@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/position_arena.schema.json",
+  "title": "Position Arena Match",
+  "type": "object",
+  "required": [
+    "id",
+    "packId",
+    "packVersion",
+    "rootFen",
+    "timeControl",
+    "legs"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "packId": {
+      "type": "string"
+    },
+    "packVersion": {
+      "type": "string"
+    },
+    "rootFen": {
+      "type": "string"
+    },
+    "timeControl": {
+      "type": "string"
+    },
+    "legs": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "whitePlayerId",
+          "blackPlayerId"
+        ],
+        "properties": {
+          "whitePlayerId": {
+            "type": "string"
+          },
+          "blackPlayerId": {
+            "type": "string"
+          },
+          "externalChallengeUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pgn": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "result": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

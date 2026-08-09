@@ -1,0 +1,134 @@
+{
+  "id": "najdorf-transition-schema-example",
+  "version": "0.1.0",
+  "title": "Najdorf: choose a setup and cross the theory boundary",
+  "mode": "trajectory",
+  "phase": "cross_phase",
+  "difficulty": {
+    "minOnlineRapid": 1600,
+    "maxOnlineRapid": 2200,
+    "label": "advanced club"
+  },
+  "start": {
+    "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+    "movesSan": [
+      "e4",
+      "c5",
+      "Nf3",
+      "d6",
+      "d4",
+      "cxd4",
+      "Nxd4",
+      "Nf6",
+      "Nc3",
+      "a6"
+    ],
+    "side": "white"
+  },
+  "objective": {
+    "type": "play_until_checkpoint",
+    "summary": "Select an opening setup, explain its intended game type, and execute the first middlegame plan without losing the timing window.",
+    "successConditions": [
+      {
+        "kind": "reach_checkpoint",
+        "checkpointId": "characteristic-structure"
+      },
+      {
+        "kind": "preserve_objective_state",
+        "minimum": "preserved"
+      }
+    ]
+  },
+  "concepts": [
+    "move order",
+    "opposite-side attack",
+    "central counterplay",
+    "theory-to-plan transition"
+  ],
+  "planClasses": [
+    {
+      "id": "sharp-kingside",
+      "label": "Sharp kingside setup",
+      "description": "Choose an aggressive setup and execute the related pawn-break plan."
+    },
+    {
+      "id": "positional-setup",
+      "label": "Positional setup",
+      "description": "Choose a quieter setup and coordinate pieces before committing pawns."
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-commitment",
+      "label": "Choose the setup",
+      "trigger": {
+        "kind": "ply",
+        "value": 1
+      },
+      "actions": [
+        "capture_intent"
+      ]
+    },
+    {
+      "id": "characteristic-structure",
+      "label": "Theory has become a middlegame",
+      "trigger": {
+        "kind": "author_rule",
+        "ruleId": "structure-ready"
+      },
+      "actions": [
+        "delay_feedback",
+        "offer_branch"
+      ]
+    },
+    {
+      "id": "timing-window",
+      "label": "Critical race resolved",
+      "trigger": {
+        "kind": "author_rule",
+        "ruleId": "race-resolved"
+      },
+      "actions": [
+        "compare_branches",
+        "offer_outcome_transition"
+      ]
+    }
+  ],
+  "opponentPolicy": {
+    "mode": "plan_defense",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "stockfishGuardCp": 120,
+    "seedMode": "per_branch"
+  },
+  "acceptedAlternatives": [],
+  "feedbackClaims": [
+    {
+      "id": "timing-claim-placeholder",
+      "text": "Compare when each side completed its thematic action; this fixture requires human review before publication.",
+      "evidenceTypes": [
+        "author_principle",
+        "engine_validated",
+        "derived_feature"
+      ]
+    }
+  ],
+  "retryVariants": [
+    {
+      "kind": "same_root_new_defense"
+    },
+    {
+      "kind": "alternate_plan_class"
+    },
+    {
+      "kind": "play_other_side"
+    }
+  ],
+  "transitions": [],
+  "provenance": {
+    "reviewStatus": "schema_example",
+    "sources": [],
+    "reviewers": []
+  }
+}

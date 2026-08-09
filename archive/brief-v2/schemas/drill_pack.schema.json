@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/drill_pack.schema.json",
+  "title": "Chess Phase Drill Pack",
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "title",
+    "mode",
+    "start",
+    "objective",
+    "checkpoints",
+    "opponentPolicy",
+    "provenance"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]+$"
+    },
+    "version": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "enum": [
+        "line",
+        "plan",
+        "outcome",
+        "trajectory"
+      ]
+    },
+    "phase": {
+      "enum": [
+        "opening",
+        "middlegame",
+        "endgame",
+        "cross_phase"
+      ]
+    },
+    "difficulty": {
+      "type": "object",
+      "properties": {
+        "minOnlineRapid": {
+          "type": "integer"
+        },
+        "maxOnlineRapid": {
+          "type": "integer"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "start": {
+      "type": "object",
+      "required": [
+        "fen"
+      ],
+      "properties": {
+        "fen": {
+          "type": "string"
+        },
+        "movesSan": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "side": {
+          "enum": [
+            "white",
+            "black"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "objective": {
+      "type": "object",
+      "required": [
+        "type",
+        "summary"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "reach_structure",
+            "preserve_plan_window",
+            "execute_break",
+            "prevent_opponent_plan",
+            "transition_to_endgame",
+            "win",
+            "hold",
+            "save",
+            "resist",
+            "play_until_checkpoint"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "successConditions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "concepts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "planClasses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "checkpoints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "trigger"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "object"
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "opponentPolicy": {
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "theory_strict",
+            "human_common",
+            "plan_defense",
+            "practical_resistance",
+            "perfect_tablebase",
+            "strong_engine",
+            "human_external"
+          ]
+        },
+        "targetElo": {
+          "type": "integer"
+        },
+        "temperature": {
+          "type": "number"
+        },
+        "topP": {
+          "type": "number"
+        },
+        "stockfishGuardCp": {
+          "type": "integer"
+        },
+        "seedMode": {
+          "enum": [
+            "fixed",
+            "per_run",
+            "per_branch"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "acceptedAlternatives": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "feedbackClaims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "text",
+          "evidenceTypes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "evidenceTypes": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "author_principle",
+                "engine_validated",
+                "tablebase_exact",
+                "corpus_observed",
+                "human_model_predicted",
+                "derived_feature",
+                "hypothesis"
+              ]
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "retryVariants": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "reviewStatus"
+      ],
+      "properties": {
+        "reviewStatus": {
+          "enum": [
+            "schema_example",
+            "draft",
+            "reviewed",
+            "published"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reviewers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

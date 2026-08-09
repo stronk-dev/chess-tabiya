@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/feedback_packet.schema.json",
+  "title": "Branch Feedback Evidence Packet",
+  "type": "object",
+  "required": [
+    "runId",
+    "branches",
+    "objectiveComparison",
+    "claims"
+  ],
+  "properties": {
+    "runId": {
+      "type": "string"
+    },
+    "branches": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "objectiveComparison": {
+      "type": "object"
+    },
+    "stockfish": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "humanModel": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "corpus": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "timingEvents": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "text",
+          "evidenceRefs"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "uncertainty": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

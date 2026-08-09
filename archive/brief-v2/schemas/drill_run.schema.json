@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/drill_run.schema.json",
+  "title": "Drill Run",
+  "type": "object",
+  "required": [
+    "id",
+    "packId",
+    "packVersion",
+    "rootNodeId",
+    "activeNodeId",
+    "nodes",
+    "branches",
+    "events"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "packId": {
+      "type": "string"
+    },
+    "packVersion": {
+      "type": "string"
+    },
+    "rootNodeId": {
+      "type": "string"
+    },
+    "activeNodeId": {
+      "type": "string"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "fen",
+          "ply"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fen": {
+            "type": "string"
+          },
+          "moveUci": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "moveSan": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ply": {
+            "type": "integer"
+          },
+          "branchId": {
+            "type": "string"
+          },
+          "objectiveState": {
+            "enum": [
+              "active",
+              "preserved",
+              "degraded",
+              "failed",
+              "achieved",
+              "transitioned"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "branches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "forkNodeId",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "forkNodeId": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "intent": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "seed": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "at"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "nodeId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
