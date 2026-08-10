@@ -306,3 +306,16 @@
 - Honesty flags recorded in the harness README: maia3 CLI entrypoint and UCI
   option names are [P]-level — verify and pin on first run; roots are tabiya
   approximations to refine before the formal preregistered run.
+
+## 2026-08-12 (claude, session 1 continued — 16) — owner correction: no experiment
+
+- Owner rejected the E4 "experiment" framing ("why do we need this?"). Correct:
+  exploration-phase rigor (preregistration, blinded review, decision thresholds)
+  does not belong in the build phase. The protocol dossier is deleted. What
+  remains: the containerized Maia UCI sidecar (needed by the engine-workers RFC
+  regardless) and a smoke runner for eyeballing games. **Q5 is answered by
+  validation-by-use during engine-workers implementation** — play it, look,
+  tune. E4-as-formal-gate is retired with the rest of the ceremony; the K5
+  concern stays real but is handled iteratively.
+- Consequence: engine-workers RFC drafting is unblocked now (no harness-result
+  precondition).

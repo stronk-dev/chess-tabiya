@@ -1,8 +1,11 @@
-# E4 Maia coherence harness
+# Maia sidecar smoke harness
 
-**Disposable research instrument** (AGENTS.md: evidence instruments, not
-implementation). Ledger question: **Q5 / gate E4 / hypothesis H5 / kill K5.**
-Protocol + decision rules: `design/research/e4-maia-coherence-protocol.md`.
+The containerized Maia+Stockfish UCI sidecar (the artifact the engine-workers
+RFC needs) plus a smoke runner that generates self-play continuations from
+plan-rich positions so you can eyeball opponent quality. No study, no
+thresholds: **the verdict is "play it and look."** If it shuffles pieces or
+forgets its plan inside a few games, the opponent needs the policy-mixer;
+otherwise wire it in and keep tuning by use. Ledger: Q5.
 
 ## Run (on the homeserver)
 
