@@ -2,8 +2,8 @@ import type { ObjectiveState } from "./types.js";
 
 const ALLOWED_TRANSITIONS = Object.freeze({
   active: ["preserved", "degraded", "failed", "achieved", "transitioned"],
-  preserved: ["degraded"],
-  degraded: ["preserved", "failed"],
+  preserved: ["active", "degraded", "failed", "achieved", "transitioned"],
+  degraded: ["active", "preserved", "failed", "achieved", "transitioned"],
   failed: [],
   achieved: [],
   transitioned: [],

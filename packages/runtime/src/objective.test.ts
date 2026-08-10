@@ -52,29 +52,34 @@ describe("objective transition graph", () => {
     "achieved",
     "transitioned",
   ];
-  const allowed = new Set([
-    "active->preserved",
-    "active->degraded",
-    "active->failed",
-    "active->achieved",
-    "active->transitioned",
-    "preserved->degraded",
-    "degraded->preserved",
-    "degraded->failed",
-  ]);
+  const nonTerminal = new Set<ObjectiveState>(["active", "preserved", "degraded"]);
 
   it("allows exactly the RFC graph and no terminal outgoing edges", () => {
     for (const from of states) {
       for (const to of states) {
         const operation = () =>
           transitionObjective(runInState(from), to, [`evidence:${from}-${to}`], at);
-        if (allowed.has(`${from}->${to}`)) {
+        if (nonTerminal.has(from) && from !== to) {
           expect(operation).not.toThrow();
         } else {
           expect(operation).toThrow(ObjectiveTransitionError);
         }
       }
     }
+  });
+
+  it("allows the review-caught preserved and degraded achievement paths", () => {
+    const preserved = runInState("preserved");
+    const degraded = runInState("degraded");
+
+    expect(
+      transitionObjective(preserved, "achieved", ["evidence:preserved-success"], at)
+        .run.nodes[0]!.objectiveState,
+    ).toBe("achieved");
+    expect(
+      transitionObjective(degraded, "achieved", ["evidence:save-completed"], at)
+        .run.nodes[0]!.objectiveState,
+    ).toBe("achieved");
   });
 
   it("always emits evidence and projects it onto only the evaluated node", () => {
