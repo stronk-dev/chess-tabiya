@@ -131,12 +131,12 @@ numbers in v1 compare (evidence overlays arrive with the feedback RFC).
 5. Objective state changes render as the **why-banner**: state + the evidence
    refs' plain rendering ("Draw available: threefold repetition on this
    path") — never a bare state flip (the CET lesson, now UI law).
-6. Feedback timing honors the pack's `feedbackPolicy`: `delayed_checkpoint`
-   hides evidence accumulation until a checkpoint (badge shows "evidence
-   waiting", contents hidden); `segment_end` until segment completion;
-   `immediate_blunder_guard` shows the why-banner immediately and offers
-   one-key rewind.
-7. Export: PGN with variations (existing endpoint payload) via download.
+6. Feedback timing honors the pack's `feedbackPolicy`, enforced server-side
+   (§New server surface): `delayed_checkpoint` withholds evidence until a
+   checkpoint (badge shows "evidence waiting"); `segment_end` until segment
+   completion. (`immediate_blunder_guard`: cut from v1, returns with on-ramp
+   content.)
+7. Export: `GET /runs/:id/pgn` (new route, §New server surface) via download.
 
 ### Keyboard map (design/02, confirmed)
 
