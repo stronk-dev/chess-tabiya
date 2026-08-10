@@ -96,6 +96,14 @@ legal review belongs before any public or proprietary release
 - **Working default until decided:** build-for-self, self-hostable, OSS-compatible
   dependencies, no assumed revenue model. A future paid offering remains possible but is
   not treated as a compatibility requirement that distorts exploration.
+- **Owner direction (2026-08-10, logged):** if built, it will be **open source and
+  free**, self-hosted on the owner's home servers, low expected usage; engines pushed
+  to the browser (WASM) where possible so hosting stays cheap; agent/LLM features must
+  run on a self-hosted LLM or cheap provider calls. Explicitly not wanted: paid SaaS,
+  or the current fragmentation ("one site for openings, another for endings"). This
+  settles the monetization and deployment axes in spirit; source-model and
+  content-rights details (licenses for code, packs, weights) remain the open part of
+  Q2. Status stays 💡 until those are recorded as one choice per axis.
 
 ## Q3 — Mobile
 

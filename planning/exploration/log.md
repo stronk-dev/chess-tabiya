@@ -41,3 +41,33 @@
   as URLs. No gate status changed—these are protocol corrections, not new evidence.
 - Next: execute the revised first wave in `plan.md` §Sequencing and preregister concrete
   thresholds before changing E1–E5.
+
+## 2026-08-10 (claude, session 1 continued)
+
+- **Owner direction on Q2 (posture):** open source and free if built; self-hosted on
+  the owner's home servers; browser-run engines (WASM) where possible; agents on a
+  self-hosted LLM or cheap provider. No paid SaaS; no phase fragmentation. Recorded in
+  `plan.md` Q2; source-model and content-rights axes remain open.
+- **DESIGN-GAP escalated — target band:** owner stated the goal as "take a ~1000 player
+  to >2000" (stop blundering, great-over-ok moves, applying strategy, reading opponent
+  move intent). `design/00-thesis.md` and the archive scope the initial fit at
+  1400–2200, explicitly *past* the blunder stage, and exclude a beginner tactics
+  curriculum. Options for the owner: (a) widen scope to include a blunder-stopping/
+  board-vision layer; (b) keep the 1400–2200 core and treat 1000–1400 as guided
+  on-ramp packs (shorter branches, opponent-intent prompts); (c) accept that the
+  1000→~1400 leg is mostly tactics volume served well by existing free tools, and our
+  product owns the 1400→2000 leg. Thesis unchanged pending ruling.
+- **Dossier landed:** `design/research/competitor-value-props.md` (adopt/conflict/
+  not-relevant per competitor; 3 claims upgraded to [V] — WhyThisMove, Noctie, Chess
+  Endgame Training). Notables: CET is an MIT PWA proving the free/browser posture
+  feasible; WhyThisMove's LLM sidebar confirmed but cloud-routed (OpenRouter) — we
+  need a local-LLM path; Noctie's per-move color labels are the ADR-0006 anti-pattern;
+  Lucas Chess is the cautionary "free integrated but fragmented mode menu" case;
+  DecodeChess possibly defunct (403) — explanation-without-drilling may not retain;
+  chessfeed.ai's claimed saved-branch exploration overlaps our core mechanic,
+  unverified → added to Q1a verification queue.
+- **New ledger rows** (owner ideas): LLM concept-anchoring agent for responsive
+  trajectories (retrieval anchors, LLM narrates — inside ADR-0005); position/structure
+  embeddings; opponent-intent prompts; browser-run engines.
+- Next: unchanged (first wave per `plan.md` §Sequencing) + owner ruling wanted on the
+  target-band gap.

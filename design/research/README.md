@@ -46,6 +46,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Area | Feeds | Status | Report |
 |---|---|---|---|
 | Competitor landscape (28 products, feature matrix) | Q1a, `design/02` | covered `[P]` — desk only | `competitor-matrix.csv`, `arch/02` |
+| Competitor value props: adopt / conflict / not-relevant vs our thesis and posture | Q1a, Q2, Q8, `design/02` | covered `[P]`, 3 claims `[V]` (WhyThisMove, Noctie, Chess Endgame Training) | `competitor-value-props.md` |
 | Chess Endgame Training hands-on (latency, branching; owner's "slow/poor UX" report) | Q1a, K9 | **GAP** (queue 1) | — |
 | Noctie takeback/branch persistence + feedback timing | Q1a | **GAP** (queue 2) | — |
 | Chessable bot-from-course-position on strategic chapters | Q1a | **GAP** (queue 3) | — |

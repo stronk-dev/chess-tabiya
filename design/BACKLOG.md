@@ -53,6 +53,10 @@ Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 | Branch growth and compare comprehension | Test 2/4/8-branch desktop and phone prototypes; budgets/grouping/cleanup are open | exploration **Q9**, `02-product-shape.md` |
 | Branch race UX (two boards, alternating moves) | Tangible divergence but high cognitive load — experimental, optional | `arch/10 §Board swapping` |
 | LLM as renderer of validated evidence (never source of truth) | Bounded by ADR-0005; wording/summarization only | `arch/09`, `arch/rfcs/RFC-0006` |
+| LLM concept-anchoring agent (self-hosted LLM/provider + search + embeddings) | 💡 owner idea 2026-08-10: when a run derails off the trajectory spine, classify the resulting structure, retrieve the nearest curated concept/pack, switch objective, narrate the transition. Retrieval + deterministic features + engine validation pick the anchor; the LLM only words it — stays inside ADR-0005. Also candidate authoring assistant (drafts stay unpublished until review, per ADR-0001) | Q4b, Q8, `arch/07 §related-position jumps` |
+| Position/structure embeddings for related-position retrieval | 💡 the retrieval layer the agent above needs; compare against pawn-structure signatures (Q4b's deterministic features) before adopting learned embeddings | Q4b, Q6 |
+| Opponent-intent prompts ("what does their move want; what is the moved piece no longer doing?") | 💡 owner idea 2026-08-10: extend intent capture (currently own-move only, `arch/03 §Commit`) to reading the opponent — prophylaxis/threat-scan checkpoints. Drillable with curated claims + features; strong fit for the sub-1400 blunder-stopping leg | `01-training-model.md`, Q8 |
+| Browser-run engines (stockfish WASM; small Maia via web runtime) | 💡 owner posture 2026-08-10: pushes compute to the client, hosting cost → near-static + agent inference; Chess Endgame Training [V] proves the PWA/WASM pattern. Complements ADR-0004, doesn't replace the server workers | Q2, `arch/12`, `research/competitor-value-props.md` |
 
 ## Deferred (designed or named, deliberately parked — revival conditions in `planning/exploration/plan.md` §Deferred)
 
