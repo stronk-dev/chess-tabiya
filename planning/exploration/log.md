@@ -319,3 +319,11 @@
   concern stays real but is handled iteratively.
 - Consequence: engine-workers RFC drafting is unblocked now (no harness-result
   precondition).
+
+## 2026-08-12 (claude, session 1 continued — 17) — first lifecycle loop closed
+
+- Verified codex's completion protocol: rfc/archive/branch-runtime.md
+  (implemented), planning/archive/branch-runtime/, canonical
+  docs/branch-runtime.md indexed, references updated, verify green, archive
+  intact. **design → RFC → review → implementation → docs → archive: complete**
+  for the product's core mechanic, three days after the repo was reorganized.
