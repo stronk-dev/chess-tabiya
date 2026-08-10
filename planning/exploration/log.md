@@ -125,3 +125,18 @@
 - Division of labor: CET needs no account (agent-drivable via browser automation with
   owner's setup, or owner-run); Noctie/Chessable/Chess.com need owner accounts —
   owner runs protocol, agent lands the dossier from notes/screenshots.
+
+## 2026-08-11 (claude, session 1 continued — 5)
+
+- **First hands-on teardown executed** (agent-driven browser session): Chess Endgame
+  Training. Dossier: `design/research/teardown-cet.md` ([V] throughout). Headlines:
+  the "slow/poor UX" report did NOT reproduce on desktop (API 80–224 ms, replies
+  ~150–300 ms after a ~2 s first-reply pacing delay); real-time objective-state
+  banners ("Unfeasible mate") exist but never explain WHY — state detection without
+  teaching; branching is destructive (replayed futures are replaced, confirmed by
+  experiment); what-if mode confirmed. E1 updated to 1/4, whitespace intact.
+- K9 recalibrated: our edge over CET cannot be raw speed on desktop — it must be
+  preserved attempts + comparison + evidence-backed feedback + variety. (Mobile
+  latency still unmeasured; owner's impression may be mobile-specific.)
+- Remaining teardowns (Noctie, Chessable, Chess.com Practice) need owner accounts —
+  protocols ready in `design/research/teardown-protocols.md`.

@@ -79,7 +79,7 @@ The first experimental vertical-slice RFC may open when all of the following hav
 
 | # | Gate | Owned by | Status | Evidence |
 |---|---|---|---|---|
-| E1 | Competitive teardown confirms meaningful integrated-loop whitespace | Q1a | unmet | — |
+| E1 | Competitive teardown confirms meaningful integrated-loop whitespace | Q1a | 1/4 teardowns done, whitespace intact so far | `design/research/teardown-cet.md` |
 | E2 | Target learners/coaches recognize the problem and choose the rehearsal loop over plausible alternatives in interview or low-fidelity tests | Q1b | unmet | — |
 | E3 | Authors can declare useful opening→middlegame boundaries and timing windows without automatic phase detection | Q4a, Q7 | unmet | — |
 | E4 | At least one runnable opponent policy produces sufficiently believable multi-ply resistance for a slice | Q5 | unmet | — |
