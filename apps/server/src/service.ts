@@ -6,7 +6,8 @@ import {
   commitMove,
   compare,
   createRun,
-  eventsSince,
+  exportPackRunPgn,
+  exportPgn,
   fork,
   rewind,
   rewindToCheckpoint,
@@ -28,7 +29,19 @@ import {
   type EvidencePage,
 } from "./evidence-queue.js";
 import { ServerError } from "./errors.js";
+import {
+  feedbackIsRevealed,
+  publicEvents,
+  publicNodes,
+} from "./feedback-policy.js";
+import { orchestratePackMove } from "./pack-orchestrator.js";
+import {
+  PackRegistry,
+  type PackRecord,
+  type PackSummary,
+} from "./pack-registry.js";
 import type { RunStorage, StoredRun } from "./storage.js";
+import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
 
 export interface RunGraph {
   readonly id: string;
@@ -46,22 +59,75 @@ export type RewindTarget =
   | { readonly nodeId: string; readonly checkpointId?: never }
   | { readonly checkpointId: string; readonly nodeId?: never };
 
+export interface CreateRunRequest {
+  readonly id: string;
+  readonly packId: string;
+  readonly policyConfig: CreateRunInput["policyConfig"];
+  readonly seed: number;
+  readonly createdAt?: string;
+  readonly packDigest?: string;
+  readonly startFen?: string;
+}
+
 export class RunService {
   readonly #storage: RunStorage;
   readonly #evidenceQueue: EvidenceJobQueue | undefined;
+  readonly #packRegistry: PackRegistry | undefined;
+  readonly #evidenceMovetimeMs: number;
 
   constructor(
     storage: RunStorage,
-    options: { readonly evidenceQueue?: EvidenceJobQueue } = {},
+    options: {
+      readonly evidenceQueue?: EvidenceJobQueue;
+      readonly packRegistry?: PackRegistry;
+      readonly evidenceMovetimeMs?: number;
+    } = {},
   ) {
     this.#storage = storage;
     this.#evidenceQueue = options.evidenceQueue;
+    this.#packRegistry = options.packRegistry;
+    this.#evidenceMovetimeMs =
+      options.evidenceMovetimeMs ?? DEFAULT_STRONG_ENGINE_PROFILE.movetimeMs;
+    if (!Number.isSafeInteger(this.#evidenceMovetimeMs) || this.#evidenceMovetimeMs < 1) {
+      throw new TypeError("Evidence movetime must be a positive safe integer");
+    }
   }
 
-  create(input: CreateRunInput, writerId: string): DrillRun {
+  create(input: CreateRunRequest, writerId: string): DrillRun {
+    const pack = this.#packRegistry?.required(input.packId);
+    if (
+      pack !== undefined &&
+      input.packDigest !== undefined &&
+      input.packDigest !== pack.digest
+    ) {
+      throw new ServerError("INVALID_REQUEST", "Client pack digest is stale");
+    }
+    if (
+      pack !== undefined &&
+      input.startFen !== undefined &&
+      input.startFen !== pack.document.start.fen
+    ) {
+      throw new ServerError("INVALID_REQUEST", "Client pack start FEN is stale");
+    }
+    const packDigest = pack?.digest ?? input.packDigest;
+    const startFen = pack?.document.start.fen ?? input.startFen;
+    if (packDigest === undefined || startFen === undefined) {
+      throw new ServerError(
+        "INVALID_REQUEST",
+        "Pack-blind run creation requires packDigest and startFen",
+      );
+    }
     let run: DrillRun;
     try {
-      run = createRun(input);
+      run = createRun({
+        id: input.id,
+        packId: input.packId,
+        packDigest,
+        policyConfig: input.policyConfig,
+        startFen,
+        seed: input.seed,
+        ...(input.createdAt === undefined ? {} : { createdAt: input.createdAt }),
+      });
     } catch (error) {
       throw new ServerError("INVALID_REQUEST", "Run definition is invalid", {
         cause: error,
@@ -78,8 +144,15 @@ export class RunService {
     options: CommitMoveOptions = {},
   ): MutationResult {
     const stored = this.#forWrite(runId, writerId);
-    const result = commitMove(stored.run, uci, options);
+    const pack = this.#registeredPack(stored.run);
+    if (pack !== undefined) this.#requiredEvidenceQueue();
+    const committed = commitMove(stored.run, uci, options);
+    const result =
+      pack === undefined
+        ? committed
+        : orchestratePackMove(pack.document, stored.run, committed);
     this.#storage.save(result.run, writerId);
+    if (pack !== undefined) this.#enqueueMoveEvidence(result.run);
     return result;
   }
 
@@ -90,8 +163,15 @@ export class RunService {
     options: AppendOpponentPlyOptions = {},
   ): MutationResult {
     const stored = this.#forWrite(runId, writerId);
-    const result = appendOpponentPly(stored.run, selection, options);
+    const pack = this.#registeredPack(stored.run);
+    if (pack !== undefined) this.#requiredEvidenceQueue();
+    const committed = appendOpponentPly(stored.run, selection, options);
+    const result =
+      pack === undefined
+        ? committed
+        : orchestratePackMove(pack.document, stored.run, committed);
     this.#storage.save(result.run, writerId);
+    if (pack !== undefined) this.#enqueueMoveEvidence(result.run);
     return result;
   }
 
@@ -129,9 +209,10 @@ export class RunService {
 
   graph(runId: string): RunGraph {
     const run = this.#required(runId).run;
+    const pack = this.#registeredPack(run);
     return Object.freeze({
       id: run.id,
-      nodes: run.nodes,
+      nodes: publicNodes(pack, run),
       branches: run.branches,
       activeCursor: run.activeCursor,
     });
@@ -143,10 +224,15 @@ export class RunService {
 
   events(runId: string, sinceSeq = 0): EventsPage {
     const run = this.#required(runId).run;
-    return Object.freeze({
-      events: eventsSince(run, sinceSeq),
-      nextSeq: run.events.at(-1)?.seq ?? 0,
-    });
+    return publicEvents(this.#registeredPack(run), run, sinceSeq);
+  }
+
+  packs(): readonly PackSummary[] {
+    return this.#requiredPackRegistry().list();
+  }
+
+  pack(packId: string): PackRecord {
+    return this.#requiredPackRegistry().required(packId);
   }
 
   enqueueEvidence(
@@ -185,7 +271,11 @@ export class RunService {
   }
 
   evidence(runId: string, sinceSeq = 0): EvidencePage {
-    this.#required(runId);
+    const run = this.#required(runId).run;
+    const pack = this.#registeredPack(run);
+    if (pack !== undefined && !feedbackIsRevealed(pack, run)) {
+      return Object.freeze({ results: Object.freeze([]), nextSeq: sinceSeq });
+    }
     return this.#requiredEvidenceQueue().page(runId, sinceSeq);
   }
 
@@ -196,6 +286,13 @@ export class RunService {
     at = new Date().toISOString(),
   ): MutationResult {
     const stored = this.#forWrite(runId, writerId);
+    const pack = this.#registeredPack(stored.run);
+    if (pack !== undefined && !feedbackIsRevealed(pack, stored.run)) {
+      throw new ServerError(
+        "FEEDBACK_WITHHELD",
+        "Evidence is withheld by the pack feedback policy",
+      );
+    }
     const queue = this.#requiredEvidenceQueue();
     const staged = queue.result(runId, resultSeq);
     if (staged === undefined) {
@@ -232,6 +329,14 @@ export class RunService {
     return result;
   }
 
+  async pgn(runId: string, branchIds?: readonly string[]): Promise<string> {
+    const run = this.#required(runId).run;
+    const pack = this.#registeredPack(run);
+    return pack === undefined
+      ? exportPgn(run, branchIds)
+      : exportPackRunPgn(pack.document, run, branchIds);
+  }
+
   #required(runId: string): StoredRun {
     const stored = this.#storage.read(runId);
     if (!stored) throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${runId}`);
@@ -242,6 +347,26 @@ export class RunService {
     const stored = this.#required(runId);
     assertActiveWriter(stored.activeWriterId, writerId);
     return stored;
+  }
+
+  #registeredPack(run: DrillRun): PackRecord | undefined {
+    const pack = this.#packRegistry?.get(run.packId);
+    return pack?.digest === run.packDigest ? pack : undefined;
+  }
+
+  #enqueueMoveEvidence(run: DrillRun): void {
+    this.enqueueEvidence(run.id, {
+      nodeId: run.activeCursor.nodeId,
+      kind: "eval",
+      movetime: this.#evidenceMovetimeMs,
+    });
+  }
+
+  #requiredPackRegistry(): PackRegistry {
+    if (this.#packRegistry === undefined) {
+      throw new ServerError("PACK_NOT_FOUND", "Pack registry is not configured");
+    }
+    return this.#packRegistry;
   }
 
   #requiredEvidenceQueue(): EvidenceJobQueue {

@@ -50,8 +50,12 @@ function authoredPaths(
   });
 }
 
-function playedPaths(run: DrillRun): readonly CombinedPath[] {
-  return run.branches.map((branch) => ({
+function playedPaths(
+  run: DrillRun,
+  branchIds?: readonly string[],
+): readonly CombinedPath[] {
+  const selected = branchIds === undefined ? undefined : new Set(branchIds);
+  return run.branches.filter((branch) => selected?.has(branch.id) ?? true).map((branch) => ({
     label: `run:${branch.label}`,
     intent: "played-run",
     moves: branchPath(run, branch.id).slice(1).map((node) => {
@@ -108,10 +112,14 @@ function appendPath(run: DrillRun, path: CombinedPath, first: boolean): DrillRun
   return next;
 }
 
-function combinedRun(pack: DrillPackDefinition, source: DrillRun): DrillRun {
+function combinedRun(
+  pack: DrillPackDefinition,
+  source: DrillRun,
+  branchIds?: readonly string[],
+): DrillRun {
   const paths = uniquePaths([
     ...authoredPaths(pack.spine ?? []),
-    ...playedPaths(source),
+    ...playedPaths(source, branchIds),
   ]);
   const createdAt = source.events[0]?.at;
   let combined = createRun({
@@ -137,6 +145,7 @@ function combinedRun(pack: DrillPackDefinition, source: DrillRun): DrillRun {
 export async function exportPackRunPgn(
   pack: DrillPackDefinition,
   run: DrillRun,
+  branchIds?: readonly string[],
 ): Promise<string> {
   const lintErrors = lintDrillPack(pack).filter((issue) => issue.severity === "error");
   if (lintErrors.length > 0) {
@@ -167,6 +176,6 @@ export async function exportPackRunPgn(
     );
   }
 
-  exportPgn(run);
-  return exportPgn(combinedRun(pack, run));
+  exportPgn(run, branchIds);
+  return exportPgn(combinedRun(pack, run, branchIds));
 }

@@ -6,18 +6,18 @@ work before its plumbing exists.
 
 ## 1. Server surface (backend foundation — zero pixels)
 
-- [ ] Pack registry: load schemas/ fixtures + content/packs at boot; lint on
+- [x] Pack registry: load schemas/ fixtures + content/packs at boot; lint on
       load, refuse failures; serve GET /packs (summary) + GET /packs/:id;
       server-side RFC-8785 digest
-- [ ] Pack-aware orchestration: POST /runs takes packId; per committed move,
+- [x] Pack-aware orchestration: POST /runs takes packId; per committed move,
       inside the same mutation: checkpoint triggers → reachCheckpoint,
       objective rules → evaluateObjective; atomic emitted-event response
-- [ ] Auto-enqueued per-move eval job (ratified 100ms profile)
-- [ ] Server-side feedbackPolicy withholding on /graph, /events, /evidence
+- [x] Auto-enqueued per-move eval job (ratified 100ms profile)
+- [x] Server-side feedbackPolicy withholding on /graph, /events, /evidence
       (rules-derived evidence exempt); tests per policy mode
       (delayed_checkpoint, segment_end; blunder_guard rejected as v1 pack)
-- [ ] GET /runs/:id/pgn?branches= (pack-merged when possible; filename header)
-- [ ] Evidence-ref grammar constructors in runtime (rules:*, pack:*, engine:*)
+- [x] GET /runs/:id/pgn?branches= (pack-merged when possible; filename header)
+- [x] Evidence-ref grammar constructors in runtime (rules:*, pack:*, engine:*)
 
 ## 2. Client plumbing (browser foundation — no product screens)
 

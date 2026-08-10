@@ -1,4 +1,5 @@
 import {
+  engineEvidenceRef,
   type EvidenceKind,
   type EvidencePayload,
   type JobObserver,
@@ -192,7 +193,7 @@ export class EvidenceJobQueue implements JobObserver {
       );
       if (queued.cancelled || queued.controller.signal.aborted) return;
 
-      const evidenceRef = `evidence:${queued.job.id}`;
+      const evidenceRef = engineEvidenceRef(queued.job.id);
       const evidenceRefs = Object.freeze([evidenceRef]) as readonly [string];
       let objectiveProposal: ObjectiveEvidenceProposal | null = null;
       if (

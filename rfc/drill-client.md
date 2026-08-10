@@ -1,6 +1,6 @@
 # RFC: Drill Client (playable vertical slice)
 
-- **Status:** accepted
+- **Status:** implementing
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/02-product-shape.md` §UX commitments (layout, keyboard-first, anti-contamination, latency budgets), `design/01-training-model.md` (episode stages, feedback timing)
@@ -8,7 +8,7 @@
 - **Depends on:** `docs/branch-runtime.md`, `docs/drill-pack-format.md`, `docs/engine-workers.md`
 - **Parent / amends:** —
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/drill-client/` (once implementing)
+- **Planning:** `planning/drill-client/`
 
 ## Summary
 
@@ -228,3 +228,4 @@ era" — this RFC is that era; folding is per that ruling, now cited.
   ruling.
 - 2026-08-12: adversarial review DC-C1..C8; C1–C7 resolved in-draft; C8
   resolved by owner E5 waiver → **status → accepted**.
+- 2026-08-12: Layer 1 implementation began → **status → implementing**.

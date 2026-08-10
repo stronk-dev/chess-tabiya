@@ -7,8 +7,9 @@ commit → play the consequence → rewind → branch → compare → replay und
 **Phase: foundation implementation** (since 2026-08-12). The branch runtime is
 implemented and documented in `docs/branch-runtime.md`; drill-pack format v0.2 is
 implemented and documented in `docs/drill-pack-format.md`; engine workers are
-implemented and documented in `docs/engine-workers.md`. There is no active feature
-RFC; the client RFC remains in the drafting queue.
+implemented and documented in `docs/engine-workers.md`. The drill-client RFC is
+implementing; its zero-pixel server foundation is documented in
+`docs/drill-client.md`.
 Doctrine: TS core + Go workers, Svelte 5, AGPL-3.0, Maia as containerized UCI
 sidecar. The exploration job continues alongside (E4 harness, gates) — see
 `planning/exploration/plan.md`.
@@ -18,7 +19,7 @@ sidecar. The exploration job continues alongside (E4 harness, gates) — see
 | Tier | Directory | Current state |
 |---|---|---|
 | Design | `design/` | 3 living docs + `BACKLOG.md` topic ledger + `research/` coverage matrix |
-| RFC | `rfc/` | Process active; three implemented foundations frozen in `rfc/archive/` |
+| RFC | `rfc/` | Drill client implementing; three implemented foundations frozen in `rfc/archive/` |
 | Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), exploration/continuation gates and kill criteria (`gates.md`), append-only `log.md` |
 | Docs | `docs/` | Canonical description of what exists; development foundation now documented |
 | Archive | `archive/brief-v2/` | The frozen v2 brief (59 files, checksummed). Immutable. Evidence base and quarry |

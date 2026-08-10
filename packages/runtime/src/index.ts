@@ -19,6 +19,17 @@ export {
 export { appendEvents, deriveSegments, eventsSince, projectRun } from "./events.js";
 export { attachEvidence } from "./evidence.js";
 export {
+  RULES_EVIDENCE_FACTS,
+  engineEvidenceRef,
+  isEngineEvidenceRef,
+  packEvidenceRef,
+  rulesEvidenceRef,
+  type EngineEvidenceRef,
+  type PackEvidenceRef,
+  type RulesEvidenceFact,
+  type RulesEvidenceRef,
+} from "./evidence-ref.js";
+export {
   MATERIAL_VALUES,
   applyObjectiveEvidenceProposal,
   evaluateObjective,

@@ -1,0 +1,447 @@
+import { readFileSync } from "node:fs";
+
+import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
+import {
+  attachEvidence,
+  engineEvidenceRef,
+  rulesEvidenceRef,
+  transitionObjective,
+  type EvidencePayload,
+  type PolicyConfig,
+} from "@chess-tabiya/runtime";
+import { parsePgn } from "chessops/pgn";
+import { afterEach, describe, expect, it } from "vitest";
+
+import {
+  EvidenceJobQueue,
+  type EvidenceExecutor,
+  type EvidenceJob,
+} from "./evidence-queue.js";
+import { PackRegistry } from "./pack-registry.js";
+import { createRestHandler } from "./rest.js";
+import { RunService } from "./service.js";
+import { SQLiteRunStorage } from "./storage.js";
+
+const at = "2026-08-12T20:00:00.000Z";
+const fixture = JSON.parse(
+  readFileSync(
+    new URL("../../../schemas/drill_pack.example.json", import.meta.url),
+    "utf8",
+  ),
+) as DrillPackDefinition;
+const policyConfig: PolicyConfig = {
+  seedMode: "fixed",
+  locus: { executedAt: "server", engineIds: [], modelIds: [] },
+};
+
+function pack(overrides: Record<string, unknown> = {}): DrillPackDefinition {
+  return { ...structuredClone(fixture), ...overrides };
+}
+
+class RecordingExecutor implements EvidenceExecutor {
+  readonly jobs: EvidenceJob[] = [];
+
+  async execute(job: EvidenceJob): Promise<EvidencePayload> {
+    this.jobs.push(job);
+    return {
+      kind: "eval",
+      source: "engine_validated",
+      values: { centipawns: 18, requestedMovetimeMs: job.movetime },
+    };
+  }
+}
+
+async function request(
+  handler: ReturnType<typeof createRestHandler>,
+  method: string,
+  path: string,
+  body?: unknown,
+  writerId = "writer-a",
+): Promise<Response> {
+  return handler(
+    new Request(`http://server.test${path}`, {
+      method,
+      headers: {
+        ...(writerId === "" ? {} : { "x-writer-id": writerId }),
+        ...(body === undefined ? {} : { "content-type": "application/json" }),
+      },
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    }),
+  );
+}
+
+async function setup(document: DrillPackDefinition) {
+  const registry = await PackRegistry.fromDocuments([
+    { source: "test-pack", value: document },
+  ]);
+  const executor = new RecordingExecutor();
+  const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
+  const storage = new SQLiteRunStorage();
+  const service = new RunService(storage, {
+    evidenceQueue: queue,
+    packRegistry: registry,
+  });
+  return {
+    registry,
+    executor,
+    queue,
+    storage,
+    service,
+    handler: createRestHandler(service),
+  };
+}
+
+function runBody(id: string, packId = fixture.id) {
+  return { id, packId, policyConfig, seed: 42, createdAt: at };
+}
+
+describe("drill-client pack registry", () => {
+  const stores: SQLiteRunStorage[] = [];
+
+  afterEach(() => {
+    for (const storage of stores.splice(0)) storage.close();
+  });
+
+  it("lints, digests, lists, and serves the living schema fixture", async () => {
+    const environment = await setup(fixture);
+    stores.push(environment.storage);
+    const digest = await digestDrillPack(fixture);
+
+    const list = await request(environment.handler, "GET", "/packs", undefined, "");
+    expect(list.status).toBe(200);
+    expect(await list.json()).toEqual([
+      {
+        id: fixture.id,
+        version: fixture.version,
+        digest,
+        title: fixture.title,
+        mode: fixture.mode,
+        difficulty: fixture.difficulty,
+        reviewStatus: "schema_example",
+      },
+    ]);
+
+    const detail = await request(
+      environment.handler,
+      "GET",
+      `/packs/${fixture.id}`,
+      undefined,
+      "",
+    );
+    expect(detail.status).toBe(200);
+    expect(detail.headers.get("x-pack-digest")).toBe(digest);
+    expect(await detail.json()).toEqual(fixture);
+  });
+
+  it("loads the living schema fixture through the default boot registry", async () => {
+    const registry = await PackRegistry.loadDefault();
+    expect(registry.list()).toContainEqual(
+      expect.objectContaining({
+        id: fixture.id,
+        reviewStatus: "schema_example",
+      }),
+    );
+  });
+
+  it("refuses semantic lint failures and the cut immediate-blunder policy", async () => {
+    const illegal = pack();
+    (illegal.spine![0] as { moveUci: string }).moveUci = "a1a8";
+    await expect(
+      PackRegistry.fromDocuments([{ source: "illegal", value: illegal }]),
+    ).rejects.toMatchObject({ code: "PACK_INVALID" });
+
+    await expect(
+      PackRegistry.fromDocuments([
+        {
+          source: "immediate",
+          value: pack({
+            id: "immediate-pack",
+            feedbackPolicy: "immediate_blunder_guard",
+          }),
+        },
+      ]),
+    ).rejects.toMatchObject({
+      code: "PACK_INVALID",
+      message: expect.stringContaining("not supported in v1"),
+    });
+  });
+});
+
+describe("pack-aware run orchestration", () => {
+  const stores: SQLiteRunStorage[] = [];
+
+  afterEach(() => {
+    for (const storage of stores.splice(0)) storage.close();
+  });
+
+  it("derives run inputs, evaluates checkpoints/objective atomically, and enqueues 100 ms evals", async () => {
+    const environment = await setup(fixture);
+    stores.push(environment.storage);
+    const created = await request(
+      environment.handler,
+      "POST",
+      "/runs",
+      runBody("orchestrated-run"),
+    );
+    expect(created.status).toBe(201);
+    const createdBody = (await created.json()) as {
+      run: { packDigest: string; nodes: { fen: string }[] };
+    };
+    expect(createdBody.run.packDigest).toBe(environment.registry.required(fixture.id).digest);
+    expect(createdBody.run.nodes[0]!.fen).toBe(fixture.start.fen);
+
+    const moves = [
+      { uci: "c1e3" },
+      {
+        selection: {
+          moveUci: "e7e6",
+          engine: {
+            id: "mock-opponent",
+            name: "Mock opponent",
+            version: "1",
+            seedHonored: true,
+          },
+        },
+      },
+      { uci: "f2f3" },
+      {
+        selection: {
+          moveUci: "b7b5",
+          engine: {
+            id: "mock-opponent",
+            name: "Mock opponent",
+            version: "1",
+            seedHonored: true,
+          },
+        },
+      },
+    ];
+    let finalMutation: {
+      run: { nodes: { objectiveState: string }[] };
+      emitted: { type: string; data: Record<string, unknown> }[];
+    } | undefined;
+    for (const move of moves) {
+      const response = await request(
+        environment.handler,
+        "POST",
+        "/runs/orchestrated-run/moves",
+        { ...move, at },
+      );
+      expect(response.status).toBe(200);
+      finalMutation = (await response.json()) as typeof finalMutation;
+    }
+    await environment.queue.whenIdle();
+
+    expect(finalMutation!.emitted.map((event) => event.type)).toEqual([
+      "opponent.move_selected",
+      "move.committed",
+      "checkpoint.reached",
+      "segment.completed",
+      "objective.state_changed",
+    ]);
+    expect(finalMutation!.emitted.at(-1)).toMatchObject({
+      data: {
+        to: "achieved",
+        evidenceRefs: ["pack:timing-window"],
+      },
+    });
+    expect(finalMutation!.run.nodes.at(-1)!.objectiveState).toBe("achieved");
+    expect(environment.executor.jobs).toHaveLength(4);
+    expect(environment.executor.jobs.every((job) => job.movetime === 100)).toBe(true);
+    expect(environment.executor.jobs.every((job) => job.kind === "eval")).toBe(true);
+  });
+
+  it("exports a selected pack-merged branch as legal downloadable PGN", async () => {
+    const environment = await setup(fixture);
+    stores.push(environment.storage);
+    environment.service.create(runBody("pgn-route"), "writer-a");
+    const mutation = environment.service.move("pgn-route", "writer-a", "c1e3", {
+      at,
+    });
+    const branchId = mutation.run.branches[0]!.id;
+
+    const response = await request(
+      environment.handler,
+      "GET",
+      `/runs/pgn-route/pgn?branches=${encodeURIComponent(branchId)}`,
+      undefined,
+      "",
+    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("text/x-chess-pgn");
+    expect(response.headers.get("content-disposition")).toBe(
+      'attachment; filename="pgn-route.pgn"',
+    );
+    const pgn = await response.text();
+    expect(pgn).toContain("authored:najdorf-be2");
+    expect(parsePgn(pgn)).toHaveLength(1);
+  });
+});
+
+describe("server-side feedback withholding", () => {
+  const stores: SQLiteRunStorage[] = [];
+
+  afterEach(() => {
+    for (const storage of stores.splice(0)) storage.close();
+  });
+
+  it("delayed_checkpoint hides engine feedback but not rules refs until a checkpoint", async () => {
+    const delayed = pack({
+      id: "delayed-pack",
+      feedbackPolicy: "delayed_checkpoint",
+      checkpoints: [{ id: "reveal", trigger: { atPly: 2 } }],
+      objective: {
+        type: "play_until_checkpoint",
+        summary: "Reach reveal",
+        successConditions: [{ kind: "reach_checkpoint", checkpointId: "reveal" }],
+      },
+    });
+    const environment = await setup(delayed);
+    stores.push(environment.storage);
+    environment.service.create(runBody("delayed-run", delayed.id), "writer-a");
+    environment.service.move("delayed-run", "writer-a", "c1e3", { at });
+    await environment.queue.whenIdle();
+
+    const stored = environment.storage.read("delayed-run")!;
+    const ruled = transitionObjective(
+      stored.run,
+      "preserved",
+      [rulesEvidenceRef("material")],
+      at,
+    );
+    const attached = attachEvidence(
+      ruled.run,
+      ruled.run.activeCursor.nodeId,
+      [engineEvidenceRef("manual-eval")],
+      { kind: "eval", source: "engine_validated", values: { centipawns: 18 } },
+      at,
+    );
+    environment.storage.save(attached.run, "writer-a");
+
+    const graphResponse = await request(
+      environment.handler,
+      "GET",
+      "/runs/delayed-run/graph",
+      undefined,
+      "",
+    );
+    const graph = (await graphResponse.json()) as {
+      graph: { nodes: { evidenceRefs: string[] }[] };
+    };
+    expect(graph.graph.nodes.at(-1)!.evidenceRefs).toEqual(["rules:material"]);
+    const eventsResponse = await request(
+      environment.handler,
+      "GET",
+      "/runs/delayed-run/events",
+      undefined,
+      "",
+    );
+    const events = (await eventsResponse.json()) as {
+      events: { type: string }[];
+    };
+    expect(events.events.map((event) => event.type)).toEqual([
+      "run.started",
+      "move.committed",
+      "objective.state_changed",
+    ]);
+    const hiddenEvidence = await request(
+      environment.handler,
+      "GET",
+      "/runs/delayed-run/evidence",
+      undefined,
+      "",
+    );
+    expect(await hiddenEvidence.json()).toEqual({
+      results: [],
+      nextSeq: 0,
+    });
+    const forbiddenApply = await request(
+      environment.handler,
+      "POST",
+      "/runs/delayed-run/evidence",
+      { resultSeq: 1, at },
+    );
+    expect(forbiddenApply.status).toBe(409);
+    expect(await forbiddenApply.json()).toMatchObject({
+      error: { code: "FEEDBACK_WITHHELD" },
+    });
+
+    environment.service.move("delayed-run", "writer-a", "e7e6", { at });
+    await environment.queue.whenIdle();
+    const revealedEvidence = await request(
+      environment.handler,
+      "GET",
+      "/runs/delayed-run/evidence",
+      undefined,
+      "",
+    );
+    const revealed = (await revealedEvidence.json()) as { results: unknown[] };
+    expect(revealed.results).toHaveLength(2);
+    expect(
+      environment.service.events("delayed-run").events.some(
+        (event) => event.type === "evidence.attached",
+      ),
+    ).toBe(true);
+  });
+
+  it("segment_end stays closed at the first checkpoint and opens on segment completion", async () => {
+    const segment = pack({
+      id: "segment-pack",
+      feedbackPolicy: "segment_end",
+      checkpoints: [
+        { id: "segment-start", trigger: { atPly: 1 } },
+        { id: "segment-finish", trigger: { atPly: 2 } },
+      ],
+      objective: {
+        type: "play_until_checkpoint",
+        summary: "Finish segment",
+        successConditions: [
+          { kind: "reach_checkpoint", checkpointId: "segment-finish" },
+        ],
+      },
+    });
+    const environment = await setup(segment);
+    stores.push(environment.storage);
+    environment.service.create(runBody("segment-run", segment.id), "writer-a");
+
+    environment.service.move("segment-run", "writer-a", "c1e3", { at });
+    await environment.queue.whenIdle();
+    const firstEvidence = await request(
+      environment.handler,
+      "GET",
+      "/runs/segment-run/evidence",
+      undefined,
+      "",
+    );
+    expect((await firstEvidence.json()) as { results: unknown[] }).toMatchObject({
+      results: [],
+    });
+    expect(
+      environment.storage
+        .read("segment-run")!
+        .run.events.some((event) => event.type === "checkpoint.reached"),
+    ).toBe(true);
+    expect(
+      environment.storage
+        .read("segment-run")!
+        .run.events.some((event) => event.type === "segment.completed"),
+    ).toBe(false);
+
+    environment.service.move("segment-run", "writer-a", "e7e6", { at });
+    await environment.queue.whenIdle();
+    const secondEvidence = await request(
+      environment.handler,
+      "GET",
+      "/runs/segment-run/evidence",
+      undefined,
+      "",
+    );
+    expect(((await secondEvidence.json()) as { results: unknown[] }).results).toHaveLength(2);
+    expect(
+      environment.storage
+        .read("segment-run")!
+        .run.events.some((event) => event.type === "segment.completed"),
+    ).toBe(true);
+  });
+});

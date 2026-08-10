@@ -313,7 +313,7 @@ describe("evidence staging and writer application", () => {
       "objective.state_changed",
     ]);
     expect(saved.nodes[0]).toMatchObject({ objectiveState: "preserved" });
-    expect(saved.nodes[0]!.evidenceRefs).toEqual(["evidence:evidence-job-1"]);
+    expect(saved.nodes[0]!.evidenceRefs).toEqual(["engine:evidence-job-1"]);
     expect(queue.page("apply-run").results).toEqual([]);
   });
 

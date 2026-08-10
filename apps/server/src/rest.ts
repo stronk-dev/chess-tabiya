@@ -12,7 +12,6 @@ import {
   type SelectionCandidate,
   type SelectionEngineIdentity,
   type CommitMoveOptions,
-  type CreateRunInput,
   type PolicyConfig,
   type VersionedPolicy,
 } from "@chess-tabiya/runtime";
@@ -23,7 +22,11 @@ import {
   OpponentSelector,
   parseSelectMoveRequest,
 } from "./opponent-selector.js";
-import { RunService, type RewindTarget } from "./service.js";
+import {
+  RunService,
+  type CreateRunRequest,
+  type RewindTarget,
+} from "./service.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -185,17 +188,21 @@ function writerId(request: Request): string {
   return requiredString(request.headers.get("x-writer-id"), "x-writer-id header");
 }
 
-function parseCreateInput(value: Record<string, unknown>): CreateRunInput {
+function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
   if (typeof value.seed !== "number" || !Number.isSafeInteger(value.seed)) {
     throw invalid("seed must be a safe integer");
   }
   return {
     id: requiredString(value.id, "id"),
     packId: requiredString(value.packId, "packId"),
-    packDigest: requiredString(value.packDigest, "packDigest"),
     policyConfig: parsePolicyConfig(value.policyConfig),
-    startFen: requiredString(value.startFen, "startFen"),
     seed: value.seed,
+    ...(value.packDigest === undefined
+      ? {}
+      : { packDigest: requiredString(value.packDigest, "packDigest") }),
+    ...(value.startFen === undefined
+      ? {}
+      : { startFen: requiredString(value.startFen, "startFen") }),
     ...(value.createdAt === undefined
       ? {}
       : { createdAt: requiredString(value.createdAt, "createdAt") }),
@@ -257,11 +264,12 @@ export function errorResponse(error: unknown): Response {
           ? 422
           : error.code === "INVALID_REQUEST"
             ? 400
-            : error.code === "RUN_NOT_FOUND"
+            : error.code === "RUN_NOT_FOUND" ||
+                error.code === "PACK_NOT_FOUND" ||
+                error.code === "EVIDENCE_RESULT_NOT_FOUND"
               ? 404
-              : error.code === "EVIDENCE_RESULT_NOT_FOUND"
-                ? 404
-              : error.code === "RUN_ALREADY_EXISTS"
+              : error.code === "RUN_ALREADY_EXISTS" ||
+                  error.code === "FEEDBACK_WITHHELD"
                 ? 409
                 : 500;
   }
@@ -279,7 +287,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|pgn)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -288,6 +296,26 @@ function parseRunRoute(
   } catch {
     throw invalid("Run id contains invalid URL encoding");
   }
+}
+
+function packIdFromPath(pathname: string): string | undefined {
+  const match = /^\/packs\/([^/]+)$/.exec(pathname);
+  if (match === null) return undefined;
+  try {
+    return decodeURIComponent(match[1]!);
+  } catch {
+    throw invalid("Pack id contains invalid URL encoding");
+  }
+}
+
+function parseBranches(url: URL): readonly string[] | undefined {
+  const raw = url.searchParams.get("branches");
+  if (raw === null) return undefined;
+  const branches = raw.split(",").map((branch) => branch.trim());
+  if (branches.length === 0 || branches.some((branch) => branch === "")) {
+    throw invalid("branches must be a comma-separated list of branch ids");
+  }
+  return Object.freeze(branches);
 }
 
 function parseSinceSeq(url: URL): number {
@@ -317,6 +345,26 @@ export function createRestHandler(
           );
         }
         return json(200, await capabilities.get());
+      }
+      if (request.method === "GET" && url.pathname === "/packs") {
+        return json(200, service.packs());
+      }
+      if (request.method === "GET" && url.pathname.startsWith("/packs/")) {
+        const packId = packIdFromPath(url.pathname);
+        if (packId === undefined) {
+          return json(404, {
+            error: { code: "NOT_FOUND", message: "Route not found" },
+          });
+        }
+        const pack = service.pack(packId);
+        return new Response(JSON.stringify(pack.document), {
+          status: 200,
+          headers: {
+            "cache-control": "no-store",
+            "content-type": "application/json",
+            "x-pack-digest": pack.digest,
+          },
+        });
       }
       if (request.method === "POST" && url.pathname === "/runs") {
         const run = service.create(
@@ -353,6 +401,18 @@ export function createRestHandler(
       }
       if (request.method === "GET" && route.action === "evidence") {
         return json(200, service.evidence(route.runId, parseSinceSeq(url)));
+      }
+      if (request.method === "GET" && route.action === "pgn") {
+        const pgn = await service.pgn(route.runId, parseBranches(url));
+        const filename = `${route.runId.replaceAll(/[^a-zA-Z0-9._-]/g, "_")}.pgn`;
+        return new Response(pgn, {
+          status: 200,
+          headers: {
+            "cache-control": "no-store",
+            "content-disposition": `attachment; filename="${filename}"`,
+            "content-type": "text/x-chess-pgn; charset=utf-8",
+          },
+        });
       }
       if (request.method !== "POST") {
         return json(405, {

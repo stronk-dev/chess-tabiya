@@ -2,6 +2,12 @@ import { runtimeBuildInfo } from "@chess-tabiya/runtime";
 import { schemaBuildInfo } from "@chess-tabiya/schema";
 
 export {
+  PackRegistry,
+  type FeedbackPolicy,
+  type PackRecord,
+  type PackSummary,
+} from "./pack-registry.js";
+export {
   DEFAULT_STRONG_ENGINE_PROFILE,
   resolveStrongEngineProfile,
   stockfishPlaySpec,
@@ -69,6 +75,7 @@ export {
 } from "./rest.js";
 export {
   RunService,
+  type CreateRunRequest,
   type EventsPage,
   type RewindTarget,
   type RunGraph,
