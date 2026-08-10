@@ -352,3 +352,11 @@
   ongoing validation. Games in tools/maia-harness/out/ (gitignored).
 - First-contact fixes: maia3 installs from source (no PyPI), entrypoint
   maia3-uci, /usr/games/stockfish path. Container prebakes the checkpoint.
+
+## 2026-08-12 (claude) — third lifecycle closed
+
+- engine-workers verified implemented + archived (100 tests green with engines
+  required, canonical doc indexed, ratified profiles shipped with provenance).
+  Opponent stack complete: the runtime can now be played against Maia through
+  the full writer-seam contract. Remaining before a playable product: the
+  client RFC (drafting now) + deployment packaging (ruled, backlogged).
