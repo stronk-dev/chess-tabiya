@@ -252,3 +252,18 @@
   for v1, watch item). **§5–§6 APPROVED.** RFC acceptance criteria met pending
   the two owner rulings (strong_engine profile, Docker-required), then
   completion protocol.
+
+## 2026-08-12 (owner rulings via claude) — profiles ratified
+
+- **strong_engine: ACCEPTED as proposed** (movetime 100ms, Threads=1, Hash=16,
+  deployment-configurable, effective value in provenance). Reasoning recorded
+  in conversation + here: opponent-only profile (evidence jobs budget
+  separately); 100ms ≈ 3000+ Elo vs humans — already absurd overkill for
+  ≤2200 learners; threads wasteful at short movetime; movetime beats depth for
+  flat latency.
+- **Maia deployment: DOCKER-REQUIRED for v1** (no venv fallback; ONNX/browser
+  path remains the Docker-less escape). Ease-of-management additions ruled in
+  and BACKLOGged for the client era: root compose.yaml with healthchecked
+  sidecar (likely fixes the exit-126 startup race), GHCR-published multi-arch
+  images by digest, compose profiles, devcontainer.
+- All acceptance criteria + rulings complete → completion protocol green-lit.
