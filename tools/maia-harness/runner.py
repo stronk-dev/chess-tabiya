@@ -23,7 +23,7 @@ PLIES = int(os.environ.get("HARNESS_PLIES", "24"))
 GAMES = int(os.environ.get("HARNESS_GAMES", "5"))
 EVAL_MS = int(os.environ.get("HARNESS_EVAL_MS", "150"))
 
-MAIA_CMD = os.environ.get("MAIA_CMD", "maia3").split()
+MAIA_CMD = os.environ.get("MAIA_CMD", "maia3-uci --model 5m --use-uci-history").split()
 SF_CMD = os.environ.get("SF_CMD", "stockfish").split()
 
 CONDITIONS = [
@@ -65,7 +65,7 @@ def play_condition(cond_id, engine_kind, options, evaluator):
     limit = (
         chess.engine.Limit(time=0.1)
         if engine_kind == "stockfish"
-        else chess.engine.Limit(nodes=1)
+        else chess.engine.Limit(time=2.0)
     )
     cond_dir = OUT / cond_id
     cond_dir.mkdir(parents=True, exist_ok=True)
