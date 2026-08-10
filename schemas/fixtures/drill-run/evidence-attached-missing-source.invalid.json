@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "0.3",
+  "id": "invalid-evidence-run",
+  "packId": "pack-1",
+  "packDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "policyConfig": {
+    "seedMode": "fixed",
+    "locus": { "executedAt": "server", "engineIds": [], "modelIds": [] }
+  },
+  "nodes": [
+    {
+      "id": "invalid-evidence-run:node:0",
+      "parentId": null,
+      "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1",
+      "transposeKey": "8/8/8/8/8/8/4K3/7k w - -",
+      "moveUci": null,
+      "moveSan": null,
+      "ply": 0,
+      "actor": "system",
+      "branchId": "invalid-evidence-run:branch:0",
+      "checkpointRefs": [],
+      "objectiveState": "active",
+      "evidenceRefs": [],
+      "createdAt": "2026-08-12T12:00:00.000Z"
+    }
+  ],
+  "branches": [
+    {
+      "id": "invalid-evidence-run:branch:0",
+      "forkNodeId": "invalid-evidence-run:node:0",
+      "label": "main",
+      "seed": 42
+    }
+  ],
+  "events": [
+    {
+      "seq": 1,
+      "type": "run.started",
+      "at": "2026-08-12T12:00:00.000Z",
+      "data": {
+        "id": "invalid-evidence-run",
+        "packId": "pack-1",
+        "packDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "policyConfig": {
+          "seedMode": "fixed",
+          "locus": { "executedAt": "server", "engineIds": [], "modelIds": [] }
+        },
+        "rootNode": {
+          "id": "invalid-evidence-run:node:0",
+          "parentId": null,
+          "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1",
+          "transposeKey": "8/8/8/8/8/8/4K3/7k w - -",
+          "moveUci": null,
+          "moveSan": null,
+          "ply": 0,
+          "actor": "system",
+          "branchId": "invalid-evidence-run:branch:0",
+          "checkpointRefs": [],
+          "objectiveState": "active",
+          "evidenceRefs": [],
+          "createdAt": "2026-08-12T12:00:00.000Z"
+        },
+        "branch": {
+          "id": "invalid-evidence-run:branch:0",
+          "forkNodeId": "invalid-evidence-run:node:0",
+          "label": "main",
+          "seed": 42
+        },
+        "activeCursor": {
+          "nodeId": "invalid-evidence-run:node:0",
+          "branchId": "invalid-evidence-run:branch:0"
+        }
+      }
+    },
+    {
+      "seq": 2,
+      "type": "evidence.attached",
+      "at": "2026-08-12T12:00:01.000Z",
+      "data": {
+        "nodeId": "invalid-evidence-run:node:0",
+        "evidenceRefs": ["analysis:1"],
+        "payload": {
+          "kind": "eval",
+          "values": { "centipawns": 24 }
+        }
+      }
+    }
+  ],
+  "activeCursor": {
+    "nodeId": "invalid-evidence-run:node:0",
+    "branchId": "invalid-evidence-run:branch:0"
+  }
+}

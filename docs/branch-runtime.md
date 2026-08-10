@@ -6,7 +6,7 @@ node, choose another move, and compare the consequences without destroying the
 first line.
 
 The transport-independent implementation is `packages/runtime`. The Node binding
-is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.2,
+is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.3,
 and `packages/schema` owns the schema version constant. Browser and server code
 import the same TypeScript runtime; there is no second implementation of chess
 semantics.
@@ -111,9 +111,15 @@ apply their proposals.
 The supported event vocabulary is:
 
 `run.started`, `move.committed`, `opponent.move_selected`,
-`checkpoint.reached`, `objective.state_changed`, `branch.forked`, `run.rewound`,
-`segment.completed`, `feedback.generated`, `outcome.reached`, and
+`checkpoint.reached`, `objective.state_changed`, `evidence.attached`,
+`branch.forked`, `run.rewound`, `segment.completed`, `feedback.generated`, `outcome.reached`, and
 `transfer.scheduled`.
+
+`evidence.attached` is the v0.3 worker amendment. It identifies a node, one or
+more evidence references, and a typed payload whose kind is `eval`, `wdl`, or
+`bestline` and whose source is `engine_validated` or
+`human_model_predicted`. Projection appends unique references to that node only;
+attaching evidence does not itself change objective state.
 
 Replay is read-back, not policy recomputation. An opponent move must be represented
 by `opponent.move_selected` immediately followed by its matching opponent

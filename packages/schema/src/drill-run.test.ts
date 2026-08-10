@@ -9,6 +9,15 @@ import { DRILL_RUN_SCHEMA_VERSION } from "./index.js";
 const schema = JSON.parse(
   readFileSync(new URL("../../../schemas/drill_run.schema.json", import.meta.url), "utf8"),
 ) as Record<string, unknown>;
+const invalidEvidenceFixture = JSON.parse(
+  readFileSync(
+    new URL(
+      "../../../schemas/fixtures/drill-run/evidence-attached-missing-source.invalid.json",
+      import.meta.url,
+    ),
+    "utf8",
+  ),
+) as Record<string, unknown>;
 
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 addFormats(ajv);
@@ -72,11 +81,11 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.2", () => {
+describe("drill_run.schema.json v0.3", () => {
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.2",
+      $id: "urn:chess-tabiya:schema:drill-run:0.3",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });
@@ -117,5 +126,40 @@ describe("drill_run.schema.json v0.2", () => {
     };
 
     expect(validate(fixedSeedRun), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it("validates typed evidence attachment and rejects the negative fixture", () => {
+    const evidenceRef = "analysis:stockfish:1";
+    const evidenceEvent = {
+      seq: 2,
+      type: "evidence.attached",
+      at,
+      data: {
+        nodeId: rootNode.id,
+        evidenceRefs: [evidenceRef],
+        payload: {
+          kind: "eval",
+          source: "engine_validated",
+          values: { centipawns: 24, depth: 18 },
+        },
+      },
+    };
+    const evidencedRun = {
+      ...validRun,
+      nodes: [{ ...rootNode, evidenceRefs: [evidenceRef] }],
+      events: [event, evidenceEvent],
+    };
+
+    expect(validate(evidencedRun), JSON.stringify(validate.errors)).toBe(true);
+    expect(validate(invalidEvidenceFixture)).toBe(false);
+    expect(validate.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          instancePath: "/events/1/data/payload",
+          keyword: "required",
+          params: { missingProperty: "source" },
+        }),
+      ]),
+    );
   });
 });

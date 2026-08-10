@@ -217,6 +217,53 @@ describe("node-local evidence", () => {
       [],
     );
   });
+
+  it("projects typed evidence attachments onto only the named node", () => {
+    const moved = commitMove(newRun(), "e2e4", { at }).run;
+    const root = moved.nodes[0]!;
+    const child = moved.nodes[1]!;
+    const attached = appendEvents(moved, [
+      {
+        type: "evidence.attached",
+        at,
+        data: {
+          nodeId: root.id,
+          evidenceRefs: ["analysis:stockfish:1"],
+          payload: {
+            kind: "eval",
+            source: "engine_validated",
+            values: { centipawns: 24, depth: 18 },
+          },
+        },
+      },
+    ]);
+
+    expect(attached.nodes[0]!.evidenceRefs).toEqual(["analysis:stockfish:1"]);
+    expect(attached.nodes[1]!.evidenceRefs).toEqual(child.evidenceRefs);
+    expect(attached.events.at(-1)).toMatchObject({
+      type: "evidence.attached",
+      data: {
+        payload: { source: "engine_validated", values: { centipawns: 24 } },
+      },
+    });
+    expect(() =>
+      appendEvents(moved, [
+        {
+          type: "evidence.attached",
+          at,
+          data: {
+            nodeId: "missing-node",
+            evidenceRefs: ["analysis:missing"],
+            payload: {
+              kind: "wdl",
+              source: "human_model_predicted",
+              values: { win: 0.4, draw: 0.3, loss: 0.3 },
+            },
+          },
+        },
+      ]),
+    ).toThrowError(RuntimeError);
+  });
 });
 
 describe("checkpoint segments", () => {

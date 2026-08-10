@@ -1,6 +1,6 @@
 # RFC: Engine Workers & Opponent Service
 
-- **Status:** accepted
+- **Status:** implementing
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` (episode, resistance), `archive/brief-v2/08_ENGINE_CORPUS_AND_CONTENT.md` (responsibility table, policy modes)
@@ -188,3 +188,5 @@ history (commit 74debed review landing).
 - 2026-08-12: created; mixer deferred on Q5 evidence.
 - 2026-08-12: adversarial review EW-C1..C8; all resolved (no owner rulings
   required — resolutions follow prior rulings); **status → accepted**.
+- 2026-08-12: §1 run-schema v0.3 amendment implementation started;
+  **status → implementing**.

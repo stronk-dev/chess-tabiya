@@ -8,6 +8,14 @@ export type ObjectiveState =
   | "failed"
   | "achieved"
   | "transitioned";
+export type EvidenceKind = "eval" | "wdl" | "bestline";
+export type EvidenceSource = "engine_validated" | "human_model_predicted";
+
+export interface EvidencePayload {
+  readonly kind: EvidenceKind;
+  readonly source: EvidenceSource;
+  readonly values: Readonly<Record<string, unknown>>;
+}
 
 export interface VersionedPolicy {
   readonly id: string;
@@ -92,6 +100,14 @@ export type ObjectiveStateChangedEvent = Event<
     readonly evidenceRefs: readonly string[];
   }
 >;
+export type EvidenceAttachedEvent = Event<
+  "evidence.attached",
+  {
+    readonly nodeId: string;
+    readonly evidenceRefs: readonly string[];
+    readonly payload: EvidencePayload;
+  }
+>;
 export type BranchForkedEvent = Event<"branch.forked", { readonly branch: Branch }>;
 export type RunRewoundEvent = Event<
   "run.rewound",
@@ -126,6 +142,7 @@ export type DrillRunEvent =
   | OpponentMoveSelectedEvent
   | CheckpointReachedEvent
   | ObjectiveStateChangedEvent
+  | EvidenceAttachedEvent
   | BranchForkedEvent
   | RunRewoundEvent
   | SegmentCompletedEvent

@@ -5,9 +5,9 @@ RFC: `rfc/engine-workers.md` (accepted 2026-08-12). Assignee: codex.
 
 ## 1. Run schema v0.3 (the declared branch-runtime amendment)
 
-- [ ] `evidence.attached` event in schemas/drill_run.schema.json (v0.3) +
+- [x] `evidence.attached` event in schemas/drill_run.schema.json (v0.3) +
       projection appends node evidenceRefs + negative fixture
-- [ ] Schema/docs version references updated (packages/schema constant)
+- [x] Schema/docs version references updated (packages/schema constant)
 
 ## 2. Engine supervisor (apps/server)
 

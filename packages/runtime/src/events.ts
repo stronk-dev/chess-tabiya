@@ -116,6 +116,18 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
         );
         break;
       }
+      case "evidence.attached": {
+        const node = nodes.find((candidate) => candidate.id === event.data.nodeId);
+        if (!node) throw unknownNode(event.data.nodeId);
+        nodes = replaceNode(
+          nodes,
+          deepFreeze({
+            ...node,
+            evidenceRefs: [...new Set([...node.evidenceRefs, ...event.data.evidenceRefs])],
+          }),
+        );
+        break;
+      }
       case "opponent.move_selected":
       case "segment.completed":
       case "feedback.generated":
