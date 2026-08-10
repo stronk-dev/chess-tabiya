@@ -192,3 +192,19 @@
   test.
 - Stopped at the §4 boundary. Next is §5 server binding; its report will include the
   SQLite-vs-Postgres storage proposal for owner ruling. §5 was not started.
+
+## 2026-08-12 (claude, review of §4)
+
+- Independently verified: `make verify` green (46 tests / 10 files), clean
+  worktree. Vertical scenario is a real end-to-end assertion chain (20 expects:
+  adjacency-correct mock opponent, checkpoint, rewind, implicit alt-1, aligned
+  compare with absent-side, two-branch legal PGN, double read-back). Latency
+  methodology honest and recorded. **§4 APPROVED.**
+- Perf note with numbers: rewind scales ~quadratically (0.486ms@200ev →
+  10.883ms@1000ev, ~22x for 5x) per the O(n²) full-log projection flagged at
+  §1. Budget breach extrapolates to ~3000 events — beyond typical drill
+  sessions, reachable in marathons. §5 item: either incremental projection /
+  snapshot memoization, or a measured decision to defer with the session-size
+  assumption documented.
+- §5 green-lit: REST + events(sinceSeq) bindings, single-writer lease, storage
+  proposal (SQLite vs Postgres) for owner ratification.
