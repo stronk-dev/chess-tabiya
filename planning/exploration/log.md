@@ -196,3 +196,26 @@
   drill-in-a-URL); the rest already covered by existing rows/dossiers. Meta-pattern
   recorded: every competitor has one healthy organ of our product; none has the
   circulatory system.
+
+## 2026-08-12 (claude, session 1 continued — 9) — OWNER RULINGS: gate transition
+
+- **E1 closed as met** (ruling): desk evidence sufficient on the Noctie residual;
+  reopen if contradicted later. Q1a → ✅ settled-go.
+- **E2 demoted to advisory** (ruling): not slice-blocking for a personal free OSS
+  build; re-gates any public push. Q1b stays open as advisory.
+- **RFC drafting opened by owner override** (ruling, third option offered was the
+  gates-as-foundations bridge; owner chose immediate RFCs): E3/E4/E5 accepted as
+  in-flight risk, their experiments folded into implementation — E3 = author pack A
+  inside drill-pack-format's acceptance criteria; E4 = Maia harness before any
+  opponent-worker RFC; E5 = low-fi prototype before any UI RFC.
+- Drafted `rfc/drill-pack-format.md` and `rfc/branch-runtime.md` (both Status:
+  draft, awaiting owner acceptance). They mine the archive sketches/schemas and fold
+  in every exploration-accumulated constraint: per-pack feedbackPolicy, prediction
+  checkpoints, authored-boundary degradation contract, deviation classes,
+  on-ramp knobs, drill-in-a-URL, session distillability, objective-state machine
+  with why-evidence (the CET lesson), determinism/seeding, latency budgets as
+  acceptance targets, deviation-never-blocks invariant.
+- Phase relabeled: exploratory → foundation specification (AGENTS.md, README).
+  Kill criteria remain live; K10/K5/K3 now get tested inside implementation.
+- Next: owner reviews the two drafts → accepted → planning/ dirs + first
+  implementation. Parallel: E4 Maia harness, pack A authoring on paper.

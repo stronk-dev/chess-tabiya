@@ -4,16 +4,17 @@ A **chess phase rehearsal system**: drill openings, middlegames, and endgames by
 the consequences, then rewind and try again. The core loop is
 commit → play the consequence → rewind → branch → compare → replay under different resistance.
 
-**This repo is in the exploratory phase. We are deciding IF and WHAT to build, not
-building.** No product code exists or may be written. The current job is driving a
-go/kill/reposition decision — see `planning/exploration/plan.md`.
+**Phase: foundation specification** (since 2026-08-12; exploration verdict: go — E1
+met, whitespace verified). No product code until an RFC is accepted. Research
+harnesses and the exploration job continue alongside — see
+`planning/exploration/plan.md`.
 
 ## Repo structure
 
 | Tier | Directory | Current state |
 |---|---|---|
 | Design | `design/` | 3 living docs + `BACKLOG.md` topic ledger + `research/` coverage matrix |
-| RFC | `rfc/` | Process + template only. Active table **empty by rule** — drafting is gated on exploration (see `rfc/0000-rfc-process.md` §Exploration gate) |
+| RFC | `rfc/` | Open since 2026-08-12 (owner ruling): `drill-pack-format.md` and `branch-runtime.md` in draft. No implementation until a draft is **accepted** |
 | Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), exploration/continuation gates and kill criteria (`gates.md`), append-only `log.md` |
 | Docs | `docs/` | Does not exist — nothing has been built; created by the first implementing change |
 | Archive | `archive/brief-v2/` | The frozen v2 brief (59 files, checksummed). Immutable. Evidence base and quarry |

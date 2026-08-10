@@ -79,13 +79,13 @@ The first experimental vertical-slice RFC may open when all of the following hav
 
 | # | Gate | Owned by | Status | Evidence |
 |---|---|---|---|---|
-| E1 | Competitive teardown confirms meaningful integrated-loop whitespace | Q1a | 4/4 examined (1 hands-on + 3 desk): whitespace confirmed on all; residual = Noctie takeback ground truth (10-min hands-on or owner ruling) | `design/research/teardown-cet.md`, `teardown-noctie-desk.md`, `teardown-chessable-desk.md`, `teardown-chesscom-desk.md` |
-| E2 | Target learners/coaches recognize the problem and choose the rehearsal loop over plausible alternatives in interview or low-fidelity tests | Q1b | unmet | — |
+| E1 | Competitive teardown confirms meaningful integrated-loop whitespace | Q1a | **met** (owner ruling 2026-08-12: desk evidence sufficient; reopen if contradicted) | `design/research/teardown-cet.md`, `teardown-noctie-desk.md`, `teardown-chessable-desk.md`, `teardown-chesscom-desk.md` |
+| E2 | Target learners/coaches recognize the problem and choose the rehearsal loop over plausible alternatives in interview or low-fidelity tests | Q1b | **advisory** (owner ruling 2026-08-12: not slice-blocking for a personal OSS build; re-gates any public push) | — |
 | E3 | Authors can declare useful opening→middlegame boundaries and timing windows without automatic phase detection | Q4a, Q7 | unmet | — |
 | E4 | At least one runnable opponent policy produces sufficiently believable multi-ply resistance for a slice | Q5 | unmet | — |
 | E5 | A low-fidelity branch/rewind/compare prototype is comprehensible on the initial target viewport | Q9 | unmet | — |
 
-This gate decides whether the vertical slice is worth specifying and building. It does not
+**Owner override 2026-08-12** (logged): RFC drafting opened with E1 met, E2 advisory, and E3/E4/E5 accepted as in-flight risk — their experiments run during implementation as validation (E3 inside the pack-format RFC via pack A; E4 via the Maia-harness before the opponent-worker RFC; E5 via low-fi prototype before the UI RFC). This gate originally decided whether the vertical slice was worth specifying. It does not
 claim that the learning hypotheses are proven. Disposable research harnesses and UX
 prototypes may be created before it under `rfc/0000-rfc-process.md` §Exploration gate.
 

@@ -11,11 +11,13 @@ opposition; drill packs supply the concepts, checkpoints, and objectives.
 
 ## Status
 
-**Exploratory phase. No code.** We are deciding whether to build this at all — whether
-the integrated rehearsal loop is actually novel and valuable, whether branching play
-against a human model is feasible over 10–20 plies, whether semantic phase detection and
-theory-to-middlegame bridging can work, and what shape (paid / OSS / self-hosted, web /
-mobile) the product should take if it survives.
+**Foundation-specification phase (go verdict on novelty, 2026-08-12).** Exploration
+verified the whitespace hands-on: no product preserves attempts, compares them, or
+explains why an objective flipped. First RFCs (`rfc/drill-pack-format.md`,
+`rfc/branch-runtime.md`) are in draft; no product code until they're accepted. Shape
+if built: open source, free, self-hosted, browser-WASM engines. Remaining risks
+tracked as gates: authoring cost, opponent long-horizon coherence, branch-UX
+comprehension.
 
 The whole state of that decision lives in **`planning/exploration/plan.md`** (the
 question ledger) and **`planning/exploration/gates.md`** (hypotheses, kill criteria,

@@ -7,8 +7,12 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent |
 |---|---|---|
 | `0000-rfc-process.md` | accepted | — |
+| `drill-pack-format.md` | draft | mines `archive/brief-v2/rfcs/RFC-0001` + schema |
+| `branch-runtime.md` | draft | mines `archive/brief-v2/rfcs/RFC-0002` + run schema |
 
-**The Active table is otherwise empty by design.** The repo is in the exploratory phase.
+**Exploration gate opened by owner ruling 2026-08-12** (logged in
+`planning/exploration/log.md`): E1 met, E2 advisory, E3/E4/E5 accepted as in-flight
+risk with their experiments folded into implementation. Previously: The repo is in the exploratory phase.
 The first experimental vertical-slice RFC may be drafted only after the
 exploration-to-slice gate in `planning/exploration/gates.md` passes, or an owner ruling
 (logged in `planning/exploration/log.md`) opens it early. Product RFCs remain closed until
