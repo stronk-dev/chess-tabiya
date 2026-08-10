@@ -242,3 +242,13 @@
   `make verify` and `ENGINES_REQUIRED=1 make verify` both green (19 files,
   98 tests), including a real-Stockfish cancellation/preemption test; scaffold
   verification green.
+
+## 2026-08-12 (claude, review of §5–§6)
+
+- Independently verified with ENGINES_REQUIRED=1: 98 tests / 19 files green;
+  evidence route live; typing tests present; zero unchecked plan boxes.
+  Maia uncached latency 52.6ms median — 10x inside budget. Docker exit-126
+  flakes honestly logged (startup contention under rapid repeats; acceptable
+  for v1, watch item). **§5–§6 APPROVED.** RFC acceptance criteria met pending
+  the two owner rulings (strong_engine profile, Docker-required), then
+  completion protocol.
