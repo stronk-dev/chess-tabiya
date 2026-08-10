@@ -100,6 +100,36 @@ None; extends the archive sketch per logged exploration decisions.
   split into a follow-up RFC.
 - Pack content licensing (Q2 content-rights axis) — owner decision pending.
 
+
+## Acceptance review blockers (2026-08-12 — DPF-C1..DPF-C8)
+
+**DPF-C1 — Required `feedbackPolicy` makes the archive fixture acceptance criterion self-contradictory.** [blocking]
+Amendment 1 makes `feedbackPolicy` required per pack, but the first acceptance criterion demands the living schema "validates the archive Najdorf fixture" — the frozen fixture has no `feedbackPolicy`, and the baseline's `additionalProperties: false` means it cannot validate against a schema that both requires and permits the new fields without the fixture changing, which archive immutability forbids. Rule: validate the archive fixture only against the frozen v0.1 baseline (a copied, amended fixture in the living tree validates v0.2), or give `feedbackPolicy` a schema default and stop requiring it.
+
+**DPF-C2 — The pack format has no node/tree model, yet three amendments reference "nodes".** [blocking]
+`authoredBoundary` is "node set / structure signatures / ply horizon" — three representations with zero types; amendment 6 URLs contain `<nodeId>`; timing windows reference "node" conditions. But the baseline schema has only `start.fen` + free-form checkpoints — no spine, tree, or node list. Either the format gains an explicit authored-tree field with node IDs, or the amendments restate in terms the schema has (FEN, ply, move sequence). Without this, `authoredBoundary` cannot be given a JSON Schema at all.
+
+**DPF-C3 — Trigger vocabulary is an open question inside the RFC's own acceptance loop.** [blocking]
+§Timing windows declares "the exact trigger vocabulary is the E3 experiment's output," and E3 = authoring pack A = the headline acceptance criterion — the criterion depends on a question settled only by performing the criterion. RFC-0000 requires open questions resolved before `accepted` or deferred to a listed future RFC. Rule: (a) freeze a minimal v0.2 trigger vocabulary now (pack A may force v0.3), or (b) carve timing windows into a follow-up RFC.
+
+**DPF-C4 — `prediction` interaction has no grading configuration and collides with the existing `actions` vocabulary.** [blocking]
+"Graded against the opponent-policy distribution and engine validation" names no fields: no threshold (top-k? probability mass? cp window?), no output type; the negative fixture "prediction without grading source" implies a field that appears nowhere. Separately the baseline fixture expresses intent capture as action string `capture_intent` while amendment 2 introduces `interaction: intent_capture` — replacement or coexistence is unstated.
+
+**DPF-C5 — "Runs record the exact pack digest" with no digest definition.** [blocking]
+Both this RFC and branch-runtime invariant 7 key determinism on `packDigest`, but neither algorithm nor canonicalization is specified — JSON has no canonical byte form. Specify algorithm (e.g. SHA-256), canonicalization (published file bytes vs RFC 8785), and whether the digest covers `version`.
+
+**DPF-C6 — `feedbackPolicy` values have undefined semantics and no parameters.** [advisory]
+`segment_end` references a "segment" the pack format never defines; `immediate_blunder_guard` names no blunder threshold or config owner. Decide bare enum (runtime owns thresholds — say so) vs parameterized object, and define or cross-reference "segment".
+
+**DPF-C7 — Amendment 4's entry shape is unspecified and the negative-fixture criterion doesn't match the amendments.** [advisory]
+`acceptedAlternatives` entries never state their identifying fields (which move/position); classes like `tactical_error` suggest the field is being repurposed as a general deviation map without saying so. "One negative fixture per amendment" lists an example testing the baseline, not an amendment; "pack A reviewed" names no reviewer or checklist (the archive authoring guide's regression list is the candidate — cite it).
+
+**DPF-C8 — Addressability encoding and lint threshold left to invention.** [advisory]
+`/fen/<FEN>/<objectiveType>` cannot work literally (FEN contains `/` and spaces) — the encoding must be normative; `@<version>` vs digest identity needs a statement (see DPF-C5). The prediction-checkpoint lint's N is unbound — pick a number or delete the sentence.
+
+**Reviewer verdict:** needs-revision — faithful to design (no ADR contradictions found) but below the template's "implement without inventing mechanics" bar until C1–C5 are ruled. Each is resolvable by a short ruling. Owner rulings pending.
+
 ## Changelog
 
 - 2026-08-12: created as first post-exploration draft.
+- 2026-08-12: acceptance review landed (DPF-C1..DPF-C8); held at draft pending owner rulings.
