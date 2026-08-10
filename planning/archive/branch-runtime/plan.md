@@ -1,6 +1,6 @@
 # Immutable Branch & Rewind Runtime — implementation plan
 
-RFC: `rfc/branch-runtime.md` (accepted 2026-08-12). Assignee: codex.
+RFC: `rfc/archive/branch-runtime.md` (implemented 2026-08-12). Assignee: codex.
 A `[x]` may flip only in a commit carrying the test that exercises the claimed
 behavior (cloud-clicker rule). Append every session to `log.md`.
 

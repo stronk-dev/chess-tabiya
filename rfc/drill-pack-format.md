@@ -48,7 +48,7 @@ published. The archive fixture validates against this frozen baseline **only**
 2. **`feedbackPolicy` (new, required in v0.2)** — bare enum (DPF-C6 ruling: runtime
    owns thresholds): `delayed_checkpoint` (default semantics per ADR-0006) ·
    `segment_end` ("segment" = checkpoint-to-checkpoint span as defined in
-   `rfc/branch-runtime.md`) · `immediate_blunder_guard` (on-ramp: consequence shown
+   `docs/branch-runtime.md`) · `immediate_blunder_guard` (on-ramp: consequence shown
    within ≤2 plies, then rewind; blunder detection thresholds are runtime/worker
    configuration, not pack fields).
 3. **Checkpoint `interaction` (new, optional per checkpoint)** — object, one of:

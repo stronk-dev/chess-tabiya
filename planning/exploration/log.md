@@ -293,3 +293,16 @@
   codex's §5 proposal, owner ratifies.
 - Process feedback recorded: do not surface housekeeping (push timing, dir
   names) as owner rulings.
+
+## 2026-08-12 (claude, session 1 continued — 15) — E4 harness built
+
+- Q5 → 🔬. Built the E4 coherence experiment: preregistered protocol with
+  decision rules (`design/research/e4-maia-coherence-protocol.md` — 6
+  conditions incl. weakened-SF control, 16 roots across Carlsbad/Caro-Advance/
+  IQP/rook-endings, automatic proxies + blinded review rubric) and the
+  disposable containerized harness (`tools/maia-harness/` — python-in-container
+  per the scoped exception; runner validated all 16 roots legal). Awaiting a
+  homeserver run (docker build && docker run; ~minutes of compute).
+- Honesty flags recorded in the harness README: maia3 CLI entrypoint and UCI
+  option names are [P]-level — verify and pin on first run; roots are tabiya
+  approximations to refine before the formal preregistered run.

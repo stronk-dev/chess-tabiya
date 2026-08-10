@@ -6,6 +6,6 @@ accepted implementation contracts remain in `rfc/`; work history remains in `pla
 Implemented foundation:
 
 - `development.md` — workspace layout, toolchain, and verification commands.
-
-Runtime behavior is not documented here yet because branch semantics have not been
-implemented. It will land with the corresponding tested runtime change.
+- `branch-runtime.md` — immutable run tree, rewind/fork/objective/replay semantics,
+  comparison and PGN export, REST/lease/storage behavior, measured envelope, and
+  current limitations.

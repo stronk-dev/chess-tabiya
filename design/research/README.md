@@ -54,7 +54,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Target learner/coach problem interviews + concept preference test | Q1b, E2 | **GAP** | — |
 | Learning effect versus simpler formats | Q1c, H1–H4, C2–C4 | **GAP** — requires slice | — |
 | Maia-3 capabilities (models, conditioning, sampling) | Q5 | covered `[P]` | `arch/research/source_index.md` R04 |
-| Maia-3 plan coherence over 20 plies @ 1600/1800/2000 | Q5, H5, K5 | **GAP** (queue 5) — needs harness | — |
+| Maia-3 plan coherence over 20 plies @ 1600/1800/2000 | Q5, H5, K5 | 🔬 protocol + harness ready; awaiting homeserver run | `e4-maia-coherence-protocol.md`, `tools/maia-harness/` |
 | Maia-3 variants vs ChessMimic (if runnable) vs corpus policy vs weakened-Stockfish control, same positions/seeds | Q5, H5 | **GAP** (queue 6) | — |
 | Author-declared transitions/timing windows on reviewed examples | Q4a, Q7, E3 | **GAP** (queue 7) | — |
 | Smallest useful deterministic feature set + coach agreement | Q4b, Q8 | **GAP** (queue 8) | — |

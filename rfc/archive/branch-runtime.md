@@ -1,6 +1,6 @@
 # RFC: Immutable Branch & Rewind Runtime
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` (episode loop), `design/02-product-shape.md` (UX commitments, latency budgets)
@@ -8,7 +8,7 @@
 - **Depends on:** `rfc/drill-pack-format.md`
 - **Parent / amends:** mines `archive/brief-v2/rfcs/RFC-0002-branch-runtime.md` sketch, `archive/brief-v2/schemas/drill_run.schema.json`, `archive/brief-v2/12_SYSTEM_ARCHITECTURE.md` event model
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/branch-runtime/`
+- **Planning:** `planning/archive/branch-runtime/`
 
 ## Summary
 
@@ -166,12 +166,12 @@ None.
   containing both branches.
 - Latency budgets measured and recorded honestly.
 
-## Open questions
+## Resolved decision and deferred question
 
-- Storage binding: SQLite is the implemented default, with the adapter boundary
-  preserving PostgreSQL as a bounded follow-up. Owner ratification and revisit
-  triggers are recorded in `planning/branch-runtime/log.md` and the deferred
-  register in `rfc/README.md`.
+- Storage binding: SQLite was ratified by the owner. The adapter boundary preserves
+  PostgreSQL as a bounded follow-up for multi-host deployment or demonstrated
+  contention. Ruling and measurements are in
+  `planning/archive/branch-runtime/log.md`.
 - `clockState` semantics (time-pressure dimension) — deferred to a future RFC
   (BACKLOG row exists).
 
@@ -200,3 +200,6 @@ Original blocker texts: git history (commit 22fa697).
   implementing**.
 - 2026-08-12: §5 server binding implemented; SQLite selected as the provisional
   default pending owner ratification, with PostgreSQL revisit triggers recorded.
+- 2026-08-12: SQLite ratified; canonical behavior distilled to
+  `docs/branch-runtime.md`; **status → implemented** and RFC/planning records
+  archived.

@@ -1,0 +1,21 @@
+{
+  "note": "Standard-tabiya approximations. Middlegame roots are move sequences from startpos (legality validated at load); endgame roots are FENs. Refine against reviewed sources before the formal preregistered run.",
+  "positions": [
+    { "id": "carlsbad-1", "family": "carlsbad", "moves": ["d4", "d5", "c4", "e6", "Nc3", "Nf6", "cxd5", "exd5", "Bg5", "Be7", "e3", "c6", "Bd3", "Nbd7", "Qc2", "O-O", "Nf3", "Re8", "O-O", "Nf8"] },
+    { "id": "carlsbad-2", "family": "carlsbad", "moves": ["d4", "d5", "c4", "e6", "Nc3", "Nf6", "cxd5", "exd5", "Bg5", "c6", "e3", "Be7", "Bd3", "Nbd7", "Nge2", "O-O", "Qc2", "Re8", "O-O", "Nf8", "f3", "Be6"] },
+    { "id": "carlsbad-3", "family": "carlsbad", "moves": ["d4", "Nf6", "c4", "e6", "Nc3", "d5", "cxd5", "exd5", "Bg5", "Be7", "e3", "O-O", "Bd3", "Nbd7", "Nf3", "Re8", "Qc2", "c6", "O-O", "Nf8", "Rab1", "a5"] },
+    { "id": "carlsbad-4", "family": "carlsbad", "moves": ["d4", "d5", "c4", "e6", "Nc3", "Be7", "cxd5", "exd5", "Bf4", "c6", "e3", "Bf5", "Bd3", "Bxd3", "Qxd3", "Nf6", "Nf3", "Nbd7", "O-O", "O-O"] },
+    { "id": "caro-advance-1", "family": "caro-advance", "moves": ["e4", "c6", "d4", "d5", "e5", "Bf5", "Nf3", "e6", "Be2", "Nd7", "O-O", "Ne7", "Nbd2", "h6", "Nb3", "Bh7"] },
+    { "id": "caro-advance-2", "family": "caro-advance", "moves": ["e4", "c6", "d4", "d5", "e5", "Bf5", "Nd2", "e6", "Nb3", "Nd7", "Nf3", "Ne7", "Be2", "Bg6", "O-O", "Nf5"] },
+    { "id": "caro-advance-3", "family": "caro-advance", "moves": ["e4", "c6", "d4", "d5", "e5", "c5", "dxc5", "Nc6", "Nf3", "Bg4", "c3", "e6", "b4", "a5", "b5", "Nxe5"] },
+    { "id": "caro-advance-4", "family": "caro-advance", "moves": ["e4", "c6", "d4", "d5", "e5", "Bf5", "h4", "h5", "c4", "e6", "Nc3", "Ne7", "Nge2", "Nd7", "Ng3", "Bg6"] },
+    { "id": "iqp-1", "family": "iqp", "moves": ["e4", "c6", "d4", "d5", "exd5", "cxd5", "c4", "Nf6", "Nc3", "e6", "Nf3", "Be7", "cxd5", "Nxd5", "Bd3", "O-O", "O-O", "Nc6"] },
+    { "id": "iqp-2", "family": "iqp", "moves": ["e4", "c6", "d4", "d5", "exd5", "cxd5", "c4", "Nf6", "Nc3", "e6", "Nf3", "Bb4", "Bd3", "dxc4", "Bxc4", "O-O", "O-O", "b6"] },
+    { "id": "iqp-3", "family": "iqp", "moves": ["d4", "d5", "c4", "e6", "Nc3", "c5", "cxd5", "exd5", "Nf3", "Nc6", "g3", "Nf6", "Bg2", "Be7", "O-O", "O-O", "dxc5", "Bxc5"] },
+    { "id": "iqp-4", "family": "iqp", "moves": ["d4", "Nf6", "c4", "e6", "Nf3", "d5", "Nc3", "Be7", "cxd5", "exd5", "Bg5", "c6", "Qc2", "O-O", "e3", "Nbd7", "Bd3", "Re8", "O-O", "Nf8", "h3", "Ne4"] },
+    { "id": "rook-4v3-passer", "family": "rook-ending", "fen": "8/5pkp/6p1/8/P7/6P1/r4PKP/2R5 w - - 0 1" },
+    { "id": "rook-3v2-hold", "family": "rook-ending", "fen": "8/5pk1/6p1/8/5P2/1r4P1/6KP/3R4 w - - 0 1" },
+    { "id": "rook-outside-passer", "family": "rook-ending", "fen": "1r6/5pkp/6p1/8/1P6/6P1/5PKP/1R6 w - - 0 1" },
+    { "id": "rook-activity", "family": "rook-ending", "fen": "8/R4pk1/5rp1/7p/8/6PP/5PK1/8 w - - 0 1" }
+  ]
+}

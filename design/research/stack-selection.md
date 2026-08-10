@@ -1,7 +1,7 @@
 # Stack selection — server/client languages, board & engine interop
 
 - **Date:** 2026-08-12
-- **Feeds:** `rfc/branch-runtime.md` (open question: server language), deferred-decisions register
+- **Fed:** `rfc/archive/branch-runtime.md` (server-language decision), deferred-decisions register
 - **Owner constraints (rulings 2026-08-12):** backend **Go or Node/TS only** (Python, Rust excluded);
   client framework open (Svelte vs React vs vanilla/lit); AGPL-3.0 project licensing; hybrid
   execution with backend capability parity (browser gets progressive enhancements).
@@ -10,7 +10,7 @@
 
 ## 1. The decisive requirement: dual-bound runtime contract
 
-`rfc/branch-runtime.md` §API surface requires the *same* transport-agnostic contract
+`rfc/archive/branch-runtime.md` §API surface required the *same* transport-agnostic contract
 (`createRun · commitMove · rewind · fork · graph · compare · exportPgn · events`) bound
 **both** server-side and client-side, with property-tested invariants and deterministic
 replay (same packDigest/policyConfig/seed/user-moves → same opponent moves). `[V]` repo file.

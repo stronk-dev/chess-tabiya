@@ -4,8 +4,9 @@
 the consequences, then rewind and try again. The core loop is
 commit → play the consequence → rewind → branch → compare → replay under different resistance.
 
-**Phase: foundation implementation** (since 2026-08-12). Two accepted RFCs
-(`drill-pack-format`, `branch-runtime`) with planning dirs ready for codex.
+**Phase: foundation implementation** (since 2026-08-12). The branch runtime is
+implemented and documented in `docs/branch-runtime.md`; `drill-pack-format` remains
+the active implementation RFC with a planning directory ready for codex.
 Doctrine: TS core + Go workers, Svelte 5, AGPL-3.0, Maia as containerized UCI
 sidecar. The exploration job continues alongside (E4 harness, gates) — see
 `planning/exploration/plan.md`.
@@ -15,7 +16,7 @@ sidecar. The exploration job continues alongside (E4 harness, gates) — see
 | Tier | Directory | Current state |
 |---|---|---|
 | Design | `design/` | 3 living docs + `BACKLOG.md` topic ledger + `research/` coverage matrix |
-| RFC | `rfc/` | `drill-pack-format.md` and `branch-runtime.md` **accepted**; implement from RFC + planning dir, never from design docs |
+| RFC | `rfc/` | `drill-pack-format.md` active; implemented branch runtime frozen in `rfc/archive/` |
 | Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), exploration/continuation gates and kill criteria (`gates.md`), append-only `log.md` |
 | Docs | `docs/` | Canonical description of what exists; development foundation now documented |
 | Archive | `archive/brief-v2/` | The frozen v2 brief (59 files, checksummed). Immutable. Evidence base and quarry |

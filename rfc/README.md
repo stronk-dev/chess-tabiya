@@ -8,7 +8,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|
 | `0000-rfc-process.md` | accepted | — |
 | `drill-pack-format.md` | implementing | mines `archive/brief-v2/rfcs/RFC-0001` + schema |
-| `branch-runtime.md` | implementing | mines `archive/brief-v2/rfcs/RFC-0002` + run schema |
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in
 `planning/exploration/log.md`): E1 met, E2 advisory, E3/E4/E5 accepted as in-flight
@@ -23,7 +22,7 @@ the slice passes the later continuation gates. See the "Exploration gate" sectio
 
 | RFC | Status | Canonical docs link |
 |---|---|---|
-| — | | |
+| `archive/branch-runtime.md` | implemented | `docs/branch-runtime.md` |
 
 ## The archive sketches are quarry, not RFCs
 
@@ -42,5 +41,5 @@ silently later.
 |---|---|---|---|
 | Server language | ✅ resolved 2026-08-12: **TS core + Go workers** doctrine (chess-semantics code is TS/shared runtime; self-contained data-format workers are Go; Python only inside Maia sidecar containers) | — | `design/research/stack-selection.md` |
 | Client framework | ✅ resolved 2026-08-12: **Svelte 5** + Vite | — | `design/research/stack-selection.md` |
-| SQLite vs PostgreSQL for runs/branches | 🟡 **SQLite default implemented; owner ratification pending.** Revisit for horizontally replicated/managed SaaS or measured cross-run write contention. Proposal: `planning/branch-runtime/log.md` §storage proposal for owner ruling (2026-08-12) | Marco | Single-writer local/self-hosted workload does not yet justify an external database service; adapter preserves a bounded PostgreSQL follow-up |
+| SQLite vs PostgreSQL for runs/branches | ✅ resolved 2026-08-12: **SQLite ratified**. PostgreSQL remains a bounded follow-up for multi-host deployment or demonstrated write contention. Ruling and proposal: `planning/archive/branch-runtime/log.md` | — | `docs/branch-runtime.md` |
 | Source model, deployment, monetization, and content/data rights | exploration Q2 | Marco | Gates public release; GPL/AGPL obligations constrain combinations but do not prohibit charging |
