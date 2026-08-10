@@ -48,9 +48,9 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Competitor landscape (28 products, feature matrix) | Q1a, `design/02` | covered `[P]` — desk only | `competitor-matrix.csv`, `arch/02` |
 | Competitor value props: adopt / conflict / not-relevant vs our thesis and posture | Q1a, Q2, Q8, `design/02` | covered `[P]`, 3 claims `[V]` (WhyThisMove, Noctie, Chess Endgame Training) | `competitor-value-props.md` |
 | Chess Endgame Training hands-on (latency, branching; owner's "slow/poor UX" report) | Q1a, K9 | covered `[V]` first pass (desktop; mobile/records/hint pending) | `teardown-cet.md` |
-| Noctie takeback/branch persistence + feedback timing | Q1a | **GAP** (queue 2) | — |
-| Chessable bot-from-course-position on strategic chapters | Q1a | **GAP** (queue 3) | — |
-| Chess.com Practice multi-move redo + color switching | Q1a | **GAP** (queue 4) | — |
+| Noctie takeback/branch persistence + feedback timing | Q1a | covered `[V]`/`[P]` desk pass; residual: takeback ground truth needs hands-on | `teardown-noctie-desk.md` |
+| Chessable bot-from-course-position on strategic chapters | Q1a | covered `[V]` desk pass (one-way Chess.com handoff, no tie-back) | `teardown-chessable-desk.md` |
+| Chess.com Practice multi-move redo + color switching | Q1a | covered `[V]` desk pass (undo destroys attempts; takeback-branch reported broken) | `teardown-chesscom-desk.md` |
 | Target learner/coach problem interviews + concept preference test | Q1b, E2 | **GAP** | — |
 | Learning effect versus simpler formats | Q1c, H1–H4, C2–C4 | **GAP** — requires slice | — |
 | Maia-3 capabilities (models, conditioning, sampling) | Q5 | covered `[P]` | `arch/research/source_index.md` R04 |

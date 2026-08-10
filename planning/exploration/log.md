@@ -140,3 +140,27 @@
   latency still unmeasured; owner's impression may be mobile-specific.)
 - Remaining teardowns (Noctie, Chessable, Chess.com Practice) need owner accounts —
   protocols ready in `design/research/teardown-protocols.md`.
+
+## 2026-08-11 (claude, session 1 continued — 6)
+
+- **Q1a → 📊 evidence.** All four E1 sources examined: CET hands-on + three
+  desk/experience-mining passes (dossiers: `teardown-noctie-desk.md`,
+  `teardown-chessable-desk.md`, `teardown-chesscom-desk.md`). Method note: owner
+  challenged whether hands-on was necessary; desk passes with strict absence-labeling
+  settled 3 of 4 products. Whitespace confirmed on every product:
+  - Noctie: takebacks + live labels, zero public trace of attempt persistence or
+    comparison. Residual: takeback ground truth ("does the old line survive?") —
+    the ONE remaining hands-on item for E1.
+  - Chessable: bot play-out is a one-way handoff to Chess.com with no course
+    tie-back; deviation handling converges on the single authored move
+    ("soft fail", no explanation). Recall→understanding gap intact.
+  - Chess.com: undo destroys the original game; takeback-then-branch reported
+    broken by users; a user guide manually reconstructing our loop across three
+    surfaces is direct "orchestration is the product" evidence. Their drills ARE
+    outcome-graded — so outcome grading alone is not our differentiator;
+    attempts + comparison + evidence-backed feedback are.
+- Bonus cross-finding for H5/ADR-0002: Chessable's bots are Chess.com engine bots,
+  user-described as "3800-rated with random mistakes / hang their queen out of
+  nowhere" — field evidence for the weakened-engine critique that motivates Maia.
+- E1 stands at effectively-met-with-one-residual. Next E-gates: E2 (interviews,
+  needs humans), E4 (Maia harness), E3/Q7 (author pack A on paper).

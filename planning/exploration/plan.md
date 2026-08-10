@@ -16,7 +16,7 @@ record). Evidence lands as dossiers in `design/research/`.
 
 | # | Question | Status | Attached gates |
 |---|---|---|---|
-| Q1a | Is the integrated rehearsal loop competitively novel? | 💡 | E1 |
+| Q1a | Is the integrated rehearsal loop competitively novel? | 📊 evidence (residual: Noctie hands-on) | E1 |
 | Q1b | Do target learners and coaches recognize and want the problem solved? | 💡 | E2, K2–K3 |
 | Q1c | Does rehearsal improve learning versus simpler formats? | 💡 · requires slice | H1–H4, K1, K4, K8, C2–C4 |
 | Q2 | What source, deployment, monetization, and content-rights posture fits? | 💡 | — (decision, evidence-informed) |
