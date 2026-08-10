@@ -62,7 +62,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Strong reviewer recruitment for packs A/B/C | Q7, C1 | **GAP** (queue 9) | — |
 | Dependency/model/content licensing across source, deployment, monetization, and rights axes 🟡 | Q2, Q6 | **GAP** (queue 10) | — |
 | Paid-competitor pricing/positioning | Q2 | **GAP** | — |
-| Server/client stack selection (Go vs Node/TS; Svelte vs React vs vanilla; chessground/WASM interop) | branch-runtime RFC, deferred-decisions register | 🔬 in flight (agent) | → `stack-selection.md` |
+| Server/client stack selection (Go vs Node/TS; Svelte vs React vs vanilla; chessground/WASM interop) | branch-runtime RFC, deferred-decisions register | covered `[V]`/`[P]` — recommends TS-everywhere + Svelte 5; flags Maia-3 Python-sidecar question | `stack-selection.md` |
 | Branch/rewind/compare comprehension at 2/4/8 branches | Q9, E5 | **GAP** | — |
 | Historical-game provenance, rights, Stage-0 coverage and bias | Q6, Q7 | **GAP** | — |
 | Deliberate-practice evidence base | thesis | covered `[P]` (observational; population skew caveat) | `arch/research/source_index.md` R01 |
