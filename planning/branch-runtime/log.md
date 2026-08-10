@@ -60,3 +60,19 @@
 - Verification: `make verify` green (4 files, 15 tests); `make build` green. Review note 3
   remains intentionally deferred: build is still outside CI until the web app is real.
 - Stopped at the §1 boundary. Next planned work is §2 objective state machine; not started.
+
+## 2026-08-12 (claude, review of §1)
+
+- Independently verified: `make verify` green (15 tests / 4 files), clean
+  worktree, archive intact. Schema requires transposeKey/seq/locus as specified;
+  projection enforces seq contiguity and replay round-trip; property tests
+  assert the BR-C1 event order [branch.forked, move.committed] after
+  rewind-then-commit with old-node immutability, plus history/ply recoverability
+  under random legal play. §0 notes 1–2 confirmed resolved. **§1 APPROVED.**
+- Non-blocking for §2: (1) seedMode "fixed" currently behaves like per_branch in
+  branch-seed derivation — fix + test; (2) commitMove copies the parent's
+  evidenceRefs onto the new node — new nodes should start with empty evidence;
+  (3) O(n²) full replay per append — acceptable, revisit at §5 latency
+  measurements; (4) dead startEvent construction in createRun — cosmetic.
+- §2 green-lit: objective state machine (engine-free predicates, transition
+  graph, evidence-carrying state changes). Address notes 1–2 first.
