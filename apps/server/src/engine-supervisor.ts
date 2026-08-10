@@ -62,6 +62,7 @@ export interface EngineRequest {
   readonly commands: readonly string[];
   readonly until: (line: string) => boolean;
   readonly timeoutMs?: number;
+  readonly signal?: AbortSignal;
 }
 
 const DEFAULT_BACKOFF: RestartBackoff = {
@@ -254,15 +255,32 @@ class ManagedUciEngine {
 
   async execute(request: EngineRequest): Promise<readonly string[]> {
     const task = this.#requestQueue.then(async () => {
+      if (request.signal?.aborted) throw abortError();
       await this.start();
+      if (request.signal?.aborted) throw abortError();
+      const onAbort = (): void => {
+        try {
+          this.#send("stop");
+        } catch {
+          // The queue still discards the result; process failure owns diagnostics.
+        }
+      };
+      request.signal?.addEventListener("abort", onAbort, { once: true });
       try {
+        if (request.signal?.aborted) {
+          onAbort();
+          throw abortError();
+        }
         const response = this.#waitFor(
           request.until,
           request.timeoutMs ?? DEFAULT_TIMEOUT_MS,
         );
         for (const command of request.commands) this.#send(command);
-        return await response;
+        const lines = await response;
+        if (request.signal?.aborted) throw abortError();
+        return lines;
       } catch (error) {
+        if (isAbortError(error)) throw error;
         this.#process?.kill();
         throw error instanceof Error && "code" in error
           ? error
@@ -271,6 +289,8 @@ class ManagedUciEngine {
               this.#nextBackoffMs(),
               error instanceof Error ? error : undefined,
             );
+      } finally {
+        request.signal?.removeEventListener("abort", onAbort);
       }
     });
     this.#requestQueue = task.then(
@@ -427,6 +447,16 @@ class ManagedUciEngine {
     if (this.#restartTimer !== undefined) clearTimeout(this.#restartTimer);
     this.#restartTimer = undefined;
   }
+}
+
+function abortError(): Error {
+  const error = new Error("Engine request aborted");
+  error.name = "AbortError";
+  return error;
+}
+
+function isAbortError(error: unknown): error is Error {
+  return error instanceof Error && error.name === "AbortError";
 }
 
 export class EngineSupervisor {

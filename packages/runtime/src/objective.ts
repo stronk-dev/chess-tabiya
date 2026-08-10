@@ -252,6 +252,34 @@ export function transitionObjective(
   return { run: next, emitted: next.events.slice(run.events.length) };
 }
 
+export function applyObjectiveEvidenceProposal(
+  run: DrillRun,
+  proposal: ObjectiveEvidenceProposal,
+  at = new Date().toISOString(),
+): MutationResult {
+  const node = run.nodes.find((candidate) => candidate.id === proposal.nodeId);
+  if (!node) throw unknownNode(proposal.nodeId);
+  if (node.objectiveState !== proposal.from) {
+    throw new TypeError(
+      `Objective proposal expected ${proposal.from}, node has ${node.objectiveState}`,
+    );
+  }
+  assertObjectiveTransition(proposal.from, proposal.to, proposal.evidenceRefs);
+  const next = appendEvents(run, [
+    {
+      type: "objective.state_changed",
+      at,
+      data: {
+        nodeId: proposal.nodeId,
+        from: proposal.from,
+        to: proposal.to,
+        evidenceRefs: proposal.evidenceRefs,
+      },
+    },
+  ]);
+  return { run: next, emitted: next.events.slice(run.events.length) };
+}
+
 export function evaluateObjective(
   run: DrillRun,
   rules: readonly ObjectiveTransitionRule[],

@@ -17,8 +17,10 @@ export {
   type RuntimeErrorCode,
 } from "./errors.js";
 export { appendEvents, deriveSegments, eventsSince, projectRun } from "./events.js";
+export { attachEvidence } from "./evidence.js";
 export {
   MATERIAL_VALUES,
+  applyObjectiveEvidenceProposal,
   evaluateObjective,
   evaluateObjectivePredicate,
   materialBalance,

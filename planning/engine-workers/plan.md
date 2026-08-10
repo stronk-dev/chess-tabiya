@@ -38,16 +38,16 @@ RFC: `rfc/engine-workers.md` (accepted 2026-08-12). Assignee: codex.
 
 ## 5. Evidence job queue
 
-- [ ] FIFO queue, bounded concurrency; staged results; GET /runs/:id/evidence
-- [ ] JobObserver.onRewound cancellation incl. late-result discard test
-- [ ] Writer applies evidence.attached / objective upgrades; typing test
+- [x] FIFO queue, bounded concurrency; staged results; GET /runs/:id/evidence
+- [x] JobObserver.onRewound cancellation incl. late-result discard test
+- [x] Writer applies evidence.attached / objective upgrades; typing test
       (engine_validated vs human_model_predicted never merged)
 
 ## 6. Capabilities + measurements
 
-- [ ] GET /capabilities per RFC shape (superset of policyConfig.locus)
-- [ ] INTEGRATION=maia tagged test (20-ply continuation, transcript-proven
+- [x] GET /capabilities per RFC shape (superset of policyConfig.locus)
+- [x] INTEGRATION=maia tagged test (20-ply continuation, transcript-proven
       history conditioning); not in make verify; optional CI job
-- [ ] Uncached Maia latency measured → log.md
-- [ ] Planning proposals for owner: strong_engine strength profile;
+- [x] Uncached Maia latency measured → log.md
+- [x] Planning proposals for owner: strong_engine strength profile;
       Docker-required vs venv fallback

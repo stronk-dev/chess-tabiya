@@ -18,6 +18,7 @@ import {
 } from "@chess-tabiya/runtime";
 
 import { ServerError } from "./errors.js";
+import type { CapabilitiesProvider } from "./capabilities.js";
 import {
   OpponentSelector,
   parseSelectMoveRequest,
@@ -57,6 +58,13 @@ function optionalString(value: unknown, label: string): string | undefined {
 
 function requiredBoolean(value: unknown, label: string): boolean {
   if (typeof value !== "boolean") throw invalid(`${label} must be a boolean`);
+  return value;
+}
+
+function requiredSafeInteger(value: unknown, label: string): number {
+  if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) {
+    throw invalid(`${label} must be a non-negative safe integer`);
+  }
   return value;
 }
 
@@ -243,12 +251,16 @@ export function errorResponse(error: unknown): Response {
     status =
       error.code === "ENGINE_UNAVAILABLE"
         ? 503
+        : error.code === "EVIDENCE_UNAVAILABLE"
+          ? 503
         : error.code === "POLICY_MODE_UNSUPPORTED"
           ? 422
           : error.code === "INVALID_REQUEST"
             ? 400
             : error.code === "RUN_NOT_FOUND"
               ? 404
+              : error.code === "EVIDENCE_RESULT_NOT_FOUND"
+                ? 404
               : error.code === "RUN_ALREADY_EXISTS"
                 ? 409
                 : 500;
@@ -267,7 +279,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -291,10 +303,21 @@ function parseSinceSeq(url: URL): number {
 export function createRestHandler(
   service: RunService,
   selector?: OpponentSelector,
+  capabilities?: CapabilitiesProvider,
 ): RestHandler {
   return async (request) => {
     try {
       const url = new URL(request.url);
+      if (request.method === "GET" && url.pathname === "/capabilities") {
+        if (capabilities === undefined) {
+          throw new ServerError(
+            "ENGINE_UNAVAILABLE",
+            "Engine capabilities are not configured",
+            { details: { engineId: "capabilities", retryAfterMs: 0 } },
+          );
+        }
+        return json(200, await capabilities.get());
+      }
       if (request.method === "POST" && url.pathname === "/runs") {
         const run = service.create(
           parseCreateInput(await parseBody(request)),
@@ -327,6 +350,9 @@ export function createRestHandler(
       }
       if (request.method === "GET" && route.action === "events") {
         return json(200, service.events(route.runId, parseSinceSeq(url)));
+      }
+      if (request.method === "GET" && route.action === "evidence") {
+        return json(200, service.evidence(route.runId, parseSinceSeq(url)));
       }
       if (request.method !== "POST") {
         return json(405, {
@@ -417,6 +443,17 @@ export function createRestHandler(
             requiredString(value.branchBId, "branchBId"),
           ),
         });
+      }
+      if (route.action === "evidence") {
+        return json(
+          200,
+          service.applyEvidence(
+            route.runId,
+            writerId(request),
+            requiredSafeInteger(value.resultSeq, "resultSeq"),
+            optionalString(value.at, "at"),
+          ),
+        );
       }
       return json(404, {
         error: { code: "NOT_FOUND", message: "Route not found" },

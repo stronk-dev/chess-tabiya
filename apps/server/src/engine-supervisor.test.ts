@@ -167,6 +167,35 @@ describe("UCI engine supervisor", () => {
       status: "ready",
     });
   });
+
+  stockfishIt("preempts a running search when its evidence job is cancelled", async () => {
+    const supervisor = stockfishSupervisor();
+    supervisors.push(supervisor);
+    await supervisor.start("stockfish-analysis");
+    const controller = new AbortController();
+    const search = supervisor.execute("stockfish-analysis", {
+      commands: ["position startpos", "go infinite"],
+      until: (line) => line.startsWith("bestmove "),
+      timeoutMs: 15_000,
+      signal: controller.signal,
+    });
+    const deadline = Date.now() + 2_000;
+    while (
+      !supervisor
+        .transcript("stockfish-analysis")
+        .some((entry) => entry.direction === "sent" && entry.line === "go infinite")
+    ) {
+      if (Date.now() >= deadline) throw new Error("Stockfish search did not start");
+      await new Promise((resolve) => setTimeout(resolve, 5));
+    }
+    controller.abort();
+
+    await expect(search).rejects.toMatchObject({ name: "AbortError" });
+    expect(supervisor.transcript("stockfish-analysis")).toContainEqual(
+      expect.objectContaining({ direction: "sent", line: "stop" }),
+    );
+    expect((await supervisor.checkHealth("stockfish-analysis")).status).toBe("ready");
+  });
 });
 
 describe("engine error contract", () => {

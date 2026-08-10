@@ -192,3 +192,53 @@
   transposeKey spine membership implemented; NOT_ACTIVE_WRITER seam pinned in
   selector/server/runtime tests; appendOpponentPly enforces strict adjacency.
   **§4 APPROVED.** §5–§6 green-lit.
+
+## 2026-08-12 (codex, §5–§6 evidence and capabilities)
+
+- Added a per-run FIFO evidence queue with a global configurable concurrency
+  bound. Analysis Stockfish produces typed eval, WDL, and best-line payloads;
+  successful results receive per-run sequence cursors and remain staged outside
+  the drill-run log until the writer polls `GET /runs/:id/evidence` and applies a
+  selected result with `POST /runs/:id/evidence`. Failed jobs remain inspectable
+  through the queue failure surface rather than becoming silent fallbacks.
+- Writer application is lease-checked and atomic at the snapshot boundary. It
+  appends `evidence.attached`, then applies any worker-returned
+  `ObjectiveEvidenceProposal` as an evidence-bearing
+  `objective.state_changed`. A seam test rejects a non-writer and a typing test
+  proves `engine_validated` and `human_model_predicted` remain distinct events
+  and payloads; they are never averaged or coalesced.
+- Wired the queue into the existing `JobObserver.onRewound` seam. Rewind removes
+  queued and already-staged off-path work, aborts running work, and checks again
+  before staging. The deterministic fake deliberately returns after cancellation
+  and proves the late result is discarded; the real Stockfish test proves the
+  abort signal emits UCI `stop` and leaves the engine ready.
+- Added `GET /capabilities`, backed by warmed supervisor identities. Its engine
+  entries include `id`, `kind`, `name`, `version`, optional model/container
+  identity, and `seedHonored`; it reports all three supported policy modes and
+  living run schema v0.4. The test pins that this is a strict superset of the
+  `{id, version}` policy-locus identity.
+- Expanded the tagged Maia integration to a 20-ply `human_common` continuation
+  after the amended Najdorf fixture's first spine move. All 20 cache keys are
+  distinct, every returned move is legal, and the captured UCI transcript equals
+  all 20 expected `position fen ... moves ...` commands with complete growing
+  history. Local image `chess-tabiya-maia:1e13597` measured 20 uncached selections
+  at **53.2 ms median, 70.8 ms p95, 89.5 ms max**, comfortably inside the RFC's
+  500 ms target. Model handshake/warmup is excluded, matching server-side
+  request latency once the supervised sidecar is ready. The final confirmation
+  run measured **52.6 ms median, 119.0 ms p95, 123.0 ms max**; both complete
+  samples remain below budget, while the p95 spread is retained rather than
+  averaged away.
+- Measurement caveat: rapid back-to-back tagged-test invocations in this managed
+  shell produced three Docker child starts exiting with code 126 between four
+  successful runs; selection never began in those failures, so they are not
+  included in the latency sample. The final tagged run was green. This is a
+  deployment-startup observation, not a hidden latency sample, and should be
+  rechecked outside the managed shell before release hardening.
+- The two owner decisions are written in
+  `planning/engine-workers/proposals.md`: recommend a 100 ms movetime-bounded
+  strong-engine v1 profile, and recommend Docker-required Maia with no host-venv
+  fallback.
+- Verification: tagged Maia integration green (1 test, 20 uncached plies);
+  `make verify` and `ENGINES_REQUIRED=1 make verify` both green (19 files,
+  98 tests), including a real-Stockfish cancellation/preemption test; scaffold
+  verification green.

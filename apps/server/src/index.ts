@@ -2,6 +2,24 @@ import { runtimeBuildInfo } from "@chess-tabiya/runtime";
 import { schemaBuildInfo } from "@chess-tabiya/schema";
 
 export {
+  EngineCapabilities,
+  SUPPORTED_POLICY_MODES,
+  type Capabilities,
+  type CapabilitiesProvider,
+  type CapabilityEngineClient,
+} from "./capabilities.js";
+export {
+  EvidenceJobQueue,
+  StockfishEvidenceExecutor,
+  type EvidenceEngineClient,
+  type EvidenceExecutor,
+  type EvidenceJob,
+  type EvidenceJobInput,
+  type EvidenceJobFailure,
+  type EvidencePage,
+  type StagedEvidence,
+} from "./evidence-queue.js";
+export {
   ServerError,
   engineUnavailable,
   policyModeUnsupported,
