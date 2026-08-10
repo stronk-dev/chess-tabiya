@@ -144,8 +144,11 @@ Cached selection: perceived-instant. Uncached Maia: <500 ms server-side
 
 ## Acceptance criteria
 
-- Supervisor: spawn/handshake/restart/transcript tests against real Stockfish
-  (CI installs the binary; tests fail with a clear message if absent).
+- Supervisor: spawn/handshake/restart/transcript tests against real Stockfish.
+  Absent binary: tests SKIP with a prominent warning locally; CI sets
+  `ENGINES_REQUIRED=1`, making absence a failure there. (Amended in review:
+  fail-loud-locally turned `make verify` red on binary-less dev machines,
+  breaking the gate for agent sessions.)
 - Maia integration (tag `INTEGRATION=maia`, requires Docker, run manually and
   in an optional non-default CI job — not in `make verify`): 20-ply
   `human_common` continuation from a pack spine; history conditioning proven
@@ -188,6 +191,8 @@ history (commit 74debed review landing).
 - 2026-08-12: created; mixer deferred on Q5 evidence.
 - 2026-08-12: adversarial review EW-C1..C8; all resolved (no owner rulings
   required — resolutions follow prior rulings); **status → accepted**.
+- 2026-08-12: §2 review amendment — engine tests skip-with-warning locally,
+  ENGINES_REQUIRED=1 enforces in CI.
 - 2026-08-12: §1 run-schema v0.3 amendment implementation started;
   **status → implementing**.
 - 2026-08-12: §1 evidence attachment and §2 Stockfish-backed UCI supervisor

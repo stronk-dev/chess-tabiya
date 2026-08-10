@@ -58,3 +58,20 @@
 - Checkpoint verification with the real-Stockfish command above: `make verify`
   green (15 files, 77 tests, all typechecks and schema/scaffold verification);
   `git diff --check` clean.
+
+## 2026-08-12 (claude, review of §1–§2)
+
+- Verification initially FAILED locally: 2 supervisor tests require a real
+  Stockfish and this machine had none — codex's "verify green" was true on its
+  env (SF via the Maia image) but not portable. Root cause: my spec said
+  "fail with a clear message if absent," which breaks the verify gate on
+  binary-less machines. Fixed both layers: stockfish installed via brew here
+  (verify now green: 77 tests), and the RFC amended — **skip-with-warning
+  locally, ENGINES_REQUIRED=1 makes absence fail in CI**. Codex: implement the
+  skip policy in the next session.
+- Otherwise verified: run schema v0.3 carries evidence.attached (+ negative
+  fixture); supervisor has real handshake/restart-after-crash tests, transcript
+  buffer, identity capture; ENGINE_UNAVAILABLE / POLICY_MODE_UNSUPPORTED typed
+  and mapped. **§1–§2 APPROVED** with the skip-policy item carried into §3.
+- Process note: reviews must re-run verify on a second environment before
+  trusting "green" — recorded for future sessions.
