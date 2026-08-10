@@ -196,3 +196,42 @@ wrapper. Options:
 Recommended: (a) now, (b) tracked as later optimization (also enables browser
 Maia in the capability negotiation). Scoped exception to "no Python": Python may
 exist only inside worker containers speaking UCI/JSON, never in server code.
+
+### Addendum (2026-08-12): scaling honestly, and the polyglot-by-boundary resolution
+
+**What actually stresses at scale.** If usage ever grows (hosted community
+instance, streamer bursts), the bottleneck is never the web/event layer — it is
+**engine compute**: Stockfish analysis and Maia inference per move, CPU/GPU-bound
+worker fleets. That is language-independent (containers + queue). Node handles
+thousands of websocket sessions; we would saturate engine workers at dozens of
+concurrent drills long before either runtime blinks. "Go for scale" solves the
+wrong bottleneck.
+
+**Where Go genuinely wins in THIS system:** CPU-bound streaming/batch work —
+above all the **future corpus pipeline** (Stage 1+: streaming multi-GB .pgn.zst
+Lichess dumps, parsing millions of games into Parquet). Real threads, low GC
+pressure, single binaries. Node is painful there (worker_threads clunkiness);
+the archive brief suggested "Rust stream processor later" — Rust is excluded, so
+**Go is the natural corpus-worker language**. Crucially, the corpus worker never
+touches drill-runtime semantics: it consumes games and emits position/transition
+statistics. No shared-runtime tax.
+
+**The hole asymmetry.** Node-core keeps every door open: if server compute ever
+hurts, shard it into Go workers behind data-format boundaries. Go-core closes a
+door permanently: the runtime is double-implemented (full Go) or the server is
+chess-blind (Go-thin) until a TS tool process sneaks Node back in. One hole has
+an escape ladder, the other compounds.
+
+**On "developing the de facto Go chess lib":** a lichess-grade movegen/SAN/PGN-
+variations library is months of correctness work (perft suites, disambiguation,
+e.p./castling edge cases) — a second product. Fine OSS ambition; extract it
+later from stable needs rather than couple the drill product's critical path to
+it.
+
+**Resolution — polyglot by boundary (doctrine, if adopted):** everything that
+touches drill semantics (runtime, packs, objective machine, feedback, server
+API) is TypeScript with the one shared runtime package; **any self-contained
+worker that speaks only data formats (UCI, JSON events, Parquet) SHOULD be Go**
+— flagship: the corpus pipeline; candidates: engine-pool supervisor, PGN bulk
+tooling. Owner writes Go where Go is best, cloud-clicker scaffolding carries
+over, zero double implementation of invariants.
