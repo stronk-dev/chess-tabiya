@@ -76,3 +76,27 @@
   measurements; (4) dead startEvent construction in createRun — cosmetic.
 - §2 green-lit: objective state machine (engine-free predicates, transition
   graph, evidence-carrying state changes). Address notes 1–2 first.
+
+## 2026-08-12 (codex, session 3) — §1 corrections + §2 objective machine
+
+- Fixed both requested §1 review notes in commit `c92abe5`: `fixed` and `per_run`
+  branch seed modes now reuse the primary seed while only `per_branch` derives a new
+  seed; newly committed nodes begin with empty `evidenceRefs`. Runtime and living-schema
+  regression tests cover both contracts.
+- Added the exact BR-C3 transition graph and exhaustive edge tests: active can enter any
+  named result; preserved can only degrade; degraded can recover to preserved or fail;
+  achieved/failed/transitioned have no outgoing edges and reject further play.
+- Added deterministic predicate evaluation for checkmate, stalemate, runtime-provable draw
+  (insufficient material, 50-move claim, or threefold on the recorded active path),
+  material balance (pawn units), FEN transpose-key/piece/pawn-structure matching, boolean
+  composition, and checkpoint reach along the active node path. Authored rules are ordered;
+  the first matching rule for the current state wins.
+- `objective.state_changed` requires non-empty `evidenceRefs` in both the live transition
+  API and event-log replay. State and evidence project onto the evaluated node; mismatched,
+  illegal, self-loop, terminal, and evidence-free changes are rejected rather than ignored.
+- Added a data-only async `ObjectiveEvidenceUpgrader` request/proposal interface and fake
+  test. It deliberately does not apply worker proposals; worker execution remains a later
+  RFC as required by the §2 plan boundary.
+- Verification before commit: `make verify` green (5 files, 30 tests); `make build` green.
+  §1 review note 3 (O(n²) replay) remains deferred to §5 measurements; note 4 is cosmetic.
+- Stopped at the §2 boundary. Next planned work is §3 replay/compare/export; not started.

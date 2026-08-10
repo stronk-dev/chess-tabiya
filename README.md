@@ -21,10 +21,10 @@ opposition; drill packs supply the concepts, checkpoints, and objectives.
 whitespace hands-on: no reviewed product preserves attempts, compares them, or explains
 why an objective flipped. The accepted `drill-pack-format` and `branch-runtime` RFCs are
 implementing. The shared TypeScript/Svelte workspace and verification gate exist; runtime
-§1 now provides the living run schema and event-sourced, path-keyed tree with immutable
-rewind and fork semantics. Objective evaluation, replay/compare/export, and server bindings
-remain. Product risks include authoring cost, opponent long-horizon coherence, and branch-UX
-comprehension.
+§1–2 now provide the living run schema, event-sourced path-keyed tree, immutable rewind and
+fork semantics, and the engine-free objective state machine. Replay/compare/export and
+server bindings remain. Product risks include authoring cost, opponent long-horizon
+coherence, and branch-UX comprehension.
 
 The whole state of that decision lives in **`planning/exploration/plan.md`** (the
 question ledger) and **`planning/exploration/gates.md`** (hypotheses, kill criteria,

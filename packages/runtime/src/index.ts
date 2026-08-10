@@ -9,6 +9,28 @@ export {
 } from "./errors.js";
 export { appendEvents, deriveSegments, eventsSince, projectRun } from "./events.js";
 export {
+  MATERIAL_VALUES,
+  evaluateObjective,
+  evaluateObjectivePredicate,
+  materialBalance,
+  requestObjectiveEvidence,
+  transitionObjective,
+  type FenPredicate,
+  type MaterialBalancePredicate,
+  type ObjectiveEvaluationResult,
+  type ObjectiveEvidenceProposal,
+  type ObjectiveEvidenceRequest,
+  type ObjectiveEvidenceUpgrader,
+  type ObjectivePredicate,
+  type ObjectiveTransitionRule,
+  type RulesFactPredicate,
+} from "./objective.js";
+export {
+  ObjectiveEvidenceError,
+  ObjectiveTransitionError,
+  isObjectiveTransitionAllowed,
+} from "./objective-state.js";
+export {
   commitMove,
   createRun,
   fork,

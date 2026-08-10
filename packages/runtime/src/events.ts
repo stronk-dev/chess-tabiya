@@ -1,6 +1,7 @@
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { unknownNode } from "./errors.js";
+import { assertObjectiveTransition } from "./objective-state.js";
 import type {
   Branch,
   CheckpointReachedEvent,
@@ -95,6 +96,16 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
       case "objective.state_changed": {
         const node = nodes.find((candidate) => candidate.id === event.data.nodeId);
         if (!node) throw unknownNode(event.data.nodeId);
+        if (node.objectiveState !== event.data.from) {
+          throw new TypeError(
+            `Objective event expected ${event.data.from}, projection has ${node.objectiveState}`,
+          );
+        }
+        assertObjectiveTransition(
+          event.data.from,
+          event.data.to,
+          event.data.evidenceRefs,
+        );
         nodes = replaceNode(
           nodes,
           deepFreeze({

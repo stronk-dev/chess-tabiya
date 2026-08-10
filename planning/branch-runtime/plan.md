@@ -27,10 +27,10 @@ behavior (cloud-clicker rule). Append every session to `log.md`.
 
 ## 2. Objective state machine
 
-- [ ] Engine-free predicate evaluation (rules facts, material, fenPredicate,
+- [x] Engine-free predicate evaluation (rules facts, material, fenPredicate,
       checkpoint reach) per RFC transition graph (BR-C3)
-- [ ] `objective.state_changed` always carries evidenceRefs
-- [ ] Async evidence-upgrade path stubbed (interface only; workers RFC later)
+- [x] `objective.state_changed` always carries evidenceRefs
+- [x] Async evidence-upgrade path stubbed (interface only; workers RFC later)
 
 ## 3. Replay, compare, export
 
