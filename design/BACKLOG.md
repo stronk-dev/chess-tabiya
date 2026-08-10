@@ -76,6 +76,10 @@ Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 
 | Topic | Status | Home |
 |---|---|---|
+| Academy mode — IM/GM-led live sessions: stage of players voting on moves, leader controls snapshotting/branching | 💡 owner idea 2026-08-12, deferred by owner-framed scope question ("or singleplayer only?") answered: singleplayer first. It is the rehearsal loop performed live by a coach — strong thesis confirmation, but a different product operationally (multiplayer sync, roles, and above all titled-player *supply*, which free/self-hosted posture can't recruit). Lichess Studies already give academy-lite boards. Two extracted non-deferred dividends: (a) design constraint — runs/branches must be session-replayable and distillable into packs (session→pack authoring pipeline, attacks Q7/K10; event-sourced run model already ~fits; future pack RFC must not break it); (b) E2 experiment — run ONE manual academy session (coach + players + Lichess study + our loop protocol), zero code, tests E2 + session→pack distillation at once. Revival condition: E-gates passed + a coach partner or community actually exists | `01-training-model.md`, Q7, E2, `arch/11` (Position Arena precedent) |
+
+| Topic | Status | Home |
+|---|---|---|
 | Position Arena (human vs human from curated position, two-leg, swap colors) | 📐 deferred | `arch/rfcs/RFC-0007` sketch, `arch/11`, `arch/schemas/position_arena.schema.json` |
 | Automatic candidate-pack mining from corpus | 📐 deferred (brief phase 4; unpublished until review) | `arch/08` |
 | Personal game-history pack recommender | 📐 deferred (ADR-0003: optional, never identity) | `arch/01 §Why personal history is optional` |

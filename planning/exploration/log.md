@@ -164,3 +164,17 @@
   nowhere" — field evidence for the weakened-engine critique that motivates Maia.
 - E1 stands at effectively-met-with-one-residual. Next E-gates: E2 (interviews,
   needs humans), E4 (Maia harness), E3/Q7 (author pack A on paper).
+
+## 2026-08-12 (claude, session 1 continued — 7)
+
+- **Owner idea: academy mode** (IM/GM-led sessions, player stage voting moves, leader
+  snapshotting for branching). Assessed and deferred with owner's own framing
+  ("or singleplayer only?") — singleplayer remains the bet: academy is the loop
+  performed live (thesis confirmation) but operationally a different product
+  (multiplayer machinery + titled-player supply, which the free/self-hosted posture
+  cannot recruit; Lichess Studies already provide academy-lite boards). Ledgered
+  under Deferred with revival condition.
+- Two dividends extracted as live items: (a) session-replayability as a pack-format
+  design constraint — session→pack distillation as a Q7/K10 authoring pipeline;
+  (b) a manual one-evening academy session (coach + Lichess study + our protocol)
+  as a combined E2 interview + Q7 distillation experiment, zero code.
