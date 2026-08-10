@@ -20,10 +20,10 @@ RFC: `rfc/engine-workers.md` (accepted 2026-08-12). Assignee: codex.
 
 ## 3. Maia sidecar (workers/maia)
 
-- [ ] Container def promoted from tools/maia-harness lineage (prebaked 5M,
+- [x] Container def promoted from tools/maia-harness lineage (prebaked 5M,
       maia3-uci --use-uci-history); supervisor drives it via docker run/exec
       or configured command
-- [ ] First contact: record seed exposure → seedHonored; pin versions
+- [x] First contact: record seed exposure → seedHonored; pin versions
 
 ## 4. Opponent selector
 

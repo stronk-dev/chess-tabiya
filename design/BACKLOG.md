@@ -23,7 +23,7 @@ Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 | Plan Drill — 8–20-ply segments, rewind, branch comparison | 📐🔬 | `arch/05`, `01-training-model.md` |
 | Outcome Drill — win/hold/save/resist, WDL-preserving grading | 📐🔬 | `arch/06`, `01-training-model.md` |
 | Trajectory Drill — causal opening→middlegame→endgame spines, causal-integrity rule | 📐 | `arch/07` |
-| Opponent policy broker (theory_strict…strong_engine modes; policy mixer for coherence) | 📐 · feasibility = exploration **Q5** | `arch/rfcs/RFC-0003` sketch, `arch/08` |
+| Opponent policy broker (theory_strict…strong_engine modes; policy mixer for coherence) | 📐 · feasibility = exploration **Q5** · DESIGN-GAP 2026-08-12: pinned Maia UCI ranks MultiPV candidates but does not expose its internally computed move-policy mass; theory_strict proportional filtering needs an adapter extension or amended sampling contract (WDL must not be misused as move probability) | `rfc/engine-workers.md` EW-C3, `arch/rfcs/RFC-0003` sketch, `arch/08` |
 | Objectives & grading (objective state machine: active→preserved/degraded/failed/achieved/transitioned) | 📐 | `arch/rfcs/RFC-0004` sketch, `arch/schemas/drill_run.schema.json` |
 | Author-declared phase transitions and timing windows | 📐 · feasibility = exploration **Q4a** | `arch/rfcs/RFC-0005` sketch, `arch/04` |
 | Deterministic phase-feature assistance for authors | 📐 · feasibility = exploration **Q4b** | `arch/rfcs/RFC-0005` sketch |

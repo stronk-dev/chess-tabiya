@@ -19,6 +19,13 @@ export {
   type TranscriptEntry,
 } from "./engine-supervisor.js";
 export {
+  DEFAULT_MAIA_IMAGE,
+  MAIA3_MODEL_ID,
+  MAIA3_SOURCE_COMMIT,
+  maiaDockerSpec,
+  type MaiaDockerSpecOptions,
+} from "./maia.js";
+export {
   createHttpServer,
   createRestHandler,
   errorResponse,

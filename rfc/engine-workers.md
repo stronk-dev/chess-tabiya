@@ -197,3 +197,5 @@ history (commit 74debed review landing).
   **status → implementing**.
 - 2026-08-12: §1 evidence attachment and §2 Stockfish-backed UCI supervisor
   implemented; selector, Maia packaging, and evidence queue remain open.
+- 2026-08-12: §3 pinned Maia sidecar implemented; first contact records no seed
+  option (`seedHonored: false`).

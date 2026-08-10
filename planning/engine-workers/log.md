@@ -82,3 +82,29 @@
   binary/`SF_CMD` is available. `ENGINES_REQUIRED=1` turns the same condition into
   a suite failure; CI sets it and still installs the system package. Error-contract
   tests remain active regardless of engine availability.
+
+## 2026-08-12 (codex, §3 Maia production sidecar)
+
+- Promoted the research harness lineage to `workers/maia`: Python 3.12.13,
+  python-chess 1.999, Maia-3 source commit
+  `1e13597c42d4858b7cfd7cfdae01e297263364b2`, and 5M checkpoint snapshot
+  `b6559de2398d7140b985f28fd2c19fb5e47ddabe`. The build verifies source and
+  checkpoint identities, disables runtime Hugging Face access, and makes
+  `--use-uci-history` part of the immutable entry point.
+- Built `chess-tabiya-maia:1e13597` successfully; local image identity:
+  `sha256:2e77dfee8a9de0f360c27efc288e479dfb4d4155740b16db9e95674cd0082c14`.
+  `maiaDockerSpec` records the pinned source/model plus deployment-supplied image
+  digest and gives the existing supervisor a Docker stdio command.
+- First-contact UCI inspection found `Elo`, `SelfElo`, `OppoElo`, `Temperature`,
+  `TopP`, and `MultiPV`; there is no seed option, so `seedHonored: false` is now
+  recorded rather than assumed. Static sidecar tests green (2); tagged
+  `INTEGRATION=maia` supervisor handshake/history test green against the promoted
+  image (1) and remains outside `make verify` via a separate Vitest config.
+- DESIGN-GAP for §4: pinned upstream computes policy probability internally but
+  its UCI info lines expose candidate rank, cp, and WDL only. WDL is an outcome
+  prediction, not move-policy mass, so it cannot truthfully implement EW-C3's
+  proportional spine sampling. No Python patch or rank-as-probability shortcut was
+  introduced; theory-strict needs an explicit resolution before its checkbox can
+  flip.
+- §3 checkpoint verification: `make verify` green (16 files, 79 tests); tagged
+  Maia integration green separately; `git diff --check` clean.
