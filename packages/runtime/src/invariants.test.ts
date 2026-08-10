@@ -1,15 +1,20 @@
 import fc from "fast-check";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
+import { parsePgn, startingPosition, walk } from "chessops/pgn";
+import { parseSan } from "chessops/san";
 import type { Move, Role } from "chessops/types";
 import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import {
   commitMove,
+  compare,
   createRun,
+  exportPgn,
   historyFrom,
   projectRun,
+  readBackReplay,
   rewind,
   type DrillRun,
 } from "./index.js";
@@ -77,6 +82,17 @@ function assertTreeInvariants(run: DrillRun): void {
   }
 }
 
+function assertLegalPgn(run: DrillRun): void {
+  const [game] = parsePgn(exportPgn(run));
+  expect(game).toBeDefined();
+  const position = startingPosition(game!.headers).unwrap();
+  walk(game!.moves, position, (branchPosition, data) => {
+    const move = parseSan(branchPosition, data.san);
+    expect(move).toBeDefined();
+    branchPosition.play(move!);
+  });
+}
+
 describe("runtime invariant properties", () => {
   it("preserves recoverable paths and a replayable event projection under legal play", () => {
     fc.assert(
@@ -94,6 +110,7 @@ describe("runtime invariant properties", () => {
           expect(JSON.stringify(before.nodes)).toBe(beforeNodes);
           assertTreeInvariants(run);
         }
+        assertLegalPgn(run);
       }),
       { numRuns: 100 },
     );
@@ -129,9 +146,48 @@ describe("runtime invariant properties", () => {
           ]);
           expect(result.run.nodes.slice(0, oldNodes.length)).toEqual(oldNodes);
           expect(result.run.nodes.at(-1)!.parentId).toBe(target.id);
+          const comparison = compare(
+            result.run,
+            result.run.branches[0]!.id,
+            result.run.branches.at(-1)!.id,
+          );
+          expect(comparison.forkNodeId).toBe(target.id);
+          expect(comparison.pairs.map((pair) => pair.plyOffset)).toEqual(
+            comparison.pairs.map((_pair, index) => index + 1),
+          );
+          expect(comparison.pairs[0]).toMatchObject({
+            a: expect.any(Object),
+            b: expect.any(Object),
+          });
           assertTreeInvariants(result.run);
         },
       ),
+      { numRuns: 100 },
+    );
+  });
+
+  it("replays identical opponent choices for identical policy locus, seed, and play", () => {
+    fc.assert(
+      fc.property(fc.array(fc.nat(), { maxLength: 12 }), (choices) => {
+        const play = (): DrillRun => {
+          let run = newRun();
+          for (const choice of choices) {
+            const cursor = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
+            const legal = legalUcis(cursor.fen);
+            if (legal.length === 0) break;
+            run = commitMove(run, legal[choice % legal.length]!, {
+              actor: cursor.ply % 2 === 0 ? "user" : "opponent",
+              at,
+            }).run;
+          }
+          return run;
+        };
+
+        const first = play();
+        const second = play();
+        expect(first).toEqual(second);
+        expect(readBackReplay(first.events)).toEqual(readBackReplay(second.events));
+      }),
       { numRuns: 100 },
     );
   });
