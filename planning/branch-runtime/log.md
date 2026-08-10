@@ -300,3 +300,10 @@ default without pretending that provisional implementation choice is product val
 - All RFC acceptance criteria now have passing tests. Pending owner storage
   ratification → RFC completion protocol (docs/ distillation, status →
   implemented, archive moves).
+
+## 2026-08-12 (owner ruling via claude) — storage ratified
+
+- **SQLite ratified** as the storage binding (owner: "sqlite"). Postgres remains
+  a bounded follow-up behind the RunStorage adapter, revisited only for
+  multi-host deployment or demonstrated write contention. Deferred-decisions
+  register updated. RFC completion protocol green-lit.
