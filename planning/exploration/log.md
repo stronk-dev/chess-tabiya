@@ -178,3 +178,21 @@
   design constraint — session→pack distillation as a Q7/K10 authoring pipeline;
   (b) a manual one-evening academy session (coach + Lichess study + our protocol)
   as a combined E2 interview + Q7 distillation experiment, zero code.
+
+## 2026-08-12 (claude, session 1 continued — 8)
+
+- **Owner idea: Twitch/streamer mode** — materially changes the academy assessment:
+  stream video replaces viewer clients (no multiplayer machinery), chat-vote
+  aggregation is a trivial known pattern, and streamers are demand rather than
+  supply. Re-ledgered as its own row with a weaker revival condition than academy
+  (singleplayer loop validated + fun). Also noted as the distribution channel
+  matching the free-OSS posture.
+- **Underexposed-gems sweep** at owner request (what competitors do well but leave
+  buried): Chessable SRS pointed at cards not episodes; Chess.com retry-from-mistake
+  trapped in Game Review; Lichess explorer rating-band data undrilled; CET's
+  FEN+objective deep links without curriculum; ChessTempo per-theme ratings driving
+  nothing; Lichess Studies as session-records without drill semantics; Noctie's
+  per-quality feedback configurability. Two new ledger rows (SRS-over-episodes,
+  drill-in-a-URL); the rest already covered by existing rows/dossiers. Meta-pattern
+  recorded: every competitor has one healthy organ of our product; none has the
+  circulatory system.
