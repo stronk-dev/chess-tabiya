@@ -183,3 +183,12 @@
 - Final post-integrity run (nested selection mismatch + degraded rank-fallback
   tests added): tagged Maia integration still 1/1; CI-equivalent verification
   passed 17 files / 90 tests plus all typechecks and schema/scaffold checks.
+
+## 2026-08-12 (claude, review of §4)
+
+- Independently verified with ENGINES_REQUIRED=1: 90 tests / 17 files green.
+  One-line policy-mass patch confirmed against pinned maia3 source; selector
+  parses multipv rank + policy mass with degraded-rank fallback;
+  transposeKey spine membership implemented; NOT_ACTIVE_WRITER seam pinned in
+  selector/server/runtime tests; appendOpponentPly enforces strict adjacency.
+  **§4 APPROVED.** §5–§6 green-lit.
