@@ -36,3 +36,27 @@
   with real invariant properties (plan already requires this); (3) `make build`
   is outside `verify`/CI — acceptable now, revisit when the web app is real.
 - §1 green-lit: living `drill_run` v0.2 schema + path-keyed core tree/events.
+
+## 2026-08-12 (codex, session 2) — §1 core tree + events
+
+- Landed the living Draft 2020-12 `schemas/drill_run.schema.json` v0.2. Ajv tests validate
+  the complete path-keyed shape and reject events without `seq` and nodes without parent
+  path identity. `packages/schema` now owns the run version; runtime build info derives it,
+  resolving Claude review note 1.
+- Added immutable Node/Branch/Run types and an event reducer whose log is source-of-truth.
+  Event append assigns contiguous monotonic sequence numbers; replay reconstructs nodes,
+  branches, checkpoint refs, objective projections, and the active cursor. Checkpoint pairs
+  derive segments and emit `segment.completed`.
+- Implemented legal `commitMove`, cursor-only rewind, explicit empty branches, and BR-C1:
+  committing at a non-leaf cursor emits `branch.forked` then `move.committed` on `alt-N`;
+  the first move on an explicit branch does not fork again. Nodes are path-distinct while
+  normalized four-field FEN `transposeKey` values recognize transpositions.
+- Added the full §1 typed error surface. Lease ownership remains a server concern in §5,
+  but the shared `NOT_ACTIVE_WRITER` assertion and error contract now exist.
+- Replaced the scaffold string-roundtrip property with two real fast-check properties over
+  randomized legal games and rewind/fork histories. They exercise immutable old nodes,
+  recoverable parent histories, branch metadata rather than copied games, event sequence,
+  replay equality, and fork-before-commit ordering, resolving Claude review note 2.
+- Verification: `make verify` green (4 files, 15 tests); `make build` green. Review note 3
+  remains intentionally deferred: build is still outside CI until the web app is real.
+- Stopped at the §1 boundary. Next planned work is §2 objective state machine; not started.

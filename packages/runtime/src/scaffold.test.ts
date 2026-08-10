@@ -1,4 +1,3 @@
-import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
@@ -20,11 +19,5 @@ describe("runtime scaffold", () => {
     const position = Chess.fromSetup(setup).unwrap();
 
     expect(position.isCheckmate()).toBe(true);
-  });
-
-  it("runs property tests through the workspace test gate", () => {
-    fc.assert(
-      fc.property(fc.string(), (value) => JSON.parse(JSON.stringify(value)) === value),
-    );
   });
 });

@@ -1,0 +1,203 @@
+import { INITIAL_FEN } from "chessops/fen";
+import { describe, expect, it } from "vitest";
+
+import {
+  RuntimeError,
+  assertActiveWriter,
+  commitMove,
+  createRun,
+  deriveSegments,
+  eventsSince,
+  fork,
+  historyFrom,
+  projectRun,
+  reachCheckpoint,
+  rewind,
+  rewindToCheckpoint,
+  type DrillRun,
+} from "./index.js";
+
+const at = "2026-08-12T12:00:00.000Z";
+const packDigest = `sha256:${"a".repeat(64)}`;
+
+function newRun(startFen = INITIAL_FEN): DrillRun {
+  return createRun({
+    id: "run-1",
+    packId: "pack-1",
+    packDigest,
+    policyConfig: {
+      seedMode: "per_branch",
+      locus: {
+        executedAt: "browser",
+        engineIds: [],
+        modelIds: [{ id: "mock-opponent", version: "1" }],
+      },
+    },
+    startFen,
+    seed: 42,
+    createdAt: at,
+  });
+}
+
+function expectRuntimeError(
+  operation: () => unknown,
+  code: RuntimeError["code"],
+  reason?: RuntimeError["reason"],
+): void {
+  try {
+    operation();
+    throw new Error("Expected operation to throw");
+  } catch (error) {
+    expect(error).toBeInstanceOf(RuntimeError);
+    expect(error).toMatchObject({ code, ...(reason === undefined ? {} : { reason }) });
+  }
+}
+
+describe("path-keyed node model", () => {
+  it("keeps transposed positions as distinct nodes linked by their full path", () => {
+    let run = newRun();
+    for (const uci of ["g1f3", "g8f6", "f3g1", "f6g8"]) {
+      run = commitMove(run, uci, { at }).run;
+    }
+
+    const root = run.nodes[0]!;
+    const transposition = run.nodes.at(-1)!;
+    expect(transposition.id).not.toBe(root.id);
+    expect(transposition.transposeKey).toBe(root.transposeKey);
+    expect(historyFrom(run, transposition.id).map((node) => node.id)).toEqual(
+      run.nodes.map((node) => node.id),
+    );
+    expect(run.nodes.every((node) => Object.isFrozen(node))).toBe(true);
+  });
+
+  it("reconstructs the projection from the sequenced event log", () => {
+    const moved = commitMove(newRun(), "e2e4", { at }).run;
+
+    expect(projectRun(moved.events)).toEqual(moved);
+    expect(moved.events.map((event) => event.seq)).toEqual([1, 2]);
+    expect(eventsSince(moved, 1).map((event) => event.type)).toEqual([
+      "move.committed",
+    ]);
+  });
+});
+
+describe("fork and rewind semantics", () => {
+  it("appends a leaf move without forking", () => {
+    const result = commitMove(newRun(), "e2e4", { at });
+
+    expect(result.emitted.map((event) => event.type)).toEqual(["move.committed"]);
+    expect(result.run.branches).toHaveLength(1);
+    expect(result.run.activeCursor.nodeId).toBe(result.run.nodes.at(-1)!.id);
+  });
+
+  it("implicitly forks alt-N before committing at a non-leaf cursor", () => {
+    let original = newRun();
+    original = commitMove(original, "e2e4", { at }).run;
+    original = commitMove(original, "e7e5", { at }).run;
+    const originalNodes = original.nodes;
+    const rootId = original.nodes[0]!.id;
+    const rewound = rewind(original, rootId, at).run;
+
+    const result = commitMove(rewound, "d2d4", { at });
+
+    expect(result.emitted.map((event) => event.type)).toEqual([
+      "branch.forked",
+      "move.committed",
+    ]);
+    expect(result.run.branches.at(-1)).toMatchObject({
+      forkNodeId: rootId,
+      label: "alt-1",
+      seed: 43,
+    });
+    expect(result.run.nodes.slice(0, originalNodes.length)).toEqual(originalNodes);
+    expect(result.run.nodes.at(-1)).toMatchObject({
+      parentId: rootId,
+      moveUci: "d2d4",
+      branchId: result.run.branches.at(-1)!.id,
+    });
+  });
+
+  it("uses an explicit empty branch for the next move without a second fork", () => {
+    const moved = commitMove(newRun(), "e2e4", { at }).run;
+    const rootId = moved.nodes[0]!.id;
+    const forked = fork(moved, rootId, {
+      label: "queenside experiment",
+      intent: "Claim more space",
+      at,
+    });
+
+    expect(forked.run.activeCursor).toEqual({
+      nodeId: rootId,
+      branchId: forked.run.branches.at(-1)!.id,
+    });
+    const committed = commitMove(forked.run, "d2d4", { at });
+    expect(committed.emitted.map((event) => event.type)).toEqual(["move.committed"]);
+    expect(committed.run.branches).toHaveLength(2);
+  });
+
+  it("rewind changes only the cursor and records the move", () => {
+    const moved = commitMove(newRun(), "e2e4", { at }).run;
+    const nodesBefore = moved.nodes;
+    const result = rewind(moved, moved.nodes[0]!.id, at);
+
+    expect(result.run.nodes).toEqual(nodesBefore);
+    expect(result.run.activeCursor.nodeId).toBe(moved.nodes[0]!.id);
+    expect(result.emitted).toEqual([
+      expect.objectContaining({ type: "run.rewound", seq: 3 }),
+    ]);
+  });
+});
+
+describe("checkpoint segments", () => {
+  it("derives spans from consecutive checkpoint events on the branch", () => {
+    let run = reachCheckpoint(newRun(), "start", at).run;
+    run = commitMove(run, "e2e4", { at }).run;
+    const completed = reachCheckpoint(run, "choice", at);
+    const segments = deriveSegments(completed.run);
+
+    expect(completed.emitted.map((event) => event.type)).toEqual([
+      "checkpoint.reached",
+      "segment.completed",
+    ]);
+    expect(segments).toEqual([
+      expect.objectContaining({
+        startCheckpointId: "start",
+        endCheckpointId: "choice",
+        startNodeId: completed.run.nodes[0]!.id,
+        endNodeId: completed.run.nodes[1]!.id,
+      }),
+    ]);
+    expect(completed.run.nodes[0]!.checkpointRefs).toEqual(["start"]);
+    expect(completed.run.nodes[1]!.checkpointRefs).toEqual(["choice"]);
+    expect(rewindToCheckpoint(completed.run, "start", at).run.activeCursor.nodeId).toBe(
+      completed.run.nodes[0]!.id,
+    );
+  });
+});
+
+describe("typed errors", () => {
+  it("surfaces every §1 error category without silent no-ops", () => {
+    const run = newRun();
+    expectRuntimeError(() => commitMove(run, "not-uci"), "ILLEGAL_MOVE", "malformed-UCI");
+    expectRuntimeError(() => commitMove(run, "e7e5"), "ILLEGAL_MOVE", "wrong-side");
+    expectRuntimeError(
+      () => commitMove(run, "e2e5"),
+      "ILLEGAL_MOVE",
+      "not-a-legal-move",
+    );
+    expectRuntimeError(() => rewind(run, "missing"), "UNKNOWN_NODE");
+    expectRuntimeError(
+      () => rewindToCheckpoint(run, "missing"),
+      "UNKNOWN_CHECKPOINT",
+    );
+    expectRuntimeError(
+      () => assertActiveWriter("writer-a", "writer-b"),
+      "NOT_ACTIVE_WRITER",
+    );
+
+    const checkmate = newRun(
+      "r1bqkbnr/ppp2Qpp/2np4/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4",
+    );
+    expectRuntimeError(() => commitMove(checkmate, "e8d7"), "RUN_TERMINATED");
+  });
+});

@@ -16,13 +16,13 @@ behavior (cloud-clicker rule). Append every session to `log.md`.
 
 ## 1. Core tree + events (`packages/runtime`)
 
-- [ ] Node/Branch/Run types per RFC §Node model (path-keyed, transposeKey)
+- [x] Node/Branch/Run types per RFC §Node model (path-keyed, transposeKey)
 - [x] Living `schemas/drill_run.schema.json` v0.2 incl. event `seq` (BR-C8)
-- [ ] Event log append + projection; segment derivation (checkpoint spans)
-- [ ] commitMove: leaf append + implicit fork at non-leaf cursor (`alt-N`,
+- [x] Event log append + projection; segment derivation (checkpoint spans)
+- [x] commitMove: leaf append + implicit fork at non-leaf cursor (`alt-N`,
       `branch.forked` then `move.committed`) (BR-C1)
-- [ ] Explicit fork (empty named branch), rewind (cursor only)
-- [ ] Typed errors: ILLEGAL_MOVE(reason)/UNKNOWN_NODE/UNKNOWN_CHECKPOINT/
+- [x] Explicit fork (empty named branch), rewind (cursor only)
+- [x] Typed errors: ILLEGAL_MOVE(reason)/UNKNOWN_NODE/UNKNOWN_CHECKPOINT/
       NOT_ACTIVE_WRITER/RUN_TERMINATED (BR-C4)
 
 ## 2. Objective state machine
