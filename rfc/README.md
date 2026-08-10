@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent |
 |---|---|---|
 | `0000-rfc-process.md` | accepted | — |
-| `engine-workers.md` | draft (in adversarial review) | mines `archive/brief-v2/rfcs/RFC-0003`; hosts relocated BR-C6 invariant |
+| `engine-workers.md` | accepted → implementing | amends archived `branch-runtime` (run schema v0.3); mines `archive/brief-v2/rfcs/RFC-0003` |
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in
 `planning/exploration/log.md`): E1 met, E2 advisory, E3/E4/E5 accepted as in-flight

@@ -1,145 +1,190 @@
 # RFC: Engine Workers & Opponent Service
 
-- **Status:** draft
+- **Status:** accepted
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` (episode, resistance), `archive/brief-v2/08_ENGINE_CORPUS_AND_CONTENT.md` (responsibility table, policy modes)
 - **Exploration gate:** Q5 settled-go by validation-in-use (Maia smoke, exploration log 2026-08-12)
-- **Depends on:** `docs/branch-runtime.md` (implemented runtime: JobObserver, evidenceRefs, policyConfig locus, ObjectiveEvidenceUpgrader), `docs/drill-pack-format.md` (opponentPolicy, evidenceTypes)
-- **Parent / amends:** mines `archive/brief-v2/rfcs/RFC-0003-opponent-policy.md` sketch; hosts the analysis-cancellation invariant relocated from branch-runtime (BR-C6)
+- **Depends on:** `docs/branch-runtime.md`, `docs/drill-pack-format.md`
+- **Parent / amends:** `rfc/archive/branch-runtime.md` — **amends the run schema to v0.3: adds the `evidence.attached` event** (EW-C2 resolution); also mines `archive/brief-v2/rfcs/RFC-0003` and hosts the relocated BR-C6 cancellation invariant
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/engine-workers/` (once implementing)
+- **Planning:** `planning/engine-workers/`
 
 ## Summary
 
 The layer that makes the runtime playable: UCI engine workers (Stockfish judge,
-Maia-3 opponent sidecar), the opponent move service that binds a pack's
-`opponentPolicy` to an engine, an async evidence job queue with
-rewind-cancellation, and the capability descriptor the hybrid execution model
-negotiates against. Stockfish judges; Maia plays; neither pretends to be the other.
+Maia-3 opponent sidecar), a **pure opponent selector** the run's writer consults,
+an async evidence job queue with rewind-cancellation, and the capability
+descriptor for the hybrid model. Stockfish judges; Maia plays; the writer —
+and only the writer — appends.
 
 ## Motivation
 
-Both foundation RFCs are implemented; runs currently need a mock opponent. The
-Maia smoke validated the opponent approach (plan-coherent with history
-conditioning; weakened-SF control confirmed as the anti-pattern). Out of scope:
-browser-side engine execution (client RFC), Syzygy tablebase adapter and the
-`perfect_tablebase` / `practical_resistance` / `plan_defense` / `human_external`
-policy modes (follow-up RFCs), feedback composition, corpus.
+Both foundation RFCs are implemented; runs need a real opponent. The Maia smoke
+validated the approach. Out of scope: browser-side engines (client RFC), Syzygy
+adapter and the `plan_defense`/`practical_resistance`/`perfect_tablebase`/
+`human_external` modes (follow-ups), feedback composition, corpus.
 
 ## Specification
 
 ### Worker topology
 
-`apps/server` hosts an **engine supervisor** managing UCI child processes:
+`apps/server` hosts an **engine supervisor** (TypeScript — see Deviations)
+managing UCI children:
 
-- **Stockfish** — the system binary, one process per configured slot
-  (default 1 play + 1 analysis).
-- **Maia-3 sidecar** — the containerized image (promoted from
-  `tools/maia-harness` lineage into `workers/maia/`): `maia3-uci --model 5m
-  --use-uci-history`, checkpoint prebaked, `/usr/games/stockfish` not included
-  (separate concern). **History conditioning is mandatory** — every opponent
-  request sends the full move history (`position fen <start> moves ...`), never
-  a bare FEN. This is the validated coherence ingredient (Q5).
+- **Stockfish** — system binary; default 1 play + 1 analysis slot.
+- **Maia-3 sidecar** — containerized image promoted to `workers/maia/`
+  (`maia3-uci --model 5m --use-uci-history`, checkpoint prebaked). **History
+  conditioning mandatory**: every request sends full move history
+  (`position fen <start> moves …`), never bare FEN.
 
-Supervisor responsibilities: spawn, UCI handshake + `isready` warmup, option
-configuration, health check (respond-to-`isready` timeout), restart with
-backoff, graceful shutdown. Engine identity (name, version string, model id,
-container digest) is captured at spawn and exposed in the capability
-descriptor; runs record it in `policyConfig` (locus + versions — the
-determinism scope from branch-runtime).
+Supervisor: spawn, handshake + `isready` warmup, option config, health checks,
+restart with backoff (parameters in planning), graceful shutdown, and a
+**bounded UCI transcript ring buffer** per engine (debug + the acceptance
+tests' inspection surface). Engine identity (name, version, model id, container
+digest, `seedHonored`) is captured at spawn, exposed via capabilities, and
+recorded in `policyConfig`.
 
-### Opponent move service
+**Failure contract (EW-C5):** engine down or crashed mid-request → typed
+`ENGINE_UNAVAILABLE` (engine id, retryAfter hint). **Never a silent fallback
+engine** — that would mutate the run's engine identity mid-stream. A request
+naming an out-of-scope policy mode → `POLICY_MODE_UNSUPPORTED`. Both join the
+HTTP error mapping (503 / 422).
 
-Binds `opponentPolicy.mode` (pack format v0.2) to an engine, for the modes in
-scope:
+### Opponent selector (EW-C1 resolution: selection ≠ commitment)
+
+The service is a **pure selector**: `POST /select-move` with `{startFen,
+historyUci[], policy, seed}` → `{moveUci, candidates?, engineIdentity}`. It
+appends **nothing**. The run's **writer** (whoever holds the lease — under the
+hybrid model, normally the client runtime) then appends
+`opponent.move_selected` (embedding the selection + engine identity) followed
+immediately by `commitMove` — preserving both the single-writer invariant and
+the strict-adjacency replay contract, which are the writer's obligations.
+
+Modes in scope (pack schema fields `targetElo`/`temperature`/`topP` map to UCI
+options `Elo`/`Temperature`/`TopP`; product defaults when absent: 0.8 / 0.92 —
+EW-C7):
 
 | Mode | Engine | Behavior |
 |---|---|---|
-| `human_common` | Maia | sample with pack's `targetElo`/`Temperature`/`TopP` (UCI options `Elo`, `Temperature`, `TopP`) |
+| `human_common` | Maia | sample per pack settings |
 | `strong_engine` | Stockfish | movetime-limited best move |
-| `theory_strict` | spine + Maia | follow the pack spine while the position is on it (choosing among spine children by Maia probability); Maia takeover past the authored boundary |
+| `theory_strict` | spine + Maia | see below |
 
-Contract with the runtime (the strict-adjacency constraint from branch-runtime
-review): the service appends `opponent.move_selected` (with engine identity,
-sampled candidates when available, and the chosen move) **immediately followed
-by** the `commitMove` that produces the matching `move.committed`. Replay reads
-these back; live recomputation never happens during replay.
+**`theory_strict` mechanism (EW-C3):** "on the spine" is decided by
+`transposeKey` — an off-spine excursion that transposes back onto a spine
+position resumes spine-following. While on-spine: query Maia with
+`MultiPV = max(8, spine children)`, read the info-line candidate probabilities,
+restrict to legal spine children, sample among them proportionally; if **no**
+spine child appears in the MultiPV output, sample uniformly among spine
+children with the branch seed. Off-spine (whether past `authoredBoundary` or
+simply deviated before it): plain `human_common` behavior. The boundary
+affects *feedback voice* (pack format), not move selection.
 
-**Seeding:** if the Maia UCI surface exposes no seed option (expected — verify
-at first contact), sampled moves are non-reproducible at the source; that is
-acceptable because the event log is authoritative (read-back replay). The
-runtime's per-locus determinism invariant is then scoped to engines that honor
-seeds; `policyConfig` records `seedHonored: false` for Maia. This is a
-documented narrowing, not a violation — the log, not re-execution, is the
-replay contract.
+**Seeding:** if Maia exposes no seed option (verify at first contact),
+`seedHonored: false` is recorded; reproducibility comes from the event log
+(read-back replay) and from the selection cache below — a documented narrowing
+of the per-locus determinism invariant, not a violation.
 
-### Evidence job queue (hosts the relocated BR-C6 invariant)
+**Selection cache (EW-C4):** keyed on `(policyConfigDigest, branchSeed,
+historyHash)` where `historyHash` covers the full UCI history from the run
+start. This makes retries of the same line hit the cache — so `seedMode:
+fixed`/`per_run` retries meet the *same* opponent replies (the designed
+semantics), while `per_branch` varies via the seed in the key. Cross-run hits
+occur for identical histories of the same pack, which is exactly the drill
+retry case. Position-only caching is wrong under history conditioning and is
+not used.
 
-Async Stockfish analysis jobs attach evidence to nodes: `{nodeId, kind:
-eval|wdl|bestline, depth|movetime}` → on completion, append
-`feedback.generated`-adjacent evidence (an `objective.state_changed` upgrade
-goes through the runtime's `ObjectiveEvidenceUpgrader` binding, with
-`evidenceRefs` naming the job output). Queue rules:
+### Evidence job queue (hosts BR-C6; amends run schema — EW-C2)
 
-1. FIFO per run, bounded concurrency (default 1 analysis engine).
-2. **Rewind cancels stale jobs**: the supervisor registers a `JobObserver`;
-   `onRewound(prunedNodeIds)` cancels queued and preempts running jobs whose
-   node is no longer on the active path. Property-tested with fake jobs
-   (existing hook) plus one integration test with the real queue.
-3. Job results for cancelled jobs are discarded, never appended.
+Jobs: `{nodeId, kind: eval|wdl|bestline, depth|movetime}` against the analysis
+Stockfish. Output path, respecting single-writer:
 
-**Evidence typing discipline** (ADR-0005 adjacent, schema-enforced): Stockfish
-output → `engine_validated`; Maia candidate distributions / WDL →
-`human_model_predicted` (maia3's own docs: its WDL is a human-outcome
-prediction, not an engine eval). The two are never merged into one number.
+1. Completed results are staged server-side and exposed at
+   `GET /runs/:id/evidence?sinceSeq` (and pushed alongside `events`).
+2. **The writer appends** the new **`evidence.attached`** event
+   (`{nodeId, evidenceRefs, payload: {kind, source, values}}`) — added to the
+   run schema as **v0.3** by this RFC; the projection appends to the node's
+   `evidenceRefs`. Objective upgrades ride the existing
+   `ObjectiveEvidenceUpgrader` proposal path, also applied by the writer via
+   `objective.state_changed`.
+3. Queue rules: FIFO per run, bounded concurrency; `JobObserver.onRewound`
+   cancels queued and preempts running jobs off the active path; cancelled
+   results are discarded and never staged. If the writer disconnects, pending
+   staged evidence expires with the session (v1: no offline evidence apply).
+
+**Evidence typing discipline:** Stockfish → `engine_validated`; Maia
+distributions/WDL → `human_model_predicted` (per maia3's own docs, its WDL is
+a human-outcome prediction). Never coalesced into one number; a test asserts it.
 
 ### Capability descriptor
 
-`GET /capabilities` returns `{ engines: [{id, kind: judge|opponent, name,
-version, modelId?, containerDigest?, seedHonored}], policyModes: [...] }`.
-The hybrid execution model (browser enhancements, client RFC later) negotiates
-against this; for this RFC it is server-truth only.
+`GET /capabilities` → `{engines: [{id, kind: judge|opponent, name, version,
+modelId?, containerDigest?, seedHonored}], policyModes: [...], runSchemaVersion}`.
+Shape is a superset of `policyConfig.locus`'s per-engine entries so recorded
+locus == a capabilities subset.
 
 ### Latency targets
 
-Cached opponent move: perceived-instant (cache keyed on `(packDigest, nodeId,
-policyConfig)`). Uncached Maia move: <500 ms on the host (measure; the smoke
-suggests comfortable margin). Analysis jobs: async only, never block a move.
+Cached selection: perceived-instant. Uncached Maia: <500 ms server-side
+(measure). Analysis jobs async only.
 
 ## Deviations from design
 
-The archive sketch (RFC-0003) proposed a policy-mixer (corpus + Maia + plan
-compatibility). Deliberately not built: the Maia smoke showed history
-conditioning suffices for v1 coherence. The mixer stays a BACKLOG fallback,
-revived only if drill play contradicts the smoke.
+1. **No policy-mixer** (archive RFC-0003): history conditioning sufficed in the
+   Q5 smoke; mixer stays a BACKLOG fallback.
+2. **Supervisor is TypeScript, no Go in this RFC** (doctrine check, EW-C6):
+   engine orchestration is core-adjacent server work, not a self-contained
+   data-format worker — the stack memo assigns it to TS explicitly. Go's
+   assigned territory (corpus pipeline) is untouched by this RFC.
+3. **Python inside the Maia container is upstream maia3 code, packaged, not
+   authored** — covered by the owner's standing sidecar ruling ("containerized
+   sidecar now, ONNX later"); the research-only phrasing on the harness
+   container is superseded by that ruling for this production packaging.
 
 ## Acceptance criteria
 
-- Supervisor: spawn/handshake/restart tests against the real Stockfish binary
-  (CI installs stockfish; skip-with-failure-note if absent locally).
-- Maia sidecar: tagged integration test (not in default CI): from a pack spine
-  position, `human_common` plays a 20-ply continuation; every opponent move
-  arrives as `opponent.move_selected` + adjacent `move.committed`; history
-  conditioning verified by inspecting the UCI transcript (`position ... moves`).
-- `theory_strict`: on-spine positions always play spine children; off-spine
-  falls through to Maia.
-- Cancellation: rewind mid-analysis cancels the queued job; its late result is
-  provably discarded.
-- Evidence typing: a Stockfish job and a Maia distribution attach with the
-  correct `evidenceTypes`; a test asserts they are never coalesced.
-- Latency: uncached Maia move measured and recorded in planning log.
+- Supervisor: spawn/handshake/restart/transcript tests against real Stockfish
+  (CI installs the binary; tests fail with a clear message if absent).
+- Maia integration (tag `INTEGRATION=maia`, requires Docker, run manually and
+  in an optional non-default CI job — not in `make verify`): 20-ply
+  `human_common` continuation from a pack spine; history conditioning proven
+  by transcript inspection (`position … moves …` on every request).
+- `theory_strict`: on-spine plays spine children (incl. a transposition-back
+  case via transposeKey); off-spine falls to human_common; zero-mass fallback
+  exercised with a stubbed MultiPV response.
+- EW-C1 seam: a full opponent ply through the REST surface — select → writer
+  appends selection+commit — replays cleanly; a direct server-side append
+  attempt gets `NOT_ACTIVE_WRITER` (regression-pinning the invariant).
+- Cancellation: rewind mid-analysis cancels; late results provably discarded.
+- `evidence.attached`: schema v0.3 validates it; projection appends
+  evidenceRefs; typing test (engine_validated vs human_model_predicted never
+  merged).
+- `ENGINE_UNAVAILABLE` / `POLICY_MODE_UNSUPPORTED` mapped and tested.
+- Uncached Maia latency measured, recorded in planning log.
 
 ## Open questions
 
-- Maia seed exposure — resolve at first contact; sets `seedHonored`.
-- Stockfish strength profile for `strong_engine` in drills (movetime vs depth
-  vs skill caps) — proposal in planning, owner ratifies with the storage-style
-  one-liner.
-- Container runtime assumption (Docker present on self-host) — document as a
-  requirement or provide a bare-venv fallback path; decide in planning.
+- Maia seed exposure — first contact sets `seedHonored`.
+- `strong_engine` strength profile (movetime vs depth) — planning proposal,
+  owner one-liner.
+- Docker-required vs bare-venv fallback for self-hosters — planning proposal.
+
+## Acceptance review blockers (2026-08-12 — EW-C1..EW-C8) — RESOLVED
+
+All eight resolved in this revision: C1 → pure selector + writer-commits;
+C2 → `evidence.attached` event via declared v0.3 amendment of the archived
+parent + writer-applies path; C3 → transposeKey spine-membership + MultiPV
+mechanism + zero-mass fallback + boundary clarified as feedback-only;
+C4 → (policyConfigDigest, branchSeed, historyHash) cache key with retry
+semantics; C5 → typed ENGINE_UNAVAILABLE/POLICY_MODE_UNSUPPORTED, no silent
+fallback; C6 → Deviations 2–3 (TS supervisor per stack memo; upstream Python
+under standing sidecar ruling); C7 → field/option mapping + defaults;
+C8 → concrete tag/CI story + transcript buffer in spec. Original texts: git
+history (commit 74debed review landing).
 
 ## Changelog
 
-- 2026-08-12: created; scoped to judge+opponent+jobs+capabilities, mixer
-  explicitly deferred on Q5 evidence.
+- 2026-08-12: created; mixer deferred on Q5 evidence.
+- 2026-08-12: adversarial review EW-C1..C8; all resolved (no owner rulings
+  required — resolutions follow prior rulings); **status → accepted**.
