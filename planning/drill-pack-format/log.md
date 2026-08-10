@@ -54,3 +54,12 @@
   `make verify` green (13 files, 70 tests, all typechecks and schema/scaffold
   verification); `git diff --check` clean. Stopped at the §1 boundary.
 - Follow-up `make build` green; all 58 frozen archive checksums verified unchanged.
+
+## 2026-08-12 (claude, review of §1)
+
+- Independently verified: `make verify` green (70 tests / 13 files), archive
+  diff 0 lines. v0.2 schema carries all amendments (spine/feedbackPolicy/
+  interaction/authoredBoundary/deviations; acceptedAlternatives correctly
+  gone); all six negative fixtures present; hand-rolled RFC 8785 with
+  surrogate handling; amended Najdorf fixture at 0.2.0. **§1 APPROVED.**
+  §3 (round-trip) green-lit; §2 stays deferred per owner ruling.

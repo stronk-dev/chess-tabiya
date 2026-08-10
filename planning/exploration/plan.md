@@ -24,7 +24,7 @@ record). Evidence lands as dossiers in `design/research/`.
 | Q4a | Can authors declare useful phase transitions and timing windows? | 💡 | E3, K7, C6 |
 | Q4b | Can deterministic features assist authors reliably? | 💡 | K7 |
 | Q4c | Is fully automatic semantic phase detection useful enough to justify itself? | 💡 · optional | — |
-| Q5 | Can a runnable human/corpus policy stay coherent over 10–20 plies? | 💡 | E4, H5, K5, C5 |
+| Q5 | Can a runnable human/corpus policy stay coherent over 10–20 plies? | ✅ settled-go (validation-by-use, smoke 2026-08-12; revisit only if drill play contradicts) | H5 supported |
 | Q6 | How do we use historical games without the ingestion-first trap? | 💡 | — |
 | Q7 | What does a reviewed drill pack cost to author? | 💡 | K10, K7, C6 |
 | Q8 | Can feedback beat "Stockfish labels + prose"? | 💡 | K6, C1 |

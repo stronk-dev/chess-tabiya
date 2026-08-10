@@ -15,7 +15,7 @@ RUN maia3-cache --model maia3-5m
 WORKDIR /harness
 COPY runner.py analyze.py positions.json ./
 
-ENV SF_CMD=stockfish
+ENV SF_CMD=/usr/games/stockfish
 # --use-uci-history = move-history conditioning: the coherence knob. On by default.
 ENV MAIA_CMD="maia3-uci --model 5m --use-uci-history"
 CMD ["python", "runner.py"]

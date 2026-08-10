@@ -327,3 +327,28 @@
   docs/branch-runtime.md indexed, references updated, verify green, archive
   intact. **design → RFC → review → implementation → docs → archive: complete**
   for the product's core mechanic, three days after the repo was reorganized.
+
+## 2026-08-12 (claude, session 1 continued — 18) — Q5 answered by use
+
+- Ran the Maia smoke locally (Docker on the owner's machine; homeserver not
+  needed — the 5M model is CPU-fine). 80 games: 16 roots × {Maia-5M@1600/1800/
+  2000 with --use-uci-history, weakened-SF control, full-SF ceiling}, 20 plies.
+- **Verdict (games read by claude): Maia-3 5M + history conditioning is
+  plan-coherent and drill-ready.** Highlights:
+  - m2@1800 Carlsbad: Ne5 + f4-f5-f6 storm + Rf3-g3 rook lift — a 10-move plan
+    followed through.
+  - m2@1800 Caro-Advance: white c4-c5/a4-a5 space plan vs black f6/f5 break
+    with Rf7-Qf8-Re8 regroup — both sides on thematically correct plans.
+  - m1@1600: played the correct e4 break ONE MOVE EARLY and lost d4 with check
+    — exactly the timing mistake-class the product drills.
+  - Rook ending: king activation, g4 break, rook behind the passer — real
+    technique both sides.
+  - Weakened-SF control: individually-fine moves, no story (Bc8, Ra4, Kh1
+    noodling) — the H5 premise visible in raw data.
+- Consequences: policy-mixer NOT needed for v1 (stays a ledger fallback);
+  engine-workers RFC mandates history conditioning; shuffle-index proxy proved
+  worthless vs reading games (full-SF scored highest) — dropped. Caveats:
+  self-play, 20 plies, 1 game/root — a smoke, not proof; drill play is the
+  ongoing validation. Games in tools/maia-harness/out/ (gitignored).
+- First-contact fixes: maia3 installs from source (no PyPI), entrypoint
+  maia3-uci, /usr/games/stockfish path. Container prebakes the checkpoint.

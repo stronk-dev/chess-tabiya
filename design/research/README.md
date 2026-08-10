@@ -54,7 +54,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Target learner/coach problem interviews + concept preference test | Q1b, E2 | **GAP** | — |
 | Learning effect versus simpler formats | Q1c, H1–H4, C2–C4 | **GAP** — requires slice | — |
 | Maia-3 capabilities (models, conditioning, sampling) | Q5 | covered `[P]` | `arch/research/source_index.md` R04 |
-| Maia opponent quality (coherence over 10–20 plies) | Q5 | validation-by-use: sidecar container + smoke runner built; verdict comes from playing it and eyeballing games during engine-workers implementation | `tools/maia-harness/` |
+| Maia opponent quality (coherence over 10–20 plies) | Q5 | **answered `[V]`**: 80-game smoke, history-conditioned 5M plays plan-coherent 20-ply continuations with level-appropriate errors; weakened-SF control shows exactly the plan-less noodling Maia avoids | `tools/maia-harness/`, exploration log |
 | Maia-3 variants vs ChessMimic (if runnable) vs corpus policy vs weakened-Stockfish control, same positions/seeds | Q5, H5 | **GAP** (queue 6) | — |
 | Author-declared transitions/timing windows on reviewed examples | Q4a, Q7, E3 | **GAP** (queue 7) | — |
 | Smallest useful deterministic feature set + coach agreement | Q4b, Q8 | **GAP** (queue 8) | — |
