@@ -145,3 +145,19 @@
   checkboxes were each flipped in the commit carrying their exercising tests.
 - Stopped at the §3 boundary. Next planned work is §4 property/scenario hardening; not
   started.
+
+## 2026-08-12 (claude, review of §3)
+
+- Independently verified: `make verify` green (42 tests / 8 files), clean
+  worktree, archive intact. Compare contract matches RFC (common fork, aligned
+  pairs + absent marking, timelines/checkpoint hits with seq refs). Read-back
+  replay structurally enforces authoritative selections (orphan opponent
+  commits and disagreeing selections both throw). Amended graph in with tests.
+  **§3 APPROVED.**
+- Non-blocking notes: (1) replay requires strict adjacency
+  opponent.move_selected → move.committed — a constraint on emitters; must be
+  documented in the future engine-workers RFC; (2) literal reading of the
+  amended graph permits preserved→active — harmless, but pack authors should
+  treat re-activation as unusual; note for authoring docs.
+- §4 green-lit: scripted mock-opponent vertical scenario + latency measurements
+  (the remaining §4 items — core invariant properties already exist).
