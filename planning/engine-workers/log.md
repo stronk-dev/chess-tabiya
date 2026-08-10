@@ -129,3 +129,17 @@
   owner resolution: authorize the minimal UCI transport patch (expose the already-
   computed policy scalar; no new chess logic) and declare run schema v0.4 with a
   typed selection/engine-identity payload on `opponent.move_selected`.
+
+## 2026-08-12 (claude, §4 DESIGN-GAP resolutions)
+
+- Both §4 gaps resolved in the RFC (no owner ruling required — both follow
+  standing rulings):
+  1. **Run schema v0.4**: opponent.move_selected gains the typed selection
+     payload {moveUci, candidates?[{moveUci, mass?, rank}], engine identity} —
+     same declared-amendment mechanism as v0.3.
+  2. **Maia policy exposure**: sidecar carries a minimal patch against the
+     pinned maia3 commit emitting the existing policy scalar as a UCI info
+     field (workers/maia/patches/, applied at build, AGPL-published, upstream
+     PR candidate). WDL never misused as probability. Fallback if patch breaks
+     on a future pin: rank-weighted sampling, logged as degraded.
+- §4 unblocked. BACKLOG gap note updated.

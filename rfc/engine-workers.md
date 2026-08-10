@@ -81,7 +81,24 @@ children with the branch seed. Off-spine (whether past `authoredBoundary` or
 simply deviated before it): plain `human_common` behavior. The boundary
 affects *feedback voice* (pack format), not move selection.
 
-**Seeding:** if Maia exposes no seed option (verify at first contact),
+**Selection payload (run schema v0.4 — DESIGN-GAP resolution 2026-08-12):**
+`opponent.move_selected` carries a typed `selection` object: `{moveUci,
+candidates?: [{moveUci, mass?, rank}], engine: {id, name, version, modelId?,
+containerDigest?, seedHonored}}`. Declared as run schema **v0.4** under this
+RFC's standing amendment of the archived branch-runtime parent (same mechanism
+as v0.3's evidence.attached).
+
+**Maia policy exposure (DESIGN-GAP resolution 2026-08-12):** the pinned maia3
+UCI surface ranks MultiPV candidates but does not emit its internally computed
+move-policy mass. The sidecar container carries a **minimal patch** against the
+pinned source commit exposing the existing policy scalar as a UCI info field
+(patch lives in `workers/maia/patches/`, applied at image build, published with
+our AGPL tree; offer upstream as a PR). WDL is never used as a probability
+substitute (typing discipline). Fallback if the patch ever breaks against a
+future pin: rank-weighted sampling, explicitly logged as degraded.
+
+**Seeding:** if Maia exposes no seed option (confirmed at first contact:
+`seedHonored: false`),
 `seedHonored: false` is recorded; reproducibility comes from the event log
 (read-back replay) and from the selection cache below — a documented narrowing
 of the per-locus determinism invariant, not a violation.
@@ -193,6 +210,10 @@ history (commit 74debed review landing).
   required — resolutions follow prior rulings); **status → accepted**.
 - 2026-08-12: §2 review amendment — engine tests skip-with-warning locally,
   ENGINES_REQUIRED=1 enforces in CI.
+- 2026-08-12: §4 DESIGN-GAP resolutions — run schema v0.4 (typed selection
+  payload in opponent.move_selected) and the minimal maia3 policy-exposure
+  patch carried in the sidecar (owner's standing fork-friendly ruling; WDL
+  never misused as probability).
 - 2026-08-12: §1 run-schema v0.3 amendment implementation started;
   **status → implementing**.
 - 2026-08-12: §1 evidence attachment and §2 Stockfish-backed UCI supervisor
