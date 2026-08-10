@@ -219,3 +219,18 @@
   Kill criteria remain live; K10/K5/K3 now get tested inside implementation.
 - Next: owner reviews the two drafts → accepted → planning/ dirs + first
   implementation. Parallel: E4 Maia harness, pack A authoring on paper.
+
+## 2026-08-12 (claude, session 1 continued — 10) — OWNER RULINGS: architecture
+
+- **Execution model:** hybrid with **backend capability parity** — every capability
+  must run on the backend (full-strength Maia needs the compute; browser model
+  downloads never required); browser implementations are negotiated progressive
+  enhancements. Written into `rfc/branch-runtime.md` §Execution model.
+- **License: AGPL-3.0** (matches Maia, closes hosted-fork loophole). Q2 source-model
+  axis resolved; content/data rights remain the last open Q2 axis.
+- **Stack constrained:** no Python backend, no Rust; Go or Node/TS, client framework
+  (Svelte/React/vanilla) genuinely open — owner wants a real comparison before
+  pinning. Stack-selection dossier commissioned (in flight).
+- **Review process:** cloud-clicker pattern adopted — adversarial acceptance reviews
+  of both draft RFCs commissioned (blocker IDs DPF-C*/BR-C*), owner rules on
+  blockers before drafts flip to accepted. Both reviews in flight.

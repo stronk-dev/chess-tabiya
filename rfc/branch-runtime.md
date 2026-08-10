@@ -68,7 +68,17 @@ future streamer overlay possible.
 fork(run, nodeId, label?, intent?) · graph(run) · compare(run, branchA, branchB) ·
 exportPgn(run, branches?) · events(run, since?)`. The archive's REST sketch
 (`POST /runs`, `/moves`, `/rewind`, `/fork`, `GET /graph`, `POST /compare`) is one
-binding of this contract; see Open questions on client-side execution.
+binding of this contract; the client-side runtime binds the same contract locally
+(see Execution model).
+
+### Execution model (owner ruling 2026-08-12)
+
+**Hybrid with backend capability parity.** Every capability MUST have a backend
+implementation (the homeserver has the compute; full-strength Maia lives there).
+Browser-side implementations — rules, board, shallow Stockfish WASM, possibly a
+small quantized Maia — are progressive enhancements the client negotiates per
+capability; in-browser model downloads are opt-in, never required. The event log
+syncs to the server regardless of where moves were computed.
 
 ### Latency budgets (acceptance targets, from design/02)
 
@@ -91,15 +101,14 @@ None.
 
 ## Open questions
 
-- **Where the runtime executes:** browser-first (WASM engines, aligns with the
-  owner's hosting posture; server only persists event logs) vs server-authoritative
-  (simpler for streamer mode later). Leaning browser-first with event-log sync;
-  decide before implementing.
-- Storage binding (SQLite vs Postgres) and server language — deferred decisions
-  register in `rfc/README.md`; resolve at implementation start, not in this spec.
+- Storage binding (SQLite vs Postgres) and server language — server language
+  constrained by owner ruling 2026-08-12: **no Python, no Rust; Go or Node/TS**,
+  pending the stack-selection research dossier (`design/research/`); storage per
+  deferred-decisions register at implementation start.
 - Clock/time-pressure state is carried (`clockState`) but semantics are undesigned
   (BACKLOG: time-pressure dimension) — explicitly deferred to a future RFC.
 
 ## Changelog
 
 - 2026-08-12: created as first post-exploration draft.
+- 2026-08-12: execution model resolved by owner ruling (hybrid, backend capability parity); stack constrained (no Python/Rust).

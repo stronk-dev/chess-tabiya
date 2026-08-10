@@ -101,9 +101,10 @@ legal review belongs before any public or proprietary release
   to the browser (WASM) where possible so hosting stays cheap; agent/LLM features must
   run on a self-hosted LLM or cheap provider calls. Explicitly not wanted: paid SaaS,
   or the current fragmentation ("one site for openings, another for endings"). This
-  settles the monetization and deployment axes in spirit; source-model and
-  content-rights details (licenses for code, packs, weights) remain the open part of
-  Q2. Status stays 💡 until those are recorded as one choice per axis.
+  settles the monetization and deployment axes in spirit.
+- **Owner ruling (2026-08-12): source model = AGPL-3.0** (matches Maia, closes the
+  hosted-fork loophole). Remaining open axis: content/data rights for packs,
+  annotations, and derived datasets.
 
 ## Q3 — Mobile
 

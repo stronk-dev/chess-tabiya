@@ -40,7 +40,7 @@ silently later.
 
 | Deferred decision | Origin | Owner | Why it matters |
 |---|---|---|---|
-| Server language (Python/FastAPI vs Go/Rust vs hybrid) | `archive/brief-v2/12_SYSTEM_ARCHITECTURE.md` ("avoid optimizing language choice before the drill runtime is validated") | first runtime RFC | Locks the engine-orchestration stack |
-| Web framework (Vite vs Next.js) | `archive/brief-v2/12_SYSTEM_ARCHITECTURE.md` | first client RFC | Minor; decide at scaffold time |
+| Server language | constrained by owner ruling 2026-08-12: no Python, no Rust; **Go or Node/TS** | stack-selection dossier → owner | Locks the engine-orchestration stack |
+| Client framework (Svelte vs React vs vanilla; bundler) | owner wants a real comparison first (2026-08-12) | stack-selection dossier → owner | Board-heavy UI; chessground interop |
 | SQLite vs PostgreSQL for runs/branches | `archive/brief-v2/12_SYSTEM_ARCHITECTURE.md` | first runtime RFC | Single-user self-hosted may not need Postgres |
 | Source model, deployment, monetization, and content/data rights | exploration Q2 | Marco | Gates public release; GPL/AGPL obligations constrain combinations but do not prohibit charging |
