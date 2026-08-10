@@ -67,10 +67,12 @@ monotonic `seq`; `events(run, since)` cursors on `seq`, not timestamps.
 
 ### Objective state machine (BR-C3 ruling)
 
-Owned by the runtime core. Transitions: `active → preserved | degraded | failed |
-achieved | transitioned`; `degraded → preserved` (recovery) and `degraded → failed`
-are legal; `preserved → degraded` is legal; `achieved`, `failed`, `transitioned`
-are terminal. Synchronous evaluation uses **engine-free pack predicates** only
+Owned by the runtime core. States: `active, preserved, degraded` (non-terminal) and
+`achieved, failed, transitioned` (terminal, absorbing). **Any non-terminal state may
+transition to any other state**; self-transitions are not events. The path a run
+takes (e.g. degraded → preserved recovery, or degraded → achieved in a save drill)
+is descriptive history, not a prescriptive graph — the machine's invariants are:
+terminals absorb, and every transition carries evidence. Synchronous evaluation uses **engine-free pack predicates** only
 (rules facts: mate/stalemate/draw, material balance, fenPredicate, checkpoint
 reach). Workers may later **asynchronously upgrade** a state with evidence — every
 `objective.state_changed` event carries `evidenceRefs` (the CET lesson: never a
@@ -188,5 +190,9 @@ Original blocker texts: git history (commit 22fa697).
 - 2026-08-12: acceptance review landed (BR-C1..BR-C8); held at draft.
 - 2026-08-12: all blockers resolved; implementation doctrine added (TS core + Go
   workers, Svelte 5, Maia sidecar); **status → accepted**.
+- 2026-08-12: §2 review amendment — transition graph generalized (any non-terminal
+  → any other state; terminals absorbing). The drafted graph made `achieved`
+  unreachable from `preserved` and blocked save-drill and mode-transformation
+  paths; caught in review of the faithful implementation.
 - 2026-08-12: implementation started with the shared monorepo scaffold; **status →
   implementing**.

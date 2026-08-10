@@ -100,3 +100,23 @@
 - Verification before commit: `make verify` green (5 files, 30 tests); `make build` green.
   §1 review note 3 (O(n²) replay) remains deferred to §5 measurements; note 4 is cosmetic.
 - Stopped at the §2 boundary. Next planned work is §3 replay/compare/export; not started.
+
+## 2026-08-12 (claude, review of §1-fixes + §2)
+
+- Independently verified: `make verify` green (30 tests / 5 files), clean
+  worktree, archive intact. Seed fix correct (fixed/per_run reuse primary;
+  per_branch derives); nodes start with empty evidenceRefs; transition graph
+  enforced exactly as the RFC specified, terminals absorbing, evidence required
+  (empty/blank refs throw); predicate vocabulary exceeds spec (path-aware
+  checkpoints, transposeKey threefold, 50-move, pawnStructure, all/any/not).
+  **§2 APPROVED as implemented.**
+- **Spec bug found in the RFC (mine, not codex's):** the drafted graph made
+  `achieved` unreachable once `preserved`, and blocked degraded→achieved (save
+  drills) and →transitioned (mode transformation). RFC amended in place:
+  any non-terminal → any other state; terminals absorbing. Codex must update
+  ALLOWED_TRANSITIONS + tests as §3 step 1.
+- Forward note (pack-format, future v0.3): the ObjectiveTransitionRule /
+  predicate vocabulary lives in the runtime; the pack schema's free-form
+  `objective.successConditions` should eventually adopt it. Also: rule order =
+  priority in evaluateObjective (first match wins) — document in pack authoring.
+- §3 green-lit: read-back replay, compare contract, PGN export, JobObserver.
