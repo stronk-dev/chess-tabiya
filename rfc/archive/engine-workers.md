@@ -1,6 +1,6 @@
 # RFC: Engine Workers & Opponent Service
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` (episode, resistance), `archive/brief-v2/08_ENGINE_CORPUS_AND_CONTENT.md` (responsibility table, policy modes)
@@ -8,7 +8,7 @@
 - **Depends on:** `docs/branch-runtime.md`, `docs/drill-pack-format.md`
 - **Parent / amends:** `rfc/archive/branch-runtime.md` — **amends the run schema to v0.3 with `evidence.attached`, then v0.4 with typed opponent selection** (EW-C2 and §4 DESIGN-GAP resolutions); also mines `archive/brief-v2/rfcs/RFC-0003` and hosts the relocated BR-C6 cancellation invariant
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/engine-workers/`
+- **Planning:** `planning/archive/engine-workers/`
 
 ## Summary
 
@@ -112,6 +112,11 @@ occur for identical histories of the same pack, which is exactly the drill
 retry case. Position-only caching is wrong under history conditioning and is
 not used.
 
+**Ratified `strong_engine` profile:** v1 ships with `go movetime 100`,
+`Threads=1`, `Hash=16`, and `MultiPV=1`. The resolved profile is
+deployment-configurable and exposed by capabilities. This opponent budget does
+not cap asynchronous analysis jobs, which carry their own depth or movetime.
+
 ### Evidence job queue (hosts BR-C6; amends run schema — EW-C2)
 
 Jobs: `{nodeId, kind: eval|wdl|bestline, depth|movetime}` against the analysis
@@ -124,7 +129,8 @@ Stockfish. Output path, respecting single-writer:
    run schema as **v0.3** by this RFC; the projection appends to the node's
    `evidenceRefs`. Objective upgrades ride the existing
    `ObjectiveEvidenceUpgrader` proposal path, also applied by the writer via
-   `objective.state_changed`.
+   `objective.state_changed`. Stockfish evidence values record the engine id
+   and the requested depth or movetime as judgment provenance.
 3. Queue rules: FIFO per run, bounded concurrency; `JobObserver.onRewound`
    cancels queued and preempts running jobs off the active path; cancelled
    results are discarded and never staged. If the writer disconnects, pending
@@ -137,7 +143,8 @@ a human-outcome prediction). Never coalesced into one number; a test asserts it.
 ### Capability descriptor
 
 `GET /capabilities` → `{engines: [{id, kind: judge|opponent, name, version,
-modelId?, containerDigest?, seedHonored}], policyModes: [...], runSchemaVersion}`.
+modelId?, containerDigest?, seedHonored}], policyModes: [...], policyProfiles:
+{strong_engine: {movetimeMs, threads, hashMb, multiPv}}, runSchemaVersion}`.
 Shape is a superset of `policyConfig.locus`'s per-engine entries so recorded
 locus == a capabilities subset.
 
@@ -183,12 +190,13 @@ Cached selection: perceived-instant. Uncached Maia: <500 ms server-side
 - `ENGINE_UNAVAILABLE` / `POLICY_MODE_UNSUPPORTED` mapped and tested.
 - Uncached Maia latency measured, recorded in planning log.
 
-## Open questions
+## Resolved owner rulings
 
-- Maia seed exposure — first contact sets `seedHonored`.
-- `strong_engine` strength profile (movetime vs depth) — planning proposal,
-  owner one-liner.
-- Docker-required vs bare-venv fallback for self-hosters — planning proposal.
+- Maia first contact found no seed option, so `seedHonored: false` is recorded.
+- `strong_engine` uses the deployment-configurable 100 ms / one thread / 16 MB
+  hash / single-PV profile above.
+- Maia is Docker-required for v1. There is no supported bare-venv fallback;
+  ONNX/browser remains the future Docker-less path.
 
 ## Acceptance review blockers (2026-08-12 — EW-C1..EW-C8) — RESOLVED
 
@@ -222,3 +230,10 @@ history (commit 74debed review landing).
   option (`seedHonored: false`).
 - 2026-08-12: §4 run schema v0.4, patched Maia policy exposure, pure selector,
   selection cache, and writer-side adjacent append implemented.
+- 2026-08-12: §5 evidence queue, rewind cancellation, writer application, and
+  evidence typing implemented; §6 capabilities and Maia continuation/latency
+  measurements implemented.
+- 2026-08-12: owner ratified the deployment-configurable 100 ms / one-thread /
+  16 MB `strong_engine` profile and Docker-required Maia deployment. Profile
+  defaults, capabilities, and evidence provenance landed; canonical behavior
+  distilled to `docs/engine-workers.md`; **status → implemented**.

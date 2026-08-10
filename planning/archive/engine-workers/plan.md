@@ -1,6 +1,6 @@
 # Engine Workers & Opponent Service — implementation plan
 
-RFC: `rfc/engine-workers.md` (accepted 2026-08-12). Assignee: codex.
+RFC: `rfc/archive/engine-workers.md` (implemented 2026-08-12). Assignee: codex.
 `[x]` flips only in commits carrying the exercising test. Append sessions to log.md.
 
 ## 1. Run schema v0.3 (the declared branch-runtime amendment)

@@ -267,3 +267,27 @@
   sidecar (likely fixes the exit-126 startup race), GHCR-published multi-arch
   images by digest, compose profiles, devcontainer.
 - All acceptance criteria + rulings complete → completion protocol green-lit.
+
+## 2026-08-12 (codex, ratified profile + completion protocol)
+
+- Landed the ratified opponent-only `strong_engine` profile in commit `3343cdf`:
+  100 ms movetime, one thread, 16 MB hash, and single PV. The shared resolver and
+  Stockfish play spec keep all four values deployment-configurable; the selector
+  consumes the effective movetime, capabilities report the complete effective
+  profile, and persisted Stockfish evidence records engine id plus requested
+  depth or movetime as judgment provenance. The focused profile/provenance tests
+  and the full CI-equivalent gate passed (19 files, 100 tests).
+- Replaced the partial `docs/engine-workers.md` with the standalone canonical
+  description of the implemented supervisor, Dockerized Maia sidecar and
+  policy-mass patch, selector modes/cache, writer-commit seam, v0.3/v0.4 run
+  amendments, evidence queue/cancellation, capabilities, error surface,
+  measured Maia envelope, ratified defaults, and limitations. The Docker
+  exit-126 startup flake remains explicit rather than being folded into request
+  latency.
+- Set the RFC to implemented, added its final changelog entries, and moved it to
+  `rfc/archive/engine-workers.md`. Moved this planning directory to
+  `planning/archive/engine-workers/`, updated the RFC/docs indexes, refreshed
+  living BACKLOG links, and updated `AGENTS.md`. The client RFC was not started.
+- Completion verification after all moves: `ENGINES_REQUIRED=1 make verify`
+  green — all workspace typechecks, 19 test files / 100 tests, and scaffold
+  verification. `git diff --check` clean; the frozen brief archive is untouched.
