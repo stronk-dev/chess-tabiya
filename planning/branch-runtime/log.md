@@ -161,3 +161,34 @@
   treat re-activation as unusual; note for authoring docs.
 - §4 green-lit: scripted mock-opponent vertical scenario + latency measurements
   (the remaining §4 items — core invariant properties already exist).
+
+## 2026-08-12 (codex, session 5) — §4 vertical proof + latency
+
+- Added the deterministic no-engine acceptance scenario in `6f460a8`: six mainline plies
+  with every mock reply logged as adjacent `opponent.move_selected` → `move.committed`, a
+  checkpoint, rewind to ply 2, user alternative with implicit `alt-1`, and a shorter
+  alternative play-out. One test then verifies aligned comparison with absent `b` at the
+  final offset, main-only checkpoint hit, legal two-branch chessops PGN, and two identical
+  successful full-log read-backs.
+- Expanded fast-check coverage so §4 now directly exercises invariants 1–3 and 5–8:
+  immutable/recoverable path trees, legal PGN export, fork-relative comparison alignment,
+  same-locus/seed/play opponent determinism, and acceptance of generated legal moves. The
+  integrated error test reconfirms malformed-UCI, wrong-side, and illegal-move failures are
+  typed rather than silent.
+- Added repeatable latency instrumentation using exact 200- and 1000-event logs. Each
+  operation received 3 warm-ups followed by 20 samples in the local Vitest process; run
+  construction was excluded. Values are milliseconds (`median / p95 / max`):
+
+  | events | full-log projection | rewind (budget <100) | implicit fork+commit (budget <50) |
+  |---:|---:|---:|---:|
+  | 200 | 0.092 / 0.121 / 0.189 | 0.486 / 0.591 / 0.606 | 0.209 / 0.255 / 0.263 |
+  | 1000 | 2.057 / 2.247 / 2.313 | 10.883 / 11.487 / 12.385 | 1.999 / 2.410 / 2.451 |
+
+- Both measured interaction operations were within budget at both sizes. These are local
+  foundation measurements, not browser/network claims; §5 must remeasure through storage
+  and transport rather than extrapolate them.
+- Verification target after integration: `make verify` (10 files, 46 tests) and
+  `make build`. All four §4 checkboxes are backed by the commit carrying their exercising
+  test.
+- Stopped at the §4 boundary. Next is §5 server binding; its report will include the
+  SQLite-vs-Postgres storage proposal for owner ruling. §5 was not started.

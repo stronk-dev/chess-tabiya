@@ -45,7 +45,7 @@ behavior (cloud-clicker rule). Append every session to `log.md`.
 - [x] fast-check properties: invariants 1–3, 5–8
 - [x] Replay determinism ×2; error-surface test (never-silent)
 - [x] Scripted mock-opponent vertical scenario from RFC acceptance criteria
-- [ ] Latency measurements recorded in log.md (honest, even if over budget)
+- [x] Latency measurements recorded in log.md (honest, even if over budget)
 
 ## 5. Server binding (`apps/server`)
 

@@ -35,12 +35,12 @@ packages.
 path-keyed, retain a normalized four-field FEN `transposeKey`, and link to their parent;
 transpositions therefore remain distinct attempts without losing position matching.
 
-The implemented §1–3 surface includes run creation, legal move commits, implicit forks
+The implemented §1–4 surface includes run creation, legal move commits, implicit forks
 after rewind, explicit empty branches, cursor-only rewind, checkpoint segment derivation,
 event read-back/projection, typed errors, the engine-free objective state machine,
 authoritative opponent read-back, branch comparison, legal PGN variation export, and the
-rewind job-observer hook. Property/scenario hardening and server lease enforcement belong
-to later plan sections. The normative wire shape is the living
+rewind job-observer hook, invariant properties, and the deterministic vertical acceptance
+scenario. Server lease enforcement belongs to §5. The normative wire shape is the living
 `schemas/drill_run.schema.json` v0.2; `packages/schema` owns its version constant.
 
 Objective transition rules use only deterministic local evidence: checkmate, stalemate,
@@ -54,6 +54,10 @@ be the matching opponent commit; it never invokes a policy. Comparison aligns br
 after their last common fork and returns absent-side marking, objective timelines, and
 checkpoint hits. PGN export uses chessops to verify every move, SAN, and resulting FEN before
 writing selected branches as variations.
+
+Latency instrumentation exercises full-log projection, rewind, and implicit fork+commit at
+200 and 1000 events without making timing a flaky CI assertion. The dated measured values
+and methodology live in `planning/branch-runtime/log.md`.
 
 ## Commands
 
