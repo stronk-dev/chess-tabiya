@@ -42,5 +42,5 @@ silently later.
 |---|---|---|---|
 | Server language | ✅ resolved 2026-08-12: **TS core + Go workers** doctrine (chess-semantics code is TS/shared runtime; self-contained data-format workers are Go; Python only inside Maia sidecar containers) | — | `design/research/stack-selection.md` |
 | Client framework | ✅ resolved 2026-08-12: **Svelte 5** + Vite | — | `design/research/stack-selection.md` |
-| SQLite vs PostgreSQL for runs/branches | `archive/brief-v2/12_SYSTEM_ARCHITECTURE.md` | first runtime RFC | Single-user self-hosted may not need Postgres |
+| SQLite vs PostgreSQL for runs/branches | 🟡 **SQLite default implemented; owner ratification pending.** Revisit for horizontally replicated/managed SaaS or measured cross-run write contention. Proposal: `planning/branch-runtime/log.md` §storage proposal for owner ruling (2026-08-12) | Marco | Single-writer local/self-hosted workload does not yet justify an external database service; adapter preserves a bounded PostgreSQL follow-up |
 | Source model, deployment, monetization, and content/data rights | exploration Q2 | Marco | Gates public release; GPL/AGPL obligations constrain combinations but do not prohibit charging |

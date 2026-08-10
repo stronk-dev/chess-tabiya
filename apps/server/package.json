@@ -9,5 +9,8 @@
   "dependencies": {
     "@chess-tabiya/runtime": "workspace:*",
     "@chess-tabiya/schema": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1"
   }
 }

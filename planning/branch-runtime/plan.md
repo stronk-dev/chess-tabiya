@@ -49,9 +49,9 @@ behavior (cloud-clicker rule). Append every session to `log.md`.
 
 ## 5. Server binding (`apps/server`)
 
-- [ ] REST + events(sinceSeq) bindings wrapping the runtime package
-- [ ] Single-writer lease (NOT_ACTIVE_WRITER on conflict)
-- [ ] Storage: decide SQLite vs Postgres HERE, log the decision + update
+- [x] REST + events(sinceSeq) bindings wrapping the runtime package
+- [x] Single-writer lease (NOT_ACTIVE_WRITER on conflict)
+- [x] Storage: decide SQLite vs Postgres HERE, log the decision + update
       `rfc/README.md` deferred register
 
 ## Out of scope (do not build)

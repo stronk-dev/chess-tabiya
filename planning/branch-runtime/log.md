@@ -208,3 +208,77 @@
   assumption documented.
 - §5 green-lit: REST + events(sinceSeq) bindings, single-writer lease, storage
   proposal (SQLite vs Postgres) for owner ratification.
+
+## 2026-08-12 (codex, session 6) — §5 server binding
+
+- Added an intentionally thin server boundary in `apps/server`: `RunService` calls the
+  shared runtime for every semantic operation, a Fetch-style REST handler owns request and
+  error translation, and a Node HTTP adapter exposes it. The exercised routes are
+  `POST /runs`, `/runs/:id/moves`, `/rewind`, `/fork`, and `/compare`, plus
+  `GET /runs/:id/graph` and `/events?sinceSeq=`. Event cursors use the runtime's monotonic
+  `seq`; compare is read-only and requires no writer credential.
+- All boundary failures return a structured `{error: {code, message, reason?}}` body.
+  Runtime move failures map to HTTP 422, unknown resources to 404, lease/terminal conflicts
+  to 409, malformed requests to 400, and unexpected/storage failures to a non-revealing
+  structured 500. Tests cover the typed illegal-move reason, missing runs, invalid cursors,
+  and an actual Node HTTP round trip.
+- The creating client's non-empty `x-writer-id` becomes the run's active writer. Every
+  mutation checks it in the service and the storage update repeats the predicate atomically;
+  a second client receives `NOT_ACTIVE_WRITER` / HTTP 409 while uncredentialed event reads
+  remain available. Lease expiry, transfer, and multi-writer merge remain intentionally
+  unspecified; those require a later concurrency RFC rather than accidental semantics here.
+- SQLite persistence writes a canonical run snapshot and the active-writer id in one row.
+  Warm reads use an immutable in-process snapshot memo; cold reads rebuild and validate the
+  projection from the authoritative event log with `readBackReplay`. A close/reopen test
+  proves persistence and authoritative opponent-move adjacency survive a cold load.
+
+### Storage proposal for owner ruling
+
+**Proposal: ratify SQLite as the v1/default binding; retain PostgreSQL as a triggered
+follow-up, not a parallel implementation.** The current workload is one writer per run,
+many read-only event followers, modest drill-session documents, and local/self-hosted-first
+operation. SQLite WAL permits readers to continue while a writer commits, while still
+allowing only one writer at a time — a close fit for the deliberately chosen concurrency
+model ([SQLite WAL](https://www.sqlite.org/wal.html)). Node's built-in `node:sqlite`
+`DatabaseSync` avoids a native addon or external service, though its API is still marked
+Stability 1.2 / release candidate; that churn risk is isolated behind `RunStorage`
+([Node.js SQLite API](https://nodejs.org/download/release/latest-v24.x/docs/api/sqlite.html)).
+
+The bounded PostgreSQL follow-up implements the same `create/read/save/close` contract and
+uses a conditional update on `(run_id, active_writer_id)`. Trigger it when the server must
+run on multiple hosts, managed-SaaS operations require a network database, or measured
+cross-run write contention makes the single SQLite writer a bottleneck. PostgreSQL's MVCC
+is valuable at that concurrency tier, but adds an external service and migration/operations
+surface before evidence asks for it
+([PostgreSQL concurrency control](https://www.postgresql.org/docs/current/mvcc-intro.html)).
+SQLite WAL itself requires processes to share a host, which makes the multi-host trigger a
+hard boundary, not taste. Owner ruling is still pending; §5 ships the requested SQLite
+default without pretending that provisional implementation choice is product validation.
+
+### Server-bound latency and projection decision
+
+- Implemented snapshot memoization rather than a second incremental reducer: repeated
+  server operations reuse the last validated immutable projection; process-start/cold-cache
+  loads replay the complete event log once. Runtime mutation still has whole-log work, so
+  this is a bounded mitigation, not a claim that the §1 scaling concern disappeared.
+- Repeated the §4 methodology with 3 warm-ups and 20 measured samples per operation at exact
+  200- and 1000-event snapshots. Node 26.5.0, in-memory SQLite, JSON response consumption,
+  and loopback Node HTTP were all inside the measured boundary; preparation/reset was not.
+  Values are milliseconds (`median / p95 / max`):
+
+  | events | cold replay + graph transport | rewind (<100 ms) | implicit fork+commit (<50 ms) |
+  |---:|---:|---:|---:|
+  | 200 | 2.408 / 2.862 / 3.062 | 2.820 / 3.594 / 4.619 | 2.481 / 3.224 / 3.530 |
+  | 1000 | 6.303 / 8.024 / 9.494 | 15.705 / 17.017 / 17.051 | 6.643 / 7.947 / 8.384 |
+
+- Both interaction medians and p95s remain inside budget through the full binding. The
+  explicit deferral assumption is **a drill run is at most 1000 events** for this slice.
+  That covers ordinary 10–20-ply rehearsals with extensive rewinds and evidence events but
+  is not a marathon guarantee. Before lifting the assumption, or if telemetry shows a
+  material tail near it, replace repeated full projection with an incremental reducer plus
+  periodic durable event snapshots and remeasure at 3000+ events.
+- Verification before commit: server integration/latency tests green (6 tests), full
+  `make verify` and `make build` to follow. Stopped at the §5 boundary as requested.
+- Follow-up verification completed: `make verify` green (12 files, 52 tests; schema and
+  all workspace typechecks green), `make build` green, `git diff --check` clean, and all
+  58 frozen archive checksums verified unchanged.

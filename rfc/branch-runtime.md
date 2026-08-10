@@ -131,8 +131,9 @@ part of this RFC's payload.
 `createRun(pack) · commitMove(run, uci) · rewind(run, nodeId|checkpoint) ·
 fork(run, nodeId, label?, intent?) · graph(run) · compare(run, a, b) ·
 exportPgn(run, branches?) · events(run, sinceSeq?)`. The REST binding
-(`POST /runs`, `/moves`, `/rewind`, `/fork`, `GET /graph`, `POST /compare`) and the
-in-process client binding wrap the same TS package.
+(`POST /runs`, `/moves`, `/rewind`, `/fork`, `GET /graph`, `POST /compare`,
+`GET /events?sinceSeq=`) and the in-process client binding wrap the same TS
+package.
 
 ### Execution model (owner ruling 2026-08-12)
 
@@ -167,9 +168,10 @@ None.
 
 ## Open questions
 
-- Storage binding: SQLite vs Postgres — resolve in `planning/branch-runtime/`
-  at implementation start (SQLite presumed for single-writer self-host; register
-  updated when pinned).
+- Storage binding: SQLite is the implemented default, with the adapter boundary
+  preserving PostgreSQL as a bounded follow-up. Owner ratification and revisit
+  triggers are recorded in `planning/branch-runtime/log.md` and the deferred
+  register in `rfc/README.md`.
 - `clockState` semantics (time-pressure dimension) — deferred to a future RFC
   (BACKLOG row exists).
 
@@ -196,3 +198,5 @@ Original blocker texts: git history (commit 22fa697).
   paths; caught in review of the faithful implementation.
 - 2026-08-12: implementation started with the shared monorepo scaffold; **status →
   implementing**.
+- 2026-08-12: §5 server binding implemented; SQLite selected as the provisional
+  default pending owner ratification, with PostgreSQL revisit triggers recorded.
