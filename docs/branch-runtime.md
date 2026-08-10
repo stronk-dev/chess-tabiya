@@ -127,8 +127,8 @@ old runs reproducible even when an opponent implementation changes.
 It returns:
 
 - the common `forkNodeId`;
-- move pairs aligned by ply offset after the fork, omitting `a` or `b` explicitly
-  when that side has no node at an offset;
+- move pairs aligned by ply offset after the fork, omitting `a` or `b` when that
+  side has no node at an offset;
 - objective-transition timelines for both paths;
 - checkpoint hits for both paths.
 

@@ -12,7 +12,7 @@
 | **Design** | `design/` | Intent and evidence: what the product is and why. Where ideas come from. | Amended rarely; never the implementation spec |
 | **RFC** | `rfc/` | Active implementation specs. Every system that gets built is specified by one or more RFCs before implementation. | Living until implemented, then frozen and moved to `rfc/archive/` |
 | **Planning** | `planning/` | Per-job working documents: the plan and a running log. The durable record of long-running jobs. | Living during the job; archived on completion |
-| **Docs** | `docs/` | Canonical description of what actually exists. | Always current; updated as part of every implementing change. **Does not exist yet — nothing has been built.** |
+| **Docs** | `docs/` | Canonical description of what actually exists. | Always current; updated as part of every implementing change. |
 
 Plus one repo-specific tier: `archive/` — frozen inputs (the v2 brief). Immutable;
 supersede in living tiers, never edit there.
@@ -104,3 +104,5 @@ to `rfc/archive/` and its planning directory to `planning/archive/`. Never delet
   added and `docs/` deferred until code exists.
 - 2026-08-10: reconciled the exploration-to-slice gate with the post-slice continuation
   gates; explicitly allowed scoped, disposable research tooling.
+- 2026-08-12: removed the pre-implementation note after the first implemented RFC
+  established canonical system documentation.

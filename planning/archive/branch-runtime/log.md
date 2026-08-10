@@ -307,3 +307,20 @@ default without pretending that provisional implementation choice is product val
   a bounded follow-up behind the RunStorage adapter, revisited only for
   multi-host deployment or demonstrated write contention. Deferred-decisions
   register updated. RFC completion protocol green-lit.
+
+## 2026-08-12 (codex, session 7) — RFC completion protocol
+
+- Distilled `docs/branch-runtime.md` as the standalone canonical description of
+  the implemented run model, mutation/objective/replay/compare/PGN semantics,
+  REST and typed-error surface, writer lease, ratified SQLite adapter, measured
+  latency envelope, ≤1000-event assumption, and known limits. Updated the docs
+  index and removed the stale partial runtime description from development docs.
+- Set the RFC status to implemented, recorded the completion changelog, and moved
+  the frozen RFC and its complete planning history to `rfc/archive/` and
+  `planning/archive/`. Updated the RFC Active/Archive tables, resolved SQLite in
+  the deferred register, and repaired live references to the archived records or
+  canonical docs.
+- Post-move `make verify` green: 12 test files, 52 tests, all workspace
+  typechecks, and schema/scaffold verification. No runtime behavior changed.
+- Completion boundary reached. The next drill-pack-format session remains
+  separate as directed; no pack-format implementation was started here.
