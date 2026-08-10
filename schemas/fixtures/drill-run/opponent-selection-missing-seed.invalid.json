@@ -1,6 +1,6 @@
 {
   "schemaVersion": "0.4",
-  "id": "invalid-evidence-run",
+  "id": "invalid-selection-run",
   "packId": "pack-1",
   "packDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
   "policyConfig": {
@@ -9,7 +9,7 @@
   },
   "nodes": [
     {
-      "id": "invalid-evidence-run:node:0",
+      "id": "invalid-selection-run:node:0",
       "parentId": null,
       "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1",
       "transposeKey": "8/8/8/8/8/8/4K3/7k w - -",
@@ -17,7 +17,7 @@
       "moveSan": null,
       "ply": 0,
       "actor": "system",
-      "branchId": "invalid-evidence-run:branch:0",
+      "branchId": "invalid-selection-run:branch:0",
       "checkpointRefs": [],
       "objectiveState": "active",
       "evidenceRefs": [],
@@ -26,8 +26,8 @@
   ],
   "branches": [
     {
-      "id": "invalid-evidence-run:branch:0",
-      "forkNodeId": "invalid-evidence-run:node:0",
+      "id": "invalid-selection-run:branch:0",
+      "forkNodeId": "invalid-selection-run:node:0",
       "label": "main",
       "seed": 42
     }
@@ -38,7 +38,7 @@
       "type": "run.started",
       "at": "2026-08-12T12:00:00.000Z",
       "data": {
-        "id": "invalid-evidence-run",
+        "id": "invalid-selection-run",
         "packId": "pack-1",
         "packDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
         "policyConfig": {
@@ -46,7 +46,7 @@
           "locus": { "executedAt": "server", "engineIds": [], "modelIds": [] }
         },
         "rootNode": {
-          "id": "invalid-evidence-run:node:0",
+          "id": "invalid-selection-run:node:0",
           "parentId": null,
           "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1",
           "transposeKey": "8/8/8/8/8/8/4K3/7k w - -",
@@ -54,40 +54,46 @@
           "moveSan": null,
           "ply": 0,
           "actor": "system",
-          "branchId": "invalid-evidence-run:branch:0",
+          "branchId": "invalid-selection-run:branch:0",
           "checkpointRefs": [],
           "objectiveState": "active",
           "evidenceRefs": [],
           "createdAt": "2026-08-12T12:00:00.000Z"
         },
         "branch": {
-          "id": "invalid-evidence-run:branch:0",
-          "forkNodeId": "invalid-evidence-run:node:0",
+          "id": "invalid-selection-run:branch:0",
+          "forkNodeId": "invalid-selection-run:node:0",
           "label": "main",
           "seed": 42
         },
         "activeCursor": {
-          "nodeId": "invalid-evidence-run:node:0",
-          "branchId": "invalid-evidence-run:branch:0"
+          "nodeId": "invalid-selection-run:node:0",
+          "branchId": "invalid-selection-run:branch:0"
         }
       }
     },
     {
       "seq": 2,
-      "type": "evidence.attached",
+      "type": "opponent.move_selected",
       "at": "2026-08-12T12:00:01.000Z",
       "data": {
-        "nodeId": "invalid-evidence-run:node:0",
-        "evidenceRefs": ["analysis:1"],
-        "payload": {
-          "kind": "eval",
-          "values": { "centipawns": 24 }
+        "nodeId": "invalid-selection-run:node:0",
+        "branchId": "invalid-selection-run:branch:0",
+        "moveUci": "e2e4",
+        "selection": {
+          "moveUci": "e2e4",
+          "candidates": [{ "moveUci": "e2e4", "mass": 0.4, "rank": 1 }],
+          "engine": {
+            "id": "maia-5m",
+            "name": "Maia3",
+            "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2"
+          }
         }
       }
     }
   ],
   "activeCursor": {
-    "nodeId": "invalid-evidence-run:node:0",
-    "branchId": "invalid-evidence-run:branch:0"
+    "nodeId": "invalid-selection-run:node:0",
+    "branchId": "invalid-selection-run:branch:0"
   }
 }

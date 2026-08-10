@@ -18,6 +18,15 @@ const invalidEvidenceFixture = JSON.parse(
     "utf8",
   ),
 ) as Record<string, unknown>;
+const invalidSelectionFixture = JSON.parse(
+  readFileSync(
+    new URL(
+      "../../../schemas/fixtures/drill-run/opponent-selection-missing-seed.invalid.json",
+      import.meta.url,
+    ),
+    "utf8",
+  ),
+) as Record<string, unknown>;
 
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 addFormats(ajv);
@@ -81,11 +90,11 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.3", () => {
+describe("drill_run.schema.json v0.4", () => {
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.3",
+      $id: "urn:chess-tabiya:schema:drill-run:0.4",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });
@@ -158,6 +167,49 @@ describe("drill_run.schema.json v0.3", () => {
           instancePath: "/events/1/data/payload",
           keyword: "required",
           params: { missingProperty: "source" },
+        }),
+      ]),
+    );
+  });
+
+  it("validates a typed opponent selection and rejects incomplete engine identity", () => {
+    const selectionEvent = {
+      seq: 2,
+      type: "opponent.move_selected",
+      at,
+      data: {
+        nodeId: rootNode.id,
+        branchId: branch.id,
+        moveUci: "e2e4",
+        selection: {
+          moveUci: "e2e4",
+          candidates: [
+            { moveUci: "e2e4", mass: 0.42, rank: 1 },
+            { moveUci: "d2d4", rank: 2 },
+          ],
+          engine: {
+            id: "maia-5m",
+            name: "Maia3",
+            version: "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+            modelId: "maia3-5m@test-model",
+            containerDigest: `sha256:${"a".repeat(64)}`,
+            seedHonored: false,
+          },
+        },
+      },
+    };
+
+    expect(
+      validate({ ...validRun, events: [event, selectionEvent] }),
+      JSON.stringify(validate.errors),
+    ).toBe(true);
+    expect(validate(invalidSelectionFixture)).toBe(false);
+    expect(validate.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          instancePath: "/events/1/data/selection/engine",
+          keyword: "required",
+          params: { missingProperty: "seedHonored" },
         }),
       ]),
     );

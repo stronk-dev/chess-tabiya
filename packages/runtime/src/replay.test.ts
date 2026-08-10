@@ -3,14 +3,26 @@ import { describe, expect, it } from "vitest";
 
 import {
   ReplayError,
+  appendOpponentPly,
   commitMove,
   createRun,
   readBackReplay,
   type DrillRun,
   type DrillRunEvent,
+  type OpponentSelection,
 } from "./index.js";
 
 const at = "2026-08-12T12:00:00.000Z";
+const opponent = (moveUci: string): OpponentSelection => ({
+  moveUci,
+  candidates: [{ moveUci, mass: 0.6, rank: 1 }],
+  engine: {
+    id: "mock-opponent",
+    name: "Mock opponent",
+    version: "1",
+    seedHonored: true,
+  },
+});
 
 function playedRun(): DrillRun {
   let run = createRun({
@@ -30,9 +42,9 @@ function playedRun(): DrillRun {
     createdAt: at,
   });
   run = commitMove(run, "e2e4", { actor: "user", at }).run;
-  run = commitMove(run, "e7e5", { actor: "opponent", at }).run;
+  run = appendOpponentPly(run, opponent("e7e5"), { at }).run;
   run = commitMove(run, "g1f3", { actor: "user", at }).run;
-  run = commitMove(run, "b8c6", { actor: "opponent", at }).run;
+  run = appendOpponentPly(run, opponent("b8c6"), { at }).run;
   return run;
 }
 
@@ -55,6 +67,17 @@ describe("authoritative read-back replay", () => {
       expect.objectContaining({ moveUci: "e7e5", selectionSeq: 3 }),
       expect.objectContaining({ moveUci: "b8c6", selectionSeq: 6 }),
     ]);
+    expect(
+      run.events.find((event) => event.type === "opponent.move_selected"),
+    ).toMatchObject({
+      data: {
+        selection: {
+          moveUci: "e7e5",
+          candidates: [{ moveUci: "e7e5", mass: 0.6, rank: 1 }],
+          engine: { id: "mock-opponent", seedHonored: true },
+        },
+      },
+    });
   });
 
   it("reconstructs identically on repeated read-back", () => {
@@ -70,5 +93,23 @@ describe("authoritative read-back replay", () => {
     );
 
     expect(() => readBackReplay(events)).toThrow(ReplayError);
+  });
+
+  it("rejects disagreement inside the typed v0.4 selection payload", () => {
+    const events: readonly DrillRunEvent[] = playedRun().events.map((event) =>
+      event.type === "opponent.move_selected" && event.data.moveUci === "e7e5"
+        ? {
+            ...event,
+            data: {
+              ...event.data,
+              selection: { ...event.data.selection, moveUci: "c7c5" },
+            },
+          }
+        : event,
+    );
+
+    expect(() => readBackReplay(events)).toThrowError(
+      "selection payload and event move disagree",
+    );
   });
 });

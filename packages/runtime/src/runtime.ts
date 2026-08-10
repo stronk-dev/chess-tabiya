@@ -21,6 +21,7 @@ import type {
   EventDraft,
   MutationResult,
   Node,
+  OpponentSelection,
   PolicyConfig,
 } from "./types.js";
 
@@ -40,7 +41,13 @@ export interface CommitMoveOptions {
   readonly actor?: Actor;
   readonly at?: string;
   readonly clockState?: Readonly<Record<string, unknown>>;
+  readonly selection?: OpponentSelection;
 }
+
+export type AppendOpponentPlyOptions = Omit<
+  CommitMoveOptions,
+  "actor" | "selection"
+>;
 
 export interface ForkOptions {
   readonly label?: string;
@@ -183,6 +190,18 @@ export function commitMove(
   uci: string,
   options: CommitMoveOptions = {},
 ): MutationResult {
+  if (options.actor === "opponent") {
+    if (options.selection === undefined) {
+      throw new TypeError(
+        "Opponent moves require appendOpponentPly with an authoritative selection",
+      );
+    }
+    if (options.selection.moveUci !== uci) {
+      throw new TypeError("Opponent selection and committed move disagree");
+    }
+  } else if (options.selection !== undefined) {
+    throw new TypeError("Only opponent moves may carry an opponent selection");
+  }
   const cursorNode = getNode(original, original.activeCursor.nodeId);
   const position = positionFromFen(cursorNode.fen);
   if (TERMINAL_OBJECTIVE_STATES.has(cursorNode.objectiveState) || position.isEnd()) {
@@ -218,6 +237,7 @@ export function commitMove(
           nodeId: run.activeCursor.nodeId,
           branchId: run.activeCursor.branchId,
           moveUci: uci,
+          selection: options.selection!,
         },
       },
     ]);
@@ -249,6 +269,18 @@ export function commitMove(
   ]);
   emitted.push(...emittedSince(run, next));
   return { run: next, emitted };
+}
+
+export function appendOpponentPly(
+  run: DrillRun,
+  selection: OpponentSelection,
+  options: AppendOpponentPlyOptions = {},
+): MutationResult {
+  return commitMove(run, selection.moveUci, {
+    ...options,
+    actor: "opponent",
+    selection,
+  });
 }
 
 export function fork(

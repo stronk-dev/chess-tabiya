@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   RuntimeError,
+  appendOpponentPly,
   commitMove,
   compare,
   createRun,
@@ -27,7 +28,19 @@ class DeterministicMockOpponent {
     const move = this.moves[this.index];
     if (move === undefined) throw new Error("Mock opponent script exhausted");
     this.index += 1;
-    const result = commitMove(run, move, { actor: "opponent", at });
+    const result = appendOpponentPly(
+      run,
+      {
+        moveUci: move,
+        engine: {
+          id: "deterministic-mock",
+          name: "Deterministic mock",
+          version: "1",
+          seedHonored: true,
+        },
+      },
+      { at },
+    );
     expect(result.emitted.map((event) => event.type)).toEqual([
       "opponent.move_selected",
       "move.committed",

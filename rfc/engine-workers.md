@@ -6,7 +6,7 @@
 - **Design refs:** `design/01-training-model.md` (episode, resistance), `archive/brief-v2/08_ENGINE_CORPUS_AND_CONTENT.md` (responsibility table, policy modes)
 - **Exploration gate:** Q5 settled-go by validation-in-use (Maia smoke, exploration log 2026-08-12)
 - **Depends on:** `docs/branch-runtime.md`, `docs/drill-pack-format.md`
-- **Parent / amends:** `rfc/archive/branch-runtime.md` — **amends the run schema to v0.3: adds the `evidence.attached` event** (EW-C2 resolution); also mines `archive/brief-v2/rfcs/RFC-0003` and hosts the relocated BR-C6 cancellation invariant
+- **Parent / amends:** `rfc/archive/branch-runtime.md` — **amends the run schema to v0.3 with `evidence.attached`, then v0.4 with typed opponent selection** (EW-C2 and §4 DESIGN-GAP resolutions); also mines `archive/brief-v2/rfcs/RFC-0003` and hosts the relocated BR-C6 cancellation invariant
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/engine-workers/`
 
@@ -220,3 +220,5 @@ history (commit 74debed review landing).
   implemented; selector, Maia packaging, and evidence queue remain open.
 - 2026-08-12: §3 pinned Maia sidecar implemented; first contact records no seed
   option (`seedHonored: false`).
+- 2026-08-12: §4 run schema v0.4, patched Maia policy exposure, pure selector,
+  selection cache, and writer-side adjacent append implemented.

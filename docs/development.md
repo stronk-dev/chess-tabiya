@@ -34,7 +34,7 @@ packages.
 Node, while `apps/server` supplies the REST, lease, and ratified SQLite binding.
 The complete current behavior, wire surface, measured envelope, and limitations
 are documented in `docs/branch-runtime.md`. The normative run shape remains
-`schemas/drill_run.schema.json` v0.3.
+`schemas/drill_run.schema.json` v0.4.
 
 ## Commands
 

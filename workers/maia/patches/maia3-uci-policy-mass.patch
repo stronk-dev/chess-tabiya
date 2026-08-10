@@ -1,0 +1,12 @@
+diff --git a/maia3/uci.py b/maia3/uci.py
+--- a/maia3/uci.py
++++ b/maia3/uci.py
+@@ -468,7 +468,8 @@ class Maia3UCIEngine:
+             win, draw, loss = item["wdl"]
+             cp = cp_from_wdl(item["wdl"])
+             print(
+                 f"info depth 1 multipv {rank} score cp {cp} wdl {win} {draw} {loss} "
++                f"policy {float(item['policy']):.12g} "
+                 f"pv {item['move'].uci()}",
+                 flush=True,
+             )

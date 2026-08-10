@@ -1,19 +1,25 @@
 # Engine workers
 
 Engine workers are being implemented behind `apps/server`. The current slice is
-the UCI supervisor, the drill-run v0.3 evidence attachment seam, and the packaged
-Maia sidecar. Opponent selection, evidence scheduling, and capabilities are not
-yet implemented.
+the UCI supervisor, drill-run v0.4 worker amendments, the packaged Maia sidecar,
+and the pure opponent selector. Evidence scheduling and capabilities are not yet
+implemented.
 
 ## Run evidence amendment
 
-The living `schemas/drill_run.schema.json` is v0.3. Its
+The living `schemas/drill_run.schema.json` is v0.4. Its v0.3
 `evidence.attached` event carries a node id, one or more evidence references, and
 `payload: {kind, source, values}`. Kinds are `eval`, `wdl`, and `bestline`;
 sources are kept explicitly distinct as `engine_validated` or
 `human_model_predicted`. Projection appends unique references to the named node
 without changing its objective state. The event is applied only by the run's
 writer; workers do not append to runs.
+
+The v0.4 amendment makes `opponent.move_selected.selection` typed. It carries
+the selected UCI move, optional ranked candidates with optional Maia policy
+mass, and engine identity (`id`, name/version, optional model/container ids, and
+`seedHonored`). `appendOpponentPly` is the writer-side runtime helper: it appends
+the selection and matching opponent move as a strict adjacent pair.
 
 ## UCI supervisor
 
@@ -35,8 +41,7 @@ advertised by the engine.
 
 There is no fallback engine. Spawn failure, timeout, crash, or unknown engine id
 raises `ENGINE_UNAVAILABLE` with `engineId` and `retryAfterMs`; HTTP maps it to
-503. `POLICY_MODE_UNSUPPORTED` maps to 422. The latter is defined now for the
-accepted selector boundary but no selector route exists yet.
+503. `POLICY_MODE_UNSUPPORTED` maps to 422 for a selector mode outside this RFC.
 
 The default verification suite exercises handshake, options, search, health,
 restart, transcript bounds, identity, shutdown, and both error mappings against
@@ -61,9 +66,38 @@ seed option, so the resulting identity records `seedHonored: false`. The UCI
 surface does advertise `Elo`, `SelfElo`, `OppoElo`, `Temperature`, `TopP`, and
 `MultiPV`.
 
+The image applies the repository-carried
+`workers/maia/patches/maia3-uci-policy-mass.patch` against that exact commit
+before installation. Each MultiPV line therefore exposes the already-computed
+Maia move-policy scalar as `policy <mass>` alongside, but never conflated with,
+WDL. The tagged `INTEGRATION=maia` test verifies this field over the real UCI
+sidecar and remains outside `make verify`.
+
+## Opponent selector
+
+`POST /select-move` accepts a start FEN, complete UCI history, policy, and branch
+seed, and returns a selection without touching a run. `human_common` sends pack
+Elo/temperature/top-p knobs to Maia (defaults 0.8/0.92); `strong_engine` asks
+Stockfish for a movetime-limited best move. `theory_strict` derives all authored
+spine positions, recognizes current membership by four-field `transposeKey`,
+requests at least eight Maia candidates, restricts to legal spine children, and
+samples proportionally to patched policy mass. No/zero eligible mass falls back
+to seeded uniform spine sampling; an off-spine position uses `human_common`.
+If a future pinned Maia build returns ranked candidates but omits the patched
+field, the selector warns with `DEGRADED_POLICY_MASS` and uses inverse-rank
+sampling instead of pretending WDL is policy probability.
+
+Selections are cached by `(policyConfigDigest, branchSeed, historyHash)`, where
+the history hash includes the start FEN and complete move sequence. Identical
+drill retries therefore reuse the exact result while per-branch seeds separate
+branches. Failed engine requests are evicted rather than cached.
+
+The selector cannot acquire or bypass a run lease. The active writer posts its
+returned selection to `/runs/:id/moves`; any server-side attempt under another
+writer id receives `NOT_ACTIVE_WRITER`.
+
 ## Not implemented yet
 
-The server does not yet expose an opponent selector, append an opponent ply,
-schedule evidence jobs, or expose `/capabilities`. In particular, the supervisor
-never writes run events; the pure-selector/writer-commit invariant remains the
-contract for the later selector slice.
+The server does not yet schedule evidence jobs or expose `/capabilities`. The
+supervisor and selector never write run events; only the leased writer applies
+the existing evidence and opponent-selection event contracts.

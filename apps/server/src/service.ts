@@ -1,4 +1,5 @@
 import {
+  appendOpponentPly,
   assertActiveWriter,
   commitMove,
   compare,
@@ -8,12 +9,14 @@ import {
   rewind,
   rewindToCheckpoint,
   type BranchComparison,
+  type AppendOpponentPlyOptions,
   type CommitMoveOptions,
   type CreateRunInput,
   type DrillRun,
   type DrillRunEvent,
   type ForkOptions,
   type MutationResult,
+  type OpponentSelection,
 } from "@chess-tabiya/runtime";
 
 import { ServerError } from "./errors.js";
@@ -63,6 +66,18 @@ export class RunService {
   ): MutationResult {
     const stored = this.#forWrite(runId, writerId);
     const result = commitMove(stored.run, uci, options);
+    this.#storage.save(result.run, writerId);
+    return result;
+  }
+
+  opponentPly(
+    runId: string,
+    writerId: string,
+    selection: OpponentSelection,
+    options: AppendOpponentPlyOptions = {},
+  ): MutationResult {
+    const stored = this.#forWrite(runId, writerId);
+    const result = appendOpponentPly(stored.run, selection, options);
     this.#storage.save(result.run, writerId);
     return result;
   }

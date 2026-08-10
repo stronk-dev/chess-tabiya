@@ -32,6 +32,9 @@ function readOpponentMove(
   selection: OpponentMoveSelectedEvent,
   committed: DrillRunEvent | undefined,
 ): OpponentMoveReadback {
+  if (selection.data.selection.moveUci !== selection.data.moveUci) {
+    throw new ReplayError(selection.seq, "selection payload and event move disagree");
+  }
   if (committed?.type !== "move.committed") {
     throw new ReplayError(selection.seq, "selection is not followed by move.committed");
   }

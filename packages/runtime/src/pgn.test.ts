@@ -5,14 +5,25 @@ import { describe, expect, it } from "vitest";
 
 import {
   PgnExportError,
+  appendOpponentPly,
   commitMove,
   createRun,
   exportPgn,
   rewind,
   type DrillRun,
+  type OpponentSelection,
 } from "./index.js";
 
 const at = "2026-08-12T12:00:00.000Z";
+const opponent = (moveUci: string): OpponentSelection => ({
+  moveUci,
+  engine: {
+    id: "mock-opponent",
+    name: "Mock opponent",
+    version: "1",
+    seedHonored: true,
+  },
+});
 
 function branchedRun(): DrillRun {
   let run = createRun({
@@ -29,10 +40,10 @@ function branchedRun(): DrillRun {
   });
   run = commitMove(run, "e2e4", { at }).run;
   const forkNodeId = run.activeCursor.nodeId;
-  run = commitMove(run, "e7e5", { actor: "opponent", at }).run;
+  run = appendOpponentPly(run, opponent("e7e5"), { at }).run;
   run = commitMove(run, "g1f3", { at }).run;
   run = rewind(run, forkNodeId, at).run;
-  return commitMove(run, "c7c5", { actor: "opponent", at }).run;
+  return appendOpponentPly(run, opponent("c7c5"), { at }).run;
 }
 
 describe("PGN variation export", () => {

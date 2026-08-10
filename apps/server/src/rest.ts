@@ -8,6 +8,9 @@ import {
 import {
   BranchQueryError,
   RuntimeError,
+  type OpponentSelection,
+  type SelectionCandidate,
+  type SelectionEngineIdentity,
   type CommitMoveOptions,
   type CreateRunInput,
   type PolicyConfig,
@@ -15,6 +18,10 @@ import {
 } from "@chess-tabiya/runtime";
 
 import { ServerError } from "./errors.js";
+import {
+  OpponentSelector,
+  parseSelectMoveRequest,
+} from "./opponent-selector.js";
 import { RunService, type RewindTarget } from "./service.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
@@ -46,6 +53,81 @@ function requiredString(value: unknown, label: string): string {
 
 function optionalString(value: unknown, label: string): string | undefined {
   return value === undefined ? undefined : requiredString(value, label);
+}
+
+function requiredBoolean(value: unknown, label: string): boolean {
+  if (typeof value !== "boolean") throw invalid(`${label} must be a boolean`);
+  return value;
+}
+
+function parseSelectionCandidate(value: unknown, label: string): SelectionCandidate {
+  const candidate = record(value, label);
+  if (
+    typeof candidate.rank !== "number" ||
+    !Number.isSafeInteger(candidate.rank) ||
+    candidate.rank < 1
+  ) {
+    throw invalid(`${label}.rank must be a positive safe integer`);
+  }
+  if (
+    candidate.mass !== undefined &&
+    (typeof candidate.mass !== "number" ||
+      !Number.isFinite(candidate.mass) ||
+      candidate.mass < 0 ||
+      candidate.mass > 1)
+  ) {
+    throw invalid(`${label}.mass must be between 0 and 1`);
+  }
+  return {
+    moveUci: requiredString(candidate.moveUci, `${label}.moveUci`),
+    rank: candidate.rank,
+    ...(candidate.mass === undefined ? {} : { mass: candidate.mass as number }),
+  };
+}
+
+function parseSelectionEngine(value: unknown): SelectionEngineIdentity {
+  const engine = record(value, "selection.engine");
+  return {
+    id: requiredString(engine.id, "selection.engine.id"),
+    name: requiredString(engine.name, "selection.engine.name"),
+    version: requiredString(engine.version, "selection.engine.version"),
+    ...(engine.modelId === undefined
+      ? {}
+      : { modelId: requiredString(engine.modelId, "selection.engine.modelId") }),
+    ...(engine.containerDigest === undefined
+      ? {}
+      : {
+          containerDigest: requiredString(
+            engine.containerDigest,
+            "selection.engine.containerDigest",
+          ),
+        }),
+    seedHonored: requiredBoolean(
+      engine.seedHonored,
+      "selection.engine.seedHonored",
+    ),
+  };
+}
+
+function parseOpponentSelection(value: unknown): OpponentSelection {
+  const selection = record(value, "selection");
+  if (selection.candidates !== undefined && !Array.isArray(selection.candidates)) {
+    throw invalid("selection.candidates must be an array");
+  }
+  if (Array.isArray(selection.candidates) && selection.candidates.length === 0) {
+    throw invalid("selection.candidates cannot be empty");
+  }
+  return {
+    moveUci: requiredString(selection.moveUci, "selection.moveUci"),
+    ...(selection.candidates === undefined
+      ? {}
+      : {
+          candidates: selection.candidates.map((candidate, index) =>
+            parseSelectionCandidate(candidate, `selection.candidates[${index}]`),
+          ),
+        }),
+    engine: parseSelectionEngine(selection.engine),
+  };
 }
 
 function policies(value: unknown, label: string): readonly VersionedPolicy[] {
@@ -206,7 +288,10 @@ function parseSinceSeq(url: URL): number {
   return value;
 }
 
-export function createRestHandler(service: RunService): RestHandler {
+export function createRestHandler(
+  service: RunService,
+  selector?: OpponentSelector,
+): RestHandler {
   return async (request) => {
     try {
       const url = new URL(request.url);
@@ -216,6 +301,19 @@ export function createRestHandler(service: RunService): RestHandler {
           writerId(request),
         );
         return json(201, { run });
+      }
+      if (request.method === "POST" && url.pathname === "/select-move") {
+        if (selector === undefined) {
+          throw new ServerError(
+            "ENGINE_UNAVAILABLE",
+            "Opponent selector is not configured",
+            { details: { engineId: "opponent-selector", retryAfterMs: 0 } },
+          );
+        }
+        const selection = await selector.select(
+          parseSelectMoveRequest(await parseBody(request)),
+        );
+        return json(200, selection);
       }
 
       const route = parseRunRoute(url.pathname);
@@ -238,6 +336,30 @@ export function createRestHandler(service: RunService): RestHandler {
 
       const value = await parseBody(request);
       if (route.action === "moves") {
+        if (value.selection !== undefined) {
+          if (value.actor !== undefined || value.uci !== undefined) {
+            throw invalid("selection moves derive actor and uci from selection");
+          }
+          return json(
+            200,
+            service.opponentPly(
+              route.runId,
+              writerId(request),
+              parseOpponentSelection(value.selection),
+              {
+                ...(value.at === undefined
+                  ? {}
+                  : { at: requiredString(value.at, "at") }),
+                ...(value.clockState === undefined
+                  ? {}
+                  : { clockState: record(value.clockState, "clockState") }),
+              },
+            ),
+          );
+        }
+        if (value.actor === "opponent") {
+          throw invalid("opponent moves require the authoritative selection payload");
+        }
         return json(
           200,
           service.move(

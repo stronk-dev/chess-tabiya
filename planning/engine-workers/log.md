@@ -143,3 +143,43 @@
      PR candidate). WDL never misused as probability. Fallback if patch breaks
      on a future pin: rank-weighted sampling, logged as degraded.
 - §4 unblocked. BACKLOG gap note updated.
+
+## 2026-08-12 (codex, §4 opponent selector)
+
+- Bumped the living drill-run schema and package constant to v0.4. The
+  `opponent.move_selected` event now requires a typed selection containing the
+  chosen move, optional ranked candidates with optional policy mass, and exact
+  engine/model identity including `seedHonored`. Added a checked-in negative
+  fixture missing that required identity bit; the earlier v0.3 evidence event is
+  preserved unchanged.
+- Added `workers/maia/patches/maia3-uci-policy-mass.patch`. The Docker build
+  checks and applies it against pinned Maia commit
+  `1e13597c42d4858b7cfd7cfdae01e297263364b2` before installation. It only emits
+  the already-computed policy scalar on MultiPV UCI lines; WDL remains separate.
+  Rebuilt image `chess-tabiya-maia:1e13597` as
+  `sha256:49126a62213d86e7305d8087499136830002cb42ceaf9b587e977e2cd806985e`;
+  the tagged `INTEGRATION=maia` test passed and observed bounded policy mass on
+  every returned info line.
+- Implemented pure `POST /select-move`. `human_common` maps Elo, temperature,
+  and top-p to Maia; `strong_engine` uses a configurable movetime-limited
+  Stockfish request; `theory_strict` indexes authored positions by
+  `transposeKey`, resumes after a move-order transposition, filters MultiPV to
+  spine children, samples proportionally by policy mass, uses seeded uniform
+  fallback at zero/no eligible mass, and falls back to `human_common` off-spine.
+  A missing policy field on a future pin logs `DEGRADED_POLICY_MASS` and uses
+  inverse-rank weighting; it never substitutes WDL.
+- The selection cache key is exactly policy-config digest, branch seed, and a
+  SHA-256 history hash covering start FEN plus every UCI move. Identical retries
+  reuse the same promise/result; seed or history changes miss; failures evict.
+- Added runtime `appendOpponentPly(selection)`. Bare opponent commits are
+  rejected; the helper handles any implicit fork first, then emits the typed
+  selection immediately followed by its matching move. The REST seam test proves
+  selection itself mutates no run, a server identity gets
+  `NOT_ACTIVE_WRITER`, the actual writer can append the ply, and full read-back
+  replay succeeds.
+- Verification: pinned-source `git apply --check` passed; the rebuilt Maia
+  tagged integration passed (1 test); `ENGINES_REQUIRED=1 make verify` passed
+  all typechecks, 17 files / 88 tests, and schema/scaffold verification.
+- Final post-integrity run (nested selection mismatch + degraded rank-fallback
+  tests added): tagged Maia integration still 1/1; CI-equivalent verification
+  passed 17 files / 90 tests plus all typechecks and schema/scaffold checks.

@@ -4,7 +4,11 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { AddressInfo } from "node:net";
 
-import { RuntimeError, type CreateRunInput } from "@chess-tabiya/runtime";
+import {
+  RuntimeError,
+  type CreateRunInput,
+  type OpponentSelection,
+} from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createHttpServer, createRestHandler } from "./rest.js";
@@ -13,6 +17,15 @@ import { SQLiteRunStorage } from "./storage.js";
 
 const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-12T14:00:00.000Z";
+const opponent = (moveUci: string): OpponentSelection => ({
+  moveUci,
+  engine: {
+    id: "mock-opponent",
+    name: "Mock opponent",
+    version: "1",
+    seedHonored: true,
+  },
+});
 
 function createBody(id: string): CreateRunInput {
   return {
@@ -71,8 +84,7 @@ describe("branch-runtime REST binding", () => {
       at,
     })).status).toBe(200);
     expect((await request(handler, "POST", "/runs/rest-run/moves", {
-      uci: "e7e5",
-      actor: "opponent",
+      selection: opponent("e7e5"),
       at,
     })).status).toBe(200);
 
@@ -200,7 +212,7 @@ describe("branch-runtime REST binding", () => {
       const service = new RunService(first);
       service.create(createBody("persisted-run"), "writer-a");
       service.move("persisted-run", "writer-a", "e2e4", { at });
-      service.move("persisted-run", "writer-a", "e7e5", { actor: "opponent", at });
+      service.opponentPly("persisted-run", "writer-a", opponent("e7e5"), { at });
       first.close();
 
       const reopened = new SQLiteRunStorage(filename);

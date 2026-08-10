@@ -6,7 +6,7 @@ node, choose another move, and compare the consequences without destroying the
 first line.
 
 The transport-independent implementation is `packages/runtime`. The Node binding
-is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.3,
+is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.4,
 and `packages/schema` owns the schema version constant. Browser and server code
 import the same TypeScript runtime; there is no second implementation of chess
 semantics.
@@ -51,8 +51,9 @@ execution locus.
 
 ## Move, rewind, and fork semantics
 
-`commitMove` accepts every legal chess move. A move is never rejected because it
-leaves an authored line; deviation classification is separate from legality.
+`commitMove` accepts every legal user/system chess move. A move is never rejected
+because it leaves an authored line; deviation classification is separate from
+legality. Opponent moves use the selection-aware helper described below.
 
 - At a leaf cursor, the move extends the active branch.
 - After rewind, committing at a node that already has children creates an implicit
@@ -63,6 +64,12 @@ leaves an authored line; deviation classification is separate from legality.
 - `rewind(nodeId)` changes only the cursor and appends `run.rewound`. Existing
   nodes and branches remain unchanged. Rewind by the latest matching checkpoint is
   also available.
+
+Opponent plies use `appendOpponentPly(selection)`, not a bare opponent
+`commitMove`. The writer supplies the authoritative v0.4 selection (chosen move,
+ranked candidates with optional policy mass, and exact engine/model identity).
+The helper emits `opponent.move_selected` followed immediately by the matching
+`move.committed`; a mismatch is rejected before either event is appended.
 
 A successful rewind can notify a `JobObserver.onRewound(prunedNodeIds)` hook about
 nodes leaving the active path. The runtime does not run or cancel analysis jobs;
@@ -121,6 +128,10 @@ more evidence references, and a typed payload whose kind is `eval`, `wdl`, or
 `human_model_predicted`. Projection appends unique references to that node only;
 attaching evidence does not itself change objective state.
 
+The v0.4 worker amendment adds the typed `selection` payload to
+`opponent.move_selected`. The selected move is repeated at the event-data level
+so adjacency checks remain cheap; the runtime requires both values to agree.
+
 Replay is read-back, not policy recomputation. An opponent move must be represented
 by `opponent.move_selected` immediately followed by its matching opponent
 `move.committed`. The selection is authoritative. Replay rejects a missing,
@@ -156,6 +167,7 @@ it does not reimplement their semantics.
 | HTTP route | Writer required | Result |
 |---|---|---|
 | `POST /runs` | `x-writer-id` establishes the lease | `{run}` |
+| `POST /select-move` | no; pure selection only | `{moveUci, candidates?, engine}` |
 | `POST /runs/:id/moves` | yes | `{run, emitted}` |
 | `POST /runs/:id/rewind` | yes | `{run, emitted}` |
 | `POST /runs/:id/fork` | yes | `{run, emitted}` |
@@ -163,8 +175,10 @@ it does not reimplement their semantics.
 | `POST /runs/:id/compare` | no | `{comparison}` |
 | `GET /runs/:id/events?sinceSeq=N` | no | `{events, nextSeq}` |
 
-Rewind bodies contain exactly one of `nodeId` or `checkpointId`. Move bodies
-contain `uci` and may contain `actor`, `at`, and `clockState`. Fork bodies contain
+Rewind bodies contain exactly one of `nodeId` or `checkpointId`. User/system move
+bodies contain `uci` and may contain `actor`, `at`, and `clockState`; opponent
+move bodies contain the selector's `selection` plus optional `at`/`clockState`.
+Fork bodies contain
 `nodeId` and may contain `label`, `intent`, and `at`.
 
 HTTP errors always use `{error: {code, message, reason?}}`. Malformed requests map

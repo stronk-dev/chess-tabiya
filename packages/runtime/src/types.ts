@@ -33,6 +33,27 @@ export interface PolicyConfig {
   readonly locus: ExecutionLocus;
 }
 
+export interface SelectionCandidate {
+  readonly moveUci: string;
+  readonly mass?: number;
+  readonly rank: number;
+}
+
+export interface SelectionEngineIdentity {
+  readonly id: string;
+  readonly name: string;
+  readonly version: string;
+  readonly modelId?: string;
+  readonly containerDigest?: string;
+  readonly seedHonored: boolean;
+}
+
+export interface OpponentSelection {
+  readonly moveUci: string;
+  readonly candidates?: readonly SelectionCandidate[];
+  readonly engine: SelectionEngineIdentity;
+}
+
 export interface Node {
   readonly id: string;
   readonly parentId: string | null;
@@ -85,7 +106,12 @@ export type RunStartedEvent = Event<
 export type MoveCommittedEvent = Event<"move.committed", { readonly node: Node }>;
 export type OpponentMoveSelectedEvent = Event<
   "opponent.move_selected",
-  { readonly nodeId: string; readonly branchId: string; readonly moveUci: string }
+  {
+    readonly nodeId: string;
+    readonly branchId: string;
+    readonly moveUci: string;
+    readonly selection: OpponentSelection;
+  }
 >;
 export type CheckpointReachedEvent = Event<
   "checkpoint.reached",

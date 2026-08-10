@@ -13,6 +13,13 @@ const dockerfile = readFileSync(
   new URL("../../../workers/maia/Dockerfile", import.meta.url),
   "utf8",
 );
+const policyPatch = readFileSync(
+  new URL(
+    "../../../workers/maia/patches/maia3-uci-policy-mass.patch",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Maia production sidecar definition", () => {
   it("pins source/model and makes history conditioning non-optional", () => {
@@ -22,6 +29,11 @@ describe("Maia production sidecar definition", () => {
       'ENTRYPOINT ["maia3-uci", "--model", "5m", "--use-uci-history"]',
     );
     expect(dockerfile).toContain("ENV HF_HUB_OFFLINE=1");
+    expect(dockerfile).toContain(
+      "git -C /opt/maia3 apply --check /tmp/maia3-uci-policy-mass.patch",
+    );
+    expect(policyPatch).toContain("policy {float(item['policy']):.12g}");
+    expect(policyPatch).not.toContain("policy {cp}");
   });
 
   it("configures Docker supervision and records first-contact seed absence", () => {

@@ -8,6 +8,7 @@ import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import {
+  appendOpponentPly,
   commitMove,
   compare,
   createRun,
@@ -175,10 +176,23 @@ describe("runtime invariant properties", () => {
             const cursor = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
             const legal = legalUcis(cursor.fen);
             if (legal.length === 0) break;
-            run = commitMove(run, legal[choice % legal.length]!, {
-              actor: cursor.ply % 2 === 0 ? "user" : "opponent",
-              at,
-            }).run;
+            const move = legal[choice % legal.length]!;
+            run =
+              cursor.ply % 2 === 0
+                ? commitMove(run, move, { at }).run
+                : appendOpponentPly(
+                    run,
+                    {
+                      moveUci: move,
+                      engine: {
+                        id: "property-mock",
+                        name: "Property mock",
+                        version: "1",
+                        seedHonored: true,
+                      },
+                    },
+                    { at },
+                  ).run;
           }
           return run;
         };

@@ -16,6 +16,11 @@ and runtime Hugging Face access is disabled. The entry point always includes
 `--use-uci-history`; callers must still send `position fen <start> moves <full
 history>` for every selection.
 
+The image applies `patches/maia3-uci-policy-mass.patch` with `git apply --check`
+against the pinned source before installation. The patch adds no chess logic: it
+only emits Maia's already-computed move-policy scalar as `policy <mass>` on each
+MultiPV `info` line. This keeps policy mass distinct from the model's WDL output.
+
 Build and inspect:
 
 ```sh

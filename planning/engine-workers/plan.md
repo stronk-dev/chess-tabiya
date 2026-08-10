@@ -27,13 +27,13 @@ RFC: `rfc/engine-workers.md` (accepted 2026-08-12). Assignee: codex.
 
 ## 4. Opponent selector
 
-- [ ] POST /select-move (pure; appends nothing): human_common, strong_engine,
+- [x] POST /select-move (pure; appends nothing): human_common, strong_engine,
       theory_strict per RFC (transposeKey membership, MultiPV mechanism,
       zero-mass fallback, off-spine → human_common)
-- [ ] Selection cache (policyConfigDigest, branchSeed, historyHash)
-- [ ] Writer-side helper in @chess-tabiya/runtime: appendOpponentPly(selection)
+- [x] Selection cache (policyConfigDigest, branchSeed, historyHash)
+- [x] Writer-side helper in @chess-tabiya/runtime: appendOpponentPly(selection)
       → opponent.move_selected + commitMove (strict adjacency)
-- [ ] Seam test: full ply via REST; server-side direct append gets
+- [x] Seam test: full ply via REST; server-side direct append gets
       NOT_ACTIVE_WRITER
 
 ## 5. Evidence job queue

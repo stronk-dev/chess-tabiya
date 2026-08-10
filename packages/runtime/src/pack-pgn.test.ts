@@ -8,13 +8,23 @@ import { makePgn, parsePgn, startingPosition, walk } from "chessops/pgn";
 import { parseSan } from "chessops/san";
 import { describe, expect, it } from "vitest";
 
-import { commitMove, createRun, rewind } from "./runtime.js";
+import { appendOpponentPly, commitMove, createRun, rewind } from "./runtime.js";
+import type { OpponentSelection } from "./types.js";
 import { exportPackRunPgn } from "./pack-pgn.js";
 
 const fixtureUrl = new URL(
   "../../../schemas/drill_pack.example.json",
   import.meta.url,
 );
+const opponent = (moveUci: string): OpponentSelection => ({
+  moveUci,
+  engine: {
+    id: "mock-opponent",
+    name: "Mock opponent",
+    version: "1",
+    seedHonored: true,
+  },
+});
 
 function loadPack(): DrillPackDefinition {
   return JSON.parse(readFileSync(fixtureUrl, "utf8")) as DrillPackDefinition;
@@ -69,10 +79,10 @@ describe("pack + run PGN export", () => {
     const b5 = findSpineNode(pack, "najdorf-b5");
 
     run = commitMove(run, be3.moveUci).run;
-    run = commitMove(run, e6.moveUci, { actor: "opponent" }).run;
+    run = appendOpponentPly(run, opponent(e6.moveUci)).run;
     const checkpointNodeId = run.activeCursor.nodeId;
     run = commitMove(run, f3.moveUci).run;
-    run = commitMove(run, b5.moveUci, { actor: "opponent" }).run;
+    run = appendOpponentPly(run, opponent(b5.moveUci)).run;
 
     run = rewind(run, checkpointNodeId).run;
     expect(findSpineNode(pack, "najdorf-e6").children.map((node) => node.moveUci))

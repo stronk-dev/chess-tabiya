@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   appendEvents,
+  appendOpponentPly,
   commitMove,
   createRun,
   projectRun,
@@ -49,7 +50,23 @@ function runWithEventCount(eventCount: number): DrillRun {
     const actor = moveIndex % 2 === 0 ? "user" : "opponent";
     const addedEvents = actor === "opponent" ? 2 : 1;
     if (run.events.length + addedEvents > eventCount) break;
-    run = commitMove(run, cycle[moveIndex % cycle.length]!, { actor, at }).run;
+    const move = cycle[moveIndex % cycle.length]!;
+    run =
+      actor === "opponent"
+        ? appendOpponentPly(
+            run,
+            {
+              moveUci: move,
+              engine: {
+                id: "latency-mock",
+                name: "Latency mock",
+                version: "1",
+                seedHonored: true,
+              },
+            },
+            { at },
+          ).run
+        : commitMove(run, move, { at }).run;
     moveIndex += 1;
   }
 

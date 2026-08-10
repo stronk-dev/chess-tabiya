@@ -52,6 +52,7 @@ export {
   type ReadBackReplay,
 } from "./replay.js";
 export {
+  appendOpponentPly,
   commitMove,
   createRun,
   fork,
@@ -59,6 +60,7 @@ export {
   reachCheckpoint,
   rewind,
   rewindToCheckpoint,
+  type AppendOpponentPlyOptions,
   type CommitMoveOptions,
   type CreateRunInput,
   type ForkOptions,
@@ -80,8 +82,11 @@ export type {
   MutationResult,
   Node,
   ObjectiveState,
+  OpponentSelection,
   OpponentMoveSelectedEvent,
   PolicyConfig,
+  SelectionCandidate,
+  SelectionEngineIdentity,
   Segment,
   VersionedPolicy,
 } from "./types.js";

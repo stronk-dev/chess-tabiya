@@ -7,9 +7,13 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends git \
     && rm -rf /var/lib/apt/lists/*
 
+COPY patches/maia3-uci-policy-mass.patch /tmp/maia3-uci-policy-mass.patch
+
 RUN git clone https://github.com/CSSLab/maia3.git /opt/maia3 \
     && git -C /opt/maia3 checkout "${MAIA3_COMMIT}" \
-    && test "$(git -C /opt/maia3 rev-parse HEAD)" = "${MAIA3_COMMIT}"
+    && test "$(git -C /opt/maia3 rev-parse HEAD)" = "${MAIA3_COMMIT}" \
+    && git -C /opt/maia3 apply --check /tmp/maia3-uci-policy-mass.patch \
+    && git -C /opt/maia3 apply /tmp/maia3-uci-policy-mass.patch
 
 RUN python -m pip install --no-cache-dir python-chess==1.999 /opt/maia3
 

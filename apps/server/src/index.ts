@@ -26,6 +26,17 @@ export {
   type MaiaDockerSpecOptions,
 } from "./maia.js";
 export {
+  OpponentSelector,
+  parseSelectMoveRequest,
+  selectionCacheKey,
+  type OpponentPolicyMode,
+  type OpponentSelectorOptions,
+  type SelectMoveRequest,
+  type SelectorEngineClient,
+  type SelectorPolicy,
+  type SelectorSpineNode,
+} from "./opponent-selector.js";
+export {
   createHttpServer,
   createRestHandler,
   errorResponse,

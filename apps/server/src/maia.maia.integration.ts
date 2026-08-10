@@ -39,6 +39,14 @@ describe("Maia production sidecar integration", () => {
       timeoutMs: 60_000,
     });
     expect(response.at(-1)).toMatch(/^bestmove [a-h][1-8][a-h][1-8]/);
+    const policyLines = response.filter((line) => line.startsWith("info "));
+    expect(policyLines.length).toBeGreaterThan(0);
+    for (const line of policyLines) {
+      const match = /\bpolicy ([0-9]+(?:\.[0-9]+)?(?:e[+-]?[0-9]+)?)\b/i.exec(line);
+      expect(match, line).not.toBeNull();
+      expect(Number(match![1])).toBeGreaterThanOrEqual(0);
+      expect(Number(match![1])).toBeLessThanOrEqual(1);
+    }
     expect(supervisor.transcript("maia-5m")).toContainEqual(
       expect.objectContaining({ direction: "sent", line: position }),
     );
