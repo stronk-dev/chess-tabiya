@@ -63,3 +63,26 @@
   gone); all six negative fixtures present; hand-rolled RFC 8785 with
   surrogate handling; amended Najdorf fixture at 0.2.0. **§1 APPROVED.**
   §3 (round-trip) green-lit; §2 stays deferred per owner ruling.
+
+## 2026-08-10 (codex, §3 pack + run PGN round-trip)
+
+- Added `exportPackRunPgn` to `@chess-tabiya/runtime`. It consumes the v0.2
+  schema package's pack type, semantic lint, and RFC 8785 digest; rejects pack ID,
+  digest, or canonical start-FEN mismatches; validates the source run; merges all
+  authored spine leaf paths with all played run branches; and delegates legal
+  validation and serialization to the existing runtime PGN exporter.
+- Exact UCI-path duplicates collapse. New paths fork at their longest authored or
+  played prefix, so an unplayed authored alternative and a played off-spine
+  deviation remain distinct PGN variations. Branch comments identify
+  `authored:<leaf-id>` and `run:<branch-label>` provenance without treating the
+  schema fixture's placeholder prose as reviewed content.
+- The integration test loads the living amended Najdorf fixture, records its
+  digest on a run, plays `Be3 e6 f3 b5`, rewinds to the position after `e6`, and
+  commits off-spine `g3` as implicit `alt-1`. The exported PGN contains authored
+  `Be2`, played `f3 ... b5`, and played `g3`; all six distinct nodes remain legal
+  after parse → serialize → parse.
+- Pack A (§2) remains deferred by owner ruling and no content was authored.
+- Verification before commit: focused integration test green; `make verify`
+  green (14 files, 71 tests, all typechecks and schema/scaffold verification);
+  `make build` green; `git diff --check` clean; all 58 frozen archive checksums
+  verified unchanged.

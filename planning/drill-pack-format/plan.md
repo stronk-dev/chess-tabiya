@@ -35,4 +35,4 @@ tooling) & Marco/claude (pack A content). Scaffold history is in
 
 ## 3. Round-trip
 
-- [ ] Pack spine + run branches → legal PGN with variations (uses runtime pkg)
+- [x] Pack spine + run branches → legal PGN with variations (uses runtime pkg)

@@ -71,10 +71,34 @@ The bare FEN is validated as standard chess and encoded with `encodeURIComponent
 so the complete FEN occupies one path segment and round-trips without losing
 slashes or spaces.
 
+## Pack and run PGN round-trip
+
+`exportPackRunPgn` from `@chess-tabiya/runtime` combines two kinds of paths into
+one legal PGN variation tree:
+
+- every authored leaf path under the pack's `spine`;
+- every branch actually present in the run.
+
+Before merging, it applies the schema package's semantic lint and RFC 8785 digest,
+then requires the pack ID, digest, and canonical start FEN to match the run. It
+also validates the source run with the ordinary runtime PGN exporter. Exact move-
+sequence duplicates are collapsed; a played deviation remains a separate
+variation from its longest shared authored prefix. The resulting tree is passed
+back through the runtime's legal-move/SAN/FEN validation and PGN serializer rather
+than maintaining a second chess or serialization implementation.
+
+Authored and played variation labels use `authored:<spine-leaf-id>` and
+`run:<branch-label>` comments. These labels identify provenance of paths, not
+reviewed coaching annotations.
+
+The integration test loads the living amended Najdorf fixture, plays its authored
+main path, rewinds at `najdorf-e6`, creates a `g3` deviation, and proves that the
+unplayed authored `Be2` sibling plus both played paths survive PGN parse, serialize,
+and reparse as legal chess.
+
 ## Not implemented yet
 
 Pack A content remains deferred by owner ruling; the living Najdorf file is a
-schema fixture, not reviewed training content. Pack-spine/run-branch PGN
-round-trip is the separate §3 plan item and has not started. Trajectory
-`transitions`, content licensing policy, engines, and authoring UI are also outside
-this implemented schema slice.
+schema fixture, not reviewed training content. Trajectory `transitions`, content
+licensing policy, engines, and authoring UI are also outside this implemented
+format foundation.

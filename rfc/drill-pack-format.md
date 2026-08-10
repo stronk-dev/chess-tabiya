@@ -140,3 +140,6 @@ lint N=2. Original blocker texts: git history of this file (commit 3eb4c52).
 - 2026-08-12: §1 living schema, amended fixture, negative fixtures, semantic
   lints, JCS digest, and URL tooling implemented; pack A remains deferred and §3
   remains open.
+- 2026-08-12: §3 pack-spine/run-branch integration implemented; authored and
+  played paths now round-trip through the runtime as legal PGN variations. Pack A
+  remains deferred by owner ruling.

@@ -41,6 +41,11 @@ export {
 } from "./objective-state.js";
 export { PgnExportError, exportPgn } from "./pgn.js";
 export {
+  PackRunPgnError,
+  exportPackRunPgn,
+  type PackRunPgnErrorCode,
+} from "./pack-pgn.js";
+export {
   ReplayError,
   readBackReplay,
   type OpponentMoveReadback,
