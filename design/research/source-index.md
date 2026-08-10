@@ -21,4 +21,24 @@ Every entry: URL, Use, Caveat. Evidence labels per `design/research/README.md`
 
 ## New sources
 
-*(next: R46)*
+### R46 — chess.com forum: "How to respond to the Caro-Kann"
+- URL: https://www.chess.com/forum/view/chess-openings/how-to-respond-to-the-caro-kann
+- Use: demand signal — club players asking how to face the Caro-Kann as White.
+- Caveat: `[P]` owner-supplied 2026-08-10, not yet fetched; anecdote, problem-shape only.
+
+### R47 — r/chessbeginners: "Caro-Kann is so frustrating when White doesn't take"
+- URL: https://www.reddit.com/r/chessbeginners/comments/10kxdjl/carokann_is_so_frustrating_when_white_doesnt_take/
+- Use: demand signal — the anti-opening pain from the Black side; both sides find the structure hard.
+- Caveat: `[P]` owner-supplied, not yet fetched; anecdote.
+
+### R48 — r/chess: "Can White kill the game easily against the Caro-Kann?"
+- URL: https://www.reddit.com/r/chess/comments/1mi5k5v/can_white_kill_the_game_easily_against_the/
+- Use: demand signal — White players seeking a practical anti-Caro approach.
+- Caveat: `[P]` owner-supplied, not yet fetched; anecdote.
+
+### R49 — r/chess: "Am I crazy or is the Caro-Kann Advance super hard?"
+- URL: https://www.reddit.com/r/chess/comments/17ljl82/am_i_crazy_or_is_the_carokann_advance_super_hard/
+- Use: demand signal — the Advance (3.e5) specifically experienced as enticing-but-hard; supports the anti-opening pack candidate (BACKLOG).
+- Caveat: `[P]` owner-supplied, not yet fetched; anecdote.
+
+*(next: R50)*

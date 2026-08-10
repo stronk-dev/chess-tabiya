@@ -71,3 +71,22 @@
   embeddings; opponent-intent prompts; browser-run engines.
 - Next: unchanged (first wave per `plan.md` §Sequencing) + owner ruling wanted on the
   target-band gap.
+
+## 2026-08-10 (claude, session 1 continued — 2)
+
+- **DESIGN-GAP resolved (target band), owner ruling:** option (b) adopted. Thesis
+  amended: the product serves the ~1000→2000+ journey — core band 1400–2000+ as
+  designed; 1000–1400 via on-ramp packs (same pack object, three knobs: 2–8-ply
+  branches, pack-declared immediate blunder-guard overriding the ADR-0006 default,
+  principle/threat objectives; opponent-intent checkpoints first-class). Explicitly
+  not a tactics trainer. Note for the future drill-pack RFC: the pack format needs a
+  per-pack feedback-policy field.
+- **New ledger rows:** on-ramp pack lane (📐 at thesis level); anti-opening packs
+  (💡) — owner's lived example: White facing the Caro-Kann Advance (3.e5 enticing but
+  hard; c5/f6 breaks, Tal Variation 4.h4). Repertoire trainers drill *your* side of
+  *your* openings; nothing drills facing an opening the opponent chose. Candidate
+  first pack, owner can dogfood. Four owner-supplied demand-signal sources added as
+  R46–R49 (`[P]`, unfetched).
+- Observation for Q7: the anti-Caro-Advance pack is a strong pack-A alternative or
+  companion — move-order/timing sensitive like the brief's Sicilian candidate, but
+  backed by the owner's own recurring pain, which makes review and dogfooding cheap.

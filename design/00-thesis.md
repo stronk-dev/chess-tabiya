@@ -56,10 +56,26 @@ curriculum, not a generic bot ladder. And per the standing failure-shape warning
 
 ## Target player
 
-A serious improver, roughly **1400–2200 online rapid**, who has crossed the
-"hang fewer pieces" stage and now loses through plan selection, move order, timing,
-structure, attack/counterplay races, transitions, and conversion. Not a hard gate —
-packs declare prerequisites and difficulty.
+**The product serves the ~1000 → 2000+ journey** (owner ruling 2026-08-10, resolving
+the target-band DESIGN-GAP; supersedes the archive's 1400–2200 framing).
+
+- **Core band, 1400–2000+:** the natively designed scope. A serious improver who has
+  crossed the "hang fewer pieces" stage and now loses through plan selection, move
+  order, timing, structure, attack/counterplay races, transitions, and conversion.
+- **On-ramp band, 1000–1400:** served by **on-ramp packs** — the same pack object and
+  runtime with three knobs turned: branch length 2–8 plies (consequences must arrive
+  fast), pack-declared immediate blunder-guard feedback (show the consequence within a
+  couple of plies, then rewind — a per-pack override of the delayed-feedback default,
+  ADR-0006), and principle/threat-shaped objectives ("nothing hanging," "answer the
+  threat," "convert the extra piece") instead of structure/tempo-shaped ones.
+  Opponent-intent checkpoints ("what does their move want; what is the moved piece no
+  longer doing?") are first-class here. Outcome Drill needs no adaptation — easier
+  roots only.
+- **Explicitly not:** a tactics puzzle trainer or lesson content. The 1000→1400
+  tactics-volume leg is well served free elsewhere; on-ramp packs exist so the player
+  graduates into core packs already fluent in rewind → branch → compare.
+
+Not a hard gate in either direction — packs declare prerequisites and difficulty.
 
 ## The hard truth
 
