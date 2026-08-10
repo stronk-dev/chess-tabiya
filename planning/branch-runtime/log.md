@@ -120,3 +120,28 @@
   `objective.successConditions` should eventually adopt it. Also: rule order =
   priority in evaluateObjective (first match wins) — document in pack authoring.
 - §3 green-lit: read-back replay, compare contract, PGN export, JobObserver.
+
+## 2026-08-12 (codex, session 4) — transition amendment + §3 replay/compare/export
+
+- Applied the review amendment in `f5b5a1c`: every non-terminal objective state now reaches
+  any different state while achieved/failed/transitioned remain absorbing. Exhaustive pair
+  tests plus explicit preserved→achieved and degraded→achieved regressions cover the two
+  cases that exposed the original RFC bug; evidence and no-self-transition rules remain.
+- Added authoritative read-back replay in `9ae77ca`. Opponent commits now record
+  `opponent.move_selected` immediately before `move.committed`; replay reads those logged
+  choices without a policy callback and rejects missing or disagreeing pairs rather than
+  recomputing them.
+- Added the BR-C7 comparison payload in `186c5b6`: branches resolve to immutable root-to-head
+  paths, align after their last common fork, omit an absent side when lengths differ, and
+  return fork-relative objective timelines and checkpoint hits. Unknown/unrelated branch
+  data fails explicitly.
+- Added chessops PGN variation export in `fbe0858`. Selected paths are legality-checked move
+  by move, including stored SAN and resulting FEN, before serialization. Tests parse the PGN
+  back through chessops and legally walk every mainline/variation; corrupted paths fail.
+- Added `JobObserver.onRewound` in `26b9d92`. A successful rewind reports a frozen list of
+  nodes leaving the active path without deleting immutable history; validation failures do
+  not notify. Actual job cancellation remains with the future worker implementation.
+- Verification: `make verify` green (8 files, 42 tests); `make build` green. §3's four
+  checkboxes were each flipped in the commit carrying their exercising tests.
+- Stopped at the §3 boundary. Next planned work is §4 property/scenario hardening; not
+  started.

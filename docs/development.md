@@ -35,18 +35,25 @@ packages.
 path-keyed, retain a normalized four-field FEN `transposeKey`, and link to their parent;
 transpositions therefore remain distinct attempts without losing position matching.
 
-The implemented §1–2 surface includes run creation, legal move commits, implicit forks
+The implemented §1–3 surface includes run creation, legal move commits, implicit forks
 after rewind, explicit empty branches, cursor-only rewind, checkpoint segment derivation,
-event read-back/projection, typed errors, and the engine-free objective state machine.
-Comparison, PGN export, and server lease enforcement belong to later plan sections. The
-normative wire shape is the living `schemas/drill_run.schema.json` v0.2;
-`packages/schema` owns its version constant.
+event read-back/projection, typed errors, the engine-free objective state machine,
+authoritative opponent read-back, branch comparison, legal PGN variation export, and the
+rewind job-observer hook. Property/scenario hardening and server lease enforcement belong
+to later plan sections. The normative wire shape is the living
+`schemas/drill_run.schema.json` v0.2; `packages/schema` owns its version constant.
 
 Objective transition rules use only deterministic local evidence: checkmate, stalemate,
 runtime-provable draws, material balance in pawn units, FEN piece/pawn-structure/transpose-key
 predicates, and checkpoint reach on the active path. State changes follow the RFC graph and
 are rejected without evidence references. A data-only asynchronous upgrader interface marks
 the future worker boundary; §2 does not apply worker proposals or introduce engines.
+
+Opponent replay reads logged `opponent.move_selected` events and requires the next event to
+be the matching opponent commit; it never invokes a policy. Comparison aligns branch nodes
+after their last common fork and returns absent-side marking, objective timelines, and
+checkpoint hits. PGN export uses chessops to verify every move, SAN, and resulting FEN before
+writing selected branches as variations.
 
 ## Commands
 
