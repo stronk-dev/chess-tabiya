@@ -132,11 +132,12 @@ function parseMoveOptions(value: Record<string, unknown>): CommitMoveOptions {
   };
 }
 
-function errorResponse(error: unknown): Response {
+export function errorResponse(error: unknown): Response {
   let status = 500;
   let code = "INTERNAL_ERROR";
   let message = "Internal server error";
   let reason: string | undefined;
+  let details: Readonly<Record<string, unknown>> | undefined;
 
   if (error instanceof RuntimeError) {
     code = error.code;
@@ -156,14 +157,19 @@ function errorResponse(error: unknown): Response {
     code = error.code;
     message =
       error.code === "STORAGE_FAILURE" ? "Storage operation failed" : error.message;
+    details = error.details;
     status =
-      error.code === "INVALID_REQUEST"
-        ? 400
-        : error.code === "RUN_NOT_FOUND"
-          ? 404
-          : error.code === "RUN_ALREADY_EXISTS"
-            ? 409
-            : 500;
+      error.code === "ENGINE_UNAVAILABLE"
+        ? 503
+        : error.code === "POLICY_MODE_UNSUPPORTED"
+          ? 422
+          : error.code === "INVALID_REQUEST"
+            ? 400
+            : error.code === "RUN_NOT_FOUND"
+              ? 404
+              : error.code === "RUN_ALREADY_EXISTS"
+                ? 409
+                : 500;
   }
 
   return json(status, {
@@ -171,6 +177,7 @@ function errorResponse(error: unknown): Response {
       code,
       message,
       ...(reason === undefined ? {} : { reason }),
+      ...(details === undefined ? {} : details),
     },
   });
 }

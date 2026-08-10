@@ -11,12 +11,12 @@ RFC: `rfc/engine-workers.md` (accepted 2026-08-12). Assignee: codex.
 
 ## 2. Engine supervisor (apps/server)
 
-- [ ] UCI child lifecycle: spawn, handshake, isready warmup, options, health,
+- [x] UCI child lifecycle: spawn, handshake, isready warmup, options, health,
       restart w/ backoff, graceful shutdown
-- [ ] Transcript ring buffer per engine (bounded)
-- [ ] Engine identity capture (name/version/model/containerDigest/seedHonored)
-- [ ] Typed ENGINE_UNAVAILABLE + POLICY_MODE_UNSUPPORTED (+ HTTP 503/422)
-- [ ] Stockfish tests (CI installs binary)
+- [x] Transcript ring buffer per engine (bounded)
+- [x] Engine identity capture (name/version/model/containerDigest/seedHonored)
+- [x] Typed ENGINE_UNAVAILABLE + POLICY_MODE_UNSUPPORTED (+ HTTP 503/422)
+- [x] Stockfish tests (CI installs binary)
 
 ## 3. Maia sidecar (workers/maia)
 

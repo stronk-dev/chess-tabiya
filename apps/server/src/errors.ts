@@ -1,15 +1,45 @@
 export type ServerErrorCode =
+  | "ENGINE_UNAVAILABLE"
   | "INVALID_REQUEST"
+  | "POLICY_MODE_UNSUPPORTED"
   | "RUN_ALREADY_EXISTS"
   | "RUN_NOT_FOUND"
   | "STORAGE_FAILURE";
 
 export class ServerError extends Error {
   readonly code: ServerErrorCode;
+  readonly details?: Readonly<Record<string, unknown>>;
 
-  constructor(code: ServerErrorCode, message: string, options?: ErrorOptions) {
-    super(message, options);
+  constructor(
+    code: ServerErrorCode,
+    message: string,
+    options?: ErrorOptions & {
+      readonly details?: Readonly<Record<string, unknown>>;
+    },
+  ) {
+    const { details, ...errorOptions } = options ?? {};
+    super(message, errorOptions);
     this.name = "ServerError";
     this.code = code;
+    if (details !== undefined) this.details = Object.freeze({ ...details });
   }
+}
+
+export function engineUnavailable(
+  engineId: string,
+  retryAfterMs: number,
+  cause?: Error,
+): ServerError {
+  return new ServerError("ENGINE_UNAVAILABLE", `Engine unavailable: ${engineId}`, {
+    ...(cause === undefined ? {} : { cause }),
+    details: { engineId, retryAfterMs },
+  });
+}
+
+export function policyModeUnsupported(policyMode: string): ServerError {
+  return new ServerError(
+    "POLICY_MODE_UNSUPPORTED",
+    `Policy mode is not supported: ${policyMode}`,
+    { details: { policyMode } },
+  );
 }

@@ -190,3 +190,5 @@ history (commit 74debed review landing).
   required — resolutions follow prior rulings); **status → accepted**.
 - 2026-08-12: §1 run-schema v0.3 amendment implementation started;
   **status → implementing**.
+- 2026-08-12: §1 evidence attachment and §2 Stockfish-backed UCI supervisor
+  implemented; selector, Maia packaging, and evidence queue remain open.
