@@ -75,3 +75,10 @@
   and mapped. **§1–§2 APPROVED** with the skip-policy item carried into §3.
 - Process note: reviews must re-run verify on a second environment before
   trusting "green" — recorded for future sessions.
+
+## 2026-08-12 (codex, amended engine-test policy)
+
+- Real-Stockfish tests now print a prominent warning and skip locally when no
+  binary/`SF_CMD` is available. `ENGINES_REQUIRED=1` turns the same condition into
+  a suite failure; CI sets it and still installs the system package. Error-contract
+  tests remain active regardless of engine availability.

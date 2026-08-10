@@ -40,9 +40,10 @@ accepted selector boundary but no selector route exists yet.
 
 The default verification suite exercises handshake, options, search, health,
 restart, transcript bounds, identity, shutdown, and both error mappings against
-a real Stockfish process. CI installs the Stockfish system package. Local runs
-may set `SF_CMD` and JSON-array `SF_ARGS` when the executable is not in a standard
-path.
+a real Stockfish process. CI installs the Stockfish system package and sets
+`ENGINES_REQUIRED=1`, so absence fails the gate. A local machine without the
+binary prints a prominent warning and skips only the real-engine cases; it may set
+`SF_CMD` and JSON-array `SF_ARGS` when the executable is not in a standard path.
 
 ## Not implemented yet
 
