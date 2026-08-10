@@ -1,9 +1,9 @@
-# Drill client server foundation
+# Drill client foundations
 
-The drill client's first implemented layer is a zero-pixel HTTP foundation. It
-serves validated packs, creates runs from those packs, owns pack-aware mutation
-orchestration, schedules evidence work, enforces feedback timing, and exports
-pack-aware PGN. No browser client or screen is part of this layer.
+The drill client's implemented foundations now cover the pack-aware HTTP
+surface and the browser-side plumbing that consumes it. There are still no
+product screens: the web app remains a scaffold, with reusable transport,
+state, board, and evidence primitives ready for composition.
 
 ## Pack registry and routes
 
@@ -71,9 +71,58 @@ digest, export merges authored spine content with the selected played
 branches. Otherwise it uses the runtime's ordinary run export. Unknown branch
 IDs are rejected by the runtime rather than silently omitted.
 
+## Typed browser transport and writer identity
+
+`DrillApi` is the typed client for the complete v1 surface: capabilities,
+packs, run creation and mutation, opponent selection, graph and comparison,
+events and evidence, and PGN download. It preserves structured server failures
+as `ApiError`, including the machine-readable error code and details. Mutating
+requests carry the run's writer ID; read-only and selector requests do not.
+
+`WriterSession` stores one generated writer ID in `localStorage` under a key
+scoped to the run ID. Reconstructing the session after a browser refresh reuses
+that identity. A `NOT_ACTIVE_WRITER` response marks only the live session as
+read-only; it does not overwrite the persisted identity or attempt unsupported
+lease transfer.
+
+## Run-state projection and polling
+
+`RunStateStore` treats mutation-returned events as authoritative. It projects
+the current run by appending each mutation's contiguous emitted-event suffix,
+and rejects a response whose projected event count disagrees with its included
+run. Resume projects the complete public event stream from `run.started`.
+
+The writer does not poll its own run events. It tracks one pending evaluation
+per committed move and, once the pack's feedback reveal condition is present,
+polls `/evidence` every second until the staged results have been writer-applied
+and their `evidence.attached` events drain the pending count. A client rejected
+with `NOT_ACTIVE_WRITER` becomes a follower and polls `/events?sinceSeq` every
+two seconds. Rewinds remove server-canceled jobs for pruned nodes from the
+pending count. Poll scheduling is injectable and covered without wall-clock
+tests.
+
+## Bare chessboard primitive
+
+`Chessboard.svelte` wraps Chessground without adding a drill screen. Chessops
+derives legal destinations from the authoritative FEN. The pack's `start.side`
+sets orientation and restricts input to the learner's turns; the component
+passes the current check and last move into Chessground's normal highlights.
+Pawn moves to the back rank pause at an explicit queen/rook/bishop/knight
+picker before emitting promotion UCI.
+
+## Evidence sentences
+
+The browser owns an enumerable evidence sentence table. Every exported
+`rules:*` fact has a fixed plain sentence, and every pack checkpoint produces a
+`pack:<checkpointId>` sentence from its authored label. Each `engine:*` result
+renders independently with its typed payload and an `Engine` or `Human model`
+source label; duplicate payload ownership is rejected rather than merged.
+Unknown future prefixes remain explicit as a generic recorded-evidence chip.
+The CI test enumerates the runtime rules vocabulary and the living pack's
+checkpoint vocabulary.
+
 ## Current boundary
 
-This document covers Layer 1 of the accepted drill-client RFC. Typed browser
-plumbing, chessground integration, product screens, keyboard behavior,
-Playwright coverage, and deployment packaging remain unimplemented follow-on
-layers.
+Layers 1 and 2 of the accepted drill-client RFC are implemented. Product
+screens, layout, keyboard behavior, Playwright coverage, and deployment
+packaging remain unimplemented follow-on layers.

@@ -14,6 +14,6 @@ Implemented foundation:
 - `engine-workers.md` — UCI supervision, Dockerized Maia and policy exposure,
   opponent selection/cache/writer seam, evidence queue, capabilities, ratified
   strong-engine profile, measured envelope, and current limitations.
-- `drill-client.md` — the zero-pixel client foundation: pack registry and HTTP
-  routes, atomic pack-aware orchestration, feedback withholding, evidence refs,
-  automatic evaluation jobs, and pack-aware PGN export.
+- `drill-client.md` — pack-aware server routes and browser plumbing: typed
+  transport, persisted writer sessions, event-projected state and polling, the
+  bare Chessground primitive, evidence sentences, and PGN export.

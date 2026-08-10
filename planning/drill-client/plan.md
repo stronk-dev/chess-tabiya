@@ -21,13 +21,13 @@ work before its plumbing exists.
 
 ## 2. Client plumbing (browser foundation — no product screens)
 
-- [ ] Typed REST client for the whole surface; writer id per run in
+- [x] Typed REST client for the whole surface; writer id per run in
       localStorage; resume-on-refresh; NOT_ACTIVE_WRITER → read-only mode
-- [ ] Run-state store from mutation-returned events (+ evidence polling 1s
+- [x] Run-state store from mutation-returned events (+ evidence polling 1s
       while pending, followers /events at 2s)
-- [ ] Bare chessground board component: orientation from start.side, legal
+- [x] Bare chessground board component: orientation from start.side, legal
       move input, promotion picker, last-move/check highlights
-- [ ] Evidence sentence table covering every v1-emittable ref (enumerated
+- [x] Evidence sentence table covering every v1-emittable ref (enumerated
       CI test per RFC contract)
 
 ## 3. Screens (thin composition over 1+2)

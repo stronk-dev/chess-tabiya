@@ -10,10 +10,14 @@
   },
   "dependencies": {
     "@chess-tabiya/runtime": "workspace:*",
+    "@chess-tabiya/schema": "workspace:*",
+    "@lichess-org/chessground": "10.1.1",
+    "chessops": "0.15.1",
     "svelte": "5.56.8"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "7.2.0",
+    "happy-dom": "^20.11.2",
     "svelte-check": "4.7.4",
     "vite": "8.1.5"
   }

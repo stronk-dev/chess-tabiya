@@ -49,3 +49,40 @@
   PACK_INVALID (refuse-to-serve, not degrade); withholding module present with
   per-policy tests; PGN route + evidence-ref constructors in. **Layer 1
   APPROVED.** Layer 2 green-lit.
+
+## 2026-08-12 (codex, Layer 2 — client plumbing)
+
+- Added a typed browser `DrillApi` for the complete v1 REST surface:
+  capabilities, packs, run creation, player/opponent moves, rewind, fork,
+  graph, compare, events, evidence read/apply, selector, and PGN download.
+  Structured failures retain HTTP status, error code, message, and details.
+- Added `WriterSession`: one writer ID per run is persisted in `localStorage`
+  and reused after refresh. `NOT_ACTIVE_WRITER` marks the live session and run
+  store read-only; no lease-transfer behavior was invented.
+- Added `RunStateStore`, projecting authoritative state from each mutation's
+  contiguous `emitted` suffix rather than replacing state from an opaque
+  response snapshot. Resume projects `/events` from sequence zero. Writers
+  poll revealed pending evidence every 1 second and apply it through the
+  writer path; rejected writers become followers polling events every 2
+  seconds. Rewind events remove canceled pruned-node jobs from the pending
+  count. Injected scheduling makes both intervals deterministic in tests.
+- Added the bare `Chessboard.svelte` primitive backed by Chessground and
+  chessops: orientation and learner input come from `start.side`, destinations
+  are legal from the current FEN, and check/last-move highlighting is passed to
+  Chessground. Back-rank pawn moves wait for an explicit queen/rook/bishop/
+  knight choice. The mounted component test uses a browser-like DOM and a fake
+  Chessground API; no product screen or app composition changed.
+- Added the enumerable evidence sentence contract. All runtime `rules:*` facts
+  and living-pack `pack:*` checkpoint refs receive authored/plain sentences;
+  `engine:*` payloads remain individually source-labeled and duplicate payload
+  ownership is rejected. Unknown future prefixes render an explicit generic
+  record instead of disappearing.
+- Added the maintained `@lichess-org/chessground` 10.1.1 package, direct
+  chessops/schema web dependencies, and the
+  browser-like Vitest environment needed to exercise Svelte components. The
+  production `pnpm build` succeeds.
+- Verification: `ENGINES_REQUIRED=1 make verify` passed outside the restricted
+  sandbox: 27 test files, 125 tests, all workspace typechecks, Svelte
+  diagnostics, and scaffold verification green.
+- Stop point: Layer 2 complete. Layer 3 screens and the existing `App.svelte`
+  scaffold remain untouched.

@@ -229,3 +229,4 @@ era" — this RFC is that era; folding is per that ruling, now cited.
 - 2026-08-12: adversarial review DC-C1..C8; C1–C7 resolved in-draft; C8
   resolved by owner E5 waiver → **status → accepted**.
 - 2026-08-12: Layer 1 implementation began → **status → implementing**.
+- 2026-08-12: Layers 1–2 implemented; product screens remain next.

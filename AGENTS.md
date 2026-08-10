@@ -8,8 +8,8 @@ commit → play the consequence → rewind → branch → compare → replay und
 implemented and documented in `docs/branch-runtime.md`; drill-pack format v0.2 is
 implemented and documented in `docs/drill-pack-format.md`; engine workers are
 implemented and documented in `docs/engine-workers.md`. The drill-client RFC is
-implementing; its zero-pixel server foundation is documented in
-`docs/drill-client.md`.
+implementing; its server and browser-plumbing foundations are documented in
+`docs/drill-client.md`, with product screens still unimplemented.
 Doctrine: TS core + Go workers, Svelte 5, AGPL-3.0, Maia as containerized UCI
 sidecar. The exploration job continues alongside (E4 harness, gates) — see
 `planning/exploration/plan.md`.
