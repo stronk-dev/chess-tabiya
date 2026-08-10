@@ -7,8 +7,8 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent |
 |---|---|---|
 | `0000-rfc-process.md` | accepted | — |
-| `drill-pack-format.md` | draft | mines `archive/brief-v2/rfcs/RFC-0001` + schema |
-| `branch-runtime.md` | draft | mines `archive/brief-v2/rfcs/RFC-0002` + run schema |
+| `drill-pack-format.md` | accepted → implementing | mines `archive/brief-v2/rfcs/RFC-0001` + schema |
+| `branch-runtime.md` | accepted → implementing | mines `archive/brief-v2/rfcs/RFC-0002` + run schema |
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in
 `planning/exploration/log.md`): E1 met, E2 advisory, E3/E4/E5 accepted as in-flight
@@ -40,7 +40,7 @@ silently later.
 
 | Deferred decision | Origin | Owner | Why it matters |
 |---|---|---|---|
-| Server language | constrained by owner ruling 2026-08-12: no Python, no Rust; **Go or Node/TS** | stack-selection dossier → owner | Locks the engine-orchestration stack |
-| Client framework (Svelte vs React vs vanilla; bundler) | owner wants a real comparison first (2026-08-12) | stack-selection dossier → owner | Board-heavy UI; chessground interop |
+| Server language | ✅ resolved 2026-08-12: **TS core + Go workers** doctrine (chess-semantics code is TS/shared runtime; self-contained data-format workers are Go; Python only inside Maia sidecar containers) | — | `design/research/stack-selection.md` |
+| Client framework | ✅ resolved 2026-08-12: **Svelte 5** + Vite | — | `design/research/stack-selection.md` |
 | SQLite vs PostgreSQL for runs/branches | `archive/brief-v2/12_SYSTEM_ARCHITECTURE.md` | first runtime RFC | Single-user self-hosted may not need Postgres |
 | Source model, deployment, monetization, and content/data rights | exploration Q2 | Marco | Gates public release; GPL/AGPL obligations constrain combinations but do not prohibit charging |

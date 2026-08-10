@@ -4,9 +4,10 @@ A **chess phase rehearsal system**: drill openings, middlegames, and endgames by
 the consequences, then rewind and try again. The core loop is
 commit → play the consequence → rewind → branch → compare → replay under different resistance.
 
-**Phase: foundation specification** (since 2026-08-12; exploration verdict: go — E1
-met, whitespace verified). No product code until an RFC is accepted. Research
-harnesses and the exploration job continue alongside — see
+**Phase: foundation implementation** (since 2026-08-12). Two accepted RFCs
+(`drill-pack-format`, `branch-runtime`) with planning dirs ready for codex.
+Doctrine: TS core + Go workers, Svelte 5, AGPL-3.0, Maia as containerized UCI
+sidecar. The exploration job continues alongside (E4 harness, gates) — see
 `planning/exploration/plan.md`.
 
 ## Repo structure
@@ -14,7 +15,7 @@ harnesses and the exploration job continue alongside — see
 | Tier | Directory | Current state |
 |---|---|---|
 | Design | `design/` | 3 living docs + `BACKLOG.md` topic ledger + `research/` coverage matrix |
-| RFC | `rfc/` | Open since 2026-08-12 (owner ruling): `drill-pack-format.md` and `branch-runtime.md` in draft. No implementation until a draft is **accepted** |
+| RFC | `rfc/` | `drill-pack-format.md` and `branch-runtime.md` **accepted**; implement from RFC + planning dir, never from design docs |
 | Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), exploration/continuation gates and kill criteria (`gates.md`), append-only `log.md` |
 | Docs | `docs/` | Does not exist — nothing has been built; created by the first implementing change |
 | Archive | `archive/brief-v2/` | The frozen v2 brief (59 files, checksummed). Immutable. Evidence base and quarry |

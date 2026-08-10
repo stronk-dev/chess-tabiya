@@ -234,3 +234,23 @@
 - **Review process:** cloud-clicker pattern adopted — adversarial acceptance reviews
   of both draft RFCs commissioned (blocker IDs DPF-C*/BR-C*), owner rules on
   blockers before drafts flip to accepted. Both reviews in flight.
+
+## 2026-08-12 (claude, session 1 continued — 11) — blockers resolved, RFCs accepted
+
+- Owner ruled the 4 contested blockers/decisions: spine tree added to pack format
+  (DPF-C2); minimal timing-trigger vocabulary frozen now (DPF-C3); **stack = TS
+  core + Go workers doctrine** (after scaling analysis + owner pushback for full
+  reasoning — memo in `design/research/stack-selection.md`); **Maia =
+  containerized UCI sidecar now, ONNX later** (scoped Python exception: worker
+  containers only). Client: Svelte 5.
+- Remaining 12 blockers author-resolved per the batch proposals (implicit fork,
+  read-back replay + per-locus determinism, runtime-owned objective machine with
+  evidence-carrying transitions, typed errors + single-writer lease, path-keyed
+  tree + transposeKey matching, JobObserver hook, compare contract, living run
+  schema + event seq, frozen-baseline fixture split, prediction grading fields,
+  RFC 8785 digest, enum feedbackPolicy, deviations rename, URL encoding).
+- Both RFCs revised and flipped to **accepted**; planning dirs created
+  (`planning/branch-runtime/`, `planning/drill-pack-format/`) with codex-ready
+  plans. Phase: foundation specification → foundation implementation.
+- Process note (memory saved): owner requires full reasoning visibly delivered
+  before decision prompts; analysis now lands as committed memos first.
