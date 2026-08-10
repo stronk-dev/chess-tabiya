@@ -1,6 +1,6 @@
 # Drill Pack Format — implementation plan
 
-RFC: `rfc/drill-pack-format.md` (accepted 2026-08-12). Assignee: codex (schema +
+RFC: `rfc/archive/drill-pack-format.md` (implemented 2026-08-12). Assignee: codex (schema +
 tooling) & Marco/claude (pack A content). Scaffold history is in
 `planning/archive/branch-runtime/plan.md` §0. `[x]` flips only with the exercising test.
 

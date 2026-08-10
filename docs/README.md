@@ -10,4 +10,4 @@ Implemented foundation:
   comparison and PGN export, REST/lease/storage behavior, measured envelope, and
   current limitations.
 - `drill-pack-format.md` — living v0.2 schema, semantic authoring lint, canonical
-  digest and URL tooling, and the boundary of the current schema slice.
+  digest and URL tooling, pack/run PGN round-trip, and deferred content boundary.

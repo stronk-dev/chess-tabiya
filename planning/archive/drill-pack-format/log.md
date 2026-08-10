@@ -95,3 +95,18 @@
   criteria for the RFC are now met (§2 pack A deferred to the content phase by
   owner ruling — its checklist survives in this archived plan and the BACKLOG
   row). Completion protocol green-lit.
+
+## 2026-08-12 (codex, completion protocol)
+
+- Verified `docs/drill-pack-format.md` as the canonical standalone description of
+  format v0.2: living/frozen fixtures, structural schema, semantic lints, RFC 8785
+  digest, URL forms, and pack/run PGN round-trip. The docs index now names the
+  complete surface.
+- Made the content boundary explicit: pack A and content authoring remain deferred
+  to the content phase by owner ruling. The unchecked checklist survives here and
+  the work remains tracked by the **Content authoring workflow + pack production
+  cost** row in `design/BACKLOG.md`.
+- Set the RFC to implemented and archived the RFC plus this planning directory in
+  the same lifecycle commit. Engine workers was not started.
+- Completion verification: `make verify` green (14 files, 71 tests, all
+  typechecks and schema/scaffold verification); `git diff --check` clean.

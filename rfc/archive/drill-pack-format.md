@@ -1,6 +1,6 @@
 # RFC: Drill Pack Format
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` (modes, episode, outcome types), `design/00-thesis.md §Target player` (on-ramp knobs)
@@ -8,7 +8,7 @@
 - **Depends on:** —
 - **Parent / amends:** mines `archive/brief-v2/rfcs/RFC-0001-drill-pack-format.md` sketch + `archive/brief-v2/schemas/drill_pack.schema.json`
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/drill-pack-format/`
+- **Planning:** `planning/archive/drill-pack-format/`
 
 ## Summary
 
@@ -143,3 +143,6 @@ lint N=2. Original blocker texts: git history of this file (commit 3eb4c52).
 - 2026-08-12: §3 pack-spine/run-branch integration implemented; authored and
   played paths now round-trip through the runtime as legal PGN variations. Pack A
   remains deferred by owner ruling.
+- 2026-08-12: canonical docs verified complete; **status → implemented**. §2 pack A
+  and content authoring remain deferred to the content phase by owner ruling, with
+  the checklist archived and the work retained in `design/BACKLOG.md`.

@@ -98,7 +98,9 @@ and reparse as legal chess.
 
 ## Not implemented yet
 
-Pack A content remains deferred by owner ruling; the living Najdorf file is a
-schema fixture, not reviewed training content. Trajectory `transitions`, content
-licensing policy, engines, and authoring UI are also outside this implemented
-format foundation.
+Pack A and content authoring remain deferred to the content phase by owner ruling;
+the work survives in `design/BACKLOG.md` under **Content authoring workflow + pack
+production cost** and in the archived implementation plan. The living Najdorf
+file is a schema fixture, not reviewed training content. Trajectory `transitions`,
+content licensing policy, engines, and authoring UI are also outside this
+implemented format foundation.
