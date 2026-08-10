@@ -1,5 +1,5 @@
 {
-  "name": "@repo/web",
+  "name": "@chess-tabiya/web",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,7 +9,7 @@
     "typecheck": "svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
-    "@repo/runtime": "workspace:*",
+    "@chess-tabiya/runtime": "workspace:*",
     "svelte": "5.56.8"
   },
   "devDependencies": {

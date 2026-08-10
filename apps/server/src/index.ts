@@ -1,5 +1,5 @@
-import { runtimeBuildInfo } from "@repo/runtime";
-import { schemaBuildInfo } from "@repo/schema";
+import { runtimeBuildInfo } from "@chess-tabiya/runtime";
+import { schemaBuildInfo } from "@chess-tabiya/schema";
 
 export const serverBuildInfo = Object.freeze({
   runtime: runtimeBuildInfo,

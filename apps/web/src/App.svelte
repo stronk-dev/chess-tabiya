@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { runtimeBuildInfo } from "@repo/runtime";
+  import { runtimeBuildInfo } from "@chess-tabiya/runtime";
 </script>
 
 <main>

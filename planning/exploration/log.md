@@ -266,3 +266,11 @@
   ~/repos/chess-tabiya`) left to the owner post-session — note: the Claude
   project memory dir is keyed to the old path and should be renamed alongside
   (~/.claude/projects/-Users-stronk-repos-chess-drills → …-chess-tabiya).
+
+## 2026-08-12 (claude, session 1 continued — 13) — canonical GitHub description
+
+- Owner-refined description locked (use verbatim for the GitHub repo):
+  "Don't memorize the opening — rehearse the game it creates: play past book
+  against human-like opposition, keep and compare every attempt, and convert
+  your positions." ("convert your positions" is the owner's phrasing; replaces
+  the explained-twice "drilled to the result / finish what you start" tails.)

@@ -25,8 +25,8 @@ directory.
 | `content/packs` | Reviewed drill packs |
 | `schemas` | Living JSON Schemas |
 
-Internal package names use the neutral private `@repo/*` scope until the product/repository
-name is settled; they are not published packages.
+Internal package names use the private `@chess-tabiya/*` scope; they are not published
+packages.
 
 ## Commands
 

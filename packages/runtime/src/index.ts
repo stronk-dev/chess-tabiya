@@ -1,4 +1,4 @@
 export const runtimeBuildInfo = Object.freeze({
-  packageName: "@repo/runtime",
+  packageName: "@chess-tabiya/runtime",
   runSchemaVersion: "0.2",
 });

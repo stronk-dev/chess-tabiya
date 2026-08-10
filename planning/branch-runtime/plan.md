@@ -6,13 +6,13 @@ behavior (cloud-clicker rule). Append every session to `log.md`.
 
 ## 0. Scaffold (shared with drill-pack-format)
 
-- [ ] pnpm monorepo: `packages/runtime` (the shared TS package), `packages/schema`,
+- [x] pnpm monorepo: `packages/runtime` (the shared TS package), `packages/schema`,
       `apps/server` (Node), `apps/web` (Svelte 5 + Vite), `workers/` (empty, Go
       later), `content/packs/`, `schemas/`
-- [ ] Root Makefile with `verify` = typecheck + test + schema-check (cloud-clicker
+- [x] Root Makefile with `verify` = typecheck + test + schema-check (cloud-clicker
       pattern); repo-local caches so agents avoid permission prompts
-- [ ] AGPL-3.0 LICENSE; deps: chessops, fast-check, vitest
-- [ ] CI: single workflow running `make verify`
+- [x] AGPL-3.0 LICENSE; deps: chessops, fast-check, vitest
+- [x] CI: single workflow running `make verify`
 
 ## 1. Core tree + events (`packages/runtime`)
 

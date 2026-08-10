@@ -1,6 +1,6 @@
 # RFC: Immutable Branch & Rewind Runtime
 
-- **Status:** accepted
+- **Status:** implementing
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` (episode loop), `design/02-product-shape.md` (UX commitments, latency budgets)
@@ -188,3 +188,5 @@ Original blocker texts: git history (commit 22fa697).
 - 2026-08-12: acceptance review landed (BR-C1..BR-C8); held at draft.
 - 2026-08-12: all blockers resolved; implementation doctrine added (TS core + Go
   workers, Svelte 5, Maia sidecar); **status → accepted**.
+- 2026-08-12: implementation started with the shared monorepo scaffold; **status →
+  implementing**.

@@ -14,10 +14,10 @@ const requiredDirectories = [
 ];
 
 const requiredPackages = new Map([
-  ["apps/server/package.json", "@repo/server"],
-  ["apps/web/package.json", "@repo/web"],
-  ["packages/runtime/package.json", "@repo/runtime"],
-  ["packages/schema/package.json", "@repo/schema"],
+  ["apps/server/package.json", "@chess-tabiya/server"],
+  ["apps/web/package.json", "@chess-tabiya/web"],
+  ["packages/runtime/package.json", "@chess-tabiya/runtime"],
+  ["packages/schema/package.json", "@chess-tabiya/schema"],
 ]);
 
 const failures = [];
@@ -63,6 +63,9 @@ for (const [path, expectedName] of requiredPackages) {
 const rootManifestText = await readText("package.json");
 if (rootManifestText) {
   const manifest = JSON.parse(rootManifestText);
+  if (manifest.name !== "chess-tabiya" || manifest.packageManager !== "pnpm@11.18.0") {
+    failures.push("package.json: expected chess-tabiya with pnpm@11.18.0");
+  }
   const expectedDevDependencies = {
     "fast-check": "4.9.0",
     typescript: "5.9.2",
@@ -106,10 +109,21 @@ if (!workflow.includes("pnpm install --frozen-lockfile") || !workflow.includes("
   failures.push("CI workflow: expected frozen install followed by make verify");
 }
 
-const npmrc = await readText(".npmrc");
-if (!npmrc.includes("store-dir=.cache/pnpm-store")) {
-  failures.push(".npmrc: pnpm store must remain inside the repository cache");
+const workspace = await readText("pnpm-workspace.yaml");
+const requiredWorkspaceSettings = [
+  "storeDir: .cache/pnpm-store",
+  "cacheDir: .cache/pnpm-cache",
+  "stateDir: .cache/pnpm-state",
+  "strictPeerDependencies: true",
+  "autoInstallPeers: false",
+];
+for (const setting of requiredWorkspaceSettings) {
+  if (!workspace.includes(setting)) {
+    failures.push(`pnpm-workspace.yaml: missing ${setting}`);
+  }
 }
+
+await requirePath("pnpm-lock.yaml");
 
 if (failures.length > 0) {
   console.error(failures.join("\n"));

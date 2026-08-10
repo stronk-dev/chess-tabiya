@@ -5,9 +5,8 @@
 **Tabiya** *(n., from Arabic)*: the known position where an opening's theory runs
 out and the real game starts. This project trains everything after it.
 
-Don't memorize the opening — rehearse the game it creates. Play past book against
-human-like resistance, rewind, branch, compare every attempt, and finish what you
-start.
+Don't memorize the opening — rehearse the game it creates: play past book against
+human-like opposition, keep and compare every attempt, and convert your positions.
 
 An exploration of a **chess phase rehearsal system**: drill openings, middlegames, and
 endgames by playing the consequences — commit to a plan, play it out against human-like
@@ -18,13 +17,12 @@ opposition; drill packs supply the concepts, checkpoints, and objectives.
 
 ## Status
 
-**Foundation-specification phase (go verdict on novelty, 2026-08-12).** Exploration
-verified the whitespace hands-on: no product preserves attempts, compares them, or
-explains why an objective flipped. First RFCs (`rfc/drill-pack-format.md`,
-`rfc/branch-runtime.md`) are in draft; no product code until they're accepted. Shape
-if built: open source, free, self-hosted, browser-WASM engines. Remaining risks
-tracked as gates: authoring cost, opponent long-horizon coherence, branch-UX
-comprehension.
+**Foundation implementation phase (since 2026-08-12).** Exploration verified the
+whitespace hands-on: no reviewed product preserves attempts, compares them, or explains
+why an objective flipped. The accepted `drill-pack-format` and `branch-runtime` RFCs are
+implementing. The shared TypeScript/Svelte workspace and verification gate exist; runtime
+behavior is not implemented yet. Remaining risks include authoring cost, opponent
+long-horizon coherence, and branch-UX comprehension.
 
 The whole state of that decision lives in **`planning/exploration/plan.md`** (the
 question ledger) and **`planning/exploration/gates.md`** (hypotheses, kill criteria,
@@ -37,7 +35,8 @@ continuation gates).
 | `planning/exploration/` | **Start here.** The go/kill job: questions, gates, append-only log |
 | `design/` | Living design docs (`00-thesis`, `01-training-model`, `02-product-shape`) + `BACKLOG.md` topic ledger |
 | `design/research/` | Research dossiers, coverage matrix, source index, competitor matrix |
-| `rfc/` | RFC process + template. No active RFCs — drafting is gated on exploration |
+| `rfc/` | Active accepted implementation contracts and RFC lifecycle |
+| `docs/` | Canonical description of the implemented development foundation |
 | `archive/brief-v2/` | The frozen v2 brief that seeded this repo (59 files, checksummed, immutable) |
 
 Agents: read `AGENTS.md`.

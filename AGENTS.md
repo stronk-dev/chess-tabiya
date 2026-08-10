@@ -17,7 +17,7 @@ sidecar. The exploration job continues alongside (E4 harness, gates) — see
 | Design | `design/` | 3 living docs + `BACKLOG.md` topic ledger + `research/` coverage matrix |
 | RFC | `rfc/` | `drill-pack-format.md` and `branch-runtime.md` **accepted**; implement from RFC + planning dir, never from design docs |
 | Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), exploration/continuation gates and kill criteria (`gates.md`), append-only `log.md` |
-| Docs | `docs/` | Does not exist — nothing has been built; created by the first implementing change |
+| Docs | `docs/` | Canonical description of what exists; development foundation now documented |
 | Archive | `archive/brief-v2/` | The frozen v2 brief (59 files, checksummed). Immutable. Evidence base and quarry |
 
 ## Your workflow

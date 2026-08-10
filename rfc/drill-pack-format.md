@@ -1,6 +1,6 @@
 # RFC: Drill Pack Format
 
-- **Status:** accepted
+- **Status:** implementing
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` (modes, episode, outcome types), `design/00-thesis.md §Target player` (on-ramp knobs)
@@ -130,3 +130,5 @@ lint N=2. Original blocker texts: git history of this file (commit 3eb4c52).
 - 2026-08-12: acceptance review landed (DPF-C1..DPF-C8); held at draft.
 - 2026-08-12: all blockers resolved per owner rulings (spine tree, frozen trigger
   vocabulary) and author resolutions; **status → accepted**.
+- 2026-08-12: implementation started through the shared schema/runtime scaffold;
+  **status → implementing**.

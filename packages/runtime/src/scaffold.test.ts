@@ -8,7 +8,7 @@ import { runtimeBuildInfo } from "./index.js";
 describe("runtime scaffold", () => {
   it("exposes the shared package to Node and browser consumers", () => {
     expect(runtimeBuildInfo).toEqual({
-      packageName: "@repo/runtime",
+      packageName: "@chess-tabiya/runtime",
       runSchemaVersion: "0.2",
     });
   });
