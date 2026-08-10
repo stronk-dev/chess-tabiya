@@ -19,7 +19,7 @@ tooling) & Marco/claude (pack A content). Scaffold comes from
 - [ ] URL forms: /drill/<id>@<version>[/<node>] and /fen/<encoded>/<objective>;
       FEN percent-encoding round-trip test (DPF-C8)
 
-## 2. Pack A — anti-Caro-Advance (content; the E3/Q7 experiment)
+## 2. Pack A — anti-Caro-Advance (CONTENT PHASE — deferred by owner ruling 2026-08-12: foundations first, content last; execute only after runtime + engine workers + authoring/playtest tooling exist)
 
 - [ ] Spine: 1.e4 c6 2.d4 d5 3.e5 tabiya; main plans (c5/f6 breaks, Bf5, Tal 4.h4)
       from reviewed sources cited per research house rules

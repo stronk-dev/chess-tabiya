@@ -274,3 +274,22 @@
   against human-like opposition, keep and compare every attempt, and convert
   your positions." ("convert your positions" is the owner's phrasing; replaces
   the explained-twice "drilled to the result / finish what you start" tails.)
+
+## 2026-08-12 (claude, session 1 continued — 14) — owner rulings: sequencing + Q2 closed
+
+- **Foundations first, content last (doctrine):** pack A removed from the
+  drill-pack-format acceptance criteria; content phase runs after runtime, engine
+  workers, and authoring/playtest tooling exist. E3/Q7/K10 evidence deferred
+  accordingly — accepted and noted: measuring authoring cost WITH tooling is the
+  fairer test. Pack A spine drafting removed from claude's near-term queue.
+- **Q2 fully settled** — content-rights axis closed with the authoring rule:
+  original prose only; ideas learned anywhere, cited; annotation text never
+  copied (moves/scores are facts; Lichess CC0; deps AGPL-compatible). All four
+  axes now ruled: AGPL-3.0 / self-hosted / free / original-prose+CC0-data.
+- **Storage:** analysis delivered (SQLite's single-writer model matches the
+  event-log workload; event sourcing makes a later Postgres migration mechanical
+  — replay the logs). Recommendation on record: storage adapter + SQLite default,
+  Postgres binding if a hosted multi-user instance becomes real. Formal moment:
+  codex's §5 proposal, owner ratifies.
+- Process feedback recorded: do not surface housekeeping (push timing, dir
+  names) as owner rulings.

@@ -102,10 +102,13 @@ None; extends the archive sketch per logged exploration and blocker rulings.
 - A URL in form (7) resolves to a playable drill definition; FEN encoding
   round-trips.
 - Digest: two serializations with different key order produce the identical digest.
-- **Pack A (anti-Caro-Advance) authored end-to-end** against the archive authoring
-  guide's regression checklist (`archive/brief-v2/product/content_pack_authoring.md`);
-  reviewer: Marco (strong-reviewer recruitment remains research queue 9). Authoring
-  time recorded in `planning/drill-pack-format/log.md` (feeds Q7/K10).
+- ~~Pack A authored end-to-end~~ **Moved out of this RFC's acceptance (owner ruling
+  2026-08-12: foundations first, content last).** The format is accepted on schema +
+  fixtures + lints + round-trip; pack A is authored in the content phase, after the
+  runtime/engine/UI foundations exist, so authoring cost (Q7/K10) is measured with
+  real tooling — a fairer test. Authoring rule (Q2 content-rights ruling): original
+  prose only; ideas may be learned from any source and cited; annotation text is
+  never copied. Moves/game scores are uncopyrightable facts; Lichess data is CC0.
 
 ## Open questions
 
@@ -132,3 +135,5 @@ lint N=2. Original blocker texts: git history of this file (commit 3eb4c52).
   vocabulary) and author resolutions; **status → accepted**.
 - 2026-08-12: implementation started through the shared schema/runtime scaffold;
   **status → implementing**.
+- 2026-08-12: pack A moved from acceptance criteria to the content phase (owner
+  ruling: foundations first); content-rights authoring rule added.
