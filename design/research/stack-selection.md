@@ -125,3 +125,74 @@ budgets standalone), the tax stays large; hence runner-up.
 Both combos are AGPL-3.0-clean: GPL-3.0+ deps (chessground, chessops, stockfish builds) and
 AGPL-3.0 Maia-3 are compatible with an AGPL-3.0 project. `[M]` — full licensing pass remains
 queue 10 in the coverage matrix.
+
+---
+
+## Owner decision memo (2026-08-12): Go vs Node, and the Maia path — full reasoning
+
+### What the backend actually does
+
+Four jobs: (1) UCI child-process orchestration (Stockfish, Maia) — Go and Node
+equally fine; (2) event-log store + WebSocket sync + single-writer lease — both
+fine at our scale (~one concurrent user); (3) serving client/models — trivial in
+both; Go's real win here is a single static binary with embedded assets, a nicer
+self-host story than Node+pnpm (Docker mostly equalizes); (4) **chess-aware
+computation** — move validation on append, objective predicates, PGN-with-
+variations export, pack spine validation/linting, session→pack distillation,
+future feature extractors and compare payloads. The whole decision lives in (4).
+
+### The real cost is not porting chessops
+
+Porting movegen to Go is doable (corentings/chess exists — young, single-
+maintainer fork of the archived notnil/chess). But SAN disambiguation, e.p.
+legality, castling-rights edge cases, and PGN variation/NAG parsing are exactly
+the subtle-bug-rich territory where mature beats portable — and a wrongly
+validated move poisons the immutable event log forever.
+
+The bigger half is OUR runtime: branch-graph semantics, objective state machine,
+deviation classification, timing windows, feature extractors. **Latency budgets
+force all of it to run in the browser in TS regardless of backend choice**
+(rewind <100 ms cannot round-trip). So the question is never "Go or TS?" — it is
+"TS, or TS plus a Go twin?" A chess-aware Go backend means every new trigger
+type and extractor is implemented twice and property-tested for
+replay-equivalence across languages, forever.
+
+### The one honest Go architecture and its catch
+
+**Go-thin**: Go does ZERO chess — event store + engine orchestrator + static
+binary; all chess logic client-side TS; replay reads back logged moves
+(BR-C2 ruling already makes them authoritative). Plays to Go's strengths and the
+owner's cloud-clicker fluency. The catch: server-side chess tasks don't
+disappear (pack lint on upload, distillation, batch evidence jobs, headless
+replay for the streamer overlay, corpus features). Under Go-thin each either
+moves awkwardly into the browser or requires a Node/TS tool process running the
+same runtime package — at which point Node is back in the stack, just less
+honestly.
+
+**Go unlocks:** single-binary embedded-asset deploy, lower idle memory, owner
+fluency + reusable cloud-clicker scaffolding (Makefile gates, boundary checks),
+no node_modules. **Node unlocks:** ONE implementation of the product's core
+invariants shared browser/server, mature chessops, fast-check, zero
+cross-language equivalence surface. Weighing: for a product whose identity IS a
+deterministic replayable runtime, minimizing implementations of that runtime
+outweighs deploy elegance. Go-thin is a legitimate runner-up, not a strawman.
+
+### Maia-3: what "properly integrating" would take
+
+Maia-3 = PyTorch transformer (5M/23M/79M) shipped as a pip package with a UCI
+wrapper. Options:
+
+- **(a) Containerized sidecar** — UCI child process, same pattern as the
+  Stockfish binary (nobody "integrates" Stockfish either). Cost ≈ zero;
+  unblocks the E4 coherence harness immediately. Self-hosters never touch pip.
+- **(b) ONNX export** — run in onnxruntime from Node (or browser; CSSLab ran
+  Maia-1-class models in-browser this way). Real work, real risk: transformer
+  export unverified for their architecture, and the sampling layer (Elo
+  conditioning, temperature/top-p over legal moves, board/history encoding)
+  must be reimplemented outside Python and validated to match. Weeks.
+- **(c) Fork/rewrite** — months, no benefit; the weights are the asset (AGPL,
+  same as us).
+
+Recommended: (a) now, (b) tracked as later optimization (also enables browser
+Maia in the capability negotiation). Scoped exception to "no Python": Python may
+exist only inside worker containers speaking UCI/JSON, never in server code.
