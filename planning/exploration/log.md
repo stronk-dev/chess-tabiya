@@ -113,3 +113,15 @@
   threshold preregistration; pack-A choice (Sicilian vs anti-Caro-Advance); vertical
   slice scope (does it include on-ramp/prediction-checkpoint machinery or core loop
   only — recommendation: core loop only).
+
+## 2026-08-11 (claude, session 1 continued — 5)
+
+- Q1a moved from 💡 to 🔬: wrote `design/research/teardown-protocols.md` — four
+  hands-on protocols (Chess Endgame Training, Noctie, Chessable, Chess.com Practice),
+  each 30–60 min, testing our five loop stages + latency budgets against observed
+  behavior, with a cross-product synthesis table that lands the E1 verdict. The
+  feature/strengths desk pass is NOT being repeated — the matrix and value-prop
+  dossier already cover it; teardowns exist to upgrade [P]→[V].
+- Division of labor: CET needs no account (agent-drivable via browser automation with
+  owner's setup, or owner-run); Noctie/Chessable/Chess.com need owner accounts —
+  owner runs protocol, agent lands the dossier from notes/screenshots.
