@@ -254,3 +254,15 @@
   plans. Phase: foundation specification → foundation implementation.
 - Process note (memory saved): owner requires full reasoning visibly delivered
   before decision prompts; analysis now lands as committed memos first.
+
+## 2026-08-12 (claude, session 1 continued — 12) — naming ruling
+
+- **Repo name: `chess-tabiya`; product working name: Tabiya** (owner ruling;
+  "drills"/"reprise"/"aftermove" rejected). Web check: no existing chess product
+  named Tabiya. Description adopted: "Don't memorize the opening — rehearse the
+  game it creates. Play past book against human-like resistance, rewind, branch,
+  compare every attempt, and finish what you start."
+- README/AGENTS/thesis updated. Directory rename (`mv ~/repos/chess-drills
+  ~/repos/chess-tabiya`) left to the owner post-session — note: the Claude
+  project memory dir is keyed to the old path and should be renamed alongside
+  (~/.claude/projects/-Users-stronk-repos-chess-drills → …-chess-tabiya).

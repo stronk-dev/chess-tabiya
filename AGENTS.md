@@ -1,6 +1,6 @@
-# Agent guide — chess-drills
+# Agent guide — chess-tabiya
 
-A **chess phase rehearsal system**: drill openings, middlegames, and endgames by playing
+**Tabiya** — a chess phase rehearsal system: drill openings, middlegames, and endgames by playing
 the consequences, then rewind and try again. The core loop is
 commit → play the consequence → rewind → branch → compare → replay under different resistance.
 

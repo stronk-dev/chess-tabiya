@@ -1,0 +1,22 @@
+{
+  "name": "chess-rehearsal-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r --if-present build",
+    "schema:check": "node tools/verify-scaffold.mjs",
+    "test": "vitest run",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "verify": "pnpm typecheck && pnpm test && pnpm schema:check"
+  },
+  "devDependencies": {
+    "fast-check": "4.9.0",
+    "typescript": "5.9.2",
+    "vitest": "4.1.10"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@11.18.0"
+}

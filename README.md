@@ -1,6 +1,13 @@
-# chess-drills
+# chess-tabiya
 
-> Do not just learn the move. Rehearse the game it creates.
+> The tabiya is where theory ends and chess begins.
+
+**Tabiya** *(n., from Arabic)*: the known position where an opening's theory runs
+out and the real game starts. This project trains everything after it.
+
+Don't memorize the opening — rehearse the game it creates. Play past book against
+human-like resistance, rewind, branch, compare every attempt, and finish what you
+start.
 
 An exploration of a **chess phase rehearsal system**: drill openings, middlegames, and
 endgames by playing the consequences — commit to a plan, play it out against human-like

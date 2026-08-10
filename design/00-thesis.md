@@ -6,6 +6,10 @@ exploration resolves questions; the archive originals stay frozen.
 
 ## What this is
 
+**Working name: Tabiya** (repo `chess-tabiya`; owner ruling 2026-08-12) — the
+position where theory ends and the real game begins, which is exactly what the
+product trains.
+
 A **chess phase rehearsal system** — closer to a flight simulator or a music practice
 loop than to an analysis dashboard. It exists to create repeated, controlled execution
 of chess decisions.

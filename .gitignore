@@ -1,1 +1,13 @@
 .DS_Store
+
+# Dependencies, local caches, and generated output
+node_modules/
+.cache/
+coverage/
+dist/
+*.tsbuildinfo
+
+# Local configuration
+.env
+.env.*
+!.env.example
