@@ -34,7 +34,7 @@ behavior (cloud-clicker rule). Append every session to `log.md`.
 
 ## 3. Replay, compare, export
 
-- [ ] Read-back replay (opponent moves authoritative from log) (BR-C2)
+- [x] Read-back replay (opponent moves authoritative from log) (BR-C2)
 - [ ] compare(): common-fork requirement, aligned pairs + absent marking,
       objective timelines, checkpoint hits (BR-C7)
 - [ ] PGN export with variations (chessops), legality-checked

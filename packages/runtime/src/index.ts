@@ -31,6 +31,12 @@ export {
   isObjectiveTransitionAllowed,
 } from "./objective-state.js";
 export {
+  ReplayError,
+  readBackReplay,
+  type OpponentMoveReadback,
+  type ReadBackReplay,
+} from "./replay.js";
+export {
   commitMove,
   createRun,
   fork,
@@ -54,6 +60,7 @@ export type {
   MutationResult,
   Node,
   ObjectiveState,
+  OpponentMoveSelectedEvent,
   PolicyConfig,
   Segment,
   VersionedPolicy,

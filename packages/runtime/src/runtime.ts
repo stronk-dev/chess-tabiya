@@ -205,6 +205,22 @@ export function commitMove(
     emitted.push(...forked.emitted);
   }
 
+  if (options.actor === "opponent") {
+    const selected = appendEvents(run, [
+      {
+        type: "opponent.move_selected",
+        at,
+        data: {
+          nodeId: run.activeCursor.nodeId,
+          branchId: run.activeCursor.branchId,
+          moveUci: uci,
+        },
+      },
+    ]);
+    emitted.push(...emittedSince(run, selected));
+    run = selected;
+  }
+
   const san = makeSan(position, move);
   position.play(move);
   const fen = canonicalFen(position);
