@@ -99,3 +99,17 @@
   level-conditioned distribution + engine validation, which no surveyed competitor
   does. Sparse placement rule to protect the uninterrupted-consequence stage;
   board-flip ergonomics assigned to the Q9 prototype.
+
+## 2026-08-11 (claude, session 1 continued — 4)
+
+- **Gap sweep at owner request** ("what else is open before we can judge feasibility/
+  novelty/value?"). Five untracked areas added to BACKLOG: skill/progress model +
+  return loop; time-pressure dimension; pack interop (Lichess-study→pack conversion as
+  a K10 lever); open pack format as the ecosystem contribution; small-n evaluation
+  methodology (the existing H/C validation design assumes cohorts we won't have —
+  must be resolved before preregistering E-gate thresholds).
+- Open owner decision points enumerated for the record: Q2 source-model + content-
+  rights axes (concrete license choice); first-wave sequencing commitment; E-gate
+  threshold preregistration; pack-A choice (Sicilian vs anti-Caro-Advance); vertical
+  slice scope (does it include on-ramp/prediction-checkpoint machinery or core loop
+  only — recommendation: core loop only).
