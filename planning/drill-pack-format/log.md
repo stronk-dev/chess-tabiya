@@ -86,3 +86,12 @@
   green (14 files, 71 tests, all typechecks and schema/scaffold verification);
   `make build` green; `git diff --check` clean; all 58 frozen archive checksums
   verified unchanged.
+
+## 2026-08-12 (claude, review of §3)
+
+- Independently verified: `make verify` green (71 tests), archive diff 0.
+  exportPackRunPgn merges spine + run branches; the test parses the export
+  back and legality-checks every SAN. **§3 APPROVED.** All amended acceptance
+  criteria for the RFC are now met (§2 pack A deferred to the content phase by
+  owner ruling — its checklist survives in this archived plan and the BACKLOG
+  row). Completion protocol green-lit.
