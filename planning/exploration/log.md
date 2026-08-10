@@ -90,3 +90,12 @@
 - Observation for Q7: the anti-Caro-Advance pack is a strong pack-A alternative or
   companion — move-order/timing sensitive like the brief's Sicilian candidate, but
   backed by the owner's own recurring pain, which makes review and dogfooding cheap.
+
+## 2026-08-10 (claude, session 1 continued — 3)
+
+- **New ledger row (owner idea): prediction checkpoints** — flip the board at pivotal
+  moments, predict the opponent's reply, explain why/why not. Assessed as a checkpoint
+  interaction (cheap), not a new mode (expensive); graded against Maia's
+  level-conditioned distribution + engine validation, which no surveyed competitor
+  does. Sparse placement rule to protect the uninterrupted-consequence stage;
+  board-flip ergonomics assigned to the Q9 prototype.
