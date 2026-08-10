@@ -108,3 +108,24 @@
   flip.
 - §3 checkpoint verification: `make verify` green (16 files, 79 tests); tagged
   Maia integration green separately; `git diff --check` clean.
+
+## 2026-08-12 (codex, §4 blocked before implementation)
+
+- EW-C3 cannot be implemented faithfully against the promoted sidecar: the
+  pinned upstream UCI adapter computes `item["policy"]` internally, but prints
+  only rank, cp, WDL, and PV. WDL describes predicted game outcome after a move,
+  not the probability that a human chooses that move. Treating WDL or rank as
+  policy mass would violate the RFC and evidence-typing discipline. The exact
+  mechanism needs either a narrow sidecar compatibility patch exposing upstream's
+  existing policy value, or an owner-approved sampling-contract amendment.
+- EW-C1 has a second wire-contract gap: run schema v0.3 defines
+  `opponent.move_selected.data` as exactly `{nodeId, branchId, moveUci}` with
+  `additionalProperties: false`, while this RFC requires the writer to embed the
+  selection and engine identity. Adding those fields after v0.3 shipped requires
+  a declared schema amendment (normally v0.4), plus replay/schema tests; silently
+  dropping identity would violate the accepted selector contract.
+- Stopped before implementing `/select-move`, cache, or `appendOpponentPly`: both
+  gaps affect their public/event shapes. §4 checkboxes remain open. Recommended
+  owner resolution: authorize the minimal UCI transport patch (expose the already-
+  computed policy scalar; no new chess logic) and declare run schema v0.4 with a
+  typed selection/engine-identity payload on `opponent.move_selected`.
