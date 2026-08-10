@@ -57,6 +57,7 @@ export {
   type CommitMoveOptions,
   type CreateRunInput,
   type ForkOptions,
+  type JobObserver,
 } from "./runtime.js";
 export type {
   Actor,

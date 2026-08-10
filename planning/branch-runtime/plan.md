@@ -38,7 +38,7 @@ behavior (cloud-clicker rule). Append every session to `log.md`.
 - [x] compare(): common-fork requirement, aligned pairs + absent marking,
       objective timelines, checkpoint hits (BR-C7)
 - [x] PGN export with variations (chessops), legality-checked
-- [ ] JobObserver.onRewound hook, tested with fakes (BR-C6)
+- [x] JobObserver.onRewound hook, tested with fakes (BR-C6)
 
 ## 4. Property + scenario tests
 

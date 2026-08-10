@@ -16,6 +16,7 @@ import {
   rewindToCheckpoint,
   appendEvents,
   type DrillRun,
+  type JobObserver,
   type PolicyConfig,
 } from "./index.js";
 
@@ -158,6 +159,39 @@ describe("fork and rewind semantics", () => {
     expect(result.emitted).toEqual([
       expect.objectContaining({ type: "run.rewound", seq: 3 }),
     ]);
+  });
+
+  it("notifies the job observer with nodes leaving the active path", () => {
+    let run = newRun();
+    run = commitMove(run, "e2e4", { at }).run;
+    const targetId = run.activeCursor.nodeId;
+    run = commitMove(run, "e7e5", { at }).run;
+    run = commitMove(run, "g1f3", { at }).run;
+    const expected = run.nodes.slice(2).map((node) => node.id);
+    const calls: (readonly string[])[] = [];
+    const observer: JobObserver = {
+      onRewound(prunedNodeIds) {
+        calls.push(prunedNodeIds);
+      },
+    };
+
+    const result = rewind(run, targetId, at, observer);
+
+    expect(calls).toEqual([expected]);
+    expect(Object.isFrozen(calls[0])).toBe(true);
+    expect(result.run.nodes).toEqual(run.nodes);
+  });
+
+  it("does not notify the job observer when rewind validation fails", () => {
+    let calls = 0;
+    const observer: JobObserver = {
+      onRewound() {
+        calls += 1;
+      },
+    };
+
+    expect(() => rewind(newRun(), "missing", at, observer)).toThrow(RuntimeError);
+    expect(calls).toBe(0);
   });
 });
 

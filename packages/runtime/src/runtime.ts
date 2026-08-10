@@ -48,6 +48,10 @@ export interface ForkOptions {
   readonly at?: string;
 }
 
+export interface JobObserver {
+  onRewound(prunedNodeIds: readonly string[]): void;
+}
+
 function timestamp(at?: string): string {
   return at ?? new Date().toISOString();
 }
@@ -264,8 +268,19 @@ function isAncestor(run: DrillRun, ancestorId: string, descendantId: string): bo
   return false;
 }
 
-export function rewind(run: DrillRun, nodeId: string, at?: string): MutationResult {
+export function rewind(
+  run: DrillRun,
+  nodeId: string,
+  at?: string,
+  jobObserver?: JobObserver,
+): MutationResult {
   const target = getNode(run, nodeId);
+  const targetPathIds = new Set(historyFrom(run, target.id).map((node) => node.id));
+  const prunedNodeIds = Object.freeze(
+    historyFrom(run, run.activeCursor.nodeId)
+      .filter((node) => !targetPathIds.has(node.id))
+      .map((node) => node.id),
+  );
   const branchId = isAncestor(run, nodeId, run.activeCursor.nodeId)
     ? run.activeCursor.branchId
     : target.branchId;
@@ -280,6 +295,7 @@ export function rewind(run: DrillRun, nodeId: string, at?: string): MutationResu
       },
     },
   ]);
+  jobObserver?.onRewound(prunedNodeIds);
   return { run: next, emitted: emittedSince(run, next) };
 }
 
@@ -287,6 +303,7 @@ export function rewindToCheckpoint(
   run: DrillRun,
   checkpointId: string,
   at?: string,
+  jobObserver?: JobObserver,
 ): MutationResult {
   const checkpoint = [...run.events]
     .reverse()
@@ -295,7 +312,7 @@ export function rewindToCheckpoint(
         event.type === "checkpoint.reached" && event.data.checkpointId === checkpointId,
     );
   if (!checkpoint) throw unknownCheckpoint(checkpointId);
-  return rewind(run, checkpoint.data.nodeId, at);
+  return rewind(run, checkpoint.data.nodeId, at, jobObserver);
 }
 
 export function reachCheckpoint(
