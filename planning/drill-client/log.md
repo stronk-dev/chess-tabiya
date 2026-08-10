@@ -40,3 +40,12 @@
   existing localhost HTTP tests (`listen EPERM`); this was an environment
   restriction, and the unrestricted rerun passed without code changes.
 - Stop point: Layer 1 complete. Layer 2 client plumbing remains untouched.
+
+## 2026-08-12 (claude, review of layer 1)
+
+- Independently verified (ENGINES_REQUIRED=1): 109 tests / 21 files green.
+  Orchestrator calls reachCheckpoint/evaluateObjective inside the mutation;
+  registry lints on load and rejects blunder-guard packs with typed
+  PACK_INVALID (refuse-to-serve, not degrade); withholding module present with
+  per-policy tests; PGN route + evidence-ref constructors in. **Layer 1
+  APPROVED.** Layer 2 green-lit.
