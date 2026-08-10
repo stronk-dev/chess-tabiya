@@ -100,4 +100,22 @@ describe("drill_run.schema.json v0.2", () => {
       expect.arrayContaining([expect.objectContaining({ instancePath: "/nodes/0" })]),
     );
   });
+
+  it("accepts the pack format's fixed seed mode", () => {
+    const fixedSeedRun = {
+      ...validRun,
+      policyConfig: { ...policyConfig, seedMode: "fixed" },
+      events: [
+        {
+          ...event,
+          data: {
+            ...event.data,
+            policyConfig: { ...policyConfig, seedMode: "fixed" },
+          },
+        },
+      ],
+    };
+
+    expect(validate(fixedSeedRun), JSON.stringify(validate.errors)).toBe(true);
+  });
 });

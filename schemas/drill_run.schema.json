@@ -91,7 +91,7 @@
       "type": "object",
       "required": ["seedMode", "locus"],
       "properties": {
-        "seedMode": { "enum": ["per_run", "per_branch"] },
+        "seedMode": { "enum": ["fixed", "per_run", "per_branch"] },
         "locus": { "$ref": "#/$defs/executionLocus" }
       },
       "additionalProperties": false

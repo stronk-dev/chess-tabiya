@@ -21,7 +21,7 @@ export interface ExecutionLocus {
 }
 
 export interface PolicyConfig {
-  readonly seedMode: "per_run" | "per_branch";
+  readonly seedMode: "fixed" | "per_run" | "per_branch";
   readonly locus: ExecutionLocus;
 }
 

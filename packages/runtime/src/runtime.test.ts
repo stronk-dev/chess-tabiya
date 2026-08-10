@@ -14,19 +14,24 @@ import {
   reachCheckpoint,
   rewind,
   rewindToCheckpoint,
+  appendEvents,
   type DrillRun,
+  type PolicyConfig,
 } from "./index.js";
 
 const at = "2026-08-12T12:00:00.000Z";
 const packDigest = `sha256:${"a".repeat(64)}`;
 
-function newRun(startFen = INITIAL_FEN): DrillRun {
+function newRun(
+  startFen = INITIAL_FEN,
+  seedMode: PolicyConfig["seedMode"] = "per_branch",
+): DrillRun {
   return createRun({
     id: "run-1",
     packId: "pack-1",
     packDigest,
     policyConfig: {
-      seedMode: "per_branch",
+      seedMode,
       locus: {
         executedAt: "browser",
         engineIds: [],
@@ -135,6 +140,14 @@ describe("fork and rewind semantics", () => {
     expect(committed.run.branches).toHaveLength(2);
   });
 
+  it("reuses the primary seed for fixed-mode branches", () => {
+    const run = newRun(INITIAL_FEN, "fixed");
+    const first = fork(run, run.nodes[0]!.id, { label: "first", at }).run;
+    const second = fork(first, first.nodes[0]!.id, { label: "second", at }).run;
+
+    expect(second.branches.map((branch) => branch.seed)).toEqual([42, 42, 42]);
+  });
+
   it("rewind changes only the cursor and records the move", () => {
     const moved = commitMove(newRun(), "e2e4", { at }).run;
     const nodesBefore = moved.nodes;
@@ -145,6 +158,30 @@ describe("fork and rewind semantics", () => {
     expect(result.emitted).toEqual([
       expect.objectContaining({ type: "run.rewound", seq: 3 }),
     ]);
+  });
+});
+
+describe("node-local evidence", () => {
+  it("starts a committed node with no inherited evidence", () => {
+    const run = newRun();
+    const root = run.nodes[0]!;
+    const evidenced = appendEvents(run, [
+      {
+        type: "objective.state_changed",
+        at,
+        data: {
+          nodeId: root.id,
+          from: "active",
+          to: "preserved",
+          evidenceRefs: ["evidence:root-evaluation"],
+        },
+      },
+    ]);
+
+    expect(evidenced.nodes[0]!.evidenceRefs).toEqual(["evidence:root-evaluation"]);
+    expect(commitMove(evidenced, "e2e4", { at }).run.nodes.at(-1)!.evidenceRefs).toEqual(
+      [],
+    );
   });
 });
 

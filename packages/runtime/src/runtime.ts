@@ -79,7 +79,7 @@ function nextBranch(run: DrillRun, nodeId: string, options: ForkOptions): Branch
     id: `${run.id}:branch:${index}`,
     forkNodeId: nodeId,
     label: options.label ?? nextAltLabel(run),
-    seed: run.policyConfig.seedMode === "per_run" ? primarySeed : primarySeed + index,
+    seed: run.policyConfig.seedMode === "per_branch" ? primarySeed + index : primarySeed,
     ...(options.intent === undefined ? {} : { intent: options.intent }),
   };
   return branch;
@@ -220,7 +220,7 @@ export function commitMove(
     branchId: run.activeCursor.branchId,
     checkpointRefs: [],
     objectiveState: cursorNode.objectiveState,
-    evidenceRefs: cursorNode.evidenceRefs,
+    evidenceRefs: [],
     createdAt: at,
     ...(options.clockState === undefined ? {} : { clockState: options.clockState }),
   };
