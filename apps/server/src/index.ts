@@ -2,6 +2,13 @@ import { runtimeBuildInfo } from "@chess-tabiya/runtime";
 import { schemaBuildInfo } from "@chess-tabiya/schema";
 
 export {
+  DEFAULT_STRONG_ENGINE_PROFILE,
+  resolveStrongEngineProfile,
+  stockfishPlaySpec,
+  type StockfishPlaySpecOptions,
+  type StrongEngineProfile,
+} from "./strong-engine.js";
+export {
   EngineCapabilities,
   SUPPORTED_POLICY_MODES,
   type Capabilities,

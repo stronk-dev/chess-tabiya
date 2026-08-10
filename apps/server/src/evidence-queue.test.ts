@@ -113,21 +113,38 @@ describe("evidence job queue", () => {
     ).resolves.toEqual({
       kind: "eval",
       source: "engine_validated",
-      values: { mateIn: 3, depth: 15 },
+      values: {
+        engineId: "stockfish-analysis",
+        requestedMovetimeMs: 40,
+        mateIn: 3,
+        depth: 15,
+      },
     });
     await expect(
       executor.execute({ ...base, kind: "wdl", depth: 17 }, signal),
     ).resolves.toEqual({
       kind: "wdl",
       source: "engine_validated",
-      values: { win: 412, draw: 537, loss: 51, depth: 17 },
+      values: {
+        engineId: "stockfish-analysis",
+        requestedDepth: 17,
+        win: 412,
+        draw: 537,
+        loss: 51,
+        depth: 17,
+      },
     });
     await expect(
       executor.execute({ ...base, kind: "bestline", depth: 19 }, signal),
     ).resolves.toEqual({
       kind: "bestline",
       source: "engine_validated",
-      values: { movesUci: ["e2e4", "e7e5", "g1f3"], depth: 19 },
+      values: {
+        engineId: "stockfish-analysis",
+        requestedDepth: 19,
+        movesUci: ["e2e4", "e7e5", "g1f3"],
+        depth: 19,
+      },
     });
     expect(requests).toHaveLength(3);
     expect(requests.every((request) => request.engineId === "stockfish-analysis")).toBe(true);

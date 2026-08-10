@@ -23,6 +23,10 @@ import {
   engineUnavailable,
   policyModeUnsupported,
 } from "./errors.js";
+import {
+  resolveStrongEngineProfile,
+  type StrongEngineProfile,
+} from "./strong-engine.js";
 
 export type OpponentPolicyMode =
   | "human_common"
@@ -60,11 +64,11 @@ export interface OpponentSelectorOptions {
   readonly maiaEngineId?: string;
   readonly strongEngineId?: string;
   readonly strongEngineMovetimeMs?: number;
+  readonly strongEngineProfile?: Partial<StrongEngineProfile>;
 }
 
 const DEFAULT_TEMPERATURE = 0.8;
 const DEFAULT_TOP_P = 0.92;
-const DEFAULT_STRONG_ENGINE_MOVETIME_MS = 100;
 const DIGEST_PATTERN = /^sha256:[0-9a-f]{64}$/;
 
 function invalid(message: string, cause?: Error): ServerError {
@@ -356,14 +360,13 @@ export class OpponentSelector {
     this.#client = client;
     this.#maiaEngineId = options.maiaEngineId ?? "maia-5m";
     this.#strongEngineId = options.strongEngineId ?? "stockfish-play";
-    this.#strongEngineMovetimeMs =
-      options.strongEngineMovetimeMs ?? DEFAULT_STRONG_ENGINE_MOVETIME_MS;
-    if (
-      !Number.isSafeInteger(this.#strongEngineMovetimeMs) ||
-      this.#strongEngineMovetimeMs < 1
-    ) {
-      throw new TypeError("strongEngineMovetimeMs must be a positive safe integer");
-    }
+    const profile = resolveStrongEngineProfile({
+      ...options.strongEngineProfile,
+      ...(options.strongEngineMovetimeMs === undefined
+        ? {}
+        : { movetimeMs: options.strongEngineMovetimeMs }),
+    });
+    this.#strongEngineMovetimeMs = profile.movetimeMs;
   }
 
   select(request: SelectMoveRequest): Promise<OpponentSelection> {

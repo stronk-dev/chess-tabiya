@@ -20,6 +20,10 @@ import {
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import {
+  DEFAULT_STRONG_ENGINE_PROFILE,
+  stockfishPlaySpec,
+} from "./strong-engine.js";
 
 const at = "2026-08-12T18:00:00.000Z";
 const digest = `sha256:${"4".repeat(64)}`;
@@ -112,6 +116,36 @@ const transposingSpine: readonly SelectorSpineNode[] = [
 ];
 
 describe("pure opponent selector", () => {
+  it("ships the ratified 100 ms, one-thread, 16 MB strong-engine profile", async () => {
+    const client = new FakeEngineClient(() => ["bestmove c7c5"]);
+    const selector = new OpponentSelector(client);
+
+    await selector.select(request("strong_engine"));
+
+    expect(DEFAULT_STRONG_ENGINE_PROFILE).toEqual({
+      movetimeMs: 100,
+      threads: 1,
+      hashMb: 16,
+      multiPv: 1,
+    });
+    expect(client.calls[0]?.request.commands.at(-1)).toBe("go movetime 100");
+    expect(stockfishPlaySpec()).toMatchObject({
+      id: "stockfish-play",
+      kind: "opponent",
+      command: "stockfish",
+      options: { Threads: 1, Hash: 16, MultiPV: 1 },
+    });
+    expect(
+      stockfishPlaySpec({
+        command: "/opt/stockfish",
+        profile: { movetimeMs: 250, threads: 2, hashMb: 64 },
+      }),
+    ).toMatchObject({
+      command: "/opt/stockfish",
+      options: { Threads: 2, Hash: 64, MultiPV: 1 },
+    });
+  });
+
   it("selects human-common Maia output with mapped policy knobs", async () => {
     const client = new FakeEngineClient(() =>
       maiaLines("e7e5", [

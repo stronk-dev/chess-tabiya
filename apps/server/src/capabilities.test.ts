@@ -54,11 +54,43 @@ describe("engine capabilities", () => {
         engines: [identities["stockfish-analysis"], identities["maia-5m"]],
         policyModes: ["human_common", "strong_engine", "theory_strict"],
         runSchemaVersion: runtimeBuildInfo.runSchemaVersion,
+        policyProfiles: {
+          strong_engine: {
+            movetimeMs: 100,
+            threads: 1,
+            hashMb: 16,
+            multiPv: 1,
+          },
+        },
       });
       expect(started).toEqual(["stockfish-analysis", "maia-5m"]);
     } finally {
       storage.close();
     }
+  });
+
+  it("reports the deployment-effective strong-engine override", async () => {
+    const identity: EngineIdentity = {
+      id: "stockfish-play",
+      kind: "opponent",
+      name: "Stockfish",
+      version: "18",
+      seedHonored: false,
+    };
+    const descriptor = await new EngineCapabilities(
+      { start: async () => identity },
+      [identity.id],
+      {
+        strongEngineProfile: { movetimeMs: 175, threads: 2, hashMb: 32 },
+      },
+    ).get();
+
+    expect(descriptor.policyProfiles.strong_engine).toEqual({
+      movetimeMs: 175,
+      threads: 2,
+      hashMb: 32,
+      multiPv: 1,
+    });
   });
 
   it("is a strict superset of policyConfig.locus engine identity fields", async () => {

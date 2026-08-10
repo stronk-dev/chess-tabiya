@@ -278,6 +278,15 @@ function depthValue(line: string): number | undefined {
   return match === null ? undefined : Number(match[1]);
 }
 
+function searchProvenance(job: EvidenceJob, engineId: string) {
+  return Object.freeze({
+    engineId,
+    ...(job.depth === undefined
+      ? { requestedMovetimeMs: job.movetime! }
+      : { requestedDepth: job.depth }),
+  });
+}
+
 export class StockfishEvidenceExecutor implements EvidenceExecutor {
   readonly #client: EvidenceEngineClient;
   readonly #engineId: string;
@@ -314,6 +323,7 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
         kind: "eval",
         source: "engine_validated",
         values: Object.freeze({
+          ...searchProvenance(job, this.#engineId),
           ...(score[1] === "cp"
             ? { centipawns: Number(score[2]) }
             : { mateIn: Number(score[2]) }),
@@ -328,6 +338,7 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
         kind: "wdl",
         source: "engine_validated",
         values: Object.freeze({
+          ...searchProvenance(job, this.#engineId),
           win: Number(wdl[1]),
           draw: Number(wdl[2]),
           loss: Number(wdl[3]),
@@ -348,6 +359,7 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
       kind: "bestline",
       source: "engine_validated",
       values: Object.freeze({
+        ...searchProvenance(job, this.#engineId),
         movesUci: Object.freeze(movesUci),
         ...(depthValue(line) === undefined ? {} : { depth: depthValue(line) }),
       }),
