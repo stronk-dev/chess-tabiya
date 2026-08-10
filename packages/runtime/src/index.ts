@@ -39,6 +39,7 @@ export {
   ObjectiveTransitionError,
   isObjectiveTransitionAllowed,
 } from "./objective-state.js";
+export { PgnExportError, exportPgn } from "./pgn.js";
 export {
   ReplayError,
   readBackReplay,
