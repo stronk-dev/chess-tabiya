@@ -6,17 +6,17 @@ tooling) & Marco/claude (pack A content). Scaffold history is in
 
 ## 1. Schema (`packages/schema`, `schemas/drill_pack.schema.json` v0.2)
 
-- [ ] v0.2 schema per RFC amendments: spine, feedbackPolicy, checkpoint
+- [x] v0.2 schema per RFC amendments: spine, feedbackPolicy, checkpoint
       interaction (intent_capture / prediction+grading), authoredBoundary,
       deviations (renamed, classed), on-ramp knobs, timing-window triggers
       (frozen vocab: atPly/atSpineNode/fenPredicate/materialBalance)
-- [ ] Living amended Najdorf fixture (archive fixture stays frozen vs v0.1 — DPF-C1)
-- [ ] Negative fixtures, one per amendment (list in RFC acceptance criteria)
-- [ ] Spine legality lint (paths legal from start.fen) + prediction-checkpoint
+- [x] Living amended Najdorf fixture (archive fixture stays frozen vs v0.1 — DPF-C1)
+- [x] Negative fixtures, one per amendment (list in RFC acceptance criteria)
+- [x] Spine legality lint (paths legal from start.fen) + prediction-checkpoint
       lint (warn >2 per segment)
-- [ ] Digest: SHA-256 over RFC 8785 canonical JSON; key-order invariance test
+- [x] Digest: SHA-256 over RFC 8785 canonical JSON; key-order invariance test
       (DPF-C5)
-- [ ] URL forms: /drill/<id>@<version>[/<node>] and /fen/<encoded>/<objective>;
+- [x] URL forms: /drill/<id>@<version>[/<node>] and /fen/<encoded>/<objective>;
       FEN percent-encoding round-trip test (DPF-C8)
 
 ## 2. Pack A — anti-Caro-Advance (CONTENT PHASE — deferred by owner ruling 2026-08-12: foundations first, content last; execute only after runtime + engine workers + authoring/playtest tooling exist)

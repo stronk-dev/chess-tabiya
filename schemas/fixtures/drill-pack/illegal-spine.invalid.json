@@ -1,0 +1,22 @@
+{
+  "id": "illegal-spine",
+  "version": "0.2.0",
+  "title": "Illegal spine",
+  "mode": "line",
+  "start": { "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" },
+  "objective": { "type": "play_until_checkpoint", "summary": "Follow the line." },
+  "spine": [
+    {
+      "id": "illegal-e5",
+      "moveUci": "e2e5",
+      "moveSan": "e5",
+      "children": []
+    }
+  ],
+  "checkpoints": [
+    { "id": "finish", "trigger": { "atSpineNode": "illegal-e5" } }
+  ],
+  "opponentPolicy": { "mode": "theory_strict", "seedMode": "fixed" },
+  "feedbackPolicy": "delayed_checkpoint",
+  "provenance": { "reviewStatus": "schema_example" }
+}

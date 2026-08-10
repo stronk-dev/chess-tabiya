@@ -1,0 +1,149 @@
+{
+  "id": "najdorf-transition-schema-example",
+  "version": "0.2.0",
+  "title": "Najdorf: choose a setup and cross the theory boundary",
+  "mode": "trajectory",
+  "phase": "cross_phase",
+  "difficulty": {
+    "minOnlineRapid": 1600,
+    "maxOnlineRapid": 2200,
+    "label": "advanced club",
+    "branchLengthTarget": 12
+  },
+  "start": {
+    "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+    "movesSan": ["e4", "c5", "Nf3", "d6", "d4", "cxd4", "Nxd4", "Nf6", "Nc3", "a6"],
+    "side": "white"
+  },
+  "objective": {
+    "type": "play_until_checkpoint",
+    "summary": "Select a setup and execute its first plan through the timing window.",
+    "successConditions": [
+      { "kind": "reach_checkpoint", "checkpointId": "timing-window" }
+    ]
+  },
+  "concepts": ["move order", "theory-to-plan transition"],
+  "planClasses": [
+    {
+      "id": "sharp-kingside",
+      "label": "Sharp kingside setup",
+      "description": "Choose an aggressive setup and retain its intended move order."
+    },
+    {
+      "id": "positional-setup",
+      "label": "Positional setup",
+      "description": "Choose a quieter setup before committing more pawns."
+    }
+  ],
+  "spine": [
+    {
+      "id": "najdorf-be3",
+      "moveUci": "c1e3",
+      "moveSan": "Be3",
+      "annotations": ["Schema-only annotation; requires human review."],
+      "children": [
+        {
+          "id": "najdorf-e6",
+          "moveUci": "e7e6",
+          "moveSan": "e6",
+          "children": [
+            {
+              "id": "najdorf-f3",
+              "moveUci": "f2f3",
+              "moveSan": "f3",
+              "children": [
+                {
+                  "id": "najdorf-b5",
+                  "moveUci": "b7b5",
+                  "moveSan": "b5",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "najdorf-be2",
+              "moveUci": "f1e2",
+              "moveSan": "Be2",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-commitment",
+      "label": "Choose the setup",
+      "trigger": { "atSpineNode": "najdorf-be3" },
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["sharp-kingside", "positional-setup"]
+      }
+    },
+    {
+      "id": "predict-reply",
+      "label": "Predict the reply",
+      "trigger": { "atSpineNode": "najdorf-e6" },
+      "interaction": {
+        "type": "prediction",
+        "grading": { "source": "both", "topK": 3, "minMass": 0.7 },
+        "flipBoard": true
+      }
+    },
+    {
+      "id": "timing-window",
+      "label": "Critical race resolved",
+      "trigger": {
+        "windowOpens": { "atSpineNode": "najdorf-f3" },
+        "windowCloses": { "atSpineNode": "najdorf-b5" },
+        "luxuryMoveBudget": 1
+      },
+      "actions": ["compare_branches", "offer_outcome_transition"]
+    }
+  ],
+  "opponentPolicy": {
+    "mode": "plan_defense",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "stockfishGuardCp": 120,
+    "seedMode": "per_branch"
+  },
+  "feedbackPolicy": "delayed_checkpoint",
+  "authoredBoundary": {
+    "spineNodeIds": ["najdorf-b5", "najdorf-be2"],
+    "plyHorizon": 4,
+    "fenPredicates": [
+      {
+        "type": "pieceOnSquare",
+        "square": "e3",
+        "piece": { "color": "white", "role": "bishop" }
+      }
+    ]
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "najdorf-e6" },
+      "moveUci": "f1e2",
+      "class": "accepted_alternative",
+      "note": "Schema example only; classification requires review."
+    }
+  ],
+  "feedbackClaims": [
+    {
+      "id": "timing-claim-placeholder",
+      "text": "Compare when each side completed its declared action; human review is required.",
+      "evidenceTypes": ["author_principle", "engine_validated", "derived_feature"]
+    }
+  ],
+  "retryVariants": [
+    { "kind": "same_root_new_defense" },
+    { "kind": "alternate_plan_class" }
+  ],
+  "provenance": {
+    "reviewStatus": "schema_example",
+    "sources": [],
+    "reviewers": []
+  }
+}

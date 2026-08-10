@@ -1,0 +1,15 @@
+{
+  "id": "empty-authored-boundary",
+  "version": "0.2.0",
+  "title": "Empty authored boundary",
+  "mode": "outcome",
+  "start": { "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1" },
+  "objective": { "type": "hold", "summary": "Hold the position." },
+  "checkpoints": [
+    { "id": "finish", "trigger": { "atPly": 2 } }
+  ],
+  "opponentPolicy": { "mode": "strong_engine", "seedMode": "per_run" },
+  "feedbackPolicy": "segment_end",
+  "authoredBoundary": {},
+  "provenance": { "reviewStatus": "schema_example" }
+}

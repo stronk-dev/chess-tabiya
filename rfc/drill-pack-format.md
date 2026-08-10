@@ -137,3 +137,6 @@ lint N=2. Original blocker texts: git history of this file (commit 3eb4c52).
   **status → implementing**.
 - 2026-08-12: pack A moved from acceptance criteria to the content phase (owner
   ruling: foundations first); content-rights authoring rule added.
+- 2026-08-12: §1 living schema, amended fixture, negative fixtures, semantic
+  lints, JCS digest, and URL tooling implemented; pack A remains deferred and §3
+  remains open.

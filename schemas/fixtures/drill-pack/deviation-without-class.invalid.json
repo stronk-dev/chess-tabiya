@@ -1,0 +1,20 @@
+{
+  "id": "deviation-without-class",
+  "version": "0.2.0",
+  "title": "Deviation without class",
+  "mode": "outcome",
+  "start": { "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1" },
+  "objective": { "type": "hold", "summary": "Hold the position." },
+  "checkpoints": [
+    { "id": "finish", "trigger": { "atPly": 2 } }
+  ],
+  "opponentPolicy": { "mode": "strong_engine", "seedMode": "per_run" },
+  "feedbackPolicy": "segment_end",
+  "deviations": [
+    {
+      "at": { "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1" },
+      "moveUci": "e2e3"
+    }
+  ],
+  "provenance": { "reviewStatus": "schema_example" }
+}

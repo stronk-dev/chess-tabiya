@@ -1,0 +1,21 @@
+{
+  "id": "malformed-window-trigger",
+  "version": "0.2.0",
+  "title": "Malformed timing window",
+  "mode": "outcome",
+  "start": { "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1" },
+  "objective": { "type": "hold", "summary": "Hold the position." },
+  "checkpoints": [
+    {
+      "id": "window",
+      "trigger": {
+        "windowOpens": { "atMove": 1 },
+        "windowCloses": { "atPly": 3 },
+        "luxuryMoveBudget": 1
+      }
+    }
+  ],
+  "opponentPolicy": { "mode": "strong_engine", "seedMode": "per_run" },
+  "feedbackPolicy": "segment_end",
+  "provenance": { "reviewStatus": "schema_example" }
+}

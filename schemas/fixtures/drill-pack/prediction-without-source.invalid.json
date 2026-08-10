@@ -1,0 +1,21 @@
+{
+  "id": "prediction-without-source",
+  "version": "0.2.0",
+  "title": "Prediction without grading source",
+  "mode": "outcome",
+  "start": { "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1" },
+  "objective": { "type": "hold", "summary": "Hold the position." },
+  "checkpoints": [
+    {
+      "id": "predict",
+      "trigger": { "atPly": 1 },
+      "interaction": {
+        "type": "prediction",
+        "grading": { "topK": 2 }
+      }
+    }
+  ],
+  "opponentPolicy": { "mode": "human_common", "seedMode": "per_run" },
+  "feedbackPolicy": "delayed_checkpoint",
+  "provenance": { "reviewStatus": "schema_example" }
+}

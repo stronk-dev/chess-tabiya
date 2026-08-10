@@ -1,0 +1,477 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.2",
+  "title": "Tabiya Drill Pack",
+  "description": "Living v0.2 format for an engine-independent authored drill.",
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "title",
+    "mode",
+    "start",
+    "objective",
+    "checkpoints",
+    "opponentPolicy",
+    "feedbackPolicy",
+    "provenance"
+  ],
+  "properties": {
+    "id": { "$ref": "#/$defs/id" },
+    "version": { "$ref": "#/$defs/semver" },
+    "title": { "$ref": "#/$defs/nonEmptyString" },
+    "mode": { "enum": ["line", "plan", "outcome", "trajectory"] },
+    "phase": {
+      "enum": ["opening", "middlegame", "endgame", "cross_phase"]
+    },
+    "difficulty": { "$ref": "#/$defs/difficulty" },
+    "start": { "$ref": "#/$defs/start" },
+    "objective": { "$ref": "#/$defs/objective" },
+    "concepts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "planClasses": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/planClass" }
+    },
+    "spine": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/spineNode" }
+    },
+    "checkpoints": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/checkpoint" }
+    },
+    "opponentPolicy": { "$ref": "#/$defs/opponentPolicy" },
+    "feedbackPolicy": {
+      "enum": [
+        "delayed_checkpoint",
+        "segment_end",
+        "immediate_blunder_guard"
+      ]
+    },
+    "authoredBoundary": { "$ref": "#/$defs/authoredBoundary" },
+    "deviations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/deviation" }
+    },
+    "feedbackClaims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/feedbackClaim" }
+    },
+    "retryVariants": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "provenance": { "$ref": "#/$defs/provenance" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+    },
+    "square": {
+      "type": "string",
+      "pattern": "^[a-h][1-8]$"
+    },
+    "moveUci": {
+      "type": "string",
+      "pattern": "^[a-h][1-8][a-h][1-8][qrbn]?$"
+    },
+    "difficulty": {
+      "type": "object",
+      "properties": {
+        "minOnlineRapid": { "type": "integer", "minimum": 1000 },
+        "maxOnlineRapid": { "type": "integer", "minimum": 1000 },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "branchLengthTarget": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 20
+        }
+      },
+      "additionalProperties": false
+    },
+    "start": {
+      "type": "object",
+      "required": ["fen"],
+      "properties": {
+        "fen": { "$ref": "#/$defs/nonEmptyString" },
+        "movesSan": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "side": { "enum": ["white", "black"] }
+      },
+      "additionalProperties": false
+    },
+    "objectiveType": {
+      "enum": [
+        "reach_structure",
+        "preserve_plan_window",
+        "execute_break",
+        "prevent_opponent_plan",
+        "transition_to_endgame",
+        "win",
+        "hold",
+        "save",
+        "resist",
+        "play_until_checkpoint"
+      ]
+    },
+    "objective": {
+      "type": "object",
+      "required": ["type", "summary"],
+      "properties": {
+        "type": { "$ref": "#/$defs/objectiveType" },
+        "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "successConditions": {
+          "type": "array",
+          "items": { "type": "object" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "planClass": {
+      "type": "object",
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "spineNode": {
+      "type": "object",
+      "required": ["id", "moveUci", "moveSan", "children"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "moveUci": { "$ref": "#/$defs/moveUci" },
+        "moveSan": { "$ref": "#/$defs/nonEmptyString" },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/spineNode" }
+        },
+        "annotations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "piece": {
+      "type": "object",
+      "required": ["color", "role"],
+      "properties": {
+        "color": { "enum": ["white", "black"] },
+        "role": { "enum": ["pawn", "knight", "bishop", "rook", "queen", "king"] }
+      },
+      "additionalProperties": false
+    },
+    "fenPredicate": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "value"],
+          "properties": {
+            "type": { "const": "transposeKey" },
+            "value": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "square", "piece"],
+          "properties": {
+            "type": { "const": "pieceOnSquare" },
+            "square": { "$ref": "#/$defs/square" },
+            "piece": {
+              "oneOf": [
+                { "$ref": "#/$defs/piece" },
+                { "type": "null" }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "mode", "white", "black"],
+          "properties": {
+            "type": { "const": "pawnStructure" },
+            "mode": { "enum": ["contains", "exact"] },
+            "white": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/square" },
+              "uniqueItems": true
+            },
+            "black": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/square" },
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "materialBalance": {
+      "type": "object",
+      "required": ["perspective", "comparison", "value"],
+      "properties": {
+        "perspective": { "enum": ["white", "black"] },
+        "comparison": { "enum": ["atLeast", "atMost", "equal"] },
+        "value": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "simpleTrigger": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["atPly"],
+          "properties": {
+            "atPly": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["atSpineNode"],
+          "properties": {
+            "atSpineNode": { "$ref": "#/$defs/id" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["fenPredicate"],
+          "properties": {
+            "fenPredicate": { "$ref": "#/$defs/fenPredicate" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["materialBalance"],
+          "properties": {
+            "materialBalance": { "$ref": "#/$defs/materialBalance" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "timingWindow": {
+      "type": "object",
+      "required": ["windowOpens", "windowCloses", "luxuryMoveBudget"],
+      "properties": {
+        "windowOpens": { "$ref": "#/$defs/simpleTrigger" },
+        "windowCloses": { "$ref": "#/$defs/simpleTrigger" },
+        "luxuryMoveBudget": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "trigger": {
+      "oneOf": [
+        { "$ref": "#/$defs/simpleTrigger" },
+        { "$ref": "#/$defs/timingWindow" }
+      ]
+    },
+    "checkpointInteraction": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "planClassIds"],
+          "properties": {
+            "type": { "const": "intent_capture" },
+            "planClassIds": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/id" },
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "grading"],
+          "properties": {
+            "type": { "const": "prediction" },
+            "grading": {
+              "type": "object",
+              "required": ["source"],
+              "properties": {
+                "source": { "enum": ["opponent_policy", "engine", "both"] },
+                "topK": { "type": "integer", "minimum": 1 },
+                "minMass": { "type": "number", "minimum": 0, "maximum": 1 }
+              },
+              "additionalProperties": false
+            },
+            "flipBoard": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "checkpoint": {
+      "type": "object",
+      "required": ["id", "trigger"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "trigger": { "$ref": "#/$defs/trigger" },
+        "actions": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              { "$ref": "#/$defs/nonEmptyString" },
+              { "not": { "const": "capture_intent" } }
+            ]
+          }
+        },
+        "interaction": { "$ref": "#/$defs/checkpointInteraction" }
+      },
+      "additionalProperties": false
+    },
+    "opponentPolicy": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "enum": [
+            "theory_strict",
+            "human_common",
+            "plan_defense",
+            "practical_resistance",
+            "perfect_tablebase",
+            "strong_engine",
+            "human_external"
+          ]
+        },
+        "targetElo": { "type": "integer" },
+        "temperature": { "type": "number" },
+        "topP": { "type": "number", "minimum": 0, "maximum": 1 },
+        "stockfishGuardCp": { "type": "integer" },
+        "seedMode": { "enum": ["fixed", "per_run", "per_branch"] }
+      },
+      "additionalProperties": true
+    },
+    "authoredBoundary": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "spineNodeIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/id" },
+          "uniqueItems": true
+        },
+        "plyHorizon": { "type": "integer", "minimum": 0 },
+        "fenPredicates": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/fenPredicate" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "deviationLocation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["spineNodeId"],
+          "properties": {
+            "spineNodeId": { "$ref": "#/$defs/id" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["fen"],
+          "properties": {
+            "fen": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "deviation": {
+      "type": "object",
+      "required": ["at", "moveUci", "class"],
+      "properties": {
+        "at": { "$ref": "#/$defs/deviationLocation" },
+        "moveUci": { "$ref": "#/$defs/moveUci" },
+        "class": {
+          "enum": [
+            "required_theory",
+            "accepted_alternative",
+            "interesting_deviation",
+            "concept_violation",
+            "tactical_error"
+          ]
+        },
+        "offObjective": { "type": "boolean" },
+        "note": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "feedbackClaim": {
+      "type": "object",
+      "required": ["id", "text", "evidenceTypes"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "text": { "$ref": "#/$defs/nonEmptyString" },
+        "evidenceTypes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "author_principle",
+              "engine_validated",
+              "tablebase_exact",
+              "corpus_observed",
+              "human_model_predicted",
+              "derived_feature",
+              "hypothesis"
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["reviewStatus"],
+      "properties": {
+        "reviewStatus": {
+          "enum": ["schema_example", "draft", "reviewed", "published"]
+        },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "reviewers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
