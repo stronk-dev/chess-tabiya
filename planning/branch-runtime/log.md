@@ -282,3 +282,21 @@ default without pretending that provisional implementation choice is product val
 - Follow-up verification completed: `make verify` green (12 files, 52 tests; schema and
   all workspace typechecks green), `make build` green, `git diff --check` clean, and all
   58 frozen archive checksums verified unchanged.
+
+## 2026-08-12 (claude, review of §5)
+
+- Independently verified: `make verify` green (52 tests / 12 files), clean
+  worktree, archive intact. Atomic writer CAS in the save UPDATE; cold-load
+  replay validation (corruption → typed error); WAL + STRICT + busy_timeout;
+  node:sqlite RC risk isolated behind RunStorage; snapshot memoization answers
+  the §4 perf note; ≤1000-events assumption documented. **§5 APPROVED.**
+- Non-blocking notes: (1) no lease transfer/steal yet — future UI "continue on
+  this device" will need an endpoint; (2) full-snapshot JSON per save is O(n)
+  write amplification — acceptable at documented scale, the adapter hides the
+  future event-append improvement; (3) snapshot cache never evicts —
+  single-user fine.
+- Storage proposal is with the owner (SQLite now; Postgres only for multi-host
+  or demonstrated contention — codex and claude recommendations align).
+- All RFC acceptance criteria now have passing tests. Pending owner storage
+  ratification → RFC completion protocol (docs/ distillation, status →
+  implemented, archive moves).
