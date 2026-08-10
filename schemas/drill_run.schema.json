@@ -1,0 +1,406 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:chess-tabiya:schema:drill-run:0.2",
+  "title": "Tabiya Drill Run",
+  "description": "Living v0.2 wire format for an immutable, event-sourced drill run. Event seq values start at 1 and increase monotonically without gaps.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "packId",
+    "packDigest",
+    "policyConfig",
+    "nodes",
+    "branches",
+    "events",
+    "activeCursor"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.2" },
+    "id": { "$ref": "#/$defs/id" },
+    "packId": { "$ref": "#/$defs/id" },
+    "packDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "policyConfig": { "$ref": "#/$defs/policyConfig" },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/node" }
+    },
+    "branches": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/branch" }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "$comment": "The runtime additionally enforces seq = array index + 1.",
+      "items": { "$ref": "#/$defs/event" }
+    },
+    "activeCursor": { "$ref": "#/$defs/cursor" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "objectiveState": {
+      "enum": [
+        "active",
+        "preserved",
+        "degraded",
+        "failed",
+        "achieved",
+        "transitioned"
+      ]
+    },
+    "versionedPolicy": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "executionLocus": {
+      "type": "object",
+      "required": ["executedAt", "engineIds", "modelIds"],
+      "properties": {
+        "executedAt": { "enum": ["browser", "server"] },
+        "engineIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/versionedPolicy" }
+        },
+        "modelIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/versionedPolicy" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "policyConfig": {
+      "type": "object",
+      "required": ["seedMode", "locus"],
+      "properties": {
+        "seedMode": { "enum": ["per_run", "per_branch"] },
+        "locus": { "$ref": "#/$defs/executionLocus" }
+      },
+      "additionalProperties": false
+    },
+    "clockState": {
+      "description": "Reserved until clock semantics are specified by a later RFC.",
+      "type": "object",
+      "additionalProperties": true
+    },
+    "node": {
+      "type": "object",
+      "required": [
+        "id",
+        "parentId",
+        "fen",
+        "transposeKey",
+        "moveUci",
+        "moveSan",
+        "ply",
+        "actor",
+        "branchId",
+        "checkpointRefs",
+        "objectiveState",
+        "evidenceRefs",
+        "createdAt"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "parentId": {
+          "oneOf": [
+            { "$ref": "#/$defs/id" },
+            { "type": "null" }
+          ]
+        },
+        "fen": { "$ref": "#/$defs/id" },
+        "transposeKey": {
+          "type": "string",
+          "pattern": "^[^ ]+ [wb] [^ ]+ [^ ]+$"
+        },
+        "moveUci": {
+          "type": ["string", "null"]
+        },
+        "moveSan": {
+          "type": ["string", "null"]
+        },
+        "ply": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "actor": { "enum": ["user", "opponent", "system"] },
+        "branchId": { "$ref": "#/$defs/id" },
+        "checkpointRefs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "uniqueItems": true
+        },
+        "objectiveState": { "$ref": "#/$defs/objectiveState" },
+        "evidenceRefs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "uniqueItems": true
+        },
+        "createdAt": { "$ref": "#/$defs/timestamp" },
+        "clockState": { "$ref": "#/$defs/clockState" }
+      },
+      "additionalProperties": false
+    },
+    "branch": {
+      "type": "object",
+      "required": ["id", "forkNodeId", "label", "seed"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "forkNodeId": { "$ref": "#/$defs/id" },
+        "label": { "$ref": "#/$defs/id" },
+        "intent": { "$ref": "#/$defs/id" },
+        "seed": { "type": "integer" }
+      },
+      "additionalProperties": false
+    },
+    "cursor": {
+      "type": "object",
+      "required": ["nodeId", "branchId"],
+      "properties": {
+        "nodeId": { "$ref": "#/$defs/id" },
+        "branchId": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "runStartedData": {
+      "type": "object",
+      "required": [
+        "id",
+        "packId",
+        "packDigest",
+        "policyConfig",
+        "rootNode",
+        "branch",
+        "activeCursor"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "packId": { "$ref": "#/$defs/id" },
+        "packDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "policyConfig": { "$ref": "#/$defs/policyConfig" },
+        "rootNode": { "$ref": "#/$defs/node" },
+        "branch": { "$ref": "#/$defs/branch" },
+        "activeCursor": { "$ref": "#/$defs/cursor" }
+      },
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "required": ["seq", "type", "at", "data"],
+      "properties": {
+        "seq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "type": {
+          "enum": [
+            "run.started",
+            "move.committed",
+            "opponent.move_selected",
+            "checkpoint.reached",
+            "objective.state_changed",
+            "branch.forked",
+            "run.rewound",
+            "segment.completed",
+            "feedback.generated",
+            "outcome.reached",
+            "transfer.scheduled"
+          ]
+        },
+        "at": { "$ref": "#/$defs/timestamp" },
+        "data": { "type": "object" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "type": { "const": "run.started" },
+            "data": { "$ref": "#/$defs/runStartedData" }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "move.committed" },
+            "data": {
+              "type": "object",
+              "required": ["node"],
+              "properties": {
+                "node": { "$ref": "#/$defs/node" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "opponent.move_selected" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "branchId", "moveUci"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "branchId": { "$ref": "#/$defs/id" },
+                "moveUci": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "checkpoint.reached" },
+            "data": {
+              "type": "object",
+              "required": ["checkpointId", "nodeId", "branchId"],
+              "properties": {
+                "checkpointId": { "$ref": "#/$defs/id" },
+                "nodeId": { "$ref": "#/$defs/id" },
+                "branchId": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "objective.state_changed" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "from", "to", "evidenceRefs"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "from": { "$ref": "#/$defs/objectiveState" },
+                "to": { "$ref": "#/$defs/objectiveState" },
+                "evidenceRefs": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "$ref": "#/$defs/id" },
+                  "uniqueItems": true
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "branch.forked" },
+            "data": {
+              "type": "object",
+              "required": ["branch"],
+              "properties": {
+                "branch": { "$ref": "#/$defs/branch" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "run.rewound" },
+            "data": {
+              "type": "object",
+              "required": ["fromNodeId", "toNodeId", "branchId"],
+              "properties": {
+                "fromNodeId": { "$ref": "#/$defs/id" },
+                "toNodeId": { "$ref": "#/$defs/id" },
+                "branchId": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "segment.completed" },
+            "data": {
+              "type": "object",
+              "required": [
+                "branchId",
+                "startCheckpointEventSeq",
+                "endCheckpointEventSeq",
+                "startNodeId",
+                "endNodeId"
+              ],
+              "properties": {
+                "branchId": { "$ref": "#/$defs/id" },
+                "startCheckpointEventSeq": { "type": "integer", "minimum": 1 },
+                "endCheckpointEventSeq": { "type": "integer", "minimum": 1 },
+                "startNodeId": { "$ref": "#/$defs/id" },
+                "endNodeId": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "feedback.generated" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "evidenceRefs"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "evidenceRefs": {
+                  "type": "array",
+                  "items": { "$ref": "#/$defs/id" },
+                  "uniqueItems": true
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "outcome.reached" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "outcome"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "outcome": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "transfer.scheduled" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "scheduleId"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "scheduleId": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}

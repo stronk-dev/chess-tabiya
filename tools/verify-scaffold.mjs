@@ -124,6 +124,7 @@ for (const setting of requiredWorkspaceSettings) {
 }
 
 await requirePath("pnpm-lock.yaml");
+await requirePath("schemas/drill_run.schema.json");
 
 if (failures.length > 0) {
   console.error(failures.join("\n"));

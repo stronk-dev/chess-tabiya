@@ -17,7 +17,7 @@ behavior (cloud-clicker rule). Append every session to `log.md`.
 ## 1. Core tree + events (`packages/runtime`)
 
 - [ ] Node/Branch/Run types per RFC §Node model (path-keyed, transposeKey)
-- [ ] Living `schemas/drill_run.schema.json` v0.2 incl. event `seq` (BR-C8)
+- [x] Living `schemas/drill_run.schema.json` v0.2 incl. event `seq` (BR-C8)
 - [ ] Event log append + projection; segment derivation (checkpoint spans)
 - [ ] commitMove: leaf append + implicit fork at non-leaf cursor (`alt-N`,
       `branch.forked` then `move.committed`) (BR-C1)
