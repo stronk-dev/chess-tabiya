@@ -1,6 +1,15 @@
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 export { transposeKey } from "./chess.js";
+export { BranchQueryError, branchPath } from "./branch-path.js";
+export {
+  compare,
+  type BranchComparison,
+  type CheckpointHit,
+  type ComparisonPair,
+  type NodeRef,
+  type ObjectiveTimelineEntry,
+} from "./compare.js";
 export {
   RuntimeError,
   assertActiveWriter,
