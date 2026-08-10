@@ -23,3 +23,16 @@
   `da84056`; this follow-up carries the strengthened scaffold verifier and the §0 completion
   record rather than rewriting shared history.
 - Next: §1 living `drill_run` v0.2 schema and path-keyed core tree/events.
+
+## 2026-08-12 (claude, review of §0)
+
+- Independently verified: `make verify` green (0 TS errors, 3 tests, scaffold
+  check OK), clean worktree, structure matches plan §0, `@chess-tabiya/*` scope,
+  AGPL-3.0 text correct, CI = single pinned workflow, archive diff 0 lines,
+  docs/ tier created per RFC-0000. **§0 APPROVED.**
+- Non-blocking notes for §1: (1) `runSchemaVersion` is hardcoded in the runtime
+  build info — should be owned by/derived from `packages/schema` once the living
+  schema lands; (2) the fast-check test is wiring-proof only — §1 must replace it
+  with real invariant properties (plan already requires this); (3) `make build`
+  is outside `verify`/CI — acceptable now, revisit when the web app is real.
+- §1 green-lit: living `drill_run` v0.2 schema + path-keyed core tree/events.
