@@ -1,10 +1,10 @@
 # RFC: Drill Client (playable vertical slice)
 
-- **Status:** draft
+- **Status:** accepted
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/02-product-shape.md` §UX commitments (layout, keyboard-first, anti-contamination, latency budgets), `design/01-training-model.md` (episode stages, feedback timing)
-- **Exploration gate:** E5 — owner ruling requested (waive low-fi-first per validation-by-use doctrine, or low-fi mockup first); this RFC holds at draft until logged (DC-C8)
+- **Exploration gate:** E5 waived by owner ruling 2026-08-12 ("A" — build real screens, iterate by use); logged in gates.md + exploration log
 - **Depends on:** `docs/branch-runtime.md`, `docs/drill-pack-format.md`, `docs/engine-workers.md`
 - **Parent / amends:** —
 - **Supersedes / superseded by:** —
@@ -185,8 +185,7 @@ enumerable CI gate; C4 → concrete PGN route; C5 → localStorage lease resume 
 polling contract; C6 → server-side withholding + immediate_blunder_guard cut
 from v1 (no consumer until on-ramp content); C7 → test-browser target +
 separate CI job + release.yml + concrete UCI healthcheck, all marked as new
-work; C8 → **owner ruling requested on E5** (waive low-fi-first, or mockup
-first) — this RFC stays draft until that ruling is logged. Deployment-folding
+work; C8 → resolved: E5 waived by owner ruling 2026-08-12; logged. Deployment-folding
 citation: the backlog row scheduled packaging "for the client/vertical-slice
 era" — this RFC is that era; folding is per that ruling, now cited.
 
@@ -227,6 +226,5 @@ era" — this RFC is that era; folding is per that ruling, now cited.
 - 2026-08-12: created; REST-driven v1 execution model chosen (in-browser
   runtime named as later enhancement); deployment packaging folded in per
   ruling.
-- 2026-08-12: adversarial review DC-C1..C8; C1–C7 resolved in-draft (new
-  server surface, evidence-ref contract, lease/polling, concrete CI/packaging,
-  blunder-guard cut); C8 held for owner ruling on E5.
+- 2026-08-12: adversarial review DC-C1..C8; C1–C7 resolved in-draft; C8
+  resolved by owner E5 waiver → **status → accepted**.

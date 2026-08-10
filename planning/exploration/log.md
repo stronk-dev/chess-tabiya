@@ -360,3 +360,11 @@
   Opponent stack complete: the runtime can now be played against Maia through
   the full writer-seam contract. Remaining before a playable product: the
   client RFC (drafting now) + deployment packaging (ruled, backlogged).
+
+## 2026-08-12 (owner ruling via claude) — E5 waived
+
+- Owner ruled "A": no low-fi mockup; branch/rewind/compare comprehension is
+  answered by using the real UI, iterated in place. E5 marked waived→by-use in
+  gates.md. Q9 (branch growth/comprehension tail) stays open, observed during
+  the slice. drill-client RFC → accepted; planning dir cut with the
+  owner-confirmed foundations-first layer order.
