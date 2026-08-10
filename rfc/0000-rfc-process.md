@@ -26,9 +26,18 @@ description of its behavior; archived RFCs explain why and how it arrived.
 This repo is in the **exploratory phase**: we are deciding *whether and what* to build,
 not building. Therefore:
 
-- **RFC drafting is closed** until the continuation gates in
-  `planning/exploration/gates.md` pass, or an owner ruling (logged in
+- **Product RFC drafting is closed** until the vertical slice has passed the continuation
+  gates in `planning/exploration/gates.md`, or an owner ruling (logged in
   `planning/exploration/log.md`) opens a specific RFC early.
+- The first **experimental vertical-slice RFC** may be drafted when the earlier
+  exploration-to-slice gate in `planning/exploration/gates.md` passes. That gate requires
+  evidence for competitive whitespace, learner/problem value, author-declared phase
+  transitions, opponent feasibility, and branch UX; it does not require a vertical slice
+  that cannot yet exist.
+- Disposable research harnesses and non-production UX prototypes do not require an RFC.
+  They must be explicitly labeled research tooling, scoped to answering a ledger question,
+  and recorded in `planning/exploration/log.md`; they do not become production foundations
+  by accident.
 - The sketches in `archive/brief-v2/rfcs/` and `archive/brief-v2/adrs/` are
   **design-tier idea sketches**, not RFCs: they predate all validation, and every one
   of them rests on an untested hypothesis (H1–H5). Real RFCs will mine them for
@@ -93,3 +102,5 @@ to `rfc/archive/` and its planning directory to `planning/archive/`. Never delet
 
 - 2026-08-09: created, adapted from cloud-clicker's RFC-0000 with the exploration gate
   added and `docs/` deferred until code exists.
+- 2026-08-10: reconciled the exploration-to-slice gate with the post-slice continuation
+  gates; explicitly allowed scoped, disposable research tooling.

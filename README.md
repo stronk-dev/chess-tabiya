@@ -38,5 +38,5 @@ Agents: read `AGENTS.md`.
 - **Rehearsal over review** — the product dies if it becomes a Stockfish review screen with a rewind button.
 - **A branch records an attempt**, not an engine line.
 - **Stockfish judges; it does not play the human.**
-- **Evidence or `[M]`** on every claim; kill-criterion evidence gets escalated, never buried.
+- **Traceable research claims** — cited `[V]`/`[P]` evidence or explicit `[M]`; kill-criterion evidence gets escalated, never buried.
 - **Explore before spec, spec before code.**

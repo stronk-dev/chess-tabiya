@@ -1,32 +1,38 @@
 # 02 — Product shape
 
 The thinnest design doc on purpose: shape questions (business model, platform, UX
-surface) are mostly **open** and owned by exploration Q2/Q3. Living successor to the
+surface) are mostly **open** and owned by exploration Q2/Q3/Q9. Living successor to the
 shape-relevant parts of `archive/brief-v2/02_MARKET_AND_EXISTING_SOLUTIONS.md` and
 `10_UX_BRANCHING_AND_REWIND.md`.
 
-## Business model — OPEN (exploration Q2)
+## Product posture — OPEN (exploration Q2)
 
-Two questions the brief refuses to collapse into one:
+Four decisions must not be collapsed into a "paid vs OSS vs self-hosted" choice:
 
-1. Is a self-hosted tool worth building? Desk verdict: yes (9/10). Ownership, latency,
-   unrestricted usage, modifiability, good local UX are legitimate value. Paid SaaS is
-   not a blocker.
-2. Would a public commercial product have substitutes? Yes (5/10 SaaS case).
+1. **Source model:** open source, source-available, or proprietary components.
+2. **Deployment:** local-only, self-hostable, hosted, or a supported combination.
+3. **Monetization:** free/donations, paid hosting, support, paid content, or another model.
+4. **Content/data rights:** licensing and provenance for packs, annotations, historical
+   games, model weights, and derived datasets.
 
-Licensing constrains the space: Stockfish GPLv3, Maia-3 AGPL-3.0, Lichess dumps CC0,
-several chess libs copyleft. Self-hosted OSS: largely compatible. Proprietary hosted:
-needs legal review.
+The brief's two commercial assessments remain useful context, not choices on those axes:
+self-hosted personal value scored 9/10; the unproven SaaS case scored 5/10. Licensing
+constrains combinations: Stockfish GPLv3, Maia-3 AGPL-3.0, Lichess dumps CC0, and several
+candidate chess libraries are copyleft according to the archive research. Copyleft does
+not prohibit charging; exact source/distribution obligations depend on architecture and
+deployment and require review before public or proprietary release
+(`archive/brief-v2/08_ENGINE_CORPUS_AND_CONTENT.md` §Licensing notes).
 
-**Working default until Q2 is decided:** build-for-self, OSS-compatible choices, no
-decision that forecloses a paid tier later.
+**Working default until Q2 is decided:** build-for-self, self-hostable, OSS-compatible
+dependencies, no assumed revenue model. Do not contort exploration merely to preserve an
+unspecified proprietary option.
 
 ## Platform — OPEN (exploration Q3)
 
 Working default: web-first (TypeScript/React + chessground per the archive sketch),
 responsive. Mobile-native excluded from v0 (three times over, in the brief's scope
 docs). The unexamined question: whether the rehearsal loop — short, repeatable,
-tactile — is actually a strong mobile-web/PWA fit. Revisit after Q1 shows evidence.
+tactile — is actually a strong mobile-web/PWA fit. Revisit after Q1a/Q1b show evidence.
 
 ## Positioning (settled at design level)
 
@@ -35,8 +41,8 @@ The comparison axis is not personalization; it is:
 > Does the product support active, repeatable rehearsal of a whole phase or transition,
 > with preserved alternatives and outcome-aware feedback?
 
-Nearest neighbors and what they prove (desk research; hands-on verification is
-exploration Q1):
+Nearest neighbors and what they suggest (desk research; hands-on verification is
+exploration Q1a):
 
 - **Chess Endgame Training** — the endgame concept is right; the gap is "immediate,
   pleasant, practical, varied, connected to earlier phases" (owner's field report:
@@ -52,6 +58,10 @@ exploration Q1):
   the opportunity is the rehearsal runtime and curriculum.
 
 ## UX commitments (design-level, from `10_UX_BRANCHING_AND_REWIND.md`)
+
+These are hypotheses owned by exploration Q9, not proof that the interaction is
+comprehensible. Low-fidelity testing must resolve branch growth, navigation, comparison
+overload, and destructive-action mistakes before they become an RFC.
 
 - **Rewind is an experiment, not an undo.** Old branches stay immutable; rewind must
   feel instantaneous and intentional.

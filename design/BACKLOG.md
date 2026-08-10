@@ -25,17 +25,19 @@ Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 | Trajectory Drill — causal opening→middlegame→endgame spines, causal-integrity rule | 📐 | `arch/07` |
 | Opponent policy broker (theory_strict…strong_engine modes; policy mixer for coherence) | 📐 · feasibility = exploration **Q5** | `arch/rfcs/RFC-0003` sketch, `arch/08` |
 | Objectives & grading (objective state machine: active→preserved/degraded/failed/achieved/transitioned) | 📐 | `arch/rfcs/RFC-0004` sketch, `arch/schemas/drill_run.schema.json` |
-| Phase & trajectory engine — semantic phase detection, NOT move-number based | 📐 · feasibility = exploration **Q4** | `arch/rfcs/RFC-0005` sketch |
-| Tempo contract / timing windows (window opens/closes, luxury-move budget) | 📐 · validation = exploration **Q4** | `arch/04`, `arch/09` |
+| Author-declared phase transitions and timing windows | 📐 · feasibility = exploration **Q4a** | `arch/rfcs/RFC-0005` sketch, `arch/04` |
+| Deterministic phase-feature assistance for authors | 📐 · feasibility = exploration **Q4b** | `arch/rfcs/RFC-0005` sketch |
+| Fully automatic semantic phase detection | 💡 optional · value = exploration **Q4c** | `arch/rfcs/RFC-0005` sketch |
+| Tempo contract / timing windows (window opens/closes, luxury-move budget) | 📐 · validation = exploration **Q4a/Q4b** | `arch/04`, `arch/09` |
 | Evidence-backed feedback (claims + evidence refs + uncertainty; timing events over eval deltas) | 📐 · quality = exploration **Q8** | `arch/rfcs/RFC-0006` sketch, `arch/09`, `arch/schemas/feedback_packet.schema.json` |
 | Engine integration — Stockfish judge, Maia workers, Syzygy adapter, responsibility table | 📐🔬 | `arch/08`, `arch/12` |
-| Corpus position/transition index (staged Lichess ingestion, Parquet + DuckDB) | 📐 · usage posture = exploration **Q6** | `arch/rfcs/RFC-0008` sketch, `arch/08`, `arch/13` |
+| Corpus position/transition index (staged Lichess ingestion, Parquet + DuckDB) | 📐 · Stage-0 coverage/provenance/rights = exploration **Q6** | `arch/rfcs/RFC-0008` sketch, `arch/08`, `arch/13` |
 | System architecture — local-first modular monolith + UCI workers | 📐 (ADR-0004) | `arch/12` |
-| UX: branching/rewind surface, compare mode, keyboard-first, latency budgets | 📐 | `arch/10`, `02-product-shape.md` |
+| UX: branching/rewind surface, compare mode, keyboard-first, latency budgets | 📐 · comprehension/growth = exploration **Q9** | `arch/10`, `02-product-shape.md` |
 | Anti-contamination defaults (hide eval/labels until checkpoint) | 📐 (ADR-0006) | `arch/10`, `arch/09` |
 | Content authoring workflow + pack production cost | 📐 · cost = exploration **Q7** | `arch/product/content_pack_authoring.md` |
 | v0 content scope — packs A (Sicilian timing) / B (Carlsbad or IQP) / C (rook endings) | 📐 | `arch/implementation/v0_content_inventory.md` |
-| Vertical slice (deterministic mock opponent, acceptance scenario) | 📐 · whether/when = exploration Q1 outcome | `arch/implementation/vertical_slice_spec.md` |
+| Vertical slice (deterministic mock opponent, acceptance scenario) | 📐 · drafting gated by E1–E5 | `arch/implementation/vertical_slice_spec.md` |
 | Benchmark plan (latency + coherence measurement) | 📐 | `arch/implementation/benchmark_plan.md` |
 | Validation protocol — H1–H5, kill criteria, continuation gates | 📐 → **lifted into living tier** | `planning/exploration/gates.md` |
 
@@ -43,9 +45,12 @@ Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 
 | Idea | Take | Home |
 |---|---|---|
-| Paid vs OSS vs self-hosted-only | Two separate questions (self-hosted worth ≠ SaaS case); licensing (GPL/AGPL deps) constrains proprietary paths | exploration **Q2**, `02-product-shape.md` |
+| Source model, deployment, monetization, and content/data rights | Four independent axes; copyleft obligations constrain combinations but do not prohibit charging | exploration **Q2**, `02-product-shape.md` |
+| Target learner/coach problem value | Competitive whitespace is insufficient; interview and concept-test the recurring job and preference over simpler workflows | exploration **Q1b**, `planning/exploration/plan.md` |
+| Learning effect versus simpler training | Test transfer and delayed retention only after a slice exists; cannot gate construction of its own test instrument | exploration **Q1c**, H1–H4 |
 | Mobile (PWA vs native vs non-goal) | Brief excludes native from v0; whether the loop is a strong mobile fit was never examined | exploration **Q3**, `02-product-shape.md` |
-| Modern engine alternatives (ChessMimic, Chessformer) as Maia complements/replacements | Benchmark against Maia-3 on same positions before adopting | exploration Q5, `arch/research/source_index.md` |
+| Runnable human-opponent policies (Maia-3 variants, ChessMimic if reproducible, corpus baseline, future released models) | Benchmark identical positions/seeds; Chessformer is Maia-3's architecture, not a separate engine | exploration **Q5**, `arch/research/source_index.md` R41–R42 |
+| Branch growth and compare comprehension | Test 2/4/8-branch desktop and phone prototypes; budgets/grouping/cleanup are open | exploration **Q9**, `02-product-shape.md` |
 | Branch race UX (two boards, alternating moves) | Tangible divergence but high cognitive load — experimental, optional | `arch/10 §Board swapping` |
 | LLM as renderer of validated evidence (never source of truth) | Bounded by ADR-0005; wording/summarization only | `arch/09`, `arch/rfcs/RFC-0006` |
 

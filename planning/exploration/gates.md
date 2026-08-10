@@ -46,9 +46,11 @@ rewind adds value**.
 
 - **Statement:** Corpus/Maia opposition creates more believable and useful branches
   than weakened Stockfish.
-- **Test design:** same positions under Maia-3 / ChessMimic / corpus policy / weakened
-  Stockfish; rate branch believability and coherence over the required horizon
-  (feeds exploration Q5).
+- **Test design:** same reviewed positions and deterministic seeds under Maia-3 variants /
+  ChessMimic if runnable / corpus policy / weakened-Stockfish control. Reviewers are blind
+  to policy identity and score plan continuity, tactical sanity, objective relevance,
+  diversity, and human plausibility over 10–20 plies; the harness also records latency,
+  memory, failures, and variance (feeds exploration Q5).
 - **Status:** untested · **Evidence:** — · **Verdict:** —
 
 ## Kill criteria
@@ -70,6 +72,23 @@ rationalized away.
 | K9 | Endgame mode is not materially faster or more usable than Chess Endgame Training | open | — |
 | K10 | Pack production cost is so high that only a handful can ever exist | open | — |
 
+## Exploration-to-slice gate
+
+The first experimental vertical-slice RFC may open when all of the following have reached
+`📊 evidence` or better, or when an owner ruling explicitly accepts the remaining risk:
+
+| # | Gate | Owned by | Status | Evidence |
+|---|---|---|---|---|
+| E1 | Competitive teardown confirms meaningful integrated-loop whitespace | Q1a | unmet | — |
+| E2 | Target learners/coaches recognize the problem and choose the rehearsal loop over plausible alternatives in interview or low-fidelity tests | Q1b | unmet | — |
+| E3 | Authors can declare useful opening→middlegame boundaries and timing windows without automatic phase detection | Q4a, Q7 | unmet | — |
+| E4 | At least one runnable opponent policy produces sufficiently believable multi-ply resistance for a slice | Q5 | unmet | — |
+| E5 | A low-fidelity branch/rewind/compare prototype is comprehensible on the initial target viewport | Q9 | unmet | — |
+
+This gate decides whether the vertical slice is worth specifying and building. It does not
+claim that the learning hypotheses are proven. Disposable research harnesses and UX
+prototypes may be created before it under `rfc/0000-rfc-process.md` §Exploration gate.
+
 ## Continuation gates
 
 Continue from vertical slice to product build when all of:
@@ -84,11 +103,9 @@ Continue from vertical slice to product build when all of:
 | C6 | Pack authors can create a reviewed pack with a documented, repeatable workflow | unmet | — |
 | C7 | Endgame restart and response latency feel effectively instant | unmet | — |
 
-Note the ordering: these gate **vertical slice → product build**. A separate, earlier
-gate — opening RFC drafting at all — is the exploration questions in `plan.md` reaching
-`📊 evidence` or better on Q1, Q4, and Q5, or an owner ruling. (The brief assumed a
-vertical slice would be built to test H1–H5; whether to build even that slice is
-exploration's first real decision — see plan.md Q1.)
+These gate **vertical slice → product build**. They are deliberately later than E1–E5:
+the brief assumed a slice would be built to test H1–H5, while E1–E5 decide whether
+building that slice is justified at all.
 
 ## Success metrics (measurement vocabulary for the above)
 

@@ -6,11 +6,20 @@ no empty stubs; GAP rows below are the queue.
 
 ## House rules
 
-- **Provenance, two orthogonal axes, never one glyph:**
-  - `[V]` verified against a fetched URL · `[P]` plausible / desk-sourced, unverified
-    hands-on · `[M]` model knowledge, no external source.
-  - Legal risk 🟢/🟡/🔴 where relevant (only ever legal, never epistemic).
-- **Every factual claim carries a URL or an explicit `[M]`.**
+- **Use one lightweight evidence label per factual research claim:**
+  - `[V]` — directly checked in the current pass against the cited primary/authoritative
+    source, a reproducible measurement, or a hands-on observation;
+  - `[P]` — source-backed but partial, secondary, inherited desk research, or not yet
+    reproduced hands-on;
+  - `[M]` — model knowledge or analysis with no external evidence; unverified.
+  These labels intentionally combine evidence basis and verification state for a small
+  repo; they are not a complete source taxonomy.
+- **Keep legal risk separate:** 🟢/🟡/🔴 may be added where relevant and means legal risk
+  only, never evidentiary confidence.
+- **Make every factual claim in a dossier traceable.** `[V]` and `[P]` require an inline
+  URL or a precise living/archive source reference. Unsupported claims require `[M]`.
+  A clearly bounded paragraph or table row may share one citation; repeated glyphs on
+  every sentence are not required.
 - **No RFC is drafted from a GAP row.** If the area is a gap, run a research pass and
   land the report first (composes with the exploration gate in `rfc/0000-rfc-process.md`).
 - **Contradicting a design doc is a feature.** When research overturns design, flag
@@ -36,20 +45,25 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 | Area | Feeds | Status | Report |
 |---|---|---|---|
-| Competitor landscape (28 products, feature matrix) | Q1, `design/02` | covered `[P]` — desk only | `competitor-matrix.csv`, `arch/02` |
-| Chess Endgame Training hands-on (latency, branching; owner's "slow/poor UX" report) | Q1, K9 | **GAP** (queue 1) | — |
-| Noctie takeback/branch persistence + feedback timing | Q1 | **GAP** (queue 2) | — |
-| Chessable bot-from-course-position on strategic chapters | Q1 | **GAP** (queue 3) | — |
-| Chess.com Practice multi-move redo + color switching | Q1 | **GAP** (queue 4) | — |
+| Competitor landscape (28 products, feature matrix) | Q1a, `design/02` | covered `[P]` — desk only | `competitor-matrix.csv`, `arch/02` |
+| Chess Endgame Training hands-on (latency, branching; owner's "slow/poor UX" report) | Q1a, K9 | **GAP** (queue 1) | — |
+| Noctie takeback/branch persistence + feedback timing | Q1a | **GAP** (queue 2) | — |
+| Chessable bot-from-course-position on strategic chapters | Q1a | **GAP** (queue 3) | — |
+| Chess.com Practice multi-move redo + color switching | Q1a | **GAP** (queue 4) | — |
+| Target learner/coach problem interviews + concept preference test | Q1b, E2 | **GAP** | — |
+| Learning effect versus simpler formats | Q1c, H1–H4, C2–C4 | **GAP** — requires slice | — |
 | Maia-3 capabilities (models, conditioning, sampling) | Q5 | covered `[P]` | `arch/research/source_index.md` R04 |
 | Maia-3 plan coherence over 20 plies @ 1600/1800/2000 | Q5, H5, K5 | **GAP** (queue 5) — needs harness | — |
-| Maia-3 vs ChessMimic vs corpus policy, same positions | Q5, H5 | **GAP** (queue 6) | — |
-| Attack-arrival/timing metrics on reviewed Sicilian examples | Q4 | **GAP** (queue 7) | — |
-| Smallest useful deterministic feature set | Q4, Q8 | **GAP** (queue 8) | — |
+| Maia-3 variants vs ChessMimic (if runnable) vs corpus policy vs weakened-Stockfish control, same positions/seeds | Q5, H5 | **GAP** (queue 6) | — |
+| Author-declared transitions/timing windows on reviewed examples | Q4a, Q7, E3 | **GAP** (queue 7) | — |
+| Smallest useful deterministic feature set + coach agreement | Q4b, Q8 | **GAP** (queue 8) | — |
+| Automatic phase detection value/ground truth | Q4c | deferred unless Q4a/Q4b expose need | — |
 | Strong reviewer recruitment for packs A/B/C | Q7, C1 | **GAP** (queue 9) | — |
-| Licensing: UI/chess libs, Maia deployment, product posture 🟡 | Q2 | **GAP** (queue 10) | — |
+| Dependency/model/content licensing across source, deployment, monetization, and rights axes 🟡 | Q2, Q6 | **GAP** (queue 10) | — |
 | Paid-competitor pricing/positioning | Q2 | **GAP** | — |
+| Branch/rewind/compare comprehension at 2/4/8 branches | Q9, E5 | **GAP** | — |
+| Historical-game provenance, rights, Stage-0 coverage and bias | Q6, Q7 | **GAP** | — |
 | Deliberate-practice evidence base | thesis | covered `[P]` (observational; population skew caveat) | `arch/research/source_index.md` R01 |
 | Lichess corpus scale/licensing | Q6 | covered `[P]` | `arch/research/source_index.md` R02 |
 | Engine stack (Stockfish UCI, Syzygy sizes) | Q5, arch | covered `[P]` | `arch/research/source_index.md` R03–R06 |
-| Forum demand signals | Q1 | covered `[P]` — anecdotes, problem-shape only | `arch/research/forum_signal_log.md` |
+| Forum demand signals | Q1b | covered `[P]` — anecdotes, problem-shape only | `arch/research/forum_signal_log.md` |

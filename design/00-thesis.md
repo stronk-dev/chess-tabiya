@@ -25,7 +25,7 @@ ENDGAME      win / hold / save / resist · repeat against different practical de
              preserve W/D/L rather than reproduce one machine line
 ```
 
-## The novelty claim (under test — exploration Q1)
+## The novelty claim (under test — exploration Q1a)
 
 None of the pieces are novel: line repetition, play-from-FEN, human-like bots, engine
 eval, tablebases, variation trees. The whitespace is the **integrated rehearsal
@@ -35,10 +35,16 @@ protocol**:
 > plan to matter → fork and replay the critical segment → finish or jump into the
 > resulting outcome problem.
 
-ChessDojo teaches a manual version of this; Chess Endgame Training proves the endgame
-loop works. The product industrializes and connects those workflows. A branch here
-records an **attempt** (what was chosen blind, how the opponent answered, whether the
-objective survived, what changed on retry) — not a passive engine line.
+ChessDojo documents a manual version of this; Chess Endgame Training demonstrates that
+an endgame play-out interaction exists. Neither establishes the integrated product's
+demand or learning effect. The product hypothesis industrializes and connects those
+workflows. A branch here records an **attempt** (what was chosen blind, how the opponent
+answered, whether the objective survived, what changed on retry) — not a passive engine
+line.
+
+Competitive whitespace is not the same as product value or learning efficacy. Q1b tests
+whether target learners and coaches recognize and prefer the problem/interaction; Q1c
+tests transfer and retention against simpler training formats after a slice exists.
 
 ## What it is not
 

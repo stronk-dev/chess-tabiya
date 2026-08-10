@@ -8,54 +8,94 @@ Question status ladder:
 `💡 posed` → `🔬 researching` → `📊 evidence` (dossier landed, gate statuses updated) →
 `✅ settled-go` / `⛔ settled-kill` / `🔁 repositioned`
 
-Companion files: `gates.md` (hypotheses H1–H5, kill criteria K1–K10, continuation gates
-C1–C7), `log.md` (append-only record). Evidence lands as dossiers in `design/research/`.
+Companion files: `gates.md` (hypotheses H1–H5, kill criteria K1–K10,
+exploration-to-slice gates E1–E5, continuation gates C1–C7), `log.md` (append-only
+record). Evidence lands as dossiers in `design/research/`.
 
 ## Question ledger
 
 | # | Question | Status | Attached gates |
 |---|---|---|---|
-| Q1 | Is the integrated rehearsal loop actually novel and valuable? | 💡 | H1–H4, K1–K4, K8 |
-| Q2 | Paid vs OSS vs self-hosted-only — what is the product posture? | 💡 | — (decision, evidence-informed) |
+| Q1a | Is the integrated rehearsal loop competitively novel? | 💡 | E1 |
+| Q1b | Do target learners and coaches recognize and want the problem solved? | 💡 | E2, K2–K3 |
+| Q1c | Does rehearsal improve learning versus simpler formats? | 💡 · requires slice | H1–H4, K1, K4, K8, C2–C4 |
+| Q2 | What source, deployment, monetization, and content-rights posture fits? | 💡 | — (decision, evidence-informed) |
 | Q3 | Mobile: scope or non-goal? | 💡 | — |
-| Q4 | Is semantic phase detection / theory-to-middlegame bridging feasible to author and detect? | 💡 | K7, C6 |
-| Q5 | Can Maia-3/corpus opposition stay coherent over 10–20 plies? | 💡 | H5, K5, C5 |
+| Q4a | Can authors declare useful phase transitions and timing windows? | 💡 | E3, K7, C6 |
+| Q4b | Can deterministic features assist authors reliably? | 💡 | K7 |
+| Q4c | Is fully automatic semantic phase detection useful enough to justify itself? | 💡 · optional | — |
+| Q5 | Can a runnable human/corpus policy stay coherent over 10–20 plies? | 💡 | E4, H5, K5, C5 |
 | Q6 | How do we use historical games without the ingestion-first trap? | 💡 | — |
 | Q7 | What does a reviewed drill pack cost to author? | 💡 | K10, K7, C6 |
 | Q8 | Can feedback beat "Stockfish labels + prose"? | 💡 | K6, C1 |
+| Q9 | Is branch/rewind/compare understandable without branch explosion or comparison overload? | 💡 | E5, K3, C2 |
 
-## Q1 — Novelty and value of the integrated loop
+## Q1 — Novelty, problem value, and learning effect
 
 The brief's desk research says no free/self-hosted workflow combines conceptual opening
 rehearsal, multi-move middlegame branching, and practical endgame outcomes with good UX
-(`archive/brief-v2/02_MARKET_AND_EXISTING_SOLUTIONS.md`, 28-product matrix). The pieces
-exist separately: Chess Endgame Training (closest endgame proof), ChessDojo sparring
-(closest pedagogy), Noctie (closest paid sparring), Chessable/Listudy (opening recall).
+(`archive/brief-v2/02_MARKET_AND_EXISTING_SOLUTIONS.md`, 28-product matrix). That is a
+competitive-whitespace claim, not evidence that learners want the product or that it
+improves learning. Q1 is deliberately split so one kind of evidence cannot impersonate
+another.
 
-- **What settles it:** hands-on teardowns confirming the gaps are real (not just
-  undocumented features), and a working answer to "would *we* use this loop weekly."
-- **Next actions** (research queue 1–4): hands-on benchmark Chess Endgame Training
+### Q1a — Competitive novelty
+
+- **What settles it:** hands-on teardowns confirming that the integrated loop is absent,
+  not merely undocumented.
+- **Next actions** (research queue 1–4): benchmark Chess Endgame Training
   latency/branching · verify Noctie's takeback/branch persistence and feedback timing ·
   test Chessable bot-from-course-position on strategic chapters · test Chess.com
   Practice for multi-move redo and color switching.
-- **Decision gate:** teardowns confirm the gap → Q1 `📊 evidence`; a product already
-  does the loop well → 🔁 reposition (what's the residual value?) or ⛔.
+- **Decision gate:** meaningful whitespace confirmed → Q1a `📊 evidence`; an existing
+  product already does the loop well → 🔁 reposition around the residual gap or ⛔.
 
-## Q2 — Paid vs OSS vs self-hosted-only
+### Q1b — Learner and coach problem value
+
+- **What settles it:** structured interviews plus a low-fidelity concept test with target
+  learners and coaches. Test recognition of the underlying failure (timing, plan execution,
+  transition, conversion), current workaround frequency, preference against simpler
+  alternatives, and credible intent to repeat the loop. "Would we use it?" is useful owner
+  evidence, not market evidence.
+- **Decision gate:** repeated problem evidence and preference for the rehearsal interaction
+  → Q1b `📊 evidence`; polite interest without a recurring job → reposition or stop before
+  building.
+
+### Q1c — Learning effect
+
+- **What settles it:** H1–H4 tests on the vertical slice against line recall, engine-PV
+  viewing, one-move retry, and key-move endgame puzzles. Immediate performance alone is
+  insufficient; related-position transfer and delayed retention are load-bearing.
+- **Ordering:** Q1c cannot gate construction of the slice needed to test it. It gates the
+  later product build through C2–C4.
+
+## Q2 — Product posture on four independent axes
 
 The brief's corrected verdict scores "worth building for personal/self-hosted use" 9/10
-but "ready-made SaaS business case" 5/10 — two separate questions, deliberately not
-collapsed. Licensing pins part of the answer: Stockfish GPLv3, Maia-3 AGPL-3.0, Lichess
-dumps CC0; a proprietary hosted product needs legal review, self-hosted OSS is largely
-compatible (`archive/brief-v2/08_ENGINE_CORPUS_AND_CONTENT.md`).
+but "ready-made SaaS business case" 5/10. "Paid vs OSS vs self-hosted" is a false
+trichotomy: charging money, publishing source, and operating a hosted service are
+independent choices. Decide four axes explicitly:
 
-- **What settles it:** owner decision, informed by a competitor pricing/positioning pass
-  and the licensing item (research queue 10). Not gated on H1–H5 — but a kill on Q1
-  moots the SaaS branch.
-- **Next actions:** pricing/positioning pass over the paid rows of the competitor
-  matrix; licensing decision for UI/chess libraries and Maia deployment.
-- **Working default until decided:** build-for-self, OSS-compatible choices, no
-  decision that forecloses a paid tier later.
+1. **Source model:** open source, source-available, or proprietary components.
+2. **Deployment:** local-only, self-hostable, hosted, or a supported combination.
+3. **Monetization:** free/donation-supported, paid hosting, paid support, paid content, or
+   another model. Copyleft licenses do not prohibit charging.
+4. **Content/data rights:** licenses and provenance for packs, annotations, historical
+   PGNs, model weights, and derived datasets—not only application code.
+
+Licensing constrains combinations: Stockfish GPLv3, Maia-3 AGPL-3.0, and Lichess dumps
+CC0 according to the cited archive research. Exact obligations depend on distribution,
+network deployment, process boundaries, modifications, and the other selected libraries;
+legal review belongs before any public or proprietary release
+(`archive/brief-v2/08_ENGINE_CORPUS_AND_CONTENT.md`).
+
+- **What settles it:** an owner decision recorded as one choice on each axis, informed by
+  competitor pricing/positioning, willingness-to-pay evidence from Q1b, and a dependency /
+  content-rights inventory (research queue 10). Q1a/Q1b failure moots most commercial options
+  but does not automatically answer whether a personal OSS experiment is worthwhile.
+- **Working default until decided:** build-for-self, self-hostable, OSS-compatible
+  dependencies, no assumed revenue model. A future paid offering remains possible but is
+  not treated as a compatibility requirement that distorts exploration.
 
 ## Q3 — Mobile
 
@@ -65,26 +105,37 @@ client thinking is web-first (chessground). But the brief never examined whether
 product-shape question, not just a scope cut.
 
 - **What settles it:** a UX prototype question — is rewind/branch/compare usable on a
-  phone screen, and is mobile-web (PWA) good enough? Deferrable until Q1 shows evidence.
+  phone screen, and is mobile-web (PWA) good enough? Deferrable until Q1a/Q1b show evidence.
 - **Working default:** web-first, responsive; mobile-native remains a non-goal until an
   explicit reversal here.
 
-## Q4 — Semantic phase detection and theory-to-middlegame bridging
+## Q4 — Phase transitions at three levels
 
-The "novel detection mechanisms" question. The brief's answer (`archive/brief-v2/rfcs/
-RFC-0005-phase-and-trajectory-engine.md` sketch): don't infer phase from move number;
-packs declare semantic boundaries, runtime supplements with deterministic features
-(pawn-structure signature, material threshold, queen exchange, tablebase eligibility).
-The tempo contract (`archive/brief-v2/04_OPENING_DRILLS.md`) is the sharpest mechanism:
-window-open/window-close nodes + luxury-move budget, making "one slow move loses the
-race" detectable and drillable.
+The brief's own design starts with packs declaring semantic boundaries and lets the
+runtime supplement them (`archive/brief-v2/rfcs/RFC-0005-phase-and-trajectory-engine.md`).
+Exploration must not turn an optional novel detector into a prerequisite for a curated
+v0. Treat three capabilities separately:
 
-- **What settles it:** (a) define attack-arrival/timing metrics and validate on reviewed
-  Sicilian examples (queue 7); (b) determine the smallest useful deterministic feature
-  set (queue 8); (c) hand-author boundaries/windows for 2–3 real packs and see whether
-  encoding is tractable (feeds Q7/K7).
-- **Decision gate:** timing metrics validate on real examples → `📊 evidence`; if
-  authors can't encode windows without excessive custom code → K7 evidence.
+### Q4a — Author-declared transitions (slice-blocking)
+
+Hand-author opening→middlegame boundaries, timing windows, stop conditions, and plausible
+endgame transitions for 2–3 real packs. The tempo contract
+(`archive/brief-v2/04_OPENING_DRILLS.md`) supplies window-open/window-close nodes and a
+luxury-move budget. Measure author time, reviewer agreement, exceptions, and custom-code
+pressure. This feeds E3, Q7, K7, and C6.
+
+### Q4b — Detector-assisted authoring (helpful, not initially blocking)
+
+Define the smallest deterministic feature set—pawn-structure signatures, material
+thresholds, queen exchange, tablebase eligibility, objective events—and test whether it
+reduces authoring effort without overriding chess judgment. Compare suggestions against
+independent coach labels; record disagreement and allow the detector to abstain.
+
+### Q4c — Fully automatic semantic detection (optional)
+
+Investigate only if Q4a/Q4b reveal a scale or personalization need. It requires a labeled
+ground truth, inter-reviewer agreement, false-transition costs, and an explicit product
+benefit. Failure here does not kill a curated product.
 
 ## Q5 — Opponent long-horizon coherence
 
@@ -93,10 +144,16 @@ producing an incoherent 12-ply plan. The brief proposes a policy mixer (corpus
 likelihood + Maia likelihood + plan compatibility + objective-preservation guard +
 diversity penalty) but explicitly says: benchmark before inventing a complex planner.
 
-- **What settles it:** evaluate Maia-3 plan coherence over 20 plies at 1600/1800/2000
-  (queue 5); compare Maia-3, ChessMimic, and a corpus policy on the same positions
-  (queue 6). This is the most experiment-shaped question — it needs a small harness,
-  which is *research tooling*, not product code (allowed under the no-code law; log it).
+- **What settles it:** use the same reviewed positions and deterministic seeds to compare
+  runnable policies: Maia-3 model sizes/settings, ChessMimic if its released implementation
+  is runnable, a corpus baseline, and weakened Stockfish as the explicit control. Chessformer
+  is the architecture underlying Maia-3, not a separate opponent. Any additional model enters
+  only after its code, weights, license, hardware needs, and reproducibility are recorded.
+  Blind strong reviewers to the policy identity and score plan continuity, tactical sanity,
+  objective relevance, diversity, and human plausibility over 10–20 plies. Record latency,
+  memory, illegal/failure rate, and variance as well as move-match accuracy.
+- **Tooling boundary:** the harness is disposable research tooling, not product code; label
+  and log it accordingly.
 - **Decision gate:** coherence acceptable on raw Maia-3 → strong go signal; acceptable
   only with the mixer → feasibility cost noted; incoherent regardless → K5 evidence,
   and H5 likely fails → the product's opposition story needs rethink.
@@ -109,9 +166,14 @@ one streamed month with filters; Stage 2 = targeted historical slices. Causal in
 rule for trajectories: no stitching a random endgame onto an opening without a real
 transition path or explicit authored jump.
 
-- **What settles it:** mostly settled by adopting the staged design; residual question
-  is whether Stage 0 (explorer API) suffices for the first three packs' spines.
-- **Next action:** none until pack authoring starts (Q7); revisit then.
+- **What settles it:** demonstrate that Stage 0 can source candidate spines and supporting
+  examples for packs A/B/C with acceptable coverage, selection bias, reproducibility, and
+  author effort. Record a provenance chain from each position/transition to source games.
+  Audit separately the rights to raw move scores, annotations, metadata, model weights, and
+  derived aggregates; a PGN obtained from a convenient site is not automatically reusable
+  merely because the moves describe a historical game.
+- **Next action:** run this as part of Q7 pack authoring. The staged strategy is a working
+  hypothesis, not a settled answer; bulk ingestion remains deferred unless Stage 0 fails.
 
 ## Q7 — Content-pack authoring cost
 
@@ -135,17 +197,35 @@ spare tempo") beat eval deltas.
 
 - **What settles it:** write the feedback for one real branch comparison by hand using
   only the evidence vocabulary (features, timing events, objective states) and have the
-  Q7 reviewer judge it (C1's ≥80% acceptance bar). Rides on Q4's feature set and Q7's
-  pack.
+  Q7 reviewer judge it (C1's ≥80% acceptance bar). Specifically, Q8 depends on Q4a's
+  authored semantics and tests whether Q4b's deterministic features add useful evidence;
+  it does not depend on Q4c automation.
+
+## Q9 — Branch/rewind/compare UX and branch growth
+
+Branch storage is ordinary engineering; making preserved attempts understandable is a
+product risk. The user must know where they are, why branches differ, which checkpoint is
+active, and what to compare without facing an analysis-tree cockpit.
+
+- **What settles it before code:** paper or clickable prototypes for desktop and phone,
+  tested on representative two-, four-, and eight-branch sessions. Measure unaided task
+  completion, time to rewind/fork/switch/compare, branch-origin recall, mistaken destructive
+  actions, and comparison comprehension. Test explicit branch budgets, collapsing/grouping,
+  semantic labels, and cleanup/archive behavior.
+- **Decision gate:** the initial target viewport passes a preregistered comprehension bar →
+  E5 evidence; repeated disorientation or comparison overload → simplify the loop before a
+  runtime RFC. Q3 separately decides whether phone is an initial target, so phone failure
+  can defer mobile without killing desktop.
 
 ## Sequencing
 
-1. **Now, parallel-friendly:** Q1 teardowns (queue 1–4) · Q5 Maia harness (queue 5–6) ·
-   Q2 licensing/pricing pass (queue 10).
-2. **Second wave:** Q4 timing metrics + feature set (queue 7–8) → Q7 author pack A
-   (+ recruit reviewer, queue 9) → Q8 feedback trial.
-3. **Then:** synthesis into a go/kill/reposition recommendation on Q1; Q2/Q3 owner
-   decisions; if go — open the first RFCs per `rfc/0000-rfc-process.md`.
+1. **Now, parallel-friendly:** Q1a teardowns (queue 1–4) · Q1b interviews/concept test ·
+   Q2 rights/pricing inventory (queue 10) · Q5 opponent harness (queue 5–6).
+2. **Second wave:** Q4a author-declared transitions + Q7 pack A (+ reviewer, queue 9) ·
+   Q4b feature assistance (queue 7–8) · Q8 feedback trial · Q9 low-fidelity branch UX.
+3. **Then:** evaluate E1–E5 and issue a go/kill/reposition decision on the experimental
+   vertical slice; record Q2/Q3 owner decisions that are mature enough. If go, draft only
+   the slice RFC. Q1c and C1–C7 govern any subsequent product build.
 
 ## Deferred and dropped
 

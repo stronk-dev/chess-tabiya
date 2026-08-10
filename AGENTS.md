@@ -14,7 +14,7 @@ go/kill/reposition decision — see `planning/exploration/plan.md`.
 |---|---|---|
 | Design | `design/` | 3 living docs + `BACKLOG.md` topic ledger + `research/` coverage matrix |
 | RFC | `rfc/` | Process + template only. Active table **empty by rule** — drafting is gated on exploration (see `rfc/0000-rfc-process.md` §Exploration gate) |
-| Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), tracked hypotheses/kill criteria (`gates.md`), append-only `log.md` |
+| Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), exploration/continuation gates and kill criteria (`gates.md`), append-only `log.md` |
 | Docs | `docs/` | Does not exist — nothing has been built; created by the first implementing change |
 | Archive | `archive/brief-v2/` | The frozen v2 brief (59 files, checksummed). Immutable. Evidence base and quarry |
 
@@ -23,8 +23,9 @@ go/kill/reposition decision — see `planning/exploration/plan.md`.
 1. Pick a question from `planning/exploration/plan.md` (or the one you're assigned).
 2. Do the research/analysis. Hands-on beats desk research — the archive's research is
    desk-only (`[P]`) and Phase 0 exists to upgrade or refute it.
-3. Land the result as a dossier in `design/research/` with `[V]/[P]/[M]` provenance on
-   every claim, and add/update its row in the coverage matrix (`design/research/README.md`).
+3. Land the result as a dossier in `design/research/` using the lightweight evidence
+   labels and citation rules in `design/research/README.md`, and add/update its row in
+   the coverage matrix.
 4. Update `planning/exploration/gates.md` if the evidence touches a hypothesis, kill
    criterion, or continuation gate; update statuses in `design/BACKLOG.md`.
 5. Append a dated entry to `planning/exploration/log.md`: what landed, what changed,
@@ -47,8 +48,10 @@ bug"), then continue.
    "No RFC from a GAP row" applies to open questions, not just missing research.
 2. **`archive/` is immutable.** Supersede in living tiers; never edit, never cite
    `MASTER_BRIEF.md` (it's a concatenation — cite the numbered files).
-3. **Every factual claim carries a URL or an explicit `[M]`** (model knowledge).
-   Provenance axes per `design/research/README.md`.
+3. **Every factual claim in a research dossier is traceable.** Use an inline URL or
+   living/archive source reference plus `[V]`/`[P]`, or mark unsupported model knowledge
+   `[M]`. Living design synthesis may cite a source once for a clearly bounded paragraph
+   or section. Rules: `design/research/README.md`.
 4. **Every idea gets a ledger row** in `design/BACKLOG.md` the moment it's uttered.
 5. **Kill-criterion evidence is logged and escalated, never rationalized away.** Finding
    evidence against the thesis is the job working, not a problem.
@@ -58,6 +61,10 @@ bug"), then continue.
    validated evidence but may not create ungrounded strategic claims or grade moves.
    "Stockfish: +0.54 / Maia: 31% / LLM: 'Ne5 centralizes the knight'" is a dashboard,
    not a drill — the named anti-pattern this product must not become.
+
+Research harnesses and non-production UX prototypes are permitted before an RFC only
+under `rfc/0000-rfc-process.md` §Exploration gate. Label them disposable, tie them to a
+ledger question, and log them; they are evidence instruments, not implementation.
 
 ## Rejected — don't reintroduce
 
