@@ -63,11 +63,16 @@ bug"), then continue.
    `[M]`. Living design synthesis may cite a source once for a clearly bounded paragraph
    or section. Rules: `design/research/README.md`.
 4. **Every idea gets a ledger row** in `design/BACKLOG.md` the moment it's uttered.
-5. **Kill-criterion evidence is logged and escalated, never rationalized away.** Finding
+5. **Design tier is intent tier.** `design/` docs are authored by the owner or
+   by claude on the owner's ruling; implementing agents propose changes through
+   an RFC or a BACKLOG row, never by writing design docs directly (RFC-0000
+   agent rule). Gate definitions are mirrored into
+   `planning/exploration/gates.md` so the gate surface is never split.
+6. **Kill-criterion evidence is logged and escalated, never rationalized away.** Finding
    evidence against the thesis is the job working, not a problem.
-6. **Logs are append-only.** `planning/exploration/log.md` entries are never edited or
+7. **Logs are append-only.** `planning/exploration/log.md` entries are never edited or
    deleted.
-7. **No LLM-manufactured chess truth** (standing law from ADR-0005): LLMs may render
+8. **No LLM-manufactured chess truth** (standing law from ADR-0005): LLMs may render
    validated evidence but may not create ungrounded strategic claims or grade moves.
    "Stockfish: +0.54 / Maia: 31% / LLM: 'Ne5 centralizes the knight'" is a dashboard,
    not a drill — the named anti-pattern this product must not become.

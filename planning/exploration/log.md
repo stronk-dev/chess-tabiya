@@ -429,3 +429,27 @@
   information architecture, and B1–B8 breadth-completion gate. Earlier
   “deferred because singleplayer first” labels no longer remove Stream,
   Academy, or external-handoff Arena from the product architecture.
+
+## 2026-08-11 (claude) — breadth program reordered by evidence
+
+- Owner accepted the track-check recommendation. Applied: (1) RFC program
+  reordered — **Evidence/explanation moves from #4 to #2**, directly after the
+  shell, because the walkthrough's own finding (comparison shows difference
+  without explaining consequence) points there, because explanation is
+  machinery rather than content, and because K4/K6 live there and cheap risks
+  are tested early; **Live moves from #6 to last** since none of it is
+  validatable by use without other humans and its BACKLOG revival conditions
+  still govern. (2) B1–B8 mirrored into `gates.md` — gate truth was split
+  across two tiers. (3) The **Lucas Chess failure mode** (free, local,
+  all-phases, fragmented into a mode menu with no unifying protocol — our own
+  competitor research) named explicitly in both docs as the watch item for
+  this strategy: surfaces accumulating while B4 stays unmet IS K6/K4 evidence
+  accruing by construction.
+- Process note: `design/03-product-breadth.md` was authored by the implementing
+  agent, crossing the tier line (RFC-0000 agent rule). Content retained — the
+  owner ruled the direction and the doc is honest about not being
+  implementation authority — but AGENTS.md gains an explicit law: design tier
+  is intent tier; implementers propose via RFC or BACKLOG row.
+- Track-check verdict recorded: research complete for this phase, RFC
+  discipline holding (3 lifecycles closed, reviews catching real defects),
+  walkthrough evidence honest including its negative finding.
