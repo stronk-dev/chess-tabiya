@@ -253,3 +253,12 @@
 - No screenshot was captured with the textual owner report. The direct
   walkthrough notes are retained as the evidence; the missing screenshot does
   not erase the observed friction or hold the mechanical walkthrough open.
+
+## 2026-08-11 (codex, completion protocol)
+
+- Verified `docs/drill-client.md` as the canonical, standalone account of the
+  implemented server orchestration, browser plumbing/screens, acceptance flow,
+  deployment packaging, measured envelope, and qualified owner walkthrough.
+- Set the RFC to implemented and archived the RFC plus this planning record in
+  the same lifecycle commit. The accepted app-shell RFC now amends the frozen
+  parent rather than a still-living implementation spec.

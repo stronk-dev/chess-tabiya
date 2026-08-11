@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent |
 |---|---|---|
 | `0000-rfc-process.md` | accepted | — |
-| `drill-client.md` | implementing | — |
+| `app-shell.md` | accepted | `archive/drill-client.md` |
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in
 `planning/exploration/log.md`): E1 met, E2 advisory, E3/E4/E5 accepted as in-flight
@@ -32,6 +32,7 @@ name the B-gates they complete before code begins.
 | `archive/branch-runtime.md` | implemented | `docs/branch-runtime.md` |
 | `archive/drill-pack-format.md` | implemented | `docs/drill-pack-format.md` |
 | `archive/engine-workers.md` | implemented | `docs/engine-workers.md` |
+| `archive/drill-client.md` | implemented | `docs/drill-client.md` |
 
 ## The archive sketches are quarry, not RFCs
 

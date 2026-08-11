@@ -19,13 +19,13 @@ opposition; drill packs supply the concepts, checkpoints, and objectives.
 
 **Playable vertical-slice phase (since 2026-08-12).** Exploration verified the
 whitespace hands-on: no reviewed product preserves attempts, compares them, or explains
-why an objective flipped. The branch runtime, drill-pack format, and engine-worker RFCs
-are implemented. The accepted drill-client RFC now has its server orchestration, Svelte
+why an objective flipped. The branch runtime, drill-pack format, engine-worker, and
+drill-client RFCs are implemented. The drill client has its server orchestration, Svelte
 episode screens, mock-backed browser acceptance, and Dockerized Maia/Stockfish packaging;
 the owner's real-engine walkthrough found the fork/rewind core promising and exposed the
-missing instructional layer plus concrete comparison/layout friction. Its completion
-review remains. Product risks still include content authoring cost and branch-UX
-comprehension in human use.
+missing instructional layer plus concrete comparison/layout friction. The accepted app-shell
+RFC begins the breadth-first rewrite. Product risks still include content authoring cost
+and branch-UX comprehension in human use.
 
 The whole state of that decision lives in **`planning/exploration/plan.md`** (the
 question ledger) and **`planning/exploration/gates.md`** (hypotheses, kill criteria,

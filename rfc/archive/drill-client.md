@@ -1,6 +1,6 @@
 # RFC: Drill Client (playable vertical slice)
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/02-product-shape.md` §UX commitments (layout, keyboard-first, anti-contamination, latency budgets), `design/01-training-model.md` (episode stages, feedback timing)
@@ -237,3 +237,7 @@ era" — this RFC is that era; folding is per that ruling, now cited.
 - 2026-08-11: Owner real-engine walkthrough completed with a qualified
   go-to-iterate verdict; follow-up feedback and UI agenda recorded. Completion
   protocol remains.
+- 2026-08-11: canonical behavior verified in `docs/drill-client.md`; lifecycle
+  completion protocol run → **status → implemented** and archived. The
+  accepted app-shell RFC amends the shell, run-index, lease-visibility,
+  capability, and keyboard behavior next.
