@@ -407,3 +407,25 @@
 - Ledgered the concrete follow-up surfaces: checkpoint/compare explanation
   sidebar with selectable validated evidence, compare-all defaults and
   multi-branch overview, and viewport-contained desktop app shell.
+
+## 2026-08-11 (owner ruling) — full product breadth before content
+
+- Corrected the implementation strategy: “content last” never meant one narrow
+  pack-shaped vertical slice followed by local polish. It means implement the
+  full feature spectrum solidly first, use thin/example fixtures to exercise
+  it, then iterate rapidly on authored content.
+- Breadth includes far more than the four solo drill modes: Just Play and
+  from-position learning; opening/middlegame/endgame/trajectory navigation;
+  Twitch/streamer and academy contexts; Position Arena; prediction/simulation;
+  review/deep analysis; progress/SRS; sharing; creation/import/review; and the
+  complete authored/engine/Maia/corpus/tablebase/LLM evidence stack.
+- The UI must accommodate this whole product now. The current pack-picker plus
+  single scrolling drill screen is a useful mechanism demo, not an acceptable
+  application architecture.
+- Branch scoring and automatic compare inclusion are later optimization. First
+  every branch can be selected, compared, explained, replayed, and shared
+  correctly; then scoring can choose defaults while manual checkboxes remain.
+- Landed `design/03-product-breadth.md` as the canonical surface map,
+  information architecture, and B1–B8 breadth-completion gate. Earlier
+  “deferred because singleplayer first” labels no longer remove Stream,
+  Academy, or external-handoff Arena from the product architecture.

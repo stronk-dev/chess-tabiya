@@ -36,7 +36,7 @@ continuation gates).
 | Where | What |
 |---|---|
 | `planning/exploration/` | **Start here.** The go/kill job: questions, gates, append-only log |
-| `design/` | Living design docs (`00-thesis`, `01-training-model`, `02-product-shape`) + `BACKLOG.md` topic ledger |
+| `design/` | Living thesis, training model, product shape, and full-spectrum breadth/IA docs + `BACKLOG.md` topic ledger |
 | `design/research/` | Research dossiers, coverage matrix, source index, competitor matrix |
 | `rfc/` | Active accepted implementation contracts and RFC lifecycle |
 | `docs/` | Canonical description of the implemented development foundation |

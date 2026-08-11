@@ -58,7 +58,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Maia-3 variants vs ChessMimic (if runnable) vs corpus policy vs weakened-Stockfish control, same positions/seeds | Q5, H5 | **GAP** (queue 6) | — |
 | Author-declared transitions/timing windows on reviewed examples | Q4a, Q7, E3 | **GAP** (queue 7) | — |
 | Smallest useful deterministic feature set + coach agreement | Q4b, Q8 | **GAP** (queue 8) | — |
-| Automatic phase detection value/ground truth | Q4c | deferred unless Q4a/Q4b expose need | — |
+| Automatic phase/structure recognition ground truth for Just Play | Q4c, B2, B4 | **GAP** — owner breadth ruling makes honest detection/retrieval/abstention load-bearing for Just Play, while curated packs retain authored boundaries | — |
 | Strong reviewer recruitment for packs A/B/C | Q7, C1 | **GAP** (queue 9) | — |
 | Dependency/model/content licensing across source, deployment, monetization, and rights axes 🟡 | Q2, Q6 | **GAP** (queue 10) | — |
 | Paid-competitor pricing/positioning | Q2 | **GAP** | — |

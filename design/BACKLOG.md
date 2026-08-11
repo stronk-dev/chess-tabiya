@@ -27,7 +27,7 @@ Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 | Objectives & grading (objective state machine: active→preserved/degraded/failed/achieved/transitioned) | 📐 | `arch/rfcs/RFC-0004` sketch, `arch/schemas/drill_run.schema.json` |
 | Author-declared phase transitions and timing windows | 📐 · feasibility = exploration **Q4a** | `arch/rfcs/RFC-0005` sketch, `arch/04` |
 | Deterministic phase-feature assistance for authors | 📐 · feasibility = exploration **Q4b** | `arch/rfcs/RFC-0005` sketch |
-| Fully automatic semantic phase detection | 💡 optional · value = exploration **Q4c** | `arch/rfcs/RFC-0005` sketch |
+| Automatic phase/structure recognition and re-anchoring | 💡 · required for Just Play B2/B4, not authoritative over curated pack boundaries · feasibility = exploration **Q4c** | `03-product-breadth.md`, `arch/rfcs/RFC-0005` sketch |
 | Tempo contract / timing windows (window opens/closes, luxury-move budget) | 📐 · validation = exploration **Q4a/Q4b** | `arch/04`, `arch/09` |
 | Evidence-backed feedback (claims + evidence refs + uncertainty; timing events over eval deltas) | 📐 · quality = exploration **Q8** | `arch/rfcs/RFC-0006` sketch, `arch/09`, `arch/schemas/feedback_packet.schema.json` |
 | Engine integration — Stockfish judge, Maia workers, Syzygy adapter, responsibility table | 📐🔬 | `arch/08`, `arch/12` |
@@ -40,6 +40,30 @@ Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 | Vertical slice (deterministic mock opponent, acceptance scenario) | 📐 · drafting gated by E1–E5 | `arch/implementation/vertical_slice_spec.md` |
 | Benchmark plan (latency + coherence measurement) | 📐 | `arch/implementation/benchmark_plan.md` |
 | Validation protocol — H1–H5, kill criteria, continuation gates | 📐 → **lifted into living tier** | `planning/exploration/gates.md` |
+
+## Breadth-first product surfaces (owner-ratified 2026-08-11)
+
+These are one product, not optional bolt-ons behind a one-pack drill screen.
+Each must reach a minimal real end-to-end workflow before content depth and
+branch-scoring polish become the main work. Canonical matrix:
+`03-product-breadth.md`.
+
+| Surface | Breadth requirement | Home |
+|---|---|---|
+| Just Play — normal/from-position play with branch-and-learn as the game develops | Pack-optional runs, phase/structure recognition, honest dynamic evidence, rewind/fork/compare/replay | `03-product-breadth.md` |
+| Phase-oriented product discovery | Opening/early game, middlegame, endgame, and trajectory navigation exists independently of catalog size | `03-product-breadth.md`, `01-training-model.md` |
+| Streamer/Twitch mode | Real host board + chat voting + overlay + rewind/branch/compare scenario | `03-product-breadth.md` |
+| Academy/coached sessions | Host/participant/spectator roles, voting/proposals, replay and session-to-pack distillation | `03-product-breadth.md`, `arch/11` |
+| Position Arena | Real external challenge/invite + two-leg/PGN return workflow before native matchmaking depth | `03-product-breadth.md`, `arch/11`, `arch/rfcs/RFC-0007` |
+| Learn/return system | History/resume, progress, episode/concept SRS, related retries, optional recommendations | `03-product-breadth.md`, `01-training-model.md` |
+| Episode/concept SRS | Schedule whole rehearsal episodes and related-position retries rather than memorized moves | B7, `03-product-breadth.md`, `01-training-model.md §Repetition` |
+| Optional personal-history recommender | Recommend relevant packs/positions without making game import mandatory or restoring the rejected v1 identity | B7, ADR-0003, `03-product-breadth.md` |
+| Create/curate system | Pack studio, study/repertoire/game/session imports, provenance, review and regression workflow | `03-product-breadth.md`, `arch/product/content_pack_authoring.md` |
+| Automatic candidate-pack mining | Real corpus pipeline emits unpublished candidates into the author/review workflow; never auto-publishes lessons | B6, `03-product-breadth.md`, `arch/08` |
+| Share/spectate/deep links | Drill/run URLs, read-only projections, export/import and spectator-safe views | `03-product-breadth.md` |
+| Drill-in-a-URL | Address a FEN/objective or pack/run directly for coaches, forums, stream sessions, and handoff between contexts | B8, `03-product-breadth.md` |
+| Full evidence/explanation surface | Authored + Stockfish + Maia + corpus/history + Syzygy + features + evidence-bound LLM, timing controlled | `03-product-breadth.md`, `arch/09` |
+| Full-spectrum application shell | Play/Learn/Review/Live/Create/Library/Settings with shared board/run/branch/evidence primitives | `03-product-breadth.md`, `02-product-shape.md` |
 
 ## Open shape questions (💡 = genuinely undecided; owned by exploration)
 
@@ -77,20 +101,11 @@ Archive homes are cited as `arch/NN §…` = `archive/brief-v2/NN_….md`.
 | Open pack format as the ecosystem contribution | The value-to-chess-ecosystem may be the openly-specified drill-pack format + runtime (what PGN/EPD did for games), not our app's user count. Reframes "low expected usage" from weakness to irrelevance: others embed/extend the format. Affects Q2 content-rights axis and the novelty story | 💡 | Q2, `00-thesis.md` candidate amendment |
 | Small-n evaluation methodology | The validation design (H1–H4, C2–C4) assumes user cohorts we will not have ("I don't expect much usage"). Honest alternatives: n-of-1 self-experiments with preregistered protocols, coach expert review as the primary quality gate, delayed self-testing. Without this, Q1c/C2–C4 are unfalsifiable theater | 💡 → must be settled before E-gate thresholds are preregistered | `gates.md`, Q1c |
 
-## Deferred (designed or named, deliberately parked — revival conditions in `planning/exploration/plan.md` §Deferred)
+## Deferred implementation depth (surfaces remain in breadth architecture)
 
 | Topic | Status | Home |
 |---|---|---|
-| Streamer/Twitch mode — chat votes the plan, streamer plays it out, rewind/compare on stream | 💡 owner idea 2026-08-12. Reassessment of academy economics: viewers watch the board via the stream (no clients/sync/accounts), votes arrive via Twitch chat (trivial IRC/tmi integration, "Twitch Plays X" pattern), and streamers are demand not supply. Architecturally: singleplayer runtime + chat-vote aggregator + overlay — one real client. Also the distribution channel that fits the free-OSS posture. Revival condition (weaker than academy's): singleplayer loop validated and fun | `01-training-model.md`, Q1b (format evidence), academy row below |
-| SRS over episodes/concepts, not moves | 💡 2026-08-12 steal from Chessable: best-in-class retention scheduling aimed at cards; nobody schedules *episodes* ("held the Philidor 3 days ago → today hold it vs a different defense"). Is the concrete mechanism behind the skill/progress-model + return-loop gap row | skill/progress row, `01-training-model.md §Repetition` |
-| Drill-in-a-URL (FEN + objective deep links) | 💡 2026-08-12 steal from CET's `/fen/<FEN>/<target>` links: packs and single drills addressable by URL — shareable by coaches/forums, trivially cheap, composes with pack interop | Q7, `02-product-shape.md` |
-| Academy mode — IM/GM-led live sessions: stage of players voting on moves, leader controls snapshotting/branching | 💡 owner idea 2026-08-12, deferred by owner-framed scope question ("or singleplayer only?") answered: singleplayer first. It is the rehearsal loop performed live by a coach — strong thesis confirmation, but a different product operationally (multiplayer sync, roles, and above all titled-player *supply*, which free/self-hosted posture can't recruit). Lichess Studies already give academy-lite boards. Two extracted non-deferred dividends: (a) design constraint — runs/branches must be session-replayable and distillable into packs (session→pack authoring pipeline, attacks Q7/K10; event-sourced run model already ~fits; future pack RFC must not break it); (b) E2 experiment — run ONE manual academy session (coach + players + Lichess study + our loop protocol), zero code, tests E2 + session→pack distillation at once. Revival condition: E-gates passed + a coach partner or community actually exists | `01-training-model.md`, Q7, E2, `arch/11` (Position Arena precedent) |
-
-| Topic | Status | Home |
-|---|---|---|
-| Position Arena (human vs human from curated position, two-leg, swap colors) | 📐 deferred | `arch/rfcs/RFC-0007` sketch, `arch/11`, `arch/schemas/position_arena.schema.json` |
-| Automatic candidate-pack mining from corpus | 📐 deferred (brief phase 4; unpublished until review) | `arch/08` |
-| Personal game-history pack recommender | 📐 deferred (ADR-0003: optional, never identity) | `arch/01 §Why personal history is optional` |
+| Native Position Arena matchmaking/clocks/moderation (external handoff remains a breadth requirement) | 📐 deferred depth | `arch/rfcs/RFC-0007` sketch, `arch/11`, `arch/schemas/position_arena.schema.json` |
 | Bulk corpus ingestion (Stage 1+: streamed months, historical slices) | 📐 deferred | `arch/08`, `arch/13` |
 
 ## Provisional decisions (the archive ADRs — held, with revisit triggers)

@@ -60,8 +60,20 @@ save tests practical resourcefulness from a worse one.
 | Outcome Drill | endgame | play to result or triviality vs exact/human resistance | result preservation, not exact moves |
 | Trajectory Drill | cross-phase | opening → characteristic middlegame → plausible endgame on one causal spine | per-phase, linked by provenance |
 
-Position Arena (two humans, curated position, swap colors) is deferred — see
-`planning/exploration/plan.md` §Deferred.
+Position Arena (two humans, curated position, swap colors) previously sat
+outside v0. The owner breadth ruling in `03-product-breadth.md` supersedes that
+surface-level deferral: external-handoff Arena, Twitch/stream, academy, and
+Just Play must fit the shared product and reach a minimal real workflow before
+content depth. Native matchmaking remains later implementation depth.
+
+## Entry contexts are not drill modes
+
+The four mode contracts describe learning behavior, not the only ways to enter
+the product. A user may select a curated pack, start from FEN/PGN/study, enter a
+live or human session, or choose **Just Play** and branch/learn as the game
+develops. Just Play requires phase/structure recognition, retrieved evidence,
+and pack-optional objectives; it must not fake authored certainty when none is
+available. All contexts reuse the episode, branch, evidence, and replay model.
 
 ## Target mistake classes
 

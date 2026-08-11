@@ -20,6 +20,14 @@ The core interaction is not "show me the engine move." It is:
 
 > commit → play the consequence → rewind → branch → compare → replay under different resistance.
 
+That interaction is a shared platform primitive, not a single pack screen.
+Owner ruling 2026-08-11 sets **breadth before content depth**: it must support
+solo and Just Play sessions, every chess phase, live/stream/academy and human
+contexts, review, creation, return/progress, sharing, and the complete evidence
+stack before authored catalog depth and scoring polish become the main work.
+The canonical surface map and app-shell contract are
+`design/03-product-breadth.md`.
+
 ```text
 OPENING      recall the theory · explain or choose the underlying idea ·
              continue beyond book into the characteristic structure
@@ -95,6 +103,11 @@ build the drill runtime and content format first." Worth building for self-hoste
 9/10. SaaS business case: 5/10 (separate question). Weakest scored dimensions:
 automatic strategic feedback 4/10, opponent coherence over 10–20 plies 6/10 — these are
 exploration Q8 and Q5. Full scorecard: `archive/brief-v2/00_CORRECTED_VERDICT.md`.
+
+**2026-08-11 — owner sequencing amendment.** The narrow prototype passed as a
+mechanism demo, but “content last” is now explicit: complete the full product
+breadth in `03-product-breadth.md` before catalog depth. This supersedes any
+reading of the 2026-08-09 line that would put pack A or one-mode polish next.
 
 This section is amended (dated, superseding lines kept) as
 `planning/exploration/gates.md` statuses change.

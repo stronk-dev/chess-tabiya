@@ -23,7 +23,7 @@ record). Evidence lands as dossiers in `design/research/`.
 | Q3 | Mobile: scope or non-goal? | 💡 | — |
 | Q4a | Can authors declare useful phase transitions and timing windows? | 💡 | E3, K7, C6 |
 | Q4b | Can deterministic features assist authors reliably? | 💡 | K7 |
-| Q4c | Is fully automatic semantic phase detection useful enough to justify itself? | 💡 · optional | — |
+| Q4c | Can automatic phase/structure recognition support Just Play without pretending certainty? | 💡 · breadth-blocking for Just Play; optional for curated packs | B2, B4 |
 | Q5 | Can a runnable human/corpus policy stay coherent over 10–20 plies? | ✅ settled-go (validation-by-use, smoke 2026-08-12; revisit only if drill play contradicts) | H5 supported |
 | Q6 | How do we use historical games without the ingestion-first trap? | 💡 | — |
 | Q7 | What does a reviewed drill pack cost to author? | 💡 | K10, K7, C6 |
@@ -140,11 +140,16 @@ thresholds, queen exchange, tablebase eligibility, objective events—and test w
 reduces authoring effort without overriding chess judgment. Compare suggestions against
 independent coach labels; record disagreement and allow the detector to abstain.
 
-### Q4c — Fully automatic semantic detection (optional)
+### Q4c — Automatic recognition for Just Play
 
-Investigate only if Q4a/Q4b reveal a scale or personalization need. It requires a labeled
-ground truth, inter-reviewer agreement, false-transition costs, and an explicit product
-benefit. Failure here does not kill a curated product.
+Curated packs do not need automatic truth: their authored phase/structure boundaries stay
+authoritative and deterministic features may assist. The breadth ruling makes a separate
+capability load-bearing for **Just Play**: recognize opening/book state, broad phase,
+structure, transition, and candidate learning loci as an uncurated game develops; retrieve
+relevant evidence or concepts; expose confidence; and abstain rather than inventing a
+lesson. It requires labeled ground truth, inter-reviewer agreement, false-transition costs,
+and explicit fallback behavior. Failure blocks B2/B4's Just Play promise but does not
+invalidate curated drills.
 
 ## Q5 — Opponent long-horizon coherence
 
@@ -228,19 +233,30 @@ active, and what to compare without facing an analysis-tree cockpit.
 
 ## Sequencing
 
-1. **Now, parallel-friendly:** Q1a teardowns (queue 1–4) · Q1b interviews/concept test ·
-   Q2 rights/pricing inventory (queue 10) · Q5 opponent harness (queue 5–6).
-2. **Second wave:** Q4a author-declared transitions + Q7 pack A (+ reviewer, queue 9) ·
-   Q4b feature assistance (queue 7–8) · Q8 feedback trial · Q9 low-fidelity branch UX.
-3. **Then:** evaluate E1–E5 and issue a go/kill/reposition decision on the experimental
-   vertical slice; record Q2/Q3 owner decisions that are mature enough. If go, draft only
-   the slice RFC. Q1c and C1–C7 govern any subsequent product build.
+**Owner sequencing ruling, 2026-08-11:** the next program is breadth completion,
+not pack A, a narrow feedback sidebar, or polish of the existing fixture. Sweep
+and implement the complete surface in `design/03-product-breadth.md` with thin,
+honest fixtures. Twitch/stream, academy, Position Arena handoff, Just Play,
+phase-oriented modes, creation, return/progress, sharing, and every evidence
+layer must fit the app shell and reach a real scenario. Content depth follows;
+branch scoring/default inclusion and similar optimization follows functional
+breadth.
+
+1. **Now:** close the drill-client lifecycle, audit `design/03-product-breadth.md`
+   against every archive/backlog surface, and cut a foundations-first RFC
+   program across B1–B8. Do not let one mode own the global shell.
+2. **Breadth implementation:** make every surface minimally real with explicit
+   fixtures and acceptance scenarios. Shared primitives land before their
+   consumers; visible entry points do not ship as fake placeholders.
+3. **Parallel research:** Q1b/Q1c, Q3/Q4, Q6/Q8/Q9 and the continuation gates
+   continue collecting evidence without redefining the breadth order.
+4. **After B1–B8:** author catalog depth, then add branch scoring/automatic
+   selection, personalization, and flow-specific polish while retaining manual
+   control.
 
 ## Deferred and dropped
 
 | Item | State | Why | Revival condition |
 |---|---|---|---|
-| Position Arena (human vs human from curated position) | 🟡 deferred | Brief phase 5; needs matchmaking; nothing else depends on it | Product build reaches phase 5 |
+| Native Position Arena matchmaking/clocks/moderation | 🟡 deferred depth | External challenge/invite + PGN-return Arena is required by B5; only native infrastructure stays deferred | External Arena use proves demand for native play |
 | Bulk corpus ingestion (Stage 1+) | 🟡 deferred | Ingestion-first is a rejected pattern; Stage 0 suffices for exploration | Q6 revisit shows explorer API insufficient for pack spines |
-| Automatic candidate-pack mining | 🟡 deferred | Brief phase 4; depends on validated manual authoring first | C6 met |
-| Personal game-history pack recommender | 🟡 deferred | v1's identity error; optional recommender at most | Core product validated and shipped |

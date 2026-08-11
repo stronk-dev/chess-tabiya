@@ -5,6 +5,21 @@ surface) are mostly **open** and owned by exploration Q2/Q3/Q9. Living successor
 shape-relevant parts of `archive/brief-v2/02_MARKET_AND_EXISTING_SOLUTIONS.md` and
 `10_UX_BRANCHING_AND_REWIND.md`.
 
+## Product order — SETTLED (owner ruling 2026-08-11)
+
+Tabiya is built **breadth first, content second, optimization third**. The
+drill-client vertical slice incorrectly allowed one schema-example pack to
+define the entire shell. Packs are one entry point beside Just Play, phase
+discovery, from-position play, review, live/stream/academy contexts, creation,
+and the user's library.
+
+The exhaustive surface map, app-shell information architecture, and
+breadth-complete gates are canonical in `03-product-breadth.md`. Earlier v0 or
+phase deferrals do not silently remove a user-facing surface from architectural
+planning. A surface can be excluded only by a fresh owner ruling; otherwise it
+must reach a minimal real end-to-end implementation before content becomes the
+main work.
+
 ## Product posture — OPEN (exploration Q2)
 
 Four decisions must not be collapsed into a "paid vs OSS vs self-hosted" choice:

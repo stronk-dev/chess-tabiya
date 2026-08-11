@@ -4,7 +4,8 @@
 the consequences, then rewind and try again. The core loop is
 commit → play the consequence → rewind → branch → compare → replay under different resistance.
 
-**Phase: foundation implementation** (since 2026-08-12). The branch runtime is
+**Phase: breadth architecture after foundation implementation** (since
+2026-08-11). The branch runtime is
 implemented and documented in `docs/branch-runtime.md`; drill-pack format v0.2 is
 implemented and documented in `docs/drill-pack-format.md`; engine workers are
 implemented and documented in `docs/engine-workers.md`. The drill-client RFC is
@@ -20,7 +21,7 @@ sidecar. The exploration job continues alongside (E4 harness, gates) — see
 
 | Tier | Directory | Current state |
 |---|---|---|
-| Design | `design/` | 3 living docs + `BACKLOG.md` topic ledger + `research/` coverage matrix |
+| Design | `design/` | 4 living docs (including the breadth/IA contract) + `BACKLOG.md` topic ledger + `research/` coverage matrix |
 | RFC | `rfc/` | Drill client implementing; three implemented foundations frozen in `rfc/archive/` |
 | Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), exploration/continuation gates and kill criteria (`gates.md`), append-only `log.md` |
 | Docs | `docs/` | Canonical description of what exists; development foundation now documented |
@@ -46,9 +47,10 @@ bug"), then continue.
 
 1. `planning/exploration/plan.md` — the questions and their status (5 min)
 2. `design/00-thesis.md` — what the product is and the current verdict (5 min)
-3. `planning/exploration/gates.md` — what would kill or confirm it (5 min)
-4. `rfc/0000-rfc-process.md` — the tiers and the exploration gate (5 min)
-5. Archive files cited by your question, as needed.
+3. `design/03-product-breadth.md` — complete surface map, IA, and B1–B8 gate
+4. `planning/exploration/gates.md` — what would kill or confirm it (5 min)
+5. `rfc/0000-rfc-process.md` — the tiers and the exploration gate (5 min)
+6. Archive files cited by your question, as needed.
 
 ## Non-negotiable laws
 

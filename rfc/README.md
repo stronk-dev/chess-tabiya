@@ -18,6 +18,13 @@ exploration-to-slice gate in `planning/exploration/gates.md` passes, or an owner
 the slice passes the later continuation gates. See the "Exploration gate" section of
 `0000-rfc-process.md`.
 
+**Breadth sequencing ruling, 2026-08-11:** the owner opened design and RFC
+planning for the complete B1–B8 product surface in
+`design/03-product-breadth.md`. This does not waive RFC review or authorize
+unspecified implementation; it supersedes the assumption that the next work is
+content for one narrow slice. Breadth RFCs must preserve the global shell and
+name the B-gates they complete before code begins.
+
 ## Archive
 
 | RFC | Status | Canonical docs link |
