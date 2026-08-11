@@ -89,6 +89,9 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
     (await page.evaluate(() => performance.now())) - branchStart;
   await page.getByRole("button", { name: /Switch to branch 2: quiet setup/ }).click();
   await expect(page.locator(".rail li.active strong")).toHaveText("quiet setup");
+  await expect(page.getByText(/evidence waiting/)).toHaveCount(0, {
+    timeout: 5_000,
+  });
 
   await page.locator("main.drill").focus();
   await page.keyboard.press("Tab");
@@ -97,6 +100,14 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   ).toBeVisible();
   await expect(page.locator(".boards article")).toHaveCount(2);
   await expect(page.getByRole("heading", { name: "quiet setup" })).toHaveCount(2);
+  await expect(page.getByText("active → achieved")).toBeVisible();
+  await expect(
+    page.getByText("Checkpoint reached: Critical race resolved."),
+  ).toBeVisible();
+  await expect(page.locator(".fork-marker")).toHaveText("Fork");
+  await expect(
+    page.locator('.evidence-cell[data-ply-offset="0"] .evidence-entry'),
+  ).toHaveCount(2);
 
   await page
     .getByRole("heading", { name: "Same decision, two consequences." })

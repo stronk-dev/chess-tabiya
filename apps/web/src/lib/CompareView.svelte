@@ -1,14 +1,26 @@
 <script lang="ts">
-  import type { BranchComparison, DrillRun } from "@chess-tabiya/runtime";
+  import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+  import type {
+    BranchComparison,
+    ComparisonEvidenceEntry,
+    DrillRun,
+    ObjectiveTimelineEntry,
+  } from "@chess-tabiya/runtime";
   import { onMount } from "svelte";
 
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
   import type { StartSide } from "./board-model.js";
+  import { renderEvidenceRef, type EvidenceSentence } from "./evidence-sentences.js";
   import { comparisonNode } from "./screen-model.js";
+
+  interface GroundedObjectiveEntry extends ObjectiveTimelineEntry {
+    readonly grounds: readonly EvidenceSentence[];
+  }
 
   interface Props {
     run: DrillRun;
+    pack: DrillPackDefinition;
     comparison: BranchComparison;
     branchLabels: readonly [string, string];
     startSide: StartSide;
@@ -17,12 +29,66 @@
     onClose: () => void;
   }
 
-  let { run, comparison, branchLabels, startSide, step, onStep, onClose }: Props =
-    $props();
+  let {
+    run,
+    pack,
+    comparison,
+    branchLabels,
+    startSide,
+    step,
+    onStep,
+    onClose,
+  }: Props = $props();
   let nodeA = $derived(comparisonNode(run, comparison, step, "a"));
   let nodeB = $derived(comparisonNode(run, comparison, step, "b"));
   let maxStep = $derived(comparison.pairs.length);
+  let timelineA = $derived(groundedTimeline(comparison.objectiveTimelines.a));
+  let timelineB = $derived(groundedTimeline(comparison.objectiveTimelines.b));
+  let maximumEvidenceOffset = $derived(
+    Math.max(
+      comparison.pairs.length,
+      0,
+      ...comparison.evidence.a.map((entry) => entry.plyOffset),
+      ...comparison.evidence.b.map((entry) => entry.plyOffset),
+    ),
+  );
+  let trajectoryOffsets = $derived(
+    Array.from({ length: maximumEvidenceOffset + 1 }, (_, offset) => offset),
+  );
   let heading: HTMLHeadingElement;
+
+  function groundedTimeline(
+    entries: readonly ObjectiveTimelineEntry[],
+  ): readonly GroundedObjectiveEntry[] {
+    return entries.map((entry) => {
+      if (entry.evidenceRefs.length === 0) {
+        throw new TypeError(
+          `Comparison objective transition at event ${entry.eventSeq} has no evidence references`,
+        );
+      }
+      return {
+        ...entry,
+        grounds: entry.evidenceRefs.map((reference) =>
+          renderEvidenceRef(reference, pack),
+        ),
+      };
+    });
+  }
+
+  function evidenceAt(
+    entries: readonly ComparisonEvidenceEntry[],
+    plyOffset: number,
+  ): readonly ComparisonEvidenceEntry[] {
+    return entries.filter((entry) => entry.plyOffset === plyOffset);
+  }
+
+  function scoreLabel(entry: ComparisonEvidenceEntry): string {
+    if (entry.score.kind === "mate") {
+      return `M${entry.score.movesTo >= 0 ? "+" : ""}${entry.score.movesTo}`;
+    }
+    const pawns = entry.score.value / 100;
+    return `${pawns >= 0 ? "+" : ""}${pawns.toFixed(2)}`;
+  }
 
   onMount(() => heading?.focus());
 </script>
@@ -99,14 +165,69 @@
     </HonestControl>
   </div>
 
+  <section class="trajectory" aria-labelledby="trajectory-title">
+    <h3 id="trajectory-title">Recorded engine evaluation</h3>
+    <p>Scores use White's perspective and align both branches on the fork.</p>
+    <div
+      class="trajectory-grid"
+      style={`--trajectory-columns: ${trajectoryOffsets.length}`}
+    >
+      <span class="axis-corner">Aligned ply</span>
+      {#each trajectoryOffsets as offset}
+        <span
+          class:fork-marker={offset === 0}
+          class="axis-point"
+          data-ply-offset={offset}
+        >{offset === 0 ? "Fork" : `+${offset}`}</span>
+      {/each}
+      <span class="trajectory-label">{branchLabels[0]}</span>
+      {#each trajectoryOffsets as offset}
+        <div
+          class:fork-cell={offset === 0}
+          class="evidence-cell"
+          data-side="a"
+          data-ply-offset={offset}
+        >
+          {#each evidenceAt(comparison.evidence.a, offset) as entry}
+            <span
+              class="evidence-entry"
+              title={`Ply ${entry.plyOffset}: engine-validated ${entry.kind}`}
+            >{scoreLabel(entry)}</span>
+          {:else}<span class="empty" aria-hidden="true">—</span>{/each}
+        </div>
+      {/each}
+      <span class="trajectory-label">{branchLabels[1]}</span>
+      {#each trajectoryOffsets as offset}
+        <div
+          class:fork-cell={offset === 0}
+          class="evidence-cell"
+          data-side="b"
+          data-ply-offset={offset}
+        >
+          {#each evidenceAt(comparison.evidence.b, offset) as entry}
+            <span
+              class="evidence-entry"
+              title={`Ply ${entry.plyOffset}: engine-validated ${entry.kind}`}
+            >{scoreLabel(entry)}</span>
+          {:else}<span class="empty" aria-hidden="true">—</span>{/each}
+        </div>
+      {/each}
+    </div>
+  </section>
+
   <div class="strips">
     <section aria-label={`${branchLabels[0]} objective and checkpoints`}>
       <h3>{branchLabels[0]}</h3>
       <div class="strip objective-strip">
-        {#each comparison.objectiveTimelines.a as entry}
-          <span title={`Ply ${entry.plyOffset}: ${entry.from} to ${entry.to}`}>
-            {entry.to}
-          </span>
+        {#each timelineA as entry}
+          <article title={`Ply ${entry.plyOffset}: ${entry.from} to ${entry.to}`}>
+            <strong>{entry.from} → {entry.to}</strong>
+            <ul>
+              {#each entry.grounds as ground}
+                <li><span>{ground.sourceLabel}</span>{ground.text}</li>
+              {/each}
+            </ul>
+          </article>
         {:else}<small>No objective change</small>{/each}
       </div>
       <div class="strip checkpoint-strip">
@@ -118,10 +239,15 @@
     <section aria-label={`${branchLabels[1]} objective and checkpoints`}>
       <h3>{branchLabels[1]}</h3>
       <div class="strip objective-strip">
-        {#each comparison.objectiveTimelines.b as entry}
-          <span title={`Ply ${entry.plyOffset}: ${entry.from} to ${entry.to}`}>
-            {entry.to}
-          </span>
+        {#each timelineB as entry}
+          <article title={`Ply ${entry.plyOffset}: ${entry.from} to ${entry.to}`}>
+            <strong>{entry.from} → {entry.to}</strong>
+            <ul>
+              {#each entry.grounds as ground}
+                <li><span>{ground.sourceLabel}</span>{ground.text}</li>
+              {/each}
+            </ul>
+          </article>
         {:else}<small>No objective change</small>{/each}
       </div>
       <div class="strip checkpoint-strip">
@@ -214,6 +340,79 @@
     margin-top: 1rem;
   }
 
+  .trajectory {
+    margin-top: 1.25rem;
+    padding: 0.8rem;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: var(--panel);
+  }
+
+  .trajectory h3,
+  .trajectory p {
+    margin: 0;
+  }
+
+  .trajectory p {
+    margin-top: 0.25rem;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .trajectory-grid {
+    display: grid;
+    grid-template-columns:
+      minmax(7rem, max-content)
+      repeat(var(--trajectory-columns), minmax(4.2rem, 1fr));
+    min-width: max-content;
+    margin-top: 0.75rem;
+    align-items: stretch;
+  }
+
+  .trajectory-grid > * {
+    padding: 0.4rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .axis-corner,
+  .axis-point,
+  .trajectory-label {
+    font: 0.66rem ui-monospace, monospace;
+  }
+
+  .axis-point,
+  .evidence-cell {
+    text-align: center;
+    border-left: 1px solid var(--line);
+  }
+
+  .fork-marker,
+  .fork-cell {
+    background: color-mix(in srgb, var(--accent) 12%, var(--paper-soft));
+  }
+
+  .fork-marker {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .trajectory-label {
+    font-weight: 700;
+  }
+
+  .evidence-entry {
+    display: inline-block;
+    padding: 0.22rem 0.4rem;
+    border-radius: 999px;
+    background: var(--paper-soft);
+    font: 700 0.7rem ui-monospace, monospace;
+  }
+
+  .empty {
+    color: var(--muted);
+  }
+
   .strip {
     min-height: 2rem;
     display: flex;
@@ -223,7 +422,7 @@
     margin-top: 0.4rem;
   }
 
-  .strip span,
+  .strip > span,
   .strip small {
     padding: 0.3rem 0.45rem;
     border-radius: 999px;
@@ -233,6 +432,37 @@
 
   .checkpoint-strip span {
     background: color-mix(in srgb, var(--warning) 18%, var(--paper-soft));
+  }
+
+  .objective-strip article {
+    flex: 1 1 14rem;
+    padding: 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 0.65rem;
+    background: var(--paper-soft);
+  }
+
+  .objective-strip strong {
+    font: 700 0.72rem ui-monospace, monospace;
+  }
+
+  .objective-strip ul {
+    display: grid;
+    gap: 0.3rem;
+    margin: 0.45rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .objective-strip li {
+    font-size: 0.76rem;
+  }
+
+  .objective-strip li span {
+    margin-right: 0.4rem;
+    color: var(--accent);
+    font: 700 0.62rem ui-monospace, monospace;
+    text-transform: uppercase;
   }
 
   @media (max-width: 48rem) {

@@ -53,3 +53,33 @@
 - §3 green-lit (client rendering): grounded sentences via the EXISTING table,
   throw-on-empty parity with whyBanner, eval trajectory aligned on plyOffset
   with the fork marked, Playwright without a delta assertion.
+
+## 2026-08-11 (codex, §3–§4 grounded rendering)
+
+- Compare objective entries now render `from → to` and resolve every existing
+  reference through `renderEvidenceRef`. The evidence sentence table itself is
+  unchanged. An empty reference array throws with the event sequence rather
+  than installing fallback copy; the component test exercises that failure.
+- Added one shared ply-offset grid for both evidence sides. Offset zero is
+  visibly marked `Fork`; centipawns render as pawn values and mate remains a
+  distinct `M±n` label. Unit coverage includes both score forms and proves the
+  same fork-offset entry occupies both branch rows.
+- The visible heading says `Recorded engine evaluation`, not Stockfish: the
+  accepted payload records `engine_validated` but does not carry an engine
+  identity, and the required browser test runs the honest mock executor. The
+  canonical doc distinguishes the engine and mock deployments without
+  manufacturing provenance in the UI.
+- Extended the real browser walkthrough to wait for writer-applied evidence,
+  then assert the grounded checkpoint sentence, objective transition, fork
+  marker, and one offset-zero overlay entry on each side. No score delta is
+  asserted; the mock's constant zero remains valid evidence.
+- Updated `docs/branch-runtime.md` for the durable recorded-evidence overlay and
+  `docs/drill-client.md` for compare withholding and grounded rendering.
+- `make test-browser` is green (2 required scenarios passed; optional Maia
+  skipped). Observed timings: board-ready 86ms, rewind 33.5ms, branch switch
+  32.1ms, uncached mock reply 2.3ms, cached mock reply 2.7ms.
+- Final-tree closeout: `ENGINES_REQUIRED=1 make verify` is green (33 files,
+  154 tests; zero Svelte diagnostics; scaffold and packaging checks pass), and
+  a second `make test-browser` run is green (2 passed, optional Maia skipped).
+  The final browser run observed board-ready 96.2ms, rewind 33.8ms, branch
+  switch 48.3ms, uncached mock reply 1.0ms, and cached mock reply 0.7ms.

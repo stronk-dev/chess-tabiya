@@ -29,17 +29,17 @@ feedback packets, or per-scope reveal** — all are content-era items.
 
 ## 3. Grounded rendering (client, amends drill-client)
 
-- [ ] Timeline entries render `<from> → <to>` + refs via the EXISTING
+- [x] Timeline entries render `<from> → <to>` + refs via the EXISTING
       `renderEvidenceRef`/`evidenceSentenceTable` (add nothing to the table)
-- [ ] Adopt throw-on-empty for empty evidenceRefs (no friendly marker — matches
+- [x] Adopt throw-on-empty for empty evidenceRefs (no friendly marker — matches
       whyBanner and the schema's minItems: 1)
-- [ ] Eval trajectory per side aligned on `plyOffset`, fork ply marked
-- [ ] Playwright: grounded sentence + one overlay entry per side at the fork.
+- [x] Eval trajectory per side aligned on `plyOffset`, fork ply marked
+- [x] Playwright: grounded sentence + one overlay entry per side at the fork.
       NO delta assertion (mock executor returns constant 0)
 
 ## 4. Docs + closeout
 
-- [ ] `docs/branch-runtime.md` — "engine scores are not part of the comparison
+- [x] `docs/branch-runtime.md` — "engine scores are not part of the comparison
       payload" is now false
-- [ ] `docs/drill-client.md` — withholding surfaces now include `/compare`
-- [ ] ENGINES_REQUIRED=1 make verify + make test-browser green
+- [x] `docs/drill-client.md` — withholding surfaces now include `/compare`
+- [x] ENGINES_REQUIRED=1 make verify + make test-browser green

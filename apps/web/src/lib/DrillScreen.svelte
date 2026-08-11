@@ -328,6 +328,7 @@
 {#if comparison}
   <CompareView
     {run}
+    {pack}
     {comparison}
     branchLabels={compareLabels}
     {startSide}

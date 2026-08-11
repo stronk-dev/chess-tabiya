@@ -4,6 +4,7 @@ import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
+  attachEvidence,
   commitMove,
   compare,
   createRun,
@@ -84,6 +85,17 @@ function branchedRun(): DrillRun {
   run = commitMove(run, "c1e3", { at }).run;
   run = reachCheckpoint(run, "plan-commitment", at).run;
   const forkNodeId = run.activeCursor.nodeId;
+  run = attachEvidence(
+    run,
+    forkNodeId,
+    ["engine:fork-eval"],
+    {
+      kind: "eval",
+      source: "engine_validated",
+      values: { centipawns: 12 },
+    },
+    at,
+  ).run;
   run = commitMove(run, "e7e6", { at }).run;
   run = reachCheckpoint(run, "predict-reply", at).run;
   run = commitMove(run, "f2f3", { at }).run;
@@ -94,6 +106,17 @@ function branchedRun(): DrillRun {
     at,
   }).run;
   run = commitMove(run, "b7b5", { at }).run;
+  run = attachEvidence(
+    run,
+    run.activeCursor.nodeId,
+    ["engine:alternative-mate"],
+    {
+      kind: "eval",
+      source: "engine_validated",
+      values: { mateIn: -2 },
+    },
+    at,
+  ).run;
   run = reachCheckpoint(run, "timing-window", at).run;
   run = transitionObjective(run, "achieved", ["pack:timing-window"], at).run;
   return run;
@@ -200,6 +223,7 @@ describe("Layer 3 screens", () => {
       target: target(),
       props: {
         run,
+        pack,
         comparison,
         branchLabels: ["main", "early queenside"],
         startSide: "white",
@@ -216,8 +240,48 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector(".boards article.absent")).not.toBeNull();
     expect(document.body.textContent).toContain("predict-reply");
     expect(document.body.textContent).toContain("timing-window");
+    expect(document.body.textContent).toContain("active → achieved");
+    expect(document.body.textContent).toContain(
+      "Checkpoint reached: Critical race resolved.",
+    );
+    expect(document.querySelectorAll(".fork-marker")).toHaveLength(1);
+    expect(
+      document.querySelectorAll(
+        '.evidence-cell[data-ply-offset="0"] .evidence-entry',
+      ),
+    ).toHaveLength(2);
+    expect(document.body.textContent).toContain("M-2");
     expectDisabledControlsExplained();
     await unmount(component);
+  });
+
+  it("rejects an ungrounded objective transition instead of inventing copy", () => {
+    const run = branchedRun();
+    const comparison = compare(run, run.branches[0]!.id, run.branches[1]!.id);
+    const grounded = comparison.objectiveTimelines.b[0]!;
+    const invalid = {
+      ...comparison,
+      objectiveTimelines: {
+        ...comparison.objectiveTimelines,
+        b: [{ ...grounded, evidenceRefs: [] }],
+      },
+    };
+
+    expect(() =>
+      mount(CompareView, {
+        target: target(),
+        props: {
+          run,
+          pack,
+          comparison: invalid,
+          branchLabels: ["main", "early queenside"],
+          startSide: "white",
+          step: 0,
+          onStep: vi.fn(),
+          onClose: vi.fn(),
+        },
+      }),
+    ).toThrow(/has no evidence references/);
   });
 
   it("explains why checkpoint comparison is disabled", async () => {

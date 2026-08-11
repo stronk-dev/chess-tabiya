@@ -147,10 +147,16 @@ It returns:
 - move pairs aligned by ply offset after the fork, omitting `a` or `b` when that
   side has no node at an offset;
 - objective-transition timelines for both paths;
-- checkpoint hits for both paths.
+- checkpoint hits for both paths; and
+- per-side recorded evaluation evidence aligned by ply offset. Each entry
+  carries its node and evidence references plus a White-perspective score
+  encoded as either centipawns or moves to mate.
 
-Engine scores and other overlays are not part of the comparison payload; later
-systems attach them through evidence references.
+The evaluation overlay is derived only from durable `evidence.attached` events
+on each branch path, never from the transient job queue. Its v1 scope is
+engine-validated `eval` payloads with an integer `centipawns` or `mateIn`
+value; WDL, best-line, human-model, and future evidence sources remain typed
+events but are not score points in this overlay.
 
 `exportPgn` writes a selected set of branches as a legal PGN with variations.
 Before serialization, chessops replays every path and verifies the stored UCI,

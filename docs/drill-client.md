@@ -75,7 +75,9 @@ checkpoint; `segment_end` reveals it after a segment completes. Until then:
 - `/graph` removes engine evidence references while retaining rules- and
   pack-derived references;
 - `/events` stops at the first withheld engine-evidence event without advancing
-  the visible cursor beyond it; and
+  the visible cursor beyond it;
+- `/compare` strips `engine:` references from objective timelines and returns
+  an empty recorded-evidence overlay; and
 - `/evidence` withholds staged results, while attempts to apply them return the
   typed `FEEDBACK_WITHHELD` error.
 
@@ -185,8 +187,15 @@ shown bare: `screen-model.ts` rejects an empty evidence-ref set before
 The comparison screen consumes the server/runtime `BranchComparison` payload.
 Its synchronized stepper positions both boards on the aligned pair; an absent
 side is dimmed and labeled `Line ended`. Objective timelines and checkpoint
-hits render as separate strips. No evaluation numbers, engine arrows, move
-labels, or human-frequency overlays exist in the v1 play or compare screens.
+hits render as separate strips. Each objective change is rendered as
+`from → to` and every recorded ground is resolved through the existing evidence
+sentence table; an empty ground set fails instead of manufacturing explanatory
+copy. A per-side recorded engine trajectory plots the comparison's
+White-perspective centipawn or mate scores at their aligned ply offsets and
+marks the common fork. The engine deployment supplies Stockfish; the mock
+deployment remains honestly labeled as recorded engine evidence rather than
+claiming a provider identity absent from the payload. Engine arrows, move
+labels, deltas, and human-frequency overlays remain absent.
 
 ## Application shell and fitted regions
 
