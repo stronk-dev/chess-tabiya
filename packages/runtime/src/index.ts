@@ -6,7 +6,9 @@ export {
   compare,
   type BranchComparison,
   type CheckpointHit,
+  type ComparisonEvidenceEntry,
   type ComparisonPair,
+  type ComparisonScore,
   type NodeRef,
   type ObjectiveTimelineEntry,
 } from "./compare.js";

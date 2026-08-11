@@ -10,22 +10,22 @@ feedback packets, or per-scope reveal** — all are content-era items.
 
 ## 1. Close the compare withholding hole (server)
 
-- [ ] `RunService.compare` gains the pack lookup + `feedbackIsRevealed` gate
+- [x] `RunService.compare` gains the pack lookup + `feedbackIsRevealed` gate
       that `evidence()` already applies
-- [ ] Withheld: strip `engine:` refs from timeline entries, empty overlay;
+- [x] Withheld: strip `engine:` refs from timeline entries, empty overlay;
       rules/pack refs are never withheld
-- [ ] Gate test that FAILS against today's code (this is a real fix, not a
+- [x] Gate test that FAILS against today's code (this is a real fix, not a
       no-op assertion)
 
 ## 2. Recorded-evidence overlay (runtime, amends branch-runtime)
 
-- [ ] `BranchComparison.evidence` per side:
+- [x] `BranchComparison.evidence` per side:
       `{nodeId, plyOffset, evidenceRefs, kind, source, score}`
-- [ ] Assembled from `evidence.attached` events on each branch path, reusing
+- [x] Assembled from `evidence.attached` events on each branch path, reusing
       compare.ts's existing path traversal — durable events only, never the queue
-- [ ] `score` = `{kind:"cp", value} | {kind:"mate", movesTo}`, White's
+- [x] `score` = `{kind:"cp", value} | {kind:"mate", movesTo}`, White's
       perspective; `mateIn` payload round-trip test
-- [ ] Derivation test: queue drained, events remain → overlay still populated
+- [x] Derivation test: queue drained, events remain → overlay still populated
 
 ## 3. Grounded rendering (client, amends drill-client)
 

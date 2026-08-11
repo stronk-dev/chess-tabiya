@@ -1,7 +1,8 @@
-import type {
-  CreateRunInput,
-  EvidencePayload,
-  ObjectiveEvidenceUpgrader,
+import {
+  compare,
+  type CreateRunInput,
+  type EvidencePayload,
+  type ObjectiveEvidenceUpgrader,
 } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -355,5 +356,73 @@ describe("evidence staging and writer application", () => {
       "human_model_predicted",
     ]);
     expect(attached.map((event) => event.data.payload.kind)).toEqual(["eval", "wdl"]);
+  });
+
+  it("derives comparison evidence from durable events after staged results are consumed", async () => {
+    const executor: EvidenceExecutor = {
+      async execute(current) {
+        return {
+          kind: "eval",
+          source: "engine_validated",
+          values:
+            current.id === "evidence-job-1"
+              ? { centipawns: 27 }
+              : { mateIn: -2 },
+        };
+      },
+    };
+    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
+    const storage = new SQLiteRunStorage();
+    stores.push(storage);
+    const service = new RunService(storage, { evidenceQueue: queue });
+    const created = service.create(createInput("durable-compare-run"), "writer-a");
+    const rootNodeId = created.activeCursor.nodeId;
+
+    const main = service.move("durable-compare-run", "writer-a", "e2e4", { at });
+    service.enqueueEvidence("durable-compare-run", {
+      nodeId: main.run.activeCursor.nodeId,
+      kind: "eval",
+      depth: 14,
+    });
+    await queue.whenIdle();
+    service.applyEvidence("durable-compare-run", "writer-a", 1, at);
+
+    service.rewind(
+      "durable-compare-run",
+      "writer-a",
+      { nodeId: rootNodeId },
+      at,
+    );
+    const alternative = service.move(
+      "durable-compare-run",
+      "writer-a",
+      "d2d4",
+      { at },
+    );
+    service.enqueueEvidence("durable-compare-run", {
+      nodeId: alternative.run.activeCursor.nodeId,
+      kind: "eval",
+      depth: 14,
+    });
+    await queue.whenIdle();
+    service.applyEvidence("durable-compare-run", "writer-a", 2, at);
+
+    expect(queue.page("durable-compare-run").results).toEqual([]);
+    const saved = storage.read("durable-compare-run")!.run;
+    const result = compare(saved, saved.branches[0]!.id, saved.branches[1]!.id);
+    expect(result.evidence.a).toEqual([
+      expect.objectContaining({
+        nodeId: main.run.activeCursor.nodeId,
+        plyOffset: 1,
+        score: { kind: "cp", value: 27 },
+      }),
+    ]);
+    expect(result.evidence.b).toEqual([
+      expect.objectContaining({
+        nodeId: alternative.run.activeCursor.nodeId,
+        plyOffset: 1,
+        score: { kind: "mate", movesTo: -2 },
+      }),
+    ]);
   });
 });

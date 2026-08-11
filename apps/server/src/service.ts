@@ -9,6 +9,7 @@ import {
   exportPackRunPgn,
   exportPgn,
   fork,
+  isEngineEvidenceRef,
   rewind,
   rewindToCheckpoint,
   type BranchComparison,
@@ -54,6 +55,37 @@ export interface RunGraph {
 export interface EventsPage {
   readonly events: readonly DrillRunEvent[];
   readonly nextSeq: number;
+}
+
+function comparisonWithoutEngineFeedback(
+  comparison: BranchComparison,
+): BranchComparison {
+  const publicTimeline = (
+    entries: BranchComparison["objectiveTimelines"]["a"],
+  ) =>
+    Object.freeze(
+      entries.map((entry) =>
+        Object.freeze({
+          ...entry,
+          evidenceRefs: Object.freeze(
+            entry.evidenceRefs.filter(
+              (reference) => !isEngineEvidenceRef(reference),
+            ),
+          ),
+        }),
+      ),
+    );
+  return Object.freeze({
+    ...comparison,
+    objectiveTimelines: Object.freeze({
+      a: publicTimeline(comparison.objectiveTimelines.a),
+      b: publicTimeline(comparison.objectiveTimelines.b),
+    }),
+    evidence: Object.freeze({
+      a: Object.freeze([]),
+      b: Object.freeze([]),
+    }),
+  });
 }
 
 export type RewindTarget =
@@ -231,7 +263,12 @@ export class RunService {
   }
 
   compare(runId: string, branchAId: string, branchBId: string): BranchComparison {
-    return compare(this.#required(runId).run, branchAId, branchBId);
+    const run = this.#required(runId).run;
+    const comparison = compare(run, branchAId, branchBId);
+    const pack = this.#registeredPack(run);
+    return pack !== undefined && !feedbackIsRevealed(pack, run)
+      ? comparisonWithoutEngineFeedback(comparison)
+      : comparison;
   }
 
   events(runId: string, sinceSeq = 0): EventsPage {

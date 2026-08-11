@@ -5,6 +5,7 @@ import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 import {
   attachEvidence,
   engineEvidenceRef,
+  reachCheckpoint,
   rulesEvidenceRef,
   transitionObjective,
   type EvidencePayload,
@@ -401,6 +402,118 @@ describe("server-side feedback withholding", () => {
         (event) => event.type === "evidence.attached",
       ),
     ).toBe(true);
+  });
+
+  it("applies delayed feedback withholding to branch comparison", async () => {
+    const delayed = pack({
+      id: "delayed-compare-pack",
+      feedbackPolicy: "delayed_checkpoint",
+      checkpoints: [{ id: "reveal", trigger: { atPly: 4 } }],
+      objective: {
+        type: "play_until_checkpoint",
+        summary: "Reach reveal",
+        successConditions: [{ kind: "reach_checkpoint", checkpointId: "reveal" }],
+      },
+    });
+    const environment = await setup(delayed);
+    stores.push(environment.storage);
+    const created = environment.service.create(
+      runBody("delayed-compare-run", delayed.id),
+      "writer-a",
+    );
+    const rootNodeId = created.activeCursor.nodeId;
+
+    let main = environment.service.move(
+      "delayed-compare-run",
+      "writer-a",
+      "c1e3",
+      { at },
+    ).run;
+    const mainNodeId = main.activeCursor.nodeId;
+    main = attachEvidence(
+      main,
+      mainNodeId,
+      [engineEvidenceRef("main-eval")],
+      { kind: "eval", source: "engine_validated", values: { centipawns: 18 } },
+      at,
+    ).run;
+    main = transitionObjective(
+      main,
+      "preserved",
+      [rulesEvidenceRef("material"), engineEvidenceRef("main-eval")],
+      at,
+    ).run;
+    environment.storage.save(main, "writer-a");
+
+    environment.service.rewind(
+      "delayed-compare-run",
+      "writer-a",
+      { nodeId: rootNodeId },
+      at,
+    );
+    let alternative = environment.service.move(
+      "delayed-compare-run",
+      "writer-a",
+      "f1e2",
+      { at },
+    ).run;
+    const alternativeNodeId = alternative.activeCursor.nodeId;
+    alternative = attachEvidence(
+      alternative,
+      alternativeNodeId,
+      [engineEvidenceRef("alternative-eval")],
+      { kind: "eval", source: "engine_validated", values: { mateIn: -3 } },
+      at,
+    ).run;
+    alternative = transitionObjective(
+      alternative,
+      "degraded",
+      [rulesEvidenceRef("material"), engineEvidenceRef("alternative-eval")],
+      at,
+    ).run;
+    environment.storage.save(alternative, "writer-a");
+
+    const [mainBranch, alternativeBranch] = alternative.branches;
+    const withheld = environment.service.compare(
+      alternative.id,
+      mainBranch!.id,
+      alternativeBranch!.id,
+    );
+    expect(withheld.objectiveTimelines.a[0]!.evidenceRefs).toEqual([
+      rulesEvidenceRef("material"),
+    ]);
+    expect(withheld.objectiveTimelines.b[0]!.evidenceRefs).toEqual([
+      rulesEvidenceRef("material"),
+    ]);
+    expect(withheld.evidence).toEqual({ a: [], b: [] });
+
+    const revealed = reachCheckpoint(alternative, "reveal", at).run;
+    environment.storage.save(revealed, "writer-a");
+    const visible = environment.service.compare(
+      revealed.id,
+      mainBranch!.id,
+      alternativeBranch!.id,
+    );
+    expect(visible.objectiveTimelines.a[0]!.evidenceRefs).toContain(
+      engineEvidenceRef("main-eval"),
+    );
+    expect(visible.objectiveTimelines.b[0]!.evidenceRefs).toContain(
+      engineEvidenceRef("alternative-eval"),
+    );
+    expect(visible.evidence.a).toEqual([
+      expect.objectContaining({
+        nodeId: mainNodeId,
+        evidenceRefs: [engineEvidenceRef("main-eval")],
+        score: { kind: "cp", value: 18 },
+      }),
+    ]);
+    expect(visible.evidence.b).toEqual([
+      expect.objectContaining({
+        nodeId: alternativeNodeId,
+        evidenceRefs: [engineEvidenceRef("alternative-eval")],
+        score: { kind: "mate", movesTo: -3 },
+      }),
+    ]);
   });
 
   it("segment_end stays closed at the first checkpoint and opens on segment completion", async () => {

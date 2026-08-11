@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   BranchQueryError,
+  attachEvidence,
   appendOpponentPly,
   commitMove,
   compare,
@@ -43,11 +44,33 @@ function branchedRun(): DrillRun {
   run = appendOpponentPly(run, opponent("e7e5"), { at }).run;
   run = commitMove(run, "g1f3", { at }).run;
   run = appendOpponentPly(run, opponent("b8c6"), { at }).run;
+  run = attachEvidence(
+    run,
+    run.activeCursor.nodeId,
+    ["engine:main-eval"],
+    {
+      kind: "eval",
+      source: "engine_validated",
+      values: { centipawns: 31 },
+    },
+    at,
+  ).run;
   run = reachCheckpoint(run, "main-result", at).run;
   run = transitionObjective(run, "preserved", ["evidence:main"], at).run;
   run = rewind(run, forkNodeId, at).run;
   run = appendOpponentPly(run, opponent("c7c5"), { at }).run;
   run = commitMove(run, "g1f3", { at }).run;
+  run = attachEvidence(
+    run,
+    run.activeCursor.nodeId,
+    ["engine:alternative-eval"],
+    {
+      kind: "eval",
+      source: "engine_validated",
+      values: { mateIn: -3 },
+    },
+    at,
+  ).run;
   run = reachCheckpoint(run, "alternative-result", at).run;
   return transitionObjective(run, "degraded", ["evidence:alternative"], at).run;
 }
@@ -93,6 +116,32 @@ describe("branch comparison", () => {
     ]);
     expect(result.checkpointHits.b).toEqual([
       expect.objectContaining({ checkpointId: "alternative-result", plyOffset: 2 }),
+    ]);
+  });
+
+  it("derives per-path recorded eval evidence with cp and mate scores", () => {
+    const run = branchedRun();
+    const result = compare(run, run.branches[0]!.id, run.branches[1]!.id);
+
+    expect(result.evidence.a).toEqual([
+      {
+        nodeId: run.nodes[4]!.id,
+        plyOffset: 3,
+        evidenceRefs: ["engine:main-eval"],
+        kind: "eval",
+        source: "engine_validated",
+        score: { kind: "cp", value: 31 },
+      },
+    ]);
+    expect(result.evidence.b).toEqual([
+      {
+        nodeId: run.nodes[6]!.id,
+        plyOffset: 2,
+        evidenceRefs: ["engine:alternative-eval"],
+        kind: "eval",
+        source: "engine_validated",
+        score: { kind: "mate", movesTo: -3 },
+      },
     ]);
   });
 

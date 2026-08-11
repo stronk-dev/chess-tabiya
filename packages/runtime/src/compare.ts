@@ -33,6 +33,19 @@ export interface CheckpointHit {
   readonly plyOffset: number;
 }
 
+export type ComparisonScore =
+  | { readonly kind: "cp"; readonly value: number }
+  | { readonly kind: "mate"; readonly movesTo: number };
+
+export interface ComparisonEvidenceEntry {
+  readonly nodeId: string;
+  readonly plyOffset: number;
+  readonly evidenceRefs: readonly string[];
+  readonly kind: "eval";
+  readonly source: "engine_validated";
+  readonly score: ComparisonScore;
+}
+
 export interface BranchComparison {
   readonly forkNodeId: string;
   readonly pairs: readonly ComparisonPair[];
@@ -43,6 +56,10 @@ export interface BranchComparison {
   readonly checkpointHits: {
     readonly a: readonly CheckpointHit[];
     readonly b: readonly CheckpointHit[];
+  };
+  readonly evidence: {
+    readonly a: readonly ComparisonEvidenceEntry[];
+    readonly b: readonly ComparisonEvidenceEntry[];
   };
 }
 
@@ -127,6 +144,50 @@ function checkpointHits(
   });
 }
 
+function comparisonScore(
+  values: Readonly<Record<string, unknown>>,
+): ComparisonScore | undefined {
+  if (Number.isSafeInteger(values.centipawns)) {
+    return { kind: "cp", value: values.centipawns as number };
+  }
+  if (Number.isSafeInteger(values.mateIn)) {
+    return { kind: "mate", movesTo: values.mateIn as number };
+  }
+  return undefined;
+}
+
+function evidenceOverlay(
+  run: DrillRun,
+  path: readonly Node[],
+  fork: Node,
+): readonly ComparisonEvidenceEntry[] {
+  const pathIds = new Set(path.map((node) => node.id));
+  const plyById = new Map(path.map((node) => [node.id, node.ply]));
+  return run.events.flatMap((event) => {
+    if (
+      event.type !== "evidence.attached" ||
+      event.data.payload.kind !== "eval" ||
+      event.data.payload.source !== "engine_validated" ||
+      !pathIds.has(event.data.nodeId)
+    ) {
+      return [];
+    }
+    const ply = plyById.get(event.data.nodeId);
+    const score = comparisonScore(event.data.payload.values);
+    if (ply === undefined || ply < fork.ply || score === undefined) return [];
+    return [
+      {
+        nodeId: event.data.nodeId,
+        plyOffset: ply - fork.ply,
+        evidenceRefs: event.data.evidenceRefs,
+        kind: "eval" as const,
+        source: "engine_validated" as const,
+        score,
+      },
+    ];
+  });
+}
+
 export function compare(
   run: DrillRun,
   branchAId: string,
@@ -159,6 +220,10 @@ export function compare(
     checkpointHits: {
       a: checkpointHits(run, pathA, fork),
       b: checkpointHits(run, pathB, fork),
+    },
+    evidence: {
+      a: evidenceOverlay(run, pathA, fork),
+      b: evidenceOverlay(run, pathB, fork),
     },
   });
 }
