@@ -134,3 +134,18 @@
   passed.
 - Stop point: Layer 3 complete. Layer 4 Playwright, packaging, latency
   measurements, and the owner walkthrough remain untouched.
+
+## 2026-08-11 (claude, review of layer 3)
+
+- Independently verified (ENGINES_REQUIRED=1): 136 tests / 30 files green,
+  zero Svelte diagnostics, production build green. All screens + episode
+  controller present with real tests. **Layer 3 APPROVED code-wise.**
+- **Blocking finding for layer 4 (walkthrough-killer):** the living Najdorf
+  fixture ships opponentPolicy.mode=plan_defense — unsupported by the
+  selector → the walkthrough's first opponent reply would 422
+  (POLICY_MODE_UNSUPPORTED). No unit test caught it because tests use
+  supported modes. Fix systemically in layer 4: (1) registry refuses to serve
+  packs whose policy mode is not selectable (same refuse-to-serve pattern as
+  blunder-guard) + test; (2) living fixture flips to human_common (archive
+  original untouched); (3) the Playwright flow must run against a SERVED pack,
+  not a synthetic one, so this class can't recur.
