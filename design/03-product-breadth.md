@@ -170,37 +170,66 @@ rows below are green or explicitly removed by a new owner ruling:
 ## Provisional foundations-first RFC program
 
 This is design-tier decomposition, not accepted implementation authority. The
-point is to avoid one giant “everything RFC” without falling back into isolated
+point is to avoid one giant "everything RFC" without falling back into isolated
 vertical slices.
+
+**Ordering principle (amended 2026-08-11 after the first walkthrough):** the
+program is ordered by *evidence and risk*, not by surface convenience. The
+walkthrough's finding — branch comparison shows difference without explaining
+consequence — makes the explanation layer the first thing after the shell.
+Explanation is **machinery, not content**: the feedback packet/composer and its
+evidence sources are server-side foundations, and every later surface inherits
+their absence if they land late. It is also where the two most dangerous kill
+criteria live (K6 generic explanations, K4 comparison not beating engine lines),
+and cheap-to-test risks are tested early.
 
 1. **Product shell and capability registry (B1/B8):** stable routes, role-aware
    app shell, responsive region model, settings/provider capabilities, and
    honest unavailable-state handling. It reserves the complete IA before more
    screen composition.
-2. **General session contexts (B2/B8):** pack-optional runs, Just Play,
+2. **Evidence and explanation (B4)** — *moved up from #4*: feedback
+   packet/composer, authored claims, Stockfish/Maia/corpus/Syzygy/features,
+   historical examples, timing policies, deep mode, and configured
+   evidence-bound LLM rendering. Needs only the shell for placement (its UI is a
+   sidebar in the existing drill screen); makes every subsequent surface worth
+   entering.
+3. **General session contexts (B2/B8):** pack-optional runs, Just Play,
    FEN/PGN/URL starts, phase/structure recognition contract, sharing, and
    spectator-safe projections.
-3. **Training-mode breadth (B2):** Line, Plan, Outcome, organic Trajectory, and
+4. **Training-mode breadth (B2):** Line, Plan, Outcome, organic Trajectory, and
    guided Trajectory contracts with one executable fixture each, including
    transitions and replay variants.
-4. **Evidence and explanation (B4):** feedback packet/composer, authored
-   claims, Stockfish/Maia/corpus/Syzygy/features, historical examples, timing
-   policies, deep mode, and configured evidence-bound LLM rendering.
 5. **Review and multi-branch exploration (B3):** manual N-branch selection,
    pairwise/multi comparison, simulate grid, prediction, narrative/difference
    modes, branch race, replay, and export/import.
-6. **Live session platform (B5):** shared roles/events first, then concrete
-   Twitch host/chat/overlay, academy voting/session control, and external
-   Position Arena handoff/PGN return.
-7. **Creation and curation (B6):** pack studio, imports, session distillation,
+6. **Creation and curation (B6):** pack studio, imports, session distillation,
    provenance, review, regression, versioning, and community interchange.
-8. **Return and progression (B7):** history, concept model, episode SRS,
+7. **Return and progression (B7):** history, concept model, episode SRS,
    related retries, progress, and optional personal-history recommendations.
+8. **Live session platform (B5)** — *moved to last*: shared roles/events first,
+   then concrete Twitch host/chat/overlay, academy voting/session control, and
+   external Position Arena handoff/PGN return. Ordered last because none of it
+   can be validated by use without other humans (a streamer audience, a coach,
+   an opponent); its BACKLOG revival conditions — singleplayer loop validated
+   and fun; a coach partner or community existing — remain in force and are the
+   real trigger. Shared roles/events plumbing may land earlier if another RFC
+   genuinely needs it.
 
 The RFCs may split further where review finds independent contracts, but they
 must retain this dependency direction and jointly close every B-gate. Content
 fixtures exercise the system; catalog production does not interrupt the
 program.
+
+## The failure mode this program must avoid
+
+**Lucas Chess** (`design/research/competitor-value-props.md`): free, local,
+all-phases — and fragmented into a mode menu with no unifying protocol. It is
+the closest existing "breadth" product and the cautionary case for this exact
+strategy. Breadth-first is correct *only if* the unifying depth (evidence,
+explanation, the shared episode/branch model) lands early enough that each
+surface is worth entering. A surface that shows difference without explaining
+consequence is a mode-menu entry, not a drill. Watch item, tracked in
+`planning/exploration/gates.md`.
 
 ## After breadth
 

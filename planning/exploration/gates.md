@@ -107,6 +107,32 @@ These gate **vertical slice → product build**. They are deliberately later tha
 the brief assumed a slice would be built to test H1–H5, while E1–E5 decide whether
 building that slice is justified at all.
 
+
+## Breadth gates (B1–B8) — mirrored from `design/03-product-breadth.md`
+
+Owner ruling 2026-08-11: implement the full feature spectrum solidly with
+thin/example fixtures before content depth. Canonical definitions live in the
+design doc; statuses are tracked here with every other gate so the gate surface
+is not split. Program order (amended by evidence): shell → **evidence/
+explanation** → session contexts → mode breadth → review → create → return →
+live.
+
+| # | Gate | Status |
+|---|---|---|
+| B1 | Shell and entry: stable Play/Learn/Review/Live/Create/Library/Settings routes; resume works | unmet |
+| B2 | Solo modes: Just Play + Line/Plan/Outcome/Trajectory each complete one fixture run | Plan slice only |
+| B3 | Review: manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise partial |
+| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | worker plumbing partial; UI unmet — **next after B1** |
+| B5 | Live: Twitch host/chat/overlay, academy roles, external Arena handoff | unmet — ordered last; BACKLOG revival conditions still govern |
+| B6 | Create: pack studio/import/review/session-distill produces a validated fixture; corpus mining emits one candidate | schema/lint only |
+| B7 | Return: history/resume, progress, concept scheduling, related retry, recommendations | resume partial |
+| B8 | Platform: desktop shell, responsive/PWA, self-hosted engines/providers, share links, accessibility | deployment partial |
+
+**Watch item — the Lucas Chess failure mode:** breadth without unifying depth
+produces a mode menu, not a product (our own competitor research named this
+case). If surfaces accumulate while B4 stays unmet, that is K6/K4 evidence
+accruing by construction — escalate rather than continue.
+
 ## Success metrics (measurement vocabulary for the above)
 
 - **Learning:** second-attempt objective achievement; related-position performance;
