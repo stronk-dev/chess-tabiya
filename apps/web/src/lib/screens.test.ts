@@ -216,7 +216,7 @@ describe("Layer 3 screens", () => {
     expect(document.activeElement).toBe(main);
 
     key("r");
-    expect(onRewind).toHaveBeenCalledWith({ checkpointId: "predict-reply" });
+    expect(onRewind).toHaveBeenCalledWith({ checkpointId: "plan-commitment" });
     key("R", { shiftKey: true });
     await tick();
     expect(document.body.textContent).toContain("Choose a checkpoint.");

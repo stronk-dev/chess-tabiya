@@ -201,3 +201,7 @@
   ignored `test-results/` directory.
 - The owner-only walkthrough checkbox remains intentionally unchecked. Layer 4
   stops at the tested and packaged experience ready for that walkthrough.
+- The final standalone `make test-browser` rerun passed with one Maia-only test
+  intentionally skipped. Its fresh mock measurements were: board ready 107.3
+  ms, rewind 32.6 ms, branch switch 45.1 ms, uncached reply 1.2 ms, cached reply
+  0.8 ms — all within the same acceptance budgets.
