@@ -10,7 +10,8 @@ implemented and documented in `docs/drill-pack-format.md`; engine workers are
 implemented and documented in `docs/engine-workers.md`. The drill-client RFC is
 implementing; its server surface, browser plumbing, and product screens are
 documented in `docs/drill-client.md`; packaging and automated acceptance are
-implemented, with only the owner-operated walkthrough still open.
+implemented, and the owner-operated walkthrough produced a qualified
+go-to-iterate verdict. The RFC completion protocol remains.
 Doctrine: TS core + Go workers, Svelte 5, AGPL-3.0, Maia as containerized UCI
 sidecar. The exploration job continues alongside (E4 harness, gates) — see
 `planning/exploration/plan.md`.

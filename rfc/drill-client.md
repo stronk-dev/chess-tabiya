@@ -234,3 +234,6 @@ era" — this RFC is that era; folding is per that ruling, now cited.
   remain.
 - 2026-08-11: Layer 4 automated acceptance and deployment packaging
   implemented; only the owner-operated real-engine walkthrough remains.
+- 2026-08-11: Owner real-engine walkthrough completed with a qualified
+  go-to-iterate verdict; follow-up feedback and UI agenda recorded. Completion
+  protocol remains.

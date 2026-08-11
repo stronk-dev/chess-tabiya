@@ -213,8 +213,10 @@ includes Node, pnpm, and Stockfish.
 
 ## Current boundary
 
-Layers 1 through 4 of the accepted drill-client RFC are implemented except for
-the explicitly owner-operated walkthrough. Automated acceptance covers the
-same flow against the mock opponent, and the packaged `make up-engines`
-experience is ready for the owner to play and record. The living Najdorf pack
-remains a schema example rather than reviewed content.
+Layers 1 through 4 of the accepted drill-client RFC and the explicitly
+owner-operated walkthrough are complete. The qualified walkthrough verdict is
+that fork/rewind is quick and promising, while manual compare selection, the
+scrolling desktop shell, and especially the absent theory/feedback layer define
+the follow-up UI and feedback work. The living Najdorf pack remains a schema
+example rather than reviewed content; this slice therefore validates that the
+mechanical loop is worth iterating, not that comparison already teaches.

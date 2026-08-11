@@ -218,3 +218,38 @@
   **Layer 4 APPROVED.**
 - All plan boxes closed except THE WALKTHROUGH — owner's. RFC completion
   protocol waits on it.
+
+## 2026-08-11 (owner, real-engine walkthrough — qualified sign-off)
+
+- Ran the packaged Najdorf fixture against Maia through the core loop. The
+  positive verdict is unambiguous: forking and rewinding are quick, the owner
+  likes the mechanic, and considers this a “GREAT start” worth iterating
+  slowly. The vertical slice is playable; this is a go-to-iterate verdict, not
+  a polished-UX approval.
+- The instructional layer is conspicuously absent. There is no LLM-rendered
+  feedback, no meaningful theory tie-in, and nothing explaining why the
+  preserved variations differ. There are also no revealed engine lines, Maia
+  alternatives/distribution, or substantial guidance/options. The current
+  rules/pack sentence surface does not make the comparison educational by
+  itself.
+- Comparing branches is cumbersome because branches must be selected
+  individually. The owner expects eligible branches to be selected by default
+  and wants a lower-friction multi-branch overview rather than repeated
+  pair-selection work.
+- The desktop screen scrolls as a document. It should behave like a fitted app
+  shell with stable sidebar/content regions and intentional internal overflow,
+  especially around the board and branch rail.
+- Interpretation: the core interaction passed its first human plausibility
+  check, while the thesis-level “compare to understand why” claim remains
+  untested because this slice omitted the very feedback needed to test it.
+  Anti-contamination should withhold assistance during committed play, then
+  reveal authored theory plus validated engine/human-model evidence at the
+  checkpoint and comparison—not suppress the instructional layer entirely.
+- Follow-up agenda: checkpoint/compare explanation sidebar; authored-theory,
+  Stockfish, Maia-policy, and historical evidence layers with controls; an LLM
+  renderer constrained to that validated evidence; default branch selection
+  plus multi-branch overview; and a viewport-contained desktop app shell.
+  These items are ledgered in `design/BACKLOG.md` and feed Q8/Q9.
+- No screenshot was captured with the textual owner report. The direct
+  walkthrough notes are retained as the evidence; the missing screenshot does
+  not erase the observed friction or hold the mechanical walkthrough open.

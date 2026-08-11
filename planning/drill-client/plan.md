@@ -49,6 +49,6 @@ work before its plumbing exists.
 - [x] release.yml → GHCR multi-arch {version, sha}; compose digest-pinned
 - [x] Devcontainer sharing the toolchain (stockfish included)
 - [x] In-browser latency budgets measured → log.md
-- [ ] THE WALKTHROUGH: owner plays the Najdorf fixture vs Maia end-to-end
+- [x] THE WALKTHROUGH: owner plays the Najdorf fixture vs Maia end-to-end
       (make up-engines → play → R → branch → Tab → E); notes + screenshots in
       log.md

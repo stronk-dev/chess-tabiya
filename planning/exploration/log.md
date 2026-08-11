@@ -389,3 +389,21 @@
   (enterable/comparable/exportable). Clarified for the owner: branching is
   already fully user-driven (any node, any time) — checkpoints are authored
   interaction points, not gates. UI-RFC follow-up candidate.
+
+## 2026-08-11 (owner) — first real-engine client walkthrough
+
+- E5 now has by-use evidence. The owner likes the quick fork/rewind mechanic
+  and calls the slice a great start worth slow iteration. This validates the
+  interaction's promise, not the learning claim.
+- Q9 friction: manual compare selection is cumbersome and should default to
+  eligible branches; the desktop page scrolls instead of behaving as a fitted
+  app shell.
+- Q8 gap made visible: with pack A/content and the feedback composer deferred,
+  the schema-example drill provides no meaningful theory explanation, LLM
+  rendering, engine line, Maia alternatives, or guidance. Branch comparison
+  therefore shows difference without explaining consequence. K4 and K6 remain
+  open—not failed—because the necessary instructional layer was absent rather
+  than tested and rejected.
+- Ledgered the concrete follow-up surfaces: checkpoint/compare explanation
+  sidebar with selectable validated evidence, compare-all defaults and
+  multi-branch overview, and viewport-contained desktop app shell.

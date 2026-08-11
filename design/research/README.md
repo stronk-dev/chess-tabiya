@@ -63,7 +63,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Dependency/model/content licensing across source, deployment, monetization, and rights axes 🟡 | Q2, Q6 | **GAP** (queue 10) | — |
 | Paid-competitor pricing/positioning | Q2 | **GAP** | — |
 | Server/client stack selection (Go vs Node/TS; Svelte vs React vs vanilla; chessground/WASM interop) | branch-runtime RFC, deferred-decisions register | covered `[V]`/`[P]` — recommends TS-everywhere + Svelte 5; flags Maia-3 Python-sidecar question | `stack-selection.md` |
-| Branch/rewind/compare comprehension at 2/4/8 branches | Q9, E5 | **GAP** | — |
+| Branch/rewind/compare comprehension at 2/4/8 branches | Q9, E5 | partial `[V]`, owner n=1 real-engine walkthrough: fork/rewind quick and promising; compare selection cumbersome; scrolling shell odd; comparison-learning value not testable without the deferred instructional layer. Four/eight branches and phone remain GAP | `planning/drill-client/log.md` |
 | Theory/pattern sourcing incl. provenance & rights | Q6, Q7, content phase | covered `[V]` — every pack need (skeleton/evidence/prose/positions/grading) has a CC0-or-ours source; do-not-use list included | `theory-sourcing.md` |
 | Deliberate-practice evidence base | thesis | covered `[P]` (observational; population skew caveat) | `arch/research/source_index.md` R01 |
 | Lichess corpus scale/licensing | Q6 | covered `[P]` | `arch/research/source_index.md` R02 |

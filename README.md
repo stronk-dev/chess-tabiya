@@ -22,8 +22,10 @@ whitespace hands-on: no reviewed product preserves attempts, compares them, or e
 why an objective flipped. The branch runtime, drill-pack format, and engine-worker RFCs
 are implemented. The accepted drill-client RFC now has its server orchestration, Svelte
 episode screens, mock-backed browser acceptance, and Dockerized Maia/Stockfish packaging;
-only the owner's real-engine walkthrough remains before its completion review. Product
-risks still include content authoring cost and branch-UX comprehension in human use.
+the owner's real-engine walkthrough found the fork/rewind core promising and exposed the
+missing instructional layer plus concrete comparison/layout friction. Its completion
+review remains. Product risks still include content authoring cost and branch-UX
+comprehension in human use.
 
 The whole state of that decision lives in **`planning/exploration/plan.md`** (the
 question ledger) and **`planning/exploration/gates.md`** (hypotheses, kill criteria,
