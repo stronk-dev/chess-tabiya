@@ -10,3 +10,15 @@
   double-fired against DrillScreen's window handler.
 - Router decision: hand-rolled, no new dependency (deferred-decisions register).
 - Next: codex session 1 → §1 storage listing + migration.
+
+## 2026-08-11 (codex, §1 storage listing + migration)
+
+- Added the ordered `PRAGMA user_version` runner. Migration 1 is transactional,
+  logged after commit, adds `summary_json`, and replays each legacy event log
+  exactly once to backfill it. A fixture database test proves the upgrade and
+  that reopening at version 1 applies nothing.
+- Run summaries are maintained with snapshot writes and list without replay or
+  pack-registry access. New registered runs capture the pack title; legacy rows
+  fall back to `packId` because the pre-migration snapshot did not store titles.
+- Added `RunStorage.list(limit, offset)` and `GET /runs` (default 50, maximum
+  100), ordered newest-first and returning `activeWriterId`.

@@ -88,6 +88,7 @@ export {
 } from "./service.js";
 export {
   SQLiteRunStorage,
+  type RunSummary,
   type RunStorage,
   type StoredRun,
 } from "./storage.js";

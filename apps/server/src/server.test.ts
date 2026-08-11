@@ -173,6 +173,32 @@ describe("branch-runtime REST binding", () => {
     expect(() => storage.save(stored.run, "writer-b")).toThrowError(RuntimeError);
   });
 
+  it("lists paginated run summaries with their active writer", async () => {
+    const { handler } = setup();
+    await request(handler, "POST", "/runs", createBody("list-a"), "writer-a");
+    await request(handler, "POST", "/runs", createBody("list-b"), "writer-b");
+
+    const response = await request(handler, "GET", "/runs?limit=2&offset=0", undefined, "");
+    expect(response.status).toBe(200);
+    const body = await response.json() as { runs: unknown[] };
+    expect(body.runs).toHaveLength(2);
+    expect(body.runs).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "list-b",
+          title: "server-pack",
+          packId: "server-pack",
+          objectiveState: "active",
+          branchCount: 1,
+          activeWriterId: "writer-b",
+        }),
+      ]),
+    );
+
+    expect((await request(handler, "GET", "/runs?limit=101", undefined, "")).status)
+      .toBe(400);
+  });
+
   it("maps typed and boundary failures to structured HTTP errors", async () => {
     const { handler } = setup();
     await request(handler, "POST", "/runs", createBody("error-run"));

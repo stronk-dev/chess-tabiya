@@ -336,6 +336,23 @@ function parseSinceSeq(url: URL): number {
   return value;
 }
 
+function parsePagination(url: URL): { readonly limit: number; readonly offset: number } {
+  const parse = (name: "limit" | "offset", fallback: number): number => {
+    const raw = url.searchParams.get(name);
+    if (raw === null) return fallback;
+    const value = Number(raw);
+    if (!Number.isSafeInteger(value) || value < (name === "limit" ? 1 : 0)) {
+      throw invalid(
+        `${name} must be a ${name === "limit" ? "positive" : "non-negative"} safe integer`,
+      );
+    }
+    return value;
+  };
+  const limit = parse("limit", 50);
+  if (limit > 100) throw invalid("limit cannot exceed 100");
+  return { limit, offset: parse("offset", 0) };
+}
+
 export function createRestHandler(
   service: RunService,
   selector?: OpponentSelector,
@@ -380,6 +397,10 @@ export function createRestHandler(
           writerId(request),
         );
         return json(201, { run });
+      }
+      if (request.method === "GET" && url.pathname === "/runs") {
+        const { limit, offset } = parsePagination(url);
+        return json(200, { runs: service.runs(limit, offset) });
       }
       if (request.method === "POST" && url.pathname === "/select-move") {
         if (selector === undefined) {

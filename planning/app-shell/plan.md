@@ -6,12 +6,12 @@ This is a shell-layer REWRITE (no router exists today) — read AS-C5.
 
 ## 1. Storage: listing + migration (server, no UI)
 
-- [ ] `PRAGMA user_version` migration runner: ordered, idempotent, logged at open
-- [ ] Step 1: denormalized summary column (title captured at creation, packId,
+- [x] `PRAGMA user_version` migration runner: ordered, idempotent, logged at open
+- [x] Step 1: denormalized summary column (title captured at creation, packId,
       updatedAt, objectiveState at activeCursor, branchCount) + backfill by
       one-time replay; idempotency test against a fixture DB
-- [ ] `RunStorage.list(limit, offset)`; no per-row replay, no registry dependency
-- [ ] `GET /runs?limit=&offset=` returning summaries + activeWriterId
+- [x] `RunStorage.list(limit, offset)`; no per-row replay, no registry dependency
+- [x] `GET /runs?limit=&offset=` returning summaries + activeWriterId
 
 ## 2. Lease visibility (server + client plumbing)
 

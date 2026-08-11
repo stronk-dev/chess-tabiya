@@ -40,11 +40,12 @@ import {
   type PackRecord,
   type PackSummary,
 } from "./pack-registry.js";
-import type { RunStorage, StoredRun } from "./storage.js";
+import type { RunStorage, RunSummary, StoredRun } from "./storage.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
 
 export interface RunGraph {
   readonly id: string;
+  readonly activeWriterId: string;
   readonly nodes: DrillRun["nodes"];
   readonly branches: DrillRun["branches"];
   readonly activeCursor: DrillRun["activeCursor"];
@@ -133,7 +134,12 @@ export class RunService {
         cause: error,
       });
     }
-    this.#storage.create(run, writerId);
+    const title = pack?.document.title;
+    this.#storage.create(
+      run,
+      writerId,
+      typeof title === "string" ? title : input.packId,
+    );
     return run;
   }
 
@@ -208,14 +214,20 @@ export class RunService {
   }
 
   graph(runId: string): RunGraph {
-    const run = this.#required(runId).run;
+    const stored = this.#required(runId);
+    const run = stored.run;
     const pack = this.#registeredPack(run);
     return Object.freeze({
       id: run.id,
+      activeWriterId: stored.activeWriterId,
       nodes: publicNodes(pack, run),
       branches: run.branches,
       activeCursor: run.activeCursor,
     });
+  }
+
+  runs(limit: number, offset: number): readonly RunSummary[] {
+    return this.#storage.list(limit, offset);
   }
 
   compare(runId: string, branchAId: string, branchBId: string): BranchComparison {
