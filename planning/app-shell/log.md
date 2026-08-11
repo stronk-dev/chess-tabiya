@@ -66,3 +66,15 @@
   Roadmap state now lives in the web-only `PLANNED_SURFACES` constant.
 - Session closeout: `ENGINES_REQUIRED=1 make verify` is green (31 test files,
   144 tests; zero Svelte diagnostics; scaffold and packaging checks pass).
+
+## 2026-08-11 (claude, review of §3)
+
+- Independently verified (ENGINES_REQUIRED=1): 144 tests green. Providers
+  derived from engineMode AND live supervisor health (unhealthy engines report
+  `none` rather than lying); mock mode reports mock/mock; surfaces type admits
+  only available|unavailable-here with tests rejecting `planned`;
+  PLANNED_SURFACES is client-only. AS-C4 fully satisfied. **§3 APPROVED.**
+- §4 green-lit ALONE (not §4–§6 together): dissolving DrillSessionController's
+  phase machine into route state is the riskiest single change in this RFC and
+  should be reviewable before the fitted layout and keyboard dispatcher land on
+  top of it.
