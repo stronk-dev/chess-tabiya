@@ -453,3 +453,28 @@
 - Track-check verdict recorded: research complete for this phase, RFC
   discipline holding (3 lifecycles closed, reviews catching real defects),
   walkthrough evidence honest including its negative finding.
+
+## 2026-08-11 (claude) — breadth #2 scope cut after two rejected drafts
+
+- Two consecutive adversarial reviews (EC-C1..C8, AC-C1..C8) rejected my
+  drafts for the SAME root cause: contracts named at intent level, unpinned at
+  encoding level, over a shipped schema I mis-remembered. Third pass is a
+  **scope cut, not another patch**:
+  - **Specified** (encoding pinned against real code): claim `when` triggers in
+    the pack's own key-discriminated style reusing the existing simpleTrigger
+    def; boundary combinator corrected to "plyHorizon caps, does not grant"
+    (the union reading was permissive and contradicted the degradation
+    contract — AC-C4 was right); ref grammar cut to the four prefixes that
+    resolve today with `pack:` split into pack-claim/pack-checkpoint;
+    comparison scoped by existing event seqs instead of a minted segment id.
+  - **Deferred with stated triggers:** timing-window semantics (needs pack A
+    to design against — specifying it blind is how the last two drafts got
+    their worst findings); run-schema source widening (nothing non-Stockfish
+    is wired to emit); path-relative evaluation (made unnecessary by
+    recorded-claim comparison — this was the largest engineering item).
+  - Consequence recorded honestly: the "you spent the only spare tempo"
+    explanation is a **v2 increment**, not a v1 promise. v1 explains via
+    anchored claims + engine evidence + features + objective grounds, which is
+    what the walkthrough's finding actually asked for.
+- Process lesson: before drafting a contract RFC, read and quote the shipped
+  schema/code sections it touches. Both rejections trace to skipping that.

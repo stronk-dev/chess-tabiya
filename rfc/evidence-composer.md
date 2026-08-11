@@ -43,13 +43,13 @@ timingEvents`; **which are required becomes scope-dependent** per amendment 4
 (the baseline's always-required list is replaced). Amendments:
 
 1. **`scope`** (new, required): `{kind: "checkpoint", nodeId}` |
-   `{kind: "segment", segmentId}` (the stable composite id from
-   authoring-contracts) | `{kind: "comparison", branchA, branchB}`.
+   `{kind: "segment", branchId, startSeq, endSeq}` (authoring-contracts §4 —
+   no new identity minted) | `{kind: "comparison", branchA, branchB}`.
 2. **`provenanceMode`** (new, required): `authored | instruments_only`
    (two-valued per authoring-contracts §3).
-3. Every `claims[]` entry keeps `evidenceRefs` and gains `sourceKind` ∈ the
-   seven `evidenceTypes` values; `uncertainty` becomes an enum
-   (`stated | likely | uncertain`) rather than free text.
+3. Every `claims[]` entry keeps `evidenceRefs` and gains `sourceKind`;
+   `uncertainty` becomes an enum (`stated | likely | uncertain`) rather than
+   free text. v1 emits only the `sourceKind`s the live ref prefixes produce.
 4. **Payload shapes are specified, not `type: object`** (EC-C5): the archive
    baseline leaves `branches`/`objectiveComparison`/`stockfish`/`humanModel`/
    `corpus`/`features`/`timingEvents` shapeless. v0.1 gives each a real shape,
@@ -58,31 +58,36 @@ timingEvents`; **which are required becomes scope-dependent** per amendment 4
    schema uses `if/then` per `scope.kind` instead of the baseline's
    always-required list.
 
+### Comparison uses recorded claims (not off-cursor re-evaluation)
+
+Claims are composed and recorded when their trigger fires on the active path.
+A comparison packet assembles the *recorded* claims of both branches rather
+than re-evaluating triggers off-cursor — which is what lets v1 ship without
+path-relative trigger evaluation (authoring-contracts §Deferred).
+
 ### Composition rules (fail closed)
 
 - **A claim without at least one resolving evidence ref is dropped, not
   rendered.** Composition logs the drop; it never emits an unsupported claim
   (ADR-0005's structural enforcement, not a prompt instruction).
-- Evidence typing is never merged: Stockfish → `engine_validated`, Maia →
-  `human_model_predicted`, Syzygy → `tablebase_exact`, corpus →
-  `corpus_observed`, extractor → `derived_feature`, pack author →
-  `author_principle`, anything else → `hypothesis` (and `hypothesis` claims are
-  marked, never stated as fact).
+- Evidence typing is never merged. v1 live sources: Stockfish →
+  `engine_validated`, extractor/rules → `derived_feature`, pack author →
+  `author_principle`, author-marked speculation → `hypothesis` (marked, never
+  stated as fact). Maia/tablebase/corpus typings are reserved by the enum but
+  emit nothing until those sources are wired.
 - Authored claims are **selected**, not generated: a pack claim enters the
   packet when its `when` trigger (authoring-contracts §1) is satisfied on the
   node/segment in scope. A claim with no satisfied trigger never appears.
 
-### Timing events (the sharpest mechanism)
+### Timing events — deferred with the contract (v2)
 
-The composer **evaluates the derivations defined in authoring-contracts §2**
-per branch and emits them as `timingEvents[]`. It defines no timing semantics
-of its own — that vocabulary and its formulas are the authored contract; this
-layer runs them. Comparison packets align timing events across branches by
-relative ply from the fork.
-
-This is what makes "your rook move was not a blunder — it consumed the only
-spare tempo, and the attack arrived a ply earlier" derivable from authored
-windows plus played moves, rather than prose invention.
+`timingEvents[]` stays in the packet **shape** but is always empty in v1:
+authoring-contracts defers the window vocabulary until pack A exists to design
+it against. The "you spent the only spare tempo" explanation is therefore a
+stated v2 increment, not a v1 promise. What v1 explains instead: anchored
+authored claims, engine evidence, structural features with their ply-of-change,
+and objective-state transitions with their grounds — which is what the
+walkthrough's "difference without consequence" finding actually asked for.
 
 ### Deterministic feature extractor (v1 set, formulas stated — EC-C8)
 
@@ -117,7 +122,7 @@ combinator** from authoring-contracts §3:
 
 ### API and per-scope reveal (EC-C6)
 
-`GET /runs/:id/feedback?scope=checkpoint:<nodeId>|segment:<segmentId>|compare:<a>,<b>`
+`GET /runs/:id/feedback?scope=checkpoint:<nodeId>|segment:<branchId>,<startSeq>,<endSeq>|compare:<a>,<b>`
 → packet. **Leaseless** (a read that mutates nothing; read routes carry no
 writer id).
 
@@ -140,15 +145,13 @@ moves to program #2b so the composer stays a pure, testable data function.
 - Living `schemas/feedback_packet.schema.json` v0.1 with all four amendments
   + negative fixtures (claim without evidenceRefs; packet without scope;
   authored claim emitted while `instruments_only`).
-- Composer unit tests per source kind (all seven now resolvable via the
-  authoring-contracts ref grammar); a merged-typing test proving Stockfish and
-  Maia values never coalesce.
+- Composer unit tests per **live** source kind (the four prefixes in
+  authoring-contracts §3); a typing test proving `engine_validated` and
+  `derived_feature` values never coalesce into one number.
 - **Fail-closed test:** a pack claim whose refs do not resolve is dropped and
   logged, and the packet still composes.
-- Timing events: a fixture run where the player spends the luxury move and the
-  opponent arrives first yields `one_tempo_short` on that branch and `in_time`
-  on the alternative — the mechanism demonstrated end to end against the
-  authored window.
+- `timingEvents` is present and empty in every v1 packet (asserted, so its
+  absence is a deliberate contract rather than an oversight).
 - Feature extractor: golden tests per shipped feature (formulas above), incl.
   the ply-of-change.
 - Degradation: a run played past `authoredBoundary` composes
