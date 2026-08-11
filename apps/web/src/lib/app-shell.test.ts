@@ -129,6 +129,29 @@ function target(): HTMLElement {
   return element;
 }
 
+function key(value: string, options: KeyboardEventInit = {}): KeyboardEvent {
+  const event = new KeyboardEvent("keydown", {
+    key: value,
+    bubbles: true,
+    cancelable: true,
+    ...options,
+  });
+  window.dispatchEvent(event);
+  return event;
+}
+
+function expectDisabledControlsExplained(): void {
+  for (const control of document.querySelectorAll<HTMLElement>(
+    ":disabled, [aria-disabled='true']",
+  )) {
+    const references = control.getAttribute("aria-describedby")?.split(/\s+/) ?? [];
+    expect(references.length, control.outerHTML).toBeGreaterThan(0);
+    for (const id of references) {
+      expect(document.getElementById(id)?.textContent?.trim(), control.outerHTML).toBeTruthy();
+    }
+  }
+}
+
 afterEach(() => {
   document.body.replaceChildren();
   history.replaceState(null, "", "/");
@@ -149,6 +172,38 @@ describe("application shell", () => {
     await vi.waitFor(() => expect(document.querySelector("main.drill")).not.toBeNull());
     expect(document.body.textContent).toContain("Read-only follower");
     expect(location.search).toBe("");
+    expectDisabledControlsExplained();
+
+    const main = document.querySelector<HTMLElement>("main.drill")!;
+    main.focus();
+    expect(key("Tab").defaultPrevented).toBe(true);
+
+    const playLink = document.querySelector<HTMLAnchorElement>(
+      "#primary-navigation a[href='/play']",
+    )!;
+    playLink.focus();
+    expect(key("Tab").defaultPrevented).toBe(false);
+
+    main.focus();
+    expect(key("g").defaultPrevented).toBe(true);
+    expect(key("m").defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(
+      document.querySelector("#primary-navigation a"),
+    );
+
+    playLink.focus();
+    key("?");
+    await vi.waitFor(() =>
+      expect(document.activeElement?.id).toBe("shell-shortcuts-title"),
+    );
+    key("Escape");
+    await vi.waitFor(() => expect(document.activeElement).toBe(playLink));
+
+    main.focus();
+    key("?");
+    await vi.waitFor(() => expect(document.activeElement?.id).toBe("shortcut-title"));
+    key("Escape");
+    await vi.waitFor(() => expect(document.activeElement).toBe(main));
     await unmount(component);
   });
 
@@ -170,6 +225,7 @@ describe("application shell", () => {
     expect(document.body.textContent).toContain("Read-only follower");
     expect(document.body.textContent).toContain(pack.title as string);
     expect(storage.values.size).toBe(0);
+    expectDisabledControlsExplained();
     await unmount(component);
   });
 
@@ -208,6 +264,7 @@ describe("application shell", () => {
     for (const [path, copy] of routes) {
       router.navigate(path);
       await vi.waitFor(() => expect(document.body.textContent).toContain(copy));
+      expectDisabledControlsExplained();
     }
 
     expect(document.body.textContent).toContain("/missing");

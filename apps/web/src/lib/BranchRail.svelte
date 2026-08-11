@@ -52,6 +52,10 @@
 <style>
   .rail {
     min-width: 0;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
   }
 
   .heading {
@@ -76,6 +80,8 @@
     gap: 0.55rem;
     margin: 0;
     padding: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     list-style: none;
   }
 

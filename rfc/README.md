@@ -4,10 +4,10 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 
 ## Active
 
-| RFC | Status | Parent |
-|---|---|---|
-| `0000-rfc-process.md` | accepted | — |
-| `app-shell.md` | accepted | `archive/drill-client.md` |
+| RFC | Status | Parent | Implementation |
+|---|---|---|---|
+| `0000-rfc-process.md` | accepted | — | process |
+| `app-shell.md` | accepted | `archive/drill-client.md` | §1–§6 complete; acceptance review pending |
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in
 `planning/exploration/log.md`): E1 met, E2 advisory, E3/E4/E5 accepted as in-flight

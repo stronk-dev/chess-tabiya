@@ -7,6 +7,7 @@
   import CheckpointSheet from "./CheckpointSheet.svelte";
   import Chessboard from "./Chessboard.svelte";
   import CompareView from "./CompareView.svelte";
+  import HonestControl from "./HonestControl.svelte";
   import KeyboardHelp from "./KeyboardHelp.svelte";
   import Timeline from "./Timeline.svelte";
   import WhyBanner from "./WhyBanner.svelte";
@@ -20,6 +21,7 @@
     whyBanner,
   } from "./screen-model.js";
   import type { RunStateSnapshot } from "./run-state.js";
+  import type { RegisterKeyboardRegion } from "./keyboard.js";
 
   type RewindTarget =
     | { readonly nodeId: string }
@@ -42,6 +44,7 @@
     onContinueCheckpoint: () => void | Promise<void>;
     onExport: () => void | Promise<void>;
     onStop: () => void;
+    registerKeyboardRegion: RegisterKeyboardRegion;
   }
 
   let {
@@ -61,6 +64,7 @@
     onContinueCheckpoint,
     onExport,
     onStop,
+    registerKeyboardRegion,
   }: Props = $props();
 
   let previewNodeId: string | undefined = $state();
@@ -76,6 +80,8 @@
   let mainElement = $state<HTMLElement>();
   let forkInput = $state<HTMLInputElement>();
   let pickerHeading = $state<HTMLHeadingElement>();
+  let regionElement = $state<HTMLElement>();
+  let unregisterKeyboard: (() => void) | undefined;
 
   let run = $derived(snapshot.run);
   let currentNode = $derived(activeNode(run));
@@ -97,7 +103,9 @@
     ];
   });
 
-  function interactiveTarget(target: EventTarget | null): boolean {
+  function interactiveTarget(event: KeyboardEvent): boolean {
+    const target =
+      event.target instanceof Node ? event.target : document.activeElement;
     return (
       target instanceof HTMLInputElement ||
       target instanceof HTMLTextAreaElement ||
@@ -127,6 +135,16 @@
 
   function closeHelp(): void {
     helpOpen = false;
+    void tick().then(() => mainElement?.focus());
+  }
+
+  function closeFork(): void {
+    forkOpen = false;
+    void tick().then(() => mainElement?.focus());
+  }
+
+  function closeCheckpointPicker(): void {
+    checkpointPickerOpen = false;
     void tick().then(() => mainElement?.focus());
   }
 
@@ -206,27 +224,36 @@
     forkIntent = "";
   }
 
-  function keyboard(event: KeyboardEvent): void {
+  async function continueFromCheckpoint(): Promise<void> {
+    await onContinueCheckpoint();
+    await tick();
+    mainElement?.focus();
+  }
+
+  function keyboard(event: KeyboardEvent): boolean {
     if (event.key === "?" || (event.key === "/" && event.shiftKey)) {
       event.preventDefault();
       if (helpOpen) closeHelp();
       else helpOpen = true;
-      return;
+      return true;
     }
     if (event.key === "Escape") {
-      helpOpen = false;
-      forkOpen = false;
-      checkpointPickerOpen = false;
-      return;
+      if (helpOpen) closeHelp();
+      else if (forkOpen) closeFork();
+      else if (checkpointPickerOpen) closeCheckpointPicker();
+      else if (comparison !== undefined) closeCompare();
+      else if (checkpoint === undefined) return false;
+      event.preventDefault();
+      return true;
     }
     if (
-      interactiveTarget(event.target) ||
+      interactiveTarget(event) ||
       helpOpen ||
       forkOpen ||
       checkpointPickerOpen ||
       checkpoint !== undefined
     ) {
-      return;
+      return false;
     }
     if (event.key.toLowerCase() === "r") {
       event.preventDefault();
@@ -238,41 +265,55 @@
         const checkpointId = latestCheckpointId();
         if (checkpointId !== undefined) void onRewind({ checkpointId });
       }
+      return true;
     } else if (event.key.toLowerCase() === "b") {
       event.preventDefault();
       forkOpen = true;
       void tick().then(() => forkInput?.focus());
+      return true;
     } else if (/^[1-9]$/.test(event.key)) {
       const branch = cards[Number(event.key) - 1];
       if (branch !== undefined) {
         event.preventDefault();
         void onSwitchBranch(branch.leafNodeId);
+        return true;
       }
     } else if (event.key === "Tab") {
       event.preventDefault();
       if (comparison === undefined) openCompare();
       else closeCompare();
+      return true;
     } else if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       event.preventDefault();
       stepTimeline(event.key === "ArrowLeft" ? -1 : 1);
+      return true;
     } else if (event.key === " ") {
       event.preventDefault();
       toggleReplay();
+      return true;
     } else if (event.key.toLowerCase() === "e") {
       event.preventDefault();
       void onExport();
+      return true;
     } else if (event.key === "Enter" && previewNodeId !== undefined) {
       event.preventDefault();
       void confirmPreview();
+      return true;
     }
+    return false;
   }
 
   onMount(() => {
+    if (regionElement === undefined) {
+      throw new Error("Drill keyboard region did not mount");
+    }
+    unregisterKeyboard = registerKeyboardRegion(regionElement, keyboard);
     if (checkpoint === undefined) {
       mainElement?.focus();
     }
   });
   onDestroy(() => {
+    unregisterKeyboard?.();
     if (replayTimer !== undefined) clearInterval(replayTimer);
   });
 
@@ -282,7 +323,7 @@
   });
 </script>
 
-<svelte:window onkeydown={keyboard} />
+<div class="drill-region" data-keyboard-region="drill" bind:this={regionElement}>
 
 {#if comparison}
   <CompareView
@@ -351,7 +392,20 @@
         />
         <div class="quick-actions" aria-label="Run actions">
           <button type="button" onclick={() => (forkOpen = true)}>Fork <kbd>B</kbd></button>
-          <button type="button" disabled={cards.length < 2} onclick={openCompare}>Compare <kbd>Tab</kbd></button>
+          <HonestControl
+            disabled={cards.length < 2}
+            reasonId="drill-compare-unavailable"
+            reason="Create at least two branches before comparing."
+          >
+            {#snippet children(describedBy)}
+              <button
+                type="button"
+                disabled={cards.length < 2}
+                aria-describedby={describedBy}
+                onclick={openCompare}
+              >Compare <kbd>Tab</kbd></button>
+            {/snippet}
+          </HonestControl>
           <button type="button" aria-pressed={replaying} onclick={toggleReplay}>
             {replaying ? "Pause" : "Replay"} <kbd>Space</kbd>
           </button>
@@ -366,7 +420,7 @@
   <CheckpointSheet
     {checkpoint}
     canCompare={cards.length >= 2}
-    onContinue={onContinueCheckpoint}
+    onContinue={continueFromCheckpoint}
     onRewind={() => onRewind({ nodeId: checkpoint.nodeId })}
     onCompare={openCompare}
     {onStop}
@@ -383,7 +437,7 @@
         <h2 id="fork-title">Name the experiment.</h2>
         <label>Label <input bind:this={forkInput} bind:value={forkLabel} placeholder="alt-{cards.length}" /></label>
         <label>Intent <textarea bind:value={forkIntent} placeholder="What are you testing?"></textarea></label>
-        <div><button type="button" onclick={() => (forkOpen = false)}>Cancel</button><button class="primary" type="submit">Create branch</button></div>
+        <div><button type="button" onclick={closeFork}>Cancel</button><button class="primary" type="submit">Create branch</button></div>
       </form>
     </div>
   </div>
@@ -402,16 +456,27 @@
           {/if}
         {:else}<p>No checkpoint reached yet.</p>{/each}
       </div>
-      <button type="button" onclick={() => (checkpointPickerOpen = false)}>Cancel</button>
+      <button type="button" onclick={closeCheckpointPicker}>Cancel</button>
     </div>
   </div>
 {/if}
+</div>
 
 <style>
+  .drill-region {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
   .drill {
     width: min(86rem, calc(100% - 2rem));
+    height: 100%;
     margin: 0 auto;
-    padding: 0.75rem 0 2rem;
+    padding: 0.6rem 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     outline: none;
   }
 
@@ -477,17 +542,23 @@
   }
 
   .workspace {
+    flex: 1;
+    min-height: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.38fr);
+    grid-template-rows: minmax(0, 1fr) auto;
     gap: 1rem;
-    align-items: start;
+    overflow: hidden;
   }
 
   .position-column {
-    width: min(100%, 46rem);
+    width: 100%;
+    min-height: 0;
     justify-self: center;
     display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr);
     gap: 0.8rem;
+    overflow: hidden;
   }
 
   .objective-copy p {
@@ -506,6 +577,10 @@
 
   .board-frame {
     position: relative;
+    width: min(100%, calc(100dvh - 22rem), 40rem);
+    max-height: 100%;
+    aspect-ratio: 1;
+    justify-self: center;
     overflow: hidden;
     border-radius: 0.8rem;
     box-shadow: var(--shadow);
@@ -531,9 +606,12 @@
 
   .timeline-row {
     grid-column: 1 / -1;
+    min-height: 0;
+    max-height: 8.5rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 0.75rem;
+    overflow: hidden;
   }
 
   .quick-actions {
@@ -632,14 +710,31 @@
   }
 
   @media (max-width: 62rem) {
+    .drill-region {
+      overflow: auto;
+    }
+
+    .drill {
+      height: auto;
+      min-height: 100%;
+      overflow: visible;
+    }
+
     .workspace {
       grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      overflow: visible;
     }
 
     .timeline-row {
       grid-column: 1;
       grid-template-columns: 1fr;
+      max-height: none;
+      overflow: visible;
     }
+
+    .position-column { overflow: visible; }
+    .board-frame { width: min(100%, 42rem); }
   }
 
   @media (max-width: 38rem) {

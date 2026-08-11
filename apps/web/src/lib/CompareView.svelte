@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
 
   import Chessboard from "./Chessboard.svelte";
+  import HonestControl from "./HonestControl.svelte";
   import type { StartSide } from "./board-model.js";
   import { comparisonNode } from "./screen-model.js";
 
@@ -67,17 +68,35 @@
   </div>
 
   <div class="stepper">
-    <button type="button" disabled={step === 0} onclick={() => onStep(step - 1)}>
-      ← Previous
-    </button>
-    <span>Aligned ply {step} / {maxStep}</span>
-    <button
-      type="button"
-      disabled={step === maxStep}
-      onclick={() => onStep(step + 1)}
+    <HonestControl
+      disabled={step === 0}
+      reasonId="compare-previous-unavailable"
+      reason="The comparison is already at its first aligned position."
     >
-      Next →
-    </button>
+      {#snippet children(describedBy)}
+        <button
+          type="button"
+          disabled={step === 0}
+          aria-describedby={describedBy}
+          onclick={() => onStep(step - 1)}
+        >← Previous</button>
+      {/snippet}
+    </HonestControl>
+    <span>Aligned ply {step} / {maxStep}</span>
+    <HonestControl
+      disabled={step === maxStep}
+      reasonId="compare-next-unavailable"
+      reason="The comparison is already at its last aligned position."
+    >
+      {#snippet children(describedBy)}
+        <button
+          type="button"
+          disabled={step === maxStep}
+          aria-describedby={describedBy}
+          onclick={() => onStep(step + 1)}
+        >Next →</button>
+      {/snippet}
+    </HonestControl>
   </div>
 
   <div class="strips">
@@ -117,8 +136,10 @@
 <style>
   .compare {
     width: min(82rem, calc(100% - 2rem));
+    height: 100%;
     margin: 0 auto;
-    padding: 1.5rem 0 3rem;
+    padding: 1rem 0;
+    overflow: auto;
   }
 
   header,

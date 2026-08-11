@@ -38,21 +38,21 @@ This is a shell-layer REWRITE (no router exists today) — read AS-C5.
 
 ## 5. Fitted region model
 
-- [ ] Viewport-owning layout; inner scroll containers only (timeline, rail, lists)
-- [ ] Drill screen → grid; board sized to smaller viewport axis
-- [ ] Playwright projects 1280x720 + 1440x900; scrollingElement + board-bbox assertions
+- [x] Viewport-owning layout; inner scroll containers only (timeline, rail, lists)
+- [x] Drill screen → grid; board sized to smaller viewport axis
+- [x] Playwright projects 1280x720 + 1440x900; scrollingElement + board-bbox assertions
 
 ## 6. Keyboard ownership + honesty convention
 
-- [ ] Single shell keydown dispatcher; DrillScreen becomes a region-scoped handler
-- [ ] Ownership table incl. the Tab rule; existing main.drill→Tab compare test must
+- [x] Single shell keydown dispatcher; DrillScreen becomes a region-scoped handler
+- [x] Ownership table incl. the Tab rule; existing main.drill→Tab compare test must
       still pass; keyboard-only path drill body → top-bar nav
-- [ ] `g` chords, `?`, `Esc`, focus restoration
-- [ ] aria-describedby convention for disabled controls + DOM sweep across routes;
+- [x] `g` chords, `?`, `Esc`, focus restoration
+- [x] aria-describedby convention for disabled controls + DOM sweep across routes;
       fix the existing Compare button
 
 ## 7. Process closeout
 
-- [ ] docs/drill-client.md updated for amended behavior (capabilities shape,
+- [x] docs/drill-client.md updated for amended behavior (capabilities shape,
       /runs route, shell/keyboard contract)
-- [ ] rfc/README.md index row; ENGINES_REQUIRED=1 make verify + make test-browser green
+- [x] rfc/README.md index row; ENGINES_REQUIRED=1 make verify + make test-browser green

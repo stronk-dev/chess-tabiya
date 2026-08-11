@@ -49,9 +49,10 @@
 </script>
 
 <div class="shell">
+  <a class="skip-link" href="#primary-navigation">Skip to primary navigation</a>
   <header class="shell-topbar">
     <a class="wordmark" href="/" onclick={(event) => follow(event, "/")}>Tabiya</a>
-    <nav aria-label="Primary navigation">
+    <nav id="primary-navigation" aria-label="Primary navigation">
       {#each destinations as [label, path, name]}
         <a
           href={path}
@@ -80,8 +81,25 @@
 
 <style>
   .shell {
-    min-height: 100vh;
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
   }
+
+  .skip-link {
+    position: fixed;
+    z-index: 50;
+    top: 0.35rem;
+    left: 0.35rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0.5rem;
+    background: var(--ink);
+    color: var(--paper);
+    transform: translateY(-150%);
+  }
+
+  .skip-link:focus { transform: translateY(0); }
 
   .shell-topbar {
     position: relative;
@@ -146,6 +164,11 @@
 
   .run-context strong.readonly {
     color: var(--warning);
+  }
+
+  .shell-content {
+    min-height: 0;
+    overflow: hidden;
   }
 
   @media (max-width: 60rem) {

@@ -114,3 +114,34 @@
 - §5 + §6 green-lit together (fitted layout + keyboard ownership): they touch
   the same components and the Tab rule only makes sense against the finished
   region model. Both must keep the existing main.drill→Tab compare test green.
+
+## 2026-08-11 (codex, §5–§7 fitted shell + keyboard ownership)
+
+- Replaced document-flow desktop layout with a viewport-owning shell and
+  bounded drill grid. Lists, branch rail, and timeline own their overflow;
+  narrow layouts use an explicit drill-region scroller. The board is bounded
+  against both axes.
+- Added a Playwright projection across every route at 1280x720 and 1440x900.
+  Its first run caught the board overlapping the timeline at 720px high; the
+  fitted height reserve was corrected and the test now asserts the board ends
+  above the timeline as well as inside the viewport.
+- Consolidated keyboard input into one shell dispatcher with an explicit
+  ownership table. The drill is a registered region; Tab toggles compare only
+  from inside it, normal top-bar Tab traversal remains intact, and `g m`
+  provides a keyboard-only escape to primary navigation. Route chords, the
+  shell/region help overlays, Escape, and focus restoration are exercised.
+- The browser flow caught checkpoint continuation leaving focus on `body`,
+  which made the subsequent rewind shortcut inert. Continue now restores the
+  drill region before play resumes.
+- Added the reusable honest disabled-control convention and route-wide DOM
+  sweeps requiring every disabled or aria-disabled control to reference a
+  nonempty explanation. Compare and stepper controls now satisfy it.
+- Updated the canonical drill-client document and active RFC index for the
+  app-shell amendment. The RFC remains accepted pending independent review.
+- `make test-browser` is green (2 passed, optional Maia skipped). Recorded
+  browser timings: board-ready 68ms, rewind 34ms, branch switch 51.2ms,
+  uncached mock reply 1.4ms, cached mock reply 0.9ms. Branch switching was
+  1.2ms above the historical 50ms target on this run and is recorded rather
+  than hidden.
+- Session closeout: `ENGINES_REQUIRED=1 make verify` is green (33 test files,
+  150 tests; zero Svelte diagnostics; scaffold and packaging checks pass).

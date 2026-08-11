@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  import HonestControl from "./HonestControl.svelte";
   import type { CheckpointNotice } from "./screen-model.js";
 
   interface Props {
@@ -28,7 +29,20 @@
       <button class="primary" type="button" onclick={onContinue}>Continue</button>
       <button type="button" onclick={onRewind}>Rewind here</button>
       {#if checkpoint.actions.includes("compare_branches")}
-        <button type="button" disabled={!canCompare} onclick={onCompare}>Compare</button>
+        <HonestControl
+          disabled={!canCompare}
+          reasonId="checkpoint-compare-unavailable"
+          reason="Reach this checkpoint on at least two branches before comparing."
+        >
+          {#snippet children(describedBy)}
+            <button
+              type="button"
+              disabled={!canCompare}
+              aria-describedby={describedBy}
+              onclick={onCompare}
+            >Compare</button>
+          {/snippet}
+        </HonestControl>
       {/if}
       <button type="button" onclick={onStop}>Stop session</button>
     </div>

@@ -116,6 +116,20 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   expect(pgn).toContain('[Event "Tabiya drill: najdorf-transition-schema-example"]');
   expect(pgn).toMatch(/\([^)]*\)/);
 
+  await page.keyboard.press("Tab");
+  await expect(page.locator("main.drill")).toBeFocused();
+  const playNavigation = page.locator("#primary-navigation a[href='/play']");
+  await playNavigation.focus();
+  await page.keyboard.press("Tab");
+  await expect(page.locator("#primary-navigation a[href='/learn']")).toBeFocused();
+  await expect(
+    page.getByRole("heading", { name: "Same decision, two consequences." }),
+  ).toHaveCount(0);
+  await page.locator("main.drill").focus();
+  await page.keyboard.press("g");
+  await page.keyboard.press("m");
+  await expect(page.locator("#primary-navigation a").first()).toBeFocused();
+
   const selectorLatency = await page.evaluate(async () => {
     const packResponse = await fetch("/packs");
     const packs = (await packResponse.json()) as { id: string; digest: string }[];
@@ -162,5 +176,58 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   for (const measurement of Object.values(latency)) {
     expect(Number.isFinite(measurement)).toBe(true);
     expect(measurement).toBeGreaterThanOrEqual(0);
+  }
+});
+
+test("every shell route owns the viewport at both desktop projections", async ({
+  page,
+}) => {
+  const projections = [
+    { width: 1280, height: 720 },
+    { width: 1440, height: 900 },
+  ] as const;
+
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    await page.goto("/play");
+    await page.getByRole("button", { name: /Open position/ }).click();
+    await expect(page.locator("cg-board")).toBeVisible();
+    const runPath = new URL(page.url()).pathname;
+    const routes = [
+      "/",
+      "/play",
+      runPath,
+      "/review",
+      "/learn",
+      "/live",
+      "/create",
+      "/library",
+      "/settings",
+    ];
+
+    for (const route of routes) {
+      await page.goto(route);
+      await expect(page.getByText("Loading Tabiya…")).toHaveCount(0);
+      const dimensions = await page.evaluate(() => ({
+        scrollHeight: document.scrollingElement!.scrollHeight,
+        clientHeight: document.scrollingElement!.clientHeight,
+      }));
+      expect(
+        dimensions.scrollHeight,
+        `${route} at ${viewport.width}x${viewport.height}`,
+      ).toBeLessThanOrEqual(dimensions.clientHeight + 1);
+
+      if (route === runPath) {
+        const board = await page.locator("cg-board").boundingBox();
+        const timeline = await page.locator(".timeline-row").boundingBox();
+        expect(board).not.toBeNull();
+        expect(timeline).not.toBeNull();
+        expect(board!.x).toBeGreaterThanOrEqual(-1);
+        expect(board!.y).toBeGreaterThanOrEqual(-1);
+        expect(board!.x + board!.width).toBeLessThanOrEqual(viewport.width + 1);
+        expect(board!.y + board!.height).toBeLessThanOrEqual(viewport.height + 1);
+        expect(board!.y + board!.height).toBeLessThanOrEqual(timeline!.y + 1);
+      }
+    }
   }
 });

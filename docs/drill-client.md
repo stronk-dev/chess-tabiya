@@ -24,6 +24,25 @@ version, digest, title, mode, difficulty, and review status. `GET /packs/:id`
 returns the full document and its digest in `x-pack-digest`; missing packs are
 typed `PACK_NOT_FOUND` errors.
 
+## Run index and deployment capabilities
+
+SQLite opens through an ordered, idempotent `PRAGMA user_version` migration
+runner. Migration 1 adds a denormalized run summary and backfills each legacy
+event log exactly once; reopening an upgraded database performs no work. New
+runs retain their pack title while pre-migration rows honestly fall back to the
+pack ID because their snapshots never stored a title.
+
+`GET /runs?limit=&offset=` lists newest-first summaries without replaying every
+run or consulting the pack registry. Both those summaries and
+`GET /runs/:id/graph` include `activeWriterId`, allowing a browser to determine
+its access mode without attempting a mutation.
+
+`GET /capabilities` derives the opponent, judge, and LLM providers from the
+configured engine mode and live supervisor health. Mock is a first-class
+provider for both opponent and judge when mock evidence is wired. Deployment
+surfaces emit only `available` or `unavailable-here`; `planned` is roadmap
+information and exists only as a client constant.
+
 ## Pack-aware run mutations
 
 `POST /runs` accepts `packId`. The service resolves the registered pack and
@@ -77,16 +96,18 @@ IDs are rejected by the runtime rather than silently omitted.
 ## Typed browser transport and writer identity
 
 `DrillApi` is the typed client for the complete v1 surface: capabilities,
-packs, run creation and mutation, opponent selection, graph and comparison,
-events and evidence, and PGN download. It preserves structured server failures
-as `ApiError`, including the machine-readable error code and details. Mutating
-requests carry the run's writer ID; read-only and selector requests do not.
+packs, run listing, run creation and mutation, opponent selection, graph and
+comparison, events and evidence, and PGN download. It preserves structured
+server failures as `ApiError`, including the machine-readable error code and
+details. Mutating requests carry the run's writer ID; read-only and selector
+requests do not.
 
-`WriterSession` stores one generated writer ID in `localStorage` under a key
-scoped to the run ID. Reconstructing the session after a browser refresh reuses
-that identity. A `NOT_ACTIVE_WRITER` response marks only the live session as
-read-only; it does not overwrite the persisted identity or attempt unsupported
-lease transfer.
+`WriterSession.claimFor()` explicitly creates and persists one writer ID under
+a run-scoped `localStorage` key. `peek()` is non-minting, and observing a run
+owned by another writer leaves storage untouched. On load, the client compares
+the stored identity with `activeWriterId` and enters writer or read-only mode
+before the first mutation. A later `NOT_ACTIVE_WRITER` response remains a
+defensive demotion path; lease transfer is still unsupported.
 
 ## Run-state projection and polling
 
@@ -127,11 +148,11 @@ checkpoint vocabulary.
 ## Episode orchestration
 
 `DrillSessionController` composes the transport, persisted `WriterSession`, and
-`RunStateStore` without implementing a second runtime. Starting a pack fetches
-the pack and capabilities, creates a URL-addressable run, and derives its
-policy locus from the server capability identities. Refresh resumes that run
-from the public event log with the same stored writer ID; a rejected writer
-continues as a read-only follower.
+`RunStateStore` without implementing a second runtime or owning screen state.
+Routes own which screen is visible. Starting a pack creates a URL-addressable
+run; refreshing `/play/run/:id` reconstructs its pack from the authoritative
+`run.started` event and projects the public event log. The client derives its
+policy locus from capability identities and access from the visible lease.
 
 A player move is applied first. When its atomic emitted-event suffix contains a
 checkpoint, the controller pauses before selecting an opponent reply. Continue
@@ -167,15 +188,42 @@ side is dimmed and labeled `Line ended`. Objective timelines and checkpoint
 hits render as separate strips. No evaluation numbers, engine arrows, move
 labels, or human-frequency overlays exist in the v1 play or compare screens.
 
+## Application shell and fitted regions
+
+A dependency-free history-API router owns `/`, `/play`, `/play/run/:id`,
+`/review`, `/learn`, `/live`, `/create`, `/library`, and `/settings`, plus an
+explicit not-found view. Home presents a lease-aware resume card; Review lists
+stored runs and opens one in the live drill context. Learn, Live, and Create
+are honest empty states naming the breadth-program item that will implement
+them rather than pretending the capability exists.
+
+The application shell owns exactly one viewport: a fixed-height top bar above
+a `minmax(0, 1fr)` content region. The document does not scroll on desktop;
+lists, the branch rail, and timeline own their overflow. The drill is a fitted
+grid, and its square board is bounded by both available width and available
+height so it cannot overlap the timeline. On narrower layouts the drill region
+itself becomes the explicit scroller and the panes stack.
+
 ## Keyboard and focus contract
 
-The implemented shortcuts are `R` for the latest checkpoint, `Shift+R` for the
-checkpoint picker, `B` for a labeled/intent branch, `1`–`9` for branch switch,
-`Tab` for compare toggle, left/right arrows for the synchronized timeline,
-Space for replay, `E` for PGN export, and `?` for the keyboard guide. Every
-operation also has a visible control. Focus enters the drill and moves into the
-checkpoint sheet, checkpoint picker, fork form, compare screen, and shortcut
-guide when each surface opens.
+`App.svelte` owns the sole window keydown listener and dispatches first to the
+active registered region, then to shell commands. The drill region owns `R`
+for the latest checkpoint, `Shift+R` for the checkpoint picker, `B` for a
+labeled/intent branch, `1`–`9` for branch switch, left/right arrows for the
+synchronized timeline, Space for replay, `E` for PGN export, and its local
+keyboard guide. `Tab` toggles compare only while focus is inside the drill
+region; in the top bar it retains native focus traversal, so keyboard users can
+always leave the drill.
+
+Shell `g` chords route to Home, Play, Learn, Review, Live, Create, Library, or
+Settings, while `g m` focuses primary navigation. Shell and region `?` guides,
+Escape dismissal, checkpoint sheets, pickers, fork forms, and compare all
+restore focus to the control or region that opened them.
+
+Every disabled or `aria-disabled` control is described by a nonempty hidden
+reason through `aria-describedby`. The reusable honest-control wrapper applies
+that contract, and a DOM sweep exercises it on every route. Visible controls
+remain available for every shortcut.
 
 ## Browser acceptance
 
@@ -195,6 +243,10 @@ the ordinary browser job. Timings are evidence written to `test-results/`, not
 hard CI thresholds: the planning log records the budgets and whether the
 observed machine met them.
 
+A second Playwright projection checks every route at 1280x720 and 1440x900.
+It asserts that the document itself has no vertical overflow and that the
+drill board remains wholly within the viewport and above the timeline.
+
 ## Packaged operation
 
 The root Compose file has an unprofiled server using the deterministic mock
@@ -213,10 +265,11 @@ includes Node, pnpm, and Stockfish.
 
 ## Current boundary
 
-Layers 1 through 4 of the accepted drill-client RFC and the explicitly
-owner-operated walkthrough are complete. The qualified walkthrough verdict is
-that fork/rewind is quick and promising, while manual compare selection, the
-scrolling desktop shell, and especially the absent theory/feedback layer define
-the follow-up UI and feedback work. The living Najdorf pack remains a schema
-example rather than reviewed content; this slice therefore validates that the
-mechanical loop is worth iterating, not that comparison already teaches.
+The drill-client implementation and the app-shell amendment now provide the
+playable mechanism, route shell, persistent history, honest capabilities,
+fitted regions, and one keyboard ownership model. The qualified walkthrough
+verdict remains that fork/rewind is quick and promising, while manual compare
+selection and especially the absent theory/feedback layer define the next
+program. The living Najdorf pack remains a schema example rather than reviewed
+content; this validates that the mechanical loop is worth iterating, not that
+comparison already teaches.

@@ -47,10 +47,13 @@
 
 <style>
   .timeline {
+    min-width: 0;
+    min-height: 0;
     padding: 1rem;
     border: 1px solid var(--line);
     border-radius: 1rem;
     background: var(--panel);
+    overflow: hidden;
   }
 
   .timeline-heading {

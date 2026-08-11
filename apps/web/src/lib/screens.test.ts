@@ -35,13 +35,38 @@ vi.mock("@lichess-org/chessground", () => ({
 }));
 
 import CompareView from "./CompareView.svelte";
+import CheckpointSheet from "./CheckpointSheet.svelte";
 import DrillScreen from "./DrillScreen.svelte";
 import PackList from "./PackList.svelte";
 import type { PackSummary } from "./api.js";
+import type {
+  RegionKeyboardHandler,
+  RegisterKeyboardRegion,
+} from "./keyboard.js";
 import { latestCheckpoint } from "./screen-model.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
 const at = "2026-08-11T20:00:00.000Z";
+let regionKeyboard: RegionKeyboardHandler | undefined;
+
+const registerKeyboardRegion: RegisterKeyboardRegion = (_element, handler) => {
+  regionKeyboard = handler;
+  return () => {
+    if (regionKeyboard === handler) regionKeyboard = undefined;
+  };
+};
+
+function expectDisabledControlsExplained(): void {
+  for (const control of document.querySelectorAll<HTMLElement>(
+    ":disabled, [aria-disabled='true']",
+  )) {
+    const references = control.getAttribute("aria-describedby")?.split(/\s+/) ?? [];
+    expect(references.length, control.outerHTML).toBeGreaterThan(0);
+    for (const id of references) {
+      expect(document.getElementById(id)?.textContent?.trim(), control.outerHTML).toBeTruthy();
+    }
+  }
+}
 
 function branchedRun(): DrillRun {
   let run = createRun({
@@ -81,8 +106,13 @@ function target(): HTMLElement {
 }
 
 function key(value: string, options: KeyboardEventInit = {}): void {
-  window.dispatchEvent(
-    new KeyboardEvent("keydown", { key: value, bubbles: true, ...options }),
+  regionKeyboard?.(
+    new KeyboardEvent("keydown", {
+      key: value,
+      bubbles: true,
+      cancelable: true,
+      ...options,
+    }),
   );
 }
 
@@ -91,6 +121,7 @@ afterEach(() => {
   chessground.configs.length = 0;
   chessground.set.mockClear();
   chessground.destroy.mockClear();
+  regionKeyboard = undefined;
   vi.restoreAllMocks();
 });
 
@@ -136,6 +167,7 @@ describe("Layer 3 screens", () => {
         onContinueCheckpoint: vi.fn(),
         onExport: vi.fn(),
         onStop: vi.fn(),
+        registerKeyboardRegion,
       },
     });
     await tick();
@@ -184,6 +216,34 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector(".boards article.absent")).not.toBeNull();
     expect(document.body.textContent).toContain("predict-reply");
     expect(document.body.textContent).toContain("timing-window");
+    expectDisabledControlsExplained();
+    await unmount(component);
+  });
+
+  it("explains why checkpoint comparison is disabled", async () => {
+    const component = mount(CheckpointSheet, {
+      target: target(),
+      props: {
+        checkpoint: {
+          id: "predict-reply",
+          label: "Predict the reply",
+          nodeId: "node-1",
+          eventSeq: 2,
+          actions: ["compare_branches"],
+        },
+        canCompare: false,
+        onContinue: vi.fn(),
+        onRewind: vi.fn(),
+        onCompare: vi.fn(),
+        onStop: vi.fn(),
+      },
+    });
+    await tick();
+
+    expectDisabledControlsExplained();
+    expect(document.body.textContent).toContain(
+      "Reach this checkpoint on at least two branches before comparing.",
+    );
     await unmount(component);
   });
 
@@ -209,6 +269,7 @@ describe("Layer 3 screens", () => {
         onContinueCheckpoint: vi.fn(),
         onExport,
         onStop: vi.fn(),
+        registerKeyboardRegion,
       },
     });
     await tick();

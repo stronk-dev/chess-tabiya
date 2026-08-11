@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { onDestroy, onMount, untrack } from "svelte";
+  import { onDestroy, onMount, tick, untrack } from "svelte";
 
   import DrillScreen from "./lib/DrillScreen.svelte";
   import PackList from "./lib/PackList.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
+  import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
   import {
     DrillApi,
     PLANNED_SURFACES,
@@ -14,6 +15,7 @@
     type SurfaceId,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
+  import { ShellKeyboardDispatcher } from "./lib/keyboard.js";
   import {
     DrillSessionController,
     type DrillSessionState,
@@ -49,9 +51,19 @@
   let capabilities: Capabilities | undefined = $state();
   let routeLoading = $state(true);
   let routeError: string | undefined = $state();
+  let shellHelpOpen = $state(false);
+  let shellHelpReturnFocus: HTMLElement | undefined;
   let unsubscribeController: (() => void) | undefined;
   let unsubscribeRouter: (() => void) | undefined;
   let loadGeneration = 0;
+
+  const keyboardDispatcher = new ShellKeyboardDispatcher({
+    navigate,
+    focusPrimaryNavigation,
+    openHelp: openShellHelp,
+    closeHelp: closeShellHelp,
+    helpIsOpen: () => shellHelpOpen,
+  });
 
   let recentRun = $derived(runs[0]);
   let runContext = $derived(
@@ -65,7 +77,27 @@
   );
 
   function navigate(path: string): void {
+    if (shellHelpOpen) closeShellHelp();
     router.navigate(path);
+  }
+
+  function focusPrimaryNavigation(): void {
+    document.querySelector<HTMLElement>("#primary-navigation a")?.focus();
+  }
+
+  function openShellHelp(): void {
+    shellHelpReturnFocus =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : undefined;
+    shellHelpOpen = true;
+  }
+
+  function closeShellHelp(): void {
+    shellHelpOpen = false;
+    const target = shellHelpReturnFocus;
+    shellHelpReturnFocus = undefined;
+    void tick().then(() => target?.focus());
   }
 
   function writerAccess(run: RunSummary): "writer" | "read_only" {
@@ -142,9 +174,12 @@
     unsubscribeController?.();
     unsubscribeRouter?.();
     controller.destroy();
+    keyboardDispatcher.destroy();
     router.destroy();
   });
 </script>
+
+<svelte:window onkeydown={(event) => keyboardDispatcher.handle(event)} />
 
 <ShellFrame {route} {runContext} onNavigate={navigate}>
   {#if routeLoading}
@@ -194,6 +229,7 @@
         onContinueCheckpoint={() => controller.continueCheckpoint()}
         onExport={exportPgn}
         onStop={() => navigate("/play")}
+        registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
     {:else}
       <main class="shell-view"><h1>Run unavailable.</h1><p role="alert">{session.error ?? "The run could not be loaded."}</p></main>
@@ -255,6 +291,8 @@
   {/if}
 </ShellFrame>
 
+{#if shellHelpOpen}<ShellKeyboardHelp onClose={closeShellHelp} />{/if}
+
 <style>
   :global(*) { box-sizing: border-box; }
   :global(:root) {
@@ -274,6 +312,7 @@
     color: var(--ink);
     background: var(--paper);
   }
+  :global(html), :global(body), :global(#app) { height: 100%; overflow: hidden; }
   :global(body) {
     min-width: 20rem;
     min-height: 100vh;
@@ -283,7 +322,7 @@
   :global(button), :global(input), :global(textarea) { font: inherit; }
   :global(:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 65%, white); outline-offset: 2px; }
   :global(::selection) { background: color-mix(in srgb, var(--accent) 25%, white); }
-  .shell-view { width: min(70rem, calc(100% - 2rem)); margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; }
+  .shell-view { width: min(70rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
   .shell-view > h1 { max-width: 18ch; margin: 0.4rem 0 1rem; font: 500 clamp(2.3rem, 6vw, 5rem)/0.96 var(--display-font); letter-spacing: -0.045em; }
   .eyebrow { color: var(--accent); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
   .home > h1 { max-width: 15ch; }
@@ -293,7 +332,7 @@
   .access, .honest { font-size: 0.88rem; }
   button { padding: 0.72rem 0.9rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--panel); color: var(--ink); cursor: pointer; }
   button:hover, button:focus-visible, button.primary { border-color: var(--accent); background: var(--accent); color: white; }
-  .item-list { display: grid; gap: 0.7rem; margin-top: 2rem; }
+  .item-list { display: grid; gap: 0.7rem; max-height: min(55dvh, 36rem); margin-top: 2rem; overflow: auto; }
   .item-list article { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
   .empty-state p { max-width: 42rem; color: var(--muted); font-size: 1.05rem; }
   section + section { margin-top: 2rem; }

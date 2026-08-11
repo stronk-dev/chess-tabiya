@@ -50,8 +50,10 @@
 <style>
   .library {
     width: min(70rem, calc(100% - 2rem));
+    height: 100%;
     margin: 0 auto;
     padding: clamp(3rem, 9vw, 8rem) 0;
+    overflow: auto;
   }
 
   header {
