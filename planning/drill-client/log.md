@@ -86,3 +86,13 @@
   diagnostics, and scaffold verification green.
 - Stop point: Layer 2 complete. Layer 3 screens and the existing `App.svelte`
   scaffold remain untouched.
+
+## 2026-08-11 (claude, review of layer 2)
+
+- Independently verified (ENGINES_REQUIRED=1): 125 tests green, web build
+  green. Plumbing modules all present and tested (api, writer-session with
+  localStorage resume, run-state with polling + rewind-aware cancellation,
+  board-model + Chessboard component, enumerated evidence-sentences test).
+  The unprompted switch to the maintained @lichess-org/chessground 10.1.1 was
+  the right call — pinned, noted. **Layer 2 APPROVED.** Layer 3 (screens)
+  green-lit.
