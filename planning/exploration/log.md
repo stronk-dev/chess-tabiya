@@ -533,3 +533,23 @@
   (claim triggers, tempo contract, provenance modes) cannot be designed without
   a real pack to design it against. The content era is no longer a deferral;
   it is the unblocker for the next layer.
+
+## 2026-08-11 (owner ruling) — content planned at full breadth
+
+- Owner rejected scoping content to the single opening they had mentioned in
+  passing: content is planned across the whole product, not one defense.
+  Landed `design/04-content-architecture.md`: unit taxonomy; White and Black
+  repertoire spines across e4/d4/flank; **anti-opening packs for every family**
+  (the whitespace — nobody drills the side you didn't choose); 10 middlegame
+  structure families keyed to the openings that feed them; 7 endgame families
+  in convert/hold/save variants with Syzygy ground truth plus corpus-mined real
+  1400–2000 endings; 6 launch trajectories; the on-ramp layer including the
+  CC0 puzzle DB re-cut as play-the-consequence.
+- §7 records why content is the critical path rather than a later phase: the
+  four withdrawn/rejected RFC attempts each failed for want of real packs —
+  claim triggers, the tempo contract, provenanceMode, and save/resist all need
+  authored material to be encoded against.
+- Production order deliberately starts with one pack per phase to measure
+  authoring cost (Q7/K10) before breadth, with the standing rule that a cost
+  blowout is answered by tooling (importers, corpus mining, authoring assist),
+  not more hours.
