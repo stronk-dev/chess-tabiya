@@ -166,3 +166,19 @@
   the second time in this repo that end-to-end coverage found cross-layer
   seams unit tests structurally cannot.
 - Completion protocol green-lit.
+
+## 2026-08-11 (codex, completion protocol)
+
+- Distilled `docs/app-shell.md` as the standalone description of the shipped
+  route/IA, migration and run-index, lease visibility, capability honesty,
+  fitted regions, keyboard ownership, disabled-control convention, measured
+  envelope, and current boundaries.
+- Indexed the canonical document, marked the RFC implemented, and updated the
+  repository's active/archive pointers. The RFC and this planning record move
+  to their lifecycle archives in the same commit.
+- Post-move verification is green: `ENGINES_REQUIRED=1 make verify` passed 33
+  files / 150 tests with zero Svelte diagnostics and both repository checks;
+  `make test-browser` passed both required scenarios (optional Maia skipped).
+  That browser run observed board-ready 71.4ms, rewind 88.2ms, branch switch
+  41.6ms, uncached mock reply 1.3ms, and cached mock reply 0.6ms. This does not
+  erase the independently reviewed 51.2ms branch-switch deviation above.

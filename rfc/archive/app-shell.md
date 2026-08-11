@@ -1,6 +1,6 @@
 # RFC: Application Shell & Capability Registry
 
-- **Status:** accepted
+- **Status:** implemented
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-11
 - **Design refs:** `design/03-product-breadth.md` (surface map, IA, B1/B8), `design/02-product-shape.md` §UX commitments
@@ -193,3 +193,5 @@ tolerance. Original texts: git history (review landing).
   rulings required — resolutions follow standing rulings and the breadth
   ruling's own "current UI is not an acceptable application architecture");
   **status → accepted**.
+- 2026-08-11: implementation and independent acceptance review complete;
+  canonical behavior distilled to `docs/app-shell.md`; **status → implemented**.

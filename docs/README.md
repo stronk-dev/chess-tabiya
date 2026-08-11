@@ -18,3 +18,6 @@ Implemented foundation:
   client: persisted writer sessions, event-projected state, episode
   orchestration, board/timeline/branch screens, evidence sentences, comparison,
   keyboard behavior, PGN export, browser acceptance, and packaged operation.
+- `app-shell.md` — stable routes and information architecture, run discovery
+  and lease-aware resume, honest deployment capabilities, fitted viewport
+  regions, global keyboard ownership, and disabled-control explanations.
