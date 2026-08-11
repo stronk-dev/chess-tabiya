@@ -64,3 +64,5 @@
 - The server runtime assertion accepts only `available | unavailable-here` for
   the complete surface keyset and rejects `planned` (exercised directly).
   Roadmap state now lives in the web-only `PLANNED_SURFACES` constant.
+- Session closeout: `ENGINES_REQUIRED=1 make verify` is green (31 test files,
+  144 tests; zero Svelte diagnostics; scaffold and packaging checks pass).
