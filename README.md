@@ -17,15 +17,13 @@ opposition; drill packs supply the concepts, checkpoints, and objectives.
 
 ## Status
 
-**Foundation implementation phase (since 2026-08-12).** Exploration verified the
+**Playable vertical-slice phase (since 2026-08-12).** Exploration verified the
 whitespace hands-on: no reviewed product preserves attempts, compares them, or explains
-why an objective flipped. The accepted `drill-pack-format` and `branch-runtime` RFCs are
-implementing. The shared TypeScript/Svelte workspace and verification gate exist; runtime
-§1–4 now provide the living run schema, event-sourced path-keyed tree, immutable rewind and
-fork semantics, engine-free objective state machine, authoritative replay, branch compare,
-legal PGN variation export, property coverage, and the tested vertical scenario. Server
-bindings remain. Product risks include authoring cost, opponent long-horizon coherence, and
-branch-UX comprehension.
+why an objective flipped. The branch runtime, drill-pack format, and engine-worker RFCs
+are implemented. The accepted drill-client RFC now has its server orchestration, Svelte
+episode screens, mock-backed browser acceptance, and Dockerized Maia/Stockfish packaging;
+only the owner's real-engine walkthrough remains before its completion review. Product
+risks still include content authoring cost and branch-UX comprehension in human use.
 
 The whole state of that decision lives in **`planning/exploration/plan.md`** (the
 question ledger) and **`planning/exploration/gates.md`** (hypotheses, kill criteria,

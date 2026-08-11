@@ -2,6 +2,12 @@ import { runtimeBuildInfo } from "@chess-tabiya/runtime";
 import { schemaBuildInfo } from "@chess-tabiya/schema";
 
 export {
+  createApplication,
+  type ApplicationOptions,
+  type ChessTabiyaApplication,
+  type EngineMode,
+} from "./application.js";
+export {
   PackRegistry,
   type FeedbackPolicy,
   type PackRecord,

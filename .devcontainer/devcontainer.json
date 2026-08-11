@@ -1,0 +1,13 @@
+{
+  "name": "chess-tabiya",
+  "dockerComposeFile": "../compose.yaml",
+  "service": "dev",
+  "workspaceFolder": "/workspace/chess-tabiya",
+  "shutdownAction": "stopCompose",
+  "postCreateCommand": "pnpm install --frozen-lockfile && ENGINES_REQUIRED=1 make verify",
+  "customizations": {
+    "vscode": {
+      "extensions": ["svelte.svelte-vscode"]
+    }
+  }
+}

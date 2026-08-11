@@ -62,7 +62,13 @@ function playedPaths(
       if (node.moveUci === null) {
         throw new TypeError(`Run branch contains a move node without UCI: ${node.id}`);
       }
-      return { uci: node.moveUci, actor: node.actor };
+      return {
+        uci: node.moveUci,
+        // The combined run is a serialization projection, not a replay log.
+        // Opponent provenance remains in the source run; committing the move
+        // as system avoids fabricating an opponent.move_selected event.
+        actor: node.actor === "opponent" ? "system" : node.actor,
+      };
     }),
   }));
 }

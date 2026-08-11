@@ -149,3 +149,55 @@
   blunder-guard) + test; (2) living fixture flips to human_common (archive
   original untouched); (3) the Playwright flow must run against a SERVED pack,
   not a synthetic one, so this class can't recur.
+
+## 2026-08-11 (codex, Layer 4 — packaging and automated acceptance)
+
+- Closed the Layer 3 blocker at the registry boundary. Pack loading now rejects
+  any `opponentPolicy.mode` outside the selector's advertised v1 modes with
+  typed `PACK_INVALID`; the regression test includes `plan_defense`. The living
+  Najdorf schema fixture now uses `human_common`; the frozen archive copy was
+  not changed.
+- Added a real application entry point that serves the production Svelte build
+  and the pack-aware REST surface from one origin. Mock mode supplies a
+  deterministic opponent and evidence executor; engine mode connects to the
+  healthchecked Maia TCP sidecar and the image's Stockfish binary. `/healthz`
+  reports the active mode.
+- Added the Playwright acceptance flow against the default registry, not a
+  synthetic pack. It proves the served pack is the `schema_example` Najdorf
+  fixture with `human_common`, then plays through authored checkpoints,
+  rewinds, creates and switches an alternative, compares both branches, and
+  downloads a legal PGN with a variation. `make test-browser` runs it and the
+  separate `browser.yml` CI job installs Chromium and retains failure
+  artifacts.
+- The browser flow caught four cross-layer seams that mounted tests could not:
+  native `fetch` needed a receiver-safe wrapper; `R` needed to choose the
+  checkpoint before the active cursor rather than the just-reached checkpoint;
+  PGN download needed a DOM-attached anchor; and pack/run PGN merging needed to
+  preserve actual opponent nodes as system moves rather than inventing missing
+  selector events. Each fix has exercising coverage. Unexpected server faults
+  are now logged while the HTTP response remains typed and non-disclosing.
+- Added root Compose packaging. Default mode is the server plus deterministic
+  mock; the `engines` profile adds Maia and sets the server to Maia mode. The
+  Maia sidecar performs `uci` and `isready` against the pinned model before
+  creating `/ready`; Compose waits for that healthcheck before starting the
+  engine-backed server. `make up`, `make up-engines`, and `make down` wrap the
+  lifecycle.
+- Added server and Maia production images, a Stockfish-equipped devcontainer
+  on the same Compose toolchain, and manifest verification in `schema:check`.
+  The tag-triggered release workflow builds both images for amd64/arm64, pushes
+  version and commit-SHA tags to GHCR, and attaches a generated Compose file
+  pinned to the two exact image digests.
+- Validated both live profiles. Default Compose became healthy and served the
+  actual living registry. In engines mode, Maia reached healthy only after its
+  model/UCI self-test, the dependent server then started, `/healthz` reported
+  `maia`, and `/capabilities` reported the pinned Maia model plus Stockfish.
+- In-browser latency sample on this Apple Silicon host with local Chromium
+  (one acceptance run, warm application): board ready 79.2 ms (budget <250,
+  pass); rewind 31.0 ms (budget <100, pass); branch switch 48.0 ms (budget <50,
+  pass); uncached mock reply 1.1 ms and cached mock reply 0.6 ms. A separate
+  browser-to-Compose measurement recorded an uncached Maia reply at 234.8 ms
+  (budget <600, pass). These are honest smoke measurements, not a stable
+  hardware benchmark or CI timing gate; Playwright writes fresh values to the
+  ignored `test-results/` directory.
+- The owner-only walkthrough checkbox remains intentionally unchecked. Layer 4
+  stops at the tested and packaged experience ready for that walkthrough.

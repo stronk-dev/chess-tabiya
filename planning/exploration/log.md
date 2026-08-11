@@ -381,3 +381,11 @@
   derived from CC0 — re-derive ourselves); TWIC/PGN-Mentor/bulk-studies on the
   do-not-use list. Flag: explorer API probes returned 401 on both hostnames —
   investigate before Stage-0 relies on it; CC0 dumps are the fallback.
+
+## 2026-08-11 (claude) — owner idea: forward-branching simulate
+
+- Ledgered: variation-preview via auto-fork + deterministic spine playout →
+  grid of resulting-structure mini-boards; previews are real branches
+  (enterable/comparable/exportable). Clarified for the owner: branching is
+  already fully user-driven (any node, any time) — checkpoints are authored
+  interaction points, not gates. UI-RFC follow-up candidate.

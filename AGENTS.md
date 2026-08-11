@@ -9,8 +9,8 @@ implemented and documented in `docs/branch-runtime.md`; drill-pack format v0.2 i
 implemented and documented in `docs/drill-pack-format.md`; engine workers are
 implemented and documented in `docs/engine-workers.md`. The drill-client RFC is
 implementing; its server surface, browser plumbing, and product screens are
-documented in `docs/drill-client.md`, with packaging and acceptance still
-unimplemented.
+documented in `docs/drill-client.md`; packaging and automated acceptance are
+implemented, with only the owner-operated walkthrough still open.
 Doctrine: TS core + Go workers, Svelte 5, AGPL-3.0, Maia as containerized UCI
 sidecar. The exploration job continues alongside (E4 harness, gates) — see
 `planning/exploration/plan.md`.

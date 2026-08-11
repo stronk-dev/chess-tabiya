@@ -8,6 +8,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY patches/maia3-uci-policy-mass.patch /tmp/maia3-uci-policy-mass.patch
+COPY sidecar.py /opt/chess-tabiya/maia-sidecar.py
 
 RUN git clone https://github.com/CSSLab/maia3.git /opt/maia3 \
     && git -C /opt/maia3 checkout "${MAIA3_COMMIT}" \

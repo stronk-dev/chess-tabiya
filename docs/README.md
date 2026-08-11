@@ -17,4 +17,4 @@ Implemented foundation:
 - `drill-client.md` — pack-aware server routes and the REST-driven Svelte
   client: persisted writer sessions, event-projected state, episode
   orchestration, board/timeline/branch screens, evidence sentences, comparison,
-  keyboard behavior, and PGN export.
+  keyboard behavior, PGN export, browser acceptance, and packaged operation.

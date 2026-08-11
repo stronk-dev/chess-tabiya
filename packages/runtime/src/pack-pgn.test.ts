@@ -88,6 +88,7 @@ describe("pack + run PGN export", () => {
     expect(findSpineNode(pack, "najdorf-e6").children.map((node) => node.moveUci))
       .not.toContain("g2g3");
     run = commitMove(run, "g2g3").run;
+    run = appendOpponentPly(run, opponent("b7b5")).run;
     expect(run.branches.at(-1)?.label).toBe("alt-1");
 
     const pgn = await exportPackRunPgn(pack, run);
@@ -97,9 +98,9 @@ describe("pack + run PGN export", () => {
     expect(pgn).toContain("g3");
     expect(pgn).toContain("authored:najdorf-be2");
     expect(pgn).toContain("run:alt-1");
-    expect(assertLegal(pgn)).toBe(6);
+    expect(assertLegal(pgn)).toBe(7);
 
     const serializedAgain = makePgn(parsePgn(pgn)[0]!);
-    expect(assertLegal(serializedAgain)).toBe(6);
+    expect(assertLegal(serializedAgain)).toBe(7);
   });
 });

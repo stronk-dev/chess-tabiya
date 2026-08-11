@@ -6,8 +6,9 @@
 - pnpm 11.18.0, pinned by the root package manifest.
 - TypeScript core packages shared by browser and Node consumers.
 - Svelte 5 + Vite for the web client.
-- Go is reserved for self-contained data-format workers; `workers/` is intentionally empty
-  at scaffold time.
+- Go is reserved for self-contained data-format workers; Python is confined to
+  the Dockerized Maia sidecar.
+- Docker Compose is required for the packaged engine-backed experience.
 
 The project is licensed under GNU AGPL-3.0. JavaScript dependencies are installed into a
 pnpm workspace; pnpm's store/cache/state remain under the ignored repository `.cache/`
@@ -21,7 +22,7 @@ directory.
 | `packages/schema` | Schema-facing types and validation tooling |
 | `apps/server` | Node server binding around the shared runtime |
 | `apps/web` | Svelte 5 browser client |
-| `workers` | Future isolated Go or containerized engine workers |
+| `workers` | Isolated data workers and the containerized Maia sidecar |
 | `content/packs` | Reviewed drill packs |
 | `schemas` | Living JSON Schemas |
 
@@ -42,9 +43,23 @@ are documented in `docs/branch-runtime.md`. The normative run shape remains
 pnpm install
 make verify
 make build
+make test-browser
+make up
+make up-engines
+make down
 ```
 
 `make verify` is the required local/CI gate and runs strict type checking, Vitest (including
-fast-check runtime invariants), and schema/scaffold verification. `make build` separately
-proves the Svelte production bundle; it is not part of the RFC-mandated three-part verify
-target.
+fast-check runtime invariants), and schema/scaffold plus deployment-manifest
+verification. `make build` separately proves the Svelte production bundle.
+`make test-browser` builds and starts the default mock-backed application and
+runs the full Playwright episode in a separate browser CI job.
+
+`make up` starts the production bundle with the deterministic mock opponent.
+`make up-engines` adds the healthchecked Maia sidecar and uses Stockfish from
+the server image; `make down` stops either profile. The devcontainer references
+the same root Compose file and includes Stockfish, so its post-create gate can
+run `ENGINES_REQUIRED=1 make verify`.
+
+Tag releases build amd64/arm64 server and Maia images, publish both version and
+commit-SHA tags to GHCR, and attach a Compose file with digest-pinned images.

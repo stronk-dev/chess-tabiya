@@ -193,6 +193,7 @@
       .find(
         (candidate) =>
           candidate.type === "checkpoint.reached" &&
+          candidate.data.nodeId !== run.activeCursor.nodeId &&
           path.has(candidate.data.nodeId),
       );
     return event?.type === "checkpoint.reached" ? event.data.checkpointId : undefined;

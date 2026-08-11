@@ -232,3 +232,5 @@ era" — this RFC is that era; folding is per that ruling, now cited.
 - 2026-08-12: Layers 1–2 implemented; product screens remain next.
 - 2026-08-11: Layer 3 product screens implemented; packaging and acceptance
   remain.
+- 2026-08-11: Layer 4 automated acceptance and deployment packaging
+  implemented; only the owner-operated real-engine walkthrough remains.

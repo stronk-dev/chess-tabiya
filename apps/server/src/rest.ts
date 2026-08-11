@@ -236,6 +236,14 @@ export function errorResponse(error: unknown): Response {
   let reason: string | undefined;
   let details: Readonly<Record<string, unknown>> | undefined;
 
+  if (
+    !(error instanceof RuntimeError) &&
+    !(error instanceof BranchQueryError) &&
+    !(error instanceof ServerError)
+  ) {
+    console.error("UNHANDLED_SERVER_ERROR", error);
+  }
+
   if (error instanceof RuntimeError) {
     code = error.code;
     message = error.message;

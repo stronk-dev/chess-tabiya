@@ -32,6 +32,13 @@ The supervisor launches the second command form and speaks UCI over stdio. Suppl
 the locally inspected image digest to `maiaDockerSpec` so run capabilities can
 record the exact container identity.
 
+For the packaged application, Compose overrides the entry point with
+`maia-sidecar.py`. That process starts the same history-conditioned UCI command,
+self-tests `uci`/`uciok` and `isready`/`readyok`, then touches `/ready` and
+bridges one TCP client on port 7000 to the warm process. The Compose healthcheck
+probes `/ready`; the ordinary image entry point remains raw UCI for supervisor
+and integration-test compatibility.
+
 First contact against the pinned source advertises `Elo`, `SelfElo`, `OppoElo`,
 `Temperature`, `TopP`, and `MultiPV`. It advertises no seed option, therefore
 `seedHonored` is `false`; replay and the selection cache provide repeatability.

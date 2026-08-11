@@ -13,7 +13,10 @@ checkpoint and objective evaluation, feedback timing, and opponent selection.
 core fields, duplicate pack IDs, unsupported v1 semantics, and semantic lint
 errors produce a typed `PACK_INVALID` error. The v1 server accepts
 `delayed_checkpoint` and `segment_end`; `immediate_blunder_guard` remains cut
-until the on-ramp content phase has a consumer for it.
+until the on-ramp content phase has a consumer for it. A pack is also refused
+unless its opponent mode is executable by the selector (`human_common`,
+`strong_engine`, or `theory_strict`), so the registry cannot advertise a drill
+that fails on its first opponent turn.
 
 Each accepted document receives a server-computed SHA-256 digest over its RFC
 8785 canonical form. `GET /packs` returns immutable summaries containing ID,
@@ -174,10 +177,44 @@ operation also has a visible control. Focus enters the drill and moves into the
 checkpoint sheet, checkpoint picker, fork form, compare screen, and shortcut
 guide when each surface opens.
 
+## Browser acceptance
+
+`make test-browser` runs the Playwright acceptance flow against the same
+production bundle and default `PackRegistry` used by the packaged server. The
+test first proves the living Najdorf fixture was actually served with its
+honest `schema_example` status and selectable `human_common` policy. It then
+plays against the deterministic mock opponent, crosses checkpoints, rewinds,
+creates and switches an alternative branch, compares both lines, and downloads
+a legal variation PGN. This lives in a separate browser CI job rather than
+making the engine-free unit gate depend on a browser installation.
+
+The acceptance run also records browser-observed board-ready, rewind, branch
+switch, and mock selector timings. The optional Maia measurement is selected
+with `MAIA_LATENCY=1` against the running engines profile and remains outside
+the ordinary browser job. Timings are evidence written to `test-results/`, not
+hard CI thresholds: the planning log records the budgets and whether the
+observed machine met them.
+
+## Packaged operation
+
+The root Compose file has an unprofiled server using the deterministic mock
+opponent and an `engines` profile that adds Maia and changes the server to the
+Maia selector. `make up`, `make up-engines`, and `make down` wrap those modes.
+The Maia sidecar starts the pinned UCI engine, completes both `uci` and
+`isready` handshakes, and only then creates `/ready` and accepts the server's
+TCP connection. Compose waits for that readiness file before starting the
+engine-backed server.
+
+The development Compose file builds local images. Tagged releases build the
+server and Maia images for amd64 and arm64, publish version- and commit-SHA
+tags to GHCR, and attach a generated Compose file whose two images are pinned
+to the exact build digests. The devcontainer reuses the Compose toolchain and
+includes Node, pnpm, and Stockfish.
+
 ## Current boundary
 
-Layers 1 through 3 of the accepted drill-client RFC are implemented.
-Playwright coverage, deployment packaging, in-browser latency measurements,
-and the owner walkthrough remain Layer 4 work. The current implementation has
-mounted browser-like component coverage and a production Vite build, but it is
-not yet the packaged `make up-engines` experience.
+Layers 1 through 4 of the accepted drill-client RFC are implemented except for
+the explicitly owner-operated walkthrough. Automated acceptance covers the
+same flow against the mock opponent, and the packaged `make up-engines`
+experience is ready for the owner to play and record. The living Najdorf pack
+remains a schema example rather than reviewed content.

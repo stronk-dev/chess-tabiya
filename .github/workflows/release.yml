@@ -1,0 +1,75 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: apps/server/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/chess-tabiya-server:${{ github.ref_name }}
+            ghcr.io/${{ github.repository_owner }}/chess-tabiya-server:${{ github.sha }}
+
+  maia:
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: build
+        uses: docker/build-push-action@v7
+        with:
+          context: workers/maia
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/chess-tabiya-maia:${{ github.ref_name }}
+            ghcr.io/${{ github.repository_owner }}/chess-tabiya-maia:${{ github.sha }}
+
+  compose:
+    needs: [server, maia]
+    runs-on: ubuntu-latest
+    env:
+      SERVER_IMAGE: ghcr.io/${{ github.repository_owner }}/chess-tabiya-server@${{ needs.server.outputs.digest }}
+      MAIA_IMAGE: ghcr.io/${{ github.repository_owner }}/chess-tabiya-maia@${{ needs.maia.outputs.digest }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Render digest-pinned Compose release
+        run: |
+          mkdir -p release
+          sed -e "s|__SERVER_IMAGE__|${SERVER_IMAGE}|g" \
+              -e "s|__MAIA_IMAGE__|${MAIA_IMAGE}|g" \
+              deploy/compose.release.template.yaml > release/compose.yaml
+          docker compose -f release/compose.yaml config --quiet
+      - name: Publish release Compose file
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "${GITHUB_REF_NAME}" release/compose.yaml --generate-notes

@@ -1,0 +1,38 @@
+name: chess-tabiya
+
+services:
+  server:
+    image: __SERVER_IMAGE__
+    environment:
+      DATABASE_PATH: /data/chess-tabiya.sqlite
+      ENGINE_MODE: maia
+      MAIA_HOST: maia
+      MAIA_PORT: "7000"
+      PORT: "3000"
+      STOCKFISH_PATH: /usr/games/stockfish
+    ports:
+      - "${TABIYA_PORT:-3000}:3000"
+    volumes:
+      - tabiya-data:/data
+    depends_on:
+      maia:
+        condition: service_healthy
+    restart: unless-stopped
+
+  maia:
+    image: __MAIA_IMAGE__
+    entrypoint: ["python", "/opt/chess-tabiya/maia-sidecar.py"]
+    environment:
+      MAIA_LISTEN_HOST: 0.0.0.0
+      MAIA_LISTEN_PORT: "7000"
+      MAIA_READY_FILE: /ready
+    healthcheck:
+      test: ["CMD", "test", "-f", "/ready"]
+      interval: 5s
+      timeout: 2s
+      start_period: 90s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  tabiya-data:

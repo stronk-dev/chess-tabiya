@@ -5,6 +5,8 @@ node_modules/
 .cache/
 coverage/
 dist/
+playwright-report/
+test-results/
 *.tsbuildinfo
 
 # Local configuration

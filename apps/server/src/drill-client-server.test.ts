@@ -173,7 +173,7 @@ describe("drill-client pack registry", () => {
           value: pack({
             id: "unselectable-opponent-pack",
             opponentPolicy: {
-              ...fixture.opponentPolicy,
+              ...(fixture.opponentPolicy as Record<string, unknown>),
               mode: "plan_defense",
             },
           }),

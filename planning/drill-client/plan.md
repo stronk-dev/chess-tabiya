@@ -43,12 +43,12 @@ work before its plumbing exists.
 
 ## 4. Packaging + acceptance (rides along, blocks nothing above)
 
-- [ ] Playwright flow vs mock opponent; make test-browser + separate CI job
-- [ ] compose.yaml (healthchecked maia via /ready entrypoint self-test,
+- [x] Playwright flow vs mock opponent; make test-browser + separate CI job
+- [x] compose.yaml (healthchecked maia via /ready entrypoint self-test,
       profiles default/engines) + make up / up-engines / down
-- [ ] release.yml → GHCR multi-arch {version, sha}; compose digest-pinned
-- [ ] Devcontainer sharing the toolchain (stockfish included)
-- [ ] In-browser latency budgets measured → log.md
+- [x] release.yml → GHCR multi-arch {version, sha}; compose digest-pinned
+- [x] Devcontainer sharing the toolchain (stockfish included)
+- [x] In-browser latency budgets measured → log.md
 - [ ] THE WALKTHROUGH: owner plays the Najdorf fixture vs Maia end-to-end
       (make up-engines → play → R → branch → Tab → E); notes + screenshots in
       log.md

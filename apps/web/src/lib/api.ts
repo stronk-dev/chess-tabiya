@@ -214,6 +214,10 @@ export interface DrillClientApi extends RunApi {
 
 type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 
+function browserFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  return globalThis.fetch(input, init);
+}
+
 function encoded(value: string): string {
   return encodeURIComponent(value);
 }
@@ -228,7 +232,7 @@ export class DrillApi implements DrillClientApi {
   readonly #baseUrl: string;
   readonly #fetch: Fetcher;
 
-  constructor(baseUrl = "", fetcher: Fetcher = fetch) {
+  constructor(baseUrl = "", fetcher: Fetcher = browserFetch) {
     this.#baseUrl = baseUrl.replace(/\/$/, "");
     this.#fetch = fetcher;
   }
