@@ -26,7 +26,7 @@ record). Evidence lands as dossiers in `design/research/`.
 | Q4c | Can automatic phase/structure recognition support Just Play without pretending certainty? | 💡 · breadth-blocking for Just Play; optional for curated packs | B2, B4 |
 | Q5 | Can a runnable human/corpus policy stay coherent over 10–20 plies? | ✅ settled-go (validation-by-use, smoke 2026-08-12; revisit only if drill play contradicts) | H5 supported |
 | Q6 | How do we use historical games without the ingestion-first trap? | 💡 | — |
-| Q7 | What does a reviewed drill pack cost to author? | 💡 | K10, K7, C6 |
+| Q7 | What does a reviewed drill pack cost to author? | 🔬 job open (`planning/content-era/`, six-category instrumentation) | K10, K7, C6 |
 | Q8 | Can feedback beat "Stockfish labels + prose"? | 💡 | K6, C1 |
 | Q9 | Is branch/rewind/compare understandable without branch explosion or comparison overload? | 💡 | E5, K3, C2 |
 
