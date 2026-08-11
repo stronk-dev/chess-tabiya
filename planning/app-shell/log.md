@@ -36,3 +36,18 @@
   the existing 409-demotion test remains green as the defensive fallback.
 - Session closeout: `ENGINES_REQUIRED=1 make verify` is green (31 test files,
   141 tests; zero Svelte diagnostics; scaffold and packaging checks pass).
+
+## 2026-08-11 (claude, review of §1–§2)
+
+- Independently verified (ENGINES_REQUIRED=1): 141 tests / 31 files green.
+  Migration runner reads PRAGMA user_version with a real legacy-fixture test
+  proving upgrade-then-skip-on-reopen (the exact hazard AS-C1 named, since
+  compose mounts a persistent volume); RunStorage.list() + paginated GET /runs
+  with activeWriterId; WriterSession.peek() has the "no minting, localStorage
+  untouched" test AS-C2 demanded. drill-client's completion protocol also ran
+  — four RFCs now archived. **§1–§2 APPROVED.**
+- Accepted judgment call: legacy runs fall back to packId as title (old
+  snapshots carry none). Honest and cheap; noted so the history list's odd
+  early rows are explainable rather than mysterious.
+- §3 (capability registry) green-lit — the last server-side piece before the
+  router/shell rewrite.
