@@ -96,3 +96,5 @@
   writer and foreign/read-only resume, every reserved route, and not-found.
   The existing Playwright drill walkthrough now enters through `/play` and is
   green. Fitted layout and keyboard ownership were intentionally untouched.
+- Session closeout: `ENGINES_REQUIRED=1 make verify` is green (33 test files,
+  149 tests; zero Svelte diagnostics; scaffold and packaging checks pass).
