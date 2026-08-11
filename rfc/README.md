@@ -7,8 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| ~~`authoring-contracts-v03.md`~~ | **withdrawn** — premise refuted (3 reviews) | — | contracts → content era |
-| ~~`evidence-composer.md`~~ | **withdrawn** — prerequisite withdrawn | — | packet abstraction not needed for v1 |
+
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in
 `planning/exploration/log.md`): E1 met, E2 advisory, E3/E4/E5 accepted as in-flight
@@ -25,6 +24,17 @@ planning for the complete B1–B8 product surface in
 unspecified implementation; it supersedes the assumption that the next work is
 content for one narrow slice. Breadth RFCs must preserve the global shell and
 name the B-gates they complete before code begins.
+
+## Withdrawn
+
+Kept for the record (RFC-0000: `withdrawn` = abandoned, not superseded). Their
+findings are salvaged into content-era BACKLOG rows — read the withdrawal notes
+before re-attempting this territory.
+
+| RFC | Why |
+|---|---|
+| `withdrawn/authoring-contracts-v03.md` | Specified an authored vocabulary with no authored content to design against; three reviews, three variations of that fault |
+| `withdrawn/evidence-composer.md` | Prerequisite withdrawn; the packet abstraction proved unnecessary for v1 |
 
 ## Archive
 

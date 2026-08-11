@@ -518,3 +518,18 @@
 - Four RFC-drafting attempts on breadth #2 produced one accepted 3-section RFC.
   Expensive, but every rejection was a real defect caught before implementation,
   and the salvage is preserved in content-era BACKLOG rows.
+
+## 2026-08-11 (claude) — sixth lifecycle closed; withdrawn RFCs filed
+
+- explanation-grounds implemented + archived (standalone canonical doc; codex's
+  reasoning — the contract crosses runtime projection, server withholding, and
+  client rendering, and keeps the B4/content-era boundary visible in one place
+  — endorsed). Six implemented systems; 154 tests + browser suite green.
+- Moved the two withdrawn RFCs to `rfc/withdrawn/` with an index section, so
+  they stop appearing beside live drafts while staying readable. RFC-0000
+  treats `withdrawn` as terminal-but-kept; the directory now reflects that.
+- **State of breadth #2: v1 shipped, B4 unmet, and the reason is content.**
+  Four drafting attempts established that the authored explanation vocabulary
+  (claim triggers, tempo contract, provenance modes) cannot be designed without
+  a real pack to design it against. The content era is no longer a deferral;
+  it is the unblocker for the next layer.
