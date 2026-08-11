@@ -205,3 +205,16 @@
   intentionally skipped. Its fresh mock measurements were: board ready 107.3
   ms, rewind 32.6 ms, branch switch 45.1 ms, uncached reply 1.2 ms, cached reply
   0.8 ms — all within the same acceptance budgets.
+
+## 2026-08-11 (claude, review of layer 4)
+
+- Independently verified: 136 tests green (ENGINES_REQUIRED=1); layer-3
+  blocking finding fixed at all three levels (registry rejects non-selectable
+  modes, living fixture → human_common, Playwright runs a SERVED pack — the
+  class can't recur); compose.yaml with engines/devcontainer profiles and a
+  /ready-file healthcheck; browser.yml + release.yml CI jobs; devcontainer;
+  make up/up-engines/down/test-browser. Browser latencies all inside budget
+  (board 107ms, rewind 33ms, branch switch 45ms, uncached Maia 235ms).
+  **Layer 4 APPROVED.**
+- All plan boxes closed except THE WALKTHROUGH — owner's. RFC completion
+  protocol waits on it.
