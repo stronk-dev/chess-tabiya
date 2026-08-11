@@ -1,6 +1,18 @@
 # RFC: Authoring Contracts (drill-pack v0.3, minimal)
 
-- **Status:** draft
+- **Status:** withdrawn (2026-08-11) — premise refuted by three reviews
+
+> **Withdrawal note.** Three adversarial passes (EC-C1..C8, AC-C1..C8,
+> R3-C1..C8) rejected this contract layer for the same reason each time: it
+> specifies an authored vocabulary (claim triggers, timing windows, boundary
+> algebra) that has **no authored content to be designed against**, over a
+> shipped schema built for something simpler. The final pass proved the
+> deferral itself dishonest — "recorded claims" had no recording site and was
+> off-cursor re-evaluation renamed. Kept for the record; its contracts move to
+> BACKLOG rows tied to the **content era**, where pack A gives them something
+> real to encode. Superseded in v1 by `rfc/explanation-grounds.md`, which
+> renders evidence the system already computes.
+
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-11
 - **Design refs:** `design/01-training-model.md`, `design/03-product-breadth.md` B4

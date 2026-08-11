@@ -1,6 +1,14 @@
 # RFC: Evidence Composer (server)
 
-- **Status:** draft
+- **Status:** withdrawn (2026-08-11) — blocked on a withdrawn prerequisite
+
+> **Withdrawal note.** Depended on `authoring-contracts-v03`, withdrawn above.
+> Reviews also found its own core sections unencoded (packet payload shapes
+> promised but never written, per-scope reveal undefined against four scopeless
+> call sites). The packet abstraction is not needed to close the walkthrough
+> finding; `rfc/explanation-grounds.md` does that with shipped data. Kept for
+> the record.
+
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-11
 - **Design refs:** `design/01-training-model.md` (feedback timing, mistake classes), `design/03-product-breadth.md` B4, `design/00-thesis.md` §The hard truth
