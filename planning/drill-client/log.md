@@ -96,3 +96,41 @@
   The unprompted switch to the maintained @lichess-org/chessground 10.1.1 was
   the right call — pinned, noted. **Layer 2 APPROVED.** Layer 3 (screens)
   green-lit.
+
+## 2026-08-11 (codex, Layer 3 — screens)
+
+- Replaced the web scaffold with the real REST-driven episode shell. The app
+  lists registered packs with mode, difficulty band, and the server's honest
+  `reviewStatus`, starts or resumes URL-addressed runs, preserves the writer
+  identity through `localStorage`, and downloads the server PGN export.
+- Added `DrillSessionController` as the thin episode coordinator over Layers 1
+  and 2. Player moves pause on atomically returned checkpoints before any
+  opponent selection; continue calls the pure selector and writer-appends the
+  selected reply. The controller also owns fork, rewind, branch switching,
+  compare, export, stop, and read-only follower state without duplicating
+  runtime semantics in the browser.
+- Added the composed drill screen: centered Chessground board and authored
+  objective, evidence-backed why-banner, checkpoint sheet, checkpoint-marked
+  click-preview/confirm timeline, and a branch rail with divergent move,
+  intent, live objective chip, selection, and compare controls.
+- Added comparison as two boards driven by the server/runtime `compare()`
+  payload. One synchronized stepper controls both sides; absent pairs visibly
+  render `Line ended`, and the separate objective and checkpoint strips remain
+  free of engine-number contamination.
+- Implemented the complete keyboard map (`R`, `Shift+R`, `B`, `1..9`, `Tab`,
+  arrows, Space, `E`, and `?`) with mouse equivalents. Mounted DOM tests cover
+  the map, timeline confirmation, and focus entry for the drill, checkpoint,
+  checkpoint picker, fork form, compare view, and shortcut guide.
+- The why-banner derives every sentence from the enumerable Layer 2 sentence
+  table. Its CI test rejects an objective transition with empty evidence refs,
+  so the screen cannot regress to a bare state label.
+- Playwright remains in Layer 4 as permitted. A final rendered smoke through
+  the in-app browser was attempted, but this environment exposed no browser
+  backend; mounted happy-dom component tests and a production Vite build cover
+  this layer here.
+- Verification: `ENGINES_REQUIRED=1 make verify` passed: 30 test files and 136
+  tests, all workspace typechecks and Svelte diagnostics, schema checks, and
+  scaffold verification green. `pnpm --filter @chess-tabiya/web build` also
+  passed.
+- Stop point: Layer 3 complete. Layer 4 Playwright, packaging, latency
+  measurements, and the owner walkthrough remain untouched.

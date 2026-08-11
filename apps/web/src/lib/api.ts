@@ -198,6 +198,20 @@ export interface RunApi {
   ): Promise<MutationResult>;
 }
 
+export interface DrillClientApi extends RunApi {
+  capabilities(): Promise<Capabilities>;
+  packs(): Promise<readonly PackSummary[]>;
+  pack(packId: string): Promise<PackDocument>;
+  selectMove(input: SelectMoveRequest): Promise<OpponentSelection>;
+  graph(runId: string): Promise<RunGraph>;
+  compare(
+    runId: string,
+    branchAId: string,
+    branchBId: string,
+  ): Promise<BranchComparison>;
+  pgn(runId: string, branchIds?: readonly string[]): Promise<PgnDownload>;
+}
+
 type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 
 function encoded(value: string): string {
@@ -210,7 +224,7 @@ function attachmentFilename(header: string | null, fallback: string): string {
   return match?.[1] ?? fallback;
 }
 
-export class DrillApi implements RunApi {
+export class DrillApi implements DrillClientApi {
   readonly #baseUrl: string;
   readonly #fetch: Fetcher;
 

@@ -1,9 +1,9 @@
-# Drill client foundations
+# Drill client
 
-The drill client's implemented foundations now cover the pack-aware HTTP
-surface and the browser-side plumbing that consumes it. There are still no
-product screens: the web app remains a scaffold, with reusable transport,
-state, board, and evidence primitives ready for composition.
+The implemented drill client covers the pack-aware HTTP surface, the browser
+transport and run projection, and the playable Svelte episode screens. It is a
+REST-driven client: the server remains authoritative for run semantics,
+checkpoint and objective evaluation, feedback timing, and opponent selection.
 
 ## Pack registry and routes
 
@@ -121,8 +121,64 @@ Unknown future prefixes remain explicit as a generic recorded-evidence chip.
 The CI test enumerates the runtime rules vocabulary and the living pack's
 checkpoint vocabulary.
 
+## Episode orchestration
+
+`DrillSessionController` composes the transport, persisted `WriterSession`, and
+`RunStateStore` without implementing a second runtime. Starting a pack fetches
+the pack and capabilities, creates a URL-addressable run, and derives its
+policy locus from the server capability identities. Refresh resumes that run
+from the public event log with the same stored writer ID; a rejected writer
+continues as a read-only follower.
+
+A player move is applied first. When its atomic emitted-event suffix contains a
+checkpoint, the controller pauses before selecting an opponent reply. Continue
+calls the pure `/select-move` endpoint and then writer-appends the selection and
+move as one opponent ply. Fork, rewind, switch, compare, PGN export, and stop
+remain thin calls to the existing client/store contracts. The living schema
+fixture's older `plan_defense` authoring label falls back explicitly to the
+server's available `human_common` selector mode; supported selector modes are
+otherwise honored directly.
+
+## Screens and episode flow
+
+The pack library shows title, mode, difficulty band, and the registry's
+`reviewStatus`; the living Najdorf document therefore remains visibly labeled
+`schema_example`, not presented as reviewed content.
+
+The drill screen composes three regions:
+
+- a centered Chessground board with the authored objective, status, and typed
+  why-banner;
+- a bottom active-line timeline whose checkpoint markers support a
+  click-preview followed by explicit rewind confirmation; and
+- a right branch rail with branch label, first divergent move, optional intent,
+  live objective-state chip, branch switching, and compare selection.
+
+The checkpoint sheet takes focus and exposes continue, rewind, compare when
+the authored checkpoint allows it, and stop. Objective transitions are never
+shown bare: `screen-model.ts` rejects an empty evidence-ref set before
+`WhyBanner.svelte` renders the sentence table.
+
+The comparison screen consumes the server/runtime `BranchComparison` payload.
+Its synchronized stepper positions both boards on the aligned pair; an absent
+side is dimmed and labeled `Line ended`. Objective timelines and checkpoint
+hits render as separate strips. No evaluation numbers, engine arrows, move
+labels, or human-frequency overlays exist in the v1 play or compare screens.
+
+## Keyboard and focus contract
+
+The implemented shortcuts are `R` for the latest checkpoint, `Shift+R` for the
+checkpoint picker, `B` for a labeled/intent branch, `1`–`9` for branch switch,
+`Tab` for compare toggle, left/right arrows for the synchronized timeline,
+Space for replay, `E` for PGN export, and `?` for the keyboard guide. Every
+operation also has a visible control. Focus enters the drill and moves into the
+checkpoint sheet, checkpoint picker, fork form, compare screen, and shortcut
+guide when each surface opens.
+
 ## Current boundary
 
-Layers 1 and 2 of the accepted drill-client RFC are implemented. Product
-screens, layout, keyboard behavior, Playwright coverage, and deployment
-packaging remain unimplemented follow-on layers.
+Layers 1 through 3 of the accepted drill-client RFC are implemented.
+Playwright coverage, deployment packaging, in-browser latency measurements,
+and the owner walkthrough remain Layer 4 work. The current implementation has
+mounted browser-like component coverage and a production Vite build, but it is
+not yet the packaged `make up-engines` experience.

@@ -230,3 +230,5 @@ era" — this RFC is that era; folding is per that ruling, now cited.
   resolved by owner E5 waiver → **status → accepted**.
 - 2026-08-12: Layer 1 implementation began → **status → implementing**.
 - 2026-08-12: Layers 1–2 implemented; product screens remain next.
+- 2026-08-11: Layer 3 product screens implemented; packaging and acceptance
+  remain.

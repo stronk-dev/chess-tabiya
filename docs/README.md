@@ -14,6 +14,7 @@ Implemented foundation:
 - `engine-workers.md` — UCI supervision, Dockerized Maia and policy exposure,
   opponent selection/cache/writer seam, evidence queue, capabilities, ratified
   strong-engine profile, measured envelope, and current limitations.
-- `drill-client.md` — pack-aware server routes and browser plumbing: typed
-  transport, persisted writer sessions, event-projected state and polling, the
-  bare Chessground primitive, evidence sentences, and PGN export.
+- `drill-client.md` — pack-aware server routes and the REST-driven Svelte
+  client: persisted writer sessions, event-projected state, episode
+  orchestration, board/timeline/branch screens, evidence sentences, comparison,
+  keyboard behavior, and PGN export.

@@ -32,14 +32,14 @@ work before its plumbing exists.
 
 ## 3. Screens (thin composition over 1+2)
 
-- [ ] Pack list (mode, band, reviewStatus badge)
-- [ ] Drill screen: board center + objective line; bottom timeline with
+- [x] Pack list (mode, band, reviewStatus badge)
+- [x] Drill screen: board center + objective line; bottom timeline with
       checkpoint markers (click-preview, confirm rewind); right branch rail
       (label, divergent move, objective chip); checkpoint sheet
-- [ ] Why-banner (never bare; sentence table)
-- [ ] Compare view: dual boards on compare() payload, synced stepper,
+- [x] Why-banner (never bare; sentence table)
+- [x] Compare view: dual boards on compare() payload, synced stepper,
       absent-side dimming, objective/checkpoint strips
-- [ ] Keyboard map + ? overlay; a11y focus smoke
+- [x] Keyboard map + ? overlay; a11y focus smoke
 
 ## 4. Packaging + acceptance (rides along, blocks nothing above)
 
