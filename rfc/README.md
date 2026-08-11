@@ -7,8 +7,9 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `authoring-contracts-v03.md` | draft (in review) | amends archived `drill-pack-format` + `branch-runtime` | breadth #2 prerequisite |
-| `evidence-composer.md` | draft (blocked on authoring-contracts-v03) | mines archive RFC-0006 | breadth #2a |
+| `explanation-grounds.md` | draft (in review) | amends archived `branch-runtime` (compare overlay) | breadth #2, v1 |
+| ~~`authoring-contracts-v03.md`~~ | **withdrawn** — premise refuted (3 reviews) | — | contracts → content era |
+| ~~`evidence-composer.md`~~ | **withdrawn** — prerequisite withdrawn | — | packet abstraction not needed for v1 |
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in
 `planning/exploration/log.md`): E1 met, E2 advisory, E3/E4/E5 accepted as in-flight

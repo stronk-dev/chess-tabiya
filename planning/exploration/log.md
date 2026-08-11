@@ -478,3 +478,27 @@
     what the walkthrough's finding actually asked for.
 - Process lesson: before drafting a contract RFC, read and quote the shipped
   schema/code sections it touches. Both rejections trace to skipping that.
+
+## 2026-08-11 (claude) — breadth #2 rescoped a third time; two RFCs withdrawn
+
+- Third review (R3-C1..C8) proved the scope cut's central deferral dishonest:
+  "recorded claims" had no recording site anywhere in the shipped event union,
+  so it was off-cursor re-evaluation renamed. Rather than a fourth patch pass,
+  **withdrew `authoring-contracts-v03` and `evidence-composer`** (RFC-0000
+  `withdrawn`: abandoned, kept for the record).
+- Root cause, recorded plainly: I was specifying an **authored vocabulary with
+  no authored content to design against**, over a shipped schema built for
+  something simpler. Three reviews found variations of that one fault.
+- Replacement: `rfc/explanation-grounds.md` — closes the walkthrough finding
+  with data the system already produces. Three concrete gaps: (1) objective
+  transitions decided by rules facts mint no evidence ref (orchestrator only
+  translates `reach_checkpoint`), so "degraded" can render with no reason;
+  (2) recorded Stockfish evidence never reaches the compare payload; (3) the
+  compare view shows raw state names instead of grounded sentences. Every
+  dependency was read in the shipped code before being cited.
+- Salvage preserved in a BACKLOG row for the content era: boundary combinator
+  ("plyHorizon caps, does not grant"), the `pack:` split, {branchId,startSeq,
+  endSeq} scoping, and the recorded-claims trap.
+- Honest consequence: B4 stays unmet; v1 explains via grounded objectives and
+  engine evidence only. Authored claims, timing windows, and the packet
+  abstraction return when pack A gives them something real to encode.
