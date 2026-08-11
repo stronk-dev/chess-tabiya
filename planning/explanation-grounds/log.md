@@ -83,3 +83,17 @@
   a second `make test-browser` run is green (2 passed, optional Maia skipped).
   The final browser run observed board-ready 96.2ms, rewind 33.8ms, branch
   switch 48.3ms, uncached mock reply 1.0ms, and cached mock reply 0.7ms.
+
+## 2026-08-11 (claude, review of §3–§4)
+
+- Independently verified: 154 tests green, browser suite 2 passed. Timeline
+  entries render through the existing renderEvidenceRef; throw-on-empty
+  adopted; trajectory aligned with fork marked; docs amended on both pages
+  (drill-client now documents /compare as a withholding surface). **§3–§4
+  APPROVED; all acceptance criteria met.**
+- Endorsed judgment call: the UI heading reads "Recorded engine evaluation"
+  rather than naming Stockfish, because the payload carries no engine identity
+  and the browser harness runs the mock executor. That is the honesty law
+  applied without being asked — the same instinct as reporting unhealthy
+  engines as `none` in the capability registry.
+- Completion protocol green-lit.
