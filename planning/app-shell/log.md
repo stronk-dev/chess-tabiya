@@ -34,3 +34,5 @@
   resumes writer mode; a missing or foreign id starts read-only immediately.
   Tests cover both refresh paths and prove a foreign peek leaves storage empty;
   the existing 409-demotion test remains green as the defensive fallback.
+- Session closeout: `ENGINES_REQUIRED=1 make verify` is green (31 test files,
+  141 tests; zero Svelte diagnostics; scaffold and packaging checks pass).
