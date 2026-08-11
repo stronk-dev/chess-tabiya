@@ -37,9 +37,10 @@ statement about *why* a branch went the way it did. Out of scope: all UI
 ### The feedback packet (living schema v0.1)
 
 Promote `archive/brief-v2/schemas/feedback_packet.schema.json` to
-`schemas/feedback_packet.schema.json`, required
-`{runId, branches, objectiveComparison, claims}` plus optional
-`stockfish, humanModel, corpus, features, timingEvents`. Amendments:
+`schemas/feedback_packet.schema.json`. Baseline members: `runId, branches,
+objectiveComparison, claims, stockfish, humanModel, corpus, features,
+timingEvents`; **which are required becomes scope-dependent** per amendment 4
+(the baseline's always-required list is replaced). Amendments:
 
 1. **`scope`** (new, required): `{kind: "checkpoint", nodeId}` |
    `{kind: "segment", segmentId}` (the stable composite id from
@@ -68,7 +69,8 @@ Promote `archive/brief-v2/schemas/feedback_packet.schema.json` to
   `author_principle`, anything else → `hypothesis` (and `hypothesis` claims are
   marked, never stated as fact).
 - Authored claims are **selected**, not generated: a pack claim enters the
-  packet when its trigger conditions hold on the node/segment in scope.
+  packet when its `when` trigger (authoring-contracts §1) is satisfied on the
+  node/segment in scope. A claim with no satisfied trigger never appears.
 
 ### Timing events (the sharpest mechanism)
 
@@ -135,7 +137,7 @@ moves to program #2b so the composer stays a pure, testable data function.
 
 ## Acceptance criteria
 
-- Living `schemas/feedback_packet.schema.json` v0.1 with the three amendments
+- Living `schemas/feedback_packet.schema.json` v0.1 with all four amendments
   + negative fixtures (claim without evidenceRefs; packet without scope;
   authored claim emitted while `instruments_only`).
 - Composer unit tests per source kind (all seven now resolvable via the
