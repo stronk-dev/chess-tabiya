@@ -145,3 +145,24 @@
   than hidden.
 - Session closeout: `ENGINES_REQUIRED=1 make verify` is green (33 test files,
   150 tests; zero Svelte diagnostics; scaffold and packaging checks pass).
+
+## 2026-08-11 (claude, review of §5–§7)
+
+- Independently verified: 150 tests green; `make test-browser` 2 passed. The
+  viewport test loops both 1280×720 and 1440×900 via setViewportSize across
+  all nine routes, asserting on document.scrollingElement (AS-C8's allowed
+  alternative to Playwright projects — intent satisfied). DrillScreen no
+  longer binds svelte:window (zero occurrences) yet the main.drill→Tab compare
+  test still passes: the dispatcher + region ownership works as specified.
+  aria-describedby convention applied with the route-wide sweep. **§5–§7
+  APPROVED; all RFC acceptance criteria met.**
+- **Recorded deviation:** branch-switch measured 51.2 ms against the <50 ms
+  design/02 budget (2.4% over). Not blocking — design/02 states these are
+  product targets to benchmark, not guarantees — but recorded here rather than
+  rounded away. Revisit if it drifts further; the O(n²) projection noted at
+  branch-runtime §1 is the likely lever.
+- Notable: the browser tests caught two real defects mounted tests could not
+  (board/timeline overlap, lost drill focus after checkpoint continuation) —
+  the second time in this repo that end-to-end coverage found cross-layer
+  seams unit tests structurally cannot.
+- Completion protocol green-lit.
