@@ -47,6 +47,13 @@ protocol**:
 > plan to matter → fork and replay the critical segment → finish or jump into the
 > resulting outcome problem.
 
+**Precision correction (2026-08-12, ChessMotive teardown):** the originality
+claim on *comparison* is specifically **comparison of two preserved attempts by
+the same player**. Comparison-against-an-authority is not novel — ChessMotive
+does it well, diffing a learner's stated candidates/line/evaluation against a
+model answer. What no surveyed product does is preserve your own attempts and
+compare them to each other.
+
 ChessDojo documents a manual version of this; Chess Endgame Training demonstrates that
 an endgame play-out interaction exists. Neither establishes the integrated product's
 demand or learning effect. The product hypothesis industrializes and connects those

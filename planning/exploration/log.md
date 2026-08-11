@@ -553,3 +553,31 @@
   authoring cost (Q7/K10) before breadth, with the standing rule that a cost
   blowout is answered by tooling (importers, corpus mining, authoring assist),
   not more hours.
+
+## 2026-08-12 (claude) — ChessMotive teardown; E1 holds, compare claim narrowed
+
+- Owner flagged ChessMotive as "close to us". Researched (`design/research/
+  teardown-chessmotive-desk.md`, `[V]` from SPA bundle strings/JSON-LD/sitemap
+  since the site is client-rendered). Added to the competitor matrix, which
+  lacked it.
+- **E1 verdict: WHITESPACE INTACT.** It is commit → compare-to-authority on
+  atomic curated positions: no opponent at all, no play-out past the committed
+  move, no rewind, no preserved branches (`branch`/`rewind`/`takeback` = 0 hits
+  across its bundles), no cross-phase notion. None of the three elements E1
+  protects.
+- **Honest narrowing applied to `design/00-thesis.md`:** our originality claim
+  on *comparison* is now stated precisely as **comparison of two preserved
+  attempts by the same player**. Comparison-against-an-authority is not novel
+  and ChessMotive does it well.
+- Independent validation worth noting: its explanations are human-authored and
+  revealed strictly **after** commit — arrived at ADR-0006's delayed-feedback
+  rule independently, which is mild external support for a design decision we
+  took on principle.
+- Steal ledgered: the **step-indexed reasoning transcript** (candidates →
+  shortlist → move → line → evaluation, diffed row-by-row), which localizes
+  failure to generation vs elimination vs selection vs calculation vs judgment.
+  Ours could diff attempt-vs-attempt, which theirs structurally cannot.
+- Q1b caution recorded: seven distinct searches (Reddit, forums, Product Hunt,
+  YouTube, app stores, press) found **zero** external mentions. A well-designed
+  product in our band with no visible audience is evidence about the market,
+  not just about them.
