@@ -36,7 +36,7 @@ async function move(page: Page, from: string, to: string): Promise<void> {
 test("served Najdorf pack plays, rewinds, branches, compares, and exports", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/play");
   const list = await page.request.get("/packs");
   expect(list.ok()).toBe(true);
   const served = (await list.json()) as {

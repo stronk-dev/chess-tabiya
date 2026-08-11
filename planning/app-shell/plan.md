@@ -30,10 +30,10 @@ This is a shell-layer REWRITE (no router exists today) — read AS-C5.
 
 ## 4. Router + shell frame
 
-- [ ] Hand-rolled history-API router (~100 lines, no new dependency)
-- [ ] Dissolve DrillSessionController's phase machine into route state
-- [ ] Top bar (route nav + run context), not-found view, deep links, reload-safe
-- [ ] Routes: / /play /play/run/:id /review /learn /live /create /library /settings
+- [x] Hand-rolled history-API router (~100 lines, no new dependency)
+- [x] Dissolve DrillSessionController's phase machine into route state
+- [x] Top bar (route nav + run context), not-found view, deep links, reload-safe
+- [x] Routes: / /play /play/run/:id /review /learn /live /create /library /settings
       (Learn/Live/Create = honest empty states naming their program item)
 
 ## 5. Fitted region model

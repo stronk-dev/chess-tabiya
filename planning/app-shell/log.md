@@ -78,3 +78,21 @@
   phase machine into route state is the riskiest single change in this RFC and
   should be reviewable before the fitted layout and keyboard dispatcher land on
   top of it.
+
+## 2026-08-11 (codex, §4 router + shell frame)
+
+- Added a dependency-free history-API router with typed parsing for every shell
+  route, encoded run ids, push/replace/popstate handling, and an explicit
+  not-found state. `/play/run/:id` reloads without query metadata: the client
+  derives `packId` from the authoritative `run.started` event.
+- Removed `phase` and pack-list state from `DrillSessionController`. It now owns
+  only an optional active drill session; App route state owns Home, Play, run,
+  Review, Learn, Live, Create, Library, Settings, loading, and not-found views.
+- Added the global top bar with primary navigation and run/access context. Home
+  uses the run index for a lease-aware resume card; Review lists runs and opens
+  them in the existing live drill/compare context. Learn/Live/Create identify
+  their exact breadth-program items and explicitly decline to fake behavior.
+- Route/component tests cover initial deep-link reconstruction, Review → run,
+  writer and foreign/read-only resume, every reserved route, and not-found.
+  The existing Playwright drill walkthrough now enters through `/play` and is
+  green. Fitted layout and keyboard ownership were intentionally untouched.

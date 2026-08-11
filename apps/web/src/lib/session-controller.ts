@@ -1,6 +1,7 @@
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   historyFrom,
+  projectRun,
   type BranchComparison,
   type DrillRunEvent,
   type PolicyConfig,
@@ -10,7 +11,6 @@ import {
   ApiError,
   type Capabilities,
   type DrillClientApi,
-  type PackSummary,
   type PgnDownload,
 } from "./api.js";
 import { boardModel } from "./board-model.js";
@@ -26,9 +26,7 @@ import {
 } from "./run-state.js";
 import { WriterSession, type KeyValueStorage } from "./writer-session.js";
 
-export interface ClientScreenState {
-  readonly phase: "loading" | "library" | "drill";
-  readonly packs: readonly PackSummary[];
+export interface DrillSessionState {
   readonly busy: boolean;
   readonly error?: string;
   readonly pack?: DrillPackDefinition;
@@ -39,9 +37,8 @@ export interface ClientScreenState {
   readonly comparisonBranchIds?: readonly [string, string];
 }
 
-export interface ResumeTarget {
+export interface StartedRun {
   readonly runId: string;
-  readonly packId: string;
 }
 
 interface ControllerOptions {
@@ -49,12 +46,12 @@ interface ControllerOptions {
   readonly scheduler?: PollScheduler;
   readonly runId?: () => string;
   readonly seed?: () => number;
-  readonly onRunStarted?: (target: ResumeTarget) => void;
+  readonly onRunStarted?: (target: StartedRun) => void;
 }
 
-type Subscriber = (state: ClientScreenState) => void;
+type Subscriber = (state: DrillSessionState) => void;
 type StatePatch = {
-  [Key in keyof ClientScreenState]?: ClientScreenState[Key] | undefined;
+  [Key in keyof DrillSessionState]?: DrillSessionState[Key] | undefined;
 };
 
 const TERMINAL_STATES = new Set(["achieved", "failed", "transitioned"]);
@@ -139,13 +136,9 @@ export class DrillSessionController {
   readonly #scheduler: PollScheduler | undefined;
   readonly #runId: () => string;
   readonly #seed: () => number;
-  readonly #onRunStarted: ((target: ResumeTarget) => void) | undefined;
+  readonly #onRunStarted: ((target: StartedRun) => void) | undefined;
   readonly #subscribers = new Set<Subscriber>();
-  #state: ClientScreenState = Object.freeze({
-    phase: "loading",
-    packs: Object.freeze([]),
-    busy: false,
-  });
+  #state: DrillSessionState = Object.freeze({ busy: false });
   #store: RunStateStore | undefined;
   #unsubscribeStore: (() => void) | undefined;
   #capabilities: Capabilities | undefined;
@@ -160,7 +153,7 @@ export class DrillSessionController {
     this.#onRunStarted = options.onRunStarted;
   }
 
-  get state(): ClientScreenState {
+  get state(): DrillSessionState {
     return this.#state;
   }
 
@@ -170,31 +163,29 @@ export class DrillSessionController {
     return () => this.#subscribers.delete(subscriber);
   }
 
-  async load(resume?: ResumeTarget): Promise<void> {
-    this.#patch({ phase: "loading", busy: true, error: undefined });
+  async resume(runId: string): Promise<void> {
+    this.#patch({ busy: true, error: undefined });
     try {
-      const packs = await this.#api.packs();
-      this.#patch({ packs });
-      if (resume === undefined) {
-        this.#patch({ phase: "library", busy: false });
-        return;
+      const eventPage = await this.#api.events(runId, 0);
+      const started = eventPage.events[0];
+      if (started?.type !== "run.started") {
+        throw new TypeError("Cannot resume a run without its run.started event");
       }
       const [{ document, digest }, capabilities, graph] = await Promise.all([
-        this.#api.pack(resume.packId),
+        this.#api.pack(started.data.packId),
         this.#api.capabilities(),
-        this.#api.graph(resume.runId),
+        this.#api.graph(runId),
       ]);
-      const claimed = WriterSession.peek(resume.runId, this.#storage);
+      const claimed = WriterSession.peek(runId, this.#storage);
       const session =
         claimed?.writerId === graph.activeWriterId
           ? claimed
-          : WriterSession.observe(resume.runId, graph.activeWriterId);
-      const store = await this.#resumeStore(document, session);
+          : WriterSession.observe(runId, graph.activeWriterId);
+      const store = this.#newStore(document, session, projectRun(eventPage.events));
       this.#capabilities = capabilities;
       this.#attachStore(store, document, digest);
     } catch (error) {
       this.#patch({
-        phase: "library",
         busy: false,
         error: error instanceof Error ? error.message : String(error),
       });
@@ -223,7 +214,7 @@ export class DrillSessionController {
       this.#capabilities = capabilities;
       const store = this.#newStore(document, session, run);
       this.#attachStore(store, document, digest);
-      this.#onRunStarted?.({ runId, packId });
+      this.#onRunStarted?.({ runId });
     } catch (error) {
       this.#fail(error);
     }
@@ -322,11 +313,7 @@ export class DrillSessionController {
     this.#store = undefined;
     this.#capabilities = undefined;
     this.#dismissedCheckpointSeq = 0;
-    this.#state = Object.freeze({
-      phase: "library",
-      packs: this.#state.packs,
-      busy: false,
-    });
+    this.#state = Object.freeze({ busy: false });
     this.#emit();
   }
 
@@ -398,15 +385,6 @@ export class DrillSessionController {
       : new RunStateStore(this.#api, pack, session, run, this.#scheduler);
   }
 
-  #resumeStore(
-    pack: DrillPackDefinition,
-    session: WriterSession,
-  ): Promise<RunStateStore> {
-    return this.#scheduler === undefined
-      ? RunStateStore.resume(this.#api, pack, session)
-      : RunStateStore.resume(this.#api, pack, session, this.#scheduler);
-  }
-
   #attachStore(
     store: RunStateStore,
     pack: DrillPackDefinition,
@@ -420,7 +398,6 @@ export class DrillSessionController {
     });
     store.start();
     this.#patch({
-      phase: "drill",
       pack,
       packDigest: digest,
       runState: store.snapshot,
@@ -459,7 +436,7 @@ export class DrillSessionController {
     for (const [key, value] of Object.entries(patch)) {
       if (value === undefined) delete next[key];
     }
-    this.#state = Object.freeze(next) as unknown as ClientScreenState;
+    this.#state = Object.freeze(next) as unknown as DrillSessionState;
     this.#emit();
   }
 

@@ -242,7 +242,7 @@ class FakeApi implements DrillClientApi {
 }
 
 function controller(api = new FakeApi(), storage = new MemoryStorage()) {
-  const started: { runId: string; packId: string }[] = [];
+  const started: { runId: string }[] = [];
   return {
     api,
     started,
@@ -257,16 +257,11 @@ function controller(api = new FakeApi(), storage = new MemoryStorage()) {
 }
 
 describe("DrillSessionController", () => {
-  it("loads the library and starts a pack with server capabilities", async () => {
+  it("starts a pack with server capabilities without owning screen routes", async () => {
     const environment = controller();
-    await environment.controller.load();
-    expect(environment.controller.state).toMatchObject({
-      phase: "library",
-      packs: [expect.objectContaining({ reviewStatus: "schema_example" })],
-    });
-
+    expect("phase" in environment.controller.state).toBe(false);
+    expect("packs" in environment.controller.state).toBe(false);
     await environment.controller.startPack(pack.id);
-    expect(environment.controller.state.phase).toBe("drill");
     expect(environment.controller.state.runState?.run.id).toBe("screen-run");
     expect(environment.api.created).toMatchObject({
       seed: 23,
@@ -279,12 +274,11 @@ describe("DrillSessionController", () => {
         },
       },
     });
-    expect(environment.started).toEqual([{ runId: "screen-run", packId: pack.id }]);
+    expect(environment.started).toEqual([{ runId: "screen-run" }]);
   });
 
   it("pauses at checkpoints, then selects and writer-appends the opponent ply", async () => {
     const environment = controller();
-    await environment.controller.load();
     await environment.controller.startPack(pack.id);
 
     await environment.controller.move("c1e3");
@@ -314,7 +308,6 @@ describe("DrillSessionController", () => {
 
   it("forks, compares, rewinds, exports, and returns to the library", async () => {
     const environment = controller();
-    await environment.controller.load();
     await environment.controller.startPack(pack.id);
     await environment.controller.move("c1e3");
     await environment.controller.continueCheckpoint();
@@ -336,7 +329,7 @@ describe("DrillSessionController", () => {
     });
 
     environment.controller.stopSession();
-    expect(environment.controller.state.phase).toBe("library");
+    expect(environment.controller.state).toEqual({ busy: false });
   });
 
   it("loads a foreign URL-addressed run read-only without minting a writer", async () => {
@@ -355,10 +348,9 @@ describe("DrillSessionController", () => {
     );
     const storage = new MemoryStorage();
     const environment = controller(api, storage);
-    await environment.controller.load({ runId: "screen-run", packId: pack.id });
+    await environment.controller.resume("screen-run");
 
     expect(environment.controller.state).toMatchObject({
-      phase: "drill",
       runState: { access: "read_only", run: { id: "screen-run" } },
     });
     expect(storage.values.size).toBe(0);
@@ -382,7 +374,7 @@ describe("DrillSessionController", () => {
     WriterSession.claimFor("screen-run", storage, () => "writer-a");
     const environment = controller(api, storage);
 
-    await environment.controller.load({ runId: "screen-run", packId: pack.id });
+    await environment.controller.resume("screen-run");
 
     expect(environment.controller.state.runState?.access).toBe("writer");
   });
