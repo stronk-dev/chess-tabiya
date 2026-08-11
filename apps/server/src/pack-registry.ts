@@ -9,6 +9,7 @@ import {
 } from "@chess-tabiya/schema/drill-pack";
 
 import { ServerError } from "./errors.js";
+import { SUPPORTED_POLICY_MODES } from "./capabilities.js";
 
 export type FeedbackPolicy = "delayed_checkpoint" | "segment_end";
 
@@ -98,6 +99,17 @@ function validatedDocument(value: unknown, source: string): DrillPackDefinition 
     throw new ServerError(
       "PACK_INVALID",
       `${source}.feedbackPolicy is not a supported v1 policy`,
+    );
+  }
+  const opponentPolicy = object(pack.opponentPolicy, `${source}.opponentPolicy`);
+  const opponentMode = string(
+    opponentPolicy.mode,
+    `${source}.opponentPolicy.mode`,
+  );
+  if (!SUPPORTED_POLICY_MODES.some((mode) => mode === opponentMode)) {
+    throw new ServerError(
+      "PACK_INVALID",
+      `${source}.opponentPolicy.mode ${opponentMode} is not selectable in v1`,
     );
   }
   const provenance = object(pack.provenance, `${source}.provenance`);

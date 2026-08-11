@@ -144,7 +144,7 @@ describe("drill-client pack registry", () => {
     );
   });
 
-  it("refuses semantic lint failures and the cut immediate-blunder policy", async () => {
+  it("refuses semantic lint failures and unsupported v1 policies", async () => {
     const illegal = pack();
     (illegal.spine![0] as { moveUci: string }).moveUci = "a1a8";
     await expect(
@@ -164,6 +164,24 @@ describe("drill-client pack registry", () => {
     ).rejects.toMatchObject({
       code: "PACK_INVALID",
       message: expect.stringContaining("not supported in v1"),
+    });
+
+    await expect(
+      PackRegistry.fromDocuments([
+        {
+          source: "unselectable-opponent",
+          value: pack({
+            id: "unselectable-opponent-pack",
+            opponentPolicy: {
+              ...fixture.opponentPolicy,
+              mode: "plan_defense",
+            },
+          }),
+        },
+      ]),
+    ).rejects.toMatchObject({
+      code: "PACK_INVALID",
+      message: expect.stringContaining("is not selectable in v1"),
     });
   });
 });

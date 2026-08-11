@@ -103,7 +103,7 @@
     }
   ],
   "opponentPolicy": {
-    "mode": "plan_defense",
+    "mode": "human_common",
     "targetElo": 1800,
     "temperature": 0.8,
     "topP": 0.92,

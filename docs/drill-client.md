@@ -134,10 +134,9 @@ A player move is applied first. When its atomic emitted-event suffix contains a
 checkpoint, the controller pauses before selecting an opponent reply. Continue
 calls the pure `/select-move` endpoint and then writer-appends the selection and
 move as one opponent ply. Fork, rewind, switch, compare, PGN export, and stop
-remain thin calls to the existing client/store contracts. The living schema
-fixture's older `plan_defense` authoring label falls back explicitly to the
-server's available `human_common` selector mode; supported selector modes are
-otherwise honored directly.
+remain thin calls to the existing client/store contracts. The pack registry
+refuses opponent modes that the selector cannot execute; the living fixture
+uses `human_common`, so every served pack is runnable by construction.
 
 ## Screens and episode flow
 

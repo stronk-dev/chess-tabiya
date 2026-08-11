@@ -368,3 +368,16 @@
   gates.md. Q9 (branch growth/comprehension tail) stays open, observed during
   the slice. drill-client RFC → accepted; planning dir cut with the
   owner-confirmed foundations-first layer order.
+
+## 2026-08-11 (claude) — theory-sourcing dossier landed
+
+- `design/research/theory-sourcing.md` fills the Q6/Q7 sourcing GAP with
+  fetched-license verdicts. Headlines: lichess chess-openings CC0 (3,810 named
+  lines — spine-name backbone); Wikibooks opening theory CC BY-SA 4.0 with
+  real per-line prose (usable as separated content data, never mixed
+  per-paragraph with ours); Lichess puzzle DB CC0 with 6.06M themed puzzles
+  (strong on-ramp content seed); Syzygy files copyright-free; CET's credited
+  endgame DB has murky provenance → do-not-use (its checkmate DB is GPL but
+  derived from CC0 — re-derive ourselves); TWIC/PGN-Mentor/bulk-studies on the
+  do-not-use list. Flag: explorer API probes returned 401 on both hostnames —
+  investigate before Stage-0 relies on it; CC0 dumps are the fallback.

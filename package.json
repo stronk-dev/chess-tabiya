@@ -12,9 +12,11 @@
     "verify": "pnpm typecheck && pnpm test && pnpm schema:check"
   },
   "devDependencies": {
+    "@playwright/test": "1.62.1",
     "@sveltejs/vite-plugin-svelte": "7.2.0",
     "fast-check": "4.9.0",
     "svelte": "5.56.8",
+    "tsx": "4.23.12",
     "typescript": "5.9.2",
     "vitest": "4.1.10"
   },

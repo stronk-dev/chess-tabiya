@@ -64,7 +64,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Paid-competitor pricing/positioning | Q2 | **GAP** | — |
 | Server/client stack selection (Go vs Node/TS; Svelte vs React vs vanilla; chessground/WASM interop) | branch-runtime RFC, deferred-decisions register | covered `[V]`/`[P]` — recommends TS-everywhere + Svelte 5; flags Maia-3 Python-sidecar question | `stack-selection.md` |
 | Branch/rewind/compare comprehension at 2/4/8 branches | Q9, E5 | **GAP** | — |
-| Historical-game provenance, rights, Stage-0 coverage and bias | Q6, Q7 | **GAP** | — |
+| Theory/pattern sourcing incl. provenance & rights | Q6, Q7, content phase | covered `[V]` — every pack need (skeleton/evidence/prose/positions/grading) has a CC0-or-ours source; do-not-use list included | `theory-sourcing.md` |
 | Deliberate-practice evidence base | thesis | covered `[P]` (observational; population skew caveat) | `arch/research/source_index.md` R01 |
 | Lichess corpus scale/licensing | Q6 | covered `[P]` | `arch/research/source_index.md` R02 |
 | Engine stack (Stockfish UCI, Syzygy sizes) | Q5, arch | covered `[P]` | `arch/research/source_index.md` R03–R06 |
