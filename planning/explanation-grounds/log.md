@@ -38,3 +38,18 @@
   sources were added. §3 remains untouched for the next session.
 - Session closeout: `ENGINES_REQUIRED=1 make verify` is green (33 test files,
   153 tests; zero Svelte diagnostics; scaffold and packaging checks pass).
+
+## 2026-08-11 (claude, review of §1–§2)
+
+- Independently verified (ENGINES_REQUIRED=1): 153 tests green. Compare gate
+  wired through `feedbackIsRevealed` alongside the existing evidence/apply
+  gates; score encoding pinned as the discriminated `{kind:"cp"|"mate"}` union
+  with a `Number.isSafeInteger` guard on mateIn; overlay derives from persisted
+  events (drained-queue case asserted). **§1–§2 APPROVED.**
+- Notable: codex confirmed the regression test fails against the pre-fix code
+  (`engine:main-eval` leaked before checkpoint reveal) — the shipped bug the
+  review discovered is real and now closed, not an assertion of existing
+  behavior.
+- §3 green-lit (client rendering): grounded sentences via the EXISTING table,
+  throw-on-empty parity with whyBanner, eval trajectory aligned on plyOffset
+  with the fork marked, Playwright without a delta assertion.
