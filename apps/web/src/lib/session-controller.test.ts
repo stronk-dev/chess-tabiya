@@ -27,11 +27,15 @@ import type {
   PackSummary,
   PlayerMoveRequest,
   RewindRequest,
+  RunSummary,
   SelectMoveRequest,
 } from "./api.js";
 import type { PollScheduler } from "./run-state.js";
 import { DrillSessionController } from "./session-controller.js";
-import type { KeyValueStorage } from "./writer-session.js";
+import {
+  WriterSession,
+  type KeyValueStorage,
+} from "./writer-session.js";
 
 const pack = JSON.parse(
   readFileSync(
@@ -81,6 +85,7 @@ class FakeApi implements DrillClientApi {
   created: CreateRunRequest | undefined;
   selected: SelectMoveRequest | undefined;
   writerIds: string[] = [];
+  activeWriterId = "writer-a";
 
   async capabilities(): Promise<Capabilities> {
     return capabilities;
@@ -104,9 +109,14 @@ class FakeApi implements DrillClientApi {
     return { document: pack, digest };
   }
 
+  async runs(): Promise<readonly RunSummary[]> {
+    return [];
+  }
+
   async createRun(input: CreateRunRequest, writerId: string): Promise<DrillRun> {
     this.created = input;
     this.writerIds.push(writerId);
+    this.activeWriterId = writerId;
     this.run = createRun({
       ...input,
       packDigest: digest,
@@ -187,6 +197,7 @@ class FakeApi implements DrillClientApi {
     const run = this.requiredRun();
     return {
       id: run.id,
+      activeWriterId: this.activeWriterId,
       nodes: run.nodes,
       branches: run.branches,
       activeCursor: run.activeCursor,
@@ -220,13 +231,13 @@ class FakeApi implements DrillClientApi {
   }
 }
 
-function controller(api = new FakeApi()) {
+function controller(api = new FakeApi(), storage = new MemoryStorage()) {
   const started: { runId: string; packId: string }[] = [];
   return {
     api,
     started,
     controller: new DrillSessionController(api, {
-      storage: new MemoryStorage(),
+      storage,
       scheduler: new FakeScheduler(),
       runId: () => "screen-run",
       seed: () => 23,
@@ -318,7 +329,7 @@ describe("DrillSessionController", () => {
     expect(environment.controller.state.phase).toBe("library");
   });
 
-  it("resumes a URL-addressed run from its public event log", async () => {
+  it("loads a foreign URL-addressed run read-only without minting a writer", async () => {
     const api = new FakeApi();
     await api.createRun(
       {
@@ -332,12 +343,37 @@ describe("DrillSessionController", () => {
       },
       "writer-a",
     );
-    const environment = controller(api);
+    const storage = new MemoryStorage();
+    const environment = controller(api, storage);
     await environment.controller.load({ runId: "screen-run", packId: pack.id });
 
     expect(environment.controller.state).toMatchObject({
       phase: "drill",
-      runState: { run: { id: "screen-run" } },
+      runState: { access: "read_only", run: { id: "screen-run" } },
     });
+    expect(storage.values.size).toBe(0);
+  });
+
+  it("resumes its stored writer claim in writer mode", async () => {
+    const api = new FakeApi();
+    await api.createRun(
+      {
+        id: "screen-run",
+        packId: pack.id,
+        policyConfig: {
+          seedMode: "fixed",
+          locus: { executedAt: "server", engineIds: [], modelIds: [] },
+        },
+        seed: 1,
+      },
+      "writer-a",
+    );
+    const storage = new MemoryStorage();
+    WriterSession.claimFor("screen-run", storage, () => "writer-a");
+    const environment = controller(api, storage);
+
+    await environment.controller.load({ runId: "screen-run", packId: pack.id });
+
+    expect(environment.controller.state.runState?.access).toBe("writer");
   });
 });

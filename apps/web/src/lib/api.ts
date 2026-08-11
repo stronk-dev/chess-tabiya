@@ -8,6 +8,7 @@ import type {
   MutationResult,
   Node,
   ObjectiveEvidenceProposal,
+  ObjectiveState,
   OpponentSelection,
   PolicyConfig,
 } from "@chess-tabiya/runtime";
@@ -29,9 +30,20 @@ export interface PackDocument {
 
 export interface RunGraph {
   readonly id: string;
+  readonly activeWriterId: string;
   readonly nodes: readonly Node[];
   readonly branches: DrillRun["branches"];
   readonly activeCursor: DrillRun["activeCursor"];
+}
+
+export interface RunSummary {
+  readonly id: string;
+  readonly title: string;
+  readonly packId: string;
+  readonly updatedAt: string;
+  readonly objectiveState: ObjectiveState;
+  readonly branchCount: number;
+  readonly activeWriterId: string;
 }
 
 export interface EventsPage {
@@ -202,6 +214,7 @@ export interface DrillClientApi extends RunApi {
   capabilities(): Promise<Capabilities>;
   packs(): Promise<readonly PackSummary[]>;
   pack(packId: string): Promise<PackDocument>;
+  runs(limit?: number, offset?: number): Promise<readonly RunSummary[]>;
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection>;
   graph(runId: string): Promise<RunGraph>;
   compare(
@@ -262,6 +275,17 @@ export class DrillApi implements DrillClientApi {
       body: input,
     });
     return body.run;
+  }
+
+  async runs(limit = 50, offset = 0): Promise<readonly RunSummary[]> {
+    const query = new URLSearchParams({
+      limit: String(limit),
+      offset: String(offset),
+    });
+    const body = await this.#json<{ readonly runs: readonly RunSummary[] }>(
+      `/runs?${query}`,
+    );
+    return body.runs;
   }
 
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {

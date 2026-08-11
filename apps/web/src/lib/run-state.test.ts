@@ -189,7 +189,7 @@ class FakeApi implements RunApi {
 }
 
 function session(storage = new MemoryStorage()): WriterSession {
-  return new WriterSession("run-a", storage, () => "writer-a");
+  return WriterSession.claimFor("run-a", storage, () => "writer-a");
 }
 
 describe("RunStateStore", () => {

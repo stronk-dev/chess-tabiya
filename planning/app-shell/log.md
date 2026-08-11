@@ -22,3 +22,15 @@
   fall back to `packId` because the pre-migration snapshot did not store titles.
 - Added `RunStorage.list(limit, offset)` and `GET /runs` (default 50, maximum
   100), ordered newest-first and returning `activeWriterId`.
+
+## 2026-08-11 (codex, §2 lease visibility)
+
+- Added `activeWriterId` to graph reads and the typed web response, alongside
+  the run-list lease field shipped in §1.
+- Replaced implicit `WriterSession` construction with explicit `claimFor()`.
+  `peek()` only returns an existing local claim; `observe()` creates an
+  in-memory read-only follower and never writes localStorage.
+- Resume reads the graph before constructing run state. A matching stored id
+  resumes writer mode; a missing or foreign id starts read-only immediately.
+  Tests cover both refresh paths and prove a foreign peek leaves storage empty;
+  the existing 409-demotion test remains green as the defensive fallback.

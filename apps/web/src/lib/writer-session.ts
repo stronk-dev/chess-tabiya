@@ -28,21 +28,41 @@ export class WriterSession {
   readonly writerId: string;
   #readOnly = false;
 
-  constructor(
+  private constructor(runId: string, writerId: string, readOnly = false) {
+    if (writerId.trim() === "") throw new TypeError("Writer id cannot be empty");
+    this.runId = runId;
+    this.writerId = writerId;
+    this.#readOnly = readOnly;
+  }
+
+  /** Returns a previously claimed session without writing to storage. */
+  static peek(
+    runId: string,
+    storage: KeyValueStorage = browserStorage(),
+  ): WriterSession | undefined {
+    const saved = storage.getItem(writerStorageKey(runId));
+    return saved === null || saved === ""
+      ? undefined
+      : new WriterSession(runId, saved);
+  }
+
+  /** Resumes an existing claim or explicitly creates and persists a new one. */
+  static claimFor(
     runId: string,
     storage: KeyValueStorage = browserStorage(),
     createWriterId: WriterIdFactory = defaultWriterId,
-  ) {
-    this.runId = runId;
-    const key = writerStorageKey(runId);
-    const saved = storage.getItem(key);
-    if (saved !== null && saved !== "") {
-      this.writerId = saved;
-    } else {
-      this.writerId = createWriterId();
-      if (this.writerId.trim() === "") throw new TypeError("Writer id cannot be empty");
-      storage.setItem(key, this.writerId);
-    }
+  ): WriterSession {
+    const saved = WriterSession.peek(runId, storage);
+    if (saved !== undefined) return saved;
+    const writerId = createWriterId();
+    if (writerId.trim() === "") throw new TypeError("Writer id cannot be empty");
+    storage.setItem(writerStorageKey(runId), writerId);
+    return new WriterSession(runId, writerId);
+  }
+
+  /** Creates a non-persisted follower for a lease held by another writer. */
+  static observe(runId: string, activeWriterId: string): WriterSession {
+    return new WriterSession(runId, activeWriterId, true);
   }
 
   get readOnly(): boolean {

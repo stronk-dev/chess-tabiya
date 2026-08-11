@@ -15,10 +15,10 @@ This is a shell-layer REWRITE (no router exists today) — read AS-C5.
 
 ## 2. Lease visibility (server + client plumbing)
 
-- [ ] `activeWriterId` on GET /runs summaries and /runs/:id/graph
-- [ ] `WriterSession.peek(runId)` non-minting + explicit `claimFor(runId)`;
+- [x] `activeWriterId` on GET /runs summaries and /runs/:id/graph
+- [x] `WriterSession.peek(runId)` non-minting + explicit `claimFor(runId)`;
       test that peeking a foreign run leaves localStorage untouched
-- [ ] Read-only derived on load (not only after 409); 409 still demotes
+- [x] Read-only derived on load (not only after 409); 409 still demotes
 
 ## 3. Capability registry
 

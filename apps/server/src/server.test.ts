@@ -112,8 +112,9 @@ describe("branch-runtime REST binding", () => {
 
     const graphResponse = await request(handler, "GET", "/runs/rest-run/graph");
     const graphBody = await graphResponse.json() as {
-      graph: { branches: { id: string; label: string }[] };
+      graph: { activeWriterId: string; branches: { id: string; label: string }[] };
     };
+    expect(graphBody.graph.activeWriterId).toBe("writer-a");
     expect(graphBody.graph.branches.map((branch) => branch.label)).toEqual([
       "main",
       "alt-1",

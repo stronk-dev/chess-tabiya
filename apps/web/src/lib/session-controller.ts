@@ -179,11 +179,16 @@ export class DrillSessionController {
         this.#patch({ phase: "library", busy: false });
         return;
       }
-      const [{ document, digest }, capabilities] = await Promise.all([
+      const [{ document, digest }, capabilities, graph] = await Promise.all([
         this.#api.pack(resume.packId),
         this.#api.capabilities(),
+        this.#api.graph(resume.runId),
       ]);
-      const session = new WriterSession(resume.runId, this.#storage);
+      const claimed = WriterSession.peek(resume.runId, this.#storage);
+      const session =
+        claimed?.writerId === graph.activeWriterId
+          ? claimed
+          : WriterSession.observe(resume.runId, graph.activeWriterId);
       const store = await this.#resumeStore(document, session);
       this.#capabilities = capabilities;
       this.#attachStore(store, document, digest);
@@ -205,7 +210,7 @@ export class DrillSessionController {
       ]);
       const runId = this.#runId();
       const seed = this.#seed();
-      const session = new WriterSession(runId, this.#storage);
+      const session = WriterSession.claimFor(runId, this.#storage);
       const run = await this.#api.createRun(
         {
           id: runId,

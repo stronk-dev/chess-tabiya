@@ -60,11 +60,13 @@ describe("DrillApi", () => {
       if (url.endsWith("/runs") && init?.method === "POST") {
         return json({ run }, { status: 201 });
       }
+      if (url.includes("/runs?")) return json({ runs: [] });
       if (url.endsWith("/select-move")) return json(selection);
       if (url.includes("/graph")) {
         return json({
           graph: {
             id: run.id,
+            activeWriterId: "writer-one",
             nodes: run.nodes,
             branches: run.branches,
             activeCursor: run.activeCursor,
@@ -104,6 +106,7 @@ describe("DrillApi", () => {
     await api.packs();
     expect((await api.pack("pack-one")).digest).toBe(run.packDigest);
     await api.createRun(createInput, "writer-one");
+    await api.runs(20, 5);
     await api.selectMove({
       startFen: run.nodes[0]!.fen,
       historyUci: [],
@@ -132,6 +135,7 @@ describe("DrillApi", () => {
       "/capabilities",
       "/packs",
       "/packs/pack-one",
+      "/runs",
       "/runs",
       "/select-move",
       "/runs/run%20%2F%20one/moves",
