@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `explanation-grounds.md` | draft (in review) | amends archived `branch-runtime` (compare overlay) | breadth #2, v1 |
+| `explanation-grounds.md` | accepted → implementing | amends archived `branch-runtime` + `drill-client` | breadth #2, v1 |
 | ~~`authoring-contracts-v03.md`~~ | **withdrawn** — premise refuted (3 reviews) | — | contracts → content era |
 | ~~`evidence-composer.md`~~ | **withdrawn** — prerequisite withdrawn | — | packet abstraction not needed for v1 |
 

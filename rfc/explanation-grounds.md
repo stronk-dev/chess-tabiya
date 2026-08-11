@@ -1,126 +1,145 @@
 # RFC: Explanation Grounds (render what the system already computes)
 
-- **Status:** draft
+- **Status:** accepted
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-11
 - **Design refs:** `design/01-training-model.md` (compare and replay), `design/03-product-breadth.md` B4
-- **Exploration gate:** breadth program #2, third scoping; answers the walkthrough finding directly
-- **Depends on:** `docs/branch-runtime.md`, `docs/engine-workers.md`, `docs/app-shell.md`
-- **Parent / amends:** **`rfc/archive/branch-runtime.md`** — extends the `compare()` payload with a recorded-evidence overlay
-- **Supersedes / superseded by:** supersedes withdrawn `rfc/authoring-contracts-v03.md` + `rfc/evidence-composer.md` for v1
-- **Planning:** `planning/explanation-grounds/` (once implementing)
+- **Exploration gate:** breadth program #2, **fourth** scoping; answers the walkthrough finding with shipped data only
+- **Depends on:** `rfc/archive/branch-runtime.md`, `rfc/archive/drill-client.md`, `rfc/archive/engine-workers.md`
+- **Parent / amends:** **`rfc/archive/branch-runtime.md`** (compare payload gains a recorded-evidence overlay) and **`rfc/archive/drill-client.md`** (compare view rendering; `RunService.compare` gains the withholding gate)
+- **Supersedes / superseded by:** — (the withdrawn `authoring-contracts-v03` / `evidence-composer` are *withdrawn*, a distinct terminal state; this RFC does not supersede them)
+- **Planning:** `planning/explanation-grounds/`
 
 ## Summary
 
 Close the walkthrough finding — *"branch comparison shows difference without
 explaining consequence"* — using **only data the system already produces**:
-objective transitions with real grounds, the Stockfish evidence already recorded
-per node, and the compare payload the runtime already returns. No new schema, no
-authored vocabulary, no packet abstraction.
+render objective transitions through the evidence-sentence table that already
+exists, and surface the Stockfish evidence already recorded per node in the
+compare payload. Also closes a withholding hole the review discovered: today
+`compare()` is ungated.
 
 ## Motivation
 
-Three adversarial passes rejected the general explanation architecture
-(withdrawn RFCs) for one root reason: it specified an authored vocabulary with
-no authored content to design against. This RFC takes the opposite approach —
-ship the concrete explanation the current data supports, use it, and let the
-authored layer be designed later against a real pack.
+Three prior drafts were rejected and two RFCs withdrawn for specifying an
+authored vocabulary with no authored content to design against. This one ships
+only what shipped code can already feed, verified file-by-file.
 
-**What the shipped code already has** (verified, not remembered):
-`compare()` returns `objectiveTimelines` (entries carrying `evidenceRefs`) and
-`checkpointHits`; `CompareView.svelte` already iterates all four arrays;
-`pack-orchestrator.ts` mints `pack:<checkpointId>` refs into
-`objective.state_changed`; `rulesEvidenceRef()` exists as a constructor;
-`evidence.attached` events carry Stockfish payloads and `GET /runs/:id/evidence`
-serves them.
+**Verified shipped state:** `compare()` returns `objectiveTimelines` (entries
+carrying `evidenceRefs`) and `checkpointHits`; `CompareView.svelte` iterates all
+four arrays but renders raw state names; `evidence-sentences.ts` already holds
+the full six-fact rules table plus `pack:` handling; `pack-orchestrator.ts`
+mints `pack:<checkpointId>` refs; `evidence.attached` events carry Stockfish
+payloads; `RunService.compare` performs **no** pack lookup and **no**
+`feedbackIsRevealed` check, unlike `evidence()` and `applyEvidence()`.
 
-**The three concrete gaps:**
+**Deferred, and why (EG-C1/C4/C6):** grounding *objective types* in rules facts
+(`win`/`hold`) is cut from this RFC. No shipped pack uses those types
+(`content/packs/` is empty; the fixture is `play_until_checkpoint`), so it would
+ship unexercised — the miniature of what killed the withdrawn RFCs. It also
+cannot be done honestly today: `drawIsAvailable` collapses stalemate,
+insufficient material, 50-move, and threefold into one boolean and cannot say
+which fired, so a discriminated `rules:` ref is unmintable without a runtime
+change this RFC declines to smuggle in. Revives with pack A.
 
-1. Objective transitions decided by *rules facts* carry no grounds — the
-   orchestrator's `successPredicate` recognizes only `reach_checkpoint`, so
-   `rulesEvidenceRef` is never minted in production and "objective degraded"
-   can appear with an empty explanation.
-2. Engine evidence exists per node but never reaches the compare payload, so a
-   comparison cannot say what the engine thought at the divergence.
-3. The compare view renders raw state names (`degraded`) rather than grounded
-   sentences.
-
-Out of scope: authored claims and their triggers, timing windows, `provenanceMode`,
-feedback packets, per-scope reveal, non-Stockfish evidence sources, the LLM
-renderer. Each returns when it has something real to be designed against.
+Also out of scope: authored claims, timing windows, `provenanceMode`, feedback
+packets, per-scope reveal, non-Stockfish sources, LLM rendering.
 
 ## Specification
 
-### 1. Rules-grounded objectives (server)
+### 1. Close the compare withholding hole (declared behavior change)
 
-Extend the orchestrator's pack→rule translation beyond `reach_checkpoint`:
+`RunService.compare` gains the same pack lookup + `feedbackIsRevealed` gate that
+`evidence()` already applies. Today `objectiveTimelines[].evidenceRefs` travels
+around the `publicEvents` barrier; that is an existing hole, not a status quo to
+preserve. When feedback is withheld: `engine:` refs are stripped from timeline
+entries and the overlay (below) is empty. Rules/pack refs are never withheld —
+they are the objective machine's own grounds, not engine output.
 
-| `objective.type` | v1 rule | minted ref |
-|---|---|---|
-| `reach_checkpoint` | unchanged | `pack:<checkpointId>` |
-| `win` | `rulesFact: checkmate` with `winner` = the drilling side | `rules:checkmate` |
-| `hold` | `rulesFact: draw` (the shipped `drawIsAvailable`: stalemate, insufficient material, 50-move, threefold on the path) | `rules:draw` |
+### 2. Recorded-evidence overlay on compare (amends branch-runtime)
 
-`save` and `resist` stay unsupported in v1 — they require judging *practical*
-difficulty, which no shipped component computes. Packs declaring them are
-rejected at registry load with the existing typed `PACK_INVALID` (the same
-refuse-to-serve pattern as unsupported policy modes), so a pack never silently
-half-works.
+`BranchComparison` gains, per side:
 
-### 2. Recorded-evidence overlay on compare (runtime, amends branch-runtime)
+```ts
+evidence: [{ nodeId, plyOffset, evidenceRefs, kind, source, score }]
+```
 
-`compare(run, a, b)` gains, per side, `evidence: [{nodeId, plyOffset, kind,
-source, values}]` assembled **from `evidence.attached` events on that branch's
-path** — durable events only, never the in-memory queue. No new event type, no
-run-schema version change: this reads what the log already stores.
+Assembled from **`evidence.attached` events on that branch's path** (durable
+events only; `compare.ts` already walks both paths for the timelines and reuses
+that traversal). `evidenceRefs` is carried so the client can join an entry back
+to the sentence table (EG-C7).
 
-Subject to the **existing** run-global reveal gate (`feedbackIsRevealed`): if
-feedback is withheld, the overlay is empty exactly as `publicEvents` already
-redacts. v1 changes no reveal semantics.
+**Score encoding, pinned (EG-C7):** the executor emits either `centipawns` or
+`mateIn` (`evidence-queue.ts`). `score` is
+`{kind: "cp", value} | {kind: "mate", movesTo}`, always **from White's
+perspective** (matching the existing payload convention), and the client plots
+mate scores at the axis extremes rather than converting them to centipawns.
+Adding a field to `BranchComparison` breaks neither the typed client nor the
+REST envelope.
 
-### 3. Grounded rendering (client)
+### 3. Grounded rendering (client, amends drill-client)
 
-- Objective timeline entries render as `<from> → <to>` **plus** their refs
-  through the existing `evidence-sentences.ts` table ("Draw available:
-  threefold repetition on this path"), not bare state names.
-- An entry whose `evidenceRefs` is empty renders "reason not recorded" — an
-  honest gap marker, and a signal that §1 missed a case.
-- The compare view shows the eval trajectory per side from the §2 overlay,
-  aligned on `plyOffset`, with the fork ply marked.
-- The sentence table gains entries for `rules:checkmate` and `rules:draw`.
+- Objective timeline entries render `<from> → <to>` **plus** their refs through
+  the **existing** `renderEvidenceRef`/`evidenceSentenceTable` — which already
+  covers all six rules facts and `pack:` refs. Nothing is added to the table.
+- **No "reason not recorded" branch** (EG-C3): empty `evidenceRefs` is
+  impossible by three shipped invariants (`assertObjectiveTransition` throws,
+  the run schema sets `minItems: 1`, `whyBanner` throws). The compare view
+  adopts the same throw-on-empty policy rather than installing a second,
+  friendlier one for identical data.
+- The eval trajectory renders per side from the §2 overlay, aligned on
+  `plyOffset`, with the fork ply marked.
 
 ## Deviations from design
 
-`design/03` B4 lists the full evidence stack (Maia, corpus, Syzygy, LLM). This
-ships only the authored-free subset that exists today; B4 stays unmet and the
-rest is scheduled against real content. Declared, not hidden.
+`design/03` B4 lists the full evidence stack (Maia, corpus, Syzygy, LLM,
+authored claims). This ships the Stockfish-and-objective subset that exists
+today; **B4 stays unmet** and the rest is scheduled against real content.
 
 ## Acceptance criteria
 
-- A run reaching a drawable position under a `hold` objective emits
-  `objective.state_changed` carrying `rules:draw`, and the UI renders the
-  sentence (the end-to-end case that today produces an empty explanation).
-- A pack declaring `save`/`resist` is refused at registry load with
-  `PACK_INVALID` (+ test).
-- `compare()` returns the evidence overlay for both branches; a test asserts
-  the overlay is empty while feedback is withheld and populated after.
+- `compare()` returns the overlay for both branches, entries aligned on
+  `plyOffset` and carrying `evidenceRefs`; a `mateIn` payload round-trips as
+  `{kind: "mate"}`.
+- **Gate test:** with feedback withheld, `compare()` returns an empty overlay
+  and no `engine:` ref in any timeline entry; after reveal, both appear. (This
+  is the hole being closed — the assertion fails against today's code.)
 - Overlay entries derive only from `evidence.attached` events (asserted by
-  composing a run whose queue was drained but whose events remain).
-- Client: timeline entries render grounded sentences; an entry with no refs
-  renders "reason not recorded"; eval trajectory aligns on `plyOffset` with the
-  fork marked.
-- Playwright: in the existing two-branch walkthrough, the compare view shows at
-  least one grounded objective sentence and an eval delta across the fork —
-  the walkthrough's finding, closed and observable.
+  comparing a run whose queue was drained but whose events remain).
+- Client: timeline entries render grounded sentences via the existing table;
+  eval trajectory aligns on `plyOffset` with the fork marked.
+- **Playwright (mock-executor-safe, EG-C5):** in the existing two-branch
+  walkthrough, the compare view shows a grounded objective sentence and an
+  overlay entry for each side at the aligned fork ply. *No* delta assertion —
+  `MockEvidenceExecutor` returns a constant 0, so a nonzero delta is
+  unreachable under `make test-browser` by construction.
+- **Docs updated in the same change (EG-C8):** `docs/branch-runtime.md`
+  ("engine scores are not part of the comparison payload" — now false),
+  `docs/drill-client.md` (withholding surfaces now include `/compare`).
 - `ENGINES_REQUIRED=1 make verify` + `make test-browser` green.
 
 ## Open questions
 
-None blocking. `save`/`resist` support, authored claims, and timing windows are
-BACKLOG rows tied to the content era.
+None blocking. Objective-type grounding, `save`/`resist` support, authored
+claims, and timing windows are content-era BACKLOG rows.
+
+## Acceptance review blockers (2026-08-11 — EG-C1..EG-C8) — RESOLVED
+
+C1/C4/C6 → §1 (objective-type grounding) **cut entirely**: unexercised by any
+shipped pack and unmintable without a runtime change; deferred to pack A with
+the reason recorded. C2 → the compare gate is now a **declared behavior
+change** that closes an existing leak, not a claimed status quo; the
+unreachable withheld-overlay criterion is replaced by a gate test that fails
+against today's code. C3 → "reason not recorded" dropped in favor of the
+shipped throw-on-empty invariant. C5 → browser criterion rewritten to what the
+mock executor can produce. C7 → `score` encoding pinned (cp vs mate, White's
+perspective) and `evidenceRefs` carried on overlay entries. C8 → docs updates
+in acceptance, metadata corrected ("fourth scoping", RFC deps, both amend
+targets, withdrawn≠superseded).
 
 ## Changelog
 
-- 2026-08-11: created as breadth #2's third scoping, after withdrawing the
-  composer and authoring-contracts RFCs. Every dependency in this draft was
-  read in the shipped code before being cited.
+- 2026-08-11: created as breadth #2's fourth scoping, after withdrawing the
+  composer and authoring-contracts RFCs.
+- 2026-08-11: adversarial review EG-C1..C8; §1 cut, compare gate reframed as a
+  declared fix, encodings pinned; **status → accepted**.

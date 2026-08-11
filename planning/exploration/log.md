@@ -502,3 +502,19 @@
 - Honest consequence: B4 stays unmet; v1 explains via grounded objectives and
   engine evidence only. Authored claims, timing windows, and the packet
   abstraction return when pack A gives them something real to encode.
+
+## 2026-08-11 (claude) — explanation-grounds accepted (breadth #2, 4th scoping)
+
+- Review verdict: "the first of the four scopings that is fixable by editing
+  rather than withdrawal." §2/§3 confirmed buildable from shipped data; §1
+  (objective-type grounding) **cut** for the same root cause as the withdrawn
+  RFCs in miniature — unexercised by any shipped pack, and `drawIsAvailable`
+  cannot discriminate which draw fired, so the ref was unmintable without a
+  runtime change. Deferred to pack A.
+- Review found a genuine shipped bug now fixed by this RFC: `RunService.compare`
+  applies no withholding gate, so evidence refs travel around the publicEvents
+  barrier. The acceptance criterion for it deliberately fails against today's
+  code.
+- Four RFC-drafting attempts on breadth #2 produced one accepted 3-section RFC.
+  Expensive, but every rejection was a real defect caught before implementation,
+  and the salvage is preserved in content-era BACKLOG rows.
