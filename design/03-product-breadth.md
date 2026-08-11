@@ -187,7 +187,11 @@ and cheap-to-test risks are tested early.
    app shell, responsive region model, settings/provider capabilities, and
    honest unavailable-state handling. It reserves the complete IA before more
    screen composition.
-2. **Evidence and explanation (B4)** — *moved up from #4*: feedback
+2. **Evidence and explanation (B4)** — *moved up from #4*; **split into #2a
+   evidence composer (server data function) and #2b explanation surface
+   (UI + evidence-bound LLM rendering), with `authoring-contracts-v03` as
+   their shared prerequisite** (split recorded 2026-08-11 after the composer
+   review found four authored contracts missing): feedback
    packet/composer, authored claims, Stockfish/Maia/corpus/Syzygy/features,
    historical examples, timing policies, deep mode, and configured
    evidence-bound LLM rendering. Needs only the shell for placement (its UI is a
