@@ -98,3 +98,19 @@
   green. Fitted layout and keyboard ownership were intentionally untouched.
 - Session closeout: `ENGINES_REQUIRED=1 make verify` is green (33 test files,
   149 tests; zero Svelte diagnostics; scaffold and packaging checks pass).
+
+## 2026-08-11 (claude, review of §4)
+
+- Independently verified (ENGINES_REQUIRED=1): 149 tests / 33 files green,
+  Playwright walkthrough passes through the new /play entry. Router is 109
+  lines, dependency-free (no routing package in apps/web/package.json — the
+  registered decision honored). Phase machine genuinely dissolved: zero
+  "library" phase references remain in session-controller. Drill screen's
+  svelte:window handler and layout untouched, exactly as scoped. **§4
+  APPROVED** — the riskiest change in this RFC landed clean.
+- Notable: /play/run/:id reconstructs from the run.started event rather than
+  requiring query metadata — deep links survive without carrying pack state,
+  a better answer than the RFC specified.
+- §5 + §6 green-lit together (fitted layout + keyboard ownership): they touch
+  the same components and the Tab rule only makes sense against the finished
+  region model. Both must keep the existing main.drill→Tab compare test green.
