@@ -97,3 +97,24 @@
   applied without being asked — the same instinct as reporting unhealthy
   engines as `none` in the capability registry.
 - Completion protocol green-lit.
+
+## 2026-08-11 (codex, completion protocol)
+
+- Chose a standalone `docs/explanation-grounds.md` because the shipped contract
+  crosses runtime path projection, server withholding, and client rendering.
+  Folding it only into the already-amended runtime and client pages would leave
+  the evidence flow and B4 boundary fragmented.
+- The canonical page records the durable-event source, cp/mate encoding,
+  compare gate and historical leak, existing-sentence rendering, shared
+  trajectory, honest provider-neutral label, verification seams, and the
+  content-era work that remains explicitly unsupported.
+- Indexed the canonical page, marked the RFC implemented, and updated the repo
+  state from five to six implemented systems. The RFC and this planning record
+  move to their lifecycle archives in the same commit.
+- The first post-move verify attempt was sandbox-blocked when the HTTP tests
+  tried to bind `127.0.0.1` (`EPERM`); rerunning the identical command with
+  local-loopback permission passed. `ENGINES_REQUIRED=1 make verify` is green
+  (33 files, 154 tests, zero Svelte diagnostics, repository checks passed).
+- Post-move `make test-browser` is green (2 required scenarios passed; optional
+  Maia skipped). Observed timings: board-ready 95.7ms, rewind 85.3ms, branch
+  switch 46.9ms, uncached mock reply 1.5ms, cached mock reply 1.1ms.

@@ -7,7 +7,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `explanation-grounds.md` | accepted → implementing | amends archived `branch-runtime` + `drill-client` | breadth #2, v1 |
 | ~~`authoring-contracts-v03.md`~~ | **withdrawn** — premise refuted (3 reviews) | — | contracts → content era |
 | ~~`evidence-composer.md`~~ | **withdrawn** — prerequisite withdrawn | — | packet abstraction not needed for v1 |
 
@@ -36,6 +35,7 @@ name the B-gates they complete before code begins.
 | `archive/engine-workers.md` | implemented | `docs/engine-workers.md` |
 | `archive/drill-client.md` | implemented | `docs/drill-client.md` |
 | `archive/app-shell.md` | implemented | `docs/app-shell.md` |
+| `archive/explanation-grounds.md` | implemented | `docs/explanation-grounds.md` |
 
 ## The archive sketches are quarry, not RFCs
 

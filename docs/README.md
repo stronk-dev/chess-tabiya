@@ -21,3 +21,6 @@ Implemented foundation:
 - `app-shell.md` — stable routes and information architecture, run discovery
   and lease-aware resume, honest deployment capabilities, fitted viewport
   regions, global keyboard ownership, and disabled-control explanations.
+- `explanation-grounds.md` — durable comparison evidence, feedback withholding,
+  grounded objective sentences, aligned engine-score trajectories, provenance
+  honesty, and the explicit content-era boundary.

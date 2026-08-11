@@ -1,6 +1,6 @@
 # RFC: Explanation Grounds (render what the system already computes)
 
-- **Status:** accepted
+- **Status:** implemented
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-11
 - **Design refs:** `design/01-training-model.md` (compare and replay), `design/03-product-breadth.md` B4
@@ -143,3 +143,6 @@ targets, withdrawn≠superseded).
   composer and authoring-contracts RFCs.
 - 2026-08-11: adversarial review EG-C1..C8; §1 cut, compare gate reframed as a
   declared fix, encodings pinned; **status → accepted**.
+- 2026-08-11: implementation and independent acceptance review complete;
+  canonical behavior distilled to `docs/explanation-grounds.md` and the
+  amended system pages; **status → implemented**.
