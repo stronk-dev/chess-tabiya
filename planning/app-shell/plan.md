@@ -22,11 +22,11 @@ This is a shell-layer REWRITE (no router exists today) — read AS-C5.
 
 ## 3. Capability registry
 
-- [ ] providers {opponent, judge, llm} derived from engineMode + supervisor;
+- [x] providers {opponent, judge, llm} derived from engineMode + supervisor;
       `mock` is first-class and honest
-- [ ] surfaces map: available | unavailable-here ONLY (server assertion that
+- [x] surfaces map: available | unavailable-here ONLY (server assertion that
       no `planned` value is ever emitted); `planned` lives as a client constant
-- [ ] Three-file contract update: server capabilities, web api.ts, capabilities.test.ts
+- [x] Three-file contract update: server capabilities, web api.ts, capabilities.test.ts
 
 ## 4. Router + shell frame
 

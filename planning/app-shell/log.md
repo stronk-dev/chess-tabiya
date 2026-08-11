@@ -51,3 +51,16 @@
   early rows are explainable rather than mysterious.
 - §3 (capability registry) green-lit — the last server-side piece before the
   router/shell rewrite.
+
+## 2026-08-11 (codex, §3 capability registry)
+
+- Extended `/capabilities` with deployment-derived providers and surface
+  availability. Real-mode identities are included only while their supervisor
+  health is `ready`; unhealthy/restarting Maia or Stockfish reports `none`
+  instead of leaking a stale identity.
+- Mock mode reports `opponent: mock` and `judge: mock`: the latter deliberately
+  follows the wired `MockEvidenceExecutor`, which produces visible evidence
+  without a UCI judge identity. LLM remains honestly `none`.
+- The server runtime assertion accepts only `available | unavailable-here` for
+  the complete surface keyset and rejects `planned` (exercised directly).
+  Roadmap state now lives in the web-only `PLANNED_SURFACES` constant.

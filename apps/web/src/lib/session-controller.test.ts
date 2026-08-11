@@ -61,6 +61,16 @@ const capabilities: Capabilities = {
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
   },
+  providers: { opponent: "maia", judge: "stockfish", llm: "none" },
+  surfaces: {
+    play: "available",
+    review: "available",
+    learn: "unavailable-here",
+    live: "unavailable-here",
+    create: "unavailable-here",
+    justPlay: "unavailable-here",
+    fromPosition: "unavailable-here",
+  },
 };
 
 class MemoryStorage implements KeyValueStorage {

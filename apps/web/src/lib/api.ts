@@ -68,13 +68,33 @@ export interface EvidencePage {
 
 export interface EngineCapability {
   readonly id: string;
-  readonly kind: "opponent" | "evidence";
+  readonly kind: "opponent" | "judge";
   readonly name: string;
   readonly version: string;
   readonly modelId?: string;
   readonly containerDigest?: string;
   readonly seedHonored: boolean;
 }
+
+export type SurfaceId =
+  | "play"
+  | "review"
+  | "learn"
+  | "live"
+  | "create"
+  | "justPlay"
+  | "fromPosition";
+
+export type SurfaceAvailability = "available" | "unavailable-here";
+
+/** Roadmap state is build-owned and deliberately never sent by the server. */
+export const PLANNED_SURFACES: readonly SurfaceId[] = Object.freeze([
+  "learn",
+  "live",
+  "create",
+  "justPlay",
+  "fromPosition",
+]);
 
 export interface Capabilities {
   readonly engines: readonly EngineCapability[];
@@ -92,6 +112,12 @@ export interface Capabilities {
       readonly multiPv: number;
     };
   };
+  readonly providers: {
+    readonly opponent: "maia" | "mock" | "none";
+    readonly judge: "stockfish" | "mock" | "none";
+    readonly llm: "none";
+  };
+  readonly surfaces: Readonly<Record<SurfaceId, SurfaceAvailability>>;
 }
 
 export interface CreateRunRequest {

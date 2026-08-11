@@ -1,14 +1,45 @@
 import { runtimeBuildInfo } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
-import { EngineCapabilities } from "./capabilities.js";
-import type { EngineIdentity } from "./engine-supervisor.js";
+import {
+  assertSurfaceCapabilities,
+  EngineCapabilities,
+  type CapabilityEngineClient,
+} from "./capabilities.js";
+import type { EngineHealth, EngineIdentity } from "./engine-supervisor.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 
+function ready(identity: EngineIdentity): EngineHealth {
+  return {
+    id: identity.id,
+    status: "ready",
+    restartCount: 0,
+    identity,
+  };
+}
+
+function healthClient(
+  healthById: Readonly<Record<string, EngineHealth>>,
+  observed: string[] = [],
+): CapabilityEngineClient {
+  return {
+    health(engineId) {
+      observed.push(engineId);
+      return (
+        healthById[engineId] ?? {
+          id: engineId,
+          status: "unavailable",
+          restartCount: 0,
+        }
+      );
+    },
+  };
+}
+
 describe("engine capabilities", () => {
-  it("reports warmed engine identities, policy modes, and the living run schema", async () => {
+  it("reports engine providers from current supervisor readiness", async () => {
     const identities: Readonly<Record<string, EngineIdentity>> = {
       "stockfish-analysis": {
         id: "stockfish-analysis",
@@ -28,17 +59,19 @@ describe("engine capabilities", () => {
         seedHonored: false,
       },
     };
-    const started: string[] = [];
+    const observed: string[] = [];
     const capabilities = new EngineCapabilities(
-      {
-        async start(engineId) {
-          started.push(engineId);
-          return identities[engineId]!;
+      healthClient(
+        {
+          "stockfish-analysis": ready(identities["stockfish-analysis"]!),
+          "maia-5m": ready(identities["maia-5m"]!),
         },
-      },
+        observed,
+      ),
       ["stockfish-analysis", "maia-5m"],
+      { engineMode: "maia" },
     );
-    const storage = new SQLiteRunStorage();
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     try {
       const handler = createRestHandler(
         new RunService(storage),
@@ -62,25 +95,106 @@ describe("engine capabilities", () => {
             multiPv: 1,
           },
         },
+        providers: { opponent: "maia", judge: "stockfish", llm: "none" },
+        surfaces: {
+          play: "available",
+          review: "available",
+          learn: "unavailable-here",
+          live: "unavailable-here",
+          create: "unavailable-here",
+          justPlay: "unavailable-here",
+          fromPosition: "unavailable-here",
+        },
       });
-      expect(started).toEqual(["stockfish-analysis", "maia-5m"]);
+      expect(observed).toEqual(["stockfish-analysis", "maia-5m"]);
     } finally {
       storage.close();
     }
   });
 
+  it("reports mock opponent and judge without claiming real engines", async () => {
+    const identity: EngineIdentity = {
+      id: "mock-opponent",
+      kind: "opponent",
+      name: "Deterministic mock opponent",
+      version: "1",
+      seedHonored: true,
+    };
+    const descriptor = await new EngineCapabilities(
+      healthClient({ [identity.id]: ready(identity) }),
+      [identity.id],
+      { engineMode: "mock" },
+    ).get();
+
+    expect(descriptor.providers).toEqual({
+      opponent: "mock",
+      judge: "mock",
+      llm: "none",
+    });
+    expect(descriptor.engines).toEqual([identity]);
+    expect(descriptor.surfaces.play).toBe("available");
+  });
+
+  it("downgrades unhealthy real providers instead of reporting stale identities", async () => {
+    const staleMaia: EngineIdentity = {
+      id: "maia-5m",
+      kind: "opponent",
+      name: "Maia3",
+      version: "1e13597",
+      seedHonored: false,
+    };
+    const descriptor = await new EngineCapabilities(
+      healthClient({
+        "maia-5m": {
+          ...ready(staleMaia),
+          status: "restarting",
+        },
+        "stockfish-analysis": {
+          id: "stockfish-analysis",
+          status: "unavailable",
+          restartCount: 2,
+        },
+      }),
+      ["maia-5m", "stockfish-analysis"],
+      { engineMode: "maia" },
+    ).get();
+
+    expect(descriptor.engines).toEqual([]);
+    expect(descriptor.providers).toEqual({
+      opponent: "none",
+      judge: "none",
+      llm: "none",
+    });
+    expect(descriptor.surfaces.play).toBe("unavailable-here");
+  });
+
+  it("rejects planned or unknown values at the server response boundary", () => {
+    expect(() =>
+      assertSurfaceCapabilities({
+        play: "available",
+        review: "available",
+        learn: "planned",
+        live: "unavailable-here",
+        create: "unavailable-here",
+        justPlay: "unavailable-here",
+        fromPosition: "unavailable-here",
+      }),
+    ).toThrow(/Surface learn/);
+  });
+
   it("reports the deployment-effective strong-engine override", async () => {
     const identity: EngineIdentity = {
-      id: "stockfish-play",
-      kind: "opponent",
+      id: "stockfish-analysis",
+      kind: "judge",
       name: "Stockfish",
       version: "18",
       seedHonored: false,
     };
     const descriptor = await new EngineCapabilities(
-      { start: async () => identity },
+      healthClient({ [identity.id]: ready(identity) }),
       [identity.id],
       {
+        engineMode: "maia",
         strongEngineProfile: { movetimeMs: 175, threads: 2, hashMb: 32 },
       },
     ).get();
@@ -103,8 +217,9 @@ describe("engine capabilities", () => {
       seedHonored: false,
     };
     const descriptor = await new EngineCapabilities(
-      { start: async () => identity },
+      healthClient({ [identity.id]: ready(identity) }),
       [identity.id],
+      { engineMode: "maia" },
     ).get();
     const locusIdentity = { id: identity.id, version: identity.version };
 

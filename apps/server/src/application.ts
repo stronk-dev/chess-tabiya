@@ -10,7 +10,6 @@ import type { EvidencePayload } from "@chess-tabiya/runtime";
 
 import {
   EngineCapabilities,
-  type CapabilityEngineClient,
 } from "./capabilities.js";
 import {
   EvidenceJobQueue,
@@ -113,7 +112,7 @@ function positionCommand(request: EngineRequest): {
   });
 }
 
-class MockEngineClient implements SelectorEngineClient, CapabilityEngineClient {
+class MockEngineClient implements SelectorEngineClient {
   readonly #identity: EngineIdentity = Object.freeze({
     id: "mock-opponent",
     kind: "opponent",
@@ -269,7 +268,7 @@ export async function createApplication(
     capabilities = new EngineCapabilities(supervisor, [
       "stockfish-analysis",
       "maia-5m",
-    ]);
+    ], { engineMode: "maia" });
     evidenceExecutor = new StockfishEvidenceExecutor(supervisor);
   } else {
     const mock = new MockEngineClient();
@@ -277,7 +276,9 @@ export async function createApplication(
       maiaEngineId: "mock-opponent",
       strongEngineId: "mock-opponent",
     });
-    capabilities = new EngineCapabilities(mock, ["mock-opponent"]);
+    capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
+      engineMode: "mock",
+    });
     evidenceExecutor = new MockEvidenceExecutor();
   }
 

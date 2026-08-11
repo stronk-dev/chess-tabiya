@@ -1,7 +1,7 @@
 import { createRun, type DrillRun, type OpponentSelection } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
-import { DrillApi } from "./api.js";
+import { DrillApi, PLANNED_SURFACES } from "./api.js";
 
 const run = createRun({
   id: "run / one",
@@ -47,6 +47,16 @@ describe("DrillApi", () => {
               hashMb: 16,
               multiPv: 1,
             },
+          },
+          providers: { opponent: "mock", judge: "mock", llm: "none" },
+          surfaces: {
+            play: "available",
+            review: "available",
+            learn: "unavailable-here",
+            live: "unavailable-here",
+            create: "unavailable-here",
+            justPlay: "unavailable-here",
+            fromPosition: "unavailable-here",
           },
         });
       }
@@ -102,7 +112,17 @@ describe("DrillApi", () => {
       seed: 7,
     };
 
-    await api.capabilities();
+    expect(await api.capabilities()).toMatchObject({
+      providers: { opponent: "mock", judge: "mock", llm: "none" },
+      surfaces: { play: "available", learn: "unavailable-here" },
+    });
+    expect(PLANNED_SURFACES).toEqual([
+      "learn",
+      "live",
+      "create",
+      "justPlay",
+      "fromPosition",
+    ]);
     await api.packs();
     expect((await api.pack("pack-one")).digest).toBe(run.packDigest);
     await api.createRun(createInput, "writer-one");

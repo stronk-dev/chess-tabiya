@@ -21,11 +21,18 @@ export {
   type StrongEngineProfile,
 } from "./strong-engine.js";
 export {
+  assertSurfaceCapabilities,
   EngineCapabilities,
+  SURFACE_IDS,
   SUPPORTED_POLICY_MODES,
+  type CapabilityEngineMode,
+  type CapabilityProviders,
   type Capabilities,
   type CapabilitiesProvider,
   type CapabilityEngineClient,
+  type SurfaceAvailability,
+  type SurfaceCapabilities,
+  type SurfaceId,
 } from "./capabilities.js";
 export {
   EvidenceJobQueue,
