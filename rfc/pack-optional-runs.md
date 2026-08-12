@@ -12,9 +12,10 @@
 
 ## Summary
 
-A drill run cannot exist without a registered pack. Six independent layers
-require one, and the seventh consequence is worse: when no pack is registered the
-evidence barrier **fails open** — `publicNodes`/`publicEvents` return everything
+A drill run cannot exist without a registered pack: six independent layers
+require one. The consequence underneath them is worse than the requirement —
+when no pack is registered the evidence barrier **fails open**.
+`publicNodes`/`publicEvents` return everything
 (`apps/server/src/feedback-policy.ts:21,48`) while no evidence is ever generated
 (`apps/server/src/service.ts:197,216`), so the surface that would first use
 pack-optional runs would also be the first to violate ADR-0006.
@@ -42,7 +43,7 @@ on the same change, and each would inherit D2 the moment that change lands.
 | 2 | Runtime type | `packages/runtime/src/types.ts:188-189` `readonly packId: string; readonly packDigest: string` |
 | 3 | Create input | `packages/runtime/src/runtime.ts:32-33` same two fields, non-optional |
 | 4 | REST parse | `apps/server/src/rest.ts:198` `packId: requiredString(value.packId, "packId")` |
-| 5 | Service + composition | `apps/server/src/service.ts:134` `this.#packRegistry?.required(input.packId)`; `pack-registry.ts:207-213` `required()` throws `PACK_NOT_FOUND`; `application.ts:303` always supplies the registry, so the pack-blind branch at `service.ts:142-156` is reachable only from tests that omit it (`server.test.ts:72`, `latency.test.ts:117`, `opponent-selector.test.ts:409`, `capabilities.test.ts:77`, `evidence-queue.test.ts:207,258,332,377`) |
+| 5 | Service + composition | `apps/server/src/service.ts:134` `this.#packRegistry?.required(input.packId)`; `pack-registry.ts:207-213` `required()` throws `PACK_NOT_FOUND`; `application.ts:303` always supplies the registry, so the pack-blind branch at `service.ts:149-156` is reachable only from tests that omit it (`server.test.ts:72`, `latency.test.ts:117`, `opponent-selector.test.ts:409`, `capabilities.test.ts:77`, `evidence-queue.test.ts:207,258,332,377`) |
 | 6 | Browser transport | `apps/web/src/lib/api.ts:159-165` `CreateRunRequest` is `{id, packId, policyConfig, seed, createdAt?}` — the pack-less shape is inexpressible from the client |
 
 ### D2, re-verified, with the surface count corrected
@@ -68,8 +69,9 @@ forever, because a pack-less run has no feedback policy and can never emit
 (`apps/server/src/pack-orchestrator.ts:131`, the sole caller of `reachCheckpoint`).
 It would also break the evidence tests at `evidence-queue.test.ts:238,321,361`,
 which use the packless path deliberately to test staging and application
-independently of withholding. §4 gives pack-less runs a reveal condition they can
-actually satisfy; §11 states exactly how those three tests change.
+independently of withholding. §3 gives pack-less runs a reveal condition they can
+actually satisfy; acceptance criterion 12 states exactly how those three tests
+change and what they keep asserting.
 
 ### Out of scope, each with a reason
 
@@ -79,8 +81,8 @@ actually satisfy; §11 states exactly how those three tests change.
 | FEN/PGN paste, `/drill` and `/fen` routes, duplicate-from-run | `router.ts:18-27` has no dynamic route but `/play/run/:runId`, and `parsePgn` appears in no non-test source (`packages/runtime/src/pgn.ts:1-10` imports `makePgn` only). Each is an entry that resolves to the session shape defined here |
 | Share tokens and spectator projection | Rests on D1 (`assertActiveWriter` is string equality, `packages/runtime/src/errors.ts:37-44`), which is an identity problem (F3), not a session-identity one |
 | Deterministic feature/phase recognition | No detector code exists (`grep -rniE "recogni|detector|\bECO\b" apps packages` returns four unrelated test titles). Its evidence namespace is a separate contract |
-| Per-node reveal of engine evidence | Impossible on the event surface: `publicEvents` must return a **contiguous** prefix because `projectRun` rejects any gap (`packages/runtime/src/events.ts:43-46`) and the follower store rejects a non-adjacent first event (`apps/web/src/lib/run-state.ts:94-99`). Filtering individual events out of the stream would break every reader. §4 works within that constraint |
-| `immediate_blunder_guard` | In the pack JSON enum (`schemas/drill_pack.schema.json` `feedbackPolicy`) and **rejected at registry load** (`apps/server/src/pack-validation.ts:103-111`), with a test asserting it (`drill-client-server.test.ts:205-219`). `PackRecord.feedbackPolicy` is therefore genuinely one of two values |
+| Per-node reveal of engine evidence | Impossible on the event surface: `publicEvents` must return a **contiguous** prefix because `projectRun` rejects any gap (`packages/runtime/src/events.ts:43-46`) and the follower store rejects a non-adjacent first event (`apps/web/src/lib/run-state.ts:94-99`). Filtering individual events out of the stream would break every reader. §3 works within that constraint |
+| `immediate_blunder_guard` | In the pack JSON enum (`schemas/drill_pack.schema.json` `feedbackPolicy`) and **rejected at registry load** (`apps/server/src/pack-validation.ts:103-111`), with a test asserting it (`drill-client-server.test.ts:206-220`). `PackRecord.feedbackPolicy` is therefore genuinely one of two values |
 | N-way comparison | `BranchComparison` hard-codes `{a, b}` (`packages/runtime/src/compare.ts:49-64`); a runtime type change unrelated to session identity |
 
 ## Specification
@@ -269,7 +271,7 @@ would produce two digests for one session.
 
 Consequences that make the field real rather than declared-and-inert (the failure
 shape catalogued in `planning/breadth/synthesis.md` §1): `sessionDigest` is
-returned in every `GET /runs` summary (§9), written into the exported PGN (§10),
+returned in every `GET /runs` summary (§8), written into the exported PGN (§9),
 and carried on `run.started` so a resumed run keeps it.
 
 `digestSessionSource` is asynchronous (`crypto.subtle.digest`, the same API the
@@ -344,6 +346,12 @@ Two further properties fall out and are intended:
   window, so a learner can apply several staged results and compare branches
   inside one open window.
 
+Rewind is deliberately **not** the reveal trigger, although it is the loop's
+natural end-of-attempt: `rewind` reports every pruned node to the queue
+(`packages/runtime/src/runtime.ts:310-331`) and the queue drops their staged
+results (`apps/server/src/evidence-queue.ts:145-166`), so a policy that revealed
+on rewind would open the window on exactly the evidence the same call discarded.
+
 ### 4. `feedback.revealed` and `POST /runs/:id/reveal`
 
 New event, in the same `Event<TType, TData>` form as the shipped twelve
@@ -399,8 +407,10 @@ The body is parsed with the closed-record helper of §7 (`at` is the only key).
 
 `RunService.reveal(runId, writerId, at?)`:
 
-1. `#forWrite` — a follower has no writer id and gets `NOT_ACTIVE_WRITER` (409)
-   from the shipped lease check (`service.ts:411-415`).
+1. `#forWrite` — a request with no `x-writer-id` header gets `INVALID_REQUEST`
+   (400) from `writerId()` (`rest.ts:188-190`) and a follower holding a different
+   id gets `NOT_ACTIVE_WRITER` (409) from the shipped lease check
+   (`service.ts:411-415`). Both are the same responses `/fork` gives today.
 2. If `run.feedbackPolicy !== "attempt_end"` → `INVALID_REQUEST` (400),
    message `Run <id> reveals feedback by its <policy> policy`. No new error code:
    `ServerErrorCode` (`apps/server/src/errors.ts:1-12`) stays as shipped.
@@ -443,12 +453,17 @@ export interface CreateRunInput {
 
 `startFen` is gone from `CreateRunInput` (it is `session.start.fen`), and
 `createRun` writes the five new fields into both the run and `run.started.data`.
+This is the **resolved** session: a pack session arrives here already carrying the
+start, feedback policy and opponent policy the service read off the pack record.
+The wire shape a client may send is narrower and forbids exactly those three keys
+on a pack session (§7); the two types are named apart (`CreateRunSession` in the
+runtime, `CreateRunSessionRequest` on the transport, §9).
 
 `RunService.create(input, writerId)` becomes `async` and resolves each kind:
 
 **`kind: "pack"`** — `#requiredPackRegistry().required(packId)` (a pack session
 with no registry configured is now `PACK_NOT_FOUND`, not a silent pack-blind run;
-the pack-blind branch at `service.ts:142-156` is deleted). Then:
+the pack-blind branch at `service.ts:149-156` is deleted). Then:
 
 | Run field | Source | Failure |
 |---|---|---|
@@ -486,10 +501,11 @@ never for withholding.
 | 6 | `GET /runs/:id/authored-feedback` (`service.ts:335-345`) | `pack === undefined` → `PACK_NOT_FOUND` (404) for **both** a pack-less run and a run whose pack is unregistered | Branch on `sessionKind`, not on the registry: `sessionKind: "position"` → `200 {items: [], hasWithheldAuthoredContent: false}`, because a position session has no authored content and a 404 would force every client to fork. `sessionKind: "pack"` with no registered pack keeps `PACK_NOT_FOUND` — the content exists and is unavailable, which is a different fact |
 
 Surfaces 1–3 remain as defence in depth and are **not** redundant: the shipped
-test at `apps/server/src/drill-client-server.test.ts:359-410` writes engine
-evidence straight into a run via `storage.save`, bypassing surface 5 entirely,
-and asserts that `/graph` and `/events` still withhold it. That test must stay
-green unmodified.
+test at `apps/server/src/drill-client-server.test.ts:359`
+(`delayed_checkpoint hides engine feedback but not rules refs until a checkpoint`)
+writes engine evidence straight into a run with `attachEvidence` + `storage.save`
+(`:379-390`), bypassing surface 5 entirely, and asserts that `/graph` and
+`/events` still withhold it.
 
 ### 7. Evidence generation for every run, and `POST /runs` never-silent (D3)
 
@@ -594,8 +610,9 @@ export interface RunSummary {
 }
 ```
 
-`summaryFields` (`storage.ts:129-141`) writes the three new values;
-`parseSummary` accepts `packId: string | null` and requires the two new fields.
+`summaryFields` (`storage.ts:129-141`) writes `sessionKind` and `sessionDigest`
+and widens `packId`; `parseSummary` (`:102-121`) accepts `packId: string | null`
+and requires both new fields.
 
 Stored v0.4 snapshots cannot be upgraded in place. Their `run.started` event does
 not contain the learner's side, the feedback policy or the opponent policy —
@@ -607,20 +624,23 @@ deleted**:
 - `STORAGE_VERSION` 1 → 2. Migration 2, `quarantine pre-0.5 run snapshots`, runs
   in the shipped `PRAGMA user_version` runner (`storage.ts:339-374`):
   `ALTER TABLE drill_runs ADD COLUMN schema_version TEXT`, then for every row
-  parse `snapshot_json` and write its `schemaVersion` (the field is part of the
-  serialized run), rebuilding `summary_json` only for rows already at `0.5`.
-  Same read-parse-update shape as the shipped migration 1 (`storage.ts:376-401`).
-- `read()` returns `undefined` for a row whose `schema_version` is not the
-  current version, so those runs answer `RUN_NOT_FOUND` (404) instead of
-  `STORAGE_FAILURE` (500) from a failed replay.
+  parse `snapshot_json` and write its `schemaVersion` — the field is part of the
+  serialized run (`storage.ts:200`). It rewrites no summary, because only
+  pre-0.5 rows can exist at that moment. Same read-parse-update shape as the
+  shipped migration 1 (`storage.ts:376-401`).
+- `create()` and `save()` write `schema_version = run.schemaVersion` alongside
+  `summary_json`.
+- `read()` returns `undefined` for a row whose `schema_version` is not
+  `DRILL_RUN_SCHEMA_VERSION`, so those runs answer `RUN_NOT_FOUND` (404) instead
+  of `STORAGE_FAILURE` (500) from a failed replay.
 - `list()` adds `WHERE schema_version = ?`.
 - Nothing is destroyed; the rows stay on disk and remain exportable by hand.
 
 ### 9. PGN and the client transport
 
 `pgnHeaders` (`packages/runtime/src/pgn.ts:55-70`) interpolates `run.packId` into
-`Event` and `TabiyaPack`, which would render `null` for a position run. Pack-run
-headers stay byte-identical; a position run gets:
+`Event` and `TabiyaPack`, which would render `null` for a position run. A
+position run gets:
 
 ```
 [Event "Tabiya session: position"]
@@ -628,8 +648,9 @@ headers stay byte-identical; a position run gets:
 [TabiyaSession "<run.sessionDigest>"]
 ```
 
-with `TabiyaPack` **omitted** rather than emitted empty. `TabiyaSession` is added
-to pack-run headers as well, after `TabiyaPack`, so one header identifies the
+with `TabiyaPack` **omitted** rather than emitted empty. Pack runs keep every
+header they emit today with the same values, and gain the one new
+`TabiyaSession` key immediately after `TabiyaPack`, so one header identifies the
 session for both kinds. `exportPackRunPgn` (`packages/runtime/src/pack-pgn.ts`)
 is unchanged and still selected only for runs with a registered pack
 (`service.ts:399-403`).
@@ -711,7 +732,8 @@ position sessions.
    `sessionKind: "position"`, `feedbackPolicy: "attempt_end"` and a
    `sessionDigest` matching `^sha256:[0-9a-f]{64}$`. That run then commits six
    plies (three via `POST /moves`, three via `selection` payloads), rewinds to
-   ply 2, forks, compares the two branches, exports a legal PGN whose headers
+   ply 2, plays a different move — which auto-forks (`runtime.ts:222-229`) —
+   compares the two branches, exports a legal PGN whose headers
    carry `TabiyaSession` and no `TabiyaPack`, and is rebuilt identically from
    `GET /runs/:id/events?sinceSeq=0` through `projectRun` after
    `clearSnapshotCache()`.
@@ -719,17 +741,18 @@ position sessions.
    moves: (a) a `najdorf-transition-schema-example` run that has reached no
    checkpoint, (b) a position run that has never been revealed. Attach engine
    evidence to both by the bypass the shipped suite already uses
-   (`attachEvidence` + `storage.save`, as at `drill-client-server.test.ts:387-400`).
+   (`attachEvidence` + `storage.save`, as at `drill-client-server.test.ts:379-390`).
    Assert for **both**, with identical expectations: `/graph` nodes carry
    `rules:` refs and no `engine:` ref; `/events` truncates before the
    `evidence.attached` event; `/compare` returns empty `evidence.a`/`evidence.b`;
    `GET /evidence` returns `{results: [], nextSeq: 0}`; `POST /evidence` returns
    409 `FEEDBACK_WITHHELD`. The test fails on today's code at every one of the
    five surfaces for run (b).
-3. **Pack-run withholding is bit-identical.** `drill-client-server.test.ts:359-410`
+3. **Pack-run withholding is bit-identical.** `drill-client-server.test.ts:359`
    (`delayed_checkpoint hides engine feedback but not rules refs until a
-   checkpoint`) and the `segment_end` test at `:575-628` pass **unmodified except
-   for the create-body shape**, including the exact event-type sequence
+   checkpoint`) and the `segment_end` test whose staged-evidence assertions run
+   at `:593-624` pass **unmodified except for the create-body shape and the
+   `await` on `service.create`**, including the exact event-type sequence
    `["run.started","move.committed","objective.state_changed"]`.
 4. **Reveal opens and the next move closes.** On a position run: enqueue evidence
    after a move; `GET /evidence` is empty; `POST /reveal` → 200 with one
@@ -754,8 +777,10 @@ position sessions.
    keys in one object report the lexicographically first.
 8. **Identity.** Two position runs created from the same `start`,
    `feedbackPolicy` and `opponentPolicy` but different `id` and `seed` have the
-   same `sessionDigest`; changing `opponentPolicy.targetElo` changes it; omitting
-   `targetElo` does not equal supplying it as `null`. Two runs of the same pack
+   same `sessionDigest`; changing `opponentPolicy.targetElo` changes it. A unit
+   test on `digestSessionSource` asserts that an omitted `targetElo` and an
+   explicit `targetElo: null` produce different digests, which is why the builder
+   omits absent optionals instead of nulling them. Two runs of the same pack
    at the same digest share a `sessionDigest`, and it changes when the pack
    document changes.
 9. **Schema.** `packages/schema/src/drill-run.test.ts` validates a v0.5 pack run
@@ -774,7 +799,11 @@ position sessions.
     (`server.test.ts:72,239`, `latency.test.ts:117`, `opponent-selector.test.ts:409`,
     `capabilities.test.ts:77`, `evidence-queue.test.ts:207,258,332,377`) are
     amended to supply a queue and to create **position** sessions, which is what
-    they were always modelling.
+    they were always modelling. Every `service.create` call site gains `await`
+    (`rest.ts:396`, `server.test.ts:240`, `authored-feedback.test.ts:262`,
+    `drill-client-server.test.ts:328,372,471,588`, and the nine above);
+    `authored-feedback.test.ts:262` needs no queue because it plays through the
+    runtime helpers rather than `service.move`.
 12. **The three evidence tests keep testing what they tested.**
     `evidence-queue.test.ts:238` (`stages over GET, enforces the writer lease,
     then appends evidence and its objective upgrade`) and `:321` (typed sources)

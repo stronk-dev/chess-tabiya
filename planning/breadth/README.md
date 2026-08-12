@@ -26,6 +26,18 @@ corrections, and any genuine owner-level ruling required.
 | `create-and-return.md` | #6, #7 | B6, B7 |
 | `live-and-platform.md` | #8, #1 residuals | B5, B1, B8 |
 
+## Staleness warning
+
+**These dossiers are snapshots dated 2026-08-12, not standing truth.** Within
+days of the pass, the F1 implementation added a sixth withholding surface and
+shifted line numbers in `apps/server/src/service.ts` by roughly four. Line
+citations here decay faster than the prose around them.
+
+Re-verify any line citation before quoting it into an RFC. The prose findings
+have held up under review; the coordinates have not. This is the same lesson
+`planning/content-era/field-consumer-matrix.md` recorded about itself, learned
+twice now.
+
 ## Rules these dossiers were written under
 
 - **No deferrals.** Standing owner ruling: full product breadth before content
