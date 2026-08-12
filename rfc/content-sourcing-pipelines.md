@@ -556,11 +556,22 @@ band or population reference. Anything else is `EVIDENCE_OVERREACH`. This is del
 narrow: it is the single case where "Stockfish: +0.54 / Maia: 31% / LLM: '…centralizes the
 knight'" does *not* apply, because the sentence is the number.
 
-**6.4 The CC BY-SA fork is a ruling, not a default.** `theory-sourcing.md` §3 gives two
-clean postures and forbids mixing. Until the owner rules, the emitters refuse
-`CC-BY-SA-4.0` sources with `LICENCE_POSTURE_UNSET` naming the dossier section. That is not
-deferral: it is the code enforcing that a rights posture is chosen before prose is derived,
-because provenance tracking will not survive the edits otherwise.
+**6.4 The CC BY-SA posture is RULED: pack prose is `CC-BY-SA-4.0` wholesale**
+(owner ruling 2026-08-12, `planning/exploration/log.md`; recorded in
+`design/02-product-shape.md` §Product posture). `LICENCE_POSTURE_UNSET` is removed —
+emitters accept `CC-BY-SA-4.0` sources. What replaces it is an *encoding* obligation, since
+`theory-sourcing.md` §3 forbids mixing postures and attribution cannot survive later edits
+unless it is machine-checked:
+
+- Every pack whose prose derives from a share-alike source declares
+  `provenance.licence: "CC-BY-SA-4.0"` and a `provenance.attribution[]` array, each entry
+  carrying `{sourceId, title, url, retrievedAt, licence}`.
+- `sourcing-check` fails `ATTRIBUTION_MISSING` when a manifest entry with a share-alike
+  SPDX contributed prose to a pack that lacks a matching `attribution[]` entry, and
+  `LICENCE_MIXED` when a single pack draws prose from postures `theory-sourcing.md` §3
+  declares incompatible.
+- Packs with no borrowed prose (Packs A/B/C today) declare no `licence` and are unaffected.
+  Hand-authored packs must not become unpublishable by tooling.
 
 ### 7. Surfaces and commands
 
@@ -675,8 +686,11 @@ line:
 6. **Deny list:** a fetch against a `theweekinchess.com` or `pgnmentor.com` URL, and one
    against `sourceId: "ecochessopeningcodes"`, each fail with `SOURCE_DENIED` quoting
    `design/research/theory-sourcing.md` §Do not use.
-7. **`CC-BY-SA-4.0` refusal:** a manifest entry with that SPDX fails `LICENCE_POSTURE_UNSET`
-   until the owner rules (§6.4).
+7. **Share-alike attribution is enforced, not refused (§6.4):** a manifest entry with
+   `CC-BY-SA-4.0` emits successfully; the same entry contributing prose to a pack with no
+   matching `provenance.attribution[]` fails `ATTRIBUTION_MISSING`; a pack mixing
+   incompatible postures fails `LICENCE_MIXED`; and `anti-caro-advance.json`, which borrows
+   no prose, still passes with no `licence` field.
 
 **Boundary conditions of shapes the schema permits** — the failure class that killed five
 drafts:

@@ -26,6 +26,31 @@ unspecified implementation; it supersedes the assumption that the next work is
 content for one narrow slice. Breadth RFCs must preserve the global shell and
 name the B-gates they complete before code begins.
 
+## Migration register
+
+Instituted 2026-08-12 after two RFCs drafted in parallel both claimed database
+migration 2 and `STORAGE_VERSION` 1→2, so neither could land independently. A
+migration number is a **shared, single-writer resource**; claim it here before
+writing it into a draft.
+
+| Migration | `STORAGE_VERSION` | Owner RFC | Status |
+|---|---|---|---|
+| 1 | 0→1 | shipped | implemented |
+| 2 | 1→2 | `learner-identity-and-authorization.md` | draft |
+| 3 | 2→3 | `pack-optional-runs.md` | draft |
+
+**Landing order is F3 before F2**, decided 2026-08-12 on three grounds: D1 is a
+live defect (a run link is a write credential) and the deployment ruling is
+hosted multi-user, so identity is a prerequisite to exposing anything at all;
+F2's v0.4 snapshot quarantine is simpler to write once ownership columns exist
+than the reverse; and F2 is the riskier change (`RunService.create` becomes
+async across ~15 call sites), so it should not also carry the migration that
+another draft depends on. F2 must rebase its migration to 3 and state the
+dependency explicitly.
+
+Any RFC touching persisted shape adds its row here in the same commit that
+drafts the migration.
+
 ## Withdrawn
 
 Kept for the record (RFC-0000: `withdrawn` = abandoned, not superseded). Their
