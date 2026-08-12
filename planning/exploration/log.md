@@ -856,3 +856,30 @@ Open questions: none. Two review rounds, ten findings, zero disputed — the
 pattern across both is that my specs are strongest on mechanism and weakest on
 the boundary conditions of shapes the schema actually permits (optional fields,
 repeated events, non-node triggers). Worth checking those first next time.
+
+## 2026-08-12 (owner ruling) — no owner review until features and content are complete
+
+Owner: *"no i will not play. i will play WHEN ALL IS DONE. I WANT FULL FEATURES
+FULL CONTENT."*
+
+Recorded because it changes what can be measured, not to relitigate it:
+
+- **K10 (authoring cost) is unfalsifiable until the end.** `owner-review` is the
+  clock `planning/content-era/plan.md` §1b calls decisive and it stays 0. The
+  agent-side clocks keep accruing and stay honest; no K10 verdict may be claimed
+  in either direction before the owner's pass.
+- **Every pack stays `reviewStatus: draft` until the end**, because the
+  graduation bar requires a strong reviewer's sign-off. Full authored inventory
+  in draft, graduating in one pass at the end, is therefore the expected shape —
+  not a backlog of unfinished work.
+- **Consequence for method, acted on rather than asked about:** hand-authoring
+  content at the breadth `design/04-content-architecture.md` describes would mass
+  -produce ungrounded prose that no reviewer pass could economically fix. So the
+  sourcing and validation pipelines (explorer frequency, CC0 line skeletons,
+  puzzle-DB re-cuts, Syzygy/Stockfish grounding) are being built alongside
+  authoring, so batches 2..N are assembly plus judgment rather than blank page.
+  That is B6 program work, not a content detour.
+
+Also this session: `authored-explanation-surface` closed to **implemented** and
+archived by codex on approval. Branch-switch measured at 50.1 ms against the
+50 ms benchmark and recorded honestly rather than rounded down.
