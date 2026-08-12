@@ -1,6 +1,6 @@
 # RFC: Authored explanation surface (per-scope reveal + rendering)
 
-- **Status:** draft (revision 3)
+- **Status:** implementing (revision 3 accepted after two adversarial review rounds)
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/03-product-breadth.md` §Foundation edge (F1), §RFC program item #2, gate B4; `design/01-training-model.md` §Vocabulary
@@ -385,3 +385,4 @@ None.
   pinned; opponent-to-move-at-start resolved as a client defect with a specified
   prerequisite fix; the `pack-check` contradiction replaced by one precisely
   scoped warning.
+- 2026-08-12: accepted by owner and moved to implementing; planning job opened.

@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `authored-explanation-surface.md` | draft | amends `archive/authored-feedback-delivery.md` | program #2 / gate B4 / primitive F1 |
+| `authored-explanation-surface.md` | implementing | amends `archive/authored-feedback-delivery.md` | program #2 / gate B4 / primitive F1 |
 
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in
