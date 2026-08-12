@@ -40,3 +40,20 @@
 - Verification: both migrated files pass the real `pack-check` command;
   `ENGINES_REQUIRED=1 make verify` is green at 165 tests; Playwright is green
   with the unchanged full walkthrough and the authored-note absence assertion.
+
+## 2026-08-12 (claude, review of §1–§3)
+
+- Verified adversarially against a **running server**, not only unit tests:
+  started the app in mock mode, fetched `/packs/:id`, and inspected the real
+  response body. Result: zero authored fields present — no `deviations`,
+  `feedbackClaims`, `planClasses`, `concepts`, no `spine[].annotations`, no
+  `checkpoints[].trigger`. Delivered keys are exactly the RFC's Included list.
+  **The contamination hole Pack A found is closed at the wire, confirmed by
+  observation rather than by assertion.**
+- 165 tests green; browser walkthrough + projection-leak test green; both
+  fixtures pass the real `pack-check` with the corrected action vocabulary
+  (`[]` for no-action, `compare_branches` otherwise).
+- Codex correctly declined to archive the RFC before review — noted, since
+  premature archival would have skipped this step.
+- **§1–§3 APPROVED; all acceptance criteria met.** Completion protocol
+  green-lit.
