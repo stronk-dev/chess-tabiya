@@ -152,6 +152,12 @@ No new sentence vocabulary was added for this feature. In particular, the
 renderer does not manufacture strategic explanations from state names or
 scores.
 
+Outcome Drill later extended the same closed rules vocabulary with
+`rules:result-win`, `rules:result-loss`, and `rules:result-draw`. Those sentences
+render the validated learner-perspective `outcome.reached`; they are chess-rule
+facts, not strategic assessments. Win/hold/save/resist root assessments and
+their separate grading contract are documented in `outcome-drill-grading.md`.
+
 An objective transition with an empty evidence-reference array throws and
 includes the event sequence in the error. There is no friendlier “reason not
 recorded” branch: runtime transition validation and the run schema already
@@ -204,7 +210,8 @@ complete breadth gate B4. The following remain content-era work:
 - authored strategic claims and their triggers;
 - the “right plan, wrong timing” or spare-tempo contract;
 - timing-window explanation semantics;
-- grounding unshipped objective types such as `win` and `hold`;
+- per-assertion grounding for authored strategic claims (Outcome Drill root
+  assessment and rules-derived result grading now ship separately);
 - corpus, Syzygy, and non-Stockfish evaluation evidence sources (Maia policy
   mass already persists in opponent selections and reaches the browser);
 - feedback packets, authored claim anchors, and path-relative claim-trigger

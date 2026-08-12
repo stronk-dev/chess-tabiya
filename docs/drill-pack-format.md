@@ -73,6 +73,16 @@ conditions. These checks are shared by `make pack-check` and registry loading,
 so an authoring no-op cannot validate locally and then enter the served
 catalogue.
 
+Outcome grading adds the typed validation codes
+`OBJECTIVE_GRADING_REQUIRED`, `OBJECTIVE_GRADING_UNSUPPORTED`,
+`OBJECTIVE_RESOLUTION_UNKNOWN`, `OBJECTIVE_RESIST_NEEDS_CHECKPOINT`,
+`OBJECTIVE_SELF_TRANSITION`, `OBJECTIVE_ABSORBING_WITHOUT_OUTCOME`,
+`OBJECTIVE_OUTCOME_TARGET_INVALID`, `OBJECTIVE_DEGRADED_IS_ONE_WAY`,
+`SYZYGY_ASSESSMENT_OUT_OF_RANGE`, `SYZYGY_ASSESSMENT_MISMATCH`,
+`CHECKPOINT_UNREACHABLE_AT_ROOT`, and `CHECKPOINT_TRUE_AT_ROOT`. Candidate
+promotion additionally uses `SYZYGY_ASSESSMENT_UNGROUNDED`. The behavior behind
+these codes is canonical in `outcome-drill-grading.md`.
+
 The required negative fixtures live in `schemas/fixtures/drill-pack/`. The illegal
 spine fixture is structurally schema-valid and fails semantic lint; the other
 fixtures fail their targeted schema constraint.

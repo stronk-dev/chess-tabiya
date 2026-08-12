@@ -50,6 +50,16 @@ preserved back-edge. It constructs a root run and applies the real checkpoint
 matcher: a trigger already true at the root is an error, as is `atPly: 0`, which
 can never be observed by the post-commit orchestrator.
 
+The corresponding typed validation codes are
+`OBJECTIVE_GRADING_REQUIRED`, `OBJECTIVE_GRADING_UNSUPPORTED`,
+`OBJECTIVE_RESOLUTION_UNKNOWN`, `OBJECTIVE_RESIST_NEEDS_CHECKPOINT`,
+`OBJECTIVE_SELF_TRANSITION`, `OBJECTIVE_ABSORBING_WITHOUT_OUTCOME`,
+`OBJECTIVE_OUTCOME_TARGET_INVALID`, `OBJECTIVE_DEGRADED_IS_ONE_WAY`,
+`SYZYGY_ASSESSMENT_OUT_OF_RANGE`, `SYZYGY_ASSESSMENT_MISMATCH`,
+`CHECKPOINT_UNREACHABLE_AT_ROOT`, and `CHECKPOINT_TRUE_AT_ROOT`. Strict sourcing
+adds `SYZYGY_ASSESSMENT_UNGROUNDED` when a declaration cannot be admitted from
+its sidecars.
+
 Coincident checkpoints remain legal, but reaching two at one node no longer
 emits a zero-length `segment.completed` event.
 

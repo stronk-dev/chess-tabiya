@@ -1,6 +1,6 @@
 # Outcome Drill grading — implementation plan
 
-RFC: `rfc/outcome-drill-grading.md` (implementing).
+RFC: `rfc/archive/outcome-drill-grading.md` (implemented).
 
 - [x] Extract sourcing validators without changing existing issue output; add sidecar discovery and ledger-grounding tests
 - [x] Add drill-pack schema v0.3, pack validation, root-trigger lint, and policy-vocabulary parity tests
@@ -8,6 +8,6 @@ RFC: `rfc/outcome-drill-grading.md` (implementing).
 - [x] Project and render assessment, grade, and honest resistance facts
 - [x] Repair Pack C, add browser fixtures, and exercise non-terminal and terminal Outcome Drill flows
 - [x] Update canonical docs for the implemented behavior
-- [ ] Run the RFC completion protocol after independent approval
+- [x] Run the RFC completion protocol after independent approval
 
 Checkboxes flip only in commits carrying their exercising tests.

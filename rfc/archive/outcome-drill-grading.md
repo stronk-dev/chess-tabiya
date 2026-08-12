@@ -1,6 +1,6 @@
 # RFC: Outcome Drill — objective grading for win / hold / save / resist
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` §Outcome types, §The four modes;
@@ -26,7 +26,7 @@
 - **Supersedes / superseded by:** —
 - **Migration:** none. This RFC changes no persisted run shape and claims no migration
   number; see Specification §12.
-- **Planning:** `planning/outcome-drill-grading/`
+- **Planning:** `planning/archive/outcome-drill-grading/`
 
 ## Summary
 
@@ -1373,6 +1373,12 @@ None.
 
 ## Changelog
 
+- 2026-08-12: implemented. Living pack schema advanced to v0.3; outcome grading,
+  exact-assessment admission, path-scoped resistance reporting, Pack C repair,
+  learner-facing presentation, and canonical docs shipped. Independent review
+  approved 276 unit/integration tests and the browser suite. D14's private
+  Chessground-element race was then reproduced and fixed without retries; five
+  consecutive zero-retry browser gates passed before archival.
 - 2026-08-12: created. Specifies WDL-preserving grading for `win`/`hold`/`save`/`resist`,
   closes D12 (Pack C unplayable, verified by execution), D12a (no root-truth check),
   D12c (ply-1 disclosure) and D13 (zero-length segment), and closes the drift half of D8

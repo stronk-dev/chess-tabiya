@@ -66,3 +66,18 @@ Append-only.
   reading geometry. No retries, sleeps, or timeout increases were introduced.
 - Five consecutive complete `make test-browser` runs passed: 40 default flows in
   total, with the tagged Maia latency case skipped each time as designed.
+
+## 2026-08-12 — Completion
+
+- Independent implementation review approved the RFC and verified Pack C's
+  repaired ply-8 resolution. D14 was diagnosed and stabilized before relying on
+  the browser gate for closeout.
+- Completion reconciliation corrected two stale canonical statements: Outcome
+  Drill result grounding now ships, and development docs now name the registry's
+  reserved sourcing-sidecar rule.
+- Status set to implemented; RFC and planning history archived together with the
+  index update.
+- Post-move gates on the exact archival tree: `ENGINES_REQUIRED=1 make verify`
+  passed 276 tests across 46 files with schema/packaging green;
+  `make test-browser` passed all eight default flows with only the tagged Maia
+  latency case skipped as designed.

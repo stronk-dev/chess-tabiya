@@ -67,6 +67,12 @@ the registry; Node restarts the preview when that file changes. Drafts may
 replace a reviewed pack with the same id during preview, so edits can be tested
 without moving files into `content/packs/`.
 
+Every JSON file beneath a served content directory is treated as a pack unless
+its basename is reserved as a sourcing sidecar: `evidence.json`, `sources.json`,
+`job.json`, or `priority.json`, including `<pack>.{reserved-name}` flat siblings.
+The registry and sidecar resolver share this list. New sidecar kinds must join
+that single list before they are placed beside served packs.
+
 `content/drafts/` is committed because the agent-authored, owner-reviewed
 revision history is part of the content-production evidence. The registry
 reads it only in development mode, rejects an explicit draft in production,
