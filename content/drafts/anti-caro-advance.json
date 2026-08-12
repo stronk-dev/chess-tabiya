@@ -270,9 +270,14 @@
   "provenance": {
     "reviewStatus": "draft",
     "sources": [
-      "Opening names and move order verified against lichess-org/chess-openings (CC0)",
-      "Structure and plan descriptions are original prose per the content-rights rule"
+      "Opening names and move order: lichess-org/chess-openings (CC0)",
+      "UNGROUNDED: all strategic claims, plan descriptions, annotations and deviation judgments are agent-authored original prose with NO citation and NO engine or human validation. 'Original prose' satisfies copyright, not truth."
     ],
-    "reviewers": []
+    "reviewers": [],
+    "graduationBlockers": [
+      "Every feedbackClaim needs either a citable reviewed source, engine/corpus validation, or a strong reviewer's sign-off before reviewStatus leaves draft",
+      "Deviation class judgments (esp. the concept_violation on O-O) need the same",
+      "Engine validation pass not yet run"
+    ]
   }
 }

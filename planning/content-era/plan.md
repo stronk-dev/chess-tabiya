@@ -93,6 +93,23 @@ These notes are the input to re-attempting the withdrawn RFCs
 (`rfc/withdrawn/`) — read their withdrawal notes first so the same ground
 isn't relearned.
 
+## 3b. Graduation bar (codex review, 2026-08-12)
+
+**"Original prose" satisfies copyright, not grounding.** A pack may sit in
+`draft` with agent-authored, uncited strategic claims. It may **not** reach
+`reviewed`/`published` until every `feedbackClaim` and every deviation-class
+judgment has one of:
+
+- a citable reviewed source (Wikibooks CC BY-SA theory with attribution, an
+  annotated master game, a named book/course *idea* restated in our words), or
+- engine/corpus validation that actually bears on the claim (Stockfish on the
+  concrete line; explorer frequency for "this is common at 1600"), or
+- a strong reviewer's explicit sign-off.
+
+Otherwise the product ships fluent, ungrounded assertion under an authored
+label — the exact failure ADR-0005 forbids, arriving through the content door
+instead of the LLM door.
+
 ## 4. Exit criteria
 
 Batch 1 is done when: three packs + one trajectory are reviewed and published;

@@ -100,3 +100,29 @@ contract-gaps (the second deliverable — what the format could NOT express):
    this reads correctly — off-spine play inside 14 plies is NOT authored. Under
    the withdrawn union reading it would have wrongly claimed authority over
    every early deviation. **The corrected combinator matches author intuition.**
+
+## 2026-08-12 (codex review of pack A draft; recorded by claude)
+
+- Verified the draft passes the real validator and the tree is legal; confirmed
+  the contract-harvest findings.
+- **Governance finding accepted and acted on:** strategic claims and deviation
+  judgments lack traceable grounding. "Original prose" answers copyright, not
+  truth. Added §3b **graduation bar** to this plan; the draft's provenance now
+  states the ungrounded status explicitly and lists graduation blockers, so the
+  gap cannot be lost between sessions.
+- Three findings that reshape session 2:
+  1. **`intent_capture` is inert** — `CheckpointSheet.svelte` never reads
+     `interaction`/`planClassIds`; it offers only Continue/Rewind/Compare. So
+     the pack's plan choice cannot be recorded. **Contract gap #6: authoring
+     outran rendering a second time** (first was deviation notes).
+  2. **`pack-preview` uses the mock opponent and constant-zero evidence** —
+     it validates playability and orchestration, NOT chess. Engine validation
+     is a separate pass and must be logged as such.
+  3. **`human_common` is unconstrained** — Maia may leave the spine, so
+     `atSpineNode` checkpoints might never fire. Useful as resistance testing;
+     a controlled authored-line walkthrough needs `theory_strict`.
+- **Session 2 restructured into four separately-measured passes:** (a) controlled
+  spine playability under theory_strict; (b) human_common off-spine behaviour;
+  (c) real Stockfish validation; (d) an explicit inventory of authored
+  structures that visibly do nothing — objective, intent capture, claims,
+  deviation notes.
