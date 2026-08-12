@@ -157,3 +157,17 @@ contract-gaps (the second deliverable — what the format could NOT express):
   schema cannot associate evidence with each objective summary, plan-class
   description, spine annotation, feedback claim, or deviation judgment; §3b's
   owner review remains the barrier until Pack A yields that evidence contract.
+
+## 2026-08-12 (claude, verification of the graduation enforcement)
+
+- Tested the enforcement adversarially rather than trusting the unit tests:
+  took the real Pack A draft, flipped `reviewStatus` to `reviewed`, ran
+  `pack-check`. Result: refused, with `GRADUATION_REQUIRES_REVIEWERS` naming
+  the exact JSON path and citing §3b. **The crudest promotion failure is now
+  mechanically blocked**, not merely discouraged. 162 tests green.
+- Codex's unprompted addition endorsed: `schema_example` stays non-promoted, so
+  the living Najdorf fixture cannot claim review it never had — a case neither
+  of us specified.
+- Standing gap, unchanged and correctly deferred: per-assertion grounding
+  (the five-category set) has no encoding yet and stays a process barrier
+  enforced by owner review.
