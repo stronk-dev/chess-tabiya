@@ -12,6 +12,7 @@
   import Timeline from "./Timeline.svelte";
   import TerminalSheet from "./TerminalSheet.svelte";
   import WhyBanner from "./WhyBanner.svelte";
+  import OutcomeContext from "./OutcomeContext.svelte";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
@@ -25,6 +26,13 @@
   import type { RunStateSnapshot } from "./run-state.js";
   import type { AuthoredFeedbackPage } from "./api.js";
   import type { RegisterKeyboardRegion } from "./keyboard.js";
+  import {
+    assessmentSentence,
+    checkpointResolutionSentence,
+    objectiveGradeSentence,
+    projectedGrading,
+    resistanceSentences,
+  } from "./outcome-presentation.js";
 
   type RewindTarget =
     | { readonly nodeId: string }
@@ -125,6 +133,24 @@
   );
   let cards = $derived(branchCards(run));
   let banner = $derived(whyBanner(pack, run));
+  let grading = $derived(projectedGrading(pack));
+  let assessment = $derived(
+    grading === undefined ? undefined : assessmentSentence(grading),
+  );
+  let resistance = $derived(
+    grading === undefined ? [] : resistanceSentences(run, currentNode.id),
+  );
+  let checkpointResolution = $derived.by(() => {
+    if (
+      grading?.resolveAt.kind !== "checkpoint" ||
+      checkpoint?.id !== grading.resolveAt.checkpointId
+    ) return undefined;
+    const node = run.nodes.find((candidate) => candidate.id === checkpoint.nodeId);
+    return checkpointResolutionSentence(
+      checkpoint.label,
+      node?.objectiveState ?? currentNode.objectiveState,
+    );
+  });
   let startSide = $derived(packStartSide(pack));
   let displayedNode = $derived(
     previewNodeId === undefined
@@ -397,11 +423,14 @@
     {/if}
 
     <div class="workspace">
-      <section class="position-column">
+      <section class="position-column" class:outcome={grading !== undefined}>
         <div class="objective-copy">
           <p>Objective</p>
           <h1 id="drill-title">{packObjective(pack)}</h1>
         </div>
+        {#if assessment !== undefined}
+          <OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
+        {/if}
         <WhyBanner model={banner} />
         <div class="board-frame" class:previewing={previewNodeId !== undefined}>
           {#if previewNodeId}<span class="preview-label">Preview</span>{/if}
@@ -462,6 +491,9 @@
   <CheckpointSheet
     {checkpoint}
     authoredItems={checkpointAuthoredItems}
+    {assessment}
+    {resistance}
+    resolution={checkpointResolution}
     canCompare={cards.length >= 2}
     onContinue={continueFromCheckpoint}
     onRewind={() => onRewind({ nodeId: checkpoint.nodeId })}
@@ -475,6 +507,9 @@
     outcome={terminalEvent.data.outcome}
     authoredItems={terminalAuthoredItems}
     evidence={terminalEvidence}
+    {assessment}
+    {resistance}
+    grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)}
     canRewind={snapshot.access === "writer" && currentNode.parentId !== null}
     onRewind={() => currentNode.parentId === null ? undefined : onRewind({ nodeId: currentNode.parentId })}
     {onStop}
@@ -638,6 +673,10 @@
     overflow: hidden;
     border-radius: 0.8rem;
     box-shadow: var(--shadow);
+  }
+
+  .position-column.outcome .board-frame {
+    width: min(100%, calc(100dvh - 38rem), 34rem);
   }
 
   .board-frame.previewing {

@@ -40,6 +40,50 @@ test("terminal outcome reveals authored commentary and recorded evidence", async
   await expect(page.getByText("Thinking…")).toHaveCount(0);
 });
 
+test("Outcome Drill resolves a non-terminal hold and remains playable", async ({ page }) => {
+  const card = page.getByRole("article").filter({ hasText: "Outcome hold browser fixture" });
+  await card.getByRole("button", { name: /Open position/ }).click();
+  await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
+  await expect(page.getByText("Root assessment (authored, unproved):", { exact: false })).toBeVisible();
+
+  await move(page, "e2", "e4");
+  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await move(page, "g1", "f3");
+  await expect(page.getByRole("heading", { name: "Authored hold horizon" })).toBeVisible();
+  await expect(page.getByText("without conceding the result", { exact: false })).toBeVisible();
+  await expect(page.getByText("not a proof of the position", { exact: false })).toBeVisible();
+  const checkpointSheet = page.getByRole("dialog");
+  await expect(checkpointSheet.getByText("Deterministic mock opponent", { exact: false })).toBeVisible();
+  await expect(checkpointSheet.getByText("not which policy it applied", { exact: false })).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await clickMove(page, "f1", "b5");
+  await expect(page.getByText("Active line 6 plies")).toBeVisible();
+});
+
+test("Outcome Drill can grade a terminal loss as successful resistance", async ({ page }) => {
+  const card = page.getByRole("article").filter({ hasText: "Outcome resist browser fixture" });
+  await card.getByRole("button", { name: /Open position/ }).click();
+  await move(page, "f2", "f3");
+  await expect(page.getByRole("heading", { name: "Resistance horizon" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await clickMove(page, "g2", "g4");
+  await expect(page.getByRole("heading", { name: "You lost." })).toBeVisible();
+  await expect(
+    page.getByRole("dialog").getByText("Objective: resist — achieved"),
+  ).toBeVisible();
+});
+
+test("Pack C names authored assessment and the opponent that actually moved", async ({ page }) => {
+  const card = page.getByRole("article").filter({ hasText: "Rook endings: holding 3 against 4" });
+  await card.getByRole("button", { name: /Open position/ }).click();
+  await expect(page.getByText("Eleven pieces are on the board", { exact: false })).toBeVisible();
+  await expect(page.getByText("Requested resistance: human_common, target Elo 1900", { exact: false })).toBeVisible();
+  await expect(page.getByText("Deterministic mock opponent", { exact: false })).toBeVisible();
+  await expect(page.getByText("Maia", { exact: false })).toHaveCount(0);
+});
+
 interface LatencyEnvelope {
   readonly boardReadyMs: number;
   readonly rewindMs: number;
@@ -61,7 +105,14 @@ function squarePoint(
 }
 
 async function move(page: Page, from: string, to: string): Promise<void> {
-  const box = await page.locator("cg-board").boundingBox();
+  const board = page.locator("cg-board");
+  await board.evaluate(
+    (element) =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
+  const box = await board.boundingBox();
   if (box === null) throw new Error("Chessground board has no bounding box");
   const origin = squarePoint(box, from);
   const destination = squarePoint(box, to);
@@ -69,6 +120,16 @@ async function move(page: Page, from: string, to: string): Promise<void> {
   await page.mouse.down();
   await page.mouse.move(destination.x, destination.y, { steps: 8 });
   await page.mouse.up();
+}
+
+async function clickMove(page: Page, from: string, to: string): Promise<void> {
+  const board = page.locator("cg-board");
+  const box = await board.boundingBox();
+  if (box === null) throw new Error("Chessground board has no bounding box");
+  const origin = squarePoint(box, from);
+  const destination = squarePoint(box, to);
+  await page.mouse.click(origin.x, origin.y);
+  await page.mouse.click(destination.x, destination.y);
 }
 
 test("served Najdorf pack plays, rewinds, branches, compares, and exports", async ({

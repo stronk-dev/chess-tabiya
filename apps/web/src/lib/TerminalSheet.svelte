@@ -4,6 +4,7 @@
   import type { RunOutcome } from "@chess-tabiya/runtime";
   import type { AuthoredFeedbackItem } from "./api.js";
   import type { EvidenceSentence } from "./evidence-sentences.js";
+  import OutcomeContext from "./OutcomeContext.svelte";
 
   interface Props {
     outcome: RunOutcome;
@@ -12,9 +13,12 @@
     canRewind: boolean;
     onRewind: () => void | Promise<void>;
     onStop: () => void;
+    assessment?: string | undefined;
+    resistance?: readonly string[];
+    grade?: string | undefined;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade }: Props = $props();
   let heading: HTMLHeadingElement;
   onMount(() => heading?.focus());
 </script>
@@ -25,6 +29,10 @@
     <h2 id="outcome-title" tabindex="-1" bind:this={heading}>
       {outcome === "win" ? "You won." : outcome === "loss" ? "You lost." : "Draw."}
     </h2>
+
+    {#if assessment !== undefined}
+      <OutcomeContext {assessment} {resistance} {grade} />
+    {/if}
 
     {#if authoredItems.length > 0}
       <section aria-labelledby="terminal-commentary">

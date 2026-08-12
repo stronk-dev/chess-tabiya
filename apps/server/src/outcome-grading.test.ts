@@ -89,6 +89,32 @@ describe("Outcome Drill grading", () => {
     });
   });
 
+  it("orders degradation before resolution and excludes every monotone back-edge", () => {
+    const base = pack("hold");
+    const document: DrillPackDefinition = {
+      ...base,
+      objective: {
+        ...base.objective,
+        successConditions: [
+          {
+            kind: "material_balance",
+            perspective: "white",
+            comparison: "atLeast",
+            value: 0,
+            to: "degraded",
+          },
+        ],
+      },
+    };
+    const rules = objectiveRules(document);
+    const degradation = rules.findIndex((rule) => rule.to === "degraded");
+    const resolution = rules.findIndex((rule) => rule.to === "preserved");
+    expect(degradation).toBeGreaterThanOrEqual(0);
+    expect(degradation).toBeLessThan(resolution);
+    expect(rules.filter((rule) => rule.to === "preserved").map((rule) => rule.from)).toEqual(["active"]);
+    expect(rules.filter((rule) => rule.to === "degraded").map((rule) => rule.from)).toEqual(["active", "preserved"]);
+  });
+
   it("rejects Pack C v0.1's root-true checkpoint and accepts v0.2", () => {
     const current = JSON.parse(readFileSync(new URL("../../../content/drafts/rook-4v3-same-side.json", import.meta.url), "utf8")) as DrillPackDefinition;
     const broken = structuredClone(current) as DrillPackDefinition;

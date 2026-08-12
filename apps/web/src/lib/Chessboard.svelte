@@ -91,6 +91,14 @@
     disabled;
     pendingPromotion = undefined;
     board?.set(config());
+    // Objective/checkpoint banners can move the board without resizing it.
+    // Chessground caches DOM bounds, so redraw after layout settles or the
+    // next pointer move is interpreted against the board's former position.
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        if (typeof board?.redrawAll === "function") board.redrawAll();
+      }),
+    );
   });
 </script>
 

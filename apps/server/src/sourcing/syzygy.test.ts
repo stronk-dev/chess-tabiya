@@ -101,6 +101,16 @@ describe("Syzygy sourcing", () => {
       { source: "pack.json", value: pack, ledger: forged, manifest },
     ]);
     expect(unverified.required(pack.id).assessmentGrounding).toBe("unverified");
+
+    await writeCanonicalJson(resolve(emitted.directory, "pack.json"), pack);
+    expect((await checkSourcingDirectory(emitted.directory, { strict: true })).issues)
+      .not.toContainEqual(expect.objectContaining({ code: "SYZYGY_ASSESSMENT_UNGROUNDED" }));
+    await writeCanonicalJson(resolve(emitted.directory, "evidence.json"), forged);
+    const promotion = await checkSourcingDirectory(emitted.directory, { strict: true });
+    expect(promotion.valid).toBe(false);
+    expect(promotion.issues).toContainEqual(
+      expect.objectContaining({ code: "SYZYGY_ASSESSMENT_UNGROUNDED", severity: "error" }),
+    );
   });
 
   it("matches the chessops board census over 200 legal committed positions", () => {

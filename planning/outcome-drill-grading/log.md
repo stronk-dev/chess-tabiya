@@ -24,3 +24,17 @@ Append-only.
   and sidecar resolution share one reserved-name constant; exact Syzygy grounding requires
   a fully valid, manifest-linked ledger. The positive path uses real emitter output.
 - `make verify`: 271 tests across 45 files, typechecks and packaging green.
+
+## 2026-08-12 — Outcome presentation and browser acceptance
+
+- The client renders root assessment, requested resistance, recorded per-path engine
+  identity, non-terminal resolution, and terminal result/grade as distinct facts. It never
+  infers the applied policy from an engine identity and labels unverified roots as claims.
+- Added deterministic hold and resist browser fixtures. The hold reaches `preserved` and
+  remains playable; the resist fixture reaches its checkpoint and later renders the terminal
+  loss separately from `Objective: resist — achieved`. Pack C renders its authored 11-piece
+  caveat and the actual mock opponent rather than claiming Maia.
+- Playwright exposed a real cached-bounds bug: adding the grade banner shifted Chessground
+  without resizing it, so moves after Continue mapped against the old board position. The
+  board now redraws after reactive layout settles; all eight default browser tests pass.
+- `ENGINES_REQUIRED=1 make verify`: 276 tests across 46 files, typechecks and packaging green.

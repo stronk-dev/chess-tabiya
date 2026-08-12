@@ -4,6 +4,7 @@
   import HonestControl from "./HonestControl.svelte";
   import type { CheckpointNotice } from "./screen-model.js";
   import type { AuthoredFeedbackItem } from "./api.js";
+  import OutcomeContext from "./OutcomeContext.svelte";
 
   interface Props {
     checkpoint: CheckpointNotice;
@@ -13,6 +14,9 @@
     onCompare: () => void | Promise<void>;
     onStop: () => void;
     authoredItems?: readonly AuthoredFeedbackItem[];
+    assessment?: string | undefined;
+    resistance?: readonly string[];
+    resolution?: string | undefined;
   }
 
   let {
@@ -23,6 +27,9 @@
     onCompare,
     onStop,
     authoredItems = [],
+    assessment,
+    resistance = [],
+    resolution,
   }: Props = $props();
   let heading: HTMLHeadingElement;
 
@@ -34,6 +41,9 @@
     <p class="eyebrow">Checkpoint</p>
     <h2 id="checkpoint-title" tabindex="-1" bind:this={heading}>{checkpoint.label}</h2>
     <p>You reached a semantic boundary. Continue, replay it, or compare attempts.</p>
+    {#if assessment !== undefined}
+      <OutcomeContext {assessment} {resistance} {resolution} />
+    {/if}
     {#if authoredItems.length > 0}
       <section class="authored-feedback" aria-labelledby="authored-feedback-title">
         <h3 id="authored-feedback-title">Authored commentary</h3>

@@ -257,6 +257,7 @@ export function validateLedger(
   value: unknown,
   issues: SourcingIssue[],
 ): EvidenceLedger | undefined {
+  const issueCount = issues.length;
   if (
     !object(value) ||
     value.schema !== "tabiya.sourcing.evidence.v1" ||
@@ -309,7 +310,9 @@ export function validateLedger(
       );
     }
   }
-  return value as unknown as EvidenceLedger;
+  return issues.length === issueCount
+    ? (value as unknown as EvidenceLedger)
+    : undefined;
 }
 
 export function linkage(

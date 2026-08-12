@@ -253,6 +253,16 @@ describe("development draft registry", () => {
     expect(registry.list().filter((pack) => pack.id === "sidecar-pack")).toHaveLength(1);
   });
 
+  it("loads the four committed sourcing candidates without mistaking sidecars for packs", async () => {
+    const candidates = new URL("../../../content/candidates/", import.meta.url);
+    const registry = await PackRegistry.loadDefault({
+      development: true,
+      draftsDirectory: candidates.pathname,
+    });
+    expect(registry.list()).toHaveLength(5);
+    expect(registry.list().filter((entry) => entry.reviewStatus === "draft")).toHaveLength(4);
+  });
+
   it("ignores committed drafts in production and loads them in development", async () => {
     const directory = await temporaryDirectory();
     const draft = {
