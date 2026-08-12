@@ -10,7 +10,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `terminal-outcome-events.md` | implementing | amends branch runtime | `planning/terminal-outcome-events/`; closes D11; **blocks** B6b and B6d |
 | `learner-identity-and-authorization.md` | implementing | foundation F3 | `planning/learner-identity-and-authorization/` |
 | `pack-optional-runs.md` | implementing | foundation F2; F3 landed first | `planning/pack-optional-runs/` |
-| `content-sourcing-foundation.md` | draft | program item #6 (B6a) | not started |
+| `content-sourcing-foundation.md` | implementing | program item #6 (B6a) | `planning/content-sourcing-foundation/` |
 | `content-sourcing-syzygy.md` | draft | program item #6 (B6b) | not started |
 | `content-sourcing-explorer.md` | draft | program item #6 (B6c) | not started |
 | `content-sourcing-position-seeds.md` | draft | program item #6 (B6d) | not started |

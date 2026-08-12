@@ -1,6 +1,6 @@
 # RFC: Content sourcing foundation — manifests, evidence sidecars, licence enforcement, and the line skeleton
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §8 (production model, cost discipline), §2d (opening pack contents); `design/02-product-shape.md` §Product posture (content/data-rights ruling, `:41-50`); `design/03-product-breadth.md:101-103` and gate B6
@@ -1172,6 +1172,10 @@ that killed five drafts:
 None.
 
 ## Changelog
+
+- 2026-08-12: implementation began. The shared sourcing checker, cache lock and HTTP
+  discipline, deterministic artifact triple, and P1 openings emitter are assigned to
+  `planning/content-sourcing-foundation/`.
 
 - 2026-08-12: automatic stale-lock takeover removed. Age-based takeover cannot
   prevent overlapping requests, only observe them: a holder quiet for 90 s may

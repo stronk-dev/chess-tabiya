@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check build verify pack-check pack-preview up up-engines down
+.PHONY: setup typecheck test test-browser schema-check build verify pack-check pack-preview source-fetch candidate-emit sourcing-check up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -31,6 +31,21 @@ pack-preview:
 	node apps/server/dist/pack-check.js "$(abspath $(FILE))"
 	@echo "Previewing $(abspath $(FILE)) at http://localhost:$${PORT:-3000} (reloads on file change)"
 	NODE_ENV=development DRAFT_PACK_FILE="$(abspath $(FILE))" pnpm --filter @chess-tabiya/server preview
+
+source-fetch:
+	@test -n "$(SOURCE)" || (echo "Usage: make source-fetch SOURCE=<source-id> [OFFLINE=1]" >&2; exit 2)
+	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/source-fetch.ts --bundle --platform=node --format=esm --outfile=dist/source-fetch.js
+	OFFLINE="$(OFFLINE)" node apps/server/dist/source-fetch.js "$(SOURCE)"
+
+candidate-emit:
+	@test -n "$(PIPELINE)" || (echo "Usage: make candidate-emit PIPELINE=<id> ARGS='...'" >&2; exit 2)
+	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/candidate-emit.ts --bundle --platform=node --format=esm --outfile=dist/candidate-emit.js
+	node apps/server/dist/candidate-emit.js "$(PIPELINE)" $(ARGS)
+
+sourcing-check:
+	@test -n "$(DIR)" || (echo "Usage: make sourcing-check DIR=<candidate-directory>" >&2; exit 2)
+	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/sourcing-check.ts --bundle --platform=node --format=esm --outfile=dist/sourcing-check.js
+	node apps/server/dist/sourcing-check.js "$(abspath $(DIR))"
 
 up:
 	docker compose up --build --detach

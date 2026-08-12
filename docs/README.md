@@ -30,3 +30,5 @@ Implemented foundation:
 - `identity-and-authorization.md` — learner accounts, server-side sessions,
   per-run roles, learner-bound writer leases, grant transfer, deletion
   reassignment, and hosted-operation limits.
+- `content-sourcing.md` — unpublished candidate artifacts, evidence/source linkage,
+  licence enforcement, deterministic and polite source access, and the opening-line emitter.
