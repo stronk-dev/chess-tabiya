@@ -17,15 +17,20 @@
   `follow_theory` objective type, the `atAuthoredBoundary` trigger, and the first evaluator
   `authoredBoundary` has ever had), **`rfc/archive/outcome-drill-grading.md`** (its compiled
   rule order and monotone law gain a second objective family that reuses one half and
-  refuses the other), **`rfc/archive/authored-explanation-surface.md`** (its
+  refuses the other; and its §8a refusal of a persisted applied-policy field is
+  **deliberately reversed** by owner ruling — §8), **`rfc/archive/authored-explanation-surface.md`** (its
   `AuthoredFeedbackItem` union gains a fourth kind and its static reachability rule learns
   one new trigger), **`rfc/archive/drill-client.md`** (the pack projection stops shipping
   the authored line for `mode: "line"`, and `/select-move` stops accepting a
-  client-supplied spine), and **`rfc/archive/engine-workers.md`** (the `theory_strict`
-  fallback keeps its behaviour and gains an honest rendering)
+  client-supplied spine), **`rfc/archive/engine-workers.md`** (the `theory_strict`
+  fallback keeps its behaviour and stops being invisible: it now records the mode it
+  applied), and **`rfc/archive/branch-runtime.md`** (run schema 0.6 → 0.7 and
+  `STORAGE_VERSION` 4 → 5)
 - **Supersedes / superseded by:** —
-- **Migration:** none. No persisted run shape changes and this RFC claims no migration
-  number; see Specification §11.
+- **Migration:** **migration 5, `STORAGE_VERSION` 4 → 5, run schema 0.6 → 0.7.** Claimed in
+  `rfc/README.md`'s migration register. It adds `policyModeApplied` to
+  `opponent.move_selected.selection` and migrates historical selections to `unknown`; see
+  Specification §11.
 - **Planning:** `planning/line-drill-theory-grading/`
 
 ## Summary
@@ -45,6 +50,14 @@ grading contract, and it does that **without importing Outcome Drill's grading**
 theory membership is not a result. A move is on the authored line, is a deviation the author
 classified, or is **unknown** — and unknown is a verdict this RFC renders, not a failure it
 infers.
+
+One more thing is inert, and it is the mode's own opponent. `theory_strict` silently falls
+back to `human_common` the moment the position leaves the authored spine
+(`apps/server/src/opponent-selector.ts:453-460`) and tells nothing but the server log. In a
+mode whose entire subject is theory, an unrecorded change of opponent policy is not a
+cosmetic gap. D15 (`design/BACKLOG.md:126`) closes here, by owner ruling and as a condition
+of acceptance: the applied policy becomes a recorded fact on every selection (§8), at the
+cost of run schema v0.7 and migration 5 (§11).
 
 ## Motivation
 
@@ -67,7 +80,7 @@ be Line Drill machinery:
 
 Everything else the mode needs is absent, and three of the absences are worse than absence.
 
-### 2. The five findings this RFC is built on
+### 2. The six findings this RFC is built on
 
 **2a. `mode` branches nothing, so nothing is a Line Drill.** `raw.mode` is copied into the
 pack summary (`apps/server/src/pack-registry.ts:206`) and into the wire projection
@@ -76,21 +89,47 @@ returns exactly one non-summary hit: the sourcing emitter writes `mode: "line"` 
 candidate packs (`apps/server/src/sourcing/openings.ts:103`). No validator, orchestrator,
 selector or screen reads it.
 
-**2b. `authoredBoundary` means two different things in the four packs that use it, and
-nothing has ever had to decide.** Verified by reading them:
+**2b. `spineNodeIds` is a membership set, and one shipped pack encodes it wrong.** The
+semantics are not open. `planning/breadth/training-modes.md:236-242` already pinned them —
+"a node is authored territory iff (`spineNodeIds` contains it **or** a `fenPredicates`
+entry matches its `transposeKey`) **and** (`plyHorizon` absent **or** ply ≤ `plyHorizon`)"
+— salvaging the same rule verbatim from the withdrawn contracts RFC
+(`rfc/withdrawn/authoring-contracts-v03.md:59-73`), which states it as "`plyHorizon` is a
+**cap on authored reach, not a grant of authority**". `plyHorizon` **caps and never
+grants**; `fenPredicates` grant additional positions; `spineNodeIds` is an explicit list of
+members. §3 implements exactly that and invents nothing.
 
-| Pack | spine nodes | `spineNodeIds` | `plyHorizon` | reading it implies |
-|---|---|---|---|---|
-| `schemas/drill_pack.example.json:114-123` | 5 | 2 — `najdorf-b5`, `najdorf-be2`, both **leaves** | 4 | the listed ids are the **frontier** |
-| `content/drafts/anti-caro-advance.json:183-197` | 10 | **all 10** | 14 | the listed ids are the **interior** |
-| `content/drafts/carlsbad-minority-attack.json:288-307` | 15 | all 15 | 8 | interior |
-| `content/drafts/rook-4v3-same-side.json:348-375` | 23 | all 23 | 8 | interior |
+The authored corpus agrees, three files to one. Boundary contents and node depths computed
+by walking each spine:
 
-Under the interior reading the served schema example is incoherent: `najdorf-be3`,
-`najdorf-e6` and `najdorf-f3` would be **outside** the boundary while their own descendants
-`najdorf-b5` and `najdorf-be2` are inside. Under the frontier reading every pack in the tree
-is coherent, and the field's name becomes true. §3b rules for the frontier reading on that
-evidence and nothing else.
+| Pack | spine nodes | `spineNodeIds` | depths listed | `plyHorizon` | encodes membership? |
+|---|---|---|---|---|---|
+| `content/drafts/anti-caro-advance.json:183-197` | 10 | **all 10** | 1–6 | 14 | yes |
+| `content/drafts/carlsbad-minority-attack.json:288-307` | 15 | all 15 | 1–8 | 8 | yes |
+| `content/drafts/rook-4v3-same-side.json:348-375` | 23 | all 23 | 1–8 | 8 | yes |
+| `schemas/drill_pack.example.json:114-123` | 5 | 2 — `najdorf-b5` (depth 4), `najdorf-be2` (depth 3) | 3–4 | 4 | **no — omits `najdorf-be3`, `najdorf-e6`, `najdorf-f3`** |
+
+Read as membership, the served schema example says something its author plainly did not mean:
+`najdorf-be3`, `najdorf-e6` and `najdorf-f3` sit outside the boundary while their own
+descendants sit inside, so the pack disclaims support for the three moves every run must play
+to reach the two it supports. That is a **bad encoding in a `schema_example`**, not a second
+meaning of the field, and §10a fixes it by listing all five nodes — the ids the pack always
+supported. No other pack in the tree is affected, because the other three already list every
+node.
+
+An earlier draft of this RFC read the same contradiction the other way and ruled
+`spineNodeIds` to be a *frontier* — the ancestor-or-self closure of the listed ids — on the
+grounds that this was the only reading under which all four files were coherent. That was
+sound reasoning from incomplete evidence: it was drawn from the four packs alone and did not
+see the pinned rule in `planning/breadth/training-modes.md` or the withdrawn-contract
+salvage behind it. The owner overruled it on that evidence. **The reading is membership; it
+was always membership; the example is what was wrong.** If a frontier shorthand is wanted
+later it gets its own `frontierNodeIds` field and its own RFC — the existing field is not
+reinterpreted.
+
+Note what the two readings do *not* differ on: for the three draft packs they compute the
+same set, because listing every node makes membership and ancestor-closure identical. The
+whole behavioural difference is the schema example, and it is an authoring fix.
 
 **2c. Four implementations of "which authored node is this run node", three of them wrong in
 the same way.** `activeSpineNodeId` (`apps/server/src/pack-orchestrator.ts:23-39`),
@@ -128,13 +167,35 @@ place, and §6 is written so it cannot happen: a `follow_theory` objective may n
 absorbing state **at all**, which is a stronger law than Outcome Drill's, for the opposite
 reason.
 
+**2f. The opponent can stop playing theory and nothing records it (D15).**
+`#theoryStrict` resolves the spine children of the current position and, when there are
+none, emits `console.warn("DEGRADED_THEORY_SPINE: …")` and returns `#humanCommon(request)`
+(`apps/server/src/opponent-selector.ts:453-460`, asserted at
+`apps/server/src/opponent-selector.test.ts:341-345`). The fallback re-enters the same
+`#maia` call against the same `maiaEngineId` (`opponent-selector.ts:428-435`), so both
+policies stamp an **identical** `SelectionEngineIdentity`
+(`packages/runtime/src/types.ts:63-69`) and the run cannot distinguish them. There is a
+second, independent switch on the same axis: `selectorMode` downgrades the pack's requested
+mode against `GET /capabilities` before every selection
+(`apps/web/src/lib/session-controller.ts:116-134`, used at `:391`), and that per-move mode is
+never written anywhere either.
+
+`rfc/archive/outcome-drill-grading.md` §8a named this exactly and refused to fix it, to
+protect its no-migration scope, calling the persisted field "the right eventual fix". For a
+grade about a rook ending a disclaimer was arguably enough. For a mode whose subject *is*
+theory it is not: the learner is told a book line was rehearsed against book replies, and
+the run holds no evidence either way. **Owner ruling 2026-08-12: D15 closes inside this RFC
+and blocks its acceptance** (`design/BACKLOG.md:126`). §8 records the applied mode; §11 pays
+the migration.
+
 ### 3. Scope boundary
 
 **In scope:** what makes a run a Line Drill and what ends one; the authored-boundary
 evaluator including transposition and re-entry; the three-verdict membership contract and
 its mapping onto the shipped objective states; delivery of verdicts through the shipped
-reveal contract; the deviation lint that grading makes load-bearing (D7); the honest
-rendering of `theory_strict` against what the run actually records.
+reveal contract; the deviation lint that grading makes load-bearing (D7); **recording the
+opponent policy that was actually applied, and rendering it separately from the one that was
+requested (D15)**.
 
 **Out of scope,** with reasons:
 
@@ -143,9 +204,9 @@ rendering of `theory_strict` against what the run actually records.
 | Grading a move against an engine's best move | `design/01-training-model.md:99` says Outcome Drill is graded on "result preservation, not exact moves", and the whole document is built on episodes rather than single-move correctness; `AGENTS.md` law 8 forbids manufacturing the claim. Nothing here calls an engine to decide a verdict |
 | Ranking or scoring the five deviation classes | The class is authored (`schemas/drill_pack.schema.json:534-542`). Turning `concept_violation` into "worse than `interesting_deviation`" is a judgement the author did not write. §6 uses only the author's own `offObjective` boolean (`drill_pack.schema.json:543`) |
 | A "theory/idea score" (`design/01-training-model.md:97`) | A score is an aggregation over verdicts, and two of the three verdicts are `unknown`-shaped. Aggregating "the pack has nothing to say" into a number is exactly the dashboard anti-pattern. Deviations-from-design item 1 |
-| Intent-relative success for the plan fork | Ledgered separately (`design/BACKLOG.md:140`); needs `checkpoints[].interaction` to have a consumer, which it does not |
+| Intent-relative success for the plan fork | Ledgered separately (`design/BACKLOG.md:141`); needs `checkpoints[].interaction` to have a consumer, which it does not |
 | `plan_defense` and the other unimplemented policy modes (D8) | Line Drill needs `theory_strict`, `human_common` and `strong_engine`; all three ship (`apps/server/src/capabilities.ts:10-14`). D8's four undeclared modes are already tested-and-declared by `outcome-drill-grading` §8 (`capabilities.ts:16-28`). Nothing here needs one, so D8 is cited and left alone |
-| Persisting which opponent policy actually ran | Refused with its reason in `rfc/archive/outcome-drill-grading.md` §8a; it is a run-schema change and a migration. §8 inherits that refusal verbatim and does not weaken it |
+| The *reason* a fallback fired, and a per-ply fallback event | §8 records **which policy was applied**, which is the fact D15 names and the fact a reader needs. A structured reason code (`off_spine`, `capability_downgrade`, …) is a second vocabulary with no consumer yet, and `DEGRADED_POLICY_MASS` (`opponent-selector.ts:466-471`) would want one too. A BACKLOG row to propose, not a field to add here |
 | FEN-anchored deviations as a graded shape | `at: {fen}` is schema-legal (`drill_pack.schema.json:518-525`) and **no pack in the tree uses it** (verified across all eight pack files plus fixtures). Its `note` has no delivery path today (`authored-feedback.ts:128` skips it), so grading it would create graded-but-unexplainable verdicts. §7 forbids it under `follow_theory` and leaves it untouched everywhere else |
 | `phase` reaching the pack list (D6) | Line Drill is the opening mode, so phase discovery is adjacent, but `PackSummary` omitting `phase` (`pack-registry.ts:26-34`) is item #1's foundation-edge residual (`design/03-product-breadth.md:202-205`) and belongs there. Note that `projectPackDocument` **does** project `phase` (`pack-registry.ts:68`), so D6 is a list-surface defect, not a wire-projection one |
 | D5's release compose light profile | Unrelated to this RFC; cited so it is not rediscovered |
@@ -211,10 +272,15 @@ The root node is always inside; it is the pack's own start position. For every o
 
 ```text
 inside(node) :=
-      (plyHorizon === undefined || node.ply <= plyHorizon)          // the cap
-  AND ( spineNodeId(node) is an ancestor-or-self of some spineNodeIds entry   // grant A
-        OR some fenPredicates entry matches node )                            // grant B
+      (plyHorizon === undefined || node.ply <= plyHorizon)      // the cap: never grants
+  AND ( spineNodeIds contains spineNodeId(node)                 // grant A: membership
+        OR some fenPredicates entry matches node )              // grant B: predicate
 ```
+
+This is `planning/breadth/training-modes.md:236-242` transcribed, which is
+`rfc/withdrawn/authoring-contracts-v03.md:59-73` salvaged. `spineNodeIds` is an explicit
+membership set, `fenPredicates` grant additional positions, and `plyHorizon` caps both. Under
+`follow_theory` the cap is required (§3a), so the first clause is always live.
 
 `spineNodeId(node)` is §3c's shared resolver. `fenPredicates` entries are evaluated with the
 shipped `evaluateObjectivePredicate` under `{type: "fenPredicate", predicate}`
@@ -226,7 +292,7 @@ shipped `evaluateObjectivePredicate` under `{type: "fenPredicate", predicate}`
 
 #### 3a. plyHorizon caps, does not grant
 
-This is the salvaged rule from the withdrawn contracts RFC (`design/BACKLOG.md:164`), and it
+This is the salvaged rule from the withdrawn contracts RFC (`design/BACKLOG.md:165`), and it
 earns its keep here rather than being restated as a principle. The served schema example
 declares `fenPredicates: [{type: "pieceOnSquare", square: "e3", piece: {white, bishop}}]`
 (`schemas/drill_pack.example.json:117-122`), which is true for the whole rest of any game in
@@ -249,25 +315,53 @@ Consequences stated so they are not discovered later:
 - A cap shorter than the shallowest declared boundary node has the same effect by a
   different route. §7 rejects that as `BOUNDARY_HORIZON_EXCLUDES_EVERY_GRANT`, computed from
   the spine depths the lint already walks. `plyHorizon: 0` is the degenerate member of that
-  family and needs no separate code. Verified: no pack in the tree trips either — every
-  pack's boundary ids sit at or above its horizon.
+  family and needs no separate code. Verified: no pack in the tree trips either.
+- Under membership, an *individual* listed id deeper than the cap is dead ink: it is granted
+  and then capped, and no run can ever be inside at it. §7b warns
+  (`BOUNDARY_NODE_BEYOND_HORIZON`). Verified across all four spine-bearing packs by walking
+  each spine and comparing listed depths against the horizon — depths 1–6 vs 14, 1–8 vs 8,
+  1–8 vs 8, and 3–4 vs 4 — so the warning has zero hits today and exists to catch the next
+  one. This class is sharper under membership than it was under the frontier reading, where
+  a deep listed id still granted its shallow ancestors and so never looked dead.
 - `plyHorizon` is **required** under `follow_theory` (`BOUNDARY_NEEDS_PLY_HORIZON`), because
   a position-keyed grant with no cap is unbounded in exactly the way above. All four packs
   in the tree that declare a boundary already declare one.
 
-#### 3b. `spineNodeIds` is a frontier, not a membership list
+#### 3b. `spineNodeIds` is a membership set
 
-Ruled on the evidence in Motivation §2b: a node is granted support when its authored id is an
-**ancestor-or-self** of a declared boundary id. Under this reading the served schema example
-grants all five of its spine nodes (be3, e6 and f3 are ancestors of b5 or be2), and the three
-draft packs that list every node grant every node. Under the membership reading the served
-example is self-contradictory. One reading is coherent across the tree and one is not; that
-is the whole argument, and it is a reading of shipped content rather than a preference.
+**Owner ruling 2026-08-12.** Grant A is set membership and nothing else: a node is granted
+support when §3c resolves it to an authored id that literally appears in `spineNodeIds`. No
+closure, no ancestry, no descendant relation. The rule was already pinned at
+`planning/breadth/training-modes.md:236-242` and salvaged from
+`rfc/withdrawn/authoring-contracts-v03.md:59-73` before this RFC existed; Motivation §2b
+records how the earlier draft came to read it as a frontier and why that reading is
+withdrawn.
 
-The relation is computed over the **spine tree**, from ids, and is therefore independent of
-§3c's position keying. A pack may deliberately leave a sideline outside its frontier; that
-sideline is authored but unsupported, its nodes are `unknown` under §2, and nothing warns —
-declaring an unsupported sideline is a legitimate authoring choice, not a mistake.
+Three consequences, all of them a direct read of the rule:
+
+- **An unlisted ancestor of a listed node is outside the boundary.** This is not a paradox
+  to be resolved by widening the field; it is an authoring statement that the pack does not
+  support that node, and if the author did not mean it the fix is to list the node. §10a
+  makes exactly that fix to the served schema example, which is the only file in the tree
+  that says it.
+- **`spineNodeIds` is an id list, so it is computed over the spine tree and is independent of
+  §3c's position keying.** §3c decides *which authored node a run node is*; §3b decides
+  *whether that node is a member*. Keep the two questions apart: the first is positional and
+  transposition-tolerant, the second is a set lookup on the id the first returned.
+- **A pack may deliberately leave a sideline out of its boundary.** That sideline is authored
+  but unsupported, its nodes are `unknown` under §2, and nothing warns — declaring an
+  unsupported sideline is a legitimate authoring choice. What is *not* legitimate is listing
+  a node the cap already kills (`BOUNDARY_NODE_BEYOND_HORIZON`, §3a).
+
+**Ancestor-or-self does not disappear from this RFC; it moves to where it is true.** §4b
+needs the ancestor closure of `spineNodeIds` for *reachability* — which authored nodes a run
+can stand on before crossing — and that is a strictly wider set than the boundary. §4b says
+so in those words, so the two are never conflated again.
+
+**If a frontier shorthand is wanted, it is a new field.** `frontierNodeIds`, with its own
+schema entry, its own lint and its own RFC. `spineNodeIds` is not reinterpreted, because a
+field that has already been authored against four times cannot change meaning without
+silently re-grading every run that used it.
 
 #### 3c. One spine resolver, position-keyed, with re-entry
 
@@ -379,14 +473,27 @@ if it is missed:
   (`packages/schema/src/drill-pack/lint.ts:54-60`,
   `apps/server/src/authored-feedback.ts:91-93`). Adding a boundary checkpoint to a pack would
   therefore silence its `AUTHORED_PROSE_AFTER_LAST_CHECKPOINT` warnings by accident. Instead,
-  both learn the trigger: a boundary checkpoint contributes **the boundary closure** — every
-  spine node that is an ancestor-or-self of a `spineNodeIds` entry — to the reachable set,
-  and does not trigger the short-circuit. That is not a widening for convenience; it is the
-  truth, because leaving the book always happens after having been in it, so any node inside
-  the boundary is on some path that ends at a crossing. This is the mechanism the
-  off-spine graceful-degradation row has been waiting for (`design/BACKLOG.md:166`).
-  The two implementations are the same algorithm twice, so they move into `line.ts` beside
-  the resolver and a test asserts one output.
+  both learn the trigger: a boundary checkpoint contributes the **ancestor closure of
+  `spineNodeIds`** — every listed id plus every spine ancestor of a listed id — to the
+  reachable set, and does not trigger the short-circuit. Both shipped implementations already
+  compute exactly this shape for `atSpineNode`, walking `parentId` upward from the trigger's
+  node (`lint.ts:64-71`, `authored-feedback.ts:95-101`), so the boundary case reuses the walk
+  with a different set of starting ids.
+
+  **This closure is deliberately wider than the boundary of §3b, and the two must not be
+  confused.** §3b answers "does the pack support this node" and is set membership. This
+  answers "can a run stand on this node before it crosses", and an unlisted ancestor of a
+  listed node is a node every run must pass through on its way there. Support and
+  reachability are different questions; the earlier draft's error was answering the first
+  with the second's relation. Under membership the widening is also the honest one: prose on
+  a node a run must traverse is deliverable prose, whether or not the pack claims support for
+  it. This is the mechanism the off-spine graceful-degradation row has been waiting for
+  (`design/BACKLOG.md:167`). The two implementations are the same algorithm twice, so they
+  move into `line.ts` beside the resolver and a test asserts one output. After §10a every
+  pack in the tree lists every spine node it uses, so on shipped content the closure and the
+  membership set coincide; the test therefore pins the difference on a fixture that lists a
+  depth-3 node without its two ancestors, so a future "simplification" that merges the two
+  functions fails on a case that shipped content cannot show.
 
 #### 4c. What `mode: "line"` branches: the recall contract
 
@@ -414,6 +521,20 @@ This closes Motivation §2d for `mode: "line"` and, as a free consequence, remov
 of any client to hand `theory_strict` a spine the server never validated. Non-line packs keep
 projecting their spine — the Najdorf fixture's `spine` is asserted node-by-node at
 `drill-client-server.test.ts:163-175` — so the blast radius is Line Drills only.
+
+**`packId` joins the selection cache key, and that is a prerequisite for §8.**
+`selectionCacheKey` is `(policyConfigDigest, seed, historyHash)`
+(`opponent-selector.ts:183-187`, documented at `docs/engine-workers.md:130`). The spine has
+never been in it. Today that is survivable by accident: the client sends the **pack digest**
+as `policyConfigDigest` (`session-controller.ts:392`), and a pack digest determines a spine,
+so a well-behaved client cannot collide. It is survivable only by accident, because
+`policy.spine` was a free-form request field and nothing tied it to the digest. Once the
+spine is resolved from `packId`, the key must cover `packId` or a caller can pair one pack's
+id with another pack's digest and receive a cached selection computed against the wrong
+spine — and, after §8, a **recorded applied mode** computed against the wrong spine. The key
+becomes `(policyConfigDigest, packId ?? "", seed, historyHash)`, `docs/engine-workers.md:130`
+is corrected to match, and a test asserts two requests differing only in `packId` do not
+share a cache entry.
 
 ### 5. Runtime: one new predicate
 
@@ -479,7 +600,7 @@ export function lineMembership(
 It walks `historyFrom(run, nodeId)` (`packages/runtime/src/runtime.ts:471-479`) and is a
 derived read-back shape exactly like `OpponentMoveReadback`
 (`packages/runtime/src/replay.ts:21-28`) — computed from what is stored, never stored. That
-is what makes §11 true.
+is what makes §11c true.
 
 ### 6. Grading: what reaches the objective, and what may not
 
@@ -562,7 +683,7 @@ Every objective transition requires at least one non-empty reference
   vocabulary.
 - Rule 1 needs a reference that is not a checkpoint id. It may **not** be
   `pack:deviation-<n>`: the salvaged rule "`pack:` must split per id space"
-  (`design/BACKLOG.md:164`) applies exactly here, and a checkpoint may legally be named
+  (`design/BACKLOG.md:165`) applies exactly here, and a checkpoint may legally be named
   `deviation-3`. A prefix scheme inside `pack:` would invalidate every persisted reference.
   So a fourth namespace is added beside `rules:`, `pack:` and `engine:`:
 
@@ -591,7 +712,7 @@ export function theoryEvidenceRef(fact: TheoryEvidenceFact): `theory:${TheoryEvi
   `theory:` reference renders its own sentence rather than the fallback.
 
 `drill_run.schema.json:78-81` types `evidenceRefs` items as plain non-empty strings, so
-`theory:off-objective-deviation` needs no run-schema change (§11).
+`theory:off-objective-deviation` needs no run-schema change of its own (§11c).
 
 ### 7. Validation, and D7 closed
 
@@ -621,7 +742,7 @@ because widening a guard silently is how the divergence class this repo tracks b
 
 #### 7b. D7 — deviations become grading inputs, so they get linted
 
-`design/BACKLOG.md:129` records the defect: "**no lint checks that a deviation's `moveUci` is
+`design/BACKLOG.md:130` records the defect: "**no lint checks that a deviation's `moveUci` is
 even legal in its anchor position, or that it belongs to the side to move**. An author can
 ship an illegal deviation, or one for the wrong colour, and `pack-check` passes." Verified
 today: `lintDrillPack` checks only that the anchor id exists
@@ -640,6 +761,7 @@ a second time.
 | `DUPLICATE_DEVIATION` | error | two entries share an anchor and a `moveUci`. The schema permits it (`drill_pack.schema.json:58-61`, an array with no uniqueness constraint) and it was harmless while deviations were prose; with §2's verdicts it means one move has two classes |
 | `DEVIATION_SHADOWS_SPINE_MOVE` | warning | the `moveUci` equals an authored child of the anchor node (§2's precedence rule) |
 | `SPINE_TRANSPOSITION_COLLISION` | warning | two authored nodes reach one position (§3c) |
+| `BOUNDARY_NODE_BEYOND_HORIZON` | warning | a `spineNodeIds` entry whose spine depth exceeds `plyHorizon`, at any objective type. Membership grants it and the cap kills it, so it can never be inside — dead ink the author almost certainly did not intend (§3a) |
 | `THEORY_DEVIATION_NEEDS_SPINE_ANCHOR` | error, runtime | under `follow_theory`, a deviation anchored by `at: {fen}`. Scope boundary table |
 
 **Wrong side is reported separately from illegality on purpose, and the distinction is not
@@ -652,7 +774,8 @@ inventing a second one.
 
 **Blast radius, verified by executing the checks against every pack and fixture in the
 tree:** all 28 deviations across the four spine-bearing packs are legal and on the side to
-move, there are no duplicates, and there are no spine transposition collisions. The one hit
+move, there are no duplicates, there are no spine transposition collisions, and no pack lists
+a boundary node beyond its own horizon (§3a records the depths). The one hit
 is `DEVIATION_SHADOWS_SPINE_MOVE` on the served schema example's single deviation
 (`schemas/drill_pack.example.json:126-131` against `:59-64`), which is why that code is a
 warning. The error codes therefore need negative fixtures rather than existing content, and
@@ -663,53 +786,156 @@ short-circuit that suppressed the warning for any non-`atSpineNode` checkpoint n
 contributes the boundary closure instead, so a boundary checkpoint no longer blinds the
 warning it was going to blind.
 
-### 8. Requested resistance, recorded engine, and the fallback nobody can hear
+### 8. Three facts about the opponent, and D15 closed
 
-This section inherits `rfc/archive/outcome-drill-grading.md` §8a in full and adds one fact
-that only Line Drill makes urgent. Nothing here weakens it and nothing here is new honesty
-machinery.
+`rfc/archive/outcome-drill-grading.md` §8a established that the product held exactly **two**
+facts about the opponent — the policy that was *requested* and the engine that *ran* — and
+that the third, the policy that was actually *applied*, was not recorded anywhere. It named
+persisting that third fact as "the right eventual fix", refused it to protect its
+no-migration scope, and shipped a disclaimer instead.
 
-**The two facts remain two facts.** `run.opponentPolicy` (`packages/runtime/src/types.ts:225`,
-copied from the pack at `apps/server/src/service.ts:187-196`) is a **request**, recorded once.
-`opponent.move_selected.selection.engine` (`types.ts:63-69`) is the **engine** that produced
-each reply. `resistanceOnPath` derives the second from the committed-child pairing
-(`packages/runtime/src/replay.ts:94-122`) and `resistanceSentences` renders both plus the
-fixed disclaimer "The run records which engine played, not which policy it applied…"
-(`apps/web/src/lib/outcome-presentation.ts:60-81`). Line Drill reuses that function
-unchanged.
+**Owner ruling 2026-08-12: this RFC reverses that refusal deliberately.** A disclaimer admits
+a gap; it does not close one. For a mode whose subject is theory, the fallback must be
+**recorded**, not merely admitted, and the migration is worth paying. The outcome RFC's §8a
+*rendering* rule survives intact and unweakened — state each fact as itself, claim nothing you cannot evidence
+— and now has a third fact to render.
 
-**The `theory_strict` fallback is audible only to the server's stdout.** `#theoryStrict`
-calls `console.warn("DEGRADED_THEORY_SPINE: position is off the authored spine; falling back
-to human_common")` and then returns `#humanCommon(request)`
-(`apps/server/src/opponent-selector.ts:453-460`), asserted at
-`apps/server/src/opponent-selector.test.ts:341-345`. That warning was made audible by
-`rfc/archive/pack-optional-runs.md` §5 for pack runs, and "audible" means exactly one thing:
-a line in the server log. **It reaches no event, no run, no response and no screen**, and the
-fallback re-enters the same `#maia` call against the same `maiaEngineId`
-(`opponent-selector.ts:428-435`), so both policies stamp an identical engine identity and no
-reader of the log can tell them apart. This RFC states that and does not guess.
+#### 8a. `policyModeApplied`
 
-**One Line-Drill-specific rule is added, and it is a claim about the pack, not about what
-ran.** Whenever the pack's requested mode is `theory_strict`, the resistance line carries:
+`OpponentSelection` (`packages/runtime/src/types.ts:72-76`) gains one **required** field:
 
-> "`theory_strict` has authored replies only inside this pack's spine. Past that, the run
-> records which engine replied and not which policy chose the move."
+```ts
+export type PolicyModeApplied =
+  | "human_common"
+  | "strong_engine"
+  | "theory_strict"
+  | "unknown";
 
-Both halves are verifiable without inference: the first from `spineChildren`
-(`opponent-selector.ts:337-347`), the second from §8a. The sentence deliberately does **not**
-say the fallback fired, because two independent conditions govern that and they are not the
-same condition:
+export interface OpponentSelection {
+  readonly moveUci: string;
+  readonly candidates?: readonly SelectionCandidate[];
+  readonly engine: SelectionEngineIdentity;
+  readonly policyModeApplied: PolicyModeApplied;   // new, required
+}
+```
 
-- `plyHorizon` caps **authored support** and the selector has never heard of it
-  (`grep -rn plyHorizon apps/server/src` returns nothing);
-- `spineChildren` governs **authored replies** and depends only on whether the position is in
-  the spine index.
+The three real values are `SUPPORTED_POLICY_MODES` (`apps/server/src/capabilities.ts:10-14`)
+and the type is derived from that constant rather than re-typed, so a fourth policy mode
+cannot ship without this field learning it — the consumer-tied-vocabulary rule D4 exists to
+enforce, applied where it is cheap.
 
-So a pack whose horizon is shorter than its spine depth is past its authored boundary while
-the opponent is still playing book, and a pack that transposes back in is inside the spine
-index again. Claiming "you faced `human_common` from ply 15" would be false in the first case
-and unprovable in both. **The product knows where its own authored support ends. It does not
-know which policy produced any move, and that has not changed.**
+**Stamped at exactly three sites, all inside the selector, each naming the branch it is in.**
+`makeSelection` (`opponent-selector.ts:266-276`) takes the applied mode as a required
+argument, so the field cannot be forgotten and cannot be defaulted. Four paths reach those
+three sites:
+
+| Call site | Records |
+|---|---|
+| `#humanCommon` (`opponent-selector.ts:428-435`), reached from `#selectUncached` case `human_common` (`:391`) | `human_common` |
+| `#strongEngine` (`:437-451`), case `strong_engine` (`:393`) | `strong_engine` |
+| `#theoryStrict` **after** `spineChildren` returned children (`:453-486`) | `theory_strict` |
+| `#theoryStrict` **fallback**, the `return this.#humanCommon(request)` at `:459` | `human_common` — the mode that was **applied**, never the mode that was requested |
+
+The fallback row is the whole point and is the one that needs no special code: because
+`#humanCommon` stamps `human_common` itself, a `theory_strict` request that falls back
+records `human_common` by construction. The only way to get it wrong is to stamp the mode in
+`#selectUncached` from `request.policy.mode`, which is the requested mode; acceptance
+criterion 12 asserts the off-spine path specifically so that mistake fails.
+
+Two properties this field has for free, and both are worth stating because neither was
+available before:
+
+- **It also captures the client's capability downgrade.** `selectorMode`
+  (`session-controller.ts:116-134`) may send `human_common` where the pack requested
+  `theory_strict`, and the selector records what it executed. The pack's request stays in
+  `run.opponentPolicy`; the applied mode is now separately visible. The gap the outcome RFC's
+  §8a described as "never written to the run at all" closes on both of its causes, not just
+  the fallback.
+- **It is relayed by the client, exactly as `engine` already is.** `/select-move` returns the
+  selection, the client forwards it verbatim to `POST /runs/:id/moves`
+  (`session-controller.ts:404`, `apps/web/src/lib/run-state.ts:167-179`), and
+  `parseOpponentSelection` (`apps/server/src/rest.ts:147-166`) parses it. The trust level of
+  `policyModeApplied` is therefore identical to that of `engine`, neither better nor worse,
+  and this RFC claims no more than that. `parseOpponentSelection` **requires** the field and
+  rejects a selection without one; it is not a `closedRecord`, so an unparsed field would
+  have been silently dropped rather than rejected, which is why the parser must be extended
+  and not only the JSON Schema.
+
+#### 8b. What the run schema, the cache and the migration do
+
+- **Run schema.** `opponentSelection` is `additionalProperties: false`
+  (`schemas/drill_run.schema.json:128-141`), so the field must be added to `properties` and
+  to `required`; there is no way to add it that leaves v0.6 snapshots valid, which is what
+  makes migration 5 mandatory rather than optional. `$id` becomes
+  `urn:chess-tabiya:schema:drill-run:0.7` and `DRILL_RUN_SCHEMA_VERSION` becomes `"0.7"`
+  (`packages/schema/src/index.ts:1`). Checked for further consequences: nothing beyond the
+  bump. No runtime code validates a run against the JSON Schema — the only reader is
+  `packages/schema/src/drill-run.test.ts:10`, so the schema is a contract document enforced
+  by tests plus the TS type. The one committed run fixture,
+  `schemas/fixtures/drill-run/opponent-selection-missing-seed.invalid.json`, is v0.6 and
+  carries a selection; it is bumped and given the field, and it keeps failing for its own
+  original reason.
+- **Selection cache.** The cache stores `Promise<OpponentSelection>` keyed by
+  `selectionCacheKey` (`opponent-selector.ts:183-187`, `:373-382`). The applied mode is a
+  pure function of the requested mode, the spine and the position, and all three are
+  determined by the key **once `packId` is in it** (§4c). So the cache needs no further
+  change: a hit returns the same applied mode the miss computed, and the same position played
+  twice cannot record two different modes. A test asserts a warm hit returns
+  `policyModeApplied` unchanged and that `cacheSize()` (`:384-386`) is still 1.
+- **Migration 5** writes `"unknown"` and never anything else — §11.
+
+#### 8c. Rendering: request and applied mode are stated separately
+
+`PathResistance` (`packages/runtime/src/replay.ts:89-92`) gains a third member beside
+`requested` and `engines`:
+
+```ts
+export interface AppliedPolicyCount {
+  readonly mode: PolicyModeApplied;
+  readonly plyCount: number;
+}
+// PathResistance: { requested, applied: readonly AppliedPolicyCount[], engines }
+```
+
+`opponentMovesFromEvents` carries `selection.policyModeApplied` onto `OpponentMoveReadback`
+(`replay.ts:35-64`, `:21-28`) and `resistanceOnPath` (`replay.ts:94-122`) counts it per path
+with the same committed-child pairing it already uses for engines. Derived, never stored
+twice.
+
+`resistanceSentences` (`apps/web/src/lib/outcome-presentation.ts:60-81`) renders three facts
+in a fixed order. The request line and the engine lines are unchanged, verbatim. Between them:
+
+- **Every ply on the path records a real mode** — "Applied policy: `theory_strict` for 6
+  plies, `human_common` for 3 plies — recorded per move by the selector." When a single mode
+  covers the path, the count is omitted.
+- **Any ply on the path records `unknown`** — "3 of these plies predate policy recording."
+  followed by the outcome RFC's §8a sentence, printed **verbatim and unchanged**: "The run
+  records which engine played, not which policy it applied, so this names the engine, not proof that
+  the requested policy produced these moves." That sentence remains exactly true of exactly
+  those plies, which is the only place it is still true.
+- **`unknown` is never inferred and never counted as a mode.** It is not rendered as a
+  fourth policy, not attributed to the requested mode, and not attributed to the engine
+  identity that happened to play. A migrated run says its plies predate recording and says
+  nothing else about them.
+- The archived sentence therefore stops being unconditional. That is the point of the
+  ruling, and `outcome-drill-grading` criterion 11b's verbatim assertion is not deleted but
+  **narrowed to migrated runs**, where it still holds byte-for-byte (criterion 13).
+
+The `theory_strict` pack sentence from the previous draft is **withdrawn and replaced**, not
+kept. It said "the run records which engine replied and not which policy chose the move" —
+which is now false. In its place, whenever the pack's requested mode is `theory_strict`, the
+line carries a claim about the pack that the run can still not answer:
+
+> "`theory_strict` has authored replies only inside this pack's spine. `plyHorizon` caps
+> authored *support*; the spine index governs authored *replies*; the two can end at
+> different plies."
+
+That remains worth saying because the two conditions really are independent: `plyHorizon` is
+unknown to the selector (`grep -rn plyHorizon apps/server/src` returns nothing) while
+`spineChildren` (`opponent-selector.ts:337-347`) depends only on the spine index, so a pack
+past its boundary may still be getting book replies and a pack that transposes back is inside
+the index again. What has changed is that "which policy chose the move" is no longer a
+question the product has to decline — it is now recorded, per ply, and rendered.
 
 **The resistance line is ungated for Line Drill.** Today the whole outcome-context block is
 rendered only when `objective.grading` exists (`apps/web/src/lib/DrillScreen.svelte:136-142`,
@@ -718,7 +944,7 @@ becomes optional (`apps/web/src/lib/OutcomeContext.svelte:1-17`) and Line Drill 
 resistance and grade with no assessment line, because there is no root assessment to make.
 
 D10 is cited rather than fixed: both shipped Stockfish specs report `version: "unknown"`
-(`design/BACKLOG.md:126`, `apps/server/src/engine-supervisor.ts:111-126`), so a
+(`design/BACKLOG.md:127`, `apps/server/src/engine-supervisor.ts:111-126`), so a
 `strong_engine` Line Drill's resistance line reads `v unknown`. That is honest — it is what
 is recorded — and fixing it is an engine-provenance change with its own blast radius.
 
@@ -830,7 +1056,7 @@ new chess claim**:
   chess content in it. It happens to be deterministic under `ENGINE_MODE=mock`, whose client
   hard-codes replies for this pack's start FEN
   (`apps/server/src/application.ts:146-151`) — that is a property of the test harness, not of
-  the pack, and criterion 15 says so rather than relying on it silently.
+  the pack, and criterion 16 says so rather than relying on it silently.
 
 **Editing the pack changes its digest**, and `#registeredPack` returns `undefined` when a
 stored run's `packDigest` no longer matches (`apps/server/src/service.ts:621-625`). Drafts
@@ -854,25 +1080,116 @@ No Playwright configuration change is needed: `NODE_ENV=development` loads every
 `playwright.config.ts` webServer command), and `DRAFT_PACK_FILE` adds a file on top of that
 directory rather than replacing it.
 
-### 11. No migration
+#### 10a. The served schema example's boundary is fixed by authoring
 
-No persisted run shape changes. No event type is added — verdicts are derived
-(`lineMembership`, §5), exactly as `resistanceOnPath` is
-(`packages/runtime/src/replay.ts:94-122`). The one new predicate is a compiled rule input,
-not a stored value. `objective.state_changed` already carries `evidenceRefs` as plain
-non-empty strings (`schemas/drill_run.schema.json:78-81`, `:418-433`), so
-`theory:off-objective-deviation` needs no schema change.
+`schemas/drill_pack.example.json:114-116` lists two of its five spine nodes:
 
-`DRILL_RUN_SCHEMA_VERSION` stays `"0.6"` (`packages/schema/src/index.ts:1`) and this RFC
-claims **no row in the migration register**. The pack-schema bump to 0.4 is not a persisted
-shape: pack digests are content digests, unaffected by the `$id`
-(`packages/schema/src/drill-pack/digest.ts:58-66`).
+```jsonc
+"spineNodeIds": ["najdorf-b5", "najdorf-be2"],
+```
 
-Two additions deserve explicit clearing because both look persisted and neither is.
-`AuthoredFeedbackItem`'s fourth kind (§9) is a field of a **response projection** computed
-per request from the run and the pack, and `GET /runs/:id/authored-feedback` has no stored
-shape. `packId` on `/select-move` (§4c) is a request field on a stateless endpoint that
-writes nothing (`apps/server/src/rest.ts:544-556`).
+Under §3b that says the pack supports two leaves and not the three nodes every run must play
+to reach them, which is not what the pack means — its own title is "choose a setup and cross
+the theory boundary" and its `plyHorizon: 4` is exactly its own maximum spine depth. The
+replacement lists all five supported nodes:
+
+```jsonc
+"spineNodeIds": [
+  "najdorf-be3", "najdorf-e6", "najdorf-f3", "najdorf-b5", "najdorf-be2"
+],
+```
+
+**This is an authoring fix, not a semantic one.** The three added ids are already in the
+pack's own spine (`drill_pack.example.json:38-73`) at depths 1, 2 and 3, all within
+`plyHorizon: 4`; nothing else in the object changes; the fenPredicate and the cap are
+untouched; and the file's `mode` stays `trajectory` with `objective.type:
+"play_until_checkpoint"`, so none of §7a's `follow_theory` rules apply to it. It makes **no
+chess claim** — the nodes were always on the authored line, and `reviewStatus` stays
+`schema_example`.
+
+Consequences, both stated rather than discovered:
+
+- **The example's digest changes.** It is loaded into the registry
+  (`pack-registry.ts:232`) and used as the fixture by nine test files, and `#registeredPack`
+  returns `undefined` when a stored run's `packDigest` no longer matches
+  (`service.ts:621-625`). The affected population is the same as Pack A's: developer test
+  runs. Same treatment, same precedent.
+- **No projected field changes**, so `drill-client-server.test.ts:137-175` — the key-set
+  assertion and the node-by-node spine assertion — passes untouched. `authoredBoundary` has
+  never been projected (`pack-registry.ts:58-89`) and still is not.
+
+### 11. Run schema v0.7 and migration 5
+
+**Exactly one persisted shape changes: `opponent.move_selected.selection` gains
+`policyModeApplied` (§8).** Everything else this RFC adds is derived or authored, and the
+list is given below so the migration's scope cannot creep.
+
+`DRILL_RUN_SCHEMA_VERSION` `"0.6"` → `"0.7"` (`packages/schema/src/index.ts:1`),
+`drill_run.schema.json` `$id` → `urn:chess-tabiya:schema:drill-run:0.7` (`:3`), and
+`STORAGE_VERSION` 4 → 5 (`apps/server/src/storage.ts:147`). **Migration 5 is claimed for this
+RFC in `rfc/README.md`'s register (line 54); the Active-table row on line 10 saying "no
+migration" is corrected in the same commit.**
+
+#### 11a. Migration 5 — "record unknown, infer nothing"
+
+A fifth entry joins the `migrations` array (`storage.ts:915-936`), following the shape of
+migration 4 exactly: select the rows at the previous version, rewrite the snapshot JSON, set
+`schema_version`.
+
+```
+version: 5, name: "record policyModeApplied as unknown on v0.6 selections"
+```
+
+For every `drill_runs` row with `schema_version = '0.6'` whose snapshot parses and whose
+`schemaVersion` is `"0.6"`: for each event of type `opponent.move_selected`, set
+`data.selection.policyModeApplied = "unknown"` if absent, leave any existing value alone, and
+stamp `schemaVersion: "0.7"`. A run with no opponent selections is stamped and otherwise
+untouched. A row whose snapshot does not parse is skipped, exactly as migration 4 skips one
+(`storage.ts:1069-1080`), and stays quarantined: `#load` and `#list` filter on
+`DRILL_RUN_SCHEMA_VERSION` (`storage.ts:384`, `:440`), so an unmigrated row disappears from
+reads rather than being served in a shape the type says is impossible.
+
+**`"unknown"` is written, never derived.** The migration does not look at the run's
+`opponentPolicy`, does not look at the engine identity, and does not look at whether the
+position was on a spine. All three would be inferences, and inferring provenance is the exact
+failure this field exists to prevent — a stored run that *looks* like it recorded
+`theory_strict` when nothing recorded anything is strictly worse than one that says it does
+not know. A test asserts the migration writes no value other than `"unknown"`, over a fixture
+containing `human_common`, `strong_engine` and `theory_strict` runs.
+
+#### 11b. Migration 4's body is frozen first, and this is a defect the register warns about
+
+`#upgradeV05Runs` writes `DRILL_RUN_SCHEMA_VERSION` — the **constant**, not a literal —
+into both the snapshot and the column (`storage.ts:1091-1092`), while its own name and
+`docs/branch-runtime.md:288` both say it upgrades v0.5 snapshots "to v0.6". Bumping the
+constant to `"0.7"` therefore silently changes migration 4's behaviour on any database that
+has not yet reached it: a v0.5 row would be stamped `0.7` without ever acquiring
+`policyModeApplied`, and migration 5's `WHERE schema_version = '0.6'` would never see it.
+The result is a row that reads as current and is not.
+
+**So migration 4's body is pinned to the literal `"0.6"` before migration 5 is added**, and
+the change is recorded in `rfc/README.md`'s migration register as a body edit, which is what
+that register's second paragraph exists for. A test drives a database at `user_version = 3`
+holding a v0.5 run through both migrations and asserts it arrives at `0.7` **with** the field,
+which is the only ordering that proves the freeze worked.
+
+#### 11c. What is explicitly not persisted
+
+Four additions look persisted and none is:
+
+- **Verdicts.** `lineMembership` (§5) is derived from the run and the pack on read, exactly
+  as `resistanceOnPath` is (`packages/runtime/src/replay.ts:94-122`). No event type is added.
+- **The `deviationPlayed` predicate** (§5) is a compiled rule input, not a stored value.
+- **`theory:off-objective-deviation`** (§6b). `objective.state_changed` already carries
+  `evidenceRefs` as plain non-empty strings (`schemas/drill_run.schema.json:78-81`,
+  `:418-433`), so the new namespace needs no schema change beyond the one §8 already makes.
+- **`AuthoredFeedbackItem`'s fourth kind** (§9) is a field of a **response projection**
+  computed per request; `GET /runs/:id/authored-feedback` has no stored shape. `packId` on
+  `/select-move` (§4c) is a request field on a stateless endpoint that writes nothing
+  (`apps/server/src/rest.ts:544-556`).
+
+The pack-schema bump to 0.4 is likewise not a persisted shape: pack digests are content
+digests, unaffected by the `$id` (`packages/schema/src/drill-pack/digest.ts:58-66`).
 
 ## Deviations from design
 
@@ -897,18 +1214,27 @@ writes nothing (`apps/server/src/rest.ts:544-556`).
    §6a forbids all three for `follow_theory`. The runtime table is left alone because it
    serves nine other objective types and `applyObjectiveEvidenceProposal`
    (`objective.ts:273-299`).
-5. **The `authoredBoundary` semantics are ruled, not designed.** `design/` describes a
-   book boundary but never says whether `spineNodeIds` is a frontier or an interior list.
-   §3b rules for the frontier on the evidence of the four packs that use the field. If the
-   owner intends the other reading, the served schema example needs an authoring fix and this
-   RFC needs a revision — recording the ruling in `design/` is a BACKLOG row for the
+5. **`design/` does not state the `authoredBoundary` semantics; the planning tier does, and
+   this RFC follows it.** `design/01-training-model.md` and `design/03-product-breadth.md`
+   describe a book boundary without saying what `spineNodeIds` contains. The rule lives at
+   `planning/breadth/training-modes.md:236-242`, salvaged from
+   `rfc/withdrawn/authoring-contracts-v03.md:59-73` and ledgered at `design/BACKLOG.md:165`,
+   and §3 implements it unchanged. This is a deviation from design only in the sense that the
+   binding statement sits one tier down; promoting it into `design/` is a BACKLOG row for the
    implementer to **propose**, never to write (`AGENTS.md` law 5).
-6. **D7 is a ledgered defect** (`design/BACKLOG.md:129`), specified and closed here. Marking
-   that row closed, and adding the rows this RFC asks for — a rating dimension on deviations
-   (item 3), a theory/idea aggregate with a named consumer (item 1), the `authoredBoundary`
-   semantics ruling (item 5), and the fact that `AUTHORED_PROSE_AFTER_LAST_CHECKPOINT` and
-   `reachableSpineIds` were two copies of one algorithm (§4b) — are `design/` edits: the
-   implementer **proposes them as BACKLOG rows** and does not write them.
+6. **D15's closure reverses a decision an implemented RFC recorded.**
+   `rfc/archive/outcome-drill-grading.md` §8a refused `policyModeApplied` to preserve its
+   no-migration scope and named it the future path; §8 adds it on the owner's ruling that the
+   migration is worth paying. The archive is immutable, so that RFC is not edited: the
+   reversal is stated here, in `docs/outcome-drill-grading.md` (criterion 19), and in the
+   BACKLOG row the implementer **proposes** marking D15 closed.
+7. **D7 is a ledgered defect** (`design/BACKLOG.md:130`), specified and closed here. Marking
+   that row closed and D15's (`:126`), and adding the rows this RFC asks for — a rating
+   dimension on deviations (item 3), a theory/idea aggregate with a named consumer (item 1),
+   a structured fallback-reason vocabulary with a consumer (Scope boundary), and the fact
+   that `AUTHORED_PROSE_AFTER_LAST_CHECKPOINT` and `reachableSpineIds` were two copies of one
+   algorithm (§4b) — are `design/` edits: the implementer **proposes them as BACKLOG rows**
+   and does not write them.
 
 ## Acceptance criteria
 
@@ -919,13 +1245,15 @@ writes nothing (`apps/server/src/rest.ts:544-556`).
    classified deviation at ply 3; an unclassified move at ply 3; and a move past the horizon
    while still on the spine. The fourth case asserts `verdict: "on_line"` is **not**
    returned once the cap binds — the mechanical form of "plyHorizon caps".
-2. **The boundary evaluator, against every shipped pack.** A test loads all four
-   spine-bearing packs (`schemas/drill_pack.example.json` and the three drafts), walks each
-   authored path, and asserts every authored node inside its own declared boundary — which
-   holds only under §3b's frontier reading. The same test asserts, against the schema
-   example specifically, that the membership reading of `spineNodeIds` would place
-   `najdorf-be3` outside while `najdorf-b5` is inside, and states in a comment that this is
-   the contradiction §3b exists to resolve.
+2. **Membership, against every shipped pack.** A test loads all four spine-bearing packs
+   (`schemas/drill_pack.example.json` after §10a, and the three drafts), walks each authored
+   path, and asserts `insideAuthoredBoundary` is true at a node **iff** its resolved id is
+   listed in that pack's own `spineNodeIds` and its ply is within `plyHorizon` — no closure,
+   no ancestry. Because §10a makes every pack list every node, the expected result is "every
+   authored node inside" for all four, and the test states the two conditions separately so
+   it fails if either is dropped. A second case runs the same evaluator against a fixture
+   listing a depth-3 node without its ancestors and asserts those two ancestors are
+   **outside**, which is the assertion that fails under the withdrawn frontier reading.
 3. **Transposition and re-entry.** On a fixture whose spine can be reached by two move
    orders: a run that plays the transposed order resolves the same spine node ids, fires the
    same `atSpineNode` checkpoints, and reveals the same annotations as the main order. A
@@ -935,12 +1263,16 @@ writes nothing (`apps/server/src/rest.ts:544-556`).
    `atAuthoredBoundary` checkpoint does not fire a second time. Written as the regression for
    Motivation §2c, with a comment naming the prefix-strict walk it replaces so it cannot be
    "simplified" back into the bug.
-4. **One resolver, three call sites.** A test drives a path that leaves and re-enters the
-   spine and asserts that the orchestrator's spine id, the authored-feedback projection's
-   spine id, and `timelineEntries`' `spineNodeId` are equal at every node; and a second test
-   asserts the same for the boundary-closure reachability used by `lintDrillPack` and
-   `reachableSpineIds`. Two implementations of one vocabulary is the D4 shape and is being
-   removed, not reintroduced.
+4. **One resolver, three call sites; and reachability is not membership.** A test drives a
+   path that leaves and re-enters the spine and asserts that the orchestrator's spine id, the
+   authored-feedback projection's spine id, and `timelineEntries`' `spineNodeId` are equal at
+   every node; a second asserts the same single output for the ancestor-closure reachability
+   used by `lintDrillPack` and `reachableSpineIds`; and a third asserts, on criterion 2's
+   ancestors fixture, that the reachability closure **contains** the two ancestors that
+   `insideAuthoredBoundary` puts outside. Two implementations of one vocabulary is the D4
+   shape and is being removed, not reintroduced; one implementation of two different
+   questions is the error this RFC was revised to fix, and the third assertion is what stops
+   it recurring.
 5. **Grading reaches exactly two states, and never an absorbing one.** Table-driven over a
    `follow_theory` fixture: the authored line to the crossing grades `active → preserved`
    once and never again; an `offObjective` deviation grades `active → degraded`; the two on
@@ -950,14 +1282,17 @@ writes nothing (`apps/server/src/rest.ts:544-556`).
    identical whether the crossing happens on an odd or an even ply.
 6. **The run is not frozen by its own grade.** After the boundary crossing, one further move
    commits. The regression for Motivation §2e, asserted at the runtime and again in the
-   browser (criterion 14), because `TERMINAL_OBJECTIVE_STATES` is what made D12b invisible at
+   browser (criterion 15), because `TERMINAL_OBJECTIVE_STATES` is what made D12b invisible at
    the endpoint.
 7. **Load-time refusals.** Each of §7a's eight codes has a fixture that fails
    `validatePackDocument` with that exact code, and `make pack-check FILE=<fixture>` **exits
    non-zero** for each, asserted on the process exit code rather than the issue list.
    Includes `{"plyHorizon": 0}` alone, `{"plyHorizon": 2}` with every boundary node at depth
    3+, two `atAuthoredBoundary` checkpoints, `follow_theory` at `mode: "plan"`, and a
-   `follow_theory` `successConditions` entry with `to: "achieved"`.
+   `follow_theory` `successConditions` entry with `to: "achieved"`. Separately,
+   `BOUNDARY_NODE_BEYOND_HORIZON` is asserted a **warning** on a fixture whose horizon kills
+   one of several listed ids — `pack-check` exits **zero** — and asserted absent on all four
+   shipped spine-bearing packs.
 8. **D7.** Four negative fixtures — an illegal deviation, a wrong-colour deviation, two
    deviations sharing an anchor and move, and a `follow_theory` pack with a FEN-anchored
    deviation — each fail with their own code and fail `pack-check` on the exit code. A
@@ -984,34 +1319,70 @@ writes nothing (`apps/server/src/rest.ts:544-556`).
     "Unknown is not a judgement" sentence verbatim and contains none of `mistake`, `wrong`,
     `inaccuracy`, `blunder`, `best`, `engine`, `correct`; that a `classified_deviation`
     renders the author's class string verbatim and adds no severity word; that a
-    `theory_strict` pack renders the §8 sentence about authored replies; and that
+    `theory_strict` pack renders the §8c sentence about authored replies; and that
     `theory:off-objective-deviation` renders its own sentence rather than
     `renderEvidenceRef`'s `"Evidence recorded."` fallback (`evidence-sentences.ts:102-106`).
-12. **No policy claim is manufactured.** With `ENGINE_MODE=mock`, a `theory_strict`
-    `follow_theory` pack driven past its authored boundary renders the request and the mock
-    engine identity as two separate facts, carries the §8a rule 5 disclaimer verbatim, and
-    contains no sentence asserting that `human_common` produced any move — asserted as a
-    forbidden substring. The direct inheritance of `outcome-drill-grading` criterion 11b.
-13. **Existing packs and runs are unaffected.** Every pack file in the repo — the schema
-    example, the five drafts and the four candidates — loads and validates under v0.4,
-    asserted by a test that walks the tree. `content/candidates/d35-queen-s-gambit-declined-exchange-variation/pack.json`
+12. **`policyModeApplied` is recorded, and D15's specific path is the named case.** Five
+    assertions, the fourth of which is the defect:
+    - **Selector.** `/select-move` with `mode: "human_common"` returns
+      `policyModeApplied: "human_common"`; with `strong_engine`, `strong_engine`; with
+      `theory_strict` at a position **on** the resolved spine, `theory_strict`.
+    - **Persistence.** The selection round-trips client → `POST /runs/:id/moves` → SQLite;
+      `GET /runs/:id` returns the field on the stored event; a selection posted **without**
+      the field is rejected by `parseOpponentSelection` (`rest.ts:147-166`).
+    - **Replay and reload.** `readBackReplay` over the stored event log yields the same
+      `policyModeApplied` per ply; `resistanceOnPath` counts modes per path and not across
+      sibling branches; and a run reloaded by URL after a server restart renders the same
+      applied-policy line.
+    - **The off-spine fallback, specifically.** A `theory_strict` request at a position with
+      no spine children returns `policyModeApplied: "human_common"` — the applied mode, not
+      the requested one — while `run.opponentPolicy.mode` remains `theory_strict`, and the
+      rendered line shows both. Asserted alongside the existing `DEGRADED_THEORY_SPINE`
+      warning assertion (`opponent-selector.test.ts:341-345`) so the log line and the recorded
+      fact are pinned together. **This is D15's closure and it is a blocking criterion.**
+    - **Cache.** Two identical requests produce one `#selectUncached` call
+      (`cacheSize() === 1`) and identical `policyModeApplied`; two requests differing only in
+      `packId` do not share an entry (§4c).
+13. **Migration 5 records `unknown` and infers nothing.** A database at `user_version = 4`
+    holding v0.6 runs whose selections were made under `human_common`, `strong_engine` and
+    `theory_strict` migrates to `user_version = 5`; every selection reads
+    `policyModeApplied: "unknown"` and **no other value appears anywhere**, asserted as a set
+    equality rather than a spot check. The migrated runs load, list, replay and render, and
+    their resistance line states "predate policy recording" plus
+    `rfc/archive/outcome-drill-grading.md` §8a rule 5's sentence **byte-identical** — the narrowed home of
+    the archived assertion. A second database at `user_version = 3` holding a v0.5 run passes
+    through migrations 4 and 5 and arrives at `0.7` **with** the field, which is the
+    regression for §11b's frozen migration-4 body.
+14. **Existing packs and runs are unaffected in every way that is not the migration.** Every
+    pack file in the repo — the schema example, the five drafts and the four candidates —
+    loads and validates under v0.4, asserted by a test that walks the tree.
+    `content/candidates/d35-queen-s-gambit-declined-exchange-variation/pack.json`
     is asserted byte-identical after re-running its emitter, and
     `make sourcing-check DIR=content/candidates/d35-queen-s-gambit-declined-exchange-variation`
     still passes, so `mode: "line"` without `follow_theory` costs the pipeline nothing. The
     browser assertion `active → achieved` (`tests/browser/drill.spec.ts:148`) still passes,
     and both existing Pack A browser tests (`drill.spec.ts:312-339`, `:341-373`) pass with
-    their current assertions unchanged.
-14. **Browser test — the crossing reaches the screen, and the drill continues.**
-    `content/drafts/line-boundary.browser.json` is played in Playwright. Asserted before the
+    their current assertions unchanged. Any shipped assertion of the outcome RFC's §8a rule 5
+    sentence on a **new** run is updated to the applied-mode form of §8c and to nothing else —
+    no rendering rule is deleted.
+15. **Browser test — the crossing reaches the screen, the drill continues, and the applied
+    policy is visible.** `content/drafts/line-boundary.browser.json` is played in Playwright.
+    Asserted before the
     first move: the resistance line states the request, says no opponent move has been
-    played, and names no engine. Asserted at the capped crossing — which happens **while the
+    played, and names no engine — **and states no applied policy**, because none has been
+    applied. Asserted at the capped crossing — which happens **while the
     move is still on the authored line**, so the fixture proves the cap and not merely
     "you left the book": the checkpoint sheet shows the boundary checkpoint's label; the
     revealed verdicts show `on_line` for the earlier plies; and after pressing Continue the
     learner **makes one further move that commits**. Then an unclassified move is played and,
     at the next reveal, the `unknown` verdict and the "Unknown is not a judgement" sentence
     are both visible, and none of the forbidden strings appear anywhere on the page.
-15. **Browser test — Pack A on the screen.** Pack A v0.2.0 is opened from `content/drafts/`
+    Finally — the browser half of D15 — the fixture is played **off its spine** so the
+    `theory_strict` fallback fires, and the page shows the requested mode and the applied
+    modes as two separate statements, with `human_common` named for the fallback plies and
+    the "predate policy recording" sentence **absent**, because nothing on this path is
+    `unknown`.
+16. **Browser test — Pack A on the screen.** Pack A v0.2.0 is opened from `content/drafts/`
     in development. Asserted: `GET /packs/anti-caro-advance-c5-race` from the page's own
     request context returns `spine: []`, so the authored line is not in the browser; the two
     existing assertions at `drill.spec.ts:328-338` still hold at `plan-commitment`; then,
@@ -1023,25 +1394,41 @@ writes nothing (`apps/server/src/rest.ts:544-556`).
     `MockEngineClient` hard-codes replies for this pack's start FEN
     (`apps/server/src/application.ts:146-151`), so a future engine change fails it loudly
     rather than flakily.
-16. **No migration.** A test asserts `DRILL_RUN_SCHEMA_VERSION === "0.6"`,
-    `DRILL_PACK_SCHEMA_VERSION === "0.4"`, that a run stored before this change replays
-    unchanged, and that `rfc/README.md`'s migration register gains no row.
-17. `ENGINES_REQUIRED=1 make verify` green; `make test-browser` green with `retries` still
+17. **The version bump is exactly one migration wide.** A test asserts
+    `DRILL_RUN_SCHEMA_VERSION === "0.7"`, `DRILL_PACK_SCHEMA_VERSION === "0.4"`,
+    `drill_run.schema.json`'s `$id` at `0.7`, `STORAGE_VERSION === 5`, and that
+    `rfc/README.md`'s migration register holds **one** row for this RFC (migration 5) plus the
+    recorded body edit to migration 4 — and that the Active-table row no longer says "no
+    migration". `schemas/fixtures/drill-run/opponent-selection-missing-seed.invalid.json` is
+    asserted still invalid at v0.7 for its original reason, and a v0.7 run **without**
+    `policyModeApplied` on a selection is asserted invalid, which is what makes the field
+    required rather than decorative.
+18. `ENGINES_REQUIRED=1 make verify` green; `make test-browser` green with `retries` still
     unset (`playwright.config.ts`), run three consecutive times;
-    `make pack-check FILE=content/drafts/anti-caro-advance.json` green.
-18. **Docs.** `docs/drill-pack-format.md` documents v0.4, `follow_theory`, the
-    `atAuthoredBoundary` trigger, the authored-boundary evaluator and its frontier/cap rules,
-    and the new validation and lint codes; `docs/branch-runtime.md` documents the
+    `make pack-check FILE=content/drafts/anti-caro-advance.json` and
+    `make pack-check FILE=schemas/drill_pack.example.json` green.
+19. **Docs.** `docs/drill-pack-format.md` documents v0.4, `follow_theory`, the
+    `atAuthoredBoundary` trigger, the authored-boundary evaluator and its
+    membership/predicate/cap rules, and the new validation and lint codes;
+    `docs/branch-runtime.md` documents the
     `deviationPlayed` predicate, `lineMembership` and `spineNodeIdFor` as derived read-back
-    shapes, and the `follow_theory` no-absorbing-state law beside the outcome monotone law;
-    `docs/drill-client.md` documents the withheld spine for `mode: "line"`, the `packId` form
+    shapes, the `follow_theory` no-absorbing-state law beside the outcome monotone law, run
+    schema v0.7 with `policyModeApplied`, and migration 5 beside migrations 3 and 4 — with
+    line 288's "to v0.6" corrected to name the frozen literal (§11b); `docs/drill-client.md`
+    documents the withheld spine for `mode: "line"`, the `packId` form
     of `/select-move`, the verdict item kind and the "Unknown is not a judgement" sentence;
+    `docs/engine-workers.md` replaces line 127's "`authoredBoundary` affects later feedback
+    voice, not selection" with the boundary evaluator's actual role, records that the
+    `theory_strict` fallback now stamps `policyModeApplied: "human_common"`, and corrects the
+    cache key at line 130 to include `packId`;
     `docs/explanation-grounds.md` corrects its claim that `GET /packs/:id` carries no pre-play
     commentary (line 92-96) to say that the authored spine is projected for every mode except
     `line`, records the `theory:` namespace against its no-new-vocabulary claim (lines
     151-153), and replaces its "FEN-anchored deviations remain absent" boundary item (line
     120-123) with the `follow_theory` refusal; `docs/outcome-drill-grading.md` gains a
-    pointer noting that the monotone law now has a second, stricter sibling.
+    pointer noting that the monotone law now has a second, stricter sibling **and** that its
+    own §8a epistemic gap is closed by run schema v0.7, with the archived disclaimer now scoped to
+    plies recorded as `unknown`.
 
 ## Open questions
 
@@ -1056,3 +1443,38 @@ None.
   with `unknown` as a first-class rendered verdict, delivery through the shipped reveal
   contract, the withdrawal of the authored line from the wire projection for `mode: "line"`,
   and D7's closure. Advances the pack schema to v0.4 and claims no migration.
+- 2026-08-12: revised on two owner rulings.
+
+  **Ruling 1 — `authoredBoundary` means membership, not frontier.** The draft's §3b read
+  `spineNodeIds` as a frontier (ancestor-or-self closure of the listed ids) because that was
+  the only reading under which all four packs using the field were internally coherent, and
+  flagged the reading as its second-riskiest item. The flag surfaced it and the owner
+  overruled it on evidence outside those four files: `planning/breadth/training-modes.md:236-242`
+  already defines authored territory as "`spineNodeIds` contains it OR a FEN predicate
+  matches", salvaged verbatim from `rfc/withdrawn/authoring-contracts-v03.md:59-73`, and three
+  of the four packs encode membership. **The descendant-paradox argument was sound reasoning
+  from incomplete evidence, not a correct reading**; the reading was always membership and the
+  served schema example is a lone bad encoding in a `schema_example`. §3 now implements
+  membership + predicate grants under a non-granting cap; §3b is rewritten; §10a fixes the
+  example by listing all five of its supported nodes; §4b keeps ancestor-or-self but only for
+  *reachability*, and says in those words that reachability is a wider question than support;
+  §3a gains `BOUNDARY_NODE_BEYOND_HORIZON`, a class that is only sharp under membership;
+  acceptance criteria 2, 4 and 7 are rewritten to assert membership and to pin the
+  reachability/membership difference on a fixture, since shipped content no longer shows it.
+  A frontier shorthand, if ever wanted, gets its own `frontierNodeIds` field and its own RFC.
+
+  **Ruling 2 — D15 closes here and blocks acceptance.** The draft's §8 stated the request and
+  the engine as two facts and added an honest disclaimer. The owner ruled that for a mode
+  whose subject is theory the fallback must be **recorded**, not merely admitted. §8 now adds
+  `policyModeApplied` (`human_common | strong_engine | theory_strict | unknown`) to
+  `opponent.move_selected.selection`, stamped inside the selector at four call sites so an
+  off-spine `theory_strict` fallback records `human_common` — the applied mode, never the
+  requested one. §8c renders requested and applied as separate facts; §11 pays run schema v0.7
+  and migration 5, which writes `unknown` onto historical selections and **never infers** one,
+  and freezes migration 4's body to the literal `"0.6"` first so the constant bump cannot
+  silently mis-stamp a v0.5 row. This **deliberately reverses `rfc/archive/outcome-drill-grading.md`
+  §8a**, which refused the same field to protect its no-migration scope and named it the future
+  path; that section's rendering rule survives unweakened and now governs three facts instead
+  of two, with its disclaimer sentence narrowed to the plies that record `unknown`. Header,
+  Scope boundary, §4c's cache key, acceptance criteria 12, 13, 14, 15, 17 and 19, and
+  `rfc/README.md` all follow.
