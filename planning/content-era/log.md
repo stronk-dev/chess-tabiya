@@ -276,3 +276,40 @@ authoring — see defects below. **The chess worked; the platform seams did not.
 Pass (b) human_common off-spine, pass (c) real Stockfish validation (mock
 executor was active — `judge: mock`), pass (d) the dead-field inventory is
 already covered by `field-consumer-matrix.md`.
+
+## 2026-08-12 — CORRECTION to session 2 pass (a) defect labels (claude, from codex review)
+
+Append-only: the entry above is left intact. Two of its four findings were
+mislabeled. Correcting before any of them reaches an RFC, because a mislabeled
+defect propagating into a spec is exactly how the five withdrawn drafts failed.
+
+**Stands as written:**
+
+- **#2 `preserve_plan_window` is inert** — behaviourally confirmed. Correct.
+- **#4 REST playtesting friction** — real, but the label overstated it.
+  `POST /runs` *does* already start from a registered pack and derive
+  `packDigest` and `startFen`. What is missing is a server-derived/default
+  `policyConfig` and run id — a convenience gap, not "no pack-based creation".
+
+**Corrected:**
+
+- **#1 is not an inconsistent-validation bug.** `PolicyConfig` carries only
+  `seedMode` and `locus`. The `policyConfigDigest` sent to `POST /runs` was
+  therefore **silently ignored**, and `/select-move`'s separate required
+  cache-key field validated correctly. The real defect is one level up:
+  **`POST /runs` silently accepts unknown nested fields**, violating the
+  never-silent contract — the same failure shape as the open checkpoint-action
+  vocabulary (author writes something, validator blesses it, nothing happens).
+  Secondary: a naming smell, since the client supplied `packDigest` under the
+  name `policyConfigDigest`.
+- **#3 is not a defect at all.** `GET /runs/:id/graph` is **intentionally
+  event-free**: its documented shape is nodes, branches, cursor, writer id, and
+  nodes retain `checkpointRefs`. Reload is specified to fetch
+  `/events?sinceSeq=0` and rebuild via `projectRun`. So an empty `events` array
+  implies nothing about checkpoint loss. The correct behavioural test is to
+  refresh `/play/run/:id` and verify checkpoint/timeline reconstruction; only a
+  failure *there* is a reload defect. Not yet run.
+
+**Net effect on the next RFC inputs:** the "never-silent request validation"
+item replaces the digest-consistency item; the graph/events item is withdrawn;
+the reload test moves to session 2's pending passes alongside (b) and (c).

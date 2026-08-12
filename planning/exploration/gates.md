@@ -119,14 +119,14 @@ live.
 
 | # | Gate | Status |
 |---|---|---|
-| B1 | Shell and entry: stable Play/Learn/Review/Live/Create/Library/Settings routes; resume works | **met** (app-shell shipped 2026-08-11; status was stale) |
-| B2 | Solo modes: Just Play + Line/Plan/Outcome/Trajectory each complete one fixture run | Plan slice only |
-| B3 | Review: manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise + grounded objective/evidence rendering (explanation-grounds); multi-branch, replay, deep mode, share unmet |
-| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | Stockfish+objective grounds render; **authored prose has no surface — the current bottleneck**; Maia/corpus/Syzygy/LLM unmet |
-| B5 | Live: Twitch host/chat/overlay, academy roles, external Arena handoff | unmet — ordered last; BACKLOG revival conditions still govern |
-| B6 | Create: pack studio/import/review/session-distill produces a validated fixture; corpus mining emits one candidate | schema/lint only |
-| B7 | Return: history/resume, progress, concept scheduling, related retry, recommendations | resume partial |
-| B8 | Platform: desktop shell, responsive/PWA, self-hosted engines/providers, share links, accessibility | deployment partial |
+| B1 | Shell and entry: stable Play/Learn/Review/Live/Create/Library/Settings routes; resume works | **met with residuals** (app-shell shipped 2026-08-11). Alignment pass 2026-08-12: `/settings` has no form control at all, `phase` is never projected to the client (D6), and the drill-address grammar has no route. Residuals belong to the foundation edge |
+| B2 | Solo modes: Just Play + Line/Plan/Outcome/Trajectory each complete one fixture run | Plan only. Line is half-real by accident (`theory_strict` + `atSpineNode` work; no mode-aware entry, no theory grading); Outcome and Trajectory are zero code; Just Play blocked on F2. `mode`/`phase` branch nothing |
+| B3 | Review: manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise + grounded objective/evidence rendering. **Pairwise is a runtime type constraint, not a UI limit** (`compare.ts:49-64`), and N-way cannot be composed from pairwise calls without aligning unrelated plies. Multi-branch, replay, deep mode, share unmet |
+| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | Stockfish+objective grounds render; **authored prose has no surface — the current bottleneck**, blocked on F1. **Not blocked on content**: 6 of 9 contracts pin against merged code (the withdrawn RFC's §1 premise was false — the `SimpleTrigger`→`ObjectivePredicate` seam ships). Maia is already persisted and reaching the browser — a rendering gap. Corpus/Syzygy/LLM unmet |
+| B5 | Live: Twitch host/chat/overlay, academy roles, external Arena handoff | unmet — ordered last. The read-only follower loop already works end to end, so spectating is nearer than this row implies; blocked on D1 (a run link is a write credential), F3 (no subject, so no second role), F1 (overlay needs per-viewer withholding), and PGN import for the Arena return leg |
+| B6 | Create: pack studio/import/review/session-distill produces a validated fixture; corpus mining emits one candidate | validation/lint/digest/graduation/withholding-projection ship; **no pack write endpoint, no `/create` UI, no importer, no distillation, no mining, no review queue**. `content/packs/` is empty |
+| B7 | Return: history/resume, progress, concept scheduling, related retry, recommendations | history/resume/deep-link ship. Everything else blocked on F3 — there is no learner subject anywhere in source and one database table. `transfer.scheduled` is declared with no producer; concept identity does not exist across packs |
+| B8 | Platform: desktop shell, responsive/PWA, self-hosted engines/providers, share links, accessibility | **deployment packaging shipped in full** (compose profiles, GHCR multi-arch, digest-pinned release compose, devcontainer) — this row was understated. Residual is D5 (release compose has no light profile). Overstated on Settings: no form control exists. Share links blocked on D1 |
 
 **Watch item — the Lucas Chess failure mode:** breadth without unifying depth
 produces a mode menu, not a product (our own competitor research named this
@@ -144,3 +144,19 @@ accruing by construction — escalate rather than continue.
 - **Content quality:** coach agreement with objective and accepted alternatives; factual
   error rate in feedback; frequency of "both moves fine, explanation forced" cases;
   opponent coherence rating; manual fixes per generated candidate pack.
+
+**Measurability audit (2026-08-12 alignment pass).** Two metrics above are
+currently unfalsifiable, which makes any verdict resting on them theater:
+
+- *"voluntary return to the same concept"* — no concept can be returned to and
+  no attempt is recorded. `concepts` exists only in the JSON schema, is unique
+  within a single pack, and has no cross-pack identity contract; there is no
+  learner subject and no episode-attempt record (F3). This becomes measurable
+  when B7's attempt record lands, not before.
+- *"second-attempt objective achievement"* — Pack A declares no
+  `objective.successConditions`, so its objective can never transition, and
+  `WhyBanner.svelte` (the only explanation surface, 52 lines) fires only on an
+  objective transition. Neither attempt can succeed or be explained.
+
+Recorded rather than quietly dropped: a success metric with no mechanism behind
+it is exactly the small-n evaluation problem already ledgered in `BACKLOG.md`.

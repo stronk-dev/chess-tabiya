@@ -11,7 +11,7 @@ then nothing reads them.
 |---|:--:|:--:|:--:|:--:|---|
 | `id` `version` `title` | ✓ | ✓ | ✓ (packId/digest) | ✓ | live |
 | `mode` | ✓ | ✗ | ✗ | ✓ (badge) | cosmetic |
-| `phase` | ✓ | ✗ | ✗ | ✓ (badge) | cosmetic |
+| `phase` | ✓ | ✗ | ✗ | ✗ | **dead** — corrected 2026-08-12, see below |
 | `difficulty` | ✓ | ✗ | ✗ | ✓ (badge) | cosmetic |
 | `start.fen` / `movesSan` / `side` | ✓ | ✓ | ✓ | ✓ | live |
 | `objective.type` | ✓ | **partial** | ✓ (state machine) | ✓ | only `reach_checkpoint` translates; `preserve_plan_window` (Pack A's own) is inert |
@@ -21,7 +21,7 @@ then nothing reads them.
 | `concepts` | ✓ | ✗ | ✗ | ✗ | **dead** |
 | `planClasses` | ✓ | ✗ | ✗ | ✗ | **dead** |
 | `checkpoints[].trigger` | ✓ | ✓ | ✓ (`checkpoint.reached`) | ✓ | live |
-| `checkpoints[].actions` | ✓ (open string) | ✗ | ✗ | partial | **operationally unsafe** — see below |
+| `checkpoints[].actions` | ✓ (closed set) | ✓ (load + `pack-check`) | ✗ | partial | closed 2026-08-12 by `ef4cfe6`; residual drift risk, see below |
 | `checkpoints[].interaction` | ✓ | ✗ | ✗ | ✗ | **dead** — incl. `intent_capture`/`planClassIds` |
 | `authoredBoundary` | ✓ | ✗ | ✗ | ✗ | **dead** — no `provenanceMode` consumer |
 | `deviations` | ✓ | ✗ | ✗ | ✗ | **dead** — classes and notes both |
@@ -103,3 +103,37 @@ validator blesses.
 This is a static audit: "evaluated" means production code reads the field, not
 that it behaves correctly. Session 2's play-throughs test behaviour; this table
 tests existence. A field can be ✓ evaluated and still be wrong.
+
+## Corrections — 2026-08-12 (breadth alignment pass)
+
+The matrix was built 2026-08-11 and two rows had gone stale by the time it was
+being used as RFC input. Both re-verified in code today.
+
+**1. `checkpoints[].actions` is no longer an open vocabulary.** Commit
+`ef4cfe6` closed it while fixing the authored-prose leak:
+`SUPPORTED_CHECKPOINT_ACTIONS = Object.freeze(["compare_branches"] as const)`
+(`apps/server/src/pack-validation.ts:11`), and an unrecognized value now raises
+`UNSUPPORTED_CHECKPOINT_ACTION` at load and in `pack-check`
+(`pack-validation.ts:147-156`). Pack A's `"stop"`/`"compare"` were replaced in
+the same commit. The §"Two defects Pack A proved" item 2 is therefore **fixed,
+not open** — do not carry it into an RFC as an outstanding defect.
+
+The residual risk is narrower and different: the server's allow-list and the
+client's recognized-action switch are two hand-maintained lists that currently
+happen to agree. A shared constant, or a test asserting they are identical, is
+what actually prevents the next divergence.
+
+**2. `phase` is not rendered.** The original row claimed a badge. `PackSummary`
+does not carry the field at all (`apps/server/src/pack-registry.ts:16-24`,
+which projects `id`/`version`/`digest`/`title`/`mode`/`difficulty`/
+`reviewStatus`), and `grep -rn "phase" apps/web/src` finds only two unrelated
+prose strings. `mode` and `difficulty` genuinely are rendered as badges
+(`apps/web/src/lib/PackList.svelte:34,38`); `phase` is dead in every column.
+
+This matters beyond a cell: phase is first-class navigation in
+`design/03-product-breadth.md` (Learn = opening / middlegame / endgame /
+trajectories). The one field the IA is organized around is not projected to the
+client.
+
+**Method reminder for future readers:** this instrument is a snapshot, not a
+standing truth. Re-verify a row before quoting it — the code moves under it.

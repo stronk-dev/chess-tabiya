@@ -597,3 +597,66 @@
   external validation of ADR-0006, recorded as evidence rather than as a
   change. Process note: when a research dossier names multiple ideas, ledger
   each one — "single best idea" sections often carry a secondary.
+
+## 2026-08-12 (claude) — breadth alignment pass: six parallel code-verified dossiers
+
+Owner instruction: *"launch subagents to align on the feature foundations, no
+deferrals."* Six parallel passes, one per RFC-program area, each required to
+cite `file.ts:line` for anything claimed to exist and a grep for anything
+claimed absent, and each forbidden from using deferral language. Landed as
+`planning/breadth/` (six dossiers + `synthesis.md`). Every finding reproduced
+below was independently re-verified before it was allowed to change a file.
+
+**The central finding: the missing work reduces to three absent primitives.**
+F1 per-scope reveal (withholding is one boolean per run), F2 pack-optional run
+identity (a pack is mandatory at six layers), F3 a subject (no learner identity
+exists anywhere in source; one database table). Each blocks areas that never
+talk to each other; all three are mutually independent and small in isolation.
+Those are the feature foundations the instruction asked for.
+
+**The structural good news.** Across six independent areas the same shape kept
+appearing: a contract that shipped, was tested, and has zero producers —
+`outcome.reached`, `transfer.scheduled`, `human_model_predicted`,
+`feedback.generated`, `CheckpointInteraction.prediction`, the drill-address
+grammar, the generic predicate evaluator. Breadth-first worked; what remains is
+mostly producers and surfaces, not design. The mirror risk is that such a slot
+reads exactly like a working feature, which is how five RFC drafts died.
+
+**Six beliefs falsified** (details in `synthesis.md` §5). Most consequential:
+B4 is **not** blocked on authored content — the withdrawn
+`authoring-contracts-v03.md` §1 premise is false against shipped code, because
+`pack-orchestrator.ts:39-59` already translates `SimpleTrigger` into the
+runtime's `ObjectivePredicate` and evaluates it. Six of nine contracts pin
+today. Also: the checkpoint-action vocabulary was already closed by `ef4cfe6`
+and was still queued as an RFC input; prediction checkpoints are ledgered as a
+candidate idea although the authored half ships with lint-enforced sparsity;
+Maia policy mass already reaches the browser (a rendering gap, not an
+integration gap); study import is not the fired K10 lever (all 45 friction
+minutes were playtest friction, and `owner-review` is still 0, so no K10 verdict
+is supportable in either direction); B8 deployment packaging shipped in full
+while `/settings` has no form control.
+
+**Six defects opened** as D1–D6 in `BACKLOG.md`. D1 is the one that matters
+beyond bookkeeping: `assertActiveWriter` is string equality, the server
+publishes `activeWriterId` to unauthenticated readers on two endpoints, and no
+authentication exists in source — so a run link is a write credential. Low
+impact on a local box; it hard-blocks every B5 scenario and any shared
+deployment. D2 is latent and becomes live the moment F2 lands, so it must ship
+inside F2.
+
+**Applied:** BACKLOG breadth-surface table now carries a Program column naming
+the owning program item and the verified blocker for every row; the "Deferred
+implementation depth" section is now "Depth beyond the minimal-real version"
+and states the surface is scheduled in both rows; the falsified rows are
+corrected; F1–F3 and D1–D6 have ledger rows. Gate statuses B1–B8 refreshed in
+`gates.md` against verified evidence, and two success metrics are marked
+unfalsifiable-as-stated rather than quietly dropped.
+
+**Process note.** The instrument corrected itself twice this session:
+`field-consumer-matrix.md` had gone stale on two rows in one day, and codex's
+session-2 defect labels needed a correction entry before they reached an RFC. A
+static audit is a snapshot, not a standing truth — re-verify a row before
+quoting it.
+
+**Blocked / next:** four owner rulings in `synthesis.md` §7, of which
+deployment posture is the one that unblocks the other three by implication.
