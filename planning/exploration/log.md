@@ -803,3 +803,56 @@ Process note: the prompt named scope derivation as the likely break point and it
 broke there. Naming your weakest assumption to the reviewer is cheap and it
 worked — but three of the six findings were in parts I had not flagged, so it is
 not a substitute for the review.
+
+## 2026-08-12 (claude) — explanation-surface revision 3; second review's four gaps closed
+
+Codex confirmed revision 2 fixed the central mechanism (Pack A path problem,
+sibling leakage, claim withholding, D2 placement, disclosure coherence) and
+raised four remaining contract gaps. All four closed; the reviewer's expectation
+is that revision 3 is implementable.
+
+- **One reveal rule instead of two half-rules.** Revision 2 defined reveal from
+  `checkpoint.reached`, then bolted on a sentence about completed segments for
+  `segment_end`. It never said whether the start checkpoint's node was included,
+  what happened to prose before the first checkpoint, or which checkpoint got the
+  attribution. Now a single algorithm walks reveal events in sequence order and
+  takes the actual root-to-node path for each — `checkpoint.reached`/`nodeId` in
+  delayed mode, `segment.completed`/`endNodeId` attributed to
+  `endCheckpointEventSeq` in segment mode. Pre-first-checkpoint material reveals
+  when the first segment completes, and consecutive segments cannot leave a gap
+  because the start node is already on the path.
+- **Attribution needed event identity, not a checkpoint id.** The same checkpoint
+  id fires on multiple branches and those occurrences reveal different
+  path-relative items, so a sheet filtering on id alone would show a later
+  `plan-commitment` what an earlier branch's `plan-commitment` revealed.
+  `revealedBy` is now `{checkpointId, eventSeq}`. This also forced the server
+  projection to change shape: a node-id set cannot carry attribution, so it
+  returns a map from **structural** source identity (node+index, array index,
+  plan-class id — never prose text, which would deduplicate two legitimately
+  identical sentences) to the first revealing event.
+- **The withheld flag would have made the UI lie.** Pack A holds two claims this
+  RFC permanently withholds. If they counted toward
+  `hasWithheldAuthoredContent`, the flag would be true forever while the
+  interface promised commentary "until checkpoints" that never arrives. The flag
+  now counts only items this RFC can ever deliver. Also pinned: deviations
+  without `note` produce no item, plan classes carry label *and* optional
+  description rather than an ambiguous single `text`, and response ordering is
+  deterministic.
+- **The open question was answerable and the answer flips its owner.** Pack A's
+  Black-to-move start is a **client orchestration defect, not a pack error**: the
+  pack deliberately starts before Black chooses between 3...Bf5 and 3...c5, the
+  schema treats `start.side` independently of the FEN side to move, and the
+  runtime already supports a root opponent ply — `startPack()` simply never asks
+  for one. Specified as a prerequisite fix with its own commit, including writer
+  resume, the read-only-follower exclusion, and the harness repairs. It affects
+  every pack starting on the opponent's move.
+- **Contradiction removed:** revision 2 proposed an `AUTHORED_PROSE_AFTER_LAST_
+  CHECKPOINT` lint in one section while asserting unchanged `pack-check`
+  behaviour in another. Now one precisely scoped warning — spine-node-only, and
+  suppressed entirely when a pack has any checkpoint whose trigger is not
+  statically resolvable to a spine node, rather than guessing.
+
+Open questions: none. Two review rounds, ten findings, zero disputed — the
+pattern across both is that my specs are strongest on mechanism and weakest on
+the boundary conditions of shapes the schema actually permits (optional fields,
+repeated events, non-node triggers). Worth checking those first next time.
