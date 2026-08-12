@@ -5,7 +5,8 @@
 - **Created:** 2026-08-12
 - **Design refs:** `design/03-product-breadth.md` §The foundation edge (F2), §Play (Just Play, From position), gate B2; ADR-0006 (`archive/brief-v2/adrs/ADR-0006-delayed-middlegame-feedback.md`)
 - **Exploration gate:** opened by owner ruling 2026-08-12 (breadth sequencing, `planning/exploration/log.md`)
-- **Depends on:** `rfc/archive/branch-runtime.md` (implemented), `rfc/archive/drill-pack-format.md` (implemented), `rfc/archive/engine-workers.md` (implemented), `rfc/archive/authored-explanation-surface.md` (implemented — this RFC takes the D2 fix it explicitly handed back)
+- **Depends on:** `rfc/archive/branch-runtime.md` (implemented), `rfc/archive/drill-pack-format.md` (implemented), `rfc/archive/engine-workers.md` (implemented), `rfc/archive/authored-explanation-surface.md` (implemented — this RFC takes the D2 fix it explicitly handed back), `rfc/learner-identity-and-authorization.md` (F3, draft — **lands first**; §Landing order states every shape this RFC inherits from it)
+- **Migration:** 3, `STORAGE_VERSION` 2 → 3, claimed in `rfc/README.md` §Migration register
 - **Parent / amends:** amends the run schema (`schemas/drill_run.schema.json`, `packages/runtime/src/types.ts`), the withholding barrier (`apps/server/src/feedback-policy.ts`), and run creation (`apps/server/src/rest.ts`, `apps/server/src/service.ts`)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/pack-optional-runs/` (once implementing)
@@ -27,6 +28,14 @@ surface reads the run instead of branching on registry state; and pack-less runs
 generate evidence and can reveal it. It also closes D3 by making `POST /runs`
 reject unknown keys with their JSON pointer, because this RFC doubles the size of
 that body.
+
+One combination the new shape would otherwise permit is refused at creation: a
+position session may not request `theory_strict`. That mode needs a spine, the
+spine has exactly one producer (`pack.spine`, sent by the client at
+`apps/web/src/lib/session-controller.ts:368`), and with no spine the shipped
+selector returns a Maia move without saying so
+(`apps/server/src/opponent-selector.ts:453-457`). Invariant I6 in §1 rejects the
+request instead of degrading it.
 
 ## Motivation
 
@@ -57,9 +66,40 @@ registry does not have at that digest. Today only the second exists, and it is
 already wrong — a pack edited after a run started silently unlocks that run's
 evidence.
 
-The count is **six** surfaces, not five: `authoredFeedback` (`service.ts:338-343`)
+The count is **six** surfaces, not five: `authoredFeedback` (`service.ts:335-345`)
 also branches on `#registeredPack`, and it fails *closed* by throwing
-`PACK_NOT_FOUND`. §6 specifies all six.
+`PACK_NOT_FOUND` (`service.ts:338-343`). §6 specifies all six.
+
+### Landing order: F3 first, and what this RFC inherits from it
+
+This RFC and `rfc/learner-identity-and-authorization.md` (F3) were drafted in
+parallel and both claimed database migration 2. `rfc/README.md` §Migration
+register resolves it: **F3 lands first as migration 2**; this RFC is
+**migration 3**, `STORAGE_VERSION` 2 → 3.
+
+The dependency is more than a number. F3 changes three shapes this RFC also
+touches, so every quotation below is against F3's post-landing versions, not the
+shipped ones:
+
+| Shape | Shipped | After F3 | What this RFC then does |
+|---|---|---|---|
+| `RunStorage.create` | `create(run, activeWriterId, title?)` (`storage.ts:30`) | `create(run, lease: LeaseHolder, title?)` (F3 §7) | supplies the position title through the same third argument (§5) |
+| `RunStorage.list` | `list(limit, offset)` (`storage.ts:33`) | `list(learnerId, limit, offset)`, joined to `run_grants` (F3 §7) | adds one predicate to the same statement (§8) |
+| `RunSummary` | `activeWriterId: string` (`storage.ts:20`) | that field removed, `viewerRole: RunRole` added (F3 §9, row 3) | adds `sessionKind` and `sessionDigest` and widens `packId` (§8) |
+
+`RunService.create` acquires a `LeaseHolder` parameter from F3 and an `async`
+return from this RFC. They are two edits to one signature and must be made
+together rather than merged blind.
+
+`POST /runs/:id/reveal` (§4) is a **W** route in F3's endpoint table — writer
+lease plus `mayWrite`, the same class as `/moves`, `/rewind`, `/fork` and
+`/evidence` (F3 §8). F3's table was written before this route existed; stating
+the class here keeps the authorization surface complete rather than leaving a
+hole for whoever implements second.
+
+F3 already records that D3 belongs to this RFC and that F3 hardens only the
+parsers it adds (F3 §Motivation, Out of scope, D3 row), so §7 does not collide
+with it.
 
 ### Why the D2 fix cannot be a boolean inversion
 
@@ -77,12 +117,13 @@ change and what they keep asserting.
 
 | Out of scope | Why |
 |---|---|
-| Just Play entry UI, `/play/just`, the start form | This RFC builds the primitive the surface stands on. The client screens take `DrillPackDefinition` as a required parameter in 13 files under `apps/web/src`; substituting a session projection into them is a client change with its own review surface, and it cannot begin before the type it consumes exists |
+| Just Play entry UI, `/play/just`, the start form | This RFC builds the primitive the surface stands on. `DrillPackDefinition` reaches 13 files under `apps/web/src` — seven modules and six test files — and is a required parameter in the screens (`DrillScreen.svelte`, `CompareView.svelte`, `screen-model.ts`, `evidence-sentences.ts`). Substituting a session projection into them is a client change with its own review surface, and it cannot begin before the type it consumes exists. §9 states the one refusal the shipped client needs in the meantime |
+| Binding `POST /select-move` to the run it plays for | The endpoint takes no run id (`rest.ts:406-417`) and reads the policy from the request body, so `run.opponentPolicy` is recorded, not enforced (§1). Adding a run id changes the selector's cache key, its request parse, and every client call site; I6 is enforced where sessions are created instead |
 | FEN/PGN paste, `/drill` and `/fen` routes, duplicate-from-run | `router.ts:18-27` has no dynamic route but `/play/run/:runId`, and `parsePgn` appears in no non-test source (`packages/runtime/src/pgn.ts:1-10` imports `makePgn` only). Each is an entry that resolves to the session shape defined here |
 | Share tokens and spectator projection | Rests on D1 (`assertActiveWriter` is string equality, `packages/runtime/src/errors.ts:37-44`), which is an identity problem (F3), not a session-identity one |
 | Deterministic feature/phase recognition | No detector code exists (`grep -rniE "recogni|detector|\bECO\b" apps packages` returns four unrelated test titles). Its evidence namespace is a separate contract |
 | Per-node reveal of engine evidence | Impossible on the event surface: `publicEvents` must return a **contiguous** prefix because `projectRun` rejects any gap (`packages/runtime/src/events.ts:43-46`) and the follower store rejects a non-adjacent first event (`apps/web/src/lib/run-state.ts:94-99`). Filtering individual events out of the stream would break every reader. §3 works within that constraint |
-| `immediate_blunder_guard` | In the pack JSON enum (`schemas/drill_pack.schema.json` `feedbackPolicy`) and **rejected at registry load** (`apps/server/src/pack-validation.ts:103-111`), with a test asserting it (`drill-client-server.test.ts:206-220`). `PackRecord.feedbackPolicy` is therefore genuinely one of two values |
+| `immediate_blunder_guard` | In the pack JSON enum (`schemas/drill_pack.schema.json` `feedbackPolicy`) and **rejected at registry load** (`apps/server/src/pack-validation.ts:104-112`), with a test asserting it (`drill-client-server.test.ts:206-220`). `PackRecord.feedbackPolicy` is therefore genuinely one of two values |
 | N-way comparison | `BranchComparison` hard-codes `{a, b}` (`packages/runtime/src/compare.ts:49-64`); a runtime type change unrelated to session identity |
 
 ## Specification
@@ -124,6 +165,12 @@ export interface RunOpponentPolicy {
   readonly topP?: number;
 }
 
+/** I6: a position session has no spine, so it cannot ask for theory. */
+export type PositionOpponentMode = "human_common" | "strong_engine";
+export interface PositionOpponentPolicy extends RunOpponentPolicy {
+  readonly mode: PositionOpponentMode;
+}
+
 export interface DrillRun {
   readonly schemaVersion: DrillRunSchemaVersion;   // "0.5"
   readonly id: string;
@@ -148,6 +195,14 @@ values, **not** the seven-value authored enum in `schemas/drill_pack.schema.json
 `$defs.opponentPolicy.mode`; the four unselectable authored values are already
 rejected at registry load (`pack-validation.ts:125-138`).
 
+`run.opponentPolicy` is the **recorded** session parameter, not a server-enforced
+one. `POST /select-move` takes no run id (`apps/server/src/rest.ts:406-417`); the
+policy it acts on arrives in the request body from the client
+(`session-controller.ts:358-369`). This RFC therefore constrains what a run may
+*declare*, which is what identity (§2) and resume (§Deviations 2) need, and
+leaves selection unbound as it is today. Binding a selection to its run requires
+a run id on that endpoint and is out of scope below.
+
 **Invariants, enforced in `projectRun` (`packages/runtime/src/events.ts:33-151`) with a `TypeError`,
 and by the JSON Schema:**
 
@@ -156,8 +211,9 @@ and by the JSON Schema:**
 | I1 | `sessionKind === "pack"` **iff** `packId !== null` **iff** `packDigest !== null` | Nullable as a pair. A run that half-declares a pack is the half-supplied shape D3 exists to prevent |
 | I2 | `sessionKind === "pack"` ⟹ `feedbackPolicy !== "attempt_end"` | A pack's reveal is authored; `attempt_end` would let a client override authored timing |
 | I3 | `sessionKind === "position"` ⟹ `feedbackPolicy === "attempt_end"` | The other two are unreachable without a pack (`pack-orchestrator.ts:131` is the only producer of `checkpoint.reached`), so permitting them would encode permanent withholding |
-| I4 | `start.fen === nodes[0].fen` | `createRun` canonicalizes the input FEN (`runtime.ts:132-133`), so the run start and the root node are one fact; two fields that can disagree is how the pack-digest staleness bug got in |
+| I4 | `start.fen === nodes[0].fen` | `createRun` canonicalizes the input FEN (`runtime.ts:131-132`), so the run start and the root node are one fact; two fields that can disagree is how the pack-digest staleness bug got in. §2 states the ordering that keeps this true and keeps the digest stable |
 | I5 | `sessionDigest` matches `^sha256:[0-9a-f]{64}$` | Same shape as `packDigest` and as `DIGEST_PATTERN` (`apps/server/src/opponent-selector.ts:72`), so it can serve as `policy.policyConfigDigest` for a pack-less selection without a second format |
+| I6 | `sessionKind === "position"` ⟹ `opponentPolicy.mode !== "theory_strict"` | `theory_strict` needs a spine, and `spineChildren` reads it from `policy.spine` (`opponent-selector.ts:337-346`), whose only producer is `pack.spine` (`session-controller.ts:368`). With no spine, `#theoryStrict` returns `this.#humanCommon(request)` (`opponent-selector.ts:453-457`) — a run that asked for opening theory and silently got a Maia move. A position session has no pack, so it has no source for that geometry; the honest answer is to refuse the request, not to serve a different one |
 
 JSON Schema (`schemas/drill_run.schema.json`): `$id` becomes
 `urn:chess-tabiya:schema:drill-run:0.5`, `schemaVersion` becomes `{"const": "0.5"}`,
@@ -207,8 +263,8 @@ with
 `$defs.runStartedData` receives the identical five additions and the identical
 nullability, because `projectRun` reconstructs the whole run from that one event
 (`events.ts:140-150`) and `SQLiteRunStorage.read` replays from events alone
-(`apps/server/src/storage.ts:236-242`). The schema-level invariants I1–I3 are
-expressed on both objects as `allOf` implications:
+(`apps/server/src/storage.ts:236-242`). The schema-level invariants I1–I3 and I6
+are expressed on both objects as `allOf` implications:
 
 ```json
 "allOf": [
@@ -216,7 +272,9 @@ expressed on both objects as `allOf` implications:
     "then": { "properties": {
       "packId": { "type": "null" },
       "packDigest": { "type": "null" },
-      "feedbackPolicy": { "const": "attempt_end" } } } },
+      "feedbackPolicy": { "const": "attempt_end" },
+      "opponentPolicy": { "properties": {
+        "mode": { "enum": ["human_common", "strong_engine"] } } } } } },
   { "if": { "properties": { "sessionKind": { "const": "pack" } } },
     "then": { "properties": {
       "packId": { "$ref": "#/$defs/id" },
@@ -225,6 +283,12 @@ expressed on both objects as `allOf` implications:
 ]
 ```
 
+Both `if` clauses are sound only because `sessionKind` is in `required` on the run
+object and on `$defs.runStartedData`: a JSON Schema `if` whose `properties` name
+an absent key matches vacuously, so an omitted `sessionKind` would satisfy both
+branches and constrain neither. That is the half-supplied shape D3 exists to
+prevent, expressed in the schema rather than argued about.
+
 `DRILL_RUN_SCHEMA_VERSION` (`packages/schema/src/index.ts:1`) becomes `"0.5"`,
 which flows into `runtimeBuildInfo.runSchemaVersion` and thus into
 `GET /capabilities` (`apps/server/src/capabilities.ts:150`) with no further change.
@@ -232,8 +296,8 @@ which flows into `runtimeBuildInfo.runSchemaVersion` and thus into
 ### 2. `sessionDigest` — what replaces `packDigest` as identity
 
 `packDigest` does four jobs today: registry matching (`service.ts:419`),
-optimistic staleness detection at creation (`service.ts:136-141`), provenance
-inside `objectiveRequest` (`service.ts:317-318`), and the client's
+optimistic staleness detection at creation (`service.ts:135-141`), provenance
+inside `objectiveRequest` (`service.ts:315-316`), and the client's
 `policy.policyConfigDigest` (`apps/web/src/lib/session-controller.ts:360`). For a
 pack-less run the first three are vacuous and the fourth still needs a digest.
 
@@ -249,12 +313,32 @@ export type SessionSource =
       readonly kind: "position";
       readonly start: RunStart;
       readonly feedbackPolicy: "attempt_end";
-      readonly opponentPolicy: RunOpponentPolicy;
+      readonly opponentPolicy: PositionOpponentPolicy;   // I6: never theory_strict
     };
 
-export function sessionSource(run: DrillRun): SessionSource;
+export type PackRun = DrillRun & {
+  readonly sessionKind: "pack";
+  readonly packId: string;
+  readonly packDigest: string;
+  readonly feedbackPolicy: "delayed_checkpoint" | "segment_end";
+};
+
+export function canonicalRunStart(start: RunStart): RunStart;
+export function isPackSession(run: DrillRun): run is PackRun;
+export function sessionSource(from: DrillRun | CreateRunSession): SessionSource;
 export async function digestSessionSource(source: SessionSource): Promise<string>;
 ```
+
+`isPackSession` is the type predicate that makes I1–I3 usable rather than merely
+true. Every consumer that needs a non-null `packId` — `exportPackRunPgn` (§9),
+`requestObjectiveEvidence` (§7), surface 6's pack branch (§6) — narrows through
+it instead of asserting, so a caller that forgets the check does not compile.
+
+`sessionSource` accepts either shape because both producers need it and neither
+may derive the source differently: a run carries `sessionKind`, a create input
+carries `kind` (§5), and the two are discriminated on that. Recomputing the
+digest of a stored run must reproduce the value written at creation, which is
+only guaranteed if one function reads both.
 
 For `kind: "pack"` the source is only the pack identity pair, because everything
 else on a pack run is derived from the pack document and `packDigest` already
@@ -264,6 +348,25 @@ the session plays: the canonical start, the reveal rule, and the opponent policy
 on the run and in each `opponent.move_selected` payload, not session identity;
 two runs of the same session at different seeds must share a digest for "the same
 Just Play setup" to mean anything.
+
+**Canonicalize the start, then digest it, then create the run.** The order is
+load-bearing and it is the reverse of the obvious one. `createRun` does not store
+the FEN it is given: it parses it and re-emits the canonical spelling
+(`runtime.ts:131-132`, `positionFromFen` then `canonicalFen`,
+`packages/runtime/src/chess.ts:4,12`) into `rootNode.fen`. Digesting the client's
+raw FEN would therefore produce two session identities for one position — the
+`rnbqkbnr/…/RNBQKBNR w KQkq - 0 1` a client types and the spelling chessops
+returns for it — and would break I4 outright, because `start.fen` would hold the
+raw string while `nodes[0].fen` holds the canonical one.
+
+`canonicalRunStart(start)` is the single place that normalizes: it runs the same
+two functions in the same order and returns `{fen: canonicalFen(positionFromFen(
+start.fen)), side: start.side}`, throwing on an illegal position. Every producer
+of a session — `RunService.create` for both kinds (§5) and `combinedRun` for the
+PGN export (§9) — calls it **before** building the `SessionSource`, so the digest
+is always over the canonical start. `createRun` re-canonicalizes idempotently and
+throws a `TypeError` if the result differs from `session.start.fen`, so no caller
+can smuggle a non-canonical start past the digest it was supposed to determine.
 
 Optional keys are omitted, never nulled, before canonicalization — RFC-8785 sorts
 keys but does not erase `"targetElo": null`, so an omitted-vs-null difference
@@ -277,9 +380,10 @@ and carried on `run.started` so a resumed run keeps it.
 `digestSessionSource` is asynchronous (`crypto.subtle.digest`, the same API the
 pack digest uses and the only one available in both the Node server and the
 browser bundle). Therefore **`RunService.create` becomes `async`**; `createRun`
-stays synchronous and takes the finished digest, validating only its shape (I5).
-The single production call site already sits in an async handler
-(`apps/server/src/rest.ts:396-400`).
+stays synchronous and takes the finished digest, validating its shape (I5) and
+the canonicality of `session.start`. `canonicalRunStart` is synchronous, so the
+whole ordering above runs before the single `await`. The one production call site
+already sits in an async handler (`apps/server/src/rest.ts:396-400`).
 
 ### 3. Feedback policy — two predicates, one home
 
@@ -438,7 +542,7 @@ export type CreateRunSession =
       readonly kind: "position";
       readonly start: RunStart;
       readonly feedbackPolicy: "attempt_end";
-      readonly opponentPolicy: RunOpponentPolicy;
+      readonly opponentPolicy: PositionOpponentPolicy;   // §1, I6
     };
 
 export interface CreateRunInput {
@@ -459,7 +563,20 @@ The wire shape a client may send is narrower and forbids exactly those three key
 on a pack session (§7); the two types are named apart (`CreateRunSession` in the
 runtime, `CreateRunSessionRequest` on the transport, §9).
 
-`RunService.create(input, writerId)` becomes `async` and resolves each kind:
+`RunService.create(input, lease)` becomes `async` and runs four steps in this
+order, for both kinds:
+
+1. **Resolve** the wire session into a `CreateRunSession` (per kind, below).
+2. **Canonicalize** its start: `session.start = canonicalRunStart(session.start)`.
+3. **Digest**: `sessionDigest = await digestSessionSource(sessionSource(session))`.
+4. **Create and store**: `createRun({...input, session, sessionDigest})`, then
+   `storage.create(run, lease, title)`.
+
+Steps 2 and 3 may not be swapped, and step 3 may not read anything `createRun`
+would rewrite; §2 gives the reason. Steps 1–2 run inside the shipped try/catch
+(`service.ts:158-172`), so an illegal or unparseable start FEN surfaces as the
+same `INVALID_REQUEST` "Run definition is invalid" (`service.ts:168-172`) it does
+today rather than as a new message.
 
 **`kind: "pack"`** — `#requiredPackRegistry().required(packId)` (a pack session
 with no registry configured is now `PACK_NOT_FOUND`, not a silent pack-blind run;
@@ -467,22 +584,47 @@ the pack-blind branch at `service.ts:149-156` is deleted). Then:
 
 | Run field | Source | Failure |
 |---|---|---|
-| `packDigest` | `pack.digest`; if the client supplied one and it differs → `INVALID_REQUEST` "Client pack digest is stale" (shipped behaviour, `service.ts:136-141`) | — |
-| `start.fen` | `pack.document.start.fen` | — |
+| `packDigest` | `pack.digest`; if the client supplied one and it differs → `INVALID_REQUEST` "Client pack digest is stale" (shipped behaviour, `service.ts:135-141`) | — |
+| `start.fen` | `canonicalRunStart` applied to `pack.document.start.fen` — the pack schema constrains it to a non-empty string (`$defs.start.fen`) and nothing canonicalizes it at registry load, so the pack path needs step 2 exactly as much as the position path does | illegal → `INVALID_REQUEST` "Run definition is invalid" |
 | `start.side` | `pack.document.start.side` | absent → `INVALID_REQUEST` `Pack <id> does not declare start.side`. `start.side` is schema-optional (`schemas/drill_pack.schema.json` `$defs.start.required = ["fen"]`) while the client throws on its absence today (`apps/web/src/lib/screen-model.ts:54-60`); both shipped packs declare it |
 | `feedbackPolicy` | `pack.feedbackPolicy` (`pack-registry.ts:30`) | — |
-| `opponentPolicy` | `pack.document.opponentPolicy`, copied key by key: `mode` (already validated against `SUPPORTED_POLICY_MODES` at `pack-validation.ts:125-138`), plus `targetElo`/`temperature`/`topP` when they are numbers. Authored keys outside those four — including `stockfishGuardCp` and `seedMode`, both permitted by `additionalProperties: true` — are **not** copied; `seedMode` already reaches the run through `policyConfig.seedMode` | — |
+| `opponentPolicy` | `pack.document.opponentPolicy`, copied key by key: `mode` (already validated against `SUPPORTED_POLICY_MODES` at `pack-validation.ts:125-138`), plus `targetElo`/`temperature`/`topP` when they are numbers. Authored keys outside those four — including `stockfishGuardCp` and `seedMode`, both permitted by `additionalProperties: true` — are **not** copied; `seedMode` already reaches the run through `policyConfig.seedMode` | a copied number the run schema's `runOpponentPolicy` would reject → `INVALID_REQUEST` naming the pack and the key |
+
+That last failure is not hypothetical. The pack schema's
+`$defs.opponentPolicy.temperature` is a bare `{"type": "number"}` with no
+minimum, while §1's `runOpponentPolicy.temperature` has `"minimum": 0`, and
+`pack-validation.ts` checks `mode` alone — the strings `temperature`, `topP` and
+`targetElo` appear nowhere in `pack-validation.ts` or `pack-registry.ts`. A pack
+authored with `temperature: -1` therefore loads cleanly today and would mint a
+run that its own schema rejects, persisted and unnoticed until something
+validated it. Creation rejects the copy instead of widening the run schema to
+match the looser authored one, because the run bound is the correct one.
 
 **`kind: "position"`** — the client supplies `start`, `feedbackPolicy` and
-`opponentPolicy`; the registry is not consulted. Start-position legality is
-enforced where it already is, by `positionFromFen` inside `createRun`
-(`runtime.ts:132`), surfacing as `INVALID_REQUEST` "Run definition is invalid"
-(`service.ts:168-172`).
+`opponentPolicy`; the registry is not consulted. Two rejections beyond the wire
+parse of §7:
 
-Both kinds: `sessionDigest = await digestSessionSource(sessionSource)`. The
-stored title (`storage.create`'s third argument, `service.ts:174-178`) is the pack
-title for pack runs and the constant `Position session` for position runs;
+- `opponentPolicy.mode === "theory_strict"` → `INVALID_REQUEST`
+  `A position session cannot use theory_strict; it has no spine`, naming
+  `/session/opponentPolicy/mode`. This is I6, enforced at the only point where a
+  position session comes into existence.
+- the same numeric bounds as the pack path, applied to the client's values.
+
+The stored title (`storage.create`'s third argument, `service.ts:174-178`) is the
+pack title for pack runs and the constant `Position session` for position runs;
 `storage.create`'s default becomes `run.packId ?? run.id`.
+
+**The silent fallback itself is also closed, one layer down.** I6 removes the
+only *new* way to reach it, but `#theoryStrict` degrades to `#humanCommon`
+(`opponent-selector.ts:453-457`) for shipped pack runs too, whenever play leaves
+the authored spine and `spineChildren` returns `undefined`
+(`opponent-selector.ts:337-346`). Leaving theory when theory runs out is correct
+behaviour; doing it without a word is not. The selector logs
+`DEGRADED_THEORY_SPINE: position is off the authored spine; falling back to
+human_common` on that branch, exactly mirroring the shipped
+`DEGRADED_POLICY_MASS` warning nine lines below it
+(`opponent-selector.ts:465-468`). No change to `OpponentSelection`, so no change
+to the event payload or the run schema.
 
 ### 6. The withholding surfaces — current and specified behaviour
 
@@ -497,15 +639,39 @@ never for withholding.
 | 2 | `GET /runs/:id/events` → `publicEvents(pack, run, sinceSeq)` (`service.ts:280`, `feedback-policy.ts:42-60`) | `pack === undefined` → the **whole** event stream including `evidence.attached`. Otherwise truncates the returned page at the first engine-feedback event | `publicEvents(run, sinceSeq)`. Truncates at the first engine-feedback event unless `feedbackDisclosed(run)`. Truncation, not filtering, is retained: the page must stay a contiguous prefix (`events.ts:43-46`, `run-state.ts:94-99`) |
 | 3 | `POST /runs/:id/compare` (`service.ts:269-276`) | Returns the full comparison whenever `pack === undefined`, including `evidence.a`/`evidence.b` | `feedbackDisclosed(run)` decides; `comparisonWithoutEngineFeedback` (`service.ts:64-93`) is unchanged |
 | 4 | `GET /runs/:id/evidence` (staged) (`service.ts:326-333`) | `pack === undefined` → the staged page is returned in full. In practice empty, because nothing was ever enqueued (`service.ts:197,216`) | Returns `{results: [], nextSeq: sinceSeq}` unless `feedbackDeliveryOpen(run)`. Same empty-page shape as shipped (`service.ts:330`) |
-| 5 | `POST /runs/:id/evidence` (apply) (`service.ts:347-395`) | `pack === undefined` → **no gate**: a writer may append `evidence.attached` and an objective upgrade into the durable log with nothing withheld | Throws `FEEDBACK_WITHHELD` (409) unless `feedbackDeliveryOpen(run)`. This is the write gate that makes surfaces 1–3 monotonically true rather than merely filtered |
+| 5 | `POST /runs/:id/evidence` (apply) (`service.ts:347-395`) | `pack === undefined` → **no gate**: a writer may append `evidence.attached` and an objective upgrade into the durable log with nothing withheld | Throws `FEEDBACK_WITHHELD` (409) unless `feedbackDeliveryOpen(run)`. This is the write gate on the one HTTP path that appends `evidence.attached` |
 | 6 | `GET /runs/:id/authored-feedback` (`service.ts:335-345`) | `pack === undefined` → `PACK_NOT_FOUND` (404) for **both** a pack-less run and a run whose pack is unregistered | Branch on `sessionKind`, not on the registry: `sessionKind: "position"` → `200 {items: [], hasWithheldAuthoredContent: false}`, because a position session has no authored content and a 404 would force every client to fork. `sessionKind: "pack"` with no registered pack keeps `PACK_NOT_FOUND` — the content exists and is unavailable, which is a different fact |
 
-Surfaces 1–3 remain as defence in depth and are **not** redundant: the shipped
-test at `apps/server/src/drill-client-server.test.ts:359`
-(`delayed_checkpoint hides engine feedback but not rules refs until a checkpoint`)
-writes engine evidence straight into a run with `attachEvidence` + `storage.save`
-(`:379-390`), bypassing surface 5 entirely, and asserts that `/graph` and
-`/events` still withhold it.
+**The two layers are both necessary, and the scope of each is stated rather than
+assumed.** Surface 5 gates a write; surfaces 1–4 gate reads. It would be
+convenient to argue that gating the write makes the reads redundant, and that
+argument is false. Its premise would be "`applyEvidence` is the only writer of
+engine refs into the durable log", and the tree falsifies it: `attachEvidence` is
+a public runtime export (`packages/runtime/src/index.ts:22`), and the shipped
+suite calls it directly and then persists through `storage.save` — at
+`apps/server/src/drill-client-server.test.ts:383-390` inside the test at `:359`
+(`delayed_checkpoint hides engine feedback but not rules refs until a
+checkpoint`), and again at `:484` and `:512` in the comparison test at `:458`.
+Those writes bypass surface 5 entirely, and the tests assert that `/graph` and
+`/events` still withhold.
+
+The claim this RFC does make, bounded to what is checkable:
+`RunService.applyEvidence` (`service.ts:370`) is the **only production caller** of
+`attachEvidence` — the other four callers are test files
+(`drill-client-server.test.ts`, `compare.test.ts`, `run-state.test.ts`,
+`screens.test.ts`). So:
+
+- Over the HTTP surface, no engine ref enters the durable log without passing
+  `feedbackDeliveryOpen`. That is surface 5's guarantee and its whole extent.
+- Over the log as a data structure, engine refs may be present at any time, put
+  there by any in-process writer. Surfaces 1–3 hold anyway, because they read the
+  run and its policy and never the path that wrote it.
+- Surface 4 is neither: it gates *staged* results, which are queue state and have
+  not entered the log at all. It is the only surface an in-process writer cannot
+  route around, because there is no second way to reach the queue's page.
+
+Neither layer alone is sufficient, and acceptance criterion 15 keeps the
+production-caller claim true by checking it rather than restating it.
 
 ### 7. Evidence generation for every run, and `POST /runs` never-silent (D3)
 
@@ -526,6 +692,28 @@ A position run therefore never produces `objective.state_changed`, which is
 correct: objective rules come only from `pack.objective.successConditions`
 (`pack-orchestrator.ts:102-117`). No upgrader is wired in the composed
 application in any case (`application.ts:300-302`).
+
+**`requestObjectiveEvidence` is the second producer of that request, and it does
+not compile after the nullable change.** It builds an `ObjectiveEvidenceRequest`
+directly from `run.packId`/`run.packDigest` (`objective.ts:300-316`, the fields at
+`:307-308`) into an interface that requires both as `string` (`objective.ts:85-86`).
+It has no production caller — the runtime re-exports it (`index.ts:40`) and
+`objective.test.ts:383` is its only invocation — but a public export that would
+silently start emitting `packId: null` into an upgrader contract is a defect
+whether or not this repo currently calls it.
+
+`ObjectiveEvidenceRequest` keeps both fields as required strings: it is a
+pack-scoped contract, and an upgrader with no
+`pack.objective.successConditions` has nothing to evaluate against
+(`pack-orchestrator.ts:102-117`). `requestObjectiveEvidence` gains the matching
+guard as its first statement — a run with `packId === null` throws
+`RuntimeError("INVALID_RUN_SESSION", "Objective evidence requires a pack
+session")` before touching the upgrader, which also narrows the two fields for
+the type checker. `RuntimeErrorCode` (`packages/runtime/src/errors.ts:6-11`) gains
+that one member. No REST mapping is added: the handler's `RuntimeError` arm is a
+default-carrying conditional, not an exhaustive switch (`rest.ts:248-257`), so an
+unmapped code answers 409 — which is the right status for "this run is the wrong
+kind of session" if the function ever acquires a route.
 
 **Never-silent (D3).** `parseCreateInput` (`rest.ts:192-211`) and
 `parsePolicyConfig` (`rest.ts:156-177`) read known keys and construct fresh
@@ -594,19 +782,21 @@ The new request body:
 ### 8. Storage: summary widening and the v0.4 quarantine
 
 `RunSummary.packId` is a required string (`apps/server/src/storage.ts:16`) and
-`parseSummary` rejects a row without one (`:102-121`). v0.5:
+`parseSummary` rejects a row without one (`:102-121`). Quoted against the shape
+F3 leaves behind — `activeWriterId` removed, `viewerRole` added (F3 §9, row 3) —
+v0.5 adds three of these nine lines:
 
 ```ts
 export interface RunSummary {
   readonly id: string;
   readonly title: string;
-  readonly sessionKind: RunSessionKind;
-  readonly packId: string | null;
-  readonly sessionDigest: string;
+  readonly sessionKind: RunSessionKind;   // new
+  readonly packId: string | null;         // widened
+  readonly sessionDigest: string;         // new
   readonly updatedAt: string;
   readonly objectiveState: ObjectiveState;
   readonly branchCount: number;
-  readonly activeWriterId: string;
+  readonly viewerRole: RunRole;           // F3, untouched here
 }
 ```
 
@@ -621,20 +811,51 @@ consult (`storage.ts:29-37`). Inventing them would mean guessing the two fields
 that govern withholding and turn order. They are therefore **quarantined, not
 deleted**:
 
-- `STORAGE_VERSION` 1 → 2. Migration 2, `quarantine pre-0.5 run snapshots`, runs
-  in the shipped `PRAGMA user_version` runner (`storage.ts:339-374`):
-  `ALTER TABLE drill_runs ADD COLUMN schema_version TEXT`, then for every row
-  parse `snapshot_json` and write its `schemaVersion` — the field is part of the
-  serialized run (`storage.ts:200`). It rewrites no summary, because only
-  pre-0.5 rows can exist at that moment. Same read-parse-update shape as the
-  shipped migration 1 (`storage.ts:376-401`).
+- `STORAGE_VERSION` 2 → 3, per the migration register: F3's identity columns are
+  migration 2, so this is **migration 3**, `quarantine pre-0.5 run snapshots`. It
+  runs in the shipped `PRAGMA user_version` runner (`storage.ts:339-374`),
+  unchanged: `ALTER TABLE drill_runs ADD COLUMN schema_version TEXT`, then for
+  every row parse `snapshot_json` and write its `schemaVersion` — the field is
+  part of the serialized run (`storage.ts:200`). A row whose snapshot has no
+  parseable `schemaVersion` is stamped `'unknown'` rather than raising: a
+  migration that throws leaves the database unopenable, which is a worse outcome
+  than a quarantined row. It rewrites no summary, because only pre-0.5 rows can
+  exist at that moment.
 - `create()` and `save()` write `schema_version = run.schemaVersion` alongside
   `summary_json`.
 - `read()` returns `undefined` for a row whose `schema_version` is not
   `DRILL_RUN_SCHEMA_VERSION`, so those runs answer `RUN_NOT_FOUND` (404) instead
   of `STORAGE_FAILURE` (500) from a failed replay.
-- `list()` adds `WHERE schema_version = ?`.
+- `list()` adds `schema_version = ?` to the predicate it already carries after F3
+  (`WHERE` on the `run_grants` join, F3 §7).
 - Nothing is destroyed; the rows stay on disk and remain exportable by hand.
+
+**Migration 1 must stop replaying, or the ladder cannot reach migration 3.**
+`#addRunSummaries` (`storage.ts:376-401`) is migration 1, and on a database still
+at `user_version = 0` it runs *before* the quarantine. It calls
+`readBackReplay(snapshot.events)` (`:394`), which is `projectRun`
+(`packages/runtime/src/replay.ts:62`), and then titles the summary with
+`run.packId` (`:397`). Under v0.5 both break on exactly the rows it exists to
+handle: `projectRun` rejects a v0.4 `run.started` for its missing `sessionKind`,
+`sessionDigest` and `start`, and `run.packId` is no longer a `string`. The result
+would be `STORAGE_FAILURE` on open — an old database that this RFC's quarantine
+was written to preserve, destroyed by a migration two steps earlier.
+
+The fix is to remove the dependency, not to special-case it. `snapshot_json` is
+`JSON.stringify(run)` (`storage.ts:200`), so every field `summaryFields` reads —
+`packId`, `branches`, `nodes`, `activeCursor` — is already in the parsed object;
+the replay recovers nothing the JSON does not already hold. Migration 1 reads
+them directly, keeps its `snapshot.id !== row.id` check, and writes the same
+summary JSON it writes today with `title = snapshot.packId ?? row.id`.
+`activeObjectiveState` (`storage.ts:123-127`) is retyped to its structural
+subset, `{nodes, activeCursor}`, so migration 1 and `summaryFields` keep sharing
+one implementation.
+
+The general rule this establishes, and the reason it belongs in this RFC rather
+than a follow-up: **a migration may not depend on the current runtime's
+projection**, because a migration exists precisely to handle shapes that
+projection no longer accepts. Migration 3 already obeys it — it reads
+`schemaVersion` out of the JSON and never replays.
 
 ### 9. PGN and the client transport
 
@@ -651,9 +872,63 @@ position run gets:
 with `TabiyaPack` **omitted** rather than emitted empty. Pack runs keep every
 header they emit today with the same values, and gain the one new
 `TabiyaSession` key immediately after `TabiyaPack`, so one header identifies the
-session for both kinds. `exportPackRunPgn` (`packages/runtime/src/pack-pgn.ts`)
-is unchanged and still selected only for runs with a registered pack
-(`service.ts:399-403`).
+session for both kinds.
+
+**`exportPackRunPgn` is not unchanged.** It is still selected only for runs with
+a registered pack (`service.ts:399-403`), so it never *sees* a position run — but
+it builds one. `combinedRun` (`pack-pgn.ts:121-144`) synthesizes a scratch run by
+calling `createRun` with `packId`, `packDigest` and `startFen`
+(`pack-pgn.ts:131-139`), three fields that §5 replaces. The call becomes:
+
+```ts
+let combined = createRun({
+  id: `${source.id}:combined-pgn`,
+  session: {
+    kind: "pack",
+    packId: source.packId,
+    packDigest: source.packDigest,
+    start: source.start,
+    feedbackPolicy: source.feedbackPolicy,
+    opponentPolicy: source.opponentPolicy,
+  },
+  sessionDigest: source.sessionDigest,
+  policyConfig: source.policyConfig,
+  seed: source.branches[0]?.seed ?? 0,
+  ...(createdAt === undefined ? {} : { createdAt }),
+});
+```
+
+Three choices in that block are deliberate:
+
+- `start: source.start`, not `pack.start`. The source run's start is already
+  canonical (§2), so I4 holds for the scratch run by construction. Re-deriving it
+  from `pack.start.fen` would reintroduce the raw-vs-canonical gap in the one
+  place the export can least afford it — and it is safe to drop, because
+  `exportPackRunPgn` has already asserted that this pack is byte-identical to the
+  one the run started from (id at `pack-pgn.ts:163-168`, digest at `:169-174`)
+  and that the run root equals the canonicalized pack start (`:176-183`). That
+  last check spells `canonicalFen(positionFromFen(pack.start.fen))` inline at
+  `:177`; `canonicalRunStart` is that expression given a name and one home.
+- `sessionDigest: source.sessionDigest`, copied rather than recomputed. For
+  `kind: "pack"` the session source is exactly the identity pair (§2), which the
+  scratch run reproduces, so recomputation is guaranteed to return the same
+  string; copying avoids a second `await` in an export path.
+- The scratch run is a pack session, so `pgnHeaders` emits `TabiyaPack` and a
+  `TabiyaSession` equal to the source run's. The exported headers are unchanged
+  from today apart from that one added key.
+
+`combinedRun`'s `source` parameter narrows to `PackRun` (§2), which is what makes
+`packId`, `packDigest` and `feedbackPolicy` assignable to the pack variant of
+`CreateRunSession` without a non-null assertion. The narrowing happens once, in
+`exportPackRunPgn`, through `isPackSession`.
+
+`exportPackRunPgn` also gains an explicit guard for the shape its signature now
+permits: a `run` for which `isPackSession` is false throws
+`PackRunPgnError("PACK_ID_MISMATCH", \`Run ${run.id} is a position session and
+has no pack\`)`. Without it the existing `pack.id !== run.packId` check
+(`pack-pgn.ts:163-168`) would still reject, but with the message
+`Pack X does not match run pack null`, which describes a mismatch that did not
+happen. `PackRunPgnErrorCode` gains no member.
 
 Client transport (`apps/web/src/lib/api.ts:159-165`):
 
@@ -664,7 +939,7 @@ export type CreateRunSessionRequest =
       readonly kind: "position";
       readonly start: { readonly fen: string; readonly side: "white" | "black" };
       readonly feedbackPolicy: "attempt_end";
-      readonly opponentPolicy: RunOpponentPolicy;
+      readonly opponentPolicy: PositionOpponentPolicy;
     };
 
 export interface CreateRunRequest {
@@ -678,9 +953,28 @@ export interface CreateRunRequest {
 
 `RunApi` gains `reveal(runId, writerId, at?): Promise<MutationResult>` posting to
 `/runs/:id/reveal`. `DrillSessionController.startPack` (`session-controller.ts:209-217`)
-sends `{kind: "pack", packId}`; nothing else in the controller changes, and
-`policyConfigDigest` keeps using the pack digest (`session-controller.ts:360`)
-because no pack-less client entry exists yet.
+sends `{kind: "pack", packId}`, and `policyConfigDigest` keeps using the pack
+digest (`session-controller.ts:360`) because no pack-less client entry exists
+yet.
+
+**One more controller change is required, because this RFC puts runs into
+`GET /runs` that the shipped client cannot open.** `resume` fetches the pack
+named by the `run.started` event without checking whether there is one
+(`session-controller.ts:176-177`, `this.#api.pack(started.data.packId)`), so a
+position run resolves to `GET /packs/null` and surfaces a 404 as the screen's
+error string. That is reachable from the shell today: `App.svelte:128,132` fills
+the run lists from `GET /runs`, `:139` calls `controller.resume(next.runId)` for
+`/play/run/:runId`, and `:68` makes `runs[0]` the home screen's resume card — so
+the newest position run in the deployment becomes the front page's offer.
+
+`resume` therefore branches on `started.data.sessionKind` before the pack fetch:
+`"position"` sets the error `This run is a position session; the position player
+is not built yet` and returns, leaving `busy: false`. It is a refusal, not a
+feature — the position player is out of scope below — but the alternative is a
+404 on a URL containing the literal string `null`, which tells a learner nothing
+and an operator less. Run-list rows render from the summary's `title`, which is
+`Position session` for these runs (§5), so they are already identifiable without
+a component change.
 
 **`RunStateStore` stops taking a pack.** Its `#pack` field is used for exactly one
 thing — `feedbackRevealed(this.#pack, …)` at `run-state.ts:229` and `:312` — so
@@ -741,7 +1035,7 @@ position sessions.
    moves: (a) a `najdorf-transition-schema-example` run that has reached no
    checkpoint, (b) a position run that has never been revealed. Attach engine
    evidence to both by the bypass the shipped suite already uses
-   (`attachEvidence` + `storage.save`, as at `drill-client-server.test.ts:379-390`).
+   (`attachEvidence` + `storage.save`, as at `drill-client-server.test.ts:383-390`).
    Assert for **both**, with identical expectations: `/graph` nodes carry
    `rules:` refs and no `engine:` ref; `/events` truncates before the
    `evidence.attached` event; `/compare` returns empty `evidence.a`/`evidence.b`;
@@ -750,9 +1044,10 @@ position sessions.
    five surfaces for run (b).
 3. **Pack-run withholding is bit-identical.** `drill-client-server.test.ts:359`
    (`delayed_checkpoint hides engine feedback but not rules refs until a
-   checkpoint`) and the `segment_end` test whose staged-evidence assertions run
-   at `:593-624` pass **unmodified except for the create-body shape and the
-   `await` on `service.create`**, including the exact event-type sequence
+   checkpoint`) and `:570` (`segment_end stays closed at the first checkpoint and
+   opens on segment completion`, whose staged-evidence assertions begin at `:592`)
+   pass **unmodified except for the create-body shape and the `await` on
+   `service.create`**, including the exact event-type sequence
    `["run.started","move.committed","objective.state_changed"]`.
 4. **Reveal opens and the next move closes.** On a position run: enqueue evidence
    after a move; `GET /evidence` is empty; `POST /reveal` → 200 with one
@@ -770,6 +1065,16 @@ position sessions.
    `/session/packId`; a position session with `feedbackPolicy: "delayed_checkpoint"`
    → 400; a pack whose `start.side` is absent → 400 naming the pack; a stale
    `packDigest` → 400 "Client pack digest is stale" (unchanged).
+   Also I6: a position session with `opponentPolicy.mode: "theory_strict"` → 400
+   naming `/session/opponentPolicy/mode`, with no run row written. Also the
+   authored-bounds gap: a pack carrying
+   `opponentPolicy: {mode: "human_common", temperature: -1}` loads into the
+   registry — the pack schema and `pack-validation.ts` both accept it — and then
+   fails `POST /runs` with 400 naming the pack and `temperature`. That case needs
+   its own fixture, because the whole point is that pack validation does not
+   catch it. Separately, `OpponentSelector` logs one `DEGRADED_THEORY_SPINE`
+   warning when a `theory_strict` request reaches a position off the spine, and
+   still returns a legal Maia move.
 7. **D3.** `POST /runs` with a valid body plus `policyConfigDigest` at the top
    level → 400 with message `Unknown field /policyConfigDigest`; plus
    `{"policyConfig":{"locus":{"engineIds":[{"id":"a","version":"1","name":"x"}]}}}`
@@ -783,14 +1088,25 @@ position sessions.
    omits absent optionals instead of nulling them. Two runs of the same pack
    at the same digest share a `sessionDigest`, and it changes when the pack
    document changes.
+   **Canonicalization is asserted before the digest, not after.** Two position
+   sessions whose `start.fen` differs only in a spelling `canonicalFen`
+   normalizes away produce the **same** `sessionDigest` and the same
+   `run.start.fen`; the stored `run.start.fen` equals `run.nodes[0].fen` in every
+   run either kind creates, including the scratch run `combinedRun` builds.
+   Digesting before canonicalizing fails this criterion, which is how it stays
+   fixed.
 9. **Schema.** `packages/schema/src/drill-run.test.ts` validates a v0.5 pack run
    and a v0.5 position run, and rejects, each with its own fixture under
    `schemas/fixtures/drill-run/`: `packId` set with `sessionKind: "position"`;
    `attempt_end` with `sessionKind: "pack"`; `packId` present with `packDigest`
-   null; a `run.started` missing `sessionDigest`.
+   null; `opponentPolicy.mode: "theory_strict"` with `sessionKind: "position"`
+   (I6); a `run.started` missing `sessionDigest`; and a run missing `sessionKind`
+   entirely — which must fail on `required` rather than slip past both `allOf`
+   branches vacuously.
 10. **Projection invariants.** `projectRun` throws on a `run.started` whose
     `start.fen` differs from `rootNode.fen` (I4), on a half-null pack pair (I1),
-    and on a `feedback.revealed` naming an unknown node.
+    on a position session declaring `theory_strict` (I6), and on a
+    `feedback.revealed` naming an unknown node.
 11. **Evidence for every run.** `service.move` on a run of either kind enqueues
     exactly one `eval` job; a position run's job carries no `objectiveRequest`;
     a service constructed without an evidence queue throws
@@ -814,19 +1130,41 @@ position sessions.
     re-closing window across its rewind, and its `compare` assertions are
     unchanged. `:192` (rewind cancellation) is unchanged apart from the create
     body.
-13. **Storage.** A database written by the current code (v0.4 snapshots) opens
-    without error after migration 2, `GET /runs` omits those rows, and
-    `GET /runs/:id/graph` for one of them returns 404 `RUN_NOT_FOUND`, not 500.
-    A v0.5 run round-trips through `list()` with `sessionKind`, `packId: null`
-    and `sessionDigest`.
+13. **Storage, from both ends of the ladder.** A database written by the current
+    code (v0.4 snapshots at `user_version = 2` after F3) opens without error,
+    reports migration 3 once via `onMigration` (`storage.ts:362`), omits those
+    rows from `GET /runs`, and answers 404 `RUN_NOT_FOUND` — not 500 — for
+    `GET /runs/:id/graph` on one of them. A second open reports no migration and
+    leaves `user_version = 3`. **And from the bottom:** a database at
+    `user_version = 0` — v0.4 snapshots, no `summary_json` — opens under the new
+    build, runs migrations 1, 2 and 3 in order, and ends with every legacy row
+    quarantined and readable-as-absent. This is the criterion that fails if
+    migration 1 still replays through `projectRun`, and it needs a checked-in
+    fixture database because no current code path can produce a `user_version = 0`
+    file. A v0.5 run round-trips through `list()` with `sessionKind`,
+    `packId: null` and `sessionDigest`.
 14. **Client.** `RunStateStore` compiles and its tests pass with no pack
     argument; `run-state.test.ts` asserts evidence polling starts only while
     `feedbackDeliveryOpen` is true and stops after the next committed move;
-    `api.test.ts` asserts the new create body and the `/reveal` call. The
-    Playwright pack walkthrough (`playwright.config.ts`) passes unchanged.
-15. **One policy rule, one implementation.** `grep -rn "feedbackIsRevealed\|feedbackRevealed" apps packages`
-    returns nothing outside the new runtime module's own tests.
-16. `make verify` green; `docs/branch-runtime.md` updated with run schema v0.5,
+    `api.test.ts` asserts the new create body and the `/reveal` call.
+    `session-controller.test.ts` asserts that resuming a position run sets the
+    named refusal and never calls `GET /packs/…`. The Playwright pack walkthrough
+    (`playwright.config.ts`) passes unchanged.
+15. **One policy rule, one implementation; one durable writer.**
+    `grep -rn "feedbackIsRevealed\|feedbackRevealed" apps packages` returns
+    nothing outside the new runtime module's own tests, and
+    `grep -rn "attachEvidence" apps packages` returns exactly one non-test,
+    non-export production call site (`service.ts:370`) plus the runtime's own
+    definition and re-export. The second grep is the checkable form of §6's
+    bounded claim; if a future change adds a second production writer, §6's
+    scoping is wrong and this criterion says so before the barrier does.
+16. **The two pack-identity call sites.** `requestObjectiveEvidence` throws
+    `INVALID_RUN_SESSION` on a position run and is otherwise unchanged
+    (`objective.test.ts:383` passes as written against a pack run).
+    `exportPackRunPgn` produces a byte-identical PGN to today's for a pack run
+    apart from the added `TabiyaSession` header, and throws `PACK_ID_MISMATCH`
+    naming the position session for a pack-less run.
+17. `make verify` green; `docs/branch-runtime.md` updated with run schema v0.5,
     the two predicates and the reveal act; `docs/drill-client.md` §Feedback
     withholding updated to describe the run-level barrier.
 
@@ -837,3 +1175,59 @@ None.
 ## Changelog
 
 - 2026-08-12: created.
+- 2026-08-12: revised after adversarial review; four blockers closed and three
+  boundary conditions found while closing them.
+  - **`theory_strict` no longer degrades silently.** Invariant I6 (§1) forbids it
+    on a position session and creation rejects it by JSON pointer (§5), because
+    the mode's spine has exactly one producer — `pack.spine` — and a pack-less
+    session has no source for it. The shipped fallback at
+    `opponent-selector.ts:453-457` is also made audible for pack runs that leave
+    the spine, mirroring `DEGRADED_POLICY_MASS`. The reviewer's alternative
+    ("specify where the geometry comes from") is circular: the geometry is an
+    authored spine, which is a pack.
+  - **The session digest is computed after canonicalization, not before** (§2, §5
+    step order, §9's `combinedRun`). The bug was worse than a split identity: the
+    raw client FEN would have been stored in `start.fen` while `createRun` wrote
+    the canonical spelling into `nodes[0].fen`, so I4 would have thrown on replay
+    for any non-canonical input. `canonicalRunStart` gives the normalization one
+    home, and `createRun` now rejects a non-canonical start rather than fixing it
+    silently.
+  - **Both missed call sites are specified, and the false claim is withdrawn**
+    (§7, §9). `requestObjectiveEvidence` (`objective.ts:300-314`) gains an
+    explicit pack-session guard instead of emitting `packId: null` into a
+    contract typed `string`. "`exportPackRunPgn` is unchanged" was wrong:
+    `combinedRun` (`pack-pgn.ts:121-144`) calls `createRun` with the three fields
+    §5 replaces. It now copies the source run's canonical start and its
+    `sessionDigest` rather than re-deriving either.
+  - **Rebased to migration 3, `STORAGE_VERSION` 2→3**, with F3 declared a
+    dependency in the header and a new §Landing order stating every shape this
+    RFC inherits from it — `RunStorage.create`, `RunStorage.list`, `RunSummary` —
+    plus the authorization class of `POST /runs/:id/reveal`, which F3's endpoint
+    table predates.
+  - **Migration 1 must stop replaying** (§8). It calls `readBackReplay` and reads
+    `run.packId`, so under v0.5 a database still at `user_version = 0` would fail
+    to open before migration 3 could quarantine anything — destroying exactly the
+    data the quarantine exists to preserve. Every field it needs is already in
+    `snapshot_json`. General rule recorded: a migration may not depend on the
+    current runtime's projection.
+  - **A pack the registry accepts can mint a run its own schema rejects** (§5).
+    `$defs.opponentPolicy.temperature` has no minimum, `runOpponentPolicy` sets
+    `minimum: 0`, and `pack-validation.ts` mentions none of the numeric keys.
+    Creation rejects the out-of-bounds copy rather than loosening the run schema.
+  - **The shipped client cannot open the runs this RFC creates** (§9). `resume`
+    fetches `/packs/${started.data.packId}`, and `App.svelte` puts the newest run
+    on the home screen, so a position run would offer the front page a 404 on the
+    string `null`. `resume` now refuses by name. The refusal is stated as a
+    refusal; the position player remains out of scope.
+  - **The two-predicate barrier's scope is bounded rather than asserted** (§6).
+    The claim that a write gate makes the read filters redundant would rest on
+    "`applyEvidence` is the only writer", which `drill-client-server.test.ts:383-390`
+    falsifies. What is true and checkable — `applyEvidence` is the only
+    *production* caller of `attachEvidence` — is stated, scoped to the HTTP
+    surface, and pinned by acceptance criterion 15.
+  - Coordinates re-verified against the tree throughout; corrected
+    `service.ts:136-141`→`:135-141`, `:317-318`→`:315-316`,
+    `authoredFeedback` `:338-343`→ surface `:335-345`,
+    `runtime.ts:132`→`:131-132`, `drill-client-server.test.ts:379-390`→`:383-390`,
+    the `segment_end` test's `it` line, and the loose "13 files" claim in
+    §Out of scope.
