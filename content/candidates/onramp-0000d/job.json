@@ -1,0 +1,1 @@
+{"args":{"count":20,"engineEval":false,"minimumNbPlays":1000,"plies":8,"ratingBand":[1000,2000],"themes":[]},"emissionJobDigest":"sha256:9596fd4a1767e206588108ec8d2dacbba98c34ccd3a70dc60615deab5d94f28b","pipeline":"position-seeds","schema":"tabiya.sourcing.job.v1","sourceEtags":["\"6a6ef08b-12248997\""]}

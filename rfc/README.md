@@ -13,7 +13,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `content-sourcing-foundation.md` | implementing | program item #6 (B6a) | `planning/content-sourcing-foundation/` |
 | `content-sourcing-syzygy.md` | implementing | program item #6 (B6b) | `planning/content-sourcing-syzygy/` |
 | `content-sourcing-explorer.md` | implementing | program item #6 (B6c) | `planning/content-sourcing-explorer/` |
-| `content-sourcing-position-seeds.md` | draft | program item #6 (B6d) | not started |
+| `content-sourcing-position-seeds.md` | implementing | program item #6 (B6d) | `planning/content-sourcing-position-seeds/` |
 
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
 `content-sourcing-pipelines.md` draft and recommended a four-way split; the draft

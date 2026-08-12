@@ -109,3 +109,33 @@ updates the pack plus source/evidence sidecars after a strict pre-check. The che
 re-derives the percentage, verifies the request population/window from the manifest URL,
 and requires byte equality. Explorer evidence cannot infer difficulty, grade a deviation,
 or support any other prose.
+
+## Puzzle-derived consequence seeds
+
+The `position-seeds` emitter consumes the exact eleven-column Lichess puzzle CSV format. It
+does not emit a tactics puzzle. It walks the complete UCI solution legally with chessops,
+derives its SAN privately, and starts a new spine-less `mode: outcome` drill from the
+resulting position. `start.side` is the original solver, so the defender moves first after
+the tactic and the learner then plays its consequence against `human_common` resistance.
+
+The solution never appears in `pack.json`: `start.movesSan` is omitted, no spine is emitted,
+and the public pack projection is regression-searched for every solution move in both UCI
+and SAN. The line lives only in `evidence.json` as `puzzle_provenance`, where
+`sourcing-check` replays it from the CSV FEN and requires the result to equal `start.fen`.
+The sidecar also holds the case-preserved puzzle id, game URL, ratings, counts, and theme
+keys. It can support `/start/fen` only and cannot ground prose.
+
+Candidates contain one even `atPly` checkpoint (eight plies by default), no authored chess
+judgements, and one executable objective: reach that checkpoint. Reaching it says only that
+the learner played the position out; it does not grade how well. A terminal result before
+the checkpoint uses the runtime’s `outcome.reached` event to disclose withheld evidence, so
+mate, draw, or insufficient material cannot strand feedback. Start positions already
+terminal after the source line are rejected.
+
+Production selection keeps rows rated at least 1000, inside the requested band, with at
+least 1000 plays and popularity 80, legal even lines of 2–8 plies, and a non-terminal
+aftermath. Phase is copied only when exactly one of `opening`, `middlegame`, or `endgame` is
+present. The dump is streamed through Node zstd under the shared source lock and discarded;
+only headers metadata and selected candidate sidecars remain. Engine evaluation is an
+explicit `--engine-eval` authoring job using the fixed-depth B6b profile, never an ambient
+effect of Stockfish being installed.

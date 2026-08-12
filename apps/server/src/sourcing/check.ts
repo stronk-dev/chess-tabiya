@@ -2,6 +2,9 @@ import { access } from "node:fs/promises";
 import { resolve, sep } from "node:path";
 
 import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
+import { Chess } from "chessops/chess";
+import { makeFen, parseFen } from "chessops/fen";
+import { parseUci } from "chessops/util";
 
 import { validatePackDocument } from "../pack-validation.js";
 import { readJson } from "./canonical.js";
@@ -236,7 +239,11 @@ function evidenceSupports(pack: unknown, ledger: EvidenceLedger, manifest: Sourc
     const isExplorerTemplate = explorerTemplate(record, pack, manifest, recordIndex, issues);
     record.supports.forEach((pointer, supportIndex) => {
       const path = `/records/${recordIndex}/supports/${supportIndex}`;
-      if (!resolvePointer(pack, pointer).found) issues.push(issue("EVIDENCE_ANCHOR_BROKEN", path, `JSON pointer does not resolve: ${pointer}`));
+      const resolved = resolvePointer(pack, pointer);
+      if (!resolved.found) issues.push(issue("EVIDENCE_ANCHOR_BROKEN", path, `JSON pointer does not resolve: ${pointer}`));
+      if (record.kind === "puzzle_provenance" && pointer === "/start/fen" && resolved.value !== record.anchor.fen) {
+        issues.push(issue("EVIDENCE_VALUES_INVALID", path, "puzzle_provenance replay anchor must equal pack /start/fen"));
+      }
       if ((!isExplorerTemplate && PROSE_POINTERS.some((pattern) => pattern.test(pointer))) || /^\/deviations\/\d+\/class$/.test(pointer) || (record.kind === "explorer_frequency" && (/^\/difficulty(?:\/|$)/.test(pointer) || /^\/spine(?:\/|$)/.test(pointer)))) {
         issues.push(issue("EVIDENCE_OVERREACH", path, `B6a has no registered template or grading contract for ${pointer}`));
       }
@@ -252,6 +259,24 @@ function evidenceSemantics(ledger: EvidenceLedger, issues: SourcingIssue[]): voi
       .map((record) => String(record.values.fen)),
   );
   ledger.records.forEach((record, index) => {
+    if (record.kind === "puzzle_provenance") {
+      const values = record.values;
+      const required = ["puzzleId", "gameUrl", "rating", "ratingDeviation", "popularity", "nbPlays", "themes", "csvFen", "solutionUci", "solutionSan", "solutionPlies"];
+      let valid = exactKeys(values as Record<string, unknown>, required) && required.every((key) => values[key] !== undefined) && nonEmpty(values.puzzleId) && nonEmpty(values.gameUrl) && nonEmpty(values.csvFen) && Array.isArray(values.solutionUci) && Array.isArray(values.solutionSan) && values.solutionUci.length === values.solutionSan.length && values.solutionPlies === values.solutionUci.length;
+      if (valid) {
+        try {
+          const position = Chess.fromSetup(parseFen(String(values.csvFen)).unwrap()).unwrap();
+          for (const raw of values.solutionUci as unknown[]) {
+            const move = typeof raw === "string" ? parseUci(raw) : undefined;
+            if (move === undefined || !position.isLegal(move)) { valid = false; break; }
+            position.play(move);
+          }
+          if (valid && makeFen(position.toSetup()) !== record.anchor.fen) valid = false;
+        } catch { valid = false; }
+      }
+      if (!valid) issues.push(issue("EVIDENCE_VALUES_INVALID", `/records/${index}/values`, "puzzle_provenance must replay its complete solutionUci from csvFen to the anchored start FEN"));
+      if (record.supports.length !== 1 || record.supports[0] !== "/start/fen") issues.push(issue("EVIDENCE_OVERREACH", `/records/${index}/supports`, "puzzle_provenance may support only /start/fen"));
+    }
     if (record.kind === "tablebase_result") {
       if (!Number.isInteger(record.values.pieceCount) || Number(record.values.pieceCount) > 7) {
         issues.push(issue("EVIDENCE_KIND_MISMATCH", `/records/${index}/values/pieceCount`, "tablebase_result requires a mechanically counted position with at most 7 pieces"));
@@ -298,6 +323,8 @@ export async function checkSourcingDirectory(directory: string, options: { reado
   let manifest: SourceManifest | undefined;
   let ledger: EvidenceLedger | undefined;
   let pack: unknown;
+  let job: unknown;
+  try { job = await readJson(resolve(absolute, "job.json")); } catch { /* job is auxiliary and optional for legacy candidates */ }
   try { manifest = validateManifest(await readJson(resolve(absolute, "sources.json")), issues); }
   catch (error) { issues.push(issue("MANIFEST_READ_ERROR", "/sources.json", error instanceof Error ? error.message : String(error))); }
   try { ledger = validateLedger(await readJson(resolve(absolute, "evidence.json")), issues); }
@@ -323,6 +350,9 @@ export async function checkSourcingDirectory(directory: string, options: { reado
     } catch (error) { issues.push(issue("PRIORITY_READ_ERROR", "/priority.json", error instanceof Error ? error.message : String(error))); }
   }
   if (ledger) evidenceSemantics(ledger, issues);
+  if (ledger && object(job) && job.pipeline === "position-seeds" && object(job.args) && job.args.engineEval !== true && ledger.records.some((record) => record.kind === "engine_eval")) {
+    issues.push(issue("EVIDENCE_KIND_UNEXPECTED", "/records", "position-seeds may contain engine_eval only when the recorded job has engineEval: true"));
+  }
   if (pack && ledger) {
     evidenceSupports(pack, ledger, manifest, issues);
     if (manifest && object(pack)) licenceObligations(pack, manifest, ledger, issues);

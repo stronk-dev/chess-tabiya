@@ -1,6 +1,6 @@
 # RFC: Position seeds from the Lichess puzzle database — the consequence, not the tactic
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §6 (on-ramp layer: "one-move-consequence packs from the CC0 puzzle DB re-cut as *play-the-consequence* rather than find-the-tactic"), §8 order item 4; `design/00-thesis.md:70,93-94` (explicitly not a tactics puzzle trainer), `:82-95` (target band)
@@ -8,7 +8,7 @@
 - **Depends on:** **`rfc/content-sourcing-foundation.md` (B6a)** — manifest, evidence sidecar, source-linkage rule (§1.2a), emission-job digest (§1.4), deterministic-output rule, `sourcing-check`, record vocabulary. **Blocks on defect D11** (`design/BACKLOG.md:115`, B6a §1.5): a consequence run that mates or stalemates before ply 8 never discloses its evidence, and there is no workaround in the pack format — see §3a. Also `rfc/archive/drill-pack-format.md` and `rfc/archive/engine-workers.md` (both implemented). Optionally strengthened by B6b (`rfc/content-sourcing-syzygy.md`) once its `engine_eval` producer exists, and then only behind `--engine-eval` (§4)
 - **Parent / amends:** — (B6d; fourth of four RFCs split out of the withdrawn `content-sourcing-pipelines.md` draft, 2026-08-12. **This is a redesign, not a rehome**: the withdrawn draft's §5 contradicted `design/00-thesis.md` and is not carried forward)
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/content-sourcing-position-seeds/` (once implementing)
+- **Planning:** `planning/content-sourcing-position-seeds/`
 
 ## Summary
 
@@ -639,6 +639,10 @@ None.
 
 ## Changelog
 
+- 2026-08-12: status → implementing; the accepted complete-line consequence pipeline,
+  private solution sidecar, streamed dump reader, and spine-less candidate emitter landed.
+  The verbatim `000Pw` fixture remains a transformation test but is excluded from production
+  emission because its real `NbPlays` is 629 and §4 requires at least 1000.
 - 2026-08-12: created, as B6d of the four-way split of the withdrawn
   `content-sourcing-pipelines.md` draft. **Redesigned rather than rehomed**: the withdrawn
   §5 started the session after `Moves[0]` and put `Moves[1..]` on the spine, which asks the

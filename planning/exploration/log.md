@@ -1075,3 +1075,15 @@ that the defect existed.
   The Q6 offline-explorer revival condition is not fired: authenticated Stage 0 works.
 - “Login with Lichess” remains a separate optional learner-facing integration. The sourcing
   pipeline uses operator/admin configuration and never borrows a learner credential.
+
+## 2026-08-12 (codex) — B6d consequence seeds implemented
+
+- The Lichess puzzle source now emits the position after the complete solution, not a tactic
+  to solve. The line is private review evidence and is absent from the served pack; emitted
+  candidates are spine-less, opponent-first, and graded only on playing to a checkpoint.
+- Exact live rows `00008`, `0000D`, and `000Pw` were replayed independently. The third has
+  629 plays, exposing a conflict between the RFC's named-fixture emission criterion and its
+  1000-play production floor. The floor was preserved: all three prove transformation, while
+  only the two qualifying rows became committed candidates.
+- This closes B6d's executable sourcing slice without adding bulk ingestion, tactics UI,
+  generated chess prose, learner authentication, or automatic publication.
