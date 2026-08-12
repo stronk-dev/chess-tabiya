@@ -744,3 +744,62 @@ again.
   names this exact missing contract. The RFC is written against that seam rather
   than against the withdrawn RFCs, which describe infrastructure that never
   existed.
+
+## 2026-08-12 (claude) — explanation-surface RFC revised after review; six blocking findings accepted
+
+Codex reviewed `authored-explanation-surface.md` and it did not survive as
+written. All six findings accepted; revision 2 is a redesign of the core
+mechanism, not a patch. No withdrawal — the reviewer's own verdict was that the
+central idea is sound and fixable by revision.
+
+- **The mechanism was wrong.** Revision 1 derived a static per-node scope from a
+  "canonical spine walk" that does not exist — the model is a forest. On Pack A a
+  depth-first ordering put `be3-hold` in the Tal branch and stranded
+  `c5-immediate` in an unreachable tail. The deeper error: `bf5-main` legitimately
+  needs *different* scopes on different continuations, so no static per-node
+  assignment can exist. Replaced with **path-relative reveal derived from actual
+  `checkpoint.reached` events**, unioned over the append-only log. Monotonicity
+  then falls out for free — rewind appends `run.rewound` and never deletes
+  checkpoint events.
+- **The claims decision was a rationalization and I should have caught it.** I
+  called first-checkpoint claim release "conservative"; it is fail-open. Pack A's
+  `tal-tempo` claim describes 4.h4 and would have been exposed on the quiet main
+  line before the learner ever met that move. Claims are now withheld entirely
+  until they have real anchors. "Never reveal unsupported placement" is the
+  conservative choice; my framing inverted it to justify making a dead field
+  live.
+- **Scope-creep check worked in the right direction.** The claim that this RFC
+  closed D2 was wrong — the barrier has five surfaces, three fail open
+  independently, and packless evidence tests legitimately depend on the current
+  path. D2 returns to F2, which is where the alignment pass had originally put
+  it. I had moved it in for tidiness.
+- **Two authored shapes were simply unsupportable**: concepts are bare ids with
+  no prose, and checkpoint labels already ship before play. The item set is now
+  closed to three named kinds, with exclusions stated.
+- **A disclosure hole I had not seen**: with withheld items merely absent, a
+  client cannot distinguish "nothing authored here" from "withheld", so both the
+  pre-reveal timeline affordance and the honest-absence requirement were
+  impossible as specified. Resolved by one coarse run-level flag and by
+  **withdrawing** pre-reveal per-ply markers — any per-position "content exists
+  here" signal is a contamination side channel.
+- **The acceptance criteria could not have run.** `e6` has no annotation; the
+  `bf5-main` deviations are never played on the asserted line; and the Playwright
+  harness cannot start Pack A at all (server not in dev mode, no mock script,
+  and the pack starts with Black to move while the learner is White with no
+  initial opponent move requested). Harness repair is now an explicit
+  prerequisite section rather than an assumption, and the Black-to-move question
+  is carried as the RFC's one open question because it affects every pack whose
+  start position is on the opponent's move.
+
+Both revision-1 open questions were resolved by the review with evidence: the
+`__tail` id cannot collide (it is outside the legal id language) but the tail
+scope is removed anyway because no run-terminal event could ever reveal it —
+authored prose after the last reachable checkpoint is an authoring defect that
+`pack-check` should warn about. And `segment.completed` carries event sequence
+numbers rather than checkpoint ids and must be resolved through the shipped
+`deriveSegments()`; revision 1's global-order mapping was invalid.
+
+Process note: the prompt named scope derivation as the likely break point and it
+broke there. Naming your weakest assumption to the reviewer is cheap and it
+worked — but three of the six findings were in parts I had not flagged, so it is
+not a substitute for the review.
