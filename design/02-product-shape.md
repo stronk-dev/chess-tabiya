@@ -38,6 +38,15 @@ not prohibit charging; exact source/distribution obligations depend on architect
 deployment and require review before public or proprietary release
 (`archive/brief-v2/08_ENGINE_CORPUS_AND_CONTENT.md` §Licensing notes).
 
+**Content/data rights axis — SETTLED 2026-08-12 (owner ruling): authored pack
+prose is `CC-BY-SA-4.0`.** Share-alike on content, matching the AGPL-3.0 posture
+on code. This is a lever, not just a licence choice: it makes Wikibooks'
+reusable idea-prose a legitimate source, so authors can start from existing
+explanation instead of a blank page for every one of the hundreds of packs
+`04-content-architecture.md` describes. The price, accepted: attribution chains
+must be encoded in each pack's `provenance`, and pack prose cannot be
+relicensed unilaterally later.
+
 **Deployment axis — SETTLED 2026-08-12 (owner ruling): hosted multi-user.**
 Supersedes the self-hosted working default on this axis only; source model,
 monetization, and content/data rights are unchanged and remain OSS-compatible

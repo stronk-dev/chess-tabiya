@@ -866,18 +866,28 @@ exist.
     by the claim contract; a new `docs/identity-and-authorization.md` records the account
     model, the role table, the operational limitations of §12, and the TLS obligation.
 
-## Open questions
+## Resolved by owner ruling (2026-08-12)
 
-1. **Does the hosted deployment need account deletion before it is public?** GDPR-shaped
-   obligations depend on jurisdiction and on whether the service is offered to others at
-   all. `ON DELETE CASCADE` on `learner_sessions` and `run_grants` makes deletion
-   mechanically cheap; what a deleted learner's *runs* become (deleted, or reassigned to
-   `__legacy`) is a product decision, not a technical one. Owner ruling required before
-   `accepted`.
-2. **Is the first account privileged?** A hosted instance has an operator. Nothing here
-   distinguishes them, so pack draft loading, deployment settings and future
-   administrative surfaces have no subject. Naming an `operator` flag on `learners` now
-   is one column; guessing its powers is not. Owner ruling required before `accepted`.
+1. **Deleted accounts: runs are reassigned to `__legacy`, not deleted.** Sessions and
+   grants cascade; the run survives with its ownership moved to the legacy holder the
+   migration already creates for backfill. Rationale the ruling protects: a run someone
+   else was granted access to, or that appears in another learner's branch comparison,
+   must not vanish because its original owner left. Specify the reassignment as part of
+   the deletion path, and add an acceptance test that a granted reader retains access to
+   a reassigned run.
+
+2. **There is no operator concept.** The owner ruled against an `operator` flag. Do not
+   add one, and do not model administrative roles.
+
+   **Consequence, stated so it is not rediscovered as a defect:** every administrative
+   capability must live *outside* the account model — environment and configuration, not
+   a privileged user. That covers draft-pack loading (already an environment concern:
+   `content/drafts/` loading is dev-mode gated), deployment settings, and engine/provider
+   configuration. Any future surface that wants "only the operator may do this" must
+   either be an environment-gated route or be redesigned; it may not introduce a
+   privileged account through the back door. If a surface ever genuinely cannot be
+   expressed this way, that is new evidence and goes back to the owner as a fresh ruling,
+   not an improvised column.
 
 ## Changelog
 

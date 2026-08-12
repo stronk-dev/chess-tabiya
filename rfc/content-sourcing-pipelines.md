@@ -756,11 +756,15 @@ drafts:
    available. §4.1 is written so the answer changes which backend is *preferred*, not
    whether P2 ships. Resolve by trying one token before P2 begins; if it fails, the offline
    table is the only backend and §4.1's ordering collapses to cache → offline.
-2. **CC BY-SA posture (owner ruling).** All-original prose, or pack prose declared
-   `CC-BY-SA-4.0` wholesale (`theory-sourcing.md` §3). Blocks nothing in this RFC — §6.4
-   makes the emitters refuse until it is answered — but it decides whether Wikibooks ever
-   becomes a fifth pipeline. Must be resolved before `accepted`, since it is one line of the
-   spec either way.
+2. **CC BY-SA posture — RESOLVED by owner ruling 2026-08-12: pack prose is declared
+   `CC-BY-SA-4.0` wholesale.** Share-alike on authored content, consistent with the
+   AGPL-3.0 posture already chosen for code. Consequences to specify rather than assume:
+   Wikibooks becomes a legitimate fifth pipeline (reusable idea-prose with attribution);
+   every pack's `provenance` must carry the licence and the attribution chain for any
+   borrowed prose, encoded rather than left to good intentions; §6.4's emitter refusal is
+   lifted; and the repo can no longer relicense pack prose unilaterally later, which is
+   the price of the lever and is accepted.
+
 3. **Should `sourcing-check` run against `content/packs/` too, as a published-content
    audit?** Argument for: it would catch a promoted pack whose evidence went stale. Argument
    against: it makes publication depend on sidecars that a hand-authored pack legitimately

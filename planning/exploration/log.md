@@ -883,3 +883,34 @@ Recorded because it changes what can be measured, not to relitigate it:
 Also this session: `authored-explanation-surface` closed to **implemented** and
 archived by codex on approval. Branch-switch measured at 50.1 ms against the
 50 ms benchmark and recorded honestly rather than rounded down.
+
+## 2026-08-12 (owner rulings) — four decisions closing three RFC blockers
+
+1. **Deleted accounts reassign their runs to `__legacy`.** Sessions and grants
+   cascade; runs survive with ownership moved. Protects the case where a run is
+   granted to another learner or appears in someone else's comparison.
+2. **No operator concept.** Ruled against an `operator` flag. Consequence
+   recorded in the F3 RFC so it is not rediscovered as a defect: every
+   administrative capability must live outside the account model — environment
+   and configuration, never a privileged user. Draft-pack loading is already
+   environment-gated, so this is consistent with what ships; the constraint is
+   on *future* surfaces, which may not introduce a privileged account through
+   the back door. A surface that genuinely cannot be expressed as
+   environment-gated is new evidence for a fresh ruling, not an improvised
+   column.
+3. **Authored pack prose is `CC-BY-SA-4.0`.** Settles the content/data-rights
+   axis of Q2 (the deployment axis was settled earlier the same day). This is
+   the authoring-cost lever, not just a licence: Wikibooks' reusable idea-prose
+   becomes a legitimate fifth pipeline, so authors start from existing
+   explanation rather than blank page across hundreds of packs. Price accepted:
+   attribution chains encoded in `provenance`, and no unilateral relicensing of
+   pack prose later.
+4. **The streamer may cheat on themselves.** Per-viewer reveal cannot enforce
+   blind play — a player can hold a second account and spectate their own run.
+   Ruled: document the limit honestly rather than engineer against a user
+   deceiving themselves. Chat voting, host rewind/branch/compare and the
+   spectator projection are unaffected, so B5 loses a guarantee, not a feature.
+
+All three drafted RFCs now have zero open questions. `pack-optional-runs` had
+none; `learner-identity-and-authorization` and `content-sourcing-pipelines` are
+resolved above.
