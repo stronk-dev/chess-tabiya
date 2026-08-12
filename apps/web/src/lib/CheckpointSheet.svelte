@@ -3,6 +3,7 @@
 
   import HonestControl from "./HonestControl.svelte";
   import type { CheckpointNotice } from "./screen-model.js";
+  import type { AuthoredFeedbackItem } from "./api.js";
 
   interface Props {
     checkpoint: CheckpointNotice;
@@ -11,10 +12,18 @@
     onRewind: () => void | Promise<void>;
     onCompare: () => void | Promise<void>;
     onStop: () => void;
+    authoredItems?: readonly AuthoredFeedbackItem[];
   }
 
-  let { checkpoint, canCompare, onContinue, onRewind, onCompare, onStop }: Props =
-    $props();
+  let {
+    checkpoint,
+    canCompare,
+    onContinue,
+    onRewind,
+    onCompare,
+    onStop,
+    authoredItems = [],
+  }: Props = $props();
   let heading: HTMLHeadingElement;
 
   onMount(() => heading?.focus());
@@ -25,6 +34,25 @@
     <p class="eyebrow">Checkpoint</p>
     <h2 id="checkpoint-title" tabindex="-1" bind:this={heading}>{checkpoint.label}</h2>
     <p>You reached a semantic boundary. Continue, replay it, or compare attempts.</p>
+    {#if authoredItems.length > 0}
+      <section class="authored-feedback" aria-labelledby="authored-feedback-title">
+        <h3 id="authored-feedback-title">Authored commentary</h3>
+        <ul>
+          {#each authoredItems as item}
+            <li>
+              {#if item.kind === "annotation"}
+                <span class="kind">Line note</span><p>{item.text}</p>
+              {:else if item.kind === "deviation"}
+                <span class="kind">Alternative {item.anchor.moveUci}</span><p>{item.note}</p>
+              {:else}
+                <span class="kind">Plan option</span><strong>{item.label}</strong>
+                {#if item.description}<p>{item.description}</p>{/if}
+              {/if}
+            </li>
+          {/each}
+        </ul>
+      </section>
+    {/if}
     <div class="actions">
       <button class="primary" type="button" onclick={onContinue}>Continue</button>
       <button type="button" onclick={onRewind}>Rewind here</button>
@@ -86,6 +114,33 @@
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-top: 1.3rem;
+  }
+
+  .authored-feedback {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .authored-feedback h3,
+  .authored-feedback p {
+    margin: 0;
+  }
+
+  .authored-feedback ul {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0.65rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .kind {
+    display: block;
+    color: var(--muted);
+    font: 700 0.62rem ui-monospace, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   button {

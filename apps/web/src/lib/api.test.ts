@@ -94,6 +94,9 @@ describe("DrillApi", () => {
         });
       }
       if (url.includes("/events")) return json({ events: [], nextSeq: 1 });
+      if (url.includes("/authored-feedback")) {
+        return json({ items: [], hasWithheldAuthoredContent: true });
+      }
       if (url.includes("/evidence") && init?.method !== "POST") {
         return json({ results: [], nextSeq: 0 });
       }
@@ -146,6 +149,10 @@ describe("DrillApi", () => {
     await api.events(run.id, 1);
     await api.evidence(run.id, 2);
     await api.applyEvidence(run.id, 3, "writer-one");
+    expect(await api.authoredFeedback(run.id)).toEqual({
+      items: [],
+      hasWithheldAuthoredContent: true,
+    });
     expect(await api.pgn(run.id, ["a", "b"])).toEqual({
       filename: "run-one.pgn",
       text: "[Event \"Tabiya\"]\n",
@@ -167,6 +174,7 @@ describe("DrillApi", () => {
       "/runs/run%20%2F%20one/events",
       "/runs/run%20%2F%20one/evidence",
       "/runs/run%20%2F%20one/evidence",
+      "/runs/run%20%2F%20one/authored-feedback",
       "/runs/run%20%2F%20one/pgn",
     ]);
     const writerCalls = calls.filter((call) =>

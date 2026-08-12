@@ -21,6 +21,7 @@
     whyBanner,
   } from "./screen-model.js";
   import type { RunStateSnapshot } from "./run-state.js";
+  import type { AuthoredFeedbackPage } from "./api.js";
   import type { RegisterKeyboardRegion } from "./keyboard.js";
 
   type RewindTarget =
@@ -31,6 +32,7 @@
     pack: DrillPackDefinition;
     snapshot: RunStateSnapshot;
     checkpoint?: CheckpointNotice | undefined;
+    authoredFeedback?: AuthoredFeedbackPage | undefined;
     comparison?: BranchComparison | undefined;
     comparisonBranchIds?: readonly [string, string] | undefined;
     busy?: boolean;
@@ -51,6 +53,7 @@
     pack,
     snapshot,
     checkpoint,
+    authoredFeedback,
     comparison,
     comparisonBranchIds,
     busy = false,
@@ -85,7 +88,21 @@
 
   let run = $derived(snapshot.run);
   let currentNode = $derived(activeNode(run));
-  let entries = $derived(timelineEntries(run));
+  let entries = $derived(timelineEntries(run, pack));
+  let authoredSpineNodeIds = $derived(
+    new Set(
+      (authoredFeedback?.items ?? []).flatMap((item) =>
+        "spineNodeId" in item.anchor ? [item.anchor.spineNodeId] : [],
+      ),
+    ),
+  );
+  let checkpointAuthoredItems = $derived(
+    checkpoint === undefined
+      ? []
+      : (authoredFeedback?.items ?? []).filter(
+          (item) => item.revealedBy.eventSeq === checkpoint.eventSeq,
+        ),
+  );
   let cards = $derived(branchCards(run));
   let banner = $derived(whyBanner(pack, run));
   let startSide = $derived(packStartSide(pack));
@@ -344,6 +361,9 @@
         <span class:readonly={snapshot.access === "read_only"}>
           {snapshot.access === "read_only" ? "Read-only follower" : busy ? "Thinking…" : "Your move"}
         </span>
+        {#if authoredFeedback?.hasWithheldAuthoredContent}
+          <span role="status">Authored commentary withheld until checkpoints</span>
+        {/if}
         {#if snapshot.pendingEvidence > 0}<span>{snapshot.pendingEvidence} evidence waiting</span>{/if}
       </div>
       <button class="help" type="button" aria-label="Keyboard shortcuts" onclick={() => (helpOpen = true)}>?</button>
@@ -390,6 +410,7 @@
           {previewNodeId}
           onPreview={preview}
           onConfirm={confirmPreview}
+          {authoredSpineNodeIds}
         />
         <div class="quick-actions" aria-label="Run actions">
           <button type="button" onclick={() => (forkOpen = true)}>Fork <kbd>B</kbd></button>
@@ -420,6 +441,7 @@
 {#if checkpoint}
   <CheckpointSheet
     {checkpoint}
+    authoredItems={checkpointAuthoredItems}
     canCompare={cards.length >= 2}
     onContinue={continueFromCheckpoint}
     onRewind={() => onRewind({ nodeId: checkpoint.nodeId })}
@@ -578,7 +600,7 @@
 
   .board-frame {
     position: relative;
-    width: min(100%, calc(100dvh - 22rem), 40rem);
+    width: min(100%, calc(100dvh - 30rem), 40rem);
     max-height: 100%;
     aspect-ratio: 1;
     justify-self: center;

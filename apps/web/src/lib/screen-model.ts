@@ -18,6 +18,7 @@ export interface TimelineEntry {
   readonly moveUci: string;
   readonly actor: Node["actor"];
   readonly checkpointIds: readonly string[];
+  readonly spineNodeId?: string;
 }
 
 export interface BranchCard {
@@ -88,9 +89,19 @@ export function activeNode(run: DrillRun): Node {
   return node;
 }
 
-export function timelineEntries(run: DrillRun): readonly TimelineEntry[] {
+export function timelineEntries(
+  run: DrillRun,
+  pack?: DrillPackDefinition,
+): readonly TimelineEntry[] {
+  let candidates = pack?.spine ?? [];
+  let onSpine = pack !== undefined;
   return historyFrom(run, run.activeCursor.nodeId).flatMap((node) => {
     if (node.moveSan === null || node.moveUci === null) return [];
+    const authored = onSpine
+      ? candidates.find((candidate) => candidate.moveUci === node.moveUci)
+      : undefined;
+    if (authored === undefined) onSpine = false;
+    else candidates = authored.children;
     return [
       Object.freeze({
         nodeId: node.id,
@@ -99,6 +110,7 @@ export function timelineEntries(run: DrillRun): readonly TimelineEntry[] {
         moveUci: node.moveUci,
         actor: node.actor,
         checkpointIds: node.checkpointRefs,
+        ...(authored === undefined ? {} : { spineNodeId: authored.id }),
       }),
     ];
   });

@@ -66,6 +66,42 @@ export interface EvidencePage {
   readonly nextSeq: number;
 }
 
+export interface RevealAttribution {
+  readonly checkpointId: string;
+  readonly eventSeq: number;
+}
+
+export type AuthoredFeedbackItem =
+  | {
+      readonly kind: "annotation";
+      readonly id: string;
+      readonly revealedBy: RevealAttribution;
+      readonly anchor: { readonly spineNodeId: string };
+      readonly text: string;
+    }
+  | {
+      readonly kind: "deviation";
+      readonly id: string;
+      readonly revealedBy: RevealAttribution;
+      readonly anchor: { readonly spineNodeId: string; readonly moveUci: string };
+      readonly note: string;
+      readonly deviationClass?: string;
+      readonly offObjective?: boolean;
+    }
+  | {
+      readonly kind: "plan_class";
+      readonly id: string;
+      readonly revealedBy: RevealAttribution;
+      readonly anchor: { readonly checkpointId: string };
+      readonly label: string;
+      readonly description?: string;
+    };
+
+export interface AuthoredFeedbackPage {
+  readonly items: readonly AuthoredFeedbackItem[];
+  readonly hasWithheldAuthoredContent: boolean;
+}
+
 export interface EngineCapability {
   readonly id: string;
   readonly kind: "opponent" | "judge";
@@ -248,6 +284,7 @@ export interface DrillClientApi extends RunApi {
     branchAId: string,
     branchBId: string,
   ): Promise<BranchComparison>;
+  authoredFeedback(runId: string): Promise<AuthoredFeedbackPage>;
   pgn(runId: string, branchIds?: readonly string[]): Promise<PgnDownload>;
 }
 
@@ -392,6 +429,10 @@ export class DrillApi implements DrillClientApi {
 
   evidence(runId: string, sinceSeq = 0): Promise<EvidencePage> {
     return this.#json(`/runs/${encoded(runId)}/evidence?sinceSeq=${sinceSeq}`);
+  }
+
+  authoredFeedback(runId: string): Promise<AuthoredFeedbackPage> {
+    return this.#json(`/runs/${encoded(runId)}/authored-feedback`);
   }
 
   applyEvidence(

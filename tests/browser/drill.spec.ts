@@ -203,6 +203,36 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   }
 });
 
+test("Pack A reveals only the authored commentary for the checkpoint occurrence", async ({
+  page,
+}) => {
+  await page.goto("/play");
+  const card = page
+    .getByRole("article")
+    .filter({ hasText: "Caro-Kann Advance: winning the c5 race" });
+  await expect(card).toBeVisible();
+  await card.getByRole("button", { name: /Open position/ }).click();
+
+  await expect(page.locator("cg-board")).toBeVisible();
+  await expect(page.getByText("Active line 1 plies")).toBeVisible();
+  await expect(page.getByText("Authored commentary withheld until checkpoints")).toBeVisible();
+  await move(page, "g1", "f3");
+  await expect(page.getByText("Active line 3 plies")).toBeVisible();
+  await move(page, "f1", "e2");
+
+  await expect(
+    page.getByRole("heading", { name: "Choose your plan before the break lands" }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Authored commentary" })).toBeVisible();
+  await expect(
+    page.getByText("The whole point of the Caro-Kann", { exact: false }),
+  ).toBeVisible();
+  await expect(page.getByText("Develop first. The Short System", { exact: false })).toBeVisible();
+  await expect(
+    page.getByText("Hold the centre and finish developing", { exact: false }),
+  ).toHaveCount(0);
+});
+
 test("every shell route owns the viewport at both desktop projections", async ({
   page,
 }) => {

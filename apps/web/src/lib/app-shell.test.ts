@@ -117,6 +117,9 @@ function api(): DrillClientApi {
         activeCursor: run.activeCursor,
       };
     },
+    async authoredFeedback() {
+      return { items: [], hasWithheldAuthoredContent: false };
+    },
     async pgn() {
       return { filename: "route-run.pgn", text: "[Event \"Tabiya\"]\n" };
     },

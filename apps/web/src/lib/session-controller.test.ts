@@ -241,6 +241,10 @@ class FakeApi implements DrillClientApi {
     return { results: [], nextSeq: 0 };
   }
 
+  async authoredFeedback() {
+    return { items: [], hasWithheldAuthoredContent: false };
+  }
+
   async applyEvidence(): Promise<MutationResult> {
     throw new Error("not used");
   }

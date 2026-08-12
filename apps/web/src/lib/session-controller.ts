@@ -10,6 +10,7 @@ import {
 import {
   ApiError,
   type Capabilities,
+  type AuthoredFeedbackPage,
   type DrillClientApi,
   type PgnDownload,
 } from "./api.js";
@@ -35,6 +36,7 @@ export interface DrillSessionState {
   readonly checkpoint?: CheckpointNotice;
   readonly comparison?: BranchComparison;
   readonly comparisonBranchIds?: readonly [string, string];
+  readonly authoredFeedback?: AuthoredFeedbackPage;
 }
 
 export interface StartedRun {
@@ -185,6 +187,7 @@ export class DrillSessionController {
       this.#capabilities = capabilities;
       this.#attachStore(store, document, digest);
       await this.#playOpponentIfNeeded();
+      await this.#refreshAuthoredFeedback();
     } catch (error) {
       this.#patch({
         busy: false,
@@ -216,6 +219,7 @@ export class DrillSessionController {
       const store = this.#newStore(document, session, run);
       this.#attachStore(store, document, digest);
       await this.#playOpponentIfNeeded();
+      await this.#refreshAuthoredFeedback();
       this.#onRunStarted?.({ runId });
     } catch (error) {
       this.#fail(error);
@@ -228,6 +232,7 @@ export class DrillSessionController {
     try {
       const result = await store.move({ uci });
       if (this.#captureCheckpoint(result.emitted)) {
+        await this.#refreshAuthoredFeedback();
         this.#patch({ busy: false });
         return;
       }
@@ -365,7 +370,15 @@ export class DrillSessionController {
       seed: branch.seed,
     });
     const result = await this.#requiredStore().appendOpponentPly(selection);
-    this.#captureCheckpoint(result.emitted);
+    if (this.#captureCheckpoint(result.emitted)) {
+      await this.#refreshAuthoredFeedback();
+    }
+  }
+
+  async #refreshAuthoredFeedback(): Promise<void> {
+    const runState = this.#state.runState;
+    if (runState === undefined) return;
+    this.#patch({ authoredFeedback: await this.#api.authoredFeedback(runState.run.id) });
   }
 
   #captureCheckpoint(events: readonly DrillRunEvent[]): boolean {
@@ -411,6 +424,7 @@ export class DrillSessionController {
       checkpoint: latestCheckpoint(pack, store.snapshot.run),
       comparison: undefined,
       comparisonBranchIds: undefined,
+      authoredFeedback: undefined,
     });
   }
 

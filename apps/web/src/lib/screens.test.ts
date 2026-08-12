@@ -174,13 +174,36 @@ describe("Layer 3 screens", () => {
 
   it("composes board, objective, why-banner, timeline preview, branch rail, and checkpoint sheet", async () => {
     const run = branchedRun();
+    const checkpoint = latestCheckpoint(pack, run)!;
     const onRewind = vi.fn();
     const component = mount(DrillScreen, {
       target: target(),
       props: {
         pack,
         snapshot: { run, access: "writer", pendingEvidence: 0 },
-        checkpoint: latestCheckpoint(pack, run),
+        checkpoint,
+        authoredFeedback: {
+          items: [
+            {
+              kind: "annotation",
+              id: "najdorf-be3#earlier",
+              revealedBy: {
+                checkpointId: checkpoint.id,
+                eventSeq: checkpoint.eventSeq - 1,
+              },
+              anchor: { spineNodeId: "najdorf-be3" },
+              text: "Earlier occurrence must stay out of this sheet.",
+            },
+            {
+              kind: "annotation",
+              id: "najdorf-be3#0",
+              revealedBy: { checkpointId: checkpoint.id, eventSeq: checkpoint.eventSeq },
+              anchor: { spineNodeId: "najdorf-be3" },
+              text: "Authored setup explanation.",
+            },
+          ],
+          hasWithheldAuthoredContent: true,
+        },
         onMove: vi.fn(),
         onRewind,
         onFork: vi.fn(),
@@ -207,6 +230,14 @@ describe("Layer 3 screens", () => {
       "Critical race resolved",
     );
     expect(document.activeElement?.textContent).toBe("Critical race resolved");
+    expect(document.body.textContent).toContain("Authored setup explanation.");
+    expect(document.body.textContent).not.toContain(
+      "Earlier occurrence must stay out of this sheet.",
+    );
+    expect(document.body.textContent).toContain(
+      "Authored commentary withheld until checkpoints",
+    );
+    expect(document.querySelectorAll(".timeline .authored-marker")).toHaveLength(1);
 
     document.querySelector<HTMLButtonElement>(".timeline li button")!.click();
     await tick();

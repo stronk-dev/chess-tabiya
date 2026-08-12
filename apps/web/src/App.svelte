@@ -216,6 +216,7 @@
         pack={session.pack}
         snapshot={session.runState}
         checkpoint={session.checkpoint}
+        authoredFeedback={session.authoredFeedback}
         comparison={session.comparison}
         comparisonBranchIds={session.comparisonBranchIds}
         busy={session.busy}

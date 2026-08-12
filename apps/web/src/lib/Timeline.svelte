@@ -7,9 +7,17 @@
     previewNodeId?: string | undefined;
     onPreview: (nodeId: string) => void;
     onConfirm: (nodeId: string) => void | Promise<void>;
+    authoredSpineNodeIds?: ReadonlySet<string>;
   }
 
-  let { entries, activeNodeId, previewNodeId, onPreview, onConfirm }: Props = $props();
+  let {
+    entries,
+    activeNodeId,
+    previewNodeId,
+    onPreview,
+    onConfirm,
+    authoredSpineNodeIds = new Set<string>(),
+  }: Props = $props();
 </script>
 
 <section class="timeline" aria-labelledby="timeline-title">
@@ -33,6 +41,9 @@
           <span>{entry.moveSan}</span>
           {#if entry.checkpointIds.length > 0}
             <span class="marker" aria-hidden="true"></span>
+          {/if}
+          {#if entry.spineNodeId && authoredSpineNodeIds.has(entry.spineNodeId)}
+            <span class="authored-marker" aria-label="Authored commentary available">A</span>
           {/if}
         </button>
       </li>
@@ -122,6 +133,13 @@
     height: 0.4rem;
     border-radius: 50%;
     background: var(--warning);
+  }
+
+  .authored-marker {
+    display: block;
+    margin-top: 0.2rem;
+    color: var(--accent);
+    font: 700 0.55rem/1 ui-monospace, monospace;
   }
 
   .confirm {

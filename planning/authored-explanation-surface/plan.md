@@ -26,10 +26,10 @@ acceptance test.
 
 ## 3. Client surface
 
-- [ ] Add the typed REST client and session-state loading
-- [ ] Render exact-occurrence checkpoint feedback and post-reveal timeline markers
-- [ ] Render only the coarse withheld-content status
-- [ ] Pass the Pack A Playwright acceptance
+- [x] Add the typed REST client and session-state loading
+- [x] Render exact-occurrence checkpoint feedback and post-reveal timeline markers
+- [x] Render only the coarse withheld-content status
+- [x] Pass the Pack A Playwright acceptance
 
 ## 4. Close implementation
 
