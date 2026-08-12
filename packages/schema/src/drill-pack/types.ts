@@ -21,6 +21,24 @@ export interface SpineNode {
   readonly annotations?: readonly string[];
 }
 
+export interface PlanClass {
+  readonly id: string;
+  readonly label: string;
+  readonly description?: string;
+}
+
+export type DeviationLocation =
+  | { readonly spineNodeId: string }
+  | { readonly fen: string };
+
+export interface Deviation {
+  readonly at: DeviationLocation;
+  readonly moveUci: string;
+  readonly class: string;
+  readonly offObjective?: boolean;
+  readonly note?: string;
+}
+
 export type SimpleTrigger =
   | { readonly atPly: number }
   | { readonly atSpineNode: string }
@@ -66,14 +84,12 @@ export interface DrillPackDefinition {
     readonly [key: string]: unknown;
   };
   readonly checkpoints: readonly CheckpointDefinition[];
+  readonly planClasses?: readonly PlanClass[];
   readonly spine?: readonly SpineNode[];
   readonly authoredBoundary?: {
     readonly spineNodeIds?: readonly string[];
     readonly [key: string]: unknown;
   };
-  readonly deviations?: readonly {
-    readonly at: { readonly spineNodeId?: string; readonly fen?: string };
-    readonly [key: string]: unknown;
-  }[];
+  readonly deviations?: readonly Deviation[];
   readonly [key: string]: unknown;
 }

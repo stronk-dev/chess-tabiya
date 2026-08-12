@@ -20,9 +20,9 @@ acceptance test.
 
 ## 2. Server projection and transport
 
-- [ ] Add typed authored pack fields and the tail-prose warning
-- [ ] Project supported items path-relatively with occurrence attribution and deterministic ordering
-- [ ] Bind `GET /runs/:id/authored-feedback` and cover delayed/segment/rewind/sibling/extraction cases
+- [x] Add typed authored pack fields and the tail-prose warning
+- [x] Project supported items path-relatively with occurrence attribution and deterministic ordering
+- [x] Bind `GET /runs/:id/authored-feedback` and cover delayed/segment/rewind/sibling/extraction cases
 
 ## 3. Client surface
 

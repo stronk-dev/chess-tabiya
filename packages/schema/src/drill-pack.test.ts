@@ -225,6 +225,40 @@ describe("drill pack authoring lint", () => {
       ]),
     );
   });
+
+  it("warns for spine-authored prose no atSpineNode checkpoint can reveal", () => {
+    const candidate = structuredClone(livingFixture) as DrillPackDefinition;
+    const lateNode = candidate.spine![0]!.children[0]!;
+    (lateNode as { annotations?: readonly string[] }).annotations = ["Too late"];
+    (candidate as { checkpoints: DrillPackDefinition["checkpoints"] }).checkpoints = [
+      { id: "early", trigger: { atSpineNode: "najdorf-be3" } },
+    ];
+
+    expect(lintDrillPack(candidate)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          severity: "warning",
+          code: "AUTHORED_PROSE_AFTER_LAST_CHECKPOINT",
+          path: "/spine/0/children/0/annotations/0",
+        }),
+      ]),
+    );
+  });
+
+  it("suppresses the tail-prose warning when any checkpoint is not node-resolvable", () => {
+    const candidate = structuredClone(livingFixture) as DrillPackDefinition;
+    const lateNode = candidate.spine![0]!.children[0]!;
+    (lateNode as { annotations?: readonly string[] }).annotations = ["Maybe reachable"];
+    (candidate as { checkpoints: DrillPackDefinition["checkpoints"] }).checkpoints = [
+      { id: "dynamic", trigger: { atPly: 9 } },
+    ];
+
+    expect(
+      lintDrillPack(candidate).filter(
+        (issue) => issue.code === "AUTHORED_PROSE_AFTER_LAST_CHECKPOINT",
+      ),
+    ).toEqual([]);
+  });
 });
 
 describe("drill pack RFC 8785 digest", () => {

@@ -24,3 +24,20 @@ Append-only.
 - The browser harness now starts in development mode and locates the schema
   example by review status instead of assuming the registry contains one pack.
   Existing browser suite: 2 passed, optional Maia test skipped.
+
+## 2026-08-12 — codex, server reveal projection
+
+- Added typed access for the three supported authored shapes without changing
+  the v0.2 JSON Schema. `pack-check` now warns, rather than guesses, when
+  spine-anchored prose lies beyond every statically resolvable checkpoint; any
+  dynamic checkpoint suppresses that warning.
+- Added an event-sequenced projection and `GET
+  /runs/:id/authored-feedback`. Tests exercise Pack A's main and Tal sibling
+  paths, repeated checkpoint ids on separate branches, segment-end reveal,
+  extraction exclusions, deterministic ordering, and monotonic reveal after
+  rewind.
+- The response counts only structurally deliverable annotation, deviation-note,
+  and plan-class items. Pack A's unanchored claims and concepts are neither
+  returned nor allowed to pin the coarse withheld flag.
+- Focused schema/server suites and the workspace typecheck passed before this
+  checkpoint.

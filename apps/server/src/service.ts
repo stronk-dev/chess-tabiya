@@ -29,6 +29,10 @@ import {
   type EvidenceJob,
   type EvidencePage,
 } from "./evidence-queue.js";
+import {
+  projectAuthoredFeedback,
+  type AuthoredFeedbackPage,
+} from "./authored-feedback.js";
 import { ServerError } from "./errors.js";
 import {
   feedbackIsRevealed,
@@ -326,6 +330,18 @@ export class RunService {
       return Object.freeze({ results: Object.freeze([]), nextSeq: sinceSeq });
     }
     return this.#requiredEvidenceQueue().page(runId, sinceSeq);
+  }
+
+  authoredFeedback(runId: string): AuthoredFeedbackPage {
+    const run = this.#required(runId).run;
+    const pack = this.#registeredPack(run);
+    if (pack === undefined) {
+      throw new ServerError(
+        "PACK_NOT_FOUND",
+        `Run ${runId} has no matching registered pack for authored feedback`,
+      );
+    }
+    return projectAuthoredFeedback(pack, run);
   }
 
   applyEvidence(

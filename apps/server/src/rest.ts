@@ -296,7 +296,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|pgn)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -431,6 +431,9 @@ export function createRestHandler(
       }
       if (request.method === "GET" && route.action === "evidence") {
         return json(200, service.evidence(route.runId, parseSinceSeq(url)));
+      }
+      if (request.method === "GET" && route.action === "authored-feedback") {
+        return json(200, service.authoredFeedback(route.runId));
       }
       if (request.method === "GET" && route.action === "pgn") {
         const pgn = await service.pgn(route.runId, parseBranches(url));

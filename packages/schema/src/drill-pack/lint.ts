@@ -13,6 +13,7 @@ import type {
 } from "./types.js";
 
 export type PackLintCode =
+  | "AUTHORED_PROSE_AFTER_LAST_CHECKPOINT"
   | "DUPLICATE_SPINE_NODE"
   | "ILLEGAL_SPINE_MOVE"
   | "INVALID_START_FEN"
@@ -25,6 +26,74 @@ export interface PackLintIssue {
   readonly code: PackLintCode;
   readonly path: string;
   readonly message: string;
+}
+
+interface SpineLocation {
+  readonly node: SpineNode;
+  readonly parentId?: string;
+  readonly path: string;
+}
+
+function indexSpine(
+  nodes: readonly SpineNode[],
+  path: string,
+  parentId: string | undefined,
+  result: Map<string, SpineLocation>,
+): void {
+  for (const [index, node] of nodes.entries()) {
+    const nodePath = `${path}/${index}`;
+    result.set(node.id, { node, ...(parentId === undefined ? {} : { parentId }), path: nodePath });
+    indexSpine(node.children, `${nodePath}/children`, node.id, result);
+  }
+}
+
+function lintUnreachableAuthoredProse(
+  pack: DrillPackDefinition,
+  issues: PackLintIssue[],
+): void {
+  if (
+    pack.checkpoints.some(
+      (checkpoint) => !("atSpineNode" in checkpoint.trigger),
+    )
+  ) {
+    return;
+  }
+
+  const locations = new Map<string, SpineLocation>();
+  indexSpine(pack.spine ?? [], "/spine", undefined, locations);
+  const reachable = new Set<string>();
+  for (const checkpoint of pack.checkpoints) {
+    if (!("atSpineNode" in checkpoint.trigger)) continue;
+    let nodeId: string | undefined = checkpoint.trigger.atSpineNode;
+    while (nodeId !== undefined && !reachable.has(nodeId)) {
+      reachable.add(nodeId);
+      nodeId = locations.get(nodeId)?.parentId;
+    }
+  }
+
+  const warning = (path: string, nodeId: string): void => {
+    issues.push({
+      severity: "warning",
+      code: "AUTHORED_PROSE_AFTER_LAST_CHECKPOINT",
+      path,
+      message: `Authored prose at spine node ${nodeId} is not on a path to any atSpineNode checkpoint and cannot be revealed`,
+    });
+  };
+  for (const [nodeId, location] of locations) {
+    if (reachable.has(nodeId)) continue;
+    for (const annotationIndex of (location.node.annotations ?? []).keys()) {
+      warning(`${location.path}/annotations/${annotationIndex}`, nodeId);
+    }
+  }
+  for (const [index, deviation] of (pack.deviations ?? []).entries()) {
+    if (
+      deviation.note !== undefined &&
+      "spineNodeId" in deviation.at &&
+      !reachable.has(deviation.at.spineNodeId)
+    ) {
+      warning(`/deviations/${index}/note`, deviation.at.spineNodeId);
+    }
+  }
 }
 
 export interface PredictionSegment {
@@ -177,7 +246,7 @@ export function lintDrillPack(
     );
   }
   for (const [index, deviation] of (pack.deviations ?? []).entries()) {
-    if (deviation.at.spineNodeId !== undefined) {
+    if ("spineNodeId" in deviation.at) {
       lintNodeReference(
         deviation.at.spineNodeId,
         `/deviations/${index}/at/spineNodeId`,
@@ -187,5 +256,6 @@ export function lintDrillPack(
     }
   }
   lintPredictionDensity(pack.checkpoints, options, issues);
+  lintUnreachableAuthoredProse(pack, issues);
   return Object.freeze(issues);
 }
