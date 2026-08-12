@@ -38,6 +38,25 @@ hours. `encoding` dominating means the format is wrong. `revision` dominating
 means objectives are being written after engine analysis instead of before
 (the authoring guide's rule).
 
+## 1b. Whose cost are we measuring? (correction, 2026-08-12)
+
+The six-category model implicitly assumed a human author. In this project the
+author is **claude** and the reviewer is **the owner**, so the numbers mean
+something different — and arguably more relevant: K10's real question here is
+not "can a human hand-write packs affordably" but **"can this owner+agent
+pipeline produce reviewed packs affordably."**
+
+Therefore log two clocks, never merged:
+
+- `agent-*` — the six categories as spent by the authoring agent.
+- `owner-review` — the owner's actual reading/judging/correcting time.
+
+The K10 verdict is on the **pipeline total**, dominated in practice by
+`owner-review` + `revision` (an agent can encode fast; only the owner can say
+whether the chess is right). If owner-review per pack does not fall as packs
+accumulate, that is the real cost ceiling — tooling cannot fix judgment time,
+only content reuse and better first drafts can.
+
 ## 2. Batch 1 — one pack per phase (measure before scaling)
 
 - [ ] **Pack A — anti-Caro Advance** (opening, faced-not-chosen). 1.e4 c6 2.d4
