@@ -51,6 +51,7 @@ writing it into a draft.
 | 2 | 1→2 | `archive/learner-identity-and-authorization.md` | implemented |
 | 3 | 2→3 | `archive/pack-optional-runs.md` | implemented after migration 2 |
 | 4 | 3→4 | `archive/terminal-outcome-events.md` | implemented; upgrades ordinary v0.5 snapshots and quarantines pre-producer outcome events |
+| 5 | 4→5 | `line-drill-theory-grading.md` | draft — run schema v0.7; adds `policyModeApplied` to `opponent.move_selected.selection`, historical selections migrate to `unknown` and are never inferred |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a

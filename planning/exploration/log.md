@@ -1193,3 +1193,37 @@ belongs to Carlsbad. And I said the `theory_strict` fallback was "now audible
 for pack runs", which is what F2 specified and not what shipped. The second
 error is the one that mattered, because it would have let the RFC assume a
 signal that does not exist — and instead it produced D15.
+
+## 2026-08-12 (owner rulings) — authoredBoundary is membership; D15 closes inside Line Drill
+
+**1. `authoredBoundary` means membership, not frontier.** The owner overruled the
+draft's frontier reading on evidence stronger than the four packs:
+`planning/breadth/training-modes.md` already defines authored territory as
+"`spineNodeIds` contains it OR a FEN predicate matches", the withdrawn-contract
+salvage says the same, three authored packs encode membership, and the Najdorf
+case is a lone bad encoding in a `schema_example`. So: `spineNodeIds` is an
+explicit membership set, `fenPredicates` grant additional positions,
+`plyHorizon` caps both and never grants, and transposing back to a listed
+position re-enters authored territory via `transposeKey`. The example is fixed by
+listing all five of its supported nodes (it lists two of `najdorf-be3`,
+`najdorf-e6`, `najdorf-f3`, `najdorf-b5`, `najdorf-be2`) — not by reinterpreting
+the field. If frontier shorthand is wanted later it gets its own
+`frontierNodeIds`.
+
+Worth recording as method: the draft ruled from the four packs it could see and
+flagged the ruling as its second-riskiest item, which is what surfaced it. The
+deciding evidence was in a planning dossier the draft had no reason to read. A
+semantics question is a search problem before it is a judgement call.
+
+**2. D15 blocks acceptance and is closed inside the Line Drill RFC.**
+`policyModeApplied` (`human_common | strong_engine | theory_strict | unknown`)
+joins `opponent.move_selected.selection`: on-spine `theory_strict` records
+`theory_strict`, the off-spine fallback records `human_common`, and historical
+selections migrate to `unknown` and are **never inferred**. Run schema v0.7,
+migration 5 claimed.
+
+This deliberately reverses `outcome-drill-grading`'s refusal of the same field.
+That RFC declined it to preserve its no-migration scope and named it the future
+path; the owner ruled the migration is worth paying, because the alternative is a
+mode about theory carrying a disclaimer where it could carry evidence. A
+disclaimer says "we do not know"; `policyModeApplied` makes the run know.
