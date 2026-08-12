@@ -244,7 +244,7 @@ matched on hostname *and* on the `sourceId` vocabulary; a fetch against one fail
       "anchor": { "fen": "8/…" },
       "reason": "out_of_range",                    // closed set: out_of_range | source_unavailable
                                                    //   | no_data_at_band | licence_withheld
-      "detail": "10 pieces; Syzygy covers <=7"
+      "detail": "11 pieces; Syzygy covers <=7"
     }
   ]
 }

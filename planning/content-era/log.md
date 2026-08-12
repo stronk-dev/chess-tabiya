@@ -533,3 +533,24 @@ check deviations at all, which is worth knowing: an author can ship a deviation
 that is illegal, or that belongs to the wrong side, and the validator is silent.
 **Ask: extend the lint to deviations; it already has the position.** No engine
 has seen any position in this pack.
+
+## 2026-08-12 — CORRECTION: the 4v3 rook ending is eleven pieces, not ten (claude)
+
+Append-only; the entries above stand as written. Two of them say the 4v3
+same-side rook ending is "ten pieces". It is **eleven** — two kings, two rooks,
+four white pawns, three black pawns.
+
+The conclusion those entries draw is unaffected: eleven is past Syzygy's
+seven-piece limit, so there is no tablebase ground truth for this material and
+none of Pack C's positions can be machine-verified. Only the count was wrong.
+
+Provenance of the error, recorded because it propagated: **I introduced it**, in
+the authoring brief for Pack C and again in conversation. It reached Pack C's
+`provenance.sources`, an RFC acceptance fixture, and both logs before a reviewer
+counted the pieces. Pack C and the RFC are corrected; the logs carry this note
+instead, being append-only.
+
+The lesson is narrow and worth keeping: a number that travels inside a sentence
+whose *conclusion* is correct will not be checked by anyone who agrees with the
+conclusion. Both agents who consumed the brief reasoned correctly from it and
+neither recounted.
