@@ -159,12 +159,12 @@ rows below are green or explicitly removed by a new owner ruling:
 | Gate | Minimal real proof | Current state |
 |---|---|---|
 | B1 — shell and entry | stable shell routes Play/Learn/Review/Live/Create/Library/Settings; resume works | **met with residuals** — `/settings` has no form control, `phase` is never projected, the drill-address grammar has no route |
-| B2 — solo modes | Just Play plus Line, Plan, Outcome, and organic/guided Trajectory each complete one fixture run | Plan only; Line half-real by accident; Outcome/Trajectory zero code; Just Play blocked on F2 |
+| B2 — solo modes | Just Play plus Line, Plan, Outcome, and organic/guided Trajectory each complete one fixture run | Plan only, but **F2 removed the blocker** — pack-optional runs ship, so Just Play is buildable rather than blocked. Line half-real; Outcome and Trajectory zero code |
 | B3 — review | manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise partial — and pairwise is a **runtime type** constraint that cannot be composed into N-way |
 | B4 — evidence | authored, Stockfish, Maia, corpus/historical, Syzygy, structural/temporal, and LLM-rendered layers work with timing controls | authored prose has no surface (blocked on F1) — **not blocked on content**; Maia already persisted and reaching the browser; corpus/Syzygy/LLM unmet |
-| B5 — live | Twitch host/chat/overlay, academy roles, and external Position Arena handoff each complete one scenario | unmet; follower loop already works, so spectating is nearer than this implies. Blocked on D1, F3, F1, and PGN import |
-| B6 — create | pack studio/import/review/session-distill workflow produces and validates a fixture; corpus mining emits one unpublished candidate | validation/lint/digest/graduation ship; no write endpoint, no UI, no importer, no mining |
-| B7 — return | history/resume, progress, concept scheduling, related retry, and optional recommendation work | history/resume ship; all else blocked on F3 (no subject exists in source) |
+| B5 — live | Twitch host/chat/overlay, academy roles, and external Position Arena handoff each complete one scenario | unmet, ordered last. **D1 and F3 closed**, so roles and a safe spectator projection are buildable; a granted spectator already follows a run in the browser suite |
+| B6 — create | pack studio/import/review/session-distill workflow produces and validates a fixture; corpus mining emits one unpublished candidate | **mining half MET** — `candidate-emit` produced four real unpublished candidates through the shipped pipeline. Absent: studio UI, pack write endpoint, session distillation, review queue |
+| B7 — return | history/resume, progress, concept scheduling, related retry, and optional recommendation work | history/resume ship and **F3 supplied the subject**, so the rest is buildable rather than blocked. Still zero: progress, SRS, related retry, recommendations |
 | B8 — platform | desktop shell, responsive/PWA transformation, self-hosted engines/providers, read-only share links, accessibility | deployment packaging shipped in full (this row was understated); residual is the release compose's missing light profile; share links blocked on D1 |
 
 ## The foundation edge (added 2026-08-12 after the alignment pass)
