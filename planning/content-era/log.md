@@ -313,3 +313,101 @@ defect propagating into a spec is exactly how the five withdrawn drafts failed.
 **Net effect on the next RFC inputs:** the "never-silent request validation"
 item replaces the digest-consistency item; the graph/events item is withdrawn;
 the reload test moves to session 2's pending passes alongside (b) and (c).
+
+## 2026-08-12 — pack B (carlsbad-minority-attack), session 1 (claude)
+
+agent-research 25 · agent-encoding 30 · agent-engine-validation 0 · owner-review 0 · agent-revision 5 · tooling-friction 5
+notes: Second pack, first middlegame pack, first pack authored after the
+authored-feedback delivery work shipped. `make pack-check` was green on the
+second run; the one issue it raised was a **semantic** one, not a schema one
+(see below), which is a different and better class of finding than Pack A's
+`annotations`-must-be-an-array. Tooling friction stayed at 5 minutes.
+
+Where the 25 research minutes went is worth recording, because it is not what
+the cost model assumed: roughly 5 minutes on the design docs and 20 on
+**mechanically verifying the chess** with chessops — deriving the start FEN
+from a SAN move list, walking every spine path, checking every deviation is
+legal from the position after its anchor, and computing attacker/defender
+counts for b5, h4 and h7 rather than recalling them. That is a real,
+repeatable, automatable cost and it is currently paid by hand in a scratch
+script. **First tooling ask from the content side: a `pack-verify`-style
+helper that takes SAN and emits FEN + UCI.** Encoding a spine means writing
+UCI by hand for moves you thought of in SAN, and that is where errors want to
+live.
+
+### The brief was wrong about the structure, and checking cost nothing
+
+The commissioning brief described the Carlsbad as "White c3/d4/e3 vs Black
+c6/d5/e6" with "...e5" as Black's break. The Carlsbad reached from the QGD
+Exchange has **no c-pawn for either side and no black e-pawn** (White a2/b2/d4/e3,
+Black a7/b7/c6/d5), which is precisely why a two-pawn *minority* attacks a
+three-pawn majority — the name only makes sense in the real structure, and
+"...e5" is not available to a side with no e-pawn. Verified against the board
+before writing a word of prose; the correction and the reasoning are recorded
+in `provenance.sources` rather than silently applied. Recording it here because
+it is the cheapest possible instance of Law 8 working: the check took under a
+minute and would have produced a pack that taught a structure that does not
+exist.
+
+### New lint caught a class of authoring waste the field matrix predicted
+
+`AUTHORED_PROSE_AFTER_LAST_CHECKPOINT` fired on the `a5-prophylaxis` node:
+prose on a spine node that is not on a path to any `atSpineNode` checkpoint can
+never be revealed, so it is dead on arrival. This is exactly the "authoring
+outran rendering" failure from Pack A, now **mechanically detectable**. Two
+consequences for future authors:
+
+1. **Checkpoint placement is not a separate concern from annotation placement.**
+   Every authored branch tip needs a downstream checkpoint or its prose is
+   invisible. I fixed it by adding a checkpoint at the sideline rather than by
+   deleting the prose, which is the right direction — the sideline deserves a
+   comparison anchor anyway.
+2. The lint only covers `annotations`. Deviation notes have the same reveal
+   rule (`docs/explanation-grounds.md`: a spine-node deviation reveals when its
+   anchor is in scope) and are **not** checked. I audited all ten by hand; all
+   are reachable. A future author will not. **Second tooling ask: extend the
+   same reachability check to deviation notes and to intent-capture plan
+   classes.**
+
+### contract-gaps (second deliverable)
+
+1. **The objective vocabulary cannot express "carry out the plan you declared".**
+   This pack's entire point is that success is *relative to the intent the
+   learner captured at the checkpoint*. There is no way to say "reaching b5 is
+   success if you chose minority-attack and irrelevant if you chose
+   kingside-attack". `successConditions` supports only `reach_checkpoint`, which
+   is intent-blind, so I omitted it entirely rather than encode a checkpoint
+   that biases one plan. **This is the first concrete case for
+   intent-conditional success, and it is stronger evidence than Pack A's
+   because the pack is unusable without it.** Pack A's finding was that
+   `preserve_plan_window` is inert; this is that the vocabulary is not merely
+   inert but structurally unable to express a plan drill's objective.
+2. **Deviation classes cannot express "same plan, different move order".**
+   11.a3 and 11.Rab1 are the same plan; `accepted_alternative` is the closest
+   class and it undersells the relationship. What I wanted was a link from a
+   deviation to a `planClass` id — the deviation is *in* a plan class. That
+   link would also give the intent-capture checkpoint something to grade
+   against, which is gap 1's cheapest partial fix. **Concrete proposal from
+   real content: an optional `planClassId` on a deviation.**
+3. **`concept_violation` is doing two different jobs.** I used it for 11.e4
+   (right idea, wrong time — a timing error) and for 14.Na4 (removes the piece
+   that supports your own pawn break — a plan-coherence error). Those are not
+   the same mistake and a learner should not get the same label. Noted, not
+   solved; the format should not grow a class until more packs confirm the
+   split.
+4. **`plyHorizon` intuition, second data point.** Set to 8, exactly the depth
+   of the deepest authored path. Under "caps, does not grant" this is the
+   correct conservative value and it was easy to choose. Confirms Pack A's
+   reading; no new gap.
+5. **Nothing in the format lets an author say a claim is mechanically checkable.**
+   `b5-arithmetic` is derivable from the position — it is attacker/defender
+   counting — and I tagged it `derived_feature` alongside `author_principle`
+   to say so. But there is no way to record *what* would check it. That is the
+   evidence-encoding gap §3b keeps deferring, now with an instance that is
+   cheap enough to actually build against.
+
+### Least confident claim in the pack, flagged for the owner
+
+The two `concept_violation` judgments. Both assert that a legal, non-losing
+move is a conceptual error, which is the strongest thing this file says and the
+least supported. They are listed first among the graduation blockers.

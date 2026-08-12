@@ -1,0 +1,451 @@
+{
+  "id": "carlsbad-minority-attack",
+  "version": "0.1.0",
+  "title": "Carlsbad structure: the minority attack and its rivals",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Club player with the White side of a Carlsbad structure",
+    "branchLengthTarget": 8
+  },
+  "start": {
+    "fen": "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10",
+    "movesSan": [
+      "d4",
+      "d5",
+      "c4",
+      "e6",
+      "Nc3",
+      "Nf6",
+      "cxd5",
+      "exd5",
+      "Bg5",
+      "Be7",
+      "e3",
+      "c6",
+      "Bd3",
+      "Nbd7",
+      "Qc2",
+      "O-O",
+      "Nge2",
+      "Re8",
+      "O-O"
+    ],
+    "side": "white"
+  },
+  "objective": {
+    "type": "execute_break",
+    "summary": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Three plans are available and they are close to mutually exclusive. Pick one and carry it out; the pack's claim is that the tempi you spend are not refunded when you change your mind."
+  },
+  "concepts": [
+    "carlsbad-structure",
+    "minority-attack",
+    "pawn-lever-support",
+    "plan-exclusivity",
+    "backward-pawn-target"
+  ],
+  "planClasses": [
+    {
+      "id": "minority-attack",
+      "label": "Minority attack (a3, Rab1, b4-b5)",
+      "description": "Two queenside pawns advance against three. The aim is not to win material: it is to force a structural concession on c6. If Black lets you play bxc6 bxc6, the c6 pawn is backward on a file where you have no pawn at all, and it stays a target into the ending. Slow, low-risk, and the plan the rest of your pieces already support."
+    },
+    {
+      "id": "central-break",
+      "label": "Central break (f3 and e3-e4)",
+      "description": "The reason the knight went to e2 rather than f3: the f-pawn is free to support e4. Prepare with f3, a rook to e1, and only then break. Trading in the centre turns the position from a slow structural game into a piece game, which is the point — but f3 loosens your king, and the queenside pawns stay home."
+    },
+    {
+      "id": "kingside-attack",
+      "label": "Kingside attack (Ng3, the g6 hook, h4-h5)",
+      "description": "Black's h7 pawn is covered three times in the starting position, so the attack is not a sacrifice hunt: it is a plan to create a hook. When a black knight comes to g6, h4-h5 gains a tempo and opens a line. The cost is that these pawn moves stand in front of your own king and cannot be taken back."
+    }
+  ],
+  "spine": [
+    {
+      "id": "nf8-regroup",
+      "moveUci": "d7f8",
+      "moveSan": "Nf8",
+      "annotations": [
+        "Black completes the standard Carlsbad regrouping: the knight leaves d7 for f8, where it covers h7 and d7 and can go on to e6 or g6. This is the tabiya. Nothing is forced from here, and every reasonable White move belongs to a different plan.",
+        "Read the structure before choosing. White: a2, b2, d4, e3, f2, g2, h2. Black: a7, b7, c6, d5, f7, g7, h7. Neither side has a c-pawn, so the c-file is half-open for White and it is Black's c6 pawn that sits on it."
+      ],
+      "children": [
+        {
+          "id": "rab1-minority",
+          "moveUci": "a1b1",
+          "moveSan": "Rab1",
+          "annotations": [
+            "The minority attack, announced. The rook goes behind the pawn that is going to advance, and it will still be useful on the b-file after the pawns come off. This is the pack's main line because it is the plan the position already supports: Nc3 and Bd3 both bear on b5 before the pawn ever gets there.",
+            "It also tells Black what you intend a move early. That is the honest cost, and the deviation at a3 is the same plan played in the other order."
+          ],
+          "children": [
+            {
+              "id": "ne4-trade",
+              "moveUci": "f6e4",
+              "moveSan": "Ne4",
+              "annotations": [
+                "Black's standard answer. Trading pieces makes the queenside easier to defend, because the minority attack creates a weakness that then has to be attacked by somebody."
+              ],
+              "children": [
+                {
+                  "id": "bxe7-trade",
+                  "moveUci": "g5e7",
+                  "moveSan": "Bxe7",
+                  "annotations": [
+                    "Take first. The bishop on g5 has no better square once ...Ne4 is played, and recapturing with the queen pulls Black's queen off d8 where it was covering the queenside along the back rank."
+                  ],
+                  "children": [
+                    {
+                      "id": "qxe7-recapture",
+                      "moveUci": "d8e7",
+                      "moveSan": "Qxe7",
+                      "annotations": [
+                        "The decision point for the rest of the game. b4 is now available, and so is f3 kicking the knight, and so is Nxe4. Two of those three are a different plan from the one you announced last move."
+                      ],
+                      "children": [
+                        {
+                          "id": "b4-launch",
+                          "moveUci": "b2b4",
+                          "moveSan": "b4",
+                          "annotations": [
+                            "The pawn is committed. From here the plan runs on rails — a4 if needed, then b5 — and the squares b4 and c4 are permanently softer for Black's pieces. That trade is what a plan is: you accept a fixed liability in exchange for a fixed target."
+                          ],
+                          "children": [
+                            {
+                              "id": "a6-brace",
+                              "moveUci": "a7a6",
+                              "moveSan": "a6",
+                              "annotations": [
+                                "Black adds a second pawn defender to b5. Count the square: White attacks b5 with the knight on c3 and the bishop on d3, Black defends with a6 and c6. Two against two means the push is playable now; if you had moved either of those pieces off, it would not be."
+                              ],
+                              "children": [
+                                {
+                                  "id": "b5-strike",
+                                  "moveUci": "b4b5",
+                                  "moveSan": "b5",
+                                  "annotations": [
+                                    "The moment the plan pays or does not. Three answers, three different games. ...axb5 keeps material level and leaves you pressing c6 down the half-open file. ...cxb5 hands Black doubled b-pawns and an isolated d5 in exchange for activity. ...c5 is the counter-break that ignores the wing and fights in the centre instead.",
+                                    "And if Black plays none of them, bxc6 bxc6 is the textbook result: a backward pawn on c6 that no black pawn can ever defend, on a file where you have no pawn to block your own rooks. That structure outlives the middlegame, which is why this plan is the low-risk one."
+                                  ],
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "a5-prophylaxis",
+              "moveUci": "a7a5",
+              "moveSan": "a5",
+              "annotations": [
+                "The other main defensive idea: stop b4 before it happens. It works as far as it goes, but b5 and the b6 square are now permanently soft, and the pawn on a5 is one more thing to look after. Play it out from the White side and compare it against the ...Ne4 line."
+              ],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "f3-central",
+          "moveUci": "f2f3",
+          "moveSan": "f3",
+          "annotations": [
+            "The central plan. This is what the knight on e2 was for — with a knight on f3 the pawn could not come here at all, so the move order from earlier in the game is what makes this plan legal now.",
+            "It is also the sharpest of the three to get wrong. e4 needs at least a rook on e1 behind it as well, and while you spend those moves the queenside pawns are doing nothing."
+          ],
+          "children": [
+            {
+              "id": "ne6-hit",
+              "moveUci": "f8e6",
+              "moveSan": "Ne6",
+              "annotations": [
+                "The knight steps out to hit the bishop and add a defender to d4's opposite number. Black is not defending yet, he is making you spend the next move on the bishop rather than on the break."
+              ],
+              "children": [
+                {
+                  "id": "bh4-retreat",
+                  "moveUci": "g5h4",
+                  "moveSan": "Bh4",
+                  "annotations": [
+                    "Keeping the bishop is the consistent choice, because in the central plan you want pieces on for the open position that e4 produces. Notice what the tempo cost: two moves in and e4 is still not prepared, while the minority attack would already have b4 on the board."
+                  ],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ng3-kingside",
+          "moveUci": "e2g3",
+          "moveSan": "Ng3",
+          "annotations": [
+            "The kingside plan. The knight heads for f5 or supports h4-h5, and the battery on b1-h7 is already pointing at h7. Before you get excited: h7 is defended by the knight on f6, the knight on f8, and the king. The attack is a plan to change that count, not a sacrifice you can play now.",
+            "This move also quietly gives up the central plan. The knight no longer supports a later e4 from e2, and f3 would now be a hole in front of your own king rather than a preparing move."
+          ],
+          "children": [
+            {
+              "id": "ng6-defend",
+              "moveUci": "f8g6",
+              "moveSan": "Ng6",
+              "annotations": [
+                "Black covers the kingside and eyes f4 and h4 — and hands you the hook the plan needs. A knight on g6 is what makes h4-h5 a gain of tempo instead of a pawn move into nothing."
+              ],
+              "children": [
+                {
+                  "id": "h4-hook",
+                  "moveUci": "h2h4",
+                  "moveSan": "h4",
+                  "annotations": [
+                    "Playable because the bishop on g5 defends h4: the knight on g6 attacks the pawn once and it is covered once. Check that arithmetic every time before pushing, because if the bishop has already left g5 the same move simply drops a pawn.",
+                    "This is the most committal of the three plans. The b-pawn can be advanced and still leave a defensible king; these pawns are the king's cover. Once h4 and h5 are played there is no version of this game where you switch back to a slow queenside squeeze."
+                  ],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-choice",
+      "label": "The tabiya: choose a plan before you move",
+      "trigger": {
+        "atSpineNode": "nf8-regroup"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "minority-attack",
+          "central-break",
+          "kingside-attack"
+        ]
+      }
+    },
+    {
+      "id": "pawn-committed",
+      "label": "b4 is on the board",
+      "trigger": {
+        "atSpineNode": "b4-launch"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "target-created",
+      "label": "b5 — the structural concession is forced",
+      "trigger": {
+        "atSpineNode": "b5-strike"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "hook-committed",
+      "label": "The h-pawn cannot come back",
+      "trigger": {
+        "atSpineNode": "h4-hook"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "queenside-frozen",
+      "label": "...a5 — b4 is stopped, b5 and b6 are soft",
+      "trigger": {
+        "atSpineNode": "a5-prophylaxis"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "break-still-unprepared",
+      "label": "Two moves into the central plan, e4 is not ready yet",
+      "trigger": {
+        "atSpineNode": "bh4-retreat"
+      },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "nf8-regroup",
+      "rab1-minority",
+      "ne4-trade",
+      "bxe7-trade",
+      "qxe7-recapture",
+      "b4-launch",
+      "a6-brace",
+      "b5-strike",
+      "a5-prophylaxis",
+      "f3-central",
+      "ne6-hit",
+      "bh4-retreat",
+      "ng3-kingside",
+      "ng6-defend",
+      "h4-hook"
+    ],
+    "plyHorizon": 8
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "spineNodeId": "nf8-regroup"
+      },
+      "moveUci": "a2a3",
+      "class": "accepted_alternative",
+      "note": "11.a3 is the same minority attack in the other move order: prepare b4 first, put the rook on b1 later. It hides your intention for one move and it is the move order to prefer if you dislike ...a5 answers. The teaching point is identical, so this branch is authored territory, not a mistake."
+    },
+    {
+      "at": {
+        "spineNodeId": "nf8-regroup"
+      },
+      "moveUci": "f1e1",
+      "class": "accepted_alternative",
+      "note": "11.Rfe1 is the central plan begun with the other rook. It is a real choice, not a transposition: the rook that goes to e1 is the one that will not be on b1, and the f-rook leaving f1 makes a later f3-f4 harder to support. Choose which rook you can spare before you choose the square."
+    },
+    {
+      "at": {
+        "spineNodeId": "nf8-regroup"
+      },
+      "moveUci": "g5f6",
+      "class": "interesting_deviation",
+      "note": "11.Bxf6 trades your developed bishop for a knight to fix Black's dark squares and clear g5. It is the move that most changes the character of the position and it belongs to the kingside plan more than the other two. Play it and compare: the structural target on c6 does not go away, but the piece that would have pressured it is gone."
+    },
+    {
+      "at": {
+        "spineNodeId": "nf8-regroup"
+      },
+      "moveUci": "e3e4",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "11.e4 is the right break played at the wrong time. Nothing is hanging, so it is not a blunder — but the centre resolves while your rooks are still on a1 and f1 and Black's pieces are the ones that get the open lines. This pack exists because the break is a plan with prerequisites, not a move."
+    },
+    {
+      "at": {
+        "spineNodeId": "qxe7-recapture"
+      },
+      "moveUci": "f2f3",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "13.f3 kicks the knight and starts the central plan — one move after you put a rook on b1 for the other one. The rook is now a spectator. This is the pack's central claim in one move: switching plans does not cost you a tempo, it costs you the tempi you already spent."
+    },
+    {
+      "at": {
+        "spineNodeId": "qxe7-recapture"
+      },
+      "moveUci": "c3e4",
+      "class": "interesting_deviation",
+      "note": "13.Nxe4 dxe4 resolves the tension immediately and changes the structure the whole pack is about: Black no longer has a d5 pawn to defend and White's d4 becomes the isolated one. Whether that is good here is a concrete question this draft does not answer. It is worth playing out precisely because it leaves the Carlsbad."
+    },
+    {
+      "at": {
+        "spineNodeId": "a6-brace"
+      },
+      "moveUci": "a2a4",
+      "class": "accepted_alternative",
+      "note": "14.a4 first, then b5, adding a third supporter before the push. Slower, and it lets Black finish regrouping — but it means ...axb5 can be met by a pawn recapture rather than a piece, which is usually what you want when the aim is a structural target and not activity."
+    },
+    {
+      "at": {
+        "spineNodeId": "a6-brace"
+      },
+      "moveUci": "c3a4",
+      "class": "concept_violation",
+      "note": "14.Na4 looks purposeful — the knight heads for c5 — but count b5 again first. The knight on c3 was one of the two pieces attacking it; from a4 it does not cover b5 at all. Playing this and then pushing anyway is the most common way this plan collapses at club level."
+    },
+    {
+      "at": {
+        "spineNodeId": "ng6-defend"
+      },
+      "moveUci": "g5f6",
+      "class": "accepted_alternative",
+      "note": "12.Bxf6 Bxf6 before advancing removes the defender of h4 as well as the defender of h7, which is the trade-off: your h-pawn now advances into a square only the pawn covers. Whether to take before pushing is the real question in the kingside plan and both orders are authored here."
+    },
+    {
+      "at": {
+        "spineNodeId": "ne6-hit"
+      },
+      "moveUci": "g5f6",
+      "class": "interesting_deviation",
+      "note": "12.Bxf6 answers the attack on the bishop by trading it, keeping the tempo that Bh4 spends. It also concedes the bishop pair in a position you are trying to open with e4 — the one plan where Black's two bishops are most likely to matter. A defensible choice with a cost you should see before you make it."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "minority-target",
+      "text": "The minority attack's aim is a structure, not a pawn. Two pawns advance against three so that the exchange on c6 leaves Black a backward pawn on a file where White has no pawn — a target that survives every trade into the ending.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    },
+    {
+      "id": "plan-tempi-nonrefundable",
+      "text": "In this structure the three plans are close to mutually exclusive, and the tempi spent on one are not refunded when you switch. A rook on b1 does nothing for e3-e4; f3 is a preparing move in one plan and a hole in another.",
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
+    },
+    {
+      "id": "b5-arithmetic",
+      "text": "b4-b5 is playable exactly when White's attackers of b5 match Black's defenders. In the main line that is the knight on c3 and the bishop on d3 against the pawns on a6 and c6; move either piece and the push stops working.",
+      "evidenceTypes": [
+        "author_principle",
+        "derived_feature"
+      ]
+    },
+    {
+      "id": "kingside-hook",
+      "text": "The kingside attack is timed by Black's regrouping, not by White's enthusiasm: h7 has three defenders in the tabiya, and h4-h5 only gains time once a black knight has come to g6 to be hit.",
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Opening name and move order to the tabiya (Queen's Gambit Declined, Exchange Variation): lichess-org/chess-openings (CC0)",
+      "MECHANICALLY VERIFIED (chessops, this session): the start FEN parses as legal standard chess and is reached by the listed SAN move list; every spine UCI/SAN pair is legal and agrees; every deviation move is legal from the position after its anchor node; the pawn structure is White a2/b2/d4/e3/f2/g2/h2 against Black a7/b7/c6/d5/f7/g7/h7, i.e. the genuine Carlsbad with no c-pawn for either side; the attacker/defender counts asserted for b5, h4 and h7 were computed from the position, not recalled.",
+      "UNGROUNDED: every strategic claim in this pack — the objective summary, all three plan-class descriptions, all spine annotations, all ten deviation classifications and notes, and all four feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation, NO corpus frequency and NO human review. The Carlsbad plan taxonomy used here (minority attack / central break / kingside attack) is presented as established, but nothing in this file establishes it. 'Original prose' answers copyright, not truth.",
+      "AUTHORING NOTE: the commissioning brief described this structure as 'White c3/d4/e3 vs Black c6/d5/e6' and named '...e5' as Black's central break. That is not the Carlsbad reached from the QGD Exchange, where neither side has a c-pawn and Black has no e-pawn at all. The structure in this file was verified against the board and the brief's description was not followed; Black's breaks here are ...c5 and ...f5, not ...e5."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "The three-plan taxonomy is the pack's foundational claim and is entirely uncited. It needs a citable reviewed source or a strong reviewer's sign-off before reviewStatus leaves draft.",
+      "All four feedbackClaims need grounding: minority-target and kingside-hook are author principles with no evidence; b5-arithmetic is partly derivable from the position and could be mechanically checked; plan-tempi-nonrefundable is a hypothesis that a comparison corpus could actually test.",
+      "The two concept_violation judgments (13.f3 and 14.Na4) assert that a legal, non-losing move is a conceptual error. That is the strongest claim in the file and the least supported; it needs engine and/or corpus evidence that these moves cost something measurable.",
+      "The evaluative language in the b5-strike annotation ('the textbook result', 'that structure outlives the middlegame') asserts endgame consequences no evidence in this repo supports.",
+      "No engine validation pass has been run on any position in this pack.",
+      "No rating-band frequency check: the tabiya is asserted to be a position 1400-2000 players actually reach, on model knowledge alone. The Lichess explorer API could settle this cheaply."
+    ]
+  }
+}

@@ -1,0 +1,543 @@
+{
+  "id": "rook-4v3-same-side-hold",
+  "version": "0.1.0",
+  "title": "Rook endings: holding 3 against 4 on one wing",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1500,
+    "maxOnlineRapid": 2200,
+    "label": "Club player who reaches this ending and defends it by instinct",
+    "branchLengthTarget": 8
+  },
+  "start": {
+    "fen": "3r2k1/5pp1/7p/8/4P3/8/5PPP/R5K1 w - - 0 1",
+    "side": "black"
+  },
+  "objective": {
+    "type": "hold",
+    "summary": "A pawn down in the most common ending in chess: rook and three against rook and four, everything on one wing. It is held with accurate defence and lost constantly in practice. Your job is the result, not the moves — reach the end of the drill still holding.",
+    "successConditions": [
+      {
+        "kind": "reach_checkpoint",
+        "checkpointId": "still-holding"
+      }
+    ]
+  },
+  "concepts": [
+    "rook-activity",
+    "back-rank-luft",
+    "rook-trade-avoidance",
+    "pawn-trade-counting",
+    "king-centralization"
+  ],
+  "planClasses": [
+    {
+      "id": "king-first",
+      "label": "King before rook",
+      "description": "The rook on d8 already owns the open file and guards the back rank, so improve the piece that is doing nothing. Slowest-looking and hardest to punish; the pack's model scheme."
+    },
+    {
+      "id": "active-second-rank",
+      "label": "Rook to the second rank",
+      "description": "Grab the second rank at once and make White's king babysit f2 and g2. Real counterplay — but the rook that leaves d8 leaves the back rank, and here that has an immediate cost."
+    },
+    {
+      "id": "sixth-rank-restraint",
+      "label": "Rook on the sixth",
+      "description": "Philidor-style restraint adapted to a position with no passed pawn: the rook sits on the sixth rank so White's king cannot cross it. Structurally sound, but the e-pawn advances with tempo against it."
+    },
+    {
+      "id": "trade-pawns-not-rooks",
+      "label": "Trade pawns, never rooks",
+      "description": "Count instead of calculating: every pair of pawns that comes off shortens the defence, and the rooks are what make the position holdable at all. Decline every rook trade, invite every pawn trade."
+    }
+  ],
+  "spine": [
+    {
+      "id": "w-kf1",
+      "moveUci": "g1f1",
+      "moveSan": "Kf1",
+      "annotations": [
+        "The correct first move in almost every version of this ending: the king walks toward the centre before anything else is committed. Nothing White does works until the king is up, which is exactly why the defender's clock starts now."
+      ],
+      "children": [
+        {
+          "id": "b-kf8",
+          "moveUci": "g8f8",
+          "moveSan": "Kf8",
+          "annotations": [
+            "King first. Your rook on d8 is already doing two jobs — it owns the only open file and it covers the back rank — so improve the piece that is doing neither. This is the pack's model scheme."
+          ],
+          "children": [
+            {
+              "id": "w-ke2",
+              "moveUci": "f1e2",
+              "moveSan": "Ke2",
+              "children": [
+                {
+                  "id": "b-ke7",
+                  "moveUci": "f8e7",
+                  "moveSan": "Ke7",
+                  "annotations": [
+                    "Match White step for step. In a same-wing ending the defending king wants to stand in front of the pawns, not behind them; every tempo White spends walking, you spend walking too."
+                  ],
+                  "children": [
+                    {
+                      "id": "w-rd1",
+                      "moveUci": "a1d1",
+                      "moveSan": "Rd1",
+                      "annotations": [
+                        "White's most testing try and the reason this pack exists: the offer to trade rooks. Note that it is a real offer — your king on e7 defends d8, so nothing is hanging and you get to choose."
+                      ],
+                      "children": [
+                        {
+                          "id": "b-ra8",
+                          "moveUci": "d8a8",
+                          "moveSan": "Ra8",
+                          "annotations": [
+                            "Decline by leaving, not by defending. The d-file looks valuable and is worth nothing: there is not a single pawn on that side of the board. Give White a file that leads nowhere and keep the rook."
+                          ],
+                          "children": [
+                            {
+                              "id": "w-rd5",
+                              "moveUci": "d1d5",
+                              "moveSan": "Rd5",
+                              "annotations": [
+                                "Now the file is used the only way it can be: as a route to the fifth rank, where the rook cuts your king from advancing and eyes h5 and the h6 pawn."
+                              ],
+                              "children": [
+                                {
+                                  "id": "b-ra2",
+                                  "moveUci": "a8a2",
+                                  "moveSan": "Ra2+",
+                                  "annotations": [
+                                    "Counterattack rather than defend. Both rooks are now grabbing at pawns, and that suits the side who is a pawn down: every pair that comes off shortens the ending. This is where the drill stops and you keep playing."
+                                  ],
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b-rd2",
+          "moveUci": "d8d2",
+          "moveSan": "Rd2",
+          "annotations": [
+            "The activity reflex, and it is not wrong in general — it is wrong here for one concrete reason, which White gets to show you on the next move. Play this branch precisely so you can compare it with the king-first line."
+          ],
+          "children": [
+            {
+              "id": "w-ra8",
+              "moveUci": "a1a8",
+              "moveSan": "Ra8+",
+              "annotations": [
+                "The bill for leaving the eighth rank. Your king has exactly one square, because the h6 pawn is the only luft you own."
+              ],
+              "children": [
+                {
+                  "id": "b-kh7",
+                  "moveUci": "g8h7",
+                  "moveSan": "Kh7",
+                  "annotations": [
+                    "Forced. Blocking with the rook on d8 would be answered by the capture, and there is nothing to recapture with."
+                  ],
+                  "children": [
+                    {
+                      "id": "w-ra7",
+                      "moveUci": "a8a7",
+                      "moveSan": "Ra7",
+                      "annotations": [
+                        "And now f7 hangs, because the king that used to defend it is on h7. Two White moves have turned an active rook into a pawn concession."
+                      ],
+                      "children": [
+                        {
+                          "id": "b-f6",
+                          "moveUci": "f7f6",
+                          "moveSan": "f6",
+                          "annotations": [
+                            "The concession itself. The pawn is safe and the position is still defensible, but you have moved a pawn you did not want to move and White has been handed the seventh rank for free. Rewind and compare this with 1...Kf8."
+                          ],
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w-ke1",
+              "moveUci": "f1e1",
+              "moveSan": "Ke1",
+              "annotations": [
+                "The quiet reply: the king centralises and evicts the rook in one move. Weaker than the check, and it lets you show what the active rook is actually for."
+              ],
+              "children": [
+                {
+                  "id": "b-rd4",
+                  "moveUci": "d2d4",
+                  "moveSan": "Rd4",
+                  "annotations": [
+                    "Evicted forwards, not backwards. The rook lands on the extra pawn, and the extra pawn is the only thing in the position White is actually playing for."
+                  ],
+                  "children": [
+                    {
+                      "id": "w-f3",
+                      "moveUci": "f2f3",
+                      "moveSan": "f3",
+                      "annotations": [
+                        "White's concession, and the reason activity was worth something here: f3 fixes a pawn on the same colour as nothing in particular but takes e4 and g4 away from White's own king forever. Defending pieces with pawns is how winning attempts die."
+                      ],
+                      "children": [
+                        {
+                          "id": "b-kf8-active",
+                          "moveUci": "g8f8",
+                          "moveSan": "Kf8",
+                          "annotations": [
+                            "Only now the king. Rook first was justified here because it provoked a concession; it was not justified two moves earlier, when it only provoked a check."
+                          ],
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "w-e5",
+      "moveUci": "e4e5",
+      "moveSan": "e5",
+      "annotations": [
+        "The impatient winning attempt: push the extra pawn before the king is up. Space, and a fixed target on an open board — the defender should welcome every pawn move White makes without preparation."
+      ],
+      "children": [
+        {
+          "id": "b-rd5",
+          "moveUci": "d8d5",
+          "moveSan": "Rd5",
+          "annotations": [
+            "Sideways, not head-on. From d5 the rook attacks the pawn and holds the fifth rank against White's king at the same time; from e8 it would only do the first."
+          ],
+          "children": [
+            {
+              "id": "w-f4",
+              "moveUci": "f2f4",
+              "moveSan": "f4",
+              "annotations": [
+                "White has to defend the pawn with a pawn, which is the whole point. Two of White's four pawns are now on squares they cannot leave."
+              ],
+              "children": [
+                {
+                  "id": "b-kf8-push",
+                  "moveUci": "g8f8",
+                  "moveSan": "Kf8",
+                  "annotations": [
+                    "The pawns are settled, so go back to the slow plan: king to the centre."
+                  ],
+                  "children": [
+                    {
+                      "id": "w-kf2",
+                      "moveUci": "g1f2",
+                      "moveSan": "Kf2",
+                      "children": [
+                        {
+                          "id": "b-ke7-push",
+                          "moveUci": "f8e7",
+                          "moveSan": "Ke7",
+                          "annotations": [
+                            "Same race as the main line, but White's structure is already committed and the e-pawn is a target rather than a threat. This is the version of the ending you want to reach."
+                          ],
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "scheme-choice",
+      "label": "Choose your defensive scheme before White's king arrives",
+      "trigger": {
+        "atSpineNode": "w-kf1"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "king-first",
+          "active-second-rank",
+          "sixth-rank-restraint",
+          "trade-pawns-not-rooks"
+        ]
+      }
+    },
+    {
+      "id": "trade-offered",
+      "label": "White offers the rook trade",
+      "trigger": {
+        "atSpineNode": "w-rd1"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "back-rank-bill",
+      "label": "The eighth rank comes due",
+      "trigger": {
+        "atSpineNode": "w-ra7"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "pawn-committed",
+      "label": "White has conceded f3",
+      "trigger": {
+        "atSpineNode": "w-f3"
+      },
+      "actions": []
+    },
+    {
+      "id": "still-holding",
+      "label": "Still only a pawn down",
+      "trigger": {
+        "materialBalance": {
+          "perspective": "black",
+          "comparison": "atLeast",
+          "value": -1
+        }
+      },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "w-kf1",
+      "b-kf8",
+      "w-ke2",
+      "b-ke7",
+      "w-rd1",
+      "b-ra8",
+      "w-rd5",
+      "b-ra2",
+      "b-rd2",
+      "w-ra8",
+      "b-kh7",
+      "w-ra7",
+      "b-f6",
+      "w-ke1",
+      "b-rd4",
+      "w-f3",
+      "b-kf8-active",
+      "w-e5",
+      "b-rd5",
+      "w-f4",
+      "b-kf8-push",
+      "w-kf2",
+      "b-ke7-push"
+    ],
+    "plyHorizon": 8
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1900,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "spineNodeId": "w-kf1"
+      },
+      "moveUci": "d8d7",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "Pure passivity: the rook defends a pawn nobody is attacking and gives up the only open file it owns. This is the single most common way a drawable rook ending is lost, and it is lost slowly enough that it never feels like a mistake."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-kf1"
+      },
+      "moveUci": "d8d6",
+      "class": "accepted_alternative",
+      "note": "The sixth-rank restraint. The rook on the sixth stops White's king from ever crossing that rank, which is a genuine defensive scheme — but e4-e5 hits it with tempo, so you must already know where the rook is going next."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-kf1"
+      },
+      "moveUci": "h6h5",
+      "class": "interesting_deviation",
+      "note": "Trading pawns favours the defender, so pushing the h-pawn toward a trade has a point. Fixing your own pawn on a square a rook can reach does not. Play it out and find out which of the two happens first."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-ra7"
+      },
+      "moveUci": "d2d7",
+      "class": "tactical_error",
+      "note": "Defending f7 by putting the rook next to White's on the seventh. The capture wins a whole rook — your king is on h7 and cannot recapture on d7."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-ra7"
+      },
+      "moveUci": "d2f2",
+      "class": "tactical_error",
+      "note": "Grabbing f2 with check looks like counterplay right up until the king takes the rook. Activity is a plan, not a licence."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-f3"
+      },
+      "moveUci": "d4e4",
+      "class": "tactical_error",
+      "note": "The pawn was hanging one move ago; f3 was played precisely because it was. Taking a pawn that was free in the previous position is the most common blunder there is in a drill with a rewind button."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-f3"
+      },
+      "moveUci": "d4d2",
+      "class": "accepted_alternative",
+      "note": "Back to the second rank now that the concession has been extracted. Slower than bringing the king up, and no worse — the rook on the second is where it eventually wants to be anyway."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-rd1"
+      },
+      "moveUci": "d8d1",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "Accepting the rook trade is the decision this pack exists to prevent. Not because the resulting pawn ending is proven lost — it is not proven anything, no tablebase reaches this material — but because the rook ending is a defence you can learn once and repeat, while the pawn ending is a race you must calculate exactly, every time, with no margin."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-rd1"
+      },
+      "moveUci": "d8d7",
+      "class": "interesting_deviation",
+      "note": "The same trade one move later, after the capture on d7 with check. If you are going to allow it, at least notice which square your king ends up recapturing on: d7 is the far side of the board from every pawn in the position."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-e5"
+      },
+      "moveUci": "d8e8",
+      "class": "accepted_alternative",
+      "note": "Attacking the pawn from the front works too. The difference is job count: from e8 the rook only attacks, from d5 it attacks and holds the fifth rank against White's king."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-e5"
+      },
+      "moveUci": "f7f6",
+      "class": "interesting_deviation",
+      "note": "Challenging the pawn immediately. The capture and recapture reach three against two, and fewer pawns is exactly what the defender wants — at the price of splitting your own pawns and opening a file toward your king. A real trade-off, not an error; branch it and judge which half matters more."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-f4"
+      },
+      "moveUci": "d5e5",
+      "class": "tactical_error",
+      "note": "The pawn was defended one move ago by nothing and is now defended by the f-pawn. Same blunder shape as taking on e4 in the other branch, which is why it is worth meeting twice."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "drawn-but-hard",
+      "text": "Rook and four against rook and three with every pawn on one wing is held with accurate defence and lost regularly at every club level. This pack drills the defence; it does not prove the draw.",
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
+    },
+    {
+      "id": "no-tablebase-here",
+      "text": "Ten pieces are on the board. Syzygy tablebases stop at seven, so no position in this drill has exact ground truth behind it — every judgment you are shown here was authored, not proved.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    },
+    {
+      "id": "decline-rook-trade",
+      "text": "The defender trades pawns and refuses rooks; the attacker wants the exact opposite. Every pair of pawns that comes off shortens the defence, and the rooks are what make the position holdable at all.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    },
+    {
+      "id": "activity-has-a-price",
+      "text": "Rook activity is the defence, but it is never free. A rook that leaves the back rank invites checks behind your king; a rook that leaves the file invites the trade. Choose which bill you are paying before you play the move.",
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
+    },
+    {
+      "id": "empty-file-worth-little",
+      "text": "With every pawn on one wing, an open file on the other wing wins nothing. Do not fight for the d-file; fight for the second rank, the fifth rank, and the squares in front of the pawns.",
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "This is an outcome drill. You are graded on whether the result survived, not on whether you found the move an engine likes — a defence that holds by a different route is a pass.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Start position is a constructed schematic four-against-three same-wing rook ending (White Kg1/Ra1, pawns e4/f2/g2/h2; Black Kg8/Rd8, pawns f7/g7/h6). It is not taken from a game, no source game was consulted, and no named theoretical position is claimed for it.",
+      "NO TABLEBASE GROUND TRUTH EXISTS ANYWHERE IN THIS PACK. Rook and four pawns against rook and three is ten pieces; Syzygy coverage stops at seven. No position here has been checked against a tablebase because none can be.",
+      "NO ENGINE ANALYSIS WAS RUN. Not one position in this pack has been seen by Stockfish or any other engine at any depth.",
+      "UNGROUNDED: the claim that this material is a theoretical draw, every plan-class description, every annotation, every deviation classification and every feedbackClaim are agent-authored model knowledge with no citation, no engine validation and no reviewer sign-off.",
+      "Technique names used in the prose (Philidor-style third-rank restraint, rook on the seventh, second-rank activity) name established methods. The name is the only thing being cited: it is not evidence for any evaluation stated in this pack.",
+      "Move legality is the only mechanically verified property of this file. Every spine move, and the start position, were checked by `make pack-check` (v0.2 schema plus the chessops spine-legality lint). Deviation moves are asserted legal by the author and are NOT checked by that lint."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "Stockfish validation pass at real depth on every spine node and every deviation; nothing in this pack has been engine-checked.",
+      "The load-bearing claim -- that this material is a theoretical draw held by accurate defence -- needs a citable endgame reference. None was consulted.",
+      "The w-ra8/w-ra7 line asserts that 1...Rd2 concedes a pawn move to the back-rank check. It is the pack's most concrete tactical claim, it drives the whole king-first-versus-activity comparison, and it is unverified.",
+      "Deviation classes need confirmation, especially the two concept_violations (passive Rd7, accepting the rook trade) and the claim that the pawn ending after a rook trade is harder to hold than the rook ending. That last one is stated as a practical judgment precisely because it cannot be stated as a fact.",
+      "Practical-difficulty judgments -- which defensive scheme a 1500-2000 player actually holds -- need Maia or corpus evidence. design/04 §7 says save/resist objectives need practical-difficulty judgment that only authored endgame content can express; this pack expresses it with no evidence underneath.",
+      "The still-holding checkpoint uses a materialBalance trigger whose runtime behaviour the author did not verify; if it is inert, the pack's only executable success condition is inert too.",
+      "No reviewer has looked at this file. reviewStatus stays draft."
+    ]
+  }
+}

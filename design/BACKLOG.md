@@ -102,7 +102,20 @@ RFC drafts died, and why every row in this pass carries a `file.ts:line`.
 | D3 | **`POST /runs` silently accepts unknown nested fields** — violates never-silent. Same shape as the old checkpoint-action problem: the author writes something, the validator blesses it, nothing happens | 🐞 (codex, session 2) |
 | D4 | **Action-vocabulary drift risk.** The server allow-list (`pack-validation.ts:11`) and the client's recognized-action switch are two hand-maintained lists that currently happen to agree. A shared constant or an equality test prevents the next divergence | 🐞 latent |
 | D5 | **The release compose has no light profile** — `ENGINE_MODE: maia` is hardcoded with an unconditional Maia dependency, so self-hosters following the published artefact must run Maia | 🐞 |
+| D7 | **`AUTHORED_PROSE_AFTER_LAST_CHECKPOINT` covers `annotations` only.** Deviation notes obey the same reveal rule and are unchecked, so unreachable deviation prose passes `pack-check` silently — the never-silent gap the lint was added to close, still open on half its surface. Found by authoring Pack B (the author audited all ten notes by hand instead) | 🐞 found 2026-08-12 |
 | D6 | **`phase` never reaches the client.** `PackSummary` omits it (`pack-registry.ts:16-24`); `grep -rn "phase" apps/web/src` finds two unrelated prose strings. The Learn IA is organized on this axis | 🐞 |
+
+## Authoring-format friction (💡 — raised by authors while writing real packs)
+
+The point of authoring one pack per phase is to find these. Each is a concrete
+proposal from someone who hit the limitation with content in hand, which is the
+evidence the withdrawn contracts RFCs never had.
+
+| Friction | Proposal | Raised by |
+|---|---|---|
+| A plan drill's objective cannot be expressed. Success is relative to the **captured intent** — did you execute the plan you committed to — but `successConditions` supports only intent-blind `reach_checkpoint`, so plan packs ship with no objective at all | Intent-relative success conditions. Directly connected to `intent_capture` being inert (`checkpoints[].interaction` has no consumer) and to the objective-type widening in program #4 | Pack B (Carlsbad), 2026-08-12 |
+| Deviations have no link to a plan class. 11.a3 and 11.Rab1 are literally the *same plan*, and `accepted_alternative` says nothing about that | Optional `planClassId` on a deviation | Pack B, 2026-08-12 |
+| `concept_violation` does two different jobs — a **timing** error (right plan, wrong moment) and a **plan-coherence** error (a move that contradicts the committed plan). Collapsing them loses the distinction the feedback most needs to make | Split the class, or add a dimension | Pack B, 2026-08-12 |
 
 ## Open shape questions (💡 = genuinely undecided; owned by exploration)
 
