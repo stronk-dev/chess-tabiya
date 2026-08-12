@@ -218,3 +218,17 @@ contract-gaps (the second deliverable — what the format could NOT express):
 - Both carried into the matrix as the next RFC's two exact inputs: (1) a
   server-side authored-prose projection honouring `feedbackPolicy`; (2) a
   closed, validated action vocabulary that fails `pack-check` on unknown values.
+
+## 2026-08-12 (claude) — delivery RFC accepted after a fifth same-class finding
+
+- The first draft of `authored-feedback-delivery` again asserted infrastructure
+  that does not exist: a reveal endpoint, a `scope=` grammar, and a 425 status
+  that lives only inside a withdrawn RFC. Fifth instance of this failure class.
+- Correction went NARROWER than the reviewer's split suggestion: the leak is
+  fully fixable **without any reveal path**, because nothing renders authored
+  prose today (the field matrix proves it). So the RFC is now "stop shipping",
+  full stop — and serving content back is explicitly blocked on per-scope
+  reveal existing first.
+- Standing lesson reinforced, now with five data points: when a draft needs a
+  capability, check whether it shipped **before** writing the sentence that
+  uses it. The withdrawn RFCs are the trap — their contracts read like history.
