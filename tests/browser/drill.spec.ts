@@ -1,6 +1,23 @@
 import { mkdir, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 
 import { expect, test, type Page } from "@playwright/test";
+
+async function register(page: Page): Promise<string> {
+  await page.goto("/play");
+  let handle = "existing";
+  if (await page.getByRole("button", { name: "Create an account" }).isVisible().catch(() => false)) {
+    handle = `browser_${randomUUID().slice(0, 8)}`;
+    await page.getByRole("button", { name: "Create an account" }).click();
+    await page.getByLabel("Handle").fill(handle);
+    await page.getByLabel("Password").fill("browser-test-password");
+    await page.getByRole("button", { name: "Register" }).click();
+  }
+  await expect(page.getByText("Choose a position worth returning to.")).toBeVisible();
+  return handle;
+}
+
+test.beforeEach(async ({ page }) => register(page));
 
 interface LatencyEnvelope {
   readonly boardReadyMs: number;
@@ -36,7 +53,6 @@ async function move(page: Page, from: string, to: string): Promise<void> {
 test("served Najdorf pack plays, rewinds, branches, compares, and exports", async ({
   page,
 }) => {
-  await page.goto("/play");
   const list = await page.request.get("/packs");
   expect(list.ok()).toBe(true);
   const served = (await list.json()) as {
@@ -206,7 +222,6 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
 test("Pack A reveals only the authored commentary for the checkpoint occurrence", async ({
   page,
 }) => {
-  await page.goto("/play");
   const card = page
     .getByRole("article")
     .filter({ hasText: "Caro-Kann Advance: winning the c5 race" });
@@ -231,6 +246,40 @@ test("Pack A reveals only the authored commentary for the checkpoint occurrence"
   await expect(
     page.getByText("Hold the centre and finish developing", { exact: false }),
   ).toHaveCount(0);
+});
+
+test("a granted spectator follows a run without receiving a write control", async ({
+  page,
+  browser,
+}) => {
+  const card = page
+    .getByRole("article")
+    .filter({ hasText: "Caro-Kann Advance: winning the c5 race" });
+  await card.getByRole("button", { name: /Open position/ }).click();
+  await expect(page.locator("cg-board")).toBeVisible();
+  const runId = decodeURIComponent(new URL(page.url()).pathname.split("/").at(-1)!);
+  const writerId = await page.evaluate((id) =>
+    localStorage.getItem(`chess-tabiya:run:${id}:writer-id`), runId);
+  expect(writerId).not.toBeNull();
+
+  const spectatorContext = await browser.newContext();
+  const spectator = await spectatorContext.newPage();
+  const spectatorHandle = await register(spectator);
+  const grant = await page.request.post(`/runs/${encodeURIComponent(runId)}/grants`, {
+    headers: { "x-writer-id": writerId! },
+    data: { op: "grant", handle: spectatorHandle, role: "spectator" },
+  });
+  expect(grant.ok(), await grant.text()).toBe(true);
+
+  await spectator.goto(`/play/run/${encodeURIComponent(runId)}`);
+  await expect(spectator.locator("cg-board")).toBeVisible();
+  await expect(spectator.getByText("Read-only", { exact: true })).toBeVisible();
+  await expect(spectator.getByRole("button", { name: "Take the board on this device" })).toHaveCount(0);
+
+  await move(page, "g1", "f3");
+  await expect(page.getByText("Active line 3 plies")).toBeVisible();
+  await expect(spectator.getByText("Active line 3 plies")).toBeVisible({ timeout: 4_000 });
+  await spectatorContext.close();
 });
 
 test("every shell route owns the viewport at both desktop projections", async ({

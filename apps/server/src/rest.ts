@@ -28,6 +28,9 @@ import {
   type CreateRunRequest,
   type RewindTarget,
 } from "./service.js";
+import { IdentityService } from "./identity.js";
+import type { Principal } from "./authorization.js";
+import type { RunRole } from "./storage.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -35,6 +38,13 @@ function json(status: number, value: unknown): Response {
   return Response.json(value, {
     status,
     headers: { "cache-control": "no-store" },
+  });
+}
+
+function jsonWithCookie(status: number, value: unknown, cookie: string): Response {
+  return Response.json(value, {
+    status,
+    headers: { "cache-control": "no-store", "set-cookie": cookie },
   });
 }
 
@@ -189,6 +199,20 @@ function writerId(request: Request): string {
   return requiredString(request.headers.get("x-writer-id"), "x-writer-id header");
 }
 
+function requireJson(request: Request): void {
+  const contentType = request.headers.get("content-type") ?? "";
+  if (!/^application\/json(?:\s*;|$)/i.test(contentType)) {
+    throw invalid("content-type must be application/json");
+  }
+}
+
+function runRole(value: unknown): RunRole {
+  if (value !== "host" && value !== "participant" && value !== "spectator") {
+    throw invalid("role must be host, participant, or spectator");
+  }
+  return value;
+}
+
 function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
   if (typeof value.seed !== "number" || !Number.isSafeInteger(value.seed)) {
     throw invalid("seed must be a safe integer");
@@ -265,7 +289,11 @@ export function errorResponse(error: unknown): Response {
       error.code === "STORAGE_FAILURE" ? "Storage operation failed" : error.message;
     details = error.details;
     status =
-      error.code === "ENGINE_UNAVAILABLE"
+      error.code === "UNAUTHENTICATED"
+        ? 401
+        : error.code === "FORBIDDEN"
+          ? 403
+      : error.code === "ENGINE_UNAVAILABLE"
         ? 503
         : error.code === "EVIDENCE_UNAVAILABLE"
           ? 503
@@ -296,7 +324,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -358,10 +386,61 @@ export function createRestHandler(
   service: RunService,
   selector?: OpponentSelector,
   capabilities?: CapabilitiesProvider,
+  identity?: IdentityService,
 ): RestHandler {
   return async (request) => {
     try {
       const url = new URL(request.url);
+      const authenticate = (): Principal => {
+        if (identity === undefined) {
+          // Low-level handler tests may omit identity; createApplication always supplies it.
+          return Object.freeze({ learnerId: "__legacy", handle: "__legacy" });
+        }
+        return identity.authenticate(request.headers.get("cookie"));
+      };
+      if (url.pathname.startsWith("/auth/")) {
+        if (identity === undefined) {
+          throw new ServerError("UNAUTHENTICATED", "Authentication is not configured");
+        }
+        if (request.method === "GET" && url.pathname === "/auth/session") {
+          const principal = authenticate();
+          return json(200, { learner: identity.learner(principal) });
+        }
+        if (request.method !== "POST") {
+          return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+        }
+        requireJson(request);
+        const value = await parseBody(request);
+        if (url.pathname === "/auth/register") {
+          const session = await identity.register({
+            handle: requiredString(value.handle, "handle"),
+            password: requiredString(value.password, "password"),
+            ...(value.displayName === undefined
+              ? {}
+              : { displayName: requiredString(value.displayName, "displayName") }),
+          });
+          return jsonWithCookie(201, { learner: session.learner }, session.cookie);
+        }
+        if (url.pathname === "/auth/login") {
+          const session = await identity.login(
+            requiredString(value.handle, "handle"),
+            requiredString(value.password, "password"),
+          );
+          return jsonWithCookie(200, { learner: session.learner }, session.cookie);
+        }
+        if (url.pathname === "/auth/logout") {
+          return jsonWithCookie(200, {}, identity.logout(request.headers.get("cookie")));
+        }
+        if (url.pathname === "/auth/delete") {
+          const principal = authenticate();
+          const cookie = await identity.deleteAccount(
+            principal,
+            requiredString(value.password, "password"),
+          );
+          return jsonWithCookie(200, {}, cookie);
+        }
+        return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } });
+      }
       if (request.method === "GET" && url.pathname === "/capabilities") {
         if (capabilities === undefined) {
           throw new ServerError(
@@ -393,17 +472,20 @@ export function createRestHandler(
         });
       }
       if (request.method === "POST" && url.pathname === "/runs") {
+        const principal = authenticate();
         const run = service.create(
           parseCreateInput(await parseBody(request)),
-          writerId(request),
+          { writerId: writerId(request), learnerId: principal.learnerId },
         );
         return json(201, { run });
       }
       if (request.method === "GET" && url.pathname === "/runs") {
+        const principal = authenticate();
         const { limit, offset } = parsePagination(url);
-        return json(200, { runs: service.runs(limit, offset) });
+        return json(200, { runs: service.runs(principal, limit, offset) });
       }
       if (request.method === "POST" && url.pathname === "/select-move") {
+        authenticate();
         if (selector === undefined) {
           throw new ServerError(
             "ENGINE_UNAVAILABLE",
@@ -423,20 +505,27 @@ export function createRestHandler(
           error: { code: "NOT_FOUND", message: "Route not found" },
         });
       }
+      const principal = authenticate();
       if (request.method === "GET" && route.action === "graph") {
-        return json(200, { graph: service.graph(route.runId) });
+        return json(200, {
+          graph: service.graph(
+            route.runId,
+            principal,
+            request.headers.get("x-writer-id") ?? undefined,
+          ),
+        });
       }
       if (request.method === "GET" && route.action === "events") {
-        return json(200, service.events(route.runId, parseSinceSeq(url)));
+        return json(200, service.events(route.runId, principal, parseSinceSeq(url)));
       }
       if (request.method === "GET" && route.action === "evidence") {
-        return json(200, service.evidence(route.runId, parseSinceSeq(url)));
+        return json(200, service.evidence(route.runId, principal, parseSinceSeq(url)));
       }
       if (request.method === "GET" && route.action === "authored-feedback") {
-        return json(200, service.authoredFeedback(route.runId));
+        return json(200, service.authoredFeedback(route.runId, principal));
       }
       if (request.method === "GET" && route.action === "pgn") {
-        const pgn = await service.pgn(route.runId, parseBranches(url));
+        const pgn = await service.pgn(route.runId, principal, parseBranches(url));
         const filename = `${route.runId.replaceAll(/[^a-zA-Z0-9._-]/g, "_")}.pgn`;
         return new Response(pgn, {
           status: 200,
@@ -447,6 +536,9 @@ export function createRestHandler(
           },
         });
       }
+      if (request.method === "GET" && route.action === "grants") {
+        return json(200, { grants: service.grants(route.runId, principal) });
+      }
       if (request.method !== "POST") {
         return json(405, {
           error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" },
@@ -454,6 +546,29 @@ export function createRestHandler(
       }
 
       const value = await parseBody(request);
+      if (route.action === "lease") {
+        requireJson(request);
+        service.claimLease(route.runId, principal, writerId(request));
+        return json(200, { holdsLease: true });
+      }
+      if (route.action === "grants") {
+        requireJson(request);
+        const op = requiredString(value.op, "op");
+        if (op !== "grant" && op !== "revoke") throw invalid("op must be grant or revoke");
+        const handle = requiredString(value.handle, "handle");
+        const operation =
+          op === "grant"
+            ? { op, handle, role: runRole(value.role) } as const
+            : { op, handle } as const;
+        return json(200, {
+          grants: service.updateGrant(
+            route.runId,
+            principal,
+            writerId(request),
+            operation,
+          ),
+        });
+      }
       if (route.action === "moves") {
         if (value.selection !== undefined) {
           if (value.actor !== undefined || value.uci !== undefined) {
@@ -463,6 +578,7 @@ export function createRestHandler(
             200,
             service.opponentPly(
               route.runId,
+              principal,
               writerId(request),
               parseOpponentSelection(value.selection),
               {
@@ -483,6 +599,7 @@ export function createRestHandler(
           200,
           service.move(
             route.runId,
+            principal,
             writerId(request),
             requiredString(value.uci, "uci"),
             parseMoveOptions(value),
@@ -501,6 +618,7 @@ export function createRestHandler(
           200,
           service.rewind(
             route.runId,
+            principal,
             writerId(request),
             target,
             optionalString(value.at, "at"),
@@ -512,6 +630,7 @@ export function createRestHandler(
           200,
           service.fork(
             route.runId,
+            principal,
             writerId(request),
             requiredString(value.nodeId, "nodeId"),
             {
@@ -532,6 +651,7 @@ export function createRestHandler(
         return json(200, {
           comparison: service.compare(
             route.runId,
+            principal,
             requiredString(value.branchAId, "branchAId"),
             requiredString(value.branchBId, "branchBId"),
           ),
@@ -542,6 +662,7 @@ export function createRestHandler(
           200,
           service.applyEvidence(
             route.runId,
+            principal,
             writerId(request),
             requiredSafeInteger(value.resultSeq, "resultSeq"),
             optionalString(value.at, "at"),

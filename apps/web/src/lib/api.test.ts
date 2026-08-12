@@ -76,7 +76,12 @@ describe("DrillApi", () => {
         return json({
           graph: {
             id: run.id,
-            activeWriterId: "writer-one",
+            viewer: {
+              role: "host",
+              mayWrite: true,
+              holdsLease: true,
+              leaseHeldBy: { learnerId: "learner-one", handle: "one" },
+            },
             nodes: run.nodes,
             branches: run.branches,
             activeCursor: run.activeCursor,
@@ -200,7 +205,7 @@ describe("DrillApi", () => {
           error: {
             code: "NOT_ACTIVE_WRITER",
             message: "Another client owns the run",
-            activeWriterId: "writer-a",
+            reason: "lease held elsewhere",
           },
         },
         { status: 409 },
@@ -210,7 +215,7 @@ describe("DrillApi", () => {
     await expect(api.move("run", { uci: "e2e4" }, "writer-b")).rejects.toMatchObject({
       status: 409,
       code: "NOT_ACTIVE_WRITER",
-      details: { activeWriterId: "writer-a" },
+      details: { reason: "lease held elsewhere" },
     });
   });
 });

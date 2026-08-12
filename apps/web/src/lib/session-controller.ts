@@ -13,6 +13,7 @@ import {
   type AuthoredFeedbackPage,
   type DrillClientApi,
   type PgnDownload,
+  type RunGraph,
 } from "./api.js";
 import { boardModel } from "./board-model.js";
 import {
@@ -37,6 +38,7 @@ export interface DrillSessionState {
   readonly comparison?: BranchComparison;
   readonly comparisonBranchIds?: readonly [string, string];
   readonly authoredFeedback?: AuthoredFeedbackPage;
+  readonly viewer?: RunGraph["viewer"];
 }
 
 export interface StartedRun {
@@ -173,19 +175,20 @@ export class DrillSessionController {
       if (started?.type !== "run.started") {
         throw new TypeError("Cannot resume a run without its run.started event");
       }
+      const claimed = WriterSession.peek(runId, this.#storage);
       const [{ document, digest }, capabilities, graph] = await Promise.all([
         this.#api.pack(started.data.packId),
         this.#api.capabilities(),
-        this.#api.graph(runId),
+        this.#api.graph(runId, claimed?.writerId),
       ]);
-      const claimed = WriterSession.peek(runId, this.#storage);
       const session =
-        claimed?.writerId === graph.activeWriterId
+        graph.viewer.holdsLease && claimed !== undefined
           ? claimed
-          : WriterSession.observe(runId, graph.activeWriterId);
+          : WriterSession.observe(runId, this.#storage);
       const store = this.#newStore(document, session, projectRun(eventPage.events));
       this.#capabilities = capabilities;
       this.#attachStore(store, document, digest);
+      this.#patch({ viewer: graph.viewer });
       await this.#playOpponentIfNeeded();
       await this.#refreshAuthoredFeedback();
     } catch (error) {
@@ -241,6 +244,16 @@ export class DrillSessionController {
     } catch (error) {
       this.#fail(error);
     }
+  }
+
+  async claimLease(): Promise<void> {
+    const runId = this.#requiredStore().snapshot.run.id;
+    if (this.#api.claimLease === undefined) {
+      throw new Error("Lease claiming is not available");
+    }
+    const session = WriterSession.claimFor(runId, this.#storage);
+    await this.#api.claimLease(runId, session.writerId);
+    await this.resume(runId);
   }
 
   async continueCheckpoint(): Promise<void> {

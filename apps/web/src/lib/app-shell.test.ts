@@ -56,7 +56,8 @@ const runSummary: RunSummary = {
   updatedAt: "2026-08-11T21:00:00.000Z",
   objectiveState: "active",
   branchCount: 1,
-  activeWriterId: "writer-a",
+  viewerRole: "host",
+  leaseHeldBy: { learnerId: "learner-test", handle: "test" },
 };
 
 const capabilities: Capabilities = {
@@ -111,7 +112,12 @@ function api(): DrillClientApi {
     async graph() {
       return {
         id: run.id,
-        activeWriterId: "writer-a",
+        viewer: {
+          role: "host" as const,
+          mayWrite: true,
+          holdsLease: true,
+          leaseHeldBy: { learnerId: "learner-a", handle: "alice" },
+        },
         nodes: run.nodes,
         branches: run.branches,
         activeCursor: run.activeCursor,
@@ -242,7 +248,7 @@ describe("application shell", () => {
     });
 
     await vi.waitFor(() =>
-      expect(document.body.textContent).toContain("This browser opens as the writer"),
+      expect(document.body.textContent).toContain("You hold the board"),
     );
     document
       .querySelector<HTMLButtonElement>(".resume-card button")!
@@ -252,7 +258,7 @@ describe("application shell", () => {
     expect(document.body.textContent).toContain("Writer");
     router.navigate("/");
     await vi.waitFor(() =>
-      expect(document.body.textContent).toContain("This browser opens as the writer"),
+      expect(document.body.textContent).toContain("You hold the board"),
     );
 
     const routes = [

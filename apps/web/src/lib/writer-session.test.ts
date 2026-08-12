@@ -49,7 +49,7 @@ describe("WriterSession", () => {
     expect(WriterSession.peek("foreign-run", storage)).toBeUndefined();
     expect(storage.values.size).toBe(0);
 
-    const observer = WriterSession.observe("foreign-run", "foreign-writer");
+    const observer = WriterSession.observe("foreign-run", storage, () => "local-observer");
     expect(observer.readOnly).toBe(true);
     expect(storage.values.size).toBe(0);
   });

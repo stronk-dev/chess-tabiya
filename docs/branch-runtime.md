@@ -195,10 +195,21 @@ fork to 422. Unexpected and storage failures return a non-revealing structured
 
 ## Writer lease and SQLite storage
 
-Each run has one active writer id. The service checks it before every mutation,
-and the SQLite `UPDATE` repeats the writer predicate atomically with the snapshot
-write. A different writer receives `NOT_ACTIVE_WRITER` / HTTP 409. Other clients
-may still read the graph, comparisons, and sequenced events.
+Each run has one active device writer id and one active learner holder. A
+learner must first hold a per-run `host` or `participant` grant; the service then
+checks both learner and device before every mutation, and the SQLite `UPDATE`
+repeats both predicates atomically with the snapshot write. A spectator receives
+HTTP 403; a writer-capable learner who does not hold the board receives
+`NOT_ACTIVE_WRITER` / HTTP 409. Authorized readers may still read the graph,
+comparisons, and sequenced events, but no read response publishes the opaque
+writer id.
+
+There is now an explicit claim operation. Any writer-capable learner may claim
+the board for their current device; there is deliberately no lease expiry. If a
+grant mutation removes write access from the current holder, storage transfers
+the lease to the acting host in the same transaction. Account deletion transfers
+it to the non-authenticating `__legacy` sentinel, leaving the board claimable by
+any surviving writer-capable member.
 
 `RunStorage` isolates persistence behind `create`, `read`, `save`, and `close`.
 The ratified implementation is `SQLiteRunStorage`; PostgreSQL is a bounded future
@@ -233,8 +244,9 @@ wide-area-network, durable-disk, or marathon-session guarantee.
 
 ## Current limitations
 
-- A lease has no expiry, renewal, transfer, or steal endpoint. “Continue on this
-  device” needs a follow-up concurrency contract. Multi-device merge is absent.
+- A lease has no expiry, renewal, heartbeat, or merge. Claim is unconditional
+  among authorized writers (last claimer wins); concurrent multi-device edits
+  are prevented, not merged.
 - Every save serializes and replaces the entire run snapshot. This is O(n) write
   amplification even though warm reads are memoized. A future event-append adapter
   can change storage without changing runtime semantics.

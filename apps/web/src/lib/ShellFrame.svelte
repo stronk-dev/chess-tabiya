@@ -2,6 +2,7 @@
   import type { Snippet } from "svelte";
 
   import type { AppRoute } from "./router.js";
+  import type { Learner } from "./api.js";
 
   interface RunContext {
     readonly title: string;
@@ -13,10 +14,13 @@
     route: AppRoute;
     runContext?: RunContext | undefined;
     onNavigate: (path: string) => void;
+    learner?: Learner;
+    onSignOut?: () => void;
+    onDeleteAccount?: () => void;
     children: Snippet;
   }
 
-  let { route, runContext, onNavigate, children }: Props = $props();
+  let { route, runContext, onNavigate, learner, onSignOut, onDeleteAccount, children }: Props = $props();
 
   const destinations = [
     ["Home", "/", "home"],
@@ -75,6 +79,13 @@
         <span>No active run</span>
       {/if}
     </div>
+    {#if learner}
+      <div class="identity-control">
+        <strong>@{learner.handle}</strong>
+        <button type="button" onclick={onSignOut}>Sign out</button>
+        <button type="button" onclick={onDeleteAccount}>Delete</button>
+      </div>
+    {/if}
   </header>
   <div class="shell-content">{@render children()}</div>
 </div>
@@ -105,7 +116,7 @@
     position: relative;
     z-index: 10;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
     align-items: center;
     gap: 1rem;
     min-height: 3.5rem;
@@ -165,6 +176,9 @@
   .run-context strong.readonly {
     color: var(--warning);
   }
+
+  .identity-control { display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; }
+  .identity-control button { padding: 0.35rem 0.5rem; font-size: 0.68rem; }
 
   .shell-content {
     min-height: 0;

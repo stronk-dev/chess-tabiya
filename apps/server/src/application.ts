@@ -33,6 +33,7 @@ import { PackRegistry } from "./pack-registry.js";
 import { createHttpServer, createRestHandler, type RestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { IdentityService } from "./identity.js";
 import { stockfishPlaySpec } from "./strong-engine.js";
 
 export type EngineMode = "mock" | "maia";
@@ -46,6 +47,7 @@ export interface ApplicationOptions {
   readonly maiaHost?: string;
   readonly maiaPort?: number;
   readonly stockfishCommand?: string;
+  readonly cookieSecure?: boolean;
 }
 
 export interface ChessTabiyaApplication {
@@ -203,6 +205,8 @@ function maiaNetworkSpec(host: string, port: number): EngineSpec {
 
 function isApiPath(pathname: string): boolean {
   return (
+    pathname === "/auth" ||
+    pathname.startsWith("/auth/") ||
     pathname === "/capabilities" ||
     pathname === "/packs" ||
     pathname.startsWith("/packs/") ||
@@ -301,7 +305,10 @@ export async function createApplication(
     maxConcurrency: 2,
   });
   const service = new RunService(storage, { evidenceQueue, packRegistry: registry });
-  const api = createRestHandler(service, selector, capabilities);
+  const identity = new IdentityService(storage, {
+    cookieSecure: options.cookieSecure ?? true,
+  });
+  const api = createRestHandler(service, selector, capabilities, identity);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

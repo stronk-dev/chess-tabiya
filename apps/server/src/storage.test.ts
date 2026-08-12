@@ -63,6 +63,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     });
     expect(firstLog).toEqual([
       { version: 1, name: "add and backfill run summaries" },
+      { version: 2, name: "learner identity and run grants" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([
       {
@@ -72,7 +73,8 @@ describe("SQLite run-storage migrations and summaries", () => {
         updatedAt: createdAt,
         objectiveState: "active",
         branchCount: 1,
-        activeWriterId: "legacy-writer",
+        viewerRole: "host",
+        leaseHeldBy: { learnerId: "__legacy", handle: "__legacy" },
       },
     ]);
     upgraded.close();
@@ -89,7 +91,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(1);
+    ).toBe(2);
     inspection.close();
   });
 
@@ -113,16 +115,24 @@ describe("SQLite run-storage migrations and summaries", () => {
         id: "run-a",
         title: "Historical A",
         branchCount: 2,
-        activeWriterId: "writer-a",
+        viewerRole: "host",
+        leaseHeldBy: { learnerId: "__legacy", handle: "__legacy" },
       }),
     ]);
     expect(storage.list(1, 1)).toEqual([
       expect.objectContaining({
         id: "run-b",
         title: "Historical B",
-        activeWriterId: "writer-b",
+        viewerRole: "host",
+        leaseHeldBy: { learnerId: "__legacy", handle: "__legacy" },
       }),
     ]);
+    storage.close();
+  });
+
+  it("does not create the legacy sentinel in a fresh database", () => {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    expect(storage.learnerById("__legacy")).toBeUndefined();
     storage.close();
   });
 });

@@ -27,3 +27,6 @@ Implemented foundation:
   path-relative authored checkpoint reveal, grounded objective sentences,
   aligned engine-score trajectories, provenance honesty, and the explicit
   content-era boundary.
+- `identity-and-authorization.md` — learner accounts, server-side sessions,
+  per-run roles, learner-bound writer leases, grant transfer, deletion
+  reassignment, and hosted-operation limits.

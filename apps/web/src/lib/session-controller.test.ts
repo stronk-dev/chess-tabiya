@@ -101,6 +101,7 @@ class FakeApi implements DrillClientApi {
   created: CreateRunRequest | undefined;
   selected: SelectMoveRequest | undefined;
   writerIds: string[] = [];
+  graphWriterIds: (string | undefined)[] = [];
   activeWriterId = "writer-a";
 
   constructor(
@@ -217,11 +218,17 @@ class FakeApi implements DrillClientApi {
     return result;
   }
 
-  async graph() {
+  async graph(_runId: string, writerId?: string) {
+    this.graphWriterIds.push(writerId);
     const run = this.requiredRun();
     return {
       id: run.id,
-      activeWriterId: this.activeWriterId,
+      viewer: {
+        role: "host" as const,
+        mayWrite: true,
+        holdsLease: writerId === this.activeWriterId,
+        leaseHeldBy: { learnerId: "learner-a", handle: "alice" },
+      },
       nodes: run.nodes,
       branches: run.branches,
       activeCursor: run.activeCursor,
@@ -431,6 +438,7 @@ describe("DrillSessionController", () => {
     await environment.controller.resume("screen-run");
 
     expect(environment.controller.state.runState?.access).toBe("writer");
+    expect(environment.api.graphWriterIds).toEqual(["writer-a"]);
   });
 
   it("requests an initial opponent ply when its writer resumes an unblocked root", async () => {

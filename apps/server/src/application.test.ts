@@ -13,13 +13,24 @@ describe("development application mock opponent", () => {
   });
 
   it("plays the deterministic Pack A opponent spine from its black-to-move root", async () => {
-    application = await createApplication({ development: true, engineMode: "mock" });
+    application = await createApplication({
+      development: true,
+      engineMode: "mock",
+      cookieSecure: false,
+    });
     await new Promise<void>((resolve, reject) => {
       application!.server.once("error", reject);
       application!.server.listen(0, "127.0.0.1", resolve);
     });
     const address = application.server.address() as AddressInfo;
     const origin = `http://127.0.0.1:${address.port}`;
+    const registered = await fetch(`${origin}/auth/register`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ handle: "engine_test", password: "engine-test-password" }),
+    });
+    expect(registered.status).toBe(201);
+    const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
     const packs = (await (await fetch(`${origin}/packs`)).json()) as {
       id: string;
       digest: string;
@@ -30,7 +41,7 @@ describe("development application mock opponent", () => {
     const choose = async (historyUci: readonly string[]) => {
       const response = await fetch(`${origin}/select-move`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "content-type": "application/json", cookie },
         body: JSON.stringify({
           startFen:
             "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",

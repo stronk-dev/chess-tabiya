@@ -13,6 +13,7 @@
     type PackSummary,
     type RunSummary,
     type SurfaceId,
+    type Learner,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
   import { ShellKeyboardDispatcher } from "./lib/keyboard.js";
@@ -52,6 +53,19 @@
   let routeLoading = $state(true);
   let routeError: string | undefined = $state();
   let shellHelpOpen = $state(false);
+  let learner: Learner | undefined = $state();
+  let authLoading = $state(true);
+  let authError: string | undefined = $state();
+  let authHandle = $state("");
+  let authPassword = $state("");
+  let authRegister = $state(false);
+  let routerStarted = false;
+  const onUnauthenticated = (): void => {
+    controller.stopSession();
+    learner = undefined;
+    router.stop();
+    routerStarted = false;
+  };
   let shellHelpReturnFocus: HTMLElement | undefined;
   let unsubscribeController: (() => void) | undefined;
   let unsubscribeRouter: (() => void) | undefined;
@@ -100,12 +114,9 @@
     void tick().then(() => target?.focus());
   }
 
-  function writerAccess(run: RunSummary): "writer" | "read_only" {
-    const claimed =
-      storage === undefined
-        ? WriterSession.peek(run.id)
-        : WriterSession.peek(run.id, storage);
-    return claimed?.writerId === run.activeWriterId ? "writer" : "read_only";
+  function boardStance(run: RunSummary): "you" | "someone-else" | "unclaimed" {
+    if (run.leaseHeldBy.handle === "__legacy") return "unclaimed";
+    return run.leaseHeldBy.learnerId === learner?.id ? "you" : "someone-else";
   }
 
   function readableDate(value: string): string {
@@ -147,6 +158,45 @@
     }
   }
 
+  function startRouter(): void {
+    if (routerStarted) return;
+    routerStarted = true;
+    router.start();
+  }
+
+  async function authenticate(): Promise<void> {
+    authError = undefined;
+    try {
+      const method = authRegister ? api.register : api.login;
+      if (method === undefined) throw new Error("Authentication is not available");
+      learner = authRegister
+        ? await method.call(api, authHandle, authPassword)
+        : await method.call(api, authHandle, authPassword);
+      authPassword = "";
+      startRouter();
+    } catch (error) {
+      authError = error instanceof Error ? error.message : String(error);
+    }
+  }
+
+  async function signOut(): Promise<void> {
+    await api.logout?.();
+    controller.stopSession();
+    learner = undefined;
+    router.stop?.();
+    routerStarted = false;
+  }
+
+  async function deleteAccount(): Promise<void> {
+    const password = window.prompt("Re-enter your password. Runs are reassigned, not deleted.");
+    if (password === null) return;
+    await api.deleteAccount?.(password);
+    controller.stopSession();
+    learner = undefined;
+    router.stop?.();
+    routerStarted = false;
+  }
+
   async function exportPgn(): Promise<void> {
     const download = await controller.exportPgn();
     const url = URL.createObjectURL(
@@ -162,15 +212,28 @@
   }
 
   onMount(() => {
+    window.addEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController = controller.subscribe((next) => (session = next));
     unsubscribeRouter = router.subscribe((next) => {
       route = next;
       void loadRoute(next);
     });
-    router.start();
+    void (async () => {
+      try {
+        learner = api.session === undefined
+          ? { id: "learner-test", handle: "test", createdAt: new Date(0).toISOString() }
+          : await api.session();
+        startRouter();
+      } catch {
+        learner = undefined;
+      } finally {
+        authLoading = false;
+      }
+    })();
   });
 
   onDestroy(() => {
+    window.removeEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController?.();
     unsubscribeRouter?.();
     controller.destroy();
@@ -181,7 +244,25 @@
 
 <svelte:window onkeydown={(event) => keyboardDispatcher.handle(event)} />
 
-<ShellFrame {route} {runContext} onNavigate={navigate}>
+{#if authLoading}
+  <main class="auth-gate" aria-busy="true"><p>Loading Tabiya…</p></main>
+{:else if !learner}
+  <main class="auth-gate" aria-labelledby="auth-title">
+    <p class="eyebrow">Tabiya / hosted rehearsal</p>
+    <h1 id="auth-title">{authRegister ? "Create your learner account." : "Return to your rehearsals."}</h1>
+    <form onsubmit={(event) => { event.preventDefault(); void authenticate(); }}>
+      <label>Handle <input autocomplete="username" bind:value={authHandle} required /></label>
+      <label>Password <input type="password" autocomplete={authRegister ? "new-password" : "current-password"} bind:value={authPassword} minlength="10" maxlength="256" required /></label>
+      <button class="primary" type="submit">{authRegister ? "Register" : "Sign in"}</button>
+    </form>
+    {#if authError}<p role="alert">{authError}</p>{/if}
+    <button type="button" onclick={() => { authRegister = !authRegister; authError = undefined; }}>
+      {authRegister ? "Use an existing account" : "Create an account"}
+    </button>
+    <p class="honest">There is no password recovery yet. Keep your password somewhere safe.</p>
+  </main>
+{:else}
+<ShellFrame {route} {runContext} {learner} onNavigate={navigate} onSignOut={() => void signOut()} onDeleteAccount={() => void deleteAccount()}>
   {#if routeLoading}
     <main class="shell-view" aria-busy="true"><p>Loading Tabiya…</p></main>
   {:else if routeError}
@@ -195,7 +276,10 @@
           <p class="eyebrow">Resume</p>
           <h2 id="resume-title">{recentRun.title}</h2>
           <p>{recentRun.branchCount} {recentRun.branchCount === 1 ? "branch" : "branches"} · {recentRun.objectiveState} · {readableDate(recentRun.updatedAt)}</p>
-          <p class="access">This browser opens as {writerAccess(recentRun) === "writer" ? "the writer" : "read-only"}.</p>
+          <p class="access">
+            {boardStance(recentRun) === "you" ? "You hold the board." : boardStance(recentRun) === "unclaimed" ? "No one holds the board." : `@${recentRun.leaseHeldBy.handle} holds the board.`}
+            {recentRun.viewerRole === "spectator" ? " You can follow read-only." : " You may take the board."}
+          </p>
           <button type="button" onclick={() => navigate(routePath({ name: "run", runId: recentRun.id }))}>Resume run</button>
         </section>
       {:else}
@@ -212,6 +296,12 @@
     />
   {:else if route.name === "run"}
     {#if session.pack && session.runState}
+      {#if session.runState.access === "read_only" && session.viewer?.mayWrite}
+        <div class="claim-banner">
+          <span>@{session.viewer.leaseHeldBy.handle} holds the board.</span>
+          <button type="button" onclick={() => void controller.claimLease()}>Take the board on this device</button>
+        </div>
+      {/if}
       <DrillScreen
         pack={session.pack}
         snapshot={session.runState}
@@ -291,6 +381,7 @@
     <main class="shell-view"><p role="alert">The route could not be rendered.</p></main>
   {/if}
 </ShellFrame>
+{/if}
 
 {#if shellHelpOpen}<ShellKeyboardHelp onClose={closeShellHelp} />{/if}
 
@@ -324,6 +415,12 @@
   :global(:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 65%, white); outline-offset: 2px; }
   :global(::selection) { background: color-mix(in srgb, var(--accent) 25%, white); }
   .shell-view { width: min(70rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
+  .auth-gate { width: min(32rem, calc(100% - 2rem)); margin: 10vh auto; }
+  .auth-gate h1 { font: 500 clamp(2rem, 6vw, 4rem)/1 var(--display-font); }
+  .auth-gate form { display: grid; gap: 1rem; margin: 2rem 0 1rem; }
+  .auth-gate label { display: grid; gap: 0.35rem; }
+  .auth-gate input { padding: 0.7rem; border: 1px solid var(--line); border-radius: 0.5rem; }
+  .claim-banner { position: fixed; z-index: 20; top: 4rem; right: 1rem; display: flex; gap: 0.7rem; align-items: center; padding: 0.6rem; background: var(--panel); border: 1px solid var(--line); border-radius: 0.7rem; }
   .shell-view > h1 { max-width: 18ch; margin: 0.4rem 0 1rem; font: 500 clamp(2.3rem, 6vw, 5rem)/0.96 var(--display-font); letter-spacing: -0.045em; }
   .eyebrow { color: var(--accent); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
   .home > h1 { max-width: 15ch; }

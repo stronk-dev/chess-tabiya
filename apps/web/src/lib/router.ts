@@ -75,6 +75,12 @@ export class HistoryRouter {
     this.#window.addEventListener("popstate", this.#onPopState);
   }
 
+  stop(): void {
+    if (!this.#started) return;
+    this.#window.removeEventListener("popstate", this.#onPopState);
+    this.#started = false;
+  }
+
   subscribe(subscriber: Subscriber): () => void {
     this.#subscribers.add(subscriber);
     subscriber(this.#route);
@@ -95,10 +101,7 @@ export class HistoryRouter {
   }
 
   destroy(): void {
-    if (this.#started) {
-      this.#window.removeEventListener("popstate", this.#onPopState);
-      this.#started = false;
-    }
+    this.stop();
     this.#subscribers.clear();
   }
 

@@ -15,6 +15,7 @@ if (engineMode !== "mock" && engineMode !== "maia") {
 
 const port = integer(process.env.PORT, 3000);
 const development = process.env.NODE_ENV === "development";
+const cookieSecure = process.env.TABIYA_COOKIE_SECURE !== "false";
 if (process.env.DRAFT_PACK_FILE !== undefined && !development) {
   throw new TypeError("DRAFT_PACK_FILE requires NODE_ENV=development");
 }
@@ -22,6 +23,7 @@ const application = await createApplication({
   development,
   engineMode,
   databasePath: process.env.DATABASE_PATH ?? ":memory:",
+  cookieSecure,
   ...(process.env.DRAFT_PACK_FILE === undefined
     ? {}
     : { draftPackFile: process.env.DRAFT_PACK_FILE }),

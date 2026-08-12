@@ -47,10 +47,25 @@ import {
 } from "./pack-registry.js";
 import type { RunStorage, RunSummary, StoredRun } from "./storage.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
+import {
+  mayManageGrants,
+  mayWrite,
+  requireRead,
+  requireWrite,
+  type Principal,
+} from "./authorization.js";
+import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
+
+export interface RunViewer {
+  readonly role: RunRole;
+  readonly mayWrite: boolean;
+  readonly holdsLease: boolean;
+  readonly leaseHeldBy: { readonly learnerId: string; readonly handle: string };
+}
 
 export interface RunGraph {
   readonly id: string;
-  readonly activeWriterId: string;
+  readonly viewer: RunViewer;
   readonly nodes: DrillRun["nodes"];
   readonly branches: DrillRun["branches"];
   readonly activeCursor: DrillRun["activeCursor"];
@@ -130,7 +145,9 @@ export class RunService {
     }
   }
 
-  create(input: CreateRunRequest, writerId: string): DrillRun {
+  create(input: CreateRunRequest, leaseInput: LeaseHolder | string): DrillRun {
+    const lease = this.#lease(leaseInput);
+    if (lease.learnerId === "__legacy") this.#principal("legacy-create");
     const pack = this.#packRegistry?.required(input.packId);
     if (
       pack !== undefined &&
@@ -173,7 +190,7 @@ export class RunService {
     const title = pack?.document.title;
     this.#storage.create(
       run,
-      writerId,
+      lease,
       typeof title === "string" ? title : input.packId,
     );
     return run;
@@ -181,11 +198,16 @@ export class RunService {
 
   move(
     runId: string,
-    writerId: string,
-    uci: string,
-    options: CommitMoveOptions = {},
+    principalOrWriter: Principal | string,
+    writerOrUci: string,
+    uciOrOptions: string | CommitMoveOptions = {},
+    maybeOptions: CommitMoveOptions = {},
   ): MutationResult {
-    const stored = this.#forWrite(runId, writerId);
+    const principal = this.#principal(principalOrWriter);
+    const writerId = typeof principalOrWriter === "string" ? principalOrWriter : writerOrUci;
+    const uci = typeof principalOrWriter === "string" ? writerOrUci : uciOrOptions as string;
+    const options = typeof principalOrWriter === "string" ? uciOrOptions as CommitMoveOptions : maybeOptions;
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
     const pack = this.#registeredPack(stored.run);
     if (pack !== undefined) this.#requiredEvidenceQueue();
     const committed = commitMove(stored.run, uci, options);
@@ -193,18 +215,23 @@ export class RunService {
       pack === undefined
         ? committed
         : orchestratePackMove(pack.document, stored.run, committed);
-    this.#storage.save(result.run, writerId);
+    this.#storage.save(result.run, lease);
     if (pack !== undefined) this.#enqueueMoveEvidence(result.run);
     return result;
   }
 
   opponentPly(
     runId: string,
-    writerId: string,
-    selection: OpponentSelection,
-    options: AppendOpponentPlyOptions = {},
+    principalOrWriter: Principal | string,
+    writerOrSelection: string | OpponentSelection,
+    selectionOrOptions: OpponentSelection | AppendOpponentPlyOptions = {},
+    maybeOptions: AppendOpponentPlyOptions = {},
   ): MutationResult {
-    const stored = this.#forWrite(runId, writerId);
+    const principal = this.#principal(principalOrWriter);
+    const writerId = typeof principalOrWriter === "string" ? principalOrWriter : writerOrSelection as string;
+    const selection = typeof principalOrWriter === "string" ? writerOrSelection as OpponentSelection : selectionOrOptions as OpponentSelection;
+    const options = typeof principalOrWriter === "string" ? selectionOrOptions as AppendOpponentPlyOptions : maybeOptions;
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
     const pack = this.#registeredPack(stored.run);
     if (pack !== undefined) this.#requiredEvidenceQueue();
     const committed = appendOpponentPly(stored.run, selection, options);
@@ -212,18 +239,23 @@ export class RunService {
       pack === undefined
         ? committed
         : orchestratePackMove(pack.document, stored.run, committed);
-    this.#storage.save(result.run, writerId);
+    this.#storage.save(result.run, lease);
     if (pack !== undefined) this.#enqueueMoveEvidence(result.run);
     return result;
   }
 
   rewind(
     runId: string,
-    writerId: string,
-    target: RewindTarget,
-    at?: string,
+    principalOrWriter: Principal | string,
+    writerOrTarget: string | RewindTarget,
+    targetOrAt?: RewindTarget | string,
+    maybeAt?: string,
   ): MutationResult {
-    const stored = this.#forWrite(runId, writerId);
+    const principal = this.#principal(principalOrWriter);
+    const writerId = typeof principalOrWriter === "string" ? principalOrWriter : writerOrTarget as string;
+    const target = typeof principalOrWriter === "string" ? writerOrTarget as RewindTarget : targetOrAt as RewindTarget;
+    const at = typeof principalOrWriter === "string" ? targetOrAt as string | undefined : maybeAt;
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
     const result =
       target.nodeId === undefined
         ? rewindToCheckpoint(
@@ -233,41 +265,67 @@ export class RunService {
             this.#evidenceQueue,
           )
         : rewind(stored.run, target.nodeId, at, this.#evidenceQueue);
-    this.#storage.save(result.run, writerId);
+    this.#storage.save(result.run, lease);
     return result;
   }
 
   fork(
     runId: string,
-    writerId: string,
-    nodeId: string,
-    options: ForkOptions = {},
+    principalOrWriter: Principal | string,
+    writerOrNode: string,
+    nodeOrOptions: string | ForkOptions = {},
+    maybeOptions: ForkOptions = {},
   ): MutationResult {
-    const stored = this.#forWrite(runId, writerId);
+    const principal = this.#principal(principalOrWriter);
+    const writerId = typeof principalOrWriter === "string" ? principalOrWriter : writerOrNode;
+    const nodeId = typeof principalOrWriter === "string" ? writerOrNode : nodeOrOptions as string;
+    const options = typeof principalOrWriter === "string" ? nodeOrOptions as ForkOptions : maybeOptions;
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
     const result = fork(stored.run, nodeId, options);
-    this.#storage.save(result.run, writerId);
+    this.#storage.save(result.run, lease);
     return result;
   }
 
-  graph(runId: string): RunGraph {
-    const stored = this.#required(runId);
+  graph(runId: string, principalInput?: Principal, writerId?: string): RunGraph {
+    const principal = principalInput ?? this.#principal("legacy-reader");
+    const { stored, role } = requireRead(this.#storage, runId, principal);
     const run = stored.run;
     const pack = this.#registeredPack(run);
+    const holder = this.#storage.learnerById(stored.activeWriterLearnerId);
+    if (holder === undefined) {
+      throw new ServerError("STORAGE_FAILURE", "Run lease holder is missing");
+    }
     return Object.freeze({
       id: run.id,
-      activeWriterId: stored.activeWriterId,
+      viewer: Object.freeze({
+        role,
+        mayWrite: mayWrite(role),
+        holdsLease:
+          writerId !== undefined &&
+          stored.activeWriterId === writerId &&
+          stored.activeWriterLearnerId === principal.learnerId,
+        leaseHeldBy: Object.freeze({ learnerId: holder.id, handle: holder.handle }),
+      }),
       nodes: publicNodes(pack, run),
       branches: run.branches,
       activeCursor: run.activeCursor,
     });
   }
 
-  runs(limit: number, offset: number): readonly RunSummary[] {
-    return this.#storage.list(limit, offset);
+  runs(principal: Principal, limit: number, offset: number): readonly RunSummary[];
+  runs(limit: number, offset: number): readonly RunSummary[];
+  runs(principalOrLimit: Principal | number, limitOrOffset: number, maybeOffset?: number): readonly RunSummary[] {
+    const principal = typeof principalOrLimit === "number" ? this.#principal("legacy-reader") : principalOrLimit;
+    const limit = typeof principalOrLimit === "number" ? principalOrLimit : limitOrOffset;
+    const offset = typeof principalOrLimit === "number" ? limitOrOffset : maybeOffset!;
+    return this.#storage.list(principal.learnerId, limit, offset);
   }
 
-  compare(runId: string, branchAId: string, branchBId: string): BranchComparison {
-    const run = this.#required(runId).run;
+  compare(runId: string, principalOrA: Principal | string, branchAOrB: string, maybeB?: string): BranchComparison {
+    const principal = this.#principal(principalOrA);
+    const branchAId = typeof principalOrA === "string" ? principalOrA : branchAOrB;
+    const branchBId = typeof principalOrA === "string" ? branchAOrB : maybeB!;
+    const run = requireRead(this.#storage, runId, principal).stored.run;
     const comparison = compare(run, branchAId, branchBId);
     const pack = this.#registeredPack(run);
     return pack !== undefined && !feedbackIsRevealed(pack, run)
@@ -275,8 +333,10 @@ export class RunService {
       : comparison;
   }
 
-  events(runId: string, sinceSeq = 0): EventsPage {
-    const run = this.#required(runId).run;
+  events(runId: string, principalOrSeq?: Principal | number, maybeSeq = 0): EventsPage {
+    const principal = typeof principalOrSeq === "object" ? principalOrSeq : this.#principal("legacy-reader");
+    const sinceSeq = typeof principalOrSeq === "number" ? principalOrSeq : maybeSeq;
+    const run = requireRead(this.#storage, runId, principal).stored.run;
     return publicEvents(this.#registeredPack(run), run, sinceSeq);
   }
 
@@ -290,15 +350,23 @@ export class RunService {
 
   enqueueEvidence(
     runId: string,
-    input: {
+    principalOrInput: Principal | {
+      readonly nodeId: string;
+      readonly kind: EvidenceKind;
+      readonly depth?: number;
+      readonly movetime?: number;
+    },
+    maybeInput?: {
       readonly nodeId: string;
       readonly kind: EvidenceKind;
       readonly depth?: number;
       readonly movetime?: number;
     },
   ): EvidenceJob {
+    const principal = "learnerId" in principalOrInput ? principalOrInput : this.#principal("legacy-reader");
+    const input = "learnerId" in principalOrInput ? maybeInput! : principalOrInput;
     const queue = this.#requiredEvidenceQueue();
-    const run = this.#required(runId).run;
+    const run = requireRead(this.#storage, runId, principal).stored.run;
     const node = run.nodes.find((candidate) => candidate.id === input.nodeId);
     if (node === undefined) {
       throw new ServerError("INVALID_REQUEST", `Unknown evidence node: ${input.nodeId}`);
@@ -323,8 +391,10 @@ export class RunService {
     });
   }
 
-  evidence(runId: string, sinceSeq = 0): EvidencePage {
-    const run = this.#required(runId).run;
+  evidence(runId: string, principalOrSeq?: Principal | number, maybeSeq = 0): EvidencePage {
+    const principal = typeof principalOrSeq === "object" ? principalOrSeq : this.#principal("legacy-reader");
+    const sinceSeq = typeof principalOrSeq === "number" ? principalOrSeq : maybeSeq;
+    const run = requireRead(this.#storage, runId, principal).stored.run;
     const pack = this.#registeredPack(run);
     if (pack !== undefined && !feedbackIsRevealed(pack, run)) {
       return Object.freeze({ results: Object.freeze([]), nextSeq: sinceSeq });
@@ -332,8 +402,9 @@ export class RunService {
     return this.#requiredEvidenceQueue().page(runId, sinceSeq);
   }
 
-  authoredFeedback(runId: string): AuthoredFeedbackPage {
-    const run = this.#required(runId).run;
+  authoredFeedback(runId: string, principalInput?: Principal): AuthoredFeedbackPage {
+    const principal = principalInput ?? this.#principal("legacy-reader");
+    const run = requireRead(this.#storage, runId, principal).stored.run;
     const pack = this.#registeredPack(run);
     if (pack === undefined) {
       throw new ServerError(
@@ -346,11 +417,16 @@ export class RunService {
 
   applyEvidence(
     runId: string,
-    writerId: string,
-    resultSeq: number,
-    at = new Date().toISOString(),
+    principalOrWriter: Principal | string,
+    writerOrSeq: string | number,
+    seqOrAt?: number | string,
+    maybeAt = new Date().toISOString(),
   ): MutationResult {
-    const stored = this.#forWrite(runId, writerId);
+    const principal = this.#principal(principalOrWriter);
+    const writerId = typeof principalOrWriter === "string" ? principalOrWriter : writerOrSeq as string;
+    const resultSeq = typeof principalOrWriter === "string" ? writerOrSeq as number : seqOrAt as number;
+    const at = typeof principalOrWriter === "string" ? (seqOrAt as string | undefined) ?? new Date().toISOString() : maybeAt;
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
     const pack = this.#registeredPack(stored.run);
     if (pack !== undefined && !feedbackIsRevealed(pack, stored.run)) {
       throw new ServerError(
@@ -389,13 +465,17 @@ export class RunService {
         ...(upgraded === attached ? [] : upgraded.emitted),
       ]),
     });
-    this.#storage.save(result.run, writerId);
+    this.#storage.save(result.run, lease);
     queue.consume(runId, resultSeq);
     return result;
   }
 
-  async pgn(runId: string, branchIds?: readonly string[]): Promise<string> {
-    const run = this.#required(runId).run;
+  async pgn(runId: string, principalOrBranches?: Principal | readonly string[], maybeBranches?: readonly string[]): Promise<string> {
+    const principal = Array.isArray(principalOrBranches) || principalOrBranches === undefined
+      ? this.#principal("legacy-reader")
+      : principalOrBranches as Principal;
+    const branchIds = Array.isArray(principalOrBranches) ? principalOrBranches : maybeBranches;
+    const run = requireRead(this.#storage, runId, principal).stored.run;
     const pack = this.#registeredPack(run);
     return pack === undefined
       ? exportPgn(run, branchIds)
@@ -408,10 +488,69 @@ export class RunService {
     return stored;
   }
 
-  #forWrite(runId: string, writerId: string): StoredRun {
-    const stored = this.#required(runId);
-    assertActiveWriter(stored.activeWriterId, writerId);
-    return stored;
+  #principal(value: Principal | string): Principal {
+    if (typeof value !== "string") return value;
+    if (this.#storage.learnerById("__legacy") === undefined) {
+      this.#storage.createLearner({
+        id: "__legacy",
+        handle: "__legacy",
+        createdAt: new Date(0).toISOString(),
+        passwordHash: "!",
+      });
+    }
+    return Object.freeze({ learnerId: "__legacy", handle: "__legacy" });
+  }
+
+  #lease(value: LeaseHolder | string): LeaseHolder {
+    if (typeof value !== "string") return value;
+    const principal = this.#principal(value);
+    return Object.freeze({ writerId: value, learnerId: principal.learnerId });
+  }
+
+  grants(runId: string, principal: Principal): readonly RunGrant[] {
+    const { role } = requireRead(this.#storage, runId, principal);
+    if (!mayManageGrants(role)) {
+      throw new ServerError("FORBIDDEN", "Only a host may manage grants");
+    }
+    return this.#storage.grants(runId);
+  }
+
+  updateGrant(
+    runId: string,
+    principal: Principal,
+    writerId: string,
+    operation:
+      | { readonly op: "grant"; readonly handle: string; readonly role: RunRole }
+      | { readonly op: "revoke"; readonly handle: string },
+    at = new Date().toISOString(),
+  ): readonly RunGrant[] {
+    const { role } = requireRead(this.#storage, runId, principal);
+    if (!mayManageGrants(role)) {
+      throw new ServerError("FORBIDDEN", "Only a host may manage grants");
+    }
+    const target = this.#storage.learnerByHandle(operation.handle.toLowerCase());
+    if (target === undefined || target.id === "__legacy") {
+      throw new ServerError("INVALID_REQUEST", `Unknown learner handle: ${operation.handle}`);
+    }
+    const actor = Object.freeze({ writerId, learnerId: principal.learnerId });
+    if (operation.op === "grant") {
+      this.#storage.grantRole(runId, target.id, operation.role, actor, at);
+    } else {
+      this.#storage.revokeGrant(runId, target.id, actor);
+    }
+    return this.#storage.grants(runId);
+  }
+
+  claimLease(runId: string, principal: Principal, writerId: string): void {
+    const { role } = requireRead(this.#storage, runId, principal);
+    if (!mayWrite(role)) {
+      throw new ServerError("FORBIDDEN", "This learner may not claim the run lease");
+    }
+    this.#storage.claimLease(runId, { writerId, learnerId: principal.learnerId });
+  }
+
+  #forWrite(runId: string, principal: Principal, writerId: string) {
+    return requireWrite(this.#storage, runId, principal, writerId);
   }
 
   #registeredPack(run: DrillRun): PackRecord | undefined {
@@ -420,10 +559,24 @@ export class RunService {
   }
 
   #enqueueMoveEvidence(run: DrillRun): void {
-    this.enqueueEvidence(run.id, {
+    const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId);
+    if (node === undefined) throw new TypeError("Run active cursor has no node");
+    this.#requiredEvidenceQueue().enqueue({
+      runId: run.id,
       nodeId: run.activeCursor.nodeId,
+      fen: node.fen,
       kind: "eval",
       movetime: this.#evidenceMovetimeMs,
+      objectiveRequest: Object.freeze({
+        runId: run.id,
+        packId: run.packId,
+        packDigest: run.packDigest,
+        nodeId: node.id,
+        fen: node.fen,
+        objectiveState: node.objectiveState,
+        evidenceRefs: node.evidenceRefs,
+        policyConfig: run.policyConfig,
+      }),
     });
   }
 

@@ -9,6 +9,7 @@ services:
     environment:
       DATABASE_PATH: /data/chess-tabiya.sqlite
       ENGINE_MODE: ${ENGINE_MODE:-mock}
+      TABIYA_COOKIE_SECURE: "false"
       MAIA_HOST: maia
       MAIA_PORT: "7000"
       PORT: "3000"

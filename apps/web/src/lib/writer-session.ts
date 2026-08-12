@@ -60,9 +60,14 @@ export class WriterSession {
     return new WriterSession(runId, writerId);
   }
 
-  /** Creates a non-persisted follower for a lease held by another writer. */
-  static observe(runId: string, activeWriterId: string): WriterSession {
-    return new WriterSession(runId, activeWriterId, true);
+  /** Creates a non-persisted follower. It never stores or receives another device's id. */
+  static observe(
+    runId: string,
+    storage: KeyValueStorage = browserStorage(),
+    createWriterId: WriterIdFactory = defaultWriterId,
+  ): WriterSession {
+    const local = WriterSession.peek(runId, storage);
+    return new WriterSession(runId, local?.writerId ?? createWriterId(), true);
   }
 
   get readOnly(): boolean {

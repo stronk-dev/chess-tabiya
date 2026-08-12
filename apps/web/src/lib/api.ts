@@ -30,7 +30,12 @@ export interface PackDocument {
 
 export interface RunGraph {
   readonly id: string;
-  readonly activeWriterId: string;
+  readonly viewer: {
+    readonly role: RunRole;
+    readonly mayWrite: boolean;
+    readonly holdsLease: boolean;
+    readonly leaseHeldBy: LeaseIdentity;
+  };
   readonly nodes: readonly Node[];
   readonly branches: DrillRun["branches"];
   readonly activeCursor: DrillRun["activeCursor"];
@@ -43,8 +48,32 @@ export interface RunSummary {
   readonly updatedAt: string;
   readonly objectiveState: ObjectiveState;
   readonly branchCount: number;
-  readonly activeWriterId: string;
+  readonly viewerRole: RunRole;
+  readonly leaseHeldBy: LeaseIdentity;
 }
+
+export type RunRole = "host" | "participant" | "spectator";
+
+export interface LeaseIdentity {
+  readonly learnerId: string;
+  readonly handle: string;
+}
+
+export interface Learner {
+  readonly id: string;
+  readonly handle: string;
+  readonly displayName?: string;
+  readonly createdAt: string;
+}
+
+export interface RunGrant extends LeaseIdentity {
+  readonly role: RunRole;
+  readonly grantedAt: string;
+}
+
+export type GrantOperation =
+  | { readonly op: "grant"; readonly handle: string; readonly role: RunRole }
+  | { readonly op: "revoke"; readonly handle: string };
 
 export interface EventsPage {
   readonly events: readonly DrillRunEvent[];
@@ -273,12 +302,20 @@ export interface RunApi {
 }
 
 export interface DrillClientApi extends RunApi {
+  session?(): Promise<Learner>;
+  register?(handle: string, password: string, displayName?: string): Promise<Learner>;
+  login?(handle: string, password: string): Promise<Learner>;
+  logout?(): Promise<void>;
+  deleteAccount?(password: string): Promise<void>;
   capabilities(): Promise<Capabilities>;
   packs(): Promise<readonly PackSummary[]>;
   pack(packId: string): Promise<PackDocument>;
   runs(limit?: number, offset?: number): Promise<readonly RunSummary[]>;
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection>;
-  graph(runId: string): Promise<RunGraph>;
+  graph(runId: string, writerId?: string): Promise<RunGraph>;
+  claimLease?(runId: string, writerId: string): Promise<void>;
+  grants?(runId: string): Promise<readonly RunGrant[]>;
+  updateGrants?(runId: string, operation: GrantOperation, writerId: string): Promise<readonly RunGrant[]>;
   compare(
     runId: string,
     branchAId: string,
@@ -311,6 +348,35 @@ export class DrillApi implements DrillClientApi {
   constructor(baseUrl = "", fetcher: Fetcher = browserFetch) {
     this.#baseUrl = baseUrl.replace(/\/$/, "");
     this.#fetch = fetcher;
+  }
+
+  async session(): Promise<Learner> {
+    const body = await this.#json<{ readonly learner: Learner }>("/auth/session");
+    return body.learner;
+  }
+
+  async register(handle: string, password: string, displayName?: string): Promise<Learner> {
+    const body = await this.#json<{ readonly learner: Learner }>("/auth/register", {
+      method: "POST",
+      body: { handle, password, ...(displayName === undefined ? {} : { displayName }) },
+    });
+    return body.learner;
+  }
+
+  async login(handle: string, password: string): Promise<Learner> {
+    const body = await this.#json<{ readonly learner: Learner }>("/auth/login", {
+      method: "POST",
+      body: { handle, password },
+    });
+    return body.learner;
+  }
+
+  async logout(): Promise<void> {
+    await this.#json("/auth/logout", { method: "POST", body: {} });
+  }
+
+  async deleteAccount(password: string): Promise<void> {
+    await this.#json("/auth/delete", { method: "POST", body: { password } });
   }
 
   capabilities(): Promise<Capabilities> {
@@ -404,11 +470,35 @@ export class DrillApi implements DrillClientApi {
     });
   }
 
-  async graph(runId: string): Promise<RunGraph> {
+  async graph(runId: string, writerId?: string): Promise<RunGraph> {
     const body = await this.#json<{ readonly graph: RunGraph }>(
       `/runs/${encoded(runId)}/graph`,
+      writerId === undefined ? {} : { writerId },
     );
     return body.graph;
+  }
+
+  async claimLease(runId: string, writerId: string): Promise<void> {
+    await this.#json(`/runs/${encoded(runId)}/lease`, {
+      method: "POST",
+      writerId,
+      body: {},
+    });
+  }
+
+  async grants(runId: string): Promise<readonly RunGrant[]> {
+    const body = await this.#json<{ readonly grants: readonly RunGrant[] }>(
+      `/runs/${encoded(runId)}/grants`,
+    );
+    return body.grants;
+  }
+
+  async updateGrants(runId: string, operation: GrantOperation, writerId: string): Promise<readonly RunGrant[]> {
+    const body = await this.#json<{ readonly grants: readonly RunGrant[] }>(
+      `/runs/${encoded(runId)}/grants`,
+      { method: "POST", writerId, body: operation },
+    );
+    return body.grants;
   }
 
   async compare(
@@ -480,8 +570,12 @@ export class DrillApi implements DrillClientApi {
         ...(options.body === undefined ? {} : { "content-type": "application/json" }),
       },
       ...(options.body === undefined ? {} : { body: JSON.stringify(options.body) }),
+      credentials: "same-origin",
     });
     if (response.ok) return response;
+    if (response.status === 401 && typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("tabiya:unauthenticated"));
+    }
 
     let envelope: ErrorEnvelope = {};
     try {

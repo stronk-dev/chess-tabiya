@@ -112,9 +112,10 @@ describe("branch-runtime REST binding", () => {
 
     const graphResponse = await request(handler, "GET", "/runs/rest-run/graph");
     const graphBody = await graphResponse.json() as {
-      graph: { activeWriterId: string; branches: { id: string; label: string }[] };
+      graph: { viewer: { holdsLease: boolean }; branches: { id: string; label: string }[] };
     };
-    expect(graphBody.graph.activeWriterId).toBe("writer-a");
+    expect(graphBody.graph.viewer.holdsLease).toBe(true);
+    expect(JSON.stringify(graphBody)).not.toContain("activeWriterId");
     expect(graphBody.graph.branches.map((branch) => branch.label)).toEqual([
       "main",
       "alt-1",
@@ -191,7 +192,8 @@ describe("branch-runtime REST binding", () => {
           packId: "server-pack",
           objectiveState: "active",
           branchCount: 1,
-          activeWriterId: "writer-b",
+          viewerRole: "host",
+          leaseHeldBy: { learnerId: "__legacy", handle: "__legacy" },
         }),
       ]),
     );
