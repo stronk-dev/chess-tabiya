@@ -44,7 +44,9 @@ export interface RunGraph {
 export interface RunSummary {
   readonly id: string;
   readonly title: string;
-  readonly packId: string;
+  readonly sessionKind: "pack" | "position";
+  readonly packId: string | null;
+  readonly sessionDigest: string;
   readonly updatedAt: string;
   readonly objectiveState: ObjectiveState;
   readonly branchCount: number;
@@ -187,7 +189,19 @@ export interface Capabilities {
 
 export interface CreateRunRequest {
   readonly id: string;
-  readonly packId: string;
+  readonly session:
+    | { readonly kind: "pack"; readonly packId: string; readonly packDigest?: string }
+    | {
+        readonly kind: "position";
+        readonly start: { readonly fen: string; readonly side: "white" | "black" };
+        readonly feedbackPolicy: "attempt_end";
+        readonly opponentPolicy: {
+          readonly mode: "human_common" | "strong_engine";
+          readonly targetElo?: number;
+          readonly temperature?: number;
+          readonly topP?: number;
+        };
+      };
   readonly policyConfig: PolicyConfig;
   readonly seed: number;
   readonly createdAt?: string;
@@ -299,6 +313,7 @@ export interface RunApi {
     writerId: string,
     at?: string,
   ): Promise<MutationResult>;
+  reveal(runId: string, writerId: string, at?: string): Promise<MutationResult>;
 }
 
 export interface DrillClientApi extends RunApi {
@@ -535,6 +550,14 @@ export class DrillApi implements DrillClientApi {
       method: "POST",
       writerId,
       body: { resultSeq, ...(at === undefined ? {} : { at }) },
+    });
+  }
+
+  reveal(runId: string, writerId: string, at?: string): Promise<MutationResult> {
+    return this.#json(`/runs/${encoded(runId)}/reveal`, {
+      method: "POST",
+      writerId,
+      body: { ...(at === undefined ? {} : { at }) },
     });
   }
 

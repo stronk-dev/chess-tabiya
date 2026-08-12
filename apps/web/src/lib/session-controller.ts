@@ -175,9 +175,18 @@ export class DrillSessionController {
       if (started?.type !== "run.started") {
         throw new TypeError("Cannot resume a run without its run.started event");
       }
+      if (started.data.sessionKind === "position") {
+        this.#patch({
+          busy: false,
+          error: "This run is a position session; the position player is not built yet",
+        });
+        return;
+      }
+      const packId = started.data.packId;
+      if (packId === null) throw new TypeError("Pack run is missing its pack id");
       const claimed = WriterSession.peek(runId, this.#storage);
       const [{ document, digest }, capabilities, graph] = await Promise.all([
-        this.#api.pack(started.data.packId),
+        this.#api.pack(packId),
         this.#api.capabilities(),
         this.#api.graph(runId, claimed?.writerId),
       ]);
@@ -212,7 +221,7 @@ export class DrillSessionController {
       const run = await this.#api.createRun(
         {
           id: runId,
-          packId,
+          session: { kind: "pack", packId },
           policyConfig: policyConfig(document, capabilities),
           seed,
         },
@@ -412,8 +421,8 @@ export class DrillSessionController {
     run: RunStateSnapshot["run"],
   ): RunStateStore {
     return this.#scheduler === undefined
-      ? new RunStateStore(this.#api, pack, session, run)
-      : new RunStateStore(this.#api, pack, session, run, this.#scheduler);
+      ? new RunStateStore(this.#api, session, run)
+      : new RunStateStore(this.#api, session, run, this.#scheduler);
   }
 
   #attachStore(

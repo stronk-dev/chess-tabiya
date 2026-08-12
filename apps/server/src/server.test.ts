@@ -6,12 +6,12 @@ import type { AddressInfo } from "node:net";
 
 import {
   RuntimeError,
-  type CreateRunInput,
   type OpponentSelection,
 } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createHttpServer, createRestHandler } from "./rest.js";
+import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 
@@ -26,17 +26,31 @@ const opponent = (moveUci: string): OpponentSelection => ({
     seedHonored: true,
   },
 });
+const evidenceExecutor: EvidenceExecutor = {
+  async execute() {
+    return { kind: "eval", source: "engine_validated", values: { centipawns: 0 } };
+  },
+};
 
-function createBody(id: string): CreateRunInput {
+function service(storage: SQLiteRunStorage): RunService {
+  return new RunService(storage, {
+    evidenceQueue: new EvidenceJobQueue(evidenceExecutor),
+  });
+}
+
+function createBody(id: string) {
   return {
     id,
-    packId: "server-pack",
-    packDigest: `sha256:${"9".repeat(64)}`,
-    policyConfig: {
-      seedMode: "per_branch",
-      locus: { executedAt: "server", engineIds: [], modelIds: [] },
+    session: {
+      kind: "position" as const,
+      start: { fen: INITIAL_FEN, side: "white" as const },
+      feedbackPolicy: "attempt_end" as const,
+      opponentPolicy: { mode: "human_common" as const },
     },
-    startFen: INITIAL_FEN,
+    policyConfig: {
+      seedMode: "per_branch" as const,
+      locus: { executedAt: "server" as const, engineIds: [], modelIds: [] },
+    },
     seed: 41,
     createdAt: at,
   };
@@ -69,7 +83,7 @@ describe("branch-runtime REST binding", () => {
   function setup() {
     const storage = new SQLiteRunStorage();
     stores.push(storage);
-    return { storage, handler: createRestHandler(new RunService(storage)) };
+    return { storage, handler: createRestHandler(service(storage)) };
   }
 
   it("binds create, moves, rewind, fork, graph, compare, and seq-cursor events", async () => {
@@ -188,8 +202,9 @@ describe("branch-runtime REST binding", () => {
       expect.arrayContaining([
         expect.objectContaining({
           id: "list-b",
-          title: "server-pack",
-          packId: "server-pack",
+          title: "Position session",
+          sessionKind: "position",
+          packId: null,
           objectiveState: "active",
           branchCount: 1,
           viewerRole: "host",
@@ -238,10 +253,10 @@ describe("branch-runtime REST binding", () => {
     const filename = join(directory, "runs.sqlite");
     try {
       const first = new SQLiteRunStorage(filename);
-      const service = new RunService(first);
-      service.create(createBody("persisted-run"), "writer-a");
-      service.move("persisted-run", "writer-a", "e2e4", { at });
-      service.opponentPly("persisted-run", "writer-a", opponent("e7e5"), { at });
+      const firstService = service(first);
+      await firstService.create(createBody("persisted-run"), "writer-a");
+      firstService.move("persisted-run", "writer-a", "e2e4", { at });
+      firstService.opponentPly("persisted-run", "writer-a", opponent("e7e5"), { at });
       first.close();
 
       const reopened = new SQLiteRunStorage(filename);

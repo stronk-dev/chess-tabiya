@@ -1,14 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-run:0.4",
+  "$id": "urn:chess-tabiya:schema:drill-run:0.5",
   "title": "Tabiya Drill Run",
-  "description": "Living v0.4 wire format for an immutable, event-sourced drill run. Event seq values start at 1 and increase monotonically without gaps.",
+  "description": "Living v0.5 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
   "type": "object",
   "required": [
     "schemaVersion",
     "id",
+    "sessionKind",
     "packId",
     "packDigest",
+    "sessionDigest",
+    "start",
+    "feedbackPolicy",
+    "opponentPolicy",
     "policyConfig",
     "nodes",
     "branches",
@@ -16,13 +21,20 @@
     "activeCursor"
   ],
   "properties": {
-    "schemaVersion": { "const": "0.4" },
+    "schemaVersion": { "const": "0.5" },
     "id": { "$ref": "#/$defs/id" },
-    "packId": { "$ref": "#/$defs/id" },
+    "sessionKind": { "enum": ["pack", "position"] },
+    "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
     "packDigest": {
-      "type": "string",
-      "pattern": "^sha256:[0-9a-f]{64}$"
+      "oneOf": [
+        { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        { "type": "null" }
+      ]
     },
+    "sessionDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "start": { "$ref": "#/$defs/runStart" },
+    "feedbackPolicy": { "enum": ["delayed_checkpoint", "segment_end", "attempt_end"] },
+    "opponentPolicy": { "$ref": "#/$defs/runOpponentPolicy" },
     "policyConfig": { "$ref": "#/$defs/policyConfig" },
     "nodes": {
       "type": "array",
@@ -43,6 +55,25 @@
     "activeCursor": { "$ref": "#/$defs/cursor" }
   },
   "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "sessionKind": { "const": "position" } } },
+      "then": { "properties": {
+        "packId": { "type": "null" },
+        "packDigest": { "type": "null" },
+        "feedbackPolicy": { "const": "attempt_end" },
+        "opponentPolicy": { "type": "object", "properties": { "mode": { "enum": ["human_common", "strong_engine"] } } }
+      } }
+    },
+    {
+      "if": { "properties": { "sessionKind": { "const": "pack" } } },
+      "then": { "properties": {
+        "packId": { "$ref": "#/$defs/id" },
+        "packDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "feedbackPolicy": { "enum": ["delayed_checkpoint", "segment_end"] }
+      } }
+    }
+  ],
   "$defs": {
     "id": {
       "type": "string",
@@ -130,6 +161,26 @@
       "properties": {
         "seedMode": { "enum": ["fixed", "per_run", "per_branch"] },
         "locus": { "$ref": "#/$defs/executionLocus" }
+      },
+      "additionalProperties": false
+    },
+    "runStart": {
+      "type": "object",
+      "required": ["fen", "side"],
+      "properties": {
+        "fen": { "$ref": "#/$defs/id" },
+        "side": { "enum": ["white", "black"] }
+      },
+      "additionalProperties": false
+    },
+    "runOpponentPolicy": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["human_common", "strong_engine", "theory_strict"] },
+        "targetElo": { "type": "integer" },
+        "temperature": { "type": "number", "minimum": 0 },
+        "topP": { "type": "number", "minimum": 0, "maximum": 1 }
       },
       "additionalProperties": false
     },
@@ -221,8 +272,13 @@
       "type": "object",
       "required": [
         "id",
+        "sessionKind",
         "packId",
         "packDigest",
+        "sessionDigest",
+        "start",
+        "feedbackPolicy",
+        "opponentPolicy",
         "policyConfig",
         "rootNode",
         "branch",
@@ -230,17 +286,43 @@
       ],
       "properties": {
         "id": { "$ref": "#/$defs/id" },
-        "packId": { "$ref": "#/$defs/id" },
+        "sessionKind": { "enum": ["pack", "position"] },
+        "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
         "packDigest": {
-          "type": "string",
-          "pattern": "^sha256:[0-9a-f]{64}$"
+          "oneOf": [
+            { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+            { "type": "null" }
+          ]
         },
+        "sessionDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "start": { "$ref": "#/$defs/runStart" },
+        "feedbackPolicy": { "enum": ["delayed_checkpoint", "segment_end", "attempt_end"] },
+        "opponentPolicy": { "$ref": "#/$defs/runOpponentPolicy" },
         "policyConfig": { "$ref": "#/$defs/policyConfig" },
         "rootNode": { "$ref": "#/$defs/node" },
         "branch": { "$ref": "#/$defs/branch" },
         "activeCursor": { "$ref": "#/$defs/cursor" }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "sessionKind": { "const": "position" } } },
+          "then": { "properties": {
+            "packId": { "type": "null" },
+            "packDigest": { "type": "null" },
+            "feedbackPolicy": { "const": "attempt_end" },
+            "opponentPolicy": { "type": "object", "properties": { "mode": { "enum": ["human_common", "strong_engine"] } } }
+          } }
+        },
+        {
+          "if": { "properties": { "sessionKind": { "const": "pack" } } },
+          "then": { "properties": {
+            "packId": { "$ref": "#/$defs/id" },
+            "packDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+            "feedbackPolicy": { "enum": ["delayed_checkpoint", "segment_end"] }
+          } }
+        }
+      ]
     },
     "event": {
       "type": "object",
@@ -264,12 +346,24 @@
             "feedback.generated",
             "outcome.reached",
             "transfer.scheduled"
+            ,"feedback.revealed"
           ]
         },
         "at": { "$ref": "#/$defs/timestamp" },
         "data": { "type": "object" }
       },
       "oneOf": [
+        {
+          "properties": {
+            "type": { "const": "feedback.revealed" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId"],
+              "properties": { "nodeId": { "$ref": "#/$defs/id" } },
+              "additionalProperties": false
+            }
+          }
+        },
         {
           "properties": {
             "type": { "const": "run.started" },

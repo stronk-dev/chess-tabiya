@@ -1,8 +1,13 @@
 {
-  "schemaVersion": "0.4",
+  "schemaVersion": "0.5",
   "id": "invalid-selection-run",
+  "sessionKind": "pack",
   "packId": "pack-1",
   "packDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "sessionDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "start": { "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1", "side": "white" },
+  "feedbackPolicy": "delayed_checkpoint",
+  "opponentPolicy": { "mode": "human_common" },
   "policyConfig": {
     "seedMode": "fixed",
     "locus": { "executedAt": "server", "engineIds": [], "modelIds": [] }
@@ -39,8 +44,13 @@
       "at": "2026-08-12T12:00:00.000Z",
       "data": {
         "id": "invalid-selection-run",
+        "sessionKind": "pack",
         "packId": "pack-1",
         "packDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "sessionDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "start": { "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1", "side": "white" },
+        "feedbackPolicy": "delayed_checkpoint",
+        "opponentPolicy": { "mode": "human_common" },
         "policyConfig": {
           "seedMode": "fixed",
           "locus": { "executedAt": "server", "engineIds": [], "modelIds": [] }

@@ -54,7 +54,12 @@ describe("SQLite run-storage migrations and summaries", () => {
         `INSERT INTO drill_runs (id, snapshot_json, active_writer_id, updated_at)
          VALUES (?, ?, ?, ?)`,
       )
-      .run(legacyRun.id, JSON.stringify(legacyRun), "legacy-writer", createdAt);
+      .run(
+        legacyRun.id,
+        JSON.stringify({ ...legacyRun, schemaVersion: "0.4" }),
+        "legacy-writer",
+        createdAt,
+      );
     fixture.close();
 
     const firstLog: StorageMigrationLog[] = [];
@@ -64,19 +69,10 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(firstLog).toEqual([
       { version: 1, name: "add and backfill run summaries" },
       { version: 2, name: "learner identity and run grants" },
+      { version: 3, name: "quarantine pre-0.5 run snapshots" },
     ]);
-    expect(upgraded.list(10, 0)).toEqual([
-      {
-        id: "legacy-run",
-        title: "legacy-pack",
-        packId: "legacy-pack",
-        updatedAt: createdAt,
-        objectiveState: "active",
-        branchCount: 1,
-        viewerRole: "host",
-        leaseHeldBy: { learnerId: "__legacy", handle: "__legacy" },
-      },
-    ]);
+    expect(upgraded.list(10, 0)).toEqual([]);
+    expect(upgraded.read("legacy-run")).toBeUndefined();
     upgraded.close();
 
     const secondLog: StorageMigrationLog[] = [];
@@ -84,14 +80,14 @@ describe("SQLite run-storage migrations and summaries", () => {
       onMigration: (entry) => secondLog.push(entry),
     });
     expect(secondLog).toEqual([]);
-    expect(reopened.list(10, 0)).toHaveLength(1);
+    expect(reopened.list(10, 0)).toHaveLength(0);
     reopened.close();
 
     const inspection = new DatabaseSync(filename);
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(2);
+    ).toBe(3);
     inspection.close();
   });
 

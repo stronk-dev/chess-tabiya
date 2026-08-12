@@ -1,6 +1,5 @@
 import {
   compare,
-  type CreateRunInput,
   type EvidencePayload,
   type ObjectiveEvidenceUpgrader,
 } from "@chess-tabiya/runtime";
@@ -20,16 +19,19 @@ const INITIAL_FEN =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-12T18:00:00.000Z";
 
-function createInput(id: string): CreateRunInput {
+function createInput(id: string) {
   return {
     id,
-    packId: "evidence-pack",
-    packDigest: `sha256:${"e".repeat(64)}`,
-    policyConfig: {
-      seedMode: "fixed",
-      locus: { executedAt: "server", engineIds: [], modelIds: [] },
+    session: {
+      kind: "position" as const,
+      start: { fen: INITIAL_FEN, side: "white" as const },
+      feedbackPolicy: "attempt_end" as const,
+      opponentPolicy: { mode: "human_common" as const },
     },
-    startFen: INITIAL_FEN,
+    policyConfig: {
+      seedMode: "fixed" as const,
+      locus: { executedAt: "server" as const, engineIds: [], modelIds: [] },
+    },
     seed: 73,
     createdAt: at,
   };
@@ -206,7 +208,7 @@ describe("evidence job queue", () => {
     const storage = new SQLiteRunStorage();
     const service = new RunService(storage, { evidenceQueue: queue });
     try {
-      const created = service.create(createInput("rewind-run"), "writer-a");
+      const created = await service.create(createInput("rewind-run"), "writer-a");
       const rootId = created.activeCursor.nodeId;
       const moved = service.move("rewind-run", "writer-a", "e2e4", { at });
       const nodeId = moved.run.activeCursor.nodeId;
@@ -235,7 +237,7 @@ describe("evidence staging and writer application", () => {
     for (const storage of stores.splice(0)) storage.close();
   });
 
-  it("stages over GET, enforces the writer lease, then appends evidence and its objective upgrade", async () => {
+  it("stages over GET, enforces the writer lease, then appends position evidence without inventing an objective", async () => {
     const executor: EvidenceExecutor = {
       async execute(current) {
         return payload(current.kind);
@@ -257,13 +259,14 @@ describe("evidence staging and writer application", () => {
     stores.push(storage);
     const service = new RunService(storage, { evidenceQueue: queue });
     const handler = createRestHandler(service);
-    const run = service.create(createInput("apply-run"), "writer-a");
+    const run = await service.create(createInput("apply-run"), "writer-a");
     service.enqueueEvidence("apply-run", {
       nodeId: run.activeCursor.nodeId,
       kind: "eval",
       depth: 16,
     });
     await queue.whenIdle();
+    service.reveal("apply-run", "writer-a", at);
 
     const stagedResponse = await request(
       handler,
@@ -309,11 +312,8 @@ describe("evidence staging and writer application", () => {
     });
     expect(applied.status).toBe(200);
     const saved = storage.read("apply-run")!.run;
-    expect(saved.events.slice(-2).map((event) => event.type)).toEqual([
-      "evidence.attached",
-      "objective.state_changed",
-    ]);
-    expect(saved.nodes[0]).toMatchObject({ objectiveState: "preserved" });
+    expect(saved.events.at(-1)?.type).toBe("evidence.attached");
+    expect(saved.nodes[0]).toMatchObject({ objectiveState: "active" });
     expect(saved.nodes[0]!.evidenceRefs).toEqual(["engine:evidence-job-1"]);
     expect(queue.page("apply-run").results).toEqual([]);
   });
@@ -330,11 +330,12 @@ describe("evidence staging and writer application", () => {
     const storage = new SQLiteRunStorage();
     stores.push(storage);
     const service = new RunService(storage, { evidenceQueue: queue });
-    const run = service.create(createInput("typed-run"), "writer-a");
+    const run = await service.create(createInput("typed-run"), "writer-a");
     const nodeId = run.activeCursor.nodeId;
     service.enqueueEvidence("typed-run", { nodeId, kind: "eval", depth: 12 });
     service.enqueueEvidence("typed-run", { nodeId, kind: "wdl", depth: 12 });
     await queue.whenIdle();
+    service.reveal("typed-run", "writer-a", at);
     const page = service.evidence("typed-run");
     expect(page.results.map((result) => result.payload.source)).toEqual([
       "engine_validated",
@@ -375,17 +376,14 @@ describe("evidence staging and writer application", () => {
     const storage = new SQLiteRunStorage();
     stores.push(storage);
     const service = new RunService(storage, { evidenceQueue: queue });
-    const created = service.create(createInput("durable-compare-run"), "writer-a");
+    const created = await service.create(createInput("durable-compare-run"), "writer-a");
     const rootNodeId = created.activeCursor.nodeId;
 
     const main = service.move("durable-compare-run", "writer-a", "e2e4", { at });
-    service.enqueueEvidence("durable-compare-run", {
-      nodeId: main.run.activeCursor.nodeId,
-      kind: "eval",
-      depth: 14,
-    });
     await queue.whenIdle();
-    service.applyEvidence("durable-compare-run", "writer-a", 1, at);
+    service.reveal("durable-compare-run", "writer-a", at);
+    const mainResultSeq = queue.page("durable-compare-run").results[0]!.seq;
+    service.applyEvidence("durable-compare-run", "writer-a", mainResultSeq, at);
 
     service.rewind(
       "durable-compare-run",
@@ -399,13 +397,15 @@ describe("evidence staging and writer application", () => {
       "d2d4",
       { at },
     );
-    service.enqueueEvidence("durable-compare-run", {
-      nodeId: alternative.run.activeCursor.nodeId,
-      kind: "eval",
-      depth: 14,
-    });
     await queue.whenIdle();
-    service.applyEvidence("durable-compare-run", "writer-a", 2, at);
+    service.reveal("durable-compare-run", "writer-a", at);
+    const alternativeResultSeq = queue.page("durable-compare-run").results[0]!.seq;
+    service.applyEvidence(
+      "durable-compare-run",
+      "writer-a",
+      alternativeResultSeq,
+      at,
+    );
 
     expect(queue.page("durable-compare-run").results).toEqual([]);
     const saved = storage.read("durable-compare-run")!.run;

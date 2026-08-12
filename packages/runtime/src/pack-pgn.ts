@@ -9,6 +9,7 @@ import { branchPath } from "./branch-path.js";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { exportPgn } from "./pgn.js";
 import { commitMove, createRun, fork } from "./runtime.js";
+import { isPackSession } from "./session.js";
 import type { Actor, DrillRun, Node } from "./types.js";
 
 export type PackRunPgnErrorCode =
@@ -123,6 +124,12 @@ function combinedRun(
   source: DrillRun,
   branchIds?: readonly string[],
 ): DrillRun {
+  if (!isPackSession(source)) {
+    throw new PackRunPgnError(
+      "PACK_ID_MISMATCH",
+      `Run ${source.id} is a position session and has no pack`,
+    );
+  }
   const paths = uniquePaths([
     ...authoredPaths(pack.spine ?? []),
     ...playedPaths(source, branchIds),
@@ -130,10 +137,16 @@ function combinedRun(
   const createdAt = source.events[0]?.at;
   let combined = createRun({
     id: `${source.id}:combined-pgn`,
-    packId: source.packId,
-    packDigest: source.packDigest,
+    session: {
+      kind: "pack",
+      packId: source.packId,
+      packDigest: source.packDigest,
+      start: source.start,
+      feedbackPolicy: source.feedbackPolicy,
+      opponentPolicy: source.opponentPolicy,
+    },
+    sessionDigest: source.sessionDigest,
     policyConfig: source.policyConfig,
-    startFen: pack.start.fen,
     seed: source.branches[0]?.seed ?? 0,
     ...(createdAt === undefined ? {} : { createdAt }),
   });
@@ -153,6 +166,12 @@ export async function exportPackRunPgn(
   run: DrillRun,
   branchIds?: readonly string[],
 ): Promise<string> {
+  if (!isPackSession(run)) {
+    throw new PackRunPgnError(
+      "PACK_ID_MISMATCH",
+      `Run ${run.id} is a position session and has no pack`,
+    );
+  }
   const lintErrors = lintDrillPack(pack).filter((issue) => issue.severity === "error");
   if (lintErrors.length > 0) {
     throw new PackRunPgnError(

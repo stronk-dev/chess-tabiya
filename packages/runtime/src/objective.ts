@@ -2,7 +2,7 @@ import type { Color, Role, SquareName } from "chessops/types";
 import { makeSquare, opposite, parseSquare } from "chessops/util";
 
 import { positionFromFen } from "./chess.js";
-import { unknownNode } from "./errors.js";
+import { RuntimeError, unknownNode } from "./errors.js";
 import { appendEvents } from "./events.js";
 import { assertObjectiveTransition } from "./objective-state.js";
 import type {
@@ -301,6 +301,12 @@ export function requestObjectiveEvidence(
   run: DrillRun,
   upgrader: ObjectiveEvidenceUpgrader,
 ): Promise<ObjectiveEvidenceProposal | null> {
+  if (run.packId === null || run.packDigest === null) {
+    throw new RuntimeError(
+      "INVALID_RUN_SESSION",
+      "Objective evidence requires a pack session",
+    );
+  }
   const node = activeNode(run);
   const request: ObjectiveEvidenceRequest = Object.freeze({
     runId: run.id,

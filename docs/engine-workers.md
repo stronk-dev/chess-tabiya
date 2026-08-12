@@ -153,7 +153,9 @@ wire format:
   engine identity (`id`, name/version, optional model/container identifiers,
   and `seedHonored`).
 
-The living schema is v0.4 and includes both amendments. Evidence sources remain
+The living schema is now v0.5; it retains both engine amendments and adds the
+session identity/reveal contract documented in `docs/branch-runtime.md`.
+Evidence sources remain
 separate events and typed payloads; Stockfish values and Maia predictions are
 never averaged into one number.
 

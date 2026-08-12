@@ -3,12 +3,18 @@ import { createHash } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { IdentityService } from "./identity.js";
+import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 
 const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const PASSWORD = "correct horse battery staple";
+const evidenceExecutor: EvidenceExecutor = {
+  async execute() {
+    return { kind: "eval", source: "engine_validated", values: { centipawns: 0 } };
+  },
+};
 
 function cheapDerive(password: string, salt: Buffer): Promise<Buffer> {
   const first = createHash("sha256").update(salt).update(password).digest();
@@ -18,9 +24,12 @@ function cheapDerive(password: string, salt: Buffer): Promise<Buffer> {
 function runBody(id: string) {
   return {
     id,
-    packId: "auth-test-pack",
-    packDigest: `sha256:${"a".repeat(64)}`,
-    startFen: INITIAL_FEN,
+    session: {
+      kind: "position",
+      start: { fen: INITIAL_FEN, side: "white" },
+      feedbackPolicy: "attempt_end",
+      opponentPolicy: { mode: "human_common" },
+    },
     policyConfig: {
       seedMode: "fixed",
       locus: { executedAt: "server", engineIds: [], modelIds: [] },
@@ -66,7 +75,14 @@ describe("learner identity and run authorization", () => {
     });
     return {
       storage,
-      handler: createRestHandler(new RunService(storage), undefined, undefined, identity),
+      handler: createRestHandler(
+        new RunService(storage, {
+          evidenceQueue: new EvidenceJobQueue(evidenceExecutor),
+        }),
+        undefined,
+        undefined,
+        identity,
+      ),
     };
   }
 

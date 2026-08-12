@@ -94,7 +94,7 @@ async function setup(document: DrillPackDefinition) {
 }
 
 function runBody(id: string, packId = fixture.id) {
-  return { id, packId, policyConfig, seed: 42, createdAt: at };
+  return { id, session: { kind: "pack" as const, packId }, policyConfig, seed: 42, createdAt: at };
 }
 
 describe("drill-client pack registry", () => {
@@ -245,6 +245,71 @@ describe("pack-aware run orchestration", () => {
     for (const storage of stores.splice(0)) storage.close();
   });
 
+  it("keeps pack-owned start and policy fields authoritative at creation", async () => {
+    const normal = await setup(fixture);
+    stores.push(normal.storage);
+    expect(
+      (await request(normal.handler, "POST", "/runs", runBody("pack-reveal-run"))).status,
+    ).toBe(201);
+    const withoutQueue = new RunService(normal.storage, {
+      packRegistry: normal.registry,
+    });
+    expect(() =>
+      withoutQueue.move("pack-reveal-run", "writer-a", "c1e3", { at }),
+    ).toThrow("Evidence queue is not configured");
+    expect(normal.storage.read("pack-reveal-run")!.run.events).toHaveLength(1);
+    const packReveal = await request(
+      normal.handler,
+      "POST",
+      "/runs/pack-reveal-run/reveal",
+      { at },
+    );
+    expect(packReveal.status).toBe(400);
+    expect(await packReveal.json()).toMatchObject({
+      error: {
+        code: "INVALID_REQUEST",
+        message: expect.stringContaining("delayed_checkpoint"),
+      },
+    });
+
+    const withoutSide = pack({
+      id: "missing-side-pack",
+      start: { fen: fixture.start.fen, movesSan: fixture.start.movesSan },
+    });
+    const missingSide = await setup(withoutSide);
+    stores.push(missingSide.storage);
+    const refusedStart = await request(
+      missingSide.handler,
+      "POST",
+      "/runs",
+      runBody("missing-side-run", withoutSide.id),
+    );
+    expect(refusedStart.status).toBe(400);
+    expect(await refusedStart.json()).toMatchObject({
+      error: { code: "INVALID_REQUEST", message: expect.stringContaining(withoutSide.id) },
+    });
+
+    const invalidPolicy = pack({
+      id: "invalid-policy-pack",
+      opponentPolicy: { mode: "human_common", temperature: -1 },
+    });
+    const badPolicy = await setup(invalidPolicy);
+    stores.push(badPolicy.storage);
+    const refusedPolicy = await request(
+      badPolicy.handler,
+      "POST",
+      "/runs",
+      runBody("invalid-policy-run", invalidPolicy.id),
+    );
+    expect(refusedPolicy.status).toBe(400);
+    expect(await refusedPolicy.json()).toMatchObject({
+      error: {
+        code: "INVALID_REQUEST",
+        message: expect.stringMatching(/invalid-policy-pack.*temperature/),
+      },
+    });
+  });
+
   it("derives run inputs, evaluates checkpoints/objective atomically, and enqueues 100 ms evals", async () => {
     const environment = await setup(fixture);
     stores.push(environment.storage);
@@ -325,7 +390,7 @@ describe("pack-aware run orchestration", () => {
   it("exports a selected pack-merged branch as legal downloadable PGN", async () => {
     const environment = await setup(fixture);
     stores.push(environment.storage);
-    environment.service.create(runBody("pgn-route"), "writer-a");
+    await environment.service.create(runBody("pgn-route"), "writer-a");
     const mutation = environment.service.move("pgn-route", "writer-a", "c1e3", {
       at,
     });
@@ -369,7 +434,7 @@ describe("server-side feedback withholding", () => {
     });
     const environment = await setup(delayed);
     stores.push(environment.storage);
-    environment.service.create(runBody("delayed-run", delayed.id), "writer-a");
+    await environment.service.create(runBody("delayed-run", delayed.id), "writer-a");
     environment.service.move("delayed-run", "writer-a", "c1e3", { at });
     await environment.queue.whenIdle();
 
@@ -468,7 +533,7 @@ describe("server-side feedback withholding", () => {
     });
     const environment = await setup(delayed);
     stores.push(environment.storage);
-    const created = environment.service.create(
+    const created = await environment.service.create(
       runBody("delayed-compare-run", delayed.id),
       "writer-a",
     );
@@ -585,7 +650,7 @@ describe("server-side feedback withholding", () => {
     });
     const environment = await setup(segment);
     stores.push(environment.storage);
-    environment.service.create(runBody("segment-run", segment.id), "writer-a");
+    await environment.service.create(runBody("segment-run", segment.id), "writer-a");
 
     environment.service.move("segment-run", "writer-a", "c1e3", { at });
     await environment.queue.whenIdle();

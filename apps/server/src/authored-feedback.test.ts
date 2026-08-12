@@ -259,8 +259,8 @@ describe("authored feedback projection", () => {
     const storage = new SQLiteRunStorage();
     try {
       const service = new RunService(storage, { packRegistry: registry });
-      service.create(
-        { id: "rest-reveal", packId: packA.id, policyConfig, seed: 23, createdAt: at },
+      await service.create(
+        { id: "rest-reveal", session: { kind: "pack", packId: packA.id }, policyConfig, seed: 23, createdAt: at },
         "writer-a",
       );
       let run = play(storage.read("rest-reveal")!.run, [

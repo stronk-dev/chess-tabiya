@@ -34,6 +34,13 @@ const validate = ajv.compile(schema);
 
 const at = "2026-08-12T12:00:00.000Z";
 const packDigest = `sha256:${"0".repeat(64)}`;
+const rootNodeFen = "8/8/8/8/8/8/4K3/7k w - - 0 1";
+const sessionDigest = `sha256:${"1".repeat(64)}`;
+const start = {
+  fen: rootNodeFen,
+  side: "white",
+} as const;
+const opponentPolicy = { mode: "human_common" } as const;
 const policyConfig = {
   seedMode: "per_branch",
   locus: {
@@ -45,7 +52,7 @@ const policyConfig = {
 const rootNode = {
   id: "run-1:node:0",
   parentId: null,
-  fen: "8/8/8/8/8/8/4K3/7k w - - 0 1",
+  fen: rootNodeFen,
   transposeKey: "8/8/8/8/8/8/4K3/7k w - -",
   moveUci: null,
   moveSan: null,
@@ -70,8 +77,13 @@ const event = {
   at,
   data: {
     id: "run-1",
+    sessionKind: "pack",
     packId: "pack-1",
     packDigest,
+    sessionDigest,
+    start,
+    feedbackPolicy: "delayed_checkpoint",
+    opponentPolicy,
     policyConfig,
     rootNode,
     branch,
@@ -81,8 +93,13 @@ const event = {
 const validRun = {
   schemaVersion: DRILL_RUN_SCHEMA_VERSION,
   id: "run-1",
+  sessionKind: "pack",
   packId: "pack-1",
   packDigest,
+  sessionDigest,
+  start,
+  feedbackPolicy: "delayed_checkpoint",
+  opponentPolicy,
   policyConfig,
   nodes: [rootNode],
   branches: [branch],
@@ -90,11 +107,11 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.4", () => {
+describe("drill_run.schema.json v0.5", () => {
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.4",
+      $id: "urn:chess-tabiya:schema:drill-run:0.5",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });
@@ -135,6 +152,76 @@ describe("drill_run.schema.json v0.4", () => {
     };
 
     expect(validate(fixedSeedRun), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it("validates a position session and rejects invalid session pairings", () => {
+    const positionFields = {
+      sessionKind: "position",
+      packId: null,
+      packDigest: null,
+      start,
+      feedbackPolicy: "attempt_end",
+      opponentPolicy,
+    } as const;
+    const positionRun = {
+      ...validRun,
+      ...positionFields,
+      events: [{ ...event, data: { ...event.data, ...positionFields } }],
+    };
+    expect(validate(positionRun), JSON.stringify(validate.errors)).toBe(true);
+
+    const invalidValues = [
+      { ...positionRun, packId: "half-pack" },
+      { ...positionRun, feedbackPolicy: "delayed_checkpoint" },
+      { ...positionRun, opponentPolicy: { mode: "theory_strict" } },
+      { ...validRun, feedbackPolicy: "attempt_end" },
+    ];
+    for (const invalid of invalidValues) {
+      expect(validate(invalid)).toBe(false);
+    }
+
+    const { sessionKind: _sessionKind, ...withoutSessionKind } = positionRun;
+    expect(validate(withoutSessionKind)).toBe(false);
+    expect(validate.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          instancePath: "",
+          keyword: "required",
+          params: { missingProperty: "sessionKind" },
+        }),
+      ]),
+    );
+
+    const { sessionDigest: _sessionDigest, ...startWithoutDigest } = event.data;
+    expect(
+      validate({
+        ...validRun,
+        events: [{ ...event, data: startWithoutDigest }],
+      }),
+    ).toBe(false);
+    expect(validate.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          instancePath: "/events/0/data",
+          keyword: "required",
+          params: { missingProperty: "sessionDigest" },
+        }),
+      ]),
+    );
+  });
+
+  it("validates feedback.revealed with a structural node reference", () => {
+    const revealed = {
+      seq: 2,
+      type: "feedback.revealed",
+      at,
+      data: { nodeId: rootNode.id },
+    };
+    expect(
+      validate({ ...validRun, events: [event, revealed] }),
+      JSON.stringify(validate.errors),
+    ).toBe(true);
+    expect(validate({ ...validRun, events: [event, { ...revealed, data: {} }] })).toBe(false);
   });
 
   it("validates typed evidence attachment and rejects the negative fixture", () => {

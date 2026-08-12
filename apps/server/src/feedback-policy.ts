@@ -1,24 +1,16 @@
 import {
   eventsSince,
+  feedbackDisclosed,
   isEngineEvidenceRef,
   type DrillRun,
   type DrillRunEvent,
   type Node,
 } from "@chess-tabiya/runtime";
 
-import type { PackRecord } from "./pack-registry.js";
-
-export function feedbackIsRevealed(pack: PackRecord, run: DrillRun): boolean {
-  return pack.feedbackPolicy === "delayed_checkpoint"
-    ? run.events.some((event) => event.type === "checkpoint.reached")
-    : run.events.some((event) => event.type === "segment.completed");
-}
-
 export function publicNodes(
-  pack: PackRecord | undefined,
   run: DrillRun,
 ): readonly Node[] {
-  if (pack === undefined || feedbackIsRevealed(pack, run)) return run.nodes;
+  if (feedbackDisclosed(run)) return run.nodes;
   return Object.freeze(
     run.nodes.map((node) =>
       Object.freeze({
@@ -40,12 +32,11 @@ function engineFeedbackEvent(event: DrillRunEvent): boolean {
 }
 
 export function publicEvents(
-  pack: PackRecord | undefined,
   run: DrillRun,
   sinceSeq: number,
 ): { readonly events: readonly DrillRunEvent[]; readonly nextSeq: number } {
   const candidates = eventsSince(run, sinceSeq);
-  if (pack === undefined || feedbackIsRevealed(pack, run)) {
+  if (feedbackDisclosed(run)) {
     return Object.freeze({
       events: candidates,
       nextSeq: run.events.at(-1)?.seq ?? 0,

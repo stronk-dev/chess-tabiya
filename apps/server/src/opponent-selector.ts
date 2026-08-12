@@ -453,6 +453,9 @@ export class OpponentSelector {
   async #theoryStrict(request: SelectMoveRequest): Promise<OpponentSelection> {
     const children = spineChildren(request);
     if (children === undefined || children.length === 0) {
+      console.warn(
+        "DEGRADED_THEORY_SPINE: position is off the authored spine; falling back to human_common",
+      );
       return this.#humanCommon(request);
     }
     const result = await this.#maia(request, Math.max(8, children.length));

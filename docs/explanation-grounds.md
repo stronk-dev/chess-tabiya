@@ -64,15 +64,18 @@ integer field is not a score point.
 
 ## Feedback withholding
 
-Comparison is a feedback surface and obeys the same pack-level reveal decision
-as graph, events, staged evidence, and evidence application. Before
-`delayed_checkpoint` or `segment_end` reveals feedback, `RunService.compare()`:
+Comparison is a feedback surface and obeys the same run-level disclosure
+decision as graph, events, staged evidence, and evidence application. Before a
+pack's `delayed_checkpoint` or `segment_end` event, or before an explicit
+position-session reveal, `RunService.compare()`:
 
 - removes only `engine:` references from objective-timeline entries;
 - retains `rules:` and `pack:` grounds; and
 - returns empty evidence arrays for both sides.
 
-After reveal, it returns the runtime comparison unchanged.
+After disclosure, it returns the runtime comparison unchanged. Position-session
+delivery closes again on the next committed move, but disclosure of evidence
+already recorded in the append-only run remains durable.
 
 This gate closes a real information leak. Before the implementation,
 `RunService.compare()` called the runtime directly, allowing an

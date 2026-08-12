@@ -35,6 +35,29 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
   if (started?.type !== "run.started") {
     throw new TypeError("A run event stream must begin with run.started");
   }
+  const data = started.data;
+  const isPack = data.sessionKind === "pack";
+  if (
+    isPack !== (data.packId !== null) ||
+    isPack !== (data.packDigest !== null)
+  ) {
+    throw new TypeError("Run session kind and pack identity disagree");
+  }
+  if (isPack && data.feedbackPolicy === "attempt_end") {
+    throw new TypeError("Pack sessions cannot use attempt_end feedback");
+  }
+  if (!isPack && data.feedbackPolicy !== "attempt_end") {
+    throw new TypeError("Position sessions must use attempt_end feedback");
+  }
+  if (!isPack && data.opponentPolicy.mode === "theory_strict") {
+    throw new TypeError("Position sessions cannot use theory_strict");
+  }
+  if (data.start.fen !== data.rootNode.fen) {
+    throw new TypeError("Run start FEN and root node FEN disagree");
+  }
+  if (!/^sha256:[0-9a-f]{64}$/.test(data.sessionDigest)) {
+    throw new TypeError("Run session digest is invalid");
+  }
 
   let nodes: readonly Node[] = [started.data.rootNode];
   let branches: readonly Branch[] = [started.data.branch];
@@ -129,6 +152,11 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
         break;
       }
       case "opponent.move_selected":
+      case "feedback.revealed":
+        if (!nodes.some((node) => node.id === event.data.nodeId)) {
+          throw unknownNode(event.data.nodeId);
+        }
+        break;
       case "segment.completed":
       case "feedback.generated":
       case "outcome.reached":
@@ -140,8 +168,13 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
   return deepFreeze({
     schemaVersion: DRILL_RUN_SCHEMA_VERSION,
     id: started.data.id,
+    sessionKind: started.data.sessionKind,
     packId: started.data.packId,
     packDigest: started.data.packDigest,
+    sessionDigest: started.data.sessionDigest,
+    start: started.data.start,
+    feedbackPolicy: started.data.feedbackPolicy,
+    opponentPolicy: started.data.opponentPolicy,
     policyConfig: started.data.policyConfig,
     nodes,
     branches,

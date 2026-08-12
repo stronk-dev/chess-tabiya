@@ -8,6 +8,7 @@ export type RuntimeErrorCode =
   | "UNKNOWN_NODE"
   | "UNKNOWN_CHECKPOINT"
   | "NOT_ACTIVE_WRITER"
+  | "INVALID_RUN_SESSION"
   | "RUN_TERMINATED";
 
 export class RuntimeError extends Error {

@@ -54,8 +54,8 @@ function selectedBranches(run: DrillRun, branchIds?: readonly string[]): readonl
 
 function pgnHeaders(run: DrillRun, root: Node): Map<string, string> {
   const date = run.events[0]?.at.slice(0, 10).replaceAll("-", ".") ?? "????.??.??";
-  return new Map([
-    ["Event", `Tabiya drill: ${run.packId}`],
+  const headers = new Map<string, string>([
+    ["Event", run.packId === null ? "Tabiya session: position" : `Tabiya drill: ${run.packId}`],
     ["Site", "chess-tabiya"],
     ["Date", date],
     ["Round", "?"],
@@ -65,8 +65,10 @@ function pgnHeaders(run: DrillRun, root: Node): Map<string, string> {
     ["SetUp", "1"],
     ["FEN", root.fen],
     ["TabiyaRun", run.id],
-    ["TabiyaPack", run.packId],
+    ["TabiyaSession", run.sessionDigest],
   ]);
+  if (run.packId !== null) headers.set("TabiyaPack", run.packId);
+  return headers;
 }
 
 export function exportPgn(run: DrillRun, branchIds?: readonly string[]): string {

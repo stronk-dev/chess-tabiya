@@ -74,9 +74,13 @@ evaluation job for the active node. Its shipped default is the ratified
 
 ## Feedback withholding
 
-Feedback timing is enforced on the server, not with client-side hiding.
-`delayed_checkpoint` reveals engine-derived evidence after the run reaches a
-checkpoint; `segment_end` reveals it after a segment completes. Until then:
+Feedback timing is a run property enforced on the server, not inferred from
+whether a pack currently resolves and not implemented with client-side hiding.
+`delayed_checkpoint` reveals after a checkpoint and `segment_end` after a
+segment completes. A pack-less position session uses `attempt_end`: its writer
+explicitly calls `/reveal`, staged evidence becomes deliverable, and the next
+committed move closes that delivery window. Already-recorded evidence stays
+disclosed. Until disclosure:
 
 - `/graph` removes engine evidence references while retaining rules- and
   pack-derived references;
@@ -87,13 +91,21 @@ checkpoint; `segment_end` reveals it after a segment completes. Until then:
 - `/evidence` withholds staged results, while attempts to apply them return the
   typed `FEEDBACK_WITHHELD` error.
 
-Authored strategic prose currently has no reveal path and therefore is not
-delivered to the browser at all. In particular, the public pack projection
-omits annotations, deviation notes, feedback claims, plan classes, and
-concepts instead of relying on client-side hiding. Serving any of those fields
-back is blocked on a server-side per-scope reveal contract; the run-global
-feedback latch is not sufficient because one checkpoint must not reveal prose
-for later scopes.
+`/authored-feedback` returns an honest empty page for position runs. An absent
+or stale registry entry never opens any engine-evidence surface.
+
+`RunStateStore` projects either session kind without a pack dependency. The
+existing drill-session controller remains a pack player and explicitly refuses
+to resume a position run with “the position player is not built yet”; this
+prevents a resume card from trying to fetch a pack named `null` while Just Play
+and from-position entry remain separate breadth increments.
+
+The public pack projection still omits annotations, deviations, claims, plan
+classes, concepts, and checkpoint triggers instead of relying on client-side
+hiding. The separate run-scoped authored-feedback endpoint reveals only the
+supported, path-anchored subset at an exact checkpoint occurrence. Unanchored
+claims and other unsupported shapes remain absent; position runs have no
+authored layer.
 
 Rules-derived explanations remain visible because they are engine-free facts
 from the objective machine. Evidence references have runtime constructors and
@@ -133,7 +145,7 @@ and rejects a response whose projected event count disagrees with its included
 run. Resume projects the complete public event stream from `run.started`.
 
 The writer does not poll its own run events. It tracks one pending evaluation
-per committed move and, once the pack's feedback reveal condition is present,
+per committed move and, once the run's feedback delivery condition is open,
 polls `/evidence` every second until the staged results have been writer-applied
 and their `evidence.attached` events drain the pending count. A client rejected
 with `NOT_ACTIVE_WRITER` becomes a follower and polls `/events?sinceSeq` every

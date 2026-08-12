@@ -59,6 +59,19 @@ function record(value: unknown, label = "body"): Record<string, unknown> {
   return value as Record<string, unknown>;
 }
 
+function closedRecord(
+  value: unknown,
+  pointer: string,
+  allowed: readonly string[],
+): Record<string, unknown> {
+  const result = record(value, pointer === "/" ? "body" : pointer);
+  const unknown = Object.keys(result).filter((key) => !allowed.includes(key)).sort()[0];
+  if (unknown !== undefined) {
+    throw invalid(`Unknown field ${pointer === "/" ? "" : pointer}/${unknown}`);
+  }
+  return result;
+}
+
 function requiredString(value: unknown, label: string): string {
   if (typeof value !== "string" || value.trim() === "") {
     throw invalid(`${label} must be a non-empty string`);
@@ -155,7 +168,8 @@ function parseOpponentSelection(value: unknown): OpponentSelection {
 function policies(value: unknown, label: string): readonly VersionedPolicy[] {
   if (!Array.isArray(value)) throw invalid(`${label} must be an array`);
   return value.map((entry, index) => {
-    const item = record(entry, `${label}[${index}]`);
+    const pointer = `/${label.replaceAll(".", "/")}/${index}`;
+    const item = closedRecord(entry, pointer, ["id", "version"]);
     return {
       id: requiredString(item.id, `${label}[${index}].id`),
       version: requiredString(item.version, `${label}[${index}].version`),
@@ -164,7 +178,7 @@ function policies(value: unknown, label: string): readonly VersionedPolicy[] {
 }
 
 function parsePolicyConfig(value: unknown): PolicyConfig {
-  const policy = record(value, "policyConfig");
+  const policy = closedRecord(value, "/policyConfig", ["seedMode", "locus"]);
   if (
     policy.seedMode !== "fixed" &&
     policy.seedMode !== "per_run" &&
@@ -172,7 +186,7 @@ function parsePolicyConfig(value: unknown): PolicyConfig {
   ) {
     throw invalid("policyConfig.seedMode is invalid");
   }
-  const locus = record(policy.locus, "policyConfig.locus");
+  const locus = closedRecord(policy.locus, "/policyConfig/locus", ["executedAt", "engineIds", "modelIds"]);
   if (locus.executedAt !== "browser" && locus.executedAt !== "server") {
     throw invalid("policyConfig.locus.executedAt is invalid");
   }
@@ -214,20 +228,58 @@ function runRole(value: unknown): RunRole {
 }
 
 function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
+  value = closedRecord(value, "/", ["id", "session", "policyConfig", "seed", "createdAt"]);
   if (typeof value.seed !== "number" || !Number.isSafeInteger(value.seed)) {
     throw invalid("seed must be a safe integer");
   }
+  const sessionValue = closedRecord(value.session, "/session", ["kind", "packId", "packDigest", "start", "feedbackPolicy", "opponentPolicy"]);
+  const kind = requiredString(sessionValue.kind, "/session/kind");
+  const session = kind === "pack"
+    ? (() => {
+        closedRecord(value.session, "/session", ["kind", "packId", "packDigest"]);
+        return {
+          kind: "pack" as const,
+          packId: requiredString(sessionValue.packId, "/session/packId"),
+          ...(sessionValue.packDigest === undefined ? {} : { packDigest: requiredString(sessionValue.packDigest, "/session/packDigest") }),
+        };
+      })()
+    : kind === "position"
+      ? (() => {
+          closedRecord(value.session, "/session", ["kind", "start", "feedbackPolicy", "opponentPolicy"]);
+          const start = closedRecord(sessionValue.start, "/session/start", ["fen", "side"]);
+          const side = requiredString(start.side, "/session/start/side");
+          if (side !== "white" && side !== "black") throw invalid("/session/start/side must be white or black");
+          if (sessionValue.feedbackPolicy !== "attempt_end") throw invalid("/session/feedbackPolicy must be attempt_end");
+          const opponent = closedRecord(sessionValue.opponentPolicy, "/session/opponentPolicy", ["mode", "targetElo", "temperature", "topP"]);
+          const mode = requiredString(opponent.mode, "/session/opponentPolicy/mode");
+          if (mode !== "human_common" && mode !== "strong_engine") {
+            throw invalid("/session/opponentPolicy/mode cannot use theory_strict without a spine");
+          }
+          const optionalNumber = (key: "targetElo" | "temperature" | "topP") => {
+            const candidate = opponent[key];
+            if (candidate === undefined) return undefined;
+            if (typeof candidate !== "number" || !Number.isFinite(candidate)) throw invalid(`/session/opponentPolicy/${key} must be a finite number`);
+            return candidate;
+          };
+          const targetElo = optionalNumber("targetElo");
+          const temperature = optionalNumber("temperature");
+          const topP = optionalNumber("topP");
+          if (temperature !== undefined && temperature < 0) throw invalid("/session/opponentPolicy/temperature must be non-negative");
+          if (topP !== undefined && (topP < 0 || topP > 1)) throw invalid("/session/opponentPolicy/topP must be between 0 and 1");
+          if (targetElo !== undefined && !Number.isSafeInteger(targetElo)) throw invalid("/session/opponentPolicy/targetElo must be a safe integer");
+          return {
+            kind: "position" as const,
+            start: { fen: requiredString(start.fen, "/session/start/fen"), side: side as "white" | "black" },
+            feedbackPolicy: "attempt_end" as const,
+            opponentPolicy: { mode: mode as "human_common" | "strong_engine", ...(targetElo === undefined ? {} : { targetElo }), ...(temperature === undefined ? {} : { temperature }), ...(topP === undefined ? {} : { topP }) },
+          };
+        })()
+      : (() => { throw invalid("/session/kind must be pack or position"); })();
   return {
     id: requiredString(value.id, "id"),
-    packId: requiredString(value.packId, "packId"),
+    session,
     policyConfig: parsePolicyConfig(value.policyConfig),
     seed: value.seed,
-    ...(value.packDigest === undefined
-      ? {}
-      : { packDigest: requiredString(value.packDigest, "packDigest") }),
-    ...(value.startFen === undefined
-      ? {}
-      : { startFen: requiredString(value.startFen, "startFen") }),
     ...(value.createdAt === undefined
       ? {}
       : { createdAt: requiredString(value.createdAt, "createdAt") }),
@@ -324,7 +376,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -473,7 +525,7 @@ export function createRestHandler(
       }
       if (request.method === "POST" && url.pathname === "/runs") {
         const principal = authenticate();
-        const run = service.create(
+        const run = await service.create(
           parseCreateInput(await parseBody(request)),
           { writerId: writerId(request), learnerId: principal.learnerId },
         );
@@ -550,6 +602,15 @@ export function createRestHandler(
         requireJson(request);
         service.claimLease(route.runId, principal, writerId(request));
         return json(200, { holdsLease: true });
+      }
+      if (route.action === "reveal") {
+        requireJson(request);
+        return json(200, service.reveal(
+          route.runId,
+          principal,
+          writerId(request),
+          optionalString(value.at, "at"),
+        ));
       }
       if (route.action === "grants") {
         requireJson(request);

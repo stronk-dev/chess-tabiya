@@ -39,7 +39,7 @@ describe("DrillApi", () => {
         return json({
           engines: [],
           policyModes: ["human_common"],
-          runSchemaVersion: "0.4",
+          runSchemaVersion: "0.5",
           policyProfiles: {
             strong_engine: {
               movetimeMs: 100,
@@ -64,7 +64,7 @@ describe("DrillApi", () => {
       if (url.endsWith("/packs/pack-one")) {
         return json(
           { id: "pack-one", version: "0.2", start: { fen: run.nodes[0]!.fen } },
-          { headers: { "x-pack-digest": run.packDigest } },
+          { headers: { "x-pack-digest": run.packDigest! } },
         );
       }
       if (url.endsWith("/runs") && init?.method === "POST") {
@@ -115,7 +115,7 @@ describe("DrillApi", () => {
     const api = new DrillApi("http://tabiya.test/", fetcher);
     const createInput = {
       id: run.id,
-      packId: run.packId,
+      session: { kind: "pack" as const, packId: run.packId! },
       policyConfig: run.policyConfig,
       seed: 7,
     };
@@ -138,7 +138,7 @@ describe("DrillApi", () => {
     await api.selectMove({
       startFen: run.nodes[0]!.fen,
       historyUci: [],
-      policy: { mode: "human_common", policyConfigDigest: run.packDigest },
+      policy: { mode: "human_common", policyConfigDigest: run.packDigest! },
       seed: 7,
     });
     await api.move(run.id, { uci: "a2a3" }, "writer-one");
@@ -153,6 +153,7 @@ describe("DrillApi", () => {
     await api.compare(run.id, "a", "b");
     await api.events(run.id, 1);
     await api.evidence(run.id, 2);
+    await api.reveal(run.id, "writer-one");
     await api.applyEvidence(run.id, 3, "writer-one");
     expect(await api.authoredFeedback(run.id)).toEqual({
       items: [],
@@ -178,6 +179,7 @@ describe("DrillApi", () => {
       "/runs/run%20%2F%20one/compare",
       "/runs/run%20%2F%20one/events",
       "/runs/run%20%2F%20one/evidence",
+      "/runs/run%20%2F%20one/reveal",
       "/runs/run%20%2F%20one/evidence",
       "/runs/run%20%2F%20one/authored-feedback",
       "/runs/run%20%2F%20one/pgn",

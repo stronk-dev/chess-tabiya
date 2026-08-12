@@ -63,7 +63,7 @@ const capabilities: Capabilities = {
     },
   ],
   policyModes: ["human_common", "strong_engine", "theory_strict"],
-  runSchemaVersion: "0.4",
+  runSchemaVersion: "0.5",
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
   },
@@ -140,13 +140,27 @@ class FakeApi implements DrillClientApi {
     this.created = input;
     this.writerIds.push(writerId);
     this.activeWriterId = writerId;
+    if (input.session.kind !== "pack") throw new Error("fake supports pack sessions only");
     this.run = createRun({
-      ...input,
-      packDigest: digest,
-      startFen: this.document.start.fen,
+      id: input.id,
+      session: {
+        kind: "pack",
+        packId: input.session.packId,
+        packDigest: digest,
+        start: { fen: this.document.start.fen, side: (this.document.start.side ?? "white") as "white" | "black" },
+        feedbackPolicy: (this.document.feedbackPolicy ?? "delayed_checkpoint") as "delayed_checkpoint" | "segment_end",
+        opponentPolicy: { mode: "human_common" },
+      },
+      sessionDigest: digest,
+      policyConfig: input.policyConfig,
+      seed: input.seed,
       createdAt: at,
     });
     return this.run;
+  }
+
+  async reveal(): Promise<MutationResult> {
+    throw new Error("position reveal is outside the pack-player fake");
   }
 
   async selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
@@ -375,7 +389,7 @@ describe("DrillSessionController", () => {
     await api.createRun(
       {
         id: "screen-run",
-        packId: pack.id,
+        session: { kind: "pack", packId: pack.id },
         policyConfig: {
           seedMode: "fixed",
           locus: { executedAt: "server", engineIds: [], modelIds: [] },
@@ -394,12 +408,43 @@ describe("DrillSessionController", () => {
     expect(storage.values.size).toBe(0);
   });
 
+  it("refuses a position-session resume without minting or fetching pack state", async () => {
+    const api = new FakeApi();
+    api.run = createRun({
+      id: "position-run",
+      session: {
+        kind: "position",
+        start: { fen: pack.start.fen, side: "white" },
+        feedbackPolicy: "attempt_end",
+        opponentPolicy: { mode: "human_common" },
+      },
+      sessionDigest: `sha256:${"9".repeat(64)}`,
+      policyConfig: {
+        seedMode: "fixed",
+        locus: { executedAt: "server", engineIds: [], modelIds: [] },
+      },
+      seed: 1,
+      createdAt: at,
+    });
+    const storage = new MemoryStorage();
+    const environment = controller(api, storage);
+
+    await environment.controller.resume("position-run");
+
+    expect(environment.controller.state).toMatchObject({
+      busy: false,
+      error: "This run is a position session; the position player is not built yet",
+    });
+    expect(environment.controller.state.runState).toBeUndefined();
+    expect(storage.values.size).toBe(0);
+  });
+
   it("does not request an initial opponent ply for a read-only follower", async () => {
     const api = new FakeApi(blackToMovePack, "c8f5", false);
     await api.createRun(
       {
         id: "screen-run",
-        packId: blackToMovePack.id,
+        session: { kind: "pack", packId: blackToMovePack.id },
         policyConfig: {
           seedMode: "fixed",
           locus: { executedAt: "server", engineIds: [], modelIds: [] },
@@ -422,7 +467,7 @@ describe("DrillSessionController", () => {
     await api.createRun(
       {
         id: "screen-run",
-        packId: pack.id,
+        session: { kind: "pack", packId: pack.id },
         policyConfig: {
           seedMode: "fixed",
           locus: { executedAt: "server", engineIds: [], modelIds: [] },
@@ -446,7 +491,7 @@ describe("DrillSessionController", () => {
     await api.createRun(
       {
         id: "screen-run",
-        packId: blackToMovePack.id,
+        session: { kind: "pack", packId: blackToMovePack.id },
         policyConfig: {
           seedMode: "fixed",
           locus: { executedAt: "server", engineIds: [], modelIds: [] },
@@ -470,7 +515,7 @@ describe("DrillSessionController", () => {
     await api.createRun(
       {
         id: "screen-run",
-        packId: blackToMovePack.id,
+        session: { kind: "pack", packId: blackToMovePack.id },
         policyConfig: {
           seedMode: "fixed",
           locus: { executedAt: "server", engineIds: [], modelIds: [] },

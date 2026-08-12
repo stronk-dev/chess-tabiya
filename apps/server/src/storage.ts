@@ -8,6 +8,7 @@ import {
   type DrillRunEvent,
   type ObjectiveState,
 } from "@chess-tabiya/runtime";
+import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { ServerError } from "./errors.js";
 
@@ -50,7 +51,9 @@ export interface LeaseIdentity {
 export interface RunSummary {
   readonly id: string;
   readonly title: string;
-  readonly packId: string;
+  readonly sessionKind: import("@chess-tabiya/runtime").RunSessionKind;
+  readonly packId: string | null;
+  readonly sessionDigest: string;
   readonly updatedAt: string;
   readonly objectiveState: ObjectiveState;
   readonly branchCount: number;
@@ -105,7 +108,9 @@ interface RunRow {
 
 interface SummaryFields {
   readonly title: string;
-  readonly packId: string;
+  readonly sessionKind: import("@chess-tabiya/runtime").RunSessionKind;
+  readonly packId: string | null;
+  readonly sessionDigest: string;
   readonly updatedAt: string;
   readonly objectiveState: ObjectiveState;
   readonly branchCount: number;
@@ -139,7 +144,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-const STORAGE_VERSION = 2;
+const STORAGE_VERSION = 3;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -221,7 +226,9 @@ function parseSummary(value: string): SummaryFields {
   const parsed = JSON.parse(value) as Partial<SummaryFields>;
   if (
     typeof parsed.title !== "string" ||
-    typeof parsed.packId !== "string" ||
+    (typeof parsed.packId !== "string" && parsed.packId !== null) ||
+    (parsed.sessionKind !== "pack" && parsed.sessionKind !== "position") ||
+    typeof parsed.sessionDigest !== "string" ||
     typeof parsed.updatedAt !== "string" ||
     !isObjectiveState(parsed.objectiveState) ||
     !Number.isSafeInteger(parsed.branchCount) ||
@@ -231,7 +238,9 @@ function parseSummary(value: string): SummaryFields {
   }
   return Object.freeze({
     title: parsed.title,
+    sessionKind: parsed.sessionKind,
     packId: parsed.packId,
+    sessionDigest: parsed.sessionDigest,
     updatedAt: parsed.updatedAt,
     objectiveState: parsed.objectiveState,
     branchCount: parsed.branchCount!,
@@ -251,7 +260,9 @@ function summaryFields(
 ): SummaryFields {
   return Object.freeze({
     title,
+    sessionKind: run.sessionKind,
     packId: run.packId,
+    sessionDigest: run.sessionDigest,
     updatedAt,
     objectiveState: activeObjectiveState(run),
     branchCount: run.branches.length,
@@ -310,7 +321,7 @@ export class SQLiteRunStorage implements RunStorage {
   create(run: DrillRun, lease: LeaseHolder, title?: string): void;
   /** @deprecated Test-harness compatibility; production always supplies a learner-bound lease. */
   create(run: DrillRun, writerId: string, title?: string): void;
-  create(run: DrillRun, leaseInput: LeaseHolder | string, title = run.packId): void {
+  create(run: DrillRun, leaseInput: LeaseHolder | string, title = run.packId ?? run.id): void {
     const lease = this.#lease(leaseInput);
     const updatedAt = this.#now();
     const summary = summaryFields(run, title, updatedAt);
@@ -320,8 +331,8 @@ export class SQLiteRunStorage implements RunStorage {
         .prepare(
           `INSERT INTO drill_runs
              (id, snapshot_json, active_writer_id, updated_at, summary_json,
-              owner_learner_id, active_writer_learner_id)
-           VALUES (?, ?, ?, ?, ?, ?, ?)`,
+              owner_learner_id, active_writer_learner_id, schema_version)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         )
         .run(
           run.id,
@@ -331,6 +342,7 @@ export class SQLiteRunStorage implements RunStorage {
           JSON.stringify(summary),
           lease.learnerId,
           lease.learnerId,
+          run.schemaVersion,
         );
       this.#database
         .prepare(
@@ -367,9 +379,9 @@ export class SQLiteRunStorage implements RunStorage {
       value = this.#database
         .prepare(
           `SELECT id, snapshot_json, active_writer_id, active_writer_learner_id
-           FROM drill_runs WHERE id = ?`,
+           FROM drill_runs WHERE id = ? AND schema_version = ?`,
         )
-        .get(runId);
+        .get(runId, DRILL_RUN_SCHEMA_VERSION);
     } catch (error) {
       throw storageFailure("Could not read run", error);
     }
@@ -421,10 +433,11 @@ export class SQLiteRunStorage implements RunStorage {
            FROM drill_runs r
            JOIN run_grants g ON g.run_id = r.id AND g.learner_id = ?
            JOIN learners holder ON holder.id = r.active_writer_learner_id
+           WHERE r.schema_version = ?
            ORDER BY r.updated_at DESC, r.id ASC
            LIMIT ? OFFSET ?`,
         )
-        .all(learnerId, limit, offset);
+        .all(learnerId, DRILL_RUN_SCHEMA_VERSION, limit, offset);
     } catch (error) {
       throw storageFailure("Could not list runs", error);
     }
@@ -471,13 +484,14 @@ export class SQLiteRunStorage implements RunStorage {
       const result = this.#database
         .prepare(
           `UPDATE drill_runs
-           SET snapshot_json = ?, updated_at = ?, summary_json = ?
+           SET snapshot_json = ?, updated_at = ?, summary_json = ?, schema_version = ?
            WHERE id = ? AND active_writer_id = ? AND active_writer_learner_id = ?`,
         )
         .run(
           JSON.stringify(run),
           updatedAt,
           JSON.stringify(summaryFields(run, title, updatedAt)),
+          run.schemaVersion,
           run.id,
           lease.writerId,
           lease.learnerId,
@@ -909,6 +923,11 @@ export class SQLiteRunStorage implements RunStorage {
         name: "learner identity and run grants",
         apply: () => this.#addLearnerIdentity(),
       },
+      {
+        version: 3,
+        name: "quarantine pre-0.5 run snapshots",
+        apply: () => this.#quarantineLegacyRuns(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -942,12 +961,18 @@ export class SQLiteRunStorage implements RunStorage {
       ) {
         throw new TypeError("Legacy run row has an invalid shape");
       }
-      const snapshot = JSON.parse(row.snapshot_json) as { events?: unknown };
-      if (!Array.isArray(snapshot.events)) throw new TypeError("Snapshot has no events");
-      const run = readBackReplay(snapshot.events as readonly DrillRunEvent[]).run;
-      if (run.id !== row.id) throw new TypeError("Snapshot id does not match row id");
+      const snapshot = JSON.parse(row.snapshot_json) as DrillRun;
+      if (snapshot.id !== row.id) throw new TypeError("Snapshot id does not match row id");
+      const active = snapshot.nodes.find((node) => node.id === snapshot.activeCursor.nodeId);
+      if (active === undefined) throw new TypeError("Snapshot active cursor has no node");
       update.run(
-        JSON.stringify(summaryFields(run, run.packId, row.updated_at)),
+        JSON.stringify({
+          title: snapshot.packId ?? snapshot.id,
+          packId: snapshot.packId,
+          updatedAt: row.updated_at,
+          objectiveState: active.objectiveState,
+          branchCount: snapshot.branches.length,
+        }),
         row.id,
       );
     }
@@ -1004,5 +1029,24 @@ export class SQLiteRunStorage implements RunStorage {
          VALUES (?, ?, ?, ?)`,
       )
       .run(LEGACY_ID, LEGACY_ID, LEGACY_HASH, at);
+  }
+
+  #quarantineLegacyRuns(): void {
+    this.#database.exec("ALTER TABLE drill_runs ADD COLUMN schema_version TEXT");
+    const rows = this.#database.prepare("SELECT id, snapshot_json FROM drill_runs").all() as readonly Record<string, unknown>[];
+    const update = this.#database.prepare("UPDATE drill_runs SET schema_version = ? WHERE id = ?");
+    for (const row of rows) {
+      if (typeof row.id !== "string" || typeof row.snapshot_json !== "string") {
+        throw new TypeError("Stored run row has an invalid shape");
+      }
+      let version = "unknown";
+      try {
+        const snapshot = JSON.parse(row.snapshot_json) as { schemaVersion?: unknown };
+        if (typeof snapshot.schemaVersion === "string") version = snapshot.schemaVersion;
+      } catch {
+        // Unparseable legacy snapshots remain quarantined instead of blocking startup.
+      }
+      update.run(version, row.id);
+    }
   }
 }

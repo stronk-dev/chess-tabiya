@@ -13,6 +13,7 @@ import {
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createHttpServer, createRestHandler } from "./rest.js";
+import { EvidenceJobQueue } from "./evidence-queue.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 
@@ -114,7 +115,17 @@ async function sample(
 
 describe("server-bound branch-runtime latency", () => {
   const storage = new SQLiteRunStorage();
-  const server = createHttpServer(createRestHandler(new RunService(storage)));
+  const server = createHttpServer(createRestHandler(new RunService(storage, {
+    evidenceQueue: new EvidenceJobQueue({
+      async execute() {
+        return {
+          kind: "eval",
+          source: "engine_validated",
+          values: { centipawns: 0 },
+        };
+      },
+    }),
+  })));
   let baseUrl = "";
 
   beforeAll(async () => {

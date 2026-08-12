@@ -19,6 +19,16 @@ export {
   type RuntimeErrorCode,
 } from "./errors.js";
 export { appendEvents, deriveSegments, eventsSince, projectRun } from "./events.js";
+export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
+export {
+  canonicalRunStart,
+  digestSessionSource,
+  isPackSession,
+  sessionSource,
+  type CreateRunSession,
+  type PackRun,
+  type SessionSource,
+} from "./session.js";
 export { attachEvidence } from "./evidence.js";
 export {
   RULES_EVIDENCE_FACTS,
@@ -75,9 +85,11 @@ export {
   reachCheckpoint,
   rewind,
   rewindToCheckpoint,
+  revealFeedback,
   type AppendOpponentPlyOptions,
   type CommitMoveOptions,
   type CreateRunInput,
+  type LegacyCreateRunInput,
   type ForkOptions,
   type JobObserver,
 } from "./runtime.js";
@@ -100,6 +112,12 @@ export type {
   OpponentSelection,
   OpponentMoveSelectedEvent,
   PolicyConfig,
+  PositionOpponentPolicy,
+  RunFeedbackPolicy,
+  RunOpponentMode,
+  RunOpponentPolicy,
+  RunSessionKind,
+  RunStart,
   SelectionCandidate,
   SelectionEngineIdentity,
   Segment,

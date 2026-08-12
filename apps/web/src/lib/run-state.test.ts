@@ -167,6 +167,14 @@ class FakeApi implements RunApi {
     };
   }
 
+  async reveal(
+    _runId: string,
+    _writerId: string,
+    _at?: string,
+  ): Promise<MutationResult> {
+    throw new Error("not used");
+  }
+
   async applyEvidence(
     _runId: string,
     _resultSeq: number,
@@ -196,7 +204,7 @@ describe("RunStateStore", () => {
   it("projects mutation-returned events and polls revealed pending evidence at 1s", async () => {
     const api = new FakeApi();
     const scheduler = new FakeScheduler();
-    const store = new RunStateStore(api, pack, session(), api.serverRun, scheduler);
+    const store = new RunStateStore(api, session(), api.serverRun, scheduler);
     store.start();
 
     await store.move({ uci: "e2e4" });
@@ -225,7 +233,7 @@ describe("RunStateStore", () => {
     const scheduler = new FakeScheduler();
     const unrevealed = commitMove(api.serverRun, "e2e4", { at });
     api.serverRun = unrevealed.run;
-    const store = new RunStateStore(api, pack, session(), api.serverRun, scheduler);
+    const store = new RunStateStore(api, session(), api.serverRun, scheduler);
     store.start();
 
     expect(store.snapshot.pendingEvidence).toBe(1);
@@ -239,7 +247,7 @@ describe("RunStateStore", () => {
     const rewound = rewind(second.run, api.serverRun.activeCursor.nodeId, at);
     api.serverRun = rewound.run;
     const scheduler = new FakeScheduler();
-    const store = new RunStateStore(api, pack, session(), api.serverRun, scheduler);
+    const store = new RunStateStore(api, session(), api.serverRun, scheduler);
     store.start();
 
     expect(store.snapshot.pendingEvidence).toBe(0);
@@ -249,7 +257,7 @@ describe("RunStateStore", () => {
   it("turns a rejected writer into a 2s event-polling follower", async () => {
     const api = new FakeApi();
     const scheduler = new FakeScheduler();
-    const store = new RunStateStore(api, pack, session(), api.serverRun, scheduler);
+    const store = new RunStateStore(api, session(), api.serverRun, scheduler);
     store.start();
     api.conflict = true;
 
@@ -270,7 +278,7 @@ describe("RunStateStore", () => {
     const committed = commitMove(api.serverRun, "e2e4", { at });
     api.serverRun = committed.run;
 
-    const store = await RunStateStore.resume(api, pack, session());
+    const store = await RunStateStore.resume(api, session());
     expect(api.eventCalls).toEqual([0]);
     expect(store.snapshot.run.activeCursor.nodeId).toBe("run-a:node:1");
   });

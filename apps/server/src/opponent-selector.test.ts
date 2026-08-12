@@ -19,6 +19,7 @@ import {
 } from "./opponent-selector.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
+import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { SQLiteRunStorage } from "./storage.js";
 import {
   DEFAULT_STRONG_ENGINE_PROFILE,
@@ -320,23 +321,31 @@ describe("pure opponent selector", () => {
   });
 
   it("falls back to human_common off-spine", async () => {
+    const warning = vi.spyOn(console, "warn").mockImplementation(() => undefined);
     const client = new FakeEngineClient(() =>
       maiaLines("g8f6", [{ move: "g8f6", mass: 0.5 }]),
     );
-    const selection = await new OpponentSelector(client).select({
-      ...request("theory_strict"),
-      historyUci: ["d2d4"],
-      policy: {
-        mode: "theory_strict",
-        policyConfigDigest: digest,
-        spine: [{ id: "e4", moveUci: "e2e4", children: [] }],
-      },
-    });
+    try {
+      const selection = await new OpponentSelector(client).select({
+        ...request("theory_strict"),
+        historyUci: ["d2d4"],
+        policy: {
+          mode: "theory_strict",
+          policyConfigDigest: digest,
+          spine: [{ id: "e4", moveUci: "e2e4", children: [] }],
+        },
+      });
 
-    expect(selection.moveUci).toBe("g8f6");
-    expect(client.calls[0]?.request.commands).not.toContain(
-      "setoption name MultiPV value 8",
-    );
+      expect(selection.moveUci).toBe("g8f6");
+      expect(client.calls[0]?.request.commands).not.toContain(
+        "setoption name MultiPV value 8",
+      );
+      expect(warning).toHaveBeenCalledWith(
+        expect.stringContaining("DEGRADED_THEORY_SPINE"),
+      );
+    } finally {
+      warning.mockRestore();
+    }
   });
 
   it("caches by policy digest, branch seed, and complete history hash", async () => {
@@ -358,16 +367,19 @@ describe("pure opponent selector", () => {
   });
 });
 
-function createBody(id: string): CreateRunInput {
+function createBody(id: string) {
   return {
     id,
-    packId: "selector-pack",
-    packDigest: digest,
+    session: {
+      kind: "position" as const,
+      start: { fen: INITIAL_FEN, side: "white" as const },
+      feedbackPolicy: "attempt_end" as const,
+      opponentPolicy: { mode: "human_common" as const },
+    },
     policyConfig: {
       seedMode: "fixed",
       locus: { executedAt: "server", engineIds: [], modelIds: [] },
     },
-    startFen: INITIAL_FEN,
     seed: 42,
     createdAt: at,
   };
@@ -406,7 +418,17 @@ describe("selector/writer REST seam", () => {
       maiaLines("e7e5", [{ move: "e7e5", mass: 0.7 }]),
     );
     const handler = createRestHandler(
-      new RunService(storage),
+      new RunService(storage, {
+        evidenceQueue: new EvidenceJobQueue({
+          async execute() {
+            return {
+              kind: "eval",
+              source: "engine_validated",
+              values: { centipawns: 0 },
+            };
+          },
+        } satisfies EvidenceExecutor),
+      }),
       new OpponentSelector(client),
     );
 

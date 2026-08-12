@@ -9,6 +9,12 @@ import {
   exportPackRunPgn,
   exportPgn,
   fork,
+  feedbackDeliveryOpen,
+  feedbackDisclosed,
+  canonicalRunStart,
+  digestSessionSource,
+  isPackSession,
+  revealFeedback,
   isEngineEvidenceRef,
   rewind,
   rewindToCheckpoint,
@@ -35,7 +41,6 @@ import {
 } from "./authored-feedback.js";
 import { ServerError } from "./errors.js";
 import {
-  feedbackIsRevealed,
   publicEvents,
   publicNodes,
 } from "./feedback-policy.js";
@@ -113,12 +118,22 @@ export type RewindTarget =
 
 export interface CreateRunRequest {
   readonly id: string;
-  readonly packId: string;
+  readonly session:
+    | { readonly kind: "pack"; readonly packId: string; readonly packDigest?: string }
+    | {
+        readonly kind: "position";
+        readonly start: { readonly fen: string; readonly side: "white" | "black" };
+        readonly feedbackPolicy: "attempt_end";
+        readonly opponentPolicy: {
+          readonly mode: "human_common" | "strong_engine";
+          readonly targetElo?: number;
+          readonly temperature?: number;
+          readonly topP?: number;
+        };
+      };
   readonly policyConfig: CreateRunInput["policyConfig"];
   readonly seed: number;
   readonly createdAt?: string;
-  readonly packDigest?: string;
-  readonly startFen?: string;
 }
 
 export class RunService {
@@ -145,44 +160,70 @@ export class RunService {
     }
   }
 
-  create(input: CreateRunRequest, leaseInput: LeaseHolder | string): DrillRun {
+  async create(input: CreateRunRequest, leaseInput: LeaseHolder | string): Promise<DrillRun> {
     const lease = this.#lease(leaseInput);
     if (lease.learnerId === "__legacy") this.#principal("legacy-create");
-    const pack = this.#packRegistry?.required(input.packId);
-    if (
-      pack !== undefined &&
-      input.packDigest !== undefined &&
-      input.packDigest !== pack.digest
-    ) {
+    const packRequest = input.session.kind === "pack" ? input.session : undefined;
+    const pack = packRequest !== undefined
+      ? this.#requiredPackRegistry().required(packRequest.packId)
+      : undefined;
+    if (pack !== undefined && packRequest?.packDigest !== undefined && packRequest.packDigest !== pack.digest) {
       throw new ServerError("INVALID_REQUEST", "Client pack digest is stale");
-    }
-    if (
-      pack !== undefined &&
-      input.startFen !== undefined &&
-      input.startFen !== pack.document.start.fen
-    ) {
-      throw new ServerError("INVALID_REQUEST", "Client pack start FEN is stale");
-    }
-    const packDigest = pack?.digest ?? input.packDigest;
-    const startFen = pack?.document.start.fen ?? input.startFen;
-    if (packDigest === undefined || startFen === undefined) {
-      throw new ServerError(
-        "INVALID_REQUEST",
-        "Pack-blind run creation requires packDigest and startFen",
-      );
     }
     let run: DrillRun;
     try {
+      const session = pack === undefined
+        ? {
+            kind: "position" as const,
+            start: canonicalRunStart(input.session.kind === "position" ? input.session.start : (() => { throw new TypeError("Invalid session"); })()),
+            feedbackPolicy: "attempt_end" as const,
+            opponentPolicy: input.session.kind === "position" ? input.session.opponentPolicy : (() => { throw new TypeError("Invalid session"); })(),
+          }
+        : (() => {
+            const side = pack.document.start.side;
+            if (side !== "white" && side !== "black") {
+              throw new ServerError("INVALID_REQUEST", `Pack ${pack.document.id} does not declare start.side`);
+            }
+            const authored = pack.document.opponentPolicy as Record<string, unknown>;
+            const mode = authored.mode;
+            if (mode !== "human_common" && mode !== "strong_engine" && mode !== "theory_strict") {
+              throw new ServerError("INVALID_REQUEST", `Pack ${pack.document.id} has an unsupported opponent mode`);
+            }
+            const opponentPolicy: import("@chess-tabiya/runtime").RunOpponentPolicy = {
+              mode,
+              ...(typeof authored.targetElo === "number" ? { targetElo: authored.targetElo } : {}),
+              ...(typeof authored.temperature === "number" ? { temperature: authored.temperature } : {}),
+              ...(typeof authored.topP === "number" ? { topP: authored.topP } : {}),
+            };
+            if (opponentPolicy.targetElo !== undefined && !Number.isSafeInteger(opponentPolicy.targetElo)) {
+              throw new ServerError("INVALID_REQUEST", `Pack ${pack.document.id} has invalid opponentPolicy.targetElo`);
+            }
+            if ((opponentPolicy.temperature ?? 0) < 0) {
+              throw new ServerError("INVALID_REQUEST", `Pack ${pack.document.id} has invalid opponentPolicy.temperature`);
+            }
+            if ((opponentPolicy.topP ?? 0) < 0 || (opponentPolicy.topP ?? 0) > 1) {
+              throw new ServerError("INVALID_REQUEST", `Pack ${pack.document.id} has invalid opponentPolicy.topP`);
+            }
+            return {
+              kind: "pack" as const,
+              packId: pack.document.id,
+              packDigest: pack.digest,
+              start: canonicalRunStart({ fen: pack.document.start.fen, side }),
+              feedbackPolicy: pack.feedbackPolicy,
+              opponentPolicy,
+            };
+          })();
+      const sessionDigest = await digestSessionSource(session);
       run = createRun({
         id: input.id,
-        packId: input.packId,
-        packDigest,
+        session,
+        sessionDigest,
         policyConfig: input.policyConfig,
-        startFen,
         seed: input.seed,
         ...(input.createdAt === undefined ? {} : { createdAt: input.createdAt }),
       });
     } catch (error) {
+      if (error instanceof ServerError) throw error;
       throw new ServerError("INVALID_REQUEST", "Run definition is invalid", {
         cause: error,
       });
@@ -191,7 +232,7 @@ export class RunService {
     this.#storage.create(
       run,
       lease,
-      typeof title === "string" ? title : input.packId,
+      typeof title === "string" ? title : "Position session",
     );
     return run;
   }
@@ -209,14 +250,14 @@ export class RunService {
     const options = typeof principalOrWriter === "string" ? uciOrOptions as CommitMoveOptions : maybeOptions;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     const pack = this.#registeredPack(stored.run);
-    if (pack !== undefined) this.#requiredEvidenceQueue();
+    this.#requiredEvidenceQueue();
     const committed = commitMove(stored.run, uci, options);
     const result =
       pack === undefined
         ? committed
         : orchestratePackMove(pack.document, stored.run, committed);
     this.#storage.save(result.run, lease);
-    if (pack !== undefined) this.#enqueueMoveEvidence(result.run);
+    this.#enqueueMoveEvidence(result.run);
     return result;
   }
 
@@ -233,14 +274,14 @@ export class RunService {
     const options = typeof principalOrWriter === "string" ? selectionOrOptions as AppendOpponentPlyOptions : maybeOptions;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     const pack = this.#registeredPack(stored.run);
-    if (pack !== undefined) this.#requiredEvidenceQueue();
+    this.#requiredEvidenceQueue();
     const committed = appendOpponentPly(stored.run, selection, options);
     const result =
       pack === undefined
         ? committed
         : orchestratePackMove(pack.document, stored.run, committed);
     this.#storage.save(result.run, lease);
-    if (pack !== undefined) this.#enqueueMoveEvidence(result.run);
+    this.#enqueueMoveEvidence(result.run);
     return result;
   }
 
@@ -290,7 +331,6 @@ export class RunService {
     const principal = principalInput ?? this.#principal("legacy-reader");
     const { stored, role } = requireRead(this.#storage, runId, principal);
     const run = stored.run;
-    const pack = this.#registeredPack(run);
     const holder = this.#storage.learnerById(stored.activeWriterLearnerId);
     if (holder === undefined) {
       throw new ServerError("STORAGE_FAILURE", "Run lease holder is missing");
@@ -306,7 +346,7 @@ export class RunService {
           stored.activeWriterLearnerId === principal.learnerId,
         leaseHeldBy: Object.freeze({ learnerId: holder.id, handle: holder.handle }),
       }),
-      nodes: publicNodes(pack, run),
+      nodes: publicNodes(run),
       branches: run.branches,
       activeCursor: run.activeCursor,
     });
@@ -327,8 +367,7 @@ export class RunService {
     const branchBId = typeof principalOrA === "string" ? branchAOrB : maybeB!;
     const run = requireRead(this.#storage, runId, principal).stored.run;
     const comparison = compare(run, branchAId, branchBId);
-    const pack = this.#registeredPack(run);
-    return pack !== undefined && !feedbackIsRevealed(pack, run)
+    return !feedbackDisclosed(run)
       ? comparisonWithoutEngineFeedback(comparison)
       : comparison;
   }
@@ -337,7 +376,7 @@ export class RunService {
     const principal = typeof principalOrSeq === "object" ? principalOrSeq : this.#principal("legacy-reader");
     const sinceSeq = typeof principalOrSeq === "number" ? principalOrSeq : maybeSeq;
     const run = requireRead(this.#storage, runId, principal).stored.run;
-    return publicEvents(this.#registeredPack(run), run, sinceSeq);
+    return publicEvents(run, sinceSeq);
   }
 
   packs(): readonly PackSummary[] {
@@ -378,16 +417,18 @@ export class RunService {
       kind: input.kind,
       ...(input.depth === undefined ? {} : { depth: input.depth }),
       ...(input.movetime === undefined ? {} : { movetime: input.movetime }),
-      objectiveRequest: Object.freeze({
-        runId: run.id,
-        packId: run.packId,
-        packDigest: run.packDigest,
-        nodeId: node.id,
-        fen: node.fen,
-        objectiveState: node.objectiveState,
-        evidenceRefs: node.evidenceRefs,
-        policyConfig: run.policyConfig,
-      }),
+      ...(isPackSession(run) ? {
+        objectiveRequest: Object.freeze({
+          runId: run.id,
+          packId: run.packId,
+          packDigest: run.packDigest,
+          nodeId: node.id,
+          fen: node.fen,
+          objectiveState: node.objectiveState,
+          evidenceRefs: node.evidenceRefs,
+          policyConfig: run.policyConfig,
+        }),
+      } : {}),
     });
   }
 
@@ -395,8 +436,7 @@ export class RunService {
     const principal = typeof principalOrSeq === "object" ? principalOrSeq : this.#principal("legacy-reader");
     const sinceSeq = typeof principalOrSeq === "number" ? principalOrSeq : maybeSeq;
     const run = requireRead(this.#storage, runId, principal).stored.run;
-    const pack = this.#registeredPack(run);
-    if (pack !== undefined && !feedbackIsRevealed(pack, run)) {
+    if (!feedbackDeliveryOpen(run)) {
       return Object.freeze({ results: Object.freeze([]), nextSeq: sinceSeq });
     }
     return this.#requiredEvidenceQueue().page(runId, sinceSeq);
@@ -406,6 +446,9 @@ export class RunService {
     const principal = principalInput ?? this.#principal("legacy-reader");
     const run = requireRead(this.#storage, runId, principal).stored.run;
     const pack = this.#registeredPack(run);
+    if (run.sessionKind === "position") {
+      return Object.freeze({ items: Object.freeze([]), hasWithheldAuthoredContent: false });
+    }
     if (pack === undefined) {
       throw new ServerError(
         "PACK_NOT_FOUND",
@@ -427,11 +470,10 @@ export class RunService {
     const resultSeq = typeof principalOrWriter === "string" ? writerOrSeq as number : seqOrAt as number;
     const at = typeof principalOrWriter === "string" ? (seqOrAt as string | undefined) ?? new Date().toISOString() : maybeAt;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
-    const pack = this.#registeredPack(stored.run);
-    if (pack !== undefined && !feedbackIsRevealed(pack, stored.run)) {
+    if (!feedbackDeliveryOpen(stored.run)) {
       throw new ServerError(
         "FEEDBACK_WITHHELD",
-        "Evidence is withheld by the pack feedback policy",
+        "Evidence is withheld by the run feedback policy",
       );
     }
     const queue = this.#requiredEvidenceQueue();
@@ -477,9 +519,32 @@ export class RunService {
     const branchIds = Array.isArray(principalOrBranches) ? principalOrBranches : maybeBranches;
     const run = requireRead(this.#storage, runId, principal).stored.run;
     const pack = this.#registeredPack(run);
-    return pack === undefined
+    return pack === undefined || !isPackSession(run)
       ? exportPgn(run, branchIds)
       : exportPackRunPgn(pack.document, run, branchIds);
+  }
+
+  reveal(runId: string, writerId: string, at?: string): MutationResult;
+  reveal(runId: string, principal: Principal, writerId: string, at?: string): MutationResult;
+  reveal(
+    runId: string,
+    principalOrWriter: Principal | string,
+    writerOrAt?: string,
+    maybeAt?: string,
+  ): MutationResult {
+    const principal = this.#principal(principalOrWriter);
+    const writerId = typeof principalOrWriter === "string" ? principalOrWriter : writerOrAt!;
+    const at = typeof principalOrWriter === "string" ? writerOrAt : maybeAt;
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    if (stored.run.feedbackPolicy !== "attempt_end") {
+      throw new ServerError(
+        "INVALID_REQUEST",
+        `Run ${runId} reveals feedback by its ${stored.run.feedbackPolicy} policy`,
+      );
+    }
+    const result = revealFeedback(stored.run, at);
+    if (result.emitted.length > 0) this.#storage.save(result.run, lease);
+    return result;
   }
 
   #required(runId: string): StoredRun {
@@ -554,6 +619,7 @@ export class RunService {
   }
 
   #registeredPack(run: DrillRun): PackRecord | undefined {
+    if (!isPackSession(run)) return undefined;
     const pack = this.#packRegistry?.get(run.packId);
     return pack?.digest === run.packDigest ? pack : undefined;
   }
@@ -567,16 +633,18 @@ export class RunService {
       fen: node.fen,
       kind: "eval",
       movetime: this.#evidenceMovetimeMs,
-      objectiveRequest: Object.freeze({
-        runId: run.id,
-        packId: run.packId,
-        packDigest: run.packDigest,
-        nodeId: node.id,
-        fen: node.fen,
-        objectiveState: node.objectiveState,
-        evidenceRefs: node.evidenceRefs,
-        policyConfig: run.policyConfig,
-      }),
+      ...(isPackSession(run) ? {
+        objectiveRequest: Object.freeze({
+          runId: run.id,
+          packId: run.packId,
+          packDigest: run.packDigest,
+          nodeId: node.id,
+          fen: node.fen,
+          objectiveState: node.objectiveState,
+          evidenceRefs: node.evidenceRefs,
+          policyConfig: run.policyConfig,
+        }),
+      } : {}),
     });
   }
 

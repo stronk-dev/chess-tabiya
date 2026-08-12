@@ -1,5 +1,5 @@
-import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
+  feedbackDeliveryOpen,
   projectRun,
   type DrillRun,
   type DrillRunEvent,
@@ -72,20 +72,6 @@ function pendingEvidence(events: readonly DrillRunEvent[]): number {
   return pendingNodeIds.size;
 }
 
-function feedbackRevealed(
-  pack: DrillPackDefinition,
-  events: readonly DrillRunEvent[],
-): boolean {
-  const policy = pack.feedbackPolicy;
-  if (policy === "delayed_checkpoint") {
-    return events.some((event) => event.type === "checkpoint.reached");
-  }
-  if (policy === "segment_end") {
-    return events.some((event) => event.type === "segment.completed");
-  }
-  return false;
-}
-
 function appendProjected(
   current: DrillRun,
   appended: readonly DrillRunEvent[],
@@ -102,7 +88,6 @@ function appendProjected(
 
 export class RunStateStore {
   readonly #api: RunApi;
-  readonly #pack: DrillPackDefinition;
   readonly #session: WriterSession;
   readonly #scheduler: PollScheduler;
   readonly #subscribers = new Set<Subscriber>();
@@ -115,7 +100,6 @@ export class RunStateStore {
 
   constructor(
     api: RunApi,
-    pack: DrillPackDefinition,
     session: WriterSession,
     initialRun: DrillRun,
     scheduler: PollScheduler = browserScheduler,
@@ -124,7 +108,6 @@ export class RunStateStore {
       throw new TypeError("Writer session and run id do not match");
     }
     this.#api = api;
-    this.#pack = pack;
     this.#session = session;
     this.#scheduler = scheduler;
     const run = projectRun(initialRun.events);
@@ -138,7 +121,6 @@ export class RunStateStore {
 
   static async resume(
     api: RunApi,
-    pack: DrillPackDefinition,
     session: WriterSession,
     scheduler: PollScheduler = browserScheduler,
   ): Promise<RunStateStore> {
@@ -148,7 +130,6 @@ export class RunStateStore {
     }
     return new RunStateStore(
       api,
-      pack,
       session,
       projectRun(page.events),
       scheduler,
@@ -226,7 +207,7 @@ export class RunStateStore {
     if (
       this.#snapshot.access !== "writer" ||
       this.#snapshot.pendingEvidence === 0 ||
-      !feedbackRevealed(this.#pack, this.#snapshot.run.events)
+      !feedbackDeliveryOpen(this.#snapshot.run)
     ) {
       this.#syncPolling();
       return;
@@ -309,7 +290,7 @@ export class RunStateStore {
     this.#clearFollowerPoll();
     const shouldPollEvidence =
       this.#snapshot.pendingEvidence > 0 &&
-      feedbackRevealed(this.#pack, this.#snapshot.run.events);
+      feedbackDeliveryOpen(this.#snapshot.run);
     if (shouldPollEvidence && this.#evidencePoll === undefined) {
       this.#evidencePoll = this.#scheduler.setInterval(
         () => this.pollEvidence(),

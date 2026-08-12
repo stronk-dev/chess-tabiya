@@ -33,6 +33,26 @@ export interface PolicyConfig {
   readonly locus: ExecutionLocus;
 }
 
+export type RunSessionKind = "pack" | "position";
+export type RunFeedbackPolicy = "delayed_checkpoint" | "segment_end" | "attempt_end";
+export type RunOpponentMode = "human_common" | "strong_engine" | "theory_strict";
+
+export interface RunStart {
+  readonly fen: string;
+  readonly side: "white" | "black";
+}
+
+export interface RunOpponentPolicy {
+  readonly mode: RunOpponentMode;
+  readonly targetElo?: number;
+  readonly temperature?: number;
+  readonly topP?: number;
+}
+
+export interface PositionOpponentPolicy extends RunOpponentPolicy {
+  readonly mode: "human_common" | "strong_engine";
+}
+
 export interface SelectionCandidate {
   readonly moveUci: string;
   readonly mass?: number;
@@ -95,13 +115,22 @@ export type RunStartedEvent = Event<
   "run.started",
   {
     readonly id: string;
-    readonly packId: string;
-    readonly packDigest: string;
+    readonly sessionKind: RunSessionKind;
+    readonly packId: string | null;
+    readonly packDigest: string | null;
+    readonly sessionDigest: string;
+    readonly start: RunStart;
+    readonly feedbackPolicy: RunFeedbackPolicy;
+    readonly opponentPolicy: RunOpponentPolicy;
     readonly policyConfig: PolicyConfig;
     readonly rootNode: Node;
     readonly branch: Branch;
     readonly activeCursor: Cursor;
   }
+>;
+export type FeedbackRevealedEvent = Event<
+  "feedback.revealed",
+  { readonly nodeId: string }
 >;
 export type MoveCommittedEvent = Event<"move.committed", { readonly node: Node }>;
 export type OpponentMoveSelectedEvent = Event<
@@ -174,7 +203,8 @@ export type DrillRunEvent =
   | SegmentCompletedEvent
   | FeedbackGeneratedEvent
   | OutcomeReachedEvent
-  | TransferScheduledEvent;
+  | TransferScheduledEvent
+  | FeedbackRevealedEvent;
 
 export type EventDraft = DrillRunEvent extends infer TEvent
   ? TEvent extends DrillRunEvent
@@ -185,8 +215,13 @@ export type EventDraft = DrillRunEvent extends infer TEvent
 export interface DrillRun {
   readonly schemaVersion: DrillRunSchemaVersion;
   readonly id: string;
-  readonly packId: string;
-  readonly packDigest: string;
+  readonly sessionKind: RunSessionKind;
+  readonly packId: string | null;
+  readonly packDigest: string | null;
+  readonly sessionDigest: string;
+  readonly start: RunStart;
+  readonly feedbackPolicy: RunFeedbackPolicy;
+  readonly opponentPolicy: RunOpponentPolicy;
   readonly policyConfig: PolicyConfig;
   readonly nodes: readonly Node[];
   readonly branches: readonly Branch[];

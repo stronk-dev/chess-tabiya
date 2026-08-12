@@ -24,10 +24,22 @@ import type {
   OpponentSelection,
   PolicyConfig,
 } from "./types.js";
+import type { CreateRunSession } from "./session.js";
+import { canonicalRunStart } from "./session.js";
 
 const TERMINAL_OBJECTIVE_STATES = new Set(["failed", "achieved", "transitioned"]);
 
 export interface CreateRunInput {
+  readonly id: string;
+  readonly session: CreateRunSession;
+  readonly sessionDigest: string;
+  readonly policyConfig: PolicyConfig;
+  readonly seed: number;
+  readonly createdAt?: string;
+}
+
+/** @deprecated Compatibility shape for pre-v0.5 callers; new code supplies session. */
+export interface LegacyCreateRunInput {
   readonly id: string;
   readonly packId: string;
   readonly packDigest: string;
@@ -127,9 +139,33 @@ function cursorHasChildren(run: DrillRun): boolean {
   return run.nodes.some((node) => node.parentId === run.activeCursor.nodeId);
 }
 
-export function createRun(input: CreateRunInput): DrillRun {
+export function createRun(inputValue: CreateRunInput | LegacyCreateRunInput): DrillRun {
+  const input: CreateRunInput = "session" in inputValue
+    ? inputValue
+    : {
+        id: inputValue.id,
+        session: {
+          kind: "pack",
+          packId: inputValue.packId,
+          packDigest: inputValue.packDigest,
+          start: canonicalRunStart({ fen: inputValue.startFen, side: "white" }),
+          feedbackPolicy: "delayed_checkpoint",
+          opponentPolicy: { mode: "human_common" },
+        },
+        sessionDigest: inputValue.packDigest,
+        policyConfig: inputValue.policyConfig,
+        seed: inputValue.seed,
+        ...(inputValue.createdAt === undefined ? {} : { createdAt: inputValue.createdAt }),
+      };
   const at = timestamp(input.createdAt);
-  const position = positionFromFen(input.startFen);
+  if (!/^sha256:[0-9a-f]{64}$/.test(input.sessionDigest)) {
+    throw new TypeError("Session digest must be an RFC-8785 SHA-256 digest");
+  }
+  const start = canonicalRunStart(input.session.start);
+  if (start.fen !== input.session.start.fen) {
+    throw new TypeError("Run start FEN must be canonical");
+  }
+  const position = positionFromFen(start.fen);
   const fen = canonicalFen(position);
   const branchId = `${input.id}:branch:0`;
   const rootNode: Node = {
@@ -160,8 +196,13 @@ export function createRun(input: CreateRunInput): DrillRun {
     at,
     data: {
       id: input.id,
-      packId: input.packId,
-      packDigest: input.packDigest,
+      sessionKind: input.session.kind,
+      packId: input.session.kind === "pack" ? input.session.packId : null,
+      packDigest: input.session.kind === "pack" ? input.session.packDigest : null,
+      sessionDigest: input.sessionDigest,
+      start,
+      feedbackPolicy: input.session.feedbackPolicy,
+      opponentPolicy: input.session.opponentPolicy,
       policyConfig: input.policyConfig,
       rootNode,
       branch,
@@ -173,8 +214,13 @@ export function createRun(input: CreateRunInput): DrillRun {
     {
       schemaVersion: DRILL_RUN_SCHEMA_VERSION,
       id: input.id,
-      packId: input.packId,
-      packDigest: input.packDigest,
+      sessionKind: input.session.kind,
+      packId: input.session.kind === "pack" ? input.session.packId : null,
+      packDigest: input.session.kind === "pack" ? input.session.packDigest : null,
+      sessionDigest: input.sessionDigest,
+      start,
+      feedbackPolicy: input.session.feedbackPolicy,
+      opponentPolicy: input.session.opponentPolicy,
       policyConfig: input.policyConfig,
       nodes: [rootNode],
       branches: [branch],
@@ -183,6 +229,27 @@ export function createRun(input: CreateRunInput): DrillRun {
     },
     [{ type: startEvent.type, at: startEvent.at, data: startEvent.data }],
   );
+}
+
+export function revealFeedback(run: DrillRun, at?: string): MutationResult {
+  if (run.feedbackPolicy !== "attempt_end") {
+    throw new TypeError(`Run ${run.id} reveals feedback by its ${run.feedbackPolicy} policy`);
+  }
+  const alreadyOpen = (() => {
+    let open = false;
+    for (const event of run.events) {
+      if (event.type === "feedback.revealed") open = true;
+      else if (event.type === "move.committed") open = false;
+    }
+    return open;
+  })();
+  if (alreadyOpen) return Object.freeze({ run, emitted: Object.freeze([]) });
+  const next = appendEvents(run, [{
+    type: "feedback.revealed",
+    at: timestamp(at),
+    data: { nodeId: run.activeCursor.nodeId },
+  }]);
+  return Object.freeze({ run: next, emitted: emittedSince(run, next) });
 }
 
 export function commitMove(

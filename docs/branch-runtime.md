@@ -6,7 +6,7 @@ node, choose another move, and compare the consequences without destroying the
 first line.
 
 The transport-independent implementation is `packages/runtime`. The Node binding
-is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.4,
+is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.5,
 and `packages/schema` owns the schema version constant. Browser and server code
 import the same TypeScript runtime; there is no second implementation of chess
 semantics.
@@ -44,8 +44,18 @@ metadata over a path, not a copied game. The initial branch is `main`. With
 `seedMode: per_branch`, each new branch derives a distinct seed; `fixed` and
 `per_run` reuse the primary seed.
 
-The run also records `packId`, `packDigest`, and `policyConfig`. Policy config
-identifies whether execution happened in the browser or server and records every
+Every run owns its session identity: `sessionKind`, nullable
+`packId`/`packDigest`, an RFC-8785 SHA-256 `sessionDigest`, canonical `start`,
+`feedbackPolicy`, `opponentPolicy`, and `policyConfig`. A pack digest identifies
+the exact registered pack. A position digest covers its canonical FEN, learner
+side, attempt-end feedback policy, and opponent policy; seed and execution locus
+deliberately do not alter session identity. Position runs cannot request
+`theory_strict`, because they have no authored spine.
+
+The nullable pack fields are an all-or-nothing pair. Projection also enforces
+that position sessions use `attempt_end`, pack sessions do not, `start.fen`
+equals the root node's FEN, and the session digest has the canonical SHA-256
+shape. Policy config identifies whether execution happened in the browser or server and records every
 engine/model id and version. Determinism claims apply only within the same recorded
 execution locus.
 
@@ -120,7 +130,7 @@ The supported event vocabulary is:
 `run.started`, `move.committed`, `opponent.move_selected`,
 `checkpoint.reached`, `objective.state_changed`, `evidence.attached`,
 `branch.forked`, `run.rewound`, `segment.completed`, `feedback.generated`, `outcome.reached`, and
-`transfer.scheduled`.
+`transfer.scheduled`, and `feedback.revealed`.
 
 `evidence.attached` is the v0.3 worker amendment. It identifies a node, one or
 more evidence references, and a typed payload whose kind is `eval`, `wdl`, or
@@ -137,6 +147,13 @@ by `opponent.move_selected` immediately followed by its matching opponent
 `move.committed`. The selection is authoritative. Replay rejects a missing,
 non-adjacent, or disagreeing pair and never calls an engine/model policy. This makes
 old runs reproducible even when an opponent implementation changes.
+
+The v0.5 session amendment adds `feedback.revealed`. It is valid only for a
+position run using `attempt_end`. The event is a durable disclosure record, but
+its delivery window is narrower: reveal opens staged-evidence delivery and the
+next `move.committed` closes it. Historical evidence stays disclosed while new
+analysis cannot silently become live assistance. Repeating reveal while open is
+idempotent.
 
 ## Compare and PGN export
 
@@ -172,7 +189,7 @@ it does not reimplement their semantics.
 
 | HTTP route | Writer required | Result |
 |---|---|---|
-| `POST /runs` | `x-writer-id` establishes the lease | `{run}` |
+| `POST /runs` | authenticated host + `x-writer-id` establishes the lease | `{run}` |
 | `POST /select-move` | no; pure selection only | `{moveUci, candidates?, engine}` |
 | `POST /runs/:id/moves` | yes | `{run, emitted}` |
 | `POST /runs/:id/rewind` | yes | `{run, emitted}` |
@@ -180,6 +197,14 @@ it does not reimplement their semantics.
 | `GET /runs/:id/graph` | no | `{graph: {id, nodes, branches, activeCursor}}` |
 | `POST /runs/:id/compare` | no | `{comparison}` |
 | `GET /runs/:id/events?sinceSeq=N` | no | `{events, nextSeq}` |
+| `POST /runs/:id/reveal` | yes | `{run, emitted}` |
+
+Run creation uses a closed `session` union. Pack requests supply `kind: pack`,
+`packId`, and an optional digest staleness check; the server derives start,
+feedback, opponent policy, and stored digest from the registry. Position
+requests supply `kind: position`, start, `attempt_end`, and a selectable
+human/strong opponent policy. Unknown create-body fields are rejected with
+their JSON pointer.
 
 Rewind bodies contain exactly one of `nodeId` or `checkpointId`. User/system move
 bodies contain `uci` and may contain `actor`, `at`, and `clockState`; opponent
@@ -219,6 +244,14 @@ SQLite stores one canonical JSON snapshot and active-writer id per run in a
 `STRICT` table. File-backed databases enable WAL and use a five-second busy
 timeout. Supplying no filename creates an in-memory database, so a durable server
 composition must pass a file path.
+
+Migration 3 adds a stored run-schema version. Pre-v0.5 rows cannot be upgraded
+honestly because their events do not contain learner side or feedback/opponent
+policy, so they remain on disk but are quarantined from reads and listings.
+Migration 1 reads legacy snapshot structure directly instead of replaying it
+through the current runtime: migrations must not depend on the projection whose
+job is to reject obsolete shapes. Run summaries record session kind, nullable
+pack id, and session digest.
 
 The adapter memoizes immutable run projections in-process. A warm read returns
 that projection. A cold read parses the stored snapshot, rebuilds it from the

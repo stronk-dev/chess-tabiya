@@ -52,7 +52,9 @@ const packSummary: PackSummary = {
 const runSummary: RunSummary = {
   id: run.id,
   title: pack.title as string,
+  sessionKind: "pack",
   packId: pack.id,
+  sessionDigest: digest,
   updatedAt: "2026-08-11T21:00:00.000Z",
   objectiveState: "active",
   branchCount: 1,
@@ -63,7 +65,7 @@ const runSummary: RunSummary = {
 const capabilities: Capabilities = {
   engines: [],
   policyModes: ["human_common"],
-  runSchemaVersion: "0.4",
+  runSchemaVersion: "0.5",
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
   },
