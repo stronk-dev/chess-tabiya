@@ -70,7 +70,7 @@ follower poll at `run-state.ts:296-307` is a working spectator client today.
    cannot be *assigned to people* — there are no people in the model.
 4. **It is not an authorization mechanism, and today it authorizes nothing.**
    The active writer id is published verbatim to every unauthenticated reader:
-   `service.ts:254` on `GET /runs/:id/graph` and `storage.ts:20` on every
+   `service.ts:258` on `GET /runs/:id/graph` and `storage.ts:20` on every
    `GET /runs` summary (`rest.ts:402-405`). The check is string equality with a
    request header (`errors.ts:37-44`) and there is no other check. Any spectator
    who can read the run list can copy the lease into `x-writer-id` and hold full
@@ -137,7 +137,7 @@ Session { id, runId, createdAt,
 it does not replace the lease, it gates access to it. This keeps
 `assertActiveWriter` (`errors.ts:37-44`) unchanged and makes the lease a
 concurrency guard behind an authorization edge, which is what it already is
-minus the edge. It also removes lease point 4 above: `service.ts:254` and
+minus the edge. It also removes lease point 4 above: `service.ts:258` and
 `storage.ts:20` must stop emitting `activeWriterId` to non-host capabilities.
 
 **C2 — The event stream a spectator consumes (pinnable now; explicitly *not* a
@@ -206,7 +206,7 @@ Ordered. Each slice states its minimal real proof and its acceptance scenario.
 
 | # | Slice | Minimal real proof | Acceptance scenario | Depends on |
 |---|---|---|---|---|
-| **L0** | **Capability edge + session record** — C1 and C3's session log; read routes accept a capability token; `activeWriterId` stops leaking to non-hosts (`service.ts:254`, `storage.ts:20`) | A run is unreachable without a capability; a spectator token cannot mutate even when it replays a captured `x-writer-id` | Host opens a run, mints a spectator link, second browser follows and is refused on every mutation attempt including a forged header | none |
+| **L0** | **Capability edge + session record** — C1 and C3's session log; read routes accept a capability token; `activeWriterId` stops leaking to non-hosts (`service.ts:258`, `storage.ts:20`) | A run is unreachable without a capability; a spectator token cannot mutate even when it replays a captured `x-writer-id` | Host opens a run, mints a spectator link, second browser follows and is refused on every mutation attempt including a forged header | none |
 | **L1** | **Share/spectate primitive** — spectator route + projection reusing the follower loop (`run-state.ts:296-307`) and `projectRun` | Second browser sees moves within one poll interval and sees no evidence the player cannot | Host plays three plies and forks; spectator's board, timeline, and branch rail track it; `/evidence` stays empty for both before checkpoint | L0 |
 | **L2** | **Overlay projection** — C4 chrome-free render mode under a spectator capability | Overlay URL renders board + objective + branch list with no navigation and no evidence beyond the spectator scope | Overlay loaded in a 1920×1080 window shows the live position and updates on host moves | L1 |
 | **L3** | **Position Arena two-leg external handoff** — invitation payload, `externalChallengeUrl` slot, **PGN import**, both legs imported as two root-forked branches of one match run (C5) | A returned PGN becomes real branch nodes and the two legs compare through the shipped `/compare` | Host creates a match from a pack root, sends the invitation, both legs return PGNs, the swapped-colour leg compares against the first at the shared root fork | L0; PGN import; C5's provider adapter |
@@ -318,7 +318,7 @@ consequence and should be honoured rather than quietly relaxed.
 resolving to a read-only projection of one run. It must not be
 `/play/run/:runId` with a flag: that route's controller claims or observes a
 lease (`session-controller.ts:179-183`) and its graph read exposes
-`activeWriterId` (`service.ts:254`).
+`activeWriterId` (`service.ts:258`).
 
 **P-C3 — Responsive region contract (pinnable now).** The named regions already
 exist as components — board/objective (`DrillScreen.svelte`), timeline
@@ -425,7 +425,7 @@ self-hosted / free / original-prose+CC0-data"). A streamer's chat, an academy's
 participants, and an Arena opponent are all people on other machines reaching one
 instance. Self-hosted admits that, but the shipped server has no authentication
 or identity and publishes every run's write credential to every reader
-(`service.ts:254`, `storage.ts:20`, `errors.ts:37-44`) — and ADR-0004's revisit
+(`service.ts:258`, `storage.ts:20`, `errors.ts:37-44`) — and ADR-0004's revisit
 trigger is literally *"multi-user/SaaS posture chosen in Q2"*. **The fork:**
 (a) *trusted-network self-hosted only* (a coach's club instance, a streamer's own
 box), where L0 is a capability edge and not an account system; or (b) *public

@@ -7,6 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
+| `content-sourcing-pipelines.md` | draft | program item #6 (B6) | not started |
 
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in

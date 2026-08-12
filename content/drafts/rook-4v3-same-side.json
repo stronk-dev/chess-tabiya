@@ -419,7 +419,7 @@
       },
       "moveUci": "d4e4",
       "class": "tactical_error",
-      "note": "The pawn was hanging one move ago; f3 was played precisely because it was. Taking a pawn that was free in the previous position is the most common blunder there is in a drill with a rewind button."
+      "note": "The pawn was hanging one move ago; f3 was played precisely because it was. The capture even comes with check, and the check is answered by the pawn taking your rook. Playing the move the previous position deserved is the most common blunder there is in a drill with a rewind button."
     },
     {
       "at": {

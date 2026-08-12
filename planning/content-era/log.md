@@ -411,3 +411,125 @@ consequences for future authors:
 The two `concept_violation` judgments. Both assert that a legal, non-losing
 move is a conceptual error, which is the strongest thing this file says and the
 least supported. They are listed first among the graduation blockers.
+
+## 2026-08-12 — pack C (rook-4v3-same-side-hold), session 1 (claude)
+
+agent-research 25 · agent-encoding 30 · agent-engine-validation 0 · owner-review 0 · agent-revision 5 · tooling-friction 5
+notes: Third pack, first endgame pack, first `mode: "outcome"` pack, first pack
+with **no citable source of any kind**. `make pack-check` was green on the first
+run — no schema errors, no lint warnings — which is the first time that has
+happened and is the clearest signal yet that the validator's marginal value is
+falling as the author learns the format. Tooling friction stayed at 5 minutes and
+was entirely one thing: chessops is not resolvable from a scratch `.mjs` outside
+the workspace, so the deviation-legality check had to be bundled with esbuild
+from inside `apps/server` to run at all. Pack B's ask stands and grows: the
+scratch chess-verification script is now a per-pack ritual.
+
+Where the 25 research minutes went: about 8 on docs and 17 on the chess, and
+**the single most valuable minute killed the first start position.** The obvious
+schematic (White Kg1/Ra1 + e4/f2/g2/h2, Black Kg8/Rd8 + f7/g7/h7) makes the
+pack's own second plan class lose on the spot: 1.Kf1 Rd2 2.Ra8+ Rd8 3.Rxd8#,
+because Black has no luft and the rook leaving d8 is mate in two. The active-rook
+scheme would have been a strawman and the drill would have taught a lie. Moving
+the h-pawn to h6 fixes it and, better, turns the accident into the pack's actual
+teaching point: the back-rank check is the *price* of the active rook, not a
+refutation of it. Recorded because it generalises — see contract-gap 2.
+
+### What endgame authoring demanded that opening/middlegame authoring did not
+
+1. **There is no citation floor.** Pack A could cite lichess-org/chess-openings
+   (CC0) for names and move order; Pack B could name the Carlsbad. R+4P vs R+3P
+   at ten pieces has **no tablebase** (Syzygy stops at seven), no engine pass was
+   run, and no game or book was consulted. So the `provenance` block is doing
+   more work than the content: five of its six source lines are statements of
+   what is *not* known. This is the first pack where the honest provenance is
+   longer than the honest evidence, and that is the correct shape, not a defect.
+2. **The start position is constructed, not derived — and construction is
+   unverified in a way derivation is not.** Packs A and B derive their start FEN
+   by replaying a legal SAN move list, so the position is reachable and sane by
+   construction. An endgame root is placed by hand, and a hand-placed position can
+   contain an accident that no move list would ever produce (the mate above).
+   Nothing in the format or in `pack-check` catches this: the FEN is legal, the
+   spine is legal, and the pack is a lie. **Ask: a position-sanity pass for
+   constructed roots — at minimum "is either side mated/losing material inside 2
+   plies from the root", which is cheap and would have caught this exactly.**
+3. **`objective.type` stops being framing and becomes a truth claim.** In Pack A,
+   `preserve_plan_window` was decorative. Here the choice between `win` and `hold`
+   *is* an assertion about the position: this material is drawn with correct play,
+   so a `convert`/`win` framing would have encoded a falsehood in a required
+   enum field. Chose `hold` for that reason and said so. First place the objective
+   vocabulary carries chess truth — and the runtime still evaluates none of it.
+4. **The Outcome Drill's grading contract is unsayable.** `design/01` says outcome
+   drills grade on **result preservation, not exact moves**. `mode: "outcome"` is
+   accepted by the schema and means nothing to any consumer, and there is no field
+   anywhere that says "grade the WDL, not the move". I ended up asserting it in a
+   `feedbackClaim` (`result-not-moves`) — i.e. telling the *learner* the grading
+   contract in prose because I cannot tell the *runtime*. That is the same failure
+   shape as Pack A's floating claims, one level worse.
+5. **The spine is the wrong shape for endgame technique.** Opening and middlegame
+   content really is a tree of concrete moves. Endgame content is *schemes*:
+   "rook on the second, king to e6, decline every rook trade, invite every pawn
+   trade" is a set of target configurations reachable by many move orders. I had
+   to encode four schemes as three concrete lines, which over-specifies badly —
+   a defender who reaches the same configuration by a different route is off-spine
+   and looks wrong. **Ask: `planClass` needs an optional target configuration
+   (the `fenPredicate` vocabulary already exists and would nearly do it), and
+   plan-class attainment should be gradeable against that, not against a line.**
+   `planClass` currently has `id`, `label`, `description` and nothing else.
+6. **`evidenceTypes` cannot express "established theory, uncited".** The enum
+   offers `tablebase_exact`, `engine_validated`, `corpus_observed`,
+   `author_principle`, `hypothesis`. The pack's load-bearing claim — this material
+   is a theoretical draw — is none of those: it is textbook consensus that the
+   author cannot cite and no tool here can check. I encoded it as
+   `author_principle` + `hypothesis`, which is **a lie by rounding**: it is not
+   the author's principle and it is not a hypothesis. **Ask: an evidence value for
+   uncited established theory, and/or a per-claim `groundTruthAvailable: false`
+   so a pack can say "no exact answer exists at this material count" in a field
+   rather than in prose.** Law 8 makes this the highest-value gap in the pack.
+7. **Endgame errors are drifts, not moves.** `deviations` anchor one UCI move at
+   one node. The characteristic way this ending is lost is a rook going passive
+   over three or four moves, or a king that never leaves the back rank — neither
+   of which is any single illegal-or-inferior move. "You have not moved your king
+   in four moves and White's has crossed the fifth rank" is unsayable. This is the
+   withdrawn RFC's luxury/tempo accounting again, wearing endgame clothes: Pack A
+   needed it for a race, Pack C needs it for slow drift, so the requirement is now
+   attested from two independent directions.
+8. **The opponent-policy gap is a contract gap, not a config gap.** Chose
+   `human_common` at 1900 deliberately: the entire subject of the pack is the gap
+   between theoretical draw and practical loss, so an opponent that *plays the
+   standard winning attempts and occasionally misses one* is not a compromise
+   here — it is the teaching instrument. `strong_engine` would replace practical
+   resistance with a proof exercise, and the schema's `perfect_tablebase` is
+   physically unavailable at ten pieces regardless of server support. But note
+   what that means: `design/01`'s Outcome Drill contract says "vs exact/human
+   resistance", and the **exact half is not merely unimplemented, it is
+   unimplementable for every endgame family above seven pieces**. The contract
+   should say so.
+9. **First non-`atSpineNode` trigger in a draft.** `still-holding` uses a
+   `materialBalance` trigger and is the pack's only executable success condition
+   (`reach_checkpoint`, the one condition kind the server supports). Whether the
+   runtime actually evaluates `materialBalance` was not verified — it is in the
+   frozen trigger vocabulary and `pack-check` accepts it, which by now is known
+   to prove nothing. Listed as a graduation blocker.
+
+### Least-confident claims in the file (for the reviewer's attention)
+
+- That the position is a theoretical draw at all. Stated as classical consensus,
+  labelled ungrounded, and the whole pack's framing rests on it.
+- The `w-ra8`/`w-ra7` line, which asserts that 1...Rd2 concedes a pawn move to
+  the back-rank check. It is verified legal and it drives the entire
+  king-first-versus-activity comparison; nothing has verified that it is *good*.
+- That the pawn ending after a rook trade is harder to hold than the rook ending.
+  Deliberately worded as a practical judgment ("a defence you can learn once
+  versus a race you must calculate exactly") because it cannot honestly be stated
+  as an evaluation — no tablebase, no engine pass.
+
+### Verification actually performed
+
+`make pack-check` green (schema + chessops spine-legality lint, first run). All
+12 deviations independently checked legal from the position after their anchor
+node with chessops, and all 12 confirmed to be *Black* moves — the lint does not
+check deviations at all, which is worth knowing: an author can ship a deviation
+that is illegal, or that belongs to the wrong side, and the validator is silent.
+**Ask: extend the lint to deviations; it already has the position.** No engine
+has seen any position in this pack.
