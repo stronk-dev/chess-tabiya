@@ -140,13 +140,17 @@ Three consequences, all forced by shipped code:
    checked at `apps/server/src/service.ts:135-140`.
 
 Therefore: **`evidence.json` is a sidecar, keyed to the pack by digest, never merged, never
-served.** Exactly two things a pipeline learns go into the pack document:
+served.** Exactly *one* thing a pipeline learns goes into the pack document:
 
 - `provenance.sources[]` — licence and attribution strings (`nonEmptyString[]`,
   `schemas/drill_pack.schema.json:465-468`). These *should* reach the browser: an
-  attribution obligation that the user never sees is not discharged.
-- Nothing else. No new keys, in any object, by any pipeline. The pack an emitter writes is
-  byte-for-byte a pack a human could have typed.
+  attribution obligation the user never sees is not discharged.
+
+**No emitter writes any key the schema does not already name**, in any object, even where
+`additionalProperties: true` would permit it. The pack an emitter writes is byte-for-byte a
+pack a human could have typed. (`graduationBlockers` is the one apparent exception and is
+not one: emitters copy the key an author already uses at
+`content/drafts/anti-caro-advance.json:273`, with the same meaning.)
 
 #### 1.2 `sources.json` — the fetch manifest
 
@@ -161,7 +165,7 @@ served.** Exactly two things a pipeline learns go into the pack document:
       "sha256": "…",                       // of the exact bytes used
       "bytes": 123456,
       "licence": {
-        "spdx": "CC0-1.0",                 // or "unlicensed-data" for Syzygy output; see §3.3
+        "spdx": "CC0-1.0",                 // closed set; see §1.2 table
         "attributionRequired": false,
         "shareAlike": false,
         "noticeText": null                 // string, required when attributionRequired is true
@@ -184,8 +188,8 @@ one fails with `SOURCE_DENIED` naming the dossier line.
 | `spdx` | Obligation | Encoding, exactly |
 |---|---|---|
 | `CC0-1.0` | none | one `provenance.sources[]` entry: `` `<what was taken>: <sourceId> (<url>) — CC0-1.0, no attribution required` `` |
-| `CC-BY-SA-4.0` | attribution **and** share-alike on derivatives | `noticeText` is mandatory in the manifest and is copied verbatim into `provenance.sources[]`; **and** the emitter refuses to write the candidate unless the pack carries a whole-pack licence declaration (`provenance.contentLicence: "CC-BY-SA-4.0"`, legal under `provenance`'s open object). Per `theory-sourcing.md` §3 there is no per-paragraph posture |
-| `unlicensed-data` | none, and the *reason* must be stated | the entry carries the copyright-free rationale verbatim (§3.3) |
+| `CC-BY-SA-4.0` | attribution **and** share-alike on derivatives | **refused today** (§6.4): no emitter accepts this SPDX until the owner rules on the whole-pack posture, because per `theory-sourcing.md` §3 there is no per-paragraph posture and provenance tracking will not survive the edits. When the ruling lands, the encoding is `noticeText` mandatory in the manifest and copied verbatim into `provenance.sources[]`, plus a whole-pack declaration — which is the one place this RFC's no-new-keys rule would need amending |
+| `unlicensed-data` | none, and the *reason* must be stated | the entry carries the copyright-free rationale verbatim (Syzygy §3.3; explorer aggregates §4) |
 
 #### 1.3 `evidence.json` — the grounding ledger
 
@@ -651,9 +655,9 @@ B6 row):
    evidence.json, sources.json}`. `make pack-check FILE=content/candidates/<id>/pack.json`
    passes. `make sourcing-check DIR=content/candidates/<id>` passes. The pack is **not** in
    `content/packs/`, `reviewStatus` is `draft`, `reviewers` is `[]`, and starting the server
-   in production mode does not list it (`GET /packs` unchanged). It is a candidate for the
-   Carlsbad pack `design/04` §8 names in batch 1 — chosen so the gate proof is also useful
-   content.
+   in production mode does not list it (`GET /packs` unchanged). The line is chosen so the
+   gate proof is also useful content: QGD Exchange is the opening `design/04` §3 names as
+   feeding the Carlsbad structure, which is `design/04` §8's batch-1 middlegame pack.
 
 **Licence and attribution assertion, one per source** — four tests, each naming its dossier
 line:
@@ -664,8 +668,10 @@ line:
    statement, the original `PuzzleId` verbatim (case preserved), and the `GameUrl`.
 4. `syzygy` → `spdx: "unlicensed-data"` with the Feist/Football-Dataco rationale text
    present in the manifest and in `provenance.sources[]`.
-5. `lichess-explorer` → recorded as facts/CC0 with the one-request-at-a-time etiquette note;
-   and a test asserting **no** explorer value appears anywhere in `pack.json`.
+5. `lichess-explorer` → `spdx: "unlicensed-data"`, rationale "aggregate statistics are facts;
+   the underlying Lichess game data is CC0" (`theory-sourcing.md` §2, §6), plus the
+   one-request-at-a-time etiquette note; and a test asserting **no** explorer value appears
+   anywhere in `pack.json`.
 6. **Deny list:** a fetch against a `theweekinchess.com` or `pgnmentor.com` URL, and one
    against `sourceId: "ecochessopeningcodes"`, each fail with `SOURCE_DENIED` quoting
    `design/research/theory-sourcing.md` §Do not use.

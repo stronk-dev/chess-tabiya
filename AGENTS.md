@@ -94,6 +94,10 @@ From `archive/brief-v2/CHANGE_FROM_V1.md` and `00_CORRECTED_VERDICT.md`:
   billions of games are not a prerequisite ("compute is not the limiting factor" —
   neither is data).
 - **LLM-generated strategic lessons** as content.
+- **A tactics puzzle trainer or lesson content** (`design/00-thesis.md` §§70,
+  93-94 — added here 2026-08-12 after an agent correctly found the prohibition
+  was cited to this file but lived only in the thesis). The CC0 puzzle corpus is
+  usable, but re-cut as *play-the-consequence*, never as find-the-tactic.
 - **Weakened Stockfish as the default opponent** (samples weaker engine moves; does not
   model human choice).
 - **"An engine review screen with a rewind button"** — the failure shape the whole
