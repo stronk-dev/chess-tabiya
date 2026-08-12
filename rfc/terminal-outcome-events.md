@@ -1,6 +1,6 @@
 # RFC: Terminal outcome events (D11)
 
-- **Status:** draft (revision 2 — revision 1 was rejected on six blockers)
+- **Status:** draft (revision 3 — revisions 1 and 2 were each rejected on six blockers)
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` §Outcome types; `design/03-product-breadth.md` gate B2
@@ -112,12 +112,38 @@ wrong.** `schemas/drill_run.schema.json:549` types `outcome` as `$ref: #/$defs/i
 — an open id, not an enum. Closing it bumps the run schema to **v0.6** with
 `schemaVersion` and `$id` updated accordingly.
 
-**Migration is provably a no-op, which is why this is safe.** `outcome.reached`
+**Revision 2's "provably a no-op" claim was wrong twice over.** Both corrections
+matter more than the enum itself.
+
+*First, a version bump hides every existing run.* `SQLiteRunStorage` reads and
+lists only rows whose `schema_version` equals the current runtime version
+(`apps/server/src/storage.ts:377`), so bumping to v0.6 without a migration makes
+every v0.5 run vanish from history and resume. This RFC therefore claims
+**migration 4** (`STORAGE_VERSION` 3→4, registered in `rfc/README.md`), which
+upgrades eligible snapshots and the indexed column.
+
+*Second, "no stored run contains one" is unprovable, and the event is no longer
+harmless.* `appendEvents` is public API (`packages/runtime/src/index.ts:21`) and
+projection currently accepts `outcome.reached` as an **unchecked no-op**
+(`packages/runtime/src/events.ts:160-164`). That was safe while the event did
+nothing. This RFC makes it **open a disclosure barrier** — so an unvalidated
+event becomes a way to unlock withheld evidence, a regression this RFC would
+have introduced rather than a pre-existing one.
+
+**Replay must therefore validate `outcome.reached`**, rejecting an event whose
+`nodeId` is unknown or whose position is not terminal, whose `outcome` does not
+match the result derived from that position and the learner's colour, that
+duplicates an existing event for the same node, or that is not adjacent to its
+node's `move.committed`. Migration 4 **quarantines** v0.5 rows containing the
+formerly-open event rather than trusting them: they predate any producer, so any
+instance is by definition not runtime-generated.
+
+**What remains genuinely no-op:** `outcome.reached`
 has never had a producer (`grep -rn "outcome.reached" packages apps` returns the
-type declaration, the projection case, and nothing else), so **no stored run
-anywhere contains one**. Tightening the enum cannot invalidate persisted data.
-State this in the migration note rather than leaving a reader to wonder, and add
-a test asserting a v0.5 run replays unchanged under v0.6.
+type declaration, the projection case, and nothing else), so no *runtime-authored*
+run contains one and the enum tightening invalidates no legitimate data. That is
+the narrow, defensible version of the claim — it is about provenance, not about
+what a file can contain.
 
 ### 3. Make it a reveal event
 
@@ -145,9 +171,16 @@ delivery, and `feedbackDeliveryOpen` (`packages/runtime/src/feedback.ts:14-22`)
 governs staged evidence and its application under `attempt_end`, re-closing on
 the next `move.committed`. Revision 1 updated only `feedbackDisclosed`, which
 would have left an `attempt_end` run able to *see* that feedback exists while
-staged evidence stayed unappliable. `outcome.reached` opens the delivery window
-too — and since no move can follow a terminal node, it stays open, which is the
-correct end state rather than a special case.
+staged evidence stayed unappliable. `outcome.reached` opens the delivery window too.
+
+**But "stays open" was wrong, and it contradicted this RFC's own criterion 3.**
+A terminal node accepts no further move, yet the run is not frozen: rewinding and
+playing on is exactly what criterion 3 exercises. The invariant for `attempt_end`
+is therefore three-part — **`outcome.reached` opens the window; a rewind leaves
+it open; the first subsequent `move.committed` closes it.** That preserves F2's
+anti-live-evaluation rule, which is the whole reason the window re-closes at all:
+without the third clause, terminating once would turn the rest of every branch
+into auto-applied live evaluation.
 
 ### 4. Authored feedback follows
 
@@ -172,7 +205,23 @@ that mirrors it. The checkpoint sheet already selects on `eventSeq`, which is
 present in both variants, so selection logic is unaffected; only the narrowing
 changes.
 
-**The client must also refresh on it.** `#refreshAuthoredFeedback` fires only
+**Three client paths change, not one.**
+
+*Opponent selection must stop.* After `move()`, the controller calls
+`#playOpponentIfNeeded()` unless a checkpoint fired
+(`apps/web/src/lib/session-controller.ts:241`), and that method tests terminal
+*objective* state rather than chess termination
+(`session-controller.ts:355`) — so after the learner delivers mate, the turn
+belongs to the mated side and the client proceeds to `/select-move` for a
+position with no legal moves. `outcome.reached` must short-circuit this before
+selection.
+
+*Read-only followers must refresh too.* Followers receive new events by polling
+(`apps/web/src/lib/run-state.ts:197`), but the session subscription only patches
+`runState` (`session-controller.ts:436`). Widening the *writer* mutation path
+covers nothing for a spectator, who would watch a run end and see no reveal.
+
+*And the writer path itself:* `#refreshAuthoredFeedback` fires only
 behind `#captureCheckpoint(result.emitted)`
 (`apps/web/src/lib/session-controller.ts:395`), so terminal disclosure would
 exist at the endpoint and never reach the screen. The refresh trigger widens to
@@ -182,9 +231,22 @@ into play. This is the same rule §1 of the explanation-surface RFC already
 applies — the terminal node is simply another reveal point on the actual path
 taken.
 
+**This requires widening the deliverability filter, which revision 2 asserted
+without checking.** `projectAuthoredFeedback` computes `reachableSpineIds` from
+checkpoint nodes and their ancestors and excludes every other source *before*
+reveals are processed (`apps/server/src/authored-feedback.ts:230`). So prose
+after the last checkpoint stays undeliverable no matter what reveal event fires,
+and the "full root-to-terminal path" claim was false as written.
+
+Fix: when a run has an `outcome.reached`, the reachable set is the union of
+`reachableSpineIds` **and the spine nodes on the actual root-to-terminal path**.
+Deliverability stops being a pure function of the pack and becomes a function of
+the pack *and the run* — which is the same shift §1 already made for reveal, now
+applied one layer earlier.
+
 Consequence, intended: authored prose positioned after the last reachable
-checkpoint — which `AUTHORED_PROSE_AFTER_LAST_CHECKPOINT` currently warns about
-as permanently unreachable — becomes reachable on any run that terminates. The
+checkpoint — which `AUTHORED_PROSE_AFTER_LAST_CHECKPOINT` warns about as
+permanently unreachable — becomes reachable on runs that terminate past it. The
 lint stays, because it is still true for runs that do not end.
 
 ### 5. Stored runs
@@ -236,8 +298,28 @@ as *objective* framings; this RFC deliberately does not touch objective grading
     unrepresentable in the type and rejected by the v0.6 schema.
 12. **Schema v0.6 migration is a no-op:** a stored v0.5 run replays unchanged,
     asserted directly, since no stored run can contain an `outcome.reached`.
-13. `ENGINES_REQUIRED=1 make verify` green; `make test-browser` green.
-14. `docs/branch-runtime.md` documents terminal outcome emission and the refusal
+13. **Migration 4 preserves history:** v0.5 runs remain readable and listed after
+    the bump, asserted against a stored fixture — the failure revision 2 would
+    have shipped.
+14. **Forged events are rejected:** an `outcome.reached` appended via the public
+    `appendEvents` with an unknown node, a non-terminal node, a mismatched
+    result, a duplicate for one node, or wrong adjacency is refused by replay.
+    Each case tested, because this event now unlocks withheld evidence.
+15. **Quarantine:** a v0.5 row containing `outcome.reached` is quarantined by
+    migration 4 rather than upgraded.
+16. **No selection after termination:** a learner-delivered mate does not issue
+    `/select-move`. Asserted at the controller, since the server would be asked
+    for a move in a position with none.
+17. **Followers see it:** a read-only follower polling a run that terminates
+    receives and displays the reveal. Separate test from the writer path.
+18. **Post-checkpoint prose is delivered:** a fixture with authored prose
+    strictly after its final checkpoint, played to termination past that prose,
+    delivers it — the deliverability widening, tested directly.
+19. **`attempt_end` window discipline:** outcome opens the window; a rewind
+    leaves it open; the first subsequent `move.committed` closes it. All three
+    asserted in one test, referencing F2's anti-live-evaluation rule.
+20. `ENGINES_REQUIRED=1 make verify` green; `make test-browser` green.
+21. `docs/branch-runtime.md` documents terminal outcome emission and the refusal
     of terminal roots; `docs/explanation-grounds.md` adds `outcome.reached` to
     the reveal events and the discriminated attribution shape.
 
@@ -248,6 +330,17 @@ None.
 ## Changelog
 
 - 2026-08-12: created, to close D11 and unblock B6b/B6d.
+- 2026-08-12: revision 3 after review — six further blockers, all mine again.
+  The v0.6 bump hides every v0.5 run because storage reads only rows at the
+  current version, so this RFC now claims migration 4; "no stored run contains
+  one" was unprovable and, worse, this RFC turns an unchecked no-op event into
+  one that opens a disclosure barrier, so replay must validate it and migration 4
+  quarantines pre-existing instances; a learner-delivered mate still issued
+  `/select-move`; read-only followers never refresh authored feedback; the
+  deliverability filter excludes post-checkpoint prose before reveals are
+  processed, so the root-to-terminal claim needed the filter widened; and
+  "the window stays open" contradicted this RFC's own rewind criterion, so the
+  `attempt_end` invariant is now three-part.
 - 2026-08-12: revision 2 after review — six blockers, all mine. `RevealAttribution`
   could not represent an outcome reveal and is now discriminated; the client
   refreshed authored feedback only behind a checkpoint capture, so terminal

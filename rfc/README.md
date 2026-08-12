@@ -56,6 +56,7 @@ writing it into a draft.
 | 1 | 0→1 | shipped | implemented; **body** rewritten by `pack-optional-runs.md` §8 to stop replaying through `projectRun` (no version change, no new number) |
 | 2 | 1→2 | `learner-identity-and-authorization.md` | implementing |
 | 3 | 2→3 | `pack-optional-runs.md` | implementing; migration 2 landed first |
+| 4 | 3→4 | `terminal-outcome-events.md` | draft — run schema v0.6; upgrades eligible v0.5 snapshots and the indexed column, quarantines rows carrying a pre-producer `outcome.reached` |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
