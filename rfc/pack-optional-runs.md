@@ -1,6 +1,6 @@
 # RFC: Pack-optional run identity and the run-level withholding barrier
 
-- **Status:** accepted
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/03-product-breadth.md` §The foundation edge (F2), §Play (Just Play, From position), gate B2; ADR-0006 (`archive/brief-v2/adrs/ADR-0006-delayed-middlegame-feedback.md`)
@@ -1175,6 +1175,7 @@ None.
 ## Changelog
 
 - 2026-08-12: created.
+- 2026-08-12: implementation started after F3 landed and passed its acceptance suite.
 - 2026-08-12: revised after adversarial review; four blockers closed and three
   boundary conditions found while closing them.
   - **`theory_strict` no longer degrades silently.** Invariant I6 (§1) forbids it
