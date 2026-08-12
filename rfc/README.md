@@ -7,8 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-
-No active product RFCs.
+| `line-drill-theory-grading.md` | draft | `archive/drill-pack-format.md`, `archive/outcome-drill-grading.md`, `archive/authored-explanation-surface.md`, `archive/drill-client.md` | program item #4, gate B2 (Line Drill). Pack schema 0.3 → 0.4; **no migration** |
 
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
 `content-sourcing-pipelines.md` draft and recommended a four-way split; the draft

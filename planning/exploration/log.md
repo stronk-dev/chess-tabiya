@@ -1157,3 +1157,39 @@ Open is D4 through D10 inclusive —
 The arithmetic slipped because the D12 family (D12a/D12b/D12c) are three
 defects sharing one number, so counting rows and counting numbers give different
 answers. Worth noting for whoever writes the next tally: count the rows.
+
+## 2026-08-12 (claude) — Line Drill drafted; my review found one blocker and one owner ruling
+
+Draft at `rfc/line-drill-theory-grading.md`. The membership discipline holds:
+three verdicts (`on_line` / `classified_deviation` / `unknown`), severity taken
+only from the author's `offObjective` flag and never from ranking the class, and
+a new `follow_theory` objective type that structurally **cannot** acquire
+`objective.grading` — which is where "membership is not WDL" ends up living in
+the schema rather than in prose.
+
+**Blocker I am raising: D15.** The draft states the `theory_strict` request and
+the recorded engine as two facts, correctly. But reviewing it I checked the
+fallback path and found it emits only a `console.warn` — no event, no run field,
+no response, no screen. So in the one mode whose entire subject is theory, the
+opponent can stop playing theory mid-drill and nothing the learner or the run
+can see records it. It matches the existing `DEGRADED_POLICY_MASS` pattern,
+which is why nobody caught it; consistency with an invisible signal is not a
+defence for a mode built on that signal.
+
+**Owner ruling needed, not an RFC inference: what does `authoredBoundary` mean?**
+The draft found the field is used two different ways and ruled for the *frontier*
+reading on the evidence. The evidence is real — under the membership reading the
+served example is incoherent, since `najdorf-be3` would sit outside the boundary
+while its own descendant `najdorf-b5` sits inside. But the count cuts the other
+way: the example lists 2 nodes, and all three authored drafts list every node
+(10, 15, 23). So frontier makes three of four packs mis-authored; membership
+makes one of four wrong and keeps a paradox. That is a genuine fork about
+authoring intent, and an RFC should not settle it by majority of four data
+points.
+
+**Two errors in my own brief, both caught by the draft.** I said Pack A has ten
+deviations across five classes — it has five across three (`mode: "plan"`); ten
+belongs to Carlsbad. And I said the `theory_strict` fallback was "now audible
+for pack runs", which is what F2 specified and not what shipped. The second
+error is the one that mattered, because it would have let the RFC assume a
+signal that does not exist — and instead it produced D15.
