@@ -285,4 +285,35 @@ describe("authored feedback projection", () => {
       storage.close();
     }
   });
+
+  // RFC acceptance criterion 8. The sort was implemented correctly but nothing
+  // pinned it, so a refactor could silently reorder the response. Asserted as
+  // the invariant rather than a fixed list so it survives pack edits.
+  it("orders items by reveal sequence, then kind, then id", async () => {
+    const pack = await registered(packA);
+    let run = play(newRun(pack, "ordering"), ["c8f5", "g1f3", "e7e6", "f1e2"]);
+    run = reachCheckpoint(run, "plan-commitment", at).run;
+    run = play(run, ["c6c5"]);
+    run = reachCheckpoint(run, "break-arrived", at).run;
+
+    const kindOrder = { annotation: 0, deviation: 1, plan_class: 2 } as const;
+    const { items } = projectAuthoredFeedback(pack, run);
+
+    // Non-vacuous: both reveal events and all three kinds must be present.
+    expect(new Set(items.map((item) => item.revealedBy.eventSeq)).size).toBe(2);
+    expect(new Set(items.map((item) => item.kind))).toEqual(
+      new Set(["annotation", "deviation", "plan_class"]),
+    );
+
+    for (const [index, item] of items.entries()) {
+      if (index === 0) continue;
+      const previous = items[index - 1]!;
+      const ordered =
+        previous.revealedBy.eventSeq < item.revealedBy.eventSeq ||
+        (previous.revealedBy.eventSeq === item.revealedBy.eventSeq &&
+          (kindOrder[previous.kind] < kindOrder[item.kind] ||
+            (previous.kind === item.kind && previous.id.localeCompare(item.id) < 0)));
+      expect(ordered, `${previous.id} must precede ${item.id}`).toBe(true);
+    }
+  });
 });

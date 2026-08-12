@@ -74,3 +74,28 @@ Append-only.
 - No claim trigger, feedback packet, LLM, corpus/Syzygy, FEN-deviation matcher,
   live deviation classifier, D2 barrier change, or authored schema field was
   added.
+
+## 2026-08-12 (claude) — review of the implementation; one acceptance gap closed
+
+Independently verified rather than accepted on report: `ENGINES_REQUIRED=1 make
+verify` green (36 files, 179 tests at the time of review), svelte-check 0
+errors/0 warnings, scaffold and packaging OK.
+
+Checked the implementation against the acceptance criteria one by one. Test
+names in `authored-feedback.test.ts` map onto them directly, including the two
+that killed earlier revisions — sibling non-leakage and occurrence attribution —
+and the flag test asserts the case that mattered (Pack A's undelivered claims
+must not pin `hasWithheldAuthoredContent` true). The sort at
+`authored-feedback.ts:303-308` matches §4 exactly: `eventSeq`, then kind, then
+id.
+
+**One gap: criterion 8 requires deterministic ordering to be *asserted*, and
+nothing asserted it.** The ordering was implemented correctly, so this was not a
+bug — but an unpinned invariant is one refactor away from becoming one, and the
+whole point of the criterion is that response order is part of the contract.
+Added `orders items by reveal sequence, then kind, then id`, written as the
+invariant rather than a fixed list so it survives pack edits, with non-vacuity
+assertions (two distinct reveal events, all three kinds present) so it cannot
+pass trivially. 180 tests green.
+
+Nothing else outstanding. The RFC's completion protocol can proceed.
