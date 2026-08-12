@@ -7,6 +7,8 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
+| `learner-identity-and-authorization.md` | implementing | foundation F3 | `planning/learner-identity-and-authorization/` |
+| `pack-optional-runs.md` | accepted | foundation F2; depends on F3 | not started |
 | `content-sourcing-foundation.md` | draft | program item #6 (B6a) | not started |
 | `content-sourcing-syzygy.md` | draft | program item #6 (B6b) | not started |
 | `content-sourcing-explorer.md` | draft | program item #6 (B6c) | not started |
@@ -51,8 +53,8 @@ writing it into a draft.
 | Migration | `STORAGE_VERSION` | Owner RFC | Status |
 |---|---|---|---|
 | 1 | 0→1 | shipped | implemented; **body** rewritten by `pack-optional-runs.md` §8 to stop replaying through `projectRun` (no version change, no new number) |
-| 2 | 1→2 | `learner-identity-and-authorization.md` | draft |
-| 3 | 2→3 | `pack-optional-runs.md` | draft |
+| 2 | 1→2 | `learner-identity-and-authorization.md` | implementing |
+| 3 | 2→3 | `pack-optional-runs.md` | accepted; waits for migration 2 |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a

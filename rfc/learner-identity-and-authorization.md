@@ -1,6 +1,6 @@
 # RFC: Learner identity and the authorization boundary
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/02-product-shape.md:50-63` (deployment axis, settled 2026-08-12); `design/03-product-breadth.md:185-188` (F3), gate rows B5/B7/B8 (`design/03-product-breadth.md:165,167,168`)
