@@ -43,6 +43,12 @@ const pack = JSON.parse(
     "utf8",
   ),
 ) as DrillPackDefinition;
+const blackToMovePack = JSON.parse(
+  readFileSync(
+    new URL("../../../../content/drafts/anti-caro-advance.json", import.meta.url),
+    "utf8",
+  ),
+) as DrillPackDefinition;
 const digest = `sha256:${"a".repeat(64)}`;
 const at = "2026-08-11T20:00:00.000Z";
 const capabilities: Capabilities = {
@@ -97,6 +103,12 @@ class FakeApi implements DrillClientApi {
   writerIds: string[] = [];
   activeWriterId = "writer-a";
 
+  constructor(
+    readonly document: DrillPackDefinition = pack,
+    readonly opponentMove = "e7e6",
+    readonly checkpointOpponentPly = true,
+  ) {}
+
   async capabilities(): Promise<Capabilities> {
     return capabilities;
   }
@@ -104,19 +116,19 @@ class FakeApi implements DrillClientApi {
   async packs(): Promise<readonly PackSummary[]> {
     return [
       {
-        id: pack.id,
-        version: pack.version,
+        id: this.document.id,
+        version: this.document.version,
         digest,
-        title: pack.title as string,
-        mode: pack.mode as string,
-        difficulty: pack.difficulty,
+        title: this.document.title as string,
+        mode: this.document.mode as string,
+        difficulty: this.document.difficulty,
         reviewStatus: "schema_example",
       },
     ];
   }
 
   async pack(): Promise<{ readonly document: DrillPackDefinition; readonly digest: string }> {
-    return { document: pack, digest };
+    return { document: this.document, digest };
   }
 
   async runs(): Promise<readonly RunSummary[]> {
@@ -130,7 +142,7 @@ class FakeApi implements DrillClientApi {
     this.run = createRun({
       ...input,
       packDigest: digest,
-      startFen: pack.start.fen,
+      startFen: this.document.start.fen,
       createdAt: at,
     });
     return this.run;
@@ -139,7 +151,7 @@ class FakeApi implements DrillClientApi {
   async selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
     this.selected = input;
     return {
-      moveUci: "e7e6",
+      moveUci: this.opponentMove,
       engine: {
         id: "maia",
         name: "Maia",
@@ -174,7 +186,9 @@ class FakeApi implements DrillClientApi {
     this.writerIds.push(writerId);
     const before = this.requiredRun().events.length;
     const moved = appendOpponentPly(this.requiredRun(), selection, { at });
-    this.run = reachCheckpoint(moved.run, "predict-reply", at).run;
+    this.run = this.checkpointOpponentPly
+      ? reachCheckpoint(moved.run, "predict-reply", at).run
+      : moved.run;
     return { run: this.run, emitted: this.run.events.slice(before) };
   }
 
@@ -277,6 +291,19 @@ describe("DrillSessionController", () => {
     expect(environment.started).toEqual([{ runId: "screen-run" }]);
   });
 
+  it("requests and writer-appends an initial opponent ply when the authored side does not move first", async () => {
+    const api = new FakeApi(blackToMovePack, "c8f5", false);
+    const environment = controller(api);
+
+    await environment.controller.startPack(blackToMovePack.id);
+
+    expect(api.selected).toMatchObject({ historyUci: [] });
+    expect(environment.controller.state.runState?.run.nodes.at(-1)).toMatchObject({
+      moveUci: "c8f5",
+      actor: "opponent",
+    });
+  });
+
   it("pauses at checkpoints, then selects and writer-appends the opponent ply", async () => {
     const environment = controller();
     await environment.controller.startPack(pack.id);
@@ -356,6 +383,29 @@ describe("DrillSessionController", () => {
     expect(storage.values.size).toBe(0);
   });
 
+  it("does not request an initial opponent ply for a read-only follower", async () => {
+    const api = new FakeApi(blackToMovePack, "c8f5", false);
+    await api.createRun(
+      {
+        id: "screen-run",
+        packId: blackToMovePack.id,
+        policyConfig: {
+          seedMode: "fixed",
+          locus: { executedAt: "server", engineIds: [], modelIds: [] },
+        },
+        seed: 1,
+      },
+      "writer-a",
+    );
+    const environment = controller(api, new MemoryStorage());
+
+    await environment.controller.resume("screen-run");
+
+    expect(environment.controller.state.runState?.access).toBe("read_only");
+    expect(api.selected).toBeUndefined();
+    expect(api.requiredRun().nodes).toHaveLength(1);
+  });
+
   it("resumes its stored writer claim in writer mode", async () => {
     const api = new FakeApi();
     await api.createRun(
@@ -377,5 +427,56 @@ describe("DrillSessionController", () => {
     await environment.controller.resume("screen-run");
 
     expect(environment.controller.state.runState?.access).toBe("writer");
+  });
+
+  it("requests an initial opponent ply when its writer resumes an unblocked root", async () => {
+    const api = new FakeApi(blackToMovePack, "c8f5", false);
+    await api.createRun(
+      {
+        id: "screen-run",
+        packId: blackToMovePack.id,
+        policyConfig: {
+          seedMode: "fixed",
+          locus: { executedAt: "server", engineIds: [], modelIds: [] },
+        },
+        seed: 1,
+      },
+      "writer-a",
+    );
+    const storage = new MemoryStorage();
+    WriterSession.claimFor("screen-run", storage, () => "writer-a");
+    const environment = controller(api, storage);
+
+    await environment.controller.resume("screen-run");
+
+    expect(api.selected).toMatchObject({ historyUci: [] });
+    expect(api.requiredRun().nodes.at(-1)).toMatchObject({ moveUci: "c8f5" });
+  });
+
+  it("does not play the initial opponent ply through a blocking checkpoint on resume", async () => {
+    const api = new FakeApi(blackToMovePack, "c8f5", false);
+    await api.createRun(
+      {
+        id: "screen-run",
+        packId: blackToMovePack.id,
+        policyConfig: {
+          seedMode: "fixed",
+          locus: { executedAt: "server", engineIds: [], modelIds: [] },
+        },
+        seed: 1,
+      },
+      "writer-a",
+    );
+    api.run = reachCheckpoint(api.requiredRun(), "plan-commitment", at).run;
+    const storage = new MemoryStorage();
+    WriterSession.claimFor("screen-run", storage, () => "writer-a");
+    const environment = controller(api, storage);
+
+    await environment.controller.resume("screen-run");
+
+    expect(environment.controller.state.checkpoint).toMatchObject({
+      id: "plan-commitment",
+    });
+    expect(api.selected).toBeUndefined();
   });
 });

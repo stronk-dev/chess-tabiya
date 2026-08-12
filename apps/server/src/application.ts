@@ -139,10 +139,18 @@ class MockEngineClient implements SelectorEngineClient {
   execute(_engineId: string, request: EngineRequest): Promise<readonly string[]> {
     const { fen, history } = positionCommand(request);
     const legal = legalMoves(fen, history);
-    const preferred = new Map<string, string>([
-      ["c1e3", "e7e6"],
-      ["c1e3 e7e6 f2f3", "b7b5"],
-    ]).get(history.join(" "));
+    const historyKey = history.join(" ");
+    const preferred =
+      fen === "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3"
+        ? new Map<string, string>([
+            ["", "c8f5"],
+            ["c8f5 g1f3", "e7e6"],
+            ["c8f5 g1f3 e7e6 f1e2", "c6c5"],
+          ]).get(historyKey)
+        : new Map<string, string>([
+            ["c1e3", "e7e6"],
+            ["c1e3 e7e6 f2f3", "b7b5"],
+          ]).get(historyKey);
     const move = preferred !== undefined && legal.includes(preferred) ? preferred : legal[0];
     if (move === undefined) throw new TypeError("Mock opponent has no legal move");
     return Promise.resolve(

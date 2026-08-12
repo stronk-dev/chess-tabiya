@@ -18,7 +18,7 @@ export default defineConfig({
   },
   webServer: {
     command:
-      `pnpm build && ENGINE_MODE=mock DATABASE_PATH=:memory: PORT=${port} ` +
+      `pnpm build && NODE_ENV=development ENGINE_MODE=mock DATABASE_PATH=:memory: PORT=${port} ` +
       "node apps/server/dist/main.js",
     url: `http://127.0.0.1:${port}/healthz`,
     reuseExistingServer: !process.env.CI,

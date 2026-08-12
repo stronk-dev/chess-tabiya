@@ -43,9 +43,9 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
     id: string;
     reviewStatus: string;
   }[];
-  expect(served).toHaveLength(1);
-  expect(served[0]).toMatchObject({ reviewStatus: "schema_example" });
-  const detail = await page.request.get(`/packs/${served[0]!.id}`);
+  const schemaExample = served.find((candidate) => candidate.reviewStatus === "schema_example");
+  expect(schemaExample).toBeDefined();
+  const detail = await page.request.get(`/packs/${schemaExample!.id}`);
   expect(detail.ok()).toBe(true);
   const projectedPack = await detail.json();
   expect(projectedPack.opponentPolicy.mode).toBe("human_common");
@@ -55,7 +55,11 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
 
   await expect(page.getByText("schema example")).toBeVisible();
   const boardStart = await page.evaluate(() => performance.now());
-  await page.getByRole("button", { name: /Open position/ }).click();
+  await page
+    .getByRole("article")
+    .filter({ hasText: "schema example" })
+    .getByRole("button", { name: /Open position/ })
+    .click();
   await expect(page.locator("cg-board")).toBeVisible();
   const boardReadyMs =
     (await page.evaluate(() => performance.now())) - boardStart;
@@ -147,15 +151,20 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
 
   const selectorLatency = await page.evaluate(async () => {
     const packResponse = await fetch("/packs");
-    const packs = (await packResponse.json()) as { id: string; digest: string }[];
-    const packDetail = await fetch(`/packs/${packs[0]!.id}`);
+    const packs = (await packResponse.json()) as {
+      id: string;
+      digest: string;
+      reviewStatus: string;
+    }[];
+    const schemaExample = packs.find((candidate) => candidate.reviewStatus === "schema_example")!;
+    const packDetail = await fetch(`/packs/${schemaExample.id}`);
     const pack = await packDetail.json();
     const body = JSON.stringify({
       startFen: pack.start.fen,
       historyUci: ["c1e3"],
       policy: {
         mode: "human_common",
-        policyConfigDigest: packs[0]!.digest,
+        policyConfigDigest: schemaExample.digest,
         targetElo: 1800,
       },
       seed: 901,
@@ -205,7 +214,11 @@ test("every shell route owns the viewport at both desktop projections", async ({
   for (const viewport of projections) {
     await page.setViewportSize(viewport);
     await page.goto("/play");
-    await page.getByRole("button", { name: /Open position/ }).click();
+    await page
+      .getByRole("article")
+      .filter({ hasText: "schema example" })
+      .getByRole("button", { name: /Open position/ })
+      .click();
     await expect(page.locator("cg-board")).toBeVisible();
     const runPath = new URL(page.url()).pathname;
     const routes = [

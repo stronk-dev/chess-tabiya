@@ -184,6 +184,7 @@ export class DrillSessionController {
       const store = this.#newStore(document, session, projectRun(eventPage.events));
       this.#capabilities = capabilities;
       this.#attachStore(store, document, digest);
+      await this.#playOpponentIfNeeded();
     } catch (error) {
       this.#patch({
         busy: false,
@@ -214,6 +215,7 @@ export class DrillSessionController {
       this.#capabilities = capabilities;
       const store = this.#newStore(document, session, run);
       this.#attachStore(store, document, digest);
+      await this.#playOpponentIfNeeded();
       this.#onRunStarted?.({ runId });
     } catch (error) {
       this.#fail(error);
@@ -328,6 +330,9 @@ export class DrillSessionController {
     const capabilities = this.#capabilities;
     if (capabilities === undefined) throw new Error("Capabilities are unavailable");
     const runState = this.#requiredRun();
+    if (runState.access === "read_only" || this.#state.checkpoint !== undefined) {
+      return;
+    }
     const run = runState.run;
     const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
     if (

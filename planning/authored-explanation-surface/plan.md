@@ -13,10 +13,10 @@ acceptance test.
 
 ## 1. Initial-opponent prerequisite
 
-- [ ] Start a writer-owned run with an opponent ply when the FEN turn differs from `start.side`
-- [ ] Do the same on writer resume when no checkpoint blocks; never for followers
-- [ ] Give the mock selector a deterministic Pack A path
-- [ ] Load Pack A in the browser harness without assuming exactly one registered pack
+- [x] Start a writer-owned run with an opponent ply when the FEN turn differs from `start.side`
+- [x] Do the same on writer resume when no checkpoint blocks; never for followers
+- [x] Give the mock selector a deterministic Pack A path
+- [x] Load Pack A in the browser harness without assuming exactly one registered pack
 
 ## 2. Server projection and transport
 
@@ -36,4 +36,3 @@ acceptance test.
 - [ ] Update `docs/explanation-grounds.md`, including the Maia correction
 - [ ] `ENGINES_REQUIRED=1 make verify` and `make test-browser` green
 - [ ] Append final measurements/findings to `log.md`
-
