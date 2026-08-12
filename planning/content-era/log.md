@@ -64,3 +64,39 @@
 - No Pack A cost-clock entry was recorded here. This was tooling work, not an
   agent authoring/research/encoding/revision pass, and Codex authored no chess
   content.
+
+## 2026-08-12 — pack A (anti-caro-advance-c5-race), session 1 (claude)
+
+agent-research 20 · agent-encoding 35 · agent-engine-validation 0 · owner-review 0 · agent-revision 5 · tooling-friction 5
+notes: First real use of codex's `make pack-check`. It worked exactly as
+intended — one schema error class (`annotations` must be an array, not a
+string) reported with precise JSON paths and no stack trace; fixed in one pass,
+second run green. Tooling-friction was 5 minutes and would have been 45+ without
+the validator (hand-diffing a 260-line JSON against a schema). **Recorded
+verdict: the validator paid for itself on its first use.** Engine validation not
+yet run — that needs `pack-preview` + play-through, session 2.
+
+contract-gaps (the second deliverable — what the format could NOT express):
+1. **No claim triggers, exactly as predicted.** Both `feedbackClaims` are
+   floating sentences. "The tempo claim should fire only when the player spent
+   a move on h4 AND ...c5 has landed" is unsayable. This is EC-C1/AC-C1
+   confirmed from the authoring side, with a concrete instance to encode against.
+2. **The timing window has no vocabulary for what I actually wanted to say.**
+   The teaching point is: White's plan-readiness vs Black's break arrival.
+   I needed to declare (a) which move constitutes "ready" (Be3/c3 — a SET of
+   moves, not one), (b) which Black move is "arrival" (...c5), (c) that h4 is
+   the discretionary spend. `planMoves`/`opponentArrival` from the withdrawn
+   RFC were the right shape after all — but they need to accept a move SET and
+   allow the same move to be plan-completion on one branch and irrelevant on
+   another. Neither withdrawn draft handled that.
+3. **`preserve_plan_window` is a declared objective with no runtime meaning.**
+   The registry accepts it; nothing evaluates it. So the pack's stated goal is
+   currently decorative — this is the honest reason B4 matters.
+4. **Deviation notes have nowhere to be shown.** I wrote five `deviations` with
+   real teaching prose; no surface renders them (explanation-grounds ships
+   objective grounds and engine evidence only). Authoring outran rendering.
+5. **Boundary intuition check (the question the plan asked):** I set
+   `spineNodeIds` + `plyHorizon: 14`. Under "plyHorizon caps, does not grant"
+   this reads correctly — off-spine play inside 14 plies is NOT authored. Under
+   the withdrawn union reading it would have wrongly claimed authority over
+   every early deviation. **The corrected combinator matches author intuition.**

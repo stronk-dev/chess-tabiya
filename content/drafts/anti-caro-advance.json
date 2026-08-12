@@ -1,0 +1,278 @@
+{
+  "id": "anti-caro-advance-c5-race",
+  "version": "0.1.0",
+  "title": "Caro-Kann Advance: winning the c5 race",
+  "mode": "plan",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Club improver facing the Caro-Kann"
+  },
+  "start": {
+    "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+    "movesSan": [
+      "e4",
+      "c6",
+      "d4",
+      "d5",
+      "e5"
+    ],
+    "side": "white"
+  },
+  "objective": {
+    "type": "preserve_plan_window",
+    "summary": "You played 3.e5 for space. Meet Black's ...c5 break with your pieces already placed, not with your king still in the centre."
+  },
+  "concepts": [
+    "advance-chain-base",
+    "break-timing",
+    "development-before-space"
+  ],
+  "planClasses": [
+    {
+      "id": "solid-c3",
+      "label": "Support the chain (c3)",
+      "description": "Play c3 and Be2/Be3 so ...c5 never wins the d4 pawn; slower, but the space advantage keeps."
+    },
+    {
+      "id": "flexible-dxc5",
+      "label": "Trade the base (dxc5)",
+      "description": "Meet ...c5 by taking, aiming to hold the extra pawn or return it for development; sharper, punishes slow Black play."
+    },
+    {
+      "id": "kingside-h4",
+      "label": "Harass the bishop (h4-h5)",
+      "description": "Chase the light-squared bishop before finishing development; space and a target, at the cost of tempo and king safety."
+    }
+  ],
+  "spine": [
+    {
+      "id": "bf5-main",
+      "moveUci": "c8f5",
+      "moveSan": "Bf5",
+      "annotations": [
+        "The whole point of the Caro-Kann: the bishop leaves before ...e6 shuts it in. Nothing else Black plays here is as testing."
+      ],
+      "children": [
+        {
+          "id": "nf3",
+          "moveUci": "g1f3",
+          "moveSan": "Nf3",
+          "annotations": [
+            "Develop first. The Short System: modest, sound, and it keeps every plan available."
+          ],
+          "children": [
+            {
+              "id": "e6",
+              "moveUci": "e7e6",
+              "moveSan": "e6",
+              "children": [
+                {
+                  "id": "be2",
+                  "moveUci": "f1e2",
+                  "moveSan": "Be2",
+                  "annotations": [
+                    "Unassuming. The bishop is not worse than on d3, and it clears the way to castle before the break arrives."
+                  ],
+                  "children": [
+                    {
+                      "id": "c5-break",
+                      "moveUci": "c6c5",
+                      "moveSan": "c5",
+                      "annotations": [
+                        "The thematic break. Black hits the base of the chain; every White plan in this pack is an answer to this move."
+                      ],
+                      "children": [
+                        {
+                          "id": "be3-hold",
+                          "moveUci": "c1e3",
+                          "moveSan": "Be3",
+                          "annotations": [
+                            "Hold the centre and finish developing. The pack's model answer: the tension favours the side who is ready for it."
+                          ],
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "h4-tal",
+          "moveUci": "h2h4",
+          "moveSan": "h4",
+          "annotations": [
+            "The Tal move: chase the bishop immediately. Enticing and genuinely dangerous, but it spends the tempo you may need when ...c5 lands."
+          ],
+          "children": [
+            {
+              "id": "h5-reply",
+              "moveUci": "h7h5",
+              "moveSan": "h5",
+              "annotations": [
+                "The critical reply. Now g4 is a real idea and so is a later Nf3-g5; but White has committed a wing pawn before castling."
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c5-immediate",
+      "moveUci": "c6c5",
+      "moveSan": "c5",
+      "annotations": [
+        "Black strikes at once, before developing the bishop. Practically common below 2000 and a different problem: the grab is available."
+      ],
+      "children": [
+        {
+          "id": "dxc5-grab",
+          "moveUci": "d4c5",
+          "moveSan": "dxc5",
+          "annotations": [
+            "Taking is critical. Holding the pawn needs concrete play; giving it back for development is often the mature choice."
+          ],
+          "children": []
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-commitment",
+      "label": "Choose your plan before the break lands",
+      "trigger": {
+        "atSpineNode": "be2"
+      },
+      "actions": [
+        "stop",
+        "compare"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "solid-c3",
+          "flexible-dxc5",
+          "kingside-h4"
+        ]
+      }
+    },
+    {
+      "id": "break-arrived",
+      "label": "...c5 has landed",
+      "trigger": {
+        "atSpineNode": "c5-break"
+      },
+      "actions": [
+        "stop"
+      ]
+    },
+    {
+      "id": "tal-commitment",
+      "label": "The h-pawn is committed",
+      "trigger": {
+        "atSpineNode": "h5-reply"
+      },
+      "actions": [
+        "stop",
+        "compare"
+      ]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "bf5-main",
+      "nf3",
+      "e6",
+      "be2",
+      "c5-break",
+      "be3-hold",
+      "h4-tal",
+      "h5-reply",
+      "c5-immediate",
+      "dxc5-grab"
+    ],
+    "plyHorizon": 14
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "spineNodeId": "bf5-main"
+      },
+      "moveUci": "f1d3",
+      "class": "accepted_alternative",
+      "note": "4.Bd3 invites the trade of Black's good bishop. Playable and popular, but it gives up the pair and a tempo after ...Bxd3."
+    },
+    {
+      "at": {
+        "spineNodeId": "bf5-main"
+      },
+      "moveUci": "b1c3",
+      "class": "interesting_deviation",
+      "note": "4.Nc3 keeps g4 ideas alive. A different pack's subject; here it leaves the c5 race unaddressed."
+    },
+    {
+      "at": {
+        "spineNodeId": "c5-break"
+      },
+      "moveUci": "c2c3",
+      "class": "accepted_alternative",
+      "note": "c3 is the other main answer and reaches the same teaching point: the break is met by preparation, not panic."
+    },
+    {
+      "at": {
+        "spineNodeId": "c5-break"
+      },
+      "moveUci": "d4c5",
+      "class": "interesting_deviation",
+      "note": "Taking here is not refuted, but with Be2 already played the recapture race favours Black's development. Play it out and compare."
+    },
+    {
+      "at": {
+        "spineNodeId": "c5-break"
+      },
+      "moveUci": "e1g1",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "Castling into the break is not a blunder, but it ignores the objective: the centre resolves while your pieces are not ready."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "chain-base",
+      "text": "...c5 attacks the base of the pawn chain. Whoever is better developed when it lands usually wins the resulting tension.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    },
+    {
+      "id": "tal-tempo",
+      "text": "4.h4 gains space on the wing but spends the tempo you need to meet ...c5 with a developed piece.",
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Opening names and move order verified against lichess-org/chess-openings (CC0)",
+      "Structure and plan descriptions are original prose per the content-rights rule"
+    ],
+    "reviewers": []
+  }
+}
