@@ -523,7 +523,7 @@
     "reviewStatus": "draft",
     "sources": [
       "Start position is a constructed schematic four-against-three same-wing rook ending (White Kg1/Ra1, pawns e4/f2/g2/h2; Black Kg8/Rd8, pawns f7/g7/h6). It is not taken from a game, no source game was consulted, and no named theoretical position is claimed for it.",
-      "NO TABLEBASE GROUND TRUTH EXISTS ANYWHERE IN THIS PACK. Rook and four pawns against rook and three is eleven pieces with both kings; Syzygy coverage stops at seven. No position here has been checked against a tablebase because none can be.",
+      "UNPLAYABLE AS AUTHORED (D12, found 2026-08-12): the still-holding trigger is already true at the root, so the objective grades achieved on the opponent first move and the run terminates before the learner moves. Do not publish until the objective encoding lands. NO TABLEBASE GROUND TRUTH EXISTS ANYWHERE IN THIS PACK. Rook and four pawns against rook and three is eleven pieces with both kings; Syzygy coverage stops at seven. No position here has been checked against a tablebase because none can be.",
       "NO ENGINE ANALYSIS WAS RUN. Not one position in this pack has been seen by Stockfish or any other engine at any depth.",
       "UNGROUNDED: the claim that this material is a theoretical draw, every plan-class description, every annotation, every deviation classification and every feedbackClaim are agent-authored model knowledge with no citation, no engine validation and no reviewer sign-off.",
       "Technique names used in the prose (Philidor-style third-rank restraint, rook on the seventh, second-rank activity) name established methods. The name is the only thing being cited: it is not evidence for any evaluation stated in this pack.",
