@@ -122,11 +122,11 @@ live.
 | B1 | Shell and entry: stable Play/Learn/Review/Live/Create/Library/Settings routes; resume works | **met with residuals** (app-shell shipped 2026-08-11). Alignment pass 2026-08-12: `/settings` has no form control at all, `phase` is never projected to the client (D6), and the drill-address grammar has no route. Residuals belong to the foundation edge |
 | B2 | Solo modes: Just Play + Line/Plan/Outcome/Trajectory each complete one fixture run | Plan only, but **F2 removed the blocker**: pack-optional position runs ship, so Just Play is now buildable rather than blocked. Line half-real by accident; Outcome and Trajectory still zero code. `mode`/`phase` branch nothing |
 | B3 | Review: manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise + grounded objective/evidence rendering. **Pairwise is a runtime type constraint, not a UI limit** (`compare.ts:49-64`), and N-way cannot be composed from pairwise calls without aligning unrelated plies. Multi-branch, replay, deep mode, share unmet |
-| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | Stockfish+objective grounds render; **authored prose has no surface — the current bottleneck**, blocked on F1. **Not blocked on content**: 6 of 9 contracts pin against merged code (the withdrawn RFC's §1 premise was false — the `SimpleTrigger`→`ObjectivePredicate` seam ships). Maia is already persisted and reaching the browser — a rendering gap. Corpus/Syzygy/LLM unmet |
+| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | **F1 shipped**: authored prose now has a real surface — checkpoint and terminal sheets render annotations, deviation notes and plan classes with per-occurrence reveal. Remaining: anchored claims, Maia explanation rendering, corpus/Syzygy runtime rendering, structural/temporal evidence, LLM rendering |
 | B5 | Live: Twitch host/chat/overlay, academy roles, external Arena handoff | unmet — ordered last. **D1 and F3 are closed**, so roles and a safe spectator projection are now buildable (a granted spectator already follows a run in the browser suite). Remaining: Twitch host/chat/overlay, academy voting, and PGN import for the Arena return leg |
 | B6 | Create: pack studio/import/review/session-distill produces a validated fixture; corpus mining emits one candidate | **mining half MET**: `candidate-emit` produced four real unpublished candidates in `content/candidates/` through the shipped pipeline (openings skeleton, Syzygy-grounded endgame root, two puzzle consequence seeds). Still absent: pack studio UI, a pack **write** endpoint, session distillation, and the review queue |
 | B7 | Return: history/resume, progress, concept scheduling, related retry, recommendations | history/resume/deep-link ship, and **F3 supplied the missing subject**, so the rest is buildable rather than blocked. Still zero: progress, SRS, related retry, recommendations. `transfer.scheduled` still has no producer; cross-pack concept identity still does not exist |
-| B8 | Platform: desktop shell, responsive/PWA, self-hosted engines/providers, share links, accessibility | **deployment packaging shipped in full** (compose profiles, GHCR multi-arch, digest-pinned release compose, devcontainer) — this row was understated. Residual is D5 (release compose has no light profile). Overstated on Settings: no form control exists. Share links blocked on D1 |
+| B8 | Platform: desktop shell, responsive/PWA, self-hosted engines/providers, share links, accessibility | deployment packaging shipped in full; residual is the release compose's missing light profile (D5). **Share links no longer blocked by D1** — safe granted spectators ship; a public share-link workflow remains unbuilt. Overstated on Settings: no form control exists |
 
 **Watch item — the Lucas Chess failure mode:** breadth without unifying depth
 produces a mode menu, not a product (our own competitor research named this
@@ -148,11 +148,12 @@ accruing by construction — escalate rather than continue.
 **Measurability audit (2026-08-12 alignment pass).** Two metrics above are
 currently unfalsifiable, which makes any verdict resting on them theater:
 
-- *"voluntary return to the same concept"* — no concept can be returned to and
-  no attempt is recorded. `concepts` exists only in the JSON schema, is unique
-  within a single pack, and has no cross-pack identity contract; there is no
-  learner subject and no episode-attempt record (F3). This becomes measurable
-  when B7's attempt record lands, not before.
+- *"voluntary return to the same concept"* — still unfalsifiable, but for a
+  narrower reason than when this audit was written. **F3 supplied the learner
+  subject**, so that half is closed. What remains absent: cross-pack concept
+  identity (`concepts` exists only in the JSON schema and is unique within one
+  pack) and any episode-attempt record. Measurable when B7's attempt record and
+  a concept registry land.
 - *"second-attempt objective achievement"* — Pack A declares no
   `objective.successConditions`, so its objective can never transition, and
   `WhyBanner.svelte` (the only explanation surface, 52 lines) fires only on an

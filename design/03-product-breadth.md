@@ -161,28 +161,31 @@ rows below are green or explicitly removed by a new owner ruling:
 | B1 — shell and entry | stable shell routes Play/Learn/Review/Live/Create/Library/Settings; resume works | **met with residuals** — `/settings` has no form control, `phase` is never projected, the drill-address grammar has no route |
 | B2 — solo modes | Just Play plus Line, Plan, Outcome, and organic/guided Trajectory each complete one fixture run | Plan only, but **F2 removed the blocker** — pack-optional runs ship, so Just Play is buildable rather than blocked. Line half-real; Outcome and Trajectory zero code |
 | B3 — review | manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise partial — and pairwise is a **runtime type** constraint that cannot be composed into N-way |
-| B4 — evidence | authored, Stockfish, Maia, corpus/historical, Syzygy, structural/temporal, and LLM-rendered layers work with timing controls | authored prose has no surface (blocked on F1) — **not blocked on content**; Maia already persisted and reaching the browser; corpus/Syzygy/LLM unmet |
+| B4 — evidence | authored, Stockfish, Maia, corpus/historical, Syzygy, structural/temporal, and LLM-rendered layers work with timing controls | **F1 shipped**: authored prose now has a real surface — checkpoint and terminal sheets render annotations, deviation notes and plan classes with per-occurrence reveal. Remaining: anchored claims, Maia explanation rendering, corpus/Syzygy runtime rendering, structural/temporal evidence, LLM rendering |
 | B5 — live | Twitch host/chat/overlay, academy roles, and external Position Arena handoff each complete one scenario | unmet, ordered last. **D1 and F3 closed**, so roles and a safe spectator projection are buildable; a granted spectator already follows a run in the browser suite |
 | B6 — create | pack studio/import/review/session-distill workflow produces and validates a fixture; corpus mining emits one unpublished candidate | **mining half MET** — `candidate-emit` produced four real unpublished candidates through the shipped pipeline. Absent: studio UI, pack write endpoint, session distillation, review queue |
 | B7 — return | history/resume, progress, concept scheduling, related retry, and optional recommendation work | history/resume ship and **F3 supplied the subject**, so the rest is buildable rather than blocked. Still zero: progress, SRS, related retry, recommendations |
-| B8 — platform | desktop shell, responsive/PWA transformation, self-hosted engines/providers, read-only share links, accessibility | deployment packaging shipped in full (this row was understated); residual is the release compose's missing light profile; share links blocked on D1 |
+| B8 — platform | desktop shell, responsive/PWA transformation, self-hosted engines/providers, read-only share links, accessibility | deployment packaging shipped in full; residual is the release compose's missing light profile (D5). **Share links no longer blocked by D1** — safe granted spectators ship; a public share-link workflow remains unbuilt. Overstated on Settings: no form control exists |
 
 ## The foundation edge (added 2026-08-12 after the alignment pass)
 
 Six code-verified passes over the whole surface (`planning/breadth/`) found that
-the work missing across all eight program items reduces to **three absent
-primitives**. They cut across the program rather than sitting inside any one
-item, they are mutually independent, and each is small in isolation:
+the work missing across all eight program items reduced to **three primitives**.
+**All three shipped on 2026-08-12** — F1 as `authored-explanation-surface`, then
+F3 and F2 as migrations 2 and 3 — closing defects D1, D2 and D3 with them. The
+section is kept because the finding is what made the sequencing possible and
+because later documents cite these names. Descriptions below are the
+pre-implementation state:
 
-- **F1 — per-scope reveal.** Withholding is one boolean per run, so reaching one
+- **F1 — per-scope reveal (SHIPPED).** Withholding *was* one boolean per run, so reaching one
   checkpoint would release authored prose for all of them. Blocks the B4
   explanation surface, the streamer overlay (which needs per-viewer withholding),
   and coach-reveals-prose.
-- **F2 — pack-optional run identity.** A pack is mandatory at six layers, so
+- **F2 — pack-optional run identity (SHIPPED).** A pack *was* mandatory at six layers, so
   Just Play, from-position starts, Arena leg import, and the pack playtest
   harness are all blocked on the same change. The withholding barrier currently
   *fails open* when no pack is present, so that fix must land in the same slice.
-- **F3 — a subject.** No learner identity exists anywhere in the system. Blocks
+- **F3 — a subject (SHIPPED).** No learner identity existed anywhere in the system. Blocks
   all of B7, both non-host roles in B5, and the fix for the writer-lease
   credential leak. The hosted-multi-user ruling (`design/02`) makes this a real
   auth boundary rather than a local profile.
@@ -196,7 +199,7 @@ interaction, the drill-address grammar, the generic predicate evaluator. Breadth
 the mirror risk is that such a slot reads exactly like a working feature, which
 is how five RFC drafts died — so every breadth claim now carries a code citation.
 
-Item #1 is therefore **not finished**: its residuals (`/settings` with no
+Item #1 remains **not finished**: its residuals (`/settings` with no
 controls, `phase` never projected, the address grammar unrouted) are inherited by
 items #3, #5 and #7 and belong to this edge rather than to whichever later item
 trips over them.
