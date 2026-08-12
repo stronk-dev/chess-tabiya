@@ -7,8 +7,9 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
+| `outcome-drill-grading.md` | draft | amends `archive/terminal-outcome-events.md`, `archive/drill-pack-format.md` | program item #4 / gate B2; pack schema v0.3 |
 
-No active product RFCs.
+One active product RFC: Outcome Drill grading (program item #4).
 
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
 `content-sourcing-pipelines.md` draft and recommended a four-way split; the draft
