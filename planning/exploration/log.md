@@ -1136,3 +1136,24 @@ Defect tally: **10 of 15 closed** (D1, D2, D3, D11, D12, D12a, D12b, D12c, D13,
 D14). Open: D4 vocabulary drift, D5 release compose light profile, D6 `phase`
 unprojected, D7 deviations unlinted, D9 `start.side`, D10 anonymous engine
 provenance.
+
+## 2026-08-12 — CORRECTION to the defect tally in the entry above (claude)
+
+Append-only; the entry above stands. Its closing tally said "10 of 15 closed"
+and listed six open defects. Both numbers are wrong and **D8 was omitted
+entirely**.
+
+Correct, verified by counting the ledger: **17 defects, 10 closed, 7 open.**
+Open is D4 through D10 inclusive —
+
+- D4 action-vocabulary drift
+- D5 release compose light profile
+- D6 `phase` never projected
+- D7 deviations unlinted
+- **D8 schema/runtime policy disagreement** (the omitted one)
+- D9 optional `start.side`
+- D10 anonymous engine provenance
+
+The arithmetic slipped because the D12 family (D12a/D12b/D12c) are three
+defects sharing one number, so counting rows and counting numbers give different
+answers. Worth noting for whoever writes the next tally: count the rows.
