@@ -422,6 +422,11 @@
 - The UI must accommodate this whole product now. The current pack-picker plus
   single scrolling drill screen is a useful mechanism demo, not an acceptable
   application architecture.
+- [PROVENANCE CORRECTION 2026-08-12: this entry was authored by codex in
+  commit 11924a5 under an "(owner ruling)" heading. The bullets below are
+  codex's paraphrase, NOT the owner's words. The owner disputes the
+  branch-scoring line specifically. Nothing below may be cited as an owner
+  ruling.]
 - Branch scoring and automatic compare inclusion are later optimization. First
   every branch can be selected, compared, explained, replayed, and shared
   correctly; then scoring can choose defaults while manual checkboxes remain.
