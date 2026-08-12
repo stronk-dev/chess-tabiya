@@ -21,7 +21,7 @@ then nothing reads them.
 | `concepts` | ✓ | ✗ | ✗ | ✗ | **dead** |
 | `planClasses` | ✓ | ✗ | ✗ | ✗ | **dead** |
 | `checkpoints[].trigger` | ✓ | ✓ | ✓ (`checkpoint.reached`) | ✓ | live |
-| `checkpoints[].actions` | ✓ | ✗ | ✗ | partial | sheet offers fixed buttons, not pack's list |
+| `checkpoints[].actions` | ✓ (open string) | ✗ | ✗ | partial | **operationally unsafe** — see below |
 | `checkpoints[].interaction` | ✓ | ✗ | ✗ | ✗ | **dead** — incl. `intent_capture`/`planClassIds` |
 | `authoredBoundary` | ✓ | ✗ | ✗ | ✗ | **dead** — no `provenanceMode` consumer |
 | `deviations` | ✓ | ✗ | ✗ | ✗ | **dead** — classes and notes both |
@@ -41,11 +41,16 @@ authoring effort on five of those seven.
 part, because it tells us what kind of work comes next rather than just that
 work remains:
 
-1. **Explanation UI (no new contracts needed).** `annotations`, `deviations[].note`,
-   `planClasses`, `concepts` are already-encoded prose that simply has no
-   surface. Rendering them requires **zero** new authored vocabulary — they are
-   strings with ids, addressable today. This is the cheapest large win in the
-   product right now and it needs no retry of a withdrawn RFC.
+1. **Explanation UI — no new *authored vocabulary*, but a delivery contract is
+   still required** (corrected after codex review; my original "no new
+   contracts" was wrong). `annotations`, `deviations[].note`, `planClasses`,
+   `concepts` are already-encoded prose addressable today — no new chess
+   vocabulary needed. **But `GET /packs/:id` ships the entire pack, including
+   every annotation, deviation note and claim, before play begins.** Revealing
+   them client-side would be precisely the "CSS hiding is theater" failure this
+   repo already rejected server-side for engine evidence (drill-client DC-C6).
+   So the slice needs a **server-side authored-feedback projection or
+   run-scoped reveal response** — a delivery/timing contract, not a chess one.
 2. **Runtime semantics (needs contracts).** `objective.type` beyond
    `reach_checkpoint`, `checkpoints[].interaction`, `authoredBoundary` →
    `provenanceMode`, and `deviations[].class` as live classification all need
@@ -69,6 +74,29 @@ list of what is inert and why:
 - `deviations` are the strongest candidate for the *first* thing to render:
   they carry per-move authored judgment, they are addressable by `spineNodeId`
   + `moveUci` with no new contract, and Pack A already has five real ones.
+
+## Two defects Pack A proved (not just gaps)
+
+**1. Authored feedback leaks before play.** `GET /packs/:id` returns the full
+pack document. A player can read every deviation note, annotation and claim for
+the position they are about to face. The anti-contamination law is enforced
+server-side for engine evidence and not at all for authored prose — because
+until Pack A, no served pack had any.
+
+**2. The checkpoint-action vocabulary is open and unaligned.** The schema
+accepts *any* non-empty string except `capture_intent`; `CheckpointSheet`
+recognizes exactly one value, `compare_branches`. Pack A authored `"stop"` and
+`"compare"` — both passed validation, both do nothing, silently. An open
+vocabulary against a closed consumer means every authoring typo is a no-op the
+validator blesses.
+
+## Two exact inputs for the next RFC (codex)
+
+1. **Authored-prose delivery and reveal timing**, using existing fields — a
+   server-side projection so authored feedback obeys `feedbackPolicy` the way
+   engine evidence already does.
+2. **A closed, validated checkpoint-action vocabulary** aligned with the
+   client, so unknown actions fail `pack-check` instead of failing silently.
 
 ## Method caveat
 

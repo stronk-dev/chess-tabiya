@@ -197,3 +197,24 @@ contract-gaps (the second deliverable — what the format could NOT express):
   five real ones already written.
 - Caveat recorded: static audit proves existence, not correctness. Session 2's
   play-throughs test behaviour.
+
+## 2026-08-12 (codex review #3; verified and recorded by claude)
+
+- **Correction accepted:** "explanation UI needs no new contracts" was wrong —
+  it needs no new *authored vocabulary*, but it does need a delivery contract.
+  Verified: `GET /packs/:id` returns the full pack document, so annotations,
+  deviation notes and claims are all downloadable **before play**. Client-side
+  reveal would recreate the "CSS hiding is theater" failure this repo already
+  rejected for engine evidence (DC-C6). Matrix corrected.
+- **Second defect verified in code:** the checkpoint-action vocabulary is open
+  (schema = any non-empty string except `capture_intent`) while
+  `CheckpointSheet` recognizes exactly one value (`compare_branches`). Pack A
+  authored `"stop"` and `"compare"`; both validate and both do nothing. An open
+  vocabulary against a closed consumer makes every authoring typo a
+  validator-blessed no-op.
+- **Pack A has now found two real product defects**, not merely missing
+  features — authored-feedback leakage and the action-vocabulary mismatch.
+  Neither was findable without content that exercises authored feedback.
+- Both carried into the matrix as the next RFC's two exact inputs: (1) a
+  server-side authored-prose projection honouring `feedbackPolicy`; (2) a
+  closed, validated action vocabulary that fails `pack-check` on unknown values.
