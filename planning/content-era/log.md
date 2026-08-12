@@ -232,3 +232,47 @@ contract-gaps (the second deliverable — what the format could NOT express):
 - Standing lesson reinforced, now with five data points: when a draft needs a
   capability, check whether it shipped **before** writing the sentence that
   uses it. The withdrawn RFCs are the trap — their contracts read like history.
+
+## 2026-08-12 — pack A, session 2 pass (a): controlled spine play-through (claude)
+
+agent-research 0 · agent-encoding 0 · agent-engine-validation 0 · owner-review 0 · agent-revision 0 · tooling-friction 40
+notes: Played the authored line end-to-end against the real server (dev mode,
+mock engines) driving the REST API directly. All 40 minutes were friction, none
+authoring — see defects below. **The chess worked; the platform seams did not.**
+
+### What worked (first evidence that authored content drives the runtime)
+
+- **Spine checkpoints fire correctly on real authored content.**
+  `plan-commitment` fired exactly at Be2 (`atSpineNode: be2`), `break-arrived`
+  at ...c5, and `segment.completed` was emitted between them. The orchestrator
+  walks an authored spine as designed — previously only proven on the fixture.
+- Moves, forking and persistence all behaved; 7 nodes, 1 branch after 6 plies.
+
+### Defects found by playing (new, beyond the matrix)
+
+1. **`policyConfigDigest` is validated inconsistently across endpoints.**
+   `POST /runs` accepted the arbitrary string `"session2-theory-strict"`;
+   `POST /select-move` rejected the identical value with
+   `"must be an RFC-8785 SHA-256 digest"`. Same field, same run, two contracts —
+   so a client can create a run it can then never get an opponent move for.
+   **This is a real bug, not a usage error.**
+2. **`preserve_plan_window` confirmed inert by observation.** Zero
+   `objective.state_changed` events across the whole play-through; the pack's
+   stated objective produced nothing. The matrix predicted it statically; this
+   is the behavioural confirmation.
+3. **`GET /runs/:id/graph` returns `events: []` while nodes/branches populate.**
+   7 nodes and 1 branch came back, but no events at all — so checkpoint history
+   is invisible to a graph consumer even though `checkpoint.reached` was
+   emitted on the mutation responses. Either withholding is stripping events
+   from this surface or the projection drops them; either way a client that
+   reloads mid-run cannot reconstruct which checkpoints it has passed.
+4. **No server-side "start a run from this pack" convenience.** The client must
+   assemble `id`, `packDigest`, and a full `policyConfig` (incl. `locus`) — fine
+   for the app, brutal for playtesting and for any future authoring tool. This
+   was the bulk of the 40 minutes.
+
+### Not yet measured
+
+Pass (b) human_common off-spine, pass (c) real Stockfish validation (mock
+executor was active — `judge: mock`), pass (d) the dead-field inventory is
+already covered by `field-consumer-matrix.md`.
