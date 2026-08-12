@@ -123,12 +123,29 @@ predicates cover:
 - transpose-key equality, a piece or vacancy on a square, and exact/containing
   white and black pawn structures;
 - whether a checkpoint was reached on the active path;
+- whether a checkpoint fired at the active node, preventing a historical
+  checkpoint fact from oscillating a non-terminal grade on later plies;
+- whether the active path contains a validated learner-perspective terminal
+  result;
 - `all`, `any`, and `not` composition.
 
 Rules are evaluated in authored order; the first rule matching the current state
 wins. An asynchronous `ObjectiveEvidenceUpgrader` interface can request a proposal
 from a future worker, but this runtime does not execute workers or automatically
 apply their proposals.
+
+The generic transition graph remains permissive for non-outcome objectives.
+Outcome Drill narrows it in the server compiler: non-terminal progress is
+monotone (`active` to `preserved` to `degraded`), absorbing grades require an
+`outcome.reached`, and degradation rules precede checkpoint resolution. This is
+an orchestration contract rather than a change to the reusable state machine.
+
+`opponentMovesFromEvents` is the shared read-back pairing primitive for
+`opponent.move_selected` and its adjacent committed child. Replay and
+path-resistance reporting use that same primitive and therefore fail on the
+same malformed adjacency. Resistance is attributed only when the committed
+child lies on the requested path, so a sibling branch cannot inherit an
+opponent identity from another attempt.
 
 ## Events and authoritative replay
 

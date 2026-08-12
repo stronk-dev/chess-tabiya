@@ -23,8 +23,9 @@ Each accepted document receives a server-computed SHA-256 digest over its RFC
 version, digest, title, mode, difficulty, and review status. `GET /packs/:id`
 returns a browser-safe projection and the complete stored document's digest in
 `x-pack-digest`; missing packs are typed `PACK_NOT_FOUND` errors. The projection
-contains identity and catalogue fields, provenance, start, objective type and
-summary, feedback and opponent policies, the recursive spine without
+contains identity and catalogue fields, provenance, start, objective type,
+summary, and projected grading, feedback and opponent policies, the recursive
+spine without
 annotations, and checkpoints reduced to ID, label, and executable actions. It
 does not deliver deviations, feedback claims, checkpoint triggers, plan
 classes, concepts, or spine annotations. The stored document—not this
@@ -62,8 +63,10 @@ data. For every committed player or opponent move, one writer-leased mutation:
 5. persists the resulting run once and returns the complete emitted-event set.
 
 This keeps the move, checkpoint, and objective projection atomic from the
-client's perspective. V1 supports the fixture's `reach_checkpoint` objective
-rule and the frozen trigger vocabulary: `atPly`, `atSpineNode`,
+client's perspective. The server supports ordinary `reach_checkpoint` rules
+and the monotone Outcome Drill compiler documented in
+`outcome-drill-grading.md`, plus the frozen trigger vocabulary: `atPly`,
+`atSpineNode`,
 `fenPredicate`, `materialBalance`, and timing windows. A timing window fires
 when its authored closing trigger matches. Unsupported objective rules fail at
 pack load rather than being ignored.
@@ -231,6 +234,16 @@ deployment remains honestly labeled as recorded engine evidence rather than
 claiming a provider identity absent from the payload. Engine arrows, move
 labels, deltas, and human-frequency overlays remain absent.
 
+Outcome Drill adds a compact context surface above the board and in checkpoint
+or terminal sheets. It keeps four facts separate: the root assessment, the
+resistance requested by the pack, the engine identities actually recorded on
+this path, and the objective state/result. A Syzygy assessment says `Exact`
+only when the server projects `ledger_verified`; otherwise it is explicitly an
+authored, unproved claim. The client never infers which policy ran from an
+engine identity and always says that recorded resistance is not proof of
+perfect play. Non-terminal checkpoint resolution says that the attempt ended,
+not that the position was proved.
+
 ## Application shell and fitted regions
 
 A dependency-free history-API router owns `/`, `/play`, `/play/run/:id`,
@@ -308,11 +321,10 @@ includes Node, pnpm, and Stockfish.
 
 ## Current boundary
 
-The drill-client implementation and the app-shell amendment now provide the
+The drill-client implementation and later amendments now provide the
 playable mechanism, route shell, persistent history, honest capabilities,
-fitted regions, and one keyboard ownership model. The qualified walkthrough
-verdict remains that fork/rewind is quick and promising, while manual compare
-selection and especially the absent theory/feedback layer define the next
-program. The living Najdorf pack remains a schema example rather than reviewed
-content; this validates that the mechanical loop is worth iterating, not that
-comparison already teaches.
+fitted regions, one keyboard ownership model, checkpoint-scoped authored prose,
+recorded comparison evidence, and honest Outcome Drill grading. The broader
+theory/explanation vocabulary, automatic N-way comparison, and reviewed content
+remain incomplete. The living Najdorf pack is still a schema example; the
+presence of grading UI does not turn unreviewed chess assertions into truth.

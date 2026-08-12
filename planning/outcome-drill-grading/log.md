@@ -38,3 +38,17 @@ Append-only.
   without resizing it, so moves after Continue mapped against the old board position. The
   board now redraws after reactive layout settles; all eight default browser tests pass.
 - `ENGINES_REQUIRED=1 make verify`: 276 tests across 46 files, typechecks and packaging green.
+
+## 2026-08-12 — Canonical documentation
+
+- Added `docs/outcome-drill-grading.md` as a separate canonical page because the
+  trust and grading contract crosses the pack schema, runtime, sourcing sidecars,
+  registry, and browser; folding it into one parent page would hide those seams.
+- Reconciled the v0.3 format, outcome predicates/compiler, exact-assessment
+  admission, pack projection, and learner-facing result across the existing
+  canonical pages and index.
+- Lifecycle archival remains deliberately pending independent implementation
+  approval; the RFC stays `implementing` for that review.
+- Final documented-tree gates: `ENGINES_REQUIRED=1 make verify` passed 276 tests
+  across 46 files with schema/packaging checks green; `make test-browser` passed
+  all eight default flows with the tagged Maia latency case skipped as designed.

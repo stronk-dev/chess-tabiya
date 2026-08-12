@@ -9,7 +9,7 @@ Implemented foundation:
 - `branch-runtime.md` — immutable run tree, rewind/fork/objective/replay semantics,
   comparison and PGN export, REST/lease/storage behavior, measured envelope, and
   current limitations.
-- `drill-pack-format.md` — living v0.2 schema, semantic authoring lint, canonical
+- `drill-pack-format.md` — living v0.3 schema, semantic authoring lint, canonical
   digest and URL tooling, executable checkpoint-action validation, pack/run PGN
   round-trip, and deferred content boundary.
 - `engine-workers.md` — UCI supervision, Dockerized Maia and policy exposure,
@@ -34,3 +34,6 @@ Implemented foundation:
   licence enforcement, deterministic and polite source access, opening skeletons,
   Syzygy/engine grounding, authenticated explorer priorities, and private-evidence puzzle
   consequence seeds.
+- `outcome-drill-grading.md` — win/hold/save/resist grading, monotone outcome
+  transitions, exact-assessment admission, path-scoped resistance identity, and
+  the learner-facing honesty contract.

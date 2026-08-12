@@ -20,6 +20,12 @@ The directory is intentionally separate from `content/drafts/` and `content/pack
 Sidecars are not pack documents; candidates are not served content. Raw caches live in the
 gitignored `content/sources/` directory.
 
+When a pack is deliberately loaded by the development/server registry, reserved
+sidecar basenames are excluded from pack discovery by one shared name rule. The
+resolver supports the candidate-directory layout (`pack.json`, `evidence.json`,
+`sources.json`) and flat sibling names (`<pack>.evidence.json`,
+`<pack>.sources.json`) without treating either sidecar as a pack.
+
 ## Checks and legal encoding
 
 `make sourcing-check DIR=content/candidates/<id>` is strict. It runs ordinary pack
@@ -71,6 +77,15 @@ In-range records preserve the backend category, DTZ, precise DTZ, DTM, and termi
 including nulls. Tablebase evidence and engine evidence are distinct kinds, and the checker
 rejects either kind on the wrong side of the range boundary. Neither may support prose.
 
+A pack's `assessedBy.kind: syzygy` declaration does not earn an exact label.
+Registry admission derives `ledger_verified` only when the complete ledger and
+manifest pass the same validators as `sourcing-check`, their linkage is valid,
+and the tablebase record matches the declaration and root on every required
+field. Missing, malformed, unlinked, or mismatched sidecars leave the assessment
+unverified; strict candidate checks reject that condition. The pack digest is
+excluded from the tablebase fact match because it binds the whole mutable draft,
+not the immutable position/result evidence.
+
 The optional above-range authoring substitute uses Stockfish at depth 22, Threads 1, Hash
 16 MB, and MultiPV 1 in a fresh authoring context, with a 120-second timeout. Fixed depth is
 recorded evidence, not a wall-clock reproducibility claim; the engine identity and profile
@@ -81,7 +96,8 @@ Generated endgame packs are spine-less outcome drills. The opponent is explicitl
 `strong_engine` or `human_common`, the checkpoint is aligned to a learner ply, and roots in
 tablebase range retain a graduation blocker because `perfect_tablebase` is still not a
 selectable runtime policy (D8). Terminal runs disclose through the implemented
-`outcome.reached` contract; this emitter does not define win/hold/save grading.
+`outcome.reached` contract. The emitter does not manufacture grading; a later
+author may add v0.3 grading only under the assessment-admission contract above.
 
 ## Opening explorer priority
 

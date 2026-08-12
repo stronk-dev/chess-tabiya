@@ -7,6 +7,7 @@ RFC: `rfc/outcome-drill-grading.md` (implementing).
 - [x] Add outcome objective predicates, monotone rule compilation, path resistance derivation, and segment fix
 - [x] Project and render assessment, grade, and honest resistance facts
 - [x] Repair Pack C, add browser fixtures, and exercise non-terminal and terminal Outcome Drill flows
-- [ ] Update canonical docs and run the RFC completion protocol
+- [x] Update canonical docs for the implemented behavior
+- [ ] Run the RFC completion protocol after independent approval
 
 Checkboxes flip only in commits carrying their exercising tests.

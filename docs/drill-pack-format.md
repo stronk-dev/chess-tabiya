@@ -1,15 +1,15 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.2; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.3; a pack's own
 `version` remains semver and is part of its digest.
 
 `schemas/drill_pack.example.json` is the living Najdorf schema fixture. The
 fixture and schema under `archive/brief-v2/` remain frozen v0.1 inputs and are
-tested only against each other. The v0.1 fixture intentionally fails v0.2 because
+tested only against each other. The v0.1 fixture intentionally fails v0.3 because
 it has no required `feedbackPolicy` and uses superseded fields.
 
-## Implemented v0.2 shape
+## Implemented v0.3 shape
 
 - `spine` is an optional array of first-move nodes rooted at the pack's start
   FEN. Each recursive node has a pack-unique `id`, UCI, SAN, `children`, and
@@ -34,6 +34,12 @@ it has no required `feedbackPolicy` and uses superseded fields.
 - `capture_intent` is no longer accepted in checkpoint `actions`; it is represented
   by the typed interaction. The reserved provenance source `session_distilled` is
   accepted.
+- `objective` is closed. Outcome objectives (`win`, `hold`, `save`, and
+  `resist`) require `grading`: an authored or Syzygy-declared root assessment
+  plus a checkpoint or terminal resolution. `successConditions` is a closed
+  union of checkpoint, outcome, material-balance, and rules-fact conditions;
+  conditions may declare their target state and applicable non-terminal source
+  states.
 
 The format schema intentionally leaves `checkpoints[].actions` structurally
 open, but the shipped registry and `pack-check` close the executable v1
@@ -41,7 +47,8 @@ vocabulary to `compare_branches`. An empty array means the checkpoint offers
 no pack-selectable action. Any other value fails runtime validation with its
 JSON Pointer and the allowed set; vocabulary grows only when a consumer grows.
 This is an executable-policy lint rather than a JSON-Schema enum, so it does
-not change format v0.2 or its schema `$id`.
+did not require the format v0.3 amendment; grading is the change that advanced
+the schema `$id`.
 
 ## Semantic authoring lint
 
@@ -111,11 +118,11 @@ main path, rewinds at `najdorf-e6`, creates a `g3` deviation, and proves that th
 unplayed authored `Be2` sibling plus both played paths survive PGN parse, serialize,
 and reparse as legal chess.
 
-## Not implemented yet
+## Current boundary
 
-Pack A and content authoring remain deferred to the content phase by owner ruling;
-the work survives in `design/BACKLOG.md` under **Content authoring workflow + pack
-production cost** and in the archived implementation plan. The living Najdorf
-file is a schema fixture, not reviewed training content. Trajectory `transitions`,
-content licensing policy, engines, and authoring UI are also outside this
-implemented format foundation.
+The living Najdorf file remains a schema fixture rather than reviewed training
+content. Draft content now exists and may exercise v0.3 outcome grading, but
+per-assertion grounding, timing-window evaluation, trajectory `transitions`, and
+the authoring studio remain separate content-era work. A Syzygy declaration in
+pack JSON is not by itself proof; exactness is admitted only by the server-side
+ledger and manifest checks described in `outcome-drill-grading.md`.
