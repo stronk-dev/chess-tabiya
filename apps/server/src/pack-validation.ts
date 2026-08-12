@@ -72,6 +72,32 @@ function runtimeIssue(
 function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
   const raw = pack as unknown as Record<string, unknown>;
+
+  const provenance = raw.provenance as Record<string, unknown>;
+  const reviewStatus = provenance.reviewStatus;
+  if (reviewStatus === "reviewed" || reviewStatus === "published") {
+    const sources = provenance.sources;
+    if (!Array.isArray(sources) || sources.length === 0) {
+      issues.push(
+        runtimeIssue(
+          "GRADUATION_REQUIRES_SOURCES",
+          "/provenance/sources",
+          `${reviewStatus} packs require at least one provenance source; see planning/content-era/plan.md §3b`,
+        ),
+      );
+    }
+    const reviewers = provenance.reviewers;
+    if (!Array.isArray(reviewers) || reviewers.length === 0) {
+      issues.push(
+        runtimeIssue(
+          "GRADUATION_REQUIRES_REVIEWERS",
+          "/provenance/reviewers",
+          `${reviewStatus} packs require at least one reviewer; see planning/content-era/plan.md §3b`,
+        ),
+      );
+    }
+  }
+
   const feedbackPolicy = raw.feedbackPolicy;
   if (feedbackPolicy === "immediate_blunder_guard") {
     issues.push(

@@ -83,6 +83,48 @@ describe("pack authoring validation", () => {
     );
   });
 
+  it("allows draft packs with no sources or reviewers", () => {
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate as unknown as Record<string, unknown>).provenance = {
+      reviewStatus: "draft",
+      sources: [],
+      reviewers: [],
+    };
+
+    expect(validatePackDocument(candidate).valid).toBe(true);
+  });
+
+  it("rejects a reviewed pack with no reviewer", () => {
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate as unknown as Record<string, unknown>).provenance = {
+      reviewStatus: "reviewed",
+      sources: ["Reviewed source"],
+      reviewers: [],
+    };
+
+    const result = validatePackDocument(candidate);
+    expect(result.valid).toBe(false);
+    expect(result.issues).toContainEqual({
+      severity: "error",
+      source: "runtime",
+      code: "GRADUATION_REQUIRES_REVIEWERS",
+      path: "/provenance/reviewers",
+      message:
+        "reviewed packs require at least one reviewer; see planning/content-era/plan.md §3b",
+    });
+  });
+
+  it("allows a reviewed pack with sources and reviewers", () => {
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate as unknown as Record<string, unknown>).provenance = {
+      reviewStatus: "reviewed",
+      sources: ["Reviewed source"],
+      reviewers: ["Named reviewer"],
+    };
+
+    expect(validatePackDocument(candidate).valid).toBe(true);
+  });
+
   it("checks files without stack traces and keeps warnings non-fatal", async () => {
     const directory = await temporaryDirectory();
     const invalidPath = join(directory, "invalid.json");

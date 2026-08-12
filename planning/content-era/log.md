@@ -141,3 +141,19 @@ contract-gaps (the second deliverable — what the format could NOT express):
   possible with the shipped schema — `pack-check` should fail any pack whose
   `reviewStatus` is not `draft` while `provenance.sources` or
   `provenance.reviewers` is empty. Queued for codex.
+
+## 2026-08-12 (codex) — coarse graduation enforcement
+
+- Added the mechanically enforceable part of §3b to `pack-check`: a pack marked
+  `reviewed` or `published` now fails unless both `provenance.sources` and
+  `provenance.reviewers` are non-empty. Failures identify the missing field by
+  JSON Pointer and direct the author to §3b.
+- `draft` remains deliberately permissive, so ungrounded work can be made
+  explicit and iterated. `schema_example` also remains non-promoted: treating
+  it as graduated would make the living schema fixture falsely claim review.
+- Tests cover a draft with both arrays empty, a reviewed pack missing its
+  reviewer, and a reviewed pack with both arrays populated.
+- Deliberately not built: per-assertion grounding enforcement. The shipped
+  schema cannot associate evidence with each objective summary, plan-class
+  description, spine annotation, feedback claim, or deviation judgment; §3b's
+  owner review remains the barrier until Pack A yields that evidence contract.
