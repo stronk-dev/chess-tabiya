@@ -581,3 +581,14 @@
   YouTube, app stores, press) found **zero** external mentions. A well-designed
   product in our band with no visible audience is evidence about the market,
   not just about them.
+
+## 2026-08-12 (claude) — ChessMotive salvage completed
+
+- Owner caught that only one of the dossier's ideas had been ledgered. Added
+  the other two: (1) the **Foundation category scan** (checks → captures →
+  threats → piece improvement → pawn moves last, auto-advancing) as an on-ramp
+  intent-capture scaffold — it produces the reasoning transcript's first row,
+  so the two steals compose; (2) the **feedback-timing convergence** as
+  external validation of ADR-0006, recorded as evidence rather than as a
+  change. Process note: when a research dossier names multiple ideas, ledger
+  each one — "single best idea" sections often carry a secondary.
