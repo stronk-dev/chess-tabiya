@@ -5,7 +5,7 @@
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §4 (Syzygy ground truth: "Syzygy where ≤7 pieces; Stockfish + authored claims above that"), §8 (batch-1 endgame pack)
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 (`design/04-content-architecture.md` header); owner ruling 2026-08-12 opening the RFC tier (`rfc/README.md`)
-- **Depends on:** **`rfc/content-sourcing-foundation.md` (B6a)** — manifest, evidence sidecar, deterministic-output rule, `sourcing-check`, record vocabulary, licence encoding. Also `rfc/archive/drill-pack-format.md` and `rfc/archive/engine-workers.md` (both implemented)
+- **Depends on:** **`rfc/content-sourcing-foundation.md` (B6a)** — manifest (including its `local-file` and `engine` origins, B6a §1.2), evidence sidecar, source-linkage rule (§1.2a), deterministic-output rule, `sourcing-check`, record vocabulary, licence encoding. **Blocks on defect D11** (`design/BACKLOG.md:115`, B6a §1.5): an endgame run that mates or stalemates before its checkpoint never discloses its evidence, and there is no workaround in the pack format — see §7. Also `rfc/archive/drill-pack-format.md` and `rfc/archive/engine-workers.md` (both implemented)
 - **Parent / amends:** — (B6b; second of four RFCs split out of the withdrawn `content-sourcing-pipelines.md` draft, 2026-08-12)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/content-sourcing-syzygy/` (once implementing)
@@ -27,14 +27,21 @@ That pack's author already discovered this by hand and wrote it into the content
 against rook and three is eleven pieces with both kings", and `:486` ships a `feedbackClaim`
 telling the learner the same thing.
 
-The count was wrong in both places when this RFC was drafted — "ten pieces" — and half of it
-still is. `:526` was corrected to eleven in `a5e27e1`; **`:486` still reads "Ten pieces are
-on the board." and is the sentence a learner is shown.** The verdict is unchanged either way
-(10 and 11 are both above 7), which is exactly why nobody caught it: a wrong number inside a
-sentence whose conclusion is right does not get recounted
-(`planning/content-era/log.md:537-556`). That is the strongest available argument that the
-range check must be code and not prose, and it is why §2's census is a mechanical count with
-a property test against `chessops` rather than a number an author types.
+The count was wrong in both places when this RFC was first drafted — "ten pieces" — and **both
+are now fixed**: `a5e27e1` corrected the pack, so `:486` reads "Eleven pieces are on the
+board." and `:526` reads "eleven pieces with both kings", and `1e4b4ae` corrected the same
+number where it had propagated into an RFC fixture and two logs. The previous revision of this
+RFC claimed `:486` still shipped "Ten pieces" and was **wrong** — a stale claim about a stale
+claim, which is the same failure one level up and is recorded here rather than quietly
+deleted.
+
+The original error is still the strongest argument this RFC has. The verdict was unchanged
+either way (10 and 11 are both above 7), which is exactly why nobody caught it for three
+commits: a wrong number inside a sentence whose conclusion is right does not get recounted,
+and the author of the correction says so in their own log
+(`planning/content-era/log.md:537-556`). That is why §2's census is a mechanical count with a
+property test against `chessops` rather than a number an author types — and why this RFC no
+longer asks anyone to hand-verify a piece count anywhere.
 
 So this RFC specifies a pipeline that **grounds run terminals, not pack roots**: an 11-piece
 rook ending reduces into Syzygy range as pawns trade, and that is where exact truth becomes
@@ -62,7 +69,7 @@ intent; it makes the boundary explicit, mechanical, and recorded in every candid
 |---|---|
 | Everything in B6a §1–§3 | `rfc/content-sourcing-foundation.md`. This RFC adds two record kinds and one emitter; it does not restate the manifest, sidecar, cache, or check |
 | Self-hosted Syzygy files | A deployment choice. `design/research/theory-sourcing.md:95-96` leaves the mirror inventory unverified (`syzygy-tables.info` fetch blocked by anti-bot), so this RFC uses the API and does not claim a mirror capability |
-| Making `perfect_tablebase` selectable | Defect **D8** (`design/BACKLOG.md:105`). See §5 — this RFC states the dependency rather than fixing the schema/validator divergence inline |
+| Making `perfect_tablebase` selectable | Defect **D8** (`design/BACKLOG.md:118`). See §5 — this RFC states the dependency rather than fixing the schema/validator divergence inline |
 | Making `win`/`hold`/`save` mechanically checkable | Requires an `outcome.reached` producer, which does not exist (B6a §0). Program item #2/#4 work |
 | Endgame *position* sourcing (which roots to drill) | B6d supplies positions from the puzzle DB; canonical theoretical positions are authoring work under `planning/content-era/` |
 
@@ -90,9 +97,8 @@ request is made:
 
 The census is a character count over the placement field, not an interpretation: every
 alphabetic character is one piece. On `3r2k1/5pp1/7p/8/4P3/8/5PPP/R5K1` this yields 11 (6
-white, 5 black), which is the number that belongs in
-`content/drafts/rook-4v3-same-side.json:486` in place of the "Ten pieces" that pack still
-shows a learner.
+white, 5 black) — the number `content/drafts/rook-4v3-same-side.json:486` and `:526` now
+carry, and the number the emitter derives rather than trusts.
 
 This is not an edge case; it is the common case for the content
 `design/04-content-architecture.md` §4 lists. The families named there — 4v3 and 3v2
@@ -219,6 +225,26 @@ B6b emits candidates from an author-supplied position list (FEN per line, with a
 label), not from a corpus: `make candidate-emit PIPELINE=syzygy ARGS='--positions
 <file> --learner-side black'`. Positions come from authors today and from B6d later.
 
+**The position list is a manifest entry, and that is what makes an abstention-only candidate
+legal.** It is ingested as B6a §1.4's `file` cache kind and declared as a `local-file` origin
+(B6a §1.2) with `sourceId: "author-positions"`, its repo-relative `path`, its `sha256`, and a
+`retrievedAt` written once at first ingest. `licence` is `basis: "no-rights-asserted"` with
+`rationale: "the author's own position list; a list of FENs states facts about chess
+positions"`.
+
+This is load-bearing rather than bookkeeping. An 11-piece candidate issues **no HTTP request
+at all** (§2), so under the previous HTTP-only manifest it had zero entries — and B6a's
+`MANIFEST_EMPTY` forbids that, which meant the deliverable this whole RFC is built around
+could not produce a legal artifact triple without inventing a fetch. With the `local-file`
+origin the manifest is honestly non-empty, the abstention links to it by
+`sourceId` + `retrievedAt` (B6a §1.2a), `sourcedAt` derives from it, and `MANIFEST_ENTRY_UNUSED`
+is satisfied. Nothing is asserted about Syzygy that did not happen: the abstention names the
+input that *was* consumed, never the source that was not queried.
+
+An `engine_eval` record's manifest entry is the `engine` origin (B6a §1.2) carrying engine id,
+version, profile, budget, FEN and evidence kind — the same identity §3.3 records in `values`,
+declared once in the place every other non-reproducible input is declared.
+
 | Pack field | Value | Legality |
 |---|---|---|
 | `id` | `` `endgame-${slug(label)}` `` with `-2`/`-3` on collision in ascending input order | `schema:78-81` |
@@ -260,6 +286,9 @@ a `checkpoint.reached` event exists (`packages/runtime/src/feedback.ts:3-6`, cal
 opponent's turn is a worse moment than after the learner's own move. (There is no
 `feedbackIsRevealed` in the tree; two drafts of this territory cited it.)
 
+Parity fixes *when* the checkpoint fires. It does nothing about the runs where it never fires
+at all, which is §7.
+
 **Deliberately absent:** no `annotations`, no `planClasses`, no `deviations`, no
 `feedbackClaims`, no `concepts`, no `authoredBoundary`. Every one is a judgment.
 
@@ -268,7 +297,7 @@ opponent's turn is a worse moment than after the learner's own move. (There is n
 **It cannot select `opponentPolicy.mode: "perfect_tablebase"`.** That value is in the schema
 (`schemas/drill_pack.schema.json:361`) and **not** in `SUPPORTED_POLICY_MODES`
 (`apps/server/src/capabilities.ts:10-14`), so `pack-validation.ts:125-138` rejects it with
-`UNSUPPORTED_OPPONENT_POLICY`. This is defect **D8** (`design/BACKLOG.md:105`), which
+`UNSUPPORTED_OPPONENT_POLICY`. This is defect **D8** (`design/BACKLOG.md:118`), which
 also covers `immediate_blunder_guard`.
 
 **B6b needs `perfect_tablebase` to exist**, and states the dependency rather than working
@@ -316,7 +345,50 @@ identifier at all.
 
 `provenance.licence` is `"CC-BY-SA-4.0"` like every emitted pack (B6a §2 is wholesale, not
 conditional on borrowing); `provenance.attribution` is absent, because nothing was borrowed
-and a tablebase result is not prose.
+and a tablebase result is not prose. The `licence` object carries exactly `basis`, `spdx`,
+`noticeText` and `rationale` — the obligation booleans no longer exist and are derived from
+the identifier (B6a §1.2), so this entry cannot declare itself attribution-free in one field
+and attribution-bearing in another.
+
+### 7. B6b blocks on D11, and there is no workaround to build instead
+
+**The dependency, stated as the review demanded rather than discovered in implementation:
+B6b requires terminal-completion/reveal semantics that do not ship.** B6a §1.5 has the full
+mechanism; the part that is specific to this RFC is why it is a block here and not a caveat.
+
+An endgame drill is *the* case where a run ends. B6b emits `mode: "outcome"` packs with one
+`atPly C` checkpoint, `C` around 16, played against `strong_engine` or `human_common` from a
+position with few pieces on the board. Mate, stalemate and insufficient material inside 16
+plies are not edge cases in that material — they are the drill's subject matter. When one
+occurs: the terminal move commits and is orchestrated (`apps/server/src/service.ts:258,282`),
+every later move throws `RUN_TERMINATED` (`packages/runtime/src/runtime.ts:274-276`), the
+`atPly C` checkpoint never matches, `feedbackDisclosed` stays false
+(`packages/runtime/src/feedback.ts:3-12`), the objective stays `active`, and every
+`tablebase_result` and `engine_eval` this RFC exists to attach stays withheld forever. **The
+learner who converted the ending is shown less than the learner who shuffled for sixteen
+plies.** That is not a pack this RFC should ship.
+
+**No bounded local workaround exists**, and B6a §1.5's table is the check: there is no trigger
+that matches a terminal position, an early checkpoint destroys delayed disclosure, `segment_end`
+needs a checkpoint to have fired already, and `attempt_end` does not validate. Options that
+would be *available* — lowering `C`, choosing a quieter opponent, restricting to positions
+unlikely to end — are all forms of emitting content shaped around a runtime defect rather than
+around chess, and each one would have to be undone when D11 lands.
+
+**So:**
+
+- B6b is **not implementable until D11 ships.** Its fix is named in B6a §1.5 and is program-item
+  work, not sourcing work; this RFC does not implement it as a side effect, and B6a §6 puts it
+  in the landing order between B6a and B6b.
+- The block is expressed as §Acceptance 21, a scripted forced mate before the checkpoint that
+  must still reveal. It fails today. It is deliberately not satisfiable by choosing a line that
+  avoids termination.
+- **The abstention path is unaffected and stays this RFC's primary deliverable.** §2's census,
+  the out-of-range refusal, and the `local-file` manifest entry that makes its triple legal are
+  all independent of D11 — they concern what is *written*, not what is *played*. If the owner
+  wants the refusal instrument before the runtime fix, the honest split is to land §1–§2 and
+  §6 (census, abstention, licence) and hold §4's pack emission, not to ship packs that cannot
+  reveal.
 
 ## Deviations from design
 
@@ -343,6 +415,14 @@ and a tablebase result is not prose.
    `reason: "out_of_range"` and `detail: "11 pieces; Syzygy covers <=7"`. **No
    `tablebase_result` record exists for it anywhere in the file, and no HTTP request is
    issued** — asserted with the network layer stubbed to throw on any call.
+1a. **The abstention-only candidate is a legal triple.** The same run's `sources.json` carries
+    exactly one entry — `origin.kind: "local-file"`, `sourceId: "author-positions"`, the
+    list's `sha256` — `make sourcing-check` passes, `MANIFEST_EMPTY` does **not** fire, the
+    abstention's `sourceId`/`retrievedAt` match that entry byte for byte (B6a §1.2a), and
+    `sourcedAt` equals its `retrievedAt`. A variant test that strips the entry fails
+    `MANIFEST_EMPTY`, and one that renames the abstention's `sourceId` to `"syzygy"` fails
+    `EVIDENCE_SOURCE_UNLINKED` — the shape that would have asserted a retrieval that never
+    happened.
 2. **The census is exact at the boundary.** An 8-piece position abstains; a 7-piece position
    queries. Both assertions run with the network stubbed, so the 8-piece case is proven by
    the absence of a request, not by the response.
@@ -411,17 +491,34 @@ and a tablebase result is not prose.
 17. `syzygy` → `basis: "no-rights-asserted"`, `spdx: null`, with the Feist / Football-Dataco
     rationale text present in `sources.json` and verbatim in `provenance.sources[]`;
     `provenance.licence` is `"CC-BY-SA-4.0"` and `provenance.attribution` is absent. A test
-    asserts no artifact of this pipeline contains the string `unlicensed-data`.
+    asserts no artifact of this pipeline contains the string `unlicensed-data`, and a second
+    asserts no `licence` object emitted by this pipeline carries an `attributionRequired` or
+    `shareAlike` key (B6a §1.2 derives both).
 18. **Determinism.** Two `--offline` runs against the committed tablebase **and engine**
     fixtures produce byte-identical `pack.json`, `evidence.json` and `sources.json`
     (B6a §1.4), including for candidates carrying `engine_eval` records.
 19. **No candidate is promotable** — `reviewStatus: "reviewed"` without a reviewer fails
     `GRADUATION_REQUIRES_REVIEWERS` (`pack-validation.ts:92-99`).
 20. `make verify` green; `docs/content-sourcing.md` gains the Syzygy section including the
-    range rule, the fixed-depth budget and the D8 dependency;
-    `content/drafts/rook-4v3-same-side.json` is **not** modified by this RFC — correcting the
-    "Ten pieces" still shipping in its `feedbackClaim` at `:486` is authoring work under
-    `planning/content-era/`, and a BACKLOG row records it.
+    range rule, the fixed-depth budget, and the D8 and D11 dependencies;
+    `content/drafts/rook-4v3-same-side.json` is **not** modified by this RFC. Its piece count
+    is already correct at `:486` and `:526` (`a5e27e1`), so there is nothing for this RFC to
+    fix there; a test asserts the emitter's census over that pack's `start.fen` returns 11,
+    which is the same claim under machine control instead of under proofreading.
+
+**The D11 block, expressed as the test that fails:**
+
+21. **A run that ends before its checkpoint still reveals.** A B6b candidate is played from a
+    committed fixture position along a **scripted forced mate** that lands before `atPly C`.
+    The test asserts, after the mating move: the objective has left `active`; `feedbackDisclosed`
+    is true (`packages/runtime/src/feedback.ts:3-12`); `GET /runs/:id/events` includes the
+    `evidence.attached` events that were withheld; and `GET /runs/:id/authored-feedback`
+    behaves as it does after a normal checkpoint. A stalemate line and an
+    insufficient-material line are asserted the same way. **This criterion cannot pass until
+    D11 ships** (B6a §1.5, `design/BACKLOG.md:115`), and that is the block, not a caveat: it
+    may not be satisfied by choosing a line that avoids termination, and the test asserts the
+    scripted line *is* terminal before ply `C` so that no future edit can quietly turn it into
+    one that survives.
 
 ## Open questions
 
@@ -447,3 +544,19 @@ None.
   pieces" in both places is corrected: `:526` was fixed in `a5e27e1`, `:486` still ships it.
   (6) `feedbackIsRevealed` corrected to `feedbackDisclosed`; `runtime.ts`,
   `session-controller.ts`, `types.ts` and `opponent-selector.ts` coordinates re-taken.
+- 2026-08-12: revised against the second review. (1) **New §7: B6b blocks on D11.** An endgame
+  run that mates or stalemates before `atPly C` never fires a checkpoint, so
+  `feedbackDisclosed` stays false forever (`packages/runtime/src/feedback.ts:3-12`) and every
+  record this RFC attaches stays withheld — in exactly the runs endgame packs are about. All
+  four candidate workarounds are closed by shipped code (B6a §1.5), so the dependency is
+  stated as a block with a named fix rather than papered over; §Acceptance 21 is the failing
+  test that expresses it, and it is written so a line that happens to survive cannot satisfy
+  it. (2) §4 now declares the author's position list as a `local-file` manifest entry (B6a
+  §1.2): without it the out-of-range candidate — this RFC's primary deliverable — had an empty
+  manifest, which `MANIFEST_EMPTY` forbids, and the only alternative was inventing a fetch.
+  The abstention links to that entry by B6a §1.2a, and §Acceptance 1a proves both directions.
+  (3) **The §Summary claim about Pack C was itself stale and is corrected**: `:486` and `:526`
+  both read "eleven" since `a5e27e1`, so the previous revision's "half of it still is [wrong]"
+  was wrong; §Acceptance 20 no longer assigns a correction that has already happened, and
+  replaces it with a census test. (4) The licence encoding drops the derived obligation
+  booleans per B6a §1.2's matrix.

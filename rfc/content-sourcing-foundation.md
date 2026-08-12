@@ -67,7 +67,7 @@ to be redesigned rather than copied.
 | Session distillation, Lichess study import, PGN game import | B6-5/6/7. Different inputs, same seed shape (`planning/breadth/create-and-return.md` §A4.2), specified there |
 | Rendering any of this evidence to a learner | B4 / program item #2. `apps/server/src/capabilities.ts:33` ships `llm: "none"`. This RFC writes files an author reads, never a response a learner reads |
 | Wikibooks / Wikipedia CC BY-SA **prose ingestion** | A fifth pipeline, unscheduled. The 2026-08-12 ruling (`design/02-product-shape.md:41-50`) makes it legitimate; §2 below ships the *encoding* it will need, so the pipeline can be specified later without re-opening the licence question |
-| Bulk corpus ingestion (streamed months, Parquet/DuckDB index) | Rejected-first pattern (`AGENTS.md:93-95`; `design/BACKLOG.md:175,197`). B6c states the one carve-out and its justification burden |
+| Bulk corpus ingestion (streamed months, Parquet/DuckDB index) | Rejected-first pattern (`AGENTS.md:93-95`; `design/BACKLOG.md:188`). B6c states the one carve-out and its justification burden |
 | Automatic lesson generation from mined material | ADR-0001 / AGENTS.md law 8. Every artifact here is a candidate for an author |
 
 ## Specification
@@ -76,7 +76,9 @@ to be redesigned rather than copied.
 
 Every claim below was checked in the working tree on 2026-08-12, because five earlier drafts
 of this territory died on unverified capability claims. `[V]` throughout. **Every coordinate
-was re-taken after F2 (`6f48e13`) and F3 (`1ae7922`) landed**, which moved most of
+was re-taken after F3 (`6f48e13`, "feat: add learner run authorization" — the subject,
+`planning/breadth/synthesis.md:65`) and F2 (`1ae7922`, "feat: add pack-optional position
+runs", `planning/breadth/synthesis.md:53`) landed**, which moved most of
 `apps/server/src/rest.ts` and `apps/server/src/service.ts`; where the withdrawn draft's
 number is stale the row says so, because a citation that no longer resolves is worse than
 none.
@@ -86,16 +88,19 @@ none.
 | No source pipeline of any kind exists | the greps in §Summary; the only outbound HTTP in production is `apps/web/src/lib/api.ts` (browser → own server) |
 | Structural + semantic + executable validation ships and is shared | `apps/server/src/pack-validation.ts:182` (`validatePackDocument`), lint at `packages/schema/src/drill-pack/lint.ts:209`, registry entry `apps/server/src/pack-registry.ts:76` |
 | Pack identity is a digest over the **whole** document | `packages/schema/src/drill-pack/digest.ts`; RFC 8785 + SHA-256, `docs/drill-pack-format.md:73-78` |
-| `perfect_tablebase` is in the schema but **not selectable** | `schemas/drill_pack.schema.json:361` lists it; `apps/server/src/capabilities.ts:10-14` ships `["human_common","strong_engine","theory_strict"]`; anything else fails `UNSUPPORTED_OPPONENT_POLICY` at `pack-validation.ts:125-138`. Ledgered as **D8** (`design/BACKLOG.md:105`) |
+| `perfect_tablebase` is in the schema but **not selectable** | `schemas/drill_pack.schema.json:361` lists it; `apps/server/src/capabilities.ts:10-14` ships `["human_common","strong_engine","theory_strict"]`; anything else fails `UNSUPPORTED_OPPONENT_POLICY` at `pack-validation.ts:125-138`. Ledgered as **D8** (`design/BACKLOG.md:118`) |
 | `immediate_blunder_guard` is in the schema but **rejected** | `schemas/drill_pack.schema.json:54` vs `pack-validation.ts:103-111`. Same defect **D8** |
-| `outcome.reached` has no producer | declared `packages/runtime/src/types.ts:185-188`, projection no-op `packages/runtime/src/events.ts:162-164` (`case "outcome.reached": break;`); no emitter |
+| `outcome.reached` has no producer | declared `packages/runtime/src/types.ts:185-188`, projection no-op `packages/runtime/src/events.ts:162-164` (`case "outcome.reached": break;`); no emitter. Ledgered as **D11** (`design/BACKLOG.md:115`), because the missing producer is what strands a terminal run's feedback — §1.5 |
+| **A run that terminates commits its terminal move and then refuses every later move** | `packages/runtime/src/runtime.ts:274-276`: `if (TERMINAL_OBJECTIVE_STATES.has(cursorNode.objectiveState) \|\| position.isEnd()) throw runTerminated(cursorNode.id);`. The guard runs on the *next* move, so checkpoint evaluation does happen on the mating move itself (`apps/server/src/service.ts:258,282`) — what is missing is a trigger that matches a terminal position |
+| **No shipped checkpoint trigger can match "the game ended"** | `SimpleTrigger` is `atPly` \| `atSpineNode` \| `fenPredicate` \| `materialBalance` (`schemas/drill_pack.schema.json` `$defs.simpleTrigger`), and `FenPredicate` is exactly `transposeKey` \| `pieceOnSquare` \| `pawnStructure` (`packages/runtime/src/objective.ts:43-58`, evaluated at `:139-161`). None of them observes checkmate, stalemate or insufficient material |
+| **All three `feedbackDisclosed` branches need an event only a checkpoint can produce** | `packages/runtime/src/feedback.ts:3-12`. `delayed_checkpoint` needs `checkpoint.reached`; `segment_end` needs `segment.completed`, emitted only by `reachCheckpoint` and only when a *previous* checkpoint exists on the branch (`packages/runtime/src/runtime.ts:441-458`); `attempt_end` needs `feedback.revealed`, and `attempt_end` is not a selectable v1 policy (`apps/server/src/pack-validation.ts:112-115` accepts only `delayed_checkpoint` and `segment_end`, and `Service.reveal` refuses any other policy at `apps/server/src/service.ts:539-544`). **There is no policy-level escape from D11** |
 | Only `reach_checkpoint` **success conditions** execute | `pack-validation.ts:160-178` rejects anything else; `apps/server/src/pack-orchestrator.ts:88-100` maps only that kind to a predicate |
 | **Checkpoint triggers are wider than success conditions.** `atPly`, `atSpineNode`, `fenPredicate` and `materialBalance` all execute; a `timingWindow` fires on its `windowCloses` leg | `pack-orchestrator.ts:39-71`. `content/drafts/rook-4v3-same-side.json` already ships a `materialBalance` checkpoint |
 | Checkpoints are evaluated after **both** learner moves and opponent plies | `apps/server/src/service.ts:258` and `:282` both call `orchestratePackMove` (post-F3 coordinates; the draft's `:195,214` are stale) |
 | `atPly` counts plies from the pack's start position | `pack-orchestrator.ts:45` compares `node.ply`; root is `ply: 0` (`packages/runtime/src/runtime.ts:178`), each move `+1` (`:325`) |
 | `atSpineNode` only fires when the run's whole move sequence matches a spine path | `pack-orchestrator.ts:21-37` walks `moveUci` level by level and returns `undefined` on the first mismatch |
 | **`start.side` is the learner's colour, not the FEN's side to move** | `apps/web/src/lib/session-controller.ts:367` moves the opponent whenever `boardModel(node.fen, packStartSide(pack)).turnColor !== packStartSide(pack)` (post-F3; the draft's `:345` is stale). All three drafts exercise the difference: `carlsbad-minority-attack.json` has a `b`-to-move FEN with `side: "white"`; `rook-4v3-same-side.json` has a `w`-to-move FEN with `side: "black"` |
-| **`start.side` is schema-optional but client-required** | `schemas/drill_pack.schema.json:117` does not require it; `apps/web/src/lib/screen-model.ts:54-60` throws `TypeError` when it is absent, and `apps/web/src/lib/DrillScreen.svelte:108` calls it unconditionally. Every emitter must write it. Ledgered as **D9** (`design/BACKLOG.md:105`) |
+| **`start.side` is schema-optional but client-required** | `schemas/drill_pack.schema.json:117` does not require it; `apps/web/src/lib/screen-model.ts:54-60` throws `TypeError` when it is absent, and `apps/web/src/lib/DrillScreen.svelte:108` calls it unconditionally. Every emitter must write it. Ledgered as **D9** (`design/BACKLOG.md:117`) |
 | **`theory_strict` silently degrades to `human_common`** when the pack has no spine, or no spine child at the current position | `apps/server/src/opponent-selector.ts:453-458` (`console.warn("DEGRADED_THEORY_SPINE…")` then `return this.#humanCommon(request)`), reached through `spineChildren` (`:337-347`) |
 | `provenance` is projected to the browser **verbatim, before play** | `pack-registry.ts:58` (`provenance: raw.provenance`), inside the same projection whose doc comment (`:42-46`) says authored feedback is never part of it |
 | **`start` is projected whole, `movesSan` included** | `pack-registry.ts:59` (`start: document.start`) — see the §1.1a projection table. This is the leak surface B6d is designed around |
@@ -105,7 +110,7 @@ none.
 | **The evidence executor never sets `MultiPV` per request** | the only `setoption name MultiPV` in the tree is `opponent-selector.ts:413`, on the Maia path. For the judge, `MultiPV` is fixed at spawn: `application.ts:189` hard-codes `{ Threads: 1, Hash: 16, MultiPV: 1 }`, and `stockfishPlaySpec` (`strong-engine.ts:41-57`) carries `profile.multiPv` into the **opponent** spec only |
 | **`lastInfo` takes the *last* matching `info` line** | `evidence-queue.ts:265-275`. Under `MultiPV > 1` that is the highest-numbered `multipv` line, so `centipawns`/`pv` would silently describe the *third*-best move. MultiPV is not a free parameter for this parser |
 | **No `ucinewgame` is ever sent** | `grep -n "ucinewgame" apps/server/src` is empty; the handshake sends `uci`, the spec's `setoption`s, then `isready` (`engine-supervisor.ts:225-236`) and `execute` sends only the request's commands (`:277`). The transposition table therefore persists across positions in one process, so "same depth, same FEN, same answer" holds only in a fresh process |
-| **A spec that sets `name` loses its engine version** | `parseIdentity` reads the advertised `id name` line (`engine-supervisor.ts:116`) but only fills `version` from it when `spec.name` is undefined (`:119-126`). Both shipped Stockfish specs set `name: "Stockfish"` (`strong-engine.ts:49`, `application.ts:188`), so both report `version: "unknown"`. An authoring spec that wants the build recorded must omit `name` |
+| **A spec that sets `name` loses its engine version** | `parseIdentity` reads the advertised `id name` line (`engine-supervisor.ts:116`) but only fills `version` from it when `spec.name` is undefined (`:119-126`). Both shipped Stockfish specs set `name: "Stockfish"` (`strong-engine.ts:49`, `application.ts:188`), so both report `version: "unknown"`. An authoring spec that wants the build recorded must omit `name`. Ledgered as **D10** (`design/BACKLOG.md:116`); B6b's omitted `name` is a workaround, not a fix |
 | The registry serves every pack it loads, **regardless of `reviewStatus`** | `pack-registry.ts:174` builds `productionPaths` from the schema fixture plus `content/packs/` with no status filter; `list()` (`:199`) and `get()` (`:203`) do not filter either. `content/packs/` is empty today |
 | `jsonFiles` recurses and `fromDocuments` throws on the first invalid document | `pack-registry.ts:97-118`, `:121-140` via `validatedDocument` (`:76-88`) |
 | Stockfish evidence ships at a 100 ms default movetime | `DEFAULT_STRONG_ENGINE_PROFILE` (`apps/server/src/strong-engine.ts:10-15`), read for evidence at `apps/server/src/service.ts:156-157`; payload kinds `eval`/`wdl`/`bestline`, source `engine_validated` (`apps/server/src/evidence-queue.ts:324,339,360`) |
@@ -227,33 +232,68 @@ three `provenance` keys §2 introduces (`licence`, `attribution`, and the pre-ex
 `graduationBlockers` an author already uses at `content/drafts/anti-caro-advance.json:273`).
 The pack an emitter writes is byte-for-byte a pack a human could have typed.
 
-#### 1.2 `sources.json` — the fetch manifest
+#### 1.2 `sources.json` — the input manifest
+
+It is called a *fetch* manifest nowhere in this revision, because two of the three inputs the
+four RFCs actually consume are not fetches: B6b's grading substitute is a **local engine
+search** and its position list is an **author-supplied FEN file**. A manifest with a mandatory
+`url` cannot represent either, and §1.4 forbids an empty manifest — so an HTTP-shaped manifest
+made B6b's out-of-range path (its *primary* deliverable, B6b §2) unable to produce a legal
+artifact triple without inventing a fetch that never happened. The manifest is therefore an
+inventory of **inputs**, and the origin is a tagged union.
 
 ```jsonc
 {
   "schema": "tabiya.sourcing.manifest.v1",
   "entries": [
     {
-      "sourceId": "lichess-chess-openings",
-      "url": "https://raw.githubusercontent.com/lichess-org/chess-openings/<commit-sha>/b.tsv",
-      "retrievedAt": "2026-08-12T10:44:56Z",   // from the cache entry, never from the emit clock (§1.4)
-      "sha256": "…",                            // of the exact bytes used
-      "bytes": 123456,
+      "sourceId": "lichess-chess-openings",     // the linkage key, §1.2a
+      "retrievedAt": "2026-08-12T10:44:56Z",    // from the cache entry, never from the emit clock (§1.4)
+      "origin": {
+        "kind": "http",
+        "url": "https://raw.githubusercontent.com/lichess-org/chess-openings/<commit-sha>/b.tsv",
+        "status": 200,
+        "sha256": "…",                          // of the exact bytes used; null for a headers-only entry
+        "bytes": 123456,                        // null for a headers-only entry
+        "etag": null                            // string when the response carried one
+      },
       "licence": {
         "basis": "spdx",                        // "spdx" | "no-rights-asserted"
-        "spdx": "CC0-1.0",                      // a real SPDX identifier, or null
-        "attributionRequired": false,
-        "shareAlike": false,
-        "noticeText": null,                     // string, required when attributionRequired is true
-        "rationale": null                       // string, required when basis is "no-rights-asserted"
+        "spdx": "CC0-1.0",                      // a listed SPDX identifier, or null
+        "noticeText": null,                     // string, required iff the derived obligation is attribution
+        "rationale": null                       // string, required iff basis is "no-rights-asserted"
       }
     }
   ]
 }
 ```
 
+**Three origin kinds, closed. Adding a fourth requires an RFC amendment**, the same discipline
+§3.1 applies to record kinds. An `origin` whose `kind` is off the set, or that omits a field
+its kind requires, is `MANIFEST_ORIGIN_INVALID`.
+
+| `origin.kind` | Required fields | Produced by | `retrievedAt` is |
+|---|---|---|---|
+| `http` | `url`, `status`, `sha256`, `bytes`, `etag` (`sha256`/`bytes` null only for a `headers-only` cache kind, §1.4) | any HTTP fetch: B6a's TSVs, B6b's tablebase queries, B6c's explorer queries, B6d's dump `HEAD` | the `body`/`headers-only` cache entry's first-fetch timestamp |
+| `local-file` | `path` (repo-relative), `sha256`, `bytes` | an author-supplied input: B6b's `--positions` file, B6c's `--lines` file | the `file` cache entry's first-ingest timestamp, keyed by `sha256` |
+| `engine` | `engineId`, `engineName` (may be null — D10), `engineVersion`, `profile` (`threads`, `hashMb`, `multiPv`), `budget` (`{depth}` or `{movetimeMs}`), `fen`, `evidenceKind` | one local engine search (B6b §3.3) | the `engine` cache entry's first-search timestamp |
+
+Three consequences worth stating because they are what make the triple producible:
+
+1. **A candidate that fetched nothing still has a manifest.** B6b's out-of-range abstention
+   candidate carries one `local-file` entry for the position list that produced it, so
+   `MANIFEST_EMPTY` (§1.4) fires on a genuinely sourceless candidate and not on an honest
+   refusal. No provenance is invented: the entry describes the file the author actually
+   handed the emitter, by digest.
+2. **The deny list applies to every kind**, on the terms stated with it below.
+3. **Every non-reproducible input enters by the same door**, which is what §1.4's determinism
+   argument already claimed and the HTTP-only shape could not deliver.
+
 `licence` is **required on every entry** and the emitter refuses to write a candidate if any
-entry lacks it.
+entry lacks it. For an `engine` origin it is always
+`basis: "no-rights-asserted"`, `rationale: "output of a locally executed engine; not a
+third-party work"`. For a `local-file` origin the author declares it, and it is subject to the
+same matrix as everything else.
 
 **`spdx` holds an SPDX identifier or nothing.** The closed set is `CC0-1.0` and
 `CC-BY-SA-4.0`; both are listed SPDX short identifiers
@@ -270,21 +310,79 @@ that the licence is *undetermined*, and `LicenseRef-…` asserts that a licence 
 unlisted. The claim these sources make is stronger and different: the material is **not a
 copyrightable work**, per the Feist / Football Dataco reasoning quoted at
 `design/research/theory-sourcing.md:87-91`. That is a factual claim with a stated basis, so
-it gets a field of our own with the reasoning attached, and `sourcing-check` fails
-`LICENCE_FIELD_INVALID` on any other shape: `basis: "spdx"` with a `null` or off-set `spdx`,
-`basis: "no-rights-asserted"` with a non-null `spdx` or an empty `rationale`, or
-`attributionRequired: true` with no `noticeText`.
+it gets a field of our own with the reasoning attached.
+
+##### The obligations are derived from the identifier, never stored beside it
+
+The previous revision stored `attributionRequired` and `shareAlike` as independent booleans
+next to `spdx`. That is a contradiction the encoding permitted: an entry could declare
+`spdx: "CC-BY-SA-4.0"` with `shareAlike: false` and walk straight past `ATTRIBUTION_MISSING`
+(§2), because that check reads the boolean. A licence field that can disagree with its own
+licence identifier is not an encoding; it is a hole with a name on it.
+
+**So the booleans do not exist.** A `licence` object has exactly four keys — `basis`, `spdx`,
+`noticeText`, `rationale` — and the obligations are a pure function of `(basis, spdx)`, fixed
+by this table:
+
+| `basis` | `spdx` | derived `attributionRequired` | derived `shareAlike` | `noticeText` | `rationale` |
+|---|---|---|---|---|---|
+| `spdx` | `CC0-1.0` | false | false | must be `null` | must be `null` |
+| `spdx` | `CC-BY-SA-4.0` | true | true | **required**, non-empty | must be `null` |
+| `no-rights-asserted` | `null` | false | false | must be `null` | **required**, non-empty |
+
+Those three rows are the entire legal field space, and `sourcing-check` fails
+`LICENCE_FIELD_INVALID` on everything else. The failure list is exhaustive by construction: a
+`licence` object carrying any key outside the four — in particular a literal
+`attributionRequired` or `shareAlike`, which are now reserved and rejected on sight;
+`basis: "spdx"` with a `null` or off-set `spdx`; `basis: "no-rights-asserted"` with a non-null
+`spdx`; a missing or empty required `noticeText`/`rationale`; a non-null
+`noticeText`/`rationale` in a row where the table says `null`.
+
+Everywhere else in these four RFCs, "share-alike" and "attribution required" mean **the
+derived values**, recomputed from the identifier at check time. There is no second source of
+truth left to drift.
 
 Sources on `design/research/theory-sourcing.md:134-143` (TWIC, PGN Mentor, the
 `ecochessopeningcodes` compilation, bulk Lichess studies, `calebjcourtney/db.sqlite3`) are a
-hard-coded deny list matched on hostname *and* on the `sourceId` vocabulary; a fetch against
-one fails with `SOURCE_DENIED` naming the dossier line.
+hard-coded deny list matched on `origin.url` hostname (for `http` origins) *and* on the
+`sourceId` vocabulary (for all three origin kinds); a fetch or an ingest against one fails
+with `SOURCE_DENIED` naming the dossier line. A `local-file` whose *contents* were scraped
+from a denied source is beyond mechanical reach and stays an author obligation — stated so
+nobody reads the check as stronger than it is.
 
 | Entry shape | Obligation | Encoding, exactly |
 |---|---|---|
-| `basis: "spdx"`, `spdx: "CC0-1.0"` | none | one `provenance.sources[]` entry: `` `<what was taken>: <sourceId> (<url>) — CC0-1.0, no attribution required` `` |
-| `basis: "spdx"`, `spdx: "CC-BY-SA-4.0"` | attribution **and** share-alike on derivatives | `noticeText` mandatory in the manifest; a `provenance.attribution[]` entry per §2 |
+| `basis: "spdx"`, `spdx: "CC0-1.0"` | none | one `provenance.sources[]` entry: `` `<what was taken>: <sourceId> (<origin>) — CC0-1.0, no attribution required` ``, where `<origin>` is the `url` for `http`, the repo-relative `path` plus `sha256` for `local-file`, and `` `<engineId>@<engineVersion>` `` for `engine` |
+| `basis: "spdx"`, `spdx: "CC-BY-SA-4.0"` | attribution **and** share-alike on derivatives, both derived | `noticeText` mandatory in the manifest; a `provenance.attribution[]` entry per §2 |
 | `basis: "no-rights-asserted"` | none, and the *reason* must be stated | `rationale` mandatory, carried verbatim into `provenance.sources[]` (B6b §6; B6c §6) |
+
+##### 1.2a The linkage rule
+
+Nothing in the previous revision connected an evidence record's `sourceId` and `retrievedAt` to
+anything. Both were *described* as copied from a manifest entry and no check said so, which
+means a record could name a source the candidate never consumed and carry a timestamp from
+nowhere — the exact shape of unverifiable provenance these RFCs exist to prevent. The rule,
+pinned:
+
+- **Every `evidence.json` record and every abstention carries `sourceId` and `retrievedAt`**
+  (abstentions included — see §1.3, where they previously carried neither).
+- **`sourceId` must match exactly one `entries[]` entry in the same candidate's
+  `sources.json`.** Zero matches is `EVIDENCE_SOURCE_UNLINKED`; two or more entries sharing a
+  `sourceId` **and** a `retrievedAt` is `MANIFEST_DUPLICATE_ENTRY`. A `sourceId` may appear
+  more than once only with distinct `retrievedAt` values — five `chess-openings` TSVs fetched
+  at different times are five entries and one `sourceId`.
+- **`retrievedAt` must be byte-equal to that entry's `retrievedAt`.** Any other value is
+  `EVIDENCE_RETRIEVED_AT_MISMATCH`. It is never re-derived, re-formatted, or re-read from a
+  clock.
+- **Every manifest entry must be referenced by at least one record or abstention.**
+  An unreferenced entry is `MANIFEST_ENTRY_UNUSED`. This is not tidiness: §1.4 defines
+  `sourcedAt` over "the manifest entries this candidate actually consumed", and without this
+  rule "consumed" is unstated and the derived timestamp is unverifiable. With it, *consumed*
+  ≡ *referenced*, `sourcedAt` is the maximum `retrievedAt` over all entries, and
+  `sourcing-check` can recompute it rather than trust it.
+
+Checked in both directions, this is what makes `sourcedAt`, §2's licence obligations, and the
+deny list bind a *candidate* rather than a file that happens to sit next to it.
 
 #### 1.3 `evidence.json` — the grounding ledger
 
@@ -299,8 +397,8 @@ one fails with `SOURCE_DENIED` naming the dossier line.
     {
       "kind": "opening_identity",                  // closed set, §3.1
       "anchor": { "spineNodeId": "exd5" },         // or { "fen": "…" } or { "pointer": "/feedbackClaims/0" }
-      "sourceId": "lichess-chess-openings",
-      "retrievedAt": "2026-08-12T10:44:56Z",       // copied from the manifest entry
+      "sourceId": "lichess-chess-openings",        // must match one manifest entry — §1.2a
+      "retrievedAt": "2026-08-12T10:44:56Z",       // byte-equal to that entry's retrievedAt — §1.2a
       "grounds": "citable_source",                 // "citable_source" | "machine_validation"
       "values": { "eco": "D35", "name": "Queen's Gambit Declined: Exchange Variation" },
       "supports": ["/spine/0/children/0/moveSan"]  // RFC 6901 pointers into pack.json
@@ -310,6 +408,8 @@ one fails with `SOURCE_DENIED` naming the dossier line.
     {
       "kind": "tablebase_result",
       "anchor": { "fen": "8/…" },
+      "sourceId": "author-positions",              // required, same linkage rule as a record — §1.2a
+      "retrievedAt": "2026-08-12T10:44:56Z",       // required, byte-equal to that entry's value
       "reason": "out_of_range",                    // closed set: out_of_range | source_unavailable
                                                    //   | no_data_at_band | licence_withheld
       "detail": "11 pieces; Syzygy covers <=7"
@@ -318,8 +418,18 @@ one fails with `SOURCE_DENIED` naming the dossier line.
 }
 ```
 
+**An abstention carries `sourceId` and `retrievedAt` like a record does**, and this is not
+symmetry for its own sake. B6b's out-of-range path issues no request at all (B6b §2), so its
+`sourceId` names the input that *was* consumed — the author's position list, a `local-file`
+manifest entry (§1.2) — and never the source that was not queried. Naming `syzygy` there
+would assert a retrieval that did not happen; naming nothing would leave `MANIFEST_ENTRY_UNUSED`
+unsatisfiable for the only entry the candidate has.
+
 Rules that make this a ledger rather than decoration:
 
+- **Every record and abstention links to a manifest entry** (§1.2a):
+  `EVIDENCE_SOURCE_UNLINKED` and `EVIDENCE_RETRIEVED_AT_MISMATCH` on the record side,
+  `MANIFEST_ENTRY_UNUSED` and `MANIFEST_DUPLICATE_ENTRY` on the manifest side.
 - **`supports` pointers must resolve** in `pack.json`. A record whose pointer does not
   resolve is an error (`EVIDENCE_ANCHOR_BROKEN`).
 - **Prose pointers fail closed.** `supports` may not target `/objective/summary`,
@@ -346,12 +456,43 @@ them required, none of them tunable down:
   globally" from a mechanism that could not deliver it:
   - *In-process*: every fetch goes through one client instance that serializes on a single
     promise chain. This is a real guarantee and it is all a promise chain can give.
-  - *Cross-process*: before each request the client acquires an exclusive lock file at
-    `content/sources/.fetch.lock`, created with `open(…, "wx")` — `O_CREAT|O_EXCL`, atomic on
-    a local filesystem — containing the pid and the acquisition time, and released in a
-    `finally`. A lock older than 300 s is treated as abandoned and taken over. Two concurrent
-    `make source-fetch` / `make candidate-emit` runs in the same checkout therefore still
-    issue one request at a time.
+  - *Cross-process*: an **owned** lock file at `content/sources/.fetch.lock`. The previous
+    revision's version was not a mutex and must not be built: it took over any lock older
+    than 300 s and released in a `finally` that deleted the path unconditionally, so a slow
+    original holder could resume mid-request and then delete the **replacement's** lock,
+    leaving two processes fetching and a third free to acquire. The corrected protocol is
+    ownership-token compare-and-delete plus a heartbeat, and every step of it is required:
+
+    1. **Acquire.** Mint `owner` = a v4 UUID. `open(path, "wx")` — `O_CREAT|O_EXCL`, atomic on
+       a local filesystem — and write `{ owner, pid, acquiredAt, heartbeatAt }`.
+    2. **Contend.** On `EEXIST`, read the file. If `heartbeatAt` is within 90 s (three missed
+       30 s beats), wait and retry; the client never proceeds past a live lock.
+    3. **Take over, atomically or not at all.** If `heartbeatAt` is older than 90 s, the
+       contender `rename`s the lock to `` `.fetch.lock.<observedOwner>.takeover` `` — atomic,
+       so exactly one contender wins — and only the winner then re-runs step 1. A `rename`
+       that fails, or that moves a file whose `owner` is no longer `observedOwner`, means
+       another process won: go back to step 2.
+    4. **Heartbeat.** While held, rewrite `heartbeatAt` every 30 s by writing a temp file and
+       `rename`-ing it over the lock, preserving `owner`.
+    5. **Verify before every request**, and every 30 s during one: re-read the lock and
+       compare `owner`. A mismatch or a missing file means this process has been taken over —
+       it raises `LOCK_LOST`, **issues no further request**, writes no artifact, and exits
+       non-zero. It never deletes a lock it does not own.
+    6. **Release** by compare-before-delete: re-read, and unlink **only** if `owner` matches.
+       The `finally` that deletes unconditionally is the bug, not the release.
+
+    One residual race is resolved by step 5 rather than prevented, and is stated so nobody
+    reads it as unhandled: a heartbeat rename (step 4) can land *after* a contender's takeover
+    rename (step 3), restoring the old holder's file over the new lock. Whichever process's
+    `owner` is not the one on disk at its next verification raises `LOCK_LOST` and exits, so
+    the outcome is "the wrong process may win" — never "both proceed". Losing a race is
+    acceptable for an authoring command; two simultaneous requests to Lichess are not.
+
+    Two concurrent `make source-fetch` / `make candidate-emit` runs in the same checkout
+    therefore issue one request at a time, and a stalled run cannot be silently overlapped —
+    it fails closed. If step 3 is ever judged too clever, the fallback that is also
+    acceptable is to **refuse to take over at all** and require the operator to remove a
+    stale lock by hand; what is not acceptable is a takeover without ownership.
   - *What this does **not** guarantee*, stated so nobody relies on it: two checkouts, two
     containers, or two machines behind one IP are not coordinated, and neither is a lock on
     a network filesystem where `O_EXCL` is unreliable. The obligation
@@ -362,13 +503,23 @@ them required, none of them tunable down:
     deterministic-timestamp rule below, which is about artifacts, not about process control.
 - **On `429`: sleep ≥ 60 s**, then retry with exponential backoff (60 s, 120 s, 240 s), max
   3 retries, then abstain with `source_unavailable`. Never a tighter interval.
+- **On `5xx`: the same schedule** — 60 s, 120 s, 240 s, max 3 retries, then abstain with
+  `source_unavailable` and the status in `detail`. Stated here because B6c §0 cited "B6a's
+  retry policy for 5xx" and no such policy existed; a server error and a rate limit are
+  answered identically rather than with two schedules, and the 60 s floor applies to both
+  because the politeness obligation (`design/research/theory-sourcing.md:37-38`) does not
+  weaken when the server is the one failing.
 - **On `401`/`403`: do not retry.** Abstain with `source_unavailable` and record the status.
+- **On any other `4xx`: do not retry.** Abstain with `source_unavailable` and the status; a
+  malformed request is not fixed by repeating it.
 - **`User-Agent` is mandatory and identifying:**
   `chess-tabiya-sourcing/<version> (+https://github.com/<repo>; <contact>)`.
-- **The cache is the default read path, and it has three entry kinds.** Key = SHA-256 of the
-  canonical request (method, host, path, sorted query) for the first two, and of the
-  canonical job for the third. Every entry stores status/metadata and `retrievedAt`
-  **written once, at first fetch, and never rewritten on a hit**.
+- **The cache is the default read path, and it has four entry kinds.** Key = SHA-256 of the
+  canonical request (method, host, path, sorted query) for the first two, of the file's
+  `sha256` for the third, and of the canonical job for the fourth. Every entry stores
+  status/metadata and `retrievedAt` **written once, at first fetch/ingest/search, and never
+  rewritten on a hit** — which is what makes every `origin.kind` in §1.2 carry a stable
+  timestamp by the same rule instead of three.
   1. **`body`** — status, headers, and the response bytes. The default. Max age 30 days for
      explorer/tablebase responses; `chess-openings` is pinned by commit SHA and never
      expires.
@@ -377,7 +528,12 @@ them required, none of them tunable down:
      discarded, never written to disk. The 304 MB puzzle dump is the only such source today
      (B6d §4); the ceiling that forces this kind is 50 MB, declared per source rather than
      discovered at runtime.
-  3. **`engine`** — the payload of one local engine search, keyed by engine id, engine
+  3. **`file`** — an author-supplied local input (B6b's `--positions` list, B6c's `--lines`
+     list), keyed by content `sha256`, storing `path`, `bytes` and `retrievedAt` and **not**
+     a second copy of the bytes. An author's file is not a fetch, but it is an input whose
+     identity has to be recorded for the same reason a fetch's is: the candidate's provenance
+     is the set of things that produced it.
+  4. **`engine`** — the payload of one local engine search, keyed by engine id, engine
      `version` as parsed from the UCI handshake (`engine-supervisor.ts:116`), profile
      (`threads`, `hashMb`, `multiPv`), search budget, FEN, and evidence kind. Engine output
      is not an HTTP response but it is exactly as non-reproducible, and it enters the
@@ -400,10 +556,30 @@ them required, none of them tunable down:
    normalized to `YYYY-MM-DDTHH:MM:SSZ` (UTC, second precision, no fractional part). It is a
    function of the inputs, so identical inputs give an identical file.
 4. A candidate that consumed **zero** manifest entries is an error (`MANIFEST_EMPTY`): there
-   is no honest `sourcedAt` for it and no reason for it to exist.
+   is no honest `sourcedAt` for it and no reason for it to exist. With §1.2's three origin
+   kinds this is now a reachable, honest rule rather than a trap — a pipeline that fetched
+   nothing still has the author's input file to declare, and only a candidate with *no*
+   recorded input at all fails.
 5. Every JSON artifact is serialized with RFC 8785 canonicalization
    (`packages/schema/src/drill-pack/digest.ts`) plus a trailing newline, so key order and
    number formatting are not a source of drift either.
+
+**The emission-job digest.** Every `candidate-emit` invocation has a
+`emissionJobDigest` = SHA-256 over the RFC 8785 canonicalization of
+`{ pipeline, args, sourceEtags }`, where `args` is the emitter's fully-resolved argument
+object with defaults applied and keys sorted, and `sourceEtags` maps each `sourceId` the job
+will consult to the `etag`/commit-SHA it resolved to. It is written to
+`content/candidates/<candidate-id>/job.json` alongside the triple (or, for a multi-candidate
+job like B6d's, to `content/candidates/<job-id>.job.json`), and it is **not** part of the
+pack, the manifest, or the evidence file, so it never enters a digest or a projection.
+
+Its one job is to make "nothing changed" checkable. **A pipeline may treat a re-run as a
+no-op only when all three of these hold**: the upstream identity is unchanged (same `etag`
+or commit SHA), the `emissionJobDigest` is byte-identical to the recorded one, **and** the
+outputs are complete — every expected candidate directory exists with all three artifacts
+and `sourcing-check` passes on each. Any other short-circuit is a bug, and §1.4's
+determinism claim does not cover it: an unchanged upstream says nothing about a changed
+argument list. B6d §4 is where this bites hardest and it is spelled out there.
 
 The clock is therefore readable in exactly one place — the cache — and nothing downstream
 of it observes the present moment.
@@ -416,6 +592,48 @@ for byte, including in `--offline` mode and including after the system clock mov
 non-reproducible input, network **and** engine, is required to enter through the cache and to
 carry the identity of what produced it (source URL and `retrievedAt`; engine id, version,
 profile and budget). Determinism is achieved by recording, not by hoping.
+
+#### 1.5 The reveal boundary: every emitted pack needs terminal-completion semantics (D11)
+
+Every pipeline in B6a–B6d emits packs whose single checkpoint is `atPly`, and `atPly` is the
+only trigger available to a spine-less pack. That makes all four RFCs consumers of one shipped
+defect, so it is stated once, here, rather than four times with four different framings.
+
+**The defect, verified in the tree** (§0 rows, and **D11**, `design/BACKLOG.md:115`): a legal
+run can reach checkmate, stalemate, or insufficient material before its checkpoint ply. The
+terminal move itself commits and is orchestrated normally (`apps/server/src/service.ts:258,282`);
+every *later* move throws `RUN_TERMINATED` (`packages/runtime/src/runtime.ts:274-276`). No
+checkpoint fires, so `feedbackDisclosed` stays false forever
+(`packages/runtime/src/feedback.ts:3-12`), the objective never leaves `active`, and the engine
+evidence the run accumulated is withheld permanently. The learner who *finished the game*
+sees less than the learner who timed out.
+
+**There is no workaround available in the pack format, and this was checked rather than
+assumed.** All four escape routes are closed by shipped code:
+
+| Candidate workaround | Why it is not one |
+|---|---|
+| A second checkpoint whose trigger matches "the game ended" | No such trigger exists. `SimpleTrigger` is `atPly`/`atSpineNode`/`fenPredicate`/`materialBalance`, and `FenPredicate` is `transposeKey`/`pieceOnSquare`/`pawnStructure` (`packages/runtime/src/objective.ts:43-58`). None observes mate, stalemate, or insufficient material |
+| A very early checkpoint, e.g. `atPly 1` | Under `delayed_checkpoint`, disclosure is global once **any** `checkpoint.reached` exists (`feedback.ts:3-6`). This discloses everything from ply 1 and destroys the withholding contract `rfc/archive/authored-explanation-surface.md` and ADR-0006 exist to hold |
+| `feedbackPolicy: "segment_end"` | `segment.completed` is emitted only inside `reachCheckpoint`, and only when a *previous* checkpoint already fired on the branch (`packages/runtime/src/runtime.ts:441-458`). It needs two checkpoints where the problem is that zero fired |
+| `feedbackPolicy: "attempt_end"` plus `POST /runs/:id/reveal` | `attempt_end` is not a selectable v1 policy (`apps/server/src/pack-validation.ts:112-115`) and `Service.reveal` refuses any run that is not `attempt_end` (`apps/server/src/service.ts:539-544`) |
+
+**The ruling for these RFCs.** B6a's pipeline emits opening lines played to a short `atPly`
+against a scripted spine, where a terminal position inside the emitted window is possible only
+in constructed cases; B6a therefore ships, and its acceptance does not require a terminal run.
+**B6b and B6d block on D11** and say so in their front matter: endgames and tactical aftermaths
+are precisely the runs that end, so an emitter for them produces content whose one executable
+grade is unreachable in the very games the pack is about. Each carries an acceptance criterion
+— a scripted forced mate before the checkpoint ply that must still reveal — which is
+unsatisfiable today and is therefore the block, expressed as a test rather than as a promise.
+
+**The fix D11 needs, named so the dependency is a task and not a mood:** produce
+`outcome.reached` (declared `packages/runtime/src/types.ts:185-188`, projected as a no-op at
+`packages/runtime/src/events.ts:162-164`) when a committed move leaves `position.isEnd()` true
+at the same site that guards `runTerminated` (`runtime.ts:274-276`), and add it to
+`feedbackDisclosed`'s reveal set (`feedback.ts:3-12`). That is program-item work, not sourcing
+work, and no RFC in this split may implement it as a side effect. §6 places it in the landing
+order.
 
 ### 2. Licence and attribution enforcement
 
@@ -466,8 +684,10 @@ Rules, all enforced by `sourcing-check` (§5):
 - A pack whose prose derives from a share-alike source additionally carries one
   `provenance.attribution[]` entry per contributing source, each with all five fields.
   `attribution[]` entries are sorted by `sourceId` then `url` so the digest is stable.
-- **`ATTRIBUTION_MISSING`** — a `sources.json` entry with `shareAlike: true` contributed
-  prose to the pack and no `attribution[]` entry has a matching `sourceId` **and** `url`.
+- **`ATTRIBUTION_MISSING`** — a `sources.json` entry whose **derived** `shareAlike` is true
+  (§1.2's matrix: `basis: "spdx"`, `spdx: "CC-BY-SA-4.0"`) contributed prose to the pack and
+  no `attribution[]` entry has a matching `sourceId` **and** `url`. The check reads the SPDX
+  identifier, never a stored boolean, so an entry cannot opt out of its own licence.
 - **`LICENCE_MIXED`** — the pack's declared posture and its borrowings disagree. Concretely:
   `provenance.licence` is present and is not `"CC-BY-SA-4.0"`; or an `attribution[]` entry's
   `licence` is a value CC-BY-SA-4.0 cannot carry forward (the accepted set is `CC0-1.0` and
@@ -679,19 +899,30 @@ registered set.
 
 1. runs `validatePackDocument` on `pack.json` and prints `PackValidationIssue[]` in the
    `apps/server/src/pack-check.ts:62-64` format;
-2. asserts every `sources.json` entry has a well-formed `licence` — `LICENCE_FIELD_INVALID`
-   for a `basis`/`spdx`/`rationale` combination §1.2 does not permit — and that no entry's
+2. asserts every `sources.json` entry has a well-formed `origin` for its declared `kind`
+   (`MANIFEST_ORIGIN_INVALID`) and a `licence` matching one of §1.2's three rows —
+   `LICENCE_FIELD_INVALID` otherwise,
+   including for a stored `attributionRequired` or `shareAlike` key — and that no entry's
    host or `sourceId` is on the deny list; fails `MANIFEST_EMPTY` when there are no entries;
+2a. enforces §1.2a's linkage in both directions: `EVIDENCE_SOURCE_UNLINKED`,
+   `EVIDENCE_RETRIEVED_AT_MISMATCH`, `MANIFEST_ENTRY_UNUSED`, `MANIFEST_DUPLICATE_ENTRY`;
 3. asserts the §2 encoding: `provenance.licence` is `"CC-BY-SA-4.0"` when present and the
-   candidate's emitter wrote it, `ATTRIBUTION_MISSING`, `LICENCE_MIXED`, and the
-   `provenance.sources[]` string obligations from §1.2;
+   candidate's emitter wrote it, `ATTRIBUTION_MISSING` (against the **derived** share-alike
+   value), `LICENCE_MIXED`, and the `provenance.sources[]` string obligations from §1.2;
 4. resolves every `evidence.json` `supports` pointer, and fails on `EVIDENCE_ANCHOR_BROKEN`,
    `EVIDENCE_OVERREACH`, `EVIDENCE_VALUES_INVALID`, or a `deviations[*]/class` support;
-5. recomputes `sourcedAt` from the consumed manifest entries and fails
-   `EVIDENCE_TIMESTAMP_DERIVED` if the stored value differs;
+5. recomputes `sourcedAt` as the maximum `retrievedAt` over the consumed — i.e. referenced,
+   §1.2a — manifest entries and fails `EVIDENCE_TIMESTAMP_DERIVED` if the stored value
+   differs;
 6. warns `EVIDENCE_DIGEST_STALE` when `packDigest` no longer matches `digestDrillPack(pack)`;
 7. fails if `provenance.reviewStatus !== "draft"` or `reviewers` is non-empty — a candidate
    is not permitted to arrive pre-approved.
+
+**Pack-less directories.** A `DIR` containing a `sources.json` but no `pack.json` runs steps
+2, 2a, 3's `provenance.sources[]` obligations where they apply, and 5, and skips the rest.
+That is not a special case invented for one consumer: any artifact carrying a derived
+`sourcedAt` needs a manifest to derive it from, and B6c's `content/candidates/priority/` is
+the first such directory (B6c §2).
 
 **Audit mode.** `make sourcing-check DIR=content/packs` runs the same checks in
 **warning-only** mode: every failure is reported and the exit status is 0. This catches a
@@ -708,7 +939,12 @@ one.
 
 ### 6. Landing order across the four RFCs
 
-**B6a → B6b → B6c → B6d.** Three reasons, in order of weight:
+**B6a → (D11 fix) → B6b → B6c → B6d**, where B6c may land concurrently with the D11 fix
+because it emits no played pack. The D11 step is not a sourcing RFC and is not optional
+sequencing garnish: §1.5 shows B6b's and B6d's packs cannot reveal in the runs they are about
+until `outcome.reached` has a producer, and both RFCs' acceptance criteria fail until it does.
+
+The pipeline order itself has three reasons, in order of weight:
 
 1. **`design/04-content-architecture.md` §8's own batch order.** Batch 1 is one pack per
    phase — anti-Caro (opening), Carlsbad (middlegame), 4v3 rook (endgame). The opening and
@@ -769,10 +1005,10 @@ that — the abstention path is the deliverable, and
 
 **Licence and attribution:**
 
-4. `lichess-chess-openings` → `basis: "spdx"`, `spdx: "CC0-1.0"`,
-   `attributionRequired: false`; the emitted `provenance.sources[]` contains the CC0
-   statement and the pinned commit SHA; `provenance.licence` is `"CC-BY-SA-4.0"` and
-   `provenance.attribution` is absent.
+4. `lichess-chess-openings` → `origin.kind: "http"`, `basis: "spdx"`, `spdx: "CC0-1.0"`, with
+   derived `attributionRequired`/`shareAlike` both false and neither stored; the emitted
+   `provenance.sources[]` contains the CC0 statement and the pinned commit SHA;
+   `provenance.licence` is `"CC-BY-SA-4.0"` and `provenance.attribution` is absent.
 5. **Deny list:** a fetch against a `theweekinchess.com` or `pgnmentor.com` URL, and one
    against `sourceId: "ecochessopeningcodes"`, each fail with `SOURCE_DENIED` quoting
    `design/research/theory-sourcing.md:134-143`.
@@ -780,8 +1016,17 @@ that — the abstention path is the deliverable, and
    `{ basis: "spdx", spdx: "unlicensed-data" }`, `{ basis: "spdx", spdx: "NOASSERTION" }`,
    `{ basis: "no-rights-asserted", spdx: "CC0-1.0" }`, and
    `{ basis: "no-rights-asserted", rationale: "" }` each fail `LICENCE_FIELD_INVALID`; the
-   two permitted shapes pass. A test asserts every value that ever reaches an `spdx` field is
+   three permitted rows pass. A test asserts every value that ever reaches an `spdx` field is
    present in a committed list of SPDX short identifiers.
+6a. **Obligations cannot contradict the identifier.** A `licence` object carrying a literal
+    `attributionRequired` or `shareAlike` key fails `LICENCE_FIELD_INVALID` — asserted
+    specifically for `{ basis: "spdx", spdx: "CC-BY-SA-4.0", shareAlike: false }`, the shape
+    that previously bypassed `ATTRIBUTION_MISSING`. A second test asserts the derivation
+    itself: for each of §1.2's three rows, the computed `(attributionRequired, shareAlike)`
+    pair equals the table, and `ATTRIBUTION_MISSING` fires from the derived value on a
+    `CC-BY-SA-4.0` entry that contributed prose with no matching `attribution[]` entry.
+6b. **`CC-BY-SA-4.0` without `noticeText` fails**, and `CC0-1.0` *with* one fails too — both
+    `LICENCE_FIELD_INVALID`, so the required/forbidden columns are proved in both directions.
 7. **Share-alike is enforced, not refused, and the ruling is wholesale.** A manifest entry
    with `CC-BY-SA-4.0` and a `noticeText` emits successfully; the same entry recorded as
    contributing prose to a pack with no matching `provenance.attribution[]` entry fails
@@ -795,8 +1040,29 @@ that — the abstention path is the deliverable, and
    test asserts the absence of `provenance.licence` produces no issue at any severity above
    warning.
 9. **A share-alike entry that supplied only geometry does not trigger attribution.** A
-   fixture manifest entry with `shareAlike: true` whose `evidence.json` records support only
-   `/spine/**/moveSan` passes with no `attribution[]`.
+   fixture manifest entry with `spdx: "CC-BY-SA-4.0"` — derived share-alike true — whose
+   `evidence.json` records support only `/spine/**/moveSan` passes with no `attribution[]`.
+
+**Manifest origins and source linkage** — the contract that makes provenance checkable:
+
+9a. **All three origin kinds round-trip.** A fixture candidate carrying one `http`, one
+    `local-file` and one `engine` entry passes `sourcing-check`; an entry whose `origin.kind`
+    is outside the closed set, or that omits a field its kind requires, fails
+    `MANIFEST_ORIGIN_INVALID`.
+9b. **A fetchless candidate is legal and an inputless one is not.** A candidate whose only
+    manifest entry is a `local-file` position list, whose `evidence.json` contains one
+    abstention and zero records, passes — the shape B6b §2's out-of-range path produces. A
+    candidate with `entries: []` fails `MANIFEST_EMPTY`.
+9c. **Linkage is enforced in both directions.** A record naming a `sourceId` absent from
+    `sources.json` fails `EVIDENCE_SOURCE_UNLINKED`; the same record with the `retrievedAt`
+    altered by one second fails `EVIDENCE_RETRIEVED_AT_MISMATCH`; a manifest entry referenced
+    by no record or abstention fails `MANIFEST_ENTRY_UNUSED`; two entries sharing a `sourceId`
+    *and* a `retrievedAt` fail `MANIFEST_DUPLICATE_ENTRY`, while two sharing only the
+    `sourceId` pass. An **abstention** missing `sourceId` or `retrievedAt` fails the same way
+    a record does.
+9d. **The deny list reaches every origin kind.** A `local-file` entry with
+    `sourceId: "ecochessopeningcodes"` fails `SOURCE_DENIED` exactly as the URL cases in
+    criterion 5 do.
 
 **Determinism and boundary conditions of shapes the schema permits** — the failure class
 that killed five drafts:
@@ -815,13 +1081,32 @@ that killed five drafts:
     asserts it validates under Ajv `strict: true` with `additionalProperties: false` at the
     root — and asserts explicitly that no `spineNode`, `start`, `difficulty`, `planClass`,
     `checkpoint`, `deviation`, or `authoredBoundary` object carries an extra key.
-14. **The fetch lock is cross-process, and its limits are proved rather than asserted.** Two
-    emitter processes started simultaneously against a stubbed server that records arrival
-    times issue their requests strictly sequentially; a test that removes the lock file
-    mid-run shows both proceeding, which is the documented takeover behaviour and not a
-    silent one; and a test asserts the client never claims coordination it does not have —
-    the lock path is under `content/sources/`, and running two checkouts is out of its scope
-    by construction.
+14. **The lock is a mutex, and the takeover race is closed.** Four assertions, and the third
+    is the one the previous revision had backwards:
+    - Two emitter processes started simultaneously against a stubbed server that records
+      arrival times issue their requests **strictly sequentially**.
+    - A contender facing a lock whose `heartbeatAt` is fresh **waits** and never proceeds; a
+      contender facing one older than 90 s takes over, and when two contenders race the
+      takeover, exactly one wins (asserted by a `rename` stub that counts successes).
+    - **A taken-over holder fails closed.** A test acquires the lock, freezes the heartbeat,
+      lets a second process take over, then resumes the first: it raises `LOCK_LOST`, issues
+      **no** further request, writes no artifact, exits non-zero, and — asserted directly —
+      the replacement's lock file is still present with the replacement's `owner`. Overlapping
+      in-flight requests are a test failure, not documented behaviour.
+    - A `finally` path that unlinks a lock whose `owner` does not match is asserted absent:
+      release re-reads and compares before deleting.
+    And a test asserts the client never claims coordination it does not have — the lock path
+    is under `content/sources/`, and running two checkouts is out of its scope by
+    construction.
+14a. **`5xx` is retried on the documented schedule.** A stub returning `503` three times then
+     `200` succeeds with waits of ≥ 60 s, 120 s and 240 s; a stub returning `503` four times
+     abstains with `source_unavailable` and the status in `detail`. A `400` is asserted **not**
+     retried.
+14b. **A changed job is not a no-op.** With the upstream `etag` unchanged, a re-run whose
+     resolved arguments differ in any field produces a different `emissionJobDigest` and
+     re-emits; a re-run with an identical digest but a deleted `evidence.json` also re-emits,
+     because the outputs are incomplete. Only unchanged-etag **and** identical-digest
+     **and** complete-and-checking outputs is a no-op. (B6d §4 is the consumer.)
 15. **A `headers-only` source never writes a body to disk.** The emitter is run against a
     fixture larger than the 50 MB ceiling with the cache directory watched; no cache file
     exceeds a few kilobytes, the entry carries `etag`, `content-length` and `retrievedAt`,
@@ -848,7 +1133,10 @@ that killed five drafts:
 21. **`atPly` fires off-spine.** A P1 candidate played with a `human_common` opponent that
     deviates from the spine at its first reply still reaches `line-end`, and the objective
     transitions to `achieved` via `reach_checkpoint`. The same pack with an `atSpineNode`
-    trigger is asserted **not** to fire.
+    trigger is asserted **not** to fire. The scripted deviation is asserted **non-terminal**
+    at every ply (`position.isEnd()` false), so this criterion proves the trigger and not an
+    accidental survival of D11 (§1.5) — B6a's exposure to D11 is bounded to constructed cases
+    and is not proved away by a line that happened to avoid it.
 
 **Grounding contract:**
 
@@ -869,8 +1157,12 @@ that killed five drafts:
     stating the directory is candidates-not-content and why it is neither `drafts/` nor
     `packs/`.
 27. `docs/` gains a canonical `content-sourcing.md` on implementation, covering B6a and
-    amended by B6b/B6c/B6d as each lands; `design/research/theory-sourcing.md`'s
-    coverage-matrix row is updated to note the 2026-08-12 re-verification.
+    amended by B6b/B6c/B6d as each lands. The implementer **proposes** the
+    `design/research/theory-sourcing.md` coverage-matrix update noting the 2026-08-12
+    re-verification, as a `design/BACKLOG.md` row quoting the exact replacement text; it does
+    not edit the dossier. `design/` is the intent tier and belongs to the owner
+    (`AGENTS.md:64-68`), reached through an RFC or a ledger row — an implementing agent that
+    edits it has skipped the gate this whole tier structure exists to hold.
 28. `content/drafts/*.json` are **not modified** by this RFC — not by the licence rule of §2
     (absence of `provenance.licence` is not an error, criterion 8) and not by §4. Re-emitting
     or correcting them is authoring work under `planning/content-era/`, and the friction is
@@ -886,7 +1178,9 @@ None.
   `content-sourcing-pipelines.md` draft (adversarial review rejected the single document and
   recommended the split).
 - 2026-08-12: revised against the per-file review that rejected the split's four documents.
-  (1) All coordinates re-taken after F2 (`6f48e13`) and F3 (`1ae7922`): `rest.ts`,
+  (1) All coordinates re-taken after F2 and F3 [this entry originally named the two commits
+  the wrong way round — `6f48e13` is F3, `1ae7922` is F2; corrected in the entry below]:
+  `rest.ts`,
   `service.ts`, `runtime.ts`, `types.ts`, `events.ts` and `session-controller.ts` had all
   moved, and `feedbackIsRevealed` — cited by two sibling RFCs — does not exist; the shipped
   function is `feedbackDisclosed` (`packages/runtime/src/feedback.ts:3-12`). (2) §2 rewritten
@@ -901,3 +1195,29 @@ None.
   which is what makes B6d's `start.movesSan` leak visible and fixable at the shared layer.
   (6) The cache gained `headers-only` and `engine` entry kinds so that streamed dumps and
   engine searches are covered by the determinism rule instead of contradicting it.
+- 2026-08-12: revised against the second review, which rejected all four documents on
+  contract-level grounds. Six changes, all of them to shapes rather than to prose.
+  (1) **The manifest is no longer HTTP-shaped** (§1.2): `origin` is a closed union of `http`,
+  `local-file` and `engine`, because B6b's out-of-range path consumes an author-supplied FEN
+  file and its substitute consumes a local engine search — neither expressible before, while
+  `MANIFEST_EMPTY` forbade the empty manifest that was the only alternative. A fourth `file`
+  cache kind carries the local input's `retrievedAt` by the same write-once rule as the other
+  three. (2) **§1.2a pins the linkage rule** that the previous revision described and never
+  checked: `sourceId`/`retrievedAt` on every record *and every abstention* must match exactly
+  one manifest entry, every entry must be referenced, and "consumed" — on which `sourcedAt`
+  depends — is now defined as "referenced" instead of being left unstated. (3) **The licence
+  booleans are deleted** (§1.2): `attributionRequired` and `shareAlike` were storable in
+  contradiction to `spdx` and `ATTRIBUTION_MISSING` read the boolean, so
+  `CC-BY-SA-4.0` + `shareAlike: false` bypassed it; obligations are now derived from
+  `(basis, spdx)` by a three-row matrix and the literal keys are rejected on sight. (4) **The
+  lock is a mutex** (§1.4): ownership token, atomic `rename` takeover, 30 s heartbeat, verify
+  before every request, and compare-before-delete on release — the previous `finally` deleted
+  the *replacement's* lock, and acceptance criterion 14 has been rewritten from
+  institutionalizing overlapping requests to forbidding them. (5) **§1.5 states the D11 reveal
+  boundary once for all four RFCs**, with the four candidate workarounds and the shipped code
+  that closes each; B6b and B6d block on it and §6's landing order says so. (6) `5xx` retry
+  and the `emissionJobDigest` are specified because B6c and B6d cited capabilities of this RFC
+  that did not exist. Also: the F2/F3 commit identities were **reversed** in §0 — `6f48e13` is
+  F3 (the subject, `planning/breadth/synthesis.md:65`), `1ae7922` is F2 (pack-optional runs,
+  `:53`) — and §Acceptance 27 no longer assigns a `design/` edit to the implementer
+  (`AGENTS.md:64-68`).

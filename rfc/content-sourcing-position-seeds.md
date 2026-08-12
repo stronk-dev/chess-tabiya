@@ -5,7 +5,7 @@
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §6 (on-ramp layer: "one-move-consequence packs from the CC0 puzzle DB re-cut as *play-the-consequence* rather than find-the-tactic"), §8 order item 4; `design/00-thesis.md:70,93-94` (explicitly not a tactics puzzle trainer), `:82-95` (target band)
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 (`design/04-content-architecture.md` header); owner ruling 2026-08-12 opening the RFC tier (`rfc/README.md`)
-- **Depends on:** **`rfc/content-sourcing-foundation.md` (B6a)** — manifest, evidence sidecar, deterministic-output rule, `sourcing-check`, record vocabulary. Also `rfc/archive/drill-pack-format.md` and `rfc/archive/engine-workers.md` (both implemented). Optionally strengthened by B6b (`rfc/content-sourcing-syzygy.md`) once its `engine_eval` producer exists
+- **Depends on:** **`rfc/content-sourcing-foundation.md` (B6a)** — manifest, evidence sidecar, source-linkage rule (§1.2a), emission-job digest (§1.4), deterministic-output rule, `sourcing-check`, record vocabulary. **Blocks on defect D11** (`design/BACKLOG.md:115`, B6a §1.5): a consequence run that mates or stalemates before ply 8 never discloses its evidence, and there is no workaround in the pack format — see §3a. Also `rfc/archive/drill-pack-format.md` and `rfc/archive/engine-workers.md` (both implemented). Optionally strengthened by B6b (`rfc/content-sourcing-syzygy.md`) once its `engine_eval` producer exists, and then only behind `--engine-eval` (§4)
 - **Parent / amends:** — (B6d; fourth of four RFCs split out of the withdrawn `content-sourcing-pipelines.md` draft, 2026-08-12. **This is a redesign, not a rehome**: the withdrawn draft's §5 contradicted `design/00-thesis.md` and is not carried forward)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/content-sourcing-position-seeds/` (once implementing)
@@ -68,7 +68,7 @@ warning at `design/00-thesis.md:72-74`.
 | Tactic *training* in any form: solve-the-position, hint reveal, solution playback | `design/00-thesis.md:93-94`. The solution is consumed at emit time and never re-enters the product |
 | Lichess theme *description prose* | `design/research/theory-sourcing.md:108-112`: the theme keys are facts and reusable; lila's description strings are AGPL text and are not reused |
 | Bulk retention of the puzzle dump | The dump is streamed and discarded; only selected rows survive, in fixtures. `AGENTS.md:93-95` |
-| `immediate_blunder_guard` feedback | Defect **D8** (`design/BACKLOG.md:105`). §Deviations 1 records the substitution |
+| `immediate_blunder_guard` feedback | Defect **D8** (`design/BACKLOG.md:118`). §Deviations 1 records the substitution |
 
 ## Specification
 
@@ -160,11 +160,17 @@ they add some.
 
 **2.2 `phase`.** Emitted only when the row's `Themes` contains exactly one of the literal
 keys `opening`, `middlegame`, `endgame`, mapped straight through; omitted otherwise, and
-omitted when two or more appear. The key vocabulary is
-`raw.githubusercontent.com/lichess-org/lila/master/translation/source/puzzleTheme.xml`
-(`design/research/theory-sourcing.md:108-112`, `[V]` for the file). Whether those three
-specific keys are in it is **not verified here** `[M]`, so the emitter treats their absence
-as normal: no matching key simply means no `phase`, never an error and never a guess.
+omitted when two or more appear. **All three keys are verified present** `[V]` in the official
+vocabulary, read live 2026-08-12 from
+<https://raw.githubusercontent.com/lichess-org/lila/master/translation/source/puzzleTheme.xml>
+(alongside `pin`, `fork`, `mate`, `mateIn1`–`mateIn5`, `short`, `long`, `veryLong` and the
+rest; each key appears as a `name` attribute with a paired `<key>Description` string that this
+RFC does not reuse — `design/research/theory-sourcing.md:108-112`). The previous revision
+marked them `[M]` and unverified; they are neither.
+
+The emitter still treats absence as normal — no matching key means no `phase`, never an error
+and never a guess — because the vocabulary is Lichess's to change and a pipeline that fails on
+an unfamiliar theme list would break on their next release rather than on ours.
 
 **2.3 `targetElo`.** `Rating` clamped to `[1100, 2000]`. This clamp is an **authoring
 convention, not a capability claim**: `schema:363` types `targetElo` as a bare integer,
@@ -197,9 +203,10 @@ emitted document, and every candidate carries the `graduationBlockers` entry
 
 > `The start position is whatever the puzzle's solution produced; it is not asserted to be winning, equal, or better for the learner. No engine or tablebase has evaluated it.`
 
-If B6b has landed, an author may attach an `engine_eval` record for the start position
-(§4) — that is the only way this system can say what the position actually is, it is
-optional, and it is evidence for a reviewer rather than a sentence for a learner.
+If B6b has landed **and `--engine-eval` is passed** (§4), an author may attach an `engine_eval`
+record for the start position — that is the only way this system can say what the position
+actually is, it is opt-in rather than ambient, and it is evidence for a reviewer rather than a
+sentence for a learner.
 
 **What is graded, exactly.** One thing: `reach_checkpoint`. The only executable success
 condition in the system is `reach_checkpoint` for a checkpoint in the same pack
@@ -259,6 +266,42 @@ The `GameUrl` itself is **not** in `provenance` any more (§5): CC0 imposes no a
 obligation, so an unrequired pointer that resolves to withheld material belongs in the
 sidecar, per B6a §1.1a's rule.
 
+### 3a. The run that never reaches ply 8 — B6d blocks on D11
+
+Everything in §3 depends on one event: the `consequence` checkpoint firing at ply 8. That is
+where the objective transitions, where withheld engine evidence is released, and therefore
+where the entire "what the learner nonetheless gets that is real" list above comes from. **A
+run that ends before ply 8 gets none of it, permanently.**
+
+This is not hypothetical for this pipeline in particular. B6d's start positions are the
+aftermath of a tactic, four learner moves from a live Maia opponent, in positions that
+frequently have reduced material and an exposed king — and the *defender* moves first. Mate,
+stalemate and insufficient material inside eight plies are ordinary outcomes there. When one
+happens the terminal move commits and is orchestrated normally
+(`apps/server/src/service.ts:258,282`), every later move throws `RUN_TERMINATED`
+(`packages/runtime/src/runtime.ts:274-276`), the `atPly 8` trigger never matches
+(`apps/server/src/pack-orchestrator.ts:45`), `feedbackDisclosed` stays false forever
+(`packages/runtime/src/feedback.ts:3-12`), and the objective never leaves `active`. This is
+shipped defect **D11** (`design/BACKLOG.md:115`), stated once with its mechanism and its four
+closed workarounds in B6a §1.5.
+
+The irony is worth naming because it is also the argument: **the learner who converts the
+tactic into a mate is the one the product punishes.** They played the position out better than
+the checkpoint asked and are shown less than someone who shuffled. A pack whose reward
+structure inverts on its best outcome is not shippable content, whatever its emitter does.
+
+There is **no bounded workaround** to specify instead, and B6a §1.5 is the check rather than an
+assertion: no trigger observes a terminal position, an early checkpoint would disclose from
+ply 1 and destroy `delayed_checkpoint`, `segment_end` requires a checkpoint to have fired
+already, and `attempt_end` does not validate. Lowering `C`, or filtering to positions unlikely
+to end, would be shaping content around a runtime defect — and §4.7 already rejects rows whose
+*start* is terminal, which is a different and much smaller problem than a run that terminates
+mid-drill.
+
+**So B6d is not implementable until D11 ships.** The fix is named in B6a §1.5, it is
+program-item work rather than sourcing work, and this RFC does not implement it as a side
+effect. §Acceptance 19a is the failing test that expresses the block.
+
 ### 4. Selection, and the boundary conditions that make a row unusable
 
 Rows are read from the streamed CSV and accepted only if **all** hold:
@@ -306,8 +349,20 @@ discipline.
 
 Three consequences, all deliberate:
 
-- A re-run whose `HEAD` returns the same `etag` is a no-op, because the `etag` is in the
-  header entry.
+- **A re-run is a no-op only when the `etag`, the job, *and* the outputs all say so.** The
+  previous revision short-circuited on the `etag` alone, which is wrong in the ordinary case:
+  after one run at `--rating-band 1000-1400 --themes fork --count 20`, a second run asking for
+  `--themes pin`, or `--count 200`, or a different band, sees the same dump `etag` and emits
+  **nothing** — the upstream has not changed, but the question has. The dump's identity says
+  what the *input* is; it says nothing about what was asked of it.
+
+  So the no-op requires all three of B6a §1.4's conditions: the `HEAD` `etag` is unchanged;
+  the `emissionJobDigest` — SHA-256 over the canonicalized `{pipeline, resolved args,
+  sourceEtags}`, recorded in `job.json` — is byte-identical to the recorded one; and the
+  outputs are **complete**, meaning every candidate directory the recorded job names exists
+  with all three artifacts and `sourcing-check` passes on each. Any of the three failing means
+  a full re-run. `--engine-eval` is part of the resolved args and therefore part of the digest,
+  so turning it on changes the job (§4).
 - A re-run whose `etag` **changed** must re-download; there is no cached body to fall back
   on. That is the price of not keeping 304 MB, and it is the right price for an authoring
   command that runs a handful of times a year.
@@ -332,17 +387,37 @@ without the pack containing the answer, which is the whole shape of this redesig
 
 One `position_legality` record for the start position, `grounds: "machine_validation"`.
 **No `templateId`, therefore no prose support** — B6a §3.3's table has no row for
-`puzzle_provenance`, so any attempt fails `EVIDENCE_OVERREACH`. If B6b has landed, the
-emitter may additionally write one `engine_eval` record for the start position under B6b
-§3.3's fixed-depth authoring rules; it is optional, B6d does not depend on it, and it is the
-only thing in the system that could ever say what the position is worth (§3).
+`puzzle_provenance`, so any attempt fails `EVIDENCE_OVERREACH`.
+
+**Engine evaluation is opt-in behind `--engine-eval`, and ambient availability changes
+nothing.** When and only when that flag is passed, the emitter writes one `engine_eval` record
+per start position under B6b §3.3's fixed-depth authoring rules, with the matching `engine`
+manifest entry (B6a §1.2). Without the flag it writes none, **even if B6b has landed, even if a
+Stockfish binary is on the path, and even if the engine cache already holds an answer** — and
+the emitter never probes for engine availability outside the flagged path.
+
+The rule is about determinism, not tidiness. Deterministic output means the artifacts are a
+function of the recorded inputs; a record that appears because a sibling RFC shipped, or
+because this machine happens to have an engine, makes the output a function of the environment
+instead, and two authors on the same fixtures would produce different candidates with different
+`packDigest`-adjacent sidecars and different `sourcedAt`. `--engine-eval` is part of the
+resolved argument set and therefore part of the `emissionJobDigest` (§4), so turning it on is a
+visibly different job rather than a silent drift. Absent the flag, `sourcing-check` fails
+`EVIDENCE_KIND_UNEXPECTED` on any `engine_eval` record in a B6d candidate.
+
+It stays optional because it is the only thing in the system that could ever say what the
+position is worth (§3), and it stays evidence for a reviewer rather than a sentence for a
+learner: B6a §3.3's table has no `engine_eval` prose template either.
 
 ### 5. Licence
 
 CC0-1.0, quoted at `design/research/theory-sourcing.md:104-106` from `database.lichess.org`:
 "Database exports are released under the Creative Commons CC0 license. Use them for research,
 commercial purpose, publication, anything you like." Encoded per B6a §1.2 as
-`basis: "spdx"`, `spdx: "CC0-1.0"`, `attributionRequired: false`, `shareAlike: false`.
+`basis: "spdx"`, `spdx: "CC0-1.0"`, `noticeText: null`, `rationale: null` — the row that
+derives no attribution and no share-alike obligation. The obligation booleans are not stored:
+a `licence` object carrying them fails `LICENCE_FIELD_INVALID`, because a field that can
+disagree with its own SPDX identifier is a bypass, not an encoding.
 
 **One** `provenance.sources[]` string per candidate: the CC0 statement with the dump URL and
 `etag`. The earlier draft added a second string carrying the `PuzzleId` and `GameUrl`;
@@ -363,7 +438,7 @@ theme *keys* that appear in `evidence.json` are API vocabulary, not text.
    and `design/04-content-architecture.md` §6 specify `immediate_blunder_guard` for the
    1000–1400 layer; `apps/server/src/pack-validation.ts:103-111` rejects it in v1 while
    `schemas/drill_pack.schema.json:54` accepts it — defect **D8**
-   (`design/BACKLOG.md:105`). B6d emits `delayed_checkpoint` and records the substitution in
+   (`design/BACKLOG.md:118`). B6d emits `delayed_checkpoint` and records the substitution in
    `graduationBlockers`. Making the on-ramp policy real is program item #2/#4 work, not a
    sourcing change, and B6d's candidates become correct by **re-emission** when it lands —
    nothing needs hand editing.
@@ -477,7 +552,18 @@ drafts:
 19. **The objective transitions on the checkpoint and on nothing else.** A run that plays
     eight plies badly (a scripted losing sequence) reaches `achieved` exactly as one that
     plays well does, and the test asserts both — the machine verdict this RFC declines to
-    dress up.
+    dress up. Both scripted lines are asserted **non-terminal at every ply**
+    (`position.isEnd()` false through ply 8), so this criterion proves the grading rule and is
+    not quietly resting on two lines that happened to avoid D11.
+19a. **A run that ends before ply 8 still reveals.** A B6d candidate is played along a
+     **scripted forced mate** landing before ply 8. After the mating move the test asserts:
+     the objective has left `active`; `feedbackDisclosed` is true
+     (`packages/runtime/src/feedback.ts:3-12`); `GET /runs/:id/events` includes the
+     `evidence.attached` events withheld until then; and the learner sees what a ply-8 finisher
+     sees. A stalemate line and an insufficient-material line are asserted the same way.
+     **This cannot pass until D11 ships** (§3a, B6a §1.5, `design/BACKLOG.md:115`) and is the
+     block, expressed as a test. The test asserts its own lines *are* terminal before ply 8, so
+     no future edit can satisfy it by choosing a line that survives.
 20. **The blockers are present verbatim.** Every candidate carries the grading blocker (§3),
     the not-asserted-to-be-winning blocker (§3), the `objective.summary` placeholder blocker
     (B6a §4), the `immediate_blunder_guard` substitution blocker (§Deviations 1), and the
@@ -504,23 +590,48 @@ drafts:
     carrying `etag`, `content-length` and `retrievedAt` and **no** body.
     `createZstdDecompress` is asserted present at startup, and its absence produces a named
     error rather than a `TypeError`.
-25. **`etag` short-circuit, and its cost.** A second run whose `HEAD` returns the same `etag`
-    emits nothing and exits 0; a run whose `etag` changed is asserted to re-download rather
-    than to read a cached body, because there is none — the documented price of §4's
-    retention rule.
-26. `lichess-puzzle-db` → `basis: "spdx"`, `spdx: "CC0-1.0"`, `attributionRequired: false`;
-    `provenance.sources[]` is exactly one string containing the CC0 statement, the dump URL
-    and the `etag`; `provenance.licence` is `"CC-BY-SA-4.0"` and `provenance.attribution` is
-    absent; `puzzleId` (case preserved) and `gameUrl` appear in `evidence.json` and in no
-    served field.
+25. **The no-op requires all three conditions, and the two-of-three cases re-emit.** A second
+    run with the same `etag`, an identical `emissionJobDigest`, and complete passing outputs
+    emits nothing and exits 0. Each of these **re-emits** instead, asserted separately, and the
+    first three are the bug the previous revision shipped:
+    - same `etag`, `--themes pin` where the recorded job had `--themes fork`;
+    - same `etag`, `--count 200` where the recorded job had `--count 20`;
+    - same `etag`, `--rating-band 1400-1800` where the recorded job had `1000-1400`;
+    - same `etag` and identical digest, but one candidate's `evidence.json` deleted;
+    - same `etag` and identical digest, but one candidate failing `sourcing-check`.
+    A run whose `etag` changed is asserted to re-download rather than to read a cached body,
+    because there is none — the documented price of §4's retention rule. A test asserts
+    `job.json` is not part of `pack.json`, `evidence.json`, `sources.json`, or any digest.
+25a. **Engine evaluation is opt-in and ambience-proof.** Without `--engine-eval`, a run with
+     B6b landed, a Stockfish binary on the path, **and** a warm `engine` cache entry for the
+     start position emits **no** `engine_eval` record and produces artifacts byte-identical to
+     a run with no engine present at all; an `engine_eval` record hand-added to that candidate
+     fails `EVIDENCE_KIND_UNEXPECTED`. With `--engine-eval`, exactly one such record and its
+     `engine` manifest entry appear, and the `emissionJobDigest` differs from the unflagged
+     run's — so the flag is visible in the recorded job rather than inferred from the output.
+26. `lichess-puzzle-db` → `origin.kind: "http"` with a `headers-only` cache entry,
+    `basis: "spdx"`, `spdx: "CC0-1.0"`, and **no** `attributionRequired` or `shareAlike` key —
+    both are derived from the identifier (B6a §1.2) and a stored copy fails
+    `LICENCE_FIELD_INVALID`. `provenance.sources[]` is exactly one string containing the CC0
+    statement, the dump URL and the `etag`; `provenance.licence` is `"CC-BY-SA-4.0"` and
+    `provenance.attribution` is absent; `puzzleId` (case preserved) and `gameUrl` appear in
+    `evidence.json` and in no served field.
+26a. **Every record and abstention links to a manifest entry** (B6a §1.2a): each
+     `puzzle_provenance` and `position_legality` record carries `sourceId: "lichess-puzzle-db"`
+     and the `retrievedAt` of the `headers-only` entry, byte-equal; altering either fails
+     `EVIDENCE_SOURCE_UNLINKED` or `EVIDENCE_RETRIEVED_AT_MISMATCH`; and a candidate whose
+     manifest carries an entry no record references fails `MANIFEST_ENTRY_UNUSED`.
 27. **Determinism.** Two `--offline` runs against the committed row fixtures produce
     byte-identical `pack.json`, `evidence.json` and `sources.json` (B6a §1.4).
 28. **No candidate is promotable** — `reviewStatus: "reviewed"` without a reviewer fails
     `GRADUATION_REQUIRES_REVIEWERS` (`pack-validation.ts:92-99`).
 29. `make verify` green; `docs/content-sourcing.md` gains the position-seeds section stating
-    the complete-line rule, the omitted `start.movesSan`, and §3's grading honesty;
-    `design/research/theory-sourcing.md`'s coverage-matrix row notes the puzzle CSV's eleventh
-    column and the 2026-08-12 re-verification.
+    the complete-line rule, the omitted `start.movesSan`, §3's grading honesty, and §3a's D11
+    block. The `design/research/theory-sourcing.md` coverage-matrix update — the puzzle CSV's
+    eleventh column, the 2026-08-12 re-verification, and the now-verified `opening`/
+    `middlegame`/`endgame` theme keys — is **proposed** as a `design/BACKLOG.md` row quoting
+    the exact replacement text. The implementer does not edit `design/`
+    (`AGENTS.md:64-68`).
 
 ## Open questions
 
@@ -546,3 +657,21 @@ None.
   which, so no emitted field claims it and a new `graduationBlockers` entry says so. (4)
   Coordinates re-taken after F2/F3 (`rest.ts`, `service.ts`, `runtime.ts`, `types.ts`,
   `session-controller.ts`), and `feedbackIsRevealed` corrected to `feedbackDisclosed`.
+- 2026-08-12: revised against the second review. (1) **New §3a: B6d blocks on D11.** A
+  consequence run that mates or stalemates before ply 8 never fires its only checkpoint, so
+  `feedbackDisclosed` stays false forever and the learner who converted the tactic is shown
+  less than one who shuffled; all four workarounds are closed by shipped code (B6a §1.5), so
+  the dependency is a block with a named fix, expressed as §Acceptance 19a, and §Acceptance 19
+  now asserts its scripted lines are non-terminal so it cannot rest on a line that happened to
+  survive. (2) **The `etag` no-op is corrected** (§4): the previous rule short-circuited on the
+  dump `etag` alone, so a second run asking for different themes, a larger `--count`, or a
+  different band emitted nothing; a no-op now requires unchanged `etag` **and** an identical
+  `emissionJobDigest` (B6a §1.4) **and** complete, checking outputs, with the three failing
+  cases enumerated in §Acceptance 25. (3) **Engine evaluation is behind `--engine-eval`**
+  (§4): ambient B6b or Stockfish availability must not change deterministic output, the flag
+  enters the job digest, and an unflagged candidate carrying an `engine_eval` record now
+  fails. (4) The `opening`/`middlegame`/`endgame` theme keys were marked unverified `[M]`;
+  **all three are present** in `puzzleTheme.xml`, read live, and §2.2 now says so `[V]`.
+  (5) The licence entry drops the derived obligation booleans (B6a §1.2), declares its
+  `origin`, and §Acceptance 26a adds the source-linkage assertions. (6) §Acceptance 29 no
+  longer assigns a `design/research/` edit to the implementer (`AGENTS.md:64-68`).

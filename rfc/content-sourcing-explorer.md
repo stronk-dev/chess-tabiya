@@ -5,7 +5,7 @@
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §2c (pack priority = frequency at 1400–2000 per explorer rating-band data), §8 order item 3 (breadth by explorer-frequency priority)
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 (`design/04-content-architecture.md` header); owner ruling 2026-08-12 opening the RFC tier (`rfc/README.md`); exploration question Q6 (`planning/exploration/plan.md:175`)
-- **Depends on:** **`rfc/content-sourcing-foundation.md` (B6a)** — manifest, evidence sidecar, deterministic-output rule, `sourcing-check`, record vocabulary, prose-template mechanism. Also `rfc/archive/drill-pack-format.md` (implemented)
+- **Depends on:** **`rfc/content-sourcing-foundation.md` (B6a)** — manifest and its `http`/`local-file` origins (§1.2), source-linkage rule (§1.2a), evidence sidecar, the `429`/`5xx` retry schedule (§1.4), deterministic-output rule, `sourcing-check`, record vocabulary, prose-template mechanism. Also `rfc/archive/drill-pack-format.md` (implemented). **Not** blocked on D11: B6c emits no played pack, so it may land concurrently with the D11 fix that B6b and B6d wait on (B6a §6)
 - **Parent / amends:** — (B6c; third of four RFCs split out of the withdrawn `content-sourcing-pipelines.md` draft, 2026-08-12)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/content-sourcing-explorer/` (once implementing)
@@ -15,7 +15,7 @@
 `design/04-content-architecture.md` §2c fixes anti-opening pack priority by "frequency at
 1400–2000 per explorer rating-band data", and nothing in the repo can measure that. This
 RFC is the instrument: a rating-band frequency query, an authoring artifact
-(`content/candidates/priority.json`) that answers "which pack next" with a number, and the
+(`content/candidates/priority/priority.json`) that answers "which pack next" with a number, and the
 one and only case in the whole sourcing program where a machine record may support an
 authored sentence.
 
@@ -89,9 +89,18 @@ Lichess later changes would silently change cached meaning; `since`/`until` defa
 `topGames`/`recentGames` return game references this RFC has no use for and must not retain.
 
 The status code, response headers, and body prefix are appended to
-`planning/exploration/log.md` and the `design/research/theory-sourcing.md` coverage-matrix
-row is updated. `429` and `5xx` are retried under B6a §1.4's schedule (60 s / 120 s / 240 s,
-max 3) before the probe is considered answered; a persistent `429` is Branch B.
+`planning/exploration/log.md` (planning tier, the implementer's own log), and the
+`design/research/theory-sourcing.md` coverage-matrix update is **proposed** as a
+`design/BACKLOG.md` row quoting the exact replacement text — `design/` is the intent tier and
+belongs to the owner (`AGENTS.md:64-68`), so an implementing agent files the row and does not
+edit the dossier.
+
+`429` and `5xx` are retried under B6a §1.4's schedule — 60 s / 120 s / 240 s, max 3 retries,
+then abstain — before the probe is considered answered; a persistent `429` is Branch B. That
+schedule is cited rather than invented: **the previous revision of this RFC cited a B6a retry
+policy for `5xx` that B6a did not have** (it specified `429` and `401`/`403` only), so the
+policy has been added to B6a §1.4 in the same revision as this sentence, and `4xx` other than
+`429` is now explicitly not retried there either.
 
 **Branch A — the token works (`200`).** B6c ships in full: §1's live backend, §2's populated
 `priority.json`, §4's prose template with a live producer, and every acceptance criterion
@@ -135,14 +144,22 @@ contains **no** `since` or `until`; `since` and `until` are query parameters
 ```ts
 type ExplorerQuery = {
   readonly fen: string;
-  readonly ratings: readonly RatingGroup[];  // ascending, non-empty; see the closed set below
-  readonly speeds: readonly string[];        // Lichess speed keys, canonical order, non-empty
-  readonly since: string;                    // "YYYY-MM", required — no implicit default
-  readonly until: string;                    // "YYYY-MM", required — no implicit default
+  readonly ratings: readonly RatingGroup[];  // ascending, unique, non-empty; closed set below
+  readonly speeds: readonly Speed[];         // canonical order, unique, non-empty; closed set below
+  readonly since: YearMonth;                 // required — no implicit default; since <= until
+  readonly until: YearMonth;                 // required — no implicit default
 };
 
 // The spec's enum, verbatim. Each value is a group's LOWER BOUND, running to the next value.
 type RatingGroup = 0 | 1000 | 1200 | 1400 | 1600 | 1800 | 2000 | 2200 | 2500;
+
+// The spec's Speed enum, verbatim and in its declared order, read live 2026-08-12 [V] from
+// raw.githubusercontent.com/lichess-org/api/master/doc/specs/schemas/Speed.yaml
+type Speed =
+  | "ultraBullet" | "bullet" | "blitz" | "rapid" | "classical" | "correspondence";
+
+// "YYYY-MM" with a real month, checked by pattern and not by parseInt
+type YearMonth = string;  // /^\d{4}-(0[1-9]|1[0-2])$/
 
 type ExplorerStats =
   | { readonly kind: "stats";
@@ -153,8 +170,8 @@ type ExplorerStats =
                                  readonly white: number; readonly draws: number;
                                  readonly black: number }[];
       // Copied from the REQUEST, not the response:
-      readonly window: { readonly since: string; readonly until: string };
-      readonly ratings: readonly RatingGroup[]; readonly speeds: readonly string[]; }
+      readonly window: { readonly since: YearMonth; readonly until: YearMonth };
+      readonly ratings: readonly RatingGroup[]; readonly speeds: readonly Speed[]; }
   | { readonly kind: "abstention"; readonly reason: "source_unavailable" | "no_data_at_band";
       readonly detail: string };
 ```
@@ -165,13 +182,36 @@ per-move play count. `total = white + draws + black` at the position;
 RFC — §2's `total` and `sharePct`, §4's template values — is computed from those two sums and
 from nothing else, and `sourcing-check` recomputes both (§4).
 
-**`ratings` values must be members of the enum.** `1400,1600,1800` covers **1400–1999**,
-because each value is a group lower bound running to the next; that is how
-`design/04-content-architecture.md` §2c's "1400–2000" is encoded, and the half-open interval
-is stated in `priority.json` and in the rendered sentence rather than rounded off in prose. A
-value outside the enum — `1500`, say — is refused by the emitter **before any request** with
-`RATINGS_NOT_A_GROUP`, because the server's behaviour for an unlisted value is not specified
-and guessing it would put an unverifiable band into a citation.
+**The request grammar is closed, in all three dimensions.** The previous revision left two of
+them open — speeds were "Lichess speed keys" in an unnamed "canonical order", and the window
+was two unvalidated strings — which meant an emitter could send `speeds=blitz,bltiz`, or
+`since=2026-13`, or a window running backwards, and put an unverifiable claim into a citation
+that `sourcing-check` would then dutifully compare against the equally wrong request.
+
+- **`ratings`** must be members of the enum above. `1400,1600,1800` covers **1400–1999**,
+  because each value is a group lower bound running to the next; that is how
+  `design/04-content-architecture.md` §2c's "1400–2000" is encoded, and the half-open interval
+  is stated in `priority.json` and in the rendered sentence rather than rounded off in prose. A
+  value outside the enum — `1500`, say — is refused by the emitter **before any request** with
+  `RATINGS_NOT_A_GROUP`, because the server's behaviour for an unlisted value is not specified
+  and guessing it would put an unverifiable band into a citation. Duplicates are refused;
+  the list is sorted ascending before the request is built.
+- **`speeds`** must be members of the `Speed` enum, which is exactly
+  `ultraBullet, bullet, blitz, rapid, classical, correspondence` — read live 2026-08-12 `[V]`
+  from <https://raw.githubusercontent.com/lichess-org/api/master/doc/specs/schemas/Speed.yaml>,
+  a six-line file whose whole content is that list. **"Canonical order" means that file's
+  declaration order**, which is the enum's own ascending-time-control order, and it is not a
+  matter of taste: the ordered list goes into the cache key (B6a §1.4), into the request, and
+  verbatim into §4's rendered sentence, so two spellings of the same query would mint two cache
+  entries and two different sentences describing identical data. Anything off the set, or a
+  duplicate, is `SPEEDS_NOT_A_SPEED` **before any request**. A committed copy of `Speed.yaml`
+  is the fixture the test pins against, exactly as `ratings` pins against its spec fragment.
+- **`since` and `until`** must each match `/^\d{4}-(0[1-9]|1[0-2])$/` — so `2026-13` and
+  `2026-00` are refused, which the previous "`YYYY-MM`" prose did not require — and must
+  satisfy **`since <= until`** by string comparison, which is exact for this format. A reversed
+  window is `WINDOW_INVALID` before any request. The check matters because Lichess's defaults
+  are `1952-01`/`3000-12`: a window this code got backwards would not error server-side, it
+  would return something, and §4's sentence would then cite a period that never existed.
 
 Satisfied by, in order:
 
@@ -189,13 +229,22 @@ There is no third path. `explorerStats` never invents, interpolates, or averages
 `LICHESS_TOKEN` is read from the environment and **never written to any artifact**. A test
 asserts no emitted file contains the token value.
 
-### 2. `content/candidates/priority.json` — a priority table, not pack content
+### 2. `content/candidates/priority/` — a priority table, not pack content
 
-One file, rebuilt by `make candidate-emit PIPELINE=explorer ARGS='--lines <file> --ratings
+Rebuilt by `make candidate-emit PIPELINE=explorer ARGS='--lines <file> --ratings
 1400,1600,1800 --speeds blitz,rapid --since 2024-01 --until 2026-07'`, where `<file>` is a
 list of `(eco, name, movesSan)` rows — in practice the output of B6a's `chess-openings`
 normalization, which is why B6c lands after B6a. **`--since` and `--until` are required and
-have no defaults.** A default would either be the spec's `1952-01`/`3000-12` (a window nobody
+have no defaults.**
+
+**It is a directory, not a loose file, because it carries a derived timestamp.**
+`content/candidates/priority/` holds `priority.json` *and* its own `sources.json`: one
+`local-file` entry for the `--lines` input and one `http` entry per explorer response consumed
+(B6a §1.2). `priority.json`'s `sourcedAt` is then the same derived maximum every other
+artifact's is, recomputable by `sourcing-check`, rather than a timestamp with nothing behind
+it — which is what a loose `priority.json` with a `sourcedAt` field would have been.
+`sourcing-check` on a directory with no `pack.json` runs the manifest, licence, deny-list and
+linkage checks and skips the pack ones. A default would either be the spec's `1952-01`/`3000-12` (a window nobody
 means) or "now" (a wall-clock read, which B6a §1.4 forbids in an artifact-producing path).
 
 ```jsonc
@@ -241,6 +290,73 @@ as numbers with at most one decimal.
 (`reason: "no_data_at_band"`), never a row. A frequency claim resting on 61 games is worse
 than no claim, because it looks like evidence.
 
+### 2a. `candidate-attach` — how an `explorer_frequency` record reaches a candidate
+
+The previous revision specified exactly one command, and it wrote `priority.json`. Nothing
+selected a candidate, nothing mapped a move to a feedback claim, nothing merged a record into
+`evidence.json` or an entry into `sources.json`, and nothing recomputed `packDigest` — yet
+§Acceptance 5 required an emitted candidate carrying `explorer_frequency` evidence and a
+generated sentence. That is the core loop of this RFC, and leaving it to the implementer to
+invent is precisely the improvisation the review exists to stop. It is specified here.
+
+```
+make candidate-attach DIR=content/candidates/<id> PIPELINE=explorer \
+  ARGS='--at-spine-node <id|--root> --move Bf5 --target /feedbackClaims/0/text \
+        --ratings 1400,1600,1800 --speeds blitz,rapid --since 2024-01 --until 2026-07'
+```
+
+Nine steps, in this order, all deterministic, and **nothing is written until the last one**:
+
+1. **Load and pre-check.** Read `DIR/{pack.json,evidence.json,sources.json}`. All three must
+   exist and `sourcing-check DIR` must already pass. A candidate that is not currently valid is
+   refused (`CANDIDATE_NOT_CLEAN`) — attachment never repairs, and a merge into a broken
+   sidecar produces a record nobody can trust.
+2. **Resolve the anchor.** `--at-spine-node <id>` walks the spine from `start.fen` to that
+   node and uses the resulting FEN; `--root` uses `start.fen`. An id that does not resolve is
+   `ANCHOR_UNRESOLVED`. The anchor is recorded in the record as `{ spineNodeId }` or `{ fen }`.
+3. **Query.** `explorerStats` (§1) for that FEN with the §1 request grammar. Cache first,
+   live second, no third path.
+4. **Abstain, if that is the answer.** On `source_unavailable` or `total < 100`
+   (`no_data_at_band`), append **one abstention** to `evidence.json.abstentions` with the
+   manifest linkage of B6a §1.2a, write no record, write nothing into `pack.json`, and exit 0.
+   An unavailable explorer must not be able to leave a candidate half-attached.
+5. **Select the move — the author does, not the emitter.** `--move <san>` must appear in the
+   response's `moves[]`; absent, it is `MOVE_NOT_IN_RESPONSE` and nothing is written. The
+   emitter never picks the most-played move, because "which move deserves a sentence" is an
+   authoring decision and picking it silently would make the tool an author.
+6. **Derive.** `playedCount`, `total`, `sharePct` per §1, from the sums and nothing else.
+7. **Render and write the one permitted sentence.** `--target` must resolve to an **existing**
+   `/feedbackClaims/<i>/text`; any other pointer is `ATTACH_TARGET_FORBIDDEN` — the command
+   cannot create a claim, cannot touch `/objective/summary`, `/planClasses`, `/spine`,
+   `/deviations` or `/difficulty`, and cannot write anywhere else in the document. The claim's
+   `text` is replaced by §4's render, and the replaced text is printed to stderr as a diff so
+   an author's own sentence is never silently lost. Overwriting is safe by construction: the
+   check re-renders and compares byte-for-byte (§4), so a wrong write cannot become a false
+   support — it becomes a failure.
+8. **Merge, deterministically.** Append one `explorer_frequency` record with `templateId`,
+   `values`, `supports: ["/feedbackClaims/<i>/text"]`, `sourceId: "lichess-explorer"` and the
+   `retrievedAt` of the cache entry that answered step 3. Merge the corresponding `http`
+   manifest entry into `sources.json`, de-duplicated on `(sourceId, retrievedAt, origin.url)`.
+   Records are then sorted by `(kind, templateId, supports[0], sourceId, retrievedAt)` and
+   entries by `(sourceId, retrievedAt)`, so the files are byte-stable and re-attachment of the
+   same record is idempotent rather than duplicative.
+9. **Re-derive, re-check, then write atomically.** Recompute `sourcedAt` (max `retrievedAt`
+   over consumed entries) and `packDigest = digestDrillPack(pack)` **after** step 7's prose
+   write — the pack's identity changed, so a digest computed before it would be stale on
+   arrival. Run the whole of `sourcing-check` in-process against the three in-memory documents;
+   **on any failure, write nothing and exit non-zero.** On success, write all three files
+   temp-and-rename.
+
+Two properties this shape buys, both of them the reason it is nine steps and not one:
+attachment is **idempotent** — re-running it against an unchanged cache reproduces the three
+files byte for byte, including `packDigest` — and it is **all-or-nothing**, so no failure mode
+leaves a pack carrying a generated sentence with no record behind it, which would be an
+uncited machine claim sitting in a learner-facing field.
+
+`priority.json` stays with `candidate-emit PIPELINE=explorer` (§2). The two commands do not
+share output: one ranks packs that do not exist yet, the other grounds one sentence in a
+candidate that does.
+
 ### 3. The anti-contamination rule
 
 Explorer output **never enters a pack document** and never reaches the browser. B6a §1.1a
@@ -250,14 +366,32 @@ per-move data has no legal home, and `provenance` is projected verbatim before p
 there would tell a learner the book move before they choose. Explorer output lives in
 `evidence.json` as `explorer_frequency` records and in `priority.json`.
 
-It has exactly two legitimate in-pack effects, both indirect:
+It has exactly **one** legitimate in-pack effect: it can support one authored sentence, under
+§4 and nothing else.
 
-1. It can support `/difficulty/minOnlineRapid` and `/difficulty/maxOnlineRapid` — integers in
-   a closed object (`schema:97-98`), not prose, and not visible as a move recommendation.
-2. It can support one authored sentence, under §4 and nothing else.
+**What was removed, and why it was worse than useless.** The previous revision also allowed an
+`explorer_frequency` record to support `/difficulty/minOnlineRapid` and
+`/difficulty/maxOnlineRapid`, on the reasoning that they are integers in a closed object rather
+than prose. The reasoning was about the *field's shape* and the claim is about its *meaning*.
+What the explorer measures is **occurrence**: games in a rating band prove that players in that
+band reached this position. `difficulty.minOnlineRapid`/`maxOnlineRapid` assert something
+different in kind — that this drill is instructionally suitable for players in that band. A
+position 1400-rated players reach constantly may be far too hard, or far too easy, to drill at
+1400; frequency is silent on both. Deriving a difficulty bound from an occurrence count is
+evidence overreach with a number attached, which is the failure `AGENTS.md` law 8 names and the
+one the whole grounding contract (B6a §3.3) exists to make mechanically impossible. A machine
+record must not be able to launder "they got here" into "this is right for them".
 
-`sourcing-check` fails `EVIDENCE_OVERREACH` for an `explorer_frequency` record supporting any
-pointer under `/spine`, and fails it unconditionally for `/deviations/*/class`.
+There is no redefinition of the fields that rescues it, either, so none is offered: a
+"difficulty band" that means "occurrence band" would be a field whose name lies to every
+future reader, and the pack format already spends `difficulty` on the learner-suitability
+meaning (`design/00-thesis.md:88-95`'s target-band knobs).
+
+`sourcing-check` therefore fails `EVIDENCE_OVERREACH` for an `explorer_frequency` record
+supporting **any** pointer under `/difficulty` or under `/spine`, any prose pointer other than
+the §4 target, and — unconditionally, for every kind — `/deviations/*/class`. Difficulty bounds
+stay an authored judgement; B6d's `Rating` column remains the only rating-band evidence
+anywhere in the system, and it is a statement about solvers, not about this drill (B6a §3.2).
 
 ### 4. The single permitted crossing: one pinned prose template
 
@@ -362,7 +496,7 @@ it rather than allowed to improvise:
 - It is **not first**. B6a and B6b land before it; its trigger is B6c's probe result.
 - It is **not a corpus**. The deliverable is a single derived aggregate table keyed by
   `transposeKey`, sized in tens of megabytes; the games are streamed, aggregated, and
-  discarded. Nothing queryable-by-game is retained. `design/BACKLOG.md:175` already draws this
+  discarded. Nothing queryable-by-game is retained. `design/BACKLOG.md:188` already draws this
   line — "Bulk volume is throughput on a working pipeline, and bulk-ingestion-*first* stays
   rejected."
 - Its **revival condition is pre-ledgered**, so it is a planned contingency rather than
@@ -409,18 +543,37 @@ our own text stating someone else's numbers, which are facts. The withdrawn draf
 **Gate 0:**
 
 1. **The probe is run and logged before implementation**, with status code, headers and body
-   prefix appended to `planning/exploration/log.md` and the
-   `design/research/theory-sourcing.md` coverage-matrix row updated. Criteria 2–6 are the
-   Branch A set; 7–8 are the Branch B set; 9–24 apply to both.
+   prefix appended to `planning/exploration/log.md`, and a `design/BACKLOG.md` row filed
+   **proposing** the `design/research/theory-sourcing.md` coverage-matrix update with its exact
+   replacement text. The implementer does not edit `design/research/` (`AGENTS.md:64-68`).
+   Criteria 2–6 are the Branch A set; 7–8 are the Branch B set; 9–24 apply to both.
 2. *(A)* A live query at `ratings=1400,1600,1800&speeds=blitz,rapid` returns `200` and
    populates at least one `priority.json` row with `total ≥ 100`.
 3. *(A)* Two consecutive `--offline` runs against the cached response produce byte-identical
-   `priority.json` (B6a §1.4).
+   `priority.json` **and** `sources.json` (B6a §1.4), and `sourcing-check
+   DIR=content/candidates/priority` passes with `sourcedAt` recomputed from the manifest
+   rather than accepted as written.
 4. *(A)* The anti-Caro Advance position from
    `content/drafts/anti-caro-advance.json:start.fen` produces a row whose `transposeKey`
    equals `transposeKey(pack.start.fen)` computed with the shipped function.
-5. *(A)* An `explorer_frequency` record supporting a `feedbackClaims[].text` equal to the §4
-   rendering passes `sourcing-check`.
+5. *(A)* **The attachment workflow produces the criterion's own subject.**
+   `make candidate-attach` (§2a) is run against a B6a-emitted candidate carrying one
+   author-written `feedbackClaims[0]`, with `--move` naming a move present in the response. It
+   writes §4's rendered sentence into `/feedbackClaims/0/text`, appends one
+   `explorer_frequency` record supporting that pointer, merges the `lichess-explorer` manifest
+   entry, and rewrites `packDigest` to `digestDrillPack` of the **post-write** pack;
+   `sourcing-check DIR` then passes with no `EVIDENCE_DIGEST_STALE` warning. Asserted
+   alongside it: re-running the identical command reproduces all three files byte for byte
+   (idempotence); a run whose `--move` is absent from the response fails
+   `MOVE_NOT_IN_RESPONSE` and leaves all three files **unmodified** (byte-compared before and
+   after); a `--target` of `/objective/summary`, `/difficulty/minOnlineRapid`, or a
+   `feedbackClaims` index that does not exist fails `ATTACH_TARGET_FORBIDDEN` with nothing
+   written; and a candidate that does not already pass `sourcing-check` is refused with
+   `CANDIDATE_NOT_CLEAN`.
+5a. *(A)* **An unavailable explorer cannot half-attach.** With the backend stubbed to 401 and
+    the cache empty, `candidate-attach` writes one abstention, exits 0, and leaves `pack.json`
+    byte-identical — no sentence, no record. The same holds for a response summing to `61`
+    (`no_data_at_band`).
 6. *(A)* A row is emitted for each of `design/04` §2c's first-wave families for which the
    query returns `total ≥ 100`, and the resulting `rows` order is recorded in
    `planning/content-era/log.md` next to §2c's asserted order.
@@ -462,6 +615,18 @@ our own text stating someone else's numbers, which are facts. The withdrawn draf
     non-zero with `RATINGS_NOT_A_GROUP` and issue **no** request; `--ratings 1400,1600,1800`
     proceeds. A test pins the accepted set to `0,1000,1200,1400,1600,1800,2000,2200,2500`
     against a committed copy of the spec fragment.
+16a. **`speeds` is the spec's enum, in the spec's order.** `--speeds blitz,bltiz`,
+     `--speeds bullet,bullet` and `--speeds hyperbullet` each exit non-zero with
+     `SPEEDS_NOT_A_SPEED` and issue **no** request. A test pins the accepted set and its
+     canonical order to a committed copy of
+     `doc/specs/schemas/Speed.yaml` — `ultraBullet, bullet, blitz, rapid, classical,
+     correspondence` — and asserts that `--speeds rapid,blitz` and `--speeds blitz,rapid`
+     produce the **same** request URL, the same cache key, and the same rendered sentence, so
+     argument order cannot fork the cache or the citation.
+16b. **The window grammar is closed.** `--since 2026-13`, `--since 2026-00` and `--since 26-01`
+     each fail with a named error before any request; `--since 2026-07 --until 2024-01` fails
+     `WINDOW_INVALID`; `--since 2024-01 --until 2024-01` (a one-month window) is accepted, so
+     the comparison is `<=` and not `<`.
 17. **`total` and `playedCount` are derived, and the derivation is tested against a real
     response body.** A committed fixture response with `white/draws/black` at the position and
     per move yields `total` and `playedCount` equal to independently computed sums; a fixture
@@ -486,18 +651,28 @@ our own text stating someone else's numbers, which are facts. The withdrawn draf
     `/objective/summary`, or `/deviations/0/class` fails `EVIDENCE_OVERREACH`; a
     `tablebase_result` record carrying `templateId: "explorer-move-share/v1"` fails the same
     way (templates are keyed by `kind`).
+22a. **Frequency cannot reach a difficulty bound.** An `explorer_frequency` record supporting
+     `/difficulty/minOnlineRapid` or `/difficulty/maxOnlineRapid` fails `EVIDENCE_OVERREACH`,
+     and a test asserts the pipeline writes **no** `/difficulty` value in any emitted or
+     attached document. The previous revision permitted this support; games from a rating band
+     prove players in that band reached the position and say nothing about whether the drill
+     suits them, so the field is closed to this record kind (§3, `AGENTS.md` law 8).
 
 **Anti-contamination and hygiene:**
 
-23. **No explorer value appears anywhere in `pack.json`.** A test emits a candidate with
-    explorer evidence and asserts that no `total`, `sharePct`, or `topMoves` value occurs in
-    the pack document outside a `/difficulty` integer or the §4 generated sentence, and that
-    `GET /packs/:id` for it contains no frequency data.
-24. `lichess-explorer` → `basis: "no-rights-asserted"`, `spdx: null`, with the §6 rationale
-    and the etiquette note present in `sources.json` and verbatim in `provenance.sources[]`;
-    every emitted candidate carries `provenance.licence: "CC-BY-SA-4.0"` and no
-    `attribution`; `make verify` green; `docs/content-sourcing.md` gains the explorer section
-    including Gate 0's outcome.
+23. **No explorer value appears anywhere in `pack.json`.** A test attaches explorer evidence to
+    a candidate and asserts that no `total`, `sharePct`, or `topMoves` value occurs anywhere in
+    the pack document **except** inside the §4 generated sentence — there is no longer a
+    `/difficulty` exemption (criterion 22a) — and that `GET /packs/:id` for it contains no
+    frequency data outside that one claim, which is not projected at all
+    (`apps/server/src/pack-registry.ts:47-74`).
+24. `lichess-explorer` → `origin.kind: "http"`, `basis: "no-rights-asserted"`, `spdx: null`,
+    with the §6 rationale and the etiquette note present in `sources.json` and verbatim in
+    `provenance.sources[]`, and no `attributionRequired`/`shareAlike` key on the `licence`
+    object (B6a §1.2 derives both); every emitted candidate carries
+    `provenance.licence: "CC-BY-SA-4.0"` and no `attribution`; every attached record and
+    abstention links to a manifest entry per B6a §1.2a; `make verify` green;
+    `docs/content-sourcing.md` gains the explorer section including Gate 0's outcome.
 
 ## Open questions
 
@@ -522,3 +697,22 @@ None.
   encoding moved to B6a's `basis: "no-rights-asserted"`; `provenance.licence` is now written
   unconditionally per the wholesale ruling; and the cross-run concurrency criterion now names
   the lock that delivers it.
+- 2026-08-12: revised against the second review. (1) **New §2a specifies `candidate-attach`**,
+  the workflow that was missing entirely: the previous revision's only command wrote
+  `priority.json`, while §Acceptance 5 required a candidate carrying an `explorer_frequency`
+  record and a generated sentence, so the core loop of this RFC — select a candidate, resolve
+  an anchor, pick a move, render, merge into both sidecars, recompute `packDigest` — was left
+  for an implementer to invent. It is now nine ordered steps that are idempotent and
+  all-or-nothing, with the failure modes named. (2) **The `/difficulty` support is removed**
+  (§3): occurrence in a rating band is not instructional suitability for that band, so
+  deriving `minOnlineRapid`/`maxOnlineRapid` from a frequency was evidence overreach with a
+  number attached; explorer output now has exactly one legal in-pack effect and
+  `EVIDENCE_OVERREACH` covers every `/difficulty` pointer. (3) **The request grammar is
+  closed** (§1): `speeds` is pinned to the six-value `Speed` enum read live from
+  `doc/specs/schemas/Speed.yaml`, "canonical order" is defined as that file's declaration
+  order (it enters the cache key and the rendered sentence, so it was never a free choice),
+  and `since`/`until` must be real months with `since <= until` — the previous revision
+  accepted `2026-13` and a reversed window. (4) The `5xx` retry policy this RFC cited **did not
+  exist** in B6a; it has been added there and is now cited accurately. (5) §0 and
+  §Acceptance 1 no longer assign a `design/research/` edit to the implementer; the
+  coverage-matrix change is proposed as a `design/BACKLOG.md` row (`AGENTS.md:64-68`).
