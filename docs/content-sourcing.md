@@ -56,8 +56,8 @@ split ply, and emits the remaining moves as a single theory-strict spine ending 
 graduation. The committed D35 Queen’s Gambit Declined Exchange candidate demonstrates the
 complete offline path with six drill plies.
 
-Later amendments add Syzygy/engine grounding, explorer priority, and puzzle-derived
-position seeds to this same boundary.
+Syzygy/engine grounding, explorer priority, and puzzle-derived position seeds use this same
+artifact and validation boundary.
 
 ## Syzygy and endgame abstention
 

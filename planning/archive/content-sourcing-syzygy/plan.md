@@ -1,6 +1,6 @@
 # Syzygy sourcing — implementation plan
 
-RFC: `rfc/content-sourcing-syzygy.md` (accepted by owner 2026-08-12).
+RFC: `rfc/archive/content-sourcing-syzygy.md` (implemented 2026-08-12).
 
 - [x] Mechanical FEN census and fail-with-abstention range boundary
 - [x] In-range tablebase record and local-input/source linkage

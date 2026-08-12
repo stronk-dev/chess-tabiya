@@ -1,14 +1,14 @@
 # RFC: Lichess opening explorer — rating-band frequency, or a recorded refusal
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §2c (pack priority = frequency at 1400–2000 per explorer rating-band data), §8 order item 3 (breadth by explorer-frequency priority)
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 (`design/04-content-architecture.md` header); owner ruling 2026-08-12 opening the RFC tier (`rfc/README.md`); exploration question Q6 (`planning/exploration/plan.md:175`)
-- **Depends on:** **`rfc/content-sourcing-foundation.md` (B6a)** — manifest and its `http`/`local-file` origins (§1.2), source-linkage rule (§1.2a), evidence sidecar, the `429`/`5xx` retry schedule (§1.4), deterministic-output rule, `sourcing-check`, record vocabulary, prose-template mechanism. Also `rfc/archive/drill-pack-format.md` (implemented). **Not** blocked on D11: B6c emits no played pack, so it may land concurrently with the D11 fix that B6b and B6d wait on (B6a §6)
+- **Depends on:** **`rfc/archive/content-sourcing-foundation.md` (B6a)** — manifest and its `http`/`local-file` origins (§1.2), source-linkage rule (§1.2a), evidence sidecar, the `429`/`5xx` retry schedule (§1.4), deterministic-output rule, `sourcing-check`, record vocabulary, prose-template mechanism. Also `rfc/archive/drill-pack-format.md` (implemented). B6c did not depend on D11 because it emits no played pack.
 - **Parent / amends:** — (B6c; third of four RFCs split out of the withdrawn `content-sourcing-pipelines.md` draft, 2026-08-12)
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/content-sourcing-explorer/` (once implementing)
+- **Planning:** `planning/archive/content-sourcing-explorer/`
 
 ## Summary
 
@@ -60,7 +60,7 @@ instrument the order is taste.
 
 | Out of scope | Why |
 |---|---|
-| Everything in B6a §1–§3 | `rfc/content-sourcing-foundation.md`. This RFC adds one record kind, one prose template, one emitter and one artifact |
+| Everything in B6a §1–§3 | `rfc/archive/content-sourcing-foundation.md`. This RFC adds one record kind, one prose template, one emitter and one artifact |
 | An offline table built from `database.lichess.org` monthly dumps | **Carved out**, §5. Not specified here and not shipped here |
 | Masters-database queries | The `/masters` endpoint 401s identically (B6a §0) and `design/04` §2c asks for 1400–2000 club data, not master games. Adding it later is a `ratings`-parameter change, not a design change |
 | Per-player explorer queries | Personal-history features are ADR-0003 territory and B7-8; this RFC ranks packs, never learners |
@@ -680,6 +680,9 @@ None.
 
 ## Changelog
 
+- 2026-08-12: implemented and approved after independent verification; authenticated
+  operator sourcing, priority artifacts, abstention, caching, and candidate attachment are
+  folded into `docs/content-sourcing.md`.
 - 2026-08-12: implementation began. The exact anonymous canonical request returned HTTP 401
   from nginx with `Authorization` advertised; the owner then supplied a scope-less personal
   operator token through a gitignored environment file, and the identical request returned

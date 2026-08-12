@@ -21,3 +21,8 @@ Append-only.
   `lichess-org/chess-openings` re-verification as executable `[V]`, naming pinned commit
   `4b8622759e7ae6f93f011cc6c83a3823401ab45e`, the `eco/name/pgn` TSV header, and the
   successful offline D35 candidate emission; preserve the dossier's existing licence note.
+
+## 2026-08-12 — Independent approval and lifecycle closeout
+
+- Claude independently verified the seven-RFC batch, including source linkage, credential
+  hygiene, canonical candidates, and both repository gates. B6a is approved and archived.

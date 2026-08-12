@@ -1,15 +1,15 @@
 # RFC: Learner identity and the authorization boundary
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/02-product-shape.md:50-63` (deployment axis, settled 2026-08-12); `design/03-product-breadth.md:185-188` (F3), gate rows B5/B7/B8 (`design/03-product-breadth.md:165,167,168`)
 - **Exploration gate:** opened by owner ruling 2026-08-12 — deployment posture amended to hosted multi-user (`planning/exploration/log.md`, entry "deployment posture amended to hosted multi-user")
 - **Depends on:** none.
-- **Depended on by:** `rfc/pack-optional-runs.md` (F2). This RFC holds **migration 2** in `rfc/README.md` §Migration register and lands first; F2 rebases its quarantine migration to 3. See §6.1
+- **Depended on by:** `rfc/archive/pack-optional-runs.md` (F2). This RFC holds **migration 2** in `rfc/README.md` §Migration register and landed first; F2 rebased its quarantine migration to 3. See §6.1
 - **Parent / amends:** amends the shipped writer lease (`packages/runtime/src/errors.ts:37-44`, `apps/server/src/storage.ts:289-327`) and the shipped run storage schema (`apps/server/src/storage.ts:178-184`)
 - **Supersedes / superseded by:** supersedes `planning/breadth/create-and-return.md` §B4.4 and slice B7-1, which pinned `learnerId` as "a single local profile default, no auth" — written before the hosted ruling
-- **Planning:** `planning/learner-identity-and-authorization/` (once implementing)
+- **Planning:** `planning/archive/learner-identity-and-authorization/`
 
 ## Summary
 
@@ -1288,6 +1288,9 @@ None.
 
 ## Changelog
 
+- 2026-08-12: implemented and approved after independent verification; canonical behavior
+  is in `docs/identity-and-authorization.md` and the lease/storage sections of
+  `docs/branch-runtime.md`.
 - 2026-08-12: created.
 - 2026-08-12: revision 2, after adversarial review. Five blockers closed and both owner
   rulings folded into the specification body.

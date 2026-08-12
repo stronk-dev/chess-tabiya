@@ -1,6 +1,6 @@
 # Content sourcing foundation — implementation plan
 
-RFC: `rfc/content-sourcing-foundation.md` (accepted by owner 2026-08-12).
+RFC: `rfc/archive/content-sourcing-foundation.md` (implemented 2026-08-12).
 
 - [x] Artifact triple, canonical serialization, manifests, evidence ledger, and strict checker
 - [x] Licence matrix, source linkage, grounding boundary, and audit mode

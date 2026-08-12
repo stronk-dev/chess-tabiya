@@ -1,6 +1,6 @@
 # Learner identity and authorization implementation plan
 
-RFC: `rfc/learner-identity-and-authorization.md`.
+RFC: `rfc/archive/learner-identity-and-authorization.md`.
 
 The owner authorized implementation on 2026-08-12. F3 lands completely before F2 begins.
 

@@ -1,6 +1,6 @@
 # Terminal outcome events — implementation plan
 
-RFC: `rfc/terminal-outcome-events.md` (accepted by owner 2026-08-12).
+RFC: `rfc/archive/terminal-outcome-events.md` (implemented 2026-08-12).
 
 - [x] Run schema v0.6 and validated terminal outcome projection
 - [x] Terminal producer, root refusal, and feedback predicates

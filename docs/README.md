@@ -31,4 +31,6 @@ Implemented foundation:
   per-run roles, learner-bound writer leases, grant transfer, deletion
   reassignment, and hosted-operation limits.
 - `content-sourcing.md` — unpublished candidate artifacts, evidence/source linkage,
-  licence enforcement, deterministic and polite source access, and the opening-line emitter.
+  licence enforcement, deterministic and polite source access, opening skeletons,
+  Syzygy/engine grounding, authenticated explorer priorities, and private-evidence puzzle
+  consequence seeds.

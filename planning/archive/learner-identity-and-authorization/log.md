@@ -31,3 +31,8 @@ Append-only.
   transfer, deletion reassignment, cache eviction, cookie flags, and resume
   ordering. Canonical behavior is in `docs/identity-and-authorization.md` and the
   writer-lease section of `docs/branch-runtime.md`.
+
+## 2026-08-12 — Independent approval and lifecycle closeout
+
+- Claude independently verified the implementation and included F3 in the owner-directed
+  seven-RFC completion batch. Canonical docs were reconciled and the lifecycle archived.

@@ -20,3 +20,8 @@ Append-only.
 - No engine-derived prose, perfect-tablebase opponent, endgame objective grading, source
   position mining, or authored claim was built. D11's terminal disclosure path was already
   delivered and exercised by the repository browser fixture before this RFC began.
+
+## 2026-08-12 — Independent approval and lifecycle closeout
+
+- Claude independently verified the range boundary, abstention, engine-evidence typing,
+  terminal disclosure dependency, and both repository gates. B6b is approved and archived.

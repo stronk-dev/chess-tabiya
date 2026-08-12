@@ -1,6 +1,6 @@
 # Pack-optional runs implementation plan
 
-RFC: `rfc/pack-optional-runs.md`.
+RFC: `rfc/archive/pack-optional-runs.md`.
 
 The owner authorized implementation on 2026-08-12 after F3 landed.
 

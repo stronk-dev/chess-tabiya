@@ -7,13 +7,8 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `terminal-outcome-events.md` | implementing | amends branch runtime | `planning/terminal-outcome-events/`; closes D11; **blocks** B6b and B6d |
-| `learner-identity-and-authorization.md` | implementing | foundation F3 | `planning/learner-identity-and-authorization/` |
-| `pack-optional-runs.md` | implementing | foundation F2; F3 landed first | `planning/pack-optional-runs/` |
-| `content-sourcing-foundation.md` | implementing | program item #6 (B6a) | `planning/content-sourcing-foundation/` |
-| `content-sourcing-syzygy.md` | implementing | program item #6 (B6b) | `planning/content-sourcing-syzygy/` |
-| `content-sourcing-explorer.md` | implementing | program item #6 (B6c) | `planning/content-sourcing-explorer/` |
-| `content-sourcing-position-seeds.md` | implementing | program item #6 (B6d) | `planning/content-sourcing-position-seeds/` |
+
+No active product RFCs.
 
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
 `content-sourcing-pipelines.md` draft and recommended a four-way split; the draft
@@ -22,8 +17,8 @@ foundation and the other three name it in `Depends on:`** — it ships the artif
 triple (`pack.json` / `evidence.json` / `sources.json`), the fetch manifest, the
 deterministic-output rule, the licence and attribution encoding required by the
 2026-08-12 content-rights ruling, the `sourcing-check` gate, and the
-`chess-openings` line skeleton. Landing order is **B6a → B6b → B6c → B6d**
-(reasoning in `content-sourcing-foundation.md` §6). B6d is a **redesign**, not a
+`chess-openings` line skeleton. The batch landed **B6a → B6b → B6c → B6d**
+(reasoning in `archive/content-sourcing-foundation.md` §6). B6d is a **redesign**, not a
 rehome: the withdrawn §5 asked the learner to solve the tactic, which
 `design/00-thesis.md:70,93-94` rejects.
 
@@ -53,25 +48,24 @@ writing it into a draft.
 
 | Migration | `STORAGE_VERSION` | Owner RFC | Status |
 |---|---|---|---|
-| 1 | 0→1 | shipped | implemented; **body** rewritten by `pack-optional-runs.md` §8 to stop replaying through `projectRun` (no version change, no new number) |
-| 2 | 1→2 | `learner-identity-and-authorization.md` | implementing |
-| 3 | 2→3 | `pack-optional-runs.md` | implementing; migration 2 landed first |
-| 4 | 3→4 | `terminal-outcome-events.md` | implementing; upgrades ordinary v0.5 snapshots and quarantines pre-producer outcome events |
-| 4 | 3→4 | `terminal-outcome-events.md` | draft — run schema v0.6; upgrades eligible v0.5 snapshots and the indexed column, quarantines rows carrying a pre-producer `outcome.reached` |
+| 1 | 0→1 | shipped | implemented; **body** rewritten by `archive/pack-optional-runs.md` §8 to stop replaying through `projectRun` (no version change, no new number) |
+| 2 | 1→2 | `archive/learner-identity-and-authorization.md` | implemented |
+| 3 | 2→3 | `archive/pack-optional-runs.md` | implemented after migration 2 |
+| 4 | 3→4 | `archive/terminal-outcome-events.md` | implemented; upgrades ordinary v0.5 snapshots and quarantines pre-producer outcome events |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
 schema change can break a migration it did not touch. Record body edits here as
 well.
 
-**Landing order is F3 before F2**, decided 2026-08-12 on three grounds: D1 is a
+**F3 landed before F2**, decided 2026-08-12 on three grounds: D1 was a
 live defect (a run link is a write credential) and the deployment ruling is
 hosted multi-user, so identity is a prerequisite to exposing anything at all;
 F2's v0.4 snapshot quarantine is simpler to write once ownership columns exist
 than the reverse; and F2 is the riskier change (`RunService.create` becomes
 async across ~15 call sites), so it should not also carry the migration that
-another draft depends on. F2 must rebase its migration to 3 and state the
-dependency explicitly.
+another draft depends on. F2 therefore rebased its migration to 3 and recorded
+the dependency explicitly.
 
 Any RFC touching persisted shape adds its row here in the same commit that
 drafts the migration.
@@ -99,6 +93,13 @@ before re-attempting this territory.
 | `archive/explanation-grounds.md` | implemented | `docs/explanation-grounds.md` |
 | `archive/authored-feedback-delivery.md` | implemented | `docs/drill-client.md`, `docs/drill-pack-format.md` |
 | `archive/authored-explanation-surface.md` | implemented | `docs/explanation-grounds.md` |
+| `archive/learner-identity-and-authorization.md` | implemented | `docs/identity-and-authorization.md`, `docs/branch-runtime.md` |
+| `archive/pack-optional-runs.md` | implemented | `docs/branch-runtime.md`, `docs/drill-client.md` |
+| `archive/terminal-outcome-events.md` | implemented | `docs/branch-runtime.md`, `docs/drill-client.md`, `docs/explanation-grounds.md` |
+| `archive/content-sourcing-foundation.md` | implemented | `docs/content-sourcing.md` |
+| `archive/content-sourcing-syzygy.md` | implemented | `docs/content-sourcing.md` |
+| `archive/content-sourcing-explorer.md` | implemented | `docs/content-sourcing.md` |
+| `archive/content-sourcing-position-seeds.md` | implemented | `docs/content-sourcing.md` |
 
 ## The archive sketches are quarry, not RFCs
 

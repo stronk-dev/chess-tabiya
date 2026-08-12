@@ -1,15 +1,15 @@
 # RFC: Pack-optional run identity and the run-level withholding barrier
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/03-product-breadth.md` §The foundation edge (F2), §Play (Just Play, From position), gate B2; ADR-0006 (`archive/brief-v2/adrs/ADR-0006-delayed-middlegame-feedback.md`)
 - **Exploration gate:** opened by owner ruling 2026-08-12 (breadth sequencing, `planning/exploration/log.md`)
-- **Depends on:** `rfc/archive/branch-runtime.md` (implemented), `rfc/archive/drill-pack-format.md` (implemented), `rfc/archive/engine-workers.md` (implemented), `rfc/archive/authored-explanation-surface.md` (implemented — this RFC takes the D2 fix it explicitly handed back), `rfc/learner-identity-and-authorization.md` (F3, draft — **lands first**; §Landing order states every shape this RFC inherits from it)
+- **Depends on:** `rfc/archive/branch-runtime.md` (implemented), `rfc/archive/drill-pack-format.md` (implemented), `rfc/archive/engine-workers.md` (implemented), `rfc/archive/authored-explanation-surface.md` (implemented — this RFC takes the D2 fix it explicitly handed back), `rfc/archive/learner-identity-and-authorization.md` (F3, implemented first; §Landing order states every shape this RFC inherits from it)
 - **Migration:** 3, `STORAGE_VERSION` 2 → 3, claimed in `rfc/README.md` §Migration register
 - **Parent / amends:** amends the run schema (`schemas/drill_run.schema.json`, `packages/runtime/src/types.ts`), the withholding barrier (`apps/server/src/feedback-policy.ts`), and run creation (`apps/server/src/rest.ts`, `apps/server/src/service.ts`)
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/pack-optional-runs/` (once implementing)
+- **Planning:** `planning/archive/pack-optional-runs/`
 
 ## Summary
 
@@ -1174,6 +1174,9 @@ None.
 
 ## Changelog
 
+- 2026-08-12: implemented and approved after independent verification; canonical session,
+  attempt-end feedback, REST, persistence, and client-compatibility behavior is folded into
+  `docs/branch-runtime.md` and `docs/drill-client.md`.
 - 2026-08-12: created.
 - 2026-08-12: implementation started after F3 landed and passed its acceptance suite.
 - 2026-08-12: revised after adversarial review; four blockers closed and three

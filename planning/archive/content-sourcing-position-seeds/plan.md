@@ -1,6 +1,6 @@
 # Position-seed sourcing — implementation plan
 
-RFC: `rfc/content-sourcing-position-seeds.md` (accepted by owner 2026-08-12).
+RFC: `rfc/archive/content-sourcing-position-seeds.md` (implemented 2026-08-12).
 
 - [x] Exact eleven-column CSV parser and full legal UCI/SAN replay
 - [x] Spine-less consequence-pack emitter with opponent-first parity and honest grading

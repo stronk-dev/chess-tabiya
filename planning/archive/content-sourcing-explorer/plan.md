@@ -1,6 +1,6 @@
 # Explorer sourcing — implementation plan
 
-RFC: `rfc/content-sourcing-explorer.md` (accepted by owner 2026-08-12).
+RFC: `rfc/archive/content-sourcing-explorer.md` (implemented 2026-08-12).
 
 - [x] Gate 0 probe and honest Branch B artifact
 - [x] Closed/canonical request grammar, token-safe client, cache, retry and abstention paths

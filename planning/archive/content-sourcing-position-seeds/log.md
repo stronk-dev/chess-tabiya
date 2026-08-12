@@ -31,3 +31,11 @@ Append-only.
   authored claims, move grading, theme-description prose, automatic publication, bulk dump
   retention, a Go ingestion lane, or a learner-facing Lichess login. Each is outside B6d or
   would violate the product thesis / grounding law.
+
+## 2026-08-12 — Independent approval and lifecycle closeout
+
+- Claude independently verified every requested boundary: no solution leakage, correct
+  learner/opponent parity, terminal disclosure, forged-aftermath rejection, streamed zstd,
+  explicit engine opt-in, credential hygiene, and both repository gates.
+- The `000Pw` split is approved without action: transformation correctness is tested on the
+  exact row while its 629 plays correctly fail the 1000-play production eligibility floor.

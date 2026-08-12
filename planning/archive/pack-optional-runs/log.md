@@ -36,3 +36,8 @@ Append-only.
   described. `ENGINES_REQUIRED=1 make verify` passed with 204 tests and Svelte
   diagnostics 0/0. `make test-browser` passed 4 tests with the tagged Maia test
   skipped as designed.
+
+## 2026-08-12 — Independent approval and lifecycle closeout
+
+- Claude independently verified the implementation and included F2 in the owner-directed
+  seven-RFC completion batch. Canonical docs were reconciled and the lifecycle archived.

@@ -21,3 +21,9 @@ Append-only.
 - No offline corpus, learner ranking, difficulty inference, automatic move selection,
   causal claim, or alternate rating band was built. Operator authentication works; a
   learner-facing Lichess OAuth flow remains explicitly separate.
+
+## 2026-08-12 — Independent approval and lifecycle closeout
+
+- Claude independently verified the real authenticated priority artifact, clean credential
+  boundary, operator/learner separation, and both repository gates. B6c is approved and
+  archived.

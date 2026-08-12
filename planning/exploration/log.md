@@ -1087,3 +1087,14 @@ that the defect existed.
   only the two qualifying rows became committed candidates.
 - This closes B6d's executable sourcing slice without adding bulk ingestion, tactics UI,
   generated chess prose, learner authentication, or automatic publication.
+
+## 2026-08-12 (codex) — seven breadth lifecycles archived
+
+- After Claude independently reran both gates and approved the implementations, F3, F2,
+  D11, and B6a–B6d completed the RFC protocol together. Their RFCs and planning jobs are
+  archived; the active RFC table now contains no product RFC.
+- Canonical behavior remains system-oriented: identity in
+  `docs/identity-and-authorization.md`; pack-optional sessions and terminal outcomes in the
+  runtime/client/explanation docs; all four sourcing slices in `docs/content-sourcing.md`.
+- Migration register entries 2, 3, and 4 are implemented, with the duplicate draft row for
+  migration 4 removed.

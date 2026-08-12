@@ -1,14 +1,14 @@
 # RFC: Syzygy grounding at ≤7 pieces, and the abstention rule above it
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §4 (Syzygy ground truth: "Syzygy where ≤7 pieces; Stockfish + authored claims above that"), §8 (batch-1 endgame pack)
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 (`design/04-content-architecture.md` header); owner ruling 2026-08-12 opening the RFC tier (`rfc/README.md`)
-- **Depends on:** **`rfc/content-sourcing-foundation.md` (B6a)** — manifest (including its `local-file` and `engine` origins, B6a §1.2), evidence sidecar, source-linkage rule (§1.2a), deterministic-output rule, `sourcing-check`, record vocabulary, licence encoding. **Blocks on defect D11** (`design/BACKLOG.md:115`, B6a §1.5): an endgame run that mates or stalemates before its checkpoint never discloses its evidence, and there is no workaround in the pack format — see §7. Also `rfc/archive/drill-pack-format.md` and `rfc/archive/engine-workers.md` (both implemented)
+- **Depends on:** **`rfc/archive/content-sourcing-foundation.md` (B6a)** — manifest (including its `local-file` and `engine` origins, B6a §1.2), evidence sidecar, source-linkage rule (§1.2a), deterministic-output rule, `sourcing-check`, record vocabulary, licence encoding. D11 is implemented by `rfc/archive/terminal-outcome-events.md`. Also `rfc/archive/drill-pack-format.md` and `rfc/archive/engine-workers.md` (implemented)
 - **Parent / amends:** — (B6b; second of four RFCs split out of the withdrawn `content-sourcing-pipelines.md` draft, 2026-08-12)
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/content-sourcing-syzygy/` (once implementing)
+- **Planning:** `planning/archive/content-sourcing-syzygy/`
 
 ## Summary
 
@@ -67,7 +67,7 @@ intent; it makes the boundary explicit, mechanical, and recorded in every candid
 
 | Out of scope | Why |
 |---|---|
-| Everything in B6a §1–§3 | `rfc/content-sourcing-foundation.md`. This RFC adds two record kinds and one emitter; it does not restate the manifest, sidecar, cache, or check |
+| Everything in B6a §1–§3 | `rfc/archive/content-sourcing-foundation.md`. This RFC adds two record kinds and one emitter; it does not restate the manifest, sidecar, cache, or check |
 | Self-hosted Syzygy files | A deployment choice. `design/research/theory-sourcing.md:95-96` leaves the mirror inventory unverified (`syzygy-tables.info` fetch blocked by anti-bot), so this RFC uses the API and does not claim a mirror capability |
 | Making `perfect_tablebase` selectable | Defect **D8** (`design/BACKLOG.md:118`). See §5 — this RFC states the dependency rather than fixing the schema/validator divergence inline |
 | Making `win`/`hold`/`save` mechanically checkable | Requires an `outcome.reached` producer, which does not exist (B6a §0). Program item #2/#4 work |
@@ -526,6 +526,9 @@ None.
 
 ## Changelog
 
+- 2026-08-12: implemented and approved after independent verification; canonical Syzygy
+  range/abstention, fixed-depth engine, and endgame-candidate behavior is folded into
+  `docs/content-sourcing.md`.
 - 2026-08-12: implementation began after D11 landed. The mechanical range census,
   abstention-first candidate emitter, tablebase evidence, fixed-depth authoring profile,
   and executor timeout override are assigned to `planning/content-sourcing-syzygy/`.

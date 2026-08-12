@@ -1,14 +1,14 @@
 # RFC: Position seeds from the Lichess puzzle database — the consequence, not the tactic
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §6 (on-ramp layer: "one-move-consequence packs from the CC0 puzzle DB re-cut as *play-the-consequence* rather than find-the-tactic"), §8 order item 4; `design/00-thesis.md:70,93-94` (explicitly not a tactics puzzle trainer), `:82-95` (target band)
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 (`design/04-content-architecture.md` header); owner ruling 2026-08-12 opening the RFC tier (`rfc/README.md`)
-- **Depends on:** **`rfc/content-sourcing-foundation.md` (B6a)** — manifest, evidence sidecar, source-linkage rule (§1.2a), emission-job digest (§1.4), deterministic-output rule, `sourcing-check`, record vocabulary. **Blocks on defect D11** (`design/BACKLOG.md:115`, B6a §1.5): a consequence run that mates or stalemates before ply 8 never discloses its evidence, and there is no workaround in the pack format — see §3a. Also `rfc/archive/drill-pack-format.md` and `rfc/archive/engine-workers.md` (both implemented). Optionally strengthened by B6b (`rfc/content-sourcing-syzygy.md`) once its `engine_eval` producer exists, and then only behind `--engine-eval` (§4)
+- **Depends on:** **`rfc/archive/content-sourcing-foundation.md` (B6a)** — manifest, evidence sidecar, source-linkage rule (§1.2a), emission-job digest (§1.4), deterministic-output rule, `sourcing-check`, record vocabulary. D11 is implemented by `rfc/archive/terminal-outcome-events.md`; B6b is `rfc/archive/content-sourcing-syzygy.md`. Also `rfc/archive/drill-pack-format.md` and `rfc/archive/engine-workers.md` (implemented).
 - **Parent / amends:** — (B6d; fourth of four RFCs split out of the withdrawn `content-sourcing-pipelines.md` draft, 2026-08-12. **This is a redesign, not a rehome**: the withdrawn draft's §5 contradicted `design/00-thesis.md` and is not carried forward)
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/content-sourcing-position-seeds/`
+- **Planning:** `planning/archive/content-sourcing-position-seeds/`
 
 ## Summary
 
@@ -63,7 +63,7 @@ warning at `design/00-thesis.md:72-74`.
 
 | Out of scope | Why |
 |---|---|
-| Everything in B6a §1–§3 | `rfc/content-sourcing-foundation.md`. This RFC adds one record kind and one emitter |
+| Everything in B6a §1–§3 | `rfc/archive/content-sourcing-foundation.md`. This RFC adds one record kind and one emitter |
 | Grading the learner's play | No source supplies it. §3 states what is and is not graded, rather than manufacturing a verdict |
 | Tactic *training* in any form: solve-the-position, hint reveal, solution playback | `design/00-thesis.md:93-94`. The solution is consumed at emit time and never re-enters the product |
 | Lichess theme *description prose* | `design/research/theory-sourcing.md:108-112`: the theme keys are facts and reusable; lila's description strings are AGPL text and are not reused |
@@ -639,6 +639,9 @@ None.
 
 ## Changelog
 
+- 2026-08-12: implemented and approved after independent verification; canonical
+  complete-line replay, private solution evidence, streamed source, selection, and
+  consequence-candidate behavior is folded into `docs/content-sourcing.md`.
 - 2026-08-12: status → implementing; the accepted complete-line consequence pipeline,
   private solution sidecar, streamed dump reader, and spine-less candidate emitter landed.
   The verbatim `000Pw` fixture remains a transformation test but is excluded from production

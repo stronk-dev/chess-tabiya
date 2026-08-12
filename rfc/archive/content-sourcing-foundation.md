@@ -1,6 +1,6 @@
 # RFC: Content sourcing foundation — manifests, evidence sidecars, licence enforcement, and the line skeleton
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §8 (production model, cost discipline), §2d (opening pack contents); `design/02-product-shape.md` §Product posture (content/data-rights ruling, `:41-50`); `design/03-product-breadth.md:101-103` and gate B6
@@ -8,7 +8,7 @@
 - **Depends on:** `rfc/archive/drill-pack-format.md` (implemented), `rfc/archive/authored-explanation-surface.md` (implemented — the reveal contract this must not leak around)
 - **Parent / amends:** — (B6a; first of four RFCs split out of the withdrawn `content-sourcing-pipelines.md` draft, 2026-08-12). `planning/breadth/create-and-return.md` §A5 slices B6-5/B6-8 are its consumers
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/content-sourcing-foundation/` (once implementing)
+- **Planning:** `planning/archive/content-sourcing-foundation/`
 
 ## Summary
 
@@ -59,9 +59,9 @@ to be redesigned rather than copied.
 
 | Out of scope | Why |
 |---|---|
-| Syzygy grounding and the Stockfish abstention fallback | B6b, `rfc/content-sourcing-syzygy.md`. Depends on this RFC's manifest, sidecar, and check |
-| Explorer access, rating-band frequency, `priority.json` | B6c, `rfc/content-sourcing-explorer.md`. Same dependency |
-| Puzzle-derived position seeds | B6d, `rfc/content-sourcing-position-seeds.md`. Same dependency |
+| Syzygy grounding and the Stockfish abstention fallback | B6b, `rfc/archive/content-sourcing-syzygy.md`. Depends on this RFC's manifest, sidecar, and check |
+| Explorer access, rating-band frequency, `priority.json` | B6c, `rfc/archive/content-sourcing-explorer.md`. Same dependency |
+| Puzzle-derived position seeds | B6d, `rfc/archive/content-sourcing-position-seeds.md`. Same dependency |
 | A `/create` UI, draft store, or pack write endpoint | B6-1. `apps/server/src/rest.ts:506,509` expose `GET /packs` and `GET /packs/:id` and nothing else on that prefix — no POST/PUT/PATCH/DELETE (line numbers re-verified 2026-08-12 after F2/F3 landed; the pre-F3 coordinates `:375,378` in the withdrawn draft are stale). This RFC's output is files on disk, consumed by `make pack-check` today and by B6-1 later |
 | Review queue, sign-off trail, reviewer identity | B6-4. This RFC produces the *record* a reviewer reads; it does not build the queue |
 | Session distillation, Lichess study import, PGN game import | B6-5/6/7. Different inputs, same seed shape (`planning/breadth/create-and-return.md` §A4.2), specified there |
@@ -1173,6 +1173,9 @@ None.
 
 ## Changelog
 
+- 2026-08-12: implemented and approved after independent verification; canonical artifact,
+  licence, grounding, deterministic-output, locking, HTTP, and opening-emitter behavior is
+  in `docs/content-sourcing.md`.
 - 2026-08-12: implementation began. The shared sourcing checker, cache lock and HTTP
   discipline, deterministic artifact triple, and P1 openings emitter are assigned to
   `planning/content-sourcing-foundation/`.

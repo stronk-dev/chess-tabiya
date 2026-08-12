@@ -1,14 +1,14 @@
 # RFC: Terminal outcome events (D11)
 
-- **Status:** implementing (revision 3 — accepted by owner 2026-08-12)
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` §Outcome types; `design/03-product-breadth.md` gate B2
 - **Exploration gate:** breadth sequencing ruling 2026-08-12 (`planning/exploration/log.md`)
 - **Depends on:** nothing unshipped
 - **Parent / amends:** amends `packages/runtime/src/runtime.ts` (commit path) and `packages/runtime/src/feedback.ts`
-- **Blocks:** `rfc/content-sourcing-syzygy.md` (B6b), `rfc/content-sourcing-position-seeds.md` (B6d)
-- **Planning:** `planning/terminal-outcome-events/`
+- **Unblocked:** `rfc/archive/content-sourcing-syzygy.md` (B6b), `rfc/archive/content-sourcing-position-seeds.md` (B6d), both implemented
+- **Planning:** `planning/archive/terminal-outcome-events/`
 
 ## Summary
 
@@ -330,6 +330,9 @@ None.
 
 ## Changelog
 
+- 2026-08-12: implemented and approved after independent verification; canonical outcome,
+  replay-integrity, disclosure, persistence, and client behavior is folded into
+  `docs/branch-runtime.md`, `docs/drill-client.md`, and `docs/explanation-grounds.md`.
 - 2026-08-12: created, to close D11 and unblock B6b/B6d.
 - 2026-08-12: revision 3 after review — six further blockers, all mine again.
   The v0.6 bump hides every v0.5 run because storage reads only rows at the

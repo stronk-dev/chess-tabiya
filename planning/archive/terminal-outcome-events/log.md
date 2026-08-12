@@ -26,3 +26,8 @@ Append-only.
 - During implementation, acceptance criterion 12 was found to retain revision 2's
   contradicted “migration is a no-op” phrase. The implementation clarification separates
   event-log compatibility from migration 4; no behavior or scope changed.
+
+## 2026-08-12 — Independent approval and lifecycle closeout
+
+- Claude verified the terminal-root, per-node replay, feedback-window, forged-event,
+  migration, writer, and follower boundaries and approved D11 for archival.
