@@ -914,3 +914,50 @@ archived by codex on approval. Branch-switch measured at 50.1 ms against the
 All three drafted RFCs now have zero open questions. `pack-optional-runs` had
 none; `learner-identity-and-authorization` and `content-sourcing-pipelines` are
 resolved above.
+
+## 2026-08-12 (claude) — three RFCs revised, one split into four, after adversarial review
+
+Codex reviewed all three drafts and asked for revision on two and rejection-plus
+-split on the third. Every finding accepted. Outcome: six RFCs where there were
+three, all with `Open questions: None.`
+
+**Two of the blockers were mine, not the drafts'.**
+
+- I appended the CC-BY-SA ruling to an open-questions section and never
+  propagated it, so §6.4 and an acceptance criterion still refused share-alike
+  sources the owner had just permitted. The identical "appended not integrated"
+  failure I had flagged in someone else's revision two rounds earlier.
+- I launched two agents onto adjacent schema territory with nothing coordinating
+  them, so both claimed database migration 2 and neither could land. Fixed
+  structurally: `rfc/README.md` now carries a **migration register**, a
+  migration number is a single-writer resource claimed in the same commit that
+  drafts it, and landing order is F3 → F2 with reasons. I then repeated the same
+  class of error one layer up by having two concurrent agents edit
+  `rfc/README.md` itself — no damage, but the lesson is about shared index files
+  generally, not migrations specifically.
+
+**What the revisions found that the review did not.** F2: `createRun` rewrites
+the FEN, so the digest-order bug broke *replay invariance*, not merely identity;
+migration 1 replays through `projectRun` and reads `run.packId`, so a
+`user_version = 0` database would fail to open before the quarantine could run;
+a pack with `temperature: -1` passes pack validation and would mint a run its own
+schema rejects. F3: the lease cannot be nulled because `active_writer_id` is NOT
+NULL and a SQLite rebuild needs `PRAGMA foreign_keys = OFF`, which is a no-op
+inside the `BEGIN IMMEDIATE` every migration runs in — so atomic transfer is
+forced by the storage layer, not chosen. Both agents also corrected the reviewer
+on coordinates while confirming its substance.
+
+**Two factual errors in our own content, corrected.** `content/drafts/
+rook-4v3-same-side.json` said the 4v3 rook ending is "ten pieces"; it is eleven
+with both kings — I had said ten too, in the brief and in conversation. The
+conclusion (past Syzygy's seven-piece limit) is unaffected, the number was
+wrong. And **D9** ledgered: `start.side` is schema-optional but
+`packStartSide` throws without it, so a pack that validates can crash the drill
+screen — a contract every future emitter must honour that no schema enforces.
+
+**B6 split** into foundation+skeletons, Syzygy, explorer, and position seeds.
+The position-seeds redesign is the substantive one: apply the *complete* puzzle
+line rather than stopping after the first move, so the learner plays the
+consequence instead of solving the tactic. It is spine-less, and the RFC states
+plainly in `graduationBlockers` that the only executable verdict is "you played
+it out" — the honest limit rather than a grading claim it cannot keep.

@@ -7,7 +7,22 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `content-sourcing-pipelines.md` | draft | program item #6 (B6) | not started |
+| `content-sourcing-foundation.md` | draft | program item #6 (B6a) | not started |
+| `content-sourcing-syzygy.md` | draft | program item #6 (B6b) | not started |
+| `content-sourcing-explorer.md` | draft | program item #6 (B6c) | not started |
+| `content-sourcing-position-seeds.md` | draft | program item #6 (B6d) | not started |
+
+**Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
+`content-sourcing-pipelines.md` draft and recommended a four-way split; the draft
+is deleted, not stubbed, and its content is fully rehomed. **B6a is the
+foundation and the other three name it in `Depends on:`** — it ships the artifact
+triple (`pack.json` / `evidence.json` / `sources.json`), the fetch manifest, the
+deterministic-output rule, the licence and attribution encoding required by the
+2026-08-12 content-rights ruling, the `sourcing-check` gate, and the
+`chess-openings` line skeleton. Landing order is **B6a → B6b → B6c → B6d**
+(reasoning in `content-sourcing-foundation.md` §6). B6d is a **redesign**, not a
+rehome: the withdrawn §5 asked the learner to solve the tactic, which
+`design/00-thesis.md:70,93-94` rejects.
 
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in
@@ -35,9 +50,14 @@ writing it into a draft.
 
 | Migration | `STORAGE_VERSION` | Owner RFC | Status |
 |---|---|---|---|
-| 1 | 0→1 | shipped | implemented |
+| 1 | 0→1 | shipped | implemented; **body** rewritten by `pack-optional-runs.md` §8 to stop replaying through `projectRun` (no version change, no new number) |
 | 2 | 1→2 | `learner-identity-and-authorization.md` | draft |
 | 3 | 2→3 | `pack-optional-runs.md` | draft |
+
+A migration's *number* is the shared resource, but its *body* is shared too: an
+already-applied migration still runs on databases that never reached it, so a
+schema change can break a migration it did not touch. Record body edits here as
+well.
 
 **Landing order is F3 before F2**, decided 2026-08-12 on three grounds: D1 is a
 live defect (a run link is a write credential) and the deployment ruling is
