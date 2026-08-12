@@ -1005,3 +1005,42 @@ stale coordinate is now common enough to check by default.
 only when `spec.name` is unset (`engine-supervisor.ts:116-126`), and both
 shipped Stockfish specs set it — so every piece of engine provenance we record
 is anonymous. B6b currently works around it by omitting `name`.
+
+## 2026-08-12 (claude) — sourcing revision three; D11 given an owner
+
+The four sourcing RFCs were rejected a second time on eight contract-level
+blockers and revised again. The substantive closures: the manifest generalized
+to `http`/`local-file`/`engine` origins with a two-way linkage rule (which
+finally defines "consumed", something `sourcedAt` had been depending on
+implicitly); the contradictory licence booleans deleted and derived from
+`(basis, spdx)` by a pinned matrix; the stale-lock takeover rewritten as an
+actual mutex after a reviewer showed the old one let a resumed holder delete its
+replacement's lock; B6c given the `candidate-attach` workflow its acceptance
+criteria had assumed; difficulty overreach removed outright; speed and date
+grammar pinned from the official Lichess schema; and the ETag no-op tightened to
+require an identical emission-job digest.
+
+**The revision's own closing observation was the useful one:** D11 now gated two
+RFCs and belonged to none — one paragraph with no assignee, which is how a block
+quietly stalls the work behind it. Drafted `rfc/terminal-outcome-events.md` to
+own it.
+
+That RFC is small because the pieces were already there, which is the alignment
+pass's zero-producer pattern one more time: `outcome.reached` is declared with a
+projection case and no emitter, and `position.isEnd()` is already called at
+`runtime.ts:274` to refuse the *next* move. Nothing needed inventing — the event
+just had to be emitted where the terminal node is created rather than only used
+to refuse continuation.
+
+Two decisions inside it worth recording. The `outcome` field was typed as an open
+`string`, which is defect D4's shape for the third time in this codebase, so it
+is closed to `win|loss|draw` **from the learner's perspective** — the result
+cannot be derived without knowing the learner's colour, whereas the terminal
+*reason* can always be derived from the persisted FEN, so the payload shape needs
+no version bump. And `outcome.reached` discloses feedback under all three
+policies, including the delayed ones: a finished run has no remaining decision to
+contaminate, which is the entire basis of ADR-0006, so withholding after
+termination protects nothing and costs the learner the feedback they just earned.
+
+No backfill for stored runs. They are append-only and the honest statement is
+that the defect existed.

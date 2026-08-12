@@ -7,6 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
+| `terminal-outcome-events.md` | draft | amends branch runtime | closes D11; **blocks** B6b and B6d |
 | `learner-identity-and-authorization.md` | implementing | foundation F3 | `planning/learner-identity-and-authorization/` |
 | `pack-optional-runs.md` | implementing | foundation F2; F3 landed first | `planning/pack-optional-runs/` |
 | `content-sourcing-foundation.md` | draft | program item #6 (B6a) | not started |
