@@ -46,6 +46,7 @@ before re-attempting this territory.
 | `archive/drill-client.md` | implemented | `docs/drill-client.md` |
 | `archive/app-shell.md` | implemented | `docs/app-shell.md` |
 | `archive/explanation-grounds.md` | implemented | `docs/explanation-grounds.md` |
+| `archive/authored-feedback-delivery.md` | implemented | `docs/drill-client.md`, `docs/drill-pack-format.md` |
 
 ## The archive sketches are quarry, not RFCs
 

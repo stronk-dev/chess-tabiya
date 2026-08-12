@@ -1,6 +1,7 @@
 # Authored-feedback delivery + action vocabulary — implementation plan
 
-RFC: `rfc/authored-feedback-delivery.md` (accepted 2026-08-12). Assignee: codex.
+RFC: `rfc/archive/authored-feedback-delivery.md` (implemented 2026-08-12).
+Assignee: codex.
 `[x]` flips only with the exercising test.
 
 **Read the RFC's Motivation first.** This RFC deliberately does NOT serve

@@ -1,6 +1,6 @@
 # RFC: Stop Shipping Authored Feedback; Close the Action Vocabulary
 
-- **Status:** accepted
+- **Status:** implemented
 - **Author:** claude (for Marco)
 - **Created:** 2026-08-12
 - **Design refs:** `design/02-product-shape.md` §anti-contamination, ADR-0006
@@ -8,7 +8,7 @@
 - **Depends on:** `rfc/archive/drill-client.md`, `rfc/archive/app-shell.md`
 - **Parent / amends:** **`rfc/archive/drill-client.md`** (pack response becomes a projection) and **`rfc/archive/drill-pack-format.md`** (checkpoint actions gain a validated allow-list)
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/authored-feedback-delivery/`
+- **Planning:** `planning/archive/authored-feedback-delivery/`
 
 ## Summary
 
@@ -150,3 +150,6 @@ cites the ruling rather than the evidence.
   stop-shipping-only after the review showed the reveal path assumed
   twice-withdrawn infrastructure; enum reimplemented as a lint;
   **status → accepted**.
+- 2026-08-12: implementation approved after live HTTP verification; canonical
+  behavior folded into `docs/drill-client.md` and `docs/drill-pack-format.md`;
+  **status → implemented**.

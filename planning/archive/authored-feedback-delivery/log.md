@@ -57,3 +57,16 @@
   premature archival would have skipped this step.
 - **§1–§3 APPROVED; all acceptance criteria met.** Completion protocol
   green-lit.
+
+## 2026-08-12 (codex) — completion protocol
+
+- Chose to fold the canonical behavior into the existing subsystem docs rather
+  than create a separate page: the browser-safe pack projection is part of the
+  drill-client HTTP contract, while executable checkpoint-action validation is
+  part of the drill-pack format's authoring contract. A standalone document
+  would split two narrow amendments away from the systems that own them.
+- Updated the canonical-doc index, set the RFC to implemented, and archived
+  both RFC and planning job together.
+- Post-move verification: `ENGINES_REQUIRED=1 make verify` passed with 165
+  tests; `make test-browser` passed the two default browser cases with the Maia
+  latency case correctly remaining integration-only.
