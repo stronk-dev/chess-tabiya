@@ -660,3 +660,54 @@ quoting it.
 
 **Blocked / next:** four owner rulings in `synthesis.md` §7, of which
 deployment posture is the one that unblocks the other three by implication.
+
+## 2026-08-12 (owner rulings) — deployment posture amended to hosted multi-user
+
+Three rulings on the alignment pass's owner questions.
+
+**1. Deployment posture: hosted multi-user.** This **amends the deployment axis
+of Q2**, which was settled as self-hosted, and it **fires ADR-0004's revisit
+trigger** verbatim ("Multi-user/SaaS posture chosen in Q2"). Recorded here as an
+amendment rather than applied silently, because a settled question changing is
+exactly the thing that must stay visible. The other three Q2 axes (source model,
+monetization, content/data rights) are untouched by this ruling.
+
+Consequences that follow mechanically and are now scheduled work, not open
+questions:
+
+- **F3 becomes a real identity and session boundary**, not a local profile:
+  accounts, authentication, and per-viewer authorization. It stops being a
+  one-column migration.
+- **D1 is promoted from low-impact to urgent.** On a local box "a run link is a
+  write credential" was a curiosity; on a hosted deployment it is the whole
+  authorization model, and there is currently no authentication anywhere in
+  source.
+- **AGPL-3.0 §13 now actually binds.** Network use triggers the source-offer
+  obligation — consistent with the chosen licence and with Maia-3's own AGPL,
+  but it becomes a live obligation rather than a dormant clause, and the
+  corresponding user-facing source offer has to exist.
+- **Tension to resolve, not to paper over:** the browser-run-engines posture
+  (BACKLOG) was justified by pushing compute to the client so hosting stays
+  near-static. Hosted multi-user reintroduces per-user server cost, and the
+  archive's own scoring put the SaaS case at 5/10 against 9/10 for
+  personal/self-hosted. That is not a reason to relitigate the ruling; it is a
+  reason for the hosting-cost and posture question to get an explicit row rather
+  than be discovered later.
+- ADR-0004 (local-first modular monolith) needs an explicit re-decision. Its
+  trigger has fired; nothing about this ruling automatically says the monolith
+  is wrong.
+
+**2. Just Play interruption model: passive marker the player may open.**
+Recognition annotates the timeline; the player chooses when to look. This keeps
+the uninterrupted-consequence stage of the episode intact, degrades honestly
+when recognition abstains, and keeps recognition non-authoritative over curated
+pack boundaries (the standing rule). It also means recognition never needs to be
+confident enough to interrupt — a materially lower bar than a director model,
+and it lets the deterministic-features level ship without the learned level.
+
+**3. Scheduling unit: not ruled — the question was badly posed.** The owner
+pushed back that "episode" and "return loop" were undefined jargon and that
+phase-scoped units are artificial because play interleaves across phases. Both
+objections are correct and the terminology is the agent's fault. Answered in
+conversation; a definition owed to `01-training-model.md` before this is asked
+again.

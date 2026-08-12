@@ -170,7 +170,7 @@ until their trigger fires or an owner ruling changes them.
 | ADR-0001 | Curated-first content: reviewed packs before automatic lesson generation | C6 met and mining quality proven |
 | ADR-0002 | Stockfish is judge, not default opponent | H5 fails in *both* directions (weakened SF also beats Maia/corpus on believability) |
 | ADR-0003 | Personal history optional; core drills work without imports | Standing — protects against the v1 identity error |
-| ADR-0004 | Local-first modular monolith + workers | Multi-user/SaaS posture chosen in Q2 |
+| ADR-0004 | Local-first modular monolith + workers | 🔔 **TRIGGER FIRED 2026-08-12** — owner ruled hosted multi-user deployment. Needs an explicit re-decision; a fired trigger is not itself a reversal, and nothing yet says the monolith is the wrong architecture for a hosted deployment |
 | ADR-0005 | No LLM as chess source of truth | Standing law (AGENTS.md §7); owner override only |
 | ADR-0006 | Delayed feedback in Plan Drills (until checkpoint/segment end) | H3/K4 evidence shows delayed feedback hurts rather than helps |
 
