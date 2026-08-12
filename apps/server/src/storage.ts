@@ -144,7 +144,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-const STORAGE_VERSION = 3;
+const STORAGE_VERSION = 4;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -928,6 +928,11 @@ export class SQLiteRunStorage implements RunStorage {
         name: "quarantine pre-0.5 run snapshots",
         apply: () => this.#quarantineLegacyRuns(),
       },
+      {
+        version: 4,
+        name: "upgrade v0.5 run snapshots to v0.6",
+        apply: () => this.#upgradeV05Runs(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -1047,6 +1052,46 @@ export class SQLiteRunStorage implements RunStorage {
         // Unparseable legacy snapshots remain quarantined instead of blocking startup.
       }
       update.run(version, row.id);
+    }
+  }
+
+  #upgradeV05Runs(): void {
+    const rows = this.#database
+      .prepare("SELECT id, snapshot_json FROM drill_runs WHERE schema_version = '0.5'")
+      .all() as readonly Record<string, unknown>[];
+    const update = this.#database.prepare(
+      "UPDATE drill_runs SET snapshot_json = ?, schema_version = ? WHERE id = ?",
+    );
+    for (const row of rows) {
+      if (typeof row.id !== "string" || typeof row.snapshot_json !== "string") {
+        throw new TypeError("Stored v0.5 run row has an invalid shape");
+      }
+      let snapshot: Record<string, unknown>;
+      try {
+        const parsed = JSON.parse(row.snapshot_json) as unknown;
+        if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+          continue;
+        }
+        snapshot = parsed as Record<string, unknown>;
+      } catch {
+        continue;
+      }
+      if (snapshot.schemaVersion !== "0.5" || !Array.isArray(snapshot.events)) continue;
+      if (
+        snapshot.events.some(
+          (event) =>
+            event !== null &&
+            typeof event === "object" &&
+            (event as { type?: unknown }).type === "outcome.reached",
+        )
+      ) {
+        continue;
+      }
+      update.run(
+        JSON.stringify({ ...snapshot, schemaVersion: DRILL_RUN_SCHEMA_VERSION }),
+        DRILL_RUN_SCHEMA_VERSION,
+        row.id,
+      );
     }
   }
 }

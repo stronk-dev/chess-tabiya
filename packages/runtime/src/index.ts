@@ -20,6 +20,7 @@ export {
 } from "./errors.js";
 export { appendEvents, deriveSegments, eventsSince, projectRun } from "./events.js";
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
+export { terminalOutcome } from "./outcome.js";
 export {
   canonicalRunStart,
   digestSessionSource,
@@ -116,6 +117,7 @@ export type {
   RunFeedbackPolicy,
   RunOpponentMode,
   RunOpponentPolicy,
+  RunOutcome,
   RunSessionKind,
   RunStart,
   SelectionCandidate,

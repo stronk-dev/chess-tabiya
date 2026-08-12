@@ -10,7 +10,9 @@
   import HonestControl from "./HonestControl.svelte";
   import KeyboardHelp from "./KeyboardHelp.svelte";
   import Timeline from "./Timeline.svelte";
+  import TerminalSheet from "./TerminalSheet.svelte";
   import WhyBanner from "./WhyBanner.svelte";
+  import { renderEvidenceRef } from "./evidence-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
     activeNode,
@@ -88,6 +90,12 @@
 
   let run = $derived(snapshot.run);
   let currentNode = $derived(activeNode(run));
+  let terminalEvent = $derived(
+    [...run.events].reverse().find(
+      (event) =>
+        event.type === "outcome.reached" && event.data.nodeId === currentNode.id,
+    ),
+  );
   let entries = $derived(timelineEntries(run, pack));
   let authoredSpineNodeIds = $derived(
     new Set(
@@ -102,6 +110,18 @@
       : (authoredFeedback?.items ?? []).filter(
           (item) => item.revealedBy.eventSeq === checkpoint.eventSeq,
         ),
+  );
+  let terminalAuthoredItems = $derived(
+    terminalEvent?.type !== "outcome.reached"
+      ? []
+      : (authoredFeedback?.items ?? []).filter(
+          (item) =>
+            item.revealedBy.kind === "outcome" &&
+            item.revealedBy.eventSeq === terminalEvent.seq,
+        ),
+  );
+  let terminalEvidence = $derived(
+    currentNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack)),
   );
   let cards = $derived(branchCards(run));
   let banner = $derived(whyBanner(pack, run));
@@ -389,7 +409,7 @@
             fen={displayedNode.fen}
             {startSide}
             lastMove={displayedNode.moveUci}
-            disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined}
+            disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined || terminalEvent !== undefined}
             {onMove}
           />
         </div>
@@ -446,6 +466,17 @@
     onContinue={continueFromCheckpoint}
     onRewind={() => onRewind({ nodeId: checkpoint.nodeId })}
     onCompare={openCompare}
+    {onStop}
+  />
+{/if}
+
+{#if terminalEvent?.type === "outcome.reached"}
+  <TerminalSheet
+    outcome={terminalEvent.data.outcome}
+    authoredItems={terminalAuthoredItems}
+    evidence={terminalEvidence}
+    canRewind={snapshot.access === "writer" && currentNode.parentId !== null}
+    onRewind={() => currentNode.parentId === null ? undefined : onRewind({ nodeId: currentNode.parentId })}
     {onStop}
   />
 {/if}

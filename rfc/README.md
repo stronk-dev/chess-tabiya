@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `terminal-outcome-events.md` | draft | amends branch runtime | closes D11; **blocks** B6b and B6d |
+| `terminal-outcome-events.md` | implementing | amends branch runtime | `planning/terminal-outcome-events/`; closes D11; **blocks** B6b and B6d |
 | `learner-identity-and-authorization.md` | implementing | foundation F3 | `planning/learner-identity-and-authorization/` |
 | `pack-optional-runs.md` | implementing | foundation F2; F3 landed first | `planning/pack-optional-runs/` |
 | `content-sourcing-foundation.md` | draft | program item #6 (B6a) | not started |
@@ -56,6 +56,7 @@ writing it into a draft.
 | 1 | 0→1 | shipped | implemented; **body** rewritten by `pack-optional-runs.md` §8 to stop replaying through `projectRun` (no version change, no new number) |
 | 2 | 1→2 | `learner-identity-and-authorization.md` | implementing |
 | 3 | 2→3 | `pack-optional-runs.md` | implementing; migration 2 landed first |
+| 4 | 3→4 | `terminal-outcome-events.md` | implementing; upgrades ordinary v0.5 snapshots and quarantines pre-producer outcome events |
 | 4 | 3→4 | `terminal-outcome-events.md` | draft — run schema v0.6; upgrades eligible v0.5 snapshots and the indexed column, quarantines rows carrying a pre-producer `outcome.reached` |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an

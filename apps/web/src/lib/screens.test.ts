@@ -149,6 +149,79 @@ afterEach(() => {
 });
 
 describe("Layer 3 screens", () => {
+  it("presents terminal authored commentary and recorded engine evidence", async () => {
+    const terminalPack = {
+      ...pack,
+      id: "terminal-screen",
+      start: { fen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", side: "white" },
+      spine: [{ id: "mate", moveUci: "g6g7", moveSan: "Qg7#", children: [] }],
+      checkpoints: [],
+    } as DrillPackDefinition;
+    let run = createRun({
+      id: "terminal-screen-run",
+      session: {
+        kind: "pack",
+        packId: terminalPack.id,
+        packDigest: `sha256:${"a".repeat(64)}`,
+        start: terminalPack.start as { fen: string; side: "white" },
+        feedbackPolicy: "delayed_checkpoint",
+        opponentPolicy: { mode: "human_common" },
+      },
+      sessionDigest: `sha256:${"b".repeat(64)}`,
+      policyConfig: {
+        seedMode: "fixed",
+        locus: { executedAt: "server", engineIds: [], modelIds: [] },
+      },
+      seed: 4,
+      createdAt: at,
+    });
+    run = commitMove(run, "g6g7", { at }).run;
+    run = attachEvidence(
+      run,
+      run.activeCursor.nodeId,
+      ["engine:terminal-eval"],
+      { kind: "eval", source: "engine_validated", values: { centipawns: 0 } },
+      at,
+    ).run;
+    const outcome = run.events.find((event) => event.type === "outcome.reached")!;
+    const onRewind = vi.fn();
+    const component = mount(DrillScreen, {
+      target: target(),
+      props: {
+        pack: terminalPack,
+        snapshot: { run, access: "writer", pendingEvidence: 0 },
+        authoredFeedback: {
+          items: [{
+            kind: "annotation",
+            id: "mate#0",
+            revealedBy: { kind: "outcome", eventSeq: outcome.seq },
+            anchor: { spineNodeId: "mate" },
+            text: "The terminal authored explanation.",
+          }],
+          hasWithheldAuthoredContent: false,
+        },
+        onMove: vi.fn(),
+        onRewind,
+        onFork: vi.fn(),
+        onSwitchBranch: vi.fn(),
+        onCompare: vi.fn(),
+        onCloseCompare: vi.fn(),
+        onContinueCheckpoint: vi.fn(),
+        onExport: vi.fn(),
+        onStop: vi.fn(),
+        registerKeyboardRegion,
+      },
+    });
+    await tick();
+
+    expect(document.querySelector('[role="dialog"]')?.textContent).toContain("You won.");
+    expect(document.body.textContent).toContain("The terminal authored explanation.");
+    expect(document.body.textContent).toContain("Engine evidence recorded");
+    document.querySelector<HTMLButtonElement>(".sheet .actions button")!.click();
+    expect(onRewind).toHaveBeenCalledWith({ nodeId: run.nodes[0]!.id });
+    await unmount(component);
+  });
+
   it("shows pack mode, difficulty band, and honest review status", async () => {
     const onSelect = vi.fn<(packId: string) => void>();
     const summary: PackSummary = {
@@ -188,6 +261,7 @@ describe("Layer 3 screens", () => {
               kind: "annotation",
               id: "najdorf-be3#earlier",
               revealedBy: {
+                kind: "checkpoint",
                 checkpointId: checkpoint.id,
                 eventSeq: checkpoint.eventSeq - 1,
               },
@@ -197,7 +271,7 @@ describe("Layer 3 screens", () => {
             {
               kind: "annotation",
               id: "najdorf-be3#0",
-              revealedBy: { checkpointId: checkpoint.id, eventSeq: checkpoint.eventSeq },
+              revealedBy: { kind: "checkpoint", checkpointId: checkpoint.id, eventSeq: checkpoint.eventSeq },
               anchor: { spineNodeId: "najdorf-be3" },
               text: "Authored setup explanation.",
             },

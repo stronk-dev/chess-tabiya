@@ -13,10 +13,13 @@ import {
 
 import type { PackRecord } from "./pack-registry.js";
 
-export interface RevealAttribution {
-  readonly checkpointId: string;
-  readonly eventSeq: number;
-}
+export type RevealAttribution =
+  | {
+      readonly kind: "checkpoint";
+      readonly checkpointId: string;
+      readonly eventSeq: number;
+    }
+  | { readonly kind: "outcome"; readonly eventSeq: number };
 
 export type AuthoredFeedbackItem =
   | {
@@ -157,25 +160,35 @@ function spineNodeIdForRunNode(
 }
 
 function revealEvents(pack: PackRecord, run: DrillRun): readonly RevealEvent[] {
+  const outcomes: readonly RevealEvent[] = run.events.flatMap((event) =>
+    event.type === "outcome.reached"
+      ? [{
+          orderSeq: event.seq,
+          nodeId: event.data.nodeId,
+          attribution: { kind: "outcome" as const, eventSeq: event.seq },
+        }]
+      : [],
+  );
   if (pack.feedbackPolicy === "delayed_checkpoint") {
-    return run.events.flatMap((event) =>
+    return [...run.events.flatMap((event) =>
       event.type === "checkpoint.reached"
         ? [
             {
               orderSeq: event.seq,
               nodeId: event.data.nodeId,
               attribution: {
+                kind: "checkpoint" as const,
                 checkpointId: event.data.checkpointId,
                 eventSeq: event.seq,
               },
             },
           ]
         : [],
-    );
+    ), ...outcomes].sort((left, right) => left.orderSeq - right.orderSeq);
   }
 
   const segments = deriveSegments(run);
-  return run.events.flatMap((event) => {
+  return [...run.events.flatMap((event) => {
     if (event.type !== "segment.completed") return [];
     const segment = segments.find(
       (candidate) =>
@@ -196,12 +209,13 @@ function revealEvents(pack: PackRecord, run: DrillRun): readonly RevealEvent[] {
         orderSeq: event.seq,
         nodeId: segment.endNodeId,
         attribution: {
+          kind: "checkpoint" as const,
           checkpointId: checkpoint.data.checkpointId,
           eventSeq: checkpoint.seq,
         },
       },
     ];
-  });
+  }), ...outcomes].sort((left, right) => left.orderSeq - right.orderSeq);
 }
 
 function checkpointDefinition(
@@ -233,7 +247,14 @@ export function projectAuthoredFeedback(
 ): AuthoredFeedbackPage {
   const spine = new Map<string, SpineIndexEntry>();
   indexSpine(pack.document.spine ?? [], undefined, spine);
-  const reachable = reachableSpineIds(pack.document, spine);
+  const reachable = new Set(reachableSpineIds(pack.document, spine));
+  for (const event of run.events) {
+    if (event.type !== "outcome.reached") continue;
+    for (const runNode of historyFrom(run, event.data.nodeId)) {
+      const spineNodeId = spineNodeIdForRunNode(pack.document, run, runNode.id);
+      if (spineNodeId !== undefined) reachable.add(spineNodeId);
+    }
+  }
   const sourcesByNode = nodeSources(pack.document);
   const deliverable = new Set<string>();
   for (const [nodeId, sources] of sourcesByNode) {
@@ -312,7 +333,7 @@ export function projectAuthoredFeedback(
   });
 }
 
-/** Source item id -> the checkpoint occurrence that first disclosed it. */
+/** Source item id -> the reveal occurrence that first disclosed it. */
 export function revealedAuthoredItems(
   pack: PackRecord,
   run: DrillRun,

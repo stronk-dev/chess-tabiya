@@ -147,6 +147,8 @@ export class DrillSessionController {
   #unsubscribeStore: (() => void) | undefined;
   #capabilities: Capabilities | undefined;
   #dismissedCheckpointSeq = 0;
+  #lastFollowerRevealSeq = 0;
+  #subscribingStore: RunStateStore | undefined;
 
   constructor(api: DrillClientApi, options: ControllerOptions = {}) {
     this.#api = api;
@@ -244,6 +246,11 @@ export class DrillSessionController {
     try {
       const result = await store.move({ uci });
       if (this.#captureCheckpoint(result.emitted)) {
+        await this.#refreshAuthoredFeedback();
+        this.#patch({ busy: false });
+        return;
+      }
+      if (this.#hasOutcome(result.emitted)) {
         await this.#refreshAuthoredFeedback();
         this.#patch({ busy: false });
         return;
@@ -364,6 +371,9 @@ export class DrillSessionController {
     const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
     if (
       TERMINAL_STATES.has(node.objectiveState) ||
+      run.events.some(
+        (event) => event.type === "outcome.reached" && event.data.nodeId === node.id,
+      ) ||
       boardModel(node.fen, packStartSide(pack)).turnColor === packStartSide(pack)
     ) {
       return;
@@ -394,11 +404,13 @@ export class DrillSessionController {
     const result = await this.#requiredStore().appendOpponentPly(selection);
     if (this.#captureCheckpoint(result.emitted)) {
       await this.#refreshAuthoredFeedback();
+    } else if (this.#hasOutcome(result.emitted)) {
+      await this.#refreshAuthoredFeedback();
     }
   }
 
   async #refreshAuthoredFeedback(): Promise<void> {
-    const runState = this.#state.runState;
+    const runState = this.#state.runState ?? this.#subscribingStore?.snapshot;
     if (runState === undefined) return;
     this.#patch({ authoredFeedback: await this.#api.authoredFeedback(runState.run.id) });
   }
@@ -413,6 +425,10 @@ export class DrillSessionController {
     if (checkpoint === undefined) return false;
     this.#patch({ checkpoint });
     return true;
+  }
+
+  #hasOutcome(events: readonly DrillRunEvent[]): boolean {
+    return events.some((event) => event.type === "outcome.reached");
   }
 
   #newStore(
@@ -433,9 +449,27 @@ export class DrillSessionController {
     this.#unsubscribeStore?.();
     this.#store?.stop();
     this.#store = store;
+    this.#subscribingStore = store;
+    this.#lastFollowerRevealSeq = Math.max(
+      0,
+      ...store.snapshot.run.events
+        .filter((event) => event.type === "outcome.reached")
+        .map((event) => event.seq),
+    );
     this.#unsubscribeStore = store.subscribe((runState) => {
       this.#patch({ runState });
+      if (runState.access !== "read_only") return;
+      const revealSeq = Math.max(
+        0,
+        ...runState.run.events
+          .filter((event) => event.type === "outcome.reached")
+          .map((event) => event.seq),
+      );
+      if (revealSeq <= this.#lastFollowerRevealSeq) return;
+      this.#lastFollowerRevealSeq = revealSeq;
+      void this.#refreshAuthoredFeedback().catch((error: unknown) => this.#fail(error));
     });
+    this.#subscribingStore = undefined;
     store.start();
     this.#patch({
       pack,

@@ -11,7 +11,7 @@ const run = createRun({
     seedMode: "fixed",
     locus: { executedAt: "server", engineIds: [], modelIds: [] },
   },
-  startFen: "8/8/8/8/8/8/K6k/8 w - - 0 1",
+  startFen: "8/8/8/8/8/8/K6k/R7 w - - 0 1",
   seed: 7,
   createdAt: "2026-08-12T20:00:00.000Z",
 });
@@ -39,7 +39,7 @@ describe("DrillApi", () => {
         return json({
           engines: [],
           policyModes: ["human_common"],
-          runSchemaVersion: "0.5",
+          runSchemaVersion: "0.6",
           policyProfiles: {
             strong_engine: {
               movetimeMs: 100,

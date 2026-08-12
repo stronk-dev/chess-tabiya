@@ -313,9 +313,11 @@ describe("typed errors", () => {
       "NOT_ACTIVE_WRITER",
     );
 
-    const checkmate = newRun(
-      "r1bqkbnr/ppp2Qpp/2np4/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4",
+    expectRuntimeError(
+      () => newRun(
+        "r1bqkbnr/ppp2Qpp/2np4/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4",
+      ),
+      "TERMINAL_START_POSITION",
     );
-    expectRuntimeError(() => commitMove(checkmate, "e8d7"), "RUN_TERMINATED");
   });
 });

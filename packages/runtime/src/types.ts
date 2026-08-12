@@ -36,6 +36,7 @@ export interface PolicyConfig {
 export type RunSessionKind = "pack" | "position";
 export type RunFeedbackPolicy = "delayed_checkpoint" | "segment_end" | "attempt_end";
 export type RunOpponentMode = "human_common" | "strong_engine" | "theory_strict";
+export type RunOutcome = "win" | "loss" | "draw";
 
 export interface RunStart {
   readonly fen: string;
@@ -184,7 +185,7 @@ export type FeedbackGeneratedEvent = Event<
 >;
 export type OutcomeReachedEvent = Event<
   "outcome.reached",
-  { readonly nodeId: string; readonly outcome: string }
+  { readonly nodeId: string; readonly outcome: RunOutcome }
 >;
 export type TransferScheduledEvent = Event<
   "transfer.scheduled",

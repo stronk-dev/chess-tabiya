@@ -8,10 +8,12 @@ import { canonicalFen, positionFromFen, transposeKey } from "./chess.js";
 import {
   illegalMove,
   runTerminated,
+  terminalStartPosition,
   unknownCheckpoint,
   unknownNode,
 } from "./errors.js";
 import { appendEvents } from "./events.js";
+import { terminalOutcome } from "./outcome.js";
 import type {
   Actor,
   Branch,
@@ -166,6 +168,7 @@ export function createRun(inputValue: CreateRunInput | LegacyCreateRunInput): Dr
     throw new TypeError("Run start FEN must be canonical");
   }
   const position = positionFromFen(start.fen);
+  if (position.isEnd()) throw terminalStartPosition();
   const fen = canonicalFen(position);
   const branchId = `${input.id}:branch:0`;
   const rootNode: Node = {
@@ -331,8 +334,12 @@ export function commitMove(
     createdAt: at,
     ...(options.clockState === undefined ? {} : { clockState: options.clockState }),
   };
+  const outcome = terminalOutcome(position, run.start.side);
   const next = appendEvents(run, [
     { type: "move.committed", at, data: { node } },
+    ...(outcome === undefined
+      ? []
+      : [{ type: "outcome.reached" as const, at, data: { nodeId: node.id, outcome } }]),
   ]);
   emitted.push(...emittedSince(run, next));
   return { run: next, emitted };

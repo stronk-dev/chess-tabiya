@@ -1,6 +1,6 @@
 # RFC: Terminal outcome events (D11)
 
-- **Status:** draft (revision 3 — revisions 1 and 2 were each rejected on six blockers)
+- **Status:** implementing (revision 3 — accepted by owner 2026-08-12)
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` §Outcome types; `design/03-product-breadth.md` gate B2
@@ -8,7 +8,7 @@
 - **Depends on:** nothing unshipped
 - **Parent / amends:** amends `packages/runtime/src/runtime.ts` (commit path) and `packages/runtime/src/feedback.ts`
 - **Blocks:** `rfc/content-sourcing-syzygy.md` (B6b), `rfc/content-sourcing-position-seeds.md` (B6d)
-- **Planning:** `planning/terminal-outcome-events/` (once implementing)
+- **Planning:** `planning/terminal-outcome-events/`
 
 ## Summary
 
@@ -296,8 +296,9 @@ as *objective* framings; this RFC deliberately does not touch objective grading
     attributed to the `outcome.reached` event's sequence number.
 11. The `outcome` vocabulary is closed: a value outside `win|loss|draw` is
     unrepresentable in the type and rejected by the v0.6 schema.
-12. **Schema v0.6 migration is a no-op:** a stored v0.5 run replays unchanged,
-    asserted directly, since no stored run can contain an `outcome.reached`.
+12. **Schema v0.6 replay compatibility:** an ordinary v0.5 event log projects
+    unchanged under v0.6 apart from its projected schema version. Persistence
+    upgrade is migration 4 in criterion 13; it is deliberately not called a no-op.
 13. **Migration 4 preserves history:** v0.5 runs remain readable and listed after
     the bump, asserted against a stored fixture — the failure revision 2 would
     have shipped.
@@ -341,6 +342,10 @@ None.
   processed, so the root-to-terminal claim needed the filter widened; and
   "the window stays open" contradicted this RFC's own rewind criterion, so the
   `attempt_end` invariant is now three-part.
+- 2026-08-12: implementing clarification — acceptance 12 still carried revision
+  2's contradicted “migration is a no-op” wording even though revision 3 specifies
+  migration 4. Reworded it as event-log replay compatibility; criterion 13 owns
+  persistence migration.
 - 2026-08-12: revision 2 after review — six blockers, all mine. `RevealAttribution`
   could not represent an outcome reveal and is now discriminated; the client
   refreshed authored feedback only behind a checkpoint capture, so terminal

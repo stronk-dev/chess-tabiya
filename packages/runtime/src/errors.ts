@@ -9,6 +9,7 @@ export type RuntimeErrorCode =
   | "UNKNOWN_CHECKPOINT"
   | "NOT_ACTIVE_WRITER"
   | "INVALID_RUN_SESSION"
+  | "TERMINAL_START_POSITION"
   | "RUN_TERMINATED";
 
 export class RuntimeError extends Error {
@@ -46,4 +47,11 @@ export function assertActiveWriter(activeWriterId: string, writerId: string): vo
 
 export function runTerminated(nodeId: string): RuntimeError {
   return new RuntimeError("RUN_TERMINATED", `Run is terminal at node: ${nodeId}`);
+}
+
+export function terminalStartPosition(): RuntimeError {
+  return new RuntimeError(
+    "TERMINAL_START_POSITION",
+    "A run cannot start from a terminal chess position",
+  );
 }

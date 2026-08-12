@@ -19,6 +19,27 @@ async function register(page: Page): Promise<string> {
 
 test.beforeEach(async ({ page }) => register(page));
 
+test("terminal outcome reveals authored commentary and recorded evidence", async ({ page }) => {
+  const card = page
+    .getByRole("article")
+    .filter({ hasText: "Terminal outcome browser fixture" });
+  await expect(card).toBeVisible();
+  await card.getByRole("button", { name: /Open position/ }).click();
+
+  await move(page, "f2", "f3");
+  await expect(page.getByRole("heading", { name: "Before terminal continuation" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await move(page, "g2", "g4");
+
+  await expect(page.getByRole("heading", { name: "You lost." })).toBeVisible();
+  await expect(page.getByText("Terminal browser fixture commentary.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Recorded evidence" })).toBeVisible({
+    timeout: 5_000,
+  });
+  await expect(page.getByText("Engine evidence recorded", { exact: false })).toBeVisible();
+  await expect(page.getByText("Thinking…")).toHaveCount(0);
+});
+
 interface LatencyEnvelope {
   readonly boardReadyMs: number;
   readonly rewindMs: number;

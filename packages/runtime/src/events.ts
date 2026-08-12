@@ -1,6 +1,8 @@
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { unknownNode } from "./errors.js";
+import { positionFromFen } from "./chess.js";
+import { terminalOutcome } from "./outcome.js";
 import { assertObjectiveTransition } from "./objective-state.js";
 import type {
   Branch,
@@ -62,6 +64,7 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
   let nodes: readonly Node[] = [started.data.rootNode];
   let branches: readonly Branch[] = [started.data.branch];
   let activeCursor = started.data.activeCursor;
+  const outcomeNodeIds = new Set<string>();
 
   for (const [index, event] of events.entries()) {
     if (event.seq !== index + 1) {
@@ -157,9 +160,32 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
           throw unknownNode(event.data.nodeId);
         }
         break;
+      case "outcome.reached": {
+        const node = nodes.find((candidate) => candidate.id === event.data.nodeId);
+        if (!node) throw unknownNode(event.data.nodeId);
+        if (outcomeNodeIds.has(node.id)) {
+          throw new TypeError(`Node ${node.id} has more than one outcome.reached event`);
+        }
+        const previous = events[index - 1];
+        if (previous?.type !== "move.committed" || previous.data.node.id !== node.id) {
+          throw new TypeError(
+            `outcome.reached ${event.seq} must immediately follow its move.committed`,
+          );
+        }
+        const expected = terminalOutcome(positionFromFen(node.fen), data.start.side);
+        if (expected === undefined) {
+          throw new TypeError(`outcome.reached ${event.seq} references a non-terminal node`);
+        }
+        if (event.data.outcome !== expected) {
+          throw new TypeError(
+            `outcome.reached ${event.seq} reports ${event.data.outcome}; expected ${expected}`,
+          );
+        }
+        outcomeNodeIds.add(node.id);
+        break;
+      }
       case "segment.completed":
       case "feedback.generated":
-      case "outcome.reached":
       case "transfer.scheduled":
         break;
     }

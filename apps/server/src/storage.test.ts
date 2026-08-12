@@ -70,6 +70,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 1, name: "add and backfill run summaries" },
       { version: 2, name: "learner identity and run grants" },
       { version: 3, name: "quarantine pre-0.5 run snapshots" },
+      { version: 4, name: "upgrade v0.5 run snapshots to v0.6" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -87,8 +88,56 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(3);
+    ).toBe(4);
     inspection.close();
+  });
+
+  it("keeps ordinary v0.5 runs readable while quarantining pre-producer outcomes", () => {
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-storage-v06-"));
+    directories.push(directory);
+    const filename = join(directory, "runs.sqlite");
+    const initial = new SQLiteRunStorage(filename, { onMigration: () => {} });
+    const ordinary = run("ordinary-v05");
+    const forged = run("forged-v05");
+    initial.create(ordinary, "writer-ordinary", "Ordinary");
+    initial.create(forged, "writer-forged", "Forged");
+    initial.close();
+
+    const fixture = new DatabaseSync(filename);
+    const downgrade = fixture.prepare(
+      "UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.5' WHERE id = ?",
+    );
+    downgrade.run(JSON.stringify({ ...ordinary, schemaVersion: "0.5" }), ordinary.id);
+    downgrade.run(
+      JSON.stringify({
+        ...forged,
+        schemaVersion: "0.5",
+        events: [
+          ...forged.events,
+          {
+            seq: forged.events.length + 1,
+            type: "outcome.reached",
+            at: createdAt,
+            data: { nodeId: forged.activeCursor.nodeId, outcome: "anything" },
+          },
+        ],
+      }),
+      forged.id,
+    );
+    fixture.exec("PRAGMA user_version = 3");
+    fixture.close();
+
+    const migrations: StorageMigrationLog[] = [];
+    const upgraded = new SQLiteRunStorage(filename, {
+      onMigration: (entry) => migrations.push(entry),
+    });
+    expect(migrations).toEqual([
+      { version: 4, name: "upgrade v0.5 run snapshots to v0.6" },
+    ]);
+    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.6");
+    expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
+    expect(upgraded.read(forged.id)).toBeUndefined();
+    upgraded.close();
   });
 
   it("lists captured titles and pages only denormalized rows", () => {

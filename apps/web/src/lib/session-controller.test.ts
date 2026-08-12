@@ -63,7 +63,7 @@ const capabilities: Capabilities = {
     },
   ],
   policyModes: ["human_common", "strong_engine", "theory_strict"],
-  runSchemaVersion: "0.5",
+  runSchemaVersion: "0.6",
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
   },
@@ -96,6 +96,18 @@ class FakeScheduler implements PollScheduler {
   clearInterval(): void {}
 }
 
+class ManualScheduler implements PollScheduler {
+  readonly tasks: Array<() => void | Promise<void>> = [];
+  setInterval(task: () => void | Promise<void>): number {
+    this.tasks.push(task);
+    return this.tasks.length;
+  }
+  clearInterval(): void {}
+  async runAll(): Promise<void> {
+    for (const task of [...this.tasks]) await task();
+  }
+}
+
 class FakeApi implements DrillClientApi {
   run: DrillRun | undefined;
   created: CreateRunRequest | undefined;
@@ -103,6 +115,7 @@ class FakeApi implements DrillClientApi {
   writerIds: string[] = [];
   graphWriterIds: (string | undefined)[] = [];
   activeWriterId = "writer-a";
+  authoredFeedbackCalls = 0;
 
   constructor(
     readonly document: DrillPackDefinition = pack,
@@ -263,7 +276,20 @@ class FakeApi implements DrillClientApi {
   }
 
   async authoredFeedback() {
-    return { items: [], hasWithheldAuthoredContent: false };
+    this.authoredFeedbackCalls += 1;
+    const outcome = this.run?.events.find((event) => event.type === "outcome.reached");
+    return outcome === undefined
+      ? { items: [], hasWithheldAuthoredContent: true }
+      : {
+          items: [{
+            kind: "annotation" as const,
+            id: "terminal#0",
+            revealedBy: { kind: "outcome" as const, eventSeq: outcome.seq },
+            anchor: { spineNodeId: "terminal" },
+            text: "Terminal commentary",
+          }],
+          hasWithheldAuthoredContent: false,
+        };
   }
 
   async applyEvidence(): Promise<MutationResult> {
@@ -296,6 +322,70 @@ function controller(api = new FakeApi(), storage = new MemoryStorage()) {
 }
 
 describe("DrillSessionController", () => {
+  it("does not select another opponent move after the learner delivers mate", async () => {
+    const terminalPack = {
+      ...pack,
+      id: "mate-in-one",
+      start: { fen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", side: "white" },
+      spine: [{ id: "mate", moveUci: "g6g7", moveSan: "Qg7#", children: [] }],
+      checkpoints: [],
+    } as DrillPackDefinition;
+    const api = new FakeApi(terminalPack, "h8g8", false);
+    const environment = controller(api);
+
+    await environment.controller.startPack(terminalPack.id);
+    const callsBeforeMove = api.authoredFeedbackCalls;
+    await environment.controller.move("g6g7");
+
+    expect(api.selected).toBeUndefined();
+    expect(api.requiredRun().events.at(-1)?.type).toBe("outcome.reached");
+    expect(api.authoredFeedbackCalls).toBe(callsBeforeMove + 1);
+    expect(environment.controller.state.authoredFeedback?.items[0]).toMatchObject({
+      text: "Terminal commentary",
+      revealedBy: { kind: "outcome" },
+    });
+  });
+
+  it("refreshes authored feedback when a read-only follower polls an outcome", async () => {
+    const terminalPack = {
+      ...pack,
+      id: "follower-mate",
+      start: { fen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1", side: "white" },
+      spine: [{ id: "mate", moveUci: "g6g7", moveSan: "Qg7#", children: [] }],
+      checkpoints: [],
+    } as DrillPackDefinition;
+    const api = new FakeApi(terminalPack, "h8g8", false);
+    await api.createRun(
+      {
+        id: "follower-run",
+        session: { kind: "pack", packId: terminalPack.id },
+        policyConfig: {
+          seedMode: "fixed",
+          locus: { executedAt: "server", engineIds: [], modelIds: [] },
+        },
+        seed: 1,
+      },
+      "writer-a",
+    );
+    const scheduler = new ManualScheduler();
+    const follower = new DrillSessionController(api, {
+      storage: new MemoryStorage(),
+      scheduler,
+    });
+    await follower.resume("follower-run");
+    const before = api.authoredFeedbackCalls;
+    api.run = commitMove(api.requiredRun(), "g6g7", { at }).run;
+
+    await scheduler.runAll();
+    await Promise.resolve();
+
+    expect(follower.state.runState?.run.events.at(-1)?.type).toBe("outcome.reached");
+    expect(api.authoredFeedbackCalls).toBeGreaterThan(before);
+    expect(follower.state.authoredFeedback?.items[0]).toMatchObject({
+      text: "Terminal commentary",
+    });
+  });
+
   it("starts a pack with server capabilities without owning screen routes", async () => {
     const environment = controller();
     expect("phase" in environment.controller.state).toBe(false);

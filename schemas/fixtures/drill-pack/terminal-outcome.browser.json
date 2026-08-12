@@ -1,0 +1,74 @@
+{
+  "id": "terminal-outcome-browser-fixture",
+  "version": "0.1.0",
+  "title": "Terminal outcome browser fixture",
+  "mode": "plan",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1000,
+    "maxOnlineRapid": 2000,
+    "label": "Test fixture",
+    "branchLengthTarget": 4
+  },
+  "start": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "preserve_plan_window",
+    "summary": "Exercise terminal outcome delivery without making a chess claim."
+  },
+  "spine": [
+    {
+      "id": "f3",
+      "moveUci": "f2f3",
+      "moveSan": "f3",
+      "children": [
+        {
+          "id": "e5",
+          "moveUci": "e7e5",
+          "moveSan": "e5",
+          "children": [
+            {
+              "id": "g4",
+              "moveUci": "g2g4",
+              "moveSan": "g4",
+              "annotations": [
+                "Terminal browser fixture commentary."
+              ],
+              "children": [
+                {
+                  "id": "qh4",
+                  "moveUci": "d8h4",
+                  "moveSan": "Qh4#",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "before-terminal",
+      "label": "Before terminal continuation",
+      "trigger": { "atSpineNode": "e5" },
+      "actions": []
+    }
+  ],
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "seedMode": "fixed"
+  },
+  "feedbackPolicy": "delayed_checkpoint",
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [],
+    "reviewers": [],
+    "graduationBlockers": [
+      "Test-only fixture; never publish as authored chess content."
+    ]
+  }
+}

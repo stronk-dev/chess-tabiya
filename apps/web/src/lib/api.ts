@@ -97,10 +97,13 @@ export interface EvidencePage {
   readonly nextSeq: number;
 }
 
-export interface RevealAttribution {
-  readonly checkpointId: string;
-  readonly eventSeq: number;
-}
+export type RevealAttribution =
+  | {
+      readonly kind: "checkpoint";
+      readonly checkpointId: string;
+      readonly eventSeq: number;
+    }
+  | { readonly kind: "outcome"; readonly eventSeq: number };
 
 export type AuthoredFeedbackItem =
   | {

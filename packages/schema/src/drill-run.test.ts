@@ -107,11 +107,11 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.5", () => {
+describe("drill_run.schema.json v0.6", () => {
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.5",
+      $id: "urn:chess-tabiya:schema:drill-run:0.6",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });
@@ -222,6 +222,25 @@ describe("drill_run.schema.json v0.5", () => {
       JSON.stringify(validate.errors),
     ).toBe(true);
     expect(validate({ ...validRun, events: [event, { ...revealed, data: {} }] })).toBe(false);
+  });
+
+  it("closes the outcome.reached result vocabulary", () => {
+    const reached = {
+      seq: 2,
+      type: "outcome.reached",
+      at,
+      data: { nodeId: rootNode.id, outcome: "draw" },
+    };
+    expect(
+      validate({ ...validRun, events: [event, reached] }),
+      JSON.stringify(validate.errors),
+    ).toBe(true);
+    expect(
+      validate({
+        ...validRun,
+        events: [event, { ...reached, data: { ...reached.data, outcome: "unknown" } }],
+      }),
+    ).toBe(false);
   });
 
   it("validates typed evidence attachment and rejects the negative fixture", () => {

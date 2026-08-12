@@ -41,10 +41,19 @@ async function registered(document: DrillPackDefinition): Promise<PackRecord> {
 function newRun(pack: PackRecord, id: string): DrillRun {
   return createRun({
     id,
-    packId: pack.document.id,
-    packDigest: pack.digest,
+    session: {
+      kind: "pack",
+      packId: pack.document.id,
+      packDigest: pack.digest,
+      start: {
+        fen: pack.document.start.fen,
+        side: pack.document.start.side === "black" ? "black" : "white",
+      },
+      feedbackPolicy: pack.feedbackPolicy,
+      opponentPolicy: { mode: "human_common" },
+    },
+    sessionDigest: pack.digest,
     policyConfig,
-    startFen: pack.document.start.fen,
     seed: 23,
     createdAt: at,
   });
@@ -109,7 +118,9 @@ describe("authored feedback projection", () => {
         .filter((item) => item.kind === "deviation")
         .map((item) => item.anchor.moveUci),
     ).toEqual(["f1d3", "b1c3"]);
-    expect(page.items.every((item) => item.revealedBy.checkpointId === "plan-commitment"))
+    expect(page.items.every((item) =>
+      item.revealedBy.kind === "checkpoint" &&
+      item.revealedBy.checkpointId === "plan-commitment"))
       .toBe(true);
     expect(JSON.stringify(page)).not.toContain("c5-break");
     expect(JSON.stringify(page)).not.toContain("be3-hold");
@@ -128,7 +139,7 @@ describe("authored feedback projection", () => {
       (item) => item.id === "bf5-main#0",
     );
     expect(annotation).toMatchObject({
-      revealedBy: { checkpointId: "tal-commitment" },
+      revealedBy: { kind: "checkpoint", checkpointId: "tal-commitment" },
     });
     expect(JSON.stringify(projectAuthoredFeedback(pack, run))).not.toContain("be2#0");
   });
@@ -166,10 +177,12 @@ describe("authored feedback projection", () => {
 
     const items = projectAuthoredFeedback(pack, run).items;
     expect(items.find((item) => item.id === "e4#0")?.revealedBy).toEqual({
+      kind: "checkpoint",
       checkpointId: "choice",
       eventSeq: firstSeq,
     });
     expect(items.find((item) => item.id === "d4#0")?.revealedBy).toEqual({
+      kind: "checkpoint",
       checkpointId: "choice",
       eventSeq: secondSeq,
     });
@@ -195,8 +208,48 @@ describe("authored feedback projection", () => {
     )!;
 
     expect(projectAuthoredFeedback(pack, run).items).toEqual([
-      expect.objectContaining({ id: "e4#0", revealedBy: { checkpointId: "finish", eventSeq: finish.seq } }),
-      expect.objectContaining({ id: "e5#0", revealedBy: { checkpointId: "finish", eventSeq: finish.seq } }),
+      expect.objectContaining({ id: "e4#0", revealedBy: { kind: "checkpoint", checkpointId: "finish", eventSeq: finish.seq } }),
+      expect.objectContaining({ id: "e5#0", revealedBy: { kind: "checkpoint", checkpointId: "finish", eventSeq: finish.seq } }),
+    ]);
+  });
+
+  it("delivers prose after the final checkpoint on the actual terminal path", async () => {
+    const pack = await registered(smallPack({
+      start: {
+        fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        side: "black",
+      },
+      spine: [
+        {
+          id: "f3", moveUci: "f2f3", moveSan: "f3", children: [
+            {
+              id: "e5", moveUci: "e7e5", moveSan: "e5", children: [
+                {
+                  id: "g4", moveUci: "g2g4", moveSan: "g4", annotations: ["After checkpoint"], children: [
+                    { id: "qh4", moveUci: "d8h4", moveSan: "Qh4#", annotations: ["Terminal"], children: [] },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      checkpoints: [{ id: "final-checkpoint", trigger: { atSpineNode: "e5" } }],
+    }));
+    let run = play(newRun(pack, "post-checkpoint"), ["f2f3", "e7e5"]);
+    run = reachCheckpoint(run, "final-checkpoint", at).run;
+    run = play(run, ["g2g4", "d8h4"]);
+    const outcome = run.events.at(-1)!;
+    expect(outcome.type).toBe("outcome.reached");
+    expect(projectAuthoredFeedback(pack, run).items).toEqual([
+      expect.objectContaining({
+        id: "g4#0",
+        revealedBy: { kind: "outcome", eventSeq: outcome.seq },
+      }),
+      expect.objectContaining({
+        id: "qh4#0",
+        revealedBy: { kind: "outcome", eventSeq: outcome.seq },
+      }),
     ]);
   });
 

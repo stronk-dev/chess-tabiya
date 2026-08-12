@@ -37,6 +37,26 @@ function newRun(startFen = INITIAL_FEN): DrillRun {
   });
 }
 
+function predicateRun(fen: string): DrillRun {
+  const base = newRun();
+  const rootNode = { ...base.nodes[0]!, fen };
+  const started = base.events[0]!;
+  if (started.type !== "run.started") throw new TypeError("Expected run.started");
+  return {
+    ...base,
+    start: { ...base.start, fen },
+    nodes: [rootNode],
+    events: [{
+      ...started,
+      data: {
+        ...started.data,
+        start: { ...started.data.start, fen },
+        rootNode,
+      },
+    }],
+  };
+}
+
 function runInState(state: ObjectiveState): DrillRun {
   return state === "active"
     ? newRun()
@@ -176,7 +196,7 @@ describe("objective transition graph", () => {
 
 describe("engine-free predicates", () => {
   it("evaluates checkmate, stalemate, and board-provable draw facts", () => {
-    const checkmate = newRun(
+    const checkmate = predicateRun(
       "r1bqkbnr/ppp2Qpp/2np4/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4",
     );
     expect(
@@ -194,7 +214,7 @@ describe("engine-free predicates", () => {
       }),
     ).toBe(false);
 
-    const stalemate = newRun("7k/5Q2/6K1/8/8/8/8/8 b - - 0 1");
+    const stalemate = predicateRun("7k/5Q2/6K1/8/8/8/8/8 b - - 0 1");
     expect(
       evaluateObjectivePredicate(stalemate, { type: "rulesFact", fact: "stalemate" }),
     ).toBe(true);
@@ -202,12 +222,12 @@ describe("engine-free predicates", () => {
       evaluateObjectivePredicate(stalemate, { type: "rulesFact", fact: "draw" }),
     ).toBe(true);
 
-    const insufficient = newRun("8/8/8/8/8/8/4K3/7k w - - 0 1");
+    const insufficient = predicateRun("8/8/8/8/8/8/4K3/7k w - - 0 1");
     expect(
       evaluateObjectivePredicate(insufficient, { type: "rulesFact", fact: "draw" }),
     ).toBe(true);
 
-    const fiftyMoveClaim = newRun("r6k/8/8/8/8/8/8/R6K w - - 100 51");
+    const fiftyMoveClaim = predicateRun("r6k/8/8/8/8/8/8/R6K w - - 100 51");
     expect(
       evaluateObjectivePredicate(fiftyMoveClaim, { type: "rulesFact", fact: "draw" }),
     ).toBe(true);

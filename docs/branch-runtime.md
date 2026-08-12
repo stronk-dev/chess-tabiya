@@ -6,7 +6,7 @@ node, choose another move, and compare the consequences without destroying the
 first line.
 
 The transport-independent implementation is `packages/runtime`. The Node binding
-is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.5,
+is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.6,
 and `packages/schema` owns the schema version constant. Browser and server code
 import the same TypeScript runtime; there is no second implementation of chess
 semantics.
@@ -89,9 +89,16 @@ Checkpoints append `checkpoint.reached` and add the checkpoint id to the referen
 node projection. Consecutive checkpoint hits on the same branch derive a segment
 and emit `segment.completed`.
 
+When a committed move creates a checkmate or draw position, the same mutation
+emits `outcome.reached` immediately after `move.committed`. Its closed result is
+`win`, `loss`, or `draw` from `start.side`, the learner's perspective. Terminal
+starting FENs are refused with `TERMINAL_START_POSITION`: a finished position
+contains no decision to rehearse. Rewinding and replaying a terminal move creates
+a new node and therefore a new outcome event for that node.
+
 Illegal operations fail with typed errors rather than becoming no-ops:
 `ILLEGAL_MOVE` (reason `malformed-UCI`, `wrong-side`, or `not-a-legal-move`),
-`UNKNOWN_NODE`, `UNKNOWN_CHECKPOINT`, `RUN_TERMINATED`, and
+`UNKNOWN_NODE`, `UNKNOWN_CHECKPOINT`, `TERMINAL_START_POSITION`, `RUN_TERMINATED`, and
 `NOT_ACTIVE_WRITER`.
 
 ## Objective state machine
@@ -154,6 +161,14 @@ its delivery window is narrower: reveal opens staged-evidence delivery and the
 next `move.committed` closes it. Historical evidence stays disclosed while new
 analysis cannot silently become live assistance. Repeating reveal while open is
 idempotent.
+
+The v0.6 amendment closes `outcome.reached` to `win|loss|draw` and makes it a
+feedback reveal under every policy. Projection treats it as security-sensitive:
+the event must immediately follow the matching terminal node's move, name the
+derived learner-perspective result, and occur once for that node. Unknown,
+non-terminal, duplicated, misordered, or mismatched outcomes fail replay rather
+than opening the disclosure barrier. Under `attempt_end`, an outcome opens
+delivery, rewind leaves it open, and the next committed move closes it.
 
 ## Compare and PGN export
 
@@ -252,6 +267,11 @@ Migration 1 reads legacy snapshot structure directly instead of replaying it
 through the current runtime: migrations must not depend on the projection whose
 job is to reject obsolete shapes. Run summaries record session kind, nullable
 pack id, and session digest.
+
+Migration 4 upgrades ordinary v0.5 snapshots and their indexed version to v0.6,
+so history and resume remain available after the wire bump. A v0.5 row already
+containing the formerly producer-less `outcome.reached` event is left quarantined
+instead of being trusted or rewritten.
 
 The adapter memoizes immutable run projections in-process. A warm read returns
 that projection. A cold read parses the stored snapshot, rebuilds it from the

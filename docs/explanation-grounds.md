@@ -5,8 +5,8 @@ prose explicitly stored in its registered drill pack. It does not generate
 strategic prose, infer authored theory, or ask an LLM to invent why a move
 worked. It supports two grounded surfaces: branch comparison shows why an
 objective changed and the engine evaluations durably attached along each path;
-checkpoint reveal shows authored commentary only after the learner reaches the
-relevant path-relative boundary.
+checkpoint and terminal reveal show authored commentary only after the learner
+reaches the relevant path-relative boundary or finishes the played consequence.
 
 This page is the cross-system contract. Runtime payload details remain in
 `docs/branch-runtime.md`; client episode behavior remains in
@@ -103,6 +103,11 @@ event does the same through its end node and attributes disclosure to the end
 checkpoint occurrence. Rewinds do not delete events, so revealed prose remains
 revealed: a learner cannot unsee it.
 
+`outcome.reached` is also a reveal occurrence. It discloses supported authored
+items on that terminal event's actual root-to-node path, including prose beyond
+the last checkpoint. Static checkpoint reachability is widened only by terminal
+paths that were actually played; sibling prose remains absent.
+
 Exactly three authored shapes are delivered:
 
 - each `spine[].annotations[]` entry, identified as
@@ -117,9 +122,11 @@ FEN-anchored deviations remain absent. Deviation commentary is about the
 decision point and therefore reveals when its anchor node is in scope whether
 or not the learner chose that move.
 
-Every item carries `revealedBy: {checkpointId, eventSeq}`. Event sequence is
-load-bearing: a checkpoint id may recur on different branches and reveal
-different material. The checkpoint sheet filters on the exact occurrence;
+Every item carries a discriminated attribution:
+`{kind:"checkpoint", checkpointId, eventSeq}` or
+`{kind:"outcome", eventSeq}`. Event sequence is load-bearing: a checkpoint id
+may recur on different branches and reveal different material. Checkpoint and
+terminal sheets filter on the exact occurrence;
 timeline markers appear only for items already returned. The response exposes
 only one pre-completion fact,
 `hasWithheldAuthoredContent`, and counts only supported items that some

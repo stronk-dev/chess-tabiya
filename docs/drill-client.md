@@ -77,7 +77,8 @@ evaluation job for the active node. Its shipped default is the ratified
 Feedback timing is a run property enforced on the server, not inferred from
 whether a pack currently resolves and not implemented with client-side hiding.
 `delayed_checkpoint` reveals after a checkpoint and `segment_end` after a
-segment completes. A pack-less position session uses `attempt_end`: its writer
+segment completes. A terminal `outcome.reached` reveals under every policy. A
+pack-less position session uses `attempt_end`: its writer
 explicitly calls `/reveal`, staged evidence becomes deliverable, and the next
 committed move closes that delivery window. Already-recorded evidence stays
 disclosed. Until disclosure:
@@ -106,6 +107,13 @@ hiding. The separate run-scoped authored-feedback endpoint reveals only the
 supported, path-anchored subset at an exact checkpoint occurrence. Unanchored
 claims and other unsupported shapes remain absent; position runs have no
 authored layer.
+
+After a terminal move, the controller does not request another opponent move.
+It refreshes run-scoped authored feedback and presents a non-dismissible
+attempt-complete sheet with the exact outcome occurrence's authored commentary
+and recorded evidence. Read-only followers perform the same refresh when their
+event poll first observes the outcome. Rewind remains available to the active
+writer and starts the next branch experiment.
 
 Rules-derived explanations remain visible because they are engine-free facts
 from the objective machine. Evidence references have runtime constructors and

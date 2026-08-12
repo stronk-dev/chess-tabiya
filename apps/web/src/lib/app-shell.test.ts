@@ -65,7 +65,7 @@ const runSummary: RunSummary = {
 const capabilities: Capabilities = {
   engines: [],
   policyModes: ["human_common"],
-  runSchemaVersion: "0.5",
+  runSchemaVersion: "0.6",
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
   },
