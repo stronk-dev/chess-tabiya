@@ -1,6 +1,6 @@
 {
   "id": "rook-4v3-same-side-hold",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Rook endings: holding 3 against 4 on one wing",
   "mode": "outcome",
   "phase": "endgame",
@@ -17,10 +17,23 @@
   "objective": {
     "type": "hold",
     "summary": "A pawn down in the most common ending in chess: rook and three against rook and four, everything on one wing. It is held with accurate defence and lost constantly in practice. Your job is the result, not the moves — reach the end of the drill still holding.",
+    "grading": {
+      "assessedBy": {
+        "kind": "authored",
+        "note": "Eleven pieces are on the board. Syzygy tablebases stop at seven, so no position in this drill has exact ground truth behind it — every judgment you are shown here was authored, not proved."
+      },
+      "resolveAt": {
+        "kind": "checkpoint",
+        "checkpointId": "still-holding"
+      }
+    },
     "successConditions": [
       {
-        "kind": "reach_checkpoint",
-        "checkpointId": "still-holding"
+        "kind": "material_balance",
+        "perspective": "black",
+        "comparison": "atMost",
+        "value": -2,
+        "to": "degraded"
       }
     ]
   },
@@ -325,13 +338,9 @@
     },
     {
       "id": "still-holding",
-      "label": "Still only a pawn down",
+      "label": "The end of the authored defence",
       "trigger": {
-        "materialBalance": {
-          "perspective": "black",
-          "comparison": "atLeast",
-          "value": -1
-        }
+        "atPly": 8
       },
       "actions": []
     }
@@ -479,13 +488,6 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
-      ]
-    },
-    {
-      "id": "no-tablebase-here",
-      "text": "Eleven pieces are on the board. Syzygy tablebases stop at seven, so no position in this drill has exact ground truth behind it — every judgment you are shown here was authored, not proved.",
-      "evidenceTypes": [
-        "author_principle"
       ]
     },
     {

@@ -445,7 +445,7 @@ export function reachCheckpoint(
   };
   let next = appendEvents(run, [checkpointDraft]);
 
-  if (previous) {
+  if (previous && previous.data.nodeId !== run.activeCursor.nodeId) {
     const current = next.events.at(-1);
     if (current?.type !== "checkpoint.reached") {
       throw new TypeError("Checkpoint append did not project a checkpoint event");

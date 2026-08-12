@@ -5,6 +5,9 @@ export const RULES_EVIDENCE_FACTS = Object.freeze([
   "draw-50move",
   "draw-insufficient",
   "material",
+  "result-win",
+  "result-loss",
+  "result-draw",
 ] as const);
 
 export type RulesEvidenceFact = (typeof RULES_EVIDENCE_FACTS)[number];

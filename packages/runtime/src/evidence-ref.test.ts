@@ -17,6 +17,9 @@ describe("evidence reference grammar", () => {
       "rules:draw-50move",
       "rules:draw-insufficient",
       "rules:material",
+      "rules:result-win",
+      "rules:result-loss",
+      "rules:result-draw",
     ]);
     expect(packEvidenceRef("timing-window")).toBe("pack:timing-window");
     expect(engineEvidenceRef("evidence-job-7")).toBe("engine:evidence-job-7");

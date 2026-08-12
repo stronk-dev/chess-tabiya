@@ -1,10 +1,11 @@
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { basename, resolve } from "node:path";
 
 import {
   validatePackDocument,
   type PackValidationIssue,
 } from "./pack-validation.js";
+import { isSidecarName } from "./pack-registry.js";
 
 export interface PackCheckResult {
   readonly file: string;
@@ -24,6 +25,18 @@ function fileIssue(code: string, message: string): PackValidationIssue {
 
 export async function checkPackFile(file: string): Promise<PackCheckResult> {
   const absolute = resolve(file);
+  if (isSidecarName(basename(absolute))) {
+    return Object.freeze({
+      file: absolute,
+      valid: false,
+      issues: Object.freeze([
+        fileIssue(
+          "PACK_FILE_IS_RESERVED_SIDECAR_NAME",
+          `${basename(absolute)} is a reserved sourcing sidecar name, not a pack filename`,
+        ),
+      ]),
+    });
+  }
   let text: string;
   try {
     text = await readFile(absolute, "utf8");
@@ -86,4 +99,3 @@ async function main(): Promise<number> {
 if (process.argv[1]?.endsWith("pack-check.js")) {
   process.exitCode = await main();
 }
-

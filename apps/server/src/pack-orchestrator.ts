@@ -2,12 +2,14 @@ import type {
   CheckpointDefinition,
   DrillPackDefinition,
   SimpleTrigger,
+  SuccessCondition,
 } from "@chess-tabiya/schema/drill-pack";
 import {
   evaluateObjective,
   evaluateObjectivePredicate,
   historyFrom,
   packEvidenceRef,
+  rulesEvidenceRef,
   reachCheckpoint,
   type DrillRun,
   type FenPredicate,
@@ -58,7 +60,7 @@ function simpleTriggerMatches(
   });
 }
 
-function checkpointMatches(
+export function checkpointMatches(
   pack: DrillPackDefinition,
   run: DrillRun,
   checkpoint: CheckpointDefinition,
@@ -96,24 +98,142 @@ function successPredicate(value: unknown): ObjectivePredicate | undefined {
   ) {
     return { type: "checkpointReached", checkpointId: condition.checkpointId };
   }
+  if (condition.kind === "outcome" && typeof condition.result === "string") {
+    return {
+      type: "outcomeReached",
+      result: condition.result as "win" | "loss" | "draw",
+    };
+  }
+  if (
+    condition.kind === "material_balance" &&
+    typeof condition.perspective === "string" &&
+    typeof condition.comparison === "string" &&
+    typeof condition.value === "number"
+  ) {
+    return {
+      type: "materialBalance",
+      perspective: condition.perspective as "white" | "black",
+      comparison: condition.comparison as "atLeast" | "atMost" | "equal",
+      value: condition.value,
+    };
+  }
+  if (condition.kind === "rules_fact" && typeof condition.fact === "string") {
+    return {
+      type: "rulesFact",
+      fact: condition.fact as "checkmate" | "stalemate",
+      ...(condition.winner === undefined
+        ? {}
+        : { winner: condition.winner as "white" | "black" }),
+    };
+  }
   return undefined;
 }
 
-function objectiveRules(pack: DrillPackDefinition): readonly ObjectiveTransitionRule[] {
+function conditionEvidence(condition: SuccessCondition): string {
+  if (condition.kind === "reach_checkpoint") {
+    return packEvidenceRef(condition.checkpointId);
+  }
+  if (condition.kind === "outcome") {
+    return rulesEvidenceRef(`result-${condition.result}`);
+  }
+  if (condition.kind === "material_balance") return rulesEvidenceRef("material");
+  return rulesEvidenceRef(condition.fact);
+}
+
+function conditionRules(
+  condition: SuccessCondition,
+  index: number,
+  outcomeObjective: boolean,
+): readonly ObjectiveTransitionRule[] {
+  const predicate = successPredicate(condition);
+  if (predicate === undefined) return [];
+  const to = condition.to ?? "achieved";
+  const defaults: readonly ObjectiveState[] =
+    to === "preserved"
+      ? outcomeObjective
+        ? ["active"]
+        : ["active", "degraded"]
+      : to === "degraded"
+        ? ["active", "preserved"]
+        : ["active", "preserved", "degraded"];
+  const fromStates = condition.from ?? defaults;
+  return fromStates.map((from) => ({
+    id: `pack-success-${index}-${from}`,
+    from,
+    to,
+    when: predicate,
+    evidenceRefs: [conditionEvidence(condition)],
+  }));
+}
+
+export function objectiveRules(
+  pack: DrillPackDefinition,
+): readonly ObjectiveTransitionRule[] {
   const raw = pack.objective.successConditions;
   if (!Array.isArray(raw)) return [];
-  const fromStates: readonly ObjectiveState[] = ["active", "preserved", "degraded"];
-  return raw.flatMap((condition, conditionIndex) => {
-    const predicate = successPredicate(condition);
-    if (predicate === undefined || predicate.type !== "checkpointReached") return [];
-    return fromStates.map((from) => ({
-      id: `pack-success-${conditionIndex}-${from}`,
-      from,
-      to: "achieved" as const,
-      when: predicate,
-      evidenceRefs: [packEvidenceRef(predicate.checkpointId)],
-    }));
-  });
+  const outcomeObjective = ["win", "hold", "save", "resist"].includes(
+    pack.objective.type,
+  );
+  if (!outcomeObjective) {
+    return raw.flatMap((condition, index) =>
+      conditionRules(condition, index, false),
+    );
+  }
+
+  const allStates: readonly ObjectiveState[] = ["active", "preserved", "degraded"];
+  const automatic: ObjectiveTransitionRule[] = [];
+  const outcomeRule = (
+    result: "win" | "loss" | "draw",
+    to: "achieved" | "failed",
+    predicate: ObjectivePredicate = { type: "outcomeReached", result },
+  ): void => {
+    for (const from of allStates) {
+      automatic.push({
+        id: `outcome-${result}-${from}`,
+        from,
+        to,
+        when: predicate,
+        evidenceRefs: [rulesEvidenceRef(`result-${result}`)],
+      });
+    }
+  };
+  outcomeRule("win", "achieved");
+  outcomeRule("draw", pack.objective.type === "win" ? "failed" : "achieved");
+  if (pack.objective.type === "resist") {
+    const resolveAt = pack.objective.grading?.resolveAt;
+    if (resolveAt?.kind === "checkpoint") {
+      outcomeRule("loss", "achieved", {
+        type: "all",
+        predicates: [
+          { type: "outcomeReached", result: "loss" },
+          { type: "checkpointReached", checkpointId: resolveAt.checkpointId },
+        ],
+      });
+    }
+  }
+  outcomeRule("loss", "failed");
+
+  const degraded = raw.flatMap((condition, index) =>
+    condition.to === "degraded" ? conditionRules(condition, index, true) : [],
+  );
+  const resolution: ObjectiveTransitionRule[] = [];
+  const resolveAt = pack.objective.grading?.resolveAt;
+  if (resolveAt?.kind === "checkpoint") {
+    resolution.push({
+      id: `outcome-resolution-${resolveAt.checkpointId}`,
+      from: "active",
+      to: "preserved",
+      when: {
+        type: "checkpointReachedHere",
+        checkpointId: resolveAt.checkpointId,
+      },
+      evidenceRefs: [packEvidenceRef(resolveAt.checkpointId)],
+    });
+  }
+  const remaining = raw.flatMap((condition, index) =>
+    condition.to !== "degraded" ? conditionRules(condition, index, true) : [],
+  );
+  return [...automatic, ...degraded, ...resolution, ...remaining];
 }
 
 export function orchestratePackMove(

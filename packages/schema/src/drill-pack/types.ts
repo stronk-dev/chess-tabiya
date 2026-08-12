@@ -81,6 +81,9 @@ export interface DrillPackDefinition {
   readonly start: { readonly fen: string; readonly [key: string]: unknown };
   readonly objective: {
     readonly type: ObjectiveType;
+    readonly summary?: string;
+    readonly grading?: ObjectiveGrading;
+    readonly successConditions?: readonly SuccessCondition[];
     readonly [key: string]: unknown;
   };
   readonly checkpoints: readonly CheckpointDefinition[];
@@ -93,3 +96,57 @@ export interface DrillPackDefinition {
   readonly deviations?: readonly Deviation[];
   readonly [key: string]: unknown;
 }
+
+export type ObjectiveState =
+  | "active"
+  | "preserved"
+  | "degraded"
+  | "failed"
+  | "achieved"
+  | "transitioned";
+
+export type RootAssessment =
+  | { readonly kind: "authored"; readonly note: string }
+  | {
+      readonly kind: "syzygy";
+      readonly category: "win" | "loss" | "draw";
+      readonly pieceCount: number;
+      readonly sourceId: "syzygy";
+      readonly retrievedAt: string;
+    };
+
+export interface ObjectiveGrading {
+  readonly assessedBy: RootAssessment;
+  readonly resolveAt:
+    | { readonly kind: "checkpoint"; readonly checkpointId: string }
+    | { readonly kind: "terminal" };
+}
+
+interface SuccessConditionBase {
+  readonly to?: Exclude<ObjectiveState, "active">;
+  readonly from?: readonly Extract<
+    ObjectiveState,
+    "active" | "preserved" | "degraded"
+  >[];
+}
+
+export type SuccessCondition =
+  | (SuccessConditionBase & {
+      readonly kind: "reach_checkpoint";
+      readonly checkpointId: string;
+    })
+  | (SuccessConditionBase & {
+      readonly kind: "outcome";
+      readonly result: "win" | "loss" | "draw";
+    })
+  | (SuccessConditionBase & {
+      readonly kind: "material_balance";
+      readonly perspective: "white" | "black";
+      readonly comparison: "atLeast" | "atMost" | "equal";
+      readonly value: number;
+    })
+  | (SuccessConditionBase & {
+      readonly kind: "rules_fact";
+      readonly fact: "checkmate" | "stalemate";
+      readonly winner?: "white" | "black";
+    });

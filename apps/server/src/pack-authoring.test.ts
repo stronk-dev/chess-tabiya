@@ -7,7 +7,12 @@ import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { checkPackFile, formatPackIssue } from "./pack-check.js";
-import { PackRegistry } from "./pack-registry.js";
+import {
+  DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES,
+  DECLARED_UNIMPLEMENTED_POLICY_MODES,
+  SUPPORTED_POLICY_MODES,
+} from "./capabilities.js";
+import { PackRegistry, SIDECAR_BASENAMES } from "./pack-registry.js";
 import { validatePackDocument } from "./pack-validation.js";
 
 const fixture = JSON.parse(
@@ -33,6 +38,28 @@ afterEach(async () => {
 });
 
 describe("pack authoring validation", () => {
+  it("keeps declared pack vocabularies aligned with executable capabilities", () => {
+    const schema = JSON.parse(
+      readFileSync(
+        new URL("../../../schemas/drill_pack.schema.json", import.meta.url),
+        "utf8",
+      ),
+    ) as any;
+    expect(new Set(schema.$defs.opponentPolicy.properties.mode.enum)).toEqual(
+      new Set([
+        ...SUPPORTED_POLICY_MODES,
+        ...DECLARED_UNIMPLEMENTED_POLICY_MODES.map((entry) => entry.mode),
+      ]),
+    );
+    expect(new Set(schema.properties.feedbackPolicy.enum)).toEqual(
+      new Set([
+        "delayed_checkpoint",
+        "segment_end",
+        ...DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES.map((entry) => entry.mode),
+      ]),
+    );
+  });
+
   it("reports living-schema failures with JSON pointers", () => {
     const { title: _title, ...missingTitle } = structuredClone(
       fixture as unknown as Record<string, unknown>,
@@ -192,9 +219,40 @@ describe("pack authoring validation", () => {
       }),
     );
   });
+
+  it("refuses reserved sidecar names as pack files", async () => {
+    const directory = await temporaryDirectory();
+    const sidecar = join(directory, "evidence.json");
+    await writeFile(sidecar, JSON.stringify(fixture), "utf8");
+    const result = await checkPackFile(sidecar);
+    expect(result).toMatchObject({ valid: false });
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({ code: "PACK_FILE_IS_RESERVED_SIDECAR_NAME" }),
+    );
+  });
 });
 
 describe("development draft registry", () => {
+  it("uses one sidecar vocabulary for recursive discovery", async () => {
+    const directory = await temporaryDirectory();
+    const nested = join(directory, "candidate");
+    await import("node:fs/promises").then(({ mkdir }) => mkdir(nested));
+    await writeFile(
+      join(nested, "pack.json"),
+      JSON.stringify({ ...structuredClone(fixture), id: "sidecar-pack" }),
+      "utf8",
+    );
+    for (const name of SIDECAR_BASENAMES) {
+      await writeFile(join(nested, name), "{}", "utf8");
+    }
+    const registry = await PackRegistry.loadDefault({
+      development: true,
+      draftsDirectory: directory,
+    });
+    expect(registry.get("sidecar-pack")).toBeDefined();
+    expect(registry.list().filter((pack) => pack.id === "sidecar-pack")).toHaveLength(1);
+  });
+
   it("ignores committed drafts in production and loads them in development", async () => {
     const directory = await temporaryDirectory();
     const draft = {

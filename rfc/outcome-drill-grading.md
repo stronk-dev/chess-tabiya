@@ -1,6 +1,6 @@
 # RFC: Outcome Drill — objective grading for win / hold / save / resist
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` §Outcome types, §The four modes;
@@ -26,7 +26,7 @@
 - **Supersedes / superseded by:** —
 - **Migration:** none. This RFC changes no persisted run shape and claims no migration
   number; see Specification §12.
-- **Planning:** `planning/outcome-drill-grading/` (once implementing)
+- **Planning:** `planning/outcome-drill-grading/`
 
 ## Summary
 

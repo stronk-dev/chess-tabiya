@@ -1,5 +1,5 @@
 import { readFile, readdir } from "node:fs/promises";
-import { extname, join } from "node:path";
+import { basename, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
@@ -10,6 +10,16 @@ import {
 
 import { ServerError } from "./errors.js";
 import { validatePackDocument } from "./pack-validation.js";
+import { assessmentGrounding } from "./sourcing/ledger-validation.js";
+
+export const SIDECAR_BASENAMES = Object.freeze([
+  "evidence.json",
+  "sources.json",
+  "job.json",
+  "priority.json",
+] as const);
+
+export type AssessmentGrounding = "ledger_verified" | "unverified";
 
 export type FeedbackPolicy = "delayed_checkpoint" | "segment_end";
 
@@ -28,6 +38,7 @@ export interface PackRecord {
   readonly digest: string;
   readonly summary: PackSummary;
   readonly feedbackPolicy: FeedbackPolicy;
+  readonly assessmentGrounding: AssessmentGrounding;
 }
 
 function projectSpineNode(node: SpineNode): unknown {
@@ -46,6 +57,7 @@ function projectSpineNode(node: SpineNode): unknown {
  */
 export function projectPackDocument(
   document: DrillPackDefinition,
+  grounding: AssessmentGrounding = "unverified",
 ): Readonly<Record<string, unknown>> {
   const raw = document as unknown as Record<string, unknown>;
   return freeze({
@@ -60,6 +72,9 @@ export function projectPackDocument(
     objective: {
       type: document.objective.type,
       summary: document.objective.summary,
+      ...(document.objective.grading === undefined
+        ? {}
+        : { grading: { ...document.objective.grading, grounding } }),
     },
     feedbackPolicy: raw.feedbackPolicy,
     opponentPolicy: raw.opponentPolicy,
@@ -106,9 +121,51 @@ async function jsonFiles(directory: string): Promise<readonly string[]> {
   for (const entry of entries) {
     const path = join(directory, entry.name);
     if (entry.isDirectory()) files.push(...(await jsonFiles(path)));
-    else if (entry.isFile() && extname(entry.name) === ".json") files.push(path);
+    else if (
+      entry.isFile() &&
+      extname(entry.name) === ".json" &&
+      !isSidecarName(entry.name)
+    ) {
+      files.push(path);
+    }
   }
   return files.sort();
+}
+
+export function isSidecarName(name: string): boolean {
+  return SIDECAR_BASENAMES.some(
+    (reserved) => name === reserved || name.endsWith(`.${reserved}`),
+  );
+}
+
+async function optionalJson(path: string): Promise<unknown | undefined> {
+  try {
+    return JSON.parse(await readFile(path, "utf8")) as unknown;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return undefined;
+    // A malformed optional sidecar cannot earn grounding, but must not turn a
+    // loadable draft pack into a server-startup failure.
+    return undefined;
+  }
+}
+
+function sidecarPaths(source: string): {
+  readonly ledger: string;
+  readonly manifest: string;
+} {
+  const directory = dirname(source);
+  const name = basename(source);
+  if (name === "pack.json") {
+    return {
+      ledger: join(directory, SIDECAR_BASENAMES[0]),
+      manifest: join(directory, SIDECAR_BASENAMES[1]),
+    };
+  }
+  const stem = name.slice(0, -extname(name).length);
+  return {
+    ledger: join(directory, `${stem}.${SIDECAR_BASENAMES[0]}`),
+    manifest: join(directory, `${stem}.${SIDECAR_BASENAMES[1]}`),
+  };
 }
 
 export class PackRegistry {
@@ -119,11 +176,16 @@ export class PackRegistry {
   }
 
   static async fromDocuments(
-    documents: readonly { readonly source: string; readonly value: unknown }[],
+    documents: readonly {
+      readonly source: string;
+      readonly value: unknown;
+      readonly ledger?: unknown;
+      readonly manifest?: unknown;
+    }[],
     options: { readonly replaceDuplicates?: boolean } = {},
   ): Promise<PackRegistry> {
     const records = new Map<string, PackRecord>();
-    for (const { source, value } of documents) {
+    for (const { source, value, ledger, manifest } of documents) {
       const document = freeze(validatedDocument(value, source));
       if (records.has(document.id) && options.replaceDuplicates !== true) {
         throw new ServerError(
@@ -135,6 +197,7 @@ export class PackRegistry {
       const provenance = raw.provenance as Record<string, unknown>;
       const feedbackPolicy = raw.feedbackPolicy as FeedbackPolicy;
       const digest = await digestDrillPack(document);
+      const grounding = assessmentGrounding({ document, ledger, manifest });
       const summary: PackSummary = freeze({
         id: document.id,
         version: document.version,
@@ -146,7 +209,13 @@ export class PackRegistry {
       });
       records.set(
         document.id,
-        freeze({ document, digest, summary, feedbackPolicy }),
+        freeze({
+          document,
+          digest,
+          summary,
+          feedbackPolicy,
+          assessmentGrounding: grounding,
+        }),
       );
     }
     return new PackRegistry(records);
@@ -186,10 +255,15 @@ export class PackRegistry {
       ),
     ];
     const documents = await Promise.all(
-      paths.map(async (path) => ({
-        source: path,
-        value: JSON.parse(await readFile(path, "utf8")) as unknown,
-      })),
+      paths.map(async (path) => {
+        const sidecars = sidecarPaths(path);
+        return {
+          source: path,
+          value: JSON.parse(await readFile(path, "utf8")) as unknown,
+          ledger: await optionalJson(sidecars.ledger),
+          manifest: await optionalJson(sidecars.manifest),
+        };
+      }),
     );
     return PackRegistry.fromDocuments(documents, {
       replaceDuplicates: options.development === true,

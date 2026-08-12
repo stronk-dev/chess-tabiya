@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.2",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.3",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.2 format for an engine-independent authored drill.",
+  "description": "Living v0.3 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -138,12 +138,127 @@
       "properties": {
         "type": { "$ref": "#/$defs/objectiveType" },
         "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "grading": { "$ref": "#/$defs/objectiveGrading" },
         "successConditions": {
           "type": "array",
-          "items": { "type": "object" }
+          "items": { "$ref": "#/$defs/successCondition" }
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
+    },
+    "objectiveGrading": {
+      "type": "object",
+      "required": ["assessedBy", "resolveAt"],
+      "properties": {
+        "assessedBy": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["kind", "note"],
+              "properties": {
+                "kind": { "const": "authored" },
+                "note": { "type": "string", "minLength": 1, "maxLength": 400 }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["kind", "category", "pieceCount", "sourceId", "retrievedAt"],
+              "properties": {
+                "kind": { "const": "syzygy" },
+                "category": { "enum": ["win", "loss", "draw"] },
+                "pieceCount": { "type": "integer", "minimum": 2, "maximum": 7 },
+                "sourceId": { "const": "syzygy" },
+                "retrievedAt": { "type": "string", "format": "date-time" }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "resolveAt": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["kind", "checkpointId"],
+              "properties": {
+                "kind": { "const": "checkpoint" },
+                "checkpointId": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["kind"],
+              "properties": { "kind": { "const": "terminal" } },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "conditionBase": {
+      "type": "object",
+      "properties": {
+        "to": { "enum": ["preserved", "degraded", "failed", "achieved", "transitioned"] },
+        "from": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["active", "preserved", "degraded"] }
+        }
+      }
+    },
+    "successCondition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "checkpointId"],
+          "properties": {
+            "kind": { "const": "reach_checkpoint" },
+            "checkpointId": { "$ref": "#/$defs/id" },
+            "to": { "$ref": "#/$defs/conditionBase/properties/to" },
+            "from": { "$ref": "#/$defs/conditionBase/properties/from" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "result"],
+          "properties": {
+            "kind": { "const": "outcome" },
+            "result": { "enum": ["win", "loss", "draw"] },
+            "to": { "$ref": "#/$defs/conditionBase/properties/to" },
+            "from": { "$ref": "#/$defs/conditionBase/properties/from" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "perspective", "comparison", "value"],
+          "properties": {
+            "kind": { "const": "material_balance" },
+            "perspective": { "enum": ["white", "black"] },
+            "comparison": { "enum": ["atLeast", "atMost", "equal"] },
+            "value": { "type": "number" },
+            "to": { "$ref": "#/$defs/conditionBase/properties/to" },
+            "from": { "$ref": "#/$defs/conditionBase/properties/from" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "fact"],
+          "properties": {
+            "kind": { "const": "rules_fact" },
+            "fact": { "enum": ["checkmate", "stalemate"] },
+            "winner": { "enum": ["white", "black"] },
+            "to": { "$ref": "#/$defs/conditionBase/properties/to" },
+            "from": { "$ref": "#/$defs/conditionBase/properties/from" }
+          },
+          "additionalProperties": false
+        }
+      ]
     },
     "planClass": {
       "type": "object",

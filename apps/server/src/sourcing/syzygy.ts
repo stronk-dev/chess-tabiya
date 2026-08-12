@@ -12,6 +12,8 @@ import { ingestLocalFile } from "./inputs.js";
 import { withSourceLock } from "./lock.js";
 import type { EvidenceLedger, SourceEntry, SourceManifest } from "./types.js";
 import { SourcingError } from "./types.js";
+export { countFenPieces } from "./chess-facts.js";
+import { countFenPieces } from "./chess-facts.js";
 
 export const TABLEBASE_RATIONALE = "Syzygy tablebase facts are free of copyright under Feist and Football Dataco; the API transports computed chess facts rather than a third-party work";
 export const AUTHOR_POSITION_RATIONALE = "the author's own position list; a list of FENs states facts about chess positions";
@@ -47,10 +49,6 @@ export interface SyzygyEmitOptions {
 }
 
 interface PositionInput { readonly fen: string; readonly label: string }
-
-export function countFenPieces(fen: string): number {
-  return [...(fen.split(" ")[0] ?? "")].filter((character) => /[a-z]/i.test(character)).length;
-}
 
 function readPositions(text: string): PositionInput[] {
   return text.replaceAll("\r\n", "\n").split("\n").filter((line) => line.trim() !== "").map((line, index) => {

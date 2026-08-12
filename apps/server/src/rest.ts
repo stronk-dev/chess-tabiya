@@ -514,14 +514,19 @@ export function createRestHandler(
           });
         }
         const pack = service.pack(packId);
-        return new Response(JSON.stringify(projectPackDocument(pack.document)), {
+        return new Response(
+          JSON.stringify(
+            projectPackDocument(pack.document, pack.assessmentGrounding),
+          ),
+          {
           status: 200,
           headers: {
             "cache-control": "no-store",
             "content-type": "application/json",
             "x-pack-digest": pack.digest,
           },
-        });
+          },
+        );
       }
       if (request.method === "POST" && url.pathname === "/runs") {
         const principal = authenticate();

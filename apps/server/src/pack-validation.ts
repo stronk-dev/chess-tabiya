@@ -3,10 +3,17 @@ import { fileURLToPath } from "node:url";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { lintDrillPack } from "@chess-tabiya/schema/drill-pack";
+import { createRun } from "@chess-tabiya/runtime";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
-import { SUPPORTED_POLICY_MODES } from "./capabilities.js";
+import {
+  DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES,
+  DECLARED_UNIMPLEMENTED_POLICY_MODES,
+  SUPPORTED_POLICY_MODES,
+} from "./capabilities.js";
+import { checkpointMatches } from "./pack-orchestrator.js";
+import { countFenPieces } from "./sourcing/chess-facts.js";
 
 const SUPPORTED_CHECKPOINT_ACTIONS = Object.freeze(["compare_branches"] as const);
 
@@ -102,11 +109,14 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
 
   const feedbackPolicy = raw.feedbackPolicy;
   if (feedbackPolicy === "immediate_blunder_guard") {
+    const reason = DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES.find(
+      (entry) => entry.mode === feedbackPolicy,
+    )?.reason;
     issues.push(
       runtimeIssue(
         "UNSUPPORTED_FEEDBACK_POLICY",
         "/feedbackPolicy",
-        "immediate_blunder_guard is not supported in v1",
+        reason ?? "immediate_blunder_guard is not supported in v1",
       ),
     );
   } else if (
@@ -128,11 +138,14 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
     typeof opponentMode !== "string" ||
     !SUPPORTED_POLICY_MODES.some((mode) => mode === opponentMode)
   ) {
+    const reason = DECLARED_UNIMPLEMENTED_POLICY_MODES.find(
+      (entry) => entry.mode === opponentMode,
+    )?.reason;
     issues.push(
       runtimeIssue(
         "UNSUPPORTED_OPPONENT_POLICY",
         "/opponentPolicy/mode",
-        `${String(opponentMode)} is not selectable in v1`,
+        reason ?? `${String(opponentMode)} is not selectable in v1`,
       ),
     );
   }
@@ -158,23 +171,193 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
   }
 
   const conditions = pack.objective.successConditions;
+  const outcomeObjective = ["win", "hold", "save", "resist"].includes(
+    pack.objective.type,
+  );
+  const grading = pack.objective.grading;
+  if (outcomeObjective && grading === undefined) {
+    issues.push(
+      runtimeIssue(
+        "OBJECTIVE_GRADING_REQUIRED",
+        "/objective/grading",
+        `${pack.objective.type} objectives require grading`,
+      ),
+    );
+  }
+  if (!outcomeObjective && grading !== undefined) {
+    issues.push(
+      runtimeIssue(
+        "OBJECTIVE_GRADING_UNSUPPORTED",
+        "/objective/grading",
+        `grading is unsupported for ${pack.objective.type} objectives`,
+      ),
+    );
+  }
+  if (grading?.resolveAt.kind === "checkpoint" && !checkpoints.has(grading.resolveAt.checkpointId)) {
+    issues.push(
+      runtimeIssue(
+        "OBJECTIVE_RESOLUTION_UNKNOWN",
+        "/objective/grading/resolveAt/checkpointId",
+        `unknown resolution checkpoint ${grading.resolveAt.checkpointId}`,
+      ),
+    );
+  }
+  if (pack.objective.type === "resist" && grading?.resolveAt.kind === "terminal") {
+    issues.push(
+      runtimeIssue(
+        "OBJECTIVE_RESIST_NEEDS_CHECKPOINT",
+        "/objective/grading/resolveAt",
+        "resist requires a checkpoint resolution so survival is measurable",
+      ),
+    );
+  }
+
   if (Array.isArray(conditions)) {
     for (const [index, value] of conditions.entries()) {
-      const condition = value as Record<string, unknown>;
-      if (
-        condition.kind !== "reach_checkpoint" ||
-        typeof condition.checkpointId !== "string" ||
-        !checkpoints.has(condition.checkpointId)
-      ) {
+      const condition = value;
+      if (condition.kind === "reach_checkpoint" && !checkpoints.has(condition.checkpointId)) {
         issues.push(
           runtimeIssue(
             "UNSUPPORTED_OBJECTIVE_CONDITION",
             `/objective/successConditions/${index}`,
-            "only reach_checkpoint for a checkpoint in this pack is supported in v1",
+            `unknown checkpoint ${condition.checkpointId}`,
+          ),
+        );
+      }
+      const to = condition.to ?? "achieved";
+      if (condition.from?.includes(to as "active" | "preserved" | "degraded")) {
+        issues.push(
+          runtimeIssue(
+            "OBJECTIVE_SELF_TRANSITION",
+            `/objective/successConditions/${index}/from`,
+            `from may not contain target state ${to}`,
+          ),
+        );
+      }
+      if (
+        outcomeObjective &&
+        ["achieved", "failed", "transitioned"].includes(to) &&
+        condition.kind !== "outcome"
+      ) {
+        issues.push(
+          runtimeIssue(
+            "OBJECTIVE_ABSORBING_WITHOUT_OUTCOME",
+            `/objective/successConditions/${index}/to`,
+            "outcome objectives may enter an absorbing state only from an outcome condition",
+          ),
+        );
+      }
+      if (
+        outcomeObjective &&
+        condition.kind === "outcome" &&
+        !["achieved", "failed"].includes(to)
+      ) {
+        issues.push(
+          runtimeIssue(
+            "OBJECTIVE_OUTCOME_TARGET_INVALID",
+            `/objective/successConditions/${index}/to`,
+            "outcome conditions may target only achieved or failed",
+          ),
+        );
+      }
+      if (
+        outcomeObjective &&
+        to === "preserved" &&
+        condition.from?.includes("degraded")
+      ) {
+        issues.push(
+          runtimeIssue(
+            "OBJECTIVE_DEGRADED_IS_ONE_WAY",
+            `/objective/successConditions/${index}/from`,
+            "degraded outcome objectives may not return to preserved",
           ),
         );
       }
     }
+  }
+
+  if (grading?.assessedBy.kind === "syzygy") {
+    const count = countFenPieces(pack.start.fen);
+    if (count > 7 || grading.assessedBy.pieceCount !== count) {
+      issues.push(
+        runtimeIssue(
+          "SYZYGY_ASSESSMENT_OUT_OF_RANGE",
+          "/objective/grading/assessedBy/pieceCount",
+          `Syzygy assessment declares ${grading.assessedBy.pieceCount} pieces; FEN has ${count}`,
+        ),
+      );
+    }
+    const sideToMove = pack.start.fen.split(" ")[1] === "b" ? "black" : "white";
+    const learner = pack.start.side;
+    const opposite = (value: "win" | "loss" | "draw") =>
+      value === "win" ? "loss" : value === "loss" ? "win" : "draw";
+    const category = learner === sideToMove
+      ? grading.assessedBy.category
+      : opposite(grading.assessedBy.category);
+    const expected = pack.objective.type === "win"
+      ? "win"
+      : pack.objective.type === "hold"
+        ? "draw"
+        : "loss";
+    if (category !== expected) {
+      issues.push(
+        runtimeIssue(
+          "SYZYGY_ASSESSMENT_MISMATCH",
+          "/objective/grading/assessedBy/category",
+          `${pack.objective.type} expects ${expected} from the learner perspective; received ${category}`,
+        ),
+      );
+    }
+  }
+
+  try {
+    const side = pack.start.side === "black" ? "black" : "white";
+    const root = createRun({
+      id: "pack-validation",
+      session: {
+        kind: "pack",
+        packId: pack.id,
+        packDigest: `sha256:${"0".repeat(64)}`,
+        start: { fen: pack.start.fen, side },
+        feedbackPolicy: "delayed_checkpoint",
+        opponentPolicy: { mode: "human_common" },
+      },
+      sessionDigest: `sha256:${"0".repeat(64)}`,
+      policyConfig: {
+        seedMode: "fixed",
+        locus: { executedAt: "server", engineIds: [], modelIds: [] },
+      },
+      seed: 0,
+      createdAt: "2000-01-01T00:00:00.000Z",
+    });
+    for (const [index, checkpoint] of pack.checkpoints.entries()) {
+      const trigger = checkpoint.trigger;
+      if ("atPly" in trigger && trigger.atPly === 0) {
+        issues.push(
+          runtimeIssue(
+            "CHECKPOINT_UNREACHABLE_AT_ROOT",
+            `/checkpoints/${index}/trigger/atPly`,
+            "atPly 0 can never be evaluated because checkpoints run after a commit",
+          ),
+        );
+      } else if (checkpointMatches(pack, root, checkpoint)) {
+        issues.push(
+          runtimeIssue(
+            "CHECKPOINT_TRUE_AT_ROOT",
+            `/checkpoints/${index}/trigger`,
+            "checkpoint condition is already true at the start position",
+          ),
+        );
+      }
+    }
+  } catch (error) {
+    issues.push(
+      runtimeIssue(
+        "START_POSITION_UNRUNNABLE",
+        "/start/fen",
+        error instanceof Error ? error.message : String(error),
+      ),
+    );
   }
   return Object.freeze(issues);
 }

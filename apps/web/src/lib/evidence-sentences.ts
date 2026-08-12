@@ -23,6 +23,9 @@ const RULES_SENTENCES: Readonly<Record<RulesEvidenceFact, string>> = Object.free
   "draw-50move": "Draw available: the 50-move rule applies on this path.",
   "draw-insufficient": "Draw: neither side has sufficient mating material.",
   material: "The material balance changed on this path.",
+  "result-win": "The learner won the game.",
+  "result-loss": "The learner lost the game.",
+  "result-draw": "The game ended in a draw.",
 });
 
 function checkpointLabel(checkpoint: DrillPackDefinition["checkpoints"][number]): string {

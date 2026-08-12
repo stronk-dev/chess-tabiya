@@ -13,6 +13,26 @@ export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = Object.free
   "theory_strict",
 ]);
 
+export const DECLARED_UNIMPLEMENTED_POLICY_MODES = Object.freeze([
+  { mode: "plan_defense", reason: "plan_defense is not selectable in v1; plan-defense selection is not implemented" },
+  {
+    mode: "practical_resistance",
+    reason: "practical_resistance is not selectable in v1; practical-resistance selection is not implemented",
+  },
+  {
+    mode: "perfect_tablebase",
+    reason: "perfect_tablebase is not selectable in v1; perfect tablebase selection is not implemented",
+  },
+  { mode: "human_external", reason: "human_external is not selectable in v1; external-human selection is not implemented" },
+] as const);
+
+export const DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES = Object.freeze([
+  {
+    mode: "immediate_blunder_guard",
+    reason: "immediate_blunder_guard is not supported in v1; it is not implemented",
+  },
+] as const);
+
 export const SURFACE_IDS = Object.freeze([
   "play",
   "review",

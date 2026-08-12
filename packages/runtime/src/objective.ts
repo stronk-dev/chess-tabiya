@@ -62,6 +62,8 @@ export type ObjectivePredicate =
   | MaterialBalancePredicate
   | { readonly type: "fenPredicate"; readonly predicate: FenPredicate }
   | { readonly type: "checkpointReached"; readonly checkpointId: string }
+  | { readonly type: "checkpointReachedHere"; readonly checkpointId: string }
+  | { readonly type: "outcomeReached"; readonly result: "win" | "loss" | "draw" }
   | {
       readonly type: "all" | "any";
       readonly predicates: readonly [ObjectivePredicate, ...ObjectivePredicate[]];
@@ -220,6 +222,22 @@ export function evaluateObjectivePredicate(
       return matchesFenPredicate(node, predicate.predicate);
     case "checkpointReached":
       return checkpointWasReached(run, node, predicate.checkpointId);
+    case "checkpointReachedHere":
+      return run.events.some(
+        (event) =>
+          event.type === "checkpoint.reached" &&
+          event.data.checkpointId === predicate.checkpointId &&
+          event.data.nodeId === node.id,
+      );
+    case "outcomeReached": {
+      const pathNodeIds = new Set(pathToNode(run, node).map((pathNode) => pathNode.id));
+      return run.events.some(
+        (event) =>
+          event.type === "outcome.reached" &&
+          event.data.outcome === predicate.result &&
+          pathNodeIds.has(event.data.nodeId),
+      );
+    }
     case "all":
       return predicate.predicates.every((child) => evaluateObjectivePredicate(run, child));
     case "any":

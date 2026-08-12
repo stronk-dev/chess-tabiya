@@ -8,6 +8,7 @@ import { makeUci } from "chessops/util";
 import { describe, expect, it, vi } from "vitest";
 
 import { StockfishEvidenceExecutor } from "../evidence-queue.js";
+import { PackRegistry, projectPackDocument } from "../pack-registry.js";
 import { checkSourcingDirectory } from "./check.js";
 import { readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import {
@@ -61,6 +62,45 @@ describe("Syzygy sourcing", () => {
     const tablebase = result.records.find((record: any) => record.kind === "tablebase_result");
     expect(tablebase.values).toMatchObject({ pieceCount: 7, category: "win", dtz: 1, precise_dtz: 1, dtm: null });
     expect((await readJson(resolve(eight.directory, "evidence.json")) as any).abstentions[0].reason).toBe("out_of_range");
+  });
+
+  it("grants exact grounding only to a valid, manifest-linked ledger", async () => {
+    const emitted = await emit(SEVEN, "white", fixtureTablebaseQuery);
+    const pack = await readJson(resolve(emitted.directory, "pack.json")) as any;
+    const ledger = await readJson(resolve(emitted.directory, "evidence.json"));
+    const manifest = await readJson(resolve(emitted.directory, "sources.json"));
+    const tablebase = (ledger as any).records.find((record: any) => record.kind === "tablebase_result");
+    pack.mode = "outcome";
+    pack.objective = {
+      type: "win",
+      summary: "Convert the exact root.",
+      grading: {
+        assessedBy: {
+          kind: "syzygy",
+          category: tablebase.values.category,
+          pieceCount: tablebase.values.pieceCount,
+          sourceId: tablebase.sourceId,
+          retrievedAt: tablebase.retrievedAt,
+        },
+        resolveAt: { kind: "terminal" },
+      },
+      successConditions: [],
+    };
+
+    const verified = await PackRegistry.fromDocuments([
+      { source: "pack.json", value: pack, ledger, manifest },
+    ]);
+    expect(verified.required(pack.id).assessmentGrounding).toBe("ledger_verified");
+    expect(projectPackDocument(pack, "ledger_verified")).toMatchObject({
+      objective: { grading: { grounding: "ledger_verified" } },
+    });
+
+    const forged = structuredClone(ledger) as any;
+    forged.records.push({ kind: "tablebase_result" });
+    const unverified = await PackRegistry.fromDocuments([
+      { source: "pack.json", value: pack, ledger: forged, manifest },
+    ]);
+    expect(unverified.required(pack.id).assessmentGrounding).toBe("unverified");
   });
 
   it("matches the chessops board census over 200 legal committed positions", () => {

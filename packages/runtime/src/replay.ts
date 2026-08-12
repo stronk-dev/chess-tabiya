@@ -3,7 +3,10 @@ import type {
   DrillRun,
   DrillRunEvent,
   OpponentMoveSelectedEvent,
+  RunOpponentPolicy,
+  SelectionEngineIdentity,
 } from "./types.js";
+import { historyFrom } from "./runtime.js";
 
 export class ReplayError extends Error {
   readonly seq: number;
@@ -21,6 +24,7 @@ export interface OpponentMoveReadback {
   readonly committedNodeId: string;
   readonly branchId: string;
   readonly moveUci: string;
+  readonly engine: SelectionEngineIdentity;
 }
 
 export interface ReadBackReplay {
@@ -55,13 +59,14 @@ function readOpponentMove(
     committedNodeId: node.id,
     branchId: selection.data.branchId,
     moveUci: selection.data.moveUci,
+    engine: selection.data.selection.engine,
   });
 }
 
-export function readBackReplay(events: readonly DrillRunEvent[]): ReadBackReplay {
-  const run = projectRun(events);
+export function opponentMovesFromEvents(
+  events: readonly DrillRunEvent[],
+): readonly OpponentMoveReadback[] {
   const opponentMoves: OpponentMoveReadback[] = [];
-
   for (const [index, event] of events.entries()) {
     if (event.type === "opponent.move_selected") {
       opponentMoves.push(readOpponentMove(event, events[index + 1]));
@@ -73,6 +78,52 @@ export function readBackReplay(events: readonly DrillRunEvent[]): ReadBackReplay
       throw new ReplayError(event.seq, "opponent commit has no authoritative selection");
     }
   }
+  return Object.freeze(opponentMoves);
+}
 
-  return Object.freeze({ run, opponentMoves: Object.freeze(opponentMoves) });
+export interface ResistanceEngineCount {
+  readonly engine: SelectionEngineIdentity;
+  readonly plyCount: number;
+}
+
+export interface PathResistance {
+  readonly requested: RunOpponentPolicy;
+  readonly engines: readonly ResistanceEngineCount[];
+}
+
+export function resistanceOnPath(run: DrillRun, nodeId: string): PathResistance {
+  const pathNodeIds = new Set(historyFrom(run, nodeId).map((node) => node.id));
+  const counts = new Map<string, { engine: SelectionEngineIdentity; plyCount: number }>();
+  for (const move of opponentMovesFromEvents(run.events)) {
+    if (!pathNodeIds.has(move.committedNodeId)) continue;
+    const identity = move.engine;
+    const key = JSON.stringify([
+      identity.id,
+      identity.name,
+      identity.version,
+      identity.modelId ?? null,
+      identity.containerDigest ?? null,
+      identity.seedHonored,
+    ]);
+    const previous = counts.get(key);
+    counts.set(key, {
+      engine: identity,
+      plyCount: (previous?.plyCount ?? 0) + 1,
+    });
+  }
+  return Object.freeze({
+    requested: run.opponentPolicy,
+    engines: Object.freeze(
+      [...counts.values()].map((value): ResistanceEngineCount =>
+        Object.freeze(value),
+      ),
+    ),
+  });
+}
+
+export function readBackReplay(events: readonly DrillRunEvent[]): ReadBackReplay {
+  const run = projectRun(events);
+  const opponentMoves = opponentMovesFromEvents(events);
+
+  return Object.freeze({ run, opponentMoves });
 }

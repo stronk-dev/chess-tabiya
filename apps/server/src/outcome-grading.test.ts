@@ -1,0 +1,109 @@
+import { readFileSync } from "node:fs";
+
+import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import {
+  createRun,
+  reachCheckpoint,
+  type DrillRun,
+} from "@chess-tabiya/runtime";
+import { describe, expect, it } from "vitest";
+
+import { objectiveRules } from "./pack-orchestrator.js";
+import { validatePackDocument } from "./pack-validation.js";
+
+const at = "2026-08-12T12:00:00.000Z";
+const fixture = JSON.parse(
+  readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8"),
+) as DrillPackDefinition;
+
+function pack(type: "win" | "hold" | "save" | "resist"): DrillPackDefinition {
+  return {
+    ...structuredClone(fixture),
+    id: `outcome-${type}`,
+    mode: "outcome",
+    objective: {
+      type,
+      summary: `${type} fixture`,
+      grading: {
+        assessedBy: { kind: "authored", note: "Fixture assessment." },
+        resolveAt: { kind: "checkpoint", checkpointId: "resolution" },
+      },
+      successConditions: [],
+    },
+    checkpoints: [{ id: "resolution", label: "Resolution", trigger: { atPly: 1 }, actions: [] }],
+  };
+}
+
+function root(document: DrillPackDefinition): DrillRun {
+  return createRun({
+    id: document.id,
+    session: {
+      kind: "pack",
+      packId: document.id,
+      packDigest: `sha256:${"a".repeat(64)}`,
+      start: {
+        fen: document.start.fen,
+        side: document.start.side === "black" ? "black" : "white",
+      },
+      feedbackPolicy: "delayed_checkpoint",
+      opponentPolicy: { mode: "human_common" },
+    },
+    sessionDigest: `sha256:${"a".repeat(64)}`,
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+    seed: 1,
+    createdAt: at,
+  });
+}
+
+describe("Outcome Drill grading", () => {
+  it.each([
+    ["win", "win", "achieved"], ["win", "draw", "failed"], ["win", "loss", "failed"],
+    ["hold", "win", "achieved"], ["hold", "draw", "achieved"], ["hold", "loss", "failed"],
+    ["save", "win", "achieved"], ["save", "draw", "achieved"], ["save", "loss", "failed"],
+  ] as const)("grades %s against %s as %s", (type, outcome, expected) => {
+    const document = pack(type);
+    const rules = objectiveRules(document).filter(
+      (rule) => rule.when.type === "outcomeReached" && rule.when.result === outcome,
+    );
+    expect(rules).toHaveLength(3);
+    expect(new Set(rules.map((rule) => rule.to))).toEqual(new Set([expected]));
+  });
+
+  it("grades a resist loss from path checkpoint history, not current state", () => {
+    const document = pack("resist");
+    const success = objectiveRules(document).filter(
+      (rule) => rule.to === "achieved" && rule.when.type === "all",
+    );
+    expect(success).toHaveLength(3);
+    expect(success.map((rule) => rule.from)).toEqual([
+      "active",
+      "preserved",
+      "degraded",
+    ]);
+    expect(success[0]!.when).toEqual({
+      type: "all",
+      predicates: [
+        { type: "outcomeReached", result: "loss" },
+        { type: "checkpointReached", checkpointId: "resolution" },
+      ],
+    });
+  });
+
+  it("rejects Pack C v0.1's root-true checkpoint and accepts v0.2", () => {
+    const current = JSON.parse(readFileSync(new URL("../../../content/drafts/rook-4v3-same-side.json", import.meta.url), "utf8")) as DrillPackDefinition;
+    const broken = structuredClone(current) as DrillPackDefinition;
+    (broken as { version: string }).version = "0.1.0";
+    (broken.checkpoints.find((checkpoint) => checkpoint.id === "still-holding") as any).trigger = {
+      materialBalance: { perspective: "black", comparison: "atLeast", value: -1 },
+    };
+    expect(validatePackDocument(broken).issues).toContainEqual(expect.objectContaining({ code: "CHECKPOINT_TRUE_AT_ROOT" }));
+    expect(validatePackDocument(current).valid).toBe(true);
+  });
+
+  it("does not emit a zero-length segment for coincident checkpoints", () => {
+    let run = root(pack("hold"));
+    run = reachCheckpoint(run, "first", at).run;
+    run = reachCheckpoint(run, "second", at).run;
+    expect(run.events.some((event) => event.type === "segment.completed")).toBe(false);
+  });
+});

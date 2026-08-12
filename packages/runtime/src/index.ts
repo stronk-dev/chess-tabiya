@@ -73,9 +73,13 @@ export {
 } from "./pack-pgn.js";
 export {
   ReplayError,
+  opponentMovesFromEvents,
   readBackReplay,
+  resistanceOnPath,
   type OpponentMoveReadback,
+  type PathResistance,
   type ReadBackReplay,
+  type ResistanceEngineCount,
 } from "./replay.js";
 export {
   appendOpponentPly,

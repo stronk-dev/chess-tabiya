@@ -7,6 +7,8 @@ import {
   commitMove,
   createRun,
   readBackReplay,
+  resistanceOnPath,
+  rewind,
   type DrillRun,
   type DrillRunEvent,
   type OpponentSelection,
@@ -111,5 +113,59 @@ describe("authoritative read-back replay", () => {
     expect(() => readBackReplay(events)).toThrowError(
       "selection payload and event move disagree",
     );
+  });
+
+  it("derives resistance from committed children without sibling leakage", () => {
+    let run = createRun({
+      id: "resistance-run",
+      session: {
+        kind: "pack",
+        packId: "replay-pack",
+        packDigest: `sha256:${"d".repeat(64)}`,
+        start: { fen: INITIAL_FEN, side: "white" },
+        feedbackPolicy: "delayed_checkpoint",
+        opponentPolicy: { mode: "theory_strict", targetElo: 1900 },
+      },
+      sessionDigest: `sha256:${"d".repeat(64)}`,
+      policyConfig: {
+        seedMode: "fixed",
+        locus: { executedAt: "server", engineIds: [], modelIds: [] },
+      },
+      seed: 5,
+      createdAt: at,
+    });
+    run = commitMove(run, "e2e4", { actor: "user", at }).run;
+    const parentId = run.activeCursor.nodeId;
+    const first = appendOpponentPly(run, opponent("e7e5"), { at }).run;
+    const firstLeaf = first.activeCursor.nodeId;
+    run = rewind(first, parentId, at).run;
+    const secondSelection = {
+      ...opponent("c7c5"),
+      engine: {
+        id: "other-opponent",
+        name: "Other opponent",
+        version: "2",
+        seedHonored: true,
+      },
+    };
+    const second = appendOpponentPly(run, secondSelection, { at }).run;
+    const secondLeaf = second.activeCursor.nodeId;
+
+    expect(resistanceOnPath(second, firstLeaf).engines).toEqual([
+      expect.objectContaining({
+        engine: expect.objectContaining({ id: "mock-opponent" }),
+        plyCount: 1,
+      }),
+    ]);
+    expect(resistanceOnPath(second, secondLeaf).engines).toEqual([
+      expect.objectContaining({
+        engine: expect.objectContaining({ id: "other-opponent" }),
+        plyCount: 1,
+      }),
+    ]);
+    expect(resistanceOnPath(second, secondLeaf).requested).toEqual({
+      mode: "theory_strict",
+      targetElo: 1900,
+    });
   });
 });
