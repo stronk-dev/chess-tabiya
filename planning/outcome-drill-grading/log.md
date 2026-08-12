@@ -52,3 +52,17 @@ Append-only.
 - Final documented-tree gates: `ENGINES_REQUIRED=1 make verify` passed 276 tests
   across 46 files with schema/packaging checks green; `make test-browser` passed
   all eight default flows with the tagged Maia latency case skipped as designed.
+
+## 2026-08-12 — D14 browser-gate diagnosis
+
+- Reproduced the reported flake without retries. The Najdorf flow and viewport
+  projection both observed a null bounding box for Chessground's private
+  `<cg-board>` during transient relayout; failure screenshots already showed the
+  stable, labeled board wrapper visibly rendered. The viewport test also used a
+  zero-count loading assertion that could complete before asynchronous run load
+  began.
+- Browser interaction and viewport assertions now synchronize on the component's
+  public `aria-label="Chessboard"` boundary and require it to be visible before
+  reading geometry. No retries, sleeps, or timeout increases were introduced.
+- Five consecutive complete `make test-browser` runs passed: 40 default flows in
+  total, with the tagged Maia latency case skipped each time as designed.

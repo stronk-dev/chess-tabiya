@@ -105,7 +105,8 @@ function squarePoint(
 }
 
 async function move(page: Page, from: string, to: string): Promise<void> {
-  const board = page.locator("cg-board");
+  const board = page.getByLabel("Chessboard");
+  await expect(board).toBeVisible();
   await board.evaluate(
     (element) =>
       new Promise<void>((resolve) =>
@@ -123,7 +124,14 @@ async function move(page: Page, from: string, to: string): Promise<void> {
 }
 
 async function clickMove(page: Page, from: string, to: string): Promise<void> {
-  const board = page.locator("cg-board");
+  const board = page.getByLabel("Chessboard");
+  await expect(board).toBeVisible();
+  await board.evaluate(
+    (element) =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
   const box = await board.boundingBox();
   if (box === null) throw new Error("Chessground board has no bounding box");
   const origin = squarePoint(box, from);
@@ -158,7 +166,7 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
     .filter({ hasText: "schema example" })
     .getByRole("button", { name: /Open position/ })
     .click();
-  await expect(page.locator("cg-board")).toBeVisible();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
   const boardReadyMs =
     (await page.evaluate(() => performance.now())) - boardStart;
 
@@ -310,7 +318,7 @@ test("Pack A reveals only the authored commentary for the checkpoint occurrence"
   await expect(card).toBeVisible();
   await card.getByRole("button", { name: /Open position/ }).click();
 
-  await expect(page.locator("cg-board")).toBeVisible();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByText("Active line 1 plies")).toBeVisible();
   await expect(page.getByText("Authored commentary withheld until checkpoints")).toBeVisible();
   await move(page, "g1", "f3");
@@ -338,7 +346,7 @@ test("a granted spectator follows a run without receiving a write control", asyn
     .getByRole("article")
     .filter({ hasText: "Caro-Kann Advance: winning the c5 race" });
   await card.getByRole("button", { name: /Open position/ }).click();
-  await expect(page.locator("cg-board")).toBeVisible();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
   const runId = decodeURIComponent(new URL(page.url()).pathname.split("/").at(-1)!);
   const writerId = await page.evaluate((id) =>
     localStorage.getItem(`chess-tabiya:run:${id}:writer-id`), runId);
@@ -354,7 +362,7 @@ test("a granted spectator follows a run without receiving a write control", asyn
   expect(grant.ok(), await grant.text()).toBe(true);
 
   await spectator.goto(`/play/run/${encodeURIComponent(runId)}`);
-  await expect(spectator.locator("cg-board")).toBeVisible();
+  await expect(spectator.getByLabel("Chessboard")).toBeVisible();
   await expect(spectator.getByText("Read-only", { exact: true })).toBeVisible();
   await expect(spectator.getByRole("button", { name: "Take the board on this device" })).toHaveCount(0);
 
@@ -380,7 +388,7 @@ test("every shell route owns the viewport at both desktop projections", async ({
       .filter({ hasText: "schema example" })
       .getByRole("button", { name: /Open position/ })
       .click();
-    await expect(page.locator("cg-board")).toBeVisible();
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
     const runPath = new URL(page.url()).pathname;
     const routes = [
       "/",
@@ -407,7 +415,9 @@ test("every shell route owns the viewport at both desktop projections", async ({
       ).toBeLessThanOrEqual(dimensions.clientHeight + 1);
 
       if (route === runPath) {
-        const board = await page.locator("cg-board").boundingBox();
+        const boardElement = page.getByLabel("Chessboard");
+        await expect(boardElement).toBeVisible();
+        const board = await boardElement.boundingBox();
         const timeline = await page.locator(".timeline-row").boundingBox();
         expect(board).not.toBeNull();
         expect(timeline).not.toBeNull();
