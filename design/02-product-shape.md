@@ -20,7 +20,7 @@ planning. A surface can be excluded only by a fresh owner ruling; otherwise it
 must reach a minimal real end-to-end implementation before content becomes the
 main work.
 
-## Product posture — OPEN (exploration Q2)
+## Product posture — two axes SETTLED, two OPEN (exploration Q2)
 
 Four decisions must not be collapsed into a "paid vs OSS vs self-hosted" choice:
 
@@ -48,9 +48,9 @@ must be encoded in each pack's `provenance`, and pack prose cannot be
 relicensed unilaterally later.
 
 **Deployment axis — SETTLED 2026-08-12 (owner ruling): hosted multi-user.**
-Supersedes the self-hosted working default on this axis only; source model,
-monetization, and content/data rights are unchanged and remain OSS-compatible
-build-for-self with no assumed revenue model.
+Supersedes the self-hosted working default on this axis only. **Still open:
+source model and monetization**, which remain OSS-compatible build-for-self with
+no assumed revenue model until ruled.
 
 What follows mechanically, and is scheduled rather than open:
 
