@@ -158,14 +158,56 @@ rows below are green or explicitly removed by a new owner ruling:
 
 | Gate | Minimal real proof | Current state |
 |---|---|---|
-| B1 — shell and entry | stable shell routes Play/Learn/Review/Live/Create/Library/Settings; resume works | unmet |
-| B2 — solo modes | Just Play plus Line, Plan, Outcome, and organic/guided Trajectory each complete one fixture run | Plan slice only |
-| B3 — review | manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise partial |
-| B4 — evidence | authored, Stockfish, Maia, corpus/historical, Syzygy, structural/temporal, and LLM-rendered layers work with timing controls | worker plumbing partial; UI unmet |
-| B5 — live | Twitch host/chat/overlay, academy roles, and external Position Arena handoff each complete one scenario | unmet |
-| B6 — create | pack studio/import/review/session-distill workflow produces and validates a fixture; corpus mining emits one unpublished candidate | schema/lint only |
-| B7 — return | history/resume, progress, concept scheduling, related retry, and optional recommendation work | resume partial |
-| B8 — platform | desktop shell, responsive/PWA transformation, self-hosted engines/providers, read-only share links, accessibility | deployment partial |
+| B1 — shell and entry | stable shell routes Play/Learn/Review/Live/Create/Library/Settings; resume works | **met with residuals** — `/settings` has no form control, `phase` is never projected, the drill-address grammar has no route |
+| B2 — solo modes | Just Play plus Line, Plan, Outcome, and organic/guided Trajectory each complete one fixture run | Plan only; Line half-real by accident; Outcome/Trajectory zero code; Just Play blocked on F2 |
+| B3 — review | manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise partial — and pairwise is a **runtime type** constraint that cannot be composed into N-way |
+| B4 — evidence | authored, Stockfish, Maia, corpus/historical, Syzygy, structural/temporal, and LLM-rendered layers work with timing controls | authored prose has no surface (blocked on F1) — **not blocked on content**; Maia already persisted and reaching the browser; corpus/Syzygy/LLM unmet |
+| B5 — live | Twitch host/chat/overlay, academy roles, and external Position Arena handoff each complete one scenario | unmet; follower loop already works, so spectating is nearer than this implies. Blocked on D1, F3, F1, and PGN import |
+| B6 — create | pack studio/import/review/session-distill workflow produces and validates a fixture; corpus mining emits one unpublished candidate | validation/lint/digest/graduation ship; no write endpoint, no UI, no importer, no mining |
+| B7 — return | history/resume, progress, concept scheduling, related retry, and optional recommendation work | history/resume ship; all else blocked on F3 (no subject exists in source) |
+| B8 — platform | desktop shell, responsive/PWA transformation, self-hosted engines/providers, read-only share links, accessibility | deployment packaging shipped in full (this row was understated); residual is the release compose's missing light profile; share links blocked on D1 |
+
+## The foundation edge (added 2026-08-12 after the alignment pass)
+
+Six code-verified passes over the whole surface (`planning/breadth/`) found that
+the work missing across all eight program items reduces to **three absent
+primitives**. They cut across the program rather than sitting inside any one
+item, they are mutually independent, and each is small in isolation:
+
+- **F1 — per-scope reveal.** Withholding is one boolean per run, so reaching one
+  checkpoint would release authored prose for all of them. Blocks the B4
+  explanation surface, the streamer overlay (which needs per-viewer withholding),
+  and coach-reveals-prose.
+- **F2 — pack-optional run identity.** A pack is mandatory at six layers, so
+  Just Play, from-position starts, Arena leg import, and the pack playtest
+  harness are all blocked on the same change. The withholding barrier currently
+  *fails open* when no pack is present, so that fix must land in the same slice.
+- **F3 — a subject.** No learner identity exists anywhere in the system. Blocks
+  all of B7, both non-host roles in B5, and the fix for the writer-lease
+  credential leak. The hosted-multi-user ruling (`design/02`) makes this a real
+  auth boundary rather than a local profile.
+
+Two structural facts shape how the rest of the program should be estimated.
+First, the foundation RFCs cut contracts that shipped, were tested, and have
+**zero producers** — `outcome.reached`, `transfer.scheduled`,
+`human_model_predicted`, `feedback.generated`, the prediction-checkpoint
+interaction, the drill-address grammar, the generic predicate evaluator. Breadth
+-first worked: what remains is mostly producers and surfaces, not design. Second,
+the mirror risk is that such a slot reads exactly like a working feature, which
+is how five RFC drafts died — so every breadth claim now carries a code citation.
+
+Item #1 is therefore **not finished**: its residuals (`/settings` with no
+controls, `phase` never projected, the address grammar unrouted) are inherited by
+items #3, #5 and #7 and belong to this edge rather than to whichever later item
+trips over them.
+
+**Just Play's interruption model — SETTLED 2026-08-12 (owner ruling): a passive
+marker the player may open.** Recognition annotates the timeline; the player
+chooses when to look. This preserves the uninterrupted-consequence stage of the
+attempt, degrades honestly when recognition abstains, keeps recognition
+non-authoritative over curated pack boundaries, and sets a materially lower
+confidence bar than a model that may interrupt — so deterministic features can
+ship without waiting for learned recognition.
 
 ## Provisional foundations-first RFC program
 

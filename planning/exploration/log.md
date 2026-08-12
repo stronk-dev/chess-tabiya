@@ -711,3 +711,36 @@ phase-scoped units are artificial because play interleaves across phases. Both
 objections are correct and the terminology is the agent's fault. Answered in
 conversation; a definition owed to `01-training-model.md` before this is asked
 again.
+
+## 2026-08-12 (claude) — design amended on the rulings; first post-alignment RFC drafted
+
+- **`01-training-model.md`** gains a Vocabulary section defining *attempt*
+  (formerly the undefined "episode" — one pass through orient/commit/play/
+  compare, and in the runtime literally a branch of a run), *return loop*, and
+  *concept*. Repetition scheduling now states the ruling that came out of the
+  owner's pushback: **attempts are scheduled, concepts select among them, phase
+  is never a scheduling key.** The phase point is the owner's — packs carry a
+  phase label but play interleaves across phases, so scheduling by phase would
+  contradict the trajectory claim the product rests on.
+- **`02-product-shape.md`** deployment axis settled as hosted multi-user, with
+  the five mechanical consequences written down rather than discovered later
+  (real identity boundary; the writer lease is not an authorization model;
+  AGPL §13 binds; hosting cost is now a constraint against the browser-engines
+  posture; ADR-0004 needs an explicit re-decision).
+- **`03-product-breadth.md`** gains a Foundation edge section (F1/F2/F3, the
+  zero-producer pattern, item #1's residuals) and records the Just Play ruling:
+  **passive marker the player may open**. Gate table refreshed against verified
+  state — B1 met-with-residuals, B8 was understated on packaging and overstated
+  on Settings.
+- **`rfc/authored-explanation-surface.md` drafted** (F1 + first rendering
+  surface). Deliberately narrow after five withdrawals: reveal scope is derived
+  from checkpoint position rather than authored, so it introduces **zero new
+  authored vocabulary**; claim triggers, LLM rendering, corpus/Syzygy and live
+  deviation classification are all explicitly out of scope with reasons. It also
+  fixes D2 (the barrier fails open) inside the same change, since that defect
+  goes live the moment F2 lands. Two open questions left honestly open rather
+  than guessed: the synthetic tail-scope id, and the segment-end mapping.
+- Note for the reviewer: the code comment at `pack-registry.ts:42-44` already
+  names this exact missing contract. The RFC is written against that seam rather
+  than against the withdrawn RFCs, which describe infrastructure that never
+  existed.

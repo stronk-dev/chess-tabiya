@@ -38,9 +38,30 @@ not prohibit charging; exact source/distribution obligations depend on architect
 deployment and require review before public or proprietary release
 (`archive/brief-v2/08_ENGINE_CORPUS_AND_CONTENT.md` §Licensing notes).
 
-**Working default until Q2 is decided:** build-for-self, self-hostable, OSS-compatible
-dependencies, no assumed revenue model. Do not contort exploration merely to preserve an
-unspecified proprietary option.
+**Deployment axis — SETTLED 2026-08-12 (owner ruling): hosted multi-user.**
+Supersedes the self-hosted working default on this axis only; source model,
+monetization, and content/data rights are unchanged and remain OSS-compatible
+build-for-self with no assumed revenue model.
+
+What follows mechanically, and is scheduled rather than open:
+
+- **Identity is a real boundary.** Accounts, authentication, and per-viewer
+  authorization — not a local profile. Nothing in the current system has any
+  notion of a user.
+- **The writer lease is not an authorization model.** It is a concurrency guard
+  that today publishes its own credential to unauthenticated readers. On a
+  hosted deployment that is the whole access-control story, so closing it is a
+  prerequisite to hosting, not a hardening task afterwards.
+- **AGPL-3.0 §13 now binds.** Network use triggers the source-offer obligation.
+  This is consistent with the chosen licence and with Maia-3's own AGPL, but the
+  user-facing source offer must actually exist before the service is public.
+- **Hosting cost becomes a real constraint.** The browser-run-engines posture was
+  justified by keeping serving near-static; per-user server-side engine work now
+  has a bill attached. The archive's own scoring (self-hosted 9/10, SaaS 5/10)
+  is context for that cost, not a reason to revisit the ruling.
+- **ADR-0004's revisit trigger has fired.** A fired trigger is not a reversal:
+  a modular monolith remains a defensible architecture for a hosted deployment.
+  It needs an explicit re-decision that adds the auth boundary, not a rewrite.
 
 ## Platform — OPEN (exploration Q3)
 
