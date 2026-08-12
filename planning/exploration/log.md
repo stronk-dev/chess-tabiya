@@ -1098,3 +1098,41 @@ that the defect existed.
   runtime/client/explanation docs; all four sourcing slices in `docs/content-sourcing.md`.
 - Migration register entries 2, 3, and 4 are implemented, with the duplicate draft row for
   migration 4 removed.
+
+## 2026-08-12 (claude) — Outcome Drill grading implemented and archived; D14 closed
+
+Program item #4's first mode landed after three review rounds. Verified
+independently rather than on report: `ENGINES_REQUIRED=1 make verify` green at
+276 tests across 46 files, and the browser gate run **five** more times at zero
+retries, all green.
+
+**D14 is the finding worth keeping.** On the first independent run of the
+implementation gate, a browser test failed; four reruns on the unchanged tree
+passed. One in five, with `retries` unset and `workers: 1`, so a single flake
+fails the suite — and that suite is what every RFC closeout in this session was
+verified against, including the seven-RFC batch. A gate that can report either
+answer on identical code is not evidence.
+
+It was diagnosed rather than masked, which was the right call and not the
+tempting one: the tests were targeting Chessground's **private** `<cg-board>`
+element during transient relayout, and now synchronize on the stable public
+`aria-label="Chessboard"` wrapper with a visible-geometry requirement.
+`retries` is still unset, so the fix had to be demonstrated instead of hidden.
+Raising retries would have converted a visible flake into an invisible one.
+
+Recorded because it generalizes: the flake only surfaced because the gate was
+re-run by a second party. It fired for me and not for the implementer, on the
+same commit.
+
+**Also corrected: a false statement I had written into Pack C's provenance.**
+When D12 was ledgered I put "UNPLAYABLE AS AUTHORED — do not publish" into
+`provenance.sources`. The encoding landed, the pack was repaired, and that text
+became false in the one field whose entire purpose is being true. Replaced with
+the historical record. The lesson is narrow and worth holding: a warning written
+into content is a claim with a lifetime, and closing the defect it describes is
+the moment it becomes a lie.
+
+Defect tally: **10 of 15 closed** (D1, D2, D3, D11, D12, D12a, D12b, D12c, D13,
+D14). Open: D4 vocabulary drift, D5 release compose light profile, D6 `phase`
+unprojected, D7 deviations unlinted, D9 `start.side`, D10 anonymous engine
+provenance.
