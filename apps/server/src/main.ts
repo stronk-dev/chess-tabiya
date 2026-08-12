@@ -14,9 +14,17 @@ if (engineMode !== "mock" && engineMode !== "maia") {
 }
 
 const port = integer(process.env.PORT, 3000);
+const development = process.env.NODE_ENV === "development";
+if (process.env.DRAFT_PACK_FILE !== undefined && !development) {
+  throw new TypeError("DRAFT_PACK_FILE requires NODE_ENV=development");
+}
 const application = await createApplication({
+  development,
   engineMode,
   databasePath: process.env.DATABASE_PATH ?? ":memory:",
+  ...(process.env.DRAFT_PACK_FILE === undefined
+    ? {}
+    : { draftPackFile: process.env.DRAFT_PACK_FILE }),
   ...(process.env.STATIC_DIRECTORY === undefined
     ? {}
     : { staticDirectory: process.env.STATIC_DIRECTORY }),

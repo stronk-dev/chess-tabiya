@@ -39,6 +39,8 @@ export type EngineMode = "mock" | "maia";
 
 export interface ApplicationOptions {
   readonly databasePath?: string;
+  readonly development?: boolean;
+  readonly draftPackFile?: string;
   readonly engineMode?: EngineMode;
   readonly staticDirectory?: string;
   readonly maiaHost?: string;
@@ -248,7 +250,12 @@ export async function createApplication(
 ): Promise<ChessTabiyaApplication> {
   const databasePath = options.databasePath ?? ":memory:";
   if (databasePath !== ":memory:") await mkdir(dirname(databasePath), { recursive: true });
-  const registry = await PackRegistry.loadDefault();
+  const registry = await PackRegistry.loadDefault({
+    development: options.development === true,
+    ...(options.draftPackFile === undefined
+      ? {}
+      : { draftFile: options.draftPackFile }),
+  });
   const storage = new SQLiteRunStorage(databasePath);
   const engineMode = options.engineMode ?? "mock";
   let supervisor: EngineSupervisor | undefined;

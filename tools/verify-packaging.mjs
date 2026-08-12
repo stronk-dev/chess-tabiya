@@ -54,4 +54,11 @@ required(
   "Devcontainer must include Stockfish",
 );
 
+required(
+  readFileSync(".dockerignore", "utf8")
+    .split(/\r?\n/u)
+    .includes("content/drafts"),
+  "Production image context must exclude content/drafts",
+);
+
 console.log("packaging verification: OK");

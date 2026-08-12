@@ -10,6 +10,7 @@ const requiredDirectories = [
   "packages/schema",
   "workers",
   "content/packs",
+  "content/drafts",
   "schemas",
 ];
 

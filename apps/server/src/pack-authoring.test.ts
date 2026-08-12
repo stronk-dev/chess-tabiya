@@ -1,0 +1,168 @@
+import { readFileSync } from "node:fs";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import { afterEach, describe, expect, it } from "vitest";
+
+import { checkPackFile, formatPackIssue } from "./pack-check.js";
+import { PackRegistry } from "./pack-registry.js";
+import { validatePackDocument } from "./pack-validation.js";
+
+const fixture = JSON.parse(
+  readFileSync(
+    new URL("../../../schemas/drill_pack.example.json", import.meta.url),
+    "utf8",
+  ),
+) as DrillPackDefinition;
+const temporaryDirectories: string[] = [];
+
+async function temporaryDirectory(): Promise<string> {
+  const directory = await mkdtemp(join(tmpdir(), "chess-tabiya-pack-authoring-"));
+  temporaryDirectories.push(directory);
+  return directory;
+}
+
+afterEach(async () => {
+  await Promise.all(
+    temporaryDirectories.splice(0).map((directory) =>
+      rm(directory, { recursive: true, force: true }),
+    ),
+  );
+});
+
+describe("pack authoring validation", () => {
+  it("reports living-schema failures with JSON pointers", () => {
+    const { title: _title, ...missingTitle } = structuredClone(
+      fixture as unknown as Record<string, unknown>,
+    );
+    const result = validatePackDocument(missingTitle);
+
+    expect(result.valid).toBe(false);
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({
+        source: "schema",
+        severity: "error",
+        code: "SCHEMA_REQUIRED",
+        path: "/title",
+      }),
+    );
+  });
+
+  it("combines shipped chess lints and executable-policy checks", () => {
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate.spine![0] as { moveUci: string }).moveUci = "a1a8";
+    (candidate as unknown as Record<string, unknown>).feedbackPolicy =
+      "immediate_blunder_guard";
+    (
+      (candidate as unknown as Record<string, unknown>)
+        .opponentPolicy as Record<string, unknown>
+    ).mode = "plan_defense";
+    const result = validatePackDocument(candidate);
+
+    expect(result.valid).toBe(false);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          source: "lint",
+          code: "ILLEGAL_SPINE_MOVE",
+          path: "/spine/0/moveUci",
+        }),
+        expect.objectContaining({
+          source: "runtime",
+          code: "UNSUPPORTED_FEEDBACK_POLICY",
+          path: "/feedbackPolicy",
+        }),
+        expect.objectContaining({
+          source: "runtime",
+          code: "UNSUPPORTED_OPPONENT_POLICY",
+          path: "/opponentPolicy/mode",
+        }),
+      ]),
+    );
+  });
+
+  it("checks files without stack traces and keeps warnings non-fatal", async () => {
+    const directory = await temporaryDirectory();
+    const invalidPath = join(directory, "invalid.json");
+    await writeFile(invalidPath, "{ not json", "utf8");
+    const invalid = await checkPackFile(invalidPath);
+    expect(invalid.valid).toBe(false);
+    expect(formatPackIssue(invalid.issues[0]!)).toMatch(
+      /^ERROR \/ \[INVALID_JSON\] /,
+    );
+    expect(formatPackIssue(invalid.issues[0]!)).not.toContain("\n");
+
+    const warningPath = join(directory, "warning.json");
+    const prediction = fixture.checkpoints.find(
+      (checkpoint) => checkpoint.interaction?.type === "prediction",
+    )!;
+    await writeFile(
+      warningPath,
+      JSON.stringify({
+        ...fixture,
+        id: "warning-pack",
+        checkpoints: [
+          ...fixture.checkpoints,
+          { ...prediction, id: "prediction-two" },
+          { ...prediction, id: "prediction-three" },
+        ],
+      }),
+      "utf8",
+    );
+    const warning = await checkPackFile(warningPath);
+    expect(warning.valid).toBe(true);
+    expect(warning.issues).toContainEqual(
+      expect.objectContaining({
+        severity: "warning",
+        code: "TOO_MANY_PREDICTIONS",
+        path: "/checkpoints",
+      }),
+    );
+  });
+});
+
+describe("development draft registry", () => {
+  it("ignores committed drafts in production and loads them in development", async () => {
+    const directory = await temporaryDirectory();
+    const draft = {
+      ...structuredClone(fixture),
+      id: "development-only-pack",
+      title: "Development-only pack",
+    };
+    await writeFile(join(directory, "draft.json"), JSON.stringify(draft), "utf8");
+
+    const production = await PackRegistry.loadDefault({
+      development: false,
+      draftsDirectory: directory,
+    });
+    expect(production.get(draft.id)).toBeUndefined();
+
+    const development = await PackRegistry.loadDefault({
+      development: true,
+      draftsDirectory: directory,
+    });
+    expect(development.required(draft.id).summary.title).toBe(draft.title);
+  });
+
+  it("lets an explicit development draft replace its published id", async () => {
+    const directory = await temporaryDirectory();
+    const draftPath = join(directory, "replacement.json");
+    await writeFile(
+      draftPath,
+      JSON.stringify({ ...structuredClone(fixture), title: "Draft replacement" }),
+      "utf8",
+    );
+
+    const registry = await PackRegistry.loadDefault({
+      development: true,
+      draftsDirectory: join(directory, "empty"),
+      draftFile: draftPath,
+    });
+    expect(registry.required(fixture.id).summary.title).toBe("Draft replacement");
+    await expect(
+      PackRegistry.loadDefault({ development: false, draftFile: draftPath }),
+    ).rejects.toThrow("Draft packs may only be loaded in development mode");
+  });
+});

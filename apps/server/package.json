@@ -4,12 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild src/main.ts --bundle --platform=node --format=esm --outfile=dist/main.js",
+    "build": "esbuild src/main.ts src/pack-check.ts --bundle --platform=node --format=esm --outdir=dist",
+    "preview": "node --watch-preserve-output --watch-path=\"$DRAFT_PACK_FILE\" dist/main.js",
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "@chess-tabiya/runtime": "workspace:*",
     "@chess-tabiya/schema": "workspace:*",
+    "ajv": "8.17.1",
+    "ajv-formats": "3.0.1",
     "chessops": "0.15.1"
   },
   "devDependencies": {

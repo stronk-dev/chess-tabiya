@@ -24,6 +24,7 @@ directory.
 | `apps/web` | Svelte 5 browser client |
 | `workers` | Isolated data workers and the containerized Maia sidecar |
 | `content/packs` | Reviewed drill packs |
+| `content/drafts` | Versioned author/reviewer workspace; development-only serving |
 | `schemas` | Living JSON Schemas |
 
 Internal package names use the private `@chess-tabiya/*` scope; they are not published
@@ -44,6 +45,8 @@ pnpm install
 make verify
 make build
 make test-browser
+make pack-check FILE=content/drafts/my-pack.json
+make pack-preview FILE=content/drafts/my-pack.json
 make up
 make up-engines
 make down
@@ -54,6 +57,20 @@ fast-check runtime invariants), and schema/scaffold plus deployment-manifest
 verification. `make build` separately proves the Svelte production bundle.
 `make test-browser` builds and starts the default mock-backed application and
 runs the full Playwright episode in a separate browser CI job.
+
+`make pack-check FILE=<path>` validates a draft against the living pack schema,
+the shipped chess lints, and the policies the current server can execute. It
+prints errors and warnings with JSON Pointer paths and exits non-zero on an
+invalid draft. `make pack-preview FILE=<path>` first runs that check, then
+starts the built application in development mode with the selected draft in
+the registry; Node restarts the preview when that file changes. Drafts may
+replace a reviewed pack with the same id during preview, so edits can be tested
+without moving files into `content/packs/`.
+
+`content/drafts/` is committed because the agent-authored, owner-reviewed
+revision history is part of the content-production evidence. The registry
+reads it only in development mode, rejects an explicit draft in production,
+and the Docker build context excludes it entirely.
 
 `make up` starts the production bundle with the deterministic mock opponent.
 `make up-engines` adds the healthchecked Maia sidecar and uses Stockfish from

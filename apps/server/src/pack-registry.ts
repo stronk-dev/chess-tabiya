@@ -4,12 +4,11 @@ import { fileURLToPath } from "node:url";
 
 import {
   digestDrillPack,
-  lintDrillPack,
   type DrillPackDefinition,
 } from "@chess-tabiya/schema/drill-pack";
 
 import { ServerError } from "./errors.js";
-import { SUPPORTED_POLICY_MODES } from "./capabilities.js";
+import { validatePackDocument } from "./pack-validation.js";
 
 export type FeedbackPolicy = "delayed_checkpoint" | "segment_end";
 
@@ -30,101 +29,17 @@ export interface PackRecord {
   readonly feedbackPolicy: FeedbackPolicy;
 }
 
-function object(value: unknown, label: string): Record<string, unknown> {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw new ServerError("PACK_INVALID", `${label} must be an object`);
-  }
-  return value as Record<string, unknown>;
-}
-
-function string(value: unknown, label: string): string {
-  if (typeof value !== "string" || value.trim() === "") {
-    throw new ServerError("PACK_INVALID", `${label} must be a non-empty string`);
-  }
-  return value;
-}
-
 function validatedDocument(value: unknown, source: string): DrillPackDefinition {
-  const pack = object(value, `Pack ${source}`);
-  const start = object(pack.start, `${source}.start`);
-  const objective = object(pack.objective, `${source}.objective`);
-  if (!Array.isArray(pack.checkpoints)) {
-    throw new ServerError("PACK_INVALID", `${source}.checkpoints must be an array`);
-  }
-  string(pack.id, `${source}.id`);
-  string(pack.version, `${source}.version`);
-  string(pack.title, `${source}.title`);
-  string(pack.mode, `${source}.mode`);
-  string(start.fen, `${source}.start.fen`);
-  string(objective.type, `${source}.objective.type`);
-  const checkpointIds = new Set(
-    pack.checkpoints.map((value, index) => {
-      const checkpoint = object(value, `${source}.checkpoints[${index}]`);
-      object(checkpoint.trigger, `${source}.checkpoints[${index}].trigger`);
-      return string(checkpoint.id, `${source}.checkpoints[${index}].id`);
-    }),
-  );
-  if (objective.successConditions !== undefined) {
-    if (!Array.isArray(objective.successConditions)) {
-      throw new ServerError(
-        "PACK_INVALID",
-        `${source}.objective.successConditions must be an array`,
-      );
-    }
-    for (const [index, value] of objective.successConditions.entries()) {
-      const condition = object(
-        value,
-        `${source}.objective.successConditions[${index}]`,
-      );
-      if (
-        condition.kind !== "reach_checkpoint" ||
-        typeof condition.checkpointId !== "string" ||
-        !checkpointIds.has(condition.checkpointId)
-      ) {
-        throw new ServerError(
-          "PACK_INVALID",
-          `${source}.objective.successConditions[${index}] is not a supported v1 checkpoint rule`,
-        );
-      }
-    }
-  }
-  const feedbackPolicy = string(pack.feedbackPolicy, `${source}.feedbackPolicy`);
-  if (feedbackPolicy === "immediate_blunder_guard") {
+  const result = validatePackDocument(value);
+  if (!result.valid || result.document === undefined) {
+    const errors = result.issues.filter((issue) => issue.severity === "error");
     throw new ServerError(
       "PACK_INVALID",
-      `${source} uses immediate_blunder_guard, which is not supported in v1`,
-    );
-  }
-  if (feedbackPolicy !== "delayed_checkpoint" && feedbackPolicy !== "segment_end") {
-    throw new ServerError(
-      "PACK_INVALID",
-      `${source}.feedbackPolicy is not a supported v1 policy`,
-    );
-  }
-  const opponentPolicy = object(pack.opponentPolicy, `${source}.opponentPolicy`);
-  const opponentMode = string(
-    opponentPolicy.mode,
-    `${source}.opponentPolicy.mode`,
-  );
-  if (!SUPPORTED_POLICY_MODES.some((mode) => mode === opponentMode)) {
-    throw new ServerError(
-      "PACK_INVALID",
-      `${source}.opponentPolicy.mode ${opponentMode} is not selectable in v1`,
-    );
-  }
-  const provenance = object(pack.provenance, `${source}.provenance`);
-  string(provenance.reviewStatus, `${source}.provenance.reviewStatus`);
-
-  const document = structuredClone(pack) as unknown as DrillPackDefinition;
-  const errors = lintDrillPack(document).filter((issue) => issue.severity === "error");
-  if (errors.length > 0) {
-    throw new ServerError(
-      "PACK_INVALID",
-      `Pack ${source} failed lint: ${errors.map((issue) => issue.code).join(", ")}`,
+      `Pack ${source} is invalid: ${errors.map((issue) => issue.message).join("; ")}`,
       { details: { source, issues: errors } },
     );
   }
-  return document;
+  return result.document;
 }
 
 function freeze<T>(value: T): T {
@@ -161,11 +76,12 @@ export class PackRegistry {
 
   static async fromDocuments(
     documents: readonly { readonly source: string; readonly value: unknown }[],
+    options: { readonly replaceDuplicates?: boolean } = {},
   ): Promise<PackRegistry> {
     const records = new Map<string, PackRecord>();
     for (const { source, value } of documents) {
       const document = freeze(validatedDocument(value, source));
-      if (records.has(document.id)) {
+      if (records.has(document.id) && options.replaceDuplicates !== true) {
         throw new ServerError(
           "PACK_INVALID",
           `Duplicate pack id ${document.id} from ${source}`,
@@ -192,21 +108,48 @@ export class PackRegistry {
     return new PackRegistry(records);
   }
 
-  static async loadDefault(): Promise<PackRegistry> {
+  static async loadDefault(
+    options: {
+      readonly development?: boolean;
+      readonly draftFile?: string;
+      readonly draftsDirectory?: string;
+    } = {},
+  ): Promise<PackRegistry> {
     const fixture = fileURLToPath(
       new URL("../../../schemas/drill_pack.example.json", import.meta.url),
     );
     const contentDirectory = fileURLToPath(
       new URL("../../../content/packs/", import.meta.url),
     );
-    const paths = [fixture, ...(await jsonFiles(contentDirectory))];
+    const draftsDirectory =
+      options.draftsDirectory ??
+      fileURLToPath(new URL("../../../content/drafts/", import.meta.url));
+    if (options.draftFile !== undefined && options.development !== true) {
+      throw new TypeError("Draft packs may only be loaded in development mode");
+    }
+    const productionPaths = [fixture, ...(await jsonFiles(contentDirectory))];
+    const draftPaths =
+      options.development === true
+        ? [
+            ...(await jsonFiles(draftsDirectory)),
+            ...(options.draftFile === undefined ? [] : [options.draftFile]),
+          ]
+        : [];
+    const paths = [
+      ...productionPaths,
+      ...draftPaths.filter(
+        (path, index, candidates) => candidates.indexOf(path) === index,
+      ),
+    ];
     const documents = await Promise.all(
       paths.map(async (path) => ({
         source: path,
         value: JSON.parse(await readFile(path, "utf8")) as unknown,
       })),
     );
-    return PackRegistry.fromDocuments(documents);
+    return PackRegistry.fromDocuments(documents, {
+      replaceDuplicates: options.development === true,
+    });
   }
 
   list(): readonly PackSummary[] {
