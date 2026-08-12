@@ -1,10 +1,12 @@
 # Explanation grounds
 
-Tabiya's first explanation layer renders only evidence already recorded by the
-run. It does not generate strategic prose, infer authored theory, or ask an LLM
-to invent why a move worked. Its shipped purpose is narrower: when two branches
-are compared, show why an objective changed and show the engine evaluations
-that were durably attached along each path.
+Tabiya's explanation layer renders only evidence already recorded by the run or
+prose explicitly stored in its registered drill pack. It does not generate
+strategic prose, infer authored theory, or ask an LLM to invent why a move
+worked. It supports two grounded surfaces: branch comparison shows why an
+objective changed and the engine evaluations durably attached along each path;
+checkpoint reveal shows authored commentary only after the learner reaches the
+relevant path-relative boundary.
 
 This page is the cross-system contract. Runtime payload details remain in
 `docs/branch-runtime.md`; client episode behavior remains in
@@ -78,8 +80,53 @@ This gate closes a real information leak. Before the implementation,
 checkpoint. The regression test was first run against that behavior and failed
 at the leaked reference before the gate was added.
 
-The reveal decision is deliberately pack-wide. Per-scope or path-relative
-reveal rules are not implemented.
+This engine-evidence decision remains pack-wide. Authored commentary uses the
+separate path-relative contract below; it does not change the existing graph,
+event, evidence, or comparison gates.
+
+## Authored checkpoint reveal
+
+`GET /packs/:id` never contains authored annotations, deviations, plan classes,
+claims, concepts, checkpoint triggers, or other pre-play commentary. That wire
+projection remains the anti-contamination boundary. The run-scoped endpoint
+`GET /runs/:id/authored-feedback` is the only shipped path for returning
+authored prose.
+
+The server derives reveal from the append-only run log rather than an authored
+scope field or a canonical spine walk. For `delayed_checkpoint`, every
+`checkpoint.reached` event reveals previously unseen supported items on that
+event's actual root-to-node path. For `segment_end`, a `segment.completed`
+event does the same through its end node and attributes disclosure to the end
+checkpoint occurrence. Rewinds do not delete events, so revealed prose remains
+revealed: a learner cannot unsee it.
+
+Exactly three authored shapes are delivered:
+
+- each `spine[].annotations[]` entry, identified as
+  `<spineNodeId>#<annotationIndex>`;
+- each spine-node deviation that has a `note`, identified as
+  `deviation#<arrayIndex>`; and
+- each referenced intent-capture plan class, carrying its required label and
+  optional description, identified as `planClass#<id>`.
+
+Concept identifiers, unanchored feedback claims, note-less deviations, and
+FEN-anchored deviations remain absent. Deviation commentary is about the
+decision point and therefore reveals when its anchor node is in scope whether
+or not the learner chose that move.
+
+Every item carries `revealedBy: {checkpointId, eventSeq}`. Event sequence is
+load-bearing: a checkpoint id may recur on different branches and reveal
+different material. The checkpoint sheet filters on the exact occurrence;
+timeline markers appear only for items already returned. The response exposes
+only one pre-completion fact,
+`hasWithheldAuthoredContent`, and counts only supported items that some
+checkpoint can deliver. It never discloses a per-node count or marker before
+reveal.
+
+`pack-check` warns with `AUTHORED_PROSE_AFTER_LAST_CHECKPOINT` when
+spine-anchored prose is outside every statically resolvable `atSpineNode`
+checkpoint path. If any checkpoint uses a dynamic trigger, the warning is
+suppressed rather than guessing reachability.
 
 ## Grounded objective rendering
 
@@ -132,7 +179,12 @@ Coverage spans the seams of the feature:
   score forms and fork alignment, and asserts throw-on-empty; and
 - the Playwright walkthrough waits for writer-applied evidence before opening
   compare, then requires a grounded objective sentence and one recorded entry
-  per side at the fork.
+  per side at the fork;
+- server projection tests exercise Pack A's sibling roots, repeated checkpoint
+  ids, segment-end attribution, exclusions, ordering, and rewind monotonicity;
+  and
+- the Pack A browser flow reaches `plan-commitment`, renders that exact
+  occurrence's authored commentary, and proves later-scope prose is absent.
 
 ## Current boundary
 
@@ -143,9 +195,10 @@ complete breadth gate B4. The following remain content-era work:
 - the “right plan, wrong timing” or spare-tempo contract;
 - timing-window explanation semantics;
 - grounding unshipped objective types such as `win` and `hold`;
-- corpus, Maia, Syzygy, and non-Stockfish evidence sources;
-- feedback packets, per-scope reveal, and path-relative trigger evaluation;
-  and
+- corpus, Syzygy, and non-Stockfish evaluation evidence sources (Maia policy
+  mass already persists in opponent selections and reaches the browser);
+- feedback packets, authored claim anchors, and path-relative claim-trigger
+  evaluation; and
 - evidence-bound LLM rendering.
 
 Those contracts require a real authored pack to supply examples and failure

@@ -59,3 +59,18 @@ Append-only.
   viewport-height allowance restored containment and both the existing
   Najdorf walkthrough and Pack A flow. Browser result: 3 passed, optional Maia
   latency test skipped.
+
+## 2026-08-12 — codex, implementation verification
+
+- Canonical documentation now separates pack-wide engine-evidence withholding
+  from event-sequenced authored-prose reveal, describes the closed three-kind
+  item set and occurrence attribution, and corrects Maia's status: policy mass
+  already persists in opponent selections and reaches the browser.
+- `ENGINES_REQUIRED=1 make verify`: 36 files and 179 tests passed; schema and
+  packaging verification passed; Svelte reported zero errors and warnings.
+- `make test-browser`: 3 passed, the opt-in Maia latency test skipped. Measured
+  browser harness timings were board ready 100.7 ms, rewind 87.2 ms, branch
+  switch 30.3 ms, uncached mock reply 1.0 ms, and cached mock reply 0.8 ms.
+- No claim trigger, feedback packet, LLM, corpus/Syzygy, FEN-deviation matcher,
+  live deviation classifier, D2 barrier change, or authored schema field was
+  added.

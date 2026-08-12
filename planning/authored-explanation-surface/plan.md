@@ -33,6 +33,6 @@ acceptance test.
 
 ## 4. Close implementation
 
-- [ ] Update `docs/explanation-grounds.md`, including the Maia correction
-- [ ] `ENGINES_REQUIRED=1 make verify` and `make test-browser` green
-- [ ] Append final measurements/findings to `log.md`
+- [x] Update `docs/explanation-grounds.md`, including the Maia correction
+- [x] `ENGINES_REQUIRED=1 make verify` and `make test-browser` green
+- [x] Append final measurements/findings to `log.md`

@@ -40,8 +40,9 @@ function projectSpineNode(node: SpineNode): unknown {
 }
 
 /**
- * Browser-safe pack shape. Authored feedback stays in the stored document until
- * a server-side, per-scope reveal contract exists.
+ * Browser-safe pack shape. Authored feedback is never part of this response;
+ * the run-scoped authored-feedback projection releases eligible prose only
+ * after its checkpoint occurrence.
  */
 export function projectPackDocument(
   document: DrillPackDefinition,
