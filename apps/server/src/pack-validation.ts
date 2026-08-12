@@ -8,6 +8,8 @@ import addFormats from "ajv-formats";
 
 import { SUPPORTED_POLICY_MODES } from "./capabilities.js";
 
+const SUPPORTED_CHECKPOINT_ACTIONS = Object.freeze(["compare_branches"] as const);
+
 export interface PackValidationIssue {
   readonly severity: "error" | "warning";
   readonly source: "schema" | "lint" | "runtime";
@@ -136,6 +138,25 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
   }
 
   const checkpoints = new Set(pack.checkpoints.map((checkpoint) => checkpoint.id));
+  for (const [checkpointIndex, checkpoint] of pack.checkpoints.entries()) {
+    const actions = checkpoint.actions;
+    if (!Array.isArray(actions)) continue;
+    for (const [actionIndex, action] of actions.entries()) {
+      if (
+        typeof action === "string" &&
+        !SUPPORTED_CHECKPOINT_ACTIONS.some((supported) => supported === action)
+      ) {
+        issues.push(
+          runtimeIssue(
+            "UNSUPPORTED_CHECKPOINT_ACTION",
+            `/checkpoints/${checkpointIndex}/actions/${actionIndex}`,
+            `checkpoint action ${JSON.stringify(action)} is unsupported; allowed actions: ${SUPPORTED_CHECKPOINT_ACTIONS.join(", ")}`,
+          ),
+        );
+      }
+    }
+  }
+
   const conditions = pack.objective.successConditions;
   if (Array.isArray(conditions)) {
     for (const [index, value] of conditions.entries()) {

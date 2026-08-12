@@ -47,7 +47,11 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   expect(served[0]).toMatchObject({ reviewStatus: "schema_example" });
   const detail = await page.request.get(`/packs/${served[0]!.id}`);
   expect(detail.ok()).toBe(true);
-  expect((await detail.json()).opponentPolicy.mode).toBe("human_common");
+  const projectedPack = await detail.json();
+  expect(projectedPack.opponentPolicy.mode).toBe("human_common");
+  expect(JSON.stringify(projectedPack)).not.toContain(
+    "Schema example only; classification requires review.",
+  );
 
   await expect(page.getByText("schema example")).toBeVisible();
   const boardStart = await page.evaluate(() => performance.now());

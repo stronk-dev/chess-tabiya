@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import {
   digestDrillPack,
   type DrillPackDefinition,
+  type SpineNode,
 } from "@chess-tabiya/schema/drill-pack";
 
 import { ServerError } from "./errors.js";
@@ -27,6 +28,48 @@ export interface PackRecord {
   readonly digest: string;
   readonly summary: PackSummary;
   readonly feedbackPolicy: FeedbackPolicy;
+}
+
+function projectSpineNode(node: SpineNode): unknown {
+  return freeze({
+    id: node.id,
+    moveUci: node.moveUci,
+    moveSan: node.moveSan,
+    children: node.children.map(projectSpineNode),
+  });
+}
+
+/**
+ * Browser-safe pack shape. Authored feedback stays in the stored document until
+ * a server-side, per-scope reveal contract exists.
+ */
+export function projectPackDocument(
+  document: DrillPackDefinition,
+): Readonly<Record<string, unknown>> {
+  const raw = document as unknown as Record<string, unknown>;
+  return freeze({
+    id: document.id,
+    version: document.version,
+    title: raw.title,
+    mode: raw.mode,
+    phase: raw.phase,
+    difficulty: raw.difficulty,
+    provenance: raw.provenance,
+    start: document.start,
+    objective: {
+      type: document.objective.type,
+      summary: document.objective.summary,
+    },
+    feedbackPolicy: raw.feedbackPolicy,
+    opponentPolicy: raw.opponentPolicy,
+    spine: (document.spine ?? []).map(projectSpineNode),
+    checkpoints: document.checkpoints.map((checkpoint) => ({
+      id: checkpoint.id,
+      label:
+        typeof checkpoint.label === "string" ? checkpoint.label : checkpoint.id,
+      actions: Array.isArray(checkpoint.actions) ? checkpoint.actions : [],
+    })),
+  });
 }
 
 function validatedDocument(value: unknown, source: string): DrillPackDefinition {

@@ -150,8 +150,7 @@
         "atSpineNode": "be2"
       },
       "actions": [
-        "stop",
-        "compare"
+        "compare_branches"
       ],
       "interaction": {
         "type": "intent_capture",
@@ -168,9 +167,7 @@
       "trigger": {
         "atSpineNode": "c5-break"
       },
-      "actions": [
-        "stop"
-      ]
+      "actions": []
     },
     {
       "id": "tal-commitment",
@@ -179,8 +176,7 @@
         "atSpineNode": "h5-reply"
       },
       "actions": [
-        "stop",
-        "compare"
+        "compare_branches"
       ]
     }
   ],

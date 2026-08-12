@@ -35,6 +35,14 @@ it has no required `feedbackPolicy` and uses superseded fields.
   by the typed interaction. The reserved provenance source `session_distilled` is
   accepted.
 
+The format schema intentionally leaves `checkpoints[].actions` structurally
+open, but the shipped registry and `pack-check` close the executable v1
+vocabulary to `compare_branches`. An empty array means the checkpoint offers
+no pack-selectable action. Any other value fails runtime validation with its
+JSON Pointer and the allowed set; vocabulary grows only when a consumer grows.
+This is an executable-policy lint rather than a JSON-Schema enum, so it does
+not change format v0.2 or its schema `$id`.
+
 ## Semantic authoring lint
 
 JSON Schema validates structure. `lintDrillPack` from
@@ -50,6 +58,13 @@ the schema cannot express:
 Static packs do not contain segment IDs. A caller may supply checkpoint groupings
 from authoring/runtime context; without them, the lint conservatively treats the
 whole pack as one segment. Prediction density is a warning, not schema rejection.
+
+The server-side authoring validator additionally rejects pack semantics the
+current product cannot execute, including unknown checkpoint actions,
+unsupported opponent and feedback policies, and unsupported objective
+conditions. These checks are shared by `make pack-check` and registry loading,
+so an authoring no-op cannot validate locally and then enter the served
+catalogue.
 
 The required negative fixtures live in `schemas/fixtures/drill-pack/`. The illegal
 spine fixture is structurally schema-valid and fails semantic lint; the other

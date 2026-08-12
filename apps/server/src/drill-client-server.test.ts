@@ -111,7 +111,7 @@ describe("drill-client pack registry", () => {
 
     const list = await request(environment.handler, "GET", "/packs", undefined, "");
     expect(list.status).toBe(200);
-    expect(await list.json()).toEqual([
+    const expectedList = [
       {
         id: fixture.id,
         version: fixture.version,
@@ -121,7 +121,8 @@ describe("drill-client pack registry", () => {
         difficulty: fixture.difficulty,
         reviewStatus: "schema_example",
       },
-    ]);
+    ];
+    expect(await list.text()).toBe(JSON.stringify(expectedList));
 
     const detail = await request(
       environment.handler,
@@ -132,7 +133,57 @@ describe("drill-client pack registry", () => {
     );
     expect(detail.status).toBe(200);
     expect(detail.headers.get("x-pack-digest")).toBe(digest);
-    expect(await detail.json()).toEqual(fixture);
+    const projected = (await detail.json()) as Record<string, unknown>;
+    expect(Object.keys(projected).sort()).toEqual(
+      [
+        "checkpoints",
+        "difficulty",
+        "feedbackPolicy",
+        "id",
+        "mode",
+        "objective",
+        "opponentPolicy",
+        "phase",
+        "provenance",
+        "spine",
+        "start",
+        "title",
+        "version",
+      ].sort(),
+    );
+    expect(projected).not.toHaveProperty("deviations");
+    expect(projected).not.toHaveProperty("feedbackClaims");
+    expect(projected).not.toHaveProperty("planClasses");
+    expect(projected).not.toHaveProperty("concepts");
+    expect(projected.objective).toEqual({
+      type: fixture.objective.type,
+      summary: fixture.objective.summary,
+    });
+    expect(projected.provenance).toEqual(fixture.provenance);
+
+    const spineNodes = (projected.spine as Record<string, unknown>[]).flatMap(
+      function nodes(node): Record<string, unknown>[] {
+        return [
+          node,
+          ...((node.children as Record<string, unknown>[] | undefined) ?? []).flatMap(
+            nodes,
+          ),
+        ];
+      },
+    );
+    expect(spineNodes.length).toBeGreaterThan(0);
+    for (const node of spineNodes) expect(node).not.toHaveProperty("annotations");
+
+    const checkpoints = projected.checkpoints as Record<string, unknown>[];
+    expect(checkpoints).toHaveLength(fixture.checkpoints.length);
+    for (const checkpoint of checkpoints) {
+      expect(Object.keys(checkpoint).sort()).toEqual(["actions", "id", "label"]);
+      expect(checkpoint).not.toHaveProperty("trigger");
+      expect(checkpoint).not.toHaveProperty("interaction");
+    }
+    expect(detail.headers.get("x-pack-digest")).toBe(
+      environment.registry.required(fixture.id).digest,
+    );
   });
 
   it("loads the living schema fixture through the default boot registry", async () => {

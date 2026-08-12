@@ -21,8 +21,14 @@ that fails on its first opponent turn.
 Each accepted document receives a server-computed SHA-256 digest over its RFC
 8785 canonical form. `GET /packs` returns immutable summaries containing ID,
 version, digest, title, mode, difficulty, and review status. `GET /packs/:id`
-returns the full document and its digest in `x-pack-digest`; missing packs are
-typed `PACK_NOT_FOUND` errors.
+returns a browser-safe projection and the complete stored document's digest in
+`x-pack-digest`; missing packs are typed `PACK_NOT_FOUND` errors. The projection
+contains identity and catalogue fields, provenance, start, objective type and
+summary, feedback and opponent policies, the recursive spine without
+annotations, and checkpoints reduced to ID, label, and executable actions. It
+does not deliver deviations, feedback claims, checkpoint triggers, plan
+classes, concepts, or spine annotations. The stored document—not this
+projection—remains authoritative for orchestration, PGN export, and digesting.
 
 ## Run index and deployment capabilities
 
@@ -80,6 +86,14 @@ checkpoint; `segment_end` reveals it after a segment completes. Until then:
   an empty recorded-evidence overlay; and
 - `/evidence` withholds staged results, while attempts to apply them return the
   typed `FEEDBACK_WITHHELD` error.
+
+Authored strategic prose currently has no reveal path and therefore is not
+delivered to the browser at all. In particular, the public pack projection
+omits annotations, deviation notes, feedback claims, plan classes, and
+concepts instead of relying on client-side hiding. Serving any of those fields
+back is blocked on a server-side per-scope reveal contract; the run-global
+feedback latch is not sufficient because one checkpoint must not reveal prose
+for later scopes.
 
 Rules-derived explanations remain visible because they are engine-free facts
 from the objective machine. Evidence references have runtime constructors and

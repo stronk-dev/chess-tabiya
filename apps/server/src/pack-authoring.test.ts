@@ -125,6 +125,35 @@ describe("pack authoring validation", () => {
     expect(validatePackDocument(candidate).valid).toBe(true);
   });
 
+  it("rejects checkpoint actions the client cannot execute", () => {
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate.checkpoints[0] as unknown as Record<string, unknown>).actions = [
+      "stop",
+    ];
+
+    const result = validatePackDocument(candidate);
+    expect(result.valid).toBe(false);
+    expect(result.issues).toContainEqual({
+      severity: "error",
+      source: "runtime",
+      code: "UNSUPPORTED_CHECKPOINT_ACTION",
+      path: "/checkpoints/0/actions/0",
+      message:
+        'checkpoint action "stop" is unsupported; allowed actions: compare_branches',
+    });
+  });
+
+  it.each([{ actions: [] }, { actions: ["compare_branches"] }])(
+    "accepts the executable checkpoint action set %j",
+    ({ actions }) => {
+      const candidate = structuredClone(fixture) as DrillPackDefinition;
+      (candidate.checkpoints[0] as unknown as Record<string, unknown>).actions =
+        actions;
+
+      expect(validatePackDocument(candidate).valid).toBe(true);
+    },
+  );
+
   it("checks files without stack traces and keeps warnings non-fatal", async () => {
     const directory = await temporaryDirectory();
     const invalidPath = join(directory, "invalid.json");

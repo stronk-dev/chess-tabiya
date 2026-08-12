@@ -99,7 +99,7 @@
         "windowCloses": { "atSpineNode": "najdorf-b5" },
         "luxuryMoveBudget": 1
       },
-      "actions": ["compare_branches", "offer_outcome_transition"]
+      "actions": ["compare_branches"]
     }
   ],
   "opponentPolicy": {

@@ -18,6 +18,7 @@ import {
 
 import { ServerError } from "./errors.js";
 import type { CapabilitiesProvider } from "./capabilities.js";
+import { projectPackDocument } from "./pack-registry.js";
 import {
   OpponentSelector,
   parseSelectMoveRequest,
@@ -382,7 +383,7 @@ export function createRestHandler(
           });
         }
         const pack = service.pack(packId);
-        return new Response(JSON.stringify(pack.document), {
+        return new Response(JSON.stringify(projectPackDocument(pack.document)), {
           status: 200,
           headers: {
             "cache-control": "no-store",
