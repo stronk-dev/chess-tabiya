@@ -259,4 +259,4 @@ breadth.
 | Item | State | Why | Revival condition |
 |---|---|---|---|
 | Native Position Arena matchmaking/clocks/moderation | 🟡 deferred depth | External challenge/invite + PGN-return Arena is required by B5; only native infrastructure stays deferred | External Arena use proves demand for native play |
-| Bulk corpus ingestion (Stage 1+) | 🟡 deferred | Ingestion-first is a rejected pattern; Stage 0 suffices for exploration | Q6 revisit shows explorer API insufficient for pack spines |
+| Bulk corpus ingestion (Stage 1+) | 🟡 deferred; revival condition tested and **not fired** 2026-08-12 | Anonymous explorer access returned 401, but the same request with an owner-supplied operator token returned 200; Stage 0 suffices | Q6 later shows authenticated explorer data insufficient for pack spines |

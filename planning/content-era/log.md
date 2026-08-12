@@ -554,3 +554,14 @@ The lesson is narrow and worth keeping: a number that travels inside a sentence
 whose *conclusion* is correct will not be checked by anyone who agrees with the
 conclusion. Both agents who consumed the brief reasoned correctly from it and
 neither recounted.
+## 2026-08-12 — authenticated explorer first-wave order (B6c)
+
+- Query: Lichess explorer, rating buckets 1400/1600/1800, blitz+rapid,
+  2024-01 through 2026-07. Counts are position totals derived from
+  white + draws + black, not response-side `total` fields.
+- Returned order: Sicilian Defense (104686766); Caro-Kann Advance (9346096);
+  French Advance (9215262); King's Indian (5353956); Dutch (4845395);
+  London (3851145).
+- This is the first executable replacement for design/04 §2c's taste-based first-wave
+  order. It ranks the exact line roots supplied to the instrument; it does not grade pack
+  quality or instructional suitability.

@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check build verify pack-check pack-preview source-fetch candidate-emit sourcing-check up up-engines down
+.PHONY: setup typecheck test test-browser schema-check build verify pack-check pack-preview source-fetch candidate-emit candidate-attach sourcing-check up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -41,6 +41,12 @@ candidate-emit:
 	@test -n "$(PIPELINE)" || (echo "Usage: make candidate-emit PIPELINE=<id> ARGS='...'" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/candidate-emit.ts --bundle --platform=node --format=esm --outfile=dist/candidate-emit.js
 	node apps/server/dist/candidate-emit.js "$(PIPELINE)" $(ARGS)
+
+candidate-attach:
+	@test -n "$(DIR)" || (echo "Usage: make candidate-attach DIR=<candidate-directory> PIPELINE=explorer ARGS='...'" >&2; exit 2)
+	@test -n "$(PIPELINE)" || (echo "Usage: make candidate-attach DIR=<candidate-directory> PIPELINE=explorer ARGS='...'" >&2; exit 2)
+	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/candidate-attach.ts --bundle --platform=node --format=esm --outfile=dist/candidate-attach.js
+	node apps/server/dist/candidate-attach.js "$(abspath $(DIR))" "$(PIPELINE)" $(ARGS)
 
 sourcing-check:
 	@test -n "$(DIR)" || (echo "Usage: make sourcing-check DIR=<candidate-directory>" >&2; exit 2)

@@ -1,6 +1,6 @@
 # RFC: Lichess opening explorer — rating-band frequency, or a recorded refusal
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §2c (pack priority = frequency at 1400–2000 per explorer rating-band data), §8 order item 3 (breadth by explorer-frequency priority)
@@ -679,6 +679,12 @@ our own text stating someone else's numbers, which are facts. The withdrawn draf
 None.
 
 ## Changelog
+
+- 2026-08-12: implementation began. The exact anonymous canonical request returned HTTP 401
+  from nginx with `Authorization` advertised; the owner then supplied a scope-less personal
+  operator token through a gitignored environment file, and the identical request returned
+  HTTP 200. Gate 0 is Branch A. The token is configuration, never an artifact, and is
+  separate from any future learner-facing Lichess account link.
 
 - 2026-08-12: created, as B6c of the four-way split of the withdrawn
   `content-sourcing-pipelines.md` draft.

@@ -82,3 +82,30 @@ Generated endgame packs are spine-less outcome drills. The opponent is explicitl
 tablebase range retain a graduation blocker because `perfect_tablebase` is still not a
 selectable runtime policy (D8). Terminal runs disclose through the implemented
 `outcome.reached` contract; this emitter does not define win/hold/save grading.
+
+## Opening explorer priority
+
+The explorer client asks one closed question: frequency at explicit rating buckets, speeds,
+and a real calendar window. Ratings and speeds are canonicalized against the published
+Lichess enums; all request parameters are explicit; 401/403 abstain immediately and never
+substitute another population. Counts are derived from white/draw/black result fields—the
+response has no trustworthy `total` or echoed time window—and rows below 100 games abstain.
+
+Gate 0 succeeded through operator authentication. The exact anonymous request returned HTTP
+401 from nginx while advertising `Authorization`; the identical request with a scope-less
+personal operator token returned HTTP 200. `content/candidates/priority/priority.json`
+therefore contains real first-wave rating-band rows. Q6’s offline-explorer revival condition
+did not fire, and no bulk or alternate backend was added.
+
+Explorer authorization is an operator boundary. Hosted deployments use one service/admin
+credential for authoring; self-hosters may configure their own. A future learner-facing
+Lichess account link is a separate optional identity/import feature and is never a content
+prerequisite or a source of per-user credentials for this pipeline.
+
+One machine-generated prose crossing is defined for future available data:
+`explorer-move-share/v1`. `candidate-attach` accepts an author-selected response move and an
+existing feedback-claim text, generates the exact count/share sentence, and atomically
+updates the pack plus source/evidence sidecars after a strict pre-check. The checker
+re-derives the percentage, verifies the request population/window from the manifest URL,
+and requires byte equality. Explorer evidence cannot infer difficulty, grade a deviation,
+or support any other prose.

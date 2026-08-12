@@ -1,0 +1,1 @@
+{"args":{"lines":"apps/server/src/sourcing/fixtures/explorer-lines.tsv","ratings":[1400,1600,1800],"since":"2024-01","speeds":["blitz","rapid"],"until":"2026-07"},"emissionJobDigest":"sha256:5787f967fe31b8438228dedf5f095b4a0655e1fb9c20a9b1caa5fc104ebb8b3c","pipeline":"explorer","schema":"tabiya.sourcing.job.v1","sourceEtags":[null,null,null,null,null,null,null]}

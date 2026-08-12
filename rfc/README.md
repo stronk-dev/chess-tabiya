@@ -12,7 +12,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `pack-optional-runs.md` | implementing | foundation F2; F3 landed first | `planning/pack-optional-runs/` |
 | `content-sourcing-foundation.md` | implementing | program item #6 (B6a) | `planning/content-sourcing-foundation/` |
 | `content-sourcing-syzygy.md` | implementing | program item #6 (B6b) | `planning/content-sourcing-syzygy/` |
-| `content-sourcing-explorer.md` | draft | program item #6 (B6c) | not started |
+| `content-sourcing-explorer.md` | implementing | program item #6 (B6c) | `planning/content-sourcing-explorer/` |
 | `content-sourcing-position-seeds.md` | draft | program item #6 (B6d) | not started |
 
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single

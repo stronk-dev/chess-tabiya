@@ -1044,3 +1044,34 @@ termination protects nothing and costs the learner the feedback they just earned
 
 No backfill for stored runs. They are append-only and the honest statement is
 that the defect existed.
+
+## 2026-08-12 (codex) — B6c Gate 0 resolves to unavailable here
+
+- Environment check: `LICHESS_TOKEN` is absent. No credential was printed or persisted.
+- One exact canonical anonymous request was made to
+  `https://explorer.lichess.org/lichess` with standard-start FEN,
+  `ratings=1400,1600,1800`, `speeds=blitz,rapid`, `since=2024-01`,
+  `until=2026-07`, `moves=12`, `topGames=0`, `recentGames=0`, and `history=false`.
+- Result: HTTP/2 401; `server: nginx`; `content-type: text/html; charset=utf-8`;
+  `content-length: 172`; `access-control-allow-headers` includes `Authorization`;
+  body prefix is `401 Authorization Required`.
+- Implementation follows Branch B: the token-capable client and closed request grammar
+  ship, but the committed priority artifact has `status: unavailable`, no rows, and an
+  explicit source-unavailable abstention. No band or backend was substituted.
+- The pre-ledgered Q6 revival condition is fired. This is not permission to bulk-ingest:
+  the follow-up still needs the separately specified streamed-aggregate RFC required by B6c
+  §5 and must retain the rejection of ingestion-first.
+
+## 2026-08-12 (codex) — Gate 0 correction after operator token
+
+- The owner supplied a personal Lichess token through gitignored `.env.lichess`; the token
+  had no scopes and was treated only as operator-side authoring configuration. It was not
+  printed, copied into a URL, written to an artifact, or connected to learner identity.
+- The otherwise identical Gate 0 request returned HTTP/2 200 from nginx,
+  `content-type: application/json`, `content-length: 1999`, and a one-day public cache
+  lifetime. At the standard initial position the response counted 464044240 white wins,
+  39886185 draws, and 430620851 black wins. The top three moves were e4, d4, and c4.
+- Gate 0 is therefore **Branch A**, superseding the provisional Branch-B conclusion above.
+  The Q6 offline-explorer revival condition is not fired: authenticated Stage 0 works.
+- “Login with Lichess” remains a separate optional learner-facing integration. The sourcing
+  pipeline uses operator/admin configuration and never borrows a learner credential.

@@ -1,0 +1,14 @@
+{
+  "opening": { "eco": "B12", "name": "Caro-Kann Defense: Advance Variation" },
+  "white": 65554,
+  "draws": 6529,
+  "black": 55951,
+  "total": 999999,
+  "moves": [
+    { "uci": "c8f5", "san": "Bf5", "averageRating": 1712, "white": 21000, "draws": 2000, "black": 17204 },
+    { "uci": "c6c5", "san": "c5", "averageRating": 1755, "white": 11000, "draws": 1500, "black": 10500 }
+  ],
+  "topGames": [],
+  "recentGames": [],
+  "history": []
+}
