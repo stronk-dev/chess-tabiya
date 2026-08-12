@@ -1,0 +1,1 @@
+{"args":{"checkpointPlies":16,"learnerSide":"white","opponent":"strong_engine","positions":"apps/server/src/sourcing/fixtures/endgame-positions.fen"},"emissionJobDigest":"sha256:7cb377724d49a2ed01def8d3b4b76526859396bab5da57897d79f048244136d0","pipeline":"syzygy","schema":"tabiya.sourcing.job.v1","sourceEtags":[null]}

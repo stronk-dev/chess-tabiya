@@ -188,6 +188,31 @@ function evidenceSupports(pack: unknown, ledger: EvidenceLedger, issues: Sourcin
   });
 }
 
+function evidenceSemantics(ledger: EvidenceLedger, issues: SourcingIssue[]): void {
+  const tablebaseFens = new Set(
+    ledger.records
+      .filter((record) => record.kind === "tablebase_result" && typeof record.values.fen === "string")
+      .map((record) => String(record.values.fen)),
+  );
+  ledger.records.forEach((record, index) => {
+    if (record.kind === "tablebase_result") {
+      if (!Number.isInteger(record.values.pieceCount) || Number(record.values.pieceCount) > 7) {
+        issues.push(issue("EVIDENCE_KIND_MISMATCH", `/records/${index}/values/pieceCount`, "tablebase_result requires a mechanically counted position with at most 7 pieces"));
+      }
+    }
+    if (record.kind === "engine_eval") {
+      const required = ["depth", "threads", "hashMb", "multiPv", "timeoutMs", "engineId", "engineName", "engineVersion"];
+      if (required.some((key) => record.values[key] === undefined) || record.values.movetimeMs !== undefined || record.values.requestedMovetimeMs !== undefined) {
+        issues.push(issue("EVIDENCE_VALUES_INVALID", `/records/${index}/values`, "authoring engine evidence requires identity, depth, threads, hashMb, multiPv and timeoutMs; movetime is forbidden"));
+      }
+      const fen = typeof record.values.fen === "string" ? record.values.fen : typeof record.anchor.fen === "string" ? record.anchor.fen : undefined;
+      if (fen !== undefined && tablebaseFens.has(fen)) {
+        issues.push(issue("EVIDENCE_KIND_MISMATCH", `/records/${index}`, "engine_eval cannot substitute for tablebase_result on the same <=7-piece position"));
+      }
+    }
+  });
+}
+
 function licenceObligations(pack: Record<string, unknown>, manifest: SourceManifest, ledger: EvidenceLedger, issues: SourcingIssue[]): void {
   const provenance = object(pack.provenance) ? pack.provenance : {};
   if (provenance.licence !== undefined && provenance.licence !== "CC-BY-SA-4.0") issues.push(issue("LICENCE_MIXED", "/provenance/licence", "emitted candidates use CC-BY-SA-4.0 wholesale"));
@@ -233,6 +258,7 @@ export async function checkSourcingDirectory(directory: string): Promise<Sourcin
     } catch (error) { issues.push(issue("PACK_READ_ERROR", "/pack.json", error instanceof Error ? error.message : String(error))); }
   }
   if (manifest && ledger) linkage(manifest, ledger, issues);
+  if (ledger) evidenceSemantics(ledger, issues);
   if (pack && ledger) {
     evidenceSupports(pack, ledger, issues);
     if (manifest && object(pack)) licenceObligations(pack, manifest, ledger, issues);

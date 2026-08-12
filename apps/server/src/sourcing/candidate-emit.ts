@@ -1,4 +1,5 @@
 import { emitOpeningCandidate } from "./openings.js";
+import { emitSyzygyCandidates, fixtureTablebaseQuery, liveTablebaseQuery } from "./syzygy.js";
 import { SourcingError } from "./types.js";
 
 function argumentsMap(values: readonly string[]): Map<string, string> {
@@ -16,14 +17,31 @@ function argumentsMap(values: readonly string[]): Map<string, string> {
 
 async function main(): Promise<number> {
   const pipeline = process.argv[2];
-  if (pipeline !== "openings") {
-    console.error(`Unknown pipeline ${JSON.stringify(pipeline)}; registered pipelines: openings`);
+  if (pipeline !== "openings" && pipeline !== "syzygy") {
+    console.error(`Unknown pipeline ${JSON.stringify(pipeline)}; registered pipelines: openings, syzygy`);
     return 2;
   }
   try {
     const args = argumentsMap(process.argv.slice(3));
     const side = args.get("learner-side");
     if (side !== "white" && side !== "black") throw new SourcingError("LEARNER_SIDE_REQUIRED", "--learner-side white|black is required");
+    if (pipeline === "syzygy") {
+      const positions = args.get("positions");
+      if (!positions) throw new SourcingError("POSITIONS_REQUIRED", "--positions is required");
+      const opponent = args.get("opponent");
+      if (opponent !== "strong_engine" && opponent !== "human_common") throw new SourcingError("OPPONENT_REQUIRED", "--opponent strong_engine|human_common is required");
+      const outputs = await emitSyzygyCandidates({
+        positions,
+        learnerSide: side,
+        opponent,
+        ...(args.has("checkpoint-plies") ? { checkpointPlies: Number(args.get("checkpoint-plies")) } : {}),
+        ...(args.has("target-elo") ? { targetElo: Number(args.get("target-elo")) } : {}),
+        ...(args.has("output-root") ? { outputRoot: args.get("output-root")! } : {}),
+        query: process.env.OFFLINE === "1" ? fixtureTablebaseQuery : liveTablebaseQuery,
+      });
+      console.log(`Emitted ${outputs.length} Syzygy candidate(s): ${outputs.join(", ")}`);
+      return 0;
+    }
     const split = Number(args.get("split-ply"));
     const eco = args.get("eco");
     if (!eco) throw new SourcingError("ECO_REQUIRED", "--eco is required");

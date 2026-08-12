@@ -58,3 +58,27 @@ complete offline path with six drill plies.
 
 Later amendments add Syzygy/engine grounding, explorer priority, and puzzle-derived
 position seeds to this same boundary.
+
+## Syzygy and endgame abstention
+
+The `syzygy` emitter begins with a mechanical census of the FEN placement field. Positions
+with at most seven pieces may query `tablebase.lichess.org`; positions with eight or more
+do not issue a request and record `out_of_range` with the exact count. The batch-one 4v3
+rook root has eleven pieces, so the committed candidate is an abstention-first artifact,
+not a falsely tablebase-grounded pack.
+
+In-range records preserve the backend category, DTZ, precise DTZ, DTM, and terminal flags,
+including nulls. Tablebase evidence and engine evidence are distinct kinds, and the checker
+rejects either kind on the wrong side of the range boundary. Neither may support prose.
+
+The optional above-range authoring substitute uses Stockfish at depth 22, Threads 1, Hash
+16 MB, and MultiPV 1 in a fresh authoring context, with a 120-second timeout. Fixed depth is
+recorded evidence, not a wall-clock reproducibility claim; the engine identity and profile
+must travel with the result. The general evidence executor’s timeout remains five seconds
+unless a caller explicitly supplies the new override.
+
+Generated endgame packs are spine-less outcome drills. The opponent is explicitly
+`strong_engine` or `human_common`, the checkpoint is aligned to a learner ply, and roots in
+tablebase range retain a graduation blocker because `perfect_tablebase` is still not a
+selectable runtime policy (D8). Terminal runs disclose through the implemented
+`outcome.reached` contract; this emitter does not define win/hold/save grading.

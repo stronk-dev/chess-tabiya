@@ -1,6 +1,6 @@
 # RFC: Syzygy grounding at ≤7 pieces, and the abstention rule above it
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/04-content-architecture.md` §4 (Syzygy ground truth: "Syzygy where ≤7 pieces; Stockfish + authored claims above that"), §8 (batch-1 endgame pack)
@@ -525,6 +525,10 @@ around chess, and each one would have to be undone when D11 lands.
 None.
 
 ## Changelog
+
+- 2026-08-12: implementation began after D11 landed. The mechanical range census,
+  abstention-first candidate emitter, tablebase evidence, fixed-depth authoring profile,
+  and executor timeout override are assigned to `planning/content-sourcing-syzygy/`.
 
 - 2026-08-12: created, as B6b of the four-way split of the withdrawn
   `content-sourcing-pipelines.md` draft.

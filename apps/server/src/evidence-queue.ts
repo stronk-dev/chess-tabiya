@@ -18,6 +18,7 @@ export interface EvidenceJobInput {
   readonly kind: EvidenceKind;
   readonly depth?: number;
   readonly movetime?: number;
+  readonly timeoutMs?: number;
   readonly objectiveRequest?: ObjectiveEvidenceRequest;
 }
 
@@ -105,6 +106,7 @@ export class EvidenceJobQueue implements JobObserver {
     if (input.movetime !== undefined) {
       positiveInteger(input.movetime, "Evidence movetime");
     }
+    if (input.timeoutMs !== undefined) positiveInteger(input.timeoutMs, "Evidence timeout");
     const job = Object.freeze({
       ...input,
       id: `evidence-job-${++this.#jobCounter}`,
@@ -309,7 +311,7 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
         go,
       ],
       until: (line) => line.startsWith("bestmove "),
-      timeoutMs: Math.max(5_000, (job.movetime ?? 0) * 10),
+      timeoutMs: job.timeoutMs ?? Math.max(5_000, (job.movetime ?? 0) * 10),
       signal,
     });
 
