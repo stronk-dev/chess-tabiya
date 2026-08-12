@@ -99,3 +99,20 @@ assertions (two distinct reveal events, all three kinds present) so it cannot
 pass trivially. 180 tests green.
 
 Nothing else outstanding. The RFC's completion protocol can proceed.
+
+## 2026-08-12 — codex, lifecycle closeout
+
+- Claude's approval and the follow-up ordering invariant close every acceptance
+  criterion. The canonical description already lives in
+  `docs/explanation-grounds.md`, so no additional system page is needed.
+- Set the RFC to implemented and prepared the RFC and planning job for archival
+  in one lifecycle commit. Post-move verification is recorded by the closing
+  commit's command results.
+- After the moves, `ENGINES_REQUIRED=1 make verify` passed 180 tests across 36
+  files, Svelte reported zero errors and warnings, and scaffold/packaging checks
+  passed. `make test-browser` passed all three required flows; the opt-in Maia
+  latency test skipped.
+- Closing browser measurements: board ready 95.9 ms, rewind 90.3 ms, branch
+  switch 50.1 ms, uncached mock reply 1.2 ms, cached mock reply 0.8 ms. Branch
+  switching is 0.1 ms over the existing 50 ms benchmark and remains the known
+  projection-performance deviation, not an acceptance failure for this RFC.

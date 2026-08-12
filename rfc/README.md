@@ -7,7 +7,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `authored-explanation-surface.md` | implementing | amends `archive/authored-feedback-delivery.md` | program #2 / gate B4 / primitive F1 |
 
 
 **Exploration gate opened by owner ruling 2026-08-12** (logged in
@@ -48,6 +47,7 @@ before re-attempting this territory.
 | `archive/app-shell.md` | implemented | `docs/app-shell.md` |
 | `archive/explanation-grounds.md` | implemented | `docs/explanation-grounds.md` |
 | `archive/authored-feedback-delivery.md` | implemented | `docs/drill-client.md`, `docs/drill-pack-format.md` |
+| `archive/authored-explanation-surface.md` | implemented | `docs/explanation-grounds.md` |
 
 ## The archive sketches are quarry, not RFCs
 

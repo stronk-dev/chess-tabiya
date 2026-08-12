@@ -1,6 +1,6 @@
 # RFC: Authored explanation surface (per-scope reveal + rendering)
 
-- **Status:** implementing (revision 3 accepted after two adversarial review rounds)
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/03-product-breadth.md` §Foundation edge (F1), §RFC program item #2, gate B4; `design/01-training-model.md` §Vocabulary
@@ -386,3 +386,6 @@ None.
   prerequisite fix; the `pack-check` contradiction replaced by one precisely
   scoped warning.
 - 2026-08-12: accepted by owner and moved to implementing; planning job opened.
+- 2026-08-12: implemented after review; deterministic response ordering pinned
+  by an explicit non-vacuous invariant test; canonical behavior distilled into
+  `docs/explanation-grounds.md`.
