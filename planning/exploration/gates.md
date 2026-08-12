@@ -119,10 +119,10 @@ live.
 
 | # | Gate | Status |
 |---|---|---|
-| B1 | Shell and entry: stable Play/Learn/Review/Live/Create/Library/Settings routes; resume works | unmet |
+| B1 | Shell and entry: stable Play/Learn/Review/Live/Create/Library/Settings routes; resume works | **met** (app-shell shipped 2026-08-11; status was stale) |
 | B2 | Solo modes: Just Play + Line/Plan/Outcome/Trajectory each complete one fixture run | Plan slice only |
-| B3 | Review: manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise partial |
-| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | worker plumbing partial; UI unmet — **next after B1** |
+| B3 | Review: manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise + grounded objective/evidence rendering (explanation-grounds); multi-branch, replay, deep mode, share unmet |
+| B4 | Evidence: authored, Stockfish, Maia, corpus, Syzygy, features, LLM-rendered layers with timing controls | Stockfish+objective grounds render; **authored prose has no surface — the current bottleneck**; Maia/corpus/Syzygy/LLM unmet |
 | B5 | Live: Twitch host/chat/overlay, academy roles, external Arena handoff | unmet — ordered last; BACKLOG revival conditions still govern |
 | B6 | Create: pack studio/import/review/session-distill produces a validated fixture; corpus mining emits one candidate | schema/lint only |
 | B7 | Return: history/resume, progress, concept scheduling, related retry, recommendations | resume partial |
