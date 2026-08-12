@@ -465,34 +465,36 @@ them required, none of them tunable down:
 
     1. **Acquire.** Mint `owner` = a v4 UUID. `open(path, "wx")` — `O_CREAT|O_EXCL`, atomic on
        a local filesystem — and write `{ owner, pid, acquiredAt, heartbeatAt }`.
-    2. **Contend.** On `EEXIST`, read the file. If `heartbeatAt` is within 90 s (three missed
-       30 s beats), wait and retry; the client never proceeds past a live lock.
-    3. **Take over, atomically or not at all.** If `heartbeatAt` is older than 90 s, the
-       contender `rename`s the lock to `` `.fetch.lock.<observedOwner>.takeover` `` — atomic,
-       so exactly one contender wins — and only the winner then re-runs step 1. A `rename`
-       that fails, or that moves a file whose `owner` is no longer `observedOwner`, means
-       another process won: go back to step 2.
+    2. **Contend — fail closed, never take over.** On `EEXIST`, read the file and raise
+       `STALE_LOCK_HELD` naming the `owner`, `pid` and `acquiredAt`, and exit non-zero. The
+       command issues no request and writes no artifact. Clearing a stale lock is a manual
+       operator action: delete `content/sources/.fetch.lock` after confirming no fetch is
+       running.
+    3. **Why there is no automatic takeover.** Two revisions tried and both were wrong, the
+       second subtly: age-based takeover cannot prevent overlap, only observe it. A holder
+       that has been quiet for 90 s may have an HTTP request **in flight** — quiet is not
+       idle — so a contender that takes over and fetches has already issued the second
+       simultaneous request by the time any heartbeat check notices. Detection after the
+       fact is not mutual exclusion. The obligation this lock exists for
+       (`design/research/theory-sourcing.md:37-38`, "Only make one request at a time") is
+       violated at the moment of the second request, not at the moment it is discovered.
+       An authoring command that occasionally requires a human to delete a file is a far
+       smaller cost than an authoring command that occasionally hammers Lichess.
     4. **Heartbeat.** While held, rewrite `heartbeatAt` every 30 s by writing a temp file and
-       `rename`-ing it over the lock, preserving `owner`.
+       `rename`-ing it over the lock, preserving `owner`. This is diagnostic only — it tells
+       an operator whether a lock is abandoned. Nothing acts on it automatically.
     5. **Verify before every request**, and every 30 s during one: re-read the lock and
-       compare `owner`. A mismatch or a missing file means this process has been taken over —
-       it raises `LOCK_LOST`, **issues no further request**, writes no artifact, and exits
-       non-zero. It never deletes a lock it does not own.
+       compare `owner`. A mismatch or a missing file means the lock was removed underneath
+       this process — it raises `LOCK_LOST`, **issues no further request**, writes no
+       artifact, and exits non-zero. It never deletes a lock it does not own.
     6. **Release** by compare-before-delete: re-read, and unlink **only** if `owner` matches.
-       The `finally` that deletes unconditionally is the bug, not the release.
+       A `finally` that deletes unconditionally is the bug, not the release.
 
-    One residual race is resolved by step 5 rather than prevented, and is stated so nobody
-    reads it as unhandled: a heartbeat rename (step 4) can land *after* a contender's takeover
-    rename (step 3), restoring the old holder's file over the new lock. Whichever process's
-    `owner` is not the one on disk at its next verification raises `LOCK_LOST` and exits, so
-    the outcome is "the wrong process may win" — never "both proceed". Losing a race is
-    acceptable for an authoring command; two simultaneous requests to Lichess are not.
+    With no takeover path there is no takeover race, and the "wrong process may win" residual
+    that the previous revision documented is gone rather than managed. The remaining failure
+    mode is a crashed process leaving a lock behind, which surfaces as `STALE_LOCK_HELD` with
+    the `pid` that held it, and is resolved by an operator in one command.
 
-    Two concurrent `make source-fetch` / `make candidate-emit` runs in the same checkout
-    therefore issue one request at a time, and a stalled run cannot be silently overlapped —
-    it fails closed. If step 3 is ever judged too clever, the fallback that is also
-    acceptable is to **refuse to take over at all** and require the operator to remove a
-    stale lock by hand; what is not acceptable is a takeover without ownership.
   - *What this does **not** guarantee*, stated so nobody relies on it: two checkouts, two
     containers, or two machines behind one IP are not coordinated, and neither is a lock on
     a network filesystem where `O_EXCL` is unreliable. The obligation
@@ -1081,18 +1083,15 @@ that killed five drafts:
     asserts it validates under Ajv `strict: true` with `additionalProperties: false` at the
     root — and asserts explicitly that no `spineNode`, `start`, `difficulty`, `planClass`,
     `checkpoint`, `deviation`, or `authoredBoundary` object carries an extra key.
-14. **The lock is a mutex, and the takeover race is closed.** Four assertions, and the third
-    is the one the previous revision had backwards:
+14. **The lock fails closed and never takes over.** Four assertions:
     - Two emitter processes started simultaneously against a stubbed server that records
-      arrival times issue their requests **strictly sequentially**.
-    - A contender facing a lock whose `heartbeatAt` is fresh **waits** and never proceeds; a
-      contender facing one older than 90 s takes over, and when two contenders race the
-      takeover, exactly one wins (asserted by a `rename` stub that counts successes).
-    - **A taken-over holder fails closed.** A test acquires the lock, freezes the heartbeat,
-      lets a second process take over, then resumes the first: it raises `LOCK_LOST`, issues
-      **no** further request, writes no artifact, exits non-zero, and — asserted directly —
-      the replacement's lock file is still present with the replacement's `owner`. Overlapping
-      in-flight requests are a test failure, not documented behaviour.
+      arrival times issue their requests **strictly sequentially** — the in-process guarantee.
+    - A second process facing **any** existing lock — fresh heartbeat or long stale — raises
+      `STALE_LOCK_HELD`, issues **no** request, writes no artifact, and exits non-zero. There
+      is no age at which it proceeds; the test asserts the stale case explicitly, because
+      that is the one earlier revisions got wrong twice.
+    - After manual removal of the lock file, the same command succeeds. Recovery is one
+      operator action and is tested, so "fails closed" does not mean "wedged".
     - A `finally` path that unlinks a lock whose `owner` does not match is asserted absent:
       release re-reads and compares before deleting.
     And a test asserts the client never claims coordination it does not have — the lock path
@@ -1173,6 +1172,12 @@ that killed five drafts:
 None.
 
 ## Changelog
+
+- 2026-08-12: automatic stale-lock takeover removed. Age-based takeover cannot
+  prevent overlapping requests, only observe them: a holder quiet for 90 s may
+  have a request in flight, so the contender's fetch *is* the second simultaneous
+  request by the time any check notices. Replaced with `STALE_LOCK_HELD` and
+  manual removal — the RFC's own named fallback.
 
 - 2026-08-12: created, as B6a of the four-way split of the withdrawn
   `content-sourcing-pipelines.md` draft (adversarial review rejected the single document and
