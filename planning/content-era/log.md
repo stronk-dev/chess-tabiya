@@ -171,3 +171,29 @@ contract-gaps (the second deliverable — what the format could NOT express):
 - Standing gap, unchanged and correctly deferred: per-assertion grounding
   (the five-category set) has no encoding yet and stays a process barrier
   enforced by owner review.
+
+## 2026-08-12 (claude) — field lifecycle matrix built (codex's instrument)
+
+- Built `field-consumer-matrix.md` by static code audit (encoded → evaluated →
+  persisted → rendered per pack field), distinguishing type declarations from
+  actual evaluation: `authoredBoundary`, `deviations`, and `interaction` appear
+  ONLY in `types.ts`/`lint.ts`, so the schema accepts and lints them and then
+  nothing reads them.
+- **Headline: roughly half of what an author writes has no consumer.** Seven
+  field groups fully dead (annotations, concepts, planClasses, checkpoint
+  interactions, authoredBoundary, deviations, feedbackClaims). Pack A spent
+  real effort on five of the seven.
+- The useful part is that they cluster into three *kinds* of work:
+  (1) **explanation UI needing NO new contracts** — annotations, deviation
+  notes, planClasses, concepts are strings with ids, addressable today;
+  (2) **runtime semantics needing contracts** — objective types beyond
+  reach_checkpoint, interactions, boundary→provenanceMode, deviation classes;
+  (3) **claim grounding needing both**.
+- Direct consequence for the withdrawn-RFC retry: **do not design
+  `provenanceMode` before `authoredBoundary` has any evaluator**, and the
+  intent-capture question is a UI question first ("what does the sheet do with
+  a recorded choice"), not a vocabulary question. `deviations` are the best
+  first render — per-move authored judgment, addressable with no new contract,
+  five real ones already written.
+- Caveat recorded: static audit proves existence, not correctness. Session 2's
+  play-throughs test behaviour.
