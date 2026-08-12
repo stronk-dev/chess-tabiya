@@ -71,7 +71,17 @@ verified state from the 2026-08-12 alignment pass (`planning/breadth/`).
 | Full evidence/explanation surface | Authored + Stockfish + Maia + corpus/history + Syzygy + features + evidence-bound LLM, timing controlled | #2 · blocked on **F1**; six of nine contracts pin against merged code today | `03-product-breadth.md`, `arch/09`, `planning/breadth/evidence-explanation.md` |
 | Full-spectrum application shell | Play/Learn/Review/Live/Create/Library/Settings with shared board/run/branch/evidence primitives | #1 · routes ship; residuals (`/settings` has no form control, `phase` unprojected, URL grammar unused) belong to the foundation edge | `03-product-breadth.md`, `02-product-shape.md` |
 
-## Foundation primitives (📐 — the alignment pass's central finding, 2026-08-12)
+## Foundation primitives (✅ ALL THREE IMPLEMENTED 2026-08-12)
+
+**Status: complete.** F1 shipped as `rfc/archive/authored-explanation-surface.md`;
+F3 then F2 shipped in that order as migrations 2 and 3. Defects D1, D2 and D3
+closed with them. The table below is kept because the *finding* — that the work
+missing across eight program items reduced to three primitives — is what made
+the sequencing possible, and because later RFCs cite these names.
+
+Note for anyone citing this section: `feedbackIsRevealed` no longer exists. F2
+replaced it with `feedbackDisclosed` (`packages/runtime/src/feedback.ts:3`).
+Coordinates below are pre-implementation and are historical.
 
 Six parallel code-verified passes (`planning/breadth/`) found that the missing
 work across all eight program items reduces to **three absent primitives**, each
@@ -97,11 +107,12 @@ RFC drafts died, and why every row in this pass carries a `file.ts:line`.
 
 | # | Defect | Status |
 |---|---|---|
-| D1 | **A run link is a write credential.** `assertActiveWriter` is string equality (`runtime/src/errors.ts:37-44`); the server publishes `activeWriterId` in `GET /runs/:id/graph` (`service.ts:258`) and every `GET /runs` summary (`storage.ts:20`); no authentication exists anywhere in source. Any reader can send it as `x-writer-id` and take the lease | 🐞 low impact on a local box; **hard-blocks** all of B5 and any shared-link deployment |
-| D2 | **The withholding barrier fails open.** `publicNodes`/`publicEvents` return everything when `pack === undefined` (`feedback-policy.ts:21,48`), so F2 would violate ADR-0006 silently. `service.ts:186,205` also enqueue no evidence for a pack-less run — both halves must flip in the same slice | 🐞 latent; becomes live with F2 |
-| D3 | **`POST /runs` silently accepts unknown nested fields** — violates never-silent. Same shape as the old checkpoint-action problem: the author writes something, the validator blesses it, nothing happens | 🐞 (codex, session 2) |
+| D1 ✅ | **CLOSED 2026-08-12 by F3.** *A run link was a write credential.* `assertActiveWriter` is string equality (`runtime/src/errors.ts:37-44`); the server publishes `activeWriterId` in `GET /runs/:id/graph` (`service.ts:258`) and every `GET /runs` summary (`storage.ts:20`); no authentication exists anywhere in source. Any reader can send it as `x-writer-id` and take the lease | 🐞 low impact on a local box; **hard-blocks** all of B5 and any shared-link deployment |
+| D2 ✅ | **CLOSED 2026-08-12 by F2.** *The withholding barrier failed open.* `publicNodes`/`publicEvents` return everything when `pack === undefined` (`feedback-policy.ts:21,48`), so F2 would violate ADR-0006 silently. `service.ts:186,205` also enqueue no evidence for a pack-less run — both halves must flip in the same slice | 🐞 latent; becomes live with F2 |
+| D3 ✅ | **CLOSED 2026-08-12 by F2.** *`POST /runs` silently accepted unknown nested fields* — violates never-silent. Same shape as the old checkpoint-action problem: the author writes something, the validator blesses it, nothing happens | 🐞 (codex, session 2) |
 | D4 | **Action-vocabulary drift risk.** The server allow-list (`pack-validation.ts:11`) and the client's recognized-action switch are two hand-maintained lists that currently happen to agree. A shared constant or an equality test prevents the next divergence | 🐞 latent |
 | D5 | **The release compose has no light profile** — `ENGINE_MODE: maia` is hardcoded with an unconditional Maia dependency, so self-hosters following the published artefact must run Maia | 🐞 |
+| D10 | **Both shipped Stockfish specs report `version: "unknown"`.** `parseIdentity` fills `version` from the UCI `id name` line *only* when `spec.name` is unset (`apps/server/src/engine-supervisor.ts:116-126`), and both specs set it — so engine provenance recorded against any evidence is anonymous. B6b works around it by omitting `name` in its authoring spec, which is a workaround, not a fix | 🐞 found 2026-08-12 by the sourcing revision |
 | D9 | **`start.side` is schema-optional but the client throws without it.** `packStartSide` raises `TypeError` when it is absent (`apps/web/src/lib/screen-model.ts:54-59`), while the JSON Schema does not require it — so a pack that validates can crash the drill screen. Every emitter in the sourcing pipelines must write it, which is a contract no schema enforces | 🐞 found 2026-08-12 by the B6 split |
 | D8 | **The JSON Schema and the runtime validator disagree on two declared values.** `perfect_tablebase` (opponent mode) and `immediate_blunder_guard` (feedback policy) both validate against `schemas/drill_pack.schema.json` and are then rejected at load by `apps/server/src/pack-validation.ts:104-129`. Consequence beyond tidiness: the **on-ramp layer's declared feedback knob** (`design/00-thesis.md` §Target player specifies the 1000–1400 lane on exactly three knobs, one of them this) and the **endgame perfect-play opponent** are both currently unencodable. Same divergence class as D4 — two sources of truth for one vocabulary | 🐞 found 2026-08-12 by the sourcing draft |
 | D7 | **`deviations` are not linted at all.** The new `AUTHORED_PROSE_AFTER_LAST_CHECKPOINT` warning covers `annotations` only, so unreachable deviation prose passes silently — but Pack C found the gap is wider than reveal: **no lint checks that a deviation's `moveUci` is even legal in its anchor position, or that it belongs to the side to move.** An author can ship an illegal deviation, or one for the wrong colour, and `pack-check` passes. Both pack authors resorted to hand-auditing every deviation with chessops (10 and 12 respectively) | 🐞 found 2026-08-12 by authoring |

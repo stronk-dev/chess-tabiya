@@ -961,3 +961,47 @@ line rather than stopping after the first move, so the learner plays the
 consequence instead of solving the tactic. It is spine-less, and the RFC states
 plainly in `graduationBlockers` that the only executable verdict is "you played
 it out" — the honest limit rather than a grading claim it cannot keep.
+
+## 2026-08-12 (claude) — all three foundation primitives implemented; sourcing RFCs revised
+
+**F1, F2 and F3 are all shipped.** F1 (authored explanation surface) landed
+earlier; F3 (learner identity and authorization, migration 2) then F2
+(pack-optional runs, migration 3) landed in the ruled order. Defects **D1**
+(a run link was a write credential), **D2** (the withholding barrier failed
+open) and **D3** (`POST /runs` silently accepted unknown fields) are closed with
+them. Verified independently: `ENGINES_REQUIRED=1 make verify` green at 204
+tests, migrations present as 1/2/3, and the F2 leak test asserts what its name
+claims — injected durable evidence withheld at every read surface before reveal.
+
+The alignment pass's central claim therefore held: the work missing across all
+eight program items really did reduce to three primitives, and naming them made
+the sequencing possible.
+
+**The sourcing RFCs were rejected on four blockers and revised.** The serious one
+was B6d shipping the puzzle solution in `start.movesSan` — `projectPackDocument`
+serves `start` whole, so it would have leaked through the public pack response.
+The same leak class F1 closed for authored prose, reintroduced by a pipeline
+that had no reason to know about it. Solution now lives in `evidence.json` and
+`sourcing-check` replays it to prove it yields `start.fen`, so review loses
+nothing and the browser never sees it.
+
+Two claims were withdrawn rather than patched: byte-identical output from a
+fixed-movetime Stockfish (replaced with `go depth 22`, the only deterministic
+budget with a shipped executor path, at the stated cost of unbounded wall clock),
+and "the position ends in the learner's favour", which puzzle solutions do not
+guarantee — mate, material gain and a drawn save are all possible endings.
+MultiPV dropped 3→1 after finding that nothing carries an overridden MultiPV to
+the judge and `lastInfo` would have recorded the *third*-best line as the
+evaluation. That one would have silently produced wrong evidence.
+
+**Two more of my errors surfaced.** The ten-piece count reached a
+learner-facing `feedbackClaim` in Pack C — the single worst place for it, since
+it is text a user reads — and I had only corrected the provenance instance.
+Fixed. And the reviewer's own line pointer for it was wrong, which the revising
+agent demonstrated rather than assumed: worth recording that a reviewer citing a
+stale coordinate is now common enough to check by default.
+
+**D10 ledgered:** `parseIdentity` fills `version` from the UCI `id name` line
+only when `spec.name` is unset (`engine-supervisor.ts:116-126`), and both
+shipped Stockfish specs set it — so every piece of engine provenance we record
+is anonymous. B6b currently works around it by omitting `name`.

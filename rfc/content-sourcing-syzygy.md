@@ -23,11 +23,18 @@ the only endgame pack that actually exists — `content/drafts/rook-4v3-same-sid
 start FEN `3r2k1/5pp1/7p/8/4P3/8/5PPP/R5K1 w - - 0 1` carries 11 pieces (6 white, 5 black).
 
 That pack's author already discovered this by hand and wrote it into the content:
-`:526` records "NO TABLEBASE GROUND TRUTH EXISTS ANYWHERE IN THIS PACK", and `:486` ships a
-`feedbackClaim` telling the learner the same thing. The author also miscounted — both lines
-say "ten pieces" where the FEN has eleven. The verdict is unchanged (10 and 11 are both
-above 7), but the arithmetic error is exactly what a mechanical census exists to prevent, and
-it is the strongest available argument that the range check must be code and not prose.
+`:526` records "NO TABLEBASE GROUND TRUTH EXISTS ANYWHERE IN THIS PACK. Rook and four pawns
+against rook and three is eleven pieces with both kings", and `:486` ships a `feedbackClaim`
+telling the learner the same thing.
+
+The count was wrong in both places when this RFC was drafted — "ten pieces" — and half of it
+still is. `:526` was corrected to eleven in `a5e27e1`; **`:486` still reads "Ten pieces are
+on the board." and is the sentence a learner is shown.** The verdict is unchanged either way
+(10 and 11 are both above 7), which is exactly why nobody caught it: a wrong number inside a
+sentence whose conclusion is right does not get recounted
+(`planning/content-era/log.md:537-556`). That is the strongest available argument that the
+range check must be code and not prose, and it is why §2's census is a mechanical count with
+a property test against `chessops` rather than a number an author types.
 
 So this RFC specifies a pipeline that **grounds run terminals, not pack roots**: an 11-piece
 rook ending reduces into Syzygy range as pawns trade, and that is where exact truth becomes
@@ -64,7 +71,9 @@ intent; it makes the boundary explicit, mechanical, and recorded in every candid
 ### 1. Backend
 
 `https://tablebase.lichess.org/standard?fen=<fen>` — verified anonymous and answering
-2026-08-12, returning `{dtz, precise_dtz, dtm, category, moves[]}` (B6a §0 probe table).
+2026-08-12, returning `{checkmate, stalemate, variant_win, variant_loss,
+insufficient_material, dtz, precise_dtz, dtm, dtw, dtc, category, moves[]}` (B6a §0 probe
+table; `dtw` and `dtc` were `null` on the probed position and are not read by this RFC).
 Same politeness, caching, and `--offline` rules as everything else (B6a §1.4); `sourceId`
 is `syzygy`. A local file mirror is a configuration swap behind the same interface, and is
 not part of this RFC's capability claim.
@@ -82,7 +91,8 @@ request is made:
 The census is a character count over the placement field, not an interpretation: every
 alphabetic character is one piece. On `3r2k1/5pp1/7p/8/4P3/8/5PPP/R5K1` this yields 11 (6
 white, 5 black), which is the number that belongs in
-`content/drafts/rook-4v3-same-side.json` in place of "ten".
+`content/drafts/rook-4v3-same-side.json:486` in place of the "Ten pieces" that pack still
+shows a learner.
 
 This is not an edge case; it is the common case for the content
 `design/04-content-architecture.md` §4 lists. The families named there — 4v3 and 3v2
@@ -101,33 +111,100 @@ about. So:
 **3.1 Position grading**, `kind: "tablebase_result"`, `grounds: "machine_validation"`, is
 offered for any position with ≤7 pieces: a pack root, a spine node, a position an author
 pastes in, or **a terminal position reached in a recorded run**. `values` carries
-`{ fen, pieceCount, category, dtz, precise_dtz, dtm }`, each field copied verbatim from the
-response except `fen` and `pieceCount`, which are the query. `dtm` is `null` in the response
-for many positions and is copied as `null`, never omitted and never inferred.
+`{ fen, pieceCount, category, dtz, precise_dtz, dtm, checkmate, stalemate,
+insufficient_material }`, each field copied verbatim from the response except `fen` and
+`pieceCount`, which are the query. `dtm` is `null` in the response for many positions and is
+copied as `null`, never omitted and never inferred; the same rule applies to `dtz` and
+`precise_dtz`. `dtw` and `dtc` are present in the response and deliberately not copied — this
+RFC has no consumer for them and an unread field in an evidence record is a claim nobody
+checks.
 
 **3.2 Out of range, the only substitute is the shipped Stockfish judge, and it is labelled
 differently.** `kind: "engine_eval"`, `grounds: "machine_validation"`, `values` carrying
-`centipawns` or `mateIn` plus `depth` exactly as `apps/server/src/evidence-queue.ts:324-331`
-produces them, plus the profile fields from §3.3. It is **never** written as
+`centipawns` or `mateIn` plus the reached `depth` exactly as
+`apps/server/src/evidence-queue.ts:323-333` produces them, plus `engineId` and
+`requestedDepth`, which the shipped `searchProvenance` already attaches when a job is
+depth-budgeted (`:282-289`), plus the profile fields from §3.3. It is **never** written as
 `tablebase_result`, and a claim it supports may never be phrased as an exact result. The
 distinction is enforced, not conventional: `sourcing-check` fails
 `EVIDENCE_KIND_MISMATCH` if a `tablebase_result` record's `values.pieceCount` is ≥ 8, and
 fails it symmetrically if an `engine_eval` record is anchored to a ≤7-piece position for
 which a `tablebase_result` exists in the same file.
 
-**3.3 The authoring engine profile is not the runtime profile.**
-`apps/server/src/strong-engine.ts:10-15` ships `movetimeMs: 100, threads: 1, hashMb: 16,
-multiPv: 1` — adequate for in-run evidence, not for validating an authored endgame claim.
-The pipeline calls `resolveStrongEngineProfile` (`strong-engine.ts:23-31`) with an explicit
-authoring override and records `movetimeMs`, `depth`, `threads`, `hashMb` and `multiPv` in
-the record's `values`. An unqualified "the engine says" is exactly the dashboard ADR-0005
-and AGENTS.md law 8 forbid; the profile is what makes the sentence checkable.
+**3.3 The authoring engine budget is a fixed depth, single-threaded, MultiPV 1, in a fresh
+process, cached.** Every word of that is load-bearing and three of them correct the earlier
+draft.
 
-Default authoring override, pinned so re-emission is reproducible:
-`{ movetimeMs: 10000, threads: 1, hashMb: 256, multiPv: 3 }`. `threads: 1` is not a
-performance choice — multi-threaded Stockfish is nondeterministic across runs, and B6a §1.4
-requires byte-identical re-emission. Overriding the profile changes the `values`, therefore
-changes `evidence.json`, therefore is visible in review.
+*Why not movetime.* `DEFAULT_STRONG_ENGINE_PROFILE` (`apps/server/src/strong-engine.ts:10-15`)
+is `movetimeMs: 100` — adequate for in-run evidence, useless for a reproducible authored
+claim. **Stockfish at a fixed movetime is not deterministic across runs**: the node count
+reached in 10 s depends on the machine, its load, and the moment. The earlier draft asked for
+byte-identical re-emission (B6a §1.4) *and* `movetimeMs: 10000`, which cannot both hold.
+
+*The budget, and why `depth`.* Every authoring search is `go depth 22`. The shipped executor
+already emits exactly that: `EvidenceJobInput` takes `depth` **xor** `movetime`
+(`apps/server/src/evidence-queue.ts:19-20`, guarded at `:101-107`) and
+`StockfishEvidenceExecutor` writes `go depth ${job.depth}` (`:301-304`). The alternative
+deterministic budget, `go nodes`, has **no** executor path — `grep -rn "go nodes"
+apps/server/src` is empty — and would need a new job field, a new command branch, and a new
+provenance key for a budget that is no more portable than depth. Depth ships; depth is used.
+
+*The cost of depth, stated rather than hidden.* A fixed depth has unbounded wall-clock, and
+the shipped executor hard-codes the depth path's timeout to
+`Math.max(5_000, (job.movetime ?? 0) * 10)` — with `depth` set, `movetime` is `undefined`, so
+the ceiling is **exactly 5 000 ms** (`evidence-queue.ts:312`) and a longer search dies as
+`ENGINE_UNAVAILABLE` (`engine-supervisor.ts:364`). B6b therefore ships **one** executor
+change, and its whole diff is: add an optional `timeoutMs` to `EvidenceJobInput`, defaulting
+to today's expression, and pass it through at `:312`. Every shipped caller is unaffected by
+construction because the default *is* the current value. The authoring job sets
+`timeoutMs: 120_000`; a search that still does not finish is an abstention with
+`reason: "source_unavailable"` and the depth in `detail`, not a silent shorter search.
+
+*Why `multiPv: 1`, not 3.* The earlier draft specified `multiPv: 3` with no path to an
+engine and a parser that would have misread it:
+
+- The evidence executor never sends `setoption name MultiPV`; the only such command in the
+  tree is on the Maia path (`opponent-selector.ts:413`). For the judge, MultiPV is fixed at
+  spawn, and `stockfishAnalysisSpec` hard-codes `{ Threads: 1, Hash: 16, MultiPV: 1 }`
+  (`application.ts:183-191`). `resolveStrongEngineProfile`'s `multiPv` reaches only the
+  **opponent** spec (`strong-engine.ts:41-57`).
+- Worse than absent: `lastInfo` takes the **last** matching `info` line
+  (`evidence-queue.ts:265-275`), which under MultiPV > 1 is the highest-numbered `multipv`
+  line. A MultiPV-3 search would have recorded the *third*-best move's score as the
+  position's evaluation, and its PV as the best line.
+
+So B6b pins `multiPv: 1`, and the emitter **refuses** an authoring profile with `multiPv > 1`
+with a named error citing `evidence-queue.ts:265-275`. Top-*n* alternatives would need a
+different parser; that is not in this RFC.
+
+*Why a fresh process per position.* No `ucinewgame` is sent anywhere in the tree
+(`grep -n "ucinewgame" apps/server/src` is empty; the handshake is `uci` → the spec's
+`setoption`s → `isready`, `engine-supervisor.ts:225-236`), so the transposition table carries
+across positions and the same `go depth 22` on the same FEN can return a different PV
+depending on what was searched before it. The pipeline therefore spawns one engine process
+per position and stops it after. At authoring scale that costs a process start per record and
+buys the only determinism claim worth making.
+
+*Recording, so the number is checkable.* The record's `values` carry `depth`, `threads`,
+`hashMb`, `multiPv`, `timeoutMs`, and the engine identity — `id`, `name`, `version` — as
+returned by the supervisor. Getting a real `version` requires one deliberate choice: the
+authoring spec sets `id: "stockfish-authoring"`, `kind: "judge"`, and **no `name`**, because
+`parseIdentity` fills the version from the advertised `id name` line only when `spec.name` is
+undefined (`engine-supervisor.ts:116-126`). Both shipped Stockfish specs set
+`name: "Stockfish"` and therefore report `version: "unknown"` — which is the second reason
+B6b does not reuse `stockfish-analysis` as-is.
+
+*And the honest residual.* Fixed depth, one thread, fixed hash and a fresh process make a
+search reproducible **on one binary**. A different Stockfish build or NNUE net can return a
+different score at the same depth, and this RFC cannot prevent that. What it does instead is
+B6a §1.4's rule: every engine result is written to the `engine` cache kind, keyed by engine
+id, version, profile, budget, FEN and evidence kind, and re-emission reads the cache. So
+re-emission is byte-identical because the answer is *recorded*, and a change of engine build
+shows up as a cache miss and a new record carrying the new `version` — visible in review,
+never silent.
+
+An unqualified "the engine says" is exactly the dashboard ADR-0005 and AGENTS.md law 8
+forbid; the recorded budget, profile and build are what make the sentence checkable.
 
 **3.4 No record from this RFC may support prose.** B6a §3.3 ships the prose-template table
 empty and B6b registers no template. `tablebase_result` and `engine_eval` records support
@@ -150,25 +227,25 @@ label), not from a corpus: `make candidate-emit PIPELINE=syzygy ARGS='--position
 | `mode` | `"outcome"` | `schema:23`; root-required. Not `"line"` — there is no line |
 | `phase` | `"endgame"` | `schema:24-26` |
 | `start.fen` | the supplied FEN | `lint.ts:218` |
-| `start.side` | `--learner-side`, **required, no default** | schema-optional (`schema:117`), client-required (`apps/web/src/lib/screen-model.ts:54-59`); B6a §0 |
+| `start.side` | `--learner-side`, **required, no default** | schema-optional (`schema:117`), client-required (`apps/web/src/lib/screen-model.ts:54-60`); defect **D9**, B6a §0 |
 | `spine` | **omitted** | no source supplies a continuation; inventing one is a chess claim |
 | `objective.type` | `"play_until_checkpoint"` | see §5 |
 | `objective.summary` | `` `Play this endgame out for ${C} plies from this position.` `` | B6a §4's placeholder discipline; `graduationBlockers` records it |
-| `objective.successConditions` | `[{ "kind": "reach_checkpoint", "checkpointId": "endgame-played-out" }]` | only executable condition (`pack-validation.ts:159-178`) |
+| `objective.successConditions` | `[{ "kind": "reach_checkpoint", "checkpointId": "endgame-played-out" }]` | only executable condition (`pack-validation.ts:160-178`) |
 | `checkpoints` | exactly one: `{ "id": "endgame-played-out", "trigger": { "atPly": C }, "actions": [] }`, `C` = 16 adjusted to learner parity (§4.1) | `minItems: 1` (`schema:44-48`); `atPly` fires regardless of spine (`pack-orchestrator.ts:45`) |
-| `opponentPolicy` | `{ "mode": "strong_engine" }` or `{ "mode": "human_common", "targetElo": …, "seedMode": "per_branch" }`, chosen by `--opponent`, **required** | `capabilities.ts:10-14`. **Never `theory_strict`**: with no spine it silently degrades to `human_common` (`opponent-selector.ts:454-457`) and the pack would misdescribe itself |
+| `opponentPolicy` | `{ "mode": "strong_engine" }` or `{ "mode": "human_common", "targetElo": …, "seedMode": "per_branch" }`, chosen by `--opponent`, **required** | `capabilities.ts:10-14`. **Never `theory_strict`**: with no spine it silently degrades to `human_common` (`opponent-selector.ts:453-458`) and the pack would misdescribe itself |
 | `feedbackPolicy` | `"delayed_checkpoint"` | `pack-validation.ts:103-122` |
 | `difficulty` | `{ "branchLengthTarget": C }` when `C ≤ 20`, else omitted | `schema:100-104` bounds it to 2–20 |
-| `provenance` | `reviewStatus: "draft"`, `reviewers: []`, the `unlicensed-data` source string (§6), `graduationBlockers` | `schema:458-475` |
+| `provenance` | `reviewStatus: "draft"`, `reviewers: []`, the no-rights-asserted source string (§6), `licence: "CC-BY-SA-4.0"` (B6a §2, unconditional), no `attribution`, `graduationBlockers` | `schema:458-475`, `additionalProperties: true` at `:474` |
 
 `--opponent` is required and has no default because the choice is pedagogical: `strong_engine`
 drills convert/hold under best defence, `human_common` drills practical resistance, and
 `design/04` §4's "convert / hold / save variants" does not say which. The choice is recorded
 in `graduationBlockers` as an open authoring decision.
 
-**4.1 Checkpoint parity.** The root is `ply: 0` (`packages/runtime/src/runtime.ts:142`) and
-each move is `+1` (`:258`). The opponent moves whenever the board's turn colour is not
-`start.side` (`apps/web/src/lib/session-controller.ts:345`). Therefore:
+**4.1 Checkpoint parity.** The root is `ply: 0` (`packages/runtime/src/runtime.ts:178`) and
+each move is `+1` (`:325`). The opponent moves whenever the board's turn colour is not
+`start.side` (`apps/web/src/lib/session-controller.ts:367`). Therefore:
 
 - FEN side to move **equals** `start.side` ⇒ the learner moves first ⇒ **learner plies are
   odd**.
@@ -176,10 +253,12 @@ each move is `+1` (`:258`). The opponent moves whenever the board's turn colour 
   are even**.
 
 The emitter computes this from the FEN and `--learner-side` and adjusts `C` by one so the
-checkpoint always fires on a **learner** ply. This matters because `feedbackIsRevealed`
-(`apps/server/src/feedback-policy.ts:12-14`) unlocks withheld engine evidence on
-`checkpoint.reached`, and revealing it in the middle of the opponent's turn is a worse moment
-than after the learner's own move.
+checkpoint always fires on a **learner** ply. This matters because withheld engine evidence
+is unlocked by `feedbackDisclosed`, which under `delayed_checkpoint` returns true as soon as
+a `checkpoint.reached` event exists (`packages/runtime/src/feedback.ts:3-6`, called from
+`apps/server/src/feedback-policy.ts:13,39`) — and revealing it in the middle of the
+opponent's turn is a worse moment than after the learner's own move. (There is no
+`feedbackIsRevealed` in the tree; two drafts of this territory cited it.)
 
 **Deliberately absent:** no `annotations`, no `planClasses`, no `deviations`, no
 `feedbackClaims`, no `concepts`, no `authoredBoundary`. Every one is a judgment.
@@ -213,7 +292,7 @@ Concretely:
 
 **It cannot make `objective.type: "win"`/`"hold"`/`"save"` mechanically checkable.** Those
 values validate (`schemas/drill_pack.schema.json:122-131`) but the only executable success
-condition is `reach_checkpoint` (`pack-validation.ts:159-178`) and `outcome.reached` has no
+condition is `reach_checkpoint` (`pack-validation.ts:160-178`) and `outcome.reached` has no
 producer (B6a §0). Emitted candidates therefore use `play_until_checkpoint`, and upgrading
 the objective is an authored act — the same shape as
 `content/drafts/rook-4v3-same-side.json`, which declares `objective.type: "hold"` and then
@@ -228,9 +307,16 @@ redistributed. In fact, those files are free of copyright at least under US law 
 Feist...) and under EU law (following Football Dataco...)." The generator's GPL-2.0 binds the
 code, not the data. The Lichess tablebase API is a transport, not a rightsholder.
 
-Encoded per B6a §1.2 as `spdx: "unlicensed-data"` with `rationale` set to that Feist /
-Football Dataco text, carried verbatim into one `provenance.sources[]` string. No
-`provenance.licence` and no `provenance.attribution` — no prose is borrowed.
+Encoded per B6a §1.2 as `basis: "no-rights-asserted"`, `spdx: null`, with `rationale` set to
+that Feist / Football Dataco text, carried verbatim into one `provenance.sources[]` string.
+This is the case B6a §1.2 introduced the field for: the claim is not "the licence is unknown"
+(SPDX `NOASSERTION`) and not "the licence is unlisted" (SPDX `LicenseRef-…`) but "this is not
+a copyrightable work", and `unlicensed-data` — the withdrawn draft's value — is not an SPDX
+identifier at all.
+
+`provenance.licence` is `"CC-BY-SA-4.0"` like every emitted pack (B6a §2 is wholesale, not
+conditional on borrowing); `provenance.attribution` is absent, because nothing was borrowed
+and a tablebase result is not prose.
 
 ## Deviations from design
 
@@ -273,52 +359,68 @@ Football Dataco text, carried verbatim into one `provenance.sources[]` string. N
    fails `sourcing-check` with `EVIDENCE_KIND_MISMATCH`; an `engine_eval` record anchored to
    a ≤7-piece position that also has a `tablebase_result` in the same file fails the same
    way.
-6. **The authoring profile is recorded.** Every `engine_eval` record carries `movetimeMs`,
-   `depth`, `threads`, `hashMb` and `multiPv`; a record missing any of them fails
-   `EVIDENCE_VALUES_INVALID`. A test asserts the emitter calls
-   `resolveStrongEngineProfile` with an override and never uses
-   `DEFAULT_STRONG_ENGINE_PROFILE` unmodified.
-7. **No record from this RFC supports prose.** Records whose `supports` target
-   `/spine/0/annotations/0`, `/feedbackClaims/0/text`, `/objective/summary`, or
-   `/deviations/0/class` each fail `EVIDENCE_OVERREACH` — asserted for both `kind`s.
+6. **The authoring budget is deterministic and recorded.** Every `engine_eval` record carries
+   `depth`, `threads`, `hashMb`, `multiPv`, `timeoutMs` and the engine `id`/`name`/`version`;
+   a record missing any of them fails `EVIDENCE_VALUES_INVALID`. A record carrying
+   `movetimeMs` fails the same way — **no engine-derived record in this RFC may be produced
+   by a wall-clock budget**. A test asserts the emitted job sets `depth` and not `movetime`,
+   and that the executor received `go depth 22`.
+7. **MultiPV is 1 and cannot be raised.** An authoring profile with `multiPv: 3` is refused
+   with a named error; a test drives `StockfishEvidenceExecutor` over a canned MultiPV-3
+   transcript and asserts `lastInfo` (`evidence-queue.ts:265-275`) returns the `multipv 3`
+   line — the misreading this restriction prevents, proved rather than asserted.
+8. **The executor change is exactly one field and changes no shipped behaviour.** A test
+   enqueues a `depth` job with no `timeoutMs` and asserts the effective timeout is still
+   `Math.max(5_000, (job.movetime ?? 0) * 10)`; another passes `timeoutMs: 120_000` and
+   asserts a 30 s search completes rather than aborting at 5 s.
+9. **Each position gets a fresh process, and re-emission comes from the cache.** A test
+   asserts one spawn per graded position; a second runs the emitter twice with the engine
+   stubbed to fail on the second run and asserts identical output, proving the second run
+   read the `engine` cache entry (B6a §1.4) and never searched.
+10. **No record from this RFC supports prose.** Records whose `supports` target
+    `/spine/0/annotations/0`, `/feedbackClaims/0/text`, `/objective/summary`, or
+    `/deviations/0/class` each fail `EVIDENCE_OVERREACH` — asserted for both `kind`s.
 
 **Boundary conditions of shapes the schema permits:**
 
-8. **`perfect_tablebase` refusal.** An endgame candidate hand-edited to that mode fails
-   `validatePackDocument` with `UNSUPPORTED_OPPONENT_POLICY` at `/opponentPolicy/mode`; the
-   shipped emitter never produces it; and every ≤7-piece candidate carries the D8
-   `graduationBlockers` entry verbatim.
-9. **`theory_strict` is never emitted.** A test asserts no B6b candidate declares it, and a
-   companion test constructs a spine-less pack with `theory_strict`, runs one selection, and
-   asserts it takes the `#humanCommon` path (`opponent-selector.ts:454-457`) — the silent
-   degradation this emitter must not create.
-10. **A spine-less candidate is valid and playable.** A B6b candidate passes
+11. **`perfect_tablebase` refusal.** An endgame candidate hand-edited to that mode fails
+    `validatePackDocument` with `UNSUPPORTED_OPPONENT_POLICY` at `/opponentPolicy/mode`
+    (`pack-validation.ts:125-138`); the shipped emitter never produces it; and every ≤7-piece
+    candidate carries the D8 `graduationBlockers` entry verbatim.
+12. **`theory_strict` is never emitted.** A test asserts no B6b candidate declares it, and a
+    companion test constructs a spine-less pack with `theory_strict`, runs one selection, and
+    asserts it takes the `#humanCommon` path (`opponent-selector.ts:453-458`) — the silent
+    degradation this emitter must not create.
+13. **A spine-less candidate is valid and playable.** A B6b candidate passes
     `validatePackDocument`; `projectPackDocument` returns `spine: []`
     (`apps/server/src/pack-registry.ts:66`); the client's `timelineEntries`
     (`apps/web/src/lib/screen-model.ts:96`) renders it without throwing; and one full run
     reaches `endgame-played-out`.
-11. **Checkpoint parity (§4.1).** For a FEN with White to move and `--learner-side white` the
+14. **Checkpoint parity (§4.1).** For a FEN with White to move and `--learner-side white` the
     emitted `atPly` is **odd**; with `--learner-side black` it is **even**. In both cases a
     played run fires `checkpoint.reached` on a node whose `actor` is `"user"`
-    (`packages/runtime/src/types.ts:3,65`).
-12. **`branchLengthTarget` is omitted, not clamped, when `C > 20`.** `schema:100-104` bounds
+    (`Actor` at `packages/runtime/src/types.ts:3`, the node field at `:85`).
+15. **`branchLengthTarget` is omitted, not clamped, when `C > 20`.** `schema:100-104` bounds
     it to 2–20; a candidate with `C = 24` emits no `difficulty.branchLengthTarget` and still
     validates.
-13. **No emitter writes a key the schema forbids** — the B6a §Acceptance 11 property test is
+16. **No emitter writes a key the schema forbids** — the B6a §Acceptance 13 property test is
     extended to this pipeline.
 
 **Licence and hygiene:**
 
-14. `syzygy` → `spdx: "unlicensed-data"` with the Feist / Football-Dataco rationale text
-    present in `sources.json` and verbatim in `provenance.sources[]`; no `provenance.licence`
-    and no `provenance.attribution` are written.
-15. **Determinism.** Two `--offline` runs against the committed tablebase fixtures produce
-    byte-identical `pack.json`, `evidence.json` and `sources.json` (B6a §1.4).
-16. **No candidate is promotable** — `reviewStatus: "reviewed"` without a reviewer fails
-    `GRADUATION_REQUIRES_REVIEWERS` (`pack-validation.ts:91-100`).
-17. `make verify` green; `docs/content-sourcing.md` gains the Syzygy section including the
-    range rule and the D8 dependency; `content/drafts/rook-4v3-same-side.json` is **not**
-    modified by this RFC — correcting "ten pieces" to eleven is authoring work under
+17. `syzygy` → `basis: "no-rights-asserted"`, `spdx: null`, with the Feist / Football-Dataco
+    rationale text present in `sources.json` and verbatim in `provenance.sources[]`;
+    `provenance.licence` is `"CC-BY-SA-4.0"` and `provenance.attribution` is absent. A test
+    asserts no artifact of this pipeline contains the string `unlicensed-data`.
+18. **Determinism.** Two `--offline` runs against the committed tablebase **and engine**
+    fixtures produce byte-identical `pack.json`, `evidence.json` and `sources.json`
+    (B6a §1.4), including for candidates carrying `engine_eval` records.
+19. **No candidate is promotable** — `reviewStatus: "reviewed"` without a reviewer fails
+    `GRADUATION_REQUIRES_REVIEWERS` (`pack-validation.ts:92-99`).
+20. `make verify` green; `docs/content-sourcing.md` gains the Syzygy section including the
+    range rule, the fixed-depth budget and the D8 dependency;
+    `content/drafts/rook-4v3-same-side.json` is **not** modified by this RFC — correcting the
+    "Ten pieces" still shipping in its `feedbackClaim` at `:486` is authoring work under
     `planning/content-era/`, and a BACKLOG row records it.
 
 ## Open questions
@@ -329,3 +431,19 @@ None.
 
 - 2026-08-12: created, as B6b of the four-way split of the withdrawn
   `content-sourcing-pipelines.md` draft.
+- 2026-08-12: revised against the per-file review. (1) The engine budget is now a fixed
+  `go depth 22` — the only deterministic budget with a shipped executor path
+  (`evidence-queue.ts:19-20,101-107,301-304`) — replacing `movetimeMs: 10000`, which
+  contradicted B6a §1.4's byte-identical rule; the cost (unbounded wall clock, the 5 s
+  hard-coded depth timeout at `:312`) is stated with the one-field executor change that
+  answers it. (2) `multiPv: 3` dropped to `1`: nothing carries an overridden MultiPV to the
+  judge (`application.ts:189` is hard-coded, `strong-engine.ts:41-57` feeds the opponent
+  only), and `lastInfo` (`:265-275`) would have read the *third*-best line as the evaluation.
+  (3) Determinism is now sourced from the `engine` cache kind plus a fresh process per
+  position (no `ucinewgame` exists), with the cross-binary residual stated instead of
+  implied. (4) Licence encoding moved off the non-SPDX `spdx: "unlicensed-data"` and onto
+  B6a's `basis: "no-rights-asserted"`, and `provenance.licence` is now written
+  unconditionally per the wholesale ruling. (5) The §Summary claim that Pack C says "ten
+  pieces" in both places is corrected: `:526` was fixed in `a5e27e1`, `:486` still ships it.
+  (6) `feedbackIsRevealed` corrected to `feedbackDisclosed`; `runtime.ts`,
+  `session-controller.ts`, `types.ts` and `opponent-selector.ts` coordinates re-taken.

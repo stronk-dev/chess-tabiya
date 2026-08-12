@@ -19,12 +19,20 @@ RFC is the instrument: a rating-band frequency query, an authoring artifact
 one and only case in the whole sourcing program where a machine record may support an
 authored sentence.
 
-It is also the only one of the four with a **verified live blocker**. On 2026-08-12 both
-`explorer.lichess.ovh/lichess` and `explorer.lichess.org/masters` returned **401
-Authorization Required** from `server: nginx`, with `access-control-allow-headers`
-advertising `Authorization` and no local proxy in the environment. The refusal is Lichess's
-own front end, not a transient application error, and it reproduces the 2026-08-11 finding
-recorded at `design/research/theory-sourcing.md:39-41,147-150`.
+It is also the only one of the four with a **verified live blocker**. On 2026-08-12
+`explorer.lichess.ovh/lichess`, `explorer.lichess.org/lichess` and
+`explorer.lichess.org/masters` all returned **401 Authorization Required** from
+`server: nginx`, with `access-control-allow-headers` advertising `Authorization` and no local
+proxy in the environment. The refusal is Lichess's own front end, not a transient application
+error, and it reproduces the 2026-08-11 finding recorded at
+`design/research/theory-sourcing.md:39-41,147-150`.
+
+The published spec agrees that authorization is expected: the operation declares
+`security: - OAuth2: []`
+(`raw.githubusercontent.com/lichess-org/api/master/doc/specs/tags/openingexplorer/lichess.yaml`,
+read 2026-08-12), and names `https://explorer.lichess.org` as the server — `.ovh` is the
+historical hostname (`design/research/theory-sourcing.md:35-36`). So Gate 0 is not a long
+shot: it is testing the mechanism the spec documents.
 
 This RFC therefore does not open with a capability claim. It opens with a **probe gate**
 (§0) whose two outcomes are both specified in full, so that "does a token work?" is a task
@@ -67,10 +75,18 @@ instrument the order is taste.
 Lichess account and exactly one request is made:
 
 ```
-GET https://explorer.lichess.ovh/lichess?variant=standard&fen=<standard start FEN>&ratings=1400,1600,1800&speeds=blitz,rapid
+GET https://explorer.lichess.org/lichess?variant=standard&fen=<standard start FEN>
+    &ratings=1400,1600,1800&speeds=blitz,rapid
+    &since=2024-01&until=2026-07&moves=12&topGames=0&recentGames=0&history=false
 Authorization: Bearer <token>
 User-Agent: chess-tabiya-sourcing/<version> (+https://github.com/<repo>; <contact>)
 ```
+
+Every parameter is sent explicitly, including the ones that have documented defaults, for
+three reasons: the cache key is the canonical request (B6a §1.4), so an implicit default that
+Lichess later changes would silently change cached meaning; `since`/`until` default to
+`1952-01` and `3000-12` and a window that wide is not the claim §4's sentence makes; and
+`topGames`/`recentGames` return game references this RFC has no use for and must not retain.
 
 The status code, response headers, and body prefix are appended to
 `planning/exploration/log.md` and the `design/research/theory-sourcing.md` coverage-matrix
@@ -104,33 +120,69 @@ to assert frequencies from model knowledge, which is what the three existing dra
 
 ### 1. `explorerStats` — one interface, two satisfiable paths
 
+The shapes below are taken from the published schema, read live on 2026-08-12 `[V]`:
+`doc/specs/tags/openingexplorer/lichess.yaml` (parameters) and
+`doc/specs/schemas/OpeningExplorerLichess.yaml` (response), both under
+`raw.githubusercontent.com/lichess-org/api/master/`.
+
+**The window is a request parameter, not a response field.** The response object is
+`{ opening, white, draws, black, moves[], topGames[], recentGames[], history[] }` and
+contains **no** `since` or `until`; `since` and `until` are query parameters
+(`in: query`, `type: string`, defaults `1952-01` and `3000-12`). The earlier draft had them
+"echoed from the response", which no server does. They are therefore recorded from the
+*request* — they are inputs the emitter chose, and provenance records them as such.
+
 ```ts
 type ExplorerQuery = {
   readonly fen: string;
-  readonly ratings: readonly number[];   // Lichess rating buckets, ascending, non-empty
-  readonly speeds: readonly string[];    // Lichess speed keys, canonical order, non-empty
+  readonly ratings: readonly RatingGroup[];  // ascending, non-empty; see the closed set below
+  readonly speeds: readonly string[];        // Lichess speed keys, canonical order, non-empty
+  readonly since: string;                    // "YYYY-MM", required — no implicit default
+  readonly until: string;                    // "YYYY-MM", required — no implicit default
 };
 
+// The spec's enum, verbatim. Each value is a group's LOWER BOUND, running to the next value.
+type RatingGroup = 0 | 1000 | 1200 | 1400 | 1600 | 1800 | 2000 | 2200 | 2500;
+
 type ExplorerStats =
-  | { readonly kind: "stats"; readonly white: number; readonly draws: number;
-      readonly black: number; readonly total: number;
-      readonly topMoves: readonly { readonly san: string; readonly uci: string;
-                                    readonly white: number; readonly draws: number;
-                                    readonly black: number }[];
-      readonly since: string; readonly until: string; }   // "YYYY-MM", echoed from the response
+  | { readonly kind: "stats";
+      // Copied from the response, which counts games by result at this position:
+      readonly white: number; readonly draws: number; readonly black: number;
+      readonly moves: readonly { readonly uci: string; readonly san: string;
+                                 readonly averageRating: number;
+                                 readonly white: number; readonly draws: number;
+                                 readonly black: number }[];
+      // Copied from the REQUEST, not the response:
+      readonly window: { readonly since: string; readonly until: string };
+      readonly ratings: readonly RatingGroup[]; readonly speeds: readonly string[]; }
   | { readonly kind: "abstention"; readonly reason: "source_unavailable" | "no_data_at_band";
       readonly detail: string };
 ```
 
+**`total` and `playedCount` are derived, not read.** The response has no `total` field and no
+per-move play count. `total = white + draws + black` at the position;
+`playedCount = m.white + m.draws + m.black` for a move `m`. Every downstream number in this
+RFC — §2's `total` and `sharePct`, §4's template values — is computed from those two sums and
+from nothing else, and `sourcing-check` recomputes both (§4).
+
+**`ratings` values must be members of the enum.** `1400,1600,1800` covers **1400–1999**,
+because each value is a group lower bound running to the next; that is how
+`design/04-content-architecture.md` §2c's "1400–2000" is encoded, and the half-open interval
+is stated in `priority.json` and in the rendered sentence rather than rounded off in prose. A
+value outside the enum — `1500`, say — is refused by the emitter **before any request** with
+`RATINGS_NOT_A_GROUP`, because the server's behaviour for an unlisted value is not specified
+and guessing it would put an unverifiable band into a citation.
+
 Satisfied by, in order:
 
-1. **Cache** (B6a §1.4). Default max age 30 days; the cache entry's `retrievedAt` is what
-   reaches `sources.json`, which is what makes re-emission byte-identical.
-2. **Live** `https://explorer.lichess.ovh/lichess?variant=standard&fen=…&ratings=…&speeds=…`
-   with a bearer token from `LICHESS_TOKEN`. On `401`/`403` the interface **abstains
-   immediately**: no retry, no fallback to a different band, no degradation to a different
-   host. Silently answering a 1400–2000 question with 2000–2500 data is the failure mode this
-   rule exists to prevent.
+1. **Cache** (B6a §1.4, `body` kind). Default max age 30 days; the cache entry's
+   `retrievedAt` is what reaches `sources.json`, which is what makes re-emission
+   byte-identical.
+2. **Live** `https://explorer.lichess.org/lichess?…` — the host the spec declares — with a
+   bearer token from `LICHESS_TOKEN`. On `401`/`403` the interface **abstains immediately**:
+   no retry, no fallback to a different band, no degradation to a different host. Silently
+   answering a 1400–2000 question with 2000–2500 data is the failure mode this rule exists to
+   prevent.
 
 There is no third path. `explorerStats` never invents, interpolates, or averages.
 
@@ -140,15 +192,22 @@ asserts no emitted file contains the token value.
 ### 2. `content/candidates/priority.json` — a priority table, not pack content
 
 One file, rebuilt by `make candidate-emit PIPELINE=explorer ARGS='--lines <file> --ratings
-1400,1600,1800 --speeds blitz,rapid'`, where `<file>` is a list of `(eco, name, movesSan)`
-rows — in practice the output of B6a's `chess-openings` normalization, which is why B6c lands
-after B6a.
+1400,1600,1800 --speeds blitz,rapid --since 2024-01 --until 2026-07'`, where `<file>` is a
+list of `(eco, name, movesSan)` rows — in practice the output of B6a's `chess-openings`
+normalization, which is why B6c lands after B6a. **`--since` and `--until` are required and
+have no defaults.** A default would either be the spec's `1952-01`/`3000-12` (a window nobody
+means) or "now" (a wall-clock read, which B6a §1.4 forbids in an artifact-producing path).
 
 ```jsonc
 {
   "schema": "tabiya.sourcing.priority.v1",
   "status": "available",                 // "available" | "unavailable" (Gate 0 branch B)
-  "query": { "ratings": [1400,1600,1800], "speeds": ["blitz","rapid"] },
+  "query": {                             // every field is a REQUEST parameter, verbatim
+    "ratings": [1400,1600,1800],         // group lower bounds: covers 1400-1999
+    "speeds": ["blitz","rapid"],
+    "since": "2024-01", "until": "2026-07",
+    "moves": 12, "topGames": 0, "recentGames": 0, "history": false
+  },
   "sourcedAt": "2026-08-12T10:44:56Z",   // derived per B6a §1.4, never a wall clock
   "rows": [
     {
@@ -156,9 +215,11 @@ after B6a.
       "name": "Caro-Kann Defense: Advance Variation",
       "movesSan": ["e4","c6","d4","d5","e5"],
       "transposeKey": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq",
-      "total": 128034,
+      "total": 128034,                   // derived: white + draws + black
       "whitePct": 51.2, "drawPct": 5.1, "blackPct": 43.7,
-      "topMoves": [{ "san": "Bf5", "playedCount": 40204, "sharePct": 31.4 }]
+      "topMoves": [{ "san": "Bf5", "uci": "c8f5",
+                     "playedCount": 40204,   // derived: the move's white + draws + black
+                     "sharePct": 31.4 }]
     }
   ],
   "abstentions": [
@@ -182,12 +243,12 @@ than no claim, because it looks like evidence.
 
 ### 3. The anti-contamination rule
 
-Explorer output **never enters a pack document** and never reaches the browser. B6a §1.1
+Explorer output **never enters a pack document** and never reaches the browser. B6a §1.1a
 gives the mechanism: `spineNode` is closed (`schemas/drill_pack.schema.json:174`) so
 per-move data has no legal home, and `provenance` is projected verbatim before play
-(`apps/server/src/pack-registry.ts:58`) so smuggling it there would tell a learner the book
-move before they choose. Explorer output lives in `evidence.json` as `explorer_frequency`
-records and in `priority.json`.
+(`apps/server/src/pack-registry.ts:58`, and B6a §1.1's projection table) so smuggling it
+there would tell a learner the book move before they choose. Explorer output lives in
+`evidence.json` as `explorer_frequency` records and in `priority.json`.
 
 It has exactly two legitimate in-pack effects, both indirect:
 
@@ -211,13 +272,14 @@ kind:          "explorer_frequency"
 templateId:    "explorer-move-share/v1"
 requiredValues:
   moveSan      string, non-empty
-  playedCount  integer >= 0
-  total        integer >= 100          // §2 minimum mass, re-asserted at check time
+  playedCount  integer >= 0             // derived: the move's white + draws + black
+  total        integer >= 100           // derived: the position's white + draws + black;
+                                        //   §2 minimum mass, re-asserted at check time
   sharePct     number, 0 <= x <= 100
-  ratings      array of integers, ascending, non-empty   // the exact query parameter sent
-  speeds       array of strings, canonical order, non-empty
-  since        string, /^\d{4}-\d{2}$/
-  until        string, /^\d{4}-\d{2}$/
+  ratings      array of RatingGroup, ascending, non-empty  // the exact query parameter sent
+  speeds       array of strings, canonical order, non-empty // ditto
+  since        string, /^\d{4}-\d{2}$/  // the `since` REQUEST parameter, not a response field
+  until        string, /^\d{4}-\d{2}$/  // the `until` REQUEST parameter, not a response field
 derived:
   sharePct === Math.round(playedCount / total * 1000) / 10
 render(values):
@@ -234,10 +296,19 @@ Bf5 is played in 31.4% of 128034 games from this position (Lichess explorer, rat
 
 `sourcing-check` validates in this order, per B6a §3.3: `templateId` present and registered
 for `kind`; every `requiredValues` name present with the declared type, range and format;
-`sharePct` recomputed from `playedCount` and `total` and compared exactly
-(`EVIDENCE_VALUES_INVALID` on mismatch); `render(values)` compared to the pack string with
-`===` (`EVIDENCE_OVERREACH` on mismatch). `total` is integer-formatted with no separators;
-`sharePct` is always one decimal, so `100` renders as `100.0`.
+`playedCount` and `total` recomputed from the cached response body's per-move and per-position
+`white`/`draws`/`black`, and `sharePct` recomputed from those two, each compared exactly
+(`EVIDENCE_VALUES_INVALID` on mismatch); `ratings`, `speeds`, `since` and `until` compared to
+the request recorded in `sources.json` — a record whose stated window is not the window that
+was asked for fails `EVIDENCE_VALUES_INVALID`, which is the check the "echoed from the
+response" version of this RFC could not have performed; then `render(values)` compared to the
+pack string with `===` (`EVIDENCE_OVERREACH` on mismatch). `total` is integer-formatted with
+no separators; `sharePct` is always one decimal, so `100` renders as `100.0`.
+
+The rendered sentence says "rating buckets 1400,1600,1800" rather than "1400–2000" on
+purpose: the buckets are what was requested, the half-open interval they cover is documented
+in §1, and a sentence that rounds a request into a range is a sentence the check cannot
+verify.
 
 The consequence is deliberate and is the point: **a supported sentence is generated, not
 approved.** An author who edits one character loses the support and gets
@@ -309,12 +380,15 @@ unmet.** Pack ordering is taste, `priority.json` records that it is, and B6d's p
 
 Explorer responses are aggregate statistics over CC0 Lichess game data
 (`design/research/theory-sourcing.md:42-44`, `:102-107`). Encoded per B6a §1.2 as
-`spdx: "unlicensed-data"` with `rationale`: "aggregate statistics are facts; the underlying
-Lichess game data is CC0", plus the one-request-at-a-time etiquette note from
-`design/research/theory-sourcing.md:37-38`. One `provenance.sources[]` string carries the
-rationale verbatim. No `provenance.licence` and no `provenance.attribution` — no prose is
-borrowed, and the generated sentence in §4 is our own text stating someone else's numbers,
-which are facts.
+`basis: "no-rights-asserted"`, `spdx: null`, with `rationale`: "aggregate statistics are
+facts; the underlying Lichess game data is CC0", plus the one-request-at-a-time etiquette
+note from `design/research/theory-sourcing.md:37-38`. One `provenance.sources[]` string
+carries the rationale verbatim.
+
+`provenance.licence` is `"CC-BY-SA-4.0"`, as on every emitted pack (B6a §2 is wholesale).
+`provenance.attribution` is absent: nothing is borrowed, and the generated sentence in §4 is
+our own text stating someone else's numbers, which are facts. The withdrawn draft's
+`spdx: "unlicensed-data"` is not an SPDX identifier and is not used here or anywhere.
 
 ## Deviations from design
 
@@ -337,7 +411,7 @@ which are facts.
 1. **The probe is run and logged before implementation**, with status code, headers and body
    prefix appended to `planning/exploration/log.md` and the
    `design/research/theory-sourcing.md` coverage-matrix row updated. Criteria 2–6 are the
-   Branch A set; 7–8 are the Branch B set; 9–20 apply to both.
+   Branch A set; 7–8 are the Branch B set; 9–24 apply to both.
 2. *(A)* A live query at `ratings=1400,1600,1800&speeds=blitz,rapid` returns `200` and
    populates at least one `priority.json` row with `total ≥ 100`.
 3. *(A)* Two consecutive `--offline` runs against the cached response produce byte-identical
@@ -363,51 +437,88 @@ which are facts.
    HTTP request is issued, and `priority.json` records the abstention rather than a zero row.
 10. **A 429 waits.** A stubbed 429 produces a wait of ≥ 60 s before the first retry, at most
     3 retries, then abstains (B6a §1.4).
-11. **Concurrency never exceeds 1** across a B6c run and a concurrently running B6b run.
+11. **One request at a time, across processes.** A B6c run and a B6b run started
+    simultaneously in the same checkout against an arrival-time-recording stub issue their
+    requests strictly sequentially, because both take B6a §1.4's `content/sources/.fetch.lock`.
+    The test asserts the ordering *and* asserts the documented limit: with the lock file
+    directory made unwritable the client fails loudly rather than proceeding unserialized.
 12. **No band substitution.** With `ratings=1400,1600,1800` stubbed to 401 and
     `ratings=2000,2200` stubbed to 200, the interface abstains and never issues the second
     query.
 13. **The token never leaks.** A test sets `LICHESS_TOKEN` to a sentinel and asserts the
     sentinel appears in no emitted file and in no `sources.json` URL.
 
+**Request shape, against the published spec:**
+
+14. **Every parameter is explicit.** A test asserts the issued URL carries `variant`, `fen`,
+    `ratings`, `speeds`, `since`, `until`, `moves`, `topGames=0`, `recentGames=0` and
+    `history=false`, and that the same URL is what `sources.json` records.
+15. **`since`/`until` come from the request and are mandatory.** Omitting `--since` or
+    `--until` exits non-zero with a named error; a stubbed response body containing invented
+    `since`/`until` fields is asserted to be ignored, and `priority.json.query` and every
+    `explorer_frequency` record carry the values that were **sent**. A record whose `since`
+    differs from the recorded request fails `EVIDENCE_VALUES_INVALID`.
+16. **`ratings` is the spec's enum.** `--ratings 1500` and `--ratings 2600` each exit
+    non-zero with `RATINGS_NOT_A_GROUP` and issue **no** request; `--ratings 1400,1600,1800`
+    proceeds. A test pins the accepted set to `0,1000,1200,1400,1600,1800,2000,2200,2500`
+    against a committed copy of the spec fragment.
+17. **`total` and `playedCount` are derived, and the derivation is tested against a real
+    response body.** A committed fixture response with `white/draws/black` at the position and
+    per move yields `total` and `playedCount` equal to independently computed sums; a fixture
+    carrying a spurious top-level `total` field is asserted not to be read.
+
 **Minimum mass and the crossing:**
 
-14. **`total < 100` abstains.** A stubbed response with `total: 61` produces
+18. **`total < 100` abstains.** A stubbed response summing to `61` produces
     `reason: "no_data_at_band"`, `detail: "total 61 < 100"`, and **no** row and **no**
     `explorer_frequency` record.
-15. **The template is byte-exact.** A record with `playedCount: 40204, total: 128034` renders
+19. **The template is byte-exact.** A record with `playedCount: 40204, total: 128034` renders
     `sharePct` as `31.4`; the supported text differing by a single character (a trailing
     space, a comma, `31.40`, or a thousands separator in `128034`) fails
     `EVIDENCE_OVERREACH`.
-16. **Derived values are recomputed.** A record whose `sharePct` is `31.5` with the same
+20. **Derived values are recomputed.** A record whose `sharePct` is `31.5` with the same
     counts fails `EVIDENCE_VALUES_INVALID`, even though the rendered string would then match
     itself.
-17. **Missing or extra values fail.** A record omitting `speeds`, or carrying an unnamed extra
+21. **Missing or extra values fail.** A record omitting `speeds`, or carrying an unnamed extra
     value, fails `EVIDENCE_VALUES_INVALID` — the check never falls back to "contains a
     numeral".
-18. **Overreach.** An `explorer_frequency` record supporting `/spine/0/annotations/0`,
+22. **Overreach.** An `explorer_frequency` record supporting `/spine/0/annotations/0`,
     `/objective/summary`, or `/deviations/0/class` fails `EVIDENCE_OVERREACH`; a
     `tablebase_result` record carrying `templateId: "explorer-move-share/v1"` fails the same
     way (templates are keyed by `kind`).
 
 **Anti-contamination and hygiene:**
 
-19. **No explorer value appears anywhere in `pack.json`.** A test emits a candidate with
+23. **No explorer value appears anywhere in `pack.json`.** A test emits a candidate with
     explorer evidence and asserts that no `total`, `sharePct`, or `topMoves` value occurs in
     the pack document outside a `/difficulty` integer or the §4 generated sentence, and that
     `GET /packs/:id` for it contains no frequency data.
-20. `lichess-explorer` → `spdx: "unlicensed-data"` with the §6 rationale and the etiquette
-    note present in `sources.json` and verbatim in `provenance.sources[]`; `make verify`
-    green; `docs/content-sourcing.md` gains the explorer section including Gate 0's outcome.
+24. `lichess-explorer` → `basis: "no-rights-asserted"`, `spdx: null`, with the §6 rationale
+    and the etiquette note present in `sources.json` and verbatim in `provenance.sources[]`;
+    every emitted candidate carries `provenance.licence: "CC-BY-SA-4.0"` and no
+    `attribution`; `make verify` green; `docs/content-sourcing.md` gains the explorer section
+    including Gate 0's outcome.
 
 ## Open questions
 
-None. The token question is not deferred — it is Gate 0 (§0), a task with a defined result
-and two fully specified branches. The offline corpus is not deferred either — it is carved
-out of this RFC entirely (§5), with the trigger, the five specification requirements, and the
-justification burden its future RFC must carry all named here.
+None.
 
 ## Changelog
 
 - 2026-08-12: created, as B6c of the four-way split of the withdrawn
   `content-sourcing-pipelines.md` draft.
+- 2026-08-12: revised against the per-file review. The record shape was rebuilt against the
+  published schemas, read live: `since`/`until` are **query parameters** with defaults
+  `1952-01`/`3000-12` and appear nowhere in `OpeningExplorerLichess.yaml`, so the "echoed
+  from the response" arm of `ExplorerStats` was wrong and is replaced by a window recorded
+  from the request, mandatory `--since`/`--until`, and a check that compares each record's
+  window to the request in `sources.json`. Three further corrections fell out of the same
+  read: the response has no `total` and no per-move play count (both are now derived sums,
+  recomputed at check time); `ratings` is a closed enum of group lower bounds, so
+  `1400,1600,1800` means 1400–1999 and an off-enum value is refused before any request; and
+  every parameter is now sent explicitly so the cache key cannot drift with a server-side
+  default. Also: the spec declares `security: OAuth2` on this operation, which is recorded in
+  §Summary as support for Gate 0; the canonical host is `explorer.lichess.org`; the licence
+  encoding moved to B6a's `basis: "no-rights-asserted"`; `provenance.licence` is now written
+  unconditionally per the wholesale ruling; and the cross-run concurrency criterion now names
+  the lock that delivers it.
