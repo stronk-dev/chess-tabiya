@@ -16,10 +16,13 @@
   `objective.grading`, a closed `successConditions` union, a closed `objective` object)
   and **`rfc/archive/terminal-outcome-events.md`** (its `outcome.reached` gains its first
   consumer). It also extends behaviour frozen in `rfc/archive/branch-runtime.md`
-  (objective evaluation, the segment rule), `rfc/archive/drill-client.md` +
+  (objective evaluation, the segment rule, and the read-back pairing that
+  `resistanceOnPath` consumes), `rfc/archive/drill-client.md` +
   `rfc/archive/authored-feedback-delivery.md` (the pack projection gains exactly one
   field and no authored-feedback prose), and `rfc/archive/content-sourcing-syzygy.md`
-  (its ledger becomes the only thing that can ground an "exact" label)
+  (its ledger becomes the only thing that can ground an "exact" label, its ledger and
+  manifest validators are extracted for reuse, and pack discovery gains reserved sidecar
+  names so a ledger may sit beside a served pack at all)
 - **Supersedes / superseded by:** —
 - **Migration:** none. This RFC changes no persisted run shape and claims no migration
   number; see Specification §12.
@@ -85,7 +88,7 @@ Four failures in one ply, all in shipped code, all ledgered
 - **D12b — `achieved` is absorbing, so grading a hold as "achieved" ends the drill.**
   `TERMINAL_OBJECTIVE_STATES` (`packages/runtime/src/runtime.ts:32`) makes `commitMove`
   throw `RUN_TERMINATED` (`runtime.ts:277-279`), and the client stops asking for
-  opponent replies (`apps/web/src/lib/session-controller.ts:370-380`). The learner never
+  opponent replies (`apps/web/src/lib/session-controller.ts:372-380`). The learner never
   moves. **A `hold` objective can never be "achieved" at a playable position** — that is
   the structural finding this RFC is built on.
 - **D12c — the disclosure barrier opens at ply 1.** `delayed_checkpoint` discloses on
@@ -93,7 +96,7 @@ Four failures in one ply, all in shipped code, all ledgered
   uninterrupted-consequence stage is gone before the learner touches a piece.
 - **D13 — a zero-length segment.** `reachCheckpoint` pairs each checkpoint with the
   previous one on the branch without checking node identity
-  (`packages/runtime/src/runtime.ts:430-465`), so two checkpoints on one node emit
+  (`packages/runtime/src/runtime.ts:430-436`, `:448-466`), so two checkpoints on one node emit
   `segment.completed` with `startNodeId === endNodeId`. Under `segment_end` that is a
   premature-disclosure path, not just noise.
 
@@ -118,7 +121,7 @@ the opponent that actually produced it.
 | A runtime tablebase client | `grep -rn "tablebase\|syzygy" apps packages workers tools`, excluding `apps/server/src/sourcing/` and build output, returns nothing. Syzygy is an **authoring-time** pipeline (`apps/server/src/sourcing/syzygy.ts:105-121`, called only from `emitSyzygyCandidates` at :123). Probing positions mid-run is network egress, caching, licence recording and an abstention path — an engine/sourcing RFC |
 | Implementing `perfect_tablebase` (D8's capability half) | Same reason. §8 closes D8's **drift** half — the schema/validator disagreement — and makes the missing capability visible inside every grade instead of silently absent |
 | Stockfish as a grading authority | An evaluation is not a result. Above 7 pieces Stockfish cannot prove a draw, and promoting its number to a verdict is the dashboard anti-pattern (`AGENTS.md` law 8) one provider away from an LLM doing it |
-| Delivering unanchored `feedbackClaims` | `projectAuthoredFeedback` has three item kinds — annotation, deviation, plan_class (`apps/server/src/authored-feedback.ts:24-48`) — all anchored to a spine node or a checkpoint. A claim anchored to neither is authored, stored, and never deliverable. Real gap; a BACKLOG row to propose, not a thing this RFC widens (§4b) |
+| Delivering unanchored `feedbackClaims` | `projectAuthoredFeedback` has three item kinds — annotation, deviation, plan_class (`apps/server/src/authored-feedback.ts:24-49`) — all anchored to a spine node or a checkpoint. A claim anchored to neither is authored, stored, and never deliverable. Real gap; a BACKLOG row to propose, not a thing this RFC widens (§4b) |
 | Intent-relative success for Plan Drill | Ledgered separately in `design/BACKLOG.md` §Authoring-format friction; needs `checkpoints[].interaction` to have a consumer, which it does not |
 | `play_until_checkpoint` freezing at its checkpoint | Existing behaviour on four emitted candidates and the served schema example. Correct for a play-it-out drill and deliberately untouched |
 
@@ -131,7 +134,7 @@ Three facts, all machine-derivable with no evaluation:
 1. **The result of a terminal position**, from the laws of chess, in the learner's
    perspective. Shipped: `terminalOutcome` (`packages/runtime/src/outcome.ts:5-11`),
    emitted once per terminal node inside `commitMove`
-   (`packages/runtime/src/runtime.ts:337-343`) and re-validated on replay
+   (`packages/runtime/src/runtime.ts:338-343`) and re-validated on replay
    (`packages/runtime/src/events.ts:163-186`).
 2. **Whether an authored checkpoint was reached on the active path**, and **whether one
    fired at this node**. Shipped: `checkpointWasReached`
@@ -260,7 +263,7 @@ answer, `active` included, and `RunSummary.objectiveState`
 **Rewind un-resolves, per path.** Objective state lives on nodes: `commitMove` copies the
 cursor node's state onto the new node (`packages/runtime/src/runtime.ts:332`) and
 `objective.state_changed` projects onto one node
-(`packages/runtime/src/events.ts:122-144`). Checkpoint re-firing is path-scoped too
+(`packages/runtime/src/events.ts:122-143`). Checkpoint re-firing is path-scoped too
 (`reachedOnActivePath`, `apps/server/src/pack-orchestrator.ts:73-86`), so a fork below
 the resolution node can resolve on its own. Each branch is graded on its own path and a
 later failure never rewrites the `preserved` grade recorded at the resolution node. This
@@ -271,7 +274,7 @@ is what makes "rewind and try again" mean anything for an outcome drill, and it 
 
 `schemas/drill_pack.schema.json` bumps `$id` to `urn:chess-tabiya:schema:drill-pack:0.3`
 and `DRILL_PACK_SCHEMA_VERSION` to `"0.3"`
-(`packages/schema/src/index.ts:2`, asserted at `packages/schema/src/drill-pack.test.ts:50-55`).
+(`packages/schema/src/index.ts:2`, asserted at `packages/schema/src/drill-pack.test.ts:49-56`).
 `digestDrillPack` digests the document, not the schema version
 (`packages/schema/src/drill-pack/digest.ts:59-66`), so **no pack digest changes from the
 bump** and no stored run is orphaned by it.
@@ -311,7 +314,7 @@ type RootAssessment =
 
 The `syzygy` variant is a **transcription of a `tablebase_result` record** the shipped
 pipeline writes into `evidence.json` (`apps/server/src/sourcing/syzygy.ts:160-168`). By
-itself it is an assertion by whoever typed it. §4c is what turns a transcription into a
+itself it is an assertion by whoever typed it. §4d is what turns a transcription into a
 ground, and nothing else in this RFC does.
 
 Three schema tightenings ship with it, the first two closing D4-shaped divergence:
@@ -324,7 +327,7 @@ Three schema tightenings ship with it, the first two closing D4-shaped divergenc
 - `successConditions.items` is `{"type": "object"}` — anything at all. It becomes the
   closed union of §5.
 - `objective.grading` itself is `additionalProperties: false`, and **`grounding` is not
-  an authorable key anywhere in the document.** It is derived at load (§4c); a pack that
+  an authorable key anywhere in the document.** It is derived at load (§4d); a pack that
   writes it fails schema validation, which is the mechanical half of "a pack cannot
   declare itself proved".
 
@@ -352,7 +355,7 @@ classes and no claim text is projected. `resolveAt.checkpointId` names a checkpo
 id and label are already in the projection (`pack-registry.ts:67-72`).
 
 Consequently this RFC **does not** restore `feedbackClaims` to any response, does not add
-a `feedback_claim` item kind to `apps/server/src/authored-feedback.ts:24-48`, and does not
+a `feedback_claim` item kind to `apps/server/src/authored-feedback.ts:24-49`, and does not
 touch the withholding barrier that `rfc/archive/authored-feedback-delivery.md` shipped.
 Criterion 12 asserts the projection still has no `feedbackClaims` after the change.
 
@@ -368,28 +371,112 @@ learner has played a move. That undeliverable-claims gap is a defect the impleme
 should **propose as a BACKLOG row**; it is not fixed here and not worked around by
 widening a projection.
 
-#### 4c. `grounding` — how a Syzygy assessment stops being self-asserted
+#### 4c. Sidecar admission, part one: which `.json` files are packs
+
+`grounding` needs a sidecar beside the pack, and today a sidecar beside a pack is a
+startup crash. `jsonFiles` walks the loaded directories recursively and treats **every**
+`.json` file as a pack document (`apps/server/src/pack-registry.ts:97-112`; the decision is
+the single `extname(entry.name) === ".json"` test at `:109`), `loadDefault` parses all of
+them (`pack-registry.ts:188-193`), and `validatedDocument` throws `PACK_INVALID` on the
+first one that is not a pack (`pack-registry.ts:76-87`). An `evidence.json` next to a
+`pack.json` inside a loaded directory therefore takes the server down at boot.
+
+The emitted four-file layout works today **only because `content/candidates/` is not
+loaded**: `loadDefault` reads `schemas/drill_pack.example.json`, `content/packs/**` and, in
+development, `content/drafts/**` plus an optional `DRAFT_PACK_FILE`
+(`pack-registry.ts:162-187`). That is an accident of directory choice, not a contract, and
+§4d would turn it into a bug the moment a ledger lands beside a draft.
+
+**So discovery gets an exclusion rule before any sidecar is allowed into a loaded
+directory,** and it is a rule about *names*, because a rule about content would mean
+parsing a file to decide whether it is allowed to fail parsing.
+
+`SIDECAR_BASENAMES` is exported from `pack-registry.ts` as a frozen list of the four names
+the sourcing pipelines write beside a pack — `evidence.json`, `sources.json`, `job.json`,
+`priority.json` (`apps/server/src/sourcing/syzygy.ts:199-202`,
+`apps/server/src/sourcing/openings.ts:155-158`,
+`apps/server/src/sourcing/position-seeds.ts:264-267`,
+`apps/server/src/sourcing/explorer.ts:199-202`). `jsonFiles` skips a file when its basename
+**is** one of them or **ends with `.` + one of them** — the flat form,
+`rook-4v3-same-side.evidence.json`. Nothing else is excluded: any other `.json` in a loaded
+directory is still a pack and still fails startup if it is not one. The failure this rule
+removes is "a sidecar was mistaken for a pack", not "a broken pack was tolerated".
+
+Three consequences, stated so they are not discovered later:
+
+- The four names are **reserved**. A pack may not be called `evidence.json`, and
+  `pack-check` pointed straight at one reports `PACK_FILE_IS_RESERVED_SIDECAR_NAME`
+  instead of a confusing schema failure.
+- The same constant is the **resolver**: §4d looks for exactly the names discovery skips.
+  One list with two consumers, asserted equal by test — two hand-maintained lists for one
+  vocabulary is the D4 shape (`design/BACKLOG.md:117`) and is not being reintroduced.
+- `content/candidates/` stays unloaded. This rule does not promote candidates; it makes
+  their layout admissible, and it makes `content/drafts/` and `content/packs/` able to
+  carry sidecars now, which is what a grounded pack needs.
+
+Criterion 12a is the regression, and it is written against the crash: pointing the loader
+at `content/candidates/` today throws `PACK_INVALID`, and after this rule it registers the
+four candidate packs and ignores the fifteen sidecar files beside them.
+
+#### 4d. Sidecar admission, part two: `grounding`
 
 Any JSON file can contain a plausible category, piece count and timestamp. Checking that
 those three agree with each other and with `start.fen` proves only that the forger can
-count. So:
+count — and checking them against one record in a file nobody validated proves only that
+the forger can also type `"kind": "tablebase_result"`. So:
 
 **The words "Syzygy" and "exact" may appear in the product only for an assessment whose
-`grounding` is `ledger_verified`, and `grounding` is computed at load from an evidence
-ledger the pack does not write.**
+`grounding` is `ledger_verified`, and `grounding` is computed at load from a structurally
+valid, manifest-linked evidence ledger the pack does not write.**
 
-`PackRegistry` resolves a ledger beside the pack file — `evidence.json` in the same
-directory when the pack is `pack.json` (the emitted candidate layout, e.g.
-`content/candidates/endgame-rook-4v3-same-side-root/`), otherwise
-`<basename>.evidence.json` beside a flat pack file. `loadDefault` already reads every pack
-by path (`pack-registry.ts:188-193`), so this is one more optional `readFile` and
-`JSON.parse` there; the ledger travels to `fromDocuments` beside the document, and a
-caller that supplies documents without a filesystem source simply has none. No sidecar
-means `grounding: "unverified"`, never an error. `PackRecord` gains `assessmentGrounding`,
-and `projectPackDocument` projects it.
+`PackRegistry` resolves two sidecars beside the pack file using `SIDECAR_BASENAMES`:
+`evidence.json` and `sources.json` in the same directory when the pack is `pack.json` (the
+emitted candidate layout, e.g. `content/candidates/endgame-rook-4v3-same-side-root/`),
+otherwise `<basename>.evidence.json` and `<basename>.sources.json` beside a flat pack file.
+`loadDefault` already reads every pack by path (`pack-registry.ts:188-193`), so this is two
+more optional `readFile`/`JSON.parse` calls there. The parsed sidecars reach the registry
+as two optional fields on the existing document descriptor —
+`fromDocuments(documents: readonly { source, value, ledger?, manifest? }[], options)`
+(`pack-registry.ts:121-153`) — so every current caller compiles unchanged and a caller that
+supplies documents without a filesystem source simply has none. Missing sidecars mean
+`grounding: "unverified"`, never an error. `PackRecord` gains `assessmentGrounding`, and
+`projectPackDocument` projects it.
 
-`grounding` is `ledger_verified` only when a single record in that ledger satisfies **all**
-of the following, by strict equality on the raw parsed values:
+`grounding` is `ledger_verified` only when **all three** of the following hold. The first
+two are the ones that make the third mean anything.
+
+**(1) The ledger is structurally valid.** It parses and `validateLedger`
+(`apps/server/src/sourcing/check.ts:141-158`) reports no issue against it: schema tag
+`tabiya.sourcing.evidence.v1`, ISO `sourcedAt`, `records[]` and `abstentions[]` present,
+and *every* record carrying a known `kind`, an `anchor`, a non-empty `sourceId`, an ISO
+`retrievedAt`, `grounds ∈ {citable_source, machine_validation}`, a `values` object and
+non-empty `supports` pointers. One malformed record anywhere in the file disqualifies the
+whole ledger, which is the point: a document that is partly invented is not a record.
+
+**(2) The ledger is linked to a source manifest.** A manifest sidecar resolves,
+`validateManifest` (`check.ts:105-127`) reports no issue against it, and
+`linkage(manifest, ledger)` (`check.ts:159-181`) reports none either — so the tablebase
+record's `sourceId` + `retrievedAt` names a manifest entry with a real origin and a
+licence, no manifest entry is unreferenced, and `sourcedAt` is the derived maximum
+`retrievedAt`. A ledger with no manifest beside it is unverified, however well-formed it
+is. Verified by running the shipped check against a committed candidate:
+`make sourcing-check DIR=content/candidates/endgame-rook-4v3-same-side-root` reports
+"Sourcing check passed (strict)", so genuine pipeline output satisfies (1) and (2) by
+construction and this requirement costs the pipeline nothing.
+
+**No pack in the tree can satisfy (3) today, and that is expected.** All four committed
+candidates are out of Syzygy range — the endgame one is the same 11-piece root as Pack C
+and its ledger carries a `tablebase_result` **abstention**, not a record
+(`content/candidates/endgame-rook-4v3-same-side-root/evidence.json`, verified). A ledger
+that does carry the record is produced offline and deterministically by the shipped
+emitter at seven pieces via `fixtureTablebaseQuery`
+(`apps/server/src/sourcing/syzygy.ts:90`, driven at
+`apps/server/src/sourcing/syzygy.test.ts:54-65`), and that is what the positive controls in
+criteria 7b and 7c use. The first genuinely grounded pack is therefore content work, not a
+code change — which is the honest state of B6b's tablebase half.
+
+**(3) A single record in that ledger matches the assessment**, by strict equality on the
+raw parsed values:
 
 | Field | Must equal |
 |---|---|
@@ -406,14 +493,37 @@ of the following, by strict equality on the raw parsed values:
 Every one of those is written by the shipped emitter in one object literal
 (`apps/server/src/sourcing/syzygy.ts:160-168`), so a genuine pipeline output matches by
 construction and a hand-typed one matches only if it is a faithful copy of a record
-someone actually retrieved.
+someone actually retrieved — inside a ledger that also passes (1) and a manifest that also
+passes (2).
 
 **`ledger.packDigest` is deliberately not in the list.** Requiring it would make every
 legitimate authoring edit — including adding this very `grading` block — indistinguishable
 from a forgery, since the digest is computed over the whole document. Digest drift is
 already owned by the sourcing check as `EVIDENCE_DIGEST_STALE`, a warning at
-`apps/server/src/sourcing/check.ts:361-363`. The linkage here binds the *position* to the
+`apps/server/src/sourcing/check.ts:363`. The linkage here binds the *position* to the
 *retrieval*, which is what the tablebase fact is about.
+
+**One predicate, two callers.** `validateLedger`, `validateManifest` and `linkage` are
+already pure over an `issues` array — they read their inputs, push issues, and mutate
+nothing else — so they **move verbatim**, bodies unchanged, from `check.ts` into a new
+`apps/server/src/sourcing/ledger-validation.ts`, together with the `issue`, `object`,
+`nonEmpty`, `validIso`, `exactKeys`, `validateOrigin` and `validateLicence` helpers they
+call. `check.ts` imports them back, so `checkSourcingDirectory`'s issue output is
+byte-identical and `apps/server/src/sourcing/sourcing.test.ts` is the regression that says
+so. The new module also exports the predicate itself:
+
+```ts
+export function assessmentGrounding(input: {
+  readonly document: DrillPackDefinition;
+  readonly ledger: unknown;    // parsed evidence sidecar, or undefined
+  readonly manifest: unknown;  // parsed manifest sidecar, or undefined
+}): "ledger_verified" | "unverified";
+```
+
+It applies (1), (2) and (3) and is called by **both** `PackRegistry` at load and
+`checkSourcingDirectory` at promotion, so load-time and promotion-time can never disagree
+about what "verified" means. The module imports only `./types.js`, so `pack-registry.ts`
+and `check.ts` can both depend on it without a cycle.
 
 Two enforcement points, and they differ on purpose:
 
@@ -422,15 +532,13 @@ Two enforcement points, and they differ on purpose:
   state of authoring, and refusing to load it would push authors to delete the field
   rather than ground it.
 - **At promotion:** `checkSourcingDirectory` in strict mode — which is exactly
-  `content/candidates/**` (`apps/server/src/sourcing/check.ts:318-322`) — raises
-  `SYZYGY_ASSESSMENT_UNGROUNDED` as an **error** when a pack declares a `syzygy`
-  assessment that its sibling ledger does not verify. Nothing ungrounded reaches
-  `content/packs/`.
+  `content/candidates/**` (`apps/server/src/sourcing/check.ts:318-321`) — raises
+  `SYZYGY_ASSESSMENT_UNGROUNDED` as an **error** whenever a pack declares a `syzygy`
+  assessment for which `assessmentGrounding` returns `unverified`. Nothing ungrounded
+  reaches `content/packs/`.
 
-Criterion 7b is the forgery regression: a pack carrying internally-consistent, entirely
-invented Syzygy metadata loads, projects `grounding: "unverified"`, renders with neither
-"Syzygy" nor "exact", and fails the strict sourcing check — and the same pack with a
-ledger differing in one character of `retrievedAt` behaves identically.
+Criteria 7b and 7c are the two regressions: 7b that invented metadata cannot earn the
+label, 7c that a byte-perfect record inside an invalid or unlinked ledger cannot either.
 
 ### 5. `successConditions` v0.3 — the widening
 
@@ -492,10 +600,10 @@ authored consumer, not a widening done on speculation here.
 **Compiled defaults, and why they are not symmetric.** `ALLOWED_TRANSITIONS`
 (`packages/runtime/src/objective-state.ts:3-10`) does not list any state as a successor of
 itself, so `assertObjectiveTransition` throws `ObjectiveTransitionError` on a
-self-transition (`objective-state.ts:44-49`) — and once a rule matches,
+self-transition (`objective-state.ts:44-46`) — and once a rule matches,
 `evaluateObjective` reaches it unconditionally through `transitionObjective`
 (`packages/runtime/src/objective.ts:296` → `:239`), as does replay
-(`packages/runtime/src/events.ts:129-133`). A condition that keeps matching after it has
+(`packages/runtime/src/events.ts:130-134`). A condition that keeps matching after it has
 fired would therefore throw on the next commit and take the run down. So `from` is
 compiled, never left implicit:
 
@@ -518,7 +626,7 @@ rules the schema cannot express (they depend on `objective.type`, on `start.fen`
 another field's value). No rule is claimed twice, so no test can pass against a code the
 validator can never emit.
 
-### 6. Runtime: two predicates, and nothing else
+### 6. Runtime: two predicates and one derivation
 
 `ObjectivePredicate` gains exactly two members:
 
@@ -551,7 +659,7 @@ branch that ended in mate leaves its `outcome.reached` in the log forever, so an
 predicate would grade every later branch by the first branch's result. The implementation
 mirrors `checkpointWasReached` (`objective.ts:176-184`) exactly, and criterion 5 tests it
 directly. It reads events that `commitMove` has already appended by the time
-`orchestratePackMove` runs (`runtime.ts:337-343`, `service.ts:254-259`), so no ordering
+`orchestratePackMove` runs (`runtime.ts:338-343`, `service.ts:254-259`), so no ordering
 change is needed.
 
 **`checkpointReachedHere` is the edge trigger of §3a guard 2.** `node` is the active
@@ -562,11 +670,49 @@ of that path. Node identity is path identity, so no separate scoping is required
 
 Both are engine-free and deterministic, so `docs/branch-runtime.md:117` stays true.
 
-**`resistanceOnPath(run, nodeId)`** is added beside them — a pure derivation over
-`opponent.move_selected` events (`packages/runtime/src/types.ts:137-145`) restricted to
-the path, returning the requested `RunOpponentPolicy` (`types.ts:225`) and the distinct
-`selection.engine` identities (`types.ts:63-76`) with a ply count each. It computes no
-chess and grades nothing; §8 says what may be rendered from it.
+#### 6a. `resistanceOnPath` — and why it may not key on the selection's own `nodeId`
+
+**`resistanceOnPath(run, nodeId)`** is added beside them, and its path scoping is the part
+that has to be right, because the obvious implementation is wrong.
+
+`opponent.move_selected.data.nodeId` is the **parent** — the cursor *before* the reply.
+`commitMove` fills it from `run.activeCursor.nodeId`
+(`packages/runtime/src/runtime.ts:301-316`, the field at `:307`) and only then creates the
+child node (`runtime.ts:321-336`). A learner who rewinds to that parent and forks gets a
+second reply from the *same* parent, so several selections on different branches carry the
+same `data.nodeId`. Filtering selections by `nodeId ∈ path` therefore reports engines that
+never played a move on this path — and under `theory_strict` sampling or a changed engine
+build, siblings genuinely differ. The grade would name an opponent the learner never faced.
+
+Identity comes from the **committed child** instead:
+
+- `commitMove` appends `opponent.move_selected` (`runtime.ts:301-316`) and then the
+  `move.committed` carrying the new node (`:338-343`), with only local `san`/`fen`/node
+  construction between them (`:318-337`) and no intervening event append. The pair
+  is adjacent by construction, and adjacency is already a **shipped, enforced invariant**:
+  `readBackReplay` rejects a selection not immediately followed by a `move.committed`, an
+  opponent commit with no preceding selection, and a pair disagreeing on parent, branch or
+  move (`packages/runtime/src/replay.ts:31-59` and `:61-77`). It is documented as a
+  contract at `docs/branch-runtime.md:152-156` and `docs/engine-workers.md:135-138`. This
+  RFC adds no invariant here; it consumes one.
+- The pairing loop of `readBackReplay` (`replay.ts:65-75`) is extracted unchanged as
+  `opponentMovesFromEvents(events)`, and `readBackReplay` calls it — one pairing
+  implementation, not two. `OpponentMoveReadback` (`replay.ts:18-24`) already carries
+  `parentNodeId` and `committedNodeId`; it gains
+  `readonly engine: SelectionEngineIdentity` copied from `selection.data.selection.engine`.
+  Nothing persisted changes: this is a derived read-back shape, not an event shape.
+- `resistanceOnPath` keeps a paired move **only when its `committedNodeId` is in
+  `historyFrom(run, nodeId)`** — the exported root-to-node walk already used for this
+  purpose (`packages/runtime/src/runtime.ts:471-479`) — and **never** its `parentNodeId`. A
+  sibling's reply commits to a different child node, so it is excluded structurally rather
+  than by a heuristic, and criterion 11a asserts exactly this against the shape that fails.
+  A rewind that leaves a node off the active path removes its reply from the derivation for
+  free, because the node is no longer in the walk.
+
+It returns the run's requested `RunOpponentPolicy` (`packages/runtime/src/types.ts:225`)
+and the distinct `SelectionEngineIdentity` values (`types.ts:63-69`) found on the path,
+each with a ply count. It computes no chess, grades nothing, and — critically — infers no
+policy: §8a is mostly about what may not be said from it.
 
 ### 7. Rule compilation and validation
 
@@ -637,7 +783,7 @@ Note the `save` row: an author who declares `save` at ≤7 pieces is declaring t
 **lost by tablebase and savable in practice**, which is exactly what `design/01` means by
 "start objectively worse". `hold` at ≤7 must be a tablebase draw. This is the one place
 where the hold/save distinction becomes machine-checkable, and it is checkable only
-because a tablebase covered it — and, per §4c, only says "exact" when a ledger record
+because a tablebase covered it — and, per §4d, only says "exact" when a ledger record
 backs it.
 
 #### 7a. D12a becomes an error, and is checked with the orchestrator's own code
@@ -663,7 +809,7 @@ another rule in the same pass is about to reject.
   (`apps/server/src/pack-check.ts:73-83`) and Pack C green, which is how D12 shipped.
   Error severity makes `validatePackDocument` return `valid: false`
   (`pack-validation.ts:205`), which fails `pack-check` and refuses the pack at load
-  (`pack-registry.ts:77-86`).
+  (`pack-registry.ts:76-87`).
 - **`CHECKPOINT_UNREACHABLE_AT_ROOT`, error** — `atPly: 0`. Orchestration only ever runs
   after a commit (`service.ts:254-259`, `:278-283`) and every committed node has
   `ply ≥ 1` (`runtime.ts:328`), so an `atPly: 0` checkpoint can never fire. It is a
@@ -681,7 +827,7 @@ Blast radius, verified across every pack in the tree: only Pack C's `still-holdi
 matches at the root, and no pack uses `atPly: 0` or a `windowCloses` that is true at the
 root. §11 fixes Pack C in the same change.
 
-### 8. Resistance policies, D8, and naming who actually resisted
+### 8. Resistance policies, D8, and naming which engine actually played
 
 `design/03-product-breadth.md:48-50` names perfect / strong / practical / annoying /
 fallible. Verified in the tree today:
@@ -689,7 +835,7 @@ fallible. Verified in the tree today:
 | Design name | Encoding | State |
 |---|---|---|
 | strong | `strong_engine` | ships — Stockfish (`apps/server/src/opponent-selector.ts:437-450`) |
-| practical | `human_common` | ships — Maia at `targetElo` (`opponent-selector.ts:427-435`) |
+| practical | `human_common` | ships — Maia at `targetElo` (`opponent-selector.ts:428-435`) |
 | theory | `theory_strict` | ships (`opponent-selector.ts:453-486`) |
 | perfect | `perfect_tablebase` | **unencodable.** Passes the JSON Schema (`schemas/drill_pack.schema.json:355-363`), rejected by `pack-validation.ts:125-138` against `SUPPORTED_POLICY_MODES` (`apps/server/src/capabilities.ts:10-14`), and absent from `#selectUncached` (`opponent-selector.ts:388-399`). D8 |
 | — | `plan_defense`, `practical_resistance`, `human_external` | same divergence, three more values: in the schema enum (`drill_pack.schema.json:355-363`), in no validator, in no selector, and in no design name |
@@ -707,56 +853,90 @@ tested, documented one, and the next value added to either list fails the build 
 of drifting. `immediate_blunder_guard` gets the same treatment on the feedback-policy
 enum (`drill_pack.schema.json:50-55`), since it is the other half of D8.
 
-#### 8a. The grade must name who actually resisted — not who was requested
+#### 8a. Two facts about the opponent, and the one the product does not have
 
-`run.opponentPolicy` (`packages/runtime/src/types.ts:225`, projected at
-`packages/runtime/src/events.ts:203`) records the mode and target rating **requested at
-run creation**. It is not evidence of who played, and in the environment most of this
-RFC's tests run in, it is wrong:
+A grade delivered without naming the resistance it was earned against says nothing, so
+every rendered grade carries a resistance line. Exactly two facts are available to write
+that line, and they are not the same fact.
 
-- with `ENGINE_MODE=mock` — the default, and what Playwright uses — `human_common` is
-  executed by `MockEngineClient` — identity `mock-opponent` / "Deterministic mock
-  opponent" (`apps/server/src/application.ts:119-126`) — wired in as both `maiaEngineId`
-  and `strongEngineId` at `application.ts:293-296`. Nothing named Maia is involved;
-- `theory_strict` **falls back to `human_common`** whenever the position leaves the
-  authored spine (`apps/server/src/opponent-selector.ts:453-460`), so one path can carry
-  two policies;
-- the client downgrades the requested mode against `GET /capabilities` before every
-  selection (`apps/web/src/lib/session-controller.ts:116-135`, used at `:391`).
+**The request.** `run.opponentPolicy` (`packages/runtime/src/types.ts:225`, projected at
+`packages/runtime/src/events.ts:203`) carries the mode and target rating copied from the
+**pack's authored** `opponentPolicy` at run creation (`apps/server/src/service.ts:187-213`).
+It is a request recorded once, not a record of what happened.
 
-The authoritative record is `opponent.move_selected.selection.engine` —
-`SelectionEngineIdentity` with `id`, `name`, `version`, optional `modelId` and
-`containerDigest`, and `seedHonored` (`packages/runtime/src/types.ts:63-76`, event at
-`:137-145`) — which the client already holds, since it projects the full event log
-locally (`session-controller.ts:175-199`). `resistanceOnPath` (§6) derives from it, and
-the resistance line obeys four rules:
+**The engine.** `opponent.move_selected.selection.engine` — `SelectionEngineIdentity` with
+`id`, `name`, `version`, optional `modelId` and `containerDigest`, and `seedHonored`
+(`packages/runtime/src/types.ts:63-69`, event at `:137-145`) — records which engine binary
+produced each individual reply. It is authoritative, it is per-ply, and the client already
+holds it, since `RunStateStore` projects the full event log locally
+(`apps/web/src/lib/run-state.ts:86`, `:113`). `resistanceOnPath` (§6a) derives from it.
 
-1. **Before the first opponent move on the path** — no `opponent.move_selected` — the
-   line may only state the request: "Requested resistance: `human_common`, target Elo
-   1900. No opponent move has been played yet." It must not name an engine, a model or a
-   strength that has not played.
-2. **One identity on the path** — name it from the record: "Resisted by Deterministic
-   mock opponent (`mock-opponent` v1)" or "Resisted by Maia3 (`maia-5m`, model …)". Under
-   the mock this reads *mock*, in the browser test as much as anywhere else.
-3. **Requested ≠ actual** — say both, in that order: "Requested `human_common` at Elo
-   1900; actually resisted by Deterministic mock opponent." Silence here is the failure
-   mode this rule exists to prevent.
-4. **More than one identity on the path** — list each with its ply count and add "This
-   path faced more than one opponent." Selection failures are not inferred: a ply with no
-   selection event is a ply that was never played, and the line counts what is recorded
-   rather than guessing at what failed.
+**Nothing persisted records which policy produced a move.** This is an epistemic gap, not
+a plumbing one, and engine identity cannot close it:
 
-Every rendered grade carries this line, and while `perfect_tablebase` is unimplemented it
-ends "Not perfect play." A `hold` graded `preserved` against Maia 1900 must never read as
-a hold against best play, and a `hold` graded against a deterministic mock must never read
-as a hold against Maia.
+- `theory_strict` falls back to `human_common` whenever the position leaves the authored
+  spine (`apps/server/src/opponent-selector.ts:453-460`), and the fallback re-enters the
+  *same* `#maia` call against the *same* `maiaEngineId`
+  (`opponent-selector.ts:428-435`, `:401-426`). Both policies therefore stamp an
+  **identical** engine identity, so no reader of the log can tell a theory-strict reply
+  from its fallback, or from a plain `human_common` reply.
+- The client downgrades the requested mode against `GET /capabilities` before every
+  selection (`apps/web/src/lib/session-controller.ts:116-134`, used at `:391`), and that
+  per-move mode is never written to the run at all.
+- With `ENGINE_MODE=mock` — the default, and what Playwright uses — every mode is executed
+  by `MockEngineClient`, identity `mock-opponent` / "Deterministic mock opponent"
+  (`apps/server/src/application.ts:119-126`), wired in as both `maiaEngineId` and
+  `strongEngineId` (`application.ts:293-296`). The engine identity is honest here; the
+  policy is simply not represented anywhere.
+
+**So the product does not know which policy produced any move, and this RFC says so rather
+than guessing.** The resistance line states the request as a request and the engine as an
+engine, and asserts no relationship between them. Deriving "the policy was `human_common`"
+from "the engine was Maia" would be manufacturing a fact the system does not hold; law 8
+of `AGENTS.md` governs claims about this product's own opponent exactly as it governs
+claims about chess.
+
+The line obeys five rules:
+
+1. **The request is stated first and labelled as a request.** "Requested resistance:
+   `human_common`, target Elo 1900 — the pack's request."
+2. **Before any opponent move on the path** — `resistanceOnPath` returns no identities —
+   the line adds "No opponent move has been played yet." and stops. It must not name an
+   engine, a model or a strength that has not played.
+3. **One identity on the path** — name it from the record, as an engine and nothing more:
+   "Moves played by Deterministic mock opponent (`mock-opponent` v1)." or "Moves played by
+   Maia3 (`maia-5m`, model …)." Under the mock this reads *mock*, in the browser test as
+   much as anywhere else.
+4. **More than one identity** — list each with its ply count and add "This path faced more
+   than one engine." Selection failures are not inferred: a ply with no paired selection is
+   a ply that was never played, and the line counts what is recorded rather than guessing
+   at what failed.
+5. **Whenever an engine is named, this sentence is printed verbatim and cannot be
+   suppressed:** "The run records which engine played, not which policy it applied, so this
+   names the engine, not proof that the requested policy produced these moves."
+
+While `perfect_tablebase` is unimplemented (§8) every rendered grade ends "Not perfect
+play." A `hold` graded `preserved` against Maia 1900 must never read as a hold against best
+play, and a `hold` graded against a deterministic mock must never read as a hold against
+Maia.
+
+**The future path, named and refused here.** The report this cannot produce — "you
+requested `theory_strict` and got the fallback for nine of these plies" — becomes possible
+only by persisting the applied mode and the fallback reason on the selection itself.
+`opponentSelection` is `additionalProperties: false`
+(`schemas/drill_run.schema.json:128-141`), so that is a run-schema change, a
+`DRILL_RUN_SCHEMA_VERSION` bump (`packages/schema/src/index.ts:1`) and a migration-register
+row — precisely the scope §12 claims not to touch, and a change whose blast radius is every
+stored run rather than this RFC's grading surface. It is the right eventual fix and it is
+not made here: the implementer **proposes it as a BACKLOG row**, and this RFC ships the
+honest rendering of what is recorded today.
 
 ### 9. The honesty boundary — what is gradable at what material count
 
 | Material | Result grading | Root assessment | What the product says |
 |---|---|---|---|
 | any | **exact** — laws of chess, from `outcome.reached` | — | "The game ended drawn." |
-| ≤7 pieces | exact | **exact**, if the pack's `syzygy` assessment is `ledger_verified` (§4c) | "Starting position: draw — Syzygy tablebase, 6 pieces, exact." |
+| ≤7 pieces | exact | **exact**, if the pack's `syzygy` assessment is `ledger_verified` (§4d) | "Starting position: draw — Syzygy tablebase, 6 pieces, exact." |
 | ≤7 pieces, assessment not ledger-verified | exact | authored claim | as below |
 | >7 pieces | exact | **no shipped exact oracle covers it** — Syzygy stops at 7 and this product ships no other result oracle | "Starting position: the author claims this is drawn. No tablebase covers 11 pieces, so this is a claim, not a proof." |
 
@@ -816,7 +996,7 @@ Surfaces, all shipped and only extended:
 ### 10. D13 — the zero-length segment
 
 `reachCheckpoint` emits `segment.completed` whenever a previous checkpoint exists on the
-branch, without comparing node ids (`packages/runtime/src/runtime.ts:448-465`). Two
+branch, without comparing node ids (`packages/runtime/src/runtime.ts:448-466`). Two
 checkpoints on one node produce a segment of length zero, which under `segment_end`
 discloses feedback (`apps/server/src/authored-feedback.ts:190-218`). Fix: skip the
 `segment.completed` append when `previous.data.nodeId === run.activeCursor.nodeId`. Three
@@ -884,7 +1064,7 @@ move-by-move browser assertions run against purpose-built `theory_strict` fixtur
 (criteria 4 and 14–16).
 
 **Editing the pack changes its digest**, and `#registeredPack` returns `undefined` when a
-stored run's `packDigest` no longer matches (`apps/server/src/service.ts:620-624`), which
+stored run's `packDigest` no longer matches (`apps/server/src/service.ts:621-625`), which
 makes `/runs/:id/authored-feedback` raise `PACK_NOT_FOUND` (`service.ts:452-457`) for runs
 started against 0.1.0. Drafts load only in development
 (`apps/server/src/pack-registry.ts:171-181`, guarded again at
@@ -901,6 +1081,14 @@ schema change), and no event type is added. `DRILL_RUN_SCHEMA_VERSION` stays `"0
 (`packages/schema/src/index.ts:1`) and this RFC claims **no row in the migration
 register**. The pack-schema bump to 0.3 is not a persisted shape: pack digests are content
 digests, unaffected by the `$id`.
+
+Two additions deserve explicit clearing, because both look like persisted shapes and
+neither is. `OpponentMoveReadback.engine` (§6a) is a field of a **derived read-back
+struct** computed from events, not a stored one; `opponentSelection` in
+`drill_run.schema.json:128-141` is untouched, which is exactly why §8a cannot report the
+applied policy. `objective.grading.grounding` (§4d) is derived at load from files the pack
+does not contain and never enters a run or a pack digest — a pack that writes it fails
+schema validation (§4).
 
 ## Deviations from design
 
@@ -927,12 +1115,21 @@ digests, unaffected by the `$id`.
    also serves the other six objective types and `applyObjectiveEvidenceProposal`
    (`objective.ts:255-281`); narrowing it globally is a separate change with its own blast
    radius.
-5. **D12, D12a, D12b, D12c and D13 are ledgered defects** (`design/BACKLOG.md:120-124`),
-   specified and closed here. Marking those rows closed, and adding the two rows this RFC
-   asks for — undeliverable unanchored `feedbackClaims` (§4b) and splitting
-   `drawIsAvailable` into distinguishable facts (§5) — are `design/` edits: the
-   implementer **proposes them as BACKLOG rows** and does not write them (`AGENTS.md`
-   law 5).
+5. **The design assumes a grade knows the resistance it was graded against; the product
+   knows the engine, not the policy.** `design/03-product-breadth.md:48-50` names the
+   policies as properties of the drill, but nothing persisted distinguishes a
+   `theory_strict` reply from its `human_common` fallback (§8a). This RFC renders the
+   requested policy and the actual engine as two facts and makes no claim about the policy
+   that ran — narrower than the design implies, and the only honest reading of what is
+   recorded. Persisting the applied mode is the fix and is a BACKLOG row to propose.
+6. **D12, D12a, D12b, D12c and D13 are ledgered defects** (`design/BACKLOG.md:120-124`),
+   specified and closed here. Marking those rows closed, and adding the four rows this RFC
+   asks for — undeliverable unanchored `feedbackClaims` (§4b), splitting
+   `drawIsAvailable` into distinguishable facts (§5), persisting the applied opponent
+   policy and its fallback reason (§8a), and the discovery/trust hole this RFC closes in
+   the sourcing contract so it is ledgered as a found defect rather than only fixed
+   (§4c) — are `design/` edits: the implementer **proposes them as BACKLOG rows** and does
+   not write them (`AGENTS.md` law 5).
 
 ## Acceptance criteria
 
@@ -997,13 +1194,35 @@ digests, unaffected by the `$id`.
      internally consistent but entirely invented `category`, `pieceCount`, `sourceId` and
      `retrievedAt` and **no** sibling ledger loads, and its projected
      `objective.grading.grounding` is `"unverified"`; the same pack beside a ledger whose
-     `retrievedAt` differs by one character is also `"unverified"`; the same pack beside
-     the emitter's real record is `"ledger_verified"`. A component test asserts the
-     unverified rendering contains neither "Syzygy" nor "exact", and a sourcing test
-     asserts `checkSourcingDirectory` in strict mode raises
+     `retrievedAt` differs by one character is also `"unverified"`; and the same pack
+     beside a **real** emitter output — the seven-piece candidate produced offline by
+     `emitSyzygyCandidates` with `fixtureTablebaseQuery`
+     (`apps/server/src/sourcing/syzygy.test.ts:54-65`), ledger and manifest together — is
+     `"ledger_verified"`. A component test
+     asserts the unverified rendering contains neither "Syzygy" nor "exact", and a sourcing
+     test asserts `checkSourcingDirectory` in strict mode raises
      `SYZYGY_ASSESSMENT_UNGROUNDED` for the forged pack and passes for the verified one —
-     so `make sourcing-check DIR=<candidate>` (Makefile:51-54) exits non-zero on the
+     so `make sourcing-check DIR=<candidate>` (`Makefile:51-54`) exits non-zero on the
      forgery. Written as a regression naming the forgery so it cannot be relaxed silently.
+   - **7c. A matching record inside an invalid or unlinked ledger stays unverified.** The
+     named regression the third review asked for, run against a record that is a **byte-
+     perfect** copy of the emitter's output, so the only variable is the file around it.
+     Four cases, each asserted `grounding: "unverified"` at load *and*
+     `SYZYGY_ASSESSMENT_UNGROUNDED` at error severity from `checkSourcingDirectory` in
+     strict mode:
+     (a) the ledger's `schema` is not `tabiya.sourcing.evidence.v1`;
+     (b) the ledger is well-tagged but a **different** record in `records[]` is malformed
+     (its `grounds` removed), so `validateLedger` reports an issue — the "one matching
+     record earns exact" hole, closed;
+     (c) no manifest sidecar is present beside the ledger;
+     (d) a manifest is present but its entry's `retrievedAt` differs, so `linkage` raises
+     `EVIDENCE_RETRIEVED_AT_MISMATCH`.
+     The record is the *same bytes* in all four, so only the surrounding file varies.
+     Positive control in the same test: the untouched seven-piece emitter output, whose
+     `tablebase_result` record, ledger and manifest all come from the pipeline, verifies. A
+     further test asserts load-time and promotion-time agree by calling
+     `assessmentGrounding` and `checkSourcingDirectory` on all five fixtures and comparing
+     verdicts, so the two callers cannot drift.
 8. **D12a fails the build.** `make pack-check FILE=<fixture>` **exits non-zero** for
    (a) a pack whose `materialBalance` trigger is true at `start.fen`, (b) a pack with
    `atPly: 0`, and (c) a pack whose `windowCloses` condition is true at `start.fen` —
@@ -1017,21 +1236,56 @@ digests, unaffected by the `$id`.
    constructed `hold` fixture where mate is reachable, not on Pack C.
 10. **D13.** Two checkpoints firing on one node emit no `segment.completed`, and a
     `segment_end` pack in that shape does not disclose feedback at that node.
-11. **Resistance identity is derived from selection events.** With `ENGINE_MODE=mock`, a
-    pack declaring `human_common` at Elo 1900 is played several plies and the derived
-    resistance is asserted to name the **mock** identity from
-    `opponent.move_selected.selection.engine` — `mock-opponent` / "Deterministic mock
-    opponent" — and never "Maia"; before the first opponent move the line is asserted to
-    say "requested" and to name no engine; a synthetic path carrying two distinct engine
-    identities is asserted to list both with ply counts and the "more than one opponent"
-    sentence; and a requested-vs-actual mismatch is asserted to render both halves.
+11. **Resistance identity is derived from selection events, per path.**
+    - **11a. No sibling leakage.** The regression for §6a, written against the shape that
+      fails. A run where the opponent replies from parent node P; the learner rewinds to P
+      and forks; a second reply is appended from P carrying a **different**
+      `SelectionEngineIdentity`. Both selections carry `data.nodeId === P`
+      (`packages/runtime/src/runtime.ts:307`), so a
+      parent-keyed filter returns two identities on either branch. Asserted:
+      `resistanceOnPath` at branch B's leaf returns branch B's identity **only**, and at
+      branch A's leaf returns branch A's only; the ply counts are 1 on each; and the test
+      states in a comment that keying on `opponent.move_selected.data.nodeId` is what it
+      exists to prevent, so it cannot be "simplified" back into the bug. A second case
+      asserts that a selection whose paired `move.committed` was pruned from the path by a
+      rewind contributes to neither branch.
+    - **11b. Rendering: request, engine, and no policy claim.** With `ENGINE_MODE=mock`, a
+      pack declaring `human_common` at Elo 1900 played several plies renders the request
+      labelled as a request, the **mock** identity from
+      `opponent.move_selected.selection.engine` — `mock-opponent` / "Deterministic mock
+      opponent" — never the string "Maia", and §8a rule 5's disclaimer verbatim. Before the
+      first opponent move the line is asserted to state the request, to say no opponent
+      move has been played, and to name no engine. A synthetic path carrying two distinct
+      identities lists both with ply counts and the "more than one engine" sentence. And a
+      `theory_strict` pack driven off its authored spine, so the fallback at
+      `opponent-selector.ts:453-460` fires, is asserted to render **exactly the same two
+      facts** — request and engine — with no sentence claiming which policy produced the
+      move, and no fabricated "actually played `human_common`". That last assertion is the
+      mechanical form of §8a's epistemic claim.
 12. **The honesty strings, and no leak.** A component test asserts the `preserved`
     presentation contains the checkpoint label and the "not a proof of the position"
     clause and contains none of `draw`, `held`, `you drew`, `you won`; that the `degraded`
     presentation obeys the same rule; that an `authored` assessment renders its `note`
     verbatim behind the unproved marker; that `active` renders "unresolved". A server test
     asserts `projectPackDocument` output has no `feedbackClaims` key and contains none of
-    the pack's claim texts after `objective.grading` is added.
+    the pack's claim texts after `objective.grading` is added; the existing top-level
+    key-set assertion (`apps/server/src/drill-client-server.test.ts:137-153`) is unchanged
+    because no top-level key is added, and the `projected.objective` equality at `:158-160`
+    is updated to the three-key objective of §4a.
+    - **12a. Sidecars are not packs.** The regression for §4c, asserted through
+      `PackRegistry.loadDefault` and not only through the `jsonFiles` helper, because the
+      crash is at startup. A temporary drafts directory containing `pack.json`,
+      `evidence.json`, `sources.json` and `job.json` contributes **exactly one** pack and
+      does not throw; a flat layout of `x.json`, `x.evidence.json` and `x.sources.json`
+      contributes exactly one; and
+      `loadDefault({development: true, draftsDirectory: "content/candidates"})` — the tree
+      as it stands: four candidate directories with three sidecars each, plus
+      `content/candidates/priority/`, which has three sidecars and no pack — contributes
+      **the four candidate packs** (five records in the registry, with
+      `schemas/drill_pack.example.json`) instead of throwing `PACK_INVALID`, which is the
+      crash this rule removes and which the same test asserts against the current code
+      shape in a comment. A further test asserts `SIDECAR_BASENAMES` is the same constant
+      the §4d resolver consults, so discovery and resolution cannot name different files.
 13. **Policy-mode single source of truth.** A test asserts the JSON Schema's
     `opponentPolicy.mode` enum equals `SUPPORTED_POLICY_MODES ∪
     DECLARED_UNIMPLEMENTED_POLICY_MODES` — all seven values — and that adding a value to
@@ -1040,14 +1294,19 @@ digests, unaffected by the `$id`.
     frozen.** A new fixture `content/drafts/outcome-hold.browser.json`
     (`mode: "outcome"`, `type: "hold"`, `theory_strict` spine, `seedMode: "fixed"`,
     `resolveAt` a `{"atPly": 4}` checkpoint, `assessedBy: {"kind": "authored", "note": …}`)
-    is played to its resolution in Playwright. Asserted: the resolution block renders the
-    `preserved` sentence with the checkpoint label and the "not a proof of the position"
-    clause; the assessment line renders the unproved marker and the note; the resistance
-    line names the mock identity derived from the selection events and ends "Not perfect
-    play."; and after pressing Continue the learner **makes one further move that
-    commits** — the D12b regression asserted in the browser, where it was visible to the
-    owner and invisible at the endpoint. `theory_strict` at a fixed seed is what makes the
-    move sequence deterministic, the same mechanism
+    is played to its resolution in Playwright. **Its root has the learner to move**, so
+    `startPack` skips `#playOpponentIfNeeded`
+    (`apps/web/src/lib/session-controller.ts:372-380`) and the pre-play state is reachable
+    in the browser. Asserted, before the first move: the resistance line states the request
+    and says no opponent move has been played, naming no engine (§8a rule 2). Asserted at
+    the resolution: the resolution block renders the `preserved` sentence with the
+    checkpoint label and the "not a proof of the position" clause; the assessment line
+    renders the unproved marker and the note; the resistance line now names the mock
+    identity derived from the selection events, carries the §8a rule 5 disclaimer, and ends
+    "Not perfect play."; and after pressing Continue the learner **makes one further move
+    that commits** — the D12b regression asserted in the browser, where it was visible to
+    the owner and invisible at the endpoint. `theory_strict` at a fixed seed is what makes
+    the move sequence deterministic, the same mechanism
     `schemas/fixtures/drill-pack/terminal-outcome.browser.json` already relies on.
 15. **Browser test — a terminal grade, and a loss that is a pass.** A second fixture
     `content/drafts/outcome-resist.browser.json`
@@ -1065,11 +1324,23 @@ digests, unaffected by the `$id`.
     like Pack C, are never served outside development (`pack-registry.ts:171-181`).
 16. **Browser test — Pack C on the screen.** Pack C v0.2.0, served from
     `content/drafts/` in development, is opened and its objective rail is asserted
-    **before any move**: the authored assessment line carrying the pack's own
-    `no-tablebase-here` text, now delivered as `assessedBy.note`, and a resistance line
-    that says `human_common` at Elo 1900 was *requested* and names no engine, because no
-    opponent move has been played. Move-by-move play is deliberately not asserted here,
-    because Pack C's opponent is not fixed (§11).
+    **before the learner's first move** — which is not the same instant as "before any
+    move". Pack C's `start.side` is `black` and its FEN has White to move
+    (`content/drafts/rook-4v3-same-side.json:13-16`), so `startPack` obtains and commits
+    White's reply and only then calls `onRunStarted`, which is what navigates to the drill
+    screen (`apps/web/src/lib/session-controller.ts:235-237`,
+    `apps/web/src/App.svelte:46`). The first render therefore already contains one opponent
+    ply and its recorded selection. That ordering is correct and deliberate and this RFC
+    does not touch it; the criterion adapts to the product instead.
+    Asserted at that first render: the authored assessment line carrying the pack's own
+    `no-tablebase-here` text, now delivered as `assessedBy.note`; and a resistance line
+    that states `human_common` at Elo 1900 as the pack's *request*, **names the recorded
+    mock identity** ("Deterministic mock opponent") because a move has been played, carries
+    the §8a rule 5 disclaimer, ends "Not perfect play.", and contains no occurrence of
+    "Maia". The pre-play form of the line — request stated, no engine named — is asserted
+    in criterion 14 instead, whose fixture has the learner to move at the root.
+    Move-by-move play is deliberately not asserted here, because Pack C's opponent is not
+    fixed (§11).
 17. **Existing packs unaffected.** `schemas/drill_pack.example.json`, the two plan drafts
     and the four `content/candidates/*/pack.json` load, validate and grade exactly as
     before, asserted by a test that loads every pack file in the repo through
@@ -1082,12 +1353,19 @@ digests, unaffected by the `$id`.
     `make pack-check FILE=content/drafts/rook-4v3-same-side.json` green.
 20. **Docs.** `docs/drill-pack-format.md` documents v0.3, `objective.grading`, the widened
     `successConditions`, the derived `grounding` and the new validation codes;
-    `docs/branch-runtime.md` documents the two new predicates, the monotone law of §3a and
-    the D13 segment rule; `docs/explanation-grounds.md` replaces its "grounding unshipped
-    objective types such as `win` and `hold`" boundary item (line 207) with the shipped
-    grounds and records the three new `rules:` facts against its no-new-vocabulary claim
-    (lines 151-153); `docs/drill-client.md` documents the resolution block, the terminal
-    grade line, the assessment line and the resistance line.
+    `docs/branch-runtime.md` documents the two new predicates, the monotone law of §3a, the
+    D13 segment rule, and `resistanceOnPath`'s committed-child scoping against the
+    already-documented selection/commit adjacency (lines 152-156);
+    `docs/explanation-grounds.md` replaces its "grounding unshipped objective types such as
+    `win` and `hold`" boundary item (line 207) with the shipped grounds and records the
+    three new `rules:` facts against its no-new-vocabulary claim (lines 151-153);
+    `docs/drill-client.md` documents the resolution block, the terminal grade line, the
+    assessment line, the resistance line and the sentence that the product does not know
+    which policy ran; `docs/content-sourcing.md` documents the reserved sidecar basenames,
+    the ledger + manifest requirement for `ledger_verified`, and the move of
+    `validateLedger` / `validateManifest` / `linkage` into `ledger-validation.ts`;
+    `docs/development.md` records that a `.json` in a served content directory is a pack
+    unless its name is a reserved sidecar.
 
 ## Open questions
 
@@ -1120,3 +1398,48 @@ None.
   draft-loading claim, replaced the ">7 pieces, no source of truth anywhere" wording,
   extended D8's drift half to all four undeclared modes, and added the five acceptance
   tests the review named (criteria 1a, 3, 7b, 8, 11).
+- 2026-08-12: revised against a third review, which accepted the grading mechanism and
+  raised four integration blockers. Nothing in §3, §3a, §5 or §7's compiled order changed.
+  (1) **Resistance scoping was leaking siblings.**
+  `opponent.move_selected.data.nodeId` is the *parent* node
+  (`packages/runtime/src/runtime.ts:301-316`), so several branches share it and a
+  parent-keyed filter reported engines that never played on this path. New §6a derives
+  identity through the required adjacent `opponent.move_selected` → `move.committed` pair —
+  an invariant `readBackReplay` already enforces (`packages/runtime/src/replay.ts:31-77`)
+  and the docs already state — extracts that pairing as `opponentMovesFromEvents`, and
+  keeps a selection only when its **committed child** is on the path. Criterion 11a is the
+  named non-leakage regression.
+  (2) **Actual policy is not recoverable and this RFC no longer implies it is.** Maia
+  executes `theory_strict` and its `human_common` fallback through the same call with the
+  same engine identity (`apps/server/src/opponent-selector.ts:453-460`, `:428-435`), so
+  engine identity cannot reveal a fallback or a requested-vs-actual policy mismatch. §8a is
+  rewritten around two persisted facts — the pack's *requested* policy and the *actual
+  engine* — states plainly that the product does not know which policy ran, and prints a
+  fixed disclaimer whenever an engine is named. The alternative — persisting
+  `policyModeApplied` and the fallback reason — is named as the future path and refused
+  here, because `opponentSelection` is `additionalProperties: false`
+  (`schemas/drill_run.schema.json:128-141`) and it would take a run-schema bump and a
+  migration row out of §12's scope. It becomes a BACKLOG row to propose.
+  (3) **Criterion 16's "before any move" was impossible.** Pack C starts with the opponent
+  to move and `startPack` commits that reply *before* `onRunStarted` navigates
+  (`apps/web/src/lib/session-controller.ts:235-237`, `apps/web/src/App.svelte:46`), so the
+  first render already carries the mock identity. The criterion becomes "before the
+  **learner's** first move" and expects the recorded identity; the pre-play form moves to
+  criterion 14, whose fixture now has the learner to move at the root. Client
+  orchestration is not changed — the existing behaviour is correct.
+  (4) **The sidecar admission contract was incomplete, in two ways.** New §4c defines pack
+  discovery exclusions: `jsonFiles` treats every `.json` under a loaded directory as a pack
+  (`apps/server/src/pack-registry.ts:109`), so a sibling ledger crashes startup, and the
+  four-file candidate layout survives only because `content/candidates/` is not loaded. A
+  frozen `SIDECAR_BASENAMES` — `evidence.json`, `sources.json`, `job.json`, `priority.json`,
+  plus the `<basename>.` forms — is excluded from discovery and is the same constant the
+  resolver uses. New §4d requires a **structurally valid ledger and a linked source
+  manifest** before `ledger_verified`, reusing `validateLedger`, `validateManifest` and
+  `linkage` (`apps/server/src/sourcing/check.ts:141-158`, `:105-127`, `:159-181`), which
+  move verbatim into `ledger-validation.ts` beside a single `assessmentGrounding` predicate
+  called by both the registry and `checkSourcingDirectory`. Criterion 7c is the
+  invalid/unlinked-ledger regression and 12a the discovery regression. Also: corrected
+  drifted line citations throughout (`replay.ts`, `types.ts:63-69`, `runtime.ts:430-436`
+  and `:448-466`, `events.ts:122-143` and `:130-134`, `objective-state.ts:44-46`,
+  `service.ts:621-625`, `pack-registry.ts:76-87`, `check.ts:318-321` and `:363`,
+  `opponent-selector.ts:428-435`, `drill-pack.test.ts:49-56`).
