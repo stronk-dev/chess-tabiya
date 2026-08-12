@@ -97,8 +97,18 @@ isn't relearned.
 
 **"Original prose" satisfies copyright, not grounding.** A pack may sit in
 `draft` with agent-authored, uncited strategic claims. It may **not** reach
-`reviewed`/`published` until every `feedbackClaim` and every deviation-class
-judgment has one of:
+`reviewed`/`published` until **every strategic assertion in the pack** has
+grounding. The complete assertion set (widened after codex review — the earlier
+list named only two of five, while the provenance block admitted all five were
+ungrounded):
+
+1. `objective.summary`
+2. every `planClasses[].description`
+3. every `spine[].annotations` entry
+4. every `feedbackClaims[].text`
+5. every `deviations[].note` **and its `class` judgment**
+
+Each needs one of:
 
 - a citable reviewed source (Wikibooks CC BY-SA theory with attribution, an
   annotated master game, a named book/course *idea* restated in our words), or
@@ -109,6 +119,17 @@ judgment has one of:
 Otherwise the product ships fluent, ungrounded assertion under an authored
 label — the exact failure ADR-0005 forbids, arriving through the content door
 instead of the LLM door.
+
+**Enforcement status, stated honestly.** This is a process barrier, not a
+validator rule: `graduationBlockers` is untyped extra metadata and nothing
+stops `reviewStatus` being flipped. Per-assertion grounding cannot be enforced
+until the evidence encoding exists (a content-era output, not an input). What
+*can* be enforced today with the shipped schema, and should be: **`pack-check`
+fails any pack whose `reviewStatus` is not `draft` while `provenance.sources`
+or `provenance.reviewers` is empty.** That blocks the crudest failure — a
+silent promotion with no reviewer and no sources — without inventing authored
+vocabulary. Until then, owner review must explicitly walk all five assertion
+categories, not just the claims.
 
 ## 4. Exit criteria
 

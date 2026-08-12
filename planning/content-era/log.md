@@ -126,3 +126,18 @@ contract-gaps (the second deliverable — what the format could NOT express):
   (c) real Stockfish validation; (d) an explicit inventory of authored
   structures that visibly do nothing — objective, intent capture, claims,
   deviation notes.
+
+## 2026-08-12 (codex review #2; recorded by claude)
+
+- Second governance finding accepted: the graduation bar enumerated only
+  feedbackClaims + deviation judgments while the provenance block admitted that
+  objective summary, plan-class descriptions, and spine annotations are equally
+  ungrounded user-facing chess assertions. Bar widened to the **complete
+  five-category assertion set**; under the previous wording three categories
+  could have graduated ungrounded.
+- Enforcement gap recorded rather than papered over: this is a process barrier,
+  not a validator rule, and per-assertion grounding is unenforceable until the
+  evidence encoding exists. Identified the cheap partial enforcement that IS
+  possible with the shipped schema — `pack-check` should fail any pack whose
+  `reviewStatus` is not `draft` while `provenance.sources` or
+  `provenance.reviewers` is empty. Queued for codex.
