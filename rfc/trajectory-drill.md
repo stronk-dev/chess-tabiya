@@ -1128,29 +1128,42 @@ mechanism, not about chess, so a reviewer cannot mistake it for content.
 
 `leg-b` declares one `{"kind": "material_balance", …, "to": "degraded"}` condition so a non-final
 leg's grading is exercised without any absorbing target. `leg-c` is the final leg, so its
-`hold` grading may absorb on `outcome.reached`.
+`hold` grading may absorb on `outcome.reached`. **No leg's `successConditions` name `book-crossed`
+or `pieces-off`**, which is what `TRAJECTORY_LEG_CONDITION_PRECEDES_ENTRY` (§10) requires and what
+Motivation §2h explains; `leg-c`'s resolution goes through `grading.resolveAt`, which compiles to
+the node-exact `checkpointReachedHere`.
 
-No Playwright configuration change is needed: `NODE_ENV=development` loads every non-sidecar
-`.json` in `content/drafts/` (`pack-registry.ts:237-250`, `playwright.config.ts:20-27`).
+No Playwright configuration change is needed. `pack-registry.ts:246-250` loads every non-sidecar
+`.json` under `content/drafts/` (`jsonFiles`, `:112-133`) whenever `options.development === true`,
+in addition to whatever `DRAFT_PACK_FILE` names, and `playwright.config.ts:20-21` already sets
+`NODE_ENV=development` alongside
+`DRAFT_PACK_FILE=schemas/fixtures/drill-pack/terminal-outcome.browser.json` — so the new fixture is
+served without displacing the one the existing outcome tests use.
 
 **The three authored drafts are not modified and are not chained.** Motivation §2d records why,
-and `design/04-content-architecture.md:158` already orders the real trajectory as step (2) of the
-content programme — after the three single-phase packs, as authoring work. This RFC ships the
+and `design/04-content-architecture.md:155-156` already orders the real trajectory as step (2) of
+the content programme — after the three single-phase packs, as authoring work. This RFC ships the
 runtime that step (2) needs and does not pre-empt its chess content.
 
 ### 13. No migration, and what is explicitly not persisted
 
 **No persisted run shape changes.** `objective.state_changed` already carries `from`, `to` and
-`evidenceRefs` (`schemas/drill_run.schema.json:420-440`), its `evidenceRefs` items are plain
-non-empty strings so `pack:<entryCheckpointId>` needs no schema change, no event type is added,
-and `DRILL_RUN_SCHEMA_VERSION` stays `"0.7"` (`packages/schema/src/index.ts:1`).
+`evidenceRefs` (`schemas/drill_run.schema.json:421-438`). Its `evidenceRefs` items are
+`{"$ref": "#/$defs/id"}`, and that `$def` is `{"type": "string", "minLength": 1}`
+(`drill_run.schema.json:78-81`) — an unpatterned non-empty string, **not** the
+`^[a-z0-9][a-z0-9-]*$` pack-side id — so `pack:<entryCheckpointId>` validates unchanged, exactly as
+the `pack:` and `rules:` refs the shipped compilers already emit do. `uniqueItems: true` is
+satisfied by a single-element array. No event type is added, and `DRILL_RUN_SCHEMA_VERSION` stays
+`"0.7"` (`packages/schema/src/index.ts:1`).
 `STORAGE_VERSION` stays 5 (`apps/server/src/storage.ts:147`). **This RFC claims no row in the
 migration register.**
 
-Five additions look persisted and none is:
+Six additions look persisted and none is:
 
 - **Leg spans, transitions and `producedBy`** (§6, §7) are derived on read from
   `historyFrom` and the event log, exactly as `lineMembership` and `resistanceOnPath` are.
+- **`TrajectoryVerdict.stopped`** (§6) is a boolean read off the last node's `objectiveState`;
+  no field records it.
 - **The reset transition** is an ordinary `objective.state_changed` in the existing shape. What is
   new is its `to: "active"` value, which the run schema's `objectiveState` enum already permits
   (`drill_run.schema.json:86-95`).
@@ -1164,7 +1177,7 @@ orphans no developer test run. The one new file is a new pack with a new id.
 
 ## Deviations from design
 
-1. **`design/04-content-architecture.md:110-119` describes a trajectory as a chain across pack
+1. **`design/04-content-architecture.md:109-119` describes a trajectory as a chain across pack
    families** — "opening family → its characteristic middlegame → the endings that structure
    actually produces" — and names a launch set of six. This RFC makes a trajectory **one pack**,
    because a chain of packs is a chain of runs and a chain of runs is a chain of root FENs with no
@@ -1177,7 +1190,8 @@ orphans no developer test run. The one new file is a new pack with a new id.
    conditions justify *authoring* a pack whose root is an ending; they do not describe a runtime
    operation, and the runtime has none. Encoding one would produce a run whose node path is
    discontinuous — the failure the same document's rule exists to prevent. A jump is a new run,
-   and sequencing runs is program item #7's territory. Scope boundary.
+   and sequencing runs is program item #7's territory (`design/03-product-breadth.md:266`), owned
+   by `rfc/return-and-progression.md`. Scope boundary.
 3. **`design/01-training-model.md:100` says a Trajectory Drill is graded "per-phase, linked by
    provenance".** This RFC ships per-leg, linked by provenance, and does not use the word phase for
    anything the runtime computes (§8a). "Per-phase" would require a phase claim; a leg is an
@@ -1200,10 +1214,20 @@ orphans no developer test run. The one new file is a new pack with a new id.
    is not edited; the discrepancy is recorded here because a trajectory that reused Pack A would
    inherit the shipped policy and not the documented one. Reconciling the pack or the doc is a
    BACKLOG row for the implementer to **propose**.
-8. **New BACKLOG rows this RFC asks for**, all proposals and none of them edits this RFC makes:
+8. **The seal-and-reset pair produces two `objective.state_changed` events at one node, which no
+   shipped RFC contemplated.** `evaluateObjective` performs at most one transition per call
+   (`objective.ts:311-326`) and both shipped mode RFCs reasoned in those terms. §4b's step 4 is a
+   second, orchestrator-level write. It is recorded as a deviation rather than buried in the
+   specification because it is the change most likely to be "simplified" by a later reader into an
+   unconditional reset — which, per §4b, makes a stored log unreplayable rather than merely
+   mis-graded. Criterion 3b is the regression.
+9. **New BACKLOG rows this RFC asks for**, all proposals and none of them edits this RFC makes:
    the catalogue-level trajectory-family relation (item 1); a widened `FenPredicate` union with a
    real authored consumer (§8a); the `selectionCacheKey` omission of `policy.mode` (Scope
-   boundary); and the Pack A policy discrepancy (item 7).
+   boundary); the Pack A policy discrepancy (item 7); and the duplicated pack-schema register in
+   `rfc/README.md` — "## Pack-schema-version register" and "## Pack schema register" are two tables
+   for one shared single-writer resource, and a register with two copies is the failure the
+   register exists to prevent. This RFC does not edit `rfc/README.md`.
 
 ## Acceptance criteria
 

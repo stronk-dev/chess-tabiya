@@ -51,7 +51,10 @@ channel** that replaces the approval gate the owner struck on 2026-08-13. It
 reuses the shipped validator, RFC-8785 digest, registry, sourcing checks and
 orchestrator rather than building a second authoring stack, and it closes one
 live defect the write path would otherwise make dangerous: a run whose pack
-digest no longer matches the registry silently stops being orchestrated (**D20**).
+digest no longer matches the registry silently stops being orchestrated (**D20**)
+— closed in both halves, by resolving runs to packs by digest *and* by refusing the
+move when no digest resolves, because the first alone leaves the silence intact for
+any pack a git commit edits (§3, §3a).
 
 **The ruling this draft was rebuilt around.** There is no pack review workflow and
 there never will be one. A sign-off gate nobody performs is worse than an honest
@@ -73,6 +76,7 @@ not pretend to be one.
 | Session distillation | no code anywhere; `design/03` lists it under Live and Create both |
 | Publication channel | nothing anywhere distinguishes a first-party pack from a contributed one. `PackSummary` carries `reviewStatus` and nothing else about origin (`pack-registry.ts:33,208`), and the client renders that string raw (`PackList.svelte:35`, `App.svelte:359`) |
 | `reviewStatus` consumers | exactly two: `pack-validation.ts:87-109` (requires non-empty `sources` **and** non-empty `reviewers` when the value is `reviewed`/`published`) and `sourcing/check.ts:216` (`CANDIDATE_ALREADY_PROMOTED`). Every committed pack is `draft` or `schema_example`; no committed document is `reviewed` or `published` |
+| `provenance.reviewers` code paths | **five**, and only one of them is in the row above — the field outlives `reviewStatus`'s consumer list. Read by `pack-validation.ts:99-107` and `sourcing/check.ts:217` (`CANDIDATE_ALREADY_REVIEWED`); *written* by `sourcing/openings.ts:114`, `sourcing/position-seeds.ts:238` and `sourcing/syzygy.ts:187`, so every future candidate would keep minting it. §10a moves all five |
 | Versioning workflow | `PackRegistry` is keyed by pack id with one record each (`pack-registry.ts:171-222`); no version history exists |
 
 ### What already ships and must be extended, not rebuilt
@@ -141,8 +145,11 @@ so in `design/BACKLOG.md`.
 Visual/form pack editing (the command loop has not been shown to be the
 bottleneck; the measured bottleneck was playtesting). Automatic candidate
 *selection* or ranking. Any authoring LLM. Corpus mining beyond the shipped
-pipelines. Intent-relative success conditions and the `concept_violation` split
-(§14b/§14c explain the refusal). Public unauthenticated share links.
+pipelines. Intent-relative success conditions, `deviations[].planClassId`, and the
+`concept_violation` split — all three authoring frictions stay surfaced and unfixed
+in the format (§14a/§14b/§14c each explain the refusal). Public unauthenticated share
+links. Pack-id namespacing, which would make ownership structural instead of tracked
+(BACKLOG row 7 below).
 
 ## Specification
 

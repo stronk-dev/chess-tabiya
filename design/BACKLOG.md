@@ -152,6 +152,9 @@ evidence the withdrawn contracts RFCs never had.
 | Deviations have no link to a plan class. 11.a3 and 11.Rab1 are literally the *same plan*, and `accepted_alternative` says nothing about that | Optional `planClassId` on a deviation | Pack B, 2026-08-12 |
 | `concept_violation` does two different jobs — a **timing** error (right plan, wrong moment) and a **plan-coherence** error (a move that contradicts the committed plan). Collapsing them loses the distinction the feedback most needs to make | 💡 **surfaced, not fixed — and the mechanism that would have caught it was struck.** The review sign-off was where Pack A's "`concept_violation` / is not a blunder" contradiction would have been resolved; with no reviewer, only Stockfish can settle it. Split the class, or add a dimension | Pack B, 2026-08-12 |
 
+| Comparison column ceiling | 💡 **owner ruling wanted.** `n-way-comparison.md` caps a comparison set at 8 branches and originally cited `design/03-product-breadth.md:288` for it — **that citation was fabricated; no such statement exists** (the only "eight" there is eight program items). The RFC now asserts 8 on its own grounds. Design should either ratify the number or set its own, because it is a product constraint on the surface the whole rewind-and-compare loop leans on | `03-product-breadth.md`, Q9 |
+| Prediction distribution delivery | 💡 the withholding barrier **truncates** the event stream at the first engine-feedback event, so a synchronous response is a legitimate and distinct delivery path. Worth stating in design, since "it isn't gated" and "it is delivered" were conflated once already | `explanation-grounds`, ADR-0006 |
+
 ## Open shape questions (💡 = genuinely undecided; owned by exploration)
 
 | Idea | Take | Home |
