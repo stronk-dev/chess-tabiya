@@ -114,6 +114,101 @@ the application's identity.
 - Community contribution and open pack interchange are supported by the same
   schema, not a private author-only format.
 
+### Branch groups — playing several candidates in parallel
+
+Owner, 2026-08-13: *"I am playing. I am unsure: I see about 4 good moves. I want
+to play the 4 moves — like a group of branches. Or if I don't know an opening,
+maybe a board for each opening variant. Or all the set of plausible human moves."*
+
+A **third** multi-branch capability; neither of the others covers it:
+
+| Capability | What it does | Who plays |
+|---|---|---|
+| **Simulate** | auto-walks authored variations to their end and renders the results | nobody — a preview |
+| **Compare** | reads branches already played | nobody — a reading |
+| **Branch group** | forks N candidates and **plays them all as a set** | the learner, in every one |
+
+The seed sources **are the assistance ladder** (`05-in-run-experience.md` §3):
+hand-picked moves (rung 0), authored variations (5), opening variants from corpus
+(4), **all plausible human replies at the learner's level** (3 — the same Maia
+distribution that detects pivotal moments), engine top-N (2). One mechanism, five
+ways to fill it, each inheriting its rung's honesty properties.
+
+**The load-bearing question is the opponent, not the boards.** For a group to
+answer *"which of my four moves is best"*, resistance must be **held constant**
+across branches, or the learner is comparing four different opponents and learns
+nothing about their own move. The control already ships: `opponentPolicy.seedMode`
+is `fixed | per_branch`, so a group defaults to `fixed`. `per_branch` is the
+deliberate opposite experiment — *does my move survive varied resistance* — and
+both are legitimate, but the default must be the controlled one and the
+difference must be visible.
+
+Open: whether branches advance in lockstep (one ply in each, in turn) or are
+played through one at a time. Lockstep makes comparison immediate and cognitive
+load high; sequential is calmer but lets branch A's memory contaminate branch B.
+The ledgered branch-race row is the two-board special case. Presentation — grid,
+carousel, stack — is deliberately unfixed; the information model does not depend
+on it.
+
+### Structural reading — the rung-0 layer
+
+Everything here is computed from the position by chess rules alone: no engine, no
+corpus, no model, no network. It is the only assistance that **cannot be wrong
+about chess, because it makes no chess judgement** (`05` §3), and the rest of this
+section depends on it.
+
+- **Deterministic feature predicates** — outpost on a square, backward pawn on a
+  file, half-open file, blocked diagonal, pawn-skeleton signature. Both a
+  *readable* for the learner and an *authorable predicate* for objectives
+  (`05` §5c). Exploration **Q4b** owns their definition.
+- **Denial and prophylaxis reading** — "after a4, a Black knight can never use b5
+  again." A denial move is invisible to every eval-first tool because nothing
+  happened; this is the clearest thing rung 0 sees that an evaluation cannot
+  explain.
+- **Discovered-consequence sight** — see not only what a piece attacks now, but
+  what it would unblock or enable: the knight that hops and frees a diagonal, the
+  rook that steps aside and opens a file. Sight, not advice.
+- **Pressure and control maps** — attackers and defenders per square, imbalance
+  shown, significance attributed rather than asserted.
+- **Structural naming** — the position *has* a Carlsbad skeleton, an IQP, a
+  Maroczy bind. Detection is structural; whether it matters is not.
+
+Each states a fact and attributes any judgement. **Detection is cheap and cannot
+be wrong; significance is judgement and must be attributed** — the governing rule
+of this section and the next two.
+
+### Adaptive guidance
+
+- **Live phase and structure classification** in-run, not just a catalogue filter
+  — it is what makes the assistance rail selectable, since a tablebase is decisive
+  below eight pieces and silent above, and corpus frequency is rich at move six
+  and empty at move forty. Abstains honestly rather than guessing, and is never
+  authoritative over a curated boundary.
+- **Assistance configuration per session context.** A curated drill withholds by
+  design; Just Play is the learner's own game; a streamed session has an audience
+  with different needs from the player. "What assistance is available here" is
+  implicit everywhere today and must become explicit.
+- **Auto-detected pivotal moments** for play with no author: irreversibility,
+  phase change, **human divergence** (the Maia distribution splitting several ways
+  — a fact about the distribution, not a claim about chess), and option collapse.
+  Engine eval swing is deliberately excluded as a primary detector: it finds where
+  someone erred, which is the post-mortem framing this product replaces, and it
+  cannot fire before the error.
+- **Endgame steering as named technique** — recognize the type, name the
+  technique, let the learner execute, grade the result. Never "play Rc8".
+- **Guidance that adjusts to what is on the board**, so drilling and Just Play get
+  the same reading rather than one being a degraded version of the other.
+
+### Reusable shapes (pending the ruling in `04-content-architecture.md` §0)
+
+Authored content splits into **shape entries** keyed to structural predicates and
+reusable wherever the classifier fires, and **line content** keyed to a specific
+move sequence and irreducible. If ruled, a drill becomes a generated recipe — a
+position source, an objective as a structural predicate, a resistance policy — and
+there is one play surface with the library lighting up on recognition. Recorded as
+breadth now so it is scheduled either way; the line/shape split, not the abolition
+of packs, is what survives both answers.
+
 ### Intelligence and explanation
 
 The UI exposes these as selectable evidence layers at the permitted feedback
@@ -170,7 +265,7 @@ rows below are green or explicitly removed by a new owner ruling:
 |---|---|---|
 | B1 — shell and entry | stable shell routes Play/Learn/Review/Live/Create/Library/Settings; resume works | **met with residuals** — `/settings` has no form control, `phase` is never projected, the drill-address grammar has no route |
 | B2 — solo modes | Just Play plus Line, Plan, Outcome, and organic/guided Trajectory each complete one fixture run | Plan only, but **F2 removed the blocker** — pack-optional runs ship, so Just Play is buildable rather than blocked. Line half-real; Outcome and Trajectory zero code |
-| B3 — review | manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise partial — and pairwise is a **runtime type** constraint that cannot be composed into N-way |
+| B3 — review | manual multi-branch selection, pair/multi compare, replay, deep mode, share/export, **and branch groups played in parallel from a seeded candidate set with resistance held constant** | pairwise partial — and pairwise is a **runtime type** constraint that cannot be composed into N-way |
 | B4 — evidence | authored, Stockfish, Maia, corpus/historical, Syzygy, structural/temporal, and LLM-rendered layers work with timing controls | **F1 shipped**: authored prose now has a real surface — checkpoint and terminal sheets render annotations, deviation notes and plan classes with per-occurrence reveal. Remaining: anchored claims, Maia explanation rendering, corpus/Syzygy runtime rendering, structural/temporal evidence, LLM rendering |
 | B5 — live | Twitch host/chat/overlay, academy roles, and external Position Arena handoff each complete one scenario | unmet, ordered last. **D1 and F3 closed**, so roles and a safe spectator projection are buildable; a granted spectator already follows a run in the browser suite |
 | B6 — create | a candidate, an import, or a completed run can become a served **community** pack, its channel visible wherever it is surfaced; corpus mining emits one unpublished candidate | **mining half MET** — `candidate-emit` produced four real unpublished candidates through the shipped pipeline. Absent: studio UI, pack write endpoint, session distillation |
