@@ -11,6 +11,7 @@ import { mayControlSession, mayPropose, mayVote, requireRead, requireWrite, type
 import { ServerError } from "./errors.js";
 import type { ArenaLeg, BoardControl, LiveSession, LiveSessionDetail, SessionKind, SessionProposal, VoteOption, VoteTally } from "./live-types.js";
 import type { LeaseHolder, LiveSessionStorage, RunStorage } from "./storage.js";
+import type { RunService } from "./service.js";
 
 type Storage = RunStorage & LiveSessionStorage;
 
@@ -40,10 +41,12 @@ function legalAt(run: DrillRun, nodeId: string, moveUci: string): void {
 
 export class LiveSessionService {
   readonly #storage: Storage;
+  readonly #runs: RunService | undefined;
   readonly #now: () => string;
 
-  constructor(storage: Storage, options: { readonly now?: () => string } = {}) {
+  constructor(storage: Storage, options: { readonly now?: () => string; readonly runService?: RunService } = {}) {
     this.#storage = storage;
+    this.#runs = options.runService;
     this.#now = options.now ?? (() => new Date().toISOString());
   }
 
@@ -110,8 +113,10 @@ export class LiveSessionService {
     if(op==="apply"){
       const access=requireWrite(this.#storage,session.runId,principal,writerId);
       if(access.stored.run.activeCursor.nodeId!==proposal.nodeId)throw new ServerError("INVALID_REQUEST","Proposal is stale");
-      const result=commitMove(access.stored.run,proposal.moveUci,{actor:"user",at:this.#now()});
-      this.#storage.save(result.run,access.lease);seq=result.run.events.at(-1)?.seq??seq;
+      const result=this.#runs===undefined
+        ? (()=>{const committed=commitMove(access.stored.run,proposal.moveUci,{actor:"user",at:this.#now()});this.#storage.save(committed.run,access.lease);return committed;})()
+        : this.#runs.move(session.runId,principal,writerId,proposal.moveUci,{actor:"user",at:this.#now()});
+      seq=result.run.events.at(-1)?.seq??seq;
     }
     return this.#storage.resolveProposal(proposalId,op==="apply"?"applied":"declined",seq,principal.learnerId,this.#now());
   }

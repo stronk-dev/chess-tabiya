@@ -318,7 +318,7 @@ export async function createApplication(
   const identity = new IdentityService(storage, {
     cookieSecure: options.cookieSecure ?? true,
   });
-  const live = new LiveSessionService(storage);
+  const live = new LiveSessionService(storage, { runService: service });
   const api = createRestHandler(service, selector, capabilities, identity, studio, live);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");

@@ -21,11 +21,11 @@ const cookie=(response:Response)=>response.headers.get("set-cookie")!.split(";",
 describe("live session platform",()=>{
   const stores:SQLiteRunStorage[]=[];
   afterEach(()=>{for(const store of stores.splice(0))store.close();});
-  function setup(){const storage=new SQLiteRunStorage(":memory:",{onMigration:()=>{}});stores.push(storage);const identity=new IdentityService(storage,{cookieSecure:false,derive});const service=new RunService(storage,{evidenceQueue:new EvidenceJobQueue(executor)});const live=new LiveSessionService(storage,{now:()=>"2026-08-13T12:00:00.000Z"});return {storage,live,handler:createRestHandler(service,undefined,undefined,identity,undefined,live)};}
+  function setup(){const storage=new SQLiteRunStorage(":memory:",{onMigration:()=>{}});stores.push(storage);const identity=new IdentityService(storage,{cookieSecure:false,derive});const queue=new EvidenceJobQueue(executor);const service=new RunService(storage,{evidenceQueue:queue});const live=new LiveSessionService(storage,{now:()=>"2026-08-13T12:00:00.000Z",runService:service});return {storage,queue,live,handler:createRestHandler(service,undefined,undefined,identity,undefined,live)};}
   async function register(handler:ReturnType<typeof createRestHandler>,handle:string){const response=await request(handler,"POST","/auth/register",{body:{handle,password:PASSWORD}});return {cookie:cookie(response),learner:(await response.json() as any).learner as {id:string;handle:string}};}
 
   it("migrates to the live schema and enforces board control, proposals, and namespaced advisory votes",async()=>{
-    const {storage,handler}=setup();expect(STORAGE_VERSION).toBe(9);
+    const {storage,queue,handler}=setup();expect(STORAGE_VERSION).toBe(9);
     const alice=await register(handler,"alice");const bob=await register(handler,"bob");const chat=await register(handler,"chatbridge");
     const run={id:"live-run",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:7};
     expect((await request(handler,"POST","/runs",{cookie:alice.cookie,writerId:"writer-a",body:run})).status).toBe(201);
@@ -39,6 +39,7 @@ describe("live session platform",()=>{
     await request(handler,"POST",`/sessions/${session.id}/votes`,{cookie:alice.cookie,body:{op:"cast",windowId:window.id,choiceUci:"e2e4"}});
     const relay=await request(handler,"POST",`/sessions/${session.id}/votes`,{cookie:chat.cookie,body:{op:"cast",windowId:window.id,choiceUci:"d2d4",voterKey:alice.learner.id}});expect(relay.status).toBe(200);const tally=await relay.json() as any;expect(tally.total).toBe(2);expect(tally.tally.map((item:any)=>item.count)).toEqual([1,1]);expect(JSON.stringify(storage.read("live-run")!.run.events)).toBe(before);
     expect((await request(handler,"POST",`/sessions/${session.id}/proposals/${proposal.id}`,{cookie:alice.cookie,writerId:"writer-a",body:{op:"apply"}})).status).toBe(200);
+    await queue.whenIdle();expect(queue.page("live-run",0).results).toHaveLength(1);
     await request(handler,"POST",`/sessions/${session.id}/board`,{cookie:alice.cookie,writerId:"writer-a",body:{op:"offer",handle:"bob"}});
     expect((await request(handler,"POST","/runs/live-run/lease",{cookie:bob.cookie,writerId:"writer-b",body:{expectedHolderLearnerId:alice.learner.id}})).status).toBe(200);
     expect((await request(handler,"POST","/runs/live-run/moves",{cookie:bob.cookie,writerId:"writer-b",body:{uci:"e7e5"}})).status).toBe(200);
@@ -55,6 +56,16 @@ describe("live session platform",()=>{
     const made=await request(handler,"POST","/sessions",{cookie:alice.cookie,body:{runId:"r",kind:"stream",title:"Stream"}});const sid=(await made.json() as any).session.id;
     const graph=await (await request(handler,"GET","/runs/r/graph",{cookie:alice.cookie})).json() as any;const opened=await request(handler,"POST",`/sessions/${sid}/votes`,{cookie:alice.cookie,body:{op:"open",nodeId:graph.graph.nodes[0].id,prompt:"Move",options:[{moveUci:"e2e4",label:"e4"},{moveUci:"d2d4",label:"d4"}],durationSeconds:60}});const wid=(await opened.json() as any).window.id;
     const response=await request(handler,"POST",`/sessions/${sid}/votes`,{cookie:bob.cookie,body:{op:"cast",windowId:wid,choiceUci:"e2e4",voterKey:"forged"}});expect(response.status).toBe(400);expect((await response.json() as any).error.code).toBe("INVALID_REQUEST");
+  });
+
+  it("uses the current-holder witness so only one competing free claim wins",async()=>{
+    const {handler}=setup();const alice=await register(handler,"alice");const bob=await register(handler,"bob");const carol=await register(handler,"carol");
+    await request(handler,"POST","/runs",{cookie:alice.cookie,writerId:"writer-a",body:{id:"race",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:9}});
+    for(const handle of ["bob","carol"])await request(handler,"POST","/runs/race/grants",{cookie:alice.cookie,writerId:"writer-a",body:{op:"grant",handle,role:"participant"}});
+    await request(handler,"POST","/sessions",{cookie:alice.cookie,body:{runId:"race",kind:"academy",title:"Race",boardControl:"free_claim"}});
+    const bobClaim=await request(handler,"POST","/runs/race/lease",{cookie:bob.cookie,writerId:"writer-b",body:{expectedHolderLearnerId:alice.learner.id}});
+    const carolClaim=await request(handler,"POST","/runs/race/lease",{cookie:carol.cookie,writerId:"writer-c",body:{expectedHolderLearnerId:alice.learner.id}});
+    expect(bobClaim.status).toBe(200);expect(carolClaim.status).toBe(409);expect((await carolClaim.json() as any).error.code).toBe("LEASE_MOVED");
   });
 
   it("imports two arena mainlines into root-forked branches without inventing opponent selections",async()=>{
