@@ -346,11 +346,12 @@ test("Pack A withholds its line, grades the boundary, and renders authored theor
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await move(page, "e1", "g1");
-  await expect(page.getByRole("heading", { name: "You are past the authored line" })).toBeVisible();
-  await expect(page.getByText("concept_violation", { exact: false })).toBeVisible();
-  await expect(page.getByText("Castling into the break", { exact: false })).toBeVisible();
+  const boundarySheet = page.getByRole("dialog");
+  await expect(boundarySheet.getByRole("heading", { name: "You are past the authored line" })).toBeVisible();
+  await expect(boundarySheet.getByText("concept_violation", { exact: false })).toBeVisible();
+  await expect(boundarySheet.getByText("Castling into the break", { exact: false })).toBeVisible();
   await expect(page.getByText("Objective: follow_theory — degraded", { exact: false })).toBeVisible();
-  await expect(page.getByRole("dialog").getByText("Applied policy: theory_strict", { exact: false })).toBeVisible();
+  await expect(boundarySheet.getByText("Applied policy: theory_strict", { exact: false })).toBeVisible();
 });
 
 test("Line Drill crosses a cap on-line, continues, and renders unknown honestly", async ({ page }) => {

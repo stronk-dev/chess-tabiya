@@ -6,6 +6,6 @@ RFC: `rfc/line-drill-theory-grading.md` (implementing).
 - [x] Selector applied-mode stamping, server-resolved spine, and pack-aware cache
 - [x] Pack schema v0.4, boundary/resolver, deviation lint, and theory objective rules
 - [x] Withheld theory verdict projection and client rendering
-- [ ] Content repairs, browser acceptance, repeated zero-retry gates, and canonical docs
+- [x] Content repairs, browser acceptance, repeated zero-retry gates, and canonical docs
 
 Checkboxes flip only in commits carrying the exercising tests.

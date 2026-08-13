@@ -52,3 +52,16 @@ Append-only.
 - The Pack A browser regression exercises the fix by requiring the prior note,
   the verbatim `concept_violation` class, and the degraded objective together at
   `past-the-book`.
+
+## 2026-08-13 — Final verification
+
+- `ENGINES_REQUIRED=1 make verify`: 287 tests / 48 files green; schema and
+  packaging verification green.
+- Three consecutive complete `make test-browser` runs passed with Playwright
+  retries still unset: 9 passed, 1 optional Maia test skipped on each run.
+- Browser-observed branch-switch timings were 49.2 ms, 50.4 ms, and 43.0 ms.
+  The middle run exceeded the <50 ms benchmark by 0.4 ms; the existing
+  full-log projection performance debt remains the named lever. This is logged,
+  not rationalized into a pass/fail guarantee.
+- `make pack-check` passes for Pack A v0.2, the living Najdorf example, and the
+  dedicated Line browser fixture.
