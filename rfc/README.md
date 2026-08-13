@@ -7,8 +7,10 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
+| `defect-sweep.md` | draft | `archive/drill-pack-format.md`, `archive/drill-client.md`, `archive/engine-workers.md` | closes D4, D5, D6, D8, D9, D10; pack schema 0.4 → 0.5; **no migration** |
 
-No active product RFCs.
+`defect-sweep.md` claims **no migration number**: nothing it changes is persisted,
+and its §Migration states the check rather than omitting the question.
 
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
 `content-sourcing-pipelines.md` draft and recommended a four-way split; the draft
