@@ -1271,3 +1271,39 @@ question the two threshold readings existed to answer.
 **3. Simulated branches are scratch** — discarded unless the learner enters one,
 which promotes it to a real branch. `Branch.origin` becomes the promotion marker
 rather than a persistence filter.
+
+## 2026-08-13 (claude) — the full idea recorded as breadth: B9, B10, B11
+
+Owner: *"make sure all the breadth is recorded… I want the full idea realized —
+from simulations to branches, from drills to classifiers that adjust, from pawn
+structures to knight threats."*
+
+`design/03-product-breadth.md` predated everything worked out today, so the
+surface map had no home for it. Added three surface sections and three gates,
+mirrored into `gates.md` so the gate surface stays unsplit:
+
+- **B9 structural reading** — the rung-0 layer. Feature predicates that are
+  simultaneously *readables* for the learner and *authorable conditions* for
+  objectives; denial and prophylaxis; discovered consequence; pressure maps;
+  structural naming. Ordered **before** B10 and B11 because both depend on it,
+  and ahead of much remaining polish for three reasons: it is the only assistance
+  that cannot manufacture chess truth, it needs no engine or network, and it
+  closes the plan-objective gap that currently leaves two of three authored packs
+  with no working objective at all.
+- **B10 adaptive guidance** — live classification, assistance configurable per
+  session context, author-free pivotal detection (irreversibility, phase change,
+  Maia divergence, option collapse — engine eval swing deliberately excluded as a
+  primary detector), endgame steering by named technique.
+- **B11 reusable shapes** — the owner's reframe. Blocked on the `04` §0 ruling
+  *and* on B9, because a shape cannot state its own trigger without feature
+  predicates.
+
+The governing rule written into all three: **detection is cheap and cannot be
+wrong; significance is judgement and must be attributed.** That single line is
+what keeps a strategic classifier from becoming the dashboard `AGENTS.md` names
+as the anti-pattern.
+
+Note on ordering: B9 sits alongside the six RFCs already drafted rather than
+behind them. Those six close B2/B3/B5/B6/B7 and the open defects; B9 is the first
+item that makes the *guidance* better rather than the surface wider, and it is
+the cheapest thing in the program.

@@ -176,6 +176,9 @@ rows below are green or explicitly removed by a new owner ruling:
 | B6 — create | a candidate, an import, or a completed run can become a served **community** pack, its channel visible wherever it is surfaced; corpus mining emits one unpublished candidate | **mining half MET** — `candidate-emit` produced four real unpublished candidates through the shipped pipeline. Absent: studio UI, pack write endpoint, session distillation |
 | B7 — return | history/resume, progress, concept scheduling, related retry, and optional recommendation work | history/resume ship and **F3 supplied the subject**, so the rest is buildable rather than blocked. Still zero: progress, SRS, related retry, recommendations |
 | B8 — platform | desktop shell, responsive/PWA transformation, self-hosted engines/providers, read-only share links, accessibility | deployment packaging shipped in full; residual is the release compose's missing light profile (D5). **Share links no longer blocked by D1** — safe granted spectators ship; a public share-link workflow remains unbuilt. Overstated on Settings: no form control exists |
+| B9 — structural reading | feature predicates computed, authorable and rendered; denial, outpost, diagonal, pressure and discovered-consequence readables work with no engine; each abstains honestly and attributes judgement rather than asserting it | unmet — specified in `05` §3/§5, nothing built |
+| B10 — adaptive guidance | live phase/structure classification in-run; assistance configurable per session context; pivotal moments auto-detected in play with no author; endgame steering names a technique rather than a move | unmet |
+| B11 — reusable shapes | a shape entry authored once attaches to every position where its trigger fires; a drill is generated from position source + structural objective + resistance; one play surface serves both | unmet — blocked on the `04` §0 ruling and on B9's predicates |
 
 ## The foundation edge (added 2026-08-12 after the alignment pass)
 
@@ -273,6 +276,21 @@ and cheap-to-test risks are tested early.
    and fun; a coach partner or community existing — remain in force and are the
    real trigger. Shared roles/events plumbing may land earlier if another RFC
    genuinely needs it.
+
+9. **Structural reading (B9):** the deterministic feature layer — predicates
+   that are simultaneously readables for the learner and authorable conditions
+   for objectives — plus denial/prophylaxis, discovered consequence, pressure
+   maps and structural naming. **Ordered before 10 and 11 because both depend on
+   it**, and ahead of much of the remaining polish because it is the only
+   assistance that cannot manufacture chess truth, needs no engine, and closes
+   the plan-objective gap that leaves two authored packs with no working
+   objective today (`05` §5c).
+10. **Adaptive guidance (B10):** live classification, assistance configuration
+    per session context, author-free pivotal detection, endgame steering by named
+    technique. Needs 9's predicates to have anything to classify with.
+11. **Reusable shapes (B11):** shape entries, generated drill recipes, one play
+    surface. Blocked on the `04-content-architecture.md` §0 ruling *and* on 9 —
+    a shape cannot state its own trigger without feature predicates.
 
 The RFCs may split further where review finds independent contracts, but they
 must retain this dependency direction and jointly close every B-gate. Content
