@@ -9,7 +9,7 @@ Implemented foundation:
 - `branch-runtime.md` — immutable run tree, rewind/fork/objective/replay semantics,
   comparison and PGN export, REST/lease/storage behavior, measured envelope, and
   current limitations.
-- `drill-pack-format.md` — living v0.4 schema, semantic authoring lint, canonical
+- `drill-pack-format.md` — living v0.5 schema, semantic authoring lint, canonical
   digest and URL tooling, executable checkpoint-action validation, pack/run PGN
   round-trip, and deferred content boundary.
 - `engine-workers.md` — UCI supervision, Dockerized Maia and policy exposure,

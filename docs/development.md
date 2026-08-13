@@ -86,3 +86,7 @@ run `ENGINES_REQUIRED=1 make verify`.
 
 Tag releases build amd64/arm64 server and Maia images, publish both version and
 commit-SHA tags to GHCR, and attach a Compose file with digest-pinned images.
+Run that downloaded release file with `docker compose -f compose.yaml up -d`
+for the deterministic mock profile, or with
+`ENGINE_MODE=maia docker compose -f compose.yaml --profile engines up -d` for
+the health-gated Maia profile.

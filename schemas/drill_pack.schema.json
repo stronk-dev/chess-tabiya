@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.4",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.5",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.4 format for an engine-independent authored drill.",
+  "description": "Living v0.5 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -48,11 +48,7 @@
     },
     "opponentPolicy": { "$ref": "#/$defs/opponentPolicy" },
     "feedbackPolicy": {
-      "enum": [
-        "delayed_checkpoint",
-        "segment_end",
-        "immediate_blunder_guard"
-      ]
+      "enum": ["delayed_checkpoint", "segment_end"]
     },
     "authoredBoundary": { "$ref": "#/$defs/authoredBoundary" },
     "deviations": {
@@ -107,7 +103,7 @@
     },
     "start": {
       "type": "object",
-      "required": ["fen"],
+      "required": ["fen", "side"],
       "properties": {
         "fen": { "$ref": "#/$defs/nonEmptyString" },
         "movesSan": {

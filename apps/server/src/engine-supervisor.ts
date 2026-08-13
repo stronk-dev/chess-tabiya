@@ -112,20 +112,18 @@ function parseIdentity(
   spec: EngineSpec,
   lines: readonly string[],
   optionNames: ReadonlySet<string>,
-): EngineIdentity {
+): { readonly identity: EngineIdentity; readonly mismatch?: string } {
   const advertised = lines.find((line) => line.startsWith("id name "))?.slice(8).trim();
-  let name = spec.name ?? advertised ?? "unknown";
-  let version = spec.version ?? "unknown";
-
-  if (spec.name === undefined && advertised !== undefined) {
-    const stockfish = /^Stockfish(?:\s+(.+))?$/.exec(advertised);
-    if (stockfish) {
-      name = "Stockfish";
-      version = spec.version ?? stockfish[1] ?? "unknown";
-    }
-  }
-
-  return Object.freeze({
+  const [advertisedName = "unknown", ...advertisedVersionParts] =
+    advertised?.split(/\s+/u) ?? [];
+  const advertisedVersion = advertisedVersionParts.join(" ") || "unknown";
+  const agrees =
+    spec.name === undefined ||
+    advertised === spec.name ||
+    advertised?.startsWith(`${spec.name} `) === true;
+  const name = spec.name ?? advertisedName;
+  const version = spec.version ?? (agrees ? advertisedVersion : "unknown");
+  const identity = Object.freeze({
     id: spec.id,
     kind: spec.kind,
     name,
@@ -136,6 +134,12 @@ function parseIdentity(
       : { containerDigest: spec.containerDigest }),
     seedHonored:
       spec.seedOption === undefined ? false : optionNames.has(spec.seedOption),
+  });
+  return Object.freeze({
+    identity,
+    ...(!agrees && advertised !== undefined
+      ? { mismatch: `identity mismatch: configured ${spec.name}, advertised ${advertised}` }
+      : {}),
   });
 }
 
@@ -229,7 +233,11 @@ class ManagedUciEngine {
           return match?.[1] === undefined ? [] : [match[1]];
         }),
       );
-      this.#identity = parseIdentity(this.#spec, uciLines, optionNames);
+      const parsedIdentity = parseIdentity(this.#spec, uciLines, optionNames);
+      this.#identity = parsedIdentity.identity;
+      if (parsedIdentity.mismatch !== undefined) {
+        this.#transcript.push("lifecycle", parsedIdentity.mismatch);
+      }
       for (const [name, value] of Object.entries(this.#spec.options ?? {})) {
         this.#send(`setoption name ${name} value ${String(value)}`);
       }

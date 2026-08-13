@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
 
   import HonestControl from "./HonestControl.svelte";
-  import type { CheckpointNotice } from "./screen-model.js";
+  import { recognizedCheckpointActions, type CheckpointNotice } from "./screen-model.js";
   import type { AuthoredFeedbackItem } from "./api.js";
   import OutcomeContext from "./OutcomeContext.svelte";
   import type { DrillRun } from "@chess-tabiya/runtime";
@@ -36,6 +36,7 @@
     run,
   }: Props = $props();
   let heading: HTMLHeadingElement;
+  let recognizedActions = $derived(recognizedCheckpointActions(checkpoint.actions));
 
   onMount(() => heading?.focus());
 </script>
@@ -75,7 +76,7 @@
     <div class="actions">
       <button class="primary" type="button" onclick={onContinue}>Continue</button>
       <button type="button" onclick={onRewind}>Rewind here</button>
-      {#if checkpoint.actions.includes("compare_branches")}
+      {#if recognizedActions.compare_branches}
         <HonestControl
           disabled={!canCompare}
           reasonId="checkpoint-compare-unavailable"

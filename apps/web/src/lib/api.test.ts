@@ -64,7 +64,7 @@ describe("DrillApi", () => {
       if (url.endsWith("/packs")) return json([]);
       if (url.endsWith("/packs/pack-one")) {
         return json(
-          { id: "pack-one", version: "0.2", start: { fen: run.nodes[0]!.fen } },
+          { id: "pack-one", version: "0.2", start: { fen: run.nodes[0]!.fen, side: "white" } },
           { headers: { "x-pack-digest": run.packDigest! } },
         );
       }

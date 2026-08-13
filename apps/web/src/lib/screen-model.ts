@@ -1,4 +1,8 @@
-import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import {
+  CHECKPOINT_ACTIONS,
+  type CheckpointAction,
+  type DrillPackDefinition,
+} from "@chess-tabiya/schema/drill-pack";
 import {
   branchPath,
   historyFrom,
@@ -52,6 +56,17 @@ const TERMINAL_STATES: ReadonlySet<ObjectiveState> = new Set([
   "failed",
   "transitioned",
 ]);
+
+export function recognizedCheckpointActions(
+  actions: readonly string[],
+): Readonly<Record<CheckpointAction, boolean>> {
+  const declared = new Set(actions);
+  const recognized: Record<CheckpointAction, boolean> = {
+    compare_branches: false,
+  };
+  for (const action of CHECKPOINT_ACTIONS) recognized[action] = declared.has(action);
+  return Object.freeze(recognized);
+}
 
 export function packStartSide(pack: DrillPackDefinition): "white" | "black" {
   const side = pack.start.side;

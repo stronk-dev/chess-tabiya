@@ -14,6 +14,15 @@ export const OBJECTIVE_TYPES = [
 
 export type ObjectiveType = (typeof OBJECTIVE_TYPES)[number];
 
+export const CHECKPOINT_ACTIONS = ["compare_branches"] as const;
+export type CheckpointAction = (typeof CHECKPOINT_ACTIONS)[number];
+
+export const FEEDBACK_POLICIES = ["delayed_checkpoint", "segment_end"] as const;
+export type FeedbackPolicy = (typeof FEEDBACK_POLICIES)[number];
+
+export const PACK_PHASES = ["opening", "middlegame", "endgame", "cross_phase"] as const;
+export type PackPhase = (typeof PACK_PHASES)[number];
+
 export interface SpineNode {
   readonly id: string;
   readonly moveUci: string;
@@ -80,7 +89,11 @@ export interface CheckpointDefinition {
 export interface DrillPackDefinition {
   readonly id: string;
   readonly version: string;
-  readonly start: { readonly fen: string; readonly [key: string]: unknown };
+  readonly start: {
+    readonly fen: string;
+    readonly side: "white" | "black";
+    readonly [key: string]: unknown;
+  };
   readonly objective: {
     readonly type: ObjectiveType;
     readonly summary?: string;

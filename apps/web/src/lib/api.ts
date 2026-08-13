@@ -1,4 +1,7 @@
-import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import type {
+  DrillPackDefinition,
+  PackPhase,
+} from "@chess-tabiya/schema/drill-pack";
 import type {
   BranchComparison,
   DrillRun,
@@ -19,6 +22,7 @@ export interface PackSummary {
   readonly digest: string;
   readonly title: string;
   readonly mode: string;
+  readonly phase: PackPhase | null;
   readonly difficulty: unknown;
   readonly reviewStatus: string;
 }
@@ -420,6 +424,10 @@ export class DrillApi implements DrillClientApi {
     const digest = response.headers.get("x-pack-digest");
     if (digest === null || digest === "") {
       throw new ApiError(502, "INVALID_RESPONSE", "Pack response omitted its digest");
+    }
+    const side = (document as { readonly start?: { readonly side?: unknown } }).start?.side;
+    if (side !== "white" && side !== "black") {
+      throw new ApiError(502, "INVALID_RESPONSE", `Pack ${packId} did not declare start.side`);
     }
     return Object.freeze({ document, digest });
   }

@@ -1,21 +1,22 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
-import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { lintDrillPack } from "@chess-tabiya/schema/drill-pack";
+import {
+  CHECKPOINT_ACTIONS,
+  FEEDBACK_POLICIES,
+  lintDrillPack,
+  type DrillPackDefinition,
+} from "@chess-tabiya/schema/drill-pack";
 import { createRun } from "@chess-tabiya/runtime";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
 import {
-  DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES,
   DECLARED_UNIMPLEMENTED_POLICY_MODES,
   SUPPORTED_POLICY_MODES,
 } from "./capabilities.js";
 import { checkpointMatches } from "./pack-orchestrator.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
-
-const SUPPORTED_CHECKPOINT_ACTIONS = Object.freeze(["compare_branches"] as const);
 
 export interface PackValidationIssue {
   readonly severity: "error" | "warning";
@@ -109,21 +110,7 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
   }
 
   const feedbackPolicy = raw.feedbackPolicy;
-  if (feedbackPolicy === "immediate_blunder_guard") {
-    const reason = DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES.find(
-      (entry) => entry.mode === feedbackPolicy,
-    )?.reason;
-    issues.push(
-      runtimeIssue(
-        "UNSUPPORTED_FEEDBACK_POLICY",
-        "/feedbackPolicy",
-        reason ?? "immediate_blunder_guard is not supported in v1",
-      ),
-    );
-  } else if (
-    feedbackPolicy !== "delayed_checkpoint" &&
-    feedbackPolicy !== "segment_end"
-  ) {
+  if (!FEEDBACK_POLICIES.some((policy) => policy === feedbackPolicy)) {
     issues.push(
       runtimeIssue(
         "UNSUPPORTED_FEEDBACK_POLICY",
@@ -158,13 +145,13 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
     for (const [actionIndex, action] of actions.entries()) {
       if (
         typeof action === "string" &&
-        !SUPPORTED_CHECKPOINT_ACTIONS.some((supported) => supported === action)
+        !CHECKPOINT_ACTIONS.some((supported) => supported === action)
       ) {
         issues.push(
           runtimeIssue(
             "UNSUPPORTED_CHECKPOINT_ACTION",
             `/checkpoints/${checkpointIndex}/actions/${actionIndex}`,
-            `checkpoint action ${JSON.stringify(action)} is unsupported; allowed actions: ${SUPPORTED_CHECKPOINT_ACTIONS.join(", ")}`,
+            `checkpoint action ${JSON.stringify(action)} is unsupported; allowed actions: ${CHECKPOINT_ACTIONS.join(", ")}`,
           ),
         );
       }
@@ -366,7 +353,7 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
   }
 
   try {
-    const side = pack.start.side === "black" ? "black" : "white";
+    const side = pack.start.side;
     const root = createRun({
       id: "pack-validation",
       session: {

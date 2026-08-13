@@ -112,8 +112,9 @@ redraws after reactive layout settles rather than retaining stale pointer bounds
 - No authored pack in the repository currently has a ledger-verified Syzygy
   assessment; positive admission is exercised with the real seven-piece emitter
   fixture.
-- `perfect_tablebase` is declared but not selectable. The client reports that
-  limitation instead of implying perfect resistance.
+- `perfect_tablebase` is declared but not selectable, and schema/capability
+  binding tests ensure it remains explicitly accounted for. The client reports
+  that limitation instead of implying perfect resistance.
 - Stockfish scores are recorded evidence, not grading authority.
 - Historical plies pre-dating run schema v0.7 cannot identify the applied policy.
 - An authored root claim above seven pieces is reviewable content, not a

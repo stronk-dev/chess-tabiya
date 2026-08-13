@@ -1,4 +1,8 @@
-import { RUN_OPPONENT_MODES, runtimeBuildInfo } from "@chess-tabiya/runtime";
+import {
+  RUN_OPPONENT_MODES,
+  runtimeBuildInfo,
+  type RunOpponentMode,
+} from "@chess-tabiya/runtime";
 
 import type { EngineHealth, EngineIdentity } from "./engine-supervisor.js";
 import type { OpponentPolicyMode } from "./opponent-selector.js";
@@ -22,12 +26,9 @@ export const DECLARED_UNIMPLEMENTED_POLICY_MODES = Object.freeze([
   { mode: "human_external", reason: "human_external is not selectable in v1; external-human selection is not implemented" },
 ] as const);
 
-export const DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES = Object.freeze([
-  {
-    mode: "immediate_blunder_guard",
-    reason: "immediate_blunder_guard is not supported in v1; it is not implemented",
-  },
-] as const);
+export function isRunOpponentMode(value: unknown): value is RunOpponentMode {
+  return RUN_OPPONENT_MODES.some((mode) => mode === value);
+}
 
 export const SURFACE_IDS = Object.freeze([
   "play",

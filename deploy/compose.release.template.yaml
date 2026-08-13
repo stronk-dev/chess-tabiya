@@ -5,7 +5,7 @@ services:
     image: __SERVER_IMAGE__
     environment:
       DATABASE_PATH: /data/chess-tabiya.sqlite
-      ENGINE_MODE: maia
+      ENGINE_MODE: ${ENGINE_MODE:-mock}
       MAIA_HOST: maia
       MAIA_PORT: "7000"
       PORT: "3000"
@@ -17,9 +17,11 @@ services:
     depends_on:
       maia:
         condition: service_healthy
+        required: false
     restart: unless-stopped
 
   maia:
+    profiles: [engines]
     image: __MAIA_IMAGE__
     entrypoint: ["python", "/opt/chess-tabiya/maia-sidecar.py"]
     environment:

@@ -118,6 +118,7 @@ describe("drill-client pack registry", () => {
         digest,
         title: fixture.title,
         mode: fixture.mode,
+        phase: fixture.phase,
         difficulty: fixture.difficulty,
         reviewStatus: "schema_example",
       },
@@ -215,7 +216,7 @@ describe("drill-client pack registry", () => {
       ]),
     ).rejects.toMatchObject({
       code: "PACK_INVALID",
-      message: expect.stringContaining("not supported in v1"),
+      message: expect.stringContaining("must be equal to one of the allowed values"),
     });
 
     await expect(
@@ -276,17 +277,9 @@ describe("pack-aware run orchestration", () => {
       id: "missing-side-pack",
       start: { fen: fixture.start.fen, movesSan: fixture.start.movesSan },
     });
-    const missingSide = await setup(withoutSide);
-    stores.push(missingSide.storage);
-    const refusedStart = await request(
-      missingSide.handler,
-      "POST",
-      "/runs",
-      runBody("missing-side-run", withoutSide.id),
-    );
-    expect(refusedStart.status).toBe(400);
-    expect(await refusedStart.json()).toMatchObject({
-      error: { code: "INVALID_REQUEST", message: expect.stringContaining(withoutSide.id) },
+    await expect(setup(withoutSide)).rejects.toMatchObject({
+      code: "PACK_INVALID",
+      message: expect.stringContaining("side"),
     });
 
     const invalidPolicy = pack({

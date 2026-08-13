@@ -135,6 +135,7 @@ class FakeApi implements DrillClientApi {
         digest,
         title: this.document.title as string,
         mode: this.document.mode as string,
+        phase: "opening",
         difficulty: this.document.difficulty,
         reviewStatus: "schema_example",
       },

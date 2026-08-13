@@ -95,7 +95,8 @@ unless a caller explicitly supplies the new override.
 Generated endgame packs are spine-less outcome drills. The opponent is explicitly
 `strong_engine` or `human_common`, the checkpoint is aligned to a learner ply, and roots in
 tablebase range retain a graduation blocker because `perfect_tablebase` is still not a
-selectable runtime policy (D8). Terminal runs disclose through the implemented
+selectable runtime policy; schema/capability binding tests keep that declaration honest.
+Terminal runs disclose through the implemented
 `outcome.reached` contract. The emitter does not manufacture grading; a later
 author may add v0.3 grading only under the assessment-admission contract above.
 

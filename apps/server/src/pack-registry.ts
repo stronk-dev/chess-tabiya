@@ -5,6 +5,8 @@ import { fileURLToPath } from "node:url";
 import {
   digestDrillPack,
   type DrillPackDefinition,
+  type FeedbackPolicy,
+  type PackPhase,
   type SpineNode,
 } from "@chess-tabiya/schema/drill-pack";
 
@@ -21,7 +23,7 @@ export const SIDECAR_BASENAMES = Object.freeze([
 
 export type AssessmentGrounding = "ledger_verified" | "unverified";
 
-export type FeedbackPolicy = "delayed_checkpoint" | "segment_end";
+export type { FeedbackPolicy } from "@chess-tabiya/schema/drill-pack";
 
 export interface PackSummary {
   readonly id: string;
@@ -29,6 +31,7 @@ export interface PackSummary {
   readonly digest: string;
   readonly title: string;
   readonly mode: string;
+  readonly phase: PackPhase | null;
   readonly difficulty: unknown;
   readonly reviewStatus: string;
 }
@@ -204,6 +207,7 @@ export class PackRegistry {
         digest,
         title: raw.title as string,
         mode: raw.mode as string,
+        phase: typeof raw.phase === "string" ? (raw.phase as PackPhase) : null,
         difficulty: raw.difficulty ?? null,
         reviewStatus: provenance.reviewStatus as string,
       });

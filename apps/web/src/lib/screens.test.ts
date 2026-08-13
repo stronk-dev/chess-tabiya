@@ -230,6 +230,7 @@ describe("Layer 3 screens", () => {
       digest: `sha256:${"a".repeat(64)}`,
       title: pack.title as string,
       mode: pack.mode as string,
+      phase: "opening",
       difficulty: pack.difficulty,
       reviewStatus: "schema_example",
     };
@@ -240,6 +241,7 @@ describe("Layer 3 screens", () => {
 
     expect(document.body.textContent).toContain("advanced club");
     expect(document.body.textContent).toContain("schema example");
+    expect(document.body.textContent).toContain("opening");
     document.querySelector<HTMLButtonElement>(".pack-card button")!.click();
     expect(onSelect).toHaveBeenCalledWith(pack.id);
     await unmount(component);

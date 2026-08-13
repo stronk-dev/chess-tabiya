@@ -64,7 +64,7 @@ export interface PositionSeedEngineAnswer {
 export type PositionSeedEngineEvaluator = (fen: string) => Promise<PositionSeedEngineAnswer>;
 
 export async function createPositionSeedEngineEvaluator(command: string, args: readonly string[] = []): Promise<{ readonly evaluate: PositionSeedEngineEvaluator; close(): Promise<void> }> {
-  const supervisor = new EngineSupervisor([{ id: "stockfish-authoring", kind: "judge", command, args, options: { Threads: AUTHORING_PROFILE.threads, Hash: AUTHORING_PROFILE.hashMb, MultiPV: AUTHORING_PROFILE.multiPv }, handshakeTimeoutMs: 15_000 }]);
+  const supervisor = new EngineSupervisor([{ id: "stockfish-authoring", kind: "judge", name: "Stockfish", command, args, options: { Threads: AUTHORING_PROFILE.threads, Hash: AUTHORING_PROFILE.hashMb, MultiPV: AUTHORING_PROFILE.multiPv }, handshakeTimeoutMs: 15_000 }]);
   const identity = await supervisor.start("stockfish-authoring");
   const executor = new StockfishEvidenceExecutor(supervisor, "stockfish-authoring");
   return {
@@ -222,7 +222,7 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
       "The objective transitions on reaching the checkpoint, i.e. on playing the position out. No shipped mechanism grades how it was played out or what happened to the position; adding one is an authored act.",
       "The start position is whatever the puzzle's solution produced; it is not asserted to be winning, equal, or better for the learner. No engine or tablebase has evaluated it.",
       "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft",
-      "immediate_blunder_guard is not selectable (defect D8); delayed_checkpoint is a temporary substitution",
+      "Immediate blunder feedback has no pack-format encoding; delayed_checkpoint is the authored policy for this candidate",
       "targetElo clamp [1100, 2000] is an authoring convention, not a Maia capability claim",
       "No authored plan, deviation, or feedback claim exists; a reviewer must add any chess judgement rather than infer one from puzzle metadata.",
     ];

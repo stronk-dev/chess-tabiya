@@ -12,15 +12,16 @@ checkpoint and objective evaluation, feedback timing, and opponent selection.
 `content/packs/` when that directory exists. Loading is fail-fast: malformed
 core fields, duplicate pack IDs, unsupported v1 semantics, and semantic lint
 errors produce a typed `PACK_INVALID` error. The v1 server accepts
-`delayed_checkpoint` and `segment_end`; `immediate_blunder_guard` remains cut
-until the on-ramp content phase has a consumer for it. A pack is also refused
+`delayed_checkpoint` and `segment_end`; `immediate_blunder_guard` is not in the
+format until the on-ramp has an executable judging and reveal contract. A pack is also refused
 unless its opponent mode is executable by the selector (`human_common`,
 `strong_engine`, or `theory_strict`), so the registry cannot advertise a drill
 that fails on its first opponent turn.
 
 Each accepted document receives a server-computed SHA-256 digest over its RFC
 8785 canonical form. `GET /packs` returns immutable summaries containing ID,
-version, digest, title, mode, difficulty, and review status. `GET /packs/:id`
+version, digest, title, mode, nullable phase, difficulty, and review status.
+The library renders a missing phase as `unclassified`. `GET /packs/:id`
 returns a browser-safe projection and the complete stored document's digest in
 `x-pack-digest`; missing packs are typed `PACK_NOT_FOUND` errors. The projection
 contains identity and catalogue fields, provenance, start, objective type,

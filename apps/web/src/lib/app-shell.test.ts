@@ -45,6 +45,7 @@ const packSummary: PackSummary = {
   digest,
   title: pack.title as string,
   mode: pack.mode as string,
+  phase: "opening",
   difficulty: pack.difficulty,
   reviewStatus: "schema_example",
 };

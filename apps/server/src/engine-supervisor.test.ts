@@ -69,6 +69,26 @@ function stockfishSupervisor(
   ]);
 }
 
+function identitySupervisor(
+  advertised: string,
+  configured: { readonly name?: string; readonly version?: string } = {},
+): EngineSupervisor {
+  const script = [
+    "const r=require('readline').createInterface({input:process.stdin});",
+    `r.on('line',l=>{if(l==='uci'){console.log(${JSON.stringify(`id name ${advertised}`)});console.log('uciok')}else if(l==='isready'){console.log('readyok')}else if(l==='quit'){process.exit(0)}});`,
+  ].join("");
+  return new EngineSupervisor([
+    {
+      id: "identity-test",
+      kind: "judge",
+      command: process.execPath,
+      args: ["-e", script],
+      ...configured,
+      restartBackoff: { initialMs: 1, maximumMs: 1, maximumAttempts: 0 },
+    },
+  ]);
+}
+
 async function waitForReady(
   supervisor: EngineSupervisor,
   timeoutMs = 15_000,
@@ -143,6 +163,37 @@ describe("UCI engine supervisor", () => {
 
     await supervisor.shutdown();
     expect(supervisor.health("stockfish-analysis").status).toBe("stopped");
+  });
+
+  it("derives advertised versions without overriding configured identity", async () => {
+    const derived = identitySupervisor("Stockfish 17.1", { name: "Stockfish" });
+    const pinned = identitySupervisor("Stockfish 17.1", {
+      name: "Stockfish",
+      version: "pinned",
+    });
+    const mismatch = identitySupervisor("Lc0 v0.31.2", { name: "Stockfish" });
+    const unnamed = identitySupervisor("Lc0 v0.31.2");
+    supervisors.push(derived, pinned, mismatch, unnamed);
+
+    await expect(derived.start("identity-test")).resolves.toMatchObject({
+      name: "Stockfish",
+      version: "17.1",
+    });
+    await expect(pinned.start("identity-test")).resolves.toMatchObject({
+      name: "Stockfish",
+      version: "pinned",
+    });
+    await expect(mismatch.start("identity-test")).resolves.toMatchObject({
+      name: "Stockfish",
+      version: "unknown",
+    });
+    expect(mismatch.transcript("identity-test")).toContainEqual(
+      expect.objectContaining({ direction: "lifecycle", line: expect.stringContaining("identity mismatch") }),
+    );
+    await expect(unnamed.start("identity-test")).resolves.toMatchObject({
+      name: "Lc0",
+      version: "v0.31.2",
+    });
   });
 
   stockfishIt("restarts real Stockfish with backoff after an unexpected exit", async () => {

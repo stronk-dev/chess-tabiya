@@ -3,12 +3,14 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import {
+  FEEDBACK_POLICIES,
+  type DrillPackDefinition,
+} from "@chess-tabiya/schema/drill-pack";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { checkPackFile, formatPackIssue } from "./pack-check.js";
 import {
-  DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES,
   DECLARED_UNIMPLEMENTED_POLICY_MODES,
   SUPPORTED_POLICY_MODES,
 } from "./capabilities.js";
@@ -51,13 +53,13 @@ describe("pack authoring validation", () => {
         ...DECLARED_UNIMPLEMENTED_POLICY_MODES.map((entry) => entry.mode),
       ]),
     );
-    expect(new Set(schema.properties.feedbackPolicy.enum)).toEqual(
-      new Set([
-        "delayed_checkpoint",
-        "segment_end",
-        ...DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES.map((entry) => entry.mode),
-      ]),
-    );
+    const supportedModes = new Set<string>(SUPPORTED_POLICY_MODES);
+    expect(
+      DECLARED_UNIMPLEMENTED_POLICY_MODES.some((entry) =>
+        supportedModes.has(entry.mode),
+      ),
+    ).toBe(false);
+    expect(schema.properties.feedbackPolicy.enum).toEqual([...FEEDBACK_POLICIES]);
   });
 
   it("reports living-schema failures with JSON pointers", () => {
@@ -80,8 +82,6 @@ describe("pack authoring validation", () => {
   it("combines shipped chess lints and executable-policy checks", () => {
     const candidate = structuredClone(fixture) as DrillPackDefinition;
     (candidate.spine![0] as { moveUci: string }).moveUci = "a1a8";
-    (candidate as unknown as Record<string, unknown>).feedbackPolicy =
-      "immediate_blunder_guard";
     (
       (candidate as unknown as Record<string, unknown>)
         .opponentPolicy as Record<string, unknown>
@@ -98,16 +98,24 @@ describe("pack authoring validation", () => {
         }),
         expect.objectContaining({
           source: "runtime",
-          code: "UNSUPPORTED_FEEDBACK_POLICY",
-          path: "/feedbackPolicy",
-        }),
-        expect.objectContaining({
-          source: "runtime",
           code: "UNSUPPORTED_OPPONENT_POLICY",
           path: "/opponentPolicy/mode",
         }),
       ]),
     );
+  });
+
+  it("rejects immediate blunder feedback at the schema stage", () => {
+    const candidate = structuredClone(fixture) as unknown as Record<string, unknown>;
+    candidate.feedbackPolicy = "immediate_blunder_guard";
+    const result = validatePackDocument(candidate);
+    expect(result.issues).toEqual([
+      expect.objectContaining({
+        source: "schema",
+        code: "SCHEMA_ENUM",
+        path: "/feedbackPolicy",
+      }),
+    ]);
   });
 
   it("allows draft packs with no sources or reviewers", () => {

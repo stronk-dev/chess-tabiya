@@ -207,6 +207,12 @@ Each engine entry is a strict superset of the `{id, version}` identity stored in
 provides them; the reported strong-engine profile is the effective resolved
 deployment configuration.
 
+Engine version prefers an explicitly pinned `spec.version`. Otherwise, when
+the advertised UCI name agrees with the configured name, the remainder of the
+advertised `id name` line becomes the version. An advertised-name mismatch is
+recorded in the supervisor transcript and yields `unknown`; it is never silently
+attributed to the configured engine.
+
 ## Measured envelope and limitations
 
 Two complete, uncached 20-ply Maia samples on the local Docker image measured:

@@ -16,6 +16,18 @@ function compose(args) {
   }
 }
 
+function composeConfig(args) {
+  const result = spawnSync(
+    "docker",
+    ["compose", ...args, "config", "--format", "json"],
+    { encoding: "utf8" },
+  );
+  if (result.status !== 0) {
+    throw new Error(`Compose rendering failed: ${result.stderr || result.stdout}`);
+  }
+  return JSON.parse(result.stdout);
+}
+
 compose(["-f", "compose.yaml"]);
 compose(["-f", "compose.yaml", "--profile", "engines"]);
 compose(["-f", "compose.yaml", "--profile", "devcontainer"]);
@@ -30,6 +42,17 @@ required(!rendered.includes("__MAIA_IMAGE__"), "Maia image placeholder survived"
 const releasePath = join(tmpdir(), `chess-tabiya-compose-${process.pid}.yaml`);
 writeFileSync(releasePath, rendered);
 compose(["-f", releasePath]);
+compose(["-f", releasePath, "--profile", "engines"]);
+const releaseDefault = composeConfig(["-f", releasePath]);
+required(
+  JSON.stringify(Object.keys(releaseDefault.services)) === JSON.stringify(["server"]),
+  `Release light profile must contain only server; got ${JSON.stringify(Object.keys(releaseDefault.services))}`,
+);
+const releaseEngines = composeConfig(["-f", releasePath, "--profile", "engines"]);
+required(
+  releaseEngines.services.server.depends_on.maia.condition === "service_healthy",
+  "Release engines profile must health-gate Maia",
+);
 
 const release = readFileSync(".github/workflows/release.yml", "utf8");
 for (const expected of [

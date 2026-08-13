@@ -6,11 +6,15 @@ import { describe, expect, it } from "vitest";
 
 import { DRILL_PACK_SCHEMA_VERSION } from "./index.js";
 import {
+  CHECKPOINT_ACTIONS,
+  FEEDBACK_POLICIES,
   canonicalizeJson,
   digestDrillPack,
   formatDrillUrl,
   formatFenUrl,
   lintDrillPack,
+  OBJECTIVE_TYPES,
+  PACK_PHASES,
   parseDrillAddress,
   resolveDrillAddress,
   type DrillPackDefinition,
@@ -46,13 +50,34 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.4", () => {
+describe("drill_pack.schema.json v0.5", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.4",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.5",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.4");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.5");
+  });
+
+  it("binds schema vocabularies to the shared constants", () => {
+    const typed = schema as any;
+    expect(typed.$defs.objectiveType.enum).toEqual([...OBJECTIVE_TYPES]);
+    expect(typed.properties.feedbackPolicy.enum).toEqual([...FEEDBACK_POLICIES]);
+    expect(typed.properties.phase.enum).toEqual([...PACK_PHASES]);
+    expect(CHECKPOINT_ACTIONS).toEqual(["compare_branches"]);
+  });
+
+  it("requires the learner side at the authoring boundary", () => {
+    const candidate = structuredClone(livingFixture) as any;
+    delete candidate.start.side;
+    expect(validate(candidate)).toBe(false);
+    expect(validate.errors).toContainEqual(
+      expect.objectContaining({
+        keyword: "required",
+        instancePath: "/start",
+        params: { missingProperty: "side" },
+      }),
+    );
   });
 
   it("keeps the frozen Najdorf fixture on the frozen v0.1 schema only", () => {

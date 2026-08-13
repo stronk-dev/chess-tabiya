@@ -1,22 +1,22 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.3; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.5; a pack's own
 `version` remains semver and is part of its digest.
 
 `schemas/drill_pack.example.json` is the living Najdorf schema fixture. The
 fixture and schema under `archive/brief-v2/` remain frozen v0.1 inputs and are
-tested only against each other. The v0.1 fixture intentionally fails v0.3 because
+tested only against each other. The v0.1 fixture intentionally fails v0.5 because
 it has no required `feedbackPolicy` and uses superseded fields.
 
-## Implemented v0.3 shape
+## Implemented v0.5 shape
 
 - `spine` is an optional array of first-move nodes rooted at the pack's start
   FEN. Each recursive node has a pack-unique `id`, UCI, SAN, `children`, and
   optional string annotations. The start position itself is implicit.
-- `feedbackPolicy` is required and is one of `delayed_checkpoint`, `segment_end`,
-  or `immediate_blunder_guard`. Threshold behavior belongs to the runtime or
-  workers, not the pack.
+- `feedbackPolicy` is required and is one of `delayed_checkpoint` or
+  `segment_end`. Immediate blunder interruption has no format encoding until a
+  real judge threshold and anti-contamination contract exist.
 - A checkpoint has one trigger and may have an `intent_capture` or `prediction`
   interaction. Intent capture names plan-class IDs. Prediction grading always
   declares `opponent_policy`, `engine`, or `both`, with optional `topK`,
@@ -47,7 +47,7 @@ vocabulary to `compare_branches`. An empty array means the checkpoint offers
 no pack-selectable action. Any other value fails runtime validation with its
 JSON Pointer and the allowed set; vocabulary grows only when a consumer grows.
 This is an executable-policy lint rather than a JSON-Schema enum, so it does
-did not require the format v0.3 amendment; grading is the change that advanced
+did not require the earlier grading amendment; grading is the change that advanced
 the schema `$id`.
 
 ## Semantic authoring lint
@@ -156,3 +156,13 @@ It warns when a deviation shadows an authored child, when two spine nodes reach
 one position, or when the boundary cap makes a listed id dead. A
 `follow_theory` deviation must use a spine-node anchor so its grading edge is
 deterministically resolvable.
+
+## v0.5 defect sweep
+
+`start.side` is required in both schema and shared TypeScript shape. Pack
+phases, feedback policies, objective types, and checkpoint actions are exported
+as shared vocabularies and bound to the JSON Schema by tests. The loader may
+declare an opponent mode it cannot select only when capabilities expose that
+refusal with a concrete reason; feedback timing has no such negotiation path,
+so unsupported feedback values are not declared. Pack summaries carry an
+optional phase as a nullable value rather than guessing from the position.

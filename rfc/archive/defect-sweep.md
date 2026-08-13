@@ -1,6 +1,6 @@
 # RFC: Defect sweep — six open defects, and the one shape underneath five of them
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/00-thesis.md` §Target player (lines 84-89: the on-ramp band's
@@ -34,7 +34,7 @@
   `digestDrillPack` canonicalizes the pack document's own bytes, so narrowing the schema
   changes no shipped pack's digest. `STORAGE_VERSION` and the run schema are untouched. **No
   number is claimed in `rfc/README.md`'s migration register.**
-- **Planning:** `planning/defect-sweep/`
+- **Planning:** `planning/archive/defect-sweep/`
 
 ## Summary
 
@@ -913,6 +913,8 @@ stop, since D8 closes here:
 None.
 
 ## Changelog
+
+- 2026-08-13: implemented and archived after both verification gates passed.
 
 - 2026-08-13: accepted after independent adversarial review and moved to
   implementing with a dedicated planning job.

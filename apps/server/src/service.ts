@@ -35,6 +35,7 @@ import {
   type EvidenceJob,
   type EvidencePage,
 } from "./evidence-queue.js";
+import { isRunOpponentMode } from "./capabilities.js";
 import {
   projectAuthoredFeedback,
   type AuthoredFeedbackPage,
@@ -186,7 +187,7 @@ export class RunService {
             }
             const authored = pack.document.opponentPolicy as Record<string, unknown>;
             const mode = authored.mode;
-            if (mode !== "human_common" && mode !== "strong_engine" && mode !== "theory_strict") {
+            if (!isRunOpponentMode(mode)) {
               throw new ServerError("INVALID_REQUEST", `Pack ${pack.document.id} has an unsupported opponent mode`);
             }
             const opponentPolicy: import("@chess-tabiya/runtime").RunOpponentPolicy = {

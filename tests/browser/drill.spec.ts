@@ -19,6 +19,35 @@ async function register(page: Page): Promise<string> {
 
 test.beforeEach(async ({ page }) => register(page));
 
+test("library exposes phase honestly and survives a malformed pack response", async ({
+  page,
+}) => {
+  const expected = [
+    ["Carlsbad structure", "middlegame"],
+    ["Rook endings", "endgame"],
+    ["Caro-Kann Advance", "opening"],
+    ["Najdorf", "cross phase"],
+  ] as const;
+  for (const [name, phase] of expected) {
+    const card = page.getByRole("article").filter({ hasText: name }).first();
+    await expect(card).toContainText(phase);
+  }
+
+  const pageErrors: Error[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error));
+  await page.route(/\/packs\/[^/]+$/u, async (route) => {
+    const response = await route.fetch();
+    const body = (await response.json()) as { start?: Record<string, unknown> };
+    if (body.start !== undefined) delete body.start.side;
+    await route.fulfill({ response, json: body });
+  });
+  const card = page.getByRole("article").filter({ hasText: "schema example" });
+  await card.getByRole("button", { name: /Open position/ }).click();
+  await expect(page.getByRole("alert")).toContainText("did not declare start.side");
+  await expect(page.getByText("Choose a position worth returning to.")).toBeVisible();
+  expect(pageErrors).toEqual([]);
+});
+
 test("terminal outcome reveals authored commentary and recorded evidence", async ({ page }) => {
   const card = page
     .getByRole("article")

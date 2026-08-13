@@ -170,7 +170,7 @@ export async function emitSyzygyCandidates(options: SyzygyEmitOptions): Promise<
     const blockers = [
       "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft",
       `opponent mode ${options.opponent} is an authoring choice that must be reviewed for this convert/hold/save drill`,
-      ...(pieces <= 7 ? [`Exact tablebase grading is available for this root but perfect_tablebase is not selectable (defect D8); the opponent is ${options.opponent} and can deviate from best play`] : []),
+      ...(pieces <= 7 ? [`Exact tablebase grading is available for this root but perfect_tablebase is a declared mode this deployment cannot select; the opponent is ${options.opponent} and can deviate from best play`] : []),
     ];
     const pack = {
       id,
