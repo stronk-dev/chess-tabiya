@@ -77,3 +77,8 @@ Append-only.
   files, zero Svelte diagnostics, schema and packaging green. A complete
   zero-retry browser suite also passed 9/9 with the optional Maia test skipped;
   the three pack-check invocations remain green.
+- Two further complete zero-retry suites on the same final tree also passed
+  9/9 (optional Maia skipped), making three consecutive final-tree passes.
+  Their branch-switch observations were 50.1 ms and 53.3 ms; together with the
+  first final-tree run's 30.3 ms, this confirms the known measurement variance
+  and does not erase the recorded performance deviation.
