@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:chess-tabiya:schema:drill-pack:0.9",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.8 format for an engine-independent authored drill.",
+  "description": "Living v0.9 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",

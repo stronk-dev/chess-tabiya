@@ -7,9 +7,10 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
+| `structural-reading.md` | draft | `archive/drill-pack-format.md`, `archive/outcome-drill-grading.md`, `archive/explanation-grounds.md` | B9 — the rung-0 layer: twelve deterministic feature predicates that are both learner readables and authorable objective conditions, denial/eviction arithmetic, one-ply discovered consequence, structural naming. Pack schema **0.10**, no migration |
 
-No active product RFCs. The completed breadth batch and its dependency history are kept
-in the archive documents and planning logs rather than duplicated in this index.
+The completed breadth batch and its dependency history are kept in the archive
+documents and planning logs rather than duplicated in this index.
 
 ## Pack-schema-version register
 
@@ -32,6 +33,7 @@ landing order, not lost data.
 | 0.7 | `archive/trajectory-drill.md` | implemented — `legs`, `run_trajectory` |
 | 0.8 | `archive/pack-studio.md` | implemented — source-derived channel; `provenance.reviewStatus` narrowed to `schema_example \| draft \| published`; typed `reviewers` removed |
 | 0.9 | `archive/n-way-comparison.md` | implemented — prediction `grading` removed; numbers are recorded and rendered without a verdict |
+| 0.10 | `structural-reading.md` | claimed 2026-08-13, draft — `$defs/structuralFeature` and `$defs/structuralExpression`, a fourth `fenPredicate` variant, a fifth `successCondition` kind (`structural_feature`), `$defs/file`. No migration: rung-0 facts are never persisted |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.

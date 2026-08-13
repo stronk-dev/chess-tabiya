@@ -22,8 +22,8 @@ sidecar. The exploration job continues alongside (E4 harness, gates) — see
 
 | Tier | Directory | Current state |
 |---|---|---|
-| Design | `design/` | 5 living docs (including the breadth/IA contract) + `BACKLOG.md` topic ledger + `research/` coverage matrix |
-| RFC | `rfc/` | No active product RFC; six implemented systems frozen in `rfc/archive/` |
+| Design | `design/` | 6 living docs (including the breadth/IA and in-run-experience contracts) + `BACKLOG.md` topic ledger + `research/` coverage matrix |
+| RFC | `rfc/` | No active product RFC; 23 implemented RFCs frozen in `rfc/archive/` |
 | Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), exploration/continuation gates and kill criteria (`gates.md`), append-only `log.md` |
 | Docs | `docs/` | Canonical description of what exists; development foundation now documented |
 | Archive | `archive/brief-v2/` | The frozen v2 brief (59 files, checksummed). Immutable. Evidence base and quarry |

@@ -307,6 +307,14 @@ The author says what to want; the classifier says whether you got it. Neither is
 complete alone — a classifier cannot know that an outpost was worth a tempo here,
 and an author cannot check every position a learner reaches.
 
+**Count corrected 2026-08-13** (it moved within hours, which is the hazard of
+counting live artifacts in a design doc): `anti-caro-advance` is graded through
+the `follow_theory` machinery that landed with the Line Drill RFC, so the pack
+without a working objective is **`carlsbad-minority-attack`** — the plan pack,
+which is exactly the case this section is about. Two browser fixtures and a
+trajectory leg also compile zero rules. The shape of the gap is unchanged and
+sharper: **no plan-family objective type can express "a plan happened."**
+
 **And that closes a hole that has been open since Pack B was written.** Its
 author reported that *a plan drill cannot express its objective*: success is
 relative to the committed intent, and `successConditions` only supports
