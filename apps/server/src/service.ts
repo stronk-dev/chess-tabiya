@@ -2,10 +2,11 @@ import {
   applyObjectiveEvidenceProposal,
   appendOpponentPly,
   appendEvents,
+  branchPath,
   assertActiveWriter,
   attachEvidence,
   commitMove,
-  compare,
+  compareBranches,
   createRun,
   exportPackRunPgn,
   exportPgn,
@@ -15,6 +16,7 @@ import {
   canonicalRunStart,
   digestSessionSource,
   isPackSession,
+  lineMembership,
   revealFeedback,
   isEngineEvidenceRef,
   rewind,
@@ -95,7 +97,7 @@ function comparisonWithoutEngineFeedback(
   comparison: BranchComparison,
 ): BranchComparison {
   const publicTimeline = (
-    entries: BranchComparison["objectiveTimelines"]["a"],
+    entries: readonly import("@chess-tabiya/runtime").ObjectiveTimelineEntry[],
   ) =>
     Object.freeze(
       entries.map((entry) =>
@@ -111,14 +113,15 @@ function comparisonWithoutEngineFeedback(
     );
   return Object.freeze({
     ...comparison,
-    objectiveTimelines: Object.freeze({
-      a: publicTimeline(comparison.objectiveTimelines.a),
-      b: publicTimeline(comparison.objectiveTimelines.b),
-    }),
-    evidence: Object.freeze({
-      a: Object.freeze([]),
-      b: Object.freeze([]),
-    }),
+    objectiveTimelines: Object.freeze(Object.fromEntries(
+      Object.entries(comparison.objectiveTimelines).map(([id, entries]) => [id, publicTimeline(entries)]),
+    )),
+    evidence: Object.freeze(Object.fromEntries(
+      comparison.columns.map((column) => [column.branchId, Object.freeze([])]),
+    )),
+    lines: Object.freeze(Object.fromEntries(
+      comparison.columns.map((column) => [column.branchId, Object.freeze([])]),
+    )),
   });
 }
 
@@ -157,6 +160,14 @@ export class RunService {
   readonly #packRegistry: PackRegistry | undefined;
   readonly #evidenceMovetimeMs: number;
   readonly #progress: ProgressStorage | undefined;
+  readonly #simulations = new Map<string, {
+    readonly runId: string;
+    readonly sourceNodeId: string;
+    readonly scratch: DrillRun;
+    readonly branchIds: readonly string[];
+    readonly moves: readonly (readonly string[])[];
+    readonly createdAt: number;
+  }>();
 
   constructor(
     storage: RunStorage,
@@ -407,12 +418,22 @@ export class RunService {
     return this.#storage.list(principal.learnerId, limit, offset);
   }
 
-  compare(runId: string, principalOrA: Principal | string, branchAOrB: string, maybeB?: string): BranchComparison {
-    const principal = this.#principal(principalOrA);
-    const branchAId = typeof principalOrA === "string" ? principalOrA : branchAOrB;
-    const branchBId = typeof principalOrA === "string" ? branchAOrB : maybeB!;
+  compare(runId: string, principalOrBranches: Principal | readonly string[], maybeBranches?: readonly string[]): BranchComparison {
+    const principal = Array.isArray(principalOrBranches)
+      ? this.#principal("legacy-reader")
+      : principalOrBranches as Principal;
+    const branchIds = Array.isArray(principalOrBranches) ? principalOrBranches : maybeBranches!;
+    if (branchIds.length < 2 || new Set(branchIds).size !== branchIds.length) {
+      throw new ServerError("INVALID_REQUEST", "compare requires at least two distinct branch ids");
+    }
+    if (branchIds.length > 8) {
+      throw new ServerError("TOO_MANY_BRANCHES", "At most eight branches may be compared", {
+        details: { count: branchIds.length, limit: 8 },
+      });
+    }
     const run = requireRead(this.#storage, runId, principal).stored.run;
-    const comparison = compare(run, branchAId, branchBId);
+    const pack = run.packId === null ? undefined : this.#requiredPackRegistry().byDigest(run.packDigest!);
+    const comparison = compareBranches(run, branchIds, pack === undefined ? {} : { pack: pack.document });
     return !feedbackDisclosed(run)
       ? comparisonWithoutEngineFeedback(comparison)
       : comparison;
@@ -440,12 +461,14 @@ export class RunService {
       readonly kind: EvidenceKind;
       readonly depth?: number;
       readonly movetime?: number;
+      readonly multiPv?: number;
     },
     maybeInput?: {
       readonly nodeId: string;
       readonly kind: EvidenceKind;
       readonly depth?: number;
       readonly movetime?: number;
+      readonly multiPv?: number;
     },
   ): EvidenceJob {
     const principal = "learnerId" in principalOrInput ? principalOrInput : this.#principal("legacy-reader");
@@ -463,6 +486,7 @@ export class RunService {
       kind: input.kind,
       ...(input.depth === undefined ? {} : { depth: input.depth }),
       ...(input.movetime === undefined ? {} : { movetime: input.movetime }),
+      ...(input.multiPv === undefined ? {} : { multiPv: input.multiPv }),
       ...(isPackSession(run) ? {
         objectiveRequest: Object.freeze({
           runId: run.id,
@@ -476,6 +500,177 @@ export class RunService {
         }),
       } : {}),
     });
+  }
+
+  analysis(
+    runId: string,
+    principal: Principal,
+    writerId: string,
+    input: {
+      readonly nodeIds: readonly string[];
+      readonly multiPv?: number;
+      readonly depth?: number;
+      readonly movetime?: number;
+    },
+  ): readonly EvidenceJob[] {
+    this.#forWrite(runId, principal, writerId);
+    if (input.nodeIds.length < 1 || input.nodeIds.length > 16 || new Set(input.nodeIds).size !== input.nodeIds.length) {
+      throw new ServerError("INVALID_REQUEST", "analysis requires 1-16 distinct node ids");
+    }
+    if (input.multiPv !== undefined && (!Number.isSafeInteger(input.multiPv) || input.multiPv < 1 || input.multiPv > 8)) {
+      throw new ServerError("INVALID_REQUEST", "multiPv must be an integer from 1 to 8");
+    }
+    return Object.freeze(input.nodeIds.map((nodeId) => this.enqueueEvidence(runId, principal, {
+      nodeId,
+      kind: "bestline",
+      ...(input.multiPv === undefined ? {} : { multiPv: input.multiPv }),
+      ...(input.depth === undefined ? {} : { depth: input.depth }),
+      ...(input.movetime === undefined ? {} : { movetime: input.movetime }),
+    })));
+  }
+
+  recordPrediction(
+    runId: string,
+    principal: Principal,
+    writerId: string,
+    input: {
+      readonly nodeId: string;
+      readonly checkpointId: string;
+      readonly predictedUci: string;
+      readonly distribution: OpponentSelection;
+      readonly at?: string;
+    },
+  ): MutationResult {
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    const pack = this.#requiredRegisteredPack(stored.run);
+    if (pack === undefined || !pack.document.checkpoints.some((checkpoint) => checkpoint.id === input.checkpointId && checkpoint.interaction?.type === "prediction")) {
+      throw new ServerError("INVALID_REQUEST", "Unknown prediction checkpoint");
+    }
+    if (stored.run.activeCursor.nodeId !== input.nodeId) {
+      throw new ServerError("INVALID_REQUEST", "Prediction node is not the active cursor");
+    }
+    const candidates = input.distribution.candidates ?? [];
+    const candidate = candidates.find((entry) => entry.moveUci === input.predictedUci);
+    const next = appendEvents(stored.run, [{
+      type: "prediction.recorded",
+      at: input.at ?? new Date().toISOString(),
+      data: {
+        nodeId: input.nodeId,
+        checkpointId: input.checkpointId,
+        predictedUci: input.predictedUci,
+        predictedMass: candidate?.mass ?? null,
+        predictedRank: candidate?.rank ?? null,
+        candidateCount: candidates.length,
+        distribution: input.distribution,
+      },
+    }]);
+    this.#storage.save(next, lease);
+    return { run: next, emitted: next.events.slice(stored.run.events.length) };
+  }
+
+  simulate(
+    runId: string,
+    principal: Principal,
+    writerId: string,
+    options: { readonly maxBranches?: number; readonly maxPlies?: number; readonly at?: string } = {},
+  ): {
+    readonly simulationId: string;
+    readonly comparison: BranchComparison;
+    readonly branches: readonly { index: number; label: string; leafFen: string; plies: number }[];
+  } {
+    const { stored } = this.#forWrite(runId, principal, writerId);
+    const pack = this.#requiredRegisteredPack(stored.run);
+    if (pack === undefined) throw new ServerError("NO_AUTHORED_VARIATIONS", "Position sessions have no authored variations");
+    const maxBranches = options.maxBranches ?? 4;
+    const maxPlies = options.maxPlies ?? 12;
+    if (!Number.isSafeInteger(maxBranches) || maxBranches < 1 || maxBranches > 4 || !Number.isSafeInteger(maxPlies) || maxPlies < 1 || maxPlies > 12) {
+      throw new ServerError("SIMULATE_TOO_LARGE", "Simulation is limited to 4 branches and 12 plies");
+    }
+    const find = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[], id: string): import("@chess-tabiya/schema/drill-pack").SpineNode | undefined => {
+      for (const node of nodes) {
+        if (node.id === id) return node;
+        const child = find(node.children, id);
+        if (child) return child;
+      }
+      return undefined;
+    };
+    const current = stored.run.nodes.find((node) => node.id === stored.run.activeCursor.nodeId)!;
+    const memberships = lineMembership(pack.document, stored.run, current.id);
+    const currentSpineId = memberships.at(-1)?.spineNodeId;
+    const choices = (currentSpineId === undefined ? pack.document.spine : find(pack.document.spine ?? [], currentSpineId)?.children) ?? [];
+    if (choices.length < 2) throw new ServerError("NO_AUTHORED_VARIATIONS", "This position has fewer than two authored variations");
+    const selected = choices.slice(0, maxBranches);
+    let scratch = stored.run;
+    const branchIds: string[] = [];
+    const moves: string[][] = [];
+    const sourceNodeId = current.id;
+    for (const [choiceIndex, choice] of selected.entries()) {
+      if (choiceIndex > 0) scratch = rewind(scratch, sourceNodeId, options.at).run;
+      scratch = fork(scratch, sourceNodeId, {
+        label: `simulation-${choiceIndex + 1}`,
+        origin: "simulated",
+        ...(options.at === undefined ? {} : { at: options.at }),
+      }).run;
+      const branchId = scratch.activeCursor.branchId;
+      const line: string[] = [];
+      let node: import("@chess-tabiya/schema/drill-pack").SpineNode | undefined = choice;
+      while (node !== undefined && line.length < maxPlies) {
+        scratch = commitMove(scratch, node.moveUci, {
+          actor: "system",
+          ...(options.at === undefined ? {} : { at: options.at }),
+        }).run;
+        line.push(node.moveUci);
+        node = node.children.length === 1 ? node.children[0] : undefined;
+      }
+      branchIds.push(branchId);
+      moves.push(line);
+    }
+    const simulationId = randomUUID();
+    this.#simulations.set(simulationId, { runId, sourceNodeId, scratch, branchIds, moves, createdAt: Date.now() });
+    return Object.freeze({
+      simulationId,
+      comparison: compareBranches(scratch, branchIds, { pack: pack.document }),
+      branches: Object.freeze(branchIds.map((branchId, indexValue) => ({
+        index: indexValue,
+        label: scratch.branches.find((branch) => branch.id === branchId)!.label,
+        leafFen: branchPath(scratch, branchId).at(-1)!.fen,
+        plies: moves[indexValue]!.length,
+      }))),
+    });
+  }
+
+  enterSimulation(
+    runId: string,
+    principal: Principal,
+    writerId: string,
+    simulationId: string,
+    branchIndex: number,
+    at?: string,
+  ): MutationResult {
+    const simulation = this.#simulations.get(simulationId);
+    if (!simulation || simulation.runId !== runId || Date.now() - simulation.createdAt > 10 * 60_000) {
+      throw new ServerError("SIMULATION_EXPIRED", "Simulation is missing or expired");
+    }
+    const moves = simulation.moves[branchIndex];
+    if (!moves) throw new ServerError("INVALID_REQUEST", "Unknown simulation branch");
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    let result = fork(stored.run, simulation.sourceNodeId, {
+      label: `simulation-${branchIndex + 1}`,
+      origin: "simulated",
+      ...(at === undefined ? {} : { at }),
+    });
+    const emitted = [...result.emitted];
+    for (const uci of moves) {
+      const committed = commitMove(result.run, uci, {
+        actor: "system",
+        ...(at === undefined ? {} : { at }),
+      });
+      result = committed;
+      emitted.push(...committed.emitted);
+    }
+    this.#storage.save(result.run, lease);
+    this.#project(result.run, lease.learnerId);
+    return { run: result.run, emitted: Object.freeze(emitted) };
   }
 
   evidence(runId: string, principalOrSeq?: Principal | number, maybeSeq = 0): EvidencePage {

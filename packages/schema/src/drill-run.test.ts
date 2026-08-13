@@ -69,6 +69,7 @@ const branch = {
   forkNodeId: rootNode.id,
   label: "main",
   seed: 42,
+  origin: "played",
 };
 const activeCursor = { nodeId: rootNode.id, branchId: branch.id };
 const event = {
@@ -107,11 +108,11 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.7", () => {
+describe("drill_run.schema.json v0.8", () => {
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.7",
+      $id: "urn:chess-tabiya:schema:drill-run:0.8",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });
@@ -332,5 +333,30 @@ describe("drill_run.schema.json v0.7", () => {
         }),
       ]),
     );
+  });
+
+  it("validates prediction.recorded with a typed distribution", () => {
+    const selection = {
+      moveUci: "e2e4",
+      policyModeApplied: "human_common",
+      candidates: [{ moveUci: "e2e4", mass: 0.42, rank: 1 }],
+      engine: { id: "maia", name: "Maia", version: "3", seedHonored: true },
+    };
+    const prediction = {
+      seq: 2,
+      type: "prediction.recorded",
+      at,
+      data: {
+        nodeId: rootNode.id,
+        checkpointId: "predict-reply",
+        predictedUci: "e2e4",
+        predictedMass: 0.42,
+        predictedRank: 1,
+        candidateCount: 1,
+        distribution: selection,
+      },
+    };
+    expect(validate({ ...validRun, events: [event, prediction] }), JSON.stringify(validate.errors)).toBe(true);
+    expect(validate({ ...validRun, events: [event, { ...prediction, data: { ...prediction.data, candidateCount: -1 } }] })).toBe(false);
   });
 });

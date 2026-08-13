@@ -10,7 +10,7 @@ import { describe, expect, it } from "vitest";
 import {
   appendOpponentPly,
   commitMove,
-  compare,
+  compareBranches,
   createRun,
   exportPgn,
   historyFrom,
@@ -147,19 +147,18 @@ describe("runtime invariant properties", () => {
           ]);
           expect(result.run.nodes.slice(0, oldNodes.length)).toEqual(oldNodes);
           expect(result.run.nodes.at(-1)!.parentId).toBe(target.id);
-          const comparison = compare(
-            result.run,
+          const comparison = compareBranches(result.run, [
             result.run.branches[0]!.id,
             result.run.branches.at(-1)!.id,
-          );
+          ]);
           expect(comparison.forkNodeId).toBe(target.id);
-          expect(comparison.pairs.map((pair) => pair.plyOffset)).toEqual(
-            comparison.pairs.map((_pair, index) => index + 1),
+          expect(comparison.rows.map((row) => row.plyOffset)).toEqual(
+            comparison.rows.map((_row, index) => index + 1),
           );
-          expect(comparison.pairs[0]).toMatchObject({
-            a: expect.any(Object),
-            b: expect.any(Object),
-          });
+          expect(Object.keys(comparison.rows[0]!.nodes)).toHaveLength(2);
+          for (const row of comparison.rows) {
+            expect(row.groups.flat()).toEqual(Object.keys(row.nodes));
+          }
           assertTreeInvariants(result.run);
         },
       ),

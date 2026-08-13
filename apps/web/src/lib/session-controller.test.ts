@@ -3,8 +3,9 @@ import { readFileSync } from "node:fs";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   appendOpponentPly,
+  appendEvents,
   commitMove,
-  compare,
+  compareBranches,
   createRun,
   fork,
   reachCheckpoint,
@@ -193,6 +194,28 @@ class FakeApi implements DrillClientApi {
     };
   }
 
+  async prediction(_runId: string, input: import("./api.js").PredictionRequest, writerId: string) {
+    const selection = await this.selectMove(input);
+    const before = this.requiredRun().events.length;
+    const candidates = selection.candidates ?? [];
+    const candidate = candidates.find((entry) => entry.moveUci === input.predictedUci);
+    this.run = appendEvents(this.requiredRun(), [{
+      type: "prediction.recorded",
+      at,
+      data: {
+        nodeId: input.nodeId,
+        checkpointId: input.checkpointId,
+        predictedUci: input.predictedUci,
+        predictedMass: candidate?.mass ?? null,
+        predictedRank: candidate?.rank ?? null,
+        candidateCount: candidates.length,
+        distribution: selection,
+      },
+    }]);
+    this.writerIds.push(writerId);
+    return { selection, run: this.run, emitted: this.run.events.slice(before) };
+  }
+
   async move(
     _runId: string,
     input: PlayerMoveRequest,
@@ -265,8 +288,8 @@ class FakeApi implements DrillClientApi {
     };
   }
 
-  async compare(_runId: string, a: string, b: string) {
-    return compare(this.requiredRun(), a, b);
+  async compare(_runId: string, branchIds: readonly string[]) {
+    return compareBranches(this.requiredRun(), branchIds);
   }
 
   async events(_runId: string, sinceSeq = 0): Promise<EventsPage> {

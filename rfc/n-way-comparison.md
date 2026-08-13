@@ -1,6 +1,6 @@
 # RFC: N-way comparison and the review surfaces
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/03-product-breadth.md` §Review and explore (lines 57–66),
@@ -1077,7 +1077,7 @@ fills `version` from the UCI `id name` line only when `spec.name` is unset
 (**D10**, `apps/server/src/engine-supervisor.ts:116-126`). The heading stays
 "Recorded engine evaluation."
 
-### 10. Persisted shape: run schema 0.8 + migration 6, and pack schema 0.9
+### 10. Persisted shape: run schema 0.8 + migration 8, and pack schema 0.9
 
 Two *run*-shape changes land together in one migration, because two migrations from
 one RFC is the hazard the register was instituted to prevent
@@ -1104,10 +1104,10 @@ line (`packages/schema/src/index.ts:2`, `"0.4"` in the tree today and whatever
 `$id` (`urn:chess-tabiya:schema:drill-pack:0.9`). The run and pack constants are
 adjacent lines in one file, which is precisely why §12's table names which
 version each slice means. `STORAGE_VERSION` moves `5` → `6`
-(`apps/server/src/storage.ts:147`) with migration 6 appended to the list at
+(`apps/server/src/storage.ts:147`) with migration 8 appended to the list at
 `storage.ts:915-941`.
 
-**Migration 6 body** — "backfill branch origin as played on v0.7 runs": rewrite
+**Migration 8 body** — "backfill branch origin as played on v0.7 runs": rewrite
 every stored run snapshot at schema `"0.7"`, setting `origin: "played"` on every
 branch and stamping `"0.8"`. The new event type needs no backfill, since no
 historical run contains one. Reads filter on the current version
@@ -1124,7 +1124,7 @@ exists. A migration that skipped the backfill because "simulated branches are no
 persisted" would leave `origin` undefined on historical branches and break the
 render, which is the shape of bug this paragraph exists to prevent.
 
-Migration 6 is claimed in `rfc/README.md`'s register in the same commit as this
+Migration 8 is claimed in `rfc/README.md`'s register in the same commit as this
 draft.
 
 ### 11. Defects: none claimed, four constraining
@@ -1163,7 +1163,7 @@ is the duplication the register exists to prevent.
   engine in the comparison and keeps the heading "Recorded engine evaluation."
 
 **Sequencing.** `defect-sweep` carries a pack-schema change (0.4 → 0.5) and no
-migration; this RFC carries a run-schema change (0.7 → 0.8, migration 6) **and** a
+migration; this RFC carries a run-schema change (0.7 → 0.8, migration 8) **and** a
 pack-schema change (→ 0.9, §8.0). The pack-schema claim orders this RFC behind
 `defect-sweep` (0.5), `return-and-progression` (0.6), `trajectory-drill` (0.7) and
 `pack-studio` (0.8) in the register, and behind nothing else: none of those four
@@ -1186,7 +1186,7 @@ here, its §6 there), and it owns pack schema 0.8 directly beneath this RFC's 0.
 | **R0** | §1.2's `ServerErrorCode` widening and its `errorResponse` arms, and §7.1's `parseRunRoute` allowlist entries. Landed first and alone, because every later slice throws codes and serves paths the shipped router turns into 500s and 404s | shipped server only |
 | **R1** | §1 payload and axis rule, §2 transport, §3 selection (incl. `BranchCard.forkNodeId` and the rail props), §4 consequence row and the `pack-absent:` reference, §6 branch-selective export, and the two doc rewrites named in the header | R0 |
 | **R2** | §5 grid, N-column strips incl. material and structure, synchronised replay, narrative mode | R1 |
-| **R3** | §7 simulate and promotion (incl. `ForkOptions.origin`), §10 **run** schema 0.8 / migration 6 | R0, R1, R2 |
+| **R3** | §7 simulate and promotion (incl. `ForkOptions.origin`), §10 **run** schema 0.8 / migration 8 | R0, R1, R2 |
 | **R4** | §8 prediction checkpoints, §8.0 **pack** schema 0.9, and A7's update to the shipped `Predict the reply` browser step | R0, R1, R3 (run schema 0.8) |
 | **R5** | §9 deep analysis and MultiPV | R0, R1 |
 
@@ -1315,7 +1315,7 @@ first engine-feedback event (§8.4), so that assertion would pass or fail on
 whether an `evidence.attached` happened to precede the prediction — a test that
 is green for the wrong reason on most runs and red for the right one on some.
 
-A run stored at schema `"0.7"` is migrated by migration 6, gains
+A run stored at schema `"0.7"` is migrated by migration 8, gains
 `origin: "played"` on every branch, and remains readable.
 
 **A6a — the reveal states no verdict (component test).** The prediction reveal for a
@@ -1434,7 +1434,7 @@ entered (§7).
   real branch, the projected-event budget moved from the walk to the promotion, the
   closing `rewind` is gone because nothing was mutated, and `Branch.origin` is now a
   **promotion marker** that consumers render rather than a persistence filter they
-  query. Migration 6 is unchanged and §10 says why the scratch ruling does not shrink
+  query. Migration 8 is unchanged and §10 says why the scratch ruling does not shrink
   it. Rewrote A5, added A5a, A6a and A6b, and rewrote the second browser test to
   assert that an un-entered simulation leaves the run untouched.
 - 2026-08-13: **adversarial review — every citation re-verified against the tree,

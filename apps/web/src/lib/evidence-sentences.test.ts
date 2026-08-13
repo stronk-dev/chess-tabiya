@@ -5,6 +5,7 @@ import {
   RULES_EVIDENCE_FACTS,
   THEORY_EVIDENCE_FACTS,
   packEvidenceRef,
+  packAbsentEvidenceRef,
   rulesEvidenceRef,
 } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
@@ -27,6 +28,7 @@ describe("evidence sentence contract", () => {
     const expected = [
       ...RULES_EVIDENCE_FACTS.map(rulesEvidenceRef),
       ...pack.checkpoints.map((checkpoint) => packEvidenceRef(checkpoint.id)),
+      ...pack.checkpoints.map((checkpoint) => packAbsentEvidenceRef(checkpoint.id)),
       ...THEORY_EVIDENCE_FACTS.map((fact) => `theory:${fact}`),
     ];
     const table = evidenceSentenceTable(pack);

@@ -149,7 +149,7 @@ describe("DrillApi", () => {
       "writer-one",
     );
     await api.graph(run.id);
-    await api.compare(run.id, "a", "b");
+    await api.compare(run.id, ["a", "b"]);
     await api.events(run.id, 1);
     await api.evidence(run.id, 2);
     await api.reveal(run.id, "writer-one");

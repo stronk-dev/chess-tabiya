@@ -35,6 +35,8 @@ export interface BranchCard {
   readonly leafNodeId: string;
   readonly objectiveState: ObjectiveState;
   readonly terminal: boolean;
+  readonly forkNodeId: string;
+  readonly origin: "played" | "simulated";
 }
 
 export interface CheckpointNotice {
@@ -43,6 +45,7 @@ export interface CheckpointNotice {
   readonly eventSeq: number;
   readonly nodeId: string;
   readonly actions: readonly string[];
+  readonly interaction?: { readonly type: "prediction"; readonly flipBoard?: boolean };
 }
 
 export interface WhyBannerModel {
@@ -143,6 +146,8 @@ export function branchCards(run: DrillRun): readonly BranchCard[] {
       leafNodeId: leaf.id,
       objectiveState: leaf.objectiveState,
       terminal: TERMINAL_STATES.has(leaf.objectiveState),
+      forkNodeId: branch.forkNodeId,
+      origin: branch.origin,
     });
   });
 }
@@ -180,6 +185,12 @@ export function latestCheckpoint(
     actions: Array.isArray(actions)
       ? Object.freeze(actions.filter((action): action is string => typeof action === "string"))
       : Object.freeze([]),
+    ...(definition?.interaction?.type === "prediction" ? {
+      interaction: {
+        type: "prediction" as const,
+        ...(definition.interaction.flipBoard === undefined ? {} : { flipBoard: definition.interaction.flipBoard }),
+      },
+    } : {}),
   });
 }
 
@@ -228,12 +239,12 @@ export function comparisonNode(
   run: DrillRun,
   comparison: BranchComparison,
   step: number,
-  side: "a" | "b",
+  branchId: string,
 ): Node | undefined {
   const nodeId =
     step === 0
       ? comparison.forkNodeId
-      : comparison.pairs[step - 1]?.[side]?.id;
+      : comparison.rows[step - 1]?.nodes[branchId]?.id;
   return nodeId === undefined
     ? undefined
     : run.nodes.find((node) => node.id === nodeId);

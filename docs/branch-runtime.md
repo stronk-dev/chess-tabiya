@@ -11,7 +11,7 @@ seal the outgoing leg and reset its node state to active for the incoming object
 two events are ordered and replay-validated; no trajectory state is stored separately.
 
 The transport-independent implementation is `packages/runtime`. The Node binding
-is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.7,
+is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.8,
 and `packages/schema` owns the schema version constant. Browser and server code
 import the same TypeScript runtime; there is no second implementation of chess
 semantics.
@@ -194,15 +194,16 @@ delivery, rewind leaves it open, and the next committed move closes it.
 
 ## Compare and PGN export
 
-`compare(run, branchA, branchB)` requires the two branches to share a fork node.
+`compareBranches(run, branchIds)` accepts two through eight distinct branches and
+derives one deepest fork shared by the whole set.
 It returns:
 
 - the common `forkNodeId`;
-- move pairs aligned by ply offset after the fork, omitting `a` or `b` when that
-  side has no node at an offset;
-- objective-transition timelines for both paths;
-- checkpoint hits for both paths; and
-- per-side recorded evaluation evidence aligned by ply offset. Each entry
+- branch-keyed rows aligned by ply offset after the fork. Each row partitions
+  present columns by node identity, so a shared prefix is not rendered as a difference;
+- objective-transition timelines and checkpoint hits keyed by branch;
+- per-branch consequence facts; and
+- per-branch recorded evaluation and best-line evidence aligned by ply offset. Each entry
   carries its node and evidence references plus a White-perspective score
   encoded as either centipawns or moves to mate.
 
@@ -212,7 +213,9 @@ engine-validated `eval` payloads with an integer `centipawns` or `mateIn`
 value; WDL, best-line, human-model, and future evidence sources remain typed
 events but are not score points in this overlay.
 
-`exportPgn` writes a selected set of branches as a legal PGN with variations.
+Run schema v0.8 adds `Branch.origin` (`played|simulated`) and durable
+`prediction.recorded` events. `exportPgn` writes a selected set of branches as a
+legal PGN with variations and marks promoted simulated branches.
 Before serialization, chessops replays every path and verifies the stored UCI,
 SAN, and resulting FEN. Corrupt or illegal paths fail rather than producing a
 plausible-looking PGN.

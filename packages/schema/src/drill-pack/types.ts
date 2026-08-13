@@ -81,11 +81,6 @@ export type CheckpointInteraction =
     }
   | {
       readonly type: "prediction";
-      readonly grading: {
-        readonly source: "opponent_policy" | "engine" | "both";
-        readonly topK?: number;
-        readonly minMass?: number;
-      };
       readonly flipBoard?: boolean;
     };
 

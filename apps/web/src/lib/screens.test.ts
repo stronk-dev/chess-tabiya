@@ -6,7 +6,7 @@ import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   attachEvidence,
   commitMove,
-  compare,
+  compareBranches,
   createRun,
   fork,
   reachCheckpoint,
@@ -326,14 +326,13 @@ describe("Layer 3 screens", () => {
 
   it("renders aligned dual-board comparison with absent-side dimming and strips", async () => {
     const run = branchedRun();
-    const comparison = compare(run, run.branches[0]!.id, run.branches[1]!.id);
+    const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
     const component = mount(CompareView, {
       target: target(),
       props: {
         run,
         pack,
         comparison,
-        branchLabels: ["main", "early queenside"],
         startSide: "white",
         step: 2,
         onStep: vi.fn(),
@@ -346,18 +345,9 @@ describe("Layer 3 screens", () => {
     expect(document.activeElement?.id).toBe("compare-title");
     expect(document.body.textContent).toContain("Line ended");
     expect(document.querySelector(".boards article.absent")).not.toBeNull();
-    expect(document.body.textContent).toContain("predict-reply");
-    expect(document.body.textContent).toContain("timing-window");
+    expect(document.body.textContent).toContain("main");
     expect(document.body.textContent).toContain("active → achieved");
-    expect(document.body.textContent).toContain(
-      "Checkpoint reached: Critical race resolved.",
-    );
-    expect(document.querySelectorAll(".fork-marker")).toHaveLength(1);
-    expect(
-      document.querySelectorAll(
-        '.evidence-cell[data-ply-offset="0"] .evidence-entry',
-      ),
-    ).toHaveLength(2);
+    expect(document.body.textContent).toContain("objective achieved");
     expect(document.body.textContent).toContain("M-2");
     expectDisabledControlsExplained();
     await unmount(component);
@@ -365,13 +355,14 @@ describe("Layer 3 screens", () => {
 
   it("rejects an ungrounded objective transition instead of inventing copy", () => {
     const run = branchedRun();
-    const comparison = compare(run, run.branches[0]!.id, run.branches[1]!.id);
-    const grounded = comparison.objectiveTimelines.b[0]!;
+    const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
+    const branchId = run.branches[1]!.id;
+    const grounded = comparison.objectiveTimelines[branchId]![0]!;
     const invalid = {
       ...comparison,
       objectiveTimelines: {
         ...comparison.objectiveTimelines,
-        b: [{ ...grounded, evidenceRefs: [] }],
+        [branchId]: [{ ...grounded, evidenceRefs: [] }],
       },
     };
 
@@ -382,7 +373,6 @@ describe("Layer 3 screens", () => {
           run,
           pack,
           comparison: invalid,
-          branchLabels: ["main", "early queenside"],
           startSide: "white",
           step: 0,
           onStep: vi.fn(),

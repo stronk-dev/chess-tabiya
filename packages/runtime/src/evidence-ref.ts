@@ -13,6 +13,7 @@ export const RULES_EVIDENCE_FACTS = Object.freeze([
 export type RulesEvidenceFact = (typeof RULES_EVIDENCE_FACTS)[number];
 export type RulesEvidenceRef = `rules:${RulesEvidenceFact}`;
 export type PackEvidenceRef = `pack:${string}`;
+export type PackAbsentEvidenceRef = `pack-absent:${string}`;
 
 export const THEORY_EVIDENCE_FACTS = Object.freeze([
   "off-objective-deviation",
@@ -40,6 +41,10 @@ export function rulesEvidenceRef(fact: RulesEvidenceFact): RulesEvidenceRef {
 
 export function packEvidenceRef(checkpointId: string): PackEvidenceRef {
   return `pack:${evidenceId(checkpointId, "Checkpoint id")}`;
+}
+
+export function packAbsentEvidenceRef(checkpointId: string): PackAbsentEvidenceRef {
+  return `pack-absent:${evidenceId(checkpointId, "Checkpoint id")}`;
 }
 
 export function theoryEvidenceRef(fact: TheoryEvidenceFact): TheoryEvidenceRef {

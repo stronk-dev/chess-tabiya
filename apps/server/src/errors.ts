@@ -19,7 +19,12 @@ export type ServerErrorCode =
   | "POLICY_MODE_UNSUPPORTED"
   | "RUN_ALREADY_EXISTS"
   | "RUN_NOT_FOUND"
-  | "STORAGE_FAILURE";
+  | "STORAGE_FAILURE"
+  | "TOO_MANY_BRANCHES"
+  | "NO_AUTHORED_VARIATIONS"
+  | "SIMULATE_TOO_LARGE"
+  | "SIMULATION_EXPIRED"
+  | "SIMULATE_BUDGET_EXCEEDED";
 
 export class ServerError extends Error {
   readonly code: ServerErrorCode;

@@ -90,7 +90,7 @@ export function exportPgn(run: DrillRun, branchIds?: readonly string[]): string 
         child = new ChildNode<PgnNodeData>({
           san: node.moveSan!,
           ...(isFirstBranchMove
-            ? { startingComments: [`Tabiya branch: ${branch.label}`] }
+            ? { startingComments: [`Tabiya branch${branch.origin === "simulated" ? " (simulated)" : ""}: ${branch.label}`] }
             : {}),
         });
         parent.children.push(child as ChildNode<PgnNodeData>);

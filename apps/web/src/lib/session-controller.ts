@@ -36,7 +36,7 @@ export interface DrillSessionState {
   readonly runState?: RunStateSnapshot;
   readonly checkpoint?: CheckpointNotice;
   readonly comparison?: BranchComparison;
-  readonly comparisonBranchIds?: readonly [string, string];
+  readonly comparisonBranchIds?: readonly string[];
   readonly authoredFeedback?: AuthoredFeedbackPage;
   readonly viewer?: RunGraph["viewer"];
 }
@@ -286,6 +286,27 @@ export class DrillSessionController {
     }
   }
 
+  async recordPrediction(predictedUci: string): Promise<void> {
+    const checkpoint = this.#state.checkpoint;
+    if (checkpoint?.interaction?.type !== "prediction") throw new Error("No prediction checkpoint is active");
+    this.#patch({ busy: true, error: undefined });
+    try {
+      const request = this.#selectionRequest();
+      const result = await this.#requiredStore().prediction({
+        ...request,
+        checkpointId: checkpoint.id,
+        nodeId: checkpoint.nodeId,
+        predictedUci,
+      });
+      this.#dismissedCheckpointSeq = checkpoint.eventSeq;
+      this.#patch({ checkpoint: undefined });
+      await this.#requiredStore().appendOpponentPly(result.selection);
+      this.#patch({ busy: false });
+    } catch (error) {
+      this.#fail(error);
+    }
+  }
+
   async rewind(target: { readonly nodeId: string } | { readonly checkpointId: string }): Promise<void> {
     this.#patch({ busy: true, checkpoint: undefined, comparison: undefined });
     try {
@@ -315,19 +336,15 @@ export class DrillSessionController {
     return this.rewind({ nodeId: leafNodeId });
   }
 
-  async compare(branchIds: readonly [string, string]): Promise<void> {
+  async compare(branchIds: readonly string[]): Promise<void> {
     const run = this.#requiredRun().run;
     this.#patch({ busy: true, error: undefined, checkpoint: undefined });
     try {
-      const comparison = await this.#api.compare(
-        run.id,
-        branchIds[0],
-        branchIds[1],
-      );
+      const comparison = await this.#api.compare(run.id, branchIds);
       this.#patch({
         busy: false,
         comparison,
-        comparisonBranchIds: Object.freeze([...branchIds]) as readonly [string, string],
+        comparisonBranchIds: Object.freeze([...branchIds]),
       });
     } catch (error) {
       this.#fail(error);
@@ -338,8 +355,8 @@ export class DrillSessionController {
     this.#patch({ comparison: undefined, comparisonBranchIds: undefined });
   }
 
-  exportPgn(): Promise<PgnDownload> {
-    return this.#api.pgn(this.#requiredRun().run.id);
+  exportPgn(branchIds?: readonly string[]): Promise<PgnDownload> {
+    return this.#api.pgn(this.#requiredRun().run.id, branchIds);
   }
 
   stopSession(): void {
@@ -378,11 +395,23 @@ export class DrillSessionController {
     ) {
       return;
     }
+    const selection = await this.#api.selectMove(this.#selectionRequest());
+    const result = await this.#requiredStore().appendOpponentPly(selection);
+    if (this.#captureCheckpoint(result.emitted)) {
+      await this.#refreshAuthoredFeedback();
+    } else if (this.#hasOutcome(result.emitted)) {
+      await this.#refreshAuthoredFeedback();
+    }
+  }
+
+  #selectionRequest(): import("./api.js").SelectMoveRequest {
+    const pack = this.#requiredPack();
+    const capabilities = this.#capabilities;
+    if (capabilities === undefined) throw new Error("Capabilities are unavailable");
+    const run = this.#requiredRun().run;
     const authored = record(pack.opponentPolicy);
-    const branch = run.branches.find(
-      (candidate) => candidate.id === run.activeCursor.branchId,
-    )!;
-    const selection = await this.#api.selectMove({
+    const branch = run.branches.find((candidate) => candidate.id === run.activeCursor.branchId)!;
+    return {
       startFen: pack.start.fen,
       historyUci: historyFrom(run, run.activeCursor.nodeId).flatMap((historyNode) =>
         historyNode.moveUci === null ? [] : [historyNode.moveUci],
@@ -400,13 +429,7 @@ export class DrillSessionController {
       },
       seed: branch.seed,
       packId: pack.id,
-    });
-    const result = await this.#requiredStore().appendOpponentPly(selection);
-    if (this.#captureCheckpoint(result.emitted)) {
-      await this.#refreshAuthoredFeedback();
-    } else if (this.#hasOutcome(result.emitted)) {
-      await this.#refreshAuthoredFeedback();
-    }
+    };
   }
 
   async #refreshAuthoredFeedback(): Promise<void> {

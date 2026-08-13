@@ -44,17 +44,18 @@
     checkpoint?: CheckpointNotice | undefined;
     authoredFeedback?: AuthoredFeedbackPage | undefined;
     comparison?: BranchComparison | undefined;
-    comparisonBranchIds?: readonly [string, string] | undefined;
+    comparisonBranchIds?: readonly string[] | undefined;
     busy?: boolean;
     error?: string | undefined;
     onMove: (uci: string) => void | Promise<void>;
     onRewind: (target: RewindTarget) => void | Promise<void>;
     onFork: (label?: string, intent?: string) => void | Promise<void>;
     onSwitchBranch: (leafNodeId: string) => void | Promise<void>;
-    onCompare: (branchIds: readonly [string, string]) => void | Promise<void>;
+    onCompare: (branchIds: readonly string[]) => void | Promise<void>;
     onCloseCompare: () => void;
     onContinueCheckpoint: () => void | Promise<void>;
-    onExport: () => void | Promise<void>;
+    onPrediction?: (uci: string) => void | Promise<void>;
+    onExport: (branchIds?: readonly string[]) => void | Promise<void>;
     onStop: () => void;
     registerKeyboardRegion: RegisterKeyboardRegion;
   }
@@ -75,6 +76,7 @@
     onCompare,
     onCloseCompare,
     onContinueCheckpoint,
+    onPrediction = () => {},
     onExport,
     onStop,
     registerKeyboardRegion,
@@ -180,15 +182,6 @@
       ? currentNode
       : (run.nodes.find((node) => node.id === previewNodeId) ?? currentNode),
   );
-  let compareLabels = $derived.by((): readonly [string, string] => {
-    const ids = comparisonBranchIds;
-    if (ids === undefined) return ["Branch A", "Branch B"];
-    return [
-      cards.find((card) => card.id === ids[0])?.label ?? "Branch A",
-      cards.find((card) => card.id === ids[1])?.label ?? "Branch B",
-    ];
-  });
-
   function interactiveTarget(event: KeyboardEvent): boolean {
     const target =
       event.target instanceof Node ? event.target : document.activeElement;
@@ -202,15 +195,15 @@
     );
   }
 
-  function defaultCompareIds(): readonly [string, string] | undefined {
-    if (compareIds.length === 2) return [compareIds[0]!, compareIds[1]!];
+  function selectedCompareIds(): readonly string[] | undefined {
+    if (compareIds.length >= 2) return compareIds;
     const active = run.activeCursor.branchId;
     const other = cards.find((card) => card.id !== active)?.id;
     return other === undefined ? undefined : [active, other];
   }
 
   function openCompare(): void {
-    const ids = defaultCompareIds();
+    const ids = selectedCompareIds();
     if (ids !== undefined) void onCompare(ids);
   }
 
@@ -238,8 +231,12 @@
     if (compareIds.includes(branchId)) {
       compareIds = compareIds.filter((id) => id !== branchId);
     } else {
-      compareIds = [...compareIds.slice(-1), branchId];
+      if (compareIds.length < 8) compareIds = [...compareIds, branchId];
     }
+  }
+
+  function compareAllHere(forkNodeId: string): void {
+    compareIds = cards.filter((card) => card.forkNodeId === forkNodeId || card.id === run.activeCursor.branchId).map((card) => card.id).slice(0, 8);
   }
 
   function preview(nodeId: string): void {
@@ -256,7 +253,7 @@
     if (comparison !== undefined) {
       compareStep = Math.max(
         0,
-        Math.min(comparison.pairs.length, compareStep + delta),
+        Math.min(comparison.rows.length, compareStep + delta),
       );
       return;
     }
@@ -379,7 +376,7 @@
       return true;
     } else if (event.key.toLowerCase() === "e") {
       event.preventDefault();
-      void onExport();
+      void onExport(comparisonBranchIds ?? (compareIds.length > 0 ? compareIds : undefined));
       return true;
     } else if (event.key === "Enter" && previewNodeId !== undefined) {
       event.preventDefault();
@@ -416,7 +413,6 @@
     {run}
     {pack}
     {comparison}
-    branchLabels={compareLabels}
     {startSide}
     step={compareStep}
     onStep={(step) => (compareStep = step)}
@@ -486,6 +482,7 @@
         {compareIds}
         onSwitch={onSwitchBranch}
         onToggleCompare={toggleCompare}
+        onCompareAllHere={compareAllHere}
       />
 
       <div class="timeline-row">
@@ -516,7 +513,7 @@
           <button type="button" aria-pressed={replaying} onclick={toggleReplay}>
             {replaying ? "Pause" : "Replay"} <kbd>Space</kbd>
           </button>
-          <button type="button" onclick={onExport}>Export <kbd>E</kbd></button>
+          <button type="button" onclick={() => onExport(compareIds.length > 0 ? compareIds : undefined)}>Export <kbd>E</kbd></button>
         </div>
       </div>
     </div>
@@ -526,6 +523,9 @@
 {#if checkpoint}
   <CheckpointSheet
     {run}
+    node={currentNode}
+    {startSide}
+    {onPrediction}
     {checkpoint}
     authoredItems={checkpointAuthoredItems}
     {assessment}

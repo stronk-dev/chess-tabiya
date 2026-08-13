@@ -87,7 +87,6 @@
       "trigger": { "atSpineNode": "najdorf-e6" },
       "interaction": {
         "type": "prediction",
-        "grading": { "source": "both", "topK": 3, "minMass": 0.7 },
         "flipBoard": true
       }
     },

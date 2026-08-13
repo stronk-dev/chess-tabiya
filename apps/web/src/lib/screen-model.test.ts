@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   commitMove,
-  compare,
+  compareBranches,
   createRun,
   fork,
   reachCheckpoint,
@@ -79,11 +79,7 @@ describe("screen view models", () => {
     });
     const alternative = commitMove(forked.run, "b7b5", { at });
     const cards = branchCards(alternative.run);
-    const comparison = compare(
-      alternative.run,
-      alternative.run.branches[0]!.id,
-      alternative.run.branches[1]!.id,
-    );
+    const comparison = compareBranches(alternative.run, alternative.run.branches.map((branch) => branch.id));
 
     expect(cards).toEqual([
       expect.objectContaining({ label: "main", firstMove: "Be3" }),
@@ -93,13 +89,13 @@ describe("screen view models", () => {
         firstMove: "b5",
       }),
     ]);
-    expect(comparisonNode(alternative.run, comparison, 0, "a")?.moveSan).toBe(
+    expect(comparisonNode(alternative.run, comparison, 0, alternative.run.branches[0]!.id)?.moveSan).toBe(
       "Be3",
     );
-    expect(comparisonNode(alternative.run, comparison, 1, "a")?.moveSan).toBe(
+    expect(comparisonNode(alternative.run, comparison, 1, alternative.run.branches[0]!.id)?.moveSan).toBe(
       "e6",
     );
-    expect(comparisonNode(alternative.run, comparison, 1, "b")?.moveSan).toBe("b5");
+    expect(comparisonNode(alternative.run, comparison, 1, alternative.run.branches[1]!.id)?.moveSan).toBe("b5");
   });
 
   it("never produces a bare objective why-banner", () => {

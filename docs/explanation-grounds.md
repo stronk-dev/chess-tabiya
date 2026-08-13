@@ -30,7 +30,8 @@ later comparison: the durable event remains authoritative.
 
 ## Comparison payload
 
-`BranchComparison` contains an `evidence` collection for each side. Each entry
+`BranchComparison` contains branch-keyed `evidence` and `lines` collections. Each
+evaluation entry
 has this shape:
 
 ```ts
@@ -47,10 +48,9 @@ has this shape:
 ```
 
 Entries are selected from `evidence.attached` events whose node occurs on that
-side's existing `branchPath`. The same path and common-fork calculation used by
-move pairs, objective timelines, and checkpoints determines `plyOffset`.
-Evidence attached to the common fork is therefore present on both sides at
-offset zero; this is intentional because it is the shared baseline.
+branch's existing `branchPath`. One set-wide common fork determines every
+`plyOffset`; evidence on that fork appears on every selected branch at offset
+zero and is deduplicated when branches share a rendered cell.
 
 The v1 overlay accepts only `engine_validated` payloads of kind `eval` with a
 safe-integer `centipawns` or `mateIn` value. Centipawns map to

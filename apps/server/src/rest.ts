@@ -383,6 +383,8 @@ export function errorResponse(error: unknown): Response {
           ? 422
           : error.code === "INVALID_REQUEST"
             ? 400
+            : error.code === "SIMULATION_EXPIRED"
+              ? 410
             : error.code === "RUN_NOT_FOUND" ||
                 error.code === "PACK_NOT_FOUND" ||
                 error.code === "EVIDENCE_RESULT_NOT_FOUND"
@@ -398,6 +400,10 @@ export function errorResponse(error: unknown): Response {
                 : error.code === "PACK_VERSION_NOT_INCREASING" ||
                     error.code === "PROVENANCE_STATUS_NOT_WRITABLE" ||
                     error.code === "GRADUATION_BLOCKERS_OUTSTANDING"
+                    || error.code === "TOO_MANY_BRANCHES"
+                    || error.code === "NO_AUTHORED_VARIATIONS"
+                    || error.code === "SIMULATE_TOO_LARGE"
+                    || error.code === "SIMULATE_BUDGET_EXCEEDED"
                   ? 422
                 : 500;
   }
@@ -415,7 +421,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -865,14 +871,77 @@ export function createRestHandler(
         );
       }
       if (route.action === "compare") {
+        const branchIds = value.branchIds;
+        if (!Array.isArray(branchIds) || branchIds.some((id) => typeof id !== "string")) {
+          throw invalid("branchIds must be an array of strings");
+        }
         return json(200, {
           comparison: service.compare(
             route.runId,
             principal,
-            requiredString(value.branchAId, "branchAId"),
-            requiredString(value.branchBId, "branchBId"),
+            branchIds,
           ),
         });
+      }
+      if (route.action === "analysis") {
+        const body = closedRecord(value, "/", ["nodeIds", "kind", "multiPv", "depth", "movetime"]);
+        if (body.kind !== "bestline") throw invalid("analysis kind must be bestline");
+        if (!Array.isArray(body.nodeIds) || body.nodeIds.some((id) => typeof id !== "string")) {
+          throw invalid("nodeIds must be an array of strings");
+        }
+        return json(202, { jobs: service.analysis(route.runId, principal, writerId(request), {
+          nodeIds: body.nodeIds,
+          ...(body.multiPv === undefined ? {} : { multiPv: requiredSafeInteger(body.multiPv, "multiPv") }),
+          ...(body.depth === undefined ? {} : { depth: requiredSafeInteger(body.depth, "depth") }),
+          ...(body.movetime === undefined ? {} : { movetime: requiredSafeInteger(body.movetime, "movetime") }),
+        }) });
+      }
+      if (route.action === "simulate") {
+        const body = closedRecord(value, "/", ["maxBranches", "maxPlies", "at"]);
+        return json(200, service.simulate(route.runId, principal, writerId(request), {
+          ...(body.maxBranches === undefined ? {} : { maxBranches: requiredSafeInteger(body.maxBranches, "maxBranches") }),
+          ...(body.maxPlies === undefined ? {} : { maxPlies: requiredSafeInteger(body.maxPlies, "maxPlies") }),
+          ...(body.at === undefined ? {} : { at: requiredString(body.at, "at") }),
+        }));
+      }
+      if (route.action === "simulate-enter") {
+        const body = closedRecord(value, "/", ["simulationId", "branchIndex", "at"]);
+        return json(200, service.enterSimulation(
+          route.runId,
+          principal,
+          writerId(request),
+          requiredString(body.simulationId, "simulationId"),
+          requiredSafeInteger(body.branchIndex, "branchIndex"),
+          body.at === undefined ? undefined : requiredString(body.at, "at"),
+        ));
+      }
+      if (route.action === "prediction") {
+        if (selector === undefined) {
+          throw new ServerError("ENGINE_UNAVAILABLE", "Opponent selector is not configured", {
+            details: { engineId: "opponent-selector", retryAfterMs: 0 },
+          });
+        }
+        const body = closedRecord(value, "/", ["startFen", "historyUci", "policy", "seed", "packId", "checkpointId", "nodeId", "predictedUci", "at"]);
+        const parsed = parseSelectMoveRequest({
+          startFen: body.startFen,
+          historyUci: body.historyUci,
+          policy: body.policy,
+          seed: body.seed,
+          ...(body.packId === undefined ? {} : { packId: body.packId }),
+        });
+        const pack = parsed.packId === undefined ? undefined : service.pack(parsed.packId);
+        const selection = await selector.select({
+          ...parsed,
+          policy: { ...parsed.policy, ...(pack?.document.spine === undefined ? {} : { spine: pack.document.spine }) },
+        });
+        const result = service.recordPrediction(route.runId, principal, writerId(request), {
+          nodeId: requiredString(body.nodeId, "nodeId"),
+          checkpointId: requiredString(body.checkpointId, "checkpointId"),
+          predictedUci: requiredString(body.predictedUci, "predictedUci"),
+          distribution: selection,
+          ...(body.at === undefined ? {} : { at: requiredString(body.at, "at") }),
+        });
+        return json(200, { selection, run: result.run, emitted: result.emitted });
       }
       if (route.action === "evidence") {
         return json(

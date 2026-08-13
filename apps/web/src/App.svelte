@@ -212,8 +212,8 @@
     routerStarted = false;
   }
 
-  async function exportPgn(): Promise<void> {
-    const download = await controller.exportPgn();
+  async function exportPgn(branchIds?: readonly string[]): Promise<void> {
+    const download = await controller.exportPgn(branchIds);
     const url = URL.createObjectURL(
       new Blob([download.text], { type: "text/x-chess-pgn;charset=utf-8" }),
     );
@@ -357,6 +357,7 @@
         onCompare={(branchIds) => controller.compare(branchIds)}
         onCloseCompare={() => controller.closeCompare()}
         onContinueCheckpoint={() => controller.continueCheckpoint()}
+        onPrediction={(uci) => controller.recordPrediction(uci)}
         onExport={exportPgn}
         onStop={() => navigate("/play")}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}

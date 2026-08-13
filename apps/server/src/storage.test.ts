@@ -74,6 +74,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 5, name: "record policyModeApplied as unknown on v0.6 selections" },
       { version: 6, name: "attempt records, concept tags, schedules, and history stats" },
       { version: 7, name: "pack studio drafts and registered versions" },
+      { version: 8, name: "branch origin and prediction event run schema" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -91,7 +92,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(7);
+    ).toBe(8);
     inspection.close();
   });
 
@@ -139,8 +140,9 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 5, name: "record policyModeApplied as unknown on v0.6 selections" },
       { version: 6, name: "attempt records, concept tags, schedules, and history stats" },
       { version: 7, name: "pack studio drafts and registered versions" },
+      { version: 8, name: "branch origin and prediction event run schema" },
     ]);
-    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.7");
+    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.8");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
     expect(upgraded.read(forged.id)).toBeUndefined();
     upgraded.close();

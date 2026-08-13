@@ -12,6 +12,8 @@ import {
   type ForkRequest,
   type MoveOptions,
   type PlayerMoveRequest,
+  type PredictionRequest,
+  type PredictionResult,
   type RewindRequest,
   type RunApi,
 } from "./api.js";
@@ -176,6 +178,14 @@ export class RunStateStore {
         options,
       ),
     );
+  }
+
+  prediction(input: PredictionRequest): Promise<PredictionResult> {
+    return this.#mutate(() => this.#api.prediction(
+      this.#session.runId,
+      input,
+      this.#session.writerId,
+    )) as Promise<PredictionResult>;
   }
 
   rewind(input: RewindRequest): Promise<MutationResult> {

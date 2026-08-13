@@ -7,9 +7,10 @@
     compareIds: readonly string[];
     onSwitch: (nodeId: string) => void | Promise<void>;
     onToggleCompare: (branchId: string) => void;
+    onCompareAllHere?: (forkNodeId: string) => void;
   }
 
-  let { branches, activeBranchId, compareIds, onSwitch, onToggleCompare }: Props =
+  let { branches, activeBranchId, compareIds, onSwitch, onToggleCompare, onCompareAllHere }: Props =
     $props();
 </script>
 
@@ -35,6 +36,7 @@
           <span class:terminal={branch.terminal} class="objective">
             {branch.objectiveState}
           </span>
+          {#if branch.origin === "simulated"}<span>simulated</span>{/if}
         </button>
         <label>
           <input
@@ -47,6 +49,9 @@
       </li>
     {/each}
   </ol>
+  {#if onCompareAllHere}
+    <button type="button" onclick={() => onCompareAllHere(branches.find((branch) => branch.id === activeBranchId)?.forkNodeId ?? "")}>Compare all forked here</button>
+  {/if}
 </aside>
 
 <style>

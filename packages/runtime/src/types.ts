@@ -105,6 +105,7 @@ export interface Branch {
   readonly label: string;
   readonly intent?: string;
   readonly seed: number;
+  readonly origin: "played" | "simulated";
 }
 
 export interface Cursor {
@@ -198,6 +199,18 @@ export type TransferScheduledEvent = Event<
   "transfer.scheduled",
   { readonly nodeId: string; readonly scheduleId: string }
 >;
+export type PredictionRecordedEvent = Event<
+  "prediction.recorded",
+  {
+    readonly nodeId: string;
+    readonly checkpointId: string;
+    readonly predictedUci: string;
+    readonly predictedMass: number | null;
+    readonly predictedRank: number | null;
+    readonly candidateCount: number;
+    readonly distribution: OpponentSelection;
+  }
+>;
 
 export type DrillRunEvent =
   | RunStartedEvent
@@ -212,6 +225,7 @@ export type DrillRunEvent =
   | FeedbackGeneratedEvent
   | OutcomeReachedEvent
   | TransferScheduledEvent
+  | PredictionRecordedEvent
   | FeedbackRevealedEvent;
 
 export type EventDraft = DrillRunEvent extends infer TEvent

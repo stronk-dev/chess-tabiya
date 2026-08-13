@@ -181,9 +181,14 @@ describe("drill-client pack registry", () => {
     const checkpoints = projected.checkpoints as Record<string, unknown>[];
     expect(checkpoints).toHaveLength(fixture.checkpoints.length);
     for (const checkpoint of checkpoints) {
-      expect(Object.keys(checkpoint).sort()).toEqual(["actions", "id", "label"]);
+      const authored = fixture.checkpoints.find((candidate) => candidate.id === checkpoint.id);
+      expect(Object.keys(checkpoint).sort()).toEqual(
+        authored?.interaction?.type === "prediction"
+          ? ["actions", "id", "interaction", "label"]
+          : ["actions", "id", "label"],
+      );
       expect(checkpoint).not.toHaveProperty("trigger");
-      expect(checkpoint).not.toHaveProperty("interaction");
+      if (authored?.interaction?.type !== "prediction") expect(checkpoint).not.toHaveProperty("interaction");
     }
     expect(detail.headers.get("x-pack-digest")).toBe(
       environment.registry.required(fixture.id).digest,
@@ -590,38 +595,36 @@ describe("server-side feedback withholding", () => {
     const [mainBranch, alternativeBranch] = alternative.branches;
     const withheld = environment.service.compare(
       alternative.id,
-      mainBranch!.id,
-      alternativeBranch!.id,
+      [mainBranch!.id, alternativeBranch!.id],
     );
-    expect(withheld.objectiveTimelines.a[0]!.evidenceRefs).toEqual([
+    expect(withheld.objectiveTimelines[mainBranch!.id]![0]!.evidenceRefs).toEqual([
       rulesEvidenceRef("material"),
     ]);
-    expect(withheld.objectiveTimelines.b[0]!.evidenceRefs).toEqual([
+    expect(withheld.objectiveTimelines[alternativeBranch!.id]![0]!.evidenceRefs).toEqual([
       rulesEvidenceRef("material"),
     ]);
-    expect(withheld.evidence).toEqual({ a: [], b: [] });
+    expect(withheld.evidence).toEqual({ [mainBranch!.id]: [], [alternativeBranch!.id]: [] });
 
     const revealed = reachCheckpoint(alternative, "reveal", at).run;
     environment.storage.save(revealed, "writer-a");
     const visible = environment.service.compare(
       revealed.id,
-      mainBranch!.id,
-      alternativeBranch!.id,
+      [mainBranch!.id, alternativeBranch!.id],
     );
-    expect(visible.objectiveTimelines.a[0]!.evidenceRefs).toContain(
+    expect(visible.objectiveTimelines[mainBranch!.id]![0]!.evidenceRefs).toContain(
       engineEvidenceRef("main-eval"),
     );
-    expect(visible.objectiveTimelines.b[0]!.evidenceRefs).toContain(
+    expect(visible.objectiveTimelines[alternativeBranch!.id]![0]!.evidenceRefs).toContain(
       engineEvidenceRef("alternative-eval"),
     );
-    expect(visible.evidence.a).toEqual([
+    expect(visible.evidence[mainBranch!.id]).toEqual([
       expect.objectContaining({
         nodeId: mainNodeId,
         evidenceRefs: [engineEvidenceRef("main-eval")],
         score: { kind: "cp", value: 18 },
       }),
     ]);
-    expect(visible.evidence.b).toEqual([
+    expect(visible.evidence[alternativeBranch!.id]).toEqual([
       expect.objectContaining({
         nodeId: alternativeNodeId,
         evidenceRefs: [engineEvidenceRef("alternative-eval")],

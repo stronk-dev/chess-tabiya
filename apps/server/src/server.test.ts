@@ -137,15 +137,14 @@ describe("branch-runtime REST binding", () => {
     ]);
 
     const comparisonResponse = await request(handler, "POST", "/runs/rest-run/compare", {
-      branchAId: graphBody.graph.branches[0]!.id,
-      branchBId: graphBody.graph.branches[1]!.id,
+      branchIds: graphBody.graph.branches.map((branch) => branch.id),
     }, "");
     expect(comparisonResponse.status).toBe(200);
     const comparisonBody = await comparisonResponse.json() as {
-      comparison: { forkNodeId: string; pairs: unknown[] };
+      comparison: { forkNodeId: string; rows: unknown[] };
     };
     expect(comparisonBody.comparison.forkNodeId).toBe(rootId);
-    expect(comparisonBody.comparison.pairs).toHaveLength(2);
+    expect(comparisonBody.comparison.rows).toHaveLength(2);
 
     const forked = await request(handler, "POST", "/runs/rest-run/fork", {
       nodeId: rootId,

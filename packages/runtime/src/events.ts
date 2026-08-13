@@ -160,6 +160,17 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
           throw unknownNode(event.data.nodeId);
         }
         break;
+      case "prediction.recorded": {
+        if (!nodes.some((node) => node.id === event.data.nodeId)) throw unknownNode(event.data.nodeId);
+        const candidates = event.data.distribution.candidates ?? [];
+        const candidate = candidates.find((entry) => entry.moveUci === event.data.predictedUci);
+        const mass = candidate?.mass ?? null;
+        const rank = candidate?.rank ?? null;
+        if (event.data.candidateCount !== candidates.length || event.data.predictedMass !== mass || event.data.predictedRank !== rank) {
+          throw new TypeError(`prediction.recorded ${event.seq} does not match its distribution`);
+        }
+        break;
+      }
       case "outcome.reached": {
         const node = nodes.find((candidate) => candidate.id === event.data.nodeId);
         if (!node) throw unknownNode(event.data.nodeId);

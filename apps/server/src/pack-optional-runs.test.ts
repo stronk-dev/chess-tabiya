@@ -116,8 +116,7 @@ describe("pack-optional position runs", () => {
     expect((await call(handler, "POST", "/runs/position-loop/moves", { uci: "d2d4", at })).status).toBe(200);
     const graph = await (await call(handler, "GET", "/runs/position-loop/graph")).json() as { graph: { branches: { id: string }[] } };
     const compared = await call(handler, "POST", "/runs/position-loop/compare", {
-      branchAId: graph.graph.branches[0]!.id,
-      branchBId: graph.graph.branches[1]!.id,
+      branchIds: graph.graph.branches.map((branch) => branch.id),
     });
     expect(compared.status).toBe(200);
     const authored = await call(handler, "GET", "/runs/position-loop/authored-feedback");
@@ -148,8 +147,7 @@ describe("pack-optional position runs", () => {
     const events = await (await call(handler, "GET", "/runs/leak-run/events?sinceSeq=0")).json();
     expect(JSON.stringify(events)).not.toContain("engine:injected");
     const comparison = await (await call(handler, "POST", "/runs/leak-run/compare", {
-      branchAId: injected.branches[0]!.id,
-      branchBId: injected.branches[1]!.id,
+      branchIds: injected.branches.map((branch) => branch.id),
     })).json();
     expect(JSON.stringify(comparison)).not.toContain("engine:injected");
     const apply = await call(handler, "POST", "/runs/leak-run/evidence", { resultSeq: 1, at });

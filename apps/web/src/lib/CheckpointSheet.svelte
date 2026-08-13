@@ -6,6 +6,9 @@
   import type { AuthoredFeedbackItem } from "./api.js";
   import OutcomeContext from "./OutcomeContext.svelte";
   import type { DrillRun } from "@chess-tabiya/runtime";
+  import type { Node } from "@chess-tabiya/runtime";
+  import Chessboard from "./Chessboard.svelte";
+  import type { StartSide } from "./board-model.js";
   import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
 
   interface Props {
@@ -20,6 +23,9 @@
     resistance?: readonly string[];
     resolution?: string | undefined;
     run: DrillRun;
+    node?: Node;
+    startSide?: StartSide;
+    onPrediction?: (uci: string) => void | Promise<void>;
   }
 
   let {
@@ -34,6 +40,9 @@
     resistance = [],
     resolution,
     run,
+    node,
+    startSide = "white",
+    onPrediction = () => {},
   }: Props = $props();
   let heading: HTMLHeadingElement;
   let recognizedActions = $derived(recognizedCheckpointActions(checkpoint.actions));
@@ -46,6 +55,18 @@
     <p class="eyebrow">Checkpoint</p>
     <h2 id="checkpoint-title" tabindex="-1" bind:this={heading}>{checkpoint.label}</h2>
     <p>You reached a semantic boundary. Continue, replay it, or compare attempts.</p>
+    {#if checkpoint.interaction?.type === "prediction" && node}
+      <section class="prediction" aria-labelledby="prediction-title">
+        <h3 id="prediction-title">Predict the opponent's reply</h3>
+        <p>Play one candidate on the board. Tabiya records the policy distribution as numbers, never a verdict.</p>
+        <Chessboard
+          fen={node.fen}
+          startSide={checkpoint.interaction.flipBoard ? (startSide === "white" ? "black" : "white") : startSide}
+          lastMove={node.moveUci}
+          onMove={onPrediction}
+        />
+      </section>
+    {/if}
     {#if assessment !== undefined || resistance.length > 0}
       <OutcomeContext {assessment} {resistance} {resolution} />
     {/if}

@@ -110,6 +110,12 @@ export function projectPackDocument(
       label:
         typeof checkpoint.label === "string" ? checkpoint.label : checkpoint.id,
       actions: Array.isArray(checkpoint.actions) ? checkpoint.actions : [],
+      ...(checkpoint.interaction?.type === "prediction" ? {
+        interaction: {
+          type: "prediction",
+          ...(checkpoint.interaction.flipBoard === undefined ? {} : { flipBoard: checkpoint.interaction.flipBoard }),
+        },
+      } : {}),
     })),
   });
 }

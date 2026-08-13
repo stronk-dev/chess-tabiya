@@ -1,5 +1,5 @@
 import {
-  compare,
+  compareBranches,
   type EvidencePayload,
   type ObjectiveEvidenceUpgrader,
 } from "@chess-tabiya/runtime";
@@ -409,15 +409,15 @@ describe("evidence staging and writer application", () => {
 
     expect(queue.page("durable-compare-run").results).toEqual([]);
     const saved = storage.read("durable-compare-run")!.run;
-    const result = compare(saved, saved.branches[0]!.id, saved.branches[1]!.id);
-    expect(result.evidence.a).toEqual([
+    const result = compareBranches(saved, [saved.branches[0]!.id, saved.branches[1]!.id]);
+    expect(result.evidence[saved.branches[0]!.id]).toEqual([
       expect.objectContaining({
         nodeId: main.run.activeCursor.nodeId,
         plyOffset: 1,
         score: { kind: "cp", value: 27 },
       }),
     ]);
-    expect(result.evidence.b).toEqual([
+    expect(result.evidence[saved.branches[1]!.id]).toEqual([
       expect.objectContaining({
         nodeId: alternative.run.activeCursor.nodeId,
         plyOffset: 1,

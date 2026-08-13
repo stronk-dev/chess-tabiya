@@ -7,7 +7,7 @@ import {
   RuntimeError,
   appendOpponentPly,
   commitMove,
-  compare,
+  compareBranches,
   createRun,
   exportPgn,
   readBackReplay,
@@ -95,19 +95,20 @@ describe("branch-runtime vertical acceptance scenario", () => {
     run = opponent.play(run).run;
     run = commitMove(run, "d2d3", { at }).run;
 
-    const comparison = compare(run, run.branches[0]!.id, run.branches[1]!.id);
+    const [a, b] = run.branches;
+    const comparison = compareBranches(run, [a!.id, b!.id]);
     expect(comparison.forkNodeId).toBe(forkNodeId);
-    expect(comparison.pairs.map((pair) => [pair.a?.moveUci, pair.b?.moveUci])).toEqual([
+    expect(comparison.rows.map((row) => [row.nodes[a!.id]?.moveUci, row.nodes[b!.id]?.moveUci])).toEqual([
       ["g1f3", "f1c4"],
       ["b8c6", "g8f6"],
       ["f1b5", "d2d3"],
       ["a7a6", undefined],
     ]);
-    expect(comparison.pairs[3]).not.toHaveProperty("b");
-    expect(comparison.checkpointHits.a).toEqual([
+    expect(comparison.rows[3]!.nodes).not.toHaveProperty(b!.id);
+    expect(comparison.checkpointHits[a!.id]).toEqual([
       expect.objectContaining({ checkpointId: "six-ply-consequence", plyOffset: 4 }),
     ]);
-    expect(comparison.checkpointHits.b).toEqual([]);
+    expect(comparison.checkpointHits[b!.id]).toEqual([]);
 
     const pgn = exportPgn(run);
     expect(pgn).toContain("Bb5");

@@ -3,6 +3,7 @@ import {
   RULES_EVIDENCE_FACTS,
   THEORY_EVIDENCE_FACTS,
   packEvidenceRef,
+  packAbsentEvidenceRef,
   rulesEvidenceRef,
   type EvidencePayload,
   type RulesEvidenceFact,
@@ -60,6 +61,12 @@ export function evidenceSentenceTable(
         sourceLabel: "Pack",
       }),
     );
+    const absent = packAbsentEvidenceRef(checkpoint.id);
+    table.set(absent, Object.freeze({
+      reference: absent,
+      text: `Checkpoint not reached on this branch: ${checkpointLabel(checkpoint)}.`,
+      sourceLabel: "Pack",
+    }));
   }
   for (const fact of THEORY_EVIDENCE_FACTS) {
     const reference = `theory:${fact}`;

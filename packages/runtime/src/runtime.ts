@@ -67,6 +67,7 @@ export interface ForkOptions {
   readonly label?: string;
   readonly intent?: string;
   readonly at?: string;
+  readonly origin?: "played" | "simulated";
 }
 
 export interface JobObserver {
@@ -105,6 +106,7 @@ function nextBranch(run: DrillRun, nodeId: string, options: ForkOptions): Branch
     forkNodeId: nodeId,
     label: options.label ?? nextAltLabel(run),
     seed: run.policyConfig.seedMode === "per_branch" ? primarySeed + index : primarySeed,
+    origin: options.origin ?? "played",
     ...(options.intent === undefined ? {} : { intent: options.intent }),
   };
   return branch;
@@ -191,6 +193,7 @@ export function createRun(inputValue: CreateRunInput | LegacyCreateRunInput): Dr
     forkNodeId: rootNode.id,
     label: "main",
     seed: input.seed,
+    origin: "played",
   };
   const activeCursor = { nodeId: rootNode.id, branchId };
   const startEvent: DrillRunEvent = {

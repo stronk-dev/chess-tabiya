@@ -18,6 +18,7 @@ export interface EvidenceJobInput {
   readonly kind: EvidenceKind;
   readonly depth?: number;
   readonly movetime?: number;
+  readonly multiPv?: number;
   readonly timeoutMs?: number;
   readonly objectiveRequest?: ObjectiveEvidenceRequest;
 }
@@ -307,8 +308,10 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
     const lines = await this.#client.execute(this.#engineId, {
       commands: [
         ...(job.kind === "wdl" ? ["setoption name UCI_ShowWDL value true"] : []),
+        ...(job.multiPv === undefined ? [] : [`setoption name MultiPV value ${job.multiPv}`]),
         `position fen ${job.fen}`,
         go,
+        ...(job.multiPv === undefined ? [] : ["setoption name MultiPV value 1"]),
       ],
       until: (line) => line.startsWith("bestmove "),
       timeoutMs: job.timeoutMs ?? Math.max(5_000, (job.movetime ?? 0) * 10),

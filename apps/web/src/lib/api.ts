@@ -276,6 +276,17 @@ export interface SelectMoveRequest {
   readonly packId?: string;
 }
 
+export interface PredictionRequest extends SelectMoveRequest {
+  readonly checkpointId: string;
+  readonly nodeId: string;
+  readonly predictedUci: string;
+  readonly at?: string;
+}
+
+export interface PredictionResult extends MutationResult {
+  readonly selection: OpponentSelection;
+}
+
 export interface MoveOptions {
   readonly at?: string;
   readonly clockState?: Readonly<Record<string, unknown>>;
@@ -369,6 +380,7 @@ export interface RunApi {
     at?: string,
   ): Promise<MutationResult>;
   reveal(runId: string, writerId: string, at?: string): Promise<MutationResult>;
+  prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult>;
 }
 
 export interface DrillClientApi extends RunApi {
@@ -388,8 +400,7 @@ export interface DrillClientApi extends RunApi {
   updateGrants?(runId: string, operation: GrantOperation, writerId: string): Promise<readonly RunGrant[]>;
   compare(
     runId: string,
-    branchAId: string,
-    branchBId: string,
+    branchIds: readonly string[],
   ): Promise<BranchComparison>;
   authoredFeedback(runId: string): Promise<AuthoredFeedbackPage>;
   pgn(runId: string, branchIds?: readonly string[]): Promise<PgnDownload>;
@@ -561,6 +572,10 @@ export class DrillApi implements DrillClientApi {
     return this.#json("/select-move", { method: "POST", body: input });
   }
 
+  prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult> {
+    return this.#json(`/runs/${encoded(runId)}/prediction`, { method: "POST", writerId, body: input });
+  }
+
   move(
     runId: string,
     input: PlayerMoveRequest,
@@ -643,12 +658,11 @@ export class DrillApi implements DrillClientApi {
 
   async compare(
     runId: string,
-    branchAId: string,
-    branchBId: string,
+    branchIds: readonly string[],
   ): Promise<BranchComparison> {
     const body = await this.#json<{ readonly comparison: BranchComparison }>(
       `/runs/${encoded(runId)}/compare`,
-      { method: "POST", body: { branchAId, branchBId } },
+      { method: "POST", body: { branchIds } },
     );
     return body.comparison;
   }

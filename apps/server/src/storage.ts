@@ -212,7 +212,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 7;
+export const STORAGE_VERSION = 8;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -1369,6 +1369,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
         name: "pack studio drafts and registered versions",
         apply: () => this.#addPackStudioTables(),
       },
+      {
+        version: 8,
+        name: "branch origin and prediction event run schema",
+        apply: () => this.#upgradeV07Runs(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -1540,6 +1545,30 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
       ) STRICT;
       CREATE INDEX IF NOT EXISTS registered_packs_digest ON registered_packs(digest);
     `);
+  }
+
+  #upgradeV07Runs(): void {
+    const rows = this.#database
+      .prepare("SELECT id, snapshot_json FROM drill_runs WHERE schema_version = '0.7'")
+      .all() as readonly Record<string, unknown>[];
+    const update = this.#database.prepare(
+      "UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.8' WHERE id = ?",
+    );
+    for (const row of rows) {
+      if (typeof row.id !== "string" || typeof row.snapshot_json !== "string") continue;
+      const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
+      if (snapshot.schemaVersion !== "0.7" || !Array.isArray(snapshot.branches) || !Array.isArray(snapshot.events)) continue;
+      const branches = snapshot.branches.map((branch) => ({ ...(branch as object), origin: "played" }));
+      const events = snapshot.events.map((event) => {
+        if (event === null || typeof event !== "object") return event;
+        const value = event as { type?: unknown; data?: unknown };
+        if (value.type !== "run.started" && value.type !== "branch.forked") return event;
+        if (value.data === null || typeof value.data !== "object") return event;
+        const data = value.data as Record<string, unknown>;
+        return { ...value, data: { ...data, branch: { ...(data.branch as object), origin: "played" } } };
+      });
+      update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.8", branches, events }), row.id);
+    }
   }
 
   #addRunSummaries(): void {

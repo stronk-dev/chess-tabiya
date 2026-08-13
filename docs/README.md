@@ -50,3 +50,6 @@ Implemented foundation:
 - `pack-studio.md` — migration 7 durable drafts/registrations, source-derived
   publication channels, digest-retained playtests and versions, the authoring REST
   surface, pack schema 0.8, and `/create`.
+- `n-way-comparison.md` — one-axis 2–8 branch comparison, consequence rows,
+  scratch simulation and promotion, prediction capture, deep analysis, run
+  schema 0.8, pack schema 0.9, and migration 8.

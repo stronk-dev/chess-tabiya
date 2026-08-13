@@ -6,7 +6,7 @@ import {
   attachEvidence,
   appendOpponentPly,
   commitMove,
-  compare,
+  compareBranches,
   createRun,
   reachCheckpoint,
   rewind,
@@ -77,26 +77,50 @@ function branchedRun(): DrillRun {
 }
 
 describe("branch comparison", () => {
+  it("uses one common axis and groups a shared prefix across three branches", () => {
+    let run = branchedRun();
+    run = rewind(run, run.nodes[0]!.id, at).run;
+    run = commitMove(run, "d2d4", { at }).run;
+    const ids = run.branches.map((branch) => branch.id);
+    const result = compareBranches(run, ids);
+    expect(result.forkNodeId).toBe(run.nodes[0]!.id);
+    expect(result.columns).toHaveLength(3);
+    expect(result.rows[0]!.groups).toEqual([[ids[0], ids[1]], [ids[2]]]);
+    for (const row of result.rows) {
+      expect(row.groups.flat()).toEqual(Object.keys(row.nodes));
+      for (const group of row.groups) {
+        expect(new Set(group.map((id) => row.nodes[id]!.id)).size).toBe(1);
+      }
+    }
+  });
+
+  it("rejects duplicate and singleton compare sets", () => {
+    const run = branchedRun();
+    expect(() => compareBranches(run, [run.branches[0]!.id])).toThrow(/two branches/);
+    expect(() => compareBranches(run, [run.branches[0]!.id, run.branches[0]!.id])).toThrow(/distinct/);
+  });
+
   it("aligns consequences from the last common fork and marks an absent side", () => {
     const run = branchedRun();
     const [main, alternative] = run.branches;
-    const result = compare(run, main!.id, alternative!.id);
+    const result = compareBranches(run, [main!.id, alternative!.id]);
 
     expect(result.forkNodeId).toBe(run.nodes[1]!.id);
-    expect(result.pairs.map((pair) => [pair.a?.moveUci, pair.b?.moveUci])).toEqual([
+    expect(result.rows.map((row) => [row.nodes[main!.id]?.moveUci, row.nodes[alternative!.id]?.moveUci])).toEqual([
       ["e7e5", "c7c5"],
       ["g1f3", "g1f3"],
       ["b8c6", undefined],
     ]);
-    expect(result.pairs[2]).not.toHaveProperty("b");
-    expect(result.pairs.map((pair) => pair.plyOffset)).toEqual([1, 2, 3]);
+    expect(result.rows[2]!.nodes).not.toHaveProperty(alternative!.id);
+    expect(result.rows.map((row) => row.plyOffset)).toEqual([1, 2, 3]);
   });
 
   it("returns objective timelines and checkpoint hits for each branch path", () => {
     const run = branchedRun();
-    const result = compare(run, run.branches[0]!.id, run.branches[1]!.id);
+    const [a, b] = run.branches;
+    const result = compareBranches(run, [a!.id, b!.id]);
 
-    expect(result.objectiveTimelines.a).toEqual([
+    expect(result.objectiveTimelines[a!.id]).toEqual([
       expect.objectContaining({
         plyOffset: 3,
         from: "active",
@@ -104,7 +128,7 @@ describe("branch comparison", () => {
         evidenceRefs: ["evidence:main"],
       }),
     ]);
-    expect(result.objectiveTimelines.b).toEqual([
+    expect(result.objectiveTimelines[b!.id]).toEqual([
       expect.objectContaining({
         plyOffset: 2,
         from: "active",
@@ -112,19 +136,20 @@ describe("branch comparison", () => {
         evidenceRefs: ["evidence:alternative"],
       }),
     ]);
-    expect(result.checkpointHits.a).toEqual([
+    expect(result.checkpointHits[a!.id]).toEqual([
       expect.objectContaining({ checkpointId: "main-result", plyOffset: 3 }),
     ]);
-    expect(result.checkpointHits.b).toEqual([
+    expect(result.checkpointHits[b!.id]).toEqual([
       expect.objectContaining({ checkpointId: "alternative-result", plyOffset: 2 }),
     ]);
   });
 
   it("derives per-path recorded eval evidence with cp and mate scores", () => {
     const run = branchedRun();
-    const result = compare(run, run.branches[0]!.id, run.branches[1]!.id);
+    const [a, b] = run.branches;
+    const result = compareBranches(run, [a!.id, b!.id]);
 
-    expect(result.evidence.a).toEqual([
+    expect(result.evidence[a!.id]).toEqual([
       {
         nodeId: run.nodes[4]!.id,
         plyOffset: 3,
@@ -134,7 +159,7 @@ describe("branch comparison", () => {
         score: { kind: "cp", value: 31 },
       },
     ]);
-    expect(result.evidence.b).toEqual([
+    expect(result.evidence[b!.id]).toEqual([
       {
         nodeId: run.nodes[6]!.id,
         plyOffset: 2,
@@ -148,7 +173,7 @@ describe("branch comparison", () => {
 
   it("rejects unknown branches instead of comparing unrelated data", () => {
     const run = branchedRun();
-    expect(() => compare(run, run.branches[0]!.id, "missing")).toThrow(
+    expect(() => compareBranches(run, [run.branches[0]!.id, "missing"])).toThrow(
       BranchQueryError,
     );
   });

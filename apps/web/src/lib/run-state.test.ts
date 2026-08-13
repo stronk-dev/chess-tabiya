@@ -122,6 +122,10 @@ class FakeApi implements RunApi {
     throw new Error("not used");
   }
 
+  async prediction(): Promise<never> {
+    throw new Error("not used");
+  }
+
   async rewind(
     _runId: string,
     _input: RewindRequest,
