@@ -142,6 +142,51 @@ Both are legitimate; using the backward detector forward is the post-mortem
 framing this product replaces, and using the forward detector backward is simply
 weaker.
 
+## 3b. Guided mode ("clippy") — naming patterns, never recommending moves
+
+Owner, 2026-08-13: *"can we have a 'clippy' mode, where you just play the game
+and it gives tips that are basically the early-game / midgame tactics, endgame
+patterns or whatever?"*
+
+Yes, and it is not an exception to §3a — it is the **shape library rendered
+live** (`04-content-architecture.md` §0), which is what B9 + B10 + B11 produce
+when assistance is turned up. §3a sets the *default*; this is a mode a learner
+chooses.
+
+**There is one line, and it is the whole design:**
+
+| Permitted — naming a pattern | Forbidden — evaluating this position |
+|---|---|
+| "This is a Carlsbad structure. The standard plans are the minority attack, the central break, and kingside play." | "You should play the minority attack here." |
+| "In an IQP position the attacker wants pieces on; the blockader wants trades." | "Trade queens, you're better." |
+| "That knight has no retreat square." *(rung 0 fact)* | "That knight is trapped, win it with a4." |
+| "This is a Lucena position; the technique is to build a bridge." | "Play Rf4." |
+
+A tip may say what *kind* of position this is and what that kind is generally
+about. It may not say what is good **here**. The first is shape content and is
+true independent of the game in front of the learner; the second is an
+evaluation, and delivering it during committed play is the ADR-0006 violation
+§3a exists to prevent.
+
+**Why this is not the Clippy people hated.** That assistant failed for four
+reasons, and each has an answer already ruled in this repo:
+
+| Clippy's failure | The answer here |
+|---|---|
+| It was frequently **wrong** | Tips come from rung 0 or from an authored shape entry. Rung 0 cannot be wrong about chess; an authored entry carries its provenance |
+| It was **generic** | Tips are keyed to a detected structure, so they fire because *this* position has an IQP, not because the learner is playing chess |
+| It **interrupted** | The owner already ruled the delivery pattern for exactly this: a **passive marker the player may open**, never a modal. Recognition annotates; it does not seize |
+| It could not be **turned off** | It is a mode, chosen, and silence is the default (§3a) |
+
+**The real risk is different and worth stating: tips that never stop remove the
+need to look.** Rung 0 exists to teach *seeing*; an assistant that names the
+outpost every time does the seeing for you. So guided mode should be
+band-shaped — the natural default for the 1000–1400 on-ramp
+(`00-thesis.md` §Target player, where naming a concept the learner has never met
+is a prerequisite to rehearsing it at all) and off by default above, with an
+explicit intent that it **fades**: you cannot rehearse a concept you have never
+heard of, and you cannot learn to find one that is always pointed out.
+
 ## 4. What varies by context
 
 The regions and the ladder are constant. Four things vary, and every surface in
