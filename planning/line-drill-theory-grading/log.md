@@ -40,3 +40,15 @@ Append-only.
   unchanged.
 - Focused suite: 56 green. Full `make verify`: 287 tests / 48 files, schema and
   packaging green. Repeated full browser-gate results follow after final runs.
+
+## 2026-08-13 — Full-browser seam
+
+- The first committed-tree browser gate found a delivery-composition defect,
+  not a flake: Pack A's deviation note had first revealed at `break-arrived`, so
+  it was absent when the later boundary occurrence rendered the matching
+  classified verdict. The checkpoint sheet now reunites an already-revealed
+  deviation whose move and class match that occurrence's verdict. It does not
+  change server attribution, repeat an item, or disclose anything early.
+- The Pack A browser regression exercises the fix by requiring the prior note,
+  the verbatim `concept_violation` class, and the degraded objective together at
+  `past-the-book`.

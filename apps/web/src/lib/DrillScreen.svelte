@@ -115,9 +115,26 @@
   let checkpointAuthoredItems = $derived(
     checkpoint === undefined
       ? []
-      : (authoredFeedback?.items ?? []).filter(
-          (item) => item.revealedBy.eventSeq === checkpoint.eventSeq,
-        ),
+      : (() => {
+          const all = authoredFeedback?.items ?? [];
+          const current = all.filter(
+            (item) => item.revealedBy.eventSeq === checkpoint.eventSeq,
+          );
+          const verdicts = current.filter(
+            (item) => item.kind === "theory_verdict" && item.verdict === "classified_deviation",
+          );
+          const supportingNotes = all.filter(
+            (item) =>
+              item.kind === "deviation" &&
+              verdicts.some(
+                (verdict) =>
+                  verdict.anchor.moveUci === item.anchor.moveUci &&
+                  verdict.deviationClass === item.deviationClass,
+              ) &&
+              !current.some((candidate) => candidate.id === item.id),
+          );
+          return [...current, ...supportingNotes];
+        })(),
   );
   let terminalAuthoredItems = $derived(
     terminalEvent?.type !== "outcome.reached"
