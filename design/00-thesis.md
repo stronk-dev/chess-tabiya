@@ -62,6 +62,45 @@ Two consequences that follow, and both cut against easier designs:
   the middlegame and why honest abstention is a feature there rather than a
   failure.
 
+## Why anyone would use it (owner, 2026-08-13)
+
+> *"We can make the game so much more attractive if people can play against
+> human-like bots but don't get punished for trying something — it will rewind and
+> explain. And people might be way more enticed to play out that tricky endgame
+> when they're behind if it's actively the target and expected that it's not a
+> win, and the win is making the best of it."*
+
+The features for this already exist; what was missing was the reason they matter.
+Two mechanisms, and the second is the one nothing else in chess offers.
+
+**1. Experimentation without cost.** Human-like resistance makes a game worth
+playing; preserved branches make trying something free. You can play the dubious
+sacrifice, see what a real opponent does to it, and still have the position you
+left. Every other context charges you a lost game for that curiosity.
+
+**2. A winnable target when you are losing.** This is the sharper one. Everywhere
+else, being worse means you are losing, so playing on feels like prolonging a
+defeat — which is exactly why people resign or bail out of the endgame that would
+have taught them most. If the product declares the honest target up front — *this
+is drawn with correct defence; hold it* — then being worse is the **premise**, not
+the failure, and holding becomes an achievable win. `01-training-model.md` already
+names it: **save** is rescuing a worse position, **hold** is defending a drawable
+one. Pack C is exactly this — a rook ending "drawn with accurate defence and lost
+constantly in practice".
+
+Two consequences, both binding:
+
+- **The target must be honest, so it can only be set where the result is
+  assessable.** Below eight pieces a tablebase settles it. Above, it is an
+  authored or engine judgement and must be labelled as one — Pack C's eleven
+  pieces mean we can *assert* the draw, not prove it. A product that declares
+  "this is held" and is wrong has done real damage, because the learner ground out
+  a defence of a position that was already lost.
+- **The consequence stays mandatory; only the retry is free.** *Rewind is an
+  experiment, not an undo* (`05` §1). If rewind were frictionless during play,
+  nothing would ever be committed and the whole rehearsal collapses. The rule is:
+  **play it out, then go back** — never *take it back*.
+
 ## The novelty claim (under test — exploration Q1a)
 
 None of the pieces are novel: line repetition, play-from-FEN, human-like bots, engine
