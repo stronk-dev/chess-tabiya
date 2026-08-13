@@ -43,3 +43,17 @@
 - Post-move verification: `ENGINES_REQUIRED=1 make verify` — 307 tests across 52 files;
   `make test-browser` — 11 passed, optional Maia skipped, zero retries. Branch switch
   measured 53.1 ms, below the 100 ms worry threshold.
+
+## 2026-08-13 — post-closeout breadth audit
+
+- Found that invitations and two-leg Position Arena imports shipped in storage and REST
+  but stopped at `unknown[]` in the web client and had no usable session-screen controls.
+  Treating that as complete would have made Live an API-only breadth claim.
+- Added typed invitation and Arena-leg contracts, invitation creation, raw
+  `text/x-chess-pgn` leg import, and visible invitation/leg status on the session screen.
+  The upload preserves the server's exact-root and one-mainline validation boundary.
+- Added a transport test proving PGN is not JSON-wrapped and extended the zero-retry
+  browser walkthrough to require the invitation surface.
+- Final gates on the amended tree: `ENGINES_REQUIRED=1 make verify` — 309 tests across
+  52 files; `make test-browser` — 11 passed, optional Maia skipped, zero retries. Branch
+  switch measured 48.7 ms, below the 100 ms worry threshold.
