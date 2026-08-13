@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.5",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.6",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.5 format for an engine-independent authored drill.",
+  "description": "Living v0.6 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -61,7 +61,23 @@
     },
     "retryVariants": {
       "type": "array",
-      "items": { "type": "object" }
+      "items": {
+        "type": "object",
+        "required": ["kind"],
+        "properties": {
+          "kind": {
+            "enum": [
+              "same_root_new_defense",
+              "alternate_plan_class",
+              "related_position_same_idea",
+              "opposite_side",
+              "different_material_details"
+            ]
+          },
+          "note": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "additionalProperties": false
+      }
     },
     "provenance": { "$ref": "#/$defs/provenance" }
   },

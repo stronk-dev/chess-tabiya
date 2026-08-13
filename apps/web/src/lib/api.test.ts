@@ -53,7 +53,7 @@ describe("DrillApi", () => {
           surfaces: {
             play: "available",
             review: "available",
-            learn: "unavailable-here",
+            learn: "available",
             live: "unavailable-here",
             create: "unavailable-here",
             justPlay: "unavailable-here",
@@ -123,10 +123,9 @@ describe("DrillApi", () => {
 
     expect(await api.capabilities()).toMatchObject({
       providers: { opponent: "mock", judge: "mock", llm: "none" },
-      surfaces: { play: "available", learn: "unavailable-here" },
+      surfaces: { play: "available", learn: "available" },
     });
     expect(PLANNED_SURFACES).toEqual([
-      "learn",
       "live",
       "create",
       "justPlay",

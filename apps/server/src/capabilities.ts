@@ -119,7 +119,7 @@ function surfaces(providerState: CapabilityProviders): SurfaceCapabilities {
   const value: Readonly<Record<string, unknown>> = Object.freeze({
     play: providerState.opponent === "none" ? "unavailable-here" : "available",
     review: "available",
-    learn: "unavailable-here",
+    learn: "available",
     live: "unavailable-here",
     create: "unavailable-here",
     justPlay: "unavailable-here",

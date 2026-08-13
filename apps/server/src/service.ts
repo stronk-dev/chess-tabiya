@@ -1,6 +1,7 @@
 import {
   applyObjectiveEvidenceProposal,
   appendOpponentPly,
+  appendEvents,
   assertActiveWriter,
   attachEvidence,
   commitMove,
@@ -28,7 +29,9 @@ import {
   type ForkOptions,
   type MutationResult,
   type OpponentSelection,
+  type PositionOpponentPolicy,
 } from "@chess-tabiya/runtime";
+import { randomUUID } from "node:crypto";
 
 import {
   EvidenceJobQueue,
@@ -52,6 +55,12 @@ import {
   type PackSummary,
 } from "./pack-registry.js";
 import type { RunStorage, RunSummary, StoredRun } from "./storage.js";
+import type { ProgressStorage, ScheduleRow, StoredAttempt } from "./storage.js";
+import {
+  projectAttempts,
+  rootKey as progressRootKey,
+  type AttemptOriginInput,
+} from "./progress.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
 import {
   mayManageGrants,
@@ -135,6 +144,11 @@ export interface CreateRunRequest {
   readonly policyConfig: CreateRunInput["policyConfig"];
   readonly seed: number;
   readonly createdAt?: string;
+  readonly intent?: {
+    readonly origin: "fresh" | "duplicate";
+    readonly scheduleId?: string;
+    readonly derivedFromRunId?: string;
+  };
 }
 
 export class RunService {
@@ -142,6 +156,7 @@ export class RunService {
   readonly #evidenceQueue: EvidenceJobQueue | undefined;
   readonly #packRegistry: PackRegistry | undefined;
   readonly #evidenceMovetimeMs: number;
+  readonly #progress: ProgressStorage | undefined;
 
   constructor(
     storage: RunStorage,
@@ -149,11 +164,13 @@ export class RunService {
       readonly evidenceQueue?: EvidenceJobQueue;
       readonly packRegistry?: PackRegistry;
       readonly evidenceMovetimeMs?: number;
+      readonly progressStorage?: ProgressStorage;
     } = {},
   ) {
     this.#storage = storage;
     this.#evidenceQueue = options.evidenceQueue;
     this.#packRegistry = options.packRegistry;
+    this.#progress = options.progressStorage;
     this.#evidenceMovetimeMs =
       options.evidenceMovetimeMs ?? DEFAULT_STRONG_ENGINE_PROFILE.movetimeMs;
     if (!Number.isSafeInteger(this.#evidenceMovetimeMs) || this.#evidenceMovetimeMs < 1) {
@@ -230,11 +247,27 @@ export class RunService {
       });
     }
     const title = pack?.document.title;
+    const root = run.nodes[0]!;
+    const key = progressRootKey(run.sessionKind, run.packId ?? null, root.transposeKey);
+    const pending = this.#progress?.pendingScheduleForRoot(lease.learnerId, key);
+    if (input.intent?.scheduleId !== undefined && pending?.id !== input.intent.scheduleId) {
+      throw new ServerError("RUN_NOT_FOUND", `Unknown pending schedule: ${input.intent.scheduleId}`);
+    }
     this.#storage.create(
       run,
       lease,
       typeof title === "string" ? title : "Position session",
     );
+    const origin: AttemptOriginInput = {
+      origin: input.intent?.scheduleId !== undefined ? "scheduled" : (input.intent?.origin ?? "fresh"),
+      ...(input.intent?.scheduleId === undefined ? {} : { scheduleId: input.intent.scheduleId }),
+      ...(pending === undefined ? {} : { rootDueAtStart: pending.dueAt }),
+      ...(input.intent?.derivedFromRunId === undefined ? {} : { derivedFromRunId: input.intent.derivedFromRunId }),
+    };
+    this.#project(run, lease.learnerId, { [run.branches[0]!.id]: origin });
+    if (input.intent?.scheduleId !== undefined) {
+      this.#progress?.markScheduleStarted(input.intent.scheduleId, lease.learnerId, run.id);
+    }
     return run;
   }
 
@@ -258,6 +291,7 @@ export class RunService {
         ? committed
         : orchestratePackMove(pack.document, stored.run, committed);
     this.#storage.save(result.run, lease);
+    this.#project(result.run, lease.learnerId);
     this.#enqueueMoveEvidence(result.run);
     return result;
   }
@@ -282,6 +316,7 @@ export class RunService {
         ? committed
         : orchestratePackMove(pack.document, stored.run, committed);
     this.#storage.save(result.run, lease);
+    this.#project(result.run, lease.learnerId);
     this.#enqueueMoveEvidence(result.run);
     return result;
   }
@@ -308,6 +343,7 @@ export class RunService {
           )
         : rewind(stored.run, target.nodeId, at, this.#evidenceQueue);
     this.#storage.save(result.run, lease);
+    this.#project(result.run, lease.learnerId);
     return result;
   }
 
@@ -325,6 +361,7 @@ export class RunService {
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     const result = fork(stored.run, nodeId, options);
     this.#storage.save(result.run, lease);
+    this.#project(result.run, lease.learnerId);
     return result;
   }
 
@@ -509,6 +546,7 @@ export class RunService {
       ]),
     });
     this.#storage.save(result.run, lease);
+    this.#project(result.run, lease.learnerId);
     queue.consume(runId, resultSeq);
     return result;
   }
@@ -544,14 +582,152 @@ export class RunService {
       );
     }
     const result = revealFeedback(stored.run, at);
-    if (result.emitted.length > 0) this.#storage.save(result.run, lease);
+    if (result.emitted.length > 0) {
+      this.#storage.save(result.run, lease);
+      this.#project(result.run, lease.learnerId);
+    }
     return result;
+  }
+
+  progress(principal: Principal): readonly StoredAttempt[] {
+    return this.#requiredProgress().progress(principal.learnerId);
+  }
+
+  due(principal: Principal, at = new Date().toISOString()): readonly ScheduleRow[] {
+    return this.#requiredProgress().dueSchedules(principal.learnerId, at);
+  }
+
+  dismissSchedule(scheduleId: string, principal: Principal): void {
+    this.#requiredProgress().dismissSchedule(scheduleId, principal.learnerId);
+  }
+
+  related(runId: string, nodeId: string, principal: Principal) {
+    const run = requireRead(this.#storage, runId, principal).stored.run;
+    const node = run.nodes.find((candidate) => candidate.id === nodeId);
+    if (node === undefined) throw new ServerError("INVALID_REQUEST", `Unknown node: ${nodeId}`);
+    return this.#requiredProgress().related(principal.learnerId, runId, node.transposeKey);
+  }
+
+  progressMetrics(principal: Principal) {
+    return this.#requiredProgress().metrics(principal.learnerId);
+  }
+
+  async duplicate(
+    sourceRunId: string,
+    principal: Principal,
+    input: {
+      readonly id: string;
+      readonly writerId: string;
+      readonly seed: number;
+      readonly scheduleId?: string;
+      readonly createdAt?: string;
+    },
+  ): Promise<DrillRun> {
+    const source = requireRead(this.#storage, sourceRunId, principal).stored.run;
+    const request: CreateRunRequest = {
+      id: input.id,
+      session: isPackSession(source)
+        ? { kind: "pack", packId: source.packId, packDigest: source.packDigest }
+        : {
+            kind: "position",
+            start: source.start,
+            feedbackPolicy: "attempt_end",
+            opponentPolicy: (source.opponentPolicy.mode === "theory_strict"
+              ? (() => { throw new ServerError("INVALID_REQUEST", "Position run cannot use theory_strict"); })()
+              : source.opponentPolicy) as PositionOpponentPolicy,
+          },
+      policyConfig: source.policyConfig,
+      seed: input.seed,
+      ...(input.createdAt === undefined ? {} : { createdAt: input.createdAt }),
+      intent: {
+        origin: "duplicate",
+        ...(input.scheduleId === undefined ? {} : { scheduleId: input.scheduleId }),
+        derivedFromRunId: sourceRunId,
+      },
+    };
+    return this.create(request, { writerId: input.writerId, learnerId: principal.learnerId });
+  }
+
+  schedule(
+    runId: string,
+    principal: Principal,
+    writerId: string,
+    input: {
+      readonly nodeId: string;
+      readonly kind: "blocked" | "varied";
+      readonly variant?: string;
+      readonly dueAt?: string;
+      readonly at?: string;
+    },
+  ): { readonly schedule: ScheduleRow; readonly result: MutationResult } {
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    const node = stored.run.nodes.find((candidate) => candidate.id === input.nodeId);
+    if (node === undefined) {
+      throw new ServerError("INVALID_REQUEST", `Unknown node: ${input.nodeId}`);
+    }
+    const at = input.at ?? new Date().toISOString();
+    const scheduleId = randomUUID();
+    const schedule = this.#requiredProgress().createSchedule({
+      id: scheduleId,
+      learnerId: principal.learnerId,
+      rootKey: progressRootKey(stored.run.sessionKind, stored.run.packId ?? null, node.transposeKey),
+      sessionKind: stored.run.sessionKind,
+      packId: stored.run.packId ?? null,
+      rootTransposeKey: node.transposeKey,
+      kind: input.kind,
+      variant: input.variant ?? null,
+      origin: "learner",
+      dueAt: input.dueAt ?? at,
+      createdAt: at,
+      sourceRunId: runId,
+      sourceNodeId: node.id,
+    });
+    const nextRun = appendEvents(stored.run, [{
+      type: "transfer.scheduled",
+      at,
+      data: { nodeId: node.id, scheduleId },
+    }]);
+    const result: MutationResult = Object.freeze({
+      run: nextRun,
+      emitted: Object.freeze([nextRun.events.at(-1)!]),
+    });
+    try {
+      this.#storage.save(result.run, lease);
+    } catch (error) {
+      this.#requiredProgress().dismissSchedule(scheduleId, principal.learnerId);
+      throw error;
+    }
+    this.#project(result.run, lease.learnerId);
+    return Object.freeze({ schedule, result });
   }
 
   #required(runId: string): StoredRun {
     const stored = this.#storage.read(runId);
     if (!stored) throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${runId}`);
     return stored;
+  }
+
+  #requiredProgress(): ProgressStorage {
+    if (this.#progress === undefined) {
+      throw new ServerError("STORAGE_FAILURE", "Progress storage is not configured");
+    }
+    return this.#progress;
+  }
+
+  #project(
+    run: DrillRun,
+    learnerId: string,
+    origins?: Readonly<Record<string, AttemptOriginInput>>,
+  ): void {
+    if (this.#progress === undefined) return;
+    const pack = this.#registeredPack(run)?.document;
+    const projection = projectAttempts({
+      run,
+      learnerId,
+      ...(pack === undefined ? {} : { pack }),
+      ...(origins === undefined ? {} : { origins }),
+    });
+    this.#progress.upsertAttempts(projection.attempts, projection.conceptTags);
   }
 
   #principal(value: Principal | string): Principal {

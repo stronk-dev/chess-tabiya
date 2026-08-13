@@ -99,7 +99,7 @@ describe("engine capabilities", () => {
         surfaces: {
           play: "available",
           review: "available",
-          learn: "unavailable-here",
+          learn: "available",
           live: "unavailable-here",
           create: "unavailable-here",
           justPlay: "unavailable-here",

@@ -266,7 +266,7 @@ describe("application shell", () => {
 
     const routes = [
       ["/play", "Choose a position worth returning to."],
-      ["/learn", "program item 4"],
+      ["/learn", "Return to the positions"],
       ["/live", "program item 8"],
       ["/create", "program item 6"],
       ["/library", "Packs and run artifacts"],

@@ -14,6 +14,8 @@
     type RunSummary,
     type SurfaceId,
     type Learner,
+    type ProgressAttempt,
+    type ProgressSchedule,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
   import { ShellKeyboardDispatcher } from "./lib/keyboard.js";
@@ -49,6 +51,8 @@
   let session: DrillSessionState = $state(controller.state);
   let packs: readonly PackSummary[] = $state([]);
   let runs: readonly RunSummary[] = $state([]);
+  let attempts: readonly ProgressAttempt[] = $state([]);
+  let dueSchedules: readonly ProgressSchedule[] = $state([]);
   let capabilities: Capabilities | undefined = $state();
   let routeLoading = $state(true);
   let routeError: string | undefined = $state();
@@ -143,6 +147,11 @@
         [packs, runs] = await Promise.all([api.packs(), api.runs(50, 0)]);
       } else if (next.name === "settings") {
         capabilities = await api.capabilities();
+      } else if (next.name === "learn") {
+        [attempts, dueSchedules] = await Promise.all([
+          api.progress?.() ?? Promise.resolve([]),
+          api.dueProgress?.() ?? Promise.resolve([]),
+        ]);
       } else if (
         next.name === "run" &&
         session.runState?.run.id !== next.runId
@@ -338,16 +347,51 @@
         {:else}<p>No runs to review yet.</p>{/each}
       </div>
     </main>
-  {:else if route.name === "learn" || route.name === "live" || route.name === "create"}
+  {:else if route.name === "learn"}
+    <main class="shell-view" aria-labelledby="learn-title">
+      <p class="eyebrow">Learn / return loop</p>
+      <h1 id="learn-title">Return to the positions that need another attempt.</h1>
+      <section aria-labelledby="due-title">
+        <h2 id="due-title">Due now</h2>
+        <div class="item-list">
+          {#each dueSchedules as schedule}
+            <article>
+              <div>
+                <h3>{schedule.packId ?? "Position rehearsal"}</h3>
+                <p>{schedule.kind === "blocked" ? "Repeat the blocked attempt" : "Try a varied repetition"} · {readableDate(schedule.dueAt)}</p>
+              </div>
+              <div class="row-actions">
+                {#if schedule.sourceRunId}<button type="button" onclick={() => navigate(routePath({ name: "run", runId: schedule.sourceRunId! }))}>Open source</button>{/if}
+                <button type="button" onclick={async () => { await api.dismissSchedule?.(schedule.id); dueSchedules = dueSchedules.filter((item) => item.id !== schedule.id); }}>Dismiss</button>
+              </div>
+            </article>
+          {:else}<p>Nothing is due yet. Played attempts create this queue.</p>{/each}
+        </div>
+      </section>
+      <section aria-labelledby="recorded-title">
+        <h2 id="recorded-title">What is recorded</h2>
+        <div class="item-list">
+          {#each attempts as attempt}
+            <article>
+              <div>
+                <h3>{attempt.packId ?? "Position rehearsal"} · attempt {attempt.attemptNo || "—"}</h3>
+                <p>{attempt.graded ? attempt.verdict : "not graded"} · {attempt.userPlyCount} learner plies · {readableDate(attempt.endedAt)}</p>
+              </div>
+              <button type="button" onclick={() => navigate(routePath({ name: "run", runId: attempt.runId }))}>Open run</button>
+            </article>
+          {:else}<p>No attempts recorded yet.</p>{/each}
+        </div>
+      </section>
+      <p class="honest">This is an attempt history and return queue, not a mastery score.</p>
+    </main>
+  {:else if route.name === "live" || route.name === "create"}
     <main class="shell-view empty-state" aria-labelledby="empty-title">
       <p class="eyebrow">{route.name}</p>
       <h1 id="empty-title">
-        {route.name === "learn" ? "Learn across phases." : route.name === "live" ? "Rehearse with other people." : "Turn games into training."}
+        {route.name === "live" ? "Rehearse with other people." : "Turn games into training."}
       </h1>
       <p>
-        {route.name === "learn"
-          ? "Training-mode breadth arrives in program item 4; progress and return scheduling arrive in item 7."
-          : route.name === "live"
+        {route.name === "live"
             ? "Streamer, academy, spectator, and arena sessions arrive in program item 8."
             : "Pack authoring, imports, review, and session distillation arrive in program item 6."}
       </p>
@@ -432,6 +476,7 @@
   button:hover, button:focus-visible, button.primary { border-color: var(--accent); background: var(--accent); color: white; }
   .item-list { display: grid; gap: 0.7rem; max-height: min(55dvh, 36rem); margin-top: 2rem; overflow: auto; }
   .item-list article { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+  .row-actions { display: flex; gap: 0.5rem; }
   .empty-state p { max-width: 42rem; color: var(--muted); font-size: 1.05rem; }
   section + section { margin-top: 2rem; }
   li { margin: 0.45rem 0; }

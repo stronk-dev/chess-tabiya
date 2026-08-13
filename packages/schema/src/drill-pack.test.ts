@@ -15,6 +15,7 @@ import {
   lintDrillPack,
   OBJECTIVE_TYPES,
   PACK_PHASES,
+  RETRY_VARIANT_KINDS,
   parseDrillAddress,
   resolveDrillAddress,
   type DrillPackDefinition,
@@ -50,13 +51,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.5", () => {
+describe("drill_pack.schema.json v0.6", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.5",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.6",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.5");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.6");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
@@ -64,6 +65,9 @@ describe("drill_pack.schema.json v0.5", () => {
     expect(typed.$defs.objectiveType.enum).toEqual([...OBJECTIVE_TYPES]);
     expect(typed.properties.feedbackPolicy.enum).toEqual([...FEEDBACK_POLICIES]);
     expect(typed.properties.phase.enum).toEqual([...PACK_PHASES]);
+    expect(typed.properties.retryVariants.items.properties.kind.enum).toEqual([
+      ...RETRY_VARIANT_KINDS,
+    ]);
     expect(CHECKPOINT_ACTIONS).toEqual(["compare_branches"]);
   });
 

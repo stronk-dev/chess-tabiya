@@ -1,6 +1,6 @@
 # RFC: Return and progression — attempt records, the due model, and `/learn`
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/01-training-model.md` §Vocabulary (`:36-46`), §Repetition
@@ -20,16 +20,16 @@
   (v0.5 → v0.6, `retryVariants` only); amends nothing in the run event schema
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/return-and-progression/`
-- **Migration:** 8 (`STORAGE_VERSION` 7→8), claimed in `rfc/README.md` §Migration register.
-  Rebased from 6 as `n-way-comparison.md` and `live-session-platform.md` claimed 6 and 7;
-  neither is a dependency, since this RFC's DDL is create-only and touches no run shape.
+- **Migration:** 6 (`STORAGE_VERSION` 5→6), claimed in `rfc/README.md` §Migration register.
+  Rebased onto the accepted implementation order so no lower-numbered migration
+  can be skipped; its DDL remains create-only and touches no run shape.
 
 ## Summary
 
 This RFC specifies program item #7 (gate B7): the product's answer to "why would you open
 this on Tuesday?" It pins the schedulable unit to **the attempt, which in the runtime is a
 branch of a run**, records one durable row per attempt in a sibling projection store behind
-migration 8, derives blocked and varied repetition from those rows with a stated trigger,
+migration 6, derives blocked and varied repetition from those rows with a stated trigger,
 gives `transfer.scheduled` its first producer, adds `POST /runs/:id/duplicate`, ships
 `/learn` as a real surface over due work and recorded attempts, and adds an opt-in
 personal-history recommender that is additive by construction. It also makes the two
@@ -369,10 +369,9 @@ says the metric is measurable "when B7's attempt record **and a concept registry
 This RFC lands the first and not the second, so the entry is narrowed rather than closed —
 A20 records that wording, not a claim that the gate is met.
 
-### 4. Storage: migration 8
+### 4. Storage: migration 6
 
-`STORAGE_VERSION` moves 7 → 8 (`apps/server/src/storage.ts:147`, currently 5; migrations 6
-and 7 are claimed by `n-way-comparison.md` and `live-session-platform.md`) with one entry
+`STORAGE_VERSION` moves 5 → 6 (`apps/server/src/storage.ts:147`) with one entry
 appended to the ladder at `storage.ts:915-940`, named `attempt records, concept tags, schedules, and
 history stats`. It creates tables and indexes **only**. It reads no snapshot and calls no
 runtime function — the register already records that migration 1's body had to be rewritten
@@ -998,7 +997,7 @@ Server and unit (`make test`):
   `attempt_no = 0`; a forked-but-unplayed branch yields a second such row; the first countable
   attempt at that root is still `attempt_no = 1`; neither uncountable row affects any schedule
   or either metric query. (B2, B20)
-- **A3.** Migration 8 applies to a database at the preceding version, is not re-applied on reopen (the
+- **A3.** Migration 6 applies to a database at the preceding version, is not re-applied on reopen (the
   pattern proven at `apps/server/src/storage.test.ts:38-94`), and touches no snapshot.
   Backfill projects existing runs, skips non-current `schema_version` rows without throwing,
   and writes `progress_meta['attempts_backfilled_at']`. (B11)
@@ -1076,7 +1075,7 @@ Documentation and register, in the same change:
   the attempt unit, the trigger, the store, the endpoints, the pack-scoped concept limitation,
   and the owner-attribution limitation (B10). `docs/drill-pack-format.md` gains a `## v0.6
   retry variants` section in the style of `## v0.4 Line Drill contract` (`:140-160`).
-- **A19.** `rfc/README.md` migration register row for migration 8 and the Active-table row;
+- **A19.** `rfc/README.md` migration register row for migration 6 and the Active-table row;
   on completion the RFC moves to `rfc/archive/` per RFC-0000.
 - **A20.** `planning/exploration/gates.md` B7 status updated to what is then true, and the
   measurability audit entries at `:148-162` replaced with the shipped queries and their stated
@@ -1094,6 +1093,9 @@ None.
 
 - 2026-08-13: accepted after independent adversarial review and moved to
   implementing after pack schema v0.5 landed.
+- 2026-08-13: migration claim rebased 8 → 6 during implementation. Landing
+  migration 6 in the accepted landing order so SQLite cannot skip later migrations
+  later bodies; lifecycle order and migration order now agree.
 
 - 2026-08-13: created.
 - 2026-08-13: adversarial review by a second author; every normative sentence re-verified
@@ -1148,5 +1150,5 @@ None.
   route to zero rules recorded. Root-key injectivity proved from `$defs/id`'s
   `^[a-z0-9][a-z0-9-]*$` and tested against three collision attacks, including a pack version
   bump under `pack-studio.md` §11a. The `defect-sweep.md` → `PackSummary.phase` dependency and
-  the migration-8 / pack-schema-0.6 register claims were re-checked against `rfc/README.md` and
+  the migration-6 / pack-schema-0.6 register claims were re-checked against `rfc/README.md` and
   hold unchanged.

@@ -304,7 +304,11 @@ export async function createApplication(
   const evidenceQueue = new EvidenceJobQueue(evidenceExecutor, {
     maxConcurrency: 2,
   });
-  const service = new RunService(storage, { evidenceQueue, packRegistry: registry });
+  const service = new RunService(storage, {
+    evidenceQueue,
+    packRegistry: registry,
+    progressStorage: storage,
+  });
   const identity = new IdentityService(storage, {
     cookieSecure: options.cookieSecure ?? true,
   });

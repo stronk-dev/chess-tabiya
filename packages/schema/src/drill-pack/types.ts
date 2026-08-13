@@ -23,6 +23,15 @@ export type FeedbackPolicy = (typeof FEEDBACK_POLICIES)[number];
 export const PACK_PHASES = ["opening", "middlegame", "endgame", "cross_phase"] as const;
 export type PackPhase = (typeof PACK_PHASES)[number];
 
+export const RETRY_VARIANT_KINDS = [
+  "same_root_new_defense",
+  "alternate_plan_class",
+  "related_position_same_idea",
+  "opposite_side",
+  "different_material_details",
+] as const;
+export type RetryVariantKind = (typeof RETRY_VARIANT_KINDS)[number];
+
 export interface SpineNode {
   readonly id: string;
   readonly moveUci: string;
@@ -102,6 +111,11 @@ export interface DrillPackDefinition {
     readonly [key: string]: unknown;
   };
   readonly checkpoints: readonly CheckpointDefinition[];
+  readonly concepts?: readonly string[];
+  readonly retryVariants?: readonly {
+    readonly kind: RetryVariantKind;
+    readonly note?: string;
+  }[];
   readonly planClasses?: readonly PlanClass[];
   readonly spine?: readonly SpineNode[];
   readonly authoredBoundary?: {

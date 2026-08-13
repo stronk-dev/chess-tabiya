@@ -243,7 +243,7 @@ function runRole(value: unknown): RunRole {
 }
 
 function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
-  value = closedRecord(value, "/", ["id", "session", "policyConfig", "seed", "createdAt"]);
+  value = closedRecord(value, "/", ["id", "session", "policyConfig", "seed", "createdAt", "intent"]);
   if (typeof value.seed !== "number" || !Number.isSafeInteger(value.seed)) {
     throw invalid("seed must be a safe integer");
   }
@@ -290,6 +290,19 @@ function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
           };
         })()
       : (() => { throw invalid("/session/kind must be pack or position"); })();
+  const intent = value.intent === undefined
+    ? undefined
+    : (() => {
+        const item = closedRecord(value.intent, "/intent", ["origin", "scheduleId", "derivedFromRunId"]);
+        if (item.origin !== "fresh" && item.origin !== "duplicate") {
+          throw invalid("/intent/origin must be fresh or duplicate");
+        }
+        return {
+          origin: item.origin,
+          ...(item.scheduleId === undefined ? {} : { scheduleId: requiredString(item.scheduleId, "/intent/scheduleId") }),
+          ...(item.derivedFromRunId === undefined ? {} : { derivedFromRunId: requiredString(item.derivedFromRunId, "/intent/derivedFromRunId") }),
+        } as const;
+      })();
   return {
     id: requiredString(value.id, "id"),
     session,
@@ -298,6 +311,7 @@ function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
     ...(value.createdAt === undefined
       ? {}
       : { createdAt: requiredString(value.createdAt, "createdAt") }),
+    ...(intent === undefined ? {} : { intent }),
   };
 }
 
@@ -391,7 +405,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -556,6 +570,32 @@ export function createRestHandler(
         const { limit, offset } = parsePagination(url);
         return json(200, { runs: service.runs(principal, limit, offset) });
       }
+      if (request.method === "GET" && url.pathname === "/progress") {
+        return json(200, { attempts: service.progress(authenticate()) });
+      }
+      if (request.method === "GET" && url.pathname === "/progress/due") {
+        return json(200, {
+          schedules: service.due(authenticate(), url.searchParams.get("at") ?? undefined),
+        });
+      }
+      if (request.method === "GET" && url.pathname === "/progress/related") {
+        return json(200, { related: service.related(
+          requiredString(url.searchParams.get("runId"), "runId"),
+          requiredString(url.searchParams.get("nodeId"), "nodeId"),
+          authenticate(),
+        ) });
+      }
+      if (request.method === "GET" && url.pathname === "/progress/metrics") {
+        return json(200, service.progressMetrics(authenticate()));
+      }
+      const scheduleRoute = /^\/progress\/schedules\/([^/]+)$/.exec(url.pathname);
+      if (request.method === "POST" && scheduleRoute !== null) {
+        requireJson(request);
+        const value = closedRecord(await parseBody(request), "/", ["op"]);
+        if (value.op !== "dismiss") throw invalid("op must be dismiss");
+        service.dismissSchedule(decodeURIComponent(scheduleRoute[1]!), authenticate());
+        return json(200, { dismissed: true });
+      }
       if (request.method === "POST" && url.pathname === "/select-move") {
         authenticate();
         if (selector === undefined) {
@@ -637,6 +677,32 @@ export function createRestHandler(
           writerId(request),
           optionalString(value.at, "at"),
         ));
+      }
+      if (route.action === "duplicate") {
+        requireJson(request);
+        const body = closedRecord(value, "/", ["id", "seed", "scheduleId", "createdAt"]);
+        const run = await service.duplicate(route.runId, principal, {
+          id: requiredString(body.id, "id"),
+          writerId: writerId(request),
+          seed: requiredSafeInteger(body.seed, "seed"),
+          ...(body.scheduleId === undefined ? {} : { scheduleId: requiredString(body.scheduleId, "scheduleId") }),
+          ...(body.createdAt === undefined ? {} : { createdAt: requiredString(body.createdAt, "createdAt") }),
+        });
+        return json(201, { run });
+      }
+      if (route.action === "schedule") {
+        requireJson(request);
+        const body = closedRecord(value, "/", ["nodeId", "kind", "variant", "dueAt", "at"]);
+        if (body.kind !== "blocked" && body.kind !== "varied") {
+          throw invalid("kind must be blocked or varied");
+        }
+        return json(201, service.schedule(route.runId, principal, writerId(request), {
+          nodeId: requiredString(body.nodeId, "nodeId"),
+          kind: body.kind,
+          ...(body.variant === undefined ? {} : { variant: requiredString(body.variant, "variant") }),
+          ...(body.dueAt === undefined ? {} : { dueAt: requiredString(body.dueAt, "dueAt") }),
+          ...(body.at === undefined ? {} : { at: requiredString(body.at, "at") }),
+        }));
       }
       if (route.action === "grants") {
         requireJson(request);

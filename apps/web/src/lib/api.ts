@@ -172,7 +172,6 @@ export type SurfaceAvailability = "available" | "unavailable-here";
 
 /** Roadmap state is build-owned and deliberately never sent by the server. */
 export const PLANNED_SURFACES: readonly SurfaceId[] = Object.freeze([
-  "learn",
   "live",
   "create",
   "justPlay",
@@ -221,6 +220,36 @@ export interface CreateRunRequest {
   readonly policyConfig: PolicyConfig;
   readonly seed: number;
   readonly createdAt?: string;
+  readonly intent?: {
+    readonly origin: "fresh" | "duplicate";
+    readonly scheduleId?: string;
+    readonly derivedFromRunId?: string;
+  };
+}
+
+export interface ProgressAttempt {
+  readonly runId: string;
+  readonly branchId: string;
+  readonly packId: string | null;
+  readonly branchLabel: string;
+  readonly attemptNo: number;
+  readonly countable: boolean;
+  readonly graded: boolean;
+  readonly verdict: "stable" | "unstable" | "open";
+  readonly result: "win" | "loss" | "draw" | null;
+  readonly userPlyCount: number;
+  readonly origin: "fresh" | "duplicate" | "scheduled" | "in_run_retry";
+  readonly endedAt: string;
+}
+
+export interface ProgressSchedule {
+  readonly id: string;
+  readonly sessionKind: "pack" | "position";
+  readonly packId: string | null;
+  readonly kind: "blocked" | "varied";
+  readonly variant: string | null;
+  readonly dueAt: string;
+  readonly sourceRunId: string | null;
 }
 
 export interface SelectMoveRequest {
@@ -354,6 +383,10 @@ export interface DrillClientApi extends RunApi {
   ): Promise<BranchComparison>;
   authoredFeedback(runId: string): Promise<AuthoredFeedbackPage>;
   pgn(runId: string, branchIds?: readonly string[]): Promise<PgnDownload>;
+  progress?(): Promise<readonly ProgressAttempt[]>;
+  dueProgress?(): Promise<readonly ProgressSchedule[]>;
+  dismissSchedule?(scheduleId: string): Promise<void>;
+  duplicateRun?(runId: string, input: { readonly id: string; readonly seed: number; readonly scheduleId?: string }, writerId: string): Promise<DrillRun>;
 }
 
 type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
@@ -450,6 +483,36 @@ export class DrillApi implements DrillClientApi {
       `/runs?${query}`,
     );
     return body.runs;
+  }
+
+  async progress(): Promise<readonly ProgressAttempt[]> {
+    const body = await this.#json<{ readonly attempts: readonly ProgressAttempt[] }>("/progress");
+    return body.attempts;
+  }
+
+  async dueProgress(): Promise<readonly ProgressSchedule[]> {
+    const body = await this.#json<{ readonly schedules: readonly ProgressSchedule[] }>("/progress/due");
+    return body.schedules;
+  }
+
+  async dismissSchedule(scheduleId: string): Promise<void> {
+    await this.#json(`/progress/schedules/${encoded(scheduleId)}`, {
+      method: "POST",
+      body: { op: "dismiss" },
+    });
+  }
+
+  async duplicateRun(
+    runId: string,
+    input: { readonly id: string; readonly seed: number; readonly scheduleId?: string },
+    writerId: string,
+  ): Promise<DrillRun> {
+    const body = await this.#json<{ readonly run: DrillRun }>(`/runs/${encoded(runId)}/duplicate`, {
+      method: "POST",
+      writerId,
+      body: input,
+    });
+    return body.run;
   }
 
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {

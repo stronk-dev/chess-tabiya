@@ -25,7 +25,8 @@ export type PackLintCode =
   | "DUPLICATE_DEVIATION"
   | "DEVIATION_SHADOWS_SPINE_MOVE"
   | "SPINE_TRANSPOSITION_COLLISION"
-  | "BOUNDARY_NODE_BEYOND_HORIZON";
+  | "BOUNDARY_NODE_BEYOND_HORIZON"
+  | "CONCEPT_KEY_NOT_SLUG";
 
 export interface PackLintIssue {
   readonly severity: "error" | "warning";
@@ -333,5 +334,15 @@ export function lintDrillPack(
   }
   lintPredictionDensity(pack.checkpoints, options, issues);
   lintUnreachableAuthoredProse(pack, issues);
+  for (const [index, concept] of (pack.concepts ?? []).entries()) {
+    if (!/^[a-z0-9][a-z0-9-]*$/u.test(concept)) {
+      issues.push({
+        severity: "warning",
+        code: "CONCEPT_KEY_NOT_SLUG",
+        path: `/concepts/${index}`,
+        message: `Concept ${JSON.stringify(concept)} is pack-local and not slug-shaped`,
+      });
+    }
+  }
   return Object.freeze(issues);
 }

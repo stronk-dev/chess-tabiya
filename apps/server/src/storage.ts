@@ -11,6 +11,7 @@ import {
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { ServerError } from "./errors.js";
+import { projectAttempts, type AttemptRow, type ConceptTagRow } from "./progress.js";
 
 export type RunRole = "host" | "participant" | "spectator";
 
@@ -99,6 +100,49 @@ export interface RunStorage {
   close(): void;
 }
 
+export interface StoredAttempt extends AttemptRow {
+  readonly attemptNo: number;
+}
+
+export interface ScheduleRow {
+  readonly id: string;
+  readonly learnerId: string;
+  readonly rootKey: string;
+  readonly sessionKind: "pack" | "position";
+  readonly packId: string | null;
+  readonly rootTransposeKey: string;
+  readonly kind: "blocked" | "varied";
+  readonly variant: string | null;
+  readonly origin: "auto" | "learner";
+  readonly state: "pending" | "started" | "dismissed";
+  readonly dueAt: string;
+  readonly createdAt: string;
+  readonly sourceRunId: string | null;
+  readonly sourceNodeId: string | null;
+  readonly startedRunId: string | null;
+}
+
+export interface ProgressStorage {
+  upsertAttempts(attempts: readonly AttemptRow[], concepts: readonly ConceptTagRow[]): void;
+  progress(learnerId: string): readonly StoredAttempt[];
+  dueSchedules(learnerId: string, at?: string): readonly ScheduleRow[];
+  pendingScheduleForRoot(learnerId: string, rootKey: string): ScheduleRow | undefined;
+  createSchedule(input: Omit<ScheduleRow, "state" | "startedRunId">): ScheduleRow;
+  markScheduleStarted(scheduleId: string, learnerId: string, runId: string): void;
+  dismissSchedule(scheduleId: string, learnerId: string): void;
+  ownerLearnerId(runId: string): string | undefined;
+  related(learnerId: string, runId: string, transposeKey: string): readonly {
+    readonly relation: "same_position" | "same_pack" | "same_concept_in_pack";
+    readonly runId: string;
+    readonly branchId: string;
+    readonly attemptCount: number;
+  }[];
+  metrics(learnerId: string): {
+    readonly voluntaryConceptReturns: readonly { readonly conceptKey: string; readonly count: number }[];
+    readonly secondAttempts: readonly { readonly rootKey: string; readonly firstVerdict: string; readonly secondVerdict: string; readonly secondResult: string | null }[];
+  };
+}
+
 interface RunRow {
   readonly id: string;
   readonly snapshot_json: string;
@@ -144,7 +188,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 5;
+export const STORAGE_VERSION = 6;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -292,7 +336,7 @@ function storageFailure(message: string, cause: unknown): ServerError {
   return new ServerError("STORAGE_FAILURE", message, { cause });
 }
 
-export class SQLiteRunStorage implements RunStorage {
+export class SQLiteRunStorage implements RunStorage, ProgressStorage {
   readonly #database: DatabaseSync;
   readonly #snapshots = new Map<string, StoredRun>();
   readonly #now: () => string;
@@ -776,6 +820,259 @@ export class SQLiteRunStorage implements RunStorage {
     }
   }
 
+  ownerLearnerId(runId: string): string | undefined {
+    const row = this.#database
+      .prepare("SELECT owner_learner_id FROM drill_runs WHERE id = ?")
+      .get(runId) as { readonly owner_learner_id?: unknown } | undefined;
+    return typeof row?.owner_learner_id === "string" ? row.owner_learner_id : undefined;
+  }
+
+  upsertAttempts(attempts: readonly AttemptRow[], concepts: readonly ConceptTagRow[]): void {
+    if (attempts.length === 0) return;
+    const affected = new Set<string>();
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const upsert = this.#database.prepare(`
+        INSERT INTO attempts (
+          run_id, branch_id, learner_id, session_kind, pack_id, pack_digest,
+          root_key, root_node_id, root_transpose_key, branch_label, branch_intent,
+          branch_seed, attempt_no, countable, graded, objective_state, verdict,
+          result, user_ply_count, checkpoint_ids, origin, schedule_id,
+          root_due_at_start, derived_from_run_id, started_at, ended_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(run_id, branch_id) DO UPDATE SET
+          branch_label=excluded.branch_label, branch_intent=excluded.branch_intent,
+          countable=excluded.countable, graded=excluded.graded,
+          objective_state=excluded.objective_state, verdict=excluded.verdict,
+          result=excluded.result, user_ply_count=excluded.user_ply_count,
+          checkpoint_ids=excluded.checkpoint_ids, ended_at=excluded.ended_at
+      `);
+      for (const attempt of attempts) {
+        affected.add(`${attempt.learnerId}\0${attempt.rootKey}`);
+        upsert.run(
+          attempt.runId, attempt.branchId, attempt.learnerId, attempt.sessionKind,
+          attempt.packId, attempt.packDigest, attempt.rootKey, attempt.rootNodeId,
+          attempt.rootTransposeKey, attempt.branchLabel, attempt.branchIntent,
+          attempt.branchSeed, attempt.countable ? 1 : 0, attempt.graded ? 1 : 0,
+          attempt.objectiveState, attempt.verdict, attempt.result,
+          attempt.userPlyCount, JSON.stringify(attempt.checkpointIds), attempt.origin,
+          attempt.scheduleId, attempt.rootDueAtStart, attempt.derivedFromRunId,
+          attempt.startedAt, attempt.endedAt,
+        );
+      }
+      const runIds = new Set(attempts.map((attempt) => attempt.runId));
+      const deleteConcepts = this.#database.prepare("DELETE FROM attempt_concepts WHERE run_id = ?");
+      for (const runId of runIds) deleteConcepts.run(runId);
+      const insertConcept = this.#database.prepare(
+        "INSERT INTO attempt_concepts (run_id, branch_id, pack_id, concept_key, label) VALUES (?, ?, ?, ?, ?)",
+      );
+      for (const concept of concepts) {
+        insertConcept.run(concept.runId, concept.branchId, concept.packId, concept.conceptKey, concept.label);
+      }
+      for (const key of affected) {
+        const split = key.indexOf("\0");
+        const learnerId = key.slice(0, split);
+        const rootKey = key.slice(split + 1);
+        const rows = this.#database.prepare(
+          `SELECT run_id, branch_id FROM attempts
+           WHERE learner_id = ? AND root_key = ? AND countable = 1
+           ORDER BY started_at, run_id, branch_id`,
+        ).all(learnerId, rootKey) as unknown as readonly { run_id: string; branch_id: string }[];
+        const number = this.#database.prepare(
+          "UPDATE attempts SET attempt_no = ? WHERE run_id = ? AND branch_id = ?",
+        );
+        rows.forEach((row, index) => number.run(index + 1, row.run_id, row.branch_id));
+        this.#refreshAutoSchedule(learnerId, rootKey);
+      }
+      this.#database.exec("COMMIT");
+    } catch (error) {
+      this.#rollback();
+      throw storageFailure("Could not project progress", error);
+    }
+  }
+
+  progress(learnerId: string): readonly StoredAttempt[] {
+    const rows = this.#database.prepare(
+      "SELECT * FROM attempts WHERE learner_id = ? ORDER BY ended_at DESC, run_id, branch_id",
+    ).all(learnerId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map((row) => Object.freeze({
+      runId: String(row.run_id), branchId: String(row.branch_id), learnerId: String(row.learner_id),
+      sessionKind: row.session_kind as "pack" | "position",
+      packId: row.pack_id === null ? null : String(row.pack_id),
+      packDigest: row.pack_digest === null ? null : String(row.pack_digest),
+      rootKey: String(row.root_key), rootNodeId: String(row.root_node_id),
+      rootTransposeKey: String(row.root_transpose_key), branchLabel: String(row.branch_label),
+      branchIntent: row.branch_intent === null ? null : String(row.branch_intent),
+      branchSeed: Number(row.branch_seed), attemptNo: Number(row.attempt_no),
+      countable: row.countable === 1, graded: row.graded === 1,
+      objectiveState: row.objective_state as ObjectiveState,
+      verdict: row.verdict as StoredAttempt["verdict"],
+      result: row.result === null ? null : row.result as StoredAttempt["result"],
+      userPlyCount: Number(row.user_ply_count),
+      checkpointIds: Object.freeze(JSON.parse(String(row.checkpoint_ids)) as string[]),
+      origin: row.origin as StoredAttempt["origin"],
+      scheduleId: row.schedule_id === null ? null : String(row.schedule_id),
+      rootDueAtStart: row.root_due_at_start === null ? null : String(row.root_due_at_start),
+      derivedFromRunId: row.derived_from_run_id === null ? null : String(row.derived_from_run_id),
+      startedAt: String(row.started_at), endedAt: String(row.ended_at),
+    })));
+  }
+
+  dueSchedules(learnerId: string, at?: string): readonly ScheduleRow[] {
+    const rows = this.#database.prepare(
+      `SELECT * FROM schedules WHERE learner_id = ? AND state = 'pending'
+       ${at === undefined ? "" : "AND due_at <= ?"}
+       ORDER BY CASE kind WHEN 'blocked' THEN 0 ELSE 1 END, due_at, id`,
+    ).all(...(at === undefined ? [learnerId] : [learnerId, at])) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map((row) => this.#scheduleRow(row)));
+  }
+
+  pendingScheduleForRoot(learnerId: string, rootKey: string): ScheduleRow | undefined {
+    const row = this.#database.prepare(
+      "SELECT * FROM schedules WHERE learner_id = ? AND root_key = ? AND state = 'pending' ORDER BY due_at LIMIT 1",
+    ).get(learnerId, rootKey) as Record<string, unknown> | undefined;
+    return row === undefined ? undefined : this.#scheduleRow(row);
+  }
+
+  createSchedule(input: Omit<ScheduleRow, "state" | "startedRunId">): ScheduleRow {
+    this.#database.prepare(`
+      INSERT INTO schedules (id, learner_id, root_key, session_kind, pack_id,
+        root_transpose_key, kind, variant, origin, state, due_at, created_at,
+        source_run_id, source_node_id, started_run_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, NULL)
+    `).run(input.id, input.learnerId, input.rootKey, input.sessionKind, input.packId,
+      input.rootTransposeKey, input.kind, input.variant, input.origin, input.dueAt,
+      input.createdAt, input.sourceRunId, input.sourceNodeId);
+    return Object.freeze({ ...input, state: "pending", startedRunId: null });
+  }
+
+  markScheduleStarted(scheduleId: string, learnerId: string, runId: string): void {
+    const result = this.#database.prepare(
+      "UPDATE schedules SET state = 'started', started_run_id = ? WHERE id = ? AND learner_id = ? AND state = 'pending'",
+    ).run(runId, scheduleId, learnerId);
+    if (result.changes !== 1) throw new ServerError("RUN_NOT_FOUND", `Unknown pending schedule: ${scheduleId}`);
+  }
+
+  dismissSchedule(scheduleId: string, learnerId: string): void {
+    const result = this.#database.prepare(
+      "UPDATE schedules SET state = 'dismissed' WHERE id = ? AND learner_id = ? AND state = 'pending'",
+    ).run(scheduleId, learnerId);
+    if (result.changes !== 1) throw new ServerError("RUN_NOT_FOUND", `Unknown pending schedule: ${scheduleId}`);
+  }
+
+  related(learnerId: string, runId: string, transposeKey: string) {
+    const source = this.#database.prepare(
+      "SELECT pack_id FROM attempts WHERE learner_id = ? AND run_id = ? LIMIT 1",
+    ).get(learnerId, runId) as { readonly pack_id?: unknown } | undefined;
+    const packId = typeof source?.pack_id === "string" ? source.pack_id : null;
+    const seen = new Set<string>();
+    const result: Array<{ relation: "same_position" | "same_pack" | "same_concept_in_pack"; runId: string; branchId: string; attemptCount: number }> = [];
+    const append = (relation: "same_position" | "same_pack" | "same_concept_in_pack", rows: readonly Record<string, unknown>[]) => {
+      for (const row of rows) {
+        const key = `${String(row.run_id)}\0${String(row.branch_id)}`;
+        if (seen.has(key) || String(row.run_id) === runId) continue;
+        seen.add(key);
+        result.push({ relation, runId: String(row.run_id), branchId: String(row.branch_id), attemptCount: Number(row.attempt_count) });
+        if (result.length === 3) return;
+      }
+    };
+    append("same_position", this.#database.prepare(`
+      SELECT run_id, branch_id, count(*) OVER (PARTITION BY root_key) AS attempt_count
+      FROM attempts WHERE learner_id = ? AND root_transpose_key = ? AND countable = 1
+      ORDER BY attempt_count, ended_at
+    `).all(learnerId, transposeKey) as readonly Record<string, unknown>[]);
+    if (result.length < 3 && packId !== null) append("same_pack", this.#database.prepare(`
+      SELECT run_id, branch_id, count(*) OVER (PARTITION BY root_key) AS attempt_count
+      FROM attempts WHERE learner_id = ? AND pack_id = ? AND countable = 1
+      ORDER BY attempt_count, ended_at
+    `).all(learnerId, packId) as readonly Record<string, unknown>[]);
+    if (result.length < 3 && packId !== null) append("same_concept_in_pack", this.#database.prepare(`
+      SELECT a.run_id, a.branch_id, count(*) OVER (PARTITION BY a.root_key) AS attempt_count
+      FROM attempts a JOIN attempt_concepts c ON c.run_id = a.run_id AND c.branch_id = a.branch_id
+      WHERE a.learner_id = ? AND a.pack_id = ? AND c.concept_key IN (
+        SELECT concept_key FROM attempt_concepts WHERE run_id = ?
+      ) AND a.countable = 1 ORDER BY attempt_count, a.ended_at
+    `).all(learnerId, packId, runId) as readonly Record<string, unknown>[]);
+    return Object.freeze(result.map((item) => Object.freeze(item)));
+  }
+
+  metrics(learnerId: string) {
+    const voluntary = this.#database.prepare(`
+      SELECT c.concept_key, count(*) AS total
+      FROM attempts a JOIN attempt_concepts c ON c.run_id = a.run_id AND c.branch_id = a.branch_id
+      WHERE a.learner_id = ? AND a.countable = 1 AND a.schedule_id IS NULL
+        AND a.root_due_at_start IS NULL AND EXISTS (
+          SELECT 1 FROM attempts earlier JOIN attempt_concepts ec
+            ON ec.run_id = earlier.run_id AND ec.branch_id = earlier.branch_id
+          WHERE earlier.learner_id = a.learner_id AND earlier.countable = 1
+            AND ec.concept_key = c.concept_key
+            AND (earlier.ended_at < a.ended_at OR
+              (earlier.ended_at = a.ended_at AND (earlier.run_id < a.run_id OR
+                (earlier.run_id = a.run_id AND earlier.branch_id < a.branch_id))))
+        ) GROUP BY c.concept_key ORDER BY c.concept_key
+    `).all(learnerId) as readonly Record<string, unknown>[];
+    const second = this.#database.prepare(`
+      SELECT first.root_key, first.verdict AS first_verdict,
+        second.verdict AS second_verdict, second.result AS second_result
+      FROM attempts first JOIN attempts second
+        ON second.learner_id = first.learner_id AND second.root_key = first.root_key
+        AND second.attempt_no = 2
+      WHERE first.learner_id = ? AND first.attempt_no = 1
+        AND first.countable = 1 AND second.countable = 1
+        AND first.graded = 1 AND second.graded = 1 ORDER BY first.root_key
+    `).all(learnerId) as readonly Record<string, unknown>[];
+    return Object.freeze({
+      voluntaryConceptReturns: Object.freeze(voluntary.map((row) => Object.freeze({ conceptKey: String(row.concept_key), count: Number(row.total) }))),
+      secondAttempts: Object.freeze(second.map((row) => Object.freeze({
+        rootKey: String(row.root_key), firstVerdict: String(row.first_verdict),
+        secondVerdict: String(row.second_verdict), secondResult: row.second_result === null ? null : String(row.second_result),
+      }))),
+    });
+  }
+
+  #scheduleRow(row: Record<string, unknown>): ScheduleRow {
+    return Object.freeze({
+      id: String(row.id), learnerId: String(row.learner_id), rootKey: String(row.root_key),
+      sessionKind: row.session_kind as "pack" | "position",
+      packId: row.pack_id === null ? null : String(row.pack_id),
+      rootTransposeKey: String(row.root_transpose_key), kind: row.kind as "blocked" | "varied",
+      variant: row.variant === null ? null : String(row.variant), origin: row.origin as "auto" | "learner",
+      state: row.state as "pending" | "started" | "dismissed", dueAt: String(row.due_at),
+      createdAt: String(row.created_at), sourceRunId: row.source_run_id === null ? null : String(row.source_run_id),
+      sourceNodeId: row.source_node_id === null ? null : String(row.source_node_id),
+      startedRunId: row.started_run_id === null ? null : String(row.started_run_id),
+    });
+  }
+
+  #refreshAutoSchedule(learnerId: string, rootKey: string): void {
+    const history = this.#database.prepare(
+      `SELECT * FROM attempts WHERE learner_id = ? AND root_key = ? AND countable = 1
+       ORDER BY ended_at, run_id, branch_id`,
+    ).all(learnerId, rootKey) as readonly Record<string, unknown>[];
+    if (history.length === 0) return;
+    const latest = history.at(-1)!;
+    const previous = history.at(-2);
+    const varied = latest.graded === 0 || (latest.verdict === "stable" && previous?.verdict === "stable");
+    const trailingStable = varied && latest.graded === 1
+      ? [...history].reverse().findIndex((row) => row.verdict !== "stable")
+      : 0;
+    const ladder = [1, 3, 7, 16, 35];
+    const days = varied ? ladder[Math.min(Math.max(trailingStable - 1, history.length - 1, 0), 4)]! : 0;
+    const dueAt = new Date(Date.parse(String(latest.ended_at)) + days * 86_400_000).toISOString();
+    this.#database.prepare(`
+      INSERT INTO schedules (id, learner_id, root_key, session_kind, pack_id,
+        root_transpose_key, kind, variant, origin, state, due_at, created_at,
+        source_run_id, source_node_id, started_run_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?, NULL, 'auto', 'pending', ?, ?, ?, ?, NULL)
+      ON CONFLICT(learner_id, root_key) WHERE state = 'pending' AND origin = 'auto'
+      DO UPDATE SET kind=excluded.kind, due_at=excluded.due_at,
+        source_run_id=excluded.source_run_id, source_node_id=excluded.source_node_id
+    `).run(randomUUID(), learnerId, rootKey, String(latest.session_kind),
+      latest.pack_id === null ? null : String(latest.pack_id),
+      String(latest.root_transpose_key), varied ? "varied" : "blocked", dueAt, this.#now(),
+      String(latest.run_id), String(latest.root_node_id));
+  }
+
   /** Evicts only memoized projections; useful for cold-load diagnostics. */
   clearSnapshotCache(): void {
     this.#snapshots.clear();
@@ -938,6 +1235,11 @@ export class SQLiteRunStorage implements RunStorage {
         name: "record policyModeApplied as unknown on v0.6 selections",
         apply: () => this.#upgradeV06Runs(),
       },
+      {
+        version: 6,
+        name: "attempt records, concept tags, schedules, and history stats",
+        apply: () => this.#addProgressTables(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -953,6 +1255,125 @@ export class SQLiteRunStorage implements RunStorage {
         throw storageFailure("Could not migrate run storage", error);
       }
     }
+  }
+
+  #addProgressTables(): void {
+    this.#database.exec(`
+      CREATE TABLE IF NOT EXISTS attempts (
+        run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
+        branch_id TEXT NOT NULL,
+        learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        session_kind TEXT NOT NULL CHECK (session_kind IN ('pack','position')),
+        pack_id TEXT,
+        pack_digest TEXT,
+        root_key TEXT NOT NULL,
+        root_node_id TEXT NOT NULL,
+        root_transpose_key TEXT NOT NULL,
+        branch_label TEXT NOT NULL,
+        branch_intent TEXT,
+        branch_seed INTEGER NOT NULL,
+        attempt_no INTEGER NOT NULL,
+        countable INTEGER NOT NULL CHECK (countable IN (0,1)),
+        graded INTEGER NOT NULL CHECK (graded IN (0,1)),
+        objective_state TEXT NOT NULL,
+        verdict TEXT NOT NULL CHECK (verdict IN ('stable','unstable','open')),
+        result TEXT CHECK (result IN ('win','loss','draw')),
+        user_ply_count INTEGER NOT NULL,
+        checkpoint_ids TEXT NOT NULL,
+        origin TEXT NOT NULL CHECK (origin IN ('fresh','duplicate','scheduled','in_run_retry')),
+        schedule_id TEXT,
+        root_due_at_start TEXT,
+        derived_from_run_id TEXT,
+        started_at TEXT NOT NULL,
+        ended_at TEXT NOT NULL,
+        PRIMARY KEY (run_id, branch_id)
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS attempts_root ON attempts(learner_id, root_key, ended_at);
+      CREATE INDEX IF NOT EXISTS attempts_transpose ON attempts(learner_id, root_transpose_key);
+      CREATE INDEX IF NOT EXISTS attempts_pack ON attempts(learner_id, pack_id);
+      CREATE TABLE IF NOT EXISTS attempt_concepts (
+        run_id TEXT NOT NULL,
+        branch_id TEXT NOT NULL,
+        pack_id TEXT NOT NULL,
+        concept_key TEXT NOT NULL,
+        label TEXT NOT NULL,
+        PRIMARY KEY (run_id, branch_id, concept_key),
+        FOREIGN KEY (run_id, branch_id) REFERENCES attempts(run_id, branch_id) ON DELETE CASCADE
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS attempt_concepts_key ON attempt_concepts(concept_key);
+      CREATE TABLE IF NOT EXISTS schedules (
+        id TEXT PRIMARY KEY,
+        learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        root_key TEXT NOT NULL,
+        session_kind TEXT NOT NULL CHECK (session_kind IN ('pack','position')),
+        pack_id TEXT,
+        root_transpose_key TEXT NOT NULL,
+        kind TEXT NOT NULL CHECK (kind IN ('blocked','varied')),
+        variant TEXT,
+        origin TEXT NOT NULL CHECK (origin IN ('auto','learner')),
+        state TEXT NOT NULL CHECK (state IN ('pending','started','dismissed')),
+        due_at TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        source_run_id TEXT,
+        source_node_id TEXT,
+        started_run_id TEXT
+      ) STRICT;
+      CREATE UNIQUE INDEX IF NOT EXISTS schedules_one_auto_pending
+        ON schedules(learner_id, root_key) WHERE state = 'pending' AND origin = 'auto';
+      CREATE INDEX IF NOT EXISTS schedules_due ON schedules(learner_id, state, due_at);
+      CREATE TABLE IF NOT EXISTS learner_position_stats (
+        learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        transpose_key TEXT NOT NULL,
+        seen_count INTEGER NOT NULL,
+        PRIMARY KEY (learner_id, transpose_key)
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS progress_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL) STRICT;
+    `);
+    const rows = this.#database.prepare(
+      "SELECT snapshot_json, owner_learner_id FROM drill_runs ORDER BY id",
+    ).all() as readonly Record<string, unknown>[];
+    const insert = this.#database.prepare(`
+      INSERT OR IGNORE INTO attempts (
+        run_id, branch_id, learner_id, session_kind, pack_id, pack_digest,
+        root_key, root_node_id, root_transpose_key, branch_label, branch_intent,
+        branch_seed, attempt_no, countable, graded, objective_state, verdict,
+        result, user_ply_count, checkpoint_ids, origin, schedule_id,
+        root_due_at_start, derived_from_run_id, started_at, ended_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL, ?, ?)
+    `);
+    for (const row of rows) {
+      if (typeof row.snapshot_json !== "string" || typeof row.owner_learner_id !== "string") continue;
+      const run = JSON.parse(row.snapshot_json) as DrillRun;
+      const projection = projectAttempts({ run, learnerId: row.owner_learner_id });
+      for (const attempt of projection.attempts) {
+        insert.run(
+          attempt.runId, attempt.branchId, attempt.learnerId, attempt.sessionKind,
+          attempt.packId, attempt.packDigest, attempt.rootKey, attempt.rootNodeId,
+          attempt.rootTransposeKey, attempt.branchLabel, attempt.branchIntent,
+          attempt.branchSeed, attempt.countable ? 1 : 0, 0, attempt.objectiveState,
+          "open", attempt.result, attempt.userPlyCount,
+          JSON.stringify(attempt.checkpointIds), attempt.origin,
+          attempt.startedAt, attempt.endedAt,
+        );
+      }
+    }
+    this.#database.exec(`
+      UPDATE attempts AS current
+      SET attempt_no = (
+        SELECT COUNT(*) FROM attempts AS earlier
+        WHERE earlier.learner_id = current.learner_id
+          AND earlier.root_key = current.root_key
+          AND earlier.countable = 1
+          AND (earlier.started_at < current.started_at OR
+            (earlier.started_at = current.started_at AND
+              (earlier.run_id < current.run_id OR
+                (earlier.run_id = current.run_id AND earlier.branch_id <= current.branch_id))))
+      )
+      WHERE current.countable = 1
+    `);
+    this.#database.prepare(
+      "INSERT OR REPLACE INTO progress_meta (key, value) VALUES ('backfill', ?)",
+    ).run(this.#now());
   }
 
   #addRunSummaries(): void {
