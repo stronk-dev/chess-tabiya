@@ -96,6 +96,66 @@ not exist yet; without them a shape cannot state its own trigger.
 **Owner ruling needed.** The three authored packs are line content and stay valid
 under either answer.
 
+## 0a. Audit: does authoring a pack make Just Play better?
+
+The owner's test, 2026-08-13: *"how do we make sure any content we iterate on
+enhances our Just Play sidebars with theory tie-ins, strategy detection, endgame
+patterns?"* Applied to the shipped format, field by field. **Transfers** means:
+this survives outside its own pack and can fire in a game nobody authored.
+
+| Field | Anchored to | Transfers to Just Play? |
+|---|---|---|
+| `start`, `spine`, `spine[].annotations` | this pack's move tree | **no** |
+| `deviations` | `spineNodeId` + `moveUci` | **no** |
+| `authoredBoundary` | spine node ids | **no** |
+| `checkpoints` via `atSpineNode` / `atPly` | this pack's tree | **no** |
+| `checkpoints` via `fenPredicate` / `materialBalance` | the *position* | **yes** — and these are the only triggers that do |
+| `objective.summary` | this position | no · `objective.type` | general |
+| `planClasses` | nothing — free-standing prose | **should**, but is locked inside one pack |
+| `concepts` | nothing — bare ids | **should**, but has no cross-pack identity (ledgered) |
+| `feedbackClaims` | nothing | **should**, but has no triggers, so it can never fire |
+| `opponentPolicy` | nothing — a resistance recipe | **yes** |
+
+**The verdict is unambiguous and it answers the owner's question: no.** Almost
+everything a pack contains is anchored to that pack's move tree, and the three
+fields that carry genuinely reusable knowledge — plan classes, concepts, claims —
+are precisely the three that cannot escape it. One is inlined per pack, one has
+no identity across packs, one has no trigger at all. So authoring a pack today
+improves exactly one drill and contributes **nothing** to a game nobody authored.
+
+That is not a defect in anyone's work. It is the correct format for what it was
+specified to do — run one curated drill — and the wrong format for the thing the
+product turned out to be about.
+
+### The rule this produces
+
+> **Content earns its cost by how much of it fires in a game nobody authored.**
+
+Not a ban on line content — opening theory *is* a move sequence and has to be
+written as one (§0). A budget and a direction: the reusable half should be the
+larger half of the effort, and it currently rounds to zero.
+
+### What changes, minimally
+
+Packs stop *inlining* shape knowledge and start **referencing** it:
+
+- A **shape entry** owns the name, the plan classes, what each plan's success
+  looks like structurally, what to watch, and its phase applicability. It is
+  triggered by a structural predicate (Q4b features), never by a spine node.
+- A **pack** keeps what is genuinely position-specific — start, spine,
+  annotations, deviations, boundary — and *names* the shapes it teaches instead
+  of restating them.
+- The same shape entry then fires in Just Play, because its trigger was never
+  about the pack.
+
+Note what already points this way: `fenPredicate` and `materialBalance` are the
+two shipped checkpoint triggers that key on the position rather than the tree,
+and they are exactly the two that would survive the change. The machinery is
+there; the authoring habit is not.
+
+**This is the concrete form of the §0 ruling still owed** — it does not need
+packs abolished, only the reusable half lifted out of them.
+
 ## 1. The unit taxonomy
 
 | Unit | Scope | Mode |
