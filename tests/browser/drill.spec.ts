@@ -28,6 +28,8 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await page.getByRole("button", { name: "Create academy" }).first().click();
   await expect(page.getByRole("heading", { name: "academy session" })).toBeVisible();
   await expect(page.getByText("your role: host")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Invitations" })).toBeVisible();
+  await expect(page.getByLabel("Tabiya handle")).toBeVisible();
   await page.getByRole("button", { name: "Open overlay" }).click();
   await expect(page.getByLabel("Live session overlay")).toBeVisible();
   await expect(page.getByLabel("Chessboard")).toBeVisible();

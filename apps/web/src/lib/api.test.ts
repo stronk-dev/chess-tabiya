@@ -31,6 +31,50 @@ function json(value: unknown, init: ResponseInit = {}): Response {
 }
 
 describe("DrillApi", () => {
+  it("binds invitations and raw PGN arena imports without losing their types", async () => {
+    const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
+    const invitation = {
+      id: "invite-one",
+      sessionId: "session / one",
+      leg: 2 as const,
+      invitedHandle: "partner",
+      invitedRole: "participant" as const,
+      externalChallengeUrl: null,
+      state: "open" as const,
+      createdAt: "2026-08-13T12:00:00.000Z",
+    };
+    const leg = {
+      sessionId: "session / one",
+      leg: 2 as const,
+      referencePlayerHandle: "partner",
+      externalChallengeUrl: null,
+      pgn: "[Result \"1/2-1/2\"]\n\n1. Ra2 1/2-1/2",
+      result: "1/2-1/2" as const,
+      branchId: "leg-two",
+      importedAt: "2026-08-13T12:01:00.000Z",
+    };
+    const api = new DrillApi("http://tabiya.test", async (input, init) => {
+      const url = String(input);
+      calls.push({ url, ...(init === undefined ? {} : { init }) });
+      return url.includes("/invitations") ? json({ invitation }) : json({ leg });
+    });
+
+    expect(await api.inviteToSession("session / one", { leg: 2, handle: "partner" })).toEqual(invitation);
+    expect(await api.importArenaLeg("session / one", 2, leg.pgn, "writer-one", leg.result)).toEqual(leg);
+    expect(calls[0]).toMatchObject({
+      url: "http://tabiya.test/sessions/session%20%2F%20one/invitations",
+      init: { method: "POST" },
+    });
+    expect(calls[1]).toMatchObject({
+      url: "http://tabiya.test/sessions/session%20%2F%20one/legs/2/pgn?result=1%2F2-1%2F2",
+      init: {
+        method: "POST",
+        body: leg.pgn,
+        headers: { "content-type": "text/x-chess-pgn", "x-writer-id": "writer-one" },
+      },
+    });
+  });
+
   it("types and binds the complete v1 REST surface", async () => {
     const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
     const fetcher = async (input: RequestInfo | URL, init?: RequestInit) => {

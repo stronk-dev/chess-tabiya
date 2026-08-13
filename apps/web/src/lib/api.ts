@@ -192,7 +192,9 @@ export interface SessionProposal { readonly id:string;readonly sessionId:string;
 export interface VoteOption { readonly moveUci:string;readonly label:string }
 export interface VoteTally { readonly window:{readonly id:string;readonly sessionId:string;readonly nodeId:string;readonly prompt:string;readonly options:readonly VoteOption[];readonly opensAt:string;readonly closesAt:string;readonly state:"open"|"closed"|"stale";readonly appliedOptionUci:string|null};readonly tally:readonly (VoteOption&{readonly count:number})[];readonly total:number }
 export interface SessionJournalEntry { readonly sessionId:string;readonly seq:number;readonly at:string;readonly kind:string;readonly actorLearnerId:string|null;readonly runSeq:number|null;readonly payload:Readonly<Record<string,unknown>> }
-export interface LiveSessionDetail { readonly session:LiveSession;readonly role:RunRole;readonly activeNodeId:string;readonly leaseHeldBy:LeaseIdentity;readonly grants:readonly RunGrant[];readonly proposals:readonly SessionProposal[];readonly vote?:VoteTally;readonly invitations:readonly unknown[];readonly legs:readonly unknown[] }
+export interface SessionInvitation { readonly id:string;readonly sessionId:string;readonly leg:1|2|null;readonly invitedHandle:string|null;readonly invitedRole:RunRole;readonly externalChallengeUrl:string|null;readonly state:"open"|"accepted"|"revoked";readonly createdAt:string }
+export interface ArenaLeg { readonly sessionId:string;readonly leg:1|2;readonly referencePlayerHandle:string|null;readonly externalChallengeUrl:string|null;readonly pgn:string|null;readonly result:"1-0"|"0-1"|"1/2-1/2"|"*"|null;readonly branchId:string|null;readonly importedAt:string|null }
+export interface LiveSessionDetail { readonly session:LiveSession;readonly role:RunRole;readonly activeNodeId:string;readonly leaseHeldBy:LeaseIdentity;readonly grants:readonly RunGrant[];readonly proposals:readonly SessionProposal[];readonly vote?:VoteTally;readonly invitations:readonly SessionInvitation[];readonly legs:readonly ArenaLeg[] }
 
 export interface Capabilities {
   readonly engines: readonly EngineCapability[];
@@ -437,6 +439,8 @@ export interface DrillClientApi extends RunApi {
   boardControl?(sessionId:string,writerId:string,op:"offer"|"withdraw"|"advance"|"reclaim",handle?:string):Promise<LiveSession>;
   openVote?(sessionId:string,input:{readonly nodeId:string;readonly prompt:string;readonly options:readonly VoteOption[];readonly durationSeconds:number}):Promise<VoteTally>;
   castVote?(sessionId:string,windowId:string,choiceUci:string,voterKey?:string):Promise<VoteTally>;
+  inviteToSession?(sessionId:string,input:{readonly leg?:1|2;readonly handle?:string;readonly externalChallengeUrl?:string}):Promise<SessionInvitation>;
+  importArenaLeg?(sessionId:string,leg:1|2,pgn:string,writerId:string,result?:ArenaLeg["result"]):Promise<ArenaLeg>;
 }
 
 type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
@@ -603,6 +607,8 @@ export class DrillApi implements DrillClientApi {
   async boardControl(sessionId:string,writerId:string,op:"offer"|"withdraw"|"advance"|"reclaim",handle?:string):Promise<LiveSession>{const body=await this.#json<{session:LiveSession}>(`/sessions/${encoded(sessionId)}/board`,{method:"POST",writerId,body:{op,...(handle===undefined?{}:{handle})}});return body.session;}
   openVote(sessionId:string,input:{readonly nodeId:string;readonly prompt:string;readonly options:readonly VoteOption[];readonly durationSeconds:number}):Promise<VoteTally>{return this.#json(`/sessions/${encoded(sessionId)}/votes`,{method:"POST",body:{op:"open",...input}});}
   castVote(sessionId:string,windowId:string,choiceUci:string,voterKey?:string):Promise<VoteTally>{return this.#json(`/sessions/${encoded(sessionId)}/votes`,{method:"POST",body:{op:"cast",windowId,choiceUci,...(voterKey===undefined?{}:{voterKey})}});}
+  async inviteToSession(sessionId:string,input:{readonly leg?:1|2;readonly handle?:string;readonly externalChallengeUrl?:string}):Promise<SessionInvitation>{const body=await this.#json<{invitation:SessionInvitation}>(`/sessions/${encoded(sessionId)}/invitations`,{method:"POST",body:input});return body.invitation;}
+  async importArenaLeg(sessionId:string,leg:1|2,pgn:string,writerId:string,result?:ArenaLeg["result"]):Promise<ArenaLeg>{const query=result===undefined||result===null?"":`?${new URLSearchParams({result})}`;const response=await this.#response(`/sessions/${encoded(sessionId)}/legs/${leg}/pgn${query}`,{method:"POST",writerId,rawBody:pgn,headers:{"content-type":"text/x-chess-pgn"}});return ((await response.json()) as {leg:ArenaLeg}).leg;}
 
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
     return this.#json("/select-move", { method: "POST", body: input });
@@ -757,6 +763,7 @@ export class DrillApi implements DrillClientApi {
       readonly method?: "GET" | "POST" | "PUT";
       readonly writerId?: string;
       readonly body?: unknown;
+      readonly rawBody?: string;
       readonly headers?: Readonly<Record<string, string>>;
     } = {},
   ): Promise<Response> {
@@ -766,10 +773,12 @@ export class DrillApi implements DrillClientApi {
         ...(options.writerId === undefined
           ? {}
           : { "x-writer-id": options.writerId }),
-        ...(options.body === undefined ? {} : { "content-type": "application/json" }),
+        ...(options.body === undefined || options.rawBody !== undefined ? {} : { "content-type": "application/json" }),
         ...options.headers,
       },
-      ...(options.body === undefined ? {} : { body: JSON.stringify(options.body) }),
+      ...(options.rawBody !== undefined
+        ? { body: options.rawBody }
+        : options.body === undefined ? {} : { body: JSON.stringify(options.body) }),
       credentials: "same-origin",
     });
     if (response.ok) return response;
