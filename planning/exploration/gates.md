@@ -95,7 +95,7 @@ Continue from vertical slice to product build when all of:
 
 | # | Gate | Status | Evidence |
 |---|---|---|---|
-| C1 | ≥80% of reviewed feedback statements accepted by strong reviewers without material correction | unmet | — |
+| C1 | ~~≥80% of reviewed feedback statements accepted by strong reviewers~~ | ⛔ **withdrawn 2026-08-13 (owner ruling): no review workflow exists or will.** Unmeasurable by construction — there are no reviewers. What replaces it as a quality signal: honest provenance labels, engine/tablebase validation where material allows, and use | — |
 | C2 | Users complete and compare branches in a majority of Plan Drill sessions | unmet | — |
 | C3 | Second-attempt objective performance improves meaningfully | unmet | — |
 | C4 | Delayed related-position performance beats the baseline format | unmet | — |

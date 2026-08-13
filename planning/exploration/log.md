@@ -1227,3 +1227,47 @@ That RFC declined it to preserve its no-migration scope and named it the future
 path; the owner ruled the migration is worth paying, because the alternative is a
 mode about theory carrying a disclaimer where it could carry evidence. A
 disclaimer says "we do not know"; `policyModeApplied` makes the run know.
+
+## 2026-08-13 (owner rulings) — no review workflow; predictions show numbers, not verdicts
+
+**1. There is no pack review workflow, and there never was one to build.** Owner:
+*"we have them in the fucking repo, NO ONE REVIEWS THIS. I am not opposed to UGC
+but then what is this 'reviewing'? WE DON'T NEED ANY OF THIS."*
+
+Packs live in the repository. They ship with honest provenance — Pack A already
+says in plain text that its claims are agent-authored and unvalidated — and that
+statement *is* the safeguard. A reviewer sign-off gate adds a ceremony no one
+performs, and a status nobody can grant is worse than an honest label, because it
+implies a check that never happened.
+
+What this strikes:
+
+- the review queue, reviewer roster, sign-off, derived checklist, and the
+  `draft → in_review → approved → registered` state machine in
+  `rfc/pack-studio-and-review.md`. The write path, studio UI, session
+  distillation, imports and versioning all survive — they are what actually
+  reduces authoring cost.
+- **ADR-0001 (curated-first: reviewed packs before automatic lesson generation)**
+  is superseded on its review half. Curated-first survives as *authored, not
+  generated*; "reviewed" does not.
+- **C1** ("≥80% of reviewed feedback statements accepted by strong reviewers")
+  is unmeasurable by construction and is withdrawn as a continuation gate.
+- the `graduationBlockers` in all three authored packs that name a reviewer's
+  sign-off, and the graduation bar in `planning/content-era/plan.md` §3b.
+
+Recorded honestly: this removes the only mechanism the product had for catching
+a wrong authored claim before a learner sees it. What remains is the provenance
+label, engine/tablebase validation where material allows it, and use. That is a
+real reduction in safety and it is the owner's call to make; law 8 still forbids
+manufacturing chess truth, so the constraint that matters most is unaffected.
+
+**2. Prediction checkpoints show the numbers and do not score.** Owner chose
+render-the-distribution over any threshold: the learner predicts, then sees where
+their move sat — "you said c4; 12% of 1500s play it, 42% play Qb6." No pass/fail.
+`minMass` stops being a grading threshold, and `grading.source` has nothing left
+to grade. This is the strictest reading of law 8 available and it removes the
+question the two threshold readings existed to answer.
+
+**3. Simulated branches are scratch** — discarded unless the learner enters one,
+which promotes it to a real branch. `Branch.origin` becomes the promotion marker
+rather than a persistence filter.

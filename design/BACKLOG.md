@@ -210,7 +210,7 @@ until their trigger fires or an owner ruling changes them.
 
 | ADR | Decision | Revisit trigger |
 |---|---|---|
-| ADR-0001 | Curated-first content: reviewed packs before automatic lesson generation | C6 met and mining quality proven |
+| ADR-0001 | Curated-first content: **authored** packs before automatic lesson generation | ⚠️ **superseded in part 2026-08-13 (owner ruling): the *reviewed* half is struck.** There is no review workflow; packs ship from the repo with honest provenance. Curated-first survives as authored-not-generated, which is the half ADR-0005 also protects. Revisit trigger for the surviving half: C6 met and mining quality proven |
 | ADR-0002 | Stockfish is judge, not default opponent | H5 fails in *both* directions (weakened SF also beats Maia/corpus on believability) |
 | ADR-0003 | Personal history optional; core drills work without imports | Standing — protects against the v1 identity error |
 | ADR-0004 | Local-first modular monolith + workers | 🔔 **TRIGGER FIRED 2026-08-12** — owner ruled hosted multi-user deployment. Needs an explicit re-decision; a fired trigger is not itself a reversal, and nothing yet says the monolith is the wrong architecture for a hosted deployment |
