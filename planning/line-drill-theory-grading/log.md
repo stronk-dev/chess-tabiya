@@ -73,3 +73,7 @@ Append-only.
   `svelte-check` correctly did not. The filter now carries an explicit
   `AuthoredFeedbackItem` type predicate. Final results below supersede the
   pre-correction verification line above.
+- Post-correction `ENGINES_REQUIRED=1 make verify` is green: 287 tests / 48
+  files, zero Svelte diagnostics, schema and packaging green. A complete
+  zero-retry browser suite also passed 9/9 with the optional Maia test skipped;
+  the three pack-check invocations remain green.
