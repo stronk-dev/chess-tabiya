@@ -60,7 +60,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Author-declared transitions/timing windows on reviewed examples | Q4a, Q7, E3 | **GAP** (queue 7) | — |
 | Smallest useful deterministic feature set + coach agreement | Q4b, Q8 | **GAP** (queue 8) | — |
 | Automatic phase/structure recognition ground truth for Just Play | Q4c, B2, B4 | **GAP** — owner breadth ruling makes honest detection/retrieval/abstention load-bearing for Just Play, while curated packs retain authored boundaries | — |
-| Strong reviewer recruitment for packs A/B/C | Q7, C1 | **GAP** (queue 9) | — |
+| ~~Strong reviewer recruitment for packs A/B/C~~ | Q7 | ⛔ **closed 2026-08-13 — not a prerequisite.** Owner ruled no review workflow; packs carry a publication channel (official/community) instead, and C1 is withdrawn. Reopen only as a content-sourcing partnership wanted for its own sake | — |
 | Dependency/model/content licensing across source, deployment, monetization, and rights axes 🟡 | Q2, Q6 | **GAP** (queue 10) | — |
 | Paid-competitor pricing/positioning | Q2 | **GAP** | — |
 | Server/client stack selection (Go vs Node/TS; Svelte vs React vs vanilla; chessground/WASM interop) | branch-runtime RFC, deferred-decisions register | covered `[V]`/`[P]` — recommends TS-everywhere + Svelte 5; flags Maia-3 Python-sidecar question | `stack-selection.md` |

@@ -440,7 +440,8 @@
     ],
     "reviewers": [],
     "graduationBlockers": [
-      "The three-plan taxonomy is the pack's foundational claim and is entirely uncited. It needs a citable reviewed source or a strong reviewer's sign-off before reviewStatus leaves draft.",
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No sign-off will ever clear a blocker below; a citable source or mechanical validation that bears on the claim are the only two things that will.",
+      "The three-plan taxonomy is the pack's foundational claim and is entirely uncited. It needs a citable source \u2014 a named book or course whose idea is restated in our words, or an annotated master game in which the taxonomy is visible. Nothing mechanical can supply a taxonomy, so this blocker has exactly one route out.",
       "All four feedbackClaims need grounding: minority-target and kingside-hook are author principles with no evidence; b5-arithmetic is partly derivable from the position and could be mechanically checked; plan-tempi-nonrefundable is a hypothesis that a comparison corpus could actually test.",
       "The two concept_violation judgments (13.f3 and 14.Na4) assert that a legal, non-losing move is a conceptual error. That is the strongest claim in the file and the least supported; it needs engine and/or corpus evidence that these moves cost something measurable.",
       "The evaluative language in the b5-strike annotation ('the textbook result', 'that structure outlives the middlegame') asserts endgame consequences no evidence in this repo supports.",

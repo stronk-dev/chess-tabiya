@@ -1,4 +1,4 @@
-# RFC: Pack studio, write path, and review queue
+# RFC: Pack studio, write path, and publication channels
 
 - **Status:** draft
 - **Author:** claude
@@ -22,26 +22,39 @@
   (the subject), `rfc/archive/pack-optional-runs.md` (pack-optional run identity),
   `rfc/archive/authored-explanation-surface.md` and
   `rfc/archive/authored-feedback-delivery.md` (per-scope reveal)
-- **Parent / amends:** amends `rfc/archive/drill-pack-format.md` in one bounded place
-  (§14a, optional `deviations[].planClassId`, schema `$id` **0.7 → 0.8**)
+- **Parent / amends:** amends `rfc/archive/drill-pack-format.md` in two bounded places
+  (§14a, optional `deviations[].planClassId`; §10a, `provenance.reviewStatus` narrowed
+  and `provenance.reviewers` removed — schema `$id` **0.7 → 0.8**)
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/pack-studio-and-review/` (once implementing)
+- **Owner rulings applied:** **no pack review workflow, ever** (2026-08-13,
+  `planning/exploration/log.md`) — ADR-0001's "reviewed" half is superseded and
+  continuation gate C1 is withdrawn; **packs carry a publication channel, not a review
+  status** (2026-08-13, same ruling thread)
+- **Planning:** `planning/pack-studio/` (once implementing)
 
 ## Summary
 
 B6's mining half is met: `candidate-emit` has produced four real unpublished
 candidates in `content/candidates/` through the shipped sourcing pipelines. The
-other half — how a candidate, an import, or a completed run becomes a *reviewed,
-served* pack — does not exist at any layer. `apps/server/src/rest.ts` has no
+other half — how a candidate, an import, or a completed run becomes a *served*
+pack — does not exist at any layer. `apps/server/src/rest.ts` has no
 non-GET `/packs` route; `content/packs/` is empty; `/create` is an honest empty
 state (`apps/web/src/App.svelte:341-355`). This RFC specifies the pack studio,
-the draft→review→registered write path, session distillation, PGN/candidate
-imports, the review state machine and its authorization, versioning, and export
-for community interchange. It reuses the shipped validator, RFC-8785 digest,
-registry, sourcing checks and orchestrator rather than building a second
-authoring stack, and it closes one live defect the write path would otherwise
-make dangerous: a run whose pack digest no longer matches the registry silently
-stops being orchestrated.
+the draft→registered write path and its safety invariants, session distillation,
+PGN/candidate/interchange imports, versioning, export, and the **publication
+channel** that replaces the approval gate the owner struck on 2026-08-13. It
+reuses the shipped validator, RFC-8785 digest, registry, sourcing checks and
+orchestrator rather than building a second authoring stack, and it closes one
+live defect the write path would otherwise make dangerous: a run whose pack
+digest no longer matches the registry silently stops being orchestrated (**D20**).
+
+**The ruling this draft was rebuilt around.** There is no pack review workflow and
+there never will be one. A sign-off gate nobody performs is worse than an honest
+label, because a status nobody can grant implies a check that never happened. What
+replaces it is a fact the server can actually assert: **where a pack came from**.
+An *official* pack ships in the repository or the image; a *community* pack is
+published through this studio. The channel is not a claim about quality and does
+not pretend to be one.
 
 ## Motivation
 
@@ -53,7 +66,8 @@ stops being orchestrated.
 | Served pack catalogue | `PackRegistry.loadDefault` (`pack-registry.ts:224-271`) reads the schema fixture, `content/packs/` (empty but for `.gitkeep`) and, in development only, `content/drafts/` |
 | Studio UI | `/create` renders "Pack authoring, imports, review, and session distillation arrive in program item 6" (`App.svelte:341-355`); `capabilities.ts:117-129` reports `create: "unavailable-here"` |
 | Session distillation | no code anywhere; `design/03` lists it under Live and Create both |
-| Review queue | `provenance.reviewStatus` is a free enum in the document (`schemas/drill_pack.schema.json` `$defs/provenance`); nothing but `pack-validation.ts:86-109` reacts to it |
+| Publication channel | nothing anywhere distinguishes a first-party pack from a contributed one. `PackSummary` carries `reviewStatus` and nothing else about origin (`pack-registry.ts:33,208`), and the client renders that string raw (`PackList.svelte:35`, `App.svelte:359`) |
+| `reviewStatus` consumers | exactly two: `pack-validation.ts:87-109` (requires non-empty `sources` **and** non-empty `reviewers` when the value is `reviewed`/`published`) and `sourcing/check.ts:216` (`CANDIDATE_ALREADY_PROMOTED`). Every committed pack is `draft` or `schema_example`; no committed document is `reviewed` or `published` |
 | Versioning workflow | `PackRegistry` is keyed by pack id with one record each (`pack-registry.ts:171-222`); no version history exists |
 
 ### What already ships and must be extended, not rebuilt
@@ -82,29 +96,40 @@ seed. Import attacks the other 55% and is the lever for the long tail, not the
 first one. This RFC therefore treats the playtest harness as load-bearing scope
 and the importers as breadth scope, in that order.
 
-Two further findings shape the specification. Pack C's `still-holding` checkpoint
+One further finding shapes the specification. Pack C's `still-holding` checkpoint
 was true at the root, so the one authored `hold` pack was never playable (D12,
 closed by `outcome-drill-grading`); nobody discovered that until an RFC executed
-it, because nobody had played it. And `owner-review` is still 0 minutes across all
-three packs — the clock `plan.md` §1b calls decisive has never started, because
-there is no review surface to start it on.
+it, because nobody had played it. Execution found it and reading did not — which
+is why the playtest harness (§8) and the regression set (§9) are the two
+mechanisms this RFC ships in place of a reading pass.
 
 ### The grounding reality
 
-No sourcing pipeline supplies reviewer sign-off, so none can promote a pack.
-`sourcing/check.ts:122-124` already encodes the permanently human-only set
-mechanically: any machine evidence record whose `supports` pointer matches
-`PROSE_POINTERS` (`check.ts:30-36`: `/objective/summary`,
-`/planClasses/N/description`, spine `annotations`, `/deviations/N/note`,
-`/feedbackClaims/N/text`) or matches `/deviations/N/class` is rejected with
-`EVIDENCE_OVERREACH`. Pack A marks castling a `concept_violation` while its own
-note says it "is not a blunder", and no evaluation in this system separates those.
-The review queue is therefore the only path to publication, and this RFC's job is
-to say exactly what a reviewer does and exactly what state their sign-off writes.
+`sourcing/check.ts:122-124` encodes a permanently human-only set mechanically: any
+machine evidence record whose `supports` pointer matches `PROSE_POINTERS`
+(`check.ts:30-36`: `/objective/summary`, `/planClasses/N/description`, spine
+`annotations`, `/deviations/N/note`, `/feedbackClaims/N/text`) or matches
+`/deviations/N/class` is rejected with `EVIDENCE_OVERREACH`. Pack A marks castling
+a `concept_violation` while its own note says it "is not a blunder", and no
+evaluation in this system separates those.
 
-ADR-0001 (curated-first) and Law 8 bound the whole surface: a studio may draft,
-never publish; any authoring assist may word validated evidence and may never
-create a strategic claim or grade a move.
+The previous draft of this RFC concluded from that gap that a review queue was the
+only honest path to publication. **The owner ruled otherwise on 2026-08-13, and the
+ruling is right about the mechanism this repo can actually operate.** A sign-off
+gate nobody performs does not close the gap; it hides it behind a status. Pack A
+already states in plain text that its claims are agent-authored and unvalidated,
+and that statement *is* the safeguard. So the gap stays visible instead:
+
+- the pack's own `provenance.graduationBlockers` names what is not yet grounded, in
+  the author's words, and registration refuses a pack that still carries any (§4b);
+- the **channel** (§10) tells the learner where the pack came from — a fact — rather
+  than whether someone vouched for it — a claim this system cannot support;
+- nothing anywhere asserts that a pack was checked.
+
+ADR-0001's curated-first half stands and Law 8 bounds the whole surface: any
+authoring assist may word validated evidence and may never create a strategic claim
+or grade a move. ADR-0001's "reviewed" half is superseded by the ruling and marked
+so in `design/BACKLOG.md`.
 
 ### Out of scope
 
@@ -126,8 +151,9 @@ than discovered at merge.
 `rfc/README.md`'s pack-schema-version register records a **contention on 0.6** between this
 RFC and `return-and-progression.md`, and offers two resolutions: one rebases to 0.8, or the
 two merge their bump. **This RFC takes 0.8.** Merging the bumps would couple two unrelated
-additions — `retryVariants`/`concepts` for scheduling, `deviations[].planClassId` for review
-— into one version whose meaning is "whichever of these landed", and the register's own note
+additions — `retryVariants`/`concepts` for scheduling, `deviations[].planClassId` plus the
+`provenance` narrowing for authoring — into one version whose meaning is "whichever of these
+landed", and the register's own note
 says a pack version rebases cheaply because pack digests are content digests unaffected by
 the `$id`. The cheap move is the right one, and the contention is resolved here rather than
 left for the implementer.
@@ -156,16 +182,18 @@ specification changes under any ordering.
 
 Three of the parallel drafts also touch shape this RFC reads:
 
-- `n-way-comparison.md` adds `Branch.origin: "played" | "simulated"`, which session
-  distillation must respect or it will manufacture deviations out of authored content (§6).
+- `n-way-comparison.md` adds `Branch.origin: "played" | "simulated"`, which after that
+  draft's own 2026-08-13 rework is a **promotion marker**: a simulated branch is scratch
+  until the learner enters it, and a branch that reaches persistence with
+  `origin: "simulated"` is one the learner entered whose moves are still the pack's own
+  authored line. Session distillation must respect it or it will manufacture deviations out
+  of authored content (§6).
 - `return-and-progression.md` adds `retryVariants` and types `concepts` in pack schema 0.6.
-  Neither is a prose assertion under `PROSE_POINTERS`, so neither enters §10b's review
-  checklist; `concepts` becoming typed does not change what a reviewer signs.
-- `trajectory-drill.md` adds `legs` in pack schema 0.7. A leg boundary is structure, not an
-  assertion, so it too stays out of the checklist — but a leg carrying authored prose would
-  bring that prose in through `PROSE_POINTERS` automatically, because §10b derives the
-  checklist from the document rather than from a hand-maintained list. That is the point of
-  deriving it.
+  Both are structure, neither is a prose assertion under `PROSE_POINTERS`, and neither
+  interacts with this RFC's registration gate.
+- `trajectory-drill.md` adds `legs` in pack schema 0.7. A leg boundary is structure too. A
+  leg carrying authored prose is an ordinary authored assertion and belongs in the pack's
+  own `graduationBlockers` like any other, which is where §4b reads it.
 
 One row in `defect-sweep`'s proposed backlog is a live constraint on this RFC's never-silent
 guarantee and is named here so it is not mistaken for a gap this RFC introduced:
@@ -173,21 +201,26 @@ guarantee and is named here so it is not mistaken for a gap this RFC introduced:
 nothing reads and hear nothing. This RFC's closed-record parsing (§4) covers the *request
 envelope*, not the pack document's own open objects; that residue belongs to the sweep's row.
 
-### 1. Three content locations, one schema
+### 1. Three content locations, one schema — and the channel boundary
 
-| Location | Contents | Written by | Served |
-|---|---|---|---|
-| `content/packs/`, `schemas/drill_pack.example.json` | **seed catalogue**: packs shipped in the image and in git | humans, through git | always |
-| `content/drafts/`, `content/candidates/` | file workspaces for `pack-check`/`pack-preview` and for `candidate-emit`/`sourcing-check` | the existing CLIs | drafts in development only; candidates never |
-| SQLite `pack_drafts` / `registered_packs` | the studio's drafts and everything it registers | this RFC's endpoints | registered packs always; drafts never |
+| Location | Contents | Written by | Served | Channel |
+|---|---|---|---|---|
+| `content/packs/`, `schemas/drill_pack.example.json` | **seed catalogue**: packs shipped in the image and in git | humans, through git | always | **official** |
+| `content/drafts/`, `content/candidates/` | file workspaces for `pack-check`/`pack-preview` and for `candidate-emit`/`sourcing-check` | the existing CLIs | drafts in development only; candidates never | — (not published) |
+| SQLite `pack_drafts` / `registered_packs` | the studio's drafts and everything it registers | this RFC's endpoints | registered packs always; drafts never | **community** |
 
-The server never writes to `content/`. Registration writes a database row; leaving
-the deployment is an explicit export (§11) followed by a human commit.
+**The server never writes to `content/`.** That sentence was a safety note in the
+previous draft; under the channel ruling it is the channel boundary itself. The only
+writer of the official channel is a git commit into the image — an act outside this
+process, performed by whoever controls the repository. Registration writes a database
+row, and a database row is community by construction. Leaving the deployment is an
+explicit export (§12) followed by a human commit, and that commit — not any endpoint —
+is the sole path from community to official.
 
 **Seed ids are reserved.** Registration rejects any pack id present in the seed
 registry with `PACK_ID_RESERVED` (409). The two channels therefore have disjoint id
-spaces and no shadowing rule is needed. A self-hoster who ships packs in git
-updates them in git.
+spaces, so a community pack can neither shadow nor impersonate an official one, and no
+precedence rule is needed. A self-hoster who ships packs in git updates them in git.
 
 ### 2. Storage — migration 9
 
@@ -208,8 +241,7 @@ CREATE TABLE pack_drafts (
   owner_learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
   document_json TEXT NOT NULL,
   digest TEXT NOT NULL,
-  state TEXT NOT NULL CHECK (state IN
-    ('draft','in_review','changes_requested','approved','registered','withdrawn')),
+  state TEXT NOT NULL CHECK (state IN ('draft','registered','withdrawn')),
   seed_kind TEXT NOT NULL CHECK (seed_kind IN
     ('blank','candidate','pgn','run','version','interchange')),
   seed_ref TEXT,
@@ -221,28 +253,6 @@ CREATE TABLE pack_drafts (
 CREATE INDEX pack_drafts_owner ON pack_drafts(owner_learner_id);
 CREATE INDEX pack_drafts_state ON pack_drafts(state);
 
-CREATE TABLE pack_reviews (
-  id TEXT PRIMARY KEY,
-  draft_id TEXT NOT NULL REFERENCES pack_drafts(id) ON DELETE CASCADE,
-  reviewer_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
-  reviewer_handle TEXT NOT NULL,
-  subject_digest TEXT NOT NULL,
-  decision TEXT NOT NULL CHECK (decision IN ('approved','changes_requested')),
-  note TEXT,
-  decided_at TEXT NOT NULL
-) STRICT;
-CREATE INDEX pack_reviews_draft ON pack_reviews(draft_id);
-
-CREATE TABLE pack_review_items (
-  review_id TEXT NOT NULL REFERENCES pack_reviews(id) ON DELETE CASCADE,
-  pointer TEXT NOT NULL,
-  decision TEXT NOT NULL CHECK (decision IN ('accepted','rejected')),
-  grounds TEXT NOT NULL CHECK (grounds IN
-    ('citable_source','machine_validation','reviewer_signoff')),
-  note TEXT,
-  PRIMARY KEY (review_id, pointer)
-) STRICT;
-
 CREATE TABLE registered_packs (
   pack_id TEXT NOT NULL,
   version TEXT NOT NULL,
@@ -250,13 +260,23 @@ CREATE TABLE registered_packs (
   document_json TEXT NOT NULL,
   ledger_json TEXT,
   manifest_json TEXT,
-  review_id TEXT NOT NULL REFERENCES pack_reviews(id) ON DELETE RESTRICT,
+  publisher_handle TEXT NOT NULL,
   draft_id TEXT NOT NULL REFERENCES pack_drafts(id) ON DELETE RESTRICT,
   registered_at TEXT NOT NULL,
   PRIMARY KEY (pack_id, version)
 ) STRICT;
 CREATE INDEX registered_packs_digest ON registered_packs(digest);
 ```
+
+**There is no `channel` column, deliberately.** Every row in `registered_packs` is
+community and every pack outside it is official; storing the channel would create a
+second source of truth for a fact the table already is, and a column is something a
+future bug can set wrongly. §10 derives the channel from which source resolved the
+pack.
+
+`publisher_handle` is the learner handle at registration time, denormalised so a
+published pack keeps an attributable origin after the account is gone. It is a
+statement about who pressed register, not about who vouched for the chess.
 
 The migration creates tables and indexes only; it backfills nothing, because no
 prior state exists. It reads no run snapshot, calls no runtime function, rewrites
@@ -267,19 +287,15 @@ independent as well as the numbers.
 
 **Account deletion.** `deleteLearner` currently reassigns owned runs and held
 leases to the `__legacy` sentinel (`docs/identity-and-authorization.md`). It is
-extended, in the same transaction, to:
-
-- set every non-`registered` draft owned by the deleted learner to `withdrawn`
-  (a draft is private work, not a shared artifact like a run, so it is not
-  reassigned);
-- null `pack_reviews.reviewer_learner_id` while `reviewer_handle` and every
-  `pack_review_items` row survive. A registered pack's audit trail must never be
-  erasable by deleting an account, and `provenance.reviewers` in the published
-  document already carries the handle independently.
+extended, in the same transaction, to set every non-`registered` draft owned by the
+deleted learner to `withdrawn` — a draft is private work, not a shared artifact like
+a run, so it is not reassigned. `registered_packs` rows are untouched, including
+`publisher_handle`: a published pack's origin must not be erasable by deleting an
+account, and the row is the only remaining record of it.
 
 `registered_packs` rows are never deleted by any code path in this RFC.
 
-### 3. Digest-addressed pack resolution (defect fix, prerequisite)
+### 3. Digest-addressed pack resolution — D20 (defect fix, prerequisite)
 
 `RunService.#registeredPack` reads `this.#packRegistry?.get(run.packId)` and
 returns it only when `pack.digest === run.packDigest`
@@ -331,6 +347,14 @@ id**, each built by the same `PackSummary` construction the registry already use
 studio's output. `get(packId)` resolves the same way. Superseded versions stay
 resolvable by digest but do not appear in `GET /packs`.
 
+Each of the three composed sources stamps the channel on the records it returns
+(§10), so a `PackRecord` or `PackSummary` always carries where it came from and no
+consumer has to infer it.
+
+This fix is independent of everything else in this RFC and of the channel ruling: it
+is a latent defect in shipped code (**D20**) that versioning makes live, and it would
+be worth landing on its own.
+
 `POST /runs` keeps its existing stale-digest rejection (`service.ts:170`): a client
 that asks for a specific digest that is not the newest is told so, rather than
 being silently started on a different pack.
@@ -347,18 +371,16 @@ a learner may hold at most 200 non-`withdrawn` drafts.
 | Method | Path | Effect |
 |---|---|---|
 | `POST` | `/packs/drafts` | create a draft from a seed (§5–§6) |
-| `GET` | `/packs/drafts` | drafts owned by the caller; `?queue=review` returns the review queue when the caller is a configured reviewer |
-| `GET` | `/packs/drafts/:draftId` | document, digest, state, validation issues, proposals, regression cases, review history |
+| `GET` | `/packs/drafts` | drafts owned by the caller |
+| `GET` | `/packs/drafts/:draftId` | document, digest, state, validation issues, proposals, regression cases |
 | `PUT` | `/packs/drafts/:draftId` | replace the document (requires `If-Match`) |
 | `POST` | `/packs/drafts/:draftId/lint` | validate a candidate document without saving |
 | `POST` | `/packs/drafts/:draftId/playtest` | create a real run against the draft (§8) |
 | `POST` | `/packs/drafts/:draftId/regressions` | replace the regression set |
 | `POST` | `/packs/drafts/:draftId/regressions/run` | execute the regression set (§9) |
-| `POST` | `/packs/drafts/:draftId/submit` | `draft` → `in_review` |
-| `POST` | `/packs/drafts/:draftId/review` | reviewer decision (§10) |
-| `POST` | `/packs/drafts/:draftId/register` | `approved` → registered (§11) |
+| `POST` | `/packs/drafts/:draftId/register` | `draft` → registered, community channel (§11) |
 | `POST` | `/packs/drafts/:draftId/withdraw` | → `withdrawn` |
-| `GET` | `/packs/:packId/versions` | registered versions with digests and review ids |
+| `GET` | `/packs/:packId/versions` | registered versions with digests and publisher handles |
 | `GET` | `/packs/:packId/export` | canonical interchange bundle (§12) |
 
 `isApiPath` (`application.ts:206-217`) already matches `/packs` and `/packs/`
@@ -374,25 +396,26 @@ Every one of these is enforced server-side and each has a distinct error code.
    able to save work in progress) but the draft cannot leave `draft`.
 2. **`reviewStatus` is not author-writable.** Any submitted document whose
    `provenance.reviewStatus` is not `"draft"` is rejected with
-   `PROVENANCE_STATUS_NOT_WRITABLE`; any non-empty `provenance.reviewers` is
-   rejected with `PROVENANCE_REVIEWERS_NOT_WRITABLE`. Only §11's registration
-   transition writes those two fields. This is the mechanical form of ADR-0001 and
-   closes the hole `planning/content-era/plan.md` §3b names honestly ("nothing
-   stops `reviewStatus` being flipped") for every path except a direct file edit
-   in git.
-3. **Optimistic concurrency.** `PUT` requires `If-Match: <digest>` naming the
+   `PROVENANCE_STATUS_NOT_WRITABLE`. Only §11's registration transition writes
+   `"published"`. This closes the hole `planning/content-era/plan.md` §3b names
+   honestly ("nothing stops `reviewStatus` being flipped") for every path except a
+   direct file edit in git — which is the official channel, and is git's problem.
+   `provenance.reviewers` is removed from the schema at 0.8 (§10a); a document that
+   still carries one is accepted as untyped extra metadata and is never read.
+3. **The channel is not author-writable, because it is not in the document.** No
+   field of `schemas/drill_pack.schema.json` names a channel and none is added. The
+   channel is computed by `PackCatalogue` from which source resolved the pack (§10),
+   so a community author has nothing to forge and the server has no submitted value
+   to trust. This is the strongest available form of invariant 2, and it is why the
+   channel was not encoded as provenance.
+4. **Optimistic concurrency.** `PUT` requires `If-Match: <digest>` naming the
    digest the client last read. A mismatch is 409 `DRAFT_STALE` with the current
    digest in `details`. There is no lease: drafts are single-owner, and the real
    conflict is two tabs.
-4. **Drafts are locked during review.** `PUT`, `POST /regressions` and
-   `POST /withdraw`-into-`registered` are rejected with `DRAFT_LOCKED_FOR_REVIEW`
-   while the state is `in_review`. An edit in `approved` is *allowed* and
-   returns the draft to `draft`, voiding the approval — enforced by digest
-   comparison in §11, so it cannot be forgotten.
-5. **Ownership.** Only the owner may `PUT`, submit, withdraw, or edit regression
-   cases. A configured reviewer may read any `in_review` draft, playtest it, run
-   its regressions, and review it. Nobody else may read a draft; a non-owner
-   non-reviewer receives 404, matching the run-grant disclosure rule.
+5. **Ownership.** Only the owner may read, `PUT`, playtest, register, withdraw, or
+   edit regression cases on a draft. Nobody else may read a draft at all; a
+   non-owner receives 404, matching the run-grant disclosure rule. There is no
+   second role in this RFC.
 6. **Registration is append-only and immutable.** `(pack_id, version)` is unique
    (`PACK_VERSION_EXISTS`, 409) and the submitted version must be strictly greater
    than every registered version of that id under semver precedence
@@ -424,18 +447,26 @@ paying to relearn.
 Registration also fails if the document produces any `validatePackDocument`
 issue of severity `error`, and reports warnings without blocking.
 
+**`GRADUATION_BLOCKERS_OUTSTANDING` is now the only content gate, and it is
+author-declared.** An author can clear their own blockers without grounding anything,
+and this RFC does not pretend otherwise. What it buys is that a pack cannot reach the
+catalogue while still *saying in its own file* that it is ungrounded — a contradiction
+between the served label and the served document. What stops a determined author from
+lying is nothing, which is exactly what the channel exists to communicate: a community
+pack carries no assertion that anyone checked it.
+
 ### 5. Seeds
 
 `POST /packs/drafts` body: `{ seed, document?, ledger?, manifest? }`.
 
 | `seed.kind` | `seed.ref` | Document source |
 |---|---|---|
-| `blank` | — | a minimal valid skeleton the server generates: caller-supplied `id`/`title`/`start`, `mode`, `objective.type: "play_until_checkpoint"` with a summary the author must replace, one `atPly` checkpoint, `feedbackPolicy: "delayed_checkpoint"`, `opponentPolicy.mode: "human_common"`, `provenance: {reviewStatus:"draft", sources:[], reviewers:[]}` |
+| `blank` | — | a minimal valid skeleton the server generates: caller-supplied `id`/`title`/`start`, `mode`, `objective.type: "play_until_checkpoint"` with a summary the author must replace, one `atPly` checkpoint, `feedbackPolicy: "delayed_checkpoint"`, `opponentPolicy.mode: "human_common"`, `provenance: {reviewStatus:"draft", sources:[]}` |
 | `candidate` | candidate directory id | `document` = the candidate's `pack.json`, `ledger`/`manifest` = its `evidence.json` / `sources.json` |
 | `pgn` | optional source URL | §5a |
 | `run` | run id | §6 |
 | `version` | `<packId>@<version>` | §11a |
-| `interchange` | exporting deployment/URL, free text | an exported bundle from another deployment; `provenance.reviewStatus` forced to `draft` and `reviewers` cleared on ingest — **review does not travel** (§12) |
+| `interchange` | exporting deployment/URL, free text | an exported bundle from another deployment; `provenance.reviewStatus` forced to `draft` on ingest — **publication does not travel** (§12) |
 
 Candidate ingestion is a body upload, not a server-side directory read, so the
 server keeps no assumption that a repo checkout is present. A new CLI target
@@ -532,23 +563,26 @@ containing the deepest node).
    position run's `attempt_end` — which is a run policy, not a pack policy, and is
    absent from the pack enum — becomes `delayed_checkpoint` and is named in
    `graduationBlockers` as a substitution rather than a choice.
-7. `provenance.reviewStatus: "draft"`, `reviewers: []`, and
-   `graduationBlockers` enumerating the five §3b assertion categories plus the
-   opponent-line caveat and any substitution above.
+7. `provenance.reviewStatus: "draft"` and `graduationBlockers` enumerating the five
+   `planning/content-era/plan.md` §3b assertion categories plus the opponent-line
+   caveat and any substitution above.
 
 **Extracted as proposals, outside the pack document:** every fork in the run
 becomes a *deviation proposal* in `proposals_json`.
 
 One exclusion, and it is not optional. `n-way-comparison.md` §7.4 adds
 `Branch.origin: "played" | "simulated"`, where a simulated branch is the pack's
-own authored line played forward by the simulate grid. Distilling a simulated
-branch into a deviation proposal would manufacture "the learner deviated here" out
-of content the author already wrote — a deviation that describes nothing anyone
-chose. **The distiller skips every branch whose `origin` is `"simulated"`**, both
-as a spine sibling and as a proposal, and says so in the response. Until that field
-exists every branch is `"played"` by construction and the rule is inert; it is
-specified now because a distiller written before the field lands would silently do
-the wrong thing after it does.
+own authored line played forward by the simulate grid. After that draft's
+2026-08-13 rework a simulated branch is scratch until the learner enters it, so a
+persisted branch marked `"simulated"` is one the learner *chose to enter* — but its
+moves are still the pack's own authored line, and distilling it into a deviation
+proposal would manufacture "the learner deviated here" out of content the author
+already wrote. Entering a demonstration is not deviating from it. **The distiller
+skips every branch whose `origin` is `"simulated"`**, both as a spine sibling and as
+a proposal, and says so in the response. Until that field exists every branch is
+`"played"` by construction and the rule is inert; it is specified now because a
+distiller written before the field lands would silently do the wrong thing after it
+does.
 
 Each proposal:
 
@@ -589,7 +623,7 @@ Three, all in the existing `runtimeIssues` path (`pack-validation.ts:81-418`) so
 |---|---|---|
 | `INTENT_CAPTURE_HAS_NO_RECORDING_SITE` | warning | a checkpoint declares `interaction.type: "intent_capture"`. Its `planClassIds` do gate plan-class *reveal* (`authored-feedback.ts:210-217`), but nothing records which class the learner chose: `CheckpointSheet.svelte` offers no plan control and no event type carries a choice (`packages/runtime/src/types.ts:200-213`). The warning tells the author, at encoding time, that the field is half-inert — the field-consumer matrix turned into a build signal instead of a document |
 | `DEVIATION_PLAN_CLASS_UNKNOWN` | error | `deviations[].planClassId` (§14a) names an id absent from `planClasses` |
-| `CONSTRUCTED_ROOT_UNVERIFIED` | warning | `start.movesSan` is absent, so the root was placed by hand rather than derived by replaying a legal move list. Pack C's hand-placed root contained a mate in two that no move list could have produced; the position was legal, the spine was legal, and the pack was a lie. The warning is a signal to the reviewer, and §10's checklist makes `/start/fen` a mandatory sign-off item in exactly this case. No engine search is performed — this RFC states a fact about provenance, not an evaluation |
+| `CONSTRUCTED_ROOT_UNVERIFIED` | warning | `start.movesSan` is absent, so the root was placed by hand rather than derived by replaying a legal move list. Pack C's hand-placed root contained a mate in two that no move list could have produced; the position was legal, the spine was legal, and the pack was a lie. The warning is a signal to the author at encoding time and it survives into the served pack's lint report, so a learner reading provenance can see it too. No engine search is performed — this RFC states a fact about provenance, not an evaluation |
 
 ### 8. Playtest harness — the measured 43%
 
@@ -613,10 +647,10 @@ run's digest is not otherwise resolvable, so a restart does not orphan a playtes
 run.
 
 A playtest is refused unless `validatePackDocument(...).valid` is true, and it is
-available to the draft owner and to reviewers reviewing it. It is the mechanism by
-which "validation by use, not ceremony" applies to review: a reviewer who cannot
-play the pack cannot judge it, and D12 was found by execution after three
-document reviews missed it.
+available to the draft owner only. It is where "validation by use, not ceremony"
+lands now that there is no ceremony: D12 was found by executing Pack C after three
+document readings had missed it, and an author who has played their own pack has
+done the one check that has ever actually worked here.
 
 `make pack-preview` is unchanged and remains the local file-based loop.
 
@@ -640,124 +674,145 @@ passing each result through `orchestratePackMove`. No engine is consulted, no ru
 is persisted, and the result is deterministic. Each case returns pass/fail with the
 first differing expectation.
 
-Registration requires every existing case to pass. It does **not** require cases
-to exist — but the review checklist shows the case count, so "0 regression cases"
-is a fact a reviewer sees and may reject on. This is the mechanism that would have
-caught D12 before a reviewer ever opened the file.
+Registration requires every existing case to pass. It does **not** require cases to
+exist — but the case count is carried on the registered record and rendered beside
+the pack's provenance, so "0 regression cases" is a fact a learner can see. This is
+the mechanism that would have caught D12 without anyone opening the file, and with
+no reviewer in the loop it is the only executable check the pipeline has.
 
-### 10. The review queue
+### 10. Publication channels
 
-#### 10a. Who may review
+The owner ruling of 2026-08-13 struck the review queue that occupied this section.
+What replaces it is smaller and is a fact rather than a judgment: every pack the
+catalogue serves carries **where it came from**.
 
-There is no operator or administrator account
-(`docs/identity-and-authorization.md`), and approval is a deployment-wide
-privilege, so it comes from deployment configuration — the same operator boundary
-`docs/content-sourcing.md` already establishes for explorer credentials.
-
-`TABIYA_REVIEWERS` is a comma-separated list of learner handles, read in
-`apps/server/src/main.ts` and passed through `ApplicationOptions`. It is:
-
-- **fail-closed** — unset or empty means nobody may approve, and every review
-  endpoint returns 403 `REVIEW_UNCONFIGURED`. A deployment that forgot to
-  configure reviewers cannot publish; it does not fall back to self-approval;
-- **not self-serving** — `reviewer_learner_id` must differ from the draft's
-  `owner_learner_id`, always, regardless of configuration
-  (`REVIEW_SELF_NOT_PERMITTED`). If the only configured reviewer is the draft's
-  author, that draft cannot be registered on that deployment. That is the correct
-  outcome under ADR-0001 and §3b, not a bug: a solo self-hoster can still author,
-  playtest, and use their packs as drafts; they simply cannot label them
-  `reviewed`.
-
-Reviewer status grants no other privilege anywhere in the system.
-
-#### 10b. What a reviewer actually does
-
-The checklist is **derived from the document**, not typed by hand. For the draft
-document `D` at digest `S`, the server enumerates every pointer that must carry a
-human judgment:
-
-1. every pointer in `D` matching the shipped `PROSE_POINTERS` set
-   (`apps/server/src/sourcing/check.ts:30-36`) — `/objective/summary`,
-   `/planClasses/N/description`, `/spine/.../annotations/N`,
-   `/deviations/N/note`, `/feedbackClaims/N/text`. This is exactly
-   `planning/content-era/plan.md` §3b's five-category assertion set, already
-   encoded in code;
-2. `/deviations/N/class` for every deviation — the pointer
-   `check.ts:122-124` singles out alongside the prose set as one no machine
-   evidence may support;
-3. `/objective/grading/assessedBy` when `kind === "authored"`. When
-   `kind === "syzygy"` the item is listed as already grounded with
-   `grounds: "machine_validation"` and is pre-accepted by
-   `assessmentGrounding`, so a reviewer is never asked to hand-sign a tablebase
-   fact;
-4. `/start/fen` when `start.movesSan` is absent (a constructed root, §7).
-
-For each pointer the reviewer records:
-
-```
-{ pointer, decision: "accepted" | "rejected",
-  grounds: "citable_source" | "machine_validation" | "reviewer_signoff",
-  note?: string }
+```ts
+export type PackChannel = "official" | "community";
 ```
 
-`grounds` reuses the shipped ledger vocabulary (`EvidenceRecord.grounds`,
-`sourcing/types.ts:79`) with one addition, `reviewer_signoff`, which is precisely
-§3b's third acceptable ground and the one no pipeline can ever supply. A
-`rejected` item requires a note.
+| Channel | Means, exactly | Written by |
+|---|---|---|
+| `official` | this pack ships in the repository or the image — `content/packs/` or `schemas/drill_pack.example.json` | a git commit, outside this process |
+| `community` | this pack was published through this deployment's studio by a learner account | `POST /packs/drafts/:draftId/register` |
 
-`POST /packs/drafts/:draftId/review` body:
-`{ decision: "approve" | "request_changes", subjectDigest, items[], note? }`.
+It means nothing else. It is not a quality tier, not an endorsement, and not a
+claim that anyone checked the chess. An official pack is one whoever controls this
+deployment's repository chose to ship; that is the whole assertion, and it is one
+the server can make without lying.
 
-Approval requires **all** of: `subjectDigest` equals the draft's current digest
-(`REVIEW_SUBJECT_STALE`, 409); every enumerated pointer has an `accepted` item
-(`REVIEW_CHECKLIST_INCOMPLETE`, 422, listing the missing pointers); no item
-targets a pointer outside the enumeration (`REVIEW_POINTER_UNKNOWN`); the caller
-is a configured reviewer who is not the owner. `request_changes` requires at
-least one `rejected` item or a note.
+#### 10a. Where the channel lives — and where it deliberately does not
 
-The review is written to `pack_reviews` + `pack_review_items` **outside the pack
-document**. That is what makes the signature non-circular: a reviewer signs the
-exact bytes they read, and those bytes do not yet contain the signature.
+**Not in the pack document.** `schemas/drill_pack.schema.json` gains no channel
+field. The channel is stamped on `PackRecord` and `PackSummary` by `PackCatalogue`
+(§3) according to which composed source resolved the pack:
 
-#### 10c. State machine
+| Source | Channel |
+|---|---|
+| seed `PackRegistry` (git / image) | `official` |
+| `PackStore` over `registered_packs` | `community` |
+| the ephemeral playtest map (§8) | `community`; never in `list()`, so never browsable |
 
-Draft lifecycle state lives on the draft row. The document itself only ever
-carries `provenance.reviewStatus: "draft"` until registration writes
-`"reviewed"`.
+Three consequences, and they are the reason for the choice:
+
+1. **A community author cannot forge official provenance, because there is no field
+   to forge.** §4a invariant 3 is enforced by absence rather than by a check that
+   could be forgotten. The alternative — a document field plus a
+   `PROVENANCE_CHANNEL_NOT_WRITABLE` rejection — would have been a second
+   author-writable-status hole of exactly the kind invariant 2 exists to close.
+2. **No committed pack's bytes change**, so no digest changes and no sidecar
+   `packDigest` in `content/candidates/` is invalidated.
+3. **An exported pack has no channel**, which is correct: channel is a fact about a
+   catalogue, not about a document, and the same bytes are official here and
+   community there (§12).
+
+**`provenance.reviewStatus` is narrowed rather than removed.** It is a required
+field on every pack in the tree and removing it would rewrite every committed
+document's bytes and every recorded digest. It stays, with the review meaning
+struck out of it:
+
+| | Before | After (pack schema 0.8) |
+|---|---|---|
+| enum | `schema_example`, `draft`, `reviewed`, `published` | `schema_example`, `draft`, `published` |
+| `reviewed` | "a reviewer signed this" | **removed** — nothing can grant it and nothing ever did; no committed document uses it |
+| `published` | a distribution act nothing performed | "this document has been published to a catalogue" — written by §11's registration, or by the human who commits a pack into `content/packs/` |
+| `provenance.reviewers` | required non-empty at `reviewed`/`published` | **removed from the schema.** `provenance.additionalProperties` is `true`, so the `"reviewers": []` in every committed pack still validates as untyped extra metadata and no bytes change |
+
+`reviewStatus` therefore has exactly one honest reading left, and it is an
+author-and-server-set lifecycle label: *is this document a working draft, or has it
+been put in front of learners?* It says nothing about grounding, which is what
+`graduationBlockers` says, and nothing about origin, which is what the channel says.
+
+**The shipped graduation rule is re-pointed, not deleted.** `pack-validation.ts:87-109`
+currently fires two issues when `reviewStatus` is `reviewed` or `published`. After
+this RFC:
+
+- `GRADUATION_REQUIRES_SOURCES` **survives**, now keyed on `published` alone. A pack
+  put in front of learners must say where its material came from; that is enforceable,
+  it is the licence and attribution obligation from
+  `archive/content-sourcing-foundation.md`, and it does not depend on anyone reviewing
+  anything. Its message stops citing `plan.md` §3b's reviewer bar and cites the
+  provenance requirement instead.
+- `GRADUATION_REQUIRES_REVIEWERS` is **deleted**, along with the reviewers field it
+  read. It was the mechanical form of a workflow that no longer exists, and leaving it
+  would mean `make pack-check` demanding a name nobody can supply.
+- `sourcing/check.ts:216` (`CANDIDATE_ALREADY_PROMOTED`, "sourcing candidates must
+  remain draft") is **unchanged and still correct**: a candidate is not a published
+  pack, and `draft` is still the only value it may carry.
+
+`apps/server/src/pack-authoring.test.ts:116-147,263` asserts against `"reviewed"` and
+moves with the enum in the same change.
+
+#### 10b. Community by construction
+
+There is no endpoint by which a studio pack becomes official, and there is no
+configuration that makes one. The enforcement is structural, in four layers, each
+verifiable in code rather than by convention:
+
+1. `PackCatalogue` reads the channel from the resolving source (§10a). The register
+   endpoint writes a `registered_packs` row and that table is the community source,
+   so its output is community by the same mechanism that makes it findable at all.
+2. The server never writes to `content/` (§1) and this RFC adds no filesystem write
+   (§4a invariant 7), so no request can put bytes into the official channel.
+3. Seed ids are reserved (§1): registration rejects any pack id present in the seed
+   registry with `PACK_ID_RESERVED`, so a community pack cannot take, shadow, or
+   masquerade as an official pack's identity.
+4. The only path from community to official is `GET /packs/:packId/export` (§12)
+   followed by a human commit into a repository. That is a deliberate act by whoever
+   controls the deployment, performed with the pack's full bytes in hand, and it is
+   where any judgment about the content actually happens — in git, by a person, on
+   the record, with no status field claiming it happened.
+
+#### 10c. Draft lifecycle
+
+With review struck, three states remain on the draft row.
 
 ```
-            submit                approve              register
-  draft ──────────▶ in_review ──────────▶ approved ──────────▶ registered
-    ▲                   │                    │
-    │  request_changes  │                    │  any edit (digest changes)
-    └───────────────────┴────────────────────┘
-                    changes_requested ──edit──▶ draft
-
-  draft | in_review | changes_requested | approved ──withdraw──▶ withdrawn
+              register
+  draft ──────────────▶ registered        (community catalogue, §11)
+    │
+    └──withdraw──▶ withdrawn
 ```
 
 | Transition | Actor | Preconditions |
 |---|---|---|
 | → `draft` | owner | valid seed |
-| `draft` → `in_review` | owner | `validatePackDocument(...).valid`; `graduationBlockers` empty; all §4b conditions met; all regression cases pass; document `reviewStatus === "draft"` and `reviewers` empty |
-| `in_review` → `changes_requested` | reviewer | §10b |
-| `in_review` → `approved` | reviewer | §10b |
-| `changes_requested` → `draft` | owner | any `PUT` |
-| `approved` → `draft` | owner | any `PUT`; the approval is void because the digest changed |
-| `approved` → `registered` | owner or the approving reviewer | §11 |
-| any non-`registered` → `withdrawn` | owner | — |
+| `draft` → `registered` | owner | `validatePackDocument(...).valid`; `graduationBlockers` empty; all §4b conditions met; all regression cases pass; document `reviewStatus === "draft"`; id not reserved; version strictly increasing |
+| `draft` → `withdrawn` | owner | — |
 
 `registered` is terminal. A registered draft is retained as the provenance of its
-`registered_packs` row.
+`registered_packs` row. There is no lock state, because there is no second party
+whose read could go stale, and no `subjectDigest` handshake, because there is no
+signature to scope.
 
 ### 11. Registration and versioning
 
 `POST /packs/drafts/:draftId/register` performs one SQLite transaction:
 
-1. re-read the draft and recompute `digestDrillPack(document)`; require it to
-   equal the approving review's `subject_digest` (`REVIEW_SUBJECT_STALE`);
+1. re-read the draft, require `state === "draft"` (`DRAFT_STATE_INVALID`), and
+   recompute `digestDrillPack(document)` from the stored bytes rather than from
+   anything the request supplied;
 2. re-run `validatePackDocument` on those exact bytes and require zero errors,
-   plus every §4b condition;
+   plus every §4b condition, plus every stored regression case passing (§9);
 3. require the pack id to be absent from the seed registry
    (`PACK_ID_RESERVED`) and the version to be strictly greater than every
    registered version of that id;
@@ -765,42 +820,40 @@ carries `provenance.reviewStatus: "draft"` until registration writes
 
    ```
    published = { ...draft,
-     provenance: { ...draft.provenance,
-                   reviewStatus: "reviewed",
-                   reviewers: [review.reviewer_handle] } }
+     provenance: { ...draft.provenance, reviewStatus: "published" } }
    ```
 
-   and `publishedDigest = digestDrillPack(published)`. Because the transform is
-   exact and the inputs are stored, anyone holding the draft and the review record
-   can recompute the published digest and verify that nothing else changed;
-5. insert `registered_packs`, set the draft to `registered`, and add the record to
-   `PackCatalogue`.
+   and `publishedDigest = digestDrillPack(published)`. The transform touches exactly
+   one field and the inputs are stored, so anyone holding the draft can recompute the
+   published digest and verify that nothing else changed. This is the only
+   server-side rewrite of an authored document anywhere in this RFC;
+5. insert `registered_packs` with the caller's handle as `publisher_handle`, set the
+   draft to `registered`, and add the record to `PackCatalogue` — which resolves it
+   from the community source, so it is served as `channel: "community"` (§10).
 
-`reviewStatus` is written as `"reviewed"`, never `"published"`. Both are treated
-identically by `pack-validation.ts:86-109`, and this endpoint performs no
-distribution act — it makes a pack servable in this deployment. Distribution is
-§12's export followed by a human commit. Nothing in this RFC ever writes
-`"published"`.
+`reviewStatus: "published"` here means precisely "served to learners by this
+deployment", which is what just happened. It carries no distribution claim beyond
+this deployment and no quality claim at all; the pack's `graduationBlockers` are
+empty because §4b required it, and the channel says who published it.
 
 #### 11a. Versioning
 
 `seed.kind: "version"` with `seed.ref: "<packId>@<version>"` creates a new draft
-from a registered document with `reviewStatus` reset to `draft`, `reviewers`
-cleared, and `version` unchanged so the author must bump it deliberately. Submit
-rejects a version that is not strictly greater.
+from a registered document with `reviewStatus` reset to `draft` and `version`
+unchanged, so the author must bump it deliberately. Registration rejects a version
+that is not strictly greater.
 
-**Every new version requires a full review.** A typo fix is re-reviewed. The
-alternative is a "trivial change" classifier, and no mechanism in this system can
-make that judgment; a digest-scoped signature is the only honest one available.
-Superseded versions remain resolvable by digest forever (§3), so in-flight runs
-finish on the pack they started.
+Every new version is an independent registration with its own digest and its own
+row. Superseded versions remain resolvable by digest forever (§3), so in-flight runs
+finish on the pack they started — which is the whole point of the D20 fix and the
+reason versioning could not ship before it.
 
-### 12. Export and community interchange
+### 12. Export and interchange
 
 `GET /packs/:packId/export` (optionally `?version=` or `?digest=`) returns:
 
 ```
-{ pack, review, sources?, evidence? }
+{ pack, sources?, evidence? }
 ```
 
 `pack` is the registered document; the response body is serialized with
@@ -810,33 +863,26 @@ convention `writeCanonicalJson` uses for candidates
 An `x-pack-digest` header carries it, matching `GET /packs/:id`
 (`rest.ts:541`).
 
-`review` is a new **reserved sidecar** named `review.json`:
-
-```
-{ schema: "tabiya.pack.review.v1",
-  packId, packVersion, subjectDigest, publishedDigest,
-  reviewerHandle, decidedAt,
-  items: [ { pointer, decision, grounds, note? } ] }
-```
-
-`review.json` joins `SIDECAR_BASENAMES` (`pack-registry.ts:15-20`) in the same
-change, per the standing rule in `docs/development.md` that new sidecar kinds must
-join that single list before being placed beside served packs. `isSidecarName`
-then excludes it from pack discovery and `checkPackFile` rejects it as a pack
-filename by the existing mechanism.
-
-The interchange unit is therefore the shipped `schemas/drill_pack.schema.json`
-document plus already-reserved sidecar names — no private author format, which is
+There is **no `review.json` sidecar** and `SIDECAR_BASENAMES`
+(`pack-registry.ts:15-20`) is unchanged. The previous draft reserved that name for a
+sign-off record; with no sign-off there is nothing for it to carry, and reserving a
+basename for a file that will never exist is exactly the kind of implied check the
+ruling struck. The interchange unit is the shipped
+`schemas/drill_pack.schema.json` document plus the already-reserved
+`sources.json` / `evidence.json` triple — no private author format, which is
 `design/03`'s explicit requirement.
 
-**Review does not travel.** `seed.kind: "interchange"` accepts an exported bundle
-and lands it as a `draft` with `reviewStatus` forced to `draft` and `reviewers`
-cleared. The imported `review.json` is retained as `seed_ref` provenance a human
-can read; it grants no status, because another deployment's reviewer is not this
-deployment's reviewer.
+**The channel does not travel, because it is not in the bytes.** `seed.kind:
+"interchange"` accepts an exported bundle and lands it as a `draft` with
+`reviewStatus` forced back to `draft`; the exporting deployment and URL are retained
+as `seed_ref` provenance a human can read. A pack that is official on the deployment
+that shipped it is community here until someone commits it into this repository,
+and that is the correct answer rather than a limitation: "official" means *we ship
+it*, and no other deployment can make that statement on our behalf.
 
-`make pack-export PACK=<id> OUT=<dir> API=<url>` writes `pack.json` and
-`review.json` into a directory ready to commit into `content/packs/`.
+`make pack-export PACK=<id> OUT=<dir> API=<url>` writes `pack.json` and any
+sidecars into a directory ready to commit into `content/packs/` — the one path from
+community to official (§10b).
 
 ### 13. Client surface
 
@@ -847,48 +893,63 @@ style:
 
 | Path | Screen |
 |---|---|
-| `/create` | drafts owned by the caller; the review queue when the caller is a reviewer |
+| `/create` | drafts owned by the caller, and the packs they have registered |
 | `/create/new` | seed picker: blank · candidate triple · PGN · completed run · new version |
-| `/create/draft/:draftId` | editor, lint panel, regression panel, playtest and submit |
-| `/create/draft/:draftId/review` | the derived checklist |
+| `/create/draft/:draftId` | editor, lint panel, regression panel, playtest and register |
 
-`AppRoute` gains `{ name: "createDraft", draftId }` and
-`{ name: "createReview", draftId }`; `routePath` and `parseRoute` are extended
-symmetrically and covered by `router.test.ts`.
+`AppRoute` gains `{ name: "createDraft", draftId }`; `routePath` and `parseRoute`
+are extended symmetrically and covered by `router.test.ts`. No review route is
+added.
 
 #### 13b. Editor
 
 Three panes. A JSON text editor; a lint panel listing every
 `PackValidationIssue` as `severity · path · code · message` with the path
 clickable to select that region; and an action bar with Playtest, Run
-regressions, and Submit for review. Submit is disabled while any error exists,
-with the reason named.
+regressions, and Register. Register is disabled while any error exists, while any
+`graduationBlockers` entry remains, or while any regression case fails — each with
+the blocking reason named rather than the button silently inert.
+
+A deviation row in the editor renders the plan class named by its optional
+`planClassId` (§14a) beside the deviation's `class` and note, so the author can see
+that 11.a3 and 11.Rab1 are the same plan while encoding them.
 
 **No visual form builder.** `planning/content-era/log.md` records that one was
 deliberately not built pending evidence that the command loop is the bottleneck,
 and the measured evidence since points at playtesting instead. This RFC ships the
 playtest loop and leaves the editor textual.
 
-#### 13c. Review screen
+#### 13c. Rendering the channel — everywhere a pack is surfaced
 
-One row per checklist pointer, each rendering the pointer, the actual value from
-the document, the surrounding context (for `/deviations/N/class`: the anchor
-spine node, the move in SAN, the note, and the plan class named by
-`planClassId` when present), Accept/Reject, a grounds selector, and a note field.
-Approve is disabled until every row is accepted. A "Play this draft" action opens
-a playtest run.
+The channel is only worth computing if a learner sees it, so this is a specified
+obligation with its own acceptance criterion (A11), not a UI suggestion.
+`PackSummary.channel` and `PackRecord.channel` (§10a) reach the browser through the
+existing `api.ts:23` summary shape, and the client renders it in **every place a pack
+is identified**:
+
+| Surface | Today | After |
+|---|---|---|
+| pack list | `PackList.svelte:35` renders `reviewStatus` raw | renders the channel as the primary origin marker, with a community pack visibly distinguished — not by colour alone |
+| app-shell library section | `App.svelte:359` renders `reviewStatus` raw | same treatment |
+| drill screen | pack title only | the channel accompanies the pack title for the whole run, so a learner is never mid-drill without knowing whose content it is |
+| provenance / pack detail | nothing | channel, publisher handle for community packs, `provenance.sources`, and the pack's outstanding lint warnings |
+
+A community pack carries one fixed sentence wherever its provenance is expanded, and
+it is the honest form of what Pack A already says in plain text:
+
+> `Published to this deployment by <handle>. Community packs are not checked by anyone; their claims are the author's.`
+
+No sentence anywhere states or implies that an official pack was checked either. The
+difference the UI communicates is origin, and only origin.
 
 #### 13d. Capabilities
 
-`SURFACE_IDS` (`capabilities.ts:32-41`) gains `"review"`. `surfaces()`
-(`capabilities.ts:117-129`) reports `create: "available"` — authoring works on any
-deployment — and `review: TABIYA_REVIEWERS` non-empty ? `"available"` :
-`"unavailable-here"`. `assertSurfaceCapabilities` keeps the key set exact, and the
-web `SurfaceId`/`PLANNED_SURFACES` union in `api.ts:158-176` is updated in the same
-change so the two hand-maintained lists cannot drift (the D4 shape). If
-`defect-sweep` has landed, its shared-constant treatment of duplicated
-vocabularies applies to this pair as well and the duplicate list is bound by an
-equality test rather than by hand.
+`SURFACE_IDS` (`capabilities.ts:32-41`) gains **no** new member: there is no review
+surface. `surfaces()` (`capabilities.ts:117-129`) reports `create: "available"` —
+authoring works on any deployment, and unlike approval it needs no roster to be
+honest. `assertSurfaceCapabilities` keeps the key set exact, and the web
+`SurfaceId`/`PLANNED_SURFACES` union in `api.ts:158-176` is updated in the same
+change so the two hand-maintained lists cannot drift (the D4 shape).
 
 ### 14. The three authoring frictions
 
@@ -912,19 +973,24 @@ Existing packs are unaffected: the property is optional and purely additive, so 
 existing document's bytes, canonicalization or digest change, and no sidecar
 `packDigest` in `content/candidates/` is invalidated.
 
-It has a consumer *in this RFC*: §13c's checklist row for
-`/deviations/N/class` renders the plan the author says the deviation belongs to,
-which is exactly the evidence a reviewer needs to judge whether
-`accepted_alternative` or `concept_violation` is the right label. It is a link
-between two id spaces the schema already owns, not a judgment.
+Its consumer changed when the review checklist was struck, and it survives because
+the replacement consumer is real rather than a placeholder: **§13b's editor renders
+the named plan class beside each deviation's `class` and note**, which is the view
+that makes "11.a3 and 11.Rab1 are the same plan" visible at the moment the author is
+encoding them, and `DEVIATION_PLAN_CLASS_UNKNOWN` (§7) enforces referential integrity
+between the two id spaces at every validation site. It is a link between two id
+spaces the schema already owns, not a judgment. If the owner would rather not grow
+the format for an editor-only consumer, dropping §14a costs this RFC nothing else —
+it is the only part of the pack schema 0.8 bump that is optional, since the
+`provenance` narrowing in §10a is not.
 
 **It is deliberately not added to the delivery surface.** `AuthoredFeedbackItem`
 does not gain `planClassId`. Plan classes reveal only through
 `planClassSourceIds` (`authored-feedback.ts:210-217`), gated on their
 intent-capture checkpoint; cross-linking a deviation to a plan class in the
 delivered payload would create a second reveal path that bypasses that gate and
-leak a plan class earlier than its checkpoint. `planClassId` is authoring and
-review metadata only.
+leak a plan class earlier than its checkpoint. `planClassId` is authoring metadata
+only.
 
 #### 14b. Surfaced, not fixed — intent-relative success
 
@@ -951,13 +1017,16 @@ plan-coherence error (14.Na4, removing the piece that supports your own break).
 Pack B's own note says the format should not grow a class until more packs confirm
 the split, and two instances from one author is not that.
 
-The review queue is where this is actually caught, and this RFC puts it there:
-`/deviations/N/class` is a **mandatory per-item sign-off**, rendered beside its
-note and its plan class, with a reviewer note required to reject. Pack A's
-castling deviation — `class: concept_violation`, note: "is not a blunder" — is a
-contradiction no evaluation in this system can detect and a reviewer reads in one
-line. Splitting the enum before a reviewer has ever rejected one of these would be
-designing the fix ahead of the evidence.
+The previous draft routed this to the review queue and made `/deviations/N/class`
+a mandatory sign-off item. With no queue, **it stays surfaced and unfixed, which is
+where Pack B's own note already put it.** Pack A's castling deviation —
+`class: concept_violation`, note: "is not a blunder" — is a contradiction no
+evaluation in this system can detect and no lint can either; it is caught by a human
+reading the file, and after the ruling that human is whoever commits the pack into
+the official channel (§10b) or nobody at all for a community pack. Splitting the enum
+now would be designing a fix ahead of the evidence, and the evidence is still two
+instances from one author. The unblocking input is unchanged: more authored packs
+that need the split.
 
 ### 15. Error codes
 
@@ -968,18 +1037,11 @@ mapping added to `errorResponse` (`rest.ts:353-378`):
 |---|---|
 | `DRAFT_NOT_FOUND` | 404 |
 | `DRAFT_STALE` | 409 |
-| `DRAFT_LOCKED_FOR_REVIEW` | 409 |
 | `DRAFT_STATE_INVALID` | 409 |
 | `DRAFT_LIMIT_REACHED` | 409 |
 | `PROVENANCE_STATUS_NOT_WRITABLE` | 422 |
-| `PROVENANCE_REVIEWERS_NOT_WRITABLE` | 422 |
 | `GRADUATION_BLOCKERS_OUTSTANDING` | 422 |
 | `REGRESSION_FAILED` | 422 |
-| `REVIEW_UNCONFIGURED` | 403 |
-| `REVIEW_SELF_NOT_PERMITTED` | 403 |
-| `REVIEW_SUBJECT_STALE` | 409 |
-| `REVIEW_CHECKLIST_INCOMPLETE` | 422 |
-| `REVIEW_POINTER_UNKNOWN` | 422 |
 | `PACK_ID_RESERVED` | 409 |
 | `PACK_VERSION_EXISTS` | 409 |
 | `PACK_VERSION_NOT_INCREASING` | 422 |
@@ -992,16 +1054,20 @@ shape (`pack-registry.ts:91-102`).
 
 ### 16. Documentation
 
-`docs/pack-studio.md` is created: the three content locations, the write path and
-its invariants, distillation's extract/refuse boundary, the review state machine
-and checklist derivation, versioning, and export. `docs/drill-pack-format.md`
-records the v0.8 `planClassId` addition and the three new lint codes, in the
-style of its existing `## v0.4 Line Drill contract` section and after the v0.5, v0.6 and
-v0.7 sections the parallel drafts add.
-`docs/development.md` records `make draft-import`, `make pack-export`,
-`TABIYA_REVIEWERS`, and `review.json` joining the sidecar list.
-`docs/branch-runtime.md` records digest-addressed pack resolution.
-`docs/content-sourcing.md` records that `draft-import` is the candidate's exit.
+`docs/pack-studio.md` is created: the three content locations and the channel
+boundary between them, the write path and its invariants, distillation's
+extract/refuse boundary, the draft lifecycle, versioning, and export. It states in
+its own words that no pack in this system has been reviewed by anyone and that the
+channel is an origin fact, so the canonical documentation cannot be read as implying
+a check. `docs/drill-pack-format.md` records the v0.8 `planClassId` addition, the
+narrowed `provenance.reviewStatus` enum, the removal of `provenance.reviewers`, and
+the three new lint codes, in the style of its existing `## v0.4 Line Drill contract`
+section and after the v0.5, v0.6 and v0.7 sections the parallel drafts add.
+`docs/development.md` records `make draft-import` and `make pack-export`; the
+sidecar list is unchanged and that is stated, because the previous draft proposed
+adding to it. `docs/branch-runtime.md` records digest-addressed pack resolution
+(D20). `docs/content-sourcing.md` records that `draft-import` is the candidate's
+exit. `docs/app-shell.md` records the channel's rendering obligation (§13c).
 
 ## Deviations from design
 
@@ -1011,45 +1077,56 @@ v0.7 sections the parallel drafts add.
    mean pinning an unversioned web API and inventing a second format. The surface
    promised — importing a study as a pack seed — works; the mechanism is one
    importer.
-2. **`design/03` §Create lists "strong-player review"; this RFC specifies
-   deployment-configured reviewers.** Strong-reviewer recruitment is research queue
-   9 and is a staffing question, not a mechanism. The mechanism is neutral about
-   how strong the configured reviewer is and records who they were.
+2. **`design/03` §Create lists "strong-player review"; this RFC ships no review at
+   all.** This is the owner ruling of 2026-08-13, not an implementer's judgment: there
+   is no pack review workflow and there never will be one, because a sign-off gate
+   nobody performs is worse than an honest label. The surface `design/03` promised is
+   replaced by the publication channel (§10), which asserts origin instead of
+   approval. A `design/` BACKLOG row is proposed below to bring that document into
+   line; this RFC does not edit it.
 3. **`design/03` §Stable application shell puts "review queue" under Create.**
-   Honoured, with one addition: `review` becomes a capability surface so a
-   deployment can honestly report that approval is unconfigured, rather than
-   showing a queue nobody can act on.
+   Not honoured, for the same reason. `/create` holds drafts and registrations only,
+   and no `review` capability surface is added — a surface that reports "approval is
+   unconfigured" would imply approval exists somewhere, which it does not.
 
 ## Acceptance criteria
 
 1. `make verify` and `make test-browser` pass; no test is retried or skipped.
-2. **Migration.** A database at `STORAGE_VERSION` 8 migrates to 9 with all four
-   tables present and no existing row altered; a database already at 9 is a no-op;
+2. **Migration.** A database at `STORAGE_VERSION` 8 migrates to 9 with both tables
+   present and no existing row altered; a database already at 9 is a no-op;
    a database at 10 still fails with the existing newer-schema error. A database at
    5 migrates through 6, 7 and 8 to 9 with every intervening body intact.
-3. **Digest-addressed resolution (regression for the §3 defect).** A run is
+3. **Digest-addressed resolution (regression for D20, §3).** A run is
    started against pack `p@1.0.0`; `p@1.1.0` is then registered; the in-flight run
    still fires checkpoints, still transitions its objective, still returns authored
    feedback, and still exports pack-aware PGN. The same test asserts the pre-fix
    behaviour is gone by checking that `byDigest` resolves the superseded version
    while `list()` does not contain it.
 4. **`reviewStatus` cannot be author-written.** `POST /packs/drafts` and `PUT` with
-   `provenance.reviewStatus: "reviewed"` return `PROVENANCE_STATUS_NOT_WRITABLE`;
-   with a non-empty `reviewers`, `PROVENANCE_REVIEWERS_NOT_WRITABLE`. A draft that
-   never passes review can reach no state in which any endpoint serves it from
-   `GET /packs`.
-5. **Review authorization.** With `TABIYA_REVIEWERS` unset, every review endpoint
-   returns 403 `REVIEW_UNCONFIGURED`. With the draft owner as the only configured
-   reviewer, approval returns 403 `REVIEW_SELF_NOT_PERMITTED`. With a second
-   configured learner, approval succeeds.
-6. **Checklist derivation.** For a draft containing an objective summary, two plan
-   classes with descriptions, three spine annotations, four deviations with notes,
-   one feedback claim and an authored root assessment, the derived checklist
-   contains exactly the expected pointer set; approving with any one pointer
-   missing returns `REVIEW_CHECKLIST_INCOMPLETE` naming it; a pointer outside the
-   set returns `REVIEW_POINTER_UNKNOWN`.
-7. **Signature is digest-scoped.** After approval, one `PUT` returns the draft to
-   `draft` and `register` returns `REVIEW_SUBJECT_STALE`.
+   `provenance.reviewStatus: "published"` return `PROVENANCE_STATUS_NOT_WRITABLE`.
+   A draft can reach no state in which any endpoint serves it from `GET /packs`
+   without passing through `register`.
+5. **The channel is not forgeable, because it is not in the document.** A schema
+   test asserts that no property named `channel` exists anywhere in
+   `schemas/drill_pack.schema.json`. A server test registers a pack whose document
+   carries a hand-added `provenance.channel: "official"` extra property and asserts
+   that `GET /packs` reports it as `community`, that `GET /packs/:id` does the same,
+   and that the served summary's channel is byte-identical to the one computed for
+   a pack with no such property. A second case asserts that a pack resolved from the
+   seed registry reports `official` and that registering under a seed id is refused
+   with `PACK_ID_RESERVED`.
+6. **The graduation rule is re-pointed, not broken.** `make pack-check` on a
+   document with `reviewStatus: "published"` and empty `sources` reports
+   `GRADUATION_REQUIRES_SOURCES`; the same document with one source passes.
+   `GRADUATION_REQUIRES_REVIEWERS` no longer exists in the codebase, asserted by
+   absence from the exported issue-code set. `sourcing/check.ts:216`'s
+   `CANDIDATE_ALREADY_PROMOTED` still fires for a candidate whose `reviewStatus` is
+   not `draft`, unchanged.
+7. **Registration is idempotent-safe and stateful.** Registering the same draft
+   twice returns `DRAFT_STATE_INVALID` on the second call, and exactly one
+   `registered_packs` row exists. The published document differs from the draft in
+   exactly one JSON Pointer, `/provenance/reviewStatus`, asserted by structural
+   diff rather than by digest equality alone.
 8. **Registration gate.** Registration is refused, each identifying its own cause,
    for: a pack whose `start.side` is absent (schema stage, inherited); a pack
    declaring `perfect_tablebase` (runtime stage, inherited); a pack declaring
@@ -1062,12 +1139,12 @@ v0.7 sections the parallel drafts add.
 9. **Round trip (required by the brief).** One server-level test carries a real
    committed candidate — `content/candidates/d35-queen-s-gambit-declined-exchange-variation`
    — end to end: `draft-import` → author edits that clear every graduation blocker
-   → playtest run that fires the candidate's checkpoint → submit → a second
-   learner's review signing every derived pointer → register → the pack appears in
-   `GET /packs`, `GET /packs/:id` serves it with `reviewStatus: "reviewed"` and one
-   reviewer, `GET /packs/:id/export` returns bytes that hash to the registered
-   digest, and the recomputed `{...draft, provenance:{...}}` transform reproduces
-   that digest exactly.
+   → playtest run that fires the candidate's checkpoint → register → the pack
+   appears in `GET /packs` with `channel: "community"`, `GET /packs/:id` serves it
+   with `reviewStatus: "published"`, `GET /packs/:id/export` returns bytes that hash
+   to the registered digest, and the recomputed
+   `{...draft, provenance:{...reviewStatus:"published"}}` transform reproduces that
+   digest exactly.
 10. **Session distillation.** Distilling a run with one fork produces: a spine
     whose mainline equals the selected branch and whose fork appears as a sibling;
     exactly one deviation *proposal* with no `class`; zero entries in
@@ -1078,33 +1155,46 @@ v0.7 sections the parallel drafts add.
     the engine identities and `policyModeApplied` values actually recorded. A
     property test over generated runs asserts the distilled document always
     passes `validatePackDocument` structurally and always fails §4b's graduation
-    gate.
-11. **Import refuses to launder prose.** A PGN with comments and NAGs produces a
+    gate. A run containing a branch with `origin: "simulated"` produces no proposal
+    and no spine sibling for it, and the response says so.
+11. **The channel is visible wherever a pack is (§13c).** Component tests assert
+    that `PackList`, the app-shell library section, the drill screen's run header
+    and the pack-provenance panel each render the channel for both an official and
+    a community pack, that the two are distinguishable by text and not by colour
+    alone, and that the community sentence in §13c appears verbatim on the
+    community pack and nowhere on the official one. A snapshot asserts that no
+    rendered string anywhere in the pack surface contains "reviewed", "approved",
+    "verified" or "checked".
+12. **Import refuses to launder prose.** A PGN with comments and NAGs produces a
     draft whose document contains none of that text — asserted by searching the
     serialized document for each comment string — while the comments are returned
     as reference material.
-12. **Lints.** `INTENT_CAPTURE_HAS_NO_RECORDING_SITE` fires on the schema fixture's
+13. **Lints.** `INTENT_CAPTURE_HAS_NO_RECORDING_SITE` fires on the schema fixture's
     intent-capture checkpoint and is a warning, not an error;
     `DEVIATION_PLAN_CLASS_UNKNOWN` is an error; `CONSTRUCTED_ROOT_UNVERIFIED` fires
     on Pack C's draft and not on Pack A's.
-13. **Format amendment.** The schema `$id` is `:0.8` and
-    `DRILL_PACK_SCHEMA_VERSION` is `"0.8"`; every pack in `content/candidates/`,
-    `content/drafts/`, and `schemas/` still validates; `digestDrillPack` over every
-    committed pack returns the digest recorded in its sidecar where one exists, and
-    the digest of `schemas/drill_pack.example.json` is unchanged.
-14. **Sidecar list.** `review.json` is in `SIDECAR_BASENAMES`; `checkPackFile`
-    rejects it with `PACK_FILE_IS_RESERVED_SIDECAR_NAME`; a directory containing
-    `pack.json` + `review.json` loads exactly one pack.
-15. **Browser test (required by the brief).** A Playwright test in
-    `tests/browser/` registers two learners on a deployment configured with the
-    second as reviewer, and: author navigates to `/create`, creates a draft from a
-    seed, sees a lint error and fixes it, playtests the draft and plays one move
-    that fires its checkpoint, submits it; reviewer opens `/create`, sees the
-    queue, opens the checklist, accepts every row, approves; author registers; the
-    pack appears in `/library` with a reviewed status; and the author's attempt to
-    approve their own draft is refused in the UI with the reason shown. The test
-    asserts a draft never appears in the `/play` pack list.
-16. **Documentation** in §16 lands in the same change; `rfc/README.md` carries the
+14. **Format amendment.** The schema `$id` is `:0.8` and
+    `DRILL_PACK_SCHEMA_VERSION` is `"0.8"`; the `reviewStatus` enum is exactly
+    `["schema_example","draft","published"]`; `provenance.reviewers` is absent from
+    the schema and a document still carrying `"reviewers": []` validates as untyped
+    extra metadata; every pack in `content/candidates/`, `content/drafts/`, and
+    `schemas/` still validates; `digestDrillPack` over every committed pack returns
+    the digest recorded in its sidecar where one exists, and the digest of
+    `schemas/drill_pack.example.json` is unchanged.
+15. **Sidecar list unchanged.** `SIDECAR_BASENAMES` (`pack-registry.ts:15-20`) has
+    the same members before and after this change, asserted explicitly — the
+    previous draft added `review.json` to it and the assertion is what stops that
+    addition surviving as a stray reservation.
+16. **Browser test (required by the brief).** A Playwright test in
+    `tests/browser/` registers one learner and: navigates to `/create`, creates a
+    draft from a seed, sees a lint error and fixes it, sees Register disabled with
+    the outstanding `graduationBlockers` named as the reason, clears them, playtests
+    the draft and plays one move that fires its checkpoint, registers; the pack then
+    appears in `/library` **marked community**, opens in `/play`, and shows the
+    community provenance sentence. The test asserts a draft never appears in the
+    `/play` pack list, and that the served example pack appears marked official in
+    the same list, so the two channels are visibly distinct in one screenshot.
+17. **Documentation** in §16 lands in the same change; `rfc/README.md` carries the
     Active row, migration 9, and the pack-schema-version claim (§0), and the
     migration register records migration 9 against this RFC before any code is
     written.
@@ -1115,47 +1205,40 @@ Per RFC-0000's agent rule, the implementer must not edit `design/`. Proposed row
 for the owner:
 
 1. **Authoring-format friction table** — mark the `planClassId` row `📜 RFC` naming
-   this RFC §14a; annotate the intent-relative-success row "surfaced by
+   this RFC §14a and noting that its consumer is now the studio editor rather than a
+   review checklist; annotate the intent-relative-success row "surfaced by
    `INTENT_CAPTURE_HAS_NO_RECORDING_SITE`; blocked on a durable interaction record
-   (program #4)"; annotate the `concept_violation` row "handled by mandatory
-   reviewer sign-off on `/deviations/N/class`; enum split deferred pending a
-   reviewer rejection that the split would have prevented".
-2. **New defect row** — *a superseded pack digest silently un-orchestrates its
+   (program #4)"; annotate the `concept_violation` row "surfaced, not fixed; the
+   review sign-off that would have caught it was struck by the 2026-08-13 ruling.
+   Unblocking input is more authored packs that need the split, not a reviewer."
+2. **New defect row D20** — *a superseded pack digest silently un-orchestrates its
    in-flight runs* (`service.ts:621-625` with `service.ts:252,276`), closed by this
    RFC §3. It is latent today and becomes live the moment a second version of any
    pack can exist.
 3. **New row** — *durable checkpoint-interaction record*: intent capture and
-   prediction both need a run event carrying the learner's choice before either
-   can be graded. Names program #4 and the `INTENT_CAPTURE_HAS_NO_RECORDING_SITE`
-   warning as the evidence.
-4. **New row** — *pack contribution across deployments*: `review.json` travels as
-   provenance but confers no status; a cross-deployment trust model (signed
-   reviewer identity, federated rosters) is undesigned and touches Q2.
-5. **B6 gate row** — update `design/03` §Breadth-complete gate B6 once implemented.
+   prediction both need a run event carrying the learner's choice. Names program #4
+   and the `INTENT_CAPTURE_HAS_NO_RECORDING_SITE` warning as the evidence.
+4. **New row** — *pack contribution across deployments*: an exported pack lands as
+   community wherever it is imported and carries no channel of its own (§12); a
+   cross-deployment provenance model (signed publisher identity, federated origin
+   claims) is undesigned and touches Q2.
+5. **`design/03-product-breadth.md` §Create and §Stable application shell** — the
+   surface map still lists "strong-player review" and a "review queue" under Create,
+   and gate **B6** is worded against a reviewed catalogue. The 2026-08-13 ruling
+   removes all three. Proposed: replace them with the publication channel, and
+   restate B6 as "a candidate, an import, or a completed run can become a served
+   community pack, and its channel is visible wherever it is surfaced". This is the
+   `design/` edit this RFC most needs and cannot make.
+6. **`design/00-thesis.md` / research queue 9** — strong-reviewer recruitment was
+   the staffing question behind the review gate. With no gate it is no longer a
+   product prerequisite; the row should be restated as content-sourcing partnership
+   or closed.
 
 ## Open questions
 
-**Owner ruling required: the reviewer roster.** `docs/identity-and-authorization.md`
-states that a learner "owns no deployment-wide privileges" and that "there is no
-operator or administrator account", yet approval is exactly a deployment-wide
-privilege. §10a specifies a deploy-time `TABIYA_REVIEWERS` handle list, fail-closed
-when unset, with self-review refused unconditionally — matching the operator
-boundary `docs/content-sourcing.md` already establishes for explorer credentials.
-Two points need the owner, because both are product decisions rather than
-mechanism:
-
-1. Is a deploy-time roster the right shape, or should it be a per-pack grant
-   (author invites a reviewer, as runs invite spectators) or a first-registered-
-   learner privilege? A per-pack grant would let authors choose their reviewers,
-   which is closer to how the content-era pipeline actually works but weaker as a
-   catalogue-quality guarantee.
-2. Is it *intended* that a solo self-hoster with one account can author, playtest
-   and use packs but can never mark one `reviewed`? This RFC says yes, on ADR-0001
-   and §3b grounds — a second judgment is the whole point of the graduation bar —
-   and accepts that it makes `reviewed` unreachable for single-account
-   deployments.
-
-No other question is open.
+None. The one open question this draft carried — the shape of the reviewer roster —
+was answered by the owner ruling of 2026-08-13, which removed the roster and the
+workflow it served rather than choosing a shape for it.
 
 ## Changelog
 
@@ -1171,3 +1254,31 @@ No other question is open.
   recorded 0.6 contention with `return-and-progression.md` rather than merging
   bumps), and migration 6 → 7 → 8 → **9** as `n-way-comparison.md`,
   `live-session-platform.md` and `return-and-progression.md` claimed those numbers.
+- 2026-08-13: **rewritten against two owner rulings and renamed
+  `pack-studio-and-review.md` → `pack-studio.md`.**
+  *Ruling 1 — there is no pack review workflow and there never will be one.* Struck:
+  the review queue and its `?queue=review` listing, the `TABIYA_REVIEWERS` roster and
+  its fail-closed configuration, the self-review refusal, the document-derived
+  sign-off checklist and its `grounds` vocabulary, the `pack_reviews` and
+  `pack_review_items` tables, `registered_packs.review_id`, the
+  `draft → in_review → changes_requested → approved → registered` state machine and
+  its lock and staleness rules, the `/submit` and `/review` endpoints, the
+  `/create/draft/:draftId/review` route and screen, the `review` capability surface,
+  the `review.json` interchange sidecar and its `SIDECAR_BASENAMES` reservation, six
+  `REVIEW_*` error codes plus `DRAFT_LOCKED_FOR_REVIEW` and
+  `PROVENANCE_REVIEWERS_NOT_WRITABLE`, and the open question about solo operators.
+  *Ruling 2 — packs carry a publication channel, not a review status.* Added §10
+  (`PackChannel`, official = git/image, community = studio), made the previously
+  incidental seed-id reservation the channel boundary itself (§1, §10b), and gave the
+  channel a rendering obligation with its own acceptance criterion (§13c, A11).
+  **Resolved the dangling `reviewStatus` field** rather than leaving it: verified its
+  two shipped consumers (`pack-validation.ts:87-109`, `sourcing/check.ts:216`) and
+  narrowed the enum to `schema_example | draft | published`, removed
+  `provenance.reviewers`, kept `GRADUATION_REQUIRES_SOURCES` re-keyed on `published`,
+  and deleted `GRADUATION_REQUIRES_REVIEWERS`. No committed document's bytes or
+  digest change, because `provenance.additionalProperties` is `true`. Re-justified
+  §14a's `planClassId` against its surviving consumer (the studio editor) and flagged
+  it as the only optional part of the 0.8 bump. Kept unchanged: the write path and
+  its safety invariants, `/create`, session distillation, PGN/candidate/interchange
+  import, the playtest harness, the regression set, versioning, and the D20
+  digest-addressed resolution fix.

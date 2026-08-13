@@ -279,9 +279,11 @@
     ],
     "reviewers": [],
     "graduationBlockers": [
-      "Every feedbackClaim needs either a citable reviewed source, engine/corpus validation, or a strong reviewer's sign-off before reviewStatus leaves draft",
-      "Deviation class judgments (esp. the concept_violation on O-O) need the same",
-      "Engine validation pass not yet run"
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Nothing in this file has been checked by a second party, nothing here is labelled as checked, and no sign-off will ever clear a blocker below. The only two things that clear one are a citable source or mechanical validation that actually bears on the claim.",
+      "Every feedbackClaim needs a citable source (a named book, course or annotated master game whose idea is restated in our words) or engine/corpus validation that bears on it. None has either.",
+      "Deviation class judgments need the same. The concept_violation on O-O is the sharpest case and it is internally contradictory: the class asserts a conceptual error while the deviation's own note says the move is not a blunder. Stockfish on the concrete line at fixed depth is the only instrument in this repo that can settle what castling there actually costs; it has not been run.",
+      "No engine validation pass has been run on any position in this pack. At 32 pieces no tablebase applies at any node, so Stockfish at fixed depth is the only mechanical ground truth available here and it is the one that is missing.",
+      "The frequency claims about what players in this rating band actually play are asserted from model knowledge. The Lichess explorer API is shipped in this repo and could settle them cheaply."
     ]
   }
 }

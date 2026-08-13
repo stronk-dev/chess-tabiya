@@ -31,8 +31,8 @@
   Specification §13. Its Active-table row in `rfc/README.md` is added in the same commit.
 - **Pack schema version:** **0.6 → 0.7, rebased.** `DRILL_PACK_SCHEMA_VERSION` is the same class of
   shared single-writer resource as a migration number, and it is now contended: `rfc/defect-sweep.md`
-  §7 claims 0.5, while **`rfc/pack-studio-and-review.md` and `rfc/return-and-progression.md` both
-  claim 0.6** — a live collision this RFC found and does not join. This RFC takes 0.7 and orders
+  §7 claims 0.5, while **`rfc/pack-studio.md` (then named `pack-studio-and-review.md`) and
+  `rfc/return-and-progression.md` both claim 0.6** — a live collision this RFC found and does not join. This RFC takes 0.7 and orders
   after all three. See §3 and the register note added to `rfc/README.md` in the same commit.
 - **Planning:** `planning/trajectory-drill/` (once implementing)
 
@@ -252,7 +252,8 @@ from the bump** and no stored run is orphaned by it.
 
 **The number is rebased, and the rebase is the point.** Five product RFCs were drafted in
 parallel on 2026-08-13. `rfc/defect-sweep.md` §7 claims pack schema 0.5;
-`rfc/pack-studio-and-review.md` and `rfc/return-and-progression.md` **both** claim 0.6, which
+`rfc/pack-studio.md` (then named `pack-studio-and-review.md`) and
+`rfc/return-and-progression.md` **both** claim 0.6, which
 is the exact failure the migration register was instituted to stop
 (`rfc/README.md` §Migration register) applied to a second shared constant. This RFC takes 0.7
 and orders after all three, exactly as F2 rebased its migration to 3 rather than contest 2. The

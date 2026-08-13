@@ -19,7 +19,7 @@ Every session logs **six categories separately**, in minutes, to `log.md`:
 | `research` | choosing roots, reading theory, explorer/corpus lookups, source citation |
 | `encoding` | writing the pack JSON: spine, objectives, checkpoints, deviations, claims |
 | `engine-validation` | Stockfish/Syzygy checks, fixing what validation refutes |
-| `review` | the reviewer's pass (owner), incl. their reading time |
+| `review` | **retired 2026-08-13** — there is no reviewer pass. Historical entries stand; new entries log `0` |
 | `revision` | rework after review or validation |
 | `tooling-friction` | time lost to missing tools: hand-writing FENs, no preview, no lint feedback loop, manual re-runs |
 
@@ -57,6 +57,14 @@ whether the chess is right). If owner-review per pack does not fall as packs
 accumulate, that is the real cost ceiling — tooling cannot fix judgment time,
 only content reuse and better first drafts can.
 
+**Correction, 2026-08-13.** `owner-review` stood at **0 minutes across all three
+packs** — the clock this section called decisive never started. The owner's ruling
+draws the conclusion rather than waiting longer for it: there is no pack review
+workflow and there never will be one, so the clock is retired rather than left
+running at zero. K10's verdict is therefore on `agent-*` plus `revision` plus
+whatever grounding work (citation hunting, engine passes) the §3b bar actually
+demands — which is measurable, unlike judgment time nobody was spending.
+
 ## 2. Batch 1 — one pack per phase (measure before scaling)
 
 - [ ] **Pack A — anti-Caro Advance** (opening, faced-not-chosen). 1.e4 c6 2.d4
@@ -71,10 +79,11 @@ only content reuse and better first drafts can.
 - [ ] **Trajectory D** linking A→its middlegame→a rook ending, proving the
       cross-phase claim on real content.
 
-Authoring: claude drafts, owner reviews (named reviewer; strong-reviewer
-recruitment remains research queue 9). Every claim needs a citable source per
-the rights rule — original prose only, ideas cited, annotation text never
-copied.
+Authoring: claude drafts; there is no review step (ruling 2026-08-13, §3b).
+Every claim needs a citable source or a mechanical check per §3b and the rights
+rule — original prose only, ideas cited, annotation text never copied — and every
+claim that has neither is named in the pack's own `graduationBlockers` and stays
+there.
 
 ## 3. Contract harvest (the second deliverable)
 
@@ -93,14 +102,13 @@ These notes are the input to re-attempting the withdrawn RFCs
 (`rfc/withdrawn/`) — read their withdrawal notes first so the same ground
 isn't relearned.
 
-## 3b. Graduation bar (codex review, 2026-08-12)
+## 3b. Graduation bar (codex review, 2026-08-12; reviewer sign-off struck 2026-08-13)
 
 **"Original prose" satisfies copyright, not grounding.** A pack may sit in
-`draft` with agent-authored, uncited strategic claims. It may **not** reach
-`reviewed`/`published` until **every strategic assertion in the pack** has
-grounding. The complete assertion set (widened after codex review — the earlier
-list named only two of five, while the provenance block admitted all five were
-ungrounded):
+`draft` with agent-authored, uncited strategic claims. It may **not** be
+`published` until **every strategic assertion in the pack** has grounding. The
+complete assertion set (widened after codex review — the earlier list named only two
+of five, while the provenance block admitted all five were ungrounded):
 
 1. `objective.summary`
 2. every `planClasses[].description`
@@ -108,32 +116,61 @@ ungrounded):
 4. every `feedbackClaims[].text`
 5. every `deviations[].note` **and its `class` judgment**
 
-Each needs one of:
+Each needs one of **two** things:
 
-- a citable reviewed source (Wikibooks CC BY-SA theory with attribution, an
-  annotated master game, a named book/course *idea* restated in our words), or
-- engine/corpus validation that actually bears on the claim (Stockfish on the
-  concrete line; explorer frequency for "this is common at 1600"), or
-- a strong reviewer's explicit sign-off.
+- a citable source (Wikibooks CC BY-SA theory with attribution, an annotated
+  master game, a named book/course *idea* restated in our words), or
+- engine/corpus/tablebase validation that actually bears on the claim (Stockfish
+  at fixed depth on the concrete line; Syzygy where the material is inside seven
+  pieces; explorer frequency for "this is common at 1600").
 
 Otherwise the product ships fluent, ungrounded assertion under an authored
 label — the exact failure ADR-0005 forbids, arriving through the content door
 instead of the LLM door.
 
-**Enforcement status, stated honestly.** This is a process barrier, not a
-validator rule: `graduationBlockers` is untyped extra metadata and nothing
-stops `reviewStatus` being flipped. Per-assertion grounding cannot be enforced
-until the evidence encoding exists (a content-era output, not an input). What
-*can* be enforced today with the shipped schema, and should be: **`pack-check`
-fails any pack whose `reviewStatus` is not `draft` while `provenance.sources`
-or `provenance.reviewers` is empty.** That blocks the crudest failure — a
-silent promotion with no reviewer and no sources — without inventing authored
-vocabulary. Until then, owner review must explicitly walk all five assertion
-categories, not just the claims.
+**The third route is struck (owner ruling, 2026-08-13).** This list previously
+ended with "a strong reviewer's explicit sign-off". **There is no pack review
+workflow and there never will be one.** A sign-off gate nobody performs is worse
+than an honest label, because a status nobody can grant implies a check that never
+happened — and `owner-review` had stood at 0 minutes across all three packs, which
+was the evidence. Consequences for this bar, stated rather than left implied:
+
+- an assertion that neither a source nor an instrument can reach **stays
+  ungrounded, permanently and in writing**. It is named in the pack's own
+  `graduationBlockers` and it does not become groundable by anyone reading it.
+  Pack C's practical-difficulty judgments and Pack B's three-plan taxonomy are the
+  live examples;
+- some assertions are unreachable by material, not by effort. Pack C sits at eleven
+  pieces, so no tablebase applies to any node in it and none ever will;
+- what replaces the reviewer's assurance is not another assurance. It is the
+  **publication channel** (`rfc/pack-studio.md` §10): a pack says where it came
+  from, and nothing anywhere says it was checked.
+
+**Enforcement status, stated honestly.** This is still a process barrier, not a
+per-assertion validator rule: `graduationBlockers` is untyped extra metadata, and
+per-assertion grounding cannot be enforced until the evidence encoding exists (a
+content-era output, not an input). What *is* enforceable and what changes:
+
+- **shipped today**: `pack-check` fails any pack whose `reviewStatus` is not
+  `draft` while `provenance.sources` **or** `provenance.reviewers` is empty
+  (`apps/server/src/pack-validation.ts:87-109`, `GRADUATION_REQUIRES_SOURCES` /
+  `GRADUATION_REQUIRES_REVIEWERS`);
+- **after `rfc/pack-studio.md`**: the sources half survives, re-keyed on
+  `published`; the reviewers half is **deleted** along with the field it reads,
+  because it demanded a name nobody can supply. Registration additionally refuses
+  any pack that still carries a non-empty `graduationBlockers`, which turns this
+  section's convention into a precondition for the first time — author-declared,
+  and honest about being author-declared.
 
 ## 4. Exit criteria
 
-Batch 1 is done when: three packs + one trajectory are reviewed and published;
-the six-category cost table has real numbers; the contract-harvest notes exist;
-and a written verdict on K10 (pack production cost) is logged in
-`planning/exploration/log.md` with the tooling priorities it implies.
+Batch 1 is done when: three packs + one trajectory have every §3b assertion either
+grounded by a citable source or a mechanical check, or named in their own
+`graduationBlockers` as permanently ungrounded with the reason; the six-category
+cost table has real numbers; the contract-harvest notes exist; and a written verdict
+on K10 (pack production cost) is logged in `planning/exploration/log.md` with the
+tooling priorities it implies.
+
+"Reviewed and published" was the previous wording. Nothing is reviewed, so the
+exit criterion is grounding coverage plus honest labelling of what could not be
+grounded — which is what the three packs' rewritten blockers now record.

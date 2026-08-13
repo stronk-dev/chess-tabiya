@@ -533,13 +533,13 @@
     ],
     "reviewers": [],
     "graduationBlockers": [
-      "Stockfish validation pass at real depth on every spine node and every deviation; nothing in this pack has been engine-checked.",
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No reviewer has looked at this file and none will; nothing here is labelled as checked, and every blocker below is cleared by a citation or by mechanical evidence or not at all.",
+      "This position holds eleven pieces. Syzygy tops out at seven, so no tablebase ground truth exists for the root or for any node in this pack, and none can be obtained \u2014 this is a permanent property of the material, not a task nobody has run yet. Stockfish at fixed depth on every spine node and every deviation is therefore the only mechanical instrument that applies here, and it has not been run.",
       "The load-bearing claim -- that this material is a theoretical draw held by accurate defence -- needs a citable endgame reference. None was consulted.",
       "The w-ra8/w-ra7 line asserts that 1...Rd2 concedes a pawn move to the back-rank check. It is the pack's most concrete tactical claim, it drives the whole king-first-versus-activity comparison, and it is unverified.",
-      "Deviation classes need confirmation, especially the two concept_violations (passive Rd7, accepting the rook trade) and the claim that the pawn ending after a rook trade is harder to hold than the rook ending. That last one is stated as a practical judgment precisely because it cannot be stated as a fact.",
+      "The deviation classes split into two halves with different fates. The concrete half \u2014 the two concept_violations (passive Rd7, accepting the rook trade) \u2014 is engine-checkable at fixed depth and has not been checked. The other half is not: the claim that the pawn ending after a rook trade is harder to hold than the rook ending is a practical judgment about human play, stated as a judgment precisely because it cannot be stated as a fact, and no instrument in this repo can promote it to one.",
       "Practical-difficulty judgments -- which defensive scheme a 1500-2000 player actually holds -- need Maia or corpus evidence. design/04 §7 says save/resist objectives need practical-difficulty judgment that only authored endgame content can express; this pack expresses it with no evidence underneath.",
-      "The still-holding checkpoint uses a materialBalance trigger whose runtime behaviour the author did not verify; if it is inert, the pack's only executable success condition is inert too.",
-      "No reviewer has looked at this file. reviewStatus stays draft."
+      "The still-holding checkpoint uses a materialBalance trigger whose runtime behaviour the author did not verify; if it is inert, the pack's only executable success condition is inert too. This one is not a grounding question and does not need a source: it is settled by playing the pack, which is the check that caught D12 here after three readings missed it."
     ]
   }
 }

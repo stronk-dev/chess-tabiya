@@ -93,7 +93,17 @@ the application's identity.
 ### Create and curate
 
 - Pack authoring, preview, lint, regression tests, versioning, provenance, and
-  strong-player review.
+  publication channel.
+
+  **Publication channels (owner ruling 2026-08-13), replacing the struck review
+  gate:** every pack carries a channel — **official** (authored by us, shipped in
+  the repository or under an official account) or **community** (published
+  through the studio by anyone else). The channel is a fact about origin, which
+  the system can always assert mechanically; a review status was a claim that
+  someone vouched, which nobody does. It is deliberately **not** a document
+  field — it is stamped from which source resolved the pack, so a community
+  author has nothing to forge. The channel must be visible wherever a pack is
+  surfaced.
 - Import Lichess studies, repertoires, FEN/PGN collections, historical games,
   and completed sessions as pack seeds.
 - Author theory boundaries, objectives, timing windows, acceptable moves,
@@ -135,7 +145,7 @@ document. Its primary navigation must have room for the whole spectrum:
 | Learn | opening, middlegame, endgame, trajectories, progress/schedule |
 | Review | runs, branch comparisons, deep analysis, shared sessions |
 | Live | Stream, academy/hosted session, events/spectate |
-| Create | pack studio, imports, session-to-pack, review queue |
+| Create | pack studio, imports, session-to-pack, publication channel |
 | Library | packs, games, positions, concepts, historical sources |
 | Settings | opponent/rating, feedback/evidence, engines/models, LLM, data, accessibility |
 
@@ -163,7 +173,7 @@ rows below are green or explicitly removed by a new owner ruling:
 | B3 — review | manual multi-branch selection, pair/multi compare, replay, deep mode, share/export | pairwise partial — and pairwise is a **runtime type** constraint that cannot be composed into N-way |
 | B4 — evidence | authored, Stockfish, Maia, corpus/historical, Syzygy, structural/temporal, and LLM-rendered layers work with timing controls | **F1 shipped**: authored prose now has a real surface — checkpoint and terminal sheets render annotations, deviation notes and plan classes with per-occurrence reveal. Remaining: anchored claims, Maia explanation rendering, corpus/Syzygy runtime rendering, structural/temporal evidence, LLM rendering |
 | B5 — live | Twitch host/chat/overlay, academy roles, and external Position Arena handoff each complete one scenario | unmet, ordered last. **D1 and F3 closed**, so roles and a safe spectator projection are buildable; a granted spectator already follows a run in the browser suite |
-| B6 — create | pack studio/import/review/session-distill workflow produces and validates a fixture; corpus mining emits one unpublished candidate | **mining half MET** — `candidate-emit` produced four real unpublished candidates through the shipped pipeline. Absent: studio UI, pack write endpoint, session distillation, review queue |
+| B6 — create | a candidate, an import, or a completed run can become a served **community** pack, its channel visible wherever it is surfaced; corpus mining emits one unpublished candidate | **mining half MET** — `candidate-emit` produced four real unpublished candidates through the shipped pipeline. Absent: studio UI, pack write endpoint, session distillation |
 | B7 — return | history/resume, progress, concept scheduling, related retry, and optional recommendation work | history/resume ship and **F3 supplied the subject**, so the rest is buildable rather than blocked. Still zero: progress, SRS, related retry, recommendations |
 | B8 — platform | desktop shell, responsive/PWA transformation, self-hosted engines/providers, read-only share links, accessibility | deployment packaging shipped in full; residual is the release compose's missing light profile (D5). **Share links no longer blocked by D1** — safe granted spectators ship; a public share-link workflow remains unbuilt. Overstated on Settings: no form control exists |
 

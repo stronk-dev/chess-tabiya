@@ -17,6 +17,13 @@
   and the branch record), `archive/explanation-grounds.md` (the comparison
   section), `archive/drill-client.md` (the compare surface and checkpoint sheet)
 - **Supersedes / superseded by:** —
+- **Owner rulings applied (2026-08-13):** prediction checkpoints show **numbers,
+  never a verdict** (§8, §8.0, §8.4); **simulated branches are scratch** until the
+  learner enters one, which promotes them (§7). Both closed this RFC's two open
+  questions.
+- **Pack schema:** **0.9** — `grading` removed from `$defs/checkpointInteraction`
+  (§8.0), claimed in `rfc/README.md`'s pack-schema register behind
+  `pack-studio.md`'s 0.8
 - **Planning:** `planning/n-way-comparison/` (once implementing)
 
 ## Summary
@@ -237,8 +244,11 @@ plus `aria-checked` state. Two new controls are added to the rail heading:
 
 - **Compare all forked here** — selects every branch whose `forkNodeId` equals
   the deepest fork node on the cursor's path, plus the cursor branch. This is
-  the direct answer to the walkthrough's "selection is cumbersome" finding and
-  is the same set simulate produces (§7).
+  the direct answer to the walkthrough's "selection is cumbersome" finding. It
+  is the same *shape* of set simulate produces, but not the same set: a
+  simulation's variations are scratch and are never in the rail at all until one
+  is promoted (§7), so this control only ever selects branches the learner
+  actually holds.
 - **Clear selection**.
 
 Both are `HonestControl`-wrapped when unavailable, matching the shipped pattern
@@ -427,17 +437,29 @@ compare view is open or the rail holds a selection, and passes nothing
 otherwise. The same selection state therefore drives compare and export, which
 is the whole point of making it real.
 
-### 7. Forward-branching simulate
+### 7. Forward-branching simulate — scratch until entered
 
-At a spine node with N authored variations, one action forks N real branches and
-walks each authored line to its end, so the learner sees the resulting positions
-side by side in §5's grid. It is authored playout with zero engine calls,
-consistent with `design/03-product-breadth.md:22-26` and law 8.
+At a spine node with N authored variations, one action walks each authored line to
+its end so the learner sees the resulting positions side by side in §5's grid. It is
+authored playout with zero engine calls, consistent with
+`design/03-product-breadth.md:22-26` and law 8.
 
-#### 7.1 Route and preconditions
+**Owner ruling, 2026-08-13: simulated branches are scratch.** The previous draft made
+them real branches in the run graph and put the question to the owner; the answer is
+that a run's record is what the learner *did*, and a demonstration the learner merely
+looked at is not that. A simulation is discarded unless the learner **enters** one,
+which **promotes** it to a real branch. This is the ruling the section is now built
+around rather than a projection choice layered on top of persistence.
 
-`POST /runs/:id/simulate`, body `{ nodeId: string }`, writer lease required
-(same `#forWrite` path as `moves`/`fork`, `service.ts:245,275`).
+#### 7.1 Routes and preconditions
+
+| Method | Path | Effect |
+|---|---|---|
+| `POST` | `/runs/:id/simulate` | walk the authored variations; **write nothing** |
+| `POST` | `/runs/:id/simulate/enter` | promote one walked variation to a real branch |
+
+Both require the writer lease (same `#forWrite` path as `moves`/`fork`,
+`service.ts:245,275`).
 
 The cursor node's position is matched to the pack spine using the shipped
 `spinePositionIndex` / `spineNodeIdFor` (`packages/runtime/src/line.ts:56,86`),
@@ -445,48 +467,54 @@ already used for the timeline at `screen-model.ts:98-101`. If the run has no
 registered pack, the node is off-spine, or the matched spine node has fewer than
 two children → `422 NO_AUTHORED_VARIATIONS`.
 
-#### 7.2 Cost guards — both verified, both binding
+#### 7.2 The walk writes nothing
 
-**Guard 1 — zero evidence jobs.** Every committed move enqueues one Stockfish
-job today: `RunService.move` calls `#enqueueMoveEvidence` at `service.ts:260`
-(and `opponentPly` at `:284`), which unconditionally enqueues an `eval` job
-(`service.ts:626-648`). An unguarded 4-variation × 12-ply simulate submits 48
-analysis jobs the learner never asked for. Simulate is therefore a **server-side
-batch**, not a client loop over `POST /runs/:id/moves` — a client loop
-physically cannot avoid the enqueue, because it sits inside `RunService.move`.
-The batch calls `commitMove` and `orchestratePackMove` directly and calls
-`#enqueueMoveEvidence` **zero times**, including after the closing rewind: the
-cursor returns to a node that already carries whatever evidence it had.
+`POST /runs/:id/simulate` walks an **in-memory clone** of the run. It appends no
+event to the stored run, writes no snapshot, and persists nothing at all; if the
+learner closes the tab, the simulation never existed. Three consequences follow, and
+two of them are guards the previous draft had to specify and no longer does:
 
-The deliberate consequence, stated rather than discovered: simulated branches
-carry **no engine evidence**, so their trajectory cells and `deepestScore` are
-empty. That is honest — the pack demonstrated these lines, nobody analysed them.
-A learner who wants evidence enters the branch and plays, or requests deep
-analysis (§9).
+**Guard 1 — zero evidence jobs — survives, and is now structural.** Every committed
+move enqueues one Stockfish job today: `RunService.move` calls
+`#enqueueMoveEvidence` at `service.ts:260` (and `opponentPly` at `:284`), which
+unconditionally enqueues an `eval` job (`service.ts:626-648`). An unguarded
+4-variation × 12-ply simulate submits 48 analysis jobs the learner never asked for.
+Simulate is therefore a **server-side batch**, not a client loop over
+`POST /runs/:id/moves` — a client loop physically cannot avoid the enqueue, because
+it sits inside `RunService.move`. The batch calls `commitMove` and
+`orchestratePackMove` on the clone directly and calls `#enqueueMoveEvidence` **zero
+times**.
 
-**Guard 2 — a stated cap, checked before anything is written.** The supported
-envelope is at most 1000 events per run (`docs/branch-runtime.md:340`). The
-budget is computed first and the whole call is refused atomically:
+The deliberate consequence, stated rather than discovered: simulated branches carry
+**no engine evidence**, so their trajectory cells and `deepestScore` are empty. That
+is honest — the pack demonstrated these lines, nobody analysed them. A learner who
+wants evidence enters the branch and plays on, or requests deep analysis (§9).
+
+**Guard 2 — compute bounds, not event bounds.** Because nothing is written, the
+1000-event envelope (`docs/branch-runtime.md:340`) is not at risk during the walk and
+the projected-event budget the previous draft computed is deleted. What remains
+bounds work, not storage:
 
 - at most **8** variations per call;
-- at most **40** committed plies per call across all variations;
-- `run.events.length` plus the projected worst case (1 `branch.forked` per
-  variation, 1 `move.committed` per ply, plus one `outcome.reached` and one
-  `objective.state_changed` per ply as the upper bound) must not exceed **800**,
-  leaving headroom for continued play.
+- at most **40** committed plies per call across all variations.
 
-Violation → `422 SIMULATE_BUDGET_EXCEEDED` with
-`{ variations, plies, events, limit }` in the error details, and **no** mutation.
+Violation → `422 SIMULATE_TOO_LARGE` with `{ variations, plies }` in the details.
+
+**No rewind is needed.** The previous draft closed the walk with
+`rewind(run, nodeId)` to undo its own mutation. The clone is discarded instead, so
+the real run's cursor never moved and there is nothing to restore — one whole class
+of "the cursor ended up somewhere surprising" bug does not exist.
 
 #### 7.3 The walk
 
-For each authored child `c` of the matched spine node, in authored order:
+For each authored child `c` of the matched spine node, in authored order, on the
+clone:
 
-1. `fork(run, nodeId, { label: c.moveSan, intent: "Authored variation " + c.id,
+1. `fork(clone, nodeId, { label: c.moveSan, intent: "Authored variation " + c.id,
    origin: "simulated" })` — `runtime.ts:360-364`; `appendBranch` moves the
    cursor to the new branch.
 2. Walk `c` and then its `children[0]` chain to the end, committing each ply
-   with `commitMove(run, uci, { actor: "system" })`. `"system"` is the **only**
+   with `commitMove(clone, uci, { actor: "system" })`. `"system"` is the **only**
    honest actor and this is verified twice over: `commitMove` rejects
    `actor: "opponent"` without an authoritative selection
    (`runtime.ts:263-268`), and `opponentMovesFromEvents` throws `ReplayError`
@@ -494,7 +522,8 @@ For each authored child `c` of the matched spine node, in authored order:
    (`replay.ts:68-83`), which would corrupt read-back replay for the whole run.
    `"user"` would falsely claim the learner played it. `parseMoveOptions`
    already accepts `"system"` (`rest.ts:304-313`) and `Actor` already includes
-   it (`types.ts:3`).
+   it (`types.ts:3`). The actor rule matters more under scratch, not less: the
+   clone's events are the exact events promotion will replay.
 3. `orchestratePackMove` runs on every ply exactly as it does in play, so
    checkpoints fire and the objective grades on the demonstrated line. This is
    what makes simulate explain consequence rather than just show positions.
@@ -507,57 +536,123 @@ For each authored child `c` of the matched spine node, in authored order:
    `subvariationsSkipped`. Silently walking one path without saying so is the
    never-silent violation.
 
-Finally the cursor is restored with `rewind(run, nodeId)`
-(`runtime.ts:377`, as used by `service.ts:300-308`).
+Response: `{ simulationId, comparison, branches: [{ index, label, leafFen, plies,
+truncatedAt?, subvariationsSkipped? }] }`. `comparison` is an ordinary
+`BranchComparison` (§1) computed over the clone, so §5's grid, strips and narrative
+mode render a simulation with **no branch of their own** — they receive the shape
+they already receive.
 
-Response: `{ run, emitted, branches: [{ branchId, label, leafNodeId, leafFen,
-plies, truncatedAt?, subvariationsSkipped? }] }`. The client selects exactly
-those branch ids and opens §5's grid.
+`simulationId` names the clone in a process-lifetime, per-run, writer-scoped
+ephemeral map. It has no persistence and needs none: if the process restarts or the
+entry is evicted, `enter` returns `410 SIMULATION_EXPIRED` and the client re-runs
+simulate, which is deterministic — the same pack node and the same authored children
+produce the same walk.
 
-#### 7.4 `Branch.origin` — persisted shape
+#### 7.4 Promotion, and `Branch.origin` as its marker
+
+`POST /runs/:id/simulate/enter`, body `{ simulationId, branchIndex }`, replays that
+one walked variation onto the **real** run: one `branch.forked` carrying
+`origin: "simulated"`, then its `move.committed` plies with `actor: "system"`, then
+whatever `orchestratePackMove` emits for each — the same events the clone produced,
+for the one variation the learner chose. The cursor is left at the branch leaf,
+because the learner asked to be there. The other N−1 variations are discarded.
+
+The event budget lives here, where events are actually written: `run.events.length`
+plus the promoted variation's event count must not exceed **800**, leaving headroom
+for continued play, else `422 SIMULATE_BUDGET_EXCEEDED` with
+`{ plies, events, limit }` and **no** mutation. One variation instead of eight makes
+this bound essentially unreachable in practice, which is the point.
 
 `Branch` (`packages/runtime/src/types.ts:102-108`) gains
 `readonly origin: BranchOrigin` where `BranchOrigin = "played" | "simulated"`.
-Encoding it in the label string instead was rejected: `exportPgn` writes
-`Tabiya branch: ${branch.label}` as a PGN comment (`pgn.ts:93`), the rail and
-run history render the label, and a prose convention would force every consumer
-to parse it. A typed field is also what makes the owner question in §Open
-questions a projection choice rather than a redesign.
 
-Consequences: `appendBranch` defaults to `"played"`; the branch rail marks
-simulated branches distinctly; `exportPgn` writes
-`Tabiya branch (simulated): ${branch.label}` for them, so provenance survives
-into the artifact; `BranchColumn.origin` carries it into the comparison.
+**It is a promotion marker, not a persistence filter.** Under the previous draft
+`origin` was the field every consumer would filter on to decide whether a branch
+belonged in history, export or the rail; scratch removes that job entirely, because a
+branch that was not entered never reaches any of them. What `origin` records now is
+narrower and permanent: *this branch's moves are the pack's authored line, played by
+the system, entered by the learner.* Nothing filters on it. Consumers **render** it:
+
+- `appendBranch` defaults to `"played"`; only promotion writes `"simulated"`;
+- the branch rail marks a promoted branch distinctly, so the learner can tell which
+  of their branches they chose move by move and which they stepped into whole;
+- `exportPgn` writes `Tabiya branch (simulated): ${branch.label}` (`pgn.ts:93`), so
+  the provenance survives into the artifact;
+- `BranchColumn.origin` carries it into the comparison;
+- `pack-studio.md` §6's distiller skips promoted branches when proposing deviations,
+  because entering a demonstration is not deviating from it.
+
+Encoding it in the label string instead was rejected: `exportPgn` writes
+`Tabiya branch: ${branch.label}` as a PGN comment, the rail and run history render
+the label, and a prose convention would force every consumer to parse it.
 
 This is a run-schema change — see §10.
 
-### 8. Prediction checkpoints
+### 8. Prediction checkpoints — numbers, never a verdict
 
-The authored half already ships in full: `CheckpointInteraction`
-(`packages/schema/src/drill-pack/types.ts:58-71`) with
-`grading { source, topK, minMass }` and `flipBoard`; the field on
-`CheckpointDefinition` (`:76`); the living example's `predict-reply` checkpoint
-(`schemas/drill_pack.example.json:84-93`); and mechanical sparsity —
-`TOO_MANY_PREDICTIONS` warns above two per segment
-(`packages/schema/src/drill-pack/lint.ts:229-242`). Four things are missing.
+**Owner ruling, 2026-08-13.** The learner predicts, then sees where their move sat:
+
+> *You said c4. 12% of 1500s play it; 42% play Qb6.*
+
+No pass, no fail, no correct or incorrect. The checkpoint is an instrument for
+showing the learner a distribution they did not know, positioned by their own guess.
+It is not an exam, and nothing in this system is entitled to grade a chess move
+against a human-frequency model anyway — a move played by 12% of the rating band is
+not thereby a mistake.
+
+Two things follow immediately and are specified below rather than left as
+consequences: `minMass` stops being a grading threshold, and `grading.source` has
+nothing left to grade.
+
+The authored half already ships in part: `CheckpointInteraction`
+(`packages/schema/src/drill-pack/types.ts:58-71`) with `grading { source, topK,
+minMass }` and `flipBoard`; the field on `CheckpointDefinition` (`:76`); the living
+example's `predict-reply` checkpoint (`schemas/drill_pack.example.json:84-93`); and
+mechanical sparsity — `TOO_MANY_PREDICTIONS` warns above two per segment
+(`packages/schema/src/drill-pack/lint.ts:229-242`).
+
+#### 8.0 `grading` is removed from the pack schema — pack schema 0.9
+
+`grading` is **removed**, not narrowed to a display hint. Taking its three fields in
+turn:
+
+| Field | Why it does not survive |
+|---|---|
+| `source` | it declared what to grade against. Nothing is graded. `"engine"` and `"both"` were never backed in any case — the strong-engine profile ships `multiPv: 1` (`apps/server/src/strong-engine.ts:10-15`), so `candidateLines` yields one move and there is no ranked engine set at all |
+| `minMass` | it was the threshold that made a prediction right or wrong. As a *display* hint it would hide candidates below a cutoff — which is a verdict wearing a rendering costume, and the worst version of one, because the learner cannot see what was hidden |
+| `topK` | a genuine display cap, and still not worth keeping: the recorded candidate list is Maia policy over a handful of moves, `TOO_MANY_PREDICTIONS` already governs sparsity, and a new authored field with one consumer and no evidence anyone wants it is the format growth §14 of `pack-studio.md` exists to refuse |
+
+After this RFC the prediction interaction is `{ type: "prediction", flipBoard? }` and
+its `required` is `["type"]`.
+
+This is a **pack-schema change**, which the previous draft did not carry and which
+`rfc/README.md`'s pack-schema register already anticipated: this RFC takes **pack
+schema 0.9**, behind `pack-studio.md`'s 0.8. `$defs/checkpointInteraction`'s
+prediction branch is `additionalProperties: false`, so
+`schemas/drill_pack.example.json:90`'s `"grading": {...}` line is deleted in the same
+change; the example's bytes and digest change and every assertion recording that
+digest moves with them. No other committed pack declares a prediction interaction —
+verified across `content/`, `schemas/fixtures/` and `content/candidates/` — so the
+example is the only document affected.
+
+`CheckpointInteraction` in `packages/schema/src/drill-pack/types.ts:58-71` loses the
+`grading` member in the same change.
 
 #### 8.1 Delivery
 
-`projectPackDocument`'s checkpoint projection
-(`pack-registry.ts:82-87`) emits only `{id, label, actions}`. It gains, for
-prediction checkpoints only:
+`projectPackDocument`'s checkpoint projection (`pack-registry.ts:82-87`) emits only
+`{id, label, actions}`. It gains, for prediction checkpoints only:
 
 ```ts
 interaction: { type: "prediction", ...(flipBoard ? { flipBoard: true } : {}) }
 ```
 
-`grading` is **never** projected: grading happens on the server, so shipping
-`topK`/`minMass` to the browser would leak how the answer is scored for no
-functional gain. `intent_capture` is not projected at all — `planClassIds` names
-authored plan classes, which is authored content under program #2's reveal
-contract. The regression that asserts the absence of `interaction`
-(`apps/server/src/drill-client-server.test.ts:182`) is amended to assert exactly
-this shape rather than deleted.
+That is now the whole interaction, so nothing is withheld and the previous draft's
+"`grading` is never projected" rule has nothing to apply to. `intent_capture` is
+still not projected at all — `planClassIds` names authored plan classes, which is
+authored content under program #2's reveal contract. The regression that asserts the
+absence of `interaction` (`apps/server/src/drill-client-server.test.ts:182`) is
+amended to assert exactly this shape rather than deleted.
 
 #### 8.2 Capture, and the ordering rule that prevents the leak
 
@@ -580,63 +675,84 @@ the opponent selection and writes the record, and it returns the selection. The
 drill client must not call `POST /select-move` (`rest.ts:559-577`) for that ply
 at all; it plays the selection the prediction response returned. Because the
 selector memoises on `selectionCacheKey` (`opponent-selector.ts:180, 353,
-372-379`), the distribution shown at grading time is provably the one the
-opponent then plays.
+372-379`), the distribution the learner is shown is provably the one the opponent
+then plays.
 
-#### 8.3 The durable record
+#### 8.3 What the interaction records
 
 Nothing shipped can carry a predicted move: `EvidenceKind` is
 `"eval" | "wdl" | "bestline"` and `EvidenceSource` is
 `"engine_validated" | "human_model_predicted"` (`types.ts:11-12`), and
 `FeedbackGeneratedEvent` carries `{nodeId, evidenceRefs}` only
 (`types.ts:189-191`) with no production emitter. A new event joins the union at
-`types.ts:202-215`:
+`types.ts:202-215`, carrying the four things the ruling names — the predicted move,
+its mass, its rank, and the distribution shown — and nothing else:
 
 ```ts
 export type PredictionRecordedEvent = Event<"prediction.recorded", {
   readonly nodeId: string;
   readonly checkpointId: string;
   readonly predictedUci: string;
-  readonly declaredSource: "opponent_policy" | "engine" | "both";
-  readonly gradedBy: "opponent_policy";
-  readonly gradedAgainst: OpponentSelection;   // types.ts:78-83, verbatim
-  readonly declaredTopK?: number;
-  readonly declaredMinMass?: number;
+
+  /** The predicted move's own policy mass in `distribution`, or null when the
+      move is absent from the recorded candidate set. */
+  readonly predictedMass: number | null;
+  /** 1-based position of the predicted move in `distribution.candidates` ordered
+      by descending mass, or null when it is absent. */
+  readonly predictedRank: number | null;
+  /** How many candidates were in the set the learner was shown, so `predictedRank`
+      is interpretable and a later reader knows what "absent" meant. */
+  readonly candidateCount: number;
+
+  /** The distribution shown, verbatim — `types.ts:78-83`, including the move the
+      opponent then played and the engine identity that produced it. */
+  readonly distribution: OpponentSelection;
 }>;
 ```
 
-It carries **facts and no verdict**. `gradedAgainst` embeds the exact
-`OpponentSelection`, whose `candidates[].mass` is Maia policy mass parsed at
-`opponent-selector.ts:225-233`. A projection case is added at `events.ts` beside
-the existing ones, and replay validates node identity and checkpoint membership
-the way `outcome.reached` is validated at `events.ts:163-186`.
+`predictedMass` and `predictedRank` are **positions in a recorded distribution**, not
+scores. `null` means "your move is not in the set we recorded", which is a fact about
+the recording and is rendered as such; it does not mean the move is bad, and the
+event carries no field in which such a claim could be stored.
 
-`declaredSource` versus `gradedBy` is the applied-versus-requested shape the
-owner ruled for `policyModeApplied` in `archive/line-drill-theory-grading.md`
-(register row 5, `rfc/README.md:55`) — a disclaimer becomes traceable run
-evidence. It is used here because `grading.source: "engine"` and `"both"` are
-**not backed**: the strong-engine profile ships `multiPv: 1`
-(`apps/server/src/strong-engine.ts:10-15`), so `candidateLines` yields one move
-and there is no ranked engine set to grade against. The living example declares
-`"source": "both"` (`schemas/drill_pack.example.json:90`), so rejecting the
-declaration at load — the D8 treatment applied to `perfect_tablebase` and
-`immediate_blunder_guard` at `pack-validation.ts:111-151` — would invalidate the
-shipped example pack and the browser suite that plays it. Recording the applied
-source instead is both honest and non-breaking, and the client states the
-divergence with a fixed sentence:
+There is no `gradedBy`, no `gradedAgainst` and no `declaredSource`. The previous
+draft carried all three to make a declared-versus-applied grading source traceable
+in the way the owner ruled for `policyModeApplied`; with `grading` removed there is
+no declaration to diverge from and no grading to attribute, so the whole
+declared/applied apparatus and the fixed "engine grading is not available" sentence
+are deleted rather than kept as vestigial honesty about a field that no longer
+exists. `distribution.engine` still carries the engine identity, and
+`distribution.policyModeApplied` still records the applied opponent policy mode, so
+nothing traceable was lost.
 
-> `This pack asked for engine-side grading. Engine grading is not available, so this prediction was graded against the opponent policy only.`
+A projection case is added at `events.ts` beside the existing ones, and replay
+validates node identity and checkpoint membership the way `outcome.reached` is
+validated at `events.ts:163-186`. `predictedMass`, `predictedRank` and
+`candidateCount` are recomputed from `distribution` on replay and must match, so a
+hand-edited snapshot cannot invent a rank.
 
-#### 8.4 Rendering — law 8
+#### 8.4 What the interaction renders — law 8
 
-The reveal shows three things and no fourth: the move the learner predicted; the
-recorded candidate list from `gradedAgainst` as `moveUci → policy mass, rank`,
-with the predicted move and the move actually played both marked; and the move
-the opponent then played. Every number is a recorded frequency and every label
-is authored. No sentence asserts that a prediction was good, bad, correct or
-incorrect — the topic of the open owner question below is precisely which of
-those a `minMass` threshold would license, and the record is complete without
-it.
+The reveal shows four things and no fifth:
+
+1. **the move the learner predicted**, in SAN;
+2. **where it sat** — one sentence in the shape the owner's ruling gives, built from
+   `predictedMass`, `predictedRank` and `candidateCount` and from the opponent
+   policy's own rating band where the policy declares one
+   (`opponentPolicy.targetElo`): `You said c4. 12% of 1500-rated players play it —
+   4th of 6 recorded replies.` When `predictedMass` is null:
+   `You said c4. It is not among the 6 replies recorded for this position.`
+3. **the distribution**, as the recorded candidate list from `distribution` rendered
+   `moveSan → policy mass, rank`, in full and with nothing truncated, with the
+   predicted move and the move actually played both marked;
+4. **the move the opponent then played**.
+
+Every number is a recorded frequency and every label is authored. No sentence asserts
+that a prediction was good, bad, correct, incorrect, close or surprising; there is no
+tick, no cross, no score, no colour that encodes approval, and no aggregate anywhere
+that counts predictions "got right". A component snapshot asserts the absence of that
+vocabulary (A6a), because this is the exact place the product would drift into the
+dashboard `design/00-thesis.md` names as the anti-pattern.
 
 **Withholding.** `prediction.recorded` passes the feedback barrier.
 `engineFeedbackEvent` gates only `evidence.attached` and engine-referenced
@@ -695,14 +811,24 @@ fills `version` from the UCI `id name` line only when `spec.name` is unset
 (**D10**, `apps/server/src/engine-supervisor.ts:116-126`). The heading stays
 "Recorded engine evaluation."
 
-### 10. Persisted shape: run schema 0.8, migration 6
+### 10. Persisted shape: run schema 0.8 + migration 6, and pack schema 0.9
 
-Two shape changes land together in one migration, because two migrations from
+Two *run*-shape changes land together in one migration, because two migrations from
 one RFC is the hazard the register was instituted to prevent
 (`rfc/README.md:42-48`):
 
 - `Branch.origin: "played" | "simulated"` (§7.4);
 - `PredictionRecordedEvent` in the event union (§8.3).
+
+Separately, this RFC now carries a **pack**-schema change it did not carry when
+drafted: `grading` is removed from `$defs/checkpointInteraction` (§8.0). It claims
+**pack schema 0.9** in `rfc/README.md`'s register, behind `pack-studio.md`'s 0.8.
+The register's row for 0.9 recorded that this draft "must rebase: its §10 and R3/R4
+still say 0.8"; both said 0.8 because both meant the *run* schema, which is correct
+and unchanged. The rebase is therefore not a renumbering of anything already
+written — it is this RFC acquiring a pack-schema claim for the first time and taking
+the number the register already held for it. §12's table names both explicitly so the
+two `0.8`s are never read as one.
 
 `DRILL_RUN_SCHEMA_VERSION` moves `"0.7"` → `"0.8"`
 (`packages/schema/src/index.ts:1`), stamped at `runtime.ts:218` and
@@ -719,6 +845,13 @@ disappears — the trap both prior grading RFCs documented. `origin` is written
 literally as `"played"` and `"0.8"` literally, not from the schema constant, so
 a later version bump cannot mis-stamp rows before migration 7, following the
 freeze rule recorded for migration 4 at `rfc/README.md:54`.
+
+The scratch ruling (§7) does **not** shrink this migration. `Branch.origin` still
+lands on every branch and every stored v0.7 branch still needs `"played"`; scratch
+changes what `origin` means and who writes `"simulated"`, not whether the field
+exists. A migration that skipped the backfill because "simulated branches are not
+persisted" would leave `origin` undefined on historical branches and break the
+render, which is the shape of bug this paragraph exists to prevent.
 
 Migration 6 is claimed in `rfc/README.md`'s register in the same commit as this
 draft.
@@ -751,19 +884,29 @@ is the duplication the register exists to prevent.
 - **D5** — the release compose hardcodes `ENGINE_MODE: maia` with no light
   profile, so §9 must degrade with the shipped `ENGINE_UNAVAILABLE` shape rather
   than assume a judge engine exists.
-- **D8** — schema-versus-validator divergence is the precedent class for §8.3's
-  declared-versus-applied grading source. §8.3 deliberately does not add a
-  seventh copy of a fourth vocabulary: `grading.source` stays a single schema
-  enum, and the *applied* value is recorded per event.
+- **D8** — schema-versus-validator divergence was the precedent class for the
+  declared-versus-applied grading source the previous draft specified. §8.0 removes
+  `grading` outright, so the divergence has no surface here: there is no declaration
+  the validator could disagree with, and no vocabulary copy is added.
 - **D10** — engine provenance is anonymous, which is why §9 forbids naming an
   engine in the comparison and keeps the heading "Recorded engine evaluation."
 
 **Sequencing.** `defect-sweep` carries a pack-schema change (0.4 → 0.5) and no
-migration; this RFC carries a run-schema change (0.7 → 0.8, migration 6) and no
-pack-schema change. They are independent and may land in either order. If this
-RFC lands first, §8.2's prediction step sits beside the existing client action
-literal and moves with it when `defect-sweep` §1 consolidates the vocabulary;
-A8 asserts against `CHECKPOINT_ACTIONS` once that constant exists.
+migration; this RFC carries a run-schema change (0.7 → 0.8, migration 6) **and** a
+pack-schema change (→ 0.9, §8.0). The pack-schema claim orders this RFC behind
+`defect-sweep` (0.5), `return-and-progression` (0.6), `trajectory-drill` (0.7) and
+`pack-studio` (0.8) in the register, and behind nothing else: none of those five
+touches `$defs/checkpointInteraction`, and a pack version rebases cheaply because
+pack digests are content digests unaffected by the `$id`
+(`packages/schema/src/drill-pack/digest.ts:58-66`). If any of them is withdrawn
+before landing, this rebases downward rather than leaving a hole. If this RFC lands
+before `defect-sweep`, §8.2's prediction step sits beside the existing client action
+literal and moves with it when `defect-sweep` §1 consolidates the vocabulary; A8
+asserts against `CHECKPOINT_ACTIONS` once that constant exists.
+
+`pack-studio.md` is the one draft with a live coupling in both directions, and both
+are already stated on both sides: it consumes `Branch.origin` in its distiller (§7.4
+here, its §6 there), and it owns pack schema 0.8 directly beneath this RFC's 0.9.
 
 ### 12. Slice plan
 
@@ -771,8 +914,8 @@ A8 asserts against `CHECKPOINT_ACTIONS` once that constant exists.
 |---|---|---|
 | **R1** | §1 payload and axis rule, §2 transport, §3 selection, §4 consequence row, §6 branch-selective export | shipped runtime only |
 | **R2** | §5 grid, N-column strips incl. material and structure, synchronised replay, narrative mode | R1 |
-| **R3** | §7 simulate, §10 schema 0.8 / migration 6 | R1, R2 |
-| **R4** | §8 prediction checkpoints | R1, R3 (schema 0.8) |
+| **R3** | §7 simulate and promotion, §10 **run** schema 0.8 / migration 6 | R1, R2 |
+| **R4** | §8 prediction checkpoints, §8.0 **pack** schema 0.9 | R1, R3 (run schema 0.8) |
 | **R5** | §9 deep analysis and MultiPV | R1 |
 
 `design/03-product-breadth.md:65-66,283-293` requires it: **default compare
@@ -838,23 +981,56 @@ the output of `objectiveGradeSentence`, `checkpointResolutionSentence`,
 form. A snapshot asserts no other string is produced, and that no rendered text
 contains a comparative between columns.
 
-**A5 — simulate cost guards (server integration).** At the example pack's spine
-node, `POST /runs/:id/simulate` produces one branch per authored child, each
-walked to its authored end, with the cursor restored to the original node. The
-evidence queue's depth is **identical** before and after the call. A request
-whose projected event count would exceed the §7.2 budget returns
-`422 SIMULATE_BUDGET_EXCEEDED` and leaves `run.events.length` unchanged.
-`readBackReplay(run.events)` succeeds on the resulting run, proving the
-`actor: "system"` choice did not corrupt read-back.
+**A5 — simulate writes nothing (server integration).** At the example pack's spine
+node, `POST /runs/:id/simulate` returns one walked variation per authored child, each
+to its authored end, and a `comparison` payload of the shipped `BranchComparison`
+shape. The assertions are about **absence**: `run.events.length`, the run's branch
+list, the stored snapshot's bytes and the cursor are all **identical** before and
+after the call, and the evidence queue's depth is identical too. A walk exceeding
+eight variations or forty plies returns `422 SIMULATE_TOO_LARGE`. A stale
+`simulationId` returns `410 SIMULATION_EXPIRED`.
+
+**A5a — promotion (server integration).** `POST /runs/:id/simulate/enter` on one
+`branchIndex` appends **exactly one** `branch.forked` with `origin: "simulated"` plus
+that variation's plies, leaves the cursor at the branch leaf, and adds nothing for the
+other variations. `readBackReplay(run.events)` succeeds on the resulting run, proving
+the `actor: "system"` choice did not corrupt read-back, and the evidence queue depth
+is still unchanged. A promotion that would breach the 800-event bound returns
+`422 SIMULATE_BUDGET_EXCEEDED` with `run.events.length` unchanged. A run whose
+simulation was never entered contains no `branch.forked` at all — the regression that
+proves scratch is scratch.
 
 **A6 — prediction record (server integration).** `POST /runs/:id/prediction`
-writes exactly one `prediction.recorded` event carrying the predicted move, the
-declared source from the pack, `gradedBy: "opponent_policy"`, and a
-`gradedAgainst` selection whose `moveUci` equals the move the subsequent
-opponent ply commits — proving the graded distribution is the played one.
+writes exactly one `prediction.recorded` event carrying the predicted move,
+`predictedMass`, `predictedRank`, `candidateCount`, and a `distribution` whose
+`moveUci` equals the move the subsequent opponent ply commits — proving the
+distribution shown is the played one. A prediction absent from the candidate set
+records `predictedMass: null` and `predictedRank: null` with `candidateCount`
+still set. Replay recomputes all three from `distribution` and rejects a snapshot
+whose stored values disagree. The event type carries no property whose name or value
+expresses a verdict, asserted against an explicit key list.
 `GET /runs/:id/events?sinceSeq=0` returns the event before reveal. A run stored
 at schema `"0.7"` is migrated by migration 6, gains `origin: "played"` on every
 branch, and remains readable.
+
+**A6a — the reveal states no verdict (component test).** The prediction reveal for a
+recorded event renders the four elements of §8.4 and nothing else. A snapshot asserts
+that no rendered string in the prediction surface matches
+`/correct|incorrect|right|wrong|good|bad|well done|score|✓|✗/i`, that the full
+candidate list is rendered with no entry hidden by any threshold, and that the
+predicted move is marked without being ranked as better or worse than any other. A
+second case renders the `predictedMass: null` path and asserts it produces the
+"not among the N replies recorded" sentence rather than a zero or a failure state.
+
+**A6b — `grading` is gone (schema and format test).** `$defs/checkpointInteraction`'s
+prediction branch has `required: ["type"]` and properties exactly
+`{type, flipBoard}`; a document declaring `grading` is **rejected**, since the branch
+is `additionalProperties: false`. `DRILL_PACK_SCHEMA_VERSION` is `"0.9"` and the
+schema `$id` is `urn:chess-tabiya:schema:drill-pack:0.9`.
+`schemas/drill_pack.example.json` no longer contains the string `grading`, still
+validates, still loads, and its new digest is recorded wherever the old one was
+asserted. Every other pack in `content/` and `schemas/fixtures/` validates unchanged
+and its digest is unchanged, since none declares a prediction interaction.
 
 **A7 — browser test (`tests/browser/drill.spec.ts`, Playwright, `workers: 1`,
 `retries` unset).** A new test, `"three branches compare on one axis, explain
@@ -890,15 +1066,18 @@ selected the way the shipped test does at `drill.spec.ts:152,162-168`):
    and exports"` (`drill.spec.ts:143`) continues to pass with its assertions
    updated from `{a, b}` to the branch-keyed selectors.
 
-A second browser test, `"a simulated spine node produces authored branches and
-a flipped prediction"`, drives simulate at the spine node, asserts the resulting
-grid, enters one simulated branch and continues against the opponent normally,
-then reaches `predict-reply` (`getByRole("heading", { name: "Predict the
-reply" })`, as at `drill.spec.ts:176`), asserts the board is flipped relative to
-`start.side`, plays a predicted move, and asserts the revealed panel shows the
-recorded candidate masses and the engine-grading-unavailable sentence — and that
-`/select-move` was **not** requested for that ply
-(`page.waitForResponse` / request log), proving §8.2's ordering rule.
+A second browser test, `"a simulation is scratch until entered, and a prediction
+shows a distribution"`, drives simulate at the spine node and asserts the resulting
+grid renders every authored variation **while the branch rail still shows no new
+branch**; navigates away and back and asserts the run is unchanged; then re-runs
+simulate, enters one variation, and asserts exactly one new branch appears in the
+rail marked as simulated. It continues against the opponent normally, reaches
+`predict-reply` (`getByRole("heading", { name: "Predict the reply" })`, as at
+`drill.spec.ts:176`), asserts the board is flipped relative to `start.side`, plays a
+predicted move, and asserts the revealed panel shows the learner's move, its mass and
+rank sentence, and the full recorded candidate list — and that `/select-move` was
+**not** requested for that ply (`page.waitForResponse` / request log), proving §8.2's
+ordering rule. It asserts no verdict word appears, matching A6a.
 
 **A8 — gates.** `pnpm verify` (typecheck, unit, schema-check —
 `package.json:13`) and `pnpm test:browser` (`package.json:10`) pass. The
@@ -914,31 +1093,31 @@ A1–A3.
 
 ## Open questions
 
-Two genuine product-intent forks. Everything else in this RFC is an engineering
-consequence of shipped code.
-
-1. **What does a prediction being "right" mean?** `minMass` admits two readings:
-   the predicted move's own policy mass clears the threshold, or the predicted
-   move sits inside the candidate set covering that mass of the distribution.
-   They teach different things — "this is the move they play" versus "you were
-   inside their plausible set" — and the living example's
-   `{"source":"both","topK":3,"minMass":0.7}`
-   (`schemas/drill_pack.example.json:90`) is consistent with both. §8.3 is built
-   so the ruling is not blocking: the record carries facts and no verdict, and
-   §8.4 renders the distribution without claiming correctness. The ruling
-   decides whether a verdict is rendered on top and which one, not what is
-   stored. Pinning input: one authored pack that uses a prediction checkpoint in
-   anger.
-2. **Are simulated branches part of the run's record, or a scratch view?** §7
-   makes them real branches in the run graph — the owner's original framing in
-   the BACKLOG row — which buys entry, compare and export for free. The cost is
-   that a run's branch list mixes lines the learner chose with lines the pack
-   demonstrated, and both land in the exported PGN. §7.4's typed
-   `Branch.origin` is specified so either ruling is a projection choice: if the
-   answer is "scratch", history, export and the rail filter on
-   `origin === "played"` and nothing else changes. This is an identity question
-   about what a run *is*.
+None. Both questions this draft carried were answered by owner rulings on
+2026-08-13 and are specified above rather than left open: a prediction shows numbers
+and never a verdict (§8, §8.0, §8.4), and simulated branches are scratch until
+entered (§7).
 
 ## Changelog
 
 - 2026-08-13: created.
+- 2026-08-13: **rewritten against two owner rulings, closing both open questions.**
+  *Ruling — prediction checkpoints show numbers, never a verdict.* Rewrote §8 around
+  what the interaction records (predicted move, its mass, its rank, the candidate
+  count, and the distribution shown, verbatim) and what it renders (the move, a
+  positioning sentence, the full distribution, the reply actually played). **Removed
+  `grading` from the pack schema** rather than keeping it as a display hint —
+  `source` graded nothing and was never backed at `multiPv: 1`, `minMass` as a
+  display hint is a verdict in rendering costume, and `topK` is format growth with no
+  consumer — which gives this RFC its first pack-schema change and the **0.9** claim
+  the register was already holding for it. Deleted the `declaredSource` / `gradedBy`
+  / `gradedAgainst` apparatus and the engine-grading-unavailable sentence with it,
+  and added A6a's snapshot against verdict vocabulary as the standing guard.
+  *Ruling — simulated branches are scratch.* Reworked §7: the walk runs on an
+  in-memory clone and writes nothing, promotion (`/simulate/enter`) is what creates a
+  real branch, the projected-event budget moved from the walk to the promotion, the
+  closing `rewind` is gone because nothing was mutated, and `Branch.origin` is now a
+  **promotion marker** that consumers render rather than a persistence filter they
+  query. Migration 6 is unchanged and §10 says why the scratch ruling does not shrink
+  it. Rewrote A5, added A5a, A6a and A6b, and rewrote the second browser test to
+  assert that an un-entered simulation leaves the run untouched.
