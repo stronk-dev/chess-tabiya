@@ -107,7 +107,86 @@ The regions and the ladder are constant. Four things vary, and every surface in
 - **Who else is here?** Nobody, a coach, a class, a chat. This changes who holds
   the board and what a viewer may see — never what is *true*, only who is told.
 
-## 5. Open questions
+## 5. Strategic reading: detection is cheap, significance is not
+
+Owner statement, 2026-08-13, and it reframes the assistance problem: *"sometimes
+you move a pawn just so your opponent can no longer put their knight there…
+identifying threats is such a tough classifier — where do we want or risk
+outposts, what diagonals do we want open or protected, what pressure is
+unbalanced, what tactics are both sides building toward."*
+
+That is one hard problem only if you keep it as one. Split it and most of it
+falls to **rung 0**:
+
+| Question | Detection | Significance |
+|---|---|---|
+| After this pawn move, can an enemy knight ever occupy d5 again? | **rules arithmetic** — enumerate the pawns that could attack it | does denying d5 matter *here* |
+| Is there an outpost on e5? | **structural** — a square in enemy territory, pawn-defended, unattackable by enemy pawns | is it worth a piece and a tempo |
+| Is the long diagonal open, and what blocks it? | **rules arithmetic** — count and name the blockers | do we want it open |
+| Is pressure on f7 balanced? | **counting** — attackers and defenders, with values | is the imbalance convertible |
+| What tactic is each side building toward? | **not deterministic** — rung 2/3 territory | — |
+
+**Four of five detections are free and cannot be wrong.** The product can say
+"after a4, Black's knight can never use b5 again" as flatly as it says a move is
+legal, because it is the same kind of statement. What it may not say for free is
+whether that mattered.
+
+This is the shape of the whole assistance problem: **the facts are rung 0 and the
+judgement is rungs 2–5.** A surface that renders the facts and attributes the
+judgement is honest at any level of the ladder; one that blurs them is the
+dashboard `AGENTS.md` names as the anti-pattern.
+
+**Prophylaxis is the case that proves it.** A denial move — a pawn played so the
+opponent *cannot* do something — is invisible to every eval-first tool, because
+nothing happened. It is exactly what rung 0 can see and an evaluation cannot
+explain. It is also the natural partner of the already-ledgered opponent-intent
+prompt: *what is the moved piece no longer doing* has a mirror in *what can the
+opponent no longer do*.
+
+### 5a. Pivotal moments without an author
+
+The owner's larger claim: *"the drilling is nice but the true gem is branching
+play with autodetected checkpoints, playing a normal game against a human-like
+opponent while truly applying an opening/middlegame/endgame strategy."*
+
+A curated pack declares its checkpoints. Just Play has no author, so the moments
+must be detected — and the honest detectors are ones that describe a fact rather
+than assert importance:
+
+- **Irreversibility** (rung 0): a pawn break, a trade that removes the last of a
+  piece type, castling. The position just stopped being able to go back.
+- **Phase change** (rung 0 + author-declared): the structure became a different
+  kind of problem.
+- **Human divergence** (rung 3): the Maia distribution at the learner's level
+  splits several ways. *"Players at your level split three ways here"* is a fact
+  about the distribution, not a claim about chess — and it is a strong signal
+  that a decision is real rather than forced. This is the most product-native
+  detector available and it uses a model already shipped.
+- **Option collapse** (rung 0): the number of reasonable continuations drops
+  sharply — forcing sequences announce themselves structurally.
+
+Engine eval swing is deliberately *not* on that list as a primary detector: it
+identifies where someone erred, which is the post-mortem framing the product
+exists to replace, and it cannot fire before the error.
+
+### 5b. Endgame guidance is named technique, not a move
+
+Owner: *"we don't want a hint like play rook c8, we want 'this is endgame X, so
+use the rook to push the enemy king into a small box while you promote'."*
+
+This is the clearest statement in the repo of what guidance should sound like,
+and the endgame is where it is most achievable: endgame *types* are recognizable
+structurally, the techniques have names and are finite, and below eight pieces a
+tablebase settles ground truth. So the chain is: recognize the type → name the
+technique → let the learner execute it → grade the result, not the moves.
+
+Note the asymmetry this creates and design around it rather than pretending it
+away: **endgames are the most tractable phase for honest guidance and middlegames
+the least.** Openings have theory and corpus frequency; endgames have structure
+and tablebases; the middlegame has neither, which is precisely why authored plan
+classes carry so much weight there.
+
+## 6. Open questions
 
 Genuine forks, not gaps to be filled by whoever writes the next RFC:
 
@@ -125,7 +204,7 @@ Genuine forks, not gaps to be filled by whoever writes the next RFC:
    product's opinion.** A product with a view is more useful and more
    presumptuous; both are defensible.
 
-## 6. What this document is not
+## 7. What this document is not
 
 It does not specify a UI. Region names are not component names, and nothing here
 fixes a layout — `03-product-breadth.md` owns the shell and its responsive

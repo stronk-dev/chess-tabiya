@@ -37,6 +37,31 @@ ENDGAME      win / hold / save / resist · repeat against different practical de
              preserve W/D/L rather than reproduce one machine line
 ```
 
+## The arc the product is actually for (owner, 2026-08-13)
+
+> *"The drilling is nice but the true gem is branching play even with
+> autodetected checkpoints, and being able to play a game as normal against a
+> human-like opponent while truly applying an opening/middlegame/endgame
+> strategy — steer the game early, and later know how to convert into advantage
+> then grind out to win or draw."*
+
+Recorded at thesis level because it sharpens what the product is *for* rather
+than adding a feature. Packs are scaffolding; the destination is a whole game
+played with intent across all three phases, forkable at the moments that mattered
+— and those moments detected rather than authored, because a real game has no
+author. `05-in-run-experience.md` §5a specifies the honest detectors.
+
+Two consequences that follow, and both cut against easier designs:
+
+- **Guidance names techniques, not moves.** *"This is a Lucena position; build a
+  bridge"* teaches; *"play Rc8"* does not, and a learner who follows it has
+  rehearsed obedience. `05` §5b.
+- **The phases are not equally tractable, and the product must not pretend they
+  are.** Openings have theory and corpus frequency; endgames have structure and
+  tablebases; the middlegame has neither. That is why authored plan classes carry
+  the middlegame and why honest abstention is a feature there rather than a
+  failure.
+
 ## The novelty claim (under test — exploration Q1a)
 
 None of the pieces are novel: line repetition, play-from-FEN, human-like bots, engine
