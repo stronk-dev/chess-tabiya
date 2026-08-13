@@ -143,6 +143,53 @@ explain. It is also the natural partner of the already-ledgered opponent-intent
 prompt: *what is the moved piece no longer doing* has a mirror in *what can the
 opponent no longer do*.
 
+### 5c. Authored and computed guidance are one layer, not two
+
+Owner, 2026-08-13: *"this ALSO ties into the wider drilling — if you practice an
+opening or explore variations, some advanced positions MAKE the outpost. It all
+ties together. Whether you're drilling or just playing we need to give the proper
+guidance, not from just the engine POV but the classifiers and patterns and
+strategies and weak points."*
+
+This is the unification, and it resolves something the repo has treated as two
+problems. An authored plan class and a computed structural fact are **the same
+claim at different levels of grounding**:
+
+> *"Support the chain with c3"* (author: what to aim for)
+> *"This position now has a protected outpost on e5"* (rung 0: what is true)
+
+The author says what to want; the classifier says whether you got it. Neither is
+complete alone — a classifier cannot know that an outpost was worth a tempo here,
+and an author cannot check every position a learner reaches.
+
+**And that closes a hole that has been open since Pack B was written.** Its
+author reported that *a plan drill cannot express its objective*: success is
+relative to the committed intent, and `successConditions` only supports
+intent-blind checkpoint arrival (`BACKLOG`, authoring-format friction). The
+answer is structural: you committed to the minority attack, so grade whether the
+**structural signature of a completed minority attack appeared** — a backward
+pawn on a half-open file — rather than whether specific moves were played. That
+is grading a plan by its consequence, which is what the product claims to do
+everywhere else.
+
+The machinery for this already ships and is authorable: `ObjectivePredicate`
+carries a `pawnStructure` variant with `contains`/`exact` modes
+(`packages/runtime/src/objective.ts:54-58`, evaluated at `:158-167`), reachable
+from a pack through `fenPredicate`.
+
+**What is missing is vocabulary, not machinery.** The shipped predicate matches
+*literal pawn placement* — explicit square lists — so "a backward pawn on c6" is
+expressible only by enumerating exact positions, which is brittle to the point of
+uselessness across the variations a real drill produces. Feature-level predicates
+— *backward pawn on file*, *outpost on square*, *half-open file*, *blocked
+diagonal* — are exactly the deterministic-feature work already owned by
+exploration **Q4b**, and they are rung 0.
+
+So the sequence is: Q4b's features are what let an author say what a plan *is*
+rather than where the pawns *are*; the same features are what let a pack-less
+game be read at all; and both are the same rung-0 layer serving drilling and Just
+Play identically. That is why `05` exists.
+
 ### 5a. Pivotal moments without an author
 
 The owner's larger claim: *"the drilling is nice but the true gem is branching
