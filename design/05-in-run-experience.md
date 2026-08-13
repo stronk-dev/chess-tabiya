@@ -187,6 +187,48 @@ is a prerequisite to rehearsing it at all) and off by default above, with an
 explicit intent that it **fades**: you cannot rehearse a concept you have never
 heard of, and you cannot learn to find one that is always pointed out.
 
+### 3b-i. The LLM is the voice, never the source
+
+Owner, 2026-08-13: *"we don't have the LLM for nothing… as long as we can
+classify game states to early/mid/endgame theory and content and ideas, the
+clippy can be beautifully annoying."*
+
+That is the correct division and it is exactly what ADR-0005 permits. The ADR
+forbids the LLM **inventing** chess truth; it has never forbidden it having a
+voice. So:
+
+> **The classifier is the source. The shape entry is the claim. The LLM is the
+> mouth.**
+
+The rendering contract, which is checkable rather than aspirational:
+
+1. An **evidence packet** is assembled first — the detected structure, its plan
+   classes, the rung-0 facts that fired, the phase. This is the complete set of
+   things that may be said.
+2. The model receives the packet **and a persona**, and may choose wording,
+   order, brevity, and tone.
+3. It may not introduce a chess noun, square, move or judgement that is not in the
+   packet. That is machine-checkable, and `docs/explanation-grounds.md` already
+   ships grounded rendering with this shape for evidence sentences — this extends
+   an existing mechanism rather than inventing one.
+
+**"Beautifully annoying" is a real design property, not a joke.** A voice with
+personality is memorable, and memorable is the difference between a concept the
+learner recognises next game and one that scrolled past. What must be annoying is
+the learner's *complacency* — not their play. That is why the delivery stays the
+passive marker (§3b): it can be as opinionated as it likes inside a panel the
+learner opened, and it never seizes the board.
+
+**Cost and degradation, since deployment is hosted multi-user.** Per-move
+generation would be a per-user bill and a latency budget on every ply. It is also
+unnecessary: tips fire on *detected shapes*, which are sparse by construction —
+you get one when the classifier recognises something, not every move. And the
+shape entry already carries a canonical written explanation, which is the entire
+point of authoring it once. So the default is **the authored text**, with the LLM
+re-voicing it on request or by preference. If the provider is absent the learner
+gets the authored sentence, the claim is byte-identical, and only the personality
+is missing — which is the correct thing to lose first.
+
 ## 4. What varies by context
 
 The regions and the ladder are constant. Four things vary, and every surface in
