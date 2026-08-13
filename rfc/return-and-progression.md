@@ -6,7 +6,7 @@
 - **Design refs:** `design/01-training-model.md` §Vocabulary, §Repetition scheduling;
   `design/03-product-breadth.md` §Learn and return (`:69-76`), B7 row (`:167`)
 - **Exploration gate:** owner ruling 2026-08-12 opening the exploration gate
-  (`rfc/README.md:26-28`); breadth sequencing ruling 2026-08-11 (`rfc/README.md:35-40`)
+  (`rfc/README.md:58-65`); breadth sequencing ruling 2026-08-11 (`rfc/README.md:67-72`)
 - **Depends on:** `archive/learner-identity-and-authorization.md` (the learner subject),
   `archive/pack-optional-runs.md` (position sessions), `archive/terminal-outcome-events.md`
   (`outcome.reached` producer), `archive/outcome-drill-grading.md` and
@@ -19,14 +19,16 @@
   (v0.5 → v0.6, `retryVariants` only); amends nothing in the run event schema
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/return-and-progression/` (once implementing)
-- **Migration:** 6 (`STORAGE_VERSION` 5→6), claimed in `rfc/README.md` §Migration register
+- **Migration:** 8 (`STORAGE_VERSION` 7→8), claimed in `rfc/README.md` §Migration register.
+  Rebased from 6 as `n-way-comparison.md` and `live-session-platform.md` claimed 6 and 7;
+  neither is a dependency, since this RFC's DDL is create-only and touches no run shape.
 
 ## Summary
 
 This RFC specifies program item #7 (gate B7): the product's answer to "why would you open
 this on Tuesday?" It pins the schedulable unit to **the attempt, which in the runtime is a
 branch of a run**, records one durable row per attempt in a sibling projection store behind
-migration 6, derives blocked and varied repetition from those rows with a stated trigger,
+migration 8, derives blocked and varied repetition from those rows with a stated trigger,
 gives `transfer.scheduled` its first producer, adds `POST /runs/:id/duplicate`, ships
 `/learn` as a real surface over due work and recorded attempts, and adds an opt-in
 personal-history recommender that is additive by construction. It also makes the two
@@ -262,10 +264,11 @@ measurable, but same-pack only. Across packs it undercounts — never overcounts
 undercounting metric can still falsify the claim it exists to test; a metric built on
 merged-by-accident strings could not.
 
-### 4. Storage: migration 6
+### 4. Storage: migration 8
 
-`STORAGE_VERSION` moves 5 → 6 (`apps/server/src/storage.ts:147`) with one entry appended to
-the ladder at `storage.ts:915-941`, named `attempt records, concept tags, schedules, and
+`STORAGE_VERSION` moves 7 → 8 (`apps/server/src/storage.ts:147`, currently 5; migrations 6
+and 7 are claimed by `n-way-comparison.md` and `live-session-platform.md`) with one entry
+appended to the ladder at `storage.ts:915-941`, named `attempt records, concept tags, schedules, and
 history stats`. It creates tables and indexes **only**. It reads no snapshot and calls no
 runtime function — the register already records that migration 1's body had to be rewritten
 to stop replaying through `projectRun` (`rfc/README.md:51`), and this RFC does not repeat
@@ -643,7 +646,7 @@ Because a previously free-form object becomes closed, this is a breaking validat
 
 **Why 0.6 and not 0.5.** The pack schema version is a shared single-writer resource for the
 same reason a migration number is: two parallel drafts that both claim it cannot land
-independently, which is why the migration register exists (`rfc/README.md:46-49`).
+independently, which is why the migration register exists (`rfc/README.md:76-79`).
 `defect-sweep.md` §7 claims 0.5 for `start.side` becoming required and
 `immediate_blunder_guard` leaving the `feedbackPolicy` enum. This RFC therefore takes 0.6 and
 names that draft in `Depends on:`, rather than colliding on 0.5 or making its own version
@@ -766,7 +769,7 @@ Server and unit (`make test`):
 - **A2.** Countability: a run opened but not played yields one row with `countable = 0`; a
   forked-but-unplayed branch yields a second such row; neither affects `attempt_no`, any
   schedule, or either metric query. (B2)
-- **A3.** Migration 6 applies to a database at version 5, is not re-applied on reopen (the
+- **A3.** Migration 8 applies to a database at the preceding version, is not re-applied on reopen (the
   pattern proven at `apps/server/src/storage.test.ts:38-91`), and touches no snapshot.
   Backfill projects existing runs, skips non-current `schema_version` rows without throwing,
   and writes `progress_meta['attempts_backfilled_at']`. (B11)
@@ -830,7 +833,7 @@ Documentation and register, in the same change:
   the attempt unit, the trigger, the store, the endpoints, the pack-scoped concept limitation,
   and the owner-attribution limitation (B10). `docs/drill-pack-format.md` gains a `## v0.6
   retry variants` section in the style of `## v0.4 Line Drill contract` (`:140-160`).
-- **A19.** `rfc/README.md` migration register row for migration 6 and the Active-table row;
+- **A19.** `rfc/README.md` migration register row for migration 8 and the Active-table row;
   on completion the RFC moves to `rfc/archive/` per RFC-0000.
 - **A20.** `planning/exploration/gates.md` B7 status updated to what is then true, and the
   measurability audit entries at `:149-160` replaced with the shipped queries and their stated

@@ -8,7 +8,7 @@
 - **Depends on:** `rfc/archive/learner-identity-and-authorization.md` (F3 — the subject, grants, and the learner-bound lease this RFC builds the session layer on top of); `rfc/archive/pack-optional-runs.md` (F2 — position runs, without which an Arena match run cannot exist)
 - **Sibling drafts:** `rfc/defect-sweep.md` closes D4, D5, D6, D8, D9 and D10 — this RFC cites all six and duplicates none of its fixes; §2.6 states the interaction, and neither blocks the other. `rfc/n-way-comparison.md` holds **migration 6** and run schema 0.7 → 0.8; this RFC rebased to **migration 7** and changes the run schema not at all, so the two are ordered but not coupled (§3.13)
 - **Parent / amends:** amends the lease claim path (`apps/server/src/storage.ts:758-777`), the events page (`apps/server/src/feedback-policy.ts:34-51`), the surface capability map (`apps/server/src/capabilities.ts:117-129`), and the client router (`apps/web/src/lib/router.ts:18-27`). Adds **migration 7** (`STORAGE_VERSION` 6→7)
-- **Supersedes / superseded by:** supersedes `planning/breadth/live-and-platform.md` §A2, §A4/C1, §A4/C3, §A4/C5 and §A4/C6, all of which were written on 2026-08-12 against a tree that had no identity. §5 below states each correction
+- **Supersedes / superseded by:** supersedes `planning/breadth/live-and-platform.md` §A2, §A4/C1, §A4/C3, §A4/C5 and §A4/C6, all of which were written on 2026-08-12 against a tree that had no identity. §Deviations item 5 states each correction
 - **Planning:** `planning/live-session-platform/` (once implementing)
 
 ## Summary

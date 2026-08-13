@@ -9,7 +9,9 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `0000-rfc-process.md` | accepted | — | process |
 | `defect-sweep.md` | draft | `archive/drill-pack-format.md`, `archive/drill-client.md`, `archive/engine-workers.md` | closes D4, D5, D6, D8, D9, D10; pack schema 0.4 → 0.5; **no migration** |
 | `n-way-comparison.md` | draft | `archive/branch-runtime.md`, `archive/explanation-grounds.md`, `archive/drill-client.md` | breadth program **#5**, gate **B3** — single-axis N-way comparison payload, manual N-branch selection, per-branch consequence rows, resulting-position grid / N-column strips / narrative mode, branch-selective export, simulate, prediction checkpoints, deep analysis. Run schema 0.7 → 0.8, migration **6** |
+| `trajectory-drill.md` | draft | `archive/drill-pack-format.md`, `archive/line-drill-theory-grading.md`, `archive/outcome-drill-grading.md`, `archive/branch-runtime.md` | breadth program **#4**, closes the last **B2** row — Trajectory Drill as one run with authored legs, objective replacement instead of the absorbing `transitioned`, causal provenance from the run's own move history, organic/guided split, no trajectory aggregate. Pack schema 0.6 → **0.7**, **no migration** |
 | `live-session-platform.md` | draft | `archive/learner-identity-and-authorization.md` (F3), `archive/pack-optional-runs.md` (F2) | breadth program **#8**, gate **B5** — live session aggregate above the run, board control and handoff, possession journal, participant proposals, chat-vote windows, overlay projection, Position Arena two-leg PGN import as root-forked branches of one run. Opens and closes D17, D18, D19. **Run schema unchanged**, migration **7** |
+| `return-and-progression.md` | draft | `archive/drill-pack-format.md`, `archive/learner-identity-and-authorization.md` (F3), `defect-sweep.md` | breadth program **#7**, gate **B7** — the attempt (a branch of a run) as the scheduled unit, durable attempt records, the blocked-vs-varied trigger, the first `transfer.scheduled` producer, `POST /runs/:id/duplicate`, `/learn` and progress display, related-position retrieval, opt-in history recommender, and the two unfalsifiable success metrics turned into queries. **Run schema unchanged**, migration **8**, pack schema 0.5 → 0.6 |
 
 `defect-sweep.md` claims **no migration number**: nothing it changes is persisted,
 and its §Migration states the check rather than omitting the question.
@@ -18,6 +20,18 @@ and its §Migration states the check rather than omitting the question.
 order: the first changes only run-persisted shape, the second only pack shape.
 `n-way-comparison.md` takes D4 and D9 as inbound from `defect-sweep.md` and
 re-claims neither.
+
+`return-and-progression.md` is ordered behind `defect-sweep.md` and independent of the
+other two. It takes D6 as inbound (its `/learn` phase filter *consumes* the
+`PackSummary.phase` the sweep adds and does not re-add it) and reuses the sweep's shared
+vocabulary-constant mechanism for `retryVariants` instead of creating a seventh copy of a
+vocabulary. **The pack schema version is a shared single-writer resource too**, for the
+same reason a migration number is: the sweep claims **0.5**, this draft claims **0.6** and
+names it in `Depends on:` rather than making its own version conditional on landing order.
+Claim the next pack version here whenever a draft narrows or widens
+`schemas/drill_pack.schema.json`. Against `n-way-comparison.md` and
+`live-session-platform.md` it is ordered, not coupled: it changes no run-persisted shape and
+its DDL appends after 7.
 
 `live-session-platform.md` is independent of both. It cites all six of
 `defect-sweep.md`'s defects and duplicates none of its fixes; the only shared shape is
@@ -74,6 +88,7 @@ writing it into a draft.
 | 5 | 4→5 | `archive/line-drill-theory-grading.md` | implemented — run schema v0.7; adds `policyModeApplied` to `opponent.move_selected.selection`, historical selections migrate to `unknown` and are never inferred |
 | 6 | 5→6 | `n-way-comparison.md` | **claimed 2026-08-13, draft** — run schema v0.8; adds `Branch.origin` (`"played" \| "simulated"`) and the `prediction.recorded` event. Body backfills `origin: "played"` on every branch of every v0.7 snapshot; the new event type needs no backfill. Both literals (`"played"`, `"0.8"`) are frozen in the body rather than read from the schema constant, following migration 4's freeze rule, so a later bump cannot mis-stamp rows before migration 7 |
 | 7 | 6→7 | `live-session-platform.md` | **claimed 2026-08-13, draft** — the live-session layer: `live_sessions`, `session_journal`, `session_proposals`, `session_vote_windows`, `session_votes`, `session_invitations`, `arena_legs`. **Create-table only.** It backfills nothing, reads no run snapshot, rewrites no `drill_runs` row, and leaves `DRILL_RUN_SCHEMA_VERSION` untouched, so it cannot mis-stamp anything and needs no freeze rule. Rebased from 6 when `n-way-comparison.md` claimed it; if that draft is withdrawn before landing, this rebases to 6 rather than leaving a hole |
+| 8 | 7→8 | `return-and-progression.md` | **claimed 2026-08-13, draft** — the progress projection: `attempts`, `attempt_concepts`, `schedules`, `learner_position_stats`, `progress_meta`. **Create-table and create-index only.** It reads no run snapshot, calls no runtime function, rewrites no `drill_runs` row, and leaves `DRILL_RUN_SCHEMA_VERSION` untouched, so it needs no freeze rule; backfill is an application-level pass at startup, deliberately outside the migration body because migration 1's body had to be rewritten to stop replaying through `projectRun`. Rebased from 6 to 8 as `n-way-comparison.md` and `live-session-platform.md` claimed 6 and 7; if either is withdrawn before landing, this rebases downward rather than leaving a hole |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a

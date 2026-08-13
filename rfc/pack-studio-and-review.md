@@ -9,9 +9,15 @@
   `design/00-thesis.md` §Target player (on-ramp knobs)
 - **Exploration gate:** owner ruling 2026-08-12 opening the exploration gate
   (`rfc/README.md` §Active); breadth sequencing ruling 2026-08-11
-- **Depends on:** **`rfc/defect-sweep.md`** (see §0 — it owns pack schema v0.5 and closes
-  D6, D8 and D9, three conditions this RFC's registration gate would otherwise have to
-  re-specify), `rfc/archive/content-sourcing-foundation.md` (artifact triple,
+- **Migration:** **9** (`STORAGE_VERSION` 8 → 9), claimed in `rfc/README.md`'s register.
+  Create-table and create-index only; no existing row is read or written and
+  `DRILL_RUN_SCHEMA_VERSION` is untouched, so it needs no freeze rule. 6, 7 and 8 belong
+  to `n-way-comparison.md`, `live-session-platform.md` and `return-and-progression.md`;
+  see §2.
+- **Depends on:** **`rfc/defect-sweep.md`** and **`rfc/return-and-progression.md`** (see §0 —
+  they own pack schema v0.5 and v0.6, and the sweep closes D6, D8 and D9, three conditions
+  this RFC's registration gate would otherwise have to re-specify),
+  `rfc/archive/content-sourcing-foundation.md` (artifact triple,
   `sourcing-check`, licence encoding), `rfc/archive/learner-identity-and-authorization.md`
   (the subject), `rfc/archive/pack-optional-runs.md` (pack-optional run identity),
   `rfc/archive/authored-explanation-surface.md` and
@@ -110,7 +116,7 @@ pipelines. Intent-relative success conditions and the `concept_violation` split
 
 ## Specification
 
-### 0. Relationship to `defect-sweep` — a second shared single-writer resource
+### 0. Relationship to the two parallel drafts — shared single-writer resources
 
 `rfc/defect-sweep.md` was drafted in parallel and claims the **pack schema version**:
 `$id` 0.4 → 0.5, `DRILL_PACK_SCHEMA_VERSION` → `"0.5"` (its §7). That is the same class of
@@ -134,6 +140,12 @@ otherwise close, under the codes `START_SIDE_REQUIRED` and the existing
 `UNSUPPORTED_*_POLICY` set. Nothing else in this specification changes. The inversion is
 stated so that neither draft blocks on the other's acceptance, and so that the resource is
 claimed in one place either way.
+
+`n-way-comparison.md` is the third parallel draft. It claims database migration **6** (so
+this RFC takes 7, §2) and adds `Branch.origin: "played" | "simulated"`, which session
+distillation must respect or it will manufacture deviations out of authored content (§6).
+Neither claim overlaps this RFC's; both are named where they bite rather than left to be
+discovered at merge.
 
 One row in `defect-sweep`'s proposed backlog is a live constraint on this RFC's never-silent
 guarantee and is named here so it is not mistaken for a gap this RFC introduced:
@@ -491,7 +503,20 @@ containing the deepest node).
    opponent-line caveat.
 
 **Extracted as proposals, outside the pack document:** every fork in the run
-becomes a *deviation proposal* in `proposals_json`:
+becomes a *deviation proposal* in `proposals_json`.
+
+One exclusion, and it is not optional. `n-way-comparison.md` §7.4 adds
+`Branch.origin: "played" | "simulated"`, where a simulated branch is the pack's
+own authored line played forward by the simulate grid. Distilling a simulated
+branch into a deviation proposal would manufacture "the learner deviated here" out
+of content the author already wrote — a deviation that describes nothing anyone
+chose. **The distiller skips every branch whose `origin` is `"simulated"`**, both
+as a spine sibling and as a proposal, and says so in the response. Until that field
+exists every branch is `"played"` by construction and the rule is inert; it is
+specified now because a distiller written before the field lands would silently do
+the wrong thing after it does.
+
+Each proposal:
 
 ```
 { kind: "deviation", atSpineNodeId, moveUci, moveSan,

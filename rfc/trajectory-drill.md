@@ -15,7 +15,7 @@
   no-absorbing-state law; the monotone law, `resolveAt`, and the compiled rule order; and
   `outcome.reached`. `rfc/archive/pack-optional-runs.md` supplies the session identity this RFC
   proves a trajectory cannot span
-- **Parent / amends:** **`rfc/archive/drill-pack-format.md`** (pack schema 0.4 → 0.5: the `legs`
+- **Parent / amends:** **`rfc/archive/drill-pack-format.md`** (pack schema 0.6 → 0.7: the `legs`
   array, the `run_trajectory` objective type, and the first meaning `mode: "trajectory"` has ever
   had), **`rfc/archive/outcome-drill-grading.md`** (its rule compiler and its validation codes gain
   a per-leg scope; its `syzygy` root assessment is refused on a leg, for a stated reason),
@@ -29,6 +29,11 @@
 - **Migration:** **none.** No persisted run shape changes, no event type is added, and no
   `DRILL_RUN_SCHEMA_VERSION` bump occurs. This RFC claims **no row in the migration register**; see
   Specification §13. Its Active-table row in `rfc/README.md` is added in the same commit.
+- **Pack schema version:** **0.6 → 0.7, rebased.** `DRILL_PACK_SCHEMA_VERSION` is the same class of
+  shared single-writer resource as a migration number, and it is now contended: `rfc/defect-sweep.md`
+  §7 claims 0.5, while **`rfc/pack-studio-and-review.md` §and `rfc/return-and-progression.md` both
+  claim 0.6** — a live collision this RFC found and does not join. This RFC takes 0.7 and orders
+  after all three. See §3 and the register note added to `rfc/README.md` in the same commit.
 - **Planning:** `planning/trajectory-drill/` (once implementing)
 
 ## Summary
@@ -182,11 +187,11 @@ the encoding safe; one executable fixture and a browser acceptance.
 | **Authored jumps as legs** — the third and fourth validity conditions of `archive/brief-v2/07_CONNECTED_TRAJECTORIES.md:46-49` | Those conditions justify *authoring* an endgame root; they do not describe an operation the runtime has. A jump inside a run needs a way to set a position without a move, and nothing in `packages/runtime` can do that (`commitMove` is the only node producer, `runtime.ts:321-336`). Encoding one would mean a run whose node path is discontinuous — the failure this RFC exists to prevent. A jump is a **new run**, and a sequence of runs is program item #7's territory (`design/03-product-breadth.md:256-257`), where "related retry" already lives |
 | A trajectory score, completion percentage, or leg ranking | An aggregate over verdicts of three different kinds, two of which are `unknown`-shaped and one of which is "not entered". `rfc/archive/line-drill-theory-grading.md` Deviations item 1 refused the same shape for one mode; refusing it across three modes is the same argument three times over. §6 |
 | Automatic phase or structure recognition | Exploration Q4c (`planning/exploration/plan.md:143-152`) and program item #3's contract. §8a uses the weakest recognition that works — author-declared conditions evaluated by the shipped predicate evaluator — and infers nothing |
-| Projecting `phase` to the pack list (D6) | `PackSummary` omits `phase` (`pack-registry.ts:26-34`) while `projectPackDocument` projects it (`:68`), so D6 is a list-surface defect and item #1's foundation-edge residual (`design/03-product-breadth.md:202-205`). A trajectory pack is `phase: "cross_phase"` and needs nothing from the list. Cited so it is not rediscovered |
+| Projecting `phase` to the pack list (D6) | `PackSummary` omits `phase` (`pack-registry.ts:26-34`) while `projectPackDocument` projects it (`:68`), so D6 is a list-surface defect and item #1's foundation-edge residual (`design/03-product-breadth.md:202-205`). **`rfc/defect-sweep.md` owns it** and this RFC does not duplicate the fix. A trajectory pack is `phase: "cross_phase"` and needs nothing from the list |
 | Per-leg `phase` labels | A leg would carry an authored phase word with no consumer, and the first consumer would be tempted to present it as a recognised phase. "Vocabulary grows only when a consumer grows" (`docs/drill-pack-format.md:44-48`). The pack's `phase: "cross_phase"` is the whole phase claim a trajectory makes |
 | `retryVariants` — repeat / mirror / opposite-side over a trajectory | Untyped schema slot, zero readers (`drill_pack.schema.json:66-69`). It is program #4 slice 6 / #7 work and touching it here would give one vocabulary two owners |
-| A perfect-play (`perfect_tablebase`) leg opponent, D8 | Declared unimplemented and tested as such (`apps/server/src/capabilities.ts:12-23`). A trajectory needs `theory_strict`, `human_common` and `strong_engine`; all three ship (`capabilities.ts:10`) |
-| D4, D5, D9, D10 | Untouched and cited so they are not rediscovered: the action-vocabulary drift risk (`design/BACKLOG.md:117`), the release compose's missing light profile (`:118`), `start.side` schema-optional but client-fatal (`:129`), and both Stockfish specs reporting `version: "unknown"` (`:128`) — the last of which means a `strong_engine` leg's resistance line reads `v unknown`, which is honest and is what is recorded |
+| A perfect-play (`perfect_tablebase`) leg opponent — D8's **capability** half | Declared unimplemented and tested as such (`apps/server/src/capabilities.ts:12-23`); D8's *divergence* half belongs to `rfc/defect-sweep.md`. A trajectory needs `theory_strict`, `human_common` and `strong_engine`; all three ship (`capabilities.ts:10`) |
+| D4, D5, D8, D9, D10 | All five are **owned by `rfc/defect-sweep.md`**, drafted in parallel; this RFC cites them so they are not rediscovered and duplicates none of its fixes. The action-vocabulary drift risk (`design/BACKLOG.md:117`), the release compose's missing light profile (`:118`), the schema/validator policy-mode divergence (`:130`), `start.side` schema-optional but client-fatal (`:129`), and both Stockfish specs reporting `version: "unknown"` (`:128`) — the last of which means a `strong_engine` leg's resistance line reads `v unknown`, which is honest and is what is recorded. **The one interaction:** the sweep makes `start.side` required at its pack-schema bump; this RFC's fixture declares it, and `legs` adds no second start position, so the two do not overlap |
 | The selection cache omitting `policy.mode` | `selectionCacheKey` is `(policyConfigDigest, packId, seed, historyHash)` (`apps/server/src/opponent-selector.ts:180-184`). A trajectory does not change the opponent policy per leg (§8), so this RFC neither depends on nor widens it. A BACKLOG row to propose |
 
 ## Specification
@@ -237,13 +242,24 @@ Two consequences, stated so they are not discovered later:
   must not force all three phases every time"
   (`archive/brief-v2/07_CONNECTED_TRAJECTORIES.md:66`, `:76`) — and §8b is the mechanism.
 
-### 3. Pack format v0.5 — `legs`
+### 3. Pack format v0.7 — `legs`
 
-`schemas/drill_pack.schema.json` bumps `$id` to `urn:chess-tabiya:schema:drill-pack:0.5` and
-`DRILL_PACK_SCHEMA_VERSION` to `"0.5"` (`packages/schema/src/index.ts:2`, asserted at
+`schemas/drill_pack.schema.json` bumps `$id` to `urn:chess-tabiya:schema:drill-pack:0.7` and
+`DRILL_PACK_SCHEMA_VERSION` to `"0.7"` (`packages/schema/src/index.ts:2`, asserted at
 `packages/schema/src/drill-pack.test.ts:49-56`). `digestDrillPack` digests the document, not the
 schema version (`packages/schema/src/drill-pack/digest.ts:58-66`), so **no pack digest changes
 from the bump** and no stored run is orphaned by it.
+
+**The number is rebased, and the rebase is the point.** Five product RFCs were drafted in
+parallel on 2026-08-13. `rfc/defect-sweep.md` §7 claims pack schema 0.5;
+`rfc/pack-studio-and-review.md` and `rfc/return-and-progression.md` **both** claim 0.6, which
+is the exact failure the migration register was instituted to stop
+(`rfc/README.md` §Migration register) applied to a second shared constant. This RFC takes 0.7
+and orders after all three, exactly as F2 rebased its migration to 3 rather than contest 2. The
+bump costs this RFC nothing to move — pack digests are content digests and no rule here depends
+on the number — so it is the cheapest of the four to rebase. Resolving the 0.5/0.6/0.6 collision
+between the other three is theirs, not this one's; a pack-schema register row is added to
+`rfc/README.md` so the next draft claims before writing.
 
 #### 3a. The `legs` array
 
@@ -887,7 +903,7 @@ Five additions look persisted and none is:
   (`drill_run.schema.json:86-95`).
 - **`legs` in the pack projection** (§11) is a field of a per-request response, not a stored shape.
 - **The PGN `leg:` comment** (§7) is produced at export time from the same derivation.
-- **The pack-schema bump to 0.5** is not a persisted shape: pack digests are content digests,
+- **The pack-schema bump to 0.7** is not a persisted shape: pack digests are content digests,
   unaffected by the `$id` (`digest.ts:58-66`).
 
 **Editing no existing pack means no digest changes**, so unlike the two shipped mode RFCs this one
@@ -1007,7 +1023,7 @@ orphans no developer test run. The one new file is a new pack with a new id.
     ply. And `hasWithheldAuthoredContent` is asserted **false** on a trajectory run whose prose is
     fully revealed but whose legs continue.
 12. **Existing packs and runs are unaffected in every way.** Every pack file in the repo — the
-    schema example, the five drafts and the four candidates — loads and validates under v0.5,
+    schema example, the five drafts and the four candidates — loads and validates under v0.7,
     asserted by a test that walks the tree, and each one's complete `runtimeIssues` output is
     asserted **identical** before and after the §10 extraction. `schemas/drill_pack.example.json`
     keeps `mode: "trajectory"` with no legs, keeps its digest, and its projected key set at
@@ -1050,7 +1066,7 @@ orphans no developer test run. The one new file is a new pack with a new id.
     and every path is re-validated as legal chess, so the export cannot look plausible while being
     discontinuous.
 17. **The version bump is exactly zero migrations wide.** A test asserts
-    `DRILL_PACK_SCHEMA_VERSION === "0.5"`, `drill_pack.schema.json`'s `$id` at `0.5`,
+    `DRILL_PACK_SCHEMA_VERSION === "0.7"`, `drill_pack.schema.json`'s `$id` at `0.7`,
     `DRILL_RUN_SCHEMA_VERSION` **still** `"0.7"`, `STORAGE_VERSION` **still** `5`, and that
     `rfc/README.md`'s migration register gains **no** row for this RFC while its Active table gains
     one.
@@ -1058,7 +1074,7 @@ orphans no developer test run. The one new file is a new pack with a new id.
     (`playwright.config.ts`), run three consecutive times;
     `make pack-check FILE=content/drafts/trajectory-legs.browser.json` and
     `make pack-check FILE=schemas/drill_pack.example.json` green.
-19. **Docs.** `docs/drill-pack-format.md` documents v0.5, `legs`, `run_trajectory`, the leg-entry
+19. **Docs.** `docs/drill-pack-format.md` documents v0.7, `legs`, `run_trajectory`, the leg-entry
     checkpoint contract and the sixteen validation codes, and **corrects line 135**, which
     currently lists "trajectory `transitions`" as unimplemented content-era work;
     `docs/branch-runtime.md` documents `trajectoryLegSpans`/`trajectoryVerdict`/`legIndexAt` as
@@ -1084,4 +1100,4 @@ None.
   may call causal provenance; an organic/guided split that turns on what the pack authors about
   the route rather than on how a transition is recognized; author-declared phase recognition and
   nothing else; and the refusal of any trajectory-level aggregate. Advances the pack schema to
-  v0.5 and claims no migration.
+  v0.7 and claims no migration.
