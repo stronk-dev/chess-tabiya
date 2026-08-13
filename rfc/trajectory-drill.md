@@ -208,7 +208,7 @@ span-scoped:
 
 - `checkpointReached` resolves through `checkpointWasReached`, which searches the **whole
   root-to-node path** (`objective.ts:170-191`, `:228-229`);
-- `outcomeReached` likewise scopes to `pathToNode` (`objective.ts:237-246`).
+- `outcomeReached` likewise scopes to `pathToNode` (`objective.ts:237-245`).
 
 So a leg-c condition `{"kind": "reach_checkpoint", "checkpointId": "book-crossed"}` — naming
 leg-b's *entry* checkpoint — is **already true at leg-c's first graded commit**, because that
@@ -237,14 +237,14 @@ the encoding safe; one executable fixture and a browser acceptance.
 
 | Out of scope | Why |
 |---|---|
-| **Authored jumps as legs** — the third and fourth validity conditions of `archive/brief-v2/07_CONNECTED_TRAJECTORIES.md:46-49` | Those conditions justify *authoring* an endgame root; they do not describe an operation the runtime has. A jump inside a run needs a way to set a position without a move, and nothing in `packages/runtime` can do that (`commitMove` is the only node producer, `runtime.ts:321-336`). Encoding one would mean a run whose node path is discontinuous — the failure this RFC exists to prevent. A jump is a **new run**, and a sequence of runs is program item #7's territory (`design/03-product-breadth.md:256-257`), where "related retry" already lives |
+| **Authored jumps as legs** — the third and fourth validity conditions of `archive/brief-v2/07_CONNECTED_TRAJECTORIES.md:46-49` | Those conditions justify *authoring* an endgame root; they do not describe an operation the runtime has. A jump inside a run needs a way to set a position without a move, and nothing in `packages/runtime` can do that (`commitMove` is the only node producer, `runtime.ts:321-336`). Encoding one would mean a run whose node path is discontinuous — the failure this RFC exists to prevent. A jump is a **new run**, and a sequence of runs is program item #7's territory (`design/03-product-breadth.md:266`, gate row B7 at `:177`), owned by `rfc/return-and-progression.md`, where "related retry" already lives |
 | A trajectory score, completion percentage, or leg ranking | An aggregate over verdicts of three different kinds, two of which are `unknown`-shaped and one of which is "not entered". `rfc/archive/line-drill-theory-grading.md` Deviations item 1 refused the same shape for one mode; refusing it across three modes is the same argument three times over. §6 |
 | Automatic phase or structure recognition | Exploration Q4c (`planning/exploration/plan.md:143-152`) and program item #3's contract. §8a uses the weakest recognition that works — author-declared conditions evaluated by the shipped predicate evaluator — and infers nothing |
-| Projecting `phase` to the pack list (D6) | `PackSummary` omits `phase` (`pack-registry.ts:26-34`) while `projectPackDocument` projects it (`:68`), so D6 is a list-surface defect and item #1's foundation-edge residual (`design/03-product-breadth.md:202-205`). **`rfc/defect-sweep.md` owns it** and this RFC does not duplicate the fix. A trajectory pack is `phase: "cross_phase"` and needs nothing from the list |
+| Projecting `phase` to the pack list (D6) | `PackSummary` omits `phase` (`pack-registry.ts:26-34`) while `projectPackDocument` projects it (`:68`), so D6 (`design/BACKLOG.md:136`, and `:60` for the IA it blocks) is a list-surface defect residual to item #1 (`design/03-product-breadth.md:241`). **`rfc/defect-sweep.md` owns it** and this RFC does not duplicate the fix. A trajectory pack is `phase: "cross_phase"` and needs nothing from the list |
 | Per-leg `phase` labels | A leg would carry an authored phase word with no consumer, and the first consumer would be tempted to present it as a recognised phase. "Vocabulary grows only when a consumer grows" (`docs/drill-pack-format.md:44-48`). The pack's `phase: "cross_phase"` is the whole phase claim a trajectory makes |
-| `retryVariants` — repeat / mirror / opposite-side over a trajectory | Untyped schema slot, zero readers (`drill_pack.schema.json:66-69`). It is program #4 slice 6 / #7 work and touching it here would give one vocabulary two owners |
-| A perfect-play (`perfect_tablebase`) leg opponent — D8's **capability** half | Declared unimplemented and tested as such (`apps/server/src/capabilities.ts:12-23`); D8's *divergence* half belongs to `rfc/defect-sweep.md`. A trajectory needs `theory_strict`, `human_common` and `strong_engine`; all three ship (`capabilities.ts:10`) |
-| D4, D5, D8, D9, D10 | All five are **owned by `rfc/defect-sweep.md`**, drafted in parallel; this RFC cites them so they are not rediscovered and duplicates none of its fixes. The action-vocabulary drift risk (`design/BACKLOG.md:117`), the release compose's missing light profile (`:118`), the schema/validator policy-mode divergence (`:130`), `start.side` schema-optional but client-fatal (`:129`), and both Stockfish specs reporting `version: "unknown"` (`:128`) — the last of which means a `strong_engine` leg's resistance line reads `v unknown`, which is honest and is what is recorded. **The one interaction:** the sweep makes `start.side` required at its pack-schema bump; this RFC's fixture declares it, and `legs` adds no second start position, so the two do not overlap |
+| `retryVariants` — repeat / mirror / opposite-side over a trajectory | Untyped schema slot, zero readers (`drill_pack.schema.json:66-69`). **`rfc/return-and-progression.md` owns it** and types it at pack schema 0.6; touching it here would give one vocabulary two owners |
+| A perfect-play (`perfect_tablebase`) leg opponent — D8's **capability** half | Declared unimplemented and tested as such (`apps/server/src/capabilities.ts:12-23`); D8's *divergence* half belongs to `rfc/defect-sweep.md`. A trajectory needs `theory_strict`, `human_common` and `strong_engine`; none of the three appears in `DECLARED_UNIMPLEMENTED_POLICY_MODES` (`capabilities.ts:12-23`) and all three have a selector branch (`opponent-selector.ts:427`, `:437`, `:454`) |
+| D4, D5, D8, D9, D10 | All five are **owned by `rfc/defect-sweep.md`**, drafted in parallel; this RFC cites them so they are not rediscovered and duplicates none of its fixes. The action-vocabulary drift risk (`design/BACKLOG.md:117`), the release compose's missing light profile (`:118`), the schema/validator policy-mode divergence (`:134`), `start.side` schema-optional — whose live consequence, per the row's 2026-08-13 re-verification, is a **silently inverted Syzygy verdict** rather than the crash originally ledgered (`:133`) — and both Stockfish specs reporting `version: "unknown"` (`:132`), the last of which means a `strong_engine` leg's resistance line reads `v unknown`, which is honest and is what is recorded. **The one interaction:** the sweep makes `start.side` required at its pack-schema bump; this RFC's fixture declares it, and `legs` adds no second start position, so the two do not overlap |
 | The selection cache omitting `policy.mode` | `selectionCacheKey` is `(policyConfigDigest, packId, seed, historyHash)` (`apps/server/src/opponent-selector.ts:180-184`). A trajectory does not change the opponent policy per leg (§8), so this RFC neither depends on nor widens it. A BACKLOG row to propose |
 
 ## Specification
@@ -299,21 +299,29 @@ Two consequences, stated so they are not discovered later:
 
 `schemas/drill_pack.schema.json` bumps `$id` to `urn:chess-tabiya:schema:drill-pack:0.7` and
 `DRILL_PACK_SCHEMA_VERSION` to `"0.7"` (`packages/schema/src/index.ts:2`, asserted at
-`packages/schema/src/drill-pack.test.ts:49-56`). `digestDrillPack` digests the document, not the
+`packages/schema/src/drill-pack.test.ts:49-56`, whose `describe` title and both assertions name the
+version literally and move with it). `digestDrillPack` digests the document, not the
 schema version (`packages/schema/src/drill-pack/digest.ts:58-66`), so **no pack digest changes
 from the bump** and no stored run is orphaned by it.
 
-**The number is rebased, and the rebase is the point.** Five product RFCs were drafted in
-parallel on 2026-08-13. `rfc/defect-sweep.md` §7 claims pack schema 0.5;
-`rfc/pack-studio.md` (then named `pack-studio-and-review.md`) and
-`rfc/return-and-progression.md` **both** claim 0.6, which
-is the exact failure the migration register was instituted to stop
-(`rfc/README.md` §Migration register) applied to a second shared constant. This RFC takes 0.7
-and orders after all three, exactly as F2 rebased its migration to 3 rather than contest 2. The
-bump costs this RFC nothing to move — pack digests are content digests and no rule here depends
-on the number — so it is the cheapest of the four to rebase. Resolving the 0.5/0.6/0.6 collision
-between the other three is theirs, not this one's; a pack-schema register row is added to
-`rfc/README.md` so the next draft claims before writing.
+**The number is claimed, not derived from the tree.** The value in the tree today is
+`"0.4"` (`packages/schema/src/index.ts:2`; `$id` `urn:chess-tabiya:schema:drill-pack:0.4` at
+`schemas/drill_pack.schema.json:3`) — every higher number belongs to a draft. Six product RFCs were
+drafted in parallel on 2026-08-13, and three of them wrote a pack-schema version before any of them
+claimed one: `rfc/defect-sweep.md` took 0.5, and `rfc/pack-studio.md` (then
+`pack-studio-and-review.md`) and `rfc/return-and-progression.md` **both** took 0.6 — the exact
+failure the migration register was instituted to stop (`rfc/README.md` §Migration register),
+applied to a second shared constant. This RFC did not join the contention: it took **0.7**, and
+the register in `rfc/README.md` now records the resolved order — 0.5 `defect-sweep`, 0.6
+`return-and-progression`, **0.7 this RFC**, 0.8 `pack-studio` (which rebased 0.6 → 0.7 → 0.8),
+0.9 `n-way-comparison`. The bump costs this RFC nothing to move — pack digests are content digests
+and no rule here depends on the number — which is why it was the cheapest one to rebase, and it
+would rebase again as cheaply. **This RFC does not require 0.5 or 0.6 to have landed**; if it lands
+first the constant goes 0.4 → 0.7 and the intervening numbers stay reserved.
+
+`rfc/n-way-comparison.md` also removes a key named `grading` at 0.9, but from
+`$defs/checkpointInteraction`, not from `$defs/objective` — the prediction-checkpoint grading the
+owner struck. Per-leg `objective.grading` (§9b) is untouched by it.
 
 #### 3a. The `legs` array
 
@@ -332,7 +340,7 @@ Schema (`$defs.trajectoryLeg`, `additionalProperties: false`):
 | Key | Shape |
 |---|---|
 | `id` | `#/$defs/id`, required |
-| `objective` | `#/$defs/objective`, required — **the same closed object the top level uses**, so a leg objective is a full objective with `type`, `summary`, optional `grading` and optional `successConditions` |
+| `objective` | `#/$defs/objective`, required — **the same closed object the top level uses** (`drill_pack.schema.json:137-149`: `required: ["type","summary"]`, `additionalProperties: false`), so a leg objective is a full objective with `type`, `summary`, optional `grading` and optional `successConditions` |
 | `entryCheckpointId` | `#/$defs/id`, optional at the schema layer, required for every leg after the first by §10 |
 
 `legs` is an array with `"minItems": 2`. A one-leg trajectory has no transition, and a transition
@@ -414,9 +422,9 @@ ships today; steps 3 and 4 are new.
 
 ```text
 1. Fire every matching checkpoint.                       (unchanged, :285-292)
-2. outgoing := legIndexAt(parentOf(node))                 // the leg the move was played inside
+2. outgoing := legIndexAt(pack, run, parentOf(node).id)   // the leg the move was played inside
    run := evaluateObjective(run, objectiveRules(pack, legs[outgoing].objective), at).run
-3. incoming := legIndexAt(node)                           // may exceed outgoing if an entry fired here
+3. incoming := legIndexAt(pack, run, node.id)             // may exceed outgoing if an entry fired here
 4. if incoming > outgoing:
      state := activeNode(run).objectiveState
      if state is absorbing:  emit nothing; the trajectory ends here (§5)
@@ -429,17 +437,33 @@ whole path reduces to the two lines that ship today** (`pack-orchestrator.ts:293
 the tree takes that reduction, which is why criterion 12 can assert byte-identical behaviour for
 all of them.
 
-Six properties, each load-bearing:
+The step-4 branch is **exhaustive over the six states, and that is checkable rather than
+asserted.** `ALLOWED_TRANSITIONS` (`objective-state.ts:3-10`) gives `preserved` and `degraded` an
+`active` successor (`:5`, `:6`); gives `active` none (`:4` omits itself); and gives `failed`,
+`achieved` and `transitioned` no successors at all (`:7-9`). So the two guards cover exactly the
+four states from which `→ active` would throw, and the fall-through covers exactly the two from
+which it is legal. There is no seventh case.
+
+Seven properties, each load-bearing:
 
 - **The leg in force for a commit is the leg active at the commit's *parent*.** You played the
   move inside the outgoing leg; the transition is a consequence of that move and is graded against
   the leg you were in. This is what makes §3c's "resolution is also the next entry" case correct
-  rather than an off-by-one.
-- **`objectiveRules` takes the objective as a parameter.** Its signature becomes
+  rather than an off-by-one. Every commit has a parent — the root is created by `createRun`, never
+  by `commitMove` — so `parentOf(node)` is total here.
+- **`objectiveRules` takes the objective as a parameter, and every `pack.objective` read inside it
+  moves with the parameter.** Its signature becomes
   `objectiveRules(pack, objective = pack.objective)` (`pack-orchestrator.ts:167`), so its single
   production call site (`:293`) passes the leg's objective and every existing caller and test
-  compiles unchanged. Its `follow_theory` branch keeps reading `pack.deviations` and
-  `pack.authoredBoundary`, which are pack-level and correct there (§9a).
+  compiles unchanged. The rename is not cosmetic and is not optional: **all seven reads must
+  switch** — `successConditions` (`:170`), the `follow_theory` test (`:171`), the outcome-type test
+  (`:213-215`), the `win`/`hold` draw target (`:240`), the `resist` test (`:241`), and
+  **`grading?.resolveAt` at `:242` and `:259`**. Leaving the last two on `pack.objective` is the
+  failure mode with teeth: a leg-bearing pack's top-level objective is `run_trajectory` with no
+  `grading` (§3b), so a `resist` or `hold` leg would compile with **no resolution rule at all** and
+  seal at `active` forever while every load-time check passed. Its `follow_theory` branch keeps
+  reading `pack.deviations` (`:173`) and the pack's `atAuthoredBoundary` checkpoint (`:192-196`),
+  which are pack-level and correct there (§9a).
 - **This is a deliberate departure from "at most one transition per commit."**
   `evaluateObjective` performs one (`objective.ts:311-326`); step 4 may perform a second. It is
   the orchestrator that is doing this, not the runtime, and the runtime's invariants are
@@ -477,26 +501,38 @@ is not a regression — it is a different objective about a different position.
 What is monotone across the whole trajectory is the **leg index**:
 
 - it starts at 0 at the root and only ever increases along a path;
-- it increases at most once per commit (§4b step 4 advances to one leg, and §4d says which one
-  when several entries coincide);
+- it advances at most once per commit, though a single advance may skip legs: §4b step 4 performs
+  one reset, and §4d says which leg it lands on when several entries coincide;
 - it never returns, because a checkpoint fires at most once per path
   (`reachedOnActivePath`, `pack-orchestrator.ts:73-86`) and the derivation of §6 only ever looks
   forward.
 
-And the second half of the law: **a sealed leg verdict is immutable.** Once leg *k* is sealed at
-the boundary node, no later commit on that path can change it, because it is read from the reset
-event's `from` field (or from the absence of a reset), and events are append-only. A trajectory
-cannot retroactively re-grade its opening because the ending went badly.
+And the second half of the law: **a sealed leg verdict is immutable, and the reason is stronger
+than append-only events.** Once leg *k* is sealed at the boundary node, no later commit on that
+path can change it, because (i) `evaluateObjective` only ever evaluates at the active cursor
+(`objective.ts:315`), (ii) §4b compiles the rules of the leg in force at that cursor's *parent*,
+and the leg index never decreases along a path, so leg *k*'s rules are never compiled again once
+the path is past the boundary, and (iii) the seal is read back from the node's own recorded state
+(§6), and events are append-only. A trajectory cannot retroactively re-grade its opening because
+the ending went badly.
+
+What that argument does **not** buy is span-scoped *predicates*: a later leg's rules still evaluate
+against path-scoped facts that an earlier leg produced. Motivation §2h is the finding, and §10's
+`TRAJECTORY_LEG_CONDITION_PRECEDES_ENTRY` is the containment.
 
 #### 4d. Rewind, forks, and coinciding entries
 
 **Rewind un-transitions, per path**, by the mechanism the outcome RFC already documents: objective
 state lives on nodes (`runtime.ts:332`), checkpoint re-firing is path-scoped
-(`pack-orchestrator.ts:73-86`), and the leg derivation walks `historyFrom`. A fork below a
-transition node re-enters that leg on its own and transitions again on its own terms; the sealed
-verdict recorded on the other branch is untouched. This is what makes "reach the middlegame a
-second way and compare" mean anything, and it is the one place where a trajectory and the
-rewind loop meet.
+(`pack-orchestrator.ts:73-86`), and the leg derivation walks `historyFrom`. The direction matters
+and is easy to state backwards, so: **a fork taken from a node *above* a transition — an ancestor
+of the boundary node — starts a path on which the entry checkpoint has not fired, so that path
+re-enters the outgoing leg and transitions again on its own terms.** A fork taken from a node
+*below* the boundary inherits the transition, because the boundary node is on its path and
+`reachedOnActivePath` sees the occurrence; that is also correct — you did cross it. Either way the
+sealed verdict recorded on the other branch is untouched, because it is read from that branch's own
+nodes. This is what makes "reach the middlegame a second way and compare" mean anything, and it is
+the one place where a trajectory and the rewind loop meet.
 
 **When two or more entry checkpoints fire at one node**, the run advances to the **highest-indexed**
 leg among them, and every leg between the outgoing one and it is recorded with
@@ -504,8 +540,8 @@ leg among them, and every leg between the outgoing one and it is recorded with
 higher entries permanently, because `checkpointReachedHere`-shaped occurrences do not recur. The
 statically decidable half of this authoring error is rejected at load
 (`TRAJECTORY_LEG_ENTRIES_COINCIDE`, §10) and the root case is already covered by the shipped
-`CHECKPOINT_TRUE_AT_ROOT` and `CHECKPOINT_UNREACHABLE_AT_ROOT`
-(`pack-validation.ts:393`, `:400`).
+`CHECKPOINT_UNREACHABLE_AT_ROOT` (`pack-validation.ts:393`) and `CHECKPOINT_TRUE_AT_ROOT`
+(`:401`).
 
 ### 5. What a leg objective may be, and the absorbing law
 
@@ -520,7 +556,7 @@ differently and all three are real today:
 | everything else (`execute_break`, `reach_structure`, `prevent_opponent_plan`, `preserve_plan_window`, …) | `conditionRules` (`pack-orchestrator.ts:141-165`) | whatever the authored `successConditions` express (§9c) |
 
 **The law: a leg that is not the last may not enter an absorbing state except through
-`outcome.reached`.** An absorbing state stops play (`runtime.ts:275-279`), so a non-final leg that
+`outcome.reached`.** An absorbing state stops play (`runtime.ts:276-278`), so a non-final leg that
 absorbs ends the trajectory. That is correct and honest when the game itself ended — checkmate in
 the middlegame leg means there is no endgame leg, and the verdict says so — and it is an authoring
 error in every other case. `TRAJECTORY_NONFINAL_LEG_ABSORBING` (§10) is the check, and it is
@@ -528,7 +564,16 @@ computed on the **compiled** target rather than the authored key, because
 `conditionRules` defaults `to` to `"achieved"` when the author writes none
 (`pack-orchestrator.ts:148`). A non-final leg with a bare
 `{"kind": "reach_checkpoint", "checkpointId": "…"}` is exactly the shape that would freeze a
-trajectory at its first checkpoint, and the default is why the check cannot read the JSON.
+trajectory at its first checkpoint, and the default is why the check cannot read the JSON. The
+outcome compiler's own `outcome-*` rules (`pack-orchestrator.ts:224-253`) are exempt by
+construction: every one of them is predicated on `outcomeReached`, which is the one door the law
+leaves open.
+
+**When a leg does absorb, the trajectory ends there and the derivation must agree with the
+runtime.** §4b step 4 emits no reset from an absorbing state, so the run does **not** advance a
+leg, even though the incoming leg's entry checkpoint may have fired at that same node. §6's
+derivation carries the same stop condition, because a derivation that advanced where the runtime
+did not would report a leg as entered that the runtime never graded.
 
 ### 6. Composition of verdicts — and the aggregate that is refused
 
@@ -574,6 +619,8 @@ export interface TrajectoryVerdict {
   readonly legs: readonly TrajectoryLegOutcome[];
   readonly transitions: readonly TrajectoryTransition[];
   readonly activeLegId: string;
+  /** True when the active leg reached an absorbing state; no later leg can be entered. */
+  readonly stopped: boolean;
 }
 
 export function trajectoryLegSpans(
@@ -590,22 +637,35 @@ export function legIndexAt(
 ): number;
 ```
 
-The derivation walks `historyFrom(run, nodeId)` once:
+The derivation walks `historyFrom(run, nodeId)` once. It must reproduce §4b's decisions exactly —
+the two are the write side and the read side of one rule — so each step below names the §4b step it
+mirrors:
 
 - leg 0 opens at the root node;
 - at each node, collect the entry checkpoint ids of legs whose index exceeds the current one and
-  whose `checkpoint.reached` event names this node; if any, close the current span at this node,
-  open the highest-indexed such leg's span at this node, and mark the legs between them
-  `not_entered`;
+  whose `checkpoint.reached` event names this node. **If the node's own `objectiveState` is
+  absorbing, do not advance** — this mirrors §4b step 4's first guard, sets `stopped: true`, and
+  leaves every later leg `not_entered`. Otherwise close the current span at this node, open the
+  highest-indexed such leg's span at this node, and mark the legs between them `not_entered`;
 - **the transition node is the outgoing leg's `exitNodeId` and the incoming leg's `entryNodeId`.
   They are the same node.** Stated because an off-by-one at a boundary is the classic error in
   this shape;
-- `sealedState` is the `from` field of the `objective.state_changed` event with `to: "active"` at
-  that node, or `"active"` when there is none (§4b's guard means both cases occur normally);
-- a leg with no span is `status: "not_entered"` with no `state`.
+- **`sealedState` is the `from` of the `objective.state_changed` with `to: "active"` at that node
+  when one exists, and otherwise the node's own `objectiveState`.** The fallback is the correction,
+  and it is not cosmetic. §4b emits no reset in **two** cases, not one: when the outgoing state is
+  already `active`, and when it is absorbing. A derivation whose fallback was the literal
+  `"active"` would therefore report `active` for a leg that had actually sealed `achieved` or
+  `failed` — silently converting the honest "the game ended in the middlegame" case into "the
+  middlegame leg is still running". Reading the node covers all three shapes with one rule:
+  `preserved`/`degraded` seal via the reset's `from`; `active` seals as `active`, which is what the
+  node reads anyway; absorbing seals as the absorbing state, which only the node carries;
+- a leg with no span is `status: "not_entered"` with no `state`;
+- `stopped` is true iff the last node on the walk carries an absorbing `objectiveState`. It is a
+  boolean about the run, not a grade, and §6's refusal of aggregates still holds — it names why
+  there is no later leg, which the `not_entered` sentence of §8b would otherwise leave unexplained.
 
 Like `lineMembership` (`packages/runtime/src/line.ts:120-158`) and `resistanceOnPath`
-(`packages/runtime/src/replay.ts:103-139`), this is **computed from what is stored and never
+(`packages/runtime/src/replay.ts:103-138`), this is **computed from what is stored and never
 stored**. That is what makes §13 true.
 
 **The trajectory's grade is the ordered list and nothing else.** There is no fourth verdict, no
@@ -627,11 +687,24 @@ of how much they matter:
 score or an explanation. It is the run's own move list, and by §2 every one of those moves was
 accepted by `commitMove` on this path.
 
+**It is replayable in the strict sense, and that is testable rather than asserted.** `historyFrom`
+returns `Node`s (`runtime.ts:471-479`), each carrying `moveUci`, `fen` and `moveSan`, and every
+non-root node was produced by `commitMove`, which rejects malformed, off-turn and illegal moves
+(`runtime.ts:281-287`) and stores the resulting canonical FEN (`:319-320`). So replaying
+`producedBy` with chessops from the outgoing leg's `entryNodeId` FEN arrives at the transition
+node's FEN, move for move — which is exactly what criterion 13 asserts, and exactly what a
+stitched trajectory could not satisfy. The `moveUci` of the root node is `null` (`types.ts:90`),
+which is why the range is entry-**exclusive**.
+
 Three rules govern what the product may say about a transition, and all three are mechanical:
 
 1. **A transition may be presented only with its provenance.** A rendered transition names the
    entry checkpoint's authored label, the ply, and `producedBy.length`. A surface that names a
-   transition without being able to print the move span does not render it at all.
+   transition without being able to print the move span does not render it at all. The three
+   surfaces that name a transition are enumerated in §11 — the transition sentence in
+   `OutcomeContext.svelte`, the timeline marker, and the PGN `leg:` comment — and each carries
+   `producedBy.length` or, in the PGN's case, the ply at which the span closes, which the moves
+   themselves precede on the same line.
 2. **The product may not assert that the opening caused the structure.** It may state that these
    *n* moves, played on this path, reached the position at which the author's declared condition
    held. The transition presentation is asserted by test to contain none of `caused`, `therefore`,
@@ -641,19 +714,55 @@ Three rules govern what the product may say about a transition, and all three ar
 3. **The word "trajectory" is never applied to a run that made no transition.** A run still in
    leg 0 renders its leg-0 verdict and the not-entered sentence (§8b), and nothing more.
 
-**The PGN export carries the spine.** `exportPackRunPgn`
-(`packages/runtime/src/pack-pgn.ts:164-206`) already labels authored variations
-`authored:<spine-leaf-id>` (`:49`) and played branches `run:<branch-label>` (`:60`). It gains one
-comment at each transition node of each exported played path:
+#### 7a. The PGN export carries the spine — and the comment channel it needs does not exist yet
+
+The intended artifact is one legal PGN whose main line carries, at each transition node of each
+exported played path:
 
 ```text
 leg:<toLegId>@ply<N>
 ```
 
-so the exported game is one legal PGN in which the phase boundaries are visible on the single main
-line. This is the concrete form of slice 7's "the export shows one causal spine"
-(`planning/breadth/training-modes.md:296`), and it is the artifact a reviewer can check without
-running the product.
+so the phase boundaries are visible on a single line. This is the concrete form of slice 7's "the
+export shows one causal spine" (`planning/breadth/training-modes.md:296`), and it is the artifact a
+reviewer can check without running the product.
+
+**It is not one line of code, and this spec does not pretend otherwise.** `exportPackRunPgn`
+(`packages/runtime/src/pack-pgn.ts:164-205`) does not export the run. It builds a **synthetic**
+`DrillRun` (`combinedRun`, `:122-158`) by replaying move lists through `commitMove`
+(`appendPath`, `:103-120`) into a fresh run whose id is `${source.id}:combined-pgn` and whose node
+ids therefore share nothing with the source run's. `exportPgn` (`packages/runtime/src/pgn.ts:74-108`)
+then keys its PGN tree on *that* run's node ids, and the only comment it can emit is
+`startingComments` on the first move of a non-first branch (`pgn.ts:88-95`). There is no per-node
+comment channel, and no correspondence from a source transition node to a synthetic one. Four
+narrow changes supply it:
+
+1. **`PathMove` gains `readonly comment?: string`** (`pack-pgn.ts:31-34`). `authoredPaths`
+   (`:42-52`) never sets it.
+2. **`playedPaths` (`:54-75`) sets it** from `trajectoryVerdict(pack, run, <branch leaf>)`: the
+   move whose source node id equals a `TrajectoryTransition.nodeId` carries
+   `leg:${toLegId}@ply${ply}`. When `pack.legs` is absent no move carries one and the export is
+   byte-identical to today's.
+3. **`uniquePaths` (`:77-84`) merges comments instead of discarding them.** It keys on the move
+   UCIs alone and keeps the **first** path with a given key, and `combinedRun` (`:135-138`) puts
+   `authoredPaths` first — so a played path that exactly retraces the authored spine is currently
+   dropped in favour of the authored one. Left alone, that is precisely the run whose leg comments
+   would vanish: the guided fixture. `uniquePaths` therefore copies any `comment` from a discarded
+   duplicate onto the retained path at the same index, and it is the merge, not the dedupe, that
+   criterion 16 pins.
+4. **`appendPath` accumulates a `Map<syntheticNodeId, string>`** as it commits (`commitMove`
+   returns the run whose last node is the one just created), `combinedRun` returns
+   `{ run, comments }`, and **`exportPgn` gains an optional third parameter**
+   `comments?: ReadonlyMap<string, string>`; where a node id is present, the created `ChildNode`
+   gets `comments: [text]` — a field chessops' `PgnNodeData` already declares alongside
+   `startingComments` (`chessops@0.15.1/dist/types/pgn.d.ts:136-141`), so `makePgn` renders it with
+   no serializer change. Existing callers pass nothing and are unaffected; `exportPgn`'s existing
+   validation-only call at `pack-pgn.ts:204` is unchanged.
+
+Nothing about the run is persisted by this and no PGN header is added. The legality guarantee is
+the shipped one: `validatePath` (`pgn.ts:26-45`) re-checks every exported move against chessops and
+throws on the first illegal one, so a discontinuous export is not merely detectable — it cannot be
+produced.
 
 ### 8. Organic and guided
 
@@ -676,6 +785,20 @@ Both are the same runtime. **No pack field distinguishes them** — a pack is gu
 that its spine reaches its own entry conditions, and that is a property of the authored content,
 not a mode switch. Adding an `organic: true` flag would be a second vocabulary for a fact the
 `spine` already carries, and it would let a pack claim a route it does not have.
+
+**The claim that recognition is identical across the split is checkable against the frozen trigger
+vocabulary, not just asserted.** A leg entry is a checkpoint (§3c), a checkpoint's trigger is
+`simpleTrigger` or `timingWindow` (`drill_pack.schema.json:404-424`), and `simpleTrigger` is closed
+at five members (`:358-399`) — `atPly`, `atSpineNode`, `atAuthoredBoundary`, `fenPredicate`,
+`materialBalance`. All five reach the **same** function, `simpleTriggerMatches`
+(`pack-orchestrator.ts:36-59`), through the same call site (`checkpointMatches`, `:61-71`), and the
+same once-per-path filter (`reachedOnActivePath`, `:73-86`). The "typical trigger" column above is
+therefore an authoring convention and nothing more: an organic pack may use `atSpineNode` and a
+guided pack may use `fenPredicate`, and neither the orchestrator nor the derivation can tell. That
+is the whole content of "they do not differ in how a transition is recognized", and it is why no
+field is needed to record the difference — there is no difference to record. §10 adds no
+trigger-shape rule beyond `TRAJECTORY_LEG_ENTRY_NOT_SIMPLE`, which excludes the *window* form for a
+reason about ply exactness (§3c), not about the organic/guided split.
 
 The `theory_strict` nudge stays honest for free: when the run leaves the spine, the selector falls
 back to `human_common` and **records** the applied mode

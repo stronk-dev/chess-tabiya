@@ -80,7 +80,7 @@ not pretend to be one.
 `validatePackDocument` (`pack-validation.ts:420-447`) composes JSON Schema,
 `lintDrillPack`, and executable-policy checks and is already shared by
 `make pack-check` and registry loading. `digestDrillPack`
-(`packages/schema/src/drill-pack/digest.ts:56-64`) is RFC-8785 identity over the
+(`packages/schema/src/drill-pack/digest.ts:59-66`) is RFC-8785 identity over the
 complete document. `checkSourcingDirectory` (`sourcing/check.ts:191-264`) already
 enforces the candidate contract including `CANDIDATE_ALREADY_PROMOTED`
 (`check.ts:216`). `assessmentGrounding` (`sourcing/ledger-validation.ts:380-407`)
@@ -609,7 +609,7 @@ respecified (§0); the rest are new.
 
 | Code | Condition | Why |
 |---|---|---|
-| inherited — schema stage | `start.side` absent | `packStartSide` throws `TypeError` (`apps/web/src/lib/screen-model.ts:56-62`) and `RunService.create` refuses the run (`service.ts:186-188`), so a registered pack without it is a pack nobody can open. `defect-sweep` §3a makes `side` schema-required, so registration inherits the refusal at the earliest stage with a JSON Pointer |
+| inherited — schema stage | `start.side` absent | `packStartSide` throws `TypeError` (`apps/web/src/lib/screen-model.ts:56-62`) and `RunService.create` refuses the run (`service.ts:183-186`), so a registered pack without it is a pack nobody can open. `defect-sweep` §3a makes `side` schema-required, so registration inherits the refusal at the earliest stage with a JSON Pointer |
 | inherited — existing `UNSUPPORTED_OPPONENT_POLICY` / schema stage | `perfect_tablebase`; `immediate_blunder_guard` | D8. After `defect-sweep` §2a/§2b the first is refused by `runtimeIssues` with its own reason string and the second by the schema. Registration inherits both: a D8 pack cannot enter the served catalogue through this path |
 | `GRADUATION_BLOCKERS_OUTSTANDING` | `provenance.graduationBlockers` present and non-empty | every emitted candidate carries this array (e.g. `content/candidates/onramp-00008/pack.json`) and every authored draft used it. It is untyped extra metadata that `provenance.additionalProperties: true` permits; registration turns the convention into a precondition |
 | existing `SYZYGY_ASSESSMENT_UNGROUNDED` | `assessedBy.kind === "syzygy"` and `assessmentGrounding(...) === "unverified"` | reuses `sourcing/ledger-validation.ts:380-407` verbatim, against the ledger and manifest attached to the draft |
@@ -814,14 +814,18 @@ as a human-readable provenance note. Grounding a distilled pack means running th
 
 ### 7. Lint additions
 
-Three, all in the existing `runtimeIssues` path (`pack-validation.ts:81-418`) so
+**Two**, both in the existing `runtimeIssues` path (`pack-validation.ts:81-418`) so
 `make pack-check`, the studio, registry loading and `sourcing-check` all see them.
 
 | Code | Severity | Rule |
 |---|---|---|
-| `INTENT_CAPTURE_HAS_NO_RECORDING_SITE` | warning | a checkpoint declares `interaction.type: "intent_capture"`. Its `planClassIds` do gate plan-class *reveal* (`authored-feedback.ts:210-217`), but nothing records which class the learner chose: `CheckpointSheet.svelte` offers no plan control and no event type carries a choice (`packages/runtime/src/types.ts:200-213`). The warning tells the author, at encoding time, that the field is half-inert — the field-consumer matrix turned into a build signal instead of a document |
-| `DEVIATION_PLAN_CLASS_UNKNOWN` | error | `deviations[].planClassId` (§14a) names an id absent from `planClasses` |
+| `INTENT_CAPTURE_HAS_NO_RECORDING_SITE` | warning | a checkpoint declares `interaction.type: "intent_capture"`. Its `planClassIds` do gate plan-class *reveal* (`apps/server/src/authored-feedback.ts:210-220,243`), but nothing records which class the learner chose: `CheckpointSheet.svelte` offers no plan control and no event type carries a choice (`packages/runtime/src/types.ts:202-215`). The warning tells the author, at encoding time, that the field is half-inert — the field-consumer matrix turned into a build signal instead of a document |
 | `CONSTRUCTED_ROOT_UNVERIFIED` | warning | `start.movesSan` is absent, so the root was placed by hand rather than derived by replaying a legal move list. Pack C's hand-placed root contained a mate in two that no move list could have produced; the position was legal, the spine was legal, and the pack was a lie. The warning is a signal to the author at encoding time and it survives into the served pack's lint report, so a learner reading provenance can see it too. No engine search is performed — this RFC states a fact about provenance, not an evaluation |
+
+A third, `DEVIATION_PLAN_CLASS_UNKNOWN`, went with the `deviations[].planClassId`
+field it policed when §14a was withdrawn. A referential-integrity check whose only
+job is to validate a field this RFC no longer adds would be the second copy of the
+mistake §14a was withdrawn for.
 
 ### 8. Playtest harness — the measured 43%
 
@@ -835,17 +839,43 @@ to hand-assemble:
   engineIds: [], modelIds: [] } }`;
 - session = `{ kind: "pack", packId, packDigest: <the draft's digest> }`.
 
-The draft document is admitted to `PackCatalogue`'s **ephemeral map** keyed by its
-digest, so `#registeredPack` (§3) resolves it by digest and the run goes through
+The exact document bytes are written to `playtest_documents` keyed by their digest
+(§2), so `#registeredPack` (§3) resolves the draft by digest and the run goes through
 `orchestratePackMove`, per-scope reveal, authored-feedback projection and the
-evidence queue — the same code paths a learner gets, not a mock of them. Ephemeral
-records never appear in `list()`, so a draft is never browsable as a pack. They are
-retained for the process lifetime and rebuilt on demand from `pack_drafts` when a
-run's digest is not otherwise resolvable, so a restart does not orphan a playtest
-run.
+evidence queue — the same code paths a learner gets, not a mock of them.
+
+**Playtest documents are reachable by `byDigest` and by nothing else.** Not `list()`,
+not `get()`. The earlier draft said only "never in `list()`", which leaves the hole
+this whole section would otherwise open: `get(packId)` is what `POST /runs` resolves
+through (`service.ts:168`), so a `get()` that consulted playtest documents would let
+any learner make a draft carrying `najdorf-transition-schema-example` — or any
+registered community id — and change what *every other learner* starts a run against,
+for as long as the process lived. Registration is guarded by `PACK_ID_RESERVED`;
+playtesting deliberately is not, because an author must be able to playtest a new
+version of their own pack under its own id. Digest-only resolution is what makes that
+safe, and §1's seed-wins ordering is what makes it safe if the rule is ever relaxed.
+
+The run itself is therefore **not** created by resolving an id. `RunService.create`
+resolves `session.packId` through `required()` (`service.ts:166-172`), which would
+either miss the draft or require it in `get()`. Instead the studio passes the already
+resolved `PackRecord` on an internal `createPlaytestRun(record, lease)` path that
+shares `create`'s body from the digest check onward. Everything `create` refuses, that
+path refuses identically and reports with the same reason: a draft whose `start.side`
+is absent or whose `opponentPolicy.mode` is outside `human_common | strong_engine |
+theory_strict` is `INVALID_REQUEST` (`service.ts:183-191`), not a silent failure — and
+those are exactly the §4b conditions, met at playtest time instead of at registration
+time, which is the earlier and cheaper place to learn them.
 
 A playtest is refused unless `validatePackDocument(...).valid` is true, and it is
-available to the draft owner only. It is where "validation by use, not ceremony"
+available to the draft owner only. Because the bytes are persisted rather than held in
+a process map, a restart does not orphan a playtest run and — the case that actually
+occurs — **neither does the author's next edit**: `PUT` mints a new digest, the earlier
+playtest run keeps pointing at the old one, and the old one is still there. Rebuilding
+from `pack_drafts` on demand, as the earlier draft proposed, would have resolved the
+*current* document under a *superseded* digest or nothing at all, which is D20 with
+extra steps.
+
+It is where "validation by use, not ceremony"
 lands now that there is no ceremony: D12 was found by executing Pack C after three
 document readings had missed it, and an author who has played their own pack has
 done the one check that has ever actually worked here.
@@ -906,19 +936,31 @@ field. The channel is stamped on `PackRecord` and `PackSummary` by `PackCatalogu
 
 | Source | Channel |
 |---|---|
-| seed `PackRegistry` (git / image) | `official` |
+| seed `PackRegistry` — the fixture, `content/packs/`, and in development `content/drafts/` and `--draft-file` (§1) | `official` |
 | `PackStore` over `registered_packs` | `community` |
-| the ephemeral playtest map (§8) | `community`; never in `list()`, so never browsable |
+| `PlaytestStore` over `playtest_documents` (§8) | `community`; resolvable by `byDigest` only, so never browsable and never startable by id |
 
 Three consequences, and they are the reason for the choice:
 
-1. **A community author cannot forge official provenance, because there is no field
+1. **A community author cannot forge the channel, because there is no channel field
    to forge.** §4a invariant 3 is enforced by absence rather than by a check that
    could be forgotten. The alternative — a document field plus a
    `PROVENANCE_CHANNEL_NOT_WRITABLE` rejection — would have been a second
-   author-writable-status hole of exactly the kind invariant 2 exists to close.
+   author-writable-status hole of exactly the kind invariant 2 exists to close. The
+   limit of this argument is stated in invariant 3 and closed in §13c: `provenance`
+   is an open object, so a *fabricated* origin claim is still expressible in the
+   document even though the real one is not.
 2. **No committed pack's bytes change**, so no digest changes and no sidecar
-   `packDigest` in `content/candidates/` is invalidated.
+   `packDigest` in `content/candidates/` is invalidated. Verified by inspection of
+   every pack document in the tree rather than assumed: the four
+   `content/candidates/*/pack.json`, the six `content/drafts/*.json`,
+   `schemas/drill_pack.example.json` and the `schemas/fixtures/drill-pack/` set carry
+   `reviewStatus` `draft` or `schema_example` and nothing else — **no committed
+   document declares `reviewed` or `published`** — and each `"reviewers"` that appears
+   is `[]`, which `provenance.additionalProperties: true`
+   (`schemas/drill_pack.schema.json:598`) keeps valid once the property declaration at
+   `:593-596` is removed. `content/packs/` is empty but for `.gitkeep`, so the served
+   official catalogue is the fixture alone until someone commits into it.
 3. **An exported pack has no channel**, which is correct: channel is a fact about a
    catalogue, not about a document, and the same bytes are official here and
    community there (§12).
@@ -940,6 +982,16 @@ author-and-server-set lifecycle label: *is this document a working draft, or has
 been put in front of learners?* It says nothing about grounding, which is what
 `graduationBlockers` says, and nothing about origin, which is what the channel says.
 
+This narrowing is the **whole** of pack schema 0.8, now that §14a is withdrawn. The
+`$id` moves `urn:chess-tabiya:schema:drill-pack:0.7` → `:0.8` — from the shipped
+`:0.4` if the intervening drafts have not landed (§0) — and
+`DRILL_PACK_SCHEMA_VERSION` (`packages/schema/src/index.ts:2`) moves with it,
+following the same handling `defect-sweep` §7 specifies for 0.4 → 0.5; the assertions
+in `packages/schema/src/drill-pack.test.ts:49-56` move with them. The change is a
+*narrowing* of an enum plus the removal of a declared property from an object that is
+`additionalProperties: true`, so it removes no value any committed document uses and
+invalidates none of them.
+
 **The shipped graduation rule is re-pointed, not deleted.** `pack-validation.ts:87-109`
 currently fires two issues when `reviewStatus` is `reviewed` or `published`. After
 this RFC:
@@ -950,15 +1002,41 @@ this RFC:
   `archive/content-sourcing-foundation.md`, and it does not depend on anyone reviewing
   anything. Its message stops citing `plan.md` §3b's reviewer bar and cites the
   provenance requirement instead.
-- `GRADUATION_REQUIRES_REVIEWERS` is **deleted**, along with the reviewers field it
-  read. It was the mechanical form of a workflow that no longer exists, and leaving it
-  would mean `make pack-check` demanding a name nobody can supply.
+- `GRADUATION_REQUIRES_REVIEWERS` (`pack-validation.ts:99-107`) is **deleted**, along
+  with the reviewers field it read. It was the mechanical form of a workflow that no
+  longer exists, and leaving it would mean `make pack-check` demanding a name nobody
+  can supply.
 - `sourcing/check.ts:216` (`CANDIDATE_ALREADY_PROMOTED`, "sourcing candidates must
   remain draft") is **unchanged and still correct**: a candidate is not a published
   pack, and `draft` is still the only value it may carry.
 
-`apps/server/src/pack-authoring.test.ts:116-147,263` asserts against `"reviewed"` and
-moves with the enum in the same change.
+**`provenance.reviewers` has two more code paths than the earlier draft accounted
+for, and "removed and never read" was false until they move too.** Removing a
+property declaration from an open object removes nothing at runtime; the field only
+stops existing when the code that reads and writes it does.
+
+- **Read:** `sourcing/check.ts:217` raises `CANDIDATE_ALREADY_REVIEWED` ("sourcing
+  candidates cannot arrive reviewed") whenever a candidate's `provenance.reviewers` is
+  non-empty. It is **deleted** with `GRADUATION_REQUIRES_REVIEWERS`, for the same
+  reason and in the same change: it guards an arrival state that no longer has a
+  producer. This matters more than its size, because `draft-import` (§5) runs
+  `checkSourcingDirectory` in strict mode as the first step of the candidate pipeline,
+  so a stale reviewers rule sits directly on this RFC's happy path.
+- **Written:** all three shipped emitters write `reviewers: []` into every candidate
+  they produce — `sourcing/openings.ts:114`, `sourcing/position-seeds.ts:238`,
+  `sourcing/syzygy.ts:187`. They **stop**, in the same change. Left alone they would
+  keep minting fresh copies of a field the schema no longer declares, which is how a
+  struck concept survives a deletion. The four committed candidate directories are
+  **not** rewritten, so their bytes and the `packDigest` in each `evidence.json` stay
+  exactly as they are; a *re-emission* of one of them produces a document without the
+  field and therefore a different digest, which `checkSourcingDirectory` reports as the
+  existing `EVIDENCE_DIGEST_STALE` **warning** (`check.ts:236-238`) rather than a
+  failure — the same signal any re-emission already produces.
+
+`apps/server/src/pack-authoring.test.ts:113-149,263` asserts against `"reviewed"` and
+reviewers, and moves with the enum in the same change: the "allows a reviewed pack
+with sources and reviewers" case (`:144-149`) is deleted outright rather than rewritten,
+because there is no state it can be rewritten into.
 
 #### 10b. Community by construction
 
@@ -973,7 +1051,9 @@ verifiable in code rather than by convention:
    (§4a invariant 7), so no request can put bytes into the official channel.
 3. Seed ids are reserved (§1): registration rejects any pack id present in the seed
    registry with `PACK_ID_RESERVED`, so a community pack cannot take, shadow, or
-   masquerade as an official pack's identity.
+   masquerade as an official pack's identity. Where reservation cannot reach — a seed
+   pack committed *after* a community pack took the id — §1's seed-wins resolution
+   holds the line instead, and holds it in the same direction.
 4. The only path from community to official is `GET /packs/:packId/export` (§12)
    followed by a human commit into a repository. That is a deliberate act by whoever
    controls the deployment, performed with the pack's full bytes in hand, and it is
@@ -994,7 +1074,7 @@ With review struck, three states remain on the draft row.
 | Transition | Actor | Preconditions |
 |---|---|---|
 | → `draft` | owner | valid seed |
-| `draft` → `registered` | owner | `validatePackDocument(...).valid`; `graduationBlockers` empty; all §4b conditions met; all regression cases pass; document `reviewStatus === "draft"`; id not reserved; version strictly increasing |
+| `draft` → `registered` | owner | `validatePackDocument(...).valid`; `graduationBlockers` empty; all §4b conditions met; all regression cases pass; document `reviewStatus === "draft"`; id neither seed-reserved nor `drafts`; id unowned or owned by the caller (§4a.6a); version strictly increasing |
 | `draft` → `withdrawn` | owner | — |
 
 `registered` is terminal. A registered draft is retained as the provenance of its
@@ -1011,8 +1091,9 @@ signature to scope.
    anything the request supplied;
 2. re-run `validatePackDocument` on those exact bytes and require zero errors,
    plus every §4b condition, plus every stored regression case passing (§9);
-3. require the pack id to be absent from the seed registry
-   (`PACK_ID_RESERVED`) and the version to be strictly greater than every
+3. require the pack id to be absent from the seed registry and not the literal
+   `drafts` (`PACK_ID_RESERVED`), the id to be unowned or owned by the caller
+   (`PACK_ID_NOT_YOURS`, §4a.6a), and the version to be strictly greater than every
    registered version of that id;
 4. compute the published document as the deterministic function
 
@@ -1025,9 +1106,22 @@ signature to scope.
    one field and the inputs are stored, so anyone holding the draft can recompute the
    published digest and verify that nothing else changed. This is the only
    server-side rewrite of an authored document anywhere in this RFC;
-5. insert `registered_packs` with the caller's handle as `publisher_handle`, set the
-   draft to `registered`, and add the record to `PackCatalogue` — which resolves it
-   from the community source, so it is served as `channel: "community"` (§10).
+5. insert `registered_packs` with the caller's handle as `publisher_handle` and the
+   caller's learner id as `publisher_learner_id`, copy the draft's
+   `ledger_json`/`manifest_json` across unchanged, and set the draft to `registered`.
+   The record needs no cache write: `PackStore` reads `registered_packs`
+   synchronously (§3), so the row *is* the catalogue entry and is served as
+   `channel: "community"` (§10) from the moment the transaction commits.
+
+The ledger is copied verbatim, which means its `packDigest` names the **pre-publication**
+bytes and not `publishedDigest`. That is correct and is not restamped: the evidence was
+gathered against the document the author validated, and rewriting a digest pointer inside
+an evidence record to make a later transform look retroactively evidenced is precisely the
+move `assessmentGrounding` exists to prevent. `assessmentGrounding` compares `ledger.packId`
+and per-record values, never `packDigest` (`sourcing/ledger-validation.ts:380-407`), so
+grounding survives the transform intact. `checkSourcingDirectory` run over an exported
+bundle (§12) reports the mismatch as its existing `EVIDENCE_DIGEST_STALE` **warning**
+(`check.ts:236-238`) — "re-confirm evidence" — which is the honest thing for it to say.
 
 `reviewStatus: "published"` here means precisely "served to learners by this
 deployment", which is what just happened. It carries no distribution claim beyond
@@ -1055,9 +1149,10 @@ reason versioning could not ship before it.
 ```
 
 `pack` is the registered document; the response body is serialized with
-`canonicalizeJson` (`digest.ts:53-55`) plus one trailing newline, the same
-convention `writeCanonicalJson` uses for candidates
-(`sourcing/canonical.ts:11-14`), so the exported bytes hash to the pack's digest.
+`canonicalizeJson` (`packages/schema/src/drill-pack/digest.ts:54-56`) plus one
+trailing newline, the same convention `writeCanonicalJson` uses for candidates
+(`sourcing/canonical.ts:11-14`), so the exported bytes hash to the pack's digest
+under `digestDrillPack` (`digest.ts:59-66`).
 An `x-pack-digest` header carries it, matching `GET /packs/:id`
 (`rest.ts:541`).
 
@@ -1108,10 +1203,6 @@ regressions, and Register. Register is disabled while any error exists, while an
 `graduationBlockers` entry remains, or while any regression case fails — each with
 the blocking reason named rather than the button silently inert.
 
-A deviation row in the editor renders the plan class named by its optional
-`planClassId` (§14a) beside the deviation's `class` and note, so the author can see
-that 11.a3 and 11.Rab1 are the same plan while encoding them.
-
 **No visual form builder.** `planning/content-era/log.md` records that one was
 deliberately not built pending evidence that the command loop is the bottleneck,
 and the measured evidence since points at playtesting instead. This RFC ships the
@@ -1121,16 +1212,41 @@ playtest loop and leaves the editor textual.
 
 The channel is only worth computing if a learner sees it, so this is a specified
 obligation with its own acceptance criterion (A11), not a UI suggestion.
-`PackSummary.channel` and `PackRecord.channel` (§10a) reach the browser through the
-existing `api.ts:23` summary shape, and the client renders it in **every place a pack
-is identified**:
+`PackSummary.channel` and `PackRecord.channel` (§10a) reach the browser by widening
+the existing summary interface at `apps/web/src/lib/api.ts:16-24` alongside the
+server's at `pack-registry.ts:26-34`, and the client renders the channel in **every
+place a pack is identified**:
 
 | Surface | Today | After |
 |---|---|---|
-| pack list | `PackList.svelte:35` renders `reviewStatus` raw | renders the channel as the primary origin marker, with a community pack visibly distinguished — not by colour alone |
+| pack list | `PackList.svelte:35` renders `reviewStatus` raw | renders the channel as the primary origin marker, with a community pack visibly distinguished — not by colour alone. `reviewStatus` **stops being rendered** |
 | app-shell library section | `App.svelte:359` renders `reviewStatus` raw | same treatment |
 | drill screen | pack title only | the channel accompanies the pack title for the whole run, so a learner is never mid-drill without knowing whose content it is |
-| provenance / pack detail | nothing | channel, publisher handle for community packs, `provenance.sources`, and the pack's outstanding lint warnings |
+| provenance / pack detail | nothing | channel, publisher handle for community packs, `provenance.sources`, `provenance.licence`, and the pack's outstanding lint warnings — and nothing else from `provenance` |
+
+**`reviewStatus` leaves the UI entirely, and that is a correction rather than tidying.**
+After the narrowing, every community pack reads `published` and the one official pack
+in the tree reads `schema_example`, so a raw render would put the *more* authoritative
+word on the *less* vouched-for pack. The field stays on the wire — `PackSummary` keeps
+it and `tests/browser/drill.spec.ts:150-152,263-265` still selects the fixture by it —
+but nothing renders it.
+
+**The provenance panel renders an allow-list, not the object.** `projectPackDocument`
+returns `provenance` whole (`pack-registry.ts:70`) and `provenance` is
+`additionalProperties: true` (`schemas/drill_pack.schema.json:598`), so a community
+author can put `"channel": "official"`, `"reviewedBy": "…"` or `"endorsement": "…"`
+into a document that validates, registers, and is served. §4a invariant 3 stops the
+server *believing* any of it; only this stops a learner reading it. The panel renders
+exactly `sources`, `licence`, `graduationBlockers` and `reviewStatus`'s absence — every
+other key of `provenance` is dropped, unrendered and uncounted, including keys added by
+a future schema version until this list is extended with them. Dropping is preferred to
+narrowing the schema: narrowing `provenance` to a closed object would invalidate every
+committed pack that carries `licence` or `graduationBlockers`, which is all of them.
+
+Pack `title` remains author-controlled and unfixable — a community pack may be titled
+"Official Tabiya repertoire" and nothing can prevent it. That is exactly why the
+channel marker is required *adjacent to the title* on all four surfaces rather than on
+a detail screen: the contradiction has to be visible in the same glance as the claim.
 
 A community pack carries one fixed sentence wherever its provenance is expanded, and
 it is the honest form of what Pack A already says in plain text:
@@ -1142,8 +1258,10 @@ difference the UI communicates is origin, and only origin.
 
 #### 13d. Capabilities
 
-`SURFACE_IDS` (`capabilities.ts:32-41`) gains **no** new member: there is no review
-surface. `surfaces()` (`capabilities.ts:117-129`) reports `create: "available"` —
+`SURFACE_IDS` (`capabilities.ts:32-40`) gains **no** new member: there is no pack
+review surface — the `review` member it already carries is the run-review screen at
+`/review` and is unrelated. `surfaces()` (`capabilities.ts:117-129`) reports
+`create: "available"` —
 authoring works on any deployment, and unlike approval it needs no roster to be
 honest. `assertSurfaceCapabilities` keeps the key set exact, and the web
 `SurfaceId`/`PLANNED_SURFACES` union in `api.ts:158-176` is updated in the same
@@ -1152,43 +1270,51 @@ change so the two hand-maintained lists cannot drift (the D4 shape).
 ### 14. The three authoring frictions
 
 `design/BACKLOG.md` §Authoring-format friction records three, each raised with
-content in hand. This RFC fixes one and surfaces two, on a single rule: **grow the
-format only where a consumer grows with it.**
+content in hand. This RFC surfaces all three and fixes none of them in the format,
+on a single rule: **grow the format only where a consumer grows with it.**
 
-#### 14a. Fixed — a deviation may name its plan class
+#### 14a. Withdrawn on review — a deviation may name its plan class
 
 Pack B: 11.a3 and 11.Rab1 are literally the same plan and `accepted_alternative`
-says nothing about that. Add an optional `planClassId` to
-`$defs/deviation` in `schemas/drill_pack.schema.json` (whose
-`additionalProperties` is `false`, so this requires the schema change), a matching
-optional field on `Deviation` in
-`packages/schema/src/drill-pack/types.ts`, and the `DEVIATION_PLAN_CLASS_UNKNOWN`
-error in §7. The schema `$id` moves `urn:chess-tabiya:schema:drill-pack:0.7` →
-`:0.8` and `DRILL_PACK_SCHEMA_VERSION` (`packages/schema/src/index.ts:2`) with it,
-following the same handling `defect-sweep` §7 specifies for 0.4 → 0.5; the
-assertions in `packages/schema/src/drill-pack.test.ts:49-56` move with them.
-Existing packs are unaffected: the property is optional and purely additive, so no
-existing document's bytes, canonicalization or digest change, and no sidecar
-`packDigest` in `content/candidates/` is invalidated.
+says nothing about that. The friction is real. The drafted fix was an optional
+`planClassId` on `$defs/deviation` (whose `additionalProperties` is `false`, so it
+needs the schema change), a matching optional field on `Deviation` in
+`packages/schema/src/drill-pack/types.ts`, and a `DEVIATION_PLAN_CLASS_UNKNOWN` lint.
+**It is withdrawn**, and the rule that withdraws it is this section's own.
 
-Its consumer changed when the review checklist was struck, and it survives because
-the replacement consumer is real rather than a placeholder: **§13b's editor renders
-the named plan class beside each deviation's `class` and note**, which is the view
-that makes "11.a3 and 11.Rab1 are the same plan" visible at the moment the author is
-encoding them, and `DEVIATION_PLAN_CLASS_UNKNOWN` (§7) enforces referential integrity
-between the two id spaces at every validation site. It is a link between two id
-spaces the schema already owns, not a judgment. If the owner would rather not grow
-the format for an editor-only consumer, dropping §14a costs this RFC nothing else —
-it is the only part of the pack schema 0.8 bump that is optional, since the
-`provenance` narrowing in §10a is not.
+Its original consumer was the review checklist, which the 2026-08-13 ruling struck.
+The re-justification offered in its place was §13b's editor rendering the named plan
+class beside each deviation. Applied honestly, that consumer does not hold: the editor
+is a JSON text pane, the author has just typed both the `planClassId` and the
+`planClasses` entry it points at, and echoing one beside the other returns
+information the author supplied seconds earlier. It is not a *reader* of the field in
+any sense that survives the question "what does this let someone know that they did
+not already know?". The remaining consumer, `DEVIATION_PLAN_CLASS_UNKNOWN`, only
+validates the field's own referential integrity — a check that exists because the
+field exists, which is circular and cannot justify it.
 
-**It is deliberately not added to the delivery surface.** `AuthoredFeedbackItem`
-does not gain `planClassId`. Plan classes reveal only through
-`planClassSourceIds` (`authored-feedback.ts:210-217`), gated on their
-intent-capture checkpoint; cross-linking a deviation to a plan class in the
-delivered payload would create a second reveal path that bypasses that gate and
-leak a plan class earlier than its checkpoint. `planClassId` is authoring metadata
-only.
+The field is also, deliberately, not on the delivery surface: `AuthoredFeedbackItem`
+does not gain it, because plan classes reveal only through `planClassSourceIds`
+(`apps/server/src/authored-feedback.ts:210-220,243`), gated on their intent-capture
+checkpoint, and a second cross-link would leak a plan class before its checkpoint.
+And §14b establishes that the intent-capture checkpoint itself has no recording site.
+So the field would be a schema-level link that no learner-facing path may traverse,
+pointing at a vocabulary that nothing yet records a choice against.
+
+That is a format grown ahead of its consumer, which is the failure §14b and §14c
+refuse for the same reason and the one this repo has already paid for twice. The
+friction stays surfaced and unfixed alongside the other two, with a stated unblocking
+input: **a consumer that reads a deviation's plan class and shows a learner something
+they did not write** — the plan-aware comparison row or feedback path that a durable
+interaction record (§14b) would make possible. Withdrawing it costs the rest of this
+RFC nothing: pack schema **0.8 is still required** by §10a's `provenance` narrowing,
+which is not optional, so the version claim is unchanged and no other section moves.
+
+Recorded rather than deleted, for the same reason as `CHECKPOINT_SET_EMPTY` in §4b:
+"the amendment I was about to make has no reader" is the finding this repo keeps
+paying to relearn, and a struck section is cheaper than a shipped field. Reinstating
+it is one owner ruling and a re-claim of the schema note in `rfc/README.md`; nothing
+else in this specification depends on it either way.
 
 #### 14b. Surfaced, not fixed — intent-relative success
 
@@ -1197,7 +1323,7 @@ and `successConditions` supports only intent-blind `reach_checkpoint`, so the pa
 shipped with no objective at all. Fixing this needs a **recording site** for the
 learner's choice, and there is none: `CheckpointSheet.svelte` renders revealed
 plan-class prose but offers no plan control, and no run event type carries a
-choice (`packages/runtime/src/types.ts:200-213`). Adding an intent-conditional
+choice (`packages/runtime/src/types.ts:202-215`). Adding an intent-conditional
 success condition now would add a second unevaluated objective vocabulary beside
 `preserve_plan_window`, which is the exact failure this repo has already paid for
 twice.
@@ -1241,9 +1367,17 @@ mapping added to `errorResponse` (`rest.ts:353-378`):
 | `GRADUATION_BLOCKERS_OUTSTANDING` | 422 |
 | `REGRESSION_FAILED` | 422 |
 | `PACK_ID_RESERVED` | 409 |
+| `PACK_ID_NOT_YOURS` | 409 |
 | `PACK_VERSION_EXISTS` | 409 |
 | `PACK_VERSION_NOT_INCREASING` | 422 |
 | `IMPORT_INVALID` | 422 |
+| `PACK_UNRESOLVABLE` | 409 |
+
+`PACK_UNRESOLVABLE` (§3a) is the only one of these that a *run* endpoint raises, and
+it is deliberately not `PACK_NOT_FOUND`: that code already means "you asked for a pack
+id nobody serves", while this one means "the run you are playing points at bytes this
+deployment can no longer produce", which has a different remedy and a different
+audience. Its `details` carry `runId`, `packId` and `packDigest`.
 
 Every body carries the existing `{error:{code,message,...details}}` shape, and
 validation failures carry the full `PackValidationIssue[]` in `details.issues`
@@ -1257,15 +1391,19 @@ boundary between them, the write path and its invariants, distillation's
 extract/refuse boundary, the draft lifecycle, versioning, and export. It states in
 its own words that no pack in this system has been reviewed by anyone and that the
 channel is an origin fact, so the canonical documentation cannot be read as implying
-a check. `docs/drill-pack-format.md` records the v0.8 `planClassId` addition, the
-narrowed `provenance.reviewStatus` enum, the removal of `provenance.reviewers`, and
-the three new lint codes, in the style of its existing `## v0.4 Line Drill contract`
+a check. `docs/drill-pack-format.md` records the v0.8 narrowing of the
+`provenance.reviewStatus` enum, the removal of `provenance.reviewers`, and
+the two new lint codes, in the style of its existing `## v0.4 Line Drill contract`
 section and after the v0.5, v0.6 and v0.7 sections the parallel drafts add.
 `docs/development.md` records `make draft-import` and `make pack-export`; the
 sidecar list is unchanged and that is stated, because the previous draft proposed
-adding to it. `docs/branch-runtime.md` records digest-addressed pack resolution
-(D20). `docs/content-sourcing.md` records that `draft-import` is the candidate's
-exit. `docs/app-shell.md` records the channel's rendering obligation (§13c).
+adding to it. `docs/branch-runtime.md` records digest-addressed pack resolution and
+the `PACK_UNRESOLVABLE` refusal that completes it (D20, §3a).
+`docs/content-sourcing.md` records that `draft-import` is the candidate's
+exit and that the emitters no longer write `provenance.reviewers` (§10a).
+`docs/app-shell.md` records the channel's rendering obligation and the provenance
+allow-list (§13c). `docs/identity-and-authorization.md` records the draft and
+publisher-id handling in `deleteLearner` (§2).
 
 ## Deviations from design
 

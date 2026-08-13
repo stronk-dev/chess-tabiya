@@ -246,7 +246,14 @@ why the D9 inversion compiles. §3a narrows it in the same edit.
 `SUPPORTED_CHECKPOINT_ACTIONS` and imports `CHECKPOINT_ACTIONS`. The message at `:168` keeps
 its current text and joins the imported constant, so the error an author sees is unchanged.
 `pack-registry.ts:24` deletes its hand-written `FeedbackPolicy` union and re-exports the
-shared type.
+shared type; `apps/server/src/index.ts:12` re-exports it onward and is unaffected.
+
+**`RunFeedbackPolicy` is deliberately not folded in.** `packages/runtime/src/types.ts:37`
+declares `"delayed_checkpoint" | "segment_end" | "attempt_end"` — a superset, because
+`attempt_end` is the policy of a pack-less run (`service.ts:179`) and can never be authored.
+It is a different vocabulary that happens to overlap, and the §1e test binds
+`FEEDBACK_POLICIES` to the *pack* schema only. Noting it here so the next reader does not
+"finish the job" by unifying two things that must stay apart.
 
 **1c. The client's recognition becomes exhaustive, so drift fails `pnpm typecheck`.**
 `apps/web/src/lib/screen-model.ts` gains:
@@ -372,11 +379,19 @@ anti-contamination barrier it exists to open early. That is an RFC, with a desig
 (what counts as a blunder, and who is allowed to say so under law 8) that this sweep must
 not answer by implication. §8 proposes the BACKLOG row.
 
-**What this costs, stated plainly.** `design/00-thesis.md:84-86` defines the on-ramp band on
-three knobs and one of them is this. After this RFC the on-ramp lane has **two encodable
-knobs and one unencodable one**, which is what it has today — the difference is that the
-format stops advertising the third. That is listed as a deviation (§Deviations 1) and
-carries a proposed BACKLOG row, not a silent narrowing.
+**What this costs, stated as a loss.** `design/00-thesis.md:84-89` defines the 1000–1400
+on-ramp lane on three knobs and one of them — line 86, "pack-declared immediate blunder-guard
+feedback … a per-pack override of the delayed-feedback default, ADR-0006" — is this one.
+**After this RFC the on-ramp lane has two encodable knobs and one that the format cannot
+express at all.** The runtime capability was already absent; what §2a removes is the *claim*
+that a pack could ask for it, and with it the ability of an author to write the intent down
+and have it survive to the day someone implements it. That is a real loss, not a
+tidying-up: the two shipped on-ramp candidates currently carry a graduation blocker recording
+the substitution (`content/candidates/onramp-00008/pack.json`, `onramp-0000d/pack.json`), and
+after §6's rewording that blocker points at a BACKLOG row instead of at a value in the enum.
+The alternative — leaving a value in the schema that the loader refuses and no deployment can
+ever negotiate — is the lie §2's rule names. It is listed as a deviation (§Deviations 1) and
+carries a proposed BACKLOG row (§8, row 3).
 
 **2b. `perfect_tablebase` stays, and the declaration becomes checked.**
 
@@ -563,37 +578,69 @@ for Maia — the same two shapes as `make up` / `make up-engines` (`docs/develop
 which is the point of §5, but written as release-artefact instructions and placed with the
 release paragraph rather than the development one.
 
-`tools/verify-packaging.mjs:24-33` extends to prove it rather than assert about text:
+`tools/verify-packaging.mjs:23-32` extends to prove it rather than assert about text. The
+existing `compose()` helper (`:10-17`) hardcodes `config --quiet` and discards stdout, so it
+gains a sibling `composeConfig(args)` that runs `config --format json`, throws on a non-zero
+exit with the same message shape, and returns `JSON.parse(result.stdout)`:
 
 - `compose(["-f", releasePath, "--profile", "engines"])` joins the existing unprofiled
-  `config --quiet` call.
-- A new check runs `docker compose -f <rendered> config --format json` with no profile and
-  requires `Object.keys(config.services)` to be exactly `["server"]` — the executable form of
-  "the published artefact does not require Maia".
-- A second run with `--profile engines` requires `maia` to be present and
-  `services.server.depends_on.maia.condition` to be `service_healthy`.
+  `compose(["-f", releasePath])` call at `:32`.
+- `composeConfig(["-f", releasePath])` — no profile — requires
+  `Object.keys(config.services)` to be exactly `["server"]`. This is the executable form of
+  "the published artefact does not require Maia", and it is only satisfiable because
+  `required: false` lets Compose drop a dependency on a service the active profiles exclude,
+  which is the same mechanism `make up` already relies on against `compose.yaml`.
+- `composeConfig(["-f", releasePath, "--profile", "engines"])` requires `maia` to be present
+  and `services.server.depends_on.maia.condition` to be `service_healthy`.
 
 ### 6. D10 — engine version is parsed whenever the spec does not supply one
 
 `apps/server/src/engine-supervisor.ts:111-140` (`parseIdentity`). The defect is that version
-derivation is nested inside `if (spec.name === undefined)` (`:120`), so naming the engine
-costs you its version. The fix separates the two decisions and adds a mismatch guard:
+derivation is nested inside `if (spec.name === undefined && advertised !== undefined)`
+(`:120`), so naming the engine costs you its version. The fix separates the two decisions and
+adds a mismatch guard:
 
 ```ts
 const advertised = lines.find((line) => line.startsWith("id name "))?.slice(8).trim();
 const advertisedName = advertised?.split(/\s+/u)[0];
-const advertisedVersion = advertised?.slice(advertisedName?.length ?? 0).trim() || undefined;
+const advertisedVersion =
+  advertised === undefined ? undefined : advertised.slice(advertisedName!.length).trim() || undefined;
 const nameAgrees =
   spec.name === undefined ||
   (advertisedName !== undefined &&
     advertisedName.toLowerCase() === spec.name.toLowerCase());
 
-let name = spec.name ?? advertised ?? "unknown";
-if (spec.name === undefined && advertised !== undefined && /^Stockfish(\s|$)/u.test(advertised)) {
-  name = "Stockfish";
-}
+const name = spec.name ?? advertisedName ?? "unknown";
 const version = spec.version ?? (nameAgrees ? advertisedVersion : undefined) ?? "unknown";
+const mismatch = nameAgrees
+  ? undefined
+  : `identity mismatch: spec names ${spec.name!}, engine advertises ${advertised ?? "nothing"}`;
 ```
+
+**Why `advertisedName` and not `advertised` for the unnamed case, and why the Stockfish
+special case dies.** Today's `name = spec.name ?? advertised ?? "unknown"` keeps the *whole*
+`id name` line, and the `/^Stockfish/` branch at `:121-125` exists solely to trim it back to
+`"Stockfish"` for the one engine anyone hit. Splitting on the first token generalises that
+trim to every engine and lets the special case go — but only if the same expression feeds
+`name`. Left as `spec.name ?? advertised`, an unnamed non-Stockfish spec would become
+`{name: "Lc0 v0.31.2", version: "v0.31.2"}` — the version duplicated inside the name, a new
+defect introduced by the fix for D10. Splitting the whole line once and using both halves
+consistently is the only form that has no such case.
+
+**Where the mismatch note goes.** `parseIdentity` is a module-level function
+(`engine-supervisor.ts:111`) with no access to the transcript ring; the ring is reachable
+only from its single caller, `ManagedUciEngine`'s start path at `:232`, as `this.#transcript`.
+So `parseIdentity`'s return type becomes
+`{ readonly identity: EngineIdentity; readonly mismatch?: string }`, and `:232` becomes:
+
+```ts
+const parsed = parseIdentity(this.#spec, uciLines, optionNames);
+if (parsed.mismatch !== undefined) this.#transcript.push("lifecycle", parsed.mismatch);
+this.#identity = parsed.identity;
+```
+
+`TranscriptRing.push` already accepts `"lifecycle"` (`:87-89`, `TranscriptEntry.direction` at
+`:49`), so no type or storage changes.
 
 Behaviour, stated case by case:
 
@@ -603,24 +650,37 @@ Behaviour, stated case by case:
 | `{}` (`position-seeds.ts:67`) | `Stockfish 17.1` | `Stockfish` / `17.1` | unchanged |
 | `{name: "Maia3", version: MAIA3_SOURCE_COMMIT}` (`application.ts:195-200`) | anything | spec values | unchanged — an explicit `spec.version` always wins |
 | `{name: "Stockfish"}` | `Lc0 v0.31.2` | `Stockfish` / `unknown` | `Stockfish` / `unknown`, **plus** a `lifecycle` transcript entry `identity mismatch: spec names Stockfish, engine advertises Lc0 v0.31.2` |
+| `{}` (hypothetical unnamed non-Stockfish spec) | `Lc0 v0.31.2` | `Lc0 v0.31.2` / `unknown` | `Lc0` / `v0.31.2` — the generalised trim; no such spec ships after this RFC removes the last one |
 
 The mismatch case is why the guard exists: recording another engine's version under the
 spec's name would be worse provenance than `unknown`, and staying silent about it would be
-worse still. The transcript ring already exists for exactly this
-(`engine-supervisor.ts:87-89`, `TranscriptEntry.direction` includes `"lifecycle"` at `:49`).
+worse still. **The guard is name-agreement, not version-plausibility, and that is the correct
+test** — it compares the first token of the advertised `id name` with `spec.name`
+case-insensitively, so the only way a foreign binary's version reaches `EngineIdentity.version`
+is if that binary also advertises the spec's name, at which point the deployment has
+substituted the binary and the identity is as honest as the filesystem allows. A version
+string that merely *looks* wrong is not filtered, deliberately: this RFC does not encode what
+a Stockfish version number should look like.
 
 **The B6b workaround is removed.** `apps/server/src/sourcing/position-seeds.ts:67` gains
 `name: "Stockfish"` back. Real Stockfish advertises a matching first token, so the version
 still resolves and the authoring evidence at `:75-76` keeps a real `engineVersion`.
 
 **A consequence to state, not hide.** `--engine-eval` emissions previously recorded
-`engineVersion: "unknown"` uniformly and will now record the operator's actual Stockfish
-version, so two operators on different Stockfish builds produce different `evidence.json`
-bytes. That is the point of the defect being a defect — anonymous provenance was
-"deterministic" only because it recorded nothing — and it does not touch the
-deterministic-output rule's subject: `emissionJobDigest` covers pipeline args and source
-etags (`content/candidates/onramp-00008/job.json`), not engine identity, and the shipped
-job runs with `engineEval: false`.
+`engineVersion: "unknown"` uniformly (`position-seeds.ts:75-76`) and will now record the
+operator's actual Stockfish version, so two operators on different Stockfish builds produce
+different `evidence.json` bytes. That is the point of the defect being a defect — anonymous
+provenance was "deterministic" only because it recorded nothing — and it does not touch the
+deterministic-output rule's subject. Verified rather than assumed:
+`emissionJobDigest(pipeline, args, sourceEtags)` (`apps/server/src/sourcing/canonical.ts:20`)
+takes exactly three inputs and engine identity is not among them; the shipped
+`content/candidates/onramp-00008/job.json` records
+`{"args":{...,"engineEval":false,...},"sourceEtags":[...],"emissionJobDigest":"sha256:9596fd…"}`,
+so the digest of the one committed job is unchanged by this RFC **and would be unchanged even
+if the job had run with `engineEval: true`**. The skip-if-unchanged guard
+(`position-seeds.ts:262`, `openings.ts:151`) compares that digest, so re-running the shipped
+job on a new Stockfish still short-circuits and does not rewrite any committed candidate's
+bytes. The version change reaches only newly emitted `evidence.json` source origins.
 
 `EngineIdentity` (`engine-supervisor.ts:31-45`) gains no field, so
 `SelectionEngineIdentity` (`packages/runtime/src/types.ts:69-76`), which is persisted inside
@@ -638,33 +698,51 @@ Version handling follows the v0.4 precedent exactly:
 - `schemas/drill_pack.schema.json:3` — `$id` becomes `urn:chess-tabiya:schema:drill-pack:0.5`;
   `:5`'s description becomes "Living v0.5 format …".
 - `packages/schema/src/index.ts:2` — `DRILL_PACK_SCHEMA_VERSION` becomes `"0.5"`.
-- `packages/schema/src/drill-pack.test.ts:49-56` — the `describe` title and both assertions
-  move to `0.5`. The frozen-v0.1 case at `:58-78` still passes: the frozen fixture still
-  fails on the missing `feedbackPolicy` it was written to fail on.
+- `packages/schema/src/drill-pack.test.ts:49-56` — the `describe` title (`:49`) and both
+  assertions (`:53`, `:55`) move to `0.5`. The frozen-v0.1 case at `:58-79` still passes,
+  verified by execution against a required-`side` build of the schema: the frozen fixture
+  produces a `missingProperty: "feedbackPolicy"` error among many others, and the case matches
+  with `expect.arrayContaining`, which tolerates the additional `missingProperty: "side"` the
+  frozen `start` block does not trigger — it declares `side: "white"` already.
+
+The version claim is registered. `rfc/README.md` already records `defect-sweep.md` at pack
+schema **0.5** with **no migration** (its status register and its pack-schema register), and
+four sibling drafts have rebased above it — `return-and-progression.md` to 0.6,
+`trajectory-drill.md` to 0.7, `pack-studio.md` to 0.8, `n-way-comparison.md` to 0.9. This RFC
+claims no new number and needs no register edit.
 
 No pack file's bytes change, so no pack digest changes, so no sidecar `packDigest` in
-`content/candidates/` is invalidated.
+`content/candidates/` is invalidated (`content/candidates/onramp-00008/evidence.json` carries
+`packDigest` alongside `packId` and `packVersion`). The one fixture whose bytes do change,
+`illegal-spine.invalid.json` (§3a), has no digest sidecar and is never served.
 
 ### 8. Docs to reconcile, and BACKLOG rows to propose
 
 **Docs the implementer updates** (these are `docs/`, the canonical description of what
 exists — not `design/`):
 
-- `docs/drill-pack-format.md:4` currently says the schema "describes format v0.3" while the
-  file has been v0.4 since the Line Drill RFC. Correct it to v0.5 in the same edit. `:18`
-  drops `immediate_blunder_guard` from the `feedbackPolicy` list. A new `## v0.5 defect
-  sweep` section, in the style of `## v0.4 Line Drill contract` (`:140-160`), states the
-  required `side`, the removed policy value, and the executable-versus-declared vocabulary
-  rule from §2.
-- `docs/drill-client.md:15` — `immediate_blunder_guard` moves from "remains cut" to "is not
-  in the format"; add that `PackSummary` carries `phase` and that an unset phase renders
-  `unclassified`.
-- `docs/engine-workers.md:22,153,196-205` — state that `version` comes from `spec.version`,
+- `docs/drill-pack-format.md` says **v0.3 in four places** — `:4` ("It describes format
+  v0.3"), `:9` ("intentionally fails v0.3"), `:12` (the `## Implemented v0.3 shape` heading)
+  and `:50` ("the format v0.3 amendment") — while the file has been v0.4 since the Line Drill
+  RFC. All four move to v0.5 in the same edit; leaving three behind would reproduce the drift
+  this RFC exists to close. `:17-18` drops `immediate_blunder_guard` from the
+  `feedbackPolicy` list and `:44-46` keeps its structurally-open `actions` statement
+  unchanged (§1d). A new `## v0.5 defect sweep` section, in the style of `## v0.4 Line Drill
+  contract` (`:140-158`), states the required `side`, the removed policy value, and the
+  executable-versus-declared vocabulary rule from §2. `pack-studio.md:1065` expects that
+  section to sit before the v0.6/v0.7/v0.8 sections the parallel drafts add.
+- `docs/drill-client.md:14-19` — `immediate_blunder_guard` moves from "remains cut" (`:15`) to
+  "is not in the format"; add that `PackSummary` carries `phase` and that an unset phase
+  renders `unclassified`.
+- `docs/engine-workers.md:22,153,196,205` — state that `version` comes from `spec.version`,
   else from the advertised `id name` remainder when the advertised name agrees with the
   spec's, else `unknown`, and that a disagreement is recorded in the transcript.
-- `docs/development.md:81-84` — the release-artefact incantations from §5.
-- `docs/content-sourcing.md:97` and `docs/outcome-drill-grading.md:115` — keep their
+- `docs/development.md:87-88` — the release-artefact incantations from §5, beside the existing
+  sentence about the attached digest-pinned Compose file rather than beside `make up`.
+- `docs/content-sourcing.md:95-98` and `docs/outcome-drill-grading.md:115-116` — keep their
   `perfect_tablebase` statements and note that the declaration is now bound by test (§2b).
+  `content-sourcing.md:98` carries a bare `(D8)` reference that must go with the defect it
+  names.
 
 **Emitter strings** (`apps/server/src/sourcing/`), both of which name "defect D8" and must
 stop, since D8 closes here:
@@ -680,15 +758,22 @@ stop, since D8 closes here:
 
 **BACKLOG rows the implementer proposes and never writes** (`AGENTS.md` law 5):
 
-1. Mark D4, D5, D6, D8, D9 and D10 closed, each with the section of this RFC that closed it.
+1. Mark D4 (`design/BACKLOG.md:117`), D5 (`:118`), D10 (`:132`), D9 (`:133`), D8 (`:134`) and
+   D6 (`:136`) closed, each with the section of this RFC that closed it. Three of those rows
+   carry stale coordinates that should be corrected in the same edit rather than frozen into
+   a closure note: D4 cites `pack-validation.ts:11` (now `:18`), D8 cites `:104-129` (now
+   `:111-134`), D6 cites `pack-registry.ts:16-24` (now `:26-34`).
 2. Unblock the "Phase-oriented product discovery" row (`design/BACKLOG.md:60`), which reads
-   "blocked on **D6**", and note that `design/03-product-breadth.md:161`'s B1 residual list
-   loses its `phase` item.
+   "blocked on **D6**", and note that `design/03-product-breadth.md:171`'s B1 residual list
+   loses its `phase` item, as does the restatement at `:213`.
 3. **New — immediate blunder-guard feedback as a real policy.** What it needs: per-move judge
    evaluation of the learner's own moves, a blunder-threshold vocabulary the pack format does
    not have, an interrupting client surface, and a ruling on how the anti-contamination
    barrier opens early without contaminating the decision it is protecting. Until then the
-   on-ramp band (`design/00-thesis.md:84-86`) runs on two of its three declared knobs.
+   on-ramp band (`design/00-thesis.md:84-89`, the knob at `:86`) runs on two of its three
+   declared knobs, and after §2a the format no longer implies otherwise. **This row is the
+   ledger entry for a design capability this RFC removes the encoding of**; without it the
+   sweep would be a silent narrowing of the target-band definition.
 4. **New — `opponentPolicy` is `additionalProperties: true`** (`schema:496`): an author can
    write a policy field nothing reads and hear nothing, which is D3's shape surviving in the
    pack format after D3 closed it for `POST /runs`.
@@ -700,17 +785,20 @@ stop, since D8 closes here:
 
 ## Deviations from design
 
-1. **`design/00-thesis.md:84-86` names pack-declared immediate blunder-guard feedback as one
-   of the three knobs that define the 1000-1400 on-ramp lane.** §2a removes its encoding
-   instead of implementing it. This does not change what the product can do today — the
-   value was rejected at load and two shipped candidates already carry a graduation blocker
-   saying so (`content/candidates/onramp-00008/pack.json`) — it changes what the format
-   claims to offer. The knob returns through the BACKLOG row in §8, with the design question
-   answered rather than assumed.
-2. **`design/03-product-breadth.md:134` puts "packs by phase" on the Play surface and
-   line 161 lists the missing projection as a B1 residual.** §4 ships the projection and one
-   label; it does not ship "packs by phase" as an information architecture. B1's residual is
-   removed; B1's successor work (program items #4 and #7) is not started.
+1. **`design/00-thesis.md:86` names pack-declared immediate blunder-guard feedback as one
+   of the three knobs that define the 1000-1400 on-ramp lane (`:84-89`).** §2a removes its
+   encoding instead of implementing it. This does not change what the product can do today —
+   the value was rejected at load and both shipped on-ramp candidates already carry a
+   graduation blocker saying so (`content/candidates/onramp-00008/pack.json`,
+   `onramp-0000d/pack.json`) — but it does remove an author's ability to record the intent in
+   the pack, and that is a loss the design tier should weigh rather than absorb. The knob
+   returns through the BACKLOG row in §8 (row 3), with the design question answered rather
+   than assumed.
+2. **`design/03-product-breadth.md:144` puts "packs by phase" on the Play surface and
+   line 171 lists the missing projection as a B1 residual (restated at `:213`).** §4 ships
+   the projection and one label; it does not ship "packs by phase" as an information
+   architecture. B1's residual is removed; B1's successor work (program items #4 and #7) is
+   not started.
 3. **The Learn IA is organized on an axis this RFC leaves optional.** §4d keeps `phase`
    optional because the shipped on-ramp emitter cannot always determine it, and a required
    field would be filled by fabrication. `unclassified` is a visible product state, which is
@@ -723,39 +811,58 @@ stop, since D8 closes here:
 
 1. **The action vocabulary has one writable source.**
    (a) `grep -rn "compare_branches" apps packages --include="*.ts" --include="*.svelte"`
-   outside tests and JSON returns exactly one definition site,
-   `packages/schema/src/drill-pack/types.ts`. (b) A test adds a second member to a local copy
-   of `CHECKPOINT_ACTIONS` and asserts `recognizedCheckpointActions` reports it — and the
-   commit is accompanied by evidence that removing the corresponding key from the literal in
-   `screen-model.ts` fails `pnpm typecheck` with a missing-property error on
-   `Record<CheckpointAction, boolean>`. (c) `screens.test.ts` asserts the checkpoint sheet
-   renders the compare control for `actions: ["compare_branches"]` and not for
-   `actions: ["compare_branches_v2"]`, unchanged in behaviour from today.
+   outside tests returns exactly **two** non-test sites and they are of different kinds: the
+   declaration, `packages/schema/src/drill-pack/types.ts`, and the exhaustive mirror in
+   `apps/web/src/lib/screen-model.ts` whose keys are checked against it by
+   `Record<CheckpointAction, boolean>`. In particular `apps/server/src/pack-validation.ts` and
+   `apps/web/src/lib/CheckpointSheet.svelte` no longer name the value at all. **A grep
+   result of one would mean the exhaustiveness check had been removed**, so the criterion is
+   two, not one. (b) The mirror is demonstrated to be load-bearing: the commit is accompanied
+   by evidence that deleting the `compare_branches` key from that literal fails
+   `pnpm typecheck` with a missing-property error, and that adding a member to
+   `CHECKPOINT_ACTIONS` without adding a key fails the same way. (c) `screens.test.ts` asserts
+   the checkpoint sheet renders the compare control for `actions: ["compare_branches"]`
+   (as it does today at `:402`) and not for `actions: ["compare_branches_v2"]`.
 2. **Schema and constants are bound, in both directions.** A `packages/schema` test asserts
    `$defs.objectiveType.enum` deep-equals `OBJECTIVE_TYPES`, `properties.feedbackPolicy.enum`
    deep-equals `FEEDBACK_POLICIES`, and `properties.phase.enum` deep-equals `PACK_PHASES`, as
-   ordered arrays. A `apps/server` test asserts the schema's opponent-mode enum equals
-   `SUPPORTED_POLICY_MODES ∪ declared-unimplemented` as sets and that those two are disjoint.
-   Each of the four assertions is demonstrated to fail under a one-sided mutation of its
+   ordered arrays. **`apps/server/src/pack-authoring.test.ts:41-61` is extended rather than
+   duplicated**: its opponent-mode set equality (`:48-53`) stays, gains a disjointness
+   assertion between `SUPPORTED_POLICY_MODES` and `DECLARED_UNIMPLEMENTED_POLICY_MODES`, and
+   its feedback-policy assertion (`:54-60`) becomes ordered equality with `FEEDBACK_POLICIES`.
+   `grep -rn "opponentPolicy.properties.mode.enum" apps packages` returns exactly one test
+   site. Each of the five assertions is demonstrated to fail under a one-sided mutation of its
    fixture copy.
-3. **D8, per value.** (a) A pack with `feedbackPolicy: "immediate_blunder_guard"` is rejected
-   by `validatePackDocument` with an issue whose `source` is `"schema"` and whose `path` is
-   `/feedbackPolicy` — the assertion that distinguishes removal from a renamed runtime
-   refusal. (b) `DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES` no longer exists:
-   `grep -rn "DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES" apps packages` returns nothing.
-   (c) A pack with `opponentPolicy.mode: "perfect_tablebase"` still passes the schema and is
+3. **D8, per value.** (a) A pack whose only defect is
+   `feedbackPolicy: "immediate_blunder_guard"` is rejected by `validatePackDocument` with
+   **exactly one** issue: `source: "schema"`, `code: "SCHEMA_ENUM"`, `path: "/feedbackPolicy"`
+   — the assertion that distinguishes removal from a renamed runtime refusal, and that pins
+   the short-circuit at `pack-validation.ts:420-427` as understood rather than discovered.
+   (b) The combining case at `pack-authoring.test.ts:80-111` still asserts a `source: "lint"`
+   and a `source: "runtime"` issue from one document, using the illegal spine move and
+   `plan_defense` only. (c) `DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES` no longer exists:
+   `grep -rn "DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES" apps packages` returns nothing, and
+   `drill-client-server.test.ts:206-219` still refuses the value, now on the Ajv enum message.
+   (d) A pack with `opponentPolicy.mode: "perfect_tablebase"` still passes the schema and is
    still rejected at load with the reason string from `capabilities.ts:19-21`, unchanged.
-   (d) `grep -n "human_common" apps/server/src/service.ts` shows no inline mode triple.
+   (e) `grep -n "human_common" apps/server/src/service.ts` shows no inline mode triple, and
+   `isRunOpponentMode` narrows without a cast — demonstrated by the absence of any
+   `as RunOpponentMode` in `service.ts` under `pnpm typecheck`.
 4. **D9.** (a) The living fixture with `start.side` deleted fails schema validation with
-   `keyword: "required"`, `missingProperty: "side"`. (b) All twelve non-negative packs in the
-   tree still validate: the living fixture, the four committed candidates (still loaded by
-   `pack-authoring.test.ts:256-263`, still five packs, four drafts), the six committed drafts,
-   and the browser fixture. (c) A Syzygy-graded fixture whose declared category is correct
-   for a black learner passes, and the same fixture with `start.side` flipped to white fails
-   with `SYZYGY_ASSESSMENT_MISMATCH` — the pair that fails today, because a missing or
-   mis-read side inverts the comparison at `pack-validation.ts:348`. (d) `grep -n
-   '=== "black" ? "black" : "white"' apps/server/src/pack-validation.ts` returns nothing.
-   (e) **Browser:** with Playwright `page.route` intercepting `GET /packs/*` to strip
+   `keyword: "required"`, `missingProperty: "side"`, `path: "/start/side"`. (b) All twelve
+   non-negative packs in the tree still validate — the living fixture, four committed
+   candidates, six committed drafts, and `terminal-outcome.browser.json` — and
+   `pack-authoring.test.ts:256-263` still loads the candidates directory into a registry of
+   five entries (the living fixture plus four candidates), four of them `reviewStatus: draft`.
+   (c) A Syzygy-graded fixture whose declared category is correct for a black learner passes,
+   and the same fixture with `start.side` flipped to white fails with
+   `SYZYGY_ASSESSMENT_MISMATCH` — the pair that cannot be written today, because a missing or
+   mis-read side inverts the comparison at `pack-validation.ts:349`. (d) `grep -n
+   '=== "black" ? "black" : "white"' apps/server/src/pack-validation.ts` returns nothing, and
+   `DrillPackDefinition["start"]["side"]` is `"white" | "black"` rather than `unknown`.
+   (e) `packages/schema/src/drill-pack.test.ts:157-171` still passes: the amended
+   `illegal-spine.invalid.json` is still schema-valid and still reports `ILLEGAL_SPINE_MOVE`.
+   (f) **Browser:** with Playwright `page.route` intercepting `GET /packs/*` to strip
    `start.side` from the response body, clicking a pack card shows the error banner text
    `did not declare start.side`, the library remains visible and interactive, and a
    `page.on("pageerror")` collector recorded zero uncaught errors. This is the criterion that
@@ -770,25 +877,33 @@ stop, since D8 closes here:
    `unclassified` and never a phase name.
 6. **D5.** (a) `node tools/verify-packaging.mjs` passes and its rendered-release check
    reports service keys exactly `["server"]` with no profile, and includes `maia` with
+   `services.server.depends_on.maia.condition === "service_healthy"` under
    `--profile engines`. (b) `docker compose -f <rendered> config --quiet` and the same with
    `--profile engines` both exit zero. (c) `grep -n "ENGINE_MODE" deploy/compose.release.template.yaml`
-   shows the `${ENGINE_MODE:-mock}` default. (d) The check is demonstrated to fail against
-   the current template.
+   shows the `${ENGINE_MODE:-mock}` default and `grep -n "required: false"` finds the
+   `depends_on` relaxation. (d) The check is demonstrated to fail against the current
+   template — specifically, the no-profile service-key assertion, which today yields
+   `["maia", "server"]`.
 7. **D10.** (a) A supervisor test drives a fake UCI process that advertises
    `id name Stockfish 17.1` against a spec with `name: "Stockfish"` and no `version`, and
    asserts the identity is `{name: "Stockfish", version: "17.1"}` — failing on the current
    tree. (b) The same advertisement against a spec with `version: "pinned"` yields
    `"pinned"`. (c) A spec named `Stockfish` against an engine advertising `Lc0 v0.31.2`
-   yields `version: "unknown"` and a transcript entry containing `identity mismatch`.
-   (d) `position-seeds.ts` declares `name: "Stockfish"` and its evaluator test asserts the
-   emitted source origin carries a non-`unknown` `engineVersion` when the fake engine
-   advertises one.
+   yields `{name: "Stockfish", version: "unknown"}` **and** a `direction: "lifecycle"`
+   transcript entry containing `identity mismatch`, read back through the supervisor's
+   transcript accessor — the assertion that proves the note reaches the ring rather than a
+   local variable. (d) A spec with no `name` against `id name Stockfish 17.1` still yields
+   `{name: "Stockfish", version: "17.1"}`, and against `id name Lc0 v0.31.2` yields
+   `{name: "Lc0", version: "v0.31.2"}` — the generalised trim, asserted so the removed
+   Stockfish special case cannot silently regress the name. (e) `position-seeds.ts:67`
+   declares `name: "Stockfish"` and its evaluator test asserts the emitted source origin
+   carries a non-`unknown` `engineVersion` when the fake engine advertises one.
 8. **No persisted shape moved.** `packages/runtime`'s `runSchemaVersion`, `STORAGE_VERSION`
    and `SelectionEngineIdentity` are byte-identical to `main`; `rfc/README.md`'s migration
    register gains no row; and `digestDrillPack` over every committed pack returns the digest
    recorded in its sidecar where one exists.
 9. **`pnpm verify` and `pnpm test:browser` pass with `retries` unset**, per D14's closure
-   condition (`design/BACKLOG.md:124`) — a green suite that needed a retry is not evidence.
+   condition (`design/BACKLOG.md:125`) — a green suite that needed a retry is not evidence.
 
 ## Open questions
 
@@ -796,6 +911,37 @@ None.
 
 ## Changelog
 
+- 2026-08-13 (adversarial review, second pass): eleven corrections, all verified against the
+  tree and several by execution. **Blast radius the first pass missed:**
+  `schemas/fixtures/drill-pack/illegal-spine.invalid.json` is a sixth negative fixture that is
+  deliberately schema-*valid* and asserted as such (`drill-pack.test.ts:157-171`), so required
+  `side` breaks it — §3a now amends it; and because `validatePackDocument` returns after a
+  failed schema stage (`pack-validation.ts:420-427`), removing `immediate_blunder_guard` from
+  the schema suppresses every lint and runtime issue in the same document, which breaks
+  `pack-authoring.test.ts:80-111` structurally and changes the message
+  `drill-client-server.test.ts:218` asserts — §2a now splits the first and restates the
+  second. **Corrections that make the spec compile:** `DrillPackDefinition["start"]` has no
+  `side` at all (`types.ts:83`), so §3b's "read the side directly" needed §3a to narrow the
+  type; `RUN_OPPONENT_MODES.includes(mode as RunOpponentMode)` does not narrow `unknown` and
+  would break the `RunOpponentPolicy` literal at `service.ts:192-197`, so §2b now specifies an
+  `isRunOpponentMode` predicate; `parseIdentity` is a free function with no access to the
+  transcript ring, so §6 now returns the mismatch note and pushes it at the caller (`:232`);
+  and §6's snippet left `name` as the whole `id name` line, which would have produced
+  `{name: "Lc0 v0.31.2", version: "v0.31.2"}` for an unnamed spec — a new defect introduced by
+  the fix for D10. **Claims that were wrong:** `pack-authoring.test.ts:41-61` already binds
+  both enums to the capability constants as sets, so §2's "nothing binds the copies" was half
+  false and §2b's "new test in `capabilities.test.ts`" would have duplicated it — the existing
+  test is extended with the disjointness assertion instead; §5's self-hoster incantation named
+  the repository's `compose.yaml` rather than the published `release/compose.yaml`; the
+  Migration paragraph named `runtimeBuildInfo` where the field lives on `schemaBuildInfo`.
+  **Coordinates re-verified:** the ledger's D10/D9/D8/D6 rows are at `design/BACKLOG.md`
+  132/133/134/136 (not 128/129/130/132) and D9's row was itself rewritten on 2026-08-13, so
+  the Summary no longer claims the ledger disagrees with this RFC; `design/03-product-breadth.md`
+  B1 is line 171 and "packs by phase" line 144 (not 161/134); plus `service.ts:189`,
+  `capabilities.ts:165`, `compose.yaml:11,21-24`, `pack-validation.ts:349,351`,
+  `docs/drill-pack-format.md:44-46` and D14 at `BACKLOG.md:125`. Motivation subsections
+  renumbered `1.1`/`2.1` so they no longer collide with the Specification's `§1a`/`§2a`, which
+  four sibling drafts cite by number; Specification numbering is untouched.
 - 2026-08-13: created. Re-verified all six open defects (all still real; D8 is five values
   rather than two, and D9's ledgered symptom has been made unreachable by a guard elsewhere
   while the format defect underneath it grew a second, sharper consequence in the Syzygy

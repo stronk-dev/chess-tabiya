@@ -98,6 +98,9 @@ landing order, not lost data.
 | 0.8 | `pack-studio.md` | **claimed 2026-08-13, draft** — optional `deviations[].planClassId` (additive); `provenance.reviewStatus` narrowed to `schema_example \| draft \| published`; `provenance.reviewers` removed. Rebased 0.6 → 0.7 → 0.8 as the contention resolved and `trajectory-drill.md` took 0.7. No committed pack's bytes or digest change: nothing in the tree declares `reviewed`, and `provenance.additionalProperties` is `true`, so an existing `"reviewers": []` still validates as untyped extra metadata |
 | 0.9 | `n-way-comparison.md` | **claimed 2026-08-13, draft** — `grading` removed from `$defs/checkpointInteraction` after the owner ruled that prediction checkpoints show numbers and never a verdict. `schemas/drill_pack.example.json`'s digest changes with it; no other committed document declares a prediction interaction |
 
+Landing order follows the numbers. A draft that cannot land behind its
+predecessor renegotiates here rather than renumbering unilaterally.
+
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
 `content-sourcing-pipelines.md` draft and recommended a four-way split; the draft
 is deleted, not stubbed, and its content is fully rehomed. **B6a is the
@@ -126,25 +129,6 @@ planning for the complete B1–B8 product surface in
 unspecified implementation; it supersedes the assumption that the next work is
 content for one narrow slice. Breadth RFCs must preserve the global shell and
 name the B-gates they complete before code begins.
-
-## Pack schema register
-
-Instituted 2026-08-13 after **three** drafts written in parallel each claimed a
-pack-schema version — the same collision the migration register was created to
-prevent, one layer over. A pack-schema version is a **shared single-writer
-resource**; claim it here before writing it into a draft.
-
-| Pack schema | Owner RFC | Change | Status |
-|---|---|---|---|
-| 0.4 | shipped | current | implemented |
-| 0.5 | `defect-sweep.md` | `start.side` required; `immediate_blunder_guard` removed | draft |
-| 0.6 | `return-and-progression.md` | `retryVariants`; `concepts` typed | draft |
-| 0.7 | `trajectory-drill.md` | `legs` | draft |
-| 0.8 | `pack-studio.md` | `deviations[].planClassId`; `provenance.reviewStatus` narrowed; `provenance.reviewers` removed | draft |
-| 0.9 | `n-way-comparison.md` | `grading` removed from `$defs/checkpointInteraction` | draft — **rebase done 2026-08-13**. The `0.8` in its §10 and R3/R4 was the *run* schema and was always correct; the draft carried no pack-schema claim at all until the prediction ruling removed `grading`, and it now takes 0.9 explicitly (its §8.0, §10, §12) |
-
-Landing order follows the numbers. A draft that cannot land behind its
-predecessor must renegotiate here rather than renumber unilaterally.
 
 ## Migration register
 

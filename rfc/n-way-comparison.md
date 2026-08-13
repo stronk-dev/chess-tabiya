@@ -495,11 +495,11 @@ when it exists and must not synthesise it in its absence.
 forbidden for two reasons, both verified:
 
 - `deepestScore` derives from engine evidence, which the shipped gate empties
-  (`service.ts:84-110`, `feedback-policy.ts:10-49`). Recomputing it in the
+  (`service.ts:84-113`, `feedback-policy.ts:10-51`). Recomputing it in the
   browser would rebuild the withholding decision in a second place — the D2
   shape.
 - `theory` cannot be computed in the browser at all: `projectPackDocument`
-  (`pack-registry.ts:57-89`) never projects `deviations` or `authoredBoundary`,
+  (`pack-registry.ts:58-89`) never projects `deviations` or `authoredBoundary`,
   and strips `spine` entirely for `mode: "line"` (`:81`). `lineMembership`
   requires all three.
 
@@ -528,23 +528,26 @@ boards are the same component in two modes — `leaf` and `step`.
 `comparisonNode(run, comparison, step, side)` (`screen-model.ts:212-225`)
 becomes `comparisonNode(run, comparison, step, branchId)`, reading
 `comparison.rows[step - 1]?.nodes[branchId]` and `comparison.forkNodeId` at step
-0. `stepTimeline` (`DrillScreen.svelte:253-258`) bounds on
-`comparison.rows.length`. The per-column "Line ended" marker already exists and
-generalises unchanged.
+0. `stepTimeline` (`DrillScreen.svelte:252-258`) bounds on
+`comparison.rows.length` in place of `comparison.pairs.length` at `:256`, and
+`maxStep` (`CompareView.svelte:44`) with it. The per-column "Line ended" marker
+already exists and generalises unchanged.
 
 **Difference strips.** The objective and checkpoint strips
 (`CompareView.svelte:218-259`) become N columns. Two strips are added that are
-deterministic rules facts already available from each node's FEN
-(`docs/branch-runtime.md:102-109`) and are computed in the runtime alongside the
-rows, never in the client:
+deterministic rules facts derivable from each node's own FEN — every `Node`
+carries one (`packages/runtime/src/types.ts:88`) — and are computed in the
+runtime alongside the rows, never in the client:
 
 - **material** — the material balance at the column's node for each offset,
   White-perspective, matching the run's existing convention
   (`docs/explanation-grounds.md:56-59`);
 - **structure** — pawn-file occupancy per side, the deterministic structural
-  fact, stated as counts and never as a named structure. Naming structures is
-  recognition, which `design/03-product-breadth.md:207-213` settles as a
-  separate contract.
+  fact, stated as counts and never as a named structure. `design/03` separates
+  the two deliberately: "deterministic structural, temporal, and phase features"
+  (line 127) is one evidence layer and "phase/structure recognition" (line 128)
+  is the next one down. Naming a structure is the second, and it is a separate
+  contract this RFC does not open.
 
 Both are added as a `strips` record keyed by branch id, of entries carrying
 `plyOffset` and the fact. Group members (§1.1 clause 4) are drawn once.
@@ -558,19 +561,19 @@ that could say something the strip view cannot is a bug.
 
 **Standalone Review route.** `/review` is currently a stub that says standalone
 comparison is not part of the shell release (`apps/web/src/App.svelte:331`,
-`docs/app-shell.md:36-38`). This RFC leaves that boundary where the shell RFC
+`docs/app-shell.md:34-36`). This RFC leaves that boundary where the shell RFC
 put it: compare stays inside the run. Extending it is B7's run-history work.
 
 ### 6. Branch-selective PGN export from the UI
 
 Export is already N-way at both the runtime (`packages/runtime/src/pgn.ts:74-75`)
 and the route (`GET /runs/:id/pgn?branches=a,b`, parsed at `rest.ts:415-423`,
-served at `:605-618`). The only gap is that the UI never passes ids:
+served at `:605-616`). The only gap is that the UI never passes ids:
 `SessionController.exportPgn()` (`session-controller.ts:341-343`) calls
 `this.#api.pgn(runId)` with no argument, so every export is the whole run.
 
 `exportPgn(branchIds?: readonly string[])` forwards to the shipped
-`api.pgn(runId, branchIds)` (`api.ts:352, 576-586`). `DrillScreen`'s export
+`api.pgn(runId, branchIds)` (`api.ts:352, 576-589`). `DrillScreen`'s export
 action (`:503`, keyboard `e` at `:379`) passes the current selection when the
 compare view is open or the rail holds a selection, and passes nothing
 otherwise. The same selection state therefore drives compare and export, which
@@ -595,16 +598,32 @@ around rather than a projection choice layered on top of persistence.
 | Method | Path | Effect |
 |---|---|---|
 | `POST` | `/runs/:id/simulate` | walk the authored variations; **write nothing** |
-| `POST` | `/runs/:id/simulate/enter` | promote one walked variation to a real branch |
+| `POST` | `/runs/:id/simulate-enter` | promote one walked variation to a real branch |
 
-Both require the writer lease (same `#forWrite` path as `moves`/`fork`,
-`service.ts:245,275`).
+Both require the writer lease (the shipped `#forWrite` helper,
+`service.ts:617-619`, as `move` uses at `:251`, `opponentPly` at `:275` and
+`fork` at `:324`).
+
+**The router will not accept these paths as drafted, and the previous draft's
+`/simulate/enter` cannot be expressed at all.** `parseRunRoute`
+(`rest.ts:392-403`) matches `^/runs/([^/]+)/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal)$`
+— a **closed allowlist of exactly one path segment**. Two consequences, both
+handled here rather than found in implementation:
+
+- every route this RFC adds is a new alternative in that group:
+  `simulate`, `simulate-enter`, `prediction` (§8.2) and `analysis` (§9);
+- `/runs/:id/simulate/enter` has two segments after the run id and the regex is
+  anchored, so it would 404 no matter what the allowlist said. The promotion
+  route is therefore **`/runs/:id/simulate-enter`**. Widening the regex to accept
+  nested actions is rejected: `parseRunRoute` returns a flat `{ runId, action }`
+  that the whole POST dispatch switches on, and a second segment would have to be
+  threaded through every arm to serve one route.
 
 The cursor node's position is matched to the pack spine using the shipped
 `spinePositionIndex` / `spineNodeIdFor` (`packages/runtime/src/line.ts:56,86`),
-already used for the timeline at `screen-model.ts:98-101`. If the run has no
+already used for the timeline at `screen-model.ts:100,103`. If the run has no
 registered pack, the node is off-spine, or the matched spine node has fewer than
-two children → `422 NO_AUTHORED_VARIATIONS`.
+two children → `422 NO_AUTHORED_VARIATIONS` (new code, §1.2).
 
 #### 7.2 The walk writes nothing
 
@@ -622,7 +641,9 @@ Simulate is therefore a **server-side batch**, not a client loop over
 `POST /runs/:id/moves` — a client loop physically cannot avoid the enqueue, because
 it sits inside `RunService.move`. The batch calls `commitMove` and
 `orchestratePackMove` on the clone directly and calls `#enqueueMoveEvidence` **zero
-times**.
+times**. It also does not call `#requiredEvidenceQueue()`, which `move` invokes at
+`service.ts:253` and which *throws* when no queue is configured: a demonstration of
+authored moves must not require an engine deployment to run at all.
 
 The deliberate consequence, stated rather than discovered: simulated branches carry
 **no engine evidence**, so their trajectory cells and `deepestScore` are empty. That
@@ -650,8 +671,15 @@ For each authored child `c` of the matched spine node, in authored order, on the
 clone:
 
 1. `fork(clone, nodeId, { label: c.moveSan, intent: "Authored variation " + c.id,
-   origin: "simulated" })` — `runtime.ts:360-364`; `appendBranch` moves the
-   cursor to the new branch.
+   origin: "simulated" })` — `runtime.ts:360-365`; `appendBranch`
+   (`runtime.ts:117-128`) moves the cursor to the new branch. **`ForkOptions`
+   does not have an `origin` field today** — it is `{ label?, intent?, at? }`
+   (`runtime.ts:66-70`) — so `ForkOptions` gains `origin?: BranchOrigin` and
+   `nextBranch` writes `options.origin ?? "played"` onto the `Branch` it
+   constructs, in the same change as §7.4's type. The route body
+   (`parseForkOptions` in `rest.ts`) is **not** widened: `origin` is set by the
+   simulate batch and by promotion, never by a client-supplied field, or a caller
+   could label a hand-played branch as authored.
 2. Walk `c` and then its `children[0]` chain to the end, committing each ply
    with `commitMove(clone, uci, { actor: "system" })`. `"system"` is the **only**
    honest actor and this is verified twice over: `commitMove` rejects
@@ -667,7 +695,7 @@ clone:
    checkpoints fire and the objective grades on the demonstrated line. This is
    what makes simulate explain consequence rather than just show positions.
 4. The walk stops early and honestly at the first ply that would raise
-   `RUN_TERMINATED` (`runtime.ts:275-277` — a terminal objective state or an
+   `RUN_TERMINATED` (`runtime.ts:277-279` — a terminal objective state or an
    ended position). Plies committed so far are kept and the response reports
    `truncatedAt`.
 5. A spine node with more than one child mid-line is an authored sub-variation;
@@ -689,7 +717,7 @@ produce the same walk.
 
 #### 7.4 Promotion, and `Branch.origin` as its marker
 
-`POST /runs/:id/simulate/enter`, body `{ simulationId, branchIndex }`, replays that
+`POST /runs/:id/simulate-enter`, body `{ simulationId, branchIndex }`, replays that
 one walked variation onto the **real** run: one `branch.forked` carrying
 `origin: "simulated"`, then its `move.committed` plies with `actor: "system"`, then
 whatever `orchestratePackMove` emits for each — the same events the clone produced,
@@ -757,7 +785,7 @@ turn:
 
 | Field | Why it does not survive |
 |---|---|
-| `source` | it declared what to grade against. Nothing is graded. `"engine"` and `"both"` were never backed in any case — the strong-engine profile ships `multiPv: 1` (`apps/server/src/strong-engine.ts:10-15`), so `candidateLines` yields one move and there is no ranked engine set at all |
+| `source` | it declared what to grade against. Nothing is graded. `"engine"` and `"both"` were never backed in any case — **both** shipped Stockfish specs boot at `MultiPV: 1`: the play spec from `DEFAULT_STRONG_ENGINE_PROFILE` (`apps/server/src/strong-engine.ts:10-15`, applied at `:55`) and the judge spec literally (`apps/server/src/application.ts:189`). `candidateLines` (`opponent-selector.ts:218`) therefore yields one move and there is no ranked engine set at all |
 | `minMass` | it was the threshold that made a prediction right or wrong. As a *display* hint it would hide candidates below a cutoff — which is a verdict wearing a rendering costume, and the worst version of one, because the learner cannot see what was hidden |
 | `topK` | a genuine display cap, and still not worth keeping: the recorded candidate list is Maia policy over a handful of moves, `TOO_MANY_PREDICTIONS` already governs sparsity, and a new authored field with one consumer and no evidence anyone wants it is the format growth §14 of `pack-studio.md` exists to refuse |
 
@@ -789,9 +817,17 @@ interaction: { type: "prediction", ...(flipBoard ? { flipBoard: true } : {}) }
 That is now the whole interaction, so nothing is withheld and the previous draft's
 "`grading` is never projected" rule has nothing to apply to. `intent_capture` is
 still not projected at all — `planClassIds` names authored plan classes, which is
-authored content under program #2's reveal contract. The regression that asserts the
-absence of `interaction` (`apps/server/src/drill-client-server.test.ts:182`) is
-amended to assert exactly this shape rather than deleted.
+authored content under program #2's reveal contract.
+
+**Two shipped assertions move, not one.** The previous draft named only the
+`not.toHaveProperty("interaction")` line
+(`apps/server/src/drill-client-server.test.ts:182`); the line above it,
+`expect(Object.keys(checkpoint).sort()).toEqual(["actions", "id", "label"])`
+(`:180`), is the stricter of the two and fails on the same change. Both are
+amended to assert the exact projected shape — `["actions", "id", "interaction",
+"label"]` for the prediction checkpoint, `["actions", "id", "label"]` for every
+other — rather than deleted, so the projection stays closed against future
+additions.
 
 #### 8.2 Capture, and the ordering rule that prevents the leak
 
@@ -808,14 +844,39 @@ an optional `orientation` argument; `flipBoard: true` passes the opposite of
 
 **Ordering rule, normative.** The client must never hold the opponent's reply
 before the prediction is recorded. This is guaranteed by construction rather
-than by discipline: `POST /runs/:id/prediction` with
-`{ checkpointId, nodeId, predictedUci }` is the endpoint that *both* resolves
-the opponent selection and writes the record, and it returns the selection. The
-drill client must not call `POST /select-move` (`rest.ts:559-577`) for that ply
-at all; it plays the selection the prediction response returned. Because the
-selector memoises on `selectionCacheKey` (`opponent-selector.ts:180, 353,
-372-379`), the distribution the learner is shown is provably the one the opponent
-then plays.
+than by discipline: `POST /runs/:id/prediction` is the endpoint that *both*
+resolves the opponent selection and writes the record, and it returns the
+selection. The drill client must not call `POST /select-move`
+(`rest.ts:559-577`) for that ply at all; it plays the selection the prediction
+response returned, through the shipped opponent-ply path.
+
+**The body is the shipped select-move body plus three fields, and the request
+composition does not move to the server.** The previous draft's
+`{ checkpointId, nodeId, predictedUci }` implied the server could build the
+selection request itself; it cannot without relocating logic that is legitimately
+client-side. `session-controller.ts:385-403` composes `startFen`, `historyUci`,
+`seed`, `packId` and a `policy` whose `mode` comes from
+`selectorMode(pack, capabilities)` — a **client** capability read. So the body is
+
+```
+{ ...SelectMoveRequest, checkpointId, nodeId, predictedUci }
+```
+
+parsed by the shipped `parseSelectMoveRequest` (`rest.ts:568`, exported from
+`opponent-selector.ts`) for the first part and by three `requiredString` calls
+for the rest, and dispatched into the *same* `selector.select({ ...parsed,
+policy: { ...parsed.policy, spine } })` expression `/select-move` already uses
+(`rest.ts:570-576`). Nothing about how a selection is requested changes; only
+*who else* sees the answer first. When `selector === undefined` the route returns
+the shipped `ENGINE_UNAVAILABLE` shape exactly as `/select-move` does
+(`rest.ts:561-567`), and the checkpoint falls back to its ordinary
+continue/rewind actions with an `HonestControl` reason rather than a dead board.
+
+Because the selector memoises on `selectionCacheKey` (`opponent-selector.ts:180,
+353, 372-379`) and the request is byte-identical to the one the ply would
+otherwise have made, the distribution the learner is shown is provably the one
+the opponent then plays. `prediction` joins `parseRunRoute`'s action allowlist
+(§7.1).
 
 #### 8.3 What the interaction records
 
@@ -875,12 +936,25 @@ hand-edited snapshot cannot invent a rank.
 The reveal shows four things and no fifth:
 
 1. **the move the learner predicted**, in SAN;
-2. **where it sat** — one sentence in the shape the owner's ruling gives, built from
-   `predictedMass`, `predictedRank` and `candidateCount` and from the opponent
-   policy's own rating band where the policy declares one
-   (`opponentPolicy.targetElo`): `You said c4. 12% of 1500-rated players play it —
-   4th of 6 recorded replies.` When `predictedMass` is null:
+2. **where it sat** — one sentence, built from `predictedMass`, `predictedRank`
+   and `candidateCount` and from the opponent policy's own rating band where the
+   policy declares one (`opponentPolicy.targetElo`, optional in the pack):
+   `You said c4. 12% of 1500-rated players play it — 4th of 6 recorded replies.`
+   When `targetElo` is absent the band clause is omitted rather than defaulted —
+   `You said c4. 12% of recorded replies are it — 4th of 6.` — because inventing
+   a rating band would attribute the frequency to a population nobody declared.
+   When `predictedMass` is null:
    `You said c4. It is not among the 6 replies recorded for this position.`
+
+   **This is the normative form, and it names one move.** The owner's ruling
+   above is quoted with its second clause (`42% play Qb6`), which positions the
+   learner's move against the *top* move in the same breath. That comparison is
+   not interpolated into this sentence: it is item 3, where the whole
+   distribution is on screen with the top entry visible and the learner's own
+   entry marked. Reading the top move out of the list is the learner's; asserting
+   it in a sentence beside their guess is the one place this surface could start
+   sounding like a verdict, and one renderer emitting one fixed form is how that
+   stays impossible.
 3. **the distribution**, as the recorded candidate list from `distribution` rendered
    `moveSan → policy mass, rank`, in full and with nothing truncated, with the
    predicted move and the move actually played both marked;
@@ -893,12 +967,33 @@ that counts predictions "got right". A component snapshot asserts the absence of
 vocabulary (A6a), because this is the exact place the product would drift into the
 dashboard `design/00-thesis.md` names as the anti-pattern.
 
-**Withholding.** `prediction.recorded` passes the feedback barrier.
+**Withholding — and the delivery path is the response, not the event stream.**
+`prediction.recorded` is not itself an engine-feedback event:
 `engineFeedbackEvent` gates only `evidence.attached` and engine-referenced
 `objective.state_changed` (`feedback-policy.ts:26-31`), and Maia policy mass
-already reaches the browser inside `opponent.move_selected`. This is intentional
+already reaches the browser inside `opponent.move_selected`. That is intentional
 and is recorded here so it is not "fixed" later: a prediction whose distribution
 is withheld until reveal teaches nothing at the moment it is asked.
+
+But "not gated" is not the same as "delivered", and the previous draft conflated
+them. `publicEvents` is a **truncating barrier, not a filter**: before disclosure
+it cuts the page at the *index* of the first engine-feedback event
+(`feedback-policy.ts:46-47`, `candidates.slice(0, barrier)`), so every later
+event of every type is withheld too, including this one. A run whose feedback
+policy opens *delivery* before *disclosure* can hold `evidence.attached` events
+— `applyEvidence` gates on `feedbackDeliveryOpen` (`service.ts:473-478`) while
+`publicEvents` and `RunService.compare` gate on `feedbackDisclosed` — and in such
+a run a `prediction.recorded` written afterwards will not appear in
+`GET /runs/:id/events` until reveal.
+
+This RFC does not change the barrier, because reordering the event stream around
+one event type is exactly the kind of second withholding decision D2 punishes.
+Instead the guarantee is stated where it actually holds: **the distribution
+reaches the learner in the `POST /runs/:id/prediction` response**, which is
+synchronous, is the same call that records the event, and is not routed through
+`publicEvents` at all. The event is the durable record; the response is the
+delivery. A6 asserts the response, and asserts the event through the stored run
+rather than through the public event page.
 
 ### 9. Deep analysis
 
@@ -910,11 +1005,36 @@ No client-facing analysis request exists. `RunService.enqueueEvidence`
 `{ nodeIds: string[] (1–16), kind: "bestline", multiPv?: 1–8, depth?, movetime? }`,
 writer lease required. It wraps the shipped `enqueueEvidence`.
 `EvidenceJobInput` (`apps/server/src/evidence-queue.ts:14-23`) gains
-`readonly multiPv?: number`; the judge executor threads it through
-`resolveStrongEngineProfile({ multiPv })` (`strong-engine.ts:23-31`), which
-already maps it to the `MultiPV` UCI option (`:55`). Results stage exactly as
+`readonly multiPv?: number`.
+
+**MultiPV is not already wired for the judge, and the previous draft's route to
+it was wrong.** `strong-engine.ts:55` is inside `stockfishPlaySpec`, whose spec is
+`kind: "opponent"` (`:47`) — the *play* engine. The judge is
+`stockfishAnalysisSpec` (`application.ts:183-190`), which does not consult
+`resolveStrongEngineProfile` at all and hardcodes
+`options: { Threads: 1, Hash: 16, MultiPV: 1 }` at `:189`. Those options are
+applied once at handshake, so a per-request `multiPv` cannot come from the spec.
+
+The mechanism that does exist is the one `StockfishEvidenceExecutor` already uses
+for WDL: it composes the UCI command list **per job** and prepends a `setoption`
+when the job asks for one (`evidence-queue.ts:301-315`, the
+`job.kind === "wdl" ? ["setoption name UCI_ShowWDL value true"] : []` line).
+`multiPv` threads through the same seam:
+
+- when `job.multiPv` is set, the executor prepends
+  `setoption name MultiPV value ${job.multiPv}`;
+- and **resets it afterwards**. The judge is one long-lived shared process
+  (`EngineSupervisor`), UCI options persist across `position`/`go` pairs, and a
+  job that leaves `MultiPV` at 5 silently changes every later `eval` job's
+  `info` lines. The executor therefore emits `setoption name MultiPV value 1` at
+  the end of any command list that raised it. This is the boundary condition a
+  shared engine process makes real and it is stated here rather than found in a
+  flaky eval.
+
+Results stage exactly as
 today and are applied by the writer through the shipped
-`POST /runs/:id/evidence`. When no judge engine is configured the route returns
+`POST /runs/:id/evidence`. `analysis` joins `parseRunRoute`'s action allowlist
+(§7.1). When no judge engine is configured the route returns
 the shipped `ENGINE_UNAVAILABLE` shape (as `/select-move` does at
 `rest.ts:561-567`) — which is the honest outcome for a self-hoster on the
 release compose, since it hardcodes `ENGINE_MODE: maia` with no light profile
@@ -937,7 +1057,13 @@ export interface ComparisonLineEntry {
 
 The payload is carried through unmodified and rendered by the shipped
 `renderEvidenceRef` (`evidence-sentences.ts:90-121`), so no new evaluation
-vocabulary is invented. The eval-only `ComparisonEvidenceEntry` contract at
+vocabulary is invented. `renderEvidenceRef` takes payloads as a
+`ReadonlyMap<string, EvidencePayload>` built today by `evidencePayloadTable` from
+the *evidence page* (`evidence-sentences.ts:75-88`); the compare view has no such
+page, so it builds the map from the entries themselves — each
+`ComparisonLineEntry` contributes `evidenceRefs → payload`. That is the reason
+`payload` is carried on the entry at all rather than being looked up. The
+eval-only `ComparisonEvidenceEntry` contract at
 `docs/explanation-grounds.md:55-63` stays byte-true because `lines` is a
 separate collection. `lines` is emptied by `comparisonWithoutEngineFeedback`
 alongside `evidence` (§2).
@@ -954,7 +1080,7 @@ fills `version` from the UCI `id name` line only when `spec.name` is unset
 
 Two *run*-shape changes land together in one migration, because two migrations from
 one RFC is the hazard the register was instituted to prevent
-(`rfc/README.md:42-48`):
+(`rfc/README.md:149-154`):
 
 - `Branch.origin: "played" | "simulated"` (§7.4);
 - `PredictionRecordedEvent` in the event union (§8.3).
@@ -971,7 +1097,12 @@ two `0.8`s are never read as one.
 
 `DRILL_RUN_SCHEMA_VERSION` moves `"0.7"` → `"0.8"`
 (`packages/schema/src/index.ts:1`), stamped at `runtime.ts:218` and
-`events.ts:195`. `STORAGE_VERSION` moves `5` → `6`
+`events.ts:195`; `DRILL_PACK_SCHEMA_VERSION` moves to `"0.9"` on the very next
+line (`packages/schema/src/index.ts:2`, `"0.4"` in the tree today and whatever
+0.5–0.8 has landed by then), together with `schemas/drill_pack.schema.json`'s
+`$id` (`urn:chess-tabiya:schema:drill-pack:0.9`). The run and pack constants are
+adjacent lines in one file, which is precisely why §12's table names which
+version each slice means. `STORAGE_VERSION` moves `5` → `6`
 (`apps/server/src/storage.ts:147`) with migration 6 appended to the list at
 `storage.ts:915-941`.
 
@@ -983,7 +1114,7 @@ historical run contains one. Reads filter on the current version
 disappears — the trap both prior grading RFCs documented. `origin` is written
 literally as `"played"` and `"0.8"` literally, not from the schema constant, so
 a later version bump cannot mis-stamp rows before migration 7, following the
-freeze rule recorded for migration 4 at `rfc/README.md:54`.
+freeze rule recorded for migration 4 at `rfc/README.md:161`.
 
 The scratch ruling (§7) does **not** shrink this migration. `Branch.origin` still
 lands on every branch and every stored v0.7 branch still needs `"played"`; scratch
@@ -1020,8 +1151,8 @@ is the duplication the register exists to prevent.
 
 **Constraining but untouched by either RFC:**
 
-- **D5** — the release compose hardcodes `ENGINE_MODE: maia` with no light
-  profile, so §9 must degrade with the shipped `ENGINE_UNAVAILABLE` shape rather
+- **D5** — the release compose hardcodes `ENGINE_MODE: maia`
+  (`deploy/compose.release.template.yaml:8`) with no light profile, so §9 must degrade with the shipped `ENGINE_UNAVAILABLE` shape rather
   than assume a judge engine exists.
 - **D8** — schema-versus-validator divergence was the precedent class for the
   declared-versus-applied grading source the previous draft specified. §8.0 removes
@@ -1034,7 +1165,7 @@ is the duplication the register exists to prevent.
 migration; this RFC carries a run-schema change (0.7 → 0.8, migration 6) **and** a
 pack-schema change (→ 0.9, §8.0). The pack-schema claim orders this RFC behind
 `defect-sweep` (0.5), `return-and-progression` (0.6), `trajectory-drill` (0.7) and
-`pack-studio` (0.8) in the register, and behind nothing else: none of those five
+`pack-studio` (0.8) in the register, and behind nothing else: none of those four
 touches `$defs/checkpointInteraction`, and a pack version rebases cheaply because
 pack digests are content digests unaffected by the `$id`
 (`packages/schema/src/drill-pack/digest.ts:58-66`). If any of them is withdrawn
@@ -1051,7 +1182,8 @@ here, its §6 there), and it owns pack schema 0.8 directly beneath this RFC's 0.
 
 | Slice | Contents | Depends on |
 |---|---|---|
-| **R1** | §1 payload and axis rule, §2 transport, §3 selection, §4 consequence row, §6 branch-selective export | shipped runtime only |
+| **R0** | §1.2's `ServerErrorCode` widening and its `errorResponse` arms, and §7.1's `parseRunRoute` allowlist entries. Landed first and alone, because every later slice throws codes and serves paths the shipped router turns into 500s and 404s | shipped server only |
+| **R1** | §1 payload and axis rule, §2 transport, §3 selection (incl. `BranchCard.forkNodeId` and the rail props), §4 consequence row and the `pack-absent:` reference, §6 branch-selective export, and the two doc rewrites named in the header | R0 |
 | **R2** | §5 grid, N-column strips incl. material and structure, synchronised replay, narrative mode | R1 |
 | **R3** | §7 simulate and promotion, §10 **run** schema 0.8 / migration 6 | R1, R2 |
 | **R4** | §8 prediction checkpoints, §8.0 **pack** schema 0.9 | R1, R3 (run schema 0.8) |
@@ -1069,17 +1201,17 @@ as their input when they are built.
    `bestline` request over the shipped evidence queue. This is a
    specialisation, not a divergence.
 2. **`design/03` groups branch race, opposite-side replay and new-defense replay
-   with the review surfaces (line 63-64).** They are out of scope here because
+   with the review surfaces (lines 63-64).** They are out of scope here because
    each needs a training mode's definition of "same decision, different
-   resistance" from program item #4 (`design/03:248-250`). B3's own gate row
-   (line 163) does not name them.
+   resistance" from program item #4 (`design/03:258-260`). B3's own gate row
+   (line 173) does not name them.
 3. **`design/03:59` lists duplicate, share and PGN-with-variations import under
    the same bullet as review.** They are run-history and platform contracts
-   (B7 line 167, B8 line 168) and are not specified here. B3's gate row does not
+   (B7 line 177, B8 line 178) and are not specified here. B3's gate row does not
    name import or duplicate; it names share/export, and export is discharged by
    §6.
 4. **The standalone `/review` comparison route stays a stub.** The shell release
-   deliberately scoped comparison inside the run (`docs/app-shell.md:36-38`) and
+   deliberately scoped comparison inside the run (`docs/app-shell.md:34-36`) and
    this RFC preserves that boundary rather than quietly reopening it.
 
 No other divergence.
@@ -1129,7 +1261,7 @@ after the call, and the evidence queue's depth is identical too. A walk exceedin
 eight variations or forty plies returns `422 SIMULATE_TOO_LARGE`. A stale
 `simulationId` returns `410 SIMULATION_EXPIRED`.
 
-**A5a — promotion (server integration).** `POST /runs/:id/simulate/enter` on one
+**A5a — promotion (server integration).** `POST /runs/:id/simulate-enter` on one
 `branchIndex` appends **exactly one** `branch.forked` with `origin: "simulated"` plus
 that variation's plies, leaves the cursor at the branch leaf, and adds nothing for the
 other variations. `readBackReplay(run.events)` succeeds on the resulting run, proving
