@@ -23,7 +23,7 @@
   `rfc/archive/authored-explanation-surface.md` and
   `rfc/archive/authored-feedback-delivery.md` (per-scope reveal)
 - **Parent / amends:** amends `rfc/archive/drill-pack-format.md` in one bounded place
-  (§14a, optional `deviations[].planClassId`, schema `$id` **0.5 → 0.6**)
+  (§14a, optional `deviations[].planClassId`, schema `$id` **0.7 → 0.8**)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/pack-studio-and-review/` (once implementing)
 
@@ -116,14 +116,26 @@ pipelines. Intent-relative success conditions and the `concept_violation` split
 
 ## Specification
 
-### 0. Relationship to the two parallel drafts — shared single-writer resources
+### 0. Relationship to the parallel drafts — shared single-writer resources
 
-`rfc/defect-sweep.md` was drafted in parallel and claims the **pack schema version**:
-`$id` 0.4 → 0.5, `DRILL_PACK_SCHEMA_VERSION` → `"0.5"` (its §7). That is the same class of
-resource as a migration number — one writable value, two drafts — and the migration
-register exists because exactly this collision has already cost this repo a landing. This
-RFC therefore **claims 0.6, not 0.5**, and names `defect-sweep` a dependency rather than
-racing it. `rfc/README.md`'s Active table records both claims.
+Five product RFCs are in draft alongside this one, and between them they have already
+claimed both shared single-writer resources this RFC touches. Nothing below is a
+dependency of *design*; it is bookkeeping on two numbers, done in the register rather
+than discovered at merge.
+
+`rfc/README.md`'s pack-schema-version register records a **contention on 0.6** between this
+RFC and `return-and-progression.md`, and offers two resolutions: one rebases to 0.8, or the
+two merge their bump. **This RFC takes 0.8.** Merging the bumps would couple two unrelated
+additions — `retryVariants`/`concepts` for scheduling, `deviations[].planClassId` for review
+— into one version whose meaning is "whichever of these landed", and the register's own note
+says a pack version rebases cheaply because pack digests are content digests unaffected by
+the `$id`. The cheap move is the right one, and the contention is resolved here rather than
+left for the implementer.
+
+| Resource | Claimed by | This RFC takes |
+|---|---|---|
+| pack schema version | `defect-sweep.md` → **0.5**; `return-and-progression.md` → **0.6**; `trajectory-drill.md` → **0.7** | **0.8** |
+| database migration | `n-way-comparison.md` → **6**; `live-session-platform.md` → **7**; `return-and-progression.md` → **8** | **9** |
 
 Three of `defect-sweep`'s closures land inside this RFC's registration gate, and this RFC
 inherits them rather than restating them:
@@ -134,18 +146,26 @@ inherits them rather than restating them:
 | D8 — `immediate_blunder_guard` removed from the schema; `perfect_tablebase` kept as a declared-not-selectable mode bound by test (`defect-sweep` §2a/§2b) | registration refuses the first at the schema stage and the second at the runtime stage with the existing `UNSUPPORTED_OPPONENT_POLICY` reason string |
 | D6 — `PackSummary` gains `phase` (`defect-sweep` §4a) | `PackCatalogue.list()` (§3) carries `phase` through for registered packs from the moment it exists |
 
-**If this RFC is accepted first**, the implementer inverts the two claims — this RFC takes
-0.5, `defect-sweep` takes 0.6 — and re-adds the two registration conditions D8 and D9 would
-otherwise close, under the codes `START_SIDE_REQUIRED` and the existing
-`UNSUPPORTED_*_POLICY` set. Nothing else in this specification changes. The inversion is
-stated so that neither draft blocks on the other's acceptance, and so that the resource is
-claimed in one place either way.
+**If the acceptance order differs**, this RFC rebases downward to the lowest unclaimed pack
+version and migration number rather than leaving a hole — the migration list skips any
+`version <= current` (`storage.ts:942-955`), so a gap would be silently tolerated and then
+silently mis-ordered by the next claim. If `defect-sweep` in particular does not land first,
+this RFC re-adds the two registration conditions D8 and D9 would otherwise close, under the
+code `START_SIDE_REQUIRED` and the existing `UNSUPPORTED_*_POLICY` set. Nothing else in this
+specification changes under any ordering.
 
-`n-way-comparison.md` is the third parallel draft. It claims database migration **6** (so
-this RFC takes 7, §2) and adds `Branch.origin: "played" | "simulated"`, which session
-distillation must respect or it will manufacture deviations out of authored content (§6).
-Neither claim overlaps this RFC's; both are named where they bite rather than left to be
-discovered at merge.
+Three of the parallel drafts also touch shape this RFC reads:
+
+- `n-way-comparison.md` adds `Branch.origin: "played" | "simulated"`, which session
+  distillation must respect or it will manufacture deviations out of authored content (§6).
+- `return-and-progression.md` adds `retryVariants` and types `concepts` in pack schema 0.6.
+  Neither is a prose assertion under `PROSE_POINTERS`, so neither enters §10b's review
+  checklist; `concepts` becoming typed does not change what a reviewer signs.
+- `trajectory-drill.md` adds `legs` in pack schema 0.7. A leg boundary is structure, not an
+  assertion, so it too stays out of the checklist — but a leg carrying authored prose would
+  bring that prose in through `PROSE_POINTERS` automatically, because §10b derives the
+  checklist from the document rather than from a hand-maintained list. That is the point of
+  deriving it.
 
 One row in `defect-sweep`'s proposed backlog is a live constraint on this RFC's never-silent
 guarantee and is named here so it is not mistaken for a gap this RFC introduced:
@@ -169,20 +189,17 @@ registry with `PACK_ID_RESERVED` (409). The two channels therefore have disjoint
 spaces and no shadowing rule is needed. A self-hoster who ships packs in git
 updates them in git.
 
-### 2. Storage — migration 7
+### 2. Storage — migration 9
 
-`STORAGE_VERSION` 6 → 7 (`storage.ts:147`), appended to the migration list at
+`STORAGE_VERSION` 8 → 9 (`storage.ts:147`), appended to the migration list at
 `storage.ts:915-941` in the established shape. Claimed in `rfc/README.md`'s
 migration register in the same commit that drafts this RFC.
 
-Migration **6** is claimed by `n-way-comparison.md` (run schema 0.7 → 0.8), so
-this RFC takes 7 and must land after it. The ordering is not a real dependency —
-that draft changes run-persisted shape and this one changes only new tables — but
-the number is the shared resource and the register is the place it is settled. If
-`n-way-comparison.md` is withdrawn, this RFC rebases to 6 rather than leaving a
-hole; the migration list is dense by construction (`storage.ts:942-955` skips any
-`version <= current`, so a gap would be silently tolerated and then silently
-mis-ordered by the next claim).
+6, 7 and 8 are claimed (§0), so this RFC takes 9 and its DDL appends after them.
+The ordering is not a real dependency: those three change run-persisted shape,
+per-session tables and a progress projection respectively, and this one only
+creates tables of its own. The number is the shared resource; the register is
+where it is settled, and §0 states the rebase rule.
 
 ```sql
 CREATE TABLE pack_drafts (
@@ -241,10 +258,12 @@ CREATE TABLE registered_packs (
 CREATE INDEX registered_packs_digest ON registered_packs(digest);
 ```
 
-The migration creates tables only; it backfills nothing, because no prior state
-exists. Existing databases at version 6 gain empty tables. It touches no column
-`n-way-comparison.md`'s migration 6 writes, so the two bodies are independent as
-well as the two numbers.
+The migration creates tables and indexes only; it backfills nothing, because no
+prior state exists. It reads no run snapshot, calls no runtime function, rewrites
+no `drill_runs` row, and leaves `DRILL_RUN_SCHEMA_VERSION` untouched, so it needs
+no freeze rule and cannot mis-stamp anything. Existing databases at version 8 gain
+empty tables. It touches no column any of migrations 6–8 writes, so the bodies are
+independent as well as the numbers.
 
 **Account deletion.** `deleteLearner` currently reassigns owned runs and held
 leases to the `__legacy` sentinel (`docs/identity-and-authorization.md`). It is
@@ -393,7 +412,14 @@ respecified (§0); the rest are new.
 | inherited — existing `UNSUPPORTED_OPPONENT_POLICY` / schema stage | `perfect_tablebase`; `immediate_blunder_guard` | D8. After `defect-sweep` §2a/§2b the first is refused by `runtimeIssues` with its own reason string and the second by the schema. Registration inherits both: a D8 pack cannot enter the served catalogue through this path |
 | `GRADUATION_BLOCKERS_OUTSTANDING` | `provenance.graduationBlockers` present and non-empty | every emitted candidate carries this array (e.g. `content/candidates/onramp-00008/pack.json`) and every authored draft used it. It is untyped extra metadata that `provenance.additionalProperties: true` permits; registration turns the convention into a precondition |
 | existing `SYZYGY_ASSESSMENT_UNGROUNDED` | `assessedBy.kind === "syzygy"` and `assessmentGrounding(...) === "unverified"` | reuses `sourcing/ledger-validation.ts:380-407` verbatim, against the ledger and manifest attached to the draft |
-| `CHECKPOINT_SET_EMPTY` | `checkpoints` is empty | a pack with no checkpoint can never disclose authored prose or resolve an objective; D12c's failure with the barrier stuck shut instead of stuck open |
+
+A fourth condition was drafted and then **withdrawn on verification**: a pack with
+no checkpoints can never disclose authored prose or resolve an objective, but
+`schemas/drill_pack.schema.json`'s `checkpoints` already carries `minItems: 1`, so
+the schema stage refuses it and a registration-level `CHECKPOINT_SET_EMPTY` would
+have been a second copy of a rule that already holds. Recorded rather than deleted,
+because "the gate I was about to add already exists" is the finding this repo keeps
+paying to relearn.
 
 Registration also fails if the document produces any `validatePackDocument`
 issue of severity `error`, and reports warnings without blocking.
@@ -870,8 +896,8 @@ says nothing about that. Add an optional `planClassId` to
 `additionalProperties` is `false`, so this requires the schema change), a matching
 optional field on `Deviation` in
 `packages/schema/src/drill-pack/types.ts`, and the `DEVIATION_PLAN_CLASS_UNKNOWN`
-error in §7. The schema `$id` moves `urn:chess-tabiya:schema:drill-pack:0.5` →
-`:0.6` and `DRILL_PACK_SCHEMA_VERSION` (`packages/schema/src/index.ts:2`) with it,
+error in §7. The schema `$id` moves `urn:chess-tabiya:schema:drill-pack:0.7` →
+`:0.8` and `DRILL_PACK_SCHEMA_VERSION` (`packages/schema/src/index.ts:2`) with it,
 following the same handling `defect-sweep` §7 specifies for 0.4 → 0.5; the
 assertions in `packages/schema/src/drill-pack.test.ts:49-56` move with them.
 Existing packs are unaffected: the property is optional and purely additive, so no
@@ -940,7 +966,6 @@ mapping added to `errorResponse` (`rest.ts:353-378`):
 | `PROVENANCE_STATUS_NOT_WRITABLE` | 422 |
 | `PROVENANCE_REVIEWERS_NOT_WRITABLE` | 422 |
 | `GRADUATION_BLOCKERS_OUTSTANDING` | 422 |
-| `CHECKPOINT_SET_EMPTY` | 422 |
 | `REGRESSION_FAILED` | 422 |
 | `REVIEW_UNCONFIGURED` | 403 |
 | `REVIEW_SELF_NOT_PERMITTED` | 403 |
@@ -962,9 +987,9 @@ shape (`pack-registry.ts:91-102`).
 `docs/pack-studio.md` is created: the three content locations, the write path and
 its invariants, distillation's extract/refuse boundary, the review state machine
 and checklist derivation, versioning, and export. `docs/drill-pack-format.md`
-records the v0.6 `planClassId` addition and the three new lint codes, in the
-style of its existing `## v0.4 Line Drill contract` section and after
-`defect-sweep`'s `## v0.5 defect sweep` section.
+records the v0.8 `planClassId` addition and the three new lint codes, in the
+style of its existing `## v0.4 Line Drill contract` section and after the v0.5, v0.6 and
+v0.7 sections the parallel drafts add.
 `docs/development.md` records `make draft-import`, `make pack-export`,
 `TABIYA_REVIEWERS`, and `review.json` joining the sidecar list.
 `docs/branch-runtime.md` records digest-addressed pack resolution.
@@ -990,10 +1015,10 @@ style of its existing `## v0.4 Line Drill contract` section and after
 ## Acceptance criteria
 
 1. `make verify` and `make test-browser` pass; no test is retried or skipped.
-2. **Migration.** A database at `STORAGE_VERSION` 6 migrates to 7 with all four
-   tables present and no existing row altered; a database already at 7 is a no-op;
-   a database at 8 still fails with the existing newer-schema error. A database at
-   5 migrates through 6 to 7 with `n-way-comparison.md`'s body intact.
+2. **Migration.** A database at `STORAGE_VERSION` 8 migrates to 9 with all four
+   tables present and no existing row altered; a database already at 9 is a no-op;
+   a database at 10 still fails with the existing newer-schema error. A database at
+   5 migrates through 6, 7 and 8 to 9 with every intervening body intact.
 3. **Digest-addressed resolution (regression for the §3 defect).** A run is
    started against pack `p@1.0.0`; `p@1.1.0` is then registered; the in-flight run
    still fires checkpoints, still transitions its objective, still returns authored
@@ -1021,8 +1046,8 @@ style of its existing `## v0.4 Line Drill contract` section and after
    for: a pack whose `start.side` is absent (schema stage, inherited); a pack
    declaring `perfect_tablebase` (runtime stage, inherited); a pack declaring
    `immediate_blunder_guard` (schema stage, inherited); a pack with non-empty
-   `graduationBlockers`; a pack with an ungrounded `syzygy` assessment; a pack with
-   no checkpoints; a seed-registry pack id; a non-increasing version; a failing
+   `graduationBlockers`; a pack with an ungrounded `syzygy` assessment; a
+   seed-registry pack id; a non-increasing version; a failing
    regression case. The three inherited cases are asserted here as well as in
    `defect-sweep`, because "the schema already refuses it" is a claim about a
    composition this RFC introduces and must therefore prove at this boundary.
@@ -1054,8 +1079,8 @@ style of its existing `## v0.4 Line Drill contract` section and after
     intent-capture checkpoint and is a warning, not an error;
     `DEVIATION_PLAN_CLASS_UNKNOWN` is an error; `CONSTRUCTED_ROOT_UNVERIFIED` fires
     on Pack C's draft and not on Pack A's.
-13. **Format amendment.** The schema `$id` is `:0.6` and
-    `DRILL_PACK_SCHEMA_VERSION` is `"0.6"`; every pack in `content/candidates/`,
+13. **Format amendment.** The schema `$id` is `:0.8` and
+    `DRILL_PACK_SCHEMA_VERSION` is `"0.8"`; every pack in `content/candidates/`,
     `content/drafts/`, and `schemas/` still validates; `digestDrillPack` over every
     committed pack returns the digest recorded in its sidecar where one exists, and
     the digest of `schemas/drill_pack.example.json` is unchanged.
@@ -1072,8 +1097,8 @@ style of its existing `## v0.4 Line Drill contract` section and after
     approve their own draft is refused in the UI with the reason shown. The test
     asserts a draft never appears in the `/play` pack list.
 16. **Documentation** in §16 lands in the same change; `rfc/README.md` carries the
-    Active row, migration 7, and the pack-schema-version claim (§0), and the
-    migration register records migration 7 against this RFC before any code is
+    Active row, migration 9, and the pack-schema-version claim (§0), and the
+    migration register records migration 9 against this RFC before any code is
     written.
 
 ## Proposed BACKLOG rows (owner-tier; not implementer work)

@@ -202,6 +202,7 @@ One row per `(runId, branchId)`, derived entirely from the run projection plus t
 | `checkpoint_ids` | JSON array of `checkpoint.reached` ids on this branch, in event order |
 | `origin` | §6 |
 | `schedule_id` | the schedule consumed when the run started, else NULL |
+| `derived_from_run_id` | the source run when this run was created by `POST /runs/:id/duplicate`, else NULL (§6) |
 | `started_at`, `ended_at` | first and last node `createdAt` on the branch; `ended_at` falls back to `started_at` for an empty branch |
 
 Concept tags go in a second table, one row per `(run_id, branch_id, concept_key)`, populated
@@ -298,6 +299,7 @@ CREATE TABLE attempts (
   checkpoint_ids     TEXT NOT NULL,
   origin             TEXT NOT NULL CHECK (origin IN ('fresh','duplicate','scheduled','in_run_retry')),
   schedule_id        TEXT,
+  derived_from_run_id TEXT,
   started_at         TEXT NOT NULL,
   ended_at           TEXT NOT NULL,
   PRIMARY KEY (run_id, branch_id)
@@ -348,7 +350,8 @@ CREATE TABLE progress_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL) STRICT;
 ```
 
 `schedules.source_run_id` deliberately has no foreign key: a learner-scheduled transfer must
-survive the deletion of the run it came from. Deleting a learner cascades all four tables,
+survive the deletion of the run it came from. Deleting a learner cascades the
+three tables that carry `learner_id`, and `attempt_concepts` cascades through `attempts`,
 which keeps the deletion promise made by `deleteLearner` (`storage.ts:610-649`) intact.
 
 `RunStorage` (`storage.ts:71-100`) is not widened. A sibling interface `ProgressStorage` is
@@ -383,6 +386,13 @@ already pays (`storage.ts:396`). Projection failure must not fail the mutation: 
 logged with the run id, and retried on the next mutation, because a progress row is a derived
 read model and a run write is the source of truth.
 
+**Three columns the run cannot supply.** `origin`, `schedule_id` and `derived_from_run_id`
+are request-time facts, not projections. They are written once, when the run or the branch
+first appears, and `upsertAttempts` preserves the stored values on every later projection —
+`ON CONFLICT … DO UPDATE` never touches those three columns. The service passes them in the
+`origins` map only for rows it is creating. A branch that appears mid-run therefore takes
+`in_run_retry` on first sight and keeps it.
+
 **`attempt_no` and idempotency.** `attempt_no` is assigned by the store, not the projector:
 `upsertAttempts` writes the rows in one transaction and then renumbers the affected
 `(learner_id, root_key)` groups by `(started_at, run_id, branch_id)`. Re-projecting an
@@ -405,10 +415,11 @@ bad row. The marker is written with the count of projected and skipped runs.
 by the caller and it copies nothing that `GET /runs/:id/graph` does not already expose. It
 does **not** require the writer lease: duplicating is not a write to the source run.
 
-Body: `{ "id": string, "seed": number, "policyConfig": {…} }` — the same three fields
-`POST /runs` already requires, parsed by the same helpers (`parseCreateInput` at
-`rest.ts:245`, `parsePolicyConfig` at `:195`). The session is derived server-side from the
-source run's `run.started` data, never from the client:
+Body: `{ "id": string, "seed": number, "policyConfig"?: {…}, "intent"?: {…} }`. `id` and
+`seed` are required and mean what they mean on `POST /runs`; `policyConfig` is optional and
+defaults to the source run's, parsed by the same helper when supplied (`parsePolicyConfig` at
+`rest.ts:195`); `intent` is the field defined below. The session is derived server-side from
+the source run's `run.started` data, never from the client:
 
 - `sessionKind: "pack"` → `{ kind: "pack", packId: source.packId }`. The pack is resolved
   from the **current** registry, so the new run carries the current digest. If the pack is no
@@ -439,6 +450,14 @@ Rules:
 
 `intent` never reaches `createRun` and never appears in the event log. That is an acceptance
 assertion, not a convention (§Acceptance, A7).
+
+**Starting a due item.** `POST /runs/:id/duplicate` accepts the same `intent` field, which is
+what makes a *position* root startable from `/learn`: a schedule for a position session
+carries no pack id, so `GET /progress/due` returns its `sourceRunId` and the client
+duplicates that run with the `scheduleId` attached. A pack root is started by the existing
+`POST /runs` path with `intent.scheduleId`, since the client already fetches the pack
+document to render the board (`session-controller.ts:213-240`). Both paths land the same
+`origin: "scheduled"`.
 
 ### 7. Schedules: the blocked/varied trigger
 
@@ -582,6 +601,16 @@ The route renders four sections:
    "Try this again" action that calls `POST /runs/:id/duplicate` on the most recent run.
 4. **Related** — rendered on a row's expansion, from `GET /progress/related`.
 
+**The one control outside `/learn`.** `TerminalSheet.svelte` gains a
+"Schedule a retry from here" button beside its existing content, wired through
+`DrillScreen.svelte` (props at `:56`, `:77`) to a controller method that calls
+`POST /runs/:id/schedule` with the active node. The terminal sheet is where the learner has
+just seen the consequence, which is the moment the return loop exists to capture. The
+checkpoint sheet's footer (`CheckpointSheet.svelte:76`) is unchanged — one control, one
+place. A read-only viewer sees the control disabled with its reason, using the existing
+`HonestControl` treatment (`CheckpointSheet.svelte:79-93`), because scheduling appends to the
+run and needs the lease.
+
 **What the display may not say.** The section answering "what does it believe you know?" is
 titled *What is recorded*, and it believes nothing. It may state counts, verdicts, dates,
 results and what the scheduler will do next. It may not emit a mastery score, a percentage, a
@@ -644,13 +673,13 @@ Because a previously free-form object becomes closed, this is a breaking validat
 `$id` becomes `urn:chess-tabiya:schema:drill-pack:0.6` with the matching `description`, and
 `packages/schema/src/drill-pack.test.ts:49-55` is updated.
 
-**Why 0.6 and not 0.5.** The pack schema version is a shared single-writer resource for the
-same reason a migration number is: two parallel drafts that both claim it cannot land
-independently, which is why the migration register exists (`rfc/README.md:76-79`).
-`defect-sweep.md` §7 claims 0.5 for `start.side` becoming required and
-`immediate_blunder_guard` leaving the `feedbackPolicy` enum. This RFC therefore takes 0.6 and
-names that draft in `Depends on:`, rather than colliding on 0.5 or making its own version
-conditional on a landing order.
+**Why 0.6.** The pack schema version is a shared single-writer resource for the same reason a
+migration number is: two parallel drafts that both claim it cannot land independently. That
+is now recorded in `rfc/README.md` §Pack-schema-version register, where this RFC holds
+**0.6**; `defect-sweep.md` holds 0.5 for `start.side` becoming required and
+`immediate_blunder_guard` leaving the `feedbackPolicy` enum, and 0.7 and 0.8 are claimed by
+other drafts. This RFC names `defect-sweep.md` in `Depends on:` rather than colliding on 0.5
+or making its own version conditional on a landing order.
 
 **One vocabulary, one source.** `RETRY_VARIANT_KINDS` and `RetryVariantKind` are declared in
 `packages/schema/src/drill-pack/types.ts` beside `OBJECTIVE_TYPES` and the constants
@@ -734,14 +763,14 @@ required handling. All are acceptance-tested.
 | B10 | A run with several granted writers (`storage.ts:744-756`) with no per-move learner in any event | another learner's moves recorded as yours | attempts attribute to `owner_learner_id`; documented in `docs/` as a named limitation |
 | B11 | Quarantined snapshots whose `schema_version` is not current (migrations 3–5) | backfill crashing at boot | `runIdsForBackfill` filters on the current version; per-run failures are counted and logged (§5) |
 | B12 | Two `pending` auto schedules for one root after a re-projection | duplicate due items that multiply on every write | partial unique index `schedules_one_auto_pending` + upsert (§4) |
-| B13 | A learner deleted while runs are reassigned to `__legacy` (`storage.ts:610-649`) | orphan attempt and schedule rows keeping a deleted learner's history | `ON DELETE CASCADE` on `learner_id` in all four new tables |
+| B13 | A learner deleted while runs are reassigned to `__legacy` (`storage.ts:610-649`) | orphan attempt and schedule rows keeping a deleted learner's history | `ON DELETE CASCADE` on `learner_id` in the three tables that carry it; `attempt_concepts` cascades through `attempts` |
 | B14 | `scheduleId` referencing a schedule that was never written | an event log pointing at nothing | one `BEGIN IMMEDIATE` for the row and the run update (§8) |
 | B15 | A schedule for a root whose only source run was deleted | foreign-key failure or a dead due item | `source_run_id` has no FK; the item stays startable because it carries `pack_id` and `root_transpose_key` |
 | B16 | A client claiming `intent.origin = "fresh"` while consuming a due item | the voluntary-return metric measuring nothing | a resolving `scheduleId` forces `origin = 'scheduled'` server-side (§6) |
 
 ## Deviations from design
 
-1. **`design/03-product-breadth.md:73` reads "SRS over episodes/concepts".** This RFC
+1. **`design/03-product-breadth.md:72-73` reads "SRS over episodes/concepts".** This RFC
    schedules attempts only; concepts are recorded as tags and select among attempts, never
    key a schedule. That is the later and narrower owner ruling
    (`design/01-training-model.md:48-70`), and where the two texts differ this RFC follows the
@@ -800,9 +829,8 @@ Server and unit (`make test`):
   `RETRY_VARIANT_KINDS` are set-equal; a non-slug `concepts` entry produces a **warning**, and
   `drill_pack.example.json` still loads. (B9)
 - **A12.** `/learn`'s phase filter groups packs by `PackSummary.phase` and files a `null`
-  phase under "unclassified" — consuming the field `defect-sweep.md` §4 adds, not re-adding
-  it. If that draft has not landed, this RFC does not ship the filter and ships the other
-  three `/learn` sections; it never adds a second writer for `phase`.
+  phase under "unclassified", consuming the field `defect-sweep.md` §4 adds. `grep` proves
+  this RFC's diff contains no second writer of `phase` into `PackSummary`.
 
 Browser (`make test-browser`, `tests/browser/progress.spec.ts`, mock engine mode):
 
@@ -820,9 +848,9 @@ Browser (`make test-browser`, `tests/browser/progress.spec.ts`, mock engine mode
   after a loss, use "Schedule a retry from here"; `GET /runs/:id/events?sinceSeq=0` contains a
   `transfer.scheduled` event; its `scheduleId` appears in `GET /progress/due`; `/learn` lists
   it as learner-scheduled.
-- **A16 — duplicate from Review.** "Try this again" on a run in *What is recorded* creates a
-  second run; both appear in `/review`; the first run's branch count and event count are
-  unchanged — the first attempt is never erased.
+- **A16 — duplicate keeps the first attempt.** "Try this again" on a row in *What is
+  recorded* creates a second run; both appear in `/review`; the source run's branch count and
+  event count are unchanged — the first attempt is never erased.
 - **A17 — honest empty state.** A freshly registered learner opening `/learn` sees
   "Nothing recorded yet" and no invented curriculum, and `GET /capabilities` reports
   `learn: "available"`.

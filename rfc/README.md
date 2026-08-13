@@ -12,6 +12,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `trajectory-drill.md` | draft | `archive/drill-pack-format.md`, `archive/line-drill-theory-grading.md`, `archive/outcome-drill-grading.md`, `archive/branch-runtime.md` | breadth program **#4**, closes the last **B2** row — Trajectory Drill as one run with authored legs, objective replacement instead of the absorbing `transitioned`, causal provenance from the run's own move history, organic/guided split, no trajectory aggregate. Pack schema 0.6 → **0.7**, **no migration** |
 | `live-session-platform.md` | draft | `archive/learner-identity-and-authorization.md` (F3), `archive/pack-optional-runs.md` (F2) | breadth program **#8**, gate **B5** — live session aggregate above the run, board control and handoff, possession journal, participant proposals, chat-vote windows, overlay projection, Position Arena two-leg PGN import as root-forked branches of one run. Opens and closes D17, D18, D19. **Run schema unchanged**, migration **7** |
 | `return-and-progression.md` | draft | `archive/drill-pack-format.md`, `archive/learner-identity-and-authorization.md` (F3), `defect-sweep.md` | breadth program **#7**, gate **B7** — the attempt (a branch of a run) as the scheduled unit, durable attempt records, the blocked-vs-varied trigger, the first `transfer.scheduled` producer, `POST /runs/:id/duplicate`, `/learn` and progress display, related-position retrieval, opt-in history recommender, and the two unfalsifiable success metrics turned into queries. **Run schema unchanged**, migration **8**, pack schema 0.5 → 0.6 |
+| `pack-studio-and-review.md` | draft | `archive/drill-pack-format.md`, `defect-sweep.md`, `archive/content-sourcing-foundation.md` | breadth program **#6**, gate **B6**'s remaining half — pack write path and its safety invariants, `/create` studio, session distillation, PGN/candidate/interchange imports, the review queue and its derived checklist, versioning, `review.json` interchange. Closes the latent superseded-digest defect in `service.ts:621-625`. **Run schema unchanged**, migration **9**, pack schema 0.7 → **0.8** |
 
 `defect-sweep.md` claims **no migration number**: nothing it changes is persisted,
 and its §Migration states the check rather than omitting the question.
@@ -33,6 +34,14 @@ Claim the next pack version here whenever a draft narrows or widens
 `live-session-platform.md` it is ordered, not coupled: it changes no run-persisted shape and
 its DDL appends after 7.
 
+`trajectory-drill.md` closes the last **B2** row and is independent of all four. It changes
+no run-persisted shape and claims **no migration number**. It cites `defect-sweep.md` as the
+owner of D4, D5, D6, D8, D9 and D10 and duplicates none of those fixes; its only inbound is
+the sweep's required `start.side`, which its fixture already declares. Against
+`n-way-comparison.md` it is a producer, not a competitor: a trajectory's legs are spans of one
+path, so its branches are ordinary inputs to N-way comparison. It **rebased its pack schema
+claim to 0.7** after finding 0.6 claimed twice — see the register below.
+
 `live-session-platform.md` is independent of both. It cites all six of
 `defect-sweep.md`'s defects and duplicates none of its fixes; the only shared shape is
 D4, where the sweep collapses the four *pack* vocabularies and the live draft collapses
@@ -42,6 +51,39 @@ coupled: it rebased to migration **7** and changes no run-persisted shape, so it
 appends after 6 without depending on anything 6 does. Its Arena leg import produces
 ordinary root-forked branches, which are inputs to N-way comparison rather than a
 competing mechanism.
+
+`pack-studio-and-review.md` closes gate **B6**'s remaining half and is ordered behind
+`defect-sweep.md`, independent of the rest. It re-claims none of the sweep's fixes: it takes
+D6, D8 and D9 as inbound registration-gate conditions its write path inherits rather than
+restates, and its §0 gives the exact swap if the sweep does not land first. It **resolved
+the 0.6 contention by rebasing to 0.8** rather than merging bumps with
+`return-and-progression.md`. Against `n-way-comparison.md` it is a consumer:
+`Branch.origin` is what stops session distillation turning a simulated branch into a
+manufactured deviation. Against `live-session-platform.md` it is ordered only — that draft's
+"session distilled into a pack" promise is satisfied by this draft's `seed.kind: "run"`, and
+neither writes the other's tables. One thing it does **not** inherit and states plainly: no
+reviewer authority exists in the identity model, so it specifies a deploy-time roster and
+puts the shape of that roster to the owner as its single open question.
+
+## Pack-schema-version register
+
+Instituted 2026-08-13 after `pack-studio-and-review.md` and `return-and-progression.md` were
+both drafted claiming pack schema **0.6**. `DRILL_PACK_SCHEMA_VERSION`
+(`packages/schema/src/index.ts:2`) and `schemas/drill_pack.schema.json`'s `$id` are a **shared,
+single-writer resource** for exactly the reason a migration number is; claim here before
+writing a version into a draft. Unlike a migration, a pack version rebases cheaply — pack
+digests are content digests and are unaffected by the `$id`
+(`packages/schema/src/drill-pack/digest.ts:58-66`) — so the cost of a collision is a stalled
+landing order, not lost data.
+
+| Pack schema | Owner RFC | Status |
+|---|---|---|
+| 0.3 | `archive/outcome-drill-grading.md` | implemented — `objective.grading`, closed `successConditions` union, closed `objective` |
+| 0.4 | `archive/line-drill-theory-grading.md` | implemented — `follow_theory`, the `atAuthoredBoundary` trigger |
+| 0.5 | `defect-sweep.md` | **claimed 2026-08-13, draft** — required `start.side`, vocabulary-constant collapse |
+| 0.6 | `return-and-progression.md` | **claimed 2026-08-13, draft** — `retryVariants`, typed `concepts`. Contention with `pack-studio-and-review.md` **resolved 2026-08-13**: that draft rebased to 0.8 rather than merging the two bumps, which would have coupled scheduling vocabulary and review metadata into one version meaning "whichever landed" |
+| 0.7 | `trajectory-drill.md` | **claimed 2026-08-13, draft** — `legs`, `run_trajectory`. Rebased from 0.5 to 0.7 rather than joining the contention; the number is load-bearing for nothing in that RFC |
+| 0.8 | `pack-studio-and-review.md` | **claimed 2026-08-13, draft** — optional `deviations[].planClassId`, purely additive. Rebased 0.6 → 0.7 → 0.8 as the contention resolved and `trajectory-drill.md` took 0.7; no committed pack's bytes or digest change either way |
 
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
 `content-sourcing-pipelines.md` draft and recommended a four-way split; the draft
@@ -72,6 +114,24 @@ unspecified implementation; it supersedes the assumption that the next work is
 content for one narrow slice. Breadth RFCs must preserve the global shell and
 name the B-gates they complete before code begins.
 
+## Pack schema register
+
+Instituted 2026-08-13 after **three** drafts written in parallel each claimed a
+pack-schema version — the same collision the migration register was created to
+prevent, one layer over. A pack-schema version is a **shared single-writer
+resource**; claim it here before writing it into a draft.
+
+| Pack schema | Owner RFC | Change | Status |
+|---|---|---|---|
+| 0.4 | shipped | current | implemented |
+| 0.5 | `defect-sweep.md` | `start.side` required; `immediate_blunder_guard` removed | draft |
+| 0.6 | `return-and-progression.md` | `retryVariants`; `concepts` typed | draft |
+| 0.7 | `trajectory-drill.md` | `legs` | draft |
+| 0.8 | `n-way-comparison.md` | prediction-checkpoint delivery | draft |
+
+Landing order follows the numbers. A draft that cannot land behind its
+predecessor must renegotiate here rather than renumber unilaterally.
+
 ## Migration register
 
 Instituted 2026-08-12 after two RFCs drafted in parallel both claimed database
@@ -89,6 +149,7 @@ writing it into a draft.
 | 6 | 5→6 | `n-way-comparison.md` | **claimed 2026-08-13, draft** — run schema v0.8; adds `Branch.origin` (`"played" \| "simulated"`) and the `prediction.recorded` event. Body backfills `origin: "played"` on every branch of every v0.7 snapshot; the new event type needs no backfill. Both literals (`"played"`, `"0.8"`) are frozen in the body rather than read from the schema constant, following migration 4's freeze rule, so a later bump cannot mis-stamp rows before migration 7 |
 | 7 | 6→7 | `live-session-platform.md` | **claimed 2026-08-13, draft** — the live-session layer: `live_sessions`, `session_journal`, `session_proposals`, `session_vote_windows`, `session_votes`, `session_invitations`, `arena_legs`. **Create-table only.** It backfills nothing, reads no run snapshot, rewrites no `drill_runs` row, and leaves `DRILL_RUN_SCHEMA_VERSION` untouched, so it cannot mis-stamp anything and needs no freeze rule. Rebased from 6 when `n-way-comparison.md` claimed it; if that draft is withdrawn before landing, this rebases to 6 rather than leaving a hole |
 | 8 | 7→8 | `return-and-progression.md` | **claimed 2026-08-13, draft** — the progress projection: `attempts`, `attempt_concepts`, `schedules`, `learner_position_stats`, `progress_meta`. **Create-table and create-index only.** It reads no run snapshot, calls no runtime function, rewrites no `drill_runs` row, and leaves `DRILL_RUN_SCHEMA_VERSION` untouched, so it needs no freeze rule; backfill is an application-level pass at startup, deliberately outside the migration body because migration 1's body had to be rewritten to stop replaying through `projectRun`. Rebased from 6 to 8 as `n-way-comparison.md` and `live-session-platform.md` claimed 6 and 7; if either is withdrawn before landing, this rebases downward rather than leaving a hole |
+| 9 | 8→9 | `pack-studio-and-review.md` | **claimed 2026-08-13, draft** — the studio layer: `pack_drafts`, `pack_reviews`, `pack_review_items`, `registered_packs`. **Create-table and create-index only.** It backfills nothing (no prior state exists), reads no run snapshot, rewrites no `drill_runs` row, and leaves `DRILL_RUN_SCHEMA_VERSION` untouched, so it needs no freeze rule. It does extend `deleteLearner` to withdraw a deleted learner's non-registered drafts and to null `pack_reviews.reviewer_learner_id` while retaining `reviewer_handle` — a registered pack's audit trail must not be erasable by deleting an account. Rebased from 6 as 6, 7 and 8 were claimed; if any is withdrawn before landing, this rebases downward rather than leaving a hole |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a

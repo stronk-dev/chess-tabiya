@@ -31,7 +31,7 @@
   Specification §13. Its Active-table row in `rfc/README.md` is added in the same commit.
 - **Pack schema version:** **0.6 → 0.7, rebased.** `DRILL_PACK_SCHEMA_VERSION` is the same class of
   shared single-writer resource as a migration number, and it is now contended: `rfc/defect-sweep.md`
-  §7 claims 0.5, while **`rfc/pack-studio-and-review.md` §and `rfc/return-and-progression.md` both
+  §7 claims 0.5, while **`rfc/pack-studio-and-review.md` and `rfc/return-and-progression.md` both
   claim 0.6** — a live collision this RFC found and does not join. This RFC takes 0.7 and orders
   after all three. See §3 and the register note added to `rfc/README.md` in the same commit.
 - **Planning:** `planning/trajectory-drill/` (once implementing)
@@ -329,7 +329,7 @@ the same direction `rfc/archive/line-drill-theory-grading.md` §4a chose for
 This is the same design `rfc/archive/outcome-drill-grading.md` §3 made for `resolveAt`, for the
 same reason: routing a boundary through a checkpoint means every transition carries a
 `pack:<checkpointId>` evidence reference that the shipped renderer turns into the checkpoint's
-authored label (`apps/web/src/lib/evidence-sentences.ts:47-58`), instead of a new vocabulary.
+authored label (`apps/web/src/lib/evidence-sentences.ts:53-60`), instead of a new vocabulary.
 
 **A timing window may not be a leg entry.** `checkpointMatches` collapses a window trigger to its
 `windowCloses` boundary (`pack-orchestrator.ts:67-69`), so a leg entered on a window would begin
@@ -370,6 +370,11 @@ ships today; steps 3 and 4 are new.
      else:  run := transitionObjective(run, "active", [packEvidenceRef(legs[incoming].entryCheckpointId)], at).run
 ```
 
+**When `pack.legs` is absent, steps 3 and 4 are skipped and step 2 passes `pack.objective`, so the
+whole path reduces to the two lines that ship today** (`pack-orchestrator.ts:293`). Every pack in
+the tree takes that reduction, which is why criterion 12 can assert byte-identical behaviour for
+all of them.
+
 Six properties, each load-bearing:
 
 - **The leg in force for a commit is the leg active at the commit's *parent*.** You played the
@@ -397,7 +402,7 @@ Six properties, each load-bearing:
   cannot be loaded. Criterion 3b asserts it on that exact input.
 - **The reset's evidence reference is `pack:<entryCheckpointId>`.** Built with the shipped
   `packEvidenceRef` (`packages/runtime/src/evidence-ref.ts:41-43`), rendered by the shipped
-  renderer as the checkpoint's authored label (`evidence-sentences.ts:47-58`). **No new evidence
+  renderer as the checkpoint's authored label (`evidence-sentences.ts:53-60`). **No new evidence
   namespace is added.**
 - **`→ active` is a reset and nothing else can produce it.** `conditionBase.to`
   excludes `active` at the schema layer (`drill_pack.schema.json:204`) and no compiler branch
@@ -583,7 +588,7 @@ Three rules govern what the product may say about a transition, and all three ar
    leg 0 renders its leg-0 verdict and the not-entered sentence (§8b), and nothing more.
 
 **The PGN export carries the spine.** `exportPackRunPgn`
-(`packages/runtime/src/pack-pgn.ts:87-206`) already labels authored variations
+(`packages/runtime/src/pack-pgn.ts:164-206`) already labels authored variations
 `authored:<spine-leaf-id>` (`:49`) and played branches `run:<branch-label>` (`:60`). It gains one
 comment at each transition node of each exported played path:
 
@@ -622,7 +627,7 @@ The `theory_strict` nudge stays honest for free: when the run leaves the spine, 
 back to `human_common` and **records** the applied mode
 (`opponent-selector.ts:456-461` → `#humanCommon` → `policyModeApplied: "human_common"` at `:433`),
 which `resistanceSentences` renders as a separate fact
-(`apps/web/src/lib/outcome-presentation.ts:76-83`). A learner who leaves the guided route is told
+(`apps/web/src/lib/outcome-presentation.ts:75-84`). A learner who leaves the guided route is told
 the guidance stopped, by machinery that already shipped for D15.
 
 #### 8a. Phase recognition: author-declared, and nothing else
@@ -725,7 +730,7 @@ in that state, so a trajectory without a theory leg cannot accidentally transiti
   `rfc/archive/outcome-drill-grading.md` §4d would be satisfied against the wrong position.
   A leg's root assessment is a claim about the class of positions the leg is entered at, which is
   authored by definition, so `kind: "authored"` is the only legal value and its
-  `note` renders with the shipped unproved marker (`outcome-presentation.ts:47-50`).
+  `note` renders with the shipped unproved marker (`outcome-presentation.ts:49-51`).
   `assessmentGrounding` and the sourcing check are untouched.
 - **A non-final leg may not resolve at `terminal`** (`TRAJECTORY_NONFINAL_TERMINAL_RESOLUTION`).
   `resolveAt: {kind: "terminal"}` means the leg resolves only when the game ends, which never
@@ -835,7 +840,7 @@ Projection and surfaces, all shipped and only extended:
   `projectedGrading(pack)` (`outcome-presentation.ts:27-38`) gains a leg-aware sibling and
   `DrillScreen.svelte:153-159` consumes it.
 - **The transition sentence** is added to `outcome-presentation.ts` beside
-  `checkpointResolutionSentence` (`:114-126`) and rendered in `OutcomeContext.svelte` and in the
+  `checkpointResolutionSentence` (`:114-125`) and rendered in `OutcomeContext.svelte` and in the
   timeline. Its content is fixed by §7 rule 1 and constrained by §7 rule 2.
 - **`whyBanner` must not read a reset as a downgrade.** It throws if a state change carries no
   evidence reference or renders a blank sentence (`screen-model.ts:197-208`); the reset carries
@@ -1101,3 +1106,11 @@ None.
   the route rather than on how a transition is recognized; author-declared phase recognition and
   nothing else; and the refusal of any trajectory-level aggregate. Advances the pack schema to
   v0.7 and claims no migration.
+- 2026-08-13: rebased the pack-schema claim from 0.5 to **0.7** before review. Five product RFCs
+  were drafted in parallel the same day; `defect-sweep.md` had claimed 0.5 and
+  `pack-studio-and-review.md` and `return-and-progression.md` had **both** claimed 0.6 — the
+  migration-register failure repeated on a second shared constant. This RFC took the next free
+  number rather than contest one, on the grounds that its version bump is load-bearing for
+  nothing, and instituted the pack-schema-version register in `rfc/README.md` so the collision it
+  found is recorded rather than only avoided. The D4/D5/D6/D8/D9/D10 scope rows were rewritten to
+  name `defect-sweep.md` as their owner instead of citing bare BACKLOG rows.
