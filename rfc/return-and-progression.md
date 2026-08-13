@@ -3,10 +3,11 @@
 - **Status:** draft
 - **Author:** claude
 - **Created:** 2026-08-13
-- **Design refs:** `design/01-training-model.md` §Vocabulary, §Repetition scheduling;
-  `design/03-product-breadth.md` §Learn and return (`:69-76`), B7 row (`:167`)
+- **Design refs:** `design/01-training-model.md` §Vocabulary (`:36-46`), §Repetition
+  scheduling (`:48-79`); `design/03-product-breadth.md` §Learn and return (`:68-77`),
+  B7 row (`:177`)
 - **Exploration gate:** owner ruling 2026-08-12 opening the exploration gate
-  (`rfc/README.md:58-65`); breadth sequencing ruling 2026-08-11 (`rfc/README.md:67-72`)
+  (`rfc/README.md:114-121`); breadth sequencing ruling 2026-08-11 (`rfc/README.md:123-128`)
 - **Depends on:** `archive/learner-identity-and-authorization.md` (the learner subject),
   `archive/pack-optional-runs.md` (position sessions), `archive/terminal-outcome-events.md`
   (`outcome.reached` producer), `archive/outcome-drill-grading.md` and
@@ -51,7 +52,7 @@ at the date of this draft. Nine are corrections, and three of them change the de
 | 2 | "there is no learner. Also no learner/user identity on the server" (`:246`, `:260`) | **Wrong now.** `learners`, `learner_sessions`, `run_grants` ship (`storage.ts:991-1032`), `drill_runs` carries `owner_learner_id` and `active_writer_learner_id` (`storage.ts:1017-1018`), and every request resolves a `Principal` (`apps/server/src/authorization.ts:11-14`, `rest.ts:461-467`). |
 | 3 | "`outcome.reached` … has no producer" (`:263`) | **Wrong now.** `commitMove` emits it on terminal detection (`packages/runtime/src/runtime.ts:337-343`), and `projectRun` validates it against a recomputed terminal outcome (`packages/runtime/src/events.ts:163-186`). |
 | 4 | "**Second storage table of any kind** — no … `STORAGE_VERSION = 1`" (`:250`) | **Wrong now.** Four tables, `STORAGE_VERSION = 5` (`storage.ts:147`), five migrations (`storage.ts:915-941`). |
-| 5 | The unit of scheduling is the **checkpoint-bounded segment** (`:270-284`) | **Refuted by shipped code** — see §1 below. Three of the eight registered packs can never produce a segment. |
+| 5 | The unit of scheduling is the **checkpoint-bounded segment** (`:270-284`) | **Refuted by shipped code** — see §1 below. Three of the eight packs the browser configuration registers can never produce a segment, and a two-checkpoint pack can also produce none. |
 | 6 | "`transfer.scheduled` … no producer" (`:243`) | **Still true.** `grep -rn "transfer.scheduled"` over `apps packages schemas` returns the type (`packages/runtime/src/types.ts:197-200`), the schema branch (`schemas/drill_run.schema.json:558-571`), and the projection no-op (`packages/runtime/src/events.ts:187-190`). Nothing emits it. |
 | 7 | "`concepts` … the only app-code occurrence is a test asserting it is not projected" (`:244`) | **Still true**, and worse than stated: `concepts` does not appear in `packages/schema/src/drill-pack/types.ts` at all. It is reachable only through the `[key: string]: unknown` index signature at `types.ts:101`. |
 | 8 | `gates.md:157-159`: "Pack A declares no `objective.successConditions`, so its objective can never transition" | **Wrong now.** `objectiveRules` builds rules for `follow_theory` packs from `offObjective` deviations and the authored-boundary checkpoint (`apps/server/src/pack-orchestrator.ts:171-211`). `content/drafts/anti-caro-advance.json` has one `offObjective` deviation and the `past-the-book` boundary checkpoint, so it resolves to `degraded` or `preserved`. Pack A is gradable. |
@@ -68,9 +69,9 @@ Verified absent, with the grep that proves it:
 
 - **Any progress, mastery, SRS or due state.** `grep -rniE "srs|spaced|dueAt|nextDue|easeFactor|mastery|attemptNo" apps packages --include="*.ts" --include="*.svelte"` returns only interval timers. The word "progress" occurs in application code once, in the `/learn` empty-state copy (`apps/web/src/App.svelte:348-350`).
 - **Run duplicate.** The run subroute grammar is a closed regex: `moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal` (`apps/server/src/rest.ts:394`).
-- **A `/learn` surface.** The route is reserved (`apps/web/src/lib/router.ts:22`), the shell renders an honest empty state (`App.svelte:341-352`), the server reports `learn: "unavailable-here"` (`apps/server/src/capabilities.ts:122`), and the client marks it planned (`apps/web/src/lib/api.ts:170-176`).
+- **A `/learn` surface.** The route is reserved (`apps/web/src/lib/router.ts:22`), the shell renders an honest empty state (`App.svelte:341-352`), the server reports `learn: "unavailable-here"` (`apps/server/src/capabilities.ts:121`), and the client marks it planned (`apps/web/src/lib/api.ts:170-176`).
 - **Related-position retry.** `transposeKey` exists and is stored on every node (`packages/runtime/src/chess.ts:16-19`, `packages/runtime/src/types.ts:89`); nothing queries across runs.
-- **Any personal-history import.** No production module imports `chessops/pgn`; it appears only in `packages/runtime/src/{pgn,pack-pgn,invariants,vertical-scenario}.test.ts` and `apps/server/src/drill-client-server.test.ts`.
+- **Any personal-history import.** `grep -rn "chessops/pgn" apps/*/src packages/*/src` returns `packages/runtime/src/pgn.ts:7` (run→PGN export), `apps/server/src/sourcing/openings.ts:7` (the content pipeline's opening parser) and five test files. **Correction to an earlier draft of this section: `chessops/pgn` *is* production code today** — what is absent is any path that reads a *learner's own* games. Nothing writes or reads per-learner position statistics, and `openings.ts` parses curated corpora at authoring time, not learner history at request time.
 
 ### 3. Scope boundary
 
@@ -118,18 +119,40 @@ already has children and the current branch is not empty at the cursor
 (`runtime.ts:292-299`, using `branchIsEmptyAtCursor` at `:130-138`). So "try that again"
 already produces a new attempt without any new vocabulary.
 
-**Why not the checkpoint-bounded segment.** `deriveSegments` pairs *consecutive*
-`checkpoint.reached` events on the same branch and emits nothing for the first one
-(`packages/runtime/src/events.ts:226-248`); `reachCheckpoint` only emits
-`segment.completed` when a previous checkpoint exists on that branch (`runtime.ts:448-466`).
-The pack schema requires `checkpoints` `minItems: 1` (`schemas/drill_pack.schema.json:44-48`),
-and three of the eight packs the server registers declare exactly one:
-`outcome-hold.browser.json`, `outcome-resist.browser.json`, and the browser fixture
-`schemas/fixtures/drill-pack/terminal-outcome.browser.json`. `outcome-grading.test.ts:133`
-asserts, for a complete graded run, that no `segment.completed` event exists at all. A unit
-that records nothing for the packs that actually resolve is not a unit. Segments remain what
-they are today — the delivery boundary for authored feedback
+**Why not the checkpoint-bounded segment.** A segment needs *two* checkpoint occurrences,
+and two shipped conditions each independently reduce that to zero.
+
+1. **One authored checkpoint is legal and common.** `deriveSegments` pairs *consecutive*
+   `checkpoint.reached` events on the same branch and emits nothing for the first one
+   (`packages/runtime/src/events.ts:226-248`). The pack schema requires `checkpoints`
+   `minItems: 1` (`schemas/drill_pack.schema.json:44-48`), and three of the eight packs the
+   browser configuration registers declare exactly one: `content/drafts/outcome-hold.browser.json`,
+   `content/drafts/outcome-resist.browser.json`, and the draft-file fixture
+   `schemas/fixtures/drill-pack/terminal-outcome.browser.json` (loaded through
+   `DRAFT_PACK_FILE`, `playwright.config.ts:21`). Two of those three are the packs whose
+   objectives actually resolve (see **Gradability** below).
+2. **Two checkpoints are not sufficient either.** `reachCheckpoint` emits `segment.completed`
+   only when a previous checkpoint on the branch sits on a *different node* —
+   `if (previous && previous.data.nodeId !== run.activeCursor.nodeId)`
+   (`packages/runtime/src/runtime.ts:448-468`). `outcome-grading.test.ts:129-134`
+   ("does not emit a zero-length segment for coincident checkpoints") reaches two checkpoints
+   at one node and asserts `run.events.some(e => e.type === "segment.completed")` is `false`
+   (`:133`). Two checkpoints whose triggers fire on the same ply are an ordinary authored
+   shape, so segment count is not even a function of checkpoint count.
+
+*A correction the earlier draft of this section got wrong:* `:133` is not an assertion about
+a complete graded run — it is the coincident-checkpoint case. The refutation does not need
+that stronger reading, and stating it would have been the citation drift this RFC's
+Motivation criticises.
+
+A unit that records nothing for the packs that actually resolve is not a unit. Segments
+remain what they are today — the delivery boundary for authored feedback
 (`apps/server/src/authored-feedback.ts:168-183`).
+
+*Noted, not fixed here:* `deriveSegments` has no coincident-node guard, so it derives a
+zero-length segment for a shape `reachCheckpoint` refuses to emit. Nothing in this RFC reads
+`deriveSegments`, and the mismatch is a pre-existing defect in a function this RFC does not
+touch; it is proposed as a BACKLOG row rather than fixed inside a scheduling RFC.
 
 **Attempt identity.** An attempt is a *thing attempted*. Its identity is the **root key**:
 
@@ -144,6 +167,28 @@ stable across runs and across packs. For the main branch the fork node is the ru
 two runs of the same pack share a root key. For a mid-line retry branch the fork node is
 deeper, so it is an attempt at a *different* thing — which is correct: rewinding to a
 checkpoint and choosing differently is an attempt at that decision, not at the pack.
+
+**The key is injective, not merely conventional.** `|` cannot occur in any component:
+`sessionKind` is the closed pair `pack | position` (`packages/runtime/src/types.ts:36`),
+`packId` matches `^[a-z0-9][a-z0-9-]*$` (`schemas/drill_pack.schema.json` `$defs/id`), and a
+`transposeKey` is four space-separated FEN fields. So the three-part join has exactly one
+parse and two distinct triples can never collide. Three collision attacks, each answered by a
+component rather than by convention:
+
+- **Two packs sharing a transposition** (an anti-Caro pack and a Carlsbad pack that both
+  reach one structure): `pack|anti-caro-advance|…` and `pack|carlsbad-minority-attack|…`
+  differ in the second field. They are two roots, and §9's `same_position` relation — not the
+  key — is what connects them.
+- **A pack-less position run:** `position||<tk>`. Two position sessions from the same FEN
+  share a root, which is intended; a position root can never collide with a pack root because
+  the first field differs even when `packId` is empty.
+- **A pack that gains a new version** under `pack-studio.md` §11a: that draft keeps the pack
+  *id* stable and makes `(pack_id, version)` the unique registration key, so `packId`
+  survives a version bump and history does not fragment. If the new version moves
+  `start.fen`, `rootTransposeKey` changes and the root legitimately becomes a different
+  thing; if it does not, the two versions pool under one root with `pack_digest` recorded per
+  attempt (B8). Digest-addressed resolution (`pack-studio.md` §3) does not change this,
+  because the digest is never keyed.
 
 `packId` is part of the key; `packDigest` is **not**. Keying on the digest would fragment a
 learner's history on every authoring edit. The digest is recorded per attempt instead, so an
@@ -162,9 +207,26 @@ verdict maps the tip's `objectiveState` (`packages/runtime/src/types.ts:4-10`):
 
 | `objectiveState` | verdict | rationale |
 |---|---|---|
-| `achieved`, `preserved`, `transitioned` | `stable` | all three are absorbing resolutions (`packages/runtime/src/objective-state.ts:4-10`) |
+| `achieved`, `preserved`, `transitioned` | `stable` | the objective was intact when play stopped |
 | `degraded`, `failed` | `unstable` | |
 | `active` | `open` | the attempt never resolved |
+
+**Two precise things about that table, because the obvious justification is false.**
+Only `failed`, `achieved` and `transitioned` are absorbing: `ALLOWED_TRANSITIONS` gives them
+empty successor lists (`packages/runtime/src/objective-state.ts:7-9`) and the runtime's
+`TERMINAL_OBJECTIVE_STATES` is exactly that set (`packages/runtime/src/runtime.ts:32`).
+`preserved` is **not** absorbing — it can still go to `degraded` or `failed`
+(`objective-state.ts:5`), and it is the state the `follow_theory` and outcome resolution
+rules assign at the authored boundary (`apps/server/src/pack-orchestrator.ts:200-206`,
+`:258-271`). The mapping is nonetheless sound because the verdict reads the **tip**: if the
+learner kept playing past a `preserved` boundary and degraded, the tip carries `degraded` and
+the verdict is `unstable`. Grouping `preserved` with the absorbing states would be wrong;
+reading the last state on the branch is not.
+
+Second, `transitioned` currently has **no producer** — `rfc/trajectory-drill.md:46` records
+that, and that draft §4a rules that trajectories replace objectives rather than emit it. The
+row is present so the mapping is total over `ObjectiveState` (`types.ts:4-10`), not because
+anything reaches it. If a producer ever appears, this row is the thing to revisit.
 
 **A result is not a verdict.** `outcome.reached` records `win | loss | draw`
 (`types.ts:193-196`) and is recorded on the attempt row, but it never produces a verdict on
@@ -172,15 +234,41 @@ its own. The `resist` fixture grades a terminal **loss** as `achieved` — the b
 asserts exactly that (`tests/browser/drill.spec.ts:72-76`). Inferring "loss ⇒ failure" would
 be manufacturing chess truth from a rules fact, which ADR-0005 forbids.
 
+A branch carries **at most one** result, so `result` is a scalar rather than a list:
+`projectRun` rejects a second `outcome.reached` on one node (`events.ts:166-168`), and
+`commitMove` throws `RUN_TERMINATED` at a node that is terminal by objective or by position
+(`runtime.ts:277-279`), so no node can follow a terminal node on the same branch. Playing on
+after a terminal position requires a rewind, which forks a new branch — a new attempt.
+
 **Gradability.** An attempt is `graded` when `objectiveRules(pack).length > 0`
 (`apps/server/src/pack-orchestrator.ts:167-276`) — the shipped function, not a new
 predicate. Position sessions (`sessionKind: "position"`) have no pack and are never graded.
-Verified over the registered packs: `anti-caro-advance` ✓, `line-boundary.browser` ✓,
-`outcome-hold.browser` ✓, `outcome-resist.browser` ✓, `rook-4v3-same-side` ✓,
-`drill_pack.example` ✓, `carlsbad-minority-attack` ✗ (its two `offObjective` deviations are
-inert because that rule path is `follow_theory`-only, `pack-orchestrator.ts:171-211`),
-`terminal-outcome.browser` ✗. Ungraded attempts always have verdict `open` and are handled
-explicitly in §7 — otherwise blocked repetition loops forever on a pack that cannot resolve.
+
+Verified by **executing** `objectiveRules` over every registered document rather than by
+reading the code, because the two `✗` rows are the load-bearing ones:
+
+| Pack | `objective.type` | rules | graded |
+|---|---|---|---|
+| `content/drafts/anti-caro-advance.json` | `follow_theory` | 3 | ✓ |
+| `content/drafts/line-boundary.browser.json` | `follow_theory` | 1 | ✓ |
+| `content/drafts/outcome-hold.browser.json` | `hold` | 10 | ✓ |
+| `content/drafts/outcome-resist.browser.json` | `resist` | 13 | ✓ |
+| `content/drafts/rook-4v3-same-side.json` | `hold` | 12 | ✓ |
+| `schemas/drill_pack.example.json` | `play_until_checkpoint` | 3 | ✓ |
+| `content/drafts/carlsbad-minority-attack.json` | `execute_break` | **0** | ✗ |
+| `schemas/fixtures/drill-pack/terminal-outcome.browser.json` | `preserve_plan_window` | **0** | ✗ |
+
+`carlsbad-minority-attack` reaches zero by **two** independent routes, and stating only the
+first would be a half-truth: its two `offObjective` deviations are inert because that rule
+path is `follow_theory`-only (`pack-orchestrator.ts:171-191`), *and* `execute_break` is
+neither `follow_theory` nor one of `win | hold | save | resist`, so control reaches
+`if (!Array.isArray(raw)) return []` (`:211`) with no `objective.successConditions` authored
+at all. `terminal-outcome.browser` reaches zero the same second way from
+`preserve_plan_window`. Either route alone is enough; the pack does not have to be edited
+twice to become gradable, but it does have to be edited.
+
+Ungraded attempts always have verdict `open` and are handled explicitly in §7 — otherwise
+blocked repetition loops forever on a pack that cannot resolve.
 
 ### 2. Attempt records
 
@@ -193,15 +281,16 @@ One row per `(runId, branchId)`, derived entirely from the run projection plus t
 | `session_kind`, `pack_id`, `pack_digest` | `run.sessionKind`, `run.packId`, `run.packDigest` |
 | `root_node_id`, `root_transpose_key`, `root_key` | `node(branch.forkNodeId)` |
 | `branch_label`, `branch_intent`, `branch_seed` | `Branch` |
-| `attempt_no` | ordinal of this attempt among the learner's countable attempts at `root_key`, ordered by `started_at`, ties broken by `run_id`, then `branch_id` |
+| `attempt_no` | ordinal of this attempt among the learner's countable attempts at `root_key`, ordered by `started_at`, ties broken by `run_id`, then `branch_id`. **`0` when `countable = 0`** — the column is `NOT NULL`, uncountable rows are excluded from the ordering (B2), and a sentinel outside the 1-based range is what keeps "excluded" expressible without a nullable ordinal |
 | `countable` | ≥1 node with `actor = "user"` on the branch |
 | `graded` | `objectiveRules(pack).length > 0` |
 | `objective_state`, `verdict` | tip node, §1 |
-| `result` | `outcome.reached.outcome` for a branch node, else NULL |
+| `result` | the `outcome.reached.outcome` of the branch's terminal node, else NULL; at most one per branch (§1) |
 | `user_ply_count` | nodes with `actor = "user"` on the branch |
 | `checkpoint_ids` | JSON array of `checkpoint.reached` ids on this branch, in event order |
 | `origin` | §6 |
 | `schedule_id` | the schedule consumed when the run started, else NULL |
+| `root_due_at_start` | the `due_at` of the caller's pending schedule for this `root_key` at the moment the row was first written, else NULL — **derived by the server from its own table, never sent by a client** (§6, §14) |
 | `derived_from_run_id` | the source run when this run was created by `POST /runs/:id/duplicate`, else NULL (§6) |
 | `started_at`, `ended_at` | first and last node `createdAt` on the branch; `ended_at` falls back to `started_at` for an empty branch |
 
@@ -260,19 +349,34 @@ compiler, and `lintDrillPack` gains a **warning** (never an error)
 keeps `drill_pack.example.json` loadable while telling every future author the shape a
 registry will want.
 
-**The cost, stated plainly.** "Voluntary return to the same concept" (§14) becomes
-measurable, but same-pack only. Across packs it undercounts — never overcounts. An
-undercounting metric can still falsify the claim it exists to test; a metric built on
-merged-by-accident strings could not.
+**The cost, stated plainly, and it is larger than "same-pack only".** "Voluntary return to
+the same concept" (§14) becomes measurable **within one pack**: a learner who returns to two
+different roots of `anti-caro-advance` that both declare `break-timing` is counted, because
+§14's query ranks by concept and not by root. A learner who moves from
+`anti-caro-advance#break-timing` to another pack's `break-timing` is **not** counted, because
+those are two keys.
+
+The direction of the error is one-sided and that is the whole reason this is acceptable: two
+authored strings that mean the same idea are recorded as two concepts, so a real return is
+missed; there is no shape in which two attempts at *different* ideas are merged into one
+concept, because the key carries the pack id and nothing normalizes the raw string. So the
+metric **undercounts and never overcounts**. A positive result is therefore trustworthy on
+its own; a null result is only conclusive within a pack. An undercounting metric can still
+falsify the claim it exists to test; a metric built on merged-by-accident strings could not.
+
+This is also the exact conjunct `planning/exploration/gates.md:151-156` names: that entry
+says the metric is measurable "when B7's attempt record **and a concept registry** land".
+This RFC lands the first and not the second, so the entry is narrowed rather than closed —
+A20 records that wording, not a claim that the gate is met.
 
 ### 4. Storage: migration 8
 
 `STORAGE_VERSION` moves 7 → 8 (`apps/server/src/storage.ts:147`, currently 5; migrations 6
 and 7 are claimed by `n-way-comparison.md` and `live-session-platform.md`) with one entry
-appended to the ladder at `storage.ts:915-941`, named `attempt records, concept tags, schedules, and
+appended to the ladder at `storage.ts:915-940`, named `attempt records, concept tags, schedules, and
 history stats`. It creates tables and indexes **only**. It reads no snapshot and calls no
 runtime function — the register already records that migration 1's body had to be rewritten
-to stop replaying through `projectRun` (`rfc/README.md:51`), and this RFC does not repeat
+to stop replaying through `projectRun` (`rfc/README.md:158`), and this RFC does not repeat
 that mistake. Backfill is an application-level pass (§5).
 
 ```sql
@@ -299,13 +403,15 @@ CREATE TABLE attempts (
   checkpoint_ids     TEXT NOT NULL,
   origin             TEXT NOT NULL CHECK (origin IN ('fresh','duplicate','scheduled','in_run_retry')),
   schedule_id        TEXT,
+  root_due_at_start  TEXT,
   derived_from_run_id TEXT,
   started_at         TEXT NOT NULL,
   ended_at           TEXT NOT NULL,
   PRIMARY KEY (run_id, branch_id)
 ) STRICT;
 CREATE INDEX attempts_root ON attempts(learner_id, root_key, ended_at);
-CREATE INDEX attempts_transpose ON attempts(root_transpose_key);
+CREATE INDEX attempts_transpose ON attempts(learner_id, root_transpose_key);
+CREATE INDEX attempts_pack ON attempts(learner_id, pack_id);
 
 CREATE TABLE attempt_concepts (
   run_id      TEXT NOT NULL,
@@ -350,9 +456,21 @@ CREATE TABLE progress_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL) STRICT;
 ```
 
 `schedules.source_run_id` deliberately has no foreign key: a learner-scheduled transfer must
-survive the deletion of the run it came from. Deleting a learner cascades the
-three tables that carry `learner_id`, and `attempt_concepts` cascades through `attempts`,
-which keeps the deletion promise made by `deleteLearner` (`storage.ts:610-649`) intact.
+survive the deletion of the run it came from.
+
+**Every index is learner-led on purpose.** `attempts_transpose` leads with `learner_id`
+rather than `root_transpose_key` so that §9's `same_position` lookup cannot be written
+without a learner predicate; an index on the transpose key alone would make a cross-learner
+history query the *easy* one to write, and `GET /runs` has been learner-scoped since F3
+(correction #1). `attempts_pack` serves §9's `same_pack` relation for the same reason.
+
+**Deletion.** `deleteLearner` (`storage.ts:610-648`) reassigns a deleted learner's runs to
+`__legacy` and then deletes the `learners` row; with `PRAGMA foreign_keys = ON`
+(`storage.ts:307`) that cascades `attempts`, `schedules` and `learner_position_stats`, and
+`attempt_concepts` cascades through `attempts`. The runs survive as `__legacy`'s and the
+progress history does not, which is the deletion promise: a learner's record of what they
+attempted is personal data, a run is a shared artifact with other grantees on it. Backfill
+runs once (§5) and is marked, so it does not resurrect the deleted rows under `__legacy`.
 
 `RunStorage` (`storage.ts:71-100`) is not widened. A sibling interface `ProgressStorage` is
 declared in the same module and implemented by the same `SQLiteRunStorage` class, so there
@@ -379,19 +497,43 @@ export function projectAttempts(input: {
 and a class `ProgressProjector` holding the storage, the pack registry and the resolver.
 
 **When it runs.** `RunService` calls `projector.project(run, ownerLearnerId)` immediately
-after every `#storage.save(...)` in `move`, `opponentPly`, `rewind`, `fork` and `reveal`, and
-after `#storage.create(...)` in `create` (`service.ts:163-238`, `:240-328`). Cost is
-`O(nodes + events)` per mutation, which is strictly less than the replay the cold-read path
-already pays (`storage.ts:396`). Projection failure must not fail the mutation: it is caught,
-logged with the run id, and retried on the next mutation, because a progress row is a derived
-read model and a run write is the source of truth.
+after **every** `#storage.save(...)` call and after `#storage.create(...)` in `create`. The
+call sites are exhaustive and enumerated, because missing one is silent staleness rather than
+a failure:
 
-**Three columns the run cannot supply.** `origin`, `schedule_id` and `derived_from_run_id`
-are request-time facts, not projections. They are written once, when the run or the branch
-first appears, and `upsertAttempts` preserves the stored values on every later projection —
-`ON CONFLICT … DO UPDATE` never touches those three columns. The service passes them in the
-`origins` map only for rows it is creating. A branch that appears mid-run therefore takes
-`in_run_retry` on first sight and keeps it.
+| Method | save site |
+|---|---|
+| `create` | `service.ts:232` (`#storage.create`) |
+| `move` | `service.ts:259` |
+| `opponentPly` | `service.ts:283` |
+| `rewind` | `service.ts:309` |
+| `fork` | `service.ts:326` |
+| **`applyEvidence`** | `service.ts:510` |
+| `reveal` | `service.ts:546` (conditional on `result.emitted.length > 0`) |
+
+`applyEvidence` is the one an earlier reading of this section omitted, and it is the one that
+matters most: it is the only path that can move `objectiveState` without a move being played,
+via `applyObjectiveEvidenceProposal` (`service.ts:495-503`). An engine result that upgrades an
+objective to `achieved` therefore changes the attempt's **verdict**, and a projector that did
+not run there would leave a resolved attempt recorded as `open` — and, through §7, leave it
+scheduled for blocked repetition it has already passed.
+
+Cost is `O(nodes + events)` per mutation. The honest comparison is not the cold-read replay
+(`storage.ts:396`), which only runs on a snapshot-cache miss: it is `save` itself, which
+already does `JSON.stringify(run)` over the whole run on every mutation
+(`storage.ts:491`). Projection is the same order as work the write path already pays.
+
+Projection failure must not fail the mutation: it is caught, logged with the run id, and
+retried on the next mutation, because a progress row is a derived read model and a run write
+is the source of truth.
+
+**Four columns the run cannot supply.** `origin`, `schedule_id`, `root_due_at_start` and
+`derived_from_run_id` are request-time facts, not projections. They are written once, when
+the run or the branch first appears, and `upsertAttempts` preserves the stored values on
+every later projection — `ON CONFLICT … DO UPDATE` never touches those four columns. The
+service passes them in the `origins` map only for rows it is creating. A branch that appears
+mid-run therefore takes `in_run_retry` on first sight and keeps it, with `root_due_at_start`
+resolved against the schedules table at that moment.
 
 **`attempt_no` and idempotency.** `attempt_no` is assigned by the store, not the projector:
 `upsertAttempts` writes the rows in one transaction and then renumbers the affected
@@ -447,9 +589,25 @@ Rules:
   claimed. A schedule id belonging to another learner is `404 RUN_NOT_FOUND`; a `dismissed`
   schedule is `422 INVALID_REQUEST`.
 - Otherwise the origin is the client's `fresh` or `duplicate`, defaulting to `fresh`.
+- **Independently of all of the above**, and with no client input at all, the server resolves
+  the row's `root_key` against its own `schedules` table and records `root_due_at_start` =
+  the `due_at` of the caller's pending schedule for that root, or NULL if there is none. This
+  is not an origin; it is the recorded answer to "was this learner being asked for this?"
 
 `intent` never reaches `createRun` and never appears in the event log. That is an acceptance
 assertion, not a convention (§Acceptance, A7).
+
+**Why `root_due_at_start` exists, when `origin` already distinguishes `scheduled`.** Forcing
+`origin: "scheduled"` on a resolving `scheduleId` closes only the *lying* attack — a client
+that sends a schedule id and claims `fresh`. It does not close the *omitting* attack: a
+client can read `GET /progress/due`, then start the identical run through plain `POST /runs`
+with no `intent` at all, and the server has no way to distinguish that from a genuinely
+unprompted return. `origin` alone therefore leaves §14's voluntary-return metric resting on
+client honesty, which is exactly the "unfalsifiable" property it was written to remove.
+`root_due_at_start` is derived from a server table the client cannot write, so omission gains
+nothing: a return to a root that was already due is recorded as prompted whether or not the
+client admits it. §14 defines voluntary as `schedule_id IS NULL AND root_due_at_start IS NULL`
+and never reads `origin` for that purpose.
 
 **Starting a due item.** `POST /runs/:id/duplicate` accepts the same `intent` field, which is
 what makes a *position* root startable from `/learn`: a schedule for a position session
@@ -535,21 +693,28 @@ schedule a retry after you lost.
 
 **Atomicity.** `saveWithSchedule(run, lease, schedule)` performs the schedule INSERT and the
 `drill_runs` UPDATE inside one `BEGIN IMMEDIATE`, reusing the two-table transaction pattern
-`create` already uses (`storage.ts:329-353`). If the UPDATE changes zero rows, the
-transaction rolls back and the call throws `NOT_ACTIVE_WRITER`. There is no window in which
-a `scheduleId` in the event log points at no row, and none in which a row references an
-event that was never appended.
+`create` already uses (`storage.ts:329-353`). The UPDATE keeps `save`'s existing guard —
+`WHERE id = ? AND active_writer_id = ? AND active_writer_learner_id = ?` (`storage.ts:485-497`) —
+so if it changes zero rows the transaction rolls back and the call throws `NOT_ACTIVE_WRITER`
+the same way `save` does (`storage.ts:498`, `:514-516`). There is no window in which a
+`scheduleId` in the event log points at no row, and none in which a row references an event
+that was never appended.
 
 ### 9. Related-position retrieval
 
-`GET /progress/related?runId=…&nodeId=…` returns at most three honestly-labelled relations,
-each derived from something recorded:
+`GET /progress/related?runId=…&nodeId=…` requires read access to `runId` (`requireRead`) and
+returns at most three honestly-labelled relations. **Every relation is restricted to the
+calling learner's own attempt rows** — `learner_id = principal.learnerId` is a predicate of
+each query, not a filter applied afterwards, and the indexes in §4 lead with `learner_id` so
+that a query written without it cannot be the fast one. History has been learner-scoped since
+F3 (correction #1) and this endpoint does not reopen it: "someone else has attempted this
+position" is not a relation this RFC exposes.
 
-| Relation | Derivation | Label shown |
+| Relation | Derivation (all `WHERE learner_id = ?`) | Label shown |
 |---|---|---|
-| `same_position` | another root key with an equal `root_transpose_key`, different `run_id` | "same position" |
-| `same_pack` | another root key with the same `pack_id` | "same pack, different position" |
-| `same_concept_in_pack` | another root key in the same pack sharing a `concept_key` | "same concept, same pack" |
+| `same_position` | another of the caller's root keys with an equal `root_transpose_key`, different `run_id` | "same position" |
+| `same_pack` | another of the caller's root keys with the same `pack_id` | "same pack, different position" |
+| `same_concept_in_pack` | another of the caller's root keys in the same pack sharing a `concept_key` | "same concept, same pack" |
 
 There is no cross-pack concept relation, because there is no cross-pack concept key (§3). The
 surface must not offer one; an empty section states why in one sentence rather than showing a
@@ -566,7 +731,7 @@ New routes, all authenticated through the existing `authenticate()` seam (`rest.
 | GET | `/progress/due?limit=&at=` | pending schedules with `due_at <= now`, blocked first, then `due_at` ascending |
 | GET | `/progress/related?runId=&nodeId=` | §9 |
 | GET | `/progress/recommendations` | §12; empty array when no history is imported |
-| POST | `/progress/schedules/:id` | `{ "op": "dismiss" }` |
+| POST | `/progress/schedules/:id` | `{ "op": "dismiss" }`; a schedule the caller does not own is `404`, matching §6's rule for a foreign `scheduleId` |
 | POST | `/profile/history` | `{ "op": "import", "pgn": string }` or `{ "op": "clear" }` |
 | POST | `/runs/:id/duplicate` | §6 |
 | POST | `/runs/:id/schedule` | §8 |
@@ -584,7 +749,7 @@ as the filter value "unclassified" — `phase` is optional in the schema
 
 ### 11. `/learn`, progress display, and what it may not say
 
-`capabilities.ts:122` flips to `learn: "available"` and `learn` is removed from
+`capabilities.ts:121` flips to `learn: "available"` and `learn` is removed from
 `PLANNED_SURFACES` (`apps/web/src/lib/api.ts:170-176`). The `App.svelte:341-352` empty-state
 branch keeps `live` and `create` and drops `learn`.
 
@@ -629,7 +794,8 @@ Opt-in, off by default, and additive by construction: **no other endpoint or tab
 `learner_position_stats`.**
 
 `POST /profile/history { op: "import", pgn }` parses with `parsePgn` from `chessops/pgn`
-(already a workspace dependency, currently used only in tests), walks each game's mainline,
+(already used in server production code by `apps/server/src/sourcing/openings.ts:7`, so this
+adds no dependency edge and no new parser), walks each game's mainline,
 computes `transposeKey` per position (`packages/runtime/src/chess.ts:16-19`), and replaces the
 caller's rows with the counts. Limits: 2 MiB of text and 500 games per request, both rejected
 with `422 INVALID_REQUEST` carrying the limit; unparseable games are skipped and counted in

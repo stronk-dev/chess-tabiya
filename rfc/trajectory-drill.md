@@ -5,8 +5,9 @@
 - **Created:** 2026-08-13
 - **Design refs:** `design/01-training-model.md` §The four modes (Trajectory Drill row, line 100),
   §Repetition scheduling (phase is never a scheduling key, lines 50-70);
-  `design/03-product-breadth.md` gate B2 and program item #4 (lines 51-52, 162, 248-250);
-  `design/04-content-architecture.md` §5 (the launch set of six) and §8 (production order)
+  `design/03-product-breadth.md` surface line 51-52, **gate B2 row at `:172`**, and **program
+  item #4 at `:258`**; `design/04-content-architecture.md` §5 (the launch set of six, `:109-119`)
+  and §8 (production order, `:154-158`)
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 + exploration gate opened by owner
   ruling 2026-08-12 (`planning/exploration/log.md`)
 - **Depends on:** nothing unshipped. `rfc/archive/line-drill-theory-grading.md`,
@@ -14,7 +15,9 @@
   implemented and supply, respectively, the three-verdict membership contract and the
   no-absorbing-state law; the monotone law, `resolveAt`, and the compiled rule order; and
   `outcome.reached`. `rfc/archive/pack-optional-runs.md` supplies the session identity this RFC
-  proves a trajectory cannot span
+  proves a trajectory cannot span. **Ordered behind, not dependent on,** `rfc/defect-sweep.md`
+  (pack schema 0.5, required `start.side`) and `rfc/return-and-progression.md` (pack schema 0.6):
+  the ordering exists only so 0.7 follows 0.6, and no rule here reads either bump
 - **Parent / amends:** **`rfc/archive/drill-pack-format.md`** (pack schema 0.6 → 0.7: the `legs`
   array, the `run_trajectory` objective type, and the first meaning `mode: "trajectory"` has ever
   had), **`rfc/archive/outcome-drill-grading.md`** (its rule compiler and its validation codes gain
@@ -28,12 +31,14 @@
 - **Supersedes / superseded by:** —
 - **Migration:** **none.** No persisted run shape changes, no event type is added, and no
   `DRILL_RUN_SCHEMA_VERSION` bump occurs. This RFC claims **no row in the migration register**; see
-  Specification §13. Its Active-table row in `rfc/README.md` is added in the same commit.
-- **Pack schema version:** **0.6 → 0.7, rebased.** `DRILL_PACK_SCHEMA_VERSION` is the same class of
-  shared single-writer resource as a migration number, and it is now contended: `rfc/defect-sweep.md`
-  §7 claims 0.5, while **`rfc/pack-studio.md` (then named `pack-studio-and-review.md`) and
-  `rfc/return-and-progression.md` both claim 0.6** — a live collision this RFC found and does not join. This RFC takes 0.7 and orders
-  after all three. See §3 and the register note added to `rfc/README.md` in the same commit.
+  Specification §13. Its Active-table row in `rfc/README.md` is already recorded.
+- **Pack schema version:** **0.7**, claimed in `rfc/README.md`'s pack-schema register. The shipped
+  value is **`"0.4"`** (`packages/schema/src/index.ts:2`, `$id` at
+  `schemas/drill_pack.schema.json:3`); 0.5 belongs to `rfc/defect-sweep.md` and 0.6 to
+  `rfc/return-and-progression.md`, so this RFC orders **behind those two and ahead of**
+  `rfc/pack-studio.md` (0.8) and `rfc/n-way-comparison.md` (0.9). The base is whatever has landed
+  when this does; nothing in this RFC depends on the predecessor number, only on 0.7 being free.
+  See §3.
 - **Planning:** `planning/trajectory-drill/` (once implementing)
 
 ## Summary
@@ -77,7 +82,8 @@ Three things exist and none of them is a trajectory:
   (`packages/schema/src/drill-pack/types.ts:6`) and a schema enum value
   (`schemas/drill_pack.schema.json:127`). `objectiveRules` has exactly two typed branches —
   `follow_theory` (`apps/server/src/pack-orchestrator.ts:171-211`) and the four outcome types
-  (`:213-275`) — and everything else compiles from `successConditions` alone. So
+  (`:213-275`) — and everything else compiles from `successConditions` alone through
+  `conditionRules` (`:141-165`). So
   `transition_to_endgame` is a catalogue label, as
   `planning/breadth/training-modes.md:92-96` already pinned.
 - **`transitioned`.** A legal target in `ALLOWED_TRANSITIONS`
@@ -90,12 +96,13 @@ There is also no pack-to-pack link of any kind. The pack schema root is
 successor id without a schema change, and `retryVariants`
 (`drill_pack.schema.json:66-69`) is an untyped `{"type": "object"}` array with zero readers.
 
-### 2. The seven findings this RFC is built on
+### 2. The eight findings this RFC is built on
 
 **2a. A run has exactly one session, so a trajectory cannot be a chain of runs.** `DrillRun`
 carries one `packId` and one `packDigest` (`packages/runtime/src/types.ts:227-228`), one canonical
-`start` (`:229`), and one `sessionDigest`; `projectRun` enforces that `start.fen` equals the root
-node's FEN and that the pack pair is all-or-nothing (`packages/runtime/src/events.ts:41-59`).
+`start` (`:230`), and one `sessionDigest` (`:229`); `projectRun` enforces that `start.fen` equals
+the root node's FEN and that the pack pair is all-or-nothing
+(`packages/runtime/src/events.ts:42-58`).
 `RunService.create` derives every one of those from a single `session` union member
 (`apps/server/src/service.ts:163-217`). There is no operation anywhere that changes a run's
 position other than `commitMove`, and `commitMove` requires a legal move from the cursor
@@ -106,9 +113,12 @@ cut the causal-integrity rule exists to forbid** (`archive/brief-v2/07_CONNECTED
 This is not a limitation this RFC works around. It is the property that makes the product's claim
 checkable, and §2 of the Specification adopts it as the contract.
 
-**2b. `transitioned` is absorbing, and using it for a trajectory transition is D12b in a third
-place.** `TERMINAL_OBJECTIVE_STATES` (`runtime.ts:32`) makes `commitMove` throw `RUN_TERMINATED`
-at a node in that state (`runtime.ts:275-279`), the client stops requesting replies
+**2b. `transitioned` is absorbing, and using it for a trajectory transition is D12b
+(`design/BACKLOG.md:122`) in a third place.** `TERMINAL_OBJECTIVE_STATES` is
+`new Set(["failed", "achieved", "transitioned"])` (`runtime.ts:32`, verified verbatim) and it makes
+`commitMove` throw `RUN_TERMINATED` at a node in that state (`runtime.ts:276-278`) — the check runs
+against the **cursor** node before the move is parsed, so the throw lands on the commit *after* the
+one that entered the state. The client stops requesting replies
 (`apps/web/src/lib/session-controller.ts:61`, `:372-380`), and `ALLOWED_TRANSITIONS` gives
 `transitioned` an empty successor list (`objective-state.ts:9`) so nothing can leave it. The two
 shipped mode RFCs each hit this shape and each wrote a law against it — `rfc/archive/outcome-drill-grading.md`
@@ -137,12 +147,19 @@ they do not chain:
 | `content/drafts/rook-4v3-same-side.json` (start block) | `3r2k1/5pp1/7p/8/4P3/8/5PPP/R5K1 w - - 0 1` | **black** | `outcome` / `endgame` | Caro Advance → … → 4v3 rook |
 
 No legal sequence of moves joins any two of these positions; two of them belong to different
-trajectory families in `design/04-content-architecture.md:117-119`; and the learner changes colour
-between the first and the third. Concatenating them would be exactly the "stitch a random endgame
-onto an opening because the session needs three sections" that
-`archive/brief-v2/07_CONNECTED_TRAJECTORIES.md:41-43` names as the failure. **They are three
-packs about three phases, which is what `design/04` §8 ordered first; the trajectory is the
-step after, and it is authoring work, not a join.** §12 says what this RFC ships instead.
+trajectory families in `design/04-content-architecture.md:115-119` (QGD Exchange → Carlsbad at
+`:115`, Caro Advance → 4v3 rook at `:118`); and the learner changes colour between the first and
+the third. Concatenating them would be exactly the "stitch a random endgame onto an opening
+because the session needs three sections" that
+`archive/brief-v2/07_CONNECTED_TRAJECTORIES.md:42` names as the failure. **They are three
+packs about three phases, which is what `design/04` §8 ordered first (`:154-156`); the trajectory
+is step (2) there, and it is authoring work, not a join.** §12 says what this RFC ships instead.
+
+`planning/breadth/training-modes.md:296` proposed a slice-7 fixture
+`trajectory-advance-caro.json` "reusing Pack A's opening as leg 1". That is *copying* an authored
+spine into a new one-pack trajectory, not chaining runs, and it stays available to the author of
+the real trajectory. It is not what this RFC's own fixture does, for the reason §12 gives: a
+mechanical fixture cannot be mistaken for chess content, and a Caro-shaped one could.
 
 **2e. Plan Drill has no grading contract, so "theory verdict, then plan verdict, then outcome
 grade" names a middle term that does not exist.** `preserve_plan_window` is behaviourally
@@ -156,12 +173,22 @@ is real — those conditions compile to the shipped predicate evaluator and driv
 and this RFC does not invent a plan verdict to fill the gap (§9c).
 
 **2f. Every objective-level validation rule reads `pack.objective`, and a leg objective is not
-`pack.objective`.** `pack-validation.ts:175-330` computes `outcomeObjective` (`:175`) and
-`theoryObjective` (`:179`) from the single top-level objective and emits sixteen codes against
-JSON pointers rooted at `/objective`. Left alone, a leg's objective would be validated by nothing
-at all — the exact "author writes something, validator blesses it, nothing happens" failure class
-the content-era audit named (`planning/breadth/training-modes.md:50`). §10 extracts the block
-rather than duplicating it.
+`pack.objective`.** `runtimeIssues` (`pack-validation.ts:81-366`) computes `conditions` (`:174`),
+`outcomeObjective` (`:175`), `grading` (`:178`) and `theoryObjective` (`:179`) from the single
+top-level objective. Counted against the file rather than from memory, the objective-dependent
+region `:174-366` emits **twenty** codes, and they are three different kinds — a distinction §10
+turns on, because extracting the region wholesale would emit the third kind once per leg:
+
+| Kind | Count | Codes |
+|---|---|---|
+| Rooted at `/objective`, one instance per objective | **12** | `OBJECTIVE_GRADING_REQUIRED` `:214`, `OBJECTIVE_GRADING_UNSUPPORTED` `:223`, `OBJECTIVE_RESOLUTION_UNKNOWN` `:233`, `OBJECTIVE_RESIST_NEEDS_CHECKPOINT` `:242`, `UNSUPPORTED_OBJECTIVE_CONDITION` `:254`, `THEORY_ABSORBING_UNSUPPORTED` `:262`, `OBJECTIVE_SELF_TRANSITION` `:267`, `OBJECTIVE_ABSORBING_WITHOUT_OUTCOME` `:280`, `OBJECTIVE_OUTCOME_TARGET_INVALID` `:293`, `OBJECTIVE_DEGRADED_IS_ONE_WAY` `:306`, `SYZYGY_ASSESSMENT_OUT_OF_RANGE` `:339`, `SYZYGY_ASSESSMENT_MISMATCH` `:360` |
+| Gated on `theoryObjective` but pointing at pack-level shape (`/mode`, `/authoredBoundary`, `/checkpoints`, `/deviations`) | **7** | `THEORY_OBJECTIVE_NEEDS_LINE_MODE` `:187`, `THEORY_NEEDS_AUTHORED_BOUNDARY` `:190`, `BOUNDARY_NEEDS_PLY_HORIZON` `:193`, `BOUNDARY_GRANTS_NOTHING` `:196`, `THEORY_NEEDS_BOUNDARY_CHECKPOINT` `:199`, `THEORY_DEVIATION_NEEDS_SPINE_ANCHOR` `:207`, `BOUNDARY_HORIZON_EXCLUDES_EVERY_GRANT` `:330` |
+| Objective-independent, and therefore **not** per-objective at all | **1** | `CHECKPOINT_BOUNDARY_WITHOUT_BOUNDARY` `:202` (`boundary === undefined && boundaryCheckpoints.length > 0`) |
+
+Left alone, a leg's objective would be validated by nothing at all — the exact "author writes
+something, validator blesses it, nothing happens" failure class the content-era audit named
+(`planning/breadth/training-modes.md:324-325`). §10 extracts the first kind, runs the second once,
+and leaves the third where it is.
 
 **2g. Two syzygy codes read `pack.start.fen`, and a leg's start position is not known until a run
 reaches it.** `SYZYGY_ASSESSMENT_OUT_OF_RANGE` (`pack-validation.ts:339`) counts pieces in
@@ -170,6 +197,32 @@ An endgame leg of an opening pack starts wherever the play arrived, so a static 
 cannot be bound to it and the whole `ledger_verified` chain of
 `rfc/archive/outcome-drill-grading.md` §4d would be satisfied against the wrong position. §9b
 refuses `syzygy` on a leg for that reason, which is a tightening rather than a gap.
+
+**2h. Half of the shipped predicates are path-scoped, so sealing a leg does not stop a later leg's
+rules from reading an earlier leg's occurrence.** This is the finding that survived the hardest
+attack on §4, and it is why §5's law is not enough on its own. `evaluateObjective` only ever runs
+at the active cursor (`objective.ts:311-317` → `activeNode`), and §4b compiles the rules of the leg
+in force at the commit's parent, so a leg's rules genuinely cannot re-grade an earlier leg's nodes,
+and a sealed verdict genuinely cannot move (§4c). But the *predicates* those rules carry are not
+span-scoped:
+
+- `checkpointReached` resolves through `checkpointWasReached`, which searches the **whole
+  root-to-node path** (`objective.ts:170-191`, `:228-229`);
+- `outcomeReached` likewise scopes to `pathToNode` (`objective.ts:237-246`).
+
+So a leg-c condition `{"kind": "reach_checkpoint", "checkpointId": "book-crossed"}` — naming
+leg-b's *entry* checkpoint — is **already true at leg-c's first graded commit**, because that
+checkpoint fired on this path two legs ago. The same holds for a leg naming its own
+`entryCheckpointId`: the entry occurrence is on the path by construction. With `conditionRules`
+defaulting `to` to `"achieved"` (`pack-orchestrator.ts:148`), a final leg written that way resolves
+before the learner touches it.
+
+Two shipped things contain this rather than one. `checkpointReachedHere` matches only an occurrence
+at *this* node (`objective.ts:230-236`), which is what both `grading.resolveAt` resolution
+(`pack-orchestrator.ts:266`) and the theory boundary rule (`:204`) compile to — so per-leg outcome
+resolution and theory resolution are node-exact and safe as they stand. The remaining hole is the
+authored `successConditions`, and §10's `TRAJECTORY_LEG_CONDITION_PRECEDES_ENTRY` closes its
+statically decidable part.
 
 ### 3. Scope boundary
 

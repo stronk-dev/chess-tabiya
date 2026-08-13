@@ -9,11 +9,12 @@
   `design/00-thesis.md` §Target player (on-ramp knobs)
 - **Exploration gate:** owner ruling 2026-08-12 opening the exploration gate
   (`rfc/README.md` §Active); breadth sequencing ruling 2026-08-11
-- **Migration:** **9** (`STORAGE_VERSION` 8 → 9), claimed in `rfc/README.md`'s register.
-  Create-table and create-index only; no existing row is read or written and
-  `DRILL_RUN_SCHEMA_VERSION` is untouched, so it needs no freeze rule. 6, 7 and 8 belong
-  to `n-way-comparison.md`, `live-session-platform.md` and `return-and-progression.md`;
-  see §2.
+- **Migration:** **9**, claimed in `rfc/README.md`'s register. The shipped value is
+  `STORAGE_VERSION = 5` (`apps/server/src/storage.ts:147`); 6, 7 and 8 are claimed by
+  `n-way-comparison.md`, `live-session-platform.md` and `return-and-progression.md`, so
+  this RFC's DDL appends after theirs and §0's rebase rule applies if any of them does
+  not land. Create-table and create-index only; no existing row is read or written and
+  `DRILL_RUN_SCHEMA_VERSION` is untouched, so it needs no freeze rule. See §2.
 - **Depends on:** **`rfc/defect-sweep.md`** and **`rfc/return-and-progression.md`** (see §0 —
   they own pack schema v0.5 and v0.6, and the sweep closes D6, D8 and D9, three conditions
   this RFC's registration gate would otherwise have to re-specify),
@@ -22,14 +23,18 @@
   (the subject), `rfc/archive/pack-optional-runs.md` (pack-optional run identity),
   `rfc/archive/authored-explanation-surface.md` and
   `rfc/archive/authored-feedback-delivery.md` (per-scope reveal)
-- **Parent / amends:** amends `rfc/archive/drill-pack-format.md` in two bounded places
-  (§14a, optional `deviations[].planClassId`; §10a, `provenance.reviewStatus` narrowed
-  and `provenance.reviewers` removed — schema `$id` **0.7 → 0.8**)
+- **Parent / amends:** amends `rfc/archive/drill-pack-format.md` in **one** bounded place
+  (§10a, `provenance.reviewStatus` narrowed and `provenance.reviewers` removed — schema
+  `$id` **0.7 → 0.8**; the shipped `$id` is `:0.4`, see §0). A second amendment,
+  optional `deviations[].planClassId`, was drafted and **withdrawn on review** — §14a
+  records why.
 - **Supersedes / superseded by:** —
-- **Owner rulings applied:** **no pack review workflow, ever** (2026-08-13,
-  `planning/exploration/log.md`) — ADR-0001's "reviewed" half is superseded and
-  continuation gate C1 is withdrawn; **packs carry a publication channel, not a review
-  status** (2026-08-13, same ruling thread)
+- **Owner rulings applied:** **no pack review workflow, ever** (2026-08-13 ruling 1,
+  `planning/exploration/log.md:1231-1262`) — ADR-0001's "reviewed" half is superseded and
+  continuation gate C1 is withdrawn. The publication channel is this RFC's mechanism for
+  that ruling's "they ship with honest provenance", and is already recorded as the
+  replacement in `planning/content-era/plan.md` §3b; it is not itself a separate ruling
+  and the owner may replace it with another honest origin label without reopening ruling 1.
 - **Planning:** `planning/pack-studio/` (once implementing)
 
 ## Summary
@@ -148,20 +153,32 @@ claimed both shared single-writer resources this RFC touches. Nothing below is a
 dependency of *design*; it is bookkeeping on two numbers, done in the register rather
 than discovered at merge.
 
+**The shipped coordinates are 0.4 and 5, not 0.7 and 8.** `schemas/drill_pack.schema.json`'s
+`$id` is `urn:chess-tabiya:schema:drill-pack:0.4` and `DRILL_PACK_SCHEMA_VERSION`
+(`packages/schema/src/index.ts:2`) is `"0.4"`; `STORAGE_VERSION` (`apps/server/src/storage.ts:147`)
+is `5`. Every number between those and this RFC's is claimed by a draft that has not landed.
+The claims below are register bookkeeping, not statements about the tree, and the rebase rule
+at the end of this section is what makes them safe to write down.
+
 `rfc/README.md`'s pack-schema-version register records a **contention on 0.6** between this
 RFC and `return-and-progression.md`, and offers two resolutions: one rebases to 0.8, or the
 two merge their bump. **This RFC takes 0.8.** Merging the bumps would couple two unrelated
-additions — `retryVariants`/`concepts` for scheduling, `deviations[].planClassId` plus the
-`provenance` narrowing for authoring — into one version whose meaning is "whichever of these
+additions — `retryVariants`/`concepts` for scheduling, the `provenance` narrowing for
+authoring — into one version whose meaning is "whichever of these
 landed", and the register's own note
 says a pack version rebases cheaply because pack digests are content digests unaffected by
 the `$id`. The cheap move is the right one, and the contention is resolved here rather than
 left for the implementer.
 
-| Resource | Claimed by | This RFC takes |
-|---|---|---|
-| pack schema version | `defect-sweep.md` → **0.5**; `return-and-progression.md` → **0.6**; `trajectory-drill.md` → **0.7** | **0.8** |
-| database migration | `n-way-comparison.md` → **6**; `live-session-platform.md` → **7**; `return-and-progression.md` → **8** | **9** |
+| Resource | Shipped | Claimed by | This RFC takes |
+|---|---|---|---|
+| pack schema version | **0.4** | `defect-sweep.md` → **0.5**; `return-and-progression.md` → **0.6**; `trajectory-drill.md` → **0.7**; `n-way-comparison.md` → **0.9** | **0.8** |
+| database migration | **5** | `n-way-comparison.md` → **6**; `live-session-platform.md` → **7**; `return-and-progression.md` → **8** | **9** |
+
+`n-way-comparison.md`'s **0.9** claim is downstream of this one and is not a contention: it
+removes `grading` from `$defs/checkpointInteraction`, which this RFC does not touch.
+`objective.grading.assessedBy` — the field §4b's syzygy condition reads through
+`assessmentGrounding` — is a different pointer and survives that draft.
 
 Three of `defect-sweep`'s closures land inside this RFC's registration gate, and this RFC
 inherits them rather than restating them:
@@ -197,17 +214,38 @@ Three of the parallel drafts also touch shape this RFC reads:
 
 One row in `defect-sweep`'s proposed backlog is a live constraint on this RFC's never-silent
 guarantee and is named here so it is not mistaken for a gap this RFC introduced:
-`$defs/opponentPolicy` is `additionalProperties: true`, so an author can write a policy field
+`$defs/opponentPolicy` is `additionalProperties: true`
+(`schemas/drill_pack.schema.json:496`), so an author can write a policy field
 nothing reads and hear nothing. This RFC's closed-record parsing (§4) covers the *request
 envelope*, not the pack document's own open objects; that residue belongs to the sweep's row.
+
+Three objects in the pack schema are open, and only one of them is harmless. The document
+root is `additionalProperties: false` (`:72`), but `$defs/opponentPolicy` (`:496`),
+`$defs/feedbackClaim` (`:580`) and **`provenance` (`:598`)** are open. `provenance` is the
+one this RFC has to answer for, because §10a's whole argument is "there is no channel field
+to forge" — and an open object means an author can *invent* one. §13c closes that with a
+rendering allow-list rather than a schema change, since narrowing `provenance` would rewrite
+every committed document that carries `licence` or `graduationBlockers`.
 
 ### 1. Three content locations, one schema — and the channel boundary
 
 | Location | Contents | Written by | Served | Channel |
 |---|---|---|---|---|
 | `content/packs/`, `schemas/drill_pack.example.json` | **seed catalogue**: packs shipped in the image and in git | humans, through git | always | **official** |
-| `content/drafts/`, `content/candidates/` | file workspaces for `pack-check`/`pack-preview` and for `candidate-emit`/`sourcing-check` | the existing CLIs | drafts in development only; candidates never | — (not published) |
+| `content/drafts/` | file workspace for `pack-check`/`pack-preview` | the existing CLIs | **development only** | **official** (see below) |
+| `content/candidates/` | `candidate-emit`/`sourcing-check` workspace | the existing CLIs | never | — (not served) |
 | SQLite `pack_drafts` / `registered_packs` | the studio's drafts and everything it registers | this RFC's endpoints | registered packs always; drafts never | **community** |
+
+**`content/drafts/` is official, and that is not a loophole.** `PackRegistry.loadDefault`
+loads `content/drafts/` and any `--draft-file` into the *same* record map as the fixture and
+`content/packs/`, in development only (`pack-registry.ts:237-256`, wired at
+`application.ts:265-269`). The channel is derived from which source resolved a pack (§10a),
+so those records are stamped `official` — correctly, because the assertion `official` makes
+is "this deployment's operator put these bytes here", and a local operator running
+`make pack-preview` on their own file has done exactly that. No production deployment serves
+them (`development !== true` yields an empty draft path list), and no request can add one:
+`draftFile` is a process option, not a body field. The earlier draft's table called this row
+"not published", which contradicted §10a; the contradiction was in the table, not the code.
 
 **The server never writes to `content/`.** That sentence was a safety note in the
 previous draft; under the channel ruling it is the channel boundary itself. The only
@@ -218,14 +256,25 @@ explicit export (§12) followed by a human commit, and that commit — not any e
 is the sole path from community to official.
 
 **Seed ids are reserved.** Registration rejects any pack id present in the seed
-registry with `PACK_ID_RESERVED` (409). The two channels therefore have disjoint id
-spaces, so a community pack can neither shadow nor impersonate an official one, and no
-precedence rule is needed. A self-hoster who ships packs in git updates them in git.
+registry with `PACK_ID_RESERVED` (409), and additionally rejects the route-reserved
+literal `drafts` (§4). A self-hoster who ships packs in git updates them in git.
+
+**But reservation is a check at one instant, and the seed registry is mutable**, so
+"disjoint id spaces" is not something registration alone can guarantee. The pack id
+grammar is `^[a-z0-9][a-z0-9-]*$` (`schemas/drill_pack.schema.json:78-80`) with no
+namespace, so a later git commit can introduce an official pack whose id a community pack
+already holds — the reservation ran before that commit existed. Resolution is therefore
+specified, not assumed: **the seed source always wins `get()` and `list()`**. A community
+row whose id has been taken over by a seed pack stops being browsable, stays resolvable by
+`byDigest` forever so its in-flight runs finish (§3), and the collision is logged at
+startup with both digests. Nothing is deleted and nothing is silently served under the
+wrong channel. The alternative — refusing to start — would let any community registration
+brick the next deployment.
 
 ### 2. Storage — migration 9
 
-`STORAGE_VERSION` 8 → 9 (`storage.ts:147`), appended to the migration list at
-`storage.ts:915-941` in the established shape. Claimed in `rfc/README.md`'s
+`STORAGE_VERSION` → 9 (`storage.ts:147`, shipped value `5`), appended to the migration
+list at `storage.ts:915-941` in the established shape. Claimed in `rfc/README.md`'s
 migration register in the same commit that drafts this RFC.
 
 6, 7 and 8 are claimed (§0), so this RFC takes 9 and its DDL appends after them.
@@ -238,9 +287,11 @@ where it is settled, and §0 states the rebase rule.
 CREATE TABLE pack_drafts (
   id TEXT PRIMARY KEY,
   pack_id TEXT NOT NULL,
-  owner_learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+  owner_learner_id TEXT NOT NULL REFERENCES learners(id),
   document_json TEXT NOT NULL,
   digest TEXT NOT NULL,
+  ledger_json TEXT,
+  manifest_json TEXT,
   state TEXT NOT NULL CHECK (state IN ('draft','registered','withdrawn')),
   seed_kind TEXT NOT NULL CHECK (seed_kind IN
     ('blank','candidate','pgn','run','version','interchange')),
@@ -253,6 +304,15 @@ CREATE TABLE pack_drafts (
 CREATE INDEX pack_drafts_owner ON pack_drafts(owner_learner_id);
 CREATE INDEX pack_drafts_state ON pack_drafts(state);
 
+-- Every document a playtest run was created against, by digest. Retained so an
+-- edit to the draft cannot orphan an earlier playtest run (§3, §8).
+CREATE TABLE playtest_documents (
+  digest TEXT PRIMARY KEY,
+  draft_id TEXT NOT NULL REFERENCES pack_drafts(id),
+  document_json TEXT NOT NULL,
+  created_at TEXT NOT NULL
+) STRICT;
+
 CREATE TABLE registered_packs (
   pack_id TEXT NOT NULL,
   version TEXT NOT NULL,
@@ -261,12 +321,32 @@ CREATE TABLE registered_packs (
   ledger_json TEXT,
   manifest_json TEXT,
   publisher_handle TEXT NOT NULL,
-  draft_id TEXT NOT NULL REFERENCES pack_drafts(id) ON DELETE RESTRICT,
+  publisher_learner_id TEXT NOT NULL,
+  draft_id TEXT NOT NULL REFERENCES pack_drafts(id),
   registered_at TEXT NOT NULL,
   PRIMARY KEY (pack_id, version)
 ) STRICT;
 CREATE INDEX registered_packs_digest ON registered_packs(digest);
 ```
+
+`ledger_json` and `manifest_json` are on `pack_drafts` as well as on
+`registered_packs` because §4b's `SYZYGY_ASSESSMENT_UNGROUNDED` condition runs
+`assessmentGrounding(...)` against the draft's sidecars at registration time and §5
+accepts them on the seed body; a draft that could not hold them would make that
+condition unevaluable. They are the same two sidecars `PackRegistry.loadDefault`
+reads from disk (`pack-registry.ts:259-265`), carried in columns instead of files.
+
+**No foreign key uses `CASCADE` or `RESTRICT`, and that is load-bearing.** The
+earlier draft had `owner_learner_id ... ON DELETE CASCADE` alongside
+`draft_id ... ON DELETE RESTRICT`. `PRAGMA foreign_keys = ON` is set
+(`storage.ts:307`) and `deleteLearner` ends in `DELETE FROM learners WHERE id = ?`
+(`storage.ts:637`), so the cascade would try to delete the learner's drafts, the
+restrict would refuse for any draft that had been registered, and the *whole*
+`deleteLearner` transaction would roll back: **a learner who had ever published a
+pack could never delete their account**, and the failure would surface as
+`STORAGE_FAILURE`, not as anything a caller could act on. Plain references plus the
+explicit reassignment below reproduce the behaviour the rest of `deleteLearner`
+already uses.
 
 **There is no `channel` column, deliberately.** Every row in `registered_packs` is
 community and every pack outside it is official; storing the channel would create a
@@ -277,23 +357,38 @@ pack.
 `publisher_handle` is the learner handle at registration time, denormalised so a
 published pack keeps an attributable origin after the account is gone. It is a
 statement about who pressed register, not about who vouched for the chess.
+`publisher_learner_id` is separate from it and is not a display value: it is what
+§4a invariant 6a compares to decide who may publish the next version of a pack id,
+and it must not move when a learner renames themselves.
 
 The migration creates tables and indexes only; it backfills nothing, because no
 prior state exists. It reads no run snapshot, calls no runtime function, rewrites
 no `drill_runs` row, and leaves `DRILL_RUN_SCHEMA_VERSION` untouched, so it needs
-no freeze rule and cannot mis-stamp anything. Existing databases at version 8 gain
+no freeze rule and cannot mis-stamp anything. Existing databases gain three
 empty tables. It touches no column any of migrations 6–8 writes, so the bodies are
 independent as well as the numbers.
 
-**Account deletion.** `deleteLearner` currently reassigns owned runs and held
-leases to the `__legacy` sentinel (`docs/identity-and-authorization.md`). It is
-extended, in the same transaction, to set every non-`registered` draft owned by the
-deleted learner to `withdrawn` — a draft is private work, not a shared artifact like
-a run, so it is not reassigned. `registered_packs` rows are untouched, including
-`publisher_handle`: a published pack's origin must not be erasable by deleting an
-account, and the row is the only remaining record of it.
+**Account deletion.** `deleteLearner` reassigns owned runs and held leases to the
+`__legacy` sentinel and then deletes the `learners` row (`storage.ts:610-648`,
+`docs/identity-and-authorization.md`). Because `pack_drafts.owner_learner_id`
+references `learners(id)` with the default `NO ACTION` and foreign keys are enforced
+(`storage.ts:307`), that final delete fails unless the referencing rows move first.
+So in the same transaction, **before** the `DELETE FROM learners`:
 
-`registered_packs` rows are never deleted by any code path in this RFC.
+- every non-`registered` draft owned by the deleted learner is set to `withdrawn`;
+- every draft owned by them — `withdrawn` and `registered` alike — has
+  `owner_learner_id` set to `__legacy`, the same sentinel the runs take. A draft is
+  private work rather than a shared artifact, so this is a tombstone and not a
+  handover: `__legacy` cannot authenticate, so nobody inherits read or write access;
+- `registered_packs.publisher_learner_id` is set to `__legacy` for their rows, which
+  makes the pack ids they published permanently unclaimable rather than claimable by
+  the next registrant. `publisher_handle` and every other column are untouched: a
+  published pack's origin must not be erasable by deleting an account, and the row is
+  the only remaining record of it.
+
+`registered_packs` and `playtest_documents` rows are never deleted by any code path
+in this RFC, which is what makes `byDigest` total over everything a run can point at
+(§3).
 
 ### 3. Digest-addressed pack resolution — D20 (defect fix, prerequisite)
 
@@ -325,39 +420,86 @@ export interface PackSource {
 ```
 
 `PackRegistry` implements it (`byDigest` over its existing record map).
-`PackCatalogue` composes the seed `PackRegistry`, a `PackStore` reading
-`registered_packs`, and an in-memory ephemeral map used by the playtest harness
-(§8). `RunService`'s `packRegistry` option is retyped to `PackSource`; no other
-call site changes.
+`PackCatalogue` composes the seed `PackRegistry`, a `PackStore` over
+`registered_packs`, and a `PlaytestStore` over `playtest_documents` (§8).
+`RunService`'s `packRegistry` option is retyped to `PackSource`; the two other call
+sites, `packs()` and `pack()` (`service.ts:383,387`), use `list()` and `required()`
+and are unchanged.
 
-`#registeredPack` becomes:
-
-```ts
-#registeredPack(run: DrillRun): PackRecord | undefined {
-  if (!isPackSession(run)) return undefined;
-  const pack = this.#packs?.byDigest(run.packDigest);
-  return pack?.document.id === run.packId ? pack : undefined;
-}
-```
+`byDigest` must be **synchronous and durable**, not a process-lifetime cache.
+`node:sqlite` statements are synchronous, so `PackStore.byDigest` and
+`PlaytestStore.byDigest` are a prepared `SELECT` by primary key, a `JSON.parse` and
+the same `PackRecord` construction the registry performs — `feedbackPolicy`,
+`assessmentGrounding(...)` over the row's stored `ledger_json`/`manifest_json`, and
+the stored `digest` rather than a recomputed one (`digestDrillPack` is async and is
+called only on write). A restart, a second process against the same database file, or
+a database moved between deployments therefore resolves exactly the same set. An
+in-memory map would have re-introduced D20 at every restart.
 
 `list()` returns the seed summaries plus the **highest registered semver per pack
 id**, each built by the same `PackSummary` construction the registry already uses
 (`pack-registry.ts:201-209`) so registered packs carry `phase` from the moment
 `defect-sweep` §4a adds it and the Learn IA does not have to special-case the
-studio's output. `get(packId)` resolves the same way. Superseded versions stay
-resolvable by digest but do not appear in `GET /packs`.
+studio's output. `get(packId)` resolves the same way, **seed source first** (§1).
+Superseded versions stay resolvable by digest but do not appear in `GET /packs`.
+`playtest_documents` is reachable through `byDigest` **only**: never `list()`, never
+`get()`. That is not a tidiness rule — see §8.
 
-Each of the three composed sources stamps the channel on the records it returns
+Each composed source stamps the channel on the records it returns
 (§10), so a `PackRecord` or `PackSummary` always carries where it came from and no
 consumer has to infer it.
-
-This fix is independent of everything else in this RFC and of the channel ruling: it
-is a latent defect in shipped code (**D20**) that versioning makes live, and it would
-be worth landing on its own.
 
 `POST /runs` keeps its existing stale-digest rejection (`service.ts:170`): a client
 that asks for a specific digest that is not the newest is told so, rather than
 being silently started on a different pack.
+
+#### 3a. Digest-addressing is necessary and not sufficient — the residue must be loud
+
+Digest-addressing closes the case D20 was found in: a superseded version, whose
+document this RFC guarantees is retained forever (§2). It does **not** make
+`byDigest` total, and three reachable cases remain where it returns `undefined` for
+a genuine pack session:
+
+1. **An official pack changed or was removed in git.** `content/packs/` and
+   `schemas/drill_pack.example.json` are the one pack source this RFC does not
+   control and cannot make append-only; the next image edits or deletes bytes and
+   every in-flight run against the old bytes is unresolvable, permanently. This is
+   the same defect, reached through the channel the RFC otherwise treats as
+   trustworthy.
+2. **A playtest run whose draft was edited.** `PUT` replaces the document and changes
+   its digest, and edit-then-playtest-again *is* the authoring loop. Without
+   `playtest_documents` (§2) the previous playtest run silently stops orchestrating
+   the moment the author saves — a D20 recurrence this RFC would have introduced.
+3. **A database restored, copied, or downgraded** so that a row a run points at is
+   absent.
+
+Case 2 is fixed by storage; cases 1 and 3 cannot be fixed by storage, because the
+missing bytes are genuinely gone. So the second half of the fix is the never-silent
+rule (D3), applied to the resolution failure itself:
+
+> When `isPackSession(run)` and `byDigest(run.packDigest)` misses, the run is not
+> orchestratable and no caller may be told otherwise.
+
+| Call site | Today | After |
+|---|---|---|
+| `move` (`service.ts:252`) | skips `orchestratePackMove`, saves, returns success | throws `PACK_UNRESOLVABLE` (409) **before** `commitMove`, so no move is committed into a run that cannot grade it |
+| `opponentPly` (`service.ts:276`) | same | same |
+| `authoredFeedback` (`service.ts:448-458`) | throws `PACK_NOT_FOUND` | throws `PACK_UNRESOLVABLE` — the same event, one code |
+| `pgn` (`service.ts:521-524`) | silently downgrades to `exportPgn` | throws `PACK_UNRESOLVABLE`; the pack-free exporter stays the path for genuine position sessions only |
+
+The error body names the run id, the unresolvable digest and the pack id, because the
+operator remedy for case 1 is to restore those bytes — into `content/packs/` for an
+official pack, from the export bundle (§12) for a community one — after which the run
+resumes with no data loss. `rewind`, `fork`, `graph`, `compare` and `events` are
+unaffected: they read run state and never consult the pack.
+
+This is what makes the fix a fix. Digest-addressing alone would have turned "the pack
+moved" into "the pack is missing" and left the second one silent, which is the
+defect. Both halves land together or neither closes D20.
+
+This fix is independent of everything else in this RFC and of the channel ruling: it
+is a latent defect in shipped code (**D20**, `design/BACKLOG.md:126`) that versioning
+makes live, and it would be worth landing on its own.
 
 ### 4. Draft write path
 
@@ -386,6 +528,22 @@ a learner may hold at most 200 non-`withdrawn` drafts.
 `isApiPath` (`application.ts:206-217`) already matches `/packs` and `/packs/`
 prefixes, so no static-serving change is needed.
 
+**Route order is a correctness condition, not a style choice.** The shipped handler
+matches `GET /packs/:id` as `request.method === "GET" && url.pathname.startsWith("/packs/")`
+(`rest.ts:524`) and then extracts the id with `/^\/packs\/([^/]+)$/`
+(`packIdFromPath`, `rest.ts:405-413`), returning 404 for anything with a further
+segment. Added naively, **every route in the table above is dead**: `GET /packs/drafts`
+would resolve as the pack whose id is `drafts` and 404, and `/packs/:packId/versions`
+and `/packs/:packId/export` would 404 on the extra segment. So the draft routes and the
+two two-segment pack routes are matched **before** the existing `startsWith("/packs/")`
+branch, which becomes the fallthrough it already reads as.
+
+That leaves one collision the ordering creates rather than removes: `drafts` is a legal
+pack id under `^[a-z0-9][a-z0-9-]*$` (`schemas/drill_pack.schema.json:78-80`), so a pack
+called `drafts` would be permanently unreachable at `GET /packs/drafts`. It is refused at
+registration with `PACK_ID_RESERVED` alongside the seed ids (§1). No committed pack uses
+it, so nothing in the tree changes.
+
 #### 4a. Safety invariants
 
 Every one of these is enforced server-side and each has a distinct error code.
@@ -401,13 +559,22 @@ Every one of these is enforced server-side and each has a distinct error code.
    honestly ("nothing stops `reviewStatus` being flipped") for every path except a
    direct file edit in git — which is the official channel, and is git's problem.
    `provenance.reviewers` is removed from the schema at 0.8 (§10a); a document that
-   still carries one is accepted as untyped extra metadata and is never read.
+   still carries one is accepted as untyped extra metadata, and §10a removes the last
+   two code paths that read it.
 3. **The channel is not author-writable, because it is not in the document.** No
    field of `schemas/drill_pack.schema.json` names a channel and none is added. The
    channel is computed by `PackCatalogue` from which source resolved the pack (§10),
-   so a community author has nothing to forge and the server has no submitted value
-   to trust. This is the strongest available form of invariant 2, and it is why the
-   channel was not encoded as provenance.
+   so a community author has no channel field to forge and the server has no
+   submitted value to trust. This is the strongest available form of invariant 2, and
+   it is why the channel was not encoded as provenance. **It is not, by itself, a
+   defence against forged origin claims**: `provenance` is an open object
+   (`schemas/drill_pack.schema.json:598`) and `projectPackDocument` returns it whole
+   (`pack-registry.ts:70`), so an author who cannot forge the field can still invent
+   `"channel": "official"`, `"reviewedBy": …`, or `"endorsement": …` and have it
+   served. Nothing in the *server's* channel computation reads any of it; what stops
+   it reaching a learner as an origin claim is §13c's rendering allow-list, which is
+   why that section is an obligation with an acceptance criterion rather than a UI
+   note.
 4. **Optimistic concurrency.** `PUT` requires `If-Match: <digest>` naming the
    digest the client last read. A mismatch is 409 `DRAFT_STALE` with the current
    digest in `details`. There is no lease: drafts are single-owner, and the real
@@ -420,6 +587,17 @@ Every one of these is enforced server-side and each has a distinct error code.
    (`PACK_VERSION_EXISTS`, 409) and the submitted version must be strictly greater
    than every registered version of that id under semver precedence
    (`PACK_VERSION_NOT_INCREASING`, 422). No registered row is ever mutated.
+6a. **A pack id belongs to its first publisher.** The version rule above is a rule
+   about *numbers*, and on its own it is an impersonation route: pack ids are global
+   and unnamespaced, so any learner could register `1.1.0` of another learner's
+   `1.0.0` pack, and `get(packId)` — which resolves the highest version — would serve
+   their document under the original author's title and version history to every
+   learner browsing the catalogue. So registration additionally requires that either
+   no version of that id exists, or the caller's learner id equals the existing
+   `publisher_learner_id`; otherwise `PACK_ID_NOT_YOURS` (409). Comparison is by
+   learner id, not handle, so a rename does not transfer a pack and a deleted account
+   does not either (§2). There is no transfer endpoint: moving a pack between
+   publishers is export plus a fresh id, or a git commit into the official channel.
 7. **No filesystem writes.** Export is a read.
 
 #### 4b. Boundary conditions the schema permits and consumers cannot survive
@@ -525,7 +703,13 @@ containing the deepest node).
 
 1. `start` = `run.start` verbatim (`packages/runtime/src/types.ts:47-50`). Because
    `RunStart.side` is required at the runtime type level, a distilled pack cannot
-   reproduce D9.
+   reproduce D9. `RunStart` is `{ fen, side }` and carries **no `movesSan`**, so every
+   distilled document trips §7's `CONSTRUCTED_ROOT_UNVERIFIED` warning — correctly,
+   since the root is a FEN the runtime was handed rather than a move list anyone
+   replayed. For a pack-sourced run the distiller copies `start.movesSan` from the
+   source pack when — and only when — the source pack's `start.fen` is byte-equal to
+   `run.start.fen`, which restores the provenance the run type discards without
+   asserting a derivation that was not performed.
 2. `spine`: the run's node graph rendered as an authored tree, built by the same
    path-merging rule `exportPackRunPgn` already uses
    (`packages/runtime/src/pack-pgn.ts:164`) rather than a second merger. The
@@ -549,9 +733,21 @@ containing the deepest node).
      branch's deepest learner ply, with `objective.type: "play_until_checkpoint"`
      and a summary that states it is mechanical. This is the convention
      `position-seeds` already ships (`content/candidates/onramp-00008/pack.json`),
-     reused verbatim rather than re-invented.
+     reused verbatim rather than re-invented;
+   - **pack-sourced run in which no checkpoint fired** — the common case for an
+     abandoned run, and the one that breaks the first rule: dropping every unreached
+     checkpoint leaves `checkpoints: []`, which `schemas/drill_pack.schema.json:44-47`
+     refuses with `minItems: 1`, so the distiller would emit a document that cannot be
+     saved as anything but a permanently invalid draft. It falls back to the
+     position-sourced rule above and names the substitution in `graduationBlockers`.
+     The same fallback covers a run whose selected branch has zero learner plies,
+     where the mechanical checkpoint would sit at ply 0: distillation is refused with
+     `IMPORT_INVALID` and the reason, because a pack with nothing to play is not a
+     seed for anything.
 5. `difficulty.branchLengthTarget` = the selected branch's ply length when it
-   falls inside the schema's 2–20 band; omitted otherwise.
+   falls inside the schema's 2–20 band (`schemas/drill_pack.schema.json:100-103`);
+   omitted otherwise — a 40-ply run distils to a pack with no target rather than to
+   an invalid one.
 6. `provenance.sources` — one generated line naming the run id, its
    `sessionDigest`, the source pack id and digest if any, and the engine
    identities above. These are facts about how the moves came to exist.
@@ -607,8 +803,10 @@ contains no evidence for any of them, and generating one would be exactly the
 ungrounded-assertion failure Law 8 forbids arriving through the content door.
 
 **Engine evidence is not carried into an evidence ledger.** Run evidence is
-movetime-budgeted (`service.ts` enqueues with `DEFAULT_STRONG_ENGINE_PROFILE`),
-while the authoring evidence contract requires fixed depth and explicitly
+movetime-budgeted — `#enqueueMoveEvidence` enqueues `movetime: this.#evidenceMovetimeMs`
+(`service.ts:635`), which defaults to `DEFAULT_STRONG_ENGINE_PROFILE.movetimeMs`
+(`service.ts:156-157`) — while the authoring evidence contract requires fixed depth and
+explicitly
 forbids `movetimeMs`/`requestedMovetimeMs` (`sourcing/check.ts:160-163`). A
 distilled draft therefore has no `evidence.json`; recorded evaluations appear only
 as a human-readable provenance note. Grounding a distilled pack means running the

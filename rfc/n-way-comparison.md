@@ -4,11 +4,11 @@
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/03-product-breadth.md` §Review and explore (lines 57–66),
-  gate **B3** (line 163), program item **#5** (lines 252–253), the ordering rule
-  (lines 65–66), and the Lucas Chess failure mode (lines 272–281)
+  gate **B3** (line 173), program item **#5** (lines 261–263), the ordering rules
+  (lines 25–26 and 65–66), and the Lucas Chess failure mode (lines 282–291)
 - **Exploration gate:** owner ruling 2026-08-12 opened the exploration gate
-  (`rfc/README.md:26-33`); the breadth sequencing ruling 2026-08-11
-  (`rfc/README.md:35-40`) opened B1–B8 RFC planning
+  (`rfc/README.md:114-121`); the breadth sequencing ruling 2026-08-11
+  (`rfc/README.md:123-128`) opened B1–B8 RFC planning
 - **Depends on:** `archive/branch-runtime.md`, `archive/drill-client.md`,
   `archive/explanation-grounds.md`, `archive/line-drill-theory-grading.md`,
   `archive/outcome-drill-grading.md`, `archive/terminal-outcome-events.md`;
@@ -16,6 +16,15 @@
 - **Parent / amends:** amends `archive/branch-runtime.md` (the comparison payload
   and the branch record), `archive/explanation-grounds.md` (the comparison
   section), `archive/drill-client.md` (the compare surface and checkpoint sheet)
+- **Docs amended in the same change** (they describe the two-sided payload
+  literally and would become false the moment §1 lands):
+  `docs/branch-runtime.md:192-200` (§Compare and PGN export — `compare(run,
+  branchA, branchB)` and "move pairs … omitting `a` or `b`") and
+  `docs/explanation-grounds.md:33,49-53` ("an `evidence` collection for each
+  side", "that side's existing `branchPath`", "present on both sides at offset
+  zero"). §1's element-type freeze keeps
+  `docs/explanation-grounds.md:36-47,55-63` byte-true; the surrounding prose does
+  not survive and is rewritten to the branch-keyed shape
 - **Supersedes / superseded by:** —
 - **Owner rulings applied (2026-08-13):** prediction checkpoints show **numbers,
   never a verdict** (§8, §8.0, §8.4); **simulated branches are scratch** until the
@@ -57,7 +66,7 @@ and a client-initiated deep-analysis request.
 
 The owner's n=1 walkthrough found two things: manual compare selection is
 cumbersome, and **the comparison shows difference without explaining
-consequence**. `design/03-product-breadth.md:279-280` names that exact shape as
+consequence**. `design/03-product-breadth.md:289-290` names that exact shape as
 the Lucas Chess failure mode — "a surface that shows difference without
 explaining consequence is a mode-menu entry, not a drill." B3 is therefore not
 met by widening a payload from two columns to N. Explaining consequence is a
@@ -65,7 +74,7 @@ first-class requirement of this RFC, and §4 is where it is discharged.
 
 The material is already in the tree and simply never reaches the compare
 surface. `branchCards()` computes each branch's leaf objective state and
-terminality (`apps/web/src/lib/screen-model.ts:116-133`) and the branch rail
+terminality (`apps/web/src/lib/screen-model.ts:118-135`) and the branch rail
 renders it (`apps/web/src/lib/BranchRail.svelte:35-37`) — compare does not read
 it at all. `resistanceOnPath()` is already path-scoped per branch
 (`packages/runtime/src/replay.ts:103-139`), `lineMembership()` already returns
@@ -84,7 +93,7 @@ checkpoints; a client-initiated deep-analysis request with MultiPV.
 
 **Explicitly out of scope**, because each is a different contract or belongs to
 another program item: default compare selection and branch usefulness scoring
-(ruled after manual inclusion by `design/03-product-breadth.md:65-66,283-293`);
+(ruled after manual inclusion by `design/03-product-breadth.md:25-26,65-66`);
 branch race and opposite-side/new-defense replay (need program #4's mode
 semantics); duplicate-a-run, shareable read-only links and PGN import (B7/B8
 run-history contracts); the step-indexed reasoning transcript; authored
@@ -143,8 +152,37 @@ export function compareBranches(
 Pairwise is `compareBranches(run, [a, b])` and produces a two-column payload of
 the same shape. Retaining a second payload shape for the two-branch case is the
 exact source-of-truth duplication that produced D4 and D8; one shape is the
-point of the change. Call sites to update: `apps/server/src/service.ts:6,364-372`
-and `packages/runtime/src/compare.test.ts`.
+point of the change.
+
+**Blast radius, enumerated.** A re-verification pass found the previous draft's
+list ("`service.ts:6` and `compare.test.ts`") wrong on the import line and short
+by nine sites, four of them tests and two of them living docs. The complete set:
+
+| Site | What breaks |
+|---|---|
+| `packages/runtime/src/index.ts:15,19,23` | re-exports `compare` and `type ComparisonPair`; both are replaced by `compareBranches`, `BranchColumn`, `ComparisonRow`, `BranchConsequence`, `ComparisonLineEntry` |
+| `apps/server/src/service.ts:7` | the `compare` import (not `:6`) |
+| `apps/server/src/service.ts:364-373` | the four-argument overload collapses to `compare(runId, principal, branchIds)` |
+| `apps/server/src/service.ts:84-113` | `comparisonWithoutEngineFeedback`, §2 |
+| `apps/server/src/rest.ts:737-745` | the `branchAId`/`branchBId` body, §2 |
+| `apps/web/src/lib/api.ts:346-351,531-541` | the two-argument transport, §2 |
+| `apps/web/src/lib/session-controller.ts:39,318-335` | `comparisonBranchIds?: readonly [string, string]` and the tuple-typed call, §2 |
+| `apps/web/src/App.svelte:311` | passes `comparisonBranchIds` through to `DrillScreen` |
+| `apps/web/src/lib/DrillScreen.svelte:47,68,180-187,202-207,256,416` | the tuple prop, `compareLabels`, `defaultCompareIds`, `comparison.pairs.length`, the `branchLabels` prop, §3 |
+| `apps/web/src/lib/CompareView.svelte:26,44,47-51,105-134,218-259` | `branchLabels: readonly [string, string]`, `comparison.pairs.length` twice, and the two hard-coded articles, §5 |
+| `apps/web/src/lib/screen-model.ts:221` | `comparison.pairs[step - 1]?.[side]`, §5 |
+| `packages/runtime/src/compare.test.ts:86-92` | asserts `pairs`, `pair.a`, `pair.b` |
+| `packages/runtime/src/invariants.test.ts:150-162` | the **property** test: calls `compare(run, a, b)` and asserts `pairs[0]` has both `a` and `b`. It is rewritten against `rows`/`nodes`, and gains the group invariant of §1.1 |
+| `packages/runtime/src/vertical-scenario.test.ts:100-106` | asserts `pairs[3]` has no `b` |
+| `apps/server/src/server.test.ts:140-148` | posts `branchAId`/`branchBId`, asserts `comparison.pairs` has length 2 |
+| `apps/server/src/pack-optional-runs.test.ts:119-120,151-152` | posts `branchAId`/`branchBId` twice |
+| `docs/branch-runtime.md:192-200` | documents `compare(run, branchA, branchB)` and "move pairs … omitting `a` or `b`" as shipped behaviour |
+| `docs/explanation-grounds.md:33,49-53` | documents "an `evidence` collection for each side" and "both sides at offset zero" |
+
+The two docs are the answer to "does anything outside code depend on the old
+payload shape": yes, and they are canonical descriptions of what exists, so they
+move in the same change rather than being left describing a payload that no
+longer exists.
 
 #### 1.1 The axis rule — normative
 
@@ -164,12 +202,38 @@ This is the load-bearing correction and every clause is binding.
    shallower than some pair's own fork, two columns may occupy the *same node*
    at low offsets. `ComparisonRow.groups` partitions the columns present at that
    offset by node id. A renderer **MUST** draw one cell per group, not one per
-   column, and **MUST NOT** count a shared node as a difference. Entries in
-   `objectiveTimelines`, `checkpointHits`, `evidence` and `lines` carry
-   `nodeId`, so an entry that is shared by a group is identified by looking up
-   the row at its offset; entries at offset `0` are shared by all columns.
-5. **`ownForkOffset` is the decision offset.** The move that made a column
+   column, and **MUST NOT** count a shared node as a difference.
+5. **`groups` is a partition, and that is what makes it safe to render.** Three
+   invariants, all asserted by A1, because a renderer that merges cells on a
+   weaker guarantee can merge two *different* nodes into one:
+   - every key of `nodes` appears in exactly one group, and no group contains a
+     branch id absent from `nodes` — so the groups exactly cover the columns
+     present at that offset;
+   - all members of a group have the identical `nodes[branchId].id`, and members
+     of two different groups never do — grouping is by node identity and by
+     nothing else, so a merged cell is provably one node;
+   - a group of one is the ordinary case, and groups are emitted in the order
+     their first member appears in `columns`, so column order is stable across
+     rows and a renderer never has to re-sort.
+
+   Entries in `objectiveTimelines`, `checkpointHits`, `evidence` and `lines`
+   carry `nodeId` and `eventSeq`/`plyOffset`. An entry on a shared node is
+   genuinely present in the record of every column in that group, so a renderer
+   drawing a group cell **MUST** deduplicate by `eventSeq` (or by `nodeId` for
+   `evidence` and `lines`, which carry no seq) rather than stacking one copy per
+   member. Entries at offset `0` are on the set fork and are shared by all
+   columns.
+6. **`ownForkOffset` is the decision offset.** The move that made a column
    distinct is its first node at an offset greater than `ownForkOffset`.
+7. **Set membership is part of the result, not a view over a fixed axis.**
+   Adding a branch to the set can move the fork shallower, which changes the
+   `plyOffset` of every node on every column already selected. This is correct
+   and is the direct consequence of clause 1; it means `plyOffset` is meaningful
+   only within one `BranchComparison`, and no consumer may cache an offset
+   across two calls with different `branchIds`. The client re-requests the whole
+   payload on every selection change and holds no offset state of its own —
+   `compareStep` (`DrillScreen.svelte:85`) is reset to `0` whenever the selection
+   changes, for exactly this reason.
 
 Worked case that acceptance must cover: branches `X` and `Y` forked from node
 `F1`, branch `Z` forked from the shallower node `F0`. `compareBranches(run, [X,
@@ -187,18 +251,45 @@ Re-verification finding that corrects the dossier: `NO_COMMON_FORK`
 **unreachable for well-formed runs**. `branchPath` walks `parentId` to `null`
 (`branch-path.ts:21-40`), so every path in a run begins at the same root node
 and a common fork always exists. It stays as a corruption guard mapped to 422
-by `rest.ts:349-351`; it is not a product path and the UI must not be built
+by `rest.ts:349-352`; it is not a product path and the UI must not be built
 around it.
 
 The real constraints are set size and identity:
 
 - fewer than 2 distinct ids → `400 INVALID_REQUEST`;
 - a repeated id → `400 INVALID_REQUEST` (a column may not be compared to itself);
-- an unknown id → `404 UNKNOWN_BRANCH` (shipped mapping, `rest.ts:349-351`);
-- more than **8** ids → `422 TOO_MANY_BRANCHES`. Eight is the ceiling the design
-  doc already names for the overview question
-  (`design/03-product-breadth.md:288`), so the cap is stated here rather than
-  discovered in use.
+- an unknown id → `404 UNKNOWN_BRANCH` (shipped mapping, `rest.ts:349-352`);
+- more than **8** ids → `422 TOO_MANY_BRANCHES`.
+
+**Eight is this RFC's number and nothing else's.** The previous draft attributed
+it to `design/03-product-breadth.md`; re-verification found no such statement —
+the only "eight" in that document is "all eight program items" (line 183), which
+is unrelated. The cap is asserted here on its own grounds: eight columns is the
+point past which §5's resulting-position grid stops being readable at one
+screen, and a cap chosen now is a cap the client can render an honest reason for
+rather than one discovered in use. It is not a data-integrity limit and it
+rebases freely if the grid layout later argues for a different number.
+
+**The error codes do not exist yet, and the shipped mapping is closed.**
+`ServerErrorCode` is a closed union (`apps/server/src/errors.ts:1-14`) and
+`errorResponse` maps a fixed set of codes with a fall-through to **500**
+(`rest.ts:343-377`); `BranchQueryError["code"]` is `"UNKNOWN_BRANCH" |
+"NO_COMMON_FORK"` and nothing else (`branch-path.ts:4`). A new code that is
+simply thrown therefore surfaces as a 500, which is the failure this paragraph
+exists to prevent. Concretely:
+
+- `TOO_MANY_BRANCHES` joins `ServerErrorCode` and gains a `422` arm in
+  `errorResponse`'s `ServerError` chain, carrying `{ count, limit }` in
+  `details`. It is **not** added to `BranchQueryError`: that class is a runtime
+  concern and its two codes both mean "this run's graph cannot answer you",
+  which a set-size limit does not.
+- `INVALID_REQUEST` already maps to `400` (`rest.ts:361-362`) and already has the
+  `invalid()` helper, so the two identity rules need no new code.
+- Every other code this RFC introduces — `NO_AUTHORED_VARIATIONS` (422),
+  `SIMULATE_TOO_LARGE` (422), `SIMULATION_EXPIRED` (**410**, a status the shipped
+  chain does not currently produce at all), `SIMULATE_BUDGET_EXCEEDED` (422) —
+  joins the same union and the same chain in the same change. R3's first commit
+  is that widening, before any route exists to throw them.
 
 A selected branch whose leaf **is** the set fork (forked, never moved) is legal.
 It contributes a column with no nodes at any offset and its consequence row
@@ -208,20 +299,25 @@ as an error.
 ### 2. Transport, service, and withholding
 
 **REST** (`apps/server/src/rest.ts:737-745`). `POST /runs/:id/compare` accepts
-`{ branchIds: string[] }` with length 2–8. The `branchAId`/`branchBId` body is
-removed; there is no compatibility shim, for the reason in §1.
+`{ branchIds: string[] }` with length 2–8, and keeps the shipped `{ comparison }`
+response envelope (`rest.ts:738`) so only the payload's interior changes. The
+`branchAId`/`branchBId` body is removed; there is no compatibility shim, for the
+reason in §1. `compare` is already a member of `parseRunRoute`'s action
+allowlist (`rest.ts:393`), so this route needs no parser change — §7's do.
 
-**Transport** (`apps/web/src/lib/api.ts:346-351, 531-539`).
+**Transport** (`apps/web/src/lib/api.ts:346-351, 531-541`).
 `compare(runId, branchIds: readonly string[]): Promise<BranchComparison>`.
 
-**Controller** (`apps/web/src/lib/session-controller.ts:318-338`).
+**Controller** (`apps/web/src/lib/session-controller.ts:318-335`).
 `compare(branchIds: readonly string[])`; the session field
-`comparisonBranchIds` becomes `readonly string[]`. `closeCompare()` is
-unchanged.
+`comparisonBranchIds` (`session-controller.ts:39`) widens from
+`readonly [string, string]` to `readonly string[]`, and the three sites that
+clear it (`:293, :338, :482`) are unchanged because `undefined` still means "no
+comparison open". `closeCompare()` is unchanged.
 
-**Withholding.** `RunService.compare` (`service.ts:364-372`) keeps the shipped
+**Withholding.** `RunService.compare` (`service.ts:364-373`) keeps the shipped
 gate: when `!feedbackDisclosed(run)` it returns
-`comparisonWithoutEngineFeedback(comparison)` (`service.ts:84-110`). That
+`comparisonWithoutEngineFeedback(comparison)` (`service.ts:84-113`). That
 function is amended to (a) map over the branch-keyed records instead of `a`/`b`,
 (b) empty `lines` as well as `evidence`, and (c) apply the reveal rule to the
 consequence row per §4.3. This is one gate in one place; no client-side hiding
@@ -234,13 +330,31 @@ default selection and scoring optimise it afterwards. This RFC implements only
 the manual half.
 
 **Selection state.** `DrillScreen.svelte:84` keeps `compareIds: string[]`;
-`toggleCompare` (`:235-241`) drops the `slice(-1)` eviction and simply adds or
-removes the id, refusing an add that would exceed 8. The eviction line is the
-whole bug and its removal is the whole fix.
+`toggleCompare` (`:234-240`) drops the `slice(-1)` eviction at `:238` and simply
+adds or removes the id, refusing an add that would exceed 8. The eviction line is
+the whole bug and its removal is the whole fix. `compareStep` (`:85`) resets to
+`0` on every change to `compareIds`, per §1.1 clause 7.
+
+**Two shipped shapes have to widen first**, and the previous draft assumed both:
+
+- `BranchCard` (`screen-model.ts:118-135`) carries `id`, `label`, `intent`,
+  `firstMove`, `leafNodeId`, `objectiveState` and `terminal` — **no
+  `forkNodeId`**, so "compare all forked here" cannot be computed from what the
+  rail holds. `branchCards()` gains `forkNodeId: branch.forkNodeId`
+  (`types.ts:104`), which it already has in hand at `screen-model.ts:119`.
+- `BranchRail`'s `Props` (`BranchRail.svelte:4-10`) has `branches`,
+  `activeBranchId`, `compareIds`, `onSwitch` and `onToggleCompare` and no way to
+  express a heading control. It gains `activeForkNodeId: string`,
+  `onCompareAllForkedHere: () => void` and `onClearSelection: () => void`. The
+  rail computes nothing; `DrillScreen` owns the selection, as it does today.
 
 **Rail affordances** (`BranchRail.svelte:39-46`). The existing per-branch
-checkbox is kept and gains an accessible name (`Include <label> in comparison`)
-plus `aria-checked` state. Two new controls are added to the rail heading:
+checkbox is kept and gains an accessible name — `aria-label={`Include ${label}
+in comparison`}` on the `<input>` at `:40-44`, replacing the bare "compare" text
+node at `:45` as the label. No `aria-checked` is added: the element is a native
+`input[type=checkbox]` whose `checked` binding (`:42`) already exposes state, and
+an ARIA override on a native control is the accessibility bug this line avoids.
+Two new controls are added to the rail heading (`:17-20`):
 
 - **Compare all forked here** — selects every branch whose `forkNodeId` equals
   the deepest fork node on the cursor's path, plus the cursor branch. This is
@@ -254,15 +368,18 @@ plus `aria-checked` state. Two new controls are added to the rail heading:
 Both are `HonestControl`-wrapped when unavailable, matching the shipped pattern
 (`DrillScreen.svelte:486-499`), with a stated reason rather than a dead button.
 
-**Opening compare.** `defaultCompareIds()` (`DrillScreen.svelte:200-206`) is
+**Opening compare.** `defaultCompareIds()` (`DrillScreen.svelte:202-207`) is
 replaced by `selectedCompareIds()`: it returns `compareIds` when at least two
 are held, otherwise the cursor branch plus the first other branch (the shipped
-fallback, preserved so the existing keyboard flow keeps working). The return
-type widens from `readonly [string, string]` to `readonly string[]`.
+fallback at `:204-206`, preserved so the existing keyboard flow keeps working).
+The return type widens from `readonly [string, string]` to `readonly string[]`;
+`openCompare()` (`:209-212`) is otherwise unchanged.
 
-**Labels.** `compareLabels` (`DrillScreen.svelte:180-188`) is removed. Labels
-travel in `BranchColumn.label`, so the compare view no longer re-derives them
-and can no longer disagree with the payload.
+**Labels.** `compareLabels` (`DrillScreen.svelte:180-187`) is removed, and with
+it the `branchLabels` prop it feeds (`DrillScreen.svelte:416`,
+`CompareView.svelte:26,33`). Labels travel in `BranchColumn.label`, so the
+compare view no longer re-derives them and can no longer disagree with the
+payload.
 
 ### 4. Explaining consequence, not difference
 
@@ -338,9 +455,31 @@ shipped table expresses a negative:
 
 It states the absence of a checkpoint id from a path — a pack fact of the same
 class as the existing `Checkpoint reached: <label>.`
-(`evidence-sentences.ts:53-62`) — and carries no judgement. It is added to the
-same table so it is rendered through `renderEvidenceRef`'s discipline rather
-than interpolated at a call site.
+(`evidence-sentences.ts:53-63`) — and carries no judgement.
+
+"Added to the same table" needs a reference to be keyed on, and the previous
+draft did not supply one: `evidenceSentenceTable` is a `Map` keyed by evidence
+reference (`evidence-sentences.ts:42-73`) and the only checkpoint key that exists
+is `packEvidenceRef(id)` → `pack:${id}` (`packages/runtime/src/evidence-ref.ts:41-43`),
+which already means *reached*. So:
+
+- `evidence-ref.ts` gains `packAbsentEvidenceRef(checkpointId)` →
+  `pack-absent:${id}`, beside `packEvidenceRef`, with `PackEvidenceRef`'s sibling
+  type and the `index.ts:48` re-export;
+- `evidenceSentenceTable`'s checkpoint loop (`:53-63`) emits a second entry per
+  checkpoint under that key, text
+  `Checkpoint not reached on this branch: ${checkpointLabel(checkpoint)}.`,
+  `sourceLabel: "Pack"`, reusing the shipped `checkpointLabel`
+  (`evidence-sentences.ts:36-39`) so the label falls back to the id exactly as the
+  reached form does;
+- **`pack-absent:` references are render keys and are never persisted.** No
+  `evidence.attached`, no `node.evidenceRefs` and no
+  `objective.state_changed.evidenceRefs` may ever contain one. An absence is not
+  a recorded fact about a position; it is a statement about a path in one
+  comparison, and writing it into the run would manufacture evidence.
+  `isEngineEvidenceRef` (`evidence-ref.ts:53`) does not match it, so it is
+  unaffected by the reveal gate and correctly so — §4.3 keeps
+  `checkpointsMissed` present before reveal.
 
 **Prohibition, normative.** No field of `BranchComparison` and no rendered
 sentence may order, score, rank, recommend, or describe any branch as better,
@@ -918,7 +1057,7 @@ here, its §6 there), and it owns pack schema 0.8 directly beneath this RFC's 0.
 | **R4** | §8 prediction checkpoints, §8.0 **pack** schema 0.9 | R1, R3 (run schema 0.8) |
 | **R5** | §9 deep analysis and MultiPV | R1 |
 
-`design/03-product-breadth.md:65-66,283-293` requires it: **default compare
+`design/03-product-breadth.md:25-26,65-66` requires it: **default compare
 selection and branch usefulness scoring are not in R1–R5.** They optimise a
 surface that must first be correct manually, and they take §3's selection state
 as their input when they are built.

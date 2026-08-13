@@ -3,11 +3,11 @@
 - **Status:** draft
 - **Author:** claude
 - **Created:** 2026-08-13
-- **Design refs:** `design/03-product-breadth.md:79-91` (Live and community), `:142-152` (shared shell regions, "session/role controls appropriate to solo, host, participant, or spectator"), `:53-55` (Position Arena), gate row B5 (`:165`), program item #8 (`:258-265`); `design/02-product-shape.md:50-73` (hosted multi-user, and ADR-0004's fired revisit trigger)
-- **Exploration gate:** opened by owner ruling 2026-08-12 (`rfc/README.md:26-33`); breadth sequencing ruling 2026-08-11 (`rfc/README.md:35-40`)
+- **Design refs:** `design/03-product-breadth.md:79-91` (Live and community), `:154-158` (shared shell regions, "session/role controls appropriate to solo, host, participant, or spectator" at `:158`), `:53-55` (Position Arena), gate row B5 (`:175`), program item #8 (`:268-272`); `design/02-product-shape.md:50-73` (hosted multi-user, and ADR-0004's fired revisit trigger)
+- **Exploration gate:** opened by owner ruling 2026-08-12 (`rfc/README.md:114-121`); breadth sequencing ruling 2026-08-11 (`rfc/README.md:123-124`)
 - **Depends on:** `rfc/archive/learner-identity-and-authorization.md` (F3 — the subject, grants, and the learner-bound lease this RFC builds the session layer on top of); `rfc/archive/pack-optional-runs.md` (F2 — position runs, without which an Arena match run cannot exist)
 - **Sibling drafts:** `rfc/defect-sweep.md` closes D4, D5, D6, D8, D9 and D10 — this RFC cites all six and duplicates none of its fixes; §2.6 states the interaction, and neither blocks the other. `rfc/n-way-comparison.md` holds **migration 6** and run schema 0.7 → 0.8; this RFC rebased to **migration 7** and changes the run schema not at all, so the two are ordered but not coupled (§3.13)
-- **Parent / amends:** amends the lease claim path (`apps/server/src/storage.ts:758-777`), the events page (`apps/server/src/feedback-policy.ts:34-51`), the surface capability map (`apps/server/src/capabilities.ts:117-129`), and the client router (`apps/web/src/lib/router.ts:18-27`). Adds **migration 7** (`STORAGE_VERSION` 6→7)
+- **Parent / amends:** amends the lease claim path (`apps/server/src/storage.ts:758-777`), the events page (`apps/server/src/feedback-policy.ts:34-51`) and both `EventsPage` declarations (`apps/server/src/service.ts:79-82`, `apps/web/src/lib/api.ts:80-83`), the server error vocabulary and its status map (`apps/server/src/errors.ts:1-14`, `apps/server/src/rest.ts:353-377`), the request router (`apps/server/src/rest.ts:391-403`), the surface capability map (`apps/server/src/capabilities.ts:117-129`), and the client router's **dynamic** route machinery (`apps/web/src/lib/router.ts:11-14`, `:32-46`, `:48-52` — *not* the `STATIC_ROUTES` table at `:18-27`). Adds **migration 7** (`STORAGE_VERSION` 6→7; shipped today is **5** at `apps/server/src/storage.ts:147`, so 7 presumes migration 6 lands first — §3.13)
 - **Supersedes / superseded by:** supersedes `planning/breadth/live-and-platform.md` §A2, §A4/C1, §A4/C3, §A4/C5 and §A4/C6, all of which were written on 2026-08-12 against a tree that had no identity. §Deviations item 5 states each correction
 - **Planning:** `planning/live-session-platform/` (once implementing)
 
@@ -17,7 +17,7 @@
 chat votes on moves, an academy whose participants propose while spectators follow,
 scheduled arena events with invitations and relays, and two-leg Position Arena
 sparring through external handoff plus PGN return. None of them exist. `live` is
-hard-coded `"unavailable-here"` (`apps/server/src/capabilities.ts:123`) and `/live`
+hard-coded `"unavailable-here"` (`apps/server/src/capabilities.ts:122`) and `/live`
 renders a placeholder naming this program item (`apps/web/src/App.svelte:351`).
 
 The audit that scoped this work concluded that B5 was blocked on identity. It is not
@@ -48,7 +48,7 @@ coordinates have drifted; corrections are marked.
 | A learner subject | **yes** | `Learner` `apps/server/src/storage.ts:17-22`; request-scoped `Principal` `apps/server/src/authorization.ts:11-14`; scrypt login → HttpOnly SameSite=Strict cookie `apps/server/src/identity.ts:200-202`, 30-day expiry `:14` |
 | Per-run roles | **yes** | `RunRole = "host" \| "participant" \| "spectator"` `apps/server/src/storage.ts:15`; `run_grants` DDL `:1009-1016`; creator auto-granted host `:347-352` |
 | Role predicates | **yes** | `mayRead`/`mayWrite`/`mayManageGrants` `apps/server/src/authorization.ts:16-26` |
-| A **second writer-capable role** | **yes — `participant`** | `mayWrite(role) => role === "host" \|\| role === "participant"` `apps/server/src/authorization.ts:21`. Corrects `planning/breadth/live-and-platform.md:64-66` ("No second writer role") |
+| A **second writer-capable role** | **yes — `participant`** | `mayWrite(role) => role === "host" \|\| role === "participant"` `apps/server/src/authorization.ts:21`. Corrects `planning/breadth/live-and-platform.md:63` ("No second writer role") |
 | Grant management by handle | yes, host-only, re-checked in-transaction | route `apps/server/src/rest.ts:641-658`; service `apps/server/src/service.ts:583-607`; transactional re-check `apps/server/src/storage.ts:798-804`; "a run always retains a host" `:816-824` |
 | Lease **transfer** | **yes, one path** | revoking write from the holder returns the lease to the acting host inside the same `BEGIN IMMEDIATE` transaction — `apps/server/src/storage.ts:825-826`, `:852-863`. Corrects `planning/breadth/live-and-platform.md:60-61` ("No transfer") and its L6 dependency claim |
 | Lease **claim** by any write-capable grantee | yes, unconditional | `POST /runs/:id/lease` `apps/server/src/rest.ts:627-631` → `apps/server/src/service.ts:609-615` → `apps/server/src/storage.ts:758-777` |
@@ -59,7 +59,11 @@ coordinates have drifted; corrections are marked.
 | Follower poll | 2 000 ms, read-only only | `apps/web/src/lib/run-state.ts:277-288`; `access: "writer" \| "read_only"` `:34-39` |
 | Realtime transport (WebSocket / SSE) | **no** | repo-wide grep `websocket\|EventSource\|text/event-stream\|socket.io` over source → 0 hits; prose in `design/`, `archive/`, `planning/` and `docs/engine-workers.md` only |
 | Role, vote, overlay, invitation, cohort, relay, arena, twitch, academy vocabulary | **no** | grep over `apps/*/src packages/*/src workers tests tools` → `RunRole` and its tests, plus the `/live` placeholder prose `apps/web/src/App.svelte:351`. Nothing else |
-| `live` surface | unavailable | `apps/server/src/capabilities.ts:123`; client relabels it "planned" `apps/web/src/lib/api.ts:170-176` |
+| `live` surface | unavailable | `apps/server/src/capabilities.ts:122`; client relabels it "planned" `apps/web/src/lib/api.ts:170-176` |
+| A route parser for anything but `/runs/:id/:action` | **no** | `parseRunRoute` is a closed regex over twelve run actions `apps/server/src/rest.ts:391-403`; `/sessions/*` has no parser, and the four-segment `/sessions/:id/legs/:leg/pgn` does not fit its shape (§3.12) |
+| Extensible server error codes | **no — closed union, and the status map falls through to 500** | `ServerErrorCode` `apps/server/src/errors.ts:1-14`; the 409 branch fires only for `RUN_ALREADY_EXISTS` and `FEEDBACK_WITHHELD`, everything unlisted is `500` `apps/server/src/rest.ts:353-377`. New codes must widen both (§3.12) |
+| A scheduler that mutates domain state on a wall-clock deadline | **no** | the only server timers are the engine supervisor's process restart/timeout machinery (`apps/server/src/engine-supervisor.ts:358`, `:439`) and the offline sourcing lock heartbeat (`apps/server/src/sourcing/lock.ts:34`). Neither is reachable from a request path and neither writes run or session state. Nothing exists that can fire when a `closesAt` passes; §3.6.2 is written against that |
+| `EventsPage` declared once | **no — twice** | `apps/server/src/service.ts:79-82` and the client mirror `apps/web/src/lib/api.ts:80-83`. §3.9 changes both |
 | Position (pack-optional) runs from arbitrary FEN | **yes, REST-only** | `apps/server/src/rest.ts:261-292`; canonical-FEN and non-terminal enforcement `packages/runtime/src/runtime.ts:166-171`. The shipped client only ever creates pack runs (`apps/web/src/lib/session-controller.ts:223-226`) |
 | Forking at the **root** node | **yes** | `appendBranch` has no `ply > 0` or `parentId !== null` guard `packages/runtime/src/runtime.ts:117-128`; the projection parks the cursor on `forkNodeId` `packages/runtime/src/events.ts:88-100`; branch 0 already forks at the root `packages/runtime/src/runtime.ts:189-195` |
 | `compare` across two runs | **no — by signature** | `compare(run, branchAId, branchBId)` `packages/runtime/src/compare.ts:191-195`; both ids resolved against `run.branches` via `requireBranch` `packages/runtime/src/branch-path.ts:13-19`; route is `POST /runs/:id/compare` `apps/server/src/rest.ts:737-746` |
@@ -119,6 +123,13 @@ records that a steal happened; no test covers racing claims. On a solo run acros
 devices this is the intended "continue on this device" affordance. In a coached session
 it means a `participant` grant is equivalent to *may interrupt the coach mid-sentence*.
 
+**The defect is not scoped to sessions, and neither is its fix.** A `participant` grant
+is issued by the shipped `POST /runs/:id/grants` (`apps/server/src/rest.ts:641-658`) on
+any run, with or without a live session. Closing the hole only for runs that have a
+session would leave it open on every run in the database. §3.3 therefore derives board
+control for session-less runs from the grant set rather than defaulting them all to
+`free_claim`: the permissive mode is earned by *being solo*, not by *lacking a session*.
+
 **D18 — a withheld event stream silently freezes a follower.** `publicEvents` truncates
 at the first engine-feedback event and pins `nextSeq` to the last pre-barrier seq, or to
 `sinceSeq` when the very first candidate is the barrier
@@ -174,11 +185,11 @@ available.
 
 **Out, and named rather than implied.** Session-to-pack distillation is program item
 #6's emitter and consumes the session record this RFC defines — this RFC ships the
-record, not the emitter (`design/03-product-breadth.md:255`). Native Arena clocks and
+record, not the emitter (`design/03-product-breadth.md:264-265`). Native Arena clocks and
 matchmaking are depth added inside the surface specified here; `Node.clockState` is
 already carried opaquely (`packages/runtime/src/types.ts:99`) so that depth extends the
 shipped schema rather than reshaping it. The public unauthenticated share link
-(`design/03-product-breadth.md:168`) is not specified here: every surface below is
+(`design/03-product-breadth.md:178`) is not specified here: every surface below is
 authenticated, and an anonymous read capability is a different contract with a different
 threat model. Per-viewer disclosure is not specified here and §3.8 explains why it is
 not specified anywhere.
@@ -208,7 +219,7 @@ export function mayControlSession(role: RunRole): boolean {
 }
 ```
 
-`mayPropose` matches `design/03-product-breadth.md:85-86` verbatim — participants
+`mayPropose` matches `design/03-product-breadth.md:84-85` verbatim — participants
 propose, spectators follow. `mayVote` admits every granted role because a vote is a
 session-log write, never a run write, and the academy case wants thirty spectators
 voting. Ballot-stuffing is bounded by §3.6's adapter rule, not by the role.
@@ -266,7 +277,7 @@ export interface LiveSession {
   before anyone joins.
 - A closed session (`closedAt` set) accepts no proposals, votes, or board changes; its
   journal and its run remain readable, which is what "the completed event can be
-  replayed" (`design/03-product-breadth.md:86`) means and all it requires — replay is
+  replayed" (`design/03-product-breadth.md:85-86`) means and all it requires — replay is
   the shipped `GET /runs/:id/events?sinceSeq=0` plus the journal.
 
 **Cohorts and team relays need no further types.** A cohort is a session's grant set. A
@@ -285,22 +296,40 @@ POST /runs/:id/lease   { expectedHolderLearnerId?: string }
 Inside one `BEGIN IMMEDIATE` transaction, mirroring `#mutateGrant`
 (`apps/server/src/storage.ts:797`):
 
-1. Resolve the role. Reject non-write-capable with `FORBIDDEN` (unchanged).
-2. If `expectedHolderLearnerId` is present and is not the current holder, reject with
-   `LEASE_MOVED` (409). Absent means unconditional and is only legal under
-   `free_claim`.
-3. Apply board control:
-   - `free_claim` — proceed. This is today's behaviour and is the default for every run
-     with no session, so nothing about solo two-device play changes.
+1. Resolve the claimant's role with the in-transaction reader `#roleInTransaction`
+   (`apps/server/src/storage.ts:871-878`), never the cached `runRole`. Reject
+   non-write-capable with `FORBIDDEN` (unchanged).
+2. `SELECT active_writer_learner_id FROM drill_runs WHERE id = ?`. This server-side read
+   — not any client-supplied value — is the CAS witness for step 4. The column is
+   `NOT NULL DEFAULT '__legacy'` (`apps/server/src/storage.ts:1018`), so the witness is
+   always a comparable string and the predicate never degenerates to `= NULL`.
+   If `expectedHolderLearnerId` is present and differs from the witness, reject with
+   `LEASE_MOVED` (409). Absent means "whoever holds it now", which is legal only where
+   step 3 grants an unconditional claim.
+3. Resolve board control, then apply it:
+   - **A run with a session** uses the session's `boardControl`.
+   - **A run with no session** derives it: `free_claim` when the run has at most one
+     write-capable grantee, `host_directed` otherwise. This is the fix for D17's
+     authorization half on the ~all runs that have no session. The permissive mode is
+     earned by being solo — one write-capable learner across N devices is exactly the
+     "continue on this device" case and is untouched — rather than by the absence of a
+     session, which is not evidence of anything. The count is read in the same
+     transaction, so a grant issued concurrently cannot be missed.
+   - `free_claim` — proceed unconditionally.
    - `host_directed` — a `host` proceeds unconditionally. A `participant` proceeds only
-     if the session has an open handoff to that learner (§3.3.1); otherwise
-     `BOARD_HELD` (409).
+     if the session has an open handoff to that learner (§3.3.1); on a session-less run,
+     only a `host` proceeds. Otherwise `BOARD_HELD` (409).
    - `rotation` — only the learner at the rotation cursor proceeds; otherwise
      `BOARD_HELD`.
 4. `UPDATE drill_runs SET active_writer_id = ?, active_writer_learner_id = ?
-   WHERE id = ? AND active_writer_learner_id = ?` with the holder read in step 2.
-   `changes !== 1` is `LEASE_MOVED`.
-5. Append a `board.granted` journal row (§3.4) in the same transaction.
+   WHERE id = ? AND active_writer_learner_id = ?` with the step-2 witness.
+   `changes !== 1` is `LEASE_MOVED`. Under `BEGIN IMMEDIATE` the witness cannot go stale,
+   so this predicate is redundant with the transaction and is written anyway: it is the
+   invariant stated in the statement rather than in a comment, and it matches the shape
+   `save` already relies on (`apps/server/src/storage.ts:484-498`).
+5. Append a `board.granted` journal row (§3.4) in the same transaction. A claim that
+   cannot be journalled must not commit — §3.4's authorship rule is exact only because
+   possession and its record move together.
 6. Commit, then repair the lease cache (`apps/server/src/storage.ts:880-891`) — the
    cache is a real correctness surface here, as `apps/server/src/identity-authorization.test.ts:243-247`
    already establishes.
@@ -312,8 +341,22 @@ superseding any previous one; it does not move the lease — the recipient still
 so the board never moves to a device that is not there. `reclaim` moves the lease to the
 host immediately and clears the handoff, which is the coach's interrupt.
 
-The existing implicit transfer on grant revocation (`apps/server/src/storage.ts:825-826`,
-`:852-863`) is unchanged and gains a `board.granted` journal row in its own transaction.
+**3.3.2 Every other path that moves possession.** The lease is moved in two places
+besides `claimLease`, and §3.4's authorship rule is exact only if all of them journal.
+Both gain a `board.granted` row **inside the transaction that already moves the lease**,
+never a following one — a row written in a second transaction can be lost while the
+possession it describes has already committed, which is precisely the state the rule
+cannot survive.
+
+- **Implicit transfer on grant revocation** (`apps/server/src/storage.ts:825-826`,
+  `:852-863`). Behaviour is unchanged; the row is appended inside `#mutateGrant`'s
+  existing `BEGIN IMMEDIATE` (`:797`), with `actorLearnerId` set to the acting host.
+- **Account deletion** (`apps/server/src/storage.ts:610-644`) reassigns
+  `active_writer_learner_id` to `__legacy` for every run the deleted learner held
+  (`:630-636`) and journals nothing today. It appends a `board.granted` row with
+  `actorLearnerId: null` for each affected run that has a session, inside the same
+  transaction. Without it the journal would keep attributing plies to an account that no
+  longer holds the board — the one way this design could silently lie.
 
 ### 3.4 The possession journal, and how a run says who played ply 14 (D19)
 
@@ -355,12 +398,44 @@ export interface SessionJournalEntry {
 }
 ```
 
-**Authorship rule.** For a run event at seq `S`, the author of a `move.committed` with
-`actor: "user"` is the `actorLearnerId` of the last `board.granted` entry ordered by
-`(runSeq, seq)` whose `runSeq <= S`. This is exact because every lease change is
-journalled inside the transaction that moves it (§3.3 step 5) and no mutation can land
-without the lease (`apps/server/src/storage.ts:484-498`). Runs with no session are
-unaffected: their sole author is the owner.
+**Authorship rule.** For a `move.committed` at run seq `S`, the author is the
+`actorLearnerId` of the last `board.granted` entry, ordered by `(runSeq, seq)`, whose
+**`runSeq < S`**.
+
+The strict inequality is load-bearing and the obvious `<=` is wrong. `runSeq` is
+`run.events.at(-1)?.seq` *at write time* — the seq of the last event that existed
+**before** possession moved. A `board.granted` written when the run stands at seq 10
+therefore describes the holder who authors seq 11 onward, while seq 10 itself was the
+outgoing holder's last ply. Under `<=` that entry would win the lookup for `S = 10` and
+attribute the outgoing holder's final move to the incoming one — an off-by-one that
+misattributes exactly the ply a handoff dispute would be about. Under `<` it does not.
+Two entries sharing a `runSeq` (an offer reclaimed with no move between) are still
+ordered by `seq`, latest wins.
+
+**The rule is total.** Three cases would otherwise have no entry to find:
+
+1. **Plies played before the session existed.** A session is created on a run that may
+   already have moves — `POST /sessions` only requires the caller be `host` on `runId`.
+   `session.opened` therefore writes a `board.granted` for the current holder in the
+   same transaction, with the `runSeq` the run stands at. Every ply at or below that
+   `runSeq` predates the session and is attributed to the run's owner
+   (`drill_runs.owner_learner_id`), which is the only claim the record supports.
+2. **Lease transfer mid-branch**, including revocation-driven transfer and account
+   deletion — §3.3.2 journals both inside the moving transaction. A transfer that lands
+   between two plies of one branch is an ordinary `board.granted` at the intervening
+   `runSeq`; branch structure is irrelevant to the rule, which reads run seq only.
+3. **Imported Arena plies are excluded.** An imported leg's reference-side plies carry
+   `actor: "user"` (§3.7.5) but were played by a human who never held the lease; the
+   holder at that `runSeq` is whoever ran the import. Applying the rule there would name
+   the importer as the player. For any ply whose `move.committed` falls inside a
+   `leg.imported` entry's committed range, the authoritative attribution is
+   `ArenaLeg.referencePlayerHandle` and the journal rule does not apply. The journal
+   still records who *imported* it, which is a different and also true fact.
+
+The rule is exact for the cases it does cover because every lease change is journalled
+inside the transaction that moves it (§3.3 step 5, §3.3.2) and no mutation can land
+without the lease (`apps/server/src/storage.ts:484-498`). Runs with no session have no
+journal and no rule to apply: their author is the run owner.
 
 The journal is served by `GET /sessions/:id/journal?sinceSeq=N` →
 `{ entries, nextSeq }`, mirroring the run events page shape
@@ -467,17 +542,61 @@ export interface VoteWindow {
 - A window closes when the host posts `{ op: "close" }`, when `closesAt` passes, or when
   the run's active cursor leaves `nodeId` — the last transitions it to `stale`, because a
   vote about a position the run has left is not a result.
+- **The two non-host transitions are evaluated lazily, on the next read or write that
+  touches the window, and are persisted at that moment.** Nothing fires at `closesAt`.
+  There is no scheduler, cron, or background job in the server that mutates domain state
+  on a wall-clock deadline (§2.1), and this RFC adds none — a timer that has to survive
+  process restart is exactly the operational surface §3.6 declines to open for the
+  transport. The consequence is stated rather than hidden: a window whose deadline has
+  passed and which nobody has read since is `open` in the database and `closed` to every
+  caller, because every caller goes through the lazy evaluation first. `state` in the row
+  is a cache of a derivable fact, never the authority, and no read path may trust it
+  without re-deriving. The same discipline governs §3.5's `stale` proposals.
 
-**3.6.3 Casting.** `POST /sessions/:id/votes` `{ op: "cast", windowId, choiceUci, voterKey? }`.
+**3.6.3 Casting — the one place untrusted external input enters the system.** `POST
+/sessions/:id/votes` `{ op: "cast", windowId, choiceUci, voterKey? }`. Everything else in
+this RFC is written by an authenticated learner about themselves; a chat vote is written
+by an adapter *on behalf of a stranger*. The rules below are the whole of what keeps that
+from being a spectator-writable amplifier, so each states what it refuses, not merely
+what it permits.
 
-- Requires `mayVote`, i.e. any granted role.
-- `voterKey` may be supplied **only** by the session's `voteAdapterLearnerId`. Every
-  other learner's vote is keyed by their own learner id. This is the ballot-integrity
-  boundary: without it any spectator could post a thousand distinct keys.
+- Requires `mayVote`, i.e. any granted role. Ungranted callers get `RUN_NOT_FOUND`.
+- **Only the session's `voteAdapterLearnerId` may supply `voterKey`.** The check is
+  `session.voteAdapterLearnerId !== undefined && principal.learnerId ===
+  session.voteAdapterLearnerId` — a session with no adapter configured has no learner who
+  may supply a key, and the undefined case must not compare equal to anything.
+- **A `voterKey` from any other learner is rejected with `INVALID_REQUEST`, never
+  ignored.** Silently dropping the field and recording the vote under the caller's
+  learner id would tell a caller their thousand keys were accepted while storing one.
+  Never-silent applies to the request surface, not only to authored packs.
+- **The key space is namespaced, and the namespaces are disjoint by construction.**
+  Stored `voter_key` is `learner:<learnerId>` for a learner voting for themselves and
+  `chat:<adapterLearnerId>:<suppliedKey>` for an adapter-relayed vote. Without this the
+  two spaces share one column and one primary key, and a **`spectator`-role adapter
+  could supply a host's learner id as its `voterKey` and overwrite that host's ballot** —
+  recasting overwrites, so the forgery would be silent and would look in the tally
+  exactly like the host changing their mind. Including the adapter's own id in the prefix
+  also keeps two adapters on one session from colliding. The prefix is applied
+  server-side; the adapter never sees or supplies it.
+- **The supplied key is bounded.** At most 128 characters, and rejected with
+  `INVALID_REQUEST` beyond that. At most 50 000 distinct `voterKey`s per window, after
+  which further *new* keys are rejected with `VOTE_INTAKE_FULL` (429) while recasts by
+  already-seen keys still succeed. The adapter is a `spectator` — the lowest-trust role
+  the model has — and it is the only writer in the system whose row count is driven by
+  people who do not have accounts. Unbounded, one compromised or merely buggy bridge
+  fills the hosted database; bounded, the worst case is a capped table and a tally that
+  says so. The cap is per window and the window is the unit that gets discarded.
 - Primary key `(sessionId, windowId, voterKey)`; recasting overwrites. Each row records
-  `castByLearnerId`.
+  `castByLearnerId`, so every relayed vote remains attributable to the adapter account
+  that posted it.
 - `choiceUci` must be one of the window's `options`, else `INVALID_REQUEST`.
-- Rejected when the window is not `open`, with `VOTE_WINDOW_CLOSED` (409).
+- Rejected when the window is not `open`, with `VOTE_WINDOW_CLOSED` (409). "Open" is
+  evaluated by §3.6.2's lazy rule, so a window past its `closesAt` refuses the cast even
+  though nothing ran at the deadline.
+- **A vote never writes the run.** No cast path reaches `commitMove`, `fork`, `rewind`,
+  or `save`; the only tables a cast touches are `session_votes` and `session_journal`.
+  This is what makes a spectator-writable endpoint safe to expose at all, and it is
+  asserted directly by A11.
 
 **3.6.4 Tally, and its epistemic status.** `GET /sessions/:id/votes/:windowId` →
 `{ window, tally: [{ moveUci, label, count }], total }`, readable by every granted role
@@ -495,10 +614,19 @@ names (`CLAUDE.md` §Non-negotiable laws 8), and the honest rendering is "chat w
 this, I played that, here is the comparison" — which is the whole point of the host then
 rewinding and forking on the crowd's choice.
 
+**A binding vote is refused, not deferred.** No field, route, or option in this RFC lets
+a tally select a move, and none may be added inside this surface: `appliedOptionUci` is
+written *after* the host's own `move.committed` and records what the host did, never what
+the crowd decided. A binding vote would make replaying a run depend on `session_votes`,
+which is not in the run event log, so two replays of the same log could differ — and the
+run log is the only thing that survives a session being closed or deleted. That is the
+same reason §3.4 keeps role traffic out of the run log, arrived at from the other side.
+
 **Documented limit:** the server dedupes by `voterKey` but cannot authenticate chat
-users. A tally is exactly as trustworthy as the adapter reporting it. This is stated in
-`docs/`, surfaced in the overlay as an attribution line naming the adapter handle, and
-not engineered against.
+users. A tally is exactly as trustworthy as the adapter reporting it, and the caps in
+§3.6.3 bound the damage rather than establishing trust. This is stated in `docs/`,
+surfaced in the overlay as an attribution line naming the adapter handle, and not
+engineered against.
 
 ### 3.7 Position Arena: two legs, one run
 
@@ -605,9 +733,15 @@ is a **service-level operation**; it never goes through `POST /runs/:id/moves`.
    (`packages/runtime/src/runtime.ts:240-246`, `packages/runtime/src/types.ts:69-76`) —
    would mean fabricating an engine identity for a human move, writing
    `version: "unknown"` into the provenance chain and manufacturing by hand the exact
-   anonymity **D10** already tracks as a defect. Who the human was is recorded on
+   anonymity **D10** already tracks as a defect. `commitMove` requires the selection only
+   for `actor: "opponent"` (`packages/runtime/src/runtime.ts:263-272`), so `"system"`
+   commits cleanly with none. Who the human was is recorded on
    `ArenaLeg.referencePlayerHandle` and rendered by the Arena UI. The run stays honest
    about provenance; the match record stays honest about people.
+
+   **This is the one place §3.4's authorship rule must not be applied**, and §3.4 case 3
+   says so: the lease holder during an import is the importer, not the player. An Arena
+   ply's player is `ArenaLeg.referencePlayerHandle` and nothing else.
 7. Write the leg's `branchId`, `pgn`, `result`, `importedAt`, and a `leg.imported`
    journal entry.
 
@@ -662,30 +796,40 @@ code is written against it.
 
 ### 3.9 D18: the follower must not freeze silently
 
-`EventsPage` gains one field:
+`EventsPage` gains one field — in **both** places it is declared, `apps/server/src/service.ts:79-82`
+and the client mirror `apps/web/src/lib/api.ts:80-83`, which must not drift:
 
 ```ts
 export interface EventsPage {
   readonly events: readonly DrillRunEvent[];
   readonly nextSeq: number;
-  readonly withheld?: true;   // set when publicEvents truncated at the barrier
+  readonly withheld?: true;   // set when publicEvents actually truncated
 }
 ```
 
-`publicEvents` sets `withheld: true` on the truncating branch
-(`apps/server/src/feedback-policy.ts:45-50`) and never on the disclosed branch. This is
-additive JSON on a response, not a run-schema change: no migration, no schema version.
-The client's follower (`apps/web/src/lib/run-state.ts:197-204`) renders a standing
-"the host is ahead; evidence is withheld until this run discloses" state instead of a
-board that looks live and is not. Truncation itself is unchanged, because the client's
-contiguity check (`:80-86`) requires it.
+**The condition is `barrier !== -1`, not "the undisclosed branch."** `publicEvents`
+(`apps/server/src/feedback-policy.ts:45-50`) reaches its second branch for every
+undisclosed run, including the common case where the page contains no barrier event at
+all (`barrier === -1`, `events === candidates`, nothing withheld). Setting the flag there
+would tell a fully caught-up follower it is behind a barrier on every one of its 2 s
+polls — trading a silent freeze for a permanent false alarm, which is the same defect
+wearing the other mask. The flag is set only when `barrier !== -1`, i.e. only when some
+candidate event was actually withheld from this page, and never on the disclosed branch.
+
+The flag has to reach a renderer, and `RunStateSnapshot` (`apps/web/src/lib/run-state.ts:34-39`)
+has no field to carry it, so it gains `readonly withheld: boolean`, set from each page in
+`pollEvents` (`:197-204`). The follower then renders a standing "the host is ahead;
+evidence is withheld until this run discloses" state instead of a board that looks live
+and is not. The flag is response-only: additive JSON, no run-schema change, no migration,
+no schema version. Truncation itself is unchanged, because the client's contiguity check
+(`:80-86`) requires it.
 
 ### 3.10 The overlay projection
 
 Route `/live/overlay/:runId`. A chrome-free render of the same `RunStateSnapshot`
 (`apps/web/src/lib/run-state.ts:34-39`) the drill screen uses, through the same
 `projectRun` the writer uses — this is what makes the overlay a projection rather than a
-second product (`design/03-product-breadth.md:151-152`). It renders the active position,
+second product (`design/03-product-breadth.md:161-162`). It renders the active position,
 the objective state, the branch list, the open vote tally, and the adapter attribution
 line from §3.6.4. No navigation, no shell frame, no write control, no evidence beyond
 what §3.8 already gives every reader.
@@ -698,7 +842,12 @@ is fortunate given `parseDrillAddress` forbids query and fragment
 
 ### 3.11 Client surface
 
-Two routes join `apps/web/src/lib/router.ts:18-27`:
+Two routes join the client router. Both are **dynamic**, so neither goes in the
+`STATIC_ROUTES` table (`apps/web/src/lib/router.ts:18-27`) — that map is keyed by exact
+pathname. They join the `AppRoute` union (`:11-14`), `parseRoute`'s dynamic arm
+(`:32-46`, which today matches exactly one pattern, `/play/run/:id`), and `routePath`
+(`:48-52`), whose non-`not-found` exhaustiveness makes adding a variant without a path
+builder a compile error rather than a broken link:
 
 - `/live/session/:sessionId` — the session page: members and their roles, board control
   and the handoff control, invitations, schedule, match legs and PGN import, and the
@@ -713,12 +862,16 @@ events, listed by scheduled time and pack id. **It does not open a second path t
 list by phase is depth added inside this surface through the field that draft supplies.
 
 Inside a run whose id has a session, the drill screen gains a **session rail** —
-`design/03-product-breadth.md:148` already names "session/role controls appropriate to
+`design/03-product-breadth.md:158` already names "session/role controls appropriate to
 solo, host, participant, or spectator" as a region of the shared shell, so this is a
 region, not a second play screen. It shows the current holder (`RunViewer.leaseHeldBy`,
 `apps/server/src/service.ts:64-69`), open proposals, the open vote window and tally, and
 the host's controls. It is absent for runs with no session, so solo play is visually
 unchanged.
+
+`AppRoute` also gains the `sessionId`/`runId` payloads these routes carry; `parseRoute`
+returns `not-found` on an un-decodable segment exactly as the run route already does
+(`:38-44`), so a malformed live URL is a route, not a crash.
 
 `live` flips to `"available"` in `apps/server/src/capabilities.ts:117-129`,
 unconditionally — sessions need no engine — and drops out of `PLANNED_SURFACES`
@@ -726,13 +879,27 @@ unconditionally — sessions need no engine — and drops out of `PLANNED_SURFAC
 
 ### 3.12 HTTP surface
 
+**A parser must exist before any of this is reachable.** `parseRunRoute`
+(`apps/server/src/rest.ts:391-403`) is a closed regex over `/runs/:id/:action` with a
+twelve-value action list; there is no parser for any other path shape, and
+`/sessions/:id/legs/:leg/pgn` has four segments and a numeric one, so it does not fit
+even after widening that list. A sibling `parseSessionRoute` is added beside it, matching
+`^/sessions(?:/([^/]+)(?:/(journal|board|proposals|votes|invitations|legs)(?:/([^/]+))?(?:/(pgn))?)?)?$`,
+decoding each segment inside the same `try` that already converts a bad encoding into
+`INVALID_REQUEST` rather than a 500 (`:398-402`). Session ids are server-minted, but the
+parser treats them as untrusted path input regardless.
+
 All routes authenticate through the shipped cookie and scope through the shipped grant.
 All POSTs require `content-type: application/json` via `requireJson`
-(`apps/server/src/rest.ts:628`) except the PGN import, which requires
-`text/x-chess-pgn`. **No new route accepts a body without a content-type check** — the
-shipped inconsistency (`requireJson` is applied only to `lease`, `reveal` and `grants`)
-must not be widened, since `SameSite=Strict` is currently the only CSRF defence
-(`apps/server/src/identity.ts:201`).
+(`apps/server/src/rest.ts:231-236`, applied at `:628`) except the PGN import, which
+requires `text/x-chess-pgn`. **No new route accepts a body without a content-type
+check** — the shipped inconsistency (among run routes `requireJson` reaches only `lease`,
+`reveal` and `grants`, `:628`, `:633`, `:642`; the `/auth` POST family is covered at
+`:479`, and `moves`, `rewind`, `fork`, `compare` and `evidence` are not) must not be
+widened, since `SameSite=Strict` is currently the only CSRF defence
+(`apps/server/src/identity.ts:201`). The vote-cast route is the sharpest instance: it is
+the one endpoint a `spectator` may POST to, so it is also the one where a
+cross-site-forged form post would be worth writing.
 
 | Route | Method | Authorization |
 |---|---|---|
@@ -755,20 +922,39 @@ A session on a run the caller has no grant on returns `RUN_NOT_FOUND`, matching
 `requireRead`'s no-existence-oracle posture (`apps/server/src/authorization.ts:28-38`).
 
 New error codes: `BOARD_HELD` (409), `LEASE_MOVED` (409), `VOTE_WINDOW_CLOSED` (409),
-`ARENA_ROOT_MISMATCH` (422). Mapped in `apps/server/src/rest.ts:358-374`.
+`VOTE_INTAKE_FULL` (429), `ARENA_ROOT_MISMATCH` (422).
+
+**Each is added in two places, and omitting either fails quietly in a different way.**
+`ServerErrorCode` is a closed union (`apps/server/src/errors.ts:1-14`), so a code that is
+not added there does not typecheck at the throw site — the loud failure. The status map
+(`apps/server/src/rest.ts:358-377`) is the quiet one: its 409 arm fires only for
+`RUN_ALREADY_EXISTS` and `FEEDBACK_WITHHELD`, and **every unlisted code falls through to
+`500`**. A `BOARD_HELD` added to the union but not to the map would compile, run, and
+report a refused board claim as a server fault — turning the central mechanism of D17's
+fix into an apparent outage. `VOTE_INTAKE_FULL` also introduces the first `429` in the
+map; the arm is added rather than folded into an existing status, because a full intake
+is a caller-throttling condition and the adapter is the one caller expected to back off.
 
 ### 3.13 Persistence — migration 7
 
-`STORAGE_VERSION` 6 → 7 (`apps/server/src/storage.ts:147`), registered in
-`rfc/README.md` §Migration register. All tables `STRICT`, all `CHECK` strings derived
-from the frozen tuples of §3.1/§3.2 rather than typed twice.
+`STORAGE_VERSION` 6 → 7, registered in `rfc/README.md:164` §Migration register. All
+tables `STRICT`, all `CHECK` strings derived from the frozen tuples of §3.1/§3.2 rather
+than typed twice.
+
+**The shipped constant is `5`, not 6** (`apps/server/src/storage.ts:147`), and the ladder
+ends at version 5 (`apps/server/src/storage.ts:915-941`). The 6 → 7 claim is a statement
+about the register, not about the tree: it presumes `rfc/n-way-comparison.md`'s migration
+6 has landed. An implementer who reads `6 → 7` as a description of the working tree will
+write a migration that never runs, because `#migrate` skips any entry whose
+`version <= version` and a 7 appended to a ladder ending at 5 leaves a hole at 6 that
+nothing fills.
 
 **Ordering against migration 6.** `rfc/n-way-comparison.md` holds 6. Migration 7 is
 append-only DDL that reads no run snapshot and no column either draft touches, so it is
 order-independent in behaviour but not in numbering: it must be appended after 6 in the
-ladder (`apps/server/src/storage.ts:915-941`). If `n-way-comparison.md` is withdrawn
-before landing, this migration rebases to 6 rather than leaving a hole — the register is
-the single writer of that decision.
+ladder. If `n-way-comparison.md` is withdrawn before landing, this migration rebases to 6
+rather than leaving a hole — the register is the single writer of that decision, and the
+rebase is a register edit before it is a code edit.
 
 ```sql
 CREATE TABLE live_sessions (
@@ -825,10 +1011,20 @@ CREATE TABLE session_vote_windows (
 CREATE UNIQUE INDEX session_vote_windows_open
   ON session_vote_windows(session_id) WHERE state = 'open';
 
+-- voter_key is server-namespaced (§3.6.3): 'learner:<id>' for a learner voting for
+-- themselves, 'chat:<adapterLearnerId>:<suppliedKey>' for an adapter relay. The CHECK is
+-- the last line of defence for the namespace separation the service layer enforces: it
+-- makes a forged 'learner:' key from an adapter a constraint violation rather than a
+-- silently overwritten ballot. cast_by_learner_id is NOT NULL and never SET NULL --
+-- deleting the adapter account must not anonymise the relayed ballots it posted, so the
+-- cascade deletes them with it.
 CREATE TABLE session_votes (
   session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,
   window_id TEXT NOT NULL REFERENCES session_vote_windows(id) ON DELETE CASCADE,
-  voter_key TEXT NOT NULL,
+  voter_key TEXT NOT NULL CHECK (
+    (voter_key LIKE 'learner:%' OR voter_key LIKE 'chat:%')
+    AND length(voter_key) <= 200
+  ),
   choice_uci TEXT NOT NULL,
   cast_by_learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
   at TEXT NOT NULL,
@@ -861,8 +1057,11 @@ CREATE TABLE arena_legs (
 
 Migration 7 creates tables only. It backfills nothing, rewrites no snapshot, and touches
 no run row, so it cannot mis-stamp a schema version the way migration 4's body had to be
-frozen against (`rfc/README.md:54`). Every existing run has no session and keeps
-`free_claim` semantics by construction. `DRILL_RUN_SCHEMA_VERSION` is unchanged.
+frozen against (`rfc/README.md:161`). Every existing run has no session, and its board
+control is therefore *derived* rather than stored (§3.3 step 3) — no column is added to
+`drill_runs` and no row is rewritten. Solo runs, which are all of them today, derive
+`free_claim` because they have one write-capable grantee.
+`DRILL_RUN_SCHEMA_VERSION` is unchanged.
 
 **Deleting a learner** must not orphan a session: `ON DELETE SET NULL` on
 `vote_adapter_learner_id`, `handoff_learner_id`, and `session_journal.actor_learner_id`
@@ -884,7 +1083,7 @@ mock mode.
 
 ## Deviations from design
 
-1. **`design/03-product-breadth.md:88` names "team relays" and "cohorts" as distinct
+1. **`design/03-product-breadth.md:87-88` names "team relays" and "cohorts" as distinct
    items; this RFC ships neither as a distinct type.** A cohort is a session's grant set
    and a relay is `boardControl: "rotation"`. The surfaces exist and complete their
    scenarios; the aggregates do not, because they would only re-express `run_grants`.
@@ -892,13 +1091,13 @@ mock mode.
    clients; this RFC gives them no client at all** in the stream case. Stronger than the
    design asks, and a consequence of §3.6.1's adapter-is-a-learner decision rather than a
    separate choice.
-3. **`design/03-product-breadth.md:90` names shareable run URLs and spectator-safe views
+3. **`design/03-product-breadth.md:90-91` names shareable run URLs and spectator-safe views
    as platform primitives. This RFC ships the authenticated half only** — a granted
    spectator with a run URL. The unauthenticated public share link is out of scope
    (§2.6) and B8's row stays open on it.
-4. **`design/03-product-breadth.md:86` says a completed event "can be replayed and
+4. **`design/03-product-breadth.md:85-86` says a completed event "can be replayed and
    distilled into a pack." This RFC ships replay and the session record; the
-   distillation emitter is program item #6's** (`design/03-product-breadth.md:255`),
+   distillation emitter is program item #6's** (`design/03-product-breadth.md:264-265`),
    which this RFC's `LiveSession` + `session_journal` + `arena_legs` are the input to.
 5. **Against `planning/breadth/live-and-platform.md` §A4/C1**, which proposed a
    capability-token model with `capabilities: [{token, role, label}]`. Rejected: F3
@@ -929,7 +1128,12 @@ learners, following the two-context pattern already proven at
    by the host. C's board advances within 4 s.
 6. The host offers the board to B; B claims it successfully; B plays one ply.
 7. `GET /sessions/:id/journal?sinceSeq=0` attributes the move in step 5 to the host and
-   the move in step 6 to B, by the §3.4 rule.
+   the move in step 6 to B, by the §3.4 rule. **The boundary ply is asserted
+   explicitly:** the host's *last* ply before the handoff attributes to the host and B's
+   *first* ply after it attributes to B, which is the pair that separates `runSeq < S`
+   from `runSeq <= S`. A server test adds the case the browser test cannot reach: a run
+   with plies committed *before* its session was created attributes those plies to the
+   run owner via `session.opened`'s seeded `board.granted`, not to nobody.
 
 **A2 — Arena two legs compare.** A browser or server test: create a `match` session from
 a root FEN with a declared reference side, import two PGNs, and assert that the run has
@@ -950,14 +1154,31 @@ is withheld, host and spectator `GET /runs/:id/graph`, `/events`, `/evidence` an
 
 **A5 — D18.** With the barrier active, `GET /runs/:id/events` returns `withheld: true`
 and the follower renders the withheld state rather than a static board. A unit test on
-`publicEvents` asserts the flag is set on the truncating branch and absent on the
-disclosed one.
+`publicEvents` asserts three cases, not two: the flag is **set** when an undisclosed page
+truncates (`barrier !== -1`), **absent** when an undisclosed page contains no barrier
+event, and **absent** on the disclosed branch. The middle case is the one that catches a
+fix that cries wolf on every poll.
 
-**A6 — D17.** A test asserts that two concurrent `POST /runs/:id/lease` calls under
-`free_claim` produce exactly one winner and one `LEASE_MOVED`, that a `host_directed`
-participant claim without a handoff is `BOARD_HELD`, that the same claim after an offer
-succeeds, and that every successful claim wrote a `board.granted` journal row in the
-same transaction.
+**A6 — D17, both halves.** A test asserts that two concurrent `POST /runs/:id/lease`
+calls under `free_claim` produce exactly one winner and one `LEASE_MOVED`; that a
+`host_directed` participant claim without a handoff is `BOARD_HELD`; that the same claim
+after an offer succeeds; and that every successful claim wrote a `board.granted` journal
+row in the same transaction. **Plus the session-less case, which is where the shipped
+defect actually lives:** on a run with *no session* and two write-capable grantees, a
+`participant` claim is `BOARD_HELD`; on a run with no session and one write-capable
+grantee, the owner's second device claims successfully, proving two-device continuity
+survives the fix.
+
+**A11 — the vote endpoint refuses what it must.** Server tests against one session with a
+configured adapter: a non-adapter learner supplying `voterKey` is `INVALID_REQUEST` (not
+a silently re-keyed vote); a session with no configured adapter refuses `voterKey` from
+everyone including the host; an adapter supplying a *host's learner id* as its
+`voterKey` cannot overwrite that host's ballot — the host's vote survives and the relayed
+vote lands under a distinct namespaced key; a supplied key over 128 characters is
+`INVALID_REQUEST`; and past the per-window cap a new key is `VOTE_INTAKE_FULL` (429)
+while a recast by an already-seen key still succeeds. Finally, and separately: after any
+number of casts the run's event log is byte-identical to before them, which is the
+assertion that the tally is advisory.
 
 **A7 — D4 obligation.** A test asserts that `RUN_ROLES`, the request-parser guard, the
 SQL `CHECK` constraint and the client's `RunRole` union are all derived from or equal to
@@ -966,13 +1187,20 @@ is gone.
 
 **A8 — Honest surfaces.** `GET /capabilities` reports `live: "available"`, the client no
 longer labels it planned, and the `/live` placeholder at
-`apps/web/src/App.svelte:351` is replaced by the real index. The route-wide disabled-control
-sweep (`docs/app-shell.md`) passes on the two new routes, and the overlay route owns its
-viewport at the projections asserted in `tests/browser/drill.spec.ts`.
+`apps/web/src/App.svelte:351` is replaced by the real index. The route-wide
+disabled-control sweep (`docs/app-shell.md:163-171` — every disabled control carries a
+reason) passes on the two new routes, and the overlay route owns its viewport at both
+desktop projections asserted by `tests/browser/drill.spec.ts:414-455`. Every new error
+code returns its declared status through a real request, not just its declared value: a
+refused board claim is observed as `409`, never `500` (§3.12).
 
 **A9 — Nothing solo changed.** The full existing suite passes unmodified, including the
 Najdorf end-to-end scenario and the existing spectator test, with `retries` still unset.
-A run with no session has `free_claim` board control and no session rail.
+A solo run — no session, one write-capable grantee — derives `free_claim` board control
+and shows no session rail, so two-device continuity and the shipped browser suite are
+untouched. A run with no session but two write-capable grantees derives `host_directed`;
+this is a deliberate behaviour change on the shipped lease and is A6's second half, not
+an A9 regression.
 
 **A10 — Docs.** `docs/live-sessions.md` exists and states, in the product's own voice:
 the three roles and the three board-control modes; that the tally is advisory and only
@@ -993,8 +1221,12 @@ owner's ruling (`CLAUDE.md` §Non-negotiable laws 5). These are proposals.
 - **New D17** — `POST /runs/:id/lease` has no compare-and-swap predicate and no
   enclosing transaction (`apps/server/src/storage.ts:758-777`), so any `participant` can
   seize the board from the host at any moment and two claimants race last-writer-wins.
-  Correct for solo two-device continuity; a live hazard for any coached session. Closed
-  by `rfc/live-session-platform.md` §3.3.
+  **The hole is not scoped to live sessions:** a `participant` grant is issued by the
+  shipped grant path on any run, so every run in the database is exposed today. Correct
+  only for genuine solo two-device continuity. Closed by
+  `rfc/live-session-platform.md` §3.3 in both halves — the race by a transaction plus
+  CAS on every claim, the authorization half by deriving board control from the grant set
+  on runs with no session rather than leaving them permanently permissive.
 - **New D18** — `publicEvents` truncates at the disclosure barrier and pins `nextSeq`
   (`apps/server/src/feedback-policy.ts:45-50`), so a 2 s follower re-requests the same
   seq forever and a spectator's board freezes with no indication. Never-silent
@@ -1002,8 +1234,9 @@ owner's ruling (`CLAUDE.md` §Non-negotiable laws 5). These are proposals.
 - **New D19** — the run log cannot attribute a ply to a learner
   (`packages/runtime/src/types.ts:115-120`) and grant/lease changes are not journalled;
   `docs/identity-and-authorization.md:71` records this as a limit, which two
-  write-capable roles on one run turn into a defect. Closed by §3.4 without touching the
-  run schema.
+  write-capable roles on one run turn into a defect. `deleteLearner`
+  (`apps/server/src/storage.ts:630-636`) additionally moves possession to `__legacy` with
+  no record at all. Closed by §3.4 and §3.3.2 without touching the run schema.
 - **Correction of record, Position Arena row** — "`parsePgn` has no production caller"
   is no longer accurate: `apps/server/src/sourcing/openings.ts:7,47` calls it in the
   offline sourcing CLI. The accurate claim is that no PGN reader exists on any request
@@ -1015,9 +1248,39 @@ owner's ruling (`CLAUDE.md` §Non-negotiable laws 5). These are proposals.
 - **`Streamer/Twitch mode`, `Academy/coached sessions`, `Position Arena`** — all three
   become 📜 scheduled against this RFC rather than blocked on F3.
 
-`planning/exploration/gates.md` B5 row: unmet → met once A1–A10 pass; B8's share-link
+`planning/exploration/gates.md` B5 row: unmet → met once A1–A11 pass; B8's share-link
 clause stays open on the unauthenticated public link (§2.6).
 
 ## Changelog
 
 - 2026-08-13: created.
+- 2026-08-13: adversarial review. **Infrastructure the draft assumed and the tree does
+  not have:** the four new error codes needed `ServerErrorCode` widened
+  (`apps/server/src/errors.ts:1-14`) and a status-map arm, since unlisted codes fall
+  through to `500` and a refused board claim would have reported as a server fault;
+  `/sessions/*` had no route parser and could not have one by widening `parseRunRoute`'s
+  action list (§3.12); `EventsPage` is declared twice and `RunStateSnapshot` had no field
+  to carry `withheld` (§3.9); no scheduler exists to fire at a vote window's `closesAt`,
+  so closure is now specified as a lazy, persisted re-derivation (§3.6.2). Corrected
+  `STORAGE_VERSION`: shipped is **5**, not 6, so `6 → 7` is a register claim and not a
+  description of the tree (§3.13).
+  **Correctness fixes:** §3.4's authorship rule was off by one — `runSeq <= S`
+  misattributes the outgoing holder's last ply to the incoming one, now `runSeq < S` —
+  and was not total, with no entry for plies predating the session, for account deletion,
+  or for imported Arena legs; all three are now specified (§3.4, §3.3.2). §3.3's
+  revocation transfer said "its own transaction", contradicting §3.4's exactness claim;
+  now the same transaction. D17's authorization half was closed only for runs with a
+  session, leaving every session-less run with a `participant` grant exposed; board
+  control is now derived from the grant set when no session exists (§2.4, §3.3, ledger).
+  **Vote intake hardened:** adapter-supplied and learner-derived `voterKey`s shared one
+  column and one primary key, so a `spectator`-role adapter could overwrite a host's
+  ballot by supplying that host's learner id — keys are now server-namespaced with a
+  `CHECK` behind the service check; a `voterKey` from a non-adapter is rejected rather
+  than ignored; key length and per-window cardinality are capped (`VOTE_INTAKE_FULL`,
+  429); and the refusal of a binding vote is stated as a closed door rather than a
+  current preference (§3.6.2–§3.6.4).
+  **Citations:** corrected `capabilities.ts:123`→`:122`, `router.ts:18-27` (the new
+  routes are dynamic and do not belong in `STATIC_ROUTES`), `runtime.ts:240-246`
+  (`revealFeedback`, not the opponent-selection guard at `:263-272`), the `requireJson`
+  coverage claim, and eleven `design/` and `rfc/README.md` line ranges that had drifted.
+  Added A11 and extended A1, A5, A6 and A8 to cover the above.

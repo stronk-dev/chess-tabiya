@@ -3,12 +3,14 @@
 - **Status:** draft
 - **Author:** claude
 - **Created:** 2026-08-13
-- **Design refs:** `design/00-thesis.md` §Target player (lines 84-86: the on-ramp band's
-  three knobs, one of which is "pack-declared immediate blunder-guard feedback");
-  `design/03-product-breadth.md` gate B1 (line 161: "met with residuals — … `phase` is
-  never projected") and the Play surface's "packs by phase" (line 134);
-  `design/BACKLOG.md` open-defect rows D4 (line 117), D5 (118), D10 (128), D9 (129),
-  D8 (130), D6 (132)
+- **Design refs:** `design/00-thesis.md` §Target player (lines 84-89: the on-ramp band's
+  three knobs, one of which is "pack-declared immediate blunder-guard feedback", line 86);
+  `design/03-product-breadth.md` gate B1 (line 171: "met with residuals — … `phase` is
+  never projected", restated at line 213) and the Play surface's "packs by phase"
+  (line 144); `design/BACKLOG.md` open-defect rows D4 (line 117), D5 (118), D10 (132),
+  D9 (133), D8 (134), D6 (136). **All six coordinates were re-read on 2026-08-13 after the
+  parallel drafts appended rows D17–D20; the ledger's own D9 row was rewritten the same day
+  and now states the severity this RFC verified (§1a).**
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 + exploration gate opened by
   owner ruling 2026-08-12 (`planning/exploration/log.md`)
 - **Depends on:** nothing unshipped
@@ -23,9 +25,12 @@
 - **Supersedes / superseded by:** —
 - **Migration:** **none, and this is a claim with a reason, not an omission.** Nothing this
   RFC changes is persisted. The pack schema version is not written into any run row: it
-  lives in `runtimeBuildInfo.drillPackVersion` (`packages/schema/src/index.ts:2,8`) which is
-  served at `/` (`apps/server/src/index.ts:104`) and is absent from the capabilities payload
-  (`apps/server/src/capabilities.ts:160-170`, which publishes `runSchemaVersion` only).
+  lives in `schemaBuildInfo.drillPackVersion` (`packages/schema/src/index.ts:2,8` — a
+  different object from `runtimeBuildInfo`, `packages/runtime/src/index.ts:149`, which
+  carries `runSchemaVersion`), is served at `/` as `serverBuildInfo.schema`
+  (`apps/server/src/index.ts:103-107`), and is absent from the capabilities payload
+  (`apps/server/src/capabilities.ts:163-172`, which publishes `runSchemaVersion` only, at
+  `:166`).
   `digestDrillPack` canonicalizes the pack document's own bytes, so narrowing the schema
   changes no shipped pack's digest. `STORAGE_VERSION` and the run schema are untouched. **No
   number is claimed in `rfc/README.md`'s migration register.**
@@ -35,19 +40,26 @@
 
 Six defects sit open in `design/BACKLOG.md`, each small, each leaking into every new RFC as
 a caveat. I re-verified all six against the tree. **All six are still real.** None was
-incidentally fixed, though one — D9 — has drifted far enough from its ledgered description
-that the ledger now understates it in one direction and overstates it in another, and one —
-D8 — is larger than its row says: the schema declares **five** values the loader rejects,
-not two.
+incidentally fixed. Two have moved since they were written: D9's severity was raised in the
+ledger on 2026-08-13 while this RFC was drafted, so the row and §1a now agree — the crash it
+was filed for is unreachable and a silent inverted grading verdict sits underneath it; and
+D8 is larger than its row says, because the schema declares **five** values the loader
+rejects, not two.
 
 Five of the six are one shape. A vocabulary is written down in two or more places — the JSON
-Schema, a server constant, a runtime constant, an inline literal, a client `if` — and
-nothing binds the copies. Where the copies happen to agree (D4) the defect is latent; where
-they disagree (D8) an author can write a value that passes `make pack-check`'s schema stage
-and is refused at load; where one copy says *optional* and the consumer assumes *present*
-(D9, D6) the boundary condition is the bug. This RFC closes all six, and closes the shape by
-making each vocabulary have exactly one writable source with a test that fails on the next
-divergence.
+Schema, a server constant, a runtime constant, an inline literal, a client `if`. Where the
+copies happen to agree (D4) the defect is latent; where they disagree (D8) an author can
+write a value that passes `make pack-check`'s schema stage and is refused at load; where one
+copy says *optional* and the consumer assumes *present* (D9, D6) the boundary condition is
+the bug. **One binding already exists** and is worth naming before proposing another:
+`apps/server/src/pack-authoring.test.ts:41-61` asserts, as sets, that the schema's
+opponent-mode enum is `SUPPORTED_POLICY_MODES ∪ DECLARED_UNIMPLEMENTED_POLICY_MODES` and
+that the `feedbackPolicy` enum is the two executable values plus
+`DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES`. So D8's divergence is deliberate and tested; what
+is untested is that the two sides are **disjoint**, and the other three vocabularies
+(checkpoint actions, objective types, phases) have no binding at all. This RFC closes all
+six, extends the existing binding, and gives the unbound vocabularies exactly one writable
+source with a test that fails on the next divergence.
 
 D8 is the one with design content and it is decided **per value**, not aligned silently.
 `immediate_blunder_guard` is **removed from the schema** (§2a); `perfect_tablebase` **stays
@@ -67,16 +79,19 @@ four of six cases; corrected coordinates are given here and are the ones this RF
 | D4 | server allow-list and "the client's recognized-action switch" are two hand-maintained lists that agree | **real, and it is three lists, not two** | `apps/server/src/pack-validation.ts:18`; the client is not a switch but a string literal inside a template, `apps/web/src/lib/CheckpointSheet.svelte:78`; the schema is a third source that constrains the same field by exclusion, `schemas/drill_pack.schema.json:462-470` |
 | D5 | release compose hardcodes `ENGINE_MODE: maia` with an unconditional Maia dependency | **real, verbatim** | `deploy/compose.release.template.yaml:8` and `:17-19`; the dev file's shape it should mirror is `compose.yaml:12,20-23,27` |
 | D6 | `PackSummary` omits `phase`; `grep -rn "phase" apps/web/src` finds only prose | **real; and the pack *detail* projection already ships it, which the row does not say** | `apps/server/src/pack-registry.ts:26-34` (summary type) and `:201-209` (construction) omit it; `pack-registry.ts:68` **does** project it on `GET /packs/:id`; `apps/web/src/lib/api.ts:16-23` mirrors the summary without it; the three `phase` hits in `apps/web/src` are `App.svelte:345`, `PackList.svelte:17` (prose) and `session-controller.test.ts:392` (an assertion that a `phase` key is absent) |
-| D8 | two declared values validate and are rejected at load | **real, and understated: five values, in two different vocabularies** | `immediate_blunder_guard` at `schemas/drill_pack.schema.json:50-56` vs `apps/server/src/pack-validation.ts:111-134`; **four** opponent modes — `plan_defense`, `practical_resistance`, `perfect_tablebase`, `human_external` — at `schema:480-489` vs `pack-validation.ts:136-152`, because `SUPPORTED_POLICY_MODES` is `RUN_OPPONENT_MODES` and that is three members (`packages/runtime/src/types.ts:38-42`) |
-| D9 | `start.side` is schema-optional; `packStartSide` throws, so a validating pack can crash the drill screen | **the format defect is real and worse than stated; the stated symptom is currently unreachable** | see §1a |
+| D8 | two declared values validate and are rejected at load, citing `pack-validation.ts:104-129` | **real, and understated: five values, in two different vocabularies** | `immediate_blunder_guard` at `schemas/drill_pack.schema.json:50-56` vs `apps/server/src/pack-validation.ts:111-134` (the row's coordinates have drifted by seven lines); **four** opponent modes — `plan_defense`, `practical_resistance`, `perfect_tablebase`, `human_external` — at `schema:480-489` vs `pack-validation.ts:136-152`, because `SUPPORTED_POLICY_MODES` is `RUN_OPPONENT_MODES` and that is three members (`packages/runtime/src/types.ts:38-42`). The row's "two sources of truth for one vocabulary" is **half wrong**: `pack-authoring.test.ts:41-61` already binds both enums to the capability constants as sets |
+| D9 | as rewritten in the ledger on 2026-08-13: schema-optional `side`, silent coercion at `pack-validation.ts:369`, unconditional Syzygy inversion | **real, and the ledger row and this RFC now say the same thing** — the row was raised in severity from the drafting of this section, so there is no remaining disagreement to reconcile | see §1.1 |
 | D10 | both shipped Stockfish specs report `version: "unknown"` | **real, verbatim** | `apps/server/src/engine-supervisor.ts:111-140` (`parseIdentity`); `spec.name` is set at `apps/server/src/strong-engine.ts:50` and `apps/server/src/application.ts:188`, neither of which sets `version`, and `application.ts:282-283` constructs both without one; the B6b workaround — an authoring spec with no `name` — is `apps/server/src/sourcing/position-seeds.ts:67` |
 
 **Nothing in this set was incidentally fixed.** The one thing that changed under D9 is a
-mitigation added elsewhere, not a fix (§1a).
+mitigation added elsewhere, not a fix (§1.1).
 
-### 1a. D9 has drifted, in both directions
+*Motivation subsections are numbered `1.1`/`2.1` to keep them distinct from the
+Specification's `§1a`/`§2a`/`§2b`/`§3a`, which four sibling drafts cite by number.*
 
-The ledger's symptom is a client crash. It is currently unreachable through the shipped
+### 1.1. D9's original symptom is unreachable; what is underneath it is worse
+
+The defect was filed as a client crash. It is currently unreachable through the shipped
 server, because `apps/server/src/service.ts:183-185` refuses to create a run for a pack
 without a valid `start.side`:
 
@@ -106,12 +121,20 @@ verified:
    perspective.** `apps/server/src/pack-validation.ts:369` builds its trial run with
    `pack.start.side === "black" ? "black" : "white"` — a missing side becomes *white*, with
    no issue raised. Upstream, the Syzygy assessment check reads
-   `const learner = pack.start.side` (`:346`) and compares `learner === sideToMove` (`:348`)
+   `const learner = pack.start.side` (`:346`) and compares `learner === sideToMove` (`:349`)
    without any presence check; with `learner` undefined that comparison is always false, so
-   the declared category is unconditionally inverted (`:347`, `opposite(...)`) and
-   `SYZYGY_ASSESSMENT_MISMATCH` fires — or fails to fire — against the wrong side. A
-   never-silent validator is silently choosing a colour and grading a tablebase claim from
-   it.
+   the declared category is unconditionally passed through `opposite(...)` (declared at
+   `:347-348`, applied at `:351`) and `SYZYGY_ASSESSMENT_MISMATCH` (`:358-364`) fires — or
+   fails to fire — against the wrong side. A never-silent validator is silently choosing a
+   colour and grading a tablebase claim from it.
+
+   **Why the type system does not catch it.** `DrillPackDefinition["start"]` is
+   `{ readonly fen: string; readonly [key: string]: unknown }`
+   (`packages/schema/src/drill-pack/types.ts:83`), so `pack.start.side` is `unknown`
+   everywhere in the server. There is no declared colour anywhere in the pack types for a
+   compiler to check, which is why the coercion at `:369` and the presence-free comparison
+   at `:349` both compile. §3a closes that too; the schema alone would leave the same hole
+   open for the next reader.
 
 So D9 is real, its consequence is an authoring-time lie rather than a runtime crash, and the
 fix belongs in the schema rather than in the client guard.
@@ -120,18 +143,23 @@ fix belongs in the schema rather than in the client guard.
 
 `grep` for each vocabulary and count the places a human has to remember to edit.
 
-| Vocabulary | Copies | Agree today? |
-|---|---|---|
-| Checkpoint actions | schema, by exclusion (`schema:462-470`: any non-empty string except `capture_intent`); `SUPPORTED_CHECKPOINT_ACTIONS` (`pack-validation.ts:18`); a literal in the client (`CheckpointSheet.svelte:78`) | yes — one member, `compare_branches`. This is D4 |
-| Opponent modes | schema enum, 7 (`schema:480-489`); `RUN_OPPONENT_MODES`, 3 (`packages/runtime/src/types.ts:38-42`); `DECLARED_UNIMPLEMENTED_POLICY_MODES`, 4 (`capabilities.ts:12-23`); an inline triple in the server (`service.ts:188`); the selector's `switch`, 3 (`opponent-selector.ts:388-394`) | **no** — half of D8, plus a fifth copy the ledger never named |
-| Feedback policies | schema enum, 3 (`schema:50-56`); two literals plus one special case (`pack-validation.ts:111-134`); the `FeedbackPolicy` type, 2 (`pack-registry.ts:24`) | **no** — the other half of D8 |
-| Objective types | schema enum, 11 (`schema:121-135`); `OBJECTIVE_TYPES`, 11 (`packages/schema/src/drill-pack/types.ts:1-13`) | yes — **and nothing tests it.** A fourth instance of D4's shape, one edit away from being D8 |
+| Vocabulary | Copies | Bound by a test? | Agree today? |
+|---|---|---|---|
+| Checkpoint actions | schema, by exclusion (`schema:462-470`: any non-empty string except `capture_intent`); `SUPPORTED_CHECKPOINT_ACTIONS` (`pack-validation.ts:18`); a literal in the client (`CheckpointSheet.svelte:78`) | **no** | yes — one member, `compare_branches`. This is D4 |
+| Opponent modes | schema enum, 7 (`schema:480-489`); `RUN_OPPONENT_MODES`, 3 (`packages/runtime/src/types.ts:38-42`); `DECLARED_UNIMPLEMENTED_POLICY_MODES`, 4 (`capabilities.ts:12-23`); an inline triple in the server (`service.ts:189`); the selector's `switch`, 3 (`opponent-selector.ts:388-394`) | **partly** — `pack-authoring.test.ts:48-53` binds the schema enum to constants 2+3 as a set; nothing binds copies 4 and 5 | **by design** — half of D8, plus a fifth copy the ledger never named |
+| Feedback policies | schema enum, 3 (`schema:50-56`); two literals plus one special case (`pack-validation.ts:111-134`); the `FeedbackPolicy` type, 2 (`pack-registry.ts:24`); a fourth literal pair inside the binding test itself (`pack-authoring.test.ts:56-57`) | **partly** — `pack-authoring.test.ts:54-60`, against a hand-written literal pair rather than an exported constant | **by design** — the other half of D8 |
+| Objective types | schema enum, 11 (`schema:121-135`); `OBJECTIVE_TYPES`, 11 (`packages/schema/src/drill-pack/types.ts:1-13`) | **no** | yes — **and nothing tests it.** A fourth instance of D4's shape, one edit away from being D8 |
 
-`OBJECTIVE_TYPES` is the proof that this repo already knows the right answer — a single
-exported constant in the shared schema package — and the proof that the answer is incomplete
-without a test binding it to the JSON Schema.
+Two conclusions, and they point in opposite directions. `OBJECTIVE_TYPES` is the proof that
+this repo already knows the right answer — a single exported constant in the shared schema
+package — and the proof that the answer is incomplete without a test binding it to the JSON
+Schema. `pack-authoring.test.ts:41-61` is the proof that the divergence in D8 is
+**deliberate and already asserted**, which changes what D8's fix has to be: not "make them
+agree", but decide per value whether declaring more than the loader accepts is honest (§2),
+and then make the assertion say something it does not say today — that the supported set and
+the declared-unimplemented set are disjoint.
 
-### 2a. Five boundary conditions, verified by execution
+### 2.1. Five boundary conditions, verified by execution
 
 The class the reviewer named is "shapes the schema permits". I probed the living schema
 directly with the shipped Ajv configuration (`allErrors: true, strict: true`, the same
@@ -146,13 +174,23 @@ options as `pack-validation.ts:44`), mutating `schemas/drill_pack.example.json`:
 | `checkpoints[0].actions: ["stop"]` | **valid** | rejected, `UNSUPPORTED_CHECKPOINT_ACTION` (`pack-validation.ts:155-172`) |
 | `opponentPolicy.nonsenseKnob: 42` | **valid** | accepted silently — `opponentPolicy` is `additionalProperties: true` (`schema:496`) |
 
-The last row is not in this RFC's scope; it is D3's shape (an author writes something, the
-validator blesses it, nothing happens) surviving in the pack format after D3 closed it for
-`POST /runs`. §8 proposes a BACKLOG row rather than widening this RFC.
+All six rows reproduce on the current tree; the probe script is disposable and is not
+committed. The last row is not in this RFC's scope; it is D3's shape (an author writes
+something, the validator blesses it, nothing happens) surviving in the pack format after D3
+closed it for `POST /runs`. §8 proposes a BACKLOG row rather than widening this RFC.
 
 Rows 3-5 are deliberate refusals with precise reasons, not accidents. That is the design
 question §2 of the Specification answers: **when is "the schema declares it, the loader
 refuses it" honest, and when is it a lie?**
+
+**A seventh probe, which is where the required-`side` change bites.** Running the same
+compiled validator with `$defs.start.required = ["fen", "side"]` against every pack-shaped
+JSON in the tree: all twelve non-negative packs still validate; the five fixtures in
+`drill-pack.test.ts`'s `negativeFixtures` list still fail (they already did); and
+`schemas/fixtures/drill-pack/illegal-spine.invalid.json` **flips from `true` to `false`**.
+That sixth `*.invalid.json` file is not in the negative list — it exists precisely to be
+schema-valid and lint-invalid, and `drill-pack.test.ts:157-171` asserts
+`validate(fixture) === true` before checking `ILLEGAL_SPINE_MOVE`. §3a amends it.
 
 ### 3. Scope boundary
 
@@ -167,7 +205,7 @@ Out of scope, explicitly:
 - **The other four unimplemented opponent modes' fate.** `plan_defense`,
   `practical_resistance` and `human_external` ride along with `perfect_tablebase` under one
   rule because they are the same declaration; nothing about them changes.
-- **`opponentPolicy.additionalProperties: true`** (§2a, last row) and the
+- **`opponentPolicy.additionalProperties: true`** (§2.1, last row) and the
   **`TABIYA_COOKIE_SECURE` default** (`apps/server/src/main.ts:18`,
   `apps/server/src/identity.ts:86`: a light-profile self-hoster on plain HTTP must set it or
   login fails). Both are BACKLOG rows to propose (§8), not work to do here.
@@ -194,10 +232,15 @@ export const PACK_PHASES = ["opening", "middlegame", "endgame", "cross_phase"] a
 export type PackPhase = (typeof PACK_PHASES)[number];
 ```
 
-All three are re-exported from `packages/schema/src/drill-pack/index.ts` alongside
-`OBJECTIVE_TYPES` (`:20-35`). Both apps already depend on `@chess-tabiya/schema`
-(`apps/web/package.json` dependencies; `apps/server/src/pack-validation.ts:4-5`), so this is
-reachable from server and client without a new dependency edge.
+All three constants and their three types are added to the existing export block in
+`packages/schema/src/drill-pack/index.ts` (`:20-36`), beside `OBJECTIVE_TYPES` (`:21`). Both
+apps already depend on `@chess-tabiya/schema` (`apps/web/package.json` dependencies;
+`apps/server/src/pack-validation.ts:4-5`), so this is reachable from server and client
+without a new dependency edge.
+
+The same file's `DrillPackDefinition` (`types.ts:80-102`) declares `start` as
+`{ readonly fen: string; readonly [key: string]: unknown }` (`:83`) — no colour, which is
+why the D9 inversion compiles. §3a narrows it in the same edit.
 
 **1b. The server consumes it.** `pack-validation.ts:18` deletes its local
 `SUPPORTED_CHECKPOINT_ACTIONS` and imports `CHECKPOINT_ACTIONS`. The message at `:168` keeps
@@ -221,7 +264,9 @@ export function recognizedCheckpointActions(
 
 The object literal is typed `Record<CheckpointAction, boolean>`, so adding a member to
 `CHECKPOINT_ACTIONS` without adding a key here is a TypeScript error, not a silent
-divergence. `CheckpointSheet.svelte:78` replaces its string literal with
+divergence. The argument type matches what the sheet already holds: `CheckpointNotice.actions`
+is `readonly string[]` (`screen-model.ts:41`), so no cast is introduced.
+`CheckpointSheet.svelte:78` replaces its string literal with
 `recognizedCheckpointActions(checkpoint.actions).compare_branches`; the rendered control and
 its `HonestControl` reason (`CheckpointSheet.svelte:79-93`) are unchanged.
 
@@ -248,14 +293,16 @@ The rule this RFC adopts, and writes into `docs/drill-pack-format.md`:
 
 The line is not "how much work is it". It is what happens when a pack names the value.
 
-- `opponentPolicy.mode` **has a negotiation surface and a record**: `/capabilities`
-  publishes the selectable modes (`capabilities.ts:166` → `SUPPORTED_POLICY_MODES`), the
-  client builds its policy config against that payload
-  (`apps/web/src/lib/session-controller.ts:216-232`), the loader refuses an unselectable
-  mode with the mode's own reason string (`pack-validation.ts:142-151`), and — since
+- `opponentPolicy.mode` **has a negotiation surface and a record**, and all three conditions
+  are satisfied today, not aspirationally: `/capabilities` publishes the selectable modes
+  (`capabilities.ts:165` → `SUPPORTED_POLICY_MODES`), the client builds its policy config
+  against that payload (`apps/web/src/lib/session-controller.ts:216-232`, applied at `:227`),
+  the loader refuses an unselectable mode with the mode's own reason string
+  (`pack-validation.ts:142-151`, sourced from `capabilities.ts:12-23`), and — since
   migration 5 — every selection records the policy actually applied
-  (`packages/runtime/src/types.ts:44`). A pack naming a mode this deployment cannot select
-  is told exactly that, by name, before anything runs.
+  (`PolicyModeApplied`, `packages/runtime/src/types.ts:44`, carried on
+  `OpponentSelection.policyModeApplied` at `:80`). A pack naming a mode this deployment
+  cannot select is told exactly that, by name, before anything runs.
 - `feedbackPolicy` **has none of that.** It is a disclosure contract, not a capability:
   `feedbackDisclosed` gates what the learner is allowed to see
   (`packages/runtime/src/feedback.ts`, consumed by
@@ -274,12 +321,48 @@ The line is not "how much work is it". It is what happens when a pack names the 
   entirely; it has one member and exists only to explain it.
 - `apps/server/src/pack-validation.ts:111-134` collapses to the general branch: any value
   not in `FEEDBACK_POLICIES` raises `UNSUPPORTED_FEEDBACK_POLICY` with the existing
-  `is not a supported v1 feedback policy` message. The schema now rejects it first, at
-  `/feedbackPolicy`, with a JSON Pointer — which is the earlier and better error.
-- `apps/server/src/drill-client-server.test.ts:212` currently constructs a pack with
-  `feedbackPolicy: "immediate_blunder_guard"` to exercise the rejection path; it keeps doing
-  exactly that, and now asserts the failure comes from the **schema** stage (`source:
-  "schema"`) rather than the runtime stage. Same for `pack-authoring.test.ts:84`.
+  `is not a supported v1 feedback policy` message. It is now unreachable for
+  `immediate_blunder_guard` and still reachable for a value the schema never saw (a pack
+  handed to `validatePackDocument` by a caller that skipped the file, which is every caller
+  of `PackRegistry.fromDocuments`). The schema rejects it first, at `/feedbackPolicy`, with a
+  JSON Pointer — which is the earlier and better error. The import of
+  `DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES` at `pack-validation.ts:11` goes with it.
+- **`apps/server/src/pack-authoring.test.ts` is the binding test, and it is an edit site
+  twice over.** It imports `DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES` (`:11`) and asserts the
+  schema's `feedbackPolicy` enum equals the two executable values plus that constant
+  (`:54-60`). With the constant gone, the assertion becomes
+  `expect(schema.properties.feedbackPolicy.enum).toEqual([...FEEDBACK_POLICIES])` — an
+  ordered-array equality, matching §1e, since there is no longer a declared remainder to
+  union in. The opponent-mode half of the same test (`:48-53`) is unchanged here and extended
+  in §2b.
+
+**Two tests break structurally, not cosmetically, and the reason is the same one.**
+`validatePackDocument` **returns after the schema stage when the schema stage fails**
+(`pack-validation.ts:420-427`): it never runs `lintDrillPack` or `runtimeIssues` on a
+document the schema rejected. So moving a refusal from the runtime stage to the schema stage
+does not merely relabel the issue — it suppresses every other issue in the same document.
+
+- `apps/server/src/pack-authoring.test.ts:80-111` (*"combines shipped chess lints and
+  executable-policy checks"*) mutates one candidate three ways — an illegal spine move
+  (`:82`), `immediate_blunder_guard` (`:83-84`) and `plan_defense` (`:85-88`) — and asserts
+  all three issues appear together. After §2a that document dies at the schema stage and
+  yields only `SCHEMA_ENUM` at `/feedbackPolicy`. **The test is split, and the split is the
+  point of the change, not a workaround for it:** the combining case keeps the illegal spine
+  and `plan_defense` (both still runtime/lint-stage refusals, so it still proves the two
+  stages combine) and drops the feedback mutation; a new sibling case asserts that
+  `immediate_blunder_guard` alone yields exactly one issue, `source: "schema"`, `code:
+  "SCHEMA_ENUM"`, `path: "/feedbackPolicy"`, **and that no `source: "lint"` or `source:
+  "runtime"` issue is present** — which is the honest statement of what a schema-stage
+  refusal costs.
+- `apps/server/src/drill-client-server.test.ts:206-219` constructs a pack with
+  `feedbackPolicy: "immediate_blunder_guard"` and asserts the thrown `PACK_INVALID`'s
+  **message** contains `"not supported in v1"` (`:218`). That string is the reason text this
+  RFC deletes. `PackRegistry` builds the message by joining issue messages
+  (`pack-registry.ts:92-99`), so the assertion becomes the Ajv enum message —
+  `expect.stringContaining("must be equal to one of the allowed values")` — with the pack id
+  still asserted through the existing `Pack ${source} is invalid` prefix. The case stays
+  where it is and keeps proving that the registry refuses the value; only the reason it gives
+  changes, which is the whole content of §2a.
 
 **Why removal and not implementation.** Implementing it means: a per-move judge evaluation
 on the learner's own moves (today judge evidence is enqueued per node and withheld —
@@ -297,20 +380,43 @@ carries a proposed BACKLOG row, not a silent narrowing.
 
 **2b. `perfect_tablebase` stays, and the declaration becomes checked.**
 
-The schema's mode enum is unchanged (`schema:480-489`, seven members). What is added is the
-binding that makes "declared" mean something:
+The schema's mode enum is unchanged (`schema:480-489`, seven members). The set-equality half
+of the binding **already exists** — `apps/server/src/pack-authoring.test.ts:48-53` asserts
+`new Set($defs.opponentPolicy.properties.mode.enum)` equals
+`new Set([...SUPPORTED_POLICY_MODES, ...DECLARED_UNIMPLEMENTED_POLICY_MODES.map(e => e.mode)])`
+and passes today. This RFC **does not add a second copy of it in `capabilities.test.ts`**;
+duplicating the assertion would be the very shape §2 is closing. What is added is the half
+that is missing:
 
-- A new test in `apps/server/src/capabilities.test.ts` asserts, against the schema file
-  read from disk, that the enum at `$defs.opponentPolicy.properties.mode.enum` equals, as a
-  set, `SUPPORTED_POLICY_MODES ∪ DECLARED_UNIMPLEMENTED_POLICY_MODES.map(entry => entry.mode)`;
-  and that the two are **disjoint**. Consequences: a schema mode with no implementation and
-  no reason string fails the suite; a mode marked unimplemented that the runtime actually
-  supports fails the suite; a supported mode missing from the schema fails the suite.
-- The fifth copy dies. `apps/server/src/service.ts:188` currently reads
-  `mode !== "human_common" && mode !== "strong_engine" && mode !== "theory_strict"`; it
-  becomes `!RUN_OPPONENT_MODES.includes(mode as RunOpponentMode)` (the import already exists
-  in the server via `capabilities.ts:1`), preserving the same `INVALID_REQUEST` message at
-  `:189`.
+- The same test gains a **disjointness** assertion: no member of
+  `DECLARED_UNIMPLEMENTED_POLICY_MODES` appears in `SUPPORTED_POLICY_MODES`. Today set
+  equality alone permits a mode that is both implemented and marked "declared unimplemented",
+  which would leave a stale refusal reason overriding a working capability at
+  `pack-validation.ts:142-151`. With both assertions: a schema mode with no implementation
+  and no reason string fails the suite; a mode marked unimplemented that the runtime actually
+  supports fails the suite; a supported mode missing from the schema fails the suite. All
+  three currently pass, so this is a guard against the next edit, not a fix for today.
+- The fifth copy dies. `apps/server/src/service.ts:189` currently reads
+  `mode !== "human_common" && mode !== "strong_engine" && mode !== "theory_strict"`, on a
+  `mode` whose static type is `unknown` (`:188`, read off a
+  `Record<string, unknown>`). **The replacement must preserve narrowing**: the literal chain
+  narrows `unknown` to `RunOpponentMode`, which is what makes the `RunOpponentPolicy` literal
+  at `:192-197` typecheck, and `RUN_OPPONENT_MODES.includes(mode as RunOpponentMode)` does
+  not narrow and hides the failure behind a cast. So `apps/server/src/capabilities.ts` gains,
+  beside `SUPPORTED_POLICY_MODES` (`:10`):
+
+  ```ts
+  export function isRunOpponentMode(value: unknown): value is RunOpponentMode {
+    return RUN_OPPONENT_MODES.some((mode) => mode === value);
+  }
+  ```
+
+  and `service.ts:189` becomes `if (!isRunOpponentMode(mode))`, preserving the same
+  `INVALID_REQUEST` message at `:190`. `RUN_OPPONENT_MODES` is already imported there
+  (`capabilities.ts:1`), and `pack-validation.ts:140` — which today re-implements the same
+  membership test with `SUPPORTED_POLICY_MODES.some(...)` — is left alone deliberately: it
+  tests membership of the *published selectable* set, which is the same three values but a
+  different question, and collapsing the two would erase the distinction §2 rests on.
 - No behaviour changes for any pack. `perfect_tablebase` remains unselectable and is still
   refused at load with its own reason (`capabilities.ts:19-21`).
 
@@ -321,18 +427,56 @@ coincidence.
 
 ### 3. D9 — `start.side` becomes required, and the silent default dies
 
-**3a. Schema.** `schemas/drill_pack.schema.json:108-118`: `"required": ["fen"]` becomes
-`"required": ["fen", "side"]`. Every non-negative pack in the tree already complies —
-verified across all twelve: the living fixture, four committed candidates, six committed
-drafts, and the browser fixture. The five `*.invalid.json` negative fixtures omit `side`,
-and their test asserts only that validation returns `false`
-(`packages/schema/src/drill-pack.test.ts:80-83`), so it keeps passing; they are not amended.
+**3a. Schema and type, together.** `schemas/drill_pack.schema.json:110` — the `$defs.start`
+`"required": ["fen"]` becomes `"required": ["fen", "side"]`; the `side` property itself
+already exists and already enumerates `["white", "black"]` (`:117`), so nothing widens.
+
+`packages/schema/src/drill-pack/types.ts:83` narrows in the same edit:
+
+```ts
+readonly start: {
+  readonly fen: string;
+  readonly side: "white" | "black";
+  readonly [key: string]: unknown;
+};
+```
+
+**Both halves are load-bearing and neither substitutes for the other.** The schema stops a
+side-less pack entering the system; the type stops the next reader writing another
+presence-free comparison against `unknown` (§1.1, finding 2). The two shipped emitters use
+`satisfies DrillPackDefinition` (`apps/server/src/sourcing/openings.ts:118`,
+`position-seeds.ts:239`, `syzygy.ts:188`) and so are checked against the narrowed type; all
+three already set `start.side` (`openings.ts:105`, `position-seeds.ts:233`, `syzygy.ts:182`).
+Test literals that omit `side` reach the type through an assertion rather than an
+assignment — `run-state.test.ts:39` uses `as unknown as DrillPackDefinition` — and are
+unaffected.
+
+Fixture blast radius, enumerated by execution rather than asserted:
+
+- **Every non-negative pack already complies** — all twelve: the living fixture, four
+  committed candidates, six committed drafts, and `schemas/fixtures/drill-pack/
+  terminal-outcome.browser.json`.
+- **The five fixtures in `drill-pack.test.ts`'s `negativeFixtures` list (`:37-43`) already
+  fail** for their own reasons and their test asserts only `false`
+  (`packages/schema/src/drill-pack.test.ts:81-84`), so they keep passing and are not amended.
+- **`schemas/fixtures/drill-pack/illegal-spine.invalid.json` is the exception, and it must be
+  amended.** It is a sixth `*.invalid.json` file that is deliberately **not** in that list:
+  `drill-pack.test.ts:157-171` asserts `validate(fixture)` is `true` and then that
+  `lintDrillPack` reports `ILLEGAL_SPINE_MOVE`, i.e. it exists to prove the lint stage catches
+  what the schema cannot. Requiring `side` flips that assertion to `false` and the case fails.
+  The fixture gains `"side": "white"` in its `start` object; its FEN is the initial position
+  with White to move, so the value is the only honest one and the lint under test is
+  untouched.
 
 **3b. The validator stops guessing.** `apps/server/src/pack-validation.ts:369` deletes
-`pack.start.side === "black" ? "black" : "white"` and reads the side directly, because the
-schema stage now guarantees it. The Syzygy perspective computation at `:345-350` is left
-structurally as-is and is now correct by construction rather than by luck; §Acceptance 4c
-pins the previously-inverted case with a test.
+`pack.start.side === "black" ? "black" : "white"` and reads `pack.start.side` directly, which
+now typechecks against `RunStart.side` (`packages/runtime/src/types.ts:47-50`) because of
+§3a's type narrowing — without it the read is `unknown` and the `createRun` call would not
+compile. The Syzygy perspective computation at `:345-351` is left structurally as-is and is
+now correct by construction rather than by luck: `learner` (`:346`) is a colour, so
+`learner === sideToMove` (`:349`) is a real comparison and `opposite(...)` (`:351`) applies
+only when the learner is not the side to move. §Acceptance 4c pins the previously-inverted
+case with a test.
 
 **3c. The client stops being able to crash, at the API boundary.**
 `apps/web/src/lib/api.ts:417-425` (`pack()`) gains, beside its existing digest check, a
@@ -350,9 +494,12 @@ malformed pack becomes a visible error banner on the library screen instead of a
 thrown from a Svelte `$derived` during render.
 
 **3d. `packStartSide` keeps its guard.** `apps/web/src/lib/screen-model.ts:56-62` is
-unchanged. It is now defence in depth behind three checks — schema, API boundary, and
-`service.ts:183-185` — and none of them is redundant: they cover authoring, transport and
-run creation respectively.
+unchanged. Under §3a's narrowed type its `side !== "white" && side !== "black"` branch is
+statically unreachable and TypeScript accepts it without complaint; that is the intended
+outcome, because the value it guards arrives over HTTP and the type is a claim about the
+server, not a fact about the bytes. It is now defence in depth behind three checks — schema,
+API boundary, and `service.ts:183-185` — and none of them is redundant: they cover authoring,
+transport and run creation respectively.
 
 ### 4. D6 — `phase` reaches the client
 
@@ -392,18 +539,29 @@ every emitter already has, `phase` is a claim not every source makes.
 shape rather than a different deployment:
 
 - `:8` — `ENGINE_MODE: maia` becomes `ENGINE_MODE: ${ENGINE_MODE:-mock}`, matching
-  `compose.yaml:12`.
+  `compose.yaml:11`.
 - `:17-19` — the `depends_on.maia` block gains `required: false`, matching
-  `compose.yaml:20-23`, so the server starts with no Maia service present.
-- The `maia` service gains `profiles: [engines]`, matching `compose.yaml:28`.
+  `compose.yaml:21-24`, so the server starts with no Maia service present.
+- The `maia` service (`:22`) gains `profiles: [engines]`, matching `compose.yaml:28`.
 - Nothing else changes: image placeholders, healthcheck, port mapping and the `tabiya-data`
-  volume are untouched, so `.github/workflows/release.yml:70`'s substitution still works
-  unmodified.
+  volume are untouched, so `.github/workflows/release.yml:68-70`'s `sed` substitution still
+  works unmodified.
 
-The resulting self-hoster incantations are the same two as development, and
-`docs/development.md:81-84` gains them beside `make up` / `make up-engines`:
-`docker compose -f compose.yaml up -d` for the deterministic mock opponent, and
-`ENGINE_MODE=maia docker compose -f compose.yaml --profile engines up -d` for Maia.
+`TABIYA_COOKIE_SECURE` is **not** added here even though `compose.yaml:12` sets it to
+`"false"`: the release artefact is the hosted-deployment path, where defaulting the cookie to
+secure is correct. The mismatch that bites a plain-HTTP self-hoster is a separate defect and
+gets a BACKLOG row (§8, row 6) rather than a silent default change inside a defect sweep.
+
+`docs/development.md:87-88` already tells a self-hoster that a tagged release attaches a
+digest-pinned Compose file; the file it attaches is `release/compose.yaml`
+(`.github/workflows/release.yml:70,75`), **not** the repository's `compose.yaml`, which
+builds `:dev` images from source and is not what anyone downloads. So the two incantations
+this RFC adds to `docs/development.md` name the downloaded artefact:
+`docker compose -f compose.yaml up -d` **run against the release file** for the deterministic
+mock opponent, and `ENGINE_MODE=maia docker compose -f compose.yaml --profile engines up -d`
+for Maia — the same two shapes as `make up` / `make up-engines` (`docs/development.md:81-83`),
+which is the point of §5, but written as release-artefact instructions and placed with the
+release paragraph rather than the development one.
 
 `tools/verify-packaging.mjs:24-33` extends to prove it rather than assert about text:
 
