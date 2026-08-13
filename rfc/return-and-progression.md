@@ -1,6 +1,6 @@
 # RFC: Return and progression — attempt records, the due model, and `/learn`
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/01-training-model.md` §Vocabulary (`:36-46`), §Repetition
@@ -12,14 +12,14 @@
   `archive/pack-optional-runs.md` (position sessions), `archive/terminal-outcome-events.md`
   (`outcome.reached` producer), `archive/outcome-drill-grading.md` and
   `archive/line-drill-theory-grading.md` (objective rules that make an attempt resolvable),
-  and the concurrent draft **`defect-sweep.md`** — it closes D6 (`PackSummary` gains
+  and **`archive/defect-sweep.md`** — it closes D6 (`PackSummary` gains
   `phase`, which `/learn`'s phase filter reads), establishes the shared
   vocabulary-constant mechanism this RFC reuses for `retryVariants`, and claims pack schema
   v0.5. This RFC ships after it and takes v0.6.
 - **Parent / amends:** amends the pack format shipped by `archive/drill-pack-format.md`
   (v0.5 → v0.6, `retryVariants` only); amends nothing in the run event schema
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/return-and-progression/` (once implementing)
+- **Planning:** `planning/return-and-progression/`
 - **Migration:** 8 (`STORAGE_VERSION` 7→8), claimed in `rfc/README.md` §Migration register.
   Rebased from 6 as `n-way-comparison.md` and `live-session-platform.md` claimed 6 and 7;
   neither is a dependency, since this RFC's DDL is create-only and touches no run shape.
@@ -1091,6 +1091,9 @@ Documentation and register, in the same change:
 None.
 
 ## Changelog
+
+- 2026-08-13: accepted after independent adversarial review and moved to
+  implementing after pack schema v0.5 landed.
 
 - 2026-08-13: created.
 - 2026-08-13: adversarial review by a second author; every normative sentence re-verified
