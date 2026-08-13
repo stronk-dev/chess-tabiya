@@ -6,8 +6,8 @@
 - **Design refs:** `design/03-product-breadth.md:79-91` (Live and community), `:142-152` (shared shell regions, "session/role controls appropriate to solo, host, participant, or spectator"), `:53-55` (Position Arena), gate row B5 (`:165`), program item #8 (`:258-265`); `design/02-product-shape.md:50-73` (hosted multi-user, and ADR-0004's fired revisit trigger)
 - **Exploration gate:** opened by owner ruling 2026-08-12 (`rfc/README.md:26-33`); breadth sequencing ruling 2026-08-11 (`rfc/README.md:35-40`)
 - **Depends on:** `rfc/archive/learner-identity-and-authorization.md` (F3 — the subject, grants, and the learner-bound lease this RFC builds the session layer on top of); `rfc/archive/pack-optional-runs.md` (F2 — position runs, without which an Arena match run cannot exist)
-- **Sibling draft:** `rfc/defect-sweep.md` closes D4, D5, D6, D8, D9 and D10. This RFC cites all six and duplicates none of its fixes; §2.6 states the interaction. The two are independent — neither blocks the other, and `defect-sweep.md` claims no migration number
-- **Parent / amends:** amends the lease claim path (`apps/server/src/storage.ts:758-777`), the events page (`apps/server/src/feedback-policy.ts:34-51`), the surface capability map (`apps/server/src/capabilities.ts:117-129`), and the client router (`apps/web/src/lib/router.ts:18-27`). Adds **migration 6** (`STORAGE_VERSION` 5→6)
+- **Sibling drafts:** `rfc/defect-sweep.md` closes D4, D5, D6, D8, D9 and D10 — this RFC cites all six and duplicates none of its fixes; §2.6 states the interaction, and neither blocks the other. `rfc/n-way-comparison.md` holds **migration 6** and run schema 0.7 → 0.8; this RFC rebased to **migration 7** and changes the run schema not at all, so the two are ordered but not coupled (§3.13)
+- **Parent / amends:** amends the lease claim path (`apps/server/src/storage.ts:758-777`), the events page (`apps/server/src/feedback-policy.ts:34-51`), the surface capability map (`apps/server/src/capabilities.ts:117-129`), and the client router (`apps/web/src/lib/router.ts:18-27`). Adds **migration 7** (`STORAGE_VERSION` 6→7)
 - **Supersedes / superseded by:** supersedes `planning/breadth/live-and-platform.md` §A2, §A4/C1, §A4/C3, §A4/C5 and §A4/C6, all of which were written on 2026-08-12 against a tree that had no identity. §5 below states each correction
 - **Planning:** `planning/live-session-platform/` (once implementing)
 
@@ -140,7 +140,32 @@ academy and relay — the persisted log cannot attribute any ply to the learner 
 it. `docs/identity-and-authorization.md:71` records this as a limit; B5 converts it into
 a defect.
 
-### 2.5 Scope boundary
+### 2.5 Interaction with `rfc/defect-sweep.md`
+
+That draft closes all six defects this RFC cites, and this RFC re-implements none of
+them. Where each one touches a surface specified here:
+
+- **D4** — `defect-sweep.md` §1 collapses the *pack* vocabularies (checkpoint actions,
+  opponent modes, feedback policies, objective types) onto single constants. `RunRole` is
+  a further instance of the same shape that its scope does not reach — it is an
+  authorization vocabulary, not a pack one — and §3.1 below adopts its discipline rather
+  than inventing a second one.
+- **D5** — `defect-sweep.md` §5 restores the light profile to the release compose. §3.14
+  below states this RFC's obligation against the profile it restores.
+- **D6** — `defect-sweep.md` §4 projects `phase` to the client. §3.11's `/live` index
+  lists by scheduled time and pack id, which is correct with or without it; filtering a
+  session list by phase is depth added inside this surface once the field arrives.
+- **D8** — `defect-sweep.md` §2 decides the rejected declared values per value. §3.7.3's
+  match run declares `human_common` and requests no selection at all, so it is unaffected
+  either way.
+- **D9** — `defect-sweep.md` §3 makes `start.side` required. §3.7.2's rule that the
+  invitation carries `side` explicitly stands regardless, because a match's reference
+  side is a property of the match, not of any pack it was rooted at.
+- **D10** — `defect-sweep.md` §6 parses the engine version whenever the spec omits one.
+  §3.7.6's rendering rule — show what is stored, never synthesize — is what makes the
+  overlay honest before that lands and correct after it.
+
+### 2.6 Scope boundary
 
 **In:** the session aggregate; board control and handoff; the possession journal;
 participant proposals; vote windows and tallies; the overlay projection; Position Arena
@@ -188,17 +213,20 @@ propose, spectators follow. `mayVote` admits every granted role because a vote i
 session-log write, never a run write, and the academy case wants thirty spectators
 voting. Ballot-stuffing is bounded by §3.6's adapter rule, not by the role.
 
-**D4 obligation, and this RFC must not deepen it.** The role vocabulary is already
+**D4's shape, applied to a vocabulary its own fix does not reach.** `RunRole` is
 maintained by hand in five places: `apps/server/src/storage.ts:15`, the SQL `CHECK` at
 `:1012`, the duplicated `mayWrite` at `:155-157`, the request parser at
 `apps/server/src/rest.ts:239-243`, and the client mirror at
-`apps/web/src/lib/api.ts:57`. That is the exact drift shape D4 names
-(`design/BACKLOG.md`, D4 row). The implementer exports a single frozen
-`RUN_ROLES` tuple from `apps/server/src/storage.ts`, derives `RunRole`, the parser
-guard, and the SQL `CHECK` string from it, deletes the duplicated `mayWrite`, and adds
-an equality test asserting the client union matches. This RFC adds three new closed
-vocabularies (`SessionKind`, `BoardControl`, `SessionJournalKind`) and each is defined
-once, as a frozen tuple with a derived type and a derived `CHECK`.
+`apps/web/src/lib/api.ts:57`. That is exactly the drift shape D4 names, on a sixth
+vocabulary — `defect-sweep.md` §1 collapses the four *pack* vocabularies and does not
+touch this one, because it is an authorization vocabulary. Rather than open a competing
+fix, this RFC adopts that draft's discipline: a single frozen `RUN_ROLES` tuple exported
+from `apps/server/src/storage.ts` with `RunRole`, the parser guard, and the SQL `CHECK`
+string derived from it, the duplicated `mayWrite` deleted, and an equality test
+asserting the client union matches. Should `defect-sweep.md` land first, the implementer
+reuses its constant module verbatim instead of adding a second one. The three new closed
+vocabularies this RFC introduces (`SessionKind`, `BoardControl`, `SessionJournalKind`)
+are each defined once, as a frozen tuple with a derived type and a derived `CHECK`.
 
 ### 3.2 The live session aggregate
 
@@ -495,11 +523,11 @@ handling of the same position." `run.start.side` is also what decides
 `terminalOutcome(position, run.start.side)` (`packages/runtime/src/runtime.ts:337`), so
 an imported mate grades against the reference side, which is correct.
 
-**D9 obligation.** The invitation and the match record carry `side` explicitly and the
-importer never reads a pack's optional `start.side`, because that field is
-schema-optional while `packStartSide` throws without it
-(`design/BACKLOG.md`, D9 row). A match rooted at a pack position resolves its reference
-side from the invitation, not from the pack.
+**On D9.** The invitation and the match record carry `side` explicitly, and the importer
+never reads a pack's `start.side` even after `defect-sweep.md` §3 makes that field
+required. This is not belt-and-braces against the defect: a match's reference side is a
+property of the match, chosen when the two players agree who plays which colour in which
+leg, and a pack rooted at the same position has no authority over it.
 
 **3.7.3 The match record.**
 
@@ -522,9 +550,10 @@ through the shipped path: `POST /runs` with
 feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }`
 (`apps/server/src/rest.ts:261-292`). `attempt_end` is not a choice — position runs
 require it (`apps/server/src/rest.ts:267`). `human_common` is declared and never
-exercised, because no opponent selection is ever requested for a match run; the
-implementer must not reach for `perfect_tablebase`, which validates against the pack
-schema and is then rejected at load (`design/BACKLOG.md`, **D8** row).
+exercised, because **no opponent selection is ever requested for a match run** — both
+sides are imported. The implementer must not reach for `perfect_tablebase`: it is one of
+the values `defect-sweep.md` §2 is deciding per value (**D8**), and a match run needs no
+opponent policy either way.
 
 **3.7.4 External handoff — pinned without pinning Lichess.** The invitation is a Tabiya
 record carrying `{ sessionId, leg, rootFen, side, packId?, version?, invitedHandle?,
@@ -591,10 +620,11 @@ comparison is withheld until the host posts `POST /runs/:id/reveal`
 `commitMove` emits `outcome.reached` (`packages/runtime/src/runtime.ts:337-343`) and the
 run discloses on import. Both paths are correct and neither is new machinery.
 
-**Rendering obligation from D10:** the comparison and overlay render engine provenance
-from `SelectionEngineIdentity` as it is stored. Both shipped Stockfish specs report
-`version: "unknown"` (`design/BACKLOG.md`, D10 row), so the UI shows "version unknown"
-and must not synthesize one.
+**Rendering rule, from D10:** the comparison and overlay render engine provenance from
+`SelectionEngineIdentity` exactly as stored, and never synthesize a version. Until
+`defect-sweep.md` §6 lands, both shipped Stockfish specs report `version: "unknown"`
+(`design/BACKLOG.md`, D10 row) and the overlay says so; after it lands the same code
+shows the parsed version. The rule is what makes the surface honest in both states.
 
 ### 3.8 Spectator disclosure: unchanged, and why
 
@@ -677,9 +707,10 @@ Two routes join `apps/web/src/lib/router.ts:18-27`:
 - `/live/overlay/:runId` — §3.10.
 
 `/live` becomes real: sessions you host, sessions you are granted on, and scheduled
-events. **It does not sort or filter by phase.** `PackSummary` omits `phase` and the
-client has never seen it (`design/BACKLOG.md`, **D6** row); this RFC lists by scheduled
-time and pack id rather than opening a second path to a field the client cannot read.
+events, listed by scheduled time and pack id. **It does not open a second path to
+`phase`.** `PackSummary` omits it and the client has never seen it (`design/BACKLOG.md`,
+**D6** row); `defect-sweep.md` §4 projects it, and once that lands, filtering a session
+list by phase is depth added inside this surface through the field that draft supplies.
 
 Inside a run whose id has a session, the drill screen gains a **session rail** —
 `design/03-product-breadth.md:148` already names "session/role controls appropriate to
@@ -726,11 +757,18 @@ A session on a run the caller has no grant on returns `RUN_NOT_FOUND`, matching
 New error codes: `BOARD_HELD` (409), `LEASE_MOVED` (409), `VOTE_WINDOW_CLOSED` (409),
 `ARENA_ROOT_MISMATCH` (422). Mapped in `apps/server/src/rest.ts:358-374`.
 
-### 3.13 Persistence — migration 6
+### 3.13 Persistence — migration 7
 
-`STORAGE_VERSION` 5 → 6 (`apps/server/src/storage.ts:147`), registered in
+`STORAGE_VERSION` 6 → 7 (`apps/server/src/storage.ts:147`), registered in
 `rfc/README.md` §Migration register. All tables `STRICT`, all `CHECK` strings derived
 from the frozen tuples of §3.1/§3.2 rather than typed twice.
+
+**Ordering against migration 6.** `rfc/n-way-comparison.md` holds 6. Migration 7 is
+append-only DDL that reads no run snapshot and no column either draft touches, so it is
+order-independent in behaviour but not in numbering: it must be appended after 6 in the
+ladder (`apps/server/src/storage.ts:915-941`). If `n-way-comparison.md` is withdrawn
+before landing, this migration rebases to 6 rather than leaving a hole — the register is
+the single writer of that decision.
 
 ```sql
 CREATE TABLE live_sessions (
@@ -821,7 +859,7 @@ CREATE TABLE arena_legs (
 ) STRICT;
 ```
 
-Migration 6 creates tables only. It backfills nothing, rewrites no snapshot, and touches
+Migration 7 creates tables only. It backfills nothing, rewrites no snapshot, and touches
 no run row, so it cannot mis-stamp a schema version the way migration 4's body had to be
 frozen against (`rfc/README.md:54`). Every existing run has no session and keeps
 `free_claim` semantics by construction. `DRILL_RUN_SCHEMA_VERSION` is unchanged.
@@ -835,13 +873,14 @@ an append-only log.
 
 ### 3.14 Deployment posture
 
-Every live surface must work under `ENGINE_MODE: mock`. This is not decoration: **D5**
-records that the release compose hardcodes `ENGINE_MODE: maia` with an unconditional
-Maia dependency (`design/BACKLOG.md`, D5 row), and a live platform that silently
-required an engine sidecar would make that defect harder to fix rather than easier. A
-match run requests no selection at all (§3.7.3); an academy or stream run requests
-selections exactly as a solo run does. D5 is not fixed here and this RFC must not
-deepen it.
+Every live surface must work under `ENGINE_MODE: mock`. A match run requests no
+selection at all (§3.7.3); an academy or stream run requests selections exactly as a
+solo run does, and every session-layer route is engine-free by construction. This is not
+decoration: **D5** records that the release compose hardcodes `ENGINE_MODE: maia` with an
+unconditional Maia dependency (`design/BACKLOG.md`, D5 row), `defect-sweep.md` §5
+restores the light profile, and a live platform that quietly required a Maia sidecar
+would erase that fix the moment it landed. The acceptance suite runs the live tests in
+mock mode.
 
 ## Deviations from design
 
@@ -856,7 +895,7 @@ deepen it.
 3. **`design/03-product-breadth.md:90` names shareable run URLs and spectator-safe views
    as platform primitives. This RFC ships the authenticated half only** — a granted
    spectator with a run URL. The unauthenticated public share link is out of scope
-   (§2.5) and B8's row stays open on it.
+   (§2.6) and B8's row stays open on it.
 4. **`design/03-product-breadth.md:86` says a completed event "can be replayed and
    distilled into a pack." This RFC ships replay and the session record; the
    distillation emitter is program item #6's** (`design/03-product-breadth.md:255`),
@@ -977,7 +1016,7 @@ owner's ruling (`CLAUDE.md` §Non-negotiable laws 5). These are proposals.
   become 📜 scheduled against this RFC rather than blocked on F3.
 
 `planning/exploration/gates.md` B5 row: unmet → met once A1–A10 pass; B8's share-link
-clause stays open on the unauthenticated public link (§2.5).
+clause stays open on the unauthenticated public link (§2.6).
 
 ## Changelog
 

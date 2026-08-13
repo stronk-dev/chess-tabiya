@@ -8,9 +8,26 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `defect-sweep.md` | draft | `archive/drill-pack-format.md`, `archive/drill-client.md`, `archive/engine-workers.md` | closes D4, D5, D6, D8, D9, D10; pack schema 0.4 → 0.5; **no migration** |
+| `n-way-comparison.md` | draft | `archive/branch-runtime.md`, `archive/explanation-grounds.md`, `archive/drill-client.md` | breadth program **#5**, gate **B3** — single-axis N-way comparison payload, manual N-branch selection, per-branch consequence rows, resulting-position grid / N-column strips / narrative mode, branch-selective export, simulate, prediction checkpoints, deep analysis. Run schema 0.7 → 0.8, migration **6** |
+| `live-session-platform.md` | draft | `archive/learner-identity-and-authorization.md` (F3), `archive/pack-optional-runs.md` (F2) | breadth program **#8**, gate **B5** — live session aggregate above the run, board control and handoff, possession journal, participant proposals, chat-vote windows, overlay projection, Position Arena two-leg PGN import as root-forked branches of one run. Opens and closes D17, D18, D19. **Run schema unchanged**, migration **7** |
 
 `defect-sweep.md` claims **no migration number**: nothing it changes is persisted,
 and its §Migration states the check rather than omitting the question.
+
+`n-way-comparison.md` and `defect-sweep.md` are independent and may land in either
+order: the first changes only run-persisted shape, the second only pack shape.
+`n-way-comparison.md` takes D4 and D9 as inbound from `defect-sweep.md` and
+re-claims neither.
+
+`live-session-platform.md` is independent of both. It cites all six of
+`defect-sweep.md`'s defects and duplicates none of its fixes; the only shared shape is
+D4, where the sweep collapses the four *pack* vocabularies and the live draft collapses
+`RunRole`, which the sweep's scope does not reach — whichever lands first supplies the
+constant module the other reuses. Against `n-way-comparison.md` it is ordered, not
+coupled: it rebased to migration **7** and changes no run-persisted shape, so its DDL
+appends after 6 without depending on anything 6 does. Its Arena leg import produces
+ordinary root-forked branches, which are inputs to N-way comparison rather than a
+competing mechanism.
 
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
 `content-sourcing-pipelines.md` draft and recommended a four-way split; the draft
@@ -55,6 +72,8 @@ writing it into a draft.
 | 3 | 2→3 | `archive/pack-optional-runs.md` | implemented after migration 2 |
 | 4 | 3→4 | `archive/terminal-outcome-events.md` | implemented; upgrades ordinary v0.5 snapshots and quarantines pre-producer outcome events. Its body is frozen to literal `"0.6"` by `archive/line-drill-theory-grading.md` §11b so later schema constants cannot mis-stamp rows before migration 5 |
 | 5 | 4→5 | `archive/line-drill-theory-grading.md` | implemented — run schema v0.7; adds `policyModeApplied` to `opponent.move_selected.selection`, historical selections migrate to `unknown` and are never inferred |
+| 6 | 5→6 | `n-way-comparison.md` | **claimed 2026-08-13, draft** — run schema v0.8; adds `Branch.origin` (`"played" \| "simulated"`) and the `prediction.recorded` event. Body backfills `origin: "played"` on every branch of every v0.7 snapshot; the new event type needs no backfill. Both literals (`"played"`, `"0.8"`) are frozen in the body rather than read from the schema constant, following migration 4's freeze rule, so a later bump cannot mis-stamp rows before migration 7 |
+| 7 | 6→7 | `live-session-platform.md` | **claimed 2026-08-13, draft** — the live-session layer: `live_sessions`, `session_journal`, `session_proposals`, `session_vote_windows`, `session_votes`, `session_invitations`, `arena_legs`. **Create-table only.** It backfills nothing, reads no run snapshot, rewrites no `drill_runs` row, and leaves `DRILL_RUN_SCHEMA_VERSION` untouched, so it cannot mis-stamp anything and needs no freeze rule. Rebased from 6 when `n-way-comparison.md` claimed it; if that draft is withdrawn before landing, this rebases to 6 rather than leaving a hole |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a

@@ -11,7 +11,8 @@
   (`rfc/README.md:35-40`) opened B1–B8 RFC planning
 - **Depends on:** `archive/branch-runtime.md`, `archive/drill-client.md`,
   `archive/explanation-grounds.md`, `archive/line-drill-theory-grading.md`,
-  `archive/outcome-drill-grading.md`, `archive/terminal-outcome-events.md`
+  `archive/outcome-drill-grading.md`, `archive/terminal-outcome-events.md`;
+  **`defect-sweep.md`** for D4 and D9 (§11) — independent, either order
 - **Parent / amends:** amends `archive/branch-runtime.md` (the comparison payload
   and the branch record), `archive/explanation-grounds.md` (the comparison
   section), `archive/drill-client.md` (the compare surface and checkpoint sheet)
@@ -722,34 +723,47 @@ freeze rule recorded for migration 4 at `rfc/README.md:54`.
 Migration 6 is claimed in `rfc/README.md`'s register in the same commit as this
 draft.
 
-### 11. Defects closed and defects constraining
+### 11. Defects: none claimed, four constraining
 
-**Closed by this RFC**, because it touches both sides of each:
+`rfc/defect-sweep.md` (draft, 2026-08-13) owns and closes all six open defects —
+D4, D5, D6, D8, D9, D10 — and its verification pass found several of them wider
+than their ledger rows say. This RFC therefore **claims none of them** and takes
+two as inbound dependencies rather than re-fixing them in a second place, which
+is the duplication the register exists to prevent.
 
-- **D4 — action-vocabulary drift.** `SUPPORTED_CHECKPOINT_ACTIONS`
-  (`apps/server/src/pack-validation.ts:18`) and the client's recognised-action
-  branch (`CheckpointSheet.svelte:78`) are two hand-maintained lists. This RFC
-  changes what `compare_branches` does, so it also moves the vocabulary to one
-  exported constant in `packages/schema` consumed by both, with an equality test.
-- **D6 — `phase` never reaches the client.** `PackSummary`
-  (`pack-registry.ts:26-34`) omits `phase` although `projectPackDocument` emits
-  it (`:66`). `phase` is added to `PackSummary`. The Review IA is organised on
-  this axis (`design/03-product-breadth.md:134-136`).
+**Inbound from `defect-sweep.md`:**
 
-**Constraining but not closed:**
+- **D4 — checkpoint-action vocabulary.** This RFC changes what
+  `compare_branches` *does* (§3, §5) but not the vocabulary that names it.
+  `defect-sweep` §1 replaces `SUPPORTED_CHECKPOINT_ACTIONS`
+  (`apps/server/src/pack-validation.ts:18`), the client literal
+  (`CheckpointSheet.svelte:78`) and the schema's exclusion rule with one
+  exported `CHECKPOINT_ACTIONS` constant. §8.2 adds a prediction *step* to the
+  checkpoint sheet, which is an `interaction`, not an action, so it adds no
+  member to that vocabulary and no new copy of it.
+- **D9 — `start.side`.** `packStartSide` throws without it
+  (`screen-model.ts:56-62`), and both simulate's grid and §8.2's board flip call
+  it. `defect-sweep` makes `start.side` required at pack schema 0.5, which
+  removes the exposure. This RFC adds no new exposure and no fix.
 
-- **D5** — no light profile in the release compose; §9 degrades honestly with
-  the shipped `ENGINE_UNAVAILABLE` shape instead of assuming a judge exists.
+**Constraining but untouched by either RFC:**
+
+- **D5** — the release compose hardcodes `ENGINE_MODE: maia` with no light
+  profile, so §9 must degrade with the shipped `ENGINE_UNAVAILABLE` shape rather
+  than assume a judge engine exists.
 - **D8** — schema-versus-validator divergence is the precedent class for §8.3's
-  declared-versus-applied grading source; this RFC does not add a fourth
-  divergent vocabulary.
-- **D9** — `start.side` is schema-optional but `packStartSide` throws without it
-  (`screen-model.ts:56-62`). Both simulate's grid and the prediction board flip
-  call it, so a validating pack without `start.side` crashes those surfaces
-  exactly as it crashes the drill screen today. This RFC adds no new exposure
-  and no fix.
+  declared-versus-applied grading source. §8.3 deliberately does not add a
+  seventh copy of a fourth vocabulary: `grading.source` stays a single schema
+  enum, and the *applied* value is recorded per event.
 - **D10** — engine provenance is anonymous, which is why §9 forbids naming an
-  engine in the comparison.
+  engine in the comparison and keeps the heading "Recorded engine evaluation."
+
+**Sequencing.** `defect-sweep` carries a pack-schema change (0.4 → 0.5) and no
+migration; this RFC carries a run-schema change (0.7 → 0.8, migration 6) and no
+pack-schema change. They are independent and may land in either order. If this
+RFC lands first, §8.2's prediction step sits beside the existing client action
+literal and moves with it when `defect-sweep` §1 consolidates the vocabulary;
+A8 asserts against `CHECKPOINT_ACTIONS` once that constant exists.
 
 ### 12. Slice plan
 
@@ -886,10 +900,11 @@ recorded candidate masses and the engine-grading-unavailable sentence — and th
 `/select-move` was **not** requested for that ply
 (`page.waitForResponse` / request log), proving §8.2's ordering rule.
 
-**A8 — gates and defects.** `pnpm verify` (typecheck, unit, schema-check —
-`package.json:13`) and `pnpm test:browser` (`package.json:10`) pass. The D4
-equality test between the server allow-list and the client's recognised actions
-passes. `GET /packs` returns `phase` for the example pack (D6).
+**A8 — gates.** `pnpm verify` (typecheck, unit, schema-check —
+`package.json:13`) and `pnpm test:browser` (`package.json:10`) pass. The
+prediction step added to the checkpoint sheet introduces no new member of the
+checkpoint-action vocabulary, asserted against `defect-sweep`'s
+`CHECKPOINT_ACTIONS` constant once that lands (§11).
 
 **A9 — B3.** With A1–A8 green, `design/03-product-breadth.md`'s B3 row moves
 from `pairwise partial` to met: manual multi-branch selection, pairwise and
