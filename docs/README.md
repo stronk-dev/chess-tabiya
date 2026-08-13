@@ -53,3 +53,6 @@ Implemented foundation:
 - `n-way-comparison.md` — one-axis 2–8 branch comparison, consequence rows,
   scratch simulation and promotion, prediction capture, deep analysis, run
   schema 0.8, pack schema 0.9, and migration 8.
+- `live-sessions.md` — roles and board-control policy, possession authorship,
+  proposals, advisory chat votes, Arena PGN legs, follower withholding, live routes,
+  migration 9, and the accepted streamer-disclosure limitation.

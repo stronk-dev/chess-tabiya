@@ -120,7 +120,7 @@ function surfaces(providerState: CapabilityProviders): SurfaceCapabilities {
     play: providerState.opponent === "none" ? "unavailable-here" : "available",
     review: "available",
     learn: "available",
-    live: "unavailable-here",
+    live: "available",
     create: "available",
     justPlay: "unavailable-here",
     fromPosition: "unavailable-here",

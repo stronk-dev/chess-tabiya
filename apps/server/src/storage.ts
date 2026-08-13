@@ -12,8 +12,24 @@ import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { ServerError } from "./errors.js";
 import { projectAttempts, type AttemptRow, type ConceptTagRow } from "./progress.js";
+import {
+  BOARD_CONTROLS,
+  SESSION_JOURNAL_KINDS,
+  SESSION_KINDS,
+  type ArenaLeg,
+  type BoardControl,
+  type LiveSession,
+  type SessionInvitation,
+  type SessionJournalEntry,
+  type SessionKind,
+  type SessionProposal,
+  type VoteOption,
+  type VoteTally,
+  type VoteWindow,
+} from "./live-types.js";
 
-export type RunRole = "host" | "participant" | "spectator";
+export const RUN_ROLES = Object.freeze(["host", "participant", "spectator"] as const);
+export type RunRole = (typeof RUN_ROLES)[number];
 
 export interface Learner {
   readonly id: string;
@@ -96,8 +112,42 @@ export interface RunStorage {
     at: string,
   ): void;
   revokeGrant(runId: string, learnerId: string, actor: LeaseHolder): void;
-  claimLease(runId: string, lease: LeaseHolder): void;
+  claimLease(runId: string, lease: LeaseHolder, expectedHolderLearnerId?: string): void;
   close(): void;
+}
+
+export interface LiveSessionStorage {
+  createLiveSession(input: {
+    readonly id: string; readonly runId: string; readonly kind: SessionKind;
+    readonly title: string; readonly boardControl: BoardControl;
+    readonly scheduledFor?: string; readonly voteAdapterLearnerId?: string;
+    readonly rotation?: readonly string[]; readonly createdBy: string; readonly at: string;
+  }): LiveSession;
+  liveSession(sessionId: string): LiveSession | undefined;
+  liveSessionByRun(runId: string): LiveSession | undefined;
+  listLiveSessions(learnerId: string): readonly LiveSession[];
+  closeLiveSession(sessionId: string, actorLearnerId: string, at: string): LiveSession;
+  sessionJournal(sessionId: string, sinceSeq: number): readonly SessionJournalEntry[];
+  boardOperation(sessionId: string, actorLearnerId: string, operation: {
+    readonly op: "offer" | "withdraw" | "advance" | "reclaim";
+    readonly learnerId?: string;
+    readonly writerId?: string;
+  }, at: string): LiveSession;
+  createProposal(input: Omit<SessionProposal, "status" | "resolvedRunSeq">): SessionProposal;
+  proposals(sessionId: string): readonly SessionProposal[];
+  resolveProposal(proposalId: string, status: "applied" | "declined", runSeq: number, actorLearnerId: string, at: string): SessionProposal;
+  createVoteWindow(input: Omit<VoteWindow, "state" | "appliedOptionUci">, actorLearnerId: string): VoteWindow;
+  voteWindow(sessionId: string, windowId?: string): VoteWindow | undefined;
+  castVote(input: { readonly sessionId: string; readonly windowId: string; readonly voterKey: string; readonly choiceUci: string; readonly castByLearnerId: string; readonly at: string }): void;
+  voteCapacity(sessionId: string, windowId: string, voterKey: string): { readonly total: number; readonly exists: boolean };
+  voteTally(sessionId: string, windowId: string): VoteTally;
+  closeVoteWindow(sessionId: string, windowId: string, actorLearnerId: string, at: string, appliedOptionUci?: string): VoteWindow;
+  transitionVoteWindow(sessionId:string,windowId:string,state:"closed"|"stale",at:string):VoteWindow;
+  createInvitation(input: Omit<SessionInvitation, "id" | "state" | "createdAt"> & { readonly at: string }): SessionInvitation;
+  invitations(sessionId: string): readonly SessionInvitation[];
+  arenaLegs(sessionId: string): readonly ArenaLeg[];
+  saveArenaLeg(leg: ArenaLeg, actorLearnerId: string, runSeq: number, at: string): void;
+  saveArenaImport(run: DrillRun, lease: LeaseHolder, leg: ArenaLeg, actorLearnerId: string, at: string): void;
 }
 
 export interface StoredAttempt extends AttemptRow {
@@ -212,15 +262,15 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 8;
+export const STORAGE_VERSION = 9;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
 function isRunRole(value: unknown): value is RunRole {
-  return value === "host" || value === "participant" || value === "spectator";
+  return RUN_ROLES.includes(value as RunRole);
 }
 
-function mayWrite(role: RunRole): boolean {
+export function runRoleMayWrite(role: RunRole): boolean {
   return role === "host" || role === "participant";
 }
 
@@ -360,7 +410,7 @@ function storageFailure(message: string, cause: unknown): ServerError {
   return new ServerError("STORAGE_FAILURE", message, { cause });
 }
 
-export class SQLiteRunStorage implements RunStorage, ProgressStorage {
+export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessionStorage {
   readonly #database: DatabaseSync;
   readonly #snapshots = new Map<string, StoredRun>();
   readonly #now: () => string;
@@ -702,12 +752,19 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
            WHERE active_writer_learner_id = ?`,
         )
         .run(LEGACY_ID, legacyWriterId, learnerId);
+      for (const row of activeRuns) {
+        const session = this.#database.prepare("SELECT id FROM live_sessions WHERE run_id=?").get(row.id) as {id?:unknown}|undefined;
+        if (typeof session?.id === "string") {
+          this.#appendSessionJournal(session.id,"board.granted",null,this.#runSeq(row.id),{holderLearnerId:LEGACY_ID},at);
+        }
+      }
       this.#database.prepare(
         "UPDATE pack_drafts SET state = CASE WHEN state = 'registered' THEN state ELSE 'withdrawn' END, owner_learner_id = ? WHERE owner_learner_id = ?",
       ).run(LEGACY_ID, learnerId);
       this.#database.prepare(
         "UPDATE registered_packs SET publisher_learner_id = ? WHERE publisher_learner_id = ?",
       ).run(LEGACY_ID, learnerId);
+      this.#database.prepare("UPDATE live_sessions SET created_by = ? WHERE created_by = ?").run(LEGACY_ID,learnerId);
       this.#database.prepare("DELETE FROM learners WHERE id = ?").run(learnerId);
       const restore = this.#database.prepare(
         `INSERT OR IGNORE INTO run_grants (run_id, learner_id, role, granted_at)
@@ -829,22 +886,54 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
     this.#mutateGrant(runId, learnerId, undefined, actor, this.#now());
   }
 
-  claimLease(runId: string, lease: LeaseHolder): void {
+  claimLease(runId: string, lease: LeaseHolder, expectedHolderLearnerId?: string): void {
     try {
-      const role = this.runRole(runId, lease.learnerId);
+      this.#database.exec("BEGIN IMMEDIATE");
+      const role = this.#roleInTransaction(runId, lease.learnerId);
       if (role === undefined) throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${runId}`);
-      if (!mayWrite(role)) {
+      if (!runRoleMayWrite(role)) {
         throw new ServerError("FORBIDDEN", "This learner may not claim the run lease");
+      }
+      const current = this.#database.prepare(
+        "SELECT active_writer_learner_id FROM drill_runs WHERE id=?",
+      ).get(runId) as { readonly active_writer_learner_id?: unknown } | undefined;
+      if (typeof current?.active_writer_learner_id !== "string") {
+        throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${runId}`);
+      }
+      const witness = current.active_writer_learner_id;
+      if (expectedHolderLearnerId !== undefined && expectedHolderLearnerId !== witness) {
+        throw new ServerError("LEASE_MOVED", "The board holder changed before this claim");
+      }
+      const sessionRow = this.#database.prepare("SELECT * FROM live_sessions WHERE run_id=?").get(runId) as Record<string,unknown>|undefined;
+      let boardControl: BoardControl;
+      if (sessionRow === undefined) {
+        const count = this.#database.prepare("SELECT count(*) AS count FROM run_grants WHERE run_id=? AND role IN ('host','participant')").get(runId) as {count:number};
+        boardControl = count.count <= 1 ? "free_claim" : "host_directed";
+      } else boardControl = String(sessionRow.board_control) as BoardControl;
+      if (boardControl === "host_directed" && role !== "host" && sessionRow?.handoff_learner_id !== lease.learnerId) {
+        throw new ServerError("BOARD_HELD", "The host has not offered this learner the board");
+      }
+      if (boardControl === "rotation") {
+        const rotation = JSON.parse(String(sessionRow?.rotation_json ?? "[]")) as string[];
+        if (rotation[Number(sessionRow?.rotation_cursor ?? 0)] !== lease.learnerId) {
+          throw new ServerError("BOARD_HELD", "It is another learner's turn in the rotation");
+        }
       }
       const result = this.#database
         .prepare(
           `UPDATE drill_runs SET active_writer_id = ?, active_writer_learner_id = ?
-           WHERE id = ?`,
+           WHERE id = ? AND active_writer_learner_id = ?`,
         )
-        .run(lease.writerId, lease.learnerId, runId);
-      if (result.changes !== 1) throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${runId}`);
+        .run(lease.writerId, lease.learnerId, runId, witness);
+      if (result.changes !== 1) throw new ServerError("LEASE_MOVED", "The board holder changed before this claim");
+      if (sessionRow !== undefined) {
+        this.#appendSessionJournal(String(sessionRow.id),"board.granted",lease.learnerId,this.#runSeq(runId),{holderLearnerId:lease.learnerId},this.#now());
+        this.#database.prepare("UPDATE live_sessions SET handoff_learner_id=NULL WHERE id=?").run(String(sessionRow.id));
+      }
+      this.#database.exec("COMMIT");
       this.#setCachedLease(runId, lease);
     } catch (error) {
+      this.#rollback();
       if (error instanceof ServerError) throw error;
       throw storageFailure("Could not claim run lease", error);
     }
@@ -1197,6 +1286,258 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
       String(latest.run_id), String(latest.root_node_id));
   }
 
+  createLiveSession(input: {
+    readonly id: string; readonly runId: string; readonly kind: SessionKind;
+    readonly title: string; readonly boardControl: BoardControl;
+    readonly scheduledFor?: string; readonly voteAdapterLearnerId?: string;
+    readonly rotation?: readonly string[]; readonly createdBy: string; readonly at: string;
+  }): LiveSession {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      if (this.#roleInTransaction(input.runId, input.createdBy) !== "host") {
+        throw new ServerError("FORBIDDEN", "Only a host may create a live session");
+      }
+      const run = this.#database.prepare(
+        "SELECT active_writer_learner_id,snapshot_json FROM drill_runs WHERE id=?",
+      ).get(input.runId) as { readonly active_writer_learner_id?: unknown; readonly snapshot_json?: unknown } | undefined;
+      if (typeof run?.active_writer_learner_id !== "string" || typeof run.snapshot_json !== "string") {
+        throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${input.runId}`);
+      }
+      this.#database.prepare(`INSERT INTO live_sessions
+        (id,run_id,kind,title,board_control,scheduled_for,vote_adapter_learner_id,rotation_json,created_by,created_at)
+        VALUES (?,?,?,?,?,?,?,?,?,?)`).run(
+          input.id, input.runId, input.kind, input.title, input.boardControl,
+          input.scheduledFor ?? null, input.voteAdapterLearnerId ?? null,
+          input.rotation === undefined ? null : JSON.stringify(input.rotation), input.createdBy, input.at,
+        );
+      const runSeq = this.#snapshotSeq(run.snapshot_json);
+      this.#appendSessionJournal(input.id, "session.opened", input.createdBy, runSeq, {}, input.at);
+      this.#appendSessionJournal(input.id, "board.granted", run.active_writer_learner_id, runSeq, {
+        holderLearnerId: run.active_writer_learner_id,
+        changedByLearnerId: input.createdBy,
+      }, input.at);
+      if (input.kind === "match") {
+        const insert = this.#database.prepare("INSERT INTO arena_legs(session_id,leg) VALUES (?,?)");
+        insert.run(input.id, 1); insert.run(input.id, 2);
+      }
+      this.#database.exec("COMMIT");
+      return this.liveSession(input.id)!;
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      if (error instanceof Error && error.message.includes("UNIQUE constraint")) {
+        throw new ServerError("INVALID_REQUEST", "A live session already exists for this run", { cause: error });
+      }
+      throw storageFailure("Could not create live session", error);
+    }
+  }
+
+  liveSession(sessionId: string): LiveSession | undefined {
+    const row = this.#database.prepare("SELECT * FROM live_sessions WHERE id=?").get(sessionId) as Record<string, unknown> | undefined;
+    return row === undefined ? undefined : this.#liveSessionRow(row);
+  }
+
+  liveSessionByRun(runId: string): LiveSession | undefined {
+    const row = this.#database.prepare("SELECT * FROM live_sessions WHERE run_id=?").get(runId) as Record<string, unknown> | undefined;
+    return row === undefined ? undefined : this.#liveSessionRow(row);
+  }
+
+  listLiveSessions(learnerId: string): readonly LiveSession[] {
+    const rows = this.#database.prepare(`SELECT s.* FROM live_sessions s
+      JOIN run_grants g ON g.run_id=s.run_id AND g.learner_id=?
+      ORDER BY COALESCE(s.scheduled_for,s.created_at),s.id`).all(learnerId) as readonly Record<string, unknown>[];
+    return Object.freeze(rows.map((row) => this.#liveSessionRow(row)));
+  }
+
+  closeLiveSession(sessionId: string, actorLearnerId: string, at: string): LiveSession {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const session = this.#requiredLiveSessionRow(sessionId);
+      if (this.#roleInTransaction(String(session.run_id), actorLearnerId) !== "host") {
+        throw new ServerError("FORBIDDEN", "Only a host may close a live session");
+      }
+      this.#database.prepare("UPDATE live_sessions SET closed_at=? WHERE id=? AND closed_at IS NULL").run(at,sessionId);
+      this.#appendSessionJournal(sessionId,"session.closed",actorLearnerId,this.#runSeq(String(session.run_id)),{},at);
+      this.#database.exec("COMMIT");
+      return this.liveSession(sessionId)!;
+    } catch (error) { this.#rollback(); if (error instanceof ServerError) throw error; throw storageFailure("Could not close live session",error); }
+  }
+
+  sessionJournal(sessionId: string, sinceSeq: number): readonly SessionJournalEntry[] {
+    const rows = this.#database.prepare("SELECT * FROM session_journal WHERE session_id=? AND seq>? ORDER BY seq").all(sessionId,sinceSeq) as readonly Record<string,unknown>[];
+    return Object.freeze(rows.map((row) => Object.freeze({
+      sessionId: String(row.session_id), seq: Number(row.seq), at: String(row.at),
+      kind: String(row.kind) as SessionJournalEntry["kind"],
+      actorLearnerId: row.actor_learner_id === null ? null : String(row.actor_learner_id),
+      runSeq: row.run_seq === null ? null : Number(row.run_seq),
+      payload: Object.freeze(JSON.parse(String(row.payload_json)) as Record<string,unknown>),
+    })));
+  }
+
+  boardOperation(sessionId: string, actorLearnerId: string, operation: {
+    readonly op: "offer" | "withdraw" | "advance" | "reclaim";
+    readonly learnerId?: string; readonly writerId?: string;
+  }, at: string): LiveSession {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const row = this.#requiredLiveSessionRow(sessionId);
+      const runId = String(row.run_id);
+      if (this.#roleInTransaction(runId,actorLearnerId) !== "host") throw new ServerError("FORBIDDEN","Only a host may control the board");
+      if (row.closed_at !== null) throw new ServerError("INVALID_REQUEST","The live session is closed");
+      if (operation.op === "offer") {
+        if (operation.learnerId === undefined || !runRoleMayWrite(this.#roleInTransaction(runId,operation.learnerId) as RunRole)) throw new ServerError("INVALID_REQUEST","Handoff target needs write access");
+        this.#database.prepare("UPDATE live_sessions SET handoff_learner_id=? WHERE id=?").run(operation.learnerId,sessionId);
+      } else if (operation.op === "withdraw") {
+        this.#database.prepare("UPDATE live_sessions SET handoff_learner_id=NULL WHERE id=?").run(sessionId);
+      } else if (operation.op === "advance") {
+        if (row.board_control !== "rotation") throw new ServerError("INVALID_REQUEST","advance requires rotation board control");
+        const rotation = JSON.parse(String(row.rotation_json ?? "[]")) as string[];
+        if (rotation.length === 0) throw new ServerError("INVALID_REQUEST","rotation is empty");
+        this.#database.prepare("UPDATE live_sessions SET rotation_cursor=(rotation_cursor+1)%? WHERE id=?").run(rotation.length,sessionId);
+      } else {
+        const writerId = operation.writerId;
+        if (writerId === undefined) throw new ServerError("INVALID_REQUEST","reclaim requires writerId");
+        this.#database.prepare("UPDATE drill_runs SET active_writer_id=?,active_writer_learner_id=? WHERE id=?").run(writerId,actorLearnerId,runId);
+        this.#database.prepare("UPDATE live_sessions SET handoff_learner_id=NULL WHERE id=?").run(sessionId);
+        this.#appendSessionJournal(sessionId,"board.granted",actorLearnerId,this.#runSeq(runId),{holderLearnerId:actorLearnerId},at);
+        this.#setCachedLease(runId,{writerId,learnerId:actorLearnerId});
+      }
+      this.#database.exec("COMMIT");
+      return this.liveSession(sessionId)!;
+    } catch (error) { this.#rollback(); if (error instanceof ServerError) throw error; throw storageFailure("Could not update board control",error); }
+  }
+
+  createProposal(input: Omit<SessionProposal,"status"|"resolvedRunSeq">): SessionProposal {
+    this.#database.prepare("UPDATE session_proposals SET status='stale' WHERE session_id=? AND node_id=? AND proposed_by=? AND status='open'").run(input.sessionId,input.nodeId,input.proposedBy);
+    this.#database.prepare(`INSERT INTO session_proposals(id,session_id,node_id,move_uci,proposed_by,at,status)
+      VALUES(?,?,?,?,?,?,'open')`).run(input.id,input.sessionId,input.nodeId,input.moveUci,input.proposedBy,input.at);
+    this.#appendSessionJournal(input.sessionId,"proposal.made",input.proposedBy,this.#sessionRunSeq(input.sessionId),{proposalId:input.id,nodeId:input.nodeId,moveUci:input.moveUci},input.at);
+    return Object.freeze({...input,status:"open",resolvedRunSeq:null});
+  }
+
+  proposals(sessionId: string): readonly SessionProposal[] {
+    const session=this.liveSession(sessionId);if(session!==undefined){const active=this.read(session.runId)?.run.activeCursor.nodeId;if(active!==undefined)this.#database.prepare("UPDATE session_proposals SET status='stale' WHERE session_id=? AND status='open' AND node_id<>?").run(sessionId,active);}
+    const rows = this.#database.prepare("SELECT * FROM session_proposals WHERE session_id=? ORDER BY at,id").all(sessionId) as readonly Record<string,unknown>[];
+    return Object.freeze(rows.map((row) => this.#proposalRow(row)));
+  }
+
+  resolveProposal(proposalId: string,status: "applied"|"declined",runSeq:number,actorLearnerId:string,at:string): SessionProposal {
+    const found = this.#database.prepare("SELECT * FROM session_proposals WHERE id=?").get(proposalId) as Record<string,unknown>|undefined;
+    if (found === undefined) throw new ServerError("INVALID_REQUEST","Unknown proposal");
+    if (found.status !== "open") throw new ServerError("INVALID_REQUEST","Proposal is not open");
+    this.#database.prepare("UPDATE session_proposals SET status=?,resolved_run_seq=? WHERE id=?").run(status,runSeq,proposalId);
+    this.#appendSessionJournal(String(found.session_id),status === "applied" ? "proposal.applied":"proposal.declined",actorLearnerId,runSeq,{proposalId},at);
+    return this.#proposalRow({...found,status,resolved_run_seq:runSeq});
+  }
+
+  createVoteWindow(input: Omit<VoteWindow,"state"|"appliedOptionUci">,actorLearnerId:string): VoteWindow {
+    this.#database.prepare("UPDATE session_vote_windows SET state='closed' WHERE session_id=? AND state='open'").run(input.sessionId);
+    this.#database.prepare(`INSERT INTO session_vote_windows(id,session_id,node_id,prompt,options_json,opens_at,closes_at,state)
+      VALUES(?,?,?,?,?,?,?,'open')`).run(input.id,input.sessionId,input.nodeId,input.prompt,JSON.stringify(input.options),input.opensAt,input.closesAt);
+    this.#appendSessionJournal(input.sessionId,"vote.opened",actorLearnerId,this.#sessionRunSeq(input.sessionId),{windowId:input.id},input.opensAt);
+    return Object.freeze({...input,state:"open",appliedOptionUci:null});
+  }
+
+  voteWindow(sessionId:string,windowId?:string): VoteWindow|undefined {
+    const row = (windowId === undefined
+      ? this.#database.prepare("SELECT * FROM session_vote_windows WHERE session_id=? ORDER BY opens_at DESC LIMIT 1").get(sessionId)
+      : this.#database.prepare("SELECT * FROM session_vote_windows WHERE session_id=? AND id=?").get(sessionId,windowId)) as Record<string,unknown>|undefined;
+    return row === undefined ? undefined : this.#voteWindowRow(row);
+  }
+
+  castVote(input:{readonly sessionId:string;readonly windowId:string;readonly voterKey:string;readonly choiceUci:string;readonly castByLearnerId:string;readonly at:string}):void {
+    this.#database.prepare(`INSERT INTO session_votes(session_id,window_id,voter_key,choice_uci,cast_by_learner_id,at)
+      VALUES(?,?,?,?,?,?) ON CONFLICT(session_id,window_id,voter_key) DO UPDATE SET choice_uci=excluded.choice_uci,cast_by_learner_id=excluded.cast_by_learner_id,at=excluded.at`)
+      .run(input.sessionId,input.windowId,input.voterKey,input.choiceUci,input.castByLearnerId,input.at);
+  }
+
+  voteCapacity(sessionId:string,windowId:string,voterKey:string):{readonly total:number;readonly exists:boolean}{
+    const total=this.#database.prepare("SELECT count(*) AS count FROM session_votes WHERE session_id=? AND window_id=?").get(sessionId,windowId) as {count:number};
+    const exists=this.#database.prepare("SELECT 1 AS found FROM session_votes WHERE session_id=? AND window_id=? AND voter_key=?").get(sessionId,windowId,voterKey);
+    return Object.freeze({total:total.count,exists:exists!==undefined});
+  }
+
+  voteTally(sessionId:string,windowId:string):VoteTally {
+    const window = this.voteWindow(sessionId,windowId);
+    if (window === undefined) throw new ServerError("INVALID_REQUEST","Unknown vote window");
+    const rows = this.#database.prepare("SELECT choice_uci,count(*) AS count FROM session_votes WHERE session_id=? AND window_id=? GROUP BY choice_uci").all(sessionId,windowId) as readonly Record<string,unknown>[];
+    const counts = new Map(rows.map((row)=>[String(row.choice_uci),Number(row.count)]));
+    const tally = Object.freeze(window.options.map((option)=>Object.freeze({...option,count:counts.get(option.moveUci)??0})));
+    return Object.freeze({window,tally,total:tally.reduce((sum,item)=>sum+item.count,0)});
+  }
+
+  closeVoteWindow(sessionId:string,windowId:string,actorLearnerId:string,at:string,appliedOptionUci?:string):VoteWindow {
+    this.#database.prepare("UPDATE session_vote_windows SET state='closed',applied_option_uci=? WHERE session_id=? AND id=?").run(appliedOptionUci??null,sessionId,windowId);
+    this.#appendSessionJournal(sessionId,appliedOptionUci===undefined?"vote.closed":"vote.applied",actorLearnerId,this.#sessionRunSeq(sessionId),{windowId,...(appliedOptionUci===undefined?{}:{appliedOptionUci})},at);
+    return this.voteWindow(sessionId,windowId)!;
+  }
+  transitionVoteWindow(sessionId:string,windowId:string,state:"closed"|"stale",at:string):VoteWindow{
+    const result=this.#database.prepare("UPDATE session_vote_windows SET state=? WHERE session_id=? AND id=? AND state='open'").run(state,sessionId,windowId);
+    if(result.changes===1)this.#appendSessionJournal(sessionId,"vote.closed",null,this.#sessionRunSeq(sessionId),{windowId,reason:state},at);
+    const window=this.voteWindow(sessionId,windowId);if(window===undefined)throw new ServerError("INVALID_REQUEST","Unknown vote window");return window;
+  }
+
+  createInvitation(input:Omit<SessionInvitation,"id"|"state"|"createdAt">&{readonly at:string}):SessionInvitation {
+    const id=randomUUID();
+    this.#database.prepare(`INSERT INTO session_invitations(id,session_id,leg,invited_handle,invited_role,external_challenge_url,state,created_at)
+      VALUES(?,?,?,?,?,?,'open',?)`).run(id,input.sessionId,input.leg,input.invitedHandle,input.invitedRole,input.externalChallengeUrl,input.at);
+    return Object.freeze({id,sessionId:input.sessionId,leg:input.leg,invitedHandle:input.invitedHandle,invitedRole:input.invitedRole,externalChallengeUrl:input.externalChallengeUrl,state:"open",createdAt:input.at});
+  }
+
+  invitations(sessionId:string):readonly SessionInvitation[] {
+    const rows=this.#database.prepare("SELECT * FROM session_invitations WHERE session_id=? ORDER BY created_at,id").all(sessionId) as readonly Record<string,unknown>[];
+    return Object.freeze(rows.map((row)=>Object.freeze({id:String(row.id),sessionId:String(row.session_id),leg:row.leg===null?null:Number(row.leg) as 1|2,invitedHandle:row.invited_handle===null?null:String(row.invited_handle),invitedRole:String(row.invited_role) as RunRole,externalChallengeUrl:row.external_challenge_url===null?null:String(row.external_challenge_url),state:String(row.state) as SessionInvitation["state"],createdAt:String(row.created_at)})));
+  }
+
+  arenaLegs(sessionId:string):readonly ArenaLeg[] {
+    const rows=this.#database.prepare("SELECT * FROM arena_legs WHERE session_id=? ORDER BY leg").all(sessionId) as readonly Record<string,unknown>[];
+    return Object.freeze(rows.map((row)=>this.#arenaLegRow(row)));
+  }
+
+  saveArenaLeg(leg:ArenaLeg,actorLearnerId:string,runSeq:number,at:string):void {
+    this.#database.prepare(`UPDATE arena_legs SET reference_player_handle=?,external_challenge_url=?,pgn=?,result=?,branch_id=?,imported_at=? WHERE session_id=? AND leg=?`)
+      .run(leg.referencePlayerHandle,leg.externalChallengeUrl,leg.pgn,leg.result,leg.branchId,leg.importedAt,leg.sessionId,leg.leg);
+    this.#appendSessionJournal(leg.sessionId,"leg.imported",actorLearnerId,runSeq,{leg:leg.leg,branchId:leg.branchId},at);
+  }
+
+  saveArenaImport(run:DrillRun,lease:LeaseHolder,leg:ArenaLeg,actorLearnerId:string,at:string):void {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const row=this.#database.prepare("SELECT summary_json FROM drill_runs WHERE id=?").get(run.id) as {summary_json?:unknown}|undefined;
+      if(typeof row?.summary_json!=="string")throw new ServerError("RUN_NOT_FOUND",`Unknown run: ${run.id}`);
+      const title=parseSummary(row.summary_json).title;
+      const updatedAt=this.#now();
+      const saved=this.#database.prepare(`UPDATE drill_runs SET snapshot_json=?,updated_at=?,summary_json=?,schema_version=?
+        WHERE id=? AND active_writer_id=? AND active_writer_learner_id=?`).run(JSON.stringify(run),updatedAt,JSON.stringify(summaryFields(run,title,updatedAt)),run.schemaVersion,run.id,lease.writerId,lease.learnerId);
+      if(saved.changes!==1)throw notActiveWriter(lease.writerId);
+      const changed=this.#database.prepare(`UPDATE arena_legs SET reference_player_handle=?,external_challenge_url=?,pgn=?,result=?,branch_id=?,imported_at=?
+        WHERE session_id=? AND leg=? AND branch_id IS NULL`).run(leg.referencePlayerHandle,leg.externalChallengeUrl,leg.pgn,leg.result,leg.branchId,leg.importedAt,leg.sessionId,leg.leg);
+      if(changed.changes!==1)throw new ServerError("INVALID_REQUEST","Arena leg was already imported");
+      this.#appendSessionJournal(leg.sessionId,"leg.imported",actorLearnerId,run.events.at(-1)?.seq??0,{leg:leg.leg,branchId:leg.branchId},at);
+      this.#database.exec("COMMIT");
+      this.#snapshots.set(run.id,Object.freeze({run,activeWriterId:lease.writerId,activeWriterLearnerId:lease.learnerId}));
+    }catch(error){this.#rollback();if(error instanceof ServerError||error instanceof RuntimeError)throw error;throw storageFailure("Could not import arena leg",error);}
+  }
+
+  #liveSessionRow(row:Record<string,unknown>):LiveSession {
+    const rotation=row.rotation_json===null?undefined:JSON.parse(String(row.rotation_json)) as string[];
+    return Object.freeze({id:String(row.id),runId:String(row.run_id),kind:String(row.kind) as SessionKind,title:String(row.title),boardControl:String(row.board_control) as BoardControl,
+      ...(row.scheduled_for===null?{}:{scheduledFor:String(row.scheduled_for)}),...(row.vote_adapter_learner_id===null?{}:{voteAdapterLearnerId:String(row.vote_adapter_learner_id)}),
+      ...(rotation===undefined?{}:{rotation:Object.freeze(rotation)}),...(row.handoff_learner_id===null?{}:{handoffLearnerId:String(row.handoff_learner_id)}),
+      rotationCursor:Number(row.rotation_cursor),createdBy:String(row.created_by),createdAt:String(row.created_at),...(row.closed_at===null?{}:{closedAt:String(row.closed_at)})});
+  }
+  #requiredLiveSessionRow(id:string):Record<string,unknown>{const row=this.#database.prepare("SELECT * FROM live_sessions WHERE id=?").get(id) as Record<string,unknown>|undefined;if(row===undefined)throw new ServerError("RUN_NOT_FOUND",`Unknown session: ${id}`);return row;}
+  #proposalRow(row:Record<string,unknown>):SessionProposal{return Object.freeze({id:String(row.id),sessionId:String(row.session_id),nodeId:String(row.node_id),moveUci:String(row.move_uci),proposedBy:String(row.proposed_by),at:String(row.at),status:String(row.status) as SessionProposal["status"],resolvedRunSeq:row.resolved_run_seq===null?null:Number(row.resolved_run_seq)});}
+  #voteWindowRow(row:Record<string,unknown>):VoteWindow{return Object.freeze({id:String(row.id),sessionId:String(row.session_id),nodeId:String(row.node_id),prompt:String(row.prompt),options:Object.freeze(JSON.parse(String(row.options_json)) as VoteOption[]),opensAt:String(row.opens_at),closesAt:String(row.closes_at),state:String(row.state) as VoteWindow["state"],appliedOptionUci:row.applied_option_uci===null?null:String(row.applied_option_uci)});}
+  #arenaLegRow(row:Record<string,unknown>):ArenaLeg{return Object.freeze({sessionId:String(row.session_id),leg:Number(row.leg) as 1|2,referencePlayerHandle:row.reference_player_handle===null?null:String(row.reference_player_handle),externalChallengeUrl:row.external_challenge_url===null?null:String(row.external_challenge_url),pgn:row.pgn===null?null:String(row.pgn),result:row.result===null?null:String(row.result) as ArenaLeg["result"],branchId:row.branch_id===null?null:String(row.branch_id),importedAt:row.imported_at===null?null:String(row.imported_at)});}
+  #snapshotSeq(snapshotJson:string):number{const parsed=JSON.parse(snapshotJson) as {events?:readonly {seq?:unknown}[]};const seq=parsed.events?.at(-1)?.seq;return typeof seq==="number"?seq:0;}
+  #runSeq(runId:string):number{const row=this.#database.prepare("SELECT snapshot_json FROM drill_runs WHERE id=?").get(runId) as {snapshot_json?:unknown}|undefined;if(typeof row?.snapshot_json!=="string")throw new ServerError("RUN_NOT_FOUND",`Unknown run: ${runId}`);return this.#snapshotSeq(row.snapshot_json);}
+  #sessionRunSeq(sessionId:string):number{return this.#runSeq(String(this.#requiredLiveSessionRow(sessionId).run_id));}
+  #appendSessionJournal(sessionId:string,kind:SessionJournalEntry["kind"],actorLearnerId:string|null,runSeq:number|null,payload:Readonly<Record<string,unknown>>,at:string):void {
+    const row=this.#database.prepare("SELECT COALESCE(max(seq),0)+1 AS seq FROM session_journal WHERE session_id=?").get(sessionId) as {seq:number};
+    this.#database.prepare("INSERT INTO session_journal(session_id,seq,at,kind,actor_learner_id,run_seq,payload_json) VALUES(?,?,?,?,?,?,?)").run(sessionId,row.seq,at,kind,actorLearnerId,runSeq,JSON.stringify(payload));
+  }
+
   /** Evicts only memoized projections; useful for cold-load diagnostics. */
   clearSnapshotCache(): void {
     this.#snapshots.clear();
@@ -1244,7 +1585,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
         }
       }
       const targetHoldsLease = run.active_writer_learner_id === targetLearnerId;
-      const removesWrite = role === undefined || !mayWrite(role);
+      const removesWrite = role === undefined || !runRoleMayWrite(role);
       if (targetHoldsLease && removesWrite && targetLearnerId === actor.learnerId) {
         throw new ServerError(
           "INVALID_REQUEST",
@@ -1279,6 +1620,10 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
           )
           .run(actor.writerId, actor.learnerId, runId);
         transferred = true;
+        const session = this.#database.prepare("SELECT id FROM live_sessions WHERE run_id=?").get(runId) as {id?:unknown}|undefined;
+        if (typeof session?.id === "string") {
+          this.#appendSessionJournal(session.id,"board.granted",actor.learnerId,this.#runSeq(runId),{holderLearnerId:actor.learnerId},at);
+        }
       }
       this.#database.exec("COMMIT");
       if (transferred) this.#setCachedLease(runId, actor);
@@ -1374,6 +1719,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
         name: "branch origin and prediction event run schema",
         apply: () => this.#upgradeV07Runs(),
       },
+      {
+        version: 9,
+        name: "live sessions, journal, proposals, votes, invitations, and arena legs",
+        apply: () => this.#addLiveSessionTables(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -1389,6 +1739,90 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
         throw storageFailure("Could not migrate run storage", error);
       }
     }
+  }
+
+  #addLiveSessionTables(): void {
+    const values = (items: readonly string[]) => items.map((item) => `'${item}'`).join(",");
+    this.#database.exec(`
+      CREATE TABLE IF NOT EXISTS live_sessions (
+        id TEXT PRIMARY KEY,
+        run_id TEXT NOT NULL UNIQUE REFERENCES drill_runs(id) ON DELETE CASCADE,
+        kind TEXT NOT NULL CHECK (kind IN (${values(SESSION_KINDS)})),
+        title TEXT NOT NULL,
+        board_control TEXT NOT NULL CHECK (board_control IN (${values(BOARD_CONTROLS)})),
+        scheduled_for TEXT,
+        vote_adapter_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
+        rotation_json TEXT,
+        handoff_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
+        rotation_cursor INTEGER NOT NULL DEFAULT 0,
+        created_by TEXT NOT NULL REFERENCES learners(id),
+        created_at TEXT NOT NULL,
+        closed_at TEXT
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS session_journal (
+        session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,
+        seq INTEGER NOT NULL,
+        at TEXT NOT NULL,
+        kind TEXT NOT NULL CHECK (kind IN (${values(SESSION_JOURNAL_KINDS)})),
+        actor_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
+        run_seq INTEGER,
+        payload_json TEXT NOT NULL,
+        PRIMARY KEY (session_id, seq)
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS session_proposals (
+        id TEXT PRIMARY KEY,
+        session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,
+        node_id TEXT NOT NULL,
+        move_uci TEXT NOT NULL,
+        proposed_by TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        at TEXT NOT NULL,
+        status TEXT NOT NULL CHECK (status IN ('open','applied','declined','stale')),
+        resolved_run_seq INTEGER
+      ) STRICT;
+      CREATE UNIQUE INDEX IF NOT EXISTS session_proposals_open ON session_proposals(session_id,node_id,proposed_by) WHERE status='open';
+      CREATE TABLE IF NOT EXISTS session_vote_windows (
+        id TEXT PRIMARY KEY,
+        session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,
+        node_id TEXT NOT NULL,
+        prompt TEXT NOT NULL,
+        options_json TEXT NOT NULL,
+        opens_at TEXT NOT NULL,
+        closes_at TEXT NOT NULL,
+        state TEXT NOT NULL CHECK (state IN ('open','closed','stale')),
+        applied_option_uci TEXT
+      ) STRICT;
+      CREATE UNIQUE INDEX IF NOT EXISTS session_vote_windows_open ON session_vote_windows(session_id) WHERE state='open';
+      CREATE TABLE IF NOT EXISTS session_votes (
+        session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,
+        window_id TEXT NOT NULL REFERENCES session_vote_windows(id) ON DELETE CASCADE,
+        voter_key TEXT NOT NULL CHECK ((voter_key LIKE 'learner:%' OR voter_key LIKE 'chat:%') AND length(voter_key)<=200),
+        choice_uci TEXT NOT NULL,
+        cast_by_learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        at TEXT NOT NULL,
+        PRIMARY KEY(session_id,window_id,voter_key)
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS session_invitations (
+        id TEXT PRIMARY KEY,
+        session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,
+        leg INTEGER CHECK (leg IN (1,2)),
+        invited_handle TEXT,
+        invited_role TEXT NOT NULL CHECK (invited_role IN (${values(RUN_ROLES)})),
+        external_challenge_url TEXT,
+        state TEXT NOT NULL CHECK (state IN ('open','accepted','revoked')),
+        created_at TEXT NOT NULL
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS arena_legs (
+        session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,
+        leg INTEGER NOT NULL CHECK (leg IN (1,2)),
+        reference_player_handle TEXT,
+        external_challenge_url TEXT,
+        pgn TEXT,
+        result TEXT CHECK (result IN ('1-0','0-1','1/2-1/2','*')),
+        branch_id TEXT,
+        imported_at TEXT,
+        PRIMARY KEY(session_id,leg)
+      ) STRICT;
+    `);
   }
 
   #addProgressTables(): void {

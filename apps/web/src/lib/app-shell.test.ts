@@ -76,7 +76,7 @@ const capabilities: Capabilities = {
     play: "available",
     review: "available",
     learn: "unavailable-here",
-    live: "unavailable-here",
+    live: "available",
     create: "unavailable-here",
     justPlay: "unavailable-here",
     fromPosition: "unavailable-here",
@@ -268,7 +268,7 @@ describe("application shell", () => {
     const routes = [
       ["/play", "Choose a position worth returning to."],
       ["/learn", "Return to the positions"],
-      ["/live", "program item 8"],
+      ["/live", "Rehearse with other people"],
       ["/create", "Author against the real validator"],
       ["/library", "Packs and run artifacts"],
       ["/settings", "This deployment"],

@@ -95,10 +95,27 @@ export {
 } from "./service.js";
 export {
   SQLiteRunStorage,
+  RUN_ROLES,
+  STORAGE_VERSION,
+  runRoleMayWrite,
+  type LiveSessionStorage,
   type RunSummary,
   type RunStorage,
   type StoredRun,
 } from "./storage.js";
+export { LiveSessionService, deriveMoveAuthorship, type MoveAuthorship } from "./live-session.js";
+export {
+  SESSION_KINDS,
+  BOARD_CONTROLS,
+  SESSION_JOURNAL_KINDS,
+  type LiveSession,
+  type LiveSessionDetail,
+  type SessionJournalEntry,
+  type SessionProposal,
+  type VoteWindow,
+  type VoteTally,
+  type ArenaLeg,
+} from "./live-types.js";
 
 export const serverBuildInfo = Object.freeze({
   runtime: runtimeBuildInfo,

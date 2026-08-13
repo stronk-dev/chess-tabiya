@@ -21,7 +21,9 @@ an explicit not-found view rather than crashing the application.
 | `/play/run/:runId` | Live drill, branch, compare, and export context |
 | `/review` | Stored run history; opening a row returns to its live run context |
 | `/learn` | Honest empty state for the phase-based learning program |
-| `/live` | Honest empty state for streamer, academy, spectator, and arena work |
+| `/live` | Live-session index and creation from hosted runs |
+| `/live/session/:sessionId` | Members, board control, proposals, votes, invitations, Arena legs, and journal |
+| `/live/overlay/:runId` | Chrome-free spectator/stream projection of a live run |
 | `/create` | Honest empty state for the authoring program |
 | `/library` | Read-only pack and run-artifact lists |
 | `/settings` | Provider, deployment-surface, and shortcut information |

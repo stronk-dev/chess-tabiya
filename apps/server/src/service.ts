@@ -91,6 +91,7 @@ export interface RunGraph {
 export interface EventsPage {
   readonly events: readonly DrillRunEvent[];
   readonly nextSeq: number;
+  readonly withheld?: true;
 }
 
 function comparisonWithoutEngineFeedback(
@@ -980,12 +981,12 @@ export class RunService {
     return this.#storage.grants(runId);
   }
 
-  claimLease(runId: string, principal: Principal, writerId: string): void {
+  claimLease(runId: string, principal: Principal, writerId: string, expectedHolderLearnerId?: string): void {
     const { role } = requireRead(this.#storage, runId, principal);
     if (!mayWrite(role)) {
       throw new ServerError("FORBIDDEN", "This learner may not claim the run lease");
     }
-    this.#storage.claimLease(runId, { writerId, learnerId: principal.learnerId });
+    this.#storage.claimLease(runId, { writerId, learnerId: principal.learnerId }, expectedHolderLearnerId);
   }
 
   #forWrite(runId: string, principal: Principal, writerId: string) {

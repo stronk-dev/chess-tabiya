@@ -19,6 +19,21 @@ async function register(page: Page): Promise<string> {
 
 test.beforeEach(async ({ page }) => register(page));
 
+test("Live turns a run into a session and exposes a chrome-free overlay", async ({ page }) => {
+  const card = page.getByRole("article").filter({ hasText: "schema example" }).first();
+  await card.getByRole("button", { name: /Open position/ }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await page.locator("#primary-navigation").getByRole("link", { name: "Live" }).click();
+  await expect(page.getByRole("heading", { name: "Rehearse with other people." })).toBeVisible();
+  await page.getByRole("button", { name: "Create academy" }).first().click();
+  await expect(page.getByRole("heading", { name: "academy session" })).toBeVisible();
+  await expect(page.getByText("your role: host")).toBeVisible();
+  await page.getByRole("button", { name: "Open overlay" }).click();
+  await expect(page.getByLabel("Live session overlay")).toBeVisible();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await expect(page.locator("#primary-navigation")).toHaveCount(0);
+});
+
 test("library exposes phase honestly and survives a malformed pack response", async ({
   page,
 }) => {

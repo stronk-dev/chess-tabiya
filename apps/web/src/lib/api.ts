@@ -86,6 +86,7 @@ export type GrantOperation =
 export interface EventsPage {
   readonly events: readonly DrillRunEvent[];
   readonly nextSeq: number;
+  readonly withheld?: true;
 }
 
 export interface StagedEvidence {
@@ -174,10 +175,24 @@ export type SurfaceAvailability = "available" | "unavailable-here";
 
 /** Roadmap state is build-owned and deliberately never sent by the server. */
 export const PLANNED_SURFACES: readonly SurfaceId[] = Object.freeze([
-  "live",
   "justPlay",
   "fromPosition",
 ]);
+
+export type SessionKind = "stream" | "academy" | "match";
+export type BoardControl = "free_claim" | "host_directed" | "rotation";
+export interface LiveSession {
+  readonly id: string; readonly runId: string; readonly kind: SessionKind;
+  readonly title: string; readonly boardControl: BoardControl; readonly scheduledFor?: string;
+  readonly voteAdapterLearnerId?: string; readonly rotation?: readonly string[];
+  readonly handoffLearnerId?: string; readonly rotationCursor: number;
+  readonly createdBy: string; readonly createdAt: string; readonly closedAt?: string;
+}
+export interface SessionProposal { readonly id:string;readonly sessionId:string;readonly nodeId:string;readonly moveUci:string;readonly proposedBy:string;readonly at:string;readonly status:"open"|"applied"|"declined"|"stale";readonly resolvedRunSeq:number|null }
+export interface VoteOption { readonly moveUci:string;readonly label:string }
+export interface VoteTally { readonly window:{readonly id:string;readonly sessionId:string;readonly nodeId:string;readonly prompt:string;readonly options:readonly VoteOption[];readonly opensAt:string;readonly closesAt:string;readonly state:"open"|"closed"|"stale";readonly appliedOptionUci:string|null};readonly tally:readonly (VoteOption&{readonly count:number})[];readonly total:number }
+export interface SessionJournalEntry { readonly sessionId:string;readonly seq:number;readonly at:string;readonly kind:string;readonly actorLearnerId:string|null;readonly runSeq:number|null;readonly payload:Readonly<Record<string,unknown>> }
+export interface LiveSessionDetail { readonly session:LiveSession;readonly role:RunRole;readonly activeNodeId:string;readonly leaseHeldBy:LeaseIdentity;readonly grants:readonly RunGrant[];readonly proposals:readonly SessionProposal[];readonly vote?:VoteTally;readonly invitations:readonly unknown[];readonly legs:readonly unknown[] }
 
 export interface Capabilities {
   readonly engines: readonly EngineCapability[];
@@ -412,6 +427,16 @@ export interface DrillClientApi extends RunApi {
   createPackDraft?(document: unknown): Promise<PackDraft>;
   updatePackDraft?(draftId: string, digest: string, document: unknown): Promise<PackDraft>;
   registerPackDraft?(draftId: string): Promise<PackSummary>;
+  liveSessions?(): Promise<readonly LiveSession[]>;
+  liveSession?(sessionId:string):Promise<LiveSessionDetail>;
+  createLiveSession?(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl}):Promise<LiveSession>;
+  sessionJournal?(sessionId:string,sinceSeq?:number):Promise<{readonly entries:readonly SessionJournalEntry[];readonly nextSeq:number}>;
+  sessionProposals?(sessionId:string):Promise<readonly SessionProposal[]>;
+  proposeMove?(sessionId:string,nodeId:string,moveUci:string):Promise<SessionProposal>;
+  resolveProposal?(sessionId:string,proposalId:string,op:"apply"|"decline",writerId:string):Promise<SessionProposal>;
+  boardControl?(sessionId:string,writerId:string,op:"offer"|"withdraw"|"advance"|"reclaim",handle?:string):Promise<LiveSession>;
+  openVote?(sessionId:string,input:{readonly nodeId:string;readonly prompt:string;readonly options:readonly VoteOption[];readonly durationSeconds:number}):Promise<VoteTally>;
+  castVote?(sessionId:string,windowId:string,choiceUci:string,voterKey?:string):Promise<VoteTally>;
 }
 
 type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
@@ -567,6 +592,17 @@ export class DrillApi implements DrillClientApi {
     });
     return body.pack.summary;
   }
+
+  async liveSessions():Promise<readonly LiveSession[]>{const body=await this.#json<{sessions:readonly LiveSession[]}>("/sessions");return body.sessions;}
+  liveSession(sessionId:string):Promise<LiveSessionDetail>{return this.#json(`/sessions/${encoded(sessionId)}`);}
+  async createLiveSession(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl}):Promise<LiveSession>{const body=await this.#json<{session:LiveSession}>("/sessions",{method:"POST",body:input});return body.session;}
+  sessionJournal(sessionId:string,sinceSeq=0):Promise<{readonly entries:readonly SessionJournalEntry[];readonly nextSeq:number}>{return this.#json(`/sessions/${encoded(sessionId)}/journal?sinceSeq=${sinceSeq}`);}
+  async sessionProposals(sessionId:string):Promise<readonly SessionProposal[]>{const body=await this.#json<{proposals:readonly SessionProposal[]}>(`/sessions/${encoded(sessionId)}/proposals`);return body.proposals;}
+  async proposeMove(sessionId:string,nodeId:string,moveUci:string):Promise<SessionProposal>{const body=await this.#json<{proposal:SessionProposal}>(`/sessions/${encoded(sessionId)}/proposals`,{method:"POST",body:{nodeId,moveUci}});return body.proposal;}
+  async resolveProposal(sessionId:string,proposalId:string,op:"apply"|"decline",writerId:string):Promise<SessionProposal>{const body=await this.#json<{proposal:SessionProposal}>(`/sessions/${encoded(sessionId)}/proposals/${encoded(proposalId)}`,{method:"POST",writerId,body:{op}});return body.proposal;}
+  async boardControl(sessionId:string,writerId:string,op:"offer"|"withdraw"|"advance"|"reclaim",handle?:string):Promise<LiveSession>{const body=await this.#json<{session:LiveSession}>(`/sessions/${encoded(sessionId)}/board`,{method:"POST",writerId,body:{op,...(handle===undefined?{}:{handle})}});return body.session;}
+  openVote(sessionId:string,input:{readonly nodeId:string;readonly prompt:string;readonly options:readonly VoteOption[];readonly durationSeconds:number}):Promise<VoteTally>{return this.#json(`/sessions/${encoded(sessionId)}/votes`,{method:"POST",body:{op:"open",...input}});}
+  castVote(sessionId:string,windowId:string,choiceUci:string,voterKey?:string):Promise<VoteTally>{return this.#json(`/sessions/${encoded(sessionId)}/votes`,{method:"POST",body:{op:"cast",windowId,choiceUci,...(voterKey===undefined?{}:{voterKey})}});}
 
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
     return this.#json("/select-move", { method: "POST", body: input });

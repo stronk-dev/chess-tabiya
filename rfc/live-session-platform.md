@@ -1,15 +1,15 @@
 # RFC: Live session platform — roles, spectating, academy, stream, and arena
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/03-product-breadth.md:79-91` (Live and community), `:154-158` (shared shell regions, "session/role controls appropriate to solo, host, participant, or spectator" at `:158`), `:53-55` (Position Arena), gate row B5 (`:175`), program item #8 (`:268-272`); `design/02-product-shape.md:50-73` (hosted multi-user, and ADR-0004's fired revisit trigger)
 - **Exploration gate:** opened by owner ruling 2026-08-12 (`rfc/README.md:114-121`); breadth sequencing ruling 2026-08-11 (`rfc/README.md:123-124`)
 - **Depends on:** `rfc/archive/learner-identity-and-authorization.md` (F3 — the subject, grants, and the learner-bound lease this RFC builds the session layer on top of); `rfc/archive/pack-optional-runs.md` (F2 — position runs, without which an Arena match run cannot exist)
-- **Sibling drafts:** `rfc/defect-sweep.md` closes D4, D5, D6, D8, D9 and D10 — this RFC cites all six and duplicates none of its fixes; §2.6 states the interaction, and neither blocks the other. `rfc/n-way-comparison.md` holds **migration 6** and run schema 0.7 → 0.8; this RFC rebased to **migration 7** and changes the run schema not at all, so the two are ordered but not coupled (§3.13)
+- **Predecessors:** `rfc/archive/defect-sweep.md` closes D4, D5, D6, D8, D9 and D10. `rfc/archive/n-way-comparison.md` landed run schema 0.8 and migration 8 before this lifecycle.
 - **Parent / amends:** amends the lease claim path (`apps/server/src/storage.ts:758-777`), the events page (`apps/server/src/feedback-policy.ts:34-51`) and both `EventsPage` declarations (`apps/server/src/service.ts:79-82`, `apps/web/src/lib/api.ts:80-83`), the server error vocabulary and its status map (`apps/server/src/errors.ts:1-14`, `apps/server/src/rest.ts:353-377`), the request router (`apps/server/src/rest.ts:391-403`), the surface capability map (`apps/server/src/capabilities.ts:117-129`), and the client router's **dynamic** route machinery (`apps/web/src/lib/router.ts:11-14`, `:32-46`, `:48-52` — *not* the `STATIC_ROUTES` table at `:18-27`). Adds **migration 7** (`STORAGE_VERSION` 6→7; shipped today is **5** at `apps/server/src/storage.ts:147`, so 7 presumes migration 6 lands first — §3.13)
 - **Supersedes / superseded by:** supersedes `planning/breadth/live-and-platform.md` §A2, §A4/C1, §A4/C3, §A4/C5 and §A4/C6, all of which were written on 2026-08-12 against a tree that had no identity. §Deviations item 5 states each correction
-- **Planning:** `planning/live-session-platform/` (once implementing)
+- **Planning:** `planning/live-session-platform/`
 
 ## Summary
 
@@ -935,9 +935,9 @@ fix into an apparent outage. `VOTE_INTAKE_FULL` also introduces the first `429` 
 map; the arm is added rather than folded into an existing status, because a full intake
 is a caller-throttling condition and the adapter is the one caller expected to back off.
 
-### 3.13 Persistence — migration 7
+### 3.13 Persistence — migration 9
 
-`STORAGE_VERSION` 6 → 7, registered in `rfc/README.md:164` §Migration register. All
+`STORAGE_VERSION` 8 → 9, registered in `rfc/README.md` §Migration register. All
 tables `STRICT`, all `CHECK` strings derived from the frozen tuples of §3.1/§3.2 rather
 than typed twice.
 
@@ -1055,7 +1055,7 @@ CREATE TABLE arena_legs (
 ) STRICT;
 ```
 
-Migration 7 creates tables only. It backfills nothing, rewrites no snapshot, and touches
+Migration 9 creates tables only. It backfills nothing, rewrites no snapshot, and touches
 no run row, so it cannot mis-stamp a schema version the way migration 4's body had to be
 frozen against (`rfc/README.md:161`). Every existing run has no session, and its board
 control is therefore *derived* rather than stored (§3.3 step 3) — no column is added to
@@ -1254,6 +1254,7 @@ clause stays open on the unauthenticated public link (§2.6).
 ## Changelog
 
 - 2026-08-13: created.
+- 2026-08-13: accepted after adversarial review; implementation began after migrations 6–8 landed, rebasing the live-session DDL to migration 9 without changing its behavior.
 - 2026-08-13: adversarial review. **Infrastructure the draft assumed and the tree does
   not have:** the four new error codes needed `ServerErrorCode` widened
   (`apps/server/src/errors.ts:1-14`) and a status-map arm, since unlisted codes fall

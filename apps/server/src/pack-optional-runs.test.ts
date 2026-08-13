@@ -146,6 +146,7 @@ describe("pack-optional position runs", () => {
     expect(JSON.stringify(graph)).not.toContain("engine:injected");
     const events = await (await call(handler, "GET", "/runs/leak-run/events?sinceSeq=0")).json();
     expect(JSON.stringify(events)).not.toContain("engine:injected");
+    expect(events).toMatchObject({ withheld: true });
     const comparison = await (await call(handler, "POST", "/runs/leak-run/compare", {
       branchIds: injected.branches.map((branch) => branch.id),
     })).json();

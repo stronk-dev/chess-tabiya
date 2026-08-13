@@ -73,7 +73,7 @@ const capabilities: Capabilities = {
     play: "available",
     review: "available",
     learn: "unavailable-here",
-    live: "unavailable-here",
+    live: "available",
     create: "unavailable-here",
     justPlay: "unavailable-here",
     fromPosition: "unavailable-here",

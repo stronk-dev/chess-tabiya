@@ -23,6 +23,10 @@ describe("application router", () => {
     const run = { name: "run", runId: "run / one" } as const;
     expect(routePath(run)).toBe("/play/run/run%20%2F%20one");
     expect(parseRoute({ pathname: routePath(run) })).toEqual(run);
+    const liveSession = { name: "live-session", sessionId: "class / one" } as const;
+    expect(parseRoute({ pathname: routePath(liveSession) })).toEqual(liveSession);
+    const overlay = { name: "live-overlay", runId: "run / one" } as const;
+    expect(parseRoute({ pathname: routePath(overlay) })).toEqual(overlay);
     expect(parseRoute({ pathname: "/nowhere" })).toEqual({
       name: "not-found",
       pathname: "/nowhere",

@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { IdentityService } from "./identity.js";
+import { LiveSessionService } from "./live-session.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -82,6 +83,8 @@ describe("learner identity and run authorization", () => {
         undefined,
         undefined,
         identity,
+        undefined,
+        new LiveSessionService(storage),
       ),
     };
   }
@@ -116,6 +119,9 @@ describe("learner identity and run authorization", () => {
       body: { op: "grant", handle: "bob", role: "participant" },
     });
     expect(granted.status).toBe(200);
+    const live = await call(handler, "POST", "/sessions", { cookie: alice.cookie, body: { runId: "private-run", kind: "academy", title: "Private lesson" } });
+    const liveId = (await live.json() as { session: { id: string } }).session.id;
+    await call(handler, "POST", `/sessions/${liveId}/board`, { cookie: alice.cookie, writerId: "writer-alice", body: { op: "offer", handle: "bob" } });
 
     const beforeClaim = await call(handler, "GET", "/runs/private-run/graph", {
       cookie: bob.cookie,
@@ -224,6 +230,9 @@ describe("learner identity and run authorization", () => {
       writerId: "writer-alice",
       body: { op: "grant", handle: "bob", role: "participant" },
     });
+    const live = await call(handler, "POST", "/sessions", { cookie: alice.cookie, body: { runId: "transfer-run", kind: "academy", title: "Transfer lesson" } });
+    const liveId = (await live.json() as { session: { id: string } }).session.id;
+    await call(handler, "POST", `/sessions/${liveId}/board`, { cookie: alice.cookie, writerId: "writer-alice", body: { op: "offer", handle: "bob" } });
     await call(handler, "POST", "/runs/transfer-run/lease", {
       cookie: bob.cookie,
       writerId: "writer-bob",
@@ -284,16 +293,13 @@ describe("learner identity and run authorization", () => {
     expect(await graph.json()).toMatchObject({
       graph: { viewer: { role: "participant", leaseHeldBy: { handle: "__legacy" } } },
     });
-    expect((await call(handler, "POST", "/runs/orphan-safe-run/lease", {
+    const blocked = await call(handler, "POST", "/runs/orphan-safe-run/lease", {
       cookie: bob.cookie,
       writerId: "writer-bob",
       body: {},
-    })).status).toBe(200);
-    expect((await call(handler, "POST", "/runs/orphan-safe-run/moves", {
-      cookie: bob.cookie,
-      writerId: "writer-bob",
-      body: { uci: "e2e4" },
-    })).status).toBe(200);
+    });
+    expect(blocked.status).toBe(409);
+    expect((await blocked.json() as { error: { code: string } }).error.code).toBe("BOARD_HELD");
     expect((await call(handler, "GET", "/auth/session", { cookie: alice.cookie })).status).toBe(401);
     const replacement = await register(handler, "alice");
     expect((await call(handler, "GET", "/runs/orphan-safe-run/graph", {

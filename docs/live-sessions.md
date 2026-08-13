@@ -1,0 +1,89 @@
+# Live sessions
+
+Tabiya can place a shared session around one existing run. The run remains the sole
+source of chess truth and deterministic replay; the session records people, possession,
+proposals, votes, invitations, and imported match legs. Closing session state cannot
+change how the run replays.
+
+## Roles and board possession
+
+The existing per-run roles remain `host`, `participant`, and `spectator`. Hosts and
+participants may write a run when they hold its single learner-and-device lease;
+spectators are read-only. Above that lease, a live session chooses one board policy:
+
+- `free_claim`: any write-capable grantee may claim the board;
+- `host_directed`: the host may claim at any time, while a participant needs an open
+  handoff from the host; or
+- `rotation`: only the learner at the current rotation cursor may claim.
+
+A session-less run derives the same policy: one write-capable learner means
+`free_claim`; multiple means `host_directed`. Claims execute in one SQLite transaction
+with a current-holder witness. A stale claim returns `LEASE_MOVED`; an unauthorized
+takeover returns `BOARD_HELD`.
+
+Every successful possession change appends `board.granted` to a per-session journal in
+the transaction that moves the lease. For a committed run event at sequence `S`, the
+author is the holder named by the last board grant whose run-sequence anchor is strictly
+less than `S`. Plies predating the session belong to the run owner. Imported Arena plies
+are attributed by their leg record instead, because the importer is not necessarily the
+player.
+
+## Proposals and voting
+
+Hosts and participants can propose a legal move at a run node. A proposal is session
+state, not a run event. Only a host applies it through the ordinary leased run mutation;
+the proposal then records the resulting run sequence. Leaving the node makes unresolved
+proposals stale.
+
+A host may open one 15–600 second vote window over two to eight legal moves. Votes are
+advisory: a tally never moves a piece. The host may separately play or apply a move and
+record what was applied. This keeps run replay independent of social state.
+
+Ordinary votes use a server-derived `learner:<id>` key. A configured chat-adapter
+account may relay external keys, which the server stores in a disjoint
+`chat:<adapter-id>:<key>` namespace. Other learners cannot supply a key. Keys are bounded
+to 128 characters and each window accepts at most 50,000 distinct relayed voters;
+recasts from an existing key remain possible at the cap. The tally is only as trustworthy
+as the adapter that submitted it, and the UI says so.
+
+## Position Arena
+
+A match session owns two legs around one position run. Each PGN must contain exactly one
+mainline-only game, start at the run's canonical root FEN, remain legal, and stay below
+300 plies. Validation happens before persistence. Leg one uses the initial root branch;
+leg two forks at that same root, so the normal comparison surface can compare them.
+
+Reference-side plies retain runtime actor `user`; the other human's imported plies use
+`system`. No `opponent.move_selected` event or engine identity is fabricated. The leg
+record carries the human handle and original PGN. The run snapshot, leg record, and
+journal entry commit atomically.
+
+## HTTP and browser surfaces
+
+`/sessions` lists and creates sessions. Nested routes expose session detail, the journal,
+board handoff, proposals, vote windows, invitations, and Arena leg imports. All use the
+existing authenticated cookie and per-run grants; an ungranted caller receives the same
+not-found response as an unknown run.
+
+The browser provides `/live`, `/live/session/:sessionId`, and the chrome-free
+`/live/overlay/:runId`. The ordinary drill adds a small session rail when its run belongs
+to a live session. Session and overlay tallies poll every two seconds. The overlay uses
+the same run projection and feedback barrier as the player; it is not a second evidence
+surface.
+
+When public event delivery stops at an undisclosed engine-evidence barrier, the event
+page returns `withheld: true`. Followers render that fact instead of appearing frozen.
+
+## Accepted limitation
+
+A streamer cannot be forced to play blind while their audience sees more evidence: the
+streamer can grant and use a second spectator account. Tabiya therefore gives player and
+spectator the same disclosure projection. It protects both from premature evidence; it
+does not pretend to prevent a host from cheating on themselves.
+
+The live platform uses authenticated polling rather than WebSockets or SSE. It has no
+anonymous public share token, native clocks, matchmaking, or provider-specific challenge
+API. External challenge URLs are opaque HTTPS links supplied by the host.
+
+SQLite migration 9 adds only the live-session tables and indexes. The run schema remains
+v0.8 and pack schema remains v0.9.

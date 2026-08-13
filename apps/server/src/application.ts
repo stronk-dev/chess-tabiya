@@ -36,6 +36,7 @@ import { PackStudio } from "./pack-studio.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { IdentityService } from "./identity.js";
 import { stockfishPlaySpec } from "./strong-engine.js";
+import { LiveSessionService } from "./live-session.js";
 
 export type EngineMode = "mock" | "maia";
 
@@ -214,6 +215,8 @@ function isApiPath(pathname: string): boolean {
     pathname === "/runs" ||
     pathname.startsWith("/runs/") ||
     pathname === "/select-move"
+    || pathname === "/sessions"
+    || pathname.startsWith("/sessions/")
   );
 }
 
@@ -315,7 +318,8 @@ export async function createApplication(
   const identity = new IdentityService(storage, {
     cookieSecure: options.cookieSecure ?? true,
   });
-  const api = createRestHandler(service, selector, capabilities, identity, studio);
+  const live = new LiveSessionService(storage);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

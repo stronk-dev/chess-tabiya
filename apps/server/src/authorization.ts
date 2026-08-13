@@ -1,6 +1,7 @@
 import { RuntimeError, assertActiveWriter } from "@chess-tabiya/runtime";
 
 import { ServerError } from "./errors.js";
+import { runRoleMayWrite } from "./storage.js";
 import type {
   LeaseHolder,
   RunRole,
@@ -18,10 +19,22 @@ export function mayRead(_role: RunRole): boolean {
 }
 
 export function mayWrite(role: RunRole): boolean {
-  return role === "host" || role === "participant";
+  return runRoleMayWrite(role);
 }
 
 export function mayManageGrants(role: RunRole): boolean {
+  return role === "host";
+}
+
+export function mayPropose(role: RunRole): boolean {
+  return role === "host" || role === "participant";
+}
+
+export function mayVote(_role: RunRole): boolean {
+  return true;
+}
+
+export function mayControlSession(role: RunRole): boolean {
   return role === "host";
 }
 

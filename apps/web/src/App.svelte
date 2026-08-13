@@ -2,6 +2,7 @@
   import { onDestroy, onMount, tick, untrack } from "svelte";
 
   import DrillScreen from "./lib/DrillScreen.svelte";
+  import Chessboard from "./lib/Chessboard.svelte";
   import PackList from "./lib/PackList.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
@@ -17,6 +18,11 @@
     type ProgressAttempt,
     type ProgressSchedule,
     type PackDraft,
+    type LiveSession,
+    type LiveSessionDetail,
+    type SessionJournalEntry,
+    type SessionKind,
+    type BoardControl,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
   import { ShellKeyboardDispatcher } from "./lib/keyboard.js";
@@ -57,6 +63,16 @@
   let drafts: readonly PackDraft[] = $state([]);
   let studioJson = $state("");
   let selectedDraftId: string | undefined = $state();
+  let liveSessions: readonly LiveSession[] = $state([]);
+  let liveDetail: LiveSessionDetail | undefined = $state();
+  let activeLiveDetail: LiveSessionDetail | undefined = $state();
+  let liveJournal: readonly SessionJournalEntry[] = $state([]);
+  let liveKind: SessionKind = $state("academy");
+  let liveBoardControl: BoardControl = $state("host_directed");
+  let liveProposalMove = $state("");
+  let liveOfferHandle = $state("");
+  let liveVoteMoveA = $state("");
+  let liveVoteMoveB = $state("");
   let capabilities: Capabilities | undefined = $state();
   let routeLoading = $state(true);
   let routeError: string | undefined = $state();
@@ -78,6 +94,7 @@
   let unsubscribeController: (() => void) | undefined;
   let unsubscribeRouter: (() => void) | undefined;
   let loadGeneration = 0;
+  let livePoll: ReturnType<typeof setInterval> | undefined;
 
   const keyboardDispatcher = new ShellKeyboardDispatcher({
     navigate,
@@ -158,11 +175,21 @@
         ]);
       } else if (next.name === "create") {
         drafts = await (api.packDrafts?.() ?? Promise.resolve([]));
+      } else if (next.name === "live") {
+        [liveSessions,runs]=await Promise.all([api.liveSessions?.()??Promise.resolve([]),api.runs(50,0)]);
+      } else if (next.name === "live-session") {
+        [liveDetail,liveJournal]=await Promise.all([api.liveSession?.(next.sessionId),api.sessionJournal?.(next.sessionId).then((page)=>page.entries)??Promise.resolve([])]);
+      } else if (next.name === "live-overlay" && session.runState?.run.id !== next.runId) {
+        await controller.resume(next.runId);
+        const related=(await (api.liveSessions?.()??Promise.resolve([]))).find((item)=>item.runId===next.runId);
+        activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
       } else if (
         next.name === "run" &&
         session.runState?.run.id !== next.runId
       ) {
         await controller.resume(next.runId);
+        const related=(await (api.liveSessions?.()??Promise.resolve([]))).find((item)=>item.runId===next.runId);
+        activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
       }
     } catch (error) {
       if (generation === loadGeneration) {
@@ -177,6 +204,17 @@
     if (routerStarted) return;
     routerStarted = true;
     router.start();
+  }
+
+  function syncLivePolling(next:AppRoute):void{
+    if(livePoll!==undefined){clearInterval(livePoll);livePoll=undefined;}
+    if(next.name!=="live-session"&&next.name!=="live-overlay")return;
+    livePoll=setInterval(()=>void (async()=>{
+      const sessionId=next.name==="live-session"?next.sessionId:activeLiveDetail?.session.id;
+      if(sessionId===undefined)return;
+      const detail=await api.liveSession?.(sessionId);if(detail!==undefined){if(next.name==="live-session")liveDetail=detail;else activeLiveDetail=detail;}
+      if(next.name==="live-session")liveJournal=(await api.sessionJournal?.(sessionId)??{entries:[],nextSeq:0}).entries;
+    })(),2_000);
   }
 
   async function authenticate(): Promise<void> {
@@ -250,12 +288,19 @@
     drafts = await (api.packDrafts?.() ?? Promise.resolve([]));
   }
 
+  async function createLive(runId:string):Promise<void>{const created=await api.createLiveSession?.({runId,kind:liveKind,title:`${liveKind} session`,boardControl:liveBoardControl});if(created){liveSessions=[created,...liveSessions];navigate(routePath({name:"live-session",sessionId:created.id}));}}
+  function liveWriterId(runId:string):string|undefined{return WriterSession.peek(runId,storage)?.writerId;}
+  async function submitLiveProposal():Promise<void>{if(!liveDetail||!liveProposalMove)return;await api.proposeMove?.(liveDetail.session.id,liveDetail.activeNodeId,liveProposalMove);liveDetail=await api.liveSession?.(liveDetail.session.id);liveProposalMove="";}
+  async function offerLiveBoard():Promise<void>{if(!liveDetail||!liveOfferHandle)return;const writer=liveWriterId(liveDetail.session.runId);if(!writer)return;await api.boardControl?.(liveDetail.session.id,writer,"offer",liveOfferHandle);liveDetail=await api.liveSession?.(liveDetail.session.id);}
+  async function openLiveVote():Promise<void>{if(!liveDetail||!liveVoteMoveA||!liveVoteMoveB)return;await api.openVote?.(liveDetail.session.id,{nodeId:liveDetail.activeNodeId,prompt:"Which continuation?",options:[{moveUci:liveVoteMoveA,label:liveVoteMoveA},{moveUci:liveVoteMoveB,label:liveVoteMoveB}],durationSeconds:60});liveDetail=await api.liveSession?.(liveDetail.session.id);}
+
   onMount(() => {
     window.addEventListener("tabiya:unauthenticated", onUnauthenticated);
     unsubscribeController = controller.subscribe((next) => (session = next));
     unsubscribeRouter = router.subscribe((next) => {
       route = next;
       void loadRoute(next);
+      syncLivePolling(next);
     });
     void (async () => {
       try {
@@ -277,6 +322,7 @@
     unsubscribeRouter?.();
     controller.destroy();
     keyboardDispatcher.destroy();
+    if(livePoll!==undefined)clearInterval(livePoll);
     router.destroy();
   });
 </script>
@@ -301,7 +347,7 @@
     <p class="honest">There is no password recovery yet. Keep your password somewhere safe.</p>
   </main>
 {:else}
-<ShellFrame {route} {runContext} {learner} onNavigate={navigate} onSignOut={() => void signOut()} onDeleteAccount={() => void deleteAccount()}>
+<ShellFrame {route} {runContext} {learner} chrome={route.name !== "live-overlay"} onNavigate={navigate} onSignOut={() => void signOut()} onDeleteAccount={() => void deleteAccount()}>
   {#if routeLoading}
     <main class="shell-view" aria-busy="true"><p>Loading Tabiya…</p></main>
   {:else if routeError}
@@ -362,6 +408,9 @@
         onStop={() => navigate("/play")}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
+      {#if activeLiveDetail}
+        <aside class="session-banner" aria-label="Live session rail"><strong>{activeLiveDetail.session.title}</strong><span>{activeLiveDetail.role} · {activeLiveDetail.proposals.filter((item)=>item.status==="open").length} open proposals{activeLiveDetail.vote ? ` · ${activeLiveDetail.vote.total} votes` : ""}</span><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:activeLiveDetail!.session.id}))}>Session</button></aside>
+      {/if}
     {:else}
       <main class="shell-view"><h1>Run unavailable.</h1><p role="alert">{session.error ?? "The run could not be loaded."}</p></main>
     {/if}
@@ -446,15 +495,23 @@
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
     </main>
   {:else if route.name === "live"}
-    <main class="shell-view empty-state" aria-labelledby="empty-title">
-      <p class="eyebrow">{route.name}</p>
-      <h1 id="empty-title">
-        {route.name === "live" ? "Rehearse with other people." : "Turn games into training."}
-      </h1>
-      <p>
-        Streamer, academy, spectator, and arena sessions arrive in program item 8.
-      </p>
-      <p class="honest">This route reserves the application surface; it does not simulate functionality that is not implemented.</p>
+    <main class="shell-view" aria-labelledby="live-title">
+      <p class="eyebrow">Live / shared rehearsal</p><h1 id="live-title">Rehearse with other people.</h1>
+      <div class="row-actions"><label>Kind <select bind:value={liveKind}><option value="stream">Stream</option><option value="academy">Academy</option><option value="match">Position Arena</option></select></label><label>Board <select bind:value={liveBoardControl}><option value="host_directed">Host directed</option><option value="free_claim">Free claim</option><option value="rotation">Rotation</option></select></label></div>
+      <section><h2>Your sessions</h2><div class="item-list">{#each liveSessions as item}<article><div><h3>{item.title}</h3><p>{item.kind} · {item.boardControl}{item.scheduledFor ? ` · ${readableDate(item.scheduledFor)}` : ""}</p></div><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:item.id}))}>Open</button></article>{:else}<p>No live sessions yet.</p>{/each}</div></section>
+      <section><h2>Start from a run</h2><div class="item-list">{#each runs as item}<article><div><h3>{item.title}</h3><p>{item.viewerRole === "host" ? "Ready to host" : "Only a host can create a session"}</p></div><button type="button" disabled={item.viewerRole!=="host"} aria-describedby={item.viewerRole!=="host"?`live-disabled-${item.id}`:undefined} onclick={()=>void createLive(item.id)}>Create {liveKind}</button>{#if item.viewerRole!=="host"}<span id={`live-disabled-${item.id}`} class="honest">Host role required.</span>{/if}</article>{/each}</div></section>
+      <p class="honest">Vote tallies are advisory. Chat identity is only as trustworthy as the configured adapter.</p>
+    </main>
+  {:else if route.name === "live-session"}
+    <main class="shell-view" aria-labelledby="session-title">
+      {#if liveDetail}<p class="eyebrow">Live / {liveDetail.session.kind}</p><h1 id="session-title">{liveDetail.session.title}</h1><p>{liveDetail.session.boardControl} · your role: {liveDetail.role}</p>
+        <div class="studio-grid"><section><h2>Members</h2><p>@{liveDetail.leaseHeldBy.handle} holds the board.</p><ul>{#each liveDetail.grants as grant}<li>@{grant.handle} — {grant.role}</li>{/each}</ul>{#if liveDetail.role==="host"}<label>Offer board to handle <input bind:value={liveOfferHandle}/></label><button type="button" disabled={!liveOfferHandle||!liveWriterId(liveDetail.session.runId)} aria-describedby={!liveWriterId(liveDetail.session.runId)?"offer-readonly":undefined} onclick={()=>void offerLiveBoard()}>Offer board</button>{#if !liveWriterId(liveDetail.session.runId)}<p id="offer-readonly" class="honest">Open the shared board on this device before offering possession.</p>{/if}{/if}<h2>Proposals</h2>{#if liveDetail.role!=="spectator"}<div class="row-actions"><label>Move (UCI)<input bind:value={liveProposalMove} placeholder="e2e4"/></label><button type="button" disabled={!liveProposalMove} aria-describedby={!liveProposalMove?"proposal-disabled":undefined} onclick={()=>void submitLiveProposal()}>Propose</button></div>{#if !liveProposalMove}<p id="proposal-disabled" class="honest">Enter a legal move from the active position.</p>{/if}{/if}<ul>{#each liveDetail.proposals as proposal}<li><code>{proposal.moveUci}</code> · {proposal.status}</li>{:else}<li>No proposals yet.</li>{/each}</ul></section><section><h2>Vote</h2>{#if liveDetail.role==="host"}<div class="row-actions"><label>Option A<input bind:value={liveVoteMoveA} placeholder="e2e4"/></label><label>Option B<input bind:value={liveVoteMoveB} placeholder="d2d4"/></label><button type="button" disabled={!liveVoteMoveA||!liveVoteMoveB} aria-describedby={!liveVoteMoveA||!liveVoteMoveB?"vote-disabled":undefined} onclick={()=>void openLiveVote()}>Open vote</button></div>{#if !liveVoteMoveA||!liveVoteMoveB}<p id="vote-disabled" class="honest">Two legal UCI moves are required.</p>{/if}{/if}{#if liveDetail.vote}<p>{liveDetail.vote.window.prompt} · {liveDetail.vote.window.state}</p><ul>{#each liveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul>{:else}<p>No vote window is open.</p>{/if}<h2>Possession journal</h2><ol>{#each liveJournal as entry}<li>{entry.kind} · run seq {entry.runSeq ?? "—"}</li>{/each}</ol></section></div>
+        <div class="row-actions"><button type="button" onclick={()=>navigate(routePath({name:"run",runId:liveDetail!.session.runId}))}>Open shared board</button><button type="button" onclick={()=>navigate(routePath({name:"live-overlay",runId:liveDetail!.session.runId}))}>Open overlay</button></div>
+      {:else}<h1 id="session-title">Session unavailable.</h1>{/if}
+    </main>
+  {:else if route.name === "live-overlay"}
+    <main class="live-overlay" aria-label="Live session overlay">
+      {#if session.runState}{@const node=session.runState.run.nodes.find((candidate)=>candidate.id===session.runState!.run.activeCursor.nodeId)}{#if node}<Chessboard fen={node.fen} startSide={session.runState.run.start.side} disabled={true} onMove={()=>{}}/><aside><p class="eyebrow">Tabiya live</p><h1>{node.objectiveState}</h1><p>{session.runState.run.branches.length} branches</p>{#if activeLiveDetail?.vote}<p>{activeLiveDetail.vote.window.prompt}</p><ul>{#each activeLiveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul>{/if}{#if session.runState.withheld}<p>Host is ahead; evidence is withheld until this run discloses.</p>{/if}</aside>{/if}{:else}<p role="alert">Overlay run unavailable.</p>{/if}
     </main>
   {:else if route.name === "library"}
     <main class="shell-view" aria-labelledby="library-title">
@@ -524,6 +581,7 @@
   .auth-gate label { display: grid; gap: 0.35rem; }
   .auth-gate input { padding: 0.7rem; border: 1px solid var(--line); border-radius: 0.5rem; }
   .claim-banner { position: fixed; z-index: 20; top: 4rem; right: 1rem; display: flex; gap: 0.7rem; align-items: center; padding: 0.6rem; background: var(--panel); border: 1px solid var(--line); border-radius: 0.7rem; }
+  .session-banner { position: fixed; z-index: 21; right: 1rem; bottom: 1rem; display: grid; gap: 0.25rem; padding: 0.7rem; max-width: 18rem; border: 1px solid var(--line); border-radius: 0.7rem; background: var(--panel); box-shadow: var(--shadow); font-size: 0.8rem; }
   .shell-view > h1 { max-width: 18ch; margin: 0.4rem 0 1rem; font: 500 clamp(2.3rem, 6vw, 5rem)/0.96 var(--display-font); letter-spacing: -0.045em; }
   .eyebrow { color: var(--accent); font: 700 0.72rem/1.2 ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
   .home > h1 { max-width: 15ch; }
@@ -536,6 +594,10 @@
   .item-list { display: grid; gap: 0.7rem; max-height: min(55dvh, 36rem); margin-top: 2rem; overflow: auto; }
   .item-list article { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
   .row-actions { display: flex; gap: 0.5rem; }
+  .row-actions label { display: grid; gap: 0.25rem; }
+  select { padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.55rem; background: var(--panel); }
+  .live-overlay { width: 100%; height: 100%; display: grid; grid-template-columns: minmax(0, min(75vh, 70vw)) minmax(12rem, 1fr); gap: 1.5rem; align-items: center; padding: 1rem; overflow: hidden; background: transparent; }
+  .live-overlay aside { padding: 1rem; border-radius: 0.8rem; background: rgb(23 23 19 / 88%); color: white; }
   .studio-grid { display: grid; grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr); gap: 1rem; }
   .studio-grid aside { display: grid; align-content: start; gap: 0.5rem; overflow: auto; }
   .studio-grid section { display: grid; gap: 0.5rem; min-width: 0; }

@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `live-session-platform.md` | draft | `archive/learner-identity-and-authorization.md` (F3), `archive/pack-optional-runs.md` (F2) | breadth program **#8**, gate **B5** — live session aggregate above the run, board control and handoff, possession journal, participant proposals, chat-vote windows, overlay projection, Position Arena two-leg PGN import as root-forked branches of one run. Opens and closes D17, D18, D19. **Run schema unchanged**, migration **7** |
+| `live-session-platform.md` | implementing | `archive/learner-identity-and-authorization.md` (F3), `archive/pack-optional-runs.md` (F2) | breadth program **#8**, gate **B5** — live session aggregate above the run, board control and handoff, possession journal, participant proposals, chat-vote windows, overlay projection, Position Arena two-leg PGN import as root-forked branches of one run. Opens and closes D17, D18, D19. **Run schema unchanged**, migration **9** |
 
 `defect-sweep.md` claims **no migration number**: nothing it changes is persisted,
 and its §Migration states the check rather than omitting the question.

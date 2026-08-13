@@ -24,7 +24,12 @@ export type ServerErrorCode =
   | "NO_AUTHORED_VARIATIONS"
   | "SIMULATE_TOO_LARGE"
   | "SIMULATION_EXPIRED"
-  | "SIMULATE_BUDGET_EXCEEDED";
+  | "SIMULATE_BUDGET_EXCEEDED"
+  | "BOARD_HELD"
+  | "LEASE_MOVED"
+  | "VOTE_WINDOW_CLOSED"
+  | "VOTE_INTAKE_FULL"
+  | "ARENA_ROOT_MISMATCH";
 
 export class ServerError extends Error {
   readonly code: ServerErrorCode;

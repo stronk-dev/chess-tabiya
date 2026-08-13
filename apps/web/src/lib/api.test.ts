@@ -54,7 +54,7 @@ describe("DrillApi", () => {
             play: "available",
             review: "available",
             learn: "available",
-            live: "unavailable-here",
+            live: "available",
             create: "available",
             justPlay: "unavailable-here",
             fromPosition: "unavailable-here",
@@ -126,7 +126,6 @@ describe("DrillApi", () => {
       surfaces: { play: "available", learn: "available" },
     });
     expect(PLANNED_SURFACES).toEqual([
-      "live",
       "justPlay",
       "fromPosition",
     ]);

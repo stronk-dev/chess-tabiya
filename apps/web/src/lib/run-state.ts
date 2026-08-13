@@ -37,6 +37,7 @@ export interface RunStateSnapshot {
   readonly run: DrillRun;
   readonly access: "writer" | "read_only";
   readonly pendingEvidence: number;
+  readonly withheld: boolean;
   readonly lastError?: ApiError;
 }
 
@@ -118,6 +119,7 @@ export class RunStateStore {
       run,
       access: session.readOnly ? "read_only" : "writer",
       pendingEvidence: pendingEvidence(run.events),
+      withheld: false,
     });
   }
 
@@ -210,6 +212,10 @@ export class RunStateStore {
     if (page.events.length > 0) {
       this.#setRun(appendProjected(this.#snapshot.run, page.events));
     }
+    if (this.#snapshot.withheld !== (page.withheld === true)) {
+      this.#snapshot = Object.freeze({ ...this.#snapshot, withheld: page.withheld === true });
+      this.#emit();
+    }
     this.#eventSeq = page.nextSeq;
   }
 
@@ -272,6 +278,7 @@ export class RunStateStore {
       run,
       access: this.#session.readOnly ? "read_only" : "writer",
       pendingEvidence: pendingEvidence(run.events),
+      withheld: this.#snapshot.withheld,
       ...(this.#snapshot.lastError === undefined
         ? {}
         : { lastError: this.#snapshot.lastError }),

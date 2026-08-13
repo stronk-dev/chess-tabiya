@@ -17,10 +17,11 @@
     learner?: Learner;
     onSignOut?: () => void;
     onDeleteAccount?: () => void;
+    chrome?: boolean;
     children: Snippet;
   }
 
-  let { route, runContext, onNavigate, learner, onSignOut, onDeleteAccount, children }: Props = $props();
+  let { route, runContext, onNavigate, learner, onSignOut, onDeleteAccount, chrome = true, children }: Props = $props();
 
   const destinations = [
     ["Home", "/", "home"],
@@ -34,7 +35,7 @@
   ] as const;
 
   function active(name: string): boolean {
-    return route.name === name || (name === "play" && route.name === "run");
+    return route.name === name || (name === "play" && route.name === "run") || (name === "live" && (route.name === "live-session" || route.name === "live-overlay"));
   }
 
   function follow(event: MouseEvent, path: string): void {
@@ -53,6 +54,7 @@
 </script>
 
 <div class="shell">
+  {#if chrome}
   <a class="skip-link" href="#primary-navigation">Skip to primary navigation</a>
   <header class="shell-topbar">
     <a class="wordmark" href="/" onclick={(event) => follow(event, "/")}>Tabiya</a>
@@ -87,6 +89,7 @@
       </div>
     {/if}
   </header>
+  {/if}
   <div class="shell-content">{@render children()}</div>
 </div>
 
@@ -97,6 +100,7 @@
     grid-template-rows: auto minmax(0, 1fr);
     overflow: hidden;
   }
+  .shell:has(> .shell-content:only-child) { grid-template-rows: minmax(0, 1fr); }
 
   .skip-link {
     position: fixed;

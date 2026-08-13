@@ -189,7 +189,7 @@ describe("Layer 3 screens", () => {
       target: target(),
       props: {
         pack: terminalPack,
-        snapshot: { run, access: "writer", pendingEvidence: 0 },
+        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
         authoredFeedback: {
           items: [{
             kind: "annotation",
@@ -256,7 +256,7 @@ describe("Layer 3 screens", () => {
       target: target(),
       props: {
         pack,
-        snapshot: { run, access: "writer", pendingEvidence: 0 },
+        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
         checkpoint,
         authoredFeedback: {
           items: [
@@ -422,7 +422,7 @@ describe("Layer 3 screens", () => {
       target: target(),
       props: {
         pack,
-        snapshot: { run, access: "writer", pendingEvidence: 0 },
+        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
         onMove: vi.fn(),
         onRewind,
         onFork,

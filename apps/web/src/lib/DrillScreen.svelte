@@ -437,7 +437,7 @@
     {#if error}<p class="error" role="alert">{error}</p>{/if}
     {#if snapshot.access === "read_only"}
       <p class="readonly-banner" role="status">
-        Another browser owns this run. You can follow its events, but this view cannot move or rewind.
+        {snapshot.withheld ? "The host is ahead; evidence is withheld until this run discloses." : "Another browser owns this run. You can follow its events, but this view cannot move or rewind."}
       </p>
     {/if}
 

@@ -16,7 +16,7 @@ derivation for known, unknown, locked, and malformed-hash cases.
 | Role | Read | Write | Claim board | Manage grants |
 |---|---:|---:|---:|---:|
 | `host` | yes | yes | yes | yes |
-| `participant` | yes | yes | yes | no |
+| `participant` | yes | yes | policy-dependent | no |
 | `spectator` | yes | no | no | no |
 
 Authorization and possession are separate. A role says whether a learner may
@@ -33,8 +33,10 @@ withholding.
 
 Hosts grant, update, and revoke roles by handle. A run always retains a host.
 When removing write access from the current holder, the same SQLite transaction
-transfers the lease to the acting host. Any host or participant may explicitly
-claim it later; there is no timeout.
+transfers the lease to the acting host. A host may reclaim explicitly. A participant's
+claim follows the board-control policy documented in `live-sessions.md`: a session may
+offer or rotate possession, while a session-less multi-writer run is host-directed.
+Claims use a transactional current-holder witness; there is no timeout.
 
 ## Persistence and lifecycle
 
@@ -44,8 +46,9 @@ but non-authenticating `__legacy` sentinel with a host grant. Fresh databases do
 not create that row until it is needed.
 
 Deleting an account reassigns its owned runs and held leases to `__legacy`
-rather than deleting shared artifacts. Other learners' grants survive. A
-surviving participant can claim and continue the run; a newly registered account
+rather than deleting shared artifacts. Other learners' grants survive. A surviving
+participant retains access but needs the host-directed possession policy satisfied
+before writing; a newly registered account
 using the deleted handle inherits nothing because all references use learner ids.
 
 ## HTTP surface
@@ -68,4 +71,6 @@ part of the concurrency operation.
   `TABIYA_COOKIE_SECURE=false`.
 - Cross-origin client/API deployment is unsupported; the shipped client and API
   are same-origin.
-- Events still identify actors only as user/opponent/system, not by learner.
+- Run events still identify chess actors only as user/opponent/system. A live session's
+  possession journal derives the learner responsible for ordinary committed plies;
+  Arena imports use their leg attribution instead.

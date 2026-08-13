@@ -34,7 +34,7 @@ function engineFeedbackEvent(event: DrillRunEvent): boolean {
 export function publicEvents(
   run: DrillRun,
   sinceSeq: number,
-): { readonly events: readonly DrillRunEvent[]; readonly nextSeq: number } {
+): { readonly events: readonly DrillRunEvent[]; readonly nextSeq: number; readonly withheld?: true } {
   const candidates = eventsSince(run, sinceSeq);
   if (feedbackDisclosed(run)) {
     return Object.freeze({
@@ -47,5 +47,6 @@ export function publicEvents(
   return Object.freeze({
     events: Object.freeze(events),
     nextSeq: events.at(-1)?.seq ?? sinceSeq,
+    ...(barrier === -1 ? {} : { withheld: true as const }),
   });
 }

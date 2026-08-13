@@ -32,6 +32,8 @@ import { IdentityService } from "./identity.js";
 import type { Principal } from "./authorization.js";
 import type { RunRole } from "./storage.js";
 import type { PackStudio } from "./pack-studio.js";
+import type { LiveSessionService } from "./live-session.js";
+import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -395,8 +397,15 @@ export function errorResponse(error: unknown): Response {
                 error.code === "PACK_ID_RESERVED" ||
                 error.code === "PACK_VERSION_EXISTS" ||
                 error.code === "PACK_ID_NOT_YOURS" ||
-                error.code === "DRAFT_STALE"
+                error.code === "DRAFT_STALE" ||
+                error.code === "BOARD_HELD" ||
+                error.code === "LEASE_MOVED" ||
+                error.code === "VOTE_WINDOW_CLOSED"
                 ? 409
+                : error.code === "VOTE_INTAKE_FULL"
+                  ? 429
+                : error.code === "ARENA_ROOT_MISMATCH"
+                  ? 422
                 : error.code === "PACK_VERSION_NOT_INCREASING" ||
                     error.code === "PROVENANCE_STATUS_NOT_WRITABLE" ||
                     error.code === "GRADUATION_BLOCKERS_OUTSTANDING"
@@ -430,6 +439,24 @@ function parseRunRoute(
   } catch {
     throw invalid("Run id contains invalid URL encoding");
   }
+}
+
+function parseSessionRoute(pathname: string): {
+  readonly sessionId?: string;
+  readonly resource?: "journal" | "board" | "proposals" | "votes" | "invitations" | "legs";
+  readonly itemId?: string;
+  readonly pgn?: true;
+} | undefined {
+  const match = /^\/sessions(?:\/([^/]+)(?:\/(journal|board|proposals|votes|invitations|legs)(?:\/([^/]+))?(?:\/(pgn))?)?)?$/.exec(pathname);
+  if (match === null) return undefined;
+  try {
+    return Object.freeze({
+      ...(match[1] === undefined ? {} : { sessionId: decodeURIComponent(match[1]) }),
+      ...(match[2] === undefined ? {} : { resource: match[2] as "journal" | "board" | "proposals" | "votes" | "invitations" | "legs" }),
+      ...(match[3] === undefined ? {} : { itemId: decodeURIComponent(match[3]) }),
+      ...(match[4] === undefined ? {} : { pgn: true as const }),
+    });
+  } catch { throw invalid("Session path contains invalid URL encoding"); }
 }
 
 function packIdFromPath(pathname: string): string | undefined {
@@ -485,6 +512,7 @@ export function createRestHandler(
   capabilities?: CapabilitiesProvider,
   identity?: IdentityService,
   studio?: PackStudio,
+  live?: LiveSessionService,
 ): RestHandler {
   return async (request) => {
     try {
@@ -687,6 +715,46 @@ export function createRestHandler(
         return json(200, selection);
       }
 
+      const sessionRoute = parseSessionRoute(url.pathname);
+      if (sessionRoute !== undefined) {
+        if (live === undefined) throw new ServerError("STORAGE_FAILURE", "Live sessions are not configured");
+        const principal = authenticate();
+        if (sessionRoute.sessionId === undefined) {
+          if (request.method === "GET") return json(200, { sessions: live.list(principal) });
+          if (request.method === "POST") {
+            requireJson(request); const body=closedRecord(await parseBody(request),"/",["runId","kind","title","boardControl","scheduledFor","voteAdapterHandle","rotationHandles"]);
+            const kind=requiredString(body.kind,"kind"); if(!["stream","academy","match"].includes(kind))throw invalid("kind must be stream, academy, or match");
+            const control=body.boardControl===undefined?undefined:requiredString(body.boardControl,"boardControl");if(control!==undefined&&!["free_claim","host_directed","rotation"].includes(control))throw invalid("boardControl is invalid");
+            const handles=body.rotationHandles===undefined?undefined:Array.isArray(body.rotationHandles)&&body.rotationHandles.every((item)=>typeof item==="string")?body.rotationHandles as string[]:(()=>{throw invalid("rotationHandles must be an array of strings");})();
+            return json(201,{session:live.create(principal,{runId:requiredString(body.runId,"runId"),kind:kind as SessionKind,title:requiredString(body.title,"title"),...(control===undefined?{}:{boardControl:control as BoardControl}),...(body.scheduledFor===undefined?{}:{scheduledFor:requiredString(body.scheduledFor,"scheduledFor")}),...(body.voteAdapterHandle===undefined?{}:{voteAdapterHandle:requiredString(body.voteAdapterHandle,"voteAdapterHandle")}),...(handles===undefined?{}:{rotationHandles:handles})})});
+          }
+          return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
+        }
+        const sid=sessionRoute.sessionId;
+        if (sessionRoute.resource === undefined) {
+          if(request.method==="GET")return json(200,live.detail(sid,principal));
+          if(request.method==="POST"){requireJson(request);const body=closedRecord(await parseBody(request),"/",["op"]);if(body.op!=="close")throw invalid("op must be close");return json(200,{session:live.close(sid,principal)});}
+        }
+        if(sessionRoute.resource==="journal"&&request.method==="GET")return json(200,live.journal(sid,principal,parseSinceSeq(url)));
+        if(sessionRoute.resource==="board"&&request.method==="POST"){requireJson(request);const body=closedRecord(await parseBody(request),"/",["op","handle"]);const op=requiredString(body.op,"op");if(!["offer","withdraw","advance","reclaim"].includes(op))throw invalid("invalid board operation");return json(200,{session:live.board(sid,principal,writerId(request),{op:op as "offer"|"withdraw"|"advance"|"reclaim",...(body.handle===undefined?{}:{handle:requiredString(body.handle,"handle")})})});}
+        if(sessionRoute.resource==="proposals"){
+          if(request.method==="GET"&&sessionRoute.itemId===undefined)return json(200,{proposals:live.proposals(sid,principal)});
+          if(request.method==="POST"){requireJson(request);const body=await parseBody(request);if(sessionRoute.itemId===undefined)return json(201,{proposal:live.propose(sid,principal,requiredString(body.nodeId,"nodeId"),requiredString(body.moveUci,"moveUci"))});const op=requiredString(body.op,"op");if(op!=="apply"&&op!=="decline")throw invalid("op must be apply or decline");return json(200,{proposal:live.resolveProposal(sid,sessionRoute.itemId,principal,writerId(request),op)});}
+        }
+        if(sessionRoute.resource==="votes"){
+          if(request.method==="GET"&&sessionRoute.itemId!==undefined)return json(200,live.tally(sid,sessionRoute.itemId,principal));
+          if(request.method==="POST"){requireJson(request);const body=await parseBody(request);const op=requiredString(body.op,"op");if(op==="open"){if(!Array.isArray(body.options))throw invalid("options must be an array");const options=body.options.map((item,index)=>{const value=record(item,`options/${index}`);return Object.freeze({moveUci:requiredString(value.moveUci,"moveUci"),label:requiredString(value.label,"label")});}) as VoteOption[];return json(201,live.openVote(sid,principal,{nodeId:requiredString(body.nodeId,"nodeId"),prompt:requiredString(body.prompt,"prompt"),options,durationSeconds:requiredSafeInteger(body.durationSeconds,"durationSeconds")}));}if(op==="cast")return json(200,live.castVote(sid,principal,{windowId:requiredString(body.windowId,"windowId"),choiceUci:requiredString(body.choiceUci,"choiceUci"),...(body.voterKey===undefined?{}:{voterKey:requiredString(body.voterKey,"voterKey")})}));if(op==="close")return json(200,live.closeVote(sid,principal,requiredString(body.windowId,"windowId"),body.appliedOptionUci===undefined?undefined:requiredString(body.appliedOptionUci,"appliedOptionUci")));throw invalid("invalid vote operation");}
+        }
+        if(sessionRoute.resource==="invitations"){
+          if(request.method==="GET")return json(200,{invitations:live.detail(sid,principal).invitations});
+          if(request.method==="POST"){requireJson(request);const body=await parseBody(request);const leg=body.leg===undefined?undefined:requiredSafeInteger(body.leg,"leg");if(leg!==undefined&&leg!==1&&leg!==2)throw invalid("leg must be 1 or 2");return json(201,{invitation:live.invite(sid,principal,{...(leg===undefined?{}:{leg}),...(body.handle===undefined?{}:{handle:requiredString(body.handle,"handle")}),...(body.externalChallengeUrl===undefined?{}:{externalChallengeUrl:requiredString(body.externalChallengeUrl,"externalChallengeUrl")})})});}
+        }
+        if(sessionRoute.resource==="legs"&&sessionRoute.itemId!==undefined&&sessionRoute.pgn===true&&request.method==="POST"){
+          const contentType=request.headers.get("content-type")??"";if(!/^text\/x-chess-pgn(?:\s*;|$)/i.test(contentType))throw invalid("content-type must be text/x-chess-pgn");const leg=Number(sessionRoute.itemId);if(leg!==1&&leg!==2)throw invalid("leg must be 1 or 2");return json(200,{leg:live.importLeg(sid,leg,principal,writerId(request),await request.text(),url.searchParams.get("result") as any)});
+        }
+        return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
+      }
+
       const route = parseRunRoute(url.pathname);
       if (!route) {
         return json(404, {
@@ -736,7 +804,7 @@ export function createRestHandler(
       const value = await parseBody(request);
       if (route.action === "lease") {
         requireJson(request);
-        service.claimLease(route.runId, principal, writerId(request));
+        service.claimLease(route.runId, principal, writerId(request), optionalString(value.expectedHolderLearnerId,"expectedHolderLearnerId"));
         return json(200, { holdsLease: true });
       }
       if (route.action === "reveal") {
