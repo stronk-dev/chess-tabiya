@@ -482,6 +482,13 @@ Seven properties, each load-bearing:
   `packEvidenceRef` (`packages/runtime/src/evidence-ref.ts:41-43`), rendered by the shipped
   renderer as the checkpoint's authored label (`evidence-sentences.ts:53-60`). **No new evidence
   namespace is added.**
+- **The two events' order is not a style choice; the projector enforces it.** On replay,
+  `objective.state_changed` is rejected unless `node.objectiveState === event.data.from`
+  (`events.ts:125-129`). So the seal (`active → preserved`) must be appended before the reset
+  (`preserved → active`): emitted the other way round the log would not project, which is why §4b
+  evaluates the objective in step 2 and resets in step 4 rather than deriving the incoming leg
+  first. Criterion 3a asserts the order, and 3c asserts the round-trip that would catch its
+  reversal.
 - **`→ active` is a reset and nothing else can produce it.** `conditionBase.to`
   excludes `active` at the schema layer (`drill_pack.schema.json:204`) and no compiler branch
   emits it, so within a pack run an `objective.state_changed` with `to: "active"` is
