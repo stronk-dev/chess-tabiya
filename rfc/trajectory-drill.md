@@ -18,7 +18,7 @@
   proves a trajectory cannot span. **Ordered behind, not dependent on,** `rfc/defect-sweep.md`
   (pack schema 0.5, required `start.side`) and `rfc/return-and-progression.md` (pack schema 0.6):
   the ordering exists only so 0.7 follows 0.6, and no rule here reads either bump
-- **Parent / amends:** **`rfc/archive/drill-pack-format.md`** (pack schema 0.6 → 0.7: the `legs`
+- **Parent / amends:** **`rfc/archive/drill-pack-format.md`** (pack schema → **0.7**: the `legs`
   array, the `run_trajectory` objective type, and the first meaning `mode: "trajectory"` has ever
   had), **`rfc/archive/outcome-drill-grading.md`** (its rule compiler and its validation codes gain
   a per-leg scope; its `syzygy` root assessment is refused on a leg, for a stated reason),
@@ -1237,7 +1237,11 @@ orphans no developer test run. The one new file is a new pack with a new id.
    on which leg 1's and leg 2's entry checkpoints fire at the same node. The fourth case asserts
    the run advances to **leg 2** and that leg 1 is returned `status: "not_entered"` (§4d). Every
    case asserts the transition node is **both** the outgoing leg's `exitNodeId` and the incoming
-   leg's `entryNodeId`, which is the off-by-one this criterion exists to pin.
+   leg's `entryNodeId`, which is the off-by-one this criterion exists to pin. A fifth case pins
+   §6's `sealedState` fallback directly: a leg that reached an **absorbing** state at its boundary
+   node returns that state as `sealedState`, `stopped: true`, and every later leg `not_entered` —
+   asserted because the naive derivation (read the reset event's `from`, default `"active"`)
+   returns `"active"` here and would report a run that ended as a run still in progress.
 2. **The trajectory never freezes.** After each of the two transitions, one further move commits.
    Asserted at the runtime and again in the browser (criterion 14), because
    `TERMINAL_OBJECTIVE_STATES` is what made D12b invisible at the endpoint and Motivation §2b is
@@ -1263,30 +1267,54 @@ orphans no developer test run. The one new file is a new pack with a new id.
    `failed`, **no reset is emitted**, the next commit throws `RUN_TERMINATED`, and
    `trajectoryVerdict` reports the final leg `not_entered`. Asserted alongside a load-time case
    proving the non-terminal route to the same state is refused (criterion 8).
-6. **`→ active` is a reset and only a reset.** A test walks every `objective.state_changed` event
-   produced by all eight pack files in the tree plus the new fixture and asserts that `to: "active"`
-   occurs **only** at leg boundaries of leg-bearing packs, so §6's derivation cannot be fooled by
-   another producer.
+6. **`→ active` is a reset and only a reset.** Two halves, because playing eleven packs to
+   completion is not a test. **Statically:** for every pack document in the tree — the schema
+   example, the six files in `content/drafts/`, and the four `content/candidates/*/pack.json` —
+   `objectiveRules(pack)` is compiled and **no** rule has `to: "active"`, which together with
+   `conditionBase.to`'s schema enum excluding `active` (`drill_pack.schema.json:204`) proves no
+   leg-free pack can emit one. **Dynamically:** across the existing orchestrator and browser suites
+   plus the new fixture run, every `objective.state_changed` with `to: "active"` names a node that
+   `trajectoryVerdict` reports as a transition node of a leg-bearing pack. The one other writer,
+   `applyObjectiveEvidenceProposal` (`objective.ts:283-309`), is asserted to have no production
+   call site. §6's derivation cannot be fooled by another producer.
 7. **Composition of verdicts, and no aggregate.** `trajectoryVerdict` over a completed
    three-leg run returns three `TrajectoryLegOutcome`s in declared order with the correct
    `objectiveType` and `state` per leg, and two `TrajectoryTransition`s. A type-level and a
    runtime assertion together prove `TrajectoryVerdict` exposes **no** numeric field, no score, no
    count of passed legs and no ordering between legs other than `legIndex`.
-8. **Load-time refusals.** Each of §10's sixteen codes has a fixture that fails
+8. **Load-time refusals.** Each of §10's **seventeen** codes has a fixture that fails
    `validatePackDocument` with that exact code, and `make pack-check FILE=<fixture>` **exits
-   non-zero** for each, asserted on the process exit code rather than the issue list. Includes
-   specifically: a non-final leg with a bare `{"kind": "reach_checkpoint"}` condition and **no**
-   `to` (`TRAJECTORY_NONFINAL_LEG_ABSORBING` fired on the compiled default, §5); a leg with a
-   timing-window entry; two legs declaring the same `atPly`; two `follow_theory` legs; a leg with
-   a `syzygy` assessment; and `legs` on a `mode: "plan"` pack. A one-leg `legs` array is asserted
-   to fail at the **schema** layer with `SCHEMA_MINITEMS`, not at the runtime layer, because
-   claiming a rule in two layers is how a test passes against a code the validator cannot emit.
+   non-zero** for each, asserted on the process exit code (`Makefile:23-26`) rather than the issue
+   list. Includes specifically: a non-final leg with a bare `{"kind": "reach_checkpoint"}`
+   condition and **no** `to` (`TRAJECTORY_NONFINAL_LEG_ABSORBING` fired on the compiled default,
+   §5); a leg with a timing-window entry; two legs declaring the same `atPly`; two `follow_theory`
+   legs; a leg with a `syzygy` assessment, which must fail with
+   `TRAJECTORY_LEG_SYZYGY_UNSUPPORTED` and **not** with `SYZYGY_ASSESSMENT_MISMATCH` (§10 — the
+   wrong-position check must never be the one that fires on a leg); a leg naming an earlier leg's
+   `entryCheckpointId` in a `reach_checkpoint` condition
+   (`TRAJECTORY_LEG_CONDITION_PRECEDES_ENTRY`, §2h); a leg condition with `to: "transitioned"` on a
+   non-theory, non-outcome leg, which no shipped code rejects; and `legs` on a `mode: "plan"` pack.
+   A one-leg `legs` array is asserted to fail at the **schema** layer with `SCHEMA_MINITEMS`, not at
+   the runtime layer, because claiming a rule in two layers is how a test passes against a code the
+   validator cannot emit.
 9. **Per-leg validation actually runs.** A trajectory whose *second* leg declares
    `type: "hold"` with no `grading` fails with `OBJECTIVE_GRADING_REQUIRED` at pointer
    `/legs/1/objective/grading`; one whose *third* leg declares `type: "resist"` with
    `resolveAt.kind: "terminal"` fails with `OBJECTIVE_RESIST_NEEDS_CHECKPOINT` at
    `/legs/2/objective/grading/resolveAt`. This is the regression for Motivation §2f: before the
-   extraction, both packs load clean.
+   extraction, both packs load clean. Two counter-assertions pin the parts of §10 that are *not*
+   per-leg: a three-leg pack with a missing `authoredBoundary` and a `follow_theory` leg emits
+   `THEORY_NEEDS_AUTHORED_BOUNDARY` **exactly once**, not once per leg; and a three-leg pack with an
+   `atAuthoredBoundary` checkpoint and no `authoredBoundary` emits
+   `CHECKPOINT_BOUNDARY_WITHOUT_BOUNDARY` **exactly once**. Duplicated issues at one pointer are the
+   signature of the wholesale extraction §10 refuses.
+
+   **And the compiler reads the leg's `grading`, not the pack's** — a run-time assertion, because
+   no validation test can reach it. A trajectory whose final leg is `resist` with
+   `grading.resolveAt.kind: "checkpoint"` is played to a loss *after* that checkpoint fires and
+   grades **`achieved`**. With `objectiveRules` still reading `pack.objective.grading` (§4b, §9b)
+   the `resist` exemption never compiles, the run grades `failed`, and every load-time check stays
+   green.
 10. **The theory guard widened by exactly one case.** `follow_theory` on a `mode: "plan"` pack
     still fails `THEORY_OBJECTIVE_NEEDS_LINE_MODE`; `follow_theory` as a **top-level** objective
     on a `mode: "trajectory"` pack still fails it; `follow_theory` as a **leg** objective on a
@@ -1299,15 +1327,22 @@ orphans no developer test run. The one new file is a new pack with a new id.
     and `content/drafts/line-boundary.browser.json` return the same verdicts as before, ply for
     ply. And `hasWithheldAuthoredContent` is asserted **false** on a trajectory run whose prose is
     fully revealed but whose legs continue.
-12. **Existing packs and runs are unaffected in every way.** Every pack file in the repo — the
-    schema example, the five drafts and the four candidates — loads and validates under v0.7,
-    asserted by a test that walks the tree, and each one's complete `runtimeIssues` output is
-    asserted **identical** before and after the §10 extraction. `schemas/drill_pack.example.json`
-    keeps `mode: "trajectory"` with no legs, keeps its digest, and its projected key set at
-    `apps/server/src/drill-client-server.test.ts:137-152` passes untouched — the assertion that
-    proves `legs` is projected only when present. Both existing Pack A browser tests
-    (`tests/browser/drill.spec.ts:312`, `:357`) and the Najdorf test (`:143`) pass with their
-    current assertions unchanged, as do the three outcome tests (`:22`, `:43`, `:64`, `:78`).
+12. **Existing packs and runs are unaffected in every way.** All **eleven** pack documents in the
+    repo — `schemas/drill_pack.example.json`, the **six** files in `content/drafts/`
+    (`anti-caro-advance`, `carlsbad-minority-attack`, `rook-4v3-same-side`,
+    `line-boundary.browser`, `outcome-hold.browser`, `outcome-resist.browser`), and the four
+    `content/candidates/*/pack.json` — load and validate under v0.7, asserted by a test that walks
+    the tree, and each one's complete `runtimeIssues` output is asserted **identical**, in content
+    and order, before and after the §10 extraction. The seven files in
+    `schemas/fixtures/drill-pack/` keep their current valid/invalid verdicts.
+    `schemas/drill_pack.example.json` keeps `mode: "trajectory"` with no legs, keeps its digest,
+    and its projected key set at `apps/server/src/drill-client-server.test.ts:137-152` passes
+    untouched — the assertion that proves `legs` is projected only when present, and the reason
+    §11 uses a conditional spread rather than `legs: raw.legs`, since a key set to `undefined`
+    still appears in `Object.keys`. All **eight** shipped browser tests pass with their current
+    assertions unchanged: the four outcome/assessment tests
+    (`tests/browser/drill.spec.ts:22`, `:43`, `:64`, `:78`), the Najdorf test (`:143`), the two
+    Pack A / Line Drill tests (`:312`, `:357`), and the spectator test (`:380`).
 13. **A complete fixture trajectory run.** `content/drafts/trajectory-legs.browser.json` is played
     end to end — root, through `book-crossed`, through `pieces-off`, to a terminal position —
     through the real `Service.move` / `Service.opponentPly` path against the mock engine, with
@@ -1339,30 +1374,47 @@ orphans no developer test run. The one new file is a new pack with a new id.
 16. **PGN export carries one causal spine.** Exporting the completed run produces one legal PGN
     whose main line carries a `leg:leg-b@ply<N>` and a `leg:leg-c@ply<M>` comment at exactly the
     two transition nodes, alongside the existing `authored:` and `run:` labels
-    (`pack-pgn.ts:49`, `:60`). The PGN is re-parsed and re-serialized by the shipped round-trip
-    and every path is re-validated as legal chess, so the export cannot look plausible while being
-    discontinuous.
+    (`pack-pgn.ts:49`, `:60`). The PGN is re-parsed with `parsePgn` and re-serialized with
+    `makePgn`, walked as `packages/runtime/src/pack-pgn.test.ts:46` already does, and every path is
+    re-validated as legal chess by the shipped `validatePath` (`pgn.ts:26-45`), so the export
+    cannot look plausible while being discontinuous. **Two specific traps are asserted, both from
+    §7a:** (i) `exportPgn(run)` with no comment map produces byte-identical output to today's for
+    every leg-free pack, since the parameter is optional; (ii) a played path that exactly retraces
+    the authored spine — the guided fixture's own main line — still carries its `leg:` comments,
+    which is the `uniquePaths` merge (`pack-pgn.ts:77-84`) and fails without it, because
+    `combinedRun` orders `authoredPaths` first and the dedupe keeps the first path with a given
+    move key.
 17. **The version bump is exactly zero migrations wide.** A test asserts
-    `DRILL_PACK_SCHEMA_VERSION === "0.7"`, `drill_pack.schema.json`'s `$id` at `0.7`,
-    `DRILL_RUN_SCHEMA_VERSION` **still** `"0.7"`, `STORAGE_VERSION` **still** `5`, and that
-    `rfc/README.md`'s migration register gains **no** row for this RFC while its Active table gains
-    one.
+    `DRILL_PACK_SCHEMA_VERSION === "0.7"` (from `"0.4"` today, or from whatever 0.5/0.6 has landed),
+    `drill_pack.schema.json`'s `$id` at `urn:chess-tabiya:schema:drill-pack:0.7` with the matching
+    `description`, `DRILL_RUN_SCHEMA_VERSION` **still** `"0.7"`, and `STORAGE_VERSION` **still**
+    `5`. `packages/schema/src/drill-pack.test.ts:49-56` names the version in its `describe` title
+    and in two assertions and moves with it. Separately asserted: **no pack digest in the tree
+    changes**, recomputed with `digestDrillPack` before and after, which is what makes the claim
+    "no stored run is orphaned" a test rather than a sentence. `rfc/README.md` needs no edit for
+    this RFC — its Active row and its pack-schema-register row at 0.7 are already recorded, and no
+    migration-register row is added.
 18. `ENGINES_REQUIRED=1 make verify` green; `make test-browser` green with `retries` still unset
     (`playwright.config.ts`), run three consecutive times;
     `make pack-check FILE=content/drafts/trajectory-legs.browser.json` and
     `make pack-check FILE=schemas/drill_pack.example.json` green.
 19. **Docs.** `docs/drill-pack-format.md` documents v0.7, `legs`, `run_trajectory`, the leg-entry
-    checkpoint contract and the sixteen validation codes, and **corrects line 135**, which
-    currently lists "trajectory `transitions`" as unimplemented content-era work;
-    `docs/branch-runtime.md` documents `trajectoryLegSpans`/`trajectoryVerdict`/`legIndexAt` as
-    derived read-back shapes beside the Line Drill derivations, the seal-and-reset with its
-    two-transition commit and its self-transition guard, the leg-index monotone law beside the
-    outcome monotone law and the theory no-absorbing law, and the `leg:` PGN comment;
-    `docs/drill-client.md` documents the optional `legs` projection, the per-leg grade line, the
-    transition sentence and the "not a failure" sentence; `docs/explanation-grounds.md` records
-    that leg spans and transitions are structural and ungated while per-leg verdicts keep their
-    reveal contracts; `docs/outcome-drill-grading.md` gains a pointer noting that outcome grading
-    now compiles per leg and that a leg may not declare a `syzygy` assessment, with the reason.
+    checkpoint contract and the **seventeen** validation codes, and **corrects line 135**, which
+    currently reads "per-assertion grounding, timing-window evaluation, trajectory `transitions`,
+    and the authoring studio remain separate content-era work" — the trajectory clause becomes
+    implemented and is restated in this RFC's vocabulary (`legs`, not `transitions`, since no field
+    of that name is added); `docs/branch-runtime.md` documents
+    `trajectoryLegSpans`/`trajectoryVerdict`/`legIndexAt` as derived read-back shapes beside the
+    Line Drill derivations, the seal-and-reset with its two-transition commit and its
+    self-transition guard, the leg-index monotone law beside the outcome monotone law and the
+    theory no-absorbing law, the `sealedState` fallback and why the reset event alone is not enough,
+    and the `leg:` PGN comment together with `exportPgn`'s new optional comment map;
+    `docs/drill-client.md` documents the optional `legs` projection, the per-leg grade line and the
+    render gate it required, the transition sentence and the "not a failure" sentence;
+    `docs/explanation-grounds.md` records that leg spans and transitions are structural and ungated
+    while per-leg verdicts keep their reveal contracts; `docs/outcome-drill-grading.md` gains a
+    pointer noting that outcome grading now compiles per leg — including `grading.resolveAt` — and
+    that a leg may not declare a `syzygy` assessment, with the reason.
 
 ## Open questions
 
@@ -1378,7 +1430,7 @@ None.
   the route rather than on how a transition is recognized; author-declared phase recognition and
   nothing else; and the refusal of any trajectory-level aggregate. Advances the pack schema to
   v0.7 and claims no migration.
-- 2026-08-13: rebased the pack-schema claim from 0.5 to **0.7** before review. Five product RFCs
+- 2026-08-13: rebased the pack-schema claim from 0.5 to **0.7** before review. Six product RFCs
   were drafted in parallel the same day; `defect-sweep.md` had claimed 0.5 and
   `pack-studio-and-review.md` and `return-and-progression.md` had **both** claimed 0.6 — the
   migration-register failure repeated on a second shared constant. This RFC took the next free
@@ -1386,3 +1438,58 @@ None.
   nothing, and instituted the pack-schema-version register in `rfc/README.md` so the collision it
   found is recorded rather than only avoided. The D4/D5/D6/D8/D9/D10 scope rows were rewritten to
   name `defect-sweep.md` as their owner instead of citing bare BACKLOG rows.
+- 2026-08-13: **adversarial review, all findings integrated in place.** Five blockers were
+  specification defects rather than wording, and each is now fixed where it lives rather than
+  appended:
+  1. **§6's derivation contradicted §4b in the absorbing case.** `sealedState` was defined as the
+     reset event's `from`, defaulting to `"active"` — but §4b emits no reset in *two* cases, not
+     one, so a leg that ended `achieved` or `failed` would have read back as `active`, and the
+     walk would have opened the next leg's span where the runtime never advanced. `sealedState`
+     now falls back to the node's own `objectiveState`, the walk carries §4b's absorbing stop, and
+     `TrajectoryVerdict` gains `stopped`. Criterion 1 pins the case the naive version gets wrong.
+  2. **§7's PGN comment asserted infrastructure that does not exist.** `exportPackRunPgn` exports a
+     *synthetic* run built by replaying moves (`combinedRun`/`appendPath`), whose node ids share
+     nothing with the source run's, and `exportPgn` has no per-node comment channel at all — only
+     `startingComments` on a branch's first move. New §7a specifies the four changes that supply
+     one, including the `uniquePaths` merge without which the guided fixture's own comments are
+     silently dropped in favour of the authored path. Criterion 16 asserts both traps.
+  3. **§11's per-leg grade line was a no-op as written.** `<OutcomeContext>` renders inside
+     `{#if assessment !== undefined || resistance.length > 0}` (`DrillScreen.svelte:451`), and both
+     operands derive from `pack.objective.grading` — which a `run_trajectory` pack must not have.
+     The component would never have mounted: no grade line, no assessment, and no resistance line,
+     silently defeating criterion 15 as well. §11 now moves the gate and the `resistance`
+     derivation, not just the argument.
+  4. **§10's extraction was wrong at the boundary.** `pack-validation.ts:174-366` is not an
+     objective-only block: recounted against the file it emits **twenty** codes, of which twelve
+     are `/objective`-rooted, seven are theory-gated but pack-pointered, and one is
+     objective-independent — so "extract 175-330 and call it per leg" would have emitted
+     `CHECKPOINT_BOUNDARY_WITHOUT_BOUNDARY` once per leg. §2f now carries the counted table and
+     §10 splits the three kinds; criterion 9 adds the duplicate-issue counter-assertions.
+  5. **Sealing does not stop path-scoped predicates**, which was the review's sharpest question.
+     `checkpointReached` and `outcomeReached` scope to the whole root-to-node path, so a leg naming
+     an earlier leg's entry checkpoint resolves at its own first commit — and with `conditionRules`
+     defaulting `to` to `"achieved"`, a final leg written that way grades before the learner acts.
+     New Motivation §2h states the limit, and `TRAJECTORY_LEG_CONDITION_PRECEDES_ENTRY` (§10,
+     seventeenth code) closes its decidable part. §4c now separates what sealing does guarantee
+     from what it does not.
+
+  Also corrected: **the shipped pack-schema version is `"0.4"`, not 0.6** — the header claimed a
+  base that does not exist, and the register collision it described has since resolved
+  (`pack-studio.md` → 0.8, `n-way-comparison.md` → 0.9), so §3 now states the claimed number and
+  the order rather than a stale contention; §4b's `objectiveRules` reparameterization is spelled
+  out to all seven `pack.objective` reads, because leaving `grading?.resolveAt` (`:242`, `:259`) on
+  the top level would compile a `resist` leg with no resolution rule and grade a survived loss as a
+  failure with every load-time check green (criterion 9b); §4d's fork direction was stated
+  backwards; §8 now derives the organic/guided identity from the frozen `simpleTrigger` union
+  reaching one `simpleTriggerMatches`, rather than asserting it; §8b distinguishes non-arrival from
+  a game that ended; §12 pins `feedbackPolicy` and `start.side` and the `graduationBlockers` shape
+  (`line-boundary.browser.json` does not use one); §13 restates the `evidenceRefs` schema
+  accurately (`$ref: "#/$defs/id"`, an unpatterned non-empty string). Roughly twenty stale
+  coordinates were re-verified and repointed — `design/03-product-breadth.md`'s B2 row (`:172`),
+  item #4 (`:258`) and item #7 (`:266`); `design/BACKLOG.md`'s D8/D9/D10 (`:134`/`:133`/`:132`) and
+  D9's re-verified symptom; `planning/breadth/training-modes.md:324-325`;
+  `design/04-content-architecture.md:155-156`; `pack-validation.ts`'s root checks (`:393`/`:401`);
+  and the pack-file counts (eleven documents, six drafts) and browser-test counts (eight) in
+  criteria 6 and 12. The RFC no longer claims it adds rows to `rfc/README.md`; the register
+  already carries them, and the duplicated pack-schema register found there is raised as a BACKLOG
+  proposal in Deviations item 9 rather than edited.

@@ -500,12 +500,22 @@ official pack, from the export bundle (§12) for a community one — after which
 resumes with no data loss. `rewind`, `fork`, `graph`, `compare` and `events` are
 unaffected: they read run state and never consult the pack.
 
+Two ordering details, because both are places the shipped code would otherwise keep the
+old behaviour. `authoredFeedback` returns early for `run.sessionKind === "position"`
+*before* it inspects the pack (`service.ts:449-451`), and that early return stays first:
+a position session has no pack to be unresolvable. And `move`/`opponentPly` resolve the
+pack at the top of the method already, so the refusal is a `throw` at the existing
+resolution site rather than a new guard — the code change is one branch, not a
+restructuring. The only externally visible regression is that `authoredFeedback`'s
+`PACK_NOT_FOUND` becomes `PACK_UNRESOLVABLE` for this case; any test asserting the old
+code moves with it.
+
 This is what makes the fix a fix. Digest-addressing alone would have turned "the pack
 moved" into "the pack is missing" and left the second one silent, which is the
 defect. Both halves land together or neither closes D20.
 
 This fix is independent of everything else in this RFC and of the channel ruling: it
-is a latent defect in shipped code (**D20**, `design/BACKLOG.md:126`) that versioning
+is a latent defect in shipped code (**D20**, ledgered in `design/BACKLOG.md`) that versioning
 makes live, and it would be worth landing on its own.
 
 ### 4. Draft write path
@@ -1595,27 +1605,31 @@ publisher-id handling in `deleteLearner` (§2).
     `/play` pack list, and that the served example pack appears marked official in
     the same list, so the two channels are visibly distinct in one screenshot.
 17. **Documentation** in §16 lands in the same change; `rfc/README.md` carries the
-    Active row, migration 9, and the pack-schema-version claim (§0), and the
-    migration register records migration 9 against this RFC before any code is
-    written.
+    Active row, the migration claim and the pack-schema-version claim (§0), and both
+    registers record them against this RFC before any code is written. The register's
+    0.8 row and this RFC's Active row must both stop naming `planClassId`, which §14a
+    withdrew, and the 0.8 row's justification must stand on the `provenance` narrowing
+    alone.
 
 ## Proposed BACKLOG rows (owner-tier; not implementer work)
 
 Per RFC-0000's agent rule, the implementer must not edit `design/`. Proposed rows
 for the owner:
 
-1. **Authoring-format friction table** (`design/BACKLOG.md:138-148`) — the
-   `planClassId` row (`:147`) stays 💡 and is **not** marked `📜 RFC`: §14a withdrew
+1. **Authoring-format friction table** (`design/BACKLOG.md` §Authoring-format friction;
+   cited by row rather than line, because that file moved four lines during this
+   review) — the "Deviations have no link to a plan class"
+   row stays 💡 and is **not** marked `📜 RFC`: §14a withdrew
    the amendment on review because its surviving consumer was an editor echoing the
    author's own input. Proposed annotation: "surfaced, not fixed — `rfc/pack-studio.md`
    §14a withdrew the schema addition; unblocking input is a consumer that shows a
    learner something they did not write, which needs the durable interaction record
    below." Annotate the intent-relative-success row "surfaced by
    `INTENT_CAPTURE_HAS_NO_RECORDING_SITE`; blocked on a durable interaction record
-   (program #4)"; annotate the `concept_violation` row (`:148`) "surfaced, not fixed; the
+   (program #4)"; annotate the `concept_violation` row "surfaced, not fixed; the
    review sign-off that would have caught it was struck by the 2026-08-13 ruling.
    Unblocking input is more authored packs that need the split, not a reviewer."
-2. **Defect row D20 already exists** at `design/BACKLOG.md:126`, added when this RFC
+2. **Defect row D20 already exists** in `design/BACKLOG.md`, added when this RFC
    was drafted; no new row is needed. Proposed amendment instead: its closure clause
    currently names only digest-addressed resolution, which §3a establishes is half the
    fix — the other half is that an unresolvable digest must **refuse the move** rather
@@ -1757,7 +1771,7 @@ workflow it served rather than choosing a shape for it.
   `service.ts:186-188`→`183-186`, `types.ts:200-213`→`202-215`,
   `capabilities.ts:32-41`→`32-40`, `api.ts:23`→`16-24`,
   `pack-authoring.test.ts:116-147`→`113-149`, and `service.ts`'s evidence movetime to
-  `:635`/`:156-157`. Noted that D20 is **already** in `design/BACKLOG.md:126`, so the
+  `:635`/`:156-157`. Noted that D20 is **already** a row in `design/BACKLOG.md`, so the
   proposed row became a proposed amendment. Added `n-way-comparison.md`'s pack schema
   **0.9** to §0's register table, verified as downstream and not a contention.
   *§1.* The table's "`content/drafts/` — not published" contradicted §10a: in
