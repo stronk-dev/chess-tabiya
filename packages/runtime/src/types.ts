@@ -35,7 +35,13 @@ export interface PolicyConfig {
 
 export type RunSessionKind = "pack" | "position";
 export type RunFeedbackPolicy = "delayed_checkpoint" | "segment_end" | "attempt_end";
-export type RunOpponentMode = "human_common" | "strong_engine" | "theory_strict";
+export const RUN_OPPONENT_MODES = Object.freeze([
+  "human_common",
+  "strong_engine",
+  "theory_strict",
+] as const);
+export type RunOpponentMode = (typeof RUN_OPPONENT_MODES)[number];
+export type PolicyModeApplied = RunOpponentMode | "unknown";
 export type RunOutcome = "win" | "loss" | "draw";
 
 export interface RunStart {
@@ -71,6 +77,7 @@ export interface SelectionEngineIdentity {
 
 export interface OpponentSelection {
   readonly moveUci: string;
+  readonly policyModeApplied: PolicyModeApplied;
   readonly candidates?: readonly SelectionCandidate[];
   readonly engine: SelectionEngineIdentity;
 }

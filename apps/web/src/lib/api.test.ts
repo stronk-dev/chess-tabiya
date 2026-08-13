@@ -17,6 +17,7 @@ const run = createRun({
 });
 const selection: OpponentSelection = {
   moveUci: "h2h1",
+  policyModeApplied: "human_common",
   engine: {
     id: "mock",
     name: "Mock",

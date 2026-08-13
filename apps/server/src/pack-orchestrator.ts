@@ -8,8 +8,13 @@ import {
   evaluateObjective,
   evaluateObjectivePredicate,
   historyFrom,
+  insideAuthoredBoundary,
   packEvidenceRef,
   rulesEvidenceRef,
+  spineNodeIdFor,
+  spinePositionIndex,
+  deviationAnchors,
+  theoryEvidenceRef,
   reachCheckpoint,
   type DrillRun,
   type FenPredicate,
@@ -24,18 +29,8 @@ function activeSpineNodeId(
   pack: DrillPackDefinition,
   run: DrillRun,
 ): string | undefined {
-  const moves = historyFrom(run, run.activeCursor.nodeId)
-    .slice(1)
-    .map((node) => node.moveUci);
-  let candidates = pack.spine ?? [];
-  let current: string | undefined;
-  for (const move of moves) {
-    const node = candidates.find((candidate) => candidate.moveUci === move);
-    if (node === undefined) return undefined;
-    current = node.id;
-    candidates = node.children;
-  }
-  return current;
+  const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
+  return spineNodeIdFor(spinePositionIndex(pack), node);
 }
 
 function simpleTriggerMatches(
@@ -47,6 +42,9 @@ function simpleTriggerMatches(
   if ("atPly" in trigger) return node.ply === trigger.atPly;
   if ("atSpineNode" in trigger) {
     return activeSpineNodeId(pack, run) === trigger.atSpineNode;
+  }
+  if ("atAuthoredBoundary" in trigger) {
+    return !insideAuthoredBoundary(pack, run, node);
   }
   if ("fenPredicate" in trigger) {
     return evaluateObjectivePredicate(run, {
@@ -170,6 +168,47 @@ export function objectiveRules(
   pack: DrillPackDefinition,
 ): readonly ObjectiveTransitionRule[] {
   const raw = pack.objective.successConditions;
+  if (pack.objective.type === "follow_theory") {
+    const anchors = deviationAnchors(pack);
+    const degraded = (pack.deviations ?? []).flatMap((deviation, index) => {
+      if (!deviation.offObjective) return [];
+      const fromTransposeKey =
+        "spineNodeId" in deviation.at
+          ? anchors.get(deviation.at.spineNodeId)
+          : undefined;
+      if (fromTransposeKey === undefined) return [];
+      return (["active", "preserved"] as const).map((from) => ({
+        id: `theory-deviation-${index}-${from}`,
+        from,
+        to: "degraded" as const,
+        when: {
+          type: "deviationPlayed" as const,
+          fromTransposeKey,
+          moveUci: deviation.moveUci,
+        },
+        evidenceRefs: [theoryEvidenceRef("off-objective-deviation")] as const,
+      }));
+    });
+    const boundary = pack.checkpoints.find(
+      (checkpoint) =>
+        !("windowOpens" in checkpoint.trigger) &&
+        "atAuthoredBoundary" in checkpoint.trigger,
+    );
+    const resolution: readonly ObjectiveTransitionRule[] =
+      boundary === undefined
+        ? []
+        : [{
+            id: `theory-boundary-${boundary.id}`,
+            from: "active",
+            to: "preserved",
+            when: { type: "checkpointReachedHere", checkpointId: boundary.id },
+            evidenceRefs: [packEvidenceRef(boundary.id)],
+          }];
+    const authored = Array.isArray(raw)
+      ? raw.flatMap((condition, index) => conditionRules(condition, index, false))
+      : [];
+    return [...degraded, ...resolution, ...authored];
+  }
   if (!Array.isArray(raw)) return [];
   const outcomeObjective = ["win", "hold", "save", "resist"].includes(
     pack.objective.type,

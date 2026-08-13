@@ -144,7 +144,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-const STORAGE_VERSION = 4;
+export const STORAGE_VERSION = 5;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -933,6 +933,11 @@ export class SQLiteRunStorage implements RunStorage {
         name: "upgrade v0.5 run snapshots to v0.6",
         apply: () => this.#upgradeV05Runs(),
       },
+      {
+        version: 5,
+        name: "record policyModeApplied as unknown on v0.6 selections",
+        apply: () => this.#upgradeV06Runs(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -1088,8 +1093,70 @@ export class SQLiteRunStorage implements RunStorage {
         continue;
       }
       update.run(
-        JSON.stringify({ ...snapshot, schemaVersion: DRILL_RUN_SCHEMA_VERSION }),
-        DRILL_RUN_SCHEMA_VERSION,
+        JSON.stringify({ ...snapshot, schemaVersion: "0.6" }),
+        "0.6",
+        row.id,
+      );
+    }
+  }
+
+  #upgradeV06Runs(): void {
+    const rows = this.#database
+      .prepare("SELECT id, snapshot_json FROM drill_runs WHERE schema_version = '0.6'")
+      .all() as readonly Record<string, unknown>[];
+    const update = this.#database.prepare(
+      "UPDATE drill_runs SET snapshot_json = ?, schema_version = ? WHERE id = ?",
+    );
+    for (const row of rows) {
+      if (typeof row.id !== "string" || typeof row.snapshot_json !== "string") {
+        throw new TypeError("Stored v0.6 run row has an invalid shape");
+      }
+      let snapshot: Record<string, unknown>;
+      try {
+        const parsed = JSON.parse(row.snapshot_json) as unknown;
+        if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+          continue;
+        }
+        snapshot = parsed as Record<string, unknown>;
+      } catch {
+        continue;
+      }
+      if (snapshot.schemaVersion !== "0.6" || !Array.isArray(snapshot.events)) continue;
+      const events = snapshot.events.map((event) => {
+        if (
+          event === null ||
+          typeof event !== "object" ||
+          Array.isArray(event) ||
+          (event as { type?: unknown }).type !== "opponent.move_selected"
+        ) {
+          return event;
+        }
+        const typed = event as Record<string, unknown>;
+        const data = typed.data;
+        if (data === null || typeof data !== "object" || Array.isArray(data)) return event;
+        const selection = (data as Record<string, unknown>).selection;
+        if (
+          selection === null ||
+          typeof selection !== "object" ||
+          Array.isArray(selection)
+        ) {
+          return event;
+        }
+        const selected = selection as Record<string, unknown>;
+        return {
+          ...typed,
+          data: {
+            ...(data as Record<string, unknown>),
+            selection: {
+              ...selected,
+              policyModeApplied: selected.policyModeApplied ?? "unknown",
+            },
+          },
+        };
+      });
+      update.run(
+        JSON.stringify({ ...snapshot, schemaVersion: "0.7", events }),
+        "0.7",
         row.id,
       );
     }

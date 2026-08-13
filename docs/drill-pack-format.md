@@ -136,3 +136,23 @@ per-assertion grounding, timing-window evaluation, trajectory `transitions`, and
 the authoring studio remain separate content-era work. A Syzygy declaration in
 pack JSON is not by itself proof; exactness is admitted only by the server-side
 ledger and manifest checks described in `outcome-drill-grading.md`.
+
+## v0.4 Line Drill contract
+
+Pack schema v0.4 adds `objective.type: follow_theory` and the closed
+`{atAuthoredBoundary: "crossed"}` checkpoint trigger. A theory objective requires
+`mode: line`, an authored boundary with a finite `plyHorizon`, and exactly one
+boundary checkpoint. It may transition only among `active`, `preserved`, and
+`degraded`; it cannot claim a chess result or enter an absorbing state.
+
+Boundary membership is explicit: a run node is supported when its resolved
+spine id is listed in `spineNodeIds` or a declared FEN predicate matches, and the
+node is no later than `plyHorizon`. The horizon caps a grant and never creates
+one. Position-keyed spine resolution permits transposition re-entry, while the
+objective remains monotone on each path.
+
+Deviation lint now rejects wrong-side, illegal, and duplicate authored moves.
+It warns when a deviation shadows an authored child, when two spine nodes reach
+one position, or when the boundary cap makes a listed id dead. A
+`follow_theory` deviation must use a spine-node anchor so its grading edge is
+deterministically resolvable.

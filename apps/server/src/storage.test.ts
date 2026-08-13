@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
-import { createRun, fork } from "@chess-tabiya/runtime";
+import { appendOpponentPly, createRun, fork, readBackReplay, resistanceOnPath } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { SQLiteRunStorage, type StorageMigrationLog } from "./storage.js";
@@ -71,6 +71,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 2, name: "learner identity and run grants" },
       { version: 3, name: "quarantine pre-0.5 run snapshots" },
       { version: 4, name: "upgrade v0.5 run snapshots to v0.6" },
+      { version: 5, name: "record policyModeApplied as unknown on v0.6 selections" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -88,7 +89,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(4);
+    ).toBe(5);
     inspection.close();
   });
 
@@ -133,11 +134,61 @@ describe("SQLite run-storage migrations and summaries", () => {
     });
     expect(migrations).toEqual([
       { version: 4, name: "upgrade v0.5 run snapshots to v0.6" },
+      { version: 5, name: "record policyModeApplied as unknown on v0.6 selections" },
     ]);
-    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.6");
+    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.7");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
     expect(upgraded.read(forged.id)).toBeUndefined();
     upgraded.close();
+  });
+
+  it("migrates every v0.6 selection to unknown without inferring its requested mode", () => {
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-storage-v07-"));
+    directories.push(directory);
+    const filename = join(directory, "runs.sqlite");
+    const initial = new SQLiteRunStorage(filename, { onMigration: () => {} });
+    const ids = ["human_common", "strong_engine", "theory_strict"] as const;
+    for (const mode of ids) {
+      const base = run(`v06-${mode}`);
+      const played = appendOpponentPly(base, {
+        moveUci: "e2e4",
+        policyModeApplied: mode,
+        engine: { id: "fixture", name: "Fixture", version: "1", seedHonored: true },
+      }, { at: createdAt }).run;
+      initial.create(played, `writer-${mode}`, mode);
+    }
+    initial.close();
+
+    const fixture = new DatabaseSync(filename);
+    const rows = fixture.prepare("SELECT id, snapshot_json FROM drill_runs").all() as Array<{ id: string; snapshot_json: string }>;
+    const update = fixture.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.6' WHERE id = ?");
+    for (const row of rows) {
+      const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown> & { events: Array<Record<string, unknown>> };
+      const events = snapshot.events.map((event) => {
+        if (event.type !== "opponent.move_selected") return event;
+        const data = event.data as Record<string, unknown>;
+        const selection = data.selection as Record<string, unknown>;
+        const { policyModeApplied: _discarded, ...legacySelection } = selection;
+        return { ...event, data: { ...data, selection: legacySelection } };
+      });
+      update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.6", events }), row.id);
+    }
+    fixture.exec("PRAGMA user_version = 4");
+    fixture.close();
+
+    const migrated = new SQLiteRunStorage(filename, { onMigration: () => {} });
+    const modes = new Set<string>();
+    for (const mode of ids) {
+      const stored = migrated.read(`v06-${mode}`)!.run;
+      const replay = readBackReplay(stored.events);
+      modes.add(replay.opponentMoves[0]!.policyModeApplied);
+      expect(resistanceOnPath(stored, stored.activeCursor.nodeId)).toMatchObject({
+        applied: [],
+        unknownPlyCount: 1,
+      });
+    }
+    expect(modes).toEqual(new Set(["unknown"]));
+    migrated.close();
   });
 
   it("lists captured titles and pages only denormalized rows", () => {

@@ -9,7 +9,7 @@ Implemented foundation:
 - `branch-runtime.md` — immutable run tree, rewind/fork/objective/replay semantics,
   comparison and PGN export, REST/lease/storage behavior, measured envelope, and
   current limitations.
-- `drill-pack-format.md` — living v0.3 schema, semantic authoring lint, canonical
+- `drill-pack-format.md` — living v0.4 schema, semantic authoring lint, canonical
   digest and URL tooling, executable checkpoint-action validation, pack/run PGN
   round-trip, and deferred content boundary.
 - `engine-workers.md` — UCI supervision, Dockerized Maia and policy exposure,
@@ -37,3 +37,7 @@ Implemented foundation:
 - `outcome-drill-grading.md` — win/hold/save/resist grading, monotone outcome
   transitions, exact-assessment admission, path-scoped resistance identity, and
   the learner-facing honesty contract.
+- Line Drill theory grading is documented across `drill-pack-format.md`,
+  `branch-runtime.md`, `engine-workers.md`, and `drill-client.md`: authored
+  membership, boundary crossing, recorded applied policy, and withheld
+  three-way verdict delivery are one cross-layer contract.

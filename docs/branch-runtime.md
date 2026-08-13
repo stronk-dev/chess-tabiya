@@ -290,6 +290,25 @@ so history and resume remain available after the wire bump. A v0.5 row already
 containing the formerly producer-less `outcome.reached` event is left quarantined
 instead of being trusted or rewritten.
 
+Migration 4 writes the frozen literal `0.6`; it does not reference the moving
+schema-version constant. Migration 5 then upgrades v0.6 snapshots to run schema
+v0.7 by adding `policyModeApplied: unknown` to historical opponent selections.
+It never infers an applied policy from the request or engine identity.
+
+## Derived Line Drill state
+
+`spinePositionIndex` resolves authored positions by transpose key, keeping the
+shallowest document-order node on collisions. `lineMembership` derives one of
+`on_line`, `classified_deviation`, or `unknown` for each played ply; verdicts
+are read-back projections, not events. `deviationPlayed` is the sole new
+objective predicate and matches only the active move edge from its authored
+parent position.
+
+For `follow_theory`, an off-objective authored deviation may move
+`active|preserved → degraded`, and first boundary crossing may move
+`active → preserved`. No rule moves backward or enters `achieved`, `failed`, or
+`transitioned`, so crossing the authored line never freezes continued play.
+
 The adapter memoizes immutable run projections in-process. A warm read returns
 that projection. A cold read parses the stored snapshot, rebuilds it from the
 authoritative event log with `readBackReplay`, validates opponent event adjacency,

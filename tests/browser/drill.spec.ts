@@ -54,7 +54,7 @@ test("Outcome Drill resolves a non-terminal hold and remains playable", async ({
   await expect(page.getByText("not a proof of the position", { exact: false })).toBeVisible();
   const checkpointSheet = page.getByRole("dialog");
   await expect(checkpointSheet.getByText("Deterministic mock opponent", { exact: false })).toBeVisible();
-  await expect(checkpointSheet.getByText("not which policy it applied", { exact: false })).toBeVisible();
+  await expect(checkpointSheet.getByText("Applied policy: theory_strict", { exact: false })).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await clickMove(page, "f1", "b5");
@@ -309,13 +309,16 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   }
 });
 
-test("Pack A reveals only the authored commentary for the checkpoint occurrence", async ({
+test("Pack A withholds its line, grades the boundary, and renders authored theory", async ({
   page,
 }) => {
   const card = page
     .getByRole("article")
     .filter({ hasText: "Caro-Kann Advance: winning the c5 race" });
   await expect(card).toBeVisible();
+  const projected = await page.request.get("/packs/anti-caro-advance-c5-race");
+  expect(projected.ok(), await projected.text()).toBe(true);
+  expect((await projected.json()).spine).toEqual([]);
   await card.getByRole("button", { name: /Open position/ }).click();
 
   await expect(page.getByLabel("Chessboard")).toBeVisible();
@@ -333,9 +336,44 @@ test("Pack A reveals only the authored commentary for the checkpoint occurrence"
     page.getByText("The whole point of the Caro-Kann", { exact: false }),
   ).toBeVisible();
   await expect(page.getByText("Develop first. The Short System", { exact: false })).toBeVisible();
+  await expect(page.getByText("on the authored line", { exact: false }).first()).toBeVisible();
   await expect(
     page.getByText("Hold the centre and finish developing", { exact: false }),
   ).toHaveCount(0);
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("Active line 5 plies")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "...c5 has landed" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await move(page, "e1", "g1");
+  await expect(page.getByRole("heading", { name: "You are past the authored line" })).toBeVisible();
+  await expect(page.getByText("concept_violation", { exact: false })).toBeVisible();
+  await expect(page.getByText("Castling into the break", { exact: false })).toBeVisible();
+  await expect(page.getByText("Objective: follow_theory — degraded", { exact: false })).toBeVisible();
+  await expect(page.getByRole("dialog").getByText("Applied policy: theory_strict", { exact: false })).toBeVisible();
+});
+
+test("Line Drill crosses a cap on-line, continues, and renders unknown honestly", async ({ page }) => {
+  const card = page.getByRole("article").filter({ hasText: "Line Drill boundary browser fixture" });
+  await card.getByRole("button", { name: /Open position/ }).click();
+  await expect(page.getByText("Requested resistance: theory_strict", { exact: false })).toBeVisible();
+  await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
+
+  await move(page, "c1", "e3");
+  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await move(page, "f2", "f3");
+  await expect(page.getByRole("heading", { name: "The authored support cap is crossed" })).toBeVisible();
+  await expect(page.getByText("Ply 1, Be3: on the authored line.")).toBeVisible();
+  await expect(page.getByText("Ply 2, e6: on the authored line.")).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("Active line 4 plies")).toBeVisible();
+
+  await move(page, "a2", "a3");
+  await expect(page.getByRole("heading", { name: "The pack is silent here" })).toBeVisible();
+  await expect(page.getByText("Ply 5, a3: this pack has no statement about this move.")).toBeVisible();
+  await expect(page.getByText("Unknown is not a judgement", { exact: false })).toBeVisible();
+  await expect(page.getByRole("dialog").getByText("Applied policy: theory_strict", { exact: false })).toBeVisible();
+  await expect(page.getByText("predate policy recording", { exact: false })).toHaveCount(0);
 });
 
 test("a granted spectator follows a run without receiving a write control", async ({

@@ -88,7 +88,7 @@ describe("Lichess puzzle consequence seeds", () => {
       const before = run;
       const at = `2026-08-12T00:00:${String(ply).padStart(2, "0")}.000Z`;
       const committed = ply % 2 === 1
-        ? appendOpponentPly(run, { moveUci: makeUci(move), engine: { id: "fixture", name: "Fixture opponent", version: "1", seedHonored: true } }, { at })
+        ? appendOpponentPly(run, { moveUci: makeUci(move), policyModeApplied: "human_common", engine: { id: "fixture", name: "Fixture opponent", version: "1", seedHonored: true } }, { at })
         : commitMove(run, makeUci(move), { actor: "user", at });
       run = orchestratePackMove(pack, before, committed).run;
     }

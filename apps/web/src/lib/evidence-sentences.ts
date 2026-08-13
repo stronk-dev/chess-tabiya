@@ -1,10 +1,12 @@
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   RULES_EVIDENCE_FACTS,
+  THEORY_EVIDENCE_FACTS,
   packEvidenceRef,
   rulesEvidenceRef,
   type EvidencePayload,
   type RulesEvidenceFact,
+  type TheoryEvidenceFact,
 } from "@chess-tabiya/runtime";
 
 import { evidenceKindLabel, type StagedEvidence } from "./api.js";
@@ -26,6 +28,10 @@ const RULES_SENTENCES: Readonly<Record<RulesEvidenceFact, string>> = Object.free
   "result-win": "The learner won the game.",
   "result-loss": "The learner lost the game.",
   "result-draw": "The game ended in a draw.",
+});
+
+const THEORY_SENTENCES: Readonly<Record<TheoryEvidenceFact, string>> = Object.freeze({
+  "off-objective-deviation": "The pack's author marked this move as off-objective.",
 });
 
 function checkpointLabel(checkpoint: DrillPackDefinition["checkpoints"][number]): string {
@@ -54,6 +60,14 @@ export function evidenceSentenceTable(
         sourceLabel: "Pack",
       }),
     );
+  }
+  for (const fact of THEORY_EVIDENCE_FACTS) {
+    const reference = `theory:${fact}`;
+    table.set(reference, Object.freeze({
+      reference,
+      text: THEORY_SENTENCES[fact],
+      sourceLabel: "Pack",
+    }));
   }
   return table;
 }

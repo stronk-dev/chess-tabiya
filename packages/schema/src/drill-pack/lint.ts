@@ -1,5 +1,5 @@
 import { Chess } from "chessops/chess";
-import { parseFen } from "chessops/fen";
+import { makeFen, parseFen } from "chessops/fen";
 import { makeSan } from "chessops/san";
 import { isNormal } from "chessops/types";
 import { parseUci } from "chessops/util";
@@ -19,7 +19,13 @@ export type PackLintCode =
   | "INVALID_START_FEN"
   | "SPINE_SAN_MISMATCH"
   | "TOO_MANY_PREDICTIONS"
-  | "UNKNOWN_SPINE_NODE";
+  | "UNKNOWN_SPINE_NODE"
+  | "DEVIATION_WRONG_SIDE"
+  | "ILLEGAL_DEVIATION_MOVE"
+  | "DUPLICATE_DEVIATION"
+  | "DEVIATION_SHADOWS_SPINE_MOVE"
+  | "SPINE_TRANSPOSITION_COLLISION"
+  | "BOUNDARY_NODE_BEYOND_HORIZON";
 
 export interface PackLintIssue {
   readonly severity: "error" | "warning";
@@ -32,6 +38,33 @@ interface SpineLocation {
   readonly node: SpineNode;
   readonly parentId?: string;
   readonly path: string;
+  readonly depth?: number;
+  readonly position?: Chess;
+}
+
+export function reachableAuthoredSpineIds(
+  pack: DrillPackDefinition,
+): ReadonlySet<string> {
+  const locations = new Map<string, SpineLocation>();
+  indexSpine(pack.spine ?? [], "/spine", undefined, locations);
+  const all = new Set(locations.keys());
+  const starts: string[] = [];
+  for (const checkpoint of pack.checkpoints) {
+    const trigger = checkpoint.trigger;
+    if ("atSpineNode" in trigger) starts.push(trigger.atSpineNode);
+    else if ("atAuthoredBoundary" in trigger) {
+      starts.push(...(pack.authoredBoundary?.spineNodeIds ?? []));
+    } else return all;
+  }
+  const result = new Set<string>();
+  for (const start of starts) {
+    let id: string | undefined = start;
+    while (id !== undefined && !result.has(id)) {
+      result.add(id);
+      id = locations.get(id)?.parentId;
+    }
+  }
+  return result;
 }
 
 function indexSpine(
@@ -51,25 +84,9 @@ function lintUnreachableAuthoredProse(
   pack: DrillPackDefinition,
   issues: PackLintIssue[],
 ): void {
-  if (
-    pack.checkpoints.some(
-      (checkpoint) => !("atSpineNode" in checkpoint.trigger),
-    )
-  ) {
-    return;
-  }
-
   const locations = new Map<string, SpineLocation>();
   indexSpine(pack.spine ?? [], "/spine", undefined, locations);
-  const reachable = new Set<string>();
-  for (const checkpoint of pack.checkpoints) {
-    if (!("atSpineNode" in checkpoint.trigger)) continue;
-    let nodeId: string | undefined = checkpoint.trigger.atSpineNode;
-    while (nodeId !== undefined && !reachable.has(nodeId)) {
-      reachable.add(nodeId);
-      nodeId = locations.get(nodeId)?.parentId;
-    }
-  }
+  const reachable = reachableAuthoredSpineIds(pack);
 
   const warning = (path: string, nodeId: string): void => {
     issues.push({
@@ -127,6 +144,9 @@ function lintSpine(
   path: string,
   ids: Set<string>,
   issues: PackLintIssue[],
+  locations: Map<string, SpineLocation>,
+  depth = 1,
+  positionKeys = new Map<string, string>(),
 ): void {
   for (const [index, node] of nodes.entries()) {
     const nodePath = `${path}/${index}`;
@@ -161,7 +181,23 @@ function lintSpine(
       });
     }
     next.play(move);
-    lintSpine(node.children, next, `${nodePath}/children`, ids, issues);
+    locations.set(node.id, {
+      node,
+      path: nodePath,
+      depth,
+      position: next,
+    });
+    const key = makeFen(next.toSetup()).split(" ", 4).join(" ");
+    const previous = positionKeys.get(key);
+    if (previous !== undefined) {
+      issues.push({
+        severity: "warning",
+        code: "SPINE_TRANSPOSITION_COLLISION",
+        path: `${nodePath}/id`,
+        message: `Spine node ${node.id} reaches the same position as ${previous}`,
+      });
+    } else positionKeys.set(key, node.id);
+    lintSpine(node.children, next, `${nodePath}/children`, ids, issues, locations, depth + 1, positionKeys);
   }
 }
 
@@ -212,6 +248,7 @@ export function lintDrillPack(
 ): readonly PackLintIssue[] {
   const issues: PackLintIssue[] = [];
   const spineIds = new Set<string>();
+  const spineLocations = new Map<string, SpineLocation>();
 
   let position: Chess;
   try {
@@ -225,7 +262,7 @@ export function lintDrillPack(
     });
     return Object.freeze(issues);
   }
-  lintSpine(pack.spine ?? [], position, "/spine", spineIds, issues);
+  lintSpine(pack.spine ?? [], position, "/spine", spineIds, issues, spineLocations);
 
   for (const [index, checkpoint] of pack.checkpoints.entries()) {
     for (const nodeId of triggerNodeRefs(checkpoint.trigger)) {
@@ -253,6 +290,45 @@ export function lintDrillPack(
         spineIds,
         issues,
       );
+    }
+  }
+  const deviationKeys = new Set<string>();
+  for (const [index, deviation] of (pack.deviations ?? []).entries()) {
+    const anchorPath = `/deviations/${index}`;
+    const anchor = "spineNodeId" in deviation.at
+      ? spineLocations.get(deviation.at.spineNodeId)?.position
+      : (() => {
+          try { return startPosition(deviation.at.fen); } catch { return undefined; }
+        })();
+    const anchorKey = "spineNodeId" in deviation.at
+      ? `spine:${deviation.at.spineNodeId}`
+      : `fen:${deviation.at.fen}`;
+    const duplicateKey = `${anchorKey}\0${deviation.moveUci}`;
+    if (deviationKeys.has(duplicateKey)) {
+      issues.push({ severity: "error", code: "DUPLICATE_DEVIATION", path: anchorPath, message: "Deviation anchor and move are duplicated" });
+    }
+    deviationKeys.add(duplicateKey);
+    if (anchor === undefined) continue;
+    const move = parseUci(deviation.moveUci);
+    if (move && isNormal(move) && anchor.board.getColor(move.from) !== undefined && anchor.board.getColor(move.from) !== anchor.turn) {
+      issues.push({ severity: "error", code: "DEVIATION_WRONG_SIDE", path: `${anchorPath}/moveUci`, message: `Move ${deviation.moveUci} belongs to the wrong side at its anchor` });
+    } else if (!move || !isNormal(move) || !anchor.isLegal(move)) {
+      issues.push({ severity: "error", code: "ILLEGAL_DEVIATION_MOVE", path: `${anchorPath}/moveUci`, message: `Move ${deviation.moveUci} is illegal at its anchor` });
+    }
+    if (
+      "spineNodeId" in deviation.at &&
+      spineLocations.get(deviation.at.spineNodeId)?.node.children.some((child) => child.moveUci === deviation.moveUci)
+    ) {
+      issues.push({ severity: "warning", code: "DEVIATION_SHADOWS_SPINE_MOVE", path: `${anchorPath}/moveUci`, message: "Deviation move is also an authored spine move; on-line takes precedence" });
+    }
+  }
+  const horizon = pack.authoredBoundary?.plyHorizon;
+  if (horizon !== undefined) {
+    for (const [index, id] of (pack.authoredBoundary?.spineNodeIds ?? []).entries()) {
+      const depth = spineLocations.get(id)?.depth;
+      if (depth !== undefined && depth > horizon) {
+        issues.push({ severity: "warning", code: "BOUNDARY_NODE_BEYOND_HORIZON", path: `/authoredBoundary/spineNodeIds/${index}`, message: `Boundary node ${id} at ply ${depth} is beyond plyHorizon ${horizon}` });
+      }
     }
   }
   lintPredictionDensity(pack.checkpoints, options, issues);

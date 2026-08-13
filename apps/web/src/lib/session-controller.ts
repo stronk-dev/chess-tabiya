@@ -397,9 +397,9 @@ export class DrillSessionController {
           ? { temperature: authored.temperature }
           : {}),
         ...(typeof authored.topP === "number" ? { topP: authored.topP } : {}),
-        ...(pack.spine === undefined ? {} : { spine: pack.spine }),
       },
       seed: branch.seed,
+      packId: pack.id,
     });
     const result = await this.#requiredStore().appendOpponentPly(selection);
     if (this.#captureCheckpoint(result.emitted)) {

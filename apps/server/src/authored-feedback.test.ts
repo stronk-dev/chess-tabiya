@@ -266,7 +266,7 @@ describe("authored feedback projection", () => {
           },
         ],
         deviations: [
-          { at: { spineNodeId: "e4" }, moveUci: "d2d4", class: "interesting_deviation" },
+          { at: { spineNodeId: "e4" }, moveUci: "c7c5", class: "interesting_deviation" },
         ],
         feedbackClaims: [
           { id: "unanchored", text: "Never deliver", evidenceTypes: ["hypothesis"] },
@@ -286,7 +286,7 @@ describe("authored feedback projection", () => {
     );
   });
 
-  it("clears Pack A's withheld flag after every deliverable path despite undelivered claims", async () => {
+  it("keeps Pack A's withheld flag honest while supported sibling prose remains unrevealed", async () => {
     const pack = await registered(packA);
     let run = newRun(pack, "all-deliverable");
     const rootId = run.activeCursor.nodeId;
@@ -299,7 +299,7 @@ describe("authored feedback projection", () => {
     run = reachCheckpoint(run, "tal-commitment", at).run;
 
     const page = projectAuthoredFeedback(pack, run);
-    expect(page.hasWithheldAuthoredContent).toBe(false);
+    expect(page.hasWithheldAuthoredContent).toBe(true);
     expect(JSON.stringify(page)).not.toContain("chain-base");
     expect(JSON.stringify(page)).not.toContain("tal-tempo");
   });
@@ -349,13 +349,13 @@ describe("authored feedback projection", () => {
     run = play(run, ["c6c5"]);
     run = reachCheckpoint(run, "break-arrived", at).run;
 
-    const kindOrder = { annotation: 0, deviation: 1, plan_class: 2 } as const;
+    const kindOrder = { annotation: 0, deviation: 1, plan_class: 2, theory_verdict: 3 } as const;
     const { items } = projectAuthoredFeedback(pack, run);
 
-    // Non-vacuous: both reveal events and all three kinds must be present.
+    // Non-vacuous: both reveal events and all four kinds must be present.
     expect(new Set(items.map((item) => item.revealedBy.eventSeq)).size).toBe(2);
     expect(new Set(items.map((item) => item.kind))).toEqual(
-      new Set(["annotation", "deviation", "plan_class"]),
+      new Set(["annotation", "deviation", "plan_class", "theory_verdict"]),
     );
 
     for (const [index, item] of items.entries()) {

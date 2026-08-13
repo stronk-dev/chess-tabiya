@@ -67,11 +67,13 @@ describe("outcome presentation honesty", () => {
     expect(resistanceSentences(before, before.activeCursor.nodeId)).toEqual([
       "Requested resistance: theory_strict, target Elo 1900 — the pack's request.",
       "No opponent move has been played yet.",
+      "`theory_strict` has authored replies only inside this pack's spine. `plyHorizon` caps authored support; the spine index governs authored replies; the two can end at different plies.",
       "Not perfect play.",
     ]);
     let after = commitMove(before, "e2e4", { actor: "user", at }).run;
     const selection: OpponentSelection = {
       moveUci: "e7e5",
+      policyModeApplied: "theory_strict",
       engine: {
         id: "mock-opponent",
         name: "Deterministic mock opponent",
@@ -82,9 +84,23 @@ describe("outcome presentation honesty", () => {
     after = appendOpponentPly(after, selection, { at }).run;
     const text = resistanceSentences(after, after.activeCursor.nodeId).join(" ");
     expect(text).toContain("Deterministic mock opponent (mock-opponent v1)");
-    expect(text).toContain("not which policy it applied");
+    expect(text).toContain("Applied policy: theory_strict");
+    expect(text).not.toContain("not which policy it applied");
     expect(text).not.toContain("actually played");
     expect(text).not.toContain("Maia");
+  });
+
+  it("keeps the archived policy disclaimer only for migrated unknown plies", () => {
+    let migrated = commitMove(run(), "e2e4", { actor: "user", at }).run;
+    migrated = appendOpponentPly(migrated, {
+      moveUci: "e7e5",
+      policyModeApplied: "unknown",
+      engine: { id: "legacy", name: "Legacy engine", version: "unknown", seedHonored: false },
+    }, { at }).run;
+    const text = resistanceSentences(migrated, migrated.activeCursor.nodeId).join(" ");
+    expect(text).toContain("1 of these plies predate policy recording.");
+    expect(text).toContain("The run records which engine played, not which policy it applied");
+    expect(text).not.toContain("Applied policy:");
   });
 
   it("never turns non-terminal grades into chess results", () => {

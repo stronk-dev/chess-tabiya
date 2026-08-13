@@ -46,13 +46,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.3", () => {
+describe("drill_pack.schema.json v0.4", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.3",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.4",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.3");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.4");
   });
 
   it("keeps the frozen Najdorf fixture on the frozen v0.1 schema only", () => {
@@ -224,6 +224,42 @@ describe("drill pack authoring lint", () => {
         expect.objectContaining({ code: "TOO_MANY_PREDICTIONS" }),
       ]),
     );
+  });
+
+  it("lints deviation legality, side, duplicates, and spine shadowing", () => {
+    const base = livingFixture as DrillPackDefinition;
+    const anchor = { spineNodeId: "najdorf-e6" } as const;
+    const cases = [
+      [{ at: anchor, moveUci: "b7b5", class: "wrong-side" }],
+      [{ at: anchor, moveUci: "a1a8", class: "illegal" }],
+      [
+        { at: anchor, moveUci: "f1e2", class: "one" },
+        { at: anchor, moveUci: "f1e2", class: "two" },
+      ],
+    ] as const;
+    expect(lintDrillPack({ ...base, deviations: cases[0] })).toContainEqual(
+      expect.objectContaining({ severity: "error", code: "DEVIATION_WRONG_SIDE" }),
+    );
+    expect(lintDrillPack({ ...base, deviations: cases[1] })).toContainEqual(
+      expect.objectContaining({ severity: "error", code: "ILLEGAL_DEVIATION_MOVE" }),
+    );
+    expect(lintDrillPack({ ...base, deviations: cases[2] })).toContainEqual(
+      expect.objectContaining({ severity: "error", code: "DUPLICATE_DEVIATION" }),
+    );
+    expect(lintDrillPack(base)).toContainEqual(
+      expect.objectContaining({ severity: "warning", code: "DEVIATION_SHADOWS_SPINE_MOVE" }),
+    );
+  });
+
+  it("warns when the boundary cap makes a listed node unreachable", () => {
+    const base = livingFixture as DrillPackDefinition;
+    expect(lintDrillPack({
+      ...base,
+      authoredBoundary: { ...base.authoredBoundary, plyHorizon: 1 },
+    })).toContainEqual(expect.objectContaining({
+      severity: "warning",
+      code: "BOUNDARY_NODE_BEYOND_HORIZON",
+    }));
   });
 
   it("warns for spine-authored prose no atSpineNode checkpoint can reveal", () => {

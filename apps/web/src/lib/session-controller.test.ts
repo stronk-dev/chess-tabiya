@@ -180,6 +180,7 @@ class FakeApi implements DrillClientApi {
     this.selected = input;
     return {
       moveUci: this.opponentMove,
+      policyModeApplied: "human_common",
       engine: {
         id: "maia",
         name: "Maia",

@@ -81,6 +81,7 @@ function runtimeIssue(
 function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
   const raw = pack as unknown as Record<string, unknown>;
+  const mode = raw.mode;
 
   const provenance = raw.provenance as Record<string, unknown>;
   const reviewStatus = provenance.reviewStatus;
@@ -175,6 +176,38 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
     pack.objective.type,
   );
   const grading = pack.objective.grading;
+  const theoryObjective = pack.objective.type === "follow_theory";
+  const boundary = pack.authoredBoundary;
+  const boundaryCheckpoints = pack.checkpoints.filter(
+    (checkpoint) =>
+      !("windowOpens" in checkpoint.trigger) &&
+      "atAuthoredBoundary" in checkpoint.trigger,
+  );
+  if (theoryObjective && mode !== "line") {
+    issues.push(runtimeIssue("THEORY_OBJECTIVE_NEEDS_LINE_MODE", "/mode", "follow_theory requires mode line"));
+  }
+  if (theoryObjective && boundary === undefined) {
+    issues.push(runtimeIssue("THEORY_NEEDS_AUTHORED_BOUNDARY", "/authoredBoundary", "follow_theory requires authoredBoundary"));
+  }
+  if (theoryObjective && boundary?.plyHorizon === undefined) {
+    issues.push(runtimeIssue("BOUNDARY_NEEDS_PLY_HORIZON", "/authoredBoundary/plyHorizon", "follow_theory requires a finite plyHorizon cap"));
+  }
+  if (theoryObjective && boundary !== undefined && boundary.spineNodeIds === undefined && boundary.fenPredicates === undefined) {
+    issues.push(runtimeIssue("BOUNDARY_GRANTS_NOTHING", "/authoredBoundary", "follow_theory boundary must grant spine nodes or FEN predicates"));
+  }
+  if (theoryObjective && boundaryCheckpoints.length !== 1) {
+    issues.push(runtimeIssue("THEORY_NEEDS_BOUNDARY_CHECKPOINT", "/checkpoints", "follow_theory requires exactly one atAuthoredBoundary checkpoint"));
+  }
+  if (boundary === undefined && boundaryCheckpoints.length > 0) {
+    issues.push(runtimeIssue("CHECKPOINT_BOUNDARY_WITHOUT_BOUNDARY", "/checkpoints", "atAuthoredBoundary requires authoredBoundary"));
+  }
+  if (theoryObjective) {
+    for (const [index, deviation] of (pack.deviations ?? []).entries()) {
+      if ("fen" in deviation.at) {
+        issues.push(runtimeIssue("THEORY_DEVIATION_NEEDS_SPINE_ANCHOR", `/deviations/${index}/at`, "follow_theory deviations require a spineNodeId anchor"));
+      }
+    }
+  }
   if (outcomeObjective && grading === undefined) {
     issues.push(
       runtimeIssue(
@@ -225,6 +258,9 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
         );
       }
       const to = condition.to ?? "achieved";
+      if (theoryObjective && ["achieved", "failed", "transitioned"].includes(to)) {
+        issues.push(runtimeIssue("THEORY_ABSORBING_UNSUPPORTED", `/objective/successConditions/${index}/to`, "follow_theory cannot enter an absorbing objective state"));
+      }
       if (condition.from?.includes(to as "active" | "preserved" | "degraded")) {
         issues.push(
           runtimeIssue(
@@ -261,7 +297,7 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
         );
       }
       if (
-        outcomeObjective &&
+        (outcomeObjective || theoryObjective) &&
         to === "preserved" &&
         condition.from?.includes("degraded")
       ) {
@@ -273,6 +309,25 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
           ),
         );
       }
+    }
+  }
+
+  if (
+    theoryObjective &&
+    boundary?.plyHorizon !== undefined &&
+    boundary.fenPredicates === undefined &&
+    boundary.spineNodeIds !== undefined
+  ) {
+    const depths = new Map<string, number>();
+    const walk = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[], depth: number): void => {
+      for (const node of nodes) {
+        depths.set(node.id, depth);
+        walk(node.children, depth + 1);
+      }
+    };
+    walk(pack.spine ?? [], 1);
+    if (boundary.spineNodeIds.every((id) => (depths.get(id) ?? Number.POSITIVE_INFINITY) > boundary.plyHorizon!)) {
+      issues.push(runtimeIssue("BOUNDARY_HORIZON_EXCLUDES_EVERY_GRANT", "/authoredBoundary/plyHorizon", "plyHorizon excludes every declared boundary node"));
     }
   }
 

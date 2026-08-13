@@ -221,3 +221,11 @@ complete breadth gate B4. The following remain content-era work:
 Those contracts require a real authored pack to supply examples and failure
 cases. They must not be inferred from the schema fixture or added as generic
 vocabulary ahead of content.
+
+Line Drill now adds one closed evidence fact,
+`theory:off-objective-deviation`, rendered as the author's explicit
+off-objective mark. This is not a strategic claim generated at runtime.
+Three-way theory verdicts are derived from the pack and run, delivered only on
+the existing per-occurrence reveal surface, and never added to the public pack
+projection. For `mode: line`, even the authored spine is withheld before play;
+other modes continue to receive their projected spine.

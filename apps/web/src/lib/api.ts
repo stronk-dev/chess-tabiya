@@ -129,6 +129,15 @@ export type AuthoredFeedbackItem =
       readonly anchor: { readonly checkpointId: string };
       readonly label: string;
       readonly description?: string;
+    }
+  | {
+      readonly kind: "theory_verdict";
+      readonly id: string;
+      readonly revealedBy: RevealAttribution;
+      readonly anchor: { readonly nodeId: string; readonly ply: number; readonly moveUci: string };
+      readonly verdict: "on_line" | "classified_deviation" | "unknown";
+      readonly spineNodeId?: string;
+      readonly deviationClass?: string;
     };
 
 export interface AuthoredFeedbackPage {
@@ -219,9 +228,9 @@ export interface SelectMoveRequest {
     readonly targetElo?: number;
     readonly temperature?: number;
     readonly topP?: number;
-    readonly spine?: DrillPackDefinition["spine"];
   };
   readonly seed: number;
+  readonly packId?: string;
 }
 
 export interface MoveOptions {

@@ -1,0 +1,73 @@
+{
+  "id": "line-boundary-browser",
+  "version": "0.1.0",
+  "title": "Line Drill boundary browser fixture",
+  "mode": "line",
+  "phase": "opening",
+  "start": {
+    "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+    "side": "white"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "Recall the authored setup, then continue beyond its support."
+  },
+  "spine": [
+    {
+      "id": "be3",
+      "moveUci": "c1e3",
+      "moveSan": "Be3",
+      "children": [
+        {
+          "id": "e6",
+          "moveUci": "e7e6",
+          "moveSan": "e6",
+          "children": [
+            {
+              "id": "f3",
+              "moveUci": "f2f3",
+              "moveSan": "f3",
+              "children": [
+                {
+                  "id": "b5",
+                  "moveUci": "b7b5",
+                  "moveSan": "b5",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "past-cap",
+      "label": "The authored support cap is crossed",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    },
+    {
+      "id": "after-unknown",
+      "label": "The pack is silent here",
+      "trigger": { "atPly": 5 },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": ["be3", "e6", "f3", "b5"],
+    "plyHorizon": 2
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "seedMode": "fixed"
+  },
+  "feedbackPolicy": "delayed_checkpoint",
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": ["Browser acceptance fixture; no chess claim beyond authored membership."],
+    "reviewers": []
+  }
+}

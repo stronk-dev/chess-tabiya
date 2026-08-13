@@ -1,8 +1,8 @@
 {
   "id": "anti-caro-advance-c5-race",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Caro-Kann Advance: winning the c5 race",
-  "mode": "plan",
+  "mode": "line",
   "phase": "opening",
   "difficulty": {
     "minOnlineRapid": 1400,
@@ -21,7 +21,7 @@
     "side": "white"
   },
   "objective": {
-    "type": "preserve_plan_window",
+    "type": "follow_theory",
     "summary": "You played 3.e5 for space. Meet Black's ...c5 break with your pieces already placed, not with your king still in the centre."
   },
   "concepts": [
@@ -178,6 +178,14 @@
       "actions": [
         "compare_branches"
       ]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
+      "actions": []
     }
   ],
   "authoredBoundary": {
@@ -196,7 +204,7 @@
     "plyHorizon": 14
   },
   "opponentPolicy": {
-    "mode": "human_common",
+    "mode": "theory_strict",
     "targetElo": 1800,
     "temperature": 0.8,
     "topP": 0.92,

@@ -121,7 +121,8 @@ describe("pure opponent selector", () => {
     const client = new FakeEngineClient(() => ["bestmove c7c5"]);
     const selector = new OpponentSelector(client);
 
-    await selector.select(request("strong_engine"));
+    const selection = await selector.select(request("strong_engine"));
+    expect(selection.policyModeApplied).toBe("strong_engine");
 
     expect(DEFAULT_STRONG_ENGINE_PROFILE).toEqual({
       movetimeMs: 100,
@@ -217,6 +218,7 @@ describe("pure opponent selector", () => {
     });
 
     expect(selection.moveUci).toBe("c7c5");
+    expect(selection.policyModeApplied).toBe("theory_strict");
     expect(selection.candidates).toEqual([
       { moveUci: "c7c5", mass: 0.1, rank: 2 },
     ]);
@@ -337,6 +339,7 @@ describe("pure opponent selector", () => {
       });
 
       expect(selection.moveUci).toBe("g8f6");
+      expect(selection.policyModeApplied).toBe("human_common");
       expect(client.calls[0]?.request.commands).not.toContain(
         "setoption name MultiPV value 8",
       );
@@ -362,8 +365,10 @@ describe("pure opponent selector", () => {
 
     await selector.select({ ...base, seed: 43 });
     await selector.select({ ...base, historyUci: ["d2d4"] });
-    expect(client.calls).toHaveLength(3);
-    expect(selector.cacheSize()).toBe(3);
+    await selector.select({ ...base, packId: "pack-a" });
+    await selector.select({ ...base, packId: "pack-b" });
+    expect(client.calls).toHaveLength(5);
+    expect(selector.cacheSize()).toBe(5);
   });
 });
 
@@ -445,6 +450,20 @@ describe("selector/writer REST seam", () => {
     ).toBe(200);
 
     const beforeSelection = storage.read("seam-run")!.run.events.length;
+    const rejectedSpine = await httpRequest(
+      handler,
+      "POST",
+      "/select-move",
+      {
+        ...request("theory_strict"),
+        policy: {
+          ...request("theory_strict").policy,
+          spine: [{ id: "client-answer", moveUci: "e2e4", children: [] }],
+        },
+      },
+      "",
+    );
+    expect(rejectedSpine.status).toBe(400);
     const selected = await httpRequest(
       handler,
       "POST",
@@ -454,7 +473,18 @@ describe("selector/writer REST seam", () => {
     );
     expect(selected.status).toBe(200);
     const selection = (await selected.json()) as OpponentSelection;
-    expect(selection).toMatchObject({ moveUci: "e7e5", engine: { id: "maia-5m" } });
+    expect(selection).toMatchObject({ moveUci: "e7e5", policyModeApplied: "human_common", engine: { id: "maia-5m" } });
+    expect(storage.read("seam-run")!.run.events).toHaveLength(beforeSelection);
+
+    const { policyModeApplied: _missing, ...legacySelection } = selection;
+    const rejected = await httpRequest(
+      handler,
+      "POST",
+      "/runs/seam-run/moves",
+      { selection: legacySelection, at },
+    );
+    expect(rejected.status).toBe(400);
+    expect(await rejected.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
     expect(storage.read("seam-run")!.run.events).toHaveLength(beforeSelection);
 
     const forbidden = await httpRequest(
@@ -483,6 +513,7 @@ describe("selector/writer REST seam", () => {
     ]);
     expect(readBackReplay(stored.events).opponentMoves.at(-1)).toMatchObject({
       moveUci: "e7e5",
+      policyModeApplied: "human_common",
     });
   });
 });

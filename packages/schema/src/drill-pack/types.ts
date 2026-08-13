@@ -9,6 +9,7 @@ export const OBJECTIVE_TYPES = [
   "save",
   "resist",
   "play_until_checkpoint",
+  "follow_theory",
 ] as const;
 
 export type ObjectiveType = (typeof OBJECTIVE_TYPES)[number];
@@ -42,6 +43,7 @@ export interface Deviation {
 export type SimpleTrigger =
   | { readonly atPly: number }
   | { readonly atSpineNode: string }
+  | { readonly atAuthoredBoundary: "crossed" }
   | { readonly fenPredicate: Readonly<Record<string, unknown>> }
   | { readonly materialBalance: Readonly<Record<string, unknown>> };
 
@@ -91,6 +93,8 @@ export interface DrillPackDefinition {
   readonly spine?: readonly SpineNode[];
   readonly authoredBoundary?: {
     readonly spineNodeIds?: readonly string[];
+    readonly plyHorizon?: number;
+    readonly fenPredicates?: readonly Readonly<Record<string, unknown>>[];
     readonly [key: string]: unknown;
   };
   readonly deviations?: readonly Deviation[];

@@ -1,6 +1,6 @@
 # RFC: Line Drill — opening theory, boundary crossing, and membership grading
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` §The four modes (Line Drill row, line 97);

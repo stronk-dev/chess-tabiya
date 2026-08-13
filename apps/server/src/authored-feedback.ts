@@ -7,9 +7,13 @@ import type {
 import {
   deriveSegments,
   historyFrom,
+  lineMembership,
+  spineNodeIdFor,
+  spinePositionIndex,
   type CheckpointReachedEvent,
   type DrillRun,
 } from "@chess-tabiya/runtime";
+import { reachableAuthoredSpineIds } from "@chess-tabiya/schema/drill-pack";
 
 import type { PackRecord } from "./pack-registry.js";
 
@@ -45,6 +49,15 @@ export type AuthoredFeedbackItem =
       readonly anchor: { readonly checkpointId: string };
       readonly label: string;
       readonly description?: string;
+    }
+  | {
+      readonly kind: "theory_verdict";
+      readonly id: string;
+      readonly revealedBy: RevealAttribution;
+      readonly anchor: { readonly nodeId: string; readonly ply: number; readonly moveUci: string };
+      readonly verdict: "on_line" | "classified_deviation" | "unknown";
+      readonly spineNodeId?: string;
+      readonly deviationClass?: string;
     };
 
 export interface AuthoredFeedbackPage {
@@ -68,7 +81,7 @@ interface RevealEvent {
 }
 
 const KIND_ORDER: Readonly<Record<AuthoredFeedbackItem["kind"], number>> =
-  Object.freeze({ annotation: 0, deviation: 1, plan_class: 2 });
+  Object.freeze({ annotation: 0, deviation: 1, plan_class: 2, theory_verdict: 3 });
 
 function indexSpine(
   nodes: readonly SpineNode[],
@@ -82,25 +95,6 @@ function indexSpine(
     });
     indexSpine(node.children, node.id, result);
   }
-}
-
-function reachableSpineIds(
-  pack: DrillPackDefinition,
-  spine: ReadonlyMap<string, SpineIndexEntry>,
-): ReadonlySet<string> {
-  if (pack.checkpoints.some((checkpoint) => !("atSpineNode" in checkpoint.trigger))) {
-    return new Set(spine.keys());
-  }
-  const result = new Set<string>();
-  for (const checkpoint of pack.checkpoints) {
-    if (!("atSpineNode" in checkpoint.trigger)) continue;
-    let nodeId: string | undefined = checkpoint.trigger.atSpineNode;
-    while (nodeId !== undefined && !result.has(nodeId)) {
-      result.add(nodeId);
-      nodeId = spine.get(nodeId)?.parentId;
-    }
-  }
-  return result;
 }
 
 function nodeSources(pack: DrillPackDefinition): ReadonlyMap<string, readonly NodeAuthoredSource[]> {
@@ -141,22 +135,6 @@ function nodeSources(pack: DrillPackDefinition): ReadonlyMap<string, readonly No
     });
   }
   return result;
-}
-
-function spineNodeIdForRunNode(
-  pack: DrillPackDefinition,
-  run: DrillRun,
-  runNodeId: string,
-): string | undefined {
-  let candidates = pack.spine ?? [];
-  let current: string | undefined;
-  for (const runNode of historyFrom(run, runNodeId).slice(1)) {
-    const authored = candidates.find((candidate) => candidate.moveUci === runNode.moveUci);
-    if (authored === undefined) return undefined;
-    current = authored.id;
-    candidates = authored.children;
-  }
-  return current;
 }
 
 function revealEvents(pack: PackRecord, run: DrillRun): readonly RevealEvent[] {
@@ -247,11 +225,12 @@ export function projectAuthoredFeedback(
 ): AuthoredFeedbackPage {
   const spine = new Map<string, SpineIndexEntry>();
   indexSpine(pack.document.spine ?? [], undefined, spine);
-  const reachable = new Set(reachableSpineIds(pack.document, spine));
+  const reachable = new Set(reachableAuthoredSpineIds(pack.document));
+  const positionIndex = spinePositionIndex(pack.document);
   for (const event of run.events) {
     if (event.type !== "outcome.reached") continue;
     for (const runNode of historyFrom(run, event.data.nodeId)) {
-      const spineNodeId = spineNodeIdForRunNode(pack.document, run, runNode.id);
+      const spineNodeId = spineNodeIdFor(positionIndex, runNode);
       if (spineNodeId !== undefined) reachable.add(spineNodeId);
     }
   }
@@ -270,7 +249,7 @@ export function projectAuthoredFeedback(
     const pathRunNodeIds = new Set(path.map((node) => node.id));
     const pathSpineNodeIds = new Set(
       path.flatMap((node) => {
-        const spineNodeId = spineNodeIdForRunNode(pack.document, run, node.id);
+        const spineNodeId = spineNodeIdFor(positionIndex, node);
         return spineNodeId === undefined ? [] : [spineNodeId];
       }),
     );
@@ -317,6 +296,22 @@ export function projectAuthoredFeedback(
               : { description: definition.description }),
           }),
         );
+      }
+    }
+
+    if (pack.document.objective.type === "follow_theory") {
+      for (const entry of lineMembership(pack.document, run, reveal.nodeId)) {
+        const id = `theory#${entry.nodeId}`;
+        if (revealed.has(id)) continue;
+        revealed.set(id, Object.freeze({
+          kind: "theory_verdict",
+          id,
+          revealedBy: reveal.attribution,
+          anchor: { nodeId: entry.nodeId, ply: entry.ply, moveUci: entry.moveUci },
+          verdict: entry.verdict,
+          ...(entry.spineNodeId === undefined ? {} : { spineNodeId: entry.spineNodeId }),
+          ...(entry.deviationClass === undefined ? {} : { deviationClass: entry.deviationClass }),
+        }));
       }
     }
   }

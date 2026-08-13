@@ -2,6 +2,8 @@ import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   branchPath,
   historyFrom,
+  spineNodeIdFor,
+  spinePositionIndex,
   type BranchComparison,
   type DrillRun,
   type EvidencePayload,
@@ -93,15 +95,10 @@ export function timelineEntries(
   run: DrillRun,
   pack?: DrillPackDefinition,
 ): readonly TimelineEntry[] {
-  let candidates = pack?.spine ?? [];
-  let onSpine = pack !== undefined;
+  const index = pack === undefined ? undefined : spinePositionIndex(pack);
   return historyFrom(run, run.activeCursor.nodeId).flatMap((node) => {
     if (node.moveSan === null || node.moveUci === null) return [];
-    const authored = onSpine
-      ? candidates.find((candidate) => candidate.moveUci === node.moveUci)
-      : undefined;
-    if (authored === undefined) onSpine = false;
-    else candidates = authored.children;
+    const spineNodeId = index === undefined ? undefined : spineNodeIdFor(index, node);
     return [
       Object.freeze({
         nodeId: node.id,
@@ -110,7 +107,7 @@ export function timelineEntries(
         moveUci: node.moveUci,
         actor: node.actor,
         checkpointIds: node.checkpointRefs,
-        ...(authored === undefined ? {} : { spineNodeId: authored.id }),
+        ...(spineNodeId === undefined ? {} : { spineNodeId }),
       }),
     ];
   });

@@ -19,6 +19,7 @@ const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-12T14:00:00.000Z";
 const opponent = (moveUci: string): OpponentSelection => ({
   moveUci,
+  policyModeApplied: "human_common",
   engine: {
     id: "mock-opponent",
     name: "Mock opponent",

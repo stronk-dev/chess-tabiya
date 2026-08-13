@@ -65,6 +65,11 @@ export type ObjectivePredicate =
   | { readonly type: "checkpointReachedHere"; readonly checkpointId: string }
   | { readonly type: "outcomeReached"; readonly result: "win" | "loss" | "draw" }
   | {
+      readonly type: "deviationPlayed";
+      readonly fromTransposeKey: string;
+      readonly moveUci: string;
+    }
+  | {
       readonly type: "all" | "any";
       readonly predicates: readonly [ObjectivePredicate, ...ObjectivePredicate[]];
     }
@@ -237,6 +242,11 @@ export function evaluateObjectivePredicate(
           event.data.outcome === predicate.result &&
           pathNodeIds.has(event.data.nodeId),
       );
+    }
+    case "deviationPlayed": {
+      if (node.moveUci !== predicate.moveUci || node.parentId === null) return false;
+      const parent = run.nodes.find((candidate) => candidate.id === node.parentId);
+      return parent?.transposeKey === predicate.fromTransposeKey;
     }
     case "all":
       return predicate.predicates.every((child) => evaluateObjectivePredicate(run, child));

@@ -235,3 +235,18 @@ Known limitations:
   and
 - browser Maia/ONNX, Syzygy and `perfect_tablebase`, policy mixing, corpus
   workers, and additional opponent modes remain follow-up work.
+
+## Recorded policy and server-owned theory spine
+
+Every selection now records `policyModeApplied`. The concrete human-common,
+strong-engine, and on-spine theory paths stamp their own mode; a
+`theory_strict` request that has no authored reply falls through the
+human-common implementation and therefore records `human_common`, never the
+requested mode.
+
+Clients no longer submit a free-form spine. `/select-move` accepts `packId`, and
+the server resolves the registered pack's validated spine before selection.
+The cache key is `(policyConfigDigest, packId, branchSeed, historyHash)`, so two
+packs cannot reuse a selection computed against different authored replies.
+For Line Drills, `plyHorizon` governs authored support while the position-keyed
+spine governs available theory replies; those boundaries can differ.

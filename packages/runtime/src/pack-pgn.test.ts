@@ -18,6 +18,7 @@ const fixtureUrl = new URL(
 );
 const opponent = (moveUci: string): OpponentSelection => ({
   moveUci,
+  policyModeApplied: "human_common",
   engine: {
     id: "mock-opponent",
     name: "Mock opponent",

@@ -1,0 +1,42 @@
+# Line Drill theory grading — log
+
+Append-only.
+
+## 2026-08-13 — Codex implementation review
+
+- Revision 2 approved for implementation. Migration 4 is the only migration body
+  coupled to the moving run-schema constant and must be pinned to literal v0.6
+  before migration 5. The REST parser must require the new applied-policy field.
+- Membership and authored-prose reachability remain deliberately different
+  computations. Membership grades only explicitly listed or predicate-matched
+  positions under the ply cap; reachability may use ancestor closure.
+- D15 closes by stamping applied policy inside each concrete selector path. The
+  `theory_strict` off-spine fallback returns through `human_common`, so it records
+  `human_common` by construction. The request mode is never used as the stamp.
+- The existing selection cache omits the client-provided spine. Server resolution
+  by `packId` therefore includes `packId` in the cache key and gets a named test.
+
+## 2026-08-13 — Codex implementation
+
+- Run schema v0.7 and SQLite migration 5 landed. Migration 4 now stamps the
+  literal v0.6 before migration 5 writes `policyModeApplied: unknown`; tests
+  exercise v0.6→v0.7 and v0.5→v0.6→v0.7 without inference.
+- The selector stamps applied mode inside each concrete policy branch. Off-spine
+  `theory_strict` fallback records `human_common`; `/select-move` rejects client
+  spines, resolves the registry pack by `packId`, and keys the cache by that id.
+- Pack schema v0.4, position-keyed authored membership, transposition re-entry,
+  boundary crossing, `deviationPlayed`, monotone theory grading, D7 legality
+  lint, and path-scoped verdict delivery are implemented.
+- Pack A is now v0.2 Line Drill content. Its line is withheld from the browser;
+  the browser path reaches its ordinary and boundary checkpoints, degrades on
+  the authored O-O deviation, and renders the class and note.
+- The separate browser fixture proves a cap can cross while the move remains on
+  the authored line, play continues, and a later unknown verdict renders the
+  mandatory non-judgement sentence.
+- Implementation correction: placing authored-prose reachability in runtime
+  would make schema lint import runtime and create a package cycle. Its single
+  implementation lives in `@chess-tabiya/schema/drill-pack`, consumed by both
+  lint and the server; position membership remains in runtime. Semantics are
+  unchanged.
+- Focused suite: 56 green. Full `make verify`: 287 tests / 48 files, schema and
+  packaging green. Repeated full browser-gate results follow after final runs.

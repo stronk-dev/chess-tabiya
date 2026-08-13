@@ -8,6 +8,7 @@ import { parseUci } from "chessops/util";
 import {
   transposeKey,
   type OpponentSelection,
+  type RunOpponentMode,
   type SelectionCandidate,
   type SelectionEngineIdentity,
 } from "@chess-tabiya/runtime";
@@ -28,10 +29,7 @@ import {
   type StrongEngineProfile,
 } from "./strong-engine.js";
 
-export type OpponentPolicyMode =
-  | "human_common"
-  | "strong_engine"
-  | "theory_strict";
+export type OpponentPolicyMode = RunOpponentMode;
 
 export interface SelectorSpineNode {
   readonly id: string;
@@ -53,6 +51,7 @@ export interface SelectMoveRequest {
   readonly historyUci: readonly string[];
   readonly policy: SelectorPolicy;
   readonly seed: number;
+  readonly packId?: string;
 }
 
 export interface SelectorEngineClient {
@@ -118,6 +117,11 @@ function parseSpineNode(value: unknown, label: string): SelectorSpineNode {
 
 export function parseSelectMoveRequest(value: unknown): SelectMoveRequest {
   const body = record(value, "body");
+  for (const key of Object.keys(body)) {
+    if (!["startFen", "historyUci", "policy", "seed", "packId"].includes(key)) {
+      throw invalid(`body.${key} is an unknown field`);
+    }
+  }
   if (!Array.isArray(body.historyUci)) {
     throw invalid("historyUci must be an array");
   }
@@ -125,6 +129,11 @@ export function parseSelectMoveRequest(value: unknown): SelectMoveRequest {
     throw invalid("seed must be a safe integer");
   }
   const policy = record(body.policy, "policy");
+  for (const key of Object.keys(policy)) {
+    if (!["mode", "policyConfigDigest", "targetElo", "temperature", "topP"].includes(key)) {
+      throw invalid(`policy.${key} is an unknown field`);
+    }
+  }
   const digest = string(policy.policyConfigDigest, "policy.policyConfigDigest");
   if (!DIGEST_PATTERN.test(digest)) {
     throw invalid("policy.policyConfigDigest must be an RFC-8785 SHA-256 digest");
@@ -141,10 +150,6 @@ export function parseSelectMoveRequest(value: unknown): SelectMoveRequest {
   if (topP !== undefined && (topP < 0 || topP > 1)) {
     throw invalid("policy.topP must be between 0 and 1");
   }
-  if (policy.spine !== undefined && !Array.isArray(policy.spine)) {
-    throw invalid("policy.spine must be an array");
-  }
-
   return Object.freeze({
     startFen: string(body.startFen, "startFen"),
     historyUci: Object.freeze(
@@ -156,17 +161,9 @@ export function parseSelectMoveRequest(value: unknown): SelectMoveRequest {
       ...(targetElo === undefined ? {} : { targetElo }),
       ...(temperature === undefined ? {} : { temperature }),
       ...(topP === undefined ? {} : { topP }),
-      ...(policy.spine === undefined
-        ? {}
-        : {
-            spine: Object.freeze(
-              policy.spine.map((node, index) =>
-                parseSpineNode(node, `policy.spine[${index}]`),
-              ),
-            ),
-          }),
     }),
     seed: body.seed,
+    ...(body.packId === undefined ? {} : { packId: string(body.packId, "packId") }),
   });
 }
 
@@ -181,7 +178,7 @@ function historyHash(request: SelectMoveRequest): string {
 }
 
 export function selectionCacheKey(request: SelectMoveRequest): string {
-  return [request.policy.policyConfigDigest, request.seed, historyHash(request)].join(
+  return [request.policy.policyConfigDigest, request.packId ?? "", request.seed, historyHash(request)].join(
     "\0",
   );
 }
@@ -267,9 +264,11 @@ function makeSelection(
   moveUci: string,
   candidates: readonly SelectionCandidate[],
   identity: EngineIdentity,
+  policyModeApplied: "human_common" | "strong_engine" | "theory_strict",
 ): OpponentSelection {
   return Object.freeze({
     moveUci,
+    policyModeApplied,
     ...(candidates.length === 0 ? {} : { candidates }),
     engine: selectionIdentity(identity),
   });
@@ -431,6 +430,7 @@ export class OpponentSelector {
       bestMove(result.lines),
       candidateLines(result.lines),
       result.identity,
+      "human_common",
     );
   }
 
@@ -447,6 +447,7 @@ export class OpponentSelector {
       bestMove(lines),
       candidateLines(lines),
       engineIdentity(this.#client, this.#strongEngineId),
+      "strong_engine",
     );
   }
 
@@ -482,6 +483,6 @@ export class OpponentSelector {
             ),
           )
         : matching;
-    return makeSelection(moveUci, candidates, result.identity);
+    return makeSelection(moveUci, candidates, result.identity, "theory_strict");
   }
 }

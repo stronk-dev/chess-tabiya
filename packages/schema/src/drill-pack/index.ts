@@ -1,6 +1,7 @@
 export { canonicalizeJson, digestDrillPack, type JsonValue } from "./digest.js";
 export {
   lintDrillPack,
+  reachableAuthoredSpineIds,
   type PackLintCode,
   type PackLintIssue,
   type PackLintOptions,

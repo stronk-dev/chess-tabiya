@@ -328,3 +328,21 @@ recorded comparison evidence, and honest Outcome Drill grading. The broader
 theory/explanation vocabulary, automatic N-way comparison, and reviewed content
 remain incomplete. The living Najdorf pack is still a schema example; the
 presence of grading UI does not turn unreviewed chess assertions into truth.
+
+## Line Drill recall and verdict delivery
+
+For `mode: line`, `GET /packs/:id` keeps the `spine` key but projects an empty
+array so the browser never receives the answer line before play. Opponent
+selection sends `packId`; the server supplies the validated spine internally.
+
+After a normal authored-feedback reveal, the checkpoint and terminal sheets may
+show path-scoped theory verdicts. Copy is deliberately non-evaluative: on-line,
+the author's deviation class verbatim, or “this pack has no statement about
+this move.” Any unknown verdict also prints “Unknown is not a judgement.”
+Verdicts are excluded from the withheld-content counter because future played
+plies are unbounded.
+
+The resistance block separates the pack's requested mode, the applied mode
+recorded per opponent ply, and the engine identity. Historical `unknown` plies
+retain the earlier disclaimer; new plies no longer claim that applied policy is
+unknowable. Line Drill renders this context without inventing a root assessment.

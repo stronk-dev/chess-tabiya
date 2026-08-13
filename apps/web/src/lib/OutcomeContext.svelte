@@ -1,6 +1,6 @@
 <script lang="ts">
   interface Props {
-    assessment: string;
+    assessment?: string | undefined;
     resistance: readonly string[];
     grade?: string | undefined;
     resolution?: string | undefined;
@@ -10,7 +10,7 @@
 </script>
 
 <section class="outcome-context" aria-label="Outcome grading context">
-  <p>{assessment}</p>
+  {#if assessment !== undefined}<p>{assessment}</p>{/if}
   {#each resistance as line}<p>{line}</p>{/each}
   {#if resolution}<p class="resolution">{resolution}</p>{/if}
   {#if grade}<p class="grade">{grade}</p>{/if}

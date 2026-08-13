@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `line-drill-theory-grading.md` | draft | `archive/drill-pack-format.md`, `archive/outcome-drill-grading.md`, `archive/authored-explanation-surface.md`, `archive/drill-client.md`, `archive/branch-runtime.md` | program item #4, gate B2 (Line Drill), and D15. Pack schema 0.3 → 0.4; run schema 0.6 → 0.7; **migration 5** |
+| `line-drill-theory-grading.md` | implementing | `archive/drill-pack-format.md`, `archive/outcome-drill-grading.md`, `archive/authored-explanation-surface.md`, `archive/drill-client.md`, `archive/branch-runtime.md` | program item #4, gate B2 (Line Drill), and D15. Pack schema 0.3 → 0.4; run schema 0.6 → 0.7; **migration 5** |
 
 **Content-sourcing split, 2026-08-12.** An adversarial review rejected the single
 `content-sourcing-pipelines.md` draft and recommended a four-way split; the draft
@@ -51,7 +51,7 @@ writing it into a draft.
 | 2 | 1→2 | `archive/learner-identity-and-authorization.md` | implemented |
 | 3 | 2→3 | `archive/pack-optional-runs.md` | implemented after migration 2 |
 | 4 | 3→4 | `archive/terminal-outcome-events.md` | implemented; upgrades ordinary v0.5 snapshots and quarantines pre-producer outcome events. **Body edit pending in `line-drill-theory-grading.md` §11b:** `#upgradeV05Runs` writes the `DRILL_RUN_SCHEMA_VERSION` *constant* (`storage.ts:1091-1092`), so the v0.7 bump would stamp v0.5 rows as `0.7` without the new field; the body is pinned to the literal `"0.6"` in the same commit as migration 5 |
-| 5 | 4→5 | `line-drill-theory-grading.md` | draft — run schema v0.7; adds `policyModeApplied` to `opponent.move_selected.selection`, historical selections migrate to `unknown` and are never inferred |
+| 5 | 4→5 | `line-drill-theory-grading.md` | implementing — run schema v0.7; adds `policyModeApplied` to `opponent.move_selected.selection`, historical selections migrate to `unknown` and are never inferred |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a

@@ -85,10 +85,11 @@ adjacent `move.committed`; replay and reporting share this parser and its typed
 failure behavior. A selection counts for a branch only when the committed child
 is on that branch's path.
 
-The UI therefore names the requested mode and the recorded engine separately.
-It explicitly refuses to claim which policy the engine applied because the v0.4
-selection payload does not persist `policyModeApplied`. It also states that the
-record is not proof of perfect play.
+The UI names requested mode, applied mode, and recorded engine separately. Run
+schema v0.7 persists `policyModeApplied` on every new selection. Historical
+selections migrate to `unknown`; only those plies retain the byte-identical
+disclaimer that the run cannot prove which policy was applied. It also states
+that the record is not proof of perfect play.
 
 ## Learner-facing result
 
@@ -114,6 +115,11 @@ redraws after reactive layout settles rather than retaining stale pointer bounds
 - `perfect_tablebase` is declared but not selectable. The client reports that
   limitation instead of implying perfect resistance.
 - Stockfish scores are recorded evidence, not grading authority.
-- The applied Maia/selector policy is not persisted, so the UI cannot assert it.
+- Historical plies pre-dating run schema v0.7 cannot identify the applied policy.
 - An authored root claim above seven pieces is reviewable content, not a
   machine-proved assessment.
+
+`follow_theory` is a stricter sibling to the outcome monotone law: its reachable
+graph is `active → preserved → degraded`, with no absorbing result state. Theory
+membership is not WDL grading, and a finished chess game does not change that
+objective automatically.

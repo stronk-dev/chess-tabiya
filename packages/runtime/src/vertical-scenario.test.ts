@@ -32,6 +32,7 @@ class DeterministicMockOpponent {
       run,
       {
         moveUci: move,
+        policyModeApplied: "human_common",
         engine: {
           id: "deterministic-mock",
           name: "Deterministic mock",

@@ -63,7 +63,26 @@ export function resistanceSentences(run: DrillRun, nodeId: string): readonly str
   const target = requested.targetElo === undefined ? "" : `, target Elo ${requested.targetElo}`;
   const lines = [`Requested resistance: ${requested.mode}${target} — the pack's request.`];
   if (resistance.engines.length === 0) {
-    return [...lines, "No opponent move has been played yet.", "Not perfect play."];
+    return [
+      ...lines,
+      "No opponent move has been played yet.",
+      ...(requested.mode === "theory_strict"
+        ? ["`theory_strict` has authored replies only inside this pack's spine. `plyHorizon` caps authored support; the spine index governs authored replies; the two can end at different plies."]
+        : []),
+      "Not perfect play.",
+    ];
+  }
+  if (resistance.applied.length > 0) {
+    const total = resistance.applied.reduce((sum, entry) => sum + entry.plyCount, 0);
+    lines.push(
+      resistance.applied.length === 1
+        ? `Applied policy: ${resistance.applied[0]!.mode} — recorded per move by the selector.`
+        : `Applied policy: ${resistance.applied.map((entry) => `${entry.mode} for ${entry.plyCount} plies`).join(", ")} — recorded per move by the selector.`,
+    );
+    void total;
+  }
+  if (resistance.unknownPlyCount > 0) {
+    lines.push(`${resistance.unknownPlyCount} of these plies predate policy recording.`);
   }
   if (resistance.engines.length === 1) {
     lines.push(`Moves played by ${engineName(resistance.engines[0]!.engine)}.`);
@@ -73,10 +92,13 @@ export function resistanceSentences(run: DrillRun, nodeId: string): readonly str
     }
     lines.push("This path faced more than one engine.");
   }
-  lines.push(
-    "The run records which engine played, not which policy it applied, so this names the engine, not proof that the requested policy produced these moves.",
-    "Not perfect play.",
-  );
+  if (resistance.unknownPlyCount > 0) {
+    lines.push("The run records which engine played, not which policy it applied, so this names the engine, not proof that the requested policy produced these moves.");
+  }
+  if (requested.mode === "theory_strict") {
+    lines.push("`theory_strict` has authored replies only inside this pack's spine. `plyHorizon` caps authored support; the spine index governs authored replies; the two can end at different plies.");
+  }
+  lines.push("Not perfect play.");
   return lines;
 }
 

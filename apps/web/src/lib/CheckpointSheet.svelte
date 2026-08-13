@@ -5,6 +5,8 @@
   import type { CheckpointNotice } from "./screen-model.js";
   import type { AuthoredFeedbackItem } from "./api.js";
   import OutcomeContext from "./OutcomeContext.svelte";
+  import type { DrillRun } from "@chess-tabiya/runtime";
+  import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
 
   interface Props {
     checkpoint: CheckpointNotice;
@@ -17,6 +19,7 @@
     assessment?: string | undefined;
     resistance?: readonly string[];
     resolution?: string | undefined;
+    run: DrillRun;
   }
 
   let {
@@ -30,6 +33,7 @@
     assessment,
     resistance = [],
     resolution,
+    run,
   }: Props = $props();
   let heading: HTMLHeadingElement;
 
@@ -41,7 +45,7 @@
     <p class="eyebrow">Checkpoint</p>
     <h2 id="checkpoint-title" tabindex="-1" bind:this={heading}>{checkpoint.label}</h2>
     <p>You reached a semantic boundary. Continue, replay it, or compare attempts.</p>
-    {#if assessment !== undefined}
+    {#if assessment !== undefined || resistance.length > 0}
       <OutcomeContext {assessment} {resistance} {resolution} />
     {/if}
     {#if authoredItems.length > 0}
@@ -54,13 +58,18 @@
                 <span class="kind">Line note</span><p>{item.text}</p>
               {:else if item.kind === "deviation"}
                 <span class="kind">Alternative {item.anchor.moveUci}</span><p>{item.note}</p>
-              {:else}
+              {:else if item.kind === "plan_class"}
                 <span class="kind">Plan option</span><strong>{item.label}</strong>
                 {#if item.description}<p>{item.description}</p>{/if}
+              {:else}
+                <span class="kind">Theory</span><p>{theoryVerdictSentence(item, run)}</p>
               {/if}
             </li>
           {/each}
         </ul>
+        {#if authoredItems.some((item) => item.kind === "theory_verdict" && item.verdict === "unknown")}
+          <p>{UNKNOWN_THEORY_NOTE}</p>
+        {/if}
       </section>
     {/if}
     <div class="actions">
@@ -101,6 +110,8 @@
 
   .sheet {
     width: min(38rem, 100%);
+    max-height: min(88dvh, 48rem);
+    overflow: auto;
     padding: 1.4rem;
     border-radius: 1.25rem;
     background: var(--panel);

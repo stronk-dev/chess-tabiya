@@ -18,6 +18,7 @@ import {
 const at = "2026-08-12T12:00:00.000Z";
 const opponent = (moveUci: string): OpponentSelection => ({
   moveUci,
+  policyModeApplied: "human_common",
   engine: {
     id: "mock-opponent",
     name: "Mock opponent",

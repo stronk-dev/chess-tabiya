@@ -138,7 +138,9 @@
     grading === undefined ? undefined : assessmentSentence(grading),
   );
   let resistance = $derived(
-    grading === undefined ? [] : resistanceSentences(run, currentNode.id),
+    grading === undefined && pack.objective.type !== "follow_theory"
+      ? []
+      : resistanceSentences(run, currentNode.id),
   );
   let checkpointResolution = $derived.by(() => {
     if (
@@ -423,12 +425,12 @@
     {/if}
 
     <div class="workspace">
-      <section class="position-column" class:outcome={grading !== undefined}>
+      <section class="position-column" class:outcome={grading !== undefined || pack.objective.type === "follow_theory"}>
         <div class="objective-copy">
           <p>Objective</p>
           <h1 id="drill-title">{packObjective(pack)}</h1>
         </div>
-        {#if assessment !== undefined}
+        {#if assessment !== undefined || resistance.length > 0}
           <OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
         {/if}
         <WhyBanner model={banner} />
@@ -489,6 +491,7 @@
 
 {#if checkpoint}
   <CheckpointSheet
+    {run}
     {checkpoint}
     authoredItems={checkpointAuthoredItems}
     {assessment}
@@ -504,6 +507,7 @@
 
 {#if terminalEvent?.type === "outcome.reached"}
   <TerminalSheet
+    {run}
     outcome={terminalEvent.data.outcome}
     authoredItems={terminalAuthoredItems}
     evidence={terminalEvidence}

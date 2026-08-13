@@ -1,6 +1,15 @@
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 export { transposeKey } from "./chess.js";
+export {
+  deviationAnchors,
+  insideAuthoredBoundary,
+  lineMembership,
+  spineNodeIdFor,
+  spinePositionIndex,
+  type LineMembershipEntry,
+  type LineVerdict,
+} from "./line.js";
 export { BranchQueryError, branchPath } from "./branch-path.js";
 export {
   compare,
@@ -33,14 +42,18 @@ export {
 export { attachEvidence } from "./evidence.js";
 export {
   RULES_EVIDENCE_FACTS,
+  THEORY_EVIDENCE_FACTS,
   engineEvidenceRef,
   isEngineEvidenceRef,
   packEvidenceRef,
   rulesEvidenceRef,
+  theoryEvidenceRef,
   type EngineEvidenceRef,
   type PackEvidenceRef,
   type RulesEvidenceFact,
   type RulesEvidenceRef,
+  type TheoryEvidenceFact,
+  type TheoryEvidenceRef,
 } from "./evidence-ref.js";
 export {
   MATERIAL_VALUES,
@@ -77,6 +90,7 @@ export {
   readBackReplay,
   resistanceOnPath,
   type OpponentMoveReadback,
+  type AppliedPolicyCount,
   type PathResistance,
   type ReadBackReplay,
   type ResistanceEngineCount,
@@ -117,6 +131,7 @@ export type {
   OpponentSelection,
   OpponentMoveSelectedEvent,
   PolicyConfig,
+  PolicyModeApplied,
   PositionOpponentPolicy,
   RunFeedbackPolicy,
   RunOpponentMode,
@@ -129,6 +144,7 @@ export type {
   Segment,
   VersionedPolicy,
 } from "./types.js";
+export { RUN_OPPONENT_MODES } from "./types.js";
 
 export const runtimeBuildInfo = Object.freeze({
   packageName: "@chess-tabiya/runtime",

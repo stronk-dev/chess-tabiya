@@ -184,6 +184,7 @@ describe("runtime invariant properties", () => {
                     run,
                     {
                       moveUci: move,
+                      policyModeApplied: "human_common",
                       engine: {
                         id: "property-mock",
                         name: "Property mock",

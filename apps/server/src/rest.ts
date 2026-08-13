@@ -154,6 +154,21 @@ function parseOpponentSelection(value: unknown): OpponentSelection {
   }
   return {
     moveUci: requiredString(selection.moveUci, "selection.moveUci"),
+    policyModeApplied: (() => {
+      const mode = requiredString(
+        selection.policyModeApplied,
+        "selection.policyModeApplied",
+      );
+      if (
+        mode !== "human_common" &&
+        mode !== "strong_engine" &&
+        mode !== "theory_strict" &&
+        mode !== "unknown"
+      ) {
+        throw invalid("selection.policyModeApplied is unsupported");
+      }
+      return mode;
+    })(),
     ...(selection.candidates === undefined
       ? {}
       : {
@@ -550,9 +565,15 @@ export function createRestHandler(
             { details: { engineId: "opponent-selector", retryAfterMs: 0 } },
           );
         }
-        const selection = await selector.select(
-          parseSelectMoveRequest(await parseBody(request)),
-        );
+        const parsed = parseSelectMoveRequest(await parseBody(request));
+        const pack = parsed.packId === undefined ? undefined : service.pack(parsed.packId);
+        const selection = await selector.select({
+          ...parsed,
+          policy: {
+            ...parsed.policy,
+            ...(pack?.document.spine === undefined ? {} : { spine: pack.document.spine }),
+          },
+        });
         return json(200, selection);
       }
 

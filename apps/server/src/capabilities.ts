@@ -1,4 +1,4 @@
-import { runtimeBuildInfo } from "@chess-tabiya/runtime";
+import { RUN_OPPONENT_MODES, runtimeBuildInfo } from "@chess-tabiya/runtime";
 
 import type { EngineHealth, EngineIdentity } from "./engine-supervisor.js";
 import type { OpponentPolicyMode } from "./opponent-selector.js";
@@ -7,11 +7,7 @@ import {
   type StrongEngineProfile,
 } from "./strong-engine.js";
 
-export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = Object.freeze([
-  "human_common",
-  "strong_engine",
-  "theory_strict",
-]);
+export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = RUN_OPPONENT_MODES;
 
 export const DECLARED_UNIMPLEMENTED_POLICY_MODES = Object.freeze([
   { mode: "plan_defense", reason: "plan_defense is not selectable in v1; plan-defense selection is not implemented" },

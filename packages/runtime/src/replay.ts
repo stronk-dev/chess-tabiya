@@ -25,6 +25,7 @@ export interface OpponentMoveReadback {
   readonly branchId: string;
   readonly moveUci: string;
   readonly engine: SelectionEngineIdentity;
+  readonly policyModeApplied: import("./types.js").PolicyModeApplied;
 }
 
 export interface ReadBackReplay {
@@ -60,6 +61,7 @@ function readOpponentMove(
     branchId: selection.data.branchId,
     moveUci: selection.data.moveUci,
     engine: selection.data.selection.engine,
+    policyModeApplied: selection.data.selection.policyModeApplied,
   });
 }
 
@@ -89,13 +91,24 @@ export interface ResistanceEngineCount {
 export interface PathResistance {
   readonly requested: RunOpponentPolicy;
   readonly engines: readonly ResistanceEngineCount[];
+  readonly applied: readonly AppliedPolicyCount[];
+  readonly unknownPlyCount: number;
+}
+
+export interface AppliedPolicyCount {
+  readonly mode: Exclude<import("./types.js").PolicyModeApplied, "unknown">;
+  readonly plyCount: number;
 }
 
 export function resistanceOnPath(run: DrillRun, nodeId: string): PathResistance {
   const pathNodeIds = new Set(historyFrom(run, nodeId).map((node) => node.id));
   const counts = new Map<string, { engine: SelectionEngineIdentity; plyCount: number }>();
+  const applied = new Map<AppliedPolicyCount["mode"], number>();
+  let unknownPlyCount = 0;
   for (const move of opponentMovesFromEvents(run.events)) {
     if (!pathNodeIds.has(move.committedNodeId)) continue;
+    if (move.policyModeApplied === "unknown") unknownPlyCount += 1;
+    else applied.set(move.policyModeApplied, (applied.get(move.policyModeApplied) ?? 0) + 1);
     const identity = move.engine;
     const key = JSON.stringify([
       identity.id,
@@ -113,6 +126,10 @@ export function resistanceOnPath(run: DrillRun, nodeId: string): PathResistance 
   }
   return Object.freeze({
     requested: run.opponentPolicy,
+    applied: Object.freeze(
+      [...applied].map(([mode, plyCount]) => Object.freeze({ mode, plyCount })),
+    ),
+    unknownPlyCount,
     engines: Object.freeze(
       [...counts.values()].map((value): ResistanceEngineCount =>
         Object.freeze(value),

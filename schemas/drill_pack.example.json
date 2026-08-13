@@ -112,7 +112,7 @@
   },
   "feedbackPolicy": "delayed_checkpoint",
   "authoredBoundary": {
-    "spineNodeIds": ["najdorf-b5", "najdorf-be2"],
+    "spineNodeIds": ["najdorf-be3", "najdorf-e6", "najdorf-f3", "najdorf-b5", "najdorf-be2"],
     "plyHorizon": 4,
     "fenPredicates": [
       {

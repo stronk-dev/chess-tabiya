@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.3",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.4",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.3 format for an engine-independent authored drill.",
+  "description": "Living v0.4 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -129,7 +129,8 @@
         "hold",
         "save",
         "resist",
-        "play_until_checkpoint"
+        "play_until_checkpoint",
+        "follow_theory"
       ]
     },
     "objective": {
@@ -369,6 +370,14 @@
           "required": ["atSpineNode"],
           "properties": {
             "atSpineNode": { "$ref": "#/$defs/id" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["atAuthoredBoundary"],
+          "properties": {
+            "atAuthoredBoundary": { "const": "crossed" }
           },
           "additionalProperties": false
         },

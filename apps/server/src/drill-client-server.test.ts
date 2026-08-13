@@ -331,6 +331,7 @@ describe("pack-aware run orchestration", () => {
       {
         selection: {
           moveUci: "e7e6",
+          policyModeApplied: "human_common",
           engine: {
             id: "mock-opponent",
             name: "Mock opponent",
@@ -343,6 +344,7 @@ describe("pack-aware run orchestration", () => {
       {
         selection: {
           moveUci: "b7b5",
+          policyModeApplied: "human_common",
           engine: {
             id: "mock-opponent",
             name: "Mock opponent",

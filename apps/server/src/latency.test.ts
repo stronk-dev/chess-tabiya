@@ -64,6 +64,7 @@ function runWithEventCount(id: string, eventCount: number): DrillRun {
             run,
             {
               moveUci: move,
+              policyModeApplied: "human_common",
               engine: {
                 id: "latency-mock",
                 name: "Latency mock",

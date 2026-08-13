@@ -5,6 +5,8 @@
   import type { AuthoredFeedbackItem } from "./api.js";
   import type { EvidenceSentence } from "./evidence-sentences.js";
   import OutcomeContext from "./OutcomeContext.svelte";
+  import type { DrillRun } from "@chess-tabiya/runtime";
+  import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
 
   interface Props {
     outcome: RunOutcome;
@@ -16,9 +18,10 @@
     assessment?: string | undefined;
     resistance?: readonly string[];
     grade?: string | undefined;
+    run: DrillRun;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run }: Props = $props();
   let heading: HTMLHeadingElement;
   onMount(() => heading?.focus());
 </script>
@@ -30,7 +33,7 @@
       {outcome === "win" ? "You won." : outcome === "loss" ? "You lost." : "Draw."}
     </h2>
 
-    {#if assessment !== undefined}
+    {#if assessment !== undefined || resistance.length > 0}
       <OutcomeContext {assessment} {resistance} {grade} />
     {/if}
 
@@ -42,11 +45,15 @@
             <li>
               {#if item.kind === "annotation"}{item.text}
               {:else if item.kind === "deviation"}{item.note}
-              {:else}<strong>{item.label}</strong>{#if item.description} — {item.description}{/if}
+              {:else if item.kind === "plan_class"}<strong>{item.label}</strong>{#if item.description} — {item.description}{/if}
+              {:else}{theoryVerdictSentence(item, run)}
               {/if}
             </li>
           {/each}
         </ul>
+        {#if authoredItems.some((item) => item.kind === "theory_verdict" && item.verdict === "unknown")}
+          <p>{UNKNOWN_THEORY_NOTE}</p>
+        {/if}
       </section>
     {/if}
 

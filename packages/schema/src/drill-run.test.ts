@@ -107,11 +107,11 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.6", () => {
+describe("drill_run.schema.json v0.7", () => {
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.6",
+      $id: "urn:chess-tabiya:schema:drill-run:0.7",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });
@@ -289,6 +289,7 @@ describe("drill_run.schema.json v0.6", () => {
         moveUci: "e2e4",
         selection: {
           moveUci: "e2e4",
+          policyModeApplied: "human_common",
           candidates: [
             { moveUci: "e2e4", mass: 0.42, rank: 1 },
             { moveUci: "d2d4", rank: 2 },
@@ -309,6 +310,18 @@ describe("drill_run.schema.json v0.6", () => {
       validate({ ...validRun, events: [event, selectionEvent] }),
       JSON.stringify(validate.errors),
     ).toBe(true);
+    const missingApplied = structuredClone(selectionEvent);
+    delete (missingApplied.data.selection as { policyModeApplied?: string }).policyModeApplied;
+    expect(validate({ ...validRun, events: [event, missingApplied] })).toBe(false);
+    expect(validate.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          instancePath: "/events/1/data/selection",
+          keyword: "required",
+          params: { missingProperty: "policyModeApplied" },
+        }),
+      ]),
+    );
     expect(validate(invalidSelectionFixture)).toBe(false);
     expect(validate.errors).toEqual(
       expect.arrayContaining([

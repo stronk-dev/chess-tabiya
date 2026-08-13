@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "id": "invalid-selection-run",
   "sessionKind": "pack",
   "packId": "pack-1",
@@ -92,6 +92,7 @@
         "moveUci": "e2e4",
         "selection": {
           "moveUci": "e2e4",
+          "policyModeApplied": "human_common",
           "candidates": [{ "moveUci": "e2e4", "mass": 0.4, "rank": 1 }],
           "engine": {
             "id": "maia-5m",

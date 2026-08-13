@@ -78,7 +78,7 @@ export function projectPackDocument(
     },
     feedbackPolicy: raw.feedbackPolicy,
     opponentPolicy: raw.opponentPolicy,
-    spine: (document.spine ?? []).map(projectSpineNode),
+    spine: raw.mode === "line" ? [] : (document.spine ?? []).map(projectSpineNode),
     checkpoints: document.checkpoints.map((checkpoint) => ({
       id: checkpoint.id,
       label:

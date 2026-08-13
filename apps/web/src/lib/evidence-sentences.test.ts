@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   RULES_EVIDENCE_FACTS,
+  THEORY_EVIDENCE_FACTS,
   packEvidenceRef,
   rulesEvidenceRef,
 } from "@chess-tabiya/runtime";
@@ -26,6 +27,7 @@ describe("evidence sentence contract", () => {
     const expected = [
       ...RULES_EVIDENCE_FACTS.map(rulesEvidenceRef),
       ...pack.checkpoints.map((checkpoint) => packEvidenceRef(checkpoint.id)),
+      ...THEORY_EVIDENCE_FACTS.map((fact) => `theory:${fact}`),
     ];
     const table = evidenceSentenceTable(pack);
 

@@ -393,6 +393,7 @@ describe("Layer 3 screens", () => {
     const component = mount(CheckpointSheet, {
       target: target(),
       props: {
+        run: branchedRun(),
         checkpoint: {
           id: "predict-reply",
           label: "Predict the reply",

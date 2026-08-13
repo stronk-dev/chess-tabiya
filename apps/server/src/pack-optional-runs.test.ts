@@ -19,6 +19,7 @@ const executor: EvidenceExecutor = {
 };
 const selection = (moveUci: string): OpponentSelection => ({
   moveUci,
+  policyModeApplied: "human_common",
   engine: { id: "mock", name: "Mock", version: "1", seedHonored: true },
 });
 
