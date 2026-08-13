@@ -119,10 +119,26 @@ overload, and destructive-action mistakes before they become an RFC.
 - **Anti-contamination default:** hide eval bar, move labels, engine arrows, human
   frequencies until segment end or explicit request.
 - **Latency budgets** (targets to benchmark, not measurements): board ready <250 ms
-  warm · branch switch <50 ms · rewind <100 ms · cached opponent move perceived-instant
-  · uncached Maia <500 ms · shallow Stockfish feedback <500 ms · deep analysis async.
-  These budgets are themselves a competitive weapon — see the Chess Endgame Training
-  gap and kill criterion K9.
+  warm · **branch switch: worry at 100 ms, intervene at 200 ms** (owner ruling
+  2026-08-13, superseding the unsourced <50 ms) · rewind <100 ms · cached
+  opponent move perceived-instant · uncached Maia <500 ms · shallow Stockfish
+  feedback <500 ms · deep analysis async.
+
+  The branch-switch ruling changed the *shape* of the target, not just the
+  number: a single threshold makes every measurement a pass/fail verdict, so a
+  reading of 50.1 ms against 50 ms reads as a failure when it is noise. A
+  worry/intervene pair says what to do at each level and leaves an honest band
+  between them. Note also that `switchBranch` *is* rewind
+  (`apps/web/src/lib/session-controller.ts:314-316`), so the two entries above
+  now describe one operation from two angles rather than contradicting each
+  other.
+
+  **What these budgets are actually for:** they exist because the owner's field
+  report was that Chess Endgame Training *felt* slow, which became K9. The
+  criterion is perceptual and comparative — "does this feel sluggish the way
+  that did" — and a stopwatch cannot answer it. The numbers are a tripwire for
+  when to go look, not the thing being measured. Do not report a small
+  overshoot as a competitive failure; go use it.
 - **Compare mode:** dual board at aligned relative plies + difference strip (eval/WDL
   trajectory, structure changes, timing events, key piece routes) + narrative mode
   (causal, not move-by-move). Branch race (alternating moves on two boards) stays
