@@ -32,6 +32,7 @@ import {
 import { PackRegistry } from "./pack-registry.js";
 import { createHttpServer, createRestHandler, type RestHandler } from "./rest.js";
 import { RunService } from "./service.js";
+import { PackStudio } from "./pack-studio.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { IdentityService } from "./identity.js";
 import { stockfishPlaySpec } from "./strong-engine.js";
@@ -269,6 +270,8 @@ export async function createApplication(
       : { draftFile: options.draftPackFile }),
   });
   const storage = new SQLiteRunStorage(databasePath);
+  const studio = new PackStudio(storage, registry);
+  studio.hydrate();
   const engineMode = options.engineMode ?? "mock";
   let supervisor: EngineSupervisor | undefined;
   let selector: OpponentSelector;
@@ -312,7 +315,7 @@ export async function createApplication(
   const identity = new IdentityService(storage, {
     cookieSecure: options.cookieSecure ?? true,
   });
-  const api = createRestHandler(service, selector, capabilities, identity);
+  const api = createRestHandler(service, selector, capabilities, identity, studio);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

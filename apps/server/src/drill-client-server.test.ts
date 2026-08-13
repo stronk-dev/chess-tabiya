@@ -121,6 +121,7 @@ describe("drill-client pack registry", () => {
         phase: fixture.phase,
         difficulty: fixture.difficulty,
         reviewStatus: "schema_example",
+        channel: "official",
       },
     ];
     expect(await list.text()).toBe(JSON.stringify(expectedList));
@@ -137,6 +138,7 @@ describe("drill-client pack registry", () => {
     const projected = (await detail.json()) as Record<string, unknown>;
     expect(Object.keys(projected).sort()).toEqual(
       [
+        "channel",
         "checkpoints",
         "difficulty",
         "feedbackPolicy",
@@ -160,7 +162,8 @@ describe("drill-client pack registry", () => {
       type: fixture.objective.type,
       summary: fixture.objective.summary,
     });
-    expect(projected.provenance).toEqual(fixture.provenance);
+    expect(projected.provenance).toEqual({ reviewStatus: "schema_example", sources: [] });
+    expect(JSON.stringify(projected)).not.toContain("reviewers");
 
     const spineNodes = (projected.spine as Record<string, unknown>[]).flatMap(
       function nodes(node): Record<string, unknown>[] {

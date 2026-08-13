@@ -47,3 +47,6 @@ Implemented foundation:
 - `trajectory-drill.md` — pack schema 0.7 trajectory legs, continuous-path entry,
   per-leg objective seal/reset, causal move provenance, derived verdicts, and the
   deliberately non-aggregated client presentation.
+- `pack-studio.md` — migration 7 durable drafts/registrations, source-derived
+  publication channels, digest-retained playtests and versions, the authoring REST
+  surface, pack schema 0.8, and `/create`.

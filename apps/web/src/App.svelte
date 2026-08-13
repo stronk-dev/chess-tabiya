@@ -16,6 +16,7 @@
     type Learner,
     type ProgressAttempt,
     type ProgressSchedule,
+    type PackDraft,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
   import { ShellKeyboardDispatcher } from "./lib/keyboard.js";
@@ -53,6 +54,9 @@
   let runs: readonly RunSummary[] = $state([]);
   let attempts: readonly ProgressAttempt[] = $state([]);
   let dueSchedules: readonly ProgressSchedule[] = $state([]);
+  let drafts: readonly PackDraft[] = $state([]);
+  let studioJson = $state("");
+  let selectedDraftId: string | undefined = $state();
   let capabilities: Capabilities | undefined = $state();
   let routeLoading = $state(true);
   let routeError: string | undefined = $state();
@@ -152,6 +156,8 @@
           api.progress?.() ?? Promise.resolve([]),
           api.dueProgress?.() ?? Promise.resolve([]),
         ]);
+      } else if (next.name === "create") {
+        drafts = await (api.packDrafts?.() ?? Promise.resolve([]));
       } else if (
         next.name === "run" &&
         session.runState?.run.id !== next.runId
@@ -218,6 +224,30 @@
     anchor.click();
     anchor.remove();
     setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+
+  async function createDraft(): Promise<void> {
+    const document = JSON.parse(studioJson) as unknown;
+    const draft = await api.createPackDraft?.(document);
+    if (draft !== undefined) {
+      drafts = [draft, ...drafts];
+      selectedDraftId = draft.id;
+      studioJson = JSON.stringify(draft.document, null, 2);
+    }
+  }
+
+  async function saveDraft(): Promise<void> {
+    const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
+    if (draft === undefined) return;
+    const saved = await api.updatePackDraft?.(draft.id, draft.digest, JSON.parse(studioJson));
+    if (saved !== undefined) drafts = drafts.map((candidate) => candidate.id === saved.id ? saved : candidate);
+  }
+
+  async function registerDraft(): Promise<void> {
+    const draft = drafts.find((candidate) => candidate.id === selectedDraftId);
+    if (draft === undefined) return;
+    await api.registerPackDraft?.(draft.id);
+    drafts = await (api.packDrafts?.() ?? Promise.resolve([]));
   }
 
   onMount(() => {
@@ -384,16 +414,44 @@
       </section>
       <p class="honest">This is an attempt history and return queue, not a mastery score.</p>
     </main>
-  {:else if route.name === "live" || route.name === "create"}
+  {:else if route.name === "create"}
+    <main class="shell-view studio" aria-labelledby="create-title">
+      <p class="eyebrow">Create / Pack Studio</p>
+      <h1 id="create-title">Author against the real validator.</h1>
+      <div class="studio-grid">
+        <aside aria-label="Your drafts">
+          <h2>Your drafts</h2>
+          {#each drafts as draft}
+            <button type="button" onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); }}>
+              {draft.packId} · {draft.state}
+            </button>
+          {:else}<p>No database drafts yet. Paste a v0.8 pack to begin.</p>{/each}
+        </aside>
+        <section>
+          <label for="studio-json">Pack JSON</label>
+          <textarea id="studio-json" bind:value={studioJson} spellcheck="false"></textarea>
+          <div class="row-actions">
+            <button type="button" onclick={() => void createDraft()}>Create draft</button>
+            <button type="button" disabled={!selectedDraftId} aria-describedby={!selectedDraftId ? "save-disabled" : undefined} onclick={() => void saveDraft()}>Save</button>
+            <button type="button" disabled={!selectedDraftId} aria-describedby={!selectedDraftId ? "register-disabled" : undefined} onclick={() => void registerDraft()}>Register community pack</button>
+          </div>
+          {#if !selectedDraftId}<p id="save-disabled" class="honest">Select or create a draft before saving.</p><p id="register-disabled" class="honest">Select a valid draft before registration.</p>{/if}
+          {#if selectedDraftId}
+            {@const selected = drafts.find((candidate) => candidate.id === selectedDraftId)}
+            {#if selected}<ul>{#each selected.validation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}
+          {/if}
+        </section>
+      </div>
+      <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
+    </main>
+  {:else if route.name === "live"}
     <main class="shell-view empty-state" aria-labelledby="empty-title">
       <p class="eyebrow">{route.name}</p>
       <h1 id="empty-title">
         {route.name === "live" ? "Rehearse with other people." : "Turn games into training."}
       </h1>
       <p>
-        {route.name === "live"
-            ? "Streamer, academy, spectator, and arena sessions arrive in program item 8."
-            : "Pack authoring, imports, review, and session distillation arrive in program item 6."}
+        Streamer, academy, spectator, and arena sessions arrive in program item 8.
       </p>
       <p class="honest">This route reserves the application surface; it does not simulate functionality that is not implemented.</p>
     </main>
@@ -477,6 +535,10 @@
   .item-list { display: grid; gap: 0.7rem; max-height: min(55dvh, 36rem); margin-top: 2rem; overflow: auto; }
   .item-list article { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
   .row-actions { display: flex; gap: 0.5rem; }
+  .studio-grid { display: grid; grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr); gap: 1rem; }
+  .studio-grid aside { display: grid; align-content: start; gap: 0.5rem; overflow: auto; }
+  .studio-grid section { display: grid; gap: 0.5rem; min-width: 0; }
+  .studio-grid textarea { width: 100%; min-height: 42vh; padding: 0.8rem; font: 0.8rem/1.4 ui-monospace, monospace; }
   .empty-state p { max-width: 42rem; color: var(--muted); font-size: 1.05rem; }
   section + section { margin-top: 2rem; }
   li { margin: 0.45rem 0; }

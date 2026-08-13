@@ -143,6 +143,30 @@ export interface ProgressStorage {
   };
 }
 
+export interface StoredPackDraft {
+  readonly id: string;
+  readonly packId: string;
+  readonly ownerLearnerId: string;
+  readonly document: unknown;
+  readonly digest: string;
+  readonly state: "draft" | "registered" | "withdrawn";
+  readonly seedKind: "blank" | "candidate" | "pgn" | "run" | "version" | "interchange";
+  readonly seedRef: string | null;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface StoredRegisteredPack {
+  readonly packId: string;
+  readonly version: string;
+  readonly digest: string;
+  readonly document: unknown;
+  readonly publisherHandle: string;
+  readonly publisherLearnerId: string;
+  readonly draftId: string;
+  readonly registeredAt: string;
+}
+
 interface RunRow {
   readonly id: string;
   readonly snapshot_json: string;
@@ -188,7 +212,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 6;
+export const STORAGE_VERSION = 7;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -678,6 +702,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
            WHERE active_writer_learner_id = ?`,
         )
         .run(LEGACY_ID, legacyWriterId, learnerId);
+      this.#database.prepare(
+        "UPDATE pack_drafts SET state = CASE WHEN state = 'registered' THEN state ELSE 'withdrawn' END, owner_learner_id = ? WHERE owner_learner_id = ?",
+      ).run(LEGACY_ID, learnerId);
+      this.#database.prepare(
+        "UPDATE registered_packs SET publisher_learner_id = ? WHERE publisher_learner_id = ?",
+      ).run(LEGACY_ID, learnerId);
       this.#database.prepare("DELETE FROM learners WHERE id = ?").run(learnerId);
       const restore = this.#database.prepare(
         `INSERT OR IGNORE INTO run_grants (run_id, learner_id, role, granted_at)
@@ -1030,6 +1060,100 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
     });
   }
 
+  createPackDraft(input: StoredPackDraft): void {
+    this.#database.prepare(`INSERT INTO pack_drafts
+      (id, pack_id, owner_learner_id, document_json, digest, state, seed_kind,
+       seed_ref, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+      .run(input.id, input.packId, input.ownerLearnerId, JSON.stringify(input.document),
+        input.digest, input.state, input.seedKind, input.seedRef, input.createdAt, input.updatedAt);
+  }
+
+  packDraft(id: string, ownerLearnerId: string): StoredPackDraft | undefined {
+    const row = this.#database.prepare(
+      "SELECT * FROM pack_drafts WHERE id = ? AND owner_learner_id = ?",
+    ).get(id, ownerLearnerId) as Record<string, unknown> | undefined;
+    return row === undefined ? undefined : this.#packDraftRow(row);
+  }
+
+  packDrafts(ownerLearnerId: string): readonly StoredPackDraft[] {
+    return Object.freeze((this.#database.prepare(
+      "SELECT * FROM pack_drafts WHERE owner_learner_id = ? ORDER BY updated_at DESC, id",
+    ).all(ownerLearnerId) as readonly Record<string, unknown>[]).map((row) => this.#packDraftRow(row)));
+  }
+
+  updatePackDraft(id: string, ownerLearnerId: string, expectedDigest: string, document: unknown, digest: string, at: string): boolean {
+    const result = this.#database.prepare(`UPDATE pack_drafts SET document_json = ?,
+      pack_id = ?, digest = ?, updated_at = ? WHERE id = ? AND owner_learner_id = ?
+      AND digest = ? AND state = 'draft'`).run(
+      JSON.stringify(document), String((document as Record<string, unknown>).id), digest, at,
+      id, ownerLearnerId, expectedDigest,
+    );
+    return result.changes === 1;
+  }
+
+  withdrawPackDraft(id: string, ownerLearnerId: string): boolean {
+    return this.#database.prepare(
+      "UPDATE pack_drafts SET state = 'withdrawn' WHERE id = ? AND owner_learner_id = ? AND state = 'draft'",
+    ).run(id, ownerLearnerId).changes === 1;
+  }
+
+  registerPackDraft(input: StoredRegisteredPack): void {
+    this.#database.exec("BEGIN IMMEDIATE");
+    try {
+      const draft = this.#database.prepare(
+        "SELECT state, owner_learner_id FROM pack_drafts WHERE id = ?",
+      ).get(input.draftId) as Record<string, unknown> | undefined;
+      if (draft?.state !== "draft" || draft.owner_learner_id !== input.publisherLearnerId) {
+        throw new ServerError("RUN_NOT_FOUND", `Unknown draft: ${input.draftId}`);
+      }
+      this.#database.prepare(`INSERT INTO registered_packs
+        (pack_id, version, digest, document_json, publisher_handle,
+         publisher_learner_id, draft_id, registered_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
+        .run(input.packId, input.version, input.digest, JSON.stringify(input.document),
+          input.publisherHandle, input.publisherLearnerId, input.draftId, input.registeredAt);
+      this.#database.prepare("UPDATE pack_drafts SET state = 'registered' WHERE id = ?").run(input.draftId);
+      this.#database.exec("COMMIT");
+    } catch (error) {
+      this.#rollback();
+      throw error;
+    }
+  }
+
+  registeredPacks(): readonly StoredRegisteredPack[] {
+    return Object.freeze((this.#database.prepare(
+      "SELECT * FROM registered_packs ORDER BY pack_id, registered_at",
+    ).all() as readonly Record<string, unknown>[]).map((row) => Object.freeze({
+      packId: String(row.pack_id), version: String(row.version), digest: String(row.digest),
+      document: JSON.parse(String(row.document_json)), publisherHandle: String(row.publisher_handle),
+      publisherLearnerId: String(row.publisher_learner_id), draftId: String(row.draft_id),
+      registeredAt: String(row.registered_at),
+    })));
+  }
+
+  storePlaytestDocument(digest: string, draftId: string, document: unknown, at: string): void {
+    this.#database.prepare(`INSERT OR IGNORE INTO playtest_documents
+      (digest, draft_id, document_json, created_at) VALUES (?, ?, ?, ?)`)
+      .run(digest, draftId, JSON.stringify(document), at);
+  }
+
+  playtestDocuments(): readonly { readonly digest: string; readonly document: unknown }[] {
+    return Object.freeze((this.#database.prepare(
+      "SELECT digest, document_json FROM playtest_documents ORDER BY created_at, digest",
+    ).all() as readonly Record<string, unknown>[]).map((row) => Object.freeze({
+      digest: String(row.digest), document: JSON.parse(String(row.document_json)),
+    })));
+  }
+
+  #packDraftRow(row: Record<string, unknown>): StoredPackDraft {
+    return Object.freeze({
+      id: String(row.id), packId: String(row.pack_id), ownerLearnerId: String(row.owner_learner_id),
+      document: JSON.parse(String(row.document_json)), digest: String(row.digest),
+      state: row.state as StoredPackDraft["state"], seedKind: row.seed_kind as StoredPackDraft["seedKind"],
+      seedRef: row.seed_ref === null ? null : String(row.seed_ref), createdAt: String(row.created_at),
+      updatedAt: String(row.updated_at),
+    });
+  }
+
   #scheduleRow(row: Record<string, unknown>): ScheduleRow {
     return Object.freeze({
       id: String(row.id), learnerId: String(row.learner_id), rootKey: String(row.root_key),
@@ -1240,6 +1364,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
         name: "attempt records, concept tags, schedules, and history stats",
         apply: () => this.#addProgressTables(),
       },
+      {
+        version: 7,
+        name: "pack studio drafts and registered versions",
+        apply: () => this.#addPackStudioTables(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -1374,6 +1503,43 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage {
     this.#database.prepare(
       "INSERT OR REPLACE INTO progress_meta (key, value) VALUES ('backfill', ?)",
     ).run(this.#now());
+  }
+
+  #addPackStudioTables(): void {
+    this.#database.exec(`
+      CREATE TABLE IF NOT EXISTS pack_drafts (
+        id TEXT PRIMARY KEY,
+        pack_id TEXT NOT NULL,
+        owner_learner_id TEXT NOT NULL REFERENCES learners(id),
+        document_json TEXT NOT NULL,
+        digest TEXT NOT NULL,
+        state TEXT NOT NULL CHECK (state IN ('draft','registered','withdrawn')),
+        seed_kind TEXT NOT NULL CHECK (seed_kind IN ('blank','candidate','pgn','run','version','interchange')),
+        seed_ref TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS pack_drafts_owner ON pack_drafts(owner_learner_id);
+      CREATE INDEX IF NOT EXISTS pack_drafts_state ON pack_drafts(state);
+      CREATE TABLE IF NOT EXISTS playtest_documents (
+        digest TEXT PRIMARY KEY,
+        draft_id TEXT NOT NULL REFERENCES pack_drafts(id),
+        document_json TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS registered_packs (
+        pack_id TEXT NOT NULL,
+        version TEXT NOT NULL,
+        digest TEXT NOT NULL UNIQUE,
+        document_json TEXT NOT NULL,
+        publisher_handle TEXT NOT NULL,
+        publisher_learner_id TEXT NOT NULL,
+        draft_id TEXT NOT NULL REFERENCES pack_drafts(id),
+        registered_at TEXT NOT NULL,
+        PRIMARY KEY (pack_id, version)
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS registered_packs_digest ON registered_packs(digest);
+    `);
   }
 
   #addRunSummaries(): void {

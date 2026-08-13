@@ -31,6 +31,7 @@ import {
 import { IdentityService } from "./identity.js";
 import type { Principal } from "./authorization.js";
 import type { RunRole } from "./storage.js";
+import type { PackStudio } from "./pack-studio.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -387,8 +388,17 @@ export function errorResponse(error: unknown): Response {
                 error.code === "EVIDENCE_RESULT_NOT_FOUND"
               ? 404
               : error.code === "RUN_ALREADY_EXISTS" ||
-                  error.code === "FEEDBACK_WITHHELD"
+                error.code === "FEEDBACK_WITHHELD" ||
+                error.code === "PACK_UNRESOLVABLE" ||
+                error.code === "PACK_ID_RESERVED" ||
+                error.code === "PACK_VERSION_EXISTS" ||
+                error.code === "PACK_ID_NOT_YOURS" ||
+                error.code === "DRAFT_STALE"
                 ? 409
+                : error.code === "PACK_VERSION_NOT_INCREASING" ||
+                    error.code === "PROVENANCE_STATUS_NOT_WRITABLE" ||
+                    error.code === "GRADUATION_BLOCKERS_OUTSTANDING"
+                  ? 422
                 : 500;
   }
 
@@ -468,6 +478,7 @@ export function createRestHandler(
   selector?: OpponentSelector,
   capabilities?: CapabilitiesProvider,
   identity?: IdentityService,
+  studio?: PackStudio,
 ): RestHandler {
   return async (request) => {
     try {
@@ -532,6 +543,54 @@ export function createRestHandler(
         }
         return json(200, await capabilities.get());
       }
+      if (url.pathname === "/packs/drafts") {
+        if (studio === undefined) throw new ServerError("STORAGE_FAILURE", "Pack Studio is not configured");
+        const principal = authenticate();
+        if (request.method === "GET") return json(200, { drafts: studio.list(principal) });
+        if (request.method === "POST") {
+          requireJson(request);
+          const body = closedRecord(await parseBody(request), "/", ["document", "seedKind", "seedRef"]);
+          return json(201, { draft: studio.create(principal, {
+            document: body.document,
+            ...(body.seedKind === undefined ? {} : { seedKind: requiredString(body.seedKind, "seedKind") as any }),
+            ...(body.seedRef === undefined ? {} : { seedRef: requiredString(body.seedRef, "seedRef") }),
+          }) });
+        }
+        return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+      }
+      const draftRoute = /^\/packs\/drafts\/([^/]+)(?:\/(lint|playtest|register|withdraw))?$/.exec(url.pathname);
+      if (draftRoute !== null) {
+        if (studio === undefined) throw new ServerError("STORAGE_FAILURE", "Pack Studio is not configured");
+        const principal = authenticate();
+        const draftId = decodeURIComponent(draftRoute[1]!);
+        const action = draftRoute[2];
+        if (request.method === "GET" && action === undefined) return json(200, { draft: studio.required(draftId, principal) });
+        requireJson(request);
+        const body = await parseBody(request);
+        if (request.method === "PUT" && action === undefined) {
+          const expected = requiredString(request.headers.get("if-match"), "if-match header");
+          return json(200, { draft: studio.update(draftId, principal, expected, body.document) });
+        }
+        if (request.method === "POST" && action === "lint") return json(200, studio.lint(body.document));
+        if (request.method === "POST" && action === "playtest") {
+          const record = studio.playtest(draftId, principal);
+          const run = await service.create({
+            id: requiredString(body.id, "id"),
+            session: { kind: "pack", packId: record.document.id, packDigest: record.digest },
+            policyConfig: parsePolicyConfig(body.policyConfig),
+            seed: requiredSafeInteger(body.seed, "seed"),
+          }, { writerId: writerId(request), learnerId: principal.learnerId });
+          return json(201, { run });
+        }
+        if (request.method === "POST" && action === "register") return json(201, { pack: studio.register(draftId, principal) });
+        if (request.method === "POST" && action === "withdraw") { studio.withdraw(draftId, principal); return json(200, { withdrawn: true }); }
+        return json(405, { error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" } });
+      }
+      const exportRoute = /^\/packs\/([^/]+)\/export$/.exec(url.pathname);
+      if (request.method === "GET" && exportRoute !== null) {
+        if (studio === undefined) throw new ServerError("STORAGE_FAILURE", "Pack Studio is not configured");
+        return json(200, studio.export(decodeURIComponent(exportRoute[1]!), authenticate()));
+      }
       if (request.method === "GET" && url.pathname === "/packs") {
         return json(200, service.packs());
       }
@@ -545,7 +604,12 @@ export function createRestHandler(
         const pack = service.pack(packId);
         return new Response(
           JSON.stringify(
-            projectPackDocument(pack.document, pack.assessmentGrounding),
+            projectPackDocument(
+              pack.document,
+              pack.assessmentGrounding,
+              pack.channel,
+              pack.publisherHandle,
+            ),
           ),
           {
           status: 200,

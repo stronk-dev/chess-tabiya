@@ -129,7 +129,7 @@ describe("pack authoring validation", () => {
     expect(validatePackDocument(candidate).valid).toBe(true);
   });
 
-  it("rejects a reviewed pack with no reviewer", () => {
+  it("rejects the removed reviewed status at the schema boundary", () => {
     const candidate = structuredClone(fixture) as DrillPackDefinition;
     (candidate as unknown as Record<string, unknown>).provenance = {
       reviewStatus: "reviewed",
@@ -139,20 +139,17 @@ describe("pack authoring validation", () => {
 
     const result = validatePackDocument(candidate);
     expect(result.valid).toBe(false);
-    expect(result.issues).toContainEqual({
-      severity: "error",
-      source: "runtime",
-      code: "GRADUATION_REQUIRES_REVIEWERS",
-      path: "/provenance/reviewers",
-      message:
-        "reviewed packs require at least one reviewer; see planning/content-era/plan.md §3b",
-    });
+    expect(result.issues).toContainEqual(expect.objectContaining({
+      source: "schema",
+      code: "SCHEMA_ENUM",
+      path: "/provenance/reviewStatus",
+    }));
   });
 
-  it("allows a reviewed pack with sources and reviewers", () => {
+  it("allows a published pack with sources without implying a reviewer gate", () => {
     const candidate = structuredClone(fixture) as DrillPackDefinition;
     (candidate as unknown as Record<string, unknown>).provenance = {
-      reviewStatus: "reviewed",
+      reviewStatus: "published",
       sources: ["Reviewed source"],
       reviewers: ["Named reviewer"],
     };

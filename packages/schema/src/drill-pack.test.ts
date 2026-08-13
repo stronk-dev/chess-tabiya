@@ -51,13 +51,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.7", () => {
+describe("drill_pack.schema.json v0.8", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.7",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.8",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.7");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.8");
   });
 
   it("binds schema vocabularies to the shared constants", () => {

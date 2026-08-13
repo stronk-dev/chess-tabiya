@@ -34,6 +34,7 @@
             <span>{pack.mode.replaceAll("_", " ")}</span>
             <span class="phase">{pack.phase?.replaceAll("_", " ") ?? "unclassified"}</span>
             <span class="review-status">{pack.reviewStatus.replaceAll("_", " ")}</span>
+            <span class="channel">{pack.channel}{pack.publisherHandle ? ` · @${pack.publisherHandle}` : ""}</span>
           </div>
           <h2>{pack.title}</h2>
           <p class="difficulty">{difficultyBand(pack.difficulty)}</p>

@@ -138,6 +138,7 @@ class FakeApi implements DrillClientApi {
         phase: "opening",
         difficulty: this.document.difficulty,
         reviewStatus: "schema_example",
+        channel: "official",
       },
     ];
   }

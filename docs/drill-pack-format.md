@@ -1,12 +1,16 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.7; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.8; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
 supplies leg entries and objectives, not authored position jumps or automatic phase
 detection.
+
+Version 0.8 narrows publication status to `schema_example`, `draft`, or `published`.
+Publication channel is server-derived and deliberately absent from the document; see
+`docs/pack-studio.md`.
 
 `schemas/drill_pack.example.json` is the living Najdorf schema fixture. The
 fixture and schema under `archive/brief-v2/` remain frozen v0.1 inputs and are

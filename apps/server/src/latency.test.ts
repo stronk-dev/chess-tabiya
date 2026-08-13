@@ -38,13 +38,17 @@ interface TransportReport {
 function freshRun(id: string): DrillRun {
   return createRun({
     id,
-    packId: "server-latency-pack",
-    packDigest: `sha256:${"7".repeat(64)}`,
+    session: {
+      kind: "position",
+      start: { fen: INITIAL_FEN, side: "white" },
+      feedbackPolicy: "attempt_end",
+      opponentPolicy: { mode: "human_common" },
+    },
+    sessionDigest: `sha256:${"7".repeat(64)}`,
     policyConfig: {
       seedMode: "per_branch",
       locus: { executedAt: "server", engineIds: [], modelIds: [] },
     },
-    startFen: INITIAL_FEN,
     seed: 29,
     createdAt: at,
   });

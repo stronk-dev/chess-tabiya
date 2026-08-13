@@ -233,6 +233,7 @@ describe("Layer 3 screens", () => {
       phase: "opening",
       difficulty: pack.difficulty,
       reviewStatus: "schema_example",
+      channel: "official",
     };
     const component = mount(PackList, {
       target: target(),

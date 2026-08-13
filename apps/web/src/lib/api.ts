@@ -25,6 +25,8 @@ export interface PackSummary {
   readonly phase: PackPhase | null;
   readonly difficulty: unknown;
   readonly reviewStatus: string;
+  readonly channel: "official" | "community";
+  readonly publisherHandle?: string;
 }
 
 export interface PackDocument {
@@ -173,7 +175,6 @@ export type SurfaceAvailability = "available" | "unavailable-here";
 /** Roadmap state is build-owned and deliberately never sent by the server. */
 export const PLANNED_SURFACES: readonly SurfaceId[] = Object.freeze([
   "live",
-  "create",
   "justPlay",
   "fromPosition",
 ]);
@@ -250,6 +251,15 @@ export interface ProgressSchedule {
   readonly variant: string | null;
   readonly dueAt: string;
   readonly sourceRunId: string | null;
+}
+
+export interface PackDraft {
+  readonly id: string;
+  readonly packId: string;
+  readonly document: unknown;
+  readonly digest: string;
+  readonly state: "draft" | "registered" | "withdrawn";
+  readonly validation: { readonly valid: boolean; readonly issues: readonly { readonly code: string; readonly path: string; readonly message: string }[] };
 }
 
 export interface SelectMoveRequest {
@@ -387,6 +397,10 @@ export interface DrillClientApi extends RunApi {
   dueProgress?(): Promise<readonly ProgressSchedule[]>;
   dismissSchedule?(scheduleId: string): Promise<void>;
   duplicateRun?(runId: string, input: { readonly id: string; readonly seed: number; readonly scheduleId?: string }, writerId: string): Promise<DrillRun>;
+  packDrafts?(): Promise<readonly PackDraft[]>;
+  createPackDraft?(document: unknown): Promise<PackDraft>;
+  updatePackDraft?(draftId: string, digest: string, document: unknown): Promise<PackDraft>;
+  registerPackDraft?(draftId: string): Promise<PackSummary>;
 }
 
 type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
@@ -513,6 +527,34 @@ export class DrillApi implements DrillClientApi {
       body: input,
     });
     return body.run;
+  }
+
+  async packDrafts(): Promise<readonly PackDraft[]> {
+    const body = await this.#json<{ readonly drafts: readonly PackDraft[] }>("/packs/drafts");
+    return body.drafts;
+  }
+
+  async createPackDraft(document: unknown): Promise<PackDraft> {
+    const body = await this.#json<{ readonly draft: PackDraft }>("/packs/drafts", {
+      method: "POST", body: { document },
+    });
+    return body.draft;
+  }
+
+  async updatePackDraft(draftId: string, digest: string, document: unknown): Promise<PackDraft> {
+    const response = await this.#response(`/packs/drafts/${encoded(draftId)}`, {
+      method: "PUT",
+      headers: { "if-match": digest },
+      body: { document },
+    });
+    return (await response.json() as { readonly draft: PackDraft }).draft;
+  }
+
+  async registerPackDraft(draftId: string): Promise<PackSummary> {
+    const body = await this.#json<{ readonly pack: { readonly summary: PackSummary } }>(`/packs/drafts/${encoded(draftId)}/register`, {
+      method: "POST", body: {},
+    });
+    return body.pack.summary;
   }
 
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
@@ -662,9 +704,10 @@ export class DrillApi implements DrillClientApi {
   async #response(
     path: string,
     options: {
-      readonly method?: "GET" | "POST";
+      readonly method?: "GET" | "POST" | "PUT";
       readonly writerId?: string;
       readonly body?: unknown;
+      readonly headers?: Readonly<Record<string, string>>;
     } = {},
   ): Promise<Response> {
     const response = await this.#fetch(`${this.#baseUrl}${path}`, {
@@ -674,6 +717,7 @@ export class DrillApi implements DrillClientApi {
           ? {}
           : { "x-writer-id": options.writerId }),
         ...(options.body === undefined ? {} : { "content-type": "application/json" }),
+        ...options.headers,
       },
       ...(options.body === undefined ? {} : { body: JSON.stringify(options.body) }),
       credentials: "same-origin",

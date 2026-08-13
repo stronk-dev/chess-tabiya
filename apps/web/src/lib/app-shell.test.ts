@@ -48,6 +48,7 @@ const packSummary: PackSummary = {
   phase: "opening",
   difficulty: pack.difficulty,
   reviewStatus: "schema_example",
+  channel: "official",
 };
 
 const runSummary: RunSummary = {
@@ -268,7 +269,7 @@ describe("application shell", () => {
       ["/play", "Choose a position worth returning to."],
       ["/learn", "Return to the positions"],
       ["/live", "program item 8"],
-      ["/create", "program item 6"],
+      ["/create", "Author against the real validator"],
       ["/library", "Packs and run artifacts"],
       ["/settings", "This deployment"],
       ["/missing", "This route is not part of Tabiya"],

@@ -121,7 +121,7 @@ function surfaces(providerState: CapabilityProviders): SurfaceCapabilities {
     review: "available",
     learn: "available",
     live: "unavailable-here",
-    create: "unavailable-here",
+    create: "available",
     justPlay: "unavailable-here",
     fromPosition: "unavailable-here",
   });

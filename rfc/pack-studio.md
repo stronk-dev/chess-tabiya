@@ -1,6 +1,6 @@
 # RFC: Pack studio, write path, and publication channels
 
-- **Status:** draft
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/03-product-breadth.md` §Create and curate, §Breadth-complete
@@ -278,13 +278,14 @@ startup with both digests. Nothing is deleted and nothing is silently served und
 wrong channel. The alternative — refusing to start — would let any community registration
 brick the next deployment.
 
-### 2. Storage — migration 9
+### 2. Storage — migration 7
 
-`STORAGE_VERSION` → 9 (`storage.ts:147`, shipped value `5`), appended to the migration
+`STORAGE_VERSION` → 7, appended after Return/Progression's migration 6,
 list at `storage.ts:915-941` in the established shape. Claimed in `rfc/README.md`'s
 migration register in the same commit that drafts this RFC.
 
-6, 7 and 8 are claimed (§0), so this RFC takes 9 and its DDL appends after them.
+The accepted implementation order rebases this RFC to migration 7; N-way comparison and
+Live Session follow as migrations 8 and 9.
 The ordering is not a real dependency: those three change run-persisted shape,
 per-session tables and a progress projection respectively, and this one only
 creates tables of its own. The number is the shared resource; the register is
@@ -1681,7 +1682,7 @@ workflow it served rather than choosing a shape for it.
   `schemas/drill_pack.schema.json` already carries `minItems: 1`. Rebased twice
   against parallel drafts: pack schema 0.6 → 0.7 → **0.8** (resolving the register's
   recorded 0.6 contention with `return-and-progression.md` rather than merging
-  bumps), and migration 6 → 7 → 8 → **9** as `n-way-comparison.md`,
+  bumps), and migration 6 → **7** → 8 → 9 in the accepted landing order,
   `live-session-platform.md` and `return-and-progression.md` claimed those numbers.
 - 2026-08-13: **rewritten against two owner rulings and renamed
   `pack-studio-and-review.md` → `pack-studio.md`.**

@@ -183,8 +183,16 @@ export class RunService {
     if (lease.learnerId === "__legacy") this.#principal("legacy-create");
     const packRequest = input.session.kind === "pack" ? input.session : undefined;
     const pack = packRequest !== undefined
-      ? this.#requiredPackRegistry().required(packRequest.packId)
+      ? packRequest.packDigest === undefined
+        ? this.#requiredPackRegistry().required(packRequest.packId)
+        : this.#requiredPackRegistry().byDigest(packRequest.packDigest)
       : undefined;
+    if (packRequest !== undefined && pack === undefined) {
+      throw new ServerError("PACK_NOT_FOUND", `Unknown pack bytes: ${packRequest.packId}`);
+    }
+    if (pack !== undefined && pack.document.id !== packRequest?.packId) {
+      throw new ServerError("INVALID_REQUEST", "Pack digest belongs to another pack id");
+    }
     if (pack !== undefined && packRequest?.packDigest !== undefined && packRequest.packDigest !== pack.digest) {
       throw new ServerError("INVALID_REQUEST", "Client pack digest is stale");
     }
@@ -283,7 +291,7 @@ export class RunService {
     const uci = typeof principalOrWriter === "string" ? writerOrUci : uciOrOptions as string;
     const options = typeof principalOrWriter === "string" ? uciOrOptions as CommitMoveOptions : maybeOptions;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
-    const pack = this.#registeredPack(stored.run);
+    const pack = this.#requiredRegisteredPack(stored.run);
     this.#requiredEvidenceQueue();
     const committed = commitMove(stored.run, uci, options);
     const result =
@@ -308,7 +316,7 @@ export class RunService {
     const selection = typeof principalOrWriter === "string" ? writerOrSelection as OpponentSelection : selectionOrOptions as OpponentSelection;
     const options = typeof principalOrWriter === "string" ? selectionOrOptions as AppendOpponentPlyOptions : maybeOptions;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
-    const pack = this.#registeredPack(stored.run);
+    const pack = this.#requiredRegisteredPack(stored.run);
     this.#requiredEvidenceQueue();
     const committed = appendOpponentPly(stored.run, selection, options);
     const result =
@@ -483,16 +491,10 @@ export class RunService {
   authoredFeedback(runId: string, principalInput?: Principal): AuthoredFeedbackPage {
     const principal = principalInput ?? this.#principal("legacy-reader");
     const run = requireRead(this.#storage, runId, principal).stored.run;
-    const pack = this.#registeredPack(run);
     if (run.sessionKind === "position") {
       return Object.freeze({ items: Object.freeze([]), hasWithheldAuthoredContent: false });
     }
-    if (pack === undefined) {
-      throw new ServerError(
-        "PACK_NOT_FOUND",
-        `Run ${runId} has no matching registered pack for authored feedback`,
-      );
-    }
+    const pack = this.#requiredRegisteredPack(run)!;
     return projectAuthoredFeedback(pack, run);
   }
 
@@ -557,8 +559,8 @@ export class RunService {
       : principalOrBranches as Principal;
     const branchIds = Array.isArray(principalOrBranches) ? principalOrBranches : maybeBranches;
     const run = requireRead(this.#storage, runId, principal).stored.run;
-    const pack = this.#registeredPack(run);
-    return pack === undefined || !isPackSession(run)
+    const pack = this.#requiredRegisteredPack(run);
+    return pack === undefined
       ? exportPgn(run, branchIds)
       : exportPackRunPgn(pack.document, run, branchIds);
   }
@@ -797,8 +799,18 @@ export class RunService {
 
   #registeredPack(run: DrillRun): PackRecord | undefined {
     if (!isPackSession(run)) return undefined;
-    const pack = this.#packRegistry?.get(run.packId);
-    return pack?.digest === run.packDigest ? pack : undefined;
+    return this.#packRegistry?.byDigest(run.packDigest);
+  }
+
+  #requiredRegisteredPack(run: DrillRun): PackRecord | undefined {
+    if (!isPackSession(run)) return undefined;
+    const pack = this.#registeredPack(run);
+    if (pack === undefined) {
+      throw new ServerError("PACK_UNRESOLVABLE", `Run ${run.id} references unavailable pack bytes`, {
+        details: { runId: run.id, packId: run.packId, digest: run.packDigest },
+      });
+    }
+    return pack;
   }
 
   #enqueueMoveEvidence(run: DrillRun): void {

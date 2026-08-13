@@ -34,6 +34,8 @@ export interface PackSummary {
   readonly phase: PackPhase | null;
   readonly difficulty: unknown;
   readonly reviewStatus: string;
+  readonly channel: "official" | "community";
+  readonly publisherHandle?: string;
 }
 
 export interface PackRecord {
@@ -42,6 +44,8 @@ export interface PackRecord {
   readonly summary: PackSummary;
   readonly feedbackPolicy: FeedbackPolicy;
   readonly assessmentGrounding: AssessmentGrounding;
+  readonly channel: "official" | "community";
+  readonly publisherHandle?: string;
 }
 
 function projectSpineNode(node: SpineNode): unknown {
@@ -61,6 +65,8 @@ function projectSpineNode(node: SpineNode): unknown {
 export function projectPackDocument(
   document: DrillPackDefinition,
   grounding: AssessmentGrounding = "unverified",
+  channel: "official" | "community" = "official",
+  publisherHandle?: string,
 ): Readonly<Record<string, unknown>> {
   const raw = document as unknown as Record<string, unknown>;
   return freeze({
@@ -70,7 +76,17 @@ export function projectPackDocument(
     mode: raw.mode,
     phase: raw.phase,
     difficulty: raw.difficulty,
-    provenance: raw.provenance,
+    provenance: (() => {
+      const source = raw.provenance as Record<string, unknown>;
+      return {
+        reviewStatus: source.reviewStatus,
+        ...(Array.isArray(source.sources) ? { sources: source.sources } : {}),
+        ...(typeof source.licence === "string" ? { licence: source.licence } : {}),
+        ...(Array.isArray(source.graduationBlockers) ? { graduationBlockers: source.graduationBlockers } : {}),
+      };
+    })(),
+    channel,
+    ...(publisherHandle === undefined ? {} : { publisherHandle }),
     start: document.start,
     objective: {
       type: document.objective.type,
@@ -179,10 +195,12 @@ function sidecarPaths(source: string): {
 }
 
 export class PackRegistry {
-  readonly #records: ReadonlyMap<string, PackRecord>;
+  readonly #records: Map<string, PackRecord>;
+  readonly #digests: Map<string, PackRecord>;
 
   private constructor(records: ReadonlyMap<string, PackRecord>) {
-    this.#records = records;
+    this.#records = new Map(records);
+    this.#digests = new Map([...records.values()].map((record) => [record.digest, record]));
   }
 
   static async fromDocuments(
@@ -217,6 +235,7 @@ export class PackRegistry {
         phase: typeof raw.phase === "string" ? (raw.phase as PackPhase) : null,
         difficulty: raw.difficulty ?? null,
         reviewStatus: provenance.reviewStatus as string,
+        channel: "official",
       });
       records.set(
         document.id,
@@ -226,6 +245,7 @@ export class PackRegistry {
           summary,
           feedbackPolicy,
           assessmentGrounding: grounding,
+          channel: "official",
         }),
       );
     }
@@ -294,6 +314,63 @@ export class PackRegistry {
     if (record === undefined) {
       throw new ServerError("PACK_NOT_FOUND", `Unknown pack: ${packId}`);
     }
+    return record;
+  }
+
+  byDigest(digest: string): PackRecord | undefined {
+    return this.#digests.get(digest);
+  }
+
+  addCommunity(
+    document: DrillPackDefinition,
+    digest: string,
+    publisherHandle: string,
+  ): PackRecord {
+    const raw = document as unknown as Record<string, unknown>;
+    const provenance = raw.provenance as Record<string, unknown>;
+    const record: PackRecord = freeze({
+      document: freeze(structuredClone(document)),
+      digest,
+      summary: freeze({
+        id: document.id,
+        version: document.version,
+        digest,
+        title: String(raw.title),
+        mode: String(raw.mode),
+        phase: typeof raw.phase === "string" ? raw.phase as PackPhase : null,
+        difficulty: raw.difficulty ?? null,
+        reviewStatus: String(provenance.reviewStatus),
+        channel: "community",
+        publisherHandle,
+      }),
+      feedbackPolicy: raw.feedbackPolicy as FeedbackPolicy,
+      assessmentGrounding: "unverified",
+      channel: "community",
+      publisherHandle,
+    });
+    if (this.#records.get(document.id)?.channel !== "official") this.#records.set(document.id, record);
+    this.#digests.set(digest, record);
+    return record;
+  }
+
+  addPlaytest(document: DrillPackDefinition, digest: string): PackRecord {
+    const raw = document as unknown as Record<string, unknown>;
+    const provenance = raw.provenance as Record<string, unknown>;
+    const record: PackRecord = freeze({
+      document: freeze(structuredClone(document)),
+      digest,
+      summary: freeze({
+        id: document.id, version: document.version, digest,
+        title: String(raw.title), mode: String(raw.mode),
+        phase: typeof raw.phase === "string" ? raw.phase as PackPhase : null,
+        difficulty: raw.difficulty ?? null, reviewStatus: String(provenance.reviewStatus),
+        channel: "community",
+      }),
+      feedbackPolicy: raw.feedbackPolicy as FeedbackPolicy,
+      assessmentGrounding: "unverified",
+      channel: "community",
+    });
+    this.#digests.set(digest, record);
     return record;
   }
 }
