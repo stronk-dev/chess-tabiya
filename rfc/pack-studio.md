@@ -1428,16 +1428,43 @@ publisher-id handling in `deleteLearner` (§2).
 ## Acceptance criteria
 
 1. `make verify` and `make test-browser` pass; no test is retried or skipped.
-2. **Migration.** A database at `STORAGE_VERSION` 8 migrates to 9 with both tables
-   present and no existing row altered; a database already at 9 is a no-op;
-   a database at 10 still fails with the existing newer-schema error. A database at
-   5 migrates through 6, 7 and 8 to 9 with every intervening body intact.
+2. **Migration.** A database at the immediately preceding version migrates to this
+   RFC's with all three tables present and no existing row altered; a database
+   already at it is a no-op; a database one version ahead still fails with the
+   existing newer-schema error. A database at the shipped `STORAGE_VERSION` **5**
+   migrates through every intervening claimed number with each intervening body
+   intact — the numbers are whichever ones §0's register settles at acceptance time,
+   not the ones written here.
+2a. **Account deletion survives publication.** A learner who holds one `draft`, one
+   `withdrawn` and one `registered` draft, and who has registered a pack, is deleted
+   successfully in one transaction: `deleteLearner` does not throw, the `draft`
+   becomes `withdrawn`, all three drafts are owned by `__legacy`, the
+   `registered_packs` row is byte-identical except `publisher_learner_id`, its
+   `publisher_handle` is unchanged, and the pack is still served. A second test
+   asserts that registering a new version of that pack id afterwards is refused with
+   `PACK_ID_NOT_YOURS`. This case is called out because the earlier DDL made it
+   impossible: it is the regression that proves the foreign keys are right.
 3. **Digest-addressed resolution (regression for D20, §3).** A run is
    started against pack `p@1.0.0`; `p@1.1.0` is then registered; the in-flight run
    still fires checkpoints, still transitions its objective, still returns authored
    feedback, and still exports pack-aware PGN. The same test asserts the pre-fix
    behaviour is gone by checking that `byDigest` resolves the superseded version
-   while `list()` does not contain it.
+   while `list()` does not contain it. Resolution is asserted **across a restart**:
+   a second `PackCatalogue` built over the same database file resolves the same
+   digest, so the fix cannot be satisfied by a process-lifetime cache.
+3a. **The residue is loud, not silent (§3a).** For a pack-session run whose
+   `packDigest` resolves nowhere — constructed by starting a run against a seed pack
+   and then rebuilding the catalogue without it, the git-commit case — `move`,
+   `opponentPly`, `authoredFeedback` and `pgn` each raise `PACK_UNRESOLVABLE`, and
+   the test asserts the run's node count is **unchanged** after the refused `move`,
+   so nothing was committed into a run that could not grade it. A separate case
+   playtests a draft, `PUT`s a new document, and asserts the earlier playtest run
+   still orchestrates against the original bytes out of `playtest_documents`.
+3b. **A playtest cannot shadow the catalogue.** A draft carrying the seed fixture's
+   pack id is created and playtested successfully; `GET /packs` is unchanged,
+   `GET /packs/:id` for that id still serves the official document, and a
+   `POST /runs` naming that id starts against the official document and not the
+   draft. The same test asserts `PACK_ID_RESERVED` on registering it.
 4. **`reviewStatus` cannot be author-written.** `POST /packs/drafts` and `PUT` with
    `provenance.reviewStatus: "published"` return `PROVENANCE_STATUS_NOT_WRITABLE`.
    A draft can reach no state in which any endpoint serves it from `GET /packs`
@@ -1451,13 +1478,28 @@ publisher-id handling in `deleteLearner` (§2).
    a pack with no such property. A second case asserts that a pack resolved from the
    seed registry reports `official` and that registering under a seed id is refused
    with `PACK_ID_RESERVED`.
+5a. **A fabricated origin claim never reaches a learner (§13c).** A community pack is
+   registered whose `provenance` carries `channel: "official"`, `reviewedBy: "a
+   grandmaster"` and `endorsement: "verified by Tabiya"` — all of which validate,
+   because `provenance` is open. A component test over the provenance panel asserts
+   that none of those three strings appears in the rendered output, that `sources`
+   and `licence` do, and that the community sentence does. The assertion is on the
+   allow-list's behaviour, not on the three specific keys: a fourth invented key added
+   to the fixture must also be absent without the test changing.
 6. **The graduation rule is re-pointed, not broken.** `make pack-check` on a
    document with `reviewStatus: "published"` and empty `sources` reports
    `GRADUATION_REQUIRES_SOURCES`; the same document with one source passes.
-   `GRADUATION_REQUIRES_REVIEWERS` no longer exists in the codebase, asserted by
-   absence from the exported issue-code set. `sourcing/check.ts:216`'s
+   `GRADUATION_REQUIRES_REVIEWERS` and `CANDIDATE_ALREADY_REVIEWED` no longer exist
+   in the codebase, asserted by absence from the exported issue-code sets of
+   `pack-validation.ts` and `sourcing/check.ts`. `sourcing/check.ts:216`'s
    `CANDIDATE_ALREADY_PROMOTED` still fires for a candidate whose `reviewStatus` is
    not `draft`, unchanged.
+6a. **The reviewers field has no producer left.** A freshly emitted candidate from
+   each of the three emitters (`openings`, `position-seeds`, `syzygy`) contains no
+   `provenance.reviewers` key at all, asserted on the serialized document. The four
+   committed `content/candidates/*/pack.json` are **unmodified** — asserted by
+   digesting each and comparing to the `packDigest` in its own `evidence.json` — and
+   each still passes `checkSourcingDirectory` in strict mode.
 7. **Registration is idempotent-safe and stateful.** Registering the same draft
    twice returns `DRAFT_STATE_INVALID` on the second call, and exactly one
    `registered_packs` row exists. The published document differs from the draft in
@@ -1468,7 +1510,8 @@ publisher-id handling in `deleteLearner` (§2).
    declaring `perfect_tablebase` (runtime stage, inherited); a pack declaring
    `immediate_blunder_guard` (schema stage, inherited); a pack with non-empty
    `graduationBlockers`; a pack with an ungrounded `syzygy` assessment; a
-   seed-registry pack id; a non-increasing version; a failing
+   seed-registry pack id; the id `drafts`; an id whose `publisher_learner_id` is
+   another learner; a non-increasing version; a failing
    regression case. The three inherited cases are asserted here as well as in
    `defect-sweep`, because "the schema already refuses it" is a claim about a
    composition this RFC introduces and must therefore prove at this boundary.
@@ -1493,6 +1536,16 @@ publisher-id handling in `deleteLearner` (§2).
     passes `validatePackDocument` structurally and always fails §4b's graduation
     gate. A run containing a branch with `origin: "simulated"` produces no proposal
     and no spine sibling for it, and the response says so.
+10a. **Distillation's edges produce valid documents or refusals, never invalid
+    drafts.** The property test's generator must include: a pack-sourced run in which
+    **no** checkpoint fired (one mechanical checkpoint, substitution named in
+    `graduationBlockers`, `checkpoints.length === 1`); a branch of 40 plies
+    (`difficulty.branchLengthTarget` absent, document still valid); a position run
+    with `feedbackPolicy: "attempt_end"` (`delayed_checkpoint` substituted and named);
+    and a selected branch with zero learner plies (refused with `IMPORT_INVALID`, no
+    draft written). Each of these is a shape the schema permits a run to reach and the
+    pack schema refuses, which is the class this RFC treats as its primary failure
+    mode.
 11. **The channel is visible wherever a pack is (§13c).** Component tests assert
     that `PackList`, the app-shell library section, the drill screen's run header
     and the pack-provenance panel each render the channel for both an official and
@@ -1500,20 +1553,24 @@ publisher-id handling in `deleteLearner` (§2).
     alone, and that the community sentence in §13c appears verbatim on the
     community pack and nowhere on the official one. A snapshot asserts that no
     rendered string anywhere in the pack surface contains "reviewed", "approved",
-    "verified" or "checked".
+    "verified" or "checked" — and, because those words can arrive from an author's
+    own `provenance` rather than from our copy, the snapshot fixture is the
+    adversarial pack of A5a. `reviewStatus` is asserted absent from every rendered
+    surface and present on the `GET /packs` payload.
 12. **Import refuses to launder prose.** A PGN with comments and NAGs produces a
     draft whose document contains none of that text — asserted by searching the
     serialized document for each comment string — while the comments are returned
     as reference material.
 13. **Lints.** `INTENT_CAPTURE_HAS_NO_RECORDING_SITE` fires on the schema fixture's
     intent-capture checkpoint and is a warning, not an error;
-    `DEVIATION_PLAN_CLASS_UNKNOWN` is an error; `CONSTRUCTED_ROOT_UNVERIFIED` fires
-    on Pack C's draft and not on Pack A's.
+    `CONSTRUCTED_ROOT_UNVERIFIED` fires on Pack C's draft and not on Pack A's; no
+    issue code named `DEVIATION_PLAN_CLASS_UNKNOWN` exists, asserted by absence.
 14. **Format amendment.** The schema `$id` is `:0.8` and
     `DRILL_PACK_SCHEMA_VERSION` is `"0.8"`; the `reviewStatus` enum is exactly
     `["schema_example","draft","published"]`; `provenance.reviewers` is absent from
     the schema and a document still carrying `"reviewers": []` validates as untyped
-    extra metadata; every pack in `content/candidates/`, `content/drafts/`, and
+    extra metadata; `$defs/deviation` gains **no** `planClassId` (§14a); every pack in
+    `content/candidates/`, `content/drafts/`, and
     `schemas/` still validates; `digestDrillPack` over every committed pack returns
     the digest recorded in its sidecar where one exists, and the digest of
     `schemas/drill_pack.example.json` is unchanged.
@@ -1540,17 +1597,24 @@ publisher-id handling in `deleteLearner` (§2).
 Per RFC-0000's agent rule, the implementer must not edit `design/`. Proposed rows
 for the owner:
 
-1. **Authoring-format friction table** — mark the `planClassId` row `📜 RFC` naming
-   this RFC §14a and noting that its consumer is now the studio editor rather than a
-   review checklist; annotate the intent-relative-success row "surfaced by
+1. **Authoring-format friction table** (`design/BACKLOG.md:138-148`) — the
+   `planClassId` row (`:147`) stays 💡 and is **not** marked `📜 RFC`: §14a withdrew
+   the amendment on review because its surviving consumer was an editor echoing the
+   author's own input. Proposed annotation: "surfaced, not fixed — `rfc/pack-studio.md`
+   §14a withdrew the schema addition; unblocking input is a consumer that shows a
+   learner something they did not write, which needs the durable interaction record
+   below." Annotate the intent-relative-success row "surfaced by
    `INTENT_CAPTURE_HAS_NO_RECORDING_SITE`; blocked on a durable interaction record
-   (program #4)"; annotate the `concept_violation` row "surfaced, not fixed; the
+   (program #4)"; annotate the `concept_violation` row (`:148`) "surfaced, not fixed; the
    review sign-off that would have caught it was struck by the 2026-08-13 ruling.
    Unblocking input is more authored packs that need the split, not a reviewer."
-2. **New defect row D20** — *a superseded pack digest silently un-orchestrates its
-   in-flight runs* (`service.ts:621-625` with `service.ts:252,276`), closed by this
-   RFC §3. It is latent today and becomes live the moment a second version of any
-   pack can exist.
+2. **Defect row D20 already exists** at `design/BACKLOG.md:126`, added when this RFC
+   was drafted; no new row is needed. Proposed amendment instead: its closure clause
+   currently names only digest-addressed resolution, which §3a establishes is half the
+   fix — the other half is that an unresolvable digest must **refuse the move** rather
+   than resolve to `undefined`. Add "…and `PACK_UNRESOLVABLE` on the residue
+   (`rfc/pack-studio.md` §3a), because digest-addressing narrows the silent case
+   without eliminating it: an official pack's bytes are mutable by git."
 3. **New row** — *durable checkpoint-interaction record*: intent capture and
    prediction both need a run event carrying the learner's choice. Names program #4
    and the `INTENT_CAPTURE_HAS_NO_RECORDING_SITE` warning as the evidence.
@@ -1569,6 +1633,14 @@ for the owner:
    the staffing question behind the review gate. With no gate it is no longer a
    product prerequisite; the row should be restated as content-sourcing partnership
    or closed.
+7. **New defect row** — *a pack id is a global unnamespaced key that any learner can
+   version*. Not a shipped defect (no write path exists yet), but the shape is a
+   standing property of the id space rather than of this RFC: `^[a-z0-9][a-z0-9-]*$`
+   with no owner segment means id ownership must be tracked out of band, which §4a.6a
+   does with `publisher_learner_id`. A namespaced id grammar (`<handle>/<slug>`) would
+   make it structural instead and is the alternative this RFC did **not** take, because
+   it would change every committed pack's bytes and every recorded digest. Worth a row
+   so the trade is on the record rather than inside one RFC.
 
 ## Open questions
 
@@ -1618,3 +1690,69 @@ workflow it served rather than choosing a shape for it.
   its safety invariants, `/create`, session distillation, PGN/candidate/interchange
   import, the playtest harness, the regression set, versioning, and the D20
   digest-addressed resolution fix.
+- 2026-08-13: **adversarial review by a second agent; blockers fixed in place.** Every
+  normative claim was re-verified against the tree, and the review's own brief was
+  re-verified with it.
+  *D20 (§3, new §3a).* Confirmed at `service.ts:621-625` with all four call sites, and
+  found the fix incomplete: digest-addressing covers superseded *registered* versions
+  but not an official pack whose bytes a git commit changes or deletes, not a playtest
+  run whose draft is then edited, and not a restored database — and in all three the
+  run kept accepting moves. Added the never-silent half: `PACK_UNRESOLVABLE` from
+  `move`/`opponentPly`/`authoredFeedback`/`pgn`, refused **before** `commitMove`; a
+  `playtest_documents` table so an author's next `PUT` cannot orphan their playtest;
+  and a requirement that `byDigest` be a synchronous durable read rather than a
+  process-lifetime map, since a cache would re-introduce D20 at every restart.
+  *Storage (§2).* The DDL could not have run: `pack_drafts.owner_learner_id ON DELETE
+  CASCADE` against `registered_packs.draft_id ON DELETE RESTRICT`, with
+  `PRAGMA foreign_keys = ON` (`storage.ts:307`), makes `deleteLearner` (`:610-648`)
+  throw for any learner who ever published. Replaced with plain references plus
+  explicit `__legacy` reassignment. Added the `ledger_json`/`manifest_json` columns
+  §4b and §11 read and the draft table did not have.
+  *Impersonation (§4a.6a, §1, §8).* Three routes found and closed: any learner could
+  register version `1.1.0` of another learner's pack id (`PACK_ID_NOT_YOURS`,
+  `publisher_learner_id`); the playtest map, specified only as "never in `list()`",
+  could shadow a seed pack id through `get()` and change what `POST /runs` resolves
+  for everyone (`byDigest`-only, plus an internal `createPlaytestRun` path so run
+  creation never resolves a draft by id); and a git commit landing *after* a
+  registration could collide with it, which reservation cannot reach (seed-wins
+  resolution, §1).
+  *Routing (§4).* `GET /packs/drafts` and both `/packs/:id/versions|export` routes were
+  dead on arrival behind `rest.ts:524`'s `startsWith("/packs/")` branch; specified
+  match order and reserved the id `drafts`, which the id grammar otherwise permits.
+  *The channel's real forgery surface (§13c, §4a.3, §0).* "No field to forge" is true
+  and insufficient: `provenance` is `additionalProperties: true` (`:598`) and
+  `projectPackDocument` returns it whole (`pack-registry.ts:70`), so `"reviewedBy"` or
+  `"channel": "official"` is expressible, valid, registrable and served. Closed with a
+  rendering allow-list rather than a schema narrowing (which would invalidate every
+  committed pack), plus A5a.
+  *`provenance.reviewers` (§10a).* "Removed and never read" was false: `check.ts:217`
+  reads it (`CANDIDATE_ALREADY_REVIEWED`, on `draft-import`'s own path) and all three
+  emitters write it (`openings.ts:114`, `position-seeds.ts:238`, `syzygy.ts:187`).
+  Both now move with the field. Verified the byte-stability claim by inspecting every
+  pack document in the tree: none declares `reviewed` or `published`, every
+  `"reviewers"` is `[]`, so the claim holds.
+  *§14a `planClassId` — **withdrawn**.* Its re-justification against the studio editor
+  does not survive the RFC's own rule: the editor is a JSON pane echoing a field the
+  author typed seconds earlier, its lint validates only the field's own existence, and
+  the delivery surface may not traverse the link at all. Recorded rather than deleted;
+  `DEVIATION_PLAN_CLASS_UNKNOWN` went with it; pack schema **0.8 is unchanged**,
+  carried now by the `provenance` narrowing alone.
+  *Distillation (§6).* `RunStart` is `{fen, side}` with no `movesSan`, so every
+  distilled pack trips `CONSTRUCTED_ROOT_UNVERIFIED` — stated, with `movesSan` copied
+  from a byte-equal source pack. Added the boundary cases that produced *invalid*
+  documents: a pack-sourced run where no checkpoint fired hit `checkpoints: []`
+  against `minItems: 1`; a >20-ply branch hit `branchLengthTarget`'s 2–20 band; a
+  zero-learner-ply branch is now refused outright.
+  *Coordinates.* The shipped values are `$id :0.4` / `DRILL_PACK_SCHEMA_VERSION "0.4"`
+  and `STORAGE_VERSION 5`, not the 0.7 and 8 the draft asserted; stated as such, with
+  the register claims kept and acceptance criterion 2 rewritten against the shipped
+  value. Corrected `digest.ts:56-64`→`59-66`, `digest.ts:53-55`→`54-56`,
+  `service.ts:186-188`→`183-186`, `types.ts:200-213`→`202-215`,
+  `capabilities.ts:32-41`→`32-40`, `api.ts:23`→`16-24`,
+  `pack-authoring.test.ts:116-147`→`113-149`, and `service.ts`'s evidence movetime to
+  `:635`/`:156-157`. Noted that D20 is **already** in `design/BACKLOG.md:126`, so the
+  proposed row became a proposed amendment. Added `n-way-comparison.md`'s pack schema
+  **0.9** to §0's register table, verified as downstream and not a contention.
+  *§1.* The table's "`content/drafts/` — not published" contradicted §10a: in
+  development those files load into the seed registry and are stamped `official`.
+  Resolved in favour of the code, with the reason stated.

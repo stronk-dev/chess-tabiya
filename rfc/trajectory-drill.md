@@ -788,8 +788,9 @@ not a mode switch. Adding an `organic: true` flag would be a second vocabulary f
 
 **The claim that recognition is identical across the split is checkable against the frozen trigger
 vocabulary, not just asserted.** A leg entry is a checkpoint (§3c), a checkpoint's trigger is
-`simpleTrigger` or `timingWindow` (`drill_pack.schema.json:404-424`), and `simpleTrigger` is closed
-at five members (`:358-399`) — `atPly`, `atSpineNode`, `atAuthoredBoundary`, `fenPredicate`,
+`simpleTrigger` or `timingWindow` (`$defs/trigger`, `drill_pack.schema.json:412`, reached from
+`$defs/checkpoint` at `:461`), and `simpleTrigger` is closed
+at five members (`:358-400`) — `atPly`, `atSpineNode`, `atAuthoredBoundary`, `fenPredicate`,
 `materialBalance`. All five reach the **same** function, `simpleTriggerMatches`
 (`pack-orchestrator.ts:36-59`), through the same call site (`checkpointMatches`, `:61-71`), and the
 same once-per-path filter (`reachedOnActivePath`, `:73-86`). The "typical trigger" column above is
@@ -836,10 +837,15 @@ runtime resolves position identity against it. Nothing is inferred."
 
 #### 8b. When an organic run does not arrive
 
-**Nothing is invented, and the run is not marked down.** Concretely:
+**Nothing is invented, the run keeps the verdict it has, and the run is not marked down.**
+Concretely:
 
 - the trajectory stays in the current leg; no checkpoint fired, so no transition exists to record;
-- the leg it is in is graded exactly as its own mode grades it, and that verdict stands;
+- **the leg it is in keeps the verdict it already has**, graded exactly as its own mode grades it —
+  a `follow_theory` leg keeps its membership derivation and its `active`/`preserved`/`degraded`
+  state, an outcome leg keeps its grade, a condition leg keeps its authored state. Non-arrival
+  changes nothing about it, because non-arrival is the absence of an event and no shipped rule
+  reads an absence;
 - every later leg is `status: "not_entered"` with no `state`;
 - a run that simply stops is not graded further. The objective state of the last node on the path
   is the answer for the active leg, `active` included
@@ -856,6 +862,14 @@ and the `not_entered` presentation is asserted by test to contain none of `faile
 `should`, `too slow`, `mistake`, `wrong`, `incomplete`. This is the `unknown` discipline of
 `rfc/archive/line-drill-theory-grading.md` §9 applied to legs, for the same reason: silence about
 something that did not happen is a fact, not a judgement.
+
+**The two ways of not arriving are rendered the same way, with one added fact.** A run that is
+still playing and a run that ended inside a leg both leave later legs `not_entered`, and both print
+the sentence above unchanged — the distinction is not a grade and must not be dressed as one. When
+`TrajectoryVerdict.stopped` is true (§6), one further sentence is printed beside it, naming the
+recorded fact and nothing else: *"The game ended in this leg."* It is licensed by
+`outcome.reached`, which is a rules fact the runtime already produces, so it asserts nothing about
+whether the game should have ended there.
 
 **`RunSummary.objectiveState` is not the trajectory's grade.** After a reset it holds the *active
 leg's* state, which for a trajectory that reached leg 3 and stopped reads `active`. The run list
@@ -883,7 +897,7 @@ Three changes, all narrow:
   (`apps/server/src/authored-feedback.ts:302`); for a leg-bearing pack the gate becomes "the pack
   has a `follow_theory` leg", and `lineMembership`'s entries are filtered to that leg's span on
   the reveal occurrence's path. Without the filter every middlegame and endgame ply returns
-  `unknown` (`line.ts:139-144`) and the sheet fills with "this pack has no statement about this
+  `unknown` (`line.ts:140-145`) and the sheet fills with "this pack has no statement about this
   move" for moves the pack never claimed to cover. That is not merely noisy: `unknown` means "the
   pack is silent about this move **in a theory drill**", and outside the theory leg the pack is
   making no theory claim at all, so the sentence would be false in tone if not in letter.
@@ -896,10 +910,15 @@ in that state, so a trajectory without a theory leg cannot accidentally transiti
 
 #### 9b. Outcome Drill inside a trajectory
 
-- **`grading` is per leg.** `OBJECTIVE_GRADING_REQUIRED` (`pack-validation.ts:214`),
-  `OBJECTIVE_GRADING_UNSUPPORTED` (`:223`), `OBJECTIVE_RESOLUTION_UNKNOWN` (`:232`) and
-  `OBJECTIVE_RESIST_NEEDS_CHECKPOINT` (`:241`) all apply, per leg, with pointers rooted at
-  `/legs/{i}/objective` (§10).
+- **`grading` is per leg — in the validator and in the compiler.** `OBJECTIVE_GRADING_REQUIRED`
+  (`pack-validation.ts:214`), `OBJECTIVE_GRADING_UNSUPPORTED` (`:223`),
+  `OBJECTIVE_RESOLUTION_UNKNOWN` (`:233`) and `OBJECTIVE_RESIST_NEEDS_CHECKPOINT` (`:242`) all
+  apply, per leg, with pointers rooted at `/legs/{i}/objective` (§10). The compiler half is §4b's
+  second property and is the one that bites: `objectiveRules` reads `grading?.resolveAt` twice
+  (`pack-orchestrator.ts:242`, `:259`), and both reads move to the passed objective. A `resist`
+  leg whose `resolveAt` was read from the top level would compile the `outcome-loss → failed` rule
+  and **not** the `resist` exemption, grading a survived loss as a failure — silently, and with
+  `OBJECTIVE_RESIST_NEEDS_CHECKPOINT` green because the *validator* read the leg.
 - **`assessedBy.kind: "syzygy"` is refused on a leg** (`TRAJECTORY_LEG_SYZYGY_UNSUPPORTED`).
   Motivation §2g is the reason: a leg's start position is not known until a run reaches it, so
   `SYZYGY_ASSESSMENT_OUT_OF_RANGE` and `SYZYGY_ASSESSMENT_MISMATCH` would check a ledger record
@@ -941,22 +960,36 @@ is kept: `validatePackDocument` returns on the first schema failure and never re
 checks (`pack-validation.ts:420-427`), so nothing here restates `legs.minItems`, the closed leg
 object, or the `run_trajectory` enum.
 
-**The objective block is extracted, not duplicated.** `pack-validation.ts:175-330` becomes
-`objectiveIssues(objective, pointerPrefix)`, closing over the pack, and is called once for
-`pack.objective` at `/objective` when `legs` is absent, or once per leg at `/legs/{i}/objective`
-when it is present. Motivation §2f is why: sixteen codes that read the top-level objective would
-otherwise validate nothing on a leg, and re-implementing them per leg is the D4 shape. The
-extraction is behaviour-preserving for every existing pack and criterion 12 asserts it byte-for-byte
-on the eight pack files in the tree.
+**The objective block is extracted, not duplicated — but only the part of it that is actually
+per-objective.** Motivation §2f counted the region `pack-validation.ts:174-366` and found three
+kinds of code inside it, and a wholesale extraction would be wrong for two of them. The split:
 
-New codes:
+| Kind | Treatment |
+|---|---|
+| The **twelve** codes rooted at `/objective` | Extracted into `objectiveIssues(objective, pointerPrefix)`, closing over `pack` and `checkpoints`. Called once for `pack.objective` at `/objective` when `legs` is absent, or **once per leg** at `/legs/{i}/objective` when it is present. This is the whole point: without it a leg's objective is validated by nothing at all, which is the D4 shape (`design/BACKLOG.md:117`) |
+| The **seven** theory-family codes whose pointers name pack-level shape (`/mode`, `/authoredBoundary`, `/checkpoints`, `/deviations`) | **Run once, not once per leg.** Their subject is the pack's single `authoredBoundary`, single spine and single boundary checkpoint, so N copies at the same pointer would be N identical issues. For a leg-bearing pack the `theoryObjective` predicate they are gated on becomes "the pack has a `follow_theory` leg" — well-defined precisely because `TRAJECTORY_MULTIPLE_THEORY_LEGS` (§9a) admits at most one. `THEORY_OBJECTIVE_NEEDS_LINE_MODE` is the one exception and is handled by §9a's widening rather than by this gate |
+| `CHECKPOINT_BOUNDARY_WITHOUT_BOUNDARY` (`:202`), the **one** objective-independent code | **Stays exactly where it is**, outside the extracted function. It reads only `pack.authoredBoundary` and `pack.checkpoints`; moving it inside would emit it once per leg on a pack that has one boundary problem |
+
+The extraction is behaviour-preserving for every existing pack — none has `legs`, so
+`objectiveIssues` is called exactly once with `pointerPrefix = "/objective"` and the emitted list is
+unchanged in content **and order** — and criterion 12 asserts that byte-for-byte across every pack
+document in the tree.
+
+**A leg's syzygy assessment is refused before the extracted syzygy checks can run**
+(`TRAJECTORY_LEG_SYZYGY_UNSUPPORTED`, §9b), so `SYZYGY_ASSESSMENT_OUT_OF_RANGE` and
+`SYZYGY_ASSESSMENT_MISMATCH` — which read `pack.start.fen` and `pack.start.side` and would silently
+check a leg against the pack's opening — are never reached with a leg pointer. They stay in the
+extracted function so the top-level path is untouched; on a leg they are dead by construction, and
+criterion 8's syzygy fixture asserts the refusal fires instead of them.
+
+**Seventeen new codes:**
 
 | Code | Rule |
 |---|---|
 | `LEGS_NEED_TRAJECTORY_MODE` | `legs` present with `mode !== "trajectory"` |
 | `LEGS_NEED_TRAJECTORY_OBJECTIVE` | `legs` present with `objective.type !== "run_trajectory"` |
 | `TRAJECTORY_OBJECTIVE_NEEDS_LEGS` | `objective.type: "run_trajectory"` without `legs` |
-| `TRAJECTORY_TOP_LEVEL_CONDITIONS_UNSUPPORTED` | `run_trajectory` with a top-level `successConditions`. Top-level `grading` is already refused by the shipped `OBJECTIVE_GRADING_UNSUPPORTED` (`:223`), since `run_trajectory` is not an outcome type, and is not restated |
+| `TRAJECTORY_TOP_LEVEL_CONDITIONS_UNSUPPORTED` | `run_trajectory` with a top-level `successConditions`. Top-level `grading` is already refused by the shipped `OBJECTIVE_GRADING_UNSUPPORTED` (`:223`), since `run_trajectory` is not an outcome type, and is not restated. This code exists because the shipped validator has **no** counterpart: `successConditions` on a non-outcome, non-theory objective is legal today and compiles through `conditionRules` — which for a `run_trajectory` pack is a rule set that §4b never asks for, i.e. exactly the silent no-op class |
 | `TRAJECTORY_DUPLICATE_LEG_ID` | two legs share an `id` |
 | `TRAJECTORY_FIRST_LEG_HAS_ENTRY` | `legs[0].entryCheckpointId` is present. Leg 1 begins at the root, which no checkpoint can name |
 | `TRAJECTORY_LEG_NEEDS_ENTRY` | a leg after the first with no `entryCheckpointId` — it could never begin |
@@ -968,13 +1001,15 @@ New codes:
 | `TRAJECTORY_NONFINAL_TERMINAL_RESOLUTION` | a non-final leg with `grading.resolveAt.kind: "terminal"` (§9b) |
 | `TRAJECTORY_MULTIPLE_THEORY_LEGS` | more than one leg with `objective.type: "follow_theory"` (§9a) |
 | `TRAJECTORY_LEG_SYZYGY_UNSUPPORTED` | a leg objective with `assessedBy.kind: "syzygy"` (§9b) |
-| `TRAJECTORY_TRANSITIONED_UNSUPPORTED` | any leg `successConditions` entry with `to: "transitioned"` (§4a) |
+| `TRAJECTORY_TRANSITIONED_UNSUPPORTED` | any leg `successConditions` entry with `to: "transitioned"` (§4a). The value is authorable: `conditionBase.to` is `["preserved","degraded","failed","achieved","transitioned"]` (`drill_pack.schema.json:204`), and the shipped `THEORY_ABSORBING_UNSUPPORTED` (`:262`) and `OBJECTIVE_ABSORBING_WITHOUT_OUTCOME` (`:280`) reject it only for theory and outcome objectives — a `execute_break` leg may write it today |
+| `TRAJECTORY_LEG_CONDITION_PRECEDES_ENTRY` | a leg `successCondition` with `kind: "reach_checkpoint"` naming **its own** `entryCheckpointId` or that of **any earlier** leg. Motivation §2h is why: `checkpointReached` compiles to the path-scoped `checkpointWasReached` (`pack-orchestrator.ts:97` → `objective.ts:228-229`), so such a condition is already true at the leg's first graded commit, and with `conditionRules`' `to` default of `"achieved"` (`pack-orchestrator.ts:148`) it resolves the leg before the learner acts. Only the decidable case is claimed — a leg naming an *arbitrary* checkpoint that happens to fire earlier is not statically knowable, and the RFC does not pretend to catch it; the node-exact `checkpointReachedHere` form used by `grading.resolveAt` (`:266`) and by the theory boundary rule (`:204`) is unaffected and remains the safe encoding |
 
-**Two shipped root checks are cited, not extended.** `CHECKPOINT_TRUE_AT_ROOT`
-(`pack-validation.ts:400`) already rejects a `materialBalance` or `fenPredicate` entry trigger
-that holds at `start.fen`, and `CHECKPOINT_UNREACHABLE_AT_ROOT` (`:393`) already rejects
-`atPly: 0`. Between them, "leg 2 begins before the learner moves" and "leg 2 can never begin" are
-covered by code that runs today, and no trajectory-specific version is added.
+**Two shipped root checks are cited, not extended.** `CHECKPOINT_UNREACHABLE_AT_ROOT`
+(`pack-validation.ts:393`) already rejects `atPly: 0`, and `CHECKPOINT_TRUE_AT_ROOT` (`:401`)
+already rejects a `materialBalance` or `fenPredicate` entry trigger that holds at `start.fen` —
+it evaluates `checkpointMatches` against a real `createRun` root (`:368-392`), so it is an
+execution, not a heuristic. Between them, "leg 2 begins before the learner moves" and "leg 2 can
+never begin" are covered by code that runs today, and no trajectory-specific version is added.
 
 `lintDrillPack` (`packages/schema/src/drill-pack/lint.ts`) gains nothing. Every rule above depends
 on `objective.type`, on the compiled rule set, or on a checkpoint's trigger shape — none of which
@@ -1009,23 +1044,52 @@ Projection and surfaces, all shipped and only extended:
   `objective.summary` and `assessedBy.note` are pre-play framing an author writes knowing it is
   shown before play, in the same surface class as the top-level summary. A leg summary tells the
   learner what the run is for. It is not a claim anchored inside the drill.
-- **The grade line is rendered per leg.** `DrillScreen.svelte:451` calls
+- **The grade line is rendered per leg — and the gate above it must move, or the change is a
+  no-op.** This is the one place where extending a shipped surface is not enough, and it is worth
+  stating in full because the naive version of this change renders nothing at all. Today
   `objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)`
-  (`outcome-presentation.ts:105-112`); for a leg-bearing pack it is called with the **active
-  leg's** objective type and the node's state. A test asserts no rendered page contains
-  `Objective: run_trajectory`, which would be the mechanical signature of this having been missed.
-  `projectedGrading(pack)` (`outcome-presentation.ts:27-38`) gains a leg-aware sibling and
-  `DrillScreen.svelte:153-159` consumes it.
+  (`outcome-presentation.ts:105-112`) is passed to `<OutcomeContext>` at
+  `DrillScreen.svelte:452`, which is **inside** `{#if assessment !== undefined || resistance.length > 0}`
+  at `:451`. Both operands derive from `grading = projectedGrading(pack)` (`:153`), which reads
+  `pack.objective.grading` (`outcome-presentation.ts:29`): `assessment` is `undefined` when
+  `grading` is (`:154-156`), and `resistance` is `[]` when `grading` is undefined and
+  `pack.objective.type !== "follow_theory"` (`:157-159`). A leg-bearing pack's **top-level**
+  objective is `run_trajectory` with no `grading` (§3b) and is not `follow_theory`, so the gate is
+  false and `OutcomeContext` never mounts — no grade line, no assessment, and **no resistance
+  line**, which would also silently defeat criterion 15's off-spine assertion. Three changes, all
+  in the same block:
+  1. `projectedGrading` gains a leg-aware sibling `activeLegGrading(pack, run, nodeId)` returning
+     the **active leg's** `grading` (or `undefined`), and `DrillScreen.svelte:153` uses it when
+     `pack.legs` is present.
+  2. The gate at `:451` gains `|| pack.legs !== undefined`. A leg-bearing pack always mounts
+     `OutcomeContext`, because the active leg always has a grade line even when it has no
+     `grading` — `objectiveGradeSentence` needs only a type and a state.
+  3. `resistance` (`:157-159`) drops its dependence on `grading` for a leg-bearing pack: the
+     resistance sentences are a fact about the opponent that played, not about outcome grading,
+     and a trajectory's guided/organic story (§8) is unreadable without them.
+
+  The grade line itself is then `objectiveGradeSentence(<active leg's objective.type>,
+  currentNode.objectiveState)`. A test asserts no rendered page contains `Objective: run_trajectory`
+  (criterion 14), which is the mechanical signature of step 3 of §4b having been wired to the
+  top-level objective by mistake.
 - **The transition sentence** is added to `outcome-presentation.ts` beside
   `checkpointResolutionSentence` (`:114-125`) and rendered in `OutcomeContext.svelte` and in the
   timeline. Its content is fixed by §7 rule 1 and constrained by §7 rule 2.
-- **`whyBanner` must not read a reset as a downgrade.** It throws if a state change carries no
-  evidence reference or renders a blank sentence (`screen-model.ts:197-208`); the reset carries
-  `pack:<entryCheckpointId>` and renders the checkpoint's label, so neither throw fires. What
-  changes is the wording: a `→ active` transition on a leg-bearing pack renders the §7 transition
-  sentence rather than the generic state-change line, so the learner is told a leg began and is
-  not told the objective was reset.
-- **The timeline marks transitions.** `DrillScreen.svelte:106-113` derives its markers from
+- **`whyBanner` must not read a reset as a downgrade, and must not swallow the seal.** It selects
+  the **last** `objective.state_changed` on the path (`screen-model.ts:188-196`) and throws if that
+  change carries no evidence reference or renders a blank sentence (`:197-208`). The reset carries
+  `pack:<entryCheckpointId>` and renders the checkpoint's label
+  (`evidence-sentences.ts:53-60`), so neither throw fires. Two consequences, both stated so they
+  are not discovered at review time:
+  - the wording changes — a `→ active` change on a leg-bearing pack renders the §7 transition
+    sentence rather than the generic state-change line, so the learner is told a leg began and is
+    not told the objective was reset;
+  - on §4b's **two**-transition commit the reset is last, so it **shadows the seal** in the banner.
+    That is correct for the banner, whose subject is "why did the state change just now", but it
+    means the banner is not where a sealed verdict is read. The sealed verdict is rendered from
+    `trajectoryVerdict` in the per-leg list and marked on the timeline; criterion 3a asserts both
+    events exist in the log regardless of which one the banner shows.
+- **The timeline marks transitions.** `DrillScreen.svelte:107` derives its markers from
   `timelineEntries` (`screen-model.ts:94-114`) and gains the transition node ids, so a boundary
   has a ply marker on the same axis the learner already reads.
 
@@ -1038,12 +1102,19 @@ the client already has.
 
 `content/drafts/trajectory-legs.browser.json` is the executable fixture for B2's Trajectory row.
 It is a **mechanical fixture and makes no chess claim beyond move legality**, which it says in its
-own `graduationBlockers` — the shape `content/drafts/line-boundary.browser.json` and
-`schemas/fixtures/drill-pack/terminal-outcome.browser.json` already use. Its ids and labels are
-about the mechanism, not about chess, so a reviewer cannot mistake it for content.
+own `provenance.graduationBlockers` — the shape
+`content/drafts/outcome-hold.browser.json:55`, `content/drafts/outcome-resist.browser.json:47` and
+`schemas/fixtures/drill-pack/terminal-outcome.browser.json:70` already use, all three with the
+one-line "Test-only fixture; never publish as chess content." Its ids and labels are about the
+mechanism, not about chess, so a reviewer cannot mistake it for content.
 
 - `mode: "trajectory"`, `phase: "cross_phase"`, `objective.type: "run_trajectory"` with a summary
   that says it is a fixture.
+- `feedbackPolicy: "delayed_checkpoint"` and an explicit `start.side`. Both are deliberate rather
+  than incidental: `immediate_blunder_guard` is rejected at load today
+  (`capabilities.ts:25-30`) and removed from the schema by `rfc/defect-sweep.md` at 0.5, and the
+  same sweep makes `start.side` required — so the fixture is already written for the schema this
+  RFC's bump follows.
 - `opponentPolicy: {mode: "theory_strict", seedMode: "fixed"}` — deterministic under
   `ENGINE_MODE=mock`, the same choice `line-boundary.browser.json` made and for the same reason.
   Playing it off its spine exercises the recorded `human_common` fallback (§8).

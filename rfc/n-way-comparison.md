@@ -204,7 +204,7 @@ This is the load-bearing correction and every clause is binding.
    offset by node id. A renderer **MUST** draw one cell per group, not one per
    column, and **MUST NOT** count a shared node as a difference.
 5. **`groups` is a partition, and that is what makes it safe to render.** Three
-   invariants, all asserted by A1, because a renderer that merges cells on a
+   invariants, all asserted by A1a, because a renderer that merges cells on a
    weaker guarantee can merge two *different* nodes into one:
    - every key of `nodes` appears in exactly one group, and no group contains a
      branch id absent from `nodes` — so the groups exactly cover the columns
@@ -550,7 +550,8 @@ runtime alongside the rows, never in the client:
   contract this RFC does not open.
 
 Both are added as a `strips` record keyed by branch id, of entries carrying
-`plyOffset` and the fact. Group members (§1.1 clause 4) are drawn once.
+`plyOffset` and the fact. Group members (§1.1 clauses 4–5) are drawn once, and
+deduplicated by `nodeId` rather than stacked per member.
 
 **Narrative mode.** A reading-order projection of the *same* payload, adding no
 evidence: set fork position → each column's `decision` → the lowest offset at
@@ -1185,12 +1186,12 @@ here, its §6 there), and it owns pack schema 0.8 directly beneath this RFC's 0.
 | **R0** | §1.2's `ServerErrorCode` widening and its `errorResponse` arms, and §7.1's `parseRunRoute` allowlist entries. Landed first and alone, because every later slice throws codes and serves paths the shipped router turns into 500s and 404s | shipped server only |
 | **R1** | §1 payload and axis rule, §2 transport, §3 selection (incl. `BranchCard.forkNodeId` and the rail props), §4 consequence row and the `pack-absent:` reference, §6 branch-selective export, and the two doc rewrites named in the header | R0 |
 | **R2** | §5 grid, N-column strips incl. material and structure, synchronised replay, narrative mode | R1 |
-| **R3** | §7 simulate and promotion, §10 **run** schema 0.8 / migration 6 | R1, R2 |
-| **R4** | §8 prediction checkpoints, §8.0 **pack** schema 0.9 | R1, R3 (run schema 0.8) |
-| **R5** | §9 deep analysis and MultiPV | R1 |
+| **R3** | §7 simulate and promotion (incl. `ForkOptions.origin`), §10 **run** schema 0.8 / migration 6 | R0, R1, R2 |
+| **R4** | §8 prediction checkpoints, §8.0 **pack** schema 0.9, and A7's update to the shipped `Predict the reply` browser step | R0, R1, R3 (run schema 0.8) |
+| **R5** | §9 deep analysis and MultiPV | R0, R1 |
 
 `design/03-product-breadth.md:25-26,65-66` requires it: **default compare
-selection and branch usefulness scoring are not in R1–R5.** They optimise a
+selection and branch usefulness scoring are not in R0–R5.** They optimise a
 surface that must first be correct manually, and they take §3's selection state
 as their input when they are built.
 
@@ -1218,6 +1219,17 @@ No other divergence.
 
 ## Acceptance criteria
 
+**A0 — the new codes and routes resolve (server regression).** Each of
+`TOO_MANY_BRANCHES`, `NO_AUTHORED_VARIATIONS`, `SIMULATE_TOO_LARGE`,
+`SIMULATION_EXPIRED` and `SIMULATE_BUDGET_EXCEEDED` returns its specified status
+(422/422/422/**410**/422) and **not 500**, which is `errorResponse`'s
+fall-through for an unmapped code (`rest.ts:376`). `POST` to
+`/runs/:id/simulate`, `/runs/:id/simulate-enter`, `/runs/:id/prediction` and
+`/runs/:id/analysis` each reach their handler rather than the `404 NOT_FOUND` an
+unlisted action produces (`rest.ts:392-403`). This is R0's whole test and it
+exists because five of the six failures it catches look like a working feature
+returning the wrong number.
+
 **A1 — axis correctness (runtime unit, `packages/runtime/src/compare.test.ts`).**
 A run with branches `X` and `Y` forked at node `F1` and branch `Z` forked at the
 shallower node `F0`: `compareBranches(run, [X, Y, Z])` returns
@@ -1228,13 +1240,26 @@ by `compareBranches(run, [X, Y])` differ from those in the three-branch payload
 for the same nodes — the concrete proof that pairwise results are not
 composable.
 
-**A2 — payload invariants (runtime unit).** `compareBranches` throws or the
-route rejects for: fewer than two distinct ids, a duplicated id, an unknown id
-(`UNKNOWN_BRANCH`), and more than eight ids (`TOO_MANY_BRANCHES`). A branch
-whose leaf is the set fork yields a column with no nodes and
-`consequence.decision === null`, and does not throw. Element types `NodeRef`,
-`ObjectiveTimelineEntry`, `CheckpointHit`, `ComparisonScore` and
-`ComparisonEvidenceEntry` are asserted structurally unchanged.
+**A1a — `groups` is a partition (runtime unit, and a property in
+`invariants.test.ts`).** Over every row of every payload in the generated runs
+that `invariants.test.ts:150-162` already builds: the union of `groups` equals
+`Object.keys(nodes)` exactly; the groups are pairwise disjoint; every member of a
+group resolves to the same `nodes[id].id`; no two groups resolve to the same node
+id; and the groups appear in `columns` order. This is the assertion that makes
+§1.1 clause 4's "draw one cell per group" safe — without it a renderer merging on
+`groups` can merge two different nodes into one cell, which is the one way an
+N-way comparison can be confidently wrong on screen.
+
+**A2 — payload invariants (runtime unit).** `compareBranches` **throws**
+`BranchQueryError("UNKNOWN_BRANCH")` for an unknown id and a `TypeError` for
+fewer than two distinct ids or a duplicated id; the route maps those to `404` and
+`400 INVALID_REQUEST` respectively and rejects more than eight ids with
+`422 TOO_MANY_BRANCHES` before calling the runtime at all, so the cap is a
+transport rule and the runtime has one less way to fail. A branch whose leaf is
+the set fork yields a column with no nodes and `consequence.decision === null`,
+and does not throw. Element types `NodeRef`, `ObjectiveTimelineEntry`,
+`CheckpointHit`, `ComparisonScore` and `ComparisonEvidenceEntry` are asserted
+structurally unchanged.
 
 **A3 — withholding (server regression, `apps/server/src/*.test.ts`).** Before
 reveal, `POST /runs/:id/compare` returns `evidence` and `lines` empty for every
@@ -1280,9 +1305,18 @@ records `predictedMass: null` and `predictedRank: null` with `candidateCount`
 still set. Replay recomputes all three from `distribution` and rejects a snapshot
 whose stored values disagree. The event type carries no property whose name or value
 expresses a verdict, asserted against an explicit key list.
-`GET /runs/:id/events?sinceSeq=0` returns the event before reveal. A run stored
-at schema `"0.7"` is migrated by migration 6, gains `origin: "played"` on every
-branch, and remains readable.
+
+**The delivery assertion is on the response, not the event page.** The route's
+own body returns the `OpponentSelection` and the three positions, before reveal,
+and that is what the test asserts. It additionally asserts the event is present
+in the *stored* run before reveal. It does **not** assert
+`GET /runs/:id/events?sinceSeq=0` contains it: `publicEvents` truncates at the
+first engine-feedback event (§8.4), so that assertion would pass or fail on
+whether an `evidence.attached` happened to precede the prediction — a test that
+is green for the wrong reason on most runs and red for the right one on some.
+
+A run stored at schema `"0.7"` is migrated by migration 6, gains
+`origin: "played"` on every branch, and remains readable.
 
 **A6a — the reveal states no verdict (component test).** The prediction reveal for a
 recorded event renders the four elements of §8.4 and nothing else. A snapshot asserts
@@ -1318,7 +1352,7 @@ selected the way the shipped test does at `drill.spec.ts:152,162-168`):
    and assert the three per-branch checkboxes are all checked, which is the
    regression against `compareIds.slice(-1)`;
 3. open compare and assert `.boards article` has count **3** (the shipped test
-   asserts 2 at `drill.spec.ts:215`) and the heading reads
+   asserts 2 at `drill.spec.ts:216`) and the heading reads
    "Same decision, 3 consequences.";
 4. assert three consequence blocks, each containing that branch's objective
    sentence and its `resistanceSentences` text ending "Not perfect play.", and
@@ -1334,8 +1368,17 @@ selected the way the shipped test does at `drill.spec.ts:152,162-168`):
    tag is present and that the file contains exactly the selected branches'
    variations;
 9. the existing test `"served Najdorf pack plays, rewinds, branches, compares,
-   and exports"` (`drill.spec.ts:143`) continues to pass with its assertions
-   updated from `{a, b}` to the branch-keyed selectors.
+   and exports"` (`drill.spec.ts:143`) continues to pass with **two** changes,
+   not one. The branch-keyed selectors replace `{a, b}` at `:213-225`; and
+   `:176-177`, which today reaches `Predict the reply` and clicks `Continue`,
+   must first play a move on the prediction board. That checkpoint carries
+   `interaction.type === "prediction"` in the living example
+   (`schemas/drill_pack.example.json:84-93`), and today the sheet shows only
+   `Continue` **because `projectPackDocument` never sends `interaction` at all**
+   (`pack-registry.ts:82-87`). §8.1 changes that, so §8.2's step appears in the
+   shipped flow the moment R4 lands. R4 updates this test in the same commit; a
+   draft that left it unmentioned would have shipped a red suite and blamed the
+   new test.
 
 A second browser test, `"a simulation is scratch until entered, and a prediction
 shows a distribution"`, drives simulate at the spine node and asserts the resulting
@@ -1356,11 +1399,13 @@ prediction step added to the checkpoint sheet introduces no new member of the
 checkpoint-action vocabulary, asserted against `defect-sweep`'s
 `CHECKPOINT_ACTIONS` constant once that lands (§11).
 
-**A9 — B3.** With A1–A8 green, `design/03-product-breadth.md`'s B3 row moves
-from `pairwise partial` to met: manual multi-branch selection, pairwise and
+**A9 — B3.** With A0–A8 green, `design/03-product-breadth.md`'s B3 row (line
+173) moves from `pairwise partial` to met: manual multi-branch selection, pairwise and
 multi comparison, replay, deep mode, and export all work end to end on the
 example pack. The owner's walkthrough constraint is discharged by A4, not by
-A1–A3.
+A1–A3. **B3 is proposed, not moved, by this RFC**: the design tier is the
+owner's, so the row change lands as a BACKLOG entry and an owner ruling, not as
+an edit from the implementing agent (RFC-0000's agent rule).
 
 ## Open questions
 
@@ -1392,3 +1437,45 @@ entered (§7).
   query. Migration 6 is unchanged and §10 says why the scratch ruling does not shrink
   it. Rewrote A5, added A5a, A6a and A6b, and rewrote the second browser test to
   assert that an un-entered simulation leaves the run untouched.
+- 2026-08-13: **adversarial review — every citation re-verified against the tree,
+  six specifications of absent infrastructure corrected.** *Infrastructure that
+  did not exist.* (1) `ServerErrorCode` is a closed union and `errorResponse`
+  falls through to **500**, so all five new codes — and 410, a status the chain
+  never produces — needed the widening §1.2 now specifies. (2) `parseRunRoute` is
+  a closed one-segment allowlist, so `/runs/:id/simulate/enter` could not be
+  routed at all; the promotion route is renamed **`/runs/:id/simulate-enter`** and
+  §7.1 lists every new action. (3) `ForkOptions` has no `origin`, so §7.3's
+  `fork(clone, …, { origin })` had nothing to pass it to. (4) `BranchCard` has no
+  `forkNodeId` and `BranchRail`'s props have no heading callbacks, so §3's
+  "compare all forked here" was uncomputable; both widenings are now stated.
+  (5) §9's MultiPV threading named `stockfishPlaySpec` — the **opponent** engine;
+  the judge (`application.ts:189`) hardcodes `MultiPV: 1` at handshake, so the
+  mechanism is a per-job `setoption` in `StockfishEvidenceExecutor`, plus a reset,
+  because the judge process is shared and UCI options persist. (6) The new
+  `Checkpoint not reached` sentence had no evidence reference to be keyed on;
+  `packAbsentEvidenceRef` is added, with a prohibition on ever persisting it.
+  *A fabricated ground.* §1.2 attributed the 8-branch cap to `design/03`; no such
+  statement exists (the document's only "eight" is its eight program items), so
+  the cap is now asserted on this RFC's own grounds. *Blast radius.* §1 claimed
+  two call sites for removing `compare()`; the real set is eighteen, including
+  four test files — one of them the **property** test at
+  `invariants.test.ts:150-162` — and two living docs that describe the two-sided
+  payload literally. Both docs are now named in the header as amended here.
+  *Ruling integration.* §8.4's positioning sentence is pinned to one fixed form
+  and explicitly does not interpolate the top move beside the learner's guess;
+  the `targetElo`-absent path is specified rather than defaulted; and §8.4's
+  withholding paragraph was wrong that "passes the barrier" means "is delivered"
+  — `publicEvents` **truncates**, so the delivery path is the prediction
+  response and A6 asserts that instead. *Axis.* §1.1 gains the `groups` partition
+  invariants (cover, disjoint, same-node-within, distinct-node-across, stable
+  order) and the explicit rule that adding a branch moves everyone's offsets, so
+  no consumer caches one across calls; A1a asserts all of it as a property.
+  *Also.* §8.1 was short one shipped assertion (`drill-client-server.test.ts:180`)
+  and A7 was short one shipped browser step — projecting `interaction` makes the
+  existing `Predict the reply` flow at `drill.spec.ts:176-177` require a move.
+  Added **R0** so the codes and routes land before anything throws or serves.
+  Corrected roughly thirty line citations that had drifted, including every
+  `design/03-product-breadth.md` reference (B3 is line **173**, program item #5 is
+  **261-263**, the Lucas Chess sentence is **289-290**) and four `rfc/README.md`
+  ones. A9 now proposes the B3 row change rather than asserting it, per the
+  design-tier rule.

@@ -10,7 +10,7 @@
   (line 144); `design/BACKLOG.md` open-defect rows D4 (line 117), D5 (118), D10 (132),
   D9 (133), D8 (134), D6 (136). **All six coordinates were re-read on 2026-08-13 after the
   parallel drafts appended rows D17–D20; the ledger's own D9 row was rewritten the same day
-  and now states the severity this RFC verified (§1a).**
+  and now states the severity this RFC verified (§1.1).**
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 + exploration gate opened by
   owner ruling 2026-08-12 (`planning/exploration/log.md`)
 - **Depends on:** nothing unshipped
@@ -41,7 +41,7 @@
 Six defects sit open in `design/BACKLOG.md`, each small, each leaking into every new RFC as
 a caveat. I re-verified all six against the tree. **All six are still real.** None was
 incidentally fixed. Two have moved since they were written: D9's severity was raised in the
-ledger on 2026-08-13 while this RFC was drafted, so the row and §1a now agree — the crash it
+ledger on 2026-08-13 while this RFC was drafted, so the row and §1.1 now agree — the crash it
 was filed for is unreachable and a silent inverted grading verdict sits underneath it; and
 D8 is larger than its row says, because the schema declares **five** values the loader
 rejects, not two.
@@ -78,7 +78,7 @@ four of six cases; corrected coordinates are given here and are the ones this RF
 |---|---|---|---|
 | D4 | server allow-list and "the client's recognized-action switch" are two hand-maintained lists that agree | **real, and it is three lists, not two** | `apps/server/src/pack-validation.ts:18`; the client is not a switch but a string literal inside a template, `apps/web/src/lib/CheckpointSheet.svelte:78`; the schema is a third source that constrains the same field by exclusion, `schemas/drill_pack.schema.json:462-470` |
 | D5 | release compose hardcodes `ENGINE_MODE: maia` with an unconditional Maia dependency | **real, verbatim** | `deploy/compose.release.template.yaml:8` and `:17-19`; the dev file's shape it should mirror is `compose.yaml:12,20-23,27` |
-| D6 | `PackSummary` omits `phase`; `grep -rn "phase" apps/web/src` finds only prose | **real; and the pack *detail* projection already ships it, which the row does not say** | `apps/server/src/pack-registry.ts:26-34` (summary type) and `:201-209` (construction) omit it; `pack-registry.ts:68` **does** project it on `GET /packs/:id`; `apps/web/src/lib/api.ts:16-23` mirrors the summary without it; the three `phase` hits in `apps/web/src` are `App.svelte:345`, `PackList.svelte:17` (prose) and `session-controller.test.ts:392` (an assertion that a `phase` key is absent) |
+| D6 | `PackSummary` omits `phase`; `grep -rn "phase" apps/web/src` finds only prose | **real; and the pack *detail* projection already ships it, which the row does not say** | `apps/server/src/pack-registry.ts:26-34` (summary type) and `:201-209` (construction) omit it; `pack-registry.ts:68` **does** project it on `GET /packs/:id`; `apps/web/src/lib/api.ts:16-24` mirrors the summary without it; the three `phase` hits in `apps/web/src` are `App.svelte:345`, `PackList.svelte:17` (prose) and `session-controller.test.ts:392` (an assertion that a `phase` key is absent) |
 | D8 | two declared values validate and are rejected at load, citing `pack-validation.ts:104-129` | **real, and understated: five values, in two different vocabularies** | `immediate_blunder_guard` at `schemas/drill_pack.schema.json:50-56` vs `apps/server/src/pack-validation.ts:111-134` (the row's coordinates have drifted by seven lines); **four** opponent modes — `plan_defense`, `practical_resistance`, `perfect_tablebase`, `human_external` — at `schema:480-489` vs `pack-validation.ts:136-152`, because `SUPPORTED_POLICY_MODES` is `RUN_OPPONENT_MODES` and that is three members (`packages/runtime/src/types.ts:38-42`). The row's "two sources of truth for one vocabulary" is **half wrong**: `pack-authoring.test.ts:41-61` already binds both enums to the capability constants as sets |
 | D9 | as rewritten in the ledger on 2026-08-13: schema-optional `side`, silent coercion at `pack-validation.ts:369`, unconditional Syzygy inversion | **real, and the ledger row and this RFC now say the same thing** — the row was raised in severity from the drafting of this section, so there is no remaining disagreement to reconcile | see §1.1 |
 | D10 | both shipped Stockfish specs report `version: "unknown"` | **real, verbatim** | `apps/server/src/engine-supervisor.ts:111-140` (`parseIdentity`); `spec.name` is set at `apps/server/src/strong-engine.ts:50` and `apps/server/src/application.ts:188`, neither of which sets `version`, and `application.ts:282-283` constructs both without one; the B6b workaround — an authoring spec with no `name` — is `apps/server/src/sourcing/position-seeds.ts:67` |
@@ -312,8 +312,8 @@ The line is not "how much work is it". It is what happens when a pack names the 
   cannot select is told exactly that, by name, before anything runs.
 - `feedbackPolicy` **has none of that.** It is a disclosure contract, not a capability:
   `feedbackDisclosed` gates what the learner is allowed to see
-  (`packages/runtime/src/feedback.ts`, consumed by
-  `apps/server/src/feedback-policy.ts:10-23,33-45`) under ADR-0006 anti-contamination.
+  (`packages/runtime/src/feedback.ts:3-18`, consumed by
+  `apps/server/src/feedback-policy.ts:10-24,34-51`) under ADR-0006 anti-contamination.
   Nothing publishes feedback policies in `/capabilities`. Nothing records an applied policy.
   There is no honest degradation: substituting `delayed_checkpoint` for a pack that asked
   for immediate feedback does not weaken the drill, it **changes what the learner is shown
@@ -328,11 +328,13 @@ The line is not "how much work is it". It is what happens when a pack names the 
   entirely; it has one member and exists only to explain it.
 - `apps/server/src/pack-validation.ts:111-134` collapses to the general branch: any value
   not in `FEEDBACK_POLICIES` raises `UNSUPPORTED_FEEDBACK_POLICY` with the existing
-  `is not a supported v1 feedback policy` message. It is now unreachable for
-  `immediate_blunder_guard` and still reachable for a value the schema never saw (a pack
-  handed to `validatePackDocument` by a caller that skipped the file, which is every caller
-  of `PackRegistry.fromDocuments`). The schema rejects it first, at `/feedbackPolicy`, with a
-  JSON Pointer — which is the earlier and better error. The import of
+  `is not a supported v1 feedback policy` message. **Stated honestly: that branch becomes
+  dead code for every document that reaches it**, because `validatePackDocument` runs the
+  schema first and returns on failure (`:420-427`), and there is no caller that skips it. It
+  is kept rather than deleted as the fallback for a schema-versus-constant divergence — the
+  exact divergence §1e's test now makes impossible — and that is the whole of its
+  justification. The schema rejects the value first, at `/feedbackPolicy`, with a JSON
+  Pointer, which is the earlier and better error. The import of
   `DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES` at `pack-validation.ts:11` goes with it.
 - **`apps/server/src/pack-authoring.test.ts` is the binding test, and it is an edit site
   twice over.** It imports `DECLARED_UNIMPLEMENTED_FEEDBACK_POLICIES` (`:11`) and asserts the
@@ -372,8 +374,9 @@ does not merely relabel the issue — it suppresses every other issue in the sam
   changes, which is the whole content of §2a.
 
 **Why removal and not implementation.** Implementing it means: a per-move judge evaluation
-on the learner's own moves (today judge evidence is enqueued per node and withheld —
-`apps/server/src/service.ts:186,205`), a blunder-threshold vocabulary the pack format does
+on the learner's own moves (today judge evidence is enqueued once per committed node and then
+withheld — `apps/server/src/service.ts:260,284` calling `#enqueueMoveEvidence` at `:627-636`,
+with disclosure gated by `feedbackDisclosed`), a blunder-threshold vocabulary the pack format does
 not have in any form, a client surface that interrupts play, and a rewrite of the
 anti-contamination barrier it exists to open early. That is an RFC, with a design question
 (what counts as a blunder, and who is allowed to say so under law 8) that this sweep must
@@ -469,8 +472,8 @@ unaffected.
 Fixture blast radius, enumerated by execution rather than asserted:
 
 - **Every non-negative pack already complies** — all twelve: the living fixture, four
-  committed candidates, six committed drafts, and `schemas/fixtures/drill-pack/
-  terminal-outcome.browser.json`.
+  committed candidates, six committed drafts, and the browser fixture
+  `terminal-outcome.browser.json` under `schemas/fixtures/drill-pack/`.
 - **The five fixtures in `drill-pack.test.ts`'s `negativeFixtures` list (`:37-43`) already
   fail** for their own reasons and their test asserts only `false`
   (`packages/schema/src/drill-pack.test.ts:81-84`), so they keep passing and are not amended.
@@ -524,7 +527,7 @@ transport and run creation respectively.
 has already constrained the string by the time a document reaches this point. The detail
 projection at `:68` is unchanged — it already ships `phase`.
 
-**4b. Client type.** `apps/web/src/lib/api.ts:16-23` mirrors the field exactly, importing
+**4b. Client type.** `apps/web/src/lib/api.ts:16-24` mirrors the field exactly, importing
 `PackPhase` from `@chess-tabiya/schema/drill-pack`. The three `PackSummary` literals in tests
 (`apps/web/src/lib/screens.test.ts:227-235`, `app-shell.test.ts:42-50`,
 `session-controller.test.ts:134-141`) gain the field; the assertion at
