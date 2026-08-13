@@ -524,9 +524,17 @@ containing the deepest node).
 6. `provenance.sources` — one generated line naming the run id, its
    `sessionDigest`, the source pack id and digest if any, and the engine
    identities above. These are facts about how the moves came to exist.
+6a. The remaining required scalars, which the schema demands and which have exactly
+   one honest source each: `id` and `title` from the request (the author names their
+   own pack); `version` `"0.1.0"`; `mode` and `objective.type` copied from the source
+   pack for a pack-sourced run and `"outcome"` / `"play_until_checkpoint"` for a
+   position-sourced one; `feedbackPolicy` = `run.feedbackPolicy`, except that a
+   position run's `attempt_end` — which is a run policy, not a pack policy, and is
+   absent from the pack enum — becomes `delayed_checkpoint` and is named in
+   `graduationBlockers` as a substitution rather than a choice.
 7. `provenance.reviewStatus: "draft"`, `reviewers: []`, and
    `graduationBlockers` enumerating the five §3b assertion categories plus the
-   opponent-line caveat.
+   opponent-line caveat and any substitution above.
 
 **Extracted as proposals, outside the pack document:** every fork in the run
 becomes a *deviation proposal* in `proposals_json`.
@@ -1151,4 +1159,15 @@ No other question is open.
 
 ## Changelog
 
-- 2026-08-13: created.
+- 2026-08-13: created. Re-verified the absent surface against the tree (no non-GET
+  `/packs` route, empty `content/packs/`, `/create` an honest empty state) and the
+  measured 43% playtest friction against `design/BACKLOG.md`'s "Pack interop" row.
+  Found and specified the fix for a latent defect the write path would make live:
+  a run whose pack digest is superseded silently stops being orchestrated
+  (`service.ts:621-625` with `:252,276`). Withdrew a drafted
+  `CHECKPOINT_SET_EMPTY` registration gate on verifying that
+  `schemas/drill_pack.schema.json` already carries `minItems: 1`. Rebased twice
+  against parallel drafts: pack schema 0.6 → 0.7 → **0.8** (resolving the register's
+  recorded 0.6 contention with `return-and-progression.md` rather than merging
+  bumps), and migration 6 → 7 → 8 → **9** as `n-way-comparison.md`,
+  `live-session-platform.md` and `return-and-progression.md` claimed those numbers.

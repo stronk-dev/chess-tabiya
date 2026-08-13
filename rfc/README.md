@@ -127,7 +127,8 @@ resource**; claim it here before writing it into a draft.
 | 0.5 | `defect-sweep.md` | `start.side` required; `immediate_blunder_guard` removed | draft |
 | 0.6 | `return-and-progression.md` | `retryVariants`; `concepts` typed | draft |
 | 0.7 | `trajectory-drill.md` | `legs` | draft |
-| 0.8 | `n-way-comparison.md` | prediction-checkpoint delivery | draft |
+| 0.8 | `pack-studio-and-review.md` | write path / review state | draft |
+| 0.9 | `n-way-comparison.md` | prediction-checkpoint delivery | draft — **must rebase**: its §10 and R3/R4 still say 0.8, written before the drafts above landed |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor must renegotiate here rather than renumber unilaterally.

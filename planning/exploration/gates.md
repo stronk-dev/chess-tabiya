@@ -154,10 +154,12 @@ currently unfalsifiable, which makes any verdict resting on them theater:
   identity (`concepts` exists only in the JSON schema and is unique within one
   pack) and any episode-attempt record. Measurable when B7's attempt record and
   a concept registry land.
-- *"second-attempt objective achievement"* — Pack A declares no
-  `objective.successConditions`, so its objective can never transition, and
-  `WhyBanner.svelte` (the only explanation surface, 52 lines) fires only on an
-  objective transition. Neither attempt can succeed or be explained.
+- *"second-attempt objective achievement"* — **corrected 2026-08-13: this is now
+  stale.** Pack A became gradable via its `offObjective` deviation and boundary
+  checkpoint (`apps/server/src/pack-orchestrator.ts:171-211`). The metric needs
+  an honest denominator rather than a caveat: only packs where
+  `objectiveRules(pack).length > 0` can contribute, or an ungraded pack silently
+  counts as a failure to improve. `return-and-progression.md` specifies it.
 
 Recorded rather than quietly dropped: a success metric with no mechanism behind
 it is exactly the small-n evaluation problem already ledgered in `BACKLOG.md`.
