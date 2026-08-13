@@ -139,6 +139,63 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
   }
 
   const checkpoints = new Set(pack.checkpoints.map((checkpoint) => checkpoint.id));
+  const legs = pack.legs;
+  if (legs !== undefined) {
+    if (mode !== "trajectory") {
+      issues.push(runtimeIssue("LEGS_NEED_TRAJECTORY_MODE", "/mode", "legs require mode trajectory"));
+    }
+    if (pack.objective.type !== "run_trajectory") {
+      issues.push(runtimeIssue("LEGS_NEED_TRAJECTORY_OBJECTIVE", "/objective/type", "legs require run_trajectory"));
+    }
+    if ((pack.objective.successConditions?.length ?? 0) > 0) {
+      issues.push(runtimeIssue("TRAJECTORY_TOP_LEVEL_CONDITIONS_UNSUPPORTED", "/objective/successConditions", "trajectory grading belongs to legs"));
+    }
+    const seenLegs = new Set<string>();
+    const seenEntries = new Set<string>();
+    let theoryCount = 0;
+    for (const [index, leg] of legs.entries()) {
+      if (seenLegs.has(leg.id)) issues.push(runtimeIssue("TRAJECTORY_DUPLICATE_LEG_ID", `/legs/${index}/id`, `duplicate leg id ${leg.id}`));
+      seenLegs.add(leg.id);
+      if (index === 0 && leg.entryCheckpointId !== undefined) {
+        issues.push(runtimeIssue("TRAJECTORY_FIRST_LEG_HAS_ENTRY", "/legs/0/entryCheckpointId", "first leg begins at the run root"));
+      }
+      if (index > 0 && leg.entryCheckpointId === undefined) {
+        issues.push(runtimeIssue("TRAJECTORY_LEG_NEEDS_ENTRY", `/legs/${index}/entryCheckpointId`, "later trajectory legs require an entry checkpoint"));
+      }
+      if (leg.entryCheckpointId !== undefined) {
+        if (!checkpoints.has(leg.entryCheckpointId)) issues.push(runtimeIssue("TRAJECTORY_LEG_ENTRY_UNKNOWN", `/legs/${index}/entryCheckpointId`, `unknown checkpoint ${leg.entryCheckpointId}`));
+        if (seenEntries.has(leg.entryCheckpointId)) issues.push(runtimeIssue("TRAJECTORY_LEG_ENTRY_REUSED", `/legs/${index}/entryCheckpointId`, `entry checkpoint ${leg.entryCheckpointId} is reused`));
+        seenEntries.add(leg.entryCheckpointId);
+        const checkpoint = pack.checkpoints.find((candidate) => candidate.id === leg.entryCheckpointId);
+        if (checkpoint !== undefined && "windowOpens" in checkpoint.trigger) issues.push(runtimeIssue("TRAJECTORY_LEG_ENTRY_NOT_SIMPLE", `/legs/${index}/entryCheckpointId`, "timing windows cannot open a trajectory leg"));
+      }
+      if (leg.objective.type === "run_trajectory") issues.push(runtimeIssue("TRAJECTORY_NESTED_UNSUPPORTED", `/legs/${index}/objective/type`, "a trajectory leg cannot contain another trajectory"));
+      if (leg.objective.type === "follow_theory") theoryCount += 1;
+      if (leg.objective.grading?.assessedBy.kind === "syzygy") issues.push(runtimeIssue("TRAJECTORY_LEG_SYZYGY_UNSUPPORTED", `/legs/${index}/objective/grading/assessedBy`, "leg entry positions are not statically bound to a Syzygy record"));
+      if (index < legs.length - 1 && leg.objective.grading?.resolveAt.kind === "terminal") issues.push(runtimeIssue("TRAJECTORY_NONFINAL_TERMINAL_RESOLUTION", `/legs/${index}/objective/grading/resolveAt`, "only the final trajectory leg may resolve at terminal"));
+      for (const [conditionIndex, condition] of (leg.objective.successConditions ?? []).entries()) {
+        const to = condition.to ?? "achieved";
+        if (to === "transitioned") issues.push(runtimeIssue("TRAJECTORY_TRANSITIONED_UNSUPPORTED", `/legs/${index}/objective/successConditions/${conditionIndex}/to`, "trajectory legs reset to active instead of entering transitioned"));
+        if (index < legs.length - 1 && (to === "achieved" || to === "failed") && condition.kind !== "outcome") issues.push(runtimeIssue("TRAJECTORY_NONFINAL_LEG_ABSORBING", `/legs/${index}/objective/successConditions/${conditionIndex}`, "a non-final leg may not stop play before a terminal outcome"));
+        if (condition.kind === "reach_checkpoint") {
+          const preceding = legs.slice(0, index + 1).some((candidate) => candidate.entryCheckpointId === condition.checkpointId);
+          if (preceding) issues.push(runtimeIssue("TRAJECTORY_LEG_CONDITION_PRECEDES_ENTRY", `/legs/${index}/objective/successConditions/${conditionIndex}`, "condition is already true at or before this leg entry"));
+        }
+      }
+    }
+    if (theoryCount > 1) issues.push(runtimeIssue("TRAJECTORY_MULTIPLE_THEORY_LEGS", "/legs", "a trajectory may contain at most one theory leg"));
+    const plyEntries = new Map<number, number>();
+    for (const [index, leg] of legs.entries()) {
+      const checkpoint = pack.checkpoints.find((candidate) => candidate.id === leg.entryCheckpointId);
+      const trigger = checkpoint?.trigger;
+      if (trigger !== undefined && !("windowOpens" in trigger) && "atPly" in trigger) {
+        if (plyEntries.has(trigger.atPly)) issues.push(runtimeIssue("TRAJECTORY_LEG_ENTRIES_COINCIDE", `/legs/${index}/entryCheckpointId`, `another leg also enters at ply ${trigger.atPly}`));
+        plyEntries.set(trigger.atPly, index);
+      }
+    }
+  } else if (pack.objective.type === "run_trajectory") {
+    issues.push(runtimeIssue("TRAJECTORY_OBJECTIVE_NEEDS_LEGS", "/legs", "run_trajectory requires authored legs"));
+  }
   for (const [checkpointIndex, checkpoint] of pack.checkpoints.entries()) {
     const actions = checkpoint.actions;
     if (!Array.isArray(actions)) continue;

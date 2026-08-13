@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import type { BranchComparison } from "@chess-tabiya/runtime";
+  import { trajectoryVerdict, type BranchComparison } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
   import BranchRail from "./BranchRail.svelte";
@@ -98,6 +98,9 @@
 
   let run = $derived(snapshot.run);
   let currentNode = $derived(activeNode(run));
+  let trajectory = $derived(pack.legs === undefined
+    ? undefined
+    : trajectoryVerdict(pack, run, run.activeCursor.nodeId));
   let terminalEvent = $derived(
     [...run.events].reverse().find(
       (event) =>
@@ -448,6 +451,19 @@
           <p>Objective</p>
           <h1 id="drill-title">{packObjective(pack)}</h1>
         </div>
+        {#if trajectory}
+          <section class="trajectory-status" aria-label="Trajectory legs">
+            {#each trajectory.legs as leg}
+              <div class:active-leg={leg.legId === trajectory.activeLegId}>
+                <strong>{leg.legId}</strong>
+                <span>{leg.status === "not_entered" ? "not entered" : leg.state}</span>
+              </div>
+            {/each}
+            {#if trajectory.transitions.length > 0}
+              <p>{trajectory.transitions.at(-1)!.fromLegId} → {trajectory.transitions.at(-1)!.toLegId} at ply {trajectory.transitions.at(-1)!.ply}; {trajectory.transitions.at(-1)!.producedBy.length} moves produced this position.</p>
+            {/if}
+          </section>
+        {/if}
         {#if assessment !== undefined || resistance.length > 0}
           <OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
         {/if}
@@ -823,6 +839,20 @@
     display: grid !important;
     justify-content: stretch !important;
   }
+
+  .trajectory-status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 0.65rem;
+  }
+
+  .trajectory-status div { display: grid; padding: 0.3rem 0.5rem; color: var(--muted); }
+  .trajectory-status .active-leg { color: var(--ink); background: var(--paper-soft); }
+  .trajectory-status span { font-size: 0.72rem; }
+  .trajectory-status p { flex-basis: 100%; margin: 0.25rem 0 0; font-size: 0.8rem; }
 
   @media (max-width: 62rem) {
     .drill-region {

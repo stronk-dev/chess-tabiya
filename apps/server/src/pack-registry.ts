@@ -79,6 +79,13 @@ export function projectPackDocument(
         ? {}
         : { grading: { ...document.objective.grading, grounding } }),
     },
+    ...(document.legs === undefined ? {} : {
+      legs: document.legs.map((leg) => ({
+        id: leg.id,
+        ...(leg.entryCheckpointId === undefined ? {} : { entryCheckpointId: leg.entryCheckpointId }),
+        objective: { type: leg.objective.type, summary: leg.objective.summary },
+      })),
+    }),
     feedbackPolicy: raw.feedbackPolicy,
     opponentPolicy: raw.opponentPolicy,
     spine: raw.mode === "line" ? [] : (document.spine ?? []).map(projectSpineNode),

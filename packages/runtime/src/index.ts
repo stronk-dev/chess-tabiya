@@ -31,6 +31,15 @@ export { appendEvents, deriveSegments, eventsSince, projectRun } from "./events.
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
 export { terminalOutcome } from "./outcome.js";
 export {
+  legIndexAt,
+  trajectoryLegSpans,
+  trajectoryVerdict,
+  type TrajectoryLegOutcome,
+  type TrajectoryLegSpan,
+  type TrajectoryTransition,
+  type TrajectoryVerdict,
+} from "./trajectory.js";
+export {
   canonicalRunStart,
   digestSessionSource,
   isPackSession,

@@ -15,7 +15,9 @@ import {
   spinePositionIndex,
   deviationAnchors,
   theoryEvidenceRef,
+  legIndexAt,
   reachCheckpoint,
+  transitionObjective,
   type DrillRun,
   type FenPredicate,
   type MaterialBalancePredicate,
@@ -166,9 +168,11 @@ function conditionRules(
 
 export function objectiveRules(
   pack: DrillPackDefinition,
+  objective: DrillPackDefinition["objective"] = pack.objective,
 ): readonly ObjectiveTransitionRule[] {
-  const raw = pack.objective.successConditions;
-  if (pack.objective.type === "follow_theory") {
+  const raw = objective.successConditions;
+  if (objective.type === "run_trajectory") return [];
+  if (objective.type === "follow_theory") {
     const anchors = deviationAnchors(pack);
     const degraded = (pack.deviations ?? []).flatMap((deviation, index) => {
       if (!deviation.offObjective) return [];
@@ -211,7 +215,7 @@ export function objectiveRules(
   }
   if (!Array.isArray(raw)) return [];
   const outcomeObjective = ["win", "hold", "save", "resist"].includes(
-    pack.objective.type,
+    objective.type,
   );
   if (!outcomeObjective) {
     return raw.flatMap((condition, index) =>
@@ -237,9 +241,9 @@ export function objectiveRules(
     }
   };
   outcomeRule("win", "achieved");
-  outcomeRule("draw", pack.objective.type === "win" ? "failed" : "achieved");
-  if (pack.objective.type === "resist") {
-    const resolveAt = pack.objective.grading?.resolveAt;
+  outcomeRule("draw", objective.type === "win" ? "failed" : "achieved");
+  if (objective.type === "resist") {
+    const resolveAt = objective.grading?.resolveAt;
     if (resolveAt?.kind === "checkpoint") {
       outcomeRule("loss", "achieved", {
         type: "all",
@@ -256,7 +260,7 @@ export function objectiveRules(
     condition.to === "degraded" ? conditionRules(condition, index, true) : [],
   );
   const resolution: ObjectiveTransitionRule[] = [];
-  const resolveAt = pack.objective.grading?.resolveAt;
+  const resolveAt = objective.grading?.resolveAt;
   if (resolveAt?.kind === "checkpoint") {
     resolution.push({
       id: `outcome-resolution-${resolveAt.checkpointId}`,
@@ -290,7 +294,26 @@ export function orchestratePackMove(
       run = reachCheckpoint(run, checkpoint.id, active.createdAt).run;
     }
   }
-  run = evaluateObjective(run, objectiveRules(pack), active.createdAt).run;
+  if (pack.legs === undefined) {
+    run = evaluateObjective(run, objectiveRules(pack), active.createdAt).run;
+  } else {
+    const parentId = active.parentId;
+    if (parentId == null) throw new TypeError("Committed trajectory node has no parent");
+    const outgoing = legIndexAt(pack, before, parentId);
+    run = evaluateObjective(run, objectiveRules(pack, pack.legs[outgoing]!.objective), active.createdAt).run;
+    const incoming = legIndexAt(pack, run, active.id);
+    if (incoming > outgoing) {
+      const state = run.nodes.find((node) => node.id === active.id)!.objectiveState;
+      if (state === "preserved" || state === "degraded") {
+        run = transitionObjective(
+          run,
+          "active",
+          [packEvidenceRef(pack.legs[incoming]!.entryCheckpointId!)],
+          active.createdAt,
+        ).run;
+      }
+    }
+  }
   return Object.freeze({
     run,
     emitted: Object.freeze(run.events.slice(before.events.length)),

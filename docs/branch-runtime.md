@@ -3,7 +3,12 @@
 The branch runtime is the implemented foundation for a chess-tabiya rehearsal. It
 records play as an immutable, path-keyed tree: play forward, rewind to an earlier
 node, choose another move, and compare the consequences without destroying the
-first line.
+original attempt.
+
+Trajectory packs add derived `trajectoryLegSpans`, `legIndexAt`, and
+`trajectoryVerdict` read-back shapes. At a checkpoint boundary the pack orchestrator may
+seal the outgoing leg and reset its node state to active for the incoming objective. The
+two events are ordered and replay-validated; no trajectory state is stored separately.
 
 The transport-independent implementation is `packages/runtime`. The Node binding
 is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.7,

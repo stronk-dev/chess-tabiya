@@ -1,0 +1,46 @@
+{
+  "id": "trajectory-legs-browser",
+  "version": "0.1.0",
+  "title": "Mechanical cross-phase trajectory",
+  "mode": "trajectory",
+  "phase": "cross_phase",
+  "difficulty": { "minOnlineRapid": 1000, "maxOnlineRapid": 2000, "label": "mechanical fixture", "branchLengthTarget": 6 },
+  "start": { "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "side": "white" },
+  "objective": { "type": "run_trajectory", "summary": "Play one continuous legal path across three authored legs." },
+  "legs": [
+    {
+      "id": "opening",
+      "objective": {
+        "type": "execute_break",
+        "summary": "Reach the first authored boundary.",
+        "successConditions": [{ "kind": "reach_checkpoint", "checkpointId": "middle", "to": "preserved" }]
+      }
+    },
+    {
+      "id": "middle",
+      "entryCheckpointId": "middle",
+      "objective": {
+        "type": "execute_break",
+        "summary": "Reach the second authored boundary.",
+        "successConditions": [{ "kind": "reach_checkpoint", "checkpointId": "ending", "to": "preserved" }]
+      }
+    },
+    {
+      "id": "ending",
+      "entryCheckpointId": "ending",
+      "objective": { "type": "play_until_checkpoint", "summary": "Continue from the position the prior moves produced." }
+    }
+  ],
+  "checkpoints": [
+    { "id": "middle", "label": "First causal boundary", "trigger": { "atPly": 1 }, "actions": [] },
+    { "id": "ending", "label": "Second causal boundary", "trigger": { "atPly": 3 }, "actions": [] }
+  ],
+  "opponentPolicy": { "mode": "human_common", "targetElo": 1600 },
+  "feedbackPolicy": "delayed_checkpoint",
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [],
+    "reviewers": [],
+    "graduationBlockers": ["Mechanical acceptance fixture only; it asserts no chess phase truth."]
+  }
+}

@@ -1,6 +1,6 @@
 # RFC: Trajectory Drill — cross-phase runs with causal provenance
 
-- **Status:** draft
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/01-training-model.md` §The four modes (Trajectory Drill row, line 100),

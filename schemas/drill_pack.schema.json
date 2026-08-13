@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.6",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.7",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.6 format for an engine-independent authored drill.",
+  "description": "Living v0.7 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -79,6 +79,11 @@
         "additionalProperties": false
       }
     },
+    "legs": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/trajectoryLeg" }
+    },
     "provenance": { "$ref": "#/$defs/provenance" }
   },
   "additionalProperties": false,
@@ -142,7 +147,8 @@
         "save",
         "resist",
         "play_until_checkpoint",
-        "follow_theory"
+        "follow_theory",
+        "run_trajectory"
       ]
     },
     "objective": {
@@ -156,6 +162,16 @@
           "type": "array",
           "items": { "$ref": "#/$defs/successCondition" }
         }
+      },
+      "additionalProperties": false
+    },
+    "trajectoryLeg": {
+      "type": "object",
+      "required": ["id", "objective"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "entryCheckpointId": { "$ref": "#/$defs/id" },
+        "objective": { "$ref": "#/$defs/objective" }
       },
       "additionalProperties": false
     },

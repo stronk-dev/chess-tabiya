@@ -10,6 +10,7 @@ export const OBJECTIVE_TYPES = [
   "resist",
   "play_until_checkpoint",
   "follow_theory",
+  "run_trajectory",
 ] as const;
 
 export type ObjectiveType = (typeof OBJECTIVE_TYPES)[number];
@@ -116,6 +117,7 @@ export interface DrillPackDefinition {
     readonly kind: RetryVariantKind;
     readonly note?: string;
   }[];
+  readonly legs?: readonly TrajectoryLeg[];
   readonly planClasses?: readonly PlanClass[];
   readonly spine?: readonly SpineNode[];
   readonly authoredBoundary?: {
@@ -126,6 +128,12 @@ export interface DrillPackDefinition {
   };
   readonly deviations?: readonly Deviation[];
   readonly [key: string]: unknown;
+}
+
+export interface TrajectoryLeg {
+  readonly id: string;
+  readonly entryCheckpointId?: string;
+  readonly objective: DrillPackDefinition["objective"];
 }
 
 export type ObjectiveState =

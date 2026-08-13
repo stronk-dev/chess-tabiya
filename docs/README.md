@@ -44,3 +44,6 @@ Implemented foundation:
 - `return-and-progression.md` — durable branch-attempt projection, migration 6,
   learner-scoped return schedules, run duplication, the `/learn` surface, and pack
   schema 0.6 retry/concept vocabulary.
+- `trajectory-drill.md` — pack schema 0.7 trajectory legs, continuous-path entry,
+  per-leg objective seal/reset, causal move provenance, derived verdicts, and the
+  deliberately non-aggregated client presentation.
