@@ -82,3 +82,24 @@ Append-only.
   Their branch-switch observations were 50.1 ms and 53.3 ms; together with the
   first final-tree run's 30.3 ms, this confirms the known measurement variance
   and does not erase the recorded performance deviation.
+
+## 2026-08-13 — Independent approval and lifecycle closeout
+
+- Claude independently approved the implementation after verifying 287 tests
+  across 48 files and three consecutive zero-retry browser suites. The review
+  specifically confirmed the migration-4 literal freeze, migration 5,
+  never-silent REST parsing, selector-side applied-mode stamps, the off-spine
+  `human_common` fallback, and the pack-aware cache-key assertion.
+- The owner replaced the unsourced sub-50-ms branch-switch target with a
+  two-level tripwire: investigate at 100 ms and intervene at 200 ms. Existing
+  45–53 ms observations are below the investigation threshold; perceived
+  sluggishness remains the actual K9 question.
+- Canonical behavior remains folded into the systems Line Drill amends rather
+  than a standalone page: pack format, branch runtime, engine workers, drill
+  client, explanation grounds, and outcome grading. This avoids duplicating one
+  cross-layer contract and keeps each system page authoritative for its part.
+- Post-move completion gates are green: `ENGINES_REQUIRED=1 make verify`
+  passed 287 tests across 48 files with zero Svelte diagnostics and clean schema
+  and packaging checks; `make test-browser` passed all 9 required tests at zero
+  retries with the optional Maia measurement skipped. The browser observed a
+  51.8 ms branch switch, below the owner's 100 ms investigation threshold.

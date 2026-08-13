@@ -1,6 +1,6 @@
 # Line Drill theory grading — implementation plan
 
-RFC: `rfc/line-drill-theory-grading.md` (implementing).
+RFC: `rfc/archive/line-drill-theory-grading.md` (implemented).
 
 - [x] Run schema v0.7, migration-4 freeze, migration 5, and required REST parser
 - [x] Selector applied-mode stamping, server-resolved spine, and pack-aware cache

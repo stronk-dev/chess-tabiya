@@ -176,10 +176,13 @@ behavior explanatory rather than merely inert.
 
 The completed browser acceptance run recorded board-ready at 68 ms, rewind at
 34 ms, branch switching at 51.2 ms, uncached mock reply at 1.4 ms, and cached
-mock reply at 0.9 ms. The 51.2 ms branch switch is 1.2 ms (2.4%) above the
-historical sub-50-ms product target. That target is a benchmark rather than a
-guarantee, so this is recorded but not blocking. If it drifts further, the
-known O(n²) full-log projection is the first optimization candidate.
+mock reply at 0.9 ms. The owner subsequently replaced the unsourced sub-50-ms
+branch-switch target with a two-level tripwire: investigate at 100 ms and
+intervene at 200 ms. The observed 45–53 ms range is comfortably below the
+investigation threshold. The threshold is a prompt to inspect perceived
+sluggishness, not a substitute for the K9 user-experience judgment; if latency
+does drift, the known O(n²) full-log projection is the first optimization
+candidate.
 
 Current intentional boundaries:
 

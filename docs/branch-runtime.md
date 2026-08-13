@@ -6,7 +6,7 @@ node, choose another move, and compare the consequences without destroying the
 first line.
 
 The transport-independent implementation is `packages/runtime`. The Node binding
-is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.6,
+is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.7,
 and `packages/schema` owns the schema version constant. Browser and server code
 import the same TypeScript runtime; there is no second implementation of chess
 semantics.

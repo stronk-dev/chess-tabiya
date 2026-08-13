@@ -1,6 +1,6 @@
 # RFC: Line Drill — opening theory, boundary crossing, and membership grading
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-12
 - **Design refs:** `design/01-training-model.md` §The four modes (Line Drill row, line 97);
@@ -31,7 +31,7 @@
   `rfc/README.md`'s migration register. It adds `policyModeApplied` to
   `opponent.move_selected.selection` and migrates historical selections to `unknown`; see
   Specification §11.
-- **Planning:** `planning/line-drill-theory-grading/`
+- **Planning:** `planning/archive/line-drill-theory-grading/`
 
 ## Summary
 
@@ -1435,6 +1435,12 @@ digests, unaffected by the `$id` (`packages/schema/src/drill-pack/digest.ts:58-6
 None.
 
 ## Changelog
+
+- 2026-08-13: implemented. Line Drill membership grading, authored-boundary
+  evaluation, deviation lint, recorded applied opponent policy, migration 5,
+  server-owned theory selection, path-scoped verdict delivery, and browser
+  acceptance shipped; canonical behavior was reconciled across the existing
+  system docs before archival.
 
 - 2026-08-12: created. Specifies Line Drill entry and completion, the first evaluator
   `authoredBoundary` has ever had (frontier semantics ruled on shipped-content evidence, with
