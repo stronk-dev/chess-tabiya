@@ -319,9 +319,20 @@ and caches the result.
 The server-bound benchmark used Node 26.5.0, in-memory SQLite, JSON response
 consumption, and loopback Node HTTP. Each exact-size snapshot received three
 warm-ups and twenty measured samples; preparation/reset time was excluded.
-Milliseconds are `median / p95 / max`:
+Milliseconds are `median / p95 / max`.
 
-| Events | Cold replay + graph transport | Rewind (budget <100 ms) | Implicit fork+commit (budget <50 ms) |
+The fork+commit budget was `<50 ms` when this benchmark ran; the owner ruling of
+2026-08-13 replaced it with a worry/intervene band (`design/02-product-shape.md`).
+Every figure below passes under either, so the numbers are unchanged — only the
+citation is.
+
+**Worth reading against the client-observed figures:** server-bound fork+commit
+sits at 2–8 ms here, while a client-observed branch switch measures 45–53 ms
+(`docs/app-shell.md`). So roughly 40–45 ms of a branch switch is client work and
+transport, not run mutation. Anyone who ever does want that gesture faster should
+start there, not in the runtime:
+
+| Events | Cold replay + graph transport | Rewind (budget <100 ms) | Implicit fork+commit (budget: worry 100 ms / intervene 200 ms) |
 |---:|---:|---:|---:|
 | 200 | 2.408 / 2.862 / 3.062 | 2.820 / 3.594 / 4.619 | 2.481 / 3.224 / 3.530 |
 | 1000 | 6.303 / 8.024 / 9.494 | 15.705 / 17.017 / 17.051 | 6.643 / 7.947 / 8.384 |
