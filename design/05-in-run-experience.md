@@ -69,8 +69,8 @@ how loudly each is presented.
 
 Two consequences follow, and they are the useful part of the ladder:
 
-**Rung 0 is underused and should be the default assistance everywhere.** It is
-the only rung that cannot manufacture chess truth, it needs no engine, no corpus
+**Rung 0 is underused — but "safest to show" is not "should be shown", and §3a
+corrects that.** It is the only rung that cannot manufacture chess truth, it needs no engine, no corpus
 and no network, and it teaches *seeing* rather than *being told* — which is the
 distinction between this product and every eval-bar trainer. The
 discovered-threat idea (`BACKLOG`, 2026-08-13) is rung 0. So is structural
@@ -83,6 +83,64 @@ covers reveals nothing a careful player could not see, and hiding it teaches
 nothing except that the interface is coy. Where the line falls between rungs 0
 and 2 during committed play is an open question (§5), but it is a line, not a
 switch.
+
+## 3a. The default is silence, and recovery is the skill
+
+Owner, 2026-08-13: *"maybe for most people they don't want the proactive
+support… maybe they want the fuck up, then recover, and if recovery fails try to
+grind out the draw, or go back to that pivotal point."*
+
+This corrects a default §3 got wrong. The ladder describes what assistance *can*
+be shown and how honest each rung is. It does not follow that more should be
+shown, and rung 0 being safe is not an argument for it being **on**.
+
+**Proactive assistance is in tension with the thesis.** *Do not just learn the
+move — rehearse the game it creates* (`00-thesis.md`). A product that tells you
+your knight has no outpost before you move is not letting you rehearse a
+consequence; it is coaching you past the mistake that would have taught you.
+Rung 0 is the *safest* thing to show, which is a different claim from being the
+right thing to show, and §3 blurred them.
+
+So the default posture is:
+
+> **Play it. Live with it. Then decide whether to recover or to rewind.**
+
+Assistance is *available* — the rail exists, the ladder is honest, the learner may
+open it — but the default during committed play is **silence**, and everything the
+product knows arrives after the commitment, which is what ADR-0006 always said.
+
+### Recovery is a first-class skill and almost nothing teaches it
+
+The sequence the owner describes — err, try to recover, and if recovery fails
+grind for the draw — is most of real chess between 1400 and 2000, and it is the
+part every trainer skips because they all optimise for *finding the best move*.
+The vocabulary already exists: `01-training-model.md` §Outcome types names
+**convert / hold / save / resist**, and **save** is exactly "rescue a worse
+position". What has been missing is treating it as the *normal* path through a
+run rather than a drill variant.
+
+That produces a fourth thing a run can be about, alongside the three in `01`:
+not *what should I have played*, but **what can I still do from here**.
+
+### Retrospective detection: the same signal, the other job
+
+`05` §5a excludes engine eval swing as a **live** pivotal detector, because it
+finds where someone erred and cannot fire before the error. That reasoning holds
+and is unchanged.
+
+But *"go back to that pivotal point"* is a **backward-looking** request, and there
+the same signal is exactly right: when a learner has played on, failed to recover,
+and asks where it actually turned, eval swing answers precisely that question.
+The rule is therefore not *"never use eval swing"* but:
+
+| Direction | Question | Honest detector |
+|---|---|---|
+| Forward, during play | *is a real decision arriving?* | irreversibility, phase change, Maia divergence, option collapse |
+| Backward, after the outcome | *where did it turn?* | eval swing, objective-state transitions, the last point the result was still available |
+
+Both are legitimate; using the backward detector forward is the post-mortem
+framing this product replaces, and using the forward detector backward is simply
+weaker.
 
 ## 4. What varies by context
 
