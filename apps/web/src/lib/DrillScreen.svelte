@@ -24,7 +24,7 @@
     whyBanner,
   } from "./screen-model.js";
   import type { RunStateSnapshot } from "./run-state.js";
-  import type { AuthoredFeedbackPage } from "./api.js";
+  import type { AuthoredFeedbackItem, AuthoredFeedbackPage } from "./api.js";
   import type { RegisterKeyboardRegion } from "./keyboard.js";
   import {
     assessmentSentence,
@@ -121,7 +121,8 @@
             (item) => item.revealedBy.eventSeq === checkpoint.eventSeq,
           );
           const verdicts = current.filter(
-            (item) => item.kind === "theory_verdict" && item.verdict === "classified_deviation",
+            (item): item is Extract<AuthoredFeedbackItem, { kind: "theory_verdict" }> =>
+              item.kind === "theory_verdict" && item.verdict === "classified_deviation",
           );
           const supportingNotes = all.filter(
             (item) =>

@@ -65,3 +65,11 @@ Append-only.
   not rationalized into a pass/fail guarantee.
 - `make pack-check` passes for Pack A v0.2, the living Najdorf example, and the
   dedicated Line browser fixture.
+
+## 2026-08-13 — Final-gate correction
+
+- The first post-closeout engine-enforced verify exposed a Svelte type-narrowing
+  gap in the new checkpoint composition. Browser build had accepted it, while
+  `svelte-check` correctly did not. The filter now carries an explicit
+  `AuthoredFeedbackItem` type predicate. Final results below supersede the
+  pre-correction verification line above.
