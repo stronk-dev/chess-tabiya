@@ -13,6 +13,89 @@ rating-band evidence; Wikibooks CC BY-SA for reusable idea prose with
 attribution; Lichess puzzle DB CC0 6.06M themed positions for the on-ramp;
 Syzygy copyright-free for endgame ground truth).
 
+## 0. Open reframe (owner, 2026-08-13): are packs the *shape library*?
+
+> *"Should we even have drill packs? How can we break chess down into primitives
+> and phases… or are drill packs defining the basic reusable shapes and
+> structures, and that's how we make it all in one Just Play mode?"*
+
+Recorded as a live proposal, not yet ruled. It inverts this document rather than
+editing it, so it is stated here before the taxonomy it would replace.
+
+### What is actually primitive
+
+Facts that exist with no author at all — all rung 0/1/3 in
+`05-in-run-experience.md` §3: the position; legal moves; the pawn skeleton;
+outposts, open lines and pressure counts; material and phase; terminal states;
+the human move distribution at a level (Maia); exact truth below eight pieces
+(tablebase); historical frequency (corpus); engine evaluation.
+
+What is **not** primitive, and is the only thing a human must supply: **which of
+those facts matters here, and what it is called.** Salience and naming.
+
+### The conflation this exposes
+
+The shipped pack format bundles two different kinds of authored content:
+
+| Kind | Keyed to | Reusable? | Example |
+|---|---|---|---|
+| **Shape content** | a *structural predicate* | across every position the classifier detects it in | "this is a Carlsbad structure; the plans are minority attack, central break, kingside attack; the minority attack succeeds when a backward c6 pawn appears on a half-open file" |
+| **Line content** | a *specific move sequence* | no — it is about these moves | "3.e5 Bf5 4.h4 is the Tal Variation; it spends the tempo you need when ...c5 arrives" |
+
+**Shape content is being re-authored per pack.** "The minority attack" is one idea
+that applies wherever the structure occurs; today it would be written again in
+every pack whose tree reaches a Carlsbad. That is a plausible explanation for why
+authoring measured expensive (`planning/content-era/plan.md`): the format made
+the reusable thing non-reusable.
+
+### What the reframe would mean
+
+A **shape entry** is authored once: a structural trigger (the feature predicates
+of `05` §5c), a name, its plan classes, what each plan's success looks like
+structurally, what to watch, and the typical mistakes. It attaches to any
+position — drilled, imported, or reached in a live game — where the classifier
+fires. That is the expensive, high-leverage, reusable asset.
+
+A **drill** then stops being a document and becomes a *recipe*: start me in a
+position where shape X applies, against resistance Y, with objective Z. Position
+sources are already machine-generated (`docs/content-sourcing.md` emits them),
+objectives are structural predicates, resistance is an opponent policy. Cheap,
+composable, and generated rather than written.
+
+And there is **one play surface**. Just Play stops being the pack-less mode with
+degraded guidance and becomes the only mode; the library lights up whenever a
+known shape is detected. That is precisely the arc in `00-thesis.md` — steer
+early, convert later, grind it out — with the guidance layer following the game
+instead of the game following a document.
+
+### What line content is still irreducible for
+
+Not everything is a shape, and the phases differ sharply:
+
+- **Openings** — theory *is* a move sequence. Move-order traps, transpositions
+  and the named variations a learner must recognize cannot be reduced to a
+  structural predicate. Line content is irreducible here.
+- **Middlegames** — almost entirely shape. This is where the reframe wins most,
+  and it is also the phase with no theory and no tablebase, so the shape library
+  is the *only* guidance source available.
+- **Endgames** — type plus named technique, which is shape, with a small set of
+  exact positions (Lucena, Philidor, Vancura) that are genuinely line content.
+
+So the honest destination is probably **both kinds, separated** — not packs
+abolished, but the reusable half lifted out of them.
+
+### What it would cost
+
+Stated plainly because the shipped format is line-shaped: `drill_pack.schema.json`
+is built around `start` + `spine` + `checkpoints` + `deviations`, a position tree.
+A shape entry has none of those. This is a new authored artifact and a new
+authoring path, not a schema widening — and six RFCs currently in flight all
+target the existing format. It also depends on Q4b feature predicates, which do
+not exist yet; without them a shape cannot state its own trigger.
+
+**Owner ruling needed.** The three authored packs are line content and stay valid
+under either answer.
+
 ## 1. The unit taxonomy
 
 | Unit | Scope | Mode |
