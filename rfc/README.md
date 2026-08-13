@@ -7,7 +7,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `n-way-comparison.md` | implementing | `archive/branch-runtime.md`, `archive/explanation-grounds.md`, `archive/drill-client.md` | breadth program **#5**, gate **B3** — single-axis N-way comparison payload, manual N-branch selection, per-branch consequence rows, resulting-position grid / N-column strips / narrative mode, branch-selective export, simulate (scratch until entered), prediction checkpoints that show numbers and never a verdict, deep analysis. Run schema 0.7 → 0.8, migration **8**; pack schema 0.8 → **0.9** (`grading` removed) |
 | `live-session-platform.md` | draft | `archive/learner-identity-and-authorization.md` (F3), `archive/pack-optional-runs.md` (F2) | breadth program **#8**, gate **B5** — live session aggregate above the run, board control and handoff, possession journal, participant proposals, chat-vote windows, overlay projection, Position Arena two-leg PGN import as root-forked branches of one run. Opens and closes D17, D18, D19. **Run schema unchanged**, migration **7** |
 
 `defect-sweep.md` claims **no migration number**: nothing it changes is persisted,
@@ -92,7 +91,7 @@ landing order, not lost data.
 | 0.6 | `archive/return-and-progression.md` | implemented — `retryVariants`, typed `concepts` |
 | 0.7 | `archive/trajectory-drill.md` | implemented — `legs`, `run_trajectory` |
 | 0.8 | `archive/pack-studio.md` | implemented — source-derived channel; `provenance.reviewStatus` narrowed to `schema_example \| draft \| published`; typed `reviewers` removed |
-| 0.9 | `n-way-comparison.md` | **claimed 2026-08-13, draft** — `grading` removed from `$defs/checkpointInteraction` after the owner ruled that prediction checkpoints show numbers and never a verdict. `schemas/drill_pack.example.json`'s digest changes with it; no other committed document declares a prediction interaction |
+| 0.9 | `archive/n-way-comparison.md` | implemented — prediction `grading` removed; numbers are recorded and rendered without a verdict |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.
@@ -142,7 +141,7 @@ writing it into a draft.
 | 5 | 4→5 | `archive/line-drill-theory-grading.md` | implemented — run schema v0.7; adds `policyModeApplied` to `opponent.move_selected.selection`, historical selections migrate to `unknown` and are never inferred |
 | 6 | 5→6 | `archive/return-and-progression.md` | implemented — attempts, schedules, progress and position statistics; create-table/index plus one-time backfill |
 | 7 | 6→7 | `archive/pack-studio.md` | implemented — studio drafts, retained playtest bytes, and registered packs |
-| 8 | 7→8 | `n-way-comparison.md` | claimed — run schema v0.8, branch origin and prediction event |
+| 8 | 7→8 | `archive/n-way-comparison.md` | implemented — run schema v0.8, branch origin and prediction event |
 | 9 | 8→9 | `live-session-platform.md` | claimed — live-session tables; create-table/index only |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
@@ -198,6 +197,7 @@ before re-attempting this territory.
 | `archive/return-and-progression.md` | implemented | `docs/return-and-progression.md`, `docs/drill-pack-format.md`, `docs/app-shell.md` |
 | `archive/trajectory-drill.md` | implemented | `docs/trajectory-drill.md`, `docs/drill-pack-format.md`, `docs/branch-runtime.md`, `docs/drill-client.md` |
 | `archive/pack-studio.md` | implemented | `docs/pack-studio.md`, `docs/drill-pack-format.md`, `docs/app-shell.md` |
+| `archive/n-way-comparison.md` | implemented | `docs/n-way-comparison.md`, `docs/branch-runtime.md`, `docs/explanation-grounds.md`, `docs/drill-pack-format.md` |
 
 ## The archive sketches are quarry, not RFCs
 

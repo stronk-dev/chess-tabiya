@@ -1,6 +1,6 @@
 # RFC: N-way comparison and the review surfaces
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/03-product-breadth.md` §Review and explore (lines 57–66),
@@ -1416,6 +1416,7 @@ entered (§7).
 
 ## Changelog
 
+- 2026-08-13: implemented and verified; run schema v0.8, pack schema v0.9, and SQLite migration 8 shipped.
 - 2026-08-13: created.
 - 2026-08-13: **rewritten against two owner rulings, closing both open questions.**
   *Ruling — prediction checkpoints show numbers, never a verdict.* Rewrote §8 around
