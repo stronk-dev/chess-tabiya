@@ -33,3 +33,13 @@
   files, schema/scaffold/packaging green; `make test-browser` — 11 passed, optional Maia
   test skipped, zero retries. Measured branch switch 43.8 ms, below the 100 ms worry
   threshold.
+
+## 2026-08-13 — lifecycle closeout
+
+- Canonical implementation description: `docs/live-sessions.md`, with identity and
+  app-shell cross-doc corrections.
+- RFC status set to implemented; RFC and planning work moved to their archives in the
+  same commit. Migration 9 and the RFC archive index were reconciled.
+- Post-move verification: `ENGINES_REQUIRED=1 make verify` — 307 tests across 52 files;
+  `make test-browser` — 11 passed, optional Maia skipped, zero retries. Branch switch
+  measured 53.1 ms, below the 100 ms worry threshold.

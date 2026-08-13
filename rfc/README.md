@@ -7,69 +7,9 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `live-session-platform.md` | implementing | `archive/learner-identity-and-authorization.md` (F3), `archive/pack-optional-runs.md` (F2) | breadth program **#8**, gate **B5** — live session aggregate above the run, board control and handoff, possession journal, participant proposals, chat-vote windows, overlay projection, Position Arena two-leg PGN import as root-forked branches of one run. Opens and closes D17, D18, D19. **Run schema unchanged**, migration **9** |
 
-`defect-sweep.md` claims **no migration number**: nothing it changes is persisted,
-and its §Migration states the check rather than omitting the question.
-
-`n-way-comparison.md` and `defect-sweep.md` are independent and may land in either
-order: the first changes only run-persisted shape, the second only pack shape.
-`n-way-comparison.md` takes D4 and D9 as inbound from `defect-sweep.md` and
-re-claims neither.
-
-`archive/return-and-progression.md` landed behind `defect-sweep.md` and is independent of the
-other two. It takes D6 as inbound (its `/learn` phase filter *consumes* the
-`PackSummary.phase` the sweep adds and does not re-add it) and reuses the sweep's shared
-vocabulary-constant mechanism for `retryVariants` instead of creating a seventh copy of a
-vocabulary. **The pack schema version is a shared single-writer resource too**, for the
-same reason a migration number is: the sweep claims **0.5**, this draft claims **0.6** and
-names it in `Depends on:` rather than making its own version conditional on landing order.
-Claim the next pack version here whenever a draft narrows or widens
-`schemas/drill_pack.schema.json`. Against `n-way-comparison.md` and
-`live-session-platform.md` it is ordered, not coupled: it changes no run-persisted shape and
-its DDL appends after 7.
-
-`archive/trajectory-drill.md` closes the last **B2** row and is independent of all four. It changes
-no run-persisted shape and claims **no migration number**. It cites `defect-sweep.md` as the
-owner of D4, D5, D6, D8, D9 and D10 and duplicates none of those fixes; its only inbound is
-the sweep's required `start.side`, which its fixture already declares. Against
-`n-way-comparison.md` it is a producer, not a competitor: a trajectory's legs are spans of one
-path, so its branches are ordinary inputs to N-way comparison. It **rebased its pack schema
-claim to 0.7** after finding 0.6 claimed twice — see the register below.
-
-`live-session-platform.md` is independent of both. It cites all six of
-`defect-sweep.md`'s defects and duplicates none of its fixes; the only shared shape is
-D4, where the sweep collapses the four *pack* vocabularies and the live draft collapses
-`RunRole`, which the sweep's scope does not reach — whichever lands first supplies the
-constant module the other reuses. Against `n-way-comparison.md` it is ordered, not
-coupled: it rebased to migration **7** and changes no run-persisted shape, so its DDL
-appends after 6 without depending on anything 6 does. Its Arena leg import produces
-ordinary root-forked branches, which are inputs to N-way comparison rather than a
-competing mechanism.
-
-`archive/pack-studio.md` (renamed from `pack-studio-and-review.md` on 2026-08-13) closes gate
-**B6**'s remaining half and is ordered behind `defect-sweep.md`, independent of the rest. It
-re-claims none of the sweep's fixes: it takes D6, D8 and D9 as inbound registration-gate
-conditions its write path inherits rather than restates, and its §0 gives the exact swap if
-the sweep does not land first. It **resolved the 0.6 contention by rebasing to 0.8** rather
-than merging bumps with `return-and-progression.md`. Against `n-way-comparison.md` it is a
-consumer: `Branch.origin` is what stops session distillation turning a promoted simulated
-branch into a manufactured deviation. Against `live-session-platform.md` it is ordered only —
-that draft's "session distilled into a pack" promise is satisfied by this draft's
-`seed.kind: "run"`, and neither writes the other's tables.
-
-**The owner ruling of 2026-08-13 removed this draft's review half entirely** — there is no
-pack review workflow and there never will be one, because a status nobody can grant implies a
-check that never happened. The draft's queue, `TABIYA_REVIEWERS` roster, sign-off checklist,
-`draft → in_review → approved` state machine and `review.json` sidecar are struck, and its
-single open question (the roster's shape) is closed by removal. What replaces the gate is a
-**publication channel**: official packs ship in git or the image, community packs are
-published through the studio, and the seed-id reservation that was a collision guard is now
-the channel boundary itself. `provenance.reviewStatus` is narrowed to
-`schema_example | draft | published` and `provenance.reviewers` is removed, both at pack
-schema 0.8; `pack-validation.ts`'s `GRADUATION_REQUIRES_SOURCES` survives re-keyed on
-`published` and `GRADUATION_REQUIRES_REVIEWERS` is deleted. ADR-0001's "reviewed" half is
-superseded and continuation gate C1 is withdrawn.
+No active product RFCs. The completed breadth batch and its dependency history are kept
+in the archive documents and planning logs rather than duplicated in this index.
 
 ## Pack-schema-version register
 
@@ -142,7 +82,7 @@ writing it into a draft.
 | 6 | 5→6 | `archive/return-and-progression.md` | implemented — attempts, schedules, progress and position statistics; create-table/index plus one-time backfill |
 | 7 | 6→7 | `archive/pack-studio.md` | implemented — studio drafts, retained playtest bytes, and registered packs |
 | 8 | 7→8 | `archive/n-way-comparison.md` | implemented — run schema v0.8, branch origin and prediction event |
-| 9 | 8→9 | `live-session-platform.md` | claimed — live-session tables; create-table/index only |
+| 9 | 8→9 | `archive/live-session-platform.md` | implemented — live-session tables; create-table/index only |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
@@ -198,6 +138,7 @@ before re-attempting this territory.
 | `archive/trajectory-drill.md` | implemented | `docs/trajectory-drill.md`, `docs/drill-pack-format.md`, `docs/branch-runtime.md`, `docs/drill-client.md` |
 | `archive/pack-studio.md` | implemented | `docs/pack-studio.md`, `docs/drill-pack-format.md`, `docs/app-shell.md` |
 | `archive/n-way-comparison.md` | implemented | `docs/n-way-comparison.md`, `docs/branch-runtime.md`, `docs/explanation-grounds.md`, `docs/drill-pack-format.md` |
+| `archive/live-session-platform.md` | implemented | `docs/live-sessions.md`, `docs/identity-and-authorization.md`, `docs/app-shell.md` |
 
 ## The archive sketches are quarry, not RFCs
 

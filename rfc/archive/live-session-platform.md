@@ -1,6 +1,6 @@
 # RFC: Live session platform — roles, spectating, academy, stream, and arena
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/03-product-breadth.md:79-91` (Live and community), `:154-158` (shared shell regions, "session/role controls appropriate to solo, host, participant, or spectator" at `:158`), `:53-55` (Position Arena), gate row B5 (`:175`), program item #8 (`:268-272`); `design/02-product-shape.md:50-73` (hosted multi-user, and ADR-0004's fired revisit trigger)
@@ -1255,6 +1255,9 @@ clause stays open on the unauthenticated public link (§2.6).
 
 - 2026-08-13: created.
 - 2026-08-13: accepted after adversarial review; implementation began after migrations 6–8 landed, rebasing the live-session DDL to migration 9 without changing its behavior.
+- 2026-08-13: implemented. Migration 9, session/board/journal/proposal/vote/Arena
+  services, REST and typed client bindings, live/session/overlay screens, follower
+  withholding visibility, canonical docs, and zero-retry browser acceptance shipped.
 - 2026-08-13: adversarial review. **Infrastructure the draft assumed and the tree does
   not have:** the four new error codes needed `ServerErrorCode` widened
   (`apps/server/src/errors.ts:1-14`) and a status-map arm, since unlisted codes fall
