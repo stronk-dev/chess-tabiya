@@ -22,7 +22,7 @@ sidecar. The exploration job continues alongside (E4 harness, gates) — see
 
 | Tier | Directory | Current state |
 |---|---|---|
-| Design | `design/` | 4 living docs (including the breadth/IA contract) + `BACKLOG.md` topic ledger + `research/` coverage matrix |
+| Design | `design/` | 5 living docs (including the breadth/IA contract) + `BACKLOG.md` topic ledger + `research/` coverage matrix |
 | RFC | `rfc/` | No active product RFC; six implemented systems frozen in `rfc/archive/` |
 | Planning | `planning/exploration/` | THE active job: question ledger (`plan.md`), exploration/continuation gates and kill criteria (`gates.md`), append-only `log.md` |
 | Docs | `docs/` | Canonical description of what exists; development foundation now documented |
@@ -49,9 +49,11 @@ bug"), then continue.
 1. `planning/exploration/plan.md` — the questions and their status (5 min)
 2. `design/00-thesis.md` — what the product is and the current verdict (5 min)
 3. `design/03-product-breadth.md` — complete surface map, IA, and B1–B8 gate
-4. `planning/exploration/gates.md` — what would kill or confirm it (5 min)
-5. `rfc/0000-rfc-process.md` — the tiers and the exploration gate (5 min)
-6. Archive files cited by your question, as needed.
+4. `design/05-in-run-experience.md` — the generic board experience beneath every
+   surface: six invariants, five regions, and the assistance ladder
+5. `planning/exploration/gates.md` — what would kill or confirm it (5 min)
+6. `rfc/0000-rfc-process.md` — the tiers and the exploration gate (5 min)
+7. Archive files cited by your question, as needed.
 
 ## Non-negotiable laws
 

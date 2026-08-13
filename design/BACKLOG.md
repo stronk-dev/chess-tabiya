@@ -162,6 +162,13 @@ Three ideas from the owner, ledgered on utterance. They compose: (1) says *what
 kind of position this is*, (2) says *what evidence applies to that kind*, and (3)
 is a distinct thing — deterministic sight, not evidence at all.
 
+**Design home: `05-in-run-experience.md`**, written the same day so these do not
+sit as loose candidates. All three are generic in-run features — true whether or
+not a pack is loaded — and that document places them: the classifier is what
+makes the assistance rail selectable (§4), configuration per session context is
+one of its four varying axes (§4), and discovered-threat sight is **rung 0** of
+the assistance ladder (§3), the only rung that cannot manufacture chess truth.
+
 | Idea | Take | Home |
 |---|---|---|
 | **Phase classifier with an in-run sidebar** | Early/middle/endgame surfaced live during play, not just as a catalogue filter. Partly covered already: Q4c owns automatic recognition, D6 is `phase` never reaching the client, and the Learn IA is organized on it — but all of that is *navigation*. A live in-run classifier is new, and it is what makes (2) selectable. Must stay non-authoritative over curated pack boundaries (standing rule) and must abstain honestly rather than guess | Q4c, D6, `03-product-breadth.md` |
