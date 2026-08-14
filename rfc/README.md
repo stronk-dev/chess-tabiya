@@ -8,6 +8,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `structural-reading.md` | implementing | `archive/drill-pack-format.md`, `archive/outcome-drill-grading.md`, `archive/explanation-grounds.md` | B9 — twelve deterministic author predicates plus a finite learner observation projection, current denial/eviction arithmetic, one-ply discovered consequence, and attributed structural naming. Pack schema **0.10**, no migration |
+| `adaptive-guidance.md` | draft | `archive/app-shell.md`, `archive/drill-client.md`, `archive/explanation-grounds.md`, `archive/pack-optional-runs.md` | B10 — banded phase classification with first-class abstention, per-context assistance configuration (one permission function, disclosure-gated endpoints), four author-free pivotal detectors as passive timeline markers, endgame-type census with Lucena/Philidor/Vancura technique naming, and the evidence-packet LLM-voice contract with machine check and provider seam. Depends on `structural-reading.md` (B9) and names `shape-library.md` (B11) for plan/technique bodies. Pack schema unchanged (0.10), run schema unchanged (0.8), **no migration** |
 | `shape-library.md` | draft | `archive/drill-pack-format.md`, `archive/pack-studio.md`, `archive/drill-client.md`, `structural-reading.md` | B11 — the shape-entry artifact (new single-writer schema `shape_entry` **0.1**, RFC 8785 digest, official/community channels), additive pack references, firing as a derived projection with a passive timeline marker, studio write path, four official entries with the Carlsbad extraction. Pack schema **0.11**, migration **10** |
 
 The completed breadth batch and its dependency history are kept in the archive
@@ -105,6 +106,15 @@ the dependency explicitly.
 
 Any RFC touching persisted shape adds its row here in the same commit that
 drafts the migration.
+
+## Cross-draft ownership pins
+
+Instituted 2026-08-14 after `shape-library.md` and `adaptive-guidance.md`, drafted in
+parallel, **both** scoped the minimal Just Play position player — the register-collision
+class on an implementation surface instead of a number. Pin: **`shape-library.md` owns the
+position player** (it scoped it concretely as its largest surface, and its acceptance test
+cannot exist without it); `adaptive-guidance.md` names it in `Depends on:` and ships no
+client entry of its own. Landing order follows: shape-library before adaptive-guidance.
 
 ## Withdrawn
 
