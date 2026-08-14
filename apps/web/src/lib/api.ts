@@ -5,6 +5,7 @@ import type {
 import type { ShapeEntryDefinition } from "@chess-tabiya/schema/shape-entry";
 import type {
   BranchComparison,
+  BranchGroup,
   DrillRun,
   DrillRunEvent,
   EvidenceKind,
@@ -343,6 +344,24 @@ export interface PredictionResult extends MutationResult {
   readonly selection: OpponentSelection;
 }
 
+export interface CreateGroupRequest {
+  readonly source: "hand_picked" | "authored" | "human_replies" | "engine_top_n";
+  readonly resistance?: "fixed" | "per_branch";
+  readonly candidates?: readonly string[];
+  readonly size?: number;
+  readonly at?: string;
+}
+
+export interface CreateGroupResult extends MutationResult {
+  readonly group: BranchGroup;
+  readonly comparison: BranchComparison;
+}
+
+export interface GroupReplyResult {
+  readonly selection: OpponentSelection;
+  readonly reusedFromNodeId: string | null;
+}
+
 export interface MoveOptions {
   readonly at?: string;
   readonly clockState?: Readonly<Record<string, unknown>>;
@@ -437,6 +456,9 @@ export interface RunApi {
   ): Promise<MutationResult>;
   reveal(runId: string, writerId: string, at?: string): Promise<MutationResult>;
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult>;
+  createGroup(runId: string, input: CreateGroupRequest, writerId: string): Promise<CreateGroupResult>;
+  groupReply(runId: string, groupId: string, writerId: string): Promise<GroupReplyResult>;
+  analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }>;
 }
 
 export interface DrillClientApi extends RunApi {
@@ -711,6 +733,20 @@ export class DrillApi implements DrillClientApi {
 
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult> {
     return this.#json(`/runs/${encoded(runId)}/prediction`, { method: "POST", writerId, body: input });
+  }
+
+  createGroup(runId: string, input: CreateGroupRequest, writerId: string): Promise<CreateGroupResult> {
+    return this.#json(`/runs/${encoded(runId)}/group`, { method: "POST", writerId, body: input });
+  }
+
+  groupReply(runId: string, groupId: string, writerId: string): Promise<GroupReplyResult> {
+    return this.#json(`/runs/${encoded(runId)}/group-reply`, { method: "POST", writerId, body: { groupId } });
+  }
+
+  analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }> {
+    return this.#json(`/runs/${encoded(runId)}/analysis`, {
+      method: "POST", writerId, body: { nodeIds, multiPv: 1 },
+    });
   }
 
   move(

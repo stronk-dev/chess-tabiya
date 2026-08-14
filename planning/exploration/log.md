@@ -1428,3 +1428,45 @@ transcription — if Q1a or the game-story RFC needs them.
   secure-cookie defaults, and a documented non-gating structural latency envelope.
 - Canonical behavior is in `docs/branch-runtime.md`, `docs/drill-pack-format.md`, and
   `docs/structural-reading.md`; lifecycle archived after both verification gates passed.
+
+## 2026-08-14 (claude) — 365Chess teardown: E1 intact; corpus verdict additive-but-unusable; third matrix miss recorded
+
+- Landed `design/research/teardown-365chess-desk.md` (desk, `[V]` raw fetches of
+  landing/pricing/trainer/play/endgame/puzzles/explorer/FAQ/ToS/shop/coach/robots.txt;
+  site 403s the plain fetch tool, served 200 to a browser UA). Matrix row 42 added;
+  README coverage row added.
+- **What it is:** the prior held — a 2007-vintage games-database site (365Engage LLC;
+  ~4.4M OTB games "updated every week", 220k players, 43k tournaments) whose center is
+  the opening explorer (per-move count, last-played year, W/D/B %, cached depth-45–50
+  evals), with training bolted on: guess-the-DB-move openings trainer (lookup),
+  Stockfish 18 at levels 1–10 "ELO ~1300–2700" (the rejected-list weakened-SF
+  opponent), a real-game endgame trainer with DTZ help and win-conversion verdicts
+  (genuine play-out, no rewind/branches), Glicko puzzles, and a 258-course store with
+  a 4-step memorize-then-flashcard coach. Pay-what-you-choose supporter tier
+  (€20–100/yr) gates PGN export, Masters DB, own-database, player explorer.
+- **E1 intact.** Lookup-first with disconnected play-out islands; zero of the three
+  protected claims. Notable adjacent pressure: a "Play Position" door on every explorer
+  node — nineteen years of explorer-with-play-button without a rehearsal loop is mild
+  evidence the integration, not the plumbing, is the product.
+- **Corpus-source verdict (Q6), under the corrected framing (explorer pipeline works
+  via operator auth):** 365chess's master/OTB population is genuinely different from
+  our rating-band rows (what-theory-plays vs what-1500s-play — both rung 4, different
+  witnesses), but the site is unusable as a source (no API, supporter-gated per-list
+  PGN only, robots.txt disallows download endpoints, ToS contains no data license at
+  all 🟡) and redundant in practice: the same lila-openingexplorer backend we already
+  authenticate to serves a public `/masters` endpoint. If master-line evidence is ever
+  wanted, that's the route — a new closed question, new population label.
+- **Adoption (design/02 posture):** the one good feature is the per-position evidence
+  row — frequency + last-played recency + depth-labelled cached eval per named
+  opening; enters through the rung-4 grounded-claims invariant (recency is a cheap
+  honest addition to our explorer evidence). Love/hate: loved as an archive (own OTB
+  games from decades back, crosstables, cheap), left for having no opponents and for
+  corpus noise (duplicate/low-rated games polluting stats `[P]`) — a concrete caution
+  that corpus counts inherit corpus hygiene (our min-100 abstention stays).
+- **Process finding, recorded in README coverage limits:** third consecutive
+  owner-side find. The gap sweep's cluster 10 was exactly this shelf and missed a
+  19-year incumbent — novelty-tuned sweeps miss old incumbents, not just new entrants.
+- Next: nothing urgent from this dossier; hands-on residuals listed (§9) matter only
+  if the Learn-IA named-opening funnel or a `/masters` evidence question activates.
+- Correction (same day, same author): the 365Chess matrix row is **row 41**, not 42
+  as written above (41 data rows total; header verified 20 columns, row parses clean).

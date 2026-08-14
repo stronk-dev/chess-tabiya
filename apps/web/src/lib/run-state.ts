@@ -14,6 +14,8 @@ import {
   type PlayerMoveRequest,
   type PredictionRequest,
   type PredictionResult,
+  type CreateGroupRequest,
+  type CreateGroupResult,
   type RewindRequest,
   type RunApi,
 } from "./api.js";
@@ -188,6 +190,35 @@ export class RunStateStore {
       input,
       this.#session.writerId,
     )) as Promise<PredictionResult>;
+  }
+
+  createGroup(input: CreateGroupRequest): Promise<CreateGroupResult> {
+    return this.#mutate(() => this.#api.createGroup(
+      this.#session.runId,
+      input,
+      this.#session.writerId,
+    )) as Promise<CreateGroupResult>;
+  }
+
+  groupReply(groupId: string) {
+    if (this.#snapshot.access === "read_only") {
+      throw new ApiError(409, "NOT_ACTIVE_WRITER", "Run is read-only");
+    }
+    return this.#api.groupReply(this.#session.runId, groupId, this.#session.writerId);
+  }
+
+  async analysis(nodeIds: readonly string[]) {
+    if (this.#snapshot.access === "read_only") {
+      throw new ApiError(409, "NOT_ACTIVE_WRITER", "Run is read-only");
+    }
+    const result = await this.#api.analysis(this.#session.runId, nodeIds, this.#session.writerId);
+    this.#snapshot = Object.freeze({
+      ...this.#snapshot,
+      pendingEvidence: this.#snapshot.pendingEvidence + nodeIds.length,
+    });
+    this.#emit();
+    this.#syncPolling();
+    return result;
   }
 
   rewind(input: RewindRequest): Promise<MutationResult> {

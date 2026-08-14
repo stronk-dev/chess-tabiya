@@ -1,10 +1,12 @@
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
   historyFrom,
+  groupsFromEvents,
   projectRun,
   type BranchComparison,
   type DrillRunEvent,
   type PolicyConfig,
+  type BranchGroup,
 } from "@chess-tabiya/runtime";
 
 import {
@@ -15,6 +17,8 @@ import {
   type PgnDownload,
   type RunGraph,
   type ShapeEntryView,
+  type CreateGroupRequest,
+  type CreateGroupResult,
 } from "./api.js";
 import { boardModel } from "./board-model.js";
 import {
@@ -363,6 +367,29 @@ export class DrillSessionController {
     }
   }
 
+  async createGroup(input: CreateGroupRequest): Promise<CreateGroupResult | undefined> {
+    this.#patch({ busy: true, error: undefined });
+    try {
+      const result = await this.#requiredStore().createGroup(input);
+      this.#patch({ busy: false });
+      return result;
+    } catch (error) {
+      this.#fail(error);
+      return undefined;
+    }
+  }
+
+  async analyzeMissingEvidence(nodeIds: readonly string[]): Promise<void> {
+    if (nodeIds.length === 0) return;
+    this.#patch({ busy: true, error: undefined });
+    try {
+      await this.#requiredStore().analysis(nodeIds);
+      this.#patch({ busy: false });
+    } catch (error) {
+      this.#fail(error);
+    }
+  }
+
   switchBranch(leafNodeId: string): Promise<void> {
     return this.rewind({ nodeId: leafNodeId });
   }
@@ -426,7 +453,12 @@ export class DrillSessionController {
     ) {
       return;
     }
-    const selection = await this.#api.selectMove(this.#selectionRequest());
+    const group = groupsFromEvents(run).find((candidate: BranchGroup) =>
+      candidate.members.some((member) => member.branchId === run.activeCursor.branchId),
+    );
+    const selection = group === undefined
+      ? await this.#api.selectMove(this.#selectionRequest())
+      : (await this.#requiredStore().groupReply(group.groupId)).selection;
     const result = await this.#requiredStore().appendOpponentPly(selection);
     if (this.#captureCheckpoint(result.emitted)) {
       await this.#refreshAuthoredFeedback();

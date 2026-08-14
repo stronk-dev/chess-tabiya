@@ -11,7 +11,11 @@ Two structural limits, both proven by owner finds rather than admitted in advanc
 1. **The matrix is a snapshot, not a watch.** The 28 products came from the frozen
    v2 brief's desk sweep. Nothing monitors new entrants — **ChessMotive** (owner
    find, 2026-08-12) and **taketaketake** (owner find, 2026-08-14) were both
-   absent, and both were found by the owner, not the process.
+   absent, and both were found by the owner, not the process. The failure also
+   runs backwards in time: **365Chess** (owner find, 2026-08-14) is a 2007
+   incumbent squarely on the gap sweep's cluster-10 shelf that the sweep still
+   missed — a sweep tuned for 2024–2026 novelty does not see old incumbents
+   either (`teardown-365chess-desk.md` §Method).
 2. **The frame was "chess training tools", and the product outgrew the frame.**
    The sweep asked who helps you *practice*. The product now has spectating,
    live sessions, share links, and (proposed) game-story summaries — surfaces
@@ -82,6 +86,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Take Take Take (Carlsen social play + LLM game review; owner's game-story-slides idea) | Q1a, E1, Q1b, Q2 | covered `[V]` desk — E1 **intact**; game-story appetite validated, substance unclaimed; ADR-0005 anti-pattern shipped by a competitor | `teardown-taketaketake-desk.md` |
 | Coverage-gap sweep — every shipped/specified surface vs. current market (11 clusters, 2024–2026) | Q1a, E1, `design/03` | covered `[V]` desk — 10 absent-relevant products grounded and added as matrix rows 31–40; E1 **intact** (no branch runtime found); branch groups, recovery-as-skill, and live structural naming returned nothing; teardown shortlist: Play Coach, Chessbook, ChessMind AI, Chess2Story, ChessEver | `coverage-gap-sweep.md` |
 | Chess.com Practice multi-move redo + color switching | Q1a | covered `[V]` desk pass (undo destroys attempts; takeback-branch reported broken) | `teardown-chesscom-desk.md` |
+| 365Chess (games-DB/explorer incumbent since 2007; missed by the sweep's cluster 10) | Q1a, E1, Q6, `design/02` adoption | covered `[V]` desk — E1 **intact** (lookup-first islands, no branches/rewind/compare; weakened-SF opponent); corpus-source verdict: additive population, unusable (no license/API), redundant via Lichess `/masters`; adoptable: per-position evidence row incl. last-played recency, via rung-4 grounded-claims invariant; love/hate: loved as OTB archive, left for no-opponents + corpus noise | `teardown-365chess-desk.md` |
 | Chess2Story (game-story surface incumbent; RFC differentiator check) | Q1a, E1, game-story RFC | covered `[V]` desk — E1 **intact**; moment slides + board-jump shipped but read-only; engine-selected turning points with verified-score provenance (grounded, unlike TTT); no opponent, zero loop stages; "re-enter into play" unclaimed | `teardown-chess2story-desk.md` |
 | ChessMind AI (closest stack neighbor; ADR-0005 live test case) | Q1a, E1, Q5, Q2 | covered `[V]` desk — E1 **intact**; Maia-2 in-browser ONNX verified in bundle (six bands ~1100–2000+); review prose generator undisclosed, no public confabulation catch found — ADR-0005 case unresolved, not passed; course-position→Maia sparring narrows the opening→play-out edge | `teardown-chessmindai-desk.md` |
 | Target learner/coach problem interviews + concept preference test | Q1b, E2 | **GAP** | — |

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, HumanSplitPage, RunRole, ShapeEntryView, VoicePage } from "./api.js";
-  import { SILENT_ASSISTANCE, classifyPhase, endgameReading, feedbackDeliveryOpen, historyFrom, permittedAssistance, pivotalMarkers, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison } from "@chess-tabiya/runtime";
+  import { SILENT_ASSISTANCE, branchPath, classifyPhase, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, permittedAssistance, pivotalMarkers, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
   import BranchRail from "./BranchRail.svelte";
@@ -15,6 +15,7 @@
   import WhyBanner from "./WhyBanner.svelte";
   import OutcomeContext from "./OutcomeContext.svelte";
   import ShapePanel from "./ShapePanel.svelte";
+  import GroupPanel from "./GroupPanel.svelte";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
@@ -27,7 +28,7 @@
     whyBanner,
   } from "./screen-model.js";
   import type { RunStateSnapshot } from "./run-state.js";
-  import type { AuthoredFeedbackItem, AuthoredFeedbackPage } from "./api.js";
+  import type { AuthoredFeedbackItem, AuthoredFeedbackPage, CreateGroupRequest } from "./api.js";
   import type { RegisterKeyboardRegion } from "./keyboard.js";
   import {
     assessmentSentence,
@@ -67,6 +68,8 @@
     onStop: () => void;
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
+    onCreateGroup?: (input: CreateGroupRequest) => void | Promise<unknown>;
+    onAnalyzeMissing?: (nodeIds: readonly string[]) => void | Promise<void>;
     registerKeyboardRegion: RegisterKeyboardRegion;
   }
 
@@ -95,6 +98,8 @@
     onStop,
     onHumanSplit,
     onVoice,
+    onCreateGroup,
+    onAnalyzeMissing,
     registerKeyboardRegion,
   }: Props = $props();
 
@@ -113,6 +118,12 @@
   let voicePage: VoicePage | undefined = $state();
   let forkLabel = $state("");
   let forkIntent = $state("");
+  let groupOpen = $state(false);
+  let groupSource: CreateGroupRequest["source"] = $state("hand_picked");
+  let groupResistance: "fixed" | "per_branch" = $state("fixed");
+  let groupSize = $state(4);
+  let groupCandidates: string[] = $state([]);
+  let groupModes: Record<string, "sequential" | "lockstep"> = $state({});
   let replayTimer: ReturnType<typeof setInterval> | undefined;
   let mainElement = $state<HTMLElement>();
   let forkInput = $state<HTMLInputElement>();
@@ -184,6 +195,9 @@
     currentNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack)),
   );
   let cards = $derived(branchCards(run));
+  let groups = $derived(groupsFromEvents(run));
+  let activeGroup = $derived(groups.find((group) => group.members.some((member) => member.branchId === run.activeCursor.branchId)));
+  let groupOrdinals = $derived(Object.fromEntries(groups.flatMap((group, groupIndex) => group.members.map((member) => [member.branchId, groupIndex + 1]))));
   let banner = $derived(pack === undefined ? undefined : whyBanner(pack, run));
   let grading = $derived(pack === undefined ? undefined : projectedGrading(pack));
   let assessment = $derived(
@@ -242,6 +256,52 @@
 
   async function requestVoice(scope: VoicePage["scope"]): Promise<void> {
     if (onVoice !== undefined) voicePage = await onVoice(displayedNode.id, scope);
+  }
+
+  function groupPreference(groupId: string): "sequential" | "lockstep" {
+    return groupModes[groupId] ?? "sequential";
+  }
+
+  function setGroupPreference(groupId: string, mode: "sequential" | "lockstep"): void {
+    groupModes = { ...groupModes, [groupId]: mode };
+    try { globalThis.localStorage?.setItem(`tabiya:branch-group:v1:${groupId}`, mode); } catch { /* Local preference only. */ }
+  }
+
+  function captureGroupMove(uci: string): void {
+    if (groupCandidates.includes(uci)) return;
+    if (groupCandidates.length < 8) groupCandidates = [...groupCandidates, uci];
+  }
+
+  async function boardMove(uci: string): Promise<void> {
+    if (groupOpen && groupSource === "hand_picked") {
+      captureGroupMove(uci);
+      return;
+    }
+    const before = activeGroup;
+    const beforeIndex = before?.members.findIndex((member) => member.branchId === run.activeCursor.branchId) ?? -1;
+    await onMove(uci);
+    await tick();
+    if (before === undefined || groupPreference(before.groupId) !== "lockstep" || checkpoint !== undefined) return;
+    const next = before.members[(beforeIndex + 1) % before.members.length];
+    if (next === undefined || next.branchId === run.activeCursor.branchId) return;
+    await onSwitchBranch(branchPath(run, next.branchId).at(-1)!.id);
+  }
+
+  async function createGroup(): Promise<void> {
+    if (onCreateGroup === undefined) return;
+    await onCreateGroup({
+      source: groupSource,
+      resistance: groupResistance,
+      ...(groupSource === "hand_picked" ? { candidates: groupCandidates } : { size: groupSize }),
+    });
+    groupOpen = false;
+    groupCandidates = [];
+  }
+
+  async function nextGroupMember(group: BranchGroup): Promise<void> {
+    const current = group.members.findIndex((member) => member.branchId === run.activeCursor.branchId);
+    const next = group.members[(current + 1) % group.members.length];
+    if (next !== undefined) await onSwitchBranch(branchPath(run, next.branchId).at(-1)!.id);
   }
   function interactiveTarget(event: KeyboardEvent): boolean {
     const target =
@@ -466,6 +526,15 @@
     comparison;
     compareStep = 0;
   });
+
+  $effect(() => {
+    for (const group of groups) {
+      if (groupModes[group.groupId] !== undefined) continue;
+      let mode: "sequential" | "lockstep" = "sequential";
+      try { if (globalThis.localStorage?.getItem(`tabiya:branch-group:v1:${group.groupId}`) === "lockstep") mode = "lockstep"; } catch { /* Default remains sequential. */ }
+      groupModes = { ...groupModes, [group.groupId]: mode };
+    }
+  });
 </script>
 
 <div class="drill-region" data-keyboard-region="drill" bind:this={regionElement}>
@@ -559,20 +628,36 @@
               {startSide}
               lastMove={displayedNode.moveUci}
               disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined || terminalEvent !== undefined}
-              {onMove}
+              onMove={boardMove}
             />
           </div>
         </div>
       </section>
 
-      <BranchRail
-        branches={cards}
-        activeBranchId={run.activeCursor.branchId}
-        {compareIds}
-        onSwitch={onSwitchBranch}
-        onToggleCompare={toggleCompare}
-        onCompareAllHere={compareAllHere}
-      />
+      <div class="rail-stack">
+        {#if activeGroup}
+          <GroupPanel
+            {run}
+            group={activeGroup}
+            {startSide}
+            advanceMode={groupPreference(activeGroup.groupId)}
+            onAdvanceMode={(mode) => setGroupPreference(activeGroup!.groupId, mode)}
+            onEnter={onSwitchBranch}
+            onCompare={() => onCompare(activeGroup!.members.map((member) => member.branchId))}
+            onAnalyze={(nodeIds) => onAnalyzeMissing?.(nodeIds)}
+          />
+          <button class="next-member" type="button" onclick={() => void nextGroupMember(activeGroup!)}>Next member</button>
+        {/if}
+        <BranchRail
+          branches={cards}
+          activeBranchId={run.activeCursor.branchId}
+          {compareIds}
+          onSwitch={onSwitchBranch}
+          onToggleCompare={toggleCompare}
+          onCompareAllHere={compareAllHere}
+          {groupOrdinals}
+        />
+      </div>
 
       <div class="timeline-row">
         <Timeline
@@ -590,6 +675,7 @@
         />
         <div class="quick-actions" aria-label="Run actions">
           <button type="button" onclick={() => (forkOpen = true)}>Fork <kbd>B</kbd></button>
+          <button type="button" onclick={() => (groupOpen = !groupOpen)}>Branch group</button>
           <HonestControl
             disabled={cards.length < 2}
             reasonId="drill-compare-unavailable"
@@ -611,6 +697,30 @@
         </div>
       </div>
     </div>
+    {#if groupOpen}
+      <section class="group-creator" aria-labelledby="group-create-title">
+        <div><p>Parallel experiment</p><h2 id="group-create-title">Create a branch group</h2></div>
+        <label>Source
+          <select bind:value={groupSource}>
+            <option value="hand_picked">My candidate moves</option>
+            <option value="authored" disabled={pack === undefined}>Authored variations</option>
+            <option value="human_replies" disabled={capabilities?.providers.opponent === "none" || assistancePermission.humanSplit === "locked_off"}>Recorded human replies</option>
+            <option value="engine_top_n" disabled={!capabilities?.policyModes.includes("strong_engine") || assistancePermission.humanSplit === "locked_off"}>Engine lines</option>
+          </select>
+        </label>
+        <label>Resistance
+          <select bind:value={groupResistance}><option value="fixed">Fixed</option><option value="per_branch">Varied</option></select>
+        </label>
+        {#if groupSource === "hand_picked"}
+          <p class="capture-help">Move pieces on the board to capture candidates. The run is not changed until Create group.</p>
+          <div class="candidate-chips">{#each groupCandidates as uci}<button type="button" onclick={() => (groupCandidates = groupCandidates.filter((move) => move !== uci))}>{uci} ×</button>{:else}<span>No candidates captured yet.</span>{/each}</div>
+        {:else}
+          <label>Members <input type="number" min="2" max="8" bind:value={groupSize} /></label>
+        {/if}
+        <div class="creator-actions"><button type="button" onclick={() => { groupOpen = false; groupCandidates = []; }}>Cancel</button><button type="button" disabled={groupSource === "hand_picked" && groupCandidates.length < 2} aria-describedby={groupSource === "hand_picked" && groupCandidates.length < 2 ? "group-candidates-needed" : undefined} onclick={() => void createGroup()}>Create group</button></div>
+        {#if groupSource === "hand_picked" && groupCandidates.length < 2}<span id="group-candidates-needed" class="honest">Capture at least two distinct legal moves.</span>{/if}
+      </section>
+    {/if}
   </main>
 {/if}
 
@@ -906,6 +1016,8 @@
     grid-template-columns: repeat(2, minmax(7rem, 1fr));
     gap: 0.45rem;
   }
+
+  .rail-stack{min-width:0;min-height:0;display:grid;grid-template-rows:auto auto minmax(0,1fr);gap:.45rem;overflow:hidden}.next-member{justify-self:start;padding:.4rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--panel);color:inherit}.group-creator{display:flex;align-items:end;gap:.65rem;flex-wrap:wrap;padding:.65rem;border:1px solid var(--accent);border-radius:.75rem;background:var(--panel)}.group-creator p,.group-creator h2{margin:0}.group-creator h2{font:600 1rem var(--display-font)}.group-creator label{display:grid;gap:.2rem;font-size:.7rem;color:var(--muted)}.group-creator select,.group-creator input,.group-creator button{padding:.45rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:inherit}.capture-help{flex-basis:100%;color:var(--muted);font-size:.72rem}.candidate-chips{display:flex;gap:.35rem;flex-wrap:wrap}.creator-actions{display:flex;gap:.35rem}.group-creator .honest{flex-basis:100%;color:var(--muted);font-size:.68rem}
 
   .quick-actions button,
   .modal button,

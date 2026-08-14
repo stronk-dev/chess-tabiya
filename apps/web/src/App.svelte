@@ -448,6 +448,8 @@
         onStop={() => navigate("/play")}
         onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
+        onCreateGroup={(input) => controller.createGroup(input)}
+        onAnalyzeMissing={(nodeIds) => controller.analyzeMissingEvidence(nodeIds)}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
       {#if activeLiveDetail}

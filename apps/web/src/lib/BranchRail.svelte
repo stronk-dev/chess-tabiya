@@ -8,9 +8,10 @@
     onSwitch: (nodeId: string) => void | Promise<void>;
     onToggleCompare: (branchId: string) => void;
     onCompareAllHere?: (forkNodeId: string) => void;
+    groupOrdinals?: Readonly<Record<string, number>>;
   }
 
-  let { branches, activeBranchId, compareIds, onSwitch, onToggleCompare, onCompareAllHere }: Props =
+  let { branches, activeBranchId, compareIds, onSwitch, onToggleCompare, onCompareAllHere, groupOrdinals = {} }: Props =
     $props();
 </script>
 
@@ -37,6 +38,7 @@
             {branch.objectiveState}
           </span>
           {#if branch.origin === "simulated"}<span>simulated</span>{/if}
+          {#if groupOrdinals[branch.id] !== undefined}<span class="group-marker">group {groupOrdinals[branch.id]}</span>{/if}
         </button>
         <label>
           <input
@@ -158,4 +160,6 @@
     color: var(--muted);
     font-size: 0.7rem;
   }
+
+  .group-marker{grid-column:2;color:var(--accent);font:600 .62rem ui-monospace,monospace;text-transform:uppercase}
 </style>
