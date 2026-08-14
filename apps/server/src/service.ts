@@ -25,6 +25,7 @@ import {
   isEngineEvidenceRef,
   rewind,
   rewindToCheckpoint,
+  storyMoments,
   type BranchComparison,
   type BranchGroup,
   type AppendOpponentPlyOptions,
@@ -89,6 +90,7 @@ import {
 import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 import { resolveImportSource, type ImportSource } from "./import-source.js";
+import type { ShapeRegistry } from "./shape-registry.js";
 
 export interface RunViewer {
   readonly role: RunRole;
@@ -264,6 +266,7 @@ export class RunService {
   readonly #progress: ProgressStorage | undefined;
   readonly #opponentSelector: OpponentSelector | undefined;
   readonly #importFetch: typeof fetch;
+  readonly #shapes: ShapeRegistry | undefined;
   readonly #simulations = new Map<string, {
     readonly runId: string;
     readonly sourceNodeId: string;
@@ -282,6 +285,7 @@ export class RunService {
       readonly progressStorage?: ProgressStorage;
       readonly opponentSelector?: OpponentSelector;
       readonly importFetch?: typeof fetch;
+      readonly shapeRegistry?: ShapeRegistry;
     } = {},
   ) {
     this.#storage = storage;
@@ -290,6 +294,7 @@ export class RunService {
     this.#progress = options.progressStorage;
     this.#opponentSelector = options.opponentSelector;
     this.#importFetch = options.importFetch ?? fetch;
+    this.#shapes = options.shapeRegistry;
     this.#evidenceMovetimeMs =
       options.evidenceMovetimeMs ?? DEFAULT_STRONG_ENGINE_PROFILE.movetimeMs;
     if (!Number.isSafeInteger(this.#evidenceMovetimeMs) || this.#evidenceMovetimeMs < 1) {
@@ -466,7 +471,8 @@ export class RunService {
       throw new ServerError("STORAGE_FAILURE", "Imported-game storage is not configured");
     }
     this.#storage.createImportedRun(run, lease, title, record);
-    return Object.freeze({ run, importRecord: record, evidencePass: Object.freeze({ jobs: 0 }) });
+    const jobs = this.#ensureImportEvidence(run).enqueued;
+    return Object.freeze({ run, importRecord: record, evidencePass: Object.freeze({ jobs }) });
   }
 
   importRecord(runId: string, principal: Principal): ImportedGameRecord {
@@ -477,6 +483,40 @@ export class RunService {
     const record = this.#storage.importedGame(runId);
     if (record === undefined) throw new ServerError("STORAGE_FAILURE", "Imported run has no import record");
     return record;
+  }
+
+  story(runId: string, principal: Principal) {
+    const run = requireRead(this.#storage, runId, principal).stored.run;
+    if (run.sessionKind !== "imported") throw new ServerError("RUN_NOT_FOUND", `Run ${runId} is not an imported game`);
+    if (!feedbackDisclosed(run)) throw new ServerError("ASSISTANCE_WITHHELD", "Reveal the finished game before opening its story");
+    const record = this.importRecord(runId, principal);
+    const pass = this.#ensureImportEvidence(run);
+    const shapes = this.#shapes?.list().map((summary) => {
+      const document = this.#shapes!.required(summary.id).document;
+      return { id: document.id, trigger: document.trigger };
+    });
+    const projection = storyMoments(run, run.branches[0]!.id, {
+      recordedResult: record.result,
+      ...(shapes === undefined ? {} : { shapes }),
+    });
+    const terminal = run.events.some((event) => event.type === "outcome.reached");
+    return Object.freeze({
+      ready: pass.ready,
+      pendingEvidence: pass.pending,
+      source: Object.freeze({
+        kind: record.sourceKind,
+        ...(record.sourceUrl === null ? {} : { url: record.sourceUrl }),
+        headers: record.headers,
+        result: record.result,
+        importedAt: record.importedAt,
+      }),
+      outcome: Object.freeze(terminal
+        ? { kind: "board_terminal" as const, result: record.result }
+        : record.result === "*"
+          ? { kind: "unfinished" as const }
+          : { kind: "recorded_result" as const, result: record.result }),
+      ...projection,
+    });
   }
 
   move(
@@ -1284,6 +1324,31 @@ export class RunService {
     }
     this.#project(result.run, lease.learnerId);
     return Object.freeze({ schedule, result });
+  }
+
+  #ensureImportEvidence(run: DrillRun): { readonly ready: boolean; readonly pending: number; readonly enqueued: number } {
+    const path = branchPath(run, run.branches[0]!.id);
+    const durable = new Set(run.events.flatMap((event) =>
+      event.type === "evidence.attached" && event.data.payload.kind === "eval" &&
+      event.data.payload.source === "engine_validated"
+        ? [event.data.nodeId]
+        : [],
+    ));
+    const queue = this.#evidenceQueue;
+    if (queue === undefined) {
+      return Object.freeze({ ready: false, pending: path.filter((node) => !durable.has(node.id)).length, enqueued: 0 });
+    }
+    const failed = new Set(queue.failures(run.id).map((failure) => failure.nodeId));
+    const outstanding = new Set(queue.outstanding(run.id).filter((job) => job.kind === "eval").map((job) => job.nodeId));
+    let enqueued = 0;
+    for (const node of path) {
+      if (durable.has(node.id) || failed.has(node.id) || outstanding.has(node.id)) continue;
+      queue.enqueue({ runId: run.id, nodeId: node.id, fen: node.fen, kind: "eval", movetime: this.#evidenceMovetimeMs });
+      outstanding.add(node.id);
+      enqueued += 1;
+    }
+    const ready = path.every((node) => durable.has(node.id) || failed.has(node.id));
+    return Object.freeze({ ready, pending: path.filter((node) => !durable.has(node.id) && !failed.has(node.id)).length, enqueued });
   }
 
   #required(runId: string): StoredRun {

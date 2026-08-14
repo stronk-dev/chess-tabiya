@@ -885,6 +885,9 @@ export function createRestHandler(
       if (request.method === "GET" && route.action === "import") {
         return json(200, { importRecord: service.importRecord(route.runId, principal) });
       }
+      if (request.method === "GET" && route.action === "story") {
+        return json(200, service.story(route.runId, principal));
+      }
       if (request.method === "GET" && route.action === "pgn") {
         const pgn = await service.pgn(route.runId, principal, parseBranches(url));
         const filename = `${route.runId.replaceAll(/[^a-zA-Z0-9._-]/g, "_")}.pgn`;

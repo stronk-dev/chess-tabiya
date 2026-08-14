@@ -28,3 +28,10 @@ errors; the current local verify gate passes.
 - Added paste-PGN and public Lichess game resolution. Lichess requests are serial, unauthenticated, timeout-bounded, and explicitly exclude server evaluations; chess.com URLs explain the paste-PGN workflow.
 - Added atomic imported-run plus provenance persistence and authorized `GET /runs/:id/import` reads. `POST /runs/import` is a closed, typed REST contract with the four import error codes mapped intentionally.
 - Tests exercise actor stamping, absence of fabricated opponent selections, atomic refusal, source normalization, no credential header, REST creation/readback, and unknown-field rejection.
+
+## 2026-08-14 — Codex §3
+
+- The import response enqueues one eval job per original-mainline node, including the root. Queue state is now inspectable without mutation so story reads enqueue only nodes with no durable eval, current failure, or outstanding job.
+- The active writer remains the only actor that can attach staged evidence. Once every node is durable or failed, repeated story reads enqueue nothing; process loss converges by re-enqueueing missing durable nodes.
+- Added a runtime story projection over persisted evidence and shipped pivotal/phase/endgame/shape detectors. Eval pivots use the pinned ±1000 rail and 150 cp threshold; all sentences name their recorded or detector ground.
+- Terminal slides carry separate fact and entry nodes, so a checkmated position is never offered as playable. Tests cover the terminal-parent boundary, learner-relative evals, N+1 cost, durable application, and idempotent completion.

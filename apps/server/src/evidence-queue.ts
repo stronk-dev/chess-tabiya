@@ -136,6 +136,20 @@ export class EvidenceJobQueue implements JobObserver {
     );
   }
 
+  outstanding(runId: string): readonly Pick<EvidenceJob, "id" | "runId" | "nodeId" | "kind">[] {
+    const queued = [
+      ...this.#pending.map((entry) => entry.job),
+      ...[...this.#running.values()].map((entry) => entry.job),
+    ];
+    const staged = (this.#staged.get(runId) ?? []).map((result) => Object.freeze({
+      id: result.jobId,
+      runId: result.runId,
+      nodeId: result.nodeId,
+      kind: result.payload.kind,
+    }));
+    return Object.freeze([...queued.filter((job) => job.runId === runId), ...staged]);
+  }
+
   consume(runId: string, seq: number): void {
     const staged = this.#staged.get(runId);
     if (staged === undefined) return;

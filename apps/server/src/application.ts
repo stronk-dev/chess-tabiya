@@ -326,6 +326,7 @@ export async function createApplication(
     packRegistry: registry,
     progressStorage: storage,
     opponentSelector: selector,
+    shapeRegistry: shapes,
   });
   const identity = new IdentityService(storage, {
     cookieSecure: options.cookieSecure ?? true,

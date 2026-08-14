@@ -4,6 +4,7 @@ import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { normalizeLichessGameUrl, resolveImportSource } from "./import-source.js";
 import { createRestHandler } from "./rest.js";
+import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 
 const PGN = `[Event "Friendly"]
 [Site "https://lichess.org/abcd1234"]
@@ -103,5 +104,25 @@ describe("own-game import", () => {
     }));
     expect(bad.status).toBe(400);
     expect(await bad.json()).toMatchObject({ error: { code: "INVALID_REQUEST", message: "Unknown field /extra" } });
+  });
+
+  it("completes the N+1 evidence pass durably and makes story reads idempotent", async () => {
+    let score = 0;
+    const executor: EvidenceExecutor = { async execute(job) { score -= 200; return { kind: "eval", source: "engine_validated", values: { centipawns: score, engineId: "mock-judge", requestedMovetimeMs: job.movetime } }; } };
+    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    stores.push(storage);
+    const service = new RunService(storage, { evidenceQueue: queue });
+    const imported = await service.importGame({ id: "story-import", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "story-writer");
+    expect(imported.evidencePass.jobs).toBe(imported.run.nodes.length);
+    await queue.whenIdle();
+    service.reveal(imported.run.id, "story-writer");
+    for (const result of queue.page(imported.run.id).results) service.applyEvidence(imported.run.id, "story-writer", result.seq);
+    const principal = { learnerId: "__legacy", handle: "__legacy" } as const;
+    const story = service.story(imported.run.id, principal);
+    expect(story).toMatchObject({ ready: true, pendingEvidence: 0, outcome: { kind: "unfinished" } });
+    expect(story.moments.some((moment) => moment.kinds.includes("eval_pivot"))).toBe(true);
+    expect(queue.outstanding(imported.run.id)).toEqual([]);
+    expect(service.story(imported.run.id, principal).pendingEvidence).toBe(0);
   });
 });
