@@ -33,6 +33,12 @@ export {
 export { appendEvents, deriveSegments, eventsSince, projectRun } from "./events.js";
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
 export { shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
+export { classifyPhase, renderPhaseReading, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type PhaseReading } from "./phase.js";
+export { SILENT_ASSISTANCE, permittedAssistance, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
+export { pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
+export { endgameReading, renderEndgameReading, type EndgameTypeId, type EndgameReading, type TechniqueRef } from "./endgame.js";
+export { retrospectivePivot } from "./adaptive.js";
+export { voiceCheck, BANNED_JUDGEMENTS, PRESCRIPTIVE_VERBS, CHESS_LEXICON, type EvidencePacket, type ShapeEntryRef, type VoiceCheckResult } from "./voice.js";
 export { terminalOutcome } from "./outcome.js";
 export {
   STRUCTURAL_FEATURE_KINDS,
