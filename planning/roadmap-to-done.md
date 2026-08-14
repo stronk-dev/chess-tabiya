@@ -14,9 +14,9 @@ as waves land; not append-only. Where a row needs detail, it cites the ledger
 | Parallel wave: predicate-wave-2, corpus-evidence, adoption-wave-1, social-match | ✅ shipped 2026-08-14 |
 | Structural round: repertoire gap-finding, onramp-guard (+D28) | ✅ shipped 2026-08-14 |
 | Structural round: open-answer grading | ✅ shipped 2026-08-14 — **the feature roadmap is down to the polish wave** |
-| **Polish wave** (needs one small RFC batch): PWA/responsive, `/settings` real controls, assistance **form slices** (lighting dial, arrows/halos, ambient presence, spoken TTS provider) | 📋 next after open-answer |
+| **Polish wave — the LAST feature wave** (RFCs drafting): (a) surfaces — PWA/responsive, `/settings` controls, form slices (lighting, arrows/halos, ambient, TTS provider); (b) orphan four — narrative mode + difference strips, session distillation, recommender; (c) grounding pair — `verify-draft`, `perfect_tablebase` policy | 🔨 drafting |
 | **Gamification cluster** (needs RFC **and** research/mileage first — deliberately post-session): Spire map, encounter unlocks, pack-opening ceremony. Rulings already made: library stays open, map gates its own rewards, ADR-0007 progression never for sale | 📋 post-session by design |
-| Orphan triage (owner may schedule or park): recommender, session distillation, narrative mode + difference strips, events layer (pack nights/cohorts/relays), resistance-spectrum completion (`perfect_tablebase` decision) | ⏳ owner triage at polish |
+| Orphan triage | ✅ ruled 2026-08-14: all four scheduled into polish; events layer consciously parked behind B5 revival |
 | Ledgered, unscheduled: position-scan import, personal-model opponent, per-position threads, B5 depth (native pool, follower feeds), board-hardware integration | 💤 parked |
 
 ## 2. Content
@@ -26,7 +26,7 @@ as waves land; not append-only. Where a row needs detail, it cites the ledger
 | Shape library | ✅ 24 entries (all families + residue) |
 | Packs: batch 1 + wave 2 openings + 2 trajectories | ✅ 12 committed |
 | Wave 4a openings (next priority tier + anti-KID/London/Dutch), 5a on-ramp (guard-enabled + emitted seeds), 5b endgames (Lucena/Philidor/opposition/…) | 🔨 three agents authoring (~18 packs) |
-| Remaining opening families to full §2 map; endgame variants breadth; more trajectories | 📋 waves 6+ |
+| Remaining opening families to full §2 map; endgame variants breadth incl. **theoretical mates (ruled in)**; more trajectories | 📋 final batches |
 | Engine-validation passes over authored claims (0 run so far — graduation gate is the only content gate) | 📋 before session |
 
 ## 2b. The reconciliation gate

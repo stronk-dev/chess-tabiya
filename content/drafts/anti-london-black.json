@@ -1,0 +1,266 @@
+{
+  "id": "anti-london-black",
+  "version": "0.1.0",
+  "title": "Facing the London: Black's counter-pyramid and the moves that bite",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Black player tired of losing slowly to the London",
+    "branchLengthTarget": 12
+  },
+  "start": {
+    "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 3 3",
+    "movesSan": ["d4", "d5", "Nf3", "Nf6", "Bf4"],
+    "side": "black"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "Your opponent chose the London: a system they play every game and you face twice a season. Challenge it in the order that asks real questions — ...c5 immediately, the counter-pyramid, ...Bd6 against their prized bishop — and know where their plan is headed (Ne5, Bd3, the h-file) before it gets there."
+  },
+  "concepts": [
+    "their-prep-is-longer",
+    "challenge-the-system-piece",
+    "know-the-opponent-plan"
+  ],
+  "planClasses": [
+    {
+      "id": "bishop-challenge",
+      "label": "Trade or chase the f4 bishop (...Bd6, ...Nh5)",
+      "description": "The London is named after one bishop: every tempo it spends staying alive (Bg3, h3) is a tempo their attack never gets. ...Bd6 is the structural challenge; ...Nh5 is the concrete one — the spine plays the first and classifies the second."
+    },
+    {
+      "id": "b2-counterattack",
+      "label": "Hit b2 while the bishop is away (...Qb6)",
+      "description": "Position-specific: the bishop's departure from c1 leaves b2 attended only by the queen, and after e3 the ...Qb6 jab arrives before c3/Nbd2 coordination is complete. Its catalogued form is the Poisoned Pawn row this pack's deviation transposes into, move for move."
+    },
+    {
+      "id": "free-the-bad-bishop",
+      "label": "Solve the c8 bishop (...b6/...Bb7)",
+      "description": "The counter-pyramid's honest cost is the c8 bishop behind ...e6. The plan that pays it off: ...b6, ...Bb7, and central breaks timed for when the long diagonal opens — the same asymmetry the London player is counting on, worked from the other side."
+    }
+  ],
+  "spine": [
+    {
+      "id": "p6-c5",
+      "moveUci": "c7c5",
+      "moveSan": "c5",
+      "annotations": [
+        "Challenge immediately, before the pyramid is finished. At your band most players drift with ...e6 first (28.1%); the immediate ...c5 (11.7%) is the catalogued mainline row and the move that makes White's construction order matter."
+      ],
+      "children": [
+        {
+          "id": "p7-e3",
+          "moveUci": "e2e3",
+          "moveSan": "e3",
+          "annotations": [
+            "The moment the c1 bishop can never come home. Your sharpest sidestep lives here — ...Qb6, classified below — and the spine's slower road keeps the tension instead."
+          ],
+          "children": [
+            {
+              "id": "p8-nc6",
+              "moveUci": "b8c6",
+              "moveSan": "Nc6",
+              "annotations": [
+                "Develop toward the tension: the knight leans on d4 and keeps ...cxd4 a live threat that White must always price in."
+              ],
+              "children": [
+                {
+                  "id": "p9-nbd2",
+                  "moveUci": "b1d2",
+                  "moveSan": "Nbd2",
+                  "children": [
+                    {
+                      "id": "p10-e6",
+                      "moveUci": "e7e6",
+                      "moveSan": "e6",
+                      "annotations": [
+                        "The counter-pyramid, with its cost stated honestly: your c8 bishop is now the worst piece on the board, and the third plan class exists to fix that."
+                      ],
+                      "children": [
+                        {
+                          "id": "p11-c3",
+                          "moveUci": "c2c3",
+                          "moveSan": "c3",
+                          "annotations": [
+                            "Their wall is complete; yours is one move behind. This is YOUR decision point: the ...Bd6 challenge, the ...cxd4 release, or queenside plans first — the drill is choosing on purpose."
+                          ],
+                          "children": [
+                            {
+                              "id": "p12-bd6",
+                              "moveUci": "f8d6",
+                              "moveSan": "Bd6",
+                              "annotations": [
+                                "Ask the system question: trade the London bishop or make it move again. Either answer costs White something — the trade costs the attack's engine, Bg3 costs a tempo and parks the bishop where ...Bxg3 opens White's h-file, not yours."
+                              ],
+                              "children": [
+                                {
+                                  "id": "p13-bg3",
+                                  "moveUci": "f4g3",
+                                  "moveSan": "Bg3",
+                                  "annotations": [
+                                    "The usual answer. Note what it tells you: White will recapture hxg3 if you ever trade, and wants Bd3/Ne5/f4 next. Your remaining spine moves are played knowing that plan."
+                                  ],
+                                  "children": [
+                                    {
+                                      "id": "p14-o-o",
+                                      "moveUci": "e8g8",
+                                      "moveSan": "O-O",
+                                      "annotations": [
+                                        "Castle into the plan you can name: Bd3 aims at h7, Ne5 wants f4 behind it. Naming it is most of surviving it — the checkpoint asks you to."
+                                      ],
+                                      "children": [
+                                        {
+                                          "id": "p15-bd3",
+                                          "moveUci": "f1d3",
+                                          "moveSan": "Bd3",
+                                          "children": [
+                                            {
+                                              "id": "p16-b6",
+                                              "moveUci": "b7b6",
+                                              "moveSan": "b6",
+                                              "annotations": [
+                                                "The third plan begins: ...Bb7 next, and the c8 bishop stops being the position's apology. Played now because White's slow build granted the tempo."
+                                              ],
+                                              "children": [
+                                                {
+                                                  "id": "p17-ne5",
+                                                  "moveUci": "f3e5",
+                                                  "moveSan": "Ne5",
+                                                  "annotations": [
+                                                    "The London's signature arrives — with its arithmetic: if ...Nxe5 dxe5, the pawn forks d6 and f6 (machine-walked geometry), so the knight is usually tolerated, undermined with ...f6 ideas, or answered by completing ...Bb7 first. Past the book from here: play the middlegame you just watched White build."
+                                                  ],
+                                                  "children": []
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "your-tabiya",
+      "label": "6.c3 — challenge, release, or queenside: choose your handling",
+      "trigger": { "atSpineNode": "p11-c3" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["bishop-challenge", "b2-counterattack", "free-the-bad-bishop"]
+      }
+    },
+    {
+      "id": "plan-named",
+      "label": "Castled — name White's plan before it happens",
+      "trigger": { "atSpineNode": "p14-o-o" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "signature-met",
+      "label": "Ne5 arrives — you knew it was coming",
+      "trigger": { "atSpineNode": "p17-ne5" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p6-c5", "p7-e3", "p8-nc6", "p9-nbd2", "p10-e6", "p11-c3",
+      "p12-bd6", "p13-bg3", "p14-o-o", "p15-bd3", "p16-b6", "p17-ne5"
+    ],
+    "plyHorizon": 12
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p7-e3" },
+      "moveUci": "d8b6",
+      "class": "interesting_deviation",
+      "note": "4...Qb6 — the position after it is FEN-identical to the London System: Poisoned Pawn Variation row (reached there by 1.d4 Nf6 2.Nf3 d5 order; transposition machine-verified this session). The queen hits the b2 square the bishop left behind; White's catalogued answer is 5.Nc3. The sharpest anti-London try at this band, and a different pack's full subject."
+    },
+    {
+      "at": { "spineNodeId": "p11-c3" },
+      "moveUci": "c5d4",
+      "class": "accepted_alternative",
+      "note": "6...cxd4 releases the tension; the walked recapture is 7.exd4, keeping White's c3-d4 chain and opening the e-file side of their pyramid. Releasing costs you the standing ...cxd4 threat — after it, White's pieces stop having to price it in. Sound, and slightly obliging."
+    },
+    {
+      "at": { "spineNodeId": "p13-bg3" },
+      "moveUci": "f6h5",
+      "class": "interesting_deviation",
+      "note": "7...Nh5 hunts the bishop a second time. Two tempi for the bishop pair is the open question the classification refuses to answer for you: the walked line confirms only that the knight stands safe on h5 and the bishop must decide again."
+    },
+    {
+      "at": { "spineNodeId": "p13-bg3" },
+      "moveUci": "d6g3",
+      "class": "accepted_alternative",
+      "note": "7...Bxg3 8.hxg3 resolves the bishop question by handing White the half-open h-file toward your castled king — derived from the walked recapture, and exactly why the spine waits: taking on g3 is soundest before ...O-O, or when the h-file cannot matter."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "faced-and-losing",
+      "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the London position after 3.Bf4 was reached 3,851,145 times and Black scores 44.5% against White's 50.4% — among the family roots measured in this repo's priority artifact, this is one of the worst results for the receiving side. This pack exists to move that number.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "habit-vs-mainline",
+      "text": "Your peers' current habit is 3...e6 (28.1% of games); the immediate 3...c5 this pack drills is chosen only 11.7% of the time — the catalogued mainline is, at your band, the road not taken.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "asymmetric-preparation",
+      "text": "The London player plays this structure every White game; you face it occasionally. Drilling the first eight defensive moves until they are automatic is worth more here than in any opening you chose yourself — the preparation asymmetry is the whole reason anti-opening packs exist.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "D02 Queen's Pawn Game: London System: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/d.tsv) — CC0-1.0, no attribution required. The ...Qb6 deviation's identity is the London System: Poisoned Pawn Variation row of the same file: its position after 4...Qb6 (via 1.d4 Nf6 2.Nf3 d5) and this pack's (via 1.d4 d5 2.Nf3 Nf6) were verified FEN-identical with a chessops scratch harness this session.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the D02 row — 3,851,145 games, whitePct 50.4 / blackPct 44.5; reply shares e6 28.1% / Bf5 19.7% / Nc6 17.0% / c5 11.7% / Bg4 8.9%. No deeper-node frequency was retrieved.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/d02-queen-s-pawn-game-london-system, learner-side black, split-ply 5; the candidate directory is shared with the mirrored White pack and records the most recent emit's job arguments). Hand-added plies 12-17 and all four deviations were walked move-by-move with the chessops harness, including the exd4 and hxg3 recaptures and the Nh5 hop.",
+      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all four deviation classifications and notes, and the non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "This pack has NO shapes reference, deliberately — the same London-wedge gap recorded in the mirrored White pack's blockers. When a system-pyramid entry exists, this pack's plan classes 1 and 3 should reference its Black-side plans.",
+      "The claim that ...Bxg3 is 'soundest before ...O-O' is timing doctrine with no engine or corpus support; it should harden or fall on evidence.",
+      "Which challenge (...Bd6 / ...Qb6 / ...Nh5) actually scores best for Black at these bands is the pack's motivating question and remains unmeasured below the family root.",
+      "The 'preparation asymmetry' claim is the anti-opening thesis itself — plausible, ledgered, and still unmeasured.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

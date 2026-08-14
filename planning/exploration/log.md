@@ -1704,3 +1704,13 @@ passes per the three-question rule); matrix rows updated for all four (CSV lines
    no unlock, encounter, path, or ceremony is ever purchasable and no
    progression state is ever for sale. The satirical pack-opening only lands
    because this is load-bearing and visible: the joke IS the promise.
+
+## 2026-08-14 (owner rulings) — orphan triage: all four scheduled; mates packs in
+
+All four offered orphans join the polish wave: narrative mode + difference
+strips, session distillation, `perfect_tablebase`, and the recommender. The
+events layer (pack nights/cohorts/relays) stays parked behind B5's revival
+conditions — the one conscious parking. Theoretical-mates packs join the final
+endgame batch. The polish wave is therefore the LAST feature wave: surfaces
+(PWA, settings, form slices), the orphan four, and the grounding pair
+(`verify-draft`, perfect-play policy).

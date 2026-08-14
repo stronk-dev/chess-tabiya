@@ -1,0 +1,264 @@
+{
+  "id": "italian-center-attack-white",
+  "version": "0.1.0",
+  "title": "Italian Center Attack: c3-d4 and the isolani you asked for",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Italian player who wants the centre, not the eighty-move Pianissimo",
+    "branchLengthTarget": 12
+  },
+  "start": {
+    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+    "movesSan": ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5"],
+    "side": "white"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "You chose the Italian and Black answered with its most common reply. Play the direct program — c3 then d4 — through the forcing sequence it starts: recapture correctly, meet the check with the sober Bd2, and arrive in the isolani tabiya knowing you chose it on purpose: the d4 pawn buys open lines, piece activity, and a plan."
+  },
+  "concepts": [
+    "central-program-over-drift",
+    "forcing-sequence-literacy",
+    "structure-as-a-purchase"
+  ],
+  "shapes": ["iqp-white"],
+  "planClasses": [
+    {
+      "id": "central-program",
+      "label": "Build c3/d4 and recapture toward the centre",
+      "description": "Position-specific counting: c3 exists so that ...exd4 is met by cxd4, keeping two pawns abreast. The program's cost is the b1 knight's best square — the same debt every c3 system pays — which is why the check on b4 comes and why Bd2 answers it."
+    },
+    {
+      "id": "iqp-initiative",
+      "label": "Play the isolani game you purchased",
+      "description": "After ...d5 exd5 Nxd5 the structure is signed: White's d4 stands alone, and in exchange every White piece gets a file or a diagonal. The reusable isolani doctrine lives in the shape entry; this pack's job is to reach the tabiya with the pieces placed to use it.",
+      "shapePlan": { "shape": "iqp-white", "plan": "white-piece-attack" }
+    },
+    {
+      "id": "greco-gambit",
+      "label": "Gambit instead: 7.Nc3 (the Greco)",
+      "description": "Position-specific: block the check with the knight, offer e4, and play for open files and development while Black grabs. Catalogued, critical, and a memory battle — the classified door at the pack's decision point, not its spine."
+    }
+  ],
+  "spine": [
+    {
+      "id": "p7-c3",
+      "moveUci": "c2c3",
+      "moveSan": "c3",
+      "annotations": [
+        "The program's first move: d4 is coming, and ...exd4 will be answered by cxd4. The alternative repertoire — d3 and the long Pianissimo manoeuvring game — is classified below as a deviation, not an error."
+      ],
+      "children": [
+        {
+          "id": "p8-nf6",
+          "moveUci": "g8f6",
+          "moveSan": "Nf6",
+          "annotations": [
+            "Black counterattacks e4 rather than defending e5 — the main line. Slower defences like ...Qe7 or ...d6 hold the centre instead and are catalogued rows in the mirrored Black pack."
+          ],
+          "children": [
+            {
+              "id": "p9-d4",
+              "moveUci": "d2d4",
+              "moveSan": "d4",
+              "annotations": [
+                "The point of c3, played before Black can organize against it. From here to the tabiya the moves are nearly forced on both sides — this is the sequence to know cold."
+              ],
+              "children": [
+                {
+                  "id": "p10-exd4",
+                  "moveUci": "e5d4",
+                  "moveSan": "exd4",
+                  "children": [
+                    {
+                      "id": "p11-cxd4",
+                      "moveUci": "c3d4",
+                      "moveSan": "cxd4",
+                      "annotations": [
+                        "Recapture toward the centre: two pawns abreast, and the c5 bishop must move again or pin. The wrong recapture question does not exist here — only the c-pawn can take."
+                      ],
+                      "children": [
+                        {
+                          "id": "p12-bb4",
+                          "moveUci": "c5b4",
+                          "moveSan": "Bb4+",
+                          "annotations": [
+                            "The check is the critical test of the whole program, and YOUR decision: the sober Bd2 (the spine — trade into the isolani game) or the Greco Gambit Nc3 (offer e4 for open lines). Both are authored thoughts; the drill is choosing one on purpose."
+                          ],
+                          "children": [
+                            {
+                              "id": "p13-bd2",
+                              "moveUci": "c1d2",
+                              "moveSan": "Bd2",
+                              "annotations": [
+                                "Block, offer the trade, and keep the structure: after the coming exchanges White's development lead is small but real, and the centre pawns tell both sides the plan."
+                              ],
+                              "children": [
+                                {
+                                  "id": "p14-bxd2",
+                                  "moveUci": "b4d2",
+                                  "moveSan": "Bxd2+",
+                                  "children": [
+                                    {
+                                      "id": "p15-nbxd2",
+                                      "moveUci": "b1d2",
+                                      "moveSan": "Nbxd2",
+                                      "annotations": [
+                                        "Recapture with the knight the c3 program had orphaned: from d2 it re-routes via b3 or f1 into the isolani game. The queen recapture is legal and slower — the knight needed the square more."
+                                      ],
+                                      "children": [
+                                        {
+                                          "id": "p16-d5",
+                                          "moveUci": "d7d5",
+                                          "moveSan": "d5",
+                                          "annotations": [
+                                            "Black frees the position at the classical moment — one move before d5 would have been a real threat by you. Meet it with the recapture that signs the structure."
+                                          ],
+                                          "children": [
+                                            {
+                                              "id": "p17-exd5",
+                                              "moveUci": "e4d5",
+                                              "moveSan": "exd5",
+                                              "children": [
+                                                {
+                                                  "id": "p18-nxd5",
+                                                  "moveUci": "f6d5",
+                                                  "moveSan": "Nxd5",
+                                                  "annotations": [
+                                                    "The tabiya, with the census on the table: White's d4 pawn has no c- or e-file neighbour — the isolani, machine-derived from this position — and both e-files are empty of pawns. You bought activity with structure; the shape entry names the plans, and the middlegame starts now."
+                                                  ],
+                                                  "children": []
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b4-evans",
+      "moveUci": "b2b4",
+      "moveSan": "b4",
+      "annotations": [
+        "The Evans Gambit — the c3-d4 program bought with a wing pawn, one move earlier. A catalogued row and a storied repertoire of its own; it is here so that choosing the quiet start is a decision, not a default."
+      ],
+      "children": []
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "your-tabiya",
+      "label": "6...Bb4+ — sober Bd2 or the Greco gambit: choose",
+      "trigger": { "atSpineNode": "p12-bb4" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["central-program", "iqp-initiative", "greco-gambit"]
+      }
+    },
+    {
+      "id": "structure-signed",
+      "label": "9...Nxd5 — the isolani tabiya; count what you bought",
+      "trigger": { "atSpineNode": "p18-nxd5" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p7-c3", "p8-nf6", "p9-d4", "p10-exd4", "p11-cxd4", "p12-bb4",
+      "p13-bd2", "p14-bxd2", "p15-nbxd2", "p16-d5", "p17-exd5", "p18-nxd5",
+      "b4-evans"
+    ],
+    "plyHorizon": 12
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p8-nf6" },
+      "moveUci": "d2d3",
+      "class": "accepted_alternative",
+      "note": "5.d3 is the Giuoco Pianissimo — the other Italian repertoire, catalogued in its own rows: keep the tension for thirty moves and outplay slowly. A temperament choice, not an evaluation claim; this pack exists for players who want the direct program instead."
+    },
+    {
+      "at": { "spineNodeId": "p12-bb4" },
+      "moveUci": "b1c3",
+      "class": "interesting_deviation",
+      "note": "7.Nc3 — the Greco Gambit (catalogued through 7...Nxe4 8.O-O in the Main Line row) — offers e4 for open lines while the b4 bishop and e4 knight dangle. Critical, theory-heavy, and unforgiving of half-memory: playing it unbooked is worse than not playing it. The classified door for the third plan class."
+    },
+    {
+      "at": { "spineNodeId": "p16-d5" },
+      "moveUci": "e4e5",
+      "class": "interesting_deviation",
+      "note": "9.e5 declines the isolani and pushes past instead: the walked line 9...dxc4 10.exf6 Qxf6 trades the structural game for an unbalanced race where both sides have grabbed. Nothing in this repo has evaluated the result — play both ninth moves and compare the games you get."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "chosen-and-common",
+      "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the Italian position after 3.Bc4 was reached 44,467,486 times — the largest tabiya-depth family measured in this repo's wave-4a priority pull — with White scoring 50.1%, and 3...Bc5 (34.2%) is the most common reply this pack drills against.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "isolani-census",
+      "text": "In the final tabiya White's d4 pawn has no pawn on the c- or e-file of either colour beside it and no White pawn ahead of it — the isolated queen's pawn as a checkable board fact, derived from the machine-walked position rather than asserted.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "forcing-literacy",
+      "text": "From 5.d4 to 9...Nxd5 nearly every move is the position's only good answer to the previous one; drilling the sequence until it is automatic converts eight moves of risk into one decision — which is the whole trade this pack offers.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "C54 Italian Game: Classical Variation, Center Attack: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/c.tsv) — CC0-1.0, no attribution required. The Giuoco Pianissimo (5.d3), Greco Gambit Main Line (7.Nc3 Nxe4 8.O-O) and Evans Gambit (4.b4, C51) identities cited in deviations and the sibling branch are rows of the same CC0 file.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority-wave4a/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07, emitted this session over seven candidate family roots. Used here: the C50 row — 44,467,486 games, whitePct 50.1 / drawPct 4.0 / blackPct 45.9; reply shares Bc5 34.2% / Nf6 29.8% / h6 13.6%. The artifact also records B01 Scandinavian at 56,347,011 games (a two-ply root, not depth-comparable) and C60 Ruy Lopez at 20,756,268. No deeper-node frequency was retrieved.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/c54-italian-game-classical-variation-center-attack, learner-side white, split-ply 6; the candidate directory is shared with the mirrored Black pack and records the most recent emit's job arguments). Hand-added plies 10-18 (the full forcing sequence to the isolani tabiya), the Evans sibling branch and all three deviations were walked move-by-move with a chessops scratch harness this session, including 9.e5 dxc4 10.exf6 Qxf6.",
+      "SHAPE REFERENCE (mechanical): the isolani census at the final spine position — White pawn d4 with no White or Black pawn on the c- or e-files adjacent ranks aside, per the walked FEN r1bqk2r/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2QK2R — is hand-derived pawn arithmetic from the machine-walked position. iqp-white's trigger is the runtime's named_structure classifier, which was NOT executed against this position; if the classifier's definition differs from this census, the reference must be reviewed.",
+      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all deviation classifications and notes, and the non-derived feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The iqp-white shape reference rests on hand-derived pawn arithmetic; running the shipped named_structure evaluator against the walked tabiya FEN would upgrade or refute it and has not been done.",
+      "The family was selected over B01 Scandinavian (56.3M games at two plies vs the Italian's 44.5M at five): the depth-incommensurability judgment is recorded in the wave log, and the Scandinavian remains the obvious next family on raw totals.",
+      "The 'nearly every move is the only good answer' claim from 5.d4 onward is unverified by any engine pass; a single refutation inside the sequence would demote the pack's central promise.",
+      "Whether Bd2 or Nc3 is more common or scores better at these bands is unquantified below the family root.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

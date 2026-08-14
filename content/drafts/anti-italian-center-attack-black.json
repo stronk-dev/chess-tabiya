@@ -1,0 +1,289 @@
+{
+  "id": "anti-italian-center-attack-black",
+  "version": "0.1.0",
+  "title": "Facing the Italian: the classical counter and the blockade you get paid in",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "1...e5 player who meets 3.Bc4 half their games",
+    "branchLengthTarget": 13
+  },
+  "start": {
+    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+    "movesSan": ["e4", "e5", "Nf3", "Nc6", "Bc4"],
+    "side": "black"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "White chose the Italian — the most common thing that happens to your 1...e5. Answer classically: ...Bc5, meet the c3-d4 program with the counter it was always vulnerable to — ...exd4, the ...Bb4+ trade, and ...d5 at the exact moment it equalizes — and land in the isolani tabiya as the side that gets to blockade."
+  },
+  "concepts": [
+    "counter-at-the-right-beat",
+    "trade-the-right-pieces",
+    "blockade-as-payment"
+  ],
+  "shapes": ["iqp-white"],
+  "planClasses": [
+    {
+      "id": "centre-counter",
+      "label": "The classical recipe: ...Nf6, ...exd4, ...d5",
+      "description": "Position-specific timing: ...Nf6 hits e4 so that d4's advance costs a tempo of defence, ...exd4 obliges the recapture, and ...d5 frees your game the single move it works without concession. Each beat exists because of the previous one — the drill is the metronome."
+    },
+    {
+      "id": "blockade-and-trade",
+      "label": "Blockade d5 and trade toward the ending",
+      "description": "The tabiya's payment: White gets activity, you get the d5 square in front of an isolated pawn — and this spine ends with your knight already standing on it, which is the shape entry's success signature fulfilled on arrival. The reusable blockade doctrine lives in the entry.",
+      "shapePlan": { "shape": "iqp-white", "plan": "black-blockade-and-trade" }
+    },
+    {
+      "id": "simplify-with-check",
+      "label": "Use ...Bb4+ to trade the attacking bishop",
+      "description": "Position-specific: the check forces a block, and taking on d2 removes a developed White piece while your development finishes at parity. The bishop that checks is the bishop the isolani attack would otherwise aim at your king."
+    }
+  ],
+  "spine": [
+    {
+      "id": "p6-bc5",
+      "moveUci": "f8c5",
+      "moveSan": "Bc5",
+      "annotations": [
+        "The classical answer and your peers' most common one (34.2% at band): the bishop takes the mirror diagonal and dares White to prove the tempo of Bc4 was better spent."
+      ],
+      "children": [
+        {
+          "id": "p7-c3",
+          "moveUci": "c2c3",
+          "moveSan": "c3",
+          "annotations": [
+            "White announces the d4 program. Slower holding answers — ...Qe7, ...d6 — are catalogued rows classified below; the spine plays the counterattack instead."
+          ],
+          "children": [
+            {
+              "id": "p8-nf6",
+              "moveUci": "g8f6",
+              "moveSan": "Nf6",
+              "annotations": [
+                "Hit e4 now, while c3 has taken the b1 knight's defence square away. Every White centre move from here must also answer for the e4 pawn."
+              ],
+              "children": [
+                {
+                  "id": "p9-d4",
+                  "moveUci": "d2d4",
+                  "moveSan": "d4",
+                  "children": [
+                    {
+                      "id": "p10-exd4",
+                      "moveUci": "e5d4",
+                      "moveSan": "exd4",
+                      "annotations": [
+                        "Take without regret: declining with ...Bb6 lets d4-d5 come with tempo on your c6 knight — a machine-walked consequence, classified below."
+                      ],
+                      "children": [
+                        {
+                          "id": "p11-cxd4",
+                          "moveUci": "c3d4",
+                          "moveSan": "cxd4",
+                          "annotations": [
+                            "White has the big centre for one move — and YOUR decision arrives: the disciplined ...Bb4+ (the spine), the retreat ...Bb6, or the grab ...Nxe4. The comparison is the drill."
+                          ],
+                          "children": [
+                            {
+                              "id": "p12-bb4",
+                              "moveUci": "c5b4",
+                              "moveSan": "Bb4+",
+                              "annotations": [
+                                "The check that pays twice: it halts the centre's momentum for a full move, and whatever blocks becomes a trade that clears your path to ...d5."
+                              ],
+                              "children": [
+                                {
+                                  "id": "p13-bd2",
+                                  "moveUci": "c1d2",
+                                  "moveSan": "Bd2",
+                                  "children": [
+                                    {
+                                      "id": "p14-bxd2",
+                                      "moveUci": "b4d2",
+                                      "moveSan": "Bxd2+",
+                                      "annotations": [
+                                        "Trade willingly: the dark-square bishop was the piece White's coming kingside ideas needed most, and your remaining pieces all have jobs in the blockade plan."
+                                      ],
+                                      "children": [
+                                        {
+                                          "id": "p15-nbxd2",
+                                          "moveUci": "b1d2",
+                                          "moveSan": "Nbxd2",
+                                          "children": [
+                                            {
+                                              "id": "p16-d5",
+                                              "moveUci": "d7d5",
+                                              "moveSan": "d5",
+                                              "annotations": [
+                                                "The freeing break at its one perfect beat: it attacks the c4 bishop, so White has no time to push past or build — the exchange is forced onto your terms."
+                                              ],
+                                              "children": [
+                                                {
+                                                  "id": "p17-exd5",
+                                                  "moveUci": "e4d5",
+                                                  "moveSan": "exd5",
+                                                  "children": [
+                                                    {
+                                                      "id": "p18-nxd5",
+                                                      "moveUci": "f6d5",
+                                                      "moveSan": "Nxd5",
+                                                      "annotations": [
+                                                        "The tabiya — and you arrive already blockading: your knight stands on d5 directly in front of White's isolated d4 pawn, which is the shape entry's success signature as a board fact. From here the entry's doctrine is your map: blockade, trade the attackers, aim for the ending where the isolani is only weak."
+                                                      ],
+                                                      "children": []
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nf6-two-knights",
+      "moveUci": "g8f6",
+      "moveSan": "Nf6",
+      "annotations": [
+        "The Two Knights Defense — your second door (29.8% at band): counterattack before developing the bishop, and be ready for 4.Ng5, the machine-walked fork question this branch exists to remind you of. A different pack's full subject."
+      ],
+      "children": []
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "your-tabiya",
+      "label": "6.cxd4 — check, retreat, or grab: choose your counter",
+      "trigger": { "atSpineNode": "p11-cxd4" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["centre-counter", "blockade-and-trade", "simplify-with-check"]
+      }
+    },
+    {
+      "id": "freed-on-time",
+      "label": "8...d5 — the break lands with tempo",
+      "trigger": { "atSpineNode": "p16-d5" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "blockade-installed",
+      "label": "9...Nxd5 — the knight sits where the entry says to put it",
+      "trigger": { "atSpineNode": "p18-nxd5" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p6-bc5", "p7-c3", "p8-nf6", "p9-d4", "p10-exd4", "p11-cxd4",
+      "p12-bb4", "p13-bd2", "p14-bxd2", "p15-nbxd2", "p16-d5", "p17-exd5",
+      "p18-nxd5", "nf6-two-knights"
+    ],
+    "plyHorizon": 13
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p7-c3" },
+      "moveUci": "d8e7",
+      "class": "accepted_alternative",
+      "note": "4...Qe7 — the Closed Variation row — holds e5 with the queen and retreats the bishop to b6 when d4 comes, keeping the centre shut. Sturdy, passive, catalogued; a different temperament from the spine's counterattack."
+    },
+    {
+      "at": { "spineNodeId": "p7-c3" },
+      "moveUci": "d7d6",
+      "class": "accepted_alternative",
+      "note": "4...d6 — the La Bourdonnais row — supports e5 with a pawn and accepts a slower game. Its known cost is that d4 comes anyway and after ...exd4 cxd4 the b6-retreat position arrives with White's centre already standing."
+    },
+    {
+      "at": { "spineNodeId": "p9-d4" },
+      "moveUci": "c5b6",
+      "class": "interesting_deviation",
+      "note": "5...Bb6 declines the pawn and keeps the bishop's diagonal — at the price of the centre: the machine-walked consequence of declining is that White's d-pawns roll (the same d5-with-tempo geometry the ...exd4 annotation warns about arrives one beat later). Whether the bishop's diagonal repays the space is unverified — play it and see."
+    },
+    {
+      "at": { "spineNodeId": "p11-cxd4" },
+      "moveUci": "c5b6",
+      "class": "interesting_deviation",
+      "note": "6...Bb6 retreats into the pawns' path: the walked line 7.d5 Ne7 shows the push arriving with tempo on the c6 knight — derived geometry, not evaluation. The retreat keeps pieces on; the spine's check trades them at a better moment."
+    },
+    {
+      "at": { "spineNodeId": "p11-cxd4" },
+      "moveUci": "f6e4",
+      "class": "interesting_deviation",
+      "note": "6...Nxe4 grabs the pawn the whole line dangles: the walked answer 7.d5 again hits c6 with tempo, and the knight on e4 must justify itself in lines this repo has not evaluated. The grab is critical theory, not refuted here — it is classified as the door you should open knowingly or not at all."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "faced-constantly",
+      "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the position after 3.Bc4 was reached 44,467,486 times — the Italian is the single most common thing that happens to a 1...e5 player at your level — and White scores 50.1% against 45.9%. Your own most common answer is already 3...Bc5 (34.2%); this pack drills doing it on purpose.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "signature-on-arrival",
+      "text": "The spine's final position contains a Black knight on d5 directly in front of an isolated White d-pawn — the exact structural success signature the iqp-white shape entry declares for the blockade plan, present as a board fact before the middlegame begins.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "beat-counting",
+      "text": "The classical counter works on beats, not moves: ...exd4 only after c3 has committed the recapture, ...Bb4+ only while the check gains the tempo, ...d5 only when it attacks the bishop — the same moves one beat early or late hand White the centre for free.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "C54 Italian Game: Classical Variation, Center Attack: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/c.tsv) — CC0-1.0, no attribution required. The Closed Variation (4...Qe7), La Bourdonnais (4...d6) and the Two Knights context of the sibling branch are rows/families of the same CC0 file.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority-wave4a/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07, emitted this session. Used here: the C50 row — 44,467,486 games, whitePct 50.1 / blackPct 45.9; reply shares Bc5 34.2% / Nf6 29.8% / h6 13.6%. No deeper-node frequency was retrieved.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/c54-italian-game-classical-variation-center-attack, learner-side black, split-ply 5; the candidate directory is shared with the mirrored White pack and records the most recent emit's job arguments). Hand-added plies 10-18, the Two Knights sibling branch (including the 4.Ng5 continuation it warns about) and all five deviations were walked move-by-move with a chessops scratch harness this session, including 6...Bb6 7.d5 Ne7 and 6...Nxe4 7.d5.",
+      "SHAPE REFERENCE (mechanical): the final spine FEN (r1bqk2r/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2QK2R) contains a black knight on d5 and a White d4 pawn with no White c- or e-pawn — hand-derived arithmetic matching the iqp-white entry's blockade success signature (pieceOnSquare d5 black knight + isolated_pawn white d). The shipped evaluator was NOT executed against this position; the claim is census arithmetic, not a classifier run.",
+      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all five deviation classifications and notes, and the non-derived feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The 'beat-counting' claim — that the same moves one beat early or late lose the centre — is the pack's strongest timing doctrine and no engine pass has tested any of the off-beat orderings.",
+      "6...Nxe4 is classified as a door rather than graded because nothing here has evaluated the grab; if an engine pass shows it simply equalizes, the spine's disciplined ...Bb4+ loses part of its motivation and the pack should say so.",
+      "The iqp-white reference rests on hand-derived census arithmetic; running the shipped named_structure evaluator against the walked FEN would upgrade or refute it (same blocker as the mirrored White pack).",
+      "First-move alternatives cannot be deviations in a follow_theory pack, so the Two Knights lives as a sibling root branch — fourth attestation of wave-2 friction #3.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

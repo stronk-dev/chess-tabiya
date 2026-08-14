@@ -1,0 +1,249 @@
+{
+  "id": "london-system-white",
+  "version": "0.1.0",
+  "title": "London System: the pyramid, the preserved bishop, and Ne5",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "London player who wants the setup to be decisions, not habit",
+    "branchLengthTarget": 11
+  },
+  "start": {
+    "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 4",
+    "movesSan": ["d4", "d5", "Nf3", "Nf6", "Bf4", "c5"],
+    "side": "white"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "You chose the London and Black challenged the centre at once. Build the pyramid in its proven order — e3, Nbd2, c3 — answer ...Bd6 by preserving the bishop on g3, and land the knight on e5 with the position already telling you why: after ...Nxe5 dxe5, the pawn attacks d6 and f6 at the same time."
+  },
+  "concepts": [
+    "system-with-move-orders",
+    "bishop-outside-the-chain",
+    "outpost-with-a-pawn-fork-behind-it"
+  ],
+  "planClasses": [
+    {
+      "id": "pyramid-order",
+      "label": "Build c3/d4/e3 in the order that answers ...Qb6",
+      "description": "The pyramid's construction order is the London's real theory: e3 before c3 keeps the queen's defence of b2 intact one move longer, and Nbd2 arrives before ...Qb6 can make Rb1 necessary. Position-specific counting, not general doctrine."
+    },
+    {
+      "id": "preserve-and-attack",
+      "label": "Preserve the dark bishop, then attack with Ne5 and f4",
+      "description": "The bishop left home before e3 was played — the whole point of the system. When ...Bd6 offers the trade, Bg3 declines it; when ...Nxe5 removes the knight, dxe5 turns the outpost into a fork; and f4 behind the e5 pawn is the attacking plan the pyramid was built to launch."
+    },
+    {
+      "id": "tension-rules",
+      "label": "Know your recaptures before the tension resolves",
+      "description": "Two standing rules the spine drills implicitly: ...cxd4 is met by exd4 (keeping c3 as d4's guard and opening the e-file side of the pyramid), and ...Bxg3 is met by hxg3 (a machine-checked capture that opens the h-file toward Black's short-castled king)."
+    }
+  ],
+  "spine": [
+    {
+      "id": "p7-e3",
+      "moveUci": "e2e3",
+      "moveSan": "e3",
+      "annotations": [
+        "The second stone of the pyramid, laid only after the bishop is out. Note the order: e3 before c3, so the d1 queen still watches b2 when ...Qb6 ideas appear."
+      ],
+      "children": [
+        {
+          "id": "p8-nc6",
+          "moveUci": "b8c6",
+          "moveSan": "Nc6",
+          "children": [
+            {
+              "id": "p9-nbd2",
+              "moveUci": "b1d2",
+              "moveSan": "Nbd2",
+              "annotations": [
+                "The knight takes its London square: it guards the e4/c4 entry points, supports a later Ne5 recapture, and deliberately leaves c3 free for the pawn."
+              ],
+              "children": [
+                {
+                  "id": "p10-e6",
+                  "moveUci": "e7e6",
+                  "moveSan": "e6",
+                  "annotations": [
+                    "Black builds the mirror pyramid — and locks the c8 bishop behind it. Your bishop is outside its chain; theirs is not. That asymmetry is the London's entire positional claim."
+                  ],
+                  "children": [
+                    {
+                      "id": "p11-c3",
+                      "moveUci": "c2c3",
+                      "moveSan": "c3",
+                      "annotations": [
+                        "The pyramid is complete: c3 guards d4, d4 leans on e5, and every recapture is scripted before it happens."
+                      ],
+                      "children": [
+                        {
+                          "id": "p12-bd6",
+                          "moveUci": "f8d6",
+                          "moveSan": "Bd6",
+                          "annotations": [
+                            "The standard challenge: Black offers to trade the piece your system is named after."
+                          ],
+                          "children": [
+                            {
+                              "id": "p13-bg3",
+                              "moveUci": "f4g3",
+                              "moveSan": "Bg3",
+                              "annotations": [
+                                "Decline it. On g3 the bishop keeps the b8-h2 diagonal, and if Black ever takes it, hxg3 opens the h-file toward the king that is about to castle short."
+                              ],
+                              "children": [
+                                {
+                                  "id": "p14-o-o",
+                                  "moveUci": "e8g8",
+                                  "moveSan": "O-O",
+                                  "children": [
+                                    {
+                                      "id": "p15-bd3",
+                                      "moveUci": "f1d3",
+                                      "moveSan": "Bd3",
+                                      "annotations": [
+                                        "The light bishop takes the diagonal that points at h7 — the second barrel of the coming kingside plan. Your decision point is next: what is the follow-up worth building toward?"
+                                      ],
+                                      "children": [
+                                        {
+                                          "id": "p16-b6",
+                                          "moveUci": "b7b6",
+                                          "moveSan": "b6",
+                                          "annotations": [
+                                            "Black prepares ...Bb7, finally giving the locked bishop a diagonal. One move of freedom for them is one free move for you — spend it on the outpost."
+                                          ],
+                                          "children": [
+                                            {
+                                              "id": "p17-ne5",
+                                              "moveUci": "f3e5",
+                                              "moveSan": "Ne5",
+                                              "annotations": [
+                                                "The London's signature move, played with its arithmetic visible: if ...Nxe5 then dxe5, and the e5 pawn attacks both the d6 bishop and the f6 knight — a machine-checked fork geometry. If Black declines, f4 arrives behind the knight and the kingside plan begins."
+                                              ],
+                                              "children": []
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "trade-declined",
+      "label": "...Bd6 met by Bg3 — the system's piece survives",
+      "trigger": { "atSpineNode": "p13-bg3" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "your-tabiya",
+      "label": "8.Bd3 — choose what the pyramid is for",
+      "trigger": { "atSpineNode": "p15-bd3" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["pyramid-order", "preserve-and-attack", "tension-rules"]
+      }
+    },
+    {
+      "id": "outpost-taken",
+      "label": "Ne5 — the fork geometry stands behind the knight",
+      "trigger": { "atSpineNode": "p17-ne5" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p7-e3", "p8-nc6", "p9-nbd2", "p10-e6", "p11-c3", "p12-bd6",
+      "p13-bg3", "p14-o-o", "p15-bd3", "p16-b6", "p17-ne5"
+    ],
+    "plyHorizon": 11
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p8-nc6" },
+      "moveUci": "d4c5",
+      "class": "interesting_deviation",
+      "note": "5.dxc5 cashes the centre for a pawn Black usually regains: the walked line ...e6 shows the simplest recovery route, and the pyramid the system is named for never gets built. Whether the pawn can be kept is unverified — play it and find out what you give up trying."
+    },
+    {
+      "at": { "spineNodeId": "p10-e6" },
+      "moveUci": "c2c4",
+      "class": "interesting_deviation",
+      "note": "6.c4 breaks the London contract mid-build and steers for Queen's Gambit structures with the bishop already outside. A legitimate hybrid with its own theory; inside this pack it is a different opening wearing your move order."
+    },
+    {
+      "at": { "spineNodeId": "p12-bd6" },
+      "moveUci": "f4d6",
+      "class": "accepted_alternative",
+      "note": "7.Bxd6 Qxd6 concedes the trade to gain time and simplicity: the walked recapture leaves Black's queen developed but the dark-square bishop pair question closed. A sound, drier choice — the pack's spine keeps the bishop because the pack's claim is about what the bishop is for."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "chosen-and-scoring",
+      "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the London position after 3.Bf4 was reached 3,851,145 times and White scores 50.4% against 44.5% — one of the strongest White results among the family roots measured in this repo's priority artifact.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "fork-geometry",
+      "text": "Ne5 carries its own tactical justification: after ...Nxe5 dxe5, the e5 pawn attacks d6 and f6 simultaneously — derived square arithmetic on the machine-walked line, true regardless of evaluation.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "order-is-the-theory",
+      "text": "A system opening's theory is its construction order: bishop out before e3, e3 before c3, Nbd2 before ...Qb6 matters — the London fails at club level mostly when the stones are laid in the wrong sequence, not when Black plays a refutation.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "D02 Queen's Pawn Game: London System: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/d.tsv) — CC0-1.0, no attribution required. The longest London System row (through 6.c3) is the spine's trunk; the Poisoned Pawn Variation row of the same file grounds the ...Qb6 identity discussed in the mirrored Black pack.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the D02 row — 3,851,145 games, whitePct 50.4 / drawPct 5.1 / blackPct 44.5. No deeper-node frequency was retrieved; note the row's top Black reply is 3...e6 (28.1%) while this spine drills the 3...c5 challenge (11.7%) because that is the CC0 mainline row.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/d02-queen-s-pawn-game-london-system, learner-side white, split-ply 6; the candidate directory is shared with the mirrored Black pack and records the most recent emit's job arguments). Hand-added plies 12-17 (...Bd6 Bg3 O-O Bd3 b6 Ne5) and all three deviations were walked move-by-move with a chessops scratch harness this session. The Ne5 fork claim (after ...Nxe5 dxe5 the pawn attacks d6 and f6) and the hxg3 h-file fact are derived square arithmetic on walked positions; the harness also refuted an earlier draft claim (...Bxg3 is illegal after dxe5 — the e5 pawn blocks the diagonal), which is why the annotations state geometry and not combinations.",
+      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all deviation classifications and notes, and the non-derived feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "This pack has NO shapes reference, deliberately: no library entry names the London wedge (c3/d4/e3 with the dark bishop outside) — bishop-good-bad is an endgame entry with different plan ownership, and closed-centre-chain's trigger is French-pinned. A London/system-pyramid shape entry is the commissioned ask, mirroring the wave-3 dxc5-residue precedent.",
+      "The 'order is the theory' claim — that Londons fail by construction order rather than refutation at these bands — is a measurable corpus hypothesis nobody has measured.",
+      "The spine drills the 3...c5 row while 3...e6 is the more common reply at band (28.1% vs 11.7%); a companion line for the ...e6/...Bd6 move orders is unwritten.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

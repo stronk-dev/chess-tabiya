@@ -161,26 +161,26 @@
               ]
             }
           ]
-        },
-        {
-          "id": "bf4-system",
-          "moveUci": "c1f4",
-          "moveSan": "Bf4",
-          "annotations": [
-            "The London-style answer — second most popular at your band (18.1%). A different pack's system; it is here so choosing it is a decision, not a default."
-          ],
-          "children": []
-        },
-        {
-          "id": "e4-staunton",
-          "moveUci": "e2e4",
-          "moveSan": "e4",
-          "annotations": [
-            "The Staunton Gambit: a pawn for open lines against the weakened king, played in 4.0% of games at your band. Sharp, respectable, and a memory battle — the opposite temperament to this pack's squeeze."
-          ],
-          "children": []
         }
       ]
+    },
+    {
+      "id": "bf4-system",
+      "moveUci": "c1f4",
+      "moveSan": "Bf4",
+      "annotations": [
+        "The London-style answer — second most popular at your band (18.1%). A different pack's system; it is here so choosing it is a decision, not a default."
+      ],
+      "children": []
+    },
+    {
+      "id": "e4-staunton",
+      "moveUci": "e2e4",
+      "moveSan": "e4",
+      "annotations": [
+        "The Staunton Gambit: a pawn for open lines against the weakened king, played in 4.0% of games at your band. Sharp, respectable, and a memory battle — the opposite temperament to this pack's squeeze."
+      ],
+      "children": []
     }
   ],
   "checkpoints": [
