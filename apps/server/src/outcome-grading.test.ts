@@ -2,13 +2,15 @@ import { readFileSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
+  commitMove,
   createRun,
+  deriveSegments,
   reachCheckpoint,
   type DrillRun,
 } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
-import { objectiveRules } from "./pack-orchestrator.js";
+import { objectiveRules, orchestratePackMove } from "./pack-orchestrator.js";
 import { validatePackDocument } from "./pack-validation.js";
 
 const at = "2026-08-12T12:00:00.000Z";
@@ -131,5 +133,26 @@ describe("Outcome Drill grading", () => {
     run = reachCheckpoint(run, "first", at).run;
     run = reachCheckpoint(run, "second", at).run;
     expect(run.events.some((event) => event.type === "segment.completed")).toBe(false);
+  });
+
+  it("keeps two same-ply orchestrator checkpoints without inventing a segment", () => {
+    const document = {
+      ...pack("hold"),
+      start: {
+        fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        side: "white" as const,
+      },
+      checkpoints: [
+        { id: "first", trigger: { atPly: 1 }, actions: [] },
+        { id: "second", trigger: { atPly: 1 }, actions: [] },
+      ],
+    } satisfies DrillPackDefinition;
+    const before = root(document);
+    const committed = commitMove(before, "e2e4", { at });
+    const run = orchestratePackMove(document, before, committed).run;
+
+    expect(run.events.filter((event) => event.type === "checkpoint.reached")).toHaveLength(2);
+    expect(run.events.filter((event) => event.type === "segment.completed")).toHaveLength(0);
+    expect(deriveSegments(run)).toEqual([]);
   });
 });

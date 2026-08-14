@@ -12,10 +12,12 @@ import {
   commitMove,
   compareBranches,
   createRun,
+  deriveSegments,
   exportPgn,
   historyFrom,
   projectRun,
   readBackReplay,
+  reachCheckpoint,
   rewind,
   type DrillRun,
 } from "./index.js";
@@ -95,6 +97,41 @@ function assertLegalPgn(run: DrillRun): void {
 }
 
 describe("runtime invariant properties", () => {
+  it("keeps derived segments in one-to-one correspondence with authoritative events", () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.record({ choice: fc.nat(), checkpoint: fc.boolean() }), { minLength: 2, maxLength: 16 }),
+        (steps) => {
+          let run = newRun();
+          for (const [index, step] of steps.entries()) {
+            const cursor = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
+            const legal = legalUcis(cursor.fen);
+            if (legal.length === 0) break;
+            run = commitMove(run, legal[step.choice % legal.length]!, { at }).run;
+            if (step.checkpoint) run = reachCheckpoint(run, `checkpoint-${index}`, at).run;
+          }
+          const events = run.events.filter((event) => event.type === "segment.completed");
+          const segments = deriveSegments(run);
+          expect(segments).toHaveLength(events.length);
+          for (const [index, event] of events.entries()) {
+            const start = run.events[event.data.startCheckpointEventSeq - 1]!;
+            const end = run.events[event.data.endCheckpointEventSeq - 1]!;
+            expect(start.type).toBe("checkpoint.reached");
+            expect(end.type).toBe("checkpoint.reached");
+            expect(segments[index]).toMatchObject({
+              branchId: event.data.branchId,
+              startSeq: event.data.startCheckpointEventSeq,
+              endSeq: event.data.endCheckpointEventSeq,
+              startNodeId: event.data.startNodeId,
+              endNodeId: event.data.endNodeId,
+            });
+          }
+        },
+      ),
+      { numRuns: 100 },
+    );
+  });
+
   it("preserves recoverable paths and a replayable event projection under legal play", () => {
     fc.assert(
       fc.property(fc.array(fc.nat(), { maxLength: 20 }), (choices) => {

@@ -291,6 +291,59 @@ describe("checkpoint segments", () => {
       completed.run.nodes[0]!.id,
     );
   });
+
+  it("does not derive a segment for coincident checkpoints", () => {
+    let run = reachCheckpoint(newRun(), "first", at).run;
+    const second = reachCheckpoint(run, "second", at);
+
+    expect(second.emitted.map((event) => event.type)).toEqual(["checkpoint.reached"]);
+    expect(deriveSegments(second.run)).toEqual([]);
+  });
+
+  it("preserves pre-guard zero-length segment events", () => {
+    let run = reachCheckpoint(newRun(), "first", at).run;
+    run = reachCheckpoint(run, "second", at).run;
+    const checkpoints = run.events.filter((event) => event.type === "checkpoint.reached");
+    const first = checkpoints[0]!;
+    const second = checkpoints[1]!;
+    run = appendEvents(run, [{
+      type: "segment.completed",
+      at,
+      data: {
+        branchId: first.data.branchId,
+        startCheckpointEventSeq: first.seq,
+        endCheckpointEventSeq: second.seq,
+        startNodeId: first.data.nodeId,
+        endNodeId: second.data.nodeId,
+      },
+    }]);
+
+    expect(deriveSegments(run)).toEqual([expect.objectContaining({
+      startCheckpointId: "first",
+      endCheckpointId: "second",
+      startNodeId: first.data.nodeId,
+      endNodeId: first.data.nodeId,
+    })]);
+  });
+
+  it("rejects forged segment scope, ordering, and adjacency", () => {
+    let run = reachCheckpoint(newRun(), "first", at).run;
+    run = commitMove(run, "e2e4", { at }).run;
+    run = reachCheckpoint(run, "second", at).run;
+    const segment = run.events.find((event) => event.type === "segment.completed")!;
+    const replaceSegment = (data: typeof segment.data) => run.events.map((event) =>
+      event.type === "segment.completed" ? { ...event, data } : event,
+    );
+
+    expect(() => projectRun(replaceSegment({ ...segment.data, branchId: "forged" }))).toThrow(/does not match/u);
+    expect(() => projectRun(replaceSegment({ ...segment.data, endNodeId: run.nodes[0]!.id }))).toThrow(/does not match/u);
+    expect(() => projectRun(replaceSegment({ ...segment.data, startCheckpointEventSeq: segment.data.endCheckpointEventSeq }))).toThrow(/ordering/u);
+
+    const beforeSegment = run.events.slice(0, -1);
+    const spacer = { seq: segment.seq, type: "feedback.generated" as const, at, data: { nodeId: run.activeCursor.nodeId, evidenceRefs: ["rules:spacer"] } };
+    const displaced = { ...segment, seq: segment.seq + 1 };
+    expect(() => projectRun([...beforeSegment, spacer, displaced])).toThrow(/immediately follow/u);
+  });
 });
 
 describe("typed errors", () => {

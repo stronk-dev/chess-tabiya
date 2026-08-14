@@ -12,6 +12,7 @@ import type {
   EventDraft,
   Node,
   Segment,
+  SegmentCompletedEvent,
 } from "./types.js";
 
 function deepFreeze<T>(value: T): T {
@@ -30,6 +31,40 @@ function replaceNode(nodes: readonly Node[], replacement: Node): readonly Node[]
   const index = nodes.findIndex((node) => node.id === replacement.id);
   if (index === -1) throw unknownNode(replacement.id);
   return nodes.map((node, nodeIndex) => (nodeIndex === index ? replacement : node));
+}
+
+function segmentFromEvent(
+  events: readonly DrillRunEvent[],
+  event: SegmentCompletedEvent,
+): Segment {
+  const start = events[event.data.startCheckpointEventSeq - 1];
+  const end = events[event.data.endCheckpointEventSeq - 1];
+  if (start?.type !== "checkpoint.reached" || end?.type !== "checkpoint.reached") {
+    throw new TypeError(`segment.completed ${event.seq} must reference checkpoint.reached events`);
+  }
+  if (!(start.seq < end.seq && end.seq < event.seq)) {
+    throw new TypeError(`segment.completed ${event.seq} has invalid checkpoint ordering`);
+  }
+  if (events[event.seq - 2] !== end) {
+    throw new TypeError(`segment.completed ${event.seq} must immediately follow its ending checkpoint`);
+  }
+  if (
+    start.data.branchId !== event.data.branchId ||
+    end.data.branchId !== event.data.branchId ||
+    start.data.nodeId !== event.data.startNodeId ||
+    end.data.nodeId !== event.data.endNodeId
+  ) {
+    throw new TypeError(`segment.completed ${event.seq} does not match its checkpoints`);
+  }
+  return deepFreeze({
+    branchId: event.data.branchId,
+    startCheckpointId: start.data.checkpointId,
+    endCheckpointId: end.data.checkpointId,
+    startNodeId: event.data.startNodeId,
+    endNodeId: event.data.endNodeId,
+    startSeq: start.seq,
+    endSeq: end.seq,
+  });
 }
 
 export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
@@ -196,6 +231,8 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
         break;
       }
       case "segment.completed":
+        segmentFromEvent(events, event);
+        break;
       case "feedback.generated":
       case "transfer.scheduled":
         break;
@@ -235,25 +272,7 @@ export function eventsSince(run: DrillRun, sinceSeq = 0): readonly DrillRunEvent
 }
 
 export function deriveSegments(run: DrillRun): readonly Segment[] {
-  const previousByBranch = new Map<string, CheckpointReachedEvent>();
-  const segments: Segment[] = [];
-
-  for (const event of run.events) {
-    if (event.type !== "checkpoint.reached") continue;
-    const previous = previousByBranch.get(event.data.branchId);
-    if (previous) {
-      segments.push({
-        branchId: event.data.branchId,
-        startCheckpointId: previous.data.checkpointId,
-        endCheckpointId: event.data.checkpointId,
-        startNodeId: previous.data.nodeId,
-        endNodeId: event.data.nodeId,
-        startSeq: previous.seq,
-        endSeq: event.seq,
-      });
-    }
-    previousByBranch.set(event.data.branchId, event);
-  }
-
-  return deepFreeze(segments);
+  return deepFreeze(run.events.flatMap((event) =>
+    event.type === "segment.completed" ? [segmentFromEvent(run.events, event)] : [],
+  ));
 }

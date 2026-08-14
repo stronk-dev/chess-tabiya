@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import {
+  appendEvents,
   commitMove,
   createRun,
   reachCheckpoint,
@@ -210,6 +211,40 @@ describe("authored feedback projection", () => {
     expect(projectAuthoredFeedback(pack, run).items).toEqual([
       expect.objectContaining({ id: "e4#0", revealedBy: { kind: "checkpoint", checkpointId: "finish", eventSeq: finish.seq } }),
       expect.objectContaining({ id: "e5#0", revealedBy: { kind: "checkpoint", checkpointId: "finish", eventSeq: finish.seq } }),
+    ]);
+  });
+
+  it("accepts a genuine pre-guard zero-length segment record", async () => {
+    const pack = await registered(smallPack({
+      feedbackPolicy: "segment_end",
+      checkpoints: [
+        { id: "start", trigger: { atSpineNode: "e4" } },
+        { id: "finish", trigger: { atSpineNode: "e4" } },
+      ],
+    }));
+    let run = play(newRun(pack, "legacy-zero-segment"), ["e2e4"]);
+    run = reachCheckpoint(run, "start", at).run;
+    run = reachCheckpoint(run, "finish", at).run;
+    const checkpoints = run.events.filter((event) => event.type === "checkpoint.reached");
+    const start = checkpoints[0]!;
+    const finish = checkpoints[1]!;
+    run = appendEvents(run, [{
+      type: "segment.completed",
+      at,
+      data: {
+        branchId: start.data.branchId,
+        startCheckpointEventSeq: start.seq,
+        endCheckpointEventSeq: finish.seq,
+        startNodeId: start.data.nodeId,
+        endNodeId: finish.data.nodeId,
+      },
+    }]);
+
+    expect(projectAuthoredFeedback(pack, run).items).toEqual([
+      expect.objectContaining({
+        id: "e4#0",
+        revealedBy: { kind: "checkpoint", checkpointId: "finish", eventSeq: finish.seq },
+      }),
     ]);
   });
 
