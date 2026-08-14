@@ -44,7 +44,9 @@ resolved server-side. Foreign schedules are indistinguishable from missing ones.
 `/learn` is a real surface and deployment capability. It lists due work and recorded
 attempts, names ungraded work honestly, links back to source runs, and permits dismissal.
 It deliberately presents no mastery percentage: the stored data is an attempt history and
-a return queue, not proof of mastery.
+a return queue, not proof of mastery. It also lists derived event-shaped milestones linking
+to preserved runs. Those record firsts and one explicit attempt-count event; they never add
+a skill percentage, score, streak, rating, ranking, or cross-learner comparison.
 
 ## Pack format 0.6
 

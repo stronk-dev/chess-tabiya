@@ -73,3 +73,6 @@ Implemented foundation:
 - `game-import-and-story.md` — one-game PGN/lichess import, imported-run identity,
   idempotent evidence completion, grounded story moments, live re-entry, and
   original-game-plus-branches export.
+- `adoption-wave-1.md` — native terminal stories, deterministic and revocable
+  public cards, external packet-bound voice, explicit-open spoken delivery,
+  event-shaped milestones, and opposite-side replay provenance.

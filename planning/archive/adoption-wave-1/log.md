@@ -23,3 +23,12 @@ preference upgrades, and zero-retry browser flows. Pre-closeout gates:
 `ENGINES_REQUIRED=1 make verify` green at 430 tests / 73 files; `make
 test-browser` green at 18 ordinary tests with the optional Maia measurement
 skipped. No authored chess vocabulary or claim was added.
+
+## 2026-08-14 — Lifecycle closeout
+
+Distilled the cross-surface behavior into `docs/adoption-wave-1.md` and amended
+the four older canonical pages whose limits changed. Set the RFC to implemented,
+archived the RFC and planning directory, and moved migration 13 to implemented
+in the register. Post-move verification is green: 430 tests / 73 files and 18
+ordinary Playwright tests at zero retries; the optional Maia measurement remains
+skipped.

@@ -59,7 +59,9 @@ story says how many positions remain and disables re-entry.
 
 ## Grounded moments
 
-`GET /runs/:id/story` is an authorized, disclosure-gated derived projection. It
+`GET /runs/:id/story` is an authorized, disclosure-gated derived projection. Imported
+mainlines qualify under this contract; native pack and position branches qualify after a
+validated terminal outcome. It
 combines persisted run/evidence data with shipped deterministic detectors:
 
 - irreversible moves, phase changes, sustained option collapse;
@@ -107,5 +109,5 @@ end to end: paste, derive, reveal, select, branch, play, and export.
 - No chess.com URL fetch; PGN paste is the supported path.
 - The evidence queue remains process-local. Durable evidence makes completion
   convergent, but an interrupted pass may repeat bounded work.
-- Story-card image rendering and public share-card hosting are not implemented;
-  the story JSON is the future renderer's grounded data contract.
+- Native terminal story offers, story-card image rendering, and revocable public
+  share-card hosting are documented in `adoption-wave-1.md`.

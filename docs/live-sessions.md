@@ -81,9 +81,10 @@ streamer can grant and use a second spectator account. Tabiya therefore gives pl
 spectator the same disclosure projection. It protects both from premature evidence; it
 does not pretend to prevent a host from cheating on themselves.
 
-The live platform uses authenticated polling rather than WebSockets or SSE. It has no
-anonymous public share token, native clocks, matchmaking, or provider-specific challenge
-API. External challenge URLs are opaque HTTPS links supplied by the host.
+The live platform uses authenticated polling rather than WebSockets or SSE. Story cards now
+have a read-only anonymous token, but live sessions themselves still have no anonymous join
+token, native clocks, matchmaking, or provider-specific challenge API. External challenge
+URLs are opaque HTTPS links supplied by the host.
 
 SQLite migration 9 adds only the live-session tables and indexes. The run schema remains
 v0.8 and pack schema remains v0.9.

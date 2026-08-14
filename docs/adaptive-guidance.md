@@ -109,7 +109,7 @@ detector-attributed phase, structural matches and observations, pivotal markers,
 matching shape references, already-revealed authored prose, and the deterministic sentences for
 all of them. The packet is assembled before an external provider is consulted.
 
-`POST /runs/:id/voice` accepts a node and `marker`, `reading`, or `steering` scope. A deployment
+`POST /runs/:id/voice` accepts a node and `marker`, `reading`, `steering`, or `story` scope. A deployment
 with no provider returns typed `VOICE_UNAVAILABLE` (HTTP 503), and the client does not show the
 persona preference. With a provider, `voiceCheck` rejects new square or move tokens, ungrounded
 chess nouns and judgments, and a closed set of prescriptive verbs. One failed rendering may be
@@ -119,9 +119,11 @@ ephemeral and never becomes evidence.
 The checker is deliberately necessary but insufficient: paraphrased advice can evade any closed
 word list. A known passing leak remains a test fixture so this limit cannot be mistaken for a
 proof. The real safeguards are sparse explicit invocation, a packet-only prompt, a persona with
-no chess claims, deterministic fallback, and no persistence. No provider implementation or
-vendor SDK ships; the server exposes only a vendor-neutral interface and reports `llm: external`
-when one is injected.
+no chess claims, deterministic fallback, and no persistence. A vendor-neutral `external_http`
+adapter ships without a vendor SDK; it sends only persona prompt, deterministic sentences, and
+scope, and reports `llm: external` when configured. Browser-side spoken delivery remains off by
+default and consumes only text from a surface the learner explicitly opened. See
+`adoption-wave-1.md` for the wire and preference contracts.
 
 ## Measured envelope and boundaries
 

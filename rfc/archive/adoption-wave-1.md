@@ -1,6 +1,6 @@
 # RFC: Adoption wave 1 — five cheap market-proven features
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude (adoption-wave-1 draft, 2026-08-14 parallel wave)
 - **Created:** 2026-08-14
 - **Design refs:** `design/02` §Adoption posture; `design/03` §Train (B2 repeat/mirror/opposite-side

@@ -16,7 +16,7 @@
 - **Depends on:** `rfc/archive/live-session-platform.md` (sessions, board control, the
   possession journal, invitations, Arena legs); `rfc/archive/learner-identity-and-authorization.md`
   (accounts, grants, the learner-bound lease); `rfc/archive/pack-optional-runs.md`
-  (position runs — a match run is one); **`rfc/adoption-wave-1.md`** (the
+  (position runs — a match run is one); **`rfc/archive/adoption-wave-1.md`** (the
   `public_tokens` trust surface this RFC's friend-link scope extends — §3.5 — and the
   `flip` route whose live-match refusal §3.3 owns); `rfc/runtime-corpus-evidence.md`
   (this RFC appends to the shared `ServerErrorCode` union that draft also appends to —
@@ -33,7 +33,7 @@
 - **Parallel batch:** drafted last in the 2026-08-14 four-draft wave
   (`predicate-wave-2` → `runtime-corpus-evidence` → `adoption-wave-1` →
   `social-match`), register claims taken behind all three. Per the standing pin
-  (`rfc/README.md` §Cross-draft ownership pins): **`adoption-wave-1.md` owns the
+  (`rfc/README.md` §Cross-draft ownership pins): **`archive/adoption-wave-1.md` owns the
   `public_tokens` table**; this RFC adds its `session_join` scope by widening that
   table's `CHECK` in its own migration and creates no second token table (§3.5).
 - **Planning:** `planning/social-match/` (once implementing)
@@ -83,7 +83,7 @@ Every row re-run against the working tree for this draft.
 | **Possession that follows the side to move** | **no** | no board-control mode consults the position; `rotation` advances by host op only (`apps/server/src/storage.ts:1008-1013`, `boardOperation` `:1513+`) |
 | **Two humans alternating on one live board** | **no** | nothing stops the lease holder from playing both sides of a position run (`actor` is client-supplied within `user|opponent|system`, `apps/server/src/rest.ts:370-383`) |
 | **Pause/rehearse/resume state on a session** | **no** | grep `pause|resume` over `apps/*/src packages/*/src` → zero domain hits |
-| **Any anonymous or invite token** | **no on this tree; the read half is claimed in-wave** | documented limit: "no anonymous public share token" `docs/live-sessions.md:84-86`; no bearer path anywhere; the cookie is the only subject-bearing mechanism. `rfc/adoption-wave-1.md` §2 (parallel draft, migration 13 after renumber) creates `public_tokens` with the single read scope `story_read`; **nothing anywhere lets a link seat a person** |
+| **Any anonymous or invite token** | **read-only story cards ship; invite seating does not** | `docs/adoption-wave-1.md` documents `public_tokens` with the single read scope `story_read`; **nothing yet lets a link seat a person** |
 | **A multi-board host view** | **no** | `GET /runs` summaries carry no position (`RunSummary` `apps/server/src/storage.ts:68-79`); `GET /sessions` lists session rows only (`listLiveSessions` `apps/server/src/storage.ts:1481+`); detail is one request per session (`LiveSessionDetail` `apps/server/src/live-types.ts:95-105`) |
 
 ### 2.2 The two ledger rows this RFC completes
@@ -307,7 +307,7 @@ consent to reveal* — and the pause handshake already is mutual consent. So:
 **The pin.** A native match run keeps the shipped `attempt_end` barrier untouched.
 `POST /runs/:id/reveal`, rewind, fork, `group`, `group-reply`, `simulate`,
 `simulate-enter`, `prediction`, **`duplicate`**, **`flip`** (the sibling
-`rfc/adoption-wave-1.md` §5 route — this RFC lands behind it structurally, §3.8, so
+`rfc/archive/adoption-wave-1.md` §5 route — this RFC lands behind it structurally, §3.8, so
 the route exists whenever a native match does), and **`import`** are refused with
 **`MATCH_LIVE`** (409) while the match is live. The last three close the
 **derived-run escape**, the hole the first revision left open: `duplicate` is
@@ -360,7 +360,7 @@ knows sides, the journal knows people.
 
 ### 3.5 The friend-link: one new scope on the wave's shared token surface
 
-**The shared contract, and who owns which half.** `rfc/adoption-wave-1.md` §2 creates
+**The shared contract, and who owns which half.** `rfc/archive/adoption-wave-1.md` §2 creates
 `public_tokens` in its migration 13 — hashed 32-byte tokens, a closed typed `scope`
 `CHECK` with the single read scope `story_read`, per-token revocation, uniform 404
 non-disclosure, creator-cascade deletion — and the register pins it as **the single
@@ -523,7 +523,7 @@ freezes live play (§3.1.2) without deleting anyone's history.
 gains `session_join` plus the nullable join columns of §3.5. All three vocabularies
 are baked into `CHECK` constraints of existing tables (`live_sessions.board_control`
 `apps/server/src/storage.ts:1903`, `session_journal.kind` `:1917`,
-`public_tokens.scope` per `rfc/adoption-wave-1.md` §2), and SQLite cannot alter a
+`public_tokens.scope` per `rfc/archive/adoption-wave-1.md` §2), and SQLite cannot alter a
 `CHECK` — the migration rebuilds all three tables: `PRAGMA foreign_keys=OFF` for the
 migration, `ALTER TABLE ... RENAME`, `CREATE` with the widened derived `CHECK`,
 `INSERT ... SELECT` copying every row and column unchanged (new columns `NULL`),
@@ -575,8 +575,8 @@ listeners (`docs/app-shell.md:140-157`).
 ## Deviations from design
 
 1. **The friend-link extends the wave's already-drafted amendment of a docs-tier
-   limit.** `docs/live-sessions.md:84-86` records "no anonymous public share token" as
-   the shipped state; `rfc/adoption-wave-1.md` §2 amends it with the read-only
+   limit.** `docs/live-sessions.md` records the shipped read-only story-token limit;
+   `rfc/archive/adoption-wave-1.md` §2 supplies that
    `story_read` scope, and this RFC adds the `session_join` scope on the same pinned
    trust surface. `design/03-product-breadth.md:90-91` names shareable run URLs as
    platform primitives, gate B8 holds the share-link clause open
