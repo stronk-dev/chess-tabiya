@@ -93,6 +93,48 @@ nothing except that the interface is coy. Where the line falls between rungs 0
 and 2 during committed play is an open question (§5), but it is a line, not a
 switch.
 
+## 3-forms. Presentation is orthogonal to source
+
+Owner, 2026-08-14: *"assistance comes in many forms — from engine (Maia,
+Stockfish) to users/historical (lichess), from lists to light-up squares to
+arrows — and of course the entire theory & classifiers."* The ladder (§3) ranks
+**sources** by what they can get wrong. This section owns the other axis:
+**forms** — how a piece of assistance renders — and the rule that keeps the
+matrix honest:
+
+> **Honesty attaches to the source. Timing attaches to disclosure. Form attaches
+> to neither — any rung may render in any form, and changing the form never
+> changes what may be said or when.**
+
+A best-move arrow is not dangerous because it is an arrow; it is dangerous
+because it is a rung-2 verdict delivered pre-commit. The same arrow drawn during
+review is fine. Conversely, a rung-0 sight fact is honest in every form —
+sentence, lit square, arrow, spoken — because the source cannot be wrong.
+
+### The form inventory
+
+| Form | State | Notes |
+|---|---|---|
+| **Sentence rows / lists** (rail, sheets) | shipped | the default form for every rung; grounded sentence templates |
+| **Timeline markers** | shipped | the passive-marker ruling's native form |
+| **Board overlays — lit squares** | 💡 the lighting-ladder row | legal / sight / disclosed-evidence levels |
+| **Board overlays — arrows & piece halos** | 💡 | arrows for *sight* (what this piece unblocks, where pressure runs) are rung-0-honest anytime the config allows; arrows for *moves* (best move, plan route) are verdicts and follow disclosure like every verdict |
+| **Sheets / panels** (checkpoint, terminal, story) | shipped | disclosure-gated by construction |
+| **Spoken voice** | wave — provider seam + TTS | renderer only; packet-bound |
+| **Story slides** | shipped | the post-game form, full ladder allowed |
+| **Simul wall / dashboards** | shipped | multi-run form for hosts |
+| **Ambient/companion presence** (Dr. Wolf's most-loved element) | 💡 | a persona that is *there* without saying anything ungrounded — form without content, allowed even in silence |
+
+### The config owns the matrix
+
+`AssistanceConfig` already picks sources per context; it grows to pick **forms**
+per context too (`boardLighting`, arrows, spoken — each off by default per §3a).
+A curated drill, Just Play, a match, a stream, and the on-ramp each get their
+own defaults; the learner adjusts within what disclosure permits. **No form may
+smuggle a source past its rung's rules** — the acceptance test for every new
+form is: render the same content as a sentence; if the sentence would be
+refused, so is the overlay.
+
 ## 3a. The default is silence, and recovery is the skill
 
 Owner, 2026-08-13: *"maybe for most people they don't want the proactive
