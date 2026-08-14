@@ -1,6 +1,6 @@
 # RFC: Branch groups — playing N candidates in parallel
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/03-product-breadth.md` §Branch groups (lines 117–151), gate
@@ -25,7 +25,7 @@
 - **Parent / amends:** amends `archive/branch-runtime.md` (one new event type and
   one widened union member in the run schema); composes with, and does not modify,
   `archive/n-way-comparison.md`'s comparison payload
-- **Not touched:** the Just Play position player, pack schema (stays 0.11), shape
+- **Not touched:** the Just Play position player, pack schema (stays 0.12), shape
   library, and every surface `archive/shape-library.md` or
   `archive/adaptive-guidance.md` owns. This RFC ships no pack-schema change and
   claims no pack-schema number.
@@ -35,10 +35,9 @@
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/branch-groups/` (once implementing)
 
-Baselines verified on this tree 2026-08-14: **359 unit tests / 63 files** passing
-(`pnpm test`; the assignment's 321/55 predates the shape-library and
-adaptive-guidance landings now in tree), run schema `"0.8"` and pack schema
-`"0.11"` (`packages/schema/src/index.ts:1-2`), `STORAGE_VERSION = 10`
+Implementation baseline verified on this tree 2026-08-14 after defect-batch-2:
+**374 unit tests / 64 files** passing, run schema `"0.8"`, pack schema `"0.12"`
+(`packages/schema/src/index.ts:1-2`), and `STORAGE_VERSION = 10`
 (`apps/server/src/storage.ts:287`).
 
 ## Summary
@@ -135,8 +134,16 @@ export type GroupCreatedEvent = Event<"group.created", {
     readonly branchId: string;
     readonly seedMoveUci: string;
   }[];                                   // 2–8 entries, distinct branchIds, distinct seedMoveUcis
+  readonly distribution?: OpponentSelection; // required for machine sources; absent otherwise
 }>;
 ```
+
+`distribution` is the selector's original result before enumeration: `human_common`
+for `human_replies`, `strong_engine` for `engine_top_n`. It grounds candidate ordering
+and engine identity even when the seed is on the learner's side and therefore produces
+no `opponent.move_selected` event. Member plies selected from it use
+`policyModeApplied: "enumerated"`; the source distribution retains the mode the engine
+actually applied. `hand_picked` and `authored` events must omit it.
 
 `Branch` (`types.ts:101-108`) is **not** widened — no `groupId` field. Group
 membership has exactly one source of truth, the event, and exactly one reader,
@@ -170,12 +177,19 @@ events", `rfc/README.md` migration 10 row). Browser and server import the same
 function; there is no second implementation (`docs/branch-runtime.md:13-17`).
 
 **Replay validation** (a projection case in `packages/runtime/src/events.ts`
-beside the `prediction.recorded` case at `events.ts:163-170`): every
-`members[].branchId` must name a branch already projected whose `forkNodeId`
-equals `sourceNodeId`; branch ids and seed moves must be distinct within the
-event; member count must be 2–8; `groupId` must be unused. A snapshot violating
-any of these fails replay rather than projecting a group that points at branches
-which are not siblings — the boundary the schema would otherwise permit.
+beside the `prediction.recorded` case at `events.ts:163-170`): `sourceNodeId` must
+name an already-projected node. Every member must bind to an already-projected
+**direct child** with `parentId === sourceNodeId`, `branchId === member.branchId`, and
+`moveUci === member.seedMoveUci`. This is deliberately not a `Branch.forkNodeId`
+check: adoption may include the main branch or another older branch whose own fork
+precedes the group source. Branch ids and seed moves must be distinct within the event;
+member count must be 2–8; `groupId` must be unused; and no member branch may occur in an
+earlier group. A snapshot violating any of these fails replay.
+
+For `human_replies` and `engine_top_n`, `distribution` is required, its candidates
+must cover every `seedMoveUci`, its applied mode must respectively be `human_common`
+or `strong_engine`, and its engine identity is the source attribution rendered by the
+client. For `hand_picked` and `authored`, `distribution` is forbidden.
 
 #### 1.3 Lifecycle
 
@@ -304,6 +318,9 @@ asked to start playing the set); then append `group.created`
 then one `#storage.save`. The event order — all `branch.forked`s before
 `group.created` — is what §1.2's replay validation asserts.
 
+For machine sources, the same `group.created` event carries the original selector
+`distribution`; it is not reconstructed from the enumerated member moves.
+
 Response: `{ group, run, emitted, comparison }` where `comparison` is
 `compareBranches(run, memberBranchIds, { pack? })` — the grid renders
 immediately from the same payload shape it always receives.
@@ -347,15 +364,16 @@ one is not (Motivation):
 |---|---|---|---|
 | `hand_picked` | 0 | the request's `candidates` UCIs, captured on the client (§6.3) | always; needs no engine, no pack |
 | `authored` | 5 | the matched spine node's children, resolved exactly as simulate resolves them: `lineMembership` → spine node → `children` (`service.ts:627-630`); authored order; first `size` (≤8) taken | pack sessions on-spine; else `NO_AUTHORED_VARIATIONS` (shipped code, `service.ts:612,630`) |
-| `human_replies` | 3 | one `selector.select()` call, mode `human_common` — already MultiPV 8 (`apps/server/src/opponent-selector.ts:428`) — yielding ≤8 ranked candidates with policy mass (`opponent-selector.ts:218-240`); members = top `size` by rank; the sampled `moveUci` is ignored (this is an enumeration, not a selection); the distribution is recorded verbatim in every member's enumerated selection | selector configured, else the shipped `ENGINE_UNAVAILABLE` shape; **plus the assistance gate below** |
-| `engine_top_n` | 2 | the strong play engine widened per-request: `OpponentSelector` gains `enumerate(request, n)` for `strong_engine`, composing `setoption name MultiPV value ${n}` before `position`/`go movetime` and — because the play engine is one long-lived shared process — a trailing `setoption name MultiPV value ${profile.multiPv}` reset, mirroring the two shipped per-request seams (`apps/server/src/evidence-queue.ts:311-314`; `opponent-selector.ts:412`) and the reset discipline `archive/n-way-comparison.md` §9 states for the judge. Candidates carry rank and no mass (Stockfish emits no policy mass; `mass` is optional, `types.ts:63-67`) | strong engine configured, else `ENGINE_UNAVAILABLE` (on the Maia-only release compose this source is honestly absent); **plus the assistance gate below** |
+| `human_replies` | 3 | one `selector.select()` call, mode `human_common` — already MultiPV 8 (`apps/server/src/opponent-selector.ts:428`) — yielding ≤8 ranked candidates with policy mass (`opponent-selector.ts:218-240`); members = top `size` by rank; the sampled `moveUci` is ignored (this is an enumeration, not a selection); the original distribution is recorded on `group.created` and copied into opponent-side enumerated selections | selector configured, else the shipped `ENGINE_UNAVAILABLE` shape; **plus the assistance gate below** |
+| `engine_top_n` | 2 | the strong play engine widened per-request: `OpponentSelector.enumerate(request, n)` returns one recorded `strong_engine` distribution. It sets MultiPV N for the completed search and then restores the profile value before the next queued request; it does not send a reset while search is live. Candidates carry rank and no mass (Stockfish emits no policy mass; `mass` is optional, `types.ts:63-67`). The original distribution is persisted on `group.created` | strong engine configured, else `ENGINE_UNAVAILABLE` (on the Maia-only release compose this source is honestly absent); **plus the assistance gate below** |
 
 **MultiPV reality, restated so nobody rediscovers it:** the judge boots at
 `MultiPV: 1` hardcoded (`apps/server/src/application.ts:196`) and the play
 engine boots at the profile's `multiPv`, default 1
 (`apps/server/src/strong-engine.ts:10-15`); neither spec can express a
-per-request width, and the only shipped per-request mechanism is the
-prepend-setoption-then-reset command composition named above. `enumerate` uses
+per-request width. `enumerate` uses two serialized supervisor calls — set/search, then
+restore — so the reset happens after `bestmove` while the shared request queue prevents
+another search from observing the temporary width. `enumerate` uses
 the **play** engine, not the judge: creation is synchronous and the judge is
 reachable only through the staged evidence queue.
 
@@ -462,20 +480,17 @@ discharged in one place.
 #### 4.4 The endpoint
 
 `POST /runs/:id/group-reply` (joins the `rest.ts:444` allowlist), writer lease
-required. Body: the shipped select-move body plus `groupId` — parsed exactly as
-the prediction endpoint parses its superset body
-(`rest.ts:1066-1073`: `closedRecord` on
-`["startFen","historyUci","policy","seed","packId","groupId"]`, then
-`parseSelectMoveRequest` on the first five, then the spine threading
-`/select-move` performs). Keeping request composition client-side follows
-`archive/n-way-comparison.md` §8.2's verified reasoning — `selectorMode(pack,
-capabilities)` is a client capability read (`session-controller.ts:129-143`) and
-does not move to the server. The server then **overrides the request's seed**
-with the effective seed of §4.2/§4.3; the client-sent value is otherwise unused
-on this route.
+required. Its closed body is only `{ groupId }`. Unlike the pure `/select-move`
+selector, this endpoint promises a stateful group invariant and therefore does not trust
+a client-supplied FEN, history, policy, pack id, or seed. The server requires the active
+branch to be a member of that group, derives the active node/history and session digest
+from the leased run, resolves the current policy from the run plus live capabilities,
+threads the digest-pinned pack spine when present, and overrides the seed with the
+effective group seed of §4.2/§4.3. This is the server-owned access shape already used by
+`guidanceAccess`; the client only chooses to invoke it.
 
-Resolution: unknown or foreign `groupId` → `UNKNOWN_GROUP` (404); the request's
-resulting position terminal → `INVALID_REQUEST`; selector unconfigured → the
+Resolution: unknown or foreign `groupId` → `UNKNOWN_GROUP` (404); active branch not a
+member → `INVALID_REQUEST`; the active position terminal → `INVALID_REQUEST`; selector unconfigured → the
 shipped `ENGINE_UNAVAILABLE` shape (`rest.ts:742` route's behaviour). Response:
 `{ selection, reusedFromNodeId: string | null }`.
 
@@ -488,13 +503,15 @@ unchanged. One route for member replies means the fixed/per-branch difference
 lives in exactly one server decision, not in client discipline — the same
 by-construction shape the prediction endpoint used for its ordering rule.
 
-The journal read is scoped to *this group's* member paths and to selections
-whose recorded engine identity and `policyModeApplied` match the current policy
-mode — a group whose run capabilities changed mid-life (say, Maia went away and
-the mode fell back) must not replay a Maia selection as if Stockfish said it.
-On such a mismatch the entry is skipped and a fresh selection is made; the group
-header renders the shipped engine identity per reply anyway, so a mixed-engine
-group is visible rather than smoothed over.
+The journal read is scoped to *this group's* member paths and to selections whose
+recorded engine identity matches the currently healthy engine for the server-resolved
+policy. Applied-mode compatibility is exact for `human_common` and `strong_engine`;
+for requested `theory_strict`, both `theory_strict` and its shipped off-spine
+`human_common` fallback are compatible when the live Maia identity still matches.
+`enumerated` and `unknown` are never journal-compatible. A group whose capabilities or
+engine identity changed mid-life must not replay a stale selection as if the current
+opponent produced it; the entry is skipped and a fresh selection is made. Mixed engine
+identity remains visible in the ordinary per-path resistance projection.
 
 ### 5. Advance discipline: two client modes over one substrate
 
@@ -683,8 +700,8 @@ the trap every schema-bump RFC since the grading pair has re-documented, here
 included. Quarantined pre-v0.5 rows stay quarantined untouched.
 
 Migration 11 and the 0.9 run-schema claim are recorded in `rfc/README.md`'s
-migration register in the same commit as this draft. Pack schema is untouched
-at 0.11; no pack register row is claimed.
+migration register. Pack schema is untouched at the now-shipped 0.12; no pack
+register row is claimed.
 
 ### 9. Route and error summary
 
@@ -702,9 +719,9 @@ implementation commit. Reads need no new route: groups project from
 
 ### 10. Defects: none claimed, five constraining
 
-The parallel draft `defect-batch-2.md` (registered 2026-08-14, while this was
-being written) owns closing D21–D24 and D27 — its verification found D21 and
-D22 real and D23/D24/D27 stale with regressions missing. This RFC therefore
+The implemented `archive/defect-batch-2.md` owns D21–D24 and D27 — its
+verification found D21 and D22 real and D23/D24/D27 stale with regressions
+missing. This RFC therefore
 **claims none of them** and cites them only as constraints on its own shape:
 
 - **D21** (`design/BACKLOG.md:132`) — producer/deriver disagreement — is the
@@ -747,23 +764,27 @@ follows the corrected view-shapes row, and no member is ever ranked.
 
 ## Acceptance criteria
 
-Baselines to move from: 359 unit tests / 63 files (`pnpm test`, 2026-08-14).
+Baselines to move from: 374 unit tests / 64 files (`make verify`, 2026-08-14).
 
 - **A1 — projection and replay.** Runtime tests: `groupsFromEvents` projects a
-  well-formed group; replay **fails** for each §1.2 violation — member branch
-  not forked at `sourceNodeId`, duplicate member branch or seed move, member
-  count 1 or 9, reused `groupId`, `group.created` preceding a member's
-  `branch.forked`. A fast-check property asserts every projected group's members
-  are pairwise-distinct sibling branches of its source node.
+  well-formed group; replay **fails** for each §1.2 violation — no matching direct
+  child `(sourceNodeId, branchId, seedMoveUci)`, duplicate member branch or seed move,
+  member count 1 or 9, reused `groupId`, repeated membership, and `group.created`
+  preceding a member's seed child. A main branch whose own fork predates the source is
+  accepted when its direct child matches. Machine sources require a mode-matched
+  distribution covering every seed; non-machine sources reject one. A fast-check
+  property asserts every projected group's members are pairwise-distinct direct-child
+  paths of its source node.
 - **A2 — creation, all four sources.** Service tests: `hand_picked` at a
   learner-to-move node (actor `user` on seeds) and at an opponent-to-move node
   (actor `system`, no fabricated selection); `authored` via the spine
   (`NO_AUTHORED_VARIATIONS` off-spine and with <2 children); `human_replies`
   records the identical distribution verbatim in every member's enumerated
   selection with `policyModeApplied: "enumerated"`, and refuses a
-  learner-to-move node; `engine_top_n`'s command list contains
-  `setoption name MultiPV value N` **and ends by resetting to the profile
-  value** (the shared-process boundary); adoption joins the oldest matching
+  learner-to-move node; `engine_top_n` sets MultiPV N for the completed search and
+  then resets to the profile value before the next request (the shared-process
+  boundary); both machine sources persist the original mode-matched distribution and
+  engine identity; adoption joins the oldest matching
   existing branch, enqueues no duplicate evidence, and refuses a branch already
   grouped; terminal source node refused; cursor lands on member 1; the response
   comparison has N columns.
@@ -771,9 +792,12 @@ Baselines to move from: 359 unit tests / 63 files (`pnpm test`, 2026-08-14).
   members transposing to one position (different move orders) receive
   **byte-identical** selections with the second marked as reused, and the
   selector is called once; under `per_branch` it is called twice with effective
-  seeds primary+1 and primary+2; a journal entry whose recorded mode mismatches
-  the current policy is skipped, not replayed. `theory_strict` under `fixed`
-  draws identically on identical histories.
+  seeds primary+1 and primary+2; a journal entry whose recorded mode is incompatible
+  or whose engine identity is no longer live is skipped. A recorded `human_common`
+  off-spine fallback remains compatible with a live `theory_strict` request using that
+  same Maia identity. `theory_strict` under `fixed` draws identically on identical
+  histories. The route rejects a group whose active branch is not a member and accepts
+  no client-supplied position or policy fields.
 - **A4 — gating.** `human_replies` and `engine_top_n` creation return
   `ASSISTANCE_WITHHELD` for a participant/spectator and while feedback delivery
   is closed, and the shipped `ENGINE_UNAVAILABLE` shape when the respective
@@ -798,7 +822,9 @@ Baselines to move from: 359 unit tests / 63 files (`pnpm test`, 2026-08-14).
   default `fixed` resistance, verify three new branches in the rail and the grid
   showing three cells; play at least two of the learner's own plies in **every**
   member against the resolved resistance (sequential default, plus one lockstep
-  rotation exercising the advance toggle); open **Compare group** and assert a
+  rotation exercising the advance toggle); delay one member's evidence so rotation
+  cancels it, assert the honest absent-evidence form, request `/analysis`, apply the
+  result, and assert the cell recovers; open **Compare group** and assert a
   three-column comparison aligned on the group's fork node; export includes the
   three members.
 - **A9 — suite health and the recorded envelope.** `pnpm verify` and
@@ -812,6 +838,12 @@ None.
 
 ## Changelog
 
+- 2026-08-14 (Codex implementation review): four blockers closed before code. Replay
+  now validates direct seed children rather than incompatible branch fork metadata;
+  machine-source distributions persist to ground provenance; group replies are assembled
+  from leased server state; and the browser criterion proves cancelled-evidence recovery.
+  `theory_strict` compatibility explicitly includes its recorded `human_common` fallback.
+  Baselines rebased behind implemented pack schema 0.12.
 - 2026-08-14: created. Verified against the tree at 359 tests / 63 files, run
   schema 0.8, pack schema 0.11, storage 10; claimed run schema 0.9 and
   migration 11 in `rfc/README.md`.
