@@ -1652,3 +1652,42 @@ adoption-wave-1 owns `public_tokens`; social-match extends its scope CHECK, no s
 token table. One design deviation called out: opposite-side ships as Just Play from
 the same root (authored grades never flip sides). Baseline verified green before
 drafting: 399 unit tests / 69 files, 16 ordinary browser tests.
+
+## 2026-08-14 (claude) — Chessbook teardown + three quick passes (sweep picks closed out)
+
+Landed `design/research/teardown-chessbook-desk.md` (full, desk) and
+`design/research/quickpass-wintrChess-encroissant-chessmonitor.md` (three quick
+passes per the three-question rule); matrix rows updated for all four (CSV lines
+31, 52, 54, 55) and two README coverage rows added.
+
+- **Chessbook (E1 intact):** gap-finding mechanics established from the developer's
+  own accounts — position/EPD-keyed repertoire graph (transposition-correct by
+  construction), gap = uncovered opponent reply prioritized by expected frequency at
+  the learner's 200-Elo Lichess band ("you'll see this move in 5% of your games"),
+  user-set "1 in N games" coverage target as the stopping rule, one-button "go to
+  your biggest gap." Corpus: every non-bullet Lichess game + 10M OTB 2400+. SRS is
+  FSRS move-cards (moved *to* FSRS in 2024 — opposite our explainable-ladder ruling;
+  their queue-flood complaint is evidence for ours). Own-game scan harvests mistakes
+  into quiz cards severed from the game — the Dr. Wolf shape again. **§7 of the
+  teardown states the adoption contract for the queued gap-finding RFC** (audit row
+  48): six items, incl. where we exceed — a gap resolves into played, preserved
+  attempts vs Maia, not a card-add. No opponent play anywhere; every loop stage
+  unclaimed.
+- **WintrChess (E1 intact):** Stockfish + chess.com-style classification, no prose,
+  no re-entry; public reliability complaints (blunder-yet-best, illegal-move claims)
+  — the trust lesson our verified-provenance rule answers.
+- **En Croissant (E1 intact):** manual workbench; its community independently
+  demands eval-bar hiding — external validation of the anti-contamination default;
+  repertoire SRS immature; our AGPL/self-host constituency.
+- **ChessMonitor (E1 intact) — the honesty question answered:** what users love is
+  mostly real-outcome record-keeping (posture-compatible), *but* the marquee,
+  Giri-fronted number is a manufactured FIDE-Elo estimate — direct demand-evidence
+  for the single number our no-skill-numbers posture refuses. Logged as a named,
+  evidenced cost of the posture (not a DESIGN-GAP — owner ruling stands; B7's
+  event-milestone bet must compensate and is unproven against this shelf).
+- E1 stays **met**; no gates.md change (four E1-intact verdicts, no kill evidence).
+  Reddit remains unreachable (standing limitation); chessbook.com is an unreadable
+  SPA — grounding via App Store, dev interview/blog, and hands-on reviews.
+- **Next:** the gap-finding RFC can now draft against teardown §7 once the runtime
+  corpus-evidence surface (its dependency) lands; remaining sweep-2 pick: Chessly;
+  scoped Lichess hands-on (studies / learn-from-mistakes / practice) still queued.

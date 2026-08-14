@@ -9,6 +9,23 @@ export type FeatureComparison = "atLeast" | "atMost" | "equal";
 export type ReachRole = "knight" | "bishop" | "rook" | "queen";
 export type ReachScope = "any" | "every";
 export type StructureId = "carlsbad" | "iqp-white" | "iqp-black" | "maroczy-bind";
+export type MirrorAxis = "colors" | "files" | "both";
+export type Quantifier = "some" | "every";
+export interface FileRange { readonly from: FileName; readonly to: FileName }
+export interface RankRange { readonly from: number; readonly to: number }
+export interface SquareRegion { readonly files: FileRange; readonly ranks: RankRange }
+export type FileTemplateFeature =
+  | { readonly kind: "backward_pawn"; readonly color: Color }
+  | { readonly kind: "isolated_pawn"; readonly color: Color }
+  | { readonly kind: "doubled_pawn"; readonly color: Color }
+  | { readonly kind: "half_open_file"; readonly color: Color }
+  | { readonly kind: "open_file" };
+export type SquareTemplateFeature =
+  | { readonly kind: "pawn_safe_square"; readonly color: Color }
+  | { readonly kind: "outpost"; readonly color: Color }
+  | { readonly kind: "passed_pawn"; readonly color: Color }
+  | { readonly kind: "direct_attack_count"; readonly color: Color; readonly comparison: FeatureComparison; readonly count: number }
+  | { readonly kind: "piece"; readonly piece: { readonly color: Color; readonly role: Role } | null };
 
 export type StructuralFeature =
   | { readonly kind: "pawn_safe_square"; readonly color: Color; readonly square: SquareName }
@@ -22,7 +39,10 @@ export type StructuralFeature =
   | { readonly kind: "line_blockers"; readonly from: SquareName; readonly to: SquareName; readonly comparison: FeatureComparison; readonly count: number }
   | { readonly kind: "direct_attack_count"; readonly square: SquareName; readonly color: Color; readonly comparison: FeatureComparison; readonly count: number }
   | { readonly kind: "piece_reach_count"; readonly color: Color; readonly role: ReachRole; readonly scope: ReachScope; readonly comparison: FeatureComparison; readonly count: number }
-  | { readonly kind: "named_structure"; readonly id: StructureId };
+  | { readonly kind: "named_structure"; readonly id: StructureId }
+  | { readonly kind: "bishop_on_shade"; readonly color: Color; readonly shade: "light" | "dark" }
+  | { readonly kind: "pawn_count"; readonly color: Color; readonly basis: "count" | "difference"; readonly comparison: FeatureComparison; readonly count: number }
+  | { readonly kind: "king_opposition"; readonly color: Color; readonly form: "direct" | "distant" };
 
 export { STRUCTURAL_FEATURE_KINDS };
 export type { StructuralFeatureKind };
@@ -32,7 +52,10 @@ export type StructuralExpression =
   | { readonly kind: "any"; readonly of: readonly [StructuralExpression, ...StructuralExpression[]] }
   | { readonly kind: "not"; readonly of: StructuralExpression }
   | { readonly kind: "feature"; readonly feature: StructuralFeature }
-  | { readonly kind: "pieceOnSquare"; readonly square: SquareName; readonly piece: { readonly color: Color; readonly role: Role } | null };
+  | { readonly kind: "pieceOnSquare"; readonly square: SquareName; readonly piece: { readonly color: Color; readonly role: Role } | null }
+  | { readonly kind: "mirrored"; readonly axis: MirrorAxis; readonly of: StructuralExpression }
+  | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly files: FileRange }; readonly feature: FileTemplateFeature }
+  | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly squares: SquareRegion }; readonly feature: SquareTemplateFeature };
 
 export interface PawnSafety {
   readonly square: SquareName;
@@ -52,6 +75,8 @@ export interface StructuralObservation {
   readonly count?: number;
   readonly detail?: PawnSafety;
   readonly provenanceNote?: string;
+  readonly shade?: "light" | "dark";
+  readonly form?: "direct" | "distant";
 }
 
 export interface StructureMatch {
@@ -92,9 +117,20 @@ const REACH_ROLES = Object.freeze(["knight", "bishop", "rook", "queen"] as const
 
 function fileIndex(file: FileName): number { return FILES.indexOf(file); }
 function rankOf(square: Square): number { return Math.floor(square / 8); }
+function shadeOf(square: Square): "light" | "dark" { return ((square % 8) + rankOf(square)) % 2 === 1 ? "light" : "dark"; }
 function forward(color: Color): 1 | -1 { return color === "white" ? 1 : -1; }
 function compare(actual: number, comparison: FeatureComparison, expected: number): boolean {
   return comparison === "atLeast" ? actual >= expected : comparison === "atMost" ? actual <= expected : actual === expected;
+}
+
+function opposition(position: ReturnType<typeof positionFromFen>, color: Color, form: "direct" | "distant"): boolean {
+  const own = position.board.kingOf(color), enemy = position.board.kingOf(opposite(color));
+  if (own === undefined || enemy === undefined || position.turn !== opposite(color)) return false;
+  const fileGap = Math.abs((own % 8) - (enemy % 8));
+  const rankGap = Math.abs(rankOf(own) - rankOf(enemy));
+  if (fileGap !== 0 && rankGap !== 0) return false;
+  const betweenCount = Math.max(fileGap, rankGap) - 1;
+  return form === "direct" ? betweenCount === 1 : betweenCount === 3 || betweenCount === 5;
 }
 
 function pawns(position: ReturnType<typeof positionFromFen>, color: Color): readonly Square[] {
@@ -168,6 +204,96 @@ function namedStructureMatches(fen: string, id: StructureId): boolean {
   return matchesStructuralExpression(fen, entries[id]);
 }
 
+function mirrorColor(color: Color, axis: MirrorAxis): Color {
+  return axis === "files" ? color : opposite(color);
+}
+
+function mirrorFile(file: FileName, axis: MirrorAxis): FileName {
+  return axis === "colors" ? file : FILES[7 - fileIndex(file)]!;
+}
+
+function mirrorSquare(squareName: SquareName, axis: MirrorAxis): SquareName {
+  const square = parseSquare(squareName);
+  if (square === undefined) throw new TypeError(`Invalid square: ${squareName}`);
+  const file = axis === "colors" ? square % 8 : 7 - (square % 8);
+  const rank = axis === "files" ? rankOf(square) : 7 - rankOf(square);
+  return makeSquare(file + rank * 8);
+}
+
+function mirrorFeature(feature: StructuralFeature, axis: MirrorAxis): StructuralFeature {
+  if (feature.kind === "pawn_safe_square" || feature.kind === "outpost" || feature.kind === "passed_pawn") return { ...feature, color: mirrorColor(feature.color, axis), square: mirrorSquare(feature.square, axis) };
+  if (feature.kind === "backward_pawn" || feature.kind === "isolated_pawn" || feature.kind === "doubled_pawn" || feature.kind === "half_open_file") return { ...feature, color: mirrorColor(feature.color, axis), file: mirrorFile(feature.file, axis) };
+  if (feature.kind === "open_file") return { ...feature, file: mirrorFile(feature.file, axis) };
+  if (feature.kind === "line_blockers") return { ...feature, from: mirrorSquare(feature.from, axis), to: mirrorSquare(feature.to, axis) };
+  if (feature.kind === "direct_attack_count") return { ...feature, color: mirrorColor(feature.color, axis), square: mirrorSquare(feature.square, axis) };
+  if (feature.kind === "piece_reach_count") return { ...feature, color: mirrorColor(feature.color, axis) };
+  if (feature.kind === "bishop_on_shade") return { ...feature, color: mirrorColor(feature.color, axis), shade: axis === "both" ? feature.shade : feature.shade === "light" ? "dark" : "light" };
+  if (feature.kind === "pawn_count" || feature.kind === "king_opposition") return { ...feature, color: mirrorColor(feature.color, axis) };
+  if (feature.kind === "named_structure") throw new TypeError("named_structure cannot appear under mirrored");
+  const exhaustive: never = feature;
+  throw new TypeError(`Unhandled structural feature mirror: ${JSON.stringify(exhaustive)}`);
+}
+
+function mirrorFileTemplate(feature: FileTemplateFeature, axis: MirrorAxis): FileTemplateFeature {
+  if (feature.kind === "open_file") return feature;
+  if (feature.kind === "backward_pawn" || feature.kind === "isolated_pawn" || feature.kind === "doubled_pawn" || feature.kind === "half_open_file") return { ...feature, color: mirrorColor(feature.color, axis) };
+  const exhaustive: never = feature;
+  throw new TypeError(`Unhandled file template mirror: ${JSON.stringify(exhaustive)}`);
+}
+
+function mirrorSquareTemplate(feature: SquareTemplateFeature, axis: MirrorAxis): SquareTemplateFeature {
+  if (feature.kind === "piece") return { kind: "piece", piece: feature.piece === null ? null : { ...feature.piece, color: mirrorColor(feature.piece.color, axis) } };
+  if (feature.kind === "pawn_safe_square" || feature.kind === "outpost" || feature.kind === "passed_pawn" || feature.kind === "direct_attack_count") return { ...feature, color: mirrorColor(feature.color, axis) };
+  const exhaustive: never = feature;
+  throw new TypeError(`Unhandled square template mirror: ${JSON.stringify(exhaustive)}`);
+}
+
+function normalizedRange(from: number, to: number): readonly [number, number] {
+  return from <= to ? [from, to] : [to, from];
+}
+
+export function mirrorExpression(expression: StructuralExpression, axis: MirrorAxis): StructuralExpression {
+  if (expression.kind === "all" || expression.kind === "any") return { kind: expression.kind, of: expression.of.map((item) => mirrorExpression(item, axis)) as [StructuralExpression, ...StructuralExpression[]] };
+  if (expression.kind === "not") return { kind: "not", of: mirrorExpression(expression.of, axis) };
+  if (expression.kind === "feature") return { kind: "feature", feature: mirrorFeature(expression.feature, axis) };
+  if (expression.kind === "pieceOnSquare") return { kind: "pieceOnSquare", square: mirrorSquare(expression.square, axis), piece: expression.piece === null ? null : { ...expression.piece, color: mirrorColor(expression.piece.color, axis) } };
+  if (expression.kind === "mirrored") return mirrorExpression(mirrorExpression(expression.of, expression.axis), axis);
+  if (expression.kind === "quantified") {
+    if ("files" in expression.over) {
+      const from = fileIndex(mirrorFile(expression.over.files.from, axis)), to = fileIndex(mirrorFile(expression.over.files.to, axis));
+      const [lower, upper] = normalizedRange(from, to);
+      return { kind: "quantified", quantifier: expression.quantifier, over: { files: { from: FILES[lower]!, to: FILES[upper]! } }, feature: mirrorFileTemplate(expression.feature as FileTemplateFeature, axis) };
+    }
+    const fileFrom = fileIndex(mirrorFile(expression.over.squares.files.from, axis)), fileTo = fileIndex(mirrorFile(expression.over.squares.files.to, axis));
+    const rankMap = (rank: number): number => axis === "files" ? rank : 9 - rank;
+    const [fileLower, fileUpper] = normalizedRange(fileFrom, fileTo);
+    const [rankLower, rankUpper] = normalizedRange(rankMap(expression.over.squares.ranks.from), rankMap(expression.over.squares.ranks.to));
+    return { kind: "quantified", quantifier: expression.quantifier, over: { squares: { files: { from: FILES[fileLower]!, to: FILES[fileUpper]! }, ranks: { from: rankLower, to: rankUpper } } }, feature: mirrorSquareTemplate(expression.feature as SquareTemplateFeature, axis) };
+  }
+  const exhaustive: never = expression;
+  throw new TypeError(`Unhandled structural expression mirror: ${JSON.stringify(exhaustive)}`);
+}
+
+function files(range: FileRange): readonly FileName[] {
+  const from = fileIndex(range.from), to = fileIndex(range.to);
+  if (from < 0 || to < 0 || from > to) throw new TypeError("Quantified file domain must be non-empty and ordered");
+  return FILES.slice(from, to + 1);
+}
+
+function squares(region: SquareRegion): readonly SquareName[] {
+  if (region.ranks.from < 1 || region.ranks.to > 8 || region.ranks.from > region.ranks.to) throw new TypeError("Quantified square domain must be non-empty and ordered");
+  return files(region.files).flatMap((file) => Array.from({ length: region.ranks.to - region.ranks.from + 1 }, (_, index) => `${file}${region.ranks.from + index}` as SquareName));
+}
+
+function matchesQuantified(fen: string, expression: Extract<StructuralExpression, { readonly kind: "quantified" }>): boolean {
+  const results = "files" in expression.over
+    ? files(expression.over.files).map((file) => matchesStructuralFeature(fen, { ...(expression.feature as FileTemplateFeature), file } as StructuralFeature))
+    : squares(expression.over.squares).map((square) => (expression.feature as SquareTemplateFeature).kind === "piece"
+      ? matchesStructuralExpression(fen, { kind: "pieceOnSquare", square, piece: (expression.feature as Extract<SquareTemplateFeature, { readonly kind: "piece" }>).piece })
+      : matchesStructuralFeature(fen, { ...(expression.feature as Exclude<SquareTemplateFeature, { readonly kind: "piece" }>), square } as StructuralFeature));
+  return expression.quantifier === "some" ? results.some(Boolean) : results.every(Boolean);
+}
+
 export function matchesStructuralFeature(fen: string, feature: StructuralFeature): boolean {
   const position = positionFromFen(fen);
   if (feature.kind === "pawn_safe_square") return pawnSafety(fen, feature.color, feature.square).safe;
@@ -211,6 +337,13 @@ export function matchesStructuralFeature(fen: string, feature: StructuralFeature
     return feature.scope === "any" ? values.some((value) => compare(value, feature.comparison, feature.count)) : values.every((value) => compare(value, feature.comparison, feature.count));
   }
   if (feature.kind === "named_structure") return namedStructureMatches(fen, feature.id);
+  if (feature.kind === "bishop_on_shade") return [...position.board.pieces(feature.color, "bishop")].some((square) => shadeOf(square) === feature.shade);
+  if (feature.kind === "pawn_count") {
+    const own = pawns(position, feature.color).length;
+    const actual = feature.basis === "count" ? own : own - pawns(position, opposite(feature.color)).length;
+    return compare(actual, feature.comparison, feature.count);
+  }
+  if (feature.kind === "king_opposition") return opposition(position, feature.color, feature.form);
   const exhaustive: never = feature;
   throw new TypeError(`Unhandled structural feature: ${JSON.stringify(exhaustive)}`);
 }
@@ -219,14 +352,16 @@ export function matchesStructuralExpression(fen: string, expression: StructuralE
   if (expression.kind === "all" || expression.kind === "any") return expression.kind === "all" ? expression.of.every((item) => matchesStructuralExpression(fen, item)) : expression.of.some((item) => matchesStructuralExpression(fen, item));
   if (expression.kind === "not") return !matchesStructuralExpression(fen, expression.of);
   if (expression.kind === "feature") return matchesStructuralFeature(fen, expression.feature);
-  if (expression.kind !== "pieceOnSquare") {
-    const exhaustive: never = expression;
-    throw new TypeError(`Unhandled structural expression: ${JSON.stringify(exhaustive)}`);
+  if (expression.kind === "pieceOnSquare") {
+    const position = positionFromFen(fen); const square = parseSquare(expression.square);
+    if (square === undefined) return false;
+    const actual = position.board.get(square);
+    return expression.piece === null ? actual === undefined : actual?.color === expression.piece.color && actual.role === expression.piece.role;
   }
-  const position = positionFromFen(fen); const square = parseSquare(expression.square);
-  if (square === undefined) return false;
-  const actual = position.board.get(square);
-  return expression.piece === null ? actual === undefined : actual?.color === expression.piece.color && actual.role === expression.piece.role;
+  if (expression.kind === "mirrored") return matchesStructuralExpression(fen, mirrorExpression(expression.of, expression.axis));
+  if (expression.kind === "quantified") return matchesQuantified(fen, expression);
+  const exhaustive: never = expression;
+  throw new TypeError(`Unhandled structural expression: ${JSON.stringify(exhaustive)}`);
 }
 
 const STRUCTURE_METADATA: Readonly<Record<StructureId, Omit<StructureMatch, "id">>> = Object.freeze({
@@ -247,6 +382,7 @@ function canonicalObservations(values: readonly StructuralObservation[]): readon
 
 export function structuralReading(fen: string): StructuralReading {
   const position = positionFromFen(fen); const values: StructuralObservation[] = [];
+  for (const color of COLORS) values.push({ kind: "pawn_count", color, count: pawns(position, color).length, squares: [] });
   for (const color of COLORS) for (const file of FILES) {
     for (const kind of ["backward_pawn", "isolated_pawn", "doubled_pawn"] as const) if (matchesStructuralFeature(fen, { kind, color, file })) values.push({ kind, color, file, squares: [] });
     if (matchesStructuralFeature(fen, { kind: "half_open_file", color, file })) values.push({ kind: "half_open_file", color, file, squares: [] });
@@ -254,6 +390,7 @@ export function structuralReading(fen: string): StructuralReading {
   for (const file of FILES) if (matchesStructuralFeature(fen, { kind: "open_file", file })) values.push({ kind: "open_file", file, squares: [] });
   for (const [square, piece] of position.board) {
     const name = makeSquare(square);
+    if (piece.role === "bishop") values.push({ kind: "bishop_on_shade", color: piece.color, shade: shadeOf(square), squares: [name] });
     if (piece.role === "pawn" && matchesStructuralFeature(fen, { kind: "passed_pawn", color: piece.color, square: name })) values.push({ kind: "passed_pawn", color: piece.color, squares: [name] });
     if (piece.role !== "pawn" && piece.role !== "king") {
       const detail = pawnSafety(fen, piece.color, name); if (detail.safe || detail.pushAttackers.length > 0) values.push({ kind: "pawn_safe_square", color: piece.color, squares: [name], detail });
@@ -273,6 +410,11 @@ export function structuralReading(fen: string): StructuralReading {
       }
     }
     if (piece.role !== "pawn") for (const color of COLORS) { const count = directAttackCount(fen, color, square); if (count > 0) values.push({ kind: "direct_attack_count", color, squares: [name], count }); }
+  }
+  for (const color of COLORS) for (const form of ["direct", "distant"] as const) {
+    if (!opposition(position, color, form)) continue;
+    const own = position.board.kingOf(color), enemy = position.board.kingOf(opposite(color));
+    if (own !== undefined && enemy !== undefined) values.push({ kind: "king_opposition", color, form, squares: [makeSquare(own), makeSquare(enemy)].sort() as SquareName[] });
   }
   const structures = (Object.keys(STRUCTURE_METADATA) as StructureId[]).filter((id) => namedStructureMatches(fen, id)).map((id) => Object.freeze({ id, ...STRUCTURE_METADATA[id] }));
   for (const structure of structures) values.push({ kind: "named_structure", squares: [], provenanceNote: structure.provenanceNote });
@@ -307,9 +449,16 @@ export function vacationReading(fen: string, squareName: SquareName): VacationRe
 export function structuralFeatureKinds(expression: StructuralExpression): readonly StructuralFeatureKind[] {
   const values: StructuralFeatureKind[] = [];
   const visit = (item: StructuralExpression): void => {
-    if (item.kind === "feature") values.push(item.feature.kind);
-    else if (item.kind === "not") visit(item.of);
-    else if (item.kind === "all" || item.kind === "any") item.of.forEach(visit);
+    if (item.kind === "feature") { values.push(item.feature.kind); return; }
+    if (item.kind === "pieceOnSquare") return;
+    if (item.kind === "not" || item.kind === "mirrored") { visit(item.of); return; }
+    if (item.kind === "all" || item.kind === "any") { item.of.forEach(visit); return; }
+    if (item.kind === "quantified") {
+      if (item.feature.kind !== "piece") values.push(item.feature.kind);
+      return;
+    }
+    const exhaustive: never = item;
+    throw new TypeError(`Unhandled structural expression kind: ${JSON.stringify(exhaustive)}`);
   };
   visit(expression);
   return Object.freeze(STRUCTURAL_FEATURE_KINDS.filter((kind) => values.includes(kind)));

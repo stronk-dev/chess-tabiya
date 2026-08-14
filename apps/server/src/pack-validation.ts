@@ -6,6 +6,8 @@ import {
   FEEDBACK_POLICIES,
   lintDrillPack,
   type DrillPackDefinition,
+  type StructuralExpression,
+  type StructuralFeature,
 } from "@chess-tabiya/schema/drill-pack";
 import { createRun } from "@chess-tabiya/runtime";
 import { between } from "chessops/attacks";
@@ -92,25 +94,74 @@ const PLAN_OBJECTIVES = new Set([
 
 export function structuralIssues(value: unknown, path = "", depth = 0): readonly PackValidationIssue[] {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return [];
-  const object = value as Record<string, unknown>;
   const issues: PackValidationIssue[] = [];
-  if (["all", "any"].includes(String(object.kind)) && Array.isArray(object.of)) {
-    if (depth >= 4) issues.push(runtimeIssue("STRUCTURAL_EXPRESSION_TOO_DEEP", path || "/", "structural expressions may be nested at most four levels"));
-    object.of.forEach((child, index) => issues.push(...structuralIssues(child, `${path}/of/${index}`, depth + 1)));
-  } else if (object.kind === "not") {
-    if (depth >= 4) issues.push(runtimeIssue("STRUCTURAL_EXPRESSION_TOO_DEEP", path || "/", "structural expressions may be nested at most four levels"));
-    issues.push(...structuralIssues(object.of, `${path}/of`, depth + 1));
-  } else if (object.kind === "feature") {
-    issues.push(...structuralIssues(object.feature, `${path}/feature`, depth));
-  } else if (object.kind === "line_blockers") {
-    const from = parseSquare(String(object.from)); const to = parseSquare(String(object.to));
-    if (from === undefined || to === undefined || between(from, to).isEmpty()) issues.push(runtimeIssue("LINE_SPAN_EMPTY", path || "/", "line blocker endpoints must be distinct, aligned, and non-adjacent"));
-    if (typeof object.count === "number" && object.count < 0) issues.push(runtimeIssue("NEGATIVE_FEATURE_COUNT", `${path}/count`, "feature counts cannot be negative"));
-  } else if (object.kind === "outpost") {
-    const square = parseSquare(String(object.square));
-    if (square !== undefined) { const rank = Math.floor(square / 8); const relative = object.color === "white" ? rank + 1 : 8 - rank; if (relative < 4 || relative > 6) issues.push(runtimeIssue("OUTPOST_RANK_OUT_OF_RANGE", `${path}/square`, "Tabiya's strict outpost detector applies only to relative ranks four through six")); }
-  } else if (["direct_attack_count", "piece_reach_count"].includes(String(object.kind))) {
-    if (typeof object.count === "number" && object.count < 0) issues.push(runtimeIssue("NEGATIVE_FEATURE_COUNT", `${path}/count`, "feature counts cannot be negative"));
+  const leaf = (feature: StructuralFeature, featurePath: string, underMirror: boolean): void => {
+    if (feature.kind === "line_blockers") {
+      const from = parseSquare(feature.from), to = parseSquare(feature.to);
+      if (from === undefined || to === undefined || between(from, to).isEmpty()) issues.push(runtimeIssue("LINE_SPAN_EMPTY", featurePath || "/", "line blocker endpoints must be distinct, aligned, and non-adjacent"));
+      if (feature.count < 0) issues.push(runtimeIssue("NEGATIVE_FEATURE_COUNT", `${featurePath}/count`, "feature counts cannot be negative"));
+      return;
+    }
+    if (feature.kind === "outpost") {
+      const square = parseSquare(feature.square);
+      if (square !== undefined) { const rank = Math.floor(square / 8); const relative = feature.color === "white" ? rank + 1 : 8 - rank; if (relative < 4 || relative > 6) issues.push(runtimeIssue("OUTPOST_RANK_OUT_OF_RANGE", `${featurePath}/square`, "Tabiya's strict outpost detector applies only to relative ranks four through six")); }
+      return;
+    }
+    if (feature.kind === "direct_attack_count" || feature.kind === "piece_reach_count") {
+      if (feature.count < 0) issues.push(runtimeIssue("NEGATIVE_FEATURE_COUNT", `${featurePath}/count`, "feature counts cannot be negative"));
+      return;
+    }
+    if (feature.kind === "pawn_count") {
+      const valid = feature.basis === "count" ? feature.count >= 0 && feature.count <= 8 : feature.count >= -8 && feature.count <= 8;
+      if (!valid) issues.push(runtimeIssue("PAWN_COUNT_OUT_OF_RANGE", `${featurePath}/count`, "pawn count must be attainable for its basis"));
+      return;
+    }
+    if (feature.kind === "named_structure") {
+      if (underMirror) issues.push(runtimeIssue("MIRRORED_NAMED_STRUCTURE", featurePath, "named structures cannot appear under mirrored"));
+      return;
+    }
+    if (feature.kind === "pawn_safe_square" || feature.kind === "backward_pawn" || feature.kind === "isolated_pawn" || feature.kind === "doubled_pawn" || feature.kind === "passed_pawn" || feature.kind === "open_file" || feature.kind === "half_open_file" || feature.kind === "bishop_on_shade" || feature.kind === "king_opposition") return;
+    const exhaustive: never = feature;
+    issues.push(runtimeIssue("STRUCTURAL_KIND_UNRECOGNISED", featurePath || "/", `unhandled structural feature ${JSON.stringify(exhaustive)}`));
+  };
+  const visit = (expression: StructuralExpression, expressionPath: string, expressionDepth: number, underMirror = false): void => {
+    if (expression.kind === "all" || expression.kind === "any") {
+      if (expressionDepth >= 4) issues.push(runtimeIssue("STRUCTURAL_EXPRESSION_TOO_DEEP", expressionPath || "/", "structural expressions may be nested at most four levels"));
+      expression.of.forEach((child, index) => visit(child, `${expressionPath}/of/${index}`, expressionDepth + 1, underMirror));
+      return;
+    }
+    if (expression.kind === "not" || expression.kind === "mirrored") {
+      if (expressionDepth >= 4) issues.push(runtimeIssue("STRUCTURAL_EXPRESSION_TOO_DEEP", expressionPath || "/", "structural expressions may be nested at most four levels"));
+      visit(expression.of, `${expressionPath}/of`, expressionDepth + 1, underMirror || expression.kind === "mirrored");
+      return;
+    }
+    if (expression.kind === "feature") { leaf(expression.feature, `${expressionPath}/feature`, underMirror); return; }
+    if (expression.kind === "pieceOnSquare") return;
+    if (expression.kind === "quantified") {
+      if (expressionDepth >= 4) issues.push(runtimeIssue("STRUCTURAL_EXPRESSION_TOO_DEEP", expressionPath || "/", "structural expressions may be nested at most four levels"));
+      if ("files" in expression.over) {
+        if (expression.over.files.from > expression.over.files.to) issues.push(runtimeIssue("QUANTIFIED_DOMAIN_EMPTY", `${expressionPath}/over/files`, "quantified file ranges must be ordered and non-empty"));
+      } else {
+        const region = expression.over.squares;
+        if (region.files.from > region.files.to || region.ranks.from > region.ranks.to) issues.push(runtimeIssue("QUANTIFIED_DOMAIN_EMPTY", `${expressionPath}/over/squares`, "quantified square regions must be ordered and non-empty"));
+        if (expression.feature.kind === "outpost") {
+          const color = expression.feature.color;
+          const ranks = Array.from({ length: Math.max(0, region.ranks.to - region.ranks.from + 1) }, (_, index) => region.ranks.from + index);
+          const possible = ranks.some((rank) => { const relative = color === "white" ? rank : 9 - rank; return relative >= 4 && relative <= 6; });
+          if (!possible) issues.push(runtimeIssue("OUTPOST_RANK_OUT_OF_RANGE", `${expressionPath}/over/squares/ranks`, "quantified outpost regions must overlap relative ranks four through six"));
+        }
+      }
+      if (expression.feature.kind === "direct_attack_count" && expression.feature.count < 0) issues.push(runtimeIssue("NEGATIVE_FEATURE_COUNT", `${expressionPath}/feature/count`, "feature counts cannot be negative"));
+      return;
+    }
+    const exhaustive: never = expression;
+    issues.push(runtimeIssue("STRUCTURAL_KIND_UNRECOGNISED", expressionPath || "/", `unhandled structural expression ${JSON.stringify(exhaustive)}`));
+  };
+  const object = value as Record<string, unknown>;
+  if (object.kind === "feature" || object.kind === "pieceOnSquare" || object.kind === "all" || object.kind === "any" || object.kind === "not" || object.kind === "mirrored" || object.kind === "quantified") {
+    visit(value as StructuralExpression, path, depth);
+  } else {
+    leaf(value as StructuralFeature, path, false);
   }
   return Object.freeze(issues);
 }

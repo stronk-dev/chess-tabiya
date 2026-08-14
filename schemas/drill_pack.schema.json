@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.12",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.13",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.12 format for an engine-independent authored drill.",
+  "description": "Living v0.13 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -356,6 +356,27 @@
       },
       "additionalProperties": false
     },
++    "fileRange": { "type": "object", "required": ["from", "to"], "properties": { "from": { "$ref": "#/$defs/file" }, "to": { "$ref": "#/$defs/file" } }, "additionalProperties": false },
+    "rankRange": { "type": "object", "required": ["from", "to"], "properties": { "from": { "type": "integer", "minimum": 1, "maximum": 8 }, "to": { "type": "integer", "minimum": 1, "maximum": 8 } }, "additionalProperties": false },
+    "squareRegion": { "type": "object", "required": ["files", "ranks"], "properties": { "files": { "$ref": "#/$defs/fileRange" }, "ranks": { "$ref": "#/$defs/rankRange" } }, "additionalProperties": false },
+    "fileTemplateFeature": {
+      "oneOf": [
+        { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "backward_pawn" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "isolated_pawn" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "doubled_pawn" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "half_open_file" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind"], "properties": { "kind": { "const": "open_file" } }, "additionalProperties": false }
+      ]
+    },
+    "squareTemplateFeature": {
+      "oneOf": [
+        { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "pawn_safe_square" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "outpost" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "passed_pawn" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "comparison", "count"], "properties": { "kind": { "const": "direct_attack_count" }, "color": { "enum": ["white", "black"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "piece"], "properties": { "kind": { "const": "piece" }, "piece": { "oneOf": [{ "$ref": "#/$defs/piece" }, { "type": "null" }] } }, "additionalProperties": false }
+      ]
+    },
     "structuralFeature": {
       "oneOf": [
         { "type": "object", "required": ["kind", "color", "square"], "properties": { "kind": { "const": "pawn_safe_square" }, "color": { "enum": ["white", "black"] }, "square": { "$ref": "#/$defs/square" } }, "additionalProperties": false },
@@ -369,6 +390,9 @@
         { "type": "object", "required": ["kind", "from", "to", "comparison", "count"], "properties": { "kind": { "const": "line_blockers" }, "from": { "$ref": "#/$defs/square" }, "to": { "$ref": "#/$defs/square" }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "square", "color", "comparison", "count"], "properties": { "kind": { "const": "direct_attack_count" }, "square": { "$ref": "#/$defs/square" }, "color": { "enum": ["white", "black"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color", "role", "scope", "comparison", "count"], "properties": { "kind": { "const": "piece_reach_count" }, "color": { "enum": ["white", "black"] }, "role": { "enum": ["knight", "bishop", "rook", "queen"] }, "scope": { "enum": ["any", "every"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
++        { "type": "object", "required": ["kind", "color", "shade"], "properties": { "kind": { "const": "bishop_on_shade" }, "color": { "enum": ["white", "black"] }, "shade": { "enum": ["light", "dark"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "basis", "comparison", "count"], "properties": { "kind": { "const": "pawn_count" }, "color": { "enum": ["white", "black"] }, "basis": { "enum": ["count", "difference"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "form"], "properties": { "kind": { "const": "king_opposition" }, "color": { "enum": ["white", "black"] }, "form": { "enum": ["direct", "distant"] } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "id"], "properties": { "kind": { "const": "named_structure" }, "id": { "enum": ["carlsbad", "iqp-white", "iqp-black", "maroczy-bind"] } }, "additionalProperties": false }
       ]
     },
@@ -377,6 +401,9 @@
         { "type": "object", "required": ["kind", "of"], "properties": { "kind": { "enum": ["all", "any"] }, "of": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/structuralExpression" } } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "of"], "properties": { "kind": { "const": "not" }, "of": { "$ref": "#/$defs/structuralExpression" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "feature"], "properties": { "kind": { "const": "feature" }, "feature": { "$ref": "#/$defs/structuralFeature" } }, "additionalProperties": false },
++        { "type": "object", "required": ["kind", "axis", "of"], "properties": { "kind": { "const": "mirrored" }, "axis": { "enum": ["colors", "files", "both"] }, "of": { "$ref": "#/$defs/structuralExpression" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "quantifier", "over", "feature"], "properties": { "kind": { "const": "quantified" }, "quantifier": { "enum": ["some", "every"] }, "over": { "type": "object", "required": ["files"], "properties": { "files": { "$ref": "#/$defs/fileRange" } }, "additionalProperties": false }, "feature": { "$ref": "#/$defs/fileTemplateFeature" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "quantifier", "over", "feature"], "properties": { "kind": { "const": "quantified" }, "quantifier": { "enum": ["some", "every"] }, "over": { "type": "object", "required": ["squares"], "properties": { "squares": { "$ref": "#/$defs/squareRegion" } }, "additionalProperties": false }, "feature": { "$ref": "#/$defs/squareTemplateFeature" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "square", "piece"], "properties": { "kind": { "const": "pieceOnSquare" }, "square": { "$ref": "#/$defs/square" }, "piece": { "oneOf": [{ "$ref": "#/$defs/piece" }, { "type": "null" }] } }, "additionalProperties": false }
       ]
     },

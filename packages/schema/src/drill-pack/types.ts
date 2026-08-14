@@ -198,7 +198,8 @@ import type { Color, FileName, Role, SquareName } from "chessops/types";
 export const STRUCTURAL_FEATURE_KINDS = Object.freeze([
   "pawn_safe_square", "outpost", "backward_pawn", "isolated_pawn", "doubled_pawn",
   "passed_pawn", "open_file", "half_open_file", "line_blockers", "direct_attack_count",
-  "piece_reach_count", "named_structure",
+  "piece_reach_count", "named_structure", "bishop_on_shade", "pawn_count",
+  "king_opposition",
 ] as const);
 export type StructuralFeatureKind = (typeof STRUCTURAL_FEATURE_KINDS)[number];
 
@@ -214,11 +215,35 @@ export type StructuralFeature =
   | { readonly kind: "line_blockers"; readonly from: SquareName; readonly to: SquareName; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
   | { readonly kind: "direct_attack_count"; readonly square: SquareName; readonly color: Color; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
   | { readonly kind: "piece_reach_count"; readonly color: Color; readonly role: "knight" | "bishop" | "rook" | "queen"; readonly scope: "any" | "every"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
-  | { readonly kind: "named_structure"; readonly id: "carlsbad" | "iqp-white" | "iqp-black" | "maroczy-bind" };
+  | { readonly kind: "named_structure"; readonly id: "carlsbad" | "iqp-white" | "iqp-black" | "maroczy-bind" }
+  | { readonly kind: "bishop_on_shade"; readonly color: Color; readonly shade: "light" | "dark" }
+  | { readonly kind: "pawn_count"; readonly color: Color; readonly basis: "count" | "difference"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "king_opposition"; readonly color: Color; readonly form: "direct" | "distant" };
+
+export type MirrorAxis = "colors" | "files" | "both";
+export type Quantifier = "some" | "every";
+export interface FileRange { readonly from: FileName; readonly to: FileName }
+export interface RankRange { readonly from: number; readonly to: number }
+export interface SquareRegion { readonly files: FileRange; readonly ranks: RankRange }
+export type FileTemplateFeature =
+  | { readonly kind: "backward_pawn"; readonly color: Color }
+  | { readonly kind: "isolated_pawn"; readonly color: Color }
+  | { readonly kind: "doubled_pawn"; readonly color: Color }
+  | { readonly kind: "half_open_file"; readonly color: Color }
+  | { readonly kind: "open_file" };
+export type SquareTemplateFeature =
+  | { readonly kind: "pawn_safe_square"; readonly color: Color }
+  | { readonly kind: "outpost"; readonly color: Color }
+  | { readonly kind: "passed_pawn"; readonly color: Color }
+  | { readonly kind: "direct_attack_count"; readonly color: Color; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "piece"; readonly piece: { readonly color: Color; readonly role: Role } | null };
 
 export type StructuralExpression =
   | { readonly kind: "all"; readonly of: readonly [StructuralExpression, ...StructuralExpression[]] }
   | { readonly kind: "any"; readonly of: readonly [StructuralExpression, ...StructuralExpression[]] }
   | { readonly kind: "not"; readonly of: StructuralExpression }
   | { readonly kind: "feature"; readonly feature: StructuralFeature }
-  | { readonly kind: "pieceOnSquare"; readonly square: SquareName; readonly piece: { readonly color: Color; readonly role: Role } | null };
+  | { readonly kind: "pieceOnSquare"; readonly square: SquareName; readonly piece: { readonly color: Color; readonly role: Role } | null }
+  | { readonly kind: "mirrored"; readonly axis: MirrorAxis; readonly of: StructuralExpression }
+  | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly files: FileRange }; readonly feature: FileTemplateFeature }
+  | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly squares: SquareRegion }; readonly feature: SquareTemplateFeature };

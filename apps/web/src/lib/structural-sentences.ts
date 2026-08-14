@@ -23,6 +23,9 @@ export function renderStructuralObservation(observation: StructuralObservation):
   if (observation.kind === "direct_attack_count") return `${count(observation.count, `${side(observation.color)} piece`)} directly attack ${observation.squares[0]} in the current occupancy; pins are not evaluated.`;
   if (observation.kind === "piece_reach_count") return `${side(observation.color)}'s ${observation.role} on ${observation.squares[0]} has ${count(observation.count, "attack-reachable square")} in the current occupancy; check and pins are not evaluated.`;
   if (observation.kind === "named_structure") return observation.provenanceNote ?? "A Tabiya catalogue structure matches this position.";
+  if (observation.kind === "bishop_on_shade") return `${side(observation.color)}'s bishop on ${observation.squares[0]} stands on a ${observation.shade} square.`;
+  if (observation.kind === "pawn_count") return `${side(observation.color)} has ${count(observation.count, "pawn")}.`;
+  if (observation.kind === "king_opposition") return `${side(observation.color)} has the ${observation.form} opposition: kings on ${observation.squares.join(" and ")} with ${side(observation.color === "white" ? "black" : "white")} to move.`;
   const exhaustive: never = observation.kind;
   throw new TypeError(`Unhandled structural observation: ${String(exhaustive)}`);
 }
@@ -44,6 +47,12 @@ function renderFeatureSpec(feature: StructuralFeature): string {
   if (feature.kind === "direct_attack_count") return `${feature.square} has ${comparison(feature.comparison, feature.count)} direct ${feature.color} attackers`;
   if (feature.kind === "piece_reach_count") return `${feature.scope} ${feature.color} ${feature.role} has ${comparison(feature.comparison, feature.count)} attack-reachable squares`;
   if (feature.kind === "named_structure") return `Tabiya's ${feature.id} catalogue detector matches`;
+  if (feature.kind === "bishop_on_shade") return `${feature.color} has a bishop on a ${feature.shade} square`;
+  if (feature.kind === "pawn_count") {
+    if (feature.basis === "count") return `${feature.color} has ${comparison(feature.comparison, feature.count)} pawns`;
+    return `${feature.color} has ${comparison(feature.comparison, Math.abs(feature.count))} ${feature.count < 0 ? "fewer" : "more"} pawn${Math.abs(feature.count) === 1 ? "" : "s"} than ${feature.color === "white" ? "black" : "white"}`;
+  }
+  if (feature.kind === "king_opposition") return `${feature.color} has the ${feature.form} opposition`;
   const exhaustive: never = feature;
   throw new TypeError(`Unhandled structural feature: ${JSON.stringify(exhaustive)}`);
 }
@@ -57,6 +66,19 @@ export function renderStructuralExpressionSpec(expression: StructuralExpression)
     return expression.piece === null
       ? `${expression.square} is empty`
       : `${expression.square} holds a ${expression.piece.color} ${expression.piece.role}`;
+  }
+  if (expression.kind === "mirrored") {
+    const prefix = expression.axis === "files" ? "with files mirrored (a↔h)" : expression.axis === "colors" ? "with colours reversed and ranks mirrored" : "rotated 180 degrees";
+    return `${prefix}: ${renderStructuralExpressionSpec(expression.of)}`;
+  }
+  if (expression.kind === "quantified") {
+    const domain = "files" in expression.over
+      ? `file from ${expression.over.files.from} to ${expression.over.files.to}`
+      : `square from ${expression.over.squares.files.from}${expression.over.squares.ranks.from} to ${expression.over.squares.files.to}${expression.over.squares.ranks.to}`;
+    const instantiated = expression.feature.kind === "piece"
+      ? expression.feature.piece === null ? "is empty" : `holds a ${expression.feature.piece.color} ${expression.feature.piece.role}`
+      : renderFeatureSpec({ ...expression.feature, ...(expression.feature.kind === "backward_pawn" || expression.feature.kind === "isolated_pawn" || expression.feature.kind === "doubled_pawn" || expression.feature.kind === "half_open_file" || expression.feature.kind === "open_file" ? { file: expression.over && "files" in expression.over ? expression.over.files.from : "a" } : { square: "a1" }) } as StructuralFeature);
+    return `on ${expression.quantifier === "some" ? "some" : "every"} ${domain}, ${instantiated}`;
   }
   const exhaustive: never = expression;
   throw new TypeError(`Unhandled structural expression: ${JSON.stringify(exhaustive)}`);

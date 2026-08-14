@@ -20,6 +20,9 @@ export const RULES_EVIDENCE_FACTS = Object.freeze([
   "structure-direct-attack-count",
   "structure-piece-reach-count",
   "structure-named-structure",
+  "structure-bishop-on-shade",
+  "structure-pawn-count",
+  "structure-king-opposition",
 ] as const);
 
 export type RulesEvidenceFact = (typeof RULES_EVIDENCE_FACTS)[number];

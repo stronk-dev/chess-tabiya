@@ -11,7 +11,7 @@ append-only.
 |---|---|
 | Breadth B1–B11 | ✅ complete 2026-08-14 |
 | Wave: predicate-wave-2 → corpus-evidence → adoption-wave-1 → social-match | 🔨 with codex |
-| Structural adoption queue: repertoire gap-finding (needs corpus evidence + Chessbook teardown), open-answer key-point grading, per-position community threads | 📋 RFCs after the wave |
+| Structural adoption queue: repertoire gap-finding (adoption contract now pinned — Chessbook teardown §7), **immediate blunder-guard re-added as a real policy** (owner 2026-08-14: post-commit guard v1 — commit, then "that hangs the knight — play on or rewind?"; unblocks the on-ramp wave), open-answer key-point grading, per-position community threads | 📋 RFCs after the wave |
 | Residual polish: PWA/responsive transformation, `/settings` real controls | 📋 last code wave |
 | Ideas ledgered, not scheduled (owner may promote or drop): position-scan import, personal-model opponent, B5 depth (native pool, follower feeds, cross-rating events) | 💤 |
 
