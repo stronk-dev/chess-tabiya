@@ -8,6 +8,8 @@ import {
 import {
   BranchQueryError,
   RuntimeError,
+  feedbackDeliveryOpen,
+  permittedAssistance,
   type OpponentSelection,
   type SelectionCandidate,
   type SelectionEngineIdentity,
@@ -36,6 +38,7 @@ import type { LiveSessionService } from "./live-session.js";
 import { projectShapeEntry, type ShapeRegistry } from "./shape-registry.js";
 import type { ShapeStudio } from "./shape-studio.js";
 import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
+import { evidencePacket, renderVoice, type VoiceProvider } from "./guidance.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -379,7 +382,7 @@ export function errorResponse(error: unknown): Response {
         ? 401
         : error.code === "FORBIDDEN"
           ? 403
-      : error.code === "ENGINE_UNAVAILABLE"
+      : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE"
         ? 503
         : error.code === "EVIDENCE_UNAVAILABLE"
           ? 503
@@ -396,6 +399,7 @@ export function errorResponse(error: unknown): Response {
               ? 404
               : error.code === "RUN_ALREADY_EXISTS" ||
                 error.code === "FEEDBACK_WITHHELD" ||
+                error.code === "ASSISTANCE_WITHHELD" ||
                 error.code === "PACK_UNRESOLVABLE" ||
                 error.code === "PACK_ID_RESERVED" ||
                 error.code === "SHAPE_ID_RESERVED" ||
@@ -437,7 +441,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis|human-split|voice)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -522,6 +526,8 @@ export function createRestHandler(
   live?: LiveSessionService,
   shapes?: ShapeRegistry,
   shapeStudio?: ShapeStudio,
+  voiceProvider?: VoiceProvider,
+  voicePersona = "Clear, concise Tabiya voice. Do not add chess claims.",
 ): RestHandler {
   return async (request) => {
     try {
@@ -834,6 +840,25 @@ export function createRestHandler(
       if (request.method === "GET" && route.action === "grants") {
         return json(200, { grants: service.grants(route.runId, principal) });
       }
+      if (request.method === "GET" && route.action === "human-split") {
+        if (selector === undefined || capabilities === undefined) {
+          throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
+        }
+        const access = service.guidanceAccess(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId"));
+        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role });
+        if (permission.humanSplit === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Human-model distribution is withheld in this context");
+        const available = await capabilities.get();
+        if (available.providers.opponent === "none") throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
+        const authored = access.run.opponentPolicy;
+        const selection = await selector.select({
+          startFen: access.run.start.fen,
+          historyUci: access.historyUci,
+          policy: { mode: "human_common", policyConfigDigest: access.run.sessionDigest, ...(authored.targetElo === undefined ? {} : { targetElo: authored.targetElo }), ...(authored.temperature === undefined ? {} : { temperature: authored.temperature }), ...(authored.topP === undefined ? {} : { topP: authored.topP }) },
+          seed: access.branchSeed,
+          ...(access.pack === undefined ? {} : { packId: access.pack.document.id }),
+        });
+        return json(200, { nodeId: access.node.id, engine: selection.engine, targetElo: authored.targetElo ?? null, candidates: selection.candidates ?? [] });
+      }
       if (request.method !== "POST") {
         return json(405, {
           error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed" },
@@ -841,6 +866,16 @@ export function createRestHandler(
       }
 
       const value = await parseBody(request);
+      if (route.action === "voice") {
+        requireJson(request);
+        if (voiceProvider === undefined) throw new ServerError("VOICE_UNAVAILABLE", "No external voice provider is configured");
+        const body = closedRecord(value, "/", ["nodeId", "scope"]);
+        const scope = requiredString(body.scope, "scope");
+        if (scope !== "marker" && scope !== "reading" && scope !== "steering") throw invalid("scope must be marker, reading, or steering");
+        const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
+        const packet = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+        return json(200, { ...(await renderVoice(voiceProvider, packet, voicePersona)), scope });
+      }
       if (route.action === "lease") {
         requireJson(request);
         service.claimLease(route.runId, principal, writerId(request), optionalString(value.expectedHolderLearnerId,"expectedHolderLearnerId"));

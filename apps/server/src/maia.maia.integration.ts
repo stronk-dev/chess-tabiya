@@ -76,6 +76,7 @@ describe("Maia production sidecar integration", () => {
         },
         seed: 91,
       });
+      expect(selection.candidates?.some((candidate) => candidate.mass !== undefined)).toBe(true);
       latenciesMs.push(performance.now() - startedAt);
       const move = parseUci(selection.moveUci);
       expect(move && isNormal(move) && position.isLegal(move)).toBe(true);

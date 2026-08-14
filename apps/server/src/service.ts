@@ -13,6 +13,7 @@ import {
   fork,
   feedbackDeliveryOpen,
   feedbackDisclosed,
+  historyFrom,
   canonicalRunStart,
   digestSessionSource,
   isPackSession,
@@ -92,6 +93,15 @@ export interface EventsPage {
   readonly events: readonly DrillRunEvent[];
   readonly nextSeq: number;
   readonly withheld?: true;
+}
+
+export interface GuidanceAccess {
+  readonly run: DrillRun;
+  readonly node: DrillRun["nodes"][number];
+  readonly role: RunRole;
+  readonly pack?: PackRecord;
+  readonly historyUci: readonly string[];
+  readonly branchSeed: number;
 }
 
 function comparisonWithoutEngineFeedback(
@@ -407,6 +417,24 @@ export class RunService {
       nodes: publicNodes(run),
       branches: run.branches,
       activeCursor: run.activeCursor,
+    });
+  }
+
+  guidanceAccess(runId: string, principal: Principal, nodeId: string): GuidanceAccess {
+    const { stored, role } = requireRead(this.#storage, runId, principal);
+    const run = stored.run;
+    const node = run.nodes.find((candidate) => candidate.id === nodeId);
+    if (node === undefined) throw new ServerError("INVALID_REQUEST", `Unknown guidance node: ${nodeId}`);
+    const branch = run.branches.find((candidate) => candidate.id === node.branchId);
+    if (branch === undefined) throw new ServerError("STORAGE_FAILURE", `Node ${nodeId} has no branch`);
+    const pack = this.#requiredRegisteredPack(run);
+    return Object.freeze({
+      run,
+      node,
+      role,
+      ...(pack === undefined ? {} : { pack }),
+      historyUci: Object.freeze(historyFrom(run, nodeId).flatMap((item) => item.moveUci === null ? [] : [item.moveUci])),
+      branchSeed: branch.seed,
     });
   }
 

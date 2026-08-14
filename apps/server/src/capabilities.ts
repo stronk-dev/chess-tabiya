@@ -47,7 +47,7 @@ export type CapabilityEngineMode = "mock" | "maia";
 export interface CapabilityProviders {
   readonly opponent: "maia" | "mock" | "none";
   readonly judge: "stockfish" | "mock" | "none";
-  readonly llm: "none";
+  readonly llm: "none" | "external";
 }
 
 export type SurfaceCapabilities = Readonly<
@@ -94,6 +94,7 @@ export function assertSurfaceCapabilities(
 function providers(
   engineMode: CapabilityEngineMode,
   identities: readonly EngineIdentity[],
+  llmAvailable: boolean,
 ): CapabilityProviders {
   if (engineMode === "mock") {
     const opponentReady = identities.some((identity) => identity.kind === "opponent");
@@ -101,7 +102,7 @@ function providers(
       opponent: opponentReady ? "mock" : "none",
       // Mock mode wires MockEvidenceExecutor even though it has no UCI identity.
       judge: "mock",
-      llm: "none",
+      llm: llmAvailable ? "external" : "none",
     });
   }
   return Object.freeze({
@@ -111,7 +112,7 @@ function providers(
     judge: identities.some((identity) => identity.kind === "judge")
       ? "stockfish"
       : "none",
-    llm: "none",
+    llm: llmAvailable ? "external" : "none",
   });
 }
 
@@ -134,6 +135,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
   readonly #engineIds: readonly string[];
   readonly #engineMode: CapabilityEngineMode;
   readonly #strongEngineProfile: StrongEngineProfile;
+  readonly #llmAvailable: boolean;
 
   constructor(
     client: CapabilityEngineClient,
@@ -141,11 +143,13 @@ export class EngineCapabilities implements CapabilitiesProvider {
     options: {
       readonly engineMode: CapabilityEngineMode;
       readonly strongEngineProfile?: Partial<StrongEngineProfile>;
+      readonly llmAvailable?: boolean;
     },
   ) {
     this.#client = client;
     this.#engineIds = Object.freeze([...engineIds]);
     this.#engineMode = options.engineMode;
+    this.#llmAvailable = options.llmAvailable === true;
     this.#strongEngineProfile = resolveStrongEngineProfile(
       options.strongEngineProfile,
     );
@@ -160,7 +164,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
           : [];
       }),
     );
-    const providerState = providers(this.#engineMode, engines);
+    const providerState = providers(this.#engineMode, engines, this.#llmAvailable);
     return Object.freeze({
       engines,
       policyModes: SUPPORTED_POLICY_MODES,

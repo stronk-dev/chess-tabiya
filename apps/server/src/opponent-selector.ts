@@ -425,7 +425,7 @@ export class OpponentSelector {
   }
 
   async #humanCommon(request: SelectMoveRequest): Promise<OpponentSelection> {
-    const result = await this.#maia(request);
+    const result = await this.#maia(request, 8);
     return makeSelection(
       bestMove(result.lines),
       candidateLines(result.lines),

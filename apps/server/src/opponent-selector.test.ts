@@ -180,6 +180,7 @@ describe("pure opponent selector", () => {
       "setoption name Elo value 1800",
       "setoption name Temperature value 0.7",
       "setoption name TopP value 0.9",
+      "setoption name MultiPV value 8",
       `position fen ${INITIAL_FEN} moves e2e4`,
       "go",
     ]);
@@ -340,7 +341,7 @@ describe("pure opponent selector", () => {
 
       expect(selection.moveUci).toBe("g8f6");
       expect(selection.policyModeApplied).toBe("human_common");
-      expect(client.calls[0]?.request.commands).not.toContain(
+      expect(client.calls[0]?.request.commands).toContain(
         "setoption name MultiPV value 8",
       );
       expect(warning).toHaveBeenCalledWith(

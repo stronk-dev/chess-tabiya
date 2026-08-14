@@ -36,6 +36,7 @@ export {
   type SurfaceCapabilities,
   type SurfaceId,
 } from "./capabilities.js";
+export { evidencePacket, renderVoice, type VoiceProvider } from "./guidance.js";
 export {
   EvidenceJobQueue,
   StockfishEvidenceExecutor,

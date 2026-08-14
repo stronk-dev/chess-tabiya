@@ -236,10 +236,19 @@ export interface Capabilities {
   readonly providers: {
     readonly opponent: "maia" | "mock" | "none";
     readonly judge: "stockfish" | "mock" | "none";
-    readonly llm: "none";
+    readonly llm: "none" | "external";
   };
   readonly surfaces: Readonly<Record<SurfaceId, SurfaceAvailability>>;
 }
+
+export interface HumanSplitPage {
+  readonly nodeId: string;
+  readonly engine: OpponentSelection["engine"];
+  readonly targetElo: number | null;
+  readonly candidates: readonly NonNullable<OpponentSelection["candidates"]>[number][];
+}
+
+export interface VoicePage { readonly text: string; readonly source: "provider" | "deterministic"; readonly scope: "marker" | "reading" | "steering"; }
 
 export interface CreateRunRequest {
   readonly id: string;
@@ -452,6 +461,8 @@ export interface DrillClientApi extends RunApi {
     branchIds: readonly string[],
   ): Promise<BranchComparison>;
   authoredFeedback(runId: string): Promise<AuthoredFeedbackPage>;
+  humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage>;
+  voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage>;
   pgn(runId: string, branchIds?: readonly string[]): Promise<PgnDownload>;
   progress?(): Promise<readonly ProgressAttempt[]>;
   dueProgress?(): Promise<readonly ProgressSchedule[]>;
@@ -688,6 +699,14 @@ export class DrillApi implements DrillClientApi {
 
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
     return this.#json("/select-move", { method: "POST", body: input });
+  }
+
+  humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage> {
+    return this.#json(`/runs/${encoded(runId)}/human-split?nodeId=${encoded(nodeId)}`);
+  }
+
+  voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage> {
+    return this.#json(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { nodeId, scope } });
   }
 
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult> {

@@ -39,6 +39,7 @@ import { stockfishPlaySpec } from "./strong-engine.js";
 import { LiveSessionService } from "./live-session.js";
 import { ShapeRegistry } from "./shape-registry.js";
 import { ShapeStudio } from "./shape-studio.js";
+import type { VoiceProvider } from "./guidance.js";
 
 export type EngineMode = "mock" | "maia";
 
@@ -52,6 +53,8 @@ export interface ApplicationOptions {
   readonly maiaPort?: number;
   readonly stockfishCommand?: string;
   readonly cookieSecure?: boolean;
+  readonly voiceProvider?: VoiceProvider;
+  readonly voicePersona?: string;
 }
 
 export interface ChessTabiyaApplication {
@@ -301,7 +304,7 @@ export async function createApplication(
     capabilities = new EngineCapabilities(supervisor, [
       "stockfish-analysis",
       "maia-5m",
-    ], { engineMode: "maia" });
+    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined });
     evidenceExecutor = new StockfishEvidenceExecutor(supervisor);
   } else {
     const mock = new MockEngineClient();
@@ -310,7 +313,7 @@ export async function createApplication(
       strongEngineId: "mock-opponent",
     });
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
-      engineMode: "mock",
+      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined,
     });
     evidenceExecutor = new MockEvidenceExecutor();
   }
@@ -327,7 +330,7 @@ export async function createApplication(
     cookieSecure: options.cookieSecure ?? true,
   });
   const live = new LiveSessionService(storage, { runService: service });
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

@@ -136,6 +136,13 @@ describe("engine capabilities", () => {
     expect(descriptor.surfaces.justPlay).toBe("available");
   });
 
+  it("reports an injected voice seam without inventing a provider by default", async () => {
+    const capabilities = new EngineCapabilities(healthClient({}), [], { engineMode: "mock", llmAvailable: true });
+    expect((await capabilities.get()).providers.llm).toBe("external");
+    const absent = new EngineCapabilities(healthClient({}), [], { engineMode: "mock" });
+    expect((await absent.get()).providers.llm).toBe("none");
+  });
+
   it("downgrades unhealthy real providers instead of reporting stale identities", async () => {
     const staleMaia: EngineIdentity = {
       id: "maia-5m",

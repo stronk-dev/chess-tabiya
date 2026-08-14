@@ -17,3 +17,12 @@ check. Tests include both declared counter-intuitive phase fixtures, abstention 
 irreversibility, sustained-vs-one-check option collapse, persisted human-model divergence,
 the exact census, and the known voice-check leak as a passing fixture. No derived value is
 persisted.
+
+## 2026-08-14 — Server seams
+
+Human-common selections now request MultiPV 8 as a report while still selecting the engine's
+`bestmove`; the tagged Maia test requires massed candidates. Added the disclosure-window and
+role-gated human-split endpoint, typed `ASSISTANCE_WITHHELD` / `VOICE_UNAVAILABLE` mappings,
+an injected vendor-neutral voice provider with one retry and deterministic fallback, and the
+`none | external` capability seam. The typed browser API mirrors both endpoints. Tests cover
+withheld → revealed → re-closed delivery and the provider-invention fallback.
