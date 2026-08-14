@@ -2,6 +2,7 @@ import type {
   DrillPackDefinition,
   PackPhase,
 } from "@chess-tabiya/schema/drill-pack";
+import type { ShapeEntryDefinition } from "@chess-tabiya/schema/shape-entry";
 import type {
   BranchComparison,
   DrillRun,
@@ -31,6 +32,27 @@ export interface PackSummary {
 
 export interface PackDocument {
   readonly document: DrillPackDefinition;
+  readonly digest: string;
+}
+
+export interface ShapeSummary {
+  readonly id: string;
+  readonly version: string;
+  readonly digest: string;
+  readonly name: string;
+  readonly phases: ShapeEntryDefinition["phases"];
+  readonly licence: string;
+  readonly channel: "official" | "community";
+  readonly publisherHandle?: string;
+}
+
+export type ShapeEntryView = ShapeEntryDefinition & {
+  readonly channel: "official" | "community";
+  readonly publisherHandle?: string;
+};
+
+export interface ShapeDocument {
+  readonly document: ShapeEntryView;
   readonly digest: string;
 }
 
@@ -136,6 +158,7 @@ export type AuthoredFeedbackItem =
       readonly anchor: { readonly checkpointId: string };
       readonly label: string;
       readonly description?: string;
+      readonly shapePlan?: { readonly shape: string; readonly plan: string };
     }
   | {
       readonly kind: "theory_verdict";
@@ -175,8 +198,6 @@ export type SurfaceAvailability = "available" | "unavailable-here";
 
 /** Roadmap state is build-owned and deliberately never sent by the server. */
 export const PLANNED_SURFACES: readonly SurfaceId[] = Object.freeze([
-  "justPlay",
-  "fromPosition",
 ]);
 
 export type SessionKind = "stream" | "academy" | "match";
@@ -277,6 +298,15 @@ export interface PackDraft {
   readonly digest: string;
   readonly state: "draft" | "registered" | "withdrawn";
   readonly validation: { readonly valid: boolean; readonly issues: readonly { readonly code: string; readonly path: string; readonly message: string }[] };
+}
+
+export interface ShapeDraft {
+  readonly id: string;
+  readonly shapeId: string;
+  readonly document: unknown;
+  readonly digest: string;
+  readonly state: "draft" | "registered" | "withdrawn";
+  readonly validation: { readonly valid: boolean; readonly issues: readonly { readonly code: string; readonly path: string; readonly message: string }[]; readonly probeMatches?: boolean };
 }
 
 export interface SelectMoveRequest {
@@ -409,6 +439,8 @@ export interface DrillClientApi extends RunApi {
   capabilities(): Promise<Capabilities>;
   packs(): Promise<readonly PackSummary[]>;
   pack(packId: string): Promise<PackDocument>;
+  shapes(): Promise<readonly ShapeSummary[]>;
+  shape(shapeId: string): Promise<ShapeDocument>;
   runs(limit?: number, offset?: number): Promise<readonly RunSummary[]>;
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection>;
   graph(runId: string, writerId?: string): Promise<RunGraph>;
@@ -429,6 +461,11 @@ export interface DrillClientApi extends RunApi {
   createPackDraft?(document: unknown): Promise<PackDraft>;
   updatePackDraft?(draftId: string, digest: string, document: unknown): Promise<PackDraft>;
   registerPackDraft?(draftId: string): Promise<PackSummary>;
+  shapeDrafts?(): Promise<readonly ShapeDraft[]>;
+  createShapeDraft?(document: unknown): Promise<ShapeDraft>;
+  updateShapeDraft?(draftId: string, digest: string, document: unknown): Promise<ShapeDraft>;
+  lintShapeDraft?(draftId: string, document: unknown, probeFen?: string): Promise<ShapeDraft["validation"]>;
+  registerShapeDraft?(draftId: string): Promise<ShapeSummary>;
   liveSessions?(): Promise<readonly LiveSession[]>;
   liveSession?(sessionId:string):Promise<LiveSessionDetail>;
   createLiveSession?(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl}):Promise<LiveSession>;
@@ -519,6 +556,21 @@ export class DrillApi implements DrillClientApi {
     return Object.freeze({ document, digest });
   }
 
+  async shapes(): Promise<readonly ShapeSummary[]> {
+    const body = await this.#json<{ readonly shapes: readonly ShapeSummary[] }>("/shapes");
+    return body.shapes;
+  }
+
+  async shape(shapeId: string): Promise<ShapeDocument> {
+    const response = await this.#response(`/shapes/${encoded(shapeId)}`);
+    const document = (await response.json()) as ShapeEntryView;
+    const digest = response.headers.get("x-shape-digest");
+    if (digest === null || digest === "") {
+      throw new ApiError(502, "INVALID_RESPONSE", "Shape response omitted its digest");
+    }
+    return Object.freeze({ document, digest });
+  }
+
   async createRun(input: CreateRunRequest, writerId: string): Promise<DrillRun> {
     const body = await this.#json<{ readonly run: DrillRun }>("/runs", {
       method: "POST",
@@ -595,6 +647,30 @@ export class DrillApi implements DrillClientApi {
       method: "POST", body: {},
     });
     return body.pack.summary;
+  }
+
+  async shapeDrafts(): Promise<readonly ShapeDraft[]> {
+    const body = await this.#json<{ readonly drafts: readonly ShapeDraft[] }>("/shapes/drafts");
+    return body.drafts;
+  }
+
+  async createShapeDraft(document: unknown): Promise<ShapeDraft> {
+    const body = await this.#json<{ readonly draft: ShapeDraft }>("/shapes/drafts", { method: "POST", body: { document } });
+    return body.draft;
+  }
+
+  async updateShapeDraft(draftId: string, digest: string, document: unknown): Promise<ShapeDraft> {
+    const response = await this.#response(`/shapes/drafts/${encoded(draftId)}`, { method: "PUT", headers: { "if-match": digest }, body: { document } });
+    return ((await response.json()) as { readonly draft: ShapeDraft }).draft;
+  }
+
+  lintShapeDraft(draftId: string, document: unknown, probeFen?: string): Promise<ShapeDraft["validation"]> {
+    return this.#json(`/shapes/drafts/${encoded(draftId)}/lint`, { method: "POST", body: { document, ...(probeFen === undefined || probeFen === "" ? {} : { probeFen }) } });
+  }
+
+  async registerShapeDraft(draftId: string): Promise<ShapeSummary> {
+    const body = await this.#json<{ readonly shape: { readonly summary: ShapeSummary } }>(`/shapes/drafts/${encoded(draftId)}/register`, { method: "POST", body: {} });
+    return body.shape.summary;
   }
 
   async liveSessions():Promise<readonly LiveSession[]>{const body=await this.#json<{sessions:readonly LiveSession[]}>("/sessions");return body.sessions;}

@@ -1,0 +1,18 @@
+{
+  "id": "carlsbad",
+  "version": "0.1.0",
+  "name": "Carlsbad structure",
+  "phases": ["middlegame"],
+  "trigger": { "kind": "feature", "feature": { "kind": "named_structure", "id": "carlsbad" } },
+  "plans": [
+    { "id": "white-minority-attack", "side": "white", "label": "Minority attack", "description": "Two queenside pawns advance against three, aiming for b5 and a structural concession on c6.", "success": { "note": "A backward Black c-pawn on a file that is half-open for White.", "signature": { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "backward_pawn", "color": "black", "file": "c" } }, { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "c" } }] } } },
+    { "id": "white-central-break", "side": "white", "label": "Central break", "description": "Prepare f3 and e3-e4 with a rook behind the e-pawn.", "success": { "note": "No rules-arithmetic signature distinguishes a working break from a wasted one.", "signature": null } },
+    { "id": "white-kingside-attack", "side": "white", "label": "Kingside attack", "description": "Reroute a knight toward the kingside and use h4-h5 when a hook exists.", "success": { "note": "No rules-arithmetic signature distinguishes attack from overextension.", "signature": null } },
+    { "id": "black-piece-trades", "side": "black", "label": "Trade pieces", "description": "Simplify before the queenside concession can be attacked.", "success": { "note": "Detection cannot count what a trade was worth.", "signature": null } },
+    { "id": "black-queenside-freeze", "side": "black", "label": "Freeze the queenside", "description": "Stop b4 before it happens with ...a5, accepting softer queenside squares.", "success": { "note": "The absence of a future advance is not decidable from one position.", "signature": null } },
+    { "id": "black-central-counter", "side": "black", "label": "Central counter-break", "description": "Answer wing play in the centre with ...c5, or ...e5 where that pawn survives.", "success": { "note": "The c-file tension resolves without leaving White a backward-pawn target.", "signature": { "kind": "all", "of": [{ "kind": "not", "of": { "kind": "feature", "feature": { "kind": "backward_pawn", "color": "black", "file": "c" } } }, { "kind": "not", "of": { "kind": "pieceOnSquare", "square": "c6", "piece": { "color": "black", "role": "pawn" } } }] } } }
+  ],
+  "watch": ["The attacker and defender count on b5 before the pawn goes there.", "Which rook commits to which file.", "Whether the c6 pawn still has a pawn neighbour."],
+  "typicalMistakes": ["Switching plans after spending tempi on the first one.", "Pushing b5 after a supporting piece moved away.", "Playing the central break before it is prepared."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["Extracted from content/drafts/carlsbad-minority-attack.json.", "UNGROUNDED: strategic claims inherit Pack B's explicit source and review blockers."], "attribution": [{ "title": "Carlsbad structure drill pack", "author": "Tabiya", "licence": "CC-BY-SA-4.0" }] }
+}

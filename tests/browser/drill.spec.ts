@@ -19,6 +19,47 @@ async function register(page: Page): Promise<string> {
 
 test.beforeEach(async ({ page }) => register(page));
 
+test("Just Play reaches a Carlsbad and opens a passive shape marker without mutating the run", async ({ page }) => {
+  await page.getByLabel("Your side").selectOption("black");
+  await page.getByLabel("Optional FEN").fill("r1bqr1k1/pppnbppp/5n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10");
+  await page.getByRole("button", { name: "Start game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await expect(page.getByRole("button", { name: /Carlsbad structure/ })).toHaveCount(0);
+  await expect(page.getByText("No pack is loaded. Nothing is claimed about this position.")).toBeVisible();
+
+  await move(page, "c7", "c6", "black");
+  const marker = page.getByRole("button", { name: /Carlsbad structure/ });
+  await expect(marker).toBeVisible();
+  const runId = page.url().split("/").at(-1)!;
+  const before = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
+  await marker.click();
+  const panel = page.getByRole("complementary", { name: "Carlsbad structure" });
+  await expect(panel).toContainText("Named plans for this structure — general to the kind of position, not advice for this one.");
+  await expect(panel).toContainText("CC-BY-SA-4.0");
+  for (const label of ["Minority attack", "Central break", "Kingside attack", "Trade pieces", "Freeze the queenside", "Central counter-break"]) await expect(panel.getByText(label, { exact: true })).toBeVisible();
+  const after = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
+  expect(after.events).toHaveLength(before.events.length);
+  await expect(page.getByText("Authored commentary withheld", { exact: false })).toHaveCount(0);
+});
+
+test("Pack B references the Carlsbad entry while its pack prose stays server-withheld", async ({ page }) => {
+  const list = await page.request.get("/packs");
+  const packs = await list.json() as { id: string; title: string }[];
+  const pack = packs.find((candidate) => candidate.id === "carlsbad-minority-attack")!;
+  const detail = await page.request.get(`/packs/${pack.id}`);
+  const projected = await detail.json() as Record<string, unknown>;
+  expect(projected.shapes).toEqual(["carlsbad"]);
+  expect(projected).not.toHaveProperty("planClasses");
+  expect(projected).not.toHaveProperty("successConditions");
+
+  await page.getByRole("article").filter({ hasText: pack.title }).getByRole("button", { name: /Open position/ }).click();
+  await expect(page.getByRole("heading", { name: "The tabiya: choose a plan before you move" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Carlsbad structure/ })).toBeAttached();
+  const generic = "Two queenside pawns advance against three";
+  await expect(page.getByText(generic, { exact: false })).toHaveCount(1);
+  await expect(page.getByText("In this tabiya the plan is already supported", { exact: false })).toHaveCount(1);
+});
+
 test("Live turns a run into a session and exposes a chrome-free overlay", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "schema example" }).first();
   await card.getByRole("button", { name: /Open position/ }).click();
@@ -141,16 +182,17 @@ interface LatencyEnvelope {
 function squarePoint(
   box: { readonly x: number; readonly y: number; readonly width: number; readonly height: number },
   square: string,
+  orientation: "white" | "black" = "white",
 ): { readonly x: number; readonly y: number } {
   const file = square.charCodeAt(0) - 97;
   const rank = Number(square[1]) - 1;
   return {
-    x: box.x + ((file + 0.5) * box.width) / 8,
-    y: box.y + ((7 - rank + 0.5) * box.height) / 8,
+    x: box.x + (((orientation === "white" ? file : 7 - file) + 0.5) * box.width) / 8,
+    y: box.y + (((orientation === "white" ? 7 - rank : rank) + 0.5) * box.height) / 8,
   };
 }
 
-async function move(page: Page, from: string, to: string): Promise<void> {
+async function move(page: Page, from: string, to: string, orientation: "white" | "black" = "white"): Promise<void> {
   const board = page.getByLabel("Chessboard");
   await expect(board).toBeVisible();
   await board.evaluate(
@@ -161,8 +203,8 @@ async function move(page: Page, from: string, to: string): Promise<void> {
   );
   const box = await board.boundingBox();
   if (box === null) throw new Error("Chessground board has no bounding box");
-  const origin = squarePoint(box, from);
-  const destination = squarePoint(box, to);
+  const origin = squarePoint(box, from, orientation);
+  const destination = squarePoint(box, to, orientation);
   await page.mouse.move(origin.x, origin.y);
   await page.mouse.down();
   await page.mouse.move(destination.x, destination.y, { steps: 8 });

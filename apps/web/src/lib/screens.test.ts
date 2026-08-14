@@ -18,6 +18,7 @@ import { mount, tick, unmount } from "svelte";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import fixtureJson from "../../../../schemas/drill_pack.example.json?raw";
+import carlsbadJson from "../../../../content/shapes/carlsbad.json?raw";
 
 const chessground = vi.hoisted(() => ({
   configs: [] as Config[],
@@ -39,7 +40,7 @@ import CompareView from "./CompareView.svelte";
 import CheckpointSheet from "./CheckpointSheet.svelte";
 import DrillScreen from "./DrillScreen.svelte";
 import PackList from "./PackList.svelte";
-import type { PackSummary } from "./api.js";
+import type { PackSummary, ShapeEntryView } from "./api.js";
 import type {
   RegionKeyboardHandler,
   RegisterKeyboardRegion,
@@ -47,6 +48,7 @@ import type {
 import { latestCheckpoint } from "./screen-model.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
+const carlsbad = { ...JSON.parse(carlsbadJson), channel: "official" } as ShapeEntryView;
 const at = "2026-08-11T20:00:00.000Z";
 let regionKeyboard: RegionKeyboardHandler | undefined;
 
@@ -149,6 +151,27 @@ afterEach(() => {
 });
 
 describe("Layer 3 screens", () => {
+  it("shows a passive shape marker in pack-free play and opens the attributed plans panel", async () => {
+    const run = createRun({
+      id: "just-play-shape",
+      session: { kind: "position", start: { fen: "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10", side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"b".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at,
+    });
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, shapes: [carlsbad],
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    expect(document.body.textContent).toContain("No pack is loaded. Nothing is claimed about this position.");
+    expect(document.querySelector<HTMLButtonElement>(".shape-marker")?.textContent).toContain("Carlsbad structure");
+    document.querySelector<HTMLButtonElement>(".shape-marker")!.click(); await tick();
+    expect(document.querySelector(".shape-panel")?.textContent).toContain("Named plans for this structure — general to the kind of position, not advice for this one.");
+    expect(document.querySelector(".shape-panel")?.textContent).toContain("CC-BY-SA-4.0");
+    expect(document.querySelector(".shape-panel")?.textContent).toContain("Minority attack");
+    await unmount(component);
+  });
+
   it("presents terminal authored commentary and recorded engine evidence", async () => {
     const terminalPack = {
       ...pack,

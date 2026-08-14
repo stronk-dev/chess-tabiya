@@ -8,6 +8,9 @@
     onPreview: (nodeId: string) => void;
     onConfirm: (nodeId: string) => void | Promise<void>;
     authoredSpineNodeIds?: ReadonlySet<string>;
+    rootNodeId?: string | undefined;
+    shapeMarkers?: readonly { readonly nodeId: string; readonly entryId: string; readonly label: string; readonly channel: "official" | "community" }[];
+    onOpenShape?: (entryId: string) => void;
   }
 
   let {
@@ -17,7 +20,12 @@
     onPreview,
     onConfirm,
     authoredSpineNodeIds = new Set<string>(),
+    rootNodeId,
+    shapeMarkers = [],
+    onOpenShape = () => {},
   }: Props = $props();
+
+  let rootMarkers = $derived(shapeMarkers.filter((marker) => marker.nodeId === rootNodeId));
 </script>
 
 <section class="timeline" aria-labelledby="timeline-title">
@@ -26,6 +34,14 @@
     <span>{entries.length} plies</span>
   </div>
   <ol>
+    {#if rootMarkers.length > 0 && rootNodeId !== undefined}
+      <li>
+        <button type="button" aria-label="Start position" class:preview={previewNodeId === rootNodeId} onclick={() => onPreview(rootNodeId)}>
+          <span class="ply">0</span><span>Start</span>
+        </button>
+        {#each rootMarkers as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
+      </li>
+    {/if}
     {#each entries as entry}
       <li class:checkpoint={entry.checkpointIds.length > 0}>
         <button
@@ -46,6 +62,7 @@
             <span class="authored-marker" aria-label="Authored commentary available">A</span>
           {/if}
         </button>
+        {#each shapeMarkers.filter((marker) => marker.nodeId === entry.nodeId) as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
       </li>
     {/each}
   </ol>
@@ -141,6 +158,8 @@
     color: var(--accent);
     font: 700 0.55rem/1 ui-monospace, monospace;
   }
+
+  .shape-marker{display:block;margin-top:.25rem;width:100%;padding:.3rem .45rem;border:1px solid var(--accent);border-radius:.45rem;background:transparent;color:var(--accent);font:.65rem/1.2 var(--display-font)}
 
   .confirm {
     margin-top: 0.5rem;

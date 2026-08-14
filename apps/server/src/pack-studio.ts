@@ -7,6 +7,7 @@ import { ServerError } from "./errors.js";
 import { PackRegistry } from "./pack-registry.js";
 import { validatePackDocument, type PackValidationResult } from "./pack-validation.js";
 import { SQLiteRunStorage, type StoredPackDraft } from "./storage.js";
+import type { ShapeRegistry } from "./shape-registry.js";
 
 function digest(value: unknown): string {
   return `sha256:${createHash("sha256").update(canonicalizeJson(value as JsonValue)).digest("hex")}`;
@@ -40,10 +41,12 @@ export interface StudioDraftView extends StoredPackDraft {
 export class PackStudio {
   readonly #storage: SQLiteRunStorage;
   readonly #registry: PackRegistry;
+  readonly #shapes: ShapeRegistry | undefined;
 
-  constructor(storage: SQLiteRunStorage, registry: PackRegistry) {
+  constructor(storage: SQLiteRunStorage, registry: PackRegistry, shapes?: ShapeRegistry) {
     this.#storage = storage;
     this.#registry = registry;
+    this.#shapes = shapes;
   }
 
   hydrate(): void {
@@ -81,7 +84,7 @@ export class PackStudio {
   }
 
   lint(document: unknown): PackValidationResult {
-    return validatePackDocument(document);
+    return validatePackDocument(document, { ...(this.#shapes === undefined ? {} : { shapes: this.#shapes }) });
   }
 
   update(id: string, principal: Principal, expectedDigest: string, document: unknown, at = new Date().toISOString()): StudioDraftView {
@@ -120,7 +123,7 @@ export class PackStudio {
       throw new ServerError("GRADUATION_BLOCKERS_OUTSTANDING", "Clear declared graduation blockers before registration");
     }
     provenance.reviewStatus = "published";
-    const validation = validatePackDocument(raw);
+    const validation = validatePackDocument(raw, { ...(this.#shapes === undefined ? {} : { shapes: this.#shapes }) });
     if (!validation.valid || validation.document === undefined) {
       throw new ServerError("PACK_INVALID", "Draft cannot be registered while validation errors remain", { details: { issues: validation.issues } });
     }
@@ -149,6 +152,6 @@ export class PackStudio {
   }
 
   #view(row: StoredPackDraft): StudioDraftView {
-    return Object.freeze({ ...row, validation: validatePackDocument(row.document) });
+    return Object.freeze({ ...row, validation: validatePackDocument(row.document, { ...(this.#shapes === undefined ? {} : { shapes: this.#shapes }) }) });
   }
 }

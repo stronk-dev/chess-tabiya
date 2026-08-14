@@ -3,7 +3,7 @@
 
   import HonestControl from "./HonestControl.svelte";
   import { recognizedCheckpointActions, type CheckpointNotice } from "./screen-model.js";
-  import type { AuthoredFeedbackItem } from "./api.js";
+  import type { AuthoredFeedbackItem, ShapeEntryView } from "./api.js";
   import OutcomeContext from "./OutcomeContext.svelte";
   import type { DrillRun } from "@chess-tabiya/runtime";
   import type { Node } from "@chess-tabiya/runtime";
@@ -26,6 +26,7 @@
     node?: Node;
     startSide?: StartSide;
     onPrediction?: (uci: string) => void | Promise<void>;
+    shapes?: readonly ShapeEntryView[];
   }
 
   let {
@@ -43,6 +44,7 @@
     node,
     startSide = "white",
     onPrediction = () => {},
+    shapes = [],
   }: Props = $props();
   let heading: HTMLHeadingElement;
   let recognizedActions = $derived(recognizedCheckpointActions(checkpoint.actions));
@@ -82,6 +84,10 @@
                 <span class="kind">Alternative {item.anchor.moveUci}</span><p>{item.note}</p>
               {:else if item.kind === "plan_class"}
                 <span class="kind">Plan option</span><strong>{item.label}</strong>
+                {#if item.shapePlan}
+                  {@const plan = shapes.find((entry) => entry.id === item.shapePlan!.shape)?.plans.find((candidate) => candidate.id === item.shapePlan!.plan)}
+                  {#if plan}<p>{plan.description}</p>{/if}
+                {/if}
                 {#if item.description}<p>{item.description}</p>{/if}
               {:else}
                 <span class="kind">Theory</span><p>{theoryVerdictSentence(item, run)}</p>

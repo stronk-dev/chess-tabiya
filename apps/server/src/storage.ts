@@ -217,6 +217,28 @@ export interface StoredRegisteredPack {
   readonly registeredAt: string;
 }
 
+export interface StoredShapeDraft {
+  readonly id: string;
+  readonly shapeId: string;
+  readonly ownerLearnerId: string;
+  readonly document: unknown;
+  readonly digest: string;
+  readonly state: "draft" | "registered" | "withdrawn";
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface StoredRegisteredShape {
+  readonly shapeId: string;
+  readonly version: string;
+  readonly digest: string;
+  readonly document: unknown;
+  readonly publisherHandle: string;
+  readonly publisherLearnerId: string;
+  readonly draftId: string;
+  readonly registeredAt: string;
+}
+
 interface RunRow {
   readonly id: string;
   readonly snapshot_json: string;
@@ -262,7 +284,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 9;
+export const STORAGE_VERSION = 10;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -764,6 +786,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       this.#database.prepare(
         "UPDATE registered_packs SET publisher_learner_id = ? WHERE publisher_learner_id = ?",
       ).run(LEGACY_ID, learnerId);
+      this.#database.prepare(
+        "UPDATE shape_drafts SET state = CASE WHEN state = 'registered' THEN state ELSE 'withdrawn' END, owner_learner_id = ? WHERE owner_learner_id = ?",
+      ).run(LEGACY_ID, learnerId);
+      this.#database.prepare(
+        "UPDATE registered_shapes SET publisher_learner_id = ? WHERE publisher_learner_id = ?",
+      ).run(LEGACY_ID, learnerId);
       this.#database.prepare("UPDATE live_sessions SET created_by = ? WHERE created_by = ?").run(LEGACY_ID,learnerId);
       this.#database.prepare("DELETE FROM learners WHERE id = ?").run(learnerId);
       const restore = this.#database.prepare(
@@ -1217,6 +1245,50 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       publisherLearnerId: String(row.publisher_learner_id), draftId: String(row.draft_id),
       registeredAt: String(row.registered_at),
     })));
+  }
+
+  createShapeDraft(input: StoredShapeDraft): void {
+    this.#database.prepare(`INSERT INTO shape_drafts
+      (id, shape_id, owner_learner_id, document_json, digest, state, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run(input.id, input.shapeId, input.ownerLearnerId,
+      JSON.stringify(input.document), input.digest, input.state, input.createdAt, input.updatedAt);
+  }
+
+  shapeDraft(id: string, ownerLearnerId: string): StoredShapeDraft | undefined {
+    const row = this.#database.prepare("SELECT * FROM shape_drafts WHERE id = ? AND owner_learner_id = ?").get(id, ownerLearnerId) as Record<string, unknown> | undefined;
+    return row === undefined ? undefined : this.#shapeDraftRow(row);
+  }
+
+  shapeDrafts(ownerLearnerId: string): readonly StoredShapeDraft[] {
+    return Object.freeze((this.#database.prepare("SELECT * FROM shape_drafts WHERE owner_learner_id = ? ORDER BY updated_at DESC, id").all(ownerLearnerId) as readonly Record<string, unknown>[]).map((row) => this.#shapeDraftRow(row)));
+  }
+
+  updateShapeDraft(id: string, ownerLearnerId: string, expectedDigest: string, document: unknown, digest: string, at: string): boolean {
+    return this.#database.prepare(`UPDATE shape_drafts SET document_json=?, shape_id=?, digest=?, updated_at=?
+      WHERE id=? AND owner_learner_id=? AND digest=? AND state='draft'`).run(JSON.stringify(document), String((document as Record<string, unknown>).id), digest, at, id, ownerLearnerId, expectedDigest).changes === 1;
+  }
+
+  registerShapeDraft(input: StoredRegisteredShape): void {
+    this.#database.exec("BEGIN IMMEDIATE");
+    try {
+      const draft = this.#database.prepare("SELECT state,owner_learner_id FROM shape_drafts WHERE id=?").get(input.draftId) as Record<string, unknown> | undefined;
+      if (draft?.state !== "draft" || draft.owner_learner_id !== input.publisherLearnerId) throw new ServerError("RUN_NOT_FOUND", `Unknown shape draft: ${input.draftId}`);
+      this.#database.prepare(`INSERT INTO registered_shapes
+        (shape_id,version,digest,document_json,publisher_handle,publisher_learner_id,draft_id,registered_at)
+        VALUES (?,?,?,?,?,?,?,?)`).run(input.shapeId,input.version,input.digest,JSON.stringify(input.document),input.publisherHandle,input.publisherLearnerId,input.draftId,input.registeredAt);
+      this.#database.prepare("UPDATE shape_drafts SET state='registered' WHERE id=?").run(input.draftId);
+      this.#database.exec("COMMIT");
+    } catch (error) { this.#rollback(); throw error; }
+  }
+
+  registeredShapes(): readonly StoredRegisteredShape[] {
+    return Object.freeze((this.#database.prepare("SELECT * FROM registered_shapes ORDER BY shape_id,registered_at").all() as readonly Record<string, unknown>[]).map((row) => Object.freeze({
+      shapeId:String(row.shape_id),version:String(row.version),digest:String(row.digest),document:JSON.parse(String(row.document_json)),publisherHandle:String(row.publisher_handle),publisherLearnerId:String(row.publisher_learner_id),draftId:String(row.draft_id),registeredAt:String(row.registered_at),
+    })));
+  }
+
+  #shapeDraftRow(row: Record<string, unknown>): StoredShapeDraft {
+    return Object.freeze({ id:String(row.id),shapeId:String(row.shape_id),ownerLearnerId:String(row.owner_learner_id),document:JSON.parse(String(row.document_json)),digest:String(row.digest),state:row.state as StoredShapeDraft["state"],createdAt:String(row.created_at),updatedAt:String(row.updated_at) });
   }
 
   storePlaytestDocument(digest: string, draftId: string, document: unknown, at: string): void {
@@ -1724,6 +1796,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "live sessions, journal, proposals, votes, invitations, and arena legs",
         apply: () => this.#addLiveSessionTables(),
       },
+      {
+        version: 10,
+        name: "shape studio drafts and registered versions",
+        apply: () => this.#addShapeStudioTables(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -1822,6 +1899,34 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         imported_at TEXT,
         PRIMARY KEY(session_id,leg)
       ) STRICT;
+    `);
+  }
+
+  #addShapeStudioTables(): void {
+    this.#database.exec(`
+      CREATE TABLE IF NOT EXISTS shape_drafts (
+        id TEXT PRIMARY KEY,
+        shape_id TEXT NOT NULL,
+        owner_learner_id TEXT NOT NULL REFERENCES learners(id),
+        document_json TEXT NOT NULL,
+        digest TEXT NOT NULL,
+        state TEXT NOT NULL CHECK (state IN ('draft','registered','withdrawn')),
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS shape_drafts_owner ON shape_drafts(owner_learner_id);
+      CREATE TABLE IF NOT EXISTS registered_shapes (
+        shape_id TEXT NOT NULL,
+        version TEXT NOT NULL,
+        digest TEXT NOT NULL UNIQUE,
+        document_json TEXT NOT NULL,
+        publisher_handle TEXT NOT NULL,
+        publisher_learner_id TEXT NOT NULL,
+        draft_id TEXT NOT NULL REFERENCES shape_drafts(id),
+        registered_at TEXT NOT NULL,
+        PRIMARY KEY (shape_id,version)
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS registered_shapes_digest ON registered_shapes(digest);
     `);
   }
 

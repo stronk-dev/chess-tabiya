@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import { structuralReading, trajectoryVerdict, type BranchComparison } from "@chess-tabiya/runtime";
+  import type { ShapeEntryView } from "./api.js";
+  import { historyFrom, shapeFirings, structuralReading, trajectoryVerdict, type BranchComparison } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
   import BranchRail from "./BranchRail.svelte";
@@ -13,6 +14,7 @@
   import TerminalSheet from "./TerminalSheet.svelte";
   import WhyBanner from "./WhyBanner.svelte";
   import OutcomeContext from "./OutcomeContext.svelte";
+  import ShapePanel from "./ShapePanel.svelte";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
@@ -40,7 +42,8 @@
     | { readonly checkpointId: string };
 
   interface Props {
-    pack: DrillPackDefinition;
+    pack?: DrillPackDefinition | undefined;
+    shapes?: readonly ShapeEntryView[] | undefined;
     snapshot: RunStateSnapshot;
     checkpoint?: CheckpointNotice | undefined;
     authoredFeedback?: AuthoredFeedbackPage | undefined;
@@ -63,6 +66,7 @@
 
   let {
     pack,
+    shapes = [],
     snapshot,
     checkpoint,
     authoredFeedback,
@@ -91,6 +95,7 @@
   let checkpointPickerOpen = $state(false);
   let replaying = $state(false);
   let structuralOpen = $state(false);
+  let openShapeId: string | undefined = $state();
   let forkLabel = $state("");
   let forkIntent = $state("");
   let replayTimer: ReturnType<typeof setInterval> | undefined;
@@ -102,7 +107,7 @@
 
   let run = $derived(snapshot.run);
   let currentNode = $derived(activeNode(run));
-  let trajectory = $derived(pack.legs === undefined
+  let trajectory = $derived(pack?.legs === undefined
     ? undefined
     : trajectoryVerdict(pack, run, run.activeCursor.nodeId));
   let terminalEvent = $derived(
@@ -112,6 +117,13 @@
     ),
   );
   let entries = $derived(timelineEntries(run, pack));
+  let path = $derived(historyFrom(run, run.activeCursor.nodeId));
+  let firings = $derived(shapeFirings(shapes, path));
+  let shapeMarkers = $derived(firings.map((firing) => {
+    const entry = shapes.find((candidate) => candidate.id === firing.entryId)!;
+    return { nodeId: firing.firstNodeId, entryId: entry.id, label: entry.name, channel: entry.channel };
+  }));
+  let openShape = $derived(shapes.find((entry) => entry.id === openShapeId));
   let authoredSpineNodeIds = $derived(
     new Set(
       (authoredFeedback?.items ?? []).flatMap((item) =>
@@ -157,13 +169,13 @@
     currentNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack)),
   );
   let cards = $derived(branchCards(run));
-  let banner = $derived(whyBanner(pack, run));
-  let grading = $derived(projectedGrading(pack));
+  let banner = $derived(pack === undefined ? undefined : whyBanner(pack, run));
+  let grading = $derived(pack === undefined ? undefined : projectedGrading(pack));
   let assessment = $derived(
     grading === undefined ? undefined : assessmentSentence(grading),
   );
   let resistance = $derived(
-    grading === undefined && pack.objective.type !== "follow_theory"
+    pack === undefined || (grading === undefined && pack.objective.type !== "follow_theory")
       ? []
       : resistanceSentences(run, currentNode.id),
   );
@@ -178,7 +190,7 @@
       node?.objectiveState ?? currentNode.objectiveState,
     );
   });
-  let startSide = $derived(packStartSide(pack));
+  let startSide = $derived(pack === undefined ? run.start.side : packStartSide(pack));
   let displayedNode = $derived(
     previewNodeId === undefined
       ? currentNode
@@ -445,10 +457,10 @@
     {/if}
 
     <div class="workspace">
-      <section class="position-column" class:outcome={grading !== undefined || pack.objective.type === "follow_theory"}>
+      <section class="position-column" class:outcome={grading !== undefined || pack?.objective.type === "follow_theory"}>
         <div class="objective-copy">
           <p>Objective</p>
-          <h1 id="drill-title">{packObjective(pack)}</h1>
+          <h1 id="drill-title">{pack === undefined ? "No pack is loaded. Nothing is claimed about this position." : packObjective(pack)}</h1>
         </div>
         {#if trajectory}
           <section class="trajectory-status" aria-label="Trajectory legs">
@@ -463,10 +475,10 @@
             {/if}
           </section>
         {/if}
-        {#if assessment !== undefined || resistance.length > 0}
+        {#if pack !== undefined && (assessment !== undefined || resistance.length > 0)}
           <OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
         {/if}
-        <WhyBanner model={banner} />
+        {#if banner !== undefined}<WhyBanner model={banner} />{/if}
         <section class="structural-reading" aria-label="Structural reading">
           <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Structural reading</button>
           {#if structuralOpen}
@@ -507,6 +519,9 @@
           onPreview={preview}
           onConfirm={confirmPreview}
           {authoredSpineNodeIds}
+          rootNodeId={run.nodes[0]?.id}
+          {shapeMarkers}
+          onOpenShape={(entryId) => (openShapeId = entryId)}
         />
         <div class="quick-actions" aria-label="Run actions">
           <button type="button" onclick={() => (forkOpen = true)}>Fork <kbd>B</kbd></button>
@@ -542,6 +557,7 @@
     {onPrediction}
     {checkpoint}
     authoredItems={checkpointAuthoredItems}
+    {shapes}
     {assessment}
     {resistance}
     resolution={checkpointResolution}
@@ -558,10 +574,11 @@
     {run}
     outcome={terminalEvent.data.outcome}
     authoredItems={terminalAuthoredItems}
+    {shapes}
     evidence={terminalEvidence}
     {assessment}
     {resistance}
-    grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)}
+    grade={pack === undefined ? undefined : objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)}
     canRewind={snapshot.access === "writer" && currentNode.parentId !== null}
     onRewind={() => currentNode.parentId === null ? undefined : onRewind({ nodeId: currentNode.parentId })}
     {onStop}
@@ -592,7 +609,7 @@
         {#each [...run.events].reverse().filter((event) => event.type === "checkpoint.reached") as event}
           {#if event.type === "checkpoint.reached"}
             <button type="button" onclick={() => { checkpointPickerOpen = false; void onRewind({ checkpointId: event.data.checkpointId }); }}>
-              {pack.checkpoints.find((item) => item.id === event.data.checkpointId)?.label ?? event.data.checkpointId}
+              {pack?.checkpoints.find((item) => item.id === event.data.checkpointId)?.label ?? event.data.checkpointId}
             </button>
           {/if}
         {:else}<p>No checkpoint reached yet.</p>{/each}
@@ -601,6 +618,8 @@
     </div>
   </div>
 {/if}
+
+{#if openShape}<ShapePanel entry={openShape} onClose={() => (openShapeId = undefined)} />{/if}
 </div>
 
 <style>

@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check build verify pack-check pack-preview source-fetch candidate-emit candidate-attach sourcing-check up up-engines down
+.PHONY: setup typecheck test test-browser schema-check build verify pack-check shape-check pack-preview source-fetch candidate-emit candidate-attach sourcing-check up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -24,6 +24,11 @@ pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/pack-check.ts --bundle --platform=node --format=esm --outfile=dist/pack-check.js
 	node apps/server/dist/pack-check.js "$(abspath $(FILE))"
+
+shape-check:
+	@test -n "$(FILE)" || (echo "Usage: make shape-check FILE=<path-to-shape.json>" >&2; exit 2)
+	pnpm --filter @chess-tabiya/server exec esbuild src/shape-check.ts --bundle --platform=node --format=esm --outfile=dist/shape-check.js
+	node apps/server/dist/shape-check.js "$(abspath $(FILE))"
 
 pack-preview:
 	@test -n "$(FILE)" || (echo "Usage: make pack-preview FILE=<path-to-pack.json>" >&2; exit 2)

@@ -45,6 +45,10 @@ export interface PlanClass {
   readonly id: string;
   readonly label: string;
   readonly description?: string;
+  readonly shapePlan?: {
+    readonly shape: string;
+    readonly plan: string;
+  };
 }
 
 export type DeviationLocation =
@@ -108,6 +112,7 @@ export interface DrillPackDefinition {
   };
   readonly checkpoints: readonly CheckpointDefinition[];
   readonly concepts?: readonly string[];
+  readonly shapes?: readonly string[];
   readonly retryVariants?: readonly {
     readonly kind: RetryVariantKind;
     readonly note?: string;

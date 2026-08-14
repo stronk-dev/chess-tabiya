@@ -1,7 +1,7 @@
 import type { StructuralObservation } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
-import { renderStructuralObservation } from "./structural-sentences.js";
+import { renderStructuralExpressionSpec, renderStructuralObservation } from "./structural-sentences.js";
 
 const observations: readonly StructuralObservation[] = [
   { kind: "pawn_safe_square", color: "black", squares: ["b5"], detail: { square: "b5", color: "black", safe: false, basis: "current_pawn_files", pushAttackers: [{ square: "a4", pushes: 1 }], captureAttackers: [] } },
@@ -28,5 +28,20 @@ describe("rung-0 structural sentences", () => {
     expect(rendered[1]).toMatch(/Tabiya's strict outpost detector/i);
     expect(rendered[9]).toMatch(/directly attack/i);
     expect(rendered[10]).toMatch(/attack-reachable/i);
+  });
+});
+
+describe("structural expression sentences", () => {
+  it("renders every expression branch without inventing a verdict", () => {
+    const values = [
+      { kind: "all", of: [{ kind: "feature", feature: { kind: "open_file", file: "c" } }, { kind: "pieceOnSquare", square: "d4", piece: { color: "white", role: "pawn" } }] },
+      { kind: "any", of: [{ kind: "feature", feature: { kind: "named_structure", id: "carlsbad" } }, { kind: "feature", feature: { kind: "isolated_pawn", color: "white", file: "d" } }] },
+      { kind: "not", of: { kind: "pieceOnSquare", square: "e4", piece: null } },
+    ] as const;
+    const rendered = values.map(renderStructuralExpressionSpec);
+    expect(rendered[0]).toContain(" and ");
+    expect(rendered[1]).toContain(" or ");
+    expect(rendered[2]).toMatch(/^not:/);
+    for (const sentence of rendered) expect(sentence).not.toMatch(/\b(best|good|bad|advantage|should)\b/i);
   });
 });

@@ -13,6 +13,8 @@ export {
   type PackRecord,
   type PackSummary,
 } from "./pack-registry.js";
+export { ShapeRegistry, projectShapeEntry, type ShapeRecord, type ShapeSummary } from "./shape-registry.js";
+export { ShapeStudio, type ShapeDraftView } from "./shape-studio.js";
 export {
   DEFAULT_STRONG_ENGINE_PROFILE,
   resolveStrongEngineProfile,

@@ -11,7 +11,7 @@
 
   interface Props {
     run: DrillRun;
-    pack: DrillPackDefinition;
+    pack?: DrillPackDefinition | undefined;
     comparison: BranchComparison;
     startSide: StartSide;
     step: number;

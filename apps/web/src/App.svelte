@@ -4,6 +4,7 @@
   import DrillScreen from "./lib/DrillScreen.svelte";
   import Chessboard from "./lib/Chessboard.svelte";
   import PackList from "./lib/PackList.svelte";
+  import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
   import {
@@ -18,6 +19,7 @@
     type ProgressAttempt,
     type ProgressSchedule,
     type PackDraft,
+    type ShapeDraft,
     type LiveSession,
     type LiveSessionDetail,
     type SessionJournalEntry,
@@ -63,6 +65,11 @@
   let drafts: readonly PackDraft[] = $state([]);
   let studioJson = $state("");
   let selectedDraftId: string | undefined = $state();
+  let shapeDrafts: readonly ShapeDraft[] = $state([]);
+  let shapeStudioJson = $state("");
+  let selectedShapeDraftId: string | undefined = $state();
+  let shapeProbeFen = $state("");
+  let shapeProbeResult: boolean | undefined = $state();
   let liveSessions: readonly LiveSession[] = $state([]);
   let liveDetail: LiveSessionDetail | undefined = $state();
   let activeLiveDetail: LiveSessionDetail | undefined = $state();
@@ -111,9 +118,9 @@
 
   let recentRun = $derived(runs[0]);
   let runContext = $derived(
-    route.name === "run" && session.pack && session.runState
+    route.name === "run" && session.runState
       ? {
-          title: session.pack.title as string,
+          title: (session.pack?.title as string | undefined) ?? "Just Play",
           access: session.runState.access,
           busy: session.busy,
         }
@@ -179,7 +186,7 @@
           api.dueProgress?.() ?? Promise.resolve([]),
         ]);
       } else if (next.name === "create") {
-        drafts = await (api.packDrafts?.() ?? Promise.resolve([]));
+        [drafts, shapeDrafts] = await Promise.all([api.packDrafts?.() ?? Promise.resolve([]), api.shapeDrafts?.() ?? Promise.resolve([])]);
       } else if (next.name === "live") {
         [liveSessions,runs]=await Promise.all([api.liveSessions?.()??Promise.resolve([]),api.runs(50,0)]);
       } else if (next.name === "live-session") {
@@ -293,6 +300,25 @@
     drafts = await (api.packDrafts?.() ?? Promise.resolve([]));
   }
 
+  async function createShapeDraft(): Promise<void> {
+    const draft = await api.createShapeDraft?.(JSON.parse(shapeStudioJson));
+    if (draft !== undefined) { shapeDrafts = [draft, ...shapeDrafts]; selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2); }
+  }
+  async function saveShapeDraft(): Promise<void> {
+    const draft = shapeDrafts.find((candidate) => candidate.id === selectedShapeDraftId); if (draft === undefined) return;
+    const saved = await api.updateShapeDraft?.(draft.id, draft.digest, JSON.parse(shapeStudioJson));
+    if (saved !== undefined) shapeDrafts = shapeDrafts.map((candidate) => candidate.id === saved.id ? saved : candidate);
+  }
+  async function lintShapeDraft(): Promise<void> {
+    const draft = shapeDrafts.find((candidate) => candidate.id === selectedShapeDraftId); if (draft === undefined) return;
+    const validation = await api.lintShapeDraft?.(draft.id, JSON.parse(shapeStudioJson), shapeProbeFen);
+    shapeProbeResult = validation?.probeMatches;
+  }
+  async function registerShapeDraft(): Promise<void> {
+    if (selectedShapeDraftId === undefined) return; await api.registerShapeDraft?.(selectedShapeDraftId);
+    shapeDrafts = await (api.shapeDrafts?.() ?? Promise.resolve([]));
+  }
+
   async function createLive(runId:string):Promise<void>{const created=await api.createLiveSession?.({runId,kind:liveKind,title:`${liveKind} session`,boardControl:liveBoardControl});if(created){liveSessions=[created,...liveSessions];navigate(routePath({name:"live-session",sessionId:created.id}));}}
   function liveWriterId(runId:string):string|undefined{return WriterSession.peek(runId,storage)?.writerId;}
   async function submitLiveProposal():Promise<void>{if(!liveDetail||!liveProposalMove)return;await api.proposeMove?.(liveDetail.session.id,liveDetail.activeNodeId,liveProposalMove);liveDetail=await api.liveSession?.(liveDetail.session.id);liveProposalMove="";}
@@ -380,14 +406,17 @@
       <button class="primary" type="button" onclick={() => navigate("/play")}>Go to Play</button>
     </main>
   {:else if route.name === "play"}
-    <PackList
-      {packs}
-      loading={session.busy}
-      error={session.error}
-      onSelect={(packId) => controller.startPack(packId)}
-    />
+    <div class="play-surface">
+      <JustPlayStarter busy={session.busy} onStart={(input) => controller.startPosition(input)} />
+      <PackList
+        {packs}
+        loading={session.busy}
+        error={session.error}
+        onSelect={(packId) => controller.startPack(packId)}
+      />
+    </div>
   {:else if route.name === "run"}
-    {#if session.pack && session.runState}
+    {#if session.runState}
       {#if session.runState.access === "read_only" && session.viewer?.mayWrite}
         <div class="claim-banner">
           <span>@{session.viewer.leaseHeldBy.handle} holds the board.</span>
@@ -396,6 +425,7 @@
       {/if}
       <DrillScreen
         pack={session.pack}
+        shapes={session.shapes}
         snapshot={session.runState}
         checkpoint={session.checkpoint}
         authoredFeedback={session.authoredFeedback}
@@ -500,6 +530,27 @@
         </section>
       </div>
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
+      <h2>Shape library editor</h2>
+      <div class="studio-grid">
+        <aside aria-label="Your shape drafts">
+          <h3>Your shape drafts</h3>
+          {#each shapeDrafts as draft}<button type="button" onclick={() => { selectedShapeDraftId = draft.id; shapeStudioJson = JSON.stringify(draft.document, null, 2); }}>{draft.shapeId} · {draft.state}</button>{:else}<p>No shape drafts yet.</p>{/each}
+        </aside>
+        <section>
+          <label for="shape-studio-json">Shape JSON</label><textarea id="shape-studio-json" bind:value={shapeStudioJson} spellcheck="false"></textarea>
+          <label>Probe FEN <input bind:value={shapeProbeFen} placeholder="Optional position to test the trigger" /></label>
+          <div class="row-actions">
+            <button type="button" onclick={() => void createShapeDraft()}>Create shape draft</button>
+            <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : undefined} onclick={() => void saveShapeDraft()}>Save shape</button>
+            <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : undefined} onclick={() => void lintShapeDraft()}>Lint + probe</button>
+            <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : undefined} onclick={() => void registerShapeDraft()}>Register community shape</button>
+          </div>
+          {#if shapeProbeResult !== undefined}<p role="status">Probe trigger: {shapeProbeResult ? "matches" : "does not match"}</p>{/if}
+          {#if !selectedShapeDraftId}<p id="shape-selection-required" class="honest">Select or create a shape draft first.</p>{/if}
+          {#if selectedShapeDraftId}{@const selectedShape=shapeDrafts.find((candidate)=>candidate.id===selectedShapeDraftId)}{#if selectedShape}<ul>{#each selectedShape.validation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}{/if}
+        </section>
+      </div>
+      <p class="honest">Shape entries name reusable patterns and plans. They do not prescribe a move in the current position.</p>
     </main>
   {:else if route.name === "live"}
     <main class="shell-view" aria-labelledby="live-title">
@@ -584,6 +635,7 @@
   :global(:focus-visible) { outline: 3px solid color-mix(in srgb, var(--accent) 65%, white); outline-offset: 2px; }
   :global(::selection) { background: color-mix(in srgb, var(--accent) 25%, white); }
   .shell-view { width: min(70rem, calc(100% - 2rem)); height: 100%; margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; overflow: auto; }
+  .play-surface{height:100%;overflow:auto;padding:1rem 0}
   .auth-gate { width: min(32rem, calc(100% - 2rem)); margin: 10vh auto; }
   .auth-gate h1 { font: 500 clamp(2rem, 6vw, 4rem)/1 var(--display-font); }
   .auth-gate form { display: grid; gap: 1rem; margin: 2rem 0 1rem; }

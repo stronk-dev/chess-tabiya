@@ -32,6 +32,7 @@ export {
 } from "./errors.js";
 export { appendEvents, deriveSegments, eventsSince, projectRun } from "./events.js";
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
+export { shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
 export { terminalOutcome } from "./outcome.js";
 export {
   STRUCTURAL_FEATURE_KINDS,

@@ -1,3 +1,4 @@
+import type { StructuralExpression, StructuralFeature } from "@chess-tabiya/schema/drill-pack";
 import type { StructuralObservation } from "@chess-tabiya/runtime";
 
 function side(color: "white" | "black" | undefined): string { return color === "white" ? "White" : "Black"; }
@@ -24,4 +25,39 @@ export function renderStructuralObservation(observation: StructuralObservation):
   if (observation.kind === "named_structure") return observation.provenanceNote ?? "A Tabiya catalogue structure matches this position.";
   const exhaustive: never = observation.kind;
   throw new TypeError(`Unhandled structural observation: ${String(exhaustive)}`);
+}
+
+function comparison(value: "atLeast" | "atMost" | "equal", count: number): string {
+  return value === "atLeast" ? `at least ${count}` : value === "atMost" ? `at most ${count}` : `exactly ${count}`;
+}
+
+function renderFeatureSpec(feature: StructuralFeature): string {
+  if (feature.kind === "pawn_safe_square") return `${feature.square} is currently safe from an opposing pawn advancing on its file for ${feature.color}`;
+  if (feature.kind === "outpost") return `${feature.square} matches Tabiya's strict outpost detector for ${feature.color}`;
+  if (feature.kind === "backward_pawn") return `${feature.color} has a backward pawn on the ${feature.file}-file`;
+  if (feature.kind === "isolated_pawn") return `${feature.color} has an isolated pawn on the ${feature.file}-file`;
+  if (feature.kind === "doubled_pawn") return `${feature.color} has doubled pawns on the ${feature.file}-file`;
+  if (feature.kind === "passed_pawn") return `${feature.color} has a passed pawn on ${feature.square}`;
+  if (feature.kind === "open_file") return `the ${feature.file}-file is open`;
+  if (feature.kind === "half_open_file") return `the ${feature.file}-file is half-open for ${feature.color}`;
+  if (feature.kind === "line_blockers") return `the line ${feature.from}–${feature.to} has ${comparison(feature.comparison, feature.count)} blockers`;
+  if (feature.kind === "direct_attack_count") return `${feature.square} has ${comparison(feature.comparison, feature.count)} direct ${feature.color} attackers`;
+  if (feature.kind === "piece_reach_count") return `${feature.scope} ${feature.color} ${feature.role} has ${comparison(feature.comparison, feature.count)} attack-reachable squares`;
+  if (feature.kind === "named_structure") return `Tabiya's ${feature.id} catalogue detector matches`;
+  const exhaustive: never = feature;
+  throw new TypeError(`Unhandled structural feature: ${JSON.stringify(exhaustive)}`);
+}
+
+export function renderStructuralExpressionSpec(expression: StructuralExpression): string {
+  if (expression.kind === "all") return expression.of.map(renderStructuralExpressionSpec).join(" and ");
+  if (expression.kind === "any") return expression.of.map(renderStructuralExpressionSpec).join(" or ");
+  if (expression.kind === "not") return `not: ${renderStructuralExpressionSpec(expression.of)}`;
+  if (expression.kind === "feature") return renderFeatureSpec(expression.feature);
+  if (expression.kind === "pieceOnSquare") {
+    return expression.piece === null
+      ? `${expression.square} is empty`
+      : `${expression.square} holds a ${expression.piece.color} ${expression.piece.role}`;
+  }
+  const exhaustive: never = expression;
+  throw new TypeError(`Unhandled structural expression: ${JSON.stringify(exhaustive)}`);
 }

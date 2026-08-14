@@ -14,6 +14,7 @@ import {
   type DrillClientApi,
   type PgnDownload,
   type RunGraph,
+  type ShapeEntryView,
 } from "./api.js";
 import { boardModel } from "./board-model.js";
 import {
@@ -33,6 +34,7 @@ export interface DrillSessionState {
   readonly error?: string;
   readonly pack?: DrillPackDefinition;
   readonly packDigest?: string;
+  readonly shapes?: readonly ShapeEntryView[];
   readonly runState?: RunStateSnapshot;
   readonly checkpoint?: CheckpointNotice;
   readonly comparison?: BranchComparison;
@@ -113,6 +115,17 @@ function policyConfig(
   });
 }
 
+function positionPolicyConfig(capabilities: Capabilities): PolicyConfig {
+  return Object.freeze({
+    seedMode: "fixed" as const,
+    locus: Object.freeze({
+      executedAt: "server" as const,
+      engineIds: Object.freeze(capabilities.engines.map((engine) => ({ id: engine.id, version: engine.version }))),
+      modelIds: Object.freeze(capabilities.engines.flatMap((engine) => engine.modelId === undefined ? [] : [{ id: engine.modelId, version: engine.version }])),
+    }),
+  });
+}
+
 function selectorMode(
   pack: DrillPackDefinition,
   capabilities: Capabilities,
@@ -177,28 +190,22 @@ export class DrillSessionController {
       if (started?.type !== "run.started") {
         throw new TypeError("Cannot resume a run without its run.started event");
       }
-      if (started.data.sessionKind === "position") {
-        this.#patch({
-          busy: false,
-          error: "This run is a position session; the position player is not built yet",
-        });
-        return;
-      }
-      const packId = started.data.packId;
-      if (packId === null) throw new TypeError("Pack run is missing its pack id");
       const claimed = WriterSession.peek(runId, this.#storage);
-      const [{ document, digest }, capabilities, graph] = await Promise.all([
-        this.#api.pack(packId),
-        this.#api.capabilities(),
-        this.#api.graph(runId, claimed?.writerId),
-      ]);
+      const [capabilities, graph] = await Promise.all([this.#api.capabilities(), this.#api.graph(runId, claimed?.writerId)]);
       const session =
         graph.viewer.holdsLease && claimed !== undefined
           ? claimed
           : WriterSession.observe(runId, this.#storage);
-      const store = this.#newStore(document, session, projectRun(eventPage.events));
+      const store = this.#newStore(session, projectRun(eventPage.events));
       this.#capabilities = capabilities;
-      this.#attachStore(store, document, digest);
+      if (started.data.sessionKind === "position") {
+        this.#attachStore(store, undefined, undefined, await this.#loadShapes());
+      } else {
+        const packId = started.data.packId;
+        if (packId === null) throw new TypeError("Pack run is missing its pack id");
+        const { document, digest } = await this.#api.pack(packId);
+        this.#attachStore(store, document, digest, await this.#loadShapes(document.shapes));
+      }
       this.#patch({ viewer: graph.viewer });
       await this.#playOpponentIfNeeded();
       await this.#refreshAuthoredFeedback();
@@ -230,14 +237,38 @@ export class DrillSessionController {
         session.writerId,
       );
       this.#capabilities = capabilities;
-      const store = this.#newStore(document, session, run);
-      this.#attachStore(store, document, digest);
+      const store = this.#newStore(session, run);
+      this.#attachStore(store, document, digest, await this.#loadShapes(document.shapes));
       await this.#playOpponentIfNeeded();
       await this.#refreshAuthoredFeedback();
       this.#onRunStarted?.({ runId });
     } catch (error) {
       this.#fail(error);
     }
+  }
+
+  async startPosition(input: {
+    readonly fen: string;
+    readonly side: "white" | "black";
+    readonly mode: "human_common" | "strong_engine";
+  }): Promise<void> {
+    this.#patch({ busy: true, error: undefined });
+    try {
+      const capabilities = await this.#api.capabilities();
+      if (!capabilities.policyModes.includes(input.mode)) throw new ApiError(422, "POLICY_MODE_UNSUPPORTED", `${input.mode} is unavailable`);
+      const runId = this.#runId(), seed = this.#seed();
+      const session = WriterSession.claimFor(runId, this.#storage);
+      const run = await this.#api.createRun({
+        id: runId,
+        session: { kind: "position", start: { fen: input.fen, side: input.side }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: input.mode } },
+        policyConfig: positionPolicyConfig(capabilities),
+        seed,
+      }, session.writerId);
+      this.#capabilities = capabilities;
+      this.#attachStore(this.#newStore(session, run), undefined, undefined, await this.#loadShapes());
+      await this.#playOpponentIfNeeded();
+      this.#onRunStarted?.({ runId });
+    } catch (error) { this.#fail(error); }
   }
 
   async move(uci: string): Promise<void> {
@@ -377,7 +408,7 @@ export class DrillSessionController {
   }
 
   async #playOpponentIfNeeded(): Promise<void> {
-    const pack = this.#requiredPack();
+    const pack = this.#state.pack;
     const capabilities = this.#capabilities;
     if (capabilities === undefined) throw new Error("Capabilities are unavailable");
     const runState = this.#requiredRun();
@@ -391,7 +422,7 @@ export class DrillSessionController {
       run.events.some(
         (event) => event.type === "outcome.reached" && event.data.nodeId === node.id,
       ) ||
-      boardModel(node.fen, packStartSide(pack)).turnColor === packStartSide(pack)
+      boardModel(node.fen, pack === undefined ? run.start.side : packStartSide(pack)).turnColor === (pack === undefined ? run.start.side : packStartSide(pack))
     ) {
       return;
     }
@@ -405,20 +436,20 @@ export class DrillSessionController {
   }
 
   #selectionRequest(): import("./api.js").SelectMoveRequest {
-    const pack = this.#requiredPack();
+    const pack = this.#state.pack;
     const capabilities = this.#capabilities;
     if (capabilities === undefined) throw new Error("Capabilities are unavailable");
     const run = this.#requiredRun().run;
-    const authored = record(pack.opponentPolicy);
+    const authored = record(pack?.opponentPolicy ?? run.opponentPolicy);
     const branch = run.branches.find((candidate) => candidate.id === run.activeCursor.branchId)!;
     return {
-      startFen: pack.start.fen,
+      startFen: pack?.start.fen ?? run.start.fen,
       historyUci: historyFrom(run, run.activeCursor.nodeId).flatMap((historyNode) =>
         historyNode.moveUci === null ? [] : [historyNode.moveUci],
       ),
       policy: {
-        mode: selectorMode(pack, capabilities),
-        policyConfigDigest: this.#state.packDigest!,
+        mode: pack === undefined ? (run.opponentPolicy.mode as "human_common" | "strong_engine") : selectorMode(pack, capabilities),
+        policyConfigDigest: this.#state.packDigest ?? run.sessionDigest,
         ...(typeof authored.targetElo === "number"
           ? { targetElo: authored.targetElo }
           : {}),
@@ -428,7 +459,7 @@ export class DrillSessionController {
         ...(typeof authored.topP === "number" ? { topP: authored.topP } : {}),
       },
       seed: branch.seed,
-      packId: pack.id,
+      ...(pack === undefined ? {} : { packId: pack.id }),
     };
   }
 
@@ -440,6 +471,7 @@ export class DrillSessionController {
 
   #captureCheckpoint(events: readonly DrillRunEvent[]): boolean {
     if (!events.some((event) => event.type === "checkpoint.reached")) return false;
+    if (this.#state.pack === undefined) return false;
     const checkpoint = latestCheckpoint(
       this.#requiredPack(),
       this.#requiredRun().run,
@@ -455,7 +487,6 @@ export class DrillSessionController {
   }
 
   #newStore(
-    pack: DrillPackDefinition,
     session: WriterSession,
     run: RunStateSnapshot["run"],
   ): RunStateStore {
@@ -466,8 +497,9 @@ export class DrillSessionController {
 
   #attachStore(
     store: RunStateStore,
-    pack: DrillPackDefinition,
-    digest: string,
+    pack: DrillPackDefinition | undefined,
+    digest: string | undefined,
+    shapes: readonly ShapeEntryView[],
   ): void {
     this.#unsubscribeStore?.();
     this.#store?.stop();
@@ -497,14 +529,20 @@ export class DrillSessionController {
     this.#patch({
       pack,
       packDigest: digest,
+      shapes,
       runState: store.snapshot,
       busy: false,
       error: undefined,
-      checkpoint: latestCheckpoint(pack, store.snapshot.run),
+      checkpoint: pack === undefined ? undefined : latestCheckpoint(pack, store.snapshot.run),
       comparison: undefined,
       comparisonBranchIds: undefined,
       authoredFeedback: undefined,
     });
+  }
+
+  async #loadShapes(ids?: readonly string[]): Promise<readonly ShapeEntryView[]> {
+    const selected = ids ?? (await this.#api.shapes()).map((shape) => shape.id);
+    return Object.freeze(await Promise.all(selected.map(async (id) => (await this.#api.shape(id)).document)));
   }
 
   #requiredStore(): RunStateStore {

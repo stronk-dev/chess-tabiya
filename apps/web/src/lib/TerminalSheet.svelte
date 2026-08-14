@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
 
   import type { RunOutcome } from "@chess-tabiya/runtime";
-  import type { AuthoredFeedbackItem } from "./api.js";
+  import type { AuthoredFeedbackItem, ShapeEntryView } from "./api.js";
   import type { EvidenceSentence } from "./evidence-sentences.js";
   import OutcomeContext from "./OutcomeContext.svelte";
   import type { DrillRun } from "@chess-tabiya/runtime";
@@ -19,9 +19,10 @@
     resistance?: readonly string[];
     grade?: string | undefined;
     run: DrillRun;
+    shapes?: readonly ShapeEntryView[];
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run, shapes = [] }: Props = $props();
   let heading: HTMLHeadingElement;
   onMount(() => heading?.focus());
 </script>
@@ -45,7 +46,7 @@
             <li>
               {#if item.kind === "annotation"}{item.text}
               {:else if item.kind === "deviation"}{item.note}
-              {:else if item.kind === "plan_class"}<strong>{item.label}</strong>{#if item.description} — {item.description}{/if}
+              {:else if item.kind === "plan_class"}<strong>{item.label}</strong>{#if item.shapePlan}{@const plan=shapes.find((entry)=>entry.id===item.shapePlan!.shape)?.plans.find((candidate)=>candidate.id===item.shapePlan!.plan)}{#if plan} — {plan.description}{/if}{/if}{#if item.description} — {item.description}{/if}
               {:else}{theoryVerdictSentence(item, run)}
               {/if}
             </li>

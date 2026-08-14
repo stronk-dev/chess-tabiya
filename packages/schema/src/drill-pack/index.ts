@@ -1,4 +1,4 @@
-export { canonicalizeJson, digestDrillPack, type JsonValue } from "./digest.js";
+export { canonicalizeJson, digestCanonicalJson, digestDrillPack, type JsonValue } from "./digest.js";
 export {
   lintDrillPack,
   reachableAuthoredSpineIds,

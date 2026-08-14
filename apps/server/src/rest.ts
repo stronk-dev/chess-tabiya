@@ -33,6 +33,8 @@ import type { Principal } from "./authorization.js";
 import type { RunRole } from "./storage.js";
 import type { PackStudio } from "./pack-studio.js";
 import type { LiveSessionService } from "./live-session.js";
+import { projectShapeEntry, type ShapeRegistry } from "./shape-registry.js";
+import type { ShapeStudio } from "./shape-studio.js";
 import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
@@ -389,14 +391,18 @@ export function errorResponse(error: unknown): Response {
               ? 410
             : error.code === "RUN_NOT_FOUND" ||
                 error.code === "PACK_NOT_FOUND" ||
+                error.code === "SHAPE_NOT_FOUND" ||
                 error.code === "EVIDENCE_RESULT_NOT_FOUND"
               ? 404
               : error.code === "RUN_ALREADY_EXISTS" ||
                 error.code === "FEEDBACK_WITHHELD" ||
                 error.code === "PACK_UNRESOLVABLE" ||
                 error.code === "PACK_ID_RESERVED" ||
+                error.code === "SHAPE_ID_RESERVED" ||
                 error.code === "PACK_VERSION_EXISTS" ||
+                error.code === "SHAPE_VERSION_EXISTS" ||
                 error.code === "PACK_ID_NOT_YOURS" ||
+                error.code === "SHAPE_ID_NOT_YOURS" ||
                 error.code === "DRAFT_STALE" ||
                 error.code === "BOARD_HELD" ||
                 error.code === "LEASE_MOVED" ||
@@ -407,6 +413,7 @@ export function errorResponse(error: unknown): Response {
                 : error.code === "ARENA_ROOT_MISMATCH"
                   ? 422
                 : error.code === "PACK_VERSION_NOT_INCREASING" ||
+                    error.code === "SHAPE_VERSION_NOT_INCREASING" ||
                     error.code === "PROVENANCE_STATUS_NOT_WRITABLE" ||
                     error.code === "GRADUATION_BLOCKERS_OUTSTANDING"
                     || error.code === "TOO_MANY_BRANCHES"
@@ -513,6 +520,8 @@ export function createRestHandler(
   identity?: IdentityService,
   studio?: PackStudio,
   live?: LiveSessionService,
+  shapes?: ShapeRegistry,
+  shapeStudio?: ShapeStudio,
 ): RestHandler {
   return async (request) => {
     try {
@@ -576,6 +585,36 @@ export function createRestHandler(
           );
         }
         return json(200, await capabilities.get());
+      }
+      if (url.pathname === "/shapes/drafts") {
+        if (shapeStudio === undefined) throw new ServerError("STORAGE_FAILURE", "Shape Studio is not configured");
+        const principal=authenticate();
+        if(request.method==="GET")return json(200,{drafts:shapeStudio.list(principal)});
+        if(request.method==="POST"){requireJson(request);const body=closedRecord(await parseBody(request),"/",["document"]);return json(201,{draft:await shapeStudio.create(principal,body.document)});}
+        return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
+      }
+      const shapeDraftRoute=/^\/shapes\/drafts\/([^/]+)(?:\/(lint|register))?$/.exec(url.pathname);
+      if(shapeDraftRoute!==null){
+        if(shapeStudio===undefined)throw new ServerError("STORAGE_FAILURE","Shape Studio is not configured");
+        const principal=authenticate(),id=decodeURIComponent(shapeDraftRoute[1]!),action=shapeDraftRoute[2];
+        if(request.method==="GET"&&action===undefined)return json(200,{draft:shapeStudio.required(id,principal)});
+        requireJson(request);const body=await parseBody(request);
+        if(request.method==="PUT"&&action===undefined)return json(200,{draft:await shapeStudio.update(id,principal,requiredString(request.headers.get("if-match"),"if-match header"),body.document)});
+        if(request.method==="POST"&&action==="lint")return json(200,shapeStudio.lint(body.document,optionalString(body.probeFen,"probeFen")));
+        if(request.method==="POST"&&action==="register")return json(201,{shape:await shapeStudio.register(id,principal)});
+        return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
+      }
+      const shapeExport=/^\/shapes\/([^/]+)\/export$/.exec(url.pathname);
+      if(request.method==="GET"&&shapeExport!==null){if(shapeStudio===undefined)throw new ServerError("STORAGE_FAILURE","Shape Studio is not configured");return json(200,shapeStudio.export(decodeURIComponent(shapeExport[1]!),authenticate()));}
+      if (request.method === "GET" && url.pathname === "/shapes") {
+        if (shapes === undefined) throw new ServerError("STORAGE_FAILURE", "Shape registry is not configured");
+        return json(200, { shapes: shapes.list() });
+      }
+      if (request.method === "GET" && /^\/shapes\/[^/]+$/.test(url.pathname)) {
+        if (shapes === undefined) throw new ServerError("STORAGE_FAILURE", "Shape registry is not configured");
+        const id = decodeURIComponent(url.pathname.slice("/shapes/".length));
+        const record = shapes.required(id);
+        return new Response(JSON.stringify(projectShapeEntry(record)), { status: 200, headers: { "cache-control": "no-store", "content-type": "application/json", "x-shape-digest": record.digest } });
       }
       if (url.pathname === "/packs/drafts") {
         if (studio === undefined) throw new ServerError("STORAGE_FAILURE", "Pack Studio is not configured");

@@ -1,0 +1,13 @@
+{
+  "id": "iqp-black", "version": "0.1.0", "name": "Black isolated queen pawn", "phases": ["middlegame"],
+  "trigger": { "kind": "feature", "feature": { "kind": "named_structure", "id": "iqp-black" } },
+  "plans": [
+    { "id": "black-piece-attack", "side": "black", "label": "Keep pieces and attack", "description": "Use the isolani's space and open lines while pieces remain.", "success": { "note": "Attacking success is not rules arithmetic.", "signature": null } },
+    { "id": "black-d4-break", "side": "black", "label": "Advance d5-d4", "description": "Advance the isolani when the opening of lines costs the defender most.", "success": { "note": "Post-break structures vary too widely for one expression.", "signature": null } },
+    { "id": "white-blockade-and-trade", "side": "white", "label": "Blockade and trade", "description": "Put a knight on d4 and reduce the attacking pieces.", "success": { "note": "A White knight blockades the still-isolated Black d-pawn.", "signature": { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "isolated_pawn", "color": "black", "file": "d" } }] } } },
+    { "id": "white-convert-the-endgame", "side": "white", "label": "Convert the endgame", "description": "Steer toward endings where the isolated pawn is a weakness rather than a spearhead.", "success": { "note": "The required material census is outside this vocabulary.", "signature": null } }
+  ],
+  "watch": ["Who occupies d4.", "The attacker and defender counts around the blockading square."],
+  "typicalMistakes": ["Blockading with the wrong piece.", "Trading into the attack.", "Allowing d5-d4 without a cost."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored shape example with no citation, engine evaluation, corpus frequency, or owner review."], "attribution": [] }
+}

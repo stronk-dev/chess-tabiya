@@ -104,6 +104,8 @@ function api(): DrillClientApi {
     async pack() {
       return { document: pack, digest };
     },
+    async shapes() { return []; },
+    async shape() { throw new Error("no shapes in shell fixture"); },
     async runs() {
       return [runSummary];
     },

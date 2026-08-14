@@ -122,8 +122,8 @@ function surfaces(providerState: CapabilityProviders): SurfaceCapabilities {
     learn: "available",
     live: "available",
     create: "available",
-    justPlay: "unavailable-here",
-    fromPosition: "unavailable-here",
+    justPlay: providerState.opponent === "none" ? "unavailable-here" : "available",
+    fromPosition: providerState.opponent === "none" ? "unavailable-here" : "available",
   });
   assertSurfaceCapabilities(value);
   return value;

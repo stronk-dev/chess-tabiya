@@ -44,26 +44,31 @@
     "pawn-trade-counting",
     "king-centralization"
   ],
+  "shapes": ["rook-4v3-same-side"],
   "planClasses": [
     {
       "id": "king-first",
       "label": "King before rook",
-      "description": "The rook on d8 already owns the open file and guards the back rank, so improve the piece that is doing nothing. Slowest-looking and hardest to punish; the pack's model scheme."
+      "description": "Here the rook on d8 already owns the open file and guards the back rank.",
+      "shapePlan": { "shape": "rook-4v3-same-side", "plan": "black-king-first" }
     },
     {
       "id": "active-second-rank",
       "label": "Rook to the second rank",
-      "description": "Grab the second rank at once and make White's king babysit f2 and g2. Real counterplay — but the rook that leaves d8 leaves the back rank, and here that has an immediate cost."
+      "description": "Here leaving d8 also leaves the back rank, with an immediate cost.",
+      "shapePlan": { "shape": "rook-4v3-same-side", "plan": "black-active-second-rank" }
     },
     {
       "id": "sixth-rank-restraint",
       "label": "Rook on the sixth",
-      "description": "Philidor-style restraint adapted to a position with no passed pawn: the rook sits on the sixth rank so White's king cannot cross it. Structurally sound, but the e-pawn advances with tempo against it."
+      "description": "In this position the e-pawn can advance with tempo against the restraining rook.",
+      "shapePlan": { "shape": "rook-4v3-same-side", "plan": "black-sixth-rank-restraint" }
     },
     {
       "id": "trade-pawns-not-rooks",
       "label": "Trade pawns, never rooks",
-      "description": "Count instead of calculating: every pair of pawns that comes off shortens the defence, and the rooks are what make the position holdable at all. Decline every rook trade, invite every pawn trade."
+      "description": "The concrete task here is to decline White's offered rook trade on d1-d8.",
+      "shapePlan": { "shape": "rook-4v3-same-side", "plan": "black-trade-pawns-not-rooks" }
     }
   ],
   "spine": [

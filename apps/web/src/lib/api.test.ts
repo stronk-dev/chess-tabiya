@@ -106,6 +106,7 @@ describe("DrillApi", () => {
         });
       }
       if (url.endsWith("/packs")) return json([]);
+      if (url.endsWith("/shapes")) return json({ shapes: [] });
       if (url.endsWith("/packs/pack-one")) {
         return json(
           { id: "pack-one", version: "0.2", start: { fen: run.nodes[0]!.fen, side: "white" } },
@@ -169,11 +170,9 @@ describe("DrillApi", () => {
       providers: { opponent: "mock", judge: "mock", llm: "none" },
       surfaces: { play: "available", learn: "available" },
     });
-    expect(PLANNED_SURFACES).toEqual([
-      "justPlay",
-      "fromPosition",
-    ]);
+    expect(PLANNED_SURFACES).toEqual([]);
     await api.packs();
+    await api.shapes();
     expect((await api.pack("pack-one")).digest).toBe(run.packDigest);
     await api.createRun(createInput, "writer-one");
     await api.runs(20, 5);
@@ -209,6 +208,7 @@ describe("DrillApi", () => {
     expect(calls.map((call) => new URL(call.url).pathname)).toEqual([
       "/capabilities",
       "/packs",
+      "/shapes",
       "/packs/pack-one",
       "/runs",
       "/runs",

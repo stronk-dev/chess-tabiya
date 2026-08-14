@@ -75,8 +75,8 @@ const capabilities: Capabilities = {
     learn: "unavailable-here",
     live: "available",
     create: "unavailable-here",
-    justPlay: "unavailable-here",
-    fromPosition: "unavailable-here",
+    justPlay: "available",
+    fromPosition: "available",
   },
 };
 
@@ -148,6 +148,9 @@ class FakeApi implements DrillClientApi {
     return { document: this.document, digest };
   }
 
+  async shapes(): Promise<readonly import("./api.js").ShapeSummary[]> { return []; }
+  async shape(): Promise<import("./api.js").ShapeDocument> { throw new Error("no shapes in fake"); }
+
   async runs(): Promise<readonly RunSummary[]> {
     return [];
   }
@@ -156,17 +159,17 @@ class FakeApi implements DrillClientApi {
     this.created = input;
     this.writerIds.push(writerId);
     this.activeWriterId = writerId;
-    if (input.session.kind !== "pack") throw new Error("fake supports pack sessions only");
+    const isPack = input.session.kind === "pack";
     this.run = createRun({
       id: input.id,
-      session: {
+      session: isPack ? {
         kind: "pack",
         packId: input.session.packId,
         packDigest: digest,
         start: { fen: this.document.start.fen, side: (this.document.start.side ?? "white") as "white" | "black" },
         feedbackPolicy: (this.document.feedbackPolicy ?? "delayed_checkpoint") as "delayed_checkpoint" | "segment_end",
         opponentPolicy: { mode: "human_common" },
-      },
+      } : input.session,
       sessionDigest: digest,
       policyConfig: input.policyConfig,
       seed: input.seed,
@@ -524,7 +527,7 @@ describe("DrillSessionController", () => {
     expect(storage.values.size).toBe(0);
   });
 
-  it("refuses a position-session resume without minting or fetching pack state", async () => {
+  it("resumes a position session read-only without minting or fetching pack state", async () => {
     const api = new FakeApi();
     api.run = createRun({
       id: "position-run",
@@ -547,12 +550,25 @@ describe("DrillSessionController", () => {
 
     await environment.controller.resume("position-run");
 
-    expect(environment.controller.state).toMatchObject({
-      busy: false,
-      error: "This run is a position session; the position player is not built yet",
-    });
-    expect(environment.controller.state.runState).toBeUndefined();
+    expect(environment.controller.state).toMatchObject({ busy: false, runState: { access: "read_only", run: { id: "position-run" } }, shapes: [] });
+    expect(environment.controller.state.pack).toBeUndefined();
     expect(storage.values.size).toBe(0);
+  });
+
+  it("starts Just Play from a position and requests an initial opponent move when needed", async () => {
+    const api = new FakeApi(pack, "e2e4", false);
+    const environment = controller(api);
+
+    await environment.controller.startPosition({
+      fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      side: "black",
+      mode: "human_common",
+    });
+
+    expect(api.created?.session).toMatchObject({ kind: "position", feedbackPolicy: "attempt_end" });
+    expect(api.selected).toMatchObject({ startFen: expect.stringContaining("rnbqkbnr"), historyUci: [], policy: { mode: "human_common", policyConfigDigest: digest } });
+    expect(environment.controller.state.pack).toBeUndefined();
+    expect(environment.controller.state.runState?.run.nodes.at(-1)).toMatchObject({ moveUci: "e2e4", actor: "opponent" });
   });
 
   it("does not request an initial opponent ply for a read-only follower", async () => {

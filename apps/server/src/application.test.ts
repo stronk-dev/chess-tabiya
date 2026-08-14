@@ -67,4 +67,21 @@ describe("development application mock opponent", () => {
       choose(["c8f5", "g1f3", "e7e6", "f1e2"]),
     ).resolves.toMatchObject({ moveUci: "c6c5" });
   });
+
+  it("serves the official shape catalogue and only the pack's public shape references", async () => {
+    application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false });
+    await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
+    const address = application.server.address() as AddressInfo;
+    const origin = `http://127.0.0.1:${address.port}`;
+    const summaries = (await (await fetch(`${origin}/shapes`)).json()) as { shapes: { id: string; channel: string }[] };
+    expect(summaries.shapes).toEqual(expect.arrayContaining([expect.objectContaining({ id: "carlsbad", channel: "official" })]));
+    const detail = await fetch(`${origin}/shapes/carlsbad`);
+    expect(detail.status).toBe(200); expect(detail.headers.get("x-shape-digest")).toMatch(/^sha256:/);
+    expect(await detail.json()).toMatchObject({ id: "carlsbad", channel: "official" });
+    const pack = await fetch(`${origin}/packs/carlsbad-minority-attack`);
+    const projected = await pack.json() as Record<string, unknown>;
+    expect(projected.shapes).toEqual(["carlsbad"]);
+    expect(projected).not.toHaveProperty("planClasses");
+    expect(projected).not.toHaveProperty("successConditions");
+  });
 });

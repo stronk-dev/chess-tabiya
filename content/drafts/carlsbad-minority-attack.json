@@ -59,21 +59,25 @@
     "plan-exclusivity",
     "backward-pawn-target"
   ],
+  "shapes": ["carlsbad"],
   "planClasses": [
     {
       "id": "minority-attack",
       "label": "Minority attack (a3, Rab1, b4-b5)",
-      "description": "Two queenside pawns advance against three. The aim is not to win material: it is to force a structural concession on c6. If Black lets you play bxc6 bxc6, the c6 pawn is backward on a file where you have no pawn at all, and it stays a target into the ending. Slow, low-risk, and the plan the rest of your pieces already support."
+      "description": "In this tabiya the plan is already supported: Nc3 and Bd3 both bear on b5 before the pawn ever gets there, which is why it is the pack's main line.",
+      "shapePlan": { "shape": "carlsbad", "plan": "white-minority-attack" }
     },
     {
       "id": "central-break",
       "label": "Central break (f3 and e3-e4)",
-      "description": "The reason the knight went to e2 rather than f3: the f-pawn is free to support e4. Prepare with f3, a rook to e1, and only then break. Trading in the centre turns the position from a slow structural game into a piece game, which is the point — but f3 loosens your king, and the queenside pawns stay home."
+      "description": "The reason the knight went to e2 rather than f3: here the break needs f3, a rook to e1, and only then e4.",
+      "shapePlan": { "shape": "carlsbad", "plan": "white-central-break" }
     },
     {
       "id": "kingside-attack",
       "label": "Kingside attack (Ng3, the g6 hook, h4-h5)",
-      "description": "Black's h7 pawn is covered three times in the starting position, so the attack is not a sacrifice hunt: it is a plan to create a hook. When a black knight comes to g6, h4-h5 gains a tempo and opens a line. The cost is that these pawn moves stand in front of your own king and cannot be taken back."
+      "description": "In this position h7 starts with three defenders, so the attack is a plan to change that count; h4-h5 only gains a tempo once a Black knight has come to g6.",
+      "shapePlan": { "shape": "carlsbad", "plan": "white-kingside-attack" }
     }
   ],
   "spine": [

@@ -102,8 +102,8 @@ describe("engine capabilities", () => {
           learn: "available",
           live: "available",
           create: "available",
-          justPlay: "unavailable-here",
-          fromPosition: "unavailable-here",
+          justPlay: "available",
+          fromPosition: "available",
         },
       });
       expect(observed).toEqual(["stockfish-analysis", "maia-5m"]);
@@ -133,6 +133,7 @@ describe("engine capabilities", () => {
     });
     expect(descriptor.engines).toEqual([identity]);
     expect(descriptor.surfaces.play).toBe("available");
+    expect(descriptor.surfaces.justPlay).toBe("available");
   });
 
   it("downgrades unhealthy real providers instead of reporting stale identities", async () => {
@@ -166,6 +167,7 @@ describe("engine capabilities", () => {
       llm: "none",
     });
     expect(descriptor.surfaces.play).toBe("unavailable-here");
+    expect(descriptor.surfaces.justPlay).toBe("unavailable-here");
   });
 
   it("rejects planned or unknown values at the server response boundary", () => {

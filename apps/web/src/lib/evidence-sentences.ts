@@ -108,10 +108,10 @@ export function evidencePayloadTable(
 
 export function renderEvidenceRef(
   reference: string,
-  pack: DrillPackDefinition,
+  pack?: DrillPackDefinition,
   payloads: ReadonlyMap<string, EvidencePayload> = new Map(),
 ): EvidenceSentence {
-  const authored = evidenceSentenceTable(pack).get(reference);
+  const authored = pack === undefined ? undefined : evidenceSentenceTable(pack).get(reference);
   if (authored !== undefined) return authored;
 
   if (reference.startsWith("engine:")) {

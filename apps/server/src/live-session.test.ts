@@ -25,7 +25,7 @@ describe("live session platform",()=>{
   async function register(handler:ReturnType<typeof createRestHandler>,handle:string){const response=await request(handler,"POST","/auth/register",{body:{handle,password:PASSWORD}});return {cookie:cookie(response),learner:(await response.json() as any).learner as {id:string;handle:string}};}
 
   it("migrates to the live schema and enforces board control, proposals, and namespaced advisory votes",async()=>{
-    const {storage,queue,handler}=setup();expect(STORAGE_VERSION).toBe(9);
+    const {storage,queue,handler}=setup();expect(STORAGE_VERSION).toBe(10);
     const alice=await register(handler,"alice");const bob=await register(handler,"bob");const chat=await register(handler,"chatbridge");
     const run={id:"live-run",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:7};
     expect((await request(handler,"POST","/runs",{cookie:alice.cookie,writerId:"writer-a",body:run})).status).toBe(201);

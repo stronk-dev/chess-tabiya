@@ -49,6 +49,7 @@ export type AuthoredFeedbackItem =
       readonly anchor: { readonly checkpointId: string };
       readonly label: string;
       readonly description?: string;
+      readonly shapePlan?: { readonly shape: string; readonly plan: string };
     }
   | {
       readonly kind: "theory_verdict";
@@ -294,6 +295,7 @@ export function projectAuthoredFeedback(
             ...(definition.description === undefined
               ? {}
               : { description: definition.description }),
+            ...(definition.shapePlan === undefined ? {} : { shapePlan: definition.shapePlan }),
           }),
         );
       }

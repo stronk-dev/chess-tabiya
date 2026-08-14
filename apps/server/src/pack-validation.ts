@@ -34,6 +34,10 @@ export interface PackValidationResult {
   readonly document?: DrillPackDefinition;
 }
 
+export interface PackShapeLookup {
+  get(id: string): { readonly document: { readonly plans: readonly { readonly id: string }[] } } | undefined;
+}
+
 let schemaValidator: ValidateFunction | undefined;
 
 function validator(): ValidateFunction {
@@ -86,7 +90,7 @@ const PLAN_OBJECTIVES = new Set([
   "prevent_opponent_plan", "transition_to_endgame",
 ]);
 
-function structuralIssues(value: unknown, path = "", depth = 0): readonly PackValidationIssue[] {
+export function structuralIssues(value: unknown, path = "", depth = 0): readonly PackValidationIssue[] {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return [];
   const object = value as Record<string, unknown>;
   const issues: PackValidationIssue[] = [];
@@ -124,10 +128,20 @@ function structuralIssuesInPack(pack: DrillPackDefinition): readonly PackValidat
   return Object.freeze(issues);
 }
 
-function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[] {
+function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
   issues.push(...structuralIssuesInPack(pack));
   const raw = pack as unknown as Record<string, unknown>;
+  const shapeIds = new Set(pack.shapes ?? []);
+  for (const [index, shapeId] of (pack.shapes ?? []).entries()) {
+    if (shapes !== undefined && shapes.get(shapeId) === undefined) issues.push(runtimeIssue("SHAPE_REFERENCE_UNKNOWN", `/shapes/${index}`, `unknown shape ${shapeId}`));
+  }
+  for (const [index, planClass] of (pack.planClasses ?? []).entries()) {
+    if (planClass.shapePlan === undefined) continue;
+    if (!shapeIds.has(planClass.shapePlan.shape)) issues.push(runtimeIssue("SHAPE_PLAN_REF_UNLISTED", `/planClasses/${index}/shapePlan`, `shape ${planClass.shapePlan.shape} is not listed in pack.shapes`));
+    const entry = shapes?.get(planClass.shapePlan.shape);
+    if (entry !== undefined && !entry.document.plans.some((plan) => plan.id === planClass.shapePlan!.plan)) issues.push(runtimeIssue("SHAPE_PLAN_UNKNOWN", `/planClasses/${index}/shapePlan`, `shape ${planClass.shapePlan.shape} has no plan ${planClass.shapePlan.plan}`));
+  }
   const mode = raw.mode;
 
   const provenance = raw.provenance as Record<string, unknown>;
@@ -504,7 +518,7 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
   return Object.freeze(issues);
 }
 
-export function validatePackDocument(value: unknown): PackValidationResult {
+export function validatePackDocument(value: unknown, options: { readonly shapes?: PackShapeLookup } = {}): PackValidationResult {
   const validate = validator();
   if (!validate(value)) {
     return Object.freeze({
@@ -524,7 +538,7 @@ export function validatePackDocument(value: unknown): PackValidationResult {
         message: issue.message,
       }),
     ),
-    ...runtimeIssues(document),
+    ...runtimeIssues(document, options.shapes),
   ];
   return Object.freeze({
     valid: !issues.some((issue) => issue.severity === "error"),

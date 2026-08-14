@@ -37,6 +37,8 @@ import { SQLiteRunStorage } from "./storage.js";
 import { IdentityService } from "./identity.js";
 import { stockfishPlaySpec } from "./strong-engine.js";
 import { LiveSessionService } from "./live-session.js";
+import { ShapeRegistry } from "./shape-registry.js";
+import { ShapeStudio } from "./shape-studio.js";
 
 export type EngineMode = "mock" | "maia";
 
@@ -212,6 +214,8 @@ function isApiPath(pathname: string): boolean {
     pathname === "/capabilities" ||
     pathname === "/packs" ||
     pathname.startsWith("/packs/") ||
+    pathname === "/shapes" ||
+    pathname.startsWith("/shapes/") ||
     pathname === "/runs" ||
     pathname.startsWith("/runs/") ||
     pathname === "/select-move"
@@ -266,14 +270,18 @@ export async function createApplication(
 ): Promise<ChessTabiyaApplication> {
   const databasePath = options.databasePath ?? ":memory:";
   if (databasePath !== ":memory:") await mkdir(dirname(databasePath), { recursive: true });
+  const storage = new SQLiteRunStorage(databasePath);
+  const shapes = await ShapeRegistry.loadDefault();
+  const shapeStudio = new ShapeStudio(storage, shapes);
+  await shapeStudio.hydrate();
   const registry = await PackRegistry.loadDefault({
     development: options.development === true,
+    shapes,
     ...(options.draftPackFile === undefined
       ? {}
       : { draftFile: options.draftPackFile }),
   });
-  const storage = new SQLiteRunStorage(databasePath);
-  const studio = new PackStudio(storage, registry);
+  const studio = new PackStudio(storage, registry, shapes);
   studio.hydrate();
   const engineMode = options.engineMode ?? "mock";
   let supervisor: EngineSupervisor | undefined;
@@ -319,7 +327,7 @@ export async function createApplication(
     cookieSecure: options.cookieSecure ?? true,
   });
   const live = new LiveSessionService(storage, { runService: service });
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

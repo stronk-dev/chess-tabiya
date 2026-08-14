@@ -56,11 +56,16 @@ export function canonicalizeJson(value: unknown): string {
 }
 
 /** Digest of the complete pack document, including its version. */
-export async function digestDrillPack(pack: unknown): Promise<string> {
-  const bytes = new TextEncoder().encode(canonicalizeJson(pack));
+export async function digestCanonicalJson(value: unknown): Promise<string> {
+  const bytes = new TextEncoder().encode(canonicalizeJson(value));
   const digest = await globalThis.crypto.subtle.digest("SHA-256", bytes);
   const hex = [...new Uint8Array(digest)]
     .map((value) => value.toString(16).padStart(2, "0"))
     .join("");
   return `sha256:${hex}`;
+}
+
+/** Digest of the complete pack document, including its version. */
+export function digestDrillPack(pack: unknown): Promise<string> {
+  return digestCanonicalJson(pack);
 }

@@ -1,0 +1,24 @@
+{
+  "id": "rook-4v3-same-side", "version": "0.1.0", "name": "Same-wing rook ending (4v3 family)", "phases": ["endgame"],
+  "trigger": { "kind": "all", "of": [
+    { "kind": "feature", "feature": { "kind": "piece_reach_count", "color": "white", "role": "rook", "scope": "any", "comparison": "atLeast", "count": 0 } },
+    { "kind": "feature", "feature": { "kind": "piece_reach_count", "color": "black", "role": "rook", "scope": "any", "comparison": "atLeast", "count": 0 } },
+    { "kind": "not", "of": { "kind": "any", "of": [
+      { "kind": "feature", "feature": { "kind": "piece_reach_count", "color": "white", "role": "queen", "scope": "any", "comparison": "atLeast", "count": 0 } }, { "kind": "feature", "feature": { "kind": "piece_reach_count", "color": "black", "role": "queen", "scope": "any", "comparison": "atLeast", "count": 0 } },
+      { "kind": "feature", "feature": { "kind": "piece_reach_count", "color": "white", "role": "bishop", "scope": "any", "comparison": "atLeast", "count": 0 } }, { "kind": "feature", "feature": { "kind": "piece_reach_count", "color": "black", "role": "bishop", "scope": "any", "comparison": "atLeast", "count": 0 } },
+      { "kind": "feature", "feature": { "kind": "piece_reach_count", "color": "white", "role": "knight", "scope": "any", "comparison": "atLeast", "count": 0 } }, { "kind": "feature", "feature": { "kind": "piece_reach_count", "color": "black", "role": "knight", "scope": "any", "comparison": "atLeast", "count": 0 } }
+    ] } },
+    { "kind": "feature", "feature": { "kind": "open_file", "file": "a" } }, { "kind": "feature", "feature": { "kind": "open_file", "file": "b" } }, { "kind": "feature", "feature": { "kind": "open_file", "file": "c" } }, { "kind": "feature", "feature": { "kind": "open_file", "file": "d" } }
+  ] },
+  "plans": [
+    { "id": "black-king-first", "side": "black", "label": "King before rook", "description": "Improve the king while the rook already owns the open file.", "success": { "note": "Holding is an outcome and has no structural signature here.", "signature": null } },
+    { "id": "black-trade-pawns-not-rooks", "side": "black", "label": "Trade pawns, not rooks", "description": "Every pawn trade shortens the defence; keep the rook that makes it holdable.", "success": { "note": "Pawn-count progress is outside this vocabulary.", "signature": null } },
+    { "id": "black-sixth-rank-restraint", "side": "black", "label": "Sixth-rank restraint", "description": "Use the rook to restrain the opposing king before seeking activity.", "success": { "note": "Holding is an outcome and has no structural signature here.", "signature": null } },
+    { "id": "black-active-second-rank", "side": "black", "label": "Active second rank", "description": "Seek counterplay against the pawns while keeping the rook active.", "success": { "note": "Activity quality is not rules arithmetic.", "signature": null } },
+    { "id": "white-king-up-pawns-forward", "side": "white", "label": "King up, pawns forward", "description": "Bring the king toward the pawns before fixing their advances.", "success": { "note": "Conversion is an outcome and has no structural signature here.", "signature": null } },
+    { "id": "white-offer-rook-trades", "side": "white", "label": "Offer rook trades", "description": "Use rook exchanges to convert the extra pawn when the resulting pawn ending works.", "success": { "note": "Whether the pawn ending works is not expressed by this vocabulary.", "signature": null } }
+  ],
+  "watch": ["This fires for the family; count the pawns yourself.", "Whether the defending rook stays active.", "Whether a rook trade changes the result."],
+  "typicalMistakes": ["Using the rook before improving the king.", "Trading rooks while behind a pawn.", "Allowing the stronger king to cross unchecked."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["Extracted from content/drafts/rook-4v3-same-side.json.", "UNGROUNDED: strategic claims inherit Pack C's authored-assessment limitations."], "attribution": [{ "title": "Rook 4v3 same-side drill pack", "author": "Tabiya", "licence": "CC-BY-SA-4.0" }] }
+}

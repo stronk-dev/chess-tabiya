@@ -11,7 +11,7 @@ import {
 } from "@chess-tabiya/schema/drill-pack";
 
 import { ServerError } from "./errors.js";
-import { validatePackDocument } from "./pack-validation.js";
+import { validatePackDocument, type PackShapeLookup } from "./pack-validation.js";
 import { assessmentGrounding } from "./sourcing/ledger-validation.js";
 
 export const SIDECAR_BASENAMES = Object.freeze([
@@ -104,6 +104,7 @@ export function projectPackDocument(
     }),
     feedbackPolicy: raw.feedbackPolicy,
     opponentPolicy: raw.opponentPolicy,
+    ...(document.shapes === undefined ? {} : { shapes: document.shapes }),
     spine: raw.mode === "line" ? [] : (document.spine ?? []).map(projectSpineNode),
     checkpoints: document.checkpoints.map((checkpoint) => ({
       id: checkpoint.id,
@@ -120,8 +121,8 @@ export function projectPackDocument(
   });
 }
 
-function validatedDocument(value: unknown, source: string): DrillPackDefinition {
-  const result = validatePackDocument(value);
+function validatedDocument(value: unknown, source: string, shapes?: PackShapeLookup): DrillPackDefinition {
+  const result = validatePackDocument(value, { ...(shapes === undefined ? {} : { shapes }) });
   if (!result.valid || result.document === undefined) {
     const errors = result.issues.filter((issue) => issue.severity === "error");
     throw new ServerError(
@@ -216,11 +217,11 @@ export class PackRegistry {
       readonly ledger?: unknown;
       readonly manifest?: unknown;
     }[],
-    options: { readonly replaceDuplicates?: boolean } = {},
+    options: { readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup } = {},
   ): Promise<PackRegistry> {
     const records = new Map<string, PackRecord>();
     for (const { source, value, ledger, manifest } of documents) {
-      const document = freeze(validatedDocument(value, source));
+      const document = freeze(validatedDocument(value, source, options.shapes));
       if (records.has(document.id) && options.replaceDuplicates !== true) {
         throw new ServerError(
           "PACK_INVALID",
@@ -263,6 +264,7 @@ export class PackRegistry {
       readonly development?: boolean;
       readonly draftFile?: string;
       readonly draftsDirectory?: string;
+      readonly shapes?: PackShapeLookup;
     } = {},
   ): Promise<PackRegistry> {
     const fixture = fileURLToPath(
@@ -304,6 +306,7 @@ export class PackRegistry {
     );
     return PackRegistry.fromDocuments(documents, {
       replaceDuplicates: options.development === true,
+      ...(options.shapes === undefined ? {} : { shapes: options.shapes }),
     });
   }
 

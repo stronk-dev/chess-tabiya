@@ -6,6 +6,7 @@ import {
   type PackValidationIssue,
 } from "./pack-validation.js";
 import { isSidecarName } from "./pack-registry.js";
+import { ShapeRegistry } from "./shape-registry.js";
 
 export interface PackCheckResult {
   readonly file: string;
@@ -68,7 +69,8 @@ export async function checkPackFile(file: string): Promise<PackCheckResult> {
       ]),
     });
   }
-  const result = validatePackDocument(value);
+  const shapes = await ShapeRegistry.loadDefault();
+  const result = validatePackDocument(value, { shapes });
   return Object.freeze({ file: absolute, valid: result.valid, issues: result.issues });
 }
 
