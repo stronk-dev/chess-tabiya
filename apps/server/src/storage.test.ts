@@ -81,6 +81,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 12, name: "imported games and run schema" },
       { version: 13, name: "public story tokens and run derivations" },
       { version: 14, name: "native matches and session join tokens" },
+      { version: 15, name: "learner repertoires, scans, and gap-run links" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -98,7 +99,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(14);
+    ).toBe(15);
     inspection.close();
   });
 
@@ -124,7 +125,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       PRAGMA user_version=13;
     `);fixture.close();
 
-    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"}]);
+    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"}]);
     expect(upgraded.liveSession(session.id)?.title).toBe("Old class");expect(upgraded.publicTokenByHash("hash-old")).toMatchObject({scope:"story_read",runId:value.id});upgraded.close();
     const inspection=new DatabaseSync(filename);expect((inspection.prepare("PRAGMA foreign_key_check").all())).toEqual([]);for(const table of ["session_proposals","session_vote_windows","session_invitations","arena_legs"]){const targets=(inspection.prepare(`PRAGMA foreign_key_list(${table})`).all() as readonly Record<string,unknown>[]).map((row)=>row.table);expect(targets).toContain("live_sessions");expect(targets).not.toContain("live_sessions_v14");}expect(String((inspection.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='live_sessions'").get() as {sql:string}).sql)).toContain("'match'");inspection.close();
     const freshFile=join(directory,"fresh.sqlite"),freshStorage=new SQLiteRunStorage(freshFile,{onMigration:()=>{}});freshStorage.close();const upgradedSchema=new DatabaseSync(filename),freshSchema=new DatabaseSync(freshFile);
@@ -183,6 +184,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 12, name: "imported games and run schema" },
       { version: 13, name: "public story tokens and run derivations" },
       { version: 14, name: "native matches and session join tokens" },
+      { version: 15, name: "learner repertoires, scans, and gap-run links" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.10");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
@@ -268,6 +270,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 12, name: "imported games and run schema" },
       { version: 13, name: "public story tokens and run derivations" },
       { version: 14, name: "native matches and session join tokens" },
+      { version: 15, name: "learner repertoires, scans, and gap-run links" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.10");
     expect(upgraded.read(quarantined.id)).toBeUndefined();

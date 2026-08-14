@@ -257,6 +257,10 @@ export interface HumanSplitPage {
 export interface CorpusPopulation { readonly source: "lichess-explorer"; readonly ratings: readonly number[]; readonly speeds: readonly string[]; readonly since: string; readonly until: string; }
 export type CorpusResult = { readonly kind: "stats"; readonly total: number; readonly white: number; readonly draws: number; readonly black: number; readonly moves: readonly { readonly san: string; readonly uci: string; readonly playedCount: number; readonly sharePct: number }[]; readonly recency: { readonly kind: "month"; readonly lastPlayedMonth: string } | { readonly kind: "absent" }; readonly population: CorpusPopulation } | { readonly kind: "abstention"; readonly reason: "no_data_at_band" | "source_unavailable"; readonly detail: string; readonly population: CorpusPopulation };
 export interface CorpusPage { readonly nodeId: string; readonly result: CorpusResult; readonly committedMoveSan: string | null; }
+export interface RepertoireSummary {readonly id:string;readonly name:string;readonly side:"white"|"black";readonly targetElo:number;readonly coverageDenominator:number;readonly digest:string;readonly updatedAt:string;readonly scan:null|{readonly scannedAt:string;readonly stale:boolean;readonly truncated:boolean;readonly gapCount:number}}
+export interface RepertoireView extends RepertoireSummary {readonly rootFen:string;readonly sourceKind:"pgn_paste"|"lichess_study";readonly sourceUrl:string|null;readonly licenceNote:string;readonly moves:readonly {readonly positionKey:string;readonly moveUci:string;readonly moveSan:string;readonly representativeFen:string;readonly rank:number;readonly origin:"imported"|"chosen_from_attempt"}[]}
+export interface RepertoireGap {readonly key:string;readonly representativeFen:string;readonly replySan:string;readonly replyUci:string;readonly line:readonly string[];readonly mass?:number;readonly gamesUntilSeen?:number;readonly state:"open"|"addressed"|"answered";readonly runId:string|null}
+export interface RepertoireGapPage {readonly status:"pending"|"never_scanned"|"ready";readonly repertoire:RepertoireSummary;readonly scan:null|{readonly population:CorpusPopulation;readonly gaps:readonly RepertoireGap[];readonly alternateGaps:readonly RepertoireGap[];readonly unknown:readonly {readonly key:string;readonly line:readonly string[];readonly reason:string;readonly detail:string;readonly gamesUntilPosition:number}[];readonly uncoveredMass:number;readonly truncated:boolean;readonly sourceFailures:number;readonly queriesUsed:number;readonly unreachedKeys:number;readonly guard:string;readonly partiality:string|null}}
 
 export interface VoicePage { readonly text: string; readonly source: "provider" | "deterministic"; readonly scope: "marker" | "reading" | "steering" | "story"; }
 
@@ -569,6 +573,12 @@ export interface DrillClientApi extends RunApi {
   mintSessionLink?(sessionId:string,input:{readonly matchSlot?:"white"|"black";readonly invitedRole:"participant"|"spectator";readonly invitedHandle?:string;readonly expiresInDays?:number}):Promise<{readonly id:string;readonly token:string;readonly url:string}>;
   revokeSessionLink?(sessionId:string,linkId:string):Promise<void>;
   redeemSessionLink?(token:string):Promise<{readonly session:LiveSession;readonly runId:string}>;
+  repertoires?():Promise<readonly RepertoireSummary[]>;
+  createRepertoire?(input:{readonly name:string;readonly side:"white"|"black";readonly targetElo:number;readonly coverageDenominator:number;readonly source:{readonly kind:"pgn";readonly pgn:string}|{readonly kind:"lichess_study";readonly url:string}}):Promise<RepertoireView>;
+  repertoireGaps?(id:string):Promise<RepertoireGapPage>;
+  scanRepertoire?(id:string):Promise<void>;
+  enterRepertoireGap?(id:string,gapKey:string,resistance?:"human_common"|"strong_engine"):Promise<{readonly runId:string;readonly writerId:string|null;readonly alreadyEntered:boolean}>;
+  chooseRepertoireAnswer?(id:string,input:{readonly positionKey:string;readonly moveUci:string;readonly ifMatch:string}):Promise<RepertoireView>;
 }
 
 type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
@@ -691,6 +701,12 @@ export class DrillApi implements DrillClientApi {
   flipRun(runId: string, nodeId: string, resistance?: "human_common" | "strong_engine"): Promise<{ readonly run: DrillRun; readonly writerId: string; readonly derivation: RunDerivation }> { return this.#json(`/runs/${encoded(runId)}/flip`, { method: "POST", body: { nodeId, ...(resistance === undefined ? {} : { resistance }) } }); }
   async runDerivations(runId: string): Promise<RunDerivationPage> { const body = await this.#json<{ readonly derivations: RunDerivationPage }>(`/runs/${encoded(runId)}/derivations`); return body.derivations; }
   async milestones(): Promise<readonly ProgressMilestone[]> { const body = await this.#json<{ readonly milestones: readonly ProgressMilestone[] }>("/progress/milestones"); return body.milestones; }
+  async repertoires():Promise<readonly RepertoireSummary[]>{const body=await this.#json<{readonly repertoires:readonly RepertoireSummary[]}>("/repertoires");return body.repertoires;}
+  async createRepertoire(input:{readonly name:string;readonly side:"white"|"black";readonly targetElo:number;readonly coverageDenominator:number;readonly source:{readonly kind:"pgn";readonly pgn:string}|{readonly kind:"lichess_study";readonly url:string}}):Promise<RepertoireView>{const body=await this.#json<{readonly repertoire:RepertoireView}>("/repertoires",{method:"POST",body:input});return body.repertoire;}
+  repertoireGaps(id:string):Promise<RepertoireGapPage>{return this.#json(`/repertoires/${encoded(id)}/gaps`);}
+  async scanRepertoire(id:string):Promise<void>{await this.#json(`/repertoires/${encoded(id)}/scan`,{method:"POST",body:{}});}
+  enterRepertoireGap(id:string,gapKey:string,resistance?:"human_common"|"strong_engine"):Promise<{readonly runId:string;readonly writerId:string|null;readonly alreadyEntered:boolean}>{return this.#json(`/repertoires/${encoded(id)}/gaps/enter`,{method:"POST",body:{gapKey,...(resistance===undefined?{}:{resistance})}});}
+  async chooseRepertoireAnswer(id:string,input:{readonly positionKey:string;readonly moveUci:string;readonly ifMatch:string}):Promise<RepertoireView>{const body=await this.#json<{readonly repertoire:RepertoireView}>(`/repertoires/${encoded(id)}/answers`,{method:"POST",body:input});return body.repertoire;}
 
   async runs(limit = 50, offset = 0): Promise<readonly RunSummary[]> {
     const query = new URLSearchParams({

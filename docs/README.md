@@ -71,6 +71,9 @@ Implemented foundation:
 - `runtime-corpus-evidence.md` — operator-authenticated, disclosure-gated Lichess
   frequency and recency facts, bounded interactive caching, honest abstention, and
   the closed fact-only assistance renderer.
+- `repertoire-gap-finding.md` — private multi-line repertoire import, population-bound
+  coverage scans, explicit partiality, atomic gap-to-run entry, and learner-chosen
+  answers on the Learn surface.
 - `game-import-and-story.md` — one-game PGN/lichess import, imported-run identity,
   idempotent evidence completion, grounded story moments, live re-entry, and
   original-game-plus-branches export.

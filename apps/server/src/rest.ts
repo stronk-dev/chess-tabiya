@@ -43,6 +43,7 @@ import type { ShapeStudio } from "./shape-studio.js";
 import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
 import { evidencePacket, renderVoice, type VoiceProvider, type VoiceScope } from "./guidance.js";
 import { corpusPopulation, type CorpusSource } from "./corpus.js";
+import type { RepertoireService } from "./repertoire.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -444,7 +445,7 @@ export function errorResponse(error: unknown): Response {
         ? 401
         : error.code === "FORBIDDEN"
           ? 403
-      : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE" || error.code === "CORPUS_UNAVAILABLE"
+      : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE" || error.code === "CORPUS_UNAVAILABLE" || error.code === "REPERTOIRE_SCAN_UNAVAILABLE"
         ? 503
         : error.code === "IMPORT_SOURCE_UNAVAILABLE"
           ? 503
@@ -453,6 +454,7 @@ export function errorResponse(error: unknown): Response {
         : error.code === "POLICY_MODE_UNSUPPORTED" ||
             error.code === "IMPORT_INVALID_PGN" ||
             error.code === "IMPORT_SOURCE_UNSUPPORTED"
+            || error.code === "REPERTOIRE_IMPORT_LIMIT"
           ? 422
           : error.code === "INVALID_REQUEST"
             ? 400
@@ -464,6 +466,7 @@ export function errorResponse(error: unknown): Response {
                 error.code === "EVIDENCE_RESULT_NOT_FOUND"
                 || error.code === "UNKNOWN_GROUP" ||
                 error.code === "IMPORT_SOURCE_NOT_FOUND"
+                || error.code === "REPERTOIRE_NOT_FOUND"
               ? 404
               : error.code === "RUN_ALREADY_EXISTS" ||
                 error.code === "FEEDBACK_WITHHELD" ||
@@ -477,6 +480,7 @@ export function errorResponse(error: unknown): Response {
                 error.code === "PACK_ID_NOT_YOURS" ||
                 error.code === "SHAPE_ID_NOT_YOURS" ||
                 error.code === "DRAFT_STALE" ||
+                error.code === "REPERTOIRE_STALE" ||
                 error.code === "BOARD_HELD" ||
                 error.code === "MATCH_LIVE" ||
                 error.code === "MATCH_MAINLINE_LOCKED" ||
@@ -601,6 +605,7 @@ export function createRestHandler(
   voiceProvider?: VoiceProvider,
   voicePersona = "Clear, concise Tabiya voice. Do not add chess claims.",
   corpusSource?: CorpusSource,
+  repertoires?: RepertoireService,
 ): RestHandler {
   return async (request) => {
     try {
@@ -718,6 +723,22 @@ export function createRestHandler(
         const id = decodeURIComponent(url.pathname.slice("/shapes/".length));
         const record = shapes.required(id);
         return new Response(JSON.stringify(projectShapeEntry(record)), { status: 200, headers: { "cache-control": "no-store", "content-type": "application/json", "x-shape-digest": record.digest } });
+      }
+      if(url.pathname==="/repertoires"){
+        if(repertoires===undefined)throw new ServerError("STORAGE_FAILURE","Repertoire service is not configured");const principal=authenticate();
+        if(request.method==="GET")return json(200,{repertoires:repertoires.list(principal)});
+        if(request.method==="POST"){requireJson(request);const body=closedRecord(await parseBody(request),"/",["name","side","targetElo","coverageDenominator","source"]),side=requiredString(body.side,"side");if(side!=="white"&&side!=="black")throw invalid("side must be white or black");const denominator=requiredSafeInteger(body.coverageDenominator,"coverageDenominator");if(denominator<10||denominator>10_000)throw invalid("coverageDenominator must be between 10 and 10000");const targetElo=requiredSafeInteger(body.targetElo,"targetElo"),source=closedRecord(body.source,"/source",["kind","pgn","url"]),kind=requiredString(source.kind,"source.kind"),parsed=kind==="pgn"?{kind:"pgn" as const,pgn:requiredString(source.pgn,"source.pgn")}:kind==="lichess_study"?{kind:"lichess_study" as const,url:requiredString(source.url,"source.url")}:(()=>{throw invalid("source.kind must be pgn or lichess_study");})();return json(201,{repertoire:await repertoires.create(principal,{name:requiredString(body.name,"name"),side,targetElo,coverageDenominator:denominator,source:parsed})});}
+        return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
+      }
+      const repertoireRoute=/^\/repertoires\/([^/]+)(?:\/(scan|gaps|answers))?(?:\/(enter))?$/.exec(url.pathname);
+      if(repertoireRoute!==null){if(repertoires===undefined)throw new ServerError("STORAGE_FAILURE","Repertoire service is not configured");const principal=authenticate(),id=decodeURIComponent(repertoireRoute[1]!),resource=repertoireRoute[2],tail=repertoireRoute[3];
+        if(resource===undefined&&request.method==="GET")return json(200,{repertoire:repertoires.get(id,principal)});
+        if(resource===undefined&&request.method==="DELETE"){repertoires.remove(id,principal);return json(200,{deleted:true});}
+        if(resource==="scan"&&request.method==="POST"){requireJson(request);closedRecord(await parseBody(request),"/",[]);return json(202,repertoires.queueScan(id,principal));}
+        if(resource==="gaps"&&tail===undefined&&request.method==="GET")return json(200,repertoires.gaps(id,principal));
+        if(resource==="gaps"&&tail==="enter"&&request.method==="POST"){requireJson(request);const body=closedRecord(await parseBody(request),"/",["gapKey","resistance"]),resistance=body.resistance===undefined?undefined:requiredString(body.resistance,"resistance");if(resistance!==undefined&&resistance!=="human_common"&&resistance!=="strong_engine")throw invalid("resistance must be human_common or strong_engine");return json(201,await repertoires.enter(id,principal,requiredString(body.gapKey,"gapKey"),resistance));}
+        if(resource==="answers"&&request.method==="POST"){requireJson(request);const body=closedRecord(await parseBody(request),"/",["positionKey","moveUci","ifMatch"]);return json(200,{repertoire:repertoires.chooseAnswer(id,principal,{positionKey:requiredString(body.positionKey,"positionKey"),moveUci:requiredString(body.moveUci,"moveUci"),ifMatch:requiredString(body.ifMatch??request.headers.get("if-match"),"ifMatch")})});}
+        return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
       }
       if (url.pathname === "/packs/drafts") {
         if (studio === undefined) throw new ServerError("STORAGE_FAILURE", "Pack Studio is not configured");

@@ -46,7 +46,11 @@ export type ServerErrorCode =
   | "IMPORT_INVALID_PGN"
   | "IMPORT_SOURCE_UNSUPPORTED"
   | "IMPORT_SOURCE_NOT_FOUND"
-  | "IMPORT_SOURCE_UNAVAILABLE";
+  | "IMPORT_SOURCE_UNAVAILABLE"
+  | "REPERTOIRE_NOT_FOUND"
+  | "REPERTOIRE_STALE"
+  | "REPERTOIRE_IMPORT_LIMIT"
+  | "REPERTOIRE_SCAN_UNAVAILABLE";
 
 export class ServerError extends Error {
   readonly code: ServerErrorCode;

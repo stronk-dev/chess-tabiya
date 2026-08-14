@@ -101,6 +101,56 @@ export type PublicTokenRecord =
   | { readonly id: string; readonly tokenHash: string; readonly scope: "session_join"; readonly sessionId: string; readonly matchSlot: "white" | "black" | null; readonly invitedRole: RunRole; readonly invitedHandle: string | null; readonly expiresAt: string; readonly usesRemaining: number; readonly createdBy: string; readonly createdAt: string; readonly revokedAt: string | null };
 export interface RunDerivation { readonly derivedRunId: string; readonly sourceRunId: string; readonly sourceBranchId: string; readonly sourceNodeId: string; readonly kind: "flip_sides"; readonly createdAt: string; }
 
+export interface RepertoireRecord {
+  readonly id: string;
+  readonly ownerLearnerId: string;
+  readonly name: string;
+  readonly side: "white" | "black";
+  readonly rootFen: string;
+  readonly targetElo: number;
+  readonly coverageDenominator: number;
+  readonly sourceKind: "pgn_paste" | "lichess_study";
+  readonly sourceUrl: string | null;
+  readonly originalPgn: string;
+  readonly licenceNote: string;
+  readonly digest: string;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface RepertoireMoveRecord {
+  readonly repertoireId: string;
+  readonly positionKey: string;
+  readonly moveUci: string;
+  readonly moveSan: string;
+  readonly representativeFen: string;
+  readonly rank: number;
+  readonly origin: "imported" | "chosen_from_attempt";
+  readonly createdAt: string;
+}
+
+export interface RepertoireScanRecord {
+  readonly repertoireId: string;
+  readonly scannedAt: string;
+  readonly repertoireDigest: string;
+  readonly population: unknown;
+  readonly gaps: unknown;
+  readonly alternateGaps: unknown;
+  readonly unknown: unknown;
+  readonly uncoveredMass: number;
+  readonly truncated: boolean;
+  readonly sourceFailures: number;
+  readonly queriesUsed: number;
+  readonly unreachedKeys: number;
+}
+
+export interface RepertoireGapRunRecord {
+  readonly runId: string;
+  readonly repertoireId: string;
+  readonly gapKey: string;
+  readonly createdAt: string;
+}
+
 /** Persistence boundary for run snapshots, identity, grants, and the writer lease. */
 export interface RunStorage {
   create(run: DrillRun, lease: LeaseHolder, title?: string): void;
@@ -116,6 +166,19 @@ export interface RunStorage {
   createDerivedRun?(run: DrillRun, lease: LeaseHolder, title: string, derivation: RunDerivation): void;
   derivationFor?(runId: string): RunDerivation | undefined;
   derivationsFrom?(runId: string): readonly RunDerivation[];
+  createRepertoire?(record: RepertoireRecord, moves: readonly RepertoireMoveRecord[]): void;
+  replaceRepertoire?(record: RepertoireRecord, importedMoves: readonly RepertoireMoveRecord[], expectedDigest: string): void;
+  repertoires?(ownerLearnerId: string): readonly RepertoireRecord[];
+  repertoire?(id: string): RepertoireRecord | undefined;
+  repertoireMoves?(id: string): readonly RepertoireMoveRecord[];
+  saveRepertoireScan?(scan: RepertoireScanRecord): void;
+  repertoireScan?(id: string): RepertoireScanRecord | undefined;
+  addRepertoireAnswer?(record: RepertoireMoveRecord, expectedDigest: string, nextDigest: string, updatedAt: string): void;
+  deleteRepertoire?(id: string, ownerLearnerId: string): void;
+  createRepertoireGapRun?(run: DrillRun, lease: LeaseHolder, title: string, link: RepertoireGapRunRecord): void;
+  repertoireGapRun?(repertoireId: string, gapKey: string): RepertoireGapRunRecord | undefined;
+  repertoireGapAttemptCount?(runId: string): number;
+  repertoireGapFirstMoves?(runId: string): readonly { readonly moveUci: string; readonly moveSan: string }[];
   liveSessionByRun?(runId: string): LiveSession | undefined;
   matchState?(sessionId: string): MatchState | undefined;
 
@@ -320,7 +383,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 14;
+export const STORAGE_VERSION = 15;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -797,6 +860,33 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   derivationFor(runId:string):RunDerivation|undefined{const row=this.#database.prepare("SELECT * FROM run_derivations WHERE derived_run_id=?").get(runId) as Record<string,unknown>|undefined;return row===undefined?undefined:this.#derivation(row);}
   derivationsFrom(runId:string):readonly RunDerivation[]{const rows=this.#database.prepare("SELECT * FROM run_derivations WHERE source_run_id=? ORDER BY created_at,derived_run_id").all(runId) as readonly Record<string,unknown>[];return Object.freeze(rows.map((row)=>this.#derivation(row)));}
 
+  createRepertoire(record:RepertoireRecord,moves:readonly RepertoireMoveRecord[]):void{
+    try{this.#database.exec("BEGIN IMMEDIATE");this.#insertRepertoire(record);const insert=this.#database.prepare("INSERT INTO repertoire_moves (repertoire_id,position_key,move_uci,move_san,representative_fen,rank,origin,created_at) VALUES (?,?,?,?,?,?,?,?)");for(const move of moves)insert.run(move.repertoireId,move.positionKey,move.moveUci,move.moveSan,move.representativeFen,move.rank,move.origin,move.createdAt);this.#database.exec("COMMIT");}
+    catch(error){this.#rollback();throw storageFailure("Could not create repertoire",error);}
+  }
+
+  replaceRepertoire(record:RepertoireRecord,importedMoves:readonly RepertoireMoveRecord[],expectedDigest:string):void{
+    try{this.#database.exec("BEGIN IMMEDIATE");const row=this.#database.prepare("SELECT digest FROM repertoires WHERE id=? AND owner_learner_id=?").get(record.id,record.ownerLearnerId) as {digest?:unknown}|undefined;if(row===undefined)throw new ServerError("RUN_NOT_FOUND","Repertoire not found");if(row.digest!==expectedDigest)throw new ServerError("REPERTOIRE_STALE","Repertoire changed while it was being edited",{details:{digest:String(row.digest)}});this.#database.prepare("DELETE FROM repertoire_moves WHERE repertoire_id=? AND origin='imported'").run(record.id);const insert=this.#database.prepare("INSERT INTO repertoire_moves (repertoire_id,position_key,move_uci,move_san,representative_fen,rank,origin,created_at) VALUES (?,?,?,?,?,?,?,?) ON CONFLICT(repertoire_id,position_key,move_uci) DO UPDATE SET move_san=excluded.move_san,representative_fen=excluded.representative_fen,rank=excluded.rank");for(const move of importedMoves)insert.run(move.repertoireId,move.positionKey,move.moveUci,move.moveSan,move.representativeFen,move.rank,move.origin,move.createdAt);this.#database.prepare("UPDATE repertoires SET name=?,side=?,root_fen=?,target_elo=?,coverage_denominator=?,source_kind=?,source_url=?,original_pgn=?,licence_note=?,digest=?,updated_at=? WHERE id=? AND owner_learner_id=?").run(record.name,record.side,record.rootFen,record.targetElo,record.coverageDenominator,record.sourceKind,record.sourceUrl,record.originalPgn,record.licenceNote,record.digest,record.updatedAt,record.id,record.ownerLearnerId);this.#database.exec("COMMIT");}
+    catch(error){this.#rollback();if(error instanceof ServerError)throw error;throw storageFailure("Could not replace repertoire",error);}
+  }
+
+  repertoires(ownerLearnerId:string):readonly RepertoireRecord[]{const rows=this.#database.prepare("SELECT * FROM repertoires WHERE owner_learner_id=? ORDER BY updated_at DESC,id").all(ownerLearnerId) as readonly Record<string,unknown>[];return Object.freeze(rows.map((row)=>this.#repertoire(row)));}
+  repertoire(id:string):RepertoireRecord|undefined{const row=this.#database.prepare("SELECT * FROM repertoires WHERE id=?").get(id) as Record<string,unknown>|undefined;return row===undefined?undefined:this.#repertoire(row);}
+  repertoireMoves(id:string):readonly RepertoireMoveRecord[]{const rows=this.#database.prepare("SELECT * FROM repertoire_moves WHERE repertoire_id=? ORDER BY position_key,rank,move_uci").all(id) as readonly Record<string,unknown>[];return Object.freeze(rows.map((row)=>this.#repertoireMove(row)));}
+  saveRepertoireScan(scan:RepertoireScanRecord):void{try{this.#database.prepare(`INSERT INTO repertoire_scans (repertoire_id,scanned_at,repertoire_digest,population_json,gaps_json,alternate_gaps_json,unknown_json,uncovered_mass,truncated,source_failures,queries_used,unreached_keys) VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(repertoire_id) DO UPDATE SET scanned_at=excluded.scanned_at,repertoire_digest=excluded.repertoire_digest,population_json=excluded.population_json,gaps_json=excluded.gaps_json,alternate_gaps_json=excluded.alternate_gaps_json,unknown_json=excluded.unknown_json,uncovered_mass=excluded.uncovered_mass,truncated=excluded.truncated,source_failures=excluded.source_failures,queries_used=excluded.queries_used,unreached_keys=excluded.unreached_keys`).run(scan.repertoireId,scan.scannedAt,scan.repertoireDigest,JSON.stringify(scan.population),JSON.stringify(scan.gaps),JSON.stringify(scan.alternateGaps),JSON.stringify(scan.unknown),scan.uncoveredMass,scan.truncated?1:0,scan.sourceFailures,scan.queriesUsed,scan.unreachedKeys);}catch(error){throw storageFailure("Could not save repertoire scan",error);}}
+  repertoireScan(id:string):RepertoireScanRecord|undefined{const row=this.#database.prepare("SELECT * FROM repertoire_scans WHERE repertoire_id=?").get(id) as Record<string,unknown>|undefined;if(row===undefined)return undefined;return Object.freeze({repertoireId:String(row.repertoire_id),scannedAt:String(row.scanned_at),repertoireDigest:String(row.repertoire_digest),population:JSON.parse(String(row.population_json)),gaps:JSON.parse(String(row.gaps_json)),alternateGaps:JSON.parse(String(row.alternate_gaps_json)),unknown:JSON.parse(String(row.unknown_json)),uncoveredMass:Number(row.uncovered_mass),truncated:Number(row.truncated)===1,sourceFailures:Number(row.source_failures),queriesUsed:Number(row.queries_used),unreachedKeys:Number(row.unreached_keys)});}
+  addRepertoireAnswer(record:RepertoireMoveRecord,expectedDigest:string,nextDigest:string,updatedAt:string):void{try{this.#database.exec("BEGIN IMMEDIATE");const row=this.#database.prepare("SELECT digest FROM repertoires WHERE id=?").get(record.repertoireId) as {digest?:unknown}|undefined;if(row===undefined)throw new ServerError("RUN_NOT_FOUND","Repertoire not found");if(row.digest!==expectedDigest)throw new ServerError("REPERTOIRE_STALE","Repertoire changed while it was being edited",{details:{digest:String(row.digest)}});this.#database.prepare("UPDATE repertoire_moves SET rank=rank+1 WHERE repertoire_id=? AND position_key=?").run(record.repertoireId,record.positionKey);this.#database.prepare("INSERT INTO repertoire_moves (repertoire_id,position_key,move_uci,move_san,representative_fen,rank,origin,created_at) VALUES (?,?,?,?,?,0,'chosen_from_attempt',?) ON CONFLICT(repertoire_id,position_key,move_uci) DO UPDATE SET rank=0,origin='chosen_from_attempt'").run(record.repertoireId,record.positionKey,record.moveUci,record.moveSan,record.representativeFen,record.createdAt);this.#database.prepare("UPDATE repertoires SET digest=?,updated_at=? WHERE id=?").run(nextDigest,updatedAt,record.repertoireId);this.#database.exec("COMMIT");}catch(error){this.#rollback();if(error instanceof ServerError)throw error;throw storageFailure("Could not add repertoire answer",error);}}
+  deleteRepertoire(id:string,ownerLearnerId:string):void{try{this.#database.exec("BEGIN IMMEDIATE");const found=this.#database.prepare("SELECT 1 AS found FROM repertoires WHERE id=? AND owner_learner_id=?").get(id,ownerLearnerId);if(found===undefined)throw new ServerError("RUN_NOT_FOUND","Repertoire not found");this.#deleteRepertoireRows(id);this.#database.exec("COMMIT");}catch(error){this.#rollback();if(error instanceof ServerError)throw error;throw storageFailure("Could not delete repertoire",error);}}
+  createRepertoireGapRun(run:DrillRun,lease:LeaseHolder,title:string,link:RepertoireGapRunRecord):void{const updatedAt=this.#now();try{this.#database.exec("BEGIN IMMEDIATE");this.#database.prepare("INSERT INTO drill_runs (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version) VALUES (?,?,?,?,?,?,?,?)").run(run.id,JSON.stringify(run),lease.writerId,updatedAt,JSON.stringify(summaryFields(run,title,updatedAt)),lease.learnerId,lease.learnerId,run.schemaVersion);this.#database.prepare("INSERT INTO run_grants (run_id,learner_id,role,granted_at) VALUES (?,?,'host',?)").run(run.id,lease.learnerId,updatedAt);this.#database.prepare("INSERT INTO repertoire_gap_runs (run_id,repertoire_id,gap_key,created_at) VALUES (?,?,?,?)").run(link.runId,link.repertoireId,link.gapKey,link.createdAt);this.#database.exec("COMMIT");this.#snapshots.set(run.id,Object.freeze({run,activeWriterId:lease.writerId,activeWriterLearnerId:lease.learnerId}));}catch(error){this.#rollback();throw storageFailure("Could not create repertoire gap run",error);}}
+  repertoireGapRun(repertoireId:string,gapKey:string):RepertoireGapRunRecord|undefined{const row=this.#database.prepare("SELECT * FROM repertoire_gap_runs WHERE repertoire_id=? AND gap_key=? ORDER BY created_at LIMIT 1").get(repertoireId,gapKey) as Record<string,unknown>|undefined;return row===undefined?undefined:Object.freeze({runId:String(row.run_id),repertoireId:String(row.repertoire_id),gapKey:String(row.gap_key),createdAt:String(row.created_at)});}
+  repertoireGapAttemptCount(runId:string):number{const row=this.#database.prepare("SELECT count(*) AS total FROM attempts WHERE run_id=? AND countable=1").get(runId) as {total?:unknown};return Number(row.total??0);}
+  repertoireGapFirstMoves(runId:string):readonly {readonly moveUci:string;readonly moveSan:string}[]{const stored=this.read(runId);if(stored===undefined)return Object.freeze([]);const root=stored.run.nodes[0];if(root===undefined)return Object.freeze([]);const rows=stored.run.nodes.filter((node)=>node.parentId===root.id&&node.actor==="user").map((node)=>({moveUci:node.moveUci!,moveSan:node.moveSan!}));return Object.freeze([...new Map(rows.map((row)=>[row.moveUci,row])).values()]);}
+
+  #insertRepertoire(record:RepertoireRecord):void{this.#database.prepare("INSERT INTO repertoires (id,owner_learner_id,name,side,root_fen,target_elo,coverage_denominator,source_kind,source_url,original_pgn,licence_note,digest,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)").run(record.id,record.ownerLearnerId,record.name,record.side,record.rootFen,record.targetElo,record.coverageDenominator,record.sourceKind,record.sourceUrl,Buffer.from(record.originalPgn),record.licenceNote,record.digest,record.createdAt,record.updatedAt);}
+  #repertoire(row:Record<string,unknown>):RepertoireRecord{return Object.freeze({id:String(row.id),ownerLearnerId:String(row.owner_learner_id),name:String(row.name),side:String(row.side) as "white"|"black",rootFen:String(row.root_fen),targetElo:Number(row.target_elo),coverageDenominator:Number(row.coverage_denominator),sourceKind:String(row.source_kind) as "pgn_paste"|"lichess_study",sourceUrl:row.source_url===null?null:String(row.source_url),originalPgn:Buffer.from(row.original_pgn as Uint8Array).toString("utf8"),licenceNote:String(row.licence_note),digest:String(row.digest),createdAt:String(row.created_at),updatedAt:String(row.updated_at)});}
+  #repertoireMove(row:Record<string,unknown>):RepertoireMoveRecord{return Object.freeze({repertoireId:String(row.repertoire_id),positionKey:String(row.position_key),moveUci:String(row.move_uci),moveSan:String(row.move_san),representativeFen:String(row.representative_fen),rank:Number(row.rank),origin:String(row.origin) as "imported"|"chosen_from_attempt",createdAt:String(row.created_at)});}
+  #deleteRepertoireRows(id:string):void{this.#database.prepare("DELETE FROM repertoire_gap_runs WHERE repertoire_id=?").run(id);this.#database.prepare("DELETE FROM repertoire_scans WHERE repertoire_id=?").run(id);this.#database.prepare("DELETE FROM repertoire_moves WHERE repertoire_id=?").run(id);this.#database.prepare("DELETE FROM repertoires WHERE id=?").run(id);}
+
   #publicToken(row:Record<string,unknown>):PublicTokenRecord{
     const common={id:String(row.id),tokenHash:String(row.token_hash),createdBy:String(row.created_by),createdAt:String(row.created_at),revokedAt:row.revoked_at===null?null:String(row.revoked_at)};
     return row.scope==="session_join"
@@ -940,6 +1030,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       this.#database.prepare(
         "UPDATE registered_shapes SET publisher_learner_id = ? WHERE publisher_learner_id = ?",
       ).run(LEGACY_ID, learnerId);
+      const repertoireRows=this.#database.prepare("SELECT id FROM repertoires WHERE owner_learner_id=?").all(learnerId) as unknown as readonly {id:string}[];
+      for(const row of repertoireRows)this.#deleteRepertoireRows(row.id);
       this.#database.prepare("UPDATE live_sessions SET created_by = ? WHERE created_by = ?").run(LEGACY_ID,learnerId);
       this.#database.prepare("DELETE FROM learners WHERE id = ?").run(learnerId);
       const restore = this.#database.prepare(
@@ -2065,6 +2157,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "native matches and session join tokens",
         apply: () => this.#addSocialMatchTables(),
       },
+      {
+        version: 15,
+        name: "learner repertoires, scans, and gap-run links",
+        apply: () => this.#addRepertoireTables(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -2118,6 +2215,61 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         created_at TEXT NOT NULL
       ) STRICT;
       CREATE INDEX IF NOT EXISTS run_derivations_source ON run_derivations(source_run_id);
+    `);
+  }
+
+  #addRepertoireTables():void{
+    this.#database.exec(`
+      CREATE TABLE IF NOT EXISTS repertoires (
+        id TEXT PRIMARY KEY,
+        owner_learner_id TEXT NOT NULL,
+        name TEXT NOT NULL,
+        side TEXT NOT NULL CHECK (side IN ('white','black')),
+        root_fen TEXT NOT NULL,
+        target_elo INTEGER NOT NULL,
+        coverage_denominator INTEGER NOT NULL CHECK (coverage_denominator BETWEEN 10 AND 10000),
+        source_kind TEXT NOT NULL CHECK (source_kind IN ('pgn_paste','lichess_study')),
+        source_url TEXT,
+        original_pgn BLOB NOT NULL,
+        licence_note TEXT NOT NULL,
+        digest TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS repertoires_owner ON repertoires(owner_learner_id,updated_at);
+      CREATE TABLE IF NOT EXISTS repertoire_moves (
+        repertoire_id TEXT NOT NULL,
+        position_key TEXT NOT NULL,
+        move_uci TEXT NOT NULL,
+        move_san TEXT NOT NULL,
+        representative_fen TEXT NOT NULL,
+        rank INTEGER NOT NULL,
+        origin TEXT NOT NULL CHECK (origin IN ('imported','chosen_from_attempt')),
+        created_at TEXT NOT NULL,
+        PRIMARY KEY (repertoire_id,position_key,move_uci)
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS repertoire_moves_position ON repertoire_moves(repertoire_id,position_key,rank);
+      CREATE TABLE IF NOT EXISTS repertoire_scans (
+        repertoire_id TEXT PRIMARY KEY,
+        scanned_at TEXT NOT NULL,
+        repertoire_digest TEXT NOT NULL,
+        population_json TEXT NOT NULL,
+        gaps_json TEXT NOT NULL,
+        alternate_gaps_json TEXT NOT NULL,
+        unknown_json TEXT NOT NULL,
+        uncovered_mass REAL NOT NULL,
+        truncated INTEGER NOT NULL CHECK (truncated IN (0,1)),
+        source_failures INTEGER NOT NULL,
+        queries_used INTEGER NOT NULL,
+        unreached_keys INTEGER NOT NULL
+      ) STRICT;
+      CREATE TABLE IF NOT EXISTS repertoire_gap_runs (
+        run_id TEXT PRIMARY KEY,
+        repertoire_id TEXT NOT NULL,
+        gap_key TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS repertoire_gap_runs_gap ON repertoire_gap_runs(repertoire_id,gap_key,created_at);
     `);
   }
 

@@ -60,3 +60,7 @@ The first implementation does not yet import personal PGN history or rank pack
 recommendations from it. Related-position expansion and longitudinal product-success SQL
 remain operator/reporting work rather than claims made by the learner UI. The scheduler is
 intentionally small and explainable; it is not an FSRS/SM-2 mastery model.
+
+Repertoire-gap entries are ordinary `position` runs. Their first countable attempt
+therefore creates and advances the same position-root schedule; the repertoire link
+adds provenance without introducing a separate queue.

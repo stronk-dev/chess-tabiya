@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
-import { normalizeLichessGameUrl, resolveImportSource } from "./import-source.js";
+import { normalizeLichessGameUrl, normalizeLichessStudyUrl, resolveImportSource, resolveStudySource } from "./import-source.js";
 import { createRestHandler } from "./rest.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 
@@ -73,6 +73,13 @@ describe("own-game import", () => {
     expect(calls[0]!.input).toContain("evals=false");
     expect(new Headers(calls[0]!.init?.headers).has("authorization")).toBe(false);
     await expect(resolveImportSource({ kind: "lichess", url: "https://chess.com/game/live/1" }, fetchImpl)).rejects.toMatchObject({ code: "IMPORT_SOURCE_UNSUPPORTED" });
+  });
+
+  it("fetches one explicit public study through the credential-free export contract",async()=>{
+    expect(normalizeLichessStudyUrl("https://lichess.org/study/Ab12cd34/chapter")).toEqual({studyId:"Ab12cd34",url:"https://lichess.org/study/Ab12cd34"});
+    const calls:string[]=[];const fetchImpl:typeof fetch=async(input,init)=>{calls.push(String(input));expect(new Headers(init?.headers).has("authorization")).toBe(false);return new Response(PGN,{status:200});};
+    await expect(resolveStudySource("https://lichess.org/study/Ab12cd34",fetchImpl)).resolves.toMatchObject({sourceKind:"lichess_study",sourceUrl:"https://lichess.org/study/Ab12cd34"});expect(calls).toEqual(["https://lichess.org/api/study/Ab12cd34.pgn"]);
+    await expect(resolveStudySource("https://chess.com/study/Ab12cd34",fetchImpl)).rejects.toMatchObject({code:"IMPORT_SOURCE_UNSUPPORTED"});
   });
 
   it("binds the closed import and provenance read contracts with typed errors", async () => {

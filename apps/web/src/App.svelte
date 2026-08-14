@@ -29,6 +29,8 @@
     type GameStory,
     type ProgressMilestone,
     type RunDerivationPage,
+    type RepertoireSummary,
+    type RepertoireGapPage,
     ApiError,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
@@ -126,6 +128,13 @@
   let livePoll: ReturnType<typeof setInterval> | undefined;
   let storyPoll: ReturnType<typeof setInterval> | undefined;
   let autoClaimingMatch = false;
+  let repertoires:readonly RepertoireSummary[]=$state([]);
+  let repertoirePages:Record<string,RepertoireGapPage>=$state({});
+  let repertoireName=$state("");
+  let repertoireSide:"white"|"black"=$state("black");
+  let repertoirePgn=$state("");
+  let repertoireStudyUrl=$state("");
+  let repertoireError:string|undefined=$state();
 
   const keyboardDispatcher = new ShellKeyboardDispatcher({
     navigate,
@@ -203,11 +212,13 @@
       } else if (next.name === "settings") {
         capabilities = await api.capabilities();
       } else if (next.name === "learn") {
-        [attempts, dueSchedules, milestones] = await Promise.all([
+        [attempts, dueSchedules, milestones, repertoires] = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
           api.dueProgress?.() ?? Promise.resolve([]),
           api.milestones?.() ?? Promise.resolve([]),
+          api.repertoires?.() ?? Promise.resolve([]),
         ]);
+        const pages=await Promise.all(repertoires.map(async(item)=>[item.id,await api.repertoireGaps?.(item.id)] as const));repertoirePages=Object.fromEntries(pages.filter((entry)=>entry[1]!==undefined)) as Record<string,RepertoireGapPage>;
       } else if (next.name === "create") {
         [drafts, shapeDrafts] = await Promise.all([api.packDrafts?.() ?? Promise.resolve([]), api.shapeDrafts?.() ?? Promise.resolve([])]);
       } else if (next.name === "live") {
@@ -318,6 +329,10 @@
     WriterSession.claimFor(result.run.id, storage, () => result.writerId);
     navigate(routePath({ name: "run", runId: result.run.id }));
   }
+
+  async function createRepertoire():Promise<void>{repertoireError=undefined;try{if(api.createRepertoire===undefined)throw new Error("Repertoire import is unavailable");const created=await api.createRepertoire({name:repertoireName,side:repertoireSide,targetElo:1600,coverageDenominator:100,source:repertoireStudyUrl.trim()?{kind:"lichess_study",url:repertoireStudyUrl}:{kind:"pgn",pgn:repertoirePgn}});repertoires=[created,...repertoires];repertoireName="";repertoirePgn="";repertoireStudyUrl="";}catch(error){repertoireError=error instanceof Error?error.message:String(error);}}
+  async function scanRepertoire(id:string):Promise<void>{await api.scanRepertoire?.(id);for(let index=0;index<50;index++){const page=await api.repertoireGaps?.(id);if(page!==undefined){repertoirePages={...repertoirePages,[id]:page};if(page.status==="ready")break;}await new Promise((resolve)=>setTimeout(resolve,100));}repertoires=await(api.repertoires?.()??Promise.resolve(repertoires));}
+  async function enterRepertoireGap(id:string,gapKey:string):Promise<void>{const result=await api.enterRepertoireGap?.(id,gapKey);if(result===undefined)return;if(result.writerId!==null)WriterSession.claimFor(result.runId,storage,()=>result.writerId!);navigate(routePath({name:"run",runId:result.runId}));}
 
   async function authenticate(): Promise<void> {
     authError = undefined;
@@ -628,6 +643,38 @@
     <main class="shell-view" aria-labelledby="learn-title">
       <p class="eyebrow">Learn / return loop</p>
       <h1 id="learn-title">Return to the positions that need another attempt.</h1>
+      <section aria-labelledby="repertoire-title">
+        <h2 id="repertoire-title">Repertoire gaps</h2>
+        <form class="repertoire-form" onsubmit={(event)=>{event.preventDefault();void createRepertoire();}}>
+          <label>Name <input required bind:value={repertoireName} /></label>
+          <label>Your side <select bind:value={repertoireSide}><option value="white">White</option><option value="black">Black</option></select></label>
+          <label>Public Lichess study URL <input type="url" placeholder="https://lichess.org/study/abcdefgh" bind:value={repertoireStudyUrl} /></label>
+          <span>or paste a multi-game, variation-bearing PGN</span>
+          <label>Repertoire PGN <textarea rows="5" bind:value={repertoirePgn}></textarea></label>
+          <button class="primary" type="submit" aria-describedby="repertoire-import-help" disabled={!repertoireName.trim()||(!repertoireStudyUrl.trim()&&!repertoirePgn.trim())}>Import repertoire</button>
+          <p id="repertoire-import-help" class="honest">Name the repertoire and provide either a public Lichess study or pasted PGN.</p>
+          {#if repertoireError}<p role="alert">{repertoireError}</p>{/if}
+        </form>
+        <div class="item-list">
+          {#each repertoires as repertoire}
+            {@const page=repertoirePages[repertoire.id]}
+            <article class="repertoire-card">
+              <div><h3>{repertoire.name}</h3><p>{repertoire.side} · {repertoire.targetElo} band · cover replies seen at least 1 in {repertoire.coverageDenominator} games</p></div>
+              <button type="button" onclick={()=>void scanRepertoire(repertoire.id)}>{page?.status==="ready"?"Rescan":"Scan gaps"}</button>
+              {#if page?.status==="pending"}<p>Scanning…</p>{/if}
+              {#if page?.scan}
+                <div class="gap-results" aria-label={`Gaps for ${repertoire.name}`}>
+                  <p>{JSON.stringify(page.scan.population)}</p><p class="honest">{page.scan.guard}.</p>
+                  {#if page.scan.partiality}<p class="honest">{page.scan.partiality}</p>{/if}
+                  {#each page.scan.gaps as gap,index}
+                    <div class="gap-row"><span>{gap.replySan||"First move"} · {gap.gamesUntilSeen?`about 1 in ${gap.gamesUntilSeen} games`:"frequency unavailable"} · {gap.state}</span>{#if index===0}<button type="button" onclick={()=>void enterRepertoireGap(repertoire.id,gap.key)}>Go to biggest gap</button>{/if}</div>
+                  {:else}<p>No ranked gaps above this bound.</p>{/each}
+                </div>
+              {/if}
+            </article>
+          {:else}<p>No repertoire imported yet.</p>{/each}
+        </div>
+      </section>
       <section aria-labelledby="milestones-title">
         <h2 id="milestones-title">Milestones</h2>
         <div class="item-list">
@@ -818,6 +865,9 @@
   .resume-card { max-width: 42rem; margin: 2.5rem 0 1rem; padding: 1.4rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--panel); box-shadow: var(--shadow); }
   .resume-card h2, .item-list h2 { margin: 0.2rem 0; font: 500 1.5rem var(--display-font); }
   .resume-card p, .item-list p { color: var(--muted); }
+  .repertoire-form{display:grid;gap:.65rem;max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}
+  .repertoire-form label{display:grid;gap:.25rem}.repertoire-form input,.repertoire-form select,.repertoire-form textarea{padding:.6rem;border:1px solid var(--line);border-radius:.4rem;background:white}
+  .repertoire-card{display:grid;gap:.6rem}.gap-results{grid-column:1/-1;border-top:1px solid var(--line);padding-top:.6rem}.gap-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem 0}
   .access, .honest { font-size: 0.88rem; }
   button { padding: 0.72rem 0.9rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--panel); color: var(--ink); cursor: pointer; }
   button:hover, button:focus-visible, button.primary { border-color: var(--accent); background: var(--accent); color: white; }

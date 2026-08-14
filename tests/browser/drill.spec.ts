@@ -72,6 +72,25 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
   await expect(page.getByText("Authored commentary withheld", { exact: false })).toHaveCount(0);
 });
 
+test("imports a repertoire, enters its biggest corpus gap, and records an addressed attempt",async({page})=>{
+  await page.getByRole("link",{name:"Learn"}).click();
+  await page.getByRole("heading",{name:"Repertoire gaps"}).scrollIntoViewIfNeeded();
+  await page.getByLabel("Name").fill("Browser black repertoire");
+  await page.getByLabel("Your side").selectOption("black");
+  await page.getByLabel("Repertoire PGN").fill("1. d4 d5 *");
+  await page.getByRole("button",{name:"Import repertoire"}).click();
+  const card=page.getByRole("article").filter({hasText:"Browser black repertoire"});
+  await card.getByRole("button",{name:"Scan gaps"}).click();
+  await expect(card.getByText("These counts say what this population played, not what is good.")).toBeVisible();
+  await expect(card.getByText(/e4 · about 1 in 2 games · open/)).toBeVisible();
+  await card.getByRole("button",{name:"Go to biggest gap"}).click();
+  await expect(page).toHaveURL(/\/play\/run\/gap-/);await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await move(page,"c7","c5","black");
+  await page.getByRole("link",{name:"Learn"}).click();
+  const refreshed=page.getByRole("article").filter({hasText:"Browser black repertoire"});
+  await expect(refreshed.getByText(/e4 · about 1 in 2 games · addressed/)).toBeVisible({timeout:5_000});
+});
+
 test("adaptive guidance keeps a queen-exchange phase change passive and removable", async ({ page }) => {
   await page.addInitScript(() => {
     (window as unknown as { __spoken: string[] }).__spoken = [];

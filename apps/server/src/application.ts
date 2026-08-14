@@ -41,6 +41,7 @@ import { ShapeRegistry } from "./shape-registry.js";
 import { ShapeStudio } from "./shape-studio.js";
 import type { VoiceProvider } from "./guidance.js";
 import { FixtureCorpusSource, LichessCorpusSource, type CorpusSource } from "./corpus.js";
+import { RepertoireService } from "./repertoire.js";
 
 export type EngineMode = "mock" | "maia";
 
@@ -226,6 +227,8 @@ function isApiPath(pathname: string): boolean {
     pathname.startsWith("/runs/") ||
     pathname === "/progress" ||
     pathname.startsWith("/progress/") ||
+    pathname === "/repertoires" ||
+    pathname.startsWith("/repertoires/") ||
     pathname.startsWith("/api/shared/") ||
     pathname.startsWith("/shared/") ||
     pathname === "/select-move"
@@ -340,7 +343,8 @@ export async function createApplication(
     cookieSecure: options.cookieSecure ?? true,
   });
   const live = new LiveSessionService(storage, { runService: service });
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource);
+  const repertoires = new RepertoireService(storage, service, corpusSource);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

@@ -11,7 +11,36 @@ export interface ResolvedImportSource {
   readonly licenceNote: string;
 }
 
+export interface ResolvedStudySource {
+  readonly pgn: string;
+  readonly sourceKind: "lichess_study";
+  readonly sourceUrl: string;
+  readonly licenceNote: string;
+}
+
 let serial = Promise.resolve();
+
+export function normalizeLichessStudyUrl(value:string):{studyId:string;url:string}{
+  let url:URL;try{url=new URL(value);}catch{throw new ServerError("IMPORT_SOURCE_UNSUPPORTED","Source must be a public lichess study URL");}
+  if(url.protocol!=="https:"||(url.hostname!=="lichess.org"&&url.hostname!=="www.lichess.org")){
+    const hint=url.hostname.endsWith("chess.com")?"; export the repertoire as PGN and paste it":"";
+    throw new ServerError("IMPORT_SOURCE_UNSUPPORTED",`Only public lichess study URLs can be fetched${hint}`);
+  }
+  const parts=url.pathname.split("/").filter(Boolean);if(parts[0]!=="study"||!/^[A-Za-z0-9]{8}$/.test(parts[1]??""))throw new ServerError("IMPORT_SOURCE_UNSUPPORTED","The lichess URL is not a study URL");
+  return {studyId:parts[1]!,url:`https://lichess.org/study/${parts[1]!}`};
+}
+
+export async function resolveStudySource(url:string,fetchImpl:typeof fetch=fetch):Promise<ResolvedStudySource>{
+  const normalized=normalizeLichessStudyUrl(url);
+  const task=serial.then(async()=>{const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),10_000);try{
+    const response=await fetchImpl(`https://lichess.org/api/study/${normalized.studyId}.pgn`,{headers:{Accept:"application/x-chess-pgn","User-Agent":"chess-tabiya/repertoire-import"},signal:controller.signal});
+    if(response.status===404)throw new ServerError("IMPORT_SOURCE_NOT_FOUND","Lichess study was not found");
+    if(response.status===429||response.status>=500)throw new ServerError("IMPORT_SOURCE_UNAVAILABLE","Lichess study export is temporarily unavailable",{details:{retryAfter:response.headers.get("retry-after")??undefined}});
+    if(!response.ok)throw new ServerError("IMPORT_SOURCE_UNAVAILABLE",`Lichess study export failed with HTTP ${response.status}`);
+    return Object.freeze({pgn:await response.text(),sourceKind:"lichess_study" as const,sourceUrl:normalized.url,licenceNote:`no-rights-asserted: public lichess study export ${normalized.url}; retrieved ${new Date().toISOString()}`});
+  }catch(error){if(error instanceof ServerError)throw error;throw new ServerError("IMPORT_SOURCE_UNAVAILABLE","Lichess study export is unavailable",{cause:error});}finally{clearTimeout(timeout);}});
+  serial=task.then(()=>undefined,()=>undefined);return task;
+}
 
 export function normalizeLichessGameUrl(value: string): { gameId: string; url: string } {
   let url: URL;

@@ -60,5 +60,7 @@ recency derivation, the floor, coalescing/TTL/negative caching, operator-only he
 capability/error honesty, disclosure re-closing, ephemerality, preference migration,
 the sentence fence, and the complete Just Play browser flow at zero retries.
 
-Corpus data remains evidence only. Repertoire gap-finding, explorer-seeded resistance,
-catalog browsing, and persisted corpus evidence are not implemented here.
+Corpus data remains evidence only. Repertoire gap-finding now consumes the same
+population attribution and guard outside runs; see `docs/repertoire-gap-finding.md`.
+Explorer-seeded resistance, catalog browsing, and persisted in-run corpus evidence are
+not implemented here.
