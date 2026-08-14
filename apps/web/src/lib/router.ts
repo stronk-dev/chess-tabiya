@@ -11,6 +11,7 @@ export type StaticRouteName =
 export type AppRoute =
   | { readonly name: StaticRouteName }
   | { readonly name: "run"; readonly runId: string }
+  | { readonly name: "story"; readonly runId: string }
   | { readonly name: "live-session"; readonly sessionId: string }
   | { readonly name: "live-overlay"; readonly runId: string }
   | { readonly name: "not-found"; readonly pathname: string };
@@ -45,6 +46,13 @@ export function parseRoute(location: Pick<Location, "pathname">): AppRoute {
       // Invalid URL encoding is a not-found route, never an app crash.
     }
   }
+  const story = /^\/review\/game\/([^/]+)$/.exec(pathname);
+  if (story !== null) {
+    try {
+      const runId = decodeURIComponent(story[1]!);
+      if (runId.trim() !== "") return Object.freeze({ name: "story", runId });
+    } catch { /* malformed story ids route to not-found */ }
+  }
   const live = /^\/live\/(session|overlay)\/([^/]+)$/.exec(pathname);
   if (live !== null) {
     try {
@@ -57,6 +65,7 @@ export function parseRoute(location: Pick<Location, "pathname">): AppRoute {
 
 export function routePath(route: Exclude<AppRoute, { name: "not-found" }>): string {
   if(route.name==="run")return `/play/run/${encodeURIComponent(route.runId)}`;
+  if(route.name==="story")return `/review/game/${encodeURIComponent(route.runId)}`;
   if(route.name==="live-session")return `/live/session/${encodeURIComponent(route.sessionId)}`;
   if(route.name==="live-overlay")return `/live/overlay/${encodeURIComponent(route.runId)}`;
   return Object.entries(STATIC_ROUTES).find(([, name]) => name === route.name)![0];

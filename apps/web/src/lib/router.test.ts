@@ -23,6 +23,9 @@ describe("application router", () => {
     const run = { name: "run", runId: "run / one" } as const;
     expect(routePath(run)).toBe("/play/run/run%20%2F%20one");
     expect(parseRoute({ pathname: routePath(run) })).toEqual(run);
+    const story = { name: "story", runId: "run / one" } as const;
+    expect(routePath(story)).toBe("/review/game/run%20%2F%20one");
+    expect(parseRoute({ pathname: routePath(story) })).toEqual(story);
     const liveSession = { name: "live-session", sessionId: "class / one" } as const;
     expect(parseRoute({ pathname: routePath(liveSession) })).toEqual(liveSession);
     const overlay = { name: "live-overlay", runId: "run / one" } as const;

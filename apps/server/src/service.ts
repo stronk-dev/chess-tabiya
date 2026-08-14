@@ -503,6 +503,7 @@ export class RunService {
     return Object.freeze({
       ready: pass.ready,
       pendingEvidence: pass.pending,
+      side: run.start.side,
       source: Object.freeze({
         kind: record.sourceKind,
         ...(record.sourceUrl === null ? {} : { url: record.sourceUrl }),
@@ -1183,6 +1184,19 @@ export class RunService {
     const branchIds = Array.isArray(principalOrBranches) ? principalOrBranches : maybeBranches;
     const run = requireRead(this.#storage, runId, principal).stored.run;
     const pack = this.#requiredRegisteredPack(run);
+    if (run.sessionKind === "imported") {
+      const record = this.#storage.importedGame?.(run.id);
+      if (record === undefined) throw new ServerError("STORAGE_FAILURE", "Imported run has no import record");
+      const headers: Record<string, string> = {
+        ...(record.headers.White === undefined ? {} : { White: record.headers.White }),
+        ...(record.headers.Black === undefined ? {} : { Black: record.headers.Black }),
+        ...(record.headers.Date === undefined ? {} : { Date: record.headers.Date }),
+        Result: record.result,
+        ...(record.headers.Event === undefined ? {} : { SourceEvent: record.headers.Event }),
+        ...(record.headers.Site === undefined ? {} : { SourceSite: record.headers.Site }),
+      };
+      return exportPgn(run, branchIds, headers);
+    }
     return pack === undefined
       ? exportPgn(run, branchIds)
       : exportPackRunPgn(pack.document, run, branchIds);
@@ -1289,6 +1303,9 @@ export class RunService {
     const node = stored.run.nodes.find((candidate) => candidate.id === input.nodeId);
     if (node === undefined) {
       throw new ServerError("INVALID_REQUEST", `Unknown node: ${input.nodeId}`);
+    }
+    if (stored.run.sessionKind === "imported") {
+      throw new ServerError("INVALID_REQUEST", "Imported games enter progression by creating a position run from a story moment");
     }
     const at = input.at ?? new Date().toISOString();
     const scheduleId = randomUUID();

@@ -35,3 +35,10 @@ errors; the current local verify gate passes.
 - The active writer remains the only actor that can attach staged evidence. Once every node is durable or failed, repeated story reads enqueue nothing; process loss converges by re-enqueueing missing durable nodes.
 - Added a runtime story projection over persisted evidence and shipped pivotal/phase/endgame/shape detectors. Eval pivots use the pinned ±1000 rail and 150 cp threshold; all sentences name their recorded or detector ground.
 - Terminal slides carry separate fact and entry nodes, so a checkmated position is never offered as playable. Tests cover the terminal-parent boundary, learner-relative evals, N+1 cost, durable application, and idempotent completion.
+
+## 2026-08-14 — Codex §4
+
+- Imported PGN headers now amend export without overriding Tabiya's run/session identity headers. The default export includes every branch, so the source continuation and story re-entry remain one legal PGN.
+- Added `/review/game/:runId`: a grounded, ranked story over persisted facts with honest pending state, learner-side board orientation, optional packet-bound voice, and explicit export. Re-entry rewinds and forks immediately, including from the imported leaf, so the original is preserved before the learner plays.
+- The browser acceptance imports pasted PGN, waits for the durable evidence pass, opens the story, re-enters, plays a different continuation, and verifies both the new branch and amended export.
+- The exact CI command exposed four current-tree fixture assumptions while this layer was in progress: a stale schema `$id`, two story tests using a branch label instead of its structural id, and an illegal Arena mismatch fixture. All were corrected against the shipped contracts before this checkbox flipped.

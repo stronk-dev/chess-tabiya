@@ -1,9 +1,9 @@
 import { randomUUID } from "node:crypto";
 
 import { Chess } from "chessops/chess";
-import { parseFen } from "chessops/fen";
+import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
-import { commitMove, fork, type DrillRun } from "@chess-tabiya/runtime";
+import { canonicalRunStart, commitMove, fork, type DrillRun } from "@chess-tabiya/runtime";
 
 import { mayControlSession, mayPropose, mayVote, requireRead, requireWrite, type Principal } from "./authorization.js";
 import { ServerError } from "./errors.js";
@@ -168,7 +168,7 @@ export class LiveSessionService {
     if(!mayControlSession(role)&&invitation===undefined)throw new ServerError("FORBIDDEN","Only the host or invited learner may import this leg");
     let parsed;try{parsed=parsePgnMainline(pgn);}catch(error){if(error instanceof PgnImportError)throw new ServerError("INVALID_REQUEST",error.message);throw error;}
     const access=requireWrite(this.#storage,session.runId,principal,writerId);const root=access.stored.run.nodes.find((node)=>node.parentId===null)!;
-    if(parsed.rootFen!==canonicalFen(root.fen))throw new ServerError("ARENA_ROOT_MISMATCH","PGN start position differs from the arena root");
+    if(parsed.rootFen!==canonicalRunStart({fen:root.fen,side:access.stored.run.start.side}).fen)throw new ServerError("ARENA_ROOT_MISMATCH","PGN start position differs from the arena root");
     let next=access.stored.run;
     if(legNo===2)next=fork(next,root.id,{label:"Leg 2",origin:"played",at:this.#now()}).run;
     else if(next.activeCursor.nodeId!==root.id||next.nodes.length>1)throw new ServerError("INVALID_REQUEST","Leg 1 requires an untouched arena run");

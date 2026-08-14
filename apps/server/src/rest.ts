@@ -934,9 +934,12 @@ export function createRestHandler(
         if (voiceProvider === undefined) throw new ServerError("VOICE_UNAVAILABLE", "No external voice provider is configured");
         const body = closedRecord(value, "/", ["nodeId", "scope"]);
         const scope = requiredString(body.scope, "scope");
-        if (scope !== "marker" && scope !== "reading" && scope !== "steering") throw invalid("scope must be marker, reading, or steering");
+        if (scope !== "marker" && scope !== "reading" && scope !== "steering" && scope !== "story") throw invalid("scope must be marker, reading, steering, or story");
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
-        const packet = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+        const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+        const packet = scope === "story"
+          ? Object.freeze({ ...basePacket, sentences: Object.freeze([...basePacket.sentences, ...(service.story(route.runId, principal).moments.find((moment) => moment.nodeId === access.node.id)?.sentences ?? [])]) })
+          : basePacket;
         return json(200, { ...(await renderVoice(voiceProvider, packet, voicePersona)), scope });
       }
       if (route.action === "lease") {

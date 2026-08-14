@@ -64,7 +64,7 @@ describe("own-game import", () => {
     expect(normalizeLichessGameUrl("https://www.lichess.org/abcd1234WXYZ/black?foo=1#bar")).toEqual({ gameId: "abcd1234", url: "https://lichess.org/abcd1234" });
     const calls: { input: string; init?: RequestInit }[] = [];
     const fetchImpl: typeof fetch = async (input, init) => {
-      calls.push({ input: String(input), init });
+      calls.push({ input: String(input), ...(init === undefined ? {} : { init }) });
       return new Response(PGN, { status: 200 });
     };
     const resolved = await resolveImportSource({ kind: "lichess", url: "https://lichess.org/abcd1234" }, fetchImpl);
@@ -120,7 +120,7 @@ describe("own-game import", () => {
     for (const result of queue.page(imported.run.id).results) service.applyEvidence(imported.run.id, "story-writer", result.seq);
     const principal = { learnerId: "__legacy", handle: "__legacy" } as const;
     const story = service.story(imported.run.id, principal);
-    expect(story).toMatchObject({ ready: true, pendingEvidence: 0, outcome: { kind: "unfinished" } });
+    expect(story).toMatchObject({ ready: true, pendingEvidence: 0, side: "white", outcome: { kind: "unfinished" } });
     expect(story.moments.some((moment) => moment.kinds.includes("eval_pivot"))).toBe(true);
     expect(queue.outstanding(imported.run.id)).toEqual([]);
     expect(service.story(imported.run.id, principal).pendingEvidence).toBe(0);

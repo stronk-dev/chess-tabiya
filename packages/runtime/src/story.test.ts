@@ -18,15 +18,15 @@ describe("grounded game story", () => {
     run = attachEvidence(run, path[0]!.id, ["engine:a"], { kind: "eval", source: "engine_validated", values: { centipawns: 0, engineId: "sf", requestedMovetimeMs: 100 } }, at).run;
     run = attachEvidence(run, path[1]!.id, ["engine:b"], { kind: "eval", source: "engine_validated", values: { centipawns: 25, engineId: "sf", requestedMovetimeMs: 100 } }, at).run;
     run = attachEvidence(run, path[2]!.id, ["engine:c"], { kind: "eval", source: "engine_validated", values: { centipawns: 240, engineId: "sf", requestedMovetimeMs: 100 } }, at).run;
-    const story = storyMoments(run, "main", { recordedResult: "0-1" });
-    expect(story.moments.some((moment) => moment.kinds.includes("eval_pivot") && moment.sentences.some((sentence) => sentence.includes("-265 cp")))).toBe(true);
+    const story = storyMoments(run, run.activeCursor.branchId, { recordedResult: "0-1" });
+    expect(story.moments.some((moment) => moment.kinds.includes("eval_pivot") && moment.sentences.some((sentence) => sentence.includes("+265 cp")))).toBe(true);
     expect(story.moments.at(-1)).toMatchObject({ kinds: expect.arrayContaining(["outcome"]), entryNodeId: path[2]!.id });
   });
 
   it("grounds a board-terminal outcome at the terminal node but enters its playable parent", () => {
     const start = imported("7k/8/5KQ1/8/8/8/8/8 w - - 0 1");
     const run = commitMove(start, "g6g7", { actor: "user", at }).run;
-    const outcome = storyMoments(run, "main", { recordedResult: "1-0" }).moments.find((moment) => moment.kinds.includes("outcome"));
+    const outcome = storyMoments(run, run.activeCursor.branchId, { recordedResult: "1-0" }).moments.find((moment) => moment.kinds.includes("outcome"));
     expect(outcome).toMatchObject({ nodeId: run.activeCursor.nodeId, entryNodeId: start.activeCursor.nodeId });
   });
 });

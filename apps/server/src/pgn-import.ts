@@ -1,4 +1,3 @@
-import { makeFen } from "chessops/fen";
 import { parsePgn, startingPosition } from "chessops/pgn";
 import { parseSan } from "chessops/san";
 import { makeUci } from "chessops/util";
@@ -45,7 +44,7 @@ export function parsePgnMainline(
   } catch (error) {
     throw new PgnImportError("PGN has an invalid starting position", { cause: error });
   }
-  const rootFen = canonicalFen(makeFen(position.toSetup()));
+  const rootFen = canonicalFen(position);
   const moves: { san: string; uci: string }[] = [];
   for (const data of mainline) {
     const move = parseSan(position, data.san);

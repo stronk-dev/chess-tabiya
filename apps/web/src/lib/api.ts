@@ -16,6 +16,7 @@ import type {
   ObjectiveState,
   OpponentSelection,
   PolicyConfig,
+  StoryMoment,
 } from "@chess-tabiya/runtime";
 
 export interface PackSummary {
@@ -249,7 +250,36 @@ export interface HumanSplitPage {
   readonly candidates: readonly NonNullable<OpponentSelection["candidates"]>[number][];
 }
 
-export interface VoicePage { readonly text: string; readonly source: "provider" | "deterministic"; readonly scope: "marker" | "reading" | "steering"; }
+export interface VoicePage { readonly text: string; readonly source: "provider" | "deterministic"; readonly scope: "marker" | "reading" | "steering" | "story"; }
+
+export interface ImportedGameRecord {
+  readonly runId: string;
+  readonly sourceKind: "pgn_paste" | "lichess_url";
+  readonly sourceUrl: string | null;
+  readonly movetextDigest: string;
+  readonly headers: Readonly<Record<string, string>>;
+  readonly result: "1-0" | "0-1" | "1/2-1/2" | "*";
+  readonly pgn: string;
+  readonly licenceNote: string;
+  readonly importedAt: string;
+}
+export interface ImportGameRequest {
+  readonly id: string;
+  readonly side: "white" | "black";
+  readonly opponentPolicy: { readonly mode: "human_common" | "strong_engine"; readonly targetElo?: number };
+  readonly policyConfig: PolicyConfig;
+  readonly seed: number;
+  readonly source: { readonly kind: "pgn"; readonly pgn: string } | { readonly kind: "lichess"; readonly url: string };
+}
+export interface GameStory {
+  readonly ready: boolean;
+  readonly pendingEvidence: number;
+  readonly side: "white" | "black";
+  readonly source: { readonly kind: ImportedGameRecord["sourceKind"]; readonly url?: string; readonly headers: Readonly<Record<string, string>>; readonly result: ImportedGameRecord["result"]; readonly importedAt: string };
+  readonly outcome: { readonly kind: "board_terminal" | "recorded_result" | "unfinished"; readonly result?: ImportedGameRecord["result"] };
+  readonly moments: readonly StoryMoment[];
+  readonly rank: readonly string[];
+}
 
 export interface CreateRunRequest {
   readonly id: string;
@@ -486,6 +516,9 @@ export interface DrillClientApi extends RunApi {
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage>;
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage>;
   pgn(runId: string, branchIds?: readonly string[]): Promise<PgnDownload>;
+  importGame?(input: ImportGameRequest, writerId: string): Promise<{ readonly run: DrillRun; readonly importRecord: ImportedGameRecord; readonly evidencePass: { readonly jobs: number } }>;
+  importRecord?(runId: string): Promise<ImportedGameRecord>;
+  story?(runId: string): Promise<GameStory>;
   progress?(): Promise<readonly ProgressAttempt[]>;
   dueProgress?(): Promise<readonly ProgressSchedule[]>;
   dismissSchedule?(scheduleId: string): Promise<void>;
@@ -611,6 +644,19 @@ export class DrillApi implements DrillClientApi {
       body: input,
     });
     return body.run;
+  }
+
+  importGame(input: ImportGameRequest, writerId: string): Promise<{ readonly run: DrillRun; readonly importRecord: ImportedGameRecord; readonly evidencePass: { readonly jobs: number } }> {
+    return this.#json("/runs/import", { method: "POST", writerId, body: input });
+  }
+
+  async importRecord(runId: string): Promise<ImportedGameRecord> {
+    const body = await this.#json<{ readonly importRecord: ImportedGameRecord }>(`/runs/${encoded(runId)}/import`);
+    return body.importRecord;
+  }
+
+  story(runId: string): Promise<GameStory> {
+    return this.#json(`/runs/${encoded(runId)}/story`);
   }
 
   async runs(limit = 50, offset = 0): Promise<readonly RunSummary[]> {

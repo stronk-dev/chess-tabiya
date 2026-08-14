@@ -93,10 +93,18 @@ export function sessionSource(from: DrillRun | CreateRunSession): SessionSource 
     }
     return Object.freeze({ kind: "pack", packId: from.packId, packDigest: from.packDigest });
   }
+  if (from.kind === "imported") {
+    return Object.freeze({
+      kind: "imported",
+      start: canonicalRunStart(from.start),
+      movetextDigest: from.movetextDigest,
+      feedbackPolicy: "attempt_end",
+      opponentPolicy: Object.freeze({ ...from.opponentPolicy }) as PositionOpponentPolicy,
+    });
+  }
   return Object.freeze({
-    kind: from.kind,
+    kind: "position",
     start: canonicalRunStart(from.start),
-    ...(from.kind === "imported" ? { movetextDigest: from.movetextDigest } : {}),
     feedbackPolicy: "attempt_end",
     opponentPolicy: Object.freeze({ ...from.opponentPolicy }) as PositionOpponentPolicy,
   });

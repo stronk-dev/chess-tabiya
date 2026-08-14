@@ -52,7 +52,7 @@ function selectedBranches(run: DrillRun, branchIds?: readonly string[]): readonl
   return run.branches.filter((branch) => selected.has(branch.id));
 }
 
-function pgnHeaders(run: DrillRun, root: Node): Map<string, string> {
+function pgnHeaders(run: DrillRun, root: Node, overrides: Readonly<Record<string, string>> = {}): Map<string, string> {
   const date = run.events[0]?.at.slice(0, 10).replaceAll("-", ".") ?? "????.??.??";
   const headers = new Map<string, string>([
     ["Event", run.packId === null ? "Tabiya session: position" : `Tabiya drill: ${run.packId}`],
@@ -68,10 +68,18 @@ function pgnHeaders(run: DrillRun, root: Node): Map<string, string> {
     ["TabiyaSession", run.sessionDigest],
   ]);
   if (run.packId !== null) headers.set("TabiyaPack", run.packId);
+  for (const [name, value] of Object.entries(overrides)) headers.set(name, value);
+  headers.set("Site", "chess-tabiya");
+  headers.set("TabiyaRun", run.id);
+  headers.set("TabiyaSession", run.sessionDigest);
   return headers;
 }
 
-export function exportPgn(run: DrillRun, branchIds?: readonly string[]): string {
+export function exportPgn(
+  run: DrillRun,
+  branchIds?: readonly string[],
+  headerOverrides: Readonly<Record<string, string>> = {},
+): string {
   const branches = selectedBranches(run, branchIds);
   const paths = branches.map((branch) => ({ branch, path: branchPath(run, branch.id) }));
   for (const { path } of paths) validatePath(path);
@@ -101,7 +109,7 @@ export function exportPgn(run: DrillRun, branchIds?: readonly string[]): string 
   }
 
   const game: Game<PgnNodeData> = {
-    headers: pgnHeaders(run, root),
+    headers: pgnHeaders(run, root, headerOverrides),
     moves: tree,
   };
   return makePgn(game);

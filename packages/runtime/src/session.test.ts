@@ -96,19 +96,20 @@ describe("run session identity and feedback", () => {
   });
 
   it("includes imported movetext in session identity and refuses to reconstruct it from a bare run", async () => {
-    const source = sessionSource({
+    const createSource = {
       kind: "imported",
       start: { fen: FEN, side: "white" },
       movetextDigest: `sha256:${"a".repeat(64)}`,
       feedbackPolicy: "attempt_end",
       opponentPolicy: { mode: "human_common", targetElo: 1600 },
-    });
+    } as const;
+    const source = sessionSource(createSource);
     await expect(digestSessionSource(source)).resolves.not.toBe(
-      await digestSessionSource({ ...source, movetextDigest: `sha256:${"b".repeat(64)}` }),
+      await digestSessionSource({ ...createSource, movetextDigest: `sha256:${"b".repeat(64)}` }),
     );
     const imported = createRun({
       id: "imported-run",
-      session: source,
+      session: createSource,
       sessionDigest: await digestSessionSource(source),
       policyConfig,
       seed: 9,

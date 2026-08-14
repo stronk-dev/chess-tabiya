@@ -76,6 +76,22 @@ describe("PGN variation export", () => {
     expect(pgn).not.toContain("e5");
   });
 
+  it("merges source headers without allowing rehearsal identity to be overwritten", () => {
+    const pgn = exportPgn(branchedRun(), undefined, {
+      White: "Alice",
+      Black: "Bob",
+      Result: "1-0",
+      SourceEvent: "Original event",
+      Site: "hostile-site",
+      TabiyaRun: "hostile-run",
+    });
+    expect(pgn).toContain('[White "Alice"]');
+    expect(pgn).toContain('[SourceEvent "Original event"]');
+    expect(pgn).toContain('[Site "chess-tabiya"]');
+    expect(pgn).toContain('[TabiyaRun "pgn-run"]');
+    expect(pgn).not.toContain("hostile-run");
+  });
+
   it("rejects a corrupted move path before writing PGN", () => {
     const run = branchedRun();
     const corrupted: DrillRun = {

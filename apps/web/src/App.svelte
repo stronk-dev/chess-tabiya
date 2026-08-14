@@ -5,6 +5,7 @@
   import Chessboard from "./lib/Chessboard.svelte";
   import PackList from "./lib/PackList.svelte";
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
+  import GameStoryScreen from "./lib/GameStoryScreen.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
   import {
@@ -25,6 +26,8 @@
     type SessionJournalEntry,
     type SessionKind,
     type BoardControl,
+    type GameStory,
+    ApiError,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
   import { ShellKeyboardDispatcher } from "./lib/keyboard.js";
@@ -85,6 +88,11 @@
   let liveInviteLeg: 1 | 2 = $state(1);
   let liveArenaLeg: 1 | 2 = $state(1);
   let liveArenaPgn = $state("");
+  let importPgn = $state("");
+  let importUrl = $state("");
+  let importSide: "white" | "black" = $state("white");
+  let importError: string | undefined = $state();
+  let story: GameStory | undefined = $state();
   let capabilities: Capabilities | undefined = $state();
   let routeLoading = $state(true);
   let routeError: string | undefined = $state();
@@ -107,6 +115,7 @@
   let unsubscribeRouter: (() => void) | undefined;
   let loadGeneration = 0;
   let livePoll: ReturnType<typeof setInterval> | undefined;
+  let storyPoll: ReturnType<typeof setInterval> | undefined;
 
   const keyboardDispatcher = new ShellKeyboardDispatcher({
     navigate,
@@ -174,6 +183,9 @@
     try {
       if (next.name === "home" || next.name === "review") {
         runs = await api.runs(50, 0);
+      } else if (next.name === "story") {
+        const loaded = await Promise.all([refreshStory(next.runId, true), api.capabilities()]);
+        capabilities = loaded[1];
       } else if (next.name === "play") {
         packs = await api.packs();
       } else if (next.name === "library") {
@@ -227,6 +239,63 @@
       const detail=await api.liveSession?.(sessionId);if(detail!==undefined){if(next.name==="live-session")liveDetail=detail;else activeLiveDetail=detail;}
       if(next.name==="live-session")liveJournal=(await api.sessionJournal?.(sessionId)??{entries:[],nextSeq:0}).entries;
     })(),2_000);
+  }
+
+  function syncStoryPolling(next: AppRoute): void {
+    if (storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
+    if (next.name !== "story") return;
+    storyPoll = setInterval(() => void refreshStory(next.runId, false), 1_000);
+  }
+
+  async function refreshStory(runId: string, allowReveal: boolean): Promise<void> {
+    if (api.story === undefined) throw new Error("Game stories are unavailable");
+    const writer = WriterSession.peek(runId, storage);
+    try {
+      story = await api.story(runId);
+    } catch (error) {
+      if (!(allowReveal && error instanceof ApiError && error.code === "ASSISTANCE_WITHHELD" && writer !== undefined)) throw error;
+      await api.reveal(runId, writer.writerId);
+      story = await api.story(runId);
+    }
+    if (writer !== undefined && story !== undefined && !story.ready) {
+      const page = await api.evidence(runId, 0);
+      for (const result of page.results) await api.applyEvidence(runId, result.seq, writer.writerId);
+      story = await api.story(runId);
+    }
+    if (story?.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
+  }
+
+  async function importGame(): Promise<void> {
+    importError = undefined;
+    try {
+      if (api.importGame === undefined) throw new Error("Game import is unavailable");
+      const runId = `import-${crypto.randomUUID()}`;
+      const writer = WriterSession.claimFor(runId, storage);
+      await api.importGame({
+        id: runId,
+        side: importSide,
+        opponentPolicy: { mode: "human_common", targetElo: 1800 },
+        policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+        seed: Math.floor(Math.random() * 2_147_483_647),
+        source: importUrl.trim() === "" ? { kind: "pgn", pgn: importPgn } : { kind: "lichess", url: importUrl },
+      }, writer.writerId);
+      await api.reveal(runId, writer.writerId);
+      navigate(routePath({ name: "story", runId }));
+    } catch (error) { importError = error instanceof Error ? error.message : String(error); }
+  }
+
+  async function enterStoryMoment(runId: string, nodeId: string): Promise<void> {
+    const writer = WriterSession.peek(runId, storage);
+    if (writer === undefined) throw new Error("This device does not hold the imported run writer session");
+    await api.rewind(runId, { nodeId }, writer.writerId);
+    await api.fork(runId, { nodeId, label: "story-reentry", intent: "Play a different continuation from this story moment" }, writer.writerId);
+    navigate(routePath({ name: "run", runId }));
+  }
+
+  async function exportStory(runId: string): Promise<void> {
+    const download = await api.pgn(runId);
+    const url = URL.createObjectURL(new Blob([download.text], { type: "text/x-chess-pgn;charset=utf-8" }));
+    const anchor = document.createElement("a"); anchor.href = url; anchor.download = download.filename; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 
   async function authenticate(): Promise<void> {
@@ -334,6 +403,7 @@
       route = next;
       void loadRoute(next);
       syncLivePolling(next);
+      syncStoryPolling(next);
     });
     void (async () => {
       try {
@@ -356,6 +426,7 @@
     controller.destroy();
     keyboardDispatcher.destroy();
     if(livePoll!==undefined)clearInterval(livePoll);
+    if(storyPoll!==undefined)clearInterval(storyPoll);
     router.destroy();
   });
 </script>
@@ -455,18 +526,35 @@
       {#if activeLiveDetail}
         <aside class="session-banner" aria-label="Live session rail"><strong>{activeLiveDetail.session.title}</strong><span>{activeLiveDetail.role} · {activeLiveDetail.proposals.filter((item)=>item.status==="open").length} open proposals{activeLiveDetail.vote ? ` · ${activeLiveDetail.vote.total} votes` : ""}</span><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:activeLiveDetail!.session.id}))}>Session</button></aside>
       {/if}
+      {#if session.runState.run.sessionKind === "imported"}
+        <aside class="session-banner" aria-label="Imported game story"><strong>Imported game</strong><span>The original continuation and your branches share one run.</span><button type="button" onclick={() => navigate(routePath({ name: "story", runId: session.runState!.run.id }))}>Story</button></aside>
+      {/if}
     {:else}
       <main class="shell-view"><h1>Run unavailable.</h1><p role="alert">{session.error ?? "The run could not be loaded."}</p></main>
     {/if}
+  {:else if route.name === "story"}
+    {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
+    {#if story}<GameStoryScreen {story} onEnter={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onVoice={capabilities?.providers.llm === "external" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">
       <p class="eyebrow">Review</p><h1 id="review-title">Run history</h1>
-      <p>Open a run to replay, branch, compare, or export it. Standalone comparison is not part of this shell release.</p>
+      <p>Open a run to replay, branch, compare, or export it. Import one finished game when you want its moments to become rehearsal doors.</p>
+      <form class="import-game" onsubmit={(event) => { event.preventDefault(); void importGame(); }}>
+        <h2>Import one game</h2>
+        <label>Lichess game URL <input type="url" placeholder="https://lichess.org/abcdefgh" bind:value={importUrl} /></label>
+        <span>or paste PGN</span>
+        <label>PGN <textarea rows="6" placeholder="[Event …]" bind:value={importPgn}></textarea></label>
+        <label>Your side <select bind:value={importSide}><option value="white">White</option><option value="black">Black</option></select></label>
+        <button class="primary" type="submit" disabled={importUrl.trim() === "" && importPgn.trim() === ""}>Build game story</button>
+        {#if importError}<p role="alert">{importError}</p>{/if}
+        <p class="honest">Chess.com: download or copy the PGN from the game page and paste it here. Tabiya never links or mines your account.</p>
+      </form>
       <div class="item-list">
         {#each runs as run}
           <article>
             <div><h2>{run.title}</h2><p>{readableDate(run.updatedAt)} · {run.branchCount} {run.branchCount === 1 ? "branch" : "branches"} · {run.objectiveState}</p></div>
-            <button type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>Open run</button>
+            <button type="button" onclick={() => navigate(routePath({ name: run.sessionKind === "imported" ? "story" : "run", runId: run.id }))}>{run.sessionKind === "imported" ? "Open story" : "Open run"}</button>
           </article>
         {:else}<p>No runs to review yet.</p>{/each}
       </div>
@@ -659,8 +747,12 @@
   .access, .honest { font-size: 0.88rem; }
   button { padding: 0.72rem 0.9rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--panel); color: var(--ink); cursor: pointer; }
   button:hover, button:focus-visible, button.primary { border-color: var(--accent); background: var(--accent); color: white; }
+  button:disabled { cursor: not-allowed; opacity: 0.55; }
   .item-list { display: grid; gap: 0.7rem; max-height: min(55dvh, 36rem); margin-top: 2rem; overflow: auto; }
   .item-list article { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+  .import-game { display: grid; gap: 0.65rem; max-width: 48rem; margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+  .import-game label { display: grid; gap: 0.3rem; }
+  .import-game input, .import-game textarea { width: 100%; padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.5rem; }
   .row-actions { display: flex; gap: 0.5rem; }
   .row-actions label { display: grid; gap: 0.25rem; }
   select { padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.55rem; background: var(--panel); }

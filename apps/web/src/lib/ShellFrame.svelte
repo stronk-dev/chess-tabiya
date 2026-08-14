@@ -35,7 +35,7 @@
   ] as const;
 
   function active(name: string): boolean {
-    return route.name === name || (name === "play" && route.name === "run") || (name === "live" && (route.name === "live-session" || route.name === "live-overlay"));
+    return route.name === name || (name === "play" && route.name === "run") || (name === "review" && route.name === "story") || (name === "live" && (route.name === "live-session" || route.name === "live-overlay"));
   }
 
   function follow(event: MouseEvent, path: string): void {

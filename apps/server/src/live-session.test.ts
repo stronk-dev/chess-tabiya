@@ -75,7 +75,7 @@ describe("live session platform",()=>{
     const unchanged=JSON.stringify(storage.read("arena-run")!.run.events);
     expect(()=>live.importLeg(session.id,1,principal,"writer-a","1. e4 (1. d4) e5 *")).toThrow("variations");
     expect(JSON.stringify(storage.read("arena-run")!.run.events)).toBe(unchanged);
-    expect(()=>live.importLeg(session.id,1,principal,"writer-a",'[SetUp "1"]\n[FEN "8/8/8/8/8/8/K6k/R7 w - - 0 1"]\n\n1. Ra2 *')).toThrow("differs");
+    expect(()=>live.importLeg(session.id,1,principal,"writer-a",'[SetUp "1"]\n[FEN "8/8/8/8/8/8/K6k/R7 w - - 0 1"]\n\n1. Rb1 *')).toThrow("differs");
     expect(JSON.stringify(storage.read("arena-run")!.run.events)).toBe(unchanged);
     const leg1=live.importLeg(session.id,1,principal,"writer-a","1. e4 e5 2. Nf3 Nc6 *");
     const leg2=live.importLeg(session.id,2,principal,"writer-a","1. d4 d5 2. c4 e6 *");

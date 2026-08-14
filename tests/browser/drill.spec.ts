@@ -19,6 +19,36 @@ async function register(page: Page): Promise<string> {
 
 test.beforeEach(async ({ page }) => register(page));
 
+test("imports one game, opens a grounded story, re-enters play, and exports original plus branch", async ({ page }) => {
+  await page.getByRole("link", { name: "Review" }).click();
+  await page.getByLabel("PGN").fill(`[Event "Browser import"]
+[Site "https://lichess.org/abcd1234"]
+[White "Alice"]
+[Black "Bob"]
+[Result "1-0"]
+
+1. e4 e5 2. Nf3 Nc6 1-0`);
+  await page.getByRole("button", { name: "Build game story" }).click();
+  await expect(page).toHaveURL(/\/review\/game\/import-/);
+  await expect(page.getByRole("heading", { name: "Alice – Bob" })).toBeVisible();
+  await expect(page.getByText("grounded story", { exact: false })).toBeVisible();
+  const enter = page.getByRole("button", { name: "Re-enter and play from here" });
+  await expect(enter).toBeEnabled({ timeout: 15_000 });
+  const runId = page.url().split("/").at(-1)!;
+  await enter.click();
+  await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await move(page, "f1", "b5", "white");
+  const graph = await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: { branches: unknown[]; nodes: { moveUci: string | null }[] } };
+  expect(graph.graph.branches.length).toBeGreaterThanOrEqual(2);
+  expect(graph.graph.nodes.filter((node) => node.moveUci !== null).length).toBeGreaterThanOrEqual(4);
+  const exported = await page.request.get(`/runs/${runId}/pgn`);
+  const text = await exported.text();
+  expect(text).toContain('[White "Alice"]');
+  expect(text).toContain('[SourceEvent "Browser import"]');
+  expect(text).toContain("Tabiya branch");
+});
+
 test("Just Play reaches a Carlsbad and opens a passive shape marker without mutating the run", async ({ page }) => {
   await page.getByLabel("Your side").selectOption("black");
   await page.getByLabel("Optional FEN").fill("r1bqr1k1/pppnbppp/5n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10");

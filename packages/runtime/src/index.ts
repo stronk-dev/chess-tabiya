@@ -1,6 +1,6 @@
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
-export { transposeKey } from "./chess.js";
+export { canonicalFen, transposeKey } from "./chess.js";
 export {
   deviationAnchors,
   insideAuthoredBoundary,
