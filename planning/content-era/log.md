@@ -1099,3 +1099,113 @@ is inside Syzygy range, which is the point of the root choices); the
 rook-pawn drawn-file claim in the QvP pack is cited-not-queried and named in
 its blockers; no touch of `rfc/`, `design/`, `apps/`, `packages/`,
 `schemas/`, no commits; stayed off sibling OPENING and ON-RAMP territory.
+
+## 2026-08-14 — Content wave 4a: eight opening packs — next priority tier + the §2c stragglers (claude)
+
+**Landed.** Four families, one chosen-side and one anti pack each, all in
+`content/drafts/`, all `make pack-check` green:
+
+- **King's Indian** (E60 row, 5,353,956): `kid-classical-black` (chosen) +
+  `anti-kid-classical-white` (§2c straggler anti-KID). E99 Traditional Line
+  skeleton, both sides; 9.b4 Bayonet and ...Ne8 as branch tips. Shape handoff:
+  `fianchetto-g7` (trigger arithmetic holds across every spine position).
+- **Dutch** (A80 row, 4,845,395): `leningrad-dutch-black` (chosen) +
+  `anti-dutch-leningrad-white` (§2c anti-Dutch). A87 skeleton via the 2.c4
+  order (33.3% at band); Warsaw/Matulovic finishers as tips, with the A88/A89
+  2.g3-order transpositions verified FEN-identical. Shape handoff:
+  `fianchetto-g7` incl. the white-trade plan on the anti side.
+- **London** (D02 row, 3,851,145): `london-system-white` (chosen) +
+  `anti-london-black` (§2c anti-London). D02 mainline row + hand plies to the
+  Bg3/Bd3/Ne5 tabiya; the ...Qb6 Poisoned Pawn row reached by transposition,
+  FEN-verified. **No shapes reference, deliberately** — no library entry names
+  the London wedge; entry commissioned in both packs' blockers.
+- **Italian** (wave-4a C50 row, 44,467,486): `italian-center-attack-white` +
+  `anti-italian-center-attack-black`. C54 Center Attack skeleton + the forcing
+  9-ply hand extension to the isolani tabiya. Shape handoff: `iqp-white`, and
+  the Black pack ARRIVES inside the entry's blockade success signature
+  (knight on d5 + isolated white d-pawn, census-derived from the walked FEN).
+
+**Priority evidence.** The committed artifact's next tier after wave 2 is
+exactly KID/Dutch/London — the three §2c stragglers' families — so the design
+commitment and the frequency order coincide. The eighth-pack family came from a
+fresh authenticated explorer pull (same query surface: 1400/1600/1800,
+blitz+rapid, 2024-01..2026-07) over seven candidate roots, emitted to
+`content/candidates/priority-wave4a/` (separate output root: the committed
+artifact's lines input is a fixture inside `apps/`, untouchable this wave).
+Result: B01 Scandinavian 56,347,011 (2 plies) > C50 Italian 44,467,486
+(5 plies) > C60 Ruy 20,756,268 > D30 QGD 13,978,493 > D10 Slav 10,340,215.
+**Italian chosen over Scandinavian on depth-commensurability**: among
+tabiya-depth roots (4-6 plies) the Italian leads 2:1, and a 2-ply funnel is not
+comparable to 5-ply roots (the committed artifact's own Sicilian row has the
+same property). Judgment recorded here and in the Italian packs' blockers; the
+Scandinavian is the obvious wave-4b family on raw totals.
+
+**Cost split (minutes; engine-validation 0 and owner-review 0 everywhere):**
+
+- batch setup (nine docs/models read, priority pull incl. 401-then-token
+  redo, four TSV volumes fetched, 8 skeleton emits, chessops walk harness):
+  agent-research 35 · tooling-friction 12
+- kid-classical-black: agent-research 6 · agent-encoding 16 · revision 0
+- anti-kid-classical-white: agent-research 4 · agent-encoding 16 · revision 0
+- leningrad-dutch-black: agent-research 6 · agent-encoding 14 · revision 0
+- anti-dutch-leningrad-white: agent-research 4 · agent-encoding 15 · revision 2 (sibling-branch placement)
+- london-system-white: agent-research 5 · agent-encoding 15 · revision 1 (evidenceTypes)
+- anti-london-black: agent-research 3 · agent-encoding 14 · revision 0
+- italian-center-attack-white: agent-research 6 · agent-encoding 15 · revision 0
+- anti-italian-center-attack-black: agent-research 3 · agent-encoding 15 · revision 0
+
+Validator: 6/8 green on first run; the two failures were mine (root-sibling
+branches nested as children — `ILLEGAL_SPINE_MOVE` with exact pointers — and
+one wrong evidenceTypes label), both fixed in minutes.
+
+**Frictions and findings, sharpest first:**
+
+1. **The explorer requires the token for every pull now**: the unauthenticated
+   run returned a clean all-abstention artifact (HTTP 401 recorded per row) —
+   the instrument degraded exactly as designed, and `.env.lichess` + re-run
+   produced the real artifact. Cache note: the committed priority artifact's
+   six cached responses are still present under `content/sources/`, so a
+   future single-artifact re-emit with a widened lines file would reproduce
+   the old rows byte-identical — but the lines input lives at
+   `apps/server/src/sourcing/fixtures/explorer-lines.tsv`, which content-era
+   agents may not edit. Ask: move the priority lines input to `content/`.
+2. **Wave-2 friction #2 recurs, wider**: the openings emitter's fixture covers
+   only a 3-row d.tsv stub — even the D02 London family needed the pinned
+   commit's real volume fetched to the scratchpad. All four families (a, c, d,
+   e volumes) ran through `--tsv`. Ship the five volumes or fetch under the
+   source lock.
+3. **Wave-2 friction #3 recurs, twice** (third and fourth attestations):
+   first-move alternatives (anti-Dutch 2.Bf4/2.e4, anti-Italian ...Nf6 Two
+   Knights) are sibling root branches again. The validator's
+   ILLEGAL_SPINE_MOVE pointer caught my attempt to nest them as children —
+   the error surface is good; the missing start-anchor idiom is still the ask.
+4. **Wave-2 friction #5 recurs** (fianchetto-g7's white-trade plan and
+   iqp-white references are hands-off declarations in three of the packs;
+   genuinely-firing in the others). Same ask: a "present vs hands-off-to"
+   distinction on shape references.
+5. **Two shape-library gaps now block honest handoffs**: (a) no entry names
+   the KID chain arrangement — `closed-centre-chain`'s trigger is pinned to
+   the French/Caro squares and the mirroring law correctly forbids reusing its
+   colour-owned plans for the reversed arrangement, so both KID packs inline
+   their chain teaching; (b) no entry names the London wedge/system pyramid.
+   Both commissioned via graduationBlockers (wave-3 dxc5-residue precedent).
+6. **The walk harness caught a real authoring error before it shipped**: the
+   drafted London "h-file trap" annotation claimed ...Bxg3 after Nxe5 dxe5 —
+   illegal, the e5 pawn blocks the d6-g3 diagonal. The surviving annotations
+   state only derived fork geometry. Lines must be derived, never recalled
+   (fourth attestation of the wave-2/3 lesson; plain `node` + the pnpm-store
+   chessops ESM path works without the esbuild ritual — cheaper than both
+   prior methods).
+7. **What worked as designed**: `derived_feature` is exactly the right
+   evidenceTypes label for machine-walked square arithmetic (used in three
+   packs); the anti-Italian pack ending INSIDE iqp-white's blockade success
+   signature is the first pack whose shape handoff is a board fact on arrival
+   rather than a promise.
+
+**Not done, deliberately:** no engine pass on any position (every pack's
+blockers say so); no explorer pulls below family roots; the shipped
+named_structure evaluator was not executed against the walked FENs (census
+arithmetic is declared as such); no touch of `rfc/`, `design/`, `apps/`,
+`packages/`, `schemas/`; no commits; stayed off sibling ON-RAMP and ENDGAME
+territory. Schema note: format constant verified at 0.15 (stated_reasoning
+landed mid-wave); these packs use the wave-2 vocabulary, valid under both.
