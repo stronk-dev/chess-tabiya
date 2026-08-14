@@ -17,19 +17,19 @@ opposition; drill packs supply the concepts, checkpoints, and objectives.
 
 ## Status
 
-**Playable vertical-slice phase (since 2026-08-12).** Exploration verified the
-whitespace hands-on: no reviewed product preserves attempts, compares them, or explains
-why an objective flipped. The branch runtime, drill-pack format, engine-worker, and
-drill-client RFCs are implemented. The drill client has its server orchestration, Svelte
-episode screens, mock-backed browser acceptance, and Dockerized Maia/Stockfish packaging;
-the owner's real-engine walkthrough found the fork/rewind core promising and exposed the
-missing instructional layer plus concrete comparison/layout friction. The accepted app-shell
-RFC begins the breadth-first rewrite. Product risks still include content authoring cost
-and branch-UX comprehension in human use.
+**Content era (since 2026-08-14).** Breadth is complete: every gate B1–B11 is
+green — all four drill modes plus Just Play, N-way comparison and branch groups,
+the live session platform (roles, spectating, chat votes, academy, Arena), the
+pack studio and sourcing pipelines, return/progression, structural reading
+(rung-0 sight), adaptive guidance, the shape library, and own-game import with
+grounded game stories. Zero open defects; 399 tests across 69 files plus a
+16-spec browser gate at zero retries.
 
-The whole state of that decision lives in **`planning/exploration/plan.md`** (the
-question ledger) and **`planning/exploration/gates.md`** (hypotheses, kill criteria,
-continuation gates).
+In flight: a four-RFC wave (predicate vocabulary wave 2, runtime corpus
+evidence, five market-proven adoptions, native human-vs-human match play) and
+content production at scale — 22 shape-library entries and 9 packs so far,
+priority-ordered by real rating-band explorer data. The roadmap to the owner's
+first full session: `planning/roadmap-to-done.md`.
 
 ## Project documentation
 
