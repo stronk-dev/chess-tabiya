@@ -2,56 +2,51 @@
 
 "Done" is the owner's ruling: **full features, full content, then the owner
 plays once** — with the invariant review (`design/05` §1) attached to that first
-session. This file is the checkable definition. Updated as waves land; not
-append-only.
+session. This file is the single checkable index of completed vs open. Updated
+as waves land; not append-only. Where a row needs detail, it cites the ledger
+(`design/BACKLOG.md`) — every idea has a row there; this file is the rollup.
 
 ## 1. Features (code)
 
 | Item | State |
 |---|---|
 | Breadth B1–B11 | ✅ complete 2026-08-14 |
-| Wave: predicate-wave-2 → corpus-evidence → adoption-wave-1 → social-match | 🔨 with codex |
-| Structural adoption queue: repertoire gap-finding (adoption contract now pinned — Chessbook teardown §7), **immediate blunder-guard re-added as a real policy** (owner 2026-08-14: post-commit guard v1 — commit, then "that hangs the knight — play on or rewind?"; unblocks the on-ramp wave), open-answer key-point grading, per-position community threads | 📋 RFCs after the wave |
-| Residual polish: PWA/responsive transformation, `/settings` real controls | 📋 last code wave |
-| Ideas ledgered, not scheduled (owner may promote or drop): position-scan import, personal-model opponent, B5 depth (native pool, follower feeds, cross-rating events) | 💤 |
+| Parallel wave: predicate-wave-2, corpus-evidence, adoption-wave-1, social-match | ✅ shipped 2026-08-14 |
+| Structural round: repertoire gap-finding, onramp-guard (+D28) | ✅ shipped 2026-08-14 |
+| Structural round: open-answer grading | 🔨 with codex |
+| **Polish wave** (needs one small RFC batch): PWA/responsive, `/settings` real controls, assistance **form slices** (lighting dial, arrows/halos, ambient presence, spoken TTS provider) | 📋 next after open-answer |
+| **Gamification cluster** (needs RFC **and** research/mileage first — deliberately post-session): Spire map, encounter unlocks, pack-opening ceremony. Rulings already made: library stays open, map gates its own rewards, ADR-0007 progression never for sale | 📋 post-session by design |
+| Orphan triage (owner may schedule or park): recommender, session distillation, narrative mode + difference strips, events layer (pack nights/cohorts/relays), resistance-spectrum completion (`perfect_tablebase` decision) | ⏳ owner triage at polish |
+| Ledgered, unscheduled: position-scan import, personal-model opponent, per-position threads, B5 depth (native pool, follower feeds), board-hardware integration | 💤 parked |
 
 ## 2. Content
 
 | Item | State |
 |---|---|
-| Shape library: middlegame 10/10 families, endgame families covered (~10 entries) | ✅ 22 entries |
-| Shape entries improved by predicate wave 2 (mirrors, opposition, shade) | 🔨 rides the wave |
-| Opening packs: top-3 families, chosen+anti | ✅ 6 packs |
-| Trajectory packs (the thesis content) + post-dxc5 residue entry | 🔨 authoring now |
-| Opening packs: remaining priority families (Italian, Ruy, QGD… per priority.json) | 📋 wave 4 |
-| On-ramp lane (1000–1400): position-seeds batch + principles packs. NOTE: the blunder-guard knob (third on-ramp knob) is still unencodable — needs its re-add as a real policy (ledgered) | 📋 wave 5 |
-| Anti-opening breadth per §2c first-wave list (anti-KID, anti-London, anti-Dutch remain) | 📋 wave 4/5 |
-| Endgame packs beyond rook-4v3 (families have entries; packs per §4 variants) | 📋 wave 5 |
+| Shape library | ✅ 24 entries (all families + residue) |
+| Packs: batch 1 + wave 2 openings + 2 trajectories | ✅ 12 committed |
+| Wave 4a openings (next priority tier + anti-KID/London/Dutch), 5a on-ramp (guard-enabled + emitted seeds), 5b endgames (Lucena/Philidor/opposition/…) | 🔨 three agents authoring (~18 packs) |
+| Remaining opening families to full §2 map; endgame variants breadth; more trajectories | 📋 waves 6+ |
+| Engine-validation passes over authored claims (0 run so far — graduation gate is the only content gate) | 📋 before session |
 
-## 2b. The reconciliation gate (added 2026-08-14, owner)
+## 2b. The reconciliation gate
 
-Before the session: a **full two-way traceability audit** —
-
-- forward: every `design/` commitment traced to shipped / in-flight / ledgered /
-  ORPHAN (`planning/traceability-forward.md`);
-- reverse: every archived RFC's deviations and discovered concepts traced back
-  into design — ABSORBED / consciously omitted / MISSING
-  (`planning/traceability-reverse.md`).
-
-Orphans and MISSING concepts become the final work list or conscious parkings;
-stale design assertions get corrected. **Done is not declared while either list
-is non-empty and untriaged.** First run: in flight now. Re-run cheaply after
-the last feature wave.
+✅ **First run complete 2026-08-14**: forward trace (6 orphans → homed; 2 gate
+misstatements → corrected) and reverse trace (12 MISSING → absorbed; ~16 stale →
+fixed; full edit list applied). Process fix standing (ledger flips in the
+completion protocol). **Re-run cheaply after the last feature wave** — done is
+not declared while either list is non-empty and untriaged.
 
 ## 3. The session itself
 
 When 1 and 2 are checked: the owner plays — Just Play with guidance off, a
-curated drill, a trajectory, an own-game import with its story, and (with a
-second human) one match. Then the invariant review, ruling by ruling, against
-felt play. Findings become the final polish wave.
+curated drill, a trajectory, an own-game import with its story, one match with
+a second human. Then the invariant review, ruling by ruling, against felt play.
+Findings become the final polish wave — and the Spire map RFC follows the
+session, shaped by it.
 
 ## Explicitly not blocking done
 
 Community/social depth beyond match+friend-links, native matchmaking, mobile
-native apps, monetization (Q2 axes still open by choice), public launch
-anything.
+native apps, monetization (Q2 axes open by choice; ADR-0007 binds progression
+regardless), public launch anything.
