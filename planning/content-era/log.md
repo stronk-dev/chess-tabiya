@@ -1005,3 +1005,97 @@ pack's blockers say exactly what a fixed-depth pass would settle); no
 promotion of any candidate; no touch of `rfc/`, `design/`, `apps/`,
 `packages/`, `schemas/`; no commits; stayed off sibling OPENING and ENDGAME
 territory (their new candidate dirs appeared mid-session and were not touched).
+
+## 2026-08-14 — pack wave 5b (endgame beyond rook-4v3), session 1
+agent-research 40 · agent-encoding 70 · agent-engine-validation 45 · review 0 · agent-revision 15 · agent-tooling-friction 15
+notes: **Landed six endgame packs in `content/drafts/`, all `make pack-check`
+green, all six with real Syzygy grounding** — the first packs in the repo whose
+roots, spines, and deviation classes carry machine-verified categories:
+
+- `lucena-bridge-convert.json` (win, 5 pieces) — bridge mainline, 13 plies;
+  root and every spine node queried win; Rc2?? queried loss, Ra1?/Rd7+?/Rd8?/
+  Kc5? queried draws (the checking-distance refutation of walk-to-the-rook is
+  now a tablebase fact in a deviation note).
+- `philidor-third-rank-hold.json` (hold, 5 pieces) — fence → drop-behind, 13
+  plies; root draw; the passive Rh8?? is a queried LOSS — "passivity loses" is
+  machine truth here, not folklore. Structural resolveAt: pawn-on-e6 + rook on
+  rank 1 (the rear-check machine), a position fact, not a ply number.
+- `pawn-opposition-convert.json` (win, 3 pieces) — **first use of the wave-2
+  `king_opposition` predicate in an objective**: taking direct/distant
+  opposition transitions active→preserved, and an opposition-taken structural
+  checkpoint fires the same fact for comparison. Root's one-move margin
+  verified: e3/Kd4/Kf4 win, all three retreats draw.
+- `pawn-breakthrough-convert.json` (win, 7 pieces) — 3v2 wing breakthrough
+  chosen over the famous 3v3 PRECISELY to stay inside Syzygy range. Order
+  claims all queried: c6/b6 win and a6 draws at the root; two moves later a6
+  is the unique win and both recaptures draw; slow moves LOSE.
+- `opposite-bishops-fortress-hold.json` (hold, 6 pieces) — division-of-labour
+  fortress; root draw queried; Bb6 loses at the root and draws one move later
+  (both queried) — fortress exactness in one deviation pair. Provenance is
+  explicit that unbreakability is tablebase-provable for THIS root and
+  censusable for none.
+- `queen-vs-pawn-seventh-convert.json` (win, 4 pieces) — zigzag; root split
+  queried (only the six checks win; two checks lose the queen outright);
+  spine is the DTM-optimal winding; companion query (same position, pawn on
+  c2) queried DRAW — the drawn-files claim grounded by one extra query.
+
+**Grounding method:** tablebase.lichess.org /standard, direct queries via a
+scratchpad harness (python-chess 1.11.2 for legality + FEN derivation, cached
+JSON responses). Every spine move of all six packs verified category-
+preserving for the learner; every deviation class that states a category is
+the queried one. `assessedBy: syzygy` declared on all six with correct piece
+counts and learner-perspective categories — pack-check's
+SYZYGY_ASSESSMENT_OUT_OF_RANGE caught a real miscount (OCB root declared 7,
+FEN has 6) and was fixed, i.e. the validator earns its keep.
+**The harness also caught two authored chess errors before they shipped:** the
+opposition pack's drafted mainline contained e5+?, a queried draw (now the
+pack's sharpest deviation), and the first OCB root let the defender win a free
+pawn (root redesigned). Objectives were written before the engine pass per the
+authoring rule; the pass then disciplined the lines, which is the rule working.
+
+**D28 dodge check (brief item): resolved and verified.** `objectiveRules`
+(apps/server/src/pack-orchestrator.ts:226-256) compiles the automatic
+win/draw/loss rules for outcome objectives UNCONDITIONALLY, before authored
+conditions attach; conditions are additive. All six packs carry
+resolveAt + structural conditions on top of the automatic floor, and none
+depends on a material_balance hack to force compilation.
+
+contract-gaps:
+1. **The variants rule fights the format at the file boundary.** design/04 §4
+   ("every root exists in convert/hold/save variants where the material
+   permits") cannot be satisfied INSIDE a pack: one objective, one start side
+   per file. The Q-vs-P save/convert pair the brief asked for became convert
+   only + a `retryVariants: opposite_side` prose note pointing at the unbuilt
+   hold/save sibling. `retryVariants` carries no machine link — sibling
+   variant packs of one root have no format identity connecting them. If the
+   variants rule is meant seriously, the format needs a root-identity field
+   (or pack-group), else every "pair" is a prose promise.
+2. **Learner-moves-first roots cannot capture intent before the first
+   decision.** atPly 0 is (correctly) banned and no spine node precedes ply 1,
+   so intent_capture lands after the opponent's first reply — one decision too
+   late in five of six packs. rook-4v3 dodged this only because its opponent
+   moved first. A `beforeFirstMove` interaction trigger is the missing piece.
+3. **Real tablebase work has no home in a hand-authored draft.** The queries
+   behind these packs exist only as provenance prose; `assessedBy` stays
+   admission-unverified without candidate sidecars, and
+   `candidate-emit PIPELINE=syzygy` emits a NEW spine-less pack from a FEN
+   list — it cannot ground an EXISTING authored draft. A "attach tablebase
+   evidence to this pack" path (sidecar emitter keyed on a draft) would
+   upgrade all six declarations to ledger-verifiable without re-authoring.
+4. **`king_opposition` first-use verdict: works, and one-directional.** The
+   predicate's to-move requirement makes own-colour opposition checkpoints
+   intrinsically root-safe for learner-to-move packs, and preserved-on-
+   opposition is an honest progress grade. The inverse is inexpressible AND
+   should stay that way: "opponent took the opposition → degraded" would be
+   false chess (regaining it via the pawn tempo/triangulation is the very
+   technique) — degraded's one-way law protects against the tempting wrong
+   encoding. No gap; noted so nobody "fixes" it.
+5. Minor: python-chess is not in the repo toolchain; installed to scratchpad
+   again (wave-3 note recommended blessing it — recommendation stands).
+
+Not done, deliberately: no sourcing sidecars/candidates for the six roots
+(gap 3 is the ticket); no Stockfish pass (nothing here needs it — every root
+is inside Syzygy range, which is the point of the root choices); the
+rook-pawn drawn-file claim in the QvP pack is cited-not-queried and named in
+its blockers; no touch of `rfc/`, `design/`, `apps/`, `packages/`,
+`schemas/`, no commits; stayed off sibling OPENING and ON-RAMP territory.

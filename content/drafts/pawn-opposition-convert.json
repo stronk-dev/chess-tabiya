@@ -1,0 +1,547 @@
+{
+  "id": "pawn-opposition-convert",
+  "version": "0.1.0",
+  "title": "King and pawn: opposition, key squares, promotion",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1000,
+    "maxOnlineRapid": 1800,
+    "label": "Any player who must convert king-and-pawn against king without memorised lines",
+    "branchLengthTarget": 12
+  },
+  "start": {
+    "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "win",
+    "summary": "King and pawn against king, kings face to face, your king already on a key square. Won — but only through the opposition: the tablebase confirms that stepping backwards throws the entire win away in one move. Take the opposition, walk the defender backwards, seize the promotion path, then and only then push. Promote and win.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "win",
+        "pieceCount": 3,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-14T18:47:00Z"
+      },
+      "resolveAt": {
+        "kind": "checkpoint",
+        "checkpointId": "pawn-promoted"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "any",
+          "of": [
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "king_opposition",
+                "color": "white",
+                "form": "direct"
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "king_opposition",
+                "color": "white",
+                "form": "distant"
+              }
+            }
+          ]
+        },
+        "to": "preserved",
+        "from": [
+          "active"
+        ]
+      },
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "pawn_count",
+                "color": "white",
+                "basis": "count",
+                "comparison": "equal",
+                "count": 0
+              }
+            },
+            {
+              "kind": "not",
+              "of": {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "white",
+                  "role": "queen",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              }
+            }
+          ]
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "direct-opposition",
+    "distant-opposition",
+    "key-squares",
+    "spare-pawn-tempo",
+    "shouldering"
+  ],
+  "shapes": [
+    "pawn-opposition-key-squares"
+  ],
+  "planClasses": [
+    {
+      "id": "take-the-opposition",
+      "label": "Take the opposition",
+      "description": "Face the kings with one square between and the opponent to move. Here the pawn's spare step e3 is the opposition-taking move — the runtime detects the resulting stand-off mechanically, and this drill's grading uses that detection.",
+      "shapePlan": {
+        "shape": "pawn-opposition-key-squares",
+        "plan": "white-take-the-opposition"
+      }
+    },
+    {
+      "id": "own-the-key-squares",
+      "label": "Occupy the key squares before pushing",
+      "description": "The king walks to the squares beside and ahead of the pawn's path first; the pawn moves last. In this drill the pawn makes exactly one preparatory step in the first eleven plies.",
+      "shapePlan": {
+        "shape": "pawn-opposition-key-squares",
+        "plan": "white-occupy-key-squares"
+      }
+    }
+  ],
+  "spine": [
+    {
+      "id": "w-e3",
+      "moveUci": "e2e3",
+      "moveSan": "e3",
+      "children": [
+        {
+          "id": "b-kd6",
+          "moveUci": "e6d6",
+          "moveSan": "Kd6",
+          "children": [
+            {
+              "id": "w-kf5",
+              "moveUci": "e4f5",
+              "moveSan": "Kf5",
+              "children": [
+                {
+                  "id": "b-ke7",
+                  "moveUci": "d6e7",
+                  "moveSan": "Ke7",
+                  "children": [
+                    {
+                      "id": "w-ke5",
+                      "moveUci": "f5e5",
+                      "moveSan": "Ke5",
+                      "children": [
+                        {
+                          "id": "b-kd7",
+                          "moveUci": "e7d7",
+                          "moveSan": "Kd7",
+                          "children": [
+                            {
+                              "id": "w-kf6",
+                              "moveUci": "e5f6",
+                              "moveSan": "Kf6",
+                              "children": [
+                                {
+                                  "id": "b-ke8",
+                                  "moveUci": "d7e8",
+                                  "moveSan": "Ke8",
+                                  "children": [
+                                    {
+                                      "id": "w-ke6",
+                                      "moveUci": "f6e6",
+                                      "moveSan": "Ke6",
+                                      "children": [
+                                        {
+                                          "id": "b-kd8",
+                                          "moveUci": "e8d8",
+                                          "moveSan": "Kd8",
+                                          "children": [
+                                            {
+                                              "id": "w-kf7",
+                                              "moveUci": "e6f7",
+                                              "moveSan": "Kf7",
+                                              "children": [
+                                                {
+                                                  "id": "b-kd7-2",
+                                                  "moveUci": "d8d7",
+                                                  "moveSan": "Kd7",
+                                                  "children": [
+                                                    {
+                                                      "id": "w-e4",
+                                                      "moveUci": "e3e4",
+                                                      "moveSan": "e4",
+                                                      "children": [
+                                                        {
+                                                          "id": "b-kd6-2",
+                                                          "moveUci": "d7d6",
+                                                          "moveSan": "Kd6",
+                                                          "children": [
+                                                            {
+                                                              "id": "w-kf6-2",
+                                                              "moveUci": "f7f6",
+                                                              "moveSan": "Kf6",
+                                                              "children": [
+                                                                {
+                                                                  "id": "b-kd7-3",
+                                                                  "moveUci": "d6d7",
+                                                                  "moveSan": "Kd7",
+                                                                  "children": [
+                                                                    {
+                                                                      "id": "w-e5-2",
+                                                                      "moveUci": "e4e5",
+                                                                      "moveSan": "e5",
+                                                                      "children": [
+                                                                        {
+                                                                          "id": "b-ke8-2",
+                                                                          "moveUci": "d7e8",
+                                                                          "moveSan": "Ke8",
+                                                                          "children": [
+                                                                            {
+                                                                              "id": "w-ke6-2",
+                                                                              "moveUci": "f6e6",
+                                                                              "moveSan": "Ke6",
+                                                                              "children": [
+                                                                                {
+                                                                                  "id": "b-kd8-2",
+                                                                                  "moveUci": "e8d8",
+                                                                                  "moveSan": "Kd8",
+                                                                                  "children": [
+                                                                                    {
+                                                                                      "id": "w-kf7-2",
+                                                                                      "moveUci": "e6f7",
+                                                                                      "moveSan": "Kf7",
+                                                                                      "children": [
+                                                                                        {
+                                                                                          "id": "b-kc7",
+                                                                                          "moveUci": "d8c7",
+                                                                                          "moveSan": "Kc7",
+                                                                                          "children": [
+                                                                                            {
+                                                                                              "id": "w-e6",
+                                                                                              "moveUci": "e5e6",
+                                                                                              "moveSan": "e6",
+                                                                                              "children": [],
+                                                                                              "annotations": [
+                                                                                                "Nothing can stop e7 and e8 now. Run it in and promote."
+                                                                                              ]
+                                                                                            }
+                                                                                          ]
+                                                                                        }
+                                                                                      ]
+                                                                                    }
+                                                                                  ]
+                                                                                }
+                                                                              ],
+                                                                              "annotations": [
+                                                                                "Opposition a final time — Black must step off the file, and the pawn's path is clear."
+                                                                              ]
+                                                                            }
+                                                                          ]
+                                                                        }
+                                                                      ]
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              ],
+                                                              "annotations": [
+                                                                "The shoulder: the king keeps its body between the black king and the pawn's path. Pushing with check here instead would drive the defender exactly where it wants to go — that branch is the drill's sharpest lesson."
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ],
+                                                      "annotations": [
+                                                        "Now the pawn runs. Every key square it will ever need is already occupied or controlled by the king that arrived first."
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "annotations": [
+                                                "The decisive gain: the king seizes the promotion square's neighbourhood. From f7 the pawn's entire path to e8 is owned, and only now does the pawn start walking."
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "annotations": [
+                                        "Direct opposition once more, one rank higher. Black's king is being walked backwards by geometry alone."
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "annotations": [
+                                "Outflank again on the conceded side."
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "annotations": [
+                        "Re-take the opposition each time the kings realign. The pawn has not moved since its one tempo; it is doing its other job — staying back so it cannot be attacked and keeping its spare steps."
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "annotations": [
+                "The king steps around the side that was conceded. Opposition is never the goal — it is the crowbar; the squares in front of the pawn are the goal."
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "The quietest winning move on the board, and the pack's whole thesis: the kings already stand face to face, so spend the pawn's spare step to pass the obligation to move. Now it is Black who must give way — you hold the direct opposition, and the drill records that fact the moment it is true."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "opposition-taken",
+      "label": "You hold the opposition",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "any",
+            "of": [
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "king_opposition",
+                  "color": "white",
+                  "form": "direct"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "king_opposition",
+                  "color": "white",
+                  "form": "distant"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "shoulder-moment",
+      "label": "Push with check, or shoulder?",
+      "trigger": {
+        "atSpineNode": "b-kd6-2"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "take-the-opposition",
+          "own-the-key-squares"
+        ]
+      }
+    },
+    {
+      "id": "pawn-promoted",
+      "label": "The pawn queens",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "feature",
+            "feature": {
+              "kind": "piece_reach_count",
+              "color": "white",
+              "role": "queen",
+              "scope": "any",
+              "comparison": "atLeast",
+              "count": 0
+            }
+          }
+        }
+      },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "w-e3",
+      "b-kd6",
+      "w-kf5",
+      "b-ke7",
+      "w-ke5",
+      "b-kd7",
+      "w-kf6",
+      "b-ke8",
+      "w-ke6",
+      "b-kd8",
+      "w-kf7",
+      "b-kd7-2",
+      "w-e4",
+      "b-kd6-2",
+      "w-kf6-2",
+      "b-kd7-3",
+      "w-e5-2",
+      "b-ke8-2",
+      "w-ke6-2",
+      "b-kd8-2",
+      "w-kf7-2",
+      "b-kc7",
+      "w-e6"
+    ],
+    "plyHorizon": 32
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1500,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1"
+      },
+      "moveUci": "e4e3",
+      "class": "tactical_error",
+      "note": "One step backwards and the win is gone: the tablebase calls every retreat from the key square a draw. The pawn cannot be escorted by a king standing behind it. Verified: win becomes draw."
+    },
+    {
+      "at": {
+        "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1"
+      },
+      "moveUci": "e4f3",
+      "class": "tactical_error",
+      "note": "The diagonal retreat draws identically. Key squares are not approximate: e4, d4 and f4 win, everything behind them does not. Verified."
+    },
+    {
+      "at": {
+        "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1"
+      },
+      "moveUci": "e4d4",
+      "class": "accepted_alternative",
+      "note": "The sidestep also wins (verified, four moves slower): the king is already on a key square, so more than one route exists. The tempo move e3 is drilled because it is the transferable pattern — it wins even when no sidestep does."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kd6"
+      },
+      "moveUci": "e4d3",
+      "class": "tactical_error",
+      "note": "Un-taking the opposition you just took. The tablebase confirms the retreat concedes the draw immediately. Verified."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kd6"
+      },
+      "moveUci": "e4d4",
+      "class": "accepted_alternative",
+      "note": "Also winning (verified): with the opposition held, both the frontal press and the f5 outflank convert. The spine takes the outflank because it generalises to positions with no spare pawn tempo."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kd6-2"
+      },
+      "moveUci": "e4e5",
+      "class": "tactical_error",
+      "note": "Pushing with check — the most natural move in the position and a verified draw: the check hands Black the square in front of the pawn, and the king shelters there forever. The pawn must arrive without tempo, behind a king that already owns its path. Verified: win becomes draw."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kd6-2"
+      },
+      "moveUci": "f7g6",
+      "class": "tactical_error",
+      "note": "Stepping wide loses the shoulder duel: Black's king reaches the blockade and the tablebase says draw. The winning move keeps the kings in contact — Kf6, body first. Verified."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kd8"
+      },
+      "moveUci": "e3e4",
+      "class": "accepted_alternative",
+      "note": "Starting the pawn here also wins and is in fact the tablebase's fastest route. The spine takes Kf7 first — owning e8 before the pawn commits — because it is the order that never needs recounting. Verified win."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "root-is-won-by-a-tempo",
+      "text": "This position is a tablebase win for White (Syzygy, three pieces), and the win survives exactly three of White's six legal first moves: the pawn tempo e3 and the two key-square sidesteps. All three retreats are tablebase draws. The margin of this ending is one move, machine-verified.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "opposition-is-detected",
+      "text": "When you hold the direct or distant opposition, the runtime detects it as a structural fact of the position — kings aligned, an odd gap, opponent to move — and this drill's objective records it as progress. Holding the opposition is not proof of the win; it is the mechanism this family's wins travel through.",
+      "evidenceTypes": [
+        "derived_feature",
+        "author_principle"
+      ]
+    },
+    {
+      "id": "push-last",
+      "text": "The pawn moves twice in the first fifteen plies of the authored line: once to pass the move, once when its path is already owned. Every premature push in this drill's branches was queried and draws. Escort first, push last.",
+      "evidenceTypes": [
+        "tablebase_exact",
+        "author_principle"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "Outcome drill: promote and win by any sound route. The authored line is one of several tablebase wins; the graded thing is the result.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Start position is the canonical kings-in-opposition teaching setup (White Ke4, Pe2; Black Ke6), constructed, not taken from a source diagram.",
+      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root: win, and per-move categories at the root split exactly as stated (e3, Kd4, Kf4 win; Kd3, Ke3, Kf3 draw). The authored 23-ply line was verified win-preserving move by move; an earlier draft line containing e5+ was caught BY this verification as a win-throwing error and demoted to the deviation it now is.",
+      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars).",
+      "FIRST USE of the king_opposition structural predicate (wave-2 vocabulary) in a pack objective: the preserved-transition condition and the opposition-taken checkpoint both evaluate it mechanically. What the predicate sees — alignment, odd gap, opponent to move — is exactly the textbook definition; what it cannot see (key squares, races) stays authored, as the shape entry already records.",
+      "AUTHORED, NOT PROVED: all prose reasoning; categories only are machine facts.",
+      "Plan classes reference content/shapes/pawn-opposition-key-squares.json.",
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative."
+    ],
+    "graduationBlockers": [
+      "Prose explanations are authored; categories are tablebase-grounded.",
+      "Syzygy assessment declared, not ledger-verified.",
+      "No human-play evidence for the difficulty banding of this on-ramp-adjacent material."
+    ]
+  }
+}

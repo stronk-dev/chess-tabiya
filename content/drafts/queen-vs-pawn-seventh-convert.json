@@ -1,0 +1,474 @@
+{
+  "id": "queen-vs-pawn-seventh-convert",
+  "version": "0.1.0",
+  "title": "Queen against a knight pawn on the seventh: the zigzag",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Club player who wins the queening race by one tempo and must now prove it",
+    "branchLengthTarget": 18
+  },
+  "start": {
+    "fen": "8/7K/8/8/4Q3/8/1p6/2k5 w - - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "win",
+    "summary": "Your queen against a pawn one step from promotion, your king almost the whole board away. Against a knight pawn this is won — but only by the zigzag: check the king onto its own promotion square, spend the frozen tempo on a king step, repeat. Win the pawn or mate; the tablebase confirms both the win and how little slack it has.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "win",
+        "pieceCount": 4,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-14T18:47:00Z"
+      },
+      "resolveAt": {
+        "kind": "checkpoint",
+        "checkpointId": "pawn-falls"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "feature",
+          "feature": {
+            "kind": "piece_reach_count",
+            "color": "black",
+            "role": "queen",
+            "scope": "any",
+            "comparison": "atLeast",
+            "count": 0
+          }
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      },
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "not",
+          "of": {
+            "kind": "feature",
+            "feature": {
+              "kind": "piece_reach_count",
+              "color": "white",
+              "role": "queen",
+              "scope": "any",
+              "comparison": "atLeast",
+              "count": 0
+            }
+          }
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "zigzag-checks",
+    "promotion-square-tempo",
+    "poisoned-guarded-pawn",
+    "drawn-files-recognition"
+  ],
+  "shapes": [
+    "queen-vs-pawn-on-seventh"
+  ],
+  "planClasses": [
+    {
+      "id": "zigzag",
+      "label": "Zigzag checks, king steps in",
+      "description": "Check along files and diagonals until the defending king is forced onto b1 in front of its own pawn; that frozen move is when your king walks. Repeat until the king arrives.",
+      "shapePlan": {
+        "shape": "queen-vs-pawn-on-seventh",
+        "plan": "white-zigzag-approach"
+      }
+    },
+    {
+      "id": "drawn-files",
+      "label": "Know the drawn files",
+      "description": "Against a bishop or rook pawn this same technique fails to a stalemate resource. This root is a knight pawn and is won; the companion query in this pack's provenance shows the identical position with a c-pawn is a tablebase draw. Recognising which file you face IS the technique.",
+      "shapePlan": {
+        "shape": "queen-vs-pawn-on-seventh",
+        "plan": "white-know-the-drawn-files"
+      }
+    }
+  ],
+  "spine": [
+    {
+      "id": "w-qc4",
+      "moveUci": "e4c4",
+      "moveSan": "Qc4+",
+      "children": [
+        {
+          "id": "b-kd1",
+          "moveUci": "c1d1",
+          "moveSan": "Kd1",
+          "children": [
+            {
+              "id": "w-qb3",
+              "moveUci": "c4b3",
+              "moveSan": "Qb3+",
+              "children": [
+                {
+                  "id": "b-kc1",
+                  "moveUci": "d1c1",
+                  "moveSan": "Kc1",
+                  "children": [
+                    {
+                      "id": "w-qc3",
+                      "moveUci": "b3c3",
+                      "moveSan": "Qc3+",
+                      "children": [
+                        {
+                          "id": "b-kb1",
+                          "moveUci": "c1b1",
+                          "moveSan": "Kb1",
+                          "children": [
+                            {
+                              "id": "w-kg6",
+                              "moveUci": "h7g6",
+                              "moveSan": "Kg6",
+                              "children": [
+                                {
+                                  "id": "b-ka2",
+                                  "moveUci": "b1a2",
+                                  "moveSan": "Ka2",
+                                  "children": [
+                                    {
+                                      "id": "w-qc2",
+                                      "moveUci": "c3c2",
+                                      "moveSan": "Qc2",
+                                      "children": [
+                                        {
+                                          "id": "b-ka1",
+                                          "moveUci": "a2a1",
+                                          "moveSan": "Ka1",
+                                          "children": [
+                                            {
+                                              "id": "w-qa4",
+                                              "moveUci": "c2a4",
+                                              "moveSan": "Qa4+",
+                                              "children": [
+                                                {
+                                                  "id": "b-kb1-2",
+                                                  "moveUci": "a1b1",
+                                                  "moveSan": "Kb1",
+                                                  "children": [
+                                                    {
+                                                      "id": "w-kf5",
+                                                      "moveUci": "g6f5",
+                                                      "moveSan": "Kf5",
+                                                      "children": [
+                                                        {
+                                                          "id": "b-kc1-2",
+                                                          "moveUci": "b1c1",
+                                                          "moveSan": "Kc1",
+                                                          "children": [
+                                                            {
+                                                              "id": "w-qc4-2",
+                                                              "moveUci": "a4c4",
+                                                              "moveSan": "Qc4+",
+                                                              "children": [
+                                                                {
+                                                                  "id": "b-kd1-2",
+                                                                  "moveUci": "c1d1",
+                                                                  "moveSan": "Kd1",
+                                                                  "children": [
+                                                                    {
+                                                                      "id": "w-qb3-2",
+                                                                      "moveUci": "c4b3",
+                                                                      "moveSan": "Qb3+",
+                                                                      "children": [
+                                                                        {
+                                                                          "id": "b-kc1-3",
+                                                                          "moveUci": "d1c1",
+                                                                          "moveSan": "Kc1",
+                                                                          "children": []
+                                                                        }
+                                                                      ],
+                                                                      "annotations": [
+                                                                        "Same machine, third winding. Keep cycling: force the king to b1, step in, and when your king arrives, the pawn falls or the king is mated. Play it out."
+                                                                      ]
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ],
+                                                      "annotations": [
+                                                        "Second cycle, second king step. The board has not changed; the distance has."
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "annotations": [
+                                        "A rare quiet move that keeps the win: it pins the pawn to the king. Black's king must return to the corner, and the promotion clock stays stopped."
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "annotations": [
+                                "The purchased tempo is spent on a king step. This is the entire winning mechanism: zigzag until the king blocks its own pawn, walk once, repeat. Count the cycles, not the moves."
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "annotations": [
+                        "The zigzag's destination: this check forces the king onto b1 — in front of its own pawn. For exactly one move nothing on Black's side can happen, and one move is what the far-away king needed."
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "Only checks preserve the win — the pawn is one tempo from queening, so every quiet move was verified to throw it away. The zigzag begins: each check steps the queen one square closer on the diagonal or the file."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "tempo-gained",
+      "label": "The king blocks its own pawn — the tempo is yours",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "pieceOnSquare",
+                "square": "b1",
+                "piece": {
+                  "color": "black",
+                  "role": "king"
+                }
+              },
+              {
+                "kind": "pieceOnSquare",
+                "square": "b2",
+                "piece": {
+                  "color": "black",
+                  "role": "pawn"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "pawn-falls",
+      "label": "The pawn is gone without promoting",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "pawn_count",
+                  "color": "black",
+                  "basis": "count",
+                  "comparison": "equal",
+                  "count": 0
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "feature",
+                  "feature": {
+                    "kind": "piece_reach_count",
+                    "color": "black",
+                    "role": "queen",
+                    "scope": "any",
+                    "comparison": "atLeast",
+                    "count": 0
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "w-qc4",
+      "b-kd1",
+      "w-qb3",
+      "b-kc1",
+      "w-qc3",
+      "b-kb1",
+      "w-kg6",
+      "b-ka2",
+      "w-qc2",
+      "b-ka1",
+      "w-qa4",
+      "b-kb1-2",
+      "w-kf5",
+      "b-kc1-2",
+      "w-qc4-2",
+      "b-kd1-2",
+      "w-qb3-2",
+      "b-kc1-3"
+    ],
+    "plyHorizon": 36
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "fen": "8/7K/8/8/4Q3/8/1p6/2k5 w - - 0 1"
+      },
+      "moveUci": "e4b1",
+      "class": "tactical_error",
+      "note": "Kxb1 and the queen is gone for nothing: bare king against king and pawn, and the tablebase calls it a LOSS for White — the pawn simply promotes. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "fen": "8/7K/8/8/4Q3/8/1p6/2k5 w - - 0 1"
+      },
+      "moveUci": "e4c2",
+      "class": "tactical_error",
+      "note": "Also simply captured: Kxc2. Checks must arrive on squares the king does not defend. Verified loss.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "fen": "8/7K/8/8/4Q3/8/1p6/2k5 w - - 0 1"
+      },
+      "moveUci": "e4d4",
+      "class": "tactical_error",
+      "note": "A quiet move with the promotion un-covered: b1=Q and the win is gone. Every non-check at this root was queried; all of them draw or worse. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "fen": "8/7K/8/8/4Q3/8/1p6/2k5 w - - 0 1"
+      },
+      "moveUci": "e4c6",
+      "class": "accepted_alternative",
+      "note": "Any checking zigzag wins (verified); this one takes two moves longer to force the king onto b1. The drill's line is the tablebase's fastest winding."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kb1"
+      },
+      "moveUci": "c3b2",
+      "class": "tactical_error",
+      "note": "The pawn is poisoned while its king guards it: Kxb2 and it is a bare-kings draw. You win this pawn only after the king is driven off or your own king arrives. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kb1"
+      },
+      "moveUci": "c3c1",
+      "class": "tactical_error",
+      "note": "Checks on guarded squares still lose the queen: Kxc1. Verified loss.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kb1"
+      },
+      "moveUci": "h7g7",
+      "class": "accepted_alternative",
+      "note": "Any approach square keeps the win (verified); g6 is the tablebase's fastest. The point of the frozen tempo is the king step — which square is second-order."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "knight-pawn-wins",
+      "text": "This root is a tablebase win (Syzygy, four pieces), and the identical position with the pawn on c2 was queried and is a tablebase draw. The winning and drawing files of queen-versus-seventh-pawn are machine facts, and this pack's root sits on the winning side by construction.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "only-checks-win",
+      "text": "At the root, every winning move is a check and every quiet move was queried as a draw — two checks even lose the queen outright. The zigzag is not a convenience; against a pawn one step from queening it is the entire set of winning moves.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "tempo-is-the-product",
+      "text": "The zigzag manufactures exactly one commodity: the move Black wastes standing on b1 in front of its own pawn. This drill's checkpoint detects that configuration mechanically; each detection is one earned king step. The far king needs several cycles — that is why the technique must run without slack.",
+      "evidenceTypes": [
+        "derived_feature",
+        "author_principle",
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "Outcome drill: win by any sound route — slower zigzags and other approach squares were verified winning. Graded on the result.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    }
+  ],
+  "retryVariants": [
+    {
+      "kind": "opposite_side",
+      "note": "The save-side variant of this same root — defending the pawn against the queen, where against a bishop or rook pawn the defender genuinely holds and against this knight pawn the defender's job is resistance — is a distinct objective on a distinct start side. The pack format carries one objective per pack, so the variants rule (design/04 §4: convert/hold/save per root where material permits) is satisfied across pack boundaries, not inside this file. The companion c2 query in provenance is the seed for that hold pack."
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Start position constructed: White Kh7, Qe4; Black Kc1, Pb2 — queen already posted on the b1-h7 diagonal, king at near-maximal distance, knight pawn (the won file) one step from promotion.",
+      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root: win (DTZ 29, DTM 31). Root move split verified: exactly the six checks Qc4+/Qe1+/Qh1+/Qe3+/Qf4+/Qc6+ win; every quiet queen move and every king move draws; Qb1+ and Qc2+ lose. At the first frozen-tempo node, Qxb2+ was verified a draw and Qc1+/Qc2+ verified losses. The 18-ply spine is the tablebase's optimal winding (both sides best by DTM).",
+      "COMPANION QUERY: the same position with the black pawn on c2 instead of b2 (8/7K/8/8/4Q3/8/2p5/2k5 w) was queried the same day: category draw. That single query grounds this pack's drawn-files claim for the bishop-pawn case; the rook-pawn case is asserted from the same standard theory and was NOT queried.",
+      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars).",
+      "VARIANTS RULE: design/04 §4 asks for convert/hold/save variants per root where material permits. Material permits a defender-side variant here; the pack format does not permit two objectives or two start sides in one file, so this file is the convert pack and the retryVariants note records the deliberate deferral. This is a format finding, logged in planning/content-era/log.md.",
+      "AUTHORED, NOT PROVED: all prose reasoning; categories only are machine facts.",
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative."
+    ],
+    "graduationBlockers": [
+      "Prose explanations are authored; categories are tablebase-grounded.",
+      "Syzygy assessment declared, not ledger-verified.",
+      "The rook-pawn drawn-file claim inside the drawn-files plan class is standard theory NOT queried here; one further tablebase query would clear it and should be made when the hold-side pack is authored."
+    ]
+  }
+}

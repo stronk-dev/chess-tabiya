@@ -1,0 +1,498 @@
+{
+  "id": "philidor-third-rank-hold",
+  "version": "0.1.0",
+  "title": "Philidor: the third-rank fence holds the draw",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2200,
+    "label": "Club player defending rook and pawn down who must hold the standard draw",
+    "branchLengthTarget": 13
+  },
+  "start": {
+    "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1",
+    "side": "black"
+  },
+  "objective": {
+    "type": "hold",
+    "summary": "The Philidor position: a pawn down in rook against rook and pawn, with your king on the promotion path. This is a tablebase draw held by one two-phase scheme — rook on the third rank until the pawn steps onto it, then rook behind for endless checks. Your job is the half point.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "draw",
+        "pieceCount": 5,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-14T18:47:00Z"
+      },
+      "resolveAt": {
+        "kind": "checkpoint",
+        "checkpointId": "rear-check-machine"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "feature",
+          "feature": {
+            "kind": "piece_reach_count",
+            "color": "white",
+            "role": "queen",
+            "scope": "any",
+            "comparison": "atLeast",
+            "count": 0
+          }
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      },
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            {
+              "kind": "not",
+              "of": {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "white",
+                  "role": "rook",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              }
+            },
+            {
+              "kind": "not",
+              "of": {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "black",
+                  "role": "rook",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "pawn_count",
+                "color": "white",
+                "basis": "count",
+                "comparison": "atLeast",
+                "count": 1
+              }
+            }
+          ]
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      },
+      {
+        "kind": "material_balance",
+        "perspective": "black",
+        "comparison": "atMost",
+        "value": -4,
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "third-rank-fence",
+    "rear-checks",
+    "king-on-promotion-path",
+    "waiting-moves"
+  ],
+  "shapes": [
+    "philidor"
+  ],
+  "planClasses": [
+    {
+      "id": "third-rank-fence",
+      "label": "Rook on the third rank",
+      "description": "The rook patrols your third rank and the attacking king never crosses. Here that is rank six, and the fence stands until the pawn itself arrives there.",
+      "shapePlan": {
+        "shape": "philidor",
+        "plan": "black-third-rank-defence"
+      }
+    },
+    {
+      "id": "drop-and-check-behind",
+      "label": "Drop to the rear on the push",
+      "description": "The moment the pawn reaches the sixth, the rook swings to your first rank and checks forever — the pawn's own advance removed the king's shelter. Timing is the entire content of this plan: one move early or late is a different (and here sometimes losing) position.",
+      "shapePlan": {
+        "shape": "philidor",
+        "plan": "black-drop-behind-on-the-push"
+      }
+    },
+    {
+      "id": "king-on-the-path",
+      "label": "King stays on the promotion path",
+      "description": "The whole scheme assumes your king stands on the pawn's queening path. Here it does; the drill's losing branches show what its absence would cost.",
+      "shapePlan": {
+        "shape": "philidor",
+        "plan": "black-king-on-the-path"
+      }
+    }
+  ],
+  "spine": [
+    {
+      "id": "b-rb6",
+      "moveUci": "h6b6",
+      "moveSan": "Rb6",
+      "children": [
+        {
+          "id": "w-kd5",
+          "moveUci": "e5d5",
+          "moveSan": "Kd5",
+          "children": [
+            {
+              "id": "b-rg6",
+              "moveUci": "b6g6",
+              "moveSan": "Rg6",
+              "children": [
+                {
+                  "id": "w-e5",
+                  "moveUci": "e4e5",
+                  "moveSan": "e5",
+                  "children": [
+                    {
+                      "id": "b-rb6-2",
+                      "moveUci": "g6b6",
+                      "moveSan": "Rb6",
+                      "children": [
+                        {
+                          "id": "w-e6",
+                          "moveUci": "e5e6",
+                          "moveSan": "e6",
+                          "children": [
+                            {
+                              "id": "b-rb1",
+                              "moveUci": "b6b1",
+                              "moveSan": "Rb1",
+                              "children": [
+                                {
+                                  "id": "w-kd6",
+                                  "moveUci": "d5d6",
+                                  "moveSan": "Kd6",
+                                  "children": [
+                                    {
+                                      "id": "b-rd1",
+                                      "moveUci": "b1d1",
+                                      "moveSan": "Rd1+",
+                                      "children": [
+                                        {
+                                          "id": "w-ke5",
+                                          "moveUci": "d6e5",
+                                          "moveSan": "Ke5",
+                                          "children": [
+                                            {
+                                              "id": "b-re1",
+                                              "moveUci": "d1e1",
+                                              "moveSan": "Re1+",
+                                              "children": [
+                                                {
+                                                  "id": "w-kf6",
+                                                  "moveUci": "e5f6",
+                                                  "moveSan": "Kf6",
+                                                  "children": [
+                                                    {
+                                                      "id": "b-rf1",
+                                                      "moveUci": "e1f1",
+                                                      "moveSan": "Rf1+",
+                                                      "children": [],
+                                                      "annotations": [
+                                                        "The checking machine at work. White has made no progress and can make none; keep checking from the rear and take the draw."
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "annotations": [
+                                                "Again. Note the geometry: every white king square near the pawn is one more check, and the rook is never attacked."
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "annotations": [
+                                        "Check from behind. The king has nowhere to hide: its own pawn occupies the one square that would shelter it, and your king guards e7."
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "annotations": [
+                                "Drop to the rear the instant the pawn lands on your third rank. The advanced pawn has stripped the king of shelter: from behind, your checks never run out."
+                              ]
+                            }
+                          ],
+                          "annotations": [
+                            "The committal move, and the moment the fence retires: the pawn now blocks its own king's shelter and splits your sixth rank in two."
+                          ]
+                        }
+                      ],
+                      "annotations": [
+                        "Still waiting. The pawn on e5 is White's only way to make progress, and advancing it is exactly what your next move is waiting for."
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "annotations": [
+                "A waiting move along the fence. White improved the king; you changed nothing and lost nothing — the defence is a configuration, not a sequence."
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "The fence. The rook patrols your third rank and the attacking king cannot cross it: every square from a6 to h6 that the pawn does not block is covered. Which square on the rank barely matters; being on the rank is everything."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "scheme-choice",
+      "label": "Commit to the defensive scheme",
+      "trigger": {
+        "atSpineNode": "w-kd5"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "third-rank-fence",
+          "drop-and-check-behind",
+          "king-on-the-path"
+        ]
+      }
+    },
+    {
+      "id": "pawn-crosses",
+      "label": "The pawn steps onto the sixth",
+      "trigger": {
+        "atSpineNode": "w-e6"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "rear-check-machine",
+      "label": "Rook behind, pawn committed: the drawing machine is assembled",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "pieceOnSquare",
+                "square": "e6",
+                "piece": {
+                  "color": "white",
+                  "role": "pawn"
+                }
+              },
+              {
+                "kind": "quantified",
+                "quantifier": "some",
+                "over": {
+                  "squares": {
+                    "files": {
+                      "from": "a",
+                      "to": "h"
+                    },
+                    "ranks": {
+                      "from": 1,
+                      "to": 1
+                    }
+                  }
+                },
+                "feature": {
+                  "kind": "piece",
+                  "piece": {
+                    "color": "black",
+                    "role": "rook"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "b-rb6",
+      "w-kd5",
+      "b-rg6",
+      "w-e5",
+      "b-rb6-2",
+      "w-e6",
+      "b-rb1",
+      "w-kd6",
+      "b-rd1",
+      "w-ke5",
+      "b-re1",
+      "w-kf6",
+      "b-rf1"
+    ],
+    "plyHorizon": 16
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1"
+      },
+      "moveUci": "h6h8",
+      "class": "tactical_error",
+      "note": "Passive defence, and the single most instructive mistake in the position: the tablebase calls this LOST. With the rook off the third rank the white king walks to the sixth and the mating and promotion threats decide. The fence is not one good option among several — here it is the difference between a draw and a loss. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1"
+      },
+      "moveUci": "h6a6",
+      "class": "tactical_error",
+      "note": "Steps onto the attacking rook's file and simply hangs: Rxa6 wins. Verified loss."
+    },
+    {
+      "at": {
+        "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1"
+      },
+      "moveUci": "h6h1",
+      "class": "interesting_deviation",
+      "note": "The rear-check plan started too early. The tablebase still says draw — but the fence is the scheme you can hold without calculation, and after this the defence is exact rear-checking with no margin. The category is machine fact; the 'harder in practice' judgment is authored."
+    },
+    {
+      "at": {
+        "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1"
+      },
+      "moveUci": "h6h5",
+      "class": "interesting_deviation",
+      "note": "A side check from short distance. Objectively still drawn (verified), and structurally fragile: the king approaches the rook and the checks run out. The Philidor scheme never depends on checking distance; this defence does."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-e6"
+      },
+      "moveUci": "b6c6",
+      "class": "tactical_error",
+      "note": "The fence square that no longer exists: the pawn on e6 splits the sixth rank, and the rook on c6 no longer covers f6. The tablebase calls this lost — the same rank that drew for five moves now loses. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "w-e6"
+      },
+      "moveUci": "b6e6",
+      "class": "tactical_error",
+      "note": "Takes the pawn, loses the game: Kxe6 wins the rook — the pawn was defended by the king and the rook is not defended by yours. Verified loss.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "w-e6"
+      },
+      "moveUci": "b6b8",
+      "class": "accepted_alternative",
+      "note": "Retreating to the eighth also holds here by tablebase — the rear checks come one move later. The immediate drop is drilled as the standard, margin-free-to-remember form."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-kd6"
+      },
+      "moveUci": "b1h1",
+      "class": "tactical_error",
+      "note": "A waiting move at the one moment waiting is fatal: with the king on d6 and the pawn on e6, Ra8 is mate next move. Every Black move here except a check or Rb6+/Rb8 loses by tablebase. Check first. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "w-kd6"
+      },
+      "moveUci": "b1b6",
+      "class": "accepted_alternative",
+      "note": "The side check also draws here (verified): with king on d6 the rank is momentarily open. The rear checks are drilled because they work in every version; the side check works in this one."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "philidor-is-drawn",
+      "text": "This exact position is a tablebase draw (Syzygy, five pieces), and every position along the authored defence was queried and remains drawn. The passive-rook alternative at the root was queried and is lost. Both categories are machine facts about these positions.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "two-phase-scheme",
+      "text": "The defence has exactly two phases keyed to one trigger: fence on the third rank while the pawn is short of it, rook behind the moment the pawn arrives. The trigger is structural, which is why this drill's resolution point is a position fact and not a move number.",
+      "evidenceTypes": [
+        "author_principle",
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "passivity-loses",
+      "text": "The difference between the fence and a passive rook on the back rank is the difference between a tablebase draw and a tablebase loss in this position. 'Activity' here is not style advice; it was verified.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "Outcome drill: you are graded on holding, not on matching the authored squares. The tablebase confirms several drawing set-ups; the authored one is the one worth memorising.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Start position is a constructed schematic Philidor (White Ke5, Pe4, Ra7; Black Ke8, Rh6): defending king on the promotion path, defending rook on its third rank, pawn not yet on the defender's third. Standard textbook configuration; no specific diagram claimed.",
+      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root category: draw. Every authored Black move preserves the draw; every deviation note states its queried category (Rh8, Ra6, Rc6, Rxe6, and the w-kd6 Rh1 are losses; Rh1/Rh5+ at root, Rb8, Rb6+ are draws).",
+      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars); registry admission will show a declared, unverified assessment. The queries happened; no admitted evidence artifact exists.",
+      "AUTHORED, NOT PROVED: all prose reasoning. The tablebase grounds categories only. The claim that the premature rook drop is 'harder in practice' though drawn is explicitly an authored practical judgment with no instrument behind it in this repo.",
+      "Technique name 'Philidor' and all three plan classes reference content/shapes/philidor.json.",
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check."
+    ],
+    "graduationBlockers": [
+      "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
+      "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
+      "The practical-difficulty judgments (fence easier than early rear-checking; side checks fragile) are exactly the save/resist-adjacent judgments design/04 §7 says need human-play evidence; none exists here."
+    ]
+  }
+}

@@ -1,0 +1,283 @@
+{
+  "id": "anti-dutch-leningrad-white",
+  "version": "0.1.0",
+  "title": "Facing the Dutch: White's mainline squeeze against the Leningrad",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "1.d4 player whose opponent answered ...f5",
+    "branchLengthTarget": 13
+  },
+  "start": {
+    "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+    "movesSan": ["d4", "f5"],
+    "side": "white"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "Your opponent chose the Dutch: they spent king cover to buy the e4 square and a kingside attack. The mainline answer is the fianchetto squeeze — c4, g3, Bg2 — aiming your bishop at the light squares ...f5 abandoned, castling into a structure their storm cannot easily reach, and denying the one break (...e5) their whole system is built for."
+  },
+  "concepts": [
+    "exploit-the-abandoned-squares",
+    "deny-the-only-break",
+    "restraint-before-action"
+  ],
+  "shapes": ["fianchetto-g7"],
+  "planClasses": [
+    {
+      "id": "central-clamp",
+      "label": "Clamp with d5 when ...e5 is finally ready",
+      "description": "The timing plan: let Black spend four moves preparing ...e5, then answer the last preparation with d5, fixing the centre where the g2 bishop and the c-file both smile. Position-specific to this tabiya — the clamp only works because ...c6 just spent a tempo."
+    },
+    {
+      "id": "queenside-expansion",
+      "label": "Expand with Rb1, b4-b5",
+      "description": "The patient plan: while Black's pieces all face e5, the queenside pawns walk. Rb1 first because the fianchettoed g2 bishop stops watching b1's diagonal duties, then b4-b5 opens files where Black has no pieces."
+    },
+    {
+      "id": "trade-the-g7-bishop",
+      "label": "Trade off the g7 bishop",
+      "description": "The Leningrad's king cover IS the fianchetto: remove the g7 bishop and the dark squares around the king belong to nobody. The reusable doctrine lives in the shape entry; this pack only declares the target.",
+      "shapePlan": { "shape": "fianchetto-g7", "plan": "white-trade-the-fianchetto-bishop" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "p3-c4",
+      "moveUci": "c2c4",
+      "moveSan": "c4",
+      "annotations": [
+        "The most popular answer at your band, and the principled one: stake the centre Black declined to contest. One third of your peers already play it — the rest of this pack makes the follow-up as automatic as the first move."
+      ],
+      "children": [
+        {
+          "id": "p4-nf6",
+          "moveUci": "g8f6",
+          "moveSan": "Nf6",
+          "children": [
+            {
+              "id": "p5-g3",
+              "moveUci": "g2g3",
+              "moveSan": "g3",
+              "annotations": [
+                "The system move: your bishop is heading for the h1-a8 diagonal, where ...f5 stopped guarding e4 and d5 forever. Every Dutch player fears this bishop more than any attack."
+              ],
+              "children": [
+                {
+                  "id": "p6-g6",
+                  "moveUci": "g7g6",
+                  "moveSan": "g6",
+                  "children": [
+                    {
+                      "id": "p7-bg2",
+                      "moveUci": "f1g2",
+                      "moveSan": "Bg2",
+                      "children": [
+                        {
+                          "id": "p8-bg7",
+                          "moveUci": "f8g7",
+                          "moveSan": "Bg7",
+                          "children": [
+                            {
+                              "id": "p9-nf3",
+                              "moveUci": "g1f3",
+                              "moveSan": "Nf3",
+                              "annotations": [
+                                "Onto the square that vetoes ...e5. Black's entire setup will now work to overload this knight's watch."
+                              ],
+                              "children": [
+                                {
+                                  "id": "p10-o-o",
+                                  "moveUci": "e8g8",
+                                  "moveSan": "O-O",
+                                  "children": [
+                                    {
+                                      "id": "p11-o-o",
+                                      "moveUci": "e1g1",
+                                      "moveSan": "O-O",
+                                      "annotations": [
+                                        "Castle behind a wall their storm cannot easily reach: with g3 played, ...f4 has no lever and the g2 bishop guards the king while attacking the queenside. Compare this with castling into a KID storm — same pawns, opposite story."
+                                      ],
+                                      "children": [
+                                        {
+                                          "id": "p12-d6",
+                                          "moveUci": "d7d6",
+                                          "moveSan": "d6",
+                                          "children": [
+                                            {
+                                              "id": "p13-nc3",
+                                              "moveUci": "b1c3",
+                                              "moveSan": "Nc3",
+                                              "annotations": [
+                                                "Development with a threat behind it: the knight watches d5 and e4, and quietly prepares the e4 break — the move that turns Black's missing f-pawn into a permanently airy king."
+                                              ],
+                                              "children": [
+                                                {
+                                                  "id": "p14-c6",
+                                                  "moveUci": "c7c6",
+                                                  "moveSan": "c6",
+                                                  "annotations": [
+                                                    "The Warsaw finisher: ...e5 is fully queued. This is YOUR decision point — clamp it with d5, or ignore it and expand with Rb1/b4. Both are authored; the comparison is the drill."
+                                                  ],
+                                                  "children": [
+                                                    {
+                                                      "id": "d5-clamp",
+                                                      "moveUci": "d4d5",
+                                                      "moveSan": "d5",
+                                                      "annotations": [
+                                                        "The clamp: ...e5 now costs an en-passant-shaped concession or never comes, the g2 bishop's diagonal stays open through c6's newly created hole on d6, and Black's four preparation moves ask what they were for."
+                                                      ],
+                                                      "children": []
+                                                    },
+                                                    {
+                                                      "id": "rb1-expand",
+                                                      "moveUci": "a1b1",
+                                                      "moveSan": "Rb1",
+                                                      "annotations": [
+                                                        "The expansion: concede ...e5 will come, meet it with dxe5 when it does, and start b4-b5 where no Black piece is looking. The walked continuation ...Na6 9.b4 shows the pawns rolling."
+                                                      ],
+                                                      "children": []
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bf4-system",
+          "moveUci": "c1f4",
+          "moveSan": "Bf4",
+          "annotations": [
+            "The London-style answer — second most popular at your band (18.1%). A different pack's system; it is here so choosing it is a decision, not a default."
+          ],
+          "children": []
+        },
+        {
+          "id": "e4-staunton",
+          "moveUci": "e2e4",
+          "moveSan": "e4",
+          "annotations": [
+            "The Staunton Gambit: a pawn for open lines against the weakened king, played in 4.0% of games at your band. Sharp, respectable, and a memory battle — the opposite temperament to this pack's squeeze."
+          ],
+          "children": []
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "wall-complete",
+      "label": "6.O-O — your king is safe from the storm they wanted",
+      "trigger": { "atSpineNode": "p11-o-o" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "your-tabiya",
+      "label": "7...c6 — clamp with d5 or expand with Rb1: choose",
+      "trigger": { "atSpineNode": "p14-c6" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["central-clamp", "queenside-expansion", "trade-the-g7-bishop"]
+      }
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p3-c4", "p4-nf6", "p5-g3", "p6-g6", "p7-bg2", "p8-bg7", "p9-nf3",
+      "p10-o-o", "p11-o-o", "p12-d6", "p13-nc3", "p14-c6",
+      "d5-clamp", "rb1-expand", "bf4-system", "e4-staunton"
+    ],
+    "plyHorizon": 13
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p4-nf6" },
+      "moveUci": "b1c3",
+      "class": "accepted_alternative",
+      "note": "3.Nc3 (9.2% at the family root) develops toward the e4 break before the fianchetto. A real alternative order whose main cost is allowing ...d5 setups where the c3 knight bites on granite."
+    },
+    {
+      "at": { "spineNodeId": "p8-bg7" },
+      "moveUci": "g1h3",
+      "class": "interesting_deviation",
+      "note": "5.Nh3 aims the knight at f4/g5 instead of vetoing ...e5 from f3 — the idea catalogued in the Leningrad Carlsbad row (under the 2.g3 order). It trades the veto for attacking squares; whether the veto was worth more is exactly what playing both here should show you."
+    },
+    {
+      "at": { "spineNodeId": "p14-c6" },
+      "moveUci": "e2e4",
+      "class": "interesting_deviation",
+      "note": "8.e4 is the third plan played immediately: the walked line 8...fxe4 9.Nxe4 opens the position while Black's ...e5 machinery still faces a closed one. It also opens lines toward your own g2/g3 complex — a genuine double-edge that nothing in this repo has evaluated."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "faced-and-favoured",
+      "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the Dutch position after 1.d4 f5 was reached 4,845,395 times and White scores 49.8% against 46.0% — and this pack's 2.c4 is already the most common answer (33.3%), ahead of 2.Bf4 (18.1%) and 2.Nf3 (15.1%).",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "break-denial",
+      "text": "The Leningrad has one break and its name is ...e5: a White move is working here almost exactly when it adds a watcher of e5, restrains the break's preparation, or opens play somewhere the break cannot help.",
+      "evidenceTypes": ["author_principle"]
+    },
+    {
+      "id": "their-hook-is-permanent",
+      "text": "...f5 never goes home: whatever else happens, the e6 square, the g4 square and the h5-push hook are features White can aim at for the whole game — the Dutch player accepted them on move one.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "A87 Dutch Defense: Leningrad Variation: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/a.tsv) — CC0-1.0, no attribution required. The Warsaw finisher (...c6) is the A88 row (2.g3 order; transposition verified FEN-identical with a chessops harness this session), the Staunton Gambit branch is the A82 row, and the Nh3 idea cited in a deviation is the A81 Leningrad Carlsbad row of the same file.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the A80 row — 4,845,395 games, whitePct 49.8 / blackPct 46.0; top-move shares c4 33.3% / Bf4 18.1% / Nf3 15.1% / Nc3 9.2% / e4 4.0%. No deeper-node frequency was retrieved.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/a87-dutch-defense-leningrad-variation, learner-side white, split-ply 2; the candidate directory is shared with the mirrored Black pack and records the most recent emit's job arguments). Hand-added plies 10-14, both decision tips (d5/Rb1 with the ...Na6 b4 continuation), both root sibling branches, and all three deviations were walked move-by-move with the chessops harness, including 8.e4 fxe4 9.Nxe4.",
+      "SHAPE REFERENCE (mechanical): fianchetto-g7's trigger (black pawn g6 + black bishop g7) first holds at spine node p8-bg7 and persists through every later spine position; derived from the walked FENs.",
+      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all deviation notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "First-move alternatives (2.Bf4, 2.e4) cannot be deviations in a follow_theory pack — no spine node precedes ply 1 — so they are sibling root branches. Third attestation of wave-2 friction #3; the format should bless the idiom or grow a start-anchor.",
+      "The trade-the-g7-bishop plan is a hands-off declaration: the authored spine never begins Be3/Qd2/Bh6, so the shapePlan reference names a target the drill does not reach (wave-2 friction #5 pattern, noted honestly).",
+      "The d5-clamp annotation's claim that ...c6 'created a hole on d6' and the whole clamp-vs-expand comparison are authored judgments with no engine or corpus support.",
+      "Whether d5 or Rb1 is more common or scores better at these bands is unquantified below the family root.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

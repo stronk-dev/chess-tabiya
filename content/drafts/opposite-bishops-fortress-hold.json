@@ -1,0 +1,339 @@
+{
+  "id": "opposite-bishops-fortress-hold",
+  "version": "0.1.0",
+  "title": "Opposite bishops: two pawns down, fortress up",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1600,
+    "maxOnlineRapid": 2200,
+    "label": "Club player who must recognise and then actually hold an opposite-bishops fortress",
+    "branchLengthTarget": 5
+  },
+  "start": {
+    "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1",
+    "side": "black"
+  },
+  "objective": {
+    "type": "hold",
+    "summary": "Two connected passed pawns down, but the bishops are on opposite colours: king in front of one pawn, bishop owning the other's landing square, and no eviction exists. The tablebase confirms the draw; your job is to set the fortress and then not leave it.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "draw",
+        "pieceCount": 6,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-14T18:47:00Z"
+      },
+      "resolveAt": {
+        "kind": "checkpoint",
+        "checkpointId": "still-holding"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "feature",
+          "feature": {
+            "kind": "piece_reach_count",
+            "color": "white",
+            "role": "queen",
+            "scope": "any",
+            "comparison": "atLeast",
+            "count": 0
+          }
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      },
+      {
+        "kind": "material_balance",
+        "perspective": "black",
+        "comparison": "atMost",
+        "value": -5,
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "fortress",
+    "blockade-on-bishop-colour",
+    "wrong-colour-eviction",
+    "division-of-labour"
+  ],
+  "shapes": [
+    "opposite-coloured-bishops"
+  ],
+  "planClasses": [
+    {
+      "id": "fortress-on-your-colour",
+      "label": "Blockade on your bishop's colour",
+      "description": "King in front of the e-pawn, bishop covering the c-pawn's dark landing squares from the a5-d8 diagonal. White's light-squared bishop can attack neither post.",
+      "shapePlan": {
+        "shape": "opposite-coloured-bishops",
+        "plan": "black-fortress-on-your-colour"
+      }
+    },
+    {
+      "id": "sell-the-bishop",
+      "label": "Sell the bishop for the breaking pawn",
+      "description": "The reserve plan: if one pawn ever forces through, the bishop gives itself for it while the king holds the other. Priced here for completeness; in the authored line the fortress never needs it.",
+      "shapePlan": {
+        "shape": "opposite-coloured-bishops",
+        "plan": "black-bishop-for-the-last-pawn"
+      }
+    }
+  ],
+  "spine": [
+    {
+      "id": "b-ke7",
+      "moveUci": "d7e7",
+      "moveSan": "Ke7",
+      "children": [
+        {
+          "id": "w-c6",
+          "moveUci": "c5c6",
+          "moveSan": "c6",
+          "children": [
+            {
+              "id": "b-bb6",
+              "moveUci": "d8b6",
+              "moveSan": "Bb6",
+              "children": [
+                {
+                  "id": "w-e6",
+                  "moveUci": "e5e6",
+                  "moveSan": "e6",
+                  "children": [
+                    {
+                      "id": "b-ba5",
+                      "moveUci": "b6a5",
+                      "moveSan": "Ba5",
+                      "children": [],
+                      "annotations": [
+                        "A waiting move that keeps everything: the a5-d8 diagonal covers c7 forever. This is the fortress — not a wall of pieces but a division of labour that no amount of shuffling breaks. Hold it and the tablebase's draw is yours."
+                      ]
+                    }
+                  ],
+                  "annotations": [
+                    "White fixes the second pawn with the king's protection. It looks menacing and it is the end of White's progress: the pawn on e6 can never advance while your king owns e7, and c7 is dark."
+                  ]
+                }
+              ],
+              "annotations": [
+                "The move that was losing one tempo ago: with the pawn gone from c5, b6 is safe, and from b6 the bishop still nails c7. One square, one tempo, opposite verdicts — the tablebase confirms both."
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "Two pawns down with bishops on opposite colours, and the defence starts with the king: it plants itself in front of the e-pawn's path. The bishop on d8 already does its whole job from one diagonal — both dark landing squares, c7 and e7, are covered."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "scheme-choice",
+      "label": "Assign the jobs: which piece stops which pawn?",
+      "trigger": {
+        "atSpineNode": "w-c6"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "fortress-on-your-colour",
+          "sell-the-bishop"
+        ]
+      }
+    },
+    {
+      "id": "blockade-set",
+      "label": "The fortress configuration stands",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "pieceOnSquare",
+                "square": "e6",
+                "piece": {
+                  "color": "white",
+                  "role": "pawn"
+                }
+              },
+              {
+                "kind": "pieceOnSquare",
+                "square": "e7",
+                "piece": {
+                  "color": "black",
+                  "role": "king"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "still-holding",
+      "label": "The fortress has held through White's tries",
+      "trigger": {
+        "atPly": 12
+      },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "b-ke7",
+      "w-c6",
+      "b-bb6",
+      "w-e6",
+      "b-ba5"
+    ],
+    "plyHorizon": 12
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1900,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1"
+      },
+      "moveUci": "d8b6",
+      "class": "tactical_error",
+      "note": "The right square at the wrong moment: cxb6 simply takes the bishop, and the tablebase calls the result lost. One move later the identical square is the drawing move. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1"
+      },
+      "moveUci": "d8f6",
+      "class": "tactical_error",
+      "note": "Same shape on the other side: exf6 wins the bishop. Verified loss.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1"
+      },
+      "moveUci": "d7c7",
+      "class": "accepted_alternative",
+      "note": "Meeting the pawns from the queenside also holds by tablebase — the jobs swap, with the king on the c-file and the bishop watching e7. The authored line keeps the king on the e-pawn because the e-pawn is the one White's king escorts."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-c6"
+      },
+      "moveUci": "e7e8",
+      "class": "tactical_error",
+      "note": "Walking away from the e-pawn's path. The bishop cannot hold two pawn-paths alone, and the tablebase counts it out: lost. The fortress is a two-piece configuration; remove either and it is rubble. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "w-c6"
+      },
+      "moveUci": "d8c7",
+      "class": "accepted_alternative",
+      "note": "Physically blocking c7 also draws (verified). Bb6 is preferred in the authored line because the bishop keeps its waiting squares along the whole a5-d8 diagonal instead of standing where the king may one day need to be."
+    },
+    {
+      "at": {
+        "spineNodeId": "w-e6"
+      },
+      "moveUci": "b6d4",
+      "class": "tactical_error",
+      "note": "Leaving the a5-d8 diagonal for the 'active' central post: c7 falls and the c-pawn promotes. Activity is the attacker's currency in opposite-bishop endings; the defender's is geometry. Verified loss.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "w-e6"
+      },
+      "moveUci": "e7f6",
+      "class": "tactical_error",
+      "note": "Chasing play instead of holding e7: the e-pawn walks in behind you. Verified loss.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "w-e6"
+      },
+      "moveUci": "e7d8",
+      "class": "accepted_alternative",
+      "note": "Retreating along the promotion path also holds by tablebase. The drill's Ba5 is the cleaner statement: change nothing, hold everything."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "root-is-drawn",
+      "text": "This position, two connected passers down, is a tablebase draw (Syzygy, six pieces) — and every fortress-keeping move in the authored line was queried and preserves it. That an opposite-bishops defence holds two pawns down is machine fact here, not folklore.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "fortress-is-not-a-census",
+      "text": "What the position vocabulary can see — and this drill's blockade checkpoint does see — is the configuration: pawn fixed on e6, king on e7. What makes it a FORTRESS is that no White plan ever evicts either piece, and that is an outcome over all continuations, not a position feature. The shape entry says exactly this; here the tablebase supplies for one root what no census can supply in general.",
+      "evidenceTypes": [
+        "tablebase_exact",
+        "author_principle"
+      ]
+    },
+    {
+      "id": "one-tempo-two-verdicts",
+      "text": "Bb6 loses at the root and draws one move later, after c5-c6 vacates the capture. Both categories verified. Fortress defence is exact even when the final configuration is calm.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "Outcome drill: hold the draw by any tablebase-sound configuration — the queenside-jobs version passes identically. The graded thing is the half point.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Start position constructed for this pack: White Kd5, Be2, Pc5, Pe5; Black Kd7, Bd8. Chosen so the standard division-of-labour fortress (king on the e-file, bishop on the a5-d8 diagonal) is available but not yet built, and so the whole root sits at six pieces, comfortably inside Syzygy range. An earlier candidate root was discarded during authoring because the tablebase check revealed the defender could simply win a pawn (bishop takes e5 unpunishable) — the honesty instrument shaped the content.",
+      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root: draw. Per-move categories at the root and at both probed later nodes are as stated in each deviation note (Bb6/Bf6 at root, Ke8, Bd4, Kf6 lost; Kc7, Bc7, Kd8 drawn).",
+      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars).",
+      "WHAT CANNOT BE CENSUSED: the fortress itself. The blockade-set checkpoint detects the piece configuration (pieceOnSquare facts); it does not and cannot detect unbreakability. For THIS root unbreakability happens to be tablebase-provable and was proved; for the family in general (more pawns, more pieces) it is not, and content/shapes/opposite-coloured-bishops.json §plans records that no structural signature is honest for holding.",
+      "AUTHORED, NOT PROVED: all prose reasoning; categories only are machine facts.",
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative."
+    ],
+    "graduationBlockers": [
+      "Prose explanations are authored; categories are tablebase-grounded.",
+      "Syzygy assessment declared, not ledger-verified.",
+      "The general fortress-recognition skill this pack gestures at (above seven pieces, real games) has no instrument in this repo and never will below the census boundary; this pack grounds one root of it and says so."
+    ]
+  }
+}

@@ -1,0 +1,416 @@
+{
+  "id": "lucena-bridge-convert",
+  "version": "0.1.0",
+  "title": "Lucena: build the bridge and promote",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2200,
+    "label": "Club player who reaches rook endings a pawn up and must convert the textbook win",
+    "branchLengthTarget": 13
+  },
+  "start": {
+    "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "win",
+    "summary": "The Lucena position: your king sits on the promotion square, the pawn is one step from queening, and the defender's rook is ready to check forever. This is the most important won position in rook endings, and it is won by one concrete four-step manoeuvre — the bridge — not by a squeeze. Promote the pawn and win the game.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "win",
+        "pieceCount": 5,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-14T18:47:00Z"
+      },
+      "resolveAt": {
+        "kind": "checkpoint",
+        "checkpointId": "pawn-promoted"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "pawn_count",
+                "color": "white",
+                "basis": "count",
+                "comparison": "equal",
+                "count": 0
+              }
+            },
+            {
+              "kind": "not",
+              "of": {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "white",
+                  "role": "queen",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              }
+            }
+          ]
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      },
+      {
+        "kind": "material_balance",
+        "perspective": "white",
+        "comparison": "atMost",
+        "value": -2,
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "bridge-building",
+    "rook-on-the-fourth",
+    "king-shelter",
+    "checking-distance"
+  ],
+  "shapes": [
+    "lucena"
+  ],
+  "planClasses": [
+    {
+      "id": "build-the-bridge",
+      "label": "Build the bridge",
+      "description": "Rook to the fourth rank first, king out second, rook drops in front of the king when the checks come. Here the bridge is Rd1-d4 followed by Rb4.",
+      "shapePlan": {
+        "shape": "lucena",
+        "plan": "white-build-the-bridge"
+      }
+    },
+    {
+      "id": "run-out-the-checks",
+      "label": "Walk toward the checking rook",
+      "description": "The other winning method when the checking rook stands too close. Here the rook checks from four ranks away, and the tablebase shows the walk only draws — this position is a bridge position, which is why choosing the scheme is the drill.",
+      "shapePlan": {
+        "shape": "lucena",
+        "plan": "white-run-out-the-checks"
+      }
+    }
+  ],
+  "spine": [
+    {
+      "id": "w-rd1",
+      "moveUci": "c1d1",
+      "moveSan": "Rd1+",
+      "children": [
+        {
+          "id": "b-ke7",
+          "moveUci": "d7e7",
+          "moveSan": "Ke7",
+          "children": [
+            {
+              "id": "w-rd4",
+              "moveUci": "d1d4",
+              "moveSan": "Rd4",
+              "children": [
+                {
+                  "id": "b-ra1",
+                  "moveUci": "a2a1",
+                  "moveSan": "Ra1",
+                  "children": [
+                    {
+                      "id": "w-kc7",
+                      "moveUci": "b8c7",
+                      "moveSan": "Kc7",
+                      "children": [
+                        {
+                          "id": "b-rc1",
+                          "moveUci": "a1c1",
+                          "moveSan": "Rc1+",
+                          "children": [
+                            {
+                              "id": "w-kb6",
+                              "moveUci": "c7b6",
+                              "moveSan": "Kb6",
+                              "children": [
+                                {
+                                  "id": "b-rb1",
+                                  "moveUci": "c1b1",
+                                  "moveSan": "Rb1+",
+                                  "children": [
+                                    {
+                                      "id": "w-kc6",
+                                      "moveUci": "b6c6",
+                                      "moveSan": "Kc6",
+                                      "children": [
+                                        {
+                                          "id": "b-rc1-2",
+                                          "moveUci": "b1c1",
+                                          "moveSan": "Rc1+",
+                                          "children": [
+                                            {
+                                              "id": "w-kb5",
+                                              "moveUci": "c6b5",
+                                              "moveSan": "Kb5",
+                                              "children": [
+                                                {
+                                                  "id": "b-rb1-2",
+                                                  "moveUci": "c1b1",
+                                                  "moveSan": "Rb1+",
+                                                  "children": [
+                                                    {
+                                                      "id": "w-rb4",
+                                                      "moveUci": "d4b4",
+                                                      "moveSan": "Rb4",
+                                                      "children": [],
+                                                      "annotations": [
+                                                        "The bridge. The rook drops in front of its king, the checks are over, and b8=Q cannot be prevented. From here the tablebase calls every Black move lost. Play it out and promote."
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "annotations": [
+                                                "One rank from shelter."
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "annotations": [
+                                        "Zigzag: the king alternates between the b- and c-files so the rook must keep switching files to keep checking, gaining you nothing but costing it options."
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "annotations": [
+                                "Walk down the board, staying beside the pawn's file. Each check pushes you one rank closer to the rook on the fourth."
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "annotations": [
+                        "Now the king steps out. The checks are coming and you have already paid for the umbrella."
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "annotations": [
+                "The signature move of the whole position: the rook takes the fourth rank for no visible reason. The reason arrives four moves from now, when this rook becomes the wall your king hides behind. Building it on the fifth or sixth would leave the king with no roof at exactly the wrong moment."
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "Check first: the rook drives the defending king one file further from the pawn before anything else happens. The rook will want d4 next, and it collects the check on the way."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "scheme-choice",
+      "label": "Choose the winning scheme before stepping out",
+      "trigger": {
+        "atSpineNode": "b-ke7"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "build-the-bridge",
+          "run-out-the-checks"
+        ]
+      }
+    },
+    {
+      "id": "bridge-moment",
+      "label": "The last check before the bridge",
+      "trigger": {
+        "atSpineNode": "b-rb1-2"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "pawn-promoted",
+      "label": "The pawn queens",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "feature",
+            "feature": {
+              "kind": "piece_reach_count",
+              "color": "white",
+              "role": "queen",
+              "scope": "any",
+              "comparison": "atLeast",
+              "count": 0
+            }
+          }
+        }
+      },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "w-rd1",
+      "b-ke7",
+      "w-rd4",
+      "b-ra1",
+      "w-kc7",
+      "b-rc1",
+      "w-kb6",
+      "b-rb1",
+      "w-kc6",
+      "b-rc1-2",
+      "w-kb5",
+      "b-rb1-2",
+      "w-rb4"
+    ],
+    "plyHorizon": 24
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1"
+      },
+      "moveUci": "c1c2",
+      "class": "tactical_error",
+      "note": "Hangs the rook to Rxc2, after which the tablebase calls the position lost for White: the pawn alone cannot outrun a rook. Verified: category flips from win to loss."
+    },
+    {
+      "at": {
+        "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1"
+      },
+      "moveUci": "c1a1",
+      "class": "tactical_error",
+      "note": "Offers the rook where it can simply be taken; after Rxa1 the tablebase says the win is gone. Verified: win becomes draw."
+    },
+    {
+      "at": {
+        "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1"
+      },
+      "moveUci": "c1c7",
+      "class": "accepted_alternative",
+      "note": "Still winning by tablebase, one move slower. The check gains nothing the bridge does not already deliver — but nothing is thrown away either."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke7"
+      },
+      "moveUci": "d1d7",
+      "class": "tactical_error",
+      "note": "The checking reflex, and here the rook simply hangs: Kxd7 and only the far-advanced pawn rescues White a draw. From a tablebase win to a half point with one check. Verified."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke7"
+      },
+      "moveUci": "d1d8",
+      "class": "tactical_error",
+      "note": "Overshooting the bridge rank. On the eighth the rook shields nothing, and the tablebase calls the position drawn: the checks never stop. Verified: win becomes draw."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke7"
+      },
+      "moveUci": "b8c7",
+      "class": "accepted_alternative",
+      "note": "Stepping out before building the bridge also wins by tablebase, two moves slower and through more checks. The bridge is drilled because it is the repeatable pattern, not the only path here."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-rb1-2"
+      },
+      "moveUci": "b5c5",
+      "class": "tactical_error",
+      "note": "Walking toward the checking rook — the right idea against a close rook, and refuted here: from four ranks away the rook keeps its distance and the tablebase calls it a draw. Checking distance is the whole difference between the two winning schemes. Verified."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-rb1-2"
+      },
+      "moveUci": "b5c6",
+      "class": "accepted_alternative",
+      "note": "Repeats the position — still winning, and still needing Rb4 eventually. Verified win by tablebase."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "lucena-is-won",
+      "text": "This exact position is a tablebase win for White (Syzygy, five pieces), and every position along the authored bridge line was queried and remains a win. That is machine truth about these positions, not a judgment.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "bridge-not-squeeze",
+      "text": "The win is a concrete four-step manoeuvre: rook to the fourth, king out, zigzag down, rook blocks the checks. It is not accumulated pressure, and moves that merely keep the position (checks, shuffles) were verified to throw the win away or postpone it.",
+      "evidenceTypes": [
+        "tablebase_exact",
+        "author_principle"
+      ]
+    },
+    {
+      "id": "distance-decides-scheme",
+      "text": "With the defending rook checking from four ranks away, walking the king toward it only draws (verified). The walk wins only against a rook that checks from too close. Which scheme applies is read off the checking distance before you step out.",
+      "evidenceTypes": [
+        "tablebase_exact",
+        "author_principle"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "This is an outcome drill: you are graded on promoting and winning, not on matching the authored moves. A win by another tablebase-sound route is a pass.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Start position is a constructed schematic Lucena (White Kb8, Pb7, Rc1; Black Kd7, Ra2): attacking king on the promotion square, pawn on the seventh, defending king cut off by one file. It is a standard textbook configuration; no specific book diagram or game is claimed as the source.",
+      "TABLEBASE VERIFIED: the root and every position after every spine move were queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root category: win for White (DTZ 15, DTM 41). Every spine position remains a win for White; after Rb4 every Black legal move is lost. The eight deviation moves listed each carry the queried category stated in their notes (Rc2 loss / Ra1, Rd7+, Rd8, Kc5 draw / Rc7+, Kc7, Kc6 win).",
+      "The Syzygy assessment declaration in objective.grading is NOT ledger-verified: no evidence.json/sources.json sidecars were produced for this draft, so registry admission will correctly display it as a declared, unverified assessment (docs/outcome-drill-grading.md). The queries above really happened; the pack format simply has no admitted evidence attached.",
+      "AUTHORED, NOT PROVED: all prose — annotations, plan-class descriptions, deviation explanations beyond the stated categories, and the feedback-claim reasoning — is the author's rendering of standard endgame technique. The tablebase grounds every win/draw/loss category cited; it does not ground any 'because' in the prose.",
+      "Technique name 'Lucena' and the two plan classes reference content/shapes/lucena.json; the pack drills what that entry teaches.",
+      "Move legality: every spine and deviation move was parsed from its exact position with python-chess 1.11.2 at build time; `make pack-check` (schema + chessops spine lint) is the authoritative second check."
+    ],
+    "graduationBlockers": [
+      "Prose explanations are authored consensus without a citable per-sentence source; the tablebase grounds the categories, not the reasons. Wikibooks or an equivalent citable treatment of the Lucena bridge would clear the remaining prose blockers.",
+      "The Syzygy root assessment is declared but not ledger-verified (no sourcing sidecars); producing candidate-format evidence for this root would upgrade it.",
+      "No engine pass and no human-play (Maia/corpus) evidence on how often defenders find the checking defence at the target band; the difficulty block is authored judgment."
+    ]
+  }
+}

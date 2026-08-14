@@ -1,0 +1,378 @@
+{
+  "id": "pawn-breakthrough-convert",
+  "version": "0.1.0",
+  "title": "Pawn breakthrough: sell two pawns, promote the third",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Club player who must recognise the breakthrough shape before the defending king arrives",
+    "branchLengthTarget": 9
+  },
+  "start": {
+    "fen": "8/pp6/4k3/PPP5/8/8/6K1/8 w - - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "win",
+    "summary": "Three pawns abreast against two, kings far from the queening square. The win is a forced sale: two pawns are given away so the outside pawn runs through unopposed. Order is everything — the wrong first pawn seals the front and the tablebase calls it a draw. Break through, promote, win.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "win",
+        "pieceCount": 7,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-14T18:47:00Z"
+      },
+      "resolveAt": {
+        "kind": "checkpoint",
+        "checkpointId": "runner-queens"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "feature",
+          "feature": {
+            "kind": "piece_reach_count",
+            "color": "black",
+            "role": "queen",
+            "scope": "any",
+            "comparison": "atLeast",
+            "count": 0
+          }
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      },
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "pawn_count",
+                "color": "white",
+                "basis": "count",
+                "comparison": "equal",
+                "count": 0
+              }
+            },
+            {
+              "kind": "not",
+              "of": {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "white",
+                  "role": "queen",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              }
+            }
+          ]
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "breakthrough",
+    "outside-passer",
+    "pawn-sacrifice",
+    "queening-race-counting"
+  ],
+  "shapes": [
+    "pawn-breakthrough-outside-passer"
+  ],
+  "planClasses": [
+    {
+      "id": "breakthrough",
+      "label": "Break through the fixed front",
+      "description": "Sacrifice into the majority so one runner emerges past the defenders. Here: c6, then b6, then the a-pawn runs — and the tablebase confirms the order is not interchangeable.",
+      "shapePlan": {
+        "shape": "pawn-breakthrough-outside-passer",
+        "plan": "white-breakthrough"
+      }
+    }
+  ],
+  "spine": [
+    {
+      "id": "w-c6",
+      "moveUci": "c5c6",
+      "moveSan": "c6",
+      "children": [
+        {
+          "id": "b-bxc6",
+          "moveUci": "b7c6",
+          "moveSan": "bxc6",
+          "children": [
+            {
+              "id": "w-b6",
+              "moveUci": "b5b6",
+              "moveSan": "b6",
+              "children": [
+                {
+                  "id": "b-axb6",
+                  "moveUci": "a7b6",
+                  "moveSan": "axb6",
+                  "children": [
+                    {
+                      "id": "w-a6",
+                      "moveUci": "a5a6",
+                      "moveSan": "a6",
+                      "children": [
+                        {
+                          "id": "b-kd6",
+                          "moveUci": "e6d6",
+                          "moveSan": "Kd6",
+                          "children": [
+                            {
+                              "id": "w-a7",
+                              "moveUci": "a6a7",
+                              "moveSan": "a7",
+                              "children": [
+                                {
+                                  "id": "b-kc7",
+                                  "moveUci": "d6c7",
+                                  "moveSan": "Kc7",
+                                  "children": [
+                                    {
+                                      "id": "w-a8q",
+                                      "moveUci": "a7a8q",
+                                      "moveSan": "a8=Q",
+                                      "children": [],
+                                      "annotations": [
+                                        "Queen against king and two crawling pawns: the rest is technique the drill lets you play out. Count this shape once and you will see it for the rest of your chess life."
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "annotations": [
+                        "The point of everything: the a-pawn — the outside file — steps past the wreckage. Two pawns were spent to make this one unstoppable, and the recapture that felt automatic would have rebuilt Black's wall instead. Material is irrelevant; the runner is everything."
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "annotations": [
+                "The second sacrifice, offered before Black's structure can settle. Declining fails too: the tablebase confirms every Black reply here loses."
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "The breakthrough starts with the middle pawn. Three abreast against two, and the front is sold, not squeezed: this pawn will not survive, and was never meant to."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "second-sacrifice",
+      "label": "The front is open a crack — commit or consolidate?",
+      "trigger": {
+        "atSpineNode": "b-bxc6"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "breakthrough"
+        ]
+      }
+    },
+    {
+      "id": "no-recapture",
+      "label": "The recapture that rebuilds the wall",
+      "trigger": {
+        "atSpineNode": "b-axb6"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "runner-queens",
+      "label": "The runner promotes",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "feature",
+            "feature": {
+              "kind": "piece_reach_count",
+              "color": "white",
+              "role": "queen",
+              "scope": "any",
+              "comparison": "atLeast",
+              "count": 0
+            }
+          }
+        }
+      },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "w-c6",
+      "b-bxc6",
+      "w-b6",
+      "b-axb6",
+      "w-a6",
+      "b-kd6",
+      "w-a7",
+      "b-kc7",
+      "w-a8q"
+    ],
+    "plyHorizon": 12
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "fen": "8/pp6/4k3/PPP5/8/8/6K1/8 w - - 0 1"
+      },
+      "moveUci": "a5a6",
+      "class": "tactical_error",
+      "note": "The outside pawn first — one move out of order, and the tablebase says the win is gone: the front seals and no runner ever emerges. Same three pawns, same idea, draw. Verified."
+    },
+    {
+      "at": {
+        "fen": "8/pp6/4k3/PPP5/8/8/6K1/8 w - - 0 1"
+      },
+      "moveUci": "b5b6",
+      "class": "accepted_alternative",
+      "note": "The mirror order also breaks through and also wins by tablebase. The drill's line leads with c6 as the standard form; what is not negotiable is that a6 first fails."
+    },
+    {
+      "at": {
+        "fen": "8/pp6/4k3/PPP5/8/8/6K1/8 w - - 0 1"
+      },
+      "moveUci": "g2h1",
+      "class": "tactical_error",
+      "note": "Waiting in the corner: verified draw. The breakthrough exists because the kings are far away; every tempo spent not breaking through invites the defender's king back."
+    },
+    {
+      "at": {
+        "fen": "8/pp6/4k3/PPP5/8/8/6K1/8 w - - 0 1"
+      },
+      "moveUci": "g2f2",
+      "class": "accepted_alternative",
+      "note": "The tablebase still says win after this — the breakthrough has not expired — but it improves nothing, and one waiting square (h1) already throws the win away. The break does not age well."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-bxc6"
+      },
+      "moveUci": "b5c6",
+      "class": "tactical_error",
+      "note": "Recapturing rebuilds the wall you just paid a pawn to open: verified draw. The sacrifice's product was the open b-file for the b-pawn, not the material.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-bxc6"
+      },
+      "moveUci": "g2f3",
+      "class": "tactical_error",
+      "note": "A tempo late and the roles reverse: Black's connected pawns and returning king now win — the tablebase calls this LOST, not drawn. The breakthrough is not merely urgent; half-measures lose. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-axb6"
+      },
+      "moveUci": "a5b6",
+      "class": "tactical_error",
+      "note": "The automatic recapture, and a verified draw: after it Black's king returns in time. a6! — the pawn that walks PAST the capture — is the only winning move on the board. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-axb6"
+      },
+      "moveUci": "g2f2",
+      "class": "tactical_error",
+      "note": "Anything slow here loses outright by tablebase: two Black pawns are already past their blockers. Verified loss.",
+      "offObjective": true
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "order-is-the-content",
+      "text": "At the root, c6 and b6 win and a6 draws; two moves later a6 is the only winning move on the board. Both facts are tablebase-verified. Breakthrough technique is order, not idea.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "material-is-fuel",
+      "text": "The winning line gives away two of three pawns. Both recaptures that would keep material even were queried and draw. In breakthrough positions pawn count is fuel spent, not score.",
+      "evidenceTypes": [
+        "tablebase_exact",
+        "author_principle"
+      ]
+    },
+    {
+      "id": "shape-fires-late",
+      "text": "The shape entry this pack drills triggers on an existing wing passer — which appears only at move three of the winning line. The pre-breakthrough position is invisible to the structural vocabulary; recognising it before it exists is exactly the skill being drilled.",
+      "evidenceTypes": [
+        "author_principle",
+        "derived_feature"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "Outcome drill: promote and win. The mirror order b6-first is a verified equal win and passes identically.",
+      "evidenceTypes": [
+        "author_principle",
+        "tablebase_exact"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Start position is the classic three-abreast-versus-two breakthrough schematic (White a5, b5, c5, Kg2; Black a7, b7, Ke6), constructed. The 3v3 version is the more famous textbook diagram; this 3v2 form was chosen because seven pieces sit inside Syzygy range, so every claim of this pack could be machine-checked.",
+      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root: win (DTZ 1). Root move split verified: c6 and b6 win, a6 and Kh1 draw, king moves win. After 1...bxc6: b6 is the unique win, bxc6 draws, all else loses. After 2...axb6: a6 is the unique win, axb6 draws, all else loses. Every deviation note's category is the queried one.",
+      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars).",
+      "SHAPE-TRIGGER HONESTY: content/shapes/pawn-breakthrough-outside-passer.json cannot fire at this root — no passed pawn exists until move three. The entry's own provenance records this exact gap ('the family is wider than the trigger'); the reference here is to what the pack hands off to, not what is detectable at the start.",
+      "AUTHORED, NOT PROVED: all prose reasoning, including the 'seals the front' mechanism behind the a6 draw — the tablebase grounds the category, not the explanation.",
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative."
+    ],
+    "graduationBlockers": [
+      "Prose explanations are authored; categories are tablebase-grounded.",
+      "Syzygy assessment declared, not ledger-verified.",
+      "The famous 3v3 sibling root (a5b5c5 vs a7b7c7) is eight pieces and outside tablebase range; a pack for it would need the Stockfish authoring substitute of docs/content-sourcing.md and is deliberately not smuggled in here."
+    ]
+  }
+}
