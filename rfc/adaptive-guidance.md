@@ -17,28 +17,36 @@
 - **Depends on:** **`rfc/structural-reading.md`** (B9, implementing) — the twelve feature
   predicates, `structuralReading`/`structuralDelta` (`packages/runtime/src/structure.ts:248,283`),
   the structure catalogue, and the no-valence sentence rule are the vocabulary this RFC
-  classifies and speaks with; **`rfc/shape-library.md`** (B11, being drafted in parallel) — plan
-  classes for detected structures and technique bodies for named endgame techniques are shape
-  entries. This RFC **names that dependency and reserves the seam** (§5b, §6a); it does not
-  specify the shape library, and every surface here renders honest absence until it lands.
+  classifies and speaks with; **`rfc/shape-library.md`** (B11, drafted in parallel), for **two**
+  things. First, **the minimal Just Play position player and its client entry, which
+  `shape-library.md` owns outright** (cross-draft ownership pin, `rfc/README.md`
+  §Cross-draft ownership pins, 2026-08-14): this RFC ships **no client entry of its own** —
+  no Play-screen starter, no route, no capability-surface flip — and its browser acceptance
+  (criterion 13) runs on the player the sibling ships, which the pinned landing order
+  (shape-library before adaptive-guidance) guarantees exists at implementation time. Second,
+  plan classes for detected structures and technique bodies for named endgame techniques are
+  shape entries. This RFC **names those dependencies and reserves the seams** (§5b, §6a); it
+  does not specify the shape library, and every surface here renders honest absence until it
+  lands.
   Implemented and archived: `rfc/archive/pack-optional-runs.md` (position sessions),
   `rfc/archive/explanation-grounds.md` (evidence-ref rendering and the disclosure gates),
   `rfc/archive/terminal-outcome-events.md` and `rfc/archive/outcome-drill-grading.md` (the
   grading endgame steering defers to), `rfc/archive/live-session-platform.md` (roles),
   `rfc/archive/app-shell.md` (routes and capabilities)
 - **Parent / amends:** **`rfc/archive/app-shell.md`** (the capability registry gains a
-  `llm: "none" | "external"` provider state and the `justPlay`/`fromPosition` surfaces stop
-  being hard-coded `"unavailable-here"`), **`rfc/archive/drill-client.md`** (the timeline gains
+  `llm: "none" | "external"` provider state; the `justPlay`/`fromPosition` surface rows are
+  **not** amended here — they flip with the position player `rfc/shape-library.md` owns),
+  **`rfc/archive/drill-client.md`** (the timeline gains
   passive marker annotations and the run screen gains the assistance control),
   **`rfc/archive/explanation-grounds.md`** (two disclosure-gated read endpoints join the
-  existing gate; no change to what is withheld), **`rfc/archive/pack-optional-runs.md`** (the
-  client gains the Just Play entry the server already supports),
+  existing gate; no change to what is withheld),
   **`rfc/archive/line-drill-theory-grading.md`** (`#humanCommon` selection gains a MultiPV
-  report request; the selected move is unchanged)
+  report request; the server-side selection rule — read the engine's `bestmove` line — is
+  unchanged)
 - **Supersedes / superseded by:** —
 - **Migration:** **none, and that is normative.** Run schema stays **0.8**
-  (`packages/runtime/src/build-info.ts:1`) and `STORAGE_VERSION` stays **9**
-  (`rfc/README.md` migration register). §1d: a classification, a marker, and an assistance
+  (`DRILL_RUN_SCHEMA_VERSION`, `packages/schema/src/index.ts:1`) and `STORAGE_VERSION` stays
+  **9** (`apps/server/src/storage.ts:265`; `rfc/README.md` migration register). §1d: a classification, a marker, and an assistance
   preference are all pure functions or preferences over the persisted record; persisting any of
   them would create a second source of truth that can drift from the run. B9's §1c law, one gate
   up.
@@ -46,12 +54,13 @@
   the shipped `phase` (`packages/schema/src/drill-pack/types.ts:24-25`,
   `schemas/drill_pack.schema.json:24-26`); assistance configuration is deliberately not a pack
   field (§3e).
-- **Baselines, measured 2026-08-14:** 321 unit tests across 55 files (`pnpm vitest run`; 320
-  pass — the one failure is B9's latency-envelope recording at
-  `packages/runtime/src/structure.test.ts:95`, 103.5 ms against the 100 ms worry threshold on
-  this machine, a pre-existing machine-speed flake owned by the B9 implementation, not touched
-  here). Pack schema 0.10 and migration 9 verified against `rfc/README.md`'s registers; this
-  RFC claims no number in either register.
+- **Baselines, re-measured 2026-08-14 (review pass):** 321 unit tests across 55 files, all
+  passing on a quiet machine (`pnpm vitest run`). The envelope assertion at
+  `packages/runtime/src/structure.test.ts:95` remains D27's ledgered flake class
+  (`design/BACKLOG.md`): it has measured 103.5 ms under parallel-agent load and passes on a
+  quiet machine — machine-dependent, owned by the B9 implementation, not touched here. Pack
+  schema 0.10 (`DRILL_PACK_SCHEMA_VERSION`, `packages/schema/src/index.ts:2`) and migration 9
+  verified against `rfc/README.md`'s registers; this RFC claims no number in either register.
 - **Planning:** `planning/adaptive-guidance/` (opened at implementation)
 
 ## Summary
@@ -112,13 +121,16 @@ claiming a seam that is not there kills a draft as surely as re-shipping one tha
   event barrier withholds `evidence.attached` and engine-grounded objective transitions and
   **nothing else** (`apps/server/src/feedback-policy.ts:26-32,34-52`) — opponent selections,
   candidates and mass included, already reach the client during committed play
-  (`docs/explanation-grounds.md:224` records the same fact). A detector reading them adds no
-  disclosure that does not already exist.
+  (`docs/explanation-grounds.md:222-223` records the same fact). A detector reading them adds
+  no disclosure that does not already exist.
 - **One gap in the supply:** `#humanCommon` requests no MultiPV
-  (`opponent-selector.ts:427-435`), so a `human_common` selection may persist only the moved
-  candidate. `#theoryStrict` already requests `MultiPV ≥ 8` from the same Maia sidecar
-  (`:454-463`), so the report capability exists; §4d closes the gap without touching move
-  selection (`bestMove` reads the `bestmove` line, `:242-249`, and is MultiPV-independent).
+  (`opponent-selector.ts:427-435`), and `candidateLines` parses only info lines carrying
+  **both** a `multipv` and a `pv` token (`:218-240`), so a `human_common` selection may
+  persist a single candidate or **no candidates at all** (`makeSelection` omits the field
+  when the parse is empty, `:263-275`). `#theoryStrict` already requests `MultiPV ≥ 8` from
+  the same Maia sidecar (`:454-463`), so the report capability exists; §4d closes the gap
+  without touching the server's selection rule (`bestMove` reads the `bestmove` line,
+  `:242-249`, whatever the info lines report).
 - **Disclosure machinery is complete and reusable.** `feedbackDisclosed`
   (`packages/runtime/src/feedback.ts:3-18`) and the position-session reveal-then-close cycle
   `feedbackDeliveryOpen` (`:20-27`) gate nodes, events, and `compare()`
@@ -130,8 +142,11 @@ claiming a seam that is not there kills a draft as surely as re-shipping one tha
   creates only pack runs (`apps/web/src/lib/session-controller.ts:223-227`), the router has no
   pack-less entry (`apps/web/src/lib/router.ts:20-29`), and the capability registry says so
   honestly: `justPlay` and `fromPosition` are hard-coded `"unavailable-here"`
-  (`apps/server/src/capabilities.ts:120-127`). B10's acceptance scenario is a Just Play game,
-  so this RFC ships the minimal client entry (§8a) and flips those two rows on real capability.
+  (`apps/server/src/capabilities.ts:120-127`). B10's acceptance scenario is a Just Play game;
+  the client entry that closes this gap — and the flip of those two capability rows — is
+  **owned by `rfc/shape-library.md`** (cross-draft ownership pin, `rfc/README.md`), lands
+  before this RFC, and is consumed here through `Depends on:`. This RFC's client surface (§8)
+  starts at the timeline and the assistance control, not at run creation.
 - **The LLM provider is a typed absence.** `CapabilityProviders.llm` is the literal type
   `"none"` (`capabilities.ts:50`), constructed as `"none"` in both engine modes (`:104,114`),
   and mirrored in the client (`apps/web/src/lib/api.ts:215-218`). §6d widens the type and
@@ -245,16 +260,38 @@ Let `M = max(material(white), material(black))` and
 | `M ≥ 18` and `U ≤ 2` | **middlegame** |
 | `M ≥ 18` and `U ∈ {3, 4}` | **unclear** |
 
-Every constant is a declared convention, in the exact sense B9 established for its strict
-outpost detector: exact within the stated convention, never presented as uncontested chess
-truth, self-identifying in every rendered sentence ("Tabiya's phase bands"). Sanity anchors,
-each a test row in criterion 1: the initial position is `M=31, U=8` → opening; a developed
-queens-on position is middlegame; K+R+P vs K+R is `M=5` → endgame; two rooks and a bishop each
-(`M=13`) is an endgame while queen-and-rook each (`M=14`) abstains — the heavy-piece
-transition zone is genuinely ambiguous and the classifier says so instead of picking a side.
+**Every constant in that table is a pinned parameter, not a fact.** The bands ship as named
+constants in `phase.ts` (`ENDGAME_MATERIAL_MAX = 13`, `DEVELOPED_MATERIAL_MIN = 18`,
+`OPENING_UNDEVELOPED_MIN = 5`, `MIDDLEGAME_UNDEVELOPED_MAX = 2`), each a declared convention
+in the exact sense B9 established for its strict outpost detector: exact within the stated
+convention, never presented as uncontested chess truth, self-identifying in every rendered
+sentence ("Tabiya's phase bands"). No published chess authority defines these boundaries;
+Tabiya is choosing them, and the contract says so. They move only by RFC amendment with
+criterion 1's fixture table re-derived, and the **revision triggers** are named now rather
+than discovered later: (i) playtest or owner-walkthrough evidence that positions players
+uncontroversially call one phase land in an abstention band at material rate; (ii) authored
+packs disagreeing with the detector about their own declared phase often enough that law 1c's
+dual attribution renders as routine noise rather than occasional honesty.
 
-Endgame is decided by material alone — development does not apply once the board has emptied
-(minor pieces standing on home squares in a six-piece position do not make it an opening).
+Sanity anchors, each a test row in criterion 1: the initial position is `M=31, U=8` →
+opening; a developed queens-on position is middlegame; K+R+P vs K+R is `M=5` → endgame; two
+rooks and a bishop each (`M=13`) is an endgame while queen-and-rook each (`M=14`) abstains —
+the heavy-piece transition zone is genuinely ambiguous and the classifier says so instead of
+picking a side.
+
+Two stated limits of the convention, in the contract because this repo does not ship silent
+ones:
+
+- **Endgame is decided by material alone** — development does not apply once the board has
+  emptied (minor pieces standing on home squares in a six-piece position do not make it an
+  opening).
+- **The convention measures development state, never move number.** A King's Indian with
+  every minor developed by move 8 is `M=31, U≤2` → **middlegame**, at a move most books
+  still call the opening; conversely an early queen trade (say a `Qxd8+ Kxd8` exchange line
+  at move 5, `M=22` a side, minors home, `U≥5`) still classifies **opening**, queens off
+  notwithstanding. Both are the convention working as declared — the phase is what the board
+  says about material and development, not what the move counter says — and criterion 1
+  fixes both as fixtures so the limit is pinned, not rediscovered.
 
 #### 2c. Abstention is the answer to design question 3
 
@@ -391,7 +428,7 @@ system beside `feedbackPolicy` (`types.ts:21-22`), and it would live inside a do
 add authored surface to a format with an open shape in the same neighbourhood. Not an
 `opponentPolicy` key — same row, same reason. Not a `/settings` page control — `/settings`
 remains the display-only residual B1 tracks (`design/03:266`), and parking a real control
-there would silently claim that residual; the control lives in the run screen (§8c).
+there would silently claim that residual; the control lives in the run screen (§8b).
 
 ### 4. Author-free pivotal markers
 
@@ -448,6 +485,32 @@ the comparison (§2c). `detail` carries `{from, to}` definite phases. Inside a p
 applies: the marker renders as Tabiya's detection alongside, never instead of, any authored
 declaration.
 
+**Why definite→definite actually prevents timeline spray, argued on the arithmetic rather
+than asserted.** Oscillation around a band edge has exactly two possible engines, and each is
+bounded:
+
+- **Material.** Absent promotion, `M` is non-increasing — captures only remove material — so
+  the `M ≤ 13` boundary is crossed downward at most once per piece configuration and
+  **endgame is absorbing on any promotion-free path**: a middlegame→endgame marker cannot be
+  followed by its reverse without a promotion. A single capture can jump `M` clean across the
+  14–17 abstention band (a queen trade takes 22 to 13), which fires one marker, once. A
+  promotion that lifts `M` back to a definite band fires the reverse transition — and a
+  path with a promotion genuinely did change regimes twice, so two markers are two truths,
+  not spray. Criterion 2 asserts both directions.
+- **Development.** `U` changes by at most 1 per ply, and the `U ∈ {3, 4}` abstention band is
+  two values wide, so flipping between the definite `U ≥ 5` and `U ≤ 2` bands costs at least
+  three same-side minor-piece moves to or from home squares per swing, every intermediate
+  node silently `unclear`. Jitter — one piece stepping on and off a home square — never
+  leaves the abstention band it entered and fires nothing. A player who genuinely
+  retreats three developed minors to their home squares has re-entered Tabiya's opening band
+  and the marker says so, attributed as the convention's claim; that is the convention being
+  honest at its edge, at a cost of at most one marker per three-move swing.
+
+What the rule therefore guarantees: no marker ever fires from or into `unclear`, band-edge
+jitter fires nothing, and every fired marker corresponds to a completed crossing of a full
+abstention band (or a capture/promotion jumping it). Criterion 2's oscillation fixture pins
+this.
+
 #### 4d. Human divergence (rung 3, from the persisted record)
 
 The detector reads what is already durable: at each node produced by an
@@ -458,7 +521,10 @@ Tabiya's declared split convention —
 > no candidate holds more than **0.50** of recorded mass, **and** at least **3** candidates
 > each hold **≥ 0.15**.
 
-That is `design/05` §5a's "players at your level split three ways here" made mechanical, and it
+The three constants (0.50 concentration ceiling, 0.15 candidate floor, 3 candidates) are
+pinned parameters under §2b's regime — named constants, moved only by amendment, revision
+triggered by the marker rendering as routine noise in playtest. That is `design/05` §5a's
+"players at your level split three ways here" made mechanical, and it
 is a statement about the model's recorded distribution, never about chess: the sentence renders
 the raw masses ("Maia-1500's recorded policy split: 31% / 24% / 19% of recorded mass"), names
 the persisted engine identity (`selection.engine`, `types.ts:69-76`) and the run's `targetElo`,
@@ -471,11 +537,29 @@ concentration and the sentence must not hide that scope.
 a marker is never a verdict that the moment was routine.
 
 **Supply:** `#humanCommon` gains the same MultiPV report request `#theoryStrict` already makes
-(`opponent-selector.ts:454-463`): `#maia(request, 8)`. This changes what the selection
-*records*, not what it *selects* — the move comes from the engine's `bestmove` line
-(`:242-249`), which is independent of how many info lines are reported. Criterion 4 asserts
-selection invariance under the change against the mock engine, and the existing `test:maia`
-integration suite (`apps/server/src/maia.maia.integration.ts`) covers the real sidecar.
+(`opponent-selector.ts:454-463`): `#maia(request, 8)`. **What "selection-invariant" honestly
+means here, stated in three scopes because they are not the same claim:**
+
+1. **The server's selection rule is invariant by construction.** With or without the report
+   request, the move is read from the engine's `bestmove` line (`:242-249`) and the request
+   differs by exactly one `setoption name MultiPV` command (`:400-415`). Criterion 4 asserts
+   both facts against the mock engine — identical command stream apart from that option, same
+   seed, same move.
+2. **The real sidecar's sampling is not seed-reproducible today, so run-to-run move identity
+   is not a property this change could break.** The `#maia` command stream sends no seed
+   (`:404-415`); the seed drives only the selection cache key and `#theoryStrict`'s
+   server-side sampling. The shipped integration suite already records
+   `seedHonored: false` for the sidecar (`apps/server/src/maia.maia.integration.ts:49`,
+   persisted in every selection's engine identity, `types.ts:75`). Same-move invariance on
+   the real engine is therefore **not a testable claim and is not claimed**; what
+   `test:maia` asserts after this change is that with MultiPV 8 set the sidecar still
+   terminates in a legal `bestmove` and reports massed candidates.
+3. **The residual risk is named:** a sidecar that conditioned its internal sampling on the
+   MultiPV option would shift its move distribution. If it does, every selection still
+   records exactly the move the engine returned, under the persisted engine identity
+   (`selection.engine` with `modelId`/`containerDigest`, `types.ts:69-76`), so the record
+   cannot drift from what was played and any behavioural difference is attributable to the
+   identified engine build — the honesty the run log is for.
 
 **The learner-side question is an endpoint, not a detector.** "What do humans play *here*,
 where I am to move?" is rung-3 material that names candidate moves, so during committed play it
@@ -492,17 +576,32 @@ absent one, the control renders disabled with the reason, `HonestControl`-style.
 *reasonable* continuations, which is evaluation, so it is rung 2/3 unless redefined as raw
 legal-move count." This RFC takes the redefinition, and takes it completely:
 
-> **Option collapse is legal-continuation collapse.** The detector counts legal moves — chessops
-> legal move generation, the arithmetic already underneath the board
-> (`apps/web/src/lib/board-model.ts:64`) — and fires at a node where the side to move has
-> **≤ 3** legal moves **and** that same side had **≥ 8** legal moves at its previous decision
-> node on the path. `detail` carries both counts; `count = 1` renders as "forced".
+> **Option collapse is sustained legal-continuation collapse.** The detector counts legal
+> moves — chessops legal move generation, the arithmetic already underneath the board
+> (`apps/web/src/lib/board-model.ts:64`) — and fires at the first node of a span in which the
+> side to move has **≤ 3** legal moves at **two or more consecutive decision nodes of that
+> side**, where that side had **≥ 8** legal moves at its last decision node before the span.
+> `detail` carries the counts; `count = 1` renders as "forced".
 
-Both constants are declared Tabiya conventions. The second condition is what makes this a
-*collapse* detector rather than a scarcity detector: in a cramped ending where three legal
-moves is the steady state, nothing collapsed and nothing fires — and it self-limits marker
-density inside a forcing sequence, because after the first marked node the "previous ≥ 8" test
-fails. The evaluated version — "reasonable continuations" — is **not a detector anywhere in
+All three constants are pinned parameters under §2b's regime. The ≥ 8 prior condition makes
+this a *collapse* detector rather than a scarcity detector: in a cramped ending where three
+legal moves is the steady state, nothing collapsed and nothing fires. The **two-consecutive
+condition is the check-spam suppressor, and it is arithmetic, not evaluation.** Without it
+the detector fires on nearly every check in every game: a position with ≤ 3 legal moves and
+the mover *not* in check is close to stalemate and genuinely rare, so almost every trigger
+is a check evasion — and "White gave a check with three legal replies" preceded by a
+34-option position is the routine signature of any tactical sequence, which would make the
+timeline confetti in exactly the way §4b's rejected halfmove-clock notion would. Requiring
+the collapse to hold at the side's **next** decision too distinguishes the one-off spite
+check (evade, count returns to 30, nothing fires) from the genuinely forcing sequence
+(checks or threats keep coming; the funnel is real; one marker at the span's first node,
+and only one, because inside the span the ≥ 8 prior test fails thereafter). The suppression
+costs one honest property, stated: the marker is knowable only one same-side decision after
+the span starts, so during live play it appears on the timeline one decision late — which
+law 1d makes harmless, since a passive annotation was never entitled to fire in the moment,
+and `pivotalMarkers` is a pure function over the whole path either way.
+
+The evaluated version — "reasonable continuations" — is **not a detector anywhere in
 this RFC**, at any rung, in any mode; if some later contract wants it, it arrives as attributed
 rung-2/3 evidence under its own RFC, not as a quiet upgrade to this one. Sentences state the
 scope: "Three legal moves are available" — never "you have no good options."
@@ -667,11 +766,22 @@ the server (enforcement) and the test suite (criterion 9):
 | No new square | Every `[a-h][1-8]` token in the output must occur in the packet's serialized text |
 | No move | Every SAN-shaped or UCI-shaped token in the output must occur in the packet's serialized text — and since §1b keeps move tokens out of every deterministic sentence, the normal packet licenses none |
 | No new chess noun | A closed `CHESS_LEXICON` ships in code: the nouns of the deterministic sentence tables (B9's and this RFC's), piece and phase names, catalogue structure names, technique names. Any lexicon word in the output must occur in the packet's serialized text, case-insensitive, whole-word |
-| No new judgement | B9 §6b's banned-form list: any of those words in the output must occur in the packet's serialized text (revealed authored prose may legitimately carry one, with its provenance; the model may then repeat it, attributed by context, but never coin one) |
+| No new judgement | B9 §6b's banned-form list (*weak, strong, good, bad, better, worse, advantage, winning, losing, should, must, best, worst, mistake, blunder, punish, wins, loses*): any of those words in the output must occur in the packet's serialized text (revealed authored prose may legitimately carry one, with its provenance; the model may then repeat it, attributed by context, but never coin one) |
+| No new prescription | A closed `PRESCRIPTIVE_VERBS` list ships beside the lexicon — *play, push, trade, take, capture, put, place, move, develop, castle, promote, advance, retreat, sacrifice, exchange, avoid, prevent, prepare, aim, attack, defend, target, grab, reroute* — same mechanism: any listed verb in the output must occur in the packet's serialized text, case-insensitive, whole-word. Deterministic sentences use several of these descriptively ("White castled", "the moved pawn attacks…"), and the packet then licenses exactly those, in exactly the game already played |
+
+The last three rows together are §1b's banned-form machinery — B9's banned list, the
+no-move-token rule, and the prescription check — **applied to provider output by the same
+function the deterministic sentences are tested with**: one check, two callers (criterion 9
+and the voice endpoint), the D4 lesson again. The paraphrase attacks this was built against
+are criterion 9 fixtures: "weak pawn" for a packet that says "backward pawn" is rejected by
+the judgement row ("weak" is banned-form and absent from the packet); "push the tall one two
+squares" is rejected by the prescription row ("push" absent from the packet).
 
 Stated honestly, in the contract, because this repo does not ship silent limits: the check is
-**necessary, not sufficient**. A model can smuggle advice in plain English that no lexicon
-catches ("push the tall one two squares"). The residual risk is bounded by the other walls —
+**necessary, not sufficient** — any closed word list is. A model can still smuggle advice in
+plain English that touches no listed word ("the c-pawn wants a friend beside it"), and
+criterion 9 pins one such known-leak fixture as *passing*, so the limit is a documented
+property, not a discovered surprise. The residual risk is bounded by the other walls —
 the packet is the prompt's entire evidence, the persona carries no chess content, voice fires
 only on an explicit request inside an opened panel (sparse by construction,
 `design/05:225-233`), and the default path never touches a provider. ADR-0005 / `AGENTS.md`
@@ -710,27 +820,21 @@ Nothing in any cell opens itself, interrupts, or carries a count on a closed con
 
 ### 8. Client surface
 
-#### 8a. The Just Play entry
+**This RFC ships no run-creation surface.** The Just Play entry, the position player, and the
+flip of the `justPlay`/`fromPosition` capability rows (`capabilities.ts:120-127`) are owned by
+`rfc/shape-library.md` under the cross-draft ownership pin (`rfc/README.md`) and land before
+this RFC does. Everything below decorates or configures a run that already exists, whichever
+RFC's surface created it, and every piece works identically on pack and position sessions
+(§9, last row).
 
-The Play screen (`/play`, `router.ts:20-29`) gains the pack-less start the server already
-accepts (`rest.ts:264-295`): choose side, optional FEN (default: the initial position),
-opponent policy from the capability registry's modes and profiles, then
-`POST /runs` with `session: { kind: "position", start, feedbackPolicy: "attempt_end",
-opponentPolicy }` through the existing `createRun` client (`api.ts:369`), claiming a writer
-session exactly as the pack path does (`session-controller.ts:221-231`). The
-`justPlay` and `fromPosition` surface rows (`capabilities.ts:120-127`) become
-`"available"` when an opponent provider is present, `"unavailable-here"` otherwise — the
-registry stops hard-coding an absence the server-side capability no longer has. This is the
-minimal real entry gate B10's acceptance scenario requires, not a redesign of the Play IA.
-
-#### 8b. Timeline markers
+#### 8a. Timeline markers
 
 `Timeline.svelte` renders marker dots from `pivotalMarkers` output joined to
 `timelineEntries` rows; opening a dot shows the marker sentences (and guided content per
 config) in a panel following the structural-reading disclosure pattern
 (`DrillScreen.svelte:470-471`): closed, learner-opened, no badge.
 
-#### 8c. The assistance control
+#### 8b. The assistance control
 
 One control on the run screen exposing `AssistanceConfig` within `permittedAssistance` bounds,
 locked rows rendered disabled-with-reason (`HonestControl`). Not in `/settings` (§3e).
@@ -749,6 +853,10 @@ locked rows rendered disabled-with-reason (`HonestControl`). Not in `/settings` 
 | Divergence on a `strong_engine` run | abstains (`policyModeApplied` guard); criterion 4 |
 | Option collapse at the first decision of a run | no marker — there is no previous same-side count |
 | Option collapse in a cramped ending, counts 3 → 3 → 2 | no marker — the ≥ 8 prior condition never holds |
+| A single check: counts 34 → 2 (in check) → 31 → … | no marker — the collapse does not hold at the side's next decision (§4e's two-consecutive condition); a one-off check is not a funnel |
+| A forcing sequence: counts 34 → 2 → 3 → 1 | one marker, at the first collapsed node; inside the span the ≥ 8 prior test fails |
+| Phase regression: endgame path with a promotion lifting `M` to ≥ 18 | endgame → middlegame marker fires — regression requires promotion (absent promotion, `M` is non-increasing and endgame is absorbing) |
+| A minor piece steps onto and off a home square at `U ∈ {3, 4}` | no marker — jitter never leaves the abstention band (§4c) |
 | `retrospectivePivot` before disclosure | `null` — compare's evidence arrays are empty (`service.ts:438-441`) |
 | `retrospectivePivot` with one recorded eval | `null` — a swing needs two points; honest absence sentence |
 | Census on K+R+P vs K+R+P | `rook`, not `rook-and-pawn-vs-rook` — the census is exact, both-sides |
@@ -801,26 +909,34 @@ today, except the MultiPV report widening of a call the selector already makes.
 
 1. **Phase bands, table-driven.** `classifyPhase` asserted on: the initial position (opening);
    a developed queens-on middlegame; K+R+P vs K+R (endgame); Q+R vs Q+R (`M=14`, unclear);
-   2R+B vs 2R+B (`M=13`, endgame); and both sides of every band edge — `M ∈ {13,14,17,18}`,
-   `U ∈ {2,3,4,5}` at fixed `M ≥ 18`. Each rendered sentence names "Tabiya's phase bands";
+   2R+B vs 2R+B (`M=13`, endgame); both sides of every band edge — `M ∈ {13,14,17,18}`,
+   `U ∈ {2,3,4,5}` at fixed `M ≥ 18`; and §2b's two stated limits as fixtures — a fully
+   developed move-8 position (`M=31, U≤2`) is middlegame, an early-queen-trade position with
+   minors home (`M=22, U≥5`) is opening. Each rendered sentence names "Tabiya's phase bands";
    the abstention sentence claims no phase.
-2. **Phase-change marker skips abstention.** A constructed path
+2. **Phase-change marker skips abstention and cannot spray.** A constructed path
    middlegame → unclear → unclear → endgame yields exactly one marker, at the first endgame
    node, with `{from: "middlegame", to: "endgame"}`; a path ending in unclear yields none; a
-   FEN-start endgame run yields none. In a pack run with `phase: "middlegame"`, the surface
-   renders the authored claim as the pack's and the detected claim as Tabiya's, both present,
-   neither replaced (law 1c).
+   FEN-start endgame run yields none; a home-square jitter path inside `U ∈ {3, 4}` yields
+   none; an endgame path with a promotion lifting `M` past 17 yields the reverse marker —
+   both directions of §4c's monotonicity argument asserted. In a pack run with
+   `phase: "middlegame"`, the surface renders the authored claim as the pack's and the
+   detected claim as Tabiya's, both present, neither replaced (law 1c).
 3. **Irreversibility sub-kinds.** Fixtures for castling, a last-queen capture (with
    `queensOff`), a pawn capture, and a push creating first pawn contact each fire exactly their
    sub-kind; a quiet piece move fires nothing.
 4. **Divergence from the persisted record.** A run whose `opponent.move_selected` carries
    massed candidates `0.31/0.24/0.19/…` marks the node with the model identity and raw masses
-   in the sentence; a `strong_engine` run and a mass-less selection both abstain. The
-   `#humanCommon` MultiPV change is asserted selection-invariant against the mock engine (same
-   seed, same move, with and without the report request).
-5. **Option collapse.** A check position with ≤ 3 legal replies after a ≥ 8-option decision
-   marks (count 1 renders "forced"); the cramped-ending steady-state case and the
-   first-decision case do not; the sentence says "legal", never "reasonable" or "good".
+   in the sentence; a `strong_engine` run and a mass-less selection both abstain. Against the
+   mock engine, the `#humanCommon` MultiPV change is asserted to alter the command stream by
+   exactly one `setoption name MultiPV` line and the selected move not at all (same seed,
+   same move, with and without the report request) — §4d's scoped invariance claim, which is
+   a claim about the server, not the sidecar's internal sampling.
+5. **Option collapse.** A sustained forcing sequence (counts ≥ 8, then ≤ 3 at two
+   consecutive same-side decisions) marks once, at the span's first node (count 1 renders
+   "forced"); a single check evasion that releases (34 → 2 → 31) does not mark; the
+   cramped-ending steady-state case and the first-decision case do not; the sentence says
+   "legal", never "reasonable" or "good".
 6. **`permittedAssistance` is §3b verbatim.** Every row and role asserted, including
    participant/spectator `humanSplit: locked_off`, and `SILENT_ASSISTANCE` as the universal
    default.
@@ -833,10 +949,15 @@ today, except the MultiPV report widening of a call the selector already makes.
    exactly when the pawn is on the a- or h-file; each technique renders the
    no-entry-yet absence pending B11; Pack C's 4v3 census (`rook`) renders the type and
    "Technique entries: none in Tabiya's index"; a census-abstaining endgame says so.
-9. **`voiceCheck` rejects introductions.** Table-driven: outputs adding a square, a UCI/SAN
-   token, a lexicon noun, and a banned-form word are each rejected; a reorder/re-tone of packet
-   sentences passes; a banned-form word *present in revealed authored packet text* passes.
-   With no provider, the rendered claim text is byte-identical to `packet.sentences`.
+9. **`voiceCheck` rejects introductions, including the paraphrase attacks.** Table-driven:
+   outputs adding a square, a UCI/SAN token, a lexicon noun, a banned-form word, and a
+   prescriptive verb are each rejected; the two named attack fixtures — "weak pawn" against a
+   "backward pawn" packet, "push the tall one two squares" — are rejected by the judgement
+   and prescription rows respectively; one known-leak fixture touching no listed word is
+   asserted *passing*, pinning the necessary-not-sufficient limit as a documented property; a
+   reorder/re-tone of packet sentences passes; a banned-form word *present in revealed
+   authored packet text* passes. With no provider, the rendered claim text is byte-identical
+   to `packet.sentences`.
 10. **Banned forms and no-move-token, extended.** Every sentence template this RFC adds —
     phase, marker, census, technique, absence sentences — is rendered against fixtures and
     asserted free of B9's banned list **and** of any SAN/UCI-shaped token. Fails closed for a
@@ -847,8 +968,9 @@ today, except the MultiPV report widening of a call the selector already makes.
 12. **Envelope.** `classifyPhase` + `pivotalMarkers` + `endgameReading` over Pack B's spine and
     a 60-ply Just Play fixture, recorded into the existing latency artifact; 100 ms worry /
     200 ms intervention, measured not microbenchmarked.
-13. **Browser: the B10 scenario.** In `tests/browser/drill.spec.ts`: start a Just Play run from
-    the Play screen (§8a) from a late-middlegame FEN with markers enabled; play a scripted
+13. **Browser: the B10 scenario.** In `tests/browser/drill.spec.ts`: start a Just Play run
+    through the position player `rfc/shape-library.md` ships (`Depends on:`; the pinned
+    landing order guarantees it exists) from a late-middlegame FEN with markers enabled; play a scripted
     sequence through a queen trade that crosses `M ≤ 13`; assert (a) a passive phase-change
     marker appears on the timeline and nothing opened by itself; (b) opening it names the
     phase change under "Tabiya's phase bands" and names the endgame type from the census;
@@ -863,7 +985,8 @@ today, except the MultiPV report widening of a call the selector already makes.
     and index, the packet and check, and the explicit boundaries (no live eval, no persistence,
     no shape-entry authoring); `docs/README.md` gains its row;
     `docs/explanation-grounds.md` gains the two gated endpoints under its withholding section;
-    `docs/app-shell.md` records the surface-row and provider-type changes.
+    `docs/app-shell.md` records the `llm` provider-type widening (the `justPlay`/
+    `fromPosition` surface-row changes are `rfc/shape-library.md`'s to document).
 
 ## Open questions
 
@@ -871,6 +994,34 @@ None.
 
 ## Changelog
 
+- 2026-08-14 (adversarial review, fixed in place): **(1) Ownership-pin violation removed** —
+  the draft shipped the minimal Just Play client entry (old §8a) and flipped the
+  `justPlay`/`fromPosition` capability rows, in direct conflict with the cross-draft
+  ownership pin (`rfc/README.md`: `shape-library.md` owns the position player;
+  this RFC ships no client entry). The entry, player and capability-row flip are now
+  consumed through `Depends on:` under the pinned landing order; §8 ships only the timeline
+  markers and the assistance control, and criterion 13 runs on the sibling's player.
+  **(2) Fabricated citation fixed** — run schema 0.8 was cited to
+  `packages/runtime/src/build-info.ts:1`, a file that does not exist; the constant is
+  `DRILL_RUN_SCHEMA_VERSION` at `packages/schema/src/index.ts:1`. **(3) Maia invariance
+  claim re-scoped honestly** — the sidecar records `seedHonored: false`
+  (`maia.maia.integration.ts:49`), so same-move invariance on the real engine is not
+  testable and is no longer implied; §4d now states the three scopes (server rule invariant
+  by construction and mock-asserted; sidecar sampling never seed-reproducible; residual
+  MultiPV-conditioning risk named and bounded by the persisted engine identity).
+  **(4) Option collapse gains the two-consecutive-decisions condition** — the single-edge
+  rule fired on nearly every check in every game (≤ 3 legal without check is near-stalemate,
+  so almost all triggers are check evasions); sustained collapse suppresses the one-off
+  check arithmetically, at the stated cost of the marker being knowable one decision late.
+  **(5) Band and threshold constants pinned as parameters** — named constants with revision
+  triggers, plus two stated limits (development-state not move-number; endgame absorbing
+  absent promotion) and the spray argument made mechanical with fixtures. **(6) `voiceCheck`
+  hardened against paraphrase** — B9's banned list is now quoted, a closed
+  `PRESCRIPTIVE_VERBS` rule added, both attack fixtures ("weak pawn", "push the tall one")
+  asserted rejected, and one known leak pinned as a passing fixture so
+  necessary-not-sufficient stays a documented property. Also: `human_common` candidate-parse
+  behaviour corrected (may persist zero candidates), `docs/explanation-grounds.md` cite fixed
+  to :222-223, baselines re-measured at 321/321 with the D27 flake noted as machine-dependent.
 - 2026-08-14: created. Specifies the B10 layer: banded deterministic phase classification with
   first-class abstention and author-over-detector attribution; a per-context assistance
   configuration object with one shared permission function, server enforcement at the two

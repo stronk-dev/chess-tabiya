@@ -65,7 +65,7 @@ and the first four official entries — `carlsbad` extracted from Pack B's inlin
 as the worked example, `iqp-white`/`iqp-black`, and `rook-4v3-same-side` from Pack C. It also
 ships the minimal position-session player, because "a shape entry fires in a game nobody
 authored" is not demonstrable in a client that refuses to play one
-(`apps/web/src/lib/session-controller.ts:180-184`).
+(`apps/web/src/lib/session-controller.ts:180-185`).
 
 What it deliberately does not ship: no LLM voice, no live phase classifier, no assistance
 configuration, no guided mode, no generated drill recipes, and no review workflow. §Motivation
@@ -134,10 +134,12 @@ the claim that killed earlier drafts when it was assumed:
   of that work (a handful of feature checks instead of the full observation projection), so
   per-node evaluation of a small entry set is comfortably inside the shipped 100 ms worry /
   200 ms intervention envelope. §12 makes this a recorded measurement, criterion 13.
-- **The expression validator ships and is reusable.** `structuralIssues` walks an expression
-  for depth (cap 4), empty line spans, out-of-range outposts and negative counts
-  (`apps/server/src/pack-validation.ts:89-113`). §3c reuses it by export rather than by copy —
-  the D4 one-implementation lesson.
+- **The expression validator ships; its export does not.** `structuralIssues` walks an
+  expression for depth (cap 4), empty line spans, out-of-range outposts and negative counts
+  (`apps/server/src/pack-validation.ts:89-113`) — but it is module-private today: the file
+  exports only `validatePackDocument` and the issue types (`pack-validation.ts:507`). §3c
+  reuses the walker by adding the `export` keyword (a one-line visibility change this RFC
+  makes) rather than by copy — the D4 one-implementation lesson.
 - **The naming catalogue ships as seed data.** `STRUCTURE_CATALOGUE`'s four entries with
   their provenance notes (`structure.ts:232-238`, `StructureId` at `:11`) are the rung-0
   naming layer. B9 §5b said the catalogue becomes B11's seed data; §10 does exactly that, with
@@ -153,7 +155,7 @@ the claim that killed earlier drafts when it was assumed:
   an allow-list, not the object (`docs/pack-studio.md`; `rfc/archive/pack-studio.md` §13c,
   ~line 1252). §3 and §9 apply the identical pattern to entries.
 - **The client gap is real.** The session controller refuses position runs with *"the
-  position player is not built yet"* (`apps/web/src/lib/session-controller.ts:180-184`), while
+  position player is not built yet"* (`apps/web/src/lib/session-controller.ts:180-185`), while
   the store beneath it already projects either session kind without a pack dependency
   (`docs/drill-client.md` §Feedback withholding) and the typed create body exists
   (`apps/web/src/lib/api.ts:228`). §8 closes exactly that gap and nothing more.
@@ -282,18 +284,41 @@ Schema rules, all normative:
 - **No pack anatomy.** There is no `start`, `spine`, `checkpoints`, `objective`,
   `deviations`, `opponentPolicy`, `feedbackPolicy`, or `authoredBoundary` — not omitted-but-
   tolerated, but unrepresentable: the closed schema refuses the keys. There is also **no
-  field anywhere that holds a move**: no UCI, no SAN, no move list. An entry attaches to
-  positions by predicate; a document that needs a move sequence is line content and belongs
-  in a pack (`design/04` §0, "What line content is still irreducible for").
+  machine-readable move or position field**: no UCI field, no SAN field, no move list, no
+  FEN. That is a claim about the *encoding*, stated precisely because prose is not covered
+  by it: §10a's plan descriptions name manoeuvres in SAN ("b4-b5", "...Ne4"), and may —
+  the trigger pins the pawn skeleton, so those tokens denote the same squares in every
+  position the entry can ever render on. What the schema refuses is a structured anchor
+  that a renderer, grader, or future feature could ever treat as advice for the live
+  position. An entry attaches to positions by predicate; a document that needs a move
+  sequence is line content and belongs in a pack (`design/04` §0, "What line content is
+  still irreducible for").
 - Ids: `id` and `plans[].id` use the pack schema's `$defs/id` slug grammar; `plans[].id` is
   unique within the entry.
 
 Prose fields (`description`, `watch`, `typicalMistakes`, `success.note`) are rung-5 authored
 text and *may* carry valence — "slow, low-risk" is an authored judgement and that is what
-rung 5 is for. What they must not do is prescribe for a live position, and no lint can read
-intent from prose; the enforcement is structural instead: the delivery frame (§6b) states the
-scope on every render, and the schema gives prescription no anchor (no moves, no FENs, no
-squares outside expressions).
+rung 5 is for. What they must not do is prescribe for a live position. Prose *can* smuggle a
+move — "push b4-b5" is a sentence, and no lint can read intent from sentences — so the
+boundary is enforced by three named mechanisms, not by hope:
+
+1. **One banned form is checkable and refused.** `SHAPE_PROSE_CONTAINS_FEN` (§3c): a
+   FEN-shaped token in any prose field fails validation at load, lint, and registration. A
+   FEN is the one token that provably binds prose to a single position, and an entry is
+   constitutionally the artifact that has no single position. SAN tokens are deliberately
+   **not** banned: a banned-form list cannot distinguish "b4-b5 is the plan in this
+   structure" (the Carlsbad entry's legitimate content) from "play b4-b5 now", and refusing
+   SAN would refuse the library's whole subject matter.
+2. **The delivery frame is machine-checked.** §6b's fixed frame sentence — general to the
+   kind, not advice for this one — renders above every plan on every surface, asserted
+   verbatim by criterion 9. The scope statement is not a rule readers are asked to
+   remember; it is part of the rendering contract.
+3. **The render-everywhere property makes prescription self-falsifying.** An entry's prose
+   renders identically at every position its trigger matches. Prose written as advice for
+   one position is therefore visibly wrong somewhere the entry fires, which makes it an
+   authoring-quality defect carried by channel and provenance — the rung-5 regime — not a
+   withholding defect (§7 is unaffected: the prose was never position-specific feedback to
+   withhold).
 
 #### 2b. Digest and versioning
 
@@ -315,8 +340,9 @@ exactly the pack rule (`apps/server/src/storage.ts:762-765` pattern).
 - Schema: `schemas/shape_entry.schema.json`.
 - Types + digest: `packages/schema/src/shape-entry/`.
 - Official content: `content/shapes/*.json` — four files in this RFC (§10).
-- Validator: `apps/server/src/shape-validation.ts`, importing the exported
-  `structuralIssues` walker from `pack-validation.ts` rather than copying it.
+- Validator: `apps/server/src/shape-validation.ts`, importing `structuralIssues` from
+  `pack-validation.ts` — which this RFC exports; the walker is module-private today
+  (§Motivation 3) — rather than copying it.
 - Registry: `apps/server/src/shape-registry.ts` (§3a).
 - Gate: `make shape-check FILE=<path>`, exit-code semantics identical to `pack-check`
   (`Makefile` precedent, B9 criterion 5 style).
@@ -363,6 +389,7 @@ fixture under `schemas/fixtures/shape-entry/` and a `make shape-check` exit-code
 | `SHAPE_TRIGGER_TRUE_AT_INITIAL` | `/trigger` | The trigger matches the standard initial position. Such an entry fires on move zero of every game ever played, which is an authoring error, not a shape — the `CHECKPOINT_TRUE_AT_ROOT` precedent (`pack-validation.ts:488`) one artifact up |
 | `STRUCTURAL_EXPRESSION_TOO_DEEP` | `/trigger`, `…/signature` | Reused code, reused walker, same depth cap of 4 |
 | `LINE_SPAN_EMPTY`, `OUTPOST_RANK_OUT_OF_RANGE`, `NEGATIVE_FEATURE_COUNT` | `…` | Reused from the shared walker, identical semantics |
+| `SHAPE_PROSE_CONTAINS_FEN` | the offending prose field | Any prose field (`description`, `watch[]`, `typicalMistakes[]`, `success.note`) contains a FEN-shaped token (a run of eight `/`-separated rank fields). Prose that cites a concrete position is bound to that position, which an entry constitutionally is not; the position belongs in a pack or in the trigger's arithmetic (§2a's enforcement 1) |
 | `SHAPE_DUPLICATE_PLAN_ID` | `/plans/<i>/id` | Two plans share an id |
 | `SHAPE_PLAN_SIDES_ONE_WAY` | `/plans` | Every plan belongs to one side. The ruling's phrase is "the plan classes **both sides** own" (`design/04` §0); an entry that only tells one side what to do is half an entry, and refusing it at load is cheaper than every reviewer catching it |
 
@@ -439,20 +466,28 @@ A match could be recorded three ways: a run event (`structure.fired` in the even
 session-journal entry, or a derived projection computed wherever it is displayed. **This RFC
 pins the derived projection.**
 
-The steelman for a run event: it is durable — replay would show exactly which markers a
-learner was shown, under exactly which library version; analytics and future SRS could read
-it; and "the run is the sole source of chess truth" (`design/05` §1) sounds at first like an
-instruction to put things *in* the run.
+The steelman for a run event, at full strength: it is durable — replay would show exactly
+which markers a learner was shown, under exactly which library version. And the drift
+objection has a known answer in this repo: pin by digest. A `structure.fired` event carrying
+the entry digest would never drift, because registered bytes are retained forever (§2b) and
+digest-addressed resolution is the shipped pattern — a run already pins its *pack* by digest
+and fails `PACK_UNRESOLVABLE` rather than silently degrading. Analytics and future SRS could
+read it; and "the run is the sole source of chess truth" (`design/05` §1) sounds at first
+like an instruction to put things *in* the run.
 
-Why it loses, on five grounds:
+Why it loses anyway, on five grounds:
 
-1. **B9 law 1c already decides the class.** A trigger match is a pure function of a FEN that
-   is already in the run, plus the served library. Persisting it creates a second source of
-   truth: not one that drifts against the FEN — it never can — but one that drifts against
-   the **library** the moment an entry re-versions. A recorded `structure.fired` for entry
-   v1 in a run replayed under entry v3 is a stale claim wearing an authoritative event
-   costume. Recompute and it is always current, always attributed to the version actually
-   served.
+1. **The pack-digest pin earns its cost; a firing pin would not.** The run pins its pack
+   because verdicts, disclosure, and grading all depend on the pack's exact bytes — replay
+   without them cannot say what happened. A digest-pinned firing record is technically
+   drift-free, but what it buys is fidelity for a fact that gates nothing and grades
+   nothing (ground 5), at the price of a permanent resolution obligation on every replay
+   surface. An *unpinned* record is worse than nothing: a recorded `structure.fired` for
+   entry v1 rendered under entry v3 is a stale claim wearing an authoritative event
+   costume. So the choice is expensive-and-faithful or cheap-and-wrong — while recompute
+   is cheap *and* always attributed to the version actually served. B9 law 1c already
+   decides the class: a pure function of a FEN already in the run does not get a second
+   home.
 2. **The invariant cuts the other way.** *The run is the sole source of chess truth* means
    everything in the run log **is** chess truth — moves, verdicts, disclosures, replayable.
    A marker is not chess truth: the trigger match is (and is recomputable from the FEN at
@@ -460,10 +495,13 @@ Why it loses, on five grounds:
    riding rung 0. Writing it into the run log dilutes what the log means, exactly the way
    the session journal was kept out: session machinery "may never alter what the run says
    happened on the board" (`design/05` §1, scoped 2026-08-14).
-3. **The precedent is one shelf over.** Line-drill membership verdicts are "read-back
-   projections, not events" (`docs/branch-runtime.md` §Derived Line Drill state) for the
-   same reason: derivable facts do not get event rows. A firing is the same shape with a
-   different derivation.
+3. **The precedent is one shelf over — twice.** Line-drill membership verdicts are
+   "read-back projections, not events" (`docs/branch-runtime.md` §Derived Line Drill
+   state) for the same reason: derivable facts do not get event rows. And the structural
+   reading control itself — the rung-0 layer these markers ride on — is recomputed with
+   the current evaluator whenever a learner opens it on any historical node; nobody
+   records which observations were viewed. Persisting firings would make the marker
+   *more* historically authoritative than the arithmetic it is derived from.
 4. **The event vocabulary is closed and expensive.** Run schema 0.8's event list
    (`docs/branch-runtime.md` §Events) grows only with a schema bump, replay-validation
    rules, and a migration — real cost, for a fact whose recomputation is measured at
@@ -476,9 +514,15 @@ The session journal loses faster: it exists for possession machinery in live ses
 (`docs/live-sessions.md`), most runs have no session journal at all, and a marker is not
 possession.
 
-What is knowingly given up: no durable record of what was shown. Accepted — when B10's
-adaptive layer or a future SRS needs "seen" facts, that RFC designs its own store with its
-own honesty rules; pre-paying for it here with run-log pollution is the wrong currency.
+What is knowingly given up, stated at full width: **replaying an old run does not show what
+the learner saw.** It shows the current library's reading of the historical positions — the
+marker set may differ because entries were re-versioned, added, or withdrawn since. Two
+consequences are normative: every surface presents markers as a present-tense reading of
+the position, attributed to the entry version actually served (the panel's provenance
+block, §6b), and no surface may claim to reconstruct the historical marker experience —
+such a surface would need its own store, and when B10's adaptive layer or a future SRS
+needs "seen" facts, that RFC designs that store with its own honesty rules. Pre-paying for
+it here with run-log pollution is the wrong currency.
 
 #### 5b. `shapeFirings`
 
@@ -556,6 +600,13 @@ discipline.
 second, visually distinct marker kind anchored at each firing's `firstNodeId`:
 
 - Label: the entry `name`, with the channel adjacent for community entries (§3b).
+- **A root anchor is added, because none exists.** The shipped timeline lists only move
+  plies — `timelineEntries` drops the root node (`apps/web/src/lib/screen-model.ts:112-133`
+  returns nothing for a node with no move) — so a span that begins at the start position
+  (Pack B's ply-0 firing, criterion 11a) has no row to sit on today. The timeline gains a
+  start-position row (ply 0, no move label) rendered exactly when at least one marker
+  anchors at the root, and absent otherwise; it carries markers and position preview,
+  nothing else — no rewind restyling, no checkpoint semantics.
 - **Passive**: it never opens itself, never modals, never pauses play, never steals focus.
   Clicking it opens the panel; nothing else happens.
 - It is *visible by default* — that is the ruled delivery ("a passive timeline marker that
@@ -573,10 +624,12 @@ second, visually distinct marker kind anchored at each firing's `firstNodeId`:
 Opening a marker renders `ShapePanel.svelte` with a fixed two-part structure, top to bottom:
 
 1. **Detection (rung 0).** The entry name as a detection statement, sourced to rules
-   arithmetic: for catalogue-triggered entries the shipped naming sentence and provenance
-   note (`structural-sentences.ts` `named_structure` branch); for raw-expression triggers
-   the fixed frame "Tabiya's shape trigger for *<name>* matches this position." Flat,
-   verdict-free, in B9's no-valence register.
+   arithmetic: for catalogue-triggered entries the entry name plus the catalogue
+   provenance note — the shipped `named_structure` branch renders the note, not a name
+   (`apps/web/src/lib/structural-sentences.ts:24`; the observation carries no id), so the
+   panel supplies the name and the branch supplies its provenance sentence; for
+   raw-expression triggers the fixed frame "Tabiya's shape trigger for *<name>* matches
+   this position." Flat, verdict-free, in B9's no-valence register.
 2. **Authored plans (rung 5).** Under a mandatory fixed frame sentence, machine-checked by
    criterion 9:
 
@@ -584,11 +637,21 @@ Opening a marker renders `ShapePanel.svelte` with a fixed two-part structure, to
    > one.*
 
    Then, per plan, grouped by side in document order: label, description, the success note
-   (with the signature rendered through a fixed template — "Success, structurally: …" — via
-   the observation sentence layer when a signature exists, and the note alone when
-   `signature: null`), then the entry's watch list and typical mistakes, then the
-   provenance block: entry id/version, channel, licence, attribution list — rendered
-   through the §3b allow-list, nothing else.
+   (with the signature rendered through a fixed template — "Success, structurally: …" —
+   when a signature exists, and the note alone when `signature: null`), then the entry's
+   watch list and typical mistakes, then the provenance block: entry id/version, channel,
+   licence, attribution list — rendered through the §3b allow-list, nothing else.
+
+   The signature sentence is **new code, stated as such**: the shipped sentence layer
+   renders *observations* — position-anchored facts carrying squares and counts
+   (`renderStructuralObservation`, `apps/web/src/lib/structural-sentences.ts:6-27`) — and
+   cannot take an expression: feature *specs* carry no `squares` array, `pieceOnSquare` is
+   not an observation kind at all, and `all`/`any`/`not` have no sentences. This RFC adds
+   `renderStructuralExpressionSpec` beside it, enumerating the closed grammar once: leaf
+   sentences in the observation register's flat vocabulary, `all` joined with "and", `any`
+   with "or", `not` prefixed "not:", bounded by the depth-4 cap so composition never
+   nests unreadably. Criterion 9 asserts it renders both Carlsbad signatures and accepts
+   every expression the schema admits.
 
 The seam between 1 and 2 is the product's honesty made visible: the detection could not be
 wrong within its stated scope and says so plainly; the plans are somebody's judgement and
@@ -645,7 +708,7 @@ matters:
 ### 8. Just Play: the minimal position player
 
 The acceptance demands a browser Just Play game; the client refuses to play one
-(`session-controller.ts:180-184`). The server side shipped with F2 — position sessions,
+(`session-controller.ts:180-185`). The server side shipped with F2 — position sessions,
 `attempt_end` reveal, the pack-free selector (`opponent-selector.ts:186-210` builds from
 `startFen` + history) — and `RunStateStore` already projects either session kind. What this
 RFC ships is deliberately the smallest honest player over that machinery:
@@ -661,6 +724,22 @@ RFC ships is deliberately the smallest honest player over that machinery:
   `design/05` §2 region 1; the `attempt_end` reveal button calls the shipped `/reveal`;
   authored-feedback surfaces do not render (the server already returns the honest empty
   page for position runs, `docs/drill-client.md`).
+- **Opponent loop.** The controller's `#selectionRequest` is pack-shaped today: it reads
+  `pack.start.fen` and `pack.opponentPolicy`, and passes the pack digest as
+  `policyConfigDigest` plus `packId` (`session-controller.ts:407-433`). The position path
+  builds the same request from the run's own `run.started` data, which carries everything
+  needed — `start.fen`, the recorded `opponentPolicy`, the recorded `policyConfig`, and
+  `sessionDigest` (`packages/runtime/src/types.ts:123-139`): `startFen` from the run's
+  start, policy fields from the recorded `opponentPolicy`, the run's `sessionDigest` as
+  `policyConfigDigest` (the server treats it as an opaque cache-key component,
+  `opponent-selector.ts:180-183`), and `packId` omitted (`selectionCacheKey` already
+  defaults it to the empty string). Nothing changes server-side: the pack-free selector
+  replays `startFen` + history as shipped (`opponent-selector.ts:186-210`).
+- **Capabilities.** The shell's surface table hardcodes `justPlay` and `fromPosition` to
+  `"unavailable-here"` (`apps/server/src/capabilities.ts:118-127`). This RFC flips both to
+  follow the opponent provider exactly as the `play` row does — available when an opponent
+  engine is present — in the same change that ships the player. A player behind a surface
+  the server still declares unavailable is not shipped.
 - **Markers** per §5/§6, evaluated against the full served catalogue.
 
 Out of scope for the player: PGN import, shared-URL starts, Arena integration, opponent
@@ -929,8 +1008,12 @@ Trigger — no catalogue id exists, so it is written in raw vocabulary:
 
 Two idioms this legitimises, documented in `docs/shape-library.md`: **existence** is
 `piece_reach_count(color, role, any, atLeast, 0)` — true exactly when such a piece exists,
-because any reach count satisfies ≥ 0 — and **absence** is its negation. Depth is 3
-(`all` → `not` → `any` → leaves), inside the cap.
+because `any` over an empty piece list is false while every reach count of an existing
+piece satisfies ≥ 0 (`structure.ts:209-211`) — and **absence** is its negation. The `any`
+scope is load-bearing: `every` over an empty list is vacuously **true**, so an
+`every`-form leaf can never express existence and absence must always negate the `any`
+form; the docs state this beside the idioms because it is the exact trap an author reaching
+for "all my rooks" walks into. Depth is 3 (`all` → `not` → `any` → leaves), inside the cap.
 
 And the honesty that names this section: **the exact 4-versus-3 census is not expressible**
 in the closed twelve-kind vocabulary. There is no pawn-count feature and no
@@ -960,7 +1043,7 @@ test under criterion 5/6.
 | Condition | Behaviour |
 |---|---|
 | Trigger true at the standard initial position | Refused at load/registration (`SHAPE_TRIGGER_TRUE_AT_INITIAL`, §3c) |
-| Trigger true at a pack's start position | Fires at ply 0; the marker sits on the root timeline entry. Pack B is exactly this case and it is correct — the tabiya *is* a Carlsbad |
+| Trigger true at a pack's start position | Fires at ply 0; the marker sits on the root timeline row §6a adds (the shipped timeline has no root entry — `screen-model.ts:112-133` drops the moveless root node). Pack B is exactly this case and it is correct — the tabiya *is* a Carlsbad |
 | Structure dissolves, later re-forms on one path | Two spans, two markers. Neither is "the real one" |
 | Trigger holds on the final node | `openEnded: true`; the span extends as play continues without re-firing |
 | Two entries fire at one node | Two markers, entry-id order, never ranked (§5b) |
@@ -980,7 +1063,9 @@ test under criterion 5/6.
 | Community entry claiming an official id | Refused at registration; official ids reserved (pack rule, §2b) |
 | Community entry titled "Official …" | Unfixable, as for packs; the channel renders adjacent to the name on every surface (§3b, §6a) |
 | Marker opened by a spectator | Identical render; pure function of positions the spectator already sees (§5c) |
-| Entry re-versioned after runs displayed its markers | Old runs re-render markers from the newest visible version, correctly attributed to it — the no-persistence decision working as intended (§5a) |
+| Entry re-versioned after runs displayed its markers | Old runs re-render firings from the newest visible versions; the marker set may differ from what was historically shown (entries re-versioned, added, or withdrawn since). Rendered as a present-tense reading attributed to the version actually served, never as a reconstruction of what the learner saw — §5a's accepted cost, stated where reviewers will look |
+| Prose field containing a FEN | Refused, `SHAPE_PROSE_CONTAINS_FEN` (§3c) |
+| Prose field containing SAN move tokens | Valid by design — generic manoeuvre naming is the library's subject matter; the §2a enforcement triad (FEN refusal, machine-checked frame, render-everywhere) is the boundary, not a SAN ban |
 | Opening a marker during withheld committed play | Permitted, changes nothing server-side, moves no disclosure barrier (§6c, §7) |
 
 ### 12. Cost
@@ -1010,7 +1095,7 @@ measurement, not a microbenchmark gate.
    generation; the clause needs an owner restatement post-ruling. Proposed as a BACKLOG
    row; the gate surface itself is owner-tier and is not edited here.
 3. **`design/03-product-breadth.md` B2 row records pack-less Just Play as shipped with
-   browser runs, while `docs/drill-client.md` and `session-controller.ts:180-184` show the
+   browser runs, while `docs/drill-client.md` and `session-controller.ts:180-185` show the
    client refuses to play a position session.** The server half is real; the client half is
    the gap §8 closes. The row/doc tension is reported as a BACKLOG-row proposal (a
    citation-refresh, `AGENTS.md` law 5), not resolved by this RFC's prose.
@@ -1027,16 +1112,18 @@ measurement, not a microbenchmark gate.
    `shape_entry.schema.json`; `digestShapeEntry` returns identical digests for
    key-reordered documents and different digests across versions; the digest implementation
    is asserted to be the shared RFC 8785 canonicalizer, not a copy.
-2. **Closed everywhere, one grammar.** A walk of `shape_entry.schema.json` asserts zero
-   `additionalProperties: true` sites; a deep-equality test asserts its
-   `$defs/structuralExpression` matches the pack schema's, so the trigger grammar cannot
-   fork.
+2. **Closed everywhere, one grammar.** A walk of `shape_entry.schema.json` asserts that
+   **every object-typed schema node declares `additionalProperties: false`** — absence of
+   the key is openness, not closure, so counting `true` sites alone would pass an open
+   schema; a deep-equality test asserts its `$defs/structuralExpression` matches the pack
+   schema's, so the trigger grammar cannot fork.
 3. **Refusals.** Every §3c and §4b code has a fixture failing validation with that exact
    code, and `make shape-check FILE=<fixture>` / `make pack-check FILE=<fixture>` exits
    non-zero, asserted on the process exit code. Includes the
    `SHAPE_TRIGGER_TRUE_AT_INITIAL` fixture (trigger `open_file(e)` is false at the initial
    position, so the fixture uses a genuinely initial-true trigger such as
-   `not(open_file(a))`) and a `SHAPE_PLAN_SIDES_ONE_WAY` fixture.
+   `not(open_file(a))`), a `SHAPE_PLAN_SIDES_ONE_WAY` fixture, and a
+   `SHAPE_PROSE_CONTAINS_FEN` fixture whose FEN sits inside a `watch` row.
 4. **Digest stability under 0.11.** Every unmodified 0.10 document —
    `schemas/drill_pack.example.json`, Pack A, the browser fixtures — validates under 0.11
    with a byte-identical digest, asserted against pre-bump recorded values. The two edited
@@ -1062,6 +1149,9 @@ measurement, not a microbenchmark gate.
    verbatim, renders detection before plans, renders channel + licence + attribution for
    the entry, and for a community fixture entry renders the channel adjacent to the name.
    The frame-sentence assertion is the machine-check that naming stays scoped.
+   `renderStructuralExpressionSpec` (§6b) renders both Carlsbad signatures to the fixed
+   "Success, structurally: …" template and accepts every expression the schema admits,
+   table-asserted over the grammar's five branches.
 10. **Browser: Just Play reaches a Carlsbad.** Using §8's player: start a position run
     from a FEN identical to Pack B's tabiya except Black's c-pawn on c7 (trigger false —
     asserted: no marker), play ...c7c6 (side black), and assert the marker appears on the
@@ -1103,6 +1193,33 @@ None.
 
 ## Changelog
 
+- 2026-08-14 (adversarial review, fixed in place): (1) §2a — the "no field holds a move"
+  claim was falsified by §10a's own SAN-bearing prose; restated as a machine-readable-field
+  claim and given a real enforcement triad: new `SHAPE_PROSE_CONTAINS_FEN` refusal (§3c,
+  criterion 3, §11), the machine-checked frame sentence, and the render-everywhere
+  property. (2) §6b — the signature sentence claimed the observation layer could render
+  expressions; it cannot (`structural-sentences.ts` renders observations only,
+  `pieceOnSquare` is no observation kind); `renderStructuralExpressionSpec` is now
+  specified as new code with a criterion-9 assertion, and the detection line correctly
+  attributes the name to the panel, not the `named_structure` branch. (3) §6a/§11 — the
+  claimed "root timeline entry" does not exist (`screen-model.ts:112-133` drops the
+  moveless root); the root row is now specified as added by this RFC. (4) §8 — two
+  invent-it-yourself gaps closed: the position-path opponent request is pinned to
+  `run.started` data with `sessionDigest` as the cache-key digest, and the hardcoded
+  `justPlay`/`fromPosition` capability rows (`capabilities.ts:118-127`) are flipped with
+  the player. (5) §5a — the drift ground did not survive the digest-pin counterattack
+  (runs already pin packs by digest); rewritten as cost-versus-need with the
+  reading-control precedent, and the replay concession stated at full width with a
+  present-tense rendering rule (§11 row updated). (6) `structuralIssues` is
+  module-private today; the RFC now states it adds the export. (7) §10d — the `every`
+  vacuity trap documented beside the existence idiom. (8) Criterion 2 tightened: every
+  object node must declare `additionalProperties: false` (absence is openness).
+  (9) Session-controller citations corrected to `:180-185`. Verified unchanged: digest
+  stability (pack documents carry no schema-version field; no committed digest moves),
+  the Carlsbad extraction (signature matches Pack B's success condition exactly;
+  `planClassIds` intact after trimming), Pack C trigger truth at its start FEN, the
+  register rows (0.11, migration 10, storage 9), and the withholding path
+  (`feedbackDisclosed` reads only the four event types; the marker emits nothing).
 - 2026-08-14: created. Specifies the B11 shape library under the 2026-08-14 owner rulings:
   the closed shape-entry artifact (schema 0.1, RFC 8785 digest, official/community
   channels, CC-BY-SA-4.0 posture with encoded attribution), additive pack references
