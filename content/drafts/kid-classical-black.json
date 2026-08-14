@@ -1,0 +1,279 @@
+{
+  "id": "kid-classical-black",
+  "version": "0.1.0",
+  "title": "King's Indian, Classical: Black seals the centre and storms the king",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "KID player who meets the classical Nf3/Be2 setup",
+    "branchLengthTarget": 11
+  },
+  "start": {
+    "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 5",
+    "movesSan": ["d4", "Nf6", "c4", "g6", "Nc3", "Bg7", "e4", "d6", "Nf3"],
+    "side": "black"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "You chose the King's Indian: concede the centre now to attack the king later. Against the classical setup, play the committal sequence in the right order — castle, ...e5, ...Nc6 inviting d5, then reroute and release ...f5 — knowing that every move signs you deeper into the race."
+  },
+  "concepts": [
+    "centre-concession-for-attack",
+    "pawn-chain-commitment",
+    "reroute-before-the-break"
+  ],
+  "shapes": ["fianchetto-g7"],
+  "planClasses": [
+    {
+      "id": "seal-and-storm",
+      "label": "Invite d5, then storm with ...f5-f4 and ...g5",
+      "description": "The main line's bargain: ...Nc6 provokes d5, the centre locks, and the kingside pawn storm becomes Black's whole game. In this pack it is the spine itself — Ne7, Nd7, ...f5 — with White's queenside race as the clock you play against."
+    },
+    {
+      "id": "keep-the-diagonal",
+      "label": "Trade the centre and play on the long diagonal",
+      "description": "The other King's Indian: ...exd4 keeps the g7 bishop's diagonal open and plays against e4 with pieces. In this pack it exists as the classified door at the 7.O-O decision — choosing it means a different pack's middlegame.",
+      "shapePlan": { "shape": "fianchetto-g7", "plan": "black-long-diagonal-pressure" }
+    },
+    {
+      "id": "flexible-develop",
+      "label": "Delay the commitment (...Nbd7 setups)",
+      "description": "Keep ...c6, ...exd4 and ...a5 all available one move longer. Its cost is the same as every postponement in a race: the storm needs the knight on e7 headed for g6 or f5 eventually, and d7 is not on the way."
+    }
+  ],
+  "spine": [
+    {
+      "id": "p10-o-o",
+      "moveUci": "e8g8",
+      "moveSan": "O-O",
+      "annotations": [
+        "Castle before ...e5: with the king on g8 the e5 push cannot be met by a dxe5/Qxd8 trick that strands your king in the centre."
+      ],
+      "children": [
+        {
+          "id": "p11-be2",
+          "moveUci": "f1e2",
+          "moveSan": "Be2",
+          "annotations": [
+            "The classical announcement: White will castle short and race you on the queenside instead of storming your king."
+          ],
+          "children": [
+            {
+              "id": "p12-e5",
+              "moveUci": "e7e5",
+              "moveSan": "e5",
+              "annotations": [
+                "The King's Indian's move. You strike at d4 from a position of deliberate cramp; White must now hold, trade, or advance the centre, and each answer defines a different variation you should recognize."
+              ],
+              "children": [
+                {
+                  "id": "p13-o-o",
+                  "moveUci": "e1g1",
+                  "moveSan": "O-O",
+                  "annotations": [
+                    "White keeps the tension. This is YOUR fork in the repertoire: ...Nc6 invites d5 and the race; ...exd4 keeps the diagonal open; ...Nbd7 postpones. The pack's spine takes the main road."
+                  ],
+                  "children": [
+                    {
+                      "id": "p14-nc6",
+                      "moveUci": "b8c6",
+                      "moveSan": "Nc6",
+                      "annotations": [
+                        "Attack d4 with a piece that is happy to be hit: you WANT d5. When it comes, the knight re-routes to e7 and the pawn chain tells both players where to attack."
+                      ],
+                      "children": [
+                        {
+                          "id": "p15-d5",
+                          "moveUci": "d4d5",
+                          "moveSan": "d5",
+                          "annotations": [
+                            "The centre closes. From here the position is a race with the finish lines on opposite wings: White queues c5 and the c-file, you queue ...f5-f4 and ...g5."
+                          ],
+                          "children": [
+                            {
+                              "id": "p16-ne7",
+                              "moveUci": "c6e7",
+                              "moveSan": "Ne7",
+                              "annotations": [
+                                "The only retreat that keeps the storm: from e7 the knight supports ...f5 and can reroute to g6."
+                              ],
+                              "children": [
+                                {
+                                  "id": "p17-ne1",
+                                  "moveUci": "f3e1",
+                                  "moveSan": "Ne1",
+                                  "annotations": [
+                                    "White unblocks the f-pawn for f3 and heads the knight for d3, where it pushes the c5 break. Your f6 knight must now clear the way for ...f5 — and which square it chooses is the pack's central decision."
+                                  ],
+                                  "children": [
+                                    {
+                                      "id": "p18-nd7",
+                                      "moveUci": "f6d7",
+                                      "moveSan": "Nd7",
+                                      "annotations": [
+                                        "The traditional square: the knight eyes c5 to blunt White's break before rejoining the attack. Its cost is real — the c8 bishop waits behind it."
+                                      ],
+                                      "children": [
+                                        {
+                                          "id": "p19-f3",
+                                          "moveUci": "f2f3",
+                                          "moveSan": "f3",
+                                          "annotations": [
+                                            "White reinforces e4 so the coming ...f5 can be met without concessions. Both storms are now fully queued."
+                                          ],
+                                          "children": [
+                                            {
+                                              "id": "p20-f5",
+                                              "moveUci": "f7f5",
+                                              "moveSan": "f5",
+                                              "annotations": [
+                                                "The release. From this tabiya the races run on rails: ...f4, ...g5-g4 against c5 and the c-file. Play on and count tempi — the side that spends one on defence usually finishes second."
+                                              ],
+                                              "children": []
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "id": "ne8-modern",
+                                      "moveUci": "f6e8",
+                                      "moveSan": "Ne8",
+                                      "annotations": [
+                                        "The modern square: the knight keeps d7 free for the bishop's sake and covers c7 against the queenside invasion, and ...f5 comes just as fast. A different division of defensive labour, not a different plan."
+                                      ],
+                                      "children": []
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "repertoire-fork",
+      "label": "7.O-O — choose your King's Indian before the centre chooses for you",
+      "trigger": { "atSpineNode": "p13-o-o" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["seal-and-storm", "keep-the-diagonal", "flexible-develop"]
+      }
+    },
+    {
+      "id": "reroute-decision",
+      "label": "9.Ne1 — pick the f6 knight's retreat square",
+      "trigger": { "atSpineNode": "p17-ne1" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "race-signed",
+      "label": "...f5 — both storms are queued; the race begins",
+      "trigger": { "atSpineNode": "p20-f5" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p10-o-o", "p11-be2", "p12-e5", "p13-o-o", "p14-nc6", "p15-d5",
+      "p16-ne7", "p17-ne1", "p18-nd7", "p19-f3", "p20-f5", "ne8-modern"
+    ],
+    "plyHorizon": 11
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p11-be2" },
+      "moveUci": "c7c5",
+      "class": "accepted_alternative",
+      "note": "6...c5 steers for Benoni structures after d5: a legitimate repertoire fork that trades the ...e5 chain war for queenside counterplay against the d5 wedge. A different family, not an error."
+    },
+    {
+      "at": { "spineNodeId": "p11-be2" },
+      "moveUci": "c8g4",
+      "class": "interesting_deviation",
+      "note": "6...Bg4 pins the knight that guards d4 before committing the centre. It spends the c8 bishop — the piece the main line keeps for the kingside attack — to make ...exd4 and ...Nc6 bite harder. Play it out and see which army you would rather attack with."
+    },
+    {
+      "at": { "spineNodeId": "p13-o-o" },
+      "moveUci": "e5d4",
+      "class": "accepted_alternative",
+      "note": "7...exd4 is the keep-the-diagonal plan made concrete: after Nxd4 the g7 bishop stares at a real target and the game is about e4, not about pawn storms. The classified door for the second plan class."
+    },
+    {
+      "at": { "spineNodeId": "p13-o-o" },
+      "moveUci": "b8d7",
+      "class": "accepted_alternative",
+      "note": "7...Nbd7 postpones the choice: ...c6, ...exd4 and ...a5 all stay available. Against the classical race its cost is a tempo of ambiguity — the e7-g6 reroute that powers ...f5 is not on this knight's map."
+    },
+    {
+      "at": { "spineNodeId": "p15-d5" },
+      "moveUci": "c6a5",
+      "class": "interesting_deviation",
+      "note": "8...Na5 hits c4 instead of retreating to e7. The question it must answer is where the knight goes when b3 comes and the storm needs it back home. Stated as a question because nothing in this repo has checked the answer — play both and compare."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "chosen-and-even",
+      "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the position after 1.d4 Nf6 2.c4 g6 was reached 5,353,956 times and scores 47.4% for Black against 48.0% for White — the fight you chose is close to even at your level, and 3.Nc3 (77.5%) is overwhelmingly what you will face.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "order-on-your-side",
+      "text": "Black's committal order is castle, then ...e5, then ...Nc6, then the reroute: each move is safe because the previous one prepared it, while playing them out of order hands White free forks like the dxe5/Qxd8 tricks against an uncastled king.",
+      "evidenceTypes": ["author_principle"]
+    },
+    {
+      "id": "race-tempo-law",
+      "text": "Once d5 closes the centre, defensive moves are race moves lost: the side that first spends a tempo answering the other wing usually attacks second from then on.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "E99 King's Indian Defense: Orthodox Variation, Classical System, Traditional Line: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/e.tsv) — CC0-1.0, no attribution required. The Bayonet Attack (9.b4), Exchange Variation (7.dxe5), Petrosian Variation (7.d5) and Neo-Classical (10.Be3) identities mentioned across this pack pair are rows in the same CC0 file.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the E60 row — 5,353,956 games, whitePct 48.0 / drawPct 4.6 / blackPct 47.4, and 3.Nc3 at 77.5% share. No deeper-node frequency was retrieved.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/e99-king-s-indian-defense-orthodox-variation-classical-system-traditional-line, learner-side black, split-ply 9; note the candidate directory is shared with the mirrored White pack and records the most recent emit's job arguments). The hand-added ...Ne8 tip and all five deviations were walked move-by-move with a chessops scratch harness this session, including side-to-move at every anchor.",
+      "SHAPE REFERENCE (mechanical): fianchetto-g7's trigger (black pawn g6 + black bishop g7) is true from the pack's start position — g6 and Bg7 stand in the preamble — and remains true at every spine position, since no authored move touches either square; derived from the walked FENs, not from running the shipped evaluator.",
+      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all five deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. 'Original prose' answers copyright, not truth."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "No shape entry names the King's Indian pawn-chain arrangement (White c4/d5/e4 against Black d6/e5): closed-centre-chain's trigger is pinned to the French/Caro squares and cannot fire here, and per the mirroring law a chain entry with different plan ownership must be authored separately. Until it exists, this pack's chain teaching is inlined and non-reusable.",
+      "Which reroute (...Nd7 vs ...Ne8) is more common or scores better at these bands is unquantified; the explorer API could settle it below the family root and has not been queried.",
+      "The 'defensive moves are race moves lost' claim is the pack's strongest generalization and is pure hypothesis — no corpus measurement of tempo-vs-result in KID races exists in this repo.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

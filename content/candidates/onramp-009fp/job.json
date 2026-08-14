@@ -1,0 +1,1 @@
+{"args":{"count":12,"engineEval":true,"minimumNbPlays":1000,"plies":6,"ratingBand":[1000,1400],"themes":["pin","skewer","trappedPiece","discoveredAttack"]},"emissionJobDigest":"sha256:72261fe79efc7e0ade0f5e430628b0c0f39d8691a31d8323aaa7631d7d0ffd2e","pipeline":"position-seeds","schema":"tabiya.sourcing.job.v1","sourceEtags":["\"6a6ef08b-12248997\"",null]}

@@ -1,0 +1,292 @@
+{
+  "id": "opening-principles-white",
+  "version": "0.1.0",
+  "title": "Opening principles as White: a new piece every move, then castle",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1000,
+    "maxOnlineRapid": 1400,
+    "label": "On-ramp: the opening as three habits, not a line to memorise",
+    "branchLengthTarget": 7
+  },
+  "start": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "play_until_checkpoint",
+    "summary": "Three habits, one drill: put a pawn in the centre, bring out a NEW piece every move, and castle before you attack anything. The finish line is not a memorised position — it is your king on g1 with a rook on f1, reached because every move did new work. The moves shown are one clean road there; the drill graduates you the moment the castle happens, by any principled order.",
+    "successConditions": [
+      {
+        "kind": "reach_checkpoint",
+        "checkpointId": "castled-and-out"
+      }
+    ]
+  },
+  "concepts": [
+    "centre-pawn-first",
+    "new-piece-every-move",
+    "castle-before-attacking",
+    "early-queen-tax",
+    "knight-on-the-rim"
+  ],
+  "planClasses": [
+    {
+      "id": "finish-and-castle",
+      "label": "Finish the kingside, castle",
+      "description": "The plan the whole pack drills: the f1 bishop and g1 knight are the only pieces standing between your king and safety, so their development and your castle are the same project. Every move that is not part of it should have a reason you can say out loud."
+    },
+    {
+      "id": "open-the-centre",
+      "label": "Prepare a centre break (c3 and d4)",
+      "description": "The plan you graduate into: once the pieces are out and the king is safe, c3 followed by d4 asks the centre question with the whole army behind it. It is listed here so you can recognise it as a plan for AFTER castling, not instead of it."
+    },
+    {
+      "id": "hunt-material",
+      "label": "Chase pawns and checks first",
+      "description": "The anti-plan this pack exists to retire: queen sorties and one-move threats before development. Every branch of it in this drill can be answered by a developing move, which means every threat you make pays your opponent a tempo."
+    }
+  ],
+  "spine": [
+    {
+      "id": "w1-e4",
+      "moveUci": "e2e4",
+      "moveSan": "e4",
+      "annotations": [
+        "Habit one, move one: a pawn takes a centre square and opens lines for the f1 bishop and the queen in a single move. Nothing is threatened and nothing needs to be — the centre is the profit."
+      ],
+      "children": [
+        {
+          "id": "b1-e5",
+          "moveUci": "e7e5",
+          "moveSan": "e5",
+          "annotations": [
+            "Black claims the mirror square. From here every White move in this drill answers one question: what NEW work does this move do?"
+          ],
+          "children": [
+            {
+              "id": "w2-nf3",
+              "moveUci": "g1f3",
+              "moveSan": "Nf3",
+              "annotations": [
+                "A new piece, toward the centre, with a threat attached: the knight attacks e5, so Black's reply is half-forced — you develop and take away their free choice at the same time. Compare this move's whole career with the queen's on the 2.Qh5 branch."
+              ],
+              "children": [
+                {
+                  "id": "b2-nc6",
+                  "moveUci": "b8c6",
+                  "moveSan": "Nc6",
+                  "annotations": [
+                    "Black defends e5 with a developing move — the answer that costs nothing. Notice the pattern from the other side: a threat that can be met by development is not really a threat, it is a gift of time."
+                  ],
+                  "children": [
+                    {
+                      "id": "w3-bc4",
+                      "moveUci": "f1c4",
+                      "moveSan": "Bc4",
+                      "annotations": [
+                        "The second new piece, and the last one standing between your king and the castle. From c4 the bishop eyes f7 — the one square only Black's king defends — but the point tonight is simpler: f1 is empty now, and g1 empties the moment you castle."
+                      ],
+                      "children": [
+                        {
+                          "id": "b3-bc5",
+                          "moveUci": "f8c5",
+                          "moveSan": "Bc5",
+                          "annotations": [
+                            "Black mirrors. The position is symmetric and calm, which is exactly why it is the right position to learn the finish in: your next move is a choice between castling, building, and hunting — and the drill asks you to make it on purpose."
+                          ],
+                          "children": [
+                            {
+                              "id": "w4-castle",
+                              "moveUci": "e1g1",
+                              "moveSan": "O-O",
+                              "annotations": [
+                                "Habit three. Two pieces developed, king safe, rook already looking at the middle — after four moves you have finished the opening's only mandatory project. Everything sharp in this position (b4, d4, even Ng5 ideas) is still available, and now you can afford it."
+                              ],
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "second-move-choices",
+      "label": "Move two: the whole opening in one choice",
+      "trigger": { "atSpineNode": "b1-e5" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "before-castling",
+      "label": "Castle, build, or hunt?",
+      "trigger": { "atSpineNode": "b3-bc5" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["finish-and-castle", "open-the-centre", "hunt-material"]
+      }
+    },
+    {
+      "id": "castled-and-out",
+      "label": "King on g1, rook on f1 — the opening's finish line",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              { "kind": "pieceOnSquare", "square": "g1", "piece": { "color": "white", "role": "king" } },
+              { "kind": "pieceOnSquare", "square": "f1", "piece": { "color": "white", "role": "rook" } }
+            ]
+          }
+        }
+      },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": ["w1-e4", "b1-e5", "w2-nf3", "b2-nc6", "w3-bc4", "b3-bc5", "w4-castle"],
+    "plyHorizon": 7
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1200,
+    "temperature": 0.8,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" },
+      "moveUci": "d2d4",
+      "class": "accepted_alternative",
+      "note": "1.d4 is the same habit through the other door: a pawn in the centre, lines opened for the c1 bishop and the queen. This pack drills the e4 road because its consequences arrive faster, not because d4 is worse."
+    },
+    {
+      "at": { "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" },
+      "moveUci": "h2h4",
+      "class": "concept_violation",
+      "note": "A wing pawn on move one claims nothing in the centre, opens a diagonal no piece wants, and loosens the field your king intends to castle into. It is not refuted by any single move — it is taxed by every normal move Black plays."
+    },
+    {
+      "at": { "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" },
+      "moveUci": "g1h3",
+      "class": "concept_violation",
+      "note": "The same knight, one square from its best home, choosing the rim: from h3 it touches two central squares instead of f3's four, and it stands on the h-file where ...Bxh3 is a standing offer. Develop toward the centre — the board is widest there."
+    },
+    {
+      "at": { "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" },
+      "moveUci": "f2f3",
+      "class": "concept_violation",
+      "note": "One move, three costs: the knight's best square is occupied by a pawn, the e1-h4 diagonal past your king is open, and no piece is closer to developing. Play it and watch how fast ...e5 and ...Qh4+ ideas appear."
+    },
+    {
+      "at": { "spineNodeId": "b1-e5" },
+      "moveUci": "d1h5",
+      "class": "concept_violation",
+      "note": "The early queen makes a real threat (Qxe5+) — and that is exactly the trap. Black answers with ...Nc6, a move they wanted to play anyway, and your strongest piece now stands where knights and pawns hit it with tempo. Threats that can be answered by development are donations. Play the branch out and count who develops faster."
+    },
+    {
+      "at": { "spineNodeId": "b1-e5" },
+      "moveUci": "f2f4",
+      "class": "interesting_deviation",
+      "note": "The King's Gambit — a real opening with a real idea (deflect the e5 pawn, seize the centre with d4). It is not a principle violation; it is a promise to play accurately for ten moves with your king's cover already spent. Branch it to see the difference between a gambit and a mistake; drill it after 1400, not before."
+    },
+    {
+      "at": { "spineNodeId": "b1-e5" },
+      "moveUci": "f1c4",
+      "class": "accepted_alternative",
+      "note": "Bishop before knight is the same plan in a different order — the Italian bishop goes to its diagonal a move early. The spine prefers 2.Nf3 because it develops WITH a threat, but nothing about this move breaks a habit."
+    },
+    {
+      "at": { "spineNodeId": "b2-nc6" },
+      "moveUci": "f3e5",
+      "class": "tactical_error",
+      "note": "Count the defenders before you take: e5 was attacked once and defended once, so 3.Nxe5 Nxe5 simply trades your knight for a pawn. The guard will show you the material arithmetic immediately — this is the exact reflex ('it's a free pawn') the counting habit replaces."
+    },
+    {
+      "at": { "spineNodeId": "b2-nc6" },
+      "moveUci": "f3g5",
+      "class": "tactical_error",
+      "note": "The same piece, moved twice, to a square where the queen takes it for free: 3...Qxg5 ends the game's interesting part. Before any piece lands on a forward square, ask the on-ramp question — what captures it, and what recaptures for me? Here the answers are 'the queen' and 'nothing'."
+    },
+    {
+      "at": { "spineNodeId": "b2-nc6" },
+      "moveUci": "f1b5",
+      "class": "accepted_alternative",
+      "note": "The Ruy Lopez bishop: instead of eyeing f7 it presses the knight that defends e5. A fully principled second door — new piece, toward the centre, castle next. This pack keeps the c4 road only because its teaching positions are simpler."
+    },
+    {
+      "at": { "spineNodeId": "b2-nc6" },
+      "moveUci": "d2d4",
+      "class": "accepted_alternative",
+      "note": "The Scotch: open the centre immediately while both sides are half-developed. Principled and sharp — after ...exd4 Nxd4 the game opens before anyone has castled, which is why the spine saves the centre break for after move four."
+    },
+    {
+      "at": { "spineNodeId": "b3-bc5" },
+      "moveUci": "b2b4",
+      "class": "interesting_deviation",
+      "note": "The Evans Gambit: a wing pawn offered to drag the c5 bishop off its diagonal and build the big centre with tempo. On the spine's own terms it breaks a habit; in chess history it is a celebrated idea. Branch it, watch what White gets for the pawn, and file it under 'later'."
+    },
+    {
+      "at": { "spineNodeId": "b3-bc5" },
+      "moveUci": "f3g5",
+      "class": "tactical_error",
+      "note": "The same lesson as one move earlier, now with the mate threat on f7 attached — and the same refutation: 4...Qxg5 takes the knight for nothing. A threat delivered by a hanging piece is not a threat."
+    }
+  ],
+  "feedbackPolicy": "immediate_guard",
+  "guard": {
+    "evalSwingCp": 250
+  },
+  "feedbackClaims": [
+    {
+      "id": "new-work-every-move",
+      "text": "An opening move earns its place by doing new work: claiming a centre square, developing a piece that has not moved, or castling. Moves that repeat old work — second pawn pushes, the same piece again, early queen walks — hand the opponent the one resource the opening is about: time.",
+      "evidenceTypes": ["author_principle"]
+    },
+    {
+      "id": "castling-is-arithmetic",
+      "text": "Castling short requires exactly two of your moves to have been the g1 knight and the f1 bishop leaving home. That is why 'develop, then castle' is not advice but arithmetic: the drill's finish line (king g1, rook f1) is checked from the board position itself, by any move order that empties the squares.",
+      "evidenceTypes": ["author_principle", "derived_feature"]
+    },
+    {
+      "id": "threats-costing-tempo",
+      "text": "At 1000-1400 the early queen usually wins material only when the defender panics. Against the calm answers — a developing move that defends, a pawn move that hits the queen — the attacker ends up two developing moves behind by move six. This pack's 2.Qh5 and 4.Qh5 branches exist to be played out, not believed.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    },
+    {
+      "id": "guard-is-the-counting-teacher",
+      "text": "This pack's guard fires when a committed move costs roughly a piece (250 centipawns or more, about the two Ng5/Nxe5 branches). It stays silent through small inaccuracies on purpose: at this band the habit being built is 'don't lose pieces', and a guard that also flagged tempo losses would bury that lesson in noise.",
+      "evidenceTypes": ["author_principle"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Spine identity: the Italian Game / Giuoco Piano (C50), 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O, per lichess-org/chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/c.tsv) — CC0-1.0. The line is used as a VEHICLE for principles; the pack makes no claim that this is the best or main theoretical continuation.",
+      "Named deviations from the same CC0 file: King's Gambit (2.f4), Ruy Lopez (3.Bb5), Scotch (3.d4), Evans Gambit (4.b4).",
+      "MECHANICAL: every spine move and every deviation move was replayed legal with chessops this session (scratch harness derived UCI/SAN/FENs; `make pack-check` independently re-walks the spine and lints deviation side/legality). The two Ng5 refutations (...Qxg5 with the d8-g5 diagonal empty) and the Nxe5 recapture were verified as legal captures on the derived positions.",
+      "MECHANICAL: the castled-and-out trigger (white king g1 AND white rook f1) is false at the start position and first becomes true on the spine at ply 7 (O-O); it cannot be true earlier on any legal path because a king on g1 with a rook on f1 requires the castle or a king walk that this 7-ply horizon does not permit... the horizon claim is the author's arithmetic, not machine-checked.",
+      "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all deviation classifications and notes, and all feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. The principle vocabulary (centre, development, king safety, early-queen tax) is standard chess pedagogy rendered from model knowledge with no named source."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on a claim clears a blocker.",
+      "The five concept_violation classifications (1.h4, 1.Nh3, 1.f3, 2.Qh5, 4.Qh5) assert that legal, extremely common club moves are principle errors. All five are concretely checkable with a fixed-depth engine pass; none has been run. 2.Qh5 in particular is known to be playable at master level — the note claims a practical tax at 1000-1400, which is a Maia/corpus question, not an engine question, and has no evidence underneath.",
+      "The material arithmetic behind the three tactical_error branches (Nxe5, Ng5 twice) is rules-derived and was replayed legal, but the follow-up claims ('ends the game's interesting part') are unevaluated prose.",
+      "The guard threshold (250cp) encodes the claim that piece-loss is the right firing line for 1000-1400 and tempo-loss is noise. That is an authored hypothesis about a rating band; no corpus or play-test evidence supports the specific number.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

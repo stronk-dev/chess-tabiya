@@ -1,0 +1,285 @@
+{
+  "id": "anti-kid-classical-white",
+  "version": "0.1.0",
+  "title": "Facing the King's Indian: White's classical race on the queenside",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "1.d4 player whose opponent chose the King's Indian",
+    "branchLengthTarget": 12
+  },
+  "start": {
+    "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+    "movesSan": ["d4", "Nf6", "c4", "g6", "Nc3", "Bg7", "e4", "d6"],
+    "side": "white"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "Your opponent chose the King's Indian and is planning a pawn storm at your king. The classical answer is not to stop it — it is to win the other race: develop calmly, answer ...Nc6 with d5, and have Ne1-d3 and c5 queued before ...f5 lands. This pack drills that order until the storm stops feeling like an emergency."
+  },
+  "concepts": [
+    "race-not-reaction",
+    "closing-the-centre-on-your-terms",
+    "queenside-file-play"
+  ],
+  "shapes": ["fianchetto-g7"],
+  "planClasses": [
+    {
+      "id": "classical-race",
+      "label": "Seal with d5, reroute Ne1-d3, break with c5",
+      "description": "The spine's plan: when the centre closes, White's pawn chain points at the queenside, and every move either queues the c5 break or clears the pieces that will use the c-file. Defensive gestures on the kingside are moves the queenside never gets back."
+    },
+    {
+      "id": "bayonet-b4",
+      "label": "Race faster with 9.b4",
+      "description": "Position-specific to this tabiya: skip the Ne1 regroup and start the queenside pawns immediately. Sharper and less forgiving — the b4 pawn is a target and the e4 defence thinner — but the storm meets a storm one tempo sooner."
+    },
+    {
+      "id": "blunt-the-bishop",
+      "label": "Neutralize the g7 bishop when the centre opens",
+      "description": "The fianchettoed bishop is the Indian's engine whenever the long diagonal opens. Trading it or keeping the diagonal closed is a standing sub-goal of every White plan here; the reusable doctrine lives in the shape entry.",
+      "shapePlan": { "shape": "fianchetto-g7", "plan": "white-trade-the-fianchetto-bishop" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "p9-nf3",
+      "moveUci": "g1f3",
+      "moveSan": "Nf3",
+      "annotations": [
+        "The classical development: knight before bishop, keeping f3 available for the pawn only after the knight later re-routes via e1."
+      ],
+      "children": [
+        {
+          "id": "p10-o-o",
+          "moveUci": "e8g8",
+          "moveSan": "O-O",
+          "children": [
+            {
+              "id": "p11-be2",
+              "moveUci": "f1e2",
+              "moveSan": "Be2",
+              "annotations": [
+                "Modest on purpose: the bishop's job is to hold c4 and free the king to castle, not to find a diagonal. Your activity arrives by pawn break, not by piece placement."
+              ],
+              "children": [
+                {
+                  "id": "p12-e5",
+                  "moveUci": "e7e5",
+                  "moveSan": "e5",
+                  "annotations": [
+                    "The King's Indian strike. You have three honest answers — keep the tension (the spine), trade queens into the Exchange ending, or seal immediately with 7.d5 — and panic is not one of them."
+                  ],
+                  "children": [
+                    {
+                      "id": "p13-o-o",
+                      "moveUci": "e1g1",
+                      "moveSan": "O-O",
+                      "annotations": [
+                        "Castle and let Black declare first. Keeping the d4/e5 tension one more move means ...exd4 is always answered by Nxd4 with a comfortable game, so Black usually commits with ...Nc6."
+                      ],
+                      "children": [
+                        {
+                          "id": "p14-nc6",
+                          "moveUci": "b8c6",
+                          "moveSan": "Nc6",
+                          "annotations": [
+                            "The invitation. The knight attacks d4 hoping you push — and you should: d5 hits it with tempo and closes the centre with YOUR pawn chain pointing at the queenside."
+                          ],
+                          "children": [
+                            {
+                              "id": "p15-d5",
+                              "moveUci": "d4d5",
+                              "moveSan": "d5",
+                              "annotations": [
+                                "Played with tempo on c6 — the one moment d5 gains a move rather than spending one. From here the game is two races, and yours is on the c-file."
+                              ],
+                              "children": [
+                                {
+                                  "id": "p16-ne7",
+                                  "moveUci": "c6e7",
+                                  "moveSan": "Ne7",
+                                  "annotations": [
+                                    "Black reroutes for ...f5. This is YOUR decision point: the patient Ne1 regroup or the immediate 9.b4 bayonet. Both are authored; the comparison is the drill."
+                                  ],
+                                  "children": [
+                                    {
+                                      "id": "p17-ne1",
+                                      "moveUci": "f3e1",
+                                      "moveSan": "Ne1",
+                                      "annotations": [
+                                        "The knight clears f3's square for the pawn and heads for d3, the square that pushes c5 and watches the b4-f4 squares at once. Slower than b4, sturdier than b4."
+                                      ],
+                                      "children": [
+                                        {
+                                          "id": "p18-nd7",
+                                          "moveUci": "f6d7",
+                                          "moveSan": "Nd7",
+                                          "children": [
+                                            {
+                                              "id": "p19-f3",
+                                              "moveUci": "f2f3",
+                                              "moveSan": "f3",
+                                              "annotations": [
+                                                "The move Ne1 bought: e4 is now held by a pawn, so ...f5 wins nothing in the centre and ...f4 closes the kingside where your wall already stands."
+                                              ],
+                                              "children": [
+                                                {
+                                                  "id": "p20-f5",
+                                                  "moveUci": "f7f5",
+                                                  "moveSan": "f5",
+                                                  "annotations": [
+                                                    "The storm is released — on schedule, into a prepared position. Play on: Nd3, c5, cxd6 and the c-file against ...f4, ...g5-g4. Count every tempo."
+                                                  ],
+                                                  "children": []
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "id": "b4-bayonet",
+                                      "moveUci": "b2b4",
+                                      "moveSan": "b4",
+                                      "annotations": [
+                                        "The Bayonet Attack: the queenside pawns move before the pieces regroup. You gain a full tempo of race and accept a looser structure — b4 can be hit by ...a5 and ...Nh5 comes with ideas against f4/g3 squares."
+                                      ],
+                                      "children": []
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "centre-sealed",
+      "label": "8.d5 — the chains are signed; your game is the queenside",
+      "trigger": { "atSpineNode": "p15-d5" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "your-tabiya",
+      "label": "8...Ne7 — patient Ne1 or immediate b4: choose your race",
+      "trigger": { "atSpineNode": "p16-ne7" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["classical-race", "bayonet-b4", "blunt-the-bishop"]
+      }
+    },
+    {
+      "id": "storm-met",
+      "label": "...f5 arrives into a prepared position",
+      "trigger": { "atSpineNode": "p20-f5" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p9-nf3", "p10-o-o", "p11-be2", "p12-e5", "p13-o-o", "p14-nc6",
+      "p15-d5", "p16-ne7", "p17-ne1", "p18-nd7", "p19-f3", "p20-f5",
+      "b4-bayonet"
+    ],
+    "plyHorizon": 12
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p10-o-o" },
+      "moveUci": "h2h3",
+      "class": "accepted_alternative",
+      "note": "6.h3 keeps Be2 and g4 options open and blunts a later ...Bg4 pin before it exists. A real system with its own theory; no row identity is claimed for this exact move order and none is cited."
+    },
+    {
+      "at": { "spineNodeId": "p12-e5" },
+      "moveUci": "d4e5",
+      "class": "accepted_alternative",
+      "note": "7.dxe5 dxe5 8.Qxd8 Rxd8 trades queens on Black's terms of material and yours of temperament: the walked line runs 9.Nxe5 Nxe4 and the fireworks resolve level. It defuses the storm entirely at the price of playing for two results against a prepared opponent. The full sequence was machine-walked as legal chess; no engine has graded it."
+    },
+    {
+      "at": { "spineNodeId": "p12-e5" },
+      "moveUci": "d4d5",
+      "class": "accepted_alternative",
+      "note": "7.d5 — the Petrosian Variation — seals immediately, before ...Nc6 can ask the question. Its structural cost: d5 arrives without tempo, and Black's knight keeps the choice of ...Nbd7/...Na6 routes rather than being pushed to e7."
+    },
+    {
+      "at": { "spineNodeId": "p14-nc6" },
+      "moveUci": "c1e3",
+      "class": "accepted_alternative",
+      "note": "8.Be3 holds the tension with a piece and dares ...Ng4: the walked reply hits the bishop immediately, and the resulting Bg5/h6 dance is a genuine theory battle. Same family of positions, more concrete questions per move."
+    },
+    {
+      "at": { "spineNodeId": "p18-nd7" },
+      "moveUci": "c1e3",
+      "class": "accepted_alternative",
+      "note": "10.Be3 — the Neo-Classical row — develops before f3, betting that ...f5 can be met with piece pressure on the dark squares. The pack's f3 spine is the traditional order; both are catalogued lines."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "faced-often-and-even",
+      "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the King's Indian position after 2...g6 was reached 5,353,956 times, scoring 48.0% for White — and 3.Nc3, this pack's preamble, is what 77.5% of White players already choose. The line you are drilling is the mainstream of your own practice.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "race-not-reaction",
+      "text": "Against a committed pawn storm, prophylaxis is measured in single moves: f3 because Ne1 freed it, Nd3 because it pushes c5 — each defensive-looking move must also be a race move, or it is a tempo donated to the attack.",
+      "evidenceTypes": ["author_principle"]
+    },
+    {
+      "id": "d5-with-tempo",
+      "text": "d5 is best played at the moment it attacks something: answered to ...Nc6 it gains the race a full move compared to sealing pre-emptively, because the knight must spend a tempo retreating.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "E99 King's Indian Defense: Orthodox Variation, Classical System, Traditional Line: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/e.tsv) — CC0-1.0, no attribution required. The Bayonet Attack (E97, 9.b4), Exchange Variation (E92, 7.dxe5), Petrosian Variation (E92, 7.d5) and Classical System, Neo-Classical Line (E98, 10.Be3) identities cited in branches and deviations are rows in the same CC0 file. The 6.h3 deviation cites no row.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the E60 row — 5,353,956 games, whitePct 48.0, and 3.Nc3 at 77.5% share (4,148,791 games). No deeper-node frequency was retrieved.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/e99-king-s-indian-defense-orthodox-variation-classical-system-traditional-line, learner-side white, split-ply 8; the candidate directory is shared with the mirrored Black pack and records the most recent emit's job arguments). The hand-added 9.b4 tip and all five deviations were walked move-by-move with a chessops scratch harness this session, including the complete 7.dxe5 queenless sequence through 9...Nxe4.",
+      "SHAPE REFERENCE (mechanical): fianchetto-g7's trigger (black pawn g6 + black bishop g7) holds from the start position through every spine node — no authored move touches g6 or g7; derived from the walked FENs.",
+      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all five deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The claim that 7.dxe5 'resolves level' is derived from a walked legal sequence and material counting only; an engine pass has not confirmed that either side stands better in the final position, and the classification should harden or soften on that evidence.",
+      "The shape reference is White-side aspirational: white-trade-the-fianchetto-bishop names a plan (Be3/Qd2/Bh6 ideas) that the authored spine never begins. The entry genuinely fires structurally, but the plan linkage is a hands-off declaration — the format still cannot distinguish 'present' from 'hands off to' (wave-2 friction #5, third attestation).",
+      "No shape entry names the KID chain arrangement; White's 'chain points at the queenside' teaching is inlined and non-reusable until a KID-arrangement chain entry is authored (see the Black pack's blocker).",
+      "Whether 9.Ne1 or 9.b4 is more common or scores better at these bands is unquantified below the family root.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "id": "leningrad-dutch-black",
+  "version": "0.1.0",
+  "title": "Leningrad Dutch: Black builds the ...e5 machine",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Dutch player who fianchettoes and fights for e5",
+    "branchLengthTarget": 11
+  },
+  "start": {
+    "fen": "rnbqkbnr/ppppp1pp/8/5p2/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+    "movesSan": ["d4", "f5", "c4"],
+    "side": "black"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "You chose the Dutch and White answered with the main move. Build the Leningrad machine in its proven order — ...Nf6, ...g6, ...Bg7, castle, ...d6 — so that every piece already serves the one break the whole system exists for: ...e5."
+  },
+  "concepts": [
+    "system-before-break",
+    "one-break-openings",
+    "kingside-space-with-a-hook"
+  ],
+  "shapes": ["fianchetto-g7"],
+  "planClasses": [
+    {
+      "id": "prepare-e5",
+      "label": "Queue ...e5 (the system's one break)",
+      "description": "Everything in the spine serves ...e5: the f5 pawn supports it, the g7 bishop backs it, ...d6 readies it, and the seventh-move choice (...c6, ...Nc6 or ...Qe8) is just three different ways of adding the final supporter."
+    },
+    {
+      "id": "warsaw-restraint",
+      "label": "...c6: cover d5 first, expand later",
+      "description": "Position-specific: the Warsaw move blunts the g2 bishop's diagonal at its own d5 square, keeps ...Qe8/...e5 available, and gives the b8 knight the a6-c7 route. The slower, sturdier build."
+    },
+    {
+      "id": "dark-square-press",
+      "label": "Use the g7 bishop's long diagonal",
+      "description": "When ...e5 finally trades on d4 or e5, the fianchettoed bishop becomes the best piece on the board or dies blunted — the reusable doctrine for that bishop lives in the shape entry; this pack's job is only to open its diagonal on Black's terms.",
+      "shapePlan": { "shape": "fianchetto-g7", "plan": "black-long-diagonal-pressure" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "p4-nf6",
+      "moveUci": "g8f6",
+      "moveSan": "Nf6",
+      "annotations": [
+        "Develop before defining: the knight belongs on f6 in every Dutch, so it moves first and keeps ...g6/...e6/...d6 all open."
+      ],
+      "children": [
+        {
+          "id": "p5-g3",
+          "moveUci": "g2g3",
+          "moveSan": "g3",
+          "annotations": [
+            "White meets fianchetto with fianchetto: the g2 bishop aims at the e4/d5 squares your ...f5 no longer guards. The whole opening is now a fight about who uses the light squares."
+          ],
+          "children": [
+            {
+              "id": "p6-g6",
+              "moveUci": "g7g6",
+              "moveSan": "g6",
+              "annotations": [
+                "The Leningrad declaration: your bishop will fight for e5 from g7 rather than sitting behind ...e6. Sharper and more honest than the classical Dutch — and it commits your king cover to two advanced pawns."
+              ],
+              "children": [
+                {
+                  "id": "p7-bg2",
+                  "moveUci": "f1g2",
+                  "moveSan": "Bg2",
+                  "children": [
+                    {
+                      "id": "p8-bg7",
+                      "moveUci": "f8g7",
+                      "moveSan": "Bg7",
+                      "children": [
+                        {
+                          "id": "p9-nf3",
+                          "moveUci": "g1f3",
+                          "moveSan": "Nf3",
+                          "annotations": [
+                            "The knight takes the square that watches e5 — the exact square your whole setup is aimed at. Every White developing move from here will contest the same break."
+                          ],
+                          "children": [
+                            {
+                              "id": "p10-o-o",
+                              "moveUci": "e8g8",
+                              "moveSan": "O-O",
+                              "annotations": [
+                                "Castle before ...d6: with the king tucked away, the coming central tension cannot surprise you with checks or dxe5/Qxd8 tricks."
+                              ],
+                              "children": [
+                                {
+                                  "id": "p11-o-o",
+                                  "moveUci": "e1g1",
+                                  "moveSan": "O-O",
+                                  "children": [
+                                    {
+                                      "id": "p12-d6",
+                                      "moveUci": "d7d6",
+                                      "moveSan": "d6",
+                                      "annotations": [
+                                        "The break's last prerequisite: ...e5 now has a pawn behind it. Note what you did NOT play — ...d5 would hand e5 to White's pieces forever."
+                                      ],
+                                      "children": [
+                                        {
+                                          "id": "p13-nc3",
+                                          "moveUci": "b1c3",
+                                          "moveSan": "Nc3",
+                                          "annotations": [
+                                            "The tabiya, and YOUR decision: three catalogued ways to finish the machine — ...c6 (Warsaw), ...Nc6 (Matulovic), or the ...Qe8 lift. Each supports ...e5 differently; the comparison is the drill."
+                                          ],
+                                          "children": [
+                                            {
+                                              "id": "p14-c6",
+                                              "moveUci": "c7c6",
+                                              "moveSan": "c6",
+                                              "annotations": [
+                                                "The Warsaw finish: d5 is covered against knight and bishop alike, the queen gets the c7/a5 squares, and ...e5 comes next on most White replies. Machine built; break when ready."
+                                              ],
+                                              "children": []
+                                            },
+                                            {
+                                              "id": "nc6-matulovic",
+                                              "moveUci": "b8c6",
+                                              "moveSan": "Nc6",
+                                              "annotations": [
+                                                "The Matulovic finish: the knight adds itself to e5 directly and dares d5 — after which it reroutes and the closed centre gives you the classic kingside clamp. Faster, and it invites the very push ...c6 prevents."
+                                              ],
+                                              "children": []
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "machine-decision",
+      "label": "7.Nc3 — choose the last supporter of ...e5",
+      "trigger": { "atSpineNode": "p13-nc3" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["prepare-e5", "warsaw-restraint", "dark-square-press"]
+      }
+    },
+    {
+      "id": "warsaw-built",
+      "label": "...c6 — the restrained machine is complete",
+      "trigger": { "atSpineNode": "p14-c6" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "matulovic-built",
+      "label": "...Nc6 — the direct machine is complete",
+      "trigger": { "atSpineNode": "nc6-matulovic" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p4-nf6", "p5-g3", "p6-g6", "p7-bg2", "p8-bg7", "p9-nf3",
+      "p10-o-o", "p11-o-o", "p12-d6", "p13-nc3", "p14-c6", "nc6-matulovic"
+    ],
+    "plyHorizon": 11
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p5-g3" },
+      "moveUci": "d7d6",
+      "class": "accepted_alternative",
+      "note": "3...d6 first is a move-order nuance, not a different opening: the same machine assembled from the other end. Its only real question is whether an early Nh3/Bf4 setup annoys this order more — unmeasured here."
+    },
+    {
+      "at": { "spineNodeId": "p13-nc3" },
+      "moveUci": "d8e8",
+      "class": "interesting_deviation",
+      "note": "7...Qe8 is the third catalogued finisher: the queen backs ...e5 from e8 and dreams of swinging to h5 later. It spends the heaviest piece on the break's behalf — play it against the same White setup and compare which finisher's ...e5 lands cleanest."
+    },
+    {
+      "at": { "spineNodeId": "p13-nc3" },
+      "moveUci": "e7e5",
+      "class": "interesting_deviation",
+      "note": "7...e5 immediately tests whether the break even needs a last supporter: the walked line runs 8.dxe5 dxe5 9.Qxd8 Rxd8 and the queens leave the board at once. Whether the resulting ending is fine for Black is exactly the kind of claim this repo cannot yet check — the classification is a timing question, not a verdict."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "chosen-and-fighting",
+      "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the Dutch position after 1.d4 f5 was reached 4,845,395 times, scoring 46.0% for Black against 49.8% for White — and 2.c4, this pack's preamble, is White's most common answer at 33.3%.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "one-break-discipline",
+      "text": "The Leningrad is a one-break opening: a candidate move is good here almost exactly when it adds a net supporter to ...e5 or removes a White defender of e5 — a counting rule you can apply before every move of the spine.",
+      "evidenceTypes": ["author_principle"]
+    },
+    {
+      "id": "hook-honesty",
+      "text": "...f5 and ...g6 are king cover spent as space: every Leningrad middlegame carries the g4/e6 holes and the h5-push hook as permanent features, and pretending otherwise is how the opening gets its bad reputation at club level.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "A87 Dutch Defense: Leningrad Variation: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/a.tsv) — CC0-1.0, no attribution required. The Warsaw (...c6) and Matulovic (...Nc6) finisher identities are the A88/A89 rows of the same file, catalogued there under the 2.g3 move order; this pack reaches the identical positions via the 2.c4 order — the fourteen-move transpositions were verified FEN-identical with a chessops scratch harness this session.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the A80 row — 4,845,395 games, whitePct 49.8 / blackPct 46.0, and 2.c4 at 33.3% share. No deeper-node frequency was retrieved.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/a87-dutch-defense-leningrad-variation, learner-side black, split-ply 3; the candidate directory is shared with the mirrored White pack and records the most recent emit's job arguments). The hand-added plies 10-14 (castling, ...d6, Nc3 and both finisher tips) and all three deviations were walked move-by-move with the chessops harness, including the full 7...e5 queenless sequence.",
+      "SHAPE REFERENCE (mechanical): fianchetto-g7's trigger (black pawn g6 + black bishop g7) first becomes true at spine node p8-bg7 and holds through every later spine position — no later authored move touches g6 or g7; derived from the walked FENs.",
+      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all three deviation notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The 'one-break counting rule' feedbackClaim is the pack's strongest generalization and is authored doctrine with no source; the structural-feature vocabulary could express supporter counts on e5 and has not been asked to.",
+      "The spine's preamble is the 2.c4 order (33.3% at band) but the finisher rows are catalogued under 2.g3 (2.0% at band): the transposition is machine-verified, but which order club opponents actually reach these tabiyas through is unquantified below the family root.",
+      "Which finisher (...c6 / ...Nc6 / ...Qe8) is most common or scores best at these bands is unquantified.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

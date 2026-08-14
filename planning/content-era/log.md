@@ -878,3 +878,130 @@ say so — the authored `win`/`hold` assessments and both liquidations are the
 files' strongest ungrounded claims); no explorer pulls below family roots (no
 D35 priority row exists, so the flagship's opening popularity is uncited); no
 touch of `rfc/`, `design/`, `apps/`, `packages/`; no commits.
+
+## 2026-08-14 — Content wave 5a: the on-ramp lane, first real guard content (claude)
+
+**Landed.** The 1000–1400 lane's first content, unblocked by `immediate_guard`
+shipping (pack schema 0.14/0.15): two machine-emitted candidate batches (24
+candidates) and four hand-authored on-ramp packs, all with the lane's three
+knobs turned — 2–8-ply spines, pack-declared guard, principle/threat-shaped
+objectives, difficulty 1000–1400.
+
+**Emitted (position-seeds, rating band 1000-1400, plies 6, count 12 each,
+`--engine-eval` at the B6b/depth-22 authoring profile):**
+
+- Batch 1, themes `hangingPiece,fork`: onramp-000lc, -001wr, -0050w, -00aas,
+  -00bts, -00dnp, -00evs, -00jph, -00nej, -00o8m, -00pgi, -00puc.
+- Batch 2, themes `pin,skewer,trappedPiece,discoveredAttack`: onramp-001xl,
+  -003ep, -004mt, -007tv, -009fp, -00ab1, -00adi, -00aho, -00cy1, -00icz,
+  -00jcd, -00kzf.
+- All 24 pass `sourcing-check` strict. Each sidecar carries puzzle_provenance,
+  position_legality, and a depth-22 engine_eval record. The emitter now emits
+  `feedbackPolicy: "immediate_guard"` natively (the D8 substitution blocker is
+  gone from the emitted blocker list).
+- The brief's suggested second batch (back-rank/mate-threat recognition) is
+  IMPOSSIBLE from this pipeline by design: the emitter rejects `mate`/`mateIn*`
+  themes and terminal aftermaths, and `backRankMate` rows end in mate, so both
+  filters exclude them. Substituted loose-piece geometry themes. See frictions.
+
+**Hand-authored (all four: `immediate_guard` + explicit `guard.evalSwingCp`,
+`content/drafts/`, validator-clean):**
+
+- `opening-principles-white.json` — principles-not-theory as White. Italian
+  scheme as VEHICLE; the success checkpoint is structural, not a line: king g1
+  + rook f1 via fenPredicate, reached by any principled order. 7-ply spine, 14
+  deviations (early queen, rim knight, wing pawns, two Qxg5 counting demos).
+  Guard 250cp: fire on pieces, stay silent on tempo — at this band the habit
+  is "don't lose pieces" and a tighter guard buries that signal in noise.
+- `opening-principles-black.json` — the colour mirror. Structural success:
+  b8/g8/f8 empty + king still e8 ("developed, ready to castle"). Damiano and
+  Blackburne-Shilling as classified deviations with machine-replayed
+  refutations. Guard 250cp, same rationale.
+- `opponent-intent-early-queen.json` — the owner's two questions ("what does
+  their move want; what is the moved piece no longer doing") as intent_capture
+  checkpoints on all three opponent spine nodes (Qh5/Bc4/Qf3 vs the Scholar's
+  pattern). Three deviation branches end in machine-verified Qxf7# — including
+  4...Nd4??, the threats-outrank-attacks teaching case. Guard 150cp: here every
+  materially costly move IS a misread threat, and the consequence should land
+  in the same breath; nothing quieter than a misread can trip it.
+- `conversion-up-a-piece.json` — outcome/win, up a clean knight: accept the
+  rook trade, march the king, raid, promote. Authored root assessment
+  (15 units, no Syzygy possible), resolveAt terminal, material_balance→degraded
+  fires exactly when the piece is given back. Three Nd5?? give-back demos
+  (exd5/Kxd5 machine-verified). Guard 200cp ≈ two-thirds of the knight: the
+  guard is the material guard-rail, a won position played slowly is not an
+  error.
+
+**Validators.** `make pack-check` × 4 green. `sourcing-check` × 24 green
+(strict). 19 claimed refutation/mate lines machine-replayed with chessops
+(scratch `refute-check.mjs`), including three checkmate assertions verified as
+mate, not just legal. The harness caught one real authoring error before it
+shipped: the conversion pack's 1.Kf1 was drafted as a rook-losing
+tactical_error and the replay refuted it — Nc3 recaptures on d1. Reclassified
+concept_violation with the true consequence (knight dragged to d1); the pack's
+provenance records the correction. Validation-by-use, working as designed.
+
+**Cost split (agent clocks, minutes, approximate):**
+research 35 · encoding 95 · engine-validation 25 · review 0 · revision 10 · tooling-friction 30
+Machine time not counted above: 304MB dump download ~2m; two emitter passes
+incl. 24 depth-22 evals ~6m background.
+notes: encoding dominated by deviation notes and per-pack provenance honesty,
+not by format fights — the schema absorbed all four packs without a single
+validation battle. The structural-success-checkpoint pattern (castle/development
+as FEN arithmetic) is the cheapest principle-shaped objective encoding found so
+far and should be the lane's default.
+
+**contract-gaps / frictions, sharpest first:**
+
+1. **The guard's pack knob is one scalar.** `guard.evalSwingCp` is the entire
+   authored surface. Could not express: (a) per-branch/per-deviation
+   thresholds — the principles packs want piece-only 250cp EXCEPT on the
+   Damiano branch, where the ~1.5-pawn swing IS the lesson and 250 may sleep
+   through it; (b) "always fire on a missed forced mate regardless of cp" —
+   the intent pack's three Qxf7# branches rely on the engine tier noticing a
+   mate score; (c) any ply/phase window (guard wanted loud inside the 7-ply
+   authored horizon, quieter beyond); (d) separate tuning of the deterministic
+   rules tiers vs the recorded-engine tier (only global `null` disables the
+   latter). Each pack's chosen number is therefore a compromise averaged over
+   its branches, and the per-pack rationale lives in a feedbackClaim, which the
+   runtime does not read.
+2. **The emitter cannot tune the guard it declares.** Emitted candidates get
+   `immediate_guard` with no `guard` block (default 200cp); there is no
+   `--guard-cp` argument, so a batch cannot carry band-appropriate tuning even
+   though the batch KNOWS its rating band. Hand-tuning 24 sidecar-checked
+   files individually would invalidate the emission-digest idempotence.
+3. **Node's zstd cannot read the real dump.** `createZstdDecompress` (Node
+   v26.7) dies mid-stream with `ZSTD_error_prefix_unknown` on the current
+   304MB puzzle dump (etag "6a6ef08b-12248997") — both the documented live
+   streaming path and `--csv` on the .zst are broken against the real file;
+   CLI `zstd -t` validates the same bytes. Workaround used: CLI-decompress,
+   then `--csv` on the 6.1M-row plain file. Suspect multi-frame/window-size
+   handling in node:zlib. Until fixed, the "stream and discard" design is
+   aspirational and reproducing an emission requires a local CLI decompress.
+4. **Back-rank/mate-threat recognition needs a different re-cut.** design/04
+   §6 lists it for the lane; position-seeds structurally cannot produce it
+   (mate filters + terminal aftermath, correctly, since play-the-consequence
+   needs a non-terminal consequence). The natural encoding is the DEFENDER's
+   chair one move BEFORE the threat lands — a pre-tactic re-cut the pipeline
+   has no mode for. BACKLOG-worthy pipeline variant.
+5. **intent_capture still has no validated-answer slot** (wave-3's gap,
+   sharpened by first real intent content): the intent pack KNOWS by attack
+   arithmetic which plan class each opponent move serves, the format's
+   `direct_attack_count` could ground it mechanically, but no interaction
+   field consumes it — so the answer lives in annotations, the interaction
+   cannot grade, and consequently the guard cannot fire on a misread intent,
+   only on its eventual material cost.
+6. **theory_strict vs the guard's consequence promise.** The three line-mode
+   packs pair the guard with theory_strict, whose opponent stops at the
+   authored boundary; the guard's "opponent starts the consequence before the
+   rewind offer" is only as good as the opponent's willingness to punish
+   off-spine play. Whether deviation branches get real consequence play under
+   theory_strict is a runtime behaviour question this author could not settle
+   from docs; if not, on-ramp line packs may want human_common as their
+   default resistance despite the spine.
+
+**Not done, deliberately:** no engine pass on any hand-authored position (each
+pack's blockers say exactly what a fixed-depth pass would settle); no
+promotion of any candidate; no touch of `rfc/`, `design/`, `apps/`,
+`packages/`, `schemas/`; no commits; stayed off sibling OPENING and ENDGAME
+territory (their new candidate dirs appeared mid-session and were not touched).
