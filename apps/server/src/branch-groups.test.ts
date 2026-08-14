@@ -140,7 +140,11 @@ describe("branch-group service and REST contract", () => {
     expect(result.comparison.columns).toHaveLength(3);
     expect(result.run.activeCursor.branchId).toBe(result.group.members[0]!.branchId);
     expect(result.run.events.filter((event) => event.type === "group.created")).toHaveLength(1);
-    expect(result.run.events.filter((event) => event.type === "move.committed" && event.data.node.parentId === rootId).map((event) => event.data.node.actor)).toEqual(["user", "user", "user"]);
+    expect(result.run.events.flatMap((event) =>
+      event.type === "move.committed" && event.data.node.parentId === rootId
+        ? [event.data.node.actor]
+        : [],
+    )).toEqual(["user", "user", "user"]);
     expect(environment.evidence.jobs.length - before).toBe(2);
     expect(groupsFromEvents(result.run)).toHaveLength(1);
 
@@ -236,13 +240,18 @@ describe("branch-group service and REST contract", () => {
   });
 
   it("resolves authored roots and strong-engine MultiPV from server-owned pack state", async () => {
-    const authored = structuredClone(fixture);
-    authored.id = "group-authored";
-    authored.spine = [
-      authored.spine![0]!,
-      { id: "najdorf-f3-root", moveUci: "f2f3", moveSan: "f3", children: [] },
-    ];
-    authored.authoredBoundary = { ...authored.authoredBoundary, spineNodeIds: [...authored.authoredBoundary!.spineNodeIds, "najdorf-f3-root"] };
+    const authored: DrillPackDefinition = {
+      ...structuredClone(fixture),
+      id: "group-authored",
+      spine: [
+        fixture.spine![0]!,
+        { id: "najdorf-f3-root", moveUci: "f2f3", moveSan: "f3", children: [] },
+      ],
+      authoredBoundary: {
+        ...fixture.authoredBoundary!,
+        spineNodeIds: [...(fixture.authoredBoundary?.spineNodeIds ?? []), "najdorf-f3-root"],
+      },
+    };
     const environment = await setup(authored); stores.push(environment.storage);
     const created = await request(environment.handler, "POST", "/runs", {
       id: "group-authored-run", session: { kind: "pack", packId: authored.id },
