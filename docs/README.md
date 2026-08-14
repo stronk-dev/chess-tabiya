@@ -9,6 +9,9 @@ Implemented foundation:
 - `branch-runtime.md` — immutable run tree, rewind/fork/objective/replay semantics,
   comparison and PGN export, REST/lease/storage behavior, measured envelope, and
   current limitations.
+- `branch-groups.md` — durable candidate sets over ordinary branches, four seed
+  sources, controlled-resistance reply journals, sequential/lockstep play,
+  semantic zoom, evidence recovery, comparison, and export.
 - `drill-pack-format.md` — living v0.12 schema, semantic authoring lint, canonical
   digest and URL tooling, executable checkpoint-action validation, pack/run PGN
   round-trip, and deferred content boundary.
@@ -52,7 +55,7 @@ Implemented foundation:
   surface, pack schema 0.8, and `/create`.
 - `n-way-comparison.md` — one-axis 2–8 branch comparison, consequence rows,
   scratch simulation and promotion, prediction capture, deep analysis, run
-  schema 0.8, pack schema 0.9, and migration 8.
+  run schema 0.8, pack schema 0.9, and migration 8.
 - `live-sessions.md` — roles and board-control policy, possession authorship,
   proposals, advisory chat votes, Arena PGN legs, follower withholding, live routes,
   migration 9, and the accepted streamer-disclosure limitation.

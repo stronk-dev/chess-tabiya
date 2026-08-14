@@ -70,3 +70,12 @@ An eight-member hand-picked group took **1.265 ms** in the local in-memory servi
 engine measurement. This is far below the 100 ms worry / 200 ms intervene navigation
 band, but it is explicitly a service-only synthetic measurement, not a storage/network
 claim, and gates nothing.
+
+## 2026-08-14 — Completion protocol
+
+Canonical behavior is distilled into `docs/branch-groups.md` and linked from the runtime,
+engine-worker, and drill-client descriptions. The B3 gate and branch-groups ledger row now
+describe shipped behavior. Final pre-closeout verification passed with **389 tests across
+67 files**, Svelte at **0 errors / 0 warnings**, and **15 Playwright tests at zero retries**
+(the opt-in Maia latency test skipped). The RFC and this planning job move to their frozen
+archive locations in the same commit as the registers.

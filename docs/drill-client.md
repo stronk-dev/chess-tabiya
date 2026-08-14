@@ -252,6 +252,23 @@ markers (including a ply-0 root row) open an attributed detection-and-plans pane
 emitting events or changing feedback disclosure. Pack runs evaluate referenced entries;
 Just Play evaluates the served catalogue.
 
+## Branch groups
+
+At a decision point the drill can capture two through eight legal candidate
+moves without committing them, then create a durable group of ordinary
+branches. The server, not the browser, resolves authored or machine candidates
+and controls subsequent group replies. The branch rail marks membership while
+the group panel presents source and resistance attribution plus Overview,
+Summary, and Boards semantic-zoom bands. It never ranks candidates.
+
+Sequential advance is the default; lockstep is an optional local preference.
+Switching a group member follows the ordinary rewind contract and requests an
+opponent reply when the new cursor is on the opponent's turn. Evidence removed
+by rewind is shown as absent and can be explicitly re-requested through the
+analysis route. Compare group opens the existing N-way view with all member
+branches selected, and export uses the ordinary variation-preserving PGN path.
+The complete persistence and resistance rules are in `branch-groups.md`.
+
 ## Application shell and fitted regions
 
 A dependency-free history-API router owns `/`, `/play`, `/play/run/:id`,
@@ -332,9 +349,9 @@ includes Node, pnpm, and Stockfish.
 The drill-client implementation and later amendments now provide the
 playable mechanism, route shell, persistent history, honest capabilities,
 fitted regions, one keyboard ownership model, checkpoint-scoped authored prose,
-recorded comparison evidence, and honest Outcome Drill grading. The broader
-theory/explanation vocabulary, automatic N-way comparison, and reviewed content
-remain incomplete. The living Najdorf pack is still a schema example; the
+recorded comparison evidence, honest Outcome Drill grading, N-way comparison,
+and branch-group rehearsal. The broader theory/explanation vocabulary and
+reviewed content remain incomplete. The living Najdorf pack is still a schema example; the
 presence of grading UI does not turn unreviewed chess assertions into truth.
 
 ## Line Drill recall and verdict delivery

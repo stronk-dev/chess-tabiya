@@ -11,7 +11,7 @@ seal the outgoing leg and reset its node state to active for the incoming object
 two events are ordered and replay-validated; no trajectory state is stored separately.
 
 The transport-independent implementation is `packages/runtime`. The Node binding
-is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.8,
+is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.9,
 and `packages/schema` owns the schema version constant. Browser and server code
 import the same TypeScript runtime; there is no second implementation of chess
 semantics.
@@ -162,8 +162,9 @@ The supported event vocabulary is:
 
 `run.started`, `move.committed`, `opponent.move_selected`,
 `checkpoint.reached`, `objective.state_changed`, `evidence.attached`,
-`branch.forked`, `run.rewound`, `segment.completed`, `feedback.generated`, `outcome.reached`, and
-`transfer.scheduled`, and `feedback.revealed`.
+`branch.forked`, `run.rewound`, `segment.completed`, `feedback.generated`,
+`outcome.reached`, `transfer.scheduled`, `feedback.revealed`, `prediction.recorded`, and
+`group.created`.
 
 `evidence.attached` is the v0.3 worker amendment. It identifies a node, one or
 more evidence references, and a typed payload whose kind is `eval`, `wdl`, or
@@ -224,6 +225,12 @@ Before serialization, chessops replays every path and verifies the stored UCI,
 SAN, and resulting FEN. Corrupt or illegal paths fail rather than producing a
 plausible-looking PGN.
 
+Run schema v0.9 adds durable branch groups and the `enumerated` applied-policy
+value. A group is projected solely from `group.created` and points at ordinary
+direct-child branches; replay validates membership and any machine-source
+distribution. Group creation, controlled resistance, client behavior, and
+migration 11 are documented in `branch-groups.md`.
+
 ## In-process and REST surfaces
 
 The public runtime exports run creation, move commit, rewind by node/checkpoint,
@@ -238,6 +245,8 @@ it does not reimplement their semantics.
 | `POST /runs/:id/moves` | yes | `{run, emitted}` |
 | `POST /runs/:id/rewind` | yes | `{run, emitted}` |
 | `POST /runs/:id/fork` | yes | `{run, emitted}` |
+| `POST /runs/:id/group` | yes | `{group, run, emitted, comparison}` |
+| `POST /runs/:id/group-reply` | yes | `{selection, reusedFromNodeId}` |
 | `GET /runs/:id/graph` | no | `{graph: {id, nodes, branches, activeCursor}}` |
 | `POST /runs/:id/compare` | no | `{comparison}` |
 | `GET /runs/:id/events?sinceSeq=N` | no | `{events, nextSeq}` |
@@ -306,6 +315,11 @@ Migration 4 writes the frozen literal `0.6`; it does not reference the moving
 schema-version constant. Migration 5 then upgrades v0.6 snapshots to run schema
 v0.7 by adding `policyModeApplied: unknown` to historical opponent selections.
 It never infers an applied policy from the request or engine identity.
+
+Migration 11 stamps v0.8 snapshots and indexed rows to run schema v0.9 using
+frozen literals. It adds no invented fields: historical runs contain neither a
+group event nor an enumerated selection. The stamp is still required because
+reads and listings admit only the current run-schema version.
 
 ## Derived Line Drill state
 

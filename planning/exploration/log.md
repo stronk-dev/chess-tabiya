@@ -1510,3 +1510,16 @@ transcription — if Q1a or the game-story RFC needs them.
   complements: notability misses new entrants, clusters miss incumbents; the union is
   the real coverage.
 - **Next:** nothing urgent; teardown queue above feeds Q1a when picked up.
+
+## 2026-08-14 (Codex) — B3 completed by branch groups
+
+- `branch-groups` completed its lifecycle and moved to `rfc/archive/branch-groups.md`;
+  canonical behavior is in `docs/branch-groups.md`.
+- B3 is now met: the existing N-way comparison/replay/export surface is joined by
+  durable 2–8-candidate groups, four seed sources, fixed/per-branch controlled
+  resistance, sequential/lockstep play, semantic zoom, explicit evidence recovery,
+  group comparison, and variation-preserving export.
+- Final verification on the archived tree: 389 tests across 67 files; Svelte 0/0;
+  15 Playwright tests at zero retries, with the opt-in Maia latency case skipped.
+- The active `game-import-and-story` draft and concurrent competitor research were
+  not changed by this lifecycle.

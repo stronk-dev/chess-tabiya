@@ -141,7 +141,7 @@ nothing about their own move. **Corrected 2026-08-14: the control does NOT alrea
 receives a seed (`seedHonored: false`) and the selector cache keys on
 move-sequence history that sibling branches never share, so `seedMode: fixed`
 alone holds nothing constant across a Maia group. Real constancy is a
-group-level reply journal (`rfc/branch-groups.md` §4.2): under `fixed`, the same
+group-level reply journal (`rfc/archive/branch-groups.md` §4.2): under `fixed`, the same
 position always receives the same recorded selection replayed verbatim. The
 earlier sentence here was an overstatement this ledger caught. `per_branch` is the
 deliberate opposite experiment — *does my move survive varied resistance* — and

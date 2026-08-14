@@ -1,6 +1,6 @@
 # RFC: Branch groups — playing N candidates in parallel
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/03-product-breadth.md` §Branch groups (lines 117–151), gate
@@ -33,7 +33,7 @@
   `"enumerated"` (§8). **Migration 11** (`STORAGE_VERSION` 10→11), claimed in
   `rfc/README.md`'s migration register in the same commit as this draft.
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/branch-groups/` (once implementing)
+- **Planning:** `planning/archive/branch-groups/`
 
 Implementation baseline verified on this tree 2026-08-14 after defect-batch-2:
 **374 unit tests / 64 files** passing, run schema `"0.8"`, pack schema `"0.12"`
@@ -838,6 +838,11 @@ None.
 
 ## Changelog
 
+- 2026-08-14: implemented and distilled into `docs/branch-groups.md`, with
+  cross-system amendments in the runtime, engine-worker, and drill-client docs.
+  Run schema 0.9 and migration 11 shipped; the final gates passed at 389 tests
+  across 67 files and 15 zero-retry browser tests (one optional Maia test
+  skipped).
 - 2026-08-14 (Codex implementation review): four blockers closed before code. Replay
   now validates direct seed children rather than incompatible branch fork metadata;
   machine-source distributions persist to ground provenance; group replies are assembled

@@ -153,7 +153,7 @@ wire format:
   engine identity (`id`, name/version, optional model/container identifiers,
   and `seedHonored`).
 
-The living schema is now v0.8; it retains both engine amendments, the v0.5
+The living schema is now v0.9; it retains both engine amendments, the v0.5
 session identity/reveal contract, the v0.6 terminal outcome contract, and the
 recorded applied-policy field documented in `docs/branch-runtime.md`.
 Evidence sources remain
@@ -256,3 +256,19 @@ The cache key is `(policyConfigDigest, packId, branchSeed, historyHash)`, so two
 packs cannot reuse a selection computed against different authored replies.
 For Line Drills, `plyHorizon` governs authored support while the position-keyed
 spine governs available theory replies; those boundaries can differ.
+
+## Branch-group enumeration
+
+The selector exposes strong-engine enumeration for branch-group seeding. A
+request temporarily sets MultiPV to the requested two through eight lines,
+waits through `bestmove`, and resets MultiPV before releasing the supervisor's
+serialized request. The recorded distribution identifies the strong engine and
+each machine-seeded move records `policyModeApplied: enumerated`; enumeration
+is not misreported as an opponent-policy sample.
+
+Group replies are selected through a server-owned endpoint. Fixed resistance
+first searches the group's durable opponent-selection journal for a compatible
+selection at the same transpose key and live engine identity. This supplies a
+real same-position reuse guarantee despite Maia's `seedHonored: false` rather
+than claiming deterministic sampling the sidecar cannot provide. See
+`branch-groups.md` for the full contract.
