@@ -3,7 +3,7 @@
 - **Status:** draft
 - **Author:** claude (drafted on the owner's breadth program)
 - **Created:** 2026-08-14
-- **Design refs:** `design/03-product-breadth.md` B1/B8 rows and §Stable application shell; `design/05-in-run-experience.md` §3-forms, §3a, §3a-i; `design/BACKLOG.md` rows "Assistance form matrix" (line 230) and "Board lighting ladder" (line 231)
+- **Design refs:** `design/03-product-breadth.md` B1/B8 rows and §Stable application shell; `design/05-in-run-experience.md` §3-forms, §3a, §3a-i; `design/BACKLOG.md` rows "Assistance form matrix" (line 231) and "Board lighting ladder" (line 232)
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 + exploration gate opened by owner ruling 2026-08-12 (`rfc/README.md`)
 - **Depends on:** `rfc/archive/app-shell.md` (shell, viewport model, capability registry), `rfc/archive/adaptive-guidance.md` (AssistanceConfig, voice seam), `rfc/archive/structural-reading.md` (B9 observations), `rfc/archive/adoption-wave-1.md` (spoken preference v3, external voice wire), `rfc/archive/onramp-guard.md` (guard grounds), `rfc/archive/learner-identity-and-authorization.md` (account surface)
 - **Parent / amends:** follow-up to `archive/app-shell.md` and `archive/adaptive-guidance.md`
@@ -103,6 +103,15 @@ Local migration in `validV3`'s successor (`assistance-preference.ts:5-12`):
 v3 records upgrade with `spoken: "on"` → `"browser"`, plus `boardLighting:
 "legal"`, `arrows: "off"`, `ambient: "off"`; v1/v2 chains extend the same way.
 The storage key is unchanged (it names the record family, not its version).
+Because preferences are per-browser and never synced
+(`docs/adaptive-guidance.md:48-50`), there is no cross-device migration: each
+browser upgrades its own record on first read, and the migration is a pure
+function of the record, so repeated loads are idempotent. The reverse direction
+is also honest: a stale cached pre-v4 client reading a v4 record fails its
+`validV3` check and falls back to `SILENT_ASSISTANCE` (the shipped
+unknown-version behavior, `assistance-preference.ts:12`) — a silent reset to
+defaults on that browser, never corruption; if that old client then saves a v3
+record, the next v4 client re-migrates it.
 
 `permittedAssistance` (`assistance.ts:24-27`) widens its return with the two
 leveled keys as **caps**, not booleans: `boardLighting` and `arrows` report the
@@ -169,6 +178,13 @@ Below a **compact breakpoint of 720px viewport width** (CSS `@media (max-width:
   does (`docs/app-shell.md:140-143`). Checkpoint, terminal, and story surfaces
   — already sheets by construction — render as bottom sheets at this width.
 - **Compare** renders its board pair stacked with the difference list as a tab.
+- **The `/live` simul wall** (`docs/app-shell.md:24`) keeps its one-request
+  polling contract (`docs/live-sessions.md:91-93`) and stacks its board
+  summaries single-column inside the shell scroller; a board card is an entry
+  point, and opening it lands on the drill screen, which transforms per the
+  drill rule above. The session detail view's member/proposal/vote panels
+  scroll as ordinary shell-view content; the chrome-free `/live/overlay/:runId`
+  is already a single-region projection and does not transform.
 - Touch has no keyboard; the keyboard dispatcher simply never receives events.
   No touch-only gestures are introduced — every action stays a visible control.
 
@@ -213,11 +229,24 @@ else. The dial levels:
   boundaries of `design/05` §3a-i, checked through the same
   `feedbackDeliveryOpen`/withheld state the client already holds
   (`packages/runtime/src/feedback.ts:22`; `DrillScreen.svelte:4`;
-  `run-state.ts:42`). It colors squares/moves **from evidence bytes the client
-  already received**; it never requests fresh evaluation, so a mid-decision
-  position with nothing disclosed renders as `sight` plus the honest note that
-  no disclosed evidence exists here. Fresh engine verdicts mid-decision are the
-  named ADR-0006 collision and do not ship at any dial position.
+  `run-state.ts:42`). The disclosure source is traceable per context, and each
+  is already unified under the same two functions: a **pack drill** discloses
+  by its policy's recorded events (`checkpoint.reached` / `segment.completed` /
+  `outcome.reached` / `feedback.revealed`, `feedback.ts:3-19`); **Just Play**
+  and every other position session run `attempt_end`, whose delivery window
+  opens on reveal or outcome and closes on the next committed move
+  (`feedback.ts:22-29`; position sessions are `attempt_end` by construction,
+  `docs/branch-runtime.md:64`); a **paused match** is that same window — the
+  pause's staged-evidence delivery window is `attempt_end` delivery, and "the
+  next live commit closes the staged-evidence delivery window again"
+  (`docs/live-sessions.md:48-53`), so resuming extinguishes the coloring with
+  no new rule. A read-only follower whose evidence is withheld
+  (`run-state.ts:42`) lights nothing. The dial colors squares/moves **from
+  evidence bytes the client already received**; it never requests fresh
+  evaluation, so a mid-decision position with nothing disclosed renders as
+  `sight` plus the honest note that no disclosed evidence exists here. Fresh
+  engine verdicts mid-decision are the named ADR-0006 collision and do not
+  ship at any dial position.
 
 #### 3b. Arrows and halos — `arrows: off | sight | evidence`
 
@@ -261,8 +290,12 @@ The browser `SpeechSynthesis` path ships and stays the default spoken form
   would return — deterministic sentences, or provider prose that passed
   `voiceCheck` (`packages/runtime/src/voice.ts:33-41`;
   `rest.ts:1063-1075`) — and sends *only that text* to the TTS provider, which
-  returns audio bytes streamed back with their content type. Audio is
-  ephemeral: never persisted, never evidence, never a run event.
+  returns audio bytes streamed back with their content type. The wire pin of
+  the voice provider holds here verbatim: no learner, run, session, client, or
+  raw-position identifier is ever in the outbound body
+  (`docs/adoption-wave-1.md:63-64`) — the TTS request carries the checked
+  sentences and nothing else. Audio is ephemeral: never persisted, never
+  evidence, never a run event.
 - Absence: no provider configured → typed `TTS_UNAVAILABLE` joining the 503
   family at `rest.ts:450` (`errors.ts:10`), and the client's `spoken:
   "provider"` option is not offered — **provider-absent = text**, the correct
@@ -275,19 +308,23 @@ The browser `SpeechSynthesis` path ships and stays the default spoken form
 - `apps/web/public/manifest.webmanifest`: `name`/`short_name` Tabiya,
   `display: "standalone"`, `start_url: "/"`, theme/background colors from the
   shipped palette (`App.svelte:828-844`), maskable icons generated into the
-  build. Linked from `apps/web/index.html` (which today has no manifest — the
-  file is the six-line skeleton) and served by the existing static directory
-  (`main.ts:47`).
-- **No offline write, and no service worker in v1.** The deployment ruling is
-  hosted multi-user (`design/02-product-shape.md:50-53`), and every mutation
-  checks session → grant → role → learner lease → device writer id in order
+  build. Linked from `apps/web/index.html` (which today is a minimal
+  twelve-line skeleton with a viewport meta and no manifest link) and served by
+  the existing static directory (`main.ts:47`).
+- **No offline write, and no service worker in v1.** The identity argument
+  excludes exactly offline *write*, no more: every mutation checks session →
+  grant → role → learner lease → device writer id in order
   (`docs/identity-and-authorization.md:23-27`); the writer lease is a
-  transactional current-holder witness (`:39`). An offline write queue would
+  transactional current-holder witness (`:39`); an offline write queue would
   fabricate that witness and replay stale leases — it is structurally a second
-  writer. Offline is therefore **honestly absent**: an installed app with no
-  network shows the browser's offline state, not a stale simulacrum of a run.
-  A read-only app-shell cache remains the permitted ceiling if a later RFC
-  wants it; it is deliberately not built here, so there is no cache to lie.
+  writer under the hosted multi-user ruling
+  (`design/02-product-shape.md:50-53`). A **read-only** app-shell cache
+  violates none of that and stays compatible with the ruling; it is excluded
+  from this RFC as scope, not refused on principle — deliberately not built
+  here so there is no half-fresh cache to present a stale simulacrum of a run,
+  and it remains the permitted ceiling for a later RFC. Until then offline is
+  **honestly absent**: an installed app with no network shows the browser's
+  offline state.
 - Installability requires manifest + HTTPS only on current Chromium; TLS is
   already the production posture (`docs/identity-and-authorization.md:81-83`).
 
@@ -362,3 +399,14 @@ None.
 
 - 2026-08-14: created; wave claim #1 registered in `rfc/README.md` (no
   migration/pack/run version claimed).
+- 2026-08-14 (adversarial review, fixed in place): corrected the two BACKLOG
+  row numbers (231/232) and the `index.html` description (twelve-line skeleton,
+  not six); §1a now states the stale-client forward path for v4 records
+  (`validV3` rejection → `SILENT_ASSISTANCE`, idempotent re-migration); §2
+  gains the `/live` simul wall and overlay transformation rule; §3a's
+  `evidence` level now traces its disclosure source per context (pack policy
+  events / `attempt_end` window / paused-match staged window,
+  `docs/live-sessions.md:48-53`); §3d pins the adoption-wave-1 no-identifier
+  wire rule onto the TTS request; §4 states explicitly that the identity
+  argument excludes only offline write and that the read-only cache is a scope
+  exclusion, not a refusal.

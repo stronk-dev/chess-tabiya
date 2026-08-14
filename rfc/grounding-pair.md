@@ -30,7 +30,7 @@
 (`apps/server/src/storage.ts:387`), run `"0.12"` / pack `"0.15"`
 (`packages/schema/src/index.ts:1-2`). Both predecessors were read after they landed and
 both claim **no** migration number, `STORAGE_VERSION` change, or run/pack schema version
-(`rfc/polish-surfaces.md:14-21`; `rfc/orphan-completion.md:18-19`), so migration 18 and
+(`rfc/polish-surfaces.md:14-21`; `rfc/orphan-completion.md:19-24`), so migration 18 and
 run 0.13 are unclaimed and this draft takes them; landing order still follows the wave
 order. **No pack-schema version is claimed**: the
 `opponentPolicy.mode` enum already contains `perfect_tablebase`
@@ -109,9 +109,14 @@ FEN. An illegal walk is a hard error.
 **1d. Range and abstention.** For each position, `countFenPieces` decides:
 at most seven → query; eight or more → an abstention record with `reason: "out_of_range"`
 and the exact count, mirroring the emitter's shape (`syzygy.ts:168`). Since a chess move
-never increases the piece count, every position derived from the in-range root is in
-range; abstentions can arise only from free-FEN deviation anchors, and the ledger states
-them honestly rather than skipping them.
+never increases the piece count (promotion swaps a pawn for a piece, castling moves two,
+captures and en passant decrease), every position derived from the in-range root is in
+range; abstentions can arise only from free-FEN deviation anchors — the schema's
+`at.fen` variant accepts any position — and the ledger's separate `abstentions` array
+records them honestly rather than skipping them (linkage validates abstentions exactly
+like records, `ledger-validation.ts:324-326`), so an out-of-range deviation anchor
+never silently vanishes and never blocks the root admission, which reads only the root
+record (§1g).
 
 **1e. Queries.** Through the existing `liveTablebaseQuery` (`syzygy.ts:103-119`):
 serialized under `content/sources/.fetch.lock`, 60/120/240-second retry on 429/5xx,
@@ -142,7 +147,12 @@ the tablebase grounds categories, not reasons. The draft file itself is ingested
 anchors the `position_legality` record and any abstentions so `MANIFEST_ENTRY_UNUSED`
 stays green. `sourcedAt` is derived as the maximum consumed `retrievedAt`
 (`apps/server/src/sourcing/ledger-validation.ts:365-377`); `packId`/`packVersion`/
-`packDigest` bind via `digestDrillPack`.
+`packDigest` bind via `digestDrillPack`. One rule the single-query emitter never needed:
+manifest entries are **deduplicated by `(sourceId, retrievedAt)`** — the manifest refuses
+duplicate pairs (`MANIFEST_DUPLICATE_ENTRY`, `ledger-validation.ts:243-245`) while any
+number of records may link to one entry (linkage matches records to entries by that same
+pair) — so many queries answered in the same instant, and the offline fixture map's
+shared fixture timestamps, collapse to one entry instead of an invalid manifest.
 
 **1g. Stamping the declaration — provenance yes, truth never.** Admission is a strict
 nine-condition match on the root record (`ledger-validation.ts:395-406`): kind,
@@ -155,7 +165,15 @@ necessarily changes. Following the `candidate-attach` atomic pack-plus-sidecar p
 against the resulting digest. It **never** rewrites `category` or `pieceCount`: if the
 queried category or the census contradicts the declaration, the command fails
 `VERIFY_ASSESSMENT_CONTRADICTED` and writes nothing — a wrong chess claim is surfaced,
-not repaired by the tool (law 8).
+not repaired by the tool (law 8). "Contradicts" is byte equality: the declaration's
+closed `win | loss | draw` enum must equal the queried category exactly, so an API
+answer of `cursed-win` or `blessed-loss` (a win or loss spoiled by the 50-move rule)
+contradicts a declared `win`/`loss` — correctly, since the objective it grades is not
+achievable over the board. The failure mode for all six wave-5b packs is therefore
+**fix-the-pack, never weaken-the-check**: the admission match and its nine conditions
+are not edited by this RFC, the only fields the tool may touch are the two retrieval
+stamps, and a pack that fails on any other condition is corrected in `content/` (the
+authoring agent's territory) and re-verified.
 
 **1h. Category-regression gate.** Using the same learner-perspective mapping as pack
 validation (`pack-validation.ts:578-588`), a **learner** spine move whose resulting
@@ -195,7 +213,13 @@ It adopts the corpus client's interactive posture verbatim as the politeness mod
 512-entry in-memory LRU; identical-request coalescing; one upstream request at a time
 with a small bounded queue; four-second dispatch budget; 60-second negative cache for
 429/5xx/network failures; repository-identifying user-agent; never takes the batch
-`.fetch.lock`, never writes source artifacts, never substitutes a different answer. One
+`.fetch.lock`, never writes source artifacts, never substitutes a different answer. This
+meets the operator's published guidance: neither the tablebase endpoint spec nor the
+`lila-tablebase` README states a tablebase-specific limit, and the Lichess API's general
+rate-limiting section asks exactly what both postures already do — "Only make one
+request at a time" and, on a 429, that "waiting one minute before retrying will be
+sufficient" (https://lichess.org/api §Rate limiting; the interactive 60-second negative
+cache and the batch 60/120/240 ladder both wait at least that minute). One
 deliberate divergence from the corpus posture: positive entries have no TTL — a
 tablebase category/DTZ is immutable mathematics, so only the LRU bounds retention.
 Deployments with real engines enable it by default; mock deployments wire a fixture
@@ -205,14 +229,22 @@ provider; `CapabilityProviders` gains `tablebase: "lichess" | "mock" | "none"`
 **2c. Selection semantics.** Selector modes are dispatched at
 `opponent-selector.ts:430-441`; `perfect_tablebase` becomes a fourth case. It applies
 only to positions of at most seven pieces, queried with the position's true halfmove
-clock (DTZ and category depend on it). The move choice is deterministic **DTZ-optimal**:
-restrict to moves preserving the selector side's category; when winning, minimize the
-resulting distance-to-zeroing (progress that is immune to 50-move draws — the actual
-content of the "exact defence" claim, which DTM optimality does not guarantee); when
-losing, maximize it (longest resistance); when drawn, any category-preserving move; ties
-break to the lexicographically least UCI. No seed participates — the selection is a pure
-function of the position — and the existing cache key (`opponent-selector.ts:180-184`)
-applies unchanged. The tablebase's ranked moves are recorded as `SelectionCandidate`s
+clock (DTZ and category depend on it). Categories are taken exactly as the API reports
+them for that clock — the full lattice including `cursed-win` and `blessed-loss`, each
+its own rung, never conflated with `win`/`loss` — so "category-preserving" already
+encodes the 50-move boundary: a move that lets a win decay to a cursed win changes
+category and is excluded while any true-category-preserving move exists. The move choice
+is deterministic **DTZ-optimal**: restrict to moves preserving the selector side's
+category; when winning, minimize the resulting distance-to-zeroing (progress that is
+immune to 50-move draws — the actual content of the "exact defence" claim, which DTM
+optimality does not guarantee); when losing, maximize it (longest resistance); when the
+category is drawn, every category-preserving move ties by definition; **all ties — equal
+DTZ, null DTZ, or the drawn case — break to the lexicographically least UCI**, so two
+runs, or two branches of one group, replaying the same position always receive the same
+reply. No seed participates — the selection is a pure function of the position — the
+existing cache key (`opponent-selector.ts:180-184`) applies unchanged, and the
+branch-group fixed-resistance reply journal is satisfied trivially: a pure function
+cannot disagree with its own journal. The tablebase's ranked moves are recorded as `SelectionCandidate`s
 (rank, no mass). The recorded identity is synthetic but honest:
 `{id: "lichess-tablebase", name: "Syzygy (tablebase.lichess.org/standard)", version: "7man", seedHonored: true}` —
 here the determinism claim is real, unlike Maia's recorded `seedHonored: false`
@@ -289,11 +321,13 @@ ship.
 
 ## Deviations from design
 
-One record correction rather than a design deviation: `design/BACKLOG.md:226` says
-`perfect_tablebase` "was deleted by the D8 fix". It was not — the defect sweep deleted
-`immediate_blunder_guard` and deliberately *kept* `perfect_tablebase` declared with a
-checked refusal (`rfc/archive/defect-sweep.md:399-416`; the enum member is live at
-`schemas/drill_pack.schema.json:642`). This RFC's §2 is therefore a partition move, not a
+One record correction rather than a design deviation: the resistance-spectrum ledger row
+once said `perfect_tablebase` "was deleted by the D8 fix". It was not — the defect sweep
+deleted `immediate_blunder_guard` and deliberately *kept* `perfect_tablebase` declared
+with a checked refusal (`rfc/archive/defect-sweep.md:399-416`; the enum member is live at
+`schemas/drill_pack.schema.json:642`). The row now carries this draft's correction
+("Record corrected 2026-08-14 (grounding-pair draft): `perfect_tablebase` was NOT
+deleted", `design/BACKLOG.md:226`). This RFC's §2 is therefore a partition move, not a
 re-add. No other deviation: none.
 
 ## Acceptance criteria
@@ -336,3 +370,15 @@ None.
 
 - 2026-08-14: created; wave claim #3 registered (migration 18, run 0.13, no pack-schema
   claim) after reading both landed predecessors, which claim no versioned resource.
+- 2026-08-14 (adversarial review, fixed in place): §1d states why free-FEN abstentions
+  neither vanish nor block root admission and completes the piece-count argument
+  (promotion swaps, never adds); §1f adds the `(sourceId, retrievedAt)` manifest
+  dedup rule the multi-query command needs (`MANIFEST_DUPLICATE_ENTRY`); §1g pins
+  "contradicts" to byte equality — `cursed-win`/`blessed-loss` contradict a declared
+  `win`/`loss` — and states the fix-the-pack-never-weaken-the-check failure mode for
+  the six wave-5b packs; §2b cites the operator's actual published guidance
+  (https://lichess.org/api §Rate limiting: one request at a time, one minute after a
+  429) and shows both postures meet it; §2c pins the full API category lattice as its
+  own rungs and extends the lexicographic-UCI tiebreak to every tie (equal DTZ, drawn
+  category), adding the group reply-journal consequence; Deviations updated to record
+  that the BACKLOG row now carries this draft's correction.

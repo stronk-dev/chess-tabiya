@@ -8,6 +8,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `polish-surfaces.md` | draft | `archive/app-shell.md`, `archive/adaptive-guidance.md` | — (wave claim #1 of the second 2026-08-14 three-draft wave, ahead of `orphan-completion` and `grounding-pair`; claims **no** migration, pack-schema, or run-schema number — only the `/settings` route body and the `AssistanceConfig` type, v3→v4 in `localStorage`) |
+| `orphan-completion.md` | draft | polish wave #2 | claims nothing versioned (register-neutral); shared surfaces: CompareView, `/learn`, the voice-scope union |
 | `grounding-pair.md` | draft | `archive/content-sourcing-syzygy.md`, `archive/engine-workers.md`, `archive/defect-sweep.md` §2b | — (wave claim #3, last in the same wave; claims **migration 18** and **run schema 0.13**, both stamp-only, registered below; **no pack-schema version** — the mode enum already carries `perfect_tablebase`; pins the tablebase provider seam and the flat-sidecar `verify-draft` emitter) |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
