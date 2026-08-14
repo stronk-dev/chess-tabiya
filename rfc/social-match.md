@@ -83,7 +83,7 @@ Every row re-run against the working tree for this draft.
 | **Possession that follows the side to move** | **no** | no board-control mode consults the position; `rotation` advances by host op only (`apps/server/src/storage.ts:1008-1013`, `boardOperation` `:1513+`) |
 | **Two humans alternating on one live board** | **no** | nothing stops the lease holder from playing both sides of a position run (`actor` is client-supplied within `user|opponent|system`, `apps/server/src/rest.ts:370-383`) |
 | **Pause/rehearse/resume state on a session** | **no** | grep `pause|resume` over `apps/*/src packages/*/src` → zero domain hits |
-| **Any anonymous or invite token** | **no on this tree; the read half is claimed in-wave** | documented limit: "no anonymous public share token" `docs/live-sessions.md:84-86`; no bearer path anywhere; the cookie is the only subject-bearing mechanism. `rfc/adoption-wave-1.md` §2 (parallel draft, migration 14) creates `public_tokens` with the single read scope `story_read`; **nothing anywhere lets a link seat a person** |
+| **Any anonymous or invite token** | **no on this tree; the read half is claimed in-wave** | documented limit: "no anonymous public share token" `docs/live-sessions.md:84-86`; no bearer path anywhere; the cookie is the only subject-bearing mechanism. `rfc/adoption-wave-1.md` §2 (parallel draft, migration 13 after renumber) creates `public_tokens` with the single read scope `story_read`; **nothing anywhere lets a link seat a person** |
 | **A multi-board host view** | **no** | `GET /runs` summaries carry no position (`RunSummary` `apps/server/src/storage.ts:68-79`); `GET /sessions` lists session rows only (`listLiveSessions` `apps/server/src/storage.ts:1481+`); detail is one request per session (`LiveSessionDetail` `apps/server/src/live-types.ts:95-105`) |
 
 ### 2.2 The two ledger rows this RFC completes
@@ -361,7 +361,7 @@ knows sides, the journal knows people.
 ### 3.5 The friend-link: one new scope on the wave's shared token surface
 
 **The shared contract, and who owns which half.** `rfc/adoption-wave-1.md` §2 creates
-`public_tokens` in its migration 14 — hashed 32-byte tokens, a closed typed `scope`
+`public_tokens` in its migration 13 — hashed 32-byte tokens, a closed typed `scope`
 `CHECK` with the single read scope `story_read`, per-token revocation, uniform 404
 non-disclosure, creator-cascade deletion — and the register pins it as **the single
 trust surface for anonymous capability tokens** (`rfc/README.md` §Cross-draft
@@ -490,15 +490,15 @@ table's.
 
 ### 3.8 Persistence
 
-**Migration number: 15** (`STORAGE_VERSION` 14→15), claimed last in the wave per the
+**Migration number: 14** (`STORAGE_VERSION` 13→14; renumbered from 15 with the wave's downward shift), claimed last per the
 register order — behind `adoption-wave-1`'s 14, which sits behind the 13 reserved for
 `runtime-corpus-evidence` (`rfc/README.md` §Migration register). That draft's own text
 claims no migration (`rfc/runtime-corpus-evidence.md:63`), so if 13 is released this
-RFC rebases 14→15 downward with its predecessor per the standing renegotiate-here
+RFC rebased downward with its predecessor per the standing renegotiate-here
 rule; the register is the single writer of the final number. Shipped today is **12**
 (`apps/server/src/storage.ts:301`). Run schema stays `0.10` and pack schema stays
 `0.12`; this RFC claims no schema version. Because this migration rebuilds
-`public_tokens`, it **must land behind migration 14** — the dependency is structural,
+`public_tokens`, it **must land behind migration 13** — the dependency is structural,
 not just numeric.
 
 **One new table:**
@@ -537,7 +537,7 @@ historical migration 9 for fresh databases while existing databases keep the nar
 an upgraded database and a fresh one hold identical constraints, and the implementer
 must also freeze migration 9's body to the literal value strings it shipped with,
 recording that body edit in the register per the standing rule. The corresponding
-check on migration 14 is already resolved in-wave: `adoption-wave-1` §2 pins its
+check on migration 13 (adoption's, post-renumber) is already resolved in-wave: `adoption-wave-1` §2 pins its
 `public_tokens` DDL to **literal CHECK strings**, never interpolated tuples, citing
 this same lesson — the pattern does not recur.
 
@@ -648,7 +648,7 @@ after reclaim the seated player claims back and play continues. `importLeg` agai
 native match session is `INVALID_REQUEST`; a native-match operation against an
 imported-Arena session likewise.
 
-**A7 — Migration.** A fixture database at migration 14 state containing live sessions,
+**A7 — Migration.** A fixture database at migration-13 state (this RFC's predecessor) containing live sessions,
 journal entries, votes, Arena legs, and `story_read` tokens migrates to 15: every
 pre-existing row survives byte-identical across the three table rebuilds;
 `PRAGMA foreign_key_check` is empty; the rebuilt constraints equal a fresh database's
@@ -682,7 +682,7 @@ None.
   two wave drafts — read by `adoption-wave-1` A-criteria, join when this A3 passes.
 - `rfc/README.md` (recorded in the same commit as this draft, honoring the existing
   pin rather than restating it): Active-table row for `social-match.md`; migration
-  register row **15** (14→15) with the lands-behind-14 dependency and the
+  register row **14** (13→14, post-renumber) with the lands-behind-13 dependency and the
   renegotiate-if-13-releases note.
 
 ## Changelog

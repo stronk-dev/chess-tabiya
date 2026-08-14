@@ -140,7 +140,7 @@ consciously amends one recorded implementation limit: "the live platform … has
 public share token" (`docs/live-sessions.md:84-86`). The amendment is exactly one read-only
 scope; every live-session surface remains token-free.
 
-Storage — **migration 14** (`STORAGE_VERSION` 13→14, register claim in §7) creates two tables:
+Storage — **migration 13** (`STORAGE_VERSION` 12→13; renumbered 2026-08-14 after `runtime-corpus-evidence` released its reservation — the version pair follows the actual ladder, per the migration-4 lesson) creates two tables:
 
 ```sql
 CREATE TABLE public_tokens (
@@ -409,7 +409,7 @@ social-match) and the standing register law (`rfc/README.md:16-27,41-42,73-79`):
   `rfc/README.md:46`).
 - **Run schema:** no version claimed. No new event kinds: the story, milestones, and card are
   derived projections; a flip creates ordinary runs; tokens and derivations are non-run tables.
-- **Migration:** this RFC claims **migration 14, `STORAGE_VERSION` 13→14** (create-table/index
+- **Migration:** this RFC claims **migration 13, `STORAGE_VERSION` 12→13** (renumbered from 14 on corpus's release) (create-table/index
   only: `public_tokens`, `run_derivations`; literal CHECK strings per §2), recorded on the
   register (`rfc/README.md:102`). Number 13 is held **reserved** for `runtime-corpus-evidence`
   by the wave order, but that draft's own text claims **no migration**
@@ -518,7 +518,7 @@ None.
   the provider's entire disclosure (no learner identity, run id, or position payload —
   hosted-ruling privacy pin); `story_read` tokens have no expiry, and §6 now states the full
   shared contract (scopes, namespace dispatch, 404 posture, lifetimes) exactly as
-  `social-match` §3.5/§3.8 does; migration 14 pins literal CHECK strings per the migration-9
+  `social-match` §3.5/§3.8 does; migration 13 pins literal CHECK strings per the migration-9
   lesson. (4) Numbers-rule pin in §4: skill numbers are banned, event counts over the
   learner's own rows are facts — `ten_attempts_one_root` is the latter. (5) Flip boundary
   pins in §5: mid-game FEN castling/en-passant legality-validated by the shipped

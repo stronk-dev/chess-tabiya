@@ -3,7 +3,7 @@
 - **Status:** draft
 - **Author:** claude
 - **Created:** 2026-08-14
-- **Design refs:** `design/BACKLOG.md:196` (row "Predicate vocabulary wave 2 (from authoring
+- **Design refs:** `design/BACKLOG.md:197` (row "Predicate vocabulary wave 2 (from authoring
   gaps)" — the collected gap ledger this RFC answers); `design/03-product-breadth.md` gate
   **B9** (the four admission rules); `docs/structural-reading.md` (canonical description of
   the shipped twelve-kind vocabulary); `docs/shape-library.md` (entry anatomy and the shared
@@ -84,7 +84,7 @@ engineering (finding honest encodings inside the twelve-predicate vocabulary)"):
 | 5 | No mirror/orientation abstraction | Five middlegame families (hanging-pawns, closed-centre-chain, doubled-c-pawns, opposite-castling-race, fianchetto-g7) are colour- or wing-symmetric; each entry pins one canonical orientation and declares the mirror unauthored — "silently halving library coverage per entry" | log `:643-652` |
 | 6 | No file quantification | "An isolated pawn exists" is not sayable except as the 16-leaf fan of gap 4 | log `:653-655` |
 
-The wave-2 BACKLOG row (`design/BACKLOG.md:196`) collects exactly these and instructs: "Each
+The wave-2 BACKLOG row (`design/BACKLOG.md:197`) collects exactly these and instructs: "Each
 admitted under B9's four rules or refused with the reason."
 
 ### 2. The four admission rules, restated
@@ -155,7 +155,7 @@ all four move in the same commit:
   duplicated). The duplication predates this RFC; widening one side without the other is a
   compile error at the evaluator boundary (`apps/server/src/pack-orchestrator.ts` passes
   schema-typed expressions into the runtime matcher), and the existing four-way sync test
-  (`packages/runtime/src/structure.test.ts:34`) is extended by criterion 10.
+  (`packages/runtime/src/structure.test.ts:34`) is extended by criterion 11.
 - `schemas/drill_pack.schema.json:359-382` — `$defs/structuralFeature` (twelve-branch
   `oneOf`) and `$defs/structuralExpression` (four-branch `oneOf`).
 - `schemas/shape_entry.schema.json:26-49` — a **duplicated copy** of both `$defs` trees
@@ -374,6 +374,44 @@ counts; the difference form exists for authors, whose conjunctions need it in on
 Admission: rules 1–2 trivially; rule 3 — Motivation gap 3 is three authored entries' worth of
 evidence; rule 4 — `pawn_count` names a census.
 
+#### 4c. `king_opposition`
+
+```ts
+| { readonly kind: "king_opposition"; readonly color: Color; readonly form: "direct" | "distant" }
+```
+
+True exactly when the two kings stand on the same file or the same rank with a gap of
+exactly one square between them (`form: "direct"`), or of exactly three or five squares
+(`form: "distant"`), **and it is `X`'s turn to move** — the standard tempo-qualified sense
+in which `C` "has" the opposition. Occupancy of the intervening squares is not read: the
+leaf is a function of the two king squares and the side to move, nothing else, and that
+scope is part of the definition sentence, not a hidden convention.
+
+Admission, rule by rule. Rule 1 — king squares and the side to move are all in the FEN
+(the parent's rule 1 excludes engines, history, and rungs 1+, not FEN fields; the
+evaluator's input has always carried the mover). Rule 2 — each form is the one sentence
+above with no free constant; the closed `form` enum is a domain like `mirrored`'s axis,
+not a taste parameter. Rule 3 — the committed `pawn-opposition-key-squares` entry carries
+five plans whose entire content is this relation, all with `null` signatures whose notes
+name exactly this gap ("King geometry — the entire content of opposition — is outside this
+vocabulary"); "take the opposition" is the canonical pawn-endgame success sentence, and it
+is even already expressible today as a ~96-arm `pieceOnSquare` fan over aligned king
+pairs, so the leaf removes a fan, not a limit — the same argument that admits `quantified`.
+Rule 4 — "opposition" names a configuration of kings and the clock, exactly as "outpost"
+and "passed pawn" name configurations; whether having it wins anything is significance,
+stays unsaid, and against a rook pawn it frequently wins nothing.
+
+The tempo qualification is deliberate: the placement-only version fails rule 3, because a
+signature that cannot tell "I took the opposition" from "my opponent holds it against me"
+states nothing an author needs. This makes `king_opposition` the first leaf that reads the
+side to move; §3a writes its mirror rule and re-states the totality argument. Refused
+around it, each with its rule: `diagonal` and virtual/rectangular opposition (rule 3 —
+exact but no filed plan names them; the enum widens additively when one does), and the
+general corresponding-squares network (rule 1 — it is a search result over king paths,
+rung-1 territory, refused exactly as the parent refuses tactics); triangulation is a fact
+about a move *sequence*, which no position census can state, and the entry's
+`white-triangulate` plan keeps its honest `null`.
+
 ### 5. Exhaustive dispatch — every widened union, every site (D26)
 
 The parent closed the D26 fallthrough for `FenPredicate`; this RFC widens two more unions and
@@ -383,13 +421,13 @@ The full site inventory, from reading the shipped code:
 
 | Site | Today | Under this RFC |
 |---|---|---|
-| `matchesStructuralFeature` (`packages/runtime/src/structure.ts:171-216`) | `never` guard at `:214` | compiler forces the two leaf cases; guard retained |
+| `matchesStructuralFeature` (`packages/runtime/src/structure.ts:171-216`) | `never` guard at `:214` | compiler forces the three leaf cases; guard retained |
 | `matchesStructuralExpression` (`structure.ts:218-230`) | `never` guard at `:223` | compiler forces `mirrored`/`quantified` cases; guard retained |
-| `mirrorExpression` (new) | — | exhaustive over 7 node kinds **and** 14 leaf kinds, `never` defaults (§3a) |
+| `mirrorExpression` (new) | — | exhaustive over 7 node kinds **and** 15 leaf kinds, `never` defaults (§3a) |
 | `structuralFeatureKinds` (`structure.ts:307-316`) | **duck-typed if/else visitor — an unmatched node kind silently contributes no evidence kinds.** A `quantified` conjunct in a graded objective would silently lose its evidence ref, the exact silent-partial-evidence failure the parent's §3d closed one layer up | rewritten as an exhaustive switch with a `never` default; `mirrored` recurses (mirroring never changes a leaf's kind), `quantified` contributes its template kind (`piece` contributes none) |
-| `structuralIssues` (`apps/server/src/pack-validation.ts:93-116`) | **duck-typed walk with silent fall-through for unknown kinds** — a `mirrored` or `quantified` node would be skipped whole, so the depth cap and every leaf refusal beneath it would go unchecked | split into an expression walk exhaustive over the 7 node kinds and a leaf check exhaustive over the 14 leaf kinds, each with a default that pushes `STRUCTURAL_KIND_UNRECOGNISED` (§7). The schema's closed `oneOf` makes the default a can't-happen guard, which is precisely D26's "compile-time failure followed by a default runtime refusal" shape |
-| `renderStructuralObservation` (`apps/web/src/lib/structural-sentences.ts:7-28`) | `never` guard at `:26` | compiler forces the two new observation sentences |
-| `renderFeatureSpec` (`structural-sentences.ts:34-49`) | `never` guard at `:47` | compiler forces the two new spec sentences |
+| `structuralIssues` (`apps/server/src/pack-validation.ts:93-116`) | **duck-typed walk with silent fall-through for unknown kinds** — a `mirrored` or `quantified` node would be skipped whole, so the depth cap and every leaf refusal beneath it would go unchecked | split into an expression walk exhaustive over the 7 node kinds and a leaf check exhaustive over the 15 leaf kinds, each with a default that pushes `STRUCTURAL_KIND_UNRECOGNISED` (§7). The schema's closed `oneOf` makes the default a can't-happen guard, which is precisely D26's "compile-time failure followed by a default runtime refusal" shape |
+| `renderStructuralObservation` (`apps/web/src/lib/structural-sentences.ts:7-28`) | `never` guard at `:26` | compiler forces the three new observation sentences |
+| `renderFeatureSpec` (`structural-sentences.ts:34-49`) | `never` guard at `:47` | compiler forces the three new spec sentences |
 | `renderStructuralExpressionSpec` (`structural-sentences.ts:51-63`) | `never` guard at `:61` | compiler forces `mirrored`/`quantified` sentences |
 | `shapeFirings` (`packages/runtime/src/shape-firing.ts:23`), guidance trigger evaluation (`apps/server/src/guidance.ts:37`), boundary/checkpoint/success evaluation (`packages/runtime/src/objective.ts:166`) | all call the one evaluator | no change — this is the one-evaluator dividend |
 
@@ -401,11 +439,15 @@ finite-enumerator contract:
 - one `pawn_count` observation per colour: `{ kind: "pawn_count", color, count: |pawns(C)|,
   squares: [] }` — always two observations, per-colour, **never a difference** (§4b);
 - one `bishop_on_shade` observation per bishop on the board:
-  `{ kind: "bishop_on_shade", color, squares: [square], shade }`.
+  `{ kind: "bishop_on_shade", color, squares: [square], shade }`;
+- at most one `king_opposition` observation, emitted when either form holds:
+  `{ kind: "king_opposition", color, form, squares: [both king squares] }` — at most one
+  because the two forms are gap-disjoint (one vs three/five) and only the colour off move
+  can hold either.
 
-`StructuralObservation` (`structure.ts:46-55`) gains an optional readonly
-`shade?: "light" | "dark"`. The projection stays score-free, rank-free, and canonically
-ordered; the two appended kinds sort last (§2). `mirrored` and `quantified` add nothing to
+`StructuralObservation` (`structure.ts:46-55`) gains two optional readonly fields:
+`shade?: "light" | "dark"` and `form?: "direct" | "distant"`. The projection stays
+score-free, rank-free, and canonically ordered; the three appended kinds sort last (§2). `mirrored` and `quantified` add nothing to
 the projection — they are author queries, and the parent's rule that the observation
 projection never enumerates author-query space is untouched. `structuralDelta` and
 `vacationReading` are unchanged.
@@ -426,6 +468,9 @@ artifact kinds, no second implementation):
 | `OUTPOST_RANK_OUT_OF_RANGE` (existing code, extended) | a `quantified` node with an `outpost` template whose region contains **no** square of relative rank 4–6 for the template's colour — the detector cannot hold anywhere in the domain, so the node asserts a contradiction (`some`) or vacuous noise (`every`). Regions that partially overlap ranks 4–6 are legal; out-of-range squares simply evaluate false, matching the shipped single-square rule at `pack-validation.ts:109-111` |
 | `STRUCTURAL_KIND_UNRECOGNISED` | the exhaustive-walk default of §5 — unreachable behind the schema, present so the walk can never silently skip |
 
+`king_opposition` needs no load rule: both of its fields are schema-closed enums and every
+well-formed leaf is satisfiable by some legal position, so there is no constant to refuse.
+
 Existing codes extend naturally: `NEGATIVE_FEATURE_COUNT` covers the `direct_attack_count`
 template's count; `STRUCTURAL_EXPRESSION_TOO_DEEP` counts `mirrored` and `quantified` as one
 level each against the unchanged cap of four. Each new code gets a fixture under
@@ -435,9 +480,10 @@ FILE=<fixture>` exit non-zero, asserted on the exit code (parent criterion 5 pre
 ### 8. Evidence facts and sentences
 
 `RULES_EVIDENCE_FACTS` (`packages/runtime/src/evidence-ref.ts:1-23`) gains
-`structure-bishop-on-shade` and `structure-pawn-count` (twelve `structure-*` facts become
-fourteen). No new namespace, per the parent's §6a reasoning. The kind↔fact sync test
-(`packages/runtime/src/structure.test.ts:34`) continues to pass by construction.
+`structure-bishop-on-shade`, `structure-pawn-count`, and `structure-king-opposition`
+(twelve `structure-*` facts become fifteen). No new namespace, per the parent's §6a
+reasoning. The kind↔fact sync test (`packages/runtime/src/structure.test.ts:34`) continues
+to pass by construction.
 
 Sentences, held to the parent's no-valence rule and banned-word test (§6b there), fixed
 strings only:
@@ -449,6 +495,9 @@ strings only:
 | spec `pawn_count(white, count, equal, 5)` | "white has exactly 5 pawns" |
 | spec `pawn_count(white, difference, atLeast, 1)` | "white has at least 1 more pawn than black" |
 | spec `bishop_on_shade(black, dark)` | "black has a bishop on a dark square" |
+| observation `king_opposition(white, direct, e5/e3)` | "White has the direct opposition: kings on e5 and e3 with Black to move." |
+| spec `king_opposition(white, direct)` | "white has the direct opposition" |
+| spec `king_opposition(black, distant)` | "black has the distant opposition" |
 | spec `mirrored("files", e)` | "with files mirrored (a↔h): …" |
 | spec `mirrored("colors", e)` | "with colours reversed and ranks mirrored: …" |
 | spec `mirrored("both", e)` | "rotated 180 degrees: …" |
@@ -461,7 +510,7 @@ advantage.
 
 ### 9. The named entries improve — before/after
 
-Four official entries are updated as acceptance demonstrations. Entry ids are immutable
+Five official entries are updated as acceptance demonstrations. Entry ids are immutable
 identity; each updated entry bumps its own semver `version` field (0.1.0 → 0.2.0), which is
 the shape-entry-level versioning `docs/shape-library.md` establishes. All updated entries
 pass `make shape-check` and their probe FENs.
@@ -484,7 +533,11 @@ arms (the two-assignment `any` stays inside the depth cap without needing `mirro
 
 The two triggers are now **mutually exclusive by construction** (opposite-shade vs same-shade
 assignments cannot both hold when each side's bishops occupy one complex), the co-fire watch
-warnings are deleted, and the disambiguation is census arithmetic, not narrative.
+warnings are deleted, and the disambiguation is census arithmetic, not narrative. The OCB
+watch row "'Up a pawn' is a count the vocabulary lacks" is deleted in the same edit —
+`pawn_count` makes it false — while the good-bad entry's pawn-colour-complex watch row
+stays: which bishop is "bad" lives in the *pawns'* shade census, which remains outside the
+vocabulary and outside this RFC.
 
 **9b. `fianchetto-g7` — the mirror-symmetric family.**
 
@@ -492,13 +545,22 @@ Before (`content/shapes/fianchetto-g7.json`): `all[pieceOnSquare(g6, black pawn)
 pieceOnSquare(g7, black bishop)]` — Black's kingside corner only; b7, g2, b2 declared
 unauthored, the coverage-halving cost the middlegame log measured.
 
-After: `any[base, mirrored("files", base)]` where `base` is the shipped conjunction — the
-entry now fires for Black's queenside fianchetto (b6 pawn, b7 bishop) with its plans intact,
-because a files mirror preserves colours and therefore plan `side` labels (§3a's side-label
-law). The `name` and prose state the widened coverage; the id stays `fianchetto-g7`. The
-White corners (g2/b2) remain a separate colour-mirrored entry under the side-label law and
-are **not** silently folded in — that is the law working, not a residual gap: an entry whose
-plans say "black" may not fire on positions where the plans belong to White.
+After: trigger `any[base, mirrored("files", base)]` where `base` is the shipped
+conjunction, and — per §3a's entry-wide rule — the two wing-pinned plan signatures widen
+the same way: `black-long-diagonal-pressure` (today: bishop on g7 ∧ `line_blockers(g7, a1,
+equal, 0)`) becomes `any[sig, mirrored("files", sig)]`, whose mirrored arm reads a b7
+bishop with the b7–h1 diagonal clear; `white-h-file-lever` (h-file open/half-open ∧ g6
+pawn) likewise gains its a-file/b6 mirror arm. The `black-guard-the-dark-squares` and
+`white-trade-the-fianchetto-bishop` plans are wing-neutral (`null` signatures) and
+unchanged. Plan `side` labels are untouched, because a files mirror preserves colours
+(§3a's side-label law) — but "plans intact" would have been false as first drafted:
+without the signature widening the entry would fire on b7 fianchettos where the g7-pinned
+success arithmetic can never hold. Wing-naming prose (name, watch, mistakes: "the h-pawn's
+licence to run") is rewritten to name the lever pawn of either wing; the id stays
+`fianchetto-g7`. The White corners (g2/b2) remain a separate colour-mirrored entry under
+the side-label law and are **not** silently folded in — that is the law working, not a
+residual gap: an entry whose plans say "black" may not fire on positions where the plans
+belong to White.
 
 **9c. The fan collapses.**
 
@@ -514,6 +576,20 @@ plans say "black" may not fire on positions where the plans belong to White.
   `any[quantified("some", files a–h, isolated_pawn(black)),
   quantified("some", files a–h, doubled_pawn(black))]` — 16 leaves to two nodes.
 
+**9d. `pawn-opposition-key-squares` — a null signature becomes real.**
+
+Before: all five plans carry `signature: null`; the attacking plan's own note reads "King
+geometry — the entire content of opposition — is outside this vocabulary."
+
+After: `white-take-the-opposition` gains the signature
+`any[king_opposition(white, direct), king_opposition(white, distant)]` — the plan's own
+prose sentence ("kings face each other with one square between and the opponent to move …
+from far away, take the distant opposition") stated as arithmetic, and its success note is
+rewritten to say what the signature now states instead of that it cannot. The other four
+plans stay `null` **honestly**, each for the reason already in its note: key squares are
+pawn-relative, and no absolute region is true of the whole family this trigger fires on;
+triangulation is a move-order fact; holding and racing are outcomes. Version 0.1.0 → 0.2.0.
+
 ### 10. Boundary conditions, enumerated
 
 | Condition | Behaviour |
@@ -527,60 +603,75 @@ plans say "black" may not fire on positions where the plans belong to White.
 | `mirrored` containing `named_structure` at any depth | Refused at load; runtime `TypeError` guard (§3a) |
 | `mirrored("colors")` of an `outpost`/`passed_pawn`/`backward_pawn` leaf | Relative geometry preserved; a load-valid leaf stays load-valid (§3a) |
 | `bishop_on_shade` under `mirrored` | Shade flips under `colors` and `files`, holds under `both` (§3a, criterion 5) |
+| `king_opposition` with kings aligned at an even gap (2 or 4) | False for both forms — not an error; even gaps are no form of opposition |
+| `king_opposition` with the intervening square occupied | Unchanged — the leaf reads king placement and the mover only (§4c) |
+| `king_opposition` with the geometry present but `C` to move | False — the tempo qualification is the definition, not a modifier (§4c) |
+| `king_opposition` under `mirrored` | `color` flips under `colors`/`both`, unchanged under `files`; `form` never changes (§3a, criterion 6) |
 | `quantified` domain of one file or one square | Legal; degenerate domains are just small, not errors |
 | `quantified` reversed range | Refused at load (`QUANTIFIED_DOMAIN_EMPTY`); runtime `TypeError` guard |
 | `quantified("every", …)` over a valid domain | Never vacuous — validated domains are non-empty by the reversed-range refusal |
 | `quantified` outpost template with region wholly outside relative ranks 4–6 | Refused at load (§7); partial overlap legal, out-of-range squares evaluate false |
 | `quantified` `piece` template with `piece: null` and `every` | "The region is empty" — exact, legal |
 | A `quantified` conjunct in a graded objective's evidence | Contributes its template's kind fact; the `piece` template contributes none (§3b, §5) |
-| An eighth expression kind or fifteenth leaf kind added later without a case in any dispatch site | Compile error at every site in §5's table, then `STRUCTURAL_KIND_UNRECOGNISED` at the walk — never a silent skip |
+| An eighth expression kind or sixteenth leaf kind added later without a case in any dispatch site | Compile error at every site in §5's table, then `STRUCTURAL_KIND_UNRECOGNISED` at the walk — never a silent skip |
 | Community shapes registered under grammar 0.1 | Still valid; the widening is additive and registered documents are immutable |
 
 ### 11. Schema changes
 
 **Pack schema 0.12 → 0.13** (`DRILL_PACK_SCHEMA_VERSION`, `packages/schema/src/index.ts:2`;
 `$id` at `schemas/drill_pack.schema.json:3`). Additive only; pack digests are content digests
-unaffected by the `$id`, so no committed digest moves. Additions: two branches in
+unaffected by the `$id`, so no committed digest moves. Additions: three branches in
 `$defs/structuralFeature` (`bishop_on_shade` with `shade` enum; `pawn_count` with `basis`
-enum and integer `count`); three branches in `$defs/structuralExpression` (`mirrored`;
+enum and integer `count`; `king_opposition` with `form` enum); three branches in
+`$defs/structuralExpression` (`mirrored`;
 `quantified` files-arm; `quantified` squares-arm); new `$defs/fileRange`, `$defs/rankRange`,
 `$defs/squareRegion`, `$defs/fileTemplateFeature`, `$defs/squareTemplateFeature`. Every new
 object is `additionalProperties: false` — the parent's pinned passthrough inventory
-(criterion 12 there) must still count exactly three sites, and criterion 13 here re-runs it.
+(criterion 12 there) must still count exactly the **two** shipped sites
+(`/$defs/feedbackClaim`, `/$defs/provenance` — pinned at
+`packages/schema/src/drill-pack.test.ts:87`), and criterion 14 here re-runs it.
 
 **Shape-entry schema 0.1 → 0.2** (`SHAPE_ENTRY_SCHEMA_VERSION`,
 `packages/schema/src/index.ts:3`; `$id` at `schemas/shape_entry.schema.json:3`): the
 identical additions to its duplicated `$defs` copy. Individual entries version themselves
-with their own semver `version` field; the four updated entries bump 0.1.0 → 0.2.0 (§9).
+with their own semver `version` field; the five updated entries bump 0.1.0 → 0.2.0 (§9).
 
 **No migration** (header). Nothing persisted changes shape; `shape_drafts` and
 `registered_shapes` store documents whose old grammar remains valid.
 
 ### 12. Cost
 
-Both new leaves are O(piece-count) board scans; `quantified` is at most 64 leaf evaluations
-per node; `mirrored` is a one-pass expression rewrite. The reading projection gains at most
-six observations (two pawn counts, four bishops). The existing instrumented envelope applies
+`bishop_on_shade` and `pawn_count` are O(piece-count) board scans and `king_opposition` is
+O(1) (two king squares and the mover); `quantified` is at most 64 leaf evaluations per
+node; `mirrored` is a one-pass expression rewrite. The reading projection gains at most
+seven observations (two pawn counts, four bishops, one opposition). The existing instrumented envelope applies
 unchanged: the structure test records a non-vacuous sample, 100 ms stays the worry threshold
 that prompts investigation, and no wall-clock pass/fail gate is added — the parent's
 measured-not-gated ruling (`docs/structural-reading.md:70-78`) showed a gate that can report
-either answer on identical code is not evidence. Criterion 14 re-records the sample.
+either answer on identical code is not evidence. Criterion 15 re-records the sample.
 
-**Baselines, verified 2026-08-14 on this checkout:** `pnpm test` — **399 tests, 69 files,
-all passing**; the drill-pack schema constant is `"0.12"` and the shape-entry constant
-`"0.1"`; the browser suite's structural-reading section drives the control at
+**Baselines, re-verified 2026-08-14 on this checkout:** `pnpm test` — **399 tests, 69
+files, of which 398 pass and one fails pre-existing**
+(`apps/server/src/pack-authoring.test.ts:267` pins the committed sourcing-candidate count
+at 5; the 2026-08-14 opening-pack wave grew `content/candidates/` to 9 loadable packs — a
+stale content pin unrelated to this RFC, to be fixed on the mainline before this RFC's
+criteria are measured); the drill-pack schema constant is `"0.12"` and the shape-entry
+constant `"0.1"`; the browser suite's structural-reading section drives the control at
 `tests/browser/drill.spec.ts:337`.
 
 ## Deviations from design
 
-1. **The BACKLOG row sketches the mirror as "a `mirrored:` expression wrapper flipping
-   colors+files" (`design/BACKLOG.md:196`).** This RFC ships the wrapper but with an explicit
-   three-value `axis` instead of one fused flip, because the two authoring costs the row
-   itself cites need *different* axes: wing symmetry (fianchetto b7) is a files flip that
-   preserves plan sides, and colour symmetry (doubled-c-pawns' Ruy case) is a colours flip
-   that cannot honestly live inside the same entry (§3a side-label law). A fused-only flip
-   would have made the one in-entry-safe use inexpressible. The row's "NOT a new leaf" call
-   is followed exactly.
+1. **The middlegame log sketches the mirror as "a `mirror`/`colorFlip` combinator or
+   per-orientation entry generation" (`planning/content-era/log.md:643-652`), and the
+   BACKLOG row carries it as "a mirror/orientation combinator" (`design/BACKLOG.md:197`).**
+   This RFC ships the combinator with an explicit three-value `axis` instead of one fused
+   colour flip, because the two authoring costs the row cites need *different* axes: wing
+   symmetry (fianchetto b7) is a files flip that preserves plan sides, and colour symmetry
+   (doubled-c-pawns' Ruy case) is a colours flip that cannot honestly live inside the same
+   entry (§3a side-label law). A fused-only flip would have made the one in-entry-safe use
+   inexpressible. Shipping it as a combinator, never a leaf, follows the row's framing
+   exactly — a combinator detects no fact, so a leaf-shaped mirror would be a fact-shaped
+   node with no fact (§1).
 2. **The middlegame log's gap list includes castling history, structure memory, pawn
    tension, and a symmetry/boundary test; this RFC refuses them rather than deferring them**
    (Motivation §3), each under a named admission rule. The BACKLOG row asked for exactly
@@ -606,7 +697,11 @@ all passing**; the drill-pack schema constant is `"0.12"` and the shape-entry co
 2. **Mirror demo.** `fianchetto-g7`'s trigger is `any[base, mirrored("files", base)]`; a
    probe with a Black b6/b7 fianchetto fires, the g6/g7 probe still fires, and a White g2/b2
    fianchetto does **not** fire, with a test comment citing the §3a side-label law as the
-   reason the colour mirror is absent.
+   reason the colour mirror is absent. Per the §3a entry-wide rule, both wing-pinned plan
+   signatures (`black-long-diagonal-pressure`, `white-h-file-lever`) are
+   `any[sig, mirrored("files", sig)]`, and a b7-wing probe (b7 bishop, clear b7–h1
+   diagonal; open a-file with a b6 pawn) satisfies the mirrored arm of each — the entry
+   never fires on a position where a plan's success signature is unstatable.
 3. **Fan collapses.** The OCB trigger contains exactly one `quantified` node and zero
    `passed_pawn` feature leaves (before: 48, asserted in a comment); its
    `white-two-wings-two-passers` signature contains two `quantified` nodes (before: 36
@@ -616,61 +711,75 @@ all passing**; the drill-pack schema constant is `"0.12"` and the shape-entry co
 4. **Mirror soundness, property-based.** For random legal positions and generated
    expressions (leaf kinds excluding `named_structure`),
    `matchesStructuralExpression(fen, mirrored(axis, e))` equals evaluating `e` against the
-   brute-force-mirrored board (an independent FEN-level mirror used only as the test
-   oracle), for all three axes; and `mirrored(axis, mirrored(axis, e))` evaluates
-   identically to `e`.
+   brute-force-mirrored FEN (an independent FEN-level mirror used only as the test
+   oracle; its `colors` and `both` forms also flip the side to move, which is what makes
+   the `king_opposition` colour-flip rule testable), for all three axes; and
+   `mirrored(axis, mirrored(axis, e))` evaluates identically to `e`.
 5. **Shade parity law.** A table test asserts `bishop_on_shade` flips shade under
    `mirrored("colors")` and `mirrored("files")` and preserves it under `mirrored("both")`,
    on positions where the two answers differ.
-6. **`pawn_count` table.** Both bases against hand-built positions including 0 pawns, equal
+6. **`king_opposition` table.** Both forms and both colours against hand-built pawn
+   endings: direct and distant hold exactly at gaps 1 and 3/5 on a shared file or rank
+   with `X` to move; even gaps, misaligned kings, and the same positions with the mover
+   flipped are false; an occupied intervening square does not change the answer;
+   `mirrored("colors")`/`mirrored("both")` flip the colour that holds it and
+   `mirrored("files")` preserves it. The §9d entry demo: the classic mutual-zugzwang
+   geometry (kings e5/e3, Black to move) satisfies the new `white-take-the-opposition`
+   signature and its White-to-move twin does not; the entry `version` field reads 0.2.0
+   and the other four signatures are still `null`.
+7. **`pawn_count` table.** Both bases against hand-built positions including 0 pawns, equal
    counts, and negative differences; the reading projection emits exactly two per-colour
    `pawn_count` observations and no difference observation; serialised readings still
    contain no field named `score`, `rank`, `severity`, or `favours`.
-7. **Quantified semantics.** `some`/`every` over file ranges and square regions, including a
+8. **Quantified semantics.** `some`/`every` over file ranges and square regions, including a
    one-square region, an `every … piece null` emptiness assertion, a
    king-in-region assertion via the `piece` template, and an outpost template with a
    partially out-of-range region evaluating false on the out-of-range squares.
-8. **Load-time refusals.** Fixtures for `MIRRORED_NAMED_STRUCTURE`,
+9. **Load-time refusals.** Fixtures for `MIRRORED_NAMED_STRUCTURE`,
    `QUANTIFIED_DOMAIN_EMPTY`, `PAWN_COUNT_OUT_OF_RANGE` (both bases), and the extended
    `OUTPOST_RANK_OUT_OF_RANGE` region form each fail `validatePackDocument` with that exact
    code and make both `make pack-check` and `make shape-check` exit non-zero, asserted on
    the exit codes; depth fixtures assert `mirrored` and `quantified` each count one level
    against the unchanged cap.
-9. **Exhaustive dispatch (D26).** `structuralFeatureKinds` and the rewritten
+10. **Exhaustive dispatch (D26).** `structuralFeatureKinds` and the rewritten
    `structuralIssues` walk carry `never`-checked defaults, each with a `@ts-expect-error`
    sentinel-variant test and a comment naming the duck-typed fall-through it replaces; a
    test asserts a `quantified` conjunct's template kind reaches objective
    `evidenceRefs` (the silent-evidence-loss regression of §5); `mirrorExpression` has a
    `@ts-expect-error` sentinel for both the leaf and node unions.
-10. **One vocabulary, four places, both copies.** The existing sync test is extended: the
-    fourteen `STRUCTURAL_FEATURE_KINDS`, the `structuralFeature` `oneOf` `kind` consts in
-    **both** schema files, the fourteen `structure-*` facts in `RULES_EVIDENCE_FACTS`, and
+11. **One vocabulary, four places, both copies.** The existing sync test is extended: the
+    fifteen `STRUCTURAL_FEATURE_KINDS`, the `structuralFeature` `oneOf` `kind` consts in
+    **both** schema files, the fifteen `structure-*` facts in `RULES_EVIDENCE_FACTS`, and
     the sentence-table coverage are the same set; the schema and runtime TS unions accept a
-    shared fixture list of all fourteen leaves and all seven node kinds in both directions.
-11. **No sentence carries a verdict.** Every new observation and spec sentence (both new
-    leaves, all three mirror axes, both quantifier domains) is rendered against fixtures and
+    shared fixture list of all fifteen leaves and all seven node kinds in both directions.
+12. **No sentence carries a verdict.** Every new observation and spec sentence (all three
+    new leaves, all three mirror axes, both quantifier domains) is rendered against fixtures and
     asserted free of the parent's banned list, case-insensitive whole words; the
     `pawn_count` difference sentence is asserted to contain no *up/ahead/advantage/majority*
     wording.
-12. **Browser.** In `tests/browser/drill.spec.ts`, the structural-reading disclosure
+13. **Browser.** In `tests/browser/drill.spec.ts`, the structural-reading disclosure
     (control at `:337` region) against the Pack B fixture: still closed on entry with no
     numeral; when opened, the reading now contains "White has 7 pawns.", "Black has 7
     pawns.", and "White's bishop on d3 stands on a light square."; reload returns the
     control to closed; the pack projection still carries no `successConditions` key.
-13. **Schema hygiene.** `DRILL_PACK_SCHEMA_VERSION` is `"0.13"`, `SHAPE_ENTRY_SCHEMA_VERSION`
+14. **Schema hygiene.** `DRILL_PACK_SCHEMA_VERSION` is `"0.13"`, `SHAPE_ENTRY_SCHEMA_VERSION`
     is `"0.2"`, both `$id`s match, all committed packs and all 22 shape entries validate,
-    and the parent's passthrough-inventory test still counts exactly the three pinned
-    `additionalProperties: true` sites.
-14. **Envelope.** The instrumented structure sample is re-recorded with the widened
+    and the parent's passthrough-inventory test still counts exactly the two pinned
+    `additionalProperties: true` sites (`/$defs/feedbackClaim`, `/$defs/provenance`,
+    `packages/schema/src/drill-pack.test.ts:87`).
+15. **Envelope.** The instrumented structure sample is re-recorded with the widened
     projection; the test asserts a non-vacuous finite sample only, per the parent's
     measured-not-gated rule.
-15. **`pnpm verify` passes** (typecheck, unit suite — baseline 399 tests/69 files grows, no
-    existing test is deleted — and `pnpm schema:check`), and `pnpm test:browser` passes.
-16. **Canonical documentation.** `docs/structural-reading.md` describes fourteen kinds, the
-    seven-node expression grammar, the three mirror axes with the shade-parity and
-    side-label laws, and the quantifier domains; `docs/drill-pack-format.md` records 0.13;
+16. **`pnpm verify` passes** (typecheck, unit suite — the 69-file baseline grows and the
+    pre-existing `pack-authoring.test.ts:267` candidate-count pin is corrected on the
+    mainline first, so the suite is green; no existing test is deleted — and
+    `pnpm schema:check`), and `pnpm test:browser` passes.
+17. **Canonical documentation.** `docs/structural-reading.md` describes fifteen kinds, the
+    seven-node expression grammar, the three mirror axes with the shade-parity,
+    opposition-flip, and side-label laws (the entry-wide clause included), and the
+    quantifier domains; `docs/drill-pack-format.md` records 0.13;
     `docs/shape-library.md` records shape-entry schema 0.2, the entry-version bumps, and the
-    side-label law; `docs/explanation-grounds.md` records fourteen `structure-*` facts.
+    side-label law; `docs/explanation-grounds.md` records fifteen `structure-*` facts.
 
 ## Open questions
 
@@ -688,3 +797,26 @@ None.
   boundary (rule 2). Pack schema 0.13, shape-entry schema 0.2, no migration; exhaustive
   `never` dispatch extended to two previously duck-typed walk sites; four official shape
   entries updated as acceptance demonstrations.
+- 2026-08-14: adversarial review (claude), fixed in place. **The opposition refusal is
+  overturned and `king_opposition` is admitted** (§1, §4c; forms `direct`/`distant`,
+  tempo-qualified; fifteenth kind, first side-to-move-reading leaf, mirror rule written in
+  §3a; `diagonal`/virtual forms and `king_distance` stay refused under rule 3): the rule-2
+  ground did not survive review — each form is one exact sentence and a closed `form` enum
+  is no taste constant, which the committed `pawn-opposition-key-squares` entry's own plan
+  prose demonstrates while filing five null signatures against the gap;
+  `pawn-opposition-key-squares` becomes the fifth acceptance demonstration (§9d,
+  criterion 6). **The side-label law gains its entry-wide clause** (§3a): a files-mirror
+  trigger widening must widen wing-pinned plan signatures too — as drafted, §9b's "plans
+  intact" was false against the committed `fianchetto-g7` JSON, whose
+  `black-long-diagonal-pressure` (g7/a1) and `white-h-file-lever` (h-file/g6) signatures
+  are wing-pinned and could never hold on the b7 mirror (§9b, criterion 2). Corrections
+  from verifying against the tree: the parent's pinned passthrough inventory is **two**
+  sites, not three (`packages/schema/src/drill-pack.test.ts:87` pins
+  `/$defs/feedbackClaim` and `/$defs/provenance`; §11, criterion 14); the baseline is 398
+  of 399 passing on this checkout (pre-existing `pack-authoring.test.ts:267`
+  candidate-count pin, stale since the opening-pack wave; §12, criterion 16); the wave-2
+  BACKLOG row lives at `design/BACKLOG.md:197` and Deviation 1's sketch quote is the
+  middlegame log's `mirror`/`colorFlip` wording, not the row's; the stale OCB "up a pawn"
+  watch row is deleted with the co-fire warnings (§9a). On landing, the `rfc/README.md`
+  0.13 register row's description must be amended to name all three leaves (a register
+  edit outside this file's authority, flagged for the owner).
