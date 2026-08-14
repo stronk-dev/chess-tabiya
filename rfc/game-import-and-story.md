@@ -36,7 +36,14 @@ renders them as slides (~8 is presentation, not contract). Every slide is tappab
 rewind *there*, fork a live branch, replay against human-like resistance with
 structural reading available, compare against the game's actual continuation, and
 export game + branches as one PGN. The review IS the rehearsal entry — the
-anti-version of the engine-review screen. The differentiator is pinned to the door
+anti-version of the engine-review screen. Market evidence sharpened 2026-08-14
+(`design/research/teardown-chesscom-platform-desk.md` §2): Chess.com's Game Review —
+the mainstream incumbent — offers **no play re-entry at all**: its only in-review
+interaction is a one-ply guess-the-move "Retry", unlimited use of which is
+Diamond-gated at $119.99/yr. The platform monetizes mistake re-entry without ever
+letting you play the position out, and that is its dominant public complaint. This
+RFC's tap-a-moment-and-play-on is the direct answer.
+The differentiator is pinned to the door
 into play, not to having a story: Chess2Story already ships clickable moment cards
 that jump a live synced board (`design/research/teardown-chess2story-desk.md` §3),
 and Take Take Take ships a read-only, LLM-confabulated share card

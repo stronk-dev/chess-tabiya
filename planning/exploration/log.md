@@ -1523,3 +1523,48 @@ transcription — if Q1a or the game-story RFC needs them.
   15 Playwright tests at zero retries, with the opt-in Maia latency case skipped.
 - The active `game-import-and-story` draft and concurrent competitor research were
   not changed by this lifecycle.
+
+## 2026-08-14 (claude, teardowns) — Chess.com whole platform + Dr. Wolf: both sweep-2 unknowns resolved, E1 intact twice
+
+- **What landed:** `design/research/teardown-chesscom-platform-desk.md` and
+  `design/research/teardown-drwolf-desk.md` — the sweep-2 shortlist's two strongest
+  picks, in house format with love/hate sections. Matrix rows deepened (CSV lines 12
+  and 49); two coverage rows added to `design/research/README.md`.
+- **Chess.com — the Game Review re-entry unknown is resolved: NO.** The only in-review
+  interaction is "Retry" — a one-ply guess-the-move exercise ("replay a specific
+  position and attempt to find the best move yourself", support 8584089 `[V]`); users
+  themselves call it a puzzle in the wrong place. Play re-entry exists only via the
+  manual Self-Analysis → Practice-vs-Computer chain — unlinked, attempt-destroying
+  (per the 2026-08-11 teardown). Gating verified exact: free = 1 review/day; coach
+  explanations Diamond-only at $119.99/yr — Trustpilot's "$120/yr to learn from your
+  mistakes" is numerically correct. Constellation verified (Komodo 2018 → integrated;
+  Dr. Wolf 2020 → standalone; PMG 2022-12-16 → chess24 + Magnus Trainer killed,
+  Everyman absorbed, Chessable/Aimchess standalone): **breadth bought per shelf, loop
+  assembled nowhere** — the strongest evidence yet that orchestration is a product
+  decision, not a portfolio side effect.
+- **Dr. Wolf — the undo semantics are resolved: erase + harvest, never preserve.**
+  Undo (unlimited, premium) removes the move; the blunder-guard ("Are you certain?",
+  popsci `[V]`) offers retraction *before* the consequence is ever played — inverting
+  commit-before-learning, not just attempt preservation. What survives is a
+  mistake-review queue of isolated positions ("reviews past moves with you", App
+  Store `[V]`) — mined lessons, not comparable attempts. No source describes seeing an
+  earlier try again (searches recorded). Band 0–1300/1500 by its designer; "hardly
+  benefit" past 1400 (chesstech `[V]`) — the ceiling sits where our band starts.
+  Explanation mechanism undisclosed; accuracy complaints on record ("better for him,
+  not the player") but no TTT-style confabulation catch.
+- **E1: intact after both** — reopen trigger not met. Both products *validate demand*
+  on our two entry surfaces: Retry Mistakes monetizes one-ply mistake re-entry at
+  $119.99/yr; Dr. Wolf's 4.8★/27k proves rewind-and-explain appetite below our band.
+- **Adoption steals recorded:** Chess.com's auto-offered post-game review ritual
+  (ours re-enters play, attempts preserved); Dr. Wolf's spoken coach persona via the
+  §3a silence default (beloved tone, our timing/grounding) + mistake resurfacing
+  upgraded from positions to attempts.
+- **RFC-relevant:** the game-import positioning line ("Chess.com's Game Review is
+  paywalled and read-only") now carries precise citations: read-only-plus-one-ply-Retry
+  `[V]`, 1 free review/day `[V]`, explained review $119.99/yr `[P]` price table.
+- **Blocked/limits:** Trustpilot 403 (quotes stay `[P]`); chess.com/membership prices
+  JS-hidden (grounded via mobeigi 2025-10 table); Google Play truncates; Retry
+  Mistakes tier limits rest on a dated launch blog — hands-on residuals listed in
+  both dossiers.
+- **Next:** remaining sweep-2 shortlist (Chessly, WintrChess, En Croissant,
+  ChessMonitor) + the scoped Lichess hands-on, as Q1a picks them up.
