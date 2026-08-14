@@ -7,7 +7,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `repertoire-gap-finding.md` | implementing | — | `planning/repertoire-gap-finding/` (wave claim #1: migration 15; no pack/run schema claim) |
 | `onramp-guard.md` | draft | `archive/defect-sweep.md` §2a | — (wave claim #2: pack schema 0.14, run schema 0.11, migration 16 — rebased from 15 behind wave claim #1) |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
@@ -106,7 +105,7 @@ writing it into a draft.
 | 12 | 11→12 | `archive/game-import-and-story.md` | implemented — run schema v0.10: `sessionKind` gains `imported` (non-pack projection rules unchanged). Creates `imported_games` (one row per imported run: source kind/url, movetext digest, headers, original PGN bytes, licence note) plus the pack-style account-deletion tombstone, and stamps frozen literals `"0.9"`→`"0.10"` (no data rewrite). Landed behind implemented migration 11 |
 | 13 | 12→13 | `archive/adoption-wave-1.md` | implemented — creates `public_tokens` + `run_derivations`; literal CHECK strings per the migration-9 freeze lesson |
 | 14 | 13→14 | `archive/social-match.md` | implemented — creates `match_states`; rebuilds `live_sessions`, `session_journal`, and `public_tokens` with widened closed vocabularies; no run/pack schema change. Landed behind implemented migration 13 |
-| 15 | 14→15 | `repertoire-gap-finding.md` | draft (wave claim #1, 2026-08-14) — creates `repertoires`, `repertoire_moves`, `repertoire_scans`, `repertoire_gap_runs`; create-table/index only, no backfill, no rebuild (deliberately does not widen `run_derivations.kind`); no run/pack schema change |
+| 15 | 14→15 | `archive/repertoire-gap-finding.md` | implemented — creates `repertoires`, `repertoire_moves`, `repertoire_scans`, `repertoire_gap_runs`; create-table/index only, no backfill or rebuild; no run/pack schema change |
 | 16 | 15→16 | `onramp-guard.md` | draft (wave claim #2, 2026-08-14) — stamp-only: run schema `"0.10"`→`"0.11"` (`RunFeedbackPolicy` gains `immediate_guard`; no new event type, no data rewrite). Rebased from an initial 15 claim behind `repertoire-gap-finding`'s wave claim #1, per the F2/F3 precedent; lands behind implemented migration 15 |
 | 17 | 16→17 | `open-answer-grading.md` | draft (wave claim #3, 2026-08-14) — **stamp-only, no table** (transcripts are run events; run deletion is the retention story); run schema 0.11→**0.12** (`reasoning.recorded` event). Reconciled behind onramp-guard per the pinned wave order |
 
@@ -190,6 +189,7 @@ before re-attempting this territory.
 | `archive/runtime-corpus-evidence.md` | implemented | `docs/runtime-corpus-evidence.md`, `docs/adaptive-guidance.md`, `docs/explanation-grounds.md`, `docs/branch-groups.md` |
 | `archive/adoption-wave-1.md` | implemented | `docs/adoption-wave-1.md`, `docs/game-import-and-story.md`, `docs/adaptive-guidance.md`, `docs/return-and-progression.md`, `docs/live-sessions.md` |
 | `archive/social-match.md` | implemented | `docs/live-sessions.md`, `docs/identity-and-authorization.md`, `docs/app-shell.md` |
+| `archive/repertoire-gap-finding.md` | implemented | `docs/repertoire-gap-finding.md`, `docs/runtime-corpus-evidence.md`, `docs/return-and-progression.md` |
 
 ## The archive sketches are quarry, not RFCs
 

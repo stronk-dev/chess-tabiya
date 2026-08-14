@@ -22,3 +22,10 @@ acceptance exercises that complete path through the mock deployment. Repository 
 pass: `ENGINES_REQUIRED=1 make verify` reports 437 tests across 74 files with Svelte
 0/0 and clean schema/packaging checks; `make test-browser` reports 21 passed at zero
 retries with the optional Maia case skipped.
+
+## 2026-08-14 — Lifecycle closeout
+
+The RFC and planning job are archived, migration 15 is implemented in the register,
+and canonical docs are indexed. Both gates were rerun after the moves: 437 tests across
+74 files passed with Svelte 0/0 and clean scaffold/packaging checks; the browser suite
+passed 21 tests at zero retries with only the optional Maia case skipped.
