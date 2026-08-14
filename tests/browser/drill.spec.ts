@@ -101,6 +101,29 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await expect(page.getByRole("button", { name: /Open pivotal marker/ })).toHaveCount(0);
 });
 
+test("runtime corpus counts stay silent until reveal and render population facts on request", async ({ page }) => {
+  await page.getByRole("button", { name: "Start game" }).click();
+  await page.getByText("Assistance", { exact: true }).click();
+  await page.getByLabel("Passive pivotal markers").check();
+  await move(page, "e2", "e4");
+  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(page.getByText("Thinking…")).toHaveCount(0);
+  const runId = page.url().split("/").at(-1)!;
+  const writerId = await page.evaluate((id) => localStorage.getItem(`chess-tabiya:run:${id}:writer-id`), runId);
+  expect(writerId).not.toBeNull();
+  const reveal = await page.request.post(`/runs/${runId}/reveal`, { headers: { "x-writer-id": writerId! }, data: {} });
+  expect(reveal.ok()).toBe(true);
+  await page.reload();
+  await page.getByText("Assistance", { exact: true }).click();
+  await page.getByLabel("Corpus counts on request").check();
+  await page.getByRole("button", { name: "Show corpus counts" }).click();
+  const corpus = page.getByRole("region", { name: "Corpus evidence" });
+  await expect(corpus).toContainText("Lichess explorer — rating buckets 1000,1200,1400,1600,1800,2000,2200,2500");
+  await expect(corpus).toContainText("These counts say what this population played, not what is good.");
+  await expect(corpus).toContainText("e4 — 60 of 120 games (50.0%).");
+  await expect(corpus).toContainText("Last recorded game in this population: 2019-04.");
+});
+
 test("Pack B references the Carlsbad entry while its pack prose stays server-withheld", async ({ page }) => {
   const list = await page.request.get("/packs");
   const packs = await list.json() as { id: string; title: string }[];

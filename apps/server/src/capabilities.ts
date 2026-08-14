@@ -48,6 +48,7 @@ export interface CapabilityProviders {
   readonly opponent: "maia" | "mock" | "none";
   readonly judge: "stockfish" | "mock" | "none";
   readonly llm: "none" | "external";
+  readonly corpus: "lichess-explorer" | "mock" | "none";
 }
 
 export type SurfaceCapabilities = Readonly<
@@ -95,6 +96,7 @@ function providers(
   engineMode: CapabilityEngineMode,
   identities: readonly EngineIdentity[],
   llmAvailable: boolean,
+  corpus: CapabilityProviders["corpus"],
 ): CapabilityProviders {
   if (engineMode === "mock") {
     const opponentReady = identities.some((identity) => identity.kind === "opponent");
@@ -103,6 +105,7 @@ function providers(
       // Mock mode wires MockEvidenceExecutor even though it has no UCI identity.
       judge: "mock",
       llm: llmAvailable ? "external" : "none",
+      corpus,
     });
   }
   return Object.freeze({
@@ -113,6 +116,7 @@ function providers(
       ? "stockfish"
       : "none",
     llm: llmAvailable ? "external" : "none",
+    corpus,
   });
 }
 
@@ -136,6 +140,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
   readonly #engineMode: CapabilityEngineMode;
   readonly #strongEngineProfile: StrongEngineProfile;
   readonly #llmAvailable: boolean;
+  readonly #corpus: CapabilityProviders["corpus"];
 
   constructor(
     client: CapabilityEngineClient,
@@ -144,12 +149,14 @@ export class EngineCapabilities implements CapabilitiesProvider {
       readonly engineMode: CapabilityEngineMode;
       readonly strongEngineProfile?: Partial<StrongEngineProfile>;
       readonly llmAvailable?: boolean;
+      readonly corpus?: CapabilityProviders["corpus"];
     },
   ) {
     this.#client = client;
     this.#engineIds = Object.freeze([...engineIds]);
     this.#engineMode = options.engineMode;
     this.#llmAvailable = options.llmAvailable === true;
+    this.#corpus = options.corpus ?? "none";
     this.#strongEngineProfile = resolveStrongEngineProfile(
       options.strongEngineProfile,
     );
@@ -164,7 +171,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
           : [];
       }),
     );
-    const providerState = providers(this.#engineMode, engines, this.#llmAvailable);
+    const providerState = providers(this.#engineMode, engines, this.#llmAvailable, this.#corpus);
     return Object.freeze({
       engines,
       policyModes: SUPPORTED_POLICY_MODES,

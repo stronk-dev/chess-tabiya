@@ -67,6 +67,9 @@ Implemented foundation:
 - `adaptive-guidance.md` — attributed phase bands, silent-by-default assistance,
   passive pivotal markers, gated human-model splits, endgame census and technique naming,
   retrospective evaluation pivots, and the packet-checked optional voice seam.
+- `runtime-corpus-evidence.md` — operator-authenticated, disclosure-gated Lichess
+  frequency and recency facts, bounded interactive caching, honest abstention, and
+  the closed fact-only assistance renderer.
 - `game-import-and-story.md` — one-game PGN/lichess import, imported-run identity,
   idempotent evidence completion, grounded story moments, live re-entry, and
   original-game-plus-branches export.

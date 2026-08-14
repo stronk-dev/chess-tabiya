@@ -38,6 +38,7 @@ const application = await createApplication({
   ...(process.env.STOCKFISH_PATH === undefined
     ? {}
     : { stockfishCommand: process.env.STOCKFISH_PATH }),
+  ...(process.env.LICHESS_TOKEN === undefined ? {} : { corpusToken: process.env.LICHESS_TOKEN }),
 });
 
 await new Promise<void>((resolve, reject) => {

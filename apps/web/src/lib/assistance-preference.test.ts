@@ -12,4 +12,10 @@ describe("assistance preference", () => {
     values.set(assistanceKey("pack"), "not-json");
     expect(loadAssistance("pack", storage)).toEqual(SILENT_ASSISTANCE);
   });
+
+  it("upgrades version one without changing the storage key", () => {
+    const storage = { getItem: () => JSON.stringify({ version: 1, markers: "live", guided: "off", humanSplit: "on_request", voice: "authored" }), setItem() {} };
+    expect(loadAssistance("pack", storage)).toEqual({ version: 2, markers: "live", guided: "off", humanSplit: "on_request", corpus: "off", voice: "authored" });
+    expect(assistanceKey("pack")).toBe("tabiya.assistance.v1.pack");
+  });
 });

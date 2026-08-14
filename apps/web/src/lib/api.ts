@@ -239,6 +239,7 @@ export interface Capabilities {
     readonly opponent: "maia" | "mock" | "none";
     readonly judge: "stockfish" | "mock" | "none";
     readonly llm: "none" | "external";
+    readonly corpus: "lichess-explorer" | "mock" | "none";
   };
   readonly surfaces: Readonly<Record<SurfaceId, SurfaceAvailability>>;
 }
@@ -249,6 +250,10 @@ export interface HumanSplitPage {
   readonly targetElo: number | null;
   readonly candidates: readonly NonNullable<OpponentSelection["candidates"]>[number][];
 }
+
+export interface CorpusPopulation { readonly source: "lichess-explorer"; readonly ratings: readonly number[]; readonly speeds: readonly string[]; readonly since: string; readonly until: string; }
+export type CorpusResult = { readonly kind: "stats"; readonly total: number; readonly white: number; readonly draws: number; readonly black: number; readonly moves: readonly { readonly san: string; readonly uci: string; readonly playedCount: number; readonly sharePct: number }[]; readonly recency: { readonly kind: "month"; readonly lastPlayedMonth: string } | { readonly kind: "absent" }; readonly population: CorpusPopulation } | { readonly kind: "abstention"; readonly reason: "no_data_at_band" | "source_unavailable"; readonly detail: string; readonly population: CorpusPopulation };
+export interface CorpusPage { readonly nodeId: string; readonly result: CorpusResult; readonly committedMoveSan: string | null; }
 
 export interface VoicePage { readonly text: string; readonly source: "provider" | "deterministic"; readonly scope: "marker" | "reading" | "steering" | "story"; }
 
@@ -514,6 +519,7 @@ export interface DrillClientApi extends RunApi {
   ): Promise<BranchComparison>;
   authoredFeedback(runId: string): Promise<AuthoredFeedbackPage>;
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage>;
+  corpus(runId: string, nodeId: string): Promise<CorpusPage>;
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage>;
   pgn(runId: string, branchIds?: readonly string[]): Promise<PgnDownload>;
   importGame?(input: ImportGameRequest, writerId: string): Promise<{ readonly run: DrillRun; readonly importRecord: ImportedGameRecord; readonly evidencePass: { readonly jobs: number } }>;
@@ -772,6 +778,8 @@ export class DrillApi implements DrillClientApi {
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage> {
     return this.#json(`/runs/${encoded(runId)}/human-split?nodeId=${encoded(nodeId)}`);
   }
+
+  corpus(runId: string, nodeId: string): Promise<CorpusPage> { return this.#json(`/runs/${encoded(runId)}/corpus?nodeId=${encoded(nodeId)}`); }
 
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage> {
     return this.#json(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { nodeId, scope } });

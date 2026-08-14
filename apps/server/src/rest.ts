@@ -9,6 +9,7 @@ import {
   BranchQueryError,
   RuntimeError,
   feedbackDeliveryOpen,
+  historyFrom,
   permittedAssistance,
   type OpponentSelection,
   type SelectionCandidate,
@@ -40,6 +41,7 @@ import { projectShapeEntry, type ShapeRegistry } from "./shape-registry.js";
 import type { ShapeStudio } from "./shape-studio.js";
 import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
 import { evidencePacket, renderVoice, type VoiceProvider } from "./guidance.js";
+import { corpusPopulation, type CorpusSource } from "./corpus.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -425,7 +427,7 @@ export function errorResponse(error: unknown): Response {
         ? 401
         : error.code === "FORBIDDEN"
           ? 403
-      : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE"
+      : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE" || error.code === "CORPUS_UNAVAILABLE"
         ? 503
         : error.code === "IMPORT_SOURCE_UNAVAILABLE"
           ? 503
@@ -491,7 +493,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis|human-split|voice|group|group-reply|import|story)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis|human-split|corpus|voice|group|group-reply|import|story)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -578,6 +580,7 @@ export function createRestHandler(
   shapeStudio?: ShapeStudio,
   voiceProvider?: VoiceProvider,
   voicePersona = "Clear, concise Tabiya voice. Do not add chess claims.",
+  corpusSource?: CorpusSource,
 ): RestHandler {
   return async (request) => {
     try {
@@ -921,6 +924,18 @@ export function createRestHandler(
           ...(access.pack === undefined ? {} : { packId: access.pack.document.id }),
         });
         return json(200, { nodeId: access.node.id, engine: selection.engine, targetElo: authored.targetElo ?? null, candidates: selection.candidates ?? [] });
+      }
+      if (request.method === "GET" && route.action === "corpus") {
+        if (corpusSource === undefined) throw new ServerError("CORPUS_UNAVAILABLE", "Corpus evidence is unavailable");
+        const access = service.guidanceAccess(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId"));
+        const permission = permittedAssistance({ sessionKind: access.run.sessionKind, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role });
+        if (permission.corpus === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Corpus evidence is withheld in this context");
+        const selectedPopulation = corpusPopulation(access.run.opponentPolicy.mode === "human_common" ? access.run.opponentPolicy.targetElo : undefined);
+        const path = historyFrom(access.run, access.run.activeCursor.nodeId);
+        const index = path.findIndex((node) => node.id === access.node.id);
+        const child = index < 0 ? undefined : path[index + 1];
+        const result = await corpusSource.stats({ ...selectedPopulation, fen: access.node.fen });
+        return json(200, { nodeId: access.node.id, result, committedMoveSan: child?.actor === "user" ? child.moveSan : null });
       }
       if (request.method !== "POST") {
         return json(405, {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import type { Capabilities, HumanSplitPage, RunRole, ShapeEntryView, VoicePage } from "./api.js";
+  import type { Capabilities, CorpusPage, HumanSplitPage, RunRole, ShapeEntryView, VoicePage } from "./api.js";
   import { SILENT_ASSISTANCE, branchPath, classifyPhase, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, permittedAssistance, pivotalMarkers, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
@@ -18,6 +18,7 @@
   import GroupPanel from "./GroupPanel.svelte";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
+  import { renderCorpusPage } from "./corpus-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
     activeNode,
@@ -67,6 +68,7 @@
     onExport: (branchIds?: readonly string[]) => void | Promise<void>;
     onStop: () => void;
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
+    onCorpus?: (nodeId: string) => Promise<CorpusPage>;
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
     onCreateGroup?: (input: CreateGroupRequest) => void | Promise<unknown>;
     onAnalyzeMissing?: (nodeIds: readonly string[]) => void | Promise<void>;
@@ -97,6 +99,7 @@
     onExport,
     onStop,
     onHumanSplit,
+    onCorpus,
     onVoice,
     onCreateGroup,
     onAnalyzeMissing,
@@ -115,6 +118,7 @@
   let assistance: AssistanceConfig = $state(SILENT_ASSISTANCE);
   let openPivotalNodeId: string | undefined = $state();
   let humanSplit: HumanSplitPage | undefined = $state();
+  let corpusPage: CorpusPage | undefined = $state();
   let voicePage: VoicePage | undefined = $state();
   let forkLabel = $state("");
   let forkIntent = $state("");
@@ -252,6 +256,13 @@
 
   async function requestHumanSplit(): Promise<void> {
     if (onHumanSplit !== undefined) humanSplit = await onHumanSplit(displayedNode.id);
+  }
+
+  async function requestCorpus(): Promise<void> {
+    if (onCorpus === undefined) return;
+    const decision = displayedNode.actor === "user" ? displayedNode : [...path].reverse().find((node) => node.actor === "user");
+    const queryNode = decision?.parentId ?? displayedNode.id;
+    corpusPage = await onCorpus(queryNode);
   }
 
   async function requestVoice(scope: VoicePage["scope"]): Promise<void> {
@@ -570,6 +581,10 @@
             <label><input type="checkbox" checked={assistance.guided === "live"} onchange={(event) => setAssistance("guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
             <label><input type="checkbox" checked={assistance.humanSplit === "on_request"} disabled={assistancePermission.humanSplit === "locked_off"} aria-describedby={assistancePermission.humanSplit === "locked_off" ? "human-split-locked" : undefined} onchange={(event) => setAssistance("humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move split on request</label>
             {#if assistancePermission.humanSplit === "locked_off"}<span id="human-split-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
+            {#if capabilities?.providers.corpus !== "none"}<label><input type="checkbox" checked={assistance.corpus === "on_request"} disabled={assistancePermission.corpus === "locked_off"} aria-describedby={assistancePermission.corpus === "locked_off" ? "corpus-locked" : undefined} onchange={(event) => setAssistance("corpus", event.currentTarget.checked ? "on_request" : "off")} /> Corpus counts on request</label>{/if}
+            {#if capabilities?.providers.corpus !== "none" && assistancePermission.corpus === "locked_off"}<span id="corpus-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
+            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Show corpus counts</button>{/if}
+            {#if corpusPage}<section aria-label="Corpus evidence">{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}</section>{/if}
             {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
           </div>
         </details>

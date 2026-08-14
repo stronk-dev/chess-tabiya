@@ -93,7 +93,7 @@ describe("DrillApi", () => {
               multiPv: 1,
             },
           },
-          providers: { opponent: "mock", judge: "mock", llm: "none" },
+          providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock" },
           surfaces: {
             play: "available",
             review: "available",
@@ -119,6 +119,7 @@ describe("DrillApi", () => {
       if (url.includes("/runs?")) return json({ runs: [] });
       if (url.endsWith("/select-move")) return json(selection);
       if (url.includes("/human-split")) return json({ nodeId: run.nodes[0]!.id, engine: selection.engine, targetElo: 1600, candidates: [] });
+      if (url.includes("/corpus")) return json({ nodeId: run.nodes[0]!.id, committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" } } });
       if (url.includes("/voice")) return json({ text: "fixture", source: "deterministic", scope: "reading" });
       if (url.includes("/graph")) {
         return json({
@@ -177,9 +178,10 @@ describe("DrillApi", () => {
     };
 
     expect(await api.capabilities()).toMatchObject({
-      providers: { opponent: "mock", judge: "mock", llm: "none" },
+      providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock" },
       surfaces: { play: "available", learn: "available" },
     });
+    expect((await api.corpus(run.id, run.nodes[0]!.id)).result.kind).toBe("abstention");
     expect(PLANNED_SURFACES).toEqual([]);
     await api.packs();
     await api.shapes();
@@ -222,6 +224,7 @@ describe("DrillApi", () => {
 
     expect(calls.map((call) => new URL(call.url).pathname)).toEqual([
       "/capabilities",
+      "/runs/run%20%2F%20one/corpus",
       "/packs",
       "/shapes",
       "/packs/pack-one",

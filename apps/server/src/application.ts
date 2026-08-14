@@ -40,6 +40,7 @@ import { LiveSessionService } from "./live-session.js";
 import { ShapeRegistry } from "./shape-registry.js";
 import { ShapeStudio } from "./shape-studio.js";
 import type { VoiceProvider } from "./guidance.js";
+import { FixtureCorpusSource, LichessCorpusSource, type CorpusSource } from "./corpus.js";
 
 export type EngineMode = "mock" | "maia";
 
@@ -55,6 +56,8 @@ export interface ApplicationOptions {
   readonly cookieSecure?: boolean;
   readonly voiceProvider?: VoiceProvider;
   readonly voicePersona?: string;
+  readonly corpusToken?: string;
+  readonly corpusSource?: CorpusSource;
 }
 
 export interface ChessTabiyaApplication {
@@ -291,6 +294,7 @@ export async function createApplication(
   let selector: OpponentSelector;
   let capabilities: EngineCapabilities;
   let evidenceExecutor: EvidenceExecutor;
+  const corpusSource = options.corpusSource ?? (engineMode === "mock" ? new FixtureCorpusSource() : options.corpusToken === undefined ? undefined : new LichessCorpusSource({ token: options.corpusToken }));
 
   if (engineMode === "maia") {
     const stockfish = options.stockfishCommand ?? "stockfish";
@@ -304,7 +308,7 @@ export async function createApplication(
     capabilities = new EngineCapabilities(supervisor, [
       "stockfish-analysis",
       "maia-5m",
-    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined });
+    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer" });
     evidenceExecutor = new StockfishEvidenceExecutor(supervisor);
   } else {
     const mock = new MockEngineClient();
@@ -313,7 +317,7 @@ export async function createApplication(
       strongEngineId: "mock-opponent",
     });
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
-      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined,
+      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock",
     });
     evidenceExecutor = new MockEvidenceExecutor();
   }
@@ -332,7 +336,7 @@ export async function createApplication(
     cookieSecure: options.cookieSecure ?? true,
   });
   const live = new LiveSessionService(storage, { runService: service });
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

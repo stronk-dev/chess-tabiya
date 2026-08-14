@@ -68,7 +68,7 @@ const capabilities: Capabilities = {
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
   },
-  providers: { opponent: "maia", judge: "stockfish", llm: "none" },
+  providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none" },
   surfaces: {
     play: "available",
     review: "available",
@@ -152,6 +152,7 @@ class FakeApi implements DrillClientApi {
   async shapes(): Promise<readonly import("./api.js").ShapeSummary[]> { return []; }
   async shape(): Promise<import("./api.js").ShapeDocument> { throw new Error("no shapes in fake"); }
   async humanSplit(_runId: string, nodeId: string): Promise<import("./api.js").HumanSplitPage> { return { nodeId, engine: { id: "maia", name: "Maia", version: "3", seedHonored: true }, targetElo: 1800, candidates: [] }; }
+  async corpus(_runId: string, nodeId: string): Promise<import("./api.js").CorpusPage> { return { nodeId, committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" } } }; }
   async voice(_runId: string, _nodeId: string, scope: import("./api.js").VoicePage["scope"]): Promise<import("./api.js").VoicePage> { return { text: "fixture", source: "deterministic", scope }; }
 
   async runs(): Promise<readonly RunSummary[]> {

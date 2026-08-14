@@ -95,7 +95,7 @@ describe("engine capabilities", () => {
             multiPv: 1,
           },
         },
-        providers: { opponent: "maia", judge: "stockfish", llm: "none" },
+        providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none" },
         surfaces: {
           play: "available",
           review: "available",
@@ -130,6 +130,7 @@ describe("engine capabilities", () => {
       opponent: "mock",
       judge: "mock",
       llm: "none",
+      corpus: "none",
     });
     expect(descriptor.engines).toEqual([identity]);
     expect(descriptor.surfaces.play).toBe("available");
@@ -141,6 +142,13 @@ describe("engine capabilities", () => {
     expect((await capabilities.get()).providers.llm).toBe("external");
     const absent = new EngineCapabilities(healthClient({}), [], { engineMode: "mock" });
     expect((await absent.get()).providers.llm).toBe("none");
+  });
+
+  it("reports corpus availability from explicit application wiring", async () => {
+    const live = new EngineCapabilities(healthClient({}), [], { engineMode: "maia", corpus: "lichess-explorer" });
+    const mock = new EngineCapabilities(healthClient({}), [], { engineMode: "mock", corpus: "mock" });
+    expect((await live.get()).providers.corpus).toBe("lichess-explorer");
+    expect((await mock.get()).providers.corpus).toBe("mock");
   });
 
   it("downgrades unhealthy real providers instead of reporting stale identities", async () => {
@@ -172,6 +180,7 @@ describe("engine capabilities", () => {
       opponent: "none",
       judge: "none",
       llm: "none",
+      corpus: "none",
     });
     expect(descriptor.surfaces.play).toBe("unavailable-here");
     expect(descriptor.surfaces.justPlay).toBe("unavailable-here");

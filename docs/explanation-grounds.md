@@ -230,8 +230,9 @@ complete breadth gate B4. The following remain content-era work:
 - timing-window explanation semantics;
 - per-assertion grounding for authored strategic claims (Outcome Drill root
   assessment and rules-derived result grading now ship separately);
-- corpus, Syzygy, and non-Stockfish evaluation evidence sources (Maia policy
-  mass already persists in opponent selections and reaches the browser);
+- durable corpus, Syzygy, and non-Stockfish evaluation evidence sources (ephemeral,
+  disclosure-gated runtime corpus counts now ship; Maia policy mass already persists
+  in opponent selections and reaches the browser);
 - feedback packets, authored claim anchors, and path-relative claim-trigger
   evaluation; and
 - evidence-bound LLM rendering.

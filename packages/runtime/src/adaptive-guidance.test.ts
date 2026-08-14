@@ -86,11 +86,14 @@ describe("adaptive guidance runtime", () => {
   });
 
   it("implements the assistance table with silence as the universal default", () => {
-    expect(SILENT_ASSISTANCE).toEqual({ version: 1, markers: "off", guided: "off", humanSplit: "off", voice: "authored" });
+    expect(SILENT_ASSISTANCE).toEqual({ version: 2, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored" });
     expect(permittedAssistance({ sessionKind: "pack", deliveryOpen: false, role: "solo" }).humanSplit).toBe("locked_off");
     expect(permittedAssistance({ sessionKind: "position", deliveryOpen: true, role: "host" }).humanSplit).toBe("free");
     expect(permittedAssistance({ sessionKind: "position", deliveryOpen: true, role: "participant" }).humanSplit).toBe("locked_off");
     expect(permittedAssistance({ sessionKind: "position", deliveryOpen: true, role: "spectator" }).markers).toBe("free");
+    for (const role of ["solo", "host", "participant", "spectator"] as const) for (const deliveryOpen of [false, true]) {
+      expect(permittedAssistance({ sessionKind: "position", deliveryOpen, role }).corpus).toBe(deliveryOpen && (role === "solo" || role === "host") ? "free" : "locked_off");
+    }
   });
 
   it("recognizes exact endgame census families and honest missing technique entries", () => {

@@ -113,8 +113,8 @@ network claim, and it is recorded rather than used as a test gate.
 Current limits are deliberate:
 
 - groups contain at most eight members, matching the comparison contract;
-- the live explorer is an operator-side sourcing tool, not a runtime seed
-  source; corpus-derived choices reach groups only through authored packs;
+- runtime explorer counts now exist as disclosure-gated evidence, but the explorer is
+  not a runtime seed source; corpus-derived choices reach groups only through authored packs;
 - group membership is immutable; create another group to change the set;
 - there is no group ranking, scoring, pruning, or special live-session voting;
 - lockstep preference is local browser state, not shared run truth; and

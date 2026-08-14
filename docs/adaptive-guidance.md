@@ -86,6 +86,10 @@ the server's selection rule. The real Maia sidecar records `seedHonored: false`,
 move identity is not claimed; the tagged integration check proves only that MultiPV reporting
 still terminates in a legal best move and supplies massed candidates.
 
+Runtime corpus counts use the same permission and disclosure window but a separate,
+operator-authenticated source. They remain off by default and are documented in
+`runtime-corpus-evidence.md`.
+
 ## Endgame census and named techniques
 
 `endgameReading(fen)` runs only inside the endgame phase band. It recognizes exact material
@@ -134,5 +138,5 @@ Current boundaries are explicit:
 - no move is prescribed by deterministic assistance;
 - no shape or technique content is authored by this layer;
 - marker and guided preferences are client-enforced because their inputs are public projection;
-- human split is server-withheld until delivery opens; and
+- human split and corpus evidence are server-withheld until delivery opens; and
 - optional provider voice may change wording only, never the evidence packet or run record.
