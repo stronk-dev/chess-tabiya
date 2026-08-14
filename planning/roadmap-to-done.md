@@ -23,11 +23,11 @@ as waves land; not append-only. Where a row needs detail, it cites the ledger
 
 | Item | State |
 |---|---|
-| Shape library | ✅ 24 entries (all families + residue) |
+| Shape library | ✅ 23 entries (all endgame + middlegame families + residue). **2 commissioned, unauthored:** London wedge, KID arrangement chain |
 | Packs: batch 1 + wave 2 openings + 2 trajectories | ✅ 12 committed |
-| Wave 4a openings (next priority tier + anti-KID/London/Dutch), 5a on-ramp (guard-enabled + emitted seeds), 5b endgames (Lucena/Philidor/opposition/…) | 🔨 three agents authoring (~18 packs) |
-| Remaining opening families to full §2 map; endgame variants breadth incl. **theoretical mates (ruled in)**; more trajectories | 📋 final batches |
-| Engine-validation passes over authored claims (0 run so far — graduation gate is the only content gate) | 📋 before session |
+| Wave 4a openings (next priority tier + anti-KID/London/Dutch), 5a on-ramp (guard-enabled + emitted seeds), 5b endgames (Lucena/Philidor/opposition/…) | ✅ all three landed; **39 packs committed** total |
+| Remaining opening families to full §2 map; endgame variants breadth; more trajectories | 📋 final batches. **Theoretical mates ✅ shipped 2026-08-14** (K+Q, K+R, two bishops, Philidor convert — all four `ledger_verified`). Scandinavian wave-4b deferred on depth-commensurability; **B+N mate awaits an owner ruling** |
+| Engine-validation passes over authored claims | 📋 before session. **Partial progress:** tablebase grounding is now real — 10 endgame/mate packs carry `ledger_verified` evidence sidecars via `make verify-draft`. What remains at zero is *engine* (Stockfish) validation of **middlegame/opening** authored claims, which no tablebase can settle |
 
 ## 2b. The reconciliation gate
 

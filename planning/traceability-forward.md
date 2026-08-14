@@ -206,3 +206,53 @@ the content exists), but the ratio — 11 unpublished drafts, 0 engine-validated
 map of hundreds — means the product's stated critical path (§7: "content is the reason this
 is the critical path") is the least-realized commitment in the design tier, and the B-gate
 greenness should not be read as product-completeness.
+
+## Delta re-run — 2026-08-14 (post polish wave)
+
+Run by claude after the last feature wave landed (`765efb5` polish-surfaces,
+`0939070` orphan-completion, `2fd82be` grounding-pair; all archived, Active
+table empty). Delta scope only — the 2026-08-14 full trace above stands.
+
+**Verified clean by grep against real code, not prose:**
+
+- Registers match implementation exactly: `STORAGE_VERSION = 18`
+  (`storage.ts:387`), `DRILL_RUN_SCHEMA_VERSION = "0.13"`, pack schema 0.15.
+- polish-surfaces: `boardLighting` in `AssistanceSettings.svelte` +
+  `DrillScreen.svelte`; TTS provider gated at `main.ts:23-26`.
+- orphan-completion: `comparisonStrips`/`comparisonNarrative` wired at
+  `rest.ts:1094`; `/runs/:id/distill` in the route matcher (`rest.ts:529`)
+  and handled at `:1051`; `/progress/recommendations` at `rest.ts:743` with
+  the corpus guard in the sentence grammar (`repertoire.ts:82`).
+- grounding-pair: `perfect_tablebase` published conditionally —
+  `capabilities.ts:190` filters it out when the tablebase provider is `none`,
+  which is the D8 declared-vs-executable law executing correctly.
+- Gates run personally: `ENGINES_REQUIRED=1 make verify` 474/80 exit 0;
+  `make test-browser` 24 passed, zero retries, 1 optional Maia skip.
+
+**Found and fixed:**
+
+1. Ledger flow-back missed by the implementing commit — `2fd82be` flipped the
+   RFC register but not the BACKLOG rows it ships (verify-draft item,
+   resistance-spectrum, the cross-link row). Flipped post-hoc in `4cb7bfd`
+   with attribution. This is the failure the completion law names, recurring.
+2. Shape-entry count overstated as 24 in `design/03-product-breadth.md` §B11
+   and `roadmap-to-done.md`; the true count is 23 (this dossier had it right).
+   Two commissioned entries — London wedge, KID arrangement chain — were being
+   counted as authored. Corrected in both.
+3. Stale roadmap content rows: waves 4a/5a/5b still read "three agents
+   authoring"; theoretical mates read as pending. All landed; 39 packs.
+4. "Engine-validation 0 run" was true-but-misleading: tablebase grounding is
+   now real for 10 packs. Restated so what is actually at zero — Stockfish
+   validation of middlegame/opening claims — stays visible.
+
+**Reverse-trace orphan (open, owner-facing):** `cursed-win` / `blessed-loss`
+ship in code (`tablebase.ts:5-11`, correct inversion and rank) and in
+`docs/tablebase-grounding.md`, but flow back to **no design doc**, and they
+contradict `01-training-model.md` §Outcome types — a *Win* drill's "keep the
+position winning and finish the conversion" is unsatisfiable in a cursed win
+under the 50-move rule. Ledgered; needs an owner ruling. No shipped pack roots
+on one, so nothing is broken today.
+
+**Gate status:** orphan list is 1 item, triaged (ledgered + escalated to the
+owner). Stale list is empty. Per the §2b rule, done is not declared while
+either list is non-empty *and untriaged* — this one is triaged.
