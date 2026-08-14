@@ -382,8 +382,8 @@ evidence; rule 4 — `pawn_count` names a census.
 
 True exactly when the two kings stand on the same file or the same rank with a gap of
 exactly one square between them (`form: "direct"`), or of exactly three or five squares
-(`form: "distant"`), **and it is `X`'s turn to move** — the standard tempo-qualified sense
-in which `C` "has" the opposition. Occupancy of the intervening squares is not read: the
+(`form: "distant"`), **and it is the opponent of `C` who is to move** — the standard
+tempo-qualified sense in which `C` "has" the opposition. Occupancy of the intervening squares is not read: the
 leaf is a function of the two king squares and the side to move, nothing else, and that
 scope is part of the definition sentence, not a hidden convention.
 
@@ -720,7 +720,7 @@ constant `"0.1"`; the browser suite's structural-reading section drives the cont
    on positions where the two answers differ.
 6. **`king_opposition` table.** Both forms and both colours against hand-built pawn
    endings: direct and distant hold exactly at gaps 1 and 3/5 on a shared file or rank
-   with `X` to move; even gaps, misaligned kings, and the same positions with the mover
+   with the opponent of `X` to move; even gaps, misaligned kings, and the same positions with the mover
    flipped are false; an occupied intervening square does not change the answer;
    `mirrored("colors")`/`mirrored("both")` flip the colour that holds it and
    `mirrored("files")` preserves it. The §9d entry demo: the classic mutual-zugzwang

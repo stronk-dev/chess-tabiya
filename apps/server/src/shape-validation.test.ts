@@ -22,6 +22,23 @@ describe("shape entry validation", () => {
   ])("refuses %s", (code, candidate) => {
     expect(validateShapeEntry(candidate).issues).toContainEqual(expect.objectContaining({ code }));
   });
+
+  it.each([
+    ["MIRRORED_NAMED_STRUCTURE", { kind: "mirrored", axis: "files", of: { kind: "feature", feature: { kind: "named_structure", id: "carlsbad" } } }],
+    ["QUANTIFIED_DOMAIN_EMPTY", { kind: "quantified", quantifier: "some", over: { files: { from: "h", to: "a" } }, feature: { kind: "open_file" } }],
+    ["PAWN_COUNT_OUT_OF_RANGE", { kind: "feature", feature: { kind: "pawn_count", color: "white", basis: "count", comparison: "equal", count: 9 } }],
+    ["PAWN_COUNT_OUT_OF_RANGE", { kind: "feature", feature: { kind: "pawn_count", color: "white", basis: "difference", comparison: "equal", count: -9 } }],
+    ["OUTPOST_RANK_OUT_OF_RANGE", { kind: "quantified", quantifier: "some", over: { squares: { files: { from: "a", to: "h" }, ranks: { from: 1, to: 3 } } }, feature: { kind: "outpost", color: "white" } }],
+  ])("refuses wave-2 expression with %s", (code, trigger) => {
+    const candidate = { ...structuredClone(entry), trigger };
+    expect(validateShapeEntry(candidate).issues).toContainEqual(expect.objectContaining({ code }));
+  });
+
+  it("counts mirrored and quantified nodes against the unchanged depth cap", () => {
+    const trigger = { kind: "mirrored", axis: "files", of: { kind: "quantified", quantifier: "some", over: { files: { from: "a", to: "h" } }, feature: { kind: "open_file" } } };
+    const nested = { kind: "not", of: { kind: "not", of: { kind: "not", of: trigger } } };
+    expect(validateShapeEntry({ ...structuredClone(entry), trigger: nested }).issues).toContainEqual(expect.objectContaining({ code: "STRUCTURAL_EXPRESSION_TOO_DEEP" }));
+  });
 });
 
 describe("pack shape references", () => {

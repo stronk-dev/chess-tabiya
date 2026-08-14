@@ -45,4 +45,15 @@ describe("structural pack orchestration", () => {
     invalid.objective.successConditions[0].feature = { kind: "feature", feature: { kind: "outpost", color: "white", square: "e2" } };
     expect(validatePackDocument(invalid).issues).toContainEqual(expect.objectContaining({ code: "OUTPOST_RANK_OUT_OF_RANGE" }));
   });
+
+  it("carries a quantified template kind into objective evidence refs", () => {
+    const quantified = structuredClone(pack) as any;
+    quantified.objective.successConditions[0].feature = {
+      kind: "quantified",
+      quantifier: "some",
+      over: { files: { from: "a", to: "h" } },
+      feature: { kind: "isolated_pawn", color: "black" },
+    };
+    expect(objectiveRules(quantified)[0]?.evidenceRefs).toEqual(["rules:structure-isolated-pawn"]);
+  });
 });

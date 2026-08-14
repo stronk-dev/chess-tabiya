@@ -1,4 +1,4 @@
-import type { StructuralExpression, StructuralFeature } from "@chess-tabiya/schema/drill-pack";
+import type { FileTemplateFeature, SquareTemplateFeature, StructuralExpression, StructuralFeature } from "@chess-tabiya/schema/drill-pack";
 import type { StructuralObservation } from "@chess-tabiya/runtime";
 
 function side(color: "white" | "black" | undefined): string { return color === "white" ? "White" : "Black"; }
@@ -50,11 +50,33 @@ function renderFeatureSpec(feature: StructuralFeature): string {
   if (feature.kind === "bishop_on_shade") return `${feature.color} has a bishop on a ${feature.shade} square`;
   if (feature.kind === "pawn_count") {
     if (feature.basis === "count") return `${feature.color} has ${comparison(feature.comparison, feature.count)} pawns`;
-    return `${feature.color} has ${comparison(feature.comparison, Math.abs(feature.count))} ${feature.count < 0 ? "fewer" : "more"} pawn${Math.abs(feature.count) === 1 ? "" : "s"} than ${feature.color === "white" ? "black" : "white"}`;
+    const other = feature.color === "white" ? "black" : "white";
+    if (feature.count >= 0) return `${feature.color} has ${comparison(feature.comparison, feature.count)} more pawn${feature.count === 1 ? "" : "s"} than ${other}`;
+    const inverse = feature.comparison === "atLeast" ? "atMost" : feature.comparison === "atMost" ? "atLeast" : "equal";
+    return `${feature.color} has ${comparison(inverse, Math.abs(feature.count))} fewer pawn${feature.count === -1 ? "" : "s"} than ${other}`;
   }
   if (feature.kind === "king_opposition") return `${feature.color} has the ${feature.form} opposition`;
   const exhaustive: never = feature;
   throw new TypeError(`Unhandled structural feature: ${JSON.stringify(exhaustive)}`);
+}
+
+function renderFileTemplate(feature: FileTemplateFeature): string {
+  if (feature.kind === "backward_pawn") return `${feature.color} has a backward pawn`;
+  if (feature.kind === "isolated_pawn") return `${feature.color} has an isolated pawn`;
+  if (feature.kind === "doubled_pawn") return `${feature.color} has doubled pawns`;
+  if (feature.kind === "half_open_file") return `the file is half-open for ${feature.color}`;
+  if (feature.kind === "open_file") return "the file is open";
+  return renderSquareTemplate(feature);
+}
+
+function renderSquareTemplate(feature: SquareTemplateFeature): string {
+  if (feature.kind === "pawn_safe_square") return `the square is currently safe from an opposing pawn advancing on its file for ${feature.color}`;
+  if (feature.kind === "outpost") return `the square matches Tabiya's strict outpost detector for ${feature.color}`;
+  if (feature.kind === "passed_pawn") return `${feature.color} has a passed pawn`;
+  if (feature.kind === "direct_attack_count") return `the square has ${comparison(feature.comparison, feature.count)} direct ${feature.color} attackers`;
+  if (feature.kind === "piece") return feature.piece === null ? "the square is empty" : `the square holds a ${feature.piece.color} ${feature.piece.role}`;
+  const exhaustive: never = feature;
+  throw new TypeError(`Unhandled quantified template: ${JSON.stringify(exhaustive)}`);
 }
 
 export function renderStructuralExpressionSpec(expression: StructuralExpression): string {
@@ -75,9 +97,9 @@ export function renderStructuralExpressionSpec(expression: StructuralExpression)
     const domain = "files" in expression.over
       ? `file from ${expression.over.files.from} to ${expression.over.files.to}`
       : `square from ${expression.over.squares.files.from}${expression.over.squares.ranks.from} to ${expression.over.squares.files.to}${expression.over.squares.ranks.to}`;
-    const instantiated = expression.feature.kind === "piece"
-      ? expression.feature.piece === null ? "is empty" : `holds a ${expression.feature.piece.color} ${expression.feature.piece.role}`
-      : renderFeatureSpec({ ...expression.feature, ...(expression.feature.kind === "backward_pawn" || expression.feature.kind === "isolated_pawn" || expression.feature.kind === "doubled_pawn" || expression.feature.kind === "half_open_file" || expression.feature.kind === "open_file" ? { file: expression.over && "files" in expression.over ? expression.over.files.from : "a" } : { square: "a1" }) } as StructuralFeature);
+    const instantiated = "files" in expression.over
+      ? renderFileTemplate(expression.feature as FileTemplateFeature)
+      : renderSquareTemplate(expression.feature as SquareTemplateFeature);
     return `on ${expression.quantifier === "some" ? "some" : "every"} ${domain}, ${instantiated}`;
   }
   const exhaustive: never = expression;

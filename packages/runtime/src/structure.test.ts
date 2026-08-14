@@ -10,12 +10,15 @@ import {
   evaluateObjectivePredicate,
   matchesStructuralExpression,
   matchesStructuralFeature,
+  mirrorExpression,
   pawnSafety,
   structuralDelta,
+  structuralFeatureKinds,
   structuralReading,
   RULES_EVIDENCE_FACTS,
   STRUCTURAL_FEATURE_KINDS,
 } from "./index.js";
+import type { MirrorAxis, StructuralExpression } from "./structure.js";
 
 const carlsbad = "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10";
 
@@ -29,7 +32,39 @@ function after(fen: string, moves: readonly string[]): string {
   return makeFen(position.toSetup());
 }
 
+function mirrorFen(fen: string, axis: MirrorAxis): string {
+  const [placement, turn] = fen.split(" ");
+  const rows = placement!.split("/").map((row) => [...row].flatMap((char) => /[1-8]/.test(char) ? Array(Number(char)).fill(null) : [char]));
+  const mappedRows = axis === "files" ? rows : [...rows].reverse();
+  const mapped = mappedRows.map((row) => {
+    const cells = axis === "colors" ? row : [...row].reverse();
+    return cells.map((cell) => cell === null || axis === "files" ? cell : cell === cell.toUpperCase() ? cell.toLowerCase() : cell.toUpperCase());
+  });
+  const compressed = mapped.map((row) => { let empty = 0, value = ""; for (const cell of row) { if (cell === null) empty += 1; else { if (empty > 0) value += empty; empty = 0; value += cell; } } return value + (empty || ""); }).join("/");
+  return `${compressed} ${axis === "files" ? turn : turn === "w" ? "b" : "w"} - - 0 1`;
+}
+
+function legalFen(choices: readonly number[]): string {
+  const position = Chess.default();
+  for (const choice of choices) {
+    const moves = [...position.allDests()].flatMap(([from, destinations]) => [...destinations].map((to) => ({ from, to })));
+    if (moves.length === 0) break;
+    const move = moves[choice % moves.length]!;
+    if (!position.isLegal(move)) throw new TypeError("generated move must be legal");
+    position.play(move);
+  }
+  return makeFen(position.toSetup());
+}
+
 describe("structural predicates", () => {
+  if (false) {
+    // @ts-expect-error D26 sentinel: a future expression node must update structuralFeatureKinds.
+    structuralFeatureKinds({ kind: "future_expression" });
+    // @ts-expect-error D26 sentinel: a future leaf must update mirrorExpression.
+    mirrorExpression({ kind: "feature", feature: { kind: "future_feature" } }, "files");
+    // @ts-expect-error D26 sentinel: a future expression node must update mirrorExpression.
+    mirrorExpression({ kind: "future_expression" }, "files");
+  }
   it("keeps the structural predicate and evidence vocabularies closed together", () => {
     expect(RULES_EVIDENCE_FACTS.filter((fact) => fact.startsWith("structure-")).map((fact) => fact.slice("structure-".length).replaceAll("-", "_"))).toEqual([...STRUCTURAL_FEATURE_KINDS]);
   });
@@ -94,5 +129,77 @@ describe("structural predicates", () => {
     console.log(`STRUCTURAL_LATENCY ${JSON.stringify({ samples: durations.length, medianMs: Number(medianMs.toFixed(3)), maxMs: Number(maxMs.toFixed(3)) })}`);
     expect(durations).toHaveLength(200);
     expect(Number.isFinite(maxMs)).toBe(true);
+  });
+
+  it("evaluates bishop shade, pawn census, and tempo-qualified opposition", () => {
+    const bishops = "4k3/8/8/8/8/8/8/Bb2K3 w - - 0 1";
+    expect(matchesStructuralFeature(bishops, { kind: "bishop_on_shade", color: "white", shade: "dark" })).toBe(true);
+    expect(matchesStructuralFeature(bishops, { kind: "bishop_on_shade", color: "black", shade: "light" })).toBe(true);
+    const pawns = "4k3/8/8/8/8/8/P6P/4K3 w - - 0 1";
+    expect(matchesStructuralFeature(pawns, { kind: "pawn_count", color: "white", basis: "count", comparison: "equal", count: 2 })).toBe(true);
+    expect(matchesStructuralFeature(pawns, { kind: "pawn_count", color: "black", basis: "difference", comparison: "equal", count: -2 })).toBe(true);
+    const direct = "8/8/8/4K3/8/4k3/8/8 b - - 0 1";
+    const distant = "8/4K3/8/8/8/4k3/8/8 b - - 0 1";
+    expect(matchesStructuralFeature(direct, { kind: "king_opposition", color: "white", form: "direct" })).toBe(true);
+    expect(matchesStructuralFeature(direct.replace(" b ", " w "), { kind: "king_opposition", color: "white", form: "direct" })).toBe(false);
+    expect(matchesStructuralFeature(distant, { kind: "king_opposition", color: "white", form: "distant" })).toBe(true);
+  });
+
+  it("pins opposition gaps, alignment, occupancy, mover, colour, and mirrors", () => {
+    const direct = "8/8/8/4K3/8/4k3/8/8 b - - 0 1";
+    const directOccupied = "8/8/8/4K3/4p3/4k3/8/8 b - - 0 1";
+    const distantThree = "8/4K3/8/8/8/4k3/8/8 b - - 0 1";
+    const distantFive = "4K3/8/8/8/8/8/4k3/8 b - - 0 1";
+    const evenGap = "8/8/4K3/8/8/4k3/8/8 b - - 0 1";
+    const misaligned = "8/8/8/4K3/8/3k4/8/8 b - - 0 1";
+    for (const fen of [direct, directOccupied]) expect(matchesStructuralFeature(fen, { kind: "king_opposition", color: "white", form: "direct" })).toBe(true);
+    for (const fen of [distantThree, distantFive]) expect(matchesStructuralFeature(fen, { kind: "king_opposition", color: "white", form: "distant" })).toBe(true);
+    for (const fen of [evenGap, misaligned, direct.replace(" b ", " w ")]) expect(matchesStructuralFeature(fen, { kind: "king_opposition", color: "white", form: "direct" })).toBe(false);
+    expect(matchesStructuralFeature(direct.replace(" b ", " w "), { kind: "king_opposition", color: "black", form: "direct" })).toBe(true);
+    expect(matchesStructuralExpression(direct, { kind: "mirrored", axis: "files", of: { kind: "feature", feature: { kind: "king_opposition", color: "white", form: "direct" } } })).toBe(true);
+    expect(matchesStructuralExpression(direct, { kind: "mirrored", axis: "colors", of: { kind: "feature", feature: { kind: "king_opposition", color: "black", form: "direct" } } })).toBe(true);
+    expect(matchesStructuralExpression(direct, { kind: "mirrored", axis: "both", of: { kind: "feature", feature: { kind: "king_opposition", color: "black", form: "direct" } } })).toBe(true);
+  });
+
+  it("flips bishop shade under one-axis mirrors and preserves it under both", () => {
+    const expression = { kind: "feature", feature: { kind: "bishop_on_shade", color: "white", shade: "dark" } } as const;
+    expect(mirrorExpression(expression, "files")).toMatchObject({ feature: { shade: "light", color: "white" } });
+    expect(mirrorExpression(expression, "colors")).toMatchObject({ feature: { shade: "light", color: "black" } });
+    expect(mirrorExpression(expression, "both")).toMatchObject({ feature: { shade: "dark", color: "black" } });
+  });
+
+  it("quantifies exact file and square domains", () => {
+    const fen = "4k3/8/8/3P4/8/8/8/4K3 w - - 0 1";
+    expect(matchesStructuralExpression(fen, { kind: "quantified", quantifier: "some", over: { squares: { files: { from: "c", to: "e" }, ranks: { from: 4, to: 6 } } }, feature: { kind: "passed_pawn", color: "white" } })).toBe(true);
+    expect(matchesStructuralExpression(fen, { kind: "quantified", quantifier: "every", over: { squares: { files: { from: "a", to: "b" }, ranks: { from: 1, to: 2 } } }, feature: { kind: "piece", piece: null } })).toBe(true);
+    expect(matchesStructuralExpression(fen, { kind: "quantified", quantifier: "some", over: { squares: { files: { from: "d", to: "f" }, ranks: { from: 1, to: 2 } } }, feature: { kind: "piece", piece: { color: "white", role: "king" } } })).toBe(true);
+    expect(matchesStructuralExpression("4k3/8/8/8/8/3P4/8/4K3 w - - 0 1", { kind: "quantified", quantifier: "some", over: { squares: { files: { from: "e", to: "e" }, ranks: { from: 2, to: 4 } } }, feature: { kind: "outpost", color: "white" } })).toBe(true);
+    expect(structuralFeatureKinds({ kind: "quantified", quantifier: "some", over: { squares: { files: { from: "a", to: "h" }, ranks: { from: 2, to: 7 } } }, feature: { kind: "passed_pawn", color: "white" } })).toEqual(["passed_pawn"]);
+  });
+
+  it("mirrors every supported structural expression against an independent FEN oracle", () => {
+    const positions = [carlsbad, "8/8/8/4K3/8/4k3/8/8 b - - 0 1", "4k3/1bp5/8/8/8/8/6P1/4K3 w - - 0 1"];
+    const expressions: StructuralExpression[] = [
+      { kind: "feature", feature: { kind: "bishop_on_shade", color: "black", shade: "light" } },
+      { kind: "feature", feature: { kind: "pawn_count", color: "white", basis: "difference", comparison: "atLeast", count: 0 } },
+      { kind: "feature", feature: { kind: "king_opposition", color: "white", form: "direct" } },
+      { kind: "quantified", quantifier: "some", over: { files: { from: "a", to: "d" } }, feature: { kind: "isolated_pawn", color: "white" } },
+      { kind: "pieceOnSquare", square: "b7", piece: { color: "black", role: "bishop" } },
+    ];
+    fc.assert(fc.property(fc.array(fc.integer({ min: 0, max: 200 }), { maxLength: 12 }), fc.constantFrom(...positions), fc.constantFrom(...expressions), fc.constantFrom("colors", "files", "both" as const), (choices, fallback, expression, axis) => {
+      const fen = choices.length === 0 ? fallback : legalFen(choices);
+      expect(matchesStructuralExpression(fen, { kind: "mirrored", axis, of: expression })).toBe(matchesStructuralExpression(mirrorFen(fen, axis), expression));
+      expect(matchesStructuralExpression(fen, mirrorExpression(mirrorExpression(expression, axis), axis))).toBe(matchesStructuralExpression(fen, expression));
+    }));
+  });
+
+  it("adds finite score-free census observations", () => {
+    const reading = structuralReading("8/8/8/4K3/8/4k3/P7/B7 b - - 0 1");
+    expect(reading.features.filter((item) => item.kind === "pawn_count")).toHaveLength(2);
+    expect(reading.features).toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: "bishop_on_shade", color: "white", shade: "dark", squares: ["a1"] }),
+      expect.objectContaining({ kind: "king_opposition", color: "white", form: "direct" }),
+    ]));
+    expect(JSON.stringify(reading)).not.toMatch(/score|rank|severity|favours/);
   });
 });

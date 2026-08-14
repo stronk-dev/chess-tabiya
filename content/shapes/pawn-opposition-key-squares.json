@@ -1,6 +1,6 @@
 {
   "id": "pawn-opposition-key-squares",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "Pure pawn ending — opposition and key squares",
   "phases": ["endgame"],
   "trigger": {
@@ -25,7 +25,7 @@
       "side": "white",
       "label": "Take the opposition",
       "description": "Place the king so the kings face each other with one square between and the opponent to move: whoever must step aside concedes the path. From far away, take the distant opposition — an odd number of squares between the kings — and convert it step by step.",
-      "success": {"note":"King geometry — the entire content of opposition — is outside this vocabulary.","signature":null}
+      "success": {"note":"The kings form direct or distant opposition with Black to move.","signature":{"kind":"any","of":[{"kind":"feature","feature":{"kind":"king_opposition","color":"white","form":"direct"}},{"kind":"feature","feature":{"kind":"king_opposition","color":"white","form":"distant"}}]}}
     },
     {
       "id": "white-occupy-key-squares",
@@ -58,7 +58,7 @@
   ],
   "watch": [
     "Fires for any kings-and-pawns-only position, from a bare-kings draw to a ten-pawn race; the entry names the family, not a verdict about this position.",
-    "Every plan here is king geometry, and kings are almost entirely invisible to the shipped vocabulary — the board check is yours.",
+    "The opposition plan is mechanically visible; key squares, triangulation, holding, and races still require their own evidence.",
     "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."
   ],
   "typicalMistakes": [
@@ -73,7 +73,7 @@
       "Family per design/04-content-architecture.md section 4 (pawn: opposition, key squares, triangulation, corresponding squares).",
       "Tablebase honesty: minimal cases of this family (king and pawn versus king — three pieces) are trivially inside tablebase range and a tablebase CAN verify them; the family as triggered often exceeds seven pieces, where no tablebase exists. Nothing in this entry was tablebase-checked.",
       "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
-      "Trigger gap: the vocabulary has no pawn-existence or king-position predicate, so the trigger is exactly 'no pieces but kings and pawns' and fires for trivial positions too; recorded here rather than faked."
+      "Trigger scope: the trigger is exactly 'no pieces but kings and pawns' and fires for trivial positions too. Direct and distant opposition are now mechanically visible; pawn-relative key squares and move-history claims remain outside the trigger."
     ],
     "attribution": []
   }

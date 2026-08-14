@@ -41,6 +41,9 @@ const RULES_SENTENCES: Readonly<Record<RulesEvidenceFact, string>> = Object.free
   "structure-direct-attack-count": "The authored per-colour direct-attack count holds at this position; opposing counts are not combined.",
   "structure-piece-reach-count": "The authored attack-reach count holds at this position; legal mobility is not evaluated.",
   "structure-named-structure": "A Tabiya catalogue structure condition holds at this position.",
+  "structure-bishop-on-shade": "The authored bishop-square-shade condition holds at this position.",
+  "structure-pawn-count": "The authored pawn-count condition holds at this position.",
+  "structure-king-opposition": "The authored king-opposition geometry and mover condition holds at this position.",
 });
 
 const THEORY_SENTENCES: Readonly<Record<TheoryEvidenceFact, string>> = Object.freeze({

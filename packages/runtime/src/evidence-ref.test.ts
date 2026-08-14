@@ -32,6 +32,9 @@ describe("evidence reference grammar", () => {
       "rules:structure-direct-attack-count",
       "rules:structure-piece-reach-count",
       "rules:structure-named-structure",
+      "rules:structure-bishop-on-shade",
+      "rules:structure-pawn-count",
+      "rules:structure-king-opposition",
     ]);
     expect(packEvidenceRef("timing-window")).toBe("pack:timing-window");
     expect(engineEvidenceRef("evidence-job-7")).toBe("engine:evidence-job-7");

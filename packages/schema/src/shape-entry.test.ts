@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { describe, expect, it } from "vitest";
@@ -9,9 +9,12 @@ import { digestShapeEntry } from "./shape-entry/index.js";
 const json = (path: string): any => JSON.parse(readFileSync(new URL(path, import.meta.url), "utf8"));
 const schema = json("../../../schemas/shape_entry.schema.json");
 const packSchema = json("../../../schemas/drill_pack.schema.json");
-const entries = ["carlsbad", "iqp-white", "iqp-black", "rook-4v3-same-side"].map((id) => json(`../../../content/shapes/${id}.json`));
+const entries = readdirSync(new URL("../../../content/shapes/", import.meta.url))
+  .filter((name) => name.endsWith(".json"))
+  .sort()
+  .map((name) => json(`../../../content/shapes/${name}`));
 
-describe("shape entry schema 0.1", () => {
+describe("shape entry schema 0.2", () => {
   it("is closed everywhere and shares the pack expression grammar", () => {
     const open: string[] = [];
     const walk = (value: unknown, path = ""): void => {
@@ -24,7 +27,10 @@ describe("shape entry schema 0.1", () => {
     walk(schema);
     expect(open).toEqual([]);
     expect(schema.$defs.structuralExpression).toEqual(packSchema.$defs.structuralExpression);
-    expect(SHAPE_ENTRY_SCHEMA_VERSION).toBe("0.1");
+    expect(schema.$defs.structuralFeature).toEqual(packSchema.$defs.structuralFeature);
+    expect(schema.$defs.structuralFeature.oneOf.map((branch: any) => branch.properties.kind.const)).toEqual(packSchema.$defs.structuralFeature.oneOf.map((branch: any) => branch.properties.kind.const));
+    expect(schema.$id).toBe("urn:chess-tabiya:schema:shape-entry:0.2");
+    expect(SHAPE_ENTRY_SCHEMA_VERSION).toBe("0.2");
   });
 
   it("validates all official entries", () => {

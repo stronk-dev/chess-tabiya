@@ -1,6 +1,6 @@
 {
   "id": "bishop-good-bad",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "Single-bishop ending — good bishop against bad",
   "phases": ["endgame"],
   "trigger": {
@@ -21,6 +21,23 @@
             {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
           ]
         }
+      },
+      {
+        "kind": "any",
+        "of": [
+          {"kind":"all","of":[
+            {"kind":"feature","feature":{"kind":"bishop_on_shade","color":"white","shade":"light"}},
+            {"kind":"not","of":{"kind":"feature","feature":{"kind":"bishop_on_shade","color":"white","shade":"dark"}}},
+            {"kind":"feature","feature":{"kind":"bishop_on_shade","color":"black","shade":"light"}},
+            {"kind":"not","of":{"kind":"feature","feature":{"kind":"bishop_on_shade","color":"black","shade":"dark"}}}
+          ]},
+          {"kind":"all","of":[
+            {"kind":"feature","feature":{"kind":"bishop_on_shade","color":"white","shade":"dark"}},
+            {"kind":"not","of":{"kind":"feature","feature":{"kind":"bishop_on_shade","color":"white","shade":"light"}}},
+            {"kind":"feature","feature":{"kind":"bishop_on_shade","color":"black","shade":"dark"}},
+            {"kind":"not","of":{"kind":"feature","feature":{"kind":"bishop_on_shade","color":"black","shade":"light"}}}
+          ]}
+        ]
       }
     ]
   },
@@ -62,7 +79,6 @@
     }
   ],
   "watch": [
-    "One bishop each is all the trigger can see: the vocabulary has no square-colour predicate, so same-coloured and opposite-coloured bishop endings — different universes — both fire here. Check the bishops' colours; if they differ, use the opposite-coloured-bishops entry instead.",
     "Which bishop is 'bad' lives in the pawn-colour complex, also outside the vocabulary; the trigger names the census, the diagnosis is yours.",
     "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."
   ],
@@ -77,7 +93,7 @@
       "Family per design/04-content-architecture.md section 4 (minor piece: good/bad bishop).",
       "Tablebase honesty: typical positions of this family exceed seven pieces; no tablebase ground truth exists for them and none was consulted.",
       "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
-      "Trigger gap: bishop square colour is inexpressible, so this trigger cannot be told apart from the opposite-coloured-bishops census; both entries fire on the same positions and each names the other. This is the sharpest known gap in the shipped vocabulary for endgame families."
+      "Trigger scope: the census now distinguishes same-coloured from opposite-coloured single-bishop endings by literal bishop-square shade; which bishop is good or bad still depends on the pawn colour complex and remains an authored interpretation."
     ],
     "attribution": []
   }

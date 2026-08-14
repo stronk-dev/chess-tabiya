@@ -112,6 +112,16 @@ test("Pack B references the Carlsbad entry while its pack prose stays server-wit
   expect(projected).not.toHaveProperty("successConditions");
 
   await page.getByRole("article").filter({ hasText: pack.title }).getByRole("button", { name: /Open position/ }).click();
+  const structuralReading = page.getByRole("button", { name: "Structural reading" });
+  await expect(structuralReading).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator(".structural-facts")).toHaveCount(0);
+  await structuralReading.click();
+  await expect(page.locator(".structural-facts")).toContainText("White has 7 pawns.");
+  await expect(page.locator(".structural-facts")).toContainText("Black has 7 pawns.");
+  await expect(page.locator(".structural-facts")).toContainText("White's bishop on d3 stands on a light square.");
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Structural reading" })).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator(".structural-facts")).toHaveCount(0);
   const marker = page.getByRole("button", { name: /Carlsbad structure/ });
   await expect(marker).toBeVisible();
   await marker.click();
@@ -178,7 +188,9 @@ test("library exposes phase honestly and survives a malformed pack response", as
     if (body.start !== undefined) delete body.start.side;
     await route.fulfill({ response, json: body });
   });
-  const card = page.getByRole("article").filter({ hasText: "Najdorf" });
+  const card = page.getByRole("article").filter({
+    has: page.getByText("Najdorf: choose a setup and cross the theory boundary", { exact: true }),
+  });
   await card.getByRole("button", { name: /Open position/ }).click();
   await expect(page.getByRole("alert")).toContainText("did not declare start.side");
   await expect(page.getByText("Choose a position worth returning to.")).toBeVisible();

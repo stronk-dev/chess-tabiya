@@ -51,7 +51,8 @@ export function validateShapeEntry(value: unknown, options: { readonly probeFen?
   for (const [index, plan] of document.plans.entries()) {
     if (plan.success.signature !== null) issues.push(...structuralIssues(plan.success.signature, `/plans/${index}/success/signature`));
   }
-  if (matchesStructuralExpression(INITIAL_FEN, document.trigger)) {
+  const expressionValid = !issues.some((candidate) => candidate.severity === "error");
+  if (expressionValid && matchesStructuralExpression(INITIAL_FEN, document.trigger)) {
     issues.push(issue("SHAPE_TRIGGER_TRUE_AT_INITIAL", "/trigger", "shape trigger must not match the standard initial position"));
   }
   const ids = new Set<string>();
@@ -74,6 +75,6 @@ export function validateShapeEntry(value: unknown, options: { readonly probeFen?
     valid: !issues.some((candidate) => candidate.severity === "error"),
     issues: Object.freeze(issues),
     document,
-    ...(options.probeFen === undefined ? {} : { probeMatches: matchesStructuralExpression(options.probeFen, document.trigger) }),
+    ...(options.probeFen === undefined || !expressionValid ? {} : { probeMatches: matchesStructuralExpression(options.probeFen, document.trigger) }),
   });
 }
