@@ -28,6 +28,7 @@ import {
 import {
   RunService,
   type CreateRunRequest,
+  type ImportGameRequest,
   type RewindTarget,
 } from "./service.js";
 import { IdentityService } from "./identity.js";
@@ -323,6 +324,48 @@ function parseCreateInput(value: Record<string, unknown>): CreateRunRequest {
   };
 }
 
+function parseImportInput(value: Record<string, unknown>): ImportGameRequest {
+  value = closedRecord(value, "/", ["id", "side", "opponentPolicy", "policyConfig", "seed", "source", "createdAt"]);
+  const side = requiredString(value.side, "side");
+  if (side !== "white" && side !== "black") throw invalid("side must be white or black");
+  const opponent = closedRecord(value.opponentPolicy, "/opponentPolicy", ["mode", "targetElo", "temperature", "topP"]);
+  const mode = requiredString(opponent.mode, "opponentPolicy.mode");
+  if (mode !== "human_common" && mode !== "strong_engine") throw invalid("opponentPolicy.mode must be human_common or strong_engine");
+  const number = (key: "targetElo" | "temperature" | "topP") => {
+    const item = opponent[key];
+    if (item === undefined) return undefined;
+    if (typeof item !== "number" || !Number.isFinite(item)) throw invalid(`opponentPolicy.${key} must be finite`);
+    return item;
+  };
+  const targetElo = number("targetElo");
+  const temperature = number("temperature");
+  const topP = number("topP");
+  if (targetElo !== undefined && !Number.isSafeInteger(targetElo)) throw invalid("opponentPolicy.targetElo must be a safe integer");
+  if (temperature !== undefined && temperature < 0) throw invalid("opponentPolicy.temperature must be non-negative");
+  if (topP !== undefined && (topP < 0 || topP > 1)) throw invalid("opponentPolicy.topP must be between 0 and 1");
+  const source = closedRecord(value.source, "/source", ["kind", "pgn", "url"]);
+  const sourceKind = requiredString(source.kind, "source.kind");
+  const parsedSource = sourceKind === "pgn"
+    ? (closedRecord(value.source, "/source", ["kind", "pgn"]), { kind: "pgn" as const, pgn: requiredString(source.pgn, "source.pgn") })
+    : sourceKind === "lichess"
+      ? (closedRecord(value.source, "/source", ["kind", "url"]), { kind: "lichess" as const, url: requiredString(source.url, "source.url") })
+      : (() => { throw invalid("source.kind must be pgn or lichess"); })();
+  return {
+    id: requiredString(value.id, "id"),
+    side,
+    opponentPolicy: {
+      mode,
+      ...(targetElo === undefined ? {} : { targetElo }),
+      ...(temperature === undefined ? {} : { temperature }),
+      ...(topP === undefined ? {} : { topP }),
+    },
+    policyConfig: parsePolicyConfig(value.policyConfig),
+    seed: requiredSafeInteger(value.seed, "seed"),
+    source: parsedSource,
+    ...(value.createdAt === undefined ? {} : { createdAt: requiredString(value.createdAt, "createdAt") }),
+  };
+}
+
 function parseMoveOptions(value: Record<string, unknown>): CommitMoveOptions {
   const actor = value.actor;
   if (
@@ -384,9 +427,13 @@ export function errorResponse(error: unknown): Response {
           ? 403
       : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE"
         ? 503
+        : error.code === "IMPORT_SOURCE_UNAVAILABLE"
+          ? 503
         : error.code === "EVIDENCE_UNAVAILABLE"
           ? 503
-        : error.code === "POLICY_MODE_UNSUPPORTED"
+        : error.code === "POLICY_MODE_UNSUPPORTED" ||
+            error.code === "IMPORT_INVALID_PGN" ||
+            error.code === "IMPORT_SOURCE_UNSUPPORTED"
           ? 422
           : error.code === "INVALID_REQUEST"
             ? 400
@@ -396,7 +443,8 @@ export function errorResponse(error: unknown): Response {
                 error.code === "PACK_NOT_FOUND" ||
                 error.code === "SHAPE_NOT_FOUND" ||
                 error.code === "EVIDENCE_RESULT_NOT_FOUND"
-                || error.code === "UNKNOWN_GROUP"
+                || error.code === "UNKNOWN_GROUP" ||
+                error.code === "IMPORT_SOURCE_NOT_FOUND"
               ? 404
               : error.code === "RUN_ALREADY_EXISTS" ||
                 error.code === "FEEDBACK_WITHHELD" ||
@@ -443,7 +491,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis|human-split|voice|group|group-reply)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis|human-split|voice|group|group-reply|import|story)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -710,6 +758,13 @@ export function createRestHandler(
         );
         return json(201, { run });
       }
+      if (request.method === "POST" && url.pathname === "/runs/import") {
+        const principal = authenticate();
+        return json(201, await service.importGame(
+          parseImportInput(await parseBody(request)),
+          { writerId: writerId(request), learnerId: principal.learnerId },
+        ));
+      }
       if (request.method === "GET" && url.pathname === "/runs") {
         const principal = authenticate();
         const { limit, offset } = parsePagination(url);
@@ -826,6 +881,9 @@ export function createRestHandler(
       }
       if (request.method === "GET" && route.action === "authored-feedback") {
         return json(200, service.authoredFeedback(route.runId, principal));
+      }
+      if (request.method === "GET" && route.action === "import") {
+        return json(200, { importRecord: service.importRecord(route.runId, principal) });
       }
       if (request.method === "GET" && route.action === "pgn") {
         const pgn = await service.pgn(route.runId, principal, parseBranches(url));

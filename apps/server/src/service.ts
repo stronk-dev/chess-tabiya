@@ -42,7 +42,8 @@ import {
   type PositionOpponentPolicy,
   RuntimeError,
 } from "@chess-tabiya/runtime";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
+import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 import { makeSan } from "chessops/san";
@@ -69,7 +70,7 @@ import {
   type PackRecord,
   type PackSummary,
 } from "./pack-registry.js";
-import type { RunStorage, RunSummary, StoredRun } from "./storage.js";
+import type { ImportedGameRecord, RunStorage, RunSummary, StoredRun } from "./storage.js";
 import type { ProgressStorage, ScheduleRow, StoredAttempt } from "./storage.js";
 import {
   projectAttempts,
@@ -86,6 +87,8 @@ import {
   type Principal,
 } from "./authorization.js";
 import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
+import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
+import { resolveImportSource, type ImportSource } from "./import-source.js";
 
 export interface RunViewer {
   readonly role: RunRole;
@@ -243,6 +246,16 @@ export interface CreateRunRequest {
   };
 }
 
+export interface ImportGameRequest {
+  readonly id: string;
+  readonly side: "white" | "black";
+  readonly opponentPolicy: PositionOpponentPolicy;
+  readonly policyConfig: CreateRunInput["policyConfig"];
+  readonly seed: number;
+  readonly source: ImportSource;
+  readonly createdAt?: string;
+}
+
 export class RunService {
   readonly #storage: RunStorage;
   readonly #evidenceQueue: EvidenceJobQueue | undefined;
@@ -250,6 +263,7 @@ export class RunService {
   readonly #evidenceMovetimeMs: number;
   readonly #progress: ProgressStorage | undefined;
   readonly #opponentSelector: OpponentSelector | undefined;
+  readonly #importFetch: typeof fetch;
   readonly #simulations = new Map<string, {
     readonly runId: string;
     readonly sourceNodeId: string;
@@ -267,6 +281,7 @@ export class RunService {
       readonly evidenceMovetimeMs?: number;
       readonly progressStorage?: ProgressStorage;
       readonly opponentSelector?: OpponentSelector;
+      readonly importFetch?: typeof fetch;
     } = {},
   ) {
     this.#storage = storage;
@@ -274,6 +289,7 @@ export class RunService {
     this.#packRegistry = options.packRegistry;
     this.#progress = options.progressStorage;
     this.#opponentSelector = options.opponentSelector;
+    this.#importFetch = options.importFetch ?? fetch;
     this.#evidenceMovetimeMs =
       options.evidenceMovetimeMs ?? DEFAULT_STRONG_ENGINE_PROFILE.movetimeMs;
     if (!Number.isSafeInteger(this.#evidenceMovetimeMs) || this.#evidenceMovetimeMs < 1) {
@@ -380,6 +396,87 @@ export class RunService {
       this.#progress?.markScheduleStarted(input.intent.scheduleId, lease.learnerId, run.id);
     }
     return run;
+  }
+
+  async importGame(
+    input: ImportGameRequest,
+    leaseInput: LeaseHolder | string,
+  ): Promise<{ readonly run: DrillRun; readonly importRecord: ImportedGameRecord; readonly evidencePass: { readonly jobs: number } }> {
+    const lease = this.#lease(leaseInput);
+    if (lease.learnerId === "__legacy") this.#principal("legacy-import");
+    const source = await resolveImportSource(input.source, this.#importFetch);
+    if (new TextEncoder().encode(source.pgn).byteLength > 65_536) {
+      throw new ServerError("IMPORT_INVALID_PGN", "PGN exceeds the 64 KiB import limit");
+    }
+    let parsed;
+    try { parsed = parsePgnMainline(source.pgn, { requireMoves: true }); }
+    catch (error) {
+      if (error instanceof PgnImportError) throw new ServerError("IMPORT_INVALID_PGN", error.message);
+      throw error;
+    }
+    const movetextDigest = `sha256:${createHash("sha256").update(canonicalizeJson({
+      rootFen: parsed.rootFen,
+      uci: parsed.moves.map((move) => move.uci),
+    })).digest("hex")}`;
+    const session = {
+      kind: "imported" as const,
+      start: canonicalRunStart({ fen: parsed.rootFen, side: input.side }),
+      movetextDigest,
+      feedbackPolicy: "attempt_end" as const,
+      opponentPolicy: input.opponentPolicy,
+    };
+    let run: DrillRun;
+    try {
+      run = createRun({
+        id: input.id,
+        session,
+        sessionDigest: await digestSessionSource(session),
+        policyConfig: input.policyConfig,
+        seed: input.seed,
+        ...(input.createdAt === undefined ? {} : { createdAt: input.createdAt }),
+      });
+      for (const move of parsed.moves) {
+        const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
+        const actor = node.fen.split(" ")[1] === input.side[0] ? "user" : "system";
+        run = commitMove(run, move.uci, { actor, ...(input.createdAt === undefined ? {} : { at: input.createdAt }) }).run;
+      }
+    } catch (error) {
+      throw new ServerError(
+        "IMPORT_INVALID_PGN",
+        error instanceof Error ? error.message : "Imported PGN is invalid",
+        { cause: error },
+      );
+    }
+    const importedAt = input.createdAt ?? new Date().toISOString();
+    const record: ImportedGameRecord = Object.freeze({
+      runId: run.id,
+      sourceKind: source.sourceKind,
+      sourceUrl: source.sourceUrl,
+      movetextDigest,
+      headers: parsed.headers,
+      result: parsed.result,
+      pgn: source.pgn,
+      licenceNote: source.licenceNote,
+      importedAt,
+    });
+    const title = parsed.headers.White !== undefined && parsed.headers.Black !== undefined
+      ? `${parsed.headers.White} – ${parsed.headers.Black} (${parsed.result})`
+      : "Imported game";
+    if (this.#storage.createImportedRun === undefined) {
+      throw new ServerError("STORAGE_FAILURE", "Imported-game storage is not configured");
+    }
+    this.#storage.createImportedRun(run, lease, title, record);
+    return Object.freeze({ run, importRecord: record, evidencePass: Object.freeze({ jobs: 0 }) });
+  }
+
+  importRecord(runId: string, principal: Principal): ImportedGameRecord {
+    const run = requireRead(this.#storage, runId, principal).stored.run;
+    if (run.sessionKind !== "imported" || this.#storage.importedGame === undefined) {
+      throw new ServerError("RUN_NOT_FOUND", `Run ${runId} is not an imported game`);
+    }
+    const record = this.#storage.importedGame(runId);
+    if (record === undefined) throw new ServerError("STORAGE_FAILURE", "Imported run has no import record");
+    return record;
   }
 
   move(

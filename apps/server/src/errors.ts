@@ -38,7 +38,11 @@ export type ServerErrorCode =
   | "LEASE_MOVED"
   | "VOTE_WINDOW_CLOSED"
   | "VOTE_INTAKE_FULL"
-  | "ARENA_ROOT_MISMATCH";
+  | "ARENA_ROOT_MISMATCH"
+  | "IMPORT_INVALID_PGN"
+  | "IMPORT_SOURCE_UNSUPPORTED"
+  | "IMPORT_SOURCE_NOT_FOUND"
+  | "IMPORT_SOURCE_UNAVAILABLE";
 
 export class ServerError extends Error {
   readonly code: ServerErrorCode;

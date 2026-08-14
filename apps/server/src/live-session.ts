@@ -1,10 +1,8 @@
 import { randomUUID } from "node:crypto";
 
 import { Chess } from "chessops/chess";
-import { makeFen, parseFen } from "chessops/fen";
-import { parsePgn, startingPosition } from "chessops/pgn";
-import { parseSan } from "chessops/san";
-import { makeUci, parseUci } from "chessops/util";
+import { parseFen } from "chessops/fen";
+import { parseUci } from "chessops/util";
 import { commitMove, fork, type DrillRun } from "@chess-tabiya/runtime";
 
 import { mayControlSession, mayPropose, mayVote, requireRead, requireWrite, type Principal } from "./authorization.js";
@@ -12,6 +10,7 @@ import { ServerError } from "./errors.js";
 import type { ArenaLeg, BoardControl, LiveSession, LiveSessionDetail, SessionKind, SessionProposal, VoteOption, VoteTally } from "./live-types.js";
 import type { LeaseHolder, LiveSessionStorage, RunStorage } from "./storage.js";
 import type { RunService } from "./service.js";
+import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 
 type Storage = RunStorage & LiveSessionStorage;
 
@@ -167,18 +166,15 @@ export class LiveSessionService {
     const session=this.#requiredOpen(sessionId,principal);if(session.kind!=="match")throw new ServerError("INVALID_REQUEST","PGN legs require a match session");
     const role=this.#storage.runRole(session.runId,principal.learnerId)!;const invitation=this.#storage.invitations(sessionId).find((item)=>item.leg===legNo&&item.invitedHandle===principal.handle);
     if(!mayControlSession(role)&&invitation===undefined)throw new ServerError("FORBIDDEN","Only the host or invited learner may import this leg");
-    const games=parsePgn(pgn);if(games.length!==1)throw new ServerError("INVALID_REQUEST","PGN must contain exactly one game");
-    const game=games[0]!;for(const node of game.moves.mainlineNodes())if(node.children.length>1)throw new ServerError("INVALID_REQUEST","PGN variations are not accepted");
-    if(game.moves.children.length>1)throw new ServerError("INVALID_REQUEST","PGN variations are not accepted");
+    let parsed;try{parsed=parsePgnMainline(pgn);}catch(error){if(error instanceof PgnImportError)throw new ServerError("INVALID_REQUEST",error.message);throw error;}
     const access=requireWrite(this.#storage,session.runId,principal,writerId);const root=access.stored.run.nodes.find((node)=>node.parentId===null)!;
-    const position=startingPosition(game.headers).unwrap();if(canonicalFen(makeFen(position.toSetup()))!==canonicalFen(root.fen))throw new ServerError("ARENA_ROOT_MISMATCH","PGN start position differs from the arena root");
-    const moves=[...game.moves.mainline()];if(moves.length>300)throw new ServerError("INVALID_REQUEST","PGN exceeds 300 plies");
+    if(parsed.rootFen!==canonicalFen(root.fen))throw new ServerError("ARENA_ROOT_MISMATCH","PGN start position differs from the arena root");
     let next=access.stored.run;
     if(legNo===2)next=fork(next,root.id,{label:"Leg 2",origin:"played",at:this.#now()}).run;
     else if(next.activeCursor.nodeId!==root.id||next.nodes.length>1)throw new ServerError("INVALID_REQUEST","Leg 1 requires an untouched arena run");
-    for(const data of moves){const move=parseSan(position,data.san);if(move===undefined||!position.isLegal(move))throw new ServerError("INVALID_REQUEST",`Illegal PGN move: ${data.san}`);const uci=makeUci(move);const actor=position.turn===next.start.side?"user":"system";next=commitMove(next,uci,{actor,at:this.#now()}).run;position.play(move);}
+    for(const data of parsed.moves){const actor=next.nodes.find((node)=>node.id===next.activeCursor.nodeId)!.fen.split(" ")[1]===next.start.side[0]?"user":"system";next=commitMove(next,data.uci,{actor,at:this.#now()}).run;}
     const existing=this.#storage.arenaLegs(sessionId).find((item)=>item.leg===legNo)!;if(existing.branchId!==null)throw new ServerError("INVALID_REQUEST","Arena leg was already imported");
-    const branchId=next.activeCursor.branchId;const leg:Object & ArenaLeg=Object.freeze({...existing,pgn,result:result??(game.headers.get("Result") as ArenaLeg["result"]??"*"),branchId,importedAt:this.#now(),referencePlayerHandle:principal.handle});
+    const branchId=next.activeCursor.branchId;const leg:Object & ArenaLeg=Object.freeze({...existing,pgn,result:result??parsed.result,branchId,importedAt:this.#now(),referencePlayerHandle:principal.handle});
     this.#storage.saveArenaImport(next,access.lease,leg,principal.learnerId,this.#now());return leg;
   }
 

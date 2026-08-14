@@ -21,3 +21,10 @@ errors; the current local verify gate passes.
 - Bumped the run schema to 0.10 and storage to migration 12. Migration 12 uses frozen 0.9/0.10 literals, creates the import-record table, and preserves existing run history.
 - Imported runs are deliberately excluded from attempt/progression projection. Runtime, schema, storage-summary, authored-feedback, and client-resume literal seams now treat imported as non-pack.
 - Exercising schema, identity, and migration tests pass; workspace typecheck is green.
+
+## 2026-08-14 — Codex §2
+
+- Extracted the Arena mainline parser into one shared module and kept its single-game, no-variation, legal-SAN, 300-ply semantics; own-game import additionally refuses zero-move and non-standard games.
+- Added paste-PGN and public Lichess game resolution. Lichess requests are serial, unauthenticated, timeout-bounded, and explicitly exclude server evaluations; chess.com URLs explain the paste-PGN workflow.
+- Added atomic imported-run plus provenance persistence and authorized `GET /runs/:id/import` reads. `POST /runs/import` is a closed, typed REST contract with the four import error codes mapped intentionally.
+- Tests exercise actor stamping, absence of fabricated opponent selections, atomic refusal, source normalization, no credential header, REST creation/readback, and unknown-field rejection.

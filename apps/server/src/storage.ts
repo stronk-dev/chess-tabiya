@@ -84,12 +84,26 @@ export interface StoredRun {
   readonly activeWriterLearnerId: string;
 }
 
+export interface ImportedGameRecord {
+  readonly runId: string;
+  readonly sourceKind: "pgn_paste" | "lichess_url";
+  readonly sourceUrl: string | null;
+  readonly movetextDigest: string;
+  readonly headers: Readonly<Record<string, string>>;
+  readonly result: "1-0" | "0-1" | "1/2-1/2" | "*";
+  readonly pgn: string;
+  readonly licenceNote: string;
+  readonly importedAt: string;
+}
+
 /** Persistence boundary for run snapshots, identity, grants, and the writer lease. */
 export interface RunStorage {
   create(run: DrillRun, lease: LeaseHolder, title?: string): void;
   read(runId: string): StoredRun | undefined;
   list(learnerId: string, limit: number, offset: number): readonly RunSummary[];
   save(run: DrillRun, lease: LeaseHolder): void;
+  createImportedRun?(run: DrillRun, lease: LeaseHolder, title: string, record: ImportedGameRecord): void;
+  importedGame?(runId: string): ImportedGameRecord | undefined;
 
   createLearner(input: NewLearner): Learner;
   learnerByHandle(handle: string): StoredLearner | undefined;
@@ -547,6 +561,54 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     } catch (error) {
       throw storageFailure("Stored run snapshot failed replay", error);
     }
+  }
+
+  createImportedRun(run: DrillRun, lease: LeaseHolder, title: string, record: ImportedGameRecord): void {
+    const updatedAt = this.#now();
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      this.#database.prepare(`INSERT INTO drill_runs
+        (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version)
+        VALUES (?,?,?,?,?,?,?,?)`).run(
+          run.id, JSON.stringify(run), lease.writerId, updatedAt,
+          JSON.stringify(summaryFields(run, title, updatedAt)), lease.learnerId,
+          lease.learnerId, run.schemaVersion,
+        );
+      this.#database.prepare(`INSERT INTO run_grants (run_id,learner_id,role,granted_at)
+        VALUES (?,?,'host',?)`).run(run.id, lease.learnerId, updatedAt);
+      this.#database.prepare(`INSERT INTO imported_games
+        (run_id,source_kind,source_url,movetext_digest,headers_json,result,pgn,licence_note,imported_at)
+        VALUES (?,?,?,?,?,?,?,?,?)`).run(
+          record.runId, record.sourceKind, record.sourceUrl, record.movetextDigest,
+          JSON.stringify(record.headers), record.result, record.pgn, record.licenceNote,
+          record.importedAt,
+        );
+      this.#database.exec("COMMIT");
+      this.#snapshots.set(run.id, Object.freeze({ run, activeWriterId: lease.writerId, activeWriterLearnerId: lease.learnerId }));
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof Error && error.message.includes("UNIQUE constraint failed")) {
+        throw new ServerError("RUN_ALREADY_EXISTS", `Run already exists: ${run.id}`, { cause: error });
+      }
+      throw storageFailure("Could not create imported run", error);
+    }
+  }
+
+  importedGame(runId: string): ImportedGameRecord | undefined {
+    const row = this.#database.prepare("SELECT * FROM imported_games WHERE run_id = ?").get(runId) as Record<string, unknown> | undefined;
+    if (row === undefined) return undefined;
+    const headers = JSON.parse(String(row.headers_json)) as Record<string, string>;
+    return Object.freeze({
+      runId: String(row.run_id),
+      sourceKind: String(row.source_kind) as ImportedGameRecord["sourceKind"],
+      sourceUrl: row.source_url === null ? null : String(row.source_url),
+      movetextDigest: String(row.movetext_digest),
+      headers: Object.freeze(headers),
+      result: String(row.result) as ImportedGameRecord["result"],
+      pgn: String(row.pgn),
+      licenceNote: String(row.licence_note),
+      importedAt: String(row.imported_at),
+    });
   }
 
   list(learnerId: string, limit: number, offset: number): readonly RunSummary[];
