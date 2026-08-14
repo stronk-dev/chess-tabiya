@@ -26,3 +26,14 @@ role-gated human-split endpoint, typed `ASSISTANCE_WITHHELD` / `VOICE_UNAVAILABL
 an injected vendor-neutral voice provider with one retry and deterministic fallback, and the
 `none | external` capability seam. The typed browser API mirrors both endpoints. Tests cover
 withheld → revealed → re-closed delivery and the provider-invention fallback.
+
+## 2026-08-14 — Client composition
+
+The run screen now labels detected and pack-authored phases separately, stores a silent-by-
+default assistance configuration per session kind, and renders pivotal markers as passive
+timeline dots that open only on request. The opened panel composes deterministic marker,
+endgame-census, optional shape, human-split, and external-voice layers without promoting any
+of them to run truth. Unit coverage pins the preference and off/passive behaviour. The browser
+scenario starts from a developed queens-on position, performs a forced queen exchange across
+the phase band, verifies nothing auto-opens, checks the rendered grounding vocabulary, and
+proves switching markers off removes the dots.

@@ -11,6 +11,8 @@
     rootNodeId?: string | undefined;
     shapeMarkers?: readonly { readonly nodeId: string; readonly entryId: string; readonly label: string; readonly channel: "official" | "community" }[];
     onOpenShape?: (entryId: string) => void;
+    pivotalMarkers?: readonly { readonly nodeId: string; readonly label: string }[];
+    onOpenPivotal?: (nodeId: string) => void;
   }
 
   let {
@@ -23,9 +25,12 @@
     rootNodeId,
     shapeMarkers = [],
     onOpenShape = () => {},
+    pivotalMarkers = [],
+    onOpenPivotal = () => {},
   }: Props = $props();
 
   let rootMarkers = $derived(shapeMarkers.filter((marker) => marker.nodeId === rootNodeId));
+  let rootPivotal = $derived(pivotalMarkers.some((marker) => marker.nodeId === rootNodeId));
 </script>
 
 <section class="timeline" aria-labelledby="timeline-title">
@@ -40,6 +45,7 @@
           <span class="ply">0</span><span>Start</span>
         </button>
         {#each rootMarkers as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
+        {#if rootPivotal}<button class="pivotal-marker" type="button" aria-label="Open pivotal marker at ply 0" onclick={() => onOpenPivotal(rootNodeId)}><span aria-hidden="true"></span></button>{/if}
       </li>
     {/if}
     {#each entries as entry}
@@ -63,6 +69,7 @@
           {/if}
         </button>
         {#each shapeMarkers.filter((marker) => marker.nodeId === entry.nodeId) as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
+        {#if pivotalMarkers.some((marker) => marker.nodeId === entry.nodeId)}<button class="pivotal-marker" type="button" aria-label={`Open pivotal marker at ply ${entry.ply}`} onclick={() => onOpenPivotal(entry.nodeId)}><span aria-hidden="true"></span></button>{/if}
       </li>
     {/each}
   </ol>
@@ -160,6 +167,7 @@
   }
 
   .shape-marker{display:block;margin-top:.25rem;width:100%;padding:.3rem .45rem;border:1px solid var(--accent);border-radius:.45rem;background:transparent;color:var(--accent);font:.65rem/1.2 var(--display-font)}
+  .pivotal-marker{display:block!important;min-width:0!important;width:1.1rem!important;height:1.1rem;margin:.25rem auto 0;padding:0!important;border:0!important;background:transparent!important}.pivotal-marker span{display:block;width:.55rem;height:.55rem;margin:auto;border-radius:50%;background:var(--warning)}
 
   .confirm {
     margin-top: 0.5rem;

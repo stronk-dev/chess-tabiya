@@ -42,6 +42,35 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
   await expect(page.getByText("Authored commentary withheld", { exact: false })).toHaveCount(0);
 });
 
+test("adaptive guidance keeps a queen-exchange phase change passive and removable", async ({ page }) => {
+  await page.getByLabel("Optional FEN").fill("3qk2r/3ppp2/2b2n2/8/8/8/8/3QK3 w - - 0 1");
+  await page.getByRole("button", { name: "Start game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await expect(page.getByText("Detected by Tabiya's phase bands: middlegame.")).toBeVisible();
+
+  await page.getByText("Assistance", { exact: true }).click();
+  await page.getByLabel("Passive pivotal markers").check();
+  await expect(page.getByRole("dialog", { name: "Recorded change" })).toHaveCount(0);
+
+  await move(page, "d1", "d8");
+  const marker = page.getByRole("button", { name: "Open pivotal marker at ply 1" });
+  await expect(marker).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Recorded change" })).toHaveCount(0);
+
+  await marker.click();
+  const guidance = page.getByRole("dialog", { name: "Recorded change" });
+  await expect(guidance).toContainText("middlegame → endgame, detected by Tabiya's phase bands.");
+  await expect(guidance).toContainText("material-census convention");
+  const rendered = await guidance.innerText();
+  expect(rendered).not.toMatch(/\b[a-h][1-8][a-h][1-8][qrbn]?\b/u);
+  expect(rendered).not.toMatch(/\b(?:[KQRBN](?:[a-h1-8]?x?)?[a-h][1-8]|[a-h](?:x[a-h])?[1-8](?:=[QRBN])?)[+#]?\b/u);
+  expect(rendered).not.toMatch(/\b(?:weak|strong|good|bad|better|worse|advantage|winning|losing|should|must|best|worst|mistake|blunder|punish|wins|loses)\b/iu);
+
+  await guidance.getByRole("button", { name: "Close" }).click();
+  await page.getByLabel("Passive pivotal markers").uncheck();
+  await expect(page.getByRole("button", { name: /Open pivotal marker/ })).toHaveCount(0);
+});
+
 test("Pack B references the Carlsbad entry while its pack prose stays server-withheld", async ({ page }) => {
   const list = await page.request.get("/packs");
   const packs = await list.json() as { id: string; title: string }[];

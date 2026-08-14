@@ -118,6 +118,8 @@ describe("DrillApi", () => {
       }
       if (url.includes("/runs?")) return json({ runs: [] });
       if (url.endsWith("/select-move")) return json(selection);
+      if (url.includes("/human-split")) return json({ nodeId: run.nodes[0]!.id, engine: selection.engine, targetElo: 1600, candidates: [] });
+      if (url.includes("/voice")) return json({ text: "fixture", source: "deterministic", scope: "reading" });
       if (url.includes("/graph")) {
         return json({
           graph: {
@@ -182,6 +184,8 @@ describe("DrillApi", () => {
       policy: { mode: "human_common", policyConfigDigest: run.packDigest! },
       seed: 7,
     });
+    await api.humanSplit(run.id, run.nodes[0]!.id);
+    await api.voice(run.id, run.nodes[0]!.id, "reading");
     await api.move(run.id, { uci: "a2a3" }, "writer-one");
     await api.appendOpponentPly(run.id, selection, "writer-one");
     await api.rewind(run.id, { nodeId: run.nodes[0]!.id }, "writer-one");
@@ -213,6 +217,8 @@ describe("DrillApi", () => {
       "/runs",
       "/runs",
       "/select-move",
+      "/runs/run%20%2F%20one/human-split",
+      "/runs/run%20%2F%20one/voice",
       "/runs/run%20%2F%20one/moves",
       "/runs/run%20%2F%20one/moves",
       "/runs/run%20%2F%20one/rewind",

@@ -150,6 +150,8 @@ class FakeApi implements DrillClientApi {
 
   async shapes(): Promise<readonly import("./api.js").ShapeSummary[]> { return []; }
   async shape(): Promise<import("./api.js").ShapeDocument> { throw new Error("no shapes in fake"); }
+  async humanSplit(_runId: string, nodeId: string): Promise<import("./api.js").HumanSplitPage> { return { nodeId, engine: { id: "maia", name: "Maia", version: "3", seedHonored: true }, targetElo: 1800, candidates: [] }; }
+  async voice(_runId: string, _nodeId: string, scope: import("./api.js").VoicePage["scope"]): Promise<import("./api.js").VoicePage> { return { text: "fixture", source: "deterministic", scope }; }
 
   async runs(): Promise<readonly RunSummary[]> {
     return [];

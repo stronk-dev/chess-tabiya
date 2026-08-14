@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import type { ShapeEntryView } from "./api.js";
-  import { historyFrom, shapeFirings, structuralReading, trajectoryVerdict, type BranchComparison } from "@chess-tabiya/runtime";
+  import type { Capabilities, HumanSplitPage, RunRole, ShapeEntryView, VoicePage } from "./api.js";
+  import { SILENT_ASSISTANCE, classifyPhase, endgameReading, feedbackDeliveryOpen, historyFrom, permittedAssistance, pivotalMarkers, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
   import BranchRail from "./BranchRail.svelte";
@@ -36,6 +36,7 @@
     projectedGrading,
     resistanceSentences,
   } from "./outcome-presentation.js";
+  import { loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
 
   type RewindTarget =
     | { readonly nodeId: string }
@@ -51,6 +52,9 @@
     comparisonBranchIds?: readonly string[] | undefined;
     busy?: boolean;
     error?: string | undefined;
+    capabilities?: Capabilities | undefined;
+    viewerRole?: RunRole | undefined;
+    assistanceStorage?: PreferenceStorage | undefined;
     onMove: (uci: string) => void | Promise<void>;
     onRewind: (target: RewindTarget) => void | Promise<void>;
     onFork: (label?: string, intent?: string) => void | Promise<void>;
@@ -61,6 +65,8 @@
     onPrediction?: (uci: string) => void | Promise<void>;
     onExport: (branchIds?: readonly string[]) => void | Promise<void>;
     onStop: () => void;
+    onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
+    onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
     registerKeyboardRegion: RegisterKeyboardRegion;
   }
 
@@ -74,6 +80,9 @@
     comparisonBranchIds,
     busy = false,
     error,
+    capabilities,
+    viewerRole = "host",
+    assistanceStorage,
     onMove,
     onRewind,
     onFork,
@@ -84,6 +93,8 @@
     onPrediction = () => {},
     onExport,
     onStop,
+    onHumanSplit,
+    onVoice,
     registerKeyboardRegion,
   }: Props = $props();
 
@@ -96,6 +107,10 @@
   let replaying = $state(false);
   let structuralOpen = $state(false);
   let openShapeId: string | undefined = $state();
+  let assistance: AssistanceConfig = $state(SILENT_ASSISTANCE);
+  let openPivotalNodeId: string | undefined = $state();
+  let humanSplit: HumanSplitPage | undefined = $state();
+  let voicePage: VoicePage | undefined = $state();
   let forkLabel = $state("");
   let forkIntent = $state("");
   let replayTimer: ReturnType<typeof setInterval> | undefined;
@@ -197,6 +212,37 @@
       : (run.nodes.find((node) => node.id === previewNodeId) ?? currentNode),
   );
   let structure = $derived(structuralReading(displayedNode.fen));
+  let detectedPhase = $derived(classifyPhase(displayedNode.fen));
+  let endgame = $derived(endgameReading(displayedNode.fen));
+  let assistancePermission = $derived(permittedAssistance({ sessionKind: run.sessionKind, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole }));
+  let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkers(run, run.activeCursor.branchId) : []);
+  let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: marker.kind.replaceAll("_", " ") })));
+  let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
+  let guidedShapes = $derived.by(() => {
+    if (openPivotalNodeId === undefined || assistance.guided !== "live") return [];
+    const target = path.findIndex((node) => node.id === openPivotalNodeId);
+    return shapes.filter((entry) => firings.some((firing) => firing.entryId === entry.id && path.findIndex((node) => node.id === firing.firstNodeId) <= target && path.findIndex((node) => node.id === firing.lastNodeId) >= target));
+  });
+
+  function preferenceStorage(): PreferenceStorage | undefined {
+    if (assistanceStorage !== undefined) return assistanceStorage;
+    if (import.meta.env.MODE === "test") return undefined;
+    try { return globalThis.localStorage ?? undefined; } catch { return undefined; }
+  }
+
+  function setAssistance<Key extends keyof Omit<AssistanceConfig, "version">>(key: Key, value: AssistanceConfig[Key]): void {
+    assistance = Object.freeze({ ...assistance, [key]: value });
+    saveAssistance(run.sessionKind, assistance, preferenceStorage());
+    if (key === "markers" && value === "off") openPivotalNodeId = undefined;
+  }
+
+  async function requestHumanSplit(): Promise<void> {
+    if (onHumanSplit !== undefined) humanSplit = await onHumanSplit(displayedNode.id);
+  }
+
+  async function requestVoice(scope: VoicePage["scope"]): Promise<void> {
+    if (onVoice !== undefined) voicePage = await onVoice(displayedNode.id, scope);
+  }
   function interactiveTarget(event: KeyboardEvent): boolean {
     const target =
       event.target instanceof Node ? event.target : document.activeElement;
@@ -402,6 +448,7 @@
   }
 
   onMount(() => {
+    assistance = loadAssistance(run.sessionKind, preferenceStorage());
     if (regionElement === undefined) {
       throw new Error("Drill keyboard region did not mount");
     }
@@ -462,6 +509,20 @@
           <p>Objective</p>
           <h1 id="drill-title">{pack === undefined ? "No pack is loaded. Nothing is claimed about this position." : packObjective(pack)}</h1>
         </div>
+        <section class="phase-reading" aria-label="Phase reading">
+          {#if pack}<span>This pack declares: {pack.phase}.</span>{/if}
+          <span>{renderPhaseReading(detectedPhase)}</span>
+        </section>
+        <details class="assistance-control">
+          <summary>Assistance</summary>
+          <div class="assistance-grid">
+            <label><input type="checkbox" checked={assistance.markers === "live"} onchange={(event) => setAssistance("markers", event.currentTarget.checked ? "live" : "off")} /> Passive pivotal markers</label>
+            <label><input type="checkbox" checked={assistance.guided === "live"} onchange={(event) => setAssistance("guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
+            <label><input type="checkbox" checked={assistance.humanSplit === "on_request"} disabled={assistancePermission.humanSplit === "locked_off"} aria-describedby={assistancePermission.humanSplit === "locked_off" ? "human-split-locked" : undefined} onchange={(event) => setAssistance("humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move split on request</label>
+            {#if assistancePermission.humanSplit === "locked_off"}<span id="human-split-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
+            {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
+          </div>
+        </details>
         {#if trajectory}
           <section class="trajectory-status" aria-label="Trajectory legs">
             {#each trajectory.legs as leg}
@@ -522,6 +583,8 @@
           rootNodeId={run.nodes[0]?.id}
           {shapeMarkers}
           onOpenShape={(entryId) => (openShapeId = entryId)}
+          pivotalMarkers={pivotalRows}
+          onOpenPivotal={(nodeId) => { openPivotalNodeId = nodeId; humanSplit = undefined; voicePage = undefined; }}
         />
         <div class="quick-actions" aria-label="Run actions">
           <button type="button" onclick={() => (forkOpen = true)}>Fork <kbd>B</kbd></button>
@@ -620,6 +683,23 @@
 {/if}
 
 {#if openShape}<ShapePanel entry={openShape} onClose={() => (openShapeId = undefined)} />{/if}
+{#if openPivotalNodeId !== undefined}
+  <div class="modal-backdrop">
+    <div class="modal guidance-panel" role="dialog" aria-modal="true" aria-labelledby="pivotal-title">
+      <p>Pivotal marker</p><h2 id="pivotal-title">Recorded change</h2>
+      {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
+      {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
+      {#if assistance.guided === "live"}
+        {#each guidedShapes as shape}<section><h3>{shape.name}</h3><p>Named plans for this structure — general to the kind of position, not advice for this one.</p><ul>{#each shape.plans as plan}<li>{plan.label}</li>{/each}</ul></section>{:else}<p class="guidance-sentence">No named structure entry matches this position.</p>{/each}
+      {/if}
+      {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Show recorded human-model split</button>{/if}
+      {#if humanSplit}<p class="guidance-sentence">{humanSplit.engine.name}, rating target {humanSplit.targetElo ?? "unrated"}: {humanSplit.candidates.map((candidate) => `${candidate.moveUci} ${candidate.mass === undefined ? "mass unavailable" : `${Math.round(candidate.mass * 100)}%`}`).join(" · ")}</p>{/if}
+      {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" onclick={() => void requestVoice("marker")}>Revoice this packet</button>{/if}
+      {#if voicePage}<p class="guidance-sentence">{voicePage.text}</p>{/if}
+      <button type="button" onclick={() => (openPivotalNodeId = undefined)}>Close</button>
+    </div>
+  </div>
+{/if}
 </div>
 
 <style>
@@ -742,6 +822,16 @@
     background: var(--panel);
     color: inherit;
   }
+
+  .phase-reading { display:flex; flex-wrap:wrap; gap:.35rem .8rem; color:var(--muted); font-size:.72rem; }
+  .assistance-control { position:absolute; z-index:6; top:.35rem; right:3rem; max-width:24rem; padding:.35rem .55rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); font-size:.75rem; }
+  .assistance-control summary { cursor:pointer; }
+  .assistance-grid { display:grid; gap:.45rem; margin-top:.55rem; }
+  .assistance-grid label { display:flex; gap:.4rem; align-items:center; }
+  .assistance-grid .honest { color:var(--muted); font-size:.68rem; }
+  .guidance-panel { max-height:min(38rem,calc(100dvh - 2rem)); overflow:auto; }
+  .guidance-panel h3 { margin:.6rem 0 .2rem; }
+  .guidance-sentence { color:var(--ink)!important; font:400 .85rem/1.45 var(--display-font)!important; text-transform:none!important; }
 
   .structural-facts {
     max-height: 8rem;

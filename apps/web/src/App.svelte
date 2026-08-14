@@ -433,6 +433,9 @@
         comparisonBranchIds={session.comparisonBranchIds}
         busy={session.busy}
         error={session.error}
+        {capabilities}
+        viewerRole={session.viewer?.role}
+        assistanceStorage={storage}
         onMove={(uci) => controller.move(uci)}
         onRewind={(target) => controller.rewind(target)}
         onFork={(label, intent) => controller.fork(label, intent)}
@@ -443,6 +446,8 @@
         onPrediction={(uci) => controller.recordPrediction(uci)}
         onExport={exportPgn}
         onStop={() => navigate("/play")}
+        onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}
+        onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
       {#if activeLiveDetail}
