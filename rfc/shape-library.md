@@ -1,6 +1,6 @@
 # RFC: Shape library — reusable chess knowledge, authored once (B11)
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/04-content-architecture.md` §0 (the 2026-08-14 split ruling, lines
@@ -224,7 +224,7 @@ New module `packages/schema/src/shape-entry/types.ts`, new living schema
 2020-12, same conventions as the pack schema):
 
 ```ts
-import type { StructuralExpression } from "@chess-tabiya/runtime";
+import type { StructuralExpression } from "@chess-tabiya/schema/drill-pack";
 
 export type ShapePhase = "opening" | "middlegame" | "endgame";
 
@@ -262,6 +262,11 @@ export interface ShapeEntryDefinition {
 ```
 
 Schema rules, all normative:
+
+- **The schema package remains dependency-rooted.** The TypeScript type reuses the existing
+  schema-owned `StructuralExpression` export from `@chess-tabiya/schema/drill-pack`; it must
+  not import the runtime package, because runtime already depends on schema. Runtime owns
+  evaluation, not the artifact type.
 
 - **Every object is closed.** `additionalProperties: false` at every level, including
   `provenance`. The pack format's `provenance` passthrough is D25's whole hazard and it
@@ -367,6 +372,10 @@ against it (§4b).
 |---|---|
 | `GET /shapes` | summaries: `id`, `version`, `digest`, `name`, `phases`, `licence`, `channel`, `publisherHandle?` |
 | `GET /shapes/:id` | the full projected entry plus `x-shape-digest`; `SHAPE_NOT_FOUND` otherwise |
+
+`SHAPE_NOT_FOUND` is added to the closed `ServerErrorCode` union and maps to HTTP 404.
+`/shapes` and `/shapes/*` are added to `application.ts`'s API-path dispatch; neither may fall
+through to the static SPA response.
 
 Unlike a pack, a shape entry is learner-facing **in its entirety by design** — there is
 nothing to withhold, because nothing in it is an answer to any particular run (§7 is the
@@ -1193,6 +1202,11 @@ None.
 
 ## Changelog
 
+- 2026-08-14 (Codex implementation review): status → implementing. Corrected the
+  `ShapeEntryDefinition` sample to reuse the schema-owned structural-expression type instead
+  of creating a schema → runtime → schema package cycle. Pinned the two closed integration
+  surfaces the new routes require: `SHAPE_NOT_FOUND` maps to HTTP 404, and `/shapes*` is API
+  traffic rather than static-SPA traffic. Product semantics are unchanged.
 - 2026-08-14 (adversarial review, fixed in place): (1) §2a — the "no field holds a move"
   claim was falsified by §10a's own SAN-bearing prose; restated as a machine-readable-field
   claim and given a real enforcement triad: new `SHAPE_PROSE_CONTAINS_FEN` refusal (§3c,
