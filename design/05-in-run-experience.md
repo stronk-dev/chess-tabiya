@@ -93,6 +93,21 @@ nothing except that the interface is coy. Where the line falls between rungs 0
 and 2 during committed play is an open question (§5), but it is a line, not a
 switch.
 
+### 3a-i. The disclosure model as shipped (absorbed from the RFC archive, 2026-08-14)
+
+ADR-0006's boundary is now three concrete policies and two predicates, and design
+should say so rather than leaving it in archived RFCs: **`feedbackDisclosed`**
+(monotonic — has anything been revealed) and **`feedbackDeliveryOpen`** (may
+staged evidence be applied *now*) are deliberately split; `delayed_checkpoint`
+and `segment_end` disclose at their boundaries; **`attempt_end`** is the third,
+pack-less boundary and it **re-closes on the next committed move** — the rule
+that stops a Just Play reveal becoming a live engine feed; **`outcome.reached`
+discloses under every policy** (a finished run has nothing left to contaminate);
+and **`immediate_guard`** is the pack-declared exception for the on-ramp — the
+guard fires post-commit because the pack consented for the learner's band. All
+five statements are the same principle: disclosure follows commitment, and the
+run — not the viewer — carries the barrier.
+
 ## 3-forms. Presentation is orthogonal to source
 
 Owner, 2026-08-14: *"assistance comes in many forms — from engine (Maia,
@@ -326,8 +341,9 @@ falls to **rung 0**:
 | What tactic is each side building toward? | **not deterministic** — rung 2/3 territory | — |
 
 **Four of five detections are free and exact within their stated scope** (see the rung-0 scope corrections in §3). The product can say
-"after a4, Black's knight can never use b5 again" as flatly as it says a move is
-legal, because it is the same kind of statement. What it may not say for free is
+"while the current pawn files remain, no opposing pawn can attack b5 by
+advancing" as flatly as it says a move is legal — the scoped form (§3); the
+unscoped "never again" is exactly what the scope correction forbids. What it may not say for free is
 whether that mattered.
 
 This is the shape of the whole assistance problem: **the facts are rung 0 and the

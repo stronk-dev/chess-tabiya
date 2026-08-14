@@ -39,8 +39,8 @@ an owner review found them being used as undefined jargon.
   the product says "try that again", an attempt is the thing being re-tried.
 - **Return loop:** the answer to "why would you open this on Tuesday?" It is the
   scheduling and progress layer that brings a learner back to material they have
-  already attempted. The product currently has no answer here; nothing records
-  what was attempted, so nothing can bring you back to it.
+  already attempted. **Shipped 2026-08-13** (`return-and-progression`): attempts
+  are recorded, scheduled on the blocked/varied ladder, and surfaced at `/learn`.
 - **Concept:** a named idea — break timing, the minority attack, opposition —
   that appears across many packs and phases. Concepts are how the product can
   ever say "you keep mistiming the break" instead of "you lost that position".
@@ -104,6 +104,14 @@ outside v0. The owner breadth ruling in `03-product-breadth.md` supersedes that
 surface-level deferral: external-handoff Arena, Twitch/stream, academy, and
 Just Play must fit the shared product and reach a minimal real workflow before
 content depth. Native matchmaking remains later implementation depth.
+
+**As shipped (absorbed 2026-08-14):** Line Drill grades **membership** —
+`on_line` / `classified_deviation` / `unknown`, never a score; Trajectory grades
+**per leg** with the leg index as the monotone quantity; `save` requires the
+starting assessment *worse* and grades on reaching the draw floor, `resist` on
+survival to an authored checkpoint (it may succeed inside a loss); an **attempt**
+is fork-rooted — its identity is the branch, keyed by session, pack and the fork
+node's transposition.
 
 ## Entry contexts are not drill modes
 

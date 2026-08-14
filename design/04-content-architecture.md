@@ -280,6 +280,13 @@ centre → good-vs-bad-bishop endings · KID → closed chain → king-race conv
 · Caro Advance → space-vs-break → 4v3 rook endings · Nimzo → doubled c-pawns →
 bishop-pair technique.
 
+**Trajectory form, as shipped (absorbed 2026-08-14):** a trajectory is **one
+pack with `legs`** — one run, objective *replaced* per leg (never `transitioned`),
+causality by `producedBy` move history, no stitching; "family" language above is
+a catalogue relation, not a runtime object. **Syzygy grounds run terminals via
+material reduction, not pack roots** — the 4v3 family is eleven pieces; what a
+tablebase verifies is where play *arrives*.
+
 ## 6. On-ramp layer (1000–1400)
 
 Same runtime, different knobs (`design/00-thesis.md`): 2–8-ply branches,

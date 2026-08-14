@@ -68,13 +68,19 @@ What follows mechanically, and is scheduled rather than open:
   justified by keeping serving near-static; per-user server-side engine work now
   has a bill attached. The archive's own scoring (self-hosted 9/10, SaaS 5/10)
   is context for that cost, not a reason to revisit the ruling.
+- **No operator account exists (owner ruling 2026-08-12/14).** Administrative
+  capability lives in environment and configuration, never a privileged user;
+  deleted learners' runs reassign to `__legacy` (sessions and grants cascade).
+- **Reads are byte-identical per run, and the only anonymous access is a scoped
+  token** (`story_read`, `session_join`) — no viewer-dependent projections
+  anywhere; the withholding barrier belongs to the run, never the viewer.
 - **ADR-0004's revisit trigger has fired.** A fired trigger is not a reversal:
   a modular monolith remains a defensible architecture for a hosted deployment.
   It needs an explicit re-decision that adds the auth boundary, not a rewrite.
 
 ## Platform — OPEN (exploration Q3)
 
-Working default: web-first (TypeScript/React + chessground per the archive sketch),
+Working default: web-first (TypeScript/**Svelte 5** + chessground — ruled 2026-08-12; the archive sketch said React),
 responsive. Mobile-native excluded from v0 (three times over, in the brief's scope
 docs). The unexamined question: whether the rehearsal loop — short, repeatable,
 tactile — is actually a strong mobile-web/PWA fit. Revisit after Q1a/Q1b show evidence.

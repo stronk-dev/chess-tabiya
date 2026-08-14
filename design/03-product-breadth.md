@@ -69,8 +69,8 @@ the application's identity.
 
 - Phase-oriented discovery: opening/early game, middlegame, endgame, and
   connected trajectories are first-class navigation and filters.
-- Concept/skill progress, due episodes, blocked versus varied repetition, SRS
-  over episodes/concepts, related-position transfer, and retry history.
+- Concept progress, due attempts, blocked versus varied repetition, scheduling
+  over **attempts** (concepts select, never schedule — `01` ruling), related-position transfer, and retry history.
 - Optional personal-history relevance can recommend packs or positions but
   never becomes the required entry point or product identity.
 - On-ramp experiences, anti-opening packs, time-pressure variants, and
@@ -109,8 +109,10 @@ the application's identity.
 - Author theory boundaries, objectives, timing windows, acceptable moves,
   model-game spines, transitions, claims, and transfer positions.
 - Corpus search and candidate mining propose material; breadth proof produces
-  at least one unpublished candidate through the real pipeline. Nothing
-  becomes published teaching without review.
+  at least one unpublished candidate through the real pipeline. Nothing claims a
+  review that never happened: publication is by **channel** (official/community,
+  server-derived provenance — owner ruling 2026-08-13), and honest provenance is
+  the safeguard.
 - Community contribution and open pack interchange are supported by the same
   schema, not a private author-only format.
 
@@ -166,8 +168,9 @@ section depends on it.
   file, half-open file, blocked diagonal, pawn-skeleton signature. Both a
   *readable* for the learner and an *authorable predicate* for objectives
   (`05` §5c). Exploration **Q4b** owns their definition.
-- **Denial and prophylaxis reading** — "after a4, a Black knight can never use b5
-  again." A denial move is invisible to every eval-first tool because nothing
+- **Denial and prophylaxis reading** — "while the a4 pawn stands, no opposing
+  pawn can attack b5 by advancing" (current, scoped — never "never again", per
+  the §3 correction: pawns advance and capture). A denial move is invisible to every eval-first tool because nothing
   happened; this is the clearest thing rung 0 sees that an evaluation cannot
   explain.
 - **Discovered-consequence sight** — see not only what a piece attacks now, but
