@@ -1,6 +1,6 @@
 # RFC: Stated reasoning and open-answer key-point coverage
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude (drafted for owner review)
 - **Created:** 2026-08-14
 - **Design refs:** `design/05-in-run-experience.md` §3 (assistance ladder, rungs 0/5/6),

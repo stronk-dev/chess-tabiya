@@ -1,6 +1,6 @@
 # Open-answer grading implementation plan
 
-Status: implementing
+Status: implemented
 
 1. Widen the pack and run contracts to `stated_reasoning` and `reasoning.recorded`; add shared validation, deterministic matching, and frozen-literal migration 17.
 2. Add recording, occurrence-scoped disclosure, the grant-scoped reasoning projection, previous-attempt lookup, and the optional quotation-only comparator.
