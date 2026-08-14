@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
@@ -46,19 +46,20 @@ const negativeFixtures = [
   "empty-authored-boundary.invalid.json",
   "deviation-without-class.invalid.json",
   "malformed-window-trigger.invalid.json",
+  "opponent-policy-unknown-key.invalid.json",
 ] as const;
 
 function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.11", () => {
+describe("drill_pack.schema.json v0.12", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.11",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.12",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.11");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.12");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
@@ -73,7 +74,7 @@ describe("drill_pack.schema.json v0.11", () => {
     expect(typed.$defs.structuralFeature.oneOf.map((branch: any) => branch.properties.kind.const)).toEqual([...STRUCTURAL_FEATURE_KINDS]);
   });
 
-  it("pins the three legacy schema passthroughs and keeps structural shapes closed", () => {
+  it("pins the two legacy schema passthroughs and keeps structural shapes closed", () => {
     const paths: string[] = [];
     const walk = (value: unknown, path: string): void => {
       if (value === null || typeof value !== "object") return;
@@ -83,7 +84,7 @@ describe("drill_pack.schema.json v0.11", () => {
       for (const [key, child] of Object.entries(object)) walk(child, `${path}/${key}`);
     };
     walk(schema, "");
-    expect(paths).toEqual(["/$defs/opponentPolicy", "/$defs/feedbackClaim", "/$defs/provenance"]);
+    expect(paths).toEqual(["/$defs/feedbackClaim", "/$defs/provenance"]);
     expect((schema as any).$defs.structuralFeature.oneOf.every((branch: any) => branch.additionalProperties === false)).toBe(true);
     expect((schema as any).$defs.structuralExpression.oneOf.every((branch: any) => branch.additionalProperties === false)).toBe(true);
   });
@@ -127,6 +128,36 @@ describe("drill_pack.schema.json v0.11", () => {
   it.each(negativeFixtures)("rejects the RFC negative fixture %s", (filename) => {
     const fixture = negativeFixture(filename);
     expect(validate(fixture), JSON.stringify(validate.errors)).toBe(false);
+  });
+
+  it("rejects unknown opponent-policy keys at their exact boundary", () => {
+    expect(validate(negativeFixture("opponent-policy-unknown-key.invalid.json"))).toBe(false);
+    expect(validate.errors).toContainEqual(expect.objectContaining({
+      keyword: "additionalProperties",
+      instancePath: "/opponentPolicy",
+      params: { additionalProperty: "maiaModel" },
+    }));
+  });
+
+  it("validates every committed pack document under the closed policy", () => {
+    const drafts = readdirSync(new URL("../../../content/drafts/", import.meta.url), { withFileTypes: true })
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
+      .map((entry) => new URL(`../../../content/drafts/${entry.name}`, import.meta.url));
+    const candidates = readdirSync(new URL("../../../content/candidates/", import.meta.url), { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => new URL(`../../../content/candidates/${entry.name}/pack.json`, import.meta.url))
+      .filter((url) => existsSync(url));
+    const documents = [
+      new URL("../../../schemas/drill_pack.example.json", import.meta.url),
+      new URL("../../../schemas/fixtures/drill-pack/terminal-outcome.browser.json", import.meta.url),
+      ...drafts,
+      ...candidates,
+    ];
+    expect(documents.length).toBeGreaterThan(2);
+    for (const document of documents) {
+      const value = JSON.parse(readFileSync(document, "utf8"));
+      expect(validate(value), `${document.pathname}: ${JSON.stringify(validate.errors)}`).toBe(true);
+    }
   });
 
   it("accepts every frozen simple-trigger kind and the timing-window form", () => {

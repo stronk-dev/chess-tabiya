@@ -19,3 +19,13 @@ adjacency, and matching branch/node metadata. Tests cover the original coinciden
 regression at runtime and orchestrator levels, a literal pre-guard zero-length event accepted by
 the authored-feedback path, forged metadata refusal, and a fast-check 1:1 invariant. The focused
 44-test slice and workspace typecheck passed.
+
+## 2026-08-14 — D22 pack policy closure
+
+Pack schema 0.12 closes `opponentPolicy`, leaving only the two explicitly deferred legacy open
+objects. A dedicated negative fixture proves an invented `maiaModel` key fails at
+`/opponentPolicy`; the corpus test discovers and validates the living fixture, browser fixture,
+all draft packs, and every emitted candidate pack. The first test run exposed that
+`content/candidates/priority/` is a metadata directory rather than a candidate; discovery now
+includes only directories containing `pack.json`. All 28 schema tests and workspace typecheck
+passed, with no content bytes changed.
