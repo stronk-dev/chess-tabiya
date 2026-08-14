@@ -1,6 +1,6 @@
 # RFC: Shape library — reusable chess knowledge, authored once (B11)
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/04-content-architecture.md` §0 (the 2026-08-14 split ruling, lines
@@ -1202,6 +1202,10 @@ None.
 
 ## Changelog
 
+- 2026-08-14: implemented. Shape entry v0.1, pack schema v0.11, migration 10,
+  source-derived registry/studio channels, derived firings and passive marker/panel, and the
+  minimal Just Play position player shipped; canonical behavior distilled to
+  `docs/shape-library.md` and amended system docs.
 - 2026-08-14 (Codex implementation review): status → implementing. Corrected the
   `ShapeEntryDefinition` sample to reuse the schema-owned structural-expression type instead
   of creating a schema → runtime → schema package cycle. Pinned the two closed integration

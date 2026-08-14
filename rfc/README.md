@@ -8,8 +8,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `structural-reading.md` | implementing | `archive/drill-pack-format.md`, `archive/outcome-drill-grading.md`, `archive/explanation-grounds.md` | B9 — twelve deterministic author predicates plus a finite learner observation projection, current denial/eviction arithmetic, one-ply discovered consequence, and attributed structural naming. Pack schema **0.10**, no migration |
-| `adaptive-guidance.md` | draft | `archive/app-shell.md`, `archive/drill-client.md`, `archive/explanation-grounds.md`, `archive/pack-optional-runs.md` | B10 — banded phase classification with first-class abstention, per-context assistance configuration (one permission function, disclosure-gated endpoints), four author-free pivotal detectors as passive timeline markers, endgame-type census with Lucena/Philidor/Vancura technique naming, and the evidence-packet LLM-voice contract with machine check and provider seam. Depends on `structural-reading.md` (B9) and names `shape-library.md` (B11) for plan/technique bodies. Pack schema unchanged (0.10), run schema unchanged (0.8), **no migration** |
-| `shape-library.md` | implementing | `archive/drill-pack-format.md`, `archive/pack-studio.md`, `archive/drill-client.md`, `structural-reading.md` | B11 — the shape-entry artifact (new single-writer schema `shape_entry` **0.1**, RFC 8785 digest, official/community channels), additive pack references, firing as a derived projection with a passive timeline marker, studio write path, four official entries with the Carlsbad extraction. Pack schema **0.11**, migration **10** |
+| `adaptive-guidance.md` | draft | `archive/app-shell.md`, `archive/drill-client.md`, `archive/explanation-grounds.md`, `archive/pack-optional-runs.md`, `archive/shape-library.md` | B10 — banded phase classification with first-class abstention, per-context assistance configuration (one permission function, disclosure-gated endpoints), four author-free pivotal detectors as passive timeline markers, endgame-type census with Lucena/Philidor/Vancura technique naming, and the evidence-packet LLM-voice contract with machine check and provider seam. Depends on `structural-reading.md` (B9) and the implemented shape library for plan/technique bodies. Pack schema unchanged (0.11), run schema unchanged (0.8), **no migration** |
 
 The completed breadth batch and its dependency history are kept in the archive
 documents and planning logs rather than duplicated in this index.
@@ -36,7 +35,7 @@ landing order, not lost data.
 | 0.8 | `archive/pack-studio.md` | implemented — source-derived channel; `provenance.reviewStatus` narrowed to `schema_example \| draft \| published`; typed `reviewers` removed |
 | 0.9 | `archive/n-way-comparison.md` | implemented — prediction `grading` removed; numbers are recorded and rendered without a verdict |
 | 0.10 | `structural-reading.md` | claimed 2026-08-13, draft — `$defs/structuralFeature` and `$defs/structuralExpression`, a fourth `fenPredicate` variant, a fifth `successCondition` kind (`structural_feature`), `$defs/file`. No migration: rung-0 facts are never persisted |
-| 0.11 | `shape-library.md` | claimed 2026-08-14, implementing — additive only: optional top-level `shapes` (referenced shape-entry ids) and optional `planClass.shapePlan`. `planClasses` stays fully valid; no committed digest moves (the `$id` is not part of any pack document) |
+| 0.11 | `archive/shape-library.md` | implemented — additive only: optional top-level `shapes` (referenced shape-entry ids) and optional `planClass.shapePlan`. `planClasses` stays fully valid; no committed digest moves (the `$id` is not part of any pack document) |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.
@@ -88,7 +87,7 @@ writing it into a draft.
 | 7 | 6→7 | `archive/pack-studio.md` | implemented — studio drafts, retained playtest bytes, and registered packs |
 | 8 | 7→8 | `archive/n-way-comparison.md` | implemented — run schema v0.8, branch origin and prediction event |
 | 9 | 8→9 | `archive/live-session-platform.md` | implemented — live-session tables; create-table/index only |
-| 10 | 9→10 | `shape-library.md` | claimed 2026-08-14, implementing — `shape_drafts` and `registered_shapes`; create-table/index plus the pack-style account-deletion tombstone. Run schema stays 0.8 by design (firings are derived projections, never events) |
+| 10 | 9→10 | `archive/shape-library.md` | implemented — `shape_drafts` and `registered_shapes`; create-table/index plus the pack-style account-deletion tombstone. Run schema stays 0.8 by design (firings are derived projections, never events) |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
@@ -109,9 +108,9 @@ drafts the migration.
 
 ## Cross-draft ownership pins
 
-Instituted 2026-08-14 after `shape-library.md` and `adaptive-guidance.md`, drafted in
+Instituted 2026-08-14 after `archive/shape-library.md` and `adaptive-guidance.md`, drafted in
 parallel, **both** scoped the minimal Just Play position player — the register-collision
-class on an implementation surface instead of a number. Pin: **`shape-library.md` owns the
+class on an implementation surface instead of a number. Pin: **`archive/shape-library.md` owns the
 position player** (it scoped it concretely as its largest surface, and its acceptance test
 cannot exist without it); `adaptive-guidance.md` names it in `Depends on:` and ships no
 client entry of its own. Landing order follows: shape-library before adaptive-guidance.
@@ -154,6 +153,7 @@ before re-attempting this territory.
 | `archive/pack-studio.md` | implemented | `docs/pack-studio.md`, `docs/drill-pack-format.md`, `docs/app-shell.md` |
 | `archive/n-way-comparison.md` | implemented | `docs/n-way-comparison.md`, `docs/branch-runtime.md`, `docs/explanation-grounds.md`, `docs/drill-pack-format.md` |
 | `archive/live-session-platform.md` | implemented | `docs/live-sessions.md`, `docs/identity-and-authorization.md`, `docs/app-shell.md` |
+| `archive/shape-library.md` | implemented | `docs/shape-library.md`, `docs/drill-pack-format.md`, `docs/drill-client.md`, `docs/pack-studio.md` |
 
 ## The archive sketches are quarry, not RFCs
 

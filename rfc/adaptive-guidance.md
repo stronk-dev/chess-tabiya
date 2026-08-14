@@ -17,9 +17,9 @@
 - **Depends on:** **`rfc/structural-reading.md`** (B9, implementing) — the twelve feature
   predicates, `structuralReading`/`structuralDelta` (`packages/runtime/src/structure.ts:248,283`),
   the structure catalogue, and the no-valence sentence rule are the vocabulary this RFC
-  classifies and speaks with; **`rfc/shape-library.md`** (B11, drafted in parallel), for **two**
+  classifies and speaks with; **`rfc/archive/shape-library.md`** (B11, implemented), for **two**
   things. First, **the minimal Just Play position player and its client entry, which
-  `shape-library.md` owns outright** (cross-draft ownership pin, `rfc/README.md`
+  `archive/shape-library.md` owns outright** (cross-draft ownership pin, `rfc/README.md`
   §Cross-draft ownership pins, 2026-08-14): this RFC ships **no client entry of its own** —
   no Play-screen starter, no route, no capability-surface flip — and its browser acceptance
   (criterion 13) runs on the player the sibling ships, which the pinned landing order
@@ -35,7 +35,7 @@
   `rfc/archive/app-shell.md` (routes and capabilities)
 - **Parent / amends:** **`rfc/archive/app-shell.md`** (the capability registry gains a
   `llm: "none" | "external"` provider state; the `justPlay`/`fromPosition` surface rows are
-  **not** amended here — they flip with the position player `rfc/shape-library.md` owns),
+  **not** amended here — they flipped with the position player `rfc/archive/shape-library.md` owns),
   **`rfc/archive/drill-client.md`** (the timeline gains
   passive marker annotations and the run screen gains the assistance control),
   **`rfc/archive/explanation-grounds.md`** (two disclosure-gated read endpoints join the
@@ -144,7 +144,7 @@ claiming a seam that is not there kills a draft as surely as re-shipping one tha
   honestly: `justPlay` and `fromPosition` are hard-coded `"unavailable-here"`
   (`apps/server/src/capabilities.ts:120-127`). B10's acceptance scenario is a Just Play game;
   the client entry that closes this gap — and the flip of those two capability rows — is
-  **owned by `rfc/shape-library.md`** (cross-draft ownership pin, `rfc/README.md`), lands
+  **owned by `rfc/archive/shape-library.md`** (cross-draft ownership pin, `rfc/README.md`), lands
   before this RFC, and is consumed here through `Depends on:`. This RFC's client surface (§8)
   starts at the timeline and the assistance control, not at run creation.
 - **The LLM provider is a typed absence.** `CapabilityProviders.llm` is the literal type
@@ -171,7 +171,7 @@ run does not already contain.
 
 Explicitly outside, each with the reason:
 
-- **Shape entries, plan prose, technique bodies** — B11 (`rfc/shape-library.md`, drafted in
+- **Shape entries, plan prose, technique bodies** — B11 (`rfc/archive/shape-library.md`, implemented in
   parallel). This RFC consumes shape entries through one typed reference (§5b, §6a) and renders
   honest absence where none resolves. It defines no shape trigger, no entry format, no
   authoring path.
@@ -682,7 +682,7 @@ or h-file, which is file arithmetic). Each provenance note states that the name 
 endgame-literature name and the trigger is Tabiya's material-census convention.
 
 **The body of a technique is a shape entry.** "The technique is to build a bridge" is plan
-content — exactly what `rfc/shape-library.md` exists to author — so `shapeEntryId` is the seam:
+content — exactly what `rfc/archive/shape-library.md` exists to author — so `shapeEntryId` is the seam:
 when the library ships an entry, opening the technique renders it under its authored
 provenance; until then the surface renders **honest absence**: "Named technique: Lucena
 position (standard endgame literature). No technique entry is available yet." A recognizable
@@ -822,7 +822,7 @@ Nothing in any cell opens itself, interrupts, or carries a count on a closed con
 
 **This RFC ships no run-creation surface.** The Just Play entry, the position player, and the
 flip of the `justPlay`/`fromPosition` capability rows (`capabilities.ts:120-127`) are owned by
-`rfc/shape-library.md` under the cross-draft ownership pin (`rfc/README.md`) and land before
+`rfc/archive/shape-library.md` under the cross-draft ownership pin (`rfc/README.md`) and landed before
 this RFC does. Everything below decorates or configures a run that already exists, whichever
 RFC's surface created it, and every piece works identically on pack and position sessions
 (§9, last row).
@@ -969,7 +969,7 @@ today, except the MultiPV report widening of a call the selector already makes.
     a 60-ply Just Play fixture, recorded into the existing latency artifact; 100 ms worry /
     200 ms intervention, measured not microbenchmarked.
 13. **Browser: the B10 scenario.** In `tests/browser/drill.spec.ts`: start a Just Play run
-    through the position player `rfc/shape-library.md` ships (`Depends on:`; the pinned
+    through the position player `rfc/archive/shape-library.md` ships (`Depends on:`; the pinned
     landing order guarantees it exists) from a late-middlegame FEN with markers enabled; play a scripted
     sequence through a queen trade that crosses `M ≤ 13`; assert (a) a passive phase-change
     marker appears on the timeline and nothing opened by itself; (b) opening it names the
@@ -986,7 +986,7 @@ today, except the MultiPV report widening of a call the selector already makes.
     no shape-entry authoring); `docs/README.md` gains its row;
     `docs/explanation-grounds.md` gains the two gated endpoints under its withholding section;
     `docs/app-shell.md` records the `llm` provider-type widening (the `justPlay`/
-    `fromPosition` surface-row changes are `rfc/shape-library.md`'s to document).
+    `fromPosition` surface-row changes are `rfc/archive/shape-library.md`'s to document).
 
 ## Open questions
 
@@ -997,7 +997,7 @@ None.
 - 2026-08-14 (adversarial review, fixed in place): **(1) Ownership-pin violation removed** —
   the draft shipped the minimal Just Play client entry (old §8a) and flipped the
   `justPlay`/`fromPosition` capability rows, in direct conflict with the cross-draft
-  ownership pin (`rfc/README.md`: `shape-library.md` owns the position player;
+  ownership pin (`rfc/README.md`: `archive/shape-library.md` owns the position player;
   this RFC ships no client entry). The entry, player and capability-row flip are now
   consumed through `Depends on:` under the pinned landing order; §8 ships only the timeline
   markers and the assistance control, and criterion 13 runs on the sibling's player.

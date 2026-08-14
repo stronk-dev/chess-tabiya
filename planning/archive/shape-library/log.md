@@ -39,3 +39,20 @@ Verification at this checkpoint: 343 unit/integration tests and scaffold/package
 The new browser Just Play acceptance independently drove Black's c-pawn into a Carlsbad, opened
 all six plans, and proved the event count stayed unchanged. The complete browser gate is rerun at
 lifecycle closeout.
+
+## 2026-08-14 — Codex lifecycle closeout
+
+Canonical behavior is distilled in `docs/shape-library.md`; drill-pack, client, studio, and
+documentation indexes are reconciled. Shape Library is implemented and archived after both
+zero-retry verification gates passed on the final tree. Adaptive Guidance now depends on the
+archived system and no longer repeats its position-player or capability work.
+
+### Closeout correction
+
+The first complete browser run after that entry was written failed one newly-added Pack B
+assertion: the mock opponent chose the authored `...a5` sibling rather than `...Nf8`, so the
+test incorrectly expected the `plan-choice` checkpoint. No product behavior failed. The test
+now asserts the contract available on either branch: the public shape panel renders generic
+entry prose while the pack-specific residue remains withheld. The subsequent zero-retry suite
+passed 13 tests with the optional Maia latency test skipped. The final unit gate passed 344 tests
+across 60 files.

@@ -101,9 +101,11 @@ or stale registry entry never opens any engine-evidence surface.
 
 `RunStateStore` projects either session kind without a pack dependency. The
 existing drill-session controller remains a pack player and explicitly refuses
-to resume a position run with “the position player is not built yet”; this
-prevents a resume card from trying to fetch a pack named `null` while Just Play
-and from-position entry remain separate breadth increments.
+to resume a position run without fetching a pack. The Play route now supplies Just Play:
+initial position or legal FEN, learner side, and human-common or strong-engine resistance.
+The controller rebuilds opponent requests from persisted run identity, including initial
+opponent turns, and the ordinary board/timeline/branch/compare/export surfaces remain active.
+The objective region explicitly says that no pack is loaded and nothing is claimed.
 
 The public pack projection still omits annotations, deviations, claims, plan
 classes, concepts, and checkpoint triggers instead of relying on client-side
@@ -244,6 +246,11 @@ authored, unproved claim. The client never infers which policy ran from an
 engine identity and always says that recorded resistance is not proof of
 perfect play. Non-terminal checkpoint resolution says that the attempt ended,
 not that the position was proved.
+
+Shape-library matches are derived over the active played path. Their passive timeline
+markers (including a ply-0 root row) open an attributed detection-and-plans panel without
+emitting events or changing feedback disclosure. Pack runs evaluate referenced entries;
+Just Play evaluates the served catalogue.
 
 ## Application shell and fitted regions
 

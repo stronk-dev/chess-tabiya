@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.10; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.11; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -16,14 +16,14 @@ Version 0.9 removes prediction `grading`. A prediction interaction carries only
 `type: prediction` and optional `flipBoard`; recorded policy mass and rank are
 shown as numbers and never turned into a correctness verdict.
 
-Version 0.10 adds a closed twelve-kind `structuralFeature` vocabulary, recursive boolean
+Version 0.11 retains v0.10's closed twelve-kind `structuralFeature` vocabulary and recursive boolean
 `structuralExpression`, a `structuralFeature` FEN predicate, and the `structural_feature` success
 condition. Every added object is closed. Structural facts derive from the run FEN and do not change
 the run schema or storage version; see `docs/structural-reading.md`.
 
 `schemas/drill_pack.example.json` is the living Najdorf schema fixture. The
 fixture and schema under `archive/brief-v2/` remain frozen v0.1 inputs and are
-tested only against each other. The v0.1 fixture intentionally fails v0.5 because
+tested only against each other. The v0.1 fixture intentionally fails v0.11 because
 it has no required `feedbackPolicy` and uses superseded fields.
 
 ## Implemented v0.5 shape
@@ -183,3 +183,8 @@ declare an opponent mode it cannot select only when capabilities expose that
 refusal with a concrete reason; feedback timing has no such negotiation path,
 so unsupported feedback values are not declared. Pack summaries carry an
 optional phase as a nullable value rather than guessing from the position.
+
+Version 0.11 also adds optional `shapes` entry ids and optional
+`planClass.shapePlan {shape, plan}` references. Resolution is registry-backed at server load
+and studio registration; unknown entries, references that bypass `pack.shapes`, and unknown
+plan ids are refused. Inlined plan classes remain fully supported.

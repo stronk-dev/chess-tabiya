@@ -60,3 +60,10 @@ Schema 0.8 narrows `reviewStatus` to `schema_example | draft | published` and re
 typed `reviewers` property. Because provenance remains open for historical metadata, old
 `reviewers` arrays still parse but have no trust-bearing consumer. Published packs require
 sources; Studio alone writes the published state.
+## Shape-entry authoring
+
+Shape-entry authoring extends the pack workflow described above. Shape drafts use
+`/shapes/drafts`, digest-based `If-Match` updates, `/lint` with an optional probe FEN,
+immutable `/register`, and `/shapes/:id/export`. Official ids are reserved; channel is
+server-derived. Migration 10 stores `shape_drafts` and `registered_shapes`, and account
+deletion withdraws mutable drafts while retaining published bytes and attribution.

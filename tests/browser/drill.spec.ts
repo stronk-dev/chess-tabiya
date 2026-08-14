@@ -53,11 +53,12 @@ test("Pack B references the Carlsbad entry while its pack prose stays server-wit
   expect(projected).not.toHaveProperty("successConditions");
 
   await page.getByRole("article").filter({ hasText: pack.title }).getByRole("button", { name: /Open position/ }).click();
-  await expect(page.getByRole("heading", { name: "The tabiya: choose a plan before you move" })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Carlsbad structure/ })).toBeAttached();
+  const marker = page.getByRole("button", { name: /Carlsbad structure/ });
+  await expect(marker).toBeVisible();
+  await marker.click();
   const generic = "Two queenside pawns advance against three";
   await expect(page.getByText(generic, { exact: false })).toHaveCount(1);
-  await expect(page.getByText("In this tabiya the plan is already supported", { exact: false })).toHaveCount(1);
+  await expect(page.getByText("In this tabiya the plan is already supported", { exact: false })).toHaveCount(0);
 });
 
 test("Live turns a run into a session and exposes a chrome-free overlay", async ({ page }) => {
