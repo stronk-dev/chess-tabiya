@@ -1,6 +1,6 @@
 # RFC: Adaptive guidance — live classification, assistance configuration, pivotal markers, and the voice contract
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/05-in-run-experience.md` §3 (the ladder, lines 54-85), §3a (silence and
@@ -46,20 +46,19 @@
 - **Supersedes / superseded by:** —
 - **Migration:** **none, and that is normative.** Run schema stays **0.8**
   (`DRILL_RUN_SCHEMA_VERSION`, `packages/schema/src/index.ts:1`) and `STORAGE_VERSION` stays
-  **9** (`apps/server/src/storage.ts:265`; `rfc/README.md` migration register). §1d: a classification, a marker, and an assistance
+  **10** (`apps/server/src/storage.ts:287`; `rfc/README.md` migration register). §1d: a classification, a marker, and an assistance
   preference are all pure functions or preferences over the persisted record; persisting any of
   them would create a second source of truth that can drift from the run. B9's §1c law, one gate
   up.
-- **Pack schema:** **unchanged, 0.10.** This RFC adds no authored field. The author's phase is
+- **Pack schema:** **unchanged, 0.11.** This RFC adds no authored field. The author's phase is
   the shipped `phase` (`packages/schema/src/drill-pack/types.ts:24-25`,
   `schemas/drill_pack.schema.json:24-26`); assistance configuration is deliberately not a pack
   field (§3e).
-- **Baselines, re-measured 2026-08-14 (review pass):** 321 unit tests across 55 files, all
-  passing on a quiet machine (`pnpm vitest run`). The envelope assertion at
-  `packages/runtime/src/structure.test.ts:95` remains D27's ledgered flake class
-  (`design/BACKLOG.md`): it has measured 103.5 ms under parallel-agent load and passes on a
-  quiet machine — machine-dependent, owned by the B9 implementation, not touched here. Pack
-  schema 0.10 (`DRILL_PACK_SCHEMA_VERSION`, `packages/schema/src/index.ts:2`) and migration 9
+- **Baselines, re-measured 2026-08-14 after the B11 lifecycle:** 344 unit tests across 60 files,
+  all passing (`ENGINES_REQUIRED=1 make verify`), with 13 browser tests passing and the optional
+  Maia integration skipped. D27's machine-dependent envelope assertion was replaced by a
+  finite/non-vacuity assertion during B11; envelopes are recorded and never gate. Pack schema
+  0.11 (`DRILL_PACK_SCHEMA_VERSION`, `packages/schema/src/index.ts:2`) and migration 10 are
   verified against `rfc/README.md`'s registers; this RFC claims no number in either register.
 - **Planning:** `planning/adaptive-guidance/` (opened at implementation)
 
@@ -136,16 +135,12 @@ claiming a seam that is not there kills a draft as surely as re-shipping one tha
   `feedbackDeliveryOpen` (`:20-27`) gate nodes, events, and `compare()`
   (`apps/server/src/service.ts:438-441`). The two endpoints this RFC adds sit behind the same
   functions; no new withholding system is invented.
-- **Position sessions exist server-side only.** `POST /runs` accepts
+- **Position sessions now have the B11 client.** `POST /runs` accepts
   `session.kind: "position"` with a mandatory `attempt_end` feedback policy and a
-  `human_common | strong_engine` opponent (`apps/server/src/rest.ts:264-295`). The web client
-  creates only pack runs (`apps/web/src/lib/session-controller.ts:223-227`), the router has no
-  pack-less entry (`apps/web/src/lib/router.ts:20-29`), and the capability registry says so
-  honestly: `justPlay` and `fromPosition` are hard-coded `"unavailable-here"`
-  (`apps/server/src/capabilities.ts:120-127`). B10's acceptance scenario is a Just Play game;
-  the client entry that closes this gap — and the flip of those two capability rows — is
-  **owned by `rfc/archive/shape-library.md`** (cross-draft ownership pin, `rfc/README.md`), lands
-  before this RFC, and is consumed here through `Depends on:`. This RFC's client surface (§8)
+  `human_common | strong_engine` opponent (`apps/server/src/rest.ts`). B11 shipped the Just
+  Play entry, position player, resume path, and the `justPlay`/`fromPosition` capability flips
+  under the ownership pin. B10 consumes that surface through `Depends on:` and does not re-own
+  it. This RFC's client surface (§8)
   starts at the timeline and the assistance control, not at run creation.
 - **The LLM provider is a typed absence.** `CapabilityProviders.llm` is the literal type
   `"none"` (`capabilities.ts:50`), constructed as `"none"` in both engine modes (`:104,114`),
@@ -683,7 +678,7 @@ endgame-literature name and the trigger is Tabiya's material-census convention.
 
 **The body of a technique is a shape entry.** "The technique is to build a bridge" is plan
 content — exactly what `rfc/archive/shape-library.md` exists to author — so `shapeEntryId` is the seam:
-when the library ships an entry, opening the technique renders it under its authored
+when a matching entry exists, opening the technique renders it under its authored
 provenance; until then the surface renders **honest absence**: "Named technique: Lucena
 position (standard endgame literature). No technique entry is available yet." A recognizable
 type with no index entry at all — `pawn`, `rook`, `queen`, `minor`, and every census abstention
@@ -947,7 +942,7 @@ today, except the MultiPV report widening of a call the selector already makes.
    `VOICE_UNAVAILABLE` when `llm` is `"none"`.
 8. **Endgame steering.** K+R+P vs K+R yields the type and Lucena + Philidor, plus Vancura
    exactly when the pawn is on the a- or h-file; each technique renders the
-   no-entry-yet absence pending B11; Pack C's 4v3 census (`rook`) renders the type and
+   no-entry-yet absence because those technique entries do not exist; Pack C's 4v3 census (`rook`) renders the type and
    "Technique entries: none in Tabiya's index"; a census-abstaining endgame says so.
 9. **`voiceCheck` rejects introductions, including the paraphrase attacks.** Table-driven:
    outputs adding a square, a UCI/SAN token, a lexicon noun, a banned-form word, and a
@@ -993,6 +988,12 @@ today, except the MultiPV report widening of a call the selector already makes.
 None.
 
 ## Changelog
+
+- 2026-08-14 (Codex implementation review): approved after reconciling the implemented B11
+  dependency. Corrected the current baselines to pack schema 0.11, storage migration 10,
+  344 unit tests / 60 files, and D27 closed; replaced the stale claim that position sessions
+  are server-only with the shipped B11 client; made technique-body absence depend on a missing
+  matching entry rather than the already-landed library.
 
 - 2026-08-14 (adversarial review, fixed in place): **(1) Ownership-pin violation removed** —
   the draft shipped the minimal Just Play client entry (old §8a) and flipped the
