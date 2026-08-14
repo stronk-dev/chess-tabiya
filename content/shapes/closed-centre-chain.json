@@ -1,0 +1,21 @@
+{
+  "id": "closed-centre-chain",
+  "version": "0.1.0",
+  "name": "Closed centre (d4-e5 chain against d5-e6)",
+  "phases": ["middlegame"],
+  "trigger": { "kind": "all", "of": [
+    { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } },
+    { "kind": "pieceOnSquare", "square": "e5", "piece": { "color": "white", "role": "pawn" } },
+    { "kind": "pieceOnSquare", "square": "d5", "piece": { "color": "black", "role": "pawn" } },
+    { "kind": "pieceOnSquare", "square": "e6", "piece": { "color": "black", "role": "pawn" } }
+  ] },
+  "plans": [
+    { "id": "white-attack-where-the-chain-points", "side": "white", "label": "Attack where the chain points", "description": "The e5 pawn faces the kingside: gain space there, reroute pieces behind the chain head, and storm with the f- and g-pawns when the centre stays shut.", "success": { "note": "No rules-arithmetic signature distinguishes attack from overextension.", "signature": null } },
+    { "id": "white-hold-the-base", "side": "white", "label": "Hold the base", "description": "Meet the strike at d4 with the c-pawn's support and keep the defender count on the base at least equal to the pressure.", "success": { "note": "Holding is duration, not a property one position can certify.", "signature": null } },
+    { "id": "black-strike-the-base", "side": "black", "label": "Strike the base with the c-pawn", "description": "Hit the chain at its base, not its head: the c-pawn strike opens the c-file and keeps pressure on d4 after the trade.", "success": { "note": "The c-file opened for Black while the chain still stands and its base remains the target.", "signature": { "kind": "all", "of": [{ "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "c" } }, { "kind": "feature", "feature": { "kind": "half_open_file", "color": "black", "file": "c" } }] }, { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "e5", "piece": { "color": "white", "role": "pawn" } }] } } },
+    { "id": "black-chip-the-head", "side": "black", "label": "Chip the head with the f-pawn", "description": "Once the king is safe, the f-pawn strike undermines the chain head and frees the cramped kingside pieces.", "success": { "note": "The head trade resolves into too many shapes for one expression.", "signature": null } }
+  ],
+  "watch": ["The attacker and defender counts on d4 as the file pressure builds.", "Whether the f-pawn strike arrives before the base falls.", "Which bishop is buried behind its own chain and whether it can be traded."],
+  "typicalMistakes": ["Attacking the chain's head before its base is under pressure.", "Opening the side of the board where the opponent's chain points.", "Trading the entombed bishop's problem away one tempo too late, or freeing the position for the opponent by timing a strike badly."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored strategic claims with no citation, engine evaluation, corpus frequency, or owner review; chain doctrine in the Nimzowitsch tradition rendered from model knowledge.", "Trigger narrowing: the family spans every locked-chain orientation; this entry encodes only the d4-e5 versus d5-e6 interlock (French and Caro-Kann Advance shape). The mirrored e4-d5 versus e5-d6 chain (King's Indian and Benoni shape) and longer chains do not fire; encoding them honestly requires either a second entry with the plan sides reversed or a chain predicate the vocabulary lacks."], "attribution": [] }
+}

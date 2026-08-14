@@ -1,0 +1,80 @@
+{
+  "id": "pawn-opposition-key-squares",
+  "version": "0.1.0",
+  "name": "Pure pawn ending — opposition and key squares",
+  "phases": ["endgame"],
+  "trigger": {
+    "kind": "not",
+    "of": {
+      "kind": "any",
+      "of": [
+        {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
+        {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}},
+        {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
+        {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}},
+        {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
+        {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
+        {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}},
+        {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
+      ]
+    }
+  },
+  "plans": [
+    {
+      "id": "white-take-the-opposition",
+      "side": "white",
+      "label": "Take the opposition",
+      "description": "Place the king so the kings face each other with one square between and the opponent to move: whoever must step aside concedes the path. From far away, take the distant opposition — an odd number of squares between the kings — and convert it step by step.",
+      "success": {"note":"King geometry — the entire content of opposition — is outside this vocabulary.","signature":null}
+    },
+    {
+      "id": "white-occupy-key-squares",
+      "side": "white",
+      "label": "Occupy the key squares",
+      "description": "Steer the king onto the pawn's key squares — beside and ahead of its path — before pushing it; a pawn escorted from behind by its king is a spectator, one whose king owns the squares in front queens itself. Opposition is the tool, key squares are the goal.",
+      "success": {"note":"Key squares are defined relative to king positions the vocabulary cannot read.","signature":null}
+    },
+    {
+      "id": "white-triangulate",
+      "side": "white",
+      "label": "Triangulate to lose a move",
+      "description": "When the straight approach is met head on, walk the king around a triangle the defending king cannot copy and return to the same position with the other side to move; corresponding squares decide who runs out of safe steps first.",
+      "success": {"note":"Triangulation is a move-order fact; a static census cannot see who is to move.","signature":null}
+    },
+    {
+      "id": "black-hold-the-opposition",
+      "side": "black",
+      "label": "Hold the opposition",
+      "description": "Meet the attacking king head on and keep it off the key squares; give ground only straight backward along the pawn's file, never diagonally aside, and fall back onto the squares in front of the pawn.",
+      "success": {"note":"Holding is an outcome and has no structural signature here.","signature":null}
+    },
+    {
+      "id": "black-shoulder-and-race",
+      "side": "black",
+      "label": "Shoulder and race",
+      "description": "When pure defence fails, count the race: use the king's body to shoulder the enemy king off its path while your own king runs at the pawns — the defender's king fights with its shoulders, not just its feet.",
+      "success": {"note":"Race counting is calculation, not a position census.","signature":null}
+    }
+  ],
+  "watch": [
+    "Fires for any kings-and-pawns-only position, from a bare-kings draw to a ten-pawn race; the entry names the family, not a verdict about this position.",
+    "Every plan here is king geometry, and kings are almost entirely invisible to the shipped vocabulary — the board check is yours.",
+    "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."
+  ],
+  "typicalMistakes": [
+    "Pushing the pawn before the king owns its key squares — each premature push moves the key squares further away and can throw away the win in one move.",
+    "Taking the opposition mechanically when the position wants a key-square end-run around it.",
+    "Losing the race by stopping to capture pawns instead of shouldering and running.",
+    "Forgetting that a rook-pawn plus the wrong king position is a stock draw the opposition cannot fix."
+  ],
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Family per design/04-content-architecture.md section 4 (pawn: opposition, key squares, triangulation, corresponding squares).",
+      "Tablebase honesty: minimal cases of this family (king and pawn versus king — three pieces) are trivially inside tablebase range and a tablebase CAN verify them; the family as triggered often exceeds seven pieces, where no tablebase exists. Nothing in this entry was tablebase-checked.",
+      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
+      "Trigger gap: the vocabulary has no pawn-existence or king-position predicate, so the trigger is exactly 'no pieces but kings and pawns' and fires for trivial positions too; recorded here rather than faked."
+    ],
+    "attribution": []
+  }
+}

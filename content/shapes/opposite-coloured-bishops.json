@@ -1,0 +1,190 @@
+{
+  "id": "opposite-coloured-bishops",
+  "version": "0.1.0",
+  "name": "Opposite-coloured bishops — blockade and fortress zone",
+  "phases": ["endgame"],
+  "trigger": {
+    "kind": "all",
+    "of": [
+      {
+        "kind": "all",
+        "of": [
+          {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
+          {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
+          {
+            "kind": "not",
+            "of": {
+              "kind": "any",
+              "of": [
+                {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
+                {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}},
+                {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
+                {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}},
+                {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}},
+                {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "any",
+        "of": [
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a2"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a3"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a4"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a5"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a6"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a7"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b2"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b3"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b4"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b5"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b6"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b7"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c2"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c3"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c4"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c5"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c6"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c7"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d2"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d3"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d4"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d5"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d6"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d7"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e2"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e3"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e4"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e5"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e6"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e7"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f2"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f3"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f4"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f5"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f6"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f7"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g2"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g3"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g4"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g5"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g6"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g7"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h2"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h3"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h4"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h5"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h6"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h7"}}
+        ]
+      }
+    ]
+  },
+  "plans": [
+    {
+      "id": "white-two-wings-two-passers",
+      "side": "white",
+      "label": "Passers on both wings",
+      "description": "One passed pawn is a blockade waiting to happen: the winning shape is passed pawns on both wings, too far apart for one bishop and king to hold both. Trade or sacrifice toward the second passer, not toward simplification.",
+      "success": {
+        "note": "Two wing passers is the structural shape; whether the defending king still reaches both is king geometry the signature cannot see.",
+        "signature": {
+          "kind": "all",
+          "of": [
+            {
+              "kind": "any",
+              "of": [
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a2"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a3"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a4"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a5"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a6"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a7"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b2"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b3"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b4"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b5"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b6"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b7"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c2"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c3"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c4"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c5"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c6"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c7"}}
+              ]
+            },
+            {
+              "kind": "any",
+              "of": [
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f2"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f3"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f4"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f5"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f6"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f7"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g2"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g3"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g4"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g5"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g6"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g7"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h2"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h3"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h4"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h5"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h6"}},
+                {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h7"}}
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "white-king-breaks-the-blockade",
+      "side": "white",
+      "label": "The king breaks the blockade",
+      "description": "The bishop cannot evict a blockader on the other colour — only the king can. Walk it in on the squares the defending bishop does not control and escort the pawn square by square.",
+      "success": {"note":"King routes and colour complexes are outside this vocabulary.","signature":null}
+    },
+    {
+      "id": "black-fortress-on-your-colour",
+      "side": "black",
+      "label": "Blockade on your bishop's colour",
+      "description": "Stop the passer on a square your bishop defends, with the king covering the squares of the other colour; a correct blockade holds by geometry no matter how large the material deficit reads.",
+      "success": {"note":"A fortress is an outcome, not a census; no structural signature is honest here.","signature":null}
+    },
+    {
+      "id": "black-bishop-for-the-last-pawn",
+      "side": "black",
+      "label": "Sell the bishop for the last dangerous pawn",
+      "description": "The bishop's final job is to give itself for the pawn that would break the fortress, when the remaining position is a counted draw; price that liquidation before the fortress cracks, not after.",
+      "success": {"note":"Whether the resulting ending is drawn is not expressed by this vocabulary.","signature":null}
+    }
+  ],
+  "watch": [
+    "Square colours are invisible to the trigger: this fires for any bishop-each census with a White passed pawn, including same-coloured-bishop positions where none of these plans apply. Verify opposite colours on the board; if the bishops share a colour, use the good-versus-bad entry.",
+    "'Up a pawn' is a count the vocabulary lacks; the passed pawn stands in for the conversion attempt in the trigger.",
+    "The drawing tendency of this family is why 'trading into it while ahead' appears as a mistake in other entries — recognizing the fortress before entering it is most of the technique.",
+    "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."
+  ],
+  "typicalMistakes": [
+    "Trading the last rooks into an opposite-bishops ending while up a pawn — handing the defender exactly the fortress this entry describes.",
+    "Blockading on the colour your bishop does not control, where the blockade can be evicted.",
+    "Advancing all pawns onto one wing, where a single blockade square holds everything.",
+    "As the attacker, trading pawns instead of creating the second passer."
+  ],
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Family per design/04-content-architecture.md section 4 (minor piece: opposite-colour drawing zones; practical conversion: up-a-pawn-with-opposite-bishops, fortress recognition). This entry covers both rows because their censuses are structurally identical.",
+      "Tablebase honesty: typical positions of this family exceed seven pieces; no tablebase ground truth exists for them and none was consulted.",
+      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
+      "Trigger gap: bishop square colour is inexpressible, so the trigger cannot distinguish this family from same-coloured bishops; the White passer distinguishes it from the good/bad entry's census but 'up a pawn' itself is not expressible."
+    ],
+    "attribution": []
+  }
+}

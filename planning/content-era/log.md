@@ -565,3 +565,56 @@ neither recounted.
 - This is the first executable replacement for design/04 §2c's taste-based first-wave
   order. It ranks the exact line roots supplied to the instrument; it does not grade pack
   quality or instructional suitability.
+
+## 2026-08-14 — endgame shape-library entries: seven families in ten entries (claude)
+
+Landed ten shape entries under `content/shapes/`, covering design/04 §4's endgame
+families beyond the existing `rook-4v3-same-side`: `lucena`, `philidor`, `vancura`
+(ids match the runtime technique index in `packages/runtime/src/endgame.ts`, so
+`endgameReading`'s `shapeEntryId` references now resolve to authored bodies);
+`pawn-opposition-key-squares`; `pawn-breakthrough-outside-passer`;
+`bishop-good-bad`; `opposite-coloured-bishops` (also carries the practical-conversion
+"up-a-pawn OCB fortress" row — the censuses are structurally identical);
+`knight-vs-bishop`; `queen-vs-pawn-on-seventh`; `up-an-exchange`. All ten pass
+`make shape-check`. Additionally, a disposable probe harness (scratchpad, not
+committed) ran each trigger against a canonical family FEN and a near-miss:
+20/20 fire/hold checks pass through the one runtime evaluator.
+
+**Cost split.** Roughly 30% trigger engineering (finding honest encodings inside the
+twelve-predicate vocabulary: the `piece_reach_count atLeast 0` existence idiom from the
+4v3 entry, `passed_pawn` any-of fans over rank/file windows, `pieceOnSquare` fans for
+"pawn on the seventh"), 45% plan/watch/mistake prose (techniques described structurally,
+never moves), 25% provenance and tablebase-honesty wording plus verification runs.
+
+**Signatures.** Seven plans got real structural success signatures: Lucena's bridge
+(promoted queen exists), Philidor's attacker plan and Vancura's attacker plan (passed
+pawn reaches the seventh), breakthrough (far-advanced passer), OCB conversion (passers
+on both wings), knight-vs-bishop (rook-file passer), queen-vs-pawn zigzag (no pawn one
+step from promotion and no new queen — with an explicit stalemate-blindness note). All
+defender/holding plans are `null` + note: holding and fortresses are outcomes, not
+censuses.
+
+**Tablebase honesty calls.** R+P-vs-R (5-piece minimal census) and Q-vs-P (4-piece)
+entries state a tablebase CAN verify their families' result claims and that none was
+consulted — the only check run was shape-check plus trigger probes. Pawn entries state
+minimal cases are tablebase-range but the triggered family often exceeds seven pieces.
+All other entries declare typical positions above seven pieces, authored-and-ungrounded.
+
+**Format gaps (sharpest first).**
+1. **No bishop square-colour predicate**: `bishop-good-bad` and
+   `opposite-coloured-bishops` cannot be distinguished by census — different universes,
+   co-firing triggers. Each entry's watch names the other. (OCB is narrowed by
+   requiring a White passer, but that encodes "conversion attempt", not colour.)
+2. **Kings are invisible** (outside per-square `pieceOnSquare`, which would overfit):
+   opposition, key squares, Lucena/Philidor king placement — the defining content of
+   pawn and rook technique — is inexpressible; every such trigger names the family and
+   records the gap.
+3. **No pawn-count or pawn-existence predicate**: "up a pawn", "only one pawn",
+   "majority without a passer yet" (pre-breakthrough) are all inexpressible.
+4. Verbose fans: rank/file windows of `passed_pawn` need up to 48 explicit leaves
+   (OCB trigger); a range-over-squares leaf would collapse them.
+5. `outpost` takes a specific square, so "anchored knight" family prose cannot use it
+   without binding to one position (noted in the knight-vs-bishop entry).
+
+Sibling agent is authoring middlegame entries in the same directory; no middlegame
+family was touched here.

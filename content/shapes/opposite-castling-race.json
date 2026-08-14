@@ -1,0 +1,25 @@
+{
+  "id": "opposite-castling-race",
+  "version": "0.1.0",
+  "name": "Opposite-side castling race (White long, Black short)",
+  "phases": ["middlegame"],
+  "trigger": { "kind": "all", "of": [
+    { "kind": "any", "of": [
+      { "kind": "pieceOnSquare", "square": "c1", "piece": { "color": "white", "role": "king" } },
+      { "kind": "pieceOnSquare", "square": "b1", "piece": { "color": "white", "role": "king" } }
+    ] },
+    { "kind": "any", "of": [
+      { "kind": "pieceOnSquare", "square": "g8", "piece": { "color": "black", "role": "king" } },
+      { "kind": "pieceOnSquare", "square": "h8", "piece": { "color": "black", "role": "king" } }
+    ] }
+  ] },
+  "plans": [
+    { "id": "white-h-file-storm", "side": "white", "label": "Storm the h-file", "description": "Race the h-pawn at the black king's cover: the storm's whole purpose is an open file for the heavy pieces, with a piece sacrifice on the way when it buys tempi.", "success": { "note": "A file has opened at the black king: the h-file is open or half-open for White.", "signature": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "h" } }, { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "h" } }] } } },
+    { "id": "white-prophylactic-tempo", "side": "white", "label": "Spend the prophylactic tempo", "description": "The race is counted in tempi, but one defensive move that blunts the counterattack - the king tuck, a timely pawn hold - is a tempo the attack repays.", "success": { "note": "Whether one defensive tempo blunted the storm is a judgment, not a position property.", "signature": null } },
+    { "id": "black-queenside-file-storm", "side": "black", "label": "Open a queenside file", "description": "Run the a- and b-pawns at the white king, or give the exchange on the c3 knight, to open an attacking file before the kingside storm lands.", "success": { "note": "A file has opened at the white king: the a- or b-file is open or half-open for Black.", "signature": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "a" } }, { "kind": "feature", "feature": { "kind": "half_open_file", "color": "black", "file": "a" } }, { "kind": "feature", "feature": { "kind": "open_file", "file": "b" } }, { "kind": "feature", "feature": { "kind": "half_open_file", "color": "black", "file": "b" } }] } } },
+    { "id": "black-central-brake", "side": "black", "label": "Brake in the centre", "description": "The central break trades the attack's cover open and makes every storm tempo cost something in the middle of the board.", "success": { "note": "Whether a central trade defused the storm is not a pawn shape.", "signature": null } }
+  ],
+  "watch": ["The tempo count: every non-forcing move hands the other attack a free one.", "Pawn moves in front of your own king - each is a hook the enemy storm will use.", "Which storm opens lines with pawns alone and which needs a sacrifice to break through."],
+  "typicalMistakes": ["Answering a wing storm with a slower wing storm instead of counting the tempi.", "Grabbing material in the middle of the race.", "Advancing a defending pawn and handing the storm its hook."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored strategic claims with no citation, engine evaluation, corpus frequency, or owner review; opposite-castling doctrine rendered from model knowledge.", "Trigger narrowing: king placement via pieceOnSquare is a proxy for castling - the vocabulary cannot see castling rights or history, so kings that walked to these squares also fire and kings on a1, f1, or f8 do not. Only the White-long against Black-short orientation is encoded (Dragon and English Attack shape); the mirrored orientation would reverse every plan's side and file targets and remains unauthored. The storm-file signatures can also be satisfied by trades far from the king; they name the opened file, not its cause."], "attribution": [] }
+}

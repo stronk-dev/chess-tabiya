@@ -1,0 +1,84 @@
+{
+  "id": "bishop-good-bad",
+  "version": "0.1.0",
+  "name": "Single-bishop ending — good bishop against bad",
+  "phases": ["endgame"],
+  "trigger": {
+    "kind": "all",
+    "of": [
+      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
+      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
+      {
+        "kind": "not",
+        "of": {
+          "kind": "any",
+          "of": [
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}},
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}},
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}},
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
+          ]
+        }
+      }
+    ]
+  },
+  "plans": [
+    {
+      "id": "white-fix-their-pawns",
+      "side": "white",
+      "label": "Fix their pawns on their bishop's colour",
+      "description": "Fix the opponent's pawns on the squares their own bishop moves on, and keep yours off your bishop's colour: their bishop becomes a tall pawn chained to targets, yours keeps every option.",
+      "success": {"note":"The pawn-and-bishop colour complex is not in the shipped vocabulary.","signature":null}
+    },
+    {
+      "id": "white-invade-the-other-colour",
+      "side": "white",
+      "label": "Invade on the colour the bad bishop cannot touch",
+      "description": "March the king in along the squares the bad bishop can never defend; the break-in happens on one colour complex and the defender's bishop watches it from the other.",
+      "success": {"note":"Colour complexes and king routes are outside this vocabulary.","signature":null}
+    },
+    {
+      "id": "white-spare-tempo-zugzwang",
+      "side": "white",
+      "label": "Spend the spare tempo",
+      "description": "A good bishop has waiting moves along free diagonals that the bad bishop lacks; in a fixed position, hand the move over and let zugzwang force the concession the direct approach could not.",
+      "success": {"note":"Zugzwang is a to-move property no static census expresses.","signature":null}
+    },
+    {
+      "id": "black-free-or-trade",
+      "side": "black",
+      "label": "Free the bad bishop or trade it",
+      "description": "Either get the pawns off the bishop's colour while there is still time, or trade the bad bishop — even at a visible structural price; the piece that cannot move is worth less than the pawn structure it costs to release.",
+      "success": {"note":"Holding is an outcome and has no structural signature here.","signature":null}
+    },
+    {
+      "id": "black-bishop-outside-the-chain",
+      "side": "black",
+      "label": "Bishop outside the chain",
+      "description": "A bad bishop standing in front of its own pawn chain is a different piece from one buried behind it: activate it to the outside before the position fixes, even at the cost of a tempo or a weakness.",
+      "success": {"note":"Inside-versus-outside the chain is geometry the vocabulary cannot express.","signature":null}
+    }
+  ],
+  "watch": [
+    "One bishop each is all the trigger can see: the vocabulary has no square-colour predicate, so same-coloured and opposite-coloured bishop endings — different universes — both fire here. Check the bishops' colours; if they differ, use the opposite-coloured-bishops entry instead.",
+    "Which bishop is 'bad' lives in the pawn-colour complex, also outside the vocabulary; the trigger names the census, the diagnosis is yours.",
+    "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."
+  ],
+  "typicalMistakes": [
+    "Fixing your own pawns on your bishop's colour for one move of convenience — the structure outlives the tempo.",
+    "Refusing the bad-bishop trade when it was offered cheaply, then losing to the zugzwang the trade would have prevented.",
+    "Winning the bishop battle but losing the pawn ending: count the king-and-pawn ending before the last trade, because good-versus-bad evaporates the moment the bishops leave."
+  ],
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Family per design/04-content-architecture.md section 4 (minor piece: good/bad bishop).",
+      "Tablebase honesty: typical positions of this family exceed seven pieces; no tablebase ground truth exists for them and none was consulted.",
+      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
+      "Trigger gap: bishop square colour is inexpressible, so this trigger cannot be told apart from the opposite-coloured-bishops census; both entries fire on the same positions and each names the other. This is the sharpest known gap in the shipped vocabulary for endgame families."
+    ],
+    "attribution": []
+  }
+}

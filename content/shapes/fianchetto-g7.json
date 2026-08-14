@@ -1,0 +1,19 @@
+{
+  "id": "fianchetto-g7",
+  "version": "0.1.0",
+  "name": "Kingside fianchetto (Black g7 bishop)",
+  "phases": ["middlegame"],
+  "trigger": { "kind": "all", "of": [
+    { "kind": "pieceOnSquare", "square": "g6", "piece": { "color": "black", "role": "pawn" } },
+    { "kind": "pieceOnSquare", "square": "g7", "piece": { "color": "black", "role": "bishop" } }
+  ] },
+  "plans": [
+    { "id": "black-long-diagonal-pressure", "side": "black", "label": "Open the long diagonal", "description": "Trade or lever away the central pawns in the bishop's path so the g7 bishop hits the queenside at full length.", "success": { "note": "The bishop stands on g7 with every square of the long diagonal to a1 empty.", "signature": { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "g7", "piece": { "color": "black", "role": "bishop" } }, { "kind": "feature", "feature": { "kind": "line_blockers", "from": "g7", "to": "a1", "comparison": "equal", "count": 0 } }] } } },
+    { "id": "black-guard-the-dark-squares", "side": "black", "label": "Guard the king's dark squares", "description": "The bishop is also the king's roof: before any trade of it, arrange which piece inherits the dark squares around the king.", "success": { "note": "Whether the remaining pieces can re-guard the dark squares is not pawn arithmetic.", "signature": null } },
+    { "id": "white-trade-the-fianchetto-bishop", "side": "white", "label": "Trade the fianchetto bishop", "description": "Exchange the dark-squared bishops to soften the squares the g6 pawn no longer guards, the standard prelude to a kingside attack.", "success": { "note": "Detection cannot tell a traded bishop from one that merely moved away.", "signature": null } },
+    { "id": "white-h-file-lever", "side": "white", "label": "Lever the h-pawn at g6", "description": "March the h-pawn to strike the fianchetto pawn and open the h-file for the heavy pieces.", "success": { "note": "The h-file is open or half-open for White while the fianchetto pawn still marks the target.", "signature": { "kind": "all", "of": [{ "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "h" } }, { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "h" } }] }, { "kind": "pieceOnSquare", "square": "g6", "piece": { "color": "black", "role": "pawn" } }] } } }
+  ],
+  "watch": ["Every trade that involves the dark-squared bishops.", "Whether the long diagonal is open, blocked by a pawn, or blocked by a defended piece.", "The h-pawn's licence to run: cheap when the kings sit on opposite wings, committal when they share one."],
+  "typicalMistakes": ["Giving up the g7 bishop without counting who guards the king's dark squares afterwards.", "Blocking the long diagonal with an own pawn that can never advance again.", "Launching the h-pawn while the centre is still fluid enough to open against the attacker."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored strategic claims with no citation, engine evaluation, corpus frequency, or owner review; fianchetto doctrine rendered from model knowledge.", "Trigger narrowing: the family covers four fianchetto corners; this entry encodes only the Black kingside fianchetto with the bishop at home on g7 (Grunfeld, King's Indian, Dragon shape). The White g2 mirror (Catalan, English) and both queenside fianchettos do not fire, and the trigger stops matching the moment the bishop leaves g7 even though the pawn structure persists - the structure-without-its-bishop case the family's central question is about is exactly the case the vocabulary cannot hold onto."], "attribution": [] }
+}

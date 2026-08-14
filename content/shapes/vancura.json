@@ -1,0 +1,99 @@
+{
+  "id": "vancura",
+  "version": "0.1.0",
+  "name": "Vancura defence (rook pawn on the sixth or below)",
+  "phases": ["endgame"],
+  "trigger": {
+    "kind": "all",
+    "of": [
+      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
+      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}},
+      {
+        "kind": "not",
+        "of": {
+          "kind": "any",
+          "of": [
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}},
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}},
+            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
+          ]
+        }
+      },
+      {
+        "kind": "any",
+        "of": [
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a4"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a5"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a6"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h4"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h5"}},
+          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h6"}}
+        ]
+      }
+    ]
+  },
+  "plans": [
+    {
+      "id": "black-side-attack",
+      "side": "black",
+      "label": "Attack the pawn from the side",
+      "description": "Place the rook on the defender's third rank attacking the rook pawn sideways along the rank, from far away: the attacking rook is chained to the pawn's defence, and the pawn cannot advance without walking out of one attack into another.",
+      "success": {"note":"Holding is an outcome and has no structural signature here.","signature":null}
+    },
+    {
+      "id": "black-side-checks",
+      "side": "black",
+      "label": "Side checks when the king approaches",
+      "description": "When the attacking king walks over to shield its pawn, the same rook checks it away along the files — near the edge there is no shelter from side checks that also keep the pawn attacked.",
+      "success": {"note":"The checking geometry is not rules arithmetic.","signature":null}
+    },
+    {
+      "id": "black-set-up-in-time",
+      "side": "black",
+      "label": "Reach the set-up before the seventh",
+      "description": "The defence must be built while the pawn stands on the sixth or lower; a rook parked passively in front of the pawn, or a set-up begun after the pawn reaches the seventh, is a different and worse defence.",
+      "success": {"note":"Set-up timing is move order, not a census.","signature":null}
+    },
+    {
+      "id": "white-rook-behind-king-across",
+      "side": "white",
+      "label": "Rook behind, king across",
+      "description": "Keep the rook behind the pawn, not in front of it, and march the king toward the pawn trying to shield the side checks and break the rank attack; the winning attempt is king and rook sheltering each other.",
+      "success": {
+        "note": "The pawn on the seventh ends the Vancura set-up; what follows is a different, often still drawn, story the arithmetic cannot judge.",
+        "signature": {
+          "kind": "any",
+          "of": [
+            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a7"}},
+            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h7"}}
+          ]
+        }
+      }
+    }
+  ],
+  "watch": [
+    "Only the a- and h-file census fires here, matching the runtime technique index, which names Vancura for rook pawns; a knight-file pawn is a different family.",
+    "The defining placement — defending rook attacking the pawn sideways from its third rank — is rook geometry this vocabulary cannot express; the trigger names the family.",
+    "Extra pawns are not excluded by the census; count them.",
+    "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."
+  ],
+  "typicalMistakes": [
+    "Leaving the defending rook passive in front of the pawn — the one placement that loses the checking set-up entirely.",
+    "Starting the side-attack set-up one tempo late, after the pawn has reached the seventh.",
+    "Walking the defending king toward the pawn to help, when the defence needs it exactly where it is, out of the way of the checks.",
+    "As the attacker, advancing the pawn while the rook still stands in front of it."
+  ],
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Technique name \"Vancura\" is a standard endgame-literature name; it matches the runtime technique index (packages/runtime/src/endgame.ts) described in docs/adaptive-guidance.md.",
+      "Tablebase honesty: the minimal census here (king, rook and pawn versus king and rook — five pieces) is inside Syzygy's seven-piece range, so a tablebase CAN verify win/draw claims for concrete positions of this family. No tablebase was consulted while authoring this entry and no verification is claimed; the only check run was `make shape-check` (schema plus trigger evaluation).",
+      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
+      "Alignment: docs/adaptive-guidance.md names Vancura additionally for a- or h-file pawns; this trigger deliberately covers only those files, on ranks four to six where the set-up still works."
+    ],
+    "attribution": []
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "open-centre",
+  "version": "0.1.0",
+  "name": "Isolani-free open centre",
+  "phases": ["middlegame"],
+  "trigger": { "kind": "all", "of": [
+    { "kind": "any", "of": [
+      { "kind": "feature", "feature": { "kind": "open_file", "file": "d" } },
+      { "kind": "feature", "feature": { "kind": "open_file", "file": "e" } }
+    ] },
+    { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "named_structure", "id": "iqp-white" } } },
+    { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "named_structure", "id": "iqp-black" } } },
+    { "kind": "feature", "feature": { "kind": "piece_reach_count", "color": "white", "role": "queen", "scope": "any", "comparison": "atLeast", "count": 0 } },
+    { "kind": "feature", "feature": { "kind": "piece_reach_count", "color": "black", "role": "queen", "scope": "any", "comparison": "atLeast", "count": 0 } }
+  ] },
+  "plans": [
+    { "id": "white-central-outpost", "side": "white", "label": "Central outpost", "description": "With no pawn tension to calculate, piece placement is the game: plant a knight on a central square an own pawn still guards.", "success": { "note": "A White knight occupies d5 or e5 as a Tabiya-detected outpost.", "signature": { "kind": "any", "of": [{ "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "d5", "piece": { "color": "white", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "white", "square": "d5" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "e5", "piece": { "color": "white", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "white", "square": "e5" } }] }] } } },
+    { "id": "white-seize-the-file", "side": "white", "label": "Seize the open file", "description": "Double the heavy pieces on the open central file before it can be neutralized, and convert the file into an entry square.", "success": { "note": "File ownership is a piece-placement contest with no single square to test.", "signature": null } },
+    { "id": "black-central-outpost", "side": "black", "label": "Central outpost", "description": "The same contest from the other side: a knight on a guarded central square outweighs a nominally freer bishop.", "success": { "note": "A Black knight occupies d4 or e4 as a Tabiya-detected outpost.", "signature": { "kind": "any", "of": [{ "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "d4" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "e4", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "e4" } }] }] } } },
+    { "id": "black-neutralize-and-level", "side": "black", "label": "Neutralize the file", "description": "Challenge the open file with a rook, trade the heavy pieces on it, and steer toward the level ending symmetry promises.", "success": { "note": "Neutralization is measured in trades and time, not in one position's arithmetic.", "signature": null } }
+  ],
+  "watch": ["Whose rooks reach the open central file first.", "Whether any central outpost square survives for a knight.", "The wing pawn majorities that decide the ending once the pieces come off."],
+  "typicalMistakes": ["Conceding the open file while planning to challenge it later.", "Posting a bishop where a knight belongs and vice versa.", "Trading into a wing-majority ending without counting whose majority runs faster."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored strategic claims with no citation, engine evaluation, corpus frequency, or owner review; open-centre doctrine rendered from model knowledge.", "Trigger narrowing: 'open centre' here means at least one fully pawnless central file with both queens still on (queens distinguish this family from the symmetrical-queenless entry) and no IQP catalogue match ('isolani-free'). Centres that are open in the practical sense but keep one mobile pawn per side on the central files do not fire; the vocabulary has no notion of pawn tension or mobility."], "attribution": [] }
+}
