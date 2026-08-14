@@ -89,6 +89,14 @@ describe("learner identity and run authorization", () => {
     };
   }
 
+  it("defaults session cookies to Secure when the option is omitted", async () => {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    stores.push(storage);
+    const identity = new IdentityService(storage, { derive: cheapDerive });
+    const session = await identity.register({ handle: "secure-default", password: PASSWORD });
+    expect(session.cookie).toContain("; Secure");
+  });
+
   async function register(
     handler: ReturnType<typeof createRestHandler>,
     handle: string,

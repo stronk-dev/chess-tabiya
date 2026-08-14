@@ -64,3 +64,18 @@ automatic grading, and theory objectives retain their boundary validation.
 This layer does not provide evaluation, “reasonable continuation” search, move advice, live
 deviation classification, intent-relative grading, authored shape entries, overlays, or LLM prose.
 Those require attributed evidence or later breadth contracts.
+
+## Measured envelope
+
+The structural projection is instrumented rather than gated by wall-clock time. On 2026-08-14,
+200 samples on a quiet development machine measured **3.858 ms median** and **6.747 ms maximum**.
+The same code reached **103.5 ms maximum** under parallel-agent load. That variance is why the unit
+test asserts only a non-vacuous finite sample: a gate that can report either answer on identical
+code is not evidence.
+
+The 100 ms value is a worry threshold that prompts investigation, not a pass/fail assertion. To
+retrieve a visible sample (the default Vitest gate intercepts console output), run:
+
+```sh
+npx vitest run packages/runtime/src/structure.test.ts --disable-console-intercept
+```

@@ -1,4 +1,5 @@
 import { createApplication, type EngineMode } from "./application.js";
+import { cookieSecureFromEnv } from "./config.js";
 
 function integer(value: string | undefined, fallback: number): number {
   const parsed = value === undefined ? fallback : Number(value);
@@ -15,7 +16,7 @@ if (engineMode !== "mock" && engineMode !== "maia") {
 
 const port = integer(process.env.PORT, 3000);
 const development = process.env.NODE_ENV === "development";
-const cookieSecure = process.env.TABIYA_COOKIE_SECURE !== "false";
+const cookieSecure = cookieSecureFromEnv(process.env.TABIYA_COOKIE_SECURE);
 if (process.env.DRAFT_PACK_FILE !== undefined && !development) {
   throw new TypeError("DRAFT_PACK_FILE requires NODE_ENV=development");
 }

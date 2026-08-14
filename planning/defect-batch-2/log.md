@@ -29,3 +29,14 @@ all draft packs, and every emitted candidate pack. The first test run exposed th
 `content/candidates/priority/` is a metadata directory rather than a candidate; discovery now
 includes only directories containing `pack.json`. All 28 schema tests and workspace typecheck
 passed, with no content bytes changed.
+
+## 2026-08-14 — Stale-row residuals
+
+D23's actual product risk is pinned in the browser: a null-phase summary remains visible and
+renders `unclassified`; the existing emitter parity tests remain unchanged. D24 now has both a
+pure exact-spelling environment parser test and an omitted-option identity test proving `Secure`
+is the default. D27's quiet/load measurements, non-gating rationale, 100 ms investigation
+tripwire, and visible-output command are canonical in `docs/structural-reading.md`. The focused
+20-test server slice and the zero-retry browser case passed. The browser edit also replaced an
+old `schema example` text selector that became ambiguous once the injected fixture honestly used
+the same review-status label.

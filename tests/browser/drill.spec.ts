@@ -121,6 +121,25 @@ test("library exposes phase honestly and survives a malformed pack response", as
     await expect(card).toContainText(phase);
   }
 
+  await page.route(/\/packs$/u, async (route) => {
+    const response = await route.fetch();
+    const body = await response.json() as Record<string, unknown>[];
+    body.push({
+      id: "unclassified-browser-fixture",
+      version: "0.1.0",
+      digest: `sha256:${"f".repeat(64)}`,
+      title: "Unclassified browser fixture",
+      mode: "plan",
+      phase: null,
+      difficulty: null,
+      reviewStatus: "schema_example",
+      channel: "official",
+    });
+    await route.fulfill({ response, json: body });
+  });
+  await page.reload();
+  await expect(page.getByRole("article").filter({ hasText: "Unclassified browser fixture" })).toContainText("unclassified");
+
   const pageErrors: Error[] = [];
   page.on("pageerror", (error) => pageErrors.push(error));
   await page.route(/\/packs\/[^/]+$/u, async (route) => {
@@ -129,7 +148,7 @@ test("library exposes phase honestly and survives a malformed pack response", as
     if (body.start !== undefined) delete body.start.side;
     await route.fulfill({ response, json: body });
   });
-  const card = page.getByRole("article").filter({ hasText: "schema example" });
+  const card = page.getByRole("article").filter({ hasText: "Najdorf" });
   await card.getByRole("button", { name: /Open position/ }).click();
   await expect(page.getByRole("alert")).toContainText("did not declare start.side");
   await expect(page.getByText("Choose a position worth returning to.")).toBeVisible();
