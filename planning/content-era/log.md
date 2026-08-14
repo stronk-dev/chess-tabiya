@@ -770,3 +770,111 @@ Najdorf pack: `DEVIATION_WRONG_SIDE` fails the gate. D7's lint (line-drill RFC)
 is live in `pack-check`. The author's hand-verification was redundant
 belt-and-braces, not a workaround for a missing check. The other frictions in
 the entry are unverified-but-plausible and stand as filed.
+
+## 2026-08-14 — Content wave 3: the first real trajectory packs (claude)
+
+**Landed.** Two guided trajectory packs — the first real content for the mode
+that tests the product's central thesis — plus the shape entry the opening
+wave's blocker commissioned:
+
+- `content/drafts/trajectory-qgd-exchange-minority.json` (the flagship, White,
+  60-ply mainline + 2 branches + 4 deviations): QGD Exchange → Carlsbad →
+  minority-attack rook ending. Legs: `follow_theory` until the Carlsbad
+  named-structure predicate fires (ply 12, ...c6); `execute_break` graded on
+  Pack B's exact structural target (backward c6 + half-open white c, fires
+  ply 40, ...bxc6); `win` (authored grading, checkpoint resolution) in the
+  rook ending, entered when a rooks-only census predicate fires (ply 54,
+  ...Rxa5). Both leg entries are fenPredicate structural facts, not plies:
+  reach them by another order and the legs still open.
+- `content/drafts/trajectory-caro-advance-chain-bishops.json` (Black, 52-ply
+  mainline + 2 branches + 5 deviations): Caro Advance → closed-centre chain →
+  same-colour bishop ending. Entries: the four-pawn chain test (ply 8, ...e6)
+  and a single-bishop-each/no-majors-no-knights census (ply 45, Bxc1). The
+  middlegame leg is graded by the `closed-centre-chain` entry's own
+  black-strike-the-base success signature (fires ply 17, 9.cxd4). Endgame
+  honesty per the wave brief: the chain forces NO particular ending; the leg
+  entry is authored on the census alone and provenance says so. What IS
+  mechanical: at leg entry five of White's seven pawns stand on White's
+  bishop's colour against two of Black's — the census is fact, the judgment
+  is authored.
+- `content/shapes/advance-caro-dxc5-residue.json` — the post-dxc5 residue the
+  early-c5 pack's blocker asked for. Honest name, predicates only: doubled
+  white c-pawns (c2+c5) beside the e5 space pawn against d5; c-file
+  HALF-OPEN FOR BLACK (not open — the wave-1 guess was wrong; White's own
+  doubled pawns stand on it), d-file half-open for White, and d5 NOT isolated
+  while Black's e-pawn stands. Trigger verified: first fires on 4.dxc5,
+  survives both plan branches, stops the move the pawn is regained, false at
+  root/Carlsbad/Caro-chain. Wired into `anti-caro-advance-early-c5` (v0.2.0):
+  `shapes` + both plan classes now reference its white plans; the
+  no-entry-exists blocker rewritten as resolved-with-record.
+
+**Validators.** All five files green: `make pack-check` × 3 (both
+trajectories + rewired early-c5), `make shape-check` × 2 (new entry, plus
+carlsbad as a control). Both mainlines, all branches and all 9 deviations
+machine-verified (python-chess 1.11.2 scratch harness — cheaper than the
+esbuild/chessops ritual, and pack-check's chessops lint is the authoritative
+second check anyway; recommend blessing python-chess for scratch work).
+Checkpoint firing plies computed by reimplementing the runtime predicate
+semantics (half-open/backward/census) against every mainline position.
+
+**Cost split.** One long session. ~75% went to authoring the two causal
+spines — specifically the liquidations: finding trade sequences where every
+capture has a legal recapture AND the trades run down the files the
+middlegame plan opened (the QGD's b-file/a6-b5-a5 grind; the Caro's c-file
+corridor). This is the real authoring cost of guided trajectories and it is
+an order of magnitude above per-phase packs. ~10% validator/format
+archaeology (pack-validation.ts + pack-orchestrator.ts are the actual spec),
+~10% shape entry + provenance prose, ~5% wiring/log.
+
+**Format frictions, sharpest first — first real `legs` content:**
+
+1. **An outcome leg with no `successConditions` silently grades nothing.**
+   `objectiveRules` returns `[]` for any objective without a conditions
+   array BEFORE compiling the automatic win/draw/loss rules, and
+   `OBJECTIVE_GRADES_NOTHING` only covers plan objectives. A `hold` leg with
+   grading but no conditions passes `pack-check` and is inert at runtime.
+   Both endgame legs here carry a material_balance→degraded condition to
+   force compilation. Ask: extend the refusal (or compile outcome rules
+   unconditionally).
+2. **`legs` carry only `{id, entryCheckpointId, objective}`.** Per-leg
+   `shapes`, plan classes, opponent policy and difficulty are inexpressible.
+   The brief said "shapes references per leg"; the format cannot say it —
+   both packs park all shapes at top level and assign them to legs in
+   provenance prose. Per-leg opponentPolicy is the one that bites next:
+   theory_strict opening + human_common ending is a natural trajectory want.
+3. **No piece-census vocabulary in the pack schema.** "Rooks only" /
+   "one bishop each" is spelled as six `piece_reach_count scope:any
+   atLeast:0` existence hacks (idiom borrowed from the endgame shape
+   entries). The shape schema grew `pawn_count`/`bishop_on_shade` this very
+   session (v0.2); the pack schema was mid-edit under Codex concurrently. I
+   stayed on the documented 12-kind vocabulary so these packs validate under
+   both.
+4. **Concurrency hazard, resolved:** for part of the session BOTH
+   `schemas/*.json` contained literal `+` diff-marker artifacts from the
+   in-flight implementation work, making `pack-check`/`shape-check` fail on
+   ALL files including committed ones (`FILE_READ_ERROR ... position 1672`).
+   Validated against a scratchpad-patched schema copy until the repo files
+   were fixed mid-session, then re-ran the real targets. Content-era work
+   needs schema edits to land atomically.
+5. **Wave-2 friction #5 recurs and sharpens:** `rook-4v3-same-side`'s
+   trigger is the generic rooks-only census, so the flagship's both-wings
+   rook-and-five ending fires an entry named "4v3 same side". Reference kept
+   (the family teaching genuinely transfers) with a census-honesty source
+   line; if a literal 4v3 trigger ever becomes expressible the reference
+   must be reviewed. The "present vs hands-off-to" reference distinction
+   still has no format encoding.
+6. **What worked exactly as designed:** leg N's success condition may
+   reference leg N+1's entry checkpoint ("reach the next boundary") — the
+   validator's PRECEDES_ENTRY rule permits forward references and refuses
+   backward ones; structural entry checkpoints compose with
+   CHECKPOINT_TRUE_AT_ROOT to guarantee entries are earned, not given; and
+   the trigger/census/signature reuse between shape entries and leg
+   objectives means the middlegame legs are graded by the SAME expressions
+   the shape library ships. The `legs` contract held real content without a
+   single schema fight.
+
+**Not done, deliberately:** no engine pass on any position (per-pack blockers
+say so — the authored `win`/`hold` assessments and both liquidations are the
+files' strongest ungrounded claims); no explorer pulls below family roots (no
+D35 priority row exists, so the flagship's opening popularity is uncited); no
+touch of `rfc/`, `design/`, `apps/`, `packages/`; no commits.

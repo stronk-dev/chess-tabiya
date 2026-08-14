@@ -1,0 +1,42 @@
+{
+  "id": "advance-caro-dxc5-residue",
+  "version": "0.1.0",
+  "name": "Advance-chain dxc5 residue (doubled c-pawns beside an e5 space pawn)",
+  "phases": ["opening", "middlegame"],
+  "trigger": { "kind": "all", "of": [
+    { "kind": "pieceOnSquare", "square": "c5", "piece": { "color": "white", "role": "pawn" } },
+    { "kind": "pieceOnSquare", "square": "e5", "piece": { "color": "white", "role": "pawn" } },
+    { "kind": "pieceOnSquare", "square": "d5", "piece": { "color": "black", "role": "pawn" } },
+    { "kind": "feature", "feature": { "kind": "doubled_pawn", "color": "white", "file": "c" } },
+    { "kind": "feature", "feature": { "kind": "half_open_file", "color": "black", "file": "c" } },
+    { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "d" } }
+  ] },
+  "plans": [
+    { "id": "white-hold-the-clamp", "side": "white", "label": "Hold the pawn with the clamp", "description": "Keep the grabbed c5 pawn: c3 first so b4 has a recapture toward the centre, then b4, and only pieces after. Held, the pawn is a cramp on Black's whole queenside, not just material.", "success": { "note": "The clamp stands: pawns on b4 and c5 together.", "signature": { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "b4", "piece": { "color": "white", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "c5", "piece": { "color": "white", "role": "pawn" } }] } } },
+    { "id": "white-sell-the-pawn", "side": "white", "label": "Sell the pawn back", "description": "Let the regain happen at a price: develop, castle, and meet ...Bxc5 or ...e6 so that Black's tempi spent collecting the pawn become White's development lead beside the standing e5 pawn.", "success": { "note": "Detection cannot tell a pawn sold for tempi from a pawn simply lost; the ledger is the moves, not the census.", "signature": null } },
+    { "id": "black-regain-the-pawn", "side": "black", "label": "Regain the pawn", "description": "Collect c5 with ...e6/...Bxc5 or ...Nc6 piece pressure before the clamp arrives; every move it costs is a developing move the opponent gets for free.", "success": { "note": "The extra pawn is gone while White's space pawn and Black's d5 pawn still face each other; the census cannot count the tempi the regain cost.", "signature": { "kind": "all", "of": [{ "kind": "not", "of": { "kind": "pieceOnSquare", "square": "c5", "piece": { "color": "white", "role": "pawn" } } }, { "kind": "pieceOnSquare", "square": "e5", "piece": { "color": "white", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "d5", "piece": { "color": "black", "role": "pawn" } }] } } },
+    { "id": "black-undermine-with-a5", "side": "black", "label": "Undermine the clamp with ...a5", "description": "Against the b4/c5 clamp the a-pawn is the counterplay: ...a5 asks b4 to justify itself, and every defence of b4 is another non-developing move on White's ledger.", "success": { "note": "The lever's payoff is dynamic (a file opened at the right moment, a pawn overextended); no single-position census certifies it.", "signature": null } }
+  ],
+  "watch": [
+    "The attacker and defender count on c5, and on b4 once the clamp is up: the pawn is held exactly while the arithmetic holds.",
+    "The c-file is NOT open: White's doubled c2/c5 pawns still own it, and it is half-open for Black only. Rooks to c8 hit c5, not thin air.",
+    "Black's d5 pawn is not isolated while the e-pawn stands next to it; it becomes a long-term target only if the e-file support disappears.",
+    "Whether the e5 space pawn survives the pawn-hunt: it, not the extra pawn, is usually the compensation that outlives the sequence."
+  ],
+  "typicalMistakes": [
+    "Holding c5 with pawns before pieces: b4 without c3 behind it invites ...a5 with no recapture toward the centre.",
+    "Counting the c5 pawn as banked before ...a5 and ...e6/...Bxc5 have both been answered.",
+    "Calling the c-file open and doubling rooks on it as White: the doubled c-pawns block their own heavy pieces.",
+    "Losing the e5 pawn while defending c5: trading the durable space advantage to keep the temporary material one."
+  ],
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Commissioned by the opening wave: content/drafts/anti-caro-advance-early-c5.json's graduation blocker recorded that after dxc5 no library entry names the resulting structure; this entry is that structure and that pack is its first customer.",
+      "MECHANICALLY DERIVED (python-chess, this session): after 1.e4 c6 2.d4 d5 3.e5 c5 4.dxc5 the pawn census is White a2/b2/c2/c5/e5/f2/g2/h2 against Black a7/b7/d5/e7/f7/g7/h7. The trigger's six conjuncts were each evaluated against that line: it first fires on 4.dxc5, persists through both the clamp (c3/b4) and regain (...e6/...Bxc5) continuations while the pawn stands, stops firing the move the pawn is regained, and is false at the start position, the Carlsbad tabiya, and the closed Caro chain.",
+      "NAMING HONESTY: the wave-1 flag guessed 'open c-file, isolated d-pawn tendencies'. The census says otherwise and this entry names only what the predicates verify: the c-file is half-open for Black (White's doubled c2/c5 pawns stand on it, so it is not open), and Black's d5 pawn is not isolated while the e-pawn remains. White's development lead — the structure's usual story — is not expressible in the shipped vocabulary and is deliberately not in the trigger.",
+      "UNGROUNDED: all plan, watch, and mistake prose is agent-authored strategic judgment with no citation, no engine evaluation, and no corpus frequency behind it."
+    ],
+    "attribution": []
+  }
+}

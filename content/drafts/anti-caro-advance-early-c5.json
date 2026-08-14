@@ -1,6 +1,6 @@
 {
   "id": "anti-caro-advance-early-c5",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Caro-Kann Advance: answering the immediate 3...c5",
   "mode": "line",
   "phase": "opening",
@@ -31,16 +31,19 @@
     "grab-and-decide",
     "development-before-material"
   ],
+  "shapes": ["advance-caro-dxc5-residue"],
   "planClasses": [
     {
       "id": "hold-the-pawn",
       "label": "Hold it (c3, b4, Be3)",
-      "description": "Position-specific arithmetic: the c5 pawn can be kept exactly as long as b4 is defensible against ...a5 and ...e6/...Bxc5 is met with a piece already there. Every extra holding move is a development move not played."
+      "description": "Position-specific arithmetic: the c5 pawn can be kept exactly as long as b4 is defensible against ...a5 and ...e6/...Bxc5 is met with a piece already there. Every extra holding move is a development move not played.",
+      "shapePlan": { "shape": "advance-caro-dxc5-residue", "plan": "white-hold-the-clamp" }
     },
     {
       "id": "return-for-development",
       "label": "Return it at a price",
-      "description": "The mature option: let ...Bxc5 or ...e6 regain the pawn while you castle and keep the e5 space. You are not defending a pawn, you are selling it — the price is Black's tempi spent regaining it."
+      "description": "The mature option: let ...Bxc5 or ...e6 regain the pawn while you castle and keep the e5 space. You are not defending a pawn, you are selling it — the price is Black's tempi spent regaining it.",
+      "shapePlan": { "shape": "advance-caro-dxc5-residue", "plan": "white-sell-the-pawn" }
     }
   ],
   "spine": [
@@ -376,12 +379,13 @@
       "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the B12 row — 9,346,096 games; ...c5 30.0% (2,806,594 games). No frequency below 3...c5 was retrieved; which fourth moves White actually plays there is unquantified.",
       "MECHANICALLY VERIFIED (chessops, this session): the start FEN is re-derived from the SAN list; all three root branches and every spine path were walked with SAN/UCI agreement; every deviation was checked legal and White-to-move from the position after its anchor. No engine, tablebase or corpus tool has evaluated any position.",
       "RELATION TO WAVE 1: the sibling draft anti-caro-advance-c5-race covers the 3...Bf5 main road and treats 3...c5 in a two-ply stub; this pack is that stub grown into its own narrow decision family, per the one-claim-per-pack rule.",
+      "SHAPES WIRING (v0.2.0, wave 3): content/shapes/advance-caro-dxc5-residue.json now names the post-dxc5 structure this pack's blocker asked for, and both plan classes reference its white plans. The entry's trigger was verified against this pack's own lines: it first fires on 4.dxc5, persists through the clamp and return branches, and stops the move the pawn is regained.",
       "UNGROUNDED: every strategic claim — the objective summary, both plan-class descriptions, all spine annotations, all seven deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. 'Original prose' answers copyright, not truth."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "This pack intentionally carries no shapes reference: after dxc5 the d4-e5 chain the closed-centre-chain entry requires is gone, and no current library entry names the resulting development-lead structure. If a 'space pawn vs development' entry is ever authored, this pack is its first customer.",
+      "RESOLVED in v0.2.0 (kept for the record): earlier versions carried no shapes reference because no library entry named the post-dxc5 structure. content/shapes/advance-caro-dxc5-residue.json now does — naming only what the predicates verify (doubled white c-pawns, the c5/e5 pawns against d5, c-file half-open for Black, d-file half-open for White; NOT an open c-file, and NOT an isolated d5 while Black's e-pawn stands). The entry's strategic prose inherits this pack's grounding blockers.",
       "The concept_violation on 5.b4 ('three tempi behind') and the entire hold-versus-return assessment are uncited and engine-unchecked; a fixed-depth Stockfish pass on the b4/...a5 lines would bear on them directly.",
       "The claim that dxc5 is 'the critical test' of 3...c5 is standard theory rendered from model knowledge with no named source.",
       "No engine validation pass has been run on any position in this pack."

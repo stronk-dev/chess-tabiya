@@ -1,0 +1,903 @@
+{
+  "id": "trajectory-qgd-exchange-minority",
+  "version": "0.1.0",
+  "title": "Trajectory: QGD Exchange to Carlsbad to the minority-attack rook ending",
+  "mode": "trajectory",
+  "phase": "cross_phase",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Club player playing one structure from move one to the rook ending",
+    "branchLengthTarget": 20
+  },
+  "start": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "run_trajectory",
+    "summary": "One continuous game as White: reach the Carlsbad structure from the QGD Exchange, execute the minority attack until Black's c-pawn is a fixed target, and convert the rook ending that structure produces. Every leg boundary is a fact about the position your own moves created."
+  },
+  "concepts": [
+    "carlsbad-structure",
+    "minority-attack",
+    "backward-pawn-target",
+    "plan-continuity-across-phases",
+    "liquidation-into-a-won-structure"
+  ],
+  "shapes": [
+    "carlsbad",
+    "rook-4v3-same-side"
+  ],
+  "planClasses": [
+    {
+      "id": "minority-attack",
+      "label": "Minority attack (Rab1, b4-b5)",
+      "description": "The trajectory's committed plan: this pack plays it from announcement to rook-ending payoff.",
+      "shapePlan": {
+        "shape": "carlsbad",
+        "plan": "white-minority-attack"
+      }
+    },
+    {
+      "id": "central-break",
+      "label": "Central break (f3, e3-e4)",
+      "description": "Authored in carlsbad-minority-attack, not here; named so your intent at the tabiya can be recorded honestly even when it diverges from this pack's spine.",
+      "shapePlan": {
+        "shape": "carlsbad",
+        "plan": "white-central-break"
+      }
+    },
+    {
+      "id": "kingside-attack",
+      "label": "Kingside attack (Ng3, h4-h5)",
+      "description": "Also authored in carlsbad-minority-attack; the same recording honesty applies.",
+      "shapePlan": {
+        "shape": "carlsbad",
+        "plan": "white-kingside-attack"
+      }
+    }
+  ],
+  "spine": [
+    {
+      "id": "p01-d4",
+      "moveUci": "d2d4",
+      "moveSan": "d4",
+      "children": [
+        {
+          "id": "p02-d5",
+          "moveUci": "d7d5",
+          "moveSan": "d5",
+          "children": [
+            {
+              "id": "p03-c4",
+              "moveUci": "c2c4",
+              "moveSan": "c4",
+              "children": [
+                {
+                  "id": "p04-e6",
+                  "moveUci": "e7e6",
+                  "moveSan": "e6",
+                  "children": [
+                    {
+                      "id": "p05-nc3",
+                      "moveUci": "b1c3",
+                      "moveSan": "Nc3",
+                      "children": [
+                        {
+                          "id": "p06-nf6",
+                          "moveUci": "g8f6",
+                          "moveSan": "Nf6",
+                          "children": [
+                            {
+                              "id": "p07-cd5",
+                              "moveUci": "c4d5",
+                              "moveSan": "cxd5",
+                              "children": [
+                                {
+                                  "id": "p08-ed5",
+                                  "moveUci": "e6d5",
+                                  "moveSan": "exd5",
+                                  "children": [
+                                    {
+                                      "id": "p09-bg5",
+                                      "moveUci": "c1g5",
+                                      "moveSan": "Bg5",
+                                      "children": [
+                                        {
+                                          "id": "p10-be7",
+                                          "moveUci": "f8e7",
+                                          "moveSan": "Be7",
+                                          "children": [
+                                            {
+                                              "id": "p11-e3",
+                                              "moveUci": "e2e3",
+                                              "moveSan": "e3",
+                                              "children": [
+                                                {
+                                                  "id": "p12-c6",
+                                                  "moveUci": "c7c6",
+                                                  "moveSan": "c6",
+                                                  "children": [
+                                                    {
+                                                      "id": "p13-bd3",
+                                                      "moveUci": "f1d3",
+                                                      "moveSan": "Bd3",
+                                                      "children": [
+                                                        {
+                                                          "id": "p14-nbd7",
+                                                          "moveUci": "b8d7",
+                                                          "moveSan": "Nbd7",
+                                                          "children": [
+                                                            {
+                                                              "id": "p15-qc2",
+                                                              "moveUci": "d1c2",
+                                                              "moveSan": "Qc2",
+                                                              "children": [
+                                                                {
+                                                                  "id": "p16-oo",
+                                                                  "moveUci": "e8g8",
+                                                                  "moveSan": "O-O",
+                                                                  "children": [
+                                                                    {
+                                                                      "id": "p17-nge2",
+                                                                      "moveUci": "g1e2",
+                                                                      "moveSan": "Nge2",
+                                                                      "children": [
+                                                                        {
+                                                                          "id": "p18-re8",
+                                                                          "moveUci": "f8e8",
+                                                                          "moveSan": "Re8",
+                                                                          "children": [
+                                                                            {
+                                                                              "id": "p19-oo",
+                                                                              "moveUci": "e1g1",
+                                                                              "moveSan": "O-O",
+                                                                              "children": [
+                                                                                {
+                                                                                  "id": "p20-nf8",
+                                                                                  "moveUci": "d7f8",
+                                                                                  "moveSan": "Nf8",
+                                                                                  "children": [
+                                                                                    {
+                                                                                      "id": "p21-rab1",
+                                                                                      "moveUci": "a1b1",
+                                                                                      "moveSan": "Rab1",
+                                                                                      "children": [
+                                                                                        {
+                                                                                          "id": "p22-ne4",
+                                                                                          "moveUci": "f6e4",
+                                                                                          "moveSan": "Ne4",
+                                                                                          "children": [
+                                                                                            {
+                                                                                              "id": "p23-be7",
+                                                                                              "moveUci": "g5e7",
+                                                                                              "moveSan": "Bxe7",
+                                                                                              "children": [
+                                                                                                {
+                                                                                                  "id": "p24-qe7",
+                                                                                                  "moveUci": "d8e7",
+                                                                                                  "moveSan": "Qxe7",
+                                                                                                  "children": [
+                                                                                                    {
+                                                                                                      "id": "p25-b4",
+                                                                                                      "moveUci": "b2b4",
+                                                                                                      "moveSan": "b4",
+                                                                                                      "children": [
+                                                                                                        {
+                                                                                                          "id": "p26-nc3",
+                                                                                                          "moveUci": "e4c3",
+                                                                                                          "moveSan": "Nxc3",
+                                                                                                          "children": [
+                                                                                                            {
+                                                                                                              "id": "p27-qc3",
+                                                                                                              "moveUci": "c2c3",
+                                                                                                              "moveSan": "Qxc3",
+                                                                                                              "children": [
+                                                                                                                {
+                                                                                                                  "id": "p28-a6",
+                                                                                                                  "moveUci": "a7a6",
+                                                                                                                  "moveSan": "a6",
+                                                                                                                  "children": [
+                                                                                                                    {
+                                                                                                                      "id": "p29-a4",
+                                                                                                                      "moveUci": "a2a4",
+                                                                                                                      "moveSan": "a4",
+                                                                                                                      "children": [
+                                                                                                                        {
+                                                                                                                          "id": "p30-ne6",
+                                                                                                                          "moveUci": "f8e6",
+                                                                                                                          "moveSan": "Ne6",
+                                                                                                                          "children": [
+                                                                                                                            {
+                                                                                                                              "id": "p31-nf4",
+                                                                                                                              "moveUci": "e2f4",
+                                                                                                                              "moveSan": "Nf4",
+                                                                                                                              "children": [
+                                                                                                                                {
+                                                                                                                                  "id": "p32-qf6",
+                                                                                                                                  "moveUci": "e7f6",
+                                                                                                                                  "moveSan": "Qf6",
+                                                                                                                                  "children": [
+                                                                                                                                    {
+                                                                                                                                      "id": "p33-ne6",
+                                                                                                                                      "moveUci": "f4e6",
+                                                                                                                                      "moveSan": "Nxe6",
+                                                                                                                                      "children": [
+                                                                                                                                        {
+                                                                                                                                          "id": "p34-fe6",
+                                                                                                                                          "moveUci": "f7e6",
+                                                                                                                                          "moveSan": "fxe6",
+                                                                                                                                          "children": [
+                                                                                                                                            {
+                                                                                                                                              "id": "p35-b5",
+                                                                                                                                              "moveUci": "b4b5",
+                                                                                                                                              "moveSan": "b5",
+                                                                                                                                              "children": [
+                                                                                                                                                {
+                                                                                                                                                  "id": "p36-ab5",
+                                                                                                                                                  "moveUci": "a6b5",
+                                                                                                                                                  "moveSan": "axb5",
+                                                                                                                                                  "children": [
+                                                                                                                                                    {
+                                                                                                                                                      "id": "p37-ab5",
+                                                                                                                                                      "moveUci": "a4b5",
+                                                                                                                                                      "moveSan": "axb5",
+                                                                                                                                                      "children": [
+                                                                                                                                                        {
+                                                                                                                                                          "id": "p38-h6",
+                                                                                                                                                          "moveUci": "h7h6",
+                                                                                                                                                          "moveSan": "h6",
+                                                                                                                                                          "children": [
+                                                                                                                                                            {
+                                                                                                                                                              "id": "p39-bc6",
+                                                                                                                                                              "moveUci": "b5c6",
+                                                                                                                                                              "moveSan": "bxc6",
+                                                                                                                                                              "children": [
+                                                                                                                                                                {
+                                                                                                                                                                  "id": "p40-bc6",
+                                                                                                                                                                  "moveUci": "b7c6",
+                                                                                                                                                                  "moveSan": "bxc6",
+                                                                                                                                                                  "children": [
+                                                                                                                                                                    {
+                                                                                                                                                                      "id": "p41-rb2",
+                                                                                                                                                                      "moveUci": "b1b2",
+                                                                                                                                                                      "moveSan": "Rb2",
+                                                                                                                                                                      "children": [
+                                                                                                                                                                        {
+                                                                                                                                                                          "id": "p42-ba6",
+                                                                                                                                                                          "moveUci": "c8a6",
+                                                                                                                                                                          "moveSan": "Ba6",
+                                                                                                                                                                          "children": [
+                                                                                                                                                                            {
+                                                                                                                                                                              "id": "p43-ba6",
+                                                                                                                                                                              "moveUci": "d3a6",
+                                                                                                                                                                              "moveSan": "Bxa6",
+                                                                                                                                                                              "children": [
+                                                                                                                                                                                {
+                                                                                                                                                                                  "id": "p44-ra6",
+                                                                                                                                                                                  "moveUci": "a8a6",
+                                                                                                                                                                                  "moveSan": "Rxa6",
+                                                                                                                                                                                  "children": [
+                                                                                                                                                                                    {
+                                                                                                                                                                                      "id": "p45-rfb1",
+                                                                                                                                                                                      "moveUci": "f1b1",
+                                                                                                                                                                                      "moveSan": "Rfb1",
+                                                                                                                                                                                      "children": [
+                                                                                                                                                                                        {
+                                                                                                                                                                                          "id": "p46-rb8",
+                                                                                                                                                                                          "moveUci": "e8b8",
+                                                                                                                                                                                          "moveSan": "Rb8",
+                                                                                                                                                                                          "children": [
+                                                                                                                                                                                            {
+                                                                                                                                                                                              "id": "p47-h3",
+                                                                                                                                                                                              "moveUci": "h2h3",
+                                                                                                                                                                                              "moveSan": "h3",
+                                                                                                                                                                                              "children": [
+                                                                                                                                                                                                {
+                                                                                                                                                                                                  "id": "p48-rb2",
+                                                                                                                                                                                                  "moveUci": "b8b2",
+                                                                                                                                                                                                  "moveSan": "Rxb2",
+                                                                                                                                                                                                  "children": [
+                                                                                                                                                                                                    {
+                                                                                                                                                                                                      "id": "p49-rb2",
+                                                                                                                                                                                                      "moveUci": "b1b2",
+                                                                                                                                                                                                      "moveSan": "Rxb2",
+                                                                                                                                                                                                      "children": [
+                                                                                                                                                                                                        {
+                                                                                                                                                                                                          "id": "p50-qd8",
+                                                                                                                                                                                                          "moveUci": "f6d8",
+                                                                                                                                                                                                          "moveSan": "Qd8",
+                                                                                                                                                                                                          "children": [
+                                                                                                                                                                                                            {
+                                                                                                                                                                                                              "id": "p51-rb7",
+                                                                                                                                                                                                              "moveUci": "b2b7",
+                                                                                                                                                                                                              "moveSan": "Rb7",
+                                                                                                                                                                                                              "children": [
+                                                                                                                                                                                                                {
+                                                                                                                                                                                                                  "id": "p52-qa5",
+                                                                                                                                                                                                                  "moveUci": "d8a5",
+                                                                                                                                                                                                                  "moveSan": "Qa5",
+                                                                                                                                                                                                                  "children": [
+                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                      "id": "p53-qa5",
+                                                                                                                                                                                                                      "moveUci": "c3a5",
+                                                                                                                                                                                                                      "moveSan": "Qxa5",
+                                                                                                                                                                                                                      "children": [
+                                                                                                                                                                                                                        {
+                                                                                                                                                                                                                          "id": "p54-ra5",
+                                                                                                                                                                                                                          "moveUci": "a6a5",
+                                                                                                                                                                                                                          "moveSan": "Rxa5",
+                                                                                                                                                                                                                          "children": [
+                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                              "id": "p55-rc7",
+                                                                                                                                                                                                                              "moveUci": "b7c7",
+                                                                                                                                                                                                                              "moveSan": "Rc7",
+                                                                                                                                                                                                                              "children": [
+                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                  "id": "p56-ra1",
+                                                                                                                                                                                                                                  "moveUci": "a5a1",
+                                                                                                                                                                                                                                  "moveSan": "Ra1+",
+                                                                                                                                                                                                                                  "children": [
+                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                      "id": "p57-kh2",
+                                                                                                                                                                                                                                      "moveUci": "g1h2",
+                                                                                                                                                                                                                                      "moveSan": "Kh2",
+                                                                                                                                                                                                                                      "children": [
+                                                                                                                                                                                                                                        {
+                                                                                                                                                                                                                                          "id": "p58-ra2",
+                                                                                                                                                                                                                                          "moveUci": "a1a2",
+                                                                                                                                                                                                                                          "moveSan": "Ra2",
+                                                                                                                                                                                                                                          "children": [
+                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                              "id": "p59-rc6",
+                                                                                                                                                                                                                                              "moveUci": "c7c6",
+                                                                                                                                                                                                                                              "moveSan": "Rxc6",
+                                                                                                                                                                                                                                              "children": [
+                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                  "id": "p60-rf2",
+                                                                                                                                                                                                                                                  "moveUci": "a2f2",
+                                                                                                                                                                                                                                                  "moveSan": "Rxf2",
+                                                                                                                                                                                                                                                  "children": [],
+                                                                                                                                                                                                                                                  "annotations": [
+                                                                                                                                                                                                                                                    "End of the authored line: White has traded f2 for c6 and owns the e6 target next. The win objective grades what you do from here, not whether you memorised this far."
+                                                                                                                                                                                                                                                  ]
+                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                              ]
+                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                          ],
+                                                                                                                                                                                                                                          "annotations": [
+                                                                                                                                                                                                                                            "The defender's answer: activity. The a-file rook takes the second rank and White's f2 for the c6 pawn - the classic trade of weaknesses. The spine ends two plies on; the conversion attempt is yours."
+                                                                                                                                                                                                                                          ]
+                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                      ]
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                  ]
+                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                              ],
+                                                                                                                                                                                                                              "annotations": [
+                                                                                                                                                                                                                                "The rook arrives at the target the middlegame manufactured."
+                                                                                                                                                                                                                              ]
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                          ],
+                                                                                                                                                                                                                          "annotations": [
+                                                                                                                                                                                                                            "Queens off. Count the survivors: one rook each, five pawns each, and the c6 pawn from move twenty is still backward on a half-open file. This position satisfies the rook-ending census that opens the final leg - reached by every move that came before, with nothing stitched."
+                                                                                                                                                                                                                          ]
+                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                      ]
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                  ],
+                                                                                                                                                                                                                  "annotations": [
+                                                                                                                                                                                                                    "The queen trade offer, made the safe way: a5 is covered by the rook, so the trade happens on Black's terms or not at all. Declining leaves the a6-rook and a5-queen aimed at White's remaining queenside."
+                                                                                                                                                                                                                  ]
+                                                                                                                                                                                                                }
+                                                                                                                                                                                                              ]
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                          ]
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                      ]
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                  ]
+                                                                                                                                                                                                }
+                                                                                                                                                                                              ]
+                                                                                                                                                                                            }
+                                                                                                                                                                                          ],
+                                                                                                                                                                                          "annotations": [
+                                                                                                                                                                                            "Black challenges the file White built the plan on. Trading rooks is defensive progress for Black; White accepts one pair and keeps the other."
+                                                                                                                                                                                          ]
+                                                                                                                                                                                        }
+                                                                                                                                                                                      ]
+                                                                                                                                                                                    }
+                                                                                                                                                                                  ]
+                                                                                                                                                                                }
+                                                                                                                                                                              ]
+                                                                                                                                                                            }
+                                                                                                                                                                          ],
+                                                                                                                                                                          "annotations": [
+                                                                                                                                                                            "With b7 empty the bad bishop finally has a diagonal - straight into a trade. Black gives up the bishop pair politely because the alternative is a bishop with no future behind c6 and d5."
+                                                                                                                                                                          ]
+                                                                                                                                                                        }
+                                                                                                                                                                      ]
+                                                                                                                                                                    }
+                                                                                                                                                                  ],
+                                                                                                                                                                  "annotations": [
+                                                                                                                                                                    "The concession stands: Black's c6 pawn has no pawn neighbour that can ever defend it, and it sits on the file where White has no pawn. This is the middlegame leg's graded target - and it is a fact about pawns, so it will still be true in the rook ending."
+                                                                                                                                                                  ]
+                                                                                                                                                                }
+                                                                                                                                                              ],
+                                                                                                                                                              "annotations": [
+                                                                                                                                                                "The exchange the whole plan aimed at."
+                                                                                                                                                              ]
+                                                                                                                                                            }
+                                                                                                                                                          ]
+                                                                                                                                                        }
+                                                                                                                                                      ]
+                                                                                                                                                    }
+                                                                                                                                                  ]
+                                                                                                                                                },
+                                                                                                                                                {
+                                                                                                                                                  "id": "b36-cb5",
+                                                                                                                                                  "moveUci": "c6b5",
+                                                                                                                                                  "moveSan": "cxb5",
+                                                                                                                                                  "children": [
+                                                                                                                                                    {
+                                                                                                                                                      "id": "b37-bb5",
+                                                                                                                                                      "moveUci": "d3b5",
+                                                                                                                                                      "moveSan": "Bxb5",
+                                                                                                                                                      "children": [],
+                                                                                                                                                      "annotations": [
+                                                                                                                                                        "The bishop lands on b5 with tempo against e8. Two structural bills were on offer and Black chose the isolated-d5 one; the packs' claim is not that one is losing, but that you should know which bill you are agreeing to pay."
+                                                                                                                                                      ]
+                                                                                                                                                    }
+                                                                                                                                                  ],
+                                                                                                                                                  "annotations": [
+                                                                                                                                                    "Taking with the c-pawn dodges the backward-pawn future - and buys a different one: the d5 pawn loses its neighbour and White's pieces get b5 and the long diagonal."
+                                                                                                                                                  ]
+                                                                                                                                                }
+                                                                                                                                              ],
+                                                                                                                                              "annotations": [
+                                                                                                                                                "The break. Count b5 before it goes: attackers and defenders match, so the pawn can stand there. Black's replies split the pack - the mainline lets it through, the branch takes with the c-pawn and accepts the other structural bill."
+                                                                                                                                              ]
+                                                                                                                                            }
+                                                                                                                                          ],
+                                                                                                                                          "annotations": [
+                                                                                                                                            "Recapturing toward the centre: e6 now backs up d5, at the price of the e-file pawn duo and the f-file opening in front of Black's king. The queenside plan is unaffected."
+                                                                                                                                          ]
+                                                                                                                                        }
+                                                                                                                                      ]
+                                                                                                                                    }
+                                                                                                                                  ]
+                                                                                                                                },
+                                                                                                                                {
+                                                                                                                                  "id": "b32-nf4",
+                                                                                                                                  "moveUci": "e6f4",
+                                                                                                                                  "moveSan": "Nxf4",
+                                                                                                                                  "children": [
+                                                                                                                                    {
+                                                                                                                                      "id": "b33-ef4",
+                                                                                                                                      "moveUci": "e3f4",
+                                                                                                                                      "moveSan": "exf4",
+                                                                                                                                      "children": [],
+                                                                                                                                      "annotations": [
+                                                                                                                                        "The e-pawn recaptures: White accepts doubled f-pawns and a half-open e-file, and d4 loses its pawn support. The minority attack still works, but every d4 tactic now has to be counted by hand. Compare this against the mainline recapture before choosing which trade to allow."
+                                                                                                                                      ]
+                                                                                                                                    }
+                                                                                                                                  ],
+                                                                                                                                  "annotations": [
+                                                                                                                                    "The other half of the knight offer: Black initiates."
+                                                                                                                                  ]
+                                                                                                                                }
+                                                                                                                              ],
+                                                                                                                              "annotations": [
+                                                                                                                                "The e2-knight finally moves, and the offer defines both branches: trade on e6 and Black's f-pawn recaptures toward the centre, or let Black take on f4 and recapture with the e-pawn. Both structures are authored; play both."
+                                                                                                                              ]
+                                                                                                                            }
+                                                                                                                          ]
+                                                                                                                        }
+                                                                                                                      ]
+                                                                                                                    }
+                                                                                                                  ]
+                                                                                                                }
+                                                                                                              ]
+                                                                                                            }
+                                                                                                          ],
+                                                                                                          "annotations": [
+                                                                                                            "Black trades pieces to make the coming queenside weakness easier to defend - the standard defensive logic in this structure, and the reason the ending at the far end of this pack has so few pieces in it."
+                                                                                                          ]
+                                                                                                        }
+                                                                                                      ]
+                                                                                                    }
+                                                                                                  ]
+                                                                                                }
+                                                                                              ]
+                                                                                            }
+                                                                                          ]
+                                                                                        }
+                                                                                      ],
+                                                                                      "annotations": [
+                                                                                        "The rook goes behind the pawn that is about to advance. From here to ...bxc6 the moves are one plan executed, not a sequence of independent good moves."
+                                                                                      ]
+                                                                                    }
+                                                                                  ],
+                                                                                  "annotations": [
+                                                                                    "The tabiya, identical to the Carlsbad pack's start. Three plans exist from here; this trajectory commits to the minority attack and plays its consequences out to the ending. The other two plans live in carlsbad-minority-attack, where they can be compared side by side."
+                                                                                  ]
+                                                                                }
+                                                                              ]
+                                                                            }
+                                                                          ]
+                                                                        }
+                                                                      ]
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ]
+                                                    }
+                                                  ],
+                                                  "annotations": [
+                                                    "...c6 completes the skeleton: White has no c-pawn, Black has no e-pawn, d4 faces d5. This is the Carlsbad structure, and the position now satisfies the same structural test that opens the next leg of this trajectory."
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "annotations": [
+                                "The Exchange. This capture is the whole pack in one move: it fixes the central pawn pair d4-against-d5 and hands White the half-open c-file that every later leg of this drill lives on."
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "legs": [
+    {
+      "id": "opening",
+      "objective": {
+        "type": "follow_theory",
+        "summary": "Play the QGD Exchange until the Carlsbad structure stands on the board: trade on d5, develop behind the d4-d5 pair, and let ...c6 complete the skeleton. The leg ends when the position itself passes the Carlsbad test, not at a memorised move number.",
+        "successConditions": [
+          {
+            "kind": "reach_checkpoint",
+            "checkpointId": "carlsbad-standing",
+            "to": "preserved"
+          }
+        ]
+      }
+    },
+    {
+      "id": "carlsbad-middlegame",
+      "entryCheckpointId": "carlsbad-standing",
+      "objective": {
+        "type": "execute_break",
+        "summary": "Execute the minority attack: Rab1, b4, a4, b5, and the exchange on c6. Graded by the structure, not the move order: succeed when Black has a backward c-pawn on the file that is half-open for White.",
+        "successConditions": [
+          {
+            "kind": "structural_feature",
+            "to": "preserved",
+            "feature": {
+              "kind": "all",
+              "of": [
+                {
+                  "kind": "feature",
+                  "feature": {
+                    "kind": "backward_pawn",
+                    "color": "black",
+                    "file": "c"
+                  }
+                },
+                {
+                  "kind": "feature",
+                  "feature": {
+                    "kind": "half_open_file",
+                    "color": "white",
+                    "file": "c"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "rook-ending",
+      "entryCheckpointId": "rook-ending",
+      "objective": {
+        "type": "win",
+        "summary": "The ending the minority attack was for: rook against rook with the backward c6 pawn as the standing target. Convert the pressure - win the weak pawn or the position it forces Black into. A draw here fails the objective; that is the authored claim this leg exists to test.",
+        "grading": {
+          "assessedBy": {
+            "kind": "authored",
+            "note": "Authored practical assessment, not a proved result: the fixed c6 target plus the more active rook is a position White can press at no risk. Fourteen units are on the board at leg entry, so no tablebase applies anywhere in this leg, and no engine has evaluated it."
+          },
+          "resolveAt": {
+            "kind": "checkpoint",
+            "checkpointId": "conversion-window"
+          }
+        },
+        "successConditions": [
+          {
+            "kind": "material_balance",
+            "perspective": "white",
+            "comparison": "atMost",
+            "value": -2,
+            "to": "degraded"
+          }
+        ]
+      }
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "carlsbad-standing",
+      "label": "The Carlsbad structure stands",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "feature",
+            "feature": {
+              "kind": "named_structure",
+              "id": "carlsbad"
+            }
+          }
+        }
+      },
+      "actions": []
+    },
+    {
+      "id": "plan-tabiya",
+      "label": "The tabiya: commit to the plan this trajectory plays out",
+      "trigger": {
+        "atSpineNode": "p20-nf8"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "minority-attack",
+          "central-break",
+          "kingside-attack"
+        ]
+      }
+    },
+    {
+      "id": "target-created",
+      "label": "...bxc6 - the backward pawn is a fact",
+      "trigger": {
+        "atSpineNode": "p40-bc6"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "rook-ending",
+      "label": "Rooks and kings: the ending the structure produced",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "white",
+                  "role": "rook",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "black",
+                  "role": "rook",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "any",
+                  "of": [
+                    {
+                      "kind": "feature",
+                      "feature": {
+                        "kind": "piece_reach_count",
+                        "color": "white",
+                        "role": "queen",
+                        "scope": "any",
+                        "comparison": "atLeast",
+                        "count": 0
+                      }
+                    },
+                    {
+                      "kind": "feature",
+                      "feature": {
+                        "kind": "piece_reach_count",
+                        "color": "black",
+                        "role": "queen",
+                        "scope": "any",
+                        "comparison": "atLeast",
+                        "count": 0
+                      }
+                    },
+                    {
+                      "kind": "feature",
+                      "feature": {
+                        "kind": "piece_reach_count",
+                        "color": "white",
+                        "role": "bishop",
+                        "scope": "any",
+                        "comparison": "atLeast",
+                        "count": 0
+                      }
+                    },
+                    {
+                      "kind": "feature",
+                      "feature": {
+                        "kind": "piece_reach_count",
+                        "color": "black",
+                        "role": "bishop",
+                        "scope": "any",
+                        "comparison": "atLeast",
+                        "count": 0
+                      }
+                    },
+                    {
+                      "kind": "feature",
+                      "feature": {
+                        "kind": "piece_reach_count",
+                        "color": "white",
+                        "role": "knight",
+                        "scope": "any",
+                        "comparison": "atLeast",
+                        "count": 0
+                      }
+                    },
+                    {
+                      "kind": "feature",
+                      "feature": {
+                        "kind": "piece_reach_count",
+                        "color": "black",
+                        "role": "knight",
+                        "scope": "any",
+                        "comparison": "atLeast",
+                        "count": 0
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "actions": []
+    },
+    {
+      "id": "conversion-window",
+      "label": "End of the conversion window",
+      "trigger": {
+        "atPly": 70
+      },
+      "actions": []
+    }
+  ],
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "spineNodeId": "p06-nf6"
+      },
+      "moveUci": "c4c5",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "4.c5 closes the queenside and gives up the exchange on d5 entirely: no half-open c-file, no Carlsbad, no minority attack. Legal, playable chess - and off everything this trajectory exists to rehearse, which is why it degrades the opening leg."
+    },
+    {
+      "at": {
+        "spineNodeId": "p12-c6"
+      },
+      "moveUci": "g1f3",
+      "class": "accepted_alternative",
+      "note": "7.Nf3 is the other main Carlsbad development and probably the more common one. This pack's spine plays Nge2 because the trajectory follows the carlsbad-minority-attack tabiya exactly; with Nf3 the same minority attack works but the f3/e4 central option is gone."
+    },
+    {
+      "at": {
+        "spineNodeId": "p28-a6"
+      },
+      "moveUci": "b4b5",
+      "class": "interesting_deviation",
+      "note": "15.b5 at once, without a4 behind it. After ...axb5 the recapture must come from the bishop, which trades the piece that was bearing on b5 and leaves the a-file to Black. The same break, one preparing move short - play it and compare whose rook owns the open file afterwards."
+    },
+    {
+      "at": {
+        "spineNodeId": "p58-ra2"
+      },
+      "moveUci": "c7c8",
+      "class": "interesting_deviation",
+      "note": "30.Rc8+ checks for its own sake: the king steps to h7 and the rook has spent the tempo that was needed for Rxc6. The backward pawn has waited twenty moves; it will not wait while you give checks."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "structure-outlives-phases",
+      "text": "The pack's central claim: the concession created on move twenty - a backward c-pawn on a half-open file - is still the operative fact of the position in the rook ending forty plies later. Structures persist; piece arrangements do not.",
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
+    },
+    {
+      "id": "defender-trades",
+      "text": "Black's trades in this line are not passivity but the standard defensive method in the Carlsbad: fewer pieces make the fixed weakness harder to attack. The trajectory's question is whether the weakness survives the simplification anyway.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    },
+    {
+      "id": "leg-boundaries-are-structural",
+      "text": "Both leg boundaries in this pack are structural facts computed from the position (the Carlsbad test; the rooks-only census), not move numbers. If you reach them by another move order, the legs still open.",
+      "evidenceTypes": [
+        "derived_feature"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Opening identity (D35 Queen's Gambit Declined: Exchange Variation): lichess-org/chess-openings (CC0), via the emitted candidate content/candidates/d35-queen-s-gambit-declined-exchange-variation. NOTE: that candidate's recorded skeleton uses the 4.e3/Nf3 move order; this pack follows the 4.cxd5/Bg5/Nge2 order of content/drafts/carlsbad-minority-attack.json so that its tabiya, plan classes and shape references chain exactly. Same ECO family, different authored road; both orders reach the Carlsbad.",
+      "Middlegame leg: plan taxonomy, tabiya and minority-attack line reused from content/drafts/carlsbad-minority-attack.json (Pack B); its provenance blockers are inherited, including the uncited three-plan taxonomy. The structural success condition is the same machine-graded target Pack B ships.",
+      "Endgame leg: the defender-side family teaching referenced via the rook-4v3-same-side shape entry. CENSUS HONESTY: that entry's trigger is the generic rooks-only census, and this pack's ending is rook-and-five against rook-and-five with pawns on both wings - the family reference names transferable rook-ending method (activity, trade pawns not rooks), NOT the literal 4v3 same-side census. The entry fires here because the vocabulary cannot distinguish the two; this is the known reference-semantics gap logged by the opening wave.",
+      "MECHANICALLY VERIFIED (python-chess 1.11.2, this session, plus make pack-check's chessops lint): the 60-ply mainline, both branches and all four deviations are legal with SAN/UCI agreement; the Carlsbad predicate first becomes true at ply 12 (...c6), the backward-c6/half-open-c conjunction at ply 40 (...bxc6), and the rooks-only census at ply 54 (...Rxa5), and none is true at the start position. Checkpoint firing plies were computed with reimplementations of the runtime's predicate semantics, not by running the server.",
+      "LIQUIDATION HONESTY: the trade sequence from ply 41 to 54 (bishops on a6, rooks on b2, queens on a5) is a single agent-authored plausible continuation, chosen so that every capture has a legal recapture (verified) and so that the trades happen on the files the minority attack opened. It is not forced, not engine-checked, and not claimed to be best play by either side; it is the causal road this guided trajectory rehearses.",
+      "UNGROUNDED: every strategic claim - leg summaries, annotations, deviation judgments, feedback claims, and the leg-3 authored win assessment - is agent-authored prose with no citation, no engine evaluation and no human review."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13); only a citable source or mechanical validation that bears on a claim clears a blocker.",
+      "The leg-3 'win' objective is the strongest claim in the file: an authored assessment that the minority-attack rook ending is winning in practice, with no engine pass, no tablebase applicability (fourteen units at entry), and no cited endgame source. A fixed-depth Stockfish sweep over the ending spine would bear on it directly.",
+      "The authored liquidation (plies 41-54) is one plausible road, not a forced or measured one. Nothing grounds the claim that games from this middlegame actually reach rook endings at these rating bands; explorer data cannot reach positions this deep, so the instrument would have to be the Go corpus pipeline.",
+      "Inherited from Pack B: the three-plan Carlsbad taxonomy and every minority-attack evaluation are uncited.",
+      "The rook-4v3-same-side shape reference relies on the census gap documented in provenance; if a literal same-side-4v3 trigger ever becomes expressible, this pack's ending does not match it and the reference must be reviewed.",
+      "No rating-band frequency evidence for any move past the opening leg; content/candidates/priority/priority.json has no D35 row, so even the opening's popularity is uncited here."
+    ]
+  }
+}
