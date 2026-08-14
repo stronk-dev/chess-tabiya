@@ -44,11 +44,12 @@ import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
 import { evidencePacket, renderVoice, type VoiceProvider, type VoiceScope } from "./guidance.js";
 import { corpusPopulation, type CorpusSource } from "./corpus.js";
 import type { RepertoireService } from "./repertoire.js";
+import { publicMutationPayload } from "./feedback-policy.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
 function json(status: number, value: unknown): Response {
-  return Response.json(value, {
+  return Response.json(publicMutationPayload(value), {
     status,
     headers: { "cache-control": "no-store" },
   });

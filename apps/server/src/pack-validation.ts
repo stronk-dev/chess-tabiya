@@ -9,9 +9,12 @@ import {
   type StructuralExpression,
   type StructuralFeature,
 } from "@chess-tabiya/schema/drill-pack";
-import { createRun } from "@chess-tabiya/runtime";
+import { createRun, matchesStructuralExpression } from "@chess-tabiya/runtime";
 import { between } from "chessops/attacks";
+import { Chess } from "chessops/chess";
+import { makeFen, parseFen } from "chessops/fen";
 import { parseSquare } from "chessops/util";
+import { parseUci } from "chessops/util";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
@@ -91,6 +94,27 @@ const PLAN_OBJECTIVES = new Set([
   "reach_structure", "preserve_plan_window", "execute_break",
   "prevent_opponent_plan", "transition_to_endgame",
 ]);
+const KEY_POINT_JUDGEMENTS = new Set(["weak", "strong", "good", "bad", "better", "worse", "advantage", "winning", "losing", "should", "must", "best", "worst", "mistake", "blunder", "punish", "wins", "loses"]);
+
+function reasoningCheckpointFen(pack: DrillPackDefinition, checkpoint: DrillPackDefinition["checkpoints"][number]): string | undefined {
+  const trigger = checkpoint.trigger;
+  if ("windowOpens" in trigger || (!("atSpineNode" in trigger) && !("atPly" in trigger))) return undefined;
+  const root = Chess.fromSetup(parseFen(pack.start.fen).unwrap()).unwrap();
+  const found: string[] = [];
+  const visit = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[], position: Chess, ply: number): void => {
+    for (const node of nodes) {
+      const next = position.clone();
+      const move = parseUci(node.moveUci);
+      if (move === undefined || !next.isLegal(move)) continue;
+      next.play(move);
+      const nextPly = ply + 1;
+      if (("atSpineNode" in trigger && trigger.atSpineNode === node.id) || ("atPly" in trigger && trigger.atPly === nextPly)) found.push(makeFen(next.toSetup()));
+      visit(node.children, next, nextPly);
+    }
+  };
+  visit(pack.spine ?? [], root, 0);
+  return found.length === 1 ? found[0] : undefined;
+}
 
 export function structuralIssues(value: unknown, path = "", depth = 0): readonly PackValidationIssue[] {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return [];
@@ -192,6 +216,36 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
     if (!shapeIds.has(planClass.shapePlan.shape)) issues.push(runtimeIssue("SHAPE_PLAN_REF_UNLISTED", `/planClasses/${index}/shapePlan`, `shape ${planClass.shapePlan.shape} is not listed in pack.shapes`));
     const entry = shapes?.get(planClass.shapePlan.shape);
     if (entry !== undefined && !entry.document.plans.some((plan) => plan.id === planClass.shapePlan!.plan)) issues.push(runtimeIssue("SHAPE_PLAN_UNKNOWN", `/planClasses/${index}/shapePlan`, `shape ${planClass.shapePlan.shape} has no plan ${planClass.shapePlan.plan}`));
+  }
+  const spineIds = new Set<string>();
+  const collectSpine = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[]): void => { for (const node of nodes) { spineIds.add(node.id); collectSpine(node.children); } };
+  collectSpine(pack.spine ?? []);
+  const claimIds = new Set((pack.feedbackClaims ?? []).map((claim) => claim.id));
+  for (const [checkpointIndex, checkpoint] of pack.checkpoints.entries()) {
+    if (checkpoint.interaction?.type !== "stated_reasoning") continue;
+    const ids = new Set<string>();
+    const phrases = new Map<string, string>();
+    const checkpointFen = reasoningCheckpointFen(pack, checkpoint);
+    for (const [pointIndex, point] of checkpoint.interaction.keyPoints.entries()) {
+      const pointPath = `/checkpoints/${checkpointIndex}/interaction/keyPoints/${pointIndex}`;
+      if (ids.has(point.id)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/id`, `duplicate key point id ${point.id}`));
+      ids.add(point.id);
+      for (const [phraseIndex, phrase] of point.phrases.entries()) {
+        const normalized = phrase.normalize("NFKC").toLocaleLowerCase("en-US").replaceAll(/\s+/g, " ").trim();
+        const previous = phrases.get(normalized);
+        if (previous !== undefined && previous !== point.id) issues.push(runtimeIssue("KEY_POINT_PHRASES_COLLIDE", `${pointPath}/phrases/${phraseIndex}`, `phrase collides with key point ${previous}`));
+        else phrases.set(normalized, point.id);
+        const words = normalized.match(/[a-z]+/g) ?? [];
+        if (words.length > 0 && words.every((word) => KEY_POINT_JUDGEMENTS.has(word))) issues.push(Object.freeze({ severity: "warning" as const, source: "runtime" as const, code: "KEY_POINT_PHRASE_IS_JUDGEMENT", path: `${pointPath}/phrases/${phraseIndex}`, message: "phrase contains only judgement vocabulary" }));
+      }
+      const ground = point.ground;
+      if (ground.kind === "shape_plan") {
+        const entry = shapes?.get(ground.shape);
+        if (!new Set(pack.shapes ?? []).has(ground.shape) || entry === undefined || !entry.document.plans.some((plan) => plan.id === ground.plan)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground`, `shape plan ${ground.shape}/${ground.plan} is not resolvable`));
+      } else if (ground.kind === "spine_move" && !spineIds.has(ground.spineNodeId)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground/spineNodeId`, `unknown spine node ${ground.spineNodeId}`));
+      else if (ground.kind === "claim" && !claimIds.has(ground.claimId)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground/claimId`, `unknown feedback claim ${ground.claimId}`));
+      else if (ground.kind === "structural" && checkpointFen !== undefined && !matchesStructuralExpression(checkpointFen, ground.expression)) issues.push(runtimeIssue("KEY_POINT_GROUND_FALSE_AT_CHECKPOINT", `${pointPath}/ground/expression`, "structural ground is false at the statically resolved checkpoint position"));
+    }
   }
   const mode = raw.mode;
 

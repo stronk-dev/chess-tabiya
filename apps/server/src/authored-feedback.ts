@@ -81,6 +81,28 @@ interface RevealEvent {
   readonly attribution: RevealAttribution;
 }
 
+function reasoningRecorded(run: DrillRun, checkpointEventSeq: number): boolean {
+  return run.events.some((event) => event.type === "reasoning.recorded" && event.data.checkpointEventSeq === checkpointEventSeq);
+}
+
+function revealIsReleased(pack: PackRecord, run: DrillRun, reveal: RevealEvent): boolean {
+  const pathNodeIds = new Set(historyFrom(run, reveal.nodeId).map((node) => node.id));
+  const occurrences = run.events.filter((event): event is CheckpointReachedEvent =>
+    event.type === "checkpoint.reached" && event.seq <= reveal.orderSeq && pathNodeIds.has(event.data.nodeId)
+  );
+  if (pack.feedbackPolicy === "delayed_checkpoint") {
+    const occurrence = reveal.attribution.kind === "checkpoint"
+      ? occurrences.find((event) => event.seq === reveal.attribution.eventSeq)
+      : undefined;
+    const definition = occurrence === undefined ? undefined : checkpointDefinition(pack.document, occurrence.data.checkpointId);
+    return definition?.interaction?.type !== "stated_reasoning" || reasoningRecorded(run, occurrence!.seq);
+  }
+  return occurrences.every((occurrence) => {
+    const definition = checkpointDefinition(pack.document, occurrence.data.checkpointId);
+    return definition?.interaction?.type !== "stated_reasoning" || reasoningRecorded(run, occurrence.seq);
+  });
+}
+
 const KIND_ORDER: Readonly<Record<AuthoredFeedbackItem["kind"], number>> =
   Object.freeze({ annotation: 0, deviation: 1, plan_class: 2, theory_verdict: 3 });
 
@@ -246,6 +268,7 @@ export function projectAuthoredFeedback(
   const definitions = planClasses(pack.document);
   const revealed = new Map<string, AuthoredFeedbackItem>();
   for (const reveal of revealEvents(pack, run)) {
+    if (!revealIsReleased(pack, run, reveal)) continue;
     const path = historyFrom(run, reveal.nodeId);
     const pathRunNodeIds = new Set(path.map((node) => node.id));
     const pathSpineNodeIds = new Set(

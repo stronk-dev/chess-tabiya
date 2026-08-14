@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.14",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.15",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.14 format for an engine-independent authored drill.",
+  "description": "Living v0.15 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -569,8 +569,45 @@
             "flipBoard": { "type": "boolean" }
           },
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "keyPoints"],
+          "properties": {
+            "type": { "const": "stated_reasoning" },
+            "keyPoints": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 12,
+              "items": { "$ref": "#/$defs/reasoningKeyPoint" }
+            }
+          },
+          "additionalProperties": false
         }
       ]
+    },
+    "reasoningKeyPoint": {
+      "type": "object",
+      "required": ["id", "label", "phrases", "ground"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phrases": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "type": "string", "minLength": 1, "maxLength": 80 }
+        },
+        "ground": {
+          "oneOf": [
+            { "type": "object", "required": ["kind", "expression"], "properties": { "kind": { "const": "structural" }, "expression": { "$ref": "#/$defs/structuralExpression" } }, "additionalProperties": false },
+            { "type": "object", "required": ["kind", "shape", "plan"], "properties": { "kind": { "const": "shape_plan" }, "shape": { "$ref": "#/$defs/id" }, "plan": { "$ref": "#/$defs/id" } }, "additionalProperties": false },
+            { "type": "object", "required": ["kind", "spineNodeId"], "properties": { "kind": { "const": "spine_move" }, "spineNodeId": { "$ref": "#/$defs/id" } }, "additionalProperties": false },
+            { "type": "object", "required": ["kind", "claimId"], "properties": { "kind": { "const": "claim" }, "claimId": { "$ref": "#/$defs/id" } }, "additionalProperties": false }
+          ]
+        }
+      },
+      "additionalProperties": false
     },
     "checkpoint": {
       "type": "object",

@@ -211,6 +211,33 @@ export type PredictionRecordedEvent = Event<
     readonly distribution: OpponentSelection;
   }
 >;
+export interface ReasoningTranscript {
+  readonly candidates: readonly string[];
+  readonly plan: string;
+  readonly fears: string;
+}
+export interface ReasoningDetection {
+  readonly keyPointId: string;
+  readonly status: "detected" | "not_detected";
+  readonly match?: {
+    readonly field: "candidates" | "plan" | "fears";
+    readonly index: number | null;
+    readonly start: number;
+    readonly end: number;
+  };
+}
+export type ReasoningRecordedEvent = Event<
+  "reasoning.recorded",
+  {
+    readonly nodeId: string;
+    readonly checkpointId: string;
+    readonly checkpointEventSeq: number;
+    readonly skipped: boolean;
+    readonly transcript: ReasoningTranscript | null;
+    readonly matcherVersion: 1;
+    readonly detections: readonly ReasoningDetection[];
+  }
+>;
 export type GroupSource = "hand_picked" | "authored" | "human_replies" | "engine_top_n";
 export type GroupResistance = "fixed" | "per_branch";
 export interface BranchGroupMember {
@@ -253,6 +280,7 @@ export type DrillRunEvent =
   | OutcomeReachedEvent
   | TransferScheduledEvent
   | PredictionRecordedEvent
+  | ReasoningRecordedEvent
   | GroupCreatedEvent
   | FeedbackRevealedEvent;
 

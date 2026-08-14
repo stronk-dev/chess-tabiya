@@ -40,6 +40,7 @@ export { endgameReading, renderEndgameReading, type EndgameTypeId, type EndgameR
 export { retrospectivePivot } from "./adaptive.js";
 export { storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
 export { voiceCheck, BANNED_JUDGEMENTS, PRESCRIPTIVE_VERBS, CHESS_LEXICON, type EvidencePacket, type ShapeEntryRef, type VoiceCheckResult } from "./voice.js";
+export { matchKeyPoints, normalizeReasoningText } from "./reasoning.js";
 export { terminalOutcome } from "./outcome.js";
 export {
   STRUCTURAL_FEATURE_KINDS,
@@ -186,6 +187,9 @@ export type {
   OpponentSelection,
   OpponentMoveSelectedEvent,
   PredictionRecordedEvent,
+  ReasoningDetection,
+  ReasoningRecordedEvent,
+  ReasoningTranscript,
   GroupCreatedEvent,
   GroupResistance,
   GroupSource,

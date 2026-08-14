@@ -16,6 +16,10 @@ import type {
   SegmentCompletedEvent,
 } from "./types.js";
 
+function normalizeForSpan(value: string): string {
+  return value.normalize("NFKC").toLocaleLowerCase("en-US").replaceAll(/\s+/g, " ").trim();
+}
+
 const MACHINE_GROUP_MODES = Object.freeze({
   human_replies: "human_common",
   engine_top_n: "strong_engine",
@@ -271,6 +275,33 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
         const rank = candidate?.rank ?? null;
         if (event.data.candidateCount !== candidates.length || event.data.predictedMass !== mass || event.data.predictedRank !== rank) {
           throw new TypeError(`prediction.recorded ${event.seq} does not match its distribution`);
+        }
+        break;
+      }
+      case "reasoning.recorded": {
+        const node = nodes.find((candidate) => candidate.id === event.data.nodeId);
+        if (node === undefined) throw unknownNode(event.data.nodeId);
+        const checkpoint = events[event.data.checkpointEventSeq - 1];
+        if (
+          checkpoint?.type !== "checkpoint.reached" ||
+          checkpoint.data.nodeId !== event.data.nodeId ||
+          checkpoint.data.checkpointId !== event.data.checkpointId
+        ) throw new TypeError(`reasoning.recorded ${event.seq} does not match its checkpoint occurrence`);
+        if (event.data.matcherVersion !== 1) throw new TypeError(`reasoning.recorded ${event.seq} has an unsupported matcher version`);
+        if (event.data.skipped !== (event.data.transcript === null) || event.data.skipped !== (event.data.detections.length === 0)) {
+          throw new TypeError(`reasoning.recorded ${event.seq} has inconsistent skip data`);
+        }
+        const ids = new Set<string>();
+        for (const detection of event.data.detections) {
+          if (ids.has(detection.keyPointId)) throw new TypeError(`reasoning.recorded ${event.seq} repeats key point ${detection.keyPointId}`);
+          ids.add(detection.keyPointId);
+          if ((detection.status === "detected") !== (detection.match !== undefined)) throw new TypeError(`reasoning.recorded ${event.seq} has inconsistent detection data`);
+          if (detection.match !== undefined) {
+            const values = detection.match.field === "candidates" ? event.data.transcript?.candidates : [event.data.transcript?.[detection.match.field]];
+            const text = detection.match.field === "candidates" ? values?.[detection.match.index ?? -1] : values?.[0];
+            const length = text === undefined ? -1 : normalizeForSpan(text).length;
+            if (detection.match.start < 0 || detection.match.end <= detection.match.start || detection.match.end > length) throw new TypeError(`reasoning.recorded ${event.seq} has an out-of-bounds match`);
+          }
         }
         break;
       }

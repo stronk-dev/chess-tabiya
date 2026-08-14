@@ -86,7 +86,30 @@ export type CheckpointInteraction =
   | {
       readonly type: "prediction";
       readonly flipBoard?: boolean;
+    }
+  | {
+      readonly type: "stated_reasoning";
+      readonly keyPoints: readonly ReasoningKeyPoint[];
     };
+
+export type ReasoningGround =
+  | { readonly kind: "structural"; readonly expression: StructuralExpression }
+  | { readonly kind: "shape_plan"; readonly shape: string; readonly plan: string }
+  | { readonly kind: "spine_move"; readonly spineNodeId: string }
+  | { readonly kind: "claim"; readonly claimId: string };
+
+export interface ReasoningKeyPoint {
+  readonly id: string;
+  readonly label: string;
+  readonly phrases: readonly string[];
+  readonly ground: ReasoningGround;
+}
+
+export interface FeedbackClaim {
+  readonly id: string;
+  readonly text: string;
+  readonly evidenceTypes: readonly string[];
+}
 
 export interface CheckpointDefinition {
   readonly id: string;
@@ -130,6 +153,7 @@ export interface DrillPackDefinition {
     readonly [key: string]: unknown;
   };
   readonly deviations?: readonly Deviation[];
+  readonly feedbackClaims?: readonly FeedbackClaim[];
   readonly [key: string]: unknown;
 }
 

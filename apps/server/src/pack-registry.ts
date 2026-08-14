@@ -116,7 +116,7 @@ export function projectPackDocument(
           type: "prediction",
           ...(checkpoint.interaction.flipBoard === undefined ? {} : { flipBoard: checkpoint.interaction.flipBoard }),
         },
-      } : {}),
+      } : checkpoint.interaction?.type === "stated_reasoning" ? { interaction: { type: "stated_reasoning" } } : {}),
     })),
   });
 }

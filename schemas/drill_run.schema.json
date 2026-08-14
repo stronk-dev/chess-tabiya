@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-run:0.11",
+  "$id": "urn:chess-tabiya:schema:drill-run:0.12",
   "title": "Tabiya Drill Run",
-  "description": "Living v0.11 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
+  "description": "Living v0.12 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
   "type": "object",
   "required": [
     "schemaVersion",
@@ -21,7 +21,7 @@
     "activeCursor"
   ],
   "properties": {
-    "schemaVersion": { "const": "0.11" },
+    "schemaVersion": { "const": "0.12" },
     "id": { "$ref": "#/$defs/id" },
     "sessionKind": { "enum": ["pack", "position", "imported"] },
     "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
@@ -369,7 +369,8 @@
             "outcome.reached",
             "transfer.scheduled",
             "prediction.recorded",
-            "group.created"
+            "group.created",
+            "reasoning.recorded"
             ,"feedback.revealed"
           ]
         },
@@ -636,6 +637,61 @@
                   }
                 },
                 "distribution": { "$ref": "#/$defs/opponentSelection" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "reasoning.recorded" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "checkpointId", "checkpointEventSeq", "skipped", "transcript", "matcherVersion", "detections"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "checkpointId": { "$ref": "#/$defs/id" },
+                "checkpointEventSeq": { "type": "integer", "minimum": 1 },
+                "skipped": { "type": "boolean" },
+                "transcript": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": ["candidates", "plan", "fears"],
+                      "properties": {
+                        "candidates": { "type": "array", "maxItems": 8, "items": { "type": "string", "minLength": 1, "maxLength": 120 } },
+                        "plan": { "type": "string", "minLength": 1, "maxLength": 1000 },
+                        "fears": { "type": "string", "maxLength": 500 }
+                      },
+                      "additionalProperties": false
+                    },
+                    { "type": "null" }
+                  ]
+                },
+                "matcherVersion": { "const": 1 },
+                "detections": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["keyPointId", "status"],
+                    "properties": {
+                      "keyPointId": { "$ref": "#/$defs/id" },
+                      "status": { "enum": ["detected", "not_detected"] },
+                      "match": {
+                        "type": "object",
+                        "required": ["field", "index", "start", "end"],
+                        "properties": {
+                          "field": { "enum": ["candidates", "plan", "fears"] },
+                          "index": { "oneOf": [{ "type": "integer", "minimum": 0, "maximum": 7 }, { "type": "null" }] },
+                          "start": { "type": "integer", "minimum": 0 },
+                          "end": { "type": "integer", "minimum": 1 }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
               },
               "additionalProperties": false
             }
