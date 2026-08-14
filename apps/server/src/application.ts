@@ -42,6 +42,7 @@ import { ShapeStudio } from "./shape-studio.js";
 import type { VoiceProvider } from "./guidance.js";
 import { FixtureCorpusSource, LichessCorpusSource, type CorpusSource } from "./corpus.js";
 import { RepertoireService } from "./repertoire.js";
+import type { TtsProvider } from "./external-tts.js";
 
 export type EngineMode = "mock" | "maia";
 
@@ -59,6 +60,7 @@ export interface ApplicationOptions {
   readonly voicePersona?: string;
   readonly corpusToken?: string;
   readonly corpusSource?: CorpusSource;
+  readonly ttsProvider?: TtsProvider;
 }
 
 export interface ChessTabiyaApplication {
@@ -315,7 +317,7 @@ export async function createApplication(
     capabilities = new EngineCapabilities(supervisor, [
       "stockfish-analysis",
       "maia-5m",
-    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer" });
+    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external" });
     evidenceExecutor = new StockfishEvidenceExecutor(supervisor);
   } else {
     const mock = new MockEngineClient();
@@ -324,7 +326,7 @@ export async function createApplication(
       strongEngineId: "mock-opponent",
     });
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
-      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock",
+      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external",
     });
     evidenceExecutor = new MockEvidenceExecutor();
   }
@@ -344,7 +346,7 @@ export async function createApplication(
   });
   const live = new LiveSessionService(storage, { runService: service });
   const repertoires = new RepertoireService(storage, service, corpusSource);
-  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires);
+  const api = createRestHandler(service, selector, capabilities, identity, studio, live, shapes, shapeStudio, options.voiceProvider, options.voicePersona, corpusSource, repertoires, options.ttsProvider);
   const staticDirectory =
     options.staticDirectory ?? join(process.cwd(), "apps", "web", "dist");
   const handler: RestHandler = async (request) => {

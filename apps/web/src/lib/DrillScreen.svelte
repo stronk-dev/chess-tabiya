@@ -73,6 +73,7 @@
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
+    onSpeech?: (nodeId: string, scope: VoicePage["scope"]) => Promise<Blob>;
     onCreateGroup?: (input: CreateGroupRequest) => void | Promise<unknown>;
     onAnalyzeMissing?: (nodeIds: readonly string[]) => void | Promise<void>;
     onStory?: (() => void) | undefined;
@@ -109,6 +110,7 @@
     onHumanSplit,
     onCorpus,
     onVoice,
+    onSpeech,
     onCreateGroup,
     onAnalyzeMissing,
     onStory,
@@ -146,6 +148,8 @@
   let unregisterKeyboard: (() => void) | undefined;
   let speechAvailable = $state(false);
   let dismissedGuardSeq: number | undefined = $state();
+  let selectedSquare: string | undefined = $state();
+  let compactTab: "timeline" | "branches" | "evidence" | "session" = $state("timeline");
 
   let run = $derived(snapshot.run);
   let currentNode = $derived(activeNode(run));
@@ -264,6 +268,10 @@
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameReading(displayedNode.fen));
   let assistancePermission = $derived(permittedAssistance({ sessionKind: run.sessionKind, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole }));
+  let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
+  let selectedObservations = $derived(selectedSquare === undefined ? [] : structure.features.filter((item) => item.squares.some((square) => square === selectedSquare)));
+  let boardOverlays = $derived((effectiveLighting === "sight" || effectiveLighting === "evidence") ? selectedObservations.flatMap((item) => item.squares.map((square) => ({ orig: square, brush: "blue" }))) : []);
+  let overlayCaption = $derived(selectedObservations.map(renderStructuralObservation));
   let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkers(run, run.activeCursor.branchId) : []);
   let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: marker.kind.replaceAll("_", " ") })));
   let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
@@ -301,7 +309,17 @@
   }
 
   function speakSentences(sentences: readonly string[]): void {
-    if (assistance.spoken !== "on" || !speechAvailable || sentences.length === 0) return;
+    if (sentences.length === 0 || assistance.spoken === "off") return;
+    if (assistance.spoken === "provider" && onSpeech !== undefined) {
+      void onSpeech(displayedNode.id, "marker").then((blob) => {
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audio.addEventListener("ended", () => URL.revokeObjectURL(url), { once: true });
+        void audio.play();
+      });
+      return;
+    }
+    if (assistance.spoken !== "browser" || !speechAvailable) return;
     globalThis.speechSynthesis.cancel();
     globalThis.speechSynthesis.speak(new SpeechSynthesisUtterance(sentences.join(" ")));
   }
@@ -618,6 +636,7 @@
         {#if snapshot.pendingEvidence > 0}<span>{snapshot.pendingEvidence} evidence waiting</span>{/if}
       </div>
       <div class="topbar-actions">
+        {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"}>♟</button>{/if}
         <details class="assistance-control">
           <summary>Assistance</summary>
           <div class="assistance-grid">
@@ -630,8 +649,9 @@
             {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Show corpus counts</button>{/if}
             {#if corpusPage}<section aria-label="Corpus evidence">{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}</section>{/if}
             {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
-            <label><input type="checkbox" checked={assistance.spoken === "on"} disabled={!speechAvailable} aria-describedby={!speechAvailable ? "spoken-unavailable" : undefined} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "on" : "off")} /> Speak opened guidance</label>
-            {#if !speechAvailable}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
+            {#if speechAvailable}<label><input type="checkbox" checked={assistance.spoken === "browser"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "browser" : "off")} /> Speak opened guidance</label>{/if}
+            {#if capabilities?.providers.tts === "external"}<label><input type="checkbox" checked={assistance.spoken === "provider"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "provider" : "off")} /> Use configured speech provider</label>{/if}
+            {#if !speechAvailable && capabilities?.providers.tts !== "external"}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
           </div>
         </details>
         <button class="help" type="button" aria-label="Keyboard shortcuts" onclick={() => (helpOpen = true)}>?</button>
@@ -665,6 +685,12 @@
     {/if}
 
     <div class="workspace">
+      <nav class="compact-tabs" aria-label="Run regions">
+        <button class:active={compactTab === "timeline"} onclick={() => compactTab = "timeline"}>Timeline</button>
+        <button class:active={compactTab === "branches"} onclick={() => compactTab = "branches"}>Branches</button>
+        <button class:active={compactTab === "evidence"} onclick={() => compactTab = "evidence"}>Evidence</button>
+        {#if viewerRole !== "host"}<button class:active={compactTab === "session"} onclick={() => compactTab = "session"}>Session</button>{/if}
+      </nav>
       <section class="position-column" class:outcome={grading !== undefined || pack?.objective.type === "follow_theory"}>
         <div class="objective-copy">
           <p>Objective</p>
@@ -709,14 +735,20 @@
                 startSide={boardSide ?? startSide}
                 lastMove={displayedNode.moveUci}
                 disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined || terminalEvent !== undefined}
+                showDests={effectiveLighting !== "off"}
+                highlightMoves={effectiveLighting !== "off"}
+                overlays={boardOverlays}
+                onSelect={(square) => selectedSquare = square}
                 onMove={boardMove}
               />
             {/key}
           </div>
+          {#if overlayCaption.length > 0}<div class="overlay-caption" aria-live="polite">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
+          {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No disclosed evidence exists here; structural sight remains available.</p>{/if}
         </div>
       </section>
 
-      <div class="rail-stack">
+      <div class="rail-stack" class:compact-active={compactTab === "branches"}>
         {#if activeGroup}
           <GroupPanel
             {run}
@@ -741,7 +773,7 @@
         />
       </div>
 
-      <div class="timeline-row">
+      <div class="timeline-row" class:compact-active={compactTab === "timeline"}>
         <Timeline
           {entries}
           activeNodeId={run.activeCursor.nodeId}
@@ -990,6 +1022,10 @@
     gap: 1rem;
     overflow: hidden;
   }
+  .compact-tabs { display: none; }
+  .overlay-caption { max-width: 40rem; margin: 0.35rem auto 0; padding: 0.4rem 0.6rem; border-radius: 0.5rem; background: var(--panel); font-size: 0.72rem; }
+  .overlay-caption p { margin: 0.1rem 0; }
+  .ambient { width: 2rem; height: 2rem; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); }
 
   .position-column {
     width: 100%;
@@ -1239,7 +1275,7 @@
     .board-frame { width: min(100%, 42rem); }
   }
 
-  @media (max-width: 38rem) {
+  @media (max-width: 719px) {
     .drill {
       width: min(100% - 1rem, 86rem);
     }
@@ -1258,5 +1294,12 @@
       grid-column: 2;
       grid-row: 1;
     }
+    .compact-tabs { display: flex; grid-column: 1; gap: 0.25rem; overflow: auto; }
+    .compact-tabs button { padding: 0.4rem; border: 1px solid var(--line); border-radius: 0.45rem; background: var(--panel); }
+    .compact-tabs button.active { border-color: var(--accent); color: var(--accent); }
+    .rail-stack, .timeline-row { display: none; }
+    .rail-stack.compact-active { display: grid; }
+    .timeline-row.compact-active { display: grid; }
+    .board-frame { width: min(100%, calc(100dvh - 21rem), 30rem); }
   }
 </style>

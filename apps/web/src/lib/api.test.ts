@@ -93,7 +93,7 @@ describe("DrillApi", () => {
               multiPv: 1,
             },
           },
-          providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock" },
+          providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none" },
           surfaces: {
             play: "available",
             review: "available",
@@ -178,7 +178,7 @@ describe("DrillApi", () => {
     };
 
     expect(await api.capabilities()).toMatchObject({
-      providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock" },
+      providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none" },
       surfaces: { play: "available", learn: "available" },
     });
     expect((await api.corpus(run.id, run.nodes[0]!.id)).result.kind).toBe("abstention");

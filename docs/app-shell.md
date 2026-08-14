@@ -137,9 +137,20 @@ Overflow belongs to named inner regions:
 
 The drill screen is a fitted grid. Its square board is limited by both
 available width and remaining viewport height, with an explicit vertical
-reserve for objective controls and the timeline. At narrower widths the panes
-stack and the drill region becomes the deliberate scroller; full responsive
-and PWA behavior remains later work.
+reserve for objective controls and the timeline. Below 720px the shell and
+drill transform without changing their information model: navigation becomes
+a compact scrolling menu, the board remains visible, and Timeline, Branches,
+Evidence, and Session are explicit region tabs. The live simul wall becomes a
+single column and comparison/live panels stack.
+
+`/settings` edits the same per-browser assistance records used by the in-run
+popover for pack, position, and imported sessions. It reports deployment
+providers without pretending environment configuration is an account control.
+Account deletion uses in-page password re-entry; shared runs are reassigned.
+
+The web build is installable through `manifest.webmanifest` with a maskable
+Tabiya icon. No service worker or offline mutation queue ships, so installed
+use remains an online client to server-authoritative lease and grant checks.
 
 Playwright projects every route at 1280x720 and 1440x900. It asserts
 `document.scrollingElement.scrollHeight <= clientHeight + 1`; on a run it also
@@ -203,5 +214,5 @@ Current intentional boundaries:
   their future behavior exists.
 - comparison remains run-scoped rather than a standalone Review route;
 - lease transfer is absent; and
-- full responsive/mobile and PWA behavior is deferred beyond the supported
-  desktop projections.
+- read-only offline shell caching and native mobile packaging remain deferred;
+  offline writes are deliberately absent.

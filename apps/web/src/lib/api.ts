@@ -274,6 +274,7 @@ export interface Capabilities {
     readonly judge: "stockfish" | "mock" | "none";
     readonly llm: "none" | "external";
     readonly corpus: "lichess-explorer" | "mock" | "none";
+    readonly tts: "none" | "external";
   };
   readonly surfaces: Readonly<Record<SurfaceId, SurfaceAvailability>>;
 }
@@ -566,6 +567,7 @@ export interface DrillClientApi extends RunApi {
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage>;
   corpus(runId: string, nodeId: string): Promise<CorpusPage>;
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage>;
+  speech(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<Blob>;
   pgn(runId: string, branchIds?: readonly string[]): Promise<PgnDownload>;
   importGame?(input: ImportGameRequest, writerId: string): Promise<{ readonly run: DrillRun; readonly importRecord: ImportedGameRecord; readonly evidencePass: { readonly jobs: number } }>;
   importRecord?(runId: string): Promise<ImportedGameRecord>;
@@ -864,6 +866,11 @@ export class DrillApi implements DrillClientApi {
 
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage> {
     return this.#json(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { nodeId, scope } });
+  }
+
+  async speech(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<Blob> {
+    const response = await this.#response(`/runs/${encoded(runId)}/speech`, { method: "POST", body: { nodeId, scope } });
+    return response.blob();
   }
 
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult> {

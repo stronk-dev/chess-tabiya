@@ -1,6 +1,7 @@
 import { createApplication, type EngineMode } from "./application.js";
 import { cookieSecureFromEnv } from "./config.js";
 import { ExternalHttpVoiceProvider } from "./external-voice.js";
+import { ExternalHttpTtsProvider } from "./external-tts.js";
 
 function integer(value: string | undefined, fallback: number): number {
   const parsed = value === undefined ? fallback : Number(value);
@@ -31,6 +32,11 @@ const voiceTimeout = process.env.TABIYA_VOICE_PROVIDER_TIMEOUT_MS === undefined
 if (!Number.isSafeInteger(voiceTimeout) || voiceTimeout < 1) {
   throw new TypeError("TABIYA_VOICE_PROVIDER_TIMEOUT_MS must be a positive safe integer");
 }
+const ttsMode = process.env.TABIYA_TTS_PROVIDER;
+if (ttsMode !== undefined && ttsMode !== "external_http") throw new TypeError(`Unsupported TABIYA_TTS_PROVIDER: ${ttsMode}`);
+if (ttsMode === "external_http" && process.env.TABIYA_TTS_PROVIDER_URL === undefined) throw new TypeError("TABIYA_TTS_PROVIDER_URL is required for external_http");
+const ttsTimeout = process.env.TABIYA_TTS_PROVIDER_TIMEOUT_MS === undefined ? 4_000 : Number(process.env.TABIYA_TTS_PROVIDER_TIMEOUT_MS);
+if (!Number.isSafeInteger(ttsTimeout) || ttsTimeout < 1) throw new TypeError("TABIYA_TTS_PROVIDER_TIMEOUT_MS must be a positive safe integer");
 if (process.env.DRAFT_PACK_FILE !== undefined && !development) {
   throw new TypeError("DRAFT_PACK_FILE requires NODE_ENV=development");
 }
@@ -58,6 +64,13 @@ const application = await createApplication({
       url: process.env.TABIYA_VOICE_PROVIDER_URL!,
       ...(process.env.TABIYA_VOICE_PROVIDER_KEY === undefined ? {} : { key: process.env.TABIYA_VOICE_PROVIDER_KEY }),
       timeoutMs: voiceTimeout,
+    }),
+  }),
+  ...(ttsMode !== "external_http" ? {} : {
+    ttsProvider: new ExternalHttpTtsProvider({
+      url: process.env.TABIYA_TTS_PROVIDER_URL!,
+      ...(process.env.TABIYA_TTS_PROVIDER_KEY === undefined ? {} : { key: process.env.TABIYA_TTS_PROVIDER_KEY }),
+      timeoutMs: ttsTimeout,
     }),
   }),
 });

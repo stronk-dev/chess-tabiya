@@ -1,6 +1,6 @@
 # RFC: Polish surfaces — real settings, responsive/PWA transformation, and the assistance form slices
 
-- **Status:** draft
+- **Status:** implemented
 - **Author:** claude (drafted on the owner's breadth program)
 - **Created:** 2026-08-14
 - **Design refs:** `design/03-product-breadth.md` B1/B8 rows and §Stable application shell; `design/05-in-run-experience.md` §3-forms, §3a, §3a-i; `design/BACKLOG.md` rows "Assistance form matrix" (line 231) and "Board lighting ladder" (line 232)

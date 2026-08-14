@@ -7,7 +7,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `polish-surfaces.md` | draft | `archive/app-shell.md`, `archive/adaptive-guidance.md` | — (wave claim #1 of the second 2026-08-14 three-draft wave, ahead of `orphan-completion` and `grounding-pair`; claims **no** migration, pack-schema, or run-schema number — only the `/settings` route body and the `AssistanceConfig` type, v3→v4 in `localStorage`) |
 | `orphan-completion.md` | draft | polish wave #2 | claims nothing versioned (register-neutral); shared surfaces: CompareView, `/learn`, the voice-scope union |
 | `grounding-pair.md` | draft | `archive/content-sourcing-syzygy.md`, `archive/engine-workers.md`, `archive/defect-sweep.md` §2b | — (wave claim #3, last in the same wave; claims **migration 18** and **run schema 0.13**, both stamp-only, registered below; **no pack-schema version** — the mode enum already carries `perfect_tablebase`; pins the tablebase provider seam and the flat-sidecar `verify-draft` emitter) |
 
@@ -200,6 +199,7 @@ before re-attempting this territory.
 | `archive/repertoire-gap-finding.md` | implemented | `docs/repertoire-gap-finding.md`, `docs/runtime-corpus-evidence.md`, `docs/return-and-progression.md` |
 | `archive/onramp-guard.md` | implemented | `docs/drill-pack-format.md`, `docs/drill-client.md`, `docs/branch-runtime.md`, `docs/explanation-grounds.md`, `docs/outcome-drill-grading.md`, `docs/trajectory-drill.md`, `docs/adaptive-guidance.md` |
 | `archive/open-answer-grading.md` | implemented | `docs/open-answer-grading.md`, `docs/drill-pack-format.md`, `docs/drill-client.md`, `docs/explanation-grounds.md` |
+| `archive/polish-surfaces.md` | implemented | `docs/app-shell.md`, `docs/adaptive-guidance.md` |
 
 ## The archive sketches are quarry, not RFCs
 

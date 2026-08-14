@@ -16,12 +16,11 @@
     onNavigate: (path: string) => void;
     learner?: Learner;
     onSignOut?: () => void;
-    onDeleteAccount?: () => void;
     chrome?: boolean;
     children: Snippet;
   }
 
-  let { route, runContext, onNavigate, learner, onSignOut, onDeleteAccount, chrome = true, children }: Props = $props();
+  let { route, runContext, onNavigate, learner, onSignOut, chrome = true, children }: Props = $props();
 
   const destinations = [
     ["Home", "/", "home"],
@@ -85,7 +84,6 @@
       <div class="identity-control">
         <strong>@{learner.handle}</strong>
         <button type="button" onclick={onSignOut}>Sign out</button>
-        <button type="button" onclick={onDeleteAccount}>Delete</button>
       </div>
     {/if}
   </header>
@@ -197,5 +195,11 @@
     .run-context {
       display: none;
     }
+  }
+
+  @media (max-width: 719px) {
+    .shell-topbar { grid-template-columns: auto minmax(0, 1fr); align-items: start; }
+    nav { grid-column: 1 / -1; order: 3; width: 100%; }
+    .identity-control { justify-self: end; }
   }
 </style>

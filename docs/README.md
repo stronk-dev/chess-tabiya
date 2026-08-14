@@ -12,7 +12,7 @@ Implemented foundation:
 - `branch-groups.md` — durable candidate sets over ordinary branches, four seed
   sources, controlled-resistance reply journals, sequential/lockstep play,
   semantic zoom, evidence recovery, comparison, and export.
-- `drill-pack-format.md` — living v0.14 schema, semantic authoring lint, canonical
+- `drill-pack-format.md` — living v0.15 schema, semantic authoring lint, canonical
   digest and URL tooling, executable checkpoint-action validation, pack/run PGN
   round-trip, and deferred content boundary.
 - `engine-workers.md` — UCI supervision, Dockerized Maia and policy exposure,
@@ -24,8 +24,9 @@ Implemented foundation:
   browser-safe pack projection, keyboard behavior, PGN export, browser
   acceptance, and packaged operation.
 - `app-shell.md` — stable routes and information architecture, run discovery
-  and lease-aware resume, honest deployment capabilities, fitted viewport
-  regions, global keyboard ownership, and disabled-control explanations.
+  and lease-aware resume, honest deployment capabilities, fitted/responsive
+  viewport regions, install manifest, real settings, global keyboard ownership,
+  and disabled-control explanations.
 - `explanation-grounds.md` — durable comparison evidence, feedback withholding,
   path-relative authored checkpoint reveal, grounded objective sentences,
   aligned engine-score trajectories, provenance honesty, and the explicit

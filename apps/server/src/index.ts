@@ -37,6 +37,7 @@ export {
   type SurfaceId,
 } from "./capabilities.js";
 export { evidencePacket, renderVoice, type VoiceProvider } from "./guidance.js";
+export { ExternalHttpTtsProvider, type ExternalHttpTtsOptions, type TtsProvider, type TtsResult } from "./external-tts.js";
 export {
   EvidenceJobQueue,
   StockfishEvidenceExecutor,

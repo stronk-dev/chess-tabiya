@@ -8,6 +8,7 @@
   import GameStoryScreen from "./lib/GameStoryScreen.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
   import ShellKeyboardHelp from "./lib/ShellKeyboardHelp.svelte";
+  import AssistanceSettings from "./lib/AssistanceSettings.svelte";
   import {
     DrillApi,
     PLANNED_SURFACES,
@@ -372,14 +373,9 @@
     routerStarted = false;
   }
 
-  async function deleteAccount(): Promise<void> {
-    const password = window.prompt("Re-enter your password. Runs are reassigned, not deleted.");
-    if (password === null) return;
+  async function deleteAccountWithPassword(password: string): Promise<void> {
     await api.deleteAccount?.(password);
-    controller.stopSession();
-    learner = undefined;
-    router.stop?.();
-    routerStarted = false;
+    controller.stopSession(); learner = undefined; router.stop?.(); routerStarted = false;
   }
 
   async function exportPgn(branchIds?: readonly string[]): Promise<void> {
@@ -519,7 +515,7 @@
     <p class="honest">There is no password recovery yet. Keep your password somewhere safe.</p>
   </main>
 {:else}
-<ShellFrame {route} {runContext} {learner} chrome={route.name !== "live-overlay"} onNavigate={navigate} onSignOut={() => void signOut()} onDeleteAccount={() => void deleteAccount()}>
+<ShellFrame {route} {runContext} {learner} chrome={route.name !== "live-overlay"} onNavigate={navigate} onSignOut={() => void signOut()}>
   {#if routeLoading}
     <main class="shell-view" aria-busy="true"><p>Loading Tabiya…</p></main>
   {:else if routeError}
@@ -591,6 +587,7 @@
         onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}
         onCorpus={(nodeId) => api.corpus(session.runState!.run.id, nodeId)}
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
+        onSpeech={(nodeId, scope) => api.speech(session.runState!.run.id, nodeId, scope)}
         onCreateGroup={(input) => controller.createGroup(input)}
         onAnalyzeMissing={(nodeIds) => controller.analyzeMissingEvidence(nodeIds)}
         onStory={session.runState.run.events.some((event) => event.type === "outcome.reached") ? () => navigate(routePath({ name: "story", runId: session.runState!.run.id })) : undefined}
@@ -800,15 +797,8 @@
   {:else if route.name === "settings"}
     <main class="shell-view" aria-labelledby="settings-title">
       <p class="eyebrow">Settings</p><h1 id="settings-title">This deployment</h1>
-      {#if capabilities}
-        <dl class="providers">
-          <div><dt>Opponent</dt><dd>{capabilities.providers.opponent}</dd></div>
-          <div><dt>Judge</dt><dd>{capabilities.providers.judge}</dd></div>
-          <div><dt>LLM</dt><dd>{capabilities.providers.llm}</dd></div>
-        </dl>
-        <h2>Surface availability</h2>
-        <ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li>{id}: {PLANNED_SURFACES.includes(id as SurfaceId) ? "planned" : availability}</li>{/each}</ul>
-      {/if}
+      <AssistanceSettings {capabilities} {learner} onSignOut={signOut} onDelete={deleteAccountWithPassword} />
+      {#if capabilities}<h2>Surface availability</h2><ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li>{id}: {PLANNED_SURFACES.includes(id as SurfaceId) ? "planned" : availability}</li>{/each}</ul>{/if}
     </main>
   {:else if route.name === "not-found"}
     <main class="shell-view empty-state" aria-labelledby="not-found-title">
@@ -897,8 +887,14 @@
   small { color: var(--muted); }
   .link-button { padding: 0; border: 0; background: transparent; color: var(--accent); }
   .link-button:hover, .link-button:focus-visible { background: transparent; color: var(--ink); }
-  .providers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; max-width: 42rem; }
-  .providers div { padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
-  .providers dt { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; }
-  .providers dd { margin: 0.3rem 0 0; font: 500 1.35rem var(--display-font); }
+  @media (max-width: 719px) {
+    :global(#app) { position: fixed; inset: 0; }
+    .shell-view { width: min(100% - 1rem, 70rem); padding: 1rem 0; }
+    .live-wall { grid-template-columns: 1fr; }
+    .live-wall article { grid-template-columns: 5rem minmax(0, 1fr); }
+    .live-wall article > button { grid-column: 1 / -1; }
+    .mini-board { inline-size: 5rem; block-size: 5rem; }
+    .studio-grid, .live-overlay { grid-template-columns: 1fr; }
+    .row-actions { flex-wrap: wrap; }
+  }
 </style>

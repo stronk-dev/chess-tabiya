@@ -126,8 +126,24 @@ proof. The real safeguards are sparse explicit invocation, a packet-only prompt,
 no chess claims, deterministic fallback, and no persistence. A vendor-neutral `external_http`
 adapter ships without a vendor SDK; it sends only persona prompt, deterministic sentences, and
 scope, and reports `llm: external` when configured. Browser-side spoken delivery remains off by
-default and consumes only text from a surface the learner explicitly opened. See
-`adoption-wave-1.md` for the wire and preference contracts.
+default and consumes only text from a surface the learner explicitly opened.
+
+`AssistanceConfig` v4 adds separate board-lighting, arrow, ambient-presence,
+and spoken-source controls. Older v1–v3 local records migrate on read; v3
+spoken `on` becomes `browser`, and an unknown future record fails back to
+silent defaults. The lighting ladder is `off | legal | sight | evidence`.
+Legal destinations are board mechanics. Sight shapes render current structural
+observations with their rail sentence. Evidence coloring is capped to sight
+unless `feedbackDeliveryOpen` is true for a solo learner or host, and it never
+requests a fresh engine verdict mid-decision.
+
+An optional `external_http` TTS provider is independent of the LLM provider.
+`POST /runs/:id/speech` builds the same packet-bound checked text, uses the
+deterministic sentences when no LLM is configured, sends only that text to TTS,
+and streams ephemeral audio with `no-store`. No run, learner, session, position,
+or client identifier crosses that wire. Absence is typed `TTS_UNAVAILABLE` and
+the provider option is not offered. See `adoption-wave-1.md` for the voice wire
+and preference origins.
 
 ## Measured envelope and boundaries
 

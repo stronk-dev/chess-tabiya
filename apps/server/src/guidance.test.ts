@@ -11,6 +11,7 @@ import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { FixtureCorpusSource } from "./corpus.js";
 import { ExternalHttpVoiceProvider } from "./external-voice.js";
+import { ExternalHttpTtsProvider, type TtsProvider } from "./external-tts.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-14T00:00:00.000Z";
@@ -25,7 +26,7 @@ const capabilities: CapabilitiesProvider = {
     return {
       engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], runSchemaVersion: "0.11",
       policyProfiles: { strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 } },
-      providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock" },
+      providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock", tts: "none" },
       surfaces: { play: "available", review: "available", learn: "available", live: "available", create: "available", justPlay: "available", fromPosition: "available" },
     };
   },
@@ -69,6 +70,34 @@ describe("adaptive guidance server seams", () => {
     const packet = { fen: FEN, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], sentences: ["Detected by Tabiya's phase bands: opening."] } satisfies EvidencePacket;
     expect(await renderVoice(provider, packet, "plain")).toEqual({ text: packet.sentences[0], source: "deterministic" });
     expect(calls).toBe(2);
+  });
+
+  it("maps absent TTS to 503 and sends only deterministic checked text", async () => {
+    const { service, run } = await setup();
+    const input = { nodeId: run.activeCursor.nodeId, scope: "reading" };
+    const absent = await createRestHandler(service)(request("/runs/guide/speech", "POST", input));
+    expect(absent.status).toBe(503);
+    expect(await absent.json()).toMatchObject({ error: { code: "TTS_UNAVAILABLE" } });
+
+    const sent: string[] = [];
+    const tts: TtsProvider = { async synthesize(text) { sent.push(text); return { bytes: new Uint8Array([1, 2, 3]), contentType: "audio/test" }; } };
+    const before = service.events("guide", 0).events;
+    const handler = createRestHandler(service, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, tts);
+    const response = await handler(request("/runs/guide/speech", "POST", input));
+    expect(response.status).toBe(200); expect(response.headers.get("content-type")).toBe("audio/test");
+    expect([...new Uint8Array(await response.arrayBuffer())]).toEqual([1, 2, 3]);
+    expect(sent).toHaveLength(1); expect(sent[0]).toContain("opening"); expect(sent[0]).not.toContain("guide");
+    expect(service.events("guide", 0).events).toEqual(before);
+  });
+
+  it("posts only text bytes to the external TTS provider", async () => {
+    const bodies: unknown[] = [];
+    const provider = new ExternalHttpTtsProvider({ url: "https://tts.test/speak", key: "SENTINEL_SECRET", fetch: async (_input, init) => {
+      bodies.push(init?.body); expect(new Headers(init?.headers).get("authorization")).toBe("Bearer SENTINEL_SECRET");
+      return new Response(new Uint8Array([4]), { headers: { "content-type": "audio/ogg" } });
+    } });
+    expect(await provider.synthesize("Only this checked sentence.")).toMatchObject({ contentType: "audio/ogg", bytes: new Uint8Array([4]) });
+    expect(bodies).toEqual(["Only this checked sentence."]);
   });
 
   it("sends only the pinned external voice packet and falls back after transport failures", async () => {

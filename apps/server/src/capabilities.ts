@@ -50,6 +50,7 @@ export interface CapabilityProviders {
   readonly judge: "stockfish" | "mock" | "none";
   readonly llm: "none" | "external";
   readonly corpus: "lichess-explorer" | "mock" | "none";
+  readonly tts: "none" | "external";
 }
 
 export type SurfaceCapabilities = Readonly<
@@ -100,6 +101,7 @@ function providers(
   identities: readonly EngineIdentity[],
   llmAvailable: boolean,
   corpus: CapabilityProviders["corpus"],
+  tts: CapabilityProviders["tts"],
 ): CapabilityProviders {
   if (engineMode === "mock") {
     const opponentReady = identities.some((identity) => identity.kind === "opponent");
@@ -109,6 +111,7 @@ function providers(
       judge: "mock",
       llm: llmAvailable ? "external" : "none",
       corpus,
+      tts,
     });
   }
   return Object.freeze({
@@ -120,6 +123,7 @@ function providers(
       : "none",
     llm: llmAvailable ? "external" : "none",
     corpus,
+    tts,
   });
 }
 
@@ -144,6 +148,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
   readonly #strongEngineProfile: StrongEngineProfile;
   readonly #llmAvailable: boolean;
   readonly #corpus: CapabilityProviders["corpus"];
+  readonly #tts: CapabilityProviders["tts"];
 
   constructor(
     client: CapabilityEngineClient,
@@ -153,6 +158,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
       readonly strongEngineProfile?: Partial<StrongEngineProfile>;
       readonly llmAvailable?: boolean;
       readonly corpus?: CapabilityProviders["corpus"];
+      readonly tts?: CapabilityProviders["tts"];
     },
   ) {
     this.#client = client;
@@ -160,6 +166,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
     this.#engineMode = options.engineMode;
     this.#llmAvailable = options.llmAvailable === true;
     this.#corpus = options.corpus ?? "none";
+    this.#tts = options.tts ?? "none";
     this.#strongEngineProfile = resolveStrongEngineProfile(
       options.strongEngineProfile,
     );
@@ -174,7 +181,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
           : [];
       }),
     );
-    const providerState = providers(this.#engineMode, engines, this.#llmAvailable, this.#corpus);
+    const providerState = providers(this.#engineMode, engines, this.#llmAvailable, this.#corpus, this.#tts);
     return Object.freeze({
       engines,
       policyModes: SUPPORTED_POLICY_MODES,

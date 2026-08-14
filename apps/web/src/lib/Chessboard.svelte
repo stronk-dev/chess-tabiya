@@ -6,6 +6,7 @@
   import { Chessground } from "@lichess-org/chessground";
   import type { Api } from "@lichess-org/chessground/api";
   import type { Config } from "@lichess-org/chessground/config";
+  import type { DrawShape } from "@lichess-org/chessground/draw";
   import type { Key } from "@lichess-org/chessground/types";
   import { onMount } from "svelte";
 
@@ -23,6 +24,10 @@
     startSide: StartSide;
     lastMove?: string | null;
     disabled?: boolean;
+    showDests?: boolean;
+    highlightMoves?: boolean;
+    overlays?: readonly DrawShape[];
+    onSelect?: (square: Key) => void;
     onMove: (uci: string) => void | Promise<void>;
   }
 
@@ -31,6 +36,10 @@
     startSide,
     lastMove = null,
     disabled = false,
+    showDests = true,
+    highlightMoves = true,
+    overlays = [],
+    onSelect,
     onMove,
   }: Props = $props();
   let boardElement: HTMLDivElement;
@@ -46,12 +55,14 @@
       turnColor: model.turnColor,
       check: model.check,
       ...(model.lastMove === undefined ? {} : { lastMove: [...model.lastMove] }),
-      highlight: { lastMove: true, check: true },
+      highlight: { lastMove: highlightMoves, check: true },
+      drawable: { enabled: false, visible: true, autoShapes: [...overlays] },
+      ...(onSelect === undefined ? {} : { events: { select: onSelect } }),
       movable: {
         free: false,
         color: canMove ? startSide : "both",
         dests: canMove ? model.dests : new Map(),
-        showDests: true,
+        showDests,
         events: { after: moved },
       },
     };
@@ -89,6 +100,9 @@
     startSide;
     lastMove;
     disabled;
+    showDests;
+    highlightMoves;
+    overlays;
     pendingPromotion = undefined;
     board?.set(config());
     // Objective/checkpoint banners can move the board without resizing it.

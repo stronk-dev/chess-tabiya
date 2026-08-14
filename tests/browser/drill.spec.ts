@@ -860,3 +860,26 @@ test("every shell route owns the viewport at both desktop projections", async ({
     }
   }
 });
+
+test("mobile shell, settings, and install manifest preserve the run regions", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/settings");
+  const position = page.getByRole("group", { name: "position" });
+  await position.getByLabel("Board lighting").selectOption("sight");
+  await page.reload();
+  await expect(position.getByLabel("Board lighting")).toHaveValue("sight");
+  await page.goto("/play");
+  await page.getByRole("button", { name: "Start game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Run regions" })).toBeVisible();
+  await page.getByRole("button", { name: "Branches" }).click();
+  await expect(page.locator(".rail-stack")).toBeVisible();
+  await page.getByRole("button", { name: "Timeline" }).click();
+  await expect(page.locator(".timeline-row")).toBeVisible();
+  const dimensions = await page.evaluate(() => ({ scrollHeight: document.scrollingElement!.scrollHeight, clientHeight: document.scrollingElement!.clientHeight }));
+  expect(dimensions.scrollHeight).toBeLessThanOrEqual(dimensions.clientHeight + 1);
+  const manifest = await page.request.get("/manifest.webmanifest");
+  expect(manifest.status()).toBe(200); expect((await manifest.json()).display).toBe("standalone");
+  expect(await page.locator('link[rel="manifest"]').getAttribute("href")).toBe("/manifest.webmanifest");
+  expect(await page.evaluate(async () => "serviceWorker" in navigator ? (await navigator.serviceWorker.getRegistrations()).length : 0)).toBe(0);
+});

@@ -22,6 +22,7 @@ import {
 
 import { ServerError } from "./errors.js";
 import type { CapabilitiesProvider } from "./capabilities.js";
+import type { TtsProvider } from "./external-tts.js";
 import { projectPackDocument } from "./pack-registry.js";
 import {
   OpponentSelector,
@@ -447,7 +448,7 @@ export function errorResponse(error: unknown): Response {
         ? 401
         : error.code === "FORBIDDEN"
           ? 403
-      : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE" || error.code === "CORPUS_UNAVAILABLE" || error.code === "REPERTOIRE_SCAN_UNAVAILABLE"
+      : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE" || error.code === "TTS_UNAVAILABLE" || error.code === "CORPUS_UNAVAILABLE" || error.code === "REPERTOIRE_SCAN_UNAVAILABLE"
         ? 503
         : error.code === "IMPORT_SOURCE_UNAVAILABLE"
           ? 503
@@ -519,7 +520,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|group|group-reply|import|story|share|flip|derivations)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|share|flip|derivations)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -608,6 +609,7 @@ export function createRestHandler(
   voicePersona = "Clear, concise Tabiya voice. Do not add chess claims.",
   corpusSource?: CorpusSource,
   repertoires?: RepertoireService,
+  ttsProvider?: TtsProvider,
 ): RestHandler {
   return async (request) => {
     try {
@@ -1073,6 +1075,20 @@ export function createRestHandler(
           ? basePacket
           : Object.freeze({ ...basePacket, sentences: Object.freeze([...basePacket.sentences, suggestTitle(story), ...(story.moments.find((moment) => moment.nodeId === access.node.id)?.sentences ?? [])]) });
         return json(200, { ...(await renderVoice(voiceProvider, packet, voicePersona, scope as VoiceScope)), scope });
+      }
+      if (route.action === "speech") {
+        requireJson(request);
+        if (ttsProvider === undefined) throw new ServerError("TTS_UNAVAILABLE", "No external TTS provider is configured");
+        const body = closedRecord(value, "/", ["nodeId", "scope"]);
+        const scope = requiredString(body.scope, "scope");
+        if (scope !== "marker" && scope !== "reading" && scope !== "steering" && scope !== "story") throw invalid("scope must be marker, reading, steering, or story");
+        const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
+        const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+        const story = scope === "story" ? service.story(route.runId, principal) : undefined;
+        const packet = story === undefined ? basePacket : Object.freeze({ ...basePacket, sentences: Object.freeze([...basePacket.sentences, suggestTitle(story), ...(story.moments.find((moment) => moment.nodeId === access.node.id)?.sentences ?? [])]) });
+        const checkedText = voiceProvider === undefined ? packet.sentences.join("\n") : (await renderVoice(voiceProvider, packet, voicePersona, scope as VoiceScope)).text;
+        const audio = await ttsProvider.synthesize(checkedText);
+        return new Response(Uint8Array.from(audio.bytes).buffer, { status: 200, headers: { "content-type": audio.contentType, "cache-control": "no-store" } });
       }
       if (route.action === "share") {
         requireJson(request);

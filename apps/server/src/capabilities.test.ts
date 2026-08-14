@@ -97,7 +97,7 @@ describe("engine capabilities", () => {
             multiPv: 1,
           },
         },
-        providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none" },
+        providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none" },
         surfaces: {
           play: "available",
           review: "available",
@@ -133,6 +133,7 @@ describe("engine capabilities", () => {
       judge: "mock",
       llm: "none",
       corpus: "none",
+      tts: "none",
     });
     expect(descriptor.engines).toEqual([identity]);
     expect(descriptor.guardBasis).toEqual(["rules", "engine"]);
@@ -153,6 +154,13 @@ describe("engine capabilities", () => {
     const mock = new EngineCapabilities(healthClient({}), [], { engineMode: "mock", corpus: "mock" });
     expect((await live.get()).providers.corpus).toBe("lichess-explorer");
     expect((await mock.get()).providers.corpus).toBe("mock");
+  });
+
+  it("reports TTS only from explicit application wiring", async () => {
+    const present = new EngineCapabilities(healthClient({}), [], { engineMode: "mock", tts: "external" });
+    const absent = new EngineCapabilities(healthClient({}), [], { engineMode: "mock" });
+    expect((await present.get()).providers.tts).toBe("external");
+    expect((await absent.get()).providers.tts).toBe("none");
   });
 
   it("downgrades unhealthy real providers instead of reporting stale identities", async () => {
@@ -186,6 +194,7 @@ describe("engine capabilities", () => {
       judge: "none",
       llm: "none",
       corpus: "none",
+      tts: "none",
     });
     expect(descriptor.surfaces.play).toBe("unavailable-here");
     expect(descriptor.surfaces.justPlay).toBe("unavailable-here");

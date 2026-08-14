@@ -1,0 +1,11 @@
+{
+  "name": "Tabiya",
+  "short_name": "Tabiya",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#eeeade",
+  "background_color": "#eeeade",
+  "icons": [
+    { "src": "/tabiya-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

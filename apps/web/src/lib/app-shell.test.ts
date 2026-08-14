@@ -73,7 +73,7 @@ const capabilities: Capabilities = {
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
   },
-  providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock" },
+  providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none" },
   surfaces: {
     play: "available",
     review: "available",
