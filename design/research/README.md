@@ -4,6 +4,25 @@ Research dossiers land here as `<topic>.md`. This README is the coverage matrix:
 has been researched, how well, and what it feeds. A dossier exists when research lands —
 no empty stubs; GAP rows below are the queue.
 
+## Coverage limits — read before trusting the matrix
+
+Two structural limits, both proven by owner finds rather than admitted in advance:
+
+1. **The matrix is a snapshot, not a watch.** The 28 products came from the frozen
+   v2 brief's desk sweep. Nothing monitors new entrants — **ChessMotive** (owner
+   find, 2026-08-12) and **taketaketake** (owner find, 2026-08-14) were both
+   absent, and both were found by the owner, not the process.
+2. **The frame was "chess training tools", and the product outgrew the frame.**
+   The sweep asked who helps you *practice*. The product now has spectating,
+   live sessions, share links, and (proposed) game-story summaries — surfaces
+   whose competitors are *fan and viewing* apps that the training frame never
+   searched. A competitor to a surface we ship is in scope regardless of which
+   category shelf it sits on.
+
+Rule going forward: **when a new surface lands, ask which category of product
+already does that one thing, and check the matrix covers its best example.**
+Owned by whoever lands the surface, recorded here, no standing ceremony.
+
 ## House rules
 
 - **Use one lightweight evidence label per factual research claim:**
