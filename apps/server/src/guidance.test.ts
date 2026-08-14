@@ -10,6 +10,7 @@ import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { FixtureCorpusSource } from "./corpus.js";
+import { ExternalHttpVoiceProvider } from "./external-voice.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-14T00:00:00.000Z";
@@ -68,6 +69,31 @@ describe("adaptive guidance server seams", () => {
     const packet = { fen: FEN, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], sentences: ["Detected by Tabiya's phase bands: opening."] } satisfies EvidencePacket;
     expect(await renderVoice(provider, packet, "plain")).toEqual({ text: packet.sentences[0], source: "deterministic" });
     expect(calls).toBe(2);
+  });
+
+  it("sends only the pinned external voice packet and falls back after transport failures", async () => {
+    const packet = { fen: FEN, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], sentences: ["Detected by Tabiya's phase bands: opening."] } satisfies EvidencePacket;
+    const bodies: unknown[] = [];
+    const provider = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", key: "SENTINEL_SECRET", fetch: async (_input, init) => {
+      bodies.push(JSON.parse(String(init?.body)) as unknown);
+      expect(new Headers(init?.headers).get("authorization")).toBe("Bearer SENTINEL_SECRET");
+      return Response.json({ text: packet.sentences[0] });
+    } });
+    expect(await renderVoice(provider, packet, "plain", "marker")).toEqual({ text: packet.sentences[0], source: "provider" });
+    expect(bodies).toEqual([{ personaPrompt: "plain", sentences: packet.sentences, scope: "marker" }]);
+
+    let failures = 0;
+    const failing = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", fetch: async () => { failures += 1; return new Response("no", { status: 503 }); } });
+    expect(await renderVoice(failing, packet, "plain", "story")).toEqual({ text: packet.sentences[0], source: "deterministic" });
+    expect(failures).toBe(2);
+
+    let timeouts = 0;
+    const timeoutProvider = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", timeoutMs: 1, fetch: async (_input, init) => {
+      timeouts += 1;
+      return await new Promise<Response>((_resolve, reject) => init?.signal?.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")), { once: true }));
+    } });
+    expect(await renderVoice(timeoutProvider, packet, "plain", "reading")).toEqual({ text: packet.sentences[0], source: "deterministic" });
+    expect(timeouts).toBe(2);
   });
 
   it("withholds ephemeral corpus evidence until reveal and closes it on the next move", async () => {

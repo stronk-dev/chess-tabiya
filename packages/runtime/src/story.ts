@@ -25,6 +25,16 @@ export interface StoryMoment {
   readonly endgame?: EndgameReading;
 }
 export interface StoryProjection { readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; }
+export interface StoryTitleInput { readonly outcome: { readonly kind: "board_terminal" | "recorded_result" | "unfinished"; readonly result?: RunOutcome | "1-0" | "0-1" | "1/2-1/2" | "*" }; readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; }
+
+export function suggestTitle(story: StoryTitleInput): string {
+  const top = story.moments.find((moment) => moment.nodeId === story.rank[0]) ?? story.moments[0];
+  const move = top === undefined ? "the finish" : `move ${Math.max(1, Math.ceil(top.ply / 2))}`;
+  const family = top?.endgame?.type?.label;
+  const result = story.outcome.result;
+  const verb = result === "draw" || result === "1/2-1/2" ? "Held" : result === "win" || result === "1-0" ? "Won" : result === "loss" || result === "0-1" ? "The turning point" : "A game story";
+  return family === undefined ? `${verb} at ${move}` : `${verb} from the ${family.toLowerCase()} at ${move}`;
+}
 
 function evaluation(run: DrillRun, node: Node): StoryEvaluation | undefined {
   const event = [...run.events].reverse().find((candidate) =>

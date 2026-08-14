@@ -27,6 +27,8 @@
     type SessionKind,
     type BoardControl,
     type GameStory,
+    type ProgressMilestone,
+    type RunDerivationPage,
     ApiError,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
@@ -65,6 +67,8 @@
   let runs: readonly RunSummary[] = $state([]);
   let attempts: readonly ProgressAttempt[] = $state([]);
   let dueSchedules: readonly ProgressSchedule[] = $state([]);
+  let milestones: readonly ProgressMilestone[] = $state([]);
+  let derivations: RunDerivationPage | undefined = $state();
   let drafts: readonly PackDraft[] = $state([]);
   let studioJson = $state("");
   let selectedDraftId: string | undefined = $state();
@@ -193,9 +197,10 @@
       } else if (next.name === "settings") {
         capabilities = await api.capabilities();
       } else if (next.name === "learn") {
-        [attempts, dueSchedules] = await Promise.all([
+        [attempts, dueSchedules, milestones] = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
           api.dueProgress?.() ?? Promise.resolve([]),
+          api.milestones?.() ?? Promise.resolve([]),
         ]);
       } else if (next.name === "create") {
         [drafts, shapeDrafts] = await Promise.all([api.packDrafts?.() ?? Promise.resolve([]), api.shapeDrafts?.() ?? Promise.resolve([])]);
@@ -212,6 +217,7 @@
         session.runState?.run.id !== next.runId
       ) {
         await controller.resume(next.runId);
+        derivations = await (api.runDerivations?.(next.runId) ?? Promise.resolve(undefined));
         const related=(await (api.liveSessions?.()??Promise.resolve([]))).find((item)=>item.runId===next.runId);
         activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
       }
@@ -296,6 +302,13 @@
     const download = await api.pgn(runId);
     const url = URL.createObjectURL(new Blob([download.text], { type: "text/x-chess-pgn;charset=utf-8" }));
     const anchor = document.createElement("a"); anchor.href = url; anchor.download = download.filename; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+
+  async function flipRun(runId: string, nodeId: string): Promise<void> {
+    if (api.flipRun === undefined) throw new Error("Opposite-side replay is unavailable");
+    const result = await api.flipRun(runId, nodeId);
+    WriterSession.claimFor(result.run.id, storage, () => result.writerId);
+    navigate(routePath({ name: "run", runId: result.run.id }));
   }
 
   async function authenticate(): Promise<void> {
@@ -522,6 +535,8 @@
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
         onCreateGroup={(input) => controller.createGroup(input)}
         onAnalyzeMissing={(nodeIds) => controller.analyzeMissingEvidence(nodeIds)}
+        onStory={session.runState.run.events.some((event) => event.type === "outcome.reached") ? () => navigate(routePath({ name: "story", runId: session.runState!.run.id })) : undefined}
+        onFlip={(nodeId) => flipRun(session.runState!.run.id, nodeId)}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
       {#if activeLiveDetail}
@@ -530,12 +545,20 @@
       {#if session.runState.run.sessionKind === "imported"}
         <aside class="session-banner" aria-label="Imported game story"><strong>Imported game</strong><span>The original continuation and your branches share one run.</span><button type="button" onclick={() => navigate(routePath({ name: "story", runId: session.runState!.run.id }))}>Story</button></aside>
       {/if}
+      {#if session.runState.run.sessionKind !== "imported" && session.runState.run.events.some((event) => event.type === "outcome.reached")}
+        <aside class="session-banner" aria-label="Run story"><strong>Attempt complete</strong><span>Your recorded moments are ready to read and replay.</span><button type="button" onclick={() => navigate(routePath({ name: "story", runId: session.runState!.run.id }))}>Story</button></aside>
+      {/if}
+      {#if derivations?.source}
+        <aside class="session-banner" aria-label="Opposite-side replay source"><strong>Opposite-side replay</strong><span>Mirror of run {derivations.source.sourceRunId} from its recorded position.</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: derivations!.source!.sourceRunId }))}>Open source</button></aside>
+      {:else if derivations && derivations.derived.length > 0}
+        <aside class="session-banner" aria-label="Opposite-side replays"><strong>Mirrored attempts</strong><span>{derivations.derived.length} opposite-side {derivations.derived.length === 1 ? "run" : "runs"}.</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: derivations!.derived[0]!.derivedRunId }))}>Open replay</button></aside>
+      {/if}
     {:else}
       <main class="shell-view"><h1>Run unavailable.</h1><p role="alert">{session.error ?? "The run could not be loaded."}</p></main>
     {/if}
   {:else if route.name === "story"}
     {@const storyRunId = (route as { readonly name: "story"; readonly runId: string }).runId}
-    {#if story}<GameStoryScreen {story} onEnter={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onVoice={capabilities?.providers.llm === "external" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+    {#if story}<GameStoryScreen {story} onEnter={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : async () => (await api.shareStory!(storyRunId, story!.branchId)).url} onVoice={capabilities?.providers.llm === "external" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">
@@ -564,6 +587,14 @@
     <main class="shell-view" aria-labelledby="learn-title">
       <p class="eyebrow">Learn / return loop</p>
       <h1 id="learn-title">Return to the positions that need another attempt.</h1>
+      <section aria-labelledby="milestones-title">
+        <h2 id="milestones-title">Milestones</h2>
+        <div class="item-list">
+          {#each milestones as milestone}
+            <article><div><h3>{milestone.sentence}</h3><p>{readableDate(milestone.occurredAt)}</p></div><button type="button" onclick={() => navigate(routePath({ name: "run", runId: milestone.link.runId }))}>Open run</button></article>
+          {:else}<p>No milestones yet. They record revisitable events, never a mastery score.</p>{/each}
+        </div>
+      </section>
       <section aria-labelledby="due-title">
         <h2 id="due-title">Due now</h2>
         <div class="item-list">

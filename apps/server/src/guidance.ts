@@ -17,7 +17,8 @@ import type { DrillPackDefinition, PackPhase } from "@chess-tabiya/schema/drill-
 import type { AuthoredFeedbackPage } from "./authored-feedback.js";
 import type { ShapeRegistry } from "./shape-registry.js";
 
-export interface VoiceProvider { render(packet: EvidencePacket, persona: string, deterministicText: string): Promise<string>; }
+export type VoiceScope = "marker" | "reading" | "steering" | "story";
+export interface VoiceProvider { render(packet: EvidencePacket, persona: string, deterministicText: string, scope: VoiceScope): Promise<string>; }
 
 function authoredText(item: AuthoredFeedbackPage["items"][number]): string | undefined {
   if (item.kind === "annotation") return item.text;
@@ -44,11 +45,15 @@ export function evidencePacket(input: { readonly run: DrillRun; readonly node: N
   return Object.freeze({ fen: input.node.fen, phase: Object.freeze(phase), structures: reading.structures, observations: reading.features, markers: Object.freeze(markers), endgame, plans: Object.freeze(plans), authored: Object.freeze(authored), sentences: Object.freeze(sentences) });
 }
 
-export async function renderVoice(provider: VoiceProvider, packet: EvidencePacket, persona: string): Promise<{ readonly text: string; readonly source: "provider" | "deterministic" }> {
+export async function renderVoice(provider: VoiceProvider, packet: EvidencePacket, persona: string, scope: VoiceScope = "reading"): Promise<{ readonly text: string; readonly source: "provider" | "deterministic" }> {
   const deterministic = packet.sentences.join("\n");
   for (let attempt = 0; attempt < 2; attempt += 1) {
-    const output = await provider.render(packet, persona, deterministic);
-    if (voiceCheck(packet, output).valid) return Object.freeze({ text: output, source: "provider" });
+    try {
+      const output = await provider.render(packet, persona, deterministic, scope);
+      if (voiceCheck(packet, output).valid) return Object.freeze({ text: output, source: "provider" });
+    } catch {
+      // Provider failures share the same one-retry then deterministic fallback path.
+    }
   }
   return Object.freeze({ text: deterministic, source: "deterministic" });
 }

@@ -72,6 +72,8 @@
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
     onCreateGroup?: (input: CreateGroupRequest) => void | Promise<unknown>;
     onAnalyzeMissing?: (nodeIds: readonly string[]) => void | Promise<void>;
+    onStory?: (() => void) | undefined;
+    onFlip?: ((nodeId: string) => void | Promise<void>) | undefined;
     registerKeyboardRegion: RegisterKeyboardRegion;
   }
 
@@ -103,6 +105,8 @@
     onVoice,
     onCreateGroup,
     onAnalyzeMissing,
+    onStory,
+    onFlip,
     registerKeyboardRegion,
   }: Props = $props();
 
@@ -134,6 +138,7 @@
   let pickerHeading = $state<HTMLHeadingElement>();
   let regionElement = $state<HTMLElement>();
   let unregisterKeyboard: (() => void) | undefined;
+  let speechAvailable = $state(false);
 
   let run = $derived(snapshot.run);
   let currentNode = $derived(activeNode(run));
@@ -267,6 +272,18 @@
 
   async function requestVoice(scope: VoicePage["scope"]): Promise<void> {
     if (onVoice !== undefined) voicePage = await onVoice(displayedNode.id, scope);
+  }
+
+  function speakSentences(sentences: readonly string[]): void {
+    if (assistance.spoken !== "on" || !speechAvailable || sentences.length === 0) return;
+    globalThis.speechSynthesis.cancel();
+    globalThis.speechSynthesis.speak(new SpeechSynthesisUtterance(sentences.join(" ")));
+  }
+
+  function openPivotalMarker(nodeId: string): void {
+    openPivotalNodeId = nodeId; humanSplit = undefined; voicePage = undefined;
+    const sentences = projectedPivotal.filter((marker) => marker.nodeId === nodeId).flatMap(renderPivotalMarker);
+    speakSentences(sentences);
   }
 
   function groupPreference(groupId: string): "sequential" | "lockstep" {
@@ -519,6 +536,7 @@
   }
 
   onMount(() => {
+    speechAvailable = typeof globalThis.speechSynthesis !== "undefined" && typeof globalThis.SpeechSynthesisUtterance !== "undefined" && globalThis.speechSynthesis.getVoices().length > 0;
     assistance = loadAssistance(run.sessionKind, preferenceStorage());
     if (regionElement === undefined) {
       throw new Error("Drill keyboard region did not mount");
@@ -586,6 +604,8 @@
             {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Show corpus counts</button>{/if}
             {#if corpusPage}<section aria-label="Corpus evidence">{#each renderCorpusPage(corpusPage) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}</section>{/if}
             {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
+            <label><input type="checkbox" checked={assistance.spoken === "on"} disabled={!speechAvailable} aria-describedby={!speechAvailable ? "spoken-unavailable" : undefined} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "on" : "off")} /> Speak opened guidance</label>
+            {#if !speechAvailable}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
           </div>
         </details>
         <button class="help" type="button" aria-label="Keyboard shortcuts" onclick={() => (helpOpen = true)}>?</button>
@@ -688,7 +708,7 @@
           {shapeMarkers}
           onOpenShape={(entryId) => (openShapeId = entryId)}
           pivotalMarkers={pivotalRows}
-          onOpenPivotal={(nodeId) => { openPivotalNodeId = nodeId; humanSplit = undefined; voicePage = undefined; }}
+          onOpenPivotal={openPivotalMarker}
         />
         <div class="quick-actions" aria-label="Run actions">
           <button type="button" onclick={() => (forkOpen = true)}>Fork <kbd>B</kbd></button>
@@ -773,6 +793,8 @@
     grade={pack === undefined ? undefined : objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)}
     canRewind={snapshot.access === "writer" && currentNode.parentId !== null}
     onRewind={() => currentNode.parentId === null ? undefined : onRewind({ nodeId: currentNode.parentId })}
+    {onStory}
+    onFlip={onFlip === undefined ? undefined : () => onFlip(run.nodes[0]!.id)}
     {onStop}
   />
 {/if}

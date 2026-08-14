@@ -20,9 +20,11 @@
     grade?: string | undefined;
     run: DrillRun;
     shapes?: readonly ShapeEntryView[];
+    onStory?: (() => void) | undefined;
+    onFlip?: (() => void | Promise<void>) | undefined;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run, shapes = [] }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip }: Props = $props();
   let heading: HTMLHeadingElement;
   onMount(() => heading?.focus());
 </script>
@@ -70,6 +72,8 @@
     {/if}
 
     <div class="actions">
+      {#if onStory}<button type="button" onclick={onStory}>Story of this run</button>{/if}
+      {#if onFlip}<button type="button" onclick={onFlip}>Replay this as {run.start.side === "white" ? "Black" : "White"}</button>{/if}
       <button type="button" disabled={!canRewind} onclick={onRewind}>Rewind and branch</button>
       <button type="button" onclick={onStop}>Stop session</button>
     </div>

@@ -79,6 +79,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 10, name: "shape studio drafts and registered versions" },
       { version: 11, name: "branch groups run schema" },
       { version: 12, name: "imported games and run schema" },
+      { version: 13, name: "public story tokens and run derivations" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -96,7 +97,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(12);
+    ).toBe(13);
     inspection.close();
   });
 
@@ -149,6 +150,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 10, name: "shape studio drafts and registered versions" },
       { version: 11, name: "branch groups run schema" },
       { version: 12, name: "imported games and run schema" },
+      { version: 13, name: "public story tokens and run derivations" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.10");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
@@ -232,6 +234,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(migrations).toEqual([
       { version: 11, name: "branch groups run schema" },
       { version: 12, name: "imported games and run schema" },
+      { version: 13, name: "public story tokens and run derivations" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.10");
     expect(upgraded.read(quarantined.id)).toBeUndefined();

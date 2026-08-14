@@ -95,6 +95,8 @@ export interface ImportedGameRecord {
   readonly licenceNote: string;
   readonly importedAt: string;
 }
+export interface PublicTokenRecord { readonly id: string; readonly tokenHash: string; readonly scope: "story_read"; readonly runId: string; readonly branchId: string; readonly createdBy: string; readonly createdAt: string; readonly revokedAt: string | null; }
+export interface RunDerivation { readonly derivedRunId: string; readonly sourceRunId: string; readonly sourceBranchId: string; readonly sourceNodeId: string; readonly kind: "flip_sides"; readonly createdAt: string; }
 
 /** Persistence boundary for run snapshots, identity, grants, and the writer lease. */
 export interface RunStorage {
@@ -104,6 +106,13 @@ export interface RunStorage {
   save(run: DrillRun, lease: LeaseHolder): void;
   createImportedRun?(run: DrillRun, lease: LeaseHolder, title: string, record: ImportedGameRecord): void;
   importedGame?(runId: string): ImportedGameRecord | undefined;
+  createPublicToken?(record: PublicTokenRecord): void;
+  publicTokens?(runId: string, creatorId: string): readonly PublicTokenRecord[];
+  publicTokenByHash?(tokenHash: string): PublicTokenRecord | undefined;
+  revokePublicToken?(runId: string, tokenId: string, creatorId: string, at: string): void;
+  createDerivedRun?(run: DrillRun, lease: LeaseHolder, title: string, derivation: RunDerivation): void;
+  derivationFor?(runId: string): RunDerivation | undefined;
+  derivationsFrom?(runId: string): readonly RunDerivation[];
 
   createLearner(input: NewLearner): Learner;
   learnerByHandle(handle: string): StoredLearner | undefined;
@@ -298,7 +307,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 12;
+export const STORAGE_VERSION = 13;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -720,6 +729,42 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     if (!existing) throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${run.id}`);
     throw notActiveWriter(lease.writerId);
   }
+
+  createPublicToken(record: PublicTokenRecord): void {
+    try { this.#database.prepare("INSERT INTO public_tokens (id,token_hash,scope,run_id,branch_id,created_by,created_at,revoked_at) VALUES (?,?,?,?,?,?,?,NULL)").run(record.id,record.tokenHash,record.scope,record.runId,record.branchId,record.createdBy,record.createdAt); }
+    catch (error) { throw storageFailure("Could not create public token", error); }
+  }
+
+  publicTokens(runId:string,creatorId:string):readonly PublicTokenRecord[]{
+    const rows=this.#database.prepare("SELECT * FROM public_tokens WHERE run_id=? AND created_by=? ORDER BY created_at,id").all(runId,creatorId) as readonly Record<string,unknown>[];
+    return Object.freeze(rows.map((row)=>this.#publicToken(row)));
+  }
+
+  publicTokenByHash(tokenHash:string):PublicTokenRecord|undefined{
+    const row=this.#database.prepare("SELECT * FROM public_tokens WHERE token_hash=? AND revoked_at IS NULL").get(tokenHash) as Record<string,unknown>|undefined;
+    return row===undefined?undefined:this.#publicToken(row);
+  }
+
+  revokePublicToken(runId:string,tokenId:string,creatorId:string,at:string):void{
+    this.#database.prepare("UPDATE public_tokens SET revoked_at=? WHERE id=? AND run_id=? AND created_by=? AND revoked_at IS NULL").run(at,tokenId,runId,creatorId);
+  }
+
+  createDerivedRun(run:DrillRun,lease:LeaseHolder,title:string,derivation:RunDerivation):void{
+    const updatedAt=this.#now();
+    try{
+      this.#database.exec("BEGIN IMMEDIATE");
+      this.#database.prepare(`INSERT INTO drill_runs (id,snapshot_json,active_writer_id,updated_at,summary_json,owner_learner_id,active_writer_learner_id,schema_version) VALUES (?,?,?,?,?,?,?,?)`).run(run.id,JSON.stringify(run),lease.writerId,updatedAt,JSON.stringify(summaryFields(run,title,updatedAt)),lease.learnerId,lease.learnerId,run.schemaVersion);
+      this.#database.prepare("INSERT INTO run_grants (run_id,learner_id,role,granted_at) VALUES (?,?,'host',?)").run(run.id,lease.learnerId,updatedAt);
+      this.#database.prepare("INSERT INTO run_derivations (derived_run_id,source_run_id,source_branch_id,source_node_id,kind,created_at) VALUES (?,?,?,?,?,?)").run(derivation.derivedRunId,derivation.sourceRunId,derivation.sourceBranchId,derivation.sourceNodeId,derivation.kind,derivation.createdAt);
+      this.#database.exec("COMMIT"); this.#snapshots.set(run.id,Object.freeze({run,activeWriterId:lease.writerId,activeWriterLearnerId:lease.learnerId}));
+    }catch(error){this.#rollback();throw storageFailure("Could not create derived run",error);}
+  }
+
+  derivationFor(runId:string):RunDerivation|undefined{const row=this.#database.prepare("SELECT * FROM run_derivations WHERE derived_run_id=?").get(runId) as Record<string,unknown>|undefined;return row===undefined?undefined:this.#derivation(row);}
+  derivationsFrom(runId:string):readonly RunDerivation[]{const rows=this.#database.prepare("SELECT * FROM run_derivations WHERE source_run_id=? ORDER BY created_at,derived_run_id").all(runId) as readonly Record<string,unknown>[];return Object.freeze(rows.map((row)=>this.#derivation(row)));}
+
+  #publicToken(row:Record<string,unknown>):PublicTokenRecord{return Object.freeze({id:String(row.id),tokenHash:String(row.token_hash),scope:"story_read",runId:String(row.run_id),branchId:String(row.branch_id),createdBy:String(row.created_by),createdAt:String(row.created_at),revokedAt:row.revoked_at===null?null:String(row.revoked_at)});}
+  #derivation(row:Record<string,unknown>):RunDerivation{return Object.freeze({derivedRunId:String(row.derived_run_id),sourceRunId:String(row.source_run_id),sourceBranchId:String(row.source_branch_id),sourceNodeId:String(row.source_node_id),kind:"flip_sides",createdAt:String(row.created_at)});}
 
   createLearner(input: NewLearner): Learner {
     try {
@@ -1875,6 +1920,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "imported games and run schema",
         apply: () => this.#addImportedGames(),
       },
+      {
+        version: 13,
+        name: "public story tokens and run derivations",
+        apply: () => this.#addAdoptionTables(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -1890,6 +1940,31 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         throw storageFailure("Could not migrate run storage", error);
       }
     }
+  }
+
+  #addAdoptionTables(): void {
+    this.#database.exec(`
+      CREATE TABLE IF NOT EXISTS public_tokens (
+        id TEXT PRIMARY KEY,
+        token_hash TEXT NOT NULL UNIQUE,
+        scope TEXT NOT NULL CHECK (scope IN ('story_read')),
+        run_id TEXT NOT NULL,
+        branch_id TEXT NOT NULL,
+        created_by TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        created_at TEXT NOT NULL,
+        revoked_at TEXT
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS public_tokens_run ON public_tokens(run_id, created_by);
+      CREATE TABLE IF NOT EXISTS run_derivations (
+        derived_run_id TEXT PRIMARY KEY,
+        source_run_id TEXT NOT NULL,
+        source_branch_id TEXT NOT NULL,
+        source_node_id TEXT NOT NULL,
+        kind TEXT NOT NULL CHECK (kind IN ('flip_sides')),
+        created_at TEXT NOT NULL
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS run_derivations_source ON run_derivations(source_run_id);
+    `);
   }
 
   #addLiveSessionTables(): void {

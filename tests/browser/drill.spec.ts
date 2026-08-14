@@ -73,6 +73,13 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
 });
 
 test("adaptive guidance keeps a queen-exchange phase change passive and removable", async ({ page }) => {
+  await page.addInitScript(() => {
+    (window as unknown as { __spoken: string[] }).__spoken = [];
+    class Utterance { text: string; constructor(text: string) { this.text = text; } }
+    Object.defineProperty(window, "SpeechSynthesisUtterance", { configurable: true, value: Utterance });
+    Object.defineProperty(window, "speechSynthesis", { configurable: true, value: { getVoices: () => [{}], cancel() {}, speak(value: { text: string }) { (window as unknown as { __spoken: string[] }).__spoken.push(value.text); } } });
+  });
+  await page.reload();
   await page.getByLabel("Optional FEN").fill("3qk2r/5p2/2b2n2/8/8/8/8/3QK3 w - - 0 1");
   await page.getByRole("button", { name: "Start game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
@@ -80,6 +87,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
 
   await page.getByText("Assistance", { exact: true }).click();
   await page.getByLabel("Passive pivotal markers").check();
+  await page.getByLabel("Speak opened guidance").check();
   await expect(page.getByRole("dialog", { name: "Recorded change" })).toHaveCount(0);
 
   await move(page, "d1", "d8");
@@ -91,6 +99,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   const guidance = page.getByRole("dialog", { name: "Recorded change" });
   await expect(guidance).toContainText("middlegame → endgame, detected by Tabiya's phase bands.");
   await expect(guidance).toContainText("material-census convention");
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken)).toEqual([expect.stringContaining("middlegame → endgame")]);
   const rendered = await guidance.innerText();
   expect(rendered).not.toMatch(/\b[a-h][1-8][a-h][1-8][qrbn]?\b/u);
   expect(rendered).not.toMatch(/\b(?:[KQRBN](?:[a-h1-8]?x?)?[a-h][1-8]|[a-h](?:x[a-h])?[1-8](?:=[QRBN])?)[+#]?\b/u);
@@ -220,7 +229,7 @@ test("library exposes phase honestly and survives a malformed pack response", as
   expect(pageErrors).toEqual([]);
 });
 
-test("terminal outcome reveals authored commentary and recorded evidence", async ({ page }) => {
+test("terminal outcome reveals authored commentary, a native story, and a revocable public card", async ({ page, browser }) => {
   const card = page
     .getByRole("article")
     .filter({ hasText: "Terminal outcome browser fixture" });
@@ -239,6 +248,41 @@ test("terminal outcome reveals authored commentary and recorded evidence", async
   });
   await expect(page.getByText("Engine evidence recorded", { exact: false })).toBeVisible();
   await expect(page.getByText("Thinking…")).toHaveCount(0);
+  await page.getByRole("button", { name: "Story of this run" }).click();
+  await expect(page).toHaveURL(/\/review\/game\//);
+  await expect(page.getByRole("heading", { name: "Story of this run" })).toBeVisible();
+  await page.getByRole("button", { name: "Share story" }).click();
+  const publicLink = page.getByRole("link", { name: /\/shared\// });
+  const href = await publicLink.getAttribute("href");
+  expect(href).not.toBeNull();
+  const absolute = new URL(href!, page.url()).href;
+  const anonymous = await browser.newContext();
+  const publicPage = await anonymous.newPage();
+  await publicPage.goto(absolute);
+  await expect(publicPage.getByRole("heading")).toContainText(/The turning point|Held|Won|A game story/);
+  await expect(publicPage.getByLabel("Chessboard")).toBeVisible();
+  const runId = page.url().split("/").at(-1)!;
+  const shares = await (await page.request.get(`/runs/${runId}/share`)).json() as { shares: { id: string }[] };
+  await page.request.delete(`/runs/${runId}/share/${shares.shares[0]!.id}`);
+  await publicPage.reload();
+  await expect(publicPage.getByText("Route not found")).toBeVisible();
+  await anonymous.close();
+});
+
+test("terminal flip preserves the source and milestones link back into played runs", async ({ page }) => {
+  const card = page.getByRole("article").filter({ hasText: "Terminal outcome browser fixture" });
+  await card.getByRole("button", { name: /Open position/ }).click();
+  await move(page, "f2", "f3");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await move(page, "g2", "g4");
+  const sourceId = page.url().split("/").at(-1)!;
+  await page.getByRole("button", { name: "Replay this as Black" }).click();
+  await expect(page).toHaveURL(/\/play\/run\/flip-/);
+  await expect(page.getByText("No pack is loaded. Nothing is claimed about this position.")).toBeVisible();
+  await expect(page.getByLabel("Opposite-side replay source")).toContainText(sourceId);
+  await page.getByRole("link", { name: "Learn" }).click();
+  await expect(page.getByRole("heading", { name: "Milestones" })).toBeVisible();
+  await expect(page.getByText("First preserved attempt.")).toBeVisible();
 });
 
 test("Outcome Drill resolves a non-terminal hold and remains playable", async ({ page }) => {

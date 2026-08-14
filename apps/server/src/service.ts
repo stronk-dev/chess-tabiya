@@ -26,6 +26,7 @@ import {
   rewind,
   rewindToCheckpoint,
   storyMoments,
+  suggestTitle,
   type BranchComparison,
   type BranchGroup,
   type AppendOpponentPlyOptions,
@@ -43,7 +44,7 @@ import {
   type PositionOpponentPolicy,
   RuntimeError,
 } from "@chess-tabiya/runtime";
-import { createHash, randomUUID } from "node:crypto";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
@@ -71,7 +72,7 @@ import {
   type PackRecord,
   type PackSummary,
 } from "./pack-registry.js";
-import type { ImportedGameRecord, RunStorage, RunSummary, StoredRun } from "./storage.js";
+import type { ImportedGameRecord, PublicTokenRecord, RunDerivation, RunStorage, RunSummary, StoredRun } from "./storage.js";
 import type { ProgressStorage, ScheduleRow, StoredAttempt } from "./storage.js";
 import {
   projectAttempts,
@@ -471,7 +472,7 @@ export class RunService {
       throw new ServerError("STORAGE_FAILURE", "Imported-game storage is not configured");
     }
     this.#storage.createImportedRun(run, lease, title, record);
-    const jobs = this.#ensureImportEvidence(run).enqueued;
+    const jobs = this.#ensureStoryEvidence(run, run.branches[0]!.id).enqueued;
     return Object.freeze({ run, importRecord: record, evidencePass: Object.freeze({ jobs }) });
   }
 
@@ -485,39 +486,68 @@ export class RunService {
     return record;
   }
 
-  story(runId: string, principal: Principal) {
+  story(runId: string, principal: Principal, requestedBranchId?: string) {
     const run = requireRead(this.#storage, runId, principal).stored.run;
-    if (run.sessionKind !== "imported") throw new ServerError("RUN_NOT_FOUND", `Run ${runId} is not an imported game`);
+    const outcomeEvents = run.events.filter((event): event is Extract<DrillRunEvent,{type:"outcome.reached"}> => event.type === "outcome.reached");
+    const defaultBranch = run.sessionKind === "imported" ? run.branches[0]?.id : [...outcomeEvents].reverse().map((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId).find((id)=>id!==undefined);
+    const branchId = requestedBranchId ?? defaultBranch;
+    const importedMainline = run.sessionKind === "imported" && branchId === run.branches[0]?.id;
+    const branchOutcome = outcomeEvents.find((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId===branchId);
+    if (branchId === undefined || (!importedMainline && branchOutcome === undefined)) throw new ServerError("STORY_UNAVAILABLE","This branch has no terminal story");
     if (!feedbackDisclosed(run)) throw new ServerError("ASSISTANCE_WITHHELD", "Reveal the finished game before opening its story");
-    const record = this.importRecord(runId, principal);
-    const pass = this.#ensureImportEvidence(run);
+    const record = run.sessionKind === "imported" ? this.importRecord(runId, principal) : undefined;
+    const pass = this.#ensureStoryEvidence(run, branchId);
     const shapes = this.#shapes?.list().map((summary) => {
       const document = this.#shapes!.required(summary.id).document;
       return { id: document.id, trigger: document.trigger };
     });
-    const projection = storyMoments(run, run.branches[0]!.id, {
-      recordedResult: record.result,
+    const projection = storyMoments(run, branchId, {
+      ...(record===undefined?{}:{recordedResult: record.result}),
       ...(shapes === undefined ? {} : { shapes }),
     });
-    const terminal = run.events.some((event) => event.type === "outcome.reached");
+    const terminal = branchOutcome !== undefined;
     return Object.freeze({
       ready: pass.ready,
       pendingEvidence: pass.pending,
+      branchId,
       side: run.start.side,
-      source: Object.freeze({
-        kind: record.sourceKind,
-        ...(record.sourceUrl === null ? {} : { url: record.sourceUrl }),
-        headers: record.headers,
-        result: record.result,
-        importedAt: record.importedAt,
-      }),
+      source: record===undefined?Object.freeze({kind:"native" as const}):Object.freeze({ kind: record.sourceKind, ...(record.sourceUrl === null ? {} : { url: record.sourceUrl }), headers: record.headers, result: record.result, importedAt: record.importedAt }),
       outcome: Object.freeze(terminal
-        ? { kind: "board_terminal" as const, result: record.result }
-        : record.result === "*"
+        ? { kind: "board_terminal" as const, result: branchOutcome.data.outcome }
+        : record?.result === "*" || record===undefined
           ? { kind: "unfinished" as const }
           : { kind: "recorded_result" as const, result: record.result }),
       ...projection,
     });
+  }
+
+  share(runId:string,principal:Principal,branchId:string,at=new Date().toISOString()){
+    const {role}=requireRead(this.#storage,runId,principal); if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may share a story");
+    this.story(runId,principal,branchId);
+    if(this.#storage.createPublicToken===undefined)throw new ServerError("STORAGE_FAILURE","Public token storage is unavailable");
+    const token=randomBytes(32).toString("base64url"),record:PublicTokenRecord={id:`share-${randomUUID()}`,tokenHash:createHash("sha256").update(token).digest("hex"),scope:"story_read",runId,branchId,createdBy:principal.learnerId,createdAt:at,revokedAt:null};
+    this.#storage.createPublicToken(record); return Object.freeze({id:record.id,token,url:`/shared/${token}`});
+  }
+  shares(runId:string,principal:Principal){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may list shares");return this.#storage.publicTokens?.(runId,principal.learnerId).map(({tokenHash,...record})=>record)??[];}
+  revokeShare(runId:string,principal:Principal,tokenId:string,at=new Date().toISOString()){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may revoke shares");this.#storage.revokePublicToken?.(runId,tokenId,principal.learnerId,at);}
+  publicStory(token:string){const record=this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"));if(record===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");const learner=this.#storage.learnerById(record.createdBy);if(learner===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");const story=this.story(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId);return Object.freeze({title:suggestTitle(story),outcome:story.outcome,moments:story.moments.slice(0,8).map((moment)=>Object.freeze({nodeId:moment.nodeId,ply:moment.ply,san:moment.san,fen:moment.fen,sentences:moment.sentences})),productLink:"/"});}
+
+  async flip(runId:string,principal:Principal,nodeId:string,resistance?:"human_common"|"strong_engine"){
+    const source=requireRead(this.#storage,runId,principal).stored.run,node=source.nodes.find((item)=>item.id===nodeId);if(node===undefined)throw new ServerError("RUN_NOT_FOUND",`Unknown run: ${runId}`);
+    if(this.#storage.createDerivedRun===undefined)throw new ServerError("STORAGE_FAILURE","Run derivation storage is unavailable");
+    const id=`flip-${randomUUID()}`,writerId=`writer-${randomUUID()}`,mode=resistance??(source.opponentPolicy.mode==="strong_engine"?"strong_engine":"human_common"),createdAt=new Date().toISOString();
+    const session={kind:"position" as const,start:canonicalRunStart({fen:node.fen,side:source.start.side==="white"?"black":"white"}),feedbackPolicy:"attempt_end" as const,opponentPolicy:{mode,...(mode==="human_common"&&source.opponentPolicy.targetElo!==undefined?{targetElo:source.opponentPolicy.targetElo}:{})}};
+    const run=createRun({id,session,sessionDigest:await digestSessionSource(session),policyConfig:source.policyConfig,seed:Math.floor(Math.random()*2_147_483_647),createdAt});
+    const derivation:RunDerivation={derivedRunId:id,sourceRunId:runId,sourceBranchId:node.branchId,sourceNodeId:nodeId,kind:"flip_sides",createdAt};
+    this.#storage.createDerivedRun(run,{writerId,learnerId:principal.learnerId},"Opposite-side replay",derivation);this.#project(run,principal.learnerId,{[run.branches[0]!.id]:{origin:"fresh",derivedFromRunId:runId}});return Object.freeze({run,writerId,derivation});
+  }
+
+  derivations(runId:string,principal:Principal){requireRead(this.#storage,runId,principal);return Object.freeze({source:this.#storage.derivationFor?.(runId)??null,derived:this.#storage.derivationsFrom?.(runId)??[]});}
+
+  milestones(principal:Principal){
+    const rows=[...this.progress(principal)].sort((a,b)=>a.endedAt.localeCompare(b.endedAt)||a.runId.localeCompare(b.runId));const output:any[]=[];const add=(kind:string,row:StoredAttempt,sentence:string)=>{if(!output.some((item)=>item.kind===kind))output.push({kind,occurredAt:row.endedAt,sentence,link:{runId:row.runId,branchId:row.branchId}});};
+    for(const row of rows){if(row.countable)add("first_attempt",row,"First preserved attempt.");if(row.graded&&row.verdict==="stable")add("first_stable",row,"First stable graded attempt.");if(row.objectiveState==="achieved")add("first_objective_achieved",row,"First achieved objective.");if(row.countable&&row.result==="win")add("first_win",row,"First recorded win.");if(row.origin==="scheduled")add("first_scheduled_return",row,"First return when due.");if(row.attemptNo===10)add("ten_attempts_one_root",row,"Ten attempts on one root.");if(this.#storage.derivationFor?.(row.runId)!==undefined)add("first_flip_sides",row,"First opposite-side replay.");}
+    return Object.freeze(output.sort((a,b)=>b.occurredAt.localeCompare(a.occurredAt)));
   }
 
   move(
@@ -1343,8 +1373,8 @@ export class RunService {
     return Object.freeze({ schedule, result });
   }
 
-  #ensureImportEvidence(run: DrillRun): { readonly ready: boolean; readonly pending: number; readonly enqueued: number } {
-    const path = branchPath(run, run.branches[0]!.id);
+  #ensureStoryEvidence(run: DrillRun, branchId: string): { readonly ready: boolean; readonly pending: number; readonly enqueued: number } {
+    const path = branchPath(run, branchId);
     const durable = new Set(run.events.flatMap((event) =>
       event.type === "evidence.attached" && event.data.payload.kind === "eval" &&
       event.data.payload.source === "engine_validated"

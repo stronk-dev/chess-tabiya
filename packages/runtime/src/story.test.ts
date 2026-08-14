@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { attachEvidence, commitMove, createRun, storyMoments } from "./index.js";
+import { attachEvidence, commitMove, createRun, storyMoments, suggestTitle } from "./index.js";
 
 const at = "2026-08-14T14:00:00.000Z";
 const digest = `sha256:${"d".repeat(64)}`;
@@ -28,5 +28,13 @@ describe("grounded game story", () => {
     const run = commitMove(start, "g6g7", { actor: "user", at }).run;
     const outcome = storyMoments(run, run.activeCursor.branchId, { recordedResult: "1-0" }).moments.find((moment) => moment.kinds.includes("outcome"));
     expect(outcome).toMatchObject({ nodeId: run.activeCursor.nodeId, entryNodeId: start.activeCursor.nodeId });
+  });
+
+  it("composes deterministic titles only from story facts", () => {
+    const run = commitMove(imported("7k/8/5KQ1/8/8/8/8/8 w - - 0 1"), "g6g7", { actor: "user", at }).run;
+    const projection = storyMoments(run, run.activeCursor.branchId, { recordedResult: "1-0" });
+    const input = { outcome: { kind: "board_terminal" as const, result: "win" as const }, ...projection };
+    expect(suggestTitle(input)).toBe(suggestTitle(structuredClone(input)));
+    expect(suggestTitle(input)).toMatch(/Won/);
   });
 });

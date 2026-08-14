@@ -279,12 +279,17 @@ export interface ImportGameRequest {
 export interface GameStory {
   readonly ready: boolean;
   readonly pendingEvidence: number;
+  readonly branchId: string;
   readonly side: "white" | "black";
-  readonly source: { readonly kind: ImportedGameRecord["sourceKind"]; readonly url?: string; readonly headers: Readonly<Record<string, string>>; readonly result: ImportedGameRecord["result"]; readonly importedAt: string };
+  readonly source: { readonly kind: "native" } | { readonly kind: ImportedGameRecord["sourceKind"]; readonly url?: string; readonly headers: Readonly<Record<string, string>>; readonly result: ImportedGameRecord["result"]; readonly importedAt: string };
   readonly outcome: { readonly kind: "board_terminal" | "recorded_result" | "unfinished"; readonly result?: ImportedGameRecord["result"] };
   readonly moments: readonly StoryMoment[];
   readonly rank: readonly string[];
 }
+export interface StoryShare { readonly id: string; readonly scope: "story_read"; readonly runId: string; readonly branchId: string; readonly createdAt: string; readonly revokedAt: string | null; }
+export interface RunDerivation { readonly derivedRunId: string; readonly sourceRunId: string; readonly sourceBranchId: string; readonly sourceNodeId: string; readonly kind: "flip_sides"; readonly createdAt: string; }
+export interface RunDerivationPage { readonly source: RunDerivation | null; readonly derived: readonly RunDerivation[]; }
+export interface ProgressMilestone { readonly kind: "first_attempt" | "first_stable" | "first_objective_achieved" | "first_win" | "first_scheduled_return" | "ten_attempts_one_root" | "first_flip_sides"; readonly occurredAt: string; readonly sentence: string; readonly link: { readonly runId: string; readonly branchId: string }; }
 
 export interface CreateRunRequest {
   readonly id: string;
@@ -524,7 +529,13 @@ export interface DrillClientApi extends RunApi {
   pgn(runId: string, branchIds?: readonly string[]): Promise<PgnDownload>;
   importGame?(input: ImportGameRequest, writerId: string): Promise<{ readonly run: DrillRun; readonly importRecord: ImportedGameRecord; readonly evidencePass: { readonly jobs: number } }>;
   importRecord?(runId: string): Promise<ImportedGameRecord>;
-  story?(runId: string): Promise<GameStory>;
+  story?(runId: string, branchId?: string): Promise<GameStory>;
+  shareStory?(runId: string, branchId: string): Promise<{ readonly id: string; readonly token: string; readonly url: string }>;
+  storyShares?(runId: string): Promise<readonly StoryShare[]>;
+  revokeStoryShare?(runId: string, tokenId: string): Promise<void>;
+  flipRun?(runId: string, nodeId: string, resistance?: "human_common" | "strong_engine"): Promise<{ readonly run: DrillRun; readonly writerId: string; readonly derivation: RunDerivation }>;
+  runDerivations?(runId: string): Promise<RunDerivationPage>;
+  milestones?(): Promise<readonly ProgressMilestone[]>;
   progress?(): Promise<readonly ProgressAttempt[]>;
   dueProgress?(): Promise<readonly ProgressSchedule[]>;
   dismissSchedule?(scheduleId: string): Promise<void>;
@@ -661,9 +672,17 @@ export class DrillApi implements DrillClientApi {
     return body.importRecord;
   }
 
-  story(runId: string): Promise<GameStory> {
-    return this.#json(`/runs/${encoded(runId)}/story`);
+  story(runId: string, branchId?: string): Promise<GameStory> {
+    const query = branchId === undefined ? "" : `?branch=${encoded(branchId)}`;
+    return this.#json(`/runs/${encoded(runId)}/story${query}`);
   }
+
+  shareStory(runId: string, branchId: string): Promise<{ readonly id: string; readonly token: string; readonly url: string }> { return this.#json(`/runs/${encoded(runId)}/share`, { method: "POST", body: { branchId } }); }
+  async storyShares(runId: string): Promise<readonly StoryShare[]> { const body = await this.#json<{ readonly shares: readonly StoryShare[] }>(`/runs/${encoded(runId)}/share`); return body.shares; }
+  async revokeStoryShare(runId: string, tokenId: string): Promise<void> { await this.#json(`/runs/${encoded(runId)}/share/${encoded(tokenId)}`, { method: "DELETE" }); }
+  flipRun(runId: string, nodeId: string, resistance?: "human_common" | "strong_engine"): Promise<{ readonly run: DrillRun; readonly writerId: string; readonly derivation: RunDerivation }> { return this.#json(`/runs/${encoded(runId)}/flip`, { method: "POST", body: { nodeId, ...(resistance === undefined ? {} : { resistance }) } }); }
+  async runDerivations(runId: string): Promise<RunDerivationPage> { const body = await this.#json<{ readonly derivations: RunDerivationPage }>(`/runs/${encoded(runId)}/derivations`); return body.derivations; }
+  async milestones(): Promise<readonly ProgressMilestone[]> { const body = await this.#json<{ readonly milestones: readonly ProgressMilestone[] }>("/progress/milestones"); return body.milestones; }
 
   async runs(limit = 50, offset = 0): Promise<readonly RunSummary[]> {
     const query = new URLSearchParams({
@@ -945,7 +964,7 @@ export class DrillApi implements DrillClientApi {
   async #response(
     path: string,
     options: {
-      readonly method?: "GET" | "POST" | "PUT";
+      readonly method?: "GET" | "POST" | "PUT" | "DELETE";
       readonly writerId?: string;
       readonly body?: unknown;
       readonly rawBody?: string;
@@ -988,7 +1007,7 @@ export class DrillApi implements DrillClientApi {
   async #json<T>(
     path: string,
     options: {
-      readonly method?: "GET" | "POST";
+      readonly method?: "GET" | "POST" | "DELETE";
       readonly writerId?: string;
       readonly body?: unknown;
     } = {},

@@ -15,7 +15,12 @@ describe("assistance preference", () => {
 
   it("upgrades version one without changing the storage key", () => {
     const storage = { getItem: () => JSON.stringify({ version: 1, markers: "live", guided: "off", humanSplit: "on_request", voice: "authored" }), setItem() {} };
-    expect(loadAssistance("pack", storage)).toEqual({ version: 2, markers: "live", guided: "off", humanSplit: "on_request", corpus: "off", voice: "authored" });
+    expect(loadAssistance("pack", storage)).toEqual({ version: 3, markers: "live", guided: "off", humanSplit: "on_request", corpus: "off", voice: "authored", spoken: "off" });
     expect(assistanceKey("pack")).toBe("tabiya.assistance.v1.pack");
+  });
+
+  it("upgrades version two with spoken delivery disabled", () => {
+    const storage = { getItem: () => JSON.stringify({ version: 2, markers: "off", guided: "live", humanSplit: "off", corpus: "on_request", voice: "persona" }), setItem() {} };
+    expect(loadAssistance("position", storage)).toEqual({ version: 3, markers: "off", guided: "live", humanSplit: "off", corpus: "on_request", voice: "persona", spoken: "off" });
   });
 });

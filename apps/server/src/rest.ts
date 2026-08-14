@@ -11,6 +11,7 @@ import {
   feedbackDeliveryOpen,
   historyFrom,
   permittedAssistance,
+  suggestTitle,
   type OpponentSelection,
   type SelectionCandidate,
   type SelectionEngineIdentity,
@@ -40,7 +41,7 @@ import type { LiveSessionService } from "./live-session.js";
 import { projectShapeEntry, type ShapeRegistry } from "./shape-registry.js";
 import type { ShapeStudio } from "./shape-studio.js";
 import type { BoardControl, SessionKind, VoteOption } from "./live-types.js";
-import { evidencePacket, renderVoice, type VoiceProvider } from "./guidance.js";
+import { evidencePacket, renderVoice, type VoiceProvider, type VoiceScope } from "./guidance.js";
 import { corpusPopulation, type CorpusSource } from "./corpus.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
@@ -451,6 +452,7 @@ export function errorResponse(error: unknown): Response {
               : error.code === "RUN_ALREADY_EXISTS" ||
                 error.code === "FEEDBACK_WITHHELD" ||
                 error.code === "ASSISTANCE_WITHHELD" ||
+                error.code === "STORY_UNAVAILABLE" ||
                 error.code === "PACK_UNRESOLVABLE" ||
                 error.code === "PACK_ID_RESERVED" ||
                 error.code === "SHAPE_ID_RESERVED" ||
@@ -493,7 +495,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis|human-split|corpus|voice|group|group-reply|import|story)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis|human-split|corpus|voice|group|group-reply|import|story|share|flip|derivations)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -645,6 +647,20 @@ export function createRestHandler(
         }
         return json(200, await capabilities.get());
       }
+      const publicStoryRoute = /^\/api\/shared\/([^/]+)\/story$/.exec(url.pathname);
+      if (request.method === "GET" && publicStoryRoute !== null) {
+        try { return json(200, service.publicStory(decodeURIComponent(publicStoryRoute[1]!))); }
+        catch { return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } }); }
+      }
+      const publicCardRoute = /^\/shared\/([^/]+)$/.exec(url.pathname);
+      if (request.method === "GET" && publicCardRoute !== null) {
+        let card: ReturnType<RunService["publicStory"]>;
+        try { card = service.publicStory(decodeURIComponent(publicCardRoute[1]!)); }
+        catch { return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } }); }
+        const escape = (value: string) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+        const moments = card.moments.map((moment) => `<li>${escape(moment.sentences.join(" "))}</li>`).join("");
+        return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(card.title)}</title></head><body><main><h1>${escape(card.title)}</h1><p>${escape(String(card.outcome.result ?? card.outcome.kind))}</p>${card.moments[0] === undefined ? "" : `<pre aria-label="Chessboard">${escape(card.moments[0].fen)}</pre>`}<ol>${moments}</ol><a href="${escape(card.productLink)}">Tabiya</a></main></body></html>`, { status: 200, headers: { "cache-control": "no-store", "content-type": "text/html; charset=utf-8" } });
+      }
       if (url.pathname === "/shapes/drafts") {
         if (shapeStudio === undefined) throw new ServerError("STORAGE_FAILURE", "Shape Studio is not configured");
         const principal=authenticate();
@@ -791,6 +807,9 @@ export function createRestHandler(
       if (request.method === "GET" && url.pathname === "/progress/metrics") {
         return json(200, service.progressMetrics(authenticate()));
       }
+      if (request.method === "GET" && url.pathname === "/progress/milestones") {
+        return json(200, { milestones: service.milestones(authenticate()) });
+      }
       const scheduleRoute = /^\/progress\/schedules\/([^/]+)$/.exec(url.pathname);
       if (request.method === "POST" && scheduleRoute !== null) {
         requireJson(request);
@@ -860,6 +879,12 @@ export function createRestHandler(
         return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
       }
 
+      const shareDelete = /^\/runs\/([^/]+)\/share\/([^/]+)$/.exec(url.pathname);
+      if (request.method === "DELETE" && shareDelete !== null) {
+        const principal = authenticate();
+        service.revokeShare(decodeURIComponent(shareDelete[1]!), principal, decodeURIComponent(shareDelete[2]!));
+        return json(200, { revoked: true });
+      }
       const route = parseRunRoute(url.pathname);
       if (!route) {
         return json(404, {
@@ -889,7 +914,13 @@ export function createRestHandler(
         return json(200, { importRecord: service.importRecord(route.runId, principal) });
       }
       if (request.method === "GET" && route.action === "story") {
-        return json(200, service.story(route.runId, principal));
+        return json(200, service.story(route.runId, principal, url.searchParams.get("branch") ?? undefined));
+      }
+      if (request.method === "GET" && route.action === "share") {
+        return json(200, { shares: service.shares(route.runId, principal) });
+      }
+      if (request.method === "GET" && route.action === "derivations") {
+        return json(200, { derivations: service.derivations(route.runId, principal) });
       }
       if (request.method === "GET" && route.action === "pgn") {
         const pgn = await service.pgn(route.runId, principal, parseBranches(url));
@@ -952,10 +983,23 @@ export function createRestHandler(
         if (scope !== "marker" && scope !== "reading" && scope !== "steering" && scope !== "story") throw invalid("scope must be marker, reading, steering, or story");
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
-        const packet = scope === "story"
-          ? Object.freeze({ ...basePacket, sentences: Object.freeze([...basePacket.sentences, ...(service.story(route.runId, principal).moments.find((moment) => moment.nodeId === access.node.id)?.sentences ?? [])]) })
-          : basePacket;
-        return json(200, { ...(await renderVoice(voiceProvider, packet, voicePersona)), scope });
+        const story = scope === "story" ? service.story(route.runId, principal) : undefined;
+        const packet = story === undefined
+          ? basePacket
+          : Object.freeze({ ...basePacket, sentences: Object.freeze([...basePacket.sentences, suggestTitle(story), ...(story.moments.find((moment) => moment.nodeId === access.node.id)?.sentences ?? [])]) });
+        return json(200, { ...(await renderVoice(voiceProvider, packet, voicePersona, scope as VoiceScope)), scope });
+      }
+      if (route.action === "share") {
+        requireJson(request);
+        const body = closedRecord(value, "/", ["branchId"]);
+        return json(201, service.share(route.runId, principal, requiredString(body.branchId, "branchId")));
+      }
+      if (route.action === "flip") {
+        requireJson(request);
+        const body = closedRecord(value, "/", ["nodeId", "resistance"]);
+        const resistance = body.resistance === undefined ? undefined : requiredString(body.resistance, "resistance");
+        if (resistance !== undefined && resistance !== "human_common" && resistance !== "strong_engine") throw invalid("resistance must be human_common or strong_engine");
+        return json(201, await service.flip(route.runId, principal, requiredString(body.nodeId, "nodeId"), resistance));
       }
       if (route.action === "lease") {
         requireJson(request);

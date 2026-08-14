@@ -38,7 +38,7 @@ export { SILENT_ASSISTANCE, permittedAssistance, type AssistanceConfig, type Ass
 export { pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export { endgameReading, renderEndgameReading, type EndgameTypeId, type EndgameReading, type TechniqueRef } from "./endgame.js";
 export { retrospectivePivot } from "./adaptive.js";
-export { storyMoments, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection } from "./story.js";
+export { storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
 export { voiceCheck, BANNED_JUDGEMENTS, PRESCRIPTIVE_VERBS, CHESS_LEXICON, type EvidencePacket, type ShapeEntryRef, type VoiceCheckResult } from "./voice.js";
 export { terminalOutcome } from "./outcome.js";
 export {
