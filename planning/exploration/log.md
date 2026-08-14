@@ -1626,3 +1626,12 @@ and the ledger. No new external research; every claim cites its source dossier o
 - **Proposed:** 12 BACKLOG rows (dossier §7) — owner-tier, not written by this pass.
 - **Next:** owner triage of §7 into the ledger; the two shortlists are candidate
   input for content-era-adjacent RFC scheduling.
+
+## 2026-08-14 (owner rulings) — full parallel wave; content wave 2 now; play-at-the-end stands
+
+Everything in parallel: four RFC drafts at once (adoption wave 1; social
+match+friend-link; predicate wave 2; runtime corpus evidence), opening-pack
+production starts alongside in explorer-priority order, and the owner's
+play-at-the-end ruling stands with the invariant review attached to that first
+session. Register discipline pre-assigned: drafts claim numbers in the order
+predicate-wave-2 → corpus-evidence → adoption-wave-1 → social-match.
