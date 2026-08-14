@@ -493,7 +493,19 @@
         {/if}
         {#if snapshot.pendingEvidence > 0}<span>{snapshot.pendingEvidence} evidence waiting</span>{/if}
       </div>
-      <button class="help" type="button" aria-label="Keyboard shortcuts" onclick={() => (helpOpen = true)}>?</button>
+      <div class="topbar-actions">
+        <details class="assistance-control">
+          <summary>Assistance</summary>
+          <div class="assistance-grid">
+            <label><input type="checkbox" checked={assistance.markers === "live"} onchange={(event) => setAssistance("markers", event.currentTarget.checked ? "live" : "off")} /> Passive pivotal markers</label>
+            <label><input type="checkbox" checked={assistance.guided === "live"} onchange={(event) => setAssistance("guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
+            <label><input type="checkbox" checked={assistance.humanSplit === "on_request"} disabled={assistancePermission.humanSplit === "locked_off"} aria-describedby={assistancePermission.humanSplit === "locked_off" ? "human-split-locked" : undefined} onchange={(event) => setAssistance("humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move split on request</label>
+            {#if assistancePermission.humanSplit === "locked_off"}<span id="human-split-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
+            {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
+          </div>
+        </details>
+        <button class="help" type="button" aria-label="Keyboard shortcuts" onclick={() => (helpOpen = true)}>?</button>
+      </div>
     </header>
 
     {#if error}<p class="error" role="alert">{error}</p>{/if}
@@ -513,16 +525,6 @@
           {#if pack}<span>This pack declares: {pack.phase}.</span>{/if}
           <span>{renderPhaseReading(detectedPhase)}</span>
         </section>
-        <details class="assistance-control">
-          <summary>Assistance</summary>
-          <div class="assistance-grid">
-            <label><input type="checkbox" checked={assistance.markers === "live"} onchange={(event) => setAssistance("markers", event.currentTarget.checked ? "live" : "off")} /> Passive pivotal markers</label>
-            <label><input type="checkbox" checked={assistance.guided === "live"} onchange={(event) => setAssistance("guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
-            <label><input type="checkbox" checked={assistance.humanSplit === "on_request"} disabled={assistancePermission.humanSplit === "locked_off"} aria-describedby={assistancePermission.humanSplit === "locked_off" ? "human-split-locked" : undefined} onchange={(event) => setAssistance("humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move split on request</label>
-            {#if assistancePermission.humanSplit === "locked_off"}<span id="human-split-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
-            {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
-          </div>
-        </details>
         {#if trajectory}
           <section class="trajectory-status" aria-label="Trajectory legs">
             {#each trajectory.legs as leg}
@@ -766,6 +768,8 @@
     color: var(--warning);
   }
 
+  .topbar-actions { position:relative; justify-self:end; display:flex; align-items:center; gap:.55rem; }
+
   .error,
   .readonly-banner {
     padding: 0.7rem 0.9rem;
@@ -824,9 +828,9 @@
   }
 
   .phase-reading { display:flex; flex-wrap:wrap; gap:.35rem .8rem; color:var(--muted); font-size:.72rem; }
-  .assistance-control { position:absolute; z-index:6; top:.35rem; right:3rem; max-width:24rem; padding:.35rem .55rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); font-size:.75rem; }
+  .assistance-control { position:relative; z-index:6; padding:.35rem .55rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); font-size:.75rem; }
   .assistance-control summary { cursor:pointer; }
-  .assistance-grid { display:grid; gap:.45rem; margin-top:.55rem; }
+  .assistance-grid { position:absolute; top:calc(100% + .4rem); right:0; display:grid; width:min(23rem,calc(100vw - 2rem)); gap:.45rem; padding:.7rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); box-shadow:var(--shadow); }
   .assistance-grid label { display:flex; gap:.4rem; align-items:center; }
   .assistance-grid .honest { color:var(--muted); font-size:.68rem; }
   .guidance-panel { max-height:min(38rem,calc(100dvh - 2rem)); overflow:auto; }

@@ -43,7 +43,7 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
 });
 
 test("adaptive guidance keeps a queen-exchange phase change passive and removable", async ({ page }) => {
-  await page.getByLabel("Optional FEN").fill("3qk2r/3ppp2/2b2n2/8/8/8/8/3QK3 w - - 0 1");
+  await page.getByLabel("Optional FEN").fill("3qk2r/5p2/2b2n2/8/8/8/8/3QK3 w - - 0 1");
   await page.getByRole("button", { name: "Start game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByText("Detected by Tabiya's phase bands: middlegame.")).toBeVisible();

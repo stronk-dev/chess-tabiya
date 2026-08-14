@@ -46,3 +46,13 @@ Apple Silicon development host: median **5.361 ms**, maximum **11.46 ms**. These
 observations, not a unit-test threshold; the test asserts only a non-vacuous workload and
 finite measurements. Focused runtime/server/client tests and the queen-exchange browser
 scenario passed. The optional tagged Maia check remains outside `make verify` by policy.
+
+## 2026-08-14 — Browser seam before closeout
+
+The first full browser gate found that the new Assistance control was absolutely positioned
+against the viewport and sat underneath the shell's account controls: it existed in the DOM but
+could not be clicked. It now belongs to the drill top-bar action region, with only its opened
+menu positioned relative to that control. The acceptance fixture also removed a blocking pawn
+from its scripted queen-exchange file; the corrected legal `Qxd8+ Kxd8` path now crosses the
+phase band and passes at zero retries. This was a real cross-layer layout defect, not hidden by
+forcing the click.
