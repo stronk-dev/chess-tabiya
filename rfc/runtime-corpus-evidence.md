@@ -1,6 +1,6 @@
 # RFC: Runtime corpus evidence — band frequency and recency in the assistance rail
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/05-in-run-experience.md` §3 rung 4 (line 75: corpus frequency
@@ -62,11 +62,9 @@ the claim order):
   siblings.
 - **Migration: none claimed.** Nothing here persists: no new table, no run event, no
   run-schema stamp. The corpus page is ephemeral by contract (§5), the preference is
-  `localStorage`, and capabilities are derived. The register currently **reserves
-  migration 13 for this draft** (`rfc/README.md` §Migration register, row 13); this
-  RFC claims nothing and therefore **releases that reservation** — a register edit
-  recorded on landing — after which adoption-wave-1 (14) and social-match (15) rebase
-  downward per the standing renegotiation rule. Shipped `STORAGE_VERSION` stays 12.
+  `localStorage`, and capabilities are derived. The reconciled register assigns
+  migration 13 to adoption-wave-1 and 14 to social-match; this RFC leaves both
+  untouched. Shipped `STORAGE_VERSION` stays 12.
 - **Shared non-register resources claimed here, recorded for the two siblings drafted
   after this one (adoption-wave-1, social-match), who must name this RFC in
   `Depends on:` if they touch any of them:**
@@ -339,10 +337,11 @@ copying the human-split seam (`rest.ts:906-923`) exactly:
 export interface CorpusPage {
   readonly nodeId: string;
   readonly result: CorpusResult;          // §1, population always present
-  readonly committedMoveSan: string | null; // SAN of the move the learner committed
-                                            // at this node, when the requested node
-                                            // has a child on its own branch path;
-                                            // null at a tip
+  readonly committedMoveSan: string | null; // SAN of the learner-authored child of
+                                            // this pre-move node on the active-cursor
+                                            // path; null when this node is not an
+                                            // active-path ancestor or that child is
+                                            // not learner-authored
 }
 ```
 
@@ -547,12 +546,8 @@ never available during committed play at all.
 
 ## Acceptance criteria
 
-Baselines re-verified on this checkout, 2026-08-14: `pnpm test` — **399 tests /
-69 files, of which 398 pass and one fails pre-existing**:
-`apps/server/src/pack-authoring.test.ts:267` pins the committed sourcing-candidate
-count at 5, and the 2026-08-14 opening-pack wave grew `content/candidates/` to 9
-loadable packs — a stale content pin unrelated to this RFC, to be fixed on the
-mainline before this RFC's criteria are measured. The browser suite holds **17
+Baselines re-verified on this checkout after Predicate Wave 2 archived,
+2026-08-14: `make verify` — **416 tests / 70 files, all green**. The browser suite holds **17
 Playwright specs** (16 in `tests/browser/drill.spec.ts` plus the env-gated Maia
 latency spec in `tests/browser/maia-latency.spec.ts`), of which 16 pass and the
 Maia latency check skips, at zero retries (`planning/exploration/log.md:1575`;
@@ -660,3 +655,8 @@ None.
   normatively and asserted in criterion 9; the byte-fixed guard sentence is now
   pinned byte-identical across all renderer snapshots in criterion 14. BACKLOG
   and `rfc/README.md` line cites corrected (196/205, 64-79).
+- 2026-08-14: Codex implementation review against the post-Predicate-Wave-2 tree.
+  Removed the stale migration-13 release narrative (13/14 are already assigned to
+  adoption/social), refreshed the green 416-test/70-file baseline, and made
+  `committedMoveSan` deterministic: it is the learner child on the active-cursor
+  path from the requested pre-move node, never an arbitrary child at a fork.

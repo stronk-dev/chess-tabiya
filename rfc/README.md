@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `runtime-corpus-evidence.md` | draft | `archive/adaptive-guidance.md` (amends the assistance rail) | — (2026-08-14 parallel wave, second; no schema or migration claim) |
+| `runtime-corpus-evidence.md` | implementing | `archive/adaptive-guidance.md` (amends the assistance rail) | `planning/runtime-corpus-evidence/` (no schema or migration claim) |
 | `adoption-wave-1.md` | draft | — | — (2026-08-14 parallel wave; migration 13 claimed, no pack/run schema claim) |
 | `social-match.md` | draft | `archive/live-session-platform.md` (amends board control, journal kinds, session routes; depends on `adoption-wave-1.md` for `public_tokens`) | — (2026-08-14 parallel wave, **last claim**; migration 14, no pack/run schema claim) |
 
