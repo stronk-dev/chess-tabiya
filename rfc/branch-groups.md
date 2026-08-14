@@ -26,8 +26,9 @@
   one widened union member in the run schema); composes with, and does not modify,
   `archive/n-way-comparison.md`'s comparison payload
 - **Not touched:** the Just Play position player, pack schema (stays 0.11), shape
-  library, and every surface `archive/shape-library.md` or `adaptive-guidance.md`
-  owns. This RFC ships no pack-schema change and claims no pack-schema number.
+  library, and every surface `archive/shape-library.md` or
+  `archive/adaptive-guidance.md` owns. This RFC ships no pack-schema change and
+  claims no pack-schema number.
 - **Run schema:** **0.9** — `group.created` event and `policyModeApplied` gains
   `"enumerated"` (§8). **Migration 11** (`STORAGE_VERSION` 10→11), claimed in
   `rfc/README.md`'s migration register in the same commit as this draft.
@@ -368,7 +369,7 @@ feedback-delivery window open). `human_replies` creation applies that function's
 `humanSplit` permission verbatim. `engine_top_n` creation applies the **same
 predicate** as its own rule — rung 2 is stronger feedback than rung 3, so it
 cannot be more available; this RFC deliberately does not add an engine member to
-`AssistanceConfig`, which is `adaptive-guidance.md`'s design surface.
+`AssistanceConfig`, which is `archive/adaptive-guidance.md`'s design surface.
 `hand_picked` and `authored` are never gated: rung 0 needs no oracle and rung 5
 is the pack the learner is already inside. This is the ladder doing its job —
 "each source inheriting its rung's honesty properties" — and it is consistent
@@ -701,7 +702,10 @@ implementation commit. Reads need no new route: groups project from
 
 ### 10. Defects: none claimed, five constraining
 
-Open defects are cited as constraints, not fixed here:
+The parallel draft `defect-batch-2.md` (registered 2026-08-14, while this was
+being written) owns closing D21–D24 and D27 — its verification found D21 and
+D22 real and D23/D24/D27 stale with regressions missing. This RFC therefore
+**claims none of them** and cites them only as constraints on its own shape:
 
 - **D21** (`design/BACKLOG.md:132`) — producer/deriver disagreement — is the
   reason §1 has one event, one projection, no denormalized field, and no
