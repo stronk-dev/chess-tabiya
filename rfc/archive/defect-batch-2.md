@@ -1,6 +1,6 @@
 # RFC: Defect batch 2 — D21, D22, D23, D24, D27: two fixes, three stale rows, five closures
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/BACKLOG.md` open-defect rows D21 (line 132), D22 (128), D23
@@ -360,6 +360,9 @@ None.
 
 ## Changelog
 
+- 2026-08-14: implemented. D21 makes validated `segment.completed` events authoritative;
+  D22 closes `opponentPolicy` in pack schema 0.12; D23/D24/D27 residual regressions and
+  canonical documentation landed. Archived after both verification gates passed.
 - 2026-08-14 (Codex implementation review): approved after closing one disclosure-integrity
   blocker. Because the new derivation makes `segment.completed` authoritative for authored
   reveal, the event must match both referenced checkpoints exactly and preserve ordering and

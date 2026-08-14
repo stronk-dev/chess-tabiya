@@ -40,3 +40,16 @@ tripwire, and visible-output command are canonical in `docs/structural-reading.m
 20-test server slice and the zero-retry browser case passed. The browser edit also replaced an
 old `schema example` text selector that became ambiguous once the injected fixture honestly used
 the same review-status label.
+
+## 2026-08-14 — Lifecycle closeout
+
+Canonical behavior was reconciled in `docs/branch-runtime.md`,
+`docs/drill-pack-format.md`, and `docs/structural-reading.md`; the RFC and planning job moved
+to their archives in the same tree as the index and ledger updates. Final moved-tree gates:
+
+- `ENGINES_REQUIRED=1 make verify`: 374 tests across 64 files; typecheck, schema scaffold,
+  and packaging verification green; Svelte reported 0 errors and 0 warnings.
+- `make test-browser`: 14 passed at zero retries; the optional Maia latency test skipped.
+
+The working implementation span is `394af95` through `0672d4b`; this closeout commit freezes
+the lifecycle record.

@@ -91,8 +91,12 @@ nodes leaving the active path. The runtime does not run or cancel analysis jobs;
 future worker code owns that action.
 
 Checkpoints append `checkpoint.reached` and add the checkpoint id to the referenced
-node projection. Consecutive checkpoint hits on the same branch derive a segment
-and emit `segment.completed`.
+node projection. A traversed interval between distinct checkpoint nodes emits
+`segment.completed`; coincident checkpoints mark one node and do not invent a segment.
+`deriveSegments` is a projection of those authoritative events rather than a second
+checkpoint-pair recurrence. Each event must immediately follow its ending checkpoint and
+match both referenced checkpoint events in sequence, branch, and node metadata. Genuine
+pre-guard zero-length events remain readable; forged or corrupted scope is rejected.
 
 When a committed move creates a checkmate or draw position, the same mutation
 emits `outcome.reached` immediately after `move.committed`. Its closed result is

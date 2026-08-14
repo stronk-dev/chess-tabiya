@@ -1416,3 +1416,15 @@ Next: teardowns for the top-5 shortlist, starting with Play Coach and Chessbook.
 Next: remaining shortlist teardowns (Play Coach, Chessbook, ChessEver); optional
 hands-on passes — one paid Chess2Story generation, one ChessMind review
 transcription — if Q1a or the game-story RFC needs them.
+
+## 2026-08-14 (Codex) — defect batch 2 implemented
+
+- Closed D21 by making validated `segment.completed` events the sole segment truth;
+  coincident checkpoints no longer produce phantom derived segments, genuine pre-guard
+  zero-length events remain readable, and forged reveal scope is rejected.
+- Closed D22 under pack schema 0.12 by making `opponentPolicy` closed and validating the
+  complete committed pack corpus. No pack bytes or digests changed.
+- Reconciled the stale D23/D24/D27 rows with regressions for honest unclassified phase,
+  secure-cookie defaults, and a documented non-gating structural latency envelope.
+- Canonical behavior is in `docs/branch-runtime.md`, `docs/drill-pack-format.md`, and
+  `docs/structural-reading.md`; lifecycle archived after both verification gates passed.
