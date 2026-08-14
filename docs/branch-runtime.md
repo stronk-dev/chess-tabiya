@@ -11,7 +11,7 @@ seal the outgoing leg and reset its node state to active for the incoming object
 two events are ordered and replay-validated; no trajectory state is stored separately.
 
 The transport-independent implementation is `packages/runtime`. The Node binding
-is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.9,
+is `apps/server`, the living wire schema is `schemas/drill_run.schema.json` v0.10,
 and `packages/schema` owns the schema version constant. Browser and server code
 import the same TypeScript runtime; there is no second implementation of chess
 semantics.
@@ -55,7 +55,10 @@ Every run owns its session identity: `sessionKind`, nullable
 the exact registered pack. A position digest covers its canonical FEN, learner
 side, attempt-end feedback policy, and opponent policy; seed and execution locus
 deliberately do not alter session identity. Position runs cannot request
-`theory_strict`, because they have no authored spine.
+`theory_strict`, because they have no authored spine. Imported sessions are also
+non-pack `attempt_end` runs. Their identity additionally covers the digest of the
+canonical root and complete historical movetext; their source bytes and headers
+live in the import record described by `game-import-and-story.md`.
 
 The nullable pack fields are an all-or-nothing pair. Projection also enforces
 that position sessions use `attempt_end`, pack sessions do not, `start.fen`
@@ -182,8 +185,8 @@ by `opponent.move_selected` immediately followed by its matching opponent
 non-adjacent, or disagreeing pair and never calls an engine/model policy. This makes
 old runs reproducible even when an opponent implementation changes.
 
-The v0.5 session amendment adds `feedback.revealed`. It is valid only for a
-position run using `attempt_end`. The event is a durable disclosure record, but
+The v0.5 session amendment adds `feedback.revealed`. It is valid only for an
+`attempt_end` run. The event is a durable disclosure record, but
 its delivery window is narrower: reveal opens staged-evidence delivery and the
 next `move.committed` closes it. Historical evidence stays disclosed while new
 analysis cannot silently become live assistance. Repeating reveal while open is
@@ -217,6 +220,11 @@ on each branch path, never from the transient job queue. Its v1 scope is
 engine-validated `eval` payloads with an integer `centipawns` or `mateIn`
 value; WDL, best-line, human-model, and future evidence sources remain typed
 events but are not score points in this overlay.
+
+`exportPgn` also accepts guarded header overrides. Imported sessions use them to
+preserve original game attribution and result while retaining Tabiya's run/session
+identity and exporting the complete original plus rehearsal branches. See
+`game-import-and-story.md`.
 
 Run schema v0.8 adds `Branch.origin` (`played|simulated`) and durable
 `prediction.recorded` events. `exportPgn` writes a selected set of branches as a

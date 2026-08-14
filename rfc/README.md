@@ -7,7 +7,8 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `game-import-and-story.md` | implementing | `archive/live-session-platform.md`, `archive/adaptive-guidance.md`, `archive/shape-library.md`, `archive/n-way-comparison.md`, `archive/return-and-progression.md`, `archive/content-sourcing-foundation.md`, `archive/branch-groups.md` | Own-game import and the game story — one game, imported by choice (PGN paste or lichess game URL; chess.com verified paste-only), as an entry context: new `imported` session kind with a movetext-digest session identity, `POST /runs/import` reusing the Arena leg parser seam as a shared routine, a zero-per-move batched evidence pass (N+1 eval jobs, cost stated), a derived detector-attributed story projection whose slides rewind into live branches, and PGN export merging the source headers. Pack schema unchanged (0.12); **run schema 0.10, migration 12** behind implemented 0.9/11 |
+
+No active product RFCs.
 
 The completed breadth batch and its dependency history are kept in the archive
 documents and planning logs rather than duplicated in this index.
@@ -89,7 +90,7 @@ writing it into a draft.
 | 9 | 8→9 | `archive/live-session-platform.md` | implemented — live-session tables; create-table/index only |
 | 10 | 9→10 | `archive/shape-library.md` | implemented — `shape_drafts` and `registered_shapes`; create-table/index plus the pack-style account-deletion tombstone. Run schema stays 0.8 by design (firings are derived projections, never events) |
 | 11 | 10→11 | `archive/branch-groups.md` | implemented — run schema v0.9: adds the `group.created` event and widens `policyModeApplied` with `enumerated`. Stamp-only body (frozen literals `"0.8"`→`"0.9"`, no data rewrite exists to do); mandatory because reads filter on the current run-schema version |
-| 12 | 11→12 | `game-import-and-story.md` | implementing — run schema v0.10: `sessionKind` gains `imported` (non-pack projection rules unchanged). Creates `imported_games` (one row per imported run: source kind/url, movetext digest, headers, original PGN bytes, licence note) plus the pack-style account-deletion tombstone, and stamps frozen literals `"0.9"`→`"0.10"` (no data rewrite). Lands behind implemented migration 11 |
+| 12 | 11→12 | `archive/game-import-and-story.md` | implemented — run schema v0.10: `sessionKind` gains `imported` (non-pack projection rules unchanged). Creates `imported_games` (one row per imported run: source kind/url, movetext digest, headers, original PGN bytes, licence note) plus the pack-style account-deletion tombstone, and stamps frozen literals `"0.9"`→`"0.10"` (no data rewrite). Landed behind implemented migration 11 |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
@@ -159,6 +160,7 @@ before re-attempting this territory.
 | `archive/adaptive-guidance.md` | implemented | `docs/adaptive-guidance.md`, `docs/explanation-grounds.md`, `docs/app-shell.md` |
 | `archive/defect-batch-2.md` | implemented | `docs/branch-runtime.md`, `docs/drill-pack-format.md`, `docs/structural-reading.md` |
 | `archive/branch-groups.md` | implemented | `docs/branch-groups.md`, `docs/branch-runtime.md`, `docs/engine-workers.md`, `docs/drill-client.md` |
+| `archive/game-import-and-story.md` | implemented | `docs/game-import-and-story.md`, `docs/branch-runtime.md` |
 
 ## The archive sketches are quarry, not RFCs
 

@@ -42,3 +42,9 @@ errors; the current local verify gate passes.
 - Added `/review/game/:runId`: a grounded, ranked story over persisted facts with honest pending state, learner-side board orientation, optional packet-bound voice, and explicit export. Re-entry rewinds and forks immediately, including from the imported leaf, so the original is preserved before the learner plays.
 - The browser acceptance imports pasted PGN, waits for the durable evidence pass, opens the story, re-enters, plays a different continuation, and verifies both the new branch and amended export.
 - The exact CI command exposed four current-tree fixture assumptions while this layer was in progress: a stale schema `$id`, two story tests using a branch label instead of its structural id, and an illegal Arena mismatch fixture. All were corrected against the shipped contracts before this checkbox flipped.
+
+## 2026-08-14 — Codex §5 closeout
+
+- Canonical behavior is distilled into `docs/game-import-and-story.md`; `docs/branch-runtime.md` now names run schema 0.10, imported session identity, attempt-end reveal scope, and imported export amendments.
+- Final implementation gates before archival: `ENGINES_REQUIRED=1 make verify` — 399 tests / 69 files, schema and packaging green; `make test-browser` — 16 passed at zero retries, optional Maia latency skipped.
+- GitHub Actions run 31797561925 remains an older-SHA result and cannot validate unpushed commits. Its reported readonly TypeScript errors are fixed by pre-existing commit 9db9183; the exact CI command is green on this completed tree.

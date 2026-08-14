@@ -1,6 +1,6 @@
 # RFC: Own-game import and the game story
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude (on the owner's 2026-08-14 BACKLOG rows)
 - **Created:** 2026-08-14
 - **Design refs:** `design/05-in-run-experience.md` §3a (backward detection), §3b-i
@@ -23,7 +23,7 @@
   precedent)
 - **Parent / amends:** —
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/game-import-and-story/` (once implementing)
+- **Planning:** `planning/archive/game-import-and-story/`
 
 ## Summary
 
@@ -629,6 +629,11 @@ None.
 
 ## Changelog
 
+- 2026-08-14: implemented. Shipped run schema 0.10 and migration 12, shared PGN
+  import, persisted provenance, idempotent evidence completion, grounded story
+  projection, explicit live re-entry branch, and amended all-branch export.
+  Canonical behavior is in `docs/game-import-and-story.md` with session/export
+  amendments in `docs/branch-runtime.md`.
 - 2026-08-14 (Codex implementation review): approved after four corrections. Rebased
   the landed dependency/baselines; separated grounded `nodeId` from playable
   `entryNodeId` so terminal outcome slides do not open a dead board; and retained the
