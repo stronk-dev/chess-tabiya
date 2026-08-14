@@ -26,3 +26,7 @@ Canonical behavior was distilled into `docs/runtime-corpus-evidence.md` because 
 source/cache/delivery contract is a coherent subsystem rather than a small amendment;
 the three consuming docs carry concise boundary updates. The RFC and planning job are
 ready for their archive moves. Final gate results are appended after those moves.
+
+Post-move verification: `ENGINES_REQUIRED=1 make verify` passed at 424 tests / 72
+files with schema and packaging clean; `make test-browser` passed 17 tests with the
+optional Maia measurement skipped and Playwright retries still zero.
