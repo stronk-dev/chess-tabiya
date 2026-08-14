@@ -1,6 +1,6 @@
 # RFC: Social match — native human-vs-human play, pause-and-rehearse, friend links, and the simul wall
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/03-product-breadth.md:79-91` (Live and community), `:90-91`
@@ -18,9 +18,9 @@
   (accounts, grants, the learner-bound lease); `rfc/archive/pack-optional-runs.md`
   (position runs — a match run is one); **`rfc/archive/adoption-wave-1.md`** (the
   `public_tokens` trust surface this RFC's friend-link scope extends — §3.5 — and the
-  `flip` route whose live-match refusal §3.3 owns); `rfc/runtime-corpus-evidence.md`
-  (this RFC appends to the shared `ServerErrorCode` union that draft also appends to —
-  named per its sibling rule, `rfc/runtime-corpus-evidence.md:67-77`; its corpus
+  `flip` route whose live-match refusal §3.3 owns); `rfc/archive/runtime-corpus-evidence.md`
+  (this RFC appends to the shared `ServerErrorCode` union that lifecycle also appends to;
+  its corpus
   endpoint is delivery-window-gated and needs no `MATCH_LIVE` entry, §3.3)
 - **Parent / amends:** amends the live-session platform: `BOARD_CONTROLS`
   (`apps/server/src/live-types.ts:6`), `SESSION_JOURNAL_KINDS` (`:9-15`), `claimLease`
@@ -38,14 +38,10 @@
   table's `CHECK` in its own migration and creates no second token table (§3.5).
 - **Planning:** `planning/social-match/` (once implementing)
 
-Implementation baseline verified on this tree 2026-08-14 by running the suite:
-**399 unit tests / 69 files** passing (`pnpm test`), run schema `"0.10"`, pack schema
-`"0.12"` (`packages/schema/src/index.ts:1-2`), and `STORAGE_VERSION = 12`
-(`apps/server/src/storage.ts:301`). (Adversarial-review re-run, later the same day:
-the 399/69 count and all three constants reproduce, but the shared tree now carries
-failures from in-flight parallel-wave content work — `pack-authoring.test.ts:267`
-candidate count — unrelated to this draft; A8's baseline is re-pinned green at
-implementation start.)
+Implementation baseline re-pinned after the three preceding wave lifecycles:
+**430 unit tests / 73 files** passing, browser **18 passed** with the optional Maia
+case skipped and retries unset, run schema `"0.10"`, pack schema `"0.13"`, and
+`STORAGE_VERSION = 13`.
 
 ## Summary
 
@@ -306,10 +302,10 @@ consent to reveal* — and the pause handshake already is mutual consent. So:
 
 **The pin.** A native match run keeps the shipped `attempt_end` barrier untouched.
 `POST /runs/:id/reveal`, rewind, fork, `group`, `group-reply`, `simulate`,
-`simulate-enter`, `prediction`, **`duplicate`**, **`flip`** (the sibling
+`simulate-enter`, `prediction`, **`duplicate`**, and **`flip`** (the sibling
 `rfc/archive/adoption-wave-1.md` §5 route — this RFC lands behind it structurally, §3.8, so
-the route exists whenever a native match does), and **`import`** are refused with
-**`MATCH_LIVE`** (409) while the match is live. The last three close the
+the route exists whenever a native match does) are refused with
+**`MATCH_LIVE`** (409) while the match is live. The last two close the
 **derived-run escape**, the hole the first revision left open: `duplicate` is
 available to any grantee (`requireRead` only, `apps/server/src/service.ts:1254-1266`)
 and yields a caller-owned copy of the match root replayable to the live position;
@@ -317,8 +313,10 @@ and yields a caller-owned copy of the match root replayable to the live position
 holds their own lease and reveals at will — the product itself would be serving
 engine evidence on the live position mid-game, which is categorically worse than the
 conceded streamer limit (outside consultation Tabiya cannot see) because it is
-in-product assistance. `import` is refused for symmetry: it commits plies without
-passing §3.1.3's seat gate. All three are ordinary shipped operations during a pause
+in-product assistance. The mutating import against an existing session is Arena
+`importLeg`, which §3.1.1 refuses for native matches. `GET /runs/:id/import` is a
+read, while `POST /runs/import` creates an unrelated imported-game run with no source
+match; neither is mislabeled as a match escape. Both derived-run operations are ordinary shipped operations during a pause
 and after the terminal, when reveal is open anyway. `analysis`, `voice`, and
 `schedule` deliberately stay available live: they disclose nothing while the delivery
 window is closed — staged results are served and applied only while delivery is open
@@ -419,6 +417,11 @@ mint, mirroring `adoption-wave-1`'s share flow; `GET /sessions/:id/links` lists 
 and states, never secrets; `POST /sessions/:id/links/:linkId` `{ op: "revoke" }`
 revokes. Journals `link.minted` / `link.revoked`.
 
+`matchSlot` is valid only with `invitedRole: "participant"`; a spectator link may
+grant read access but can never occupy a playing seat. The REST parser and service
+both refuse the contradictory pair with `INVALID_REQUEST`, and the table `CHECK`
+repeats the invariant so direct storage writes cannot create an unwritable player.
+
 **Abuse posture, pinned for the hosted ruling.** Tokens travel only over TLS —
 production terminates TLS and secure cookies are the D24-pinned default unless the
 exact string `false` opts out (`design/BACKLOG.md:131`, `cookieSecureFromEnv`
@@ -490,14 +493,10 @@ table's.
 
 ### 3.8 Persistence
 
-**Migration number: 14** (`STORAGE_VERSION` 13→14; renumbered from 15 with the wave's downward shift), claimed last per the
-register order — behind `adoption-wave-1`'s 14, which sits behind the 13 reserved for
-`runtime-corpus-evidence` (`rfc/README.md` §Migration register). That draft's own text
-claims no migration (`rfc/runtime-corpus-evidence.md:63`), so if 13 is released this
-RFC rebased downward with its predecessor per the standing renegotiate-here
-rule; the register is the single writer of the final number. Shipped today is **12**
-(`apps/server/src/storage.ts:301`). Run schema stays `0.10` and pack schema stays
-`0.12`; this RFC claims no schema version. Because this migration rebuilds
+**Migration number: 14** (`STORAGE_VERSION` 13→14), claimed last per the register
+order and structurally behind `archive/adoption-wave-1.md` migration 13. Shipped at
+implementation start is **13**. Run schema stays `0.10` and pack schema stays
+`0.13`; this RFC claims no schema version. Because this migration rebuilds
 `public_tokens`, it **must land behind migration 13** — the dependency is structural,
 not just numeric.
 
@@ -527,8 +526,15 @@ are baked into `CHECK` constraints of existing tables (`live_sessions.board_cont
 `CHECK` — the migration rebuilds all three tables: `PRAGMA foreign_keys=OFF` for the
 migration, `ALTER TABLE ... RENAME`, `CREATE` with the widened derived `CHECK`,
 `INSERT ... SELECT` copying every row and column unchanged (new columns `NULL`),
-`DROP`, then `PRAGMA foreign_key_check` must report zero rows before commit (child
-FKs reference the table name and survive the rename dance). **The found edge:**
+`DROP`, then `PRAGMA foreign_key_check` must report zero rows before commit. This is a
+runner-level exception, not SQL pasted into the migration body: SQLite ignores
+`PRAGMA foreign_keys=OFF` inside an active transaction. The runner disables foreign
+keys and enables `legacy_alter_table` **before** `BEGIN IMMEDIATE`, executes migration
+14, checks `foreign_key_check` before commit, then restores both pragmas in a
+`finally` path. `legacy_alter_table` is required so the other, non-rebuilt session
+child tables keep referencing the newly-created `live_sessions` name rather than the
+temporary renamed parent. A7 asserts those child foreign-key targets explicitly.
+**The found edge:**
 migration 9's DDL interpolates the *live* tuples (`values(SESSION_KINDS)` et al.,
 `apps/server/src/storage.ts:1901-1917`), so widening a tuple silently rewrites
 historical migration 9 for fresh databases while existing databases keep the narrow
@@ -649,15 +655,15 @@ native match session is `INVALID_REQUEST`; a native-match operation against an
 imported-Arena session likewise.
 
 **A7 — Migration.** A fixture database at migration-13 state (this RFC's predecessor) containing live sessions,
-journal entries, votes, Arena legs, and `story_read` tokens migrates to 15: every
+journal entries, votes, Arena legs, and `story_read` tokens migrates to 14: every
 pre-existing row survives byte-identical across the three table rebuilds;
 `PRAGMA foreign_key_check` is empty; the rebuilt constraints equal a fresh database's
 (asserted by comparing `sqlite_master` SQL for the rebuilt tables); old-vocabulary
 journal rows still read. Migration 9's body is frozen to its shipped literals in the
 same change.
 
-**A8 — Nothing existing moves.** The full suite passes unmodified from the verified
-399/69 baseline; the attempts pin (§3.7) is asserted — mainline `countable: false`,
+**A8 — Nothing existing moves.** The full suite passes from the verified
+430/73 baseline and browser 18-pass zero-retry baseline; the attempts pin (§3.7) is asserted — mainline `countable: false`,
 rehearsal branches countable under their forkers — and a solo position run's attempts
 are untouched. Every new error code returns its declared status through a real request.
 
@@ -717,3 +723,8 @@ None.
   shared-resource rule (append-only error union). (7) `design/BACKLOG.md` row cites
   corrected (+1 line drift: 210/211/200). Baseline note updated with the review-time
   tree state.
+- 2026-08-14: implementation review against the post-wave tree. Corrected the
+  migration recipe so SQLite pragmas are applied outside the transaction and
+  unrelated child foreign keys survive the rename; corrected the stale 13→14
+  register/baseline text; removed the nonexistent mutating run-import escape in
+  favor of the actual `importLeg` guard; and refused slot-bearing spectator links.
