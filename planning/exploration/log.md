@@ -1714,3 +1714,38 @@ conditions — the one conscious parking. Theoretical-mates packs join the final
 endgame batch. The polish wave is therefore the LAST feature wave: surfaces
 (PWA, settings, form slices), the orphan four, and the grounding pair
 (`verify-draft`, perfect-play policy).
+
+## 2026-08-14 — the feature roadmap closed; reconciliation delta
+
+**Landed.** The last feature wave: polish-surfaces (`765efb5`),
+orphan-completion (`0939070`), grounding-pair (`2fd82be`), all archived. The
+features column of `roadmap-to-done.md` is empty. Content: the mates + variants
+batch (`06f48fe`) — K+Q, K+R, two bishops, and the Philidor convert sibling,
+every spine walked to checkmate, five authored chess errors caught pre-ship by
+the tablebase harness. All four then grounded through the brand-new
+`make verify-draft` (`0b4caf3`) — a tool built for wave 5b generalizing to
+content it had never seen, which is the argument for building it.
+
+**Verified, not accepted.** Gates run personally rather than taken from the
+implementer's report: `ENGINES_REQUIRED=1 make verify` 474 tests / 80 files
+exit 0; `make test-browser` 24 passed, zero retries. Spot-checked the mates
+batch's most load-bearing claim against the tablebase myself — the convert root
+really does have exactly one winning move of 21.
+
+**Changed.** The reconciliation gate's delta re-run (`713fdde`) found the
+ledger flow-back failure recurring: `2fd82be` flipped the RFC register in-commit
+but not the BACKLOG rows it ships. Flipped post-hoc, attributed. Also corrected
+a shape-entry count overstated as 24 in two places — two *commissioned*
+entries were being counted as *authored*, which is exactly how a content gap
+becomes invisible.
+
+**Blocked / owner-facing.** One reverse-trace orphan, triaged: `cursed-win` /
+`blessed-loss` ship in code with correct inversion and ranking but flow back to
+no design doc, and they contradict `01-training-model.md` §Outcome types — a
+Win drill cannot be satisfied in a cursed win under the 50-move rule. Needs a
+ruling. So does the deferred B+N mate. Neither blocks anything today.
+
+**Next.** Content only: two commissioned shape entries (London wedge, KID
+arrangement chain), Scandinavian wave-4b, and the pass that is still genuinely
+at zero — Stockfish validation of middlegame/opening authored claims, which no
+tablebase can settle. Then the owner's session and its invariant review.
