@@ -95,6 +95,29 @@ describe("run session identity and feedback", () => {
     expect(feedbackDeliveryOpen(moved)).toBe(false);
   });
 
+  it("includes imported movetext in session identity and refuses to reconstruct it from a bare run", async () => {
+    const source = sessionSource({
+      kind: "imported",
+      start: { fen: FEN, side: "white" },
+      movetextDigest: `sha256:${"a".repeat(64)}`,
+      feedbackPolicy: "attempt_end",
+      opponentPolicy: { mode: "human_common", targetElo: 1600 },
+    });
+    await expect(digestSessionSource(source)).resolves.not.toBe(
+      await digestSessionSource({ ...source, movetextDigest: `sha256:${"b".repeat(64)}` }),
+    );
+    const imported = createRun({
+      id: "imported-run",
+      session: source,
+      sessionDigest: await digestSessionSource(source),
+      policyConfig,
+      seed: 9,
+      createdAt: at,
+    });
+    expect(imported).toMatchObject({ sessionKind: "imported", packId: null, packDigest: null });
+    expect(() => sessionSource(imported)).toThrow("without movetextDigest");
+  });
+
   it.each([
     ["pack pair", (data: Record<string, unknown>) => ({ ...data, packDigest: null })],
     ["pack feedback", (data: Record<string, unknown>) => ({ ...data, feedbackPolicy: "attempt_end" })],

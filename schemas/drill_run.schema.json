@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-run:0.9",
+  "$id": "urn:chess-tabiya:schema:drill-run:0.10",
   "title": "Tabiya Drill Run",
-  "description": "Living v0.8 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
+  "description": "Living v0.10 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
   "type": "object",
   "required": [
     "schemaVersion",
@@ -21,9 +21,9 @@
     "activeCursor"
   ],
   "properties": {
-    "schemaVersion": { "const": "0.9" },
+    "schemaVersion": { "const": "0.10" },
     "id": { "$ref": "#/$defs/id" },
-    "sessionKind": { "enum": ["pack", "position"] },
+    "sessionKind": { "enum": ["pack", "position", "imported"] },
     "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
     "packDigest": {
       "oneOf": [
@@ -58,6 +58,15 @@
   "allOf": [
     {
       "if": { "properties": { "sessionKind": { "const": "position" } } },
+      "then": { "properties": {
+        "packId": { "type": "null" },
+        "packDigest": { "type": "null" },
+        "feedbackPolicy": { "const": "attempt_end" },
+        "opponentPolicy": { "type": "object", "properties": { "mode": { "enum": ["human_common", "strong_engine"] } } }
+      } }
+    },
+    {
+      "if": { "properties": { "sessionKind": { "const": "imported" } } },
       "then": { "properties": {
         "packId": { "type": "null" },
         "packDigest": { "type": "null" },
@@ -290,7 +299,7 @@
       ],
       "properties": {
         "id": { "$ref": "#/$defs/id" },
-        "sessionKind": { "enum": ["pack", "position"] },
+        "sessionKind": { "enum": ["pack", "position", "imported"] },
         "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
         "packDigest": {
           "oneOf": [
@@ -311,6 +320,15 @@
       "allOf": [
         {
           "if": { "properties": { "sessionKind": { "const": "position" } } },
+          "then": { "properties": {
+            "packId": { "type": "null" },
+            "packDigest": { "type": "null" },
+            "feedbackPolicy": { "const": "attempt_end" },
+            "opponentPolicy": { "type": "object", "properties": { "mode": { "enum": ["human_common", "strong_engine"] } } }
+          } }
+        },
+        {
+          "if": { "properties": { "sessionKind": { "const": "imported" } } },
           "then": { "properties": {
             "packId": { "type": "null" },
             "packDigest": { "type": "null" },

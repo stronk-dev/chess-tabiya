@@ -80,6 +80,9 @@ export function projectAttempts(input: {
   readonly concepts?: ConceptResolver;
 }): { readonly attempts: readonly AttemptRow[]; readonly conceptTags: readonly ConceptTagRow[] } {
   const { run, pack, learnerId } = input;
+  if (run.sessionKind === "imported") {
+    return Object.freeze({ attempts: Object.freeze([]), conceptTags: Object.freeze([]) });
+  }
   const resolver = input.concepts ?? new PackScopedConceptResolver();
   const attempts: AttemptRow[] = [];
   const conceptTags: ConceptTagRow[] = [];

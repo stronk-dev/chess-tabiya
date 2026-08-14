@@ -2,7 +2,7 @@
 
 RFC: `rfc/game-import-and-story.md` (implementing).
 
-- [ ] §1 Imported session identity, run schema 0.10, and migration 12.
+- [x] §1 Imported session identity, run schema 0.10, and migration 12.
 - [ ] §2 Shared PGN parser, source fetch, import storage, and REST contract.
 - [ ] §3 Idempotent evidence completion and grounded story projection.
 - [ ] §4 Export amendments, client story surface, and playable browser walkthrough.

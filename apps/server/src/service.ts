@@ -977,7 +977,7 @@ export class RunService {
   authoredFeedback(runId: string, principalInput?: Principal): AuthoredFeedbackPage {
     const principal = principalInput ?? this.#principal("legacy-reader");
     const run = requireRead(this.#storage, runId, principal).stored.run;
-    if (run.sessionKind === "position") {
+    if (!isPackSession(run)) {
       return Object.freeze({ items: Object.freeze([]), hasWithheldAuthoredContent: false });
     }
     const pack = this.#requiredRegisteredPack(run)!;

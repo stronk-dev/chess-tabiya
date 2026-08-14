@@ -284,7 +284,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 11;
+export const STORAGE_VERSION = 12;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -367,7 +367,9 @@ function parseSummary(value: string): SummaryFields {
   if (
     typeof parsed.title !== "string" ||
     (typeof parsed.packId !== "string" && parsed.packId !== null) ||
-    (parsed.sessionKind !== "pack" && parsed.sessionKind !== "position") ||
+    (parsed.sessionKind !== "pack" &&
+      parsed.sessionKind !== "position" &&
+      parsed.sessionKind !== "imported") ||
     typeof parsed.sessionDigest !== "string" ||
     typeof parsed.updatedAt !== "string" ||
     !isObjectiveState(parsed.objectiveState) ||
@@ -1806,6 +1808,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "branch groups run schema",
         apply: () => this.#upgradeV08Runs(),
       },
+      {
+        version: 12,
+        name: "imported games and run schema",
+        apply: () => this.#addImportedGames(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -2127,6 +2134,34 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
       if (snapshot.schemaVersion !== "0.8") continue;
       update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.9" }), row.id);
+    }
+  }
+
+  #addImportedGames(): void {
+    this.#database.exec(`
+      CREATE TABLE IF NOT EXISTS imported_games (
+        run_id TEXT PRIMARY KEY REFERENCES drill_runs(id) ON DELETE CASCADE,
+        source_kind TEXT NOT NULL CHECK (source_kind IN ('pgn_paste','lichess_url')),
+        source_url TEXT,
+        movetext_digest TEXT NOT NULL,
+        headers_json TEXT NOT NULL,
+        result TEXT NOT NULL CHECK (result IN ('1-0','0-1','1/2-1/2','*')),
+        pgn TEXT NOT NULL,
+        licence_note TEXT NOT NULL,
+        imported_at TEXT NOT NULL
+      ) STRICT
+    `);
+    const rows = this.#database
+      .prepare("SELECT id, snapshot_json FROM drill_runs WHERE schema_version = '0.9'")
+      .all() as readonly Record<string, unknown>[];
+    const update = this.#database.prepare(
+      "UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.10' WHERE id = ?",
+    );
+    for (const row of rows) {
+      if (typeof row.id !== "string" || typeof row.snapshot_json !== "string") continue;
+      const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
+      if (snapshot.schemaVersion !== "0.9") continue;
+      update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.10" }), row.id);
     }
   }
 

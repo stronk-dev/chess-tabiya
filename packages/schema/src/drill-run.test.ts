@@ -211,6 +211,25 @@ describe("drill_run.schema.json v0.9", () => {
     );
   });
 
+  it("validates imported sessions with the same non-pack policy boundary", () => {
+    const importedFields = {
+      sessionKind: "imported",
+      packId: null,
+      packDigest: null,
+      start,
+      feedbackPolicy: "attempt_end",
+      opponentPolicy,
+    } as const;
+    const importedRun = {
+      ...validRun,
+      ...importedFields,
+      events: [{ ...event, data: { ...event.data, ...importedFields } }],
+    };
+    expect(validate(importedRun), JSON.stringify(validate.errors)).toBe(true);
+    expect(validate({ ...importedRun, packId: "not-a-pack" })).toBe(false);
+    expect(validate({ ...importedRun, opponentPolicy: { mode: "theory_strict" } })).toBe(false);
+  });
+
   it("validates feedback.revealed with a structural node reference", () => {
     const revealed = {
       seq: 2,

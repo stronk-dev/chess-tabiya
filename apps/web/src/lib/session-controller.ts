@@ -202,7 +202,7 @@ export class DrillSessionController {
           : WriterSession.observe(runId, this.#storage);
       const store = this.#newStore(session, projectRun(eventPage.events));
       this.#capabilities = capabilities;
-      if (started.data.sessionKind === "position") {
+      if (started.data.sessionKind !== "pack") {
         this.#attachStore(store, undefined, undefined, await this.#loadShapes());
       } else {
         const packId = started.data.packId;

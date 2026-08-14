@@ -73,7 +73,7 @@ export interface RunGraph {
 export interface RunSummary {
   readonly id: string;
   readonly title: string;
-  readonly sessionKind: "pack" | "position";
+  readonly sessionKind: "pack" | "position" | "imported";
   readonly packId: string | null;
   readonly sessionDigest: string;
   readonly updatedAt: string;

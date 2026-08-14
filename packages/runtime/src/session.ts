@@ -16,6 +16,13 @@ export type SessionSource =
       readonly start: RunStart;
       readonly feedbackPolicy: "attempt_end";
       readonly opponentPolicy: PositionOpponentPolicy;
+    }
+  | {
+      readonly kind: "imported";
+      readonly start: RunStart;
+      readonly movetextDigest: string;
+      readonly feedbackPolicy: "attempt_end";
+      readonly opponentPolicy: PositionOpponentPolicy;
     };
 
 export type CreateRunSession =
@@ -30,6 +37,13 @@ export type CreateRunSession =
   | {
       readonly kind: "position";
       readonly start: RunStart;
+      readonly feedbackPolicy: "attempt_end";
+      readonly opponentPolicy: PositionOpponentPolicy;
+    }
+  | {
+      readonly kind: "imported";
+      readonly start: RunStart;
+      readonly movetextDigest: string;
       readonly feedbackPolicy: "attempt_end";
       readonly opponentPolicy: PositionOpponentPolicy;
     };
@@ -60,8 +74,11 @@ export function sessionSource(from: DrillRun | CreateRunSession): SessionSource 
       }
       return Object.freeze({ kind: "pack", packId: from.packId, packDigest: from.packDigest });
     }
+    if (from.sessionKind === "imported") {
+      throw new TypeError("An imported run cannot reconstruct its source without movetextDigest");
+    }
     if (from.opponentPolicy.mode === "theory_strict") {
-      throw new TypeError("Position session cannot use theory_strict");
+      throw new TypeError("Non-pack session cannot use theory_strict");
     }
     return Object.freeze({
       kind: "position",
@@ -77,8 +94,9 @@ export function sessionSource(from: DrillRun | CreateRunSession): SessionSource 
     return Object.freeze({ kind: "pack", packId: from.packId, packDigest: from.packDigest });
   }
   return Object.freeze({
-    kind: "position",
+    kind: from.kind,
     start: canonicalRunStart(from.start),
+    ...(from.kind === "imported" ? { movetextDigest: from.movetextDigest } : {}),
     feedbackPolicy: "attempt_end",
     opponentPolicy: Object.freeze({ ...from.opponentPolicy }) as PositionOpponentPolicy,
   });

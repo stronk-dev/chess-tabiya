@@ -33,7 +33,7 @@ export interface PolicyConfig {
   readonly locus: ExecutionLocus;
 }
 
-export type RunSessionKind = "pack" | "position";
+export type RunSessionKind = "pack" | "position" | "imported";
 export type RunFeedbackPolicy = "delayed_checkpoint" | "segment_end" | "attempt_end";
 export const RUN_OPPONENT_MODES = Object.freeze([
   "human_common",

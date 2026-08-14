@@ -78,6 +78,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 9, name: "live sessions, journal, proposals, votes, invitations, and arena legs" },
       { version: 10, name: "shape studio drafts and registered versions" },
       { version: 11, name: "branch groups run schema" },
+      { version: 12, name: "imported games and run schema" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -95,7 +96,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(11);
+    ).toBe(12);
     inspection.close();
   });
 
@@ -147,8 +148,9 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 9, name: "live sessions, journal, proposals, votes, invitations, and arena legs" },
       { version: 10, name: "shape studio drafts and registered versions" },
       { version: 11, name: "branch groups run schema" },
+      { version: 12, name: "imported games and run schema" },
     ]);
-    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.9");
+    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.10");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
     expect(upgraded.read(forged.id)).toBeUndefined();
     upgraded.close();
@@ -227,8 +229,11 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const migrations: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => migrations.push(entry) });
-    expect(migrations).toEqual([{ version: 11, name: "branch groups run schema" }]);
-    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.9");
+    expect(migrations).toEqual([
+      { version: 11, name: "branch groups run schema" },
+      { version: 12, name: "imported games and run schema" },
+    ]);
+    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.10");
     expect(upgraded.read(quarantined.id)).toBeUndefined();
     upgraded.close();
 
