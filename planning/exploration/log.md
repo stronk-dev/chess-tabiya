@@ -1326,3 +1326,29 @@ Two rulings, closing the `design/04` §0 question that blocked B11:
 B11 is now unblocked (B9's predicates shipped 2026-08-14, the ruling was the
 last dependency). B10 and B11 will be specified together against this content
 model.
+
+## 2026-08-14 — Take Take Take desk teardown lands (Q1a/E1)
+
+`design/research/teardown-taketaketake-desk.md` + matrix row. Take Take Take
+(taketaketake.com) is the Carlsen-cofounded, VC-backed social chess platform
+launched 2026-04-06: real games via a Lichess-powered Play Zone, an LLM-narrated
+post-game review, and a Strava-style feed that auto-generates a shareable
+key-moments summary of every game ("It even suggests a title").
+
+- **E1: whitespace intact.** Zero loop stages as training interactions — no
+  curated positions, no rewind, no preserved branches, no attempt comparison, no
+  phase notion. A post-game analyzer with a social layer; their own blog tells
+  readers to *imagine* replaying the key position because the product can't.
+- **Game-story summaries exist and are the product's spine** — directly relevant
+  to the owner's ~8-slides feature idea. Appetite validated by a $9M bet;
+  substance unclaimed: nobody ships grounded pivotal states that open back into
+  play.
+- **ADR-0005 vindicated in the market**: the review is per-move LLM prose over
+  Stockfish PV/eval and was publicly documented producing wrong chess on launch
+  day ("Almost everything this LLM says about chess is irrelevant or wrong" —
+  intermediatemoves.substack.com). The named anti-pattern, shipped, by name.
+- Demand signal for Q1b/Q2: a funded competitor now owns "improver" positioning
+  (~800–2000 band) with the opposite mechanism.
+
+Next: hands-on residuals (feed-summary anatomy; whether the review board allows
+free exploration) if Q1a ever needs them.
