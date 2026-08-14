@@ -1375,3 +1375,44 @@ free exploration) if Q1a ever needs them.
   grounded via App Store instead); sweep is English/US-only and desk-only.
 
 Next: teardowns for the top-5 shortlist, starting with Play Coach and Chessbook.
+
+## 2026-08-14 (claude, teardowns) — Chess2Story + ChessMind AI desk teardowns
+
+- Landed `design/research/teardown-chess2story-desk.md` and
+  `design/research/teardown-chessmindai-desk.md` (coverage-gap sweep shortlist
+  items 4 and 3); deepened matrix rows 32 and 36; coverage rows added to the
+  research README.
+- **Chess2Story — E1 intact, zero loop stages, no opponent object at all.** But
+  the sweep's row undersold its grounding: engine analysis selects turning
+  points, famous games ship machine-replayed verified scores with cited
+  provenance, and the fiction is explicitly quarantined as fiction. It also
+  already ships moment cards with a live board that jumps to the position
+  ("Click one — the board above jumps there") — read-only navigation.
+  **Consequence for the in-flight `rfc/game-import-and-story.md`:** the
+  differentiator must be pinned to *the door into play* (moment → position →
+  resistance → consequence → rewind), because slides-with-board-sync are taken,
+  and "we're grounded, they're freestyle" does not hold against C2S (only
+  against TTT). Its no-fiction "coach review" rendering is also a standing
+  warning: a story surface without the play door is the named failure shape.
+- **ChessMind AI — E1 intact; the closest stack neighbor in the matrix.**
+  Bundle-read verified the marketing: Maia-2 runs client-side as ONNX
+  (`maia2_rapid.onnx`, elo_self/elo_oppo conditioning, policy sampling) at six
+  bands ~1100–2000+ — a Q5 deployment datapoint. Founded by GM Mauricio Flores
+  Rios (Chess Structures); GM-authored courses end in board practice vs the AI,
+  narrowing the opening→play-out edge; endgame trainer plays out with
+  resistance plus a Survival mode. No checkpoint rewind, preserved branches,
+  comparison, or phase trajectory anywhere.
+- **ADR-0005 live test case: unresolved, not passed.** Review prose is
+  server-generated, no LLM named anywhere (bundle's only LLM strings are
+  referrer-analytics regexes), and searches for public confabulation caught
+  nothing — with ~1k downloads/121 ratings, nobody has looked. Cheap hands-on
+  settle available: import one game, transcribe the debrief, check it against
+  the board.
+- Null results recorded in both dossiers: no third-party coverage of
+  Chess2Story exists at all (no reviews/press/founder identity); no
+  ChessMind confabulation reports; story bodies and most ChessMind SPA routes
+  are client-rendered and unreadable from desk.
+
+Next: remaining shortlist teardowns (Play Coach, Chessbook, ChessEver); optional
+hands-on passes — one paid Chess2Story generation, one ChessMind review
+transcription — if Q1a or the game-story RFC needs them.
