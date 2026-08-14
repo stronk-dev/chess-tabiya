@@ -1470,3 +1470,43 @@ transcription — if Q1a or the game-story RFC needs them.
   if the Learn-IA named-opening funnel or a `/masters` evidence question activates.
 - Correction (same day, same author): the 365Chess matrix row is **row 41**, not 42
   as written above (41 data rows total; header verified 20 columns, row parses clean).
+
+## 2026-08-14 (claude, coverage sweep 2) — notability-method sweep: 14 old-guard/mindshare rows; Lichess + Chess.com censused; E1 intact
+
+- **What landed:** `design/research/coverage-sweep-2-notability.md` — the second
+  coverage sweep, method inverted per the 365Chess process finding: enumerate the
+  most-used platforms/tools by notability, traffic and community mindshare, then check
+  each against the matrix. Every owner-listed old-guard prior was verified rather than
+  trusted; several were wrong (chess24 dead 2024-01; ICC alive, relaunched 2024;
+  Chessly is Rozman's, not Rosen/Naroditsky's; Magnus Trainer removed 2024-04;
+  Everyman consolidated into the New In Chess shop).
+- **Matrix:** 14 fetch-grounded absent-relevant products added (CSV lines 43–56):
+  chessgames.com, ICC, Chess King Learn/CT-ART, Chessity, ChessKid, Chessly,
+  **Dr. Wolf**, Forward Chess, Chessify, ChessMonitor, OpeningTree, En Croissant,
+  WintrChess, chessvision.ai. Verdict-only (no row): SCID vs PC, Arena, Nibbler,
+  Banksia (GUI shelf proxied by Lucas Chess/ChessBase rows), chesstree.net (no new
+  axis), chesspuzzle.net (Cloudflare-blocked, `[P]` only), Shredder (engine-app
+  commodity). Matrix correction recorded: ChessBase row understates the 12-app web
+  suite (Playchess/tactics/Fritz Online/openings) — `[V]` account.chessbase.com.
+- **Lichess and Chess.com censused as whole platforms for the first time** (censuses,
+  not teardowns, in the dossier): feature maps against `design/03` surfaces plus
+  top-3 loved/hated each with citations. Verdicts: Chess.com deserves a full
+  teardown (strongest yes — Game Review re-entry and Coach Practice are load-bearing
+  unknowns; its acquisition constellation IS the breadth strategy executed by M&A);
+  Lichess deserves a scoped hands-on of studies + learn-from-your-mistakes +
+  practice only.
+- **E1 intact** after a second, method-inverted sweep. Sharpest pressure found:
+  **Dr. Wolf** (Chess.com-owned, 4.8★/27k) ships rewind-and-explain as *unlimited
+  undo with spoken explanation* — beloved by beginners, unpreserved, advice-during-play,
+  and depth-capped right where our band starts. The "most-hated pain we already
+  solve" is chess.com's paywalled read-only review (Trustpilot's dominant complaint);
+  the most-loved ecosystem feature we lack is the instant human game against a live
+  pool (deliberate — B5 keeps native matchmaking out of scope).
+- **Teardown shortlist from this sweep:** Dr. Wolf, Chessly, WintrChess,
+  En Croissant, ChessMonitor (+ the two platform verdicts above).
+- **Blocked/limits:** Reddit unreachable (login wall + WebSearch domain refusal) — the
+  r/chess mindshare angle proxied via alternativeto/substacks/forums/Trustpilot;
+  English/US-only; non-English ecosystems still unswept. The two sweeps are
+  complements: notability misses new entrants, clusters miss incumbents; the union is
+  the real coverage.
+- **Next:** nothing urgent; teardown queue above feeds Q1a when picked up.
