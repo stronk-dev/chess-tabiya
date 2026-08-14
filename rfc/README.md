@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `repertoire-gap-finding.md` | draft | — | — (wave claim #1: migration 15; no pack/run schema claim) |
+| `repertoire-gap-finding.md` | implementing | — | `planning/repertoire-gap-finding/` (wave claim #1: migration 15; no pack/run schema claim) |
 | `onramp-guard.md` | draft | `archive/defect-sweep.md` §2a | — (wave claim #2: pack schema 0.14, run schema 0.11, migration 16 — rebased from 15 behind wave claim #1) |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then

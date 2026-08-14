@@ -1,6 +1,6 @@
 # RFC: Repertoire gap-finding
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude (owner: Marco)
 - **Created:** 2026-08-14
 - **Design refs:** `design/03-product-breadth.md` §Play (From position), §Learn and return;
@@ -14,7 +14,7 @@
   (owner scoping, account deletion)
 - **Parent / amends:** —
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/repertoire-gap-finding/` (once implementing)
+- **Planning:** `planning/repertoire-gap-finding/`
 - **Register claims (wave claim #1 of the three-draft wave, 2026-08-14):** migration **15**
   (`STORAGE_VERSION` 14→15). **No pack-schema version is claimed** — a repertoire is
   learner data, not a pack — and **no run-schema version is claimed** — gap entry creates
@@ -419,6 +419,10 @@ None.
 
 ## Changelog
 
+- 2026-08-14: implementation review passed. The gap-run/link write is pinned as one
+  storage transaction; study fetches share the shipped serialized Lichess request
+  chain; and every new repertoire error is added to both the closed server-error union
+  and REST status mapping so typed failures cannot degrade into 500 responses.
 - 2026-08-14: created; claimed migration 15 in `rfc/README.md` (wave claim #1); no
   pack-schema or run-schema claim.
 - 2026-08-14: adversarial review (verified against the working tree at 432/73 green,
