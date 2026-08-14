@@ -13,7 +13,7 @@ as waves land; not append-only. Where a row needs detail, it cites the ledger
 | Breadth B1–B11 | ✅ complete 2026-08-14 |
 | Parallel wave: predicate-wave-2, corpus-evidence, adoption-wave-1, social-match | ✅ shipped 2026-08-14 |
 | Structural round: repertoire gap-finding, onramp-guard (+D28) | ✅ shipped 2026-08-14 |
-| Structural round: open-answer grading | 🔨 with codex |
+| Structural round: open-answer grading | ✅ shipped 2026-08-14 — **the feature roadmap is down to the polish wave** |
 | **Polish wave** (needs one small RFC batch): PWA/responsive, `/settings` real controls, assistance **form slices** (lighting dial, arrows/halos, ambient presence, spoken TTS provider) | 📋 next after open-answer |
 | **Gamification cluster** (needs RFC **and** research/mileage first — deliberately post-session): Spire map, encounter unlocks, pack-opening ceremony. Rulings already made: library stays open, map gates its own rewards, ADR-0007 progression never for sale | 📋 post-session by design |
 | Orphan triage (owner may schedule or park): recommender, session distillation, narrative mode + difference strips, events layer (pack nights/cohorts/relays), resistance-spectrum completion (`perfect_tablebase` decision) | ⏳ owner triage at polish |
