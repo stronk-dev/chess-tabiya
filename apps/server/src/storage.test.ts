@@ -80,6 +80,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 11, name: "branch groups run schema" },
       { version: 12, name: "imported games and run schema" },
       { version: 13, name: "public story tokens and run derivations" },
+      { version: 14, name: "native matches and session join tokens" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -97,8 +98,38 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(13);
+    ).toBe(14);
     inspection.close();
+  });
+
+  it("rebuilds migration-13 live tables without losing story tokens or retargeting child foreign keys",()=>{
+    const directory=mkdtempSync(join(tmpdir(),"tabiya-storage-social-"));directories.push(directory);const filename=join(directory,"social.sqlite");
+    const initial=new SQLiteRunStorage(filename,{onMigration:()=>{}}),host=initial.createLearner({id:"host",handle:"host",passwordHash:"!",createdAt});const value=run("social-old");initial.create(value,{writerId:"writer",learnerId:host.id},"Old live run");
+    const session=initial.createLiveSession({id:"session-old",runId:value.id,kind:"academy",title:"Old class",boardControl:"host_directed",createdBy:host.id,at:createdAt});
+    initial.createPublicToken({id:"story-old",tokenHash:"hash-old",scope:"story_read",runId:value.id,branchId:value.branches[0]!.id,createdBy:host.id,createdAt,revokedAt:null});initial.close();
+
+    const fixture=new DatabaseSync(filename);fixture.exec("PRAGMA foreign_keys=OFF; PRAGMA legacy_alter_table=ON");
+    fixture.exec(`
+      DROP TABLE match_states;
+      ALTER TABLE public_tokens RENAME TO public_tokens_v14;
+      DROP INDEX public_tokens_run; DROP INDEX public_tokens_session;
+      CREATE TABLE public_tokens (id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,scope TEXT NOT NULL CHECK(scope IN ('story_read')),run_id TEXT NOT NULL,branch_id TEXT NOT NULL,created_by TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,created_at TEXT NOT NULL,revoked_at TEXT) STRICT;
+      INSERT INTO public_tokens SELECT id,token_hash,scope,run_id,branch_id,created_by,created_at,revoked_at FROM public_tokens_v14; DROP TABLE public_tokens_v14; CREATE INDEX public_tokens_run ON public_tokens(run_id,created_by);
+      ALTER TABLE session_journal RENAME TO session_journal_v14;
+      CREATE TABLE session_journal (session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,seq INTEGER NOT NULL,at TEXT NOT NULL,kind TEXT NOT NULL CHECK(kind IN ('session.opened','member.joined','board.granted','proposal.made','proposal.applied','proposal.declined','vote.opened','vote.closed','vote.applied','leg.imported','session.closed')),actor_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,run_seq INTEGER,payload_json TEXT NOT NULL,PRIMARY KEY(session_id,seq)) STRICT;
+      INSERT INTO session_journal SELECT * FROM session_journal_v14; DROP TABLE session_journal_v14;
+      ALTER TABLE live_sessions RENAME TO live_sessions_v14;
+      CREATE TABLE live_sessions (id TEXT PRIMARY KEY,run_id TEXT NOT NULL UNIQUE REFERENCES drill_runs(id) ON DELETE CASCADE,kind TEXT NOT NULL CHECK(kind IN ('stream','academy','match')),title TEXT NOT NULL,board_control TEXT NOT NULL CHECK(board_control IN ('free_claim','host_directed','rotation')),scheduled_for TEXT,vote_adapter_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,rotation_json TEXT,handoff_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,rotation_cursor INTEGER NOT NULL DEFAULT 0,created_by TEXT NOT NULL REFERENCES learners(id),created_at TEXT NOT NULL,closed_at TEXT) STRICT;
+      INSERT INTO live_sessions SELECT * FROM live_sessions_v14; DROP TABLE live_sessions_v14;
+      PRAGMA user_version=13;
+    `);fixture.close();
+
+    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"}]);
+    expect(upgraded.liveSession(session.id)?.title).toBe("Old class");expect(upgraded.publicTokenByHash("hash-old")).toMatchObject({scope:"story_read",runId:value.id});upgraded.close();
+    const inspection=new DatabaseSync(filename);expect((inspection.prepare("PRAGMA foreign_key_check").all())).toEqual([]);for(const table of ["session_proposals","session_vote_windows","session_invitations","arena_legs"]){const targets=(inspection.prepare(`PRAGMA foreign_key_list(${table})`).all() as readonly Record<string,unknown>[]).map((row)=>row.table);expect(targets).toContain("live_sessions");expect(targets).not.toContain("live_sessions_v14");}expect(String((inspection.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='live_sessions'").get() as {sql:string}).sql)).toContain("'match'");inspection.close();
+    const freshFile=join(directory,"fresh.sqlite"),freshStorage=new SQLiteRunStorage(freshFile,{onMigration:()=>{}});freshStorage.close();const upgradedSchema=new DatabaseSync(filename),freshSchema=new DatabaseSync(freshFile);
+    for(const table of ["live_sessions","session_journal","public_tokens"]){const sql=(database:DatabaseSync)=>String((database.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name=?").get(table) as {sql:string}).sql).replaceAll(/\s+/gu," ").trim();expect(sql(upgradedSchema)).toBe(sql(freshSchema));}
+    const tokenTables=(upgradedSchema.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%token%'").all() as unknown as readonly {name:string}[]).map((row)=>row.name);expect(tokenTables).toEqual(["public_tokens"]);upgradedSchema.close();freshSchema.close();
   });
 
   it("keeps ordinary v0.5 runs readable while quarantining pre-producer outcomes", () => {
@@ -151,6 +182,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 11, name: "branch groups run schema" },
       { version: 12, name: "imported games and run schema" },
       { version: 13, name: "public story tokens and run derivations" },
+      { version: 14, name: "native matches and session join tokens" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.10");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
@@ -235,6 +267,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 11, name: "branch groups run schema" },
       { version: 12, name: "imported games and run schema" },
       { version: 13, name: "public story tokens and run derivations" },
+      { version: 14, name: "native matches and session join tokens" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.10");
     expect(upgraded.read(quarantined.id)).toBeUndefined();

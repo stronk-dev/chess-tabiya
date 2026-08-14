@@ -19,6 +19,7 @@ import {
   type ArenaLeg,
   type BoardControl,
   type LiveSession,
+  type MatchState,
   type SessionInvitation,
   type SessionJournalEntry,
   type SessionKind,
@@ -95,7 +96,9 @@ export interface ImportedGameRecord {
   readonly licenceNote: string;
   readonly importedAt: string;
 }
-export interface PublicTokenRecord { readonly id: string; readonly tokenHash: string; readonly scope: "story_read"; readonly runId: string; readonly branchId: string; readonly createdBy: string; readonly createdAt: string; readonly revokedAt: string | null; }
+export type PublicTokenRecord =
+  | { readonly id: string; readonly tokenHash: string; readonly scope: "story_read"; readonly runId: string; readonly branchId: string; readonly createdBy: string; readonly createdAt: string; readonly revokedAt: string | null }
+  | { readonly id: string; readonly tokenHash: string; readonly scope: "session_join"; readonly sessionId: string; readonly matchSlot: "white" | "black" | null; readonly invitedRole: RunRole; readonly invitedHandle: string | null; readonly expiresAt: string; readonly usesRemaining: number; readonly createdBy: string; readonly createdAt: string; readonly revokedAt: string | null };
 export interface RunDerivation { readonly derivedRunId: string; readonly sourceRunId: string; readonly sourceBranchId: string; readonly sourceNodeId: string; readonly kind: "flip_sides"; readonly createdAt: string; }
 
 /** Persistence boundary for run snapshots, identity, grants, and the writer lease. */
@@ -107,12 +110,14 @@ export interface RunStorage {
   createImportedRun?(run: DrillRun, lease: LeaseHolder, title: string, record: ImportedGameRecord): void;
   importedGame?(runId: string): ImportedGameRecord | undefined;
   createPublicToken?(record: PublicTokenRecord): void;
-  publicTokens?(runId: string, creatorId: string): readonly PublicTokenRecord[];
+  publicTokens?(runId: string, creatorId: string): readonly Extract<PublicTokenRecord, { scope: "story_read" }>[];
   publicTokenByHash?(tokenHash: string): PublicTokenRecord | undefined;
   revokePublicToken?(runId: string, tokenId: string, creatorId: string, at: string): void;
   createDerivedRun?(run: DrillRun, lease: LeaseHolder, title: string, derivation: RunDerivation): void;
   derivationFor?(runId: string): RunDerivation | undefined;
   derivationsFrom?(runId: string): readonly RunDerivation[];
+  liveSessionByRun?(runId: string): LiveSession | undefined;
+  matchState?(sessionId: string): MatchState | undefined;
 
   createLearner(input: NewLearner): Learner;
   learnerByHandle(handle: string): StoredLearner | undefined;
@@ -145,6 +150,7 @@ export interface LiveSessionStorage {
     readonly title: string; readonly boardControl: BoardControl;
     readonly scheduledFor?: string; readonly voteAdapterLearnerId?: string;
     readonly rotation?: readonly string[]; readonly createdBy: string; readonly at: string;
+    readonly matchPlayers?: { readonly whiteLearnerId: string | null; readonly blackLearnerId: string | null };
   }): LiveSession;
   liveSession(sessionId: string): LiveSession | undefined;
   liveSessionByRun(runId: string): LiveSession | undefined;
@@ -171,6 +177,13 @@ export interface LiveSessionStorage {
   arenaLegs(sessionId: string): readonly ArenaLeg[];
   saveArenaLeg(leg: ArenaLeg, actorLearnerId: string, runSeq: number, at: string): void;
   saveArenaImport(run: DrillRun, lease: LeaseHolder, leg: ArenaLeg, actorLearnerId: string, at: string): void;
+  matchState(sessionId: string): MatchState | undefined;
+  updateMatchState(sessionId: string, actorLearnerId: string, operation: "propose_pause" | "accept_pause" | "withdraw_pause" | "pause" | "resume", at: string): MatchState;
+  seatMatchPlayer(sessionId: string, slot: "white" | "black", learnerId: string, at: string, tokenId: string): MatchState;
+  createSessionJoinToken(record: Extract<PublicTokenRecord, { scope: "session_join" }>): void;
+  sessionJoinTokens(sessionId: string, creatorId: string): readonly Extract<PublicTokenRecord, { scope: "session_join" }>[];
+  redeemSessionJoinToken(tokenHash: string, learnerId: string, handle: string, at: string): { readonly token: Extract<PublicTokenRecord, { scope: "session_join" }>; readonly session: LiveSession } | undefined;
+  revokeSessionJoinToken(sessionId: string, tokenId: string, creatorId: string, at: string): void;
 }
 
 export interface StoredAttempt extends AttemptRow {
@@ -307,7 +320,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 13;
+export const STORAGE_VERSION = 14;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -731,22 +744,43 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   }
 
   createPublicToken(record: PublicTokenRecord): void {
+    if(record.scope!=="story_read")throw new TypeError("createPublicToken accepts story tokens only");
     try { this.#database.prepare("INSERT INTO public_tokens (id,token_hash,scope,run_id,branch_id,created_by,created_at,revoked_at) VALUES (?,?,?,?,?,?,?,NULL)").run(record.id,record.tokenHash,record.scope,record.runId,record.branchId,record.createdBy,record.createdAt); }
     catch (error) { throw storageFailure("Could not create public token", error); }
   }
 
-  publicTokens(runId:string,creatorId:string):readonly PublicTokenRecord[]{
+  publicTokens(runId:string,creatorId:string):readonly Extract<PublicTokenRecord,{scope:"story_read"}>[]{
     const rows=this.#database.prepare("SELECT * FROM public_tokens WHERE run_id=? AND created_by=? ORDER BY created_at,id").all(runId,creatorId) as readonly Record<string,unknown>[];
-    return Object.freeze(rows.map((row)=>this.#publicToken(row)));
+    return Object.freeze(rows.map((row)=>this.#publicToken(row) as Extract<PublicTokenRecord,{scope:"story_read"}>));
   }
 
   publicTokenByHash(tokenHash:string):PublicTokenRecord|undefined{
     const row=this.#database.prepare("SELECT * FROM public_tokens WHERE token_hash=? AND revoked_at IS NULL").get(tokenHash) as Record<string,unknown>|undefined;
-    return row===undefined?undefined:this.#publicToken(row);
+    if(row===undefined)return undefined;
+    if(row.scope==="session_join"&&(String(row.expires_at)<=this.#now()||Number(row.uses_remaining)<=0))return undefined;
+    return this.#publicToken(row);
   }
 
   revokePublicToken(runId:string,tokenId:string,creatorId:string,at:string):void{
     this.#database.prepare("UPDATE public_tokens SET revoked_at=? WHERE id=? AND run_id=? AND created_by=? AND revoked_at IS NULL").run(at,tokenId,runId,creatorId);
+  }
+
+  createSessionJoinToken(record:Extract<PublicTokenRecord,{scope:"session_join"}>):void{
+    try{this.#database.exec("BEGIN IMMEDIATE");this.#database.prepare(`INSERT INTO public_tokens
+      (id,token_hash,scope,session_id,match_slot,invited_role,invited_handle,expires_at,uses_remaining,created_by,created_at,revoked_at)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,NULL)`).run(record.id,record.tokenHash,record.scope,record.sessionId,record.matchSlot,record.invitedRole,record.invitedHandle,record.expiresAt,record.usesRemaining,record.createdBy,record.createdAt);this.#appendSessionJournal(record.sessionId,"link.minted",record.createdBy,this.#sessionRunSeq(record.sessionId),{tokenId:record.id},record.createdAt);this.#database.exec("COMMIT");}
+    catch(error){this.#rollback();throw storageFailure("Could not create session join token",error);}
+  }
+
+  sessionJoinTokens(sessionId:string,creatorId:string):readonly Extract<PublicTokenRecord,{scope:"session_join"}>[]{
+    const rows=this.#database.prepare("SELECT * FROM public_tokens WHERE session_id=? AND created_by=? ORDER BY created_at,id").all(sessionId,creatorId) as readonly Record<string,unknown>[];
+    return Object.freeze(rows.map((row)=>this.#publicToken(row) as Extract<PublicTokenRecord,{scope:"session_join"}>));
+  }
+
+  revokeSessionJoinToken(sessionId:string,tokenId:string,creatorId:string,at:string):void{
+    try{this.#database.exec("BEGIN IMMEDIATE");const changed=this.#database.prepare("UPDATE public_tokens SET revoked_at=? WHERE id=? AND session_id=? AND created_by=? AND scope='session_join' AND revoked_at IS NULL").run(at,tokenId,sessionId,creatorId);
+    if(changed.changes===1)this.#appendSessionJournal(sessionId,"link.revoked",creatorId,this.#sessionRunSeq(sessionId),{tokenId},at);this.#database.exec("COMMIT");}
+    catch(error){this.#rollback();throw storageFailure("Could not revoke session join token",error);}
   }
 
   createDerivedRun(run:DrillRun,lease:LeaseHolder,title:string,derivation:RunDerivation):void{
@@ -763,7 +797,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   derivationFor(runId:string):RunDerivation|undefined{const row=this.#database.prepare("SELECT * FROM run_derivations WHERE derived_run_id=?").get(runId) as Record<string,unknown>|undefined;return row===undefined?undefined:this.#derivation(row);}
   derivationsFrom(runId:string):readonly RunDerivation[]{const rows=this.#database.prepare("SELECT * FROM run_derivations WHERE source_run_id=? ORDER BY created_at,derived_run_id").all(runId) as readonly Record<string,unknown>[];return Object.freeze(rows.map((row)=>this.#derivation(row)));}
 
-  #publicToken(row:Record<string,unknown>):PublicTokenRecord{return Object.freeze({id:String(row.id),tokenHash:String(row.token_hash),scope:"story_read",runId:String(row.run_id),branchId:String(row.branch_id),createdBy:String(row.created_by),createdAt:String(row.created_at),revokedAt:row.revoked_at===null?null:String(row.revoked_at)});}
+  #publicToken(row:Record<string,unknown>):PublicTokenRecord{
+    const common={id:String(row.id),tokenHash:String(row.token_hash),createdBy:String(row.created_by),createdAt:String(row.created_at),revokedAt:row.revoked_at===null?null:String(row.revoked_at)};
+    return row.scope==="session_join"
+      ? Object.freeze({...common,scope:"session_join" as const,sessionId:String(row.session_id),matchSlot:row.match_slot===null?null:String(row.match_slot) as "white"|"black",invitedRole:String(row.invited_role) as RunRole,invitedHandle:row.invited_handle===null?null:String(row.invited_handle),expiresAt:String(row.expires_at),usesRemaining:Number(row.uses_remaining)})
+      : Object.freeze({...common,scope:"story_read" as const,runId:String(row.run_id),branchId:String(row.branch_id)});
+  }
   #derivation(row:Record<string,unknown>):RunDerivation{return Object.freeze({derivedRunId:String(row.derived_run_id),sourceRunId:String(row.source_run_id),sourceBranchId:String(row.source_branch_id),sourceNodeId:String(row.source_node_id),kind:"flip_sides",createdAt:String(row.created_at)});}
 
   createLearner(input: NewLearner): Learner {
@@ -1032,9 +1071,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         throw new ServerError("FORBIDDEN", "This learner may not claim the run lease");
       }
       const current = this.#database.prepare(
-        "SELECT active_writer_learner_id FROM drill_runs WHERE id=?",
-      ).get(runId) as { readonly active_writer_learner_id?: unknown } | undefined;
-      if (typeof current?.active_writer_learner_id !== "string") {
+        "SELECT active_writer_learner_id,snapshot_json FROM drill_runs WHERE id=?",
+      ).get(runId) as { readonly active_writer_learner_id?: unknown;readonly snapshot_json?:unknown } | undefined;
+      if (typeof current?.active_writer_learner_id !== "string"||typeof current.snapshot_json!=="string") {
         throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${runId}`);
       }
       const witness = current.active_writer_learner_id;
@@ -1054,6 +1093,17 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         const rotation = JSON.parse(String(sessionRow?.rotation_json ?? "[]")) as string[];
         if (rotation[Number(sessionRow?.rotation_cursor ?? 0)] !== lease.learnerId) {
           throw new ServerError("BOARD_HELD", "It is another learner's turn in the rotation");
+        }
+      }
+      if(boardControl==="match"){
+        const state=this.#database.prepare("SELECT * FROM match_states WHERE session_id=?").get(String(sessionRow?.id)) as Record<string,unknown>|undefined;
+        if(state===undefined)throw new ServerError("STORAGE_FAILURE","Native match state is missing");
+        if(state.paused_at===null){
+          const snapshot=JSON.parse(current.snapshot_json) as DrillRun;
+          const node=snapshot.nodes.find((candidate)=>candidate.id===snapshot.activeCursor.nodeId);
+          if(node===undefined)throw new ServerError("STORAGE_FAILURE","Match cursor node is missing");
+          const expected=node.fen.split(" ")[1]==="w"?state.white_learner_id:state.black_learner_id;
+          if(expected===null||expected!==lease.learnerId)throw new ServerError("BOARD_HELD","It is another learner's move");
         }
       }
       const result = this.#database
@@ -1472,6 +1522,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     readonly title: string; readonly boardControl: BoardControl;
     readonly scheduledFor?: string; readonly voteAdapterLearnerId?: string;
     readonly rotation?: readonly string[]; readonly createdBy: string; readonly at: string;
+    readonly matchPlayers?: { readonly whiteLearnerId: string | null; readonly blackLearnerId: string | null };
   }): LiveSession {
     try {
       this.#database.exec("BEGIN IMMEDIATE");
@@ -1497,7 +1548,20 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         holderLearnerId: run.active_writer_learner_id,
         changedByLearnerId: input.createdBy,
       }, input.at);
-      if (input.kind === "match") {
+      if(input.boardControl==="match"){
+        const players=input.matchPlayers;
+        if(input.kind!=="match"||players===undefined||(players.whiteLearnerId===null&&players.blackLearnerId===null)||players.whiteLearnerId!==null&&players.whiteLearnerId===players.blackLearnerId){
+          throw new ServerError("INVALID_REQUEST","Native match needs one or two distinct players");
+        }
+        for(const learnerId of [players.whiteLearnerId,players.blackLearnerId]){
+          if(learnerId===null)continue;
+          const existing=this.#roleInTransaction(input.runId,learnerId);
+          if(existing===undefined)this.#database.prepare("INSERT INTO run_grants(run_id,learner_id,role,granted_at) VALUES (?,?,'participant',?)").run(input.runId,learnerId,input.at);
+          else if(existing==="spectator")this.#database.prepare("UPDATE run_grants SET role='participant',granted_at=? WHERE run_id=? AND learner_id=?").run(input.at,input.runId,learnerId);
+        }
+        this.#database.prepare("INSERT INTO match_states(session_id,white_learner_id,black_learner_id) VALUES (?,?,?)").run(input.id,players.whiteLearnerId,players.blackLearnerId);
+      }
+      if (input.kind === "match"&&input.boardControl!=="match") {
         const insert = this.#database.prepare("INSERT INTO arena_legs(session_id,leg) VALUES (?,?)");
         insert.run(input.id, 1); insert.run(input.id, 2);
       }
@@ -1553,6 +1617,76 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       runSeq: row.run_seq === null ? null : Number(row.run_seq),
       payload: Object.freeze(JSON.parse(String(row.payload_json)) as Record<string,unknown>),
     })));
+  }
+
+  matchState(sessionId:string):MatchState|undefined{
+    const row=this.#database.prepare("SELECT * FROM match_states WHERE session_id=?").get(sessionId) as Record<string,unknown>|undefined;
+    return row===undefined?undefined:this.#matchStateRow(row);
+  }
+
+  updateMatchState(sessionId:string,actorLearnerId:string,operation:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume",at:string):MatchState{
+    try{
+      this.#database.exec("BEGIN IMMEDIATE");
+      const session=this.#requiredLiveSessionRow(sessionId);
+      const row=this.#database.prepare("SELECT * FROM match_states WHERE session_id=?").get(sessionId) as Record<string,unknown>|undefined;
+      if(row===undefined||session.board_control!=="match")throw new ServerError("INVALID_REQUEST","Operation requires a native match");
+      if(session.closed_at!==null)throw new ServerError("INVALID_REQUEST","The live session is closed");
+      const isWhite=row.white_learner_id===actorLearnerId,isBlack=row.black_learner_id===actorLearnerId,isPlayer=isWhite||isBlack;
+      const isNonPlayingHost=session.created_by===actorLearnerId&&!isPlayer;
+      if(operation==="propose_pause"){
+        if(!isPlayer||row.paused_at!==null)throw new ServerError("INVALID_REQUEST","Only a player in a live match may propose a pause");
+        this.#database.prepare("UPDATE match_states SET pause_proposed_by=? WHERE session_id=?").run(actorLearnerId,sessionId);
+        this.#appendSessionJournal(sessionId,"match.pause_proposed",actorLearnerId,this.#runSeq(String(session.run_id)),{},at);
+      }else if(operation==="accept_pause"){
+        if(!isPlayer||row.paused_at!==null||row.pause_proposed_by===null||row.pause_proposed_by===actorLearnerId)throw new ServerError("INVALID_REQUEST","The other player must accept a standing pause proposal");
+        this.#database.prepare("UPDATE match_states SET paused_at=?,pause_proposed_by=NULL WHERE session_id=?").run(at,sessionId);
+        this.#appendSessionJournal(sessionId,"match.paused",actorLearnerId,this.#runSeq(String(session.run_id)),{},at);
+      }else if(operation==="withdraw_pause"){
+        if(row.paused_at!==null||row.pause_proposed_by!==actorLearnerId)throw new ServerError("INVALID_REQUEST","Only the proposer may withdraw a live pause proposal");
+        this.#database.prepare("UPDATE match_states SET pause_proposed_by=NULL WHERE session_id=?").run(sessionId);
+      }else if(operation==="pause"){
+        if(!isNonPlayingHost||row.paused_at!==null)throw new ServerError("INVALID_REQUEST","Only a non-playing host may pause unilaterally");
+        this.#database.prepare("UPDATE match_states SET paused_at=?,pause_proposed_by=NULL WHERE session_id=?").run(at,sessionId);
+        this.#appendSessionJournal(sessionId,"match.paused",actorLearnerId,this.#runSeq(String(session.run_id)),{},at);
+      }else{
+        if(row.paused_at===null||(!isPlayer&&!isNonPlayingHost))throw new ServerError("INVALID_REQUEST","A player or non-playing host may resume a paused match");
+        this.#database.prepare("UPDATE match_states SET paused_at=NULL,pause_proposed_by=NULL WHERE session_id=?").run(sessionId);
+        this.#appendSessionJournal(sessionId,"match.resumed",actorLearnerId,this.#runSeq(String(session.run_id)),{},at);
+      }
+      this.#database.exec("COMMIT");
+      return this.matchState(sessionId)!;
+    }catch(error){this.#rollback();if(error instanceof ServerError)throw error;throw storageFailure("Could not update native match",error);}
+  }
+
+  seatMatchPlayer(sessionId:string,slot:"white"|"black",learnerId:string,at:string,tokenId:string):MatchState{
+    const column=slot==="white"?"white_learner_id":"black_learner_id";
+    const changed=this.#database.prepare(`UPDATE match_states SET ${column}=? WHERE session_id=? AND ${column} IS NULL`).run(learnerId,sessionId);
+    if(changed.changes!==1)throw new ServerError("INVALID_REQUEST","The match seat is no longer open");
+    this.#appendSessionJournal(sessionId,"member.joined",learnerId,this.#sessionRunSeq(sessionId),{tokenId,slot},at);
+    return this.matchState(sessionId)!;
+  }
+
+  redeemSessionJoinToken(tokenHash:string,learnerId:string,handle:string,at:string):{readonly token:Extract<PublicTokenRecord,{scope:"session_join"}>;readonly session:LiveSession}|undefined{
+    try{
+      this.#database.exec("BEGIN IMMEDIATE");
+      const row=this.#database.prepare("SELECT * FROM public_tokens WHERE token_hash=? AND scope='session_join' AND revoked_at IS NULL AND expires_at>? AND uses_remaining>0").get(tokenHash,at) as Record<string,unknown>|undefined;
+      if(row===undefined||(row.invited_handle!==null&&String(row.invited_handle)!==handle)){this.#database.exec("ROLLBACK");return undefined;}
+      const session=this.#requiredLiveSessionRow(String(row.session_id));
+      if(session.closed_at!==null){this.#database.exec("ROLLBACK");return undefined;}
+      const role=String(row.invited_role) as RunRole;
+      const existing=this.#roleInTransaction(String(session.run_id),learnerId);
+      if(existing===undefined)this.#database.prepare("INSERT INTO run_grants(run_id,learner_id,role,granted_at) VALUES (?,?,?,?)").run(String(session.run_id),learnerId,role,at);
+      else if(existing==="spectator"&&role==="participant")this.#database.prepare("UPDATE run_grants SET role='participant',granted_at=? WHERE run_id=? AND learner_id=?").run(at,String(session.run_id),learnerId);
+      if(row.match_slot!==null){
+        const column=row.match_slot==="white"?"white_learner_id":"black_learner_id";
+        const changed=this.#database.prepare(`UPDATE match_states SET ${column}=? WHERE session_id=? AND ${column} IS NULL`).run(learnerId,String(row.session_id));
+        if(changed.changes!==1){this.#database.exec("ROLLBACK");return undefined;}
+      }
+      this.#database.prepare("UPDATE public_tokens SET uses_remaining=uses_remaining-1 WHERE id=?").run(String(row.id));
+      this.#appendSessionJournal(String(row.session_id),"member.joined",learnerId,this.#runSeq(String(session.run_id)),{tokenId:String(row.id),...(row.match_slot===null?{}:{slot:String(row.match_slot)})},at);
+      this.#database.exec("COMMIT");
+      return Object.freeze({token:this.#publicToken({...row,uses_remaining:Number(row.uses_remaining)-1}) as Extract<PublicTokenRecord,{scope:"session_join"}>,session:this.liveSession(String(row.session_id))!});
+    }catch(error){this.#rollback();if(error instanceof ServerError)throw error;throw storageFailure("Could not redeem session join token",error);}
   }
 
   boardOperation(sessionId: string, actorLearnerId: string, operation: {
@@ -1707,6 +1841,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       ...(rotation===undefined?{}:{rotation:Object.freeze(rotation)}),...(row.handoff_learner_id===null?{}:{handoffLearnerId:String(row.handoff_learner_id)}),
       rotationCursor:Number(row.rotation_cursor),createdBy:String(row.created_by),createdAt:String(row.created_at),...(row.closed_at===null?{}:{closedAt:String(row.closed_at)})});
   }
+  #matchStateRow(row:Record<string,unknown>):MatchState{return Object.freeze({sessionId:String(row.session_id),whiteLearnerId:row.white_learner_id===null?null:String(row.white_learner_id),blackLearnerId:row.black_learner_id===null?null:String(row.black_learner_id),pausedAt:row.paused_at===null?null:String(row.paused_at),pauseProposedBy:row.pause_proposed_by===null?null:String(row.pause_proposed_by)});}
   #requiredLiveSessionRow(id:string):Record<string,unknown>{const row=this.#database.prepare("SELECT * FROM live_sessions WHERE id=?").get(id) as Record<string,unknown>|undefined;if(row===undefined)throw new ServerError("RUN_NOT_FOUND",`Unknown session: ${id}`);return row;}
   #proposalRow(row:Record<string,unknown>):SessionProposal{return Object.freeze({id:String(row.id),sessionId:String(row.session_id),nodeId:String(row.node_id),moveUci:String(row.move_uci),proposedBy:String(row.proposed_by),at:String(row.at),status:String(row.status) as SessionProposal["status"],resolvedRunSeq:row.resolved_run_seq===null?null:Number(row.resolved_run_seq)});}
   #voteWindowRow(row:Record<string,unknown>):VoteWindow{return Object.freeze({id:String(row.id),sessionId:String(row.session_id),nodeId:String(row.node_id),prompt:String(row.prompt),options:Object.freeze(JSON.parse(String(row.options_json)) as VoteOption[]),opensAt:String(row.opens_at),closesAt:String(row.closes_at),state:String(row.state) as VoteWindow["state"],appliedOptionUci:row.applied_option_uci===null?null:String(row.applied_option_uci)});}
@@ -1925,12 +2060,26 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "public story tokens and run derivations",
         apply: () => this.#addAdoptionTables(),
       },
+      {
+        version: 14,
+        name: "native matches and session join tokens",
+        apply: () => this.#addSocialMatchTables(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
+      const rebuildsReferencedTables = migration.version === 14;
       try {
+        if(rebuildsReferencedTables){
+          this.#database.exec("PRAGMA foreign_keys = OFF");
+          this.#database.exec("PRAGMA legacy_alter_table = ON");
+        }
         this.#database.exec("BEGIN IMMEDIATE");
         migration.apply();
+        if(rebuildsReferencedTables){
+          const violations=this.#database.prepare("PRAGMA foreign_key_check").all();
+          if(violations.length>0)throw new TypeError("Migration 14 produced foreign-key violations");
+        }
         this.#database.exec(`PRAGMA user_version = ${migration.version}`);
         this.#database.exec("COMMIT");
         version = migration.version;
@@ -1938,6 +2087,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       } catch (error) {
         this.#rollback();
         throw storageFailure("Could not migrate run storage", error);
+      } finally {
+        if(rebuildsReferencedTables){
+          this.#database.exec("PRAGMA legacy_alter_table = OFF");
+          this.#database.exec("PRAGMA foreign_keys = ON");
+        }
       }
     }
   }
@@ -1967,15 +2121,89 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     `);
   }
 
+  #addSocialMatchTables():void{
+    if(this.#database.prepare("SELECT 1 AS found FROM sqlite_master WHERE type='table' AND name='match_states'").get()!==undefined)return;
+    this.#database.exec(`
+      ALTER TABLE live_sessions RENAME TO live_sessions_v13;
+      CREATE TABLE live_sessions (
+        id TEXT PRIMARY KEY,
+        run_id TEXT NOT NULL UNIQUE REFERENCES drill_runs(id) ON DELETE CASCADE,
+        kind TEXT NOT NULL CHECK (kind IN ('stream','academy','match')),
+        title TEXT NOT NULL,
+        board_control TEXT NOT NULL CHECK (board_control IN ('free_claim','host_directed','rotation','match')),
+        scheduled_for TEXT,
+        vote_adapter_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
+        rotation_json TEXT,
+        handoff_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
+        rotation_cursor INTEGER NOT NULL DEFAULT 0,
+        created_by TEXT NOT NULL REFERENCES learners(id),
+        created_at TEXT NOT NULL,
+        closed_at TEXT
+      ) STRICT;
+      INSERT INTO live_sessions SELECT * FROM live_sessions_v13;
+      DROP TABLE live_sessions_v13;
+
+      ALTER TABLE session_journal RENAME TO session_journal_v13;
+      CREATE TABLE session_journal (
+        session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,
+        seq INTEGER NOT NULL,
+        at TEXT NOT NULL,
+        kind TEXT NOT NULL CHECK (kind IN ('session.opened','member.joined','board.granted','proposal.made','proposal.applied','proposal.declined','vote.opened','vote.closed','vote.applied','leg.imported','session.closed','match.pause_proposed','match.paused','match.resumed','link.minted','link.revoked')),
+        actor_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
+        run_seq INTEGER,
+        payload_json TEXT NOT NULL,
+        PRIMARY KEY (session_id, seq)
+      ) STRICT;
+      INSERT INTO session_journal SELECT * FROM session_journal_v13;
+      DROP TABLE session_journal_v13;
+
+      ALTER TABLE public_tokens RENAME TO public_tokens_v13;
+      DROP INDEX IF EXISTS public_tokens_run;
+      CREATE TABLE public_tokens (
+        id TEXT PRIMARY KEY,
+        token_hash TEXT NOT NULL UNIQUE,
+        scope TEXT NOT NULL CHECK (scope IN ('story_read','session_join')),
+        run_id TEXT,
+        branch_id TEXT,
+        session_id TEXT REFERENCES live_sessions(id) ON DELETE CASCADE,
+        match_slot TEXT CHECK (match_slot IN ('white','black')),
+        invited_role TEXT CHECK (invited_role IN ('participant','spectator')),
+        invited_handle TEXT,
+        expires_at TEXT,
+        uses_remaining INTEGER,
+        created_by TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+        created_at TEXT NOT NULL,
+        revoked_at TEXT,
+        CHECK (
+          (scope='story_read' AND run_id IS NOT NULL AND branch_id IS NOT NULL AND session_id IS NULL AND match_slot IS NULL AND invited_role IS NULL AND invited_handle IS NULL AND expires_at IS NULL AND uses_remaining IS NULL)
+          OR
+          (scope='session_join' AND run_id IS NULL AND branch_id IS NULL AND session_id IS NOT NULL AND invited_role IS NOT NULL AND expires_at IS NOT NULL AND uses_remaining>=0 AND (match_slot IS NULL OR invited_role='participant'))
+        )
+      ) STRICT;
+      INSERT INTO public_tokens(id,token_hash,scope,run_id,branch_id,created_by,created_at,revoked_at)
+        SELECT id,token_hash,scope,run_id,branch_id,created_by,created_at,revoked_at FROM public_tokens_v13;
+      DROP TABLE public_tokens_v13;
+      CREATE INDEX public_tokens_run ON public_tokens(run_id,created_by);
+      CREATE INDEX public_tokens_session ON public_tokens(session_id,created_by);
+
+      CREATE TABLE match_states (
+        session_id TEXT PRIMARY KEY REFERENCES live_sessions(id) ON DELETE CASCADE,
+        white_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
+        black_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
+        paused_at TEXT,
+        pause_proposed_by TEXT REFERENCES learners(id) ON DELETE SET NULL
+      ) STRICT;
+    `);
+  }
+
   #addLiveSessionTables(): void {
-    const values = (items: readonly string[]) => items.map((item) => `'${item}'`).join(",");
     this.#database.exec(`
       CREATE TABLE IF NOT EXISTS live_sessions (
         id TEXT PRIMARY KEY,
         run_id TEXT NOT NULL UNIQUE REFERENCES drill_runs(id) ON DELETE CASCADE,
-        kind TEXT NOT NULL CHECK (kind IN (${values(SESSION_KINDS)})),
+        kind TEXT NOT NULL CHECK (kind IN ('stream','academy','match')),
         title TEXT NOT NULL,
-        board_control TEXT NOT NULL CHECK (board_control IN (${values(BOARD_CONTROLS)})),
+        board_control TEXT NOT NULL CHECK (board_control IN ('free_claim','host_directed','rotation')),
         scheduled_for TEXT,
         vote_adapter_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
         rotation_json TEXT,
@@ -1989,7 +2217,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,
         seq INTEGER NOT NULL,
         at TEXT NOT NULL,
-        kind TEXT NOT NULL CHECK (kind IN (${values(SESSION_JOURNAL_KINDS)})),
+        kind TEXT NOT NULL CHECK (kind IN ('session.opened','member.joined','board.granted','proposal.made','proposal.applied','proposal.declined','vote.opened','vote.closed','vote.applied','leg.imported','session.closed')),
         actor_learner_id TEXT REFERENCES learners(id) ON DELETE SET NULL,
         run_seq INTEGER,
         payload_json TEXT NOT NULL,
@@ -2032,7 +2260,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         session_id TEXT NOT NULL REFERENCES live_sessions(id) ON DELETE CASCADE,
         leg INTEGER CHECK (leg IN (1,2)),
         invited_handle TEXT,
-        invited_role TEXT NOT NULL CHECK (invited_role IN (${values(RUN_ROLES)})),
+        invited_role TEXT NOT NULL CHECK (invited_role IN ('host','participant','spectator')),
         external_challenge_url TEXT,
         state TEXT NOT NULL CHECK (state IN ('open','accepted','revoked')),
         created_at TEXT NOT NULL

@@ -530,10 +530,10 @@ export class RunService {
   }
   shares(runId:string,principal:Principal){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may list shares");return this.#storage.publicTokens?.(runId,principal.learnerId).map(({tokenHash,...record})=>record)??[];}
   revokeShare(runId:string,principal:Principal,tokenId:string,at=new Date().toISOString()){const {role}=requireRead(this.#storage,runId,principal);if(!mayManageGrants(role))throw new ServerError("FORBIDDEN","Only the host may revoke shares");this.#storage.revokePublicToken?.(runId,tokenId,principal.learnerId,at);}
-  publicStory(token:string){const record=this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"));if(record===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");const learner=this.#storage.learnerById(record.createdBy);if(learner===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");const story=this.story(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId);return Object.freeze({title:suggestTitle(story),outcome:story.outcome,moments:story.moments.slice(0,8).map((moment)=>Object.freeze({nodeId:moment.nodeId,ply:moment.ply,san:moment.san,fen:moment.fen,sentences:moment.sentences})),productLink:"/"});}
+  publicStory(token:string){const record=this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"));if(record?.scope!=="story_read")throw new ServerError("RUN_NOT_FOUND","Shared story not found");const learner=this.#storage.learnerById(record.createdBy);if(learner===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");const story=this.story(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId);return Object.freeze({title:suggestTitle(story),outcome:story.outcome,moments:story.moments.slice(0,8).map((moment)=>Object.freeze({nodeId:moment.nodeId,ply:moment.ply,san:moment.san,fen:moment.fen,sentences:moment.sentences})),productLink:"/"});}
 
   async flip(runId:string,principal:Principal,nodeId:string,resistance?:"human_common"|"strong_engine"){
-    const source=requireRead(this.#storage,runId,principal).stored.run,node=source.nodes.find((item)=>item.id===nodeId);if(node===undefined)throw new ServerError("RUN_NOT_FOUND",`Unknown run: ${runId}`);
+    const source=requireRead(this.#storage,runId,principal).stored.run;this.#refuseWhileMatchLive(runId,source);const node=source.nodes.find((item)=>item.id===nodeId);if(node===undefined)throw new ServerError("RUN_NOT_FOUND",`Unknown run: ${runId}`);
     if(this.#storage.createDerivedRun===undefined)throw new ServerError("STORAGE_FAILURE","Run derivation storage is unavailable");
     const id=`flip-${randomUUID()}`,writerId=`writer-${randomUUID()}`,mode=resistance??(source.opponentPolicy.mode==="strong_engine"?"strong_engine":"human_common"),createdAt=new Date().toISOString();
     const session={kind:"position" as const,start:canonicalRunStart({fen:node.fen,side:source.start.side==="white"?"black":"white"}),feedbackPolicy:"attempt_end" as const,opponentPolicy:{mode,...(mode==="human_common"&&source.opponentPolicy.targetElo!==undefined?{targetElo:source.opponentPolicy.targetElo}:{})}};
@@ -562,9 +562,10 @@ export class RunService {
     const uci = typeof principalOrWriter === "string" ? writerOrUci : uciOrOptions as string;
     const options = typeof principalOrWriter === "string" ? uciOrOptions as CommitMoveOptions : maybeOptions;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    const guardedOptions=this.#matchMoveOptions(runId,principal,stored.run,options);
     const pack = this.#requiredRegisteredPack(stored.run);
     this.#requiredEvidenceQueue();
-    const committed = commitMove(stored.run, uci, options);
+    const committed = commitMove(stored.run, uci, guardedOptions);
     const result =
       pack === undefined
         ? committed
@@ -587,6 +588,7 @@ export class RunService {
     const selection = typeof principalOrWriter === "string" ? writerOrSelection as OpponentSelection : selectionOrOptions as OpponentSelection;
     const options = typeof principalOrWriter === "string" ? selectionOrOptions as AppendOpponentPlyOptions : maybeOptions;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    if(this.#matchContext(runId)!==undefined)throw new ServerError("INVALID_REQUEST","Native matches do not accept opponent selections");
     const pack = this.#requiredRegisteredPack(stored.run);
     this.#requiredEvidenceQueue();
     const committed = appendOpponentPly(stored.run, selection, options);
@@ -612,6 +614,7 @@ export class RunService {
     const target = typeof principalOrWriter === "string" ? writerOrTarget as RewindTarget : targetOrAt as RewindTarget;
     const at = typeof principalOrWriter === "string" ? targetOrAt as string | undefined : maybeAt;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    this.#refuseWhileMatchLive(runId,stored.run);
     const result =
       target.nodeId === undefined
         ? rewindToCheckpoint(
@@ -638,6 +641,7 @@ export class RunService {
     const nodeId = typeof principalOrWriter === "string" ? writerOrNode : nodeOrOptions as string;
     const options = typeof principalOrWriter === "string" ? nodeOrOptions as ForkOptions : maybeOptions;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    this.#refuseWhileMatchLive(runId,stored.run);
     const result = fork(stored.run, nodeId, options);
     this.#storage.save(result.run, lease);
     this.#project(result.run, lease.learnerId);
@@ -694,6 +698,7 @@ export class RunService {
     input: CreateGroupInput,
   ): Promise<CreateGroupResult> {
     const { stored, role, lease } = this.#forWrite(runId, principal, writerId);
+    this.#refuseWhileMatchLive(runId,stored.run);
     this.#requiredEvidenceQueue();
     const pack = this.#requiredRegisteredPack(stored.run);
     const sourceNode = stored.run.nodes.find((node) => node.id === stored.run.activeCursor.nodeId)!;
@@ -829,6 +834,7 @@ export class RunService {
     groupId: string,
   ): Promise<GroupReplyResult> {
     const { stored } = this.#forWrite(runId, principal, writerId);
+    this.#refuseWhileMatchLive(runId,stored.run);
     const group = groupsFromEvents(stored.run).find((candidate) => candidate.groupId === groupId);
     if (group === undefined) throw new ServerError("UNKNOWN_GROUP", `Unknown group: ${groupId}`);
     const memberIndex = group.members.findIndex((member) => member.branchId === stored.run.activeCursor.branchId);
@@ -1001,6 +1007,7 @@ export class RunService {
     },
   ): MutationResult {
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    this.#refuseWhileMatchLive(runId,stored.run);
     const pack = this.#requiredRegisteredPack(stored.run);
     if (pack === undefined || !pack.document.checkpoints.some((checkpoint) => checkpoint.id === input.checkpointId && checkpoint.interaction?.type === "prediction")) {
       throw new ServerError("INVALID_REQUEST", "Unknown prediction checkpoint");
@@ -1038,6 +1045,7 @@ export class RunService {
     readonly branches: readonly { index: number; label: string; leafFen: string; plies: number }[];
   } {
     const { stored } = this.#forWrite(runId, principal, writerId);
+    this.#refuseWhileMatchLive(runId,stored.run);
     const pack = this.#requiredRegisteredPack(stored.run);
     if (pack === undefined) throw new ServerError("NO_AUTHORED_VARIATIONS", "Position sessions have no authored variations");
     const maxBranches = options.maxBranches ?? 4;
@@ -1113,6 +1121,7 @@ export class RunService {
     const moves = simulation.moves[branchIndex];
     if (!moves) throw new ServerError("INVALID_REQUEST", "Unknown simulation branch");
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    this.#refuseWhileMatchLive(runId,stored.run);
     let result = fork(stored.run, simulation.sourceNodeId, {
       label: `simulation-${branchIndex + 1}`,
       origin: "simulated",
@@ -1244,6 +1253,7 @@ export class RunService {
     const writerId = typeof principalOrWriter === "string" ? principalOrWriter : writerOrAt!;
     const at = typeof principalOrWriter === "string" ? writerOrAt : maybeAt;
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    this.#refuseWhileMatchLive(runId,stored.run);
     if (stored.run.feedbackPolicy !== "attempt_end") {
       throw new ServerError(
         "INVALID_REQUEST",
@@ -1293,6 +1303,7 @@ export class RunService {
     },
   ): Promise<DrillRun> {
     const source = requireRead(this.#storage, sourceRunId, principal).stored.run;
+    this.#refuseWhileMatchLive(sourceRunId,source);
     const request: CreateRunRequest = {
       id: input.id,
       session: isPackSession(source)
@@ -1411,6 +1422,37 @@ export class RunService {
     return this.#progress;
   }
 
+  #matchContext(runId:string){
+    const session=this.#storage.liveSessionByRun?.(runId);
+    if(session?.boardControl!=="match")return undefined;
+    const state=this.#storage.matchState?.(session.id);
+    if(state===undefined)throw new ServerError("STORAGE_FAILURE","Native match state is missing");
+    return Object.freeze({session,state});
+  }
+
+  #refuseWhileMatchLive(runId:string,run:DrillRun):void{
+    const context=this.#matchContext(runId);if(context===undefined||context.state.pausedAt!==null)return;
+    const node=run.nodes.find((candidate)=>candidate.id===run.activeCursor.nodeId);
+    if(node!==undefined&&terminalPosition(node.fen))return;
+    throw new ServerError("MATCH_LIVE","Pause the match before rehearsing or revealing");
+  }
+
+  #matchMoveOptions(runId:string,principal:Principal,run:DrillRun,options:CommitMoveOptions):CommitMoveOptions{
+    const context=this.#matchContext(runId);if(context===undefined)return options;
+    if(options.actor!==undefined||options.selection!==undefined)throw new ServerError("INVALID_REQUEST","Native match moves derive their actor from the seated player");
+    const node=run.nodes.find((candidate)=>candidate.id===run.activeCursor.nodeId);if(node===undefined)throw new ServerError("STORAGE_FAILURE","Match cursor node is missing");
+    const primary=run.branches[0]!,tip=run.nodes.filter((candidate)=>candidate.branchId===primary.id).sort((a,b)=>b.ply-a.ply)[0]!;
+    if(context.state.pausedAt!==null){
+      if(run.activeCursor.nodeId===tip.id&&run.activeCursor.branchId===primary.id)throw new ServerError("MATCH_MAINLINE_LOCKED","Resume the match before extending its main line");
+    }else{
+      if(run.activeCursor.nodeId!==tip.id||run.activeCursor.branchId!==primary.id)throw new ServerError("MATCH_LIVE","Live match play must continue from the main line");
+      const whiteToMove=node.fen.split(" ")[1]==="w",expected=whiteToMove?context.state.whiteLearnerId:context.state.blackLearnerId;
+      if(expected===null||expected!==principal.learnerId)throw new ServerError("BOARD_HELD","It is another learner's move");
+    }
+    const moverSide=node.fen.split(" ")[1]==="w"?"white":"black";
+    return Object.freeze({...options,actor:moverSide===run.start.side?"user":"system"});
+  }
+
   #project(
     run: DrillRun,
     learnerId: string,
@@ -1424,7 +1466,10 @@ export class RunService {
       ...(pack === undefined ? {} : { pack }),
       ...(origins === undefined ? {} : { origins }),
     });
-    this.#progress.upsertAttempts(projection.attempts, projection.conceptTags);
+    const match=this.#matchContext(run.id);
+    const primary=run.branches[0]?.id;
+    const attempts=match===undefined||primary===undefined?projection.attempts:Object.freeze(projection.attempts.map((attempt)=>attempt.branchId===primary?Object.freeze({...attempt,countable:false}):attempt));
+    this.#progress.upsertAttempts(attempts, projection.conceptTags);
   }
 
   #principal(value: Principal | string): Principal {

@@ -203,7 +203,7 @@ export const PLANNED_SURFACES: readonly SurfaceId[] = Object.freeze([
 ]);
 
 export type SessionKind = "stream" | "academy" | "match";
-export type BoardControl = "free_claim" | "host_directed" | "rotation";
+export type BoardControl = "free_claim" | "host_directed" | "rotation" | "match";
 export interface LiveSession {
   readonly id: string; readonly runId: string; readonly kind: SessionKind;
   readonly title: string; readonly boardControl: BoardControl; readonly scheduledFor?: string;
@@ -211,13 +211,16 @@ export interface LiveSession {
   readonly handoffLearnerId?: string; readonly rotationCursor: number;
   readonly createdBy: string; readonly createdAt: string; readonly closedAt?: string;
 }
+export interface MatchState { readonly sessionId:string;readonly whiteLearnerId:string|null;readonly blackLearnerId:string|null;readonly pausedAt:string|null;readonly pauseProposedBy:string|null }
+export interface LiveSessionSummary extends LiveSession { readonly board:{readonly activeFen:string;readonly sideToMove:"white"|"black";readonly plyCount:number;readonly pausedAt:string|null;readonly leaseHeldBy:LeaseIdentity;readonly lastMoveAt:string|null;readonly players?:{readonly white:LeaseIdentity|null;readonly black:LeaseIdentity|null}};readonly match?:MatchState }
 export interface SessionProposal { readonly id:string;readonly sessionId:string;readonly nodeId:string;readonly moveUci:string;readonly proposedBy:string;readonly at:string;readonly status:"open"|"applied"|"declined"|"stale";readonly resolvedRunSeq:number|null }
 export interface VoteOption { readonly moveUci:string;readonly label:string }
 export interface VoteTally { readonly window:{readonly id:string;readonly sessionId:string;readonly nodeId:string;readonly prompt:string;readonly options:readonly VoteOption[];readonly opensAt:string;readonly closesAt:string;readonly state:"open"|"closed"|"stale";readonly appliedOptionUci:string|null};readonly tally:readonly (VoteOption&{readonly count:number})[];readonly total:number }
 export interface SessionJournalEntry { readonly sessionId:string;readonly seq:number;readonly at:string;readonly kind:string;readonly actorLearnerId:string|null;readonly runSeq:number|null;readonly payload:Readonly<Record<string,unknown>> }
 export interface SessionInvitation { readonly id:string;readonly sessionId:string;readonly leg:1|2|null;readonly invitedHandle:string|null;readonly invitedRole:RunRole;readonly externalChallengeUrl:string|null;readonly state:"open"|"accepted"|"revoked";readonly createdAt:string }
 export interface ArenaLeg { readonly sessionId:string;readonly leg:1|2;readonly referencePlayerHandle:string|null;readonly externalChallengeUrl:string|null;readonly pgn:string|null;readonly result:"1-0"|"0-1"|"1/2-1/2"|"*"|null;readonly branchId:string|null;readonly importedAt:string|null }
-export interface LiveSessionDetail { readonly session:LiveSession;readonly role:RunRole;readonly activeNodeId:string;readonly leaseHeldBy:LeaseIdentity;readonly grants:readonly RunGrant[];readonly proposals:readonly SessionProposal[];readonly vote?:VoteTally;readonly invitations:readonly SessionInvitation[];readonly legs:readonly ArenaLeg[] }
+export interface LiveSessionDetail { readonly session:LiveSession;readonly role:RunRole;readonly activeNodeId:string;readonly leaseHeldBy:LeaseIdentity;readonly grants:readonly RunGrant[];readonly proposals:readonly SessionProposal[];readonly vote?:VoteTally;readonly invitations:readonly SessionInvitation[];readonly legs:readonly ArenaLeg[];readonly match?:MatchState }
+export interface SessionJoinLink {readonly id:string;readonly scope:"session_join";readonly sessionId:string;readonly matchSlot:"white"|"black"|null;readonly invitedRole:"participant"|"spectator";readonly invitedHandle:string|null;readonly expiresAt:string;readonly usesRemaining:number;readonly createdAt:string;readonly revokedAt:string|null}
 
 export interface Capabilities {
   readonly engines: readonly EngineCapability[];
@@ -549,9 +552,9 @@ export interface DrillClientApi extends RunApi {
   updateShapeDraft?(draftId: string, digest: string, document: unknown): Promise<ShapeDraft>;
   lintShapeDraft?(draftId: string, document: unknown, probeFen?: string): Promise<ShapeDraft["validation"]>;
   registerShapeDraft?(draftId: string): Promise<ShapeSummary>;
-  liveSessions?(): Promise<readonly LiveSession[]>;
+  liveSessions?(): Promise<readonly LiveSessionSummary[]>;
   liveSession?(sessionId:string):Promise<LiveSessionDetail>;
-  createLiveSession?(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl}):Promise<LiveSession>;
+  createLiveSession?(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly matchPlayers?:{readonly white?:string;readonly black?:string}}):Promise<LiveSession>;
   sessionJournal?(sessionId:string,sinceSeq?:number):Promise<{readonly entries:readonly SessionJournalEntry[];readonly nextSeq:number}>;
   sessionProposals?(sessionId:string):Promise<readonly SessionProposal[]>;
   proposeMove?(sessionId:string,nodeId:string,moveUci:string):Promise<SessionProposal>;
@@ -561,6 +564,11 @@ export interface DrillClientApi extends RunApi {
   castVote?(sessionId:string,windowId:string,choiceUci:string,voterKey?:string):Promise<VoteTally>;
   inviteToSession?(sessionId:string,input:{readonly leg?:1|2;readonly handle?:string;readonly externalChallengeUrl?:string}):Promise<SessionInvitation>;
   importArenaLeg?(sessionId:string,leg:1|2,pgn:string,writerId:string,result?:ArenaLeg["result"]):Promise<ArenaLeg>;
+  matchOperation?(sessionId:string,op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume",writerId?:string):Promise<MatchState>;
+  sessionLinks?(sessionId:string):Promise<readonly SessionJoinLink[]>;
+  mintSessionLink?(sessionId:string,input:{readonly matchSlot?:"white"|"black";readonly invitedRole:"participant"|"spectator";readonly invitedHandle?:string;readonly expiresInDays?:number}):Promise<{readonly id:string;readonly token:string;readonly url:string}>;
+  revokeSessionLink?(sessionId:string,linkId:string):Promise<void>;
+  redeemSessionLink?(token:string):Promise<{readonly session:LiveSession;readonly runId:string}>;
 }
 
 type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
@@ -777,9 +785,9 @@ export class DrillApi implements DrillClientApi {
     return body.shape.summary;
   }
 
-  async liveSessions():Promise<readonly LiveSession[]>{const body=await this.#json<{sessions:readonly LiveSession[]}>("/sessions");return body.sessions;}
+  async liveSessions():Promise<readonly LiveSessionSummary[]>{const body=await this.#json<{sessions:readonly LiveSessionSummary[]}>("/sessions");return body.sessions;}
   liveSession(sessionId:string):Promise<LiveSessionDetail>{return this.#json(`/sessions/${encoded(sessionId)}`);}
-  async createLiveSession(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl}):Promise<LiveSession>{const body=await this.#json<{session:LiveSession}>("/sessions",{method:"POST",body:input});return body.session;}
+  async createLiveSession(input:{readonly runId:string;readonly kind:SessionKind;readonly title:string;readonly boardControl?:BoardControl;readonly matchPlayers?:{readonly white?:string;readonly black?:string}}):Promise<LiveSession>{const body=await this.#json<{session:LiveSession}>("/sessions",{method:"POST",body:input});return body.session;}
   sessionJournal(sessionId:string,sinceSeq=0):Promise<{readonly entries:readonly SessionJournalEntry[];readonly nextSeq:number}>{return this.#json(`/sessions/${encoded(sessionId)}/journal?sinceSeq=${sinceSeq}`);}
   async sessionProposals(sessionId:string):Promise<readonly SessionProposal[]>{const body=await this.#json<{proposals:readonly SessionProposal[]}>(`/sessions/${encoded(sessionId)}/proposals`);return body.proposals;}
   async proposeMove(sessionId:string,nodeId:string,moveUci:string):Promise<SessionProposal>{const body=await this.#json<{proposal:SessionProposal}>(`/sessions/${encoded(sessionId)}/proposals`,{method:"POST",body:{nodeId,moveUci}});return body.proposal;}
@@ -789,6 +797,11 @@ export class DrillApi implements DrillClientApi {
   castVote(sessionId:string,windowId:string,choiceUci:string,voterKey?:string):Promise<VoteTally>{return this.#json(`/sessions/${encoded(sessionId)}/votes`,{method:"POST",body:{op:"cast",windowId,choiceUci,...(voterKey===undefined?{}:{voterKey})}});}
   async inviteToSession(sessionId:string,input:{readonly leg?:1|2;readonly handle?:string;readonly externalChallengeUrl?:string}):Promise<SessionInvitation>{const body=await this.#json<{invitation:SessionInvitation}>(`/sessions/${encoded(sessionId)}/invitations`,{method:"POST",body:input});return body.invitation;}
   async importArenaLeg(sessionId:string,leg:1|2,pgn:string,writerId:string,result?:ArenaLeg["result"]):Promise<ArenaLeg>{const query=result===undefined||result===null?"":`?${new URLSearchParams({result})}`;const response=await this.#response(`/sessions/${encoded(sessionId)}/legs/${leg}/pgn${query}`,{method:"POST",writerId,rawBody:pgn,headers:{"content-type":"text/x-chess-pgn"}});return ((await response.json()) as {leg:ArenaLeg}).leg;}
+  async matchOperation(sessionId:string,op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume",writerId?:string):Promise<MatchState>{const body=await this.#json<{match:MatchState}>(`/sessions/${encoded(sessionId)}/match`,{method:"POST",...(writerId===undefined?{}:{writerId}),body:{op}});return body.match;}
+  async sessionLinks(sessionId:string):Promise<readonly SessionJoinLink[]>{const body=await this.#json<{links:readonly SessionJoinLink[]}>(`/sessions/${encoded(sessionId)}/links`);return body.links;}
+  mintSessionLink(sessionId:string,input:{readonly matchSlot?:"white"|"black";readonly invitedRole:"participant"|"spectator";readonly invitedHandle?:string;readonly expiresInDays?:number}):Promise<{readonly id:string;readonly token:string;readonly url:string}>{return this.#json(`/sessions/${encoded(sessionId)}/links`,{method:"POST",body:input});}
+  async revokeSessionLink(sessionId:string,linkId:string):Promise<void>{await this.#json(`/sessions/${encoded(sessionId)}/links/${encoded(linkId)}`,{method:"POST",body:{op:"revoke"}});}
+  redeemSessionLink(token:string):Promise<{readonly session:LiveSession;readonly runId:string}>{return this.#json(`/api/shared/${encoded(token)}/join`,{method:"POST",body:{}});}
 
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection> {
     return this.#json("/select-move", { method: "POST", body: input });

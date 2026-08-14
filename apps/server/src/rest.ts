@@ -60,6 +60,22 @@ function jsonWithCookie(status: number, value: unknown, cookie: string): Respons
   });
 }
 
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function sessionJoinPage(token: string, join: { readonly title: string; readonly hostHandle: string }): Response {
+  const tokenLiteral = JSON.stringify(token);
+  return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escapeHtml(join.title)}</title></head><body><main><h1>${escapeHtml(join.title)}</h1><p>Hosted by @${escapeHtml(join.hostHandle)}</p><p>Sign in or create a learner account to take this seat. No position or evidence is disclosed by this page.</p><form id="join-form"><label>Handle <input name="handle" autocomplete="username" required></label><label>Password <input name="password" type="password" minlength="10" maxlength="256" required></label><button name="action" value="login" type="submit">Sign in and join</button><button name="action" value="register" type="submit">Register and join</button></form><p id="join-error" role="alert"></p></main><script>document.getElementById("join-form").addEventListener("submit",async(event)=>{event.preventDefault();const form=new FormData(event.currentTarget);const action=event.submitter.value;const credentials=await fetch("/auth/"+action,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:form.get("handle"),password:form.get("password")})});if(!credentials.ok){document.getElementById("join-error").textContent="Those account details were not accepted.";return;}const joined=await fetch("/api/shared/"+encodeURIComponent(${tokenLiteral})+"/join",{method:"POST"});if(!joined.ok){document.getElementById("join-error").textContent="This invitation is no longer available.";return;}const result=await joined.json();location.assign("/live/session/"+encodeURIComponent(result.session.id));});</script></body></html>`, {
+    status: 200,
+    headers: { "cache-control": "no-store", "content-type": "text/html; charset=utf-8" },
+  });
+}
+
 function invalid(message: string): ServerError {
   return new ServerError("INVALID_REQUEST", message);
 }
@@ -462,6 +478,8 @@ export function errorResponse(error: unknown): Response {
                 error.code === "SHAPE_ID_NOT_YOURS" ||
                 error.code === "DRAFT_STALE" ||
                 error.code === "BOARD_HELD" ||
+                error.code === "MATCH_LIVE" ||
+                error.code === "MATCH_MAINLINE_LOCKED" ||
                 error.code === "LEASE_MOVED" ||
                 error.code === "VOTE_WINDOW_CLOSED"
                 ? 409
@@ -508,16 +526,16 @@ function parseRunRoute(
 
 function parseSessionRoute(pathname: string): {
   readonly sessionId?: string;
-  readonly resource?: "journal" | "board" | "proposals" | "votes" | "invitations" | "legs";
+  readonly resource?: "journal" | "board" | "proposals" | "votes" | "invitations" | "legs" | "match" | "links";
   readonly itemId?: string;
   readonly pgn?: true;
 } | undefined {
-  const match = /^\/sessions(?:\/([^/]+)(?:\/(journal|board|proposals|votes|invitations|legs)(?:\/([^/]+))?(?:\/(pgn))?)?)?$/.exec(pathname);
+  const match = /^\/sessions(?:\/([^/]+)(?:\/(journal|board|proposals|votes|invitations|legs|match|links)(?:\/([^/]+))?(?:\/(pgn))?)?)?$/.exec(pathname);
   if (match === null) return undefined;
   try {
     return Object.freeze({
       ...(match[1] === undefined ? {} : { sessionId: decodeURIComponent(match[1]) }),
-      ...(match[2] === undefined ? {} : { resource: match[2] as "journal" | "board" | "proposals" | "votes" | "invitations" | "legs" }),
+      ...(match[2] === undefined ? {} : { resource: match[2] as "journal" | "board" | "proposals" | "votes" | "invitations" | "legs" | "match" | "links" }),
       ...(match[3] === undefined ? {} : { itemId: decodeURIComponent(match[3]) }),
       ...(match[4] === undefined ? {} : { pgn: true as const }),
     });
@@ -652,14 +670,24 @@ export function createRestHandler(
         try { return json(200, service.publicStory(decodeURIComponent(publicStoryRoute[1]!))); }
         catch { return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } }); }
       }
+      const publicJoinRoute = /^\/api\/shared\/([^/]+)\/join$/.exec(url.pathname);
+      if (publicJoinRoute !== null) {
+        if(live===undefined)return json(404,{error:{code:"NOT_FOUND",message:"Route not found"}});
+        const token=decodeURIComponent(publicJoinRoute[1]!);
+        if(request.method==="GET"){try{return json(200,live.publicJoin(token));}catch{return json(404,{error:{code:"NOT_FOUND",message:"Route not found"}});}}
+        if(request.method==="POST"){try{return json(200,live.join(token,authenticate()));}catch{return json(404,{error:{code:"NOT_FOUND",message:"Route not found"}});}}
+        return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
+      }
       const publicCardRoute = /^\/shared\/([^/]+)$/.exec(url.pathname);
       if (request.method === "GET" && publicCardRoute !== null) {
-        let card: ReturnType<RunService["publicStory"]>;
-        try { card = service.publicStory(decodeURIComponent(publicCardRoute[1]!)); }
-        catch { return json(404, { error: { code: "NOT_FOUND", message: "Route not found" } }); }
-        const escape = (value: string) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
-        const moments = card.moments.map((moment) => `<li>${escape(moment.sentences.join(" "))}</li>`).join("");
-        return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(card.title)}</title></head><body><main><h1>${escape(card.title)}</h1><p>${escape(String(card.outcome.result ?? card.outcome.kind))}</p>${card.moments[0] === undefined ? "" : `<pre aria-label="Chessboard">${escape(card.moments[0].fen)}</pre>`}<ol>${moments}</ol><a href="${escape(card.productLink)}">Tabiya</a></main></body></html>`, { status: 200, headers: { "cache-control": "no-store", "content-type": "text/html; charset=utf-8" } });
+        const token=decodeURIComponent(publicCardRoute[1]!);
+        const escape = escapeHtml;
+        try{
+          const card=service.publicStory(token),moments=card.moments.map((moment) => `<li>${escape(moment.sentences.join(" "))}</li>`).join("");
+          return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(card.title)}</title></head><body><main><h1>${escape(card.title)}</h1><p>${escape(String(card.outcome.result ?? card.outcome.kind))}</p>${card.moments[0] === undefined ? "" : `<pre aria-label="Chessboard">${escape(card.moments[0].fen)}</pre>`}<ol>${moments}</ol><a href="${escape(card.productLink)}">Tabiya</a></main></body></html>`, { status: 200, headers: { "cache-control": "no-store", "content-type": "text/html; charset=utf-8" } });
+        }catch{
+          try{if(live===undefined)throw new Error();return sessionJoinPage(token,live.publicJoin(token));}catch{return json(404,{error:{code:"NOT_FOUND",message:"Route not found"}});}
+        }
       }
       if (url.pathname === "/shapes/drafts") {
         if (shapeStudio === undefined) throw new ServerError("STORAGE_FAILURE", "Shape Studio is not configured");
@@ -846,11 +874,12 @@ export function createRestHandler(
         if (sessionRoute.sessionId === undefined) {
           if (request.method === "GET") return json(200, { sessions: live.list(principal) });
           if (request.method === "POST") {
-            requireJson(request); const body=closedRecord(await parseBody(request),"/",["runId","kind","title","boardControl","scheduledFor","voteAdapterHandle","rotationHandles"]);
+            requireJson(request); const body=closedRecord(await parseBody(request),"/",["runId","kind","title","boardControl","scheduledFor","voteAdapterHandle","rotationHandles","matchPlayers"]);
             const kind=requiredString(body.kind,"kind"); if(!["stream","academy","match"].includes(kind))throw invalid("kind must be stream, academy, or match");
-            const control=body.boardControl===undefined?undefined:requiredString(body.boardControl,"boardControl");if(control!==undefined&&!["free_claim","host_directed","rotation"].includes(control))throw invalid("boardControl is invalid");
+            const control=body.boardControl===undefined?undefined:requiredString(body.boardControl,"boardControl");if(control!==undefined&&!["free_claim","host_directed","rotation","match"].includes(control))throw invalid("boardControl is invalid");
             const handles=body.rotationHandles===undefined?undefined:Array.isArray(body.rotationHandles)&&body.rotationHandles.every((item)=>typeof item==="string")?body.rotationHandles as string[]:(()=>{throw invalid("rotationHandles must be an array of strings");})();
-            return json(201,{session:live.create(principal,{runId:requiredString(body.runId,"runId"),kind:kind as SessionKind,title:requiredString(body.title,"title"),...(control===undefined?{}:{boardControl:control as BoardControl}),...(body.scheduledFor===undefined?{}:{scheduledFor:requiredString(body.scheduledFor,"scheduledFor")}),...(body.voteAdapterHandle===undefined?{}:{voteAdapterHandle:requiredString(body.voteAdapterHandle,"voteAdapterHandle")}),...(handles===undefined?{}:{rotationHandles:handles})})});
+            const players=body.matchPlayers===undefined?undefined:closedRecord(body.matchPlayers,"/matchPlayers",["white","black"]);
+            return json(201,{session:live.create(principal,{runId:requiredString(body.runId,"runId"),kind:kind as SessionKind,title:requiredString(body.title,"title"),...(control===undefined?{}:{boardControl:control as BoardControl}),...(body.scheduledFor===undefined?{}:{scheduledFor:requiredString(body.scheduledFor,"scheduledFor")}),...(body.voteAdapterHandle===undefined?{}:{voteAdapterHandle:requiredString(body.voteAdapterHandle,"voteAdapterHandle")}),...(handles===undefined?{}:{rotationHandles:handles}),...(players===undefined?{}:{matchPlayers:{...(players.white===undefined?{}:{white:requiredString(players.white,"matchPlayers.white")}),...(players.black===undefined?{}:{black:requiredString(players.black,"matchPlayers.black")})}})})});
           }
           return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
         }
@@ -861,6 +890,12 @@ export function createRestHandler(
         }
         if(sessionRoute.resource==="journal"&&request.method==="GET")return json(200,live.journal(sid,principal,parseSinceSeq(url)));
         if(sessionRoute.resource==="board"&&request.method==="POST"){requireJson(request);const body=closedRecord(await parseBody(request),"/",["op","handle"]);const op=requiredString(body.op,"op");if(!["offer","withdraw","advance","reclaim"].includes(op))throw invalid("invalid board operation");return json(200,{session:live.board(sid,principal,writerId(request),{op:op as "offer"|"withdraw"|"advance"|"reclaim",...(body.handle===undefined?{}:{handle:requiredString(body.handle,"handle")})})});}
+        if(sessionRoute.resource==="match"&&request.method==="POST"){requireJson(request);const body=closedRecord(await parseBody(request),"/",["op"]),op=requiredString(body.op,"op");if(!["propose_pause","accept_pause","withdraw_pause","pause","resume"].includes(op))throw invalid("invalid match operation");return json(200,{match:live.matchOperation(sid,principal,request.headers.get("x-writer-id")??undefined,op as "propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume")});}
+        if(sessionRoute.resource==="links"){
+          if(request.method==="GET"&&sessionRoute.itemId===undefined)return json(200,{links:live.links(sid,principal)});
+          if(request.method==="POST"&&sessionRoute.itemId===undefined){requireJson(request);const body=closedRecord(await parseBody(request),"/",["matchSlot","invitedRole","invitedHandle","expiresInDays"]),role=requiredString(body.invitedRole,"invitedRole"),slot=body.matchSlot===undefined?undefined:requiredString(body.matchSlot,"matchSlot");if(role!=="participant"&&role!=="spectator")throw invalid("invitedRole must be participant or spectator");if(slot!==undefined&&slot!=="white"&&slot!=="black")throw invalid("matchSlot must be white or black");return json(201,live.mintLink(sid,principal,{invitedRole:role,...(slot===undefined?{}:{matchSlot:slot}),...(body.invitedHandle===undefined?{}:{invitedHandle:requiredString(body.invitedHandle,"invitedHandle")}),...(body.expiresInDays===undefined?{}:{expiresInDays:requiredSafeInteger(body.expiresInDays,"expiresInDays")})}));}
+          if(request.method==="POST"&&sessionRoute.itemId!==undefined){requireJson(request);const body=closedRecord(await parseBody(request),"/",["op"]);if(body.op!=="revoke")throw invalid("op must be revoke");live.revokeLink(sid,sessionRoute.itemId,principal);return json(200,{revoked:true});}
+        }
         if(sessionRoute.resource==="proposals"){
           if(request.method==="GET"&&sessionRoute.itemId===undefined)return json(200,{proposals:live.proposals(sid,principal)});
           if(request.method==="POST"){requireJson(request);const body=await parseBody(request);if(sessionRoute.itemId===undefined)return json(201,{proposal:live.propose(sid,principal,requiredString(body.nodeId,"nodeId"),requiredString(body.moveUci,"moveUci"))});const op=requiredString(body.op,"op");if(op!=="apply"&&op!=="decline")throw invalid("op must be apply or decline");return json(200,{proposal:live.resolveProposal(sid,sessionRoute.itemId,principal,writerId(request),op)});}

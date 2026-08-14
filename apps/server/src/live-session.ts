@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
 
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
@@ -7,8 +7,8 @@ import { canonicalRunStart, commitMove, fork, type DrillRun } from "@chess-tabiy
 
 import { mayControlSession, mayPropose, mayVote, requireRead, requireWrite, type Principal } from "./authorization.js";
 import { ServerError } from "./errors.js";
-import type { ArenaLeg, BoardControl, LiveSession, LiveSessionDetail, SessionKind, SessionProposal, VoteOption, VoteTally } from "./live-types.js";
-import type { LeaseHolder, LiveSessionStorage, RunStorage } from "./storage.js";
+import type { ArenaLeg, BoardControl, LiveSession, LiveSessionDetail, LiveSessionSummary, MatchState, SessionKind, SessionProposal, VoteOption, VoteTally } from "./live-types.js";
+import type { LeaseHolder, LiveSessionStorage, PublicTokenRecord, RunRole, RunStorage } from "./storage.js";
 import type { RunService } from "./service.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 
@@ -53,6 +53,7 @@ export class LiveSessionService {
     readonly runId: string; readonly kind: SessionKind; readonly title: string;
     readonly boardControl?: BoardControl; readonly scheduledFor?: string;
     readonly voteAdapterHandle?: string; readonly rotationHandles?: readonly string[];
+    readonly matchPlayers?: { readonly white?: string; readonly black?: string };
   }): LiveSession {
     const { role } = requireRead(this.#storage,input.runId,principal);
     if (!mayControlSession(role)) throw new ServerError("FORBIDDEN","Only a host may create a live session");
@@ -68,12 +69,30 @@ export class LiveSessionService {
     });
     const boardControl=input.boardControl??"host_directed";
     if(boardControl==="rotation"&&(!rotation||rotation.length===0))throw new ServerError("INVALID_REQUEST","rotation board control requires rotationHandles");
+    let matchPlayers:{readonly whiteLearnerId:string|null;readonly blackLearnerId:string|null}|undefined;
+    if(boardControl==="match"){
+      if(input.kind!=="match")throw new ServerError("INVALID_REQUEST","match board control requires match session kind");
+      const stored=requireRead(this.#storage,input.runId,principal).stored.run;
+      if(stored.sessionKind!=="position"||stored.events.some((event)=>event.type==="move.committed"))throw new ServerError("INVALID_REQUEST","A native match requires an untouched position run");
+      const resolve=(handle:string|undefined)=>{if(handle===undefined)return null;const learner=this.#storage.learnerByHandle(handle.toLowerCase());if(learner===undefined)throw new ServerError("INVALID_REQUEST",`Unknown match player: ${handle}`);return learner.id;};
+      matchPlayers=Object.freeze({whiteLearnerId:resolve(input.matchPlayers?.white),blackLearnerId:resolve(input.matchPlayers?.black)});
+      if(matchPlayers.whiteLearnerId===null&&matchPlayers.blackLearnerId===null)throw new ServerError("INVALID_REQUEST","A native match needs at least one named player");
+      if(matchPlayers.whiteLearnerId!==null&&matchPlayers.whiteLearnerId===matchPlayers.blackLearnerId)throw new ServerError("INVALID_REQUEST","Match players must be distinct");
+    }else if(input.matchPlayers!==undefined)throw new ServerError("INVALID_REQUEST","matchPlayers requires match board control");
     return this.#storage.createLiveSession({id:randomUUID(),runId:input.runId,kind:input.kind,title:input.title,boardControl,
       ...(input.scheduledFor===undefined?{}:{scheduledFor:input.scheduledFor}),...(adapter===undefined?{}:{voteAdapterLearnerId:adapter.id}),
-      ...(rotation===undefined?{}:{rotation:Object.freeze(rotation)}),createdBy:principal.learnerId,at:this.#now()});
+      ...(rotation===undefined?{}:{rotation:Object.freeze(rotation)}),...(matchPlayers===undefined?{}:{matchPlayers}),createdBy:principal.learnerId,at:this.#now()});
   }
 
-  list(principal: Principal): readonly LiveSession[] { return this.#storage.listLiveSessions(principal.learnerId); }
+  list(principal: Principal): readonly LiveSessionSummary[] { return Object.freeze(this.#storage.listLiveSessions(principal.learnerId).map((session)=>{
+    const stored=this.#storage.read(session.runId);if(stored===undefined)throw new ServerError("STORAGE_FAILURE","Session run is missing");
+    const node=stored.run.nodes.find((candidate)=>candidate.id===stored.run.activeCursor.nodeId);if(node===undefined)throw new ServerError("STORAGE_FAILURE","Session cursor is missing");
+    const holder=this.#storage.learnerById(stored.activeWriterLearnerId);if(holder===undefined)throw new ServerError("STORAGE_FAILURE","Run lease holder is missing");
+    const main=stored.run.branches[0]!,plies=stored.run.nodes.filter((candidate)=>candidate.branchId===main.id&&candidate.parentId!==null);
+    const match=this.#storage.matchState(session.id);
+    const player=(learnerId:string|null)=>{if(learnerId===null)return null;const learner=this.#storage.learnerById(learnerId);if(learner===undefined)throw new ServerError("STORAGE_FAILURE","Match player is missing");return Object.freeze({learnerId:learner.id,handle:learner.handle});};
+    return Object.freeze({...session,board:Object.freeze({activeFen:node.fen,sideToMove:node.fen.split(" ")[1]==="w"?"white" as const:"black" as const,plyCount:plies.length,pausedAt:match?.pausedAt??null,leaseHeldBy:Object.freeze({learnerId:holder.id,handle:holder.handle}),lastMoveAt:plies.at(-1)?.createdAt??null,...(match===undefined?{}:{players:Object.freeze({white:player(match.whiteLearnerId),black:player(match.blackLearnerId)})})}),...(match===undefined?{}:{match})});
+  })); }
 
   detail(sessionId:string,principal:Principal):LiveSessionDetail {
     const session=this.#required(sessionId,principal);
@@ -81,8 +100,9 @@ export class LiveSessionService {
     const holder=this.#storage.learnerById(stored.activeWriterLearnerId);if(holder===undefined)throw new ServerError("STORAGE_FAILURE","Run lease holder is missing");
     const proposals=this.#storage.proposals(sessionId);
     const latest=this.#storage.voteWindow(sessionId);
+    const match=this.#storage.matchState(sessionId);
     return Object.freeze({session,role:this.#storage.runRole(session.runId,principal.learnerId)!,activeNodeId:stored.run.activeCursor.nodeId,leaseHeldBy:{learnerId:holder.id,handle:holder.handle},grants:this.#storage.grants(session.runId),proposals,
-      ...(latest===undefined?{}:{vote:this.#tallyWithDerivedState(session,latest.id)}),invitations:this.#storage.invitations(sessionId),legs:this.#storage.arenaLegs(sessionId)});
+      ...(latest===undefined?{}:{vote:this.#tallyWithDerivedState(session,latest.id)}),invitations:this.#storage.invitations(sessionId),legs:this.#storage.arenaLegs(sessionId),...(match===undefined?{}:{match})});
   }
 
   close(sessionId:string,principal:Principal):LiveSession { const session=this.#requiredControl(sessionId,principal);return this.#storage.closeLiveSession(session.id,principal.learnerId,this.#now()); }
@@ -95,6 +115,44 @@ export class LiveSessionService {
     if(operation.op==="offer"&&learner===undefined)throw new ServerError("INVALID_REQUEST","offer requires a known handle");
     return this.#storage.boardOperation(session.id,principal.learnerId,{op:operation.op,...(learner===undefined?{}:{learnerId:learner.id}),...(operation.op==="reclaim"?{writerId}:{})},this.#now());
   }
+
+  matchOperation(sessionId:string,principal:Principal,writerId:string|undefined,op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume"):MatchState{
+    const session=this.#requiredOpen(sessionId,principal);
+    if(session.boardControl!=="match")throw new ServerError("INVALID_REQUEST","Operation requires a native match");
+    if(op==="resume"){
+      if(writerId===undefined)throw new ServerError("INVALID_REQUEST","resume requires x-writer-id");
+      const access=requireWrite(this.#storage,session.runId,principal,writerId);
+      const primary=access.stored.run.branches[0]!;
+      const tip=access.stored.run.nodes.filter((node)=>node.branchId===primary.id).sort((a,b)=>b.ply-a.ply)[0]!;
+      if(access.stored.run.activeCursor.nodeId!==tip.id){
+        if(this.#runs===undefined)throw new ServerError("STORAGE_FAILURE","Run service is required to resume a match");
+        this.#runs.rewind(session.runId,principal,writerId,{nodeId:tip.id},this.#now());
+      }
+    }
+    return this.#storage.updateMatchState(sessionId,principal.learnerId,op,this.#now());
+  }
+
+  mintLink(sessionId:string,principal:Principal,input:{readonly matchSlot?:"white"|"black";readonly invitedRole:RunRole;readonly invitedHandle?:string;readonly expiresInDays?:number}){
+    const session=this.#requiredControl(sessionId,principal);
+    if(session.closedAt!==undefined)throw new ServerError("INVALID_REQUEST","The live session is closed");
+    if(input.matchSlot!==undefined&&input.invitedRole!=="participant")throw new ServerError("INVALID_REQUEST","A match seat requires participant role");
+    if(input.matchSlot!==undefined){const state=this.#storage.matchState(sessionId);if(state===undefined)throw new ServerError("INVALID_REQUEST","A match seat requires a native match");if((input.matchSlot==="white"?state.whiteLearnerId:state.blackLearnerId)!==null)throw new ServerError("INVALID_REQUEST","The requested match seat is occupied");}
+    if(input.invitedHandle!==undefined&&this.#storage.learnerByHandle(input.invitedHandle.toLowerCase())===undefined)throw new ServerError("INVALID_REQUEST","Unknown invited handle");
+    const days=input.expiresInDays??14;if(!Number.isSafeInteger(days)||days<1||days>90)throw new ServerError("INVALID_REQUEST","expiresInDays must be 1–90");
+    if(this.#storage.sessionJoinTokens(sessionId,principal.learnerId).filter((item)=>item.revokedAt===null&&item.expiresAt>this.#now()&&item.usesRemaining>0).length>=50)throw new ServerError("INVALID_REQUEST","A session may have at most 50 active links");
+    const token=randomBytes(32).toString("base64url"),at=this.#now();
+    const record:Extract<PublicTokenRecord,{scope:"session_join"}>={id:`join-${randomUUID()}`,tokenHash:createHash("sha256").update(token).digest("hex"),scope:"session_join",sessionId,matchSlot:input.matchSlot??null,invitedRole:input.invitedRole,invitedHandle:input.invitedHandle?.toLowerCase()??null,expiresAt:new Date(Date.parse(at)+days*86_400_000).toISOString(),usesRemaining:1,createdBy:principal.learnerId,createdAt:at,revokedAt:null};
+    this.#storage.createSessionJoinToken(record);
+    return Object.freeze({id:record.id,token,url:`/shared/${token}`});
+  }
+
+  links(sessionId:string,principal:Principal){const session=this.#requiredControl(sessionId,principal);return Object.freeze(this.#storage.sessionJoinTokens(session.id,principal.learnerId).map(({tokenHash,...record})=>record));}
+
+  revokeLink(sessionId:string,linkId:string,principal:Principal):void{const session=this.#requiredControl(sessionId,principal);this.#storage.revokeSessionJoinToken(session.id,linkId,principal.learnerId,this.#now());}
+
+  publicJoin(token:string){const record=this.#storage.publicTokenByHash?.(createHash("sha256").update(token).digest("hex"));if(record?.scope!=="session_join")throw new ServerError("RUN_NOT_FOUND","Shared link not found");const session=this.#storage.liveSession(record.sessionId),host=session===undefined?undefined:this.#storage.learnerById(session.createdBy);if(session===undefined||host===undefined||session.closedAt!==undefined)throw new ServerError("RUN_NOT_FOUND","Shared link not found");return Object.freeze({title:session.title,hostHandle:host.handle});}
+
+  join(token:string,principal:Principal){const redeemed=this.#storage.redeemSessionJoinToken(createHash("sha256").update(token).digest("hex"),principal.learnerId,principal.handle,this.#now());if(redeemed===undefined)throw new ServerError("RUN_NOT_FOUND","Shared link not found");return Object.freeze({session:redeemed.session,runId:redeemed.session.runId});}
 
   propose(sessionId:string,principal:Principal,nodeId:string,moveUci:string):SessionProposal {
     const session=this.#requiredOpen(sessionId,principal);const role=this.#storage.runRole(session.runId,principal.learnerId)!;
@@ -163,7 +221,7 @@ export class LiveSessionService {
   }
 
   importLeg(sessionId:string,legNo:1|2,principal:Principal,writerId:string,pgn:string,result?:ArenaLeg["result"]):ArenaLeg {
-    const session=this.#requiredOpen(sessionId,principal);if(session.kind!=="match")throw new ServerError("INVALID_REQUEST","PGN legs require a match session");
+    const session=this.#requiredOpen(sessionId,principal);if(session.kind!=="match"||session.boardControl==="match")throw new ServerError("INVALID_REQUEST","PGN legs require an imported Arena match session");
     const role=this.#storage.runRole(session.runId,principal.learnerId)!;const invitation=this.#storage.invitations(sessionId).find((item)=>item.leg===legNo&&item.invitedHandle===principal.handle);
     if(!mayControlSession(role)&&invitation===undefined)throw new ServerError("FORBIDDEN","Only the host or invited learner may import this leg");
     let parsed;try{parsed=parsePgnMainline(pgn);}catch(error){if(error instanceof PgnImportError)throw new ServerError("INVALID_REQUEST",error.message);throw error;}

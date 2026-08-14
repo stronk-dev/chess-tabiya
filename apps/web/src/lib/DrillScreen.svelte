@@ -56,6 +56,7 @@
     error?: string | undefined;
     capabilities?: Capabilities | undefined;
     viewerRole?: RunRole | undefined;
+    boardSide?: "white" | "black" | undefined;
     assistanceStorage?: PreferenceStorage | undefined;
     onMove: (uci: string) => void | Promise<void>;
     onRewind: (target: RewindTarget) => void | Promise<void>;
@@ -89,6 +90,7 @@
     error,
     capabilities,
     viewerRole = "host",
+    boardSide,
     assistanceStorage,
     onMove,
     onRewind,
@@ -661,7 +663,7 @@
             {#key `${displayedNode.id}:${groupOpen ? groupCandidates.length : -1}`}
               <Chessboard
                 fen={displayedNode.fen}
-                {startSide}
+                startSide={boardSide ?? startSide}
                 lastMove={displayedNode.moveUci}
                 disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined || terminalEvent !== undefined}
                 onMove={boardMove}

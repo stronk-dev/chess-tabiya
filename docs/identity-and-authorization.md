@@ -38,6 +38,11 @@ claim follows the board-control policy documented in `live-sessions.md`: a sessi
 offer or rotate possession, while a session-less multi-writer run is host-directed.
 Claims use a transactional current-holder witness; there is no timeout.
 
+For a native match, the board policy also checks the active FEN's side to move against
+the learner seated for that color. After a successful ply only the next seated learner
+can claim. During an agreed or coach-imposed pause, write-capable grantees may claim for
+rehearsal while the match mainline remains locked.
+
 ## Persistence and lifecycle
 
 SQLite migration 2 adds learners, hashed sessions, grants, immutable ownership
@@ -59,6 +64,13 @@ opponent selector require a session. Run reads additionally require a grant;
 missing grants return 404 to avoid disclosing run existence. Grant management and
 lease claim use JSON POST bodies and retain the device writer header where it is
 part of the concurrency operation.
+
+`/shared/:token` is the sole public capability-token namespace. `story_read` can read a
+bounded terminal story. `session_join` can do nothing anonymously: after login or
+registration it atomically grants the invited role and, when declared, occupies one open
+match seat. It never becomes a writer id and cannot dispatch a run mutation. Only hashes
+are stored; join links are single-use by default, expiring, handle-bindable, and
+revocable. Every invalid-token state deliberately looks like the same 404.
 
 ## Operational limits
 

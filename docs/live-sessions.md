@@ -14,7 +14,9 @@ spectators are read-only. Above that lease, a live session chooses one board pol
 - `free_claim`: any write-capable grantee may claim the board;
 - `host_directed`: the host may claim at any time, while a participant needs an open
   handoff from the host; or
-- `rotation`: only the learner at the current rotation cursor may claim.
+- `rotation`: only the learner at the current rotation cursor may claim; or
+- `match`: while live, only the learner seated for the position's side to move may
+  claim; while paused, any write-capable grantee may claim for rehearsal.
 
 A session-less run derives the same policy: one write-capable learner means
 `free_claim`; multiple means `host_directed`. Claims execute in one SQLite transaction
@@ -27,6 +29,31 @@ author is the holder named by the last board grant whose run-sequence anchor is 
 less than `S`. Plies predating the session belong to the run owner. Imported Arena plies
 are attributed by their leg record instead, because the importer is not necessarily the
 player.
+
+## Native human matches
+
+A native match is one untouched position run with a `match` session and two learner
+seats. The host may occupy a seat, coach without playing, or leave one seat open for a
+friend link. The server derives each move's runtime actor from the seated learner and
+the run's reference side; clients cannot label an actor or submit an engine selection.
+Every turn remains attributable through the possession journal.
+
+Possession follows the FEN's side to move. After one learner commits, their browser
+becomes a follower; the other browser observes the event and claims automatically when
+its learner owns the new turn. A coach and the wrong-side player receive `BOARD_HELD`.
+Native matches have no clocks, ratings, matchmaking pool, resignation event, or agreed-
+draw event.
+
+Live play is mainline-only. Rewind, fork, reveal, group/simulation mutations, duplicate,
+and opposite-side replay return `MATCH_LIVE`. Either player may propose a pause and only
+the other may accept; a non-playing host may pause for coaching. A pause is consent to
+use the ordinary rehearsal loop: a write-capable member may claim, rewind, fork, compare,
+and reveal. The mainline tip remains locked. Resume rewinds the cursor to the preserved
+mainline tip without deleting rehearsal branches and restores side-to-move possession.
+The next live commit closes the staged-evidence delivery window again.
+
+The mainline stays in history but is not a countable solo attempt. Rehearsal branches
+remain ordinary attempts belonging to the learner who created them.
 
 ## Proposals and voting
 
@@ -60,8 +87,11 @@ journal entry commit atomically.
 
 ## HTTP and browser surfaces
 
-`/sessions` lists and creates sessions. Nested routes expose session detail, the journal,
-board handoff, proposals, vote windows, invitations, and Arena leg imports. All use the
+`/sessions` lists and creates sessions. Each summary includes the active FEN, side to
+move, mainline ply count, pause state, lease holder, last-move time, and match players,
+allowing the `/live` simul wall to poll all granted boards in one request. Nested routes
+expose session detail, the journal, board handoff, match pause operations, friend links,
+proposals, vote windows, invitations, and Arena leg imports. All use the
 existing authenticated cookie and per-run grants; an ungranted caller receives the same
 not-found response as an unknown run.
 
@@ -74,6 +104,21 @@ surface.
 When public event delivery stops at an undisclosed engine-evidence barrier, the event
 page returns `withheld: true`. Followers render that fact instead of appearing frozen.
 
+## Friend links
+
+Public story cards and session invitations share one `public_tokens` table and one
+`/shared/:token` namespace. Only a SHA-256 token hash is persisted. A story token is
+read-only; a `session_join` token is an invitation to authenticate as oneself, not a run
+write credential. It may grant participant or spectator access and may bind a participant
+to one open White or Black match seat. A spectator token cannot carry a match seat.
+
+The anonymous join page renders only the session title, host handle, and sign-in/register
+form—never a FEN, move, or evidence—and is `no-store`. Redemption, grant, optional
+seating, usage decrement, and `member.joined` journal entry commit atomically. Links
+default to one use and 14 days, cap at 90 days and 50 active links per session, can be
+handle-bound, and are individually revocable. Unknown, wrong-scope, expired, exhausted,
+revoked, and wrong-handle tokens all return the same not-found response.
+
 ## Accepted limitation
 
 A streamer cannot be forced to play blind while their audience sees more evidence: the
@@ -81,10 +126,11 @@ streamer can grant and use a second spectator account. Tabiya therefore gives pl
 spectator the same disclosure projection. It protects both from premature evidence; it
 does not pretend to prevent a host from cheating on themselves.
 
-The live platform uses authenticated polling rather than WebSockets or SSE. Story cards now
-have a read-only anonymous token, but live sessions themselves still have no anonymous join
-token, native clocks, matchmaking, or provider-specific challenge API. External challenge
-URLs are opaque HTTPS links supplied by the host.
+The live platform uses authenticated polling rather than WebSockets or SSE. External
+challenge URLs remain opaque HTTPS links supplied by the host; native clocks,
+matchmaking, and provider-specific challenge APIs do not ship.
 
-SQLite migration 9 adds only the live-session tables and indexes. The run schema remains
-v0.8 and pack schema remains v0.9.
+SQLite migration 9 adds the original live-session tables. Migration 14 rebuilds the
+closed session/journal/token vocabularies and adds `match_states`; it disables foreign
+keys before its transaction and verifies `foreign_key_check` before commit. The run
+schema remains v0.10 and pack schema remains v0.13.

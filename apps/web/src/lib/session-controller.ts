@@ -59,6 +59,8 @@ interface ControllerOptions {
   readonly onRunStarted?: (target: StartedRun) => void;
 }
 
+export type MatchMode = "live" | "paused";
+
 type Subscriber = (state: DrillSessionState) => void;
 type StatePatch = {
   [Key in keyof DrillSessionState]?: DrillSessionState[Key] | undefined;
@@ -166,6 +168,7 @@ export class DrillSessionController {
   #dismissedCheckpointSeq = 0;
   #lastFollowerRevealSeq = 0;
   #subscribingStore: RunStateStore | undefined;
+  #matchMode: MatchMode | undefined;
 
   constructor(api: DrillClientApi, options: ControllerOptions = {}) {
     this.#api = api;
@@ -186,9 +189,10 @@ export class DrillSessionController {
     return () => this.#subscribers.delete(subscriber);
   }
 
-  async resume(runId: string): Promise<void> {
+  async resume(runId: string, options: { readonly matchMode?: MatchMode } = {}): Promise<void> {
     this.#patch({ busy: true, error: undefined });
     try {
+      this.#matchMode = options.matchMode;
       const eventPage = await this.#api.events(runId, 0);
       const started = eventPage.events[0];
       if (started?.type !== "run.started") {
@@ -290,6 +294,9 @@ export class DrillSessionController {
         this.#patch({ busy: false });
         return;
       }
+      if (this.#matchMode === "live") {
+        store.follow();
+      }
       await this.#playOpponentIfNeeded();
       this.#patch({ busy: false });
     } catch (error) {
@@ -304,7 +311,11 @@ export class DrillSessionController {
     }
     const session = WriterSession.claimFor(runId, this.#storage);
     await this.#api.claimLease(runId, session.writerId);
-    await this.resume(runId);
+    await this.resume(runId, { ...(this.#matchMode === undefined ? {} : { matchMode: this.#matchMode }) });
+  }
+
+  setMatchMode(mode: MatchMode | undefined): void {
+    this.#matchMode = mode;
   }
 
   async continueCheckpoint(): Promise<void> {
@@ -434,6 +445,7 @@ export class DrillSessionController {
     this.#store = undefined;
     this.#capabilities = undefined;
     this.#dismissedCheckpointSeq = 0;
+    this.#matchMode = undefined;
     this.#state = Object.freeze({ busy: false });
     this.#emit();
   }
@@ -445,6 +457,7 @@ export class DrillSessionController {
   }
 
   async #playOpponentIfNeeded(): Promise<void> {
+    if (this.#matchMode !== undefined) return;
     const pack = this.#state.pack;
     const capabilities = this.#capabilities;
     if (capabilities === undefined) throw new Error("Capabilities are unavailable");

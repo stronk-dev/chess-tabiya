@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { feedbackDeliveryOpen } from "@chess-tabiya/runtime";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { IdentityService } from "./identity.js";
 import { LiveSessionService, deriveMoveAuthorship } from "./live-session.js";
@@ -21,11 +22,11 @@ const cookie=(response:Response)=>response.headers.get("set-cookie")!.split(";",
 describe("live session platform",()=>{
   const stores:SQLiteRunStorage[]=[];
   afterEach(()=>{for(const store of stores.splice(0))store.close();});
-  function setup(){const storage=new SQLiteRunStorage(":memory:",{onMigration:()=>{}});stores.push(storage);const identity=new IdentityService(storage,{cookieSecure:false,derive});const queue=new EvidenceJobQueue(executor);const service=new RunService(storage,{evidenceQueue:queue});const live=new LiveSessionService(storage,{now:()=>"2026-08-13T12:00:00.000Z",runService:service});return {storage,queue,live,handler:createRestHandler(service,undefined,undefined,identity,undefined,live)};}
+  function setup(){const storage=new SQLiteRunStorage(":memory:",{onMigration:()=>{}});stores.push(storage);const identity=new IdentityService(storage,{cookieSecure:false,derive});const queue=new EvidenceJobQueue(executor);const service=new RunService(storage,{evidenceQueue:queue,progressStorage:storage});const live=new LiveSessionService(storage,{now:()=>"2026-08-13T12:00:00.000Z",runService:service});return {storage,queue,live,handler:createRestHandler(service,undefined,undefined,identity,undefined,live)};}
   async function register(handler:ReturnType<typeof createRestHandler>,handle:string){const response=await request(handler,"POST","/auth/register",{body:{handle,password:PASSWORD}});return {cookie:cookie(response),learner:(await response.json() as any).learner as {id:string;handle:string}};}
 
   it("migrates to the live schema and enforces board control, proposals, and namespaced advisory votes",async()=>{
-    const {storage,queue,handler}=setup();expect(STORAGE_VERSION).toBe(13);
+    const {storage,queue,handler}=setup();expect(STORAGE_VERSION).toBe(14);
     const alice=await register(handler,"alice");const bob=await register(handler,"bob");const chat=await register(handler,"chatbridge");
     const run={id:"live-run",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:7};
     expect((await request(handler,"POST","/runs",{cookie:alice.cookie,writerId:"writer-a",body:run})).status).toBe(201);
@@ -83,5 +84,54 @@ describe("live session platform",()=>{
     expect(new Set([leg1.branchId,leg2.branchId]).size).toBe(2);
     expect(run.branches.filter((branch)=>branch.id===leg1.branchId||branch.id===leg2.branchId).every((branch)=>branch.forkNodeId===root.id)).toBe(true);
     expect(run.events.some((event)=>event.type==="opponent.move_selected")).toBe(false);
+  });
+
+  it("alternates a native match, gates live rehearsal, and seats a friend through one-use public tokens",async()=>{
+    const {storage,live,handler}=setup();const coach=await register(handler,"coach");const white=await register(handler,"white");const black=await register(handler,"black");
+    await request(handler,"POST","/runs",{cookie:coach.cookie,writerId:"writer-c",body:{id:"native-match",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:3}});
+    const created=await request(handler,"POST","/sessions",{cookie:coach.cookie,body:{runId:"native-match",kind:"match",title:"Student board",boardControl:"match",matchPlayers:{white:"white",black:"black"}}});expect(created.status).toBe(201);const sid=(await created.json() as any).session.id as string;
+    expect((await request(handler,"POST","/runs/native-match/lease",{cookie:coach.cookie,writerId:"coach-live",body:{expectedHolderLearnerId:coach.learner.id}})).status).toBe(409);
+    expect((await request(handler,"POST","/runs/native-match/lease",{cookie:white.cookie,writerId:"writer-w",body:{expectedHolderLearnerId:coach.learner.id}})).status).toBe(200);
+    const labelled=await request(handler,"POST","/runs/native-match/moves",{cookie:white.cookie,writerId:"writer-w",body:{uci:"e2e4",actor:"user"}});expect(labelled.status).toBe(400);
+    expect((await request(handler,"POST","/runs/native-match/moves",{cookie:white.cookie,writerId:"writer-w",body:{uci:"e2e4"}})).status).toBe(200);
+    const stolen=await request(handler,"POST","/runs/native-match/lease",{cookie:white.cookie,writerId:"writer-w2",body:{expectedHolderLearnerId:white.learner.id}});expect(stolen.status).toBe(409);expect((await stolen.json() as any).error.code).toBe("BOARD_HELD");
+    expect((await request(handler,"POST","/runs/native-match/lease",{cookie:black.cookie,writerId:"writer-b",body:{expectedHolderLearnerId:white.learner.id}})).status).toBe(200);
+    expect((await request(handler,"POST","/runs/native-match/moves",{cookie:black.cookie,writerId:"writer-b",body:{uci:"e7e5"}})).status).toBe(200);
+    const authors=deriveMoveAuthorship(storage.read("native-match")!.run,storage.sessionJournal(sid,0),coach.learner.id);expect(authors.map((item)=>item.learnerId)).toEqual([white.learner.id,black.learner.id]);
+    const beforePause=await request(handler,"POST","/runs/native-match/rewind",{cookie:black.cookie,writerId:"writer-b",body:{nodeId:storage.read("native-match")!.run.nodes[0]!.id}});expect(beforePause.status).toBe(409);expect((await beforePause.json() as any).error.code).toBe("MATCH_LIVE");
+    const liveDuplicate=await request(handler,"POST","/runs/native-match/duplicate",{cookie:black.cookie,writerId:"writer-b",body:{id:"escaped-copy",seed:31}});expect(liveDuplicate.status).toBe(409);expect((await liveDuplicate.json() as any).error.code).toBe("MATCH_LIVE");
+    const liveFlip=await request(handler,"POST","/runs/native-match/flip",{cookie:black.cookie,body:{nodeId:storage.read("native-match")!.run.activeCursor.nodeId}});expect(liveFlip.status).toBe(409);expect((await liveFlip.json() as any).error.code).toBe("MATCH_LIVE");
+    await request(handler,"POST",`/sessions/${sid}/match`,{cookie:white.cookie,body:{op:"propose_pause"}});
+    expect((await request(handler,"POST",`/sessions/${sid}/match`,{cookie:white.cookie,body:{op:"accept_pause"}})).status).toBe(400);
+    expect((await request(handler,"POST",`/sessions/${sid}/match`,{cookie:black.cookie,body:{op:"accept_pause"}})).status).toBe(200);
+    expect((await request(handler,"POST","/runs/native-match/lease",{cookie:white.cookie,writerId:"writer-w",body:{expectedHolderLearnerId:black.learner.id}})).status).toBe(200);
+    const locked=await request(handler,"POST","/runs/native-match/moves",{cookie:white.cookie,writerId:"writer-w",body:{uci:"g1f3"}});expect(locked.status).toBe(409);expect((await locked.json() as any).error.code).toBe("MATCH_MAINLINE_LOCKED");
+    const root=storage.read("native-match")!.run.nodes[0]!.id;
+    expect((await request(handler,"POST","/runs/native-match/rewind",{cookie:white.cookie,writerId:"writer-w",body:{nodeId:root}})).status).toBe(200);
+    const alternative=await request(handler,"POST","/runs/native-match/moves",{cookie:white.cookie,writerId:"writer-w",body:{uci:"d2d4"}});expect(alternative.status).toBe(200);expect(storage.read("native-match")!.run.branches).toHaveLength(2);
+    expect((await request(handler,"POST","/runs/native-match/reveal",{cookie:white.cookie,writerId:"writer-w",body:{}})).status).toBe(200);
+    const branchIds=storage.read("native-match")!.run.branches.map((branch)=>branch.id);expect((await request(handler,"POST","/runs/native-match/compare",{cookie:white.cookie,body:{branchIds}})).status).toBe(200);
+    expect((await request(handler,"POST","/runs/native-match/duplicate",{cookie:white.cookie,writerId:"writer-w",body:{id:"paused-copy",seed:32}})).status).toBe(201);
+    expect((await request(handler,"POST","/runs/native-match/flip",{cookie:white.cookie,body:{nodeId:root}})).status).toBe(201);
+    expect(()=>live.importLeg(sid,1,{learnerId:coach.learner.id,handle:"coach"},"writer-w","1. e4 *")).toThrow("imported Arena");
+    expect((await request(handler,"POST",`/sessions/${sid}/match`,{cookie:white.cookie,writerId:"writer-w",body:{op:"resume"}})).status).toBe(200);
+    expect(storage.read("native-match")!.run.activeCursor.branchId).toBe(storage.read("native-match")!.run.branches[0]!.id);
+    expect((await request(handler,"POST","/runs/native-match/moves",{cookie:white.cookie,writerId:"writer-w",body:{uci:"g1f3"}})).status).toBe(200);expect(feedbackDeliveryOpen(storage.read("native-match")!.run)).toBe(false);
+    expect(storage.progress(coach.learner.id).find((item)=>item.runId==="native-match"&&item.branchId===storage.read("native-match")!.run.branches[0]!.id)).toMatchObject({countable:false});
+    expect(storage.progress(white.learner.id).filter((item)=>item.runId==="native-match")).toEqual(expect.arrayContaining([expect.objectContaining({countable:true})]));
+    const summaries=await (await request(handler,"GET","/sessions",{cookie:coach.cookie})).json() as any;expect(summaries.sessions[0].board).toMatchObject({sideToMove:"black",plyCount:3,pausedAt:null,players:{white:{handle:"white"},black:{handle:"black"}}});
+
+    await request(handler,"POST","/runs",{cookie:coach.cookie,writerId:"writer-invite",body:{id:"invite-match",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:4}});
+    const inviteSession=await request(handler,"POST","/sessions",{cookie:coach.cookie,body:{runId:"invite-match",kind:"match",title:"Friend board",boardControl:"match",matchPlayers:{white:"coach"}}});const inviteSid=(await inviteSession.json() as any).session.id as string;
+    const bad=await request(handler,"POST",`/sessions/${inviteSid}/links`,{cookie:coach.cookie,body:{matchSlot:"black",invitedRole:"spectator"}});expect(bad.status).toBe(400);
+    const minted=await request(handler,"POST",`/sessions/${inviteSid}/links`,{cookie:coach.cookie,body:{matchSlot:"black",invitedRole:"participant",invitedHandle:"black"}});expect(minted.status).toBe(201);const token=(await minted.json() as any).token as string;
+    const page=await request(handler,"GET",`/shared/${token}`);expect(page.status).toBe(200);const html=await page.text();expect(html).toContain("Friend board");expect(html).not.toContain(FEN);
+    const wrongRedeemer=await request(handler,"POST",`/api/shared/${token}/join`,{cookie:white.cookie});expect(wrongRedeemer.status).toBe(404);const notFoundBody=await wrongRedeemer.text();
+    expect((await request(handler,"POST",`/api/shared/${token}/join`,{cookie:black.cookie})).status).toBe(200);
+    const exhausted=await request(handler,"POST",`/api/shared/${token}/join`,{cookie:black.cookie});expect(exhausted.status).toBe(404);expect(await exhausted.text()).toBe(notFoundBody);
+    expect(storage.matchState(inviteSid)?.blackLearnerId).toBe(black.learner.id);
+    const branchId=storage.read("invite-match")!.run.branches[0]!.id;storage.createPublicToken({id:"story-scope",tokenHash:createHash("sha256").update("story-scope-token").digest("hex"),scope:"story_read",runId:"invite-match",branchId,createdBy:coach.learner.id,createdAt:"2026-08-13T12:00:00.000Z",revokedAt:null});
+    const scopeMismatch=await request(handler,"POST","/api/shared/story-scope-token/join",{cookie:black.cookie});expect(scopeMismatch.status).toBe(404);expect(await scopeMismatch.text()).toBe(notFoundBody);
+    const unknown=await request(handler,"POST","/api/shared/unknown-token/join",{cookie:black.cookie});expect(unknown.status).toBe(404);expect(await unknown.text()).toBe(notFoundBody);
   });
 });

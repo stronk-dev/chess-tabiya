@@ -21,7 +21,7 @@
     type ProgressSchedule,
     type PackDraft,
     type ShapeDraft,
-    type LiveSession,
+    type LiveSessionSummary,
     type LiveSessionDetail,
     type SessionJournalEntry,
     type SessionKind,
@@ -77,7 +77,7 @@
   let selectedShapeDraftId: string | undefined = $state();
   let shapeProbeFen = $state("");
   let shapeProbeResult: boolean | undefined = $state();
-  let liveSessions: readonly LiveSession[] = $state([]);
+  let liveSessions: readonly LiveSessionSummary[] = $state([]);
   let liveDetail: LiveSessionDetail | undefined = $state();
   let activeLiveDetail: LiveSessionDetail | undefined = $state();
   let liveJournal: readonly SessionJournalEntry[] = $state([]);
@@ -92,6 +92,11 @@
   let liveInviteLeg: 1 | 2 = $state(1);
   let liveArenaLeg: 1 | 2 = $state(1);
   let liveArenaPgn = $state("");
+  let liveMatchWhite = $state("");
+  let liveMatchBlack = $state("");
+  let liveJoinHandle = $state("");
+  let liveJoinSlot: "white" | "black" = $state("black");
+  let liveJoinUrl = $state("");
   let importPgn = $state("");
   let importUrl = $state("");
   let importSide: "white" | "black" = $state("white");
@@ -120,6 +125,7 @@
   let loadGeneration = 0;
   let livePoll: ReturnType<typeof setInterval> | undefined;
   let storyPoll: ReturnType<typeof setInterval> | undefined;
+  let autoClaimingMatch = false;
 
   const keyboardDispatcher = new ShellKeyboardDispatcher({
     navigate,
@@ -209,17 +215,19 @@
       } else if (next.name === "live-session") {
         [liveDetail,liveJournal]=await Promise.all([api.liveSession?.(next.sessionId),api.sessionJournal?.(next.sessionId).then((page)=>page.entries)??Promise.resolve([])]);
       } else if (next.name === "live-overlay" && session.runState?.run.id !== next.runId) {
-        await controller.resume(next.runId);
         const related=(await (api.liveSessions?.()??Promise.resolve([]))).find((item)=>item.runId===next.runId);
         activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
+        const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
+        await controller.resume(next.runId,{...(matchMode===undefined?{}:{matchMode})});
       } else if (
         next.name === "run" &&
         session.runState?.run.id !== next.runId
       ) {
-        await controller.resume(next.runId);
-        derivations = await (api.runDerivations?.(next.runId) ?? Promise.resolve(undefined));
         const related=(await (api.liveSessions?.()??Promise.resolve([]))).find((item)=>item.runId===next.runId);
         activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
+        const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
+        await controller.resume(next.runId,{...(matchMode===undefined?{}:{matchMode})});
+        derivations = await (api.runDerivations?.(next.runId) ?? Promise.resolve(undefined));
       }
     } catch (error) {
       if (generation === loadGeneration) {
@@ -238,11 +246,11 @@
 
   function syncLivePolling(next:AppRoute):void{
     if(livePoll!==undefined){clearInterval(livePoll);livePoll=undefined;}
-    if(next.name!=="live-session"&&next.name!=="live-overlay")return;
+    if(next.name!=="live-session"&&next.name!=="live-overlay"&&next.name!=="run")return;
     livePoll=setInterval(()=>void (async()=>{
       const sessionId=next.name==="live-session"?next.sessionId:activeLiveDetail?.session.id;
       if(sessionId===undefined)return;
-      const detail=await api.liveSession?.(sessionId);if(detail!==undefined){if(next.name==="live-session")liveDetail=detail;else activeLiveDetail=detail;}
+      const detail=await api.liveSession?.(sessionId);if(detail!==undefined){if(next.name==="live-session")liveDetail=detail;else activeLiveDetail=detail;controller.setMatchMode(detail.match===undefined?undefined:detail.match.pausedAt===null?"live":"paused");}
       if(next.name==="live-session")liveJournal=(await api.sessionJournal?.(sessionId)??{entries:[],nextSeq:0}).entries;
     })(),2_000);
   }
@@ -326,6 +334,21 @@
     }
   }
 
+  function activeTurn(): "white" | "black" | undefined {
+    const run=session.runState?.run;
+    if(run===undefined)return undefined;
+    const node=run.nodes.find((candidate)=>candidate.id===run.activeCursor.nodeId);
+    const turn=node?.fen.split(" ")[1];
+    return turn==="w"?"white":turn==="b"?"black":undefined;
+  }
+
+  function learnerOwnsActiveMatchTurn(): boolean {
+    const match=activeLiveDetail?.match;
+    const turn=activeTurn();
+    if(match===undefined||match.pausedAt!==null||turn===undefined||learner===undefined)return false;
+    return (turn==="white"?match.whiteLearnerId:match.blackLearnerId)===learner.id;
+  }
+
   async function signOut(): Promise<void> {
     await api.logout?.();
     controller.stopSession();
@@ -401,13 +424,24 @@
     shapeDrafts = await (api.shapeDrafts?.() ?? Promise.resolve([]));
   }
 
-  async function createLive(runId:string):Promise<void>{const created=await api.createLiveSession?.({runId,kind:liveKind,title:`${liveKind} session`,boardControl:liveBoardControl});if(created){liveSessions=[created,...liveSessions];navigate(routePath({name:"live-session",sessionId:created.id}));}}
+  async function createLive(runId:string):Promise<void>{const created=await api.createLiveSession?.({runId,kind:liveKind,title:`${liveKind} session`,boardControl:liveBoardControl,...(liveBoardControl==="match"?{matchPlayers:{...(liveMatchWhite?{white:liveMatchWhite}:{}),...(liveMatchBlack?{black:liveMatchBlack}:{})}}:{})});if(created){navigate(routePath({name:"live-session",sessionId:created.id}));}}
   function liveWriterId(runId:string):string|undefined{return WriterSession.peek(runId,storage)?.writerId;}
   async function submitLiveProposal():Promise<void>{if(!liveDetail||!liveProposalMove)return;await api.proposeMove?.(liveDetail.session.id,liveDetail.activeNodeId,liveProposalMove);liveDetail=await api.liveSession?.(liveDetail.session.id);liveProposalMove="";}
   async function offerLiveBoard():Promise<void>{if(!liveDetail||!liveOfferHandle)return;const writer=liveWriterId(liveDetail.session.runId);if(!writer)return;await api.boardControl?.(liveDetail.session.id,writer,"offer",liveOfferHandle);liveDetail=await api.liveSession?.(liveDetail.session.id);}
   async function openLiveVote():Promise<void>{if(!liveDetail||!liveVoteMoveA||!liveVoteMoveB)return;await api.openVote?.(liveDetail.session.id,{nodeId:liveDetail.activeNodeId,prompt:"Which continuation?",options:[{moveUci:liveVoteMoveA,label:liveVoteMoveA},{moveUci:liveVoteMoveB,label:liveVoteMoveB}],durationSeconds:60});liveDetail=await api.liveSession?.(liveDetail.session.id);}
   async function inviteLiveParticipant():Promise<void>{if(!liveDetail||(!liveInviteHandle&&!liveInviteUrl))return;await api.inviteToSession?.(liveDetail.session.id,{...(liveDetail.session.kind==="match"?{leg:liveInviteLeg}:{}),...(liveInviteHandle?{handle:liveInviteHandle}:{}),...(liveInviteUrl?{externalChallengeUrl:liveInviteUrl}:{})});liveDetail=await api.liveSession?.(liveDetail.session.id);liveInviteHandle="";liveInviteUrl="";}
   async function importLiveArenaLeg():Promise<void>{if(!liveDetail||!liveArenaPgn)return;const writer=liveWriterId(liveDetail.session.runId);if(!writer)return;await api.importArenaLeg?.(liveDetail.session.id,liveArenaLeg,liveArenaPgn,writer);liveDetail=await api.liveSession?.(liveDetail.session.id);liveArenaPgn="";}
+  async function operateMatch(op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume"):Promise<void>{if(!liveDetail)return;let writerId:string|undefined;if(op==="resume"){const writer=WriterSession.claimFor(liveDetail.session.runId,storage);await api.claimLease?.(liveDetail.session.runId,writer.writerId);writerId=writer.writerId;}await api.matchOperation?.(liveDetail.session.id,op,writerId);liveDetail=await api.liveSession?.(liveDetail.session.id);}
+  async function operateActiveMatch(op:"propose_pause"|"accept_pause"|"withdraw_pause"|"pause"|"resume"):Promise<void>{
+    if(!activeLiveDetail)return;
+    const runId=activeLiveDetail.session.runId;
+    if(op==="resume"&&session.runState?.access==="read_only")await controller.claimLease();
+    await api.matchOperation?.(activeLiveDetail.session.id,op,op==="resume"?liveWriterId(activeLiveDetail.session.runId):undefined);
+    activeLiveDetail=await api.liveSession?.(activeLiveDetail.session.id);
+    controller.setMatchMode(activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused");
+    if(op==="resume")await controller.resume(runId,{matchMode:"live"});
+  }
+  async function mintJoinLink():Promise<void>{if(!liveDetail)return;const result=await api.mintSessionLink?.(liveDetail.session.id,{matchSlot:liveJoinSlot,invitedRole:"participant",...(liveJoinHandle?{invitedHandle:liveJoinHandle}:{})});if(result)liveJoinUrl=result.url;}
 
   onMount(() => {
     window.addEventListener("tabiya:unauthenticated", onUnauthenticated);
@@ -430,6 +464,12 @@
         authLoading = false;
       }
     })();
+  });
+
+  $effect(() => {
+    if(route.name!=="run"||session.runState?.access!=="read_only"||!learnerOwnsActiveMatchTurn()||autoClaimingMatch)return;
+    autoClaimingMatch=true;
+    void controller.claimLease().finally(()=>{autoClaimingMatch=false;});
   });
 
   onDestroy(() => {
@@ -519,6 +559,7 @@
         error={session.error}
         {capabilities}
         viewerRole={session.viewer?.role}
+        boardSide={activeLiveDetail?.match===undefined||learner===undefined?undefined:activeLiveDetail.match.whiteLearnerId===learner.id?"white":activeLiveDetail.match.blackLearnerId===learner.id?"black":undefined}
         assistanceStorage={storage}
         onMove={(uci) => controller.move(uci)}
         onRewind={(target) => controller.rewind(target)}
@@ -540,7 +581,7 @@
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
       {#if activeLiveDetail}
-        <aside class="session-banner" aria-label="Live session rail"><strong>{activeLiveDetail.session.title}</strong><span>{activeLiveDetail.role} · {activeLiveDetail.proposals.filter((item)=>item.status==="open").length} open proposals{activeLiveDetail.vote ? ` · ${activeLiveDetail.vote.total} votes` : ""}</span><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:activeLiveDetail!.session.id}))}>Session</button></aside>
+        <aside class="session-banner" aria-label="Live session rail"><strong>{activeLiveDetail.session.title}</strong>{#if activeLiveDetail.match}{@const seated=learner?.id===activeLiveDetail.match.whiteLearnerId||learner?.id===activeLiveDetail.match.blackLearnerId}<span>{activeLiveDetail.match.pausedAt?"Paused — rehearsal is open":activeLiveDetail.match.pauseProposedBy?"Pause proposed":learnerOwnsActiveMatchTurn()?"Your move":"Their move"}</span><div class="row-actions">{#if activeLiveDetail.match.pausedAt}<button type="button" onclick={()=>void operateActiveMatch("resume")}>Resume main line</button>{:else if seated}{#if activeLiveDetail.match.pauseProposedBy===learner?.id}<button type="button" onclick={()=>void operateActiveMatch("withdraw_pause")}>Withdraw pause</button>{:else if activeLiveDetail.match.pauseProposedBy}<button type="button" onclick={()=>void operateActiveMatch("accept_pause")}>Accept pause</button>{:else}<button type="button" onclick={()=>void operateActiveMatch("propose_pause")}>Propose pause</button>{/if}{:else if activeLiveDetail.role==="host"}<button type="button" onclick={()=>void operateActiveMatch("pause")}>Pause for coaching</button>{/if}</div>{:else}<span>{activeLiveDetail.role} · {activeLiveDetail.proposals.filter((item)=>item.status==="open").length} open proposals{activeLiveDetail.vote ? ` · ${activeLiveDetail.vote.total} votes` : ""}</span>{/if}<button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:activeLiveDetail!.session.id}))}>Session</button></aside>
       {/if}
       {#if session.runState.run.sessionKind === "imported"}
         <aside class="session-banner" aria-label="Imported game story"><strong>Imported game</strong><span>The original continuation and your branches share one run.</span><button type="button" onclick={() => navigate(routePath({ name: "story", runId: session.runState!.run.id }))}>Story</button></aside>
@@ -682,17 +723,18 @@
   {:else if route.name === "live"}
     <main class="shell-view" aria-labelledby="live-title">
       <p class="eyebrow">Live / shared rehearsal</p><h1 id="live-title">Rehearse with other people.</h1>
-      <div class="row-actions"><label>Kind <select bind:value={liveKind}><option value="stream">Stream</option><option value="academy">Academy</option><option value="match">Position Arena</option></select></label><label>Board <select bind:value={liveBoardControl}><option value="host_directed">Host directed</option><option value="free_claim">Free claim</option><option value="rotation">Rotation</option></select></label></div>
-      <section><h2>Your sessions</h2><div class="item-list">{#each liveSessions as item}<article><div><h3>{item.title}</h3><p>{item.kind} · {item.boardControl}{item.scheduledFor ? ` · ${readableDate(item.scheduledFor)}` : ""}</p></div><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:item.id}))}>Open</button></article>{:else}<p>No live sessions yet.</p>{/each}</div></section>
+      <div class="row-actions"><label>Kind <select bind:value={liveKind}><option value="stream">Stream</option><option value="academy">Academy</option><option value="match">Match / Arena</option></select></label><label>Board <select bind:value={liveBoardControl}><option value="host_directed">Host directed</option><option value="free_claim">Free claim</option><option value="rotation">Rotation</option><option value="match">Native two-player match</option></select></label>{#if liveBoardControl==="match"}<label>White handle<input bind:value={liveMatchWhite} placeholder="student-white"/></label><label>Black handle<input bind:value={liveMatchBlack} placeholder="or leave one seat open"/></label>{/if}</div>
+      <section><h2>Your sessions</h2><div class="item-list live-wall">{#each liveSessions as item}<article><div class="mini-board"><Chessboard fen={item.board.activeFen} startSide="white" disabled={true} onMove={()=>{}}/></div><div><h3>{item.title}</h3><p>{item.kind} · {item.boardControl} · {item.board.sideToMove} to move{item.board.pausedAt ? " · paused" : ""}</p>{#if item.board.players}<p>{item.board.players.white?`@${item.board.players.white.handle}`:"open"} vs {item.board.players.black?`@${item.board.players.black.handle}`:"open"}</p>{/if}<p>@{item.board.leaseHeldBy.handle} holds the board · {item.board.plyCount} plies</p></div><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:item.id}))}>Open</button></article>{:else}<p>No live sessions yet.</p>{/each}</div></section>
       <section><h2>Start from a run</h2><div class="item-list">{#each runs as item}<article><div><h3>{item.title}</h3><p>{item.viewerRole === "host" ? "Ready to host" : "Only a host can create a session"}</p></div><button type="button" disabled={item.viewerRole!=="host"} aria-describedby={item.viewerRole!=="host"?`live-disabled-${item.id}`:undefined} onclick={()=>void createLive(item.id)}>Create {liveKind}</button>{#if item.viewerRole!=="host"}<span id={`live-disabled-${item.id}`} class="honest">Host role required.</span>{/if}</article>{/each}</div></section>
       <p class="honest">Vote tallies are advisory. Chat identity is only as trustworthy as the configured adapter.</p>
     </main>
   {:else if route.name === "live-session"}
     <main class="shell-view" aria-labelledby="session-title">
       {#if liveDetail}<p class="eyebrow">Live / {liveDetail.session.kind}</p><h1 id="session-title">{liveDetail.session.title}</h1><p>{liveDetail.session.boardControl} · your role: {liveDetail.role}</p>
+        {#if liveDetail.match}<section aria-labelledby="match-state-title"><h2 id="match-state-title">Match board</h2><p>{liveDetail.match.pausedAt ? "Paused for rehearsal" : liveDetail.match.pauseProposedBy ? "Pause proposed" : "Live — evidence and rehearsal are withheld"}</p><div class="row-actions">{#if liveDetail.match.pausedAt}<button type="button" onclick={()=>void operateMatch("resume")}>Resume main line</button>{:else}<button type="button" onclick={()=>void operateMatch("propose_pause")}>Propose pause</button>{#if liveDetail.match.pauseProposedBy}<button type="button" onclick={()=>void operateMatch("accept_pause")}>Accept pause</button>{/if}{#if liveDetail.role==="host"}<button type="button" onclick={()=>void operateMatch("pause")}>Coach pause</button>{/if}{/if}</div>{#if liveDetail.role==="host"}<div class="row-actions"><label>Open seat <select bind:value={liveJoinSlot}><option value="white">White</option><option value="black">Black</option></select></label><label>Optional handle<input bind:value={liveJoinHandle}/></label><button type="button" onclick={()=>void mintJoinLink()}>Create friend link</button></div>{#if liveJoinUrl}<p role="status">Friend link: <code>{liveJoinUrl}</code></p>{/if}{/if}</section>{/if}
         <div class="studio-grid"><section><h2>Members</h2><p>@{liveDetail.leaseHeldBy.handle} holds the board.</p><ul>{#each liveDetail.grants as grant}<li>@{grant.handle} — {grant.role}</li>{/each}</ul>{#if liveDetail.role==="host"}<label>Offer board to handle <input bind:value={liveOfferHandle}/></label><button type="button" disabled={!liveOfferHandle||!liveWriterId(liveDetail.session.runId)} aria-describedby={!liveWriterId(liveDetail.session.runId)?"offer-readonly":undefined} onclick={()=>void offerLiveBoard()}>Offer board</button>{#if !liveWriterId(liveDetail.session.runId)}<p id="offer-readonly" class="honest">Open the shared board on this device before offering possession.</p>{/if}{/if}<h2>Proposals</h2>{#if liveDetail.role!=="spectator"}<div class="row-actions"><label>Move (UCI)<input bind:value={liveProposalMove} placeholder="e2e4"/></label><button type="button" disabled={!liveProposalMove} aria-describedby={!liveProposalMove?"proposal-disabled":undefined} onclick={()=>void submitLiveProposal()}>Propose</button></div>{#if !liveProposalMove}<p id="proposal-disabled" class="honest">Enter a legal move from the active position.</p>{/if}{/if}<ul>{#each liveDetail.proposals as proposal}<li><code>{proposal.moveUci}</code> · {proposal.status}</li>{:else}<li>No proposals yet.</li>{/each}</ul></section><section><h2>Vote</h2>{#if liveDetail.role==="host"}<div class="row-actions"><label>Option A<input bind:value={liveVoteMoveA} placeholder="e2e4"/></label><label>Option B<input bind:value={liveVoteMoveB} placeholder="d2d4"/></label><button type="button" disabled={!liveVoteMoveA||!liveVoteMoveB} aria-describedby={!liveVoteMoveA||!liveVoteMoveB?"vote-disabled":undefined} onclick={()=>void openLiveVote()}>Open vote</button></div>{#if !liveVoteMoveA||!liveVoteMoveB}<p id="vote-disabled" class="honest">Two legal UCI moves are required.</p>{/if}{/if}{#if liveDetail.vote}<p>{liveDetail.vote.window.prompt} · {liveDetail.vote.window.state}</p><ul>{#each liveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul>{:else}<p>No vote window is open.</p>{/if}<h2>Possession journal</h2><ol>{#each liveJournal as entry}<li>{entry.kind} · run seq {entry.runSeq ?? "—"}</li>{/each}</ol></section></div>
         {#if liveDetail.role==="host"}<section aria-labelledby="invite-title"><h2 id="invite-title">Invitations</h2><div class="row-actions">{#if liveDetail.session.kind==="match"}<label>Leg <select bind:value={liveInviteLeg}><option value={1}>1</option><option value={2}>2</option></select></label>{/if}<label>Tabiya handle<input bind:value={liveInviteHandle} placeholder="training-partner"/></label><label>External challenge URL<input type="url" bind:value={liveInviteUrl} placeholder="https://lichess.org/…"/></label><button type="button" disabled={!liveInviteHandle&&!liveInviteUrl} aria-describedby={!liveInviteHandle&&!liveInviteUrl?"invite-disabled":undefined} onclick={()=>void inviteLiveParticipant()}>Create invitation</button></div>{#if !liveInviteHandle&&!liveInviteUrl}<p id="invite-disabled" class="honest">Enter a local handle, an external HTTPS challenge, or both.</p>{/if}<ul>{#each liveDetail.invitations as invitation}<li>{invitation.leg===null?"Session":`Leg ${invitation.leg}`} · {invitation.invitedHandle?`@${invitation.invitedHandle}`:invitation.externalChallengeUrl} · {invitation.state}</li>{:else}<li>No invitations yet.</li>{/each}</ul></section>{/if}
-        {#if liveDetail.session.kind==="match"}<section aria-labelledby="arena-title"><h2 id="arena-title">Position Arena legs</h2><p class="honest">Import one mainline PGN per leg. Its starting position must exactly match this run.</p>{#if liveDetail.role==="host"}<label>Leg <select bind:value={liveArenaLeg}><option value={1}>1</option><option value={2}>2</option></select></label><label>PGN<textarea rows="8" bind:value={liveArenaPgn} placeholder={'[SetUp "1"]\n[FEN "…"]\n\n1. …'}></textarea></label><button type="button" disabled={!liveArenaPgn||!liveWriterId(liveDetail.session.runId)} aria-describedby={!liveWriterId(liveDetail.session.runId)?"arena-readonly":undefined} onclick={()=>void importLiveArenaLeg()}>Import leg</button>{#if !liveWriterId(liveDetail.session.runId)}<p id="arena-readonly" class="honest">Open the shared board on this device before importing a leg.</p>{/if}{/if}<ol>{#each liveDetail.legs as leg}<li>Leg {leg.leg}: {leg.branchId===null?"awaiting PGN":`${leg.result??"*"} · branch ${leg.branchId}`}</li>{/each}</ol></section>{/if}
+        {#if liveDetail.session.kind==="match"&&!liveDetail.match}<section aria-labelledby="arena-title"><h2 id="arena-title">Position Arena legs</h2><p class="honest">Import one mainline PGN per leg. Its starting position must exactly match this run.</p>{#if liveDetail.role==="host"}<label>Leg <select bind:value={liveArenaLeg}><option value={1}>1</option><option value={2}>2</option></select></label><label>PGN<textarea rows="8" bind:value={liveArenaPgn} placeholder={'[SetUp "1"]\n[FEN "…"]\n\n1. …'}></textarea></label><button type="button" disabled={!liveArenaPgn||!liveWriterId(liveDetail.session.runId)} aria-describedby={!liveWriterId(liveDetail.session.runId)?"arena-readonly":undefined} onclick={()=>void importLiveArenaLeg()}>Import leg</button>{#if !liveWriterId(liveDetail.session.runId)}<p id="arena-readonly" class="honest">Open the shared board on this device before importing a leg.</p>{/if}{/if}<ol>{#each liveDetail.legs as leg}<li>Leg {leg.leg}: {leg.branchId===null?"awaiting PGN":`${leg.result??"*"} · branch ${leg.branchId}`}</li>{/each}</ol></section>{/if}
         <div class="row-actions"><button type="button" onclick={()=>navigate(routePath({name:"run",runId:liveDetail!.session.runId}))}>Open shared board</button><button type="button" onclick={()=>navigate(routePath({name:"live-overlay",runId:liveDetail!.session.runId}))}>Open overlay</button></div>
       {:else}<h1 id="session-title">Session unavailable.</h1>{/if}
     </main>
@@ -782,6 +824,9 @@
   button:disabled { cursor: not-allowed; opacity: 0.55; }
   .item-list { display: grid; gap: 0.7rem; max-height: min(55dvh, 36rem); margin-top: 2rem; overflow: auto; }
   .item-list article { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+  .live-wall { grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); }
+  .live-wall article { display: grid; grid-template-columns: 7rem minmax(0, 1fr) auto; }
+  .mini-board { inline-size: 7rem; block-size: 7rem; overflow: hidden; }
   .import-game { display: grid; gap: 0.65rem; max-width: 48rem; margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
   .import-game label { display: grid; gap: 0.3rem; }
   .import-game input, .import-game textarea { width: 100%; padding: 0.65rem; border: 1px solid var(--line); border-radius: 0.5rem; }

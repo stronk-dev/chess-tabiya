@@ -17,16 +17,22 @@ an explicit not-found view rather than crashing the application.
 | Route | Current surface |
 |---|---|
 | `/` | Home, including the most recent run's lease-aware resume card |
-| `/play` | Registered pack list and start action |
+| `/play` | Just Play position entry and registered pack list |
 | `/play/run/:runId` | Live drill, branch, compare, and export context |
 | `/review` | Stored run history; opening a row returns to its live run context |
 | `/learn` | Honest empty state for the phase-based learning program |
-| `/live` | Live-session index and creation from hosted runs |
-| `/live/session/:sessionId` | Members, board control, proposals, votes, invitations, Arena legs, and journal |
+| `/live` | Live-session index, native-match simul wall, and creation from hosted runs |
+| `/live/session/:sessionId` | Members, match pause state, friend links, board control, proposals, votes, invitations, Arena legs, and journal |
 | `/live/overlay/:runId` | Chrome-free spectator/stream projection of a live run |
 | `/create` | Honest empty state for the authoring program |
 | `/library` | Read-only pack and run-artifact lists |
 | `/settings` | Provider, deployment-surface, and shortcut information |
+
+Public `/shared/:token` pages sit outside the authenticated shell. Story tokens render a
+bounded terminal card; session-join tokens render only title, host, and the existing
+account form, then redirect an authenticated redeemer into `/live/session/:sessionId`.
+Server-side scope dispatch prevents the anonymous page from booting a run projection or
+leaking a match position.
 
 The route owns which screen is visible. `DrillSessionController` has no screen
 phase machine; it owns only an optional active drill session. A deep link to a
@@ -81,8 +87,11 @@ The browser's `WriterSession` has three explicit paths:
 On resume, the client reads the graph and compares its stored claim with the
 visible active writer. A match resumes writer mode; a missing or foreign claim
 enters read-only mode immediately and leaves `localStorage` untouched. A later
-`NOT_ACTIVE_WRITER` response still demotes the session defensively. Lease
-transfer remains unsupported.
+`NOT_ACTIVE_WRITER` response still demotes the session defensively. Lease transfer is
+explicit through live-session board policies. Native-match clients add one local
+behavior: after committing their ply they follow the run, then automatically claim only
+when their learner owns the new side to move. Their board is oriented to their seat;
+objective and comparison perspective stay pinned to the run's reference side.
 
 ## Capability registry
 

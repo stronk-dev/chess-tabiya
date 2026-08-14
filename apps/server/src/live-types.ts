@@ -3,7 +3,7 @@ import type { RunRole } from "./storage.js";
 export const SESSION_KINDS = Object.freeze(["stream", "academy", "match"] as const);
 export type SessionKind = (typeof SESSION_KINDS)[number];
 
-export const BOARD_CONTROLS = Object.freeze(["free_claim", "host_directed", "rotation"] as const);
+export const BOARD_CONTROLS = Object.freeze(["free_claim", "host_directed", "rotation", "match"] as const);
 export type BoardControl = (typeof BOARD_CONTROLS)[number];
 
 export const SESSION_JOURNAL_KINDS = Object.freeze([
@@ -11,6 +11,8 @@ export const SESSION_JOURNAL_KINDS = Object.freeze([
   "proposal.made", "proposal.applied", "proposal.declined",
   "vote.opened", "vote.closed", "vote.applied",
   "leg.imported", "session.closed",
+  "match.pause_proposed", "match.paused", "match.resumed",
+  "link.minted", "link.revoked",
 ] as const);
 export type SessionJournalKind = (typeof SESSION_JOURNAL_KINDS)[number];
 
@@ -102,4 +104,31 @@ export interface LiveSessionDetail {
   readonly vote?: VoteTally;
   readonly invitations: readonly SessionInvitation[];
   readonly legs: readonly ArenaLeg[];
+  readonly match?: MatchState;
+}
+
+export interface MatchState {
+  readonly sessionId: string;
+  readonly whiteLearnerId: string | null;
+  readonly blackLearnerId: string | null;
+  readonly pausedAt: string | null;
+  readonly pauseProposedBy: string | null;
+}
+
+export interface LiveBoardSummary {
+  readonly activeFen: string;
+  readonly sideToMove: "white" | "black";
+  readonly plyCount: number;
+  readonly pausedAt: string | null;
+  readonly leaseHeldBy: { readonly learnerId: string; readonly handle: string };
+  readonly lastMoveAt: string | null;
+  readonly players?: {
+    readonly white: { readonly learnerId: string; readonly handle: string } | null;
+    readonly black: { readonly learnerId: string; readonly handle: string } | null;
+  };
+}
+
+export interface LiveSessionSummary extends LiveSession {
+  readonly board: LiveBoardSummary;
+  readonly match?: MatchState;
 }

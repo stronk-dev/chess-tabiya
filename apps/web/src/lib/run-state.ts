@@ -164,6 +164,21 @@ export class RunStateStore {
     this.#clearEvidencePoll();
   }
 
+  /**
+   * A live match writer becomes a follower after committing their ply. The
+   * server lease remains authoritative; this only makes the local projection
+   * poll while the other seated player owns the next decision.
+   */
+  follow(): void {
+    this.#session.markReadOnly();
+    this.#snapshot = Object.freeze({
+      ...this.#snapshot,
+      access: "read_only",
+    });
+    this.#emit();
+    this.#syncPolling();
+  }
+
   move(input: PlayerMoveRequest): Promise<MutationResult> {
     return this.#mutate(() =>
       this.#api.move(this.#session.runId, input, this.#session.writerId),
