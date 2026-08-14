@@ -618,3 +618,64 @@ All other entries declare typical positions above seven pieces, authored-and-ung
 
 Sibling agent is authoring middlegame entries in the same directory; no middlegame
 family was touched here.
+
+## 2026-08-14 — shape library: eight middlegame structure-family entries (claude)
+
+agent-research 20 · agent-encoding 45 · agent-engine-validation 0 · owner-review 0 · agent-revision 10 · tooling-friction 10
+notes: Authored the eight remaining middlegame families from design/04 §3 as
+shape entries in `content/shapes/`: `hanging-pawns`, `maroczy-bind`,
+`closed-centre-chain`, `open-centre`, `fianchetto-g7`, `doubled-c-pawns`,
+`opposite-castling-race`, `queenless-middlegame`. All eight pass
+`make shape-check`. Beyond the validator, every trigger was fired against a
+hand-built representative FEN from its feeding opening through the runtime
+evaluator (`matchesStructuralExpression`), plus six signature spot-checks
+(four positive, two deliberate negatives). That probing caught two of my own
+bad probe FENs, not entry bugs — and confirmed one honest surprise: the strict
+outpost detector refuses a Maroczy knight on d5 while Black retains an e-pawn
+able to reach e6, which matches the chess, and the d5-clamp success note now
+says so. All prose is original and declared UNGROUNDED in provenance
+(no Wikibooks adaptation; clean posture (a) from theory-sourcing).
+Plan census: 35 plans total, 14 with real structural signatures, 21 null with
+stated reasons.
+
+What the vocabulary could not express (input to the next predicate wave):
+
+1. **No mirror/orientation abstraction.** Five families are colour- or
+   wing-symmetric but every square and file must be enumerated literally, and
+   plan `side` labels flip with the orientation, so each entry was narrowed to
+   one canonical orientation with the mirror recorded as unauthored:
+   hanging-pawns (Black c5-d5 pair only), closed-centre-chain (French d4-e5
+   orientation only), doubled-c-pawns (Nimzo White pair only; Ruy Exchange and
+   Sveshnikov cases unauthored), opposite-castling-race (White long vs Black
+   short only), fianchetto-g7 (Black kingside only; g2/b2/b7 corners
+   unauthored). A `mirror`/`colorFlip` combinator or per-orientation entry
+   generation would halve this cost.
+2. **No file quantification.** "Some Black pawn is isolated or doubled" took a
+   16-leaf `any` in queenless-middlegame; "an isolated pawn exists" is not
+   otherwise sayable.
+3. **No "colour X has no pawn on file f" primitive.** Only expressible as
+   `any(half_open_file, open_file)`; used in three entries and easy to get
+   wrong (half-open requires the *opponent's* pawn present).
+4. **No castling rights/history.** Opposite-side castling uses king-square
+   `pieceOnSquare` as a proxy; kings that walked there fire, kings on f1/a1
+   don't.
+5. **No material census, pawn counts, or symmetry test.** The
+   "symmetrical/queenless" family can prove queenless-with-both-armies but not
+   symmetry, and cannot mark the middlegame/endgame boundary.
+6. **No pawn-tension or mobility notion.** "Open centre" had to mean a fully
+   pawnless central file; practically-open centres with one mobile pawn each
+   don't fire.
+7. **No structure memory.** The fianchetto trigger dies the moment the bishop
+   leaves g7, yet the family's central question (life after the bishop trade)
+   is exactly that persisting structure; same for "traded vs merely moved" in
+   two null success notes.
+
+Two positives worth keeping: `line_blockers` expresses long-diagonal clearance
+exactly (fianchetto's best signature), and the anticipated Maroczy trigger gap
+did not exist — `named_structure maroczy-bind` already shipped in the runtime
+catalogue.
+
+Flag for the next code slice (not touched here, content-only pass):
+`apps/server/src/shape-registry.test.ts` pins the official catalogue to the
+original four ids, so the registry test fails until that list is extended with
+the new entries (this sibling wave adds middlegame and endgame files).

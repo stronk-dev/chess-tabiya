@@ -1591,3 +1591,38 @@ first (highest leverage — 10 middlegame structure families + 7 endgame
 families), then packs referencing them in explorer-frequency order, then the
 on-ramp via position-seeds, trajectories across them, and the long tail via
 studio/import tooling. The owner plays when all is done, per their ruling.
+
+## 2026-08-14 (claude) — adoption audit landed (`design/research/adoption-audit.md`)
+
+The synthesis pass `design/02` §Adoption posture called for: every "best steal" /
+loved-feature finding across all twelve teardowns, both sweeps, and
+`competitor-value-props.md`, checked against the shipped surface (`docs/*`, B1–B11)
+and the ledger. No new external research; every claim cites its source dossier or doc.
+
+- **What landed:** 60 features audited — **34 shipped** (12 of them in explicitly
+  transformed, invariant-compatible form: undo→fork, live labels→post-commit rail,
+  SRS-cards→attempt scheduler, weakness-scan→opt-in recommender, Play-Coach→guided
+  mode, …), **7 ledgered** (verified: reasoning transcript, category scan, recency,
+  browser engines, blunder-guard encoding, mirror actions, events surface),
+  **19 missing** in whole or decisive part.
+- **What changed:** the third-shortlist frame was applied per the owner's
+  transformation ruling — a conflict with an invariant is a design prompt, not a
+  veto. Every collision transformed; **the refusal set came out empty**, including
+  the human pool (minimal loved version: friend-link over shipped grants/sessions;
+  native matchmaking stays behind B5's revival conditions) and pre-commit
+  blunder-guarding (post-commit on-ramp form, already ledgered).
+- **Top cheap adoptions:** (1) auto-offered post-game story for *native* runs — all
+  detectors ship, story is import-only today, and the ritual is proven at platform
+  scale; (2) spoken coach persona over the shipped packet-check seam; (3)
+  event-shaped revisitable milestones; (4) flip-sides + one-click mirror retry;
+  (5) grounded share card with suggested title.
+- **Structural RFC candidates:** runtime corpus/explorer evidence surface (also the
+  sharpest weaker-than-incumbent finding — a 2007 PHP site out-ships us on rung 4),
+  Chessbook-style repertoire gap-finding, stated-reasoning capture + key-point
+  grading, friend-link play.
+- **Honesty section:** five places incumbents beat what we ship today — runtime
+  corpus evidence, share artifacts, voice/audio, catalog depth (deliberate,
+  content-last), mobile/PWA.
+- **Proposed:** 12 BACKLOG rows (dossier §7) — owner-tier, not written by this pass.
+- **Next:** owner triage of §7 into the ledger; the two shortlists are candidate
+  input for content-era-adjacent RFC scheduling.
