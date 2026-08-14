@@ -12,3 +12,12 @@ the browser criterion now covers lockstep cancellation followed by `/analysis` r
 `theory_strict` journal compatibility explicitly permits its recorded `human_common`
 off-spine fallback only while the same Maia identity remains live. Baseline after
 defect-batch-2: 374 tests / 64 files, run schema 0.8, pack schema 0.12, storage 10.
+
+## 2026-08-14 — Persisted group substrate
+
+Run schema 0.9 adds the closed `group.created` event and the honest `enumerated`
+applied-policy value. Replay binds each member to its direct seed child, accepts an
+adopted main branch whose own fork predates the source, refuses repeated membership, and
+requires a mode-matched recorded distribution for machine sources. A fast-check property
+covers every supported group size. Migration 11 uses frozen `"0.8"` → `"0.9"` literals
+and leaves quarantined rows untouched. The focused 21 tests and workspace typecheck pass.

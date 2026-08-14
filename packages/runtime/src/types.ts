@@ -41,7 +41,7 @@ export const RUN_OPPONENT_MODES = Object.freeze([
   "theory_strict",
 ] as const);
 export type RunOpponentMode = (typeof RUN_OPPONENT_MODES)[number];
-export type PolicyModeApplied = RunOpponentMode | "unknown";
+export type PolicyModeApplied = RunOpponentMode | "enumerated" | "unknown";
 export type RunOutcome = "win" | "loss" | "draw";
 
 export interface RunStart {
@@ -211,6 +211,33 @@ export type PredictionRecordedEvent = Event<
     readonly distribution: OpponentSelection;
   }
 >;
+export type GroupSource = "hand_picked" | "authored" | "human_replies" | "engine_top_n";
+export type GroupResistance = "fixed" | "per_branch";
+export interface BranchGroupMember {
+  readonly branchId: string;
+  readonly seedMoveUci: string;
+}
+export type GroupCreatedEvent = Event<
+  "group.created",
+  {
+    readonly groupId: string;
+    readonly sourceNodeId: string;
+    readonly source: GroupSource;
+    readonly resistance: GroupResistance;
+    readonly members: readonly BranchGroupMember[];
+    readonly distribution?: OpponentSelection;
+  }
+>;
+
+export interface BranchGroup {
+  readonly groupId: string;
+  readonly sourceNodeId: string;
+  readonly source: GroupSource;
+  readonly resistance: GroupResistance;
+  readonly members: readonly BranchGroupMember[];
+  readonly distribution?: OpponentSelection;
+  readonly createdAtSeq: number;
+}
 
 export type DrillRunEvent =
   | RunStartedEvent
@@ -226,6 +253,7 @@ export type DrillRunEvent =
   | OutcomeReachedEvent
   | TransferScheduledEvent
   | PredictionRecordedEvent
+  | GroupCreatedEvent
   | FeedbackRevealedEvent;
 
 export type EventDraft = DrillRunEvent extends infer TEvent

@@ -108,11 +108,11 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.8", () => {
+describe("drill_run.schema.json v0.9", () => {
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.8",
+      $id: "urn:chess-tabiya:schema:drill-run:0.9",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });
@@ -358,5 +358,46 @@ describe("drill_run.schema.json v0.8", () => {
     };
     expect(validate({ ...validRun, events: [event, prediction] }), JSON.stringify(validate.errors)).toBe(true);
     expect(validate({ ...validRun, events: [event, { ...prediction, data: { ...prediction.data, candidateCount: -1 } }] })).toBe(false);
+  });
+
+  it("validates the closed group.created wire shape and enumerated selections", () => {
+    const distribution = {
+      moveUci: "e2e4",
+      policyModeApplied: "human_common",
+      candidates: [
+        { moveUci: "e2e4", mass: 0.42, rank: 1 },
+        { moveUci: "d2d4", mass: 0.31, rank: 2 },
+      ],
+      engine: { id: "maia", name: "Maia", version: "3", seedHonored: false },
+    };
+    const group = {
+      seq: 2,
+      type: "group.created",
+      at,
+      data: {
+        groupId: "run-1:group:1",
+        sourceNodeId: rootNode.id,
+        source: "human_replies",
+        resistance: "fixed",
+        members: [
+          { branchId: "branch-a", seedMoveUci: "e2e4" },
+          { branchId: "branch-b", seedMoveUci: "d2d4" },
+        ],
+        distribution,
+      },
+    };
+    expect(validate({ ...validRun, events: [event, group] }), JSON.stringify(validate.errors)).toBe(true);
+    expect(validate({ ...validRun, events: [event, { ...group, data: { ...group.data, extra: true } }] })).toBe(false);
+    expect(validate({ ...validRun, events: [event, {
+      seq: 2,
+      type: "opponent.move_selected",
+      at,
+      data: {
+        nodeId: rootNode.id,
+        branchId: branch.id,
+        moveUci: "e2e4",
+        selection: { ...distribution, policyModeApplied: "enumerated" },
+      },
+    }] }), JSON.stringify(validate.errors)).toBe(true);
   });
 });

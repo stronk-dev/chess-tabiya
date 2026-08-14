@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-run:0.8",
+  "$id": "urn:chess-tabiya:schema:drill-run:0.9",
   "title": "Tabiya Drill Run",
   "description": "Living v0.8 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
   "type": "object",
@@ -21,7 +21,7 @@
     "activeCursor"
   ],
   "properties": {
-    "schemaVersion": { "const": "0.8" },
+    "schemaVersion": { "const": "0.9" },
     "id": { "$ref": "#/$defs/id" },
     "sessionKind": { "enum": ["pack", "position"] },
     "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
@@ -131,7 +131,7 @@
       "properties": {
         "moveUci": { "$ref": "#/$defs/id" },
         "policyModeApplied": {
-          "enum": ["human_common", "strong_engine", "theory_strict", "unknown"]
+          "enum": ["human_common", "strong_engine", "theory_strict", "enumerated", "unknown"]
         },
         "candidates": {
           "type": "array",
@@ -350,7 +350,8 @@
             "feedback.generated",
             "outcome.reached",
             "transfer.scheduled",
-            "prediction.recorded"
+            "prediction.recorded",
+            "group.created"
             ,"feedback.revealed"
           ]
         },
@@ -584,6 +585,37 @@
                 "predictedMass": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
                 "predictedRank": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
                 "candidateCount": { "type": "integer", "minimum": 0 },
+                "distribution": { "$ref": "#/$defs/opponentSelection" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "group.created" },
+            "data": {
+              "type": "object",
+              "required": ["groupId", "sourceNodeId", "source", "resistance", "members"],
+              "properties": {
+                "groupId": { "$ref": "#/$defs/id" },
+                "sourceNodeId": { "$ref": "#/$defs/id" },
+                "source": { "enum": ["hand_picked", "authored", "human_replies", "engine_top_n"] },
+                "resistance": { "enum": ["fixed", "per_branch"] },
+                "members": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 8,
+                  "items": {
+                    "type": "object",
+                    "required": ["branchId", "seedMoveUci"],
+                    "properties": {
+                      "branchId": { "$ref": "#/$defs/id" },
+                      "seedMoveUci": { "$ref": "#/$defs/id" }
+                    },
+                    "additionalProperties": false
+                  }
+                },
                 "distribution": { "$ref": "#/$defs/opponentSelection" }
               },
               "additionalProperties": false

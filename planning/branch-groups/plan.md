@@ -2,7 +2,7 @@
 
 RFC: `rfc/branch-groups.md` (implementing).
 
-- [ ] §1 Run schema 0.9, validated group projection, and migration 11.
+- [x] §1 Run schema 0.9, validated group projection, and migration 11.
 - [ ] §2 Server creation, four seed sources, adoption, gating, and reply journal.
 - [ ] §3 Typed REST/client plumbing and state projection.
 - [ ] §4 Group UI, sequential/lockstep navigation, compare/export, and evidence recovery.

@@ -77,6 +77,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 8, name: "branch origin and prediction event run schema" },
       { version: 9, name: "live sessions, journal, proposals, votes, invitations, and arena legs" },
       { version: 10, name: "shape studio drafts and registered versions" },
+      { version: 11, name: "branch groups run schema" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -94,7 +95,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(10);
+    ).toBe(11);
     inspection.close();
   });
 
@@ -145,8 +146,9 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 8, name: "branch origin and prediction event run schema" },
       { version: 9, name: "live sessions, journal, proposals, votes, invitations, and arena legs" },
       { version: 10, name: "shape studio drafts and registered versions" },
+      { version: 11, name: "branch groups run schema" },
     ]);
-    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.8");
+    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.9");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
     expect(upgraded.read(forged.id)).toBeUndefined();
     upgraded.close();
@@ -199,6 +201,40 @@ describe("SQLite run-storage migrations and summaries", () => {
     }
     expect(modes).toEqual(new Set(["unknown"]));
     migrated.close();
+  });
+
+  it("stamps v0.8 runs to v0.9 with frozen literals and leaves quarantined rows untouched", () => {
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-storage-v09-"));
+    directories.push(directory);
+    const filename = join(directory, "runs.sqlite");
+    const initial = new SQLiteRunStorage(filename, { onMigration: () => {} });
+    const ordinary = run("ordinary-v08");
+    const quarantined = run("quarantined-v08");
+    initial.create(ordinary, "writer-ordinary", "Ordinary");
+    initial.create(quarantined, "writer-quarantined", "Quarantined");
+    initial.close();
+
+    const fixture = new DatabaseSync(filename);
+    const rows = fixture.prepare("SELECT id, snapshot_json FROM drill_runs").all() as Array<{ id: string; snapshot_json: string }>;
+    const downgrade = fixture.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = ? WHERE id = ?");
+    for (const row of rows) {
+      const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
+      const schemaVersion = row.id === quarantined.id ? "quarantined:pre-0.5" : "0.8";
+      downgrade.run(JSON.stringify({ ...snapshot, schemaVersion: "0.8" }), schemaVersion, row.id);
+    }
+    fixture.exec("PRAGMA user_version = 10");
+    fixture.close();
+
+    const migrations: StorageMigrationLog[] = [];
+    const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => migrations.push(entry) });
+    expect(migrations).toEqual([{ version: 11, name: "branch groups run schema" }]);
+    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.9");
+    expect(upgraded.read(quarantined.id)).toBeUndefined();
+    upgraded.close();
+
+    const inspection = new DatabaseSync(filename);
+    expect(inspection.prepare("SELECT schema_version FROM drill_runs WHERE id = ?").get(quarantined.id)).toEqual({ schema_version: "quarantined:pre-0.5" });
+    inspection.close();
   });
 
   it("lists captured titles and pages only denormalized rows", () => {

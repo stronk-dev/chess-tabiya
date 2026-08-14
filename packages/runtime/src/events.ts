@@ -6,6 +6,7 @@ import { terminalOutcome } from "./outcome.js";
 import { assertObjectiveTransition } from "./objective-state.js";
 import type {
   Branch,
+  BranchGroup,
   CheckpointReachedEvent,
   DrillRun,
   DrillRunEvent,
@@ -14,6 +15,11 @@ import type {
   Segment,
   SegmentCompletedEvent,
 } from "./types.js";
+
+const MACHINE_GROUP_MODES = Object.freeze({
+  human_replies: "human_common",
+  engine_top_n: "strong_engine",
+} as const);
 
 function deepFreeze<T>(value: T): T {
   if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
@@ -67,6 +73,67 @@ function segmentFromEvent(
   });
 }
 
+function branchGroupFromEvent(
+  runState: { readonly nodes: readonly Node[]; readonly groups: readonly BranchGroup[] },
+  event: Extract<DrillRunEvent, { readonly type: "group.created" }>,
+): BranchGroup {
+  const { data } = event;
+  if (!runState.nodes.some((node) => node.id === data.sourceNodeId)) {
+    throw unknownNode(data.sourceNodeId);
+  }
+  if (data.members.length < 2 || data.members.length > 8) {
+    throw new TypeError(`group.created ${event.seq} must contain 2-8 members`);
+  }
+  if (runState.groups.some((group) => group.groupId === data.groupId)) {
+    throw new TypeError(`Duplicate group id: ${data.groupId}`);
+  }
+  const branchIds = data.members.map((member) => member.branchId);
+  const seedMoves = data.members.map((member) => member.seedMoveUci);
+  if (new Set(branchIds).size !== branchIds.length || new Set(seedMoves).size !== seedMoves.length) {
+    throw new TypeError(`group.created ${event.seq} members must be distinct`);
+  }
+  const alreadyGrouped = new Set(runState.groups.flatMap((group) => group.members.map((member) => member.branchId)));
+  for (const member of data.members) {
+    if (alreadyGrouped.has(member.branchId)) {
+      throw new TypeError(`Branch ${member.branchId} already belongs to a group`);
+    }
+    const child = runState.nodes.find((node) =>
+      node.parentId === data.sourceNodeId &&
+      node.branchId === member.branchId &&
+      node.moveUci === member.seedMoveUci
+    );
+    if (child === undefined) {
+      throw new TypeError(`Group member ${member.branchId} has no matching seed child`);
+    }
+  }
+  const expectedMode = data.source === "human_replies" || data.source === "engine_top_n"
+    ? MACHINE_GROUP_MODES[data.source]
+    : undefined;
+  if (expectedMode === undefined) {
+    if (data.distribution !== undefined) {
+      throw new TypeError(`group.created ${event.seq} non-machine source cannot carry a distribution`);
+    }
+  } else {
+    const distribution = data.distribution;
+    if (distribution === undefined || distribution.policyModeApplied !== expectedMode) {
+      throw new TypeError(`group.created ${event.seq} machine source requires a ${expectedMode} distribution`);
+    }
+    const candidates = new Set((distribution.candidates ?? []).map((candidate) => candidate.moveUci));
+    if (data.members.some((member) => !candidates.has(member.seedMoveUci))) {
+      throw new TypeError(`group.created ${event.seq} distribution does not cover every seed move`);
+    }
+  }
+  return deepFreeze({
+    groupId: data.groupId,
+    sourceNodeId: data.sourceNodeId,
+    source: data.source,
+    resistance: data.resistance,
+    members: data.members,
+    ...(data.distribution === undefined ? {} : { distribution: data.distribution }),
+    createdAtSeq: event.seq,
+  });
+}
+
 export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
   const started = events[0];
   if (started?.type !== "run.started") {
@@ -100,6 +167,7 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
   let branches: readonly Branch[] = [started.data.branch];
   let activeCursor = started.data.activeCursor;
   const outcomeNodeIds = new Set<string>();
+  let groups: readonly BranchGroup[] = [];
 
   for (const [index, event] of events.entries()) {
     if (event.seq !== index + 1) {
@@ -206,6 +274,9 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
         }
         break;
       }
+      case "group.created":
+        groups = [...groups, branchGroupFromEvent({ nodes, groups }, event)];
+        break;
       case "outcome.reached": {
         const node = nodes.find((candidate) => candidate.id === event.data.nodeId);
         if (!node) throw unknownNode(event.data.nodeId);
@@ -275,4 +346,15 @@ export function deriveSegments(run: DrillRun): readonly Segment[] {
   return deepFreeze(run.events.flatMap((event) =>
     event.type === "segment.completed" ? [segmentFromEvent(run.events, event)] : [],
   ));
+}
+
+export function groupsFromEvents(run: DrillRun): readonly BranchGroup[] {
+  const canonical = projectRun(run.events);
+  let groups: readonly BranchGroup[] = [];
+  for (const event of canonical.events) {
+    if (event.type === "group.created") {
+      groups = [...groups, branchGroupFromEvent({ nodes: canonical.nodes, groups }, event)];
+    }
+  }
+  return deepFreeze(groups);
 }

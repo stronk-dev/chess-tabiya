@@ -30,7 +30,7 @@ export {
   type IllegalMoveReason,
   type RuntimeErrorCode,
 } from "./errors.js";
-export { appendEvents, deriveSegments, eventsSince, projectRun } from "./events.js";
+export { appendEvents, deriveSegments, eventsSince, groupsFromEvents, projectRun } from "./events.js";
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
 export { shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
 export { classifyPhase, renderPhaseReading, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type PhaseReading } from "./phase.js";
@@ -159,6 +159,8 @@ export {
 export type {
   Actor,
   Branch,
+  BranchGroup,
+  BranchGroupMember,
   CheckpointReachedEvent,
   Cursor,
   DrillRun,
@@ -175,6 +177,9 @@ export type {
   OpponentSelection,
   OpponentMoveSelectedEvent,
   PredictionRecordedEvent,
+  GroupCreatedEvent,
+  GroupResistance,
+  GroupSource,
   PolicyConfig,
   PolicyModeApplied,
   PositionOpponentPolicy,
