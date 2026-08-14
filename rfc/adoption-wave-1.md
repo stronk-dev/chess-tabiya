@@ -1,6 +1,6 @@
 # RFC: Adoption wave 1 — five cheap market-proven features
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude (adoption-wave-1 draft, 2026-08-14 parallel wave)
 - **Created:** 2026-08-14
 - **Design refs:** `design/02` §Adoption posture; `design/03` §Train (B2 repeat/mirror/opposite-side
@@ -15,10 +15,10 @@
   `archive/shape-library.md` (Just Play position player),
   `archive/learner-identity-and-authorization.md` (token discipline, grant roles),
   `archive/live-session-platform.md` (the no-anonymous-token limit this RFC amends),
-  `rfc/runtime-corpus-evidence.md` (shared non-register resources this RFC also touches:
+  `archive/runtime-corpus-evidence.md` (shared non-register resources this RFC also touches:
   the `AssistanceConfig` version — that draft claims 1→2, this RFC rebases on it (§3) —
   the append-only `ServerErrorCode` union, and the `/runs/:id/…` route-action regex,
-  per that draft's sibling rule, `rfc/runtime-corpus-evidence.md:67-77`).
+  per that RFC's sibling rule).
   Coordinated with the `social-match` draft (not yet present in `rfc/` at drafting
   time; drafted later the same day) via the shared public-token contract in §6.
 - **Parent / amends:** —
@@ -116,6 +116,9 @@ Server:
 - Re-entry is unchanged: selecting a moment rewinds to `entryNodeId` and explicitly creates a
   `story-reentry` branch (`docs/game-import-and-story.md:86-89`), preserving the played
   continuation.
+- Native story responses carry `source: {kind: "native"}`. They carry no imported
+  headers, URL, import timestamp, or PGN result. The learner-perspective terminal fact
+  remains the existing `outcome` projection; no PGN-style result is fabricated.
 
 Client:
 
@@ -329,7 +332,8 @@ Server:
   the source run (a node's FEN is already visible to every authorized role, so no disclosure
   widens; no writer lease is required because nothing in the source mutates). The server
   validates the node exists on a source branch, derives the node's FEN from durable run state,
-  and atomically creates: a new **position** run owned by the caller with root FEN = the node's
+  and atomically creates: a new **position** run with server-minted id `flip-<UUID>`, owned by
+  the caller, with root FEN = the node's
   FEN and learner side = the opposite of the source run's learner side, plus the
   `run_derivations` row (§2's table; kind `flip_sides`, source run/branch/node recorded). The
   requested resistance defaults to the source run's requested policy when the deployment can
@@ -445,14 +449,10 @@ social-match) and the standing register law (`rfc/README.md:16-27,41-42,73-79`):
 
 ## Acceptance criteria
 
-Baseline, verified 2026-08-14 on this machine before drafting: **399 unit tests / 69 files, all
-passing** (`pnpm test`), and **16 ordinary browser tests** (17 listed minus the optional
-`maia-latency` measurement) at zero retries. Adversarial-review re-run, later the same day:
-the 399/69 count reproduces, but the shared working tree now shows failures unrelated to this
-draft (`apps/server/src/pack-authoring.test.ts:267` expects 5 committed sourcing candidates
-and finds 9, plus committed-document schema validation — in-flight content work from the
-parallel wave). Implementation re-pins a green baseline before starting; the criterion stands:
-the full suite must be green, and every criterion below adds tests.
+Baseline, verified after Runtime Corpus Evidence archived on 2026-08-14: **424 unit tests /
+72 files, all green**, and **17 ordinary browser tests** plus the optional skipped Maia
+measurement at zero retries. The full suite must remain green and every criterion below adds
+exercising coverage.
 
 Unit/integration:
 
@@ -480,7 +480,7 @@ Unit/integration:
 6. **Flip:** the created run has the source node's FEN as root, the opposite learner side, and
    an atomic `run_derivations` row; the source run's event log and branches are byte-identical
    before and after; a caller without a source grant gets the unknown-run 404.
-7. **Migration 14** applies idempotently to a fresh and an upgraded database, and all committed
+7. **Migration 13** applies idempotently to a fresh and an upgraded database, and all committed
    packs and fixtures validate unchanged (no pack schema change).
 
 Browser (extending the zero-retry Playwright job):
@@ -526,3 +526,7 @@ None.
   on flip against live native matches recorded (owned by `social-match` §3.3).
   (6) `STORY_UNAVAILABLE` pinned into both the error union and the status map. BACKLOG row
   cite corrected to `:199-203`. Baseline note updated with the review-time tree state.
+- 2026-08-14: Codex implementation review on the post-corpus tree. Dependency and
+  baseline refreshed; criterion 7 corrected to migration 13; native stories pinned to
+  a non-import `source.kind: "native"` response with no fabricated PGN metadata; flip
+  identifiers pinned as server-minted `flip-<UUID>` values returned with derivation.

@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `adoption-wave-1.md` | draft | — | — (2026-08-14 parallel wave; migration 13 claimed, no pack/run schema claim) |
+| `adoption-wave-1.md` | implementing | — | `planning/adoption-wave-1/` (migration 13, no pack/run schema claim) |
 | `social-match.md` | draft | `archive/live-session-platform.md` (amends board control, journal kinds, session routes; depends on `adoption-wave-1.md` for `public_tokens`) | — (2026-08-14 parallel wave, **last claim**; migration 14, no pack/run schema claim) |
 
 **Four-draft wave, 2026-08-14** — claim order: `predicate-wave-2` first, then
