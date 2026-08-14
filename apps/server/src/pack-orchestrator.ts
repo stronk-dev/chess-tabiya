@@ -18,6 +18,7 @@ import {
   legIndexAt,
   reachCheckpoint,
   transitionObjective,
+  structuralFeatureKinds,
   type DrillRun,
   type FenPredicate,
   type MaterialBalancePredicate,
@@ -87,57 +88,54 @@ function reachedOnActivePath(
   );
 }
 
-function successPredicate(value: unknown): ObjectivePredicate | undefined {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    return undefined;
-  }
-  const condition = value as Record<string, unknown>;
-  if (
-    condition.kind === "reach_checkpoint" &&
-    typeof condition.checkpointId === "string"
-  ) {
+function successPredicate(condition: SuccessCondition): ObjectivePredicate {
+  if (condition.kind === "reach_checkpoint") {
     return { type: "checkpointReached", checkpointId: condition.checkpointId };
   }
-  if (condition.kind === "outcome" && typeof condition.result === "string") {
+  if (condition.kind === "outcome") {
     return {
       type: "outcomeReached",
-      result: condition.result as "win" | "loss" | "draw",
+      result: condition.result,
     };
   }
-  if (
-    condition.kind === "material_balance" &&
-    typeof condition.perspective === "string" &&
-    typeof condition.comparison === "string" &&
-    typeof condition.value === "number"
-  ) {
+  if (condition.kind === "material_balance") {
     return {
       type: "materialBalance",
-      perspective: condition.perspective as "white" | "black",
-      comparison: condition.comparison as "atLeast" | "atMost" | "equal",
+      perspective: condition.perspective,
+      comparison: condition.comparison,
       value: condition.value,
     };
   }
-  if (condition.kind === "rules_fact" && typeof condition.fact === "string") {
+  if (condition.kind === "rules_fact") {
     return {
       type: "rulesFact",
-      fact: condition.fact as "checkmate" | "stalemate",
+      fact: condition.fact,
       ...(condition.winner === undefined
         ? {}
         : { winner: condition.winner as "white" | "black" }),
     };
   }
-  return undefined;
+  if (condition.kind === "structural_feature") {
+    return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: condition.feature } };
+  }
+  const exhaustive: never = condition;
+  throw new TypeError(`Unhandled success condition: ${JSON.stringify(exhaustive)}`);
 }
 
-function conditionEvidence(condition: SuccessCondition): string {
+function conditionEvidenceRefs(condition: SuccessCondition): readonly [string, ...string[]] {
   if (condition.kind === "reach_checkpoint") {
-    return packEvidenceRef(condition.checkpointId);
+    return [packEvidenceRef(condition.checkpointId)];
   }
   if (condition.kind === "outcome") {
-    return rulesEvidenceRef(`result-${condition.result}`);
+    return [rulesEvidenceRef(`result-${condition.result}`)];
   }
-  if (condition.kind === "material_balance") return rulesEvidenceRef("material");
-  return rulesEvidenceRef(condition.fact);
+  if (condition.kind === "material_balance") return [rulesEvidenceRef("material")];
+  if (condition.kind === "rules_fact") return [rulesEvidenceRef(condition.fact)];
+  const references = structuralFeatureKinds(condition.feature).map((kind) =>
+    rulesEvidenceRef(`structure-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]),
+  );
+  if (references.length === 0) throw new TypeError("Structural success condition has no feature leaf");
+  return references as [string, ...string[]];
 }
 
 function conditionRules(
@@ -146,7 +144,6 @@ function conditionRules(
   outcomeObjective: boolean,
 ): readonly ObjectiveTransitionRule[] {
   const predicate = successPredicate(condition);
-  if (predicate === undefined) return [];
   const to = condition.to ?? "achieved";
   const defaults: readonly ObjectiveState[] =
     to === "preserved"
@@ -162,7 +159,7 @@ function conditionRules(
     from,
     to,
     when: predicate,
-    evidenceRefs: [conditionEvidence(condition)],
+    evidenceRefs: conditionEvidenceRefs(condition),
   }));
 }
 

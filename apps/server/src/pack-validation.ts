@@ -8,6 +8,8 @@ import {
   type DrillPackDefinition,
 } from "@chess-tabiya/schema/drill-pack";
 import { createRun } from "@chess-tabiya/runtime";
+import { between } from "chessops/attacks";
+import { parseSquare } from "chessops/util";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
@@ -15,7 +17,7 @@ import {
   DECLARED_UNIMPLEMENTED_POLICY_MODES,
   SUPPORTED_POLICY_MODES,
 } from "./capabilities.js";
-import { checkpointMatches } from "./pack-orchestrator.js";
+import { checkpointMatches, objectiveRules } from "./pack-orchestrator.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
 
 export interface PackValidationIssue {
@@ -79,8 +81,52 @@ function runtimeIssue(
   return Object.freeze({ severity: "error", source: "runtime", code, path, message });
 }
 
+const PLAN_OBJECTIVES = new Set([
+  "reach_structure", "preserve_plan_window", "execute_break",
+  "prevent_opponent_plan", "transition_to_endgame",
+]);
+
+function structuralIssues(value: unknown, path = "", depth = 0): readonly PackValidationIssue[] {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return [];
+  const object = value as Record<string, unknown>;
+  const issues: PackValidationIssue[] = [];
+  if (["all", "any"].includes(String(object.kind)) && Array.isArray(object.of)) {
+    if (depth >= 4) issues.push(runtimeIssue("STRUCTURAL_EXPRESSION_TOO_DEEP", path || "/", "structural expressions may be nested at most four levels"));
+    object.of.forEach((child, index) => issues.push(...structuralIssues(child, `${path}/of/${index}`, depth + 1)));
+  } else if (object.kind === "not") {
+    if (depth >= 4) issues.push(runtimeIssue("STRUCTURAL_EXPRESSION_TOO_DEEP", path || "/", "structural expressions may be nested at most four levels"));
+    issues.push(...structuralIssues(object.of, `${path}/of`, depth + 1));
+  } else if (object.kind === "feature") {
+    issues.push(...structuralIssues(object.feature, `${path}/feature`, depth));
+  } else if (object.kind === "line_blockers") {
+    const from = parseSquare(String(object.from)); const to = parseSquare(String(object.to));
+    if (from === undefined || to === undefined || between(from, to).isEmpty()) issues.push(runtimeIssue("LINE_SPAN_EMPTY", path || "/", "line blocker endpoints must be distinct, aligned, and non-adjacent"));
+    if (typeof object.count === "number" && object.count < 0) issues.push(runtimeIssue("NEGATIVE_FEATURE_COUNT", `${path}/count`, "feature counts cannot be negative"));
+  } else if (object.kind === "outpost") {
+    const square = parseSquare(String(object.square));
+    if (square !== undefined) { const rank = Math.floor(square / 8); const relative = object.color === "white" ? rank + 1 : 8 - rank; if (relative < 4 || relative > 6) issues.push(runtimeIssue("OUTPOST_RANK_OUT_OF_RANGE", `${path}/square`, "Tabiya's strict outpost detector applies only to relative ranks four through six")); }
+  } else if (["direct_attack_count", "piece_reach_count"].includes(String(object.kind))) {
+    if (typeof object.count === "number" && object.count < 0) issues.push(runtimeIssue("NEGATIVE_FEATURE_COUNT", `${path}/count`, "feature counts cannot be negative"));
+  }
+  return Object.freeze(issues);
+}
+
+function structuralIssuesInPack(pack: DrillPackDefinition): readonly PackValidationIssue[] {
+  const issues: PackValidationIssue[] = [];
+  const visit = (value: unknown, path: string): void => {
+    if (value === null || typeof value !== "object") return;
+    if (Array.isArray(value)) { value.forEach((item, index) => visit(item, `${path}/${index}`)); return; }
+    const object = value as Record<string, unknown>;
+    if (object.kind === "structural_feature" || object.type === "structuralFeature") issues.push(...structuralIssues(object.feature, `${path}/feature`));
+    for (const [key, child] of Object.entries(object)) visit(child, `${path}/${pointerToken(key)}`);
+  };
+  visit(pack, "");
+  return Object.freeze(issues);
+}
+
 function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
+  issues.push(...structuralIssuesInPack(pack));
   const raw = pack as unknown as Record<string, unknown>;
   const mode = raw.mode;
 
@@ -277,6 +323,13 @@ function runtimeIssues(pack: DrillPackDefinition): readonly PackValidationIssue[
         "resist requires a checkpoint resolution so survival is measurable",
       ),
     );
+  }
+
+  if (PLAN_OBJECTIVES.has(pack.objective.type) && objectiveRules(pack).length === 0) {
+    issues.push(runtimeIssue("OBJECTIVE_GRADES_NOTHING", "/objective", `${pack.objective.type} declares a plan objective but compiles to no transition rules`));
+  }
+  for (const [index, leg] of (pack.legs ?? []).entries()) {
+    if (PLAN_OBJECTIVES.has(leg.objective.type) && objectiveRules(pack, leg.objective).length === 0) issues.push(runtimeIssue("OBJECTIVE_GRADES_NOTHING", `/legs/${index}/objective`, `${leg.objective.type} declares a plan objective but compiles to no transition rules`));
   }
 
   if (Array.isArray(conditions)) {

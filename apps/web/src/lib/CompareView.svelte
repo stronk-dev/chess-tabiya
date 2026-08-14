@@ -1,12 +1,13 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import type { BranchComparison, ComparisonEvidenceEntry, DrillRun, ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
+  import { structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
   import { onMount } from "svelte";
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
   import type { StartSide } from "./board-model.js";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { comparisonNode } from "./screen-model.js";
+  import { renderStructuralObservation } from "./structural-sentences.js";
 
   interface Props {
     run: DrillRun;
@@ -93,6 +94,11 @@
         <div class="scores" aria-label={`${column.label} recorded engine evaluations`}>
           {#each comparison.evidence[column.branchId] ?? [] as entry}<span data-ply-offset={entry.plyOffset}>+{entry.plyOffset}: {score(entry)}</span>{/each}
         </div>
+        {#if consequence}
+          <details><summary>Structural reading</summary>
+            {#each structuralReading(run.nodes.find((node) => node.id === column.leafNodeId)?.fen ?? run.nodes[0]!.fen).features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}
+          </details>
+        {/if}
       </article>
     {/each}
   </section>

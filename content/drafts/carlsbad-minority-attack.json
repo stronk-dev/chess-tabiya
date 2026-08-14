@@ -37,7 +37,20 @@
   },
   "objective": {
     "type": "execute_break",
-    "summary": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Three plans are available and they are close to mutually exclusive. Pick one and carry it out; the pack's claim is that the tempi you spend are not refunded when you change your mind."
+    "summary": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Execute the minority attack until Black has a backward c-pawn on White's half-open c-file.",
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "to": "achieved",
+        "feature": {
+          "kind": "all",
+          "of": [
+            { "kind": "feature", "feature": { "kind": "backward_pawn", "color": "black", "file": "c" } },
+            { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "c" } }
+          ]
+        }
+      }
+    ]
   },
   "concepts": [
     "carlsbad-structure",

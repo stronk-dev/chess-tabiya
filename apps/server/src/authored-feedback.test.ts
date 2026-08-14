@@ -75,7 +75,7 @@ function smallPack(overrides: Record<string, unknown> = {}): DrillPackDefinition
       fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
       side: "white",
     },
-    objective: { type: "preserve_plan_window", summary: "Test" },
+    objective: { type: "play_until_checkpoint", summary: "Exercise feedback projection without grading chess." },
     spine: [
       {
         id: "e4",

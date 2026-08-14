@@ -34,6 +34,29 @@ export { appendEvents, deriveSegments, eventsSince, projectRun } from "./events.
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
 export { terminalOutcome } from "./outcome.js";
 export {
+  STRUCTURAL_FEATURE_KINDS,
+  matchesStructuralExpression,
+  matchesStructuralFeature,
+  pawnSafety,
+  structuralDelta,
+  structuralFeatureKinds,
+  structuralReading,
+  vacationReading,
+  type FeatureComparison,
+  type PawnSafety,
+  type ReachRole,
+  type ReachScope,
+  type StructuralDelta,
+  type StructuralExpression,
+  type StructuralFeature,
+  type StructuralFeatureKind,
+  type StructuralObservation,
+  type StructuralReading,
+  type StructureId,
+  type StructureMatch,
+  type VacationReading,
+} from "./structure.js";
+export {
   legIndexAt,
   trajectoryLegSpans,
   trajectoryVerdict,

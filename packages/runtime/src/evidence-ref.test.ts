@@ -20,6 +20,18 @@ describe("evidence reference grammar", () => {
       "rules:result-win",
       "rules:result-loss",
       "rules:result-draw",
+      "rules:structure-pawn-safe-square",
+      "rules:structure-outpost",
+      "rules:structure-backward-pawn",
+      "rules:structure-isolated-pawn",
+      "rules:structure-doubled-pawn",
+      "rules:structure-passed-pawn",
+      "rules:structure-open-file",
+      "rules:structure-half-open-file",
+      "rules:structure-line-blockers",
+      "rules:structure-direct-attack-count",
+      "rules:structure-piece-reach-count",
+      "rules:structure-named-structure",
     ]);
     expect(packEvidenceRef("timing-window")).toBe("pack:timing-window");
     expect(engineEvidenceRef("evidence-job-7")).toBe("engine:evidence-job-7");

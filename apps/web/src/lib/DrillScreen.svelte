@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import { trajectoryVerdict, type BranchComparison } from "@chess-tabiya/runtime";
+  import { structuralReading, trajectoryVerdict, type BranchComparison } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
   import BranchRail from "./BranchRail.svelte";
@@ -14,6 +14,7 @@
   import WhyBanner from "./WhyBanner.svelte";
   import OutcomeContext from "./OutcomeContext.svelte";
   import { renderEvidenceRef } from "./evidence-sentences.js";
+  import { renderStructuralObservation } from "./structural-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
     activeNode,
@@ -89,6 +90,7 @@
   let forkOpen = $state(false);
   let checkpointPickerOpen = $state(false);
   let replaying = $state(false);
+  let structuralOpen = $state(false);
   let forkLabel = $state("");
   let forkIntent = $state("");
   let replayTimer: ReturnType<typeof setInterval> | undefined;
@@ -182,6 +184,7 @@
       ? currentNode
       : (run.nodes.find((node) => node.id === previewNodeId) ?? currentNode),
   );
+  let structure = $derived(structuralReading(displayedNode.fen));
   function interactiveTarget(event: KeyboardEvent): boolean {
     const target =
       event.target instanceof Node ? event.target : document.activeElement;
@@ -464,15 +467,26 @@
           <OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
         {/if}
         <WhyBanner model={banner} />
-        <div class="board-frame" class:previewing={previewNodeId !== undefined}>
-          {#if previewNodeId}<span class="preview-label">Preview</span>{/if}
-          <Chessboard
-            fen={displayedNode.fen}
-            {startSide}
-            lastMove={displayedNode.moveUci}
-            disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined || terminalEvent !== undefined}
-            {onMove}
-          />
+        <section class="structural-reading" aria-label="Structural reading">
+          <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Structural reading</button>
+          {#if structuralOpen}
+            <div class="structural-facts">
+              {#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}
+              {#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}
+            </div>
+          {/if}
+        </section>
+        <div class="board-slot">
+          <div class="board-frame" class:previewing={previewNodeId !== undefined}>
+            {#if previewNodeId}<span class="preview-label">Preview</span>{/if}
+            <Chessboard
+              fen={displayedNode.fen}
+              {startSide}
+              lastMove={displayedNode.moveUci}
+              disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined || terminalEvent !== undefined}
+              {onMove}
+            />
+          </div>
         </div>
       </section>
 
@@ -683,7 +697,7 @@
     min-height: 0;
     justify-self: center;
     display: grid;
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-rows: auto auto auto minmax(0, 1fr);
     gap: 0.8rem;
     overflow: hidden;
   }
@@ -702,10 +716,38 @@
     font: 500 clamp(1.4rem, 3vw, 2.4rem) / 1.04 var(--display-font);
   }
 
+  .structural-reading > button {
+    padding: 0.45rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 0.55rem;
+    background: var(--panel);
+    color: inherit;
+  }
+
+  .structural-facts {
+    max-height: 8rem;
+    margin-top: 0.35rem;
+    overflow: auto;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .structural-facts p { margin: 0.2rem 0; }
+
+  .board-slot {
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
   .board-frame {
     position: relative;
-    width: min(100%, calc(100dvh - 30rem), 40rem);
-    max-height: 100%;
+    width: min(100%, max(10rem, calc(100dvh - 34rem)), 40rem);
+    height: auto;
     aspect-ratio: 1;
     justify-self: center;
     overflow: hidden;
@@ -714,7 +756,8 @@
   }
 
   .position-column.outcome .board-frame {
-    width: min(100%, calc(100dvh - 38rem), 34rem);
+    width: min(100%, max(10rem, calc(100dvh - 42rem)), 34rem);
+    height: auto;
   }
 
   .board-frame.previewing {

@@ -213,6 +213,13 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
     .getByRole("button", { name: /Open position/ })
     .click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
+  const structuralReading = page.getByRole("button", { name: "Structural reading" });
+  await expect(structuralReading).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator(".structural-facts")).toHaveCount(0);
+  await structuralReading.click();
+  await expect(page.locator(".structural-facts")).toBeVisible();
+  await expect(page.locator(".structural-facts p").first()).toBeVisible();
+  await structuralReading.click();
   const boardReadyMs =
     (await page.evaluate(() => performance.now())) - boardStart;
 

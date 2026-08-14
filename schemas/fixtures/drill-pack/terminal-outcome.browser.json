@@ -15,7 +15,7 @@
     "side": "white"
   },
   "objective": {
-    "type": "preserve_plan_window",
+    "type": "play_until_checkpoint",
     "summary": "Exercise terminal outcome delivery without making a chess claim."
   },
   "spine": [

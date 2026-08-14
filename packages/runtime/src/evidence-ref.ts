@@ -8,6 +8,18 @@ export const RULES_EVIDENCE_FACTS = Object.freeze([
   "result-win",
   "result-loss",
   "result-draw",
+  "structure-pawn-safe-square",
+  "structure-outpost",
+  "structure-backward-pawn",
+  "structure-isolated-pawn",
+  "structure-doubled-pawn",
+  "structure-passed-pawn",
+  "structure-open-file",
+  "structure-half-open-file",
+  "structure-line-blockers",
+  "structure-direct-attack-count",
+  "structure-piece-reach-count",
+  "structure-named-structure",
 ] as const);
 
 export type RulesEvidenceFact = (typeof RULES_EVIDENCE_FACTS)[number];

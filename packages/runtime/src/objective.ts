@@ -5,6 +5,7 @@ import { positionFromFen } from "./chess.js";
 import { RuntimeError, unknownNode } from "./errors.js";
 import { appendEvents } from "./events.js";
 import { assertObjectiveTransition } from "./objective-state.js";
+import { matchesStructuralExpression, type StructuralExpression } from "./structure.js";
 import type {
   DrillRun,
   MutationResult,
@@ -55,7 +56,8 @@ export type FenPredicate =
       readonly mode: "contains" | "exact";
       readonly white: readonly SquareName[];
       readonly black: readonly SquareName[];
-    };
+    }
+  | { readonly type: "structuralFeature"; readonly feature: StructuralExpression };
 
 export type ObjectivePredicate =
   | RulesFactPredicate
@@ -144,27 +146,29 @@ function squareSetMatches(
 }
 
 function matchesFenPredicate(node: Node, predicate: FenPredicate): boolean {
-  if (predicate.type === "transposeKey") return node.transposeKey === predicate.value;
-
-  const position = positionFromFen(node.fen);
-  if (predicate.type === "pieceOnSquare") {
-    const square = parseSquare(predicate.square);
-    if (square === undefined) return false;
-    const actual = position.board.get(square);
-    if (predicate.piece === null) return actual === undefined;
-    return actual?.color === predicate.piece.color && actual.role === predicate.piece.role;
+  switch (predicate.type) {
+    case "transposeKey": return node.transposeKey === predicate.value;
+    case "pieceOnSquare": {
+      const position = positionFromFen(node.fen);
+      const square = parseSquare(predicate.square);
+      if (square === undefined) return false;
+      const actual = position.board.get(square);
+      if (predicate.piece === null) return actual === undefined;
+      return actual?.color === predicate.piece.color && actual.role === predicate.piece.role;
+    }
+    case "pawnStructure": {
+      const position = positionFromFen(node.fen);
+      const pawns = (color: Color): ReadonlySet<SquareName> => new Set(
+        [...position.board.pawn.intersect(position.board[color])].map(makeSquare),
+      );
+      return squareSetMatches(pawns("white"), predicate.white, predicate.mode) && squareSetMatches(pawns("black"), predicate.black, predicate.mode);
+    }
+    case "structuralFeature": return matchesStructuralExpression(node.fen, predicate.feature);
+    default: {
+      const exhaustive: never = predicate;
+      throw new TypeError(`Unhandled fen predicate: ${JSON.stringify(exhaustive)}`);
+    }
   }
-
-  const pawns = (color: Color): ReadonlySet<SquareName> =>
-    new Set(
-      [...position.board.pawn.intersect(position.board[color])].map((square) =>
-        makeSquare(square),
-      ),
-    );
-  return (
-    squareSetMatches(pawns("white"), predicate.white, predicate.mode) &&
-    squareSetMatches(pawns("black"), predicate.black, predicate.mode)
-  );
 }
 
 function pathToNode(run: DrillRun, node: Node): readonly Node[] {

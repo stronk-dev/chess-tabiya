@@ -1,6 +1,6 @@
 # RFC: Structural reading — the rung-0 layer
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/05-in-run-experience.md` §3 (the ladder, lines 54-85), §3a (silence
@@ -36,13 +36,14 @@
   pointer to a rule and not a cached computation.
 - **Pack schema:** **0.10.** Claimed in `rfc/README.md`'s pack-schema-version register in the
   same edit that adds this RFC's Active row.
-- **Planning:** `planning/structural-reading/` (once implementing)
+- **Planning:** `planning/structural-reading/`
 
 ## Summary
 
 `ObjectivePredicate` can already ask whether a specific pawn stands on a specific square
 (`packages/runtime/src/objective.ts:53-58`). It cannot ask whether *a* pawn is backward, whether
-a file is half-open, or whether a square can ever be attacked by an enemy pawn again. So an
+a file is half-open, or whether a square is safe from enemy pawn advances in the current pawn
+placement. So an
 author who wants to grade the minority attack has to enumerate the exact pawn placement of every
 position in which it might be said to have succeeded, and gives up. The result is measurable and
 this RFC measured it: `content/drafts/carlsbad-minority-attack.json` compiles to **zero**
@@ -205,7 +206,8 @@ Explicitly outside this RFC, each because it is a different rung or a different 
 
 Everything below is subordinate to these, and any later RFC extending this layer inherits them.
 
-**1a. Detection is cheap and cannot be wrong; significance is judgement and must be attributed.**
+**1a. Detection is cheap and exact within its declared scope; significance is judgement and must
+be attributed.**
 `design/05` §5, `design/03` lines 176-178. Nothing in this RFC asserts that a detected feature is
 good, bad, or worth playing for. §2b, §4a and §6b make that a property of the vocabulary, the types
 and the renderer rather than a rule people are asked to remember.
@@ -233,8 +235,8 @@ taste.
 
 | # | `kind` | Fields | True exactly when |
 |---|---|---|---|
-| 1 | `pawn_safe_square` | `color`, `square` | No pawn of `X` stands on a file adjacent to `f` at a rank ahead of `r` for `C`. Equivalently: no enemy pawn can attack `(f, r)` by pushes alone. §2c is the whole contract of this one |
-| 2 | `outpost` | `color`, `square` | `(f, r)` is on rank 4, 5 or 6 counted from `C`'s side; **and** `(f, r)` is attacked by a pawn of `C`; **and** `pawn_safe_square(C, (f, r))` holds. Occupancy is *not* part of the definition — compose with the shipped `pieceOnSquare` to ask who is standing there |
+| 1 | `pawn_safe_square` | `color`, `square` | In the **current pawn placement**, no pawn of `X` stands on a file adjacent to `f` at a rank ahead of `r` for `C`. Equivalently: no enemy pawn can attack `(f, r)` by pushes alone while pawns remain on their current files. §2c is the whole contract of this one |
+| 2 | `outpost` | `color`, `square` | Under **Tabiya's strict detector definition**, `(f, r)` is on rank 4, 5 or 6 counted from `C`'s side; **and** `(f, r)` is attacked by a pawn of `C`; **and** `pawn_safe_square(C, (f, r))` holds. Occupancy is *not* part of the definition — compose with the shipped `pieceOnSquare` to ask who is standing there. The product never presents this convention as uncontested chess truth |
 | 3 | `backward_pawn` | `color`, `file` | Some pawn of `C` on `file` at rank `r` has (i) no pawn of `C` on an adjacent file at a rank that is not ahead of `r` for `C`, and (ii) a stop square `(f, r + fwd(C))` that is attacked by at least one pawn of `X` |
 | 4 | `isolated_pawn` | `color`, `file` | At least one pawn of `C` on `file`, and no pawn of `C` on either adjacent file |
 | 5 | `doubled_pawn` | `color`, `file` | Two or more pawns of `C` on `file` |
@@ -242,8 +244,8 @@ taste.
 | 7 | `open_file` | `file` | No pawn of either colour on `file` |
 | 8 | `half_open_file` | `color`, `file` | No pawn of `C` on `file` and at least one pawn of `X` on `file`. ("Half-open **for White**" means White has no pawn there) |
 | 9 | `line_blockers` | `from`, `to`, `comparison`, `count` | `|between(from, to) ∩ occupied|` satisfies `comparison count`. `between` is chessops' (`chessops/attacks`), so the endpoints must be aligned on a rank, file or diagonal; §8 refuses a pack where they are not |
-| 10 | `square_control` | `square`, `perspective`, `comparison`, `margin` | `attackers(perspective) − attackers(opposite(perspective))` satisfies `comparison margin`. An attacker is any piece `p` of that colour on square `s` with `attacks(p, s, occupied).has(square)` — **direct attackers only**, no x-ray, no pin filtering, kings counted |
-| 11 | `piece_mobility` | `color`, `role`, `scope`, `comparison`, `count` | `role ∈ {knight, bishop, rook, queen}`. Mobility of a piece on `s` is `attacks(piece, s, occupied).diff(board[color]).size()`. `scope: "any"` — some such piece satisfies `comparison count`; `scope: "every"` — all do, **vacuously true when the side has no such piece** |
+| 10 | `direct_attack_count` | `square`, `color`, `comparison`, `count` | The number of pieces of `color` whose chessops attack set contains `square` satisfies `comparison count` — **one colour at a time**, direct attacks only, no x-ray, no pin filtering, kings counted. The detector never subtracts the opponent's count or calls the result a balance |
+| 11 | `piece_reach_count` | `color`, `role`, `scope`, `comparison`, `count` | `role ∈ {knight, bishop, rook, queen}`. The scoped count for a piece on `s` is `attacks(piece, s, occupied).diff(board[color]).size()`: attack-reachable squares in the current occupancy, **not legal mobility**. `scope: "any"` and `scope: "every"` have their ordinary quantifier meanings; `every` is vacuously true when the side has no such piece |
 | 12 | `named_structure` | `id` | The catalogue entry `id` (§5) matches this position |
 
 `comparison` reuses the shipped spelling `"atLeast" | "atMost" | "equal"`
@@ -251,10 +253,10 @@ taste.
 
 Three definitional notes that are load-bearing rather than pedantic:
 
-- **`piece_mobility` covers four roles because those are the four whose attack set equals their
-  move set.** A pawn attacks diagonally and moves forward; a king's legal moves depend on check and
-  castling rights. Reporting `attacks()` for either would be a number that is not mobility. The
-  restriction is enforced by the schema enum, not by a lint.
+- **`piece_reach_count` covers four roles because their geometric attack reach is useful without
+  pretending it is a legal-move count.** Pins and check are deliberately outside rung 0. Pawns move
+  differently from how they attack, and kings add check and castling semantics, so neither role is
+  admitted. The restriction is enforced by the schema enum, not by a lint.
 - **`backward_pawn` and `isolated_pawn` may both hold.** Some textbooks make them exclusive. This
   RFC does not, because "backward" as defined is a statement about support and the stop square and
   "isolated" is a statement about neighbouring files, and suppressing one because the other holds
@@ -283,14 +285,14 @@ Rule 4 is the one that shapes the list, so the exclusions are stated rather than
 | king safety, space, initiative, tempo | Scores. Each is a weighted count whose weights *are* the judgement |
 | weak square, weak pawn | The word "weak" is the claim. `pawn_safe_square` and `backward_pawn` are the arithmetic underneath it, without it |
 | good bishop / bad bishop | A verdict about a piece, keyed to a pawn colour count that means nothing without a plan |
-| trapped piece | Expressible as `piece_mobility` with `count: 0`. The **arithmetic ships and the name does not** |
-| hanging piece | Expressible as `square_control` with a positive margin against the occupier. Same rule |
+| trapped piece | A zero `piece_reach_count` is an exact scoped count, but calling the piece trapped is a judgement about legal continuations. The arithmetic ships and the name does not |
+| hanging piece | Requires comparing attack/defence, legality and tactical continuations. This RFC ships per-colour direct attack counts only and does not derive this verdict |
 | pawn-skeleton signature as an equality test | A canonical string of pawn placement is `pawnStructure` with `mode: "exact"` under another name, and it is exactly the brittleness this RFC exists to remove. The skeleton survives as a **readable key** for grouping (§4a) and as the *body* of a named structure (§5), never as an authorable equality |
 | bishop pair | Material, already expressible |
 
 The last two rows in the middle of that table are the mechanism, so it is worth naming it directly:
 **a composition is authorable; a name is not shipped.** An author may write
-`piece_mobility(black, bishop, any, equal, 0)` and call it a trapped bishop in their own prose —
+`piece_reach_count(black, bishop, any, equal, 0)` and call it a trapped bishop in their own prose —
 and that prose then carries their provenance, which is what rung 5 is for. What the product will
 not do is ship "trapped" as a computed fact, because the arithmetic is the fact and the word is the
 verdict.
@@ -298,7 +300,7 @@ verdict.
 #### 2c. Pawn safety, denial, and the one-sided-safe property
 
 `pawn_safe_square` is the primitive under every prophylactic reading and it is the one place where
-"cannot be wrong" has to be earned rather than claimed.
+"exact within its declared scope" has to be earned rather than claimed.
 
 The definition in §2a says *by pushes alone*. That qualifier is not decoration: an enemy pawn two
 files away can migrate onto an adjacent file by capturing, and a definition that ignored this would
@@ -328,24 +330,25 @@ Two properties follow, and both are normative and tested:
 **One-sided safety.** Blockage is ignored when computing `pushes`, which can only ever add a push
 attacker that a blocked file would have removed. So `safe: true` is *exact* under the stated basis,
 and `safe: false` may be pessimistic. The approximation can only ever **withhold** a denial claim,
-never assert one falsely. That is the direction that makes "cannot be wrong about chess" true rather
-than nearly true.
+never assert one falsely within the pawn-push-only model. It does not make a claim about captures or
+reasonable continuations.
 
-**Push monotonicity.** Under pawn pushes alone the push-attacker set of any square is
-non-increasing, because a push keeps the pawn's file and moves it away from the ranks that matter.
-Pawn *captures* change file and may create an attacker; a pawn leaving the board removes one. Stated
-as a lemma because it is what makes the denial delta meaningful (§4c) and because criterion 3 is a
-`fast-check` property test of it (`fast-check@4.9.0` is already a devDependency).
+**Push monotonicity.** Under pawn pushes alone the number of candidate pawns for a square is
+non-increasing, and a surviving candidate on the same file is one push closer to its attacking stand
+square. (The array stores current squares, so literal set inclusion would be false when `a2` becomes
+`a3`.) Pawn *captures* change file and may create a candidate; a pawn leaving the relevant ranks
+removes one. Stated as a lemma because it is what makes the denial delta meaningful (§4c).
 
 **What this corrects about the design's example.** `design/05` §5 line 268 and `design/03` line 164
-both give the reading as *"after a4, a Black knight can never use b5 again."* Measured on a real
+both gave the stale reading *"after a4, a Black knight can never use b5 again."* The corrected
+rung-0 row in `design/05` now scopes this to the current pawn placement. Measured on a real
 position, the interesting fact arrives **earlier than the move**: with a white pawn on a2, b5 is
 already not pawn-safe for Black at a distance of two pushes; a4 reduces the distance to one; a5
 would make it zero. The rung-0 reading is therefore not a post-hoc note that something became
 impossible — it is *the eviction distance, available before anybody commits to anything*, which is a
 forward-looking honest detector in the sense of `design/05` §5a. The sentence the product says is
-"White's a-pawn evicts a piece from b5 in one push," and it can say it as flatly as it says a move
-is legal.
+"While the a4 pawn remains on its current file, one push attacks b5." It never claims the square is
+permanently denied or evaluates reasonable continuations.
 
 ### 3. Authoring: extend the union, do not sibling it
 
@@ -398,14 +401,14 @@ export type StructuralFeature =
       readonly count: number;
     }
   | {
-      readonly kind: "square_control";
+      readonly kind: "direct_attack_count";
       readonly square: SquareName;
-      readonly perspective: Color;
+      readonly color: Color;
       readonly comparison: FeatureComparison;
-      readonly margin: number;
+      readonly count: number;
     }
   | {
-      readonly kind: "piece_mobility";
+      readonly kind: "piece_reach_count";
       readonly color: Color;
       readonly role: MobilityRole;
       readonly scope: MobilityScope;
@@ -416,8 +419,8 @@ export type StructuralFeature =
 
 export const STRUCTURAL_FEATURE_KINDS = Object.freeze([
   "pawn_safe_square", "outpost", "backward_pawn", "isolated_pawn", "doubled_pawn",
-  "passed_pawn", "open_file", "half_open_file", "line_blockers", "square_control",
-  "piece_mobility", "named_structure",
+  "passed_pawn", "open_file", "half_open_file", "line_blockers", "direct_attack_count",
+  "piece_reach_count", "named_structure",
 ] as const);
 export type StructuralFeatureKind = (typeof STRUCTURAL_FEATURE_KINDS)[number];
 
@@ -512,29 +515,41 @@ Compilation, in `apps/server/src/pack-orchestrator.ts`:
   the pack ends up graded by fewer rules than it declared — the same never-silent hazard as §3c,
   one layer up. Load-time validation (§8) is the user-facing refusal; the throw is the
   can't-happen guard.
-- `conditionEvidence` (`:132-141`) gains a `structural_feature` branch returning
-  `rulesEvidenceRef(structuralEvidenceFact(k))` where `k` is the **first feature kind in the
-  expression's canonical walk** — a deterministic choice, defined here so that two implementations
-  cannot disagree, and honest because the ref names a rule rather than a computed instance (§6a).
+- `conditionEvidence` (`:132-141`) becomes `conditionEvidenceRefs` and its
+  `structural_feature` branch returns one `rulesEvidenceRef(structuralEvidenceFact(k))` for **every
+  distinct feature leaf kind in canonical order**. A conjunction is grounded by all of its leaves;
+  silently retaining only the first would make Pack B's objective claim that the backward pawn
+  alone proved the minority signature. `pieceOnSquare` leaves are position anchors rather than a
+  new evidence kind and add no ref.
   Note that the function's present final line falls through to `condition.fact`, so adding the kind
   makes it a **type error** until it is handled. That is the desired failure mode and it is why the
   union is extended rather than widened with an index signature.
 
 ### 4. Reading: what a learner may be shown
 
-#### 4a. `StructuralReading` — the shape that cannot carry a verdict
+#### 4a. `StructuralReading` — observations are not author queries
+
+`StructuralFeature` is an author query. Several variants contain arbitrary thresholds or square
+pairs, so there is no finite operation that can "detect every feature that holds." The first draft
+incorrectly used that query type as the reading's output and left enumeration undefined. The
+learner-facing reading instead carries a closed, finite observation vocabulary:
 
 ```ts
-export interface DetectedFeature {
-  readonly feature: StructuralFeature;   // the exact query that holds
+export interface StructuralObservation {
+  readonly kind: StructuralFeatureKind;
+  readonly color?: Color;
+  readonly role?: MobilityRole;
   readonly squares: readonly SquareName[]; // the squares it is about, canonical order
-  readonly detail?: PawnSafety | LineBlockers | ControlCount | MobilityCount;
+  readonly file?: FileName;
+  readonly count?: number;               // raw blocker, attack, or reach count
+  readonly detail?: PawnSafety;
+  readonly provenanceNote?: string;      // required for detector conventions
 }
 
 export interface StructuralReading {
   readonly fen: string;
   readonly skeletonKey: string;          // canonical pawn placement, for grouping only
-  readonly features: readonly DetectedFeature[];  // canonical order — never ranked
+  readonly features: readonly StructuralObservation[]; // canonical order — never ranked
   readonly structures: readonly StructureMatch[];
 }
 ```
@@ -546,6 +561,14 @@ does arrive — from an author, a shape entry, an engine — it arrives as a *se
 references a feature*, carrying its own provenance in the shape `RootAssessment` already
 establishes (`packages/schema/src/drill-pack/types.ts:142-150`). Nothing in this RFC creates that
 record type; §5 ships the one attributed string this layer needs and stops.
+
+The finite enumerator is explicit: pawn facts over the sixteen colour/file pairs; passed pawns at
+occupied pawn squares; pawn safety and strict outpost matches for squares occupied by non-pawn
+pieces; eight open files and sixteen half-open colour/files; direct attack counts
+for each colour at occupied non-pawn squares with a non-zero count; attack-reach counts for each present knight, bishop,
+rook and queen; blockers on each present slider's rays to the board edge; and the four named
+structure matches. This is a curated observation projection, **not** the set of all true author
+queries. In particular it never invents every possible threshold or every pair of aligned squares.
 
 `skeletonKey` is a canonical serialisation of pawn placement. It exists for grouping and telemetry
 and is explicitly **not** authorable (§2b, last-but-one row).
@@ -571,8 +594,8 @@ A denial move is invisible to every eval-first tool because nothing happened (`d
 export interface StructuralDelta {
   readonly parentFen: string;
   readonly fen: string;
-  readonly gained: readonly DetectedFeature[];  // held after, not before
-  readonly lost: readonly DetectedFeature[];    // held before, not after
+  readonly gained: readonly StructuralObservation[];  // held after, not before
+  readonly lost: readonly StructuralObservation[];    // held before, not after
   readonly evictionChanges: readonly {
     readonly square: SquareName;
     readonly color: Color;
@@ -634,8 +657,8 @@ it"* (`design/05` §5 line 270) by naming the blockers and what opens if one lea
 #### 5a. The name is authored; the trigger is arithmetic
 
 A named structure is the one place in this RFC where a human contributes something, and the split is
-absolute: **the trigger is a predicate and cannot be wrong; the name is a convention and carries
-provenance.**
+absolute: **the trigger is exact arithmetic within the catalogue's declared convention; the name is
+a convention and carries provenance.**
 
 ```ts
 export interface StructureEntry {
@@ -707,7 +730,7 @@ second half will go.
 kind, spelled `structure-<kind-with-hyphens>`: `structure-pawn-safe-square`, `structure-outpost`,
 `structure-backward-pawn`, `structure-isolated-pawn`, `structure-doubled-pawn`,
 `structure-passed-pawn`, `structure-open-file`, `structure-half-open-file`,
-`structure-line-blockers`, `structure-square-control`, `structure-piece-mobility`,
+`structure-line-blockers`, `structure-direct-attack-count`, `structure-piece-reach-count`,
 `structure-named-structure`. A helper `structuralEvidenceFact(kind)` maps between them.
 
 No new namespace, for three reasons. The `sourceLabel` a ref renders under **is** its attribution
@@ -719,15 +742,19 @@ schema constrains `evidenceRefs` items only to non-empty strings
 (`schemas/drill_run.schema.json:243-247`, `:432-437`), so an extended `rules:` vocabulary needs no
 run-schema change — which is what keeps §1c's no-migration claim true.
 
-The ref is per **kind**, not per instance, and that is deliberate: the instance detail is a pure
-function of the node's FEN and §1c forbids persisting it. The renderer recomputes.
+The ref is per **kind**, not per instance. Existing `renderEvidenceRef(reference, pack, payloads)`
+does not receive a node FEN, so it cannot honestly reconstruct instance parameters. Objective
+grounds therefore render a generic detector sentence (for example, "Tabiya's backward-pawn
+condition holds at this position"), while the open structural-reading control renders the exact
+position-specific observation from the node FEN. This preserves the current evidence-ref grammar,
+does not fabricate lost parameters, and keeps the two claims visibly distinct.
 
 #### 6b. Sentences, and the rule they are held to
 
-`apps/web/src/lib/structural-sentences.ts` exports
-`Record<StructuralFeatureKind, (feature, detected) => string>` — exhaustive by type, so a thirteenth
-kind will not compile without a sentence. Fixed strings with interpolated squares, files and counts.
-No LLM anywhere near this path.
+`apps/web/src/lib/structural-sentences.ts` exports two exhaustive tables: generic objective-ground
+sentences keyed by `StructuralFeatureKind`, and position-specific observation renderers keyed by
+`StructuralObservation["kind"]`. A thirteenth kind cannot compile without both. Fixed strings with
+interpolated squares, files and counts; no LLM anywhere near this path.
 
 Two normative rules:
 
@@ -737,9 +764,13 @@ Two normative rules:
    appear. This is the machine-checkable form of §1a, in the spirit of the grounded-rendering
    contract `design/05` §3b-i point 3 already asks for.
 2. **The safety qualifier is obligatory.** When a `pawn_safe_square` detection has a non-empty
-   `captureAttackers`, the rendered sentence must include it. "No black pawn can attack e5 by
-   advancing; b7 could after one capture." Omitting the second clause would state a permanence the
-   arithmetic does not support, and §2c's honesty rests on it being said.
+   `captureAttackers`, the rendered sentence must include it without claiming a capture is legally
+   available: "No black pawn can attack e5 by advancing on its current file; a pawn would need one
+   capture to reach an attacking file, and capture availability is not evaluated." Omitting the
+   second clause would state a permanence the arithmetic does not support.
+3. **Detector conventions identify themselves.** An outpost sentence starts with "Tabiya's strict
+   outpost detector…" and named-structure output carries the catalogue provenance note. Neither is
+   presented as uncontested chess truth.
 
 Sample renderings, which are the specification of tone as much as of content:
 
@@ -747,9 +778,11 @@ Sample renderings, which are the specification of tone as much as of content:
 |---|---|
 | `backward_pawn(black, c)` | "Black's c6 pawn has no pawn on b or d that can support it, and c5 is covered by a white pawn." |
 | `half_open_file(white, c)` | "White has no pawn on the c-file; Black has one." |
-| `pawn_safe_square(black, b5)`, 1 push | "White's a-pawn can attack b5 in one push." |
+| `pawn_safe_square(black, b5)`, 1 push | "While the current pawn files remain, White's a-pawn can attack b5 in one push." |
 | `line_blockers(a1, h8, equal, 1)` | "The a1–h8 diagonal has one piece on it: the pawn on d4." |
-| `square_control(f7, white, atLeast, 1)` | "f7 is attacked twice and defended once." |
+| `direct_attack_count(f7, white, equal, 2)` | "Two White pieces directly attack f7 in the current occupancy; pins are not evaluated." |
+| `piece_reach_count(white, bishop, any, equal, 3)` | "A White bishop has three attack-reachable squares in the current occupancy; legal mobility is not evaluated." |
+| `outpost(white, e5)` | "Tabiya's strict outpost detector matches e5 for White: pawn-supported in enemy territory and currently unattackable by a Black pawn advancing on its file." |
 | `named_structure(carlsbad)` | "Carlsbad structure." *(and the provenance note on request)* |
 
 #### 6c. The comparison surface
@@ -808,7 +841,7 @@ a fixture under `schemas/fixtures/drill-pack/`:
 | `LINE_SPAN_EMPTY` | `…/feature` | `line_blockers` whose `between(from, to)` is empty — unaligned, identical, or adjacent endpoints. All three are authoring errors and all three would otherwise evaluate to a constant |
 | `OUTPOST_RANK_OUT_OF_RANGE` | `…/feature` | `outpost` on a square outside ranks 4–6 from `color`'s side. The definition cannot hold there, so the pack is asserting a contradiction |
 | `UNKNOWN_STRUCTURE_ID` | `…/feature/id` | `named_structure` naming an id absent from `STRUCTURE_CATALOGUE` |
-| `NEGATIVE_FEATURE_COUNT` | `…/feature` | `line_blockers.count`, `piece_mobility.count` negative, or `square_control.margin` outside ±16 |
+| `NEGATIVE_FEATURE_COUNT` | `…/feature` | `line_blockers.count`, `piece_reach_count.count`, or `direct_attack_count.count` is negative |
 | `STRUCTURAL_EXPRESSION_TOO_DEEP` | `…/feature` | A `StructuralExpression` nested more than **4** levels. The language is recursive and a recursive schema with no cap is an unbounded parse; four levels expresses every signature in §10 with room over |
 
 `OBJECTIVE_GRADES_NOTHING` is the one that makes the gap unreintroducible, so its exemptions are
@@ -823,6 +856,14 @@ stated rather than left to the reader:
   objectives.
 - The four outcome types cannot trigger it (automatic rules, `:228-257`) and `follow_theory` is
   already covered by `THEORY_NEEDS_BOUNDARY_CHECKPOINT` (`pack-validation.ts:232-234`).
+
+The exemption audit is deliberately two-way. `play_until_checkpoint` is the only plan-like type
+whose meaning is explicitly ungraded, so refusing it would turn an honesty type into an error.
+Conversely, none of the five plan-family types can claim an asynchronous grader as an exemption:
+`ObjectiveEvidenceUpgrader` is an optional server construction detail and no pack field declares or
+requires one. A pack that loads must be gradeable from its own durable contract; deployment wiring
+cannot rescue an empty objective. Unit-test helper objects that bypass `validatePackDocument` are
+not loadable artifacts and remain unaffected.
 
 Under this rule two currently-valid artifacts stop loading, and §10 fixes both in this RFC.
 
@@ -843,7 +884,7 @@ Additions:
    `$defs/square` (`schema.json:103-106`).
 2. `$defs/structuralFeature` — a twelve-branch `oneOf`, every branch an object with
    `additionalProperties: false`, a `const` `kind`, and required fields exactly as §3b.
-   `piece_mobility.role` is `{"enum": ["knight","bishop","rook","queen"]}`;
+   `piece_reach_count.role` is `{"enum": ["knight","bishop","rook","queen"]}`;
    `named_structure.id` is an enum of the four catalogue ids.
 3. `$defs/structuralExpression` — a four-branch `oneOf` (`all`/`any`, `not`, `feature`,
    `pieceOnSquare`), self-referential through `$ref: "#/$defs/structuralExpression"`, every branch
@@ -873,9 +914,9 @@ grow silently, which is the general form of the failure class this RFC's shapes 
 
 ### 10. Pack B gets an objective, and the browser fixture gets an honest type
 
-**`content/drafts/carlsbad-minority-attack.json`.** The author already wrote the signature in prose
-at `/planClasses/0/description`. It becomes `successConditions` — one condition per plan class that
-**has** a structural signature:
+**`content/drafts/carlsbad-minority-attack.json`.** The author already wrote the minority signature
+in prose at `/planClasses/0/description`. It becomes the pack's one machine-graded
+`successCondition`:
 
 ```json
 "successConditions": [
@@ -889,14 +930,6 @@ at `/planClasses/0/description`. It becomes `successConditions` — one conditio
         { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "c" } }
       ]
     }
-  },
-  {
-    "kind": "structural_feature",
-    "to": "achieved",
-    "feature": {
-      "kind": "feature",
-      "feature": { "kind": "half_open_file", "color": "black", "file": "d" }
-    }
   }
 ]
 ```
@@ -906,11 +939,13 @@ are disjunctive by compilation — each becomes its own rule set (`pack-orchestr
 any of them can fire — so writing the minority attack's two features as two conditions would grade
 "either half happened", which is wrong at the start position, where `half_open_file(white, c)` is
 already true. This is the concrete reason §3b makes the predicate carry an expression rather than a
-bare feature. The three plan classes:
+bare feature. The other plan classes are **not** alternative success rules. Without recorded
+intent, making three disjunctive plan signatures would grade "some plan-shaped consequence
+occurred," not the minority attack named by this acceptance slice:
 
 - **Minority attack** — `all[ backward_pawn(black, "c"), half_open_file(white, "c") ]` → `achieved`.
-- **Central break** — `half_open_file(black, "d")` → `achieved`. A successful e3–e4 break removes
-  Black's d5 pawn while White keeps d4, which is exactly "Black has no d-pawn and White does".
+- **Central break** — not graded here. A half-open d-file alone cannot establish that the learner
+  chose or successfully executed the authored plan.
 - **Kingside attack** — **not graded, and this RFC says so rather than inventing a signature.** Its
   success is piece placement and initiative; there is no rules-arithmetic statement that
   distinguishes a working kingside attack from a wasted one, and manufacturing one would be the
@@ -918,7 +953,7 @@ bare feature. The three plan classes:
   today — which is a limit of rung 0, honestly located, not a defect in the encoding.
 
 Because `successConditions` compile with `to: "achieved"` from `["active","preserved","degraded"]`
-(`pack-orchestrator.ts:150-159`), Pack B goes from **0** compiled rules to **6** and stops tripping
+(`pack-orchestrator.ts:150-159`), Pack B goes from **0** compiled rules to **3** and stops tripping
 `OBJECTIVE_GRADES_NOTHING`.
 
 Verified against the real position rather than reasoned about. Pack B's start FEN is
@@ -958,10 +993,10 @@ criterion 4 unless noted.
 | `half_open_file` where **neither** side has a pawn | False for both colours. `open_file` is the predicate for that, and the two are not aliases |
 | `line_blockers` with unaligned, identical or adjacent endpoints | Refused at load (§8) |
 | `line_blockers` counting the endpoints | It does not. `between` excludes both bounds |
-| `square_control` where the king is an attacker | Counted. It attacks the square; whether it may legally capture is a different question and is not asked |
-| `square_control` and x-ray | Not counted. Direct attackers only, stated in §2a and in the rendered sentence's wording |
-| `piece_mobility` with `scope: "every"` and no such piece | Vacuously true. §2a |
-| `piece_mobility` and pins | Ignored. Mobility is the attack set minus friendly occupancy; it is not a legal-move count and the name is not "legal moves" |
+| `direct_attack_count` where the king is an attacker | Counted for that colour. It attacks the square; whether it may legally capture is a different question and is not asked |
+| `direct_attack_count` and x-ray | Not counted. Direct attacks only; opposing counts are never subtracted or called a balance |
+| `piece_reach_count` with `scope: "every"` and no such piece | Vacuously true. §2a |
+| `piece_reach_count` and pins | Ignored. The count is attack reach minus friendly occupancy, explicitly not legal mobility |
 | `named_structure` inside a catalogue trigger | Impossible by type (§5a) |
 | `all` or `any` with an empty `of` | Impossible by schema (`minItems: 1`) and by type (non-empty tuple). An empty `all` would be vacuously true and an empty `any` vacuously false, which are two different silent answers to a malformed input |
 | A `StructuralExpression` nested more than 4 deep | Refused at load (§8) |
@@ -974,12 +1009,13 @@ criterion 4 unless noted.
 
 ### 12. Cost
 
-All twelve features are `SquareSet` arithmetic over a 64-square board (`chessops/attacks`,
-`chessops/squareSet`), with no allocation beyond the result arrays. A full `StructuralReading` is
-bounded by 8 files × 2 colours + 64 squares + ≤ 16 sliders, and the catalogue is four entries. The
-budget is **under 1 ms per position** and it is asserted, not assumed: criterion 14 measures a full
-reading plus delta over the Pack B spine and fails above 1 ms per node on the same envelope the
-existing latency tests use (`packages/runtime/src/latency.test.ts`).
+All twelve features are bounded `SquareSet` arithmetic over a 64-square board
+(`chessops/attacks`, `chessops/squareSet`). The finite observation enumerator in §4a defines the
+actual envelope; it does not pretend every author query can be enumerated. **1 ms per position is a
+measurement target, not a correctness gate**: criterion 14 records the reading-plus-delta numbers
+over Pack B and fails only if the existing 100 ms worry / 200 ms intervention envelope for direct
+navigation is crossed. A sub-millisecond threshold on shared CI hardware would be a flake generator,
+not evidence of user-visible latency.
 
 Computation happens **in the browser** for the reading and **on the server** for the grading, from
 the same functions in `packages/runtime` — which `apps/web` already depends on
@@ -995,11 +1031,9 @@ D4 lesson `rfc/archive/line-drill-theory-grading.md` §4b paid for once already.
    claim, it widens it — the gap is the whole five-type plan family, and two currently-loading
    artifacts are in it. Correcting the row is a BACKLOG row the implementer **proposes**
    (`AGENTS.md` law 5).
-2. **`design/05` §5 line 268 and `design/03` line 164 give the denial reading as "after a4, a Black
-   knight can never use b5 again."** Measured, the fact is available *before* a4 and what a4 changes
-   is the eviction distance (§2c). The RFC ships the distance, which is strictly more informative
-   and is forward-looking rather than retrospective. The design's example is a correct instance of a
-   claim whose general form is slightly different.
+2. **The corrected rung-0 row in `design/05` scopes denial to the current pawn placement.** The RFC
+   follows that correction: the fact is available before a4, a4 changes the eviction distance, and
+   no sentence says "never" or reasons over reasonable continuations.
 3. **`design/05` §6 question 2 — how deep discovered consequence goes — is answered at one ply.**
    It is listed as a genuine design fork, and this RFC resolves it on rung-0 grounds rather than on
    taste (§4d): a second ply requires a null move, a null move is a judgement about the opponent, and
@@ -1009,11 +1043,9 @@ D4 lesson `rfc/archive/line-drill-theory-grading.md` §4b paid for once already.
    readable key and as the body of a named structure, never as an authorable equality test, because
    as a predicate it is `pawnStructure` with `mode: "exact"` renamed — the exact brittleness this
    RFC exists to remove (§2b).
-5. **`design/03` line 171 says pressure maps show "imbalance shown, significance attributed."** This
-   RFC ships the counts and attributes nothing, because there is no attributed judgement available
-   at rung 0 to attribute. The attribution slot exists (an authored record referencing a feature id,
-   §4a) and stays empty until a rung-5 source fills it. Showing an imbalance with an empty
-   attribution is the honest half.
+5. **The corrected rung-0 contract permits exact attacker/defender counts, not a derived balance.**
+   This RFC ships one colour's direct-attack count at a time. It neither subtracts the opponent's
+   count nor labels a position balanced, defended, pressured, or favourable.
 6. **`design/05` §3b's guided mode is a permitted use of this layer and is not built here.** The
    design places clippy at "B9 + B10 + B11 with assistance turned up"; this RFC is the B9 third and
    §7 is deliberately the *off* posture. No deviation in substance, recorded so nobody reads the
@@ -1030,7 +1062,8 @@ D4 lesson `rfc/archive/line-drill-theory-grading.md` §4b paid for once already.
    against the position after `a3, Rab1, b4, b5, bxc6 bxc6`, and asserts **false** then **true**,
    with each conjunct asserted separately so that the test fails if either is dropped. The same test
    drives a run through those moves and asserts the objective transitions `active → achieved` once,
-   with `evidenceRefs` containing `rules:structure-backward-pawn`. This is the criterion the whole
+   with `evidenceRefs` containing both `rules:structure-backward-pawn` and
+   `rules:structure-half-open-file`. This is the criterion the whole
    RFC exists for: **a feature predicate authored into a pack objective grades a plan by its
    structural consequence.**
 2. **`objectiveRules` over every shipped pack.** A test compiles every pack under `content/drafts/`,
@@ -1042,7 +1075,8 @@ D4 lesson `rfc/archive/line-drill-theory-grading.md` §4b paid for once already.
 3. **Pawn safety is one-sided-safe and push-monotone.** A `fast-check` property over random legal
    positions asserts (a) whenever `safe` is true there is no enemy pawn that can attack the square by
    pushes alone, checked by brute-force enumeration of pawn push sequences to depth 6; and (b) after
-   any single pawn push the push-attacker set of every square is a subset of what it was. A third
+   any single pawn push the candidate count cannot grow and a surviving same-file candidate is one
+   push closer. A third
    case asserts a hand-built position where `safe` is true and `captureAttackers` is non-empty, and
    that the rendered sentence contains the qualifier (§6b rule 2).
 4. **Boundary conditions, table-driven.** Every row of §11 that is not marked "refused at load" has a
@@ -1064,13 +1098,15 @@ D4 lesson `rfc/archive/line-drill-theory-grading.md` §4b paid for once already.
    `pushesBefore: 2, pushesAfter: 1`, and after `a4` reports `pushesAfter: 0`. Asserts that
    `gained`/`lost` are empty across both — the reading fires where nothing else does, which is the
    claim in `design/05` §5.
-8. **Canonical order is a pure function of the feature set.** Two positions with the same features
-   detected produce byte-identical `features` arrays, and a shuffled internal detection order
+8. **Canonical order is a pure function of the observation set.** Two positions with the same
+   observations produce byte-identical `features` arrays, and a shuffled internal detection order
    produces the same output. Asserts no field named `score`, `rank`, `severity` or `favours` exists
    anywhere in `StructuralReading` by walking the serialised object.
-9. **No sentence carries a verdict.** Every `StructuralFeatureKind` is rendered against a fixture
+9. **No sentence carries a verdict or hidden permanence.** Every `StructuralFeatureKind` is rendered against a fixture
    position and the result is asserted not to contain any word from §6b's banned list,
-   case-insensitively, as whole words. Fails closed for a kind with no sentence.
+   case-insensitively, as whole words. It also asserts outpost text names Tabiya's strict detector,
+   pawn-safety text says "current" or "while", direct-attack text never says balance/defended, and
+   reach-count text never calls itself legal mobility. Fails closed for a kind with no sentence.
 10. **Comparison does not compare.** A two-branch comparison payload carries each branch's reading in
     canonical order and no field or sentence that relates them; asserted alongside the existing
     no-ranking assertions of `rfc/archive/n-way-comparison.md`.
@@ -1096,8 +1132,9 @@ D4 lesson `rfc/archive/line-drill-theory-grading.md` §4b paid for once already.
     (d) is the one that proves the two halves are the same layer: the same predicate that graded the
     plan is the sentence the learner reads.
 14. **Envelope.** A full `StructuralReading` plus `StructuralDelta` over every node of Pack B's spine
-    stays under 1 ms per node, measured in the style of `packages/runtime/src/latency.test.ts` and
-    written to the existing latency artifact.
+    is measured in the style of `packages/runtime/src/latency.test.ts` and written to the existing
+    latency artifact. The report records median and maximum; 100 ms is the worry threshold and
+    200 ms the intervention threshold. The test does not fail at an unsourced 1 ms microbenchmark.
 15. **`pnpm verify` passes** — typecheck, unit suite, and `pnpm schema:check` — and
     `pnpm test:browser` passes with the amended `terminal-outcome.browser.json`.
 16. **Canonical documentation.** `docs/structural-reading.md` describes the twelve features with
@@ -1113,6 +1150,12 @@ None.
 
 ## Changelog
 
+- 2026-08-14: adversarial review against the realigned design. Separated author queries from the
+  finite learner observation projection; replaced pseudo-attack balance and "mobility" claims with
+  per-colour direct-attack and attack-reach counts; made denial current rather than permanent;
+  identified the outpost definition as Tabiya's strict detector convention; required every leaf of
+  a conjunction in objective evidence; narrowed Pack B grading to the minority signature; and
+  changed the 1 ms microbenchmark from a brittle gate to a recorded measurement.
 - 2026-08-13: created. Specifies the rung-0 structural layer: twelve deterministic feature
   predicates that are simultaneously learner readables and authorable objective conditions, the
   push/capture eviction arithmetic behind denial and prophylaxis reading, one-ply vacation-diff

@@ -183,4 +183,37 @@ export type SuccessCondition =
       readonly kind: "rules_fact";
       readonly fact: "checkmate" | "stalemate";
       readonly winner?: "white" | "black";
+    })
+  | (SuccessConditionBase & {
+      readonly kind: "structural_feature";
+      readonly feature: StructuralExpression;
     });
+import type { Color, FileName, Role, SquareName } from "chessops/types";
+
+export const STRUCTURAL_FEATURE_KINDS = Object.freeze([
+  "pawn_safe_square", "outpost", "backward_pawn", "isolated_pawn", "doubled_pawn",
+  "passed_pawn", "open_file", "half_open_file", "line_blockers", "direct_attack_count",
+  "piece_reach_count", "named_structure",
+] as const);
+export type StructuralFeatureKind = (typeof STRUCTURAL_FEATURE_KINDS)[number];
+
+export type StructuralFeature =
+  | { readonly kind: "pawn_safe_square"; readonly color: Color; readonly square: SquareName }
+  | { readonly kind: "outpost"; readonly color: Color; readonly square: SquareName }
+  | { readonly kind: "backward_pawn"; readonly color: Color; readonly file: FileName }
+  | { readonly kind: "isolated_pawn"; readonly color: Color; readonly file: FileName }
+  | { readonly kind: "doubled_pawn"; readonly color: Color; readonly file: FileName }
+  | { readonly kind: "passed_pawn"; readonly color: Color; readonly square: SquareName }
+  | { readonly kind: "open_file"; readonly file: FileName }
+  | { readonly kind: "half_open_file"; readonly color: Color; readonly file: FileName }
+  | { readonly kind: "line_blockers"; readonly from: SquareName; readonly to: SquareName; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "direct_attack_count"; readonly square: SquareName; readonly color: Color; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "piece_reach_count"; readonly color: Color; readonly role: "knight" | "bishop" | "rook" | "queen"; readonly scope: "any" | "every"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "named_structure"; readonly id: "carlsbad" | "iqp-white" | "iqp-black" | "maroczy-bind" };
+
+export type StructuralExpression =
+  | { readonly kind: "all"; readonly of: readonly [StructuralExpression, ...StructuralExpression[]] }
+  | { readonly kind: "any"; readonly of: readonly [StructuralExpression, ...StructuralExpression[]] }
+  | { readonly kind: "not"; readonly of: StructuralExpression }
+  | { readonly kind: "feature"; readonly feature: StructuralFeature }
+  | { readonly kind: "pieceOnSquare"; readonly square: SquareName; readonly piece: { readonly color: Color; readonly role: Role } | null };

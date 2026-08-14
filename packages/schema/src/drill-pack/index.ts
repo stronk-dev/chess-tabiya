@@ -23,6 +23,7 @@ export {
   OBJECTIVE_TYPES,
   PACK_PHASES,
   RETRY_VARIANT_KINDS,
+  STRUCTURAL_FEATURE_KINDS,
   type CheckpointAction,
   type CheckpointDefinition,
   type CheckpointInteraction,
@@ -40,5 +41,8 @@ export {
   type PackPhase,
   type SimpleTrigger,
   type SpineNode,
+  type StructuralExpression,
+  type StructuralFeature,
+  type StructuralFeatureKind,
   type TimingWindowTrigger,
 } from "./types.js";

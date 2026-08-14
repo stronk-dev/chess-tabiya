@@ -29,6 +29,18 @@ const RULES_SENTENCES: Readonly<Record<RulesEvidenceFact, string>> = Object.free
   "result-win": "The learner won the game.",
   "result-loss": "The learner lost the game.",
   "result-draw": "The game ended in a draw.",
+  "structure-pawn-safe-square": "Tabiya's current-pawn-file safety condition holds at this position.",
+  "structure-outpost": "Tabiya's strict outpost detector condition holds at this position.",
+  "structure-backward-pawn": "Tabiya's backward-pawn condition holds at this position.",
+  "structure-isolated-pawn": "Tabiya's isolated-pawn condition holds at this position.",
+  "structure-doubled-pawn": "Tabiya's doubled-pawn condition holds at this position.",
+  "structure-passed-pawn": "Tabiya's passed-pawn condition holds at this position.",
+  "structure-open-file": "The authored open-file condition holds at this position.",
+  "structure-half-open-file": "The authored half-open-file condition holds at this position.",
+  "structure-line-blockers": "The authored exact blocker-count condition holds at this position.",
+  "structure-direct-attack-count": "The authored per-colour direct-attack count holds at this position; opposing counts are not combined.",
+  "structure-piece-reach-count": "The authored attack-reach count holds at this position; legal mobility is not evaluated.",
+  "structure-named-structure": "A Tabiya catalogue structure condition holds at this position.",
 });
 
 const THEORY_SENTENCES: Readonly<Record<TheoryEvidenceFact, string>> = Object.freeze({

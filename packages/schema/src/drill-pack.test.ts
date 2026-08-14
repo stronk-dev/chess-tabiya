@@ -16,6 +16,7 @@ import {
   OBJECTIVE_TYPES,
   PACK_PHASES,
   RETRY_VARIANT_KINDS,
+  STRUCTURAL_FEATURE_KINDS,
   parseDrillAddress,
   resolveDrillAddress,
   type DrillPackDefinition,
@@ -51,13 +52,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.9", () => {
+describe("drill_pack.schema.json v0.10", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.9",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.10",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.9");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.10");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
@@ -69,6 +70,22 @@ describe("drill_pack.schema.json v0.9", () => {
       ...RETRY_VARIANT_KINDS,
     ]);
     expect(CHECKPOINT_ACTIONS).toEqual(["compare_branches"]);
+    expect(typed.$defs.structuralFeature.oneOf.map((branch: any) => branch.properties.kind.const)).toEqual([...STRUCTURAL_FEATURE_KINDS]);
+  });
+
+  it("pins the three legacy schema passthroughs and keeps structural shapes closed", () => {
+    const paths: string[] = [];
+    const walk = (value: unknown, path: string): void => {
+      if (value === null || typeof value !== "object") return;
+      if (Array.isArray(value)) { value.forEach((item, index) => walk(item, `${path}/${index}`)); return; }
+      const object = value as Record<string, unknown>;
+      if (object.additionalProperties === true) paths.push(path);
+      for (const [key, child] of Object.entries(object)) walk(child, `${path}/${key}`);
+    };
+    walk(schema, "");
+    expect(paths).toEqual(["/$defs/opponentPolicy", "/$defs/feedbackClaim", "/$defs/provenance"]);
+    expect((schema as any).$defs.structuralFeature.oneOf.every((branch: any) => branch.additionalProperties === false)).toBe(true);
+    expect((schema as any).$defs.structuralExpression.oneOf.every((branch: any) => branch.additionalProperties === false)).toBe(true);
   });
 
   it("requires the learner side at the authoring boundary", () => {
