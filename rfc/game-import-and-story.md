@@ -7,7 +7,9 @@
   (LLM-as-voice), §5a (pivotal moments without an author); `design/BACKLOG.md` rows
   "Own-game review — import one game into the rehearsal frame" and "Game story — a
   finished game as ~8 pivotal slides" (both owner-uttered 2026-08-14, written to compose
-  into exactly this RFC); `design/research/teardown-taketaketake-desk.md` (market frame)
+  into exactly this RFC); `design/research/teardown-taketaketake-desk.md` and
+  `design/research/teardown-chess2story-desk.md` (market frame — the latter landed
+  after first draft and repositioned §Summary/§Motivation, see Changelog)
 - **Exploration gate:** opened by owner ruling 2026-08-12 (`rfc/README.md`); breadth
   sequencing ruling 2026-08-11; the two composing BACKLOG rows are owner statements, not
   GAP rows
@@ -31,11 +33,17 @@ declared side, full branch/rewind/compare/export machinery underneath. Post-game
 shipped backward ladder (B10 retrospective pivots, phase bands, pivotal markers, B9/B11
 structural naming, the outcome) derives an ordered set of grounded MOMENTS; the client
 renders them as slides (~8 is presentation, not contract). Every slide is tappable:
-rewind *there*, fork a live branch, and replay against human-like resistance with
-structural reading available. The review IS the rehearsal entry — the anti-version of
-the engine-review screen, and the product's answer to Take Take Take's read-only,
-LLM-confabulated share card (`design/research/teardown-taketaketake-desk.md` §2c, §5):
-their moment is read; ours is re-entered.
+rewind *there*, fork a live branch, replay against human-like resistance with
+structural reading available, compare against the game's actual continuation, and
+export game + branches as one PGN. The review IS the rehearsal entry — the
+anti-version of the engine-review screen. The differentiator is pinned to the door
+into play, not to having a story: Chess2Story already ships clickable moment cards
+that jump a live synced board (`design/research/teardown-chess2story-desk.md` §3),
+and Take Take Take ships a read-only, LLM-confabulated share card
+(`design/research/teardown-taketaketake-desk.md` §2c, §5). Nobody ships the next
+step: tapping a moment forks a live branch against a human-like opponent, plays the
+consequence, compares it with what actually happened, and exports both together.
+Their moment is read or clicked-to-view; ours is re-entered and played.
 
 ## Motivation
 
@@ -60,14 +68,28 @@ requirement for any other surface; the product works identically if it is never 
 - A PGN import seam already ships in production code: the Arena leg importer
   (`apps/server/src/live-session.ts:166-181`) parses, validates, and replays a
   mainline-only PGN into run nodes with correct actor stamping.
-- The market validation is fresh: a $9M, Carlsen-cofounded competitor bet its identity
-  on "every game has a story", shipped it as a read-only card narrated by an LLM that
-  was publicly caught confabulating on launch day, and implements zero loop stages
-  (teardown §2, §3, §7). The appetite is proven and the substance is unclaimed:
-  nobody ships grounded pivotal states that open back into play.
+- The market validation is fresh, and the fan shelf is crowded: a $9M,
+  Carlsen-cofounded competitor bet its identity on "every game has a story" and
+  shipped it as a read-only card narrated by an LLM that was publicly caught
+  confabulating on launch day (`design/research/teardown-taketaketake-desk.md` §2,
+  §3, §7); Chess2Story ships the story surface *well* — engine-selected turning
+  points, machine-verified scores with cited provenance and a published methodology,
+  moment cards that jump a live synced board — and still implements zero loop stages:
+  no opponent object exists anywhere in that product
+  (`design/research/teardown-chess2story-desk.md` §2, §3, §6). Two consequences bind
+  this RFC. First, "grounded vs freestyle" distinguishes us only from Take Take
+  Take; Chess2Story's selection and provenance discipline is real, so the honest
+  contrast with them is **read vs replay**, plus grounding that extends into
+  strategic explanation (`docs/explanation-grounds.md` discipline) where theirs
+  stops at score and selection (teardown §9). Second, the unclaimed substance is
+  exactly one atom — a moment that opens back into play: moment → position →
+  human-like opponent → your move → consequence → rewind → compare against the
+  game's actual continuation → export game + branches. That door is this RFC's
+  contract, and the adoption posture is explicit: adopt the slide rail freely,
+  differentiate on the loop — the door into play IS the loop.
 
-Out of scope: multi-game import of any kind; chess.com server-side fetch (§3.2 —
-verified impossible honestly); ingesting third-party engine annotations as evidence;
+Out of scope: multi-game import of any kind; chess.com server-side fetch (§2c —
+paste-only, verified); ingesting third-party engine annotations as evidence;
 story-card image rendering (data contract only, §8); variant chess; review workflows.
 
 ## Specification
@@ -78,14 +100,23 @@ story-card image rendering (data contract only, §8); variant chess; review work
 `"pack" | "position"` to `"pack" | "position" | "imported"`.
 
 An imported run is a non-pack session. The shipped projection rules
-(`packages/runtime/src/events.ts:41-58`) already branch on
+(`packages/runtime/src/events.ts:76-91`) already branch on
 `isPack = sessionKind === "pack"`, so an imported run inherits the non-pack
-obligations with **no rule rewrite**: `packId`/`packDigest` null, `feedbackPolicy`
-must be `attempt_end`, `opponentPolicy.mode` must not be `theory_strict`, `start.fen`
-must equal the root node's FEN. `feedback.revealed` validity is keyed on
-`feedbackPolicy === "attempt_end"` (`packages/runtime/src/runtime.ts:241`), so reveal
-works for imported runs without runtime change; its docs sentence "valid only for a
-position run" is restated as "valid only for an `attempt_end` run".
+obligations with **no projection-rule rewrite**: `packId`/`packDigest` null,
+`feedbackPolicy` must be `attempt_end`, `opponentPolicy.mode` must not be
+`theory_strict`, `start.fen` must equal the root node's FEN (`events.ts:92-94`).
+`feedback.revealed` validity is keyed on `feedbackPolicy === "attempt_end"`
+(`packages/runtime/src/runtime.ts:241`), so reveal works for imported runs without
+runtime change; its docs sentence "valid only for a position run" is restated as
+"valid only for an `attempt_end` run". Two call sites test the literal `"position"`
+instead of "not pack" and get a named edit — the "slots in with zero rewrites" claim
+is false without them: `authoredFeedback`
+(`apps/server/src/service.ts:718`) returns the empty page for
+`sessionKind === "position"` and would otherwise fall through to a non-null-asserted
+pack lookup and crash with a 500 on `GET /runs/:id/authored-feedback` for an
+imported run — the branch becomes non-pack; and `parseSummary`
+(`apps/server/src/storage.ts:370`) validates the stored summary literal and must
+accept `"imported"`.
 
 `SessionSource` (`packages/runtime/src/session.ts:12-19`) gains a third variant:
 
@@ -103,9 +134,22 @@ position run" is restated as "valid only for an `attempt_end` run".
 gives every imported game its own session identity, resolving the F2 collision this
 RFC would otherwise create: without it, every imported standard game would share the
 position digest of "startpos + side + policy" and merge in every digest-keyed surface.
-Re-importing the same game with the same side and policy reproduces the same
-`sessionDigest` — correct grouping identity; run ids stay unique, so re-import is
-allowed and creates a distinct run.
+The digest input is canonical: the canonical root FEN (`canonicalRunStart`,
+`session.ts:44-49`) plus the full UCI list in game order, canonicalized by
+`canonicalizeJson`. `CreateRunSession` (`session.ts:21-35`) and the create-input arm
+of `sessionSource()` (`session.ts:55-85`) gain the matching `imported` variant —
+without them an imported create input falls into the position arm and reproduces the
+exact collision this member exists to prevent. The import endpoint computes the
+digest from the parsed moves and passes it in the create input; a bare `DrillRun`
+does not carry it (it lives in the session identity and the import record, §3), so
+the `DrillRun` arm of `sessionSource()` throws for imported runs — its only
+production-adjacent caller, `duplicate` (`apps/server/src/service.ts:855-864`),
+builds its request inline via `isPackSession` and therefore duplicates an imported
+run as an ordinary **position** run at the import's root: the explicit front door
+into progress-land (§6's semantics at ply 0), not a second imported identity.
+Unchanged code, stated so nobody "fixes" it. Re-importing the same game with the
+same side and policy reproduces the same `sessionDigest` — correct grouping
+identity; run ids stay unique, so re-import is allowed and creates a distinct run.
 
 Wire schema: `schemas/drill_run.schema.json` bumps to **0.10** — the two `sessionKind`
 enums (lines 26 and 293) gain `"imported"`, plus an `if sessionKind == "imported"`
@@ -123,10 +167,16 @@ from the source headers (`"White – Black (Result)"`, falling back to
 `"Imported game"`). The road back into progress-land is explicit: creating a fresh
 position run at a slide's FEN (§6) re-enters attempts/scheduling normally.
 
-Storage touchpoints (widened, no table change): summary type and validation
-(`apps/server/src/storage.ts:161`, `:370`, `:1047`), assistance projection input
-(`packages/runtime/src/assistance.ts:17` — imported runs take the position-run
-assistance rules).
+Storage touchpoints (no table change): the summary types
+(`apps/server/src/storage.ts:71`, `:251`) already use `RunSessionKind` and widen
+with the type; the one summary edit is the `parseSummary` literal check (`:370`,
+named above). The progress-land row shapes stay literal `"pack" | "position"`
+deliberately — `ScheduleRow` (`storage.ts:161`) and the attempt/schedule row casts
+(`:1047`, `:1321`) describe rows imported runs never mint (see Progress exclusion),
+so widening them would encode a shape that cannot occur. Assistance projection input
+(`packages/runtime/src/assistance.ts:17`) widens with `RunSessionKind`;
+`permittedAssistance` does not branch on session kind at all, so imported runs take
+the position-run assistance rules with no further change.
 
 ### 2. Sources: what is honestly fetchable
 
@@ -157,11 +207,13 @@ constrains `gameId` to exactly 8, so the importer truncates to 8); trailing
 lichess path (`/study/…`, `/broadcast/…`, `/training/…`) is refused with
 `IMPORT_SOURCE_UNSUPPORTED`.
 
-Fetch operator rules (the sourcing-foundation politeness precedent,
+Fetch operator rules (borrowing the sourcing-foundation politeness precedent,
 `apps/server/src/sourcing/http.ts:25,36`): an identifying `User-Agent`; one fetch per
-import request, serial per process; a 10-second timeout; **no retry loop** — 429/5xx
-map to typed `IMPORT_SOURCE_UNAVAILABLE` (with `Retry-After` echoed when present) and
-the learner may simply try again or paste the PGN; 404 maps to
+import request, serial per process; a 10-second timeout; **no retry loop** — the
+sourcing client's own 60/120/240-second retry ladder (`http.ts:13,37-40`) is
+batch-pipeline behaviour and is deliberately not reused for an interactive request:
+429/5xx map to typed `IMPORT_SOURCE_UNAVAILABLE` (with `Retry-After` echoed when
+present) and the learner may simply try again or paste the PGN; 404 maps to
 `IMPORT_SOURCE_NOT_FOUND`. No credentials are ever attached; only public games are
 reachable by construction. Licence row for the record: `no-rights-asserted` with
 rationale naming the export URL and retrieval time (lichess distributes its bulk game
@@ -250,8 +302,12 @@ illegal SAN with the offending token, unsupported variant, oversize) → 422;
 runtime only knows board-terminal truth. Three cases:
 
 - **Board-terminal finish** (mate, stalemate, provable draw): `outcome.reached` is
-  emitted at the leaf; play cannot continue from that node; disclosure opens
-  (`packages/runtime/src/feedback.ts:3-17` — outcome discloses under every policy).
+  emitted at the leaf, **from the declared side's perspective** — `commitMove`
+  computes `terminalOutcome(position, run.start.side)`
+  (`packages/runtime/src/runtime.ts:340-345`), so the side declaration is the frame
+  of the recorded win/loss/draw; play cannot continue from that node; disclosure
+  opens (`packages/runtime/src/feedback.ts:3-17` — outcome discloses under every
+  policy).
   Rewinding and replaying a terminal move creates a new node and a new outcome for
   it — shipped semantics, exactly what a slide tap wants.
 - **Recorded-result finish** (resignation, agreement, flag: `Result` `1-0`/`0-1`/`½-½`
@@ -297,7 +353,9 @@ at the standard evidence movetime.
 of shared-judge engine time**; the 300-ply cap bounds the worst case at ≈ 30.1 s.
 Jobs run at the queue's existing concurrency on the shared Stockfish judge and debit
 every other user of it; the response returns the job count so the client can render
-honest progress. The pass is bounded, one-shot, and never re-fires.
+honest progress. The pass is bounded and **idempotent-completing** (next paragraph):
+re-reads enqueue only what is missing, so the steady-state cost is paid once per
+node, and the worst case is bounded by the ply cap however often it is interrupted.
 
 **Staged → durable, and the pruning boundary.** Results stage in the queue and become
 durable `evidence.attached` events through the existing writer-applied path
@@ -314,14 +372,39 @@ importing writer's lease, while delivery is open.
 The boundary that must be engineered around: `onRewound` cancels queued/running jobs
 and drops staged results for nodes leaving the active path
 (`apps/server/src/evidence-queue.ts:148-169`), and a slide tap IS a rewind. A tap
-before the pass completes would permanently destroy the later mainline's pending
-evals. Therefore: the story payload carries `ready` (all mainline evals durable or
-recorded-failed) and `pendingEvidence`; **the client disables slide taps until
-`ready`**, rendering "evaluation pending" absence rows meanwhile. If a learner closes
-delivery mid-pass by moving anyway (via the ordinary run screen, which this RFC does
-not lock), remaining results stay staged; re-reveal at the branch's attempt end
-reopens delivery and the server resumes applying whatever survived — and any pruned
-evals are reported as absent, never re-fetched silently.
+before the pass completes would destroy the later mainline's pending evals. The
+client-side gate stands: the story payload carries `ready` and `pendingEvidence`;
+**the client disables slide taps until `ready`**, rendering "evaluation pending"
+absence rows meanwhile. But a client gate cannot be the whole answer, because three
+interruptions it does not control can hit the pass: any lease-holding client can
+rewind mid-pass (the ordinary run screen, which this RFC does not lock, or a second
+device after a lease claim — spectators cannot, writes require the lease); the batch
+can fail halfway; and the queue is process memory — staged results and the failure
+list both evaporate on a server restart (`evidence-queue.ts:85` in-memory
+`#failures`; staged maps), so "recorded-failed" is not a durable predicate and a
+one-shot pass would wedge `ready` closed forever after a restart. Therefore the pass
+is **idempotent-completing, not one-shot**: `ready` is recomputed on every story
+read from durable state plus current-process failures — every mainline node either
+carries an engine-validated `eval` among its durable `evidence.attached` events or
+has a recorded failure from the current pass — and the story read re-enqueues
+exactly the mainline nodes that have neither and no in-flight job. Re-enqueueing is
+visible, never silent: the returned `pendingEvidence` count rises and `ready` stays
+false while it happens. One mechanism covers all three interruptions — rewind
+pruning, halfway failure, restart loss (a lost failure record merely re-runs that
+node on the next read; convergence, not a wedge). Delivery gating is unchanged:
+results stage until delivery is open (the import's `outcome.reached`, or the story
+surface's reveal on entry) and the server applies each result durably as it
+completes, under the importing writer's lease. If a learner closes delivery mid-pass
+by moving on a live branch, remaining results stay staged; re-reveal at the branch's
+attempt end reopens delivery and application resumes.
+
+Stated honestly against the ledger: this RFC is the **second consumer in one day**
+to design around `onRewound`'s live-play pruning rules (`design/BACKLOG.md`
+"Recurring sharp edge: rewind cancels pending evidence"; `branch-groups.md` is the
+first). The mechanism above is complete for this RFC — nothing here waits on
+anything — but it is also this RFC's vote on that row: by the ledger's own
+criterion, a third consumer makes the fix structural (a batch evidence class exempt
+from live-play pruning), and this section then collapses to a queue flag.
 
 ### 5. The story — grounded moments, detector-attributed
 
@@ -464,10 +547,15 @@ router (AS-C5 — no routing dependency):
 
 ## Acceptance criteria
 
-Baseline before this RFC: 359 tests / 63 files pass (verified 2026-08-14, `pnpm
-vitest run`); run schema 0.8 shipped with 0.9 claimed by `branch-groups.md`; pack
-schema 0.11 shipped with 0.12 claimed by `defect-batch-2.md`; `STORAGE_VERSION` 10
-with 11 claimed. All existing tests still pass after implementation.
+Baseline before this RFC: 374 tests / 64 files pass (verified 2026-08-14 at review,
+`pnpm vitest run`; two sibling RFCs are implementing in parallel, so this number is
+the review pin, not a gate — `defect-batch-2.md`'s pack constant is already in the
+tree: `DRILL_PACK_SCHEMA_VERSION` reads `"0.12"` at `packages/schema/src/index.ts:2`).
+Run schema 0.8 shipped (`packages/schema/src/index.ts:1`) with 0.9 claimed by
+`branch-groups.md`; `STORAGE_VERSION` 10 with 11 claimed. Landing order: this RFC's
+migration 12 / run schema 0.10 land **behind** `branch-groups.md`'s 11 / 0.9, per
+the register rows both drafts carry. All existing tests still pass after
+implementation.
 
 1. **Parser seam**: the shared routine imports a real lichess-exported PGN and a real
    chess.com-exported PGN (fixtures committed); the Arena leg route behaves
@@ -490,8 +578,12 @@ with 11 claimed. All existing tests still pass after implementation.
    `/runs` listing shows the derived title.
 4. **Evidence pass**: an N-ply import enqueues exactly N+1 eval jobs and zero during
    replay; results become durable only while delivery is open; a rewind mid-pass
-   cancels/prunes exactly the off-path jobs and the story reports the absence;
-   `ready` flips only when every mainline eval is durable or recorded-failed.
+   cancels/prunes exactly the off-path jobs, and the next story read re-enqueues
+   exactly the mainline nodes lacking a durable eval (asserted: no duplicate job for
+   a node with one in flight); a simulated restart mid-pass (fresh queue, same
+   storage) converges to `ready` across subsequent story reads; `ready` flips only
+   when every mainline eval is durable or recorded-failed in the current pass, and
+   `pendingEvidence` reflects re-enqueues visibly.
 5. **Story**: deterministic across recomputation; every moment carries detector
    attribution and grounded sentences; `eval_pivot`/`last_level` arithmetic
    property-tested against hand-computed fixtures; `human_divergence` absent on the
@@ -506,7 +598,16 @@ with 11 claimed. All existing tests still pass after implementation.
    play two learner moves against the configured opponent (two opponent replies
    arrive through the shipped selection flow) → export → the downloaded PGN contains
    the original mainline plus the new branch.
-8. **Registers and docs**: `rfc/README.md` Active row + migration-register row 12
+8. **Never shippable read-only** (the Chess2Story warning,
+   `design/research/teardown-chess2story-desk.md` §9): the story surface must not
+   exist in any merged state where moments cannot be entered — criterion 7's
+   tap-to-rehearse path is v1-blocking, not a fast-follow. A build with the slide
+   rail but without the door into play is Chess2Story's "coach review" rendering:
+   an analytical walkthrough with a synced board, which is literally the named
+   failure shape ("an engine review screen with a rewind button"). The Playwright
+   test of criterion 7 is the enforcement: it lands in the same change as the story
+   surface or the surface does not land.
+9. **Registers and docs**: `rfc/README.md` Active row + migration-register row 12
    land with this draft (done in the same change); on implementation, canonical docs
    (`docs/` page + `docs/branch-runtime.md` session-kind note) and the register
    statuses update; landing order behind `branch-groups.md` is honoured or
@@ -518,9 +619,33 @@ None.
 
 ## Changelog
 
-- 2026-08-14: created. Capabilities verified against the working tree (359/63 test
-  baseline; file:line citations throughout). Lichess single-game export verified
+- 2026-08-14: created. Capabilities verified against the working tree (then 359/63
+  test baseline; file:line citations throughout). Lichess single-game export verified
   against the lichess OpenAPI spec (`security: []`, 8-char id, PGN accept header).
   Chess.com verdict: paste-only — the published-data API is player/month-shaped with
   no game-id resolution, and the callback workaround is undocumented, non-PGN, and
   ban-risky, so it is refused rather than promised.
+- 2026-08-14 (adversarial review, folded in): repositioned §Summary/§Motivation on
+  `design/research/teardown-chess2story-desk.md` — the differentiator is the door
+  into play, not "a walkable story" (moment cards with board sync are shipped by
+  Chess2Story; "grounded vs freestyle" distinguishes only from Take Take Take);
+  added acceptance criterion 8 (never shippable read-only). Corrected citations
+  verified against code: projection rules are `events.ts:76-91` (not :41-58);
+  `storage.ts:161` is `ScheduleRow`, not the summary type — touchpoint list
+  rewritten with the true summary edit (`parseSummary` :370) and the missed
+  `authoredFeedback` literal-`"position"` crash path (`service.ts:718`). Named the
+  `CreateRunSession`/`sessionSource()` widening and pinned `duplicate()` behaviour
+  for imported runs. Reworked the evidence pass from one-shot to
+  idempotent-completing after verifying the queue's staged results and failure list
+  are process memory (`evidence-queue.ts:85`) — a one-shot pass wedges `ready` on
+  restart, and the client tap gate does not bind other lease-holding clients;
+  recorded this RFC as the second vote on the BACKLOG "rewind cancels pending
+  evidence" pattern row. Clarified that the sourcing client's 60/120/240 s retry
+  ladder (`http.ts:13,37-40`) is deliberately not reused. Pinned the outcome
+  perspective (`terminalOutcome(position, run.start.side)`, `runtime.ts:340-345`).
+  Refreshed the baseline to 374/64 with siblings implementing in parallel and
+  restated the landing order (12/0.10 behind 11/0.9). External claims re-verified
+  against fetched sources: lichess `game-export-gameId.yaml` (operationId `gamePgn`,
+  `security: []` absent auth, `gameId` min/max 8, `moves/tags/clocks/evals/opening/
+  literate` booleans, 3-move delay on ongoing games) and the chess.com published-data
+  API (player-scoped aggregates only; no game-id or game-URL resolution endpoint).
