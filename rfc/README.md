@@ -108,7 +108,7 @@ writing it into a draft.
 | 14 | 13→14 | `archive/social-match.md` | implemented — creates `match_states`; rebuilds `live_sessions`, `session_journal`, and `public_tokens` with widened closed vocabularies; no run/pack schema change. Landed behind implemented migration 13 |
 | 15 | 14→15 | `repertoire-gap-finding.md` | draft (wave claim #1, 2026-08-14) — creates `repertoires`, `repertoire_moves`, `repertoire_scans`, `repertoire_gap_runs`; create-table/index only, no backfill, no rebuild (deliberately does not widen `run_derivations.kind`); no run/pack schema change |
 | 16 | 15→16 | `onramp-guard.md` | draft (wave claim #2, 2026-08-14) — stamp-only: run schema `"0.10"`→`"0.11"` (`RunFeedbackPolicy` gains `immediate_guard`; no new event type, no data rewrite). Rebased from an initial 15 claim behind `repertoire-gap-finding`'s wave claim #1, per the F2/F3 precedent; lands behind implemented migration 15 |
-| 17 | 16→17 | `open-answer-grading.md` | draft (wave claim #3, 2026-08-14) — creates `reasoning_records`; reconciled behind onramp-guard per the pinned wave order |
+| 17 | 16→17 | `open-answer-grading.md` | draft (wave claim #3, 2026-08-14) — **stamp-only, no table** (transcripts are run events; run deletion is the retention story); run schema 0.11→**0.12** (`reasoning.recorded` event). Reconciled behind onramp-guard per the pinned wave order |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a

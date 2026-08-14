@@ -9,7 +9,7 @@
   `design/BACKLOG.md:208` ("Open-answer key-point grading as a checkpoint interaction")
   and `design/BACKLOG.md:250` ("Step-indexed reasoning transcript (steal from
   ChessMotive)")
-- **Exploration gate:** opened by owner ruling 2026-08-12 (`rfc/README.md:63-70`); breadth
+- **Exploration gate:** opened by owner ruling 2026-08-12 (`rfc/README.md:70-77`); breadth
   sequencing ruling 2026-08-11 applies. This draft completes no B-gate; it is an
   adoption-audit structural adoption adjacent to B4's authored-claims residual and stays
   inside B4's "authored content supplies the vocabulary" constraint by shipping grammar,
@@ -29,7 +29,7 @@ At an authored **stated-reasoning checkpoint**, the learner types what they are 
 candidates considered, the chosen plan, what they fear — *before* seeing any authored or
 engine evidence for that stretch of play. The transcript is recorded as a durable run
 event, exactly as prediction checkpoints already record a predicted move before the reply
-is selected (`docs/n-way-comparison.md:27-30`, `apps/server/src/service.ts:997-1035`).
+is selected (`docs/n-way-comparison.md:25-27`, `apps/server/src/service.ts:997-1035`).
 The author lists **key points** per checkpoint, each keyed to a groundable fact — a
 structural expression, a shape-entry plan, an authored spine move, or a typed
 `feedbackClaims` entry — never free prose. A deterministic string/synonym matcher reports
@@ -92,7 +92,9 @@ belonging to the on-ramp work).
 
 The checkpoint `interaction` union (`schemas/drill_pack.schema.json`
 `$defs/checkpointInteraction`, currently the closed two-variant union `intent_capture` |
-`prediction`; verified against v0.13, `$id` `urn:chess-tabiya:schema:drill-pack:0.13`)
+`prediction`; verified against the shipped v0.13, `$id`
+`urn:chess-tabiya:schema:drill-pack:0.13` — `onramp-guard`'s claimed 0.14 touches
+`feedbackPolicy` and the top-level `guard` block only and leaves this union two-variant)
 gains a third closed variant:
 
 ```jsonc
@@ -125,15 +127,40 @@ not the ground itself:
 | `spine_move` | `{ "kind": "spine_move", "spineNodeId": <id> }` — must reference an existing spine node (existing lint rule class, `docs/drill-pack-format.md:79-80`) | the authored SAN of that node, labeled as the author's line | authored, digest-bound |
 | `claim` | `{ "kind": "claim", "claimId": <id> }` — must reference an entry in the pack's existing `feedbackClaims` array | the claim text plus its declared `evidenceTypes` | as declared — this is how a corpus fact enters, via a claim typed `corpus_observed` (the `$defs/feedbackClaim.evidenceTypes` enum already carries `corpus_observed`, `tablebase_exact`, `engine_validated`, etc.) |
 
+**What load-time validation proves, per kind** (§7 carries the codes; the honesty
+boundary is that each kind is checked exactly as deeply as shipped machinery can check
+it, and no deeper claim is rendered):
+
+- `structural` — existence **and truth at the checkpoint position**, when the
+  checkpoint trigger is statically resolvable on the spine; the fifteen-leaf evaluator
+  is shipped (`docs/structural-reading.md:11-19`) and re-runs at render time on the
+  actual run FEN. This is the only kind with a truth check, so
+  `KEY_POINT_GROUND_FALSE_AT_CHECKPOINT` exists for `structural` only.
+- `shape_plan` — registry-backed resolution exactly as `planClass.shapePlan`: entry
+  listed in `pack.shapes`, plan id present in the entry, refused otherwise at server
+  load and studio registration (`docs/drill-pack-format.md:188-191`). Truth is not a
+  question: the ground *is* the registry entry, and its attribution renders the entry's
+  own provenance (`docs/shape-library.md:25-27`).
+- `spine_move` — existence of the spine node, nothing more. The rendered attribution
+  ("the author's line plays this move") is made true by existence plus the digest; no
+  temporal relation to the checkpoint is checked or implied — a point may legitimately
+  key a move already played ("the point of the earlier exchange") or one still to come.
+- `claim` — reference into `feedbackClaims`, nothing more. The truth of a claim typed
+  `corpus_observed` or `engine_validated` is **not** machine-checked at load — corpus
+  and engine evidence are runtime surfaces — which is exactly why the attribution
+  renders the claim as *the author's declaration with its declared `evidenceTypes`*
+  (the shipped claims discipline, `docs/explanation-grounds.md`), never as a
+  product-verified fact.
+
 Pack schema version: see §8 for the register claim. The change is additive; every
 existing pack validates unchanged and no committed digest moves (the `$id` is not part of
-any pack document, `rfc/README.md:28-31`).
+any pack document, `rfc/README.md:33-35`).
 
 ### 2. Recording: the interaction and its durable event
 
 **Ordering is the contract:** the learner states reasoning *before* seeing evidence.
 Mechanically, this mirrors the prediction checkpoint, which "record[s] the learner's move
-before selecting the reply" (`docs/n-way-comparison.md:27-30`).
+before selecting the reply" (`docs/n-way-comparison.md:25-27`).
 
 New endpoint, following the `prediction` route shape (`apps/server/src/rest.ts:516`):
 
@@ -152,8 +179,11 @@ interface ReasoningTranscript {
 }
 ```
 
-Server behavior (`recordReasoning`, mirroring `recordPrediction`
-`apps/server/src/service.ts:997-1035` clause by clause):
+Server behavior (`recordReasoning`, mirroring `recordPrediction`'s refusal ladder
+clause by clause, `apps/server/src/service.ts:997-1035`, and then adding two rules the
+prediction endpoint does not have — `prediction.recorded` is keyed by node + checkpoint
+id only, with no occurrence pinning, no skip, and no double-record guard; the additions
+follow the occurrence-attribution precedent cited below, not the prediction code):
 
 - writer-leased (`#forWrite`), refused while a match is live (`#refuseWhileMatchLive`);
 - requires a registered pack whose named checkpoint has
@@ -207,7 +237,10 @@ Detections are persisted in the event — the durable record of what the learner
 following `prediction.recorded`'s persistence of derived mass/rank — and append-time
 validation enforces internal consistency the way
 `packages/runtime/src/events.ts:266-275` validates a prediction against its distribution:
-`skipped` ⟺ `transcript === null` ⟺ `detections` empty of `detected` entries; every
+`skipped` ⟺ `transcript === null` ⟺ `detections.length === 0` (a typed transcript
+yields exactly one detection entry per authored key point, in authored order — a
+transcript that matches nothing is all `not_detected`, never an empty array); a
+`match` object is present iff `status === "detected"`; every
 `match` span must be in-bounds for its field; `nodeId` must exist; `checkpointEventSeq`
 must reference a `checkpoint.reached` event with the same `checkpointId` and node.
 `matcherVersion` is honest provenance: if the matcher ever changes, old events keep their
@@ -221,7 +254,7 @@ the record.
 
 A new event type widens the run schema; the stamp-only migration follows the
 migration-11 precedent ("mandatory because reads filter on the current run-schema
-version", `rfc/README.md:98`). Numbers in §8.
+version", `rfc/README.md:105`). Numbers in §8.
 
 ### 3. Deterministic key-point matching
 
@@ -243,6 +276,32 @@ Algorithm, exhaustively:
    span is recorded.
 4. Each key point is evaluated independently. Ambiguous attribution cannot arise because
    two key points sharing an identical normalized phrase are refused at validation (§7).
+
+**The expected failure mode is the miss, and this RFC owns the rate.** A word-boundary
+matcher has no morphology, no stemming, no translation: "trade the dark bishops" does
+not match the phrase "dark-squared bishop" (the plural breaks the trailing boundary and
+NFKC does not touch hyphens); a minority-attack plan stated as "push the queenside
+pawns" matches no phrase the author did not anticipate; Dutch or German reasoning
+matches no English phrase at all. At the target bands the *common* case for a sound
+idea in unanticipated words is `not_detected`. That is the accepted cost, and it is the
+honest direction of error: the matcher may under-claim coverage but can never
+over-claim it, and law 8 permits crude-and-honest while forbidding
+fluent-and-ungrounded. Three consequences are contractual:
+
+- **The only synonym vocabulary is the authored per-point `phrases` list** — pack
+  content, owned by the pack author, versioned by the pack digest. A multilingual pack
+  carries its Dutch or German variants as authored phrases. **No product-global synonym
+  table, stemming, lemmatizer, embedding, or fuzzy-match layer may be added**: a shared
+  synonym dictionary is chess taste encoded as infrastructure, and growing one is how a
+  string matcher becomes a judgment engine. `matcherVersion` may change matching
+  *mechanics* (normalization, tokenization), never introduce *vocabulary*; a proposal
+  to do the latter is a new RFC that must answer this paragraph.
+- **Detections feed nothing.** No `attempts` column, `graded`/`verdict` value,
+  progress, scheduling, recommendation, or selection input ever reads a detection.
+  Coverage is a reflection surface at one occurrence, not a metric — otherwise
+  "not detected" becomes a grade one projection downstream.
+- **The surface reads as coverage of the author's points, never as assessment of the
+  learner** — the rendered vocabulary below plus A6's forbidden-strings check pin this.
 
 **The rendered vocabulary is fixed and closed.** A detected point renders
 "Mentioned — matched '<span>'" quoting the learner's own words; an undetected point
@@ -289,6 +348,14 @@ After recording (and after delivery opens, §6), the checkpoint sheet
    3. otherwise the byte-fixed absence sentence: "No earlier attempt has stated
       reasoning at this checkpoint."
 
+Cross-run alignment is by checkpoint id **within** the same `packId` + `packDigest`,
+never across digests. A re-versioned pack may have moved, re-triggered, or re-authored
+a checkpoint that kept its id; diffing a transcript against what is now a different
+question would be a false comparison — the stale-reference class this product refuses
+elsewhere. The deliberate cost is owned: publishing a new pack version starts the
+you-vs-you history empty (the absence sentence renders), and prior-digest transcripts
+remain readable in their own runs but are never re-attached.
+
 The previous-attempt column shows that attempt's transcript and its *recorded* detections
 (as stored in its event — never regraded, per `matcherVersion` in §2). The two
 transcripts sit side by side, row-aligned (candidates/plan/fears); the product draws no
@@ -302,6 +369,22 @@ transcript, detections, key points) **for recorded occurrences only**, plus the
 prior-run transcript block. Key points and detections obey §6 disclosure. Prior-run
 transcripts are returned only to the run owner's principal — another learner's spectator
 grant on this run does not reach into the owner's other runs.
+
+**Who sees the learner's text — the closed list.** A transcript is learner-authored
+free text inside the run record, the same visibility class as the branch `label` and
+`intent` strings the run already carries (`docs/branch-runtime.md:47`). Exactly two
+surfaces can return it: the run event log (`/runs/:id/events` and equivalents) and this
+projection, both behind the run-grant model — host, participant, or spectator by
+explicit grant, missing grants 404 (`docs/identity-and-authorization.md`). Granting a
+read role *is* the disclosure decision for this text, as it already is for branch
+intents. Everything else is excluded by construction: the public story-share token
+exposes no event log, PGN, or run graph (`docs/adoption-wave-1.md:40-44`); PGN export
+serializes headers and movetext only (`packages/runtime/src/pgn.ts`) — a transcript
+never enters a PGN; the pack projection is untouched (§6); and a match opponent never
+sees one, because recording is refused while a match is live (§2), so no transcript can
+be authored mid-match. No copy exists outside the run's append-only events (no table,
+§8), so transcripts follow the run's existing deletion and account-deletion story and
+need no separate retention rule.
 
 ### 5. The LLM comparator: rung-6 rendering, never a grade
 
@@ -319,11 +402,28 @@ deterministic detections. The provider is asked one closed question: for each
 `not_detected` key point, quote a verbatim passage of the learner's transcript, if any,
 that may express it.
 
-`reasoningMatchCheck` — deterministic, and deliberately necessary-but-insufficient like
-`voiceCheck` (`docs/adaptive-guidance.md:119-122`) — rejects the output when:
+**The loop is parse, then check, then template — provider prose never renders.** The
+provider's reply is parsed into (key-point id, quotation) pairs — at most one pair per
+`not_detected` point, each quotation a contiguous span of a single transcript field,
+at most 240 codepoints — and everything else in the reply is discarded before any check
+runs. The rendered output is the byte-fixed frame below with exactly two
+interpolations: the learner's own quotation and the author's own `label`. Every
+rendered byte is therefore learner-authored or author-authored; a hostile transcript
+(prompt injection included) can at worst get its own words quoted back at their author,
+attributed. This is deliberately stronger than `voiceCheck`, which renders checked
+provider prose — here the provider only *selects*, never *phrases*.
 
-- any proposed quotation is not a verbatim substring of the learner's normalized
-  transcript;
+Nothing confirms a proposal *as a match*, and nothing can: whether the quoted span
+expresses the authored point is exactly the judgment the deterministic record refuses
+to make (the matcher already scanned that span and found no phrase). The frame
+therefore labels it a proposal, and it can never flip the stored detection.
+
+`reasoningMatchCheck` — deterministic, and deliberately necessary-but-insufficient like
+`voiceCheck` (`docs/adaptive-guidance.md:119-122`) — rejects the parsed pairs when:
+
+- any proposed quotation is not a verbatim substring of the learner's transcript,
+  checked against the raw field text — the rendered quotation is the learner's original
+  characters, never a normalized echo;
 - any named key-point id is not in the authored set, or is already `detected`;
 - the output introduces square/move tokens or chess lexicon absent from packet +
   transcript + key-point phrases (reusing the `voiceCheck` token machinery,
@@ -408,29 +508,30 @@ the shared ones above. Shape Studio is untouched.
 ### 8. Versions, migration, and register claims
 
 This draft lands **third in the 2026-08-14 wave** (register order:
-`repertoire-gap-finding`, `onramp-guard`, then this RFC). The register was re-read
-immediately before this section was finalized: **wave claim #1 has landed** —
-`repertoire-gap-finding` holds **migration 15** (create-table only; no pack/run schema
-claim). `onramp-guard` had not yet claimed. This draft therefore pins the first free
-numbers behind both predecessors' order and, per the standing register rule ("a draft
-that cannot land behind its predecessor renegotiates here rather than renumbering
-unilaterally", `rfc/README.md:47-48`), rebases upward if `onramp-guard`'s claim takes a
-slot pinned here — the F2/F3 precedent (`rfc/README.md:108-115`). Pack digests are
-unaffected by an `$id` rebase (`rfc/README.md:28-31`).
+`repertoire-gap-finding`, `onramp-guard`, then this RFC). Reconciled against the
+register as of this revision, with both predecessors' claims recorded: wave claim #1
+(`repertoire-gap-finding`) holds **migration 15** (create-table only; no pack/run schema
+claim); wave claim #2 (`onramp-guard`) holds **pack schema 0.14, run schema 0.11,
+migration 16** (`rfc/README.md:11,51,110`). Every number below lands behind both. Per
+the standing register rule ("a draft that cannot land behind its predecessor
+renegotiates here rather than renumbering unilaterally", `rfc/README.md:54-55`), any
+further predecessor motion rebases these upward — the F2/F3 precedent
+(`rfc/README.md:118-125`). Pack digests are unaffected by an `$id` rebase
+(`rfc/README.md:33-35`).
 
-- **Pack schema `0.15`** (reconciled 2026-08-14 — `onramp-guard` holds 0.14;
-  `repertoire-gap-finding` claims no pack version; moves to 0.15 if `onramp-guard`
-  holds 0.14): the `stated_reasoning` interaction variant of §1. Additive; all
+- **Pack schema `0.15`** (registered, `rfc/README.md:52`; behind `onramp-guard`'s
+  0.14): the `stated_reasoning` interaction variant of §1. Additive; all
   committed packs and fixtures validate unchanged; no digest moves.
-- **Migration `16`, `STORAGE_VERSION` 16→17** (provisional, lands behind
-  `repertoire-gap-finding`'s claimed migration 15; moves to 17 if `onramp-guard` claims
-  16; current shipped `STORAGE_VERSION` is 14, `apps/server/src/storage.ts:323`):
-  stamp-only run-schema bump for the new event type, frozen literals `"0.10"` → `"0.11"`
-  (values finalized at register reconciliation; the freeze rule itself is the
-  migration-9/11 lesson, `rfc/README.md:98-100`). No table is created: cross-run lookup
-  rides the existing `attempts` projection (§4), and transcripts live in the
-  append-only event log.
-- **Run schema `v0.11`** (provisional; `repertoire-gap-finding` claims no run schema
+- **Migration `17`, `STORAGE_VERSION` 16→17** (registered, `rfc/README.md:111`; lands
+  behind `onramp-guard`'s claimed migration 16. Shipped `STORAGE_VERSION` today is 14,
+  `apps/server/src/storage.ts:323` — 15 and 16 are the predecessors' unimplemented
+  claims, which is why this row cannot renumber without renegotiating the wave):
+  stamp-only run-schema bump for the new event type, frozen literals `"0.11"` → `"0.12"`
+  (the freeze rule itself is the migration-9/11 lesson, `rfc/README.md:103-105`).
+  No table is created: cross-run lookup rides the existing `attempts` projection (§4),
+  and transcripts live in the append-only event log.
+- **Run schema `0.12`** (behind `onramp-guard`'s claimed 0.11, which stamps
+  `"0.10"`→`"0.11"` in its migration 16; `repertoire-gap-finding` claims no run schema
   change): adds `reasoning.recorded` to the closed event union. Constants:
   `DRILL_RUN_SCHEMA_VERSION` (`packages/schema/src/index.ts:1`),
   `DRILL_PACK_SCHEMA_VERSION` (`packages/schema/src/index.ts:2`).
@@ -464,9 +565,13 @@ unaffected by an `$id` rebase (`rfc/README.md:28-31`).
   and attributed to them. The product renders their words; it does not correct, filter,
   or grade them.
 - **Live sessions**: recording is writer-leased, so participants/spectators cannot
-  record; `#refuseWhileMatchLive` applies as it does to predictions. Spectators reading
-  the run see recorded transcripts under the same disclosure gates as other feedback
-  surfaces; the prior-run column is owner-only (§4).
+  record; `#refuseWhileMatchLive` applies as it does to predictions. Explicitly granted
+  readers of the run see recorded transcripts per the §4 closed visibility list; the
+  prior-run column is owner-only (§4); anonymous share tokens and PGN never carry a
+  transcript (§4).
+- **Pack re-version**: a new digest of the same `packId` starts the you-vs-you history
+  empty by design (§4 alignment rule); prior-digest transcripts stay readable in their
+  own runs and are never re-attached to a re-authored checkpoint.
 - **Oversize input**: refused atomically; nothing appended, nothing revealed.
 - **Matcher evolution**: `matcherVersion` in the event; recorded detections are never
   recomputed. A future matcher change is a run-schema-visible contract change, not a
@@ -506,7 +611,9 @@ reasons; all committed packs and `schemas/drill_pack.example.json` validate unch
 with unmoved digests.
 
 **A2 — Record shape.** Runtime tests: append-time validation for `reasoning.recorded`
-(skip/transcript exclusivity, span bounds, occurrence pairing) in the
+(skip/transcript/empty-detections triple equivalence, exactly one detection entry per
+authored key point when typed, `match` present iff detected, span bounds, occurrence
+pairing) in the
 `events.ts:266-275` style; matcher unit tests covering move-token equivalence at a real
 FEN, word-boundary behavior, NFKC casefolding, first-match span capture, and the
 independent-evaluation property.
@@ -522,8 +629,10 @@ run's transcript with its *stored* detections; a foreign learner's run never app
 absence renders the fixed sentence.
 
 **A5 — Comparator.** With the mock/external provider: a verbatim-quotation proposal
-passes and renders under the fixed frame; a non-verbatim quotation, an unknown id, and a
-smuggled judgment word are each rejected; second failure yields silence; no event, no
+passes and renders under the fixed frame with the learner's raw (unnormalized) span; a
+non-verbatim quotation, an unknown or already-detected id, an oversize quotation, and a
+smuggled judgment word are each rejected; provider prose outside the (id, quotation)
+pairs never reaches the rendered surface; second failure yields silence; no event, no
 persistence; unconfigured provider returns `VOICE_UNAVAILABLE`.
 
 **A6 — Browser walkthrough** (extends `tests/browser/drill.spec.ts` at zero retries; the
@@ -542,8 +651,11 @@ occurrences appear.
 **432 tests across 73 files** (re-verified by suite run for this draft, 2026-08-14,
 exit 0) — and the zero-retry browser baseline (21 authored browser tests across
 `drill.spec.ts`/`match.spec.ts`/`maia-latency.spec.ts`, the Maia case optional). The
-migration fixture check follows the A7 social-match shape: a migration-14 database
-migrates with every row surviving byte-identical.
+migration fixture check follows the A7 social-match shape at this draft's slot: a
+database at `STORAGE_VERSION` 16 (the predecessors' claims applied) migrates to 17 with
+every row surviving byte-identical; today's shipped databases sit at 14
+(`apps/server/src/storage.ts:323`) and cross 15 and 16 under the predecessors' own
+fixtures first.
 
 **A8 — Docs.** `docs/drill-pack-format.md` gains the interaction variant;
 `docs/explanation-grounds.md` gains the reveal-ordering rule; `docs/drill-client.md`
@@ -561,11 +673,15 @@ None.
 - `design/BACKLOG.md:250` (step-indexed reasoning transcript): 💡 → 📜 scheduled against
   this RFC, noting the three-row deviation and that the category-scan row
   (`design/BACKLOG.md:251`) remains open.
-- `rfc/README.md` (same commit as this draft lands): Active-table row; pack-schema
-  register row **0.15** and migration register row **17,
-  STORAGE_VERSION 16→17** (behind `repertoire-gap-finding`'s claimed 15), each marked
-  "rebases upward behind an `onramp-guard` claim at register reconciliation per the
-  standing rule".
+- `rfc/README.md`: the pack-schema register row **0.15** (`rfc/README.md:52`) and
+  migration register row **17, STORAGE_VERSION 16→17** (`rfc/README.md:111`), both
+  behind `onramp-guard`'s claims (0.14 / 16), are **already recorded**. Two register
+  corrections are owed in the commit that lands this draft (register edits are
+  single-writer and are reported here, not made by review): the migration-17 row
+  currently reads "creates `reasoning_records`", which contradicts §8 — the correct
+  body is **stamp-only, run schema `"0.11"` → `"0.12"`, no table created**; and the
+  run-schema claim **0.12** (behind `onramp-guard`'s 0.11) should be recorded in the
+  row and the Active table beside the pack claim.
 
 ## Changelog
 
@@ -576,3 +692,24 @@ None.
   #1 (migration 15, no pack/run schema) landed while this draft was being written; §8
   rebased from migration 15 to **16** and recorded that pack schema 0.15 and migration
   16 remain provisional behind `onramp-guard`'s pending claim.
+- 2026-08-14: adversarial review, same day. §8 finalized against `onramp-guard`'s
+  recorded claims (pack 0.14, run 0.11, migration 16): migration **17**
+  (`STORAGE_VERSION` 16→17), run schema **0.12** with frozen literals `"0.11"`→`"0.12"`
+  — the prior draft's run-schema claim of 0.11 collided with `onramp-guard`'s and its
+  migration number was internally inconsistent (16 with 16→17). Ledger section now
+  records the owed `rfc/README.md` correction (migration-17 row says "creates
+  `reasoning_records`"; the correct body is stamp-only, no table). Fixed the §2
+  append-validation iff (a typed transcript that matches nothing is all `not_detected`,
+  not an empty array) and stopped overclaiming the prediction precedent (it has no
+  occurrence pinning, skip, or double-record guard). Added: §1 per-kind statement of
+  what load validation proves (truth check is `structural`-only; `claim` truth is the
+  author's declaration, not product-verified); §3 miss-rate ownership (no product-global
+  synonym/stemming layer ever; detections feed no metric); §4 digest-strict you-vs-you
+  alignment owned as a deliberate orphaning trade-off; §4/§9 closed visibility list for
+  learner text (grant-scoped run reads only; story tokens, PGN, pack projection, and
+  match opponents excluded by construction); §5 comparator loop pinned as
+  parse-then-check-then-template with raw-verbatim quotations, per-point/length caps,
+  and provider prose never rendering. Stale line citations refreshed
+  (`rfc/README.md` shifted by the wave's register rows; `docs/n-way-comparison.md`).
+  Baseline re-verified by suite run: 432/73, exit 0; 21 browser tests, no `retries`
+  key.
