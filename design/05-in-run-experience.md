@@ -30,7 +30,7 @@ extend them; none may quietly except itself from one.
 | **Rewind is an experiment, not an undo** | An undo says the move did not happen. A fork says it happened and here is another world. The difference is the entire pedagogy |
 | **Nothing here invents chess truth** | ADR-0005. Every statement is rendered from something validated — rules, a tablebase, an engine, a corpus, or an author. Wording may be generated; claims may not |
 | **Absence is stated, never simulated** | If the product does not know, it says so. A confident wrong verdict costs more than a visible gap, and the gap is recoverable |
-| **The run is the record** | Everything that happened is in the event log, replayable. A surface that shows something the run cannot reconstruct is showing something that did not happen |
+| **The run is the sole source of chess truth** | Every move, verdict and disclosure is in the run's event log, replayable. Session machinery — possession, proposals, votes, invitations — deliberately lives in a separate session journal (`docs/live-sessions.md`) and may never alter what the run says happened on the board (scoped 2026-08-14; the earlier "everything is in the run log" contradicted shipped Live semantics) |
 
 ## 2. The regions
 
@@ -208,9 +208,12 @@ The rendering contract, which is checkable rather than aspirational:
 2. The model receives the packet **and a persona**, and may choose wording,
    order, brevity, and tone.
 3. It may not introduce a chess noun, square, move or judgement that is not in the
-   packet. That is machine-checkable, and `docs/explanation-grounds.md` already
-   ships grounded rendering with this shape for evidence sentences — this extends
-   an existing mechanism rather than inventing one.
+   packet. That is machine-checkable, and what ships today
+   (`docs/explanation-grounds.md`) is **closed deterministic sentence
+   templates**, with evidence-bound LLM rendering explicitly listed as future
+   work — so this section states the intended contract, and the packet grammar
+   and machine-check rule are B10-RFC detail, not shipped behaviour
+   (corrected 2026-08-14; the earlier text overclaimed).
 
 **"Beautifully annoying" is a real design property, not a joke.** A voice with
 personality is memorable, and memorable is the difference between a concept the
@@ -391,7 +394,11 @@ classes carry so much weight there.
 Genuine forks, not gaps to be filled by whoever writes the next RFC:
 
 1. **Where the anti-contamination line falls between rungs 0 and 2 during
-   committed play.** Rung 0 reveals no answer, so withholding it is theatre; rung
+   committed play — narrowed 2026-08-14 after the silence ruling (§3a).** The
+   default is silence and that is ruled, not open. What remains open is
+   *availability on request*: whether a learner may pull rung-0 sight mid-play
+   or only at checkpoints. The earlier text called withholding rung 0
+   "theatre", which contradicted §3a; rung
    2 reveals the answer, so showing it is contamination. Somewhere in between —
    probably at rung 1 or 3 — the line sits, and it may move by mode.
 2. **How deep discovered consequence goes before it becomes noise.** One ply of

@@ -89,8 +89,8 @@ abolished, but the reusable half lifted out of them.
 Stated plainly because the shipped format is line-shaped: `drill_pack.schema.json`
 is built around `start` + `spine` + `checkpoints` + `deviations`, a position tree.
 A shape entry has none of those. This is a new authored artifact and a new
-authoring path, not a schema widening — and six RFCs currently in flight all
-target the existing format. It also depends on Q4b feature predicates, which do
+authoring path, not a schema widening — and the six 2026-08-13 RFCs — since implemented and archived — all
+targeted the existing format. It also depends on Q4b feature predicates, which do
 not exist yet; without them a shape cannot state its own trigger.
 
 **Owner ruling needed.** The three authored packs are line content and stay valid
@@ -106,15 +106,16 @@ this survives outside its own pack and can fire in a game nobody authored.
 | Field | Anchored to | Transfers to Just Play? |
 |---|---|---|
 | `start`, `spine`, `spine[].annotations` | this pack's move tree | **no** |
-| `deviations` | `spineNodeId` + `moveUci` | **no** |
-| `authoredBoundary` | spine node ids | **no** |
-| `checkpoints` via `atSpineNode` / `atPly` | this pack's tree | **no** |
+| `deviations` | `spineNodeId` *or FEN anchor* + `moveUci` (corrected 2026-08-14) | **no** — either way it is this pack's position |
+| `authoredBoundary` | spine node ids **+ `fenPredicates`** (corrected 2026-08-14) | the predicate half keys on positions and would transfer; the id half does not |
+| `checkpoints` via `atSpineNode` / `atPly` / `atAuthoredBoundary` / timing windows | this pack's tree | **no** |
 | `checkpoints` via `fenPredicate` / `materialBalance` | the *position* | **yes** — and these are the only triggers that do |
-| `objective.summary` | this position | no · `objective.type` | general |
+| `objective.summary` | this position | **no** |
+| `objective.type` | the objective vocabulary | general — but carries no content |
 | `planClasses` | nothing — free-standing prose | **should**, but is locked inside one pack |
 | `concepts` | nothing — bare ids | **should**, but has no cross-pack identity (ledgered) |
 | `feedbackClaims` | nothing | **should**, but has no triggers, so it can never fire |
-| `opponentPolicy` | nothing — a resistance recipe | **yes** |
+| `opponentPolicy` | nothing — a resistance recipe | *portable* as a recipe, but authoring one does not improve an unauthored game (corrected 2026-08-14 — the earlier **yes** contradicted this audit's own definition of transfer) |
 
 **The verdict is unambiguous and it answers the owner's question: no.** Almost
 everything a pack contains is anchored to that pack's move tree, and the three
