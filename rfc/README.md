@@ -7,7 +7,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `runtime-corpus-evidence.md` | implementing | `archive/adaptive-guidance.md` (amends the assistance rail) | `planning/runtime-corpus-evidence/` (no schema or migration claim) |
 | `adoption-wave-1.md` | draft | — | — (2026-08-14 parallel wave; migration 13 claimed, no pack/run schema claim) |
 | `social-match.md` | draft | `archive/live-session-platform.md` (amends board control, journal kinds, session routes; depends on `adoption-wave-1.md` for `public_tokens`) | — (2026-08-14 parallel wave, **last claim**; migration 14, no pack/run schema claim) |
 
@@ -178,6 +177,7 @@ before re-attempting this territory.
 | `archive/branch-groups.md` | implemented | `docs/branch-groups.md`, `docs/branch-runtime.md`, `docs/engine-workers.md`, `docs/drill-client.md` |
 | `archive/game-import-and-story.md` | implemented | `docs/game-import-and-story.md`, `docs/branch-runtime.md` |
 | `archive/predicate-wave-2.md` | implemented | `docs/structural-reading.md`, `docs/drill-pack-format.md`, `docs/shape-library.md`, `docs/explanation-grounds.md` |
+| `archive/runtime-corpus-evidence.md` | implemented | `docs/runtime-corpus-evidence.md`, `docs/adaptive-guidance.md`, `docs/explanation-grounds.md`, `docs/branch-groups.md` |
 
 ## The archive sketches are quarry, not RFCs
 

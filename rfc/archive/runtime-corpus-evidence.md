@@ -1,6 +1,6 @@
 # RFC: Runtime corpus evidence — band frequency and recency in the assistance rail
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/05-in-run-experience.md` §3 rung 4 (line 75: corpus frequency
@@ -660,3 +660,6 @@ None.
   adoption/social), refreshed the green 416-test/70-file baseline, and made
   `committedMoveSan` deterministic: it is the learner child on the active-cursor
   path from the requested pre-move node, never an arbitrary child at a fork.
+- 2026-08-14: implemented and verified. Canonical behavior is in
+  `docs/runtime-corpus-evidence.md`, with cross-seam amendments in the adaptive,
+  explanation, and branch-group docs. No schema or migration was introduced.

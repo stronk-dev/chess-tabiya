@@ -19,3 +19,10 @@ The acceptance now waits for the reply before reveal and proves the real contrac
 Verification on the feature tree: `ENGINES_REQUIRED=1 make verify` — 424 tests across
 72 files, schema and packaging green; `make test-browser` — 17 passed, optional Maia
 check skipped, Playwright retries unset.
+
+## 2026-08-14 — lifecycle closeout
+
+Canonical behavior was distilled into `docs/runtime-corpus-evidence.md` because the
+source/cache/delivery contract is a coherent subsystem rather than a small amendment;
+the three consuming docs carry concise boundary updates. The RFC and planning job are
+ready for their archive moves. Final gate results are appended after those moves.
