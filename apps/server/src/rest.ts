@@ -396,6 +396,7 @@ export function errorResponse(error: unknown): Response {
                 error.code === "PACK_NOT_FOUND" ||
                 error.code === "SHAPE_NOT_FOUND" ||
                 error.code === "EVIDENCE_RESULT_NOT_FOUND"
+                || error.code === "UNKNOWN_GROUP"
               ? 404
               : error.code === "RUN_ALREADY_EXISTS" ||
                 error.code === "FEEDBACK_WITHHELD" ||
@@ -424,6 +425,7 @@ export function errorResponse(error: unknown): Response {
                     || error.code === "NO_AUTHORED_VARIATIONS"
                     || error.code === "SIMULATE_TOO_LARGE"
                     || error.code === "SIMULATE_BUDGET_EXCEEDED"
+                    || error.code === "GROUP_SEEDS_UNAVAILABLE"
                   ? 422
                 : 500;
   }
@@ -441,7 +443,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis|human-split|voice)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis|human-split|voice|group|group-reply)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -933,6 +935,38 @@ export function createRestHandler(
             operation,
           ),
         });
+      }
+      if (route.action === "group") {
+        requireJson(request);
+        const body = closedRecord(value, "/", ["source", "resistance", "candidates", "size", "at"]);
+        const source = requiredString(body.source, "source");
+        if (source !== "hand_picked" && source !== "authored" && source !== "human_replies" && source !== "engine_top_n") {
+          throw invalid("source is unsupported");
+        }
+        const resistance = body.resistance === undefined ? undefined : requiredString(body.resistance, "resistance");
+        if (resistance !== undefined && resistance !== "fixed" && resistance !== "per_branch") {
+          throw invalid("resistance must be fixed or per_branch");
+        }
+        if (body.candidates !== undefined && (!Array.isArray(body.candidates) || body.candidates.some((candidate) => typeof candidate !== "string"))) {
+          throw invalid("candidates must be an array of strings");
+        }
+        return json(200, await service.createGroup(route.runId, principal, writerId(request), {
+          source,
+          ...(resistance === undefined ? {} : { resistance }),
+          ...(body.candidates === undefined ? {} : { candidates: body.candidates as string[] }),
+          ...(body.size === undefined ? {} : { size: requiredSafeInteger(body.size, "size") }),
+          ...(body.at === undefined ? {} : { at: requiredString(body.at, "at") }),
+        }));
+      }
+      if (route.action === "group-reply") {
+        requireJson(request);
+        const body = closedRecord(value, "/", ["groupId"]);
+        return json(200, await service.groupReply(
+          route.runId,
+          principal,
+          writerId(request),
+          requiredString(body.groupId, "groupId"),
+        ));
       }
       if (route.action === "moves") {
         if (value.selection !== undefined) {

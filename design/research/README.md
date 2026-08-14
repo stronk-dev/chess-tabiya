@@ -19,6 +19,15 @@ Two structural limits, both proven by owner finds rather than admitted in advanc
    searched. A competitor to a surface we ship is in scope regardless of which
    category shelf it sits on.
 
+**What a teardown answers (widened 2026-08-14, owner ruling):** three questions,
+not one — (1) does it threaten E1; (2) what is its one good feature and through
+which `design/05` invariant does it enter (adoption posture, `design/02`); and
+(3) **why do people love it and why do people hate it** — reviews, forums,
+churn complaints, with evidence labels. The third is the going-wide question:
+the strategy is breadth ("the end-all-be-all"), so knowing what makes each
+one-feature product beloved or abandoned is product research, not competitive
+hygiene. A teardown without a love/hate section is incomplete.
+
 Rule going forward: **when a new surface lands, ask which category of product
 already does that one thing, and check the matrix covers its best example.**
 Owned by whoever lands the surface, recorded here, no standing ceremony.

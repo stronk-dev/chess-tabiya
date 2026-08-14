@@ -229,7 +229,7 @@ parsed with the shipped `closedRecord` (`rest.ts:70`):
   source: "hand_picked" | "authored" | "human_replies" | "engine_top_n",
   resistance?: "fixed" | "per_branch",      // default "fixed"
   candidates?: string[],                    // UCIs; required iff source = hand_picked
-  size?: number,                            // 2–8, default 4; machine sources only
+  size?: number,                            // 2–8, default 4; non-hand sources only
   at?: string
 }
 ```

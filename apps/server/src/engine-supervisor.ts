@@ -60,6 +60,7 @@ export interface EngineHealth {
 
 export interface EngineRequest {
   readonly commands: readonly string[];
+  readonly afterCommands?: readonly string[];
   readonly until: (line: string) => boolean;
   readonly timeoutMs?: number;
   readonly signal?: AbortSignal;
@@ -286,6 +287,7 @@ class ManagedUciEngine {
         for (const command of request.commands) this.#send(command);
         const lines = await response;
         if (request.signal?.aborted) throw abortError();
+        for (const command of request.afterCommands ?? []) this.#send(command);
         return lines;
       } catch (error) {
         if (isAbortError(error)) throw error;

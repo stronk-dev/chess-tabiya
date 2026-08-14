@@ -13,16 +13,20 @@ import {
   fork,
   feedbackDeliveryOpen,
   feedbackDisclosed,
+  groupsFromEvents,
   historyFrom,
   canonicalRunStart,
   digestSessionSource,
   isPackSession,
   lineMembership,
+  opponentMovesFromEvents,
+  permittedAssistance,
   revealFeedback,
   isEngineEvidenceRef,
   rewind,
   rewindToCheckpoint,
   type BranchComparison,
+  type BranchGroup,
   type AppendOpponentPlyOptions,
   type CommitMoveOptions,
   type CreateRunInput,
@@ -32,9 +36,14 @@ import {
   type ForkOptions,
   type MutationResult,
   type OpponentSelection,
+  type GroupResistance,
+  type GroupSource,
+  type RunOpponentMode,
   type PositionOpponentPolicy,
 } from "@chess-tabiya/runtime";
 import { randomUUID } from "node:crypto";
+import { Chess } from "chessops/chess";
+import { parseFen } from "chessops/fen";
 
 import {
   EvidenceJobQueue,
@@ -65,6 +74,7 @@ import {
   type AttemptOriginInput,
 } from "./progress.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
+import { OpponentSelector, type SelectMoveRequest } from "./opponent-selector.js";
 import {
   mayManageGrants,
   mayWrite,
@@ -104,6 +114,24 @@ export interface GuidanceAccess {
   readonly branchSeed: number;
 }
 
+export interface CreateGroupInput {
+  readonly source: GroupSource;
+  readonly resistance?: GroupResistance;
+  readonly candidates?: readonly string[];
+  readonly size?: number;
+  readonly at?: string;
+}
+
+export interface CreateGroupResult extends MutationResult {
+  readonly group: BranchGroup;
+  readonly comparison: BranchComparison;
+}
+
+export interface GroupReplyResult {
+  readonly selection: OpponentSelection;
+  readonly reusedFromNodeId: string | null;
+}
+
 function comparisonWithoutEngineFeedback(
   comparison: BranchComparison,
 ): BranchComparison {
@@ -134,6 +162,44 @@ function comparisonWithoutEngineFeedback(
       comparison.columns.map((column) => [column.branchId, Object.freeze([])]),
     )),
   });
+}
+
+function findSpineNode(
+  nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[],
+  id: string,
+): import("@chess-tabiya/schema/drill-pack").SpineNode | undefined {
+  for (const node of nodes) {
+    if (node.id === id) return node;
+    const child = findSpineNode(node.children, id);
+    if (child !== undefined) return child;
+  }
+  return undefined;
+}
+
+function learnerToMove(run: DrillRun, node: DrillRun["nodes"][number]): boolean {
+  const turn = node.fen.split(" ")[1];
+  return (turn === "w" ? "white" : "black") === run.start.side;
+}
+
+function terminalPosition(fen: string): boolean {
+  return Chess.fromSetup(parseFen(fen).unwrap()).unwrap().isEnd();
+}
+
+function sameEngine(
+  left: OpponentSelection["engine"],
+  right: OpponentSelection["engine"],
+): boolean {
+  return left.id === right.id && left.name === right.name && left.version === right.version &&
+    left.modelId === right.modelId && left.containerDigest === right.containerDigest &&
+    left.seedHonored === right.seedHonored;
+}
+
+function compatibleAppliedMode(
+  requested: RunOpponentMode,
+  applied: OpponentSelection["policyModeApplied"],
+): boolean {
+  return applied === requested ||
+    (requested === "theory_strict" && applied === "human_common");
 }
 
 export type RewindTarget =
@@ -171,6 +237,7 @@ export class RunService {
   readonly #packRegistry: PackRegistry | undefined;
   readonly #evidenceMovetimeMs: number;
   readonly #progress: ProgressStorage | undefined;
+  readonly #opponentSelector: OpponentSelector | undefined;
   readonly #simulations = new Map<string, {
     readonly runId: string;
     readonly sourceNodeId: string;
@@ -187,12 +254,14 @@ export class RunService {
       readonly packRegistry?: PackRegistry;
       readonly evidenceMovetimeMs?: number;
       readonly progressStorage?: ProgressStorage;
+      readonly opponentSelector?: OpponentSelector;
     } = {},
   ) {
     this.#storage = storage;
     this.#evidenceQueue = options.evidenceQueue;
     this.#packRegistry = options.packRegistry;
     this.#progress = options.progressStorage;
+    this.#opponentSelector = options.opponentSelector;
     this.#evidenceMovetimeMs =
       options.evidenceMovetimeMs ?? DEFAULT_STRONG_ENGINE_PROFILE.movetimeMs;
     if (!Number.isSafeInteger(this.#evidenceMovetimeMs) || this.#evidenceMovetimeMs < 1) {
@@ -436,6 +505,187 @@ export class RunService {
       historyUci: Object.freeze(historyFrom(run, nodeId).flatMap((item) => item.moveUci === null ? [] : [item.moveUci])),
       branchSeed: branch.seed,
     });
+  }
+
+  async createGroup(
+    runId: string,
+    principal: Principal,
+    writerId: string,
+    input: CreateGroupInput,
+  ): Promise<CreateGroupResult> {
+    const { stored, role, lease } = this.#forWrite(runId, principal, writerId);
+    this.#requiredEvidenceQueue();
+    const pack = this.#requiredRegisteredPack(stored.run);
+    const sourceNode = stored.run.nodes.find((node) => node.id === stored.run.activeCursor.nodeId)!;
+    if (terminalPosition(sourceNode.fen) || ["achieved", "failed", "transitioned"].includes(sourceNode.objectiveState)) {
+      throw new ServerError("INVALID_REQUEST", "A group cannot start from a terminal node");
+    }
+    const resistance = input.resistance ?? "fixed";
+    const requestedSize = input.size ?? 4;
+    if (!Number.isSafeInteger(requestedSize) || requestedSize < 2 || requestedSize > 8) {
+      throw new ServerError("INVALID_REQUEST", "Group size must be an integer from 2 to 8");
+    }
+    if (input.source === "hand_picked" && input.size !== undefined) {
+      throw new ServerError("INVALID_REQUEST", "Hand-picked groups derive size from candidates");
+    }
+    if (input.source !== "hand_picked" && input.candidates !== undefined) {
+      throw new ServerError("INVALID_REQUEST", "Only hand-picked groups accept candidates");
+    }
+
+    let distribution: OpponentSelection | undefined;
+    let candidates: readonly string[];
+    if (input.source === "hand_picked") {
+      candidates = Object.freeze([...(input.candidates ?? [])]);
+    } else if (input.source === "authored") {
+      if (pack === undefined) {
+        throw new ServerError("NO_AUTHORED_VARIATIONS", "Position sessions have no authored variations");
+      }
+      const membership = lineMembership(pack.document, stored.run, sourceNode.id);
+      const spineId = membership.at(-1)?.spineNodeId;
+      const choices = (spineId === undefined
+        ? pack.document.spine
+        : findSpineNode(pack.document.spine ?? [], spineId)?.children) ?? [];
+      candidates = Object.freeze(choices.slice(0, requestedSize).map((choice) => choice.moveUci));
+    } else {
+      const permission = permittedAssistance({
+        sessionKind: stored.run.sessionKind,
+        deliveryOpen: feedbackDeliveryOpen(stored.run),
+        role,
+      });
+      if (permission.humanSplit === "locked_off") {
+        throw new ServerError("ASSISTANCE_WITHHELD", "Machine-seeded groups are withheld in this context");
+      }
+      if (input.source === "human_replies" && learnerToMove(stored.run, sourceNode)) {
+        throw new ServerError("GROUP_SEEDS_UNAVAILABLE", "Human replies are resistance, not learner move advice");
+      }
+      const selector = this.#requiredOpponentSelector();
+      const mode = input.source === "human_replies" ? "human_common" : "strong_engine";
+      const request = this.#selectionRequest(stored.run, sourceNode.id, pack, mode, stored.run.branches[0]!.seed);
+      distribution = input.source === "human_replies"
+        ? await selector.select(request)
+        : await selector.enumerate(request, requestedSize);
+      candidates = Object.freeze((distribution.candidates ?? []).slice(0, requestedSize).map((candidate) => candidate.moveUci));
+    }
+    if (candidates.length < 2) {
+      throw new ServerError("GROUP_SEEDS_UNAVAILABLE", "At least two group seeds are required");
+    }
+    if (candidates.length > 8) {
+      throw new ServerError("TOO_MANY_BRANCHES", "At most eight branches may be grouped", { details: { count: candidates.length, limit: 8 } });
+    }
+    if (new Set(candidates).size !== candidates.length) {
+      throw new ServerError("INVALID_REQUEST", "Group seed moves must be distinct");
+    }
+
+    const groupedBranches = new Set(groupsFromEvents(stored.run).flatMap((group) => group.members.map((member) => member.branchId)));
+    let scratch = stored.run;
+    const members: { branchId: string; seedMoveUci: string }[] = [];
+    const evidenceNodeIds: string[] = [];
+    for (const moveUci of candidates) {
+      const existing = scratch.nodes.find((node) => node.parentId === sourceNode.id && node.moveUci === moveUci);
+      if (existing !== undefined) {
+        if (groupedBranches.has(existing.branchId)) {
+          throw new ServerError("INVALID_REQUEST", `Branch ${existing.branchId} already belongs to a group`);
+        }
+        members.push({ branchId: existing.branchId, seedMoveUci: moveUci });
+        continue;
+      }
+      scratch = fork(scratch, sourceNode.id, {
+        label: moveUci,
+        ...(input.at === undefined ? {} : { at: input.at }),
+      }).run;
+      const beforeCommit = scratch;
+      const opponentSide = !learnerToMove(stored.run, sourceNode);
+      const committed = opponentSide && distribution !== undefined
+        ? appendOpponentPly(scratch, {
+            ...distribution,
+            moveUci,
+            policyModeApplied: "enumerated",
+          }, input.at === undefined ? {} : { at: input.at })
+        : commitMove(scratch, moveUci, {
+            actor: input.source === "hand_picked" && !opponentSide ? "user" : "system",
+            ...(input.at === undefined ? {} : { at: input.at }),
+          });
+      const orchestrated = pack === undefined
+        ? committed
+        : orchestratePackMove(pack.document, beforeCommit, committed);
+      scratch = orchestrated.run;
+      members.push({ branchId: scratch.activeCursor.branchId, seedMoveUci: moveUci });
+      evidenceNodeIds.push(scratch.activeCursor.nodeId);
+    }
+    if (new Set(members.map((member) => member.branchId)).size !== members.length) {
+      throw new ServerError("INVALID_REQUEST", "Two seeds resolve to the same branch");
+    }
+    const firstLeaf = branchPath(scratch, members[0]!.branchId).at(-1)!;
+    scratch = rewind(scratch, firstLeaf.id, input.at).run;
+    const groupId = `${scratch.id}:group:${groupsFromEvents(scratch).length + 1}`;
+    scratch = appendEvents(scratch, [{
+      type: "group.created",
+      at: input.at ?? new Date().toISOString(),
+      data: {
+        groupId,
+        sourceNodeId: sourceNode.id,
+        source: input.source,
+        resistance,
+        members,
+        ...(distribution === undefined ? {} : { distribution }),
+      },
+    }]);
+    this.#storage.save(scratch, lease);
+    this.#project(scratch, lease.learnerId);
+    for (const nodeId of evidenceNodeIds) this.#enqueueMoveEvidence(scratch, nodeId);
+    const group = groupsFromEvents(scratch).at(-1)!;
+    return Object.freeze({
+      group,
+      run: scratch,
+      emitted: scratch.events.slice(stored.run.events.length),
+      comparison: compareBranches(scratch, members.map((member) => member.branchId), pack === undefined ? {} : { pack: pack.document }),
+    });
+  }
+
+  async groupReply(
+    runId: string,
+    principal: Principal,
+    writerId: string,
+    groupId: string,
+  ): Promise<GroupReplyResult> {
+    const { stored } = this.#forWrite(runId, principal, writerId);
+    const group = groupsFromEvents(stored.run).find((candidate) => candidate.groupId === groupId);
+    if (group === undefined) throw new ServerError("UNKNOWN_GROUP", `Unknown group: ${groupId}`);
+    const memberIndex = group.members.findIndex((member) => member.branchId === stored.run.activeCursor.branchId);
+    if (memberIndex < 0) throw new ServerError("INVALID_REQUEST", "The active branch is not a member of this group");
+    const node = stored.run.nodes.find((candidate) => candidate.id === stored.run.activeCursor.nodeId)!;
+    if (terminalPosition(node.fen)) throw new ServerError("INVALID_REQUEST", "The active group position is terminal");
+    const pack = this.#requiredRegisteredPack(stored.run);
+    const selector = this.#requiredOpponentSelector();
+    const available = selector.availableModes();
+    const requested = stored.run.opponentPolicy.mode;
+    const mode = available.includes(requested)
+      ? requested
+      : available.includes("human_common")
+        ? "human_common"
+        : available[0];
+    if (mode === undefined) {
+      throw new ServerError("ENGINE_UNAVAILABLE", "Opponent selector has no healthy engine", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
+    }
+    const identity = selector.identityFor(mode);
+    if (group.resistance === "fixed") {
+      const memberIds = new Set(group.members.map((member) => member.branchId));
+      const sourcePly = stored.run.nodes.find((candidate) => candidate.id === group.sourceNodeId)!.ply;
+      for (const move of opponentMovesFromEvents(stored.run.events)) {
+        if (!memberIds.has(move.branchId)) continue;
+        const parent = stored.run.nodes.find((candidate) => candidate.id === move.parentNodeId);
+        if (parent === undefined || parent.ply < sourcePly || parent.transposeKey !== node.transposeKey) continue;
+        if (!compatibleAppliedMode(mode, move.policyModeApplied) || !sameEngine(move.engine, identity)) continue;
+        const event = stored.run.events[move.selectionSeq - 1];
+        if (event?.type !== "opponent.move_selected") continue;
+        return Object.freeze({ selection: event.data.selection, reusedFromNodeId: move.parentNodeId });
+      }
+    }
+    const seed = group.resistance === "fixed"
+      ? stored.run.branches[0]!.seed
+      : stored.run.branches[0]!.seed + memberIndex + 1;
+    const request = this.#selectionRequest(stored.run, node.id, pack, mode, seed);
+    return Object.freeze({ selection: await selector.select(request), reusedFromNodeId: null });
   }
 
   runs(principal: Principal, limit: number, offset: number): readonly RunSummary[];
@@ -1037,12 +1287,12 @@ export class RunService {
     return pack;
   }
 
-  #enqueueMoveEvidence(run: DrillRun): void {
-    const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId);
+  #enqueueMoveEvidence(run: DrillRun, nodeId = run.activeCursor.nodeId): void {
+    const node = run.nodes.find((candidate) => candidate.id === nodeId);
     if (node === undefined) throw new TypeError("Run active cursor has no node");
     this.#requiredEvidenceQueue().enqueue({
       runId: run.id,
-      nodeId: run.activeCursor.nodeId,
+      nodeId,
       fen: node.fen,
       kind: "eval",
       movetime: this.#evidenceMovetimeMs,
@@ -1059,6 +1309,39 @@ export class RunService {
         }),
       } : {}),
     });
+  }
+
+  #selectionRequest(
+    run: DrillRun,
+    nodeId: string,
+    pack: PackRecord | undefined,
+    mode: RunOpponentMode,
+    seed: number,
+  ): SelectMoveRequest {
+    const authored = run.opponentPolicy;
+    return Object.freeze({
+      startFen: run.start.fen,
+      historyUci: Object.freeze(historyFrom(run, nodeId).flatMap((node) => node.moveUci === null ? [] : [node.moveUci])),
+      policy: Object.freeze({
+        mode,
+        policyConfigDigest: run.sessionDigest,
+        ...(authored.targetElo === undefined ? {} : { targetElo: authored.targetElo }),
+        ...(authored.temperature === undefined ? {} : { temperature: authored.temperature }),
+        ...(authored.topP === undefined ? {} : { topP: authored.topP }),
+        ...(pack?.document.spine === undefined ? {} : { spine: pack.document.spine }),
+      }),
+      seed,
+      ...(pack === undefined ? {} : { packId: pack.document.id }),
+    });
+  }
+
+  #requiredOpponentSelector(): OpponentSelector {
+    if (this.#opponentSelector === undefined) {
+      throw new ServerError("ENGINE_UNAVAILABLE", "Opponent selector is not configured", {
+        details: { engineId: "opponent-selector", retryAfterMs: 0 },
+      });
+    }
+    return this.#opponentSelector;
   }
 
   #requiredPackRegistry(): PackRegistry {

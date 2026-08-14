@@ -325,6 +325,7 @@ export async function createApplication(
     evidenceQueue,
     packRegistry: registry,
     progressStorage: storage,
+    opponentSelector: selector,
   });
   const identity = new IdentityService(storage, {
     cookieSecure: options.cookieSecure ?? true,

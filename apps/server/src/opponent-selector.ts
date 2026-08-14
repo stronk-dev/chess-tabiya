@@ -350,6 +350,7 @@ export class OpponentSelector {
   readonly #maiaEngineId: string;
   readonly #strongEngineId: string;
   readonly #strongEngineMovetimeMs: number;
+  readonly #strongEngineMultiPv: number;
   readonly #cache = new Map<string, Promise<OpponentSelection>>();
 
   constructor(
@@ -366,6 +367,7 @@ export class OpponentSelector {
         : { movetimeMs: options.strongEngineMovetimeMs }),
     });
     this.#strongEngineMovetimeMs = profile.movetimeMs;
+    this.#strongEngineMultiPv = profile.multiPv;
   }
 
   select(request: SelectMoveRequest): Promise<OpponentSelection> {
@@ -382,6 +384,47 @@ export class OpponentSelector {
 
   cacheSize(): number {
     return this.#cache.size;
+  }
+
+  availableModes(): readonly RunOpponentMode[] {
+    const maia = this.#client.health(this.#maiaEngineId).identity !== undefined;
+    const strong = this.#client.health(this.#strongEngineId).identity !== undefined;
+    return Object.freeze([
+      ...(maia ? (["human_common", "theory_strict"] as const) : []),
+      ...(strong ? (["strong_engine"] as const) : []),
+    ]);
+  }
+
+  identityFor(mode: RunOpponentMode): SelectionEngineIdentity {
+    return selectionIdentity(engineIdentity(
+      this.#client,
+      mode === "strong_engine" ? this.#strongEngineId : this.#maiaEngineId,
+    ));
+  }
+
+  async enumerate(request: SelectMoveRequest, count: number): Promise<OpponentSelection> {
+    if (request.policy.mode !== "strong_engine") {
+      throw policyModeUnsupported(request.policy.mode);
+    }
+    if (!Number.isSafeInteger(count) || count < 2 || count > 8) {
+      throw invalid("enumerate count must be an integer from 2 to 8");
+    }
+    const lines = await this.#client.execute(this.#strongEngineId, {
+      commands: [
+        `setoption name MultiPV value ${count}`,
+        positionCommand(request),
+        `go movetime ${this.#strongEngineMovetimeMs}`,
+      ],
+      afterCommands: [`setoption name MultiPV value ${this.#strongEngineMultiPv}`],
+      until: (line) => line.startsWith("bestmove "),
+      timeoutMs: Math.max(5_000, this.#strongEngineMovetimeMs * 10),
+    });
+    return makeSelection(
+      bestMove(lines),
+      candidateLines(lines),
+      engineIdentity(this.#client, this.#strongEngineId),
+      "strong_engine",
+    );
   }
 
   async #selectUncached(request: SelectMoveRequest): Promise<OpponentSelection> {

@@ -200,6 +200,41 @@ describe("pure opponent selector", () => {
     expect(client.calls[0]?.request.commands.at(-1)).toBe("go movetime 125");
   });
 
+  it("enumerates strong-engine candidates and restores MultiPV after bestmove", async () => {
+    const client = new FakeEngineClient(() => [
+      "info depth 8 multipv 1 score cp 35 pv c7c5",
+      "info depth 8 multipv 2 score cp 20 pv e7e5",
+      "info depth 8 multipv 3 score cp 5 pv g8f6",
+      "bestmove c7c5",
+    ]);
+    const selector = new OpponentSelector(client, {
+      strongEngineProfile: { multiPv: 1 },
+    });
+
+    await expect(selector.enumerate(request("strong_engine"), 3)).resolves.toMatchObject({
+      moveUci: "c7c5",
+      policyModeApplied: "strong_engine",
+      candidates: [
+        { moveUci: "c7c5", rank: 1 },
+        { moveUci: "e7e5", rank: 2 },
+        { moveUci: "g8f6", rank: 3 },
+      ],
+    });
+    expect(client.calls[0]?.request.commands).toEqual([
+      "setoption name MultiPV value 3",
+      `position fen ${INITIAL_FEN} moves e2e4`,
+      "go movetime 100",
+    ]);
+    expect(client.calls[0]?.request.afterCommands).toEqual([
+      "setoption name MultiPV value 1",
+    ]);
+    expect(selector.availableModes()).toEqual([
+      "human_common",
+      "theory_strict",
+      "strong_engine",
+    ]);
+  });
+
   it("recognizes a transposition back by transposeKey and restricts Maia mass to spine children", async () => {
     const client = new FakeEngineClient(() =>
       maiaLines("e7e6", [

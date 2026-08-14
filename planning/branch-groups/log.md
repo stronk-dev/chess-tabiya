@@ -21,3 +21,11 @@ adopted main branch whose own fork predates the source, refuses repeated members
 requires a mode-matched recorded distribution for machine sources. A fast-check property
 covers every supported group size. Migration 11 uses frozen `"0.8"` → `"0.9"` literals
 and leaves quarantined rows untouched. The focused 21 tests and workspace typecheck pass.
+
+## 2026-08-14 — Creation contract clarification
+
+Implementation exposed one wording contradiction in the accepted request shape: `authored`
+uses `size` to take the first N spine children, while the field comment said it was for
+machine sources only. The normative source table already required the authored use. The
+comment now says `size` is for every non-hand source; `hand_picked` derives its size from
+the explicit candidate list. No behaviour or authored vocabulary changed.
