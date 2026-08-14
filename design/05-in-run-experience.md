@@ -59,7 +59,7 @@ how loudly each is presented.
 
 | Rung | Source | What it can get wrong | Cost |
 |---|---|---|---|
-| 0 | **Rules-derived sight** — legality, attack and defence maps, discovered consequence, structure descriptions | *Nothing.* It is arithmetic over the position. It cannot be wrong about chess because it makes no chess judgement | free, local |
+| 0 | **Rules-derived sight** — legality, attack and defence maps, discovered consequence, structure descriptions | *Nothing — within scope.* It is arithmetic over the position and makes no chess judgement. **Scope corrections (2026-08-14):** a denial readable is *current*, not permanent ("b5 is denied **while the a4 pawn stands**", never "can never use b5 again" — pawns advance and capture); option-collapse needs *reasonable* continuations, which is evaluation, so it is rung 2/3 unless redefined as raw legal-move count; attacker/defender *counts* are exact but "pressure balance" as a conclusion depends on pins and legal recaptures. The rung keeps its property only when its statements carry their scope | free, local |
 | 1 | **Tablebase** (≤7 pieces) | Nothing, within range. Outside range it must abstain, and abstention is the whole contract | lookup |
 | 2 | **Engine evaluation** | It is right about the position and can still be wrong about the *lesson* — "+0.54" answers a question the learner did not ask | ms, server |
 | 3 | **Human model (Maia)** | Predicts what a human at a level plays. Correct as a distribution, misleading as advice, and it must never be dressed as best play | ms, sidecar |
@@ -274,7 +274,7 @@ falls to **rung 0**:
 | Is pressure on f7 balanced? | **counting** — attackers and defenders, with values | is the imbalance convertible |
 | What tactic is each side building toward? | **not deterministic** — rung 2/3 territory | — |
 
-**Four of five detections are free and cannot be wrong.** The product can say
+**Four of five detections are free and exact within their stated scope** (see the rung-0 scope corrections in §3). The product can say
 "after a4, Black's knight can never use b5 again" as flatly as it says a move is
 legal, because it is the same kind of statement. What it may not say for free is
 whether that mattered.
