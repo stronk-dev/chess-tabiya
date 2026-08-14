@@ -468,13 +468,22 @@ Genuine forks, not gaps to be filled by whoever writes the next RFC:
    "theatre", which contradicted §3a; rung
    2 reveals the answer, so showing it is contamination. Somewhere in between —
    probably at rung 1 or 3 — the line sits, and it may move by mode.
-2. **How deep discovered consequence goes before it becomes noise.** One ply of
+2. **How deep discovered consequence goes — RESOLVED for v1** by the guard and
+   lighting specs: one consequence hop, scope sentences carried; deeper is a
+   form question behind the invariant review. *(2026-08-14)*
+   *(original)* **How deep discovered consequence goes before it becomes noise.** One ply of
    "this move unblocks that piece" is clearly useful; three is a diagram nobody
    reads.
-3. **Whether a phase classifier may be wrong out loud.** It must abstain rather
+3. **Whether a phase classifier may be wrong out loud — RESOLVED** by
+   `adaptive-guidance`: declared abstention bands, definite→definite marker
+   firing only, authored `phase` outranks detection inside packs. *(2026-08-14)*
+   *(original)* **Whether a phase classifier may be wrong out loud.** It must abstain rather
    than guess, but abstention has a cost: a rail that frequently says "unclear"
    trains people to ignore it.
-4. **Whether Just Play's assistance defaults are the learner's choice or the
+4. **Whether Just Play's defaults are the learner's or the product's —
+   RESOLVED**: silence is the product's opinion (§3a ruling); everything else is
+   the learner's per-context `AssistanceConfig`. *(2026-08-14)*
+   *(original)* **Whether Just Play's assistance defaults are the learner's choice or the
    product's opinion.** A product with a view is more useful and more
    presumptuous; both are defensible.
 

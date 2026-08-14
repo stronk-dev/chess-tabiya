@@ -813,7 +813,7 @@
     {startSide}
     {onPrediction}
     {onReasoning}
-    {reasoning}
+    {...(reasoning === undefined ? {} : { reasoning })}
     {checkpoint}
     authoredItems={checkpointAuthoredItems}
     {shapes}

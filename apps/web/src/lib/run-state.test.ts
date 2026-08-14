@@ -126,6 +126,10 @@ class FakeApi implements RunApi {
     throw new Error("not used");
   }
 
+  async recordReasoning(): Promise<never> {
+    throw new Error("not used");
+  }
+
   async createGroup(): Promise<never> { throw new Error("not used"); }
   async groupReply(): Promise<never> { throw new Error("not used"); }
   async analysis(): Promise<never> { throw new Error("not used"); }

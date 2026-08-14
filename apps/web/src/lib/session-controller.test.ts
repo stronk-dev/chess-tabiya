@@ -156,6 +156,8 @@ class FakeApi implements DrillClientApi {
   async humanSplit(_runId: string, nodeId: string): Promise<import("./api.js").HumanSplitPage> { return { nodeId, engine: { id: "maia", name: "Maia", version: "3", seedHonored: true }, targetElo: 1800, candidates: [] }; }
   async corpus(_runId: string, nodeId: string): Promise<import("./api.js").CorpusPage> { return { nodeId, committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" } } }; }
   async voice(_runId: string, _nodeId: string, scope: import("./api.js").VoicePage["scope"]): Promise<import("./api.js").VoicePage> { return { text: "fixture", source: "deterministic", scope }; }
+  async reasoning(_runId: string, checkpointId: string): Promise<import("./api.js").ReasoningPage> { return { checkpointId, occurrences: [], previous: null, absenceSentence: "No previous reasoning recorded.", honestySentence: "Detected means the recorded words matched an authored key point; not detected does not mean wrong." }; }
+  async recordReasoning(): Promise<never> { throw new Error("not used"); }
 
   async runs(): Promise<readonly RunSummary[]> {
     return [];

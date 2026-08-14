@@ -1122,7 +1122,7 @@ export class RunService {
     if (current.length > 1) {
       const event = current[current.length - 2]!;
       previous = Object.freeze({ runId, eventSeq: event.seq, skipped: event.data.skipped, transcript: event.data.transcript, detections: event.data.detections });
-    } else if (this.#storage.ownerLearnerId(runId) === principal.learnerId && run.packId !== null && run.packDigest !== null) {
+    } else if (this.#storage.ownerLearnerId?.(runId) === principal.learnerId && run.packId !== null && run.packDigest !== null) {
       const candidates = this.#progress?.progress(principal.learnerId).filter((attempt) => attempt.runId !== runId && attempt.packId === run.packId && attempt.packDigest === run.packDigest) ?? [];
       for (const candidateRunId of [...new Set(candidates.map((attempt) => attempt.runId))].slice(0, 5)) {
         const candidate = this.#storage.read(candidateRunId)?.run;

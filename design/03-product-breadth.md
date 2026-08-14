@@ -90,6 +90,13 @@ the application's identity.
 - Shareable drill/run URLs and spectator-safe read-only views are platform
   primitives, not late marketing additions.
 
+**Native match play, as shipped (2026-08-14):** two humans alternate on one run
+via `match` board control (possession follows side-to-move); rewind/branch/
+compare/reveal are refused while live (`MATCH_LIVE`) — **the mutually-accepted
+pause IS the consent** to rehearse, and resume re-closes delivery; both players
+always see byte-identical disclosure. Friend-links seat a person via a scoped
+join token; the coach walks N boards on the simul wall.
+
 ### Create and curate
 
 - Pack authoring, preview, lint, regression tests, versioning, provenance, and
@@ -273,15 +280,15 @@ rows below are green or explicitly removed by a new owner ruling:
 |---|---|---|
 | B1 — shell and entry | stable shell routes Play/Learn/Review/Live/Create/Library/Settings; resume works | shipped — shell, routes, resume; `phase` projected (D6 closed by `defect-sweep`). Residual: `/settings` remains display-only |
 | B2 — solo modes | Just Play plus Line, Plan, Outcome, and organic/guided Trajectory each complete one fixture run | **shipped in full 2026-08-14** — all four drill modes plus the Just Play position player (`shape-library`); the justPlay/fromPosition capability rows are live |
-| B3 — review | manual multi-branch selection, pair/multi compare, replay, deep mode, share/export, **and branch groups played in parallel from a seeded candidate set with resistance held constant** | largely shipped (`n-way-comparison`) — N-way compare, simulate, prediction rendering, deep analysis, branch-selective export. Open surface: **branch groups** (owner 2026-08-13, no RFC yet) |
-| B4 — evidence | authored, Stockfish, Maia, corpus/historical, Syzygy, structural/temporal, and LLM-rendered layers work with timing controls | authored prose, Stockfish grounds and Maia policy render; **structural layer is B9** (`rfc/structural-reading.md`, draft); corpus/Syzygy runtime rendering and evidence-bound LLM rendering remain unmet |
+| B3 — review | manual multi-branch selection, pair/multi compare, replay, deep mode, share/export, **and branch groups played in parallel from a seeded candidate set with resistance held constant** | shipped in full — N-way compare, simulate, prediction rendering, deep analysis, export, **and branch groups (2026-08-14)**. Residual: narrative mode + difference strips (forward-trace orphan, ledgered) |
+| B4 — evidence | authored, Stockfish, Maia, corpus/historical, Syzygy, structural/temporal, and LLM-rendered layers work with timing controls | authored ✓, Stockfish ✓, Maia ✓, **corpus/recency ✓ (`runtime-corpus-evidence`)**, structural ✓ (B9), voice seam ✓. True residual: Syzygy runtime rendering + full evidence-bound LLM rendering |
 | B5 — live | Twitch host/chat/overlay, academy roles, and external Position Arena handoff each complete one scenario | shipped 2026-08-13 (`live-session-platform`) — roles, board control, spectate, chat voting, academy, Arena two-leg handoff. Native matchmaking stays outside minimal-real scope by design |
 | B6 — create | a candidate, an import, or a completed run can become a served **community** pack, its channel visible wherever it is surfaced; corpus mining emits one unpublished candidate | shipped — mining (`candidate-emit`) plus studio write path, imports and publication channels. **Correction 2026-08-14 (forward trace): session distillation was claimed here and does NOT exist** — `session_distilled` is a reserved enum with zero producers; re-ledgered (`pack-studio`) |
 | B7 — return | history/resume, progress, concept scheduling, related retry, and optional recommendation work | shipped 2026-08-13 (`return-and-progression`) — attempt scheduling, progress, `/learn`, duplicate, related retry. **Correction 2026-08-14 (forward trace): the opt-in recommender was claimed here and does NOT exist** — no route, disclaimed in the canonical doc; re-ledgered as an orphan. Cross-pack concept identity deliberately absent (a studio/B11 contract) |
 | B8 — platform | desktop shell, responsive/PWA transformation, self-hosted engines/providers, read-only share links, accessibility | deployment shipped incl. the light profile (D5 closed); share links via live platform. Residuals: PWA transformation, settings controls |
 | B9 — structural reading | feature predicates computed, authorable and rendered; denial, outpost, diagonal, pressure and discovered-consequence readables work with no engine; each abstains honestly and attributes judgement rather than asserting it | **shipped 2026-08-14 (`structural-reading`)** — twelve scoped feature predicates, dual readable/authorable role, Pack B graded by structural consequence, closed-by-default disclosure. Rung-0 layer is real |
 | B10 — adaptive guidance | live phase/structure classification in-run; assistance configurable per session context; pivotal moments auto-detected in play with no author; endgame steering names a technique rather than a move | **shipped 2026-08-14 (`adaptive-guidance`)** — attributed phase classification with honest abstention, silent-by-default preferences, passive pivotal markers (two-decision option collapse), disclosure-gated human splits, endgame technique naming, retrospective eval pivots, packet-bound voice seam with deterministic fallback |
-| B11 — reusable shapes | a shape entry authored once attaches to every position where its trigger fires; a drill is generated from position source + structural objective + resistance; one play surface serves both | **shipped 2026-08-14 (`shape-library`)** — shape entries (Carlsbad/IQP/rook-type official), pack references, derived-projection markers in Just Play and drills, the position player, SHAPE_PROSE_CONTAINS_FEN |
+| B11 — reusable shapes | a shape entry authored once attaches to every position where its trigger fires; a drill is generated from position source + structural objective + resistance; one play surface serves both | **shipped 2026-08-14 (`shape-library`)** per the split ruling: entries reference-only in packs, derived-projection markers, the position player. 24 entries authored |
 
 ## The foundation edge (added 2026-08-12 after the alignment pass)
 

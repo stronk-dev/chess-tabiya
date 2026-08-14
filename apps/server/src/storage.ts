@@ -195,6 +195,7 @@ export interface RunStorage {
 
   grants(runId: string): readonly RunGrant[];
   runRole(runId: string, learnerId: string): RunRole | undefined;
+  ownerLearnerId?(runId: string): string | undefined;
   grantRole(
     runId: string,
     learnerId: string,
