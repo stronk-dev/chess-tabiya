@@ -1,0 +1,17 @@
+{
+  "id": "maroczy-bind",
+  "version": "0.1.0",
+  "name": "Maroczy Bind",
+  "phases": ["middlegame"],
+  "trigger": { "kind": "feature", "feature": { "kind": "named_structure", "id": "maroczy-bind" } },
+  "plans": [
+    { "id": "white-d5-clamp", "side": "white", "label": "Occupy d5", "description": "Plant a knight on the hole in front of the bind, where both bind pawns guard it and no Black c-pawn exists to challenge it.", "success": { "note": "A White knight stands on d5 and the square is a Tabiya-detected White outpost.", "signature": { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "d5", "piece": { "color": "white", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "white", "square": "d5" } }] } } },
+    { "id": "white-space-squeeze", "side": "white", "label": "Squeeze on space", "description": "Restrain both freeing breaks, improve pieces behind the pawn wall, and trade toward positions where the extra space decides.", "success": { "note": "Restraint is the continued absence of opposing breaks and is not decidable from one position.", "signature": null } },
+    { "id": "black-b5-break", "side": "black", "label": "The b5 break", "description": "Prepare the queenside break with the a-pawn and rook support to challenge the bind's queenside anchor.", "success": { "note": "The break's recapture shapes vary too widely for one arithmetic expression.", "signature": null } },
+    { "id": "black-d5-break", "side": "black", "label": "The d5 break", "description": "Prepare the central break to dissolve the bind in one stroke, usually after heavy preparation.", "success": { "note": "The break's recapture shapes vary too widely for one arithmetic expression.", "signature": null } },
+    { "id": "black-dark-square-strategy", "side": "black", "label": "Dark-square strategy", "description": "Trade the dark-squared bishops or plant a knight where no White pawn can evict it, and live on the squares the bind pawns cannot touch.", "success": { "note": "Which dark squares matter shifts with the piece trades; no fixed square is honest.", "signature": null } }
+  ],
+  "watch": ["White pawn control of b5 and d5 before either freeing break.", "Every minor-piece trade: the bind squeezes less with each pair off.", "The dark squares in front of the bind pawns once the c-pawns are gone."],
+  "typicalMistakes": ["Breaking with the b- or d-pawn before it is supported, trading a cramp for a permanent weakness.", "Drifting without a break plan and slowly running out of squares.", "Stretching the bind pawns forward until the dark squares behind them collapse."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored strategic claims with no citation, engine evaluation, corpus frequency, or owner review; standard Maroczy doctrine rendered from model knowledge.", "Trigger basis: the shipped maroczy-bind catalogue convention (White pawns on c4 and e4, the d-file half-open for White, the c-file half-open for Black). The convention does not check Black's kingside arrangement or piece placement, so non-Sicilian positions matching the pawn signature also fire; the entry names the family, not the census."], "attribution": [] }
+}

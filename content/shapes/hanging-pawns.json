@@ -1,0 +1,30 @@
+{
+  "id": "hanging-pawns",
+  "version": "0.1.0",
+  "name": "Hanging pawns (Black pair on c5 and d5)",
+  "phases": ["middlegame"],
+  "trigger": { "kind": "all", "of": [
+    { "kind": "pieceOnSquare", "square": "c5", "piece": { "color": "black", "role": "pawn" } },
+    { "kind": "pieceOnSquare", "square": "d5", "piece": { "color": "black", "role": "pawn" } },
+    { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "c" } },
+    { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "d" } },
+    { "kind": "any", "of": [
+      { "kind": "feature", "feature": { "kind": "half_open_file", "color": "black", "file": "b" } },
+      { "kind": "feature", "feature": { "kind": "open_file", "file": "b" } }
+    ] },
+    { "kind": "any", "of": [
+      { "kind": "feature", "feature": { "kind": "half_open_file", "color": "black", "file": "e" } },
+      { "kind": "feature", "feature": { "kind": "open_file", "file": "e" } }
+    ] }
+  ] },
+  "plans": [
+    { "id": "black-advance-the-pair", "side": "black", "label": "Advance the pair", "description": "The pair's dynamic life: push the d-pawn with piece support to open lines and plant a wedge before the pawns become targets.", "success": { "note": "The pair advanced intact: the d-pawn stands on d4 with the c-pawn still beside it.", "signature": { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "c5", "piece": { "color": "black", "role": "pawn" } }] } } },
+    { "id": "black-file-pressure", "side": "black", "label": "Use the flanking files", "description": "Put rooks on the half-open b- and e-files the pair's birth opened, so the pawns are a spearhead and not only a liability.", "success": { "note": "Rook placement quality is not pawn arithmetic.", "signature": null } },
+    { "id": "black-keep-the-pieces", "side": "black", "label": "Keep pieces on", "description": "The pair lives on piece energy; avoid the trades that leave it a static target.", "success": { "note": "Detection cannot count what a trade was worth.", "signature": null } },
+    { "id": "white-provoke-and-degrade", "side": "white", "label": "Provoke and degrade", "description": "Pile on the pawns, provoke an advance, blockade the square the advance left behind, and win the straggler.", "success": { "note": "The pair degraded: one pawn fell or was traded off, leaving the survivor isolated.", "signature": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "isolated_pawn", "color": "black", "file": "c" } }, { "kind": "feature", "feature": { "kind": "isolated_pawn", "color": "black", "file": "d" } }] } } },
+    { "id": "white-trade-the-energy", "side": "white", "label": "Trade the active pieces", "description": "Exchange the pieces that give the pair its dynamism, then attack what remains.", "success": { "note": "Detection cannot count what a trade was worth.", "signature": null } }
+  ],
+  "watch": ["The attacker and defender counts on d4, the square the pair most wants to cross.", "Whether each pawn still has its partner beside it.", "Who controls the blockading squares c4 and d4 if a pawn advances."],
+  "typicalMistakes": ["Advancing one pawn to win a tempo and leaving the pair split.", "Trading the pieces that made the pawns dynamic, then defending them forever.", "Besieging the pawns head-on while the supported advance is still available."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored strategic claims with no citation, engine evaluation, corpus frequency, or owner review; standard hanging-pawns doctrine rendered from model knowledge.", "Trigger narrowing: the family is colour-symmetric and square-flexible; this entry encodes only the Black pair on the canonical c5 and d5 squares (the QGD Tartakower shape). The White mirror on c4 and d4, and pairs that have already advanced, do not fire; no predicate quantifies over files, so each orientation must be enumerated square by square."], "attribution": [] }
+}

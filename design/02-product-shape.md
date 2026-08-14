@@ -94,6 +94,16 @@ from diluting: an adopted feature enters through our invariants (`05` §1 —
 silence default, commit-before-learning, attempts preserved, grounded claims),
 and the coverage matrix is therefore a *mining list*, not only a threat list.
 
+**Amendment (owner, 2026-08-14): a conflict with an invariant is a design
+prompt, not a veto.** Rulings constrain the *form* a feature takes, never its
+existence. When a loved feature collides with a ruling, the move is
+**transformation** — design the invariant-compatible version — not refusal. The
+proof-pattern already shipped: real-time move advice collides with the silence
+default, and guided mode is its transformation (opt-in, names patterns, never
+prescribes here). "Genuinely no version survives" is reserved for features whose
+transformation would collapse the invariant itself, and that set is expected to
+be empty or near-empty.
+
 **Worked contrast — Chess.com Play Coach** (owner read, matching the sweep's
 grounding): it narrates reactively — praise/warnings during play with no theory
 tie-in and no structural anchor. Ours inverts both halves: silent by default,
