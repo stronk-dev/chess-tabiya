@@ -28,6 +28,21 @@ append-only.
 | Anti-opening breadth per §2c first-wave list (anti-KID, anti-London, anti-Dutch remain) | 📋 wave 4/5 |
 | Endgame packs beyond rook-4v3 (families have entries; packs per §4 variants) | 📋 wave 5 |
 
+## 2b. The reconciliation gate (added 2026-08-14, owner)
+
+Before the session: a **full two-way traceability audit** —
+
+- forward: every `design/` commitment traced to shipped / in-flight / ledgered /
+  ORPHAN (`planning/traceability-forward.md`);
+- reverse: every archived RFC's deviations and discovered concepts traced back
+  into design — ABSORBED / consciously omitted / MISSING
+  (`planning/traceability-reverse.md`).
+
+Orphans and MISSING concepts become the final work list or conscious parkings;
+stale design assertions get corrected. **Done is not declared while either list
+is non-empty and untriaged.** First run: in flight now. Re-run cheaply after
+the last feature wave.
+
 ## 3. The session itself
 
 When 1 and 2 are checked: the owner plays — Just Play with guidance off, a
