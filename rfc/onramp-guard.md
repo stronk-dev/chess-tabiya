@@ -49,8 +49,12 @@ is two members (`packages/schema/src/drill-pack/types.ts:21`), the schema enum m
 (`schemas/drill_pack.schema.json:56-58`), and the sourced on-ramp candidates ship with the
 blocker "immediate_blunder_guard is not selectable (defect D8); delayed_checkpoint is a
 temporary substitution" (`content/candidates/onramp-00008/pack.json`,
-`content/candidates/onramp-0000d/pack.json`; emitted at
-`apps/server/src/sourcing/position-seeds.ts:221-229,237`). The fix is the one the BACKLOG row
+`content/candidates/onramp-0000d/pack.json`). The emitter has since reworded that line:
+today it writes "Immediate blunder feedback has no pack-format encoding;
+delayed_checkpoint is the authored policy for this candidate"
+(`apps/server/src/sourcing/position-seeds.ts:225`) and pins the substitute policy at
+`:237` — the committed candidates carry the older text, which is why §1i speaks of
+re-emission, not rewriting. The fix is the one the BACKLOG row
 demands: re-add it *as a real policy*, not as an enum value.
 
 **The form is ruled, and the teardown says why it matters.** Dr. Wolf's blunder dialog fires
@@ -180,20 +184,42 @@ Three signals, each honest at its own rung (`design/05-in-run-experience.md:69-7
 are rung 0, the judgment is rung 2 — each tier is presented at its rung, never dressed as the
 other):
 
-1. **Material tier (rung 0, always on).** `MATERIAL_VALUES` arithmetic
-   (`packages/runtime/src/objective.ts:17,125-135`) from the learner's perspective: fires when
-   material(C) − material(P) ≤ **−3** pawn units. The floor is 3 because below it lives
+1. **Material tier (rung 0, always on).** `MATERIAL_VALUES` arithmetic — the shipped
+   table, pawn 1 / knight 3 / bishop 3 / rook 5 / queen 9 / king 0
+   (`packages/runtime/src/objective.ts:17-24`) — where "material" is the learner-perspective
+   **balance**: own minus opponent, `materialScore`/`materialBalance`
+   (`objective.ts:122-137`), so exchanges net correctly. Fires when
+   balance(C) − balance(P) ≤ **−3** pawn units. The floor is 3 because below it lives
    exchange and gambit noise (a clean capture-recapture nets 0 and never fires); at 3 a piece
    is actually gone. This is the "hanging piece is rules-arithmetic" case: the consequence
    already took it.
 2. **En-prise tier (rung 0, always on).** In C's position (learner to move), a learner piece
    of value ≥ 3 (N/B/R/Q, never the king) is directly attacked at least once and defended zero
-   times, by the shipped direct-attack/defence count arithmetic
-   (`packages/runtime/src/structure.ts`, the `direct_attack_count` machinery). Rendered under
-   the no-valence scope contract (`docs/explanation-grounds.md:15-20`): counts only, pins and
-   legal recaptures not evaluated, a current fact about the displayed position. It fires
-   whether or not the learner's move caused the hang — the guard names current facts, it does
-   not attribute cause.
+   times, by the shipped geometric count: `directAttackCount`
+   (`packages/runtime/src/structure.ts:169-176`) with the opponent's colour for attacks and
+   the learner's colour on the same square for defence — chessops `attacks()` over the
+   occupied board, nothing else. Rendered under the no-valence scope contract
+   (`docs/explanation-grounds.md:15-20`): counts only, pins and legal recaptures not
+   evaluated, a current fact about the displayed position. It fires whether or not the
+   learner's move caused the hang — the guard names current facts, it does not attribute
+   cause.
+
+   **False-positive analysis (required, because a guard that misfires at 1000 Elo teaches
+   distrust).** The geometric count has exactly the misfire classes the rung-0 scope
+   correction names (`design/05-in-run-experience.md:71`: "attacker/defender *counts* are
+   exact but 'pressure balance' as a conclusion depends on pins and legal recaptures"):
+   it **fires** on a piece whose only attacker is absolutely pinned (the capture is
+   illegal, the piece may be safe) and on a piece whose real defence is an x-ray battery
+   (a defender behind a defender is not a direct count); it **does not fire** on a piece
+   whose sole counted defender is itself pinned or overloaded (the piece is actually
+   lost); and it cannot distinguish a sacrifice from a hang (it does not attribute
+   intent). These are acceptable at v1 for three reasons, all load-bearing: the prompt is
+   non-blocking and verdict-free, so a misfire costs one glance, not a retraction; the
+   rendered sentence is the count fact carrying its own scope, so a fire on a
+   pinned-attacker position is a *true sentence with visible limits*, never a wrong
+   verdict; and the misfire classes are pinned by fixture in the acceptance tests rather
+   than hidden. Tightening the tier with pin or recapture logic is a future rung-0
+   widening, not a silent change to this contract.
 3. **Engine tier (rung 2, when a judge engine is present and `guard.evalSwingCp` is not
    null).** Both P and C already receive eval jobs on every ply
    (`apps/server/src/service.ts:1556-1578`, enqueued at `:575,:601`). When *recorded*
@@ -205,9 +231,28 @@ other):
 
 **Where evaluated:** tiers 1–2 run synchronously inside `opponentPly` after
 `orchestratePackMove` (`apps/server/src/service.ts:579-603`) — pure arithmetic, well inside
-the measured rung-0 envelope (`docs/adaptive-guidance.md:130-134`). Tier 3 runs inside
-`applyEvidence` (`service.ts:1164-1217`) after `attachEvidence`, when the newly applied eval
-completes a (P, C) pair on a guard run.
+the measured rung-0 envelope (`docs/adaptive-guidance.md:130-134`). Opponent nodes created
+outside `opponentPly` — the branch-group comparison path (`service.ts:820`) — never
+evaluate the guard: a group is a comparison instrument, not the committed decision loop.
+Tier 3 runs inside `applyEvidence` (`service.ts:1164-1217`) after `attachEvidence`, when
+the newly applied eval completes a (P, C) pair on a guard run.
+
+**Tier-3 timing, pinned honestly.** Eval jobs are enqueued per committed node
+(`service.ts:575,601` via `#enqueueMoveEvidence`, `:1556-1578`); results are staged
+asynchronously and land only when the client applies them. So the engine tier fires
+**late by construction** — typically seconds after the move, possibly after further plies
+— and never blocks anything: play continues, rung-0 tiers have already had their chance,
+and a late engine fire only adds a record where no tier fired yet (dedupe below). Three
+consequences are contract, not accident: (a) the **run root receives no eval job at
+creation** — `:575`/`:601` are per-move — so at the first decision of a run (P = root)
+the engine tier abstains unless a root eval was recovered through the analysis surface;
+(b) if the learner **rewinds off the consequence before the eval lands**, the pending job
+is cancelled (`apps/server/src/evidence-queue.ts:162` `onRewound`) and the tier abstains
+for that C permanently — correct here, the learner has left the line, and noted as the
+third consumer of the BACKLOG "rewind cancels pending evidence" pattern row, resolved by
+abstention rather than a batch-class exemption; (c) an eval that never arrives (engine
+down, job lost) is the same silent abstention. The guard never waits, never polls, and
+never triggers an out-of-band evaluation to close the gap.
 
 **Dedupe:** at most one guard record per consequence-start node C. First tier to cross fires;
 later evaluations (including a later-arriving engine pair) abstain if a record for C exists.
@@ -259,7 +304,10 @@ attempt is never destroyed", `design/05-in-run-experience.md` §1).
 - `feedbackPolicies: readonly FeedbackPolicy[]` — the pack-selectable set, i.e.
   `FEEDBACK_POLICIES` (mirroring `policyModes` at `:177`);
 - `guardBasis: readonly ("rules" | "engine")[]` — `["rules"]` when `providers.judge` is
-  `"none"`, `["rules", "engine"]` otherwise.
+  `"none"`, `["rules", "engine"]` when it is `"stockfish"` **or** `"mock"`
+  (`capabilities.ts:106,115-117`): mock deployments run the `MockEvidenceExecutor`,
+  which produces real recorded evals, so their engine tier is genuinely live, not
+  theatre.
 
 The client builds its episode expectations against this payload exactly as the session
 controller does for policy modes. The named-refusal leg stays satisfied by the general branch:
@@ -282,8 +330,11 @@ prompt anchored to the assistance rail: the rendered ground sentences (existing
 
 The prompt never blocks input, never asks "are you certain?" before a move, and never appears
 pre-commit — the Dr. Wolf inversion (`teardown-drwolf-desk.md:103-111`) is the contract, not a
-styling choice. On a `guardBasis: ["rules"]` deployment the episode shows the guard as active
-with its engine tier honestly absent (no pretend evaluations).
+styling choice. A **late tier-3 fire** (§1e timing) renders the prompt only while C is still
+on the active path; if the learner has already advanced past C, the record stands in the log
+and the rail shows it anchored at the node without stealing focus — a late fact arrives as a
+fact, not as an interruption. On a `guardBasis: ["rules"]` deployment the episode shows the
+guard as active with its engine tier honestly absent (no pretend evaluations).
 
 #### 1i. Honest degradation and the sourcing emitter
 
@@ -368,6 +419,15 @@ out-of-band evaluation. No new evidence-ref kinds, event types, tables, or endpo
 change to `delayed_checkpoint`, `segment_end`, or `attempt_end` behavior. No authored on-ramp
 pack (content-era work; the knob merely exists again).
 
+No match interaction exists to specify, and that is structural, not scoping: a native match
+requires an **untouched position run** (`apps/server/src/live-session.ts:76`), position runs
+are pinned to `feedbackPolicy: "attempt_end"` (`packages/runtime/src/session.ts:40`;
+`service.ts:539` for the flip precedent), and `attempt_end` is not pack-selectable — so a
+guard run can never sit under `MATCH_LIVE`, and the guard prompt's rewind offer can never
+collide with the match-live rewind refusal (`service.ts:1433-1437`). Non-match live sessions
+on a guard run change nothing: the prompt is client rendering over the existing event
+stream; possession and journal machinery are untouched.
+
 ### 5. Register claims (single-writer resources, `rfc/README.md`)
 
 Wave claim #2, behind `repertoire-gap-finding` per the 2026-08-14 register order.
@@ -409,10 +469,16 @@ Otherwise none.
 4. Tier tests: a −3 material swing at C fires with `rules:material`; an attacked-undefended
    minor at C fires with `rules:structure-direct-attack-count`; a recorded ≥200cp swing
    against the learner fires on `applyEvidence` with the eval's `engine:` ref; a
-   sub-threshold exchange fires nothing; at most one record per C under tier races.
-5. Mock-judge (engines-absent) deployment: same pack loads and guards rules-only;
-   `/capabilities` reports `guardBasis: ["rules"]` and `feedbackPolicies` including
-   `immediate_guard`; the binding test (§1a) pins schema enum === `FEEDBACK_POLICIES`.
+   sub-threshold exchange fires nothing; at most one record per C under tier races. The
+   §1e misfire classes are pinned by fixture: an absolutely-pinned sole attacker still
+   fires and its rendered sentence carries the counts-only scope; a piece whose sole
+   counted defender is pinned does not fire. The first decision of a run (P = root, no
+   recorded root eval) abstains on tier 3 while rung-0 tiers fire normally.
+5. Engines-absent deployment (`providers.judge: "none"`): same pack loads and guards
+   rules-only; `/capabilities` reports `guardBasis: ["rules"]` and `feedbackPolicies`
+   including `immediate_guard`. A mock deployment (`providers.judge: "mock"`) reports
+   `guardBasis: ["rules", "engine"]` and its engine tier fires on mock evals. The
+   binding test (§1a) pins schema enum === `FEEDBACK_POLICIES`.
 6. Disclosure: on a guard run, `publicEvents` withholds nothing, `applyEvidence` never throws
    `FEEDBACK_WITHHELD`, and the compare surface returns engine evidence without a checkpoint.
 7. Client walkthrough: guard prompt appears after the opponent reply, board stays live,
@@ -425,14 +491,16 @@ Otherwise none.
    conditions removed; a condition-less `win` leg transitions on `outcome.reached`.
 10. Emitter: `position-seeds` output declares `immediate_guard`, omits the substitution
     blocker, and remains deterministic under the sourcing-check gate.
-11. Register rows for pack 0.14, run 0.11, and migration 15 are recorded in `rfc/README.md`
+11. Register rows for pack 0.14, run 0.11, and migration 16 are recorded in `rfc/README.md`
     in the same change that lands them.
 
 ## Open questions
 
-None. The one candidate — rung-0-only versus rung-0-plus-engine firing — is argued closed in
-§1e: the owner has already ruled the form and the schedule; the ladder rules the presentation;
-the remaining numbers are pack-overridable authoring conventions, not owner-level design.
+The one candidate — rung-0-only versus rung-0-plus-engine firing — is argued closed in §1e:
+the owner has already ruled the form and the schedule; the ladder rules the presentation; the
+remaining numbers are pack-overridable authoring conventions, not owner-level design.
+
+None.
 
 ## Changelog
 
@@ -440,3 +508,18 @@ the remaining numbers are pack-overridable authoring conventions, not owner-leve
   citation checked against the working tree this date.
 - 2026-08-14: migration claim rebased 15 → 16 after `repertoire-gap-finding` registered wave
   claim #1 (migration 15) concurrently; schema claims (pack 0.14, run 0.11) uncontested.
+- 2026-08-14: adversarial review (re-verified against the working tree at 432/73 green,
+  `STORAGE_VERSION` 14, pack 0.13, run 0.10). Fixed in place: tier 1 pinned to the
+  `materialBalance` learner-perspective balance with the value table inlined; tier 2
+  pinned to `directAttackCount` (`structure.ts:169-176`) with a required false-positive
+  analysis (pinned attacker and x-ray battery fire; pinned defender does not; classes
+  pinned by fixture in AC 4); tier-3 timing pinned honestly (late by construction, root
+  node has no eval job at creation, rewind-cancellation abstention via
+  `evidence-queue.ts:162`); branch-group opponent nodes excluded from evaluation;
+  `guardBasis` mapping corrected for `providers.judge: "mock"` (mock evals are real —
+  AC 5 reworded, it had conflated mock with engines-absent); late-fire client rendering
+  specified; guard/match interaction proven structurally unreachable
+  (`live-session.ts:76` + `session.ts:40`) rather than merely out-of-scoped; Motivation
+  emitter citation corrected (committed candidates carry the older D8 blocker text; the
+  current emitter writes the reworded line at `position-seeds.ts:225`); AC 11 register
+  typo fixed (migration 15 → 16).

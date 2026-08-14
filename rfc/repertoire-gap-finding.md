@@ -89,9 +89,12 @@ appended to the migrations array at `apps/server/src/storage.ts:1997`):**
   `representative_fen` is a full FEN with counters reset to `0 1` so the position can be
   re-materialized (a key alone cannot seed a run).
 - `repertoire_scans(repertoire_id PK, scanned_at, repertoire_digest, population_json,
-  gaps_json, alternate_gaps_json, uncovered_mass REAL, truncated INTEGER,
-  source_failures INTEGER, queries_used INTEGER)` — exactly one row per repertoire,
-  replaced on each completed scan.
+  gaps_json, alternate_gaps_json, unknown_json, uncovered_mass REAL,
+  truncated INTEGER, source_failures INTEGER, queries_used INTEGER,
+  unreached_keys INTEGER)` — exactly one row per repertoire, replaced on each completed
+  scan. `unknown_json` holds the unknown-frequency entries of §2 boundary 1 (they are
+  normative output and need a persisted home, not a rendering afterthought);
+  `unreached_keys` is the §1 count of answer keys the walk never reached.
 - `repertoire_gap_runs(run_id PK, repertoire_id, gap_key, created_at)`.
 
 Migration 15 is create-table/index only: no backfill, no run-snapshot stamping, no
@@ -99,7 +102,10 @@ existing-table rebuild. It deliberately does **not** widen the
 `run_derivations.kind CHECK (kind IN ('flip_sides'))` constraint
 (`apps/server/src/storage.ts:2117`): that table is run→run and pinned to
 `archive/adoption-wave-1.md`; a gap entry derives from a repertoire, so it gets its own
-link table instead of a rebuild of someone else's trust surface.
+link table instead of a rebuild of someone else's trust surface. The link is read only
+through the repertoire surface (the §4 gap states); it is never merged into
+`GET /runs/:id/derivations` (`apps/server/src/service.ts:545`), so each provenance
+mechanism keeps exactly one reader and the run→run contract stays byte-identical.
 
 **Versioning and concurrency.** `digest` is the SHA-256 of a canonical serialization of
 (side, root key, sorted answer map). Every mutation (`POST …/answers`, settings update)
@@ -115,15 +121,19 @@ source}` where `source` is `{kind:"pgn", pgn}` or `{kind:"lichess_study", url}`.
   here by design — `apps/server/src/pgn-import.ts:26-31`) accepts **multiple games
   (study chapters) and variations**, walking the full move tree of each game via the
   shared chessops parser. Variant headers other than `Standard` / `From Position` are
-  rejected (mirror of `pgn-import.ts:32-35`). Every SAN move is legality-checked;
-  the first illegal move fails the import with game index, ply, and SAN named.
+  rejected (mirror of `pgn-import.ts:32-35`). The walk is a depth-first traversal of
+  every node's children — mainline and variations alike; `parsePgn` already yields the
+  full tree per game — replaying the position along each path. Comments, NAGs, and
+  annotation glyphs are parsed by chessops and discarded; they never affect the answer
+  map. Every SAN move is legality-checked; the first illegal or unparseable move
+  (including null-move tokens) fails the import with game index, ply, and SAN named.
 - Limits: at most 64 games/chapters, 10,000 total plies, and 3,000 distinct
   learner-side answer keys; each violated limit is a distinct typed error.
 - The **declared root** is the first game's initial position (honouring `SetUp`/`FEN`).
   Other chapters may start anywhere: they contribute answer-map entries by key
   regardless. Chapters whose lines never intersect the corpus-reachable tree still
   import; the scan reports how many answer keys were never reached within the bound
-  (honesty, not an error).
+  (persisted as `unreached_keys` — honesty, not an error).
 - Only **learner-side** moves become answers: at each position in the imported tree
   where `side` is to move, each played move is recorded at that position's key
   (`rank` by encounter order). Opponent-side moves shape the tree but are never
@@ -134,8 +144,11 @@ source}` where `source` is `{kind:"pgn", pgn}` or `{kind:"lichess_study", url}`.
   with `<id>` an 8-char `[A-Za-z0-9]` segment extracted from a pasted
   `https://lichess.org/study/...` URL; 404 → `IMPORT_SOURCE_NOT_FOUND`, 429/5xx →
   `IMPORT_SOURCE_UNAVAILABLE` with retry-after passthrough. Private studies are
-  indistinguishable from missing ones upstream and surface the same 404 error. Licence
-  note recorded verbatim-style like `import-source.ts:60`.
+  indistinguishable from missing ones upstream and surface the same 404 error. The
+  fetch accepts exactly one explicit study URL: there is no username-based study
+  listing and no account-export path on this surface (the ADR-0003 boundary restated
+  as an API fact, not just a scope note). Licence note recorded verbatim-style like
+  `import-source.ts:60`.
 - `original_pgn` retains the exact imported bytes. Re-import replaces the answer map
   wholesale (same endpoint, existing id, `If-Match`); answers with origin
   `chosen_from_attempt` survive a re-import (they are the learner's work product, and
@@ -171,7 +184,14 @@ frequency at the learner's band is at or above the learner's coverage bound. Def
 - **Merging**: the walk is over positions, memoized by key; when several opponent paths
   reach the same key, their masses add (they are disjoint opponent-choice events) and
   the shortest SAN path from the root is kept as the display line. The same rule merges
-  gap masses.
+  gap masses. Order matters and is pinned: the frontier expands in ply order, so paths
+  reaching a key at the same ply merge *before* the key is expanded, and a frontier key
+  whose accumulated mass first crosses the bound at merge time expands then — per-path
+  pruning never silently drops a key whose merged mass clears the bound. A path that
+  arrives at an already-expanded key (a longer transposition) adds its mass to that
+  key's recorded entries without re-walking the subtree: downstream masses are then
+  understated, never overstated, so games-until-seen stays conservative in the only
+  honest direction.
 - **The root special case**: if the learner's side is to move at the declared root and
   the answer map has no answer there, the scan returns exactly one gap — the root, mass
   1, "your repertoire has no first move" — and nothing else.
@@ -180,10 +200,16 @@ frequency at the learner's band is at or above the learner's coverage bound. Def
 
 1. **Abstention propagates.** Corpus abstention at a position — the sub-100-game floor
    (`corpus.ts:55`) or source failure (`corpus.ts:120-122`) — terminates the walk
-   there. The subtree is reported as an **unknown-frequency entry** carrying the
-   abstention reason and the floor detail, listed after ranked gaps, never silently
-   dropped and never assigned a number. A gap below the sample floor says so; it does
-   not pretend to a frequency.
+   there. The subtree is reported as an **unknown-frequency entry** (persisted in
+   `unknown_json`) carrying the abstention reason and the floor detail, listed after
+   ranked gaps, never silently dropped and never assigned a ranked mass. Unknown is
+   never multiplied onward as if it were 1.0 and never rounded to 0 — no product
+   involving an abstained node exists, because the walk stops where knowledge stops.
+   One number *is* known and rendered as an explicitly labelled upper bound: the path
+   mass to the abstention node ("you reach this position in about 1 in N games; beyond
+   it the corpus abstains"). Nothing from an unknown-frequency entry is added to
+   `uncovered_mass`. A gap below the sample floor says so; it does not pretend to a
+   frequency.
 2. **A repertoire opponent move absent from corpus rows** has mass 0 at this population:
    pruned. Honest — the learner will not see it at their band; its prepared answer is
    simply unreached (counted in the unreached-keys report of §1).
@@ -211,20 +237,34 @@ frequency at the learner's band is at or above the learner's coverage bound. Def
    added since); it never recomputes on read.
 
 `uncovered_mass` is the sum of ranked gap masses — rendered as "above your 1-in-N bound,
-uncovered replies total about X% of your games." Arithmetic over counts; no judgment.
+uncovered replies total about X% of your games." On a `truncated` scan (ply cap or query
+budget) it is rendered as an explicit lower bound — "at least X%" — because mass the
+budget never reached cannot be pretended absent. Individual ranked gaps stay exact
+either way: truncation can only hide *further* gaps, never inflate a found one.
+Arithmetic over counts; no judgment.
 
 ### 3. Rendering discipline — the corpus guard applies
 
 The gap surface is derived entirely from corpus counts, so it inherits the discipline of
 `docs/runtime-corpus-evidence.md` §Client contract verbatim: the panel opens with its
 population attribution (rating bucket, speeds, month window) and the byte-fixed line
-"These counts say what this population played, not what is good." Every gap row is
+"These counts say what this population played, not what is good." (the shipped
+`CORPUS_GUARD` constant, `apps/web/src/lib/corpus-sentences.ts:3`). Every gap row is
 closed-vocabulary: opponent reply SAN, the display line, "about 1 in N games at
 <population>", and its state. "Gap" and "uncovered" describe the *repertoire's* coverage
 — a fact about the learner's data — never the quality of any move; no verdict vocabulary
 (good/bad/mistake/weakness/blunder) may appear anywhere on the surface. No LLM renders
 any of it (ADR-0005). Unknown-frequency entries render their abstention sentence
-("fewer than 100 games at this population" / source failure) instead of a number.
+("fewer than 100 games at this population" / source failure) plus the labelled
+upper-bound sentence of §2 boundary 1 — never a ranked number.
+
+Scan partiality is rendered, not merely stored. When `truncated` is set or
+`source_failures > 0`, the panel's summary row states the cause (60-ply cap, 300-query
+budget, or source failures) and the count of unqueried frontier positions **before any
+gap row renders**, and `uncovered_mass` takes its lower-bound form (§2). A learner must
+never read a truncated scan as complete coverage — a deep repertoire that exhausts the
+query budget shows "scan stopped after 300 corpus queries; N positions unexplored", not
+a quietly short gap list.
 
 Scanning is not in-run assistance: it runs against the learner's own repertoire outside
 any run, so the `feedbackDeliveryOpen` withholding rule
@@ -319,9 +359,10 @@ request sends the server token and position URL only, `apps/server/src/corpus.ts
 Study fetches are credential-free public exports. `deleteLearner`
 (`apps/server/src/storage.ts:898`) extends to **delete** the learner's `repertoires`,
 `repertoire_moves`, and `repertoire_scans` rows outright — unlike packs, nothing here is
-published, so there are no bytes to retain; `repertoire_gap_runs` rows cascade with
-them, while the runs they pointed at follow the existing run-deletion semantics
-unchanged.
+published, so there are no bytes to retain. `repertoire_gap_runs` rows are deleted in
+the same transaction (migration 15 declares no foreign keys, so nothing "cascades" by
+itself — the deletion is explicit), while the runs they pointed at follow the existing
+run-deletion semantics unchanged.
 
 ## Deviations from design
 
@@ -342,13 +383,18 @@ inside the breadth map, not a divergence from it.
    illegal-move case returns its typed error; chess.com study URLs are refused with the
    paste hint.
 3. **Gap math (unit):** on a fixture corpus, path masses multiply and merge as
-   specified; the bound prunes; the mainline-only mass rule holds; alternate-answer
-   gaps land unranked; the root-no-answer case returns exactly one gap; abstention
-   yields unknown-frequency entries with the floor sentence; ply cap and query budget
-   set `truncated`; serial issuance never exceeds one in-flight corpus request.
+   specified; same-ply transpositions merge before expansion and a merged mass that
+   crosses the bound expands; a longer transposition into an already-expanded key adds
+   mass without re-walking; the bound prunes; the mainline-only mass rule holds;
+   alternate-answer gaps land unranked; the root-no-answer case returns exactly one
+   gap; abstention yields unknown-frequency entries with the floor sentence and the
+   labelled upper bound, contributing nothing to `uncovered_mass`; ply cap and query
+   budget set `truncated`; serial issuance never exceeds one in-flight corpus request.
 4. **Rendering:** the gap panel's first rendered line is the population attribution and
    the byte-fixed fence sentence; a test asserts the absence of verdict vocabulary on
-   the surface (the SHAPE_PROSE-style fence test pattern).
+   the surface (the SHAPE_PROSE-style fence test pattern); a truncated fixture scan
+   renders the partiality sentence with its unqueried-frontier count before any gap row
+   and renders `uncovered_mass` as a lower bound.
 5. **Entry:** entering the top gap creates a `position` run at the gap FEN with
    `human_common` at the repertoire's `targetElo` plus the link row, atomically;
    re-entry returns the existing run; unavailable resistance is refused typed;
@@ -375,3 +421,16 @@ None.
 
 - 2026-08-14: created; claimed migration 15 in `rfc/README.md` (wave claim #1); no
   pack-schema or run-schema claim.
+- 2026-08-14: adversarial review (verified against the working tree at 432/73 green,
+  `STORAGE_VERSION` 14, pack 0.13, run 0.10). Fixed in place: `repertoire_scans` gains
+  `unknown_json` and `unreached_keys` so the normative boundary outputs have a
+  persisted home; walk order pinned (ply-order frontier, merge-before-expand,
+  conservative late-merge) so per-path pruning cannot silently drop a merged-mass gap;
+  abstention entries carry an explicitly labelled known upper bound and provably never
+  enter `uncovered_mass`; truncation now normatively reaches the UI (partiality
+  sentence before any gap row, `uncovered_mass` as a lower bound when `truncated`);
+  parser spec pinned for comments/NAGs/variation traversal; single-study-URL
+  ADR-0003 boundary stated as an API fact; `repertoire_gap_runs` single-reader rule
+  added (never merged into `GET /runs/:id/derivations`, `service.ts:545`); deletion
+  wording corrected (explicit same-transaction delete, no FK cascade exists).
+  Acceptance criteria 3–4 extended to pin the above.
