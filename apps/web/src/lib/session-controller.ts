@@ -219,6 +219,7 @@ export class DrillSessionController {
       this.#patch({ viewer: graph.viewer });
       await this.#playOpponentIfNeeded();
       await this.#refreshAuthoredFeedback();
+      await this.#refreshReasoning();
     } catch (error) {
       this.#patch({
         busy: false,
@@ -288,6 +289,7 @@ export class DrillSessionController {
       const result = await store.move({ uci });
       if (this.#captureCheckpoint(result.emitted)) {
         await this.#refreshAuthoredFeedback();
+        await this.#refreshReasoning();
         this.#patch({ busy: false });
         return;
       }
@@ -498,6 +500,7 @@ export class DrillSessionController {
     const result = await this.#requiredStore().appendOpponentPly(selection);
     if (this.#captureCheckpoint(result.emitted)) {
       await this.#refreshAuthoredFeedback();
+      await this.#refreshReasoning();
     } else if (this.#hasOutcome(result.emitted)) {
       await this.#refreshAuthoredFeedback();
     }
@@ -535,6 +538,13 @@ export class DrillSessionController {
     const runState = this.#state.runState ?? this.#subscribingStore?.snapshot;
     if (runState === undefined) return;
     this.#patch({ authoredFeedback: await this.#api.authoredFeedback(runState.run.id) });
+  }
+
+  async #refreshReasoning(): Promise<void> {
+    const checkpoint = this.#state.checkpoint;
+    const runState = this.#state.runState ?? this.#subscribingStore?.snapshot;
+    if (checkpoint?.interaction?.type !== "stated_reasoning" || runState === undefined) return;
+    this.#patch({ reasoning: await this.#api.reasoning(runState.run.id, checkpoint.id) });
   }
 
   #captureCheckpoint(events: readonly DrillRunEvent[]): boolean {

@@ -92,13 +92,18 @@
       <section class="reasoning" aria-labelledby="reasoning-title">
         <h3 id="reasoning-title">State your reasoning</h3>
         {#if currentReasoning === undefined}
-          <p>Write what you considered before opening the author's points.</p>
-          <label>Candidate moves <textarea aria-label="Candidate moves" rows="3" bind:value={candidates} placeholder="One candidate per line"></textarea></label>
-          <label>Your plan <textarea aria-label="Your plan" rows="4" bind:value={plan}></textarea></label>
-          <label>What you fear <textarea aria-label="What you fear" rows="3" bind:value={fears}></textarea></label>
-          <div class="reasoning-actions">
-            <button class="primary" type="button" disabled={plan.trim() === ""} onclick={submitReasoning}>Record reasoning</button>
-            <button type="button" onclick={() => void onReasoning({ skipped: true })}>Show the author's points without writing</button>
+          <div class="reasoning-entry">
+            <div>
+              <p>Write what you considered before opening the author's points.</p>
+              <label>Candidate moves <textarea aria-label="Candidate moves" rows="3" bind:value={candidates} placeholder="One candidate per line"></textarea></label>
+              <label>Your plan <textarea aria-label="Your plan" rows="4" bind:value={plan}></textarea></label>
+              <label>What you fear <textarea aria-label="What you fear" rows="3" bind:value={fears}></textarea></label>
+              <div class="reasoning-actions">
+                <button class="primary" type="button" disabled={plan.trim() === ""} onclick={submitReasoning}>Record reasoning</button>
+                <button type="button" onclick={() => void onReasoning({ skipped: true })}>Show the author's points without writing</button>
+              </div>
+            </div>
+            <section aria-label="Your previous attempt"><h4>Your previous attempt</h4>{#if previousReasoning?.skipped}<p>Declined to state reasoning.</p>{:else if previousReasoning?.transcript}<p><strong>Candidates</strong> {previousReasoning.transcript.candidates.join("; ") || "None listed"}</p><p><strong>Plan</strong> {previousReasoning.transcript.plan}</p><p><strong>Fears</strong> {previousReasoning.transcript.fears || "None listed"}</p>{:else}<p>{reasoning?.absenceSentence}</p>{/if}</section>
           </div>
         {:else if currentReasoning.skipped}
           <p>You chose to see the author's points without stating your reasoning first.</p>
@@ -219,11 +224,12 @@
   .reasoning textarea { width: 100%; resize: vertical; padding: 0.55rem; border: 1px solid var(--line); border-radius: 0.5rem; background: var(--surface); color: inherit; font: inherit; }
   .reasoning-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .reasoning-columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+  .reasoning-entry { display: grid; grid-template-columns: minmax(0, 2fr) minmax(14rem, 1fr); gap: 0.75rem; }
   .reasoning-columns section { min-width: 0; padding: 0.7rem; border: 1px solid var(--line); border-radius: 0.6rem; }
   .reasoning-columns h4, .reasoning-columns p { margin: 0 0 0.45rem; }
   .reasoning-columns ul { padding-left: 1rem; }
   .honesty { color: var(--muted); }
-  @media (max-width: 760px) { .reasoning-columns { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) { .reasoning-columns, .reasoning-entry { grid-template-columns: 1fr; } }
 
   .authored-feedback {
     margin-top: 1rem;

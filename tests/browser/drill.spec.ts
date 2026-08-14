@@ -203,6 +203,44 @@ test("immediate guard waits for the consequence, preserves play-on, and rewinds 
   await expect(page.getByRole("button", { name: /Switch to branch 2:/ })).toBeVisible();
 });
 
+test("stated reasoning reveals attributed key points only after recording and keeps the prior attempt", async ({ page }) => {
+  const card = page.getByRole("article").filter({ hasText: "Stated reasoning browser fixture" });
+  await card.getByRole("button", { name: /Open position/ }).click();
+  await move(page, "h2", "h3");
+
+  const reasoning = page.getByRole("region", { name: "State your reasoning" });
+  await expect(reasoning).toBeVisible();
+  await expect(reasoning.getByText("Keep the queen protected")).toHaveCount(0);
+  await reasoning.getByLabel("Candidate moves").fill("Keep the queen");
+  await reasoning.getByLabel("Your plan").fill("protect the queen");
+  await reasoning.getByLabel("What you fear").fill("king safety");
+  await reasoning.getByRole("button", { name: "Record reasoning" }).click();
+
+  await expect(reasoning.getByText(/Mentioned — matched 'protect the queen'/)).toBeVisible();
+  await expect(reasoning.getByText("Not detected in your words.")).toBeVisible();
+  await expect(reasoning.getByText(/not detected.*never that it was wrong/i)).toBeVisible();
+  await expect(reasoning.getByText(/The author's line plays h3/)).toHaveCount(2);
+  const verdictFree = await reasoning.evaluate((element) => {
+    const clone = element.cloneNode(true) as HTMLElement;
+    clone.querySelector(".honesty")?.remove();
+    return clone.innerText;
+  });
+  expect(verdictFree).not.toMatch(/\b(?:score|correct|incorrect|wrong|accuracy|grade|pass|fail)\b|%/iu);
+  expect(verdictFree).not.toMatch(/\d+\s*\/\s*\d+/u);
+
+  const runId = page.url().split("/").at(-1)!;
+  const graph = await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: { nodes: { id: string; parentId: string | null }[] } };
+  const writerId = await page.evaluate((id) => localStorage.getItem(`chess-tabiya:run:${id}:writer-id`), runId);
+  const rewind = await page.request.post(`/runs/${runId}/rewind`, { headers: { "x-writer-id": writerId! }, data: { nodeId: graph.graph.nodes.find((node) => node.parentId === null)!.id } });
+  expect(rewind.ok(), await rewind.text()).toBe(true);
+  await page.reload();
+  await move(page, "h2", "h3");
+  await expect(page.getByRole("region", { name: "Your previous attempt" })).toContainText("protect the queen");
+  await page.getByRole("textbox", { name: "Your plan" }).fill("keep the queen");
+  await page.getByRole("button", { name: "Record reasoning" }).click();
+  await expect(page.getByRole("region", { name: "Your previous attempt" })).toContainText("protect the queen");
+});
+
 test("Live turns a run into a session and exposes a chrome-free overlay", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "schema example" }).first();
   await card.getByRole("button", { name: /Open position/ }).click();

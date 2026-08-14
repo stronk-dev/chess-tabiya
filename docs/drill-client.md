@@ -80,6 +80,21 @@ evaluation job for the active node. Its shipped default is the ratified
 
 ## Feedback withholding
 
+## Stated-reasoning checkpoint sheet
+
+The checkpoint sheet supports a three-row stated-reasoning form: candidate moves, the
+learner's plan, and what they fear. Authored point labels and attributions are absent
+until the writer records the form or explicitly chooses to skip. After recording, the
+sheet shows the learner's own words, per-point `detected`/`not detected` coverage with
+the matched quotation, the fixed matcher-honesty sentence, and the learner's previous
+attempt at the same checkpoint. On a later branch, that prior transcript is visible
+beside the new form before submission.
+
+The controller refreshes this projection on checkpoint capture and on reload. Only the
+active writer can append the durable event; readers may view the current run according
+to grants, while prior-run comparison remains owner-only. Story tokens, PGN exports,
+and match opponents never carry the transcript.
+
 Feedback timing is a run property enforced on the server, not inferred from
 whether a pack currently resolves and not implemented with client-side hiding.
 `delayed_checkpoint` reveals after a checkpoint and `segment_end` after a

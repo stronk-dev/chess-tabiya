@@ -74,6 +74,9 @@ Implemented foundation:
 - `repertoire-gap-finding.md` — private multi-line repertoire import, population-bound
   coverage scans, explicit partiality, atomic gap-to-run entry, and learner-chosen
   answers on the Learn surface.
+- `open-answer-grading.md` — durable stated-reasoning transcripts, grounded authored
+  key points, deterministic literal/SAN matching, owner-only previous-attempt comparison,
+  and the explicit never-graded privacy contract.
 - `game-import-and-story.md` — one-game PGN/lichess import, imported-run identity,
   idempotent evidence completion, grounded story moments, live re-entry, and
   original-game-plus-branches export.

@@ -162,6 +162,20 @@ suppressed rather than guessing reachability.
 
 ## Grounded objective rendering
 
+## Stated-reasoning reveal order
+
+A `stated_reasoning` checkpoint reveals none of its labels, phrases, or grounds in the
+public pack projection. The active writer first records a closed candidates/plan/fears
+transcript—or explicitly skips—against the exact checkpoint event sequence. That same
+atomic mutation persists deterministic detections and returns the attributed points
+when the feedback policy permits delivery. `segment_end` packs are admitted only when
+the checkpoint statically closes an existing segment.
+
+Recorded detections are immutable run evidence with `matcherVersion: 1`; they are not
+recomputed after matcher changes. A miss renders as “not detected,” never as a chess
+verdict. Previous-attempt lookup requires the same pack ID and digest and never crosses
+learner ownership.
+
 Each objective-timeline entry is rendered as `from → to`. Every one of its
 `evidenceRefs` is resolved through the existing `renderEvidenceRef` and
 `evidenceSentenceTable` implementation:

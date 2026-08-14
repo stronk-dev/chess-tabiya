@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.14; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.15; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -27,9 +27,14 @@ Version 0.14 adds the executable `immediate_guard` feedback policy and an option
 the recorded-engine tier while leaving deterministic rules tiers active. A `guard` block on
 any other policy is refused.
 
+Version 0.15 adds the closed `stated_reasoning` checkpoint interaction. It carries
+1–12 keyed points whose grounds are structural expressions, referenced shape plans,
+authored spine moves, or typed feedback claims. Match phrases are author-owned and
+digest-versioned; the product has no global synonym or semantic-grading vocabulary.
+
 `schemas/drill_pack.example.json` is the living Najdorf schema fixture. The
 fixture and schema under `archive/brief-v2/` remain frozen v0.1 inputs and are
-tested only against each other. The v0.1 fixture intentionally fails v0.14 because
+tested only against each other. The v0.1 fixture intentionally fails v0.15 because
 it has no required `feedbackPolicy` and uses superseded fields.
 
 ## Implemented v0.5 shape
@@ -41,9 +46,9 @@ it has no required `feedbackPolicy` and uses superseded fields.
   or `immediate_guard`. The guard is post-commit and non-blocking: the opponent starts
   the consequence before any rewind offer appears.
 - A checkpoint has one trigger and may have an `intent_capture` or `prediction`
-  interaction. Intent capture names plan-class IDs. Prediction grading always
-  declares `opponent_policy`, `engine`, or `both`, with optional `topK`,
-  `minMass`, and board flip.
+  interaction, or a `stated_reasoning` interaction. Intent capture names plan-class
+  IDs. Prediction carries an optional board flip and records policy mass without a
+  verdict. Stated reasoning names grounded key points and their literal match phrases.
 - The frozen simple trigger vocabulary is `atPly`, `atSpineNode`, `fenPredicate`,
   and `materialBalance`. A timing window contains `windowOpens`, `windowCloses`,
   and a non-negative `luxuryMoveBudget`; each boundary uses a simple trigger.
@@ -95,6 +100,12 @@ unsupported opponent and feedback policies, and unsupported objective
 conditions. These checks are shared by `make pack-check` and registry loading,
 so an authoring no-op cannot validate locally and then enter the served
 catalogue.
+
+Stated-reasoning validation refuses duplicate point IDs, colliding phrases,
+unresolvable grounds, and structural grounds false at statically known checkpoint
+positions. Under `segment_end`, the checkpoint must be statically provable as the end
+of an existing segment; a dynamic or first checkpoint is refused rather than risking
+either an evidence leak or an unreplayable redacted mutation snapshot.
 
 Outcome grading adds the typed validation codes
 `OBJECTIVE_GRADING_REQUIRED`, `OBJECTIVE_GRADING_UNSUPPORTED`,

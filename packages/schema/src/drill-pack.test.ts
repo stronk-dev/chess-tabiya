@@ -59,7 +59,7 @@ describe("drill_pack.schema.json v0.15", () => {
     expect(schema).toMatchObject({
       $id: "urn:chess-tabiya:schema:drill-pack:0.15",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.14");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.15");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
