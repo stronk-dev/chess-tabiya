@@ -371,6 +371,7 @@ export class DrillSessionController {
     this.#patch({ busy: true, error: undefined });
     try {
       const result = await this.#requiredStore().createGroup(input);
+      await this.#playOpponentIfNeeded();
       this.#patch({ busy: false });
       return result;
     } catch (error) {

@@ -117,6 +117,7 @@ class FakeApi implements DrillClientApi {
   graphWriterIds: (string | undefined)[] = [];
   activeWriterId = "writer-a";
   authoredFeedbackCalls = 0;
+  groupReplyCalls = 0;
 
   constructor(
     readonly document: DrillPackDefinition = pack,
@@ -220,6 +221,28 @@ class FakeApi implements DrillClientApi {
     this.writerIds.push(writerId);
     return { selection, run: this.run, emitted: this.run.events.slice(before) };
   }
+
+  async createGroup(_runId: string, input: import("./api.js").CreateGroupRequest, writerId: string) {
+    const before = this.requiredRun().events.length;
+    const source = this.requiredRun().activeCursor.nodeId;
+    let next = this.requiredRun();
+    const members: { branchId: string; seedMoveUci: string }[] = [];
+    for (const moveUci of input.candidates ?? []) {
+      next = fork(next, source, { label: moveUci, at }).run;
+      next = commitMove(next, moveUci, { actor: "user", at }).run;
+      members.push({ branchId: next.activeCursor.branchId, seedMoveUci: moveUci });
+    }
+    const firstLeaf = next.nodes.filter((node) => node.branchId === members[0]!.branchId).at(-1)!;
+    next = rewind(next, firstLeaf.id, at).run;
+    next = appendEvents(next, [{ type: "group.created", at, data: { groupId: `${next.id}:group:1`, sourceNodeId: source, source: input.source, resistance: input.resistance ?? "fixed", members } }]);
+    this.run = next; this.writerIds.push(writerId);
+    return { group: { ...next.events.at(-1)!.data, createdAtSeq: next.events.at(-1)!.seq }, run: next, emitted: next.events.slice(before), comparison: compareBranches(next, members.map((member) => member.branchId)) } as import("./api.js").CreateGroupResult;
+  }
+  async groupReply(): Promise<import("./api.js").GroupReplyResult> {
+    this.groupReplyCalls += 1;
+    return { selection: await this.selectMove({ startFen: "", historyUci: [], policy: { mode: "human_common", policyConfigDigest: digest }, seed: 1 }), reusedFromNodeId: null };
+  }
+  async analysis(): Promise<{ readonly jobs: readonly { readonly id: string }[] }> { return { jobs: [] }; }
 
   async move(
     _runId: string,
@@ -503,6 +526,22 @@ describe("DrillSessionController", () => {
 
     environment.controller.stopSession();
     expect(environment.controller.state).toEqual({ busy: false });
+  });
+
+  it("creates a group and routes its opponent reply through the group journal seam", async () => {
+    const environment = controller();
+    await environment.controller.startPack(pack.id);
+    const result = await environment.controller.createGroup({
+      source: "hand_picked",
+      candidates: ["c1e3", "f2f3"],
+    });
+
+    expect(result?.group.members).toHaveLength(2);
+    expect(environment.api.groupReplyCalls).toBe(1);
+    expect(environment.controller.state.runState?.run.events).toContainEqual(
+      expect.objectContaining({ type: "group.created" }),
+    );
+    expect(environment.controller.state.runState?.run.nodes.at(-1)).toMatchObject({ actor: "opponent" });
   });
 
   it("loads a foreign URL-addressed run read-only without minting a writer", async () => {

@@ -74,13 +74,11 @@
           <option value="lockstep">Lockstep</option>
         </select>
       </label>
-      <label>Detail
-        <select bind:value={zoom} aria-label="Group detail">
-          <option value="far">Overview</option>
-          <option value="mid">Summary</option>
-          <option value="near">Boards</option>
-        </select>
-      </label>
+      <div class="zoom-control" aria-label="Group detail">
+        <button type="button" aria-pressed={zoom === "far"} onclick={() => (zoom = "far")}>Overview</button>
+        <button type="button" aria-pressed={zoom === "mid"} onclick={() => (zoom = "mid")}>Summary</button>
+        <button type="button" aria-pressed={zoom === "near"} onclick={() => (zoom = "near")}>Boards</button>
+      </div>
       <button type="button" onclick={onCompare}>Compare group</button>
     </div>
   </header>
@@ -113,5 +111,5 @@
 </section>
 
 <style>
-  .group-panel{min-height:0;padding:.7rem;border:1px solid var(--line);border-radius:.9rem;background:var(--panel);overflow:hidden}.group-panel>header{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}.group-panel h2{margin:.1rem 0;font:600 1rem/1.2 var(--display-font)}.group-panel header p,.group-panel header span{margin:0;color:var(--muted);font-size:.72rem}.controls{display:flex;align-items:end;gap:.5rem;flex-wrap:wrap}.controls label{display:grid;gap:.2rem;font-size:.65rem;color:var(--muted)}select,button{padding:.45rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:inherit}.canvas{display:grid;grid-template-columns:repeat(var(--members),minmax(9rem,1fr));gap:.55rem;margin-top:.65rem;overflow:auto;overscroll-behavior:contain}.canvas article{min-width:9rem;padding:.5rem;border:1px solid var(--line);border-radius:.65rem;background:var(--paper-soft)}.canvas article.active{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.cell-heading{width:100%;display:flex;justify-content:space-between;gap:.4rem;text-align:left}.cell-heading span{font-size:.65rem;text-transform:uppercase;color:var(--muted)}dl{display:grid;gap:.2rem;margin:.45rem 0;font-size:.7rem}dl div{display:flex;justify-content:space-between;gap:.5rem}dt{color:var(--muted)}dd{margin:0}.absence{color:var(--muted);font-size:.7rem}.analysis{margin-top:.55rem}
+  .group-panel{min-height:0;padding:.7rem;border:1px solid var(--line);border-radius:.9rem;background:var(--panel);overflow:hidden}.group-panel>header{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}.group-panel h2{margin:.1rem 0;font:600 1rem/1.2 var(--display-font)}.group-panel header p,.group-panel header span{margin:0;color:var(--muted);font-size:.72rem}.controls{display:flex;align-items:end;gap:.5rem;flex-wrap:wrap}.controls label{display:grid;gap:.2rem;font-size:.65rem;color:var(--muted)}select,button{padding:.45rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:inherit}.zoom-control{display:flex;gap:.2rem}.zoom-control button[aria-pressed="true"]{border-color:var(--accent)}.canvas{display:grid;grid-template-columns:repeat(var(--members),minmax(9rem,1fr));gap:.55rem;margin-top:.65rem;overflow:auto;overscroll-behavior:contain}.canvas article{min-width:9rem;padding:.5rem;border:1px solid var(--line);border-radius:.65rem;background:var(--paper-soft)}.canvas article.active{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.cell-heading{width:100%;display:flex;justify-content:space-between;gap:.4rem;text-align:left}.cell-heading span{font-size:.65rem;text-transform:uppercase;color:var(--muted)}dl{display:grid;gap:.2rem;margin:.45rem 0;font-size:.7rem}dl div{display:flex;justify-content:space-between;gap:.5rem}dt{color:var(--muted)}dd{margin:0}.absence{color:var(--muted);font-size:.7rem}.analysis{margin-top:.55rem}
 </style>

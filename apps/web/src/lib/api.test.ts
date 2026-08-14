@@ -146,6 +146,14 @@ describe("DrillApi", () => {
           },
         });
       }
+      if (url.endsWith("/group")) {
+        return json({
+          group: { groupId: "g1", sourceNodeId: run.nodes[0]!.id, source: "hand_picked", resistance: "fixed", members: [], createdAtSeq: 1 },
+          run, emitted: [], comparison: { forkNodeId: run.nodes[0]!.id, columns: [], rows: [], groups: [], consequences: {}, objectiveTimelines: {}, checkpointHits: {}, evidence: {} },
+        });
+      }
+      if (url.endsWith("/group-reply")) return json({ selection, reusedFromNodeId: null });
+      if (url.endsWith("/analysis")) return json({ jobs: [{ id: "analysis-one" }] }, { status: 202 });
       if (url.includes("/events")) return json({ events: [], nextSeq: 1 });
       if (url.includes("/authored-feedback")) {
         return json({ items: [], hasWithheldAuthoredContent: true });
@@ -194,6 +202,9 @@ describe("DrillApi", () => {
       { nodeId: run.nodes[0]!.id, label: "alt-1" },
       "writer-one",
     );
+    await api.createGroup(run.id, { source: "hand_picked", candidates: ["a2a3", "b2b3"] }, "writer-one");
+    await api.groupReply(run.id, "group-one", "writer-one");
+    await api.analysis(run.id, [run.nodes[0]!.id], "writer-one");
     await api.graph(run.id);
     await api.compare(run.id, ["a", "b"]);
     await api.events(run.id, 1);
@@ -223,6 +234,9 @@ describe("DrillApi", () => {
       "/runs/run%20%2F%20one/moves",
       "/runs/run%20%2F%20one/rewind",
       "/runs/run%20%2F%20one/fork",
+      "/runs/run%20%2F%20one/group",
+      "/runs/run%20%2F%20one/group-reply",
+      "/runs/run%20%2F%20one/analysis",
       "/runs/run%20%2F%20one/graph",
       "/runs/run%20%2F%20one/compare",
       "/runs/run%20%2F%20one/events",
@@ -233,7 +247,7 @@ describe("DrillApi", () => {
       "/runs/run%20%2F%20one/pgn",
     ]);
     const writerCalls = calls.filter((call) =>
-      ["/runs", "/moves", "/rewind", "/fork", "/evidence"].some((suffix) =>
+      ["/runs", "/moves", "/rewind", "/fork", "/group", "/group-reply", "/analysis", "/evidence"].some((suffix) =>
         new URL(call.url).pathname.endsWith(suffix),
       ),
     );

@@ -29,3 +29,21 @@ uses `size` to take the first N spine children, while the field comment said it 
 machine sources only. The normative source table already required the authored use. The
 comment now says `size` is for every non-hand source; `hand_picked` derives its size from
 the explicit candidate list. No behaviour or authored vocabulary changed.
+
+## 2026-08-14 — Server creation, reply journal, and client plumbing
+
+The two server routes are thin, closed parsers over server-owned run context. All four
+seed sources resolve without trusting client FEN/history/policy; hand-picked creation
+adopts an existing direct child without a second evidence job; machine sources preserve
+their original distribution and mark enumerated plies honestly. The fixed journal was
+exercised with two knight-move orders transposing to the same position: the second reply
+was returned byte-identically and the selector was not called again. Strong-engine
+enumeration restores MultiPV only after `bestmove` while still inside the supervisor's
+serialized request.
+
+Typed browser plumbing now projects the mutation-returned events, routes opponent turns
+on group members through `/group-reply`, and exposes on-demand analysis for cancelled
+evidence. Focused server and client tests pass; Svelte reports 0 errors and 0 warnings.
+Two concurrent research commits captured the already-prepared server and client source
+changes while they shared the worktree; the exercising tests and these checked plan rows
+land together rather than rewriting shared history.
