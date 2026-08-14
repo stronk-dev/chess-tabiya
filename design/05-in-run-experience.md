@@ -20,6 +20,15 @@ loaded.** Anything that depends on authored content belongs in `01` or `04`.
 
 ## 1. The invariants
 
+**These are rulings, not physics (owner, 2026-08-14).** The transformation
+doctrine cuts both ways: ideas are transformed to fit invariants, and an
+invariant may itself be amended when evidence shows it costs more than it
+protects. **A full invariant review is scheduled at content-complete** — the
+owner's first end-to-end play is the evidence that ruling-by-ruling reads as
+felt experience rather than design theory. Until then they bind as written; no
+RFC quietly excepts itself.
+
+
 These hold in every run, in every mode, with or without a pack. An RFC may
 extend them; none may quietly except itself from one.
 
