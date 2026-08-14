@@ -1,6 +1,6 @@
 # RFC: Structural reading — the rung-0 layer
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-13
 - **Design refs:** `design/05-in-run-experience.md` §3 (the ladder, lines 54-85), §3a (silence

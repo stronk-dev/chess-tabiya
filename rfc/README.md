@@ -7,7 +7,8 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `structural-reading.md` | implementing | `archive/drill-pack-format.md`, `archive/outcome-drill-grading.md`, `archive/explanation-grounds.md` | B9 — twelve deterministic author predicates plus a finite learner observation projection, current denial/eviction arithmetic, one-ply discovered consequence, and attributed structural naming. Pack schema **0.10**, no migration |
+| `archive/structural-reading.md` | implemented | `archive/drill-pack-format.md`, `archive/outcome-drill-grading.md`, `archive/explanation-grounds.md` | B9 — twelve deterministic author predicates plus a finite learner observation projection, current denial/eviction arithmetic, one-ply discovered consequence, and attributed structural naming. Pack schema **0.10**, no migration |
+| `defect-batch-2.md` | draft | `archive/branch-runtime.md`, `archive/outcome-drill-grading.md`, `archive/drill-pack-format.md`, `archive/defect-sweep.md`, `archive/shape-library.md` | Defect batch — closes ledger rows D21–D24 and D27. Two verified real: D21 (`deriveSegments` becomes a projection of `segment.completed` events; the outcome-grading coincidence guard is ratified as the segment semantic) and D22 (`$defs/opponentPolicy` closes; pack schema **0.12**). Three verified stale (D23 never shipped; D24 closed by the defect-sweep; D27 closed by shape-library) — their missing regressions land here. Run schema unchanged (0.8), **no migration** |
 
 The completed breadth batch and its dependency history are kept in the archive
 documents and planning logs rather than duplicated in this index.
@@ -33,8 +34,9 @@ landing order, not lost data.
 | 0.7 | `archive/trajectory-drill.md` | implemented — `legs`, `run_trajectory` |
 | 0.8 | `archive/pack-studio.md` | implemented — source-derived channel; `provenance.reviewStatus` narrowed to `schema_example \| draft \| published`; typed `reviewers` removed |
 | 0.9 | `archive/n-way-comparison.md` | implemented — prediction `grading` removed; numbers are recorded and rendered without a verdict |
-| 0.10 | `structural-reading.md` | claimed 2026-08-13, draft — `$defs/structuralFeature` and `$defs/structuralExpression`, a fourth `fenPredicate` variant, a fifth `successCondition` kind (`structural_feature`), `$defs/file`. No migration: rung-0 facts are never persisted |
+| 0.10 | `archive/structural-reading.md` | implemented 2026-08-13, draft — `$defs/structuralFeature` and `$defs/structuralExpression`, a fourth `fenPredicate` variant, a fifth `successCondition` kind (`structural_feature`), `$defs/file`. No migration: rung-0 facts are never persisted |
 | 0.11 | `archive/shape-library.md` | implemented — additive only: optional top-level `shapes` (referenced shape-entry ids) and optional `planClass.shapePlan`. `planClasses` stays fully valid; no committed digest moves (the `$id` is not part of any pack document) |
+| 0.12 | `defect-batch-2.md` | claimed 2026-08-14, draft — tightening only: `$defs/opponentPolicy` gets `additionalProperties: false` (D22); all committed packs and fixtures verified to validate unchanged; no committed digest moves. Drafted while `adaptive-guidance.md` was implementing against 0.11 unchanged; that RFC archived as implemented on 2026-08-14, so 0.12 lands cleanly behind 0.11 (the shared surface — the version constant and its `drill-pack.test.ts:61` pin — is single-writer again) |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.
