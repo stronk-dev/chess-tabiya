@@ -137,8 +137,13 @@ ways to fill it, each inheriting its rung's honesty properties.
 **The load-bearing question is the opponent, not the boards.** For a group to
 answer *"which of my four moves is best"*, resistance must be **held constant**
 across branches, or the learner is comparing four different opponents and learns
-nothing about their own move. The control already ships: `opponentPolicy.seedMode`
-is `fixed | per_branch`, so a group defaults to `fixed`. `per_branch` is the
+nothing about their own move. **Corrected 2026-08-14: the control does NOT already ship** — the sidecar never
+receives a seed (`seedHonored: false`) and the selector cache keys on
+move-sequence history that sibling branches never share, so `seedMode: fixed`
+alone holds nothing constant across a Maia group. Real constancy is a
+group-level reply journal (`rfc/branch-groups.md` §4.2): under `fixed`, the same
+position always receives the same recorded selection replayed verbatim. The
+earlier sentence here was an overstatement this ledger caught. `per_branch` is the
 deliberate opposite experiment — *does my move survive varied resistance* — and
 both are legitimate, but the default must be the controlled one and the
 difference must be visible.
