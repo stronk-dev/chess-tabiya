@@ -46,7 +46,7 @@ export interface CheckpointNotice {
   readonly eventSeq: number;
   readonly nodeId: string;
   readonly actions: readonly string[];
-  readonly interaction?: { readonly type: "prediction"; readonly flipBoard?: boolean };
+  readonly interaction?: { readonly type: "prediction"; readonly flipBoard?: boolean } | { readonly type: "stated_reasoning" };
 }
 
 export interface WhyBannerModel {
@@ -195,7 +195,7 @@ export function latestCheckpoint(
         type: "prediction" as const,
         ...(definition.interaction.flipBoard === undefined ? {} : { flipBoard: definition.interaction.flipBoard }),
       },
-    } : {}),
+    } : definition?.interaction?.type === "stated_reasoning" ? { interaction: { type: "stated_reasoning" as const } } : {}),
   });
 }
 

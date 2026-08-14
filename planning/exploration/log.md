@@ -1691,3 +1691,16 @@ passes per the three-question rule); matrix rows updated for all four (CSV lines
 - **Next:** the gap-finding RFC can now draft against teardown §7 once the runtime
   corpus-evidence surface (its dependency) lands; remaining sweep-2 pick: Chessly;
   scoped Lichess hands-on (studies / learn-from-mistakes / practice) still queued.
+
+## 2026-08-14 (owner rulings) — the Spire map, and progression is never for sale
+
+1. **The map gates its own rewards; the library stays open.** The full catalog
+   is always browsable and directly playable — a coach can assign anything, the
+   breadth posture holds. The Spire map is a chosen mode with its own unlock
+   state: encounters, earned reveals, the ceremony. Slow-drip for those who
+   choose the journey; zero paternalism for those who don't.
+2. **Progression is never monetized — standing law**, same tier as ADR-0005:
+   whatever Q2's still-open monetization axis ever decides (hosting, support),
+   no unlock, encounter, path, or ceremony is ever purchasable and no
+   progression state is ever for sale. The satirical pack-opening only lands
+   because this is load-bearing and visible: the joke IS the promise.

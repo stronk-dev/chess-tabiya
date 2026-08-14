@@ -45,6 +45,7 @@ import { evidencePacket, renderVoice, type VoiceProvider, type VoiceScope } from
 import { corpusPopulation, type CorpusSource } from "./corpus.js";
 import type { RepertoireService } from "./repertoire.js";
 import { publicMutationPayload } from "./feedback-policy.js";
+import { reasoningMatchCheck, type ReasoningProposal } from "./reasoning.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -518,7 +519,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|analysis|human-split|corpus|voice|group|group-reply|import|story|share|flip|derivations)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|group|group-reply|import|story|share|flip|derivations)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -967,6 +968,9 @@ export function createRestHandler(
       if (request.method === "GET" && route.action === "authored-feedback") {
         return json(200, service.authoredFeedback(route.runId, principal));
       }
+      if (request.method === "GET" && route.action === "reasoning") {
+        return json(200, service.reasoning(route.runId, principal, requiredString(url.searchParams.get("checkpointId"), "checkpointId")));
+      }
       if (request.method === "GET" && route.action === "import") {
         return json(200, { importRecord: service.importRecord(route.runId, principal) });
       }
@@ -1032,6 +1036,30 @@ export function createRestHandler(
       }
 
       const value = await parseBody(request);
+      if (route.action === "reasoning-review") {
+        requireJson(request);
+        if (voiceProvider === undefined) throw new ServerError("VOICE_UNAVAILABLE", "No external voice provider is configured");
+        const body = closedRecord(value, "/", ["checkpointEventSeq"]);
+        const access = service.reasoningReviewAccess(route.runId, principal, requiredSafeInteger(body.checkpointEventSeq, "checkpointEventSeq"));
+        const packet = evidencePacket({ run: access.run, node: access.node, pack: access.pack.document, authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+        const prompt = JSON.stringify({ task: "Quote only contiguous learner text that may express each not-detected authored point.", transcript: access.event.data.transcript, keyPoints: access.keyPoints.map((point) => ({ id: point.id, label: point.label, phrases: point.phrases })), detections: access.event.data.detections });
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+          try {
+            const raw = await voiceProvider.render(packet, voicePersona, prompt, "reasoning");
+            const parsed = JSON.parse(raw) as unknown;
+            if (!Array.isArray(parsed)) continue;
+            const proposals = parsed.map((item) => {
+              const row = closedRecord(item, "/proposal", ["keyPointId", "quotation"]);
+              return Object.freeze({ keyPointId: requiredString(row.keyPointId, "keyPointId"), quotation: requiredString(row.quotation, "quotation") });
+            }) satisfies ReasoningProposal[];
+            const accepted = reasoningMatchCheck(proposals, access.event.data.transcript!, access.keyPoints, access.event.data.detections);
+            if (accepted === undefined) continue;
+            const labels = new Map(access.keyPoints.map((point) => [point.id, point.label]));
+            return json(200, { provider: "external", proposals: accepted.map((proposal) => ({ ...proposal, text: `Possible mention, proposed by the configured language model and not a detection: you wrote "${proposal.quotation}" — the author's point "${labels.get(proposal.keyPointId)}".` })) });
+          } catch { /* one retry, then silence */ }
+        }
+        return json(200, { provider: "external", proposals: [] });
+      }
       if (route.action === "voice") {
         requireJson(request);
         if (voiceProvider === undefined) throw new ServerError("VOICE_UNAVAILABLE", "No external voice provider is configured");
@@ -1298,6 +1326,17 @@ export function createRestHandler(
           ...(body.at === undefined ? {} : { at: requiredString(body.at, "at") }),
         });
         return json(200, { selection, run: result.run, emitted: result.emitted });
+      }
+      if (route.action === "reasoning") {
+        requireJson(request);
+        const body = closedRecord(value, "/", ["nodeId", "checkpointEventSeq", "transcript", "skipped", "at"]);
+        const transcript = body.transcript === undefined ? undefined : (() => {
+          const item = closedRecord(body.transcript, "/transcript", ["candidates", "plan", "fears"]);
+          if (!Array.isArray(item.candidates) || item.candidates.some((candidate) => typeof candidate !== "string")) throw invalid("transcript.candidates must be an array of strings");
+          return { candidates: item.candidates as string[], plan: requiredString(item.plan, "transcript.plan"), fears: typeof item.fears === "string" ? item.fears : (() => { throw invalid("transcript.fears must be a string"); })() };
+        })();
+        if (body.skipped !== undefined && body.skipped !== true) throw invalid("skipped must be true when present");
+        return json(200, service.recordReasoning(route.runId, principal, writerId(request), { nodeId: requiredString(body.nodeId, "nodeId"), checkpointEventSeq: requiredSafeInteger(body.checkpointEventSeq, "checkpointEventSeq"), ...(transcript === undefined ? {} : { transcript }), ...(body.skipped === true ? { skipped: true as const } : {}), ...(body.at === undefined ? {} : { at: requiredString(body.at, "at") }) }));
       }
       if (route.action === "evidence") {
         return json(

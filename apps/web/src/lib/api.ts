@@ -16,6 +16,8 @@ import type {
   ObjectiveState,
   OpponentSelection,
   PolicyConfig,
+  ReasoningDetection,
+  ReasoningTranscript,
   StoryMoment,
 } from "@chess-tabiya/runtime";
 
@@ -175,6 +177,29 @@ export type AuthoredFeedbackItem =
 export interface AuthoredFeedbackPage {
   readonly items: readonly AuthoredFeedbackItem[];
   readonly hasWithheldAuthoredContent: boolean;
+}
+
+export interface ReasoningKeyPointView {
+  readonly id: string;
+  readonly label: string;
+  readonly ground: import("@chess-tabiya/schema/drill-pack").ReasoningGround;
+  readonly attribution: string;
+}
+export interface ReasoningOccurrenceView {
+  readonly eventSeq: number;
+  readonly checkpointEventSeq: number;
+  readonly branchId: string;
+  readonly skipped: boolean;
+  readonly transcript: ReasoningTranscript | null;
+  readonly detections?: readonly ReasoningDetection[];
+  readonly keyPoints?: readonly ReasoningKeyPointView[];
+}
+export interface ReasoningPage {
+  readonly checkpointId: string;
+  readonly occurrences: readonly ReasoningOccurrenceView[];
+  readonly previous: { readonly runId: string; readonly eventSeq: number; readonly skipped: boolean; readonly transcript: ReasoningTranscript | null; readonly detections: readonly ReasoningDetection[] } | null;
+  readonly absenceSentence: string;
+  readonly honestySentence: string;
 }
 
 export interface EngineCapability {
@@ -509,6 +534,7 @@ export interface RunApi {
   ): Promise<MutationResult>;
   reveal(runId: string, writerId: string, at?: string): Promise<MutationResult>;
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult>;
+  recordReasoning(runId: string, input: { readonly nodeId: string; readonly checkpointEventSeq: number; readonly transcript?: ReasoningTranscript; readonly skipped?: true }, writerId: string): Promise<MutationResult & { readonly reasoning: ReasoningPage }>;
   createGroup(runId: string, input: CreateGroupRequest, writerId: string): Promise<CreateGroupResult>;
   groupReply(runId: string, groupId: string, writerId: string): Promise<GroupReplyResult>;
   analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }>;
@@ -536,6 +562,7 @@ export interface DrillClientApi extends RunApi {
     branchIds: readonly string[],
   ): Promise<BranchComparison>;
   authoredFeedback(runId: string): Promise<AuthoredFeedbackPage>;
+  reasoning(runId: string, checkpointId: string): Promise<ReasoningPage>;
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage>;
   corpus(runId: string, nodeId: string): Promise<CorpusPage>;
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage>;
@@ -843,6 +870,10 @@ export class DrillApi implements DrillClientApi {
     return this.#json(`/runs/${encoded(runId)}/prediction`, { method: "POST", writerId, body: input });
   }
 
+  recordReasoning(runId: string, input: { readonly nodeId: string; readonly checkpointEventSeq: number; readonly transcript?: ReasoningTranscript; readonly skipped?: true }, writerId: string): Promise<MutationResult & { readonly reasoning: ReasoningPage }> {
+    return this.#json(`/runs/${encoded(runId)}/reasoning`, { method: "POST", writerId, body: input });
+  }
+
   createGroup(runId: string, input: CreateGroupRequest, writerId: string): Promise<CreateGroupResult> {
     return this.#json(`/runs/${encoded(runId)}/group`, { method: "POST", writerId, body: input });
   }
@@ -958,6 +989,10 @@ export class DrillApi implements DrillClientApi {
 
   authoredFeedback(runId: string): Promise<AuthoredFeedbackPage> {
     return this.#json(`/runs/${encoded(runId)}/authored-feedback`);
+  }
+
+  reasoning(runId: string, checkpointId: string): Promise<ReasoningPage> {
+    return this.#json(`/runs/${encoded(runId)}/reasoning?checkpointId=${encoded(checkpointId)}`);
   }
 
   applyEvidence(

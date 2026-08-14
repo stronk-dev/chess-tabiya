@@ -568,6 +568,7 @@
         snapshot={session.runState}
         checkpoint={session.checkpoint}
         authoredFeedback={session.authoredFeedback}
+        reasoning={session.reasoning}
         comparison={session.comparison}
         comparisonBranchIds={session.comparisonBranchIds}
         busy={session.busy}
@@ -584,6 +585,7 @@
         onCloseCompare={() => controller.closeCompare()}
         onContinueCheckpoint={() => controller.continueCheckpoint()}
         onPrediction={(uci) => controller.recordPrediction(uci)}
+        onReasoning={(input) => controller.recordReasoning(input)}
         onExport={exportPgn}
         onStop={() => navigate("/play")}
         onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}

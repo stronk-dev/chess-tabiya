@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import type { Capabilities, CorpusPage, HumanSplitPage, RunRole, ShapeEntryView, VoicePage } from "./api.js";
+  import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, RunRole, ShapeEntryView, VoicePage } from "./api.js";
   import { SILENT_ASSISTANCE, branchPath, classifyPhase, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, permittedAssistance, pivotalMarkers, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
@@ -50,6 +50,7 @@
     snapshot: RunStateSnapshot;
     checkpoint?: CheckpointNotice | undefined;
     authoredFeedback?: AuthoredFeedbackPage | undefined;
+    reasoning?: ReasoningPage | undefined;
     comparison?: BranchComparison | undefined;
     comparisonBranchIds?: readonly string[] | undefined;
     busy?: boolean;
@@ -66,6 +67,7 @@
     onCloseCompare: () => void;
     onContinueCheckpoint: () => void | Promise<void>;
     onPrediction?: (uci: string) => void | Promise<void>;
+    onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
     onExport: (branchIds?: readonly string[]) => void | Promise<void>;
     onStop: () => void;
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
@@ -84,6 +86,7 @@
     snapshot,
     checkpoint,
     authoredFeedback,
+    reasoning,
     comparison,
     comparisonBranchIds,
     busy = false,
@@ -100,6 +103,7 @@
     onCloseCompare,
     onContinueCheckpoint,
     onPrediction = () => {},
+    onReasoning = () => {},
     onExport,
     onStop,
     onHumanSplit,
@@ -808,6 +812,8 @@
     node={currentNode}
     {startSide}
     {onPrediction}
+    {onReasoning}
+    {reasoning}
     {checkpoint}
     authoredItems={checkpointAuthoredItems}
     {shapes}

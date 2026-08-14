@@ -19,6 +19,7 @@ import {
   type ShapeEntryView,
   type CreateGroupRequest,
   type CreateGroupResult,
+  type ReasoningPage,
 } from "./api.js";
 import { boardModel } from "./board-model.js";
 import {
@@ -44,6 +45,7 @@ export interface DrillSessionState {
   readonly comparison?: BranchComparison;
   readonly comparisonBranchIds?: readonly string[];
   readonly authoredFeedback?: AuthoredFeedbackPage;
+  readonly reasoning?: ReasoningPage;
   readonly viewer?: RunGraph["viewer"];
 }
 
@@ -323,7 +325,7 @@ export class DrillSessionController {
     if (checkpoint !== undefined) {
       this.#dismissedCheckpointSeq = checkpoint.eventSeq;
     }
-    this.#patch({ checkpoint: undefined, busy: true });
+    this.#patch({ checkpoint: undefined, reasoning: undefined, busy: true });
     try {
       await this.#playOpponentIfNeeded();
       this.#patch({ busy: false });
@@ -351,6 +353,17 @@ export class DrillSessionController {
     } catch (error) {
       this.#fail(error);
     }
+  }
+
+  async recordReasoning(input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }): Promise<void> {
+    const checkpoint = this.#state.checkpoint;
+    if (checkpoint?.interaction?.type !== "stated_reasoning") throw new Error("No stated-reasoning checkpoint is active");
+    this.#patch({ busy: true, error: undefined });
+    try {
+      const result = await this.#requiredStore().recordReasoning({ nodeId: checkpoint.nodeId, checkpointEventSeq: checkpoint.eventSeq, ...input });
+      this.#patch({ busy: false, reasoning: result.reasoning });
+      await this.#refreshAuthoredFeedback();
+    } catch (error) { this.#fail(error); }
   }
 
   async rewind(target: { readonly nodeId: string } | { readonly checkpointId: string }): Promise<void> {
@@ -533,7 +546,7 @@ export class DrillSessionController {
       this.#dismissedCheckpointSeq,
     );
     if (checkpoint === undefined) return false;
-    this.#patch({ checkpoint });
+    this.#patch({ checkpoint, reasoning: undefined });
     return true;
   }
 
@@ -592,6 +605,7 @@ export class DrillSessionController {
       comparison: undefined,
       comparisonBranchIds: undefined,
       authoredFeedback: undefined,
+      reasoning: undefined,
     });
   }
 

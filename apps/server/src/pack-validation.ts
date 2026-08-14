@@ -223,6 +223,23 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
   const claimIds = new Set((pack.feedbackClaims ?? []).map((claim) => claim.id));
   for (const [checkpointIndex, checkpoint] of pack.checkpoints.entries()) {
     if (checkpoint.interaction?.type !== "stated_reasoning") continue;
+    if (pack.feedbackPolicy === "segment_end") {
+      const trigger = checkpoint.trigger;
+      const proven = !(
+        "windowOpens" in trigger || (!("atPly" in trigger) && !("atSpineNode" in trigger))
+      ) && pack.checkpoints.some((earlier) => {
+        if (earlier === checkpoint || "windowOpens" in earlier.trigger) return false;
+        if ("atPly" in trigger && "atPly" in earlier.trigger) return earlier.trigger.atPly < trigger.atPly;
+        if ("atSpineNode" in trigger && "atSpineNode" in earlier.trigger) {
+          const target = trigger.atSpineNode;
+          const ancestor = earlier.trigger.atSpineNode;
+          const contains = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[], seen = false): boolean => nodes.some((node) => node.id === target ? seen : contains(node.children, seen || node.id === ancestor));
+          return contains(pack.spine ?? []);
+        }
+        return false;
+      });
+      if (!proven) issues.push(runtimeIssue("REASONING_SEGMENT_END_UNPROVEN", `/checkpoints/${checkpointIndex}/interaction`, "segment_end reasoning must be statically proven to end a segment"));
+    }
     const ids = new Set<string>();
     const phrases = new Map<string, string>();
     const checkpointFen = reasoningCheckpointFen(pack, checkpoint);

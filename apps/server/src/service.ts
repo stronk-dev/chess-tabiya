@@ -19,6 +19,7 @@ import {
   digestSessionSource,
   isPackSession,
   lineMembership,
+  matchKeyPoints,
   opponentMovesFromEvents,
   permittedAssistance,
   revealFeedback,
@@ -42,6 +43,7 @@ import {
   type GroupSource,
   type RunOpponentMode,
   type PositionOpponentPolicy,
+  type ReasoningTranscript,
   RuntimeError,
 } from "@chess-tabiya/runtime";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
@@ -93,6 +95,16 @@ import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 import { resolveImportSource, type ImportSource } from "./import-source.js";
 import type { ShapeRegistry } from "./shape-registry.js";
+import {
+  NO_PREVIOUS_REASONING,
+  REASONING_HONESTY,
+  keyPointViews,
+  occurrenceView,
+  reasoningDeliveryOpen,
+  reasoningEvents,
+  type ReasoningPage,
+  type ReasoningPreviousView,
+} from "./reasoning.js";
 
 export interface RunViewer {
   readonly role: RunRole;
@@ -1053,6 +1065,89 @@ export class RunService {
     }]);
     this.#storage.save(next, lease);
     return { run: next, emitted: next.events.slice(stored.run.events.length) };
+  }
+
+  recordReasoning(
+    runId: string,
+    principal: Principal,
+    writerId: string,
+    input: {
+      readonly nodeId: string;
+      readonly checkpointEventSeq: number;
+      readonly transcript?: ReasoningTranscript;
+      readonly skipped?: true;
+      readonly at?: string;
+    },
+  ): MutationResult & { readonly reasoning: ReasoningPage } {
+    const { stored, lease } = this.#forWrite(runId, principal, writerId);
+    this.#refuseWhileMatchLive(runId, stored.run);
+    const pack = this.#requiredRegisteredPack(stored.run);
+    if (pack === undefined) throw new ServerError("INVALID_REQUEST", "Stated reasoning requires a pack run");
+    if (stored.run.activeCursor.nodeId !== input.nodeId) throw new ServerError("INVALID_REQUEST", "Reasoning node is not the active cursor");
+    const checkpointEvent = stored.run.events[input.checkpointEventSeq - 1];
+    if (checkpointEvent?.type !== "checkpoint.reached" || checkpointEvent.data.nodeId !== input.nodeId) throw new ServerError("INVALID_REQUEST", "Unknown reasoning checkpoint occurrence");
+    const checkpoint = pack.document.checkpoints.find((candidate) => candidate.id === checkpointEvent.data.checkpointId);
+    if (checkpoint?.interaction?.type !== "stated_reasoning") throw new ServerError("INVALID_REQUEST", "Unknown stated-reasoning checkpoint");
+    const pathIds = new Set(historyFrom(stored.run, stored.run.activeCursor.nodeId).map((node) => node.id));
+    const latest = stored.run.events.filter((event) => event.type === "checkpoint.reached" && event.data.checkpointId === checkpoint.id && pathIds.has(event.data.nodeId)).at(-1);
+    if (latest?.seq !== checkpointEvent.seq) throw new ServerError("INVALID_REQUEST", "Reasoning checkpoint occurrence is stale");
+    if (stored.run.events.some((event) => event.type === "reasoning.recorded" && event.data.checkpointEventSeq === checkpointEvent.seq)) throw new ServerError("INVALID_REQUEST", "Reasoning was already recorded for this occurrence");
+    const skipped = input.skipped === true;
+    if (skipped === (input.transcript !== undefined)) throw new ServerError("INVALID_REQUEST", "Submit either a transcript or skipped: true");
+    let transcript: ReasoningTranscript | null = null;
+    if (!skipped) {
+      const value = input.transcript!;
+      if (!Array.isArray(value.candidates) || value.candidates.length > 8 || value.candidates.some((item) => typeof item !== "string" || item.length < 1 || item.length > 120) || typeof value.plan !== "string" || value.plan.trim().length === 0 || value.plan.length > 1000 || typeof value.fears !== "string" || value.fears.length > 500) throw new ServerError("INVALID_REQUEST", "Reasoning transcript exceeds its closed field limits");
+      transcript = Object.freeze({ candidates: Object.freeze([...value.candidates]), plan: value.plan, fears: value.fears });
+    }
+    const detections = transcript === null ? Object.freeze([]) : matchKeyPoints(checkpoint.interaction.keyPoints, transcript, stored.run.nodes.find((node) => node.id === input.nodeId)!.fen);
+    const next = appendEvents(stored.run, [{
+      type: "reasoning.recorded",
+      at: input.at ?? new Date().toISOString(),
+      data: { nodeId: input.nodeId, checkpointId: checkpoint.id, checkpointEventSeq: checkpointEvent.seq, skipped, transcript, matcherVersion: 1, detections },
+    }]);
+    this.#storage.save(next, lease);
+    this.#project(next, lease.learnerId);
+    return Object.freeze({ run: next, emitted: Object.freeze(next.events.slice(stored.run.events.length)), reasoning: this.reasoning(runId, principal, checkpoint.id) });
+  }
+
+  reasoning(runId: string, principal: Principal, checkpointId: string): ReasoningPage {
+    const access = requireRead(this.#storage, runId, principal);
+    const run = access.stored.run;
+    const pack = this.#requiredRegisteredPack(run);
+    if (pack === undefined) throw new ServerError("INVALID_REQUEST", "Stated reasoning requires a pack run");
+    const current = reasoningEvents(run, checkpointId);
+    const occurrences = Object.freeze(current.map((event) => occurrenceView(run, pack, event, this.#shapes)));
+    let previous: ReasoningPreviousView | null = null;
+    if (current.length > 1) {
+      const event = current[current.length - 2]!;
+      previous = Object.freeze({ runId, eventSeq: event.seq, skipped: event.data.skipped, transcript: event.data.transcript, detections: event.data.detections });
+    } else if (this.#storage.ownerLearnerId(runId) === principal.learnerId && run.packId !== null && run.packDigest !== null) {
+      const candidates = this.#progress?.progress(principal.learnerId).filter((attempt) => attempt.runId !== runId && attempt.packId === run.packId && attempt.packDigest === run.packDigest) ?? [];
+      for (const candidateRunId of [...new Set(candidates.map((attempt) => attempt.runId))].slice(0, 5)) {
+        const candidate = this.#storage.read(candidateRunId)?.run;
+        if (candidate === undefined) continue;
+        const event = reasoningEvents(candidate, checkpointId).at(-1);
+        if (event === undefined) continue;
+        previous = Object.freeze({ runId: candidate.id, eventSeq: event.seq, skipped: event.data.skipped, transcript: event.data.transcript, detections: event.data.detections });
+        break;
+      }
+    }
+    return Object.freeze({ checkpointId, occurrences, previous, absenceSentence: NO_PREVIOUS_REASONING, honestySentence: REASONING_HONESTY });
+  }
+
+  reasoningReviewAccess(runId: string, principal: Principal, checkpointEventSeq: number) {
+    const access = requireRead(this.#storage, runId, principal);
+    const run = access.stored.run;
+    const pack = this.#requiredRegisteredPack(run);
+    if (pack === undefined) throw new ServerError("INVALID_REQUEST", "Stated reasoning requires a pack run");
+    const event = run.events.find((candidate) => candidate.type === "reasoning.recorded" && candidate.data.checkpointEventSeq === checkpointEventSeq);
+    if (event === undefined || event.type !== "reasoning.recorded" || event.data.skipped || event.data.transcript === null) throw new ServerError("INVALID_REQUEST", "Recorded reasoning is unavailable for review");
+    if (!reasoningDeliveryOpen(run, checkpointEventSeq)) throw new ServerError("FEEDBACK_WITHHELD", "Reasoning key points are still withheld");
+    const node = run.nodes.find((candidate) => candidate.id === event.data.nodeId);
+    const checkpoint = pack.document.checkpoints.find((candidate) => candidate.id === event.data.checkpointId);
+    if (node === undefined || checkpoint?.interaction?.type !== "stated_reasoning") throw new ServerError("INVALID_REQUEST", "Reasoning occurrence is not resolvable");
+    return Object.freeze({ run, node, pack, event, keyPoints: checkpoint.interaction.keyPoints });
   }
 
   simulate(

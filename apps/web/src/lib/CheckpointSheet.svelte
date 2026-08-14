@@ -3,7 +3,7 @@
 
   import HonestControl from "./HonestControl.svelte";
   import { recognizedCheckpointActions, type CheckpointNotice } from "./screen-model.js";
-  import type { AuthoredFeedbackItem, ShapeEntryView } from "./api.js";
+  import type { AuthoredFeedbackItem, ReasoningPage, ShapeEntryView } from "./api.js";
   import OutcomeContext from "./OutcomeContext.svelte";
   import type { DrillRun } from "@chess-tabiya/runtime";
   import type { Node } from "@chess-tabiya/runtime";
@@ -26,6 +26,8 @@
     node?: Node;
     startSide?: StartSide;
     onPrediction?: (uci: string) => void | Promise<void>;
+    onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
+    reasoning?: ReasoningPage;
     shapes?: readonly ShapeEntryView[];
   }
 
@@ -44,10 +46,27 @@
     node,
     startSide = "white",
     onPrediction = () => {},
+    onReasoning = () => {},
+    reasoning,
     shapes = [],
   }: Props = $props();
   let heading: HTMLHeadingElement;
+  let candidates = $state("");
+  let plan = $state("");
+  let fears = $state("");
   let recognizedActions = $derived(recognizedCheckpointActions(checkpoint.actions));
+  let currentReasoning = $derived(reasoning?.occurrences.find((item) => item.checkpointEventSeq === checkpoint.eventSeq));
+  let previousReasoning = $derived(reasoning?.previous ?? (reasoning?.occurrences.filter((item) => item.eventSeq !== currentReasoning?.eventSeq).at(-1) ?? null));
+
+  function matchedWords(detection: import("@chess-tabiya/runtime").ReasoningDetection): string {
+    if (!currentReasoning?.transcript || !detection.match) return "";
+    const source = detection.match.field === "candidates" ? currentReasoning.transcript.candidates[detection.match.index ?? -1] : currentReasoning.transcript[detection.match.field];
+    return source?.normalize("NFKC").toLocaleLowerCase("en-US").replaceAll(/\s+/g, " ").trim().slice(detection.match.start, detection.match.end) ?? "";
+  }
+
+  function submitReasoning(): void {
+    void onReasoning({ transcript: { candidates: candidates.split("\n").map((item) => item.trim()).filter(Boolean), plan, fears } });
+  }
 
   onMount(() => heading?.focus());
 </script>
@@ -67,6 +86,34 @@
           lastMove={node.moveUci}
           onMove={onPrediction}
         />
+      </section>
+    {/if}
+    {#if checkpoint.interaction?.type === "stated_reasoning"}
+      <section class="reasoning" aria-labelledby="reasoning-title">
+        <h3 id="reasoning-title">State your reasoning</h3>
+        {#if currentReasoning === undefined}
+          <p>Write what you considered before opening the author's points.</p>
+          <label>Candidate moves <textarea aria-label="Candidate moves" rows="3" bind:value={candidates} placeholder="One candidate per line"></textarea></label>
+          <label>Your plan <textarea aria-label="Your plan" rows="4" bind:value={plan}></textarea></label>
+          <label>What you fear <textarea aria-label="What you fear" rows="3" bind:value={fears}></textarea></label>
+          <div class="reasoning-actions">
+            <button class="primary" type="button" disabled={plan.trim() === ""} onclick={submitReasoning}>Record reasoning</button>
+            <button type="button" onclick={() => void onReasoning({ skipped: true })}>Show the author's points without writing</button>
+          </div>
+        {:else if currentReasoning.skipped}
+          <p>You chose to see the author's points without stating your reasoning first.</p>
+        {:else}
+          <div class="reasoning-columns">
+            <section aria-label="Your reasoning"><h4>Your reasoning</h4><p><strong>Candidates</strong> {currentReasoning.transcript?.candidates.join("; ") || "None listed"}</p><p><strong>Plan</strong> {currentReasoning.transcript?.plan}</p><p><strong>Fears</strong> {currentReasoning.transcript?.fears || "None listed"}</p></section>
+            <section aria-label="The author's points"><h4>The author's points</h4>
+              {#if currentReasoning.keyPoints && currentReasoning.detections}
+                <p class="honesty">{reasoning?.honestySentence}</p>
+                <ul>{#each currentReasoning.keyPoints as point, index}<li><strong>{point.label}</strong><p>{currentReasoning.detections[index]?.status === "detected" ? `Mentioned — matched '${matchedWords(currentReasoning.detections[index]!)}'` : "Not detected in your words."}</p><small>{point.attribution}</small></li>{/each}</ul>
+              {:else}<p>Author points remain withheld until this segment opens.</p>{/if}
+            </section>
+            <section aria-label="Your previous attempt"><h4>Your previous attempt</h4>{#if previousReasoning?.skipped}<p>Declined to state reasoning.</p>{:else if previousReasoning?.transcript}<p><strong>Candidates</strong> {previousReasoning.transcript.candidates.join("; ") || "None listed"}</p><p><strong>Plan</strong> {previousReasoning.transcript.plan}</p><p><strong>Fears</strong> {previousReasoning.transcript.fears || "None listed"}</p>{:else}<p>{reasoning?.absenceSentence}</p>{/if}</section>
+          </div>
+        {/if}
       </section>
     {/if}
     {#if assessment !== undefined || resistance.length > 0}
@@ -100,6 +147,7 @@
         {/if}
       </section>
     {/if}
+    {#if checkpoint.interaction?.type !== "stated_reasoning" || currentReasoning !== undefined}
     <div class="actions">
       <button class="primary" type="button" onclick={onContinue}>Continue</button>
       <button type="button" onclick={onRewind}>Rewind here</button>
@@ -121,6 +169,7 @@
       {/if}
       <button type="button" onclick={onStop}>Stop session</button>
     </div>
+    {/if}
   </div>
 </div>
 
@@ -164,6 +213,17 @@
     gap: 0.5rem;
     margin-top: 1.3rem;
   }
+
+  .reasoning { display: grid; gap: 0.75rem; margin-top: 1rem; }
+  .reasoning label { display: grid; gap: 0.3rem; font-weight: 650; }
+  .reasoning textarea { width: 100%; resize: vertical; padding: 0.55rem; border: 1px solid var(--line); border-radius: 0.5rem; background: var(--surface); color: inherit; font: inherit; }
+  .reasoning-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .reasoning-columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+  .reasoning-columns section { min-width: 0; padding: 0.7rem; border: 1px solid var(--line); border-radius: 0.6rem; }
+  .reasoning-columns h4, .reasoning-columns p { margin: 0 0 0.45rem; }
+  .reasoning-columns ul { padding-left: 1rem; }
+  .honesty { color: var(--muted); }
+  @media (max-width: 760px) { .reasoning-columns { grid-template-columns: 1fr; } }
 
   .authored-feedback {
     margin-top: 1rem;

@@ -17,7 +17,7 @@ import type { DrillPackDefinition, PackPhase } from "@chess-tabiya/schema/drill-
 import type { AuthoredFeedbackPage } from "./authored-feedback.js";
 import type { ShapeRegistry } from "./shape-registry.js";
 
-export type VoiceScope = "marker" | "reading" | "steering" | "story";
+export type VoiceScope = "marker" | "reading" | "steering" | "story" | "reasoning";
 export interface VoiceProvider { render(packet: EvidencePacket, persona: string, deterministicText: string, scope: VoiceScope): Promise<string>; }
 
 function authoredText(item: AuthoredFeedbackPage["items"][number]): string | undefined {

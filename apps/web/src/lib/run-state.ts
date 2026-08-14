@@ -207,6 +207,10 @@ export class RunStateStore {
     )) as Promise<PredictionResult>;
   }
 
+  recordReasoning(input: { readonly nodeId: string; readonly checkpointEventSeq: number; readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) {
+    return this.#mutate(() => this.#api.recordReasoning(this.#session.runId, input, this.#session.writerId)) as Promise<MutationResult & { readonly reasoning: import("./api.js").ReasoningPage }>;
+  }
+
   createGroup(input: CreateGroupRequest): Promise<CreateGroupResult> {
     return this.#mutate(() => this.#api.createGroup(
       this.#session.runId,
