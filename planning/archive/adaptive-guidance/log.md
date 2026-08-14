@@ -56,3 +56,12 @@ menu positioned relative to that control. The acceptance fixture also removed a 
 from its scripted queen-exchange file; the corrected legal `Qxd8+ Kxd8` path now crosses the
 phase band and passes at zero retries. This was a real cross-layer layout defect, not hidden by
 forcing the click.
+
+## 2026-08-14 — Lifecycle closeout
+
+Canonical behavior is distilled into `docs/adaptive-guidance.md`, with the capability and
+withholding seams reconciled in `docs/app-shell.md` and `docs/explanation-grounds.md`. On the
+final moved tree, `ENGINES_REQUIRED=1 make verify` passed **359 tests across 63 files**, typecheck
+reported zero Svelte errors and warnings, and scaffold/packaging verification passed. The
+zero-retry browser gate passed **14 tests**; the opt-in Maia latency case was skipped by design.
+The RFC and this planning record are archived together.
