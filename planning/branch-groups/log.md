@@ -47,3 +47,26 @@ evidence. Focused server and client tests pass; Svelte reports 0 errors and 0 wa
 Two concurrent research commits captured the already-prepared server and client source
 changes while they shared the worktree; the exercising tests and these checked plan rows
 land together rather than rewriting shared history.
+
+## 2026-08-14 — Group surface and browser walkthrough
+
+The drill now captures 2–8 legal candidates without mutating the run, marks grouped
+branches in the rail, and renders the group as a horizontally pannable semantic-zoom
+grid. Overview contains labels/state/outcomes only; Summary adds last move, exact ply and
+material counts, checkpoints, and honest evidence absence; Boards uses the disabled
+comparison board. Source attribution and the fixed/varied resistance sentence come only
+from persisted group data. Sequential is the default; lockstep is a versioned local
+navigation preference and a browser assertion proves that it rotates to another member.
+
+The browser walkthrough captured three candidates, created three real branches, played a
+second learner decision on each, exercised lockstep, observed evidence discarded by a
+rewind, recovered it through `/analysis`, opened the existing three-column comparison,
+and exported a PGN with all variations. That walkthrough found one real cross-layer bug:
+the new client analysis call omitted the route's required `kind` and a search budget,
+which made the queue throw. It now sends `kind: bestline`, `multiPv: 1`, and
+`movetime: 100`; the recovery path passes end to end.
+
+An eight-member hand-picked group took **1.265 ms** in the local in-memory service/mocked
+engine measurement. This is far below the 100 ms worry / 200 ms intervene navigation
+band, but it is explicitly a service-only synthetic measurement, not a storage/network
+claim, and gates nothing.

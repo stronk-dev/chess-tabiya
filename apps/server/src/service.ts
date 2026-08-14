@@ -40,10 +40,13 @@ import {
   type GroupSource,
   type RunOpponentMode,
   type PositionOpponentPolicy,
+  RuntimeError,
 } from "@chess-tabiya/runtime";
 import { randomUUID } from "node:crypto";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
+import { makeSan } from "chessops/san";
+import { parseUci } from "chessops/util";
 
 import {
   EvidenceJobQueue,
@@ -183,6 +186,15 @@ function learnerToMove(run: DrillRun, node: DrillRun["nodes"][number]): boolean 
 
 function terminalPosition(fen: string): boolean {
   return Chess.fromSetup(parseFen(fen).unwrap()).unwrap().isEnd();
+}
+
+function seedMoveSan(fen: string, uci: string): string {
+  const position = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
+  const move = parseUci(uci);
+  if (move === undefined || !position.isLegal(move)) {
+    throw new RuntimeError("ILLEGAL_MOVE", `Illegal group seed: ${uci}`);
+  }
+  return makeSan(position, move);
 }
 
 function sameEngine(
@@ -590,7 +602,7 @@ export class RunService {
         continue;
       }
       scratch = fork(scratch, sourceNode.id, {
-        label: moveUci,
+        label: seedMoveSan(sourceNode.fen, moveUci),
         ...(input.at === undefined ? {} : { at: input.at }),
       }).run;
       const beforeCommit = scratch;

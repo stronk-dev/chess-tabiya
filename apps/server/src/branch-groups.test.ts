@@ -11,7 +11,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import type { EngineHealth, EngineIdentity, EngineRequest } from "./engine-supervisor.js";
 import { EvidenceJobQueue, type EvidenceExecutor, type EvidenceJob } from "./evidence-queue.js";
-import { OpponentSelector, type SelectorEngineClient } from "./opponent-selector.js";
+import { OpponentSelector, type SelectMoveRequest, type SelectorEngineClient } from "./opponent-selector.js";
 import { PackRegistry } from "./pack-registry.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -72,6 +72,14 @@ class RecordingEvidence implements EvidenceExecutor {
   }
 }
 
+class RecordingSelector extends OpponentSelector {
+  readonly requests: SelectMoveRequest[] = [];
+  override select(request: SelectMoveRequest): Promise<OpponentSelection> {
+    this.requests.push(request);
+    return super.select(request);
+  }
+}
+
 function body(id: string, side: "white" | "black" = "white") {
   return {
     id,
@@ -98,12 +106,12 @@ async function request(handler: ReturnType<typeof createRestHandler>, method: st
 async function setup(pack?: DrillPackDefinition, maiaMoves?: readonly string[]) {
   const storage = new SQLiteRunStorage();
   const engines = new ScriptedEngines(maiaMoves);
-  const selector = new OpponentSelector(engines);
+  const selector = new RecordingSelector(engines);
   const evidence = new RecordingEvidence();
   const queue = new EvidenceJobQueue(evidence, { maxConcurrency: 1 });
   const registry = pack === undefined ? undefined : await PackRegistry.fromDocuments([{ source: "group-pack", value: pack }]);
   const service = new RunService(storage, { evidenceQueue: queue, opponentSelector: selector, ...(registry === undefined ? {} : { packRegistry: registry }) });
-  return { storage, engines, evidence, queue, service, handler: createRestHandler(service, selector) };
+  return { storage, engines, selector, evidence, queue, service, handler: createRestHandler(service, selector) };
 }
 
 async function runFrom(response: Response): Promise<DrillRun> {
@@ -128,6 +136,7 @@ describe("branch-group service and REST contract", () => {
     expect(response.status).toBe(200);
     const result = await response.json() as { readonly run: DrillRun; readonly group: { readonly members: readonly { readonly branchId: string }[] }; readonly comparison: { readonly columns: readonly unknown[] } };
     expect(result.group.members).toHaveLength(3);
+    expect(result.run.branches.filter((branch) => result.group.members.some((member) => member.branchId === branch.id)).map((branch) => branch.label)).toEqual(["main", "d4", "Nf3"]);
     expect(result.comparison.columns).toHaveLength(3);
     expect(result.run.activeCursor.branchId).toBe(result.group.members[0]!.branchId);
     expect(result.run.events.filter((event) => event.type === "group.created")).toHaveLength(1);
@@ -145,6 +154,11 @@ describe("branch-group service and REST contract", () => {
   it("enumerates machine seeds with honest applied mode and maps closed-route errors", async () => {
     const environment = await setup(undefined, ["e2e4"]); stores.push(environment.storage);
     await request(environment.handler, "POST", "/runs", body("group-machine", "black"));
+    const withheld = await request(environment.handler, "POST", "/runs/group-machine/group", {
+      source: "human_replies", size: 2, at,
+    });
+    expect(withheld.status).toBe(409);
+    expect(await withheld.json()).toMatchObject({ error: { code: "ASSISTANCE_WITHHELD" } });
     await request(environment.handler, "POST", "/runs/group-machine/reveal", { at });
     const response = await request(environment.handler, "POST", "/runs/group-machine/group", {
       source: "human_replies", size: 2, at,
@@ -161,6 +175,18 @@ describe("branch-group service and REST contract", () => {
     expect(await unknown.json()).toMatchObject({ error: { code: "UNKNOWN_GROUP" } });
     const injected = await request(environment.handler, "POST", "/runs/group-machine/group-reply", { groupId: group.groupId, startFen: INITIAL_FEN });
     expect(injected.status).toBe(400);
+
+    await request(environment.handler, "POST", "/runs", body("group-engine"));
+    await request(environment.handler, "POST", "/runs/group-engine/reveal", { at });
+    const engine = await request(environment.handler, "POST", "/runs/group-engine/group", {
+      source: "engine_top_n", size: 3, at,
+    });
+    expect(engine.status).toBe(200);
+    expect(groupsFromEvents(((await engine.json()) as { readonly run: DrillRun }).run)[0]).toMatchObject({
+      source: "engine_top_n",
+      distribution: { policyModeApplied: "strong_engine", engine: { id: "stockfish-play" } },
+      members: [{ seedMoveUci: "e2e4" }, { seedMoveUci: "d2d4" }, { seedMoveUci: "g1f3" }],
+    });
   });
 
   it("reuses one fixed reply after sibling paths transpose and varies per-branch seeds", async () => {
@@ -193,6 +219,22 @@ describe("branch-group service and REST contract", () => {
     expect(memberA).toBeDefined();
   });
 
+  it("derives per-branch reply seeds from member order", async () => {
+    const environment = await setup(); stores.push(environment.storage);
+    await request(environment.handler, "POST", "/runs", body("group-varied"));
+    const created = await request(environment.handler, "POST", "/runs/group-varied/group", {
+      source: "hand_picked", resistance: "per_branch", candidates: ["g1f3", "b1c3"], at,
+    });
+    const result = await created.json() as { readonly run: DrillRun; readonly group: { readonly groupId: string; readonly members: readonly { readonly branchId: string }[] } };
+    const first = await request(environment.handler, "POST", "/runs/group-varied/group-reply", { groupId: result.group.groupId });
+    expect(first.status).toBe(200);
+    const secondLeaf = result.run.nodes.filter((node) => node.branchId === result.group.members[1]!.branchId).at(-1)!;
+    await request(environment.handler, "POST", "/runs/group-varied/rewind", { nodeId: secondLeaf.id, at });
+    const second = await request(environment.handler, "POST", "/runs/group-varied/group-reply", { groupId: result.group.groupId });
+    expect(second.status).toBe(200);
+    expect(environment.selector.requests.slice(-2).map((request) => request.seed)).toEqual([42, 43]);
+  });
+
   it("resolves authored roots and strong-engine MultiPV from server-owned pack state", async () => {
     const authored = structuredClone(fixture);
     authored.id = "group-authored";
@@ -210,5 +252,20 @@ describe("branch-group service and REST contract", () => {
     const grouped = await request(environment.handler, "POST", "/runs/group-authored-run/group", { source: "authored", size: 2, at });
     expect(grouped.status).toBe(200);
     expect(groupsFromEvents(((await grouped.json()) as { readonly run: DrillRun }).run)[0]?.members).toHaveLength(2);
+  });
+
+  it("records but does not gate the eight-member creation envelope", async () => {
+    const environment = await setup(); stores.push(environment.storage);
+    await request(environment.handler, "POST", "/runs", body("group-eight"));
+    const started = performance.now();
+    const response = await request(environment.handler, "POST", "/runs/group-eight/group", {
+      source: "hand_picked",
+      candidates: ["a2a3", "b2b3", "c2c3", "d2d3", "e2e3", "f2f3", "g2g3", "h2h3"],
+      at,
+    });
+    const elapsedMs = performance.now() - started;
+    expect(response.status).toBe(200);
+    expect(groupsFromEvents(((await response.json()) as { readonly run: DrillRun }).run)[0]?.members).toHaveLength(8);
+    console.log(`GROUP_CREATION_8 ${elapsedMs.toFixed(3)}ms`);
   });
 });

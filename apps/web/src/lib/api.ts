@@ -745,7 +745,7 @@ export class DrillApi implements DrillClientApi {
 
   analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }> {
     return this.#json(`/runs/${encoded(runId)}/analysis`, {
-      method: "POST", writerId, body: { nodeIds, multiPv: 1 },
+      method: "POST", writerId, body: { nodeIds, kind: "bestline", multiPv: 1, movetime: 100 },
     });
   }
 

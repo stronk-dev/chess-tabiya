@@ -391,8 +391,17 @@ export class DrillSessionController {
     }
   }
 
-  switchBranch(leafNodeId: string): Promise<void> {
-    return this.rewind({ nodeId: leafNodeId });
+  async switchBranch(leafNodeId: string): Promise<void> {
+    await this.rewind({ nodeId: leafNodeId });
+    if (this.#state.error === undefined) {
+      this.#patch({ busy: true });
+      try {
+        await this.#playOpponentIfNeeded();
+        this.#patch({ busy: false });
+      } catch (error) {
+        this.#fail(error);
+      }
+    }
   }
 
   async compare(branchIds: readonly string[]): Promise<void> {

@@ -184,7 +184,7 @@ test("Outcome Drill resolves a non-terminal hold and remains playable", async ({
 
   await move(page, "e2", "e4");
   await expect(page.getByText("Active line 2 plies")).toBeVisible();
-  await move(page, "g1", "f3");
+  await move(page, "f2", "f3");
   await expect(page.getByRole("heading", { name: "Authored hold horizon" })).toBeVisible();
   await expect(page.getByText("without conceding the result", { exact: false })).toBeVisible();
   await expect(page.getByText("not a proof of the position", { exact: false })).toBeVisible();
@@ -337,7 +337,7 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   await page.getByLabel("Label").fill("quiet setup");
   await page.getByLabel("Intent").fill("Compare a lower-commitment setup");
   await page.getByRole("button", { name: "Create branch" }).click();
-  await move(page, "f1", "e2");
+  await move(page, "d1", "d2");
   await expect(page.getByText("Active line 4 plies")).toBeVisible();
 
   const branchStart = await page.evaluate(() => performance.now());
@@ -451,6 +451,65 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
     expect(Number.isFinite(measurement)).toBe(true);
     expect(measurement).toBeGreaterThanOrEqual(0);
   }
+});
+
+test("branch group captures three candidates, rotates, recovers evidence, compares, and exports", async ({ page }) => {
+  await page
+    .getByRole("article")
+    .filter({ hasText: "schema example" })
+    .getByRole("button", { name: /Open position/ })
+    .click();
+  await move(page, "c1", "e3");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+
+  await page.getByRole("button", { name: "Branch group" }).click();
+  await expect(page.getByRole("heading", { name: "Create a branch group" })).toBeVisible();
+  await move(page, "f2", "f3");
+  await move(page, "h2", "h3");
+  await move(page, "a2", "a3");
+  await expect(page.locator(".candidate-chips button")).toHaveCount(3);
+  await page.getByRole("button", { name: "Create group" }).click();
+
+  await expect(page.getByText("Branch group · 3 candidates")).toBeVisible();
+  await expect(page.locator("[data-group-member]")).toHaveCount(3);
+  await expect(page.locator(".group-marker")).toHaveCount(3);
+  await expect(page.getByText("Fixed resistance: within this group, the same position always receives the same reply.")).toBeVisible();
+
+  // The captured seed is the first learner ply. Play one more learner decision
+  // in each member; the ordinary opponent loop lands between them.
+  await move(page, "d1", "d2");
+  if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Next member" }).click();
+  await page.getByLabel("Advance").selectOption("lockstep");
+  const activeBeforeLockstep = await page.locator(".rail li.active strong").textContent();
+  await move(page, "f2", "f3");
+  if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.locator(".rail li.active .group-marker")).toBeVisible();
+  await expect(page.locator(".rail li.active strong")).not.toHaveText(activeBeforeLockstep ?? "");
+  await move(page, "d1", "d2");
+  if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) await page.getByRole("button", { name: "Continue" }).click();
+
+  await page.getByRole("button", { name: "Boards" }).click();
+  await expect(page.locator("[data-group-member] [aria-label='Chessboard']")).toHaveCount(3);
+  const missing = page.getByText("No recorded engine evidence for this branch leaf.");
+  await expect(missing.first()).toBeVisible();
+  await page.getByRole("button", { name: "Analyze missing evidence" }).click();
+  await expect(missing).toHaveCount(0, { timeout: 5_000 });
+
+  await page.getByRole("button", { name: "Compare group" }).click();
+  await expect(page.getByRole("heading", { name: "Same decision, 3 consequences." })).toBeVisible();
+  await expect(page.locator(".boards article")).toHaveCount(3);
+
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("heading", { name: "Same decision, 3 consequences." }).focus();
+  await page.keyboard.press("e");
+  const download = await downloadPromise;
+  const path = await download.path();
+  if (path === null) throw new Error("Group PGN download did not reach disk");
+  const pgn = await (await import("node:fs/promises")).readFile(path, "utf8");
+  expect((pgn.match(/\(/gu) ?? []).length).toBeGreaterThanOrEqual(2);
 });
 
 test("Pack A withholds its line, grades the boundary, and renders authored theory", async ({

@@ -623,13 +623,15 @@
         <div class="board-slot">
           <div class="board-frame" class:previewing={previewNodeId !== undefined}>
             {#if previewNodeId}<span class="preview-label">Preview</span>{/if}
-            <Chessboard
-              fen={displayedNode.fen}
-              {startSide}
-              lastMove={displayedNode.moveUci}
-              disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined || terminalEvent !== undefined}
-              onMove={boardMove}
-            />
+            {#key `${displayedNode.id}:${groupOpen ? groupCandidates.length : -1}`}
+              <Chessboard
+                fen={displayedNode.fen}
+                {startSide}
+                lastMove={displayedNode.moveUci}
+                disabled={busy || snapshot.access === "read_only" || previewNodeId !== undefined || terminalEvent !== undefined}
+                onMove={boardMove}
+              />
+            {/key}
           </div>
         </div>
       </section>
