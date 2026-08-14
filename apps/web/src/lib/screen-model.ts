@@ -25,6 +25,7 @@ export interface TimelineEntry {
   readonly actor: Node["actor"];
   readonly checkpointIds: readonly string[];
   readonly spineNodeId?: string;
+  readonly guardGenerated: boolean;
 }
 
 export interface BranchCard {
@@ -114,6 +115,9 @@ export function timelineEntries(
   pack?: DrillPackDefinition,
 ): readonly TimelineEntry[] {
   const index = pack === undefined ? undefined : spinePositionIndex(pack);
+  const guardNodes = new Set(
+    run.events.flatMap((event) => event.type === "feedback.generated" ? [event.data.nodeId] : []),
+  );
   return historyFrom(run, run.activeCursor.nodeId).flatMap((node) => {
     if (node.moveSan === null || node.moveUci === null) return [];
     const spineNodeId = index === undefined ? undefined : spineNodeIdFor(index, node);
@@ -125,6 +129,7 @@ export function timelineEntries(
         moveUci: node.moveUci,
         actor: node.actor,
         checkpointIds: node.checkpointRefs,
+        guardGenerated: guardNodes.has(node.id),
         ...(spineNodeId === undefined ? {} : { spineNodeId }),
       }),
     ];

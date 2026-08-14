@@ -73,6 +73,12 @@ function freezePayload(payload: EvidencePayload): EvidencePayload {
   });
 }
 
+function whitePerspectiveScore(value: number, fen: string): number {
+  const turn = fen.split(/\s+/)[1];
+  if (turn !== "w" && turn !== "b") throw new TypeError("Evidence job FEN has no valid turn");
+  return turn === "w" ? value : -value;
+}
+
 export class EvidenceJobQueue implements JobObserver {
   readonly #executor: EvidenceExecutor;
   readonly #upgrader: ObjectiveEvidenceUpgrader | undefined;
@@ -345,8 +351,8 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
         values: Object.freeze({
           ...searchProvenance(job, this.#engineId),
           ...(score[1] === "cp"
-            ? { centipawns: Number(score[2]) }
-            : { mateIn: Number(score[2]) }),
+            ? { centipawns: whitePerspectiveScore(Number(score[2]), job.fen) }
+            : { mateIn: whitePerspectiveScore(Number(score[2]), job.fen) }),
           ...(depthValue(line) === undefined ? {} : { depth: depthValue(line) }),
         }),
       });

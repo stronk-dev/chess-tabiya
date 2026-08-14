@@ -67,6 +67,7 @@ import {
   publicNodes,
 } from "./feedback-policy.js";
 import { orchestratePackMove } from "./pack-orchestrator.js";
+import { applyRecordedEngineGuard, applyRulesGuard } from "./guard.js";
 import {
   PackRegistry,
   type PackRecord,
@@ -600,10 +601,22 @@ export class RunService {
     const pack = this.#requiredRegisteredPack(stored.run);
     this.#requiredEvidenceQueue();
     const committed = appendOpponentPly(stored.run, selection, options);
-    const result =
+    let result =
       pack === undefined
         ? committed
         : orchestratePackMove(pack.document, stored.run, committed);
+    if (pack !== undefined && result.run.feedbackPolicy === "immediate_guard") {
+      const consequence = result.run.nodes.find(
+        (candidate) => candidate.id === result.run.activeCursor.nodeId,
+      );
+      if (consequence !== undefined) {
+        const guarded = applyRulesGuard(result.run, consequence.id, consequence.createdAt);
+        result = Object.freeze({
+          run: guarded.run,
+          emitted: Object.freeze([...result.emitted, ...guarded.emitted]),
+        });
+      }
+    }
     this.#storage.save(result.run, lease);
     this.#project(result.run, lease.learnerId);
     this.#enqueueMoveEvidence(result.run);
@@ -1211,13 +1224,27 @@ export class RunService {
             staged.objectiveProposal,
             at,
           );
-    const result: MutationResult = Object.freeze({
+    let result: MutationResult = Object.freeze({
       run: upgraded.run,
       emitted: Object.freeze([
         ...attached.emitted,
         ...(upgraded === attached ? [] : upgraded.emitted),
       ]),
     });
+    const pack = this.#requiredRegisteredPack(result.run);
+    if (pack !== undefined && result.run.feedbackPolicy === "immediate_guard") {
+      const guarded = applyRecordedEngineGuard(
+        pack.document,
+        result.run,
+        staged.nodeId,
+        staged.evidenceRefs,
+        at,
+      );
+      result = Object.freeze({
+        run: guarded.run,
+        emitted: Object.freeze([...result.emitted, ...guarded.emitted]),
+      });
+    }
     this.#storage.save(result.run, lease);
     this.#project(result.run, lease.learnerId);
     queue.consume(runId, resultSeq);

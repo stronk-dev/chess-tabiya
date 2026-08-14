@@ -141,9 +141,29 @@
   let regionElement = $state<HTMLElement>();
   let unregisterKeyboard: (() => void) | undefined;
   let speechAvailable = $state(false);
+  let dismissedGuardSeq: number | undefined = $state();
 
   let run = $derived(snapshot.run);
   let currentNode = $derived(activeNode(run));
+  let guardEvent = $derived(
+    [...run.events].reverse().find(
+      (event) =>
+        event.type === "feedback.generated" &&
+        event.data.nodeId === currentNode.id &&
+        event.seq !== dismissedGuardSeq,
+    ),
+  );
+  let guardGrounds = $derived(
+    guardEvent?.type === "feedback.generated"
+      ? guardEvent.data.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack))
+      : [],
+  );
+  let guardRewindNodeId = $derived.by(() => {
+    if (guardEvent?.type !== "feedback.generated") return undefined;
+    const consequence = run.nodes.find((node) => node.id === guardEvent.data.nodeId);
+    const learnerMove = run.nodes.find((node) => node.id === consequence?.parentId);
+    return run.nodes.find((node) => node.id === learnerMove?.parentId)?.id;
+  });
   let trajectory = $derived(pack?.legs === undefined
     ? undefined
     : trajectoryVerdict(pack, run, run.activeCursor.nodeId));
@@ -621,6 +641,25 @@
       </p>
     {/if}
 
+    {#if guardEvent?.type === "feedback.generated"}
+      <section class="guard-prompt" aria-label="Post-commit guard" aria-live="polite">
+        <div>
+          <strong>The consequence exposed something concrete.</strong>
+          {#each guardGrounds as sentence}<p>{sentence.text}</p>{/each}
+          <p>Your played line stays preserved on the branch rail.</p>
+        </div>
+        <div class="guard-actions">
+          <button type="button" onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
+          <button
+            class="primary"
+            type="button"
+            disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined}
+            onclick={() => guardRewindNodeId === undefined ? undefined : onRewind({ nodeId: guardRewindNodeId })}
+          >Rewind this decision</button>
+        </div>
+      </section>
+    {/if}
+
     <div class="workspace">
       <section class="position-column" class:outcome={grading !== undefined || pack?.objective.type === "follow_theory"}>
         <div class="objective-copy">
@@ -980,6 +1019,9 @@
 
   .phase-reading { display:flex; flex-wrap:wrap; gap:.35rem .8rem; color:var(--muted); font-size:.72rem; }
   .assistance-control { position:relative; z-index:6; padding:.35rem .55rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); font-size:.75rem; }
+  .guard-prompt { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin:.55rem .8rem 0; padding:.65rem .8rem; border:1px solid var(--accent); border-radius:.7rem; background:color-mix(in srgb,var(--accent) 9%,var(--panel)); }
+  .guard-prompt p { margin:.2rem 0 0; font-size:.78rem; color:var(--muted); }
+  .guard-actions { display:flex; flex:none; gap:.45rem; }
   .assistance-control summary { cursor:pointer; }
   .assistance-grid { position:absolute; top:calc(100% + .4rem); right:0; display:grid; width:min(23rem,calc(100vw - 2rem)); gap:.45rem; padding:.7rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); box-shadow:var(--shadow); }
   .assistance-grid label { display:flex; gap:.4rem; align-items:center; }

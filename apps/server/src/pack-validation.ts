@@ -220,6 +220,15 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
       ),
     );
   }
+  if (raw.guard !== undefined && feedbackPolicy !== "immediate_guard") {
+    issues.push(
+      runtimeIssue(
+        "GUARD_WITHOUT_IMMEDIATE_GUARD",
+        "/guard",
+        "guard tuning requires feedbackPolicy immediate_guard",
+      ),
+    );
+  }
 
   const opponentPolicy = raw.opponentPolicy as Record<string, unknown>;
   const opponentMode = opponentPolicy.mode;

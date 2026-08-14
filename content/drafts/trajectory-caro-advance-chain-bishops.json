@@ -606,16 +606,7 @@
             "kind": "checkpoint",
             "checkpointId": "holding-window"
           }
-        },
-        "successConditions": [
-          {
-            "kind": "material_balance",
-            "perspective": "black",
-            "comparison": "atMost",
-            "value": -2,
-            "to": "degraded"
-          }
-        ]
+        }
       }
     }
   ],

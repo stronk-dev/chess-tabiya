@@ -32,7 +32,7 @@ function node(id: string, fen: string, ply: number): Node {
 
 function run(fens: readonly string[], events: DrillRun["events"] = []): DrillRun {
   const nodes = fens.map((fen, index) => node(`n${index}`, fen, index));
-  return Object.freeze({ schemaVersion: "0.10", id: "adaptive", sessionKind: "position", packId: null, packDigest: null, sessionDigest: "sha256:test", start: { fen: fens[0]!, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, nodes, branches: [{ id: "main", forkNodeId: "n0", label: "Main", seed: 1, origin: "played" }], events, activeCursor: { nodeId: nodes.at(-1)!.id, branchId: "main" } } satisfies DrillRun);
+  return Object.freeze({ schemaVersion: "0.11", id: "adaptive", sessionKind: "position", packId: null, packDigest: null, sessionDigest: "sha256:test", start: { fen: fens[0]!, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, nodes, branches: [{ id: "main", forkNodeId: "n0", label: "Main", seed: 1, origin: "played" }], events, activeCursor: { nodeId: nodes.at(-1)!.id, branchId: "main" } } satisfies DrillRun);
 }
 
 describe("adaptive guidance runtime", () => {

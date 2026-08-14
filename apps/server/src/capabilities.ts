@@ -3,6 +3,7 @@ import {
   runtimeBuildInfo,
   type RunOpponentMode,
 } from "@chess-tabiya/runtime";
+import { FEEDBACK_POLICIES, type FeedbackPolicy } from "@chess-tabiya/schema/drill-pack";
 
 import type { EngineHealth, EngineIdentity } from "./engine-supervisor.js";
 import type { OpponentPolicyMode } from "./opponent-selector.js";
@@ -58,6 +59,8 @@ export type SurfaceCapabilities = Readonly<
 export interface Capabilities {
   readonly engines: readonly EngineIdentity[];
   readonly policyModes: readonly OpponentPolicyMode[];
+  readonly feedbackPolicies: readonly FeedbackPolicy[];
+  readonly guardBasis: readonly ("rules" | "engine")[];
   readonly runSchemaVersion: string;
   readonly policyProfiles: {
     readonly strong_engine: StrongEngineProfile;
@@ -175,6 +178,10 @@ export class EngineCapabilities implements CapabilitiesProvider {
     return Object.freeze({
       engines,
       policyModes: SUPPORTED_POLICY_MODES,
+      feedbackPolicies: FEEDBACK_POLICIES,
+      guardBasis: providerState.judge === "none"
+        ? Object.freeze(["rules"] as const)
+        : Object.freeze(["rules", "engine"] as const),
       runSchemaVersion: runtimeBuildInfo.runSchemaVersion,
       policyProfiles: Object.freeze({
         strong_engine: this.#strongEngineProfile,

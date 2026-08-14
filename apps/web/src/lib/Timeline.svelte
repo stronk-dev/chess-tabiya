@@ -67,6 +67,9 @@
           {#if entry.spineNodeId && authoredSpineNodeIds.has(entry.spineNodeId)}
             <span class="authored-marker" aria-label="Authored commentary available">A</span>
           {/if}
+          {#if entry.guardGenerated}
+            <span class="guard-marker" aria-label="Post-commit guard recorded">G</span>
+          {/if}
         </button>
         {#each shapeMarkers.filter((marker) => marker.nodeId === entry.nodeId) as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
         {#if pivotalMarkers.some((marker) => marker.nodeId === entry.nodeId)}<button class="pivotal-marker" type="button" aria-label={`Open pivotal marker at ply ${entry.ply}`} onclick={() => onOpenPivotal(entry.nodeId)}><span aria-hidden="true"></span></button>{/if}
@@ -163,6 +166,13 @@
     display: block;
     margin-top: 0.2rem;
     color: var(--accent);
+    font: 700 0.55rem/1 ui-monospace, monospace;
+  }
+
+  .guard-marker {
+    display: block;
+    margin-top: 0.2rem;
+    color: var(--warning);
     font: 700 0.55rem/1 ui-monospace, monospace;
   }
 

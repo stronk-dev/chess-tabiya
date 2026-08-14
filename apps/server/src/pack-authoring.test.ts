@@ -118,6 +118,19 @@ describe("pack authoring validation", () => {
     ]);
   });
 
+  it("accepts immediate_guard but rejects guard tuning on another policy", () => {
+    const accepted = structuredClone(fixture) as DrillPackDefinition;
+    (accepted as unknown as Record<string, unknown>).feedbackPolicy = "immediate_guard";
+    (accepted as unknown as Record<string, unknown>).guard = { evalSwingCp: 250 };
+    expect(validatePackDocument(accepted).valid).toBe(true);
+
+    const rejected = structuredClone(fixture) as DrillPackDefinition;
+    (rejected as unknown as Record<string, unknown>).guard = { evalSwingCp: null };
+    expect(validatePackDocument(rejected).issues).toContainEqual(
+      expect.objectContaining({ code: "GUARD_WITHOUT_IMMEDIATE_GUARD", path: "/guard" }),
+    );
+  });
+
   it("allows draft packs with no sources or reviewers", () => {
     const candidate = structuredClone(fixture) as DrillPackDefinition;
     (candidate as unknown as Record<string, unknown>).provenance = {

@@ -67,6 +67,8 @@ const runSummary: RunSummary = {
 const capabilities: Capabilities = {
   engines: [],
   policyModes: ["human_common"],
+  feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],
+  guardBasis: ["rules", "engine"],
   runSchemaVersion: "0.6",
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },

@@ -210,15 +210,17 @@ export function objectiveRules(
       : [];
     return [...degraded, ...resolution, ...authored];
   }
-  if (!Array.isArray(raw)) return [];
   const outcomeObjective = ["win", "hold", "save", "resist"].includes(
     objective.type,
   );
   if (!outcomeObjective) {
+    if (!Array.isArray(raw)) return [];
     return raw.flatMap((condition, index) =>
       conditionRules(condition, index, false),
     );
   }
+
+  const conditions = Array.isArray(raw) ? raw : [];
 
   const allStates: readonly ObjectiveState[] = ["active", "preserved", "degraded"];
   const automatic: ObjectiveTransitionRule[] = [];
@@ -253,7 +255,7 @@ export function objectiveRules(
   }
   outcomeRule("loss", "failed");
 
-  const degraded = raw.flatMap((condition, index) =>
+  const degraded = conditions.flatMap((condition, index) =>
     condition.to === "degraded" ? conditionRules(condition, index, true) : [],
   );
   const resolution: ObjectiveTransitionRule[] = [];
@@ -270,7 +272,7 @@ export function objectiveRules(
       evidenceRefs: [packEvidenceRef(resolveAt.checkpointId)],
     });
   }
-  const remaining = raw.flatMap((condition, index) =>
+  const remaining = conditions.flatMap((condition, index) =>
     condition.to !== "degraded" ? conditionRules(condition, index, true) : [],
   );
   return [...automatic, ...degraded, ...resolution, ...remaining];

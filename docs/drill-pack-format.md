@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.13; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.14; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -22,9 +22,14 @@ v0.10's structural grammar from twelve to fifteen leaves with `bishop_on_shade`,
 object is closed. Structural facts remain deterministic FEN arithmetic, derive from the run FEN,
 and do not change the run schema or storage version; see `docs/structural-reading.md`.
 
+Version 0.14 adds the executable `immediate_guard` feedback policy and an optional closed
+`guard.evalSwingCp` tuning block. The threshold defaults to 200 centipawns; `null` disables
+the recorded-engine tier while leaving deterministic rules tiers active. A `guard` block on
+any other policy is refused.
+
 `schemas/drill_pack.example.json` is the living Najdorf schema fixture. The
 fixture and schema under `archive/brief-v2/` remain frozen v0.1 inputs and are
-tested only against each other. The v0.1 fixture intentionally fails v0.13 because
+tested only against each other. The v0.1 fixture intentionally fails v0.14 because
 it has no required `feedbackPolicy` and uses superseded fields.
 
 ## Implemented v0.5 shape
@@ -32,9 +37,9 @@ it has no required `feedbackPolicy` and uses superseded fields.
 - `spine` is an optional array of first-move nodes rooted at the pack's start
   FEN. Each recursive node has a pack-unique `id`, UCI, SAN, `children`, and
   optional string annotations. The start position itself is implicit.
-- `feedbackPolicy` is required and is one of `delayed_checkpoint` or
-  `segment_end`. Immediate blunder interruption has no format encoding until a
-  real judge threshold and anti-contamination contract exist.
+- `feedbackPolicy` is required and is one of `delayed_checkpoint`, `segment_end`,
+  or `immediate_guard`. The guard is post-commit and non-blocking: the opponent starts
+  the consequence before any rewind offer appears.
 - A checkpoint has one trigger and may have an `intent_capture` or `prediction`
   interaction. Intent capture names plan-class IDs. Prediction grading always
   declares `opponent_policy`, `engine`, or `both`, with optional `topK`,

@@ -124,6 +124,12 @@ describe("evidence job queue", () => {
       },
     });
     await expect(
+      executor.execute({ ...base, fen: "4k3/8/8/8/8/8/8/4K3 b - - 0 1", kind: "eval", movetime: 40 }, signal),
+    ).resolves.toMatchObject({
+      kind: "eval",
+      values: { mateIn: -3 },
+    });
+    await expect(
       executor.execute({ ...base, kind: "wdl", depth: 17 }, signal),
     ).resolves.toEqual({
       kind: "wdl",
@@ -149,7 +155,7 @@ describe("evidence job queue", () => {
         depth: 19,
       },
     });
-    expect(requests).toHaveLength(3);
+    expect(requests).toHaveLength(4);
     expect(requests.every((request) => request.engineId === "stockfish-analysis")).toBe(true);
     expect(requests.every((request) => request.signal === signal)).toBe(true);
   });

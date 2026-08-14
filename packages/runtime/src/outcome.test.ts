@@ -96,7 +96,7 @@ describe("terminal outcome events", () => {
     expect(new Set(outcomes.map((event) => event.data.nodeId)).size).toBe(2);
   });
 
-  it.each<RunFeedbackPolicy>(["delayed_checkpoint", "segment_end", "attempt_end"])(
+  it.each<RunFeedbackPolicy>(["delayed_checkpoint", "segment_end", "attempt_end", "immediate_guard"])(
     "discloses %s feedback on terminal outcome",
     (policy) => {
       const ended = commitMove(run(policy), "g6g7", { at }).run;

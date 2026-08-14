@@ -383,7 +383,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 15;
+export const STORAGE_VERSION = 16;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -2162,6 +2162,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "learner repertoires, scans, and gap-run links",
         apply: () => this.#addRepertoireTables(),
       },
+      {
+        version: 16,
+        name: "immediate guard run schema",
+        apply: () => this.#upgradeV010Runs(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -2651,6 +2656,21 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
       if (snapshot.schemaVersion !== "0.8") continue;
       update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.9" }), row.id);
+    }
+  }
+
+  #upgradeV010Runs(): void {
+    const rows = this.#database
+      .prepare("SELECT id, snapshot_json FROM drill_runs WHERE schema_version = '0.10'")
+      .all() as readonly Record<string, unknown>[];
+    const update = this.#database.prepare(
+      "UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.11' WHERE id = ?",
+    );
+    for (const row of rows) {
+      if (typeof row.id !== "string" || typeof row.snapshot_json !== "string") continue;
+      const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
+      if (snapshot.schemaVersion !== "0.10") continue;
+      update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.11" }), row.id);
     }
   }
 

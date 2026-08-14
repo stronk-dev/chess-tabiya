@@ -229,6 +229,12 @@ export interface Capabilities {
     | "strong_engine"
     | "theory_strict"
   )[];
+  readonly feedbackPolicies: readonly (
+    | "delayed_checkpoint"
+    | "segment_end"
+    | "immediate_guard"
+  )[];
+  readonly guardBasis: readonly ("rules" | "engine")[];
   readonly runSchemaVersion: string;
   readonly policyProfiles: {
     readonly strong_engine: {

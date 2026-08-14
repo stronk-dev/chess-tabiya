@@ -181,6 +181,28 @@ test("Pack B references the Carlsbad entry while its pack prose stays server-wit
   await expect(page.getByText("In this tabiya the plan is already supported", { exact: false })).toHaveCount(0);
 });
 
+test("immediate guard waits for the consequence, preserves play-on, and rewinds the decision", async ({ page }) => {
+  const card = page.getByRole("article").filter({ hasText: "Post-commit guard browser fixture" });
+  await card.getByRole("button", { name: /Open position/ }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+
+  await move(page, "h2", "h3");
+  const prompt = page.getByRole("region", { name: "Post-commit guard" });
+  await expect(prompt).toBeVisible();
+  await expect(prompt).toContainText("The material balance changed on this path.");
+  await expect(page.getByLabel("Post-commit guard recorded")).toBeVisible();
+
+  await prompt.getByRole("button", { name: "Play on" }).click();
+  await expect(prompt).toHaveCount(0);
+  await page.reload();
+  await expect(prompt).toBeVisible();
+  await prompt.getByRole("button", { name: "Rewind this decision" }).click();
+  await expect(page.getByText("Active line 0 plies")).toBeVisible();
+  await move(page, "h2", "h4");
+  await expect(page.getByRole("button", { name: /Switch to branch 1:/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Switch to branch 2:/ })).toBeVisible();
+});
+
 test("Live turns a run into a session and exposes a chrome-free overlay", async ({ page }) => {
   const card = page.getByRole("article").filter({ hasText: "schema example" }).first();
   await card.getByRole("button", { name: /Open position/ }).click();

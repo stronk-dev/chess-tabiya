@@ -108,11 +108,11 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.10", () => {
+describe("drill_run.schema.json v0.11", () => {
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.10",
+      $id: "urn:chess-tabiya:schema:drill-run:0.11",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });

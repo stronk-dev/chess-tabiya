@@ -305,6 +305,13 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
         segmentFromEvent(events, event);
         break;
       case "feedback.generated":
+        if (!nodes.some((node) => node.id === event.data.nodeId)) {
+          throw unknownNode(event.data.nodeId);
+        }
+        if (event.data.evidenceRefs.length === 0) {
+          throw new TypeError(`feedback.generated ${event.seq} requires evidence references`);
+        }
+        break;
       case "transfer.scheduled":
         break;
     }

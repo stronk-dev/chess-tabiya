@@ -14,6 +14,8 @@ export function feedbackDisclosed(run: DrillRun): boolean {
       return run.events.some(
         (event) => event.type === "feedback.revealed" || event.type === "outcome.reached",
       );
+    case "immediate_guard":
+      return true;
   }
 }
 

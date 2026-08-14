@@ -37,6 +37,10 @@ reached and play may continue. `degraded` is one-way for an outcome attempt. `ac
 `failed` are absorbing and require the validated `outcome.reached` event; an
 ordinary checkpoint can never stop an outcome game by declaring success.
 
+Automatic win/draw/loss rules compile even when `successConditions` is absent. Authored
+conditions are additive; they are not an unlock token for terminal grading. This applies to
+top-level objectives and trajectory legs alike.
+
 Rules are ordered so a degradation on the same committed node wins over
 checkpoint resolution. Checkpoint resolution uses `checkpointReachedHere`, not
 the historical `checkpointReached`, so the same standing fact cannot alternate

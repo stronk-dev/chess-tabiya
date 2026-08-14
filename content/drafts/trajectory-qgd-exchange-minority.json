@@ -633,16 +633,7 @@
             "kind": "checkpoint",
             "checkpointId": "conversion-window"
           }
-        },
-        "successConditions": [
-          {
-            "kind": "material_balance",
-            "perspective": "white",
-            "comparison": "atMost",
-            "value": -2,
-            "to": "degraded"
-          }
-        ]
+        }
       }
     }
   ],

@@ -169,6 +169,9 @@ The supported event vocabulary is:
 `outcome.reached`, `transfer.scheduled`, `feedback.revealed`, `prediction.recorded`, and
 `group.created`.
 
+`feedback.generated` now has its first production emitter: the post-commit guard. Replay
+requires its node to exist and its evidence-reference list to be non-empty.
+
 `evidence.attached` is the v0.3 worker amendment. It identifies a node, one or
 more evidence references, and a typed payload whose kind is `eval`, `wdl`, or
 `bestline` and whose source is `engine_validated` or

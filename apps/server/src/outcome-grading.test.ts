@@ -58,6 +58,32 @@ function root(document: DrillPackDefinition): DrillRun {
 }
 
 describe("Outcome Drill grading", () => {
+  it.each(["win", "hold", "save", "resist"] as const)(
+    "compiles automatic rules for condition-less %s objectives",
+    (type) => {
+      const document = pack(type);
+      delete (document.objective as { successConditions?: unknown }).successConditions;
+      expect(objectiveRules(document).length).toBeGreaterThanOrEqual(6);
+    },
+  );
+
+  it("grades a condition-less win when the committed move reaches mate", () => {
+    const document = pack("win");
+    delete (document.objective as { successConditions?: unknown }).successConditions;
+    (document as { start: { fen: string; side: "white" } }).start = {
+      fen: "7k/8/5KQ1/8/8/8/8/8 w - - 0 1",
+      side: "white",
+    };
+    const before = root(document);
+    const committed = commitMove(before, "g6g7", { at });
+    const result = orchestratePackMove(document, before, committed);
+    expect(result.run.nodes.at(-1)?.objectiveState).toBe("achieved");
+    expect(result.emitted).toContainEqual(expect.objectContaining({
+      type: "objective.state_changed",
+      data: expect.objectContaining({ evidenceRefs: ["rules:result-win"] }),
+    }));
+  });
+
   it.each([
     ["win", "win", "achieved"], ["win", "draw", "failed"], ["win", "loss", "failed"],
     ["hold", "win", "achieved"], ["hold", "draw", "achieved"], ["hold", "loss", "failed"],

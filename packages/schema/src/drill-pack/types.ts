@@ -18,7 +18,7 @@ export type ObjectiveType = (typeof OBJECTIVE_TYPES)[number];
 export const CHECKPOINT_ACTIONS = ["compare_branches"] as const;
 export type CheckpointAction = (typeof CHECKPOINT_ACTIONS)[number];
 
-export const FEEDBACK_POLICIES = ["delayed_checkpoint", "segment_end"] as const;
+export const FEEDBACK_POLICIES = ["delayed_checkpoint", "segment_end", "immediate_guard"] as const;
 export type FeedbackPolicy = (typeof FEEDBACK_POLICIES)[number];
 
 export const PACK_PHASES = ["opening", "middlegame", "endgame", "cross_phase"] as const;
@@ -111,6 +111,9 @@ export interface DrillPackDefinition {
     readonly [key: string]: unknown;
   };
   readonly checkpoints: readonly CheckpointDefinition[];
+  readonly guard?: {
+    readonly evalSwingCp?: number | null;
+  };
   readonly concepts?: readonly string[];
   readonly shapes?: readonly string[];
   readonly retryVariants?: readonly {

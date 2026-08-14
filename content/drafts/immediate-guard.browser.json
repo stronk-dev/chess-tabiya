@@ -1,0 +1,62 @@
+{
+  "id": "immediate-guard-browser",
+  "version": "0.1.0",
+  "title": "Post-commit guard browser fixture",
+  "mode": "line",
+  "phase": "middlegame",
+  "start": {
+    "fen": "3rk3/8/8/8/8/8/7P/3Q2K1 w - - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "play_until_checkpoint",
+    "summary": "Play the consequence before deciding whether to rewind.",
+    "successConditions": [
+      {
+        "kind": "reach_checkpoint",
+        "checkpointId": "line-end"
+      }
+    ]
+  },
+  "spine": [
+    {
+      "id": "wait",
+      "moveUci": "h2h3",
+      "moveSan": "h3",
+      "children": [
+        {
+          "id": "queen-taken",
+          "moveUci": "d8d1",
+          "moveSan": "Rxd1+",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "line-end",
+      "trigger": {
+        "atPly": 4
+      },
+      "actions": []
+    }
+  ],
+  "opponentPolicy": {
+    "mode": "theory_strict"
+  },
+  "feedbackPolicy": "immediate_guard",
+  "guard": {
+    "evalSwingCp": null
+  },
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Browser acceptance fixture: the only claimed fact is the rules-derived material change in the encoded position."
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "graduationBlockers": [
+      "Testing fixture only; do not publish as authored chess content."
+    ]
+  }
+}

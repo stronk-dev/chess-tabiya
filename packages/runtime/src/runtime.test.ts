@@ -344,6 +344,12 @@ describe("checkpoint segments", () => {
     const displaced = { ...segment, seq: segment.seq + 1 };
     expect(() => projectRun([...beforeSegment, spacer, displaced])).toThrow(/immediately follow/u);
   });
+
+  it("rejects feedback.generated without an existing node and non-empty grounds", () => {
+    const run = newRun();
+    expect(() => appendEvents(run, [{ type: "feedback.generated", at, data: { nodeId: "missing", evidenceRefs: ["rules:material"] } }])).toThrow(/Unknown node/u);
+    expect(() => appendEvents(run, [{ type: "feedback.generated", at, data: { nodeId: run.activeCursor.nodeId, evidenceRefs: [] } }])).toThrow(/requires evidence references/u);
+  });
 });
 
 describe("typed errors", () => {

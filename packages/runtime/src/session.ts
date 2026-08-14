@@ -52,7 +52,7 @@ export type PackRun = DrillRun & {
   readonly sessionKind: "pack";
   readonly packId: string;
   readonly packDigest: string;
-  readonly feedbackPolicy: "delayed_checkpoint" | "segment_end";
+  readonly feedbackPolicy: "delayed_checkpoint" | "segment_end" | "immediate_guard";
 };
 
 export function canonicalRunStart(start: RunStart): RunStart {

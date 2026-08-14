@@ -222,7 +222,6 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
       "The objective transitions on reaching the checkpoint, i.e. on playing the position out. No shipped mechanism grades how it was played out or what happened to the position; adding one is an authored act.",
       "The start position is whatever the puzzle's solution produced; it is not asserted to be winning, equal, or better for the learner. No engine or tablebase has evaluated it.",
       "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft",
-      "Immediate blunder feedback has no pack-format encoding; delayed_checkpoint is the authored policy for this candidate",
       "targetElo clamp [1100, 2000] is an authoring convention, not a Maia capability claim",
       "No authored plan, deviation, or feedback claim exists; a reviewer must add any chess judgement rather than infer one from puzzle metadata.",
     ];
@@ -234,7 +233,7 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
       objective: { type: "play_until_checkpoint", summary: `Play on from this position for ${plies} plies against an opponent near your rating.`, successConditions: [{ kind: "reach_checkpoint", checkpointId: "consequence" }] },
       checkpoints: [{ id: "consequence", label: "Consequence", trigger: { atPly: plies }, actions: [] }],
       opponentPolicy: { mode: "human_common", targetElo: clampElo(row.rating), seedMode: "per_branch" },
-      feedbackPolicy: "delayed_checkpoint",
+      feedbackPolicy: "immediate_guard",
       provenance: { reviewStatus: "draft", sources: [`Lichess puzzle database (${PUZZLE_DUMP_URL}, etag ${String(source.origin.kind === "http" ? source.origin.etag : null)}) — CC0-1.0; database exports may be used for any purpose`], reviewers: [], licence: "CC-BY-SA-4.0", graduationBlockers: blockers },
     } satisfies DrillPackDefinition;
     const validation = validatePackDocument(pack);

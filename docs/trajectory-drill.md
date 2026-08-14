@@ -15,6 +15,10 @@ trajectories, coincident authored ply entries, multiple theory legs, Syzygy asse
 a dynamically reached leg, premature terminal resolution, absorbing non-terminal middle
 legs, `transitioned` targets, and checkpoint conditions already true at leg entry.
 
+Outcome legs inherit automatic terminal grading without needing a placeholder success
+condition. The first authored trajectories no longer carry material-balance conditions whose
+only purpose was to make the compiler enter its outcome branch.
+
 `mode: trajectory` remains usable without `legs` for old schema fixtures. `legs`, however,
 require both trajectory mode and `run_trajectory`; this keeps the behavioral contract
 one-way and explicit.

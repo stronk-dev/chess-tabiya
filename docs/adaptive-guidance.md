@@ -5,6 +5,10 @@ current phase, records arithmetic turning-point markers, names a small set of en
 and optionally exposes recorded human-model distributions. None of these projections is stored
 as run truth, changes objective grading, or prescribes a move. Assistance is silent by default.
 
+`immediate_guard` is a separate, pack-authored on-ramp policy rather than an assistance
+preference. It may surface recorded engine evidence during play, but only after the learner's
+move stands and the consequence has begun; all other policies retain their existing defaults.
+
 ## Phase bands
 
 `classifyPhase(fen)` computes two exact quantities for each position:

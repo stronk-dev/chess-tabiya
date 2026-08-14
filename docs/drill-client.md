@@ -11,9 +11,9 @@ checkpoint and objective evaluation, feedback timing, and opponent selection.
 `schemas/drill_pack.example.json` fixture and every JSON document below
 `content/packs/` when that directory exists. Loading is fail-fast: malformed
 core fields, duplicate pack IDs, unsupported v1 semantics, and semantic lint
-errors produce a typed `PACK_INVALID` error. The v1 server accepts
-`delayed_checkpoint` and `segment_end`; `immediate_blunder_guard` is not in the
-format until the on-ramp has an executable judging and reveal contract. A pack is also refused
+errors produce a typed `PACK_INVALID` error. The server accepts
+`delayed_checkpoint`, `segment_end`, and `immediate_guard`; the removed
+`immediate_blunder_guard` spelling remains invalid. A pack is also refused
 unless its opponent mode is executable by the selector (`human_common`,
 `strong_engine`, or `theory_strict`), so the registry cannot advertise a drill
 that fails on its first opponent turn.
@@ -50,6 +50,8 @@ configured engine mode and live supervisor health. Mock is a first-class
 provider for both opponent and judge when mock evidence is wired. Deployment
 surfaces emit only `available` or `unavailable-here`; `planned` is roadmap
 information and exists only as a client constant.
+Capabilities also publish the executable pack feedback policies and the guard basis: rules on
+every deployment, plus recorded engine evaluations when a mock or Stockfish judge is live.
 
 ## Pack-aware run mutations
 
@@ -98,6 +100,12 @@ disclosed. Until disclosure:
 
 `/authored-feedback` returns an honest empty page for position runs. An absent
 or stale registry entry never opens any engine-evidence surface.
+
+`immediate_guard` is the explicit authored exception: disclosure and delivery are always open.
+After a learner move and the opponent's consequence-start reply, deterministic material or
+direct-attack arithmetic may append `feedback.generated`. A completed pair of already-recorded
+evaluations may append the same event later. The client renders an unfocused play-on-or-rewind
+offer only while that consequence node is current and keeps a durable `G` marker on the timeline.
 
 `RunStateStore` projects either session kind without a pack dependency. The
 existing drill-session controller remains a pack player and explicitly refuses

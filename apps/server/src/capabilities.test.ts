@@ -86,6 +86,8 @@ describe("engine capabilities", () => {
       expect(await response.json()).toEqual({
         engines: [identities["stockfish-analysis"], identities["maia-5m"]],
         policyModes: ["human_common", "strong_engine", "theory_strict"],
+        feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],
+        guardBasis: ["rules", "engine"],
         runSchemaVersion: runtimeBuildInfo.runSchemaVersion,
         policyProfiles: {
           strong_engine: {
@@ -133,6 +135,8 @@ describe("engine capabilities", () => {
       corpus: "none",
     });
     expect(descriptor.engines).toEqual([identity]);
+    expect(descriptor.guardBasis).toEqual(["rules", "engine"]);
+    expect(descriptor.feedbackPolicies).toContain("immediate_guard");
     expect(descriptor.surfaces.play).toBe("available");
     expect(descriptor.surfaces.justPlay).toBe("available");
   });
@@ -176,6 +180,7 @@ describe("engine capabilities", () => {
     ).get();
 
     expect(descriptor.engines).toEqual([]);
+    expect(descriptor.guardBasis).toEqual(["rules"]);
     expect(descriptor.providers).toEqual({
       opponent: "none",
       judge: "none",

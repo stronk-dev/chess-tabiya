@@ -19,6 +19,10 @@ Those sentences have a no-valence contract; pawn safety states its current-file 
 counts never imply a balance, attack reach is not called legal mobility, and outpost/named-structure
 matches identify Tabiya's detector or catalogue convention.
 
+The post-commit guard reuses `rules:material`, `rules:structure-direct-attack-count`, and
+existing `engine:<jobId>` references. Its prompt is rendered from recorded grounds; it adds no
+free-form explanation or LLM-authored chess claim.
+
 ## Evidence flow
 
 The implemented path is:
