@@ -71,6 +71,7 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 | Noctie takeback/branch persistence + feedback timing | Q1a | covered `[V]`/`[P]` desk pass; residual: takeback ground truth needs hands-on | `teardown-noctie-desk.md` |
 | Chessable bot-from-course-position on strategic chapters | Q1a | covered `[V]` desk pass (one-way Chess.com handoff, no tie-back) | `teardown-chessable-desk.md` |
 | Take Take Take (Carlsen social play + LLM game review; owner's game-story-slides idea) | Q1a, E1, Q1b, Q2 | covered `[V]` desk — E1 **intact**; game-story appetite validated, substance unclaimed; ADR-0005 anti-pattern shipped by a competitor | `teardown-taketaketake-desk.md` |
+| Coverage-gap sweep — every shipped/specified surface vs. current market (11 clusters, 2024–2026) | Q1a, E1, `design/03` | covered `[V]` desk — 10 absent-relevant products grounded and added as matrix rows 31–40; E1 **intact** (no branch runtime found); branch groups, recovery-as-skill, and live structural naming returned nothing; teardown shortlist: Play Coach, Chessbook, ChessMind AI, Chess2Story, ChessEver | `coverage-gap-sweep.md` |
 | Chess.com Practice multi-move redo + color switching | Q1a | covered `[V]` desk pass (undo destroys attempts; takeback-branch reported broken) | `teardown-chesscom-desk.md` |
 | Target learner/coach problem interviews + concept preference test | Q1b, E2 | **GAP** | — |
 | Learning effect versus simpler formats | Q1c, H1–H4, C2–C4 | **GAP** — requires slice | — |

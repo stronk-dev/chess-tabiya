@@ -1352,3 +1352,26 @@ key-moments summary of every game ("It even suggests a title").
 
 Next: hands-on residuals (feed-summary anatomy; whether the review board allows
 free exploration) if Q1a ever needs them.
+
+## 2026-08-14 (claude, coverage-gap sweep) — surface-by-surface competitor census
+
+- Landed `design/research/coverage-gap-sweep.md`: 11 surface clusters swept against
+  the 2024–2026 market per the coverage-limits rule; 10 absent-relevant products
+  grounded by fetch and added to `competitor-matrix.csv` as rows 31–40 (Chessbook,
+  Chess2Story, ChessEver, Chessido, Chessvia, ChessMind AI, OpeningTrainer,
+  Chess Yourself, Chess vs Chat, Chess.com Play Coach). Take Take Take handled by
+  its own teardown in the same session.
+- Teardown shortlist (ranked): Chess.com Play Coach, Chessbook, ChessMind AI,
+  Chess2Story, ChessEver.
+- **E1 intact:** no found product ships preserved branch attempts, checkpoint
+  rewind with comparison, or phase-trajectory rehearsal. Null results recorded for
+  branch groups / parallel candidate play, recovery-as-skill as a run path, and
+  live structural naming — three of our newest surfaces have no competitor found.
+- Pressure points are adjacent, not central: Play Coach normalizes in-play move
+  advice at platform scale (the exact §3a/§3b contrast case); ChessMind AI pairs
+  Maia with ungrounded "plans behind the moves" claims (ADR-0005 live test case);
+  the fan shelf (ChessEver, taketaketake, Chess2Story) is crowded.
+- Blocked/limits: chessplay.io and chessever.com root both 403'd (ChessEver
+  grounded via App Store instead); sweep is English/US-only and desk-only.
+
+Next: teardowns for the top-5 shortlist, starting with Play Coach and Chessbook.
