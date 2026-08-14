@@ -55,3 +55,15 @@ across 73 files, Svelte 0/0, schema scaffold and packaging clean. The full zero-
 browser suite passes 20 tests with the optional Maia latency case skipped. The native
 match acceptance accounts for two of those tests and takes 9–11 seconds because it
 waits on the real two-second follower contract rather than bypassing it.
+
+## 2026-08-14 — Lifecycle closeout
+
+Canonical behavior is reconciled in `docs/live-sessions.md`,
+`docs/identity-and-authorization.md`, and `docs/app-shell.md`. The RFC status is
+implemented, migration 14 is registered as implemented, and the RFC and planning job
+are archived.
+
+Both required gates were rerun against the post-move tree. `ENGINES_REQUIRED=1 make
+verify` passed 432 tests across 73 files with Svelte 0/0 and clean schema scaffold and
+packaging checks. `make test-browser` passed 20 tests at zero retries; the optional Maia
+latency case was skipped.

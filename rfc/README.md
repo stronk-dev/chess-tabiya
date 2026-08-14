@@ -7,7 +7,8 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `social-match.md` | implementing | `archive/live-session-platform.md` (amends board control, journal kinds, session routes; depends on `archive/adoption-wave-1.md` for `public_tokens`) | `planning/social-match/` (migration 14, no pack/run schema claim) |
+
+No active product RFCs.
 
 **Four-draft wave, 2026-08-14** — claim order: `predicate-wave-2` first, then
 `corpus-evidence`, `adoption-wave-1`, `social-match`. Shared-resource claims (pack
@@ -97,7 +98,7 @@ writing it into a draft.
 | 11 | 10→11 | `archive/branch-groups.md` | implemented — run schema v0.9: adds the `group.created` event and widens `policyModeApplied` with `enumerated`. Stamp-only body (frozen literals `"0.8"`→`"0.9"`, no data rewrite exists to do); mandatory because reads filter on the current run-schema version |
 | 12 | 11→12 | `archive/game-import-and-story.md` | implemented — run schema v0.10: `sessionKind` gains `imported` (non-pack projection rules unchanged). Creates `imported_games` (one row per imported run: source kind/url, movetext digest, headers, original PGN bytes, licence note) plus the pack-style account-deletion tombstone, and stamps frozen literals `"0.9"`→`"0.10"` (no data rewrite). Landed behind implemented migration 11 |
 | 13 | 12→13 | `archive/adoption-wave-1.md` | implemented — creates `public_tokens` + `run_derivations`; literal CHECK strings per the migration-9 freeze lesson |
-| 14 | 13→14 | `social-match.md` | implementing — creates `match_states`; rebuilds `live_sessions`, `session_journal`, and `public_tokens` with widened closed vocabularies; no run/pack schema change. Lands behind implemented migration 13 |
+| 14 | 13→14 | `archive/social-match.md` | implemented — creates `match_states`; rebuilds `live_sessions`, `session_journal`, and `public_tokens` with widened closed vocabularies; no run/pack schema change. Landed behind implemented migration 13 |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
@@ -128,8 +129,8 @@ client entry of its own. Landing order follows: shape-library before adaptive-gu
 Pin, 2026-08-14 (parallel wave): **`archive/adoption-wave-1.md` owns the `public_tokens` table** —
 the single trust surface for anonymous capability tokens (hashed 32-byte tokens, closed
 typed `scope` CHECK, per-token revocation, uniform 404 non-disclosure, creator-cascade
-deletion). The `social-match` draft (friend-link tokens, same trust surface) adds its
-scopes by widening the CHECK in its own migration, names `archive/adoption-wave-1.md` in
+deletion). `archive/social-match.md` (friend-link tokens, same trust surface) adds its
+scopes by widening the CHECK in migration 14, names `archive/adoption-wave-1.md` in
 `Depends on:`, and creates no second token table.
 
 ## Withdrawn
@@ -178,6 +179,7 @@ before re-attempting this territory.
 | `archive/predicate-wave-2.md` | implemented | `docs/structural-reading.md`, `docs/drill-pack-format.md`, `docs/shape-library.md`, `docs/explanation-grounds.md` |
 | `archive/runtime-corpus-evidence.md` | implemented | `docs/runtime-corpus-evidence.md`, `docs/adaptive-guidance.md`, `docs/explanation-grounds.md`, `docs/branch-groups.md` |
 | `archive/adoption-wave-1.md` | implemented | `docs/adoption-wave-1.md`, `docs/game-import-and-story.md`, `docs/adaptive-guidance.md`, `docs/return-and-progression.md`, `docs/live-sessions.md` |
+| `archive/social-match.md` | implemented | `docs/live-sessions.md`, `docs/identity-and-authorization.md`, `docs/app-shell.md` |
 
 ## The archive sketches are quarry, not RFCs
 

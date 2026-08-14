@@ -1,6 +1,6 @@
 # RFC: Social match — native human-vs-human play, pause-and-rehearse, friend links, and the simul wall
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/03-product-breadth.md:79-91` (Live and community), `:90-91`
@@ -36,7 +36,7 @@
   (`rfc/README.md` §Cross-draft ownership pins): **`archive/adoption-wave-1.md` owns the
   `public_tokens` table**; this RFC adds its `session_join` scope by widening that
   table's `CHECK` in its own migration and creates no second token table (§3.5).
-- **Planning:** `planning/social-match/` (once implementing)
+- **Planning:** `planning/archive/social-match/`
 
 Implementation baseline re-pinned after the three preceding wave lifecycles:
 **430 unit tests / 73 files** passing, browser **18 passed** with the optional Maia
@@ -693,6 +693,13 @@ None.
 
 ## Changelog
 
+- 2026-08-14: implemented. Native two-player alternation, mutual pause-and-rehearse,
+  scoped single-use friend links, and the coach simul wall shipped with migration 14.
+  Canonical behavior is reconciled in `docs/live-sessions.md`,
+  `docs/identity-and-authorization.md`, and `docs/app-shell.md`. The public join page
+  composes on the existing server-owned `/shared/:token` surface rather than booting
+  the authenticated app shell. Implementation-tree verification passed 432 tests across
+  73 files and 20 zero-retry browser tests (optional Maia case skipped).
 - 2026-08-14: created. Baseline 399/69 verified by suite run; all shipped-surface
   citations re-verified against the working tree.
 - 2026-08-14: register reconciliation, same day. An earlier revision of this draft
