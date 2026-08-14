@@ -1,6 +1,6 @@
 # RFC: On-ramp guard — `immediate_guard` as a real feedback policy, and honest outcome-leg grading (D28)
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude, on the owner's 2026-08-14 schedule (`design/BACKLOG.md:154`)
 - **Created:** 2026-08-14
 - **Design refs:** `design/00-thesis.md:148-156` (§Target player, the three on-ramp knobs);
@@ -533,3 +533,7 @@ None.
   blocker. Corrected the §1c heading typo, pinned the explicit `PackRun` union widening,
   and made root-opponent-ply abstention normative so a reply cannot be attributed to a
   learner decision that never happened.
+- 2026-08-14: implemented and verified at 453 tests / 75 files plus 22 zero-retry browser
+  passes (one optional Maia test skipped). Canonical behavior was folded into the existing
+  cross-system docs because the policy spans pack format, runtime, evidence, grading, and client
+  presentation rather than constituting a standalone subsystem.

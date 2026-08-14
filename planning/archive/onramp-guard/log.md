@@ -33,3 +33,10 @@ one optional Maia test skipped, zero retries. All three exercised draft packs pa
 
 `design/BACKLOG.md` was not edited: AGENTS.md reserves design-tier changes to the owner/Claude.
 The implementation and canonical docs close the code/docs work; the owner can reconcile those rows.
+
+## 2026-08-14 — Completion protocol
+
+Canonical behavior was folded into the existing system pages rather than split into a new page:
+the feature is one cross-layer feedback policy plus an objective-compiler repair, and a standalone
+page would duplicate the authoritative pack/runtime/client contracts. RFC and planning records move
+to their archives after the final post-move verification gates.

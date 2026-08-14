@@ -7,7 +7,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `onramp-guard.md` | implementing | `archive/defect-sweep.md` §2a | `planning/onramp-guard/` (wave claim #2: pack schema 0.14, run schema 0.11, migration 16) |
 | `open-answer-grading.md` | draft | — | — (wave claim #3: pack schema 0.15, run schema 0.12, migration 17) |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
@@ -48,7 +47,7 @@ landing order, not lost data.
 | 0.11 | `archive/shape-library.md` | implemented — additive only: optional top-level `shapes` (referenced shape-entry ids) and optional `planClass.shapePlan`. `planClasses` stays fully valid; no committed digest moves (the `$id` is not part of any pack document) |
 | 0.12 | `archive/defect-batch-2.md` | implemented — tightening only: `$defs/opponentPolicy` gets `additionalProperties: false` (D22); all committed packs and fixtures validate unchanged; no committed digest moves |
 | 0.13 | `archive/predicate-wave-2.md` | implemented — additive: `structuralFeature` gains `bishop_on_shade`, `pawn_count` and `king_opposition`; `structuralExpression` gains `mirrored` and `quantified`; shape-entry schema 0.1 → 0.2 with the same duplicated grammar. No migration; rung-0 facts remain derived |
-| 0.14 | `onramp-guard.md` | implementing — additive: `feedbackPolicy` enum gains `immediate_guard`; optional top-level `guard` tuning block. Claimed 2026-08-14 behind `repertoire-gap-finding` per the three-draft register order (`repertoire-gap-finding`, `onramp-guard`, `open-answer-grading`) |
+| 0.14 | `archive/onramp-guard.md` | implemented — additive: `feedbackPolicy` enum gains `immediate_guard`; optional top-level `guard` tuning block |
 | 0.15 | `open-answer-grading.md` | draft — additive: checkpoint `interaction` union gains `stated_reasoning` with grounded key points (closed four-kind union); reconciled behind 0.14 |
 
 Landing order follows the numbers. A draft that cannot land behind its
@@ -107,7 +106,7 @@ writing it into a draft.
 | 13 | 12→13 | `archive/adoption-wave-1.md` | implemented — creates `public_tokens` + `run_derivations`; literal CHECK strings per the migration-9 freeze lesson |
 | 14 | 13→14 | `archive/social-match.md` | implemented — creates `match_states`; rebuilds `live_sessions`, `session_journal`, and `public_tokens` with widened closed vocabularies; no run/pack schema change. Landed behind implemented migration 13 |
 | 15 | 14→15 | `archive/repertoire-gap-finding.md` | implemented — creates `repertoires`, `repertoire_moves`, `repertoire_scans`, `repertoire_gap_runs`; create-table/index only, no backfill or rebuild; no run/pack schema change |
-| 16 | 15→16 | `onramp-guard.md` | implementing (wave claim #2, 2026-08-14) — stamp-only: run schema `"0.10"`→`"0.11"` (`RunFeedbackPolicy` gains `immediate_guard`; no new event type, no data rewrite). Rebased from an initial 15 claim behind `repertoire-gap-finding`'s wave claim #1, per the F2/F3 precedent; lands behind implemented migration 15 |
+| 16 | 15→16 | `archive/onramp-guard.md` | implemented — stamp-only: run schema `"0.10"`→`"0.11"` (`RunFeedbackPolicy` gains `immediate_guard`; no new event type, no data rewrite). Rebased from an initial 15 claim behind `repertoire-gap-finding`'s wave claim #1 |
 | 17 | 16→17 | `open-answer-grading.md` | draft (wave claim #3, 2026-08-14) — **stamp-only, no table** (transcripts are run events; run deletion is the retention story); run schema 0.11→**0.12** (`reasoning.recorded` event). Reconciled behind onramp-guard per the pinned wave order |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
@@ -191,6 +190,7 @@ before re-attempting this territory.
 | `archive/adoption-wave-1.md` | implemented | `docs/adoption-wave-1.md`, `docs/game-import-and-story.md`, `docs/adaptive-guidance.md`, `docs/return-and-progression.md`, `docs/live-sessions.md` |
 | `archive/social-match.md` | implemented | `docs/live-sessions.md`, `docs/identity-and-authorization.md`, `docs/app-shell.md` |
 | `archive/repertoire-gap-finding.md` | implemented | `docs/repertoire-gap-finding.md`, `docs/runtime-corpus-evidence.md`, `docs/return-and-progression.md` |
+| `archive/onramp-guard.md` | implemented | `docs/drill-pack-format.md`, `docs/drill-client.md`, `docs/branch-runtime.md`, `docs/explanation-grounds.md`, `docs/outcome-drill-grading.md`, `docs/trajectory-drill.md`, `docs/adaptive-guidance.md` |
 
 ## The archive sketches are quarry, not RFCs
 
