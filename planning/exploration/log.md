@@ -1568,3 +1568,26 @@ transcription — if Q1a or the game-story RFC needs them.
   both dossiers.
 - **Next:** remaining sweep-2 shortlist (Chessly, WintrChess, En Croissant,
   ChessMonitor) + the scoped Lichess hands-on, as Q1a picks them up.
+
+## 2026-08-14 (claude) — BREADTH COMPLETE
+
+The final breadth RFC (`game-import-and-story`) is implemented, verified
+independently (399 tests / 69 files, browser 16 at zero retries, spot-checks:
+resignation stays the PGN's recorded result with the leaf playable; a chess.com
+URL refuses with a teach-the-paste hint; stories are explicit-choice imports),
+and archived. **Every gate B1–B11 is green. Zero open defects. No active product
+RFCs.**
+
+The standing owner ruling — full breadth, then full content — flips today.
+`design/03`'s breadth-complete gate is satisfied: content expansion is now the
+main work. What the content era inherits that batch 1 did not have: the shape
+library (authored once, fires everywhere), structural predicates as authorable
+objectives, drills-as-recipes over the sourcing pipelines, real explorer
+priority data (`content/candidates/priority/priority.json`), the studio write
+path, the playtest harness, and a 56-row market map with love/hate evidence.
+
+Production order per `design/04` §8, updated for the library: shape entries
+first (highest leverage — 10 middlegame structure families + 7 endgame
+families), then packs referencing them in explorer-frequency order, then the
+on-ramp via position-seeds, trajectories across them, and the long tail via
+studio/import tooling. The owner plays when all is done, per their ruling.

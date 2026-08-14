@@ -108,6 +108,8 @@ the brief assumed a slice would be built to test H1–H5, while E1–E5 decide w
 building that slice is justified at all.
 
 
+## Breadth gates — **COMPLETE 2026-08-14**: B1–B11 all green, content era open
+
 ## Breadth gates (B1–B8) — mirrored from `design/03-product-breadth.md`
 
 Owner ruling 2026-08-11: implement the full feature spectrum solidly with
