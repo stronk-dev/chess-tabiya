@@ -1,6 +1,6 @@
 # RFC: Structural predicate vocabulary, wave 2 — from authoring evidence
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/BACKLOG.md:197` (row "Predicate vocabulary wave 2 (from authoring
@@ -34,7 +34,7 @@
   `packages/schema/src/index.ts:3`; `schemas/shape_entry.schema.json:3` `$id`). No register
   exists for this constant; it is recorded here and in the pack-schema register row so the
   single-writer discipline covers it.
-- **Planning:** `planning/predicate-wave-2/` (once implementing)
+- **Planning:** `planning/predicate-wave-2/`
 
 ## Summary
 
@@ -787,6 +787,9 @@ None.
 
 ## Changelog
 
+- 2026-08-14 (Codex implementation review): approved against the current four-way
+  vocabulary copies, exhaustive-dispatch sites, evidence/sentence consumers, and
+  five named content artifacts. Register baselines reproduce; no blocker found.
 - 2026-08-14: created. Admits, from the two authoring waves' measured gap reports: the
   `mirrored` orientation combinator (axis colors/files/both, leaf-rewrite semantics,
   catalogue exclusion, side-label law), the `quantified` bounded some/every node over file
