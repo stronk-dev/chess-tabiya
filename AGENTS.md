@@ -41,6 +41,12 @@ sidecar. The exploration job continues alongside (E4 harness, gates) — see
 5. Append a dated entry to `planning/exploration/log.md`: what landed, what changed,
    what's blocked, what's next.
 
+**RFC completion protocol includes the ledger.** Archiving an implemented RFC
+flips the `design/BACKLOG.md` rows it ships (💡→✅ with a one-line summary) in
+the same commit — the 2026-08-14 reverse-trace found flow-back died exactly
+where this was left to a later pass while the RFC registers, edited in-commit,
+stayed perfect.
+
 New idea mid-task? BACKLOG row first ("an idea missing from the ledger is a process
 bug"), then continue.
 
