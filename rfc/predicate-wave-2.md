@@ -16,10 +16,10 @@
   supplies the twelve leaves, the expression grammar, the evaluator, the evidence facts, and
   the admission rules this RFC extends; `rfc/archive/shape-library.md` is implemented and
   supplies the shape-entry format whose triggers and signatures reuse that grammar
-- **Parent / amends:** **`rfc/archive/structural-reading.md`** (the vocabulary: two new
-  feature leaves, two new expression nodes, two new evidence facts),
+- **Parent / amends:** **`rfc/archive/structural-reading.md`** (the vocabulary: three new
+  feature leaves, two new expression nodes, three new evidence facts),
   **`rfc/archive/drill-pack-format.md`** (pack schema 0.12 → 0.13, additive),
-  **`rfc/archive/shape-library.md`** (shape-entry schema 0.1 → 0.2, additive; four official
+  **`rfc/archive/shape-library.md`** (shape-entry schema 0.1 → 0.2, additive; five official
   entries improve as this RFC's acceptance demonstrations)
 - **Supersedes / superseded by:** —
 - **Migration:** **none, and that is normative.** Parent law 1c holds: a rung-0 fact is never
@@ -48,16 +48,19 @@ another a 16-leaf fan; **five families are mirror-symmetric but every entry pins
 canonical orientation**, silently halving library coverage; and "up a pawn" — the claim the
 OCB entry's own family description makes — is inexpressible.
 
-This RFC admits four mechanisms under the parent's four admission rules and refuses the
-rest by name: two new feature leaves (`bishop_on_shade`, `pawn_count` — twelve kinds become
-fourteen), and two new expression nodes (`mirrored`, an orientation combinator that is
-deliberately **not** a leaf, and `quantified`, a bounded some/every quantifier over a file
-range or square region that collapses every fan the waves produced and gives kings a
-region-addressable position without any king-specific leaf). Every union it widens is
-re-dispatched exhaustively with a `never` refusal (the D26 law), including two sites that are
-duck-typed walks today and would otherwise silently skip the new nodes. Four official shape
-entries are updated as the acceptance demonstrations, including the required
-disambiguation, mirror, and fan-collapse before/afters.
+This RFC admits five mechanisms under the parent's four admission rules and refuses the
+rest by name: three new feature leaves (`bishop_on_shade`, `pawn_count`, and
+`king_opposition` — twelve kinds become fifteen), and two new expression nodes (`mirrored`,
+an orientation combinator that is deliberately **not** a leaf, and `quantified`, a bounded
+some/every quantifier over a file range or square region that collapses every fan the waves
+produced and gives kings a region-addressable position). `king_opposition` (forms `direct`
+and `distant`, tempo-qualified) is the one relative king-geometry fact the committed
+entries' plans name and regions cannot state; it is the first leaf that reads the side to
+move, and its mirror rule is written with it. Every union this RFC widens is re-dispatched
+exhaustively with a `never` refusal (the D26 law), including two sites that are duck-typed
+walks today and would otherwise silently skip the new nodes. Five official shape entries
+are updated as the acceptance demonstrations, including the required disambiguation,
+mirror, fan-collapse, and null-signature-made-real before/afters.
 
 Everything the parent made normative is inherited unchanged: no verdict is expressible, no
 sentence carries valence, nothing is persisted, silence stays the default, and detection
@@ -131,14 +134,14 @@ Outside this RFC, each with the rule that closes it rather than deferral languag
 |---|---|---|
 | Mirror/orientation combinator | **Admitted** as expression node `mirrored` (§3) — an expression wrapper, **not** a new leaf: it detects nothing itself, so making it a leaf would create a fact-shaped node with no fact | Rules 1–4 applied to its output: a mirrored leaf is exactly the leaf's arithmetic on mirrored coordinates |
 | Bishop square-colour | **Admitted** as leaf `bishop_on_shade` (§4a) | Passes all four; rule 4 satisfied because the name states placement, not value |
-| King position/geometry | **Split.** A named `opposition` leaf is **refused** under rule 2: direct, distant, diagonal, and virtual opposition are competing conventions, and picking one is a taste constant — and unlike the outpost detector there is no honest "Tabiya's strict opposition" that closes the cited gap, because the entries need the *concept*, which includes the variants. A raw `king_distance` leaf is **refused** under rule 3: no collected gap is closed by it (Chebyshev distance alone cannot state opposition — alignment, parity, and side-to-move all matter — so no author would write it and no learner needs it pointed at). The honest minimal addition is **no king-specific leaf at all**: kings become region-addressable through `quantified` with the `piece` template (§3b), which is what Lucena/Philidor king placement actually needed | Rule 2 (opposition), rule 3 (king_distance) |
+| King position/geometry | **Split three ways.** *Absolute* king placement is admitted through `quantified` with the `piece` template (§3b) — what Lucena/Philidor and key-square placement actually needed. The *opposition* is **admitted** as leaf `king_opposition` (§4c) with a closed `form` enum (`direct`, `distant`): each form is one exact sentence over king placement and the side to move, so rule 2 holds — an enumerated closed form is no more a taste constant than `mirrored`'s axis, and the committed `pawn-opposition-key-squares` entry's own plan prose already states the direct form exactly ("kings face each other with one square between and the opponent to move") while filing five null signatures against the gap. (This RFC's first draft refused the leaf under rule 2 by reading the variant list as competing conventions; the review overturned that — see Changelog.) `diagonal` and virtual/rectangular opposition are **refused** under rule 3: exactly definable the same way, but no filed plan names them; the enum widens additively when one does. A raw `king_distance` leaf stays **refused** under rule 3: no collected gap is closed by it (Chebyshev distance alone cannot state opposition — alignment, parity, and side-to-move all matter — so no author would write it and no learner needs it pointed at) | Rules 1–4 (`king_opposition` admitted); rule 3 (diagonal/virtual forms, `king_distance`) |
 | Pawn-count comparison | **Admitted** as leaf `pawn_count` (§4b), with a `basis` of `count` or `difference` | Passes all four; §4b states why `difference` does not violate the parent's no-balance rule |
 | Range-over-squares | **Admitted** as expression node `quantified` with a square-region domain (§3b) | Rules 1–4 applied to its output; it quantifies existing exact leaves over a bounded domain and can express nothing a finite `any`/`all` fan cannot already express — it removes the fan, not a limit |
 | File quantification | **Admitted** as the same `quantified` node with a file-range domain (§3b) — one mechanism, not two | Same |
 
-Net: **fourteen** feature kinds (twelve + `bishop_on_shade` + `pawn_count`), **seven**
-expression node kinds (`all`, `any`, `not`, `feature`, `pieceOnSquare` + `mirrored` +
-`quantified`).
+Net: **fifteen** feature kinds (twelve + `bishop_on_shade` + `pawn_count` +
+`king_opposition`), **seven** expression node kinds (`all`, `any`, `not`, `feature`,
+`pieceOnSquare` + `mirrored` + `quantified`).
 
 ### 2. Where the vocabulary lives, exactly
 
@@ -158,11 +161,11 @@ all four move in the same commit:
 - `schemas/shape_entry.schema.json:26-49` — a **duplicated copy** of both `$defs` trees
   (shape entries validate standalone). Both files gain identical branches.
 
-`STRUCTURAL_FEATURE_KINDS` gains `"bishop_on_shade"` and `"pawn_count"` **appended at the
-end**. The array's order is the canonical observation sort key
-(`packages/runtime/src/structure.ts:244-246`); appending keeps every existing reading's order
-byte-stable, and the parent already ruled that kind order is canonical-arbitrary, never
-significance.
+`STRUCTURAL_FEATURE_KINDS` gains `"bishop_on_shade"`, `"pawn_count"`, and
+`"king_opposition"` **appended at the end**. The array's order is the canonical observation
+sort key (`packages/runtime/src/structure.ts:244-246`); appending keeps every existing
+reading's order byte-stable, and the parent already ruled that kind order is
+canonical-arbitrary, never significance.
 
 ### 3. Two new expression nodes
 
@@ -202,6 +205,14 @@ Per-leaf transform rules, stated because two of them are subtle:
   getting it wrong would silently invert every mirrored OCB signature.
 - `pawn_count`: `color` flips under `colors`/`both`; `basis`, `comparison`, `count`
   unchanged (a difference for White becomes the same difference asked of Black).
+- `king_opposition`: the geometry (same file or rank, gap of one or of three/five) is
+  preserved by all three maps, so `form` never changes. The `color` field flips under
+  `colors` and `both`, because a colour mirror of a *position* flips the side to move
+  together with the pieces — "White has the direct opposition" on the mirrored board is
+  "Black has the direct opposition" on this one; under `files` nothing changes (a files
+  mirror moves no clock). Verified by the same square-arithmetic style as the shade law:
+  for kings on `(f, r₁)`/`(f, r₂)`, every axis maps them to two squares that are again
+  file- or rank-aligned with the same gap.
 - `quantified`: the domain maps (file ranges reverse under `files`, rank ranges reverse under
   `colors`, both re-normalised so `from ≤ to`); the template's colour fields map.
 - `named_structure`: **refused inside `mirrored`**, at load
@@ -212,13 +223,14 @@ Per-leaf transform rules, stated because two of them are subtle:
   name. (That `mirrored("colors", iqp-white)` would coincide with `iqp-black` is true and is
   not a reason to bless the general case.)
 
-`mirrorExpression` is an **exhaustive switch over all fourteen leaf kinds and all seven node
-kinds with `never` defaults**. This is the D26 dividend stated as a rule: a fifteenth leaf
+`mirrorExpression` is an **exhaustive switch over all fifteen leaf kinds and all seven node
+kinds with `never` defaults**. This is the D26 dividend stated as a rule: a sixteenth leaf
 kind added later without a mirror rule is a compile error, not a silently unmirrored leaf.
-All fourteen leaves are functions of piece placement alone — none reads side-to-move,
-castling rights, or en passant — which is why the three axis maps are total. A future leaf
-that reads any of those cannot be added without the `never` check forcing its mirror rule to
-be written.
+Fourteen of the fifteen leaves are functions of piece placement alone; `king_opposition` is
+the first leaf that also reads the side to move, and its mirror rule is written out above —
+the `never` switch forcing that rule to exist is precisely the discipline this paragraph
+states. No leaf reads castling rights or en passant; a future leaf that does cannot be
+added without the `never` check forcing its rule to be written.
 
 **Depth:** a `mirrored` node counts one nesting level, exactly like `not`, against the
 existing cap of four (`apps/server/src/pack-validation.ts:98-102`).
@@ -237,6 +249,15 @@ existing cap of four (`apps/server/src/pack-validation.ts:98-102`).
   per-orientation artifact, which is honest because plans are claims and claims carry
   provenance). No lint can distinguish the two uses mechanically, so this is documentation
   plus the acceptance demonstrations, not a refusal code.
+- **Widening is entry-wide, not trigger-only.** Mirroring an entry's trigger widens where
+  the entry *fires*, so every plan whose success signature is wing-pinned must widen with
+  it: each such signature becomes `any[sig, mirrored("files", sig)]` (one wrapper node,
+  same depth argument as the trigger), and wing-naming prose ("the h-pawn") is rewritten
+  to name the lever of either wing. An entry that mirrors its trigger but keeps a
+  wing-pinned signature fires on positions where that plan's success can never be stated
+  — the silent mis-handling §9b's demonstration exists to rule out. The signature half is
+  mechanical and asserted (criterion 2); the prose half is authoring discipline, which no
+  lint can see.
 
 #### 3b. `quantified` — bounded some/every over files or squares
 
@@ -278,13 +299,15 @@ behind that refusal.
 **What is deliberately not templatable:** `line_blockers` (two squares — quantifying one
 endpoint has no evidenced use and doubles the template surface), `named_structure` (no
 positional field), `open_file` over squares, `piece_reach_count`/`pawn_count`/
-`bishop_on_shade` (no file/square field). The template unions are closed and
-schema-enumerated exactly like the leaves.
+`bishop_on_shade`/`king_opposition` (no file/square field). The template unions are closed
+and schema-enumerated exactly like the leaves.
 
-**Kings.** `quantified("some", squares(...), piece {color, role: "king"})` is the whole
-king-geometry admission: "the White king stands inside this region" — exact, region-shaped,
-and free of any opposition claim. The Lucena/Philidor king-placement gap (Motivation gap 2)
-is closed by regions; relative two-king geometry stays refused per §1.
+**Kings.** `quantified("some", squares(...), piece {color, role: "king"})` is the
+*absolute* half of the king-geometry admission: "the White king stands inside this region"
+— exact, region-shaped, and free of any opposition claim. The Lucena/Philidor
+king-placement gap (Motivation gap 2) is closed by regions; the one admitted *relative*
+two-king fact is `king_opposition` (§4c), and all other relative king geometry stays
+refused per §1.
 
 `every` composes honestly: `quantified("every", region, piece null)` is "the region is
 empty"; `quantified("every", region, pawn_safe_square(C))` is a shelter statement in pure
@@ -295,7 +318,7 @@ fact (`structure-passed-pawn` for a passed-pawn template, etc.); the `piece` tem
 contributes none, matching the parent's `pieceOnSquare`-is-an-anchor rule
 (`rfc/archive/structural-reading.md` §3d).
 
-### 4. Two new feature leaves
+### 4. Three new feature leaves
 
 Notation as in the parent: `C` is the colour asked about, `X = opposite(C)`.
 

@@ -258,14 +258,28 @@ describe("development draft registry", () => {
     expect(registry.list().filter((pack) => pack.id === "sidecar-pack")).toHaveLength(1);
   });
 
-  it("loads the four committed sourcing candidates without mistaking sidecars for packs", async () => {
+  it("loads the committed sourcing candidates without mistaking sidecars for packs", async () => {
     const candidates = new URL("../../../content/candidates/", import.meta.url);
+    const { readdir } = await import("node:fs/promises");
+    const { access } = await import("node:fs/promises");
+    const packDirs = (await Promise.all(
+      (await readdir(candidates, { withFileTypes: true }))
+        .filter((entry) => entry.isDirectory())
+        .map(async (entry) => {
+          try { await access(new URL(`${entry.name}/pack.json`, candidates)); return 1 as const; }
+          catch { return 0 as const; }
+        }),
+    )).reduce<number>((sum, n) => sum + n, 0);
     const registry = await PackRegistry.loadDefault({
       development: true,
       draftsDirectory: candidates.pathname,
     });
-    expect(registry.list()).toHaveLength(5);
-    expect(registry.list().filter((entry) => entry.reviewStatus === "draft")).toHaveLength(4);
+    // Derived, not hand-pinned (the D4 lesson): one registry entry per dir
+    // that actually contains a pack.json, plus the served schema example.
+    // Counting raw dirs would pass only while exactly one non-pack dir
+    // (priority/) exists - a coincidence, not an invariant.
+    expect(registry.list()).toHaveLength(packDirs + 1); // +1: the served schema example
+    expect(registry.list().filter((entry) => entry.reviewStatus === "draft")).toHaveLength(packDirs);
   });
 
   it("ignores committed drafts in production and loads them in development", async () => {

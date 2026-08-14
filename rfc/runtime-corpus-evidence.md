@@ -11,9 +11,9 @@
   frequency/outcomes" as a selectable evidence layer at the permitted feedback time,
   lines 231-234 anti-contamination timing), gate **B4** (line 274: "corpus/Syzygy runtime
   rendering … remain unmet");
-  `design/BACKLOG.md` "Last-played recency in explorer evidence" (line 195) and
+  `design/BACKLOG.md` "Last-played recency in explorer evidence" (line 196) and
   "Repertoire gap-finding over imported repertoires vs band-explorer coverage"
-  (line 204 — enabled by this RFC, not built by it);
+  (line 205 — enabled by this RFC, not built by it);
   `design/research/adoption-audit.md` row 20 (line 82), §5.1 (lines 186-189, structural
   shortlist #1), §6.1 (lines 206-209: the audit's sharpest weaker-than-incumbent
   finding — "our explorer data is operator-side sourcing only; a 2007 PHP site
@@ -23,7 +23,7 @@
 - **Exploration gate:** owner ruling 2026-08-14 (`planning/exploration/log.md`, final
   entry): four RFC drafts in parallel, register discipline pre-assigned
   predicate-wave-2 → **corpus-evidence** → adoption-wave-1 → social-match; standing
-  breadth/exploration rulings of 2026-08-11/12 (`rfc/README.md` lines 57-71)
+  breadth/exploration rulings of 2026-08-11/12 (`rfc/README.md` lines 64-79)
 - **Depends on:**
   `rfc/archive/content-sourcing-explorer.md` (implemented) — the authenticated explorer
   client, its query normalization, enums, the 100-game abstention, and the
@@ -62,8 +62,11 @@ the claim order):
   siblings.
 - **Migration: none claimed.** Nothing here persists: no new table, no run event, no
   run-schema stamp. The corpus page is ephemeral by contract (§5), the preference is
-  `localStorage`, and capabilities are derived. The migration register's last row
-  remains 12 (`rfc/README.md` lines 80-93).
+  `localStorage`, and capabilities are derived. The register currently **reserves
+  migration 13 for this draft** (`rfc/README.md` §Migration register, row 13); this
+  RFC claims nothing and therefore **releases that reservation** — a register edit
+  recorded on landing — after which adoption-wave-1 (14) and social-match (15) rebase
+  downward per the standing renegotiation rule. Shipped `STORAGE_VERSION` stays 12.
 - **Shared non-register resources claimed here, recorded for the two siblings drafted
   after this one (adoption-wave-1, social-match), who must name this RFC in
   `Depends on:` if they touch any of them:**
@@ -103,11 +106,11 @@ seed source." The adoption audit made this the one place incumbents are honestly
 ahead (`adoption-audit.md:206-209`): the per-position frequency + recency row is the
 surface a pay-what-you-choose site survived nineteen years on
 (`teardown-365chess-desk.md:220-229`), and the carrier surface for the ledgered
-recency steal (`design/BACKLOG.md:195`).
+recency steal (`design/BACKLOG.md:196`).
 
 **Why now.** The owner's 2026-08-14 ruling opened four parallel drafts and named this
 one; it is also the dependency of the ledgered repertoire gap-finding row
-(`design/BACKLOG.md:204`). This RFC ships the **source and the rail rendering**;
+(`design/BACKLOG.md:205`). This RFC ships the **source and the rail rendering**;
 gap-finding, named-opening catalog browsing (audit row 21), and any Learn-surface
 browse UI are out of scope and consume the same server-internal source later. Also
 out of scope, unchanged by design: explorer-frequency-sampled *resistance* (the
@@ -235,6 +238,14 @@ Abstentions from the negative cache and from the budget are indistinguishable to
 client from any other `source_unavailable`: one honest sentence (§8), no spinner
 theatre.
 
+The 4000 ms budget runs **from upstream dispatch**, not from arrival, so the
+depth cap — not the budget — is the total-latency bound: a request at the back of
+a full queue waits at most (1 in flight + 4 queued) × 4000 ms ≈ 20 s before its
+own dispatch, and every earlier completion or abort shortens that. There is no
+path on which a request waits unboundedly: coalesced waiters settle with the one
+promise they joined, queued requests are dispatched FIFO or abstained, and an
+aborted fetch settles its waiters with the abstention.
+
 ### 3. Recency (the 365chess steal)
 
 The request sets `history=true`. When the response body carries a `history` array of
@@ -249,7 +260,7 @@ renders it says so (§8). Two honest boundaries:
 - **No qualifying month** (history present, all zeros): `recency` is
   `{kind: "absent"}`. Frequency still renders; only the recency line is absent.
 - **No history array, or malformed rows**: `recency` is `{kind: "absent"}`. The
-  BACKLOG row's own caveat (`design/BACKLOG.md:195`) is that game dates are verified
+  BACKLOG row's own caveat (`design/BACKLOG.md:196`) is that game dates are verified
   `[V]` on `/masters` but the band endpoints still needed verifying — so the
   contract is written to be correct under either answer: history present → recency
   renders; history absent → the recency line honestly disappears and **nothing else
@@ -286,8 +297,11 @@ Selection rules, deterministic and closed:
   from the default population, includable by configuration), speeds
   `["blitz", "rapid", "classical"]`, window length **36 months**.
 - **Window.** `until` = the current month (server clock, UTC); `since` = `until`
-  minus (window length − 1) months. Both rendered in the attribution. The 24-hour
-  cache TTL (§2) bounds how stale a month-boundary crossing can leave an entry.
+  minus (window length − 1) months. Both rendered in the attribution. The window is
+  recomputed per request and is part of the cache key (§2), so a month rollover
+  changes the key: post-rollover requests can never be served a pre-rollover
+  entry, which simply expires unused. The 24-hour TTL governs ordinary freshness
+  within one window, not rollover correctness.
 
 No other population is ever substituted (§1 rule 5). If the configured population
 yields an abstention, the learner sees the abstention for that population — not a
@@ -369,6 +383,16 @@ request handler passes no principal-derived value into `CorpusSource`; the upstr
 request carries only the server token and user-agent (`explorer.ts:119` pattern). A
 learner's cookie, handle, or grant can influence *whether* the endpoint answers
 (authorization, disclosure), never *as whom* the explorer is queried.
+
+The one learner-influenced value in the upstream request is the position itself,
+and it is not learner text: the FEN comes from the server's own run graph — a
+node that exists only because validated legal moves created it
+(`guidanceAccess` resolves `nodeId` to the stored node, `service.ts:642-650`) —
+is normalized through the shipped `transposeKey`, and is percent-encoded because
+`explorerUrl` builds the request with `URL`/`searchParams.set`
+(`explorer.ts:62-74`). There is no string-concatenation path from client input
+into the request URL, and a `nodeId` that resolves to no node dies at
+`INVALID_REQUEST` before any query is formed.
 
 ### 7. Assistance preference, version 2
 
@@ -492,7 +516,7 @@ The killer class, enumerated:
 | Upstream 429/5xx/timeout/malformed JSON | `source_unavailable` abstention (§2); never a thrown 500 for a well-formed request |
 | Provider absent | 503 `CORPUS_UNAVAILABLE`; preference hidden via capabilities (§6) |
 | Interactive burst (N learners, distinct positions) | coalescing + serial upstream + depth-4 queue; overflow abstains honestly (§2) |
-| Month boundary during cache lifetime | window recomputed per request; a cached entry keyed on the old window serves at most 24 h (§4) |
+| Month boundary during cache lifetime | window recomputed per request and embedded in the cache key, so a pre-rollover entry is unreachable after rollover and expires unused (§2, §4) |
 | Mock deployment | `FixtureCorpusSource`; deterministic stats for one position, abstention elsewhere; zero network (§1) |
 
 ### 10. What this RFC does not touch
@@ -509,7 +533,7 @@ The killer class, enumerated:
 - **The pack projection** — `GET /packs/:id` and the anti-contamination boundary
   (`docs/explanation-grounds.md:110-113`) are untouched.
 - **Repertoire gap-finding** — enabled (the `CorpusSource` interface is the
-  band-coverage oracle its BACKLOG row needs, `design/BACKLOG.md:204`), not built.
+  band-coverage oracle its BACKLOG row needs, `design/BACKLOG.md:205`), not built.
 
 ## Deviations from design
 
@@ -523,10 +547,15 @@ never available during committed play at all.
 
 ## Acceptance criteria
 
-Baselines verified on the implementation host, 2026-08-14: `pnpm test` — **399
-tests / 69 files, all passing**; the browser suite holds **17 Playwright specs**
-(`tests/browser/drill.spec.ts`), of which 16 pass and the optional Maia latency
-check skips, at zero retries (`planning/exploration/log.md:1575`;
+Baselines re-verified on this checkout, 2026-08-14: `pnpm test` — **399 tests /
+69 files, of which 398 pass and one fails pre-existing**:
+`apps/server/src/pack-authoring.test.ts:267` pins the committed sourcing-candidate
+count at 5, and the 2026-08-14 opening-pack wave grew `content/candidates/` to 9
+loadable packs — a stale content pin unrelated to this RFC, to be fixed on the
+mainline before this RFC's criteria are measured. The browser suite holds **17
+Playwright specs** (16 in `tests/browser/drill.spec.ts` plus the env-gated Maia
+latency spec in `tests/browser/maia-latency.spec.ts`), of which 16 pass and the
+Maia latency check skips, at zero retries (`planning/exploration/log.md:1575`;
 `planning/archive/game-import-and-story/log.md:49`). All criteria are additive to
 those baselines.
 
@@ -561,7 +590,10 @@ those baselines.
 9. **Operator credential only (unit).** The upstream request's headers contain the
    server-configured bearer token and user-agent and nothing derived from the
    requesting principal; constructing the source requires no per-request identity
-   parameter (compile-time: `CorpusSource.stats` takes only `CorpusQuery`).
+   parameter (compile-time: `CorpusSource.stats` takes only `CorpusQuery`). The
+   request URL is built by the shipped `explorerUrl` (percent-encoded query
+   parameters), and a test asserts the `fen` parameter decodes to exactly the
+   node's `transposeKey` output plus `" 0 1"` — never a client-supplied string.
 10. **Cache posture (unit, fake clock).** Two identical queries → one fetcher call.
     Two concurrent identical queries → one fetcher call (coalescing). TTL expiry →
     refetch. A 429 → abstention now and abstention from negative cache within 60 s
@@ -589,8 +621,11 @@ those baselines.
 14. **Sentence closure (client unit).** The corpus panel's renderer is a total
     function over `CorpusPage` whose output strings are drawn from the §8 set only;
     a snapshot test enumerates stats-with-recency, stats-without-recency,
-    committed-move-absent, both abstentions, and asserts no verdict vocabulary
-    (best/good/strong/dubious/mistake/recommended) appears in any output.
+    committed-move-absent, both abstentions, asserts no verdict vocabulary
+    (best/good/strong/dubious/mistake/recommended) appears in any output, and
+    asserts the §8 guard sentence — byte-identical `These counts say what this
+    population played, not what is good.` — is present in every one of the five
+    snapshots, stats and abstentions alike.
 15. **Suite health.** `make verify` green from the baseline above plus the new
     tests; the browser suite passes at zero retries with the new spec added;
     `docs/` gains the canonical description (a runtime-corpus section alongside the
@@ -610,3 +645,18 @@ None.
   claimed; `AssistanceConfig` v2, `CORPUS_UNAVAILABLE`, `providers.corpus`, and the
   `corpus` route action recorded as cross-draft resources for adoption-wave-1 and
   social-match to depend on if touched.
+- 2026-08-14: adversarial review (claude), fixed in place. Migration claim
+  corrected: the register's row 13 is *reserved for this draft*, so claiming
+  nothing means releasing that reservation (a register edit on landing), not "the
+  register's last row remains 12", which was false against the current
+  `rfc/README.md`. Baseline corrected: 398 of 399 unit tests pass on this
+  checkout (pre-existing `pack-authoring.test.ts:267` candidate-count pin, stale
+  since the opening-pack wave), and the 17th Playwright spec lives in
+  `maia-latency.spec.ts`, not `drill.spec.ts`. Month-rollover cache semantics
+  restated: the recomputed window changes the cache key, so rollover correctness
+  never depended on the TTL. Queue latency bounded explicitly (depth cap ×
+  budget, no unbounded wait). Credential seam sharpened: the FEN's provenance
+  (server run graph, `transposeKey`, `URLSearchParams` percent-encoding) stated
+  normatively and asserted in criterion 9; the byte-fixed guard sentence is now
+  pinned byte-identical across all renderer snapshots in criterion 14. BACKLOG
+  and `rfc/README.md` line cites corrected (196/205, 64-79).

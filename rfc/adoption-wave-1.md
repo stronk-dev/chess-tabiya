@@ -14,9 +14,13 @@
   `archive/return-and-progression.md` (attempts tables, `/learn`),
   `archive/shape-library.md` (Just Play position player),
   `archive/learner-identity-and-authorization.md` (token discipline, grant roles),
-  `archive/live-session-platform.md` (the no-anonymous-token limit this RFC amends).
-  Forward-coordinated with the `social-match` draft (not yet present in `rfc/` at drafting
-  time) via the shared public-token contract in §6.
+  `archive/live-session-platform.md` (the no-anonymous-token limit this RFC amends),
+  `rfc/runtime-corpus-evidence.md` (shared non-register resources this RFC also touches:
+  the `AssistanceConfig` version — that draft claims 1→2, this RFC rebases on it (§3) —
+  the append-only `ServerErrorCode` union, and the `/runs/:id/…` route-action regex,
+  per that draft's sibling rule, `rfc/runtime-corpus-evidence.md:67-77`).
+  Coordinated with the `social-match` draft (not yet present in `rfc/` at drafting
+  time; drafted later the same day) via the shared public-token contract in §6.
 - **Parent / amends:** —
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/adoption-wave-1/` (once implementing)
@@ -30,7 +34,7 @@ voice delivery over the shipped packet-checked persona seam, (4) revisitable eve
 milestones, and (5) flip-sides retry plus the one-click mirror control residual. Each is
 market-proven elsewhere (love-evidence cited per feature), low-cost against the shipped surface,
 and conflict-free once it enters through its named `design/05` §1 invariant. All five were
-ledgered by the owner on 2026-08-14 (`design/BACKLOG.md:198-202`). Nothing here adds a grounding
+ledgered by the owner on 2026-08-14 (`design/BACKLOG.md:199-203`). Nothing here adds a grounding
 path, a mastery number, or an LLM chess claim.
 
 ## Motivation
@@ -83,9 +87,17 @@ Server:
   recent validated `outcome.reached` event.
 - **Storyability rule:** a native branch is storyable iff it carries a validated
   `outcome.reached` event. This keeps disclosure honest with zero new machinery: a terminal
-  `outcome.reached` reveals under every feedback policy (`docs/drill-client.md:84-85`).
-  Requesting a story for a run with no storyable branch, or naming a non-storyable branch,
-  returns the typed error `STORY_UNAVAILABLE` (HTTP 409). Mid-run engine evidence can never leak
+  `outcome.reached` reveals under every feedback policy — all three arms of
+  `feedbackDisclosed` accept it (`packages/runtime/src/feedback.ts:3-18`;
+  `docs/drill-client.md:84-85`) — and the shipped story read already refuses undisclosed
+  runs with `ASSISTANCE_WITHHELD` (`apps/server/src/service.ts:491`); that gate extends to
+  native runs unchanged, so the storyability rule is belt-and-braces, not the only barrier
+  (the `sessionKind !== "imported"` refusal at `apps/server/src/service.ts:490` is the one
+  check this section lifts). Requesting a story for a run with no storyable branch, or
+  naming a non-storyable branch, returns the typed error `STORY_UNAVAILABLE` (HTTP 409),
+  added in both places new codes must land — the closed union
+  (`apps/server/src/errors.ts:1-46`) and the status map whose unlisted codes fall through
+  to 500 (`apps/server/src/rest.ts:389-479`). Mid-run engine evidence can never leak
   through the story because no story exists before a terminal.
 - The story path is root → the storyable branch's leaf along that branch's path. The
   idempotent-completing evidence pass from import applies unchanged
@@ -154,7 +166,13 @@ CREATE TABLE run_derivations (               -- owned by §5, same migration
 Token discipline is the session discipline: 32 random bytes, only the SHA-256 hash stored
 (`docs/identity-and-authorization.md:9-10`). `ON DELETE CASCADE` on `created_by` is deliberate
 and differs from the run-tombstone rule: a share link is the sharer's standing intent, and it
-dies with the account rather than surviving as an orphaned public window.
+dies with the account rather than surviving as an orphaned public window. A `story_read`
+token has **no expiry**: its lifetime is bounded only by explicit revocation and the creator
+cascade (the table deliberately carries no expiry column; the sibling's nullable
+`expires_at`/`uses_remaining` columns stay `NULL` for every `story_read` row, §6). Both
+`CHECK` constraints are written as **literal strings**, never by interpolating a live
+vocabulary tuple — the migration-9 lesson the sibling's freeze mandate records
+(`rfc/README.md:103`), honoured here before it can recur.
 
 HTTP:
 
@@ -194,6 +212,18 @@ Suggested title:
   packet is the story JSON's deterministic sentences plus the composed title. `voiceCheck` and
   the one-retry-then-deterministic-fallback rule apply unchanged
   (`docs/adaptive-guidance.md:109-113`). There is no free-text title generation path.
+- **The persona rendering can never reach the public surface.** The public card's title is
+  always `suggestTitle(story)`, recomputed at render time from the story JSON; nothing
+  persists a title anywhere (`public_tokens` carries no title column by design, §2 SQL), so
+  there is no field a persona or free-text title could ride into `GET /shared/:token`. The
+  persona rendering is delivered to the sharer alone — a caption they may paste themselves,
+  under their own name. This is deliberate belt-and-braces: `voiceCheck` is documented as
+  necessary but insufficient, and the known passing plain-English leak remains a pinned
+  fixture (`docs/adaptive-guidance.md:116-118`; verified still present at
+  `packages/runtime/src/adaptive-guidance.test.ts:113`) — exactly why the anonymous public
+  projection never depends on it. The same argument covers every other packet field: the
+  projection is composed exclusively of story-JSON facts (deterministic detector sentences,
+  FENs, ply/SAN, the result fact), none of which pass through an LLM.
 
 ### 3. Spoken voice delivery and provider configuration
 
@@ -214,6 +244,12 @@ Provider configuration (the persona-text half — closes "no provider ships"):
   timeout (default 4000 ms, configurable) counts as a failed rendering and falls into the
   existing retry/fallback rule. Capabilities report `llm: external` exactly as specified today.
   No vendor SDK enters the repository.
+- **Privacy pin, for the hosted ruling:** that request body is the provider's entire
+  disclosure. No learner identifier or handle, no run or session id, no client IP or
+  user-agent forwarding, and no FEN or position payload beyond what the deterministic
+  sentences themselves already say ever reaches the provider — the documented
+  packet-only-prompt rule (`docs/adaptive-guidance.md:117-119`) carried to the wire. A
+  contract test asserts the serialized request contains exactly the three pinned keys.
 - Unconfigured deployments are byte-identical to today: `VOICE_UNAVAILABLE` (503), persona
   preference hidden (`docs/adaptive-guidance.md:108-110`).
 
@@ -221,9 +257,12 @@ Spoken delivery (the audio half):
 
 - Speech is produced client-side by the browser's `SpeechSynthesis` API. No audio provider, no
   server audio path, no new external dependency.
-- The versioned per-session-kind assistance preference (`docs/adaptive-guidance.md:34-44`) bumps
-  version 1→2, adding `spoken: "off" | "on"` with universal default `"off"`. Stored v1
-  preferences are read as v2 with `spoken: "off"`.
+- The versioned per-session-kind assistance preference (`docs/adaptive-guidance.md:34-44`) is
+  a shared in-wave resource: the earlier `runtime-corpus-evidence` draft claims version 1→2
+  (the `corpus` key) and requires siblings to rebase on it
+  (`rfc/runtime-corpus-evidence.md:70-71`). This RFC therefore claims **2→3**, adding
+  `spoken: "off" | "on"` with universal default `"off"`. Stored v1 and v2 preferences are
+  read as v3 with `spoken: "off"` (and, for v1, that draft's `corpus` default).
 - What may be spoken is exactly the text already rendered on an explicitly opened assistance
   surface: an opened pivotal-marker's sentences, the endgame reading, persona-rendered voice
   output, and story moment sentences. With `spoken: "on"`, opening such a surface speaks its
@@ -263,6 +302,15 @@ interruptions.
   the registry where `pack_id` is present; ungraded and pack-free rows named honestly, matching
   `/learn`'s existing language). No sentence contains a percentage, score, streak, ranking, or
   comparison to other learners.
+- **Pin on the numbers rule**, so `ten_attempts_one_root` cannot be read as a violation: what
+  the honest-progress posture bans is **skill numbers** — percentages, scores, streaks,
+  ratings, rankings, and cross-learner comparisons — because they are claims about mastery
+  the stored data cannot support (`docs/return-and-progression.md:44-47`: "no mastery
+  percentage: the stored data is an attempt history"). A count of the learner's own preserved
+  attempts ("ten attempts on one root") is an event fact read off stored rows — the attempt
+  history speaking as itself — and is permitted. The closed kind set contains exactly one
+  such count and no other numeric content; any future kind proposing a number must pass this
+  distinction explicitly.
 - Client: `/learn` gains a Milestones section listing achieved events newest-first, each linking
   into its source run via the existing source-run links (`docs/return-and-progression.md:44-46`).
   Honest empty state when none exist.
@@ -288,7 +336,20 @@ Server:
   execute it, else the caller chooses; the normal capability rules apply.
 - The derived run is an ordinary Just Play position run (`docs/shape-library.md:56-61`): full
   board/timeline/branch/compare/export machinery, objective region explicitly stating no pack
-  is loaded and nothing is claimed.
+  is loaded and nothing is claimed. Two boundary conditions, pinned because the machinery
+  already handles them: a mid-game node FEN carries castling rights, the en-passant square,
+  and the move clocks, and run creation canonicalizes and legality-validates it through the
+  shipped path (`canonicalRunStart` → `positionFromFen`,
+  `packages/runtime/src/session.ts:58-63` — an illegal position is a typed refusal, not a
+  broken run); and when the flipped learner is **not** to move at the derived root, the
+  ordinary position-run flow has the opponent select first, exactly as any Just Play run
+  whose FEN gives the other side the move.
+- **Live-match gate (cross-draft):** against a run whose session is the `social-match`
+  sibling's live native match, `POST /runs/:id/flip` is refused with that draft's
+  `MATCH_LIVE` — a mid-game flip would hand a player a private engine-facing copy of the
+  live position, an in-product escape from withholding. The refusal is specified and owned
+  by `rfc/social-match.md` §3.3 (this RFC predates the mode; the register order lands this
+  draft first, so the gate ships with the sibling).
 - Attempt projection is untouched: the derived run's attempts project normally under their own
   root (the existing `derived_from_run_id` column, `apps/server/src/storage.ts:2033`, is set as
   the duplicate path already does; the attempts `origin` CHECK is not widened — the derivation
@@ -311,19 +372,32 @@ Client — two visible placements, closing the discoverability failure chess.com
 
 ### 6. The shared public-token contract (coordination with `social-match`)
 
-The `social-match` draft (friend-link play) was **not present** in `rfc/` at drafting time, so
-per the wave's coordination rule this RFC names the shared contract and specifies only the
-card's read-only needs:
+The `social-match` draft (friend-link play) was **not present** in `rfc/` at drafting time;
+it has since landed in the same wave, and this section was reconciled against it (see
+Changelog). The shared contract:
 
 - `public_tokens` (§2) is the **single trust surface** for anonymous capability tokens: one
   table, hashed 32-byte tokens, a closed typed `scope` CHECK, per-token revocation, uniform 404
-  non-disclosure, cascade deletion with the creating account.
-- This RFC defines exactly one scope, `story_read`, and its projection contains no write
-  capability and no live-session state. `social-match` adds its friend-link scopes by widening
-  the `scope` CHECK in its own migration and names this RFC in `Depends on:`; it does not
-  create a second token table. A Cross-draft ownership pin recording this
-  ("`adoption-wave-1.md` owns `public_tokens`") is added to `rfc/README.md` §Cross-draft
-  ownership pins in the same commit that lands this draft's register rows.
+  non-disclosure, cascade deletion with the creating account. The Cross-draft ownership pin
+  recording this ("`adoption-wave-1.md` owns `public_tokens`") is on the register
+  (`rfc/README.md:131-136`).
+- This RFC defines exactly one scope, `story_read`, with **no expiry** (revocation and
+  creator cascade are the whole lifecycle, §2), and its projection contains no write
+  capability and no live-session state. `social-match` adds exactly one further scope,
+  `session_join` — single-use by default, 14-day default expiry, 90-day cap — by rebuilding
+  the table in its own migration: the `scope` CHECK widens, join-only columns
+  (`session_id`, `match_slot`, `invited_role`, `invited_handle`, `expires_at`,
+  `uses_remaining`) are added nullable, `run_id`/`branch_id` relax to nullable under a
+  per-scope CHECK, and every `story_read` row survives byte-identical
+  (`rfc/social-match.md` §3.5, §3.8). It names this RFC in `Depends on:` and creates no
+  second token table.
+- The public URL namespace is likewise single and shared: `GET /shared/:token` dispatches by
+  the resolved row's scope, and every failure mode — unknown, revoked, expired, exhausted,
+  scope-mismatched, cascade-deleted — answers with the same 404 as an unknown path. Both
+  drafts pin the identical posture; neither adds a token error code.
+- The sibling additionally refuses `flip` and `duplicate` on live native-match runs
+  (`MATCH_LIVE`, its §3.3) so neither this RFC's flip route nor the shipped duplicate route
+  can become a mid-game withholding escape; this RFC's §5 records the flip half.
 
 ### 7. Register claims
 
@@ -331,17 +405,29 @@ Per the pre-assigned order (predicate-wave-2 → corpus-evidence → adoption-wa
 social-match) and the standing register law (`rfc/README.md:16-27,41-42,73-79`):
 
 - **Pack schema:** no version claimed. No pack field changes; `retryVariants.opposite_side`
-  already exists in 0.6. The next version (0.13) is free for `predicate-wave-2`.
+  already exists in 0.6. Version 0.13 is claimed by `predicate-wave-2` (register row,
+  `rfc/README.md:46`).
 - **Run schema:** no version claimed. No new event kinds: the story, milestones, and card are
   derived projections; a flip creates ordinary runs; tokens and derivations are non-run tables.
 - **Migration:** this RFC claims **migration 14, `STORAGE_VERSION` 13→14** (create-table/index
-  only: `public_tokens`, `run_derivations`), landing behind migration 13, which the earlier
-  `runtime-corpus-evidence` draft claims per the wave order. If that draft claims no migration,
-  the renegotiation happens at the register per its standing rule ("a draft that cannot land
-  behind its predecessor renegotiates here rather than renumbering unilaterally",
-  `rfc/README.md:41-42`).
-- The client assistance-preference version bump 1→2 (§3) is browser-local versioned state, not
-  a registered shared resource; it is recorded here for the review trail.
+  only: `public_tokens`, `run_derivations`; literal CHECK strings per §2), recorded on the
+  register (`rfc/README.md:102`). Number 13 is held **reserved** for `runtime-corpus-evidence`
+  by the wave order, but that draft's own text claims **no migration**
+  (`rfc/runtime-corpus-evidence.md:63-66`), so 13's release — and this RFC's rebase 14→13
+  together with `social-match`'s 15→14 — happens at the register per its standing rule ("a
+  draft that cannot land behind its predecessor renegotiates here rather than renumbering
+  unilaterally", `rfc/README.md:48-49`); the register stays the single writer of the final
+  numbers.
+- **Error codes:** `STORY_UNAVAILABLE` (409) appends to the shared `ServerErrorCode` union and
+  the status map (§1); the union is append-only and also appended in-wave by
+  `runtime-corpus-evidence` (`CORPUS_UNAVAILABLE`) and `social-match` (`MATCH_LIVE`,
+  `MATCH_MAINLINE_LOCKED`).
+- **Route regex:** the closed `/runs/:id/…` action alternation (`apps/server/src/rest.ts:494`)
+  gains `share` and `flip` here, beside the `corpus` action the corpus sibling adds —
+  append-only alternation, landing in wave order.
+- The client assistance-preference version bump 2→3 (§3, rebased on the corpus sibling's 1→2)
+  is browser-local versioned state, not a registered shared resource; it is recorded here for
+  the review trail.
 
 ## Deviations from design
 
@@ -361,8 +447,12 @@ social-match) and the standing register law (`rfc/README.md:16-27,41-42,73-79`):
 
 Baseline, verified 2026-08-14 on this machine before drafting: **399 unit tests / 69 files, all
 passing** (`pnpm test`), and **16 ordinary browser tests** (17 listed minus the optional
-`maia-latency` measurement) at zero retries. The full suite must remain green; every criterion
-below adds tests.
+`maia-latency` measurement) at zero retries. Adversarial-review re-run, later the same day:
+the 399/69 count reproduces, but the shared working tree now shows failures unrelated to this
+draft (`apps/server/src/pack-authoring.test.ts:267` expects 5 committed sourcing candidates
+and finds 9, plus committed-document schema validation — in-flight content work from the
+parallel wave). Implementation re-pins a green baseline before starting; the criterion stands:
+the full suite must be green, and every criterion below adds tests.
 
 Unit/integration:
 
@@ -378,7 +468,9 @@ Unit/integration:
 3. **Tokens:** creation stores only the SHA-256 hash; unknown, revoked, and cascade-deleted
    tokens return the same 404 body as an unknown path; the public story projection contains no
    handle, graph, events, or write-capable field (asserted by exact-shape fixture); a
-   non-storyable branch cannot be shared.
+   non-storyable branch cannot be shared; and the public card's title equals
+   `suggestTitle(story)` even when the sharer requested and received a persona rendering —
+   the rendering never persists and never appears at `GET /shared/:token`.
 4. **Provider adapter:** contract-shape, non-2xx, and timeout failures each count as one failed
    rendering and produce the deterministic fallback after the existing single retry; an
    unconfigured deployment still returns `VOICE_UNAVAILABLE`.
@@ -412,3 +504,25 @@ None.
 ## Changelog
 
 - 2026-08-14: created.
+- 2026-08-14: adversarial review, same day, fixed in place. (1) Register-state corrections:
+  migration 13 is *reserved*, not claimed — `runtime-corpus-evidence` claims no migration, so
+  the 14→13 rebase is a register renegotiation; pack schema 0.13 is claimed by
+  `predicate-wave-2`, not free; the `public_tokens` ownership pin already stands at
+  `rfc/README.md:131-136` (was future-tense). (2) Shared-resource collision resolved: the
+  assistance-preference bump rebases 1→2 → **2→3** behind the corpus sibling's claimed v2;
+  `runtime-corpus-evidence` added to `Depends on:`; the error-union and route-regex touches
+  are now recorded in §7. (3) Boundary pins added: the public card's title is always the
+  deterministic `suggestTitle` recomputed at render (no persisted title exists, so no persona
+  or free text can reach the anonymous surface; voiceCheck's known-leak fixture re-verified at
+  `packages/runtime/src/adaptive-guidance.test.ts:113`); the `external_http` request body is
+  the provider's entire disclosure (no learner identity, run id, or position payload —
+  hosted-ruling privacy pin); `story_read` tokens have no expiry, and §6 now states the full
+  shared contract (scopes, namespace dispatch, 404 posture, lifetimes) exactly as
+  `social-match` §3.5/§3.8 does; migration 14 pins literal CHECK strings per the migration-9
+  lesson. (4) Numbers-rule pin in §4: skill numbers are banned, event counts over the
+  learner's own rows are facts — `ten_attempts_one_root` is the latter. (5) Flip boundary
+  pins in §5: mid-game FEN castling/en-passant legality-validated by the shipped
+  `canonicalRunStart` path; opponent-to-move-at-root supported; cross-draft `MATCH_LIVE` gate
+  on flip against live native matches recorded (owned by `social-match` §3.3).
+  (6) `STORY_UNAVAILABLE` pinned into both the error union and the status map. BACKLOG row
+  cite corrected to `:199-203`. Baseline note updated with the review-time tree state.

@@ -6,18 +6,22 @@
 - **Design refs:** `design/03-product-breadth.md:79-91` (Live and community), `:90-91`
   (shareable URLs and spectator-safe views as platform primitives), `:252-258` (shared
   shell regions); `design/05-in-run-experience.md:33-42` (§1 invariants — audited
-  one by one in §2.4 below); `design/BACKLOG.md:209` (Friend-link play, audit row 30),
-  `:210` (Native human-vs-human match mode, owner 2026-08-14), `:199` (share-card read
+  one by one in §2.4 below); `design/BACKLOG.md:210` (Friend-link play, audit row 30),
+  `:211` (Native human-vs-human match mode, owner 2026-08-14), `:200` (share-card read
   token, audit row 2 — consumed contract); `design/research/adoption-audit.md:44` (row 2),
   `:97` (row 30)
 - **Exploration gate:** breadth sequencing ruling 2026-08-11 (`rfc/README.md:66-71`);
-  owner framing 2026-08-14 in the BACKLOG match row (`design/BACKLOG.md:210`): coach
+  owner framing 2026-08-14 in the BACKLOG match row (`design/BACKLOG.md:211`): coach
   hosts, students pair off, coach walks the boards like a simul
 - **Depends on:** `rfc/archive/live-session-platform.md` (sessions, board control, the
   possession journal, invitations, Arena legs); `rfc/archive/learner-identity-and-authorization.md`
   (accounts, grants, the learner-bound lease); `rfc/archive/pack-optional-runs.md`
   (position runs — a match run is one); **`rfc/adoption-wave-1.md`** (the
-  `public_tokens` trust surface this RFC's friend-link scope extends — §3.5)
+  `public_tokens` trust surface this RFC's friend-link scope extends — §3.5 — and the
+  `flip` route whose live-match refusal §3.3 owns); `rfc/runtime-corpus-evidence.md`
+  (this RFC appends to the shared `ServerErrorCode` union that draft also appends to —
+  named per its sibling rule, `rfc/runtime-corpus-evidence.md:67-77`; its corpus
+  endpoint is delivery-window-gated and needs no `MATCH_LIVE` entry, §3.3)
 - **Parent / amends:** amends the live-session platform: `BOARD_CONTROLS`
   (`apps/server/src/live-types.ts:6`), `SESSION_JOURNAL_KINDS` (`:9-15`), `claimLease`
   (`apps/server/src/storage.ts:981-1032`), the session route parser
@@ -37,11 +41,15 @@
 Implementation baseline verified on this tree 2026-08-14 by running the suite:
 **399 unit tests / 69 files** passing (`pnpm test`), run schema `"0.10"`, pack schema
 `"0.12"` (`packages/schema/src/index.ts:1-2`), and `STORAGE_VERSION = 12`
-(`apps/server/src/storage.ts:301`).
+(`apps/server/src/storage.ts:301`). (Adversarial-review re-run, later the same day:
+the 399/69 count and all three constants reproduce, but the shared tree now carries
+failures from in-flight parallel-wave content work — `pack-authoring.test.ts:267`
+candidate count — unrelated to this draft; A8's baseline is re-pinned green at
+implementation start.)
 
 ## Summary
 
-The owner's audit in the BACKLOG match row (`design/BACKLOG.md:210`) is correct and was
+The owner's audit in the BACKLOG match row (`design/BACKLOG.md:211`) is correct and was
 re-verified for this draft: the live platform already ships roles, per-run grants, three
 board-control modes, a CAS'd lease claim, a possession journal with an exact authorship
 rule, invitations, and spectating across real browser contexts. The missing atom is
@@ -80,13 +88,13 @@ Every row re-run against the working tree for this draft.
 
 ### 2.2 The two ledger rows this RFC completes
 
-**Native match** (`design/BACKLOG.md:210`, owner 2026-08-14): the row itself names the
+**Native match** (`design/BACKLOG.md:211`, owner 2026-08-14): the row itself names the
 missing atom — "a **match** board-control mode where possession auto-alternates by
 side-to-move between two write-capable grantees" — and the pilot: the owner's coaching
 context, coach walking the boards like a simul. B5's validated-by-use rationale now has
 its humans.
 
-**Friend-link** (`design/BACKLOG.md:209`, audit row 30): "the minimal B5-compatible
+**Friend-link** (`design/BACKLOG.md:210`, audit row 30): "the minimal B5-compatible
 human-pool transformation — a real human now, with the loop attached (both attempts
 preserved and comparable, which no instant pool offers)." The audit costed it at "token
 + invite flow" with **no conflict at friend-link scale**
@@ -110,7 +118,7 @@ security-sensitive projection-validated (`docs/branch-runtime.md:195-201`); a ma
 that ends without a board-terminal position ends by the host closing the session, the
 run stays non-terminal, and its evidence opens by reveal-under-pause (§3.3) — stated as
 the shipped shape, not a gap. **Matchmaking, pools, ratings** — rejected posture,
-unchanged (`design/BACKLOG.md:209-210`). **Per-viewer disclosure** — refused again for
+unchanged (`design/BACKLOG.md:210-211`). **Per-viewer disclosure** — refused again for
 the same four reasons as `rfc/archive/live-session-platform.md` §3.8; §3.3 shows the
 match case needs none.
 
@@ -180,9 +188,19 @@ beside the three at `apps/server/src/storage.ts:1005-1013`, inside the same
 
 No auto-transfer is added. After A moves, A still holds the lease but the position now
 belongs to B's side, so A's claim arm and B's both resolve correctly on the next
-request; B's client claims when the poll shows B's side to move (one claim request,
-invisible under the shipped 2 s poll). Every alternation is therefore an ordinary
-journalled claim — which is precisely what keeps §3.4 exact. Disconnection needs no new
+request; B's client claims when the poll shows B's side to move. The cost is stated,
+not waved: alternation adds at most one poll interval plus one claim round-trip before
+B's move can commit — worst case ~2 s + two request round-trips per ply on the shipped
+2 s poll. That budget is **bounded by assertion, not measured**: A1 asserts the ply
+visible on the other board within 4 s, and no tighter number is claimed. It is
+acceptable here precisely because clocks are out of scope (§2.3); a timed mode would
+have to revisit possession transfer, and that is part of why clocks are refused. If
+both clients race the same transition — both claim after A's ply — the transaction
+serializes them: the side-to-move player's claim succeeds and every other claimant
+(the opponent, a write-capable coach) receives the typed `BOARD_HELD` 409, which the
+rail renders as "their move"; the loser's state is honest, not silently stale. Every
+alternation is therefore an ordinary journalled claim — which is precisely what keeps
+§3.4 exact. Disconnection needs no new
 machinery: the lease is learner+device, so B returning on any device claims under the
 same arm; A cannot steal the board meanwhile because it is B's side to move; two of B's
 devices racing produce one winner and one `LEASE_MOVED` exactly as A6 of the platform
@@ -238,6 +256,16 @@ entries; it never enters the run log.
   simul host can stop any board to teach. Journals `match.paused` with the host as
   actor.
 
+Every `match` op is precondition-checked and refuses out-of-state calls with
+`INVALID_REQUEST`: propose/accept/withdraw while already paused, resume while live,
+accept with no standing proposal, any op on a closed session. Acceptance, withdrawal,
+and resume all clear `pause_proposed_by`, so no proposal survives a state transition.
+Disconnection mid-pause needs no machinery: pause state is a server-side
+`match_states` fact, not a connection property, and the platform's lazy-transition
+doctrine means nothing times out — a board whose players both walk away simply stays
+paused until either player or the non-playing host resumes it (§3.2.4), or the host
+closes the session.
+
 **3.2.2 What a pause opens.** Claims go `free_claim` among write-capable grantees
 (§3.1.2). Rewind, fork, compare, and reveal — refused while live (§3.3) — become
 ordinary shipped operations under whatever lease the claimant holds. Rewinding into the
@@ -278,17 +306,37 @@ consent to reveal* — and the pause handshake already is mutual consent. So:
 
 **The pin.** A native match run keeps the shipped `attempt_end` barrier untouched.
 `POST /runs/:id/reveal`, rewind, fork, `group`, `group-reply`, `simulate`,
-`simulate-enter`, and `prediction` are refused with **`MATCH_LIVE`** (409) while the
-match is live. During a pause, reveal is the ordinary shipped operation under the
-claimant's lease — the mutually-accepted pause (or the host's teaching pause) *is* the
+`simulate-enter`, `prediction`, **`duplicate`**, **`flip`** (the sibling
+`rfc/adoption-wave-1.md` §5 route — this RFC lands behind it structurally, §3.8, so
+the route exists whenever a native match does), and **`import`** are refused with
+**`MATCH_LIVE`** (409) while the match is live. The last three close the
+**derived-run escape**, the hole the first revision left open: `duplicate` is
+available to any grantee (`requireRead` only, `apps/server/src/service.ts:1254-1266`)
+and yields a caller-owned copy of the match root replayable to the live position;
+`flip` yields a caller-owned run at any live node's exact FEN; on either, the caller
+holds their own lease and reveals at will — the product itself would be serving
+engine evidence on the live position mid-game, which is categorically worse than the
+conceded streamer limit (outside consultation Tabiya cannot see) because it is
+in-product assistance. `import` is refused for symmetry: it commits plies without
+passing §3.1.3's seat gate. All three are ordinary shipped operations during a pause
+and after the terminal, when reveal is open anyway. `analysis`, `voice`, and
+`schedule` deliberately stay available live: they disclose nothing while the delivery
+window is closed — staged results are served and applied only while delivery is open
+(`apps/server/src/service.ts:1109`, `:1137`) — and the corpus sibling's endpoint is
+already gated on `feedbackDeliveryOpen` plus role by its own §5, so it needs no entry
+here. During a pause, reveal is the ordinary shipped operation under the claimant's
+lease — the mutually-accepted pause (or the host's teaching pause) *is* the
 agreement, enforced by the handshake rather than by a viewer parameter. After
 `outcome.reached`, disclosure opens under every policy exactly as shipped
 (`packages/runtime/src/feedback.ts:13-16`) — a finished game cannot be contaminated.
 Resumed play is clean for free: `feedbackDeliveryOpen` re-closes staged delivery on the
-next `move.committed` (`packages/runtime/src/feedback.ts:20-28`), so evidence revealed
-during a pause stays historical while new analysis cannot become live assistance
-(`docs/branch-runtime.md:188-193`). No second disclosure path, no new predicate, no
-viewer parameter — the entire mechanism is one 409 gate in front of shipped machinery.
+next `move.committed` (`packages/runtime/src/feedback.ts:20-28`), and because staged
+results never become `evidence.attached` events while the window is closed, the
+post-reveal run log and node refs hold only pause-consented historical evidence — new
+analysis cannot become live assistance (`docs/branch-runtime.md:188-193`;
+delivery-window gates verified at `apps/server/src/service.ts:1109,1137`). No second
+disclosure path, no new predicate, no viewer parameter — the entire mechanism is one
+409 gate in front of shipped machinery.
 
 Read-only surfaces (`graph`, `events`, `evidence`, `compare`, `pgn`) stay available
 live; they are already barrier-gated for every reader
@@ -347,7 +395,7 @@ pins, matching `requireRead`'s no-existence-oracle rule
 that RFC's card, `session_join` renders this RFC's join page. One namespace, because
 two would give an attacker a scope oracle by path.
 
-**`session_join` semantics** (`design/BACKLOG.md:209`). Never anonymous: the link is
+**`session_join` semantics** (`design/BACKLOG.md:210`). Never anonymous: the link is
 an invitation, not a credential — the one anonymous thing the GET renders is the
 session title, the host's handle, and a sign-in/register form (registration is the
 shipped `/auth/register`; nothing new), never a position, move, or evidence.
@@ -412,8 +460,13 @@ readonly board: {
 Derived server-side from the stored snapshot at listing time, for every session the
 caller is granted on — no new authorization surface (the caller could read each run's
 graph already) and no evidence surface (a FEN is rung-0 position truth,
-`design/05-in-run-experience.md` §3 rung 0; the block carries no evaluation and passes
-through no disclosure barrier). The client `/live` index renders granted native-match
+`design/05-in-run-experience.md` §3 rung 0; the block carries no evaluation, no
+verdict, no staged-result count, and passes through no disclosure barrier — during a
+pause the `activeFen` may show a rehearsal cursor, which is the same position truth
+every granted follower already reads from the graph). The payload stays one FEN wide
+per board: roughly a hundred bytes of block per session row, so a
+twenty-board wall polls a few kilobytes per 2 s tick instead of twenty full run
+projections. The client `/live` index renders granted native-match
 sessions as a wall of mini-boards — position, players, whose move, paused badge — on
 the shipped 2 s poll, one request total. Clicking a board opens `/live/session/:id`;
 the coach walks the boards. Per-ply attribution in the session page uses the shipped
@@ -483,9 +536,10 @@ historical migration 9 for fresh databases while existing databases keep the nar
 (`rfc/README.md:103-106`). This migration is what re-converges them: after it runs,
 an upgraded database and a fresh one hold identical constraints, and the implementer
 must also freeze migration 9's body to the literal value strings it shipped with,
-recording that body edit in the register per the standing rule — and check whether
-migration 14's `public_tokens` DDL repeats the same pattern before it lands, flagging
-it to `adoption-wave-1` if so.
+recording that body edit in the register per the standing rule. The corresponding
+check on migration 14 is already resolved in-wave: `adoption-wave-1` §2 pins its
+`public_tokens` DDL to **literal CHECK strings**, never interpolated tuples, citing
+this same lesson — the pattern does not recur.
 
 **Widened request/response surfaces.** `POST /sessions` body gains `matchPlayers`
 (`{ white?, black? }`, handles, at least one named; an unnamed seat must be bound to a
@@ -527,12 +581,12 @@ listeners (`docs/app-shell.md:140-157`).
    trust surface. `design/03-product-breadth.md:90-91` names shareable run URLs as
    platform primitives, gate B8 holds the share-link clause open
    (`planning/exploration/gates.md:134`), and the owner ledgered both consuming rows
-   (`design/BACKLOG.md:199`, `:209`) — this is the different-threat-model contract the
+   (`design/BACKLOG.md:200`, `:210`) — this is the different-threat-model contract the
    platform RFC said the limit was waiting on
    (`rfc/archive/live-session-platform.md` §2.6). `docs/live-sessions.md`'s limit
    paragraph is rewritten to describe both scopes (A9).
 2. **`design/03-product-breadth.md:79-91` does not name human-vs-human match play as a
-   live surface.** It is added by owner ledger ruling (`design/BACKLOG.md:210`), which
+   live surface.** It is added by owner ledger ruling (`design/BACKLOG.md:211`), which
    names the exact mechanism this RFC specifies. No `design/` edit is made by this RFC;
    the proposed row updates are listed for the owner below.
 
@@ -555,8 +609,9 @@ opens the session page and the run read-only.
 the proposal; A's own `accept_pause` is `INVALID_REQUEST`; B accepts. While paused: a
 commit at the mainline tip is `MATCH_MAINLINE_LOCKED`; A rewinds two plies and plays an
 alternative — the shipped auto-fork creates a rehearsal branch; `reveal` succeeds
-(refused with `MATCH_LIVE` before the pause — asserted); compare over mainline and
-rehearsal returns rows. B resumes: a `run.rewound` event repositions the cursor to the
+(refused with `MATCH_LIVE` before the pause — asserted, as are `duplicate` and `flip`
+while live: the derived-run escape of §3.3 is closed by observed 409s, and both succeed
+during the pause); compare over mainline and rehearsal returns rows. B resumes: a `run.rewound` event repositions the cursor to the
 mainline tip, the rehearsal branch is still in the branch rail, play continues with the
 seat gate back in force, and the next `move.committed` re-closes staged delivery
 (`feedbackDeliveryOpen` false — server-asserted).
@@ -619,8 +674,8 @@ None.
 
 ## Proposed ledger and register rows (owner-tier; not implementer tasks)
 
-- `design/BACKLOG.md:210` native match row: 💡 → 📜 scheduled against this RFC.
-- `design/BACKLOG.md:209` friend-link row: 💡 → 📜 scheduled against this RFC; the
+- `design/BACKLOG.md:211` native match row: 💡 → 📜 scheduled against this RFC.
+- `design/BACKLOG.md:210` friend-link row: 💡 → 📜 scheduled against this RFC; the
   token trust surface is `adoption-wave-1`'s per the standing pin, this RFC's
   `session_join` scope is the invite flow the row asks for.
 - `planning/exploration/gates.md:134` B8: the share-link residual closes across the
@@ -642,3 +697,23 @@ None.
   surface; migration claim settled at 15 behind the wave's 13 (reserved) and 14;
   the generic anonymous-read capability was dropped as already owned by
   `adoption-wave-1`'s `story_read`.
+- 2026-08-14: adversarial review, same day, fixed in place. (1) **The derived-run
+  escape closed**: `duplicate` (any grantee, `service.ts:1254-1266`) and the sibling's
+  `flip` route each mint a caller-owned run on which the caller reveals at will — an
+  in-product engine consult on the live position; both, plus `import`, added to the
+  `MATCH_LIVE` refusal list, with `analysis`/`voice`/`schedule`/corpus explicitly left
+  live because the delivery-window gates (`service.ts:1109,1137`; corpus's own §5)
+  already withhold them; A2 asserts the new refusals. (2) Alternation latency budget
+  stated honestly in §3.1.2 (≤ one poll interval + one claim round-trip per ply,
+  bounded by A1's 4 s assertion, not measured) and the simultaneous-claim race pinned:
+  the transaction serializes, the side-to-move player wins, every other claimant gets
+  an honest `BOARD_HELD`. (3) §3.2 pause ops precondition-checked (`INVALID_REQUEST`
+  out of state), proposals cleared on accept/withdraw/resume, disconnect-mid-pause
+  stated under the lazy-transition doctrine. (4) §3.3's resumed-play claim upgraded
+  from assertion to verified mechanism: staged results never become `evidence.attached`
+  while delivery is closed, so the post-reveal log holds only pause-consented history.
+  (5) §3.8's migration-14 pattern check resolved in-wave: `adoption-wave-1` §2 now pins
+  literal CHECK strings. (6) `runtime-corpus-evidence` added to `Depends on:` per its
+  shared-resource rule (append-only error union). (7) `design/BACKLOG.md` row cites
+  corrected (+1 line drift: 210/211/200). Baseline note updated with the review-time
+  tree state.
