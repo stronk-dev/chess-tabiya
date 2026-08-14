@@ -8,6 +8,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `structural-reading.md` | implementing | `archive/drill-pack-format.md`, `archive/outcome-drill-grading.md`, `archive/explanation-grounds.md` | B9 — twelve deterministic author predicates plus a finite learner observation projection, current denial/eviction arithmetic, one-ply discovered consequence, and attributed structural naming. Pack schema **0.10**, no migration |
+| `shape-library.md` | draft | `archive/drill-pack-format.md`, `archive/pack-studio.md`, `archive/drill-client.md`, `structural-reading.md` | B11 — the shape-entry artifact (new single-writer schema `shape_entry` **0.1**, RFC 8785 digest, official/community channels), additive pack references, firing as a derived projection with a passive timeline marker, studio write path, four official entries with the Carlsbad extraction. Pack schema **0.11**, migration **10** |
 
 The completed breadth batch and its dependency history are kept in the archive
 documents and planning logs rather than duplicated in this index.
@@ -34,6 +35,7 @@ landing order, not lost data.
 | 0.8 | `archive/pack-studio.md` | implemented — source-derived channel; `provenance.reviewStatus` narrowed to `schema_example \| draft \| published`; typed `reviewers` removed |
 | 0.9 | `archive/n-way-comparison.md` | implemented — prediction `grading` removed; numbers are recorded and rendered without a verdict |
 | 0.10 | `structural-reading.md` | claimed 2026-08-13, draft — `$defs/structuralFeature` and `$defs/structuralExpression`, a fourth `fenPredicate` variant, a fifth `successCondition` kind (`structural_feature`), `$defs/file`. No migration: rung-0 facts are never persisted |
+| 0.11 | `shape-library.md` | claimed 2026-08-14, draft — additive only: optional top-level `shapes` (referenced shape-entry ids) and optional `planClass.shapePlan`. `planClasses` stays fully valid; no committed digest moves (the `$id` is not part of any pack document) |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.
@@ -85,6 +87,7 @@ writing it into a draft.
 | 7 | 6→7 | `archive/pack-studio.md` | implemented — studio drafts, retained playtest bytes, and registered packs |
 | 8 | 7→8 | `archive/n-way-comparison.md` | implemented — run schema v0.8, branch origin and prediction event |
 | 9 | 8→9 | `archive/live-session-platform.md` | implemented — live-session tables; create-table/index only |
+| 10 | 9→10 | `shape-library.md` | claimed 2026-08-14, draft — `shape_drafts` and `registered_shapes`; create-table/index plus the pack-style account-deletion tombstone. Run schema stays 0.8 by design (firings are derived projections, never events) |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
