@@ -1,6 +1,6 @@
 # RFC: Own-game import and the game story
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude (on the owner's 2026-08-14 BACKLOG rows)
 - **Created:** 2026-08-14
 - **Design refs:** `design/05-in-run-experience.md` §3a (backward detection), §3b-i
@@ -13,7 +13,7 @@
 - **Exploration gate:** opened by owner ruling 2026-08-12 (`rfc/README.md`); breadth
   sequencing ruling 2026-08-11; the two composing BACKLOG rows are owner statements, not
   GAP rows
-- **Depends on:** `branch-groups.md` (migration/run-schema landing order only — no
+- **Depends on:** `archive/branch-groups.md` (migration/run-schema landing order only — no
   behavioural dependency); `archive/live-session-platform.md` (the shipped PGN parser
   seam); `archive/adaptive-guidance.md` (B10 detectors and voice seam);
   `archive/shape-library.md` (B11 position player, shape firings);
@@ -161,9 +161,8 @@ identity; run ids stay unique, so re-import is allowed and creates a distinct ru
 Wire schema: `schemas/drill_run.schema.json` bumps to **0.10** — the two `sessionKind`
 enums (lines 26 and 293) gain `"imported"`, plus an `if sessionKind == "imported"`
 conditional mirroring the position conditional (null pack pair, `attempt_end`).
-`DRILL_RUN_SCHEMA_VERSION` (`packages/schema/src/index.ts:1`) moves `"0.9"` (claimed
-by `branch-groups.md`) → `"0.10"`. If `branch-groups.md` withdraws, this RFC rebases
-to 0.9 via the register, never unilaterally.
+`DRILL_RUN_SCHEMA_VERSION` (`packages/schema/src/index.ts:1`) moves `"0.9"` (shipped
+by `archive/branch-groups.md`) → `"0.10"`.
 
 **Progress exclusion.** Imported runs never project attempts, mint no
 `rootKey` (`apps/server/src/progress.ts:67-73`), and never appear in `/progress`,
@@ -335,12 +334,11 @@ precedent), `licence_note`, `imported_at`. Read back via `GET /runs/:id/import`
 (any authorized reader). Account-deletion follows the pack-style tombstone precedent
 (migration 10).
 
-**Migration 12** (`STORAGE_VERSION` 11→12, behind `branch-groups.md`'s migration 11):
+**Migration 12** (`STORAGE_VERSION` 11→12, behind `archive/branch-groups.md`'s migration 11):
 creates `imported_games` + indexes, and stamps run-schema literals `"0.9"` → `"0.10"`
 (frozen literals, no data rewrite; mandatory because reads filter on the current
 run-schema version — the migration-11 precedent). Registered in `rfc/README.md` in
-this RFC's commit. Pack schema is untouched (0.11 shipped; 0.12 belongs to
-`defect-batch-2.md`).
+this RFC's commit. Pack schema is untouched at the shipped 0.12.
 
 ### 4. The evidence pass — batching decision and stated cost
 
@@ -373,8 +371,11 @@ non-board-terminal games, the learner's first `POST /runs/:id/reveal` (the story
 surface issues it on entry; the game is over, revealing is the point) — opens
 delivery; disclosure, once open, is permanent; the next committed move closes
 *new*-evidence delivery only, which is exactly the anti-contamination the live branch
-needs. The server applies each import-pass result durably as it completes, under the
-importing writer's lease, while delivery is open.
+needs. The active writer applies staged import-pass results through the shipped
+`POST /runs/:id/evidence` path while delivery is open. The import record does not
+persist a writer credential, and the server never impersonates either the importing
+writer or a later lease holder. Read-only followers can observe progress but cannot
+turn a read into a write.
 
 The boundary that must be engineered around: `onRewound` cancels queued/running jobs
 and drops staged results for nodes leaving the active path
@@ -400,10 +401,10 @@ false while it happens. One mechanism covers all three interruptions — rewind
 pruning, halfway failure, restart loss (a lost failure record merely re-runs that
 node on the next read; convergence, not a wedge). Delivery gating is unchanged:
 results stage until delivery is open (the import's `outcome.reached`, or the story
-surface's reveal on entry) and the server applies each result durably as it
-completes, under the importing writer's lease. If a learner closes delivery mid-pass
-by moving on a live branch, remaining results stay staged; re-reveal at the branch's
-attempt end reopens delivery and application resumes.
+surface's reveal on entry), and the active writer's existing evidence loop applies
+them durably. If a learner closes delivery mid-pass by moving on a live branch,
+remaining results stay staged; re-reveal at the branch's attempt end reopens delivery
+and application resumes.
 
 Stated honestly against the ledger: this RFC is the **second consumer in one day**
 to design around `onRewound`'s live-play pruning rules (`design/BACKLOG.md`
@@ -450,13 +451,18 @@ Payload:
   "ready": true, "pendingEvidence": 0,
   "source": { "kind", "url"?, "headers", "result", "importedAt" },
   "outcome": { "kind": "board_terminal" | "recorded_result" | "unfinished", "result"? },
-  "moments": [ { "nodeId", "ply", "san", "fen", "kinds": [...],
+  "moments": [ { "nodeId", "entryNodeId", "ply", "san", "fen", "kinds": [...],
                  "sentences": [...],           // detector-attributed, deterministic
                  "evalBefore"?, "evalAfter"?,  // recorded values, engine identity included
                  "phase", "endgame"? } ],
   "rank": [ "nodeId", ... ]   // deterministic precedence, see below
 }
 ```
+
+`nodeId` is the position carrying the grounded fact. `entryNodeId` is the position
+the learner can legally re-enter. They are equal except for a board-terminal outcome:
+that slide remains grounded at the terminal node but enters at its non-terminal
+parent. A terminal node is never presented as a playable door.
 
 The server returns **all** moments plus a deterministic rank (precedence: outcome
 always; then `eval_pivot` by |Δ| desc; `last_level`; `phase_change`;
@@ -476,7 +482,8 @@ ephemeral and is never a run event.
 
 ### 6. The tap — a slide is a door, not a caption
 
-Tapping a slide issues the existing `POST /runs/:id/rewind` to the slide's node.
+Tapping a slide issues the existing `POST /runs/:id/rewind` to the slide's
+`entryNodeId`.
 The learner's next committed move creates the implicit `alt-N` branch
 (`branch.forked` then `move.committed`, `docs/branch-runtime.md`
 §Move-rewind-fork) — or the client forks explicitly with a label derived from the
@@ -554,15 +561,10 @@ router (AS-C5 — no routing dependency):
 
 ## Acceptance criteria
 
-Baseline before this RFC: 374 tests / 64 files pass (verified 2026-08-14 at review,
-`pnpm vitest run`; two sibling RFCs are implementing in parallel, so this number is
-the review pin, not a gate — `defect-batch-2.md`'s pack constant is already in the
-tree: `DRILL_PACK_SCHEMA_VERSION` reads `"0.12"` at `packages/schema/src/index.ts:2`).
-Run schema 0.8 shipped (`packages/schema/src/index.ts:1`) with 0.9 claimed by
-`branch-groups.md`; `STORAGE_VERSION` 10 with 11 claimed. Landing order: this RFC's
-migration 12 / run schema 0.10 land **behind** `branch-groups.md`'s 11 / 0.9, per
-the register rows both drafts carry. All existing tests still pass after
-implementation.
+Baseline before this RFC: **389 tests / 67 files**, run schema **0.9**, pack schema
+**0.12**, and `STORAGE_VERSION` **11**, verified 2026-08-14 after Branch Groups.
+This RFC's migration 12 / run schema 0.10 land behind the implemented migration 11 /
+run schema 0.9 register rows. All existing tests still pass after implementation.
 
 1. **Parser seam**: the shared routine imports a real lichess-exported PGN and a real
    chess.com-exported PGN (fixtures committed); the Arena leg route behaves
@@ -594,8 +596,9 @@ implementation.
 5. **Story**: deterministic across recomputation; every moment carries detector
    attribution and grounded sentences; `eval_pivot`/`last_level` arithmetic
    property-tested against hand-computed fixtures; `human_divergence` absent on the
-   mainline; voice scope `story` falls back byte-identically without a provider;
-   story endpoint withholds before disclosure.
+   mainline; a board-terminal outcome keeps its fact `nodeId` but uses its
+   non-terminal parent as `entryNodeId`; voice scope `story` falls back
+   byte-identically without a provider; story endpoint withholds before disclosure.
 6. **Export**: imported-run PGN round-trips through chessops; contains original
    headers, original `Result`, the full mainline, and a rehearsal branch as a
    variation with its `Tabiya branch:` comment.
@@ -617,7 +620,7 @@ implementation.
 9. **Registers and docs**: `rfc/README.md` Active row + migration-register row 12
    land with this draft (done in the same change); on implementation, canonical docs
    (`docs/` page + `docs/branch-runtime.md` session-kind note) and the register
-   statuses update; landing order behind `branch-groups.md` is honoured or
+   statuses update; landing order behind `archive/branch-groups.md` is honoured or
    renegotiated in the register.
 
 ## Open questions
@@ -626,6 +629,12 @@ None.
 
 ## Changelog
 
+- 2026-08-14 (Codex implementation review): approved after four corrections. Rebased
+  the landed dependency/baselines; separated grounded `nodeId` from playable
+  `entryNodeId` so terminal outcome slides do not open a dead board; and retained the
+  single-writer invariant by having only the active writer apply staged evidence.
+  CI run 31797561925 was confirmed to be an older-SHA typecheck failure already fixed
+  by commit `9db9183` on the current tree.
 - 2026-08-14: created. Capabilities verified against the working tree (then 359/63
   test baseline; file:line citations throughout). Lichess single-game export verified
   against the lichess OpenAPI spec (`security: []`, 8-char id, PGN accept header).
