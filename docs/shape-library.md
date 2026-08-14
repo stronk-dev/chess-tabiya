@@ -6,7 +6,7 @@ signatures, watch points, and provenance also work in pack-free Just Play sessio
 
 ## Entry anatomy and trust
 
-`schemas/shape_entry.schema.json` is the closed v0.1 format. An entry has an id and version,
+`schemas/shape_entry.schema.json` is the closed v0.2 format. An entry has an id and version,
 one or more phases, a structural trigger, plans for both colours, watch points, typical
 mistakes, and explicit provenance. Each plan may carry a structural success signature or
 `null` when the shipped arithmetic cannot honestly express one. The entry cannot contain a
@@ -15,8 +15,11 @@ is rejected so reusable prose cannot quietly bind itself to one position.
 
 The trigger and success signatures reuse the drill-pack `StructuralExpression` grammar.
 Catalogue entries commonly use a `named_structure` leaf; entries that need composition use
-the same `all`/`any`/`not`, feature, and piece-on-square expressions used by pack objectives.
-There is one evaluator in `@chess-tabiya/runtime`.
+the same `all`/`any`/`not`, feature, piece-on-square, mirrored, and bounded quantified expressions
+used by pack objectives. Mirrored catalogue names are refused. Files mirroring preserves plan
+owners and can widen an entry's trigger only when every wing-pinned success signature widens with
+it. Colours or both axes change plan ownership and therefore require a separate entry with its own
+authored plan prose. There is one evaluator in `@chess-tabiya/runtime`.
 
 Official entries load from `content/shapes/`. Community entries are immutable registered
 versions from Shape Studio. Channel is derived from the resolving source and is never an
@@ -47,9 +50,12 @@ ply-0 start row. Opening a marker shows detection first, then the fixed honesty 
 one.” Plans, structural success descriptions, watch points, mistakes, and provenance follow.
 
 For a pack run, only entries named by that pack are evaluated. Position runs evaluate the
-served catalogue. The four initial official entries are Carlsbad, White IQP, Black IQP, and
-same-side 4-v-3 rook endings. The rook entry names the family honestly; the current feature
-vocabulary does not prove the exact pawn census.
+served catalogue. The initial four entries have grown into the official catalogue under
+`content/shapes/`. Five entries were upgraded to v0.2.0 with the wave-2 grammar: same- versus
+opposite-coloured bishop endings are shade-disjoint; the Black fianchetto covers both wings;
+opposite-bishop and queenless fans use quantifiers; and the pawn-ending entry can identify direct
+or distant opposition. Entry versions are content versions and remain distinct from the shape-entry
+schema version.
 
 ## Just Play and authoring
 

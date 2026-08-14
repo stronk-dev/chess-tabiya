@@ -13,3 +13,11 @@ Implemented the fifteen-kind vocabulary and seven-node expression grammar across
 The exercising refusal tests found one integration defect not visible in the RFC review: `validateShapeEntry` collected the correct runtime issue and then evaluated the invalid trigger anyway, throwing for reversed quantified ranges and mirrored catalogue names. Validation now skips evaluation after a structural refusal and returns the named issue. The RFC also contained one internally contradictory opposition sentence (`X` to move versus its own Black-to-move example); corrected to the opponent of `X` to move.
 
 The first browser run exposed a stale content selector after the six-pack opening wave added two more Najdorf titles. It now selects the exact schema-example title rather than the substring “Najdorf”; this is a test-maintenance correction, not a retry. Repository verification passed at 416 tests / 70 files. Browser verification then passed 16 tests with the optional Maia test skipped, zero retries. The widened structural sample measured 3.393 ms median / 5.336 ms maximum over 200 samples.
+
+## 2026-08-14 — Lifecycle closeout
+
+Canonical behavior was reconciled into `docs/structural-reading.md`, `docs/drill-pack-format.md`, `docs/shape-library.md`, and `docs/explanation-grounds.md`. The RFC and planning directory moved to their archives and the shared register now records pack schema 0.13 / shape-entry schema 0.2 as implemented.
+
+The closeout also repaired two demonstrably stale parallel-wave index entries before the next lifecycle: `runtime-corpus-evidence.md` was absent from the Active table despite being the named second draft, and the Active descriptions still called adoption/social migrations 14/15 after their accepted documents and migration register had reconciled them to 13/14. No sibling RFC behavior changed.
+
+Final-tree verification after the archive moves: `ENGINES_REQUIRED=1 make verify` passed at 416 tests / 70 files with schema and packaging clean; `make test-browser` passed 16 tests with the optional Maia measurement skipped and Playwright retries still zero.

@@ -7,9 +7,9 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `predicate-wave-2.md` | implementing | `archive/structural-reading.md` (amends `archive/drill-pack-format.md`, `archive/shape-library.md`) | `planning/predicate-wave-2/` (2026-08-14 parallel wave, **first claim**; pack schema 0.13 + shape-entry schema 0.2, no migration) |
-| `adoption-wave-1.md` | draft | — | — (2026-08-14 parallel wave; migration 14 claimed, no pack/run schema claim) |
-| `social-match.md` | draft | `archive/live-session-platform.md` (amends board control, journal kinds, session routes; depends on `adoption-wave-1.md` for `public_tokens`) | — (2026-08-14 parallel wave, **last claim**; migration 15, no pack/run schema claim) |
+| `runtime-corpus-evidence.md` | draft | `archive/adaptive-guidance.md` (amends the assistance rail) | — (2026-08-14 parallel wave, second; no schema or migration claim) |
+| `adoption-wave-1.md` | draft | — | — (2026-08-14 parallel wave; migration 13 claimed, no pack/run schema claim) |
+| `social-match.md` | draft | `archive/live-session-platform.md` (amends board control, journal kinds, session routes; depends on `adoption-wave-1.md` for `public_tokens`) | — (2026-08-14 parallel wave, **last claim**; migration 14, no pack/run schema claim) |
 
 **Four-draft wave, 2026-08-14** — claim order: `predicate-wave-2` first, then
 `corpus-evidence`, `adoption-wave-1`, `social-match`. Shared-resource claims (pack
@@ -43,7 +43,7 @@ landing order, not lost data.
 | 0.10 | `archive/structural-reading.md` | implemented 2026-08-13, draft — `$defs/structuralFeature` and `$defs/structuralExpression`, a fourth `fenPredicate` variant, a fifth `successCondition` kind (`structural_feature`), `$defs/file`. No migration: rung-0 facts are never persisted |
 | 0.11 | `archive/shape-library.md` | implemented — additive only: optional top-level `shapes` (referenced shape-entry ids) and optional `planClass.shapePlan`. `planClasses` stays fully valid; no committed digest moves (the `$id` is not part of any pack document) |
 | 0.12 | `archive/defect-batch-2.md` | implemented — tightening only: `$defs/opponentPolicy` gets `additionalProperties: false` (D22); all committed packs and fixtures validate unchanged; no committed digest moves |
-| 0.13 | `predicate-wave-2.md` | implementing — additive: `structuralFeature` gains `bishop_on_shade`, `pawn_count` and `king_opposition` (admitted on review — the refusal lost its falsification test); `structuralExpression` gains `mirrored` and `quantified`; new domain/template `$defs`, all `additionalProperties: false`. Also bumps the shape-entry schema constant 0.1 → 0.2 (same additions in its duplicated `$defs`; no separate register exists, recorded here). First claim of the four-draft wave of 2026-08-14 — `corpus-evidence`, `adoption-wave-1`, and `social-match` claim behind this row |
+| 0.13 | `archive/predicate-wave-2.md` | implemented — additive: `structuralFeature` gains `bishop_on_shade`, `pawn_count` and `king_opposition`; `structuralExpression` gains `mirrored` and `quantified`; shape-entry schema 0.1 → 0.2 with the same duplicated grammar. No migration; rung-0 facts remain derived |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.
@@ -177,6 +177,7 @@ before re-attempting this territory.
 | `archive/defect-batch-2.md` | implemented | `docs/branch-runtime.md`, `docs/drill-pack-format.md`, `docs/structural-reading.md` |
 | `archive/branch-groups.md` | implemented | `docs/branch-groups.md`, `docs/branch-runtime.md`, `docs/engine-workers.md`, `docs/drill-client.md` |
 | `archive/game-import-and-story.md` | implemented | `docs/game-import-and-story.md`, `docs/branch-runtime.md` |
+| `archive/predicate-wave-2.md` | implemented | `docs/structural-reading.md`, `docs/drill-pack-format.md`, `docs/shape-library.md`, `docs/explanation-grounds.md` |
 
 ## The archive sketches are quarry, not RFCs
 

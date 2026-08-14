@@ -12,7 +12,7 @@ Implemented foundation:
 - `branch-groups.md` — durable candidate sets over ordinary branches, four seed
   sources, controlled-resistance reply journals, sequential/lockstep play,
   semantic zoom, evidence recovery, comparison, and export.
-- `drill-pack-format.md` — living v0.12 schema, semantic authoring lint, canonical
+- `drill-pack-format.md` — living v0.13 schema, semantic authoring lint, canonical
   digest and URL tooling, executable checkpoint-action validation, pack/run PGN
   round-trip, and deferred content boundary.
 - `engine-workers.md` — UCI supervision, Dockerized Maia and policy exposure,
@@ -59,8 +59,8 @@ Implemented foundation:
 - `live-sessions.md` — roles and board-control policy, possession authorship,
   proposals, advisory chat votes, Arena PGN legs, follower withholding, live routes,
   migration 9, and the accepted streamer-disclosure limitation.
-- `structural-reading.md` — deterministic rung-0 predicates, finite learner observations,
-  current-position deltas, and structurally grounded plan objectives.
+- `structural-reading.md` — fifteen deterministic rung-0 predicates, mirrored/quantified
+  expressions, finite learner observations, current-position deltas, and grounded plan objectives.
 - `shape-library.md` — reusable structural entries and pack references, source-derived
   channels, derived timeline firings, the attributed plans panel, Shape Studio, and the
   pack-free Just Play position player.

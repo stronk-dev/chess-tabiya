@@ -1,6 +1,6 @@
 # RFC: Structural predicate vocabulary, wave 2 — from authoring evidence
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/BACKLOG.md:197` (row "Predicate vocabulary wave 2 (from authoring
