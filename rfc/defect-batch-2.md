@@ -1,6 +1,6 @@
 # RFC: Defect batch 2 — D21, D22, D23, D24, D27: two fixes, three stale rows, five closures
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/BACKLOG.md` open-defect rows D21 (line 132), D22 (128), D23
@@ -113,7 +113,13 @@ coincident checkpoints (same `nodeId`) mark the node and never produce a segment
    `startCheckpointId` / `endCheckpointId`; **throw `TypeError`** if either seq does not
    resolve to a `checkpoint.reached` event (a corrupted log, same strictness class as
    `projectRun`'s existing event-order checks at `events.ts:180-194`).
-3. Build the `Segment` (`packages/runtime/src/types.ts:254-262`) from the event's
+3. Treat the event as integrity-sensitive now that it controls `segment_end` disclosure.
+   Require `startSeq < endSeq < segment.seq`; require the segment event to immediately follow
+   the ending checkpoint; and require both checkpoint events' `branchId` and `nodeId` to equal
+   the segment's declared branch/start/end values. Reject any mismatch with `TypeError`.
+   `appendEvents` is public, so validating only that the two sequence numbers exist would let a
+   forged event substitute an arbitrary `endNodeId` and widen authored reveal.
+4. Build the `Segment` (`packages/runtime/src/types.ts:254-262`) from the event's
    `branchId`, `startNodeId`, `endNodeId` and the resolved checkpoint ids;
    `startSeq`/`endSeq` are the event's two checkpoint seqs, exactly as today's consumers
    match on. Return frozen, in log order.
@@ -155,6 +161,9 @@ mirrored.
   legal play/checkpoint/rewind sequences, `deriveSegments(run)` corresponds 1:1 with the
   run's `segment.completed` events under `(branchId, startSeq, endSeq, startNodeId,
   endNodeId)` — the two readers cannot disagree on any reachable log.
+- *Forgery refusal*: a manually appended segment that cites real checkpoint sequences but
+  changes its branch, start/end node, order, or adjacency is rejected. This regression is
+  load-bearing because segment projection now opens authored-feedback scope.
 
 **Unblocks:** any future consumer may count, join, or grade on segments through either
 surface without a semantic fork — the exact property the return/progression review went
@@ -321,8 +330,8 @@ re-measured at implementation start):
    against the pre-fix deriver** (run once against the old `deriveSegments` to prove the
    regression bites); (b) the orchestrator-level two-triggers-same-ply test passes; (c) the
    pre-guard zero-length-event log projects, derives, and feeds authored feedback without
-   throwing; (d) the invariants property (`deriveSegments` ≡ `segment.completed`
-   projection) passes.
+  throwing; (d) the invariants property (`deriveSegments` ≡ validated `segment.completed`
+  projection) passes; (e) forged branch/node/order/adjacency metadata is rejected.
 2. **D22:** (a) `grep -n '"additionalProperties"' schemas/drill_pack.schema.json` shows no
    `true` at the `opponentPolicy` definition; (b) the full committed corpus
    (`content/candidates/*/pack.json`, `content/drafts/*.json`,
@@ -351,5 +360,9 @@ None.
 
 ## Changelog
 
+- 2026-08-14 (Codex implementation review): approved after closing one disclosure-integrity
+  blocker. Because the new derivation makes `segment.completed` authoritative for authored
+  reveal, the event must match both referenced checkpoints exactly and preserve ordering and
+  adjacency; sequence existence alone was insufficient against public `appendEvents`.
 - 2026-08-14: created; five rows re-verified against the tree (two real, three stale);
   pack schema 0.12 claimed in the register.
