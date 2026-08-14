@@ -79,6 +79,28 @@ responsive. Mobile-native excluded from v0 (three times over, in the brief's sco
 docs). The unexamined question: whether the rehearsal loop — short, repeatable,
 tactile — is actually a strong mobile-web/PWA fit. Revisit after Q1a/Q1b show evidence.
 
+## Adoption posture (owner ruling, 2026-08-14)
+
+> *"I am not opposed to adopting features that don't differentiate. All these
+> different apps do one thing well, and then leave out the rest."*
+
+The market's shape IS the fragmentation: each product is one good feature with
+the rest missing (the 40-row matrix is the evidence — an SRS without play, a
+story without re-entry, a coach without theory, spectating without training).
+**The differentiator is the integrated loop; everything else may be adopted
+freely** — and adopting well is not a distraction from the thesis, it is what
+makes the loop reachable without leaving the app. Constraints that keep adoption
+from diluting: an adopted feature enters through our invariants (`05` §1 —
+silence default, commit-before-learning, attempts preserved, grounded claims),
+and the coverage matrix is therefore a *mining list*, not only a threat list.
+
+**Worked contrast — Chess.com Play Coach** (owner read, matching the sweep's
+grounding): it narrates reactively — praise/warnings during play with no theory
+tie-in and no structural anchor. Ours inverts both halves: silent by default,
+and when it speaks it *names* — the shape, the plan, the technique — grounded in
+the library and re-enterable at the position. They talk more and say less; the
+adoptable part is the ambient-companion presence, not the commentary.
+
 ## Positioning (settled at design level)
 
 The comparison axis is not personalization; it is:
