@@ -1,0 +1,418 @@
+{
+  "id": "mate-k-r-technique",
+  "version": "0.1.0",
+  "title": "Rook mate: the fence, the opposition, and the tempo move",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1000,
+    "maxOnlineRapid": 1400,
+    "label": "On-ramp: the second theoretical mate — the rook fences, the kings do the work",
+    "branchLengthTarget": 19
+  },
+  "start": {
+    "fen": "8/3k4/8/8/8/3K4/7R/8 w - - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "win",
+    "summary": "King and rook against a bare king. The rook is a fence, not a hunter: it cuts off one rank and stands still at a distance. Your king does the driving — walk up, take the opposition, and when the kings stand eye to eye the rook checks and the fence advances a rank. When the defender dodges the opposition, you need the one move beginners never find: a rook slide along the fence, changing nothing except whose turn it is. Mate on the back rank.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "win",
+        "pieceCount": 3,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-14T21:55:00Z"
+      },
+      "resolveAt": {
+        "kind": "terminal"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "not",
+          "of": {
+            "kind": "feature",
+            "feature": {
+              "kind": "piece_reach_count",
+              "color": "white",
+              "role": "rook",
+              "scope": "any",
+              "comparison": "atLeast",
+              "count": 0
+            }
+          }
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "rook-fence",
+    "direct-opposition",
+    "tempo-move",
+    "back-rank-mate"
+  ],
+  "planClasses": [
+    {
+      "id": "cut-and-fence",
+      "label": "Cut off a rank and leave the rook alone",
+      "description": "The rook takes one rank away and then stands still, as far from the enemy king as the fence allows. Rook checks that are not part of the drive do nothing; a rook that wanders close gets attacked and loses the fence."
+    },
+    {
+      "id": "opposition-and-drive",
+      "label": "Opposition, then check",
+      "description": "Your king walks up and takes the direct opposition. When the kings stand eye to eye and it is your move, the rook check has nowhere to hide from: the defender must retreat and the fence advances one rank. The check is only good at exactly that moment."
+    },
+    {
+      "id": "tempo-move",
+      "label": "The waiting move",
+      "description": "When the defender sidesteps to avoid the opposition, do not chase with the king — slide the rook one or more squares along the fence, from the long side. The position is unchanged, but now the defender must move, and every move walks into the opposition or gives ground."
+    }
+  ],
+  "spine": [
+    {
+      "id": "w-rh6",
+      "moveUci": "h2h6",
+      "moveSan": "Rh6",
+      "children": [
+        {
+          "id": "b-ke7",
+          "moveUci": "d7e7",
+          "moveSan": "Ke7",
+          "children": [
+            {
+              "id": "w-ke4",
+              "moveUci": "d3e4",
+              "moveSan": "Ke4",
+              "children": [
+                {
+                  "id": "b-kd7",
+                  "moveUci": "e7d7",
+                  "moveSan": "Kd7",
+                  "children": [
+                    {
+                      "id": "w-kd5",
+                      "moveUci": "e4d5",
+                      "moveSan": "Kd5",
+                      "children": [
+                        {
+                          "id": "b-ke7-2",
+                          "moveUci": "d7e7",
+                          "moveSan": "Ke7",
+                          "children": [
+                            {
+                              "id": "w-ra6",
+                              "moveUci": "h6a6",
+                              "moveSan": "Ra6",
+                              "children": [
+                                {
+                                  "id": "b-kd7-2",
+                                  "moveUci": "e7d7",
+                                  "moveSan": "Kd7",
+                                  "children": [
+                                    {
+                                      "id": "w-ra7",
+                                      "moveUci": "a6a7",
+                                      "moveSan": "Ra7+",
+                                      "children": [
+                                        {
+                                          "id": "b-kd8",
+                                          "moveUci": "d7d8",
+                                          "moveSan": "Kd8",
+                                          "children": [
+                                            {
+                                              "id": "w-kd6",
+                                              "moveUci": "d5d6",
+                                              "moveSan": "Kd6",
+                                              "children": [
+                                                {
+                                                  "id": "b-ke8",
+                                                  "moveUci": "d8e8",
+                                                  "moveSan": "Ke8",
+                                                  "children": [
+                                                    {
+                                                      "id": "w-ke6",
+                                                      "moveUci": "d6e6",
+                                                      "moveSan": "Ke6",
+                                                      "children": [
+                                                        {
+                                                          "id": "b-kf8",
+                                                          "moveUci": "e8f8",
+                                                          "moveSan": "Kf8",
+                                                          "children": [
+                                                            {
+                                                              "id": "w-kf6",
+                                                              "moveUci": "e6f6",
+                                                              "moveSan": "Kf6",
+                                                              "children": [
+                                                                {
+                                                                  "id": "b-kg8",
+                                                                  "moveUci": "f8g8",
+                                                                  "moveSan": "Kg8",
+                                                                  "children": [
+                                                                    {
+                                                                      "id": "w-kg6",
+                                                                      "moveUci": "f6g6",
+                                                                      "moveSan": "Kg6",
+                                                                      "children": [
+                                                                        {
+                                                                          "id": "b-kh8",
+                                                                          "moveUci": "g8h8",
+                                                                          "moveSan": "Kh8",
+                                                                          "children": [
+                                                                            {
+                                                                              "id": "w-ra8-mate",
+                                                                              "moveUci": "a7a8",
+                                                                              "moveSan": "Ra8#",
+                                                                              "children": []
+                                                                            }
+                                                                          ]
+                                                                        }
+                                                                      ],
+                                                                      "annotations": [
+                                                                        "The shadow continues to the mating post. The defender is out of board: h8 is the last square, your king covers g7 and h7, and the rook has the whole eighth rank from a8. One warning remains — Rg7 here would be stalemate, not mate. Check on the rank, from the far side."
+                                                                      ]
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              ],
+                                                              "annotations": [
+                                                                "Shadow the king square for square. With the seventh rank fenced, the defender can only walk the back rank toward the corner, and every step of yours keeps the eye-to-eye distance."
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ],
+                                                      "annotations": [
+                                                        "Follow. The rook holds the entire seventh rank from a7; your king herds the bare king along the eighth toward the far corner."
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "annotations": [
+                                                "Opposition again, one rank higher. The drive repeats itself: fence, opposition, and the defender runs out of ranks — there is none behind the eighth."
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "annotations": [
+                                        "The drive: the kings stand eye to eye and it is your move, so the check has no answer but retreat. The fence advances from the sixth rank to the seventh in one move — this check is the entire reason the opposition mattered."
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "annotations": [
+                                "The tempo move, and the hardest move of the endgame to find: the rook slides along its own fence, all the way to the long side. Nothing on the board changed — except that the defender now has to move, and from e7 every legal move either walks into the opposition or gives up ground."
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "annotations": [
+                        "Take the opposition back. The defender is now shuffling between two squares while your king stands its ground — one waiting move from the rook will run him out of safe squares."
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "annotations": [
+                "The king, not the rook, does the driving. Walk up behind the fence. The defender dodges to avoid standing eye to eye — that dodge is what the tempo move will punish."
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "The fence: the rook cuts off the sixth rank and the defending king can never cross it again. The rook stays far away on the h-file — distance is what keeps a fence safe."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "scheme-choice",
+      "label": "Name the division of labour",
+      "trigger": {
+        "atSpineNode": "b-ke7"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "cut-and-fence",
+          "opposition-and-drive",
+          "tempo-move"
+        ]
+      }
+    },
+    {
+      "id": "tempo-moment",
+      "label": "The defender dodges — find the move that does nothing",
+      "trigger": {
+        "atSpineNode": "b-ke7-2"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "mate-or-stalemate",
+      "label": "Last move: the rank check mates, the file move stalemates",
+      "trigger": {
+        "atSpineNode": "b-kh8"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "w-rh6",
+      "b-ke7",
+      "w-ke4",
+      "b-kd7",
+      "w-kd5",
+      "b-ke7-2",
+      "w-ra6",
+      "b-kd7-2",
+      "w-ra7",
+      "b-kd8",
+      "w-kd6",
+      "b-ke8",
+      "w-ke6",
+      "b-kf8",
+      "w-kf6",
+      "b-kg8",
+      "w-kg6",
+      "b-kh8",
+      "w-ra8-mate"
+    ],
+    "plyHorizon": 26
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1200,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "fen": "8/3k4/8/8/8/3K4/7R/8 w - - 0 1"
+      },
+      "moveUci": "h2h7",
+      "class": "interesting_deviation",
+      "note": "The check reflex. Rh7+ is still a tablebase win — in this endgame almost everything is — but the king simply steps away and nothing was gained: a rook check with no opposition drives nothing. The fence move Rh6 takes territory instead."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke7"
+      },
+      "moveUci": "h6f6",
+      "class": "tactical_error",
+      "note": "The fence wandered too close: Kxf6 and the game is a queried draw. Rd6 and Re6+ lose the rook the same way. A fence works from a distance; the whole h-file was available.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke7-2"
+      },
+      "moveUci": "h6f6",
+      "class": "tactical_error",
+      "note": "The right idea — a waiting move along the fence — from the wrong side: Kxf6 takes the rook, a queried draw. The tempo move must come from the long side, out of the king's reach: Ra6.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kg8"
+      },
+      "moveUci": "a7a8",
+      "class": "interesting_deviation",
+      "note": "The back-rank check one move early: the kings are not eye to eye, so Kh7 slips out sideways and the herding starts over. Still a tablebase win — but the mate was two moves away and now it is not. The rank check is only mate when your king already covers the escape squares."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kh8"
+      },
+      "moveUci": "a7g7",
+      "class": "tactical_error",
+      "note": "STALEMATE, queried as a rules fact. Rg7 covers g8 — the defender's only square — without giving check, and a whole endgame of correct fencing ends in a draw one move from mate. Ra8# and the far-side rank check was the move.",
+      "offObjective": true
+    }
+  ],
+  "feedbackPolicy": "immediate_guard",
+  "guard": {
+    "evalSwingCp": 200
+  },
+  "feedbackClaims": [
+    {
+      "id": "kr-always-won",
+      "text": "This exact position is a tablebase win (Syzygy, three pieces), and every position along the authored line was queried and remains a win. The queried non-wins in this pack are the ones the learner creates: a rook left in the king's reach (draw) and the Rg7 stalemate (draw). Both categories are machine facts about these positions.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "tempo-is-the-lesson",
+      "text": "At the tempo moment every rook slide along the sixth rank from the long side preserves the tablebase win, and the same idea played from the short side (Rf6) was queried as a draw because the king takes the rook. The waiting move is a real move; where it is played from decides the game.",
+      "evidenceTypes": [
+        "tablebase_exact",
+        "author_principle"
+      ]
+    },
+    {
+      "id": "opposition-then-check",
+      "text": "The drive check Ra7+ comes exactly when the kings stand in direct opposition; played early (Ra8+ before the kings meet) the king escapes sideways — verified as still winning but with the drive reset. The pairing of opposition and check is authored teaching; every category cited is queried.",
+      "evidenceTypes": [
+        "author_principle",
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "Outcome drill: you are graded on delivering mate, not on matching the authored squares. The tablebase confirms many winning routes; the fence-opposition-tempo method is the one that needs no calculation.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Start position is a constructed schematic (White Kd3, Rh2; Black Kd7): defending king one step off the back rank so that the full method — fence, opposition, tempo move, drive, herd, mate — must all be played. No specific book diagram is claimed.",
+      "TABLEBASE VERIFIED: the root and every position after every spine move were queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root category: win, DTM 21. Every authored White move preserves the win; the spine ends in checkmate, confirmed by rules arithmetic. Every legal White move at the root and at the anchored decision nodes was enumerated and queried; each deviation note states its queried category (Rf6/Re6+/Rd6 after ...Ke7: draws; Rf6 at the tempo node: draw; Rg7 at the final node: stalemate; Rh7+ at root and Ra8+ before the kings meet: wins).",
+      "The defender's spine replies from the drive check onward are forced or two-way (verified by enumeration); the earlier replies are one plausible dodge among several. The spine is one move slower than DTM-optimal because the authored method plays the tempo move rather than the fastest king walk; every position on it remains a queried win.",
+      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars); registry admission will show a declared, unverified assessment.",
+      "AUTHORED, NOT PROVED: all prose reasoning, the phase names, and 'hardest move to find'. The tablebase and the rules of chess ground the categories only.",
+      "No shape-library entry exists for theoretical mates; none is referenced. See graduationBlockers.",
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check.",
+      "Sibling packs in the theoretical-mates family: mate-k-q-technique (K+Q) and mate-two-bishops (B+B)."
+    ],
+    "graduationBlockers": [
+      "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
+      "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
+      "No shape-library entry names the theoretical-mate boxes; commission one if the library should fire on K+R positions in Just Play.",
+      "The natural opponent for a mates pack is perfect_tablebase; that mode is declared-unimplemented in v1, so human_common at 1200 stands in."
+    ]
+  },
+  "retryVariants": [
+    {
+      "kind": "different_material_details",
+      "note": "Same family, different material: mate-k-q-technique (queen: track from a knight's move, no opposition needed) and mate-two-bishops (bishops: the fence is two diagonals). Drilled once each, then retired."
+    }
+  ]
+}

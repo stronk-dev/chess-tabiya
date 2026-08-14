@@ -1209,3 +1209,111 @@ arithmetic is declared as such); no touch of `rfc/`, `design/`, `apps/`,
 `packages/`, `schemas/`; no commits; stayed off sibling ON-RAMP and ENDGAME
 territory. Schema note: format constant verified at 0.15 (stated_reasoning
 landed mid-wave); these packs use the wave-2 vocabulary, valid under both.
+
+## 2026-08-14 — pack wave 5c (final endgame batch): theoretical mates + the variants-rule demonstration (claude)
+
+agent-research 97 · agent-encoding 68 · agent-engine-validation 35 · review 0 · agent-revision 11 · agent-tooling-friction 10
+notes: **Landed four packs in `content/drafts/`, all `make pack-check` green, all
+fully Syzygy-grounded** — the theoretical-mates row of design/04 §4 ("drilled
+once, never again"; owner ruling 2026-08-14: mates packs are IN) plus one
+demonstration of the convert/hold variants rule:
+
+- `mate-k-q-technique.json` (win, 3 pieces, 1000–1400, guard ON at 200cp) —
+  19-ply spine: knight's-move tracking to the h8 corner, queen parks, king
+  marches, Qe8#. **The stalemate traps ARE the content, as briefed**: Qf7 with
+  the cornered king queried STALEMATE at TWO anchors — mid-drill and one move
+  before mate — and the final-node enumeration shows 27 of 29 moves still win
+  (the two failures are both stalemate). Four hang-the-queen checks at the
+  root/early nodes all queried draws; the aimless Qd8+ queried win and
+  classed interesting (progress reset, nothing lost).
+- `mate-k-r-technique.json` (win, 3 pieces, 1000–1400, guard ON) — 19-ply
+  spine with the full method: fence (Rh6), opposition shadow, THE TEMPO MOVE
+  (Ra6 slide from the long side), drive check on opposition (Ra7+), herd,
+  Ra8#. The same waiting-move idea from the short side (Rf6) queried DRAW —
+  Kxf6 — at both nodes where it tempts; Rg7 at the final node queried
+  STALEMATE one move from mate.
+- `mate-two-bishops.json` (win, 4 pieces, 1400–2000, delayed_checkpoint) —
+  the spine IS the DTM-optimal line for both sides (17 plies), drive-to-corner
+  with the quiet full-length retreat Bb1 as the pivot move. Enumeration found
+  a stalemate FIELD: at the final node 16 of 18 legal moves are stalemate, the
+  17th hangs a bishop, the 18th is Bd4#; plus three mid-line king-approach
+  stalemates (Ke7, Bf7, Kf7), all encoded as deviations with queried
+  categories. First root drafted had both bishops on dark squares — the
+  tablebase said DRAW and the root was rebuilt (harness catch #1).
+- `philidor-passive-rook-convert.json` (win, 5 pieces, 1400–2200) — **the
+  variants-rule demonstration**: the CONVERT sibling of wave-5b's
+  `philidor-third-rank-hold`, root DERIVED not constructed (hold-root after
+  the queried-losing 1...Rh8??, i.e. h6h8). The tablebase gave the pack its
+  thesis for free: Ra8+ (the skewer through the king that blocks its own
+  rook) is the UNIQUE winning move — all 21 root moves enumerated: 1 win, 13
+  draws (including Kd6, the textbook squeeze, refuted HERE and honestly
+  cross-referenced against the shape entry's white-squeeze plan), 7 losses
+  (hanging the rook). At the collection node the geometry reverses: quiet
+  eighth-rank rook moves and all four king moves queried LOSSES to Rxa8 once
+  e8 is vacated. Conversion tail ends Rh8# via the K+R fence (deliberate
+  reprise); the conversion has its own queried STALEMATE (Ke5 at the
+  sixth-rank node) — now a deviation. Sibling cross-referenced in provenance
+  prose + `retryVariants: opposite_side` both ways is impossible (hold pack
+  is frozen content, not edited) — one-way prose link only, per the gap.
+
+**Grounding method (wave-5b discipline replicated and extended):**
+tablebase.lichess.org /standard via the scratchpad python-chess 1.11.2
+harness with JSON cache and 429 backoff. Every spine move of all four packs
+queried win-preserving; all four spines walked to CHECKMATE (rules
+arithmetic); **full legal-move enumeration at every learner decision node**
+(not spot checks), which is where the undrafted stalemates were found; every
+deviation category is the queried one. A final self-check script re-reads the
+four SHIPPED JSON files and re-verifies spines, deviations, declared piece
+counts and root categories against the tablebase: 0 failures.
+
+**The harness and validator caught five authored chess errors before ship:**
+(1) same-coloured-bishops B+B root — queried draw; (2)+(3) two K+R finishes —
+one mis-spliced (walk showed Ra8+ NOT mate, king off the mating post), one 23
+plies (over the 20-ply format cap); (4) drafted claim "Ra7+ draws" at the
+collection node — enumeration says WIN, and drafted "all root alternatives
+draw" — seven are LOSSES; both notes rewritten to the queried facts;
+(5) drafted root deviation e4e5 — ILLEGAL, own king on e5 blocks the pawn,
+caught by pack-check ILLEGAL_DEVIATION_MOVE with exact pointer.
+
+contract-gaps and frictions, sharpest first:
+1. **Variants rule still fights the format (wave-5b gap #1, second
+   attestation, now with a machine-derivable case).** This convert sibling's
+   root is DERIVED from the hold pack's root by one recorded move — the
+   strongest possible root-identity fact — and the format still cannot say
+   it. Prose + one-way retryVariants remain the stand-in. If a root-identity
+   field lands, this pair is the test fixture.
+2. **Mates packs want the perfect_tablebase opponent and cannot have it**:
+   the mode is declared-unimplemented (capabilities.ts), pack-check would
+   refuse it, so all four packs run human_common with a blocker note. The
+   whole point of a theoretical-mate drill is "works against best defence";
+   revisit when tablebase opponent selection ships.
+3. **branchLengthTarget's 20-ply cap constrains theoretical mates
+   structurally**: K+R from a centre king is DTM 21–23 before method
+   overhead — a full-length mate drill cannot fit one spine. Both 3-piece
+   packs root one stage in (rank-7/centre-edge kings). Acceptable for
+   "drilled once", but the cap is now a measured content constraint, not a
+   hypothetical.
+4. **AUTHORED_PROSE_AFTER_LAST_CHECKPOINT is a good lint**: it fired on the
+   K+Q march annotations and forced a real improvement — the
+   mate-or-stalemate checkpoints at the final decision node now exist in all
+   three mates packs because prose needed a path to a checkpoint.
+5. **Full-node enumeration should be standing discipline for ≤7-piece
+   packs**: every stalemate deviation in the B+B and philidor packs that no
+   draft contained was found by enumerating all legal moves at decision
+   nodes and querying each. Cost is bounded (≤30 queries/node, cached); the
+   content it surfaces (the B+B "16 of 18" fact) is the sharpest in the
+   batch.
+6. Rate limit: parallel enumeration streams tripped tablebase.lichess.org
+   429s; fixed with 1s spacing + exponential backoff, cache reused across
+   reruns. Batch discipline: one sequential stream.
+7. python-chess still not blessed in the repo toolchain (third attestation;
+   installed to scratchpad venv again).
+
+Not done, deliberately: no B+N mate pack (design/04 lists it; deliberately
+deferred with a note in the B+B pack's provenance — its place at any band is
+an open product question, and "drilled once" cuts against authoring it
+without a ruling); no sourcing sidecars/candidates (wave-5b gap #3
+unchanged — all four Syzygy declarations remain admission-unverified); no
+Stockfish pass (everything is inside Syzygy range — the point of the root
+choices); no touch of `rfc/`, `design/`, `archive/`, `apps/`, `packages/`,
+`schemas/`, opening-named drafts, or ON-RAMP territory; no commits.

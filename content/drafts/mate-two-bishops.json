@@ -1,0 +1,416 @@
+{
+  "id": "mate-two-bishops",
+  "version": "0.1.0",
+  "title": "Two bishops: the rolling wall and the corner net",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Club player who must convert the bishop pair against a bare king without touching the fifty-move count",
+    "branchLengthTarget": 17
+  },
+  "start": {
+    "fen": "3k4/8/8/3K4/3BB3/8/8/8 w - - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "win",
+    "summary": "Two bishops against a bare king — the hardest of the common theoretical mates. Side by side the bishops wall off two adjacent diagonals; the wall rolls forward one diagonal at a time and the king does the driving. Mate exists only in a corner, and only with your king standing two squares away. The traps are the same as every mate: a loose bishop, and a quiet move too many in the corner — where almost everything that is not a check is stalemate.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "win",
+        "pieceCount": 4,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-14T21:55:00Z"
+      },
+      "resolveAt": {
+        "kind": "terminal"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "not",
+          "of": {
+            "kind": "feature",
+            "feature": {
+              "kind": "piece_reach_count",
+              "color": "white",
+              "role": "bishop",
+              "scope": "every",
+              "comparison": "atLeast",
+              "count": 0
+            }
+          }
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "two-diagonal-wall",
+    "king-leads",
+    "corner-net",
+    "quiet-bishop-move"
+  ],
+  "planClasses": [
+    {
+      "id": "rolling-wall",
+      "label": "Wall on two diagonals, rolled forward",
+      "description": "Bishops on adjacent diagonals leave no gap: together they fence off a shrinking triangle of the board. The wall advances one diagonal at a time and never needs to give check to make progress."
+    },
+    {
+      "id": "king-leads",
+      "label": "The king does the driving",
+      "description": "The bishops hold territory; they cannot take any. Every rank the defender loses is taken by your king walking up with the wall at its back."
+    },
+    {
+      "id": "corner-net",
+      "label": "Mate only in the corner, checks only at the end",
+      "description": "The net closes in a corner: your king two squares away, the light bishop sealing the diagonal out, the dark bishop delivering along the long diagonal. In the corner nearly every quiet move is stalemate — once the king is caged, only checks make progress."
+    }
+  ],
+  "spine": [
+    {
+      "id": "w-kd6",
+      "moveUci": "d5d6",
+      "moveSan": "Kd6",
+      "children": [
+        {
+          "id": "b-ke8",
+          "moveUci": "d8e8",
+          "moveSan": "Ke8",
+          "children": [
+            {
+              "id": "w-bg6",
+              "moveUci": "e4g6",
+              "moveSan": "Bg6+",
+              "children": [
+                {
+                  "id": "b-kf8",
+                  "moveUci": "e8f8",
+                  "moveSan": "Kf8",
+                  "children": [
+                    {
+                      "id": "w-ke6",
+                      "moveUci": "d6e6",
+                      "moveSan": "Ke6",
+                      "children": [
+                        {
+                          "id": "b-kg8",
+                          "moveUci": "f8g8",
+                          "moveSan": "Kg8",
+                          "children": [
+                            {
+                              "id": "w-kf6",
+                              "moveUci": "e6f6",
+                              "moveSan": "Kf6",
+                              "children": [
+                                {
+                                  "id": "b-kf8-2",
+                                  "moveUci": "g8f8",
+                                  "moveSan": "Kf8",
+                                  "children": [
+                                    {
+                                      "id": "w-bc5",
+                                      "moveUci": "d4c5",
+                                      "moveSan": "Bc5+",
+                                      "children": [
+                                        {
+                                          "id": "b-kg8-2",
+                                          "moveUci": "f8g8",
+                                          "moveSan": "Kg8",
+                                          "children": [
+                                            {
+                                              "id": "w-bb1",
+                                              "moveUci": "g6b1",
+                                              "moveSan": "Bb1",
+                                              "children": [
+                                                {
+                                                  "id": "b-kh8",
+                                                  "moveUci": "g8h8",
+                                                  "moveSan": "Kh8",
+                                                  "children": [
+                                                    {
+                                                      "id": "w-kg6",
+                                                      "moveUci": "f6g6",
+                                                      "moveSan": "Kg6",
+                                                      "children": [
+                                                        {
+                                                          "id": "b-kg8-3",
+                                                          "moveUci": "h8g8",
+                                                          "moveSan": "Kg8",
+                                                          "children": [
+                                                            {
+                                                              "id": "w-ba2",
+                                                              "moveUci": "b1a2",
+                                                              "moveSan": "Ba2+",
+                                                              "children": [
+                                                                {
+                                                                  "id": "b-kh8-2",
+                                                                  "moveUci": "g8h8",
+                                                                  "moveSan": "Kh8",
+                                                                  "children": [
+                                                                    {
+                                                                      "id": "w-bd4-mate",
+                                                                      "moveUci": "c5d4",
+                                                                      "moveSan": "Bd4#",
+                                                                      "children": []
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              ],
+                                                              "annotations": [
+                                                                "The net closes: the light bishop checks from the far end of the diagonal it has owned since Bb1, and h8 is the only square left. Next comes the one dark-square check — and it is mate, because your king holds g7 and h7 and the light bishop holds g8. Any quiet move instead would be stalemate."
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ],
+                                                      "annotations": [
+                                                        "The king takes its mating post two squares from the corner. Everything is now placed; what remains is a two-check sequence, and nothing else."
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "annotations": [
+                                                "The move this endgame is about: the bishop retreats the full length of its diagonal and keeps doing its job — b1 and g6 hold the same wall, but from b1 the bishop is ready to swing to a2 and seal g8 when the moment comes. Bishops work at any range; use the far end."
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "annotations": [
+                                        "The dark bishop joins the wall from behind the king: c5 seals f8, and the defender's world is now g8 and h8. Note that both bishops still stand where the bare king can never touch them."
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "annotations": [
+                                "Shadow the king. With g8 and f8 the only squares, your king walks to f6 and takes g7 away; the bishops have not moved because the wall is already right."
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "annotations": [
+                        "The king leads again. The bishops hold the wall; the king takes the squares in front of it. The defender is already reduced to the corner triangle."
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "annotations": [
+                "One check — not to harass, but to choose the corner: Bg6+ takes e8's exit and sends the king toward h8, the corner the wall is already pointing at. Checks in this endgame exist to steer, and there are only three of them in the whole line."
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "The king steps up first. The bishops on d4 and e4 already wall off the two long diagonals side by side — the defender is fenced into the top-right triangle before a single check is given."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "scheme-choice",
+      "label": "Name the machinery before it rolls",
+      "trigger": {
+        "atSpineNode": "b-ke8"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "rolling-wall",
+          "king-leads",
+          "corner-net"
+        ]
+      }
+    },
+    {
+      "id": "quiet-move",
+      "label": "The wall is right, the wing is wrong — find the regrouping move",
+      "trigger": {
+        "atSpineNode": "b-kg8-2"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "corner-net-closes",
+      "label": "In the corner: checks or stalemate",
+      "trigger": {
+        "atSpineNode": "b-kh8-2"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "w-kd6",
+      "b-ke8",
+      "w-bg6",
+      "b-kf8",
+      "w-ke6",
+      "b-kg8",
+      "w-kf6",
+      "b-kf8-2",
+      "w-bc5",
+      "b-kg8-2",
+      "w-bb1",
+      "b-kh8",
+      "w-kg6",
+      "b-kg8-3",
+      "w-ba2",
+      "b-kh8-2",
+      "w-bd4-mate"
+    ],
+    "plyHorizon": 24
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1700,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "spineNodeId": "b-kf8"
+      },
+      "moveUci": "d4g7",
+      "class": "tactical_error",
+      "note": "Bg7+ puts the bishop on the square it will eventually mate from — one phase too early, with no king support: Kxg7, a queried draw. Be8 and Bf7 hang the other bishop the same way. Two bishops win; one bishop never does.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kg8"
+      },
+      "moveUci": "e6e7",
+      "class": "tactical_error",
+      "note": "STALEMATE in the middle of the drive, queried as a rules fact. Ke7 walks the king straight forward — and with g6 and d4 already covering h7, g7 and h8, the caged king has no move and no check on it. The king must approach beside the cage, not onto its last airhole.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kf8-2"
+      },
+      "moveUci": "g6f7",
+      "class": "tactical_error",
+      "note": "STALEMATE, queried as a rules fact: Bf7 seals e8 and g8 in one move while your king holds e7 and g7 — total control, zero legal replies, half a point. The winning move Bc5+ gives the king a square while taking the rank.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kg8-2"
+      },
+      "moveUci": "g6h7",
+      "class": "tactical_error",
+      "note": "Bh7+ looks like it drives the king into the corner; it is simply captured, Kxh7 — a queried draw. The regrouping move runs the other way: Bb1 keeps the same diagonal from the far end, where no king will ever touch it.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kh8"
+      },
+      "moveUci": "f6f7",
+      "class": "tactical_error",
+      "note": "STALEMATE, queried as a rules fact — the third stalemating king approach this position offers. Kf7 covers g8 while the b1-bishop covers h7: cage shut, no check, draw. Kg6 covers the same squares minus one: the shuffle square g8 stays open.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kh8-2"
+      },
+      "moveUci": "c5b6",
+      "class": "tactical_error",
+      "note": "STALEMATE, queried as a rules fact — and not alone: at this node every legal move except two was queried as stalemate (sixteen of eighteen), the seventeenth (Bg8) hangs the bishop for a draw, and the eighteenth is Bd4#. In the closed corner, quiet moves do not exist.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kh8-2"
+      },
+      "moveUci": "a2g8",
+      "class": "tactical_error",
+      "note": "Bg8 'seals the corner' by standing on the one square the defender can capture on: Kxg8, a queried draw, and the light-squared half of the mating net is gone for good.",
+      "offObjective": true
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "bb-always-won",
+      "text": "This exact position is a tablebase win (Syzygy, four pieces), and the authored spine is the DTM-optimal line for both sides: every position on it was queried, every White move is fastest-mate-preserving, and the line ends in checkmate confirmed by rules arithmetic.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "corner-stalemate-field",
+      "text": "At the final decision node every legal White move was enumerated and queried: the checks win, and the quiet alternatives that keep the cage shut are stalemate — the deviation notes list the queried categories move by move. In the corner phase of this endgame, stalemate is not one trap; it is the default.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "wall-then-king",
+      "text": "The wall-and-king narration — bishops hold, king takes — is authored teaching language for a line whose every category is machine truth. The bishops never stand where the bare king could attack them at any point of the spine, which is checkable square arithmetic.",
+      "evidenceTypes": [
+        "author_principle",
+        "derived_feature"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "Outcome drill: you are graded on delivering mate, not on matching the authored squares — but this is the one common mate where wandering costs real risk, because the fifty-move rule and the stalemate field punish aimless play. The authored line is the shortest road.",
+      "evidenceTypes": [
+        "author_principle",
+        "tablebase_exact"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Start position is a constructed schematic (White Kd5, Bd4, Be4; Black Kd8): bishops already side by side on the two long diagonals, defending king on the back rank, so the drill is the drive-to-corner geometry rather than the slow centralization. No specific book diagram is claimed. A first draft of this root placed both bishops on dark squares; the tablebase returned category draw and the root was rebuilt — the harness catching an authored chess error before it shipped.",
+      "TABLEBASE VERIFIED: the root and every position after every spine move were queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root category: win, DTM 17. The spine is the DTM-optimal mainline for both sides (each White move fastest, each Black reply most resistant); it ends in checkmate confirmed by rules arithmetic. Every legal White move at the root and at each anchored decision node was enumerated and queried; every deviation note states its queried category.",
+      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars); registry admission will show a declared, unverified assessment.",
+      "AUTHORED, NOT PROVED: all prose reasoning — 'wall', 'net', 'steer' — is the author's rendering of standard technique. The tablebase grounds categories; square-coverage statements are derivable FEN arithmetic.",
+      "No shape-library entry exists for theoretical mates; none is referenced. See graduationBlockers.",
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check.",
+      "Sibling packs in the theoretical-mates family: mate-k-q-technique (K+Q) and mate-k-r-technique (K+R). The B+N mate is deliberately not authored: design/04 §4 lists it, but at this band it is a curiosity; a future pack should decide its place explicitly."
+    ],
+    "graduationBlockers": [
+      "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
+      "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
+      "No shape-library entry names the theoretical-mate geometry; commission one if the library should fire on B+B positions in Just Play.",
+      "The natural opponent for a mates pack is perfect_tablebase; that mode is declared-unimplemented in v1, so human_common at 1700 stands in.",
+      "The fifty-move pressure claim is stated but the drill has no counter surfaced; whether the runtime should show the count in mates packs is an open product question."
+    ]
+  },
+  "retryVariants": [
+    {
+      "kind": "different_material_details",
+      "note": "Same family, different material: mate-k-q-technique (queen) and mate-k-r-technique (rook) — the easier siblings, drilled at the on-ramp band with the guard on."
+    }
+  ]
+}

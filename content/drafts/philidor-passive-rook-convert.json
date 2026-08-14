@@ -1,0 +1,470 @@
+{
+  "id": "philidor-passive-rook-convert",
+  "version": "0.1.0",
+  "title": "Philidor family: punish the passive rook",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2200,
+    "label": "Club player on the strong side of the Philidor who must cash the defender's one passive move",
+    "branchLengthTarget": 15
+  },
+  "start": {
+    "fen": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2",
+    "side": "white"
+  },
+  "objective": {
+    "type": "win",
+    "summary": "The same Philidor position the defence drill holds — one move after the defender abandoned the third-rank fence for the passive Rh8. The tablebase now says win, and it says something sharper: exactly one move wins it. The defending king stands on its own rook's rank, so the back-rank check is a skewer; every other move on the board — including the natural king-to-the-sixth squeeze — lets the defender re-assemble the draw. Collect the rook, then escort the pawn home with the king in front.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "win",
+        "pieceCount": 5,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-14T22:40:00Z"
+      },
+      "resolveAt": {
+        "kind": "checkpoint",
+        "checkpointId": "rook-is-won"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            {
+              "kind": "not",
+              "of": {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "white",
+                  "role": "rook",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              }
+            },
+            {
+              "kind": "not",
+              "of": {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "white",
+                  "role": "queen",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              }
+            }
+          ]
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      },
+      {
+        "kind": "material_balance",
+        "perspective": "white",
+        "comparison": "atMost",
+        "value": 0,
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "back-rank-skewer",
+    "one-move-window",
+    "king-before-pawn",
+    "rook-fence-reprise"
+  ],
+  "shapes": [
+    "philidor"
+  ],
+  "planClasses": [
+    {
+      "id": "skewer-the-blocked-rank",
+      "label": "Check the rank the king blocks",
+      "description": "The passive rook's fatal geometry: its own king stands between it and the checking square, so Ra8+ cannot be met by a capture. The king steps aside and the rook falls. This window is one move wide — the drill's root is the only position in the family where it is open."
+    },
+    {
+      "id": "squeeze-with-king",
+      "label": "The squeeze that comes too late",
+      "description": "Against passive defence the textbook plan is the king to the sixth and zugzwang — and here the tablebase refutes it: the defender's rook returns to checking and the draw re-assembles. The squeeze is the right plan one family member over; in this position it costs the win.",
+      "shapePlan": {
+        "shape": "philidor",
+        "plan": "white-squeeze-the-passive-rook"
+      }
+    },
+    {
+      "id": "king-before-pawn",
+      "label": "Escort: king in front, pawn behind",
+      "description": "Once the rook is won, the conversion is the family's standard escort: the king advances ahead of the pawn and the pawn follows in its shadow. Pushing the pawn first is the concession the defence always waits for.",
+      "shapePlan": {
+        "shape": "philidor",
+        "plan": "white-king-before-pawn"
+      }
+    }
+  ],
+  "spine": [
+    {
+      "id": "w-ra8",
+      "moveUci": "a7a8",
+      "moveSan": "Ra8+",
+      "children": [
+        {
+          "id": "b-ke7",
+          "moveUci": "e8e7",
+          "moveSan": "Ke7",
+          "children": [
+            {
+              "id": "w-rxh8",
+              "moveUci": "a8h8",
+              "moveSan": "Rxh8",
+              "children": [
+                {
+                  "id": "b-kd7",
+                  "moveUci": "e7d7",
+                  "moveSan": "Kd7",
+                  "children": [
+                    {
+                      "id": "w-kd5",
+                      "moveUci": "e5d5",
+                      "moveSan": "Kd5",
+                      "children": [
+                        {
+                          "id": "b-ke7-2",
+                          "moveUci": "d7e7",
+                          "moveSan": "Ke7",
+                          "children": [
+                            {
+                              "id": "w-e5",
+                              "moveUci": "e4e5",
+                              "moveSan": "e5",
+                              "children": [
+                                {
+                                  "id": "b-kf7",
+                                  "moveUci": "e7f7",
+                                  "moveSan": "Kf7",
+                                  "children": [
+                                    {
+                                      "id": "w-e6",
+                                      "moveUci": "e5e6",
+                                      "moveSan": "e6+",
+                                      "children": [
+                                        {
+                                          "id": "b-ke7-3",
+                                          "moveUci": "f7e7",
+                                          "moveSan": "Ke7",
+                                          "children": [
+                                            {
+                                              "id": "w-rh7",
+                                              "moveUci": "h8h7",
+                                              "moveSan": "Rh7+",
+                                              "children": [
+                                                {
+                                                  "id": "b-ke8",
+                                                  "moveUci": "e7e8",
+                                                  "moveSan": "Ke8",
+                                                  "children": [
+                                                    {
+                                                      "id": "w-kd6",
+                                                      "moveUci": "d5d6",
+                                                      "moveSan": "Kd6",
+                                                      "children": [
+                                                        {
+                                                          "id": "b-kd8",
+                                                          "moveUci": "e8d8",
+                                                          "moveSan": "Kd8",
+                                                          "children": [
+                                                            {
+                                                              "id": "w-rh8-mate",
+                                                              "moveUci": "h7h8",
+                                                              "moveSan": "Rh8#",
+                                                              "children": []
+                                                            }
+                                                          ]
+                                                        }
+                                                      ],
+                                                      "annotations": [
+                                                        "The blockade square is taken by your king, not the pawn. The defender's king has only the two back-rank squares, your rook holds the seventh — this is the rook-mate fence from the theoretical-mates drill, arrived at from a real game."
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "annotations": [
+                                                "The rook comes back to work: the check clears the king off the seventh rank so the promotion path belongs to White. The pawn itself never needed defending — the rook's rank does the pushing."
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "annotations": [
+                                        "Now the pawn steps into the king's shadow — with a tempo. Note the order everywhere in this line: king first, pawn second."
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "annotations": [
+                                "Only now the pawn. It advances into a square its king already guards; nothing to attack, nothing to blockade."
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "annotations": [
+                        "The escort begins: king in front of the pawn. The rook on h8 needs no minding — a bare king can never attack it profitably."
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "annotations": [
+                "Collect. Rook and pawn against a bare king: the game is decided, and the drill's remaining work is the clean escort."
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "The skewer. The rook checks along the rank the defending rook needs — and Rxa8 is impossible because the defender's own king blocks the eighth. The king must step off the rank, and h8 falls next move. The tablebase verdict on this position: this is the only winning move."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "scheme-choice",
+      "label": "Why not the squeeze?",
+      "trigger": {
+        "atSpineNode": "b-ke7"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "skewer-the-blocked-rank",
+          "squeeze-with-king",
+          "king-before-pawn"
+        ]
+      }
+    },
+    {
+      "id": "rook-is-won",
+      "label": "The defender's rook is off the board",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "not",
+            "of": {
+              "kind": "feature",
+              "feature": {
+                "kind": "piece_reach_count",
+                "color": "black",
+                "role": "rook",
+                "scope": "any",
+                "comparison": "atLeast",
+                "count": 0
+              }
+            }
+          }
+        }
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "fence-reprise",
+      "label": "The rook-mate fence, reached from a real ending",
+      "trigger": {
+        "atSpineNode": "b-kd8"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "w-ra8",
+      "b-ke7",
+      "w-rxh8",
+      "b-kd7",
+      "w-kd5",
+      "b-ke7-2",
+      "w-e5",
+      "b-kf7",
+      "w-e6",
+      "b-ke7-3",
+      "w-rh7",
+      "b-ke8",
+      "w-kd6",
+      "b-kd8",
+      "w-rh8-mate"
+    ],
+    "plyHorizon": 22
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "fen": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2"
+      },
+      "moveUci": "e5d6",
+      "class": "tactical_error",
+      "note": "The textbook squeeze — king to the sixth against a passive rook — queried as a DRAW in this exact position: the rook checks from behind and the defence re-assembles. The shape entry's squeeze plan is real; this is the family member where the skewer preempts it, and hesitating costs the win.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "fen": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2"
+      },
+      "moveUci": "e5e6",
+      "class": "tactical_error",
+      "note": "Marching straight ahead — the other natural king move — is also a queried draw: the window closes, the defender lifts the rook off the blocked rank or restores the rear-check machine, and the position returns to the held Philidor of the sibling drill. (The pawn itself cannot even move: its own king stands on e5.)",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "fen": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2"
+      },
+      "moveUci": "a7b7",
+      "class": "tactical_error",
+      "note": "A waiting move where waiting is the one thing the position does not allow — queried draw. All twenty-one legal White moves at this root were enumerated and queried: Ra8+ wins, thirteen moves draw, and seven moves lose outright because they hang the rook. One move wins; twenty do not.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke7"
+      },
+      "moveUci": "a8a7",
+      "class": "interesting_deviation",
+      "note": "The only other winning move on the board (queried): the check repeats the question, and after ...Ke8 the skewer stands again. Nothing is lost — and nothing is gained. Rxh8 collects now."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke7"
+      },
+      "moveUci": "a8b8",
+      "class": "tactical_error",
+      "note": "The skewer geometry, turned around: the king has stepped off e8, so the eighth rank now belongs to the defender's rook — Rxb8, and the tablebase calls White LOST. Every quiet rook move along the eighth loses the same way. Verified.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke7"
+      },
+      "moveUci": "e5d5",
+      "class": "tactical_error",
+      "note": "Abandoning the collection for a king move: with e8 vacated the defender simply plays Rxa8 — your rook falls on the same open rank the skewer used. Queried LOSS; all four king moves here lose. The window at this node is one move wide in the other direction.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kd7"
+      },
+      "moveUci": "h8h7",
+      "class": "interesting_deviation",
+      "note": "The rook check works here too — at this node every legal move was queried winning — but it achieves nothing yet: the escort still has to be played. In this pack the checks are saved for the moment the king needs the seventh rank cleared."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke7-3"
+      },
+      "moveUci": "d5e5",
+      "class": "tactical_error",
+      "note": "STALEMATE, queried as a rules fact — in a rook-up conversion. Ke5 completes a perfect cage by accident: the rook holds the whole eighth rank, the pawn holds d7 and f7, and the king seals the sixth. The winning move Rh7+ clears the seventh instead of sealing the position shut.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke7-3"
+      },
+      "moveUci": "h8e8",
+      "class": "tactical_error",
+      "note": "Re8+ checks from the square the defending king covers: Kxe8, and the resulting pawn ending was queried a draw. An extra rook is only extra while it is on the board.",
+      "offObjective": true
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "one-move-wins",
+      "text": "In this exact position the tablebase gives exactly one winning move, Ra8+. All twenty-one legal moves were enumerated and queried: thirteen draw — including the king-to-the-sixth squeeze that is the textbook plan against passive defence — and seven lose by hanging the rook. That exclusivity is a machine fact about this position.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "why-the-skewer-works",
+      "text": "Rxa8 is illegal because the defending king stands on e8 between the rooks — square arithmetic, checkable from the FEN. The passive rook did not just lose time; it chose the one square its own king disconnects.",
+      "evidenceTypes": [
+        "derived_feature",
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "sibling-drill",
+      "text": "This root is the position one move after the defence drill philidor-third-rank-hold plays 1...Rh8?? — the deviation that pack queries as a loss. Held fence: draw; passive rook: this pack. The two packs are the same family seen from both benches.",
+      "evidenceTypes": [
+        "tablebase_exact",
+        "author_principle"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "Outcome drill: after the skewer you are graded on converting, not on matching the authored squares. The tablebase confirms several escorts; king-before-pawn is the one that generalizes across the family.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "VARIANT SIBLING (design/04 §4 convert/hold/save rule): this pack is the CONVERT sibling of content/drafts/philidor-third-rank-hold.json — the same root family from the attacker's bench. Its start FEN is derived, not constructed: it is the hold pack's root after the queried-losing deviation 1...Rh8?? (h6h8). No format encoding links sibling variant packs of one root family (wave-5b contract gap #1); this cross-reference and the retryVariants note are prose stand-ins until a root-identity field exists.",
+      "TABLEBASE VERIFIED: the root and every position after every spine move were queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root category: win, DTM 21, and the moves list confirms Ra8+ as the unique winning move. The spine ends in Rh8#, confirmed by rules arithmetic. Every legal White move at the root and at the anchored decision nodes was enumerated and queried; every deviation note states its queried category. The spine is one move slower than DTM-optimal (Rh7+ before Kd6); every position on it remains a queried win.",
+      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars); registry admission will show a declared, unverified assessment.",
+      "AUTHORED, NOT PROVED: all prose reasoning. The tablebase grounds categories; the illegality of Rxa8 is rules arithmetic; the 'defence re-assembles' explanations of WHY the drawing moves draw are authored renderings.",
+      "Technique names and two plan classes reference content/shapes/philidor.json (white-squeeze-the-passive-rook, white-king-before-pawn). The skewer plan is inlined: no shape-library plan names the back-rank skewer geometry — see graduationBlockers.",
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check."
+    ],
+    "graduationBlockers": [
+      "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
+      "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
+      "The variants rule has no encoding: the sibling link to philidor-third-rank-hold is prose plus a retryVariants note, invisible to the runtime. A root-identity field or pack-group would make the convert/hold pairing a machine fact.",
+      "The philidor shape entry has no plan for the back-rank skewer against the passive rook; its typicalMistakes list names passive placement but not this refutation geometry. Commission an amendment.",
+      "No human-play evidence on how often defenders actually play the passive rook at the target band; the difficulty block is authored judgment."
+    ]
+  },
+  "retryVariants": [
+    {
+      "kind": "opposite_side",
+      "note": "Defender's bench: philidor-third-rank-hold — the same family root, one move earlier, held to the tablebase draw by the third-rank fence. Drill both benches; the family is one piece of knowledge."
+    }
+  ]
+}

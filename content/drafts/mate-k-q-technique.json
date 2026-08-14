@@ -1,0 +1,436 @@
+{
+  "id": "mate-k-q-technique",
+  "version": "0.1.0",
+  "title": "Queen mate: shrink the box, bring the king, give air",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1000,
+    "maxOnlineRapid": 1400,
+    "label": "On-ramp: the first theoretical mate, drilled once with its stalemate traps, then never again",
+    "branchLengthTarget": 19
+  },
+  "start": {
+    "fen": "8/8/3k4/8/8/2Q5/6K1/8 w - - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "win",
+    "summary": "King and queen against a bare king. Every position of this endgame is a tablebase win — the only ways to fail are to hang the queen or to stalemate. The drill is the standard three-phase method: the queen shrinks the king's box from a knight's-move distance without ever checking, your king walks over, and mate comes only when both pieces do it together. The stalemate traps at the end are the real content: they are one square away from the winning moves.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "win",
+        "pieceCount": 3,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-14T21:55:00Z"
+      },
+      "resolveAt": {
+        "kind": "terminal"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "not",
+          "of": {
+            "kind": "feature",
+            "feature": {
+              "kind": "piece_reach_count",
+              "color": "white",
+              "role": "queen",
+              "scope": "any",
+              "comparison": "atLeast",
+              "count": 0
+            }
+          }
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "knights-move-tracking",
+    "shrinking-the-box",
+    "king-support",
+    "stalemate-avoidance"
+  ],
+  "planClasses": [
+    {
+      "id": "shrink-the-box",
+      "label": "Shrink the box from a knight's move away",
+      "description": "The queen sits a knight's move from the enemy king and copies its retreats. From that distance she fences the king into an ever-smaller box, can never be attacked, and never gives a check — checks are how the king slips out."
+    },
+    {
+      "id": "bring-the-king",
+      "label": "Stop the queen, walk the king",
+      "description": "The queen alone cannot mate. The moment the enemy king is trapped shuffling on the edge, the queen stands still and your king walks over. Every queen move during the march is a move wasted — or worse."
+    },
+    {
+      "id": "give-air",
+      "label": "Always leave one square",
+      "description": "A cornered king with no legal move and no check on it is a draw, not a win. Until your king arrives, the enemy king must always have exactly one square to shuffle to. Taking the last square is the classic beginner draw."
+    }
+  ],
+  "spine": [
+    {
+      "id": "w-qc4",
+      "moveUci": "c3c4",
+      "moveSan": "Qc4",
+      "children": [
+        {
+          "id": "b-kd7",
+          "moveUci": "d6d7",
+          "moveSan": "Kd7",
+          "children": [
+            {
+              "id": "w-qc5",
+              "moveUci": "c4c5",
+              "moveSan": "Qc5",
+              "children": [
+                {
+                  "id": "b-ke8",
+                  "moveUci": "d7e8",
+                  "moveSan": "Ke8",
+                  "children": [
+                    {
+                      "id": "w-qc7",
+                      "moveUci": "c5c7",
+                      "moveSan": "Qc7",
+                      "children": [
+                        {
+                          "id": "b-kf8",
+                          "moveUci": "e8f8",
+                          "moveSan": "Kf8",
+                          "children": [
+                            {
+                              "id": "w-qd7",
+                              "moveUci": "c7d7",
+                              "moveSan": "Qd7",
+                              "children": [
+                                {
+                                  "id": "b-kg8",
+                                  "moveUci": "f8g8",
+                                  "moveSan": "Kg8",
+                                  "children": [
+                                    {
+                                      "id": "w-qe7",
+                                      "moveUci": "d7e7",
+                                      "moveSan": "Qe7",
+                                      "children": [
+                                        {
+                                          "id": "b-kh8",
+                                          "moveUci": "g8h8",
+                                          "moveSan": "Kh8",
+                                          "children": [
+                                            {
+                                              "id": "w-kg3",
+                                              "moveUci": "g2g3",
+                                              "moveSan": "Kg3",
+                                              "children": [
+                                                {
+                                                  "id": "b-kg8-2",
+                                                  "moveUci": "h8g8",
+                                                  "moveSan": "Kg8",
+                                                  "children": [
+                                                    {
+                                                      "id": "w-kg4",
+                                                      "moveUci": "g3g4",
+                                                      "moveSan": "Kg4",
+                                                      "children": [
+                                                        {
+                                                          "id": "b-kh8-2",
+                                                          "moveUci": "g8h8",
+                                                          "moveSan": "Kh8",
+                                                          "children": [
+                                                            {
+                                                              "id": "w-kg5",
+                                                              "moveUci": "g4g5",
+                                                              "moveSan": "Kg5",
+                                                              "children": [
+                                                                {
+                                                                  "id": "b-kg8-3",
+                                                                  "moveUci": "h8g8",
+                                                                  "moveSan": "Kg8",
+                                                                  "children": [
+                                                                    {
+                                                                      "id": "w-kg6",
+                                                                      "moveUci": "g5g6",
+                                                                      "moveSan": "Kg6",
+                                                                      "children": [
+                                                                        {
+                                                                          "id": "b-kh8-3",
+                                                                          "moveUci": "g8h8",
+                                                                          "moveSan": "Kh8",
+                                                                          "children": [
+                                                                            {
+                                                                              "id": "w-qe8-mate",
+                                                                              "moveUci": "e7e8",
+                                                                              "moveSan": "Qe8#",
+                                                                              "children": []
+                                                                            }
+                                                                          ]
+                                                                        }
+                                                                      ],
+                                                                      "annotations": [
+                                                                        "The king takes its mating post; the queen never moved once during the march. Next move Qe8 is mate along the back rank — the queen covers the eighth, your king covers g7 and h7 — while Qf7, one file short, is stalemate. The difference between those two squares is the whole endgame."
+                                                                      ]
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              ],
+                                                              "annotations": [
+                                                                "Closer. The defender can only shuffle between g8 and h8; nothing about the position changes until your king arrives."
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ],
+                                                      "annotations": [
+                                                        "The march continues. The queen on e7 holds the entire eighth-rank box by herself."
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "annotations": [
+                                                "Phase two: the queen has done all she can alone, so she stops and the king walks. The g-file is the direct road."
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "annotations": [
+                                        "The last tracking move: the king is driven into the corner shuffle, g8 and h8, and the box cannot get smaller without stalemate. This is where the queen must stop."
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "annotations": [
+                                "Tracking along the seventh: each queen step copies the king's slide and takes one more square off the back rank."
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "annotations": [
+                        "The king reached the back rank, so the queen switches to the seventh — still a knight's move away, still no check — and starts walking the king toward the corner."
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "annotations": [
+                "Copy the retreat: the king stepped back, the queen steps up, the knight's-move distance is restored and the box loses another rank."
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "The box. From c4 the queen stands a knight's move from the king: it can never approach her, and every flight square points toward the edge. No check — a check here would let the king pick its direction."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "scheme-choice",
+      "label": "Name the method before the squeeze",
+      "trigger": {
+        "atSpineNode": "b-kd7"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "shrink-the-box",
+          "bring-the-king",
+          "give-air"
+        ]
+      }
+    },
+    {
+      "id": "box-closed",
+      "label": "The corner shuffle: queen stops here",
+      "trigger": {
+        "atSpineNode": "b-kh8"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "mate-or-stalemate",
+      "label": "One move from mate — and one from stalemate",
+      "trigger": {
+        "atSpineNode": "b-kh8-3"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "w-qc4",
+      "b-kd7",
+      "w-qc5",
+      "b-ke8",
+      "w-qc7",
+      "b-kf8",
+      "w-qd7",
+      "b-kg8",
+      "w-qe7",
+      "b-kh8",
+      "w-kg3",
+      "b-kg8-2",
+      "w-kg4",
+      "b-kh8-2",
+      "w-kg5",
+      "b-kg8-3",
+      "w-kg6",
+      "b-kh8-3",
+      "w-qe8-mate"
+    ],
+    "plyHorizon": 24
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1200,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "fen": "8/8/3k4/8/8/2Q5/6K1/8 w - - 0 1"
+      },
+      "moveUci": "c3c5",
+      "class": "tactical_error",
+      "note": "The check reflex, punished immediately: Kxc5 and the game is a dead draw. Four of the five checks available at the root (Qc5+, Qc6+, Qc7+, Qe5+) put the queen next to the king with no defender, and all four were queried as draws. In this endgame an unsupported check is usually a blunder, not pressure.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kd7"
+      },
+      "moveUci": "c4c7",
+      "class": "tactical_error",
+      "note": "Qc7+ walks into Kxc7 — a queried draw. The queen was already perfectly placed a knight's move away; touching the king's field without your own king's support throws the game away.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-ke8"
+      },
+      "moveUci": "c5e7",
+      "class": "tactical_error",
+      "note": "The 'centralizing' check Qe7+ hangs the queen to Kxe7: a queried draw. Qf8+ loses her the same way. The tracking move Qc7 does the same boxing work from a square the king can never touch.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kg8"
+      },
+      "moveUci": "d7d8",
+      "class": "interesting_deviation",
+      "note": "Qd8+ is still a tablebase win — nothing is thrown away — but the check lets the king out to f7, g7 or h7 and the whole box must be rebuilt. Checks feel like progress and undo it; this is the drill's quietest lesson."
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kh8"
+      },
+      "moveUci": "e7f7",
+      "class": "tactical_error",
+      "note": "STALEMATE — the classic queen-mate draw, queried as a rules fact. Qf7 takes g8, the king's only square, while giving no check: game over, half a point, from a position where every other reasonable move wins. One more tracking step past the corner is exactly one step too many.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kh8"
+      },
+      "moveUci": "e7g7",
+      "class": "tactical_error",
+      "note": "Qg7+ 'traps' the king by standing next to it — and is simply captured, Kxg7, a queried draw. Mating squares next to the king belong to the queen only once your own king defends them.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "b-kh8-3"
+      },
+      "moveUci": "e7f7",
+      "class": "tactical_error",
+      "note": "STALEMATE one move before mate, queried as a rules fact. With your king already on g6, Qe8 mates — but Qf7, covering g8 without check, ends the game as a draw instead. The last move of this endgame is the one beginners most often get wrong.",
+      "offObjective": true
+    }
+  ],
+  "feedbackPolicy": "immediate_guard",
+  "guard": {
+    "evalSwingCp": 200
+  },
+  "feedbackClaims": [
+    {
+      "id": "kq-always-won",
+      "text": "This exact position is a tablebase win (Syzygy, three pieces), and every position along the authored line was queried and remains a win. The only queried non-wins reachable in this pack are the ones you create: hanging the queen (draw) or stalemate (draw). Both categories are machine facts about these positions.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "stalemate-is-the-content",
+      "text": "Both stalemate traps in this pack were queried as rules facts: Qf7 with the king cornered is stalemate whether your king is on g2 or on g6 — including one move before mate. The winning method exists precisely to walk past these two draws.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "method-in-three-phases",
+      "text": "Queen tracks from a knight's move without checking, then stands still while the king marches, then mates with king support. The phase boundaries are authored teaching; every position along them was tablebase-verified winning.",
+      "evidenceTypes": [
+        "author_principle",
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "Outcome drill: you are graded on delivering mate, not on matching the authored squares. The tablebase confirms many winning routes; the authored one is the repeatable method worth keeping.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "Start position is a constructed schematic (White Kg2, Qc3; Black Kd6): king near the centre, queen a knight's move from taking up the box, attacking king far enough away that all three phases of the method must actually be played. No specific book diagram is claimed.",
+      "TABLEBASE VERIFIED: the root and every position after every spine move were queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root category: win, DTM 15. Every authored White move preserves the win; the spine ends in checkmate, confirmed by rules arithmetic. Additionally, every legal White move at the root and at the four anchored decision nodes was enumerated and queried: the deviation notes state exactly the queried categories (Qc5+/Qc6+/Qc7+/Qe5+ at root: draws; Qc7+ after ...Kd7: draw; Qe7+/Qf8+ after ...Ke8: draws; Qf7 after ...Kh8 and after the final ...Kh8: stalemate; Qg7+/Qh7+ after ...Kh8: draws; Qd8+ after ...Kg8: win).",
+      "The defender's spine replies are forced from the third move onward (single legal king move, verified by move enumeration); the first two replies are one plausible retreat among several, all of which stay inside the same method.",
+      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars); registry admission will show a declared, unverified assessment. The queries happened; no admitted evidence artifact exists.",
+      "AUTHORED, NOT PROVED: all prose reasoning, phase names, and the 'beginners most often get wrong' judgment. The tablebase and the rules of chess ground the categories only.",
+      "No shape-library entry exists for theoretical mates; none is referenced. See graduationBlockers.",
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check.",
+      "Sibling packs in the theoretical-mates family: mate-k-r-technique (K+R) and mate-two-bishops (B+B)."
+    ],
+    "graduationBlockers": [
+      "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
+      "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
+      "No shape-library entry names the theoretical-mate boxes; if the library is to fire on K+Q positions in Just Play, an entry needs commissioning.",
+      "The natural opponent for a mates pack is perfect_tablebase (the method must work against best defence); that mode is declared-unimplemented in v1, so human_common at 1200 stands in. Revisit when tablebase opponent selection ships."
+    ]
+  },
+  "retryVariants": [
+    {
+      "kind": "different_material_details",
+      "note": "Same family, different material: mate-k-r-technique (rook: the box needs opposition and tempo moves) and mate-two-bishops (bishops: the box is two diagonals). Drilled once each, then retired."
+    }
+  ]
+}
