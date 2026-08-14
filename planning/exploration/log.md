@@ -1307,3 +1307,22 @@ Note on ordering: B9 sits alongside the six RFCs already drafted rather than
 behind them. Those six close B2/B3/B5/B6/B7 and the open defects; B9 is the first
 item that makes the *guidance* better rather than the surface wider, and it is
 the cheapest thing in the program.
+
+## 2026-08-14 (owner rulings) — shape library split; Just Play marker default
+
+Two rulings, closing the `design/04` §0 question that blocked B11:
+
+1. **Split.** Reusable knowledge goes to a shared shape library, authored once,
+   firing wherever its structural trigger matches — drill or Just Play. Packs
+   survive as focused practice referencing the library. Full-merge (packs as
+   generated recipes only) explicitly not taken: the hand-crafted drill stays
+   first-class. The owner's own framing: the drill pack is a nice focused way
+   to practice, but the content it adds must work for Just Play, where all
+   content comes together.
+2. **Passive marker default.** When the library fires mid-game, the learner sees
+   a quiet timeline marker that opens to the shape entry's named plans. No
+   interruption, no prescription.
+
+B11 is now unblocked (B9's predicates shipped 2026-08-14, the ruling was the
+last dependency). B10 and B11 will be specified together against this content
+model.

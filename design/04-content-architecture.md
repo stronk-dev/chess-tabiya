@@ -13,7 +13,25 @@ rating-band evidence; Wikibooks CC BY-SA for reusable idea prose with
 attribution; Lichess puzzle DB CC0 6.06M themed positions for the on-ramp;
 Syzygy copyright-free for endgame ground truth).
 
-## 0. Open reframe (owner, 2026-08-13): are packs the *shape library*?
+## 0. RULED (owner, 2026-08-14): shared shape library, packs reference it
+
+> Ruling: **split.** Reusable chess knowledge — structure names, the plans both
+> sides own, what success looks like structurally — lives in a **shape library**,
+> authored once, firing wherever its trigger matches: inside a drill or mid-game
+> in Just Play. **Packs survive as focused practice sessions** ("a nice focussed
+> way to practice" — owner) that *reference* shape entries instead of restating
+> them. The full-merge option (packs as pure generated recipes) was considered
+> and not taken: the hand-crafted drill stays first-class.
+>
+> Companion ruling, same day: when the library fires during Just Play, the
+> default is a **passive marker that opens to the named plans** — consistent
+> with silence-by-default, the marker-you-may-open pattern, and tips that name
+> patterns but never prescribe moves here.
+
+Owned by gate **B11** (`rfc/shape-library.md` once drafted). The analysis that
+motivated the ruling follows, unchanged.
+
+### The original proposal (2026-08-13)
 
 > *"Should we even have drill packs? How can we break chess down into primitives
 > and phases… or are drill packs defining the basic reusable shapes and
