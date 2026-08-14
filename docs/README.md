@@ -61,3 +61,6 @@ Implemented foundation:
 - `shape-library.md` — reusable structural entries and pack references, source-derived
   channels, derived timeline firings, the attributed plans panel, Shape Studio, and the
   pack-free Just Play position player.
+- `adaptive-guidance.md` — attributed phase bands, silent-by-default assistance,
+  passive pivotal markers, gated human-model splits, endgame census and technique naming,
+  retrospective evaluation pivots, and the packet-checked optional voice seam.

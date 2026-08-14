@@ -94,7 +94,7 @@ supervisor readiness:
 |---|---|---|
 | `opponent` | `maia`, `mock`, `none` | The selector provider currently able to answer |
 | `judge` | `stockfish`, `mock`, `none` | The executor currently able to produce evidence |
-| `llm` | `none` | No LLM renderer is implemented |
+| `llm` | `none`, `external` | Whether a vendor-neutral external voice provider is configured; no provider implementation ships |
 
 In mock mode the opponent and judge report `mock` when their shipped mock
 implementations are available. They never claim Maia or Stockfish, and the
@@ -110,6 +110,8 @@ surface as planned without pretending the server reported that state.
 
 The capability response also retains runnable policy modes, healthy engine
 identities, the run-schema version, and the effective strong-engine profile.
+An injected voice provider changes only the `llm` capability to `external`; its
+packet and checking contract is documented in `adaptive-guidance.md`.
 
 ## Viewport and region model
 

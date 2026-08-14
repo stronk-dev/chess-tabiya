@@ -1,6 +1,6 @@
 # RFC: Adaptive guidance — live classification, assistance configuration, pivotal markers, and the voice contract
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-14
 - **Design refs:** `design/05-in-run-experience.md` §3 (the ladder, lines 54-85), §3a (silence and
@@ -989,6 +989,11 @@ None.
 
 ## Changelog
 
+- 2026-08-14 (implemented): shipped derived phase bands, silent-by-default assistance,
+  four passive pivotal detectors, disclosure-gated human-model splits, endgame census and
+  named-technique seams, retrospective recorded-evaluation pivots, the deterministic evidence
+  packet and checked external-voice seam, client composition, browser acceptance, and canonical
+  documentation. No pack/run schema change or persistence was introduced.
 - 2026-08-14 (Codex implementation review): approved after reconciling the implemented B11
   dependency. Corrected the current baselines to pack schema 0.11, storage migration 10,
   344 unit tests / 60 files, and D27 closed; replaced the stale claim that position sessions

@@ -8,7 +8,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `structural-reading.md` | implementing | `archive/drill-pack-format.md`, `archive/outcome-drill-grading.md`, `archive/explanation-grounds.md` | B9 — twelve deterministic author predicates plus a finite learner observation projection, current denial/eviction arithmetic, one-ply discovered consequence, and attributed structural naming. Pack schema **0.10**, no migration |
-| `adaptive-guidance.md` | implementing | `archive/app-shell.md`, `archive/drill-client.md`, `archive/explanation-grounds.md`, `archive/pack-optional-runs.md`, `archive/shape-library.md` | B10 — banded phase classification with first-class abstention, per-context assistance configuration (one permission function, disclosure-gated endpoints), four author-free pivotal detectors as passive timeline markers, endgame-type census with Lucena/Philidor/Vancura technique naming, and the evidence-packet LLM-voice contract with machine check and provider seam. Depends on `structural-reading.md` (B9) and the implemented shape library for plan/technique bodies. Pack schema unchanged (0.11), run schema unchanged (0.8), **no migration** |
 
 The completed breadth batch and its dependency history are kept in the archive
 documents and planning logs rather than duplicated in this index.
@@ -154,6 +153,7 @@ before re-attempting this territory.
 | `archive/n-way-comparison.md` | implemented | `docs/n-way-comparison.md`, `docs/branch-runtime.md`, `docs/explanation-grounds.md`, `docs/drill-pack-format.md` |
 | `archive/live-session-platform.md` | implemented | `docs/live-sessions.md`, `docs/identity-and-authorization.md`, `docs/app-shell.md` |
 | `archive/shape-library.md` | implemented | `docs/shape-library.md`, `docs/drill-pack-format.md`, `docs/drill-client.md`, `docs/pack-studio.md` |
+| `archive/adaptive-guidance.md` | implemented | `docs/adaptive-guidance.md`, `docs/explanation-grounds.md`, `docs/app-shell.md` |
 
 ## The archive sketches are quarry, not RFCs
 

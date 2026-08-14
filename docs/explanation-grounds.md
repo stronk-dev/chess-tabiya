@@ -94,6 +94,17 @@ This engine-evidence decision remains pack-wide. Authored commentary uses the
 separate path-relative contract below; it does not change the existing graph,
 event, evidence, or comparison gates.
 
+Adaptive guidance adds two run-scoped request surfaces without weakening these
+barriers. `GET /runs/:id/human-split?nodeId=...` returns an ephemeral recorded
+human-model candidate distribution only while the feedback-delivery window is
+open; otherwise it returns typed `ASSISTANCE_WITHHELD` (HTTP 409). It never
+becomes run evidence. `POST /runs/:id/voice` assembles its packet from the same
+run projection and only the authored items already returned by this reveal
+surface. It returns typed `VOICE_UNAVAILABLE` (HTTP 503) when no external
+provider is configured, and any provider output that fails the packet check
+degrades to deterministic text rather than widening the claim set. See
+`adaptive-guidance.md`.
+
 ## Authored checkpoint reveal
 
 `GET /packs/:id` never contains authored annotations, deviations, plan classes,
