@@ -1,0 +1,390 @@
+{
+  "id": "anti-caro-advance-early-c5",
+  "version": "0.1.0",
+  "title": "Caro-Kann Advance: answering the immediate 3...c5",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "3.e5 player whose opponent breaks before developing",
+    "branchLengthTarget": 7
+  },
+  "start": {
+    "fen": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+    "movesSan": [
+      "e4",
+      "c6",
+      "d4",
+      "d5",
+      "e5",
+      "c5"
+    ],
+    "side": "white"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "Black broke at your chain's base immediately, bishop still on c8. Take the pawn — the one answer that asks Black to prove the idea — and then make the real decision: hold the extra pawn with c3/b4, or hand it back at the moment that buys you the better game."
+  },
+  "concepts": [
+    "advance-chain-base",
+    "grab-and-decide",
+    "development-before-material"
+  ],
+  "planClasses": [
+    {
+      "id": "hold-the-pawn",
+      "label": "Hold it (c3, b4, Be3)",
+      "description": "Position-specific arithmetic: the c5 pawn can be kept exactly as long as b4 is defensible against ...a5 and ...e6/...Bxc5 is met with a piece already there. Every extra holding move is a development move not played."
+    },
+    {
+      "id": "return-for-development",
+      "label": "Return it at a price",
+      "description": "The mature option: let ...Bxc5 or ...e6 regain the pawn while you castle and keep the e5 space. You are not defending a pawn, you are selling it — the price is Black's tempi spent regaining it."
+    }
+  ],
+  "spine": [
+    {
+      "id": "dxc5-take",
+      "moveUci": "d4c5",
+      "moveSan": "dxc5",
+      "annotations": [
+        "The critical test, and the point of this pack: with Black's bishop still on c8, taking does not lose a tempo to anything. Black must now spend moves to regain the pawn — the exact opposite of the tempo race in the main-line Advance.",
+        "Note what happened to the structure: the d4-e5 chain this variation is named for is gone. You are no longer playing a chain position; you are playing a lead in development with an e5 space pawn."
+      ],
+      "children": [
+        {
+          "id": "nc6-active",
+          "moveUci": "b8c6",
+          "moveSan": "Nc6",
+          "annotations": [
+            "The active try: develop and collect c5 later with the pieces. This is the version where holding the pawn is most ambitious and most testing for both sides."
+          ],
+          "children": [
+            {
+              "id": "nf3-dev",
+              "moveUci": "g1f3",
+              "moveSan": "Nf3",
+              "annotations": [
+                "Develop toward the kingside first. The c5 pawn is not running away, and every White piece that appears makes ...Nxe5 tricks less available."
+              ],
+              "children": [
+                {
+                  "id": "bg4-pin",
+                  "moveUci": "c8g4",
+                  "moveSan": "Bg4",
+                  "annotations": [
+                    "Black's bishop finally moves — to pin the knight rather than to blockade. The pressure is real but it is aimed at your development, not at the c5 pawn."
+                  ],
+                  "children": [
+                    {
+                      "id": "c3-brace",
+                      "moveUci": "c2c3",
+                      "moveSan": "c3",
+                      "annotations": [
+                        "The holding move: b4 is prepared, ...Qa5+ is blunted, and the b4/d4 squares are covered against the c6 knight. One pawn move that does three jobs is how a pawn gets held without falling behind."
+                      ],
+                      "children": [
+                        {
+                          "id": "e6-late",
+                          "moveUci": "e7e6",
+                          "moveSan": "e6",
+                          "annotations": [
+                            "Black finally bids for the pawn with the bishop's diagonal. One move too late, if the next move stands."
+                          ],
+                          "children": [
+                            {
+                              "id": "b4-clamp",
+                              "moveUci": "b2b4",
+                              "moveSan": "b4",
+                              "annotations": [
+                                "The clamp: c5 is now a protected outpost pawn cramping Black's whole queenside, and ...Bxc5 no longer exists. What you owe in exchange is care over ...a5 — the undermining move that is the entire counterplay from here."
+                              ],
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "e6-bid",
+          "moveUci": "e7e6",
+          "moveSan": "e6",
+          "annotations": [
+            "The direct regain: the f8 bishop will take on c5. This is the moment to decide which plan you are in — the checkpoint above this line asked you, and this branch is where 'return it at a price' plays out."
+          ],
+          "children": [
+            {
+              "id": "be3-shield",
+              "moveUci": "c1e3",
+              "moveSan": "Be3",
+              "annotations": [
+                "Not a holding move — an exchange offer. If Black wants c5 back, the dark-squared bishops come off, and the trade favours the side with more space because the remaining pieces need squares."
+              ],
+              "children": [
+                {
+                  "id": "bxc5-recoup",
+                  "moveUci": "f8c5",
+                  "moveSan": "Bxc5",
+                  "annotations": [
+                    "Black regains the pawn as promised."
+                  ],
+                  "children": [
+                    {
+                      "id": "bxc5-trade",
+                      "moveUci": "e3c5",
+                      "moveSan": "Bxc5",
+                      "annotations": [
+                        "Material is level again and the position is the receipt: you kept the e5 space, Black's remaining bishop lives behind its own e6 pawn, and the dark squares around d6 belong to your knights for the rest of the game. This is what 'returning the pawn at a price' means — the price was never material."
+                      ],
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nf3-decline",
+      "moveUci": "g1f3",
+      "moveSan": "Nf3",
+      "annotations": [
+        "Declining the pawn is playable — but see what Black gets for free: the break has already succeeded, and the tension is Black's to resolve."
+      ],
+      "children": [
+        {
+          "id": "cxd4-free",
+          "moveUci": "c5d4",
+          "moveSan": "cxd4",
+          "annotations": [
+            "Black liquidates the base at no cost."
+          ],
+          "children": [
+            {
+              "id": "nxd4-central",
+              "moveUci": "f3d4",
+              "moveSan": "Nxd4",
+              "annotations": [
+                "A fine, slightly better-for-nobody middlegame: the knight is central, e5 still cramps, but Black solved the problem the Advance exists to pose — without spending the bishop tempo the main line charges. Compare this branch against the capture and decide which game you would rather have."
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c3-prop",
+      "moveUci": "c2c3",
+      "moveSan": "c3",
+      "annotations": [
+        "Propping the base looks principled and concedes the point: after ...cxd4 cxd4 the break has traded itself off for free, Black's queenside is unweakened, and your extra space must now win the game on its own. Authored as a branch precisely so you can feel the difference from the capture."
+      ],
+      "children": []
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "grab-decision",
+      "label": "Pawn in hand — hold it or sell it?",
+      "trigger": {
+        "atSpineNode": "dxc5-take"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "hold-the-pawn",
+          "return-for-development"
+        ]
+      }
+    },
+    {
+      "id": "clamp-standing",
+      "label": "b4 — the pawn is held and the target is now a5",
+      "trigger": {
+        "atSpineNode": "b4-clamp"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "price-collected",
+      "label": "Material level, space and dark squares yours",
+      "trigger": {
+        "atSpineNode": "bxc5-trade"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "decline-compared",
+      "label": "The declined version — what Black got for free",
+      "trigger": {
+        "atSpineNode": "nxd4-central"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "prop-compared",
+      "label": "c3 — the break traded itself off at no cost",
+      "trigger": {
+        "atSpineNode": "c3-prop"
+      },
+      "actions": []
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "dxc5-take",
+      "nc6-active",
+      "nf3-dev",
+      "bg4-pin",
+      "c3-brace",
+      "e6-late",
+      "b4-clamp",
+      "e6-bid",
+      "be3-shield",
+      "bxc5-recoup",
+      "bxc5-trade",
+      "nf3-decline",
+      "cxd4-free",
+      "nxd4-central",
+      "c3-prop"
+    ],
+    "plyHorizon": 7
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "spineNodeId": "nc6-active"
+      },
+      "moveUci": "f1b5",
+      "class": "interesting_deviation",
+      "note": "5.Bb5 pins the regaining knight and fights for the c5 pawn tactically. Sharper than the spine's development order; after ...Qa5+ ideas both sides must know concrete lines, which is exactly the invitation this pack's plan declines to send."
+    },
+    {
+      "at": {
+        "spineNodeId": "nc6-active"
+      },
+      "moveUci": "c1e3",
+      "class": "accepted_alternative",
+      "note": "5.Be3 offers the same exchange logic as the ...e6 branch one move earlier: hold with a piece, and if ...Ng4 or ...Qa5+ come, the concrete lines hold up. Equivalent plan, different move order."
+    },
+    {
+      "at": {
+        "spineNodeId": "nc6-active"
+      },
+      "moveUci": "b2b4",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "5.b4 holds the pawn with pawns before a single piece is developed. ...a5 hits immediately and every defence of b4 costs another non-developing move — the exact debt spiral the spine's c3-first order avoids. The extra pawn is not worth being three tempi behind in an open position."
+    },
+    {
+      "at": {
+        "spineNodeId": "e6-bid"
+      },
+      "moveUci": "g1f3",
+      "class": "accepted_alternative",
+      "note": "5.Nf3 first, deciding about the c5 pawn only after seeing Black's next move. Loses nothing and commits to nothing; the spine plays Be3 first only to make the exchange-offer idea explicit."
+    },
+    {
+      "at": {
+        "spineNodeId": "e6-bid"
+      },
+      "moveUci": "d1g4",
+      "class": "interesting_deviation",
+      "note": "5.Qg4 exploits the one drawback of ...e6 — the c8 bishop no longer guards g7's diagonal escort, so the f8 bishop must choose between g7 duty and taking on c5. An early queen sortie with real bite here; it also hands Black developing moves with tempo if mishandled. Play it out before trusting it."
+    },
+    {
+      "at": {
+        "spineNodeId": "bg4-pin"
+      },
+      "moveUci": "f1e2",
+      "class": "accepted_alternative",
+      "note": "6.Be2 breaks the pin before bracing. Solid, one beat slower on the queenside; against it Black's ...e6 regain arrives with the b4 clamp not yet available."
+    },
+    {
+      "at": {
+        "spineNodeId": "bg4-pin"
+      },
+      "moveUci": "b2b4",
+      "class": "interesting_deviation",
+      "note": "6.b4 clamps immediately, without c3 behind it. Now ...a5 comes with ...axb4 and there is no c3 pawn to recapture toward the centre — the same clamp, structurally weaker by exactly one preparing move. A concrete illustration of why move order is the pack's subject."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "early-c5-share",
+      "text": "After 3.e5 at the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the immediate 3...c5 is Black's choice in 30.0% of 9,346,096 games — nearly one Advance Caro-Kann in three skips ...Bf5, so an Advance repertoire without an answer here is a third unprepared.",
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
+    },
+    {
+      "id": "tempo-ledger",
+      "text": "The capture's justification is a tempo ledger, not greed: with the c8 bishop undeveloped, dxc5 costs White nothing, while every Black move spent regaining the pawn is a developing move White gets for free.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
+    },
+    {
+      "id": "structure-changed",
+      "text": "After dxc5 this is no longer a pawn-chain opening: the d4-e5 chain is gone, and the game's currency switches from break timing to development lead plus the e5 space pawn.",
+      "evidenceTypes": [
+        "author_principle",
+        "derived_feature"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "B12 Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense (3...c5): lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/b.tsv) — CC0-1.0, no attribution required. The CC0 row ends at 3...c5 itself, so no emitted skeleton exists past the start position: this pack's spine is hand-built.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the B12 row — 9,346,096 games; ...c5 30.0% (2,806,594 games). No frequency below 3...c5 was retrieved; which fourth moves White actually plays there is unquantified.",
+      "MECHANICALLY VERIFIED (chessops, this session): the start FEN is re-derived from the SAN list; all three root branches and every spine path were walked with SAN/UCI agreement; every deviation was checked legal and White-to-move from the position after its anchor. No engine, tablebase or corpus tool has evaluated any position.",
+      "RELATION TO WAVE 1: the sibling draft anti-caro-advance-c5-race covers the 3...Bf5 main road and treats 3...c5 in a two-ply stub; this pack is that stub grown into its own narrow decision family, per the one-claim-per-pack rule.",
+      "UNGROUNDED: every strategic claim — the objective summary, both plan-class descriptions, all spine annotations, all seven deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. 'Original prose' answers copyright, not truth."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "This pack intentionally carries no shapes reference: after dxc5 the d4-e5 chain the closed-centre-chain entry requires is gone, and no current library entry names the resulting development-lead structure. If a 'space pawn vs development' entry is ever authored, this pack is its first customer.",
+      "The concept_violation on 5.b4 ('three tempi behind') and the entire hold-versus-return assessment are uncited and engine-unchecked; a fixed-depth Stockfish pass on the b4/...a5 lines would bear on them directly.",
+      "The claim that dxc5 is 'the critical test' of 3...c5 is standard theory rendered from model knowledge with no named source.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

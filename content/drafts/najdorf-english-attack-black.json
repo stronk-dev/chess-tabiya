@@ -1,0 +1,245 @@
+{
+  "id": "najdorf-english-attack-black",
+  "version": "0.1.0",
+  "title": "Najdorf vs the English Attack: Black's side of the race",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Sicilian player whose Najdorf meets 6.Be3",
+    "branchLengthTarget": 7
+  },
+  "start": {
+    "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+    "movesSan": ["e4", "c5", "Nf3", "d6", "d4", "cxd4", "Nxd4", "Nf6", "Nc3"],
+    "side": "black"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "You chose the Najdorf. When White answers with the English Attack setup, play your side of the tabiya in the right order — ...e5 and ...Be6 before the wing decisions — and choose your race plan with your eyes open."
+  },
+  "concepts": [
+    "opposite-castling-commitment",
+    "break-timing",
+    "counterplay-before-safety"
+  ],
+  "shapes": ["opposite-castling-race"],
+  "planClasses": [
+    {
+      "id": "queenside-storm",
+      "label": "Race on the queenside (...b5-b4, files at the white king)",
+      "description": "In this tabiya the b-pawn is still at home and White has not yet castled long: the storm is a plan you are preparing, not one you can launch. Its concrete trigger is White's O-O-O.",
+      "shapePlan": { "shape": "opposite-castling-race", "plan": "black-queenside-file-storm" }
+    },
+    {
+      "id": "central-brake",
+      "label": "Brake with ...d5 at the right moment",
+      "description": "The Najdorf's freeing break. Here it is a threat to hold in reserve: played too early it trades queens into a structure you did not choose, played at the right moment it defuses the storm entirely.",
+      "shapePlan": { "shape": "opposite-castling-race", "plan": "black-central-brake" }
+    },
+    {
+      "id": "h5-clamp",
+      "label": "Clamp with ...h5 before the storm starts",
+      "description": "Position-specific to this tabiya: one tempo spent so g4 never comes. It is not part of the reusable race doctrine — it is the modern Najdorf's answer to this exact setup, and its cost is a permanent hook on h5."
+    }
+  ],
+  "spine": [
+    {
+      "id": "p10-a6",
+      "moveUci": "a7a6",
+      "moveSan": "a6",
+      "annotations": [
+        "Your move, your opening. ...a6 prepares ...e5 without Bb5+ and queues ...b5 for the race that has not started yet."
+      ],
+      "children": [
+        {
+          "id": "p11-be3",
+          "moveUci": "c1e3",
+          "moveSan": "Be3",
+          "annotations": [
+            "The English Attack announcement: White intends f3, Qd2 and O-O-O. This is the setup a Najdorf player meets more than any other; your whole pack is the correct reply order."
+          ],
+          "children": [
+            {
+              "id": "p12-e5",
+              "moveUci": "e7e5",
+              "moveSan": "e5",
+              "annotations": [
+                "Stake the centre now, while the d4 knight must decide. You concede d5 as a square; you gain a fixed target on e4, space, and the tempo that hitting the knight buys. Delaying this move lets White choose whether the centre is big or small."
+              ],
+              "children": [
+                {
+                  "id": "p13-nb3",
+                  "moveUci": "d4b3",
+                  "moveSan": "Nb3",
+                  "annotations": [
+                    "The main retreat, keeping f3 free for the pawn."
+                  ],
+                  "children": [
+                    {
+                      "id": "p14-be6",
+                      "moveUci": "c8e6",
+                      "moveSan": "Be6",
+                      "annotations": [
+                        "The bishop's only good diagonal: it covers d5 — the square ...e5 gave away — and supports the ...b5 and ...d5 plans at once. Played before ...Be7 because the c8 bishop has one square and the f8 bishop has two."
+                      ],
+                      "children": [
+                        {
+                          "id": "p15-f3",
+                          "moveUci": "f2f3",
+                          "moveSan": "f3",
+                          "annotations": [
+                            "White secures e4 and g4 and will follow with Qd2 and O-O-O. This is the tabiya, and it is YOUR decision point: clamp with ...h5, or develop with ...Be7 and race straightforwardly. Both are authored; the comparison is the drill."
+                          ],
+                          "children": [
+                            {
+                              "id": "be7-race",
+                              "moveUci": "f8e7",
+                              "moveSan": "Be7",
+                              "annotations": [
+                                "The classical handling: finish developing, castle short into the storm on purpose, and count on the queenside pawns arriving first. This is the line where the shape entry's tempo arithmetic is the whole game."
+                              ],
+                              "children": []
+                            },
+                            {
+                              "id": "h5-stop",
+                              "moveUci": "h7h5",
+                              "moveSan": "h5",
+                              "annotations": [
+                                "The modern clamp: g4 never comes, so White's storm must find another mechanism. The costs are real — h5 is a hook forever, and your king may end up staying in the centre — but at club level the storm you prevented is usually the one that was going to win."
+                              ],
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "your-tabiya",
+      "label": "8.f3 — choose your handling before the race is signed",
+      "trigger": { "atSpineNode": "p15-f3" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["queenside-storm", "central-brake", "h5-clamp"]
+      }
+    },
+    {
+      "id": "race-accepted",
+      "label": "...Be7 — you will castle into the storm on purpose",
+      "trigger": { "atSpineNode": "be7-race" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "clamp-chosen",
+      "label": "...h5 — the storm is blunted, the hook is permanent",
+      "trigger": { "atSpineNode": "h5-stop" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p10-a6", "p11-be3", "p12-e5", "p13-nb3", "p14-be6", "p15-f3",
+      "be7-race", "h5-stop"
+    ],
+    "plyHorizon": 7
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p11-be3" },
+      "moveUci": "e7e6",
+      "class": "accepted_alternative",
+      "note": "6...e6 keeps the small centre — a Scheveningen structure by a Najdorf move order. Fully sound; it trades the d5 concession for a passive-but-solid centre, and against the same White setup it leads to the Keres-flavoured g4 fights instead. A different repertoire choice, not an error."
+    },
+    {
+      "at": { "spineNodeId": "p11-be3" },
+      "moveUci": "f6g4",
+      "class": "interesting_deviation",
+      "note": "6...Ng4 — the Anti-English — punishes White for playing Be3 before f3 by hitting the bishop at once. It is theory's critical test and a memory battle: the resulting ...h6/...g5 lines are sharp enough that playing them unbooked is worse than not playing them. Know it exists; play it here and see why."
+    },
+    {
+      "at": { "spineNodeId": "p13-nb3" },
+      "moveUci": "f8e7",
+      "class": "accepted_alternative",
+      "note": "7...Be7 first is a real theory order (the same tabiya usually appears after 8.f3 Be6). The difference is move-order nuance: with ...Be6 delayed, White gets extra options with g4 played one beat sooner in some lines. Same family, slightly different door."
+    },
+    {
+      "at": { "spineNodeId": "p13-nb3" },
+      "moveUci": "d6d5",
+      "class": "interesting_deviation",
+      "note": "7...d5 plays the freeing break a move before ...Be6 supports it: after exd5 Nxd5 Nxd5 Qxd5 the queens come off into an ending where White's structure claims are exactly the kind of thing this repo cannot yet verify. The teaching point is that ...d5 is a TIMED resource, and this is the earliest — probably premature — timing. Play it out and compare against the reserve plan."
+    },
+    {
+      "at": { "spineNodeId": "p15-f3" },
+      "moveUci": "b7b5",
+      "class": "accepted_alternative",
+      "note": "8...b5 starts the race before finishing development — standard and sharp: the storm gains a beat, the king loses one. Choosing it honestly means accepting that White's g4-g5 will also arrive a beat sooner against your uncastled king."
+    },
+    {
+      "at": { "spineNodeId": "p15-f3" },
+      "moveUci": "b8d7",
+      "class": "accepted_alternative",
+      "note": "8...Nbd7 is flexible development that keeps ...b5, ...Be7 and ...d5 all available; its only cost is postponing every commitment, which against a fast storm can itself become the commitment."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "chosen-and-even",
+      "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the position after 1.e4 c5 scores 47.9% for Black against 47.9% for White across 104,686,766 games — the opening you chose is, by results at your level, a genuinely equal fight.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "order-on-your-side",
+      "text": "Black's tabiya order is ...a6, ...e5, ...Be6, and only then the wing decisions: each earlier move is the prerequisite of the next, while ...h5, ...b5 and ...Be7 are choices that can wait one move without being lost.",
+      "evidenceTypes": ["author_principle"]
+    },
+    {
+      "id": "brake-is-a-threat",
+      "text": "The ...d5 break does most of its work as a threat: as long as it hangs over the position, White's storm moves must each be checked against it, which is a tempo tax on the attack.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "B90 Sicilian Defense: Najdorf Variation, English Attack: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/b.tsv) — CC0-1.0, no attribution required. The Anti-English (6...Ng4), the Scheveningen ...e6 rows and the 7.Nb3 Be7 8.f3 sibling row cited in deviations are from the same CC0 file.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the B20 row — 104,686,766 games, whitePct 47.9 / drawPct 4.2 / blackPct 47.9. No deeper-node frequency was retrieved.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/b90-sicilian-defense-najdorf-variation-english-attack, learner-side black, split-ply 9, longest matching row 6.Be3 e5 7.Nb3 Be6 8.f3; note the candidate directory is shared with the mirrored White pack and records the most recent emit's job arguments). Hand-added tips (...Be7, ...h5) and every deviation were verified legal with chessops this session, including that each deviation is a Black move from the position after its anchor.",
+      "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all six deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. 'Original prose' answers copyright, not truth."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "No deviation here is graded stronger than interesting/accepted, deliberately: the sharpest candidate judgment (that 7...d5 is premature) is stated as a timing question rather than an error because nothing in this repo has checked it. If an engine pass later shows it loses concretely, the class should harden and cite that run.",
+      "The claim that ...Be6-before-...Be7 is the canonical order, and the whole 'prerequisite order' feedbackClaim, are standard theory rendered from model knowledge with no named source.",
+      "No engine validation pass has been run on any position in this pack.",
+      "Which of ...h5 / ...Be7 / ...b5 is actually most common at these bands is unquantified; the explorer API could settle it below the family root and has not been queried."
+    ]
+  }
+}

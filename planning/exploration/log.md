@@ -1635,3 +1635,20 @@ production starts alongside in explorer-priority order, and the owner's
 play-at-the-end ruling stands with the invariant review attached to that first
 session. Register discipline pre-assigned: drafts claim numbers in the order
 predicate-wave-2 → corpus-evidence → adoption-wave-1 → social-match.
+
+## 2026-08-14 (claude) — RFC draft: `rfc/adoption-wave-1.md`
+
+Third draft of the parallel wave (behind predicate-wave-2 and runtime-corpus-evidence
+per the pre-assigned register order; neither sibling draft was present in `rfc/` at
+drafting time). Specifies the audit's five cheap adoptions (`adoption-audit.md` §4,
+BACKLOG rows of 2026-08-14): native-run story ritual (offer-at-terminal, storyable =
+terminal `outcome.reached`), grounded share card + deterministic/packet-bound title +
+public `story_read` token, spoken delivery (browser SpeechSynthesis) + `external_http`
+voice-provider adapter, derived event-shaped milestones on `/learn`, and flip-sides /
+one-click mirror as pack-free derived runs (`run_derivations`). Register: migration 14
+claimed (create-table only: `public_tokens`, `run_derivations`); 13 recorded as
+reserved for corpus-evidence; no pack/run schema claims. Cross-draft pin added:
+adoption-wave-1 owns `public_tokens`; social-match extends its scope CHECK, no second
+token table. One design deviation called out: opposite-side ships as Just Play from
+the same root (authored grades never flip sides). Baseline verified green before
+drafting: 399 unit tests / 69 files, 16 ordinary browser tests.

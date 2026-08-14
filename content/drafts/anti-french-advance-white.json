@@ -1,0 +1,266 @@
+{
+  "id": "anti-french-advance-white",
+  "version": "0.1.0",
+  "title": "French Advance: holding the base against the ...c5 siege",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "3.e5 player whose French opponent knows the siege by heart",
+    "branchLengthTarget": 8
+  },
+  "start": {
+    "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+    "movesSan": ["e4", "e6", "d4", "d5", "e5"],
+    "side": "white"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "You chose 3.e5; the French player has faced it a hundred times and their siege of d4 runs on rails — ...c5, ...Nc6, ...Qb6. Your job is to keep the defender count on the base equal to the pressure, move by move, until the siege runs out of attackers before you run out of defenders."
+  },
+  "concepts": [
+    "advance-chain-base",
+    "defender-counting",
+    "space-as-compensation"
+  ],
+  "shapes": ["closed-centre-chain"],
+  "planClasses": [
+    {
+      "id": "hold-the-base",
+      "label": "Hold d4 (c3, Be2, a3-b4)",
+      "description": "In this exact position the count is the content: after ...Qb6 the base has three attackers, and every White move in the spine either adds a defender or removes an attacker's square. a3 is a holding move in disguise — it buys b4, which drives the c5 pawn's tension away.",
+      "shapePlan": { "shape": "closed-centre-chain", "plan": "white-hold-the-base" }
+    },
+    {
+      "id": "kingside-when-shut",
+      "label": "Turn kingside once the centre closes",
+      "description": "The chain points at the kingside, but this plan only unlocks when Black releases the base — by ...c4 or ...cxd4 — and the drill's closing branches exist to show that moment arriving.",
+      "shapePlan": { "shape": "closed-centre-chain", "plan": "white-attack-where-the-chain-points" }
+    },
+    {
+      "id": "gambit-the-base",
+      "label": "Gambit d4 (the Milner-Barry try)",
+      "description": "Position-specific residue, authored as a deviation rather than a line: give up the base for open lines and a development lead. A different pack's subject; here it exists so choosing it is a decision, not an accident."
+    }
+  ],
+  "spine": [
+    {
+      "id": "p6-c5",
+      "moveUci": "c7c5",
+      "moveSan": "c5",
+      "annotations": [
+        "The break arrives immediately — at your level it is Black's choice more than four games in five. The French player is not improvising; this is the start of a memorized siege, and your answers need to be just as automatic."
+      ],
+      "children": [
+        {
+          "id": "p7-c3",
+          "moveUci": "c2c3",
+          "moveSan": "c3",
+          "annotations": [
+            "Defender one, before the attackers multiply. The c-pawn's whole life is now to recapture toward the centre; the b1 knight pays the price by losing its best square, which is the structural debt every Advance player carries."
+          ],
+          "children": [
+            {
+              "id": "p8-nc6",
+              "moveUci": "b8c6",
+              "moveSan": "Nc6",
+              "annotations": [
+                "Attacker two takes its post."
+              ],
+              "children": [
+                {
+                  "id": "p9-nf3",
+                  "moveUci": "g1f3",
+                  "moveSan": "Nf3",
+                  "annotations": [
+                    "Defender two. Note the division of labour the structure imposes: Black develops pieces AT d4, you develop pieces TO d4, and whoever runs out of useful moves first has to change the game."
+                  ],
+                  "children": [
+                    {
+                      "id": "p10-qb6",
+                      "moveUci": "d8b6",
+                      "moveSan": "Qb6",
+                      "annotations": [
+                        "Attacker three — and a second target: b2. This is the position your whole Advance repertoire is priced by. Count before you move: d4 is attacked by the c5 pawn, the c6 knight and the b6 queen, and defended by the c3 pawn, the f3 knight and the d1 queen. Level — which means every next move matters."
+                      ],
+                      "children": [
+                        {
+                          "id": "p11-a3",
+                          "moveUci": "a2a3",
+                          "moveSan": "a3",
+                          "annotations": [
+                            "The modern main move, and the drill's central lesson: a pawn move that defends d4 without touching it. It prepares b4, which pushes the question back at the c5 pawn — and it keeps b2 defended by the queen's rook one move longer. Patience is the plan."
+                          ],
+                          "children": [
+                            {
+                              "id": "nh6-fly",
+                              "moveUci": "g8h6",
+                              "moveSan": "Nh6",
+                              "annotations": [
+                                "The Lputian route: the knight aims at f5, the one square from which it attacks d4 without blocking the siege. Taking on h6 doubles Black's pawns but donates the bishop pair and the g-file; declining and continuing the plan is the spine's choice."
+                              ],
+                              "children": [
+                                {
+                                  "id": "b4-gain",
+                                  "moveUci": "b2b4",
+                                  "moveSan": "b4",
+                                  "annotations": [
+                                    "The point of a3, delivered: the c5 pawn must resolve — take and open the a3-square for the bishop to meet the knight on f5, or retreat the tension entirely. Either way the siege has lost its pawn attacker, and your base survived on counting alone."
+                                  ],
+                                  "children": []
+                                }
+                              ]
+                            },
+                            {
+                              "id": "c4-clamp",
+                              "moveUci": "c5c4",
+                              "moveSan": "c4",
+                              "annotations": [
+                                "Black closes the queenside and gives up the siege of d4 voluntarily, planning ...Na5-b3 and a slow queenside bind. The centre is now fully locked."
+                              ],
+                              "children": [
+                                {
+                                  "id": "nbd2-reroute",
+                                  "moveUci": "b1d2",
+                                  "moveSan": "Nbd2",
+                                  "annotations": [
+                                    "With d4 no longer under pressure, the buried knight finally moves — toward f1-g3 and the kingside, where the chain has been pointing since move three. This is the moment the second plan class unlocks: the base held, so the attack begins."
+                                  ],
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "siege-counted",
+      "label": "...Qb6 — three attackers on d4; choose your handling",
+      "trigger": { "atSpineNode": "p10-qb6" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["hold-the-base", "gambit-the-base", "kingside-when-shut"]
+      }
+    },
+    {
+      "id": "siege-outlasted",
+      "label": "b4 — the pawn attacker is driven off",
+      "trigger": { "atSpineNode": "b4-gain" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "centre-locked",
+      "label": "...c4 answered — the game turns kingside",
+      "trigger": { "atSpineNode": "nbd2-reroute" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p6-c5", "p7-c3", "p8-nc6", "p9-nf3", "p10-qb6", "p11-a3",
+      "nh6-fly", "b4-gain", "c4-clamp", "nbd2-reroute"
+    ],
+    "plyHorizon": 8
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p6-c5" },
+      "moveUci": "d4c5",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "4.dxc5 gives away the centre you played 3.e5 to keep: unlike the Caro-Kann version of this capture, Black's ...Bxc5 regains the pawn with a developing move and the e5 pawn becomes a target rather than a cramp. The Advance's promise is the chain; this move resigns the promise on move four."
+    },
+    {
+      "at": { "spineNodeId": "p6-c5" },
+      "moveUci": "g1f3",
+      "class": "accepted_alternative",
+      "note": "4.Nf3 — the Nimzowitsch System — defends d4 with pieces instead of the c-pawn and often gambits it outright. A respectable repertoire with a different bargain: activity for structure. This pack's c3 line is the structural version."
+    },
+    {
+      "at": { "spineNodeId": "p6-c5" },
+      "moveUci": "d1g4",
+      "class": "interesting_deviation",
+      "note": "4.Qg4 — the Nimzowitsch Attack — attacks g7 while Black's kingside is undeveloped, on the logic that ...e6 already blocked the c8 bishop's defence of the kingside light squares. Concrete and double-edged: the queen is early, and every tempo Black gains on her is a siege move. Play it out rather than trust either verdict."
+    },
+    {
+      "at": { "spineNodeId": "p8-nc6" },
+      "moveUci": "c1e3",
+      "class": "accepted_alternative",
+      "note": "5.Be3 — the Kupreichik line — develops the bishop before Nf3 and dares ...Qb6 to take b2 with concrete tricks (Qd2 and Rb1 come with tempo on the exposed queen). Same holding plan, sharper accounting; a real alternative for players who like forcing debts."
+    },
+    {
+      "at": { "spineNodeId": "p10-qb6" },
+      "moveUci": "f1d3",
+      "class": "interesting_deviation",
+      "note": "6.Bd3 is the Milner-Barry Gambit: d4 is offered for open lines and a lead in development. It is a coherent, well-mapped gamble and a different pack's subject; what it is NOT is a way to hold the base. Choosing it should be a decision made before ...Qb6, not a reaction to it."
+    },
+    {
+      "at": { "spineNodeId": "p10-qb6" },
+      "moveUci": "f1e2",
+      "class": "accepted_alternative",
+      "note": "6.Be2 holds by development and sets the band's classic trap: after ...cxd4 7.cxd4 Nxd4?? 8.Nxd4 Qxd4, 9.Bb5+ forces the block and 10.Bxd7+ followed by 11.Qxd4 wins the queen — a sequence verified move-by-move with the board tools in this repo. Slower than a3 as a plan; richer in immediate tactics."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "break-inevitable",
+      "text": "After 3.e5 at the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), 3...c5 is Black's choice in 83.5% of 9,215,262 games — the siege this pack drills is not one possible middlegame, it is the Advance French's default reality.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "count-is-the-content",
+      "text": "Holding the Advance centre is arithmetic made into a habit: attackers and defenders of d4 are counted before every move, and a3 belongs in the count because b4 removes an attacker one move later.",
+      "evidenceTypes": ["author_principle"]
+    },
+    {
+      "id": "their-prep-is-longer",
+      "text": "In this variation it is White who chose the line and Black who usually knows it deeper: the French player meets 3.e5 in most of their games, while the e4 player faces the French only occasionally. The spine is short on purpose — the value is making the first six defensive moves automatic.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "C02 French Defense: Advance Variation, Main Line: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/c.tsv) — CC0-1.0, no attribution required. The Nimzowitsch System (4.Nf3), Nimzowitsch Attack (4.Qg4), Kupreichik (5.Be3), Milner-Barry Gambit (6.Bd3) and Lputian (...Nh6) identities cited above are from the same CC0 file.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the C02 row (position after 3.e5) — 9,215,262 games; ...c5 83.5% (7,695,360 games). No deeper-node frequency was retrieved.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/c02-french-defense-advance-variation-main-line, learner-side white, split-ply 5, row 3...c5 4.c3 Nc6 5.Nf3 Qb6 6.a3). Hand-added branches (...Nh6/b4, ...c4/Nbd2) and every deviation were verified legal with chessops this session, including the complete Be2 trap sequence 6.Be2 cxd4 7.cxd4 Nxd4 8.Nxd4 Qxd4 9.Bb5+ Bd7 10.Bxd7+ Kxd7 11.Qxd4, walked move by move as legal chess. That the trap WINS is derived material arithmetic on the walked line (queen for a pawn after equal minor-piece trades); no engine has evaluated it.",
+      "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all six deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. 'Original prose' answers copyright, not truth."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The concept_violation on 4.dxc5 asserts a legal capture resigns the opening's point; it is the file's strongest judgment and an engine pass on the concrete line has not been run.",
+      "The d4 attacker/defender counts stated in the ...Qb6 annotation are derivable from the position and were hand-counted, not machine-derived; the structural-feature vocabulary could express and check this count and has not been asked to.",
+      "The 'their prep is longer' asymmetry claim is a plausible hypothesis with no corpus measurement behind it.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}

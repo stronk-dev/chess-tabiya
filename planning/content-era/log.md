@@ -679,3 +679,94 @@ Flag for the next code slice (not touched here, content-only pass):
 `apps/server/src/shape-registry.test.ts` pins the official catalogue to the
 original four ids, so the registry test fails until that list is extended with
 the new entries (this sibling wave adds middlegame and endgame files).
+
+## 2026-08-14 — content wave 2: six opening packs in explorer-priority order (claude)
+
+Authored the first opening-pack batch per the B6c priority order (Sicilian
+104,686,766 · Caro-Kann Advance 9,346,096 · French Advance 9,215,262), one
+chosen-side and one anti pack per family, all in `content/drafts/`:
+
+- `najdorf-english-attack-black` (chosen, Black) + `anti-sicilian-najdorf-english-attack`
+  (anti, White — design/04 §2c's "facing Najdorf as White"). Shape handoff:
+  `opposite-castling-race`.
+- `caro-kann-advance-black` (chosen, Black — the §2c mirror of wave-1's
+  anti-caro-advance-c5-race) + `anti-caro-advance-early-c5` (anti, White — the
+  3...c5 Botvinnik-Carls family, 30.0% share in the B12 row; grows pack A's
+  two-ply stub into its own pack per the one-claim rule). Shape handoff:
+  `closed-centre-chain` for the Black pack; the early-c5 pack deliberately has
+  NO shapes reference — after dxc5 the chain is gone and no library entry names
+  the resulting structure (recorded in its blockers).
+- `french-advance-black` (chosen, Black) + `anti-french-advance-white` (anti,
+  White). Shape handoff: `closed-centre-chain`, both sides' plans referenced
+  via `shapePlan`.
+
+Cost split (minutes; engine-validation 0 and owner-review 0 everywhere):
+
+- batch setup (docs, priority data, emitter runs, TSV volumes, verify harness):
+  agent-research 25 · tooling-friction 15
+- anti-sicilian-najdorf-english-attack: agent-research 10 · agent-encoding 25 · agent-revision 0 · tooling-friction 2
+- najdorf-english-attack-black: agent-research 5 · agent-encoding 15 · agent-revision 0 · tooling-friction 0
+- caro-kann-advance-black: agent-research 5 · agent-encoding 15 · agent-revision 0 · tooling-friction 0
+- anti-caro-advance-early-c5: agent-research 10 · agent-encoding 20 · agent-revision 2 · tooling-friction 3
+- anti-french-advance-white: agent-research 8 · agent-encoding 20 · agent-revision 0 · tooling-friction 0
+- french-advance-black: agent-research 4 · agent-encoding 12 · agent-revision 0 · tooling-friction 0
+
+Emitted skeletons used for five of six (B90 English Attack row ×2 sides, B12
+Advance Short Variation, C02 Main Line, C02 Advance Variation);
+`anti-caro-advance-early-c5` is hand-built because the Botvinnik-Carls TSV row
+ends at 3...c5 itself — the pipeline covers named lines, not continuations.
+Validator: 5/6 green on first `make pack-check` run; the sixth failed only on
+`"shapePlan": null` (must be absent, not null) and was green after removal. All
+38 deviations across the batch machine-checked with a scratch chessops harness
+for legality, side-to-move and SAN agreement — `pack-check` still does not
+check deviations (pack C's standing ask).
+
+Format frictions and findings, sharpest first:
+
+1. **Candidate directory identity is per TSV row, not per (row, side, split).**
+   Both mirrored packs of a family want skeletons from the same row; the second
+   emit overwrites `job.json`, so the committed candidate now records only the
+   most recent side (B90 dir: black; C02 main-line dir: white). Ask: learner
+   side in the candidate id, or a job list.
+2. **The openings emitter's fixture covers only volume d.** B and C rows needed
+   the pinned commit's `b.tsv`/`c.tsv` fetched to the scratchpad and passed via
+   `--tsv`; the recorded source URL and sha256 remain honest because they are
+   derived from the bytes actually read. Ask: ship all five volume fixtures or
+   fetch under the source lock.
+3. **First-move alternatives cannot be deviations** in a `follow_theory` pack —
+   deviations need spine-node anchors and no node precedes ply 1 — so White's
+   4.Nf3/4.c3 declines in the early-c5 pack are sibling root branches, exactly
+   like pack A's c5-immediate. Second attestation; the format should either
+   bless the idiom or grow a start-anchor.
+4. **`planClass.shapePlan` rejects `null`** while shape entries' own success
+   signatures embrace it; asymmetric and mildly surprising, but the validator
+   error carried an exact pointer and the fix took two minutes.
+5. **Shape references cannot say "hands off to" versus "present".** The
+   opposite-castling-race reference in both Najdorf packs cannot fire during
+   the authored spine (nobody has castled yet); it is a trajectory declaration
+   riding on the only reference mechanism that exists. closed-centre-chain, by
+   contrast, genuinely fires mid-spine once ...e6 stands. Both uses are honest;
+   the format cannot distinguish them.
+6. **The priority artifact is the first mechanical ground for frequency prose:**
+   each pack carries one `corpus_observed` feedbackClaim citing exact counts and
+   shares from `content/candidates/priority/priority.json` (e.g. ...c5 83.5% of
+   9,215,262 in the C02 row). Below-root shares remain ungroundable without
+   further explorer pulls, and every pack's blockers say so.
+7. The scratch chessops ritual (pack B's ask, third occurrence) again required
+   esbuild bundling because bare specifiers resolve from the script's location;
+   the harness now also re-derives start FENs and checks boundary/checkpoint
+   references, and it caught zero chess errors in the final drafts because the
+   lines were derived with it rather than recalled.
+
+Not done, deliberately: no engine pass on any position (blockers recorded per
+pack), no explorer pulls below the family roots, no touch of `rfc/` (four
+drafts running concurrently), no commits.
+
+## 2026-08-14 — CORRECTION to the opening-wave entry above (claude)
+
+Append-only; the entry stands. Its claim that "`pack-check` still ignores
+deviations" is **false** — probed by injecting `a1a8` into a copy of the
+Najdorf pack: `DEVIATION_WRONG_SIDE` fails the gate. D7's lint (line-drill RFC)
+is live in `pack-check`. The author's hand-verification was redundant
+belt-and-braces, not a workaround for a missing check. The other frictions in
+the entry are unverified-but-plausible and stand as filed.

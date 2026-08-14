@@ -1,0 +1,335 @@
+{
+  "id": "anti-sicilian-najdorf-english-attack",
+  "version": "0.1.0",
+  "title": "Facing the Najdorf: the English Attack move order",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "e4 player who meets 1...c5 and did not choose it",
+    "branchLengthTarget": 9
+  },
+  "start": {
+    "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+    "movesSan": ["e4", "c5", "Nf3", "d6", "d4", "cxd4", "Nxd4", "Nf6"],
+    "side": "white"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "Your opponent chose the Sicilian and knows the Najdorf better than you do. Reach the English Attack tabiya with the moves in the right order — f3 before Qd2, so ...Ng4 never lands — and know which move commits you to castling long."
+  },
+  "concepts": [
+    "move-order-discipline",
+    "opposite-castling-commitment",
+    "prophylaxis-before-storm"
+  ],
+  "shapes": ["opposite-castling-race"],
+  "planClasses": [
+    {
+      "id": "english-attack-storm",
+      "label": "The storm setup (Qd2, O-O-O, g4-h4)",
+      "description": "In this pack's tabiya the storm is not yet launched: f3 has secured e4 and g4, and Qd2 plus O-O-O are the committal moves that turn the setup into the race.",
+      "shapePlan": { "shape": "opposite-castling-race", "plan": "white-h-file-storm" }
+    },
+    {
+      "id": "prophylaxis-first",
+      "label": "Prophylaxis before the pawns move (Kb1, a timely h3)",
+      "description": "The same setup can spend one tempo on king safety before the pawns run. Here that is Kb1 after castling — the concrete question is always whether Black's ...b5-b4 arrives during the tempo you spent.",
+      "shapePlan": { "shape": "opposite-castling-race", "plan": "white-prophylactic-tempo" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "p9-nc3",
+      "moveUci": "b1c3",
+      "moveSan": "Nc3",
+      "annotations": [
+        "Guard e4 with a piece, not a pawn. Everything about the English Attack setup comes later; this move keeps every option open."
+      ],
+      "children": [
+        {
+          "id": "p10-a6",
+          "moveUci": "a7a6",
+          "moveSan": "a6",
+          "annotations": [
+            "The Najdorf move. It does nothing you can attack: it prepares ...e5 without allowing Bb5+, and ...b5 later. Your opponent has likely played this position hundreds of times — the pack's claim is that you only need one setup against it, learned in the right order."
+          ],
+          "children": [
+            {
+              "id": "p11-be3",
+              "moveUci": "c1e3",
+              "moveSan": "Be3",
+              "annotations": [
+                "The English Attack bid. The bishop goes to its storm square before the queen moves, but note what is NOT yet played: f3. Until f3 is on the board, ...Ng4 harassing this bishop is Black's standing resource, and your move order exists to control when that is possible."
+              ],
+              "children": [
+                {
+                  "id": "p12-e5",
+                  "moveUci": "e7e5",
+                  "moveSan": "e5",
+                  "annotations": [
+                    "Black stakes the centre and pushes your knight backwards. The d5 square is the payment; the question this pack drills is where the knight goes."
+                  ],
+                  "children": [
+                    {
+                      "id": "p13-nb3",
+                      "moveUci": "d4b3",
+                      "moveSan": "Nb3",
+                      "annotations": [
+                        "The retreat that keeps f3 available for the pawn. From b3 the knight eyes a5 and c5 and stays out of the way of the storm."
+                      ],
+                      "children": [
+                        {
+                          "id": "p14-be6",
+                          "moveUci": "c8e6",
+                          "moveSan": "Be6",
+                          "annotations": [
+                            "Black develops toward d5 and ...b5. Now comes the move-order moment this whole pack exists for."
+                          ],
+                          "children": [
+                            {
+                              "id": "p15-f3",
+                              "moveUci": "f2f3",
+                              "moveSan": "f3",
+                              "annotations": [
+                                "f3 BEFORE Qd2. The pawn takes g4 away from both the knight and the bishop, so ...Ng4 is dead before the queen steps onto d2. This is the tabiya: from here Qd2, O-O-O and the g- and h-pawns are the plan, and Black will race you on the other wing."
+                              ],
+                              "children": [
+                                {
+                                  "id": "be7-classical",
+                                  "moveUci": "f8e7",
+                                  "moveSan": "Be7",
+                                  "annotations": [
+                                    "Black just develops. Nothing is stopping the setup now."
+                                  ],
+                                  "children": [
+                                    {
+                                      "id": "qd2-commit",
+                                      "moveUci": "d1d2",
+                                      "moveSan": "Qd2",
+                                      "annotations": [
+                                        "The committal move: after Qd2 the pieces are arranged for O-O-O and there is no honest way back to castling short. You have entered the race on purpose — the shape entry this pack references describes what both sides now want."
+                                      ],
+                                      "children": []
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "h5-clamp",
+                                  "moveUci": "h7h5",
+                                  "moveSan": "h5",
+                                  "annotations": [
+                                    "The modern clamp: Black spends a whole tempo to stop g4. It blunts the pawn storm but it is also a hook — a later g4 anyway, met by ...hxg4, opens files near whichever king ends up on the kingside."
+                                  ],
+                                  "children": [
+                                    {
+                                      "id": "qd2-vs-clamp",
+                                      "moveUci": "d1d2",
+                                      "moveSan": "Qd2",
+                                      "annotations": [
+                                        "The setup does not change because Black clamped. Qd2 and O-O-O still come; only the storm's mechanics change, and slower plans (Nd5 at the right moment, play against d6) gain weight."
+                                      ],
+                                      "children": []
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "ng4-harass",
+                  "moveUci": "f6g4",
+                  "moveSan": "Ng4",
+                  "annotations": [
+                    "The move your order must respect: with f3 not yet played, the knight hits the e3 bishop immediately. This is why 6.Be3 players must know a concrete answer before playing 6.Be3 at all."
+                  ],
+                  "children": [
+                    {
+                      "id": "bg5-sidestep",
+                      "moveUci": "e3g5",
+                      "moveSan": "Bg5",
+                      "annotations": [
+                        "The bishop sidesteps with tempo ideas of its own; the theory continues ...h6 and a long forcing sequence. This pack does not author that fight — it teaches you that the fight exists, and that against it many club players prefer the 6.f3 move order (see the deviation at the a6 node)."
+                      ],
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": "e6-scheveningen",
+                  "moveUci": "e7e6",
+                  "moveSan": "e6",
+                  "annotations": [
+                    "The small-centre setup instead of ...e5: a Scheveningen structure by another order. Your plan barely changes, which is precisely the argument for the English Attack as a club repertoire against the whole Najdorf complex."
+                  ],
+                  "children": [
+                    {
+                      "id": "f3-vs-scheveningen",
+                      "moveUci": "f2f3",
+                      "moveSan": "f3",
+                      "annotations": [
+                        "Same move, same reason: secure e4 and g4, then Qd2 and O-O-O. One setup against both of Black's central formations is the whole point."
+                      ],
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "tabiya-reached",
+      "label": "The English Attack tabiya — the race is about to be signed",
+      "trigger": { "atSpineNode": "p15-f3" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["english-attack-storm", "prophylaxis-first"]
+      }
+    },
+    {
+      "id": "committed-to-the-race",
+      "label": "Qd2 — castling long is now the only honest plan",
+      "trigger": { "atSpineNode": "qd2-commit" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "clamp-answered",
+      "label": "...h5 stopped g4; the setup continues anyway",
+      "trigger": { "atSpineNode": "qd2-vs-clamp" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "harassment-fork",
+      "label": "...Ng4 landed — the cost of the Be3-first order",
+      "trigger": { "atSpineNode": "bg5-sidestep" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "one-setup-two-centres",
+      "label": "...e6 instead of ...e5 — same White setup",
+      "trigger": { "atSpineNode": "f3-vs-scheveningen" },
+      "actions": []
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p9-nc3", "p10-a6", "p11-be3", "p12-e5", "p13-nb3", "p14-be6", "p15-f3",
+      "be7-classical", "qd2-commit", "h5-clamp", "qd2-vs-clamp",
+      "ng4-harass", "bg5-sidestep", "e6-scheveningen", "f3-vs-scheveningen"
+    ],
+    "plyHorizon": 9
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p10-a6" },
+      "moveUci": "f1e2",
+      "class": "accepted_alternative",
+      "note": "6.Be2 is the Opocensky Variation: castle short, keep the pawns at home, and outplay Black in a slower middlegame. A complete and respectable answer to the Najdorf — but a different repertoire, without the race this pack teaches."
+    },
+    {
+      "at": { "spineNodeId": "p10-a6" },
+      "moveUci": "c1g5",
+      "class": "accepted_alternative",
+      "note": "6.Bg5 is the classical main line and the sharpest theory battle in the whole opening. Against a booked-up Najdorf player it tests YOUR memory more than theirs — which is exactly what an anti pack should avoid signing up for."
+    },
+    {
+      "at": { "spineNodeId": "p10-a6" },
+      "moveUci": "f2f3",
+      "class": "interesting_deviation",
+      "note": "6.f3 first reaches the same tabiya while making ...Ng4 impossible one move earlier; the cost is telling Black the plan before Be3 is on the board and allowing ...Qb6 lines where the queen hits b2 with the bishop still on c1. Play both orders and compare — this is the pack's move-order lesson from the other side."
+    },
+    {
+      "at": { "spineNodeId": "p12-e5" },
+      "moveUci": "d4f3",
+      "class": "interesting_deviation",
+      "note": "7.Nf3 keeps the knight active but parks it on the square the f-pawn needs. You can still castle long, but the English Attack's storm no longer works as designed — the retreat choice IS the plan choice."
+    },
+    {
+      "at": { "spineNodeId": "p12-e5" },
+      "moveUci": "d4e2",
+      "class": "accepted_alternative",
+      "note": "7.Nde2 also keeps f3 free for the pawn and reroutes toward g3. Slower than Nb3 and the knight blocks the f1 bishop for a while; a real alternative with the same plan behind it."
+    },
+    {
+      "at": { "spineNodeId": "p12-e5" },
+      "moveUci": "d4f5",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "7.Nf5 walks into ...Bxf5 followed by ...d5: the bishop that took on f5 was Black's problem piece, and the pawn that recaptures opens your king's file. The knight retreat is not a concession, it is the plan — this jump trades your structure for one tempo of activity."
+    },
+    {
+      "at": { "spineNodeId": "p14-be6" },
+      "moveUci": "d1d2",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "8.Qd2 before f3 re-opens the door this move order exists to close: ...Ng4 now hits the e3 bishop with the queen already committed. The setup's moves are cheap; their ORDER is the content. Play it out and watch where the bishop has to go."
+    },
+    {
+      "at": { "spineNodeId": "p14-be6" },
+      "moveUci": "h2h3",
+      "class": "accepted_alternative",
+      "note": "8.h3 is a real theory move here (it prepares g4 in one go and keeps ...Ng4 controlled by the pawn one square earlier). It commits the h-pawn before the king has decided where to live — a different storm mechanism, drilled in nobody's first repertoire but sound."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "faced-not-chosen",
+      "text": "After 1.e4 c5 at the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), 2.Nf3 is White's choice in 52.1% of 104,686,766 games — the open Sicilian is the single most common opening surface an e4 player faces without having chosen it.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "order-not-moves",
+      "text": "The English Attack setup (Be3, f3, Qd2, O-O-O) is easy to memorize as a list and loses its point when the list is played in the wrong order: f3 before Qd2 is what makes ...Ng4 permanently impossible.",
+      "evidenceTypes": ["author_principle"]
+    },
+    {
+      "id": "one-setup-argument",
+      "text": "Against both ...e5 and ...e6 centres the same White setup applies, which is the practical argument for the English Attack as the club answer to the Najdorf: your prep does not fork where Black's does.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "B90 Sicilian Defense: Najdorf Variation, English Attack: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/b.tsv) — CC0-1.0, no attribution required. Variation names cited in deviations (Opocensky, and the 6.Bg5/6.f3/8.h3 identities) are from the same CC0 file.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the B20 row (position after 1.e4 c5) — 104,686,766 games, 2.Nf3 share 52.1%. No deeper-node frequency was retrieved; every other popularity statement in this pack is unquantified prose.",
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/b90-sicilian-defense-najdorf-variation-english-attack, learner-side white, split-ply 8, longest matching row 6.Be3 e5 7.Nb3 Be6 8.f3). Hand-added branches (Be7/Qd2, h5/Qd2, Ng4/Bg5, e6/f3) and every deviation were verified legal with chessops this session: start FEN re-derived from the SAN list, full spine walked with SAN/UCI agreement, each deviation checked legal and White-to-move from the position after its anchor.",
+      "UNGROUNDED: every strategic claim — the objective summary, both plan-class descriptions, all spine annotations, all eight deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. 'Original prose' answers copyright, not truth."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). The only two things that clear a blocker are a citable source or mechanical validation that actually bears on the claim.",
+      "The two concept_violation judgments (7.Nf5 and 8.Qd2-before-f3) assert that legal moves are conceptual errors. The 8.Qd2 ...Ng4 claim is concretely checkable with Stockfish at fixed depth on the specific line; it has not been run.",
+      "The claim that ...Ng4 is 'Black's standing resource' against a bishop on e3 without f3, and the entire move-order thesis, is standard theory rendered from model knowledge with no named source. A citable book/course reference (any Najdorf or English Attack monograph) would clear it; none is cited.",
+      "No engine validation pass has been run on any position in this pack.",
+      "Popularity claims below the 1.e4 c5 root (which 6th moves club players actually face) are asserted only implicitly; the explorer API could quantify them and has not been queried below the family root."
+    ]
+  }
+}

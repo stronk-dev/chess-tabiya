@@ -7,8 +7,14 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
+| `predicate-wave-2.md` | draft | `archive/structural-reading.md` (amends `archive/drill-pack-format.md`, `archive/shape-library.md`) | — (2026-08-14 parallel wave, **first claim**; pack schema 0.13 + shape-entry schema 0.2, no migration) |
+| `adoption-wave-1.md` | draft | — | — (2026-08-14 parallel wave; migration 14 claimed, no pack/run schema claim) |
+| `social-match.md` | draft | `archive/live-session-platform.md` (amends board control, journal kinds, session routes; depends on `adoption-wave-1.md` for `public_tokens`) | — (2026-08-14 parallel wave, **last claim**; migration 15, no pack/run schema claim) |
 
-No active product RFCs.
+**Four-draft wave, 2026-08-14** — claim order: `predicate-wave-2` first, then
+`corpus-evidence`, `adoption-wave-1`, `social-match`. Shared-resource claims (pack
+schema, migrations, ownership pins) land in that order; a draft that cannot land
+behind its predecessor renegotiates here.
 
 The completed breadth batch and its dependency history are kept in the archive
 documents and planning logs rather than duplicated in this index.
@@ -37,6 +43,7 @@ landing order, not lost data.
 | 0.10 | `archive/structural-reading.md` | implemented 2026-08-13, draft — `$defs/structuralFeature` and `$defs/structuralExpression`, a fourth `fenPredicate` variant, a fifth `successCondition` kind (`structural_feature`), `$defs/file`. No migration: rung-0 facts are never persisted |
 | 0.11 | `archive/shape-library.md` | implemented — additive only: optional top-level `shapes` (referenced shape-entry ids) and optional `planClass.shapePlan`. `planClasses` stays fully valid; no committed digest moves (the `$id` is not part of any pack document) |
 | 0.12 | `archive/defect-batch-2.md` | implemented — tightening only: `$defs/opponentPolicy` gets `additionalProperties: false` (D22); all committed packs and fixtures validate unchanged; no committed digest moves |
+| 0.13 | `predicate-wave-2.md` | claimed 2026-08-14, draft — additive: `structuralFeature` gains `bishop_on_shade` and `pawn_count`; `structuralExpression` gains `mirrored` and `quantified`; new domain/template `$defs`, all `additionalProperties: false`. Also bumps the shape-entry schema constant 0.1 → 0.2 (same additions in its duplicated `$defs`; no separate register exists, recorded here). First claim of the four-draft wave of 2026-08-14 — `corpus-evidence`, `adoption-wave-1`, and `social-match` claim behind this row |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.
@@ -91,6 +98,9 @@ writing it into a draft.
 | 10 | 9→10 | `archive/shape-library.md` | implemented — `shape_drafts` and `registered_shapes`; create-table/index plus the pack-style account-deletion tombstone. Run schema stays 0.8 by design (firings are derived projections, never events) |
 | 11 | 10→11 | `archive/branch-groups.md` | implemented — run schema v0.9: adds the `group.created` event and widens `policyModeApplied` with `enumerated`. Stamp-only body (frozen literals `"0.8"`→`"0.9"`, no data rewrite exists to do); mandatory because reads filter on the current run-schema version |
 | 12 | 11→12 | `archive/game-import-and-story.md` | implemented — run schema v0.10: `sessionKind` gains `imported` (non-pack projection rules unchanged). Creates `imported_games` (one row per imported run: source kind/url, movetext digest, headers, original PGN bytes, licence note) plus the pack-style account-deletion tombstone, and stamps frozen literals `"0.9"`→`"0.10"` (no data rewrite). Landed behind implemented migration 11 |
+| 13 | 12→13 | reserved — `runtime-corpus-evidence` draft | reserved 2026-08-14 per the owner-ruled wave order (predicate-wave-2 → corpus-evidence → adoption-wave-1 → social-match); that draft records its own claim or releases the number here |
+| 14 | 13→14 | `adoption-wave-1.md` | draft — creates `public_tokens` (hashed anonymous read tokens, first scope `story_read`) and `run_derivations` (flip-sides provenance); create-table/index only, no run/pack schema change. Lands behind 13; if 13 is released, renegotiate here per the standing rule |
+| 15 | 14→15 | `social-match.md` | draft — creates `match_states`; rebuilds `live_sessions` (board-control CHECK gains `match`), `session_journal` (kind CHECK gains the match/link kinds), and `public_tokens` (scope CHECK gains `session_join` plus nullable join columns, per the ownership pin below). **Must land behind 14** (it rebuilds 14's table — structural, not just numeric); if 13 is released, rebases downward with 14 per the standing rule. Also freezes migration 9's body to its shipped literal CHECK strings (body-edit record: migration 9 currently interpolates live tuples, `apps/server/src/storage.ts:1901-1917`, so tuple widening would silently fork fresh-vs-upgraded databases — `rfc/social-match.md` §3.8) |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
@@ -117,6 +127,13 @@ class on an implementation surface instead of a number. Pin: **`archive/shape-li
 position player** (it scoped it concretely as its largest surface, and its acceptance test
 cannot exist without it); `adaptive-guidance.md` names it in `Depends on:` and ships no
 client entry of its own. Landing order follows: shape-library before adaptive-guidance.
+
+Pin, 2026-08-14 (parallel wave): **`adoption-wave-1.md` owns the `public_tokens` table** —
+the single trust surface for anonymous capability tokens (hashed 32-byte tokens, closed
+typed `scope` CHECK, per-token revocation, uniform 404 non-disclosure, creator-cascade
+deletion). The `social-match` draft (friend-link tokens, same trust surface) adds its
+scopes by widening the CHECK in its own migration, names `adoption-wave-1.md` in
+`Depends on:`, and creates no second token table.
 
 ## Withdrawn
 

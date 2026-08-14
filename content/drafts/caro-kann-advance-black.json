@@ -1,0 +1,281 @@
+{
+  "id": "caro-kann-advance-black",
+  "version": "0.1.0",
+  "title": "Caro-Kann Advance: the defender's bishop and the ...c5 clock",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Caro-Kann player whose 3.e5 opponent has a plan",
+    "branchLengthTarget": 7
+  },
+  "start": {
+    "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+    "movesSan": ["e4", "c6", "d4", "d5", "e5"],
+    "side": "black"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "White gained space with 3.e5 and their preparation usually ends a few moves later. Get the light-squared bishop out BEFORE ...e6 locks it in, survive the lunges at it, and land ...c5 against the chain's base with your development ahead of theirs."
+  },
+  "concepts": [
+    "problem-bishop-first",
+    "advance-chain-base",
+    "break-timing"
+  ],
+  "shapes": ["closed-centre-chain"],
+  "planClasses": [
+    {
+      "id": "strike-the-base",
+      "label": "Strike the base with ...c5",
+      "description": "In this pack the strike is prepared, not immediate: the bishop leaves c8 first, ...e6 solidifies, and only then does the c-pawn hit d4 — so the resulting open c-file belongs to pieces that are already out.",
+      "shapePlan": { "shape": "closed-centre-chain", "plan": "black-strike-the-base" }
+    },
+    {
+      "id": "chip-the-head",
+      "label": "Chip the head with ...f6 later",
+      "description": "The second lever, held in reserve for the middlegame once the king is safe. Nothing in this pack's spine plays it; the pack's job is to reach a structure where it remains available.",
+      "shapePlan": { "shape": "closed-centre-chain", "plan": "black-chip-the-head" }
+    },
+    {
+      "id": "bishop-out-first",
+      "label": "The bishop leaves before the chain closes",
+      "description": "Position-specific to the Caro-Kann and the reason it exists as an opening: unlike its French cousin, the c8 bishop gets outside the pawn chain before ...e6. Every White lunge in this pack is an attempt to make that bishop a target instead of an asset."
+    }
+  ],
+  "spine": [
+    {
+      "id": "p6-bf5",
+      "moveUci": "c8f5",
+      "moveSan": "Bf5",
+      "annotations": [
+        "The move the whole opening is for: the problem bishop exits before ...e6 shuts the diagonal. At your level this is also the most common choice by a wide margin — and everything White tries next is an attempt to punish it."
+      ],
+      "children": [
+        {
+          "id": "p7-nf3",
+          "moveUci": "g1f3",
+          "moveSan": "Nf3",
+          "annotations": [
+            "The restrained system: develop, castle, keep the space. This is where most club preparation for White ends — a setup, not a refutation — and your equalizing plan runs on schedule against it."
+          ],
+          "children": [
+            {
+              "id": "e6-solid",
+              "moveUci": "e7e6",
+              "moveSan": "e6",
+              "annotations": [
+                "Now, with the bishop already outside, close the wall. The chain d5/e6 against d4/e5 is the structure this pack's shape reference describes; your c-pawn is the one that talks to its base."
+              ],
+              "children": [
+                {
+                  "id": "be2-short",
+                  "moveUci": "f1e2",
+                  "moveSan": "Be2",
+                  "annotations": [
+                    "White prepares to castle before meeting the break. This is the decision beat for Black: strike at once with ...c5, or develop a knight first? Both are authored thinking; the checkpoint asks you to commit."
+                  ],
+                  "children": [
+                    {
+                      "id": "c5-break",
+                      "moveUci": "c6c5",
+                      "moveSan": "c5",
+                      "annotations": [
+                        "The break lands with White's king still in the centre — one tempo earlier than White would like. The c-pawn has moved twice, which is the honest cost; the claim is that hitting the base before White finishes developing is worth it."
+                      ],
+                      "children": [
+                        {
+                          "id": "be3-tension",
+                          "moveUci": "c1e3",
+                          "moveSan": "Be3",
+                          "annotations": [
+                            "White reinforces the base and keeps the tension. Your choice now shapes the middlegame: increase the pressure with ...Qb6, resolve with ...cxd4, or develop and keep both options."
+                          ],
+                          "children": [
+                            {
+                              "id": "qb6-press",
+                              "moveUci": "d8b6",
+                              "moveSan": "Qb6",
+                              "annotations": [
+                                "The pressure move: the queen adds an attacker to d4's defender count and eyes b2, which the c1 bishop just stopped defending. White must now spend a move on the queenside or accept the tension permanently — either way, your opening has done its job."
+                              ],
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tal-h4",
+          "moveUci": "h2h4",
+          "moveSan": "h4",
+          "annotations": [
+            "The lunge you must be ready for: h4-h5 means the bishop that just escaped will be asked where it lives. This is prepared-White territory — and it has a prepared answer."
+          ],
+          "children": [
+            {
+              "id": "h5-stop",
+              "moveUci": "h7h5",
+              "moveSan": "h5",
+              "annotations": [
+                "Meet the flank pawn with a flank pawn. The bishop keeps f5-g6 as a home, White's g4 now costs a pawn structure to play, and the inserted pawns favour you in most endings because White's h-pawn advanced first. The cost: g5 is White's forever."
+              ],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "bayonet-g4",
+          "moveUci": "g2g4",
+          "moveSan": "g4",
+          "annotations": [
+            "The Bayonet: the most direct attempt to make ...Bf5 a mistake. White gains kingside space at the price of every light square around their own king."
+          ],
+          "children": [
+            {
+              "id": "bg6-retreat",
+              "moveUci": "f5g6",
+              "moveSan": "Bg6",
+              "annotations": [
+                "Step back and let the pawns overextend. On g6 the bishop still watches the b1-h7 diagonal, ...h5 comes next to ask g4 a question, and White's prep — which usually stops right here — has bought space it must now defend for the rest of the game."
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "break-commitment",
+      "label": "5.Be2 — strike now or develop first?",
+      "trigger": { "atSpineNode": "be2-short" },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["strike-the-base", "bishop-out-first", "chip-the-head"]
+      }
+    },
+    {
+      "id": "pressure-standing",
+      "label": "...Qb6 — the base is under siege with your king safe to castle",
+      "trigger": { "atSpineNode": "qb6-press" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "lunge-answered",
+      "label": "...h5 — the Tal lunge met, structure fixed",
+      "trigger": { "atSpineNode": "h5-stop" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "bayonet-answered",
+      "label": "...Bg6 — the space is White's, the light squares are yours",
+      "trigger": { "atSpineNode": "bg6-retreat" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": { "atAuthoredBoundary": "crossed" },
+      "actions": []
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p6-bf5", "p7-nf3", "e6-solid", "be2-short", "c5-break", "be3-tension", "qb6-press",
+      "tal-h4", "h5-stop", "bayonet-g4", "bg6-retreat"
+    ],
+    "plyHorizon": 7
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "spineNodeId": "p7-nf3" },
+      "moveUci": "c6c5",
+      "class": "interesting_deviation",
+      "note": "4...c5 strikes before ...e6, with the bishop already out. It is a real alternative order; the difference from the spine is that dxc5 now comes while your e-pawn still stands on e7, and regaining the pawn costs the tempo the spine's order saves. Play both and compare where the c-pawn's second move went."
+    },
+    {
+      "at": { "spineNodeId": "be2-short" },
+      "moveUci": "b8d7",
+      "class": "accepted_alternative",
+      "note": "5...Nd7 develops first and keeps ...c5 in hand — the patient order. It concedes White one free developing move; whether the break is better prepared or merely later is exactly the comparison this checkpoint exists for."
+    },
+    {
+      "at": { "spineNodeId": "be2-short" },
+      "moveUci": "g8e7",
+      "class": "accepted_alternative",
+      "note": "5...Ne7 heads for f5 or g6, keeping the f-pawn free for a later ...f6 chip. Slower against the castled-and-ready plan, but it is the move that keeps BOTH levers alive longest."
+    },
+    {
+      "at": { "spineNodeId": "be3-tension" },
+      "moveUci": "c5d4",
+      "class": "accepted_alternative",
+      "note": "6...cxd4 resolves the tension into piece play against d4. This is main-line theory in its own right; what you give up is the standing threat, which was taxing every White move. Choose it when White's setup is finished, not before."
+    },
+    {
+      "at": { "spineNodeId": "be3-tension" },
+      "moveUci": "b8d7",
+      "class": "accepted_alternative",
+      "note": "6...Nd7 keeps every option and adds a defender to the queenside before committing the queen. The quiet handling of a position you are already comfortable in."
+    },
+    {
+      "at": { "spineNodeId": "be3-tension" },
+      "moveUci": "c5c4",
+      "class": "concept_violation",
+      "offObjective": true,
+      "note": "6...c4 closes the position and releases d4 from all pressure. The c-pawn spent two tempi to arrive at a square where it attacks nothing, and White's pieces are now free to turn to the kingside where the space already favours them. The break was your rent on the position; this move stops paying it."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "bf5-share",
+      "text": "After 3.e5 at the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), 3...Bf5 is Black's choice in 61.4% of 9,346,096 games and the immediate 3...c5 in 30.0% — the bishop-first plan this pack drills is the family's main road.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "bishop-before-wall",
+      "text": "The Caro-Kann's identity in one rule: the light-squared bishop leaves the pawn chain before ...e6 closes it. Every White system against the Advance is priced by how hard it works to make that bishop a liability.",
+      "evidenceTypes": ["author_principle"]
+    },
+    {
+      "id": "prep-ends-early",
+      "text": "Against the restrained Nf3/Be2 setup, typical club preparation for White ends around move five or six; from the tabiya onward the better-understood plan, not the better-memorized line, decides the game.",
+      "evidenceTypes": ["author_principle", "hypothesis"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "B12 Caro-Kann Defense: Advance Variation, Short Variation: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/b.tsv) — CC0-1.0, no attribution required. The Tal Variation (4.h4) and Bayonet Attack (4.g4) branch identities are from the same CC0 file.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the B12 row (position after 3.e5) — 9,346,096 games; ...Bf5 61.4%, ...c5 30.0%, ...e6 4.8%.",
+      "SPINE TRUNK: the first two plies (3...Bf5 4.Nf3) were emitted by the openings sourcing pipeline (content/candidates/b12-caro-kann-defense-advance-variation-short-variation, learner-side black, split-ply 5). All hand-added continuation (4...e6 5.Be2 c5 6.Be3 Qb6), both lunge branches, and every deviation were verified legal with chessops this session, including that each deviation is a Black move from the position after its anchor. This pack is the Black-side mirror of the wave-1 draft anti-caro-advance-c5-race, which drills the same tabiya as White.",
+      "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all six deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. 'Original prose' answers copyright, not truth."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The concept_violation on 6...c4 is this file's strongest judgment: it asserts a legal, positionally motivated move stops the opening's plan. Stockfish at fixed depth on the concrete line could confirm or refute what ...c4 costs; it has not been run.",
+      "The claim that the inserted h4/h5 pawns favour Black in 'most endings' is an endgame-consequence assertion no evidence in this repo supports.",
+      "The 'prep ends around move five or six' claim is a hypothesis about club preparation with no corpus measurement behind it; explorer novelty-depth data could test a proxy for it.",
+      "No engine validation pass has been run on any position in this pack."
+    ]
+  }
+}
