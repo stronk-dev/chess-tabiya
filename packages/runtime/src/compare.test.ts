@@ -7,6 +7,8 @@ import {
   appendOpponentPly,
   commitMove,
   compareBranches,
+  comparisonNarrative,
+  comparisonStrips,
   createRun,
   reachCheckpoint,
   rewind,
@@ -176,5 +178,16 @@ describe("branch comparison", () => {
     expect(() => compareBranches(run, [run.branches[0]!.id, "missing"])).toThrow(
       BranchQueryError,
     );
+  });
+
+  it("derives deterministic fact-only strips and narrative from persisted comparison data", () => {
+    const run = branchedRun();
+    const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
+    const strips = comparisonStrips(run, comparison);
+    expect(Object.values(strips).map((strip) => strip.evalTrail.length)).toEqual([1, 1]);
+    expect(Object.values(strips).flatMap((strip) => strip.timing).length).toBeGreaterThan(0);
+    const first = comparisonNarrative(run, comparison, strips);
+    expect(comparisonNarrative(run, comparison, strips)).toEqual(first);
+    expect(JSON.stringify(first)).not.toMatch(/\b(better|worse|should|best)\b/i);
   });
 });

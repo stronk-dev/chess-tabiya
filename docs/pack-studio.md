@@ -51,8 +51,15 @@ playtesting, registering, withdrawing, and exporting drafts/packs under `/packs/
 
 `/create` exposes the real JSON document, validation issues with paths, create/save actions,
 and community registration. It is intentionally a low-level authoring instrument rather than
-a visual chess-content editor; session distillation and structured PGN/candidate import remain
-follow-up authoring affordances over this write path.
+a visual chess-content editor.
+
+`POST /runs/:id/distill` lets a run host turn played branches into an ordinary
+learner-owned draft with `seedKind: run`. It copies only recorded move facts,
+remaps portable fired checkpoints, substitutes a mechanical checkpoint when
+needed, returns classless fork proposals, and always declares graduation
+blockers. It never copies authored grading, deviation classes, claims, plan
+classes, annotations, or engine evidence. Registration therefore remains
+impossible until a human supplies and grounds the missing judgment.
 
 ## Pack format 0.8
 

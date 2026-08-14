@@ -1,6 +1,6 @@
 # RFC: Orphan completion — comparison narrative and strips, session distillation, event-fact recommender
 
-- **Status:** draft
+- **Status:** implemented
 - **Author:** claude (for owner review)
 - **Created:** 2026-08-14
 - **Design refs:** `design/02-product-shape.md:180-183` (compare mode: difference strip + narrative
@@ -219,11 +219,12 @@ added.
 5. `difficulty.branchLengthTarget` = the selected branch's ply length iff within the schema's
    2–20 band; omitted otherwise.
 6. `provenance.reviewStatus: "draft"`; `provenance.sources` includes the literal
-   `"session_distilled"` plus one generated line naming the run id, its `sessionDigest`
+   `"session_distilled"` plus one generated line naming the run id, its session-identity `sessionDigest`
    (`packages/runtime/src/types.ts:299` — every run has one), the source pack id and digest when
    present, and — for an `imported` run — the stored licence note and source URL from its
-   `imported_games` row (`docs/game-import-and-story.md:31-34`). **The provenance names the run
-   digest**; nothing else asserts where the moves came from.
+   `imported_games` row (`docs/game-import-and-story.md:31-34`). **The provenance names the
+   session-identity digest, not a digest of the evolving run snapshot**; nothing else asserts
+   where the moves came from.
 7. Remaining required scalars: `id`/`title` from the request; `version` `"0.1.0"`. `mode` and
    `objective.type` are copied from the source pack only when the copied pair stands on its own
    over the distilled document: `follow_theory` requires mode `line`, an authored boundary, and
@@ -429,3 +430,6 @@ None.
   encounter join and template are corrected to **countable** attempts (an attempts row is any
   preserved branch, not a completion, `docs/return-and-progression.md:3-14`); ledger citations
   corrected to `design/BACKLOG.md:222-224` + `planning/roadmap-to-done.md:17,19`.
+- 2026-08-14 (implementation review): corrected `sessionDigest` from “run digest”
+  to session-identity digest; it identifies the immutable session contract, not
+  the evolving run snapshot.

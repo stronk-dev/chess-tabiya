@@ -32,6 +32,7 @@
     type RunDerivationPage,
     type RepertoireSummary,
     type RepertoireGapPage,
+    type ProgressRecommendation,
     ApiError,
   } from "./lib/api.js";
   import { HistoryRouter, routePath, type AppRoute } from "./lib/router.js";
@@ -136,6 +137,7 @@
   let repertoirePgn=$state("");
   let repertoireStudyUrl=$state("");
   let repertoireError:string|undefined=$state();
+  let recommendations:readonly ProgressRecommendation[]=$state([]);
 
   const keyboardDispatcher = new ShellKeyboardDispatcher({
     navigate,
@@ -213,11 +215,12 @@
       } else if (next.name === "settings") {
         capabilities = await api.capabilities();
       } else if (next.name === "learn") {
-        [attempts, dueSchedules, milestones, repertoires] = await Promise.all([
+        [attempts, dueSchedules, milestones, repertoires, recommendations] = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
           api.dueProgress?.() ?? Promise.resolve([]),
           api.milestones?.() ?? Promise.resolve([]),
           api.repertoires?.() ?? Promise.resolve([]),
+          api.recommendations?.() ?? Promise.resolve([]),
         ]);
         const pages=await Promise.all(repertoires.map(async(item)=>[item.id,await api.repertoireGaps?.(item.id)] as const));repertoirePages=Object.fromEntries(pages.filter((entry)=>entry[1]!==undefined)) as Record<string,RepertoireGapPage>;
       } else if (next.name === "create") {
@@ -334,6 +337,7 @@
   async function createRepertoire():Promise<void>{repertoireError=undefined;try{if(api.createRepertoire===undefined)throw new Error("Repertoire import is unavailable");const created=await api.createRepertoire({name:repertoireName,side:repertoireSide,targetElo:1600,coverageDenominator:100,source:repertoireStudyUrl.trim()?{kind:"lichess_study",url:repertoireStudyUrl}:{kind:"pgn",pgn:repertoirePgn}});repertoires=[created,...repertoires];repertoireName="";repertoirePgn="";repertoireStudyUrl="";}catch(error){repertoireError=error instanceof Error?error.message:String(error);}}
   async function scanRepertoire(id:string):Promise<void>{await api.scanRepertoire?.(id);for(let index=0;index<50;index++){const page=await api.repertoireGaps?.(id);if(page!==undefined){repertoirePages={...repertoirePages,[id]:page};if(page.status==="ready")break;}await new Promise((resolve)=>setTimeout(resolve,100));}repertoires=await(api.repertoires?.()??Promise.resolve(repertoires));}
   async function enterRepertoireGap(id:string,gapKey:string):Promise<void>{const result=await api.enterRepertoireGap?.(id,gapKey);if(result===undefined)return;if(result.writerId!==null)WriterSession.claimFor(result.runId,storage,()=>result.writerId!);navigate(routePath({name:"run",runId:result.runId}));}
+  async function distillActiveRun():Promise<void>{const run=session.runState?.run;if(run===undefined||api.distillRun===undefined)return;const result=await api.distillRun(run.id,{packId:`distilled-${run.id}`,title:"Distilled rehearsal",branchId:run.activeCursor.branchId});drafts=[result.draft,...drafts.filter((item)=>item.id!==result.draft.id)];selectedDraftId=result.draft.id;studioJson=JSON.stringify(result.draft.document,null,2);navigate("/create");}
 
   async function authenticate(): Promise<void> {
     authError = undefined;
@@ -587,6 +591,7 @@
         onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}
         onCorpus={(nodeId) => api.corpus(session.runState!.run.id, nodeId)}
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
+        onCompareVoice={capabilities?.providers.llm === "external" && session.comparisonBranchIds !== undefined ? () => api.compareVoice(session.runState!.run.id, session.comparisonBranchIds!) : undefined}
         onSpeech={(nodeId, scope) => api.speech(session.runState!.run.id, nodeId, scope)}
         onCreateGroup={(input) => controller.createGroup(input)}
         onAnalyzeMissing={(nodeIds) => controller.analyzeMissingEvidence(nodeIds)}
@@ -602,6 +607,9 @@
       {/if}
       {#if session.runState.run.sessionKind !== "imported" && session.runState.run.events.some((event) => event.type === "outcome.reached")}
         <aside class="session-banner" aria-label="Run story"><strong>Attempt complete</strong><span>Your recorded moments are ready to read and replay.</span><button type="button" onclick={() => navigate(routePath({ name: "story", runId: session.runState!.run.id }))}>Story</button></aside>
+      {/if}
+      {#if session.viewer?.role === "host" && session.runState.run.events.some((event) => event.type === "outcome.reached")}
+        <aside class="session-banner" aria-label="Distill run"><strong>Authoring seed</strong><span>Turn these recorded branches into a blocked draft for human judgment.</span><button type="button" onclick={()=>void distillActiveRun()}>Distill to draft</button></aside>
       {/if}
       {#if derivations?.source}
         <aside class="session-banner" aria-label="Opposite-side replay source"><strong>Opposite-side replay</strong><span>Mirror of run {derivations.source.sourceRunId} from its recorded position.</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: derivations!.source!.sourceRunId }))}>Open source</button></aside>
@@ -642,6 +650,11 @@
     <main class="shell-view" aria-labelledby="learn-title">
       <p class="eyebrow">Learn / return loop</p>
       <h1 id="learn-title">Return to the positions that need another attempt.</h1>
+      {#if recommendations.length>0}
+        <section aria-labelledby="recommended-title"><h2 id="recommended-title">Recommended next</h2><div class="item-list">
+          {#each recommendations as item}<article><p>{item.sentence}</p>{#if item.kind==="repertoire_gap"}<button type="button" onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>Enter gap</button>{:else if item.packIds[0]}<button type="button" onclick={()=>navigate("/play")}>Find {item.packIds[0]}</button>{/if}</article>{/each}
+        </div></section>
+      {/if}
       <section aria-labelledby="repertoire-title">
         <h2 id="repertoire-title">Repertoire gaps</h2>
         <form class="repertoire-form" onsubmit={(event)=>{event.preventDefault();void createRepertoire();}}>

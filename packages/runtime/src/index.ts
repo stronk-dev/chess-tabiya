@@ -24,6 +24,7 @@ export {
   type NodeRef,
   type ObjectiveTimelineEntry,
 } from "./compare.js";
+export { comparisonNarrative, comparisonStrips, type BranchStrips, type ComparisonNarrative, type NarrativeGroup, type PieceRoute, type StripEntry } from "./compare-strips.js";
 export {
   RuntimeError,
   assertActiveWriter,
@@ -38,7 +39,7 @@ export { SILENT_ASSISTANCE, permittedAssistance, type AssistanceConfig, type Ass
 export { pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
 export { endgameReading, renderEndgameReading, type EndgameTypeId, type EndgameReading, type TechniqueRef } from "./endgame.js";
 export { retrospectivePivot } from "./adaptive.js";
-export { storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
+export { STORY_MATE_CP, STORY_PIVOT_CP, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
 export { voiceCheck, BANNED_JUDGEMENTS, PRESCRIPTIVE_VERBS, CHESS_LEXICON, type EvidencePacket, type ShapeEntryRef, type VoiceCheckResult } from "./voice.js";
 export { matchKeyPoints, normalizeReasoningText } from "./reasoning.js";
 export { terminalOutcome } from "./outcome.js";

@@ -48,6 +48,13 @@ a return queue, not proof of mastery. It also lists derived event-shaped milesto
 to preserved runs. Those record firsts and one explicit attempt-count event; they never add
 a skill percentage, score, streak, rating, ranking, or cross-learner comparison.
 
+`GET /progress/recommendations` is a read-only, learner-scoped projection. It
+may name an unaddressed stored repertoire gap or a shape encountered in a
+preserved run but absent from every countable attempt. Its closed sentences
+state only those events and corpus population counts; they never infer weakness,
+mastery, rating, or what other learners struggle with. Empty history produces no
+section, and reading recommendations writes no schedule or attempt.
+
 ## Pack format 0.6
 
 Packs may declare typed `retryVariants` and pack-scoped `concepts`. Concept keys must be
@@ -56,8 +63,8 @@ taxonomy.
 
 ## Current limits
 
-The first implementation does not yet import personal PGN history or rank pack
-recommendations from it. Related-position expansion and longitudinal product-success SQL
+The first implementation does not import bulk personal PGN history or rank
+recommendations by inferred skill. Related-position expansion and longitudinal product-success SQL
 remain operator/reporting work rather than claims made by the learner UI. The scheduler is
 intentionally small and explainable; it is not an FSRS/SM-2 mastery model.
 

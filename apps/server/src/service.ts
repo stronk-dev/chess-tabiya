@@ -27,6 +27,7 @@ import {
   rewind,
   rewindToCheckpoint,
   storyMoments,
+  shapeFirings,
   suggestTitle,
   type BranchComparison,
   type BranchGroup,
@@ -134,6 +135,11 @@ export interface GuidanceAccess {
   readonly pack?: PackRecord;
   readonly historyUci: readonly string[];
   readonly branchSeed: number;
+}
+
+export interface DistillationAccess {
+  readonly run: DrillRun;
+  readonly pack?: PackRecord;
 }
 
 export interface CreateGroupInput {
@@ -722,6 +728,34 @@ export class RunService {
       historyUci: Object.freeze(historyFrom(run, nodeId).flatMap((item) => item.moveUci === null ? [] : [item.moveUci])),
       branchSeed: branch.seed,
     });
+  }
+
+  distillationAccess(runId: string, principal: Principal): DistillationAccess {
+    const { stored, role } = requireRead(this.#storage, runId, principal);
+    if (!mayManageGrants(role)) throw new ServerError("FORBIDDEN", "Only the host may distill a run");
+    const pack = this.#requiredRegisteredPack(stored.run);
+    return Object.freeze({ run: stored.run, ...(pack === undefined ? {} : { pack }) });
+  }
+
+  shapeRecommendations(principal: Principal) {
+    if (this.#shapes === undefined || this.#packRegistry === undefined || this.#progress === undefined) return Object.freeze([]);
+    const attemptedShapes = new Set<string>();
+    for (const attempt of this.#progress.progress(principal.learnerId)) {
+      if (!attempt.countable || attempt.packId === null) continue;
+      for (const shape of this.#packRegistry.get(attempt.packId)?.document.shapes ?? []) attemptedShapes.add(shape);
+    }
+    const triggers = this.#shapes.list().map((summary) => ({ id: summary.id, trigger: this.#shapes!.required(summary.id).document.trigger }));
+    const encountered = new Map<string, Set<string>>();
+    for (const summary of this.#storage.list(principal.learnerId, 50, 0)) {
+      const run = this.#storage.read(summary.id)?.run; if (run === undefined) continue;
+      const ids = new Set(run.branches.flatMap((branch) => shapeFirings(triggers, branchPath(run, branch.id)).map((firing) => firing.entryId)));
+      for (const id of ids) { const runs = encountered.get(id) ?? new Set<string>(); runs.add(run.id); encountered.set(id, runs); }
+    }
+    return Object.freeze([...encountered].filter(([id]) => !attemptedShapes.has(id)).map(([id, runIds]) => {
+      const shape = this.#shapes!.required(id).summary;
+      const packIds = this.#packRegistry!.list().filter((pack) => this.#packRegistry!.get(pack.id)?.document.shapes?.includes(id)).map((pack) => pack.id).sort();
+      return Object.freeze({ kind: "shape_encounter" as const, shapeId: id, shapeName: shape.name, runCount: runIds.size, runIds: Object.freeze([...runIds].sort()), packIds: Object.freeze(packIds), sentence: `You met ${shape.name} in ${runIds.size} of your preserved runs and have no countable attempt recorded in any pack that names it.` });
+    }).sort((left, right) => right.runCount - left.runCount || left.shapeId.localeCompare(right.shapeId)).slice(0, 10));
   }
 
   async createGroup(

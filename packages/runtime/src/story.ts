@@ -26,6 +26,8 @@ export interface StoryMoment {
 }
 export interface StoryProjection { readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; }
 export interface StoryTitleInput { readonly outcome: { readonly kind: "board_terminal" | "recorded_result" | "unfinished"; readonly result?: RunOutcome | "1-0" | "0-1" | "1/2-1/2" | "*" }; readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; }
+export const STORY_MATE_CP = 1000;
+export const STORY_PIVOT_CP = 150;
 
 export function suggestTitle(story: StoryTitleInput): string {
   const top = story.moments.find((moment) => moment.nodeId === story.rank[0]) ?? story.moments[0];
@@ -45,10 +47,10 @@ function evaluation(run: DrillRun, node: Node): StoryEvaluation | undefined {
   const values = event.data.payload.values;
   let cp: number | undefined;
   if (Number.isSafeInteger(values.centipawns)) cp = values.centipawns as number;
-  else if (Number.isSafeInteger(values.mateIn)) cp = (values.mateIn as number) < 0 ? -1000 : 1000;
+  else if (Number.isSafeInteger(values.mateIn)) cp = (values.mateIn as number) < 0 ? -STORY_MATE_CP : STORY_MATE_CP;
   if (cp === undefined) return undefined;
   const sideToMove = node.fen.split(" ")[1] === "w" ? "white" : "black";
-  const learnerCp = Math.max(-1000, Math.min(1000, sideToMove === run.start.side ? cp : -cp));
+  const learnerCp = Math.max(-STORY_MATE_CP, Math.min(STORY_MATE_CP, sideToMove === run.start.side ? cp : -cp));
   return Object.freeze({
     centipawns: learnerCp,
     engineId: typeof values.engineId === "string" ? values.engineId : "recorded engine",
@@ -81,7 +83,7 @@ export function storyMoments(
     const before = evaluations[index - 1], after = evaluations[index];
     if (before === undefined || after === undefined) continue;
     const delta = after.centipawns - before.centipawns;
-    if (Math.abs(delta) < 150) continue;
+    if (Math.abs(delta) < STORY_PIVOT_CP) continue;
     const value = item(path[index]!.id); value.kinds.add("eval_pivot"); value.before = before; value.after = after;
     value.sentences.push(`The recorded evaluation moved ${delta >= 0 ? "+" : ""}${delta} cp across this move (${after.engineId}${after.requestedMovetimeMs === undefined ? "" : `, ${after.requestedMovetimeMs} ms`}).`);
   }

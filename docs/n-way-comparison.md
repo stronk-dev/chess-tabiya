@@ -18,6 +18,14 @@ an N-column board grid and per-branch strips; shared-prefix groups are one
 position, not duplicated differences. Eight is a readability cap, not a data
 integrity limit.
 
+The strip band is derived from the same run snapshot and comparison payload. It
+shows recorded cp/mate points, attributed structural and timing changes, and
+piece routes computed from persisted moves; it never interpolates missing
+evidence or ranks columns. Narrative mode groups those same facts into a closed,
+deterministic causal template. Optional `compare` voice may rephrase only that
+packet after the ordinary disclosure gate, and never receives learner branch
+labels or intent text.
+
 Forward simulation is scratch. `/simulate` walks at most four authored
 variations for at most twelve plies in memory and writes no events, evidence, or
 attempts. `/simulate-enter` explicitly promotes one result to a real branch with

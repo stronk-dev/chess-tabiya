@@ -73,6 +73,7 @@
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
     onVoice?: (nodeId: string, scope: VoicePage["scope"]) => Promise<VoicePage>;
+    onCompareVoice?: (() => Promise<VoicePage>) | undefined;
     onSpeech?: (nodeId: string, scope: VoicePage["scope"]) => Promise<Blob>;
     onCreateGroup?: (input: CreateGroupRequest) => void | Promise<unknown>;
     onAnalyzeMissing?: (nodeIds: readonly string[]) => void | Promise<void>;
@@ -110,6 +111,7 @@
     onHumanSplit,
     onCorpus,
     onVoice,
+    onCompareVoice,
     onSpeech,
     onCreateGroup,
     onAnalyzeMissing,
@@ -621,6 +623,7 @@
     step={compareStep}
     onStep={(step) => (compareStep = step)}
     onClose={closeCompare}
+    onVoice={onCompareVoice === undefined ? undefined : async () => (await onCompareVoice()).text}
   />
 {:else}
   <main class="drill" tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title">

@@ -545,6 +545,10 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
     page.getByRole("heading", { name: "Same decision, two consequences." }),
   ).toBeVisible();
   await expect(page.locator(".boards article")).toHaveCount(2);
+  await expect(page.getByRole("heading", { name: "Recorded branch strips" })).toBeVisible();
+  await expect(page.locator(".sparkline span")).toHaveCount(2);
+  await page.getByRole("button", { name: "Narrative" }).click();
+  await expect(page.getByText(/recorded branches share/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "quiet setup" })).toHaveCount(2);
   await expect(page.getByText("active → achieved")).toBeVisible();
   await expect(

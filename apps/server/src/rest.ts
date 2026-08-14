@@ -11,6 +11,8 @@ import {
   feedbackDeliveryOpen,
   historyFrom,
   permittedAssistance,
+  comparisonNarrative,
+  comparisonStrips,
   suggestTitle,
   type OpponentSelection,
   type SelectionCandidate,
@@ -47,6 +49,7 @@ import { corpusPopulation, type CorpusSource } from "./corpus.js";
 import type { RepertoireService } from "./repertoire.js";
 import { publicMutationPayload } from "./feedback-policy.js";
 import { reasoningMatchCheck, type ReasoningProposal } from "./reasoning.js";
+import { distillRun } from "./distill.js";
 
 export type RestHandler = (request: Request) => Promise<Response>;
 
@@ -455,7 +458,7 @@ export function errorResponse(error: unknown): Response {
         : error.code === "EVIDENCE_UNAVAILABLE"
           ? 503
         : error.code === "POLICY_MODE_UNSUPPORTED" ||
-            error.code === "IMPORT_INVALID_PGN" ||
+            (error.code === "IMPORT_INVALID_PGN" || error.code === "IMPORT_INVALID") ||
             error.code === "IMPORT_SOURCE_UNSUPPORTED"
             || error.code === "REPERTOIRE_IMPORT_LIMIT"
           ? 422
@@ -520,7 +523,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|share|flip|derivations)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|share|flip|derivations|distill)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -733,6 +736,10 @@ export function createRestHandler(
         if(request.method==="GET")return json(200,{repertoires:repertoires.list(principal)});
         if(request.method==="POST"){requireJson(request);const body=closedRecord(await parseBody(request),"/",["name","side","targetElo","coverageDenominator","source"]),side=requiredString(body.side,"side");if(side!=="white"&&side!=="black")throw invalid("side must be white or black");const denominator=requiredSafeInteger(body.coverageDenominator,"coverageDenominator");if(denominator<10||denominator>10_000)throw invalid("coverageDenominator must be between 10 and 10000");const targetElo=requiredSafeInteger(body.targetElo,"targetElo"),source=closedRecord(body.source,"/source",["kind","pgn","url"]),kind=requiredString(source.kind,"source.kind"),parsed=kind==="pgn"?{kind:"pgn" as const,pgn:requiredString(source.pgn,"source.pgn")}:kind==="lichess_study"?{kind:"lichess_study" as const,url:requiredString(source.url,"source.url")}:(()=>{throw invalid("source.kind must be pgn or lichess_study");})();return json(201,{repertoire:await repertoires.create(principal,{name:requiredString(body.name,"name"),side,targetElo,coverageDenominator:denominator,source:parsed})});}
         return json(405,{error:{code:"METHOD_NOT_ALLOWED",message:"Method not allowed"}});
+      }
+      if (request.method === "GET" && url.pathname === "/progress/recommendations") {
+        const principal = authenticate();
+        return json(200, { recommendations: Object.freeze([...(repertoires?.recommendations(principal) ?? []), ...service.shapeRecommendations(principal)]) });
       }
       const repertoireRoute=/^\/repertoires\/([^/]+)(?:\/(scan|gaps|answers))?(?:\/(enter))?$/.exec(url.pathname);
       if(repertoireRoute!==null){if(repertoires===undefined)throw new ServerError("STORAGE_FAILURE","Repertoire service is not configured");const principal=authenticate(),id=decodeURIComponent(repertoireRoute[1]!),resource=repertoireRoute[2],tail=repertoireRoute[3];
@@ -1038,6 +1045,15 @@ export function createRestHandler(
       }
 
       const value = await parseBody(request);
+      if (route.action === "distill") {
+        if (studio === undefined) throw new ServerError("STORAGE_FAILURE", "Pack Studio is not configured");
+        requireJson(request);
+        const body = closedRecord(value, "/", ["packId", "title", "branchId"]);
+        const access = service.distillationAccess(route.runId, principal);
+        const result = distillRun(access.run, access.pack, { packId: requiredString(body.packId, "packId"), title: requiredString(body.title, "title"), ...(body.branchId === undefined ? {} : { branchId: requiredString(body.branchId, "branchId") }) });
+        const draft = studio.create(principal, { document: result.document, seedKind: "run", seedRef: route.runId });
+        return json(201, { draft, proposals: result.proposals, dropped: result.dropped });
+      }
       if (route.action === "reasoning-review") {
         requireJson(request);
         if (voiceProvider === undefined) throw new ServerError("VOICE_UNAVAILABLE", "No external voice provider is configured");
@@ -1065,9 +1081,18 @@ export function createRestHandler(
       if (route.action === "voice") {
         requireJson(request);
         if (voiceProvider === undefined) throw new ServerError("VOICE_UNAVAILABLE", "No external voice provider is configured");
-        const body = closedRecord(value, "/", ["nodeId", "scope"]);
+        const body = closedRecord(value, "/", ["nodeId", "scope", "branches"]);
         const scope = requiredString(body.scope, "scope");
-        if (scope !== "marker" && scope !== "reading" && scope !== "steering" && scope !== "story") throw invalid("scope must be marker, reading, steering, or story");
+        if (scope !== "marker" && scope !== "reading" && scope !== "steering" && scope !== "story" && scope !== "compare") throw invalid("scope must be marker, reading, steering, story, or compare");
+        if (scope === "compare") {
+          if (!Array.isArray(body.branches) || body.branches.some((branch) => typeof branch !== "string")) throw invalid("branches must be an array of strings");
+          const comparison = service.compare(route.runId, principal, body.branches as string[]);
+          const access = service.guidanceAccess(route.runId, principal, comparison.forkNodeId);
+          const narrative = comparisonNarrative(access.run, comparison, comparisonStrips(access.run, comparison));
+          const base = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
+          const packet = Object.freeze({ ...base, authored: Object.freeze([]), sentences: Object.freeze(narrative.groups.flatMap((group) => group.sentences)) });
+          return json(200, { ...(await renderVoice(voiceProvider, packet, voicePersona, "compare")), scope });
+        }
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.story(route.runId, principal) : undefined;

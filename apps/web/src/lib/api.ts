@@ -293,8 +293,10 @@ export interface RepertoireSummary {readonly id:string;readonly name:string;read
 export interface RepertoireView extends RepertoireSummary {readonly rootFen:string;readonly sourceKind:"pgn_paste"|"lichess_study";readonly sourceUrl:string|null;readonly licenceNote:string;readonly moves:readonly {readonly positionKey:string;readonly moveUci:string;readonly moveSan:string;readonly representativeFen:string;readonly rank:number;readonly origin:"imported"|"chosen_from_attempt"}[]}
 export interface RepertoireGap {readonly key:string;readonly representativeFen:string;readonly replySan:string;readonly replyUci:string;readonly line:readonly string[];readonly mass?:number;readonly gamesUntilSeen?:number;readonly state:"open"|"addressed"|"answered";readonly runId:string|null}
 export interface RepertoireGapPage {readonly status:"pending"|"never_scanned"|"ready";readonly repertoire:RepertoireSummary;readonly scan:null|{readonly population:CorpusPopulation;readonly gaps:readonly RepertoireGap[];readonly alternateGaps:readonly RepertoireGap[];readonly unknown:readonly {readonly key:string;readonly line:readonly string[];readonly reason:string;readonly detail:string;readonly gamesUntilPosition:number}[];readonly uncoveredMass:number;readonly truncated:boolean;readonly sourceFailures:number;readonly queriesUsed:number;readonly unreachedKeys:number;readonly guard:string;readonly partiality:string|null}}
+export type ProgressRecommendation = {readonly kind:"repertoire_gap";readonly repertoireId:string;readonly repertoireName:string;readonly gapKey:string;readonly sentence:string}|{readonly kind:"shape_encounter";readonly shapeId:string;readonly shapeName:string;readonly runCount:number;readonly runIds:readonly string[];readonly packIds:readonly string[];readonly sentence:string};
+export interface DistillResult {readonly draft:PackDraft;readonly proposals:readonly Record<string,unknown>[];readonly dropped:readonly string[]}
 
-export interface VoicePage { readonly text: string; readonly source: "provider" | "deterministic"; readonly scope: "marker" | "reading" | "steering" | "story"; }
+export interface VoicePage { readonly text: string; readonly source: "provider" | "deterministic"; readonly scope: "marker" | "reading" | "steering" | "story" | "compare"; }
 
 export interface ImportedGameRecord {
   readonly runId: string;
@@ -567,6 +569,7 @@ export interface DrillClientApi extends RunApi {
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage>;
   corpus(runId: string, nodeId: string): Promise<CorpusPage>;
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage>;
+  compareVoice(runId: string, branchIds: readonly string[]): Promise<VoicePage>;
   speech(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<Blob>;
   pgn(runId: string, branchIds?: readonly string[]): Promise<PgnDownload>;
   importGame?(input: ImportGameRequest, writerId: string): Promise<{ readonly run: DrillRun; readonly importRecord: ImportedGameRecord; readonly evidencePass: { readonly jobs: number } }>;
@@ -578,6 +581,8 @@ export interface DrillClientApi extends RunApi {
   flipRun?(runId: string, nodeId: string, resistance?: "human_common" | "strong_engine"): Promise<{ readonly run: DrillRun; readonly writerId: string; readonly derivation: RunDerivation }>;
   runDerivations?(runId: string): Promise<RunDerivationPage>;
   milestones?(): Promise<readonly ProgressMilestone[]>;
+  recommendations?(): Promise<readonly ProgressRecommendation[]>;
+  distillRun?(runId:string,input:{readonly packId:string;readonly title:string;readonly branchId?:string}):Promise<DistillResult>;
   progress?(): Promise<readonly ProgressAttempt[]>;
   dueProgress?(): Promise<readonly ProgressSchedule[]>;
   dismissSchedule?(scheduleId: string): Promise<void>;
@@ -868,10 +873,17 @@ export class DrillApi implements DrillClientApi {
     return this.#json(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { nodeId, scope } });
   }
 
+  compareVoice(runId: string, branchIds: readonly string[]): Promise<VoicePage> {
+    return this.#json(`/runs/${encoded(runId)}/voice`, { method: "POST", body: { branches: branchIds, scope: "compare" } });
+  }
+
   async speech(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<Blob> {
     const response = await this.#response(`/runs/${encoded(runId)}/speech`, { method: "POST", body: { nodeId, scope } });
     return response.blob();
   }
+
+  async recommendations():Promise<readonly ProgressRecommendation[]>{const body=await this.#json<{recommendations:readonly ProgressRecommendation[]}>("/progress/recommendations");return body.recommendations;}
+  distillRun(runId:string,input:{readonly packId:string;readonly title:string;readonly branchId?:string}):Promise<DistillResult>{return this.#json(`/runs/${encoded(runId)}/distill`,{method:"POST",body:input});}
 
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult> {
     return this.#json(`/runs/${encoded(runId)}/prediction`, { method: "POST", writerId, body: input });

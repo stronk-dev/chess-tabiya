@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import { structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
+  import { comparisonNarrative, comparisonStrips, structuralReading, type BranchComparison, type ComparisonEvidenceEntry, type DrillRun, type ObjectiveTimelineEntry } from "@chess-tabiya/runtime";
   import { onMount } from "svelte";
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
@@ -17,10 +17,15 @@
     step: number;
     onStep: (step: number) => void;
     onClose: () => void;
+    onVoice?: (() => Promise<string>) | undefined;
   }
-  let { run, pack, comparison, startSide, step, onStep, onClose }: Props = $props();
+  let { run, pack, comparison, startSide, step, onStep, onClose, onVoice }: Props = $props();
   let maxStep = $derived(comparison.rows.length);
   let heading: HTMLHeadingElement;
+  let narrativeOpen = $state(false);
+  let personaText = $state<string | undefined>();
+  let strips = $derived(comparisonStrips(run, comparison));
+  let narrative = $derived(comparisonNarrative(run, comparison, strips));
 
   function timeline(entries: readonly ObjectiveTimelineEntry[]) {
     return entries.map((entry) => {
@@ -78,6 +83,21 @@
     {/each}
   </section>
 
+  <section class="strip-band" aria-label="Per-branch difference strips">
+    <h3>Recorded branch strips</h3>
+    {#each comparison.columns as column}
+      <article><strong>{column.label}</strong>
+        <div class="sparkline" aria-label={`${column.label} recorded evaluation points`}>{#each strips[column.branchId]?.evalTrail ?? [] as point}<span data-ply-offset={point.plyOffset} title={score({ ...point, evidenceRefs: [], kind: "eval", source: "engine_validated" })}>●</span>{/each}</div>
+        <details><summary>Structure and timing</summary>{#each strips[column.branchId]?.structure ?? [] as entry}<p>+{entry.plyOffset}: {entry.sentence} {entry.attribution}.</p>{/each}{#each strips[column.branchId]?.timing ?? [] as entry}<p>+{entry.plyOffset}: {entry.sentence} {entry.attribution}.</p>{/each}</details>
+        <details><summary>Piece routes</summary>{#each strips[column.branchId]?.routes ?? [] as route}<p>{route.pieceId}: {route.squares.join(" → ")}</p>{:else}<p>No piece route past the fork.</p>{/each}</details>
+      </article>
+    {/each}
+  </section>
+  <section class="narrative" aria-label="Comparison narrative">
+    <button type="button" aria-expanded={narrativeOpen} onclick={() => narrativeOpen = !narrativeOpen}>Narrative</button>
+    {#if narrativeOpen}{#each narrative.groups as group}<div>{#each group.sentences as sentence}<p>{sentence}</p>{/each}</div>{/each}{#if onVoice}<button type="button" onclick={() => void onVoice().then((text) => personaText = text)}>Revoice narrative</button>{/if}{#if personaText}<p>{personaText}</p>{/if}{/if}
+  </section>
+
   <section class="results" aria-label="Per-branch consequences">
     {#each comparison.columns as column}
       {@const consequence = comparison.consequences[column.branchId]}
@@ -105,5 +125,5 @@
 </section>
 
 <style>
-  .compare{width:min(96rem,calc(100% - 2rem));height:100%;margin:auto;padding:1rem 0;overflow:auto}.compare>header,.stepper{display:flex;justify-content:space-between;align-items:center;gap:1rem}.compare header p{margin:0;color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.12em}h2{margin:.2rem 0 0;font:500 clamp(1.6rem,3vw,2.8rem)/1 var(--display-font)}button{padding:.65rem .8rem;border:1px solid var(--line);border-radius:.65rem;background:var(--panel);color:inherit}.boards,.results{display:grid;grid-template-columns:repeat(var(--branches,2),minmax(15rem,1fr));gap:.8rem;margin:1rem 0;overflow-x:auto}.boards article,.results>article{min-width:15rem;padding:.7rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.boards article.absent{opacity:.45}.line-ended{aspect-ratio:1;display:grid;place-items:center;background:var(--panel-soft)}.stepper{justify-content:center}.trajectory{margin:1rem 0}.trajectory-row{display:grid;grid-template-columns:12rem 1fr;gap:.5rem}.fork-marker{display:inline-block;color:var(--accent);font:700 .75rem ui-monospace,monospace}.evidence-entry{margin-right:.35rem}.results{grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))}.results p{margin:.35rem 0;color:var(--muted)}.scores{display:grid;gap:.25rem;font: .76rem ui-monospace,monospace}
+  .compare{width:min(96rem,calc(100% - 2rem));height:100%;margin:auto;padding:1rem 0;overflow:auto}.compare>header,.stepper{display:flex;justify-content:space-between;align-items:center;gap:1rem}.compare header p{margin:0;color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.12em}h2{margin:.2rem 0 0;font:500 clamp(1.6rem,3vw,2.8rem)/1 var(--display-font)}button{padding:.65rem .8rem;border:1px solid var(--line);border-radius:.65rem;background:var(--panel);color:inherit}.boards,.results,.strip-band{display:grid;grid-template-columns:repeat(var(--branches,2),minmax(15rem,1fr));gap:.8rem;margin:1rem 0;overflow-x:auto}.strip-band>h3{grid-column:1/-1}.strip-band article,.boards article,.results>article{min-width:15rem;padding:.7rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.sparkline{display:flex;gap:.2rem;color:var(--accent)}.narrative{padding:1rem;border:1px solid var(--line);border-radius:.8rem}.boards article.absent{opacity:.45}.line-ended{aspect-ratio:1;display:grid;place-items:center;background:var(--panel-soft)}.stepper{justify-content:center}.trajectory{margin:1rem 0}.trajectory-row{display:grid;grid-template-columns:12rem 1fr;gap:.5rem}.fork-marker{display:inline-block;color:var(--accent);font:700 .75rem ui-monospace,monospace}.evidence-entry{margin-right:.35rem}.results{grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))}.results p{margin:.35rem 0;color:var(--muted)}.scores{display:grid;gap:.25rem;font: .76rem ui-monospace,monospace}
 </style>

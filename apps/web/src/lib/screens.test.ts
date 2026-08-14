@@ -393,6 +393,11 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("active → achieved");
     expect(document.body.textContent).toContain("objective achieved");
     expect(document.body.textContent).toContain("M-2");
+    expect(document.body.textContent).toContain("Recorded branch strips");
+    expect(document.querySelectorAll(".sparkline span")).toHaveLength(comparison.columns.reduce((total,column)=>total+comparison.evidence[column.branchId]!.length,0));
+    document.querySelector<HTMLButtonElement>(".narrative > button")!.click();
+    await tick();
+    expect(document.body.textContent).toContain("recorded branches share");
     expectDisabledControlsExplained();
     await unmount(component);
   });
