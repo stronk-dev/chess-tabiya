@@ -1,6 +1,6 @@
 # RFC: On-ramp guard — `immediate_guard` as a real feedback policy, and honest outcome-leg grading (D28)
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude, on the owner's 2026-08-14 schedule (`design/BACKLOG.md:154`)
 - **Created:** 2026-08-14
 - **Design refs:** `design/00-thesis.md:148-156` (§Target player, the three on-ramp knobs);
@@ -104,7 +104,9 @@ a v0.5–0.13 document naming `immediate_blunder_guard` still fails exactly as `
   (`packages/runtime/src/types.ts:37`). Pack sessions already type their policy as
   `Exclude<RunFeedbackPolicy, "attempt_end">` (`packages/runtime/src/session.ts:34`) and the
   server copies `pack.feedbackPolicy` into the run at creation
-  (`apps/server/src/service.ts:363`), so no session plumbing changes.
+  (`apps/server/src/service.ts:363`). The explicit `PackRun.feedbackPolicy` union in
+  `packages/runtime/src/session.ts` widens in the same change; position and imported
+  sessions remain pinned to `attempt_end`.
 - The schema/validator/capability binding test extends its assertion
   (`apps/server/src/pack-authoring.test.ts:42-63`): schema enum === `FEEDBACK_POLICIES`.
 
@@ -140,7 +142,7 @@ validation adds one refusal: **`GUARD_WITHOUT_IMMEDIATE_GUARD`** when `guard` is
 the `$id` (`packages/schema/src/drill-pack/digest.ts:58-66`); all committed packs and fixtures
 validate unchanged.
 
-#### 1c. Run schema 0.11 and migration 15
+#### 1c. Run schema 0.11 and migration 16
 
 Widening `RunFeedbackPolicy` widens the `run.started` vocabulary
 (`packages/runtime/src/types.ts:132`), the same class as migration 11's `policyModeApplied`
@@ -236,6 +238,10 @@ outside `opponentPly` — the branch-group comparison path (`service.ts:820`) �
 evaluate the guard: a group is a comparison instrument, not the committed decision loop.
 Tier 3 runs inside `applyEvidence` (`service.ts:1164-1217`) after `attachEvidence`, when
 the newly applied eval completes a (P, C) pair on a guard run.
+
+An opponent move from a pack root is not a consequence-start node: there is no learner
+decision P→L before it. Guard evaluation therefore abstains unless the node active before
+`opponentPly` is itself a learner-committed move with a parent P.
 
 **Tier-3 timing, pinned honestly.** Eval jobs are enqueued per committed node
 (`service.ts:575,601` via `#enqueueMoveEvidence`, `:1556-1578`); results are staged
@@ -523,3 +529,7 @@ None.
   emitter citation corrected (committed candidates carry the older D8 blocker text; the
   current emitter writes the reworded line at `position-seeds.ts:225`); AC 11 register
   typo fixed (migration 15 → 16).
+- 2026-08-14: implementation review against the post-migration-15 tree found no design
+  blocker. Corrected the §1c heading typo, pinned the explicit `PackRun` union widening,
+  and made root-opponent-ply abstention normative so a reply cannot be attributed to a
+  learner decision that never happened.
