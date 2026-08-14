@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-run:0.12",
+  "$id": "urn:chess-tabiya:schema:drill-run:0.13",
   "title": "Tabiya Drill Run",
-  "description": "Living v0.12 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
+  "description": "Living v0.13 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
   "type": "object",
   "required": [
     "schemaVersion",
@@ -21,7 +21,7 @@
     "activeCursor"
   ],
   "properties": {
-    "schemaVersion": { "const": "0.12" },
+    "schemaVersion": { "const": "0.13" },
     "id": { "$ref": "#/$defs/id" },
     "sessionKind": { "enum": ["pack", "position", "imported"] },
     "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
@@ -140,7 +140,7 @@
       "properties": {
         "moveUci": { "$ref": "#/$defs/id" },
         "policyModeApplied": {
-          "enum": ["human_common", "strong_engine", "theory_strict", "enumerated", "unknown"]
+          "enum": ["human_common", "strong_engine", "theory_strict", "perfect_tablebase", "enumerated", "unknown"]
         },
         "candidates": {
           "type": "array",
@@ -189,7 +189,7 @@
       "type": "object",
       "required": ["mode"],
       "properties": {
-        "mode": { "enum": ["human_common", "strong_engine", "theory_strict"] },
+        "mode": { "enum": ["human_common", "strong_engine", "theory_strict", "perfect_tablebase"] },
         "targetElo": { "type": "integer" },
         "temperature": { "type": "number", "minimum": 0 },
         "topP": { "type": "number", "minimum": 0, "maximum": 1 }

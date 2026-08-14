@@ -86,6 +86,12 @@ unverified; strict candidate checks reject that condition. The pack digest is
 excluded from the tablebase fact match because it binds the whole mutable draft,
 not the immutable position/result evidence.
 
+`make verify-draft FILE=<pack.json>` closes this loop for an existing authored
+draft. It walks the root, spine, and deviations, emits the flat sibling evidence,
+source, and job artifacts, refuses a contradicted root or learner-category spine
+regression, and requires the existing registry admission function to return
+`ledger_verified`. `OFFLINE=1` uses committed per-FEN fixtures.
+
 The optional above-range authoring substitute uses Stockfish at depth 22, Threads 1, Hash
 16 MB, and MultiPV 1 in a fresh authoring context, with a 120-second timeout. Fixed depth is
 recorded evidence, not a wall-clock reproducibility claim; the engine identity and profile
@@ -94,8 +100,9 @@ unless a caller explicitly supplies the new override.
 
 Generated endgame packs are spine-less outcome drills. The opponent is explicitly
 `strong_engine` or `human_common`, the checkpoint is aligned to a learner ply, and roots in
-tablebase range retain a graduation blocker because `perfect_tablebase` is still not a
-selectable runtime policy; schema/capability binding tests keep that declaration honest.
+tablebase range state that `perfect_tablebase` is selectable only where its provider is
+published. An author must still choose that policy explicitly; generation never upgrades
+resistance silently.
 Terminal runs disclose through the implemented
 `outcome.reached` contract. The emitter does not manufacture grading; a later
 author may add v0.3 grading only under the assessment-admission contract above.

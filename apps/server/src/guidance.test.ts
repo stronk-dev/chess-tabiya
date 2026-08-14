@@ -26,7 +26,7 @@ const capabilities: CapabilitiesProvider = {
     return {
       engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], runSchemaVersion: "0.11",
       policyProfiles: { strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 } },
-      providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock", tts: "none" },
+      providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock", tts: "none", tablebase: "none" },
       surfaces: { play: "available", review: "available", learn: "available", live: "available", create: "available", justPlay: "available", fromPosition: "available" },
     };
   },

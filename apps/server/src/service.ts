@@ -1476,8 +1476,8 @@ export class RunService {
             kind: "position",
             start: source.start,
             feedbackPolicy: "attempt_end",
-            opponentPolicy: (source.opponentPolicy.mode === "theory_strict"
-              ? (() => { throw new ServerError("INVALID_REQUEST", "Position run cannot use theory_strict"); })()
+            opponentPolicy: (source.opponentPolicy.mode === "theory_strict" || source.opponentPolicy.mode === "perfect_tablebase"
+              ? (() => { throw new ServerError("INVALID_REQUEST", "Position run cannot use a pack-only opponent mode"); })()
               : source.opponentPolicy) as PositionOpponentPolicy,
           },
       policyConfig: source.policyConfig,

@@ -253,6 +253,7 @@ export interface Capabilities {
     | "human_common"
     | "strong_engine"
     | "theory_strict"
+    | "perfect_tablebase"
   )[];
   readonly feedbackPolicies: readonly (
     | "delayed_checkpoint"
@@ -275,6 +276,7 @@ export interface Capabilities {
     readonly llm: "none" | "external";
     readonly corpus: "lichess-explorer" | "mock" | "none";
     readonly tts: "none" | "external";
+    readonly tablebase: "lichess" | "mock" | "none";
   };
   readonly surfaces: Readonly<Record<SurfaceId, SurfaceAvailability>>;
 }

@@ -239,8 +239,13 @@ Known limitations:
 - Maia does not honor a seed; replay and cache provide retry determinism;
 - staged evidence has no durable offline/session-expiry protocol or push channel;
   and
-- browser Maia/ONNX, Syzygy and `perfect_tablebase`, policy mixing, corpus
+- browser Maia/ONNX, local Syzygy files, policy mixing, corpus
   workers, and additional opponent modes remain follow-up work.
+
+`perfect_tablebase` itself is implemented through the hosted Lichess standard-tablebase
+provider. It is deterministic, capability-published, and records its applied policy and
+synthetic provider identity. It never falls back to Stockfish or Maia on outage or above
+the seven-piece boundary; see `tablebase-grounding.md`.
 
 ## Recorded policy and server-owned theory spine
 

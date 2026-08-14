@@ -137,12 +137,13 @@ function positionPolicyConfig(capabilities: Capabilities): PolicyConfig {
 function selectorMode(
   pack: DrillPackDefinition,
   capabilities: Capabilities,
-): "human_common" | "strong_engine" | "theory_strict" {
+): "human_common" | "strong_engine" | "theory_strict" | "perfect_tablebase" {
   const requested = record(pack.opponentPolicy).mode;
   if (
     (requested === "human_common" ||
       requested === "strong_engine" ||
-      requested === "theory_strict") &&
+      requested === "theory_strict" ||
+      requested === "perfect_tablebase") &&
     capabilities.policyModes.includes(requested)
   ) {
     return requested;

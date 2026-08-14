@@ -141,7 +141,7 @@ describe("drill_pack.schema.json v0.15", () => {
 
   it("validates every committed pack document under the closed policy", () => {
     const drafts = readdirSync(new URL("../../../content/drafts/", import.meta.url), { withFileTypes: true })
-      .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".json") && ![".evidence.json", ".sources.json", ".job.json"].some((suffix) => entry.name.endsWith(suffix)))
       .map((entry) => new URL(`../../../content/drafts/${entry.name}`, import.meta.url));
     const candidates = readdirSync(new URL("../../../content/candidates/", import.meta.url), { withFileTypes: true })
       .filter((entry) => entry.isDirectory())

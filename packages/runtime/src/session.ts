@@ -77,8 +77,8 @@ export function sessionSource(from: DrillRun | CreateRunSession): SessionSource 
     if (from.sessionKind === "imported") {
       throw new TypeError("An imported run cannot reconstruct its source without movetextDigest");
     }
-    if (from.opponentPolicy.mode === "theory_strict") {
-      throw new TypeError("Non-pack session cannot use theory_strict");
+    if (from.opponentPolicy.mode === "theory_strict" || from.opponentPolicy.mode === "perfect_tablebase") {
+      throw new TypeError("Non-pack session cannot use a pack-only opponent mode");
     }
     return Object.freeze({
       kind: "position",

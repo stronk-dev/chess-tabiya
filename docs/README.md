@@ -38,6 +38,9 @@ Implemented foundation:
   licence enforcement, deterministic and polite source access, opening skeletons,
   Syzygy/engine grounding, authenticated explorer priorities, and private-evidence puzzle
   consequence seeds.
+- `tablebase-grounding.md` — draft verification into ledger-verified Syzygy sidecars,
+  deterministic perfect tablebase resistance, capability publication, and named refusal
+  boundaries.
 - `outcome-drill-grading.md` — win/hold/save/resist grading, monotone outcome
   transitions, exact-assessment admission, path-scoped resistance identity, and
   the learner-facing honesty contract.

@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check build verify pack-check shape-check pack-preview source-fetch candidate-emit candidate-attach sourcing-check up up-engines down
+.PHONY: setup typecheck test test-browser schema-check build verify pack-check shape-check pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -57,6 +57,11 @@ sourcing-check:
 	@test -n "$(DIR)" || (echo "Usage: make sourcing-check DIR=<candidate-directory>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/sourcing-check.ts --bundle --platform=node --format=esm --outfile=dist/sourcing-check.js
 	node apps/server/dist/sourcing-check.js "$(abspath $(DIR))"
+
+verify-draft:
+	@test -n "$(FILE)" || (echo "Usage: make verify-draft FILE=<path-to-pack.json> [OFFLINE=1]" >&2; exit 2)
+	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/verify-draft.ts --bundle --platform=node --format=esm --outfile=dist/verify-draft.js
+	OFFLINE="$(OFFLINE)" node apps/server/dist/verify-draft.js "$(abspath $(FILE))"
 
 up:
 	docker compose up --build --detach

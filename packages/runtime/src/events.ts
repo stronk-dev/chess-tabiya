@@ -157,8 +157,8 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
   if (!isPack && data.feedbackPolicy !== "attempt_end") {
     throw new TypeError("Non-pack sessions must use attempt_end feedback");
   }
-  if (!isPack && data.opponentPolicy.mode === "theory_strict") {
-    throw new TypeError("Non-pack sessions cannot use theory_strict");
+  if (!isPack && (data.opponentPolicy.mode === "theory_strict" || data.opponentPolicy.mode === "perfect_tablebase")) {
+    throw new TypeError("Non-pack sessions cannot use pack-only opponent modes");
   }
   if (data.start.fen !== data.rootNode.fen) {
     throw new TypeError("Run start FEN and root node FEN disagree");

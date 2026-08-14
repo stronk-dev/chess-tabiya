@@ -1,6 +1,6 @@
 # RFC: The grounding pair — `verify-draft` and the `perfect_tablebase` opponent policy
 
-- **Status:** draft
+- **Status:** implemented
 - **Author:** claude (drafted on the owner's polish-wave program)
 - **Created:** 2026-08-14
 - **Design refs:** `design/01-training-model.md:84-99` (hold/save against "strong or perfect
@@ -382,3 +382,8 @@ None.
   own rungs and extends the lexicographic-UCI tiebreak to every tie (equal DTZ, drawn
   category), adding the group reply-journal consequence; Deviations updated to record
   that the BACKLOG row now carries this draft's correction.
+- 2026-08-14 (implementation review): approved. The official lila-tablebase
+  response example confirms each move category is reported for the resulting
+  position's side to move, so the selector must invert it before applying the
+  RFC's selector-side category comparison. This is an implementation pin on
+  §2c, not a change to its semantics.

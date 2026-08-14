@@ -318,6 +318,9 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
       ),
     );
   }
+  if (opponentMode === "perfect_tablebase" && countFenPieces(pack.start.fen) > 7) {
+    issues.push(runtimeIssue("PERFECT_TABLEBASE_OUT_OF_RANGE", "/opponentPolicy/mode", "perfect_tablebase requires a root with at most seven pieces"));
+  }
 
   const checkpoints = new Set(pack.checkpoints.map((checkpoint) => checkpoint.id));
   const legs = pack.legs;

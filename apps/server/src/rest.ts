@@ -198,6 +198,7 @@ function parseOpponentSelection(value: unknown): OpponentSelection {
         mode !== "human_common" &&
         mode !== "strong_engine" &&
         mode !== "theory_strict" &&
+        mode !== "perfect_tablebase" &&
         mode !== "unknown"
       ) {
         throw invalid("selection.policyModeApplied is unsupported");
@@ -451,7 +452,7 @@ export function errorResponse(error: unknown): Response {
         ? 401
         : error.code === "FORBIDDEN"
           ? 403
-      : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE" || error.code === "TTS_UNAVAILABLE" || error.code === "CORPUS_UNAVAILABLE" || error.code === "REPERTOIRE_SCAN_UNAVAILABLE"
+      : error.code === "ENGINE_UNAVAILABLE" || error.code === "VOICE_UNAVAILABLE" || error.code === "TTS_UNAVAILABLE" || error.code === "CORPUS_UNAVAILABLE" || error.code === "TABLEBASE_UNAVAILABLE" || error.code === "REPERTOIRE_SCAN_UNAVAILABLE"
         ? 503
         : error.code === "IMPORT_SOURCE_UNAVAILABLE"
           ? 503
@@ -506,6 +507,8 @@ export function errorResponse(error: unknown): Response {
                     || error.code === "SIMULATE_TOO_LARGE"
                     || error.code === "SIMULATE_BUDGET_EXCEEDED"
                     || error.code === "GROUP_SEEDS_UNAVAILABLE"
+                    || error.code === "TABLEBASE_OUT_OF_RANGE"
+                    || error.code === "PERFECT_TABLEBASE_OUT_OF_RANGE"
                   ? 422
                 : 500;
   }

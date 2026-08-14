@@ -28,6 +28,7 @@ import {
   resolveStrongEngineProfile,
   type StrongEngineProfile,
 } from "./strong-engine.js";
+import { invertTablebaseCategory, type TablebaseMove, type TablebaseSource } from "./tablebase.js";
 
 export type OpponentPolicyMode = RunOpponentMode;
 
@@ -64,6 +65,7 @@ export interface OpponentSelectorOptions {
   readonly strongEngineId?: string;
   readonly strongEngineMovetimeMs?: number;
   readonly strongEngineProfile?: Partial<StrongEngineProfile>;
+  readonly tablebaseSource?: TablebaseSource;
 }
 
 const DEFAULT_TEMPERATURE = 0.8;
@@ -264,7 +266,7 @@ function makeSelection(
   moveUci: string,
   candidates: readonly SelectionCandidate[],
   identity: EngineIdentity,
-  policyModeApplied: "human_common" | "strong_engine" | "theory_strict",
+  policyModeApplied: "human_common" | "strong_engine" | "theory_strict" | "perfect_tablebase",
 ): OpponentSelection {
   return Object.freeze({
     moveUci,
@@ -351,6 +353,7 @@ export class OpponentSelector {
   readonly #strongEngineId: string;
   readonly #strongEngineMovetimeMs: number;
   readonly #strongEngineMultiPv: number;
+  readonly #tablebase: TablebaseSource | undefined;
   readonly #cache = new Map<string, Promise<OpponentSelection>>();
 
   constructor(
@@ -368,6 +371,7 @@ export class OpponentSelector {
     });
     this.#strongEngineMovetimeMs = profile.movetimeMs;
     this.#strongEngineMultiPv = profile.multiPv;
+    this.#tablebase = options.tablebaseSource;
   }
 
   select(request: SelectMoveRequest): Promise<OpponentSelection> {
@@ -392,10 +396,12 @@ export class OpponentSelector {
     return Object.freeze([
       ...(maia ? (["human_common", "theory_strict"] as const) : []),
       ...(strong ? (["strong_engine"] as const) : []),
+      ...(this.#tablebase === undefined ? [] : (["perfect_tablebase"] as const)),
     ]);
   }
 
   identityFor(mode: RunOpponentMode): SelectionEngineIdentity {
+    if (mode === "perfect_tablebase") return Object.freeze({id:"lichess-tablebase",name:"Syzygy (tablebase.lichess.org/standard)",version:"7man",seedHonored:true});
     return selectionIdentity(engineIdentity(
       this.#client,
       mode === "strong_engine" ? this.#strongEngineId : this.#maiaEngineId,
@@ -435,6 +441,8 @@ export class OpponentSelector {
         return this.#strongEngine(request);
       case "theory_strict":
         return this.#theoryStrict(request);
+      case "perfect_tablebase":
+        return this.#perfectTablebase(request);
       default:
         throw policyModeUnsupported(request.policy.mode);
     }
@@ -527,5 +535,22 @@ export class OpponentSelector {
           )
         : matching;
     return makeSelection(moveUci, candidates, result.identity, "theory_strict");
+  }
+
+  async #perfectTablebase(request: SelectMoveRequest):Promise<OpponentSelection>{
+    if(this.#tablebase===undefined)throw new ServerError("TABLEBASE_UNAVAILABLE","Perfect tablebase resistance is unavailable",{details:{retryAfterMs:0}});
+    const fen=makeFen(currentPosition(request).toSetup()),position=await this.#tablebase.probe(fen);
+    if(position.category==="unknown")throw new ServerError("TABLEBASE_UNAVAILABLE","Tablebase category is unknown",{details:{retryAfterMs:60_000}});
+    const board=currentPosition(request);
+    const preserving=position.moves.filter((move)=>{
+      const parsed=parseUci(move.uci);
+      return parsed!==undefined&&board.isLegal(parsed)&&invertTablebaseCategory(move.category)===position.category;
+    });
+    if(preserving.length===0)throw new ServerError("TABLEBASE_UNAVAILABLE","Tablebase returned no category-preserving move",{details:{retryAfterMs:60_000}});
+    const winning=position.category.includes("win"),losing=position.category.includes("loss");
+    const metric=(move:TablebaseMove)=>Math.abs(move.preciseDtz??move.dtz??0);
+    const ordered=[...preserving].sort((left,right)=>winning?metric(left)-metric(right)||left.uci.localeCompare(right.uci):losing?metric(right)-metric(left)||left.uci.localeCompare(right.uci):left.uci.localeCompare(right.uci));
+    const candidates=Object.freeze(ordered.map((move,index)=>Object.freeze({moveUci:move.uci,rank:index+1})));
+    return Object.freeze({moveUci:ordered[0]!.uci,policyModeApplied:"perfect_tablebase",candidates,engine:this.identityFor("perfect_tablebase")});
   }
 }

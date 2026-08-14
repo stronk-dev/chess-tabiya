@@ -7,7 +7,8 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `grounding-pair.md` | draft | `archive/content-sourcing-syzygy.md`, `archive/engine-workers.md`, `archive/defect-sweep.md` §2b | — (wave claim #3, last in the same wave; claims **migration 18** and **run schema 0.13**, both stamp-only, registered below; **no pack-schema version** — the mode enum already carries `perfect_tablebase`; pins the tablebase provider seam and the flat-sidecar `verify-draft` emitter) |
+
+No active product RFCs.
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
 `onramp-guard`, then `open-answer-grading`. Shared-resource claims (migrations, pack
@@ -113,7 +114,7 @@ writing it into a draft.
 | 15 | 14→15 | `archive/repertoire-gap-finding.md` | implemented — creates `repertoires`, `repertoire_moves`, `repertoire_scans`, `repertoire_gap_runs`; create-table/index only, no backfill or rebuild; no run/pack schema change |
 | 16 | 15→16 | `archive/onramp-guard.md` | implemented — stamp-only: run schema `"0.10"`→`"0.11"` (`RunFeedbackPolicy` gains `immediate_guard`; no new event type, no data rewrite). Rebased from an initial 15 claim behind `repertoire-gap-finding`'s wave claim #1 |
 | 17 | 16→17 | `archive/open-answer-grading.md` | implemented — **stamp-only, no table** (transcripts are run events; run deletion is the retention story); run schema 0.11→**0.12** (`reasoning.recorded` event). Reconciled behind onramp-guard per the pinned wave order |
-| 18 | 17→18 | `grounding-pair.md` | draft — stamp-only: run schema 0.12→**0.13** (`RunOpponentMode`/`PolicyModeApplied` gain `perfect_tablebase`; no new event type, no data rewrite). Claimed as wave claim #3 of the 2026-08-14 (second) three-draft wave after both predecessors landed claiming no versioned resource |
+| 18 | 17→18 | `archive/grounding-pair.md` | implemented — stamp-only: run schema 0.12→**0.13** (`RunOpponentMode`/`PolicyModeApplied` gain `perfect_tablebase`; no new event type, no data rewrite) |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
@@ -199,6 +200,8 @@ before re-attempting this territory.
 | `archive/onramp-guard.md` | implemented | `docs/drill-pack-format.md`, `docs/drill-client.md`, `docs/branch-runtime.md`, `docs/explanation-grounds.md`, `docs/outcome-drill-grading.md`, `docs/trajectory-drill.md`, `docs/adaptive-guidance.md` |
 | `archive/open-answer-grading.md` | implemented | `docs/open-answer-grading.md`, `docs/drill-pack-format.md`, `docs/drill-client.md`, `docs/explanation-grounds.md` |
 | `archive/polish-surfaces.md` | implemented | `docs/app-shell.md`, `docs/adaptive-guidance.md` |
+| `archive/orphan-completion.md` | implemented | `docs/n-way-comparison.md`, `docs/pack-studio.md`, `docs/return-and-progression.md` |
+| `archive/grounding-pair.md` | implemented | `docs/tablebase-grounding.md`, `docs/content-sourcing.md`, `docs/engine-workers.md`, `docs/outcome-drill-grading.md` |
 
 ## The archive sketches are quarry, not RFCs
 

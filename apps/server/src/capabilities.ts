@@ -20,10 +20,6 @@ export const DECLARED_UNIMPLEMENTED_POLICY_MODES = Object.freeze([
     mode: "practical_resistance",
     reason: "practical_resistance is not selectable in v1; practical-resistance selection is not implemented",
   },
-  {
-    mode: "perfect_tablebase",
-    reason: "perfect_tablebase is not selectable in v1; perfect tablebase selection is not implemented",
-  },
   { mode: "human_external", reason: "human_external is not selectable in v1; external-human selection is not implemented" },
 ] as const);
 
@@ -51,6 +47,7 @@ export interface CapabilityProviders {
   readonly llm: "none" | "external";
   readonly corpus: "lichess-explorer" | "mock" | "none";
   readonly tts: "none" | "external";
+  readonly tablebase: "lichess" | "mock" | "none";
 }
 
 export type SurfaceCapabilities = Readonly<
@@ -102,6 +99,7 @@ function providers(
   llmAvailable: boolean,
   corpus: CapabilityProviders["corpus"],
   tts: CapabilityProviders["tts"],
+  tablebase: CapabilityProviders["tablebase"],
 ): CapabilityProviders {
   if (engineMode === "mock") {
     const opponentReady = identities.some((identity) => identity.kind === "opponent");
@@ -112,6 +110,7 @@ function providers(
       llm: llmAvailable ? "external" : "none",
       corpus,
       tts,
+      tablebase,
     });
   }
   return Object.freeze({
@@ -124,6 +123,7 @@ function providers(
     llm: llmAvailable ? "external" : "none",
     corpus,
     tts,
+    tablebase,
   });
 }
 
@@ -149,6 +149,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
   readonly #llmAvailable: boolean;
   readonly #corpus: CapabilityProviders["corpus"];
   readonly #tts: CapabilityProviders["tts"];
+  readonly #tablebase: CapabilityProviders["tablebase"];
 
   constructor(
     client: CapabilityEngineClient,
@@ -159,6 +160,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
       readonly llmAvailable?: boolean;
       readonly corpus?: CapabilityProviders["corpus"];
       readonly tts?: CapabilityProviders["tts"];
+      readonly tablebase?: CapabilityProviders["tablebase"];
     },
   ) {
     this.#client = client;
@@ -167,6 +169,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
     this.#llmAvailable = options.llmAvailable === true;
     this.#corpus = options.corpus ?? "none";
     this.#tts = options.tts ?? "none";
+    this.#tablebase = options.tablebase ?? "none";
     this.#strongEngineProfile = resolveStrongEngineProfile(
       options.strongEngineProfile,
     );
@@ -181,10 +184,10 @@ export class EngineCapabilities implements CapabilitiesProvider {
           : [];
       }),
     );
-    const providerState = providers(this.#engineMode, engines, this.#llmAvailable, this.#corpus, this.#tts);
+    const providerState = providers(this.#engineMode, engines, this.#llmAvailable, this.#corpus, this.#tts, this.#tablebase);
     return Object.freeze({
       engines,
-      policyModes: SUPPORTED_POLICY_MODES,
+      policyModes: Object.freeze(SUPPORTED_POLICY_MODES.filter((mode)=>mode!=="perfect_tablebase"||providerState.tablebase!=="none")),
       feedbackPolicies: FEEDBACK_POLICIES,
       guardBasis: providerState.judge === "none"
         ? Object.freeze(["rules"] as const)

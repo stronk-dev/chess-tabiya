@@ -25,6 +25,7 @@ import {
   DEFAULT_STRONG_ENGINE_PROFILE,
   stockfishPlaySpec,
 } from "./strong-engine.js";
+import { FixtureTablebaseSource, parseTablebasePosition } from "./tablebase.js";
 
 const at = "2026-08-12T18:00:00.000Z";
 const digest = `sha256:${"4".repeat(64)}`;
@@ -117,6 +118,44 @@ const transposingSpine: readonly SelectorSpineNode[] = [
 ];
 
 describe("pure opponent selector", () => {
+  it("inverts result-position categories and selects deterministic DTZ-perfect play", async () => {
+    const fen = "4k3/6KP/8/8/8/8/8/8 w - - 0 1";
+    const payload = parseTablebasePosition({
+      category: "win",
+      dtz: 1,
+      moves: [
+        { uci: "h7h8r", san: "h8=R+", category: "loss", dtz: -1, precise_dtz: -1 },
+        { uci: "h7h8q", san: "h8=Q+", category: "loss", dtz: -1, precise_dtz: -1 },
+        { uci: "g7f6", san: "Kf6", category: "draw", dtz: 0, precise_dtz: 0 },
+      ],
+    });
+    const selector = new OpponentSelector(new FakeEngineClient(() => []), {
+      tablebaseSource: new FixtureTablebaseSource({ [fen]: payload }),
+    });
+
+    const input = request("perfect_tablebase", { startFen: fen, historyUci: [] });
+    const first = await selector.select(input);
+    const second = await selector.select(input);
+    expect(first).toEqual(second);
+    expect(first).toMatchObject({
+      moveUci: "h7h8q",
+      policyModeApplied: "perfect_tablebase",
+      engine: { id: "lichess-tablebase", version: "7man", seedHonored: true },
+      candidates: [
+        { moveUci: "h7h8q", rank: 1 },
+        { moveUci: "h7h8r", rank: 2 },
+      ],
+    });
+    expect(selector.availableModes()).toContain("perfect_tablebase");
+  });
+
+  it("refuses perfect play by name when the provider is absent", async () => {
+    const selector = new OpponentSelector(new FakeEngineClient(() => []));
+    expect(selector.availableModes()).not.toContain("perfect_tablebase");
+    await expect(selector.select(request("perfect_tablebase"))).rejects.toMatchObject({
+      code: "TABLEBASE_UNAVAILABLE",
+    });
+  });
   it("ships the ratified 100 ms, one-thread, 16 MB strong-engine profile", async () => {
     const client = new FakeEngineClient(() => ["bestmove c7c5"]);
     const selector = new OpponentSelector(client);

@@ -69,7 +69,7 @@ describe("engine capabilities", () => {
         observed,
       ),
       ["stockfish-analysis", "maia-5m"],
-      { engineMode: "maia" },
+      { engineMode: "maia", tablebase: "lichess" },
     );
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     try {
@@ -85,7 +85,7 @@ describe("engine capabilities", () => {
       expect(response.status).toBe(200);
       expect(await response.json()).toEqual({
         engines: [identities["stockfish-analysis"], identities["maia-5m"]],
-        policyModes: ["human_common", "strong_engine", "theory_strict"],
+        policyModes: ["human_common", "strong_engine", "theory_strict", "perfect_tablebase"],
         feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],
         guardBasis: ["rules", "engine"],
         runSchemaVersion: runtimeBuildInfo.runSchemaVersion,
@@ -97,7 +97,7 @@ describe("engine capabilities", () => {
             multiPv: 1,
           },
         },
-        providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none" },
+        providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "lichess" },
         surfaces: {
           play: "available",
           review: "available",
@@ -125,7 +125,7 @@ describe("engine capabilities", () => {
     const descriptor = await new EngineCapabilities(
       healthClient({ [identity.id]: ready(identity) }),
       [identity.id],
-      { engineMode: "mock" },
+      { engineMode: "mock", tablebase: "mock" },
     ).get();
 
     expect(descriptor.providers).toEqual({
@@ -134,6 +134,7 @@ describe("engine capabilities", () => {
       llm: "none",
       corpus: "none",
       tts: "none",
+      tablebase: "mock",
     });
     expect(descriptor.engines).toEqual([identity]);
     expect(descriptor.guardBasis).toEqual(["rules", "engine"]);
@@ -195,6 +196,7 @@ describe("engine capabilities", () => {
       llm: "none",
       corpus: "none",
       tts: "none",
+      tablebase: "none",
     });
     expect(descriptor.surfaces.play).toBe("unavailable-here");
     expect(descriptor.surfaces.justPlay).toBe("unavailable-here");

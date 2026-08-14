@@ -113,12 +113,12 @@ redraws after reactive layout settles rather than retaining stale pointer bounds
 
 ## Current limits
 
-- No authored pack in the repository currently has a ledger-verified Syzygy
-  assessment; positive admission is exercised with the real seven-piece emitter
-  fixture.
-- `perfect_tablebase` is declared but not selectable, and schema/capability
-  binding tests ensure it remains explicitly accounted for. The client reports
-  that limitation instead of implying perfect resistance.
+- Six authored endgame drafts have ledger-verified Syzygy assessments through
+  `make verify-draft`; other Syzygy declarations remain unverified until their own
+  sibling artifacts pass the same admission path.
+- `perfect_tablebase` is selectable only where the capability registry publishes a
+  configured tablebase provider. Provider loss is a named refusal, never an engine
+  fallback presented as exact resistance.
 - Stockfish scores are recorded evidence, not grading authority.
 - Historical plies pre-dating run schema v0.7 cannot identify the applied policy.
 - An authored root claim above seven pieces is reviewable content, not a

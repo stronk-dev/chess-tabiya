@@ -384,7 +384,7 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 17;
+export const STORAGE_VERSION = 18;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -2173,6 +2173,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "stated reasoning run schema",
         apply: () => this.#upgradeV011Runs(),
       },
+      {
+        version: 18,
+        name: "perfect tablebase run schema",
+        apply: () => this.#upgradeV012Runs(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -2692,6 +2697,17 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
       if (snapshot.schemaVersion !== "0.11") continue;
       update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.12" }), row.id);
+    }
+  }
+
+  #upgradeV012Runs(): void {
+    const rows = this.#database.prepare("SELECT id, snapshot_json FROM drill_runs WHERE schema_version = '0.12'").all() as readonly Record<string, unknown>[];
+    const update = this.#database.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.13' WHERE id = ?");
+    for (const row of rows) {
+      if (typeof row.id !== "string" || typeof row.snapshot_json !== "string") continue;
+      const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
+      if (snapshot.schemaVersion !== "0.12") continue;
+      update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.13" }), row.id);
     }
   }
 

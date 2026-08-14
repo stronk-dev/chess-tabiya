@@ -70,7 +70,7 @@ const capabilities: Capabilities = {
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
   },
-  providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none" },
+  providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "lichess" },
   surfaces: {
     play: "available",
     review: "available",

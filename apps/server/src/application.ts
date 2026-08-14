@@ -43,6 +43,7 @@ import type { VoiceProvider } from "./guidance.js";
 import { FixtureCorpusSource, LichessCorpusSource, type CorpusSource } from "./corpus.js";
 import { RepertoireService } from "./repertoire.js";
 import type { TtsProvider } from "./external-tts.js";
+import { FixtureTablebaseSource, LichessTablebaseSource, type TablebaseSource } from "./tablebase.js";
 
 export type EngineMode = "mock" | "maia";
 
@@ -61,6 +62,7 @@ export interface ApplicationOptions {
   readonly corpusToken?: string;
   readonly corpusSource?: CorpusSource;
   readonly ttsProvider?: TtsProvider;
+  readonly tablebaseSource?: TablebaseSource | null;
 }
 
 export interface ChessTabiyaApplication {
@@ -304,6 +306,9 @@ export async function createApplication(
   let capabilities: EngineCapabilities;
   let evidenceExecutor: EvidenceExecutor;
   const corpusSource = options.corpusSource ?? (engineMode === "mock" ? new FixtureCorpusSource() : options.corpusToken === undefined ? undefined : new LichessCorpusSource({ token: options.corpusToken }));
+  const tablebaseSource = options.tablebaseSource === null
+    ? undefined
+    : options.tablebaseSource ?? (engineMode === "mock" ? new FixtureTablebaseSource() : new LichessTablebaseSource());
 
   if (engineMode === "maia") {
     const stockfish = options.stockfishCommand ?? "stockfish";
@@ -313,20 +318,21 @@ export async function createApplication(
       stockfishAnalysisSpec(stockfish),
     ]);
     await supervisor.startAll();
-    selector = new OpponentSelector(supervisor);
+    selector = new OpponentSelector(supervisor, tablebaseSource === undefined ? {} : { tablebaseSource });
     capabilities = new EngineCapabilities(supervisor, [
       "stockfish-analysis",
       "maia-5m",
-    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external" });
+    ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none" });
     evidenceExecutor = new StockfishEvidenceExecutor(supervisor);
   } else {
     const mock = new MockEngineClient();
     selector = new OpponentSelector(mock, {
       maiaEngineId: "mock-opponent",
       strongEngineId: "mock-opponent",
+      ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
     });
     capabilities = new EngineCapabilities(mock, ["mock-opponent"], {
-      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external",
+      engineMode: "mock", llmAvailable: options.voiceProvider !== undefined, corpus: "mock", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none",
     });
     evidenceExecutor = new MockEvidenceExecutor();
   }

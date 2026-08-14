@@ -40,6 +40,20 @@ afterEach(async () => {
 });
 
 describe("pack authoring validation", () => {
+  it("loads all six verified endgame drafts through the development registry admission path", async () => {
+    const registry = await PackRegistry.loadDefault({ development: true });
+    for (const id of [
+      "lucena-bridge-convert",
+      "philidor-third-rank-hold",
+      "pawn-opposition-convert",
+      "pawn-breakthrough-convert",
+      "opposite-bishops-fortress-hold",
+      "queen-vs-pawn-seventh-convert",
+    ]) {
+      expect(registry.required(id).assessmentGrounding, id).toBe("ledger_verified");
+    }
+  });
+
   it("keeps declared pack vocabularies aligned with executable capabilities", () => {
     const schema = JSON.parse(
       readFileSync(
@@ -60,6 +74,16 @@ describe("pack authoring validation", () => {
       ),
     ).toBe(false);
     expect(schema.properties.feedbackPolicy.enum).toEqual([...FEEDBACK_POLICIES]);
+  });
+
+  it("refuses perfect tablebase resistance above the seven-piece boundary", () => {
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate.start as { fen: string }).fen = "4k3/8/8/8/8/8/PPPP4/R3K2R w - - 0 1";
+    (candidate.opponentPolicy as { mode: string }).mode = "perfect_tablebase";
+    expect(validatePackDocument(candidate).issues).toContainEqual(expect.objectContaining({
+      code: "PERFECT_TABLEBASE_OUT_OF_RANGE",
+      path: "/opponentPolicy/mode",
+    }));
   });
 
   it("reports living-schema failures with JSON pointers", () => {

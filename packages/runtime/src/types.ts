@@ -39,6 +39,7 @@ export const RUN_OPPONENT_MODES = Object.freeze([
   "human_common",
   "strong_engine",
   "theory_strict",
+  "perfect_tablebase",
 ] as const);
 export type RunOpponentMode = (typeof RUN_OPPONENT_MODES)[number];
 export type PolicyModeApplied = RunOpponentMode | "enumerated" | "unknown";
