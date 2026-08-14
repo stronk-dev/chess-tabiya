@@ -37,3 +37,12 @@ of them to run truth. Unit coverage pins the preference and off/passive behaviou
 scenario starts from a developed queens-on position, performs a forced queen exchange across
 the phase band, verifies nothing auto-opens, checks the rendered grounding vocabulary, and
 proves switching markers off removes the dots.
+
+## 2026-08-14 — Acceptance and measured envelope
+
+The combined `classifyPhase` + `pivotalMarkers` + `endgameReading` instrument traversed all
+16 Pack B spine-prefix runs and one synthetic 60-ply Just Play path over 20 samples on this
+Apple Silicon development host: median **5.361 ms**, maximum **11.46 ms**. These are recorded
+observations, not a unit-test threshold; the test asserts only a non-vacuous workload and
+finite measurements. Focused runtime/server/client tests and the queen-exchange browser
+scenario passed. The optional tagged Maia check remains outside `make verify` by policy.

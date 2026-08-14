@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -116,5 +117,41 @@ describe("adaptive guidance runtime", () => {
     expect(voiceCheck(packet, "The c4 square matters.").valid).toBe(false);
     expect(voiceCheck(packet, "The tall one wants a friend beside it.").valid).toBe(true);
     expect(BANNED_JUDGEMENTS).toContain("blunder");
+  });
+
+  it("records the combined guidance envelope over Pack B and a 60-ply position run without gating it", () => {
+    const pack = JSON.parse(readFileSync(new URL("../../../content/drafts/carlsbad-minority-attack.json", import.meta.url), "utf8")) as { id: string; start: { fen: string }; spine: readonly { moveUci: string; children?: readonly unknown[] }[] };
+    const root = createRun({ id: "adaptive-pack-envelope", packId: pack.id, packDigest: `sha256:${"a".repeat(64)}`, startFen: pack.start.fen, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+    const packRuns: DrillRun[] = [root];
+    const walk = (nodes: readonly { moveUci: string; children?: readonly unknown[] }[], parent: DrillRun): void => {
+      for (const entry of nodes) {
+        const next = commitMove(parent, entry.moveUci, { at }).run;
+        packRuns.push(next);
+        walk((entry.children ?? []) as readonly { moveUci: string; children?: readonly unknown[] }[], next);
+      }
+    };
+    walk(pack.spine, root);
+    const sixty = run(Array.from({ length: 61 }, (_, index) => index % 2 === 0 ? start : start.replace(" w ", " b ")));
+    const durations: number[] = [];
+    for (let sample = 0; sample < 20; sample += 1) {
+      const started = performance.now();
+      for (const candidate of packRuns) {
+        const active = candidate.nodes.find((item) => item.id === candidate.activeCursor.nodeId)!;
+        classifyPhase(active.fen);
+        pivotalMarkers(candidate, candidate.activeCursor.branchId);
+        endgameReading(active.fen);
+      }
+      classifyPhase(sixty.nodes.at(-1)!.fen);
+      pivotalMarkers(sixty, "main");
+      endgameReading(sixty.nodes.at(-1)!.fen);
+      durations.push(performance.now() - started);
+    }
+    durations.sort((left, right) => left - right);
+    const medianMs = durations[Math.floor(durations.length / 2)]!;
+    const maxMs = durations.at(-1)!;
+    console.log(`ADAPTIVE_GUIDANCE_LATENCY ${JSON.stringify({ packBSpineRuns: packRuns.length, justPlayPlies: sixty.nodes.length - 1, samples: durations.length, medianMs: Number(medianMs.toFixed(3)), maxMs: Number(maxMs.toFixed(3)) })}`);
+    expect(packRuns.length).toBeGreaterThan(1);
+    expect(sixty.nodes).toHaveLength(61);
+    expect(Number.isFinite(maxMs)).toBe(true);
   });
 });
