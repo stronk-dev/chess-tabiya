@@ -256,3 +256,367 @@ on one, so nothing is broken today.
 **Gate status:** orphan list is 1 item, triaged (ledgered + escalated to the
 owner). Stale list is empty. Per the §2b rule, done is not declared while
 either list is non-empty *and untriaged* — this one is triaged.
+
+---
+
+## Delta re-run — 2026-08-15 (twelve-wave delta)
+
+Run by claude at HEAD `e200ba8`. **The largest delta the gate has absorbed:**
+eleven RFCs archived since the last run (`authoring-frictions` 0.16,
+`validator-integrity`, `tempo-vocabulary` 0.17, `resistance-spectrum` run 0.14 +
+migration 19, `predicate-wave-3` 0.18 + shape-entry 0.3, `opening-evidence-path`
+0.20, `branch-set-scale`, `deviation-classes` 0.21, `transition-primitives` 0.22,
+`expression-census`, `engine-request-contract` run 0.15 + migration 20), plus a
+D56 fix, a refusal-coverage sweep, nine research dossiers, `design/06-campaign.md`,
+and ~25 new defect rows. Delta scope only; the 2026-08-14 full trace stands
+except where corrected below. Every claim below was checked by grep against
+`apps/*/src`, `packages/*/src`, `schemas/` and `content/` — never against ledger
+prose.
+
+### The headline
+
+**The ledger absorbed all eleven waves; the design tier and the gate mirrors
+absorbed none of them.** Every one of the eleven has BACKLOG rows (2–11 each);
+**none of the eleven is named anywhere in `design/03-product-breadth.md` or
+`planning/exploration/gates.md`** (`grep -c` = 0 in both files, for all eleven).
+This is the reverse of the 2026-08-14 finding, where registers held and the
+ledger lagged. The failure has moved one tier up: it is now the **gate surface**
+that is not being maintained, and the gate table is the design's own honesty
+instrument.
+
+The second-order consequence is that the gate table is now wrong in **both**
+directions at once, and — the sharper finding — **three of its rows are stale
+because the previous delta run's own corrections were never carried into them.**
+The 2026-08-14 delta verified `comparisonStrips`, `/runs/:id/distill` and
+`/progress/recommendations` in code and wrote that verification into *this
+dossier*; the gate rows it was verifying still say all three do not exist.
+
+### A. Gate-table OVERCLAIMS (design says shipped or names a false residual)
+
+1. **B4 residual is wrong — `design/03:284` + `gates.md:127`.** Both name
+   "Syzygy runtime rendering" as a true residual. It ships:
+   `apps/server/src/service.ts:1002-1021` probes the tablebase live inside
+   `branchDecidedness`, routed at `apps/server/src/rest.ts:1347-1350`, rendered
+   with a full provenance sentence at `packages/runtime/src/branch-scale.ts:83`
+   ("…Source: Syzygy (tablebase.lichess.org/standard)") and in
+   `apps/web/src/lib/BranchRail.svelte:75`. Meanwhile the row **omits** the
+   residuals the canonical doc actually names —
+   `docs/explanation-grounds.md:245-260` says outright "it does not complete
+   breadth gate B4" and lists authored claim triggers, per-assertion grounding,
+   **durable** corpus/Syzygy evidence records, and feedback packets/claim
+   anchors. *Fix: replace the residual with those four, citing
+   `docs/explanation-grounds.md` §Current boundary.*
+2. **`gates.md:111` "Breadth gates — COMPLETE 2026-08-14: B1–B11 all green"** —
+   false, and unmirrored (`design/03` never declares completion). B4 in the very
+   same table carries a "True residual", B1/B3/B8 carry residuals, and the
+   canonical doc denies B4 completion. *Fix: strike the banner or restate as
+   "B1–B3, B5–B11 green; B4 partial".*
+3. **B5 still says "Twitch" — `design/03:285` + `gates.md:128`.**
+   `grep -rni twitch apps/ packages/ docs/ workers/` = zero hits. Orphan #6 from
+   the 2026-08-14 run; neither mirror was fixed. *Fix: "chat-adapter seam +
+   chrome-free overlay"; ledger the Twitch bridge.*
+4. **Resistance adjectives — `design/03:48-49`** still promise "perfect, strong,
+   practical, **annoying, or fallible**". `RUN_OPPONENT_MODES`
+   (`packages/runtime/src/types.ts:38-44`) has exactly five and contains no
+   "annoying" or "fallible". Orphan #5 is now *half* closed —
+   `resistance-spectrum` and `grounding-pair` shipped `practical_resistance` and
+   `perfect_tablebase` — but two promised policies remain declared-unimplemented
+   in a design doc, which is precisely what M-1's declared-vs-executable rule
+   forbids. *Fix: drop them or mark them ledgered.*
+5. **Branch-group seed sources — `design/03:140-144`** says "one mechanism,
+   **five** ways to fill it", including "opening variants from corpus (rung 4)".
+   `GroupSource` (`packages/runtime/src/types.ts:247`) has **four**, and
+   `docs/branch-groups.md:117` states corpus is "not a runtime seed source".
+6. **B4 proof column + `design/03:238`** promise "continuation clusters, and
+   historical examples". `apps/server/src/corpus.ts:23` returns only
+   total/white/draws/black/moves/recency; no `modelGame`, `historicalExample` or
+   continuation-cluster symbol exists in the tree.
+
+### B. Gate-table UNDERCLAIMS (design says absent; it shipped)
+
+7. **B6 — `design/03:286` + `gates.md:129`** still carry the 2026-08-14
+   correction "**session distillation … does NOT exist** — `session_distilled` is
+   a reserved enum with zero producers". It shipped in `orphan-completion`:
+   `apps/server/src/distill.ts`, route registered `rest.ts:559`, handled
+   `:1081-1086`, client `api.ts:604,905`, browser action `App.svelte:340,613`,
+   documented `docs/pack-studio.md:56`.
+8. **B7 — `design/03:287` + `gates.md:130`** still carry "**the opt-in
+   recommender … does NOT exist** — no route, disclaimed in the canonical doc".
+   False on both halves: route `rest.ts:773-775`, client `api.ts:603,904`,
+   rendered `App.svelte:654-656`, and `docs/return-and-progression.md:51-56` now
+   *documents* it rather than disclaiming it.
+9. **B3 residual — `design/03:283` + `gates.md:126`** still read "Residual:
+   narrative mode + difference strips (forward-trace orphan, ledgered)". Both
+   shipped: `packages/runtime/src/compare-strips.ts`, wired `rest.ts:14-15,1125`,
+   rendered in `CompareView.svelte:27-28` (eval sparkline), `:91` (structure +
+   timing strips), `:92` (piece routes), `:96-98` (narrative panel). B3 has **no
+   named residual left**; `branch-set-scale`'s rail collapse
+   (`packages/runtime/src/branch-scale.ts`, `BRANCH_COLLAPSE_FLOOR`) is new B3
+   surface neither mirror records.
+10. **B1 + B8 residuals — `design/03:281`/`:288` + `gates.md:124`/`:134`** —
+    "`/settings` remains display-only" / "Residuals: PWA transformation, settings
+    controls". `/settings` mounts `AssistanceSettings.svelte`
+    (`App.svelte:811-814`) with six live per-context controls (`:42-47`),
+    sign-out (`:62`) and password-confirmed deletion (`:64-65`); responsive
+    transformation ships (`docs/app-shell.md:140-144`) and the build is
+    installable (`apps/web/public/manifest.webmanifest`). *Fix: re-scope to what
+    is genuinely missing — no opponent/engine/LLM-provider or accessibility
+    controls, and "no service worker / offline queue" rather than "PWA
+    transformation".*
+
+### C. Count errors in the gate table
+
+11. **B11 — `design/03:291`: "23 entries authored … the London wedge and the KID
+    arrangement chain are outstanding, not authored".** Both are now real
+    trigger-bearing entries (`content/shapes/london-wedge.json`,
+    `content/shapes/kid-chain-arrangement.json`, landed `ae8aab7`); the true count
+    is **25**. The 2026-08-14 delta corrected this number *downward* from 24 and
+    was right that day; it is now wrong in the other direction. Same stale text
+    at `planning/roadmap-to-done.md:26`.
+12. **B9 — `design/03:289` + `gates.md:131`: "twelve scoped feature
+    predicates".** `STRUCTURAL_FEATURE_KINDS`
+    (`packages/schema/src/drill-pack/types.ts:325-330`) has **18**;
+    `docs/structural-reading.md:14` says "eighteen closed feature kinds". A
+    further **six** transition feature kinds shipped via `transition-primitives`
+    (`types.ts:381-388`). *Fix: "eighteen structural feature kinds plus six
+    transition primitives".*
+
+### D. Mirror disagreements (`design/03` vs `gates.md`)
+
+13. **`gates.md:113`** titles the table "Breadth gates (**B1–B8**)" while the
+    table runs B1–B11.
+14. **`gates.md:129`** B6 definition still says "pack studio/import/**review**/
+    session-distill" — the review gate was struck by owner ruling 2026-08-13 and
+    replaced by publication channels; `design/03:286` correctly says "a served
+    **community** pack, its channel visible wherever it is surfaced". The mirror
+    carries an abolished gate and drops the channel requirement.
+15. **B11 status text differs entirely between the two mirrors**
+    (`design/03:291` vs `gates.md:133`) — not contradictory, but not a mirror.
+16. **`gates.md:131-134`** orders rows B9, B10, B11, then B8 — the two tables are
+    not diffable.
+
+### E. Other stale claims in `design/03` outside the gate table
+
+17. **`design/03:316-323` "zero producers" list** — five of its seven entries now
+    have producers: `outcome.reached` (`runtime.ts:350`), `transfer.scheduled`
+    (`service.ts:1584`), `feedback.generated` (`guard.ts:142`), the prediction
+    checkpoint (`rest.ts:1384`), the generic predicate evaluator
+    (`packages/runtime/src/structure.ts`). Genuinely still zero-producer:
+    **`human_model_predicted`** and the **drill-address grammar**
+    (`packages/schema/src/drill-pack/urls.ts:88`).
+18. **`design/03:325-328`** says item #1 is "not finished: `/settings` with no
+    controls, **`phase` never projected**, the address grammar unrouted" — the
+    same document's B1 row says `phase` is projected (D6 closed), and
+    `apps/web/src/lib/api.ts:30` confirms it. Only the address grammar survives.
+19. **`design/03:217` and `:402-403`** say reusable shapes are "pending the
+    ruling" / "blocked on" `04` §0 — `design/04:16` reads "## 0. **RULED**
+    (owner, 2026-08-14)" and B11 is shipped.
+20. **`design/03:149-158`** presents the group-level reply journal as the
+    *specified* remedy ("Real constancy **is** a group-level reply journal"). It
+    shipped: `service.ts:941-957` replays a recorded selection verbatim on a
+    matching `transposeKey` under `fixed`, returning `reusedFromNodeId`. The
+    `seedHonored: false` explanation around it is still accurate
+    (`apps/server/src/maia.ts:33`, `engine-supervisor.ts:199-200`).
+
+### F. `design/06-campaign.md` — the new design doc, audited claim by claim
+
+This doc was authored by claude on owner rulings and its load-bearing content is
+claims about shipped code, so it was checked hardest. **Two of its three headline
+claims verify; the third overstates, and there are four smaller precision
+errors.** None is a fabrication — the pattern is a careful synthesis losing its
+qualifiers on the way into the design tier.
+
+**Verified true:**
+
+- `:36-40` **the policy⟂inventory split is real.** `permittedAssistance`
+  (`packages/runtime/src/assistance.ts:27`) computes per-axis permission from
+  `{sessionKind, deliveryOpen, role}`; `AssistanceConfig` (`:3-14`) is `version: 4`
+  plus **exactly nine** named axes (markers, guided, humanSplit, corpus, voice,
+  spoken, boardLighting, arrows, ambient). Two separate artefacts, as claimed.
+- `:46-49` **the "what does not exist" list is accurate.** `AssistanceConfig` is
+  browser-local (`apps/web/src/lib/assistance-preference.ts`, keyed by session
+  kind); `clockState` is an untyped `Record<string, unknown>` passthrough that is
+  parsed (`rest.ts:418-424`) and stored (`runtime.ts:341`) and read by nothing;
+  `clock_zeroed` is indeed the halfmove clock
+  (`packages/runtime/src/transition.ts:360`, "Capture-or-pawn-move halfmove-clock
+  convention").
+- `:85-86` **`perfect_tablebase` "already used by two packs"** — exactly two:
+  `content/drafts/mate-bishop-knight.json:539` and
+  `content/drafts/trajectory-mate-bishop-knight.json:693`.
+- `:59-63` the measured numbers all reproduce: 10.2% / 43 cp / 5.8% at depth 16
+  (`design/research/practical-difficulty-outside-tablebase.md:47,339-345`),
+  κ = 1.000 (`:39`), ply ~20 and zero by 27
+  (`human-outcome-coverage-depth.md:43,277,280`), ρ = −0.143
+  (`census-hint-false-positives.md:40`).
+
+**Overstated — the one design-tier error worth the owner's attention:**
+
+21. **`:41-42` "The difficulty-availability axis exists as `branchDecidedness`
+    (`decided` / `undecided` / `unknown`), each with a named ground."** Two
+    problems. (a) **"each with a named ground" is false**: only `decided` carries
+    `ground: DecidednessGround`; `undecided` and `unknown` carry a `reason`
+    (`no_terminal_fact | uncertain_category`; `out_of_range | not_probed |
+    provider_unavailable | withheld`) —
+    `packages/runtime/src/branch-scale.ts:11-19`. (b) More substantively, the
+    doc's own §2a availability vocabulary is *measured-by-outcome (openings) /
+    measured-by-tablebase / authored / none*, while `DecidednessGround` is
+    *terminal_outcome / objective_terminal / tablebase* — **there is no
+    human-outcome ground in the shipped type**, so the axis §2a specifies is not
+    the axis that exists. `planning/campaign-synthesis.md:738-745` states this
+    correctly ("C1's axis already implemented **at the branch level** … **promoted**
+    from branch scale to campaign scale"); the design doc dropped both qualifiers
+    and asserts the axis flatly "exists". *Fix (owner-tier): restate as "exists at
+    branch scale as `branchDecidedness`, with a ground on `decided` only; the
+    campaign promotes it to encounter scale and must add the human-outcome
+    ground."*
+
+**Smaller precision errors in the same doc:**
+
+22. **`:43-44` "The encounter unlock exists as `shapeRecommendations`."**
+    `service.ts:758` and `rest.ts:763` are real and the provenance sentence is
+    real, but the function *recommends* shapes met-but-undrilled — nothing gates
+    or unlocks on it anywhere. §1's "load-bearing half" framing partly covers
+    this; the bullet does not. *Fix: "the encounter **detector** exists".*
+23. **`:91` "only three of six opponent modes are reproducible at all."**
+    `RUN_OPPONENT_MODES` has **five**. The "six" is a row count from
+    `planning/campaign-synthesis.md:872-879`, whose table splits `theory_strict`
+    into on-spine and off-spine. *Fix: "three of six move-source paths across
+    five modes".*
+24. **`:77` "Maia's bands run ≈1100–1900."** R10
+    (`design/research/maia-band-calibrated-range.md:148`) explicitly labels that
+    exact sentence `[M]` — unsupported model knowledge quoted from
+    `design/BACKLOG.md:126,254` — and measures band availability at **1100–1939**
+    with an emitter clamp of `[1100, 2000]`. The owner then **ruled `[1000, 2400]`**
+    on 2026-08-15 (`design/BACKLOG.md:116`). §2b's "no IM/GM opponent" conclusion
+    is not overturned by this, but the doc restates an `[M]` claim as fact in the
+    tier that is supposed to be most careful. *Fix: cite the measured range and
+    the ruled bound.*
+25. **`:120-122` law 6 imports "the live-surface admission rule
+    (`live-marker-quality` L1–L6)" as a standing law.** That RFC is
+    `implementing`, not archived (`rfc/README.md:10`) — a design-tier law resting
+    on unlanded normative text that may still change.
+26. **`:6-7` points at `planning/campaign-synthesis.md` for "the assembled
+    evidence and every file:line citation" — that file is UNTRACKED**
+    (`git status`: `?? planning/campaign-synthesis.md`). A committed design doc's
+    entire evidence base is not in the repository. *Fix: commit it.* Same for
+    `tools/q8-feedback-surface-harness/`, an untracked research harness for a
+    still-`💡` question (Q8), which AGENTS.md requires to be labelled disposable,
+    tied to a ledger row and logged.
+27. **`design/06-campaign.md` has zero inbound links** — no reference from any
+    file in `design/`, `planning/`, `docs/`, `rfc/`, `AGENTS.md` or `CLAUDE.md`.
+    Its own gate file `planning/campaign-research-queue.md` still opens "**Status:
+    research tier. Nothing here may become an RFC yet**" and "before the cluster
+    earns a design doc", never recording that the doc was earned and written.
+    **R10 has no row in that queue at all**, though it is answered, dossiered and
+    ruled on.
+
+### G. Registers vs code — verified, with two register gaps
+
+Verified exact against implementation: `DRILL_PACK_SCHEMA_VERSION = "0.22"`,
+`DRILL_RUN_SCHEMA_VERSION = "0.15"`, `SHAPE_ENTRY_SCHEMA_VERSION = "0.3"`
+(`packages/schema/src/index.ts:1-3`), `STORAGE_VERSION = 20`
+(`apps/server/src/storage.ts:387`), `schemas/drill_pack.schema.json` `$id`
+…drill-pack:0.22, `drill_run.schema.json` …drill-run:0.15,
+`shape_entry.schema.json` …shape-entry:0.3. **0.19 is confirmed frozen shut** —
+the register skips 0.18→0.20 and nothing in `packages/`, `schemas/`, `design/`,
+`docs/` or any live draft claims it; `rfc/live-marker-quality.md:868`,
+`rfc/client-surface-floor.md:59` and `rfc/fixture-realism.md:33` all explicitly
+decline it. Two gaps, both in the single-writer file (**report only, not edited
+here**):
+
+28. **`rfc/README.md` never records `expression-census` anywhere.** Commit
+    `4a893dc` ("docs: archive expression census") **removed** its Active-table row
+    and added no Archive-table row, so an implemented RFC with a canonical doc
+    (`rfc/archive/expression-census.md`, `docs/expression-census.md`) is absent
+    from the index entirely.
+29. **The shape-entry 0.2 → 0.3 bump is unregistered.** `predicate-wave-3` shipped
+    it (`rfc/archive/predicate-wave-3.md:1598,1900`), but the register row for
+    0.18 (`rfc/README.md:60`) does not mention it, though the analogous row for
+    0.13 recorded the 0.1 → 0.2 bump.
+30. **`rfc/README.md:125`** says "D60 remains open pending R10" — R10 landed and
+    the owner ruled `[1000, 2400]` on 2026-08-15.
+31. **`rfc/fixture-realism.md` is an active draft absent from the Active table**
+    (`rfc/README.md:5-11`), while `planning/codex-queue.md:10` lists it READY.
+32. **`docs/README.md` does not index `docs/expression-census.md` or
+    `docs/transition-primitives.md`** — two canonical docs outside the docs index.
+
+### H. `planning/roadmap-to-done.md` — six stale rows
+
+33. **`:17`** calls the polish wave "**the LAST feature wave**" and states "the
+    feature column is empty … run 0.13, storage 18, **no active product RFCs**".
+    Eleven feature waves have landed since; run is 0.15, storage 20, and three
+    product RFCs are active (`live-marker-quality` implementing,
+    `client-surface-floor` and `fixture-realism` drafts).
+34. **`:26`** "23 entries … 2 commissioned, unauthored: London wedge, KID
+    arrangement chain" — both authored; **25** entries.
+35. **`:28`** "**39 packs committed** total" — `content/drafts/` holds **43** pack
+    documents, of which 6 are `.browser.json` fixtures → **37 authored packs**.
+    39 is right under neither reading. (`planning/exploration/log.md` reports "43
+    packs / 694 positions" from the census instrument.)
+36. **`:29`** "Scandinavian wave-4b **deferred** on depth-commensurability;
+    **B+N mate awaits an owner ruling**" — `scandinavian-mainline-black.json`,
+    `anti-scandinavian-white.json`, `mate-bishop-knight.json` and
+    `trajectory-mate-bishop-knight.json` all exist and are authored.
+37. **`:30`** is now stale in the *unsafe* direction: "What remains at zero is
+    *engine* (Stockfish) validation of middlegame/opening authored claims."
+    `opening-evidence-path` (pack 0.20) shipped `objective.grading.assessedBy`
+    `kind: "engine"` and **20 opening packs now carry engine-assessed grading**
+    (12 carry `syzygy`, 7 `authored`; counted across `content/drafts/*.json`).
+    The row also says 10 packs carry `ledger_verified` evidence sidecars — the
+    true syzygy count is 12, and `ledger_verified` is a *computed* verification
+    status (`apps/server/src/sourcing/ledger-validation.ts:384-406`), not a field
+    present in any content file.
+38. **`:15`** "onramp-guard (**+D28**) ✅ shipped" is a **narrower-than-it-reads
+    closure**, and the D28 row itself was never flipped (`design/BACKLOG.md:242`
+    still reads `🐞 found 2026-08-14`). The first half of D28's remedy landed —
+    outcome objectives now fall through to automatic win/draw/loss rules
+    (`apps/server/src/pack-orchestrator.ts:450-480`). The second half did not:
+    `OBJECTIVE_GRADES_NOTHING` fires only when `PLAN_OBJECTIVES.has(objective.type)`
+    (`apps/server/src/pack-validation.ts:421-423`), so a grading-free **outcome**
+    leg still is not a load refusal.
+39. **`:18`** gamification row reads "📋 post-session by design" without noting
+    that `design/06-campaign.md` and the R1–R10 research queue now exist.
+40. **`:34-38` §2b** still reads "First run complete 2026-08-14 … Re-run cheaply
+    after the last feature wave". This is that re-run.
+
+### I. `planning/codex-queue.md`
+
+41. **`:3` "Landed and verified today (9 waves)"** then lists **eleven**.
+42. Otherwise current and accurate (refreshed 2026-08-15 night); its D60 ruling,
+    D73/D74 rows and three READY drafts all reconcile with the tree.
+
+### J. `AGENTS.md` / `CLAUDE.md` (identical files) — three stale facts
+
+43. **`:25`** "**6 living docs**" — seven, since `design/06-campaign.md`.
+44. **`:26`** "**No active product RFC; 23 implemented RFCs** frozen in
+    `rfc/archive/`" — three active drafts and **50** archived RFCs.
+45. **`:27`** describes the planning tier as only `planning/exploration/`; it now
+    holds a dozen sibling jobs including the campaign queue and synthesis.
+
+### Verified clean
+
+- All nine new research dossiers have coverage-matrix rows in
+  `design/research/README.md`.
+- `planning/exploration/plan.md` is current — Q3, Q4a, Q4b and Q7 all carry
+  2026-08-15 evidence statuses matching their dossiers.
+- `gates.md` E5 was refreshed 2026-08-15 with the mobile-scope compare-scale
+  evidence — the one place the gate file *was* maintained this cycle.
+- Every one of the eleven waves has BACKLOG rows (2–11 each). The ledger
+  discipline held; only the design tier and gate mirrors lapsed.
+- B1, B2, B3, B5, B6, B9, B10, B11 runtime claims spot-checked green (routes,
+  modes, channel derivation, four pivotal detectors with eval-swing excluded
+  live, `SHAPE_PROSE_CONTAINS_FEN`, `present`/`prospective` relations) — details
+  in the sub-audit; only the residual/count text on those rows is wrong, not the
+  shipped-ness.
+- `perfect_tablebase` still publishes conditionally on provider presence
+  (`capabilities.ts`), i.e. D8's declared-vs-executable law is still executing.
+
+### Gate status
+
+**Orphan/stale list is 45 items and NOT triaged.** Per the §2b rule, done is not
+declared. The severe subset is: the B4 residual (both mirrors), the
+`gates.md:111` COMPLETE banner, the three previous-delta corrections that were
+never carried into the gate rows (B3/B6/B7), the `design/06` decidedness
+overstatement, and the two `rfc/README.md` register gaps. All design-tier fixes
+are **reports for the owner** (law 5); nothing in `design/`, `rfc/README.md`,
+`apps/` or `packages/` was edited by this run.

@@ -190,3 +190,267 @@ on one, so nothing is broken today.
 **Gate status:** orphan list is 1 item, triaged (ledgered + escalated to the
 owner). Stale list is empty. Per the §2b rule, done is not declared while
 either list is non-empty *and untriaged* — this one is triaged.
+
+---
+
+## Delta re-run — 2026-08-15 (twelve-wave delta)
+
+Run by claude at HEAD `e200ba8`. Scope: the eleven RFCs archived since the last
+run — `authoring-frictions`, `validator-integrity`, `tempo-vocabulary`,
+`resistance-spectrum`, `predicate-wave-3`, `opening-evidence-path`,
+`branch-set-scale`, `deviation-classes`, `transition-primitives`,
+`expression-census`, `engine-request-contract` — read end to end (~15,100 lines)
+for Deviations, discovered concepts, and **the normative text their cross-reviews
+added late**, which the brief correctly identified as the likeliest to be lost.
+Plus a full integrity pass over the defect ledger. Companion:
+`planning/traceability-forward.md` §Delta re-run 2026-08-15.
+
+### The headline, and it is partly good news
+
+**Design-doc flow-back in this wave is markedly better than 2026-08-14 found.**
+Three deviations landed properly and in the right tier: `authoring-frictions`
+Deviation 3 (cursed win / blessed loss — the open owner-facing orphan this
+dossier escalated on 2026-08-14) is now written at
+`design/01-training-model.md:104-110`; Deviation 4's draws-by-rule ruling at
+`design/01:93-102`; and `resistance-spectrum` Deviation 2's `<500 ms` breach
+became a two-axis latency ruling at `design/02-product-shape.md:165-180`,
+carrying the measured figures *and* a "what the split does not license" clause —
+better than the RFC proposed. **The 2026-08-14 escalation is closed.**
+
+The remaining debt is concentrated, not diffuse. **Ten of eleven RFCs flipped
+their ledger rows in the implementing commit**, satisfying the completion law's
+intent even though all five archive commits (`12784a3`, `63bb6ab`, `57f86da`,
+`4a893dc`, `ff95cfc`) touched no `design/` file. **`engine-request-contract` is
+the single point of failure**: it flipped rows in neither commit and has no
+`planning/exploration/log.md` entry at all. Six of the eleven declare no
+deviation and are correct to (`branch-set-scale:874`,
+`validator-integrity:909`, `expression-census:1194`,
+`engine-request-contract:797`, `opening-evidence-path:1343`,
+`transition-primitives:1362`).
+
+### 1. MISSING — concepts with no design-tier home, ranked
+
+- **M-14 — The engine request contract is not design-tier law**
+  (`engine-request-contract:189-198`). *"An engine request must close over the
+  instrument state its answer depends on"* — five obligations (state / clear /
+  bind / bound / record), one-line form *"state a request does not state is state
+  the previous request chose."* `design/BACKLOG.md:260` carries it as **💡** and
+  literally reads *"Belongs in design tier once the RFC lands"* — the RFC landed
+  at `ff95cfc`. Its sibling **M-1** (declared-vs-executable) is likewise still 💡
+  at `BACKLOG.md:312`, unpromoted since the 2026-08-14 audit named it. **Two of
+  the repo's four governing laws are candidate rows.** Home: `design/02` §hosted
+  consequences, beside the no-operator and byte-identical-read rulings.
+- **M-15 — The validator's own law** (`validator-integrity:134-154`):
+  *"Validation must exercise every code path play will exercise before the first
+  move"*, with two corollaries — *"a compilation failure is never an exception
+  that escapes `validatePackDocument`"* and *"a rule that compiles but can never
+  fire is a defect, not a nicety."* No design doc, no BACKLOG row. `design/04` §8
+  makes `pack-check` the authoring gate; the law that makes the gate mean
+  anything is invisible from the design tier. Home: `design/04` §8.
+- **M-16 — "What grounds a plan class?"** (`opening-evidence-path:1499-1505`).
+  The RFC states it *"belongs in a `design/BACKLOG.md` row before it belongs in
+  an RFC"* — no such row exists. Design-shaping: `design/04` §3 builds the whole
+  middlegame tier on structures and plan classes, so if plan classes are
+  permanently ungroundable, a middlegame pack's central content is permanently
+  ungrounded — *"a strictly larger version of the opening problem this RFC
+  closes."* Home: a BACKLOG row plus a paragraph in `design/04` §3.
+- **M-17 — Transition reading has no home on the assistance ladder.**
+  `predicate-wave-3:1659-1662` (Deviation 5) says the transition category *"has
+  no design home yet… the RFC that ships the surface should place it there"*;
+  `transition-primitives` then shipped the surface and states *"`design/` is not
+  touched"* (`:1461`). A new rung-0 readable class — attack/defence/line/
+  flight-square/duty/irreversibility facts about a committed move, with a
+  mandatory per-leaf scope table and a permitted/forbidden sentence table
+  (`transition-primitives:826-832`, `:1045-1055`) — lives in
+  `docs/transition-primitives.md` and `BACKLOG.md:258` and nowhere in `design/`.
+  Home: `design/05` §3 ladder + §5.
+- **M-18 — The segment-length band is declared-and-unenforced**
+  (`authoring-frictions:1258-1266`, Deviation 2). The band widened to 2–40 with
+  `SEGMENT_BEYOND_PLAN_BAND` demoted to a warning; the RFC said *"if the owner
+  reads the widening as a design change rather than a format correction, §5 is
+  the item to hold."* Nothing was held and nothing landed. See S-5.
+- **M-19 — Three engine-contract residuals and one generalisation, unledgered**
+  (`engine-request-contract:912-916`). Rows 2 and 4 became D70/D71; rows **1, 3
+  and 5 exist nowhere**: `capabilities.engines` omits `stockfish-play`;
+  `#theoryStrict`/`#practicalResistance` request MultiPV **above the advertised
+  max** — *"the contract failing on its own terms one line away from where it is
+  being enforced"*; and Maia advertises `SelfElo`/`OppoElo` which nothing in the
+  repo has ever set or measured (an R5-shaped probe would settle it). Plus the
+  generalisation from row 4 — *"a summary sentence whose evidence rows cannot
+  support it — worth a sweep beyond this panel"* — an honesty pattern, not one
+  defect.
+- **M-20 (borderline) — The collapse/fold doctrine is doc- and ledger-only**
+  (`branch-set-scale`): decidedness-does-the-work-ranking-was-asked-to-do; the
+  shortfall rule (*"under `save`/`resist` the tablebase ground collapses nothing,
+  ever"*, `:406-408`); *"no engine evaluation, at any depth, with any threshold,
+  ever collapses a branch"* (`:249-252`); collapsed ≠ folded (`:745-760`); and a
+  normative banned lexicon (`:499-504`). Ledger-absorbed (`BACKLOG.md:285`,
+  `:287`) and canonical in `docs/branch-set-scale.md`, but `design/03` §Review
+  says nothing and `BACKLOG.md:330` still says *"Do not build either until
+  ruled."* Listed last because the ledger does carry it.
+
+**Consciously OMITTED, correctly:** `expression-census`'s coverage-vs-
+satisfiability machinery → `docs/expression-census.md`; `validator-integrity`'s
+grading-vs-grounding split → `docs/drill-pack-format.md`; `deviation-classes`'
+multi-value rendering contract and join-key refusal → `docs/drill-pack-format.md`
++ `docs/drill-client.md`; `opening-evidence-path`'s sidecar trio and 14 refusal
+codes → `docs/engine-grounding.md`; `tempo-vocabulary`'s evaluator algorithm →
+`docs/drill-pack-format.md:43-47`; `engine-request-contract`'s handshake
+mechanics → `docs/engine-workers.md:50-71`.
+
+### 2. Un-flipped ledger rows
+
+| Row | File:line | Why it should have moved |
+|---|---|---|
+| **D29, D30, D31** | `BACKLOG.md:157-159` | Still `🔨 shipped by authoring-frictions`, header glyph still 🐞, on an implemented and archived RFC whose §12/criterion 13 required the flip. Verified shipped: `schemas/drill_pack.schema.json` `rules_fact` enum has `draw`; `packages/runtime/src/outcome.ts:14`; `apps/server/src/sourcing/openings.ts:93` |
+| **D65, D71** | `BACKLOG.md:121`, `:117` | `🔨 owned by engine-request-contract`, an archived RFC. Both fixed: `apps/server/src/engine-supervisor.ts:95` now parses the full option contract and `engine-band.ts` consumes min/max/default; `apps/web/src/lib/outcome-presentation.ts:74-82` renders the applied band. (D71 is also owner-orphaned — the RFC text never mentions it) |
+| **D58, D59** | `BACKLOG.md:131`, `:132` | Still `💡 open`; closed in code — `engine-band.ts:74` (`requested ?? profile.default`) ends band inheritance; `opponent-selector.ts:525-526,535-541` widens MultiPV to the legal-move count and records the residual as `offWindow: true` |
+| **Plan-drill objective friction** | `BACKLOG.md:199` | Still says *"only feature-level vocabulary (Q4b) is missing."* `predicate-wave-3:1644-1649` declares this *"now false in an instructive way — the vocabulary was never missing, the **binding** was"*; criterion 18 required the binding half flipped in the landing commit |
+| **Trajectory-format frictions** | `BACKLOG.md:243` | Still 💡 with three gaps. `authoring-frictions` §5 shipped per-leg `branchLengthTarget`; `validator-integrity:716-719` says the row is *"down to two fields, not three"* |
+| **Authored explanation vocabulary** | `BACKLOG.md:360` | Still names *"the timing move-set"* among three contracts that *"genuinely lack a pin"*; `tempo-vocabulary:1375-1378` discharges that clause |
+| **R4 answered: decidedness…** | `BACKLOG.md:266` | `resistance-spectrum` §8 asked for an amendment — the row *"reads as though the variant is ready to build; it is the right variant and it is not yet buildable."* Unamended |
+| **Branch ranking for pruning** | `BACKLOG.md:330` | Still 💡 and *"Do not build either until ruled"*, while its sibling `:285` is ✅ — `branch-set-scale` shipped the pruning-as-management half. Related: `:204` still asks design to ratify a comparison ceiling of 8 that `MAX_COMPARISON_BRANCHES` now fixes |
+
+### 3. Stale design assertions
+
+- **S-23 — `design/01:84` and `:118`.** *"**Hold** — preserve a draw against
+  strong or perfect resistance"* / Outcome Drill *"vs exact/human resistance"* —
+  a two-valued spectrum. `resistance-spectrum:880-885` names these two lines
+  exactly; a third, difficulty-seeking answer now ships. Filed as a ledger row
+  only (`BACKLOG.md:321`).
+- **S-24 — `design/03:49`.** *"perfect, strong, practical, **annoying, or
+  fallible** policies."* `resistance-spectrum:163`: *"'Fallible' is not a missing
+  mode, and it must not become one"* — `human_common` **is** the human-choice
+  policy and "annoying" **is** `practical_resistance`. `BACKLOG.md:321` records
+  the restatement; `design/03` still promises two names that will never exist.
+  (Same row as forward-delta finding A4, reached from the other direction.)
+- **S-25 — `design/04:309-311`.** §7 still lists the **tempo contract** among
+  four things that *"cannot be designed without real packs"*, in the superseded
+  `planMoves`/`opponentArrival`/luxury vocabulary. `tempo-vocabulary:198`
+  replaced the object outright — *"a timing window is not a pair of events, it is
+  a ledger kept between two events"* — at pack 0.17, removing the point-pair form.
+- **S-26 — `design/04:228`.** *"one timing window where the tempo contract
+  bites"* per opening root. `tempo-vocabulary:1401-1406`: §8.2 authors three in
+  one pack and the format permits eight — *"an owner ruling, raised not taken."*
+  Sharper at `:109-113`: `:228` and the shipped corpus are *"in direct
+  disagreement, and the corpus is right until this is fixed"* — 18 of 18 opening
+  packs declare no window.
+- **S-27 — `design/01:25`, `design/01:117`, `design/00:149`.** *"branches run
+  8–20 plies"* / Plan Drill *"8–20-ply segment"* / on-ramp *"2–8 plies."*
+  `authoring-frictions` §5 widened the format band to 2–40 and demoted the Plan
+  number to a warning. Neither doc carries a note (see M-18).
+- **S-28 — `planning/exploration/gates.md:70` (K7).** Still *"**timing is not
+  encodable at all** (§4, two independent attestations, 0/135 usage)."*
+  `tempo-vocabulary:1383-1384` puts a remedy on record, and `gates.md:84` (E3)
+  *was* updated in the same window — **the two gate rows now disagree inside one
+  file.**
+
+### 4. Defect-ledger integrity
+
+**77 defect rows, 77 unique ids** (D1–D74 plus D12a/b/c). **No duplicates.**
+Counted as written: **45 resolved / 32 open**; after the verified corrections
+below, **≈52 closed / 25 open**. Caveat for anyone scripting this: the table
+mixes two conventions — D1–D28 put ✅/⛔ in the **id** cell, while D32–D40 keep 🐞
+in the id cell and put ✅ in the **status** cell. Any single-convention count is
+off by 8 or by 37.
+
+**Closures narrower than they read — the D54 pattern, and it does repeat:**
+
+- **D35 (`BACKLOG.md:152`) — do not flip as-is.** `engine-request-contract`
+  criterion 2 says "D35 closed", but the row names *two* causes and only one
+  landed: `resetSearchState: true` (`opponent-selector.ts:453,558`) sends
+  `ucinewgame` + `Clear Hash`, closing the hash-carryover half, while
+  `go movetime ${this.#strongEngineMovetimeMs}` is still there (`:451`, `:556`) —
+  so `strong_engine` remains wall-clock dependent and is **not** a pure function
+  of position and mode. Flip only with an explicit "movetime residual" note.
+- **D66 (`BACKLOG.md:122`) — cannot be confirmed closed.** The RFC claims closure
+  "as a side effect of the state obligation". The literal defect is unchanged:
+  `engine-supervisor.ts:390` still sends `afterCommands` only after a successful
+  await, and the `finally` at `:402-404` only removes the abort listener. The
+  *consequence* is arguably neutralised because every consumer now sets MultiPV
+  per request (`evidence-queue.ts:338`, `opponent-selector.ts:506,554`), but the
+  restore path itself is unverified. Restate as "consequence closed, restore path
+  unchanged".
+- **D28 (`BACKLOG.md:242`) — half-closed, and never flipped.** Row still reads
+  `🐞 found 2026-08-14` while `planning/roadmap-to-done.md:15` records it shipped.
+  First remedy landed: outcome objectives now fall through to automatic
+  win/draw/loss rules (`pack-orchestrator.ts:450-480`). Second did not:
+  `OBJECTIVE_GRADES_NOTHING` fires only when
+  `PLAN_OBJECTIVES.has(objective.type)` (`pack-validation.ts:421-423`), so a
+  grading-free **outcome** leg still is not a load refusal.
+
+**A ✅ that is not a closure — and it is hiding in a rendering bug:**
+
+- **D69 (`BACKLOG.md:119`) is a 4-cell row in a 3-column table.** It renders as
+  `✅ **RULED 2026-08-15…**`, i.e. as closed, while the trailing `found
+  2026-08-15` cell is dropped. **The fix has not landed:**
+  `packages/runtime/src/practical-difficulty.ts:17` still reads
+  `FLOAT32_POLICY_MASS_TOLERANCE = 32 * 2 ** -23`, unchanged. Should read
+  `💡 open (ruled, unimplemented)`.
+- **D54 (`BACKLOG.md:133`) has the identical 4-cell defect** — and it is the row
+  that documents the narrower-than-it-reads problem. Its "NARROWER THAN IT READS"
+  correction sits in the dropped 4th cell.
+- **D15 (`:184`) breaks into 6 cells** from unescaped pipes inside a code span
+  (`` `human_common | strong_engine | …` ``) and renders as garbage; D19 (`:182`)
+  escapes them correctly. **D16 (`:183`) has only 2 cells** — no status column.
+
+**Owner references — all resolve, but four point at finished work:**
+
+- Every `🔨 owned by X` names a real RFC. But `D73`, `D74` (`:114`, `:115`) name
+  **`engine-request-contract`, an archived RFC, for work that has not started**:
+  D73's own text conditions closure on "once R10's range is configured", the
+  owner ruled `[1000, 2400]` (`:116`, commit `23a28d4`), and
+  `grep -rn "2400" apps/server/src apps/web/src packages/*/src` returns nothing —
+  `application.ts:218` sets only `bandOption: "Elo"`, so the effective band is
+  still the advertised `[0, 5000]`, which is exactly D70's counterexample
+  (accepts 50, rejects 9000). `schemas/drill_run.schema.json:197` is still bare
+  `{"type": "integer"}`. **No archived RFC can own unstarted work** — D60, D70,
+  D73, D74 need a live owner.
+- **D28 is filed outside the defect ledger** (`:242`, inside the "Trajectory-format
+  frictions" table under Authoring-format friction), so it is invisible to any
+  sweep of the defect table at `:114-189`.
+
+**Verified clean (closure claim matches code):** D56 · D45/D41/D42
+(`MAX_COMPARISON_BRANCHES = 8` used both sides) · D37 · D39 · D40 · D38 · D32 ·
+D33 · D34 · D36 · D49 (correctly withdrawn) · D26 · D25 · D22 · D24 · D21 · D20 ·
+D17 · D18 · D14 · D12a · D11 · D10 · D8 · D7 · D6 · D4.
+**Unverifiable from code** (prose- or ruling-only closures, stated as such rather
+than guessed): D5, D13, D12b, D12c, D16, D27, D23.
+
+### 5. Checked and found clean
+
+- **The 2026-08-14 open escalation is discharged**: cursed-win / blessed-loss now
+  has design-tier text at `design/01:104-110`, written by the owner's ruling in
+  `c21ad35`. `authoring-frictions` Deviations 3 and 4 are the model case for this
+  delta.
+- The owner's general principle from `tempo-vocabulary:27-30` — *"authored
+  contexts declare; unauthored contexts default"* — is absorbed twice
+  (`BACKLOG.md:289`; `design/06-campaign.md:114-115` as campaign law 4).
+- R4's decidedness reframe (`resistance-spectrum:80-82`) is absorbed into
+  `design/06-campaign.md:56-73`, `:75-91` and `BACKLOG.md:266`/`:268`.
+- `expression-census`'s three proposed rows all landed (`BACKLOG.md:428`, `:427`,
+  `:133`); its census numbers reproduce unchanged.
+- `transition-primitives` criterion 14 fully honoured (`BACKLOG.md:258` ✅,
+  `:255`, `:224`, `:274` ✅, `:276` correctly left open).
+- `deviation-classes` (`:202`, `:251`, `:252`, `:288` landed; `:201`, `:277`
+  correctly open) and `opening-evidence-path` (`:250`, `:155`, `:248`, `:288`)
+  both flipped cleanly.
+- `validator-integrity`: D32/D33/D37/D38/D39/D40 all ✅ at `BACKLOG.md:148-155`.
+- Docs-tier obligations honoured: `docs/drill-client.md:71-78` replaced the
+  sentence `tempo-vocabulary:1348-1350` declared false; `docs/engine-workers.md:50-71`
+  carries the five-obligation contract; `docs/branch-set-scale.md:9,21` carries
+  the shortfall rule and the shared cap.
+
+### Gate status
+
+**Both lists are non-empty and untriaged.** Reverse side: 7 MISSING concepts, 8
+un-flipped ledger rows, 6 stale design assertions, and 11 defect-ledger integrity
+items. Done is not declared. Every design-tier fix is a **report for the owner**
+(law 5); `design/`, `rfc/README.md`, `apps/` and `packages/` were not edited.
+
+**Process observation.** The 2026-08-14 process fix worked: making the ledger
+flip part of the *implementing* commit caught ten of eleven RFCs. The one that
+escaped, `engine-request-contract`, is also the one with no log entry — so the
+cheapest remaining guard is to require a `planning/exploration/log.md` entry
+before an RFC may be archived, since that is the step whose absence perfectly
+predicted the flow-back failure this wave.

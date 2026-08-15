@@ -41,11 +41,19 @@ sidecar. The exploration job continues alongside (E4 harness, gates) — see
 5. Append a dated entry to `planning/exploration/log.md`: what landed, what changed,
    what's blocked, what's next.
 
-**RFC completion protocol includes the ledger.** Archiving an implemented RFC
-flips the `design/BACKLOG.md` rows it ships (💡→✅ with a one-line summary) in
-the same commit — the 2026-08-14 reverse-trace found flow-back died exactly
-where this was left to a later pass while the RFC registers, edited in-commit,
-stayed perfect.
+**RFC completion protocol includes the ledger AND the log.** Archiving an
+implemented RFC flips the `design/BACKLOG.md` rows it ships (💡→✅ with a one-line
+summary) **and appends its entry to `planning/exploration/log.md`** in the same
+commit. **The log clause was added 2026-08-15 by claude on measured evidence and
+is the owner's to veto:** the reconciliation gate found the 2026-08-14 ledger fix
+worked — 10 of 11 waves flowed back — while the failure **moved one tier up**, with
+none of the eleven named in `design/03-product-breadth.md` or
+`planning/exploration/gates.md`. `engine-request-contract` was the single RFC that
+flowed back to nothing, and it was **also the only one with no log entry** — the
+absence predicted the failure exactly, which is what makes it a cheap guard rather
+than more ceremony. The original ledger clause stands on its own evidence: the
+2026-08-14 reverse-trace found flow-back died exactly where it was left to a later
+pass, while the RFC registers, edited in-commit, stayed perfect.
 
 New idea mid-task? BACKLOG row first ("an idea missing from the ledger is a process
 bug"), then continue.

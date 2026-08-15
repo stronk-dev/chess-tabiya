@@ -2062,3 +2062,49 @@ material excess still refuses by the typed
 `PRACTICAL_RESISTANCE_POLICY_MASS_INVALID` code and maps to HTTP 422 instead of
 falling through to an unhandled 500. D57–D59 were not bundled; their behavior
 requires separate contracts.
+
+## 2026-08-15 (night) — reconciliation over twelve waves; the failure moved one tier up
+
+**The gate ran** for the first time since morning, across the largest delta it has
+had: eleven archived RFCs, nine research dossiers, a new design doc, ~25 new
+defect rows.
+
+**The headline is a process result, not a defect list.** The 2026-08-14 fix —
+making the ledger flip ride in the implementing commit — **worked**: 10 of 11 waves
+flowed back correctly. But **the failure moved one tier up**. None of the eleven is
+named anywhere in `design/03-product-breadth.md` or `planning/exploration/gates.md`;
+the gate surface is now the unmaintained tier. Sharper still: **three gate rows are
+stale because the previous delta run's own corrections were never carried into
+them** — the 08-14 run verified `comparisonStrips`, `/runs/:id/distill` and
+`/progress/recommendations` in code and wrote that into the dossier, while the gate
+rows it was verifying still say all three do not exist.
+
+**A design-tier error of claude's, corrected.** `design/06-campaign.md` claimed the
+difficulty-availability axis "exists as `branchDecidedness`… each with a named
+ground". Verified false on both counts: only `decided` carries a **ground**, the
+other two carry a `reason`, and `DecidednessGround` has **no human-outcome kind** —
+the very thing R9 established as the openings' oracle. `campaign-synthesis.md` had
+stated it correctly, with both qualifiers; the design doc dropped them. This is the
+class of error the whole reconciliation discipline exists to catch, committed by the
+person running it.
+
+**Ledger integrity, three fixes.** D69 was marked ✅ on the **ruling** — a ruling is
+not a fix, `practical-difficulty.ts` is unchanged, and it closes when
+`fixture-realism` lands. D35 must **not** flip: `engine-request-contract` closed the
+*clear* obligation, not the movetime nondeterminism. And `expression-census` existed
+in **neither** register table — its Active row was removed on archive and no Archive
+row added, so a shipped RFC was invisible.
+
+**Process change adopted, owner-vetoable.** The completion protocol now requires the
+**log entry** in the archiving commit alongside the ledger flip. The evidence is
+exact: `engine-request-contract` was the one RFC that flowed back to nothing, and
+the only one with no log entry. The absence predicted the failure perfectly, which
+is what makes it a guard rather than ceremony.
+
+**Also clean, and worth recording:** the 2026-08-14 escalation is discharged —
+cursed-win/blessed-loss now has design-tier text. Flow-back was *better* this wave
+than proposed in one case. All nine dossiers have coverage-matrix rows. And the
+expression census's first real run found **zero genuinely dead expressions** across
+36 zero-firing subjects, with every headline figure reproducing exactly.
+
+**Gate status: both lists non-empty. Done is not declared.**
