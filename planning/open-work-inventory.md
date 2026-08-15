@@ -26,7 +26,25 @@ direction from what the owner feared:
 | Design-tier law promotions | 2 | Declared-vs-executable law; graduation-gate statement. Owner-tier text, not RFCs |
 | **Genuine unscheduled RFC-shaped work** | **~16** | Listed below |
 
-## The ~16 that are real, unscheduled feature work
+## VERIFICATION PASS — 2026-08-15, same day
+
+This list was written to correct an unverified claim and was itself only
+partly verified. Checked against `docs/` and code the same afternoon:
+
+| # | Item | Verified state |
+|---|---|---|
+| 1 | Game story ~8 slides | **SHIPPED** — `docs/game-import-and-story.md`, client displays up to eight ranked moments |
+| 2 | Own-game review import | **SHIPPED** — same doc: `imported` session kind, lichess URL + PGN, story re-entry branches, PGN export |
+| 5 | Branch ranking | **DOCTRINE CONFLICT, not a gap** — `n-way-comparison.md:11-12` refuses ranking by design; needs an owner ruling, see the ledger row |
+| 8 | Comparison column ceiling | **largely settled** — the doc states "Eight is a readability cap, not a data integrity limit"; the row's "ruling wanted" may be stale |
+| 3, 4, 9, 12, 13, 14, 15 | threat viz, view shapes, `concept_violation`, what-if steering, explorer recency, position-scan, annoying/fallible | **confirmed genuinely open** (zero hits in docs and code) |
+| 6, 7, 10, 11, 16 | LLM voice, compare sidebar, prediction delivery, predicate wave 2, pack A discrepancy | **partially shipped or adjacent to shipped work** — need item-level checks before any are commissioned |
+
+**The lesson, twice in one day:** a ledger row is a claim about the past, not
+evidence about the present. Check `docs/` and code before commissioning work
+against any row. Two RFC agents were commissioned and stopped for exactly this.
+
+## The ~16 as originally written (uncorrected — see the pass above)
 
 Ordered by how directly they trace to something the owner asked for.
 
