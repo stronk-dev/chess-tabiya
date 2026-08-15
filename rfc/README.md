@@ -8,6 +8,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `live-marker-quality.md` | draft (awaiting cross-review) | — | **claims nothing versioned**. Audits all four live markers (1 measured and failing, 3 never measured); narrows `irreversibility` to `last_of_role`; re-homes D48 (whose fix was leaving with `transition-primitives`' withdrawn live tier); closes the D51 permission bypass normatively. Proposes **L1–L6**, the standing admission rule for the live surface |
+| `engine-request-contract.md` | draft (awaiting cross-review) | — | claims **run schema 0.15** + **migration 20** (stamp-only), both **contingent** — if cross-review prefers retry-then-refuse over the `offWindow` marker it claims nothing and both return to the pool. **No pack-schema claim: 0.23 stays free** (a band range is a deployment capability, not a document fact, so the bound lives in `/capabilities` + a named 422 and the committed `targetElo: 1939` pack stays valid) |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
 `onramp-guard`, then `open-answer-grading`. Shared-resource claims (migrations, pack
