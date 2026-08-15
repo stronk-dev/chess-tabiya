@@ -15,35 +15,41 @@
   transition census is cheap*, *R2 REFUTED: routing is a renderer, not a detector*,
   *`structuralDelta`'s cost is a defect distinct from its deadness*, *`structuralDelta`
   and `vacationReading` ship and are dead*, *Discovered-threat visualisation*
-- **Exploration gate:** **owner ruling 2026-08-15**, recorded in `rfc/predicate-wave-3.md:148-151`:
+- **Exploration gate:** **owner ruling 2026-08-15**, recorded in
+  `rfc/archive/predicate-wave-3.md:146-147`:
   *"ship it and make sure they're integrated properly for the just play and drill packs."*
-  This overturns `rfc/predicate-wave-3.md` §7 F4's deferral. The ruling is explicit about
-  *why* the deferral falls: F4 refused on the `timingWindow` precedent, that precedent is
+  This overturns `rfc/archive/predicate-wave-3.md` §7 F4's deferral. The ruling is explicit
+  about *why* the deferral falls: F4 refused on the `timingWindow` precedent, that precedent is
   about shipping a grammar with **no consumer**, and the ruling supplies two.
 - **Depends on:** nothing unshipped. `rfc/archive/structural-reading.md` (implemented)
   supplies the four admission rules, the `structuralExpression` grammar this RFC embeds
   rather than copies, and the evidence-ref discipline; `rfc/archive/predicate-wave-2.md`
   (implemented) supplies the exhaustive-dispatch law (D26); `rfc/archive/adaptive-guidance.md`
   (implemented) supplies `AssistanceConfig` and the passive-marker delivery pattern this
-  RFC reuses **without changing**. `rfc/predicate-wave-3.md` **implemented while this draft
-  was being written** (pack 0.18 is on the tree) and is still a *code* dependency in one
-  direction only — see §12.
-- **Parent / amends:** **`rfc/predicate-wave-3.md` §7 F4** (its specification input, extended
-  not re-derived), **`rfc/archive/outcome-drill-grading.md`** (a further `successCondition`
-  kind), **`rfc/archive/drill-pack-format.md`** (pack schema 0.18 → 0.19, additive),
-  **`rfc/archive/adaptive-guidance.md`** (`PivotalKind` widens by one)
+  RFC reuses **without changing**. `rfc/archive/predicate-wave-3.md` **implemented AND archived
+  while this draft was being written** — it is a *code* dependency in one direction only, see §12.
+- **Parent / amends:** **`rfc/archive/predicate-wave-3.md` §7 F4** (its specification input,
+  extended not re-derived), **`rfc/archive/outcome-drill-grading.md`** (a further
+  `successCondition` kind), **`rfc/archive/drill-pack-format.md`** (pack schema 0.21 → 0.22,
+  additive), **`rfc/archive/adaptive-guidance.md`** (`PivotalKind` widens by one)
 - **Supersedes / superseded by:** —
-- **Pack schema:** **0.19.** Free and claimed here loudly: `rfc/archive/validator-integrity.md`
-  deliberately declined 0.19 and claims nothing versioned, and `rfc/predicate-wave-3.md:39-43`
-  states in its own header that it "neither takes nor reserves it". **Re-verified on the
-  tree at drafting time and it moved underneath this draft: 0.18 has now LANDED.**
-  `DRILL_PACK_SCHEMA_VERSION` is `"0.18"` (`packages/schema/src/index.ts:2`), the `$id` at
-  `schemas/drill_pack.schema.json:3` reads `urn:chess-tabiya:schema:drill-pack:0.18`,
-  `plan_consequence` is the seventh `successCondition` arm (`:379`), and `piece_count` /
-  `king_zone` / `piece_distance` ship (`:472-474`). So 0.19 is unambiguously the next number
-  and is not blocked behind a draft. 0.20 is claimed by `opening-evidence-path`, 0.21 by
-  `deviation-classes`; **0.22+ is free**. **This draft does not edit `rfc/README.md`** — the
-  register row is flagged for the owner/coordinator to add.
+- **Pack schema:** **0.22.** **CORRECTED 2026-08-15 during cross-review: this draft originally
+  claimed 0.19 and the claim is now impossible.** `DRILL_PACK_SCHEMA_VERSION`
+  (`packages/schema/src/index.ts:2`) and the `$id` at `schemas/drill_pack.schema.json:3` both
+  read **`0.20`** on the current tree — `opening-evidence-path` has landed (the `assessedBy`
+  `kind: "engine"` arm is present), and the pack version is a single monotonic shared constant
+  (`rfc/README.md` §Pack-schema-version register), so a draft cannot land a number *below* the
+  tree. 0.19 is a permanently skipped slot in the register — `rfc/archive/validator-integrity.md`
+  declined it (`:655`, *"The register's 0.19 slot stays free"*) and
+  `rfc/archive/predicate-wave-3.md:39-43` neither took nor reserved it — and the skip is now
+  frozen by 0.20 landing over it. **0.21 is claimed by `deviation-classes` (draft, not landed —
+  `$defs/deviation` still carries only `at`/`moveUci`/`class`/`offObjective`/`note`), so this RFC
+  takes 0.22 and rebases down to 0.21 rather than renumbering unilaterally if `deviation-classes`
+  stalls.** Verified on the current tree: `plan_consequence` is still the **seventh**
+  `successCondition` arm and 0.20 added no arm, so the eighth-arm claim in §4.1 survives the move.
+  **This draft does not edit `rfc/README.md`** — its Active row already exists (`README.md:13`,
+  written by the coordinator and still saying 0.19); the Active row's version and the missing
+  **0.22 register row** are both flagged for the owner/coordinator.
 - **Run schema / migration:** **none, and that is normative.** Run schema stays **0.14**
   (`packages/schema/src/index.ts:1`); `STORAGE_VERSION` stays **19**
   (`apps/server/src/storage.ts:387`, landed with `resistance-spectrum` as migration 19).
@@ -52,13 +58,18 @@
   (`packages/runtime/src/evidence-ref.ts:1-30`) is migration-free by established precedent —
   `predicate-wave-2` added three `structure-*` facts at pack 0.13 and `predicate-wave-3` added
   three more (`structure-piece-count`, `structure-king-zone`, `structure-piece-distance`,
-  `evidence-ref.ts:27-29`) at 0.18, both with no migration, because no historical row can
-  contain a string that did not exist and nothing narrows.
+  `evidence-ref.ts:27-29`) at 0.18, both with no migration. Re-verified as a *mechanism* rather
+  than an analogy: refs are persisted as bare `string`s
+  (`ObjectiveTransitionRule.evidenceRefs` in `objective.ts`), no JSON
+  schema enumerates them (`grep "rules:" schemas/` is empty), so no historical row can contain a
+  string that did not exist and nothing narrows. **Migration-free is not work-free** — §4.5 lists
+  the four files that must move in lockstep, which is the correction the `"draw"` widening at
+  0.16 (`rfc/archive/authoring-frictions.md`) had to make after missing exactly this.
 - **Shape-entry schema:** **unchanged, deliberately.** A shape entry's
   `plans[].success.signature` is a `structuralExpression` evaluated against **one** position;
   a transition expression is not one and is refused there by §7 R3. `SHAPE_ENTRY_SCHEMA_VERSION`
-  is now `"0.3"` (`packages/schema/src/index.ts:3`, landed with `predicate-wave-3`); this RFC
-  leaves it there and touches neither copy of the duplicated `$defs`.
+  is `"0.3"` (`packages/schema/src/index.ts:3`, landed with `predicate-wave-3` and unmoved by
+  0.20); this RFC leaves it there and touches neither copy of the duplicated `$defs`.
 - **Client preference:** **unchanged.** `AssistanceConfig` stays **v4**
   (`packages/runtime/src/assistance.ts:3-14`) and `apps/web/src/lib/assistance-preference.ts`
   gains no migration branch. §5 explains why the Just Play surface needs no new switch, and
@@ -68,7 +79,7 @@
 ## Summary
 
 Every predicate in the shipped vocabulary is a feature of a *position*; none is a feature of
-a *move*. `rfc/predicate-wave-3.md` §7 F4 established that the missing category is real, that
+a *move*. `rfc/archive/predicate-wave-3.md` §7 F4 established that the missing category is real, that
 it is an **extraction rather than an invention**, and that it must be a **sibling grammar**
 with a sibling evaluator — `matchesTransitionExpression(before, moveUci, after)` — never a
 `StructuralExpression` member, because the root position has no predecessor and
@@ -76,8 +87,8 @@ with a sibling evaluator — `matchesTransitionExpression(before, moveUci, after
 position by construction. F4 then refused to ship it, on the `timingWindow` precedent: a
 grammar shipped ahead of its consumer earns zero uses. That precedent is now sharper than
 when F4 wrote it — re-verified this pass, **`timingWindow` and `timingWindows` have 0
-matches across all of `content/`**, on a tree where pack schema 0.17 has *landed* (and 0.18
-after it) and the whole subsystem (schema `$defs`, `successPredicate` arm, seven verdicts, six `TIMING_WINDOW_*`
+matches across all of `content/`**, on a tree where pack schema 0.17 has *landed* (and 0.18,
+0.19-skipped and 0.20 after it) and the whole subsystem (schema `$defs`, `successPredicate` arm, seven verdicts, six `TIMING_WINDOW_*`
 refusal codes) is code-complete.
 
 The owner's 2026-08-15 ruling supplies the two consumers and this RFC ships all three
@@ -112,7 +123,7 @@ central risk of this RFC, because the whole point of the category is telling lea
 
 ### 1. What F4 specified, and what this RFC adds to it
 
-`rfc/predicate-wave-3.md:1289-1374` is the specification input. It is already written and
+`rfc/archive/predicate-wave-3.md:1289-1374` is the specification input. It is already written and
 cross-reviewed, and this RFC extends it rather than re-deriving it. Inherited verbatim:
 
 | F4's finding | Where | Taken as-is |
@@ -140,7 +151,7 @@ makes a predicate *tempting*, not what makes it right.
 
 Re-verified on the current tree, and it is worse than F4 could state: pack schema **0.17 has
 landed** (`rfc/archive/tempo-vocabulary.md` is in the archive; the tree has since moved on to
-0.18), so the timing-window subsystem is now fully shipped — `$defs/timingWindow`
+**0.20**), so the timing-window subsystem is now fully shipped — `$defs/timingWindow`
 (`schemas/drill_pack.schema.json:684`), the `timing_window` success-condition arm (`:367`),
 `$defs/tempoVerdict` (`:708`), the `timingWindow` `ObjectivePredicate`
 (`packages/runtime/src/objective.ts:87-93`), the `successPredicate` arm
@@ -164,7 +175,7 @@ F4 was not:
 
 Out, each with the reason rather than deferral language:
 
-- **Prophylaxis.** `rfc/predicate-wave-3.md` §7 F9: the missing term is an opponent model, not
+- **Prophylaxis.** `rfc/archive/predicate-wave-3.md` §7 F9: the missing term is an opponent model, not
   a board fact. `rfc/archive/resistance-spectrum.md` owns opponent modelling. Not absorbed,
   not re-defined, no name reserved (§7 R4).
 - **Tempo accounting, timing windows, the luxury budget.** `rfc/archive/tempo-vocabulary.md`
@@ -177,7 +188,7 @@ Out, each with the reason rather than deferral language:
   rate. The static leaf survives and is being admitted by `predicate-wave-3` as
   `piece_distance`. §7 R1 refuses the delta and states the mechanism that keeps it out.
 - **`structuralDelta`.** Excluded, and the exclusion is enforced rather than promised (§8).
-- **Intent-relative grading.** `rfc/predicate-wave-3.md` §7 F1's blocker is unchanged: the
+- **Intent-relative grading.** `rfc/archive/predicate-wave-3.md` §7 F1's blocker is unchanged: the
   learner's declared plan is not recorded as data. A transition census does not change that.
 - **Multi-move claims** — "over the last four moves the knight went d2–f1–g3–f5". Piece-route
   reconstruction already ships (`packages/runtime/src/compare-strips.ts:40-46`, exported type
@@ -207,7 +218,7 @@ several times on 2026-08-15; several standing citations have drifted and are cor
 **Citation drift, recorded because several living documents carry it and because the tree moved
 four times on 2026-08-15 — twice while this draft was being written.**
 `design/BACKLOG.md` (*`structuralDelta` and `vacationReading` ship and are dead*),
-`design/research/move-primitive-computability.md:125-126` and `rfc/predicate-wave-3.md:1307`
+`design/research/move-primitive-computability.md:125-126` and `rfc/archive/predicate-wave-3.md:1307`
 all cite `index.ts:52,55` for the two dead exports; the current lines are **`index.ts:71` and
 `:74`**. `rfc/archive/adaptive-guidance.md:18` cites `structure.ts:248,283` for
 `structuralReading`/`structuralDelta`; actual **`:449`** and **`:498`**. The dossier's
@@ -242,7 +253,7 @@ undefined at the root and would force every one-FEN call site —
 (`packages/runtime/src/objective.ts:168-192`), `guidanceShapes`' trigger evaluation, and the
 static validator's `authoredSpineFens` check (`apps/server/src/pack-validation.ts:474`) —
 either to carry a path it does not have or to fabricate one. This is the same argument
-`rfc/predicate-wave-3.md` §7 F2 uses against history predicates, and it is inherited rather
+`rfc/archive/predicate-wave-3.md` §7 F2 uses against history predicates, and it is inherited rather
 than restated as taste.
 
 #### 2.1 Nodes — five, closed
@@ -266,14 +277,22 @@ the same `rules:structure-*` refs its embedded expression always did. What it bu
 1. **It removes the authoring fan.** "The move opened the c-file *and* White now has a
    half-open c-file" is one expression instead of two conditions in two different fields
    under two different kinds.
-2. **It subsumes the control-delta row.** F4 marks "control delta on a square or region"
-   admissible (`:1329`). It is not admitted as a leaf here, because it is exactly
+2. **It subsumes the control-delta row — the square form of it.** F4 marks "control delta on a
+   square or region" admissible (`:1329`). The **square** form is not admitted as a leaf here,
+   because it is exactly
    `all[ position(before, direct_attack_count(w, e5, atMost, 1)),
-   position(after, direct_attack_count(w, e5, atLeast, 2)) ]` — shipped arithmetic
-   (`schemas/drill_pack.schema.json:466`), no new kind. Two spellings of one census is the rot
-   `rfc/predicate-wave-3.md` §1 exists to prevent, and that RFC retired `pawn_count` and
-   declined `king_distance` on exactly this ground. The disposition here needs no deprecation
-   because nothing shipped.
+   position(after, direct_attack_count(w, e5, atLeast, 2)) ]` — shipped arithmetic, no new kind.
+   Two spellings of one census is the rot `rfc/archive/predicate-wave-3.md` §1 exists to prevent,
+   and that RFC retired `pawn_count` and declined `king_distance` on exactly this ground. The
+   disposition here needs no deprecation because nothing shipped.
+   **The region form is a separate disposition and cross-review corrected the draft, which
+   claimed the whole row.** "How many squares in this region changed control" is a cardinality
+   over an unnamed set; two `position` nodes cannot express it (the shipped `quantified` node
+   takes `some`/`every` over a region, never a count), so rule 5 does **not** exclude it. It is
+   refused here under **rule 3, zero attestations** — no shape entry, plan or pack has asked for
+   it — and routed to R8 with `mirrored`, `quantified` and `mover`. Recorded because "rule 5
+   excludes control delta" was doing work it cannot do, and a later wave reading that sentence
+   would have thought the region form was already disposed of.
 3. **It makes `structuralDelta` unnecessary rather than merely unused** (§8).
 
 And it is cheap in the way that matters: `matchesStructuralExpression` is a *targeted*
@@ -281,12 +300,17 @@ evaluator (verified: `structure.ts:417-431` dispatches straight to
 `matchesStructuralFeature`; it never calls `structuralReading`). Two `position` nodes cost two
 predicate evaluations, not two full readings.
 
-**Not admitted as nodes, each with its reason.** `mirrored` and `quantified`
-(`structure.ts:427-428`) are not lifted into the transition grammar: zero attestations, and
-both remain reachable *inside* a `position` node, so nothing is lost by composition. A
-`mover` node ("the move was played by White") is not admitted: every leaf already carries a
-`color`, and objective rules already know whose turn it is. Both are open questions, not
-silent omissions.
+**Not admitted as nodes, each with its reason.** `mirrored`, `quantified` **and `pieceOnSquare`**
+— the shipped `StructuralExpression` carries seven kinds, not five, and this draft's enumeration
+originally omitted `pieceOnSquare` — are not lifted into the transition grammar: zero
+attestations, and all three remain reachable *inside* a `position` node, so nothing is lost by
+composition. `pieceOnSquare` in particular is the one a reader would expect to want ("the knight
+that was on f3 is now on e5"), and the composition that substitutes for it is
+`all[ position(before, pieceOnSquare(f3, white knight)), position(after, pieceOnSquare(e5, white
+knight)) ]` — which is a pair of position facts and not a transition fact, exactly as rule 5
+requires. A `mover` node ("the move was played by White") is not admitted either: every leaf
+already carries a `color`, and objective rules already know whose turn it is. All are open
+questions (R8, open question 5), not silent omissions.
 
 **Depth cap.** Four levels, the same cap `STRUCTURAL_EXPRESSION_TOO_DEEP` enforces
 (`apps/server/src/pack-validation.ts:235,240,247` — *"structural expressions may be nested at
@@ -304,9 +328,19 @@ because otherwise every static census re-enters as a delta and the vocabulary do
 > *pairing*, not the difference of two position censuses.** Anything that is
 > `census(after) − census(before)` is expressible with two `position` nodes and is refused.
 
-That rule is what excludes `control_delta` (§2.1), what excludes `structuralDelta` (§8), and
-what each of the six admitted leaves has to survive. It is stated once here and applied in
-the table below rather than argued six times.
+**The operative test, sharpened in cross-review.** "Expressible with two `position` nodes" is
+the part that decides cases, and it has a narrow reach: the static grammar's counting leaves all
+take a **named** square, file, role or region, so two `position` nodes can express a delta only
+when the author names the thing. A leaf therefore survives rule 5 if **either** its quantity
+needs both boards jointly (same-square identity, a surviving ray key, a threshold crossing, a
+UCI) **or** it is a cardinality over a set the static grammar cannot name. Both routes appear in
+§2.3's table and the draft conflated them.
+
+That rule is what excludes the square form of `control_delta` (§2.1), what excludes
+`structuralDelta` (§8), and what each of the six admitted leaves has to survive. It is **not**
+what excludes the region form of control delta, or a `check` leaf (R2 excludes that on the
+position/transition boundary), or `pieceOnSquare` — those are rule 3 and category dispositions,
+recorded where they belong so rule 5 is not credited with work it does not do.
 
 #### 2.3 Leaves — six, closed
 
@@ -330,15 +364,45 @@ export type TransitionFeature =
 
 | Leaf | Exact definition, one sentence | Rule 5 | Harness selectivity (upper bound) |
 |---|---|---|---|
-| `attacked_squares_changed` | The number of squares **occupied by an enemy piece in both positions** that at least one piece of `color` attacks in one position and in no piece of `color` attacks in the other | Pairing: the both-occupied conjunct is not evaluable on either position alone | **50.6%** |
-| `defended_squares_changed` | The same over squares occupied by a **friendly** piece of `color` in both positions | Pairing, same reason | **74.9%** |
-| `slider_lines_changed` | The number of (slider square, board-edge endpoint) rays owned by `color` that exist in **both** positions and whose blocker count fell (`opened`) or rose (`closed`) | Pairing: the ray key must survive the move; the enumeration is unbounded, so no static leaf names it | **52.6%** |
+| `attacked_squares_changed` | The number of squares **occupied by an enemy piece in both positions** that at least one piece of `color` attacks in one position and no piece of `color` attacks in the other | **Unnamed-set cardinality** (primary) + the both-occupied conjunct (secondary) | **≤ 50.6%** |
+| `defended_squares_changed` | The same over squares occupied by a **friendly** piece of `color` in both positions | Same, both reasons | **≤ 74.9%** |
+| `slider_lines_changed` | The number of (slider square, board-edge endpoint) rays owned by `color` that exist in **both** positions and whose blocker count fell (`opened`) or rose (`closed`) | Pairing: the ray key must survive the move; **and** unnamed-set cardinality — the enumeration is unbounded, so no static leaf names it | **52.6%** |
 | `escape_squares_changed` | Summed over pieces of `color` standing on the **same square** in both positions: the number of geometric destination squares uncontrolled by the opponent that were lost or gained | Pairing: same-square identity | **61.2%** |
 | `defended_duties_changed` | The number of pieces of `color` on the same square in both positions that cross the ≥2 threshold of *attacked friendly pieces defended* (`acquired`) or fall below it (`released`) | Pairing: a threshold **crossing**, not a count | **6.7%** |
-| `move_irreversibility` | Whether the move is classified `castled` / `last_of_role` / `pawn_break` by the shipped `pivotal.ts:41-57` arithmetic, or zeroed the FEN halfmove clock | Pairing: needs the UCI and both boards | **13.2%** (`clock_zeroed`: 13.8%) |
+| `move_irreversibility` | Whether the move is classified `castled` / `last_of_role` / `pawn_break` by the shipped `pivotal.ts:41-57` arithmetic, or is a capture or pawn move (`clock_zeroed`, see below) | Pairing: needs the UCI and both boards | **13.2%** (`clock_zeroed`: 13.8%) |
 
-`Color` and `role` reuse the shipped schema `$defs` (`schemas/drill_pack.schema.json:427-430`
-for `role`); nothing new is minted for either.
+**Rule 5, restated correctly for the first two leaves — a cross-review correction.** The draft
+justified `attacked_squares_changed` and `defended_squares_changed` as pairings *because of the
+both-occupied conjunct*. That conjunct is real (§2.4) but it is not what keeps the leaf out of
+rule 5's ban: without it, the quantity would still not be `census(after) − census(before)` in the
+sense rule 5 means, because **rule 5's ban bites on quantities that two `position` nodes can
+express, and two `position` nodes can only ever name a square.** The operative property is that
+these leaves count over an **unnamed set** — every enemy-occupied square, every ray, every safe
+destination — and the shipped static grammar has no cardinality-over-an-unnamed-set operator.
+That is the honest reading, it is what actually distinguishes them from `control_delta` on a
+named square, and it is what the region-form disposition in §2.1 turns on. Stated here so a
+wave-4 author applying rule 5 applies the test that works.
+
+**`clock_zeroed` — narrowed, because as drafted it breached rule 5 and contradicted R2.** The
+draft defined it as *"zeroed the FEN halfmove clock"*, i.e. `halfmoveClock(after) === 0`. That is
+a fact about the `after` position alone, which is precisely the ground R2 uses to refuse a `check`
+leaf ("it is a fact about the `after` position and the side to move there"). Two additional
+problems: consecutive captures each leave the clock at 0, so an after-only test cannot distinguish
+"this move zeroed it" from "it was already 0"; and the halfmove clock is not read by any shipped
+leaf, so a `position` node cannot express it either. **Specified instead as a property of the
+move: the move was a capture or a pawn move** — which is what zeroes the clock under FIDE
+counting, is derivable from the shipped `capturedRole` plus the mover's role, needs both boards
+and the UCI, and therefore passes rule 5 on the same footing as the other three subkinds.
+
+**And `clock_zeroed` is new arithmetic, not extracted arithmetic.** The shipped
+`IrreversibilityDetail` union has three subkinds (`castled`, `last_of_role`, `pawn_break`);
+`clock_zeroed` is a fourth that exists only in the transition leaf. It does **not** join
+`IrreversibilityDetail` and does **not** produce a `PivotalKind` marker — that would change
+shipped pivotal behaviour, which criterion 3 forbids. §1's "code motion with no behaviour change"
+claim covers `capturedRole`, `irreversibility` and the ray walk; it does not cover this subkind,
+and the draft's leaf-table wording ("classified … by the shipped arithmetic") implied otherwise.
+
+`Color` and `role` reuse the shipped schema `$defs`; nothing new is minted for either.
 
 **Geometric, never legal.** Destination sets are board geometry — attack sets minus own
 pieces, plus pawn pushes (`tools/r1r2-primitives-harness/primitives.ts:122-136`). No legality
@@ -511,27 +575,88 @@ refusal.**
 | `renderTransitionObservation`, `renderTransitionSpec` (new, `apps/web/src/lib/transition-sentences.ts`) | — | `never` guards, mirroring `structural-sentences.ts:29-30,59-60` |
 | `renderPivotalMarker` (`packages/runtime/src/pivotal.ts:98-106`) | **not exhaustive** — `:102` casts `marker.detail as IrreversibilityDetail` and falls through | see §5.3: this is a latent defect that the widening would trip, and it is fixed here |
 
-#### 4.4 Load refusals — five, and the first is the point of the RFC
+#### 4.4 Load refusals — six rows, five of them new codes, and the first is the point of the RFC
+
+**Read §4.4a first.** The first row was rewritten in cross-review: as originally drafted it
+refused a class of correct authoring, and the reason is a distinction the repo has already
+measured and ledgered.
 
 | Code | Fires when | Severity | Why |
 |---|---|---|---|
-| **`TRANSITION_EXPRESSION_NEVER_PRESENT`** | The expression is `false` at **every** transition of the pack's own spine | **error** | The direct answer to the `timingWindow` precedent. A condition that never fires on the content it ships with is not authored, it is decorative. **Directly modelled on `PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT`, which landed with 0.18 at `pack-validation.ts:474`** and reads `!authoredSpineFens(pack).some((fen) => matchesStructuralExpression(fen, signature))`. Also mirrors `TIMING_WINDOW_NEVER_RESOLVES` (`:361`) |
-| `TRANSITION_EXPRESSION_ALWAYS_PRESENT` | The expression is `true` at every spine transition **and the spine has ≥ 4 transitions** | warning | The noisy leaves' failure mode is tautology, not vacuity — `structuralDelta` reports something on 93.3% of plies and defences change on 74.9%. A condition true everywhere grades nothing. A warning, not an error, because a short spine can be legitimately uniform |
+| **`TRANSITION_EXPRESSION_NEVER_PRESENT`** | The condition's `to` is **`achieved`, `preserved` or `transitioned`** and the expression is `false` at every transition in the pack's **authored transition set** (§4.4a) | **error** | The direct answer to the `timingWindow` precedent, scoped by polarity so it is a coverage claim the author actually made. **Directly modelled on `PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT` (`pack-validation.ts`, landed with 0.18)**, which reads `!authoredSpineFens(pack).some((fen) => matchesStructuralExpression(fen, signature))`, and on the polarity guard in its sibling **`SHAPE_REFERENCE_NEVER_PRESENT`**, which fires *only* when `reference.relation === "present"` |
+| **`TRANSITION_EXPRESSION_NEVER_ABSENT`** | The condition's `to` is **`degraded` or `failed`** and the expression is `true` at every transition in the authored transition set | **error** | The polarity mirror. A failure condition that fires on the model line's every move fails the pack's own demonstration. This is the failure-side analogue of the row above, and it is the reason the row above must not simply be inverted onto failure conditions |
+| `TRANSITION_EXPRESSION_ALWAYS_PRESENT` | The expression is `true` at every transition in the authored set **and that set has ≥ 4 transitions**, for a `to` of `achieved`/`preserved`/`transitioned` | warning | The noisy leaves' failure mode is tautology, not vacuity — `structuralDelta` reports something on 93.3% of plies and defences change on 74.9%. A condition true everywhere grades nothing. A warning, not an error, because a short line can be legitimately uniform |
 | `TRANSITION_COUNT_OUT_OF_RANGE` | `count > 64` on any counting leaf | error | Outside the bound the leaf is a constant. The bound starts at the board size and criterion 5 requires it tightened to the measured corpus maximum per leaf, the way `PIECE_DISTANCE_OUT_OF_RANGE` is per-role |
 | `NEGATIVE_FEATURE_COUNT` | `count < 0` | error | **Reused, not added** (`pack-validation.ts:194,203,260`). A second spelling of a shipped refusal is the same rot as a second spelling of a census |
 | `TRANSITION_KIND_UNRECOGNISED` | The `never` fallthrough in the validator's leaf and node walks | error | Mirrors `STRUCTURAL_KIND_UNRECOGNISED` (`:231`, `:264`) |
 | `TRANSITION_EXPRESSION_TOO_DEEP` | Nesting exceeds four levels | error | Mirrors `STRUCTURAL_EXPRESSION_TOO_DEEP` (`:235,240,247`) |
 
-**The satisfiability check is a three-line sibling of a function that already ships.**
+**The walk is a three-line sibling of a function that already ships.**
 `authoredSpineFens(pack)` (`apps/server/src/pack-validation.ts:170-186`) replays the spine
 from `pack.start.fen` with chessops — `Chess.fromSetup(parseFen(pack.start.fen).unwrap()).unwrap()`
 at `:171`, recursive `visit` at `:173-184`, skipping illegal moves at `:177` — and returns the
-resulting FENs. `authoredSpineTransitions(pack)` is the same walk emitting
-`{ before, moveUci, after }` instead of `after` alone, and
-`TRANSITION_EXPRESSION_NEVER_PRESENT` is `!authoredSpineTransitions(pack).some(t =>
-matchesTransitionExpression(t.before, t.moveUci, t.after))`. At 29.06 µs/ply the whole corpus
-is ≈18 ms. **The precedent for this rule is not analogical — it is the same function with one
-more field.**
+resulting FENs. `authoredTransitions(pack)` is the same walk emitting
+`{ before, moveUci, after }` per **edge** instead of `after` per **node**, plus the deviation
+edges (§4.4a). At 29.06 µs/ply the whole corpus is ≈18 ms. **The precedent for the walk is not
+analogical — it is the same function with one more field.** The precedent for the *refusal* is
+weaker than that, and §4.4a says exactly how much weaker.
+
+#### 4.4a What the refusal actually measures — coverage, not satisfiability
+
+**This is the correction cross-review forced, and it is the most important paragraph in §4.**
+
+The repo has already drawn this line and ledgered it. `design/BACKLOG.md`, row *No instrument
+answers "where does this expression fire?"*: **"'fires on zero corpus positions' is not the same
+defect as 'is unsatisfiable' — the first is a coverage fact, the second is a bug, and only the
+second justifies refusal."** The live example is in `planning/content-era/log.md` §*The
+knight-vs-bishop fan, and why 0 firings is not the same defect twice*:
+`knight-vs-bishop/black-anchor-the-knight` is an 18-arm outpost enumeration that fires on **0 of
+the 346 corpus positions containing a black knight** while **36 of 36 constructed anchors fire
+true, 36 of 36 pawn-evictable positions fire false, and 36 of 36 undefended-knight positions fire
+false**. It discriminates perfectly; the corpus simply contains no instance.
+
+**`TRANSITION_EXPRESSION_NEVER_PRESENT` cannot decide satisfiability and does not try.** It
+counts hits on one pack's authored content. As drafted — an unconditional error on "false at
+every spine transition" — **it would have refused the transition analogue of that outpost
+enumeration**, and it would additionally have refused every correct `to: "failed"` /
+`to: "degraded"` condition, because a pack's spine is the *model line* and by construction does
+not contain the moves a failure condition names. §4.1 celebrates that one attachment point
+serves all five `conditionBase` states; the original rule made two of the five unauthorable.
+That is not a hypothetical: `$defs/conditionBase.to` is
+`preserved | degraded | failed | achieved | transitioned` (verified on the tree), and
+`pack-orchestrator.ts:481,498` route `to: "degraded"` conditions through a distinct rule path.
+
+**Three corrections, and together they keep the anti-`timingWindow` force without the false
+refusal:**
+
+1. **Polarity scoping, on a shipped precedent rather than invention.**
+   `SHAPE_REFERENCE_NEVER_PRESENT` fires only when `reference.relation === "present"` — the
+   validator already refuses absence-on-spine *only where the author asserted presence*. A
+   `to: "achieved"` transition condition is that same assertion about the pack's own line; a
+   `to: "failed"` one is its negation, and gets `NEVER_ABSENT` instead.
+2. **The authored transition set is spine edges ∪ deviation edges.** `pack.deviations[]` carries
+   `at` (a `deviationLocation`) and `moveUci` — enough to replay one edge each — and it is where
+   the moves a failure condition names actually live. Restricting the walk to `pack.spine` was
+   the second half of the drafting error. Deviation edges enter the set for **all** polarities.
+3. **The refusal is named as a coverage rule, in its own message.** The issue message reads
+   *"never fires on this pack's authored transitions"*, never *"is unsatisfiable"*, and the docs
+   entry (criterion 14) states the distinction. An author whose condition is correct but
+   uncovered has one legitimate remedy and it is **not** loosening the condition (§4.6): add the
+   authored transition that demonstrates it, or move the condition to the pack that has one.
+
+**What survives of the answer to `timingWindow`.** All of it, for the case that mattered.
+`timingWindow` earned zero uses because *nothing anywhere* consumed it. This rule guarantees the
+weaker but sufficient property: **no `transition_feature` condition can ship without at least one
+authored transition in its own pack that exercises it in the direction its author claimed.** That
+is a coverage guarantee, it is worth having, and calling it a satisfiability check — as this draft
+originally did, including in its own header line "the satisfiability check" — overclaimed it.
+
+**One residual, and it is owner-facing rather than fixable here.** A `to: "achieved"` condition
+that is correct but deliberately uncovered by its own pack — the exact outpost-enumeration shape,
+one wave later — is still refused. Two remedies exist and this RFC picks neither by itself: a
+`witness: { before, moveUci }` field on the condition (a schema addition inside this RFC's 0.22
+lane, but a new authoring surface), or downgrading the error to a warning (which weakens the
+answer to `timingWindow` to nothing). **Filed as open question 8.**
 
 #### 4.5 Evidence refs and sentences
 
@@ -542,15 +667,46 @@ one per leaf: `transition-attacked-squares-changed`, `transition-defended-square
 node contributes the `rules:structure-*` refs it always did and adds nothing.
 
 These are **durable rule names, not parameterised instances**, exactly as the parent ruled
-(`docs/structural-reading.md:63-67`): the evidence renderer has no FEN argument, so a ref must
-never encode a square or a count. Six entries join
-`apps/web/src/lib/evidence-sentences.ts` in the shipped voice
-(*"Tabiya's … condition holds at this transition."*).
+(`docs/structural-reading.md`): the evidence renderer has no FEN argument, so a ref must
+never encode a square or a count.
 
-No migration: `predicate-wave-2` widened this same frozen list with three `structure-*` facts
-at pack 0.13 and `predicate-wave-3` with three more at 0.18 (`evidence-ref.ts:27-29`), both
-with none, and for the same reason — no historical row can contain a string that did not
-exist, and nothing narrows.
+**Migration-free is not work-free, and this is the `"draw"` correction applied in advance.**
+`rfc/archive/authoring-frictions.md` added the `draw` rules fact at 0.16 and originally missed
+that the frozen constant itself had to be widened; the omission had to be corrected in flight.
+Widening `RULES_EVIDENCE_FACTS` by six touches **four files in lockstep**, all verified on the
+tree this cross-review, and the draft named only the second:
+
+1. `packages/runtime/src/evidence-ref.ts` — the six entries, appended in §2.3's leaf order.
+2. `apps/web/src/lib/evidence-sentences.ts` — `RULES_SENTENCES` is
+   `Readonly<Record<RulesEvidenceFact, string>>`, so six sentences are **compile-mandatory**, in
+   the shipped voice (*"Tabiya's … condition holds at this transition."*).
+3. `packages/runtime/src/evidence-ref.test.ts` — asserts
+   `RULES_EVIDENCE_FACTS.map(rulesEvidenceRef)` against a **hard-coded 28-element literal**. Six
+   new facts fail this test until the literal is extended. This is the file the `"draw"` wave
+   missed.
+4. `apps/web/src/lib/evidence-sentences.test.ts` — builds its expectation from
+   `RULES_EVIDENCE_FACTS`, so it follows automatically, but is listed because it is the fourth
+   site a grep for the constant returns and an implementer should not have to rediscover which
+   of the four is derived.
+
+**And one invariant to mirror rather than break.** `packages/runtime/src/structure.test.ts:70`
+asserts that the `structure-`-prefixed facts map 1:1 and **in order** onto
+`STRUCTURAL_FEATURE_KINDS`. The six new facts are `transition-`-prefixed, so that assertion is
+untouched — verified. This RFC ships its sibling: a test asserting the `transition-`-prefixed
+facts map 1:1 and in order onto the six `TransitionFeature` kinds, so the two lists cannot drift.
+
+**No migration**, for a mechanism rather than an analogy: evidence refs are persisted as bare
+strings, no JSON schema enumerates them, so no historical row can contain a string that did not
+exist and nothing narrows. `predicate-wave-2` widened this same frozen list with three
+`structure-*` facts at pack 0.13 and `predicate-wave-3` with three more at 0.18
+(`evidence-ref.ts:27-29`), both with none.
+
+**Who walks the expression for refs, pinned rather than implied.** `conditionEvidenceRefs`
+cannot reuse `structuralFeatureKinds` directly, because its argument is a
+`TransitionExpression`. This RFC adds `transitionFeatureKinds(expression)` next to the shipped
+`structuralFeatureKinds` (exported from `structure.ts`), walking the five node kinds and
+**delegating to the shipped `structuralFeatureKinds` at every `position` node** so a satisfied
+`position` node contributes its `rules:structure-*` refs and nothing is minted twice.
 
 #### 4.6 Authored content, in this RFC's commits
 
@@ -596,7 +752,7 @@ The line, in `05` §3b's format:
 | Permitted — a fact about the board | Forbidden — a verdict about the move |
 |---|---|
 | "Your last move left c1 attacked by no White piece." | "You shouldn't have moved that rook." |
-| "The knight on f6 lost two of its three squares that Black does not attack." | "The knight is trapped." |
+| "Black's knight on f6 lost two of its three destination squares that White does not attack." | "The knight is trapped." |
 | "The bishop on c1 now defends two attacked White pieces." | "The bishop is overloaded." |
 | "The h1–a8 diagonal gained one square for White's bishop." | "Opening that diagonal was the point." |
 | "Black castled." *(shipped today, `pivotal.ts:103`)* | "Black castled into the attack." |
@@ -649,21 +805,54 @@ export type PivotalKind =
 export interface DutyDetail { readonly color: Color; readonly square: SquareName; readonly duties: number; }
 ```
 
-computed inside `pivotalMarkers` (`pivotal.ts:71-96`), which **already** holds the parent/child
-pair it needs at `:82-83` — the same place `irreversibility(parent, node)` is called. Delivery
-is the shipped passive-marker path with nothing added: gated by `assistance.markers === "live"`
-at `DrillScreen.svelte:277`, labelled at `:278` (`kind.replaceAll("_", " ")` → "defended duty
-acquired"), rendered as a Timeline dot at `Timeline.svelte:75`, opened into the modal at
-`DrillScreen.svelte:925-941` with the sentence produced by `renderPivotalMarker` at `:929`.
-**No new component, no new gate, no new permission, no new config key.**
+**and `PivotalMarker.detail`'s union widens with it** — verified on the tree, it is today
+`IrreversibilityDetail | PhaseChangeDetail | DivergenceDetail | CollapseDetail` and `DutyDetail`
+is a fifth member. The original draft declared the interface and omitted this; without it the
+new marker does not type-check at construction.
+
+Computed inside `pivotalMarkers`, which **already** holds the parent/child pair it needs — the
+same place `irreversibility(parent, node)` is called. Delivery is the shipped passive-marker path
+with nothing added: gated by `assistance.markers === "live"` (`DrillScreen.svelte:277`), rendered
+as a Timeline dot (`Timeline.svelte:75`), opened into the modal (`DrillScreen.svelte:925-941`)
+with the sentence produced by `renderPivotalMarker` (`:929`). **No new component, no new gate,
+no new permission, no new config key.**
+
+**One correction to that path, found in cross-review, and it raises the stakes on the fix
+below.** This draft said the marker is *"labelled at `:278` (`kind.replaceAll("_", " ")` →
+'defended duty acquired')"*, implying the learner reads that label. **They do not.**
+`DrillScreen.svelte:278` builds `{ nodeId, label }` rows, but `Timeline.svelte:75` renders only a
+dot and an `aria-label` of the form *"Open pivotal marker at ply N"* — the `label` field is passed
+and discarded (contrast `:74`, where shape markers do render theirs). **`renderPivotalMarker` is
+therefore the marker's only text surface**, so a wrong sentence there is not one of several
+signals a learner could cross-check; it is the entire content of the disclosure.
 
 **A latent defect this widening would trip, and this RFC fixes it.**
 `renderPivotalMarker` (`pivotal.ts:98-106`) is **not** exhaustive: it tests three kinds and
-then falls through at `:102` with `marker.detail as IrreversibilityDetail`. A fifth kind would
-be rendered as *"created or resolved pawn contact"* — silently, with no compile error, because
-the cast defeats the check. The function is converted to a `switch` over `marker.kind` ending
-in a `never` binding, per the D26 law, and criterion 7 asserts that the four existing sentences
-are byte-identical afterwards.
+then falls through at `:102` with `marker.detail as IrreversibilityDetail`. Verified precisely:
+a `defended_duty_acquired` marker carrying a `DutyDetail` has no `subkind`, so both `subkind`
+tests fail and the function returns the final template — the learner is told
+*"white created or resolved pawn contact."* about a move that did no such thing. Silently, with
+no compile error, because the cast defeats the check. **This is a shipped defect, the RFC fixes
+it rather than noting it, and criterion 7 is the gate.**
+
+The fix is a `switch` over `marker.kind` ending in a `never` binding, per the D26 law. **Two
+precisions the original draft got wrong:**
+
+- **It is six outputs across four kinds, not "four sentences."** `phase_change`,
+  `human_divergence` and `option_collapse` produce one template each (`option_collapse` branches
+  on `count === 1`, so two strings), and the irreversibility fallthrough produces three
+  (`castled`, `last_of_role`, pawn contact). Criterion 7 pins **every** one of them.
+- **The `never` binding fixes the defect; it does not remove the casts.** `PivotalMarker` is a
+  flat interface, not a discriminated union — `kind` and `detail` are independent fields — so
+  `switch (marker.kind)` narrows `kind` and leaves `detail` at the full union, and each arm still
+  casts. That is sufficient for the defect (a sixth kind added without an arm is a compile error,
+  so no wrong sentence can be emitted), and it is *not* sufficient to make the casts sound. The
+  sound form is to make `PivotalMarker` a discriminated union of five `{ kind, detail }` pairs.
+  **This RFC requires the `never` binding and does not require the union split** — the split
+  touches every construction site in `pivotalMarkers` and every consumer of `marker.detail`,
+  which is a refactor with its own risk, and the `never` binding closes the learner-facing hole
+  on its own. Recorded as open question 9 so a later wave does not read the residual cast as
+  intentional.
 
 #### 5.4 Which primitive may speak unasked — the selectivity rule
 
@@ -677,11 +866,34 @@ look*. Firing rate is the mechanism that turns that into a rule.
 | **On request** (the §5.2 disclosure) | all six | The learner asked |
 | **Never, at any tier** | hypothetical transitions; anything naming a verdict | §5.5, §9 |
 
-The partition is drawn at the measured bimodal gap: the selectivity ordering is
+The partition is drawn at the measured gap: the selectivity ordering is
 **6.7 < 7.1 < 13.2 ≪ 50.6 < 52.6 < 61.2 < 74.9**, and there is a **37-point empty band**
-between irreversibility and attacks. Any threshold in (13.2, 50.6) picks the same set, so the
-partition is robust to the threshold — which matters, because a threshold is otherwise exactly
-the "free parameter that encodes taste" rule 2 forbids.
+between irreversibility and attacks. Any threshold in (13.2, 50.6) picks the same set, so on
+these numbers the partition is robust to the threshold — which matters, because a threshold is
+otherwise exactly the "free parameter that encodes taste" rule 2 forbids.
+
+**The grounding is contingent, not established, and cross-review corrected this from a settled
+claim to a dependency.** §2.4 proves that two of the four numbers bounding the band are **strict
+upper bounds**: target-keying and the both-occupied conjunct are coarsenings, so
+`attacked_squares_changed` is **≤ 50.6%** and `defended_squares_changed` is **≤ 74.9%**. The
+band's *lower* edge (irreversibility 13.2%, duties 6.7%) is measured under definitions the
+implementation keeps, so it does not move. **The band can therefore only shrink, never widen**,
+and it can shrink to nothing: if corrected `attacked_squares_changed` lands anywhere near 13–15%,
+there is no empty band, no robust threshold, and §5.4's partition is a taste judgement wearing a
+measurement's clothes — which rule 2 forbids and which this RFC must not ship.
+
+- **This is not resolvable in this document.** The corrected rates are unmeasured; criterion 2
+  requires the implementer to produce them and open question 2 already records the disposition
+  as an owner call. **The dependency is now stated where the threshold is used, not only where
+  the correction is described**, because a reader arriving at §5.4 was previously told the
+  partition was robust full stop.
+- **The live tier does not land before the number exists.** If the corrected band is narrower
+  than ~10 points, the live/on-request split is re-derived or the live tier is withheld and
+  `defended_duty_acquired` waits — the same one-enum-member fallback as the R3 dependency below,
+  triggered by a different measurement.
+- **The two dependencies are distinct and must not be collapsed.** The corrected firing rates
+  decide whether the *partition* has a grounded threshold; R3 decides whether the primitive on
+  the live side of it is *worth reading*. Passing one does not discharge the other.
 
 **Irreversibility is live and already is** — it is the shipped `irreversibility` marker
 (`pivotal.ts:83`). This RFC does **not** add a second one. The live tier gains exactly one
@@ -712,7 +924,27 @@ rate makes overload a candidate, not a good hint."*
 overload, endpoint, or client call that takes a candidate move, a legal-move list, or a
 proposed continuation.
 
-This is not a policy, it is the shape of the API, and it is the firewall for this consumer.
+**Corrected in cross-review, because the original claim was stronger than the code can support.**
+This draft said *"this is not a policy, it is the shape of the API."* **It is not.** The signature
+is `(before: string, moveUci: string, after: string)` — three strings — and any caller can
+synthesise `after` by playing a candidate move into a cloned position and calling it. The type
+does not distinguish a committed transition from a hypothetical one, and it cannot: the validator
+replays authored spines and has FENs rather than a run, so a run-and-node-keyed signature
+(`transitionReadingAt(run, nodeId)`) is not available as the only form. **The firewall is real but
+it is enforced, not typed**, and stating otherwise is exactly the kind of structural claim §7 R1
+insists on distinguishing from a promise. What actually holds it:
+
+1. **No exported surface produces a candidate `after`.** Nothing in `packages/runtime`,
+   `apps/server` or `apps/web` enumerates legal moves and projects resulting FENs for transition
+   analysis, and criterion 12 asserts that by inventory.
+2. **Both §5 surfaces are keyed to a node that exists.** The §5.2 disclosure reads the *displayed*
+   node, and the §5.3 marker is computed inside `pivotalMarkers` over a committed branch path.
+   Neither has a candidate to hand.
+3. **Criterion 12 is widened accordingly** to forbid not only a parameter that accepts a candidate
+   move, but any call site under `apps/` that constructs the `after` argument from a move the run
+   has not committed.
+
+That is the firewall for this consumer, and its honest name is a tested boundary.
 "What would Nf3 do to my attack map" is a move-evaluation surface: it answers the question the
 learner is supposed to be answering, it is the shortest path from a census to *"that knight is
 trapped, win it with a4"* (`05` §3b's own forbidden example), and it converts a rung-0 fact into
@@ -868,15 +1100,35 @@ and is not closed by this RFC.
 **Enforced, not stated.** The tempting implementation of "lines opened" or "attacks created"
 *is* `structuralDelta`, and the penalty for taking it is 59×. So:
 
-> **Criterion 6 (normative): `matchesTransitionExpression`, `matchesTransitionFeature` and
-> `transitionReading` have no call path — direct or transitive — to `structuralReading`,
-> `structuralDelta` or `pawnSafety`.** Asserted by a module-graph test, not by review. The
-> `position` node's call to `matchesStructuralExpression` is the single permitted edge into
-> `structure.ts`, and that function is verified targeted: `structure.ts:417-431` dispatches to
-> `matchesStructuralFeature` (`:340`) and never builds a reading. (`matchesStructuralFeature`
-> does reach `pawnSafety` for the `pawn_safe_square` and `outpost` leaves — that is the shipped
-> leaf's own cost, paid only when an author writes one, and is not an edge this criterion
-> forbids. The criterion forbids the *transition* code reaching it.)
+> **Criterion 6 (normative), restated in cross-review so that it is satisfiable and
+> mechanically checkable.** The original wording — *"no call path, direct or transitive, to
+> `structuralReading`, `structuralDelta` or `pawnSafety`, asserted by a module-graph test"* —
+> **could not pass, for two independent reasons.** (a) At *module* granularity the test fails on
+> the first line of `transition.ts`, because the `position` node must import
+> `matchesStructuralExpression` from `structure.ts`, and `structure.ts` is where all three
+> forbidden symbols live. (b) At *symbol* granularity the transitive closure through the single
+> permitted edge genuinely reaches `pawnSafety`: `matchesStructuralExpression` →
+> `matchesStructuralFeature` → `pawnSafety`, for the `pawn_safe_square` and `outpost` leaves.
+> The parenthetical already conceded (b) while the normative sentence forbade it. The two forms
+> that *are* checkable, and both are required:
+>
+> **6a — import surface (a module-level test, and this is the one that carries the weight).**
+> `packages/runtime/src/transition.ts` imports from `./structure.js` exactly one value binding,
+> `matchesStructuralExpression`, plus type-only imports. It imports `structuralReading`,
+> `structuralDelta` and `pawnSafety` from nowhere, under any alias, and re-exports none of them.
+> Asserted by parsing the module's import declarations, not by review.
+>
+> **6b — symbol reachability, excluding the permitted edge.** In the call graph rooted at
+> `matchesTransitionExpression`, `matchesTransitionFeature` and `transitionReading`, with the
+> single edge `→ matchesStructuralExpression` cut, no path reaches `structuralReading`,
+> `structuralDelta` or `pawnSafety`.
+>
+> The permitted edge is verified targeted on the tree: `matchesStructuralExpression`
+> (`structure.ts`) dispatches to `matchesStructuralFeature`, handles `pieceOnSquare` inline, and
+> recurses through `mirrored`/`quantified` — it **never** builds a reading and never touches
+> `structuralDelta`. `matchesStructuralFeature`'s own reach into `pawnSafety` is the shipped
+> leaf's own cost, paid only when an author writes `pawn_safe_square` or `outpost` inside a
+> `position` node, and is out of scope for 6b by construction.
 
 **And the `position` node makes it unnecessary rather than merely unused.** "Feature X was
 absent before and present after" — the entire reason `structuralDelta` was written — is
@@ -948,8 +1200,9 @@ this RFC changes that boundary or feeds it.
 
 ### 11. Schema changes
 
-`schemas/drill_pack.schema.json` `$id` → `urn:chess-tabiya:schema:drill-pack:0.19`;
-`DRILL_PACK_SCHEMA_VERSION` (`packages/schema/src/index.ts:2`) → `"0.19"`. Both move together.
+`schemas/drill_pack.schema.json` `$id` → `urn:chess-tabiya:schema:drill-pack:0.22`;
+`DRILL_PACK_SCHEMA_VERSION` (`packages/schema/src/index.ts:2`) → `"0.22"`. Both move together,
+from the tree's current **0.20**, behind `deviation-classes`' claimed 0.21 (header note).
 
 Additive only:
 
@@ -965,30 +1218,41 @@ Additive only:
 **Nothing is removed, nothing narrows, no committed content digest moves** — pack digests are
 content digests and are unaffected by the `$id`
 (`packages/schema/src/drill-pack/digest.ts:58-66`, `digestCanonicalJson`). All committed packs
-validate unchanged against 0.19.
+validate unchanged against 0.22.
 
 **Not touched:** `schemas/shape_entry.schema.json` and its duplicated `$defs` (both copies),
 `SHAPE_ENTRY_SCHEMA_VERSION` (`"0.3"`), the run schema (`"0.14"`), `STORAGE_VERSION` (19),
 `$defs/fenPredicate`, `$defs/structuralFeature`, `$defs/distanceTarget`, `$defs/timingWindow`,
 and `AssistanceConfig`.
 
-### 12. Relationship to `rfc/predicate-wave-3.md`, which landed mid-draft
+### 12. Relationship to `rfc/archive/predicate-wave-3.md`, which landed and was archived mid-draft
 
-**It landed while this draft was being written**, and the draft was re-verified against the new
-tree rather than left describing the old one. Pack schema is **0.18**, shape-entry **0.3**,
-`plan_consequence` is the seventh `successCondition` arm (`schemas/drill_pack.schema.json:379`),
-and `piece_count` / `king_zone` / `piece_distance` ship (`:472-474`). `rfc/predicate-wave-3.md`
-is still in `rfc/` rather than `rfc/archive/` — implemented, not yet archived — so its section
-and line references in this file remain valid.
+**It landed AND was archived while this draft was being written**, and the draft was re-verified
+against the new tree rather than left describing the old one. `plan_consequence` is the seventh
+`successCondition` arm, and `piece_count` / `king_zone` / `piece_distance` ship. **Corrected in
+cross-review:** an earlier revision of this section asserted the file was "still in `rfc/` rather
+than `rfc/archive/`". It is not — it is `rfc/archive/predicate-wave-3.md`, every citation in this
+file was repointed, and the owner ruling this RFC's exploration gate rests on is at `:146-147`
+of the archived file, not `:148-151` of the pre-archive one. **Its section numbers survive
+archiving; its line numbers did not, and the implementer re-locates by section and symbol.**
+
+**And the tree moved again after that.** Pack schema is **0.20**, not 0.18 —
+`opening-evidence-path` landed the `assessedBy` `kind: "engine"` arm. That move did *not* add a
+`successCondition` arm, so §4.1's eighth-arm claim survives; it did invalidate this draft's
+original 0.19 claim, corrected in the header. Shape-entry stays **0.3**, run schema **0.14**,
+`STORAGE_VERSION` **19**.
 
 **Three consequences, all of which make this RFC smaller:**
 
 1. **The ordinal is settled**, not conditional (§4.1). `transition_feature` is the eighth arm.
 2. **The `NEVER_PRESENT` refusal has a shipped sibling to copy** rather than an analogy to
    argue: `PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT` and `authoredSpineFens`
-   (`apps/server/src/pack-validation.ts:170-186,474`) are exactly the shape §4.4 needs, one
-   field wider. That is the strongest single piece of evidence that §4.4's rule is
-   implementable as specified.
+   (`apps/server/src/pack-validation.ts:170-186` and the `checkPlanConsequences` walk) are
+   exactly the shape §4.4 needs, one field wider — verified line by line this cross-review.
+   **But copying it wholesale was the drafting error §4.4a corrects.** The *walk* transfers;
+   the *refusal* transfers only under the polarity guard its other sibling
+   `SHAPE_REFERENCE_NEVER_PRESENT` already carries, because `plan_consequence` is
+   positive-polarity by construction and `transition_feature` is not.
 3. **`piece_distance` shipping closes R2's loop.** The static half of the repositioning case is
    now in the vocabulary, which is precisely why §7 R1 can refuse the delta without leaving the
    owner's knight-reroute case unserved. The half that survived measurement shipped; the half
@@ -1030,19 +1294,29 @@ deliberate and stated so a later wave does not read the gap as an oversight:
 
 ## Acceptance criteria
 
-1. **The satisfiability refusal is real.** A pack whose `transition_feature` condition is
-   `false` at every transition of its own spine is rejected at load with
-   `TRANSITION_EXPRESSION_NEVER_PRESENT`, demonstrated on a deliberately-inert fixture; and the
-   `ALWAYS_PRESENT` warning is demonstrated on a tautological one. **This criterion is the RFC's
-   answer to the `timingWindow` precedent and is not waivable.**
-2. **Re-measured on the landing checkout.** Every corpus figure quoted here (593 transitions,
-   35 packs, the selectivity table, the 29.06 µs bundle) is re-run on the tree at landing, by
-   symbol name and not by the line numbers in this file. The *ordering* of selectivity must
-   survive; the digits may move.
+1. **The coverage refusal is real, and it refuses only what §4.4a scopes it to.** Four fixtures,
+   all required: (a) a pack whose `to: "achieved"` `transition_feature` condition is `false` at
+   every transition in its authored set is rejected with `TRANSITION_EXPRESSION_NEVER_PRESENT`;
+   (b) a pack whose `to: "failed"` condition is `true` at every authored transition is rejected
+   with `TRANSITION_EXPRESSION_NEVER_ABSENT`; (c) **a pack whose `to: "failed"` condition is false
+   on every spine edge but true on an authored deviation edge LOADS CLEAN** — this is the
+   negative test for the drafting error §4.4a corrects, and without it the fix is unverified;
+   (d) the `ALWAYS_PRESENT` warning is demonstrated on a tautological positive-polarity condition.
+   **This criterion is the RFC's answer to the `timingWindow` precedent and is not waivable; (c)
+   is what keeps the answer from being a false refusal.**
+2. **Re-measured on the landing checkout, and §5.4 is re-derived from the result.** Every corpus
+   figure quoted here (593 transitions, 35 packs, the selectivity table, the 29.06 µs bundle) is
+   re-run on the tree at landing, by symbol name and not by the line numbers in this file. The
+   *ordering* of selectivity must survive; the digits may move. **Additionally, and this is a
+   gate rather than a report: the corrected `attacked_squares_changed` rate is measured, and if
+   the empty band between the live tier and the next primitive is narrower than 10 points, the
+   §5.4 partition is escalated to the owner (open question 2) rather than shipped as drawn.**
 3. **The extraction is behaviour-preserving.** `capturedRole`, `irreversibility` and the
    slider-ray walk move to `packages/runtime/src/transition.ts` and are imported back by
    `pivotal.ts` and `structure.ts`. Every existing assertion in `pivotal.test.ts`,
-   `structure.test.ts` and `predicate-wave-2-content.test.ts` passes unchanged.
+   `structure.test.ts` and `predicate-wave-2-content.test.ts` passes unchanged. **`clock_zeroed`
+   is new arithmetic in `transition.ts` only: `IrreversibilityDetail` gains no fourth subkind and
+   `pivotalMarkers` emits no new irreversibility marker** (§2.3).
 4. **The evaluator is oracle-checked against the harness** on all 593 corpus transitions for
    the four leaves whose arithmetic the harness implements identically
    (`slider_lines_changed`, `escape_squares_changed`, `defended_duties_changed`,
@@ -1051,19 +1325,31 @@ deliberate and stated so a later wave does not read the gap as an oversight:
 5. **Ranges are measured, not guessed.** `TRANSITION_COUNT_OUT_OF_RANGE`'s per-leaf bound is
    tightened from 64 to the measured corpus maximum, and the observed range per leaf is
    recorded in `docs/`.
-6. **No expensive call path.** A module-graph test asserts that `matchesTransitionExpression`,
-   `matchesTransitionFeature` and `transitionReading` reach neither `structuralReading` nor
-   `structuralDelta` nor `pawnSafety`, transitively (§8).
-7. **`renderPivotalMarker` is exhaustive.** Converted to a `switch` ending in a `never`
-   binding, with the four existing sentences byte-identical
-   (`pivotal.ts:99-105` outputs pinned by test before and after).
+6. **No expensive call path — in the two checkable forms of §8, both required.** **6a:** an
+   import-declaration test asserts `transition.ts` takes exactly one value binding from
+   `./structure.js`, `matchesStructuralExpression`, and never imports or re-exports
+   `structuralReading`, `structuralDelta` or `pawnSafety` under any alias. **6b:** a call-graph
+   test asserts that with the `→ matchesStructuralExpression` edge cut, none of
+   `matchesTransitionExpression`, `matchesTransitionFeature`, `transitionReading` reaches any of
+   the three. The draft's single "module-graph test asserting no transitive path" is **not** an
+   acceptable substitute: it cannot pass, for the two reasons §8 states.
+7. **`renderPivotalMarker` is exhaustive, and the sentences are pinned before and after.**
+   Converted to a `switch` over `marker.kind` ending in a `never` binding. **All six existing
+   outputs across the four shipped kinds** — `phase_change`; `human_divergence`;
+   `option_collapse` in both its one-move and n-move forms; and the three irreversibility
+   sentences `castled`, `last_of_role`, pawn contact — are byte-identical, pinned by a test
+   written **before** the conversion. A regression test constructs a `defended_duty_acquired`
+   marker and asserts it does **not** render "created or resolved pawn contact", which is what
+   the shipped code does today (§5.3). `PivotalMarker.detail`'s union includes `DutyDetail`.
 8. **The reading projection carries no verdict.** `transitionReading`'s output type has no
    score, rank, severity or significance field, and a unit test asserts that no template string
    in `transition-sentences.ts` and no leaf name contains a member of `KEY_POINT_JUDGEMENTS`
    (`pack-validation.ts:148`).
 9. **Three committed packs carry a firing `transition_feature` condition** (§4.6), landing in
-   the same commits as the implementation, each verified to fire on its own spine and each
-   graded — not `play_until_checkpoint`.
+   the same commits as the implementation, each verified to fire on its own authored transition
+   set and each graded — not `play_until_checkpoint`. **At least one of the three carries a
+   negative-polarity (`to: "degraded"` or `to: "failed"`) condition**, so the polarity half of
+   §4.4a is exercised by content and not only by a fixture.
 10. **One of the three is a plan-family pack** whose objective previously graded a position and
     now grades the transition that produced it, demonstrating `05` §5c's *grade a plan by its
     consequence*.
@@ -1072,9 +1358,14 @@ deliberate and stated so a later wave does not read the gap as an oversight:
     `markers: "live"` a `defended_duty_acquired` dot appears on the timeline and opens into the
     modal — mirroring the shipped `tests/browser/drill.spec.ts:52` Just Play assertion, and
     asserting **no run mutation**.
-12. **The hypothetical boundary holds by signature.** No exported function, REST route or
-    client call accepts a candidate move for transition analysis (§5.5), asserted by an
-    API-surface test.
+12. **The hypothetical boundary holds, as a tested boundary rather than a type** (§5.5, corrected).
+    Two assertions: (a) no exported function, REST route or client call accepts a candidate move,
+    a legal-move list or a proposed continuation for transition analysis; **and (b) no call site
+    under `apps/` constructs the `after` argument to `matchesTransitionExpression` or
+    `transitionReading` from a move the run has not committed** — every call site passes a node's
+    own `fen`/`moveUci` and its parent's `fen`, or a validator-replayed authored transition.
+    (b) is the one that matters, because (a) alone is satisfiable while a caller synthesises the
+    third string itself.
 13. **Exhaustive dispatch.** Every site in §4.3 compiles only with its new case, including the
     `never` binding newly added to `evaluateObjectivePredicate`.
 14. **Docs and ledger, in the same commits.** `docs/structural-reading.md` gains a transition
@@ -1095,11 +1386,17 @@ deliberate and stated so a later wave does not read the gap as an oversight:
    and §5.4 makes `defended_duty_acquired` provisional on it. Decided by the R3 harness, not
    here. Fallback is one enum member (§5.4). **Owner-facing only if R3 says no** — the removal
    is mechanical.
-2. **What are the corrected firing rates for the two target-keyed leaves?** §2.4 proves they
-   are ≤ 50.6% and ≤ 74.9% but does not measure them. If `attacked_squares_changed` falls below
-   ~15% under target-keying and the both-occupied conjunct, it becomes a live-tier candidate and
-   §5.4's partition should be revisited. **Criterion 2 produces the number; the disposition is
-   an owner call, not an implementer's.**
+2. **What are the corrected firing rates for the two target-keyed leaves, and does §5.4's
+   threshold still have a grounding?** §2.4 proves they are ≤ 50.6% and ≤ 74.9% but does not
+   measure them. **Both failure modes are live, and cross-review raised this from a footnote to
+   a blocker on the live tier.** If `attacked_squares_changed` falls below ~15%, it becomes a
+   live-tier candidate. If it falls anywhere into the 13–25% region, the "37-point empty band"
+   §5.4 draws its partition on **closes**, and the threshold reverts to a free parameter encoding
+   taste — which rule 2 forbids. Only the two upper bounds move, and they move downward, so the
+   band can shrink but never widen. **Criterion 2 produces the number and gates on it; the
+   disposition is an owner call, not an implementer's.** An R3-lane dossier measuring exactly
+   these corrected rates is in flight; this RFC states the dependency rather than guessing the
+   result, and the live tier does not land ahead of it.
 3. **Should the static `defended_duties` count ship as a position leaf?** R7 refuses it for this
    wave on zero attestations. It is the most natural wave-4 candidate this RFC creates, and the
    asymmetry — a crossing is expressible, the level is not — is real. Deferred to the next
@@ -1122,12 +1419,56 @@ deliberate and stated so a later wave does not read the gap as an oversight:
    delete it and `vacationReading` as dead code, or leave both for the discovered-threat
    surface. **Owner-facing**, because deleting an exported function is a public-API decision and
    because the discovered-threat surface is a ledgered product idea, not just dead code.
+8. **What happens to a correct `to: "achieved"` condition that its own pack deliberately does not
+   cover?** §4.4a scopes the refusal by polarity and widens the walk to deviation edges, which
+   removes the false refusal for failure conditions. It does not remove it for the
+   outpost-enumeration shape on the positive side: an expression that discriminates perfectly and
+   that the pack simply never realises is still refused at load. Two remedies, and this RFC picks
+   neither: a `witness: { before, moveUci }` field on the condition (inside this RFC's 0.22 lane,
+   but a new authoring surface, and the ledger row *No instrument answers "where does this
+   expression fire?"* suggests the general instrument should own it rather than one condition
+   kind), or downgrading `NEVER_PRESENT` to a warning (which returns the answer to the
+   `timingWindow` precedent to nothing). **Owner-facing.** Left open rather than decided because
+   deciding it either way changes what §4.4's headline claim is worth.
+9. **Does `PivotalMarker` become a discriminated union?** §5.3's `never` binding closes the
+   learner-facing defect but leaves each arm's `marker.detail as …` cast unchecked, because
+   `kind` and `detail` are independent fields on a flat interface. The sound form is five
+   `{ kind, detail }` pairs, which touches every construction site in `pivotalMarkers` and every
+   consumer of `detail`. Not taken here; recorded so the residual cast is not read as intentional.
+   **Files as a BACKLOG row rather than an owner decision.**
 
 ## Changelog
 
 - 2026-08-15: created. Drafted against the owner ruling of the same day
-  (`rfc/predicate-wave-3.md:148-151`), taking §7 F4 as specification input and
-  `design/research/move-primitive-computability.md` as the measurement base. Claims pack schema
-  **0.19**; claims no migration, no run-schema change, no shape-entry change and no
-  `AssistanceConfig` version. `rfc/README.md` register row flagged for the coordinator, not
-  edited here.
+  (`rfc/archive/predicate-wave-3.md:146-147`), taking §7 F4 as specification input and
+  `design/research/move-primitive-computability.md` as the measurement base. Claims no migration,
+  no run-schema change, no shape-entry change and no `AssistanceConfig` version.
+- 2026-08-15 (cross-review, adversarial, by an agent that did not write the draft). Eight
+  corrections, four of them blocking as drafted:
+  **(1) Pack schema 0.19 → 0.22.** The tree moved to **0.20** while this draft sat
+  (`opening-evidence-path` landed); the pack version is a monotonic shared constant, so 0.19 was
+  no longer claimable. 0.21 is `deviation-classes`'. Header, §11 and §12 corrected.
+  **(2) `predicate-wave-3` was archived mid-draft.** All 15 citations repointed to
+  `rfc/archive/predicate-wave-3.md`; §12's assertion that it was "still in `rfc/`" removed; the
+  exploration-gate ruling relocated to `:146-147`.
+  **(3) `TRANSITION_EXPRESSION_NEVER_PRESENT` conflated coverage with unsatisfiability** and, as
+  drafted, refused every correct `to: "failed"` / `to: "degraded"` condition. New §4.4a, polarity
+  scoping on the shipped `SHAPE_REFERENCE_NEVER_PRESENT` precedent, a `NEVER_ABSENT` mirror, the
+  authored transition set widened to deviation edges, and criterion 1 gains the negative test.
+  **(4) Criterion 6 could not pass** in either the module or the symbol reading; split into 6a
+  (import surface) and 6b (call graph with the permitted edge cut).
+  **(5) §5.5's "it is the shape of the API" was false** — three FEN strings do not forbid a
+  synthesised `after`. Restated as a tested boundary; criterion 12 widened to call sites.
+  **(6) `renderPivotalMarker`:** `PivotalMarker.detail` must widen with `DutyDetail`; it is six
+  outputs across four kinds, not four; the `never` binding fixes the defect but not the casts
+  (open question 9). Also corrected: `Timeline.svelte:75` discards the marker `label`, so
+  `renderPivotalMarker` is the marker's *only* text surface.
+  **(7) §5.4's threshold is contingent, not established** — the band can only shrink under §2.4's
+  corrections; criterion 2 now gates on it and open question 2 states the in-flight dependency.
+  **(8) Rule 5 restated** (unnamed-set cardinality is the operative test); control delta's
+  **region** form is not excluded by it and moves to rule 3/R8; `pieceOnSquare` added to the
+  not-admitted enumeration; `clock_zeroed` narrowed from an `after`-only test to a move property
+  and marked as new rather than extracted arithmetic; §4.5's evidence-fact widening given its
+  four-file work list and a `transitionFeatureKinds` walker.
+  `rfc/README.md` was **not** edited: its Active row exists but still says 0.19, and the
+  **0.22 pack-schema register row is missing**. Both flagged for the coordinator.

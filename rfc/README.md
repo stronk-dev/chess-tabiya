@@ -7,10 +7,11 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `opening-evidence-path.md` | draft — **cross-reviewed, READY** | — | pack **0.20**. `assessedBy` gains `kind: "engine"`. Closes the opening half of the evidence hole |
+| `opening-evidence-path.md` | implementing | — | pack **0.20**. `assessedBy` gains `kind: "engine"`. Closes the opening half of the evidence hole |
 | `deviation-classes.md` | draft — reviewed + **rewritten multi-valued**, ready | — | pack **0.21**. `mistake` is a SET (`minItems:1`, `uniqueItems`), `cost` author-declared and unbacked. Eight rendering surfaces given explicit multi-value rules; *pick-the-first* prohibited by name |
 | `branch-set-scale.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — rebased 2026-08-15 after `ed48978` (pack 0.17) and `4977ff6` (run 0.14 / migration 19) landed the same day; the claim survives the rebase intact, which is the point. No migration, no new event, no new `BranchComparison` field. One writer-free read route + a versioned browser preference. Implements the 2026-08-15 branch ruling: collapse decided branches, bound the eval work, manual fold |
 | `transition-primitives.md` | draft (awaiting cross-review) | — | claims **pack schema 0.19** (0.18 has LANDED). The move-primitive grammar shipped **with both consumers** per the 2026-08-15 ruling: an eighth `successCondition` arm for packs, and a Just Play reading + one new `PivotalKind`. Excludes `structuralDelta` and **enforces the exclusion** with a module-graph test |
+| `expression-census.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — no schema, no migration, no persisted field, no event; lands in any order. `make expression-census` (report-only), plus `CORPUS=`/`PROBE=`/multi-`FILE=` on `shape-check`. Separates **coverage** (never an error) from **satisfiability** (three-valued; only a sound refutation errors) |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
 `onramp-guard`, then `open-answer-grading`. Shared-resource claims (migrations, pack
@@ -60,7 +61,7 @@ landing order, not lost data.
 | 0.16 | `archive/authoring-frictions.md` | implemented — additive/widening only: `deviationLocation` gains `{atStart}`, `simpleTrigger` gains `atStart`, new `variantOf` (three directional relations), `branchLengthTarget` max 20→40, guard gains `fireOnMate`/`rulesTier`/`window`/`overrides`, `rules_fact` enum gains `draw`, tablebase category enum widens to five determinate values. All committed content remains valid; no content digest moved |
 | 0.17 | `archive/tempo-vocabulary.md` | implemented — a timing window is a branch-local ledger: commitment opening, ordered closes, move-set readiness/tolerance, luxury spend, seven verdicts, authored `outpaced` control, and `tempo:` applied evidence. Additive plus removal of the unused checkpoint-local point-pair form; no committed content digest moved |
 | 0.18 | `archive/predicate-wave-3.md` | implemented — additive: `plan_consequence` success-condition kind, `king_zone`, `piece_distance`, `piece_count`, `pack.shapes` relation `present`/`prospective`. Ships `pawn_count` and `piece_reach_count scope:"every"` as deprecation WARNINGS (schema removal deferred to wave 4 because `registered_shapes` rows are immutable) |
-| 0.20 | `opening-evidence-path.md` | claimed 2026-08-15 — additive: `$defs/objectiveGrading.assessedBy` gains a third `oneOf` member `kind: "engine"`. Retires `VERIFY_ASSESSMENT_NOT_SYZYGY`; narrows `OBJECTIVE_GRADING_UNSUPPORTED` to legs |
+| 0.20 | `opening-evidence-path.md` | implementing — additive: `$defs/objectiveGrading.assessedBy` gains a third `oneOf` member `kind: "engine"`. Retires `VERIFY_ASSESSMENT_NOT_SYZYGY`; narrows `OBJECTIVE_GRADING_UNSUPPORTED` to legs |
 | 0.21 | `deviation-classes.md` | claimed 2026-08-15 — additive: `mistake` (`plan\|timing\|tactical`) and `cost` on `$defs/deviation`, `moveUci` on `guard.overrides[]`. Ships `cost` author-declared and UNBACKED per the 2026-08-15 coordinator ruling |
 
 Landing order follows the numbers. A draft that cannot land behind its
