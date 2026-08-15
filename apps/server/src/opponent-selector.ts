@@ -6,6 +6,7 @@ import { isNormal } from "chessops/types";
 import { parseUci } from "chessops/util";
 
 import {
+  PolicyMassError,
   humanConcessionMass,
   transposeKey,
   type OpponentSelection,
@@ -623,7 +624,20 @@ export class OpponentSelector {
           .filter((reply) => invertTablebaseCategory(reply.category) !== childTablebase.category)
           .map((reply) => reply.uci),
       );
-      const mass = humanConcessionMass(policy, conceding);
+      const mass = (() => {
+        try {
+          return humanConcessionMass(policy, conceding);
+        } catch (error) {
+          if (error instanceof PolicyMassError) {
+            throw new ServerError(
+              "PRACTICAL_RESISTANCE_POLICY_MASS_INVALID",
+              "Maia returned an invalid policy-mass distribution",
+              { cause: error },
+            );
+          }
+          throw error;
+        }
+      })();
       const ratio = mass === null || mass.measuredMass <= 0
         ? mass === null ? null : 0
         : mass.concedingMass / mass.measuredMass;

@@ -261,11 +261,14 @@ the seven-piece boundary; see `tablebase-grounding.md`.
 `practical_resistance` composes that tablebase gate with Maia policy mass. It
 never weakens Stockfish and never falls back under the same name. The selector
 refuses out-of-range roots, unavailable instruments, missing preserving replies,
-and the all-zero difficulty case by typed code. Missing Maia policy mass is an
-abstention: the recorded reply uses the stable UCI tiebreak and emits the existing
-degradation warning. A cold four-candidate selection can take roughly 580 ms;
-that is its declared per-selection budget, distinct from the per-instrument call
-budget.
+the all-zero difficulty case, and materially invalid policy distributions by
+typed code. Maia's policy values are float32, so a normalized vector may sum a
+few float32 ulps above 1; the runtime admits at most 32 ulps of accumulation and
+refuses larger excess as `PRACTICAL_RESISTANCE_POLICY_MASS_INVALID`. Missing
+Maia policy mass is an abstention: the recorded reply uses the stable UCI
+tiebreak and emits the existing degradation warning. A cold four-candidate
+selection can take roughly 580 ms; that is its declared per-selection budget,
+distinct from the per-instrument call budget.
 
 ## Recorded policy and server-owned theory spine
 

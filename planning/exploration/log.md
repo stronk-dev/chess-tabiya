@@ -2051,3 +2051,14 @@ Cross-review's corrected R1 and R6 are pinned by their nine counterexamples and 
 positions. One remaining polarity typo was found in the RFC's degeneracy criterion and corrected:
 the empty-set vacuity belongs to `every`, not to its surrounding negation. Shape checking gains
 opt-in corpus warnings, probing, and multi-file use; coverage remains outside `make verify`.
+
+## 2026-08-15 (codex) — D56 float32 policy mass fixed
+
+The pinned `chess-tabiya-maia:1e13597` sidecar reproduced the defect with an
+eleven-candidate Elo-1500 vector summing to `1.00000000803311`: valid float32
+output that the old `1 + 1e-9` guard rejected. The regression now uses that
+captured vector. Policy-mass accumulation admits 32 float32 ulps, while a
+material excess still refuses by the typed
+`PRACTICAL_RESISTANCE_POLICY_MASS_INVALID` code and maps to HTTP 422 instead of
+falling through to an unhandled 500. D57–D59 were not bundled; their behavior
+requires separate contracts.

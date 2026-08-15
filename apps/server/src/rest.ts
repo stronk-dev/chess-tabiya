@@ -523,6 +523,7 @@ export function errorResponse(error: unknown): Response {
                     || error.code === "PRACTICAL_RESISTANCE_OUT_OF_RANGE"
                     || error.code === "PRACTICAL_RESISTANCE_UNAVAILABLE"
                     || error.code === "PRACTICAL_RESISTANCE_UNDECIDABLE"
+                    || error.code === "PRACTICAL_RESISTANCE_POLICY_MASS_INVALID"
                   ? 422
                 : 500;
   }

@@ -9,7 +9,7 @@ shape-entry 0.3) · `opening-evidence-path` (0.20) · refusal-code coverage.
 
 **Four items are ready — more than when you last read this file.**
 
-## 0. D56 — TAKE THIS FIRST, no RFC needed, it is a one-line tolerance bug
+## 0. D56 — IMPLEMENTED, no RFC needed
 
 **`practical_resistance` returns HTTP 500 on 75% of its own domain.** It shipped
 in `4977ff6` today and is broken. `packages/runtime/src/practical-difficulty.ts:32`
@@ -19,10 +19,10 @@ error near **1e-6** — three orders of magnitude above that tolerance — so th
 guard rejects correct engine output. Measured: **30 of 40 in-range roots throw,
 20/20 repeats each**.
 
-**No test caught it because every fixture mass is a hand-written decimal summing
-to ≤1** — the fixtures do not resemble real instrument output. Fix the tolerance
-to a float32-appropriate bound, convert the throw to a coded refusal, and add a
-fixture built from an actual Maia policy vector rather than a typed decimal.
+**Closed 2026-08-15.** The runtime admits 32 float32 ulps of accumulation, an
+actual vector captured from the pinned Maia image is the regression fixture,
+and materially invalid distributions return the typed
+`PRACTICAL_RESISTANCE_POLICY_MASS_INVALID` refusal as HTTP 422 rather than 500.
 
 Three siblings from the same measurement, in the same file's neighbourhood
 (D57–D59 in the ledger): the vacuity gate can be skipped so the mode plays the

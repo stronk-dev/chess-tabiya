@@ -57,6 +57,8 @@ export { voiceCheck, BANNED_JUDGEMENTS, PRESCRIPTIVE_VERBS, CHESS_LEXICON, type 
 export { matchKeyPoints, normalizeReasoningText } from "./reasoning.js";
 export { terminalOutcome } from "./outcome.js";
 export {
+  FLOAT32_POLICY_MASS_TOLERANCE,
+  PolicyMassError,
   humanConcessionMass,
   type HumanConcessionMass,
   type PolicyMassCandidate,

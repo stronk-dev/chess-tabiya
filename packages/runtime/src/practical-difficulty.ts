@@ -9,6 +9,21 @@ export interface HumanConcessionMass {
   readonly candidateCount: number;
 }
 
+// Maia emits float32 policy values. A normalized vector may therefore sum a
+// few float32 ulps above 1 after the values are parsed and accumulated here.
+// The sidecar currently returns at most 20 candidates; 32 ulps leaves room for
+// that accumulation while still refusing materially invalid distributions.
+export const FLOAT32_POLICY_MASS_TOLERANCE = 32 * 2 ** -23;
+
+export class PolicyMassError extends TypeError {
+  readonly code = "POLICY_MASS_INVALID" as const;
+
+  constructor(message: string) {
+    super(message);
+    this.name = "PolicyMassError";
+  }
+}
+
 /**
  * Measures how much of an observed human-policy distribution lies on moves
  * whose externally classified outcome differs. Missing policy mass is an
@@ -23,14 +38,14 @@ export function humanConcessionMass(
   let measuredMass = 0;
   for (const candidate of candidates) {
     const mass = candidate.mass!;
-    if (!Number.isFinite(mass) || mass < 0 || mass > 1) {
-      throw new TypeError(`policy mass must be between 0 and 1; received ${String(mass)}`);
+    if (!Number.isFinite(mass) || mass < 0 || mass > 1 + FLOAT32_POLICY_MASS_TOLERANCE) {
+      throw new PolicyMassError(`policy mass must be between 0 and 1 within float32 tolerance; received ${String(mass)}`);
     }
     measuredMass += mass;
     if (concedingMoves.has(candidate.moveUci)) concedingMass += mass;
   }
-  if (measuredMass > 1 + 1e-9) {
-    throw new TypeError(`measured policy mass cannot exceed 1; received ${String(measuredMass)}`);
+  if (measuredMass > 1 + FLOAT32_POLICY_MASS_TOLERANCE) {
+    throw new PolicyMassError(`measured policy mass cannot exceed 1 within float32 tolerance; received ${String(measuredMass)}`);
   }
   return Object.freeze({ concedingMass, measuredMass, candidateCount: candidates.length });
 }

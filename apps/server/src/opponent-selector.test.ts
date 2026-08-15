@@ -17,7 +17,7 @@ import {
   type SelectorEngineClient,
   type SelectorSpineNode,
 } from "./opponent-selector.js";
-import { createRestHandler } from "./rest.js";
+import { createRestHandler, errorResponse } from "./rest.js";
 import { RunService } from "./service.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -193,6 +193,27 @@ describe("pure opponent selector", () => {
     await expect(selector.select({
       ...request("practical_resistance"), startFen: practicalFen, historyUci: [],
     })).rejects.toMatchObject({ code: "PRACTICAL_RESISTANCE_UNDECIDABLE" });
+  });
+
+  it("converts materially invalid Maia policy mass into a 422 refusal", async () => {
+    const selector = new OpponentSelector(new FakeEngineClient(() => maiaLines("e2f2", [
+      { move: "h1h3", mass: 0.6 },
+      { move: "e2f2", mass: 0.41 },
+    ])), { tablebaseSource: practicalTablebase() });
+    let refusal: unknown;
+    try {
+      await selector.select({
+        ...request("practical_resistance"), startFen: practicalFen, historyUci: [],
+      });
+    } catch (error) {
+      refusal = error;
+    }
+    expect(refusal).toMatchObject({ code: "PRACTICAL_RESISTANCE_POLICY_MASS_INVALID" });
+    const response = errorResponse(refusal);
+    expect(response.status).toBe(422);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { code: "PRACTICAL_RESISTANCE_POLICY_MASS_INVALID" },
+    });
   });
 
   it("uses the deterministic UCI tiebreak when every Maia reading abstains", async () => {
