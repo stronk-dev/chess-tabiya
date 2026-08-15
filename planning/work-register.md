@@ -12,9 +12,16 @@ which is itself queued work). There is no fourth state.
 
 ## 0. Blocking now
 
+**D64 is the live one.** `fixture-realism` was **implemented** (`4155a10`) while deferring
+D64 on a measurement now proved wrong by a seven-character offset — **135 of 341 committed
+syzygy entries are manufactured, across six packs carrying `ledger_verified`**, and
+`offlineQuery` asserts `status: 200` from a URL no process contacted. The RFC is **not yet
+archived**, so D64 can still be scoped into it. **It must not archive with the superseded
+measurement standing.**
+
 | Item | Destination |
 |---|---|
-| **D91** — every Maia request runs at band 1500; `Elo` is an alias overwritten by the `SelfElo`/`OppoElo` defaults sent after it | **implemented, pending independent review.** The defaults now precede `Elo`; a real-engine production-selector test proves bands 1000 and 2400 produce different policy vectors |
+| ~~**D91**~~ ✅ closed by `0985fa4` (band applied last; real-Maia test proves 1000 ≠ 2400). *Was:* every Maia request runs at band 1500; `Elo` is an alias overwritten by the `SelfElo`/`OppoElo` defaults sent after it | **implemented, pending independent review.** The defaults now precede `Elo`; a real-engine production-selector test proves bands 1000 and 2400 produce different policy vectors |
 | **D60 / D70** — the band bound, re-opened because D91 makes it inert | mechanism restored with D91; owner-ledger closure waits for independent review |
 | **D58** — an Elo-less Maia request inherits the previous request's band; nine of twelve malformed forms do the same | same file, same fix as D91 — route it into that change or it will be re-found by the next sweep |
 
