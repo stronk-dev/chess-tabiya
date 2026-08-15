@@ -1,65 +1,65 @@
-# Codex queue — refreshed 2026-08-15 (evening)
+# Codex queue — refreshed 2026-08-15 (late)
 
-**Landed today, all verified by claude at `ENGINES_REQUIRED=1 make verify` exit 0:**
-`authoring-frictions` (`ffc9817`, pack 0.16) · `validator-integrity` (`047de02`,
-nothing versioned) · `tempo-vocabulary` (`ed48978`, pack 0.17) ·
-`resistance-spectrum` (`4977ff6`, run 0.14 / migration 19) · refusal-code
-coverage (`8fbab41`, 107 emitters classified).
+**Landed, all verified by claude at `ENGINES_REQUIRED=1 make verify` exit 0 and
+`make test-browser` 24 passed / zero retries:** `authoring-frictions` (0.16) ·
+`validator-integrity` (nothing versioned) · `tempo-vocabulary` (0.17) ·
+`resistance-spectrum` (run 0.14 / migration 19) · `predicate-wave-3` (0.18 +
+shape-entry 0.3) · `opening-evidence-path` (0.20) · refusal-code coverage.
+**546 tests / 88 files.**
 
-## 1. `rfc/archive/predicate-wave-3.md` — IMPLEMENTED
+**Four items are ready — more than when you last read this file.**
 
-Pack **0.18** + shape-entry **0.2 → 0.3** (the shape schema carries a duplicated
-`$defs/structuralFeature`; new leaves must land in **both** copies or shape
-triggers silently cannot use them).
+## 1. `rfc/branch-set-scale.md` — READY, claims nothing versioned
 
-**Previously blocked on three things; all three are cleared:** the cross-review
-is committed, the status note names which open questions gate acceptance, and
-both owner-facing questions are ruled.
+Collapse decided branches, bound the eval work, manual fold. Lands in any order.
+Cross-review caught the near-miss worth knowing: the rule was `decided ∧
+¬admitted`, but that is **symmetric** — under `hold` it folds a *won* branch, and
+under `save`/`resist` every win, draw and cursed-win, each with a grammatically
+correct explanation. It is now a **shortfall** rule, and under `save`/`resist`
+the tablebase ground collapses nothing, ever. Also: tablebase categories are
+returned **for the side to move**, so the learner-perspective conversion is
+mandatory or collapse folds winning branches on a coin flip.
 
-Owner rulings it now carries:
-- **`plan_consequence` SHIPS** (Q1). Its 16-of-99 coverage is a *content* defect,
-  not a format limit — *"we are the authors"*. A signature authoring pass runs in
-  parallel; do not wait for it.
-- **`piece_distance` is absorbed** into this wave. Ship it as the **static** leaf
-  only — the delta form was refuted at a 98.7% false-positive rate. Note the
-  measured limits: rook/bishop/queen take only the values {1,2} against a king
-  target corpus-wide, and 85 of 440 positions have every white bishop off-shade,
-  so the vacuity refusal is load-bearing.
-- Intent grading is **grade the 45%, refuse the rest by name** — §5c-bis supplies
-  capability publication, named refusal and applied record.
+## 2. `rfc/deviation-classes.md` — READY (the hold is lifted)
 
-## 2. `rfc/archive/opening-evidence-path.md` — IMPLEMENTED
+Pack **0.21**. The owner ruled `mistake` **multi-valued** and the body has been
+rewritten to match — it is a set (`minItems: 1`, `uniqueItems`), not an enum.
+Eight rendering surfaces have explicit multi-value rules and **"pick the first"
+is prohibited by name**. `cost` ships **author-declared and UNBACKED**: no
+capability claims it verified, no surface renders it engine-confirmed.
 
-Pack **0.20** (behind 0.18, hence the ordering). Closes the opening half of the
-evidence hole. `assessedBy` gains `kind: "engine"`.
+**Watch the pointer suffix.** `/deviations/0/mistake/1` is a *resolvable* pointer,
+so the human-only refusal must read `…/mistake(?:/\d+)?$` — anchored at the field
+alone it would refuse `mistake` and silently **admit the element**. Whichever of
+this and 0.20 landed second owns carrying it; 0.20 has landed, so it is yours.
 
-The stale corpus count you flagged is fixed — it is **20** opening packs, not 18
-(the Scandinavian pair landed after G1). The spine to preserve: a tablebase
-record grounds a claim by *settling* it; an engine record grounds a claim by
-making it *falsifiable at a named cost*. An opening pack may be `ledger_verified`
-while every strategic assertion in it stays ungrounded — hence `"not a proof"`
-against the syzygy branch's `"Exact."`, and **no pack-level verified badge**.
+## 3. `rfc/transition-primitives.md` — READY, pack **0.22**
 
-Cross-review caught a real regression: retiring `OBJECTIVE_GRADING_UNSUPPORTED`
-outright would have admitted an engine assessment on a trajectory **leg**, whose
-entry position is not statically bound. It is *narrowed to legs*, not retired.
+**0.19 is frozen shut** — it was free as a register slot, but the schema constant
+is monotonic and 0.20 passed it. The move-primitive grammar with its pack
+consumer.
 
-## 3. `rfc/branch-set-scale.md` — in cross-review
+**R3 removed the live tier**, on this RFC's own bar: the proposed marker cleared
+29.5% (an *upper bound*, so a clear majority is unreachable by arithmetic) and
+signals on 2.1% of played moves vs 3.4% of unplayed alternatives — **0.61×, the
+wrong direction**. The on-request reading ships; the live marker does not. Its
+`renderPivotalMarker` fix moved to item 5.
 
-Claims **nothing versioned**. Collapse decided branches, bound the eval work,
-manual fold. Note its finding: **compare already spends zero engine work**, so 99
-branches never meant 99 evaluations — the real cost is the O(B·N) branch rail.
+## 4. `rfc/expression-census.md` — READY, claims nothing versioned
 
-## 4. `rfc/deviation-classes.md` — being rewritten, do NOT take yet
+The instrument behind the repo's most-attested friction. Cross-review found **two
+of its own refutation rules unsound** and fixed both with nine executed
+counterexamples — ship the corrected R1 (leaf-local, direction-aware, closed
+allow-list) and the R6 carve-out for `piece_reach_count`.
 
-Pack **0.21**. The owner ruled `mistake` **multi-valued**; the body still
-specifies a single-valued enum, so an agent is rewriting it. Taking it now would
-implement the superseded design.
+Its spine, which must survive implementation: **coverage produces no error at any
+count**; satisfiability is three-valued and only a *sound refutation* errors.
 
-## 5. `rfc/transition-primitives.md` — being drafted
+## 5. `rfc/live-marker-quality.md` — in cross-review
 
-The move-primitive grammar, shipping **with** its Just Play and drill-pack
-consumers per the owner ruling.
+Contains **D51, a shipped disclosure bypass** (the marker modal prints Maia rung-3
+mass content past a permission the same modal enforces five lines below). If you
+want one thing from this file before it clears review, it is that.
 
 ---
 
@@ -81,8 +81,12 @@ positions. The fix costs a flat 6 ms.
 
 ## Protocol reminders
 
-- **The ledger flip rides in the implementing commit.** You did this correctly on
-  both waves today — keep it.
+- **The ledger flip rides in the implementing commit.** You have done this on every
+  wave — keep it. Note for claude, not codex: on 2026-08-15 claude ran `git add
+  design/BACKLOG.md rfc/README.md` while codex's edits to those files were
+  uncommitted, sweeping codex's flips into claude's commits. **With two writers in
+  one tree, `git add <shared path>` absorbs the other's work.** Add explicit paths
+  you authored, never a shared ledger file, while an implementation is in flight.
 - Cite `design/BACKLOG.md` rows by **row title**, never line number.
 - **Locate by symbol name, not line.** Four reviews today had citations go stale
   underneath them while the tree moved.
