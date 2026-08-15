@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { SILENT_ASSISTANCE, type AssistanceConfig, type RunSessionKind } from "@chess-tabiya/runtime";
+  import { SILENT_ASSISTANCE, type AssistanceConfig } from "@chess-tabiya/runtime";
   import { onMount } from "svelte";
 
   import type { Capabilities, Learner } from "./api.js";
-  import { loadAssistance, saveAssistance } from "./assistance-preference.js";
+  import { ASSISTANCE_PROFILES, loadAssistance, saveAssistance, type AssistanceProfile } from "./assistance-preference.js";
 
   interface Props {
     capabilities?: Capabilities | undefined;
@@ -13,13 +13,13 @@
   }
 
   let { capabilities, learner, onSignOut, onDelete }: Props = $props();
-  const kinds = Object.freeze(["pack", "position", "imported"] as const);
-  let configs: Record<RunSessionKind, AssistanceConfig> = $state({ pack: SILENT_ASSISTANCE, position: SILENT_ASSISTANCE, imported: SILENT_ASSISTANCE });
+  const labels: Record<AssistanceProfile, string> = { pack: "Curated drill", position: "Just Play", imported: "Imported game", match: "Match / Arena", stream: "Streamed session", onramp: "On-ramp" };
+  let configs: Record<AssistanceProfile, AssistanceConfig> = $state(Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, SILENT_ASSISTANCE])) as Record<AssistanceProfile, AssistanceConfig>);
   let password = $state("");
   let deleteError = $state<string | undefined>();
 
   function storage(): Storage | undefined { try { return globalThis.localStorage; } catch { return undefined; } }
-  function set<Key extends keyof Omit<AssistanceConfig, "version">>(kind: RunSessionKind, key: Key, value: AssistanceConfig[Key]): void {
+  function set<Key extends keyof Omit<AssistanceConfig, "version">>(kind: AssistanceProfile, key: Key, value: AssistanceConfig[Key]): void {
     const next = Object.freeze({ ...configs[kind], [key]: value });
     configs = { ...configs, [kind]: next };
     saveAssistance(kind, next, storage());
@@ -29,16 +29,16 @@
     if (password.length === 0) { deleteError = "Re-enter your password before deleting the account."; return; }
     try { await onDelete(password); password = ""; } catch (error) { deleteError = error instanceof Error ? error.message : String(error); }
   }
-  onMount(() => { configs = { pack: loadAssistance("pack", storage()), position: loadAssistance("position", storage()), imported: loadAssistance("imported", storage()) }; });
+  onMount(() => { configs = Object.fromEntries(ASSISTANCE_PROFILES.map((profile) => [profile, loadAssistance(profile, storage())])) as Record<AssistanceProfile, AssistanceConfig>; });
 </script>
 
 <section aria-labelledby="assistance-settings-title">
   <h2 id="assistance-settings-title">Assistance by context</h2>
   <p class="honest">Saved in this browser only. Deployment providers are controlled by the server environment.</p>
   <div class="context-grid">
-    {#each kinds as kind}
+    {#each ASSISTANCE_PROFILES as kind}
       <fieldset>
-        <legend>{kind}</legend>
+        <legend>{labels[kind]}</legend>
         <label>Board lighting <select value={configs[kind].boardLighting} onchange={(event) => set(kind, "boardLighting", event.currentTarget.value as AssistanceConfig["boardLighting"])}><option value="off">Off</option><option value="legal">Legal moves</option><option value="sight">Structural sight</option><option value="evidence">Disclosed evidence</option></select></label>
         <label>Arrows <select value={configs[kind].arrows} onchange={(event) => set(kind, "arrows", event.currentTarget.value as AssistanceConfig["arrows"])}><option value="off">Off</option><option value="sight">Structural sight</option><option value="evidence">Disclosed evidence</option></select></label>
         <label>Spoken guidance <select value={configs[kind].spoken} onchange={(event) => set(kind, "spoken", event.currentTarget.value as AssistanceConfig["spoken"])}><option value="off">Off</option><option value="browser">Browser voice</option>{#if capabilities?.providers.tts === "external"}<option value="provider">Configured provider</option>{/if}</select></label>

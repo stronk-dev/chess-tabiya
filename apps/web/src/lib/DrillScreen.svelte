@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, RunRole, ShapeEntryView, VoicePage } from "./api.js";
+  import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, RunRole, SessionKind, ShapeEntryView, VoicePage } from "./api.js";
   import { BRANCH_COLLAPSE_FLOOR, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, liveMarkers, permittedAssistance, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
@@ -39,7 +39,7 @@
     projectedGrading,
     resistanceSentences,
   } from "./outcome-presentation.js";
-  import { loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
+  import { assistanceProfile, loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
 
   type RewindTarget =
@@ -61,6 +61,7 @@
     viewerRole?: RunRole | undefined;
     boardSide?: "white" | "black" | undefined;
     assistanceStorage?: PreferenceStorage | undefined;
+    liveSessionKind?: SessionKind | undefined;
     onMove: (uci: string) => void | Promise<void>;
     onRewind: (target: RewindTarget) => void | Promise<void>;
     onFork: (label?: string, intent?: string) => void | Promise<void>;
@@ -100,6 +101,7 @@
     viewerRole = "host",
     boardSide,
     assistanceStorage,
+    liveSessionKind,
     onMove,
     onRewind,
     onFork,
@@ -312,7 +314,7 @@
 
   function setAssistance<Key extends keyof Omit<AssistanceConfig, "version">>(key: Key, value: AssistanceConfig[Key]): void {
     assistance = Object.freeze({ ...assistance, [key]: value });
-    saveAssistance(run.sessionKind, assistance, preferenceStorage());
+    saveAssistance(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }), assistance, preferenceStorage());
     if (key === "markers" && value === "off") openPivotalNodeId = undefined;
   }
 
@@ -637,7 +639,7 @@
     measureViewport();
     globalThis.addEventListener("resize", measureViewport);
     speechAvailable = typeof globalThis.speechSynthesis !== "undefined" && typeof globalThis.SpeechSynthesisUtterance !== "undefined" && globalThis.speechSynthesis.getVoices().length > 0;
-    assistance = loadAssistance(run.sessionKind, preferenceStorage());
+    assistance = loadAssistance(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }), preferenceStorage());
     try {
       const stored = JSON.parse(globalThis.localStorage?.getItem(`tabiya:branch-fold:v1:${run.id}`) ?? "[]");
       if (Array.isArray(stored) && stored.every((value) => typeof value === "string")) foldedBranchIds = stored;

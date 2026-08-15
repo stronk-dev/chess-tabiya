@@ -1,6 +1,7 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { SILENT_ASSISTANCE } from "@chess-tabiya/runtime";
-import { assistanceKey, loadAssistance, saveAssistance } from "./assistance-preference.js";
+import { ASSISTANCE_PROFILES, assistanceKey, assistanceProfile, loadAssistance, saveAssistance } from "./assistance-preference.js";
 
 describe("assistance preference", () => {
   it("defaults silently and keeps pack and position surfaces separate", () => {
@@ -30,5 +31,44 @@ describe("assistance preference", () => {
     expect(loadAssistance("imported", storage)).toEqual({ ...SILENT_ASSISTANCE, spoken: "browser" });
     const current = { getItem: () => JSON.stringify({ ...SILENT_ASSISTANCE, ambient: "on" }), setItem() {} };
     expect(loadAssistance("imported", current)).toEqual({ ...SILENT_ASSISTANCE, ambient: "on" });
+  });
+
+  it("derives all six profiles with guard and live-session precedence", () => {
+    expect(ASSISTANCE_PROFILES).toEqual(["pack", "position", "imported", "match", "stream", "onramp"]);
+    expect(assistanceProfile({ sessionKind: "pack", feedbackPolicy: "attempt_end" })).toBe("pack");
+    expect(assistanceProfile({ sessionKind: "position", feedbackPolicy: "attempt_end" })).toBe("position");
+    expect(assistanceProfile({ sessionKind: "imported", feedbackPolicy: "attempt_end" })).toBe("imported");
+    expect(assistanceProfile({ sessionKind: "pack", feedbackPolicy: "attempt_end", liveKind: "match" })).toBe("match");
+    expect(assistanceProfile({ sessionKind: "position", feedbackPolicy: "attempt_end", liveKind: "stream" })).toBe("stream");
+    expect(assistanceProfile({ sessionKind: "position", feedbackPolicy: "immediate_guard" })).toBe("onramp");
+    expect(assistanceProfile({ sessionKind: "pack", feedbackPolicy: "immediate_guard", liveKind: "stream" })).toBe("onramp");
+  });
+
+  it("does not inherit or overwrite a Just Play preference in a stream", () => {
+    const values = new Map<string, string>();
+    const storage = { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => { values.set(key, value); } };
+    const position = { ...SILENT_ASSISTANCE, markers: "live" as const, boardLighting: "off" as const };
+    saveAssistance("position", position, storage);
+    expect(loadAssistance("stream", storage)).toEqual(SILENT_ASSISTANCE);
+    saveAssistance("stream", { ...SILENT_ASSISTANCE, ambient: "on" }, storage);
+    expect(loadAssistance("position", storage)).toEqual(position);
+    expect(values.get(assistanceKey("position"))).toBe(JSON.stringify(position));
+  });
+
+  it("keeps the silent-profile exception confined to board lighting", () => {
+    const maximum = { version: 4, markers: "live", guided: "live", humanSplit: "on_request", corpus: "on_request", voice: "persona", spoken: "provider", boardLighting: "evidence", arrows: "evidence", ambient: "on" } as const;
+    for (const profile of ["match", "stream", "onramp"] as const) {
+      expect(loadAssistance(profile, { getItem: () => null, setItem() {} })).toEqual(SILENT_ASSISTANCE);
+      const storedOff = { ...maximum, markers: "off" as const, guided: "off" as const, humanSplit: "off" as const, corpus: "off" as const, voice: "authored" as const, spoken: "off" as const, boardLighting: "off" as const, arrows: "off" as const, ambient: "off" as const };
+      const resolved = loadAssistance(profile, { getItem: () => null, setItem() {} });
+      const changed = Object.keys(resolved).filter((key) => resolved[key as keyof typeof resolved] !== storedOff[key as keyof typeof storedOff]);
+      expect(changed).toEqual(["boardLighting"]);
+    }
+  });
+
+  it("renders settings from the same exhaustive profile list", () => {
+    const source = readFileSync(new URL("./AssistanceSettings.svelte", import.meta.url), "utf8");
+    expect(source).toContain("{#each ASSISTANCE_PROFILES as kind}");
+    for (const label of ["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "On-ramp"]) expect(source).toContain(label);
   });
 });

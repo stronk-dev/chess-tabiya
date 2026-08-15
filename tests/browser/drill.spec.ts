@@ -294,9 +294,27 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await expect(page.getByText("your role: host")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Invitations" })).toBeVisible();
   await expect(page.getByLabel("Tabiya handle")).toBeVisible();
+  const voteEditor = page.locator(".vote-editor");
+  await voteEditor.getByLabel("Prompt").fill("Which plan?");
+  const moves = ["a1b1", "c1d2", "c1e3", "c1f4", "c1g5", "c1h6", "d1d2", "d1e2"];
+  const labels = ["Rook across", "Bishop d2", "Bishop e3", "Bishop f4", "Bishop g5", "Bishop h6", "Queen d2", "Queen e2"];
+  for (let index = 2; index < moves.length; index += 1) await voteEditor.getByRole("button", { name: "Add option" }).click();
+  await expect(voteEditor.getByRole("button", { name: "Add option" })).toBeDisabled();
+  await expect(voteEditor.getByRole("button", { name: "Remove" }).first()).toBeEnabled();
+  for (let index = 0; index < moves.length; index += 1) {
+    await voteEditor.getByLabel("Move (UCI)").nth(index).fill(moves[index]!);
+    await voteEditor.getByLabel("Label").nth(index).fill(labels[index]!);
+  }
+  await voteEditor.getByLabel("Duration (seconds)").fill("90");
+  await voteEditor.getByRole("button", { name: "Open vote" }).click();
+  await expect(page.getByText("Which plan? · open")).toBeVisible();
+  await expect(page.getByText("Bishop f4: 0")).toBeVisible();
+  await expect(page.getByText("No votes yet.")).toBeVisible();
   await page.getByRole("button", { name: "Open overlay" }).click();
   await expect(page.getByLabel("Live session overlay")).toBeVisible();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await expect(page.getByText("Bishop f4: 0")).toBeVisible();
+  await expect(page.getByText("No votes yet.")).toBeVisible();
   await expect(page.locator("#primary-navigation")).toHaveCount(0);
 });
 

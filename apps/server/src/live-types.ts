@@ -1,4 +1,4 @@
-import type { RunRole } from "./storage.js";
+import type { LeaseIdentity, RunRole } from "./storage.js";
 
 export const SESSION_KINDS = Object.freeze(["stream", "academy", "match"] as const);
 export type SessionKind = (typeof SESSION_KINDS)[number];
@@ -70,6 +70,7 @@ export interface VoteTally {
   readonly window: VoteWindow;
   readonly tally: readonly (VoteOption & { readonly count: number })[];
   readonly total: number;
+  readonly relayed: number;
 }
 
 export interface SessionInvitation {
@@ -99,6 +100,7 @@ export interface LiveSessionDetail {
   readonly role: RunRole;
   readonly activeNodeId: string;
   readonly leaseHeldBy: { readonly learnerId: string; readonly handle: string };
+  readonly voteAdapter?: LeaseIdentity;
   readonly grants: readonly import("./storage.js").RunGrant[];
   readonly proposals: readonly SessionProposal[];
   readonly vote?: VoteTally;

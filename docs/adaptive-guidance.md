@@ -38,25 +38,34 @@ absorbing on a promotion-free path because the material count cannot rise.
 
 ## Assistance configuration and enforcement
 
-Each session kind has a versioned local preference:
+Six learner-facing contexts have independent, versioned local preferences: curated drills,
+Just Play, imported games, native matches/Arenas, streamed sessions, and the on-ramp. A live
+stream or match selects its own profile; `immediate_guard` selects on-ramp first. The stored
+shape is currently:
 
 ```ts
 {
-  version: 1,
+  version: 4,
   markers: "off" | "live",
   guided: "off" | "live",
   humanSplit: "off" | "on_request",
-  voice: "authored" | "persona"
+  corpus: "off" | "on_request",
+  voice: "authored" | "persona",
+  spoken: "off" | "browser" | "provider",
+  boardLighting: "off" | "legal" | "sight" | "evidence",
+  arrows: "off" | "sight" | "evidence",
+  ambient: "off" | "on"
 }
 ```
 
-The universal default is `off`, `off`, `off`, and `authored`. Preferences live in
-`localStorage`; they are not events, run fields, or server-side learner state. The shared
-`permittedAssistance` function gives the client an honest permission projection and guards the
-server-owned human-split seam. A human split is unavailable while a run's feedback-delivery
-window is closed and to live participants or spectators. Markers and named-pattern guidance are
-client projections of data the viewer already holds, so pretending to withhold them server-side
-would be theatre.
+New contexts start from `SILENT_ASSISTANCE`; its rules-tier `boardLighting: "legal"` is the
+single named exception to literal off. Preferences live in `localStorage`; they are not events,
+run fields, or server-side learner state. A profile selects what the learner asked for, never
+what the viewer may receive. The shared `permittedAssistance` function separately projects that
+permission ceiling and guards the server-owned human-split and corpus seams. A human split is
+unavailable while a run's feedback-delivery window is closed and to live participants or
+spectators. Markers and named-pattern guidance are client projections of data the viewer already
+holds, so pretending to withhold them server-side would be theatre.
 
 ## Pivotal markers
 

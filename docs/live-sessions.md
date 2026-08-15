@@ -64,14 +64,18 @@ proposals stale.
 
 A host may open one 15–600 second vote window over two to eight legal moves. Votes are
 advisory: a tally never moves a piece. The host may separately play or apply a move and
-record what was applied. This keeps run replay independent of social state.
+record what was applied. The browser exposes the complete two-to-eight range, separate
+host-authored labels and prompt, and the full duration range. This keeps run replay independent
+of social state.
 
 Ordinary votes use a server-derived `learner:<id>` key. A configured chat-adapter
 account may relay external keys, which the server stores in a disjoint
 `chat:<adapter-id>:<key>` namespace. Other learners cannot supply a key. Keys are bounded
 to 128 characters and each window accepts at most 50,000 distinct relayed voters;
 recasts from an existing key remain possible at the cap. The tally is only as trustworthy
-as the adapter that submitted it, and the UI says so.
+as the adapter that submitted it. Session and overlay tallies therefore state how many votes
+were relayed, name the configured adapter when it still resolves, and say explicitly that
+Tabiya cannot verify chat identities. Member-only tallies are labelled as such.
 
 ## Position Arena
 
@@ -123,8 +127,10 @@ revoked, and wrong-handle tokens all return the same not-found response.
 
 A streamer cannot be forced to play blind while their audience sees more evidence: the
 streamer can grant and use a second spectator account. Tabiya therefore gives player and
-spectator the same disclosure projection. It protects both from premature evidence; it
-does not pretend to prevent a host from cheating on themselves.
+spectator the same viewer-blind run projection. Assistance is a separate rail: role may cap it
+lower for a participant or spectator, never raise it, and never exceed what the run itself has
+disclosed. It protects every reader from premature evidence; it does not pretend to prevent a
+host from cheating on themselves.
 
 The live platform uses authenticated polling rather than WebSockets or SSE. External
 challenge URLs remain opaque HTTPS links supplied by the host; native clocks,

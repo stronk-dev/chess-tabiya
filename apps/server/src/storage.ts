@@ -1871,7 +1871,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     const rows = this.#database.prepare("SELECT choice_uci,count(*) AS count FROM session_votes WHERE session_id=? AND window_id=? GROUP BY choice_uci").all(sessionId,windowId) as readonly Record<string,unknown>[];
     const counts = new Map(rows.map((row)=>[String(row.choice_uci),Number(row.count)]));
     const tally = Object.freeze(window.options.map((option)=>Object.freeze({...option,count:counts.get(option.moveUci)??0})));
-    return Object.freeze({window,tally,total:tally.reduce((sum,item)=>sum+item.count,0)});
+    const optionMoves=window.options.map((option)=>option.moveUci);
+    const relayed=optionMoves.length===0?0:Number((this.#database.prepare(`SELECT count(*) AS count FROM session_votes WHERE session_id=? AND window_id=? AND voter_key LIKE 'chat:%' AND choice_uci IN (${optionMoves.map(()=>"?").join(",")})`).get(sessionId,windowId,...optionMoves) as {count:number}).count);
+    return Object.freeze({window,tally,total:tally.reduce((sum,item)=>sum+item.count,0),relayed});
   }
 
   closeVoteWindow(sessionId:string,windowId:string,actorLearnerId:string,at:string,appliedOptionUci?:string):VoteWindow {
