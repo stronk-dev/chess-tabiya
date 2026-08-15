@@ -76,6 +76,45 @@
   that is a deliberate result rather than an omission.
 - **Planning:** `planning/transition-primitives/` (once implementing)
 
+
+> **R3 MEASURED, 2026-08-15 — the live tier is NOT supported, and it fails this RFC's own bar
+> arithmetically rather than by judgment.** `{D}`, over 634 transitions and 15,989 enumerated
+> legal alternatives:
+>
+> - **The bar was "a reader judges a clear majority informative".** Of 44 `defended_duty_acquired`
+>   witnesses, **13 (29.5%)** clear the necessary conditions — and because they are *necessary*,
+>   29.5% is an **upper bound**. A clear majority is unreachable by arithmetic. **No reader study
+>   is needed to answer this.**
+> - **The second bar was "materially better than a random quiet move".** It signals on **2.1%** of
+>   played moves against **3.4%** of quiet alternatives — **0.61×, the wrong direction.** The
+>   reason is worth keeping: *overload is what bad moves create, and a spine is made of endorsed
+>   moves.*
+> - **§5.4's threshold rationale is invalid, twice.** Selectivity does not predict quality
+>   (Spearman ρ = **−0.143**; the cleanest leaf is the second-commonest), and the corrected rates
+>   collapse the "37-point empty band" to **5.5 points** — membership survives, *"forced rather
+>   than tuned"* does not.
+> - **Two published figures were not leaf rates at all:** `escape_squares_changed` is **94.0%**
+>   (61.2% was `lost`-only and non-mover-colour-only), and `move_irreversibility` is **24.6%** with
+>   `clock_zeroed` included, not 13.2%. Corrected attack/defence rates: 51.3 → **37.5%** and
+>   76.5 → **34.1%**.
+> - **`slider_lines_changed` looked like the best leaf and dies on the alternatives axis** —
+>   **1.05× lift**, 32.5% of the same position's alternatives also signal. Without that axis the
+>   analysis would have recommended putting it live. It is R2's renderer-not-detector in a new
+>   costume.
+>
+> **Take the pre-authorised fallback: remove `defended_duty_acquired` from the live tier.** The
+> measured alternative is one step further out — a **T∧C-gated** variant fires at 2.1% (4.0% on a
+> learner-proxy population) with **0% false positives by construction**, ~0.8 markers per 20-ply
+> branch, and **zero firings across 259 endgame transitions** (it is an opening/middlegame
+> instrument). Whether that conjunction survives rules 2 and 5 is an RFC question; the dossier's
+> own note is that sole-defender is a property of `after` alone, so it belongs as a **surface
+> conjunction, not a new leaf**. Also measured: the **released** direction — which this RFC does
+> not ship live — is the sharper half at 38.5% FP and **2.19× lift**.
+> **The on-request tier is untouched by this ruling but is not clean either:** it prints 6.18
+> observations per ply of which 0.68 clear the gate — an **89.0% false-positive rate at the
+> observation level.** Silence-by-default and learner-initiated disclosure are what make that
+> acceptable; it should be stated, not assumed.
+
 ## Summary
 
 Every predicate in the shipped vocabulary is a feature of a *position*; none is a feature of
