@@ -1689,3 +1689,246 @@ Not done, deliberately: no touch of `rfc/`, `design/`, `docs/`, `archive/`,
 (including `carlsbad-minority-attack` and the two cross-phase trajectories,
 which carry the same blocker); no class reclassifications; no replacement lines
 for anything deleted; no commits.
+
+## 2026-08-15 — Wave 4b: the two commissioned shape entries, the Scandinavian judgment overturned, and the first prose-grounding pass (claude)
+
+Three outstanding commissions cleared in one wave: the shape entries two earlier
+packs blocked on, the Scandinavian deferral that wave 4a recorded rather than
+resolved, and the prose residue grounding wave G1 explicitly did not reach.
+
+agent-research 70 · agent-encoding 85 · agent-engine-validation 95 · review 0 ·
+agent-revision 20 · agent-tooling-friction 40 · **total 310**, friction 12.9%
+
+Machine time outside the clocks (wave-5a convention): 55 s for the main
+Stockfish batch (5 parallel processes, 10 decisions / 50 candidates), ~40 s for
+the White-side batch and ~25 s for the supplementary refutation lines — 130
+engine jobs at depth 22 in total; four serialized Lichess explorer pulls (30
+rows) through the repo's own emitter.
+
+Delivered: 2 shape entries, 2 opening packs, 4 packs wired to the new entries,
+5 packs prose-corrected, 4 new candidate artifacts. `make shape-check` green on
+all 25 entries, `make pack-check` green on all 39 packs, and an independent
+re-walk of all 527 spine positions in `content/drafts` legal with SAN/UCI
+agreement.
+
+### 1. The two commissioned entries
+
+Both were commissioned **via blockers** — wave-4a authors wanted to reference an
+entry that did not exist and correctly shipped without a wrong reference. Before
+authoring either, the gap itself was verified rather than trusted: the trigger of
+every one of the 23 existing entries was evaluated against all 487 then-shipped
+spine positions with the repo's own `matchesStructuralExpression`. Result: **no
+entry fires on any position of either London pack**, and on the King's Indian
+packs only `fianchetto-g7` fires — `closed-centre-chain` matches nothing there,
+exactly as its own provenance and the KID blockers claimed and nothing had
+checked.
+
+- **`content/shapes/london-wedge.json`** — c3/d4/e3 with the dark-squared bishop
+  on f4, g3 or h2. Fires on exactly 14 nodes, the seven from `p11-c3` to
+  `p17-ne5` in each London pack, and nowhere else in the corpus. Six plans, five
+  with a machine-verified success signature and one honest `null`.
+- **`content/shapes/kid-chain-arrangement.json`** — White c4/d5/e4 against Black
+  d6/e5. Fires on exactly 14 nodes, the seven from `p15-d5` onward in each KID
+  pack including both branch tips, and nowhere else. Six plans, four signed, two
+  `null`. It is the reversed sibling `closed-centre-chain`'s provenance asked
+  for.
+
+The entries' hard facts are derived, not recalled. **c3, d4 and e3 are all dark
+squares**, so the wedge stands on the colour its own bishop travels — and with
+White pawns on b2 and e3, **a bishop on c1 has exactly one legal destination,
+d2**, enumerated on two independent positions. The mirror holds for Black: in the
+anti-London tabiya after ...e6, **the c8 bishop has exactly one destination,
+d7**. Across all 14 London firing nodes, **White's b2 pawn has zero defenders**.
+On the KID side, the two breaks are exact pawn-geometry mirrors: a White pawn on
+c5 attacks d6, a Black pawn on f5 attacks e4 — each striking the pawn that holds
+the other chain up. The KID entry's ...f5 signature fires at `p20-f5`, the last
+spine node of both KID packs, so those packs now **end inside a named plan's
+success condition** rather than beside one — the second instance of the "arrival
+is a board fact" property after wave 4a's `iqp-white` handoff.
+
+The standing finding held: no signature was invented that could not be expressed.
+Three of the twelve plans ship `signature: null` with the reason stated.
+
+All four commissioning packs were then wired (`shapes` reference plus
+`shapePlan` on the matching plan classes) and their blockers rewritten to record
+what the reference does and does not clear. `pack-check` green on all four.
+
+**The wiring refuted an authored claim.** `anti-london-black`'s
+`b2-counterattack` plan class said the bishop's departure from c1 "leaves b2
+attended only by the queen". Counted with the repo's own `direct_attack_count` at
+the pack's own deviation position (1.d4 Nf6 2.Nf3 d5 3.Bf4 c5 4.e3 Qb6): **zero**
+White pieces bear on b2. The queen on d1 does not attack b2 on any line. With the
+bishop still home the count is 1, and that one is the bishop. Corrected in place.
+
+### 2. Scandinavian wave-4b — the deferral does not survive the data
+
+Wave 4a deferred the Scandinavian on **depth-commensurability**: 56.3M games but
+a 2-ply row, "not comparable to 5-ply roots". Re-examined against the real data,
+that judgment was about the *pull*, not the opening. The CC0 catalogue carries 46
+B01 rows up to 13 plies, and four fresh authenticated explorer pulls through the
+repo's own emitter (`content/candidates/priority-wave4b`, `-deep`, `-bg4`,
+`-sixth`; 1400/1600/1800, blitz+rapid, 2024-01..2026-07) measured the family at
+tabiya depth for the first time:
+
+| root | plies | games at band |
+|---|---|---|
+| 3...Qd8 Valencian | 6 | 7,841,794 |
+| 3...Qa5 Main Line | 6 | 7,160,241 |
+| 2...Nf6 3.d4 Modern | 5 | 1,670,518 |
+| 3...Qd6 Gubinsky-Melts | 6 | 1,277,395 |
+
+Three of the six families wave 2 and wave 4a actually authored sit **below** the
+Scandinavian's 6-ply main branches: King's Indian 5,353,956 (4 plies), Dutch
+4,845,395 (2 plies), London 3,851,145 (5 plies). **The correct outcome is
+therefore authoring, not refusal**, and the recorded judgment is overturned by
+its own instrument. The lesson generalises: a priority row's ply count is a
+property of the lines TSV that was fed in, not of the opening, and must not be
+read as evidence about drillability.
+
+Two packs authored, both `pack-check` green:
+
+- **`scandinavian-mainline-black`** — 1.e4 d5 2.exd5 Qxd5 3.Nc3 Qa5 4.d4 Nf6
+  5.Nf3 Bg4 6.Be2 Nc6 7.O-O O-O-O 8.Be3, 16 spine nodes with three sibling
+  branches, 10 deviations.
+- **`anti-scandinavian-white`** — the same tabiya from the other chair, trunking
+  into 6.h3 Bh5 7.g4 Bg6 8.Ne5, 22 spine nodes, with 6.Be2 kept as a full
+  playable **consequence branch** rather than a footnote, 10 deviations.
+
+The pair's thesis is the first content in this repo where **two independent
+instruments agree on a band-specific recommendation**. Of the five White sixth
+moves measured after 5...Bg4, only 6.h3 gives White a plus score at band (52.7%
+against 43.6% in 71,349 games) and Stockfish at depth 22 ranks the same five in
+nearly the same order with h3 first at +1.09 and Bc4 last at 0.00. The popular
+6.Be2 scores 43.9% and evaluates +0.46; after 6...Nc6 7.O-O O-O-O White scores
+**38.1%** in 41,554 games and every measured eighth move sits between -1.20 and
+-1.70.
+
+The packs also state where the instruments **disagree**, rather than hiding it:
+the spine's 5...Bg4 is played by 53.7% at band and is the engine's fourth choice
+of five, 0.34 behind 5...c6. That the popular move is the right thing to drill is
+named in the Black pack's blockers as the pack's central ungrounded claim.
+
+Every number in both packs was audited mechanically after encoding: all 59
+distinct corpus-shaped numbers in the two packs' prose appear verbatim in the
+four explorer artifacts, and every engine figure was checked against the
+evaluation record.
+
+### 3. Prose grounding — the residue G1 named and did not reach
+
+G1 grounded moves and said so: prose, plan classes and deviation classes stayed
+untouched, and `corpus_observed` claims were already clean. This pass took the
+most checkable remaining kind — **attacker and defender counts, piece mobility
+counts, legality, checkmate, and pawn geometry** — harvested 232 factual-shaped
+statements from the opening packs, and mechanically checked 21 of them with the
+repo's own `direct_attack_count`, `line_blockers` and chessops move generation.
+
+**16 held. 5 were refuted and corrected in place; none was replaced by an
+invented substitute.**
+
+1. `anti-french-advance-white` — "after ...Qb6 the base has three attackers".
+   Measured: **two** (the c5 pawn and the c6 knight) against three White
+   defenders; the queen is a third only through Black's own c5 pawn.
+2. `anti-dutch-leningrad-white` — "...f5 stopped guarding e4 and d5 forever".
+   **Backwards.** A black pawn on f5 *guards* e4 and g4; what ...f5 gives up is
+   the pawn guard on e6 and g6; no black f-pawn ever guarded d5.
+3. `najdorf-english-attack-black` — "the c8 bishop has one square and the f8
+   bishop has two", given as the reason for the move order. Measured at that
+   position: **c8 has five (d7, e6, f5, g4, h3) and f8 has one (e7)** — exactly
+   reversed. The stated reason was withdrawn, not rewritten.
+4. `opening-principles-white` — "from h3 it touches two central squares instead
+   of f3's four". Measured: **h3 touches none of d4/d5/e4/e5, f3 touches two**
+   (d4 and e5).
+5. `opening-principles-black` — "from c6 it would touch four central squares".
+   Measured: **two**, d4 and e5. Same authored miscount as #4, in the sibling
+   on-ramp pack — the only systematic error the pass found.
+
+What held is worth recording too, because these are the claims a 1000-1400 pack
+lives or dies on: all three `Qxf7#` claims in `opponent-intent-early-queen` are
+real checkmates; the f7 attacker/defender counts (2 against 1) are exact; ...g6
+does both block the h5-f7 diagonal and attack the queen; ...Nf6 does cut White's
+second attacker on f7; 3.Nxe5 in `opening-principles-white` really is a
+one-for-one trade by the counting rule the pack teaches; both `Ng5` deviations
+really do hang the knight to `Qxg5` with zero defenders; the Damiano `Qh5+` is
+check; f2-f3 really does open e1-h4; and the London `Ne5` fork geometry
+reproduces exactly.
+
+### What the machine refuted in my own drafting, before anything shipped
+
+Seven drafted lines and two arithmetic claims died in the harness. Sixth
+attestation of the standing lesson: **lines are derived, never recalled.**
+
+- After 7...Nxd4 in the Scandinavian, `Bxg4` is **illegal** — White's own knight
+  stands on f3.
+- After 6.h3 Qh5, `Nxh5` is **not a knight move**.
+- After 8.Ne5, `...Nxe5` is **not available to the f6 knight**.
+- `6...Qxd4` is **not a queen move from a5**.
+- In the London probe, `...cxd3` after `Bc2` (the bishop had already left d3),
+  and Black's `d5-d4` (occupied by White's pawn) — both illegal.
+- My deviation note said 4...Nc6 costs 0.74; the measured figure is **0.77**.
+- My provenance said "47 candidate moves and 9 walked lines" and "14 decision
+  positions, 57 candidate moves"; the actual counts are **50 / 4** and
+  **13 / 58**. Both corrected.
+
+### contract-gaps and frictions, sharpest first
+
+1. **Shape plan success signatures are inert — nothing in the shipped system
+   ever evaluates one.** Verified in source: `matchesStructuralExpression` is
+   called on a shape's *trigger* in three places (`guidance.ts:38`,
+   `shape-firing.ts:23`, `shape-validation.ts:55` and `:78`) and on
+   `plans[].success.signature` **nowhere**. The signature is validated for
+   well-formedness (`shape-validation.ts:52`) and rendered as an English sentence
+   (`ShapePanel.svelte:39`); that is its entire life. The standing "75 of 103
+   ship `signature: null`" finding therefore understates the situation: the
+   non-null ones are equally unenforced. Either a consumer evaluates them or the
+   field is documentation with a schema.
+2. **A third shape-library orientation gap, found exactly like the first two.**
+   The Scandinavian trunk reaches kings castled on opposite wings, but
+   `opposite-castling-race` encodes only the White-long / Black-short
+   orientation — its trigger matches none of either new pack's walked positions,
+   and no other entry matches any of them. Adding a `mirrored` disjunct would be
+   the wrong fix: the entry's plans are colour-owned and the mirroring law
+   forbids re-pointing them. Both packs therefore ship with **no** shapes
+   reference and commission the entry, following the wave-4a London precedent.
+   Three commissions have now arrived by the same route; the library's gap shape
+   is orientation, not subject matter.
+3. **No repo command evaluates a draft pack, and none evaluates a shape entry
+   against a corpus of positions.** Sixth attestation of G1's gap #2, now with a
+   sibling. This wave rebuilt both harnesses from scratch — a walker, a firing
+   census, a signature prober and an engine driver — none of which is repo
+   surface. A `make shape-firing FILE=<entry> CORPUS=content/drafts` would have
+   removed the single largest block of this wave's clock, and it is the exact
+   instrument that proved the two commissioned gaps were real.
+4. **`shape-check` drops a capability the library already ships.**
+   `validateShapeEntry` accepts a `probeFen` and returns `probeMatches`, and the
+   HTTP lint route exposes it — but `shape-check.ts` never passes it, so the CLI
+   cannot answer "does this trigger fire on this position". One argument.
+5. **The explorer priority lines input still lives outside `content/`** (wave-4a
+   friction #1, second attestation). This wave again wrote scratchpad TSVs and
+   used `--output-root`, which works, but means the four new artifacts' `job.json`
+   records a scratchpad path as their input origin — provenance pointing at a
+   directory that will not exist tomorrow.
+6. **There is no evidenceType for "two independent instruments agree."** The
+   Scandinavian pair's strongest claim is corpus and engine converging on 6.h3;
+   it is encoded as `["corpus_observed","engine_validated"]`, which reads as two
+   separate weaker claims rather than the one stronger one.
+7. **A pack's own `guard` and its deviation classes remain unrelated** (G1 gap
+   #4, second attestation): both new packs carry classes whose measured cost is
+   far from what the class implies, named in their own blockers rather than
+   quietly reclassified.
+
+### What the pass may not do, and did not
+
+`rfc/archive/content-sourcing-foundation.md:772` rules deviation classes
+objective-relative, so **no class was reclassified on a number anywhere in this
+wave**, including the five places in the new packs where the number plainly
+disagrees with the class. Those disagreements are named in the packs' own
+blockers and left visible in the files. Law 8 cuts both ways: the engine may not
+manufacture the class any more than the LLM may. What was changed is only false
+factual statements — counts, mobility, pawn geometry, defender arithmetic — and
+one plan-class sentence whose arithmetic was simply wrong.
+
+Not done, deliberately: no touch of `rfc/`, `design/`, `docs/`, `archive/`,
+`apps/`, `packages/`, `schemas/`; no edit to `opposite-castling-race.json` (the
+mirrored orientation is commissioned, not bolted on); no third shape entry
+authored without a commission; no reclassifications; no replacement rationale
+for the withdrawn Najdorf move-order reason; no commits.

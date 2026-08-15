@@ -34,13 +34,18 @@
     "queenside-file-play"
   ],
   "shapes": [
-    "fianchetto-g7"
+    "fianchetto-g7",
+    "kid-chain-arrangement"
   ],
   "planClasses": [
     {
       "id": "classical-race",
       "label": "Seal with d5, reroute Ne1-d3, break with c5",
-      "description": "The spine's plan: when the centre closes, White's pawn chain points at the queenside, and every move either queues the c5 break or clears the pieces that will use the c-file. Defensive gestures on the kingside are moves the queenside never gets back."
+      "description": "The spine's plan: when the centre closes, White's pawn chain points at the queenside, and every move either queues the c5 break or clears the pieces that will use the c-file. Defensive gestures on the kingside are moves the queenside never gets back.",
+      "shapePlan": {
+        "shape": "kid-chain-arrangement",
+        "plan": "white-strike-the-base-with-c5"
+      }
     },
     {
       "id": "bayonet-b4",
@@ -337,7 +342,7 @@
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
       "ENGINE-CHECKED 2026-08-15 and confirmed literally: after 7.dxe5 dxe5 the position evaluates 0.00 at depth 22. It also costs White the whole edge — 7.dxe5 is 0.65 below the spine's 7.O-O, the largest deviation cost in this pack. 'Resolves level' is now grounded. The accepted_alternative class was not changed; the number sits beside it.",
       "The shape reference is White-side aspirational: white-trade-the-fianchetto-bishop names a plan (Be3/Qd2/Bh6 ideas) that the authored spine never begins. The entry genuinely fires structurally, but the plan linkage is a hands-off declaration — the format still cannot distinguish 'present' from 'hands off to' (wave-2 friction #5, third attestation).",
-      "No shape entry names the KID chain arrangement; White's 'chain points at the queenside' teaching is inlined and non-reusable until a KID-arrangement chain entry is authored (see the Black pack's blocker).",
+      "SHAPE ENTRY AUTHORED 2026-08-15 — this blocker is superseded and kept for the record. content/shapes/kid-chain-arrangement.json now exists and this pack references it from the classical-race plan class, which points at the white-strike-the-base-with-c5 plan. What that does NOT clear: the entry's own plan descriptions, watch items and typical mistakes are agent-authored and ungrounded exactly as this pack's prose is, so the reference moves the teaching into a reusable place without grounding it. What was machine-checked before the reference was made: the entry's trigger fires on seven (p15-d5 onward, including the b4-bayonet tip) of this pack's spine positions and on no position of any other shipped pack, evaluated with the repo's own matchesStructuralExpression over all 487 walked spine positions in content/drafts. Original blocker text: \"No shape entry names the KID chain arrangement; White's 'chain points at the queenside' teaching is inlined and non-reusable until a KID-arrangement chain entry is authored (see the Black pack's blocker).\"",
       "Whether 9.Ne1 or 9.b4 is more common or scores better at these bands is unquantified below the family root.",
       "ENGINE PASS RUN 2026-08-15 — this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 22 candidate moves across 12 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative — rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist."
     ],

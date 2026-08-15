@@ -1,0 +1,543 @@
+{
+  "id": "scandinavian-mainline-black",
+  "version": "0.1.0",
+  "title": "Scandinavian main line: the queen on a5 and the race you castle into",
+  "mode": "line",
+  "phase": "opening",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Black player who answers 1.e4 with 1...d5",
+    "branchLengthTarget": 12
+  },
+  "start": {
+    "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+    "movesSan": [
+      "e4",
+      "d5",
+      "exd5"
+    ],
+    "side": "black"
+  },
+  "objective": {
+    "type": "follow_theory",
+    "summary": "You answered 1.e4 with 1...d5 and you are about to spend a tempo on the queen. This pack drills what you get for it: the queen on a5 already facing the side you will attack, the pin on f3, the knight to c6, and castling long into a race that players at your band win far more often than they lose. It also shows you the one White sixth move that takes the race away."
+  },
+  "concepts": [
+    "tempo-for-placement",
+    "pin-before-committing",
+    "opposite-side-race"
+  ],
+  "planClasses": [
+    {
+      "id": "castle-into-the-race",
+      "label": "Castle long and race (...Nc6, ...O-O-O)",
+      "description": "Every piece to the queenside, king to the queenside, and then the pawns at White's king. The queen on a5 is not misplaced for this plan - she is already there."
+    },
+    {
+      "id": "hold-the-pin",
+      "label": "Keep the pin on f3 and make White solve it",
+      "description": "The bishop on g4 is the whole reason ...Nc6 bites. Do not release it for free: make White spend h3, or Be2 and a tempo, or accept the trade on his terms rather than yours."
+    },
+    {
+      "id": "solid-house-first",
+      "label": "Build the house first (...c6, ...e6)",
+      "description": "The slower repertoire: a pawn on c6 for the queen's retreat and the b7 square, and a pawn on e6 before any bishop commits. It declines the race and it is what the engine prefers."
+    }
+  ],
+  "spine": [
+    {
+      "id": "p4-qxd5",
+      "moveUci": "d8d5",
+      "moveSan": "Qxd5",
+      "annotations": [
+        "Take with the queen. It is what 68.5% of players at your band choose, and it is also the best of the four recaptures measured at depth 22 - the early queen sortie is a real opening, not a beginner's error. What you are buying is the tempo White is about to spend."
+      ],
+      "children": [
+        {
+          "id": "p5-nc3",
+          "moveUci": "b1c3",
+          "moveSan": "Nc3",
+          "annotations": [
+            "The tempo arrives. This is the whole bargain of the Scandinavian: White develops with gain of time, and you decide where the queen will live for the next twenty moves."
+          ],
+          "children": [
+            {
+              "id": "p6-qa5",
+              "moveUci": "d5a5",
+              "moveSan": "Qa5",
+              "annotations": [
+                "a5 keeps the queen active and looks down the diagonal at the c3 knight. At depth 22 the three main retreats sit within two centipawns of each other, so the engine has no opinion here - this is a repertoire choice, not a calculation."
+              ],
+              "children": [
+                {
+                  "id": "p7-d4",
+                  "moveUci": "d2d4",
+                  "moveSan": "d4",
+                  "annotations": [
+                    "White takes the centre. Note what has not happened: nothing has hit your queen a second time, which is what makes a5 playable."
+                  ],
+                  "children": [
+                    {
+                      "id": "p8-nf6",
+                      "moveUci": "g8f6",
+                      "moveSan": "Nf6",
+                      "annotations": [
+                        "Develop and stop d4-d5. Here White's two setups diverge: the knight to f3, or the bishop to d2 first."
+                      ],
+                      "children": [
+                        {
+                          "id": "p9-nf3",
+                          "moveUci": "g1f3",
+                          "moveSan": "Nf3",
+                          "annotations": [
+                            "The best developing move of the five measured, and the second most common at band: 35.8% against 45.5% for Bd2. The knight now blocks its own f-pawn and, more to the point, becomes something you can pin."
+                          ],
+                          "children": [
+                            {
+                              "id": "p10-bg4",
+                              "moveUci": "c8g4",
+                              "moveSan": "Bg4",
+                              "annotations": [
+                                "Pin the knight before playing anything else. 53.7% of players at band choose it. Be honest about the price: the engine ranks it fourth of the five replies measured here, 0.34 behind ...c6. You are drilling a human line, not the best line, and the rest of this pack is the argument for it."
+                              ],
+                              "children": [
+                                {
+                                  "id": "p11-be2",
+                                  "moveUci": "f1e2",
+                                  "moveSan": "Be2",
+                                  "annotations": [
+                                    "The most common answer at your band, 44.9%, and the one this pack is built to meet. It breaks the pin without asking your bishop any question at all."
+                                  ],
+                                  "children": [
+                                    {
+                                      "id": "p12-nc6",
+                                      "moveUci": "b8c6",
+                                      "moveSan": "Nc6",
+                                      "annotations": [
+                                        "The move that turns the position. Every developed piece now points at the same wing, and the queen on a5 is already where a queenside attack wants her. At band this is where White's score collapses: 39.7% for White, 56.7% for Black."
+                                      ],
+                                      "children": [
+                                        {
+                                          "id": "p13-o-o",
+                                          "moveUci": "e1g1",
+                                          "moveSan": "O-O",
+                                          "annotations": [
+                                            "White castles into it. 40.1% play this. Of the five White moves measured here it is the worst by evaluation, and by results it starts the slide: after it White scores 38.8%."
+                                          ],
+                                          "children": [
+                                            {
+                                              "id": "p14-o-o-o",
+                                              "moveUci": "e8c8",
+                                              "moveSan": "O-O-O",
+                                              "annotations": [
+                                                "Castle the other way and the race is on: 69.6% of players at band find this, and it is the only one of the five replies measured that leaves the evaluation on Black's side. Your king goes to the wing White's pieces are not on."
+                                              ],
+                                              "children": [
+                                                {
+                                                  "id": "p15-be3",
+                                                  "moveUci": "c1e3",
+                                                  "moveSan": "Be3",
+                                                  "annotations": [
+                                                    "White's most common eighth move, and all five eighth moves measured leave White worse. From here the pack stops and the race starts: your pawns go at his king, his go at yours, and the only question left is who is faster. Past the authored line."
+                                                  ],
+                                                  "children": []
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "p11-h3",
+                                  "moveUci": "h2h3",
+                                  "moveSan": "h3",
+                                  "annotations": [
+                                    "The question your bishop does not want asked. Only 18.1% play it, and it is the one sixth move of the five measured that the engine puts above a pawn, and the only one where White outscores Black at band: 52.7% to 43.6%. If your opponent knows this move, the pack's main line is not available to you."
+                                  ],
+                                  "children": [
+                                    {
+                                      "id": "p12-bh5-vs-h3",
+                                      "moveUci": "g4h5",
+                                      "moveSan": "Bh5",
+                                      "annotations": [
+                                        "Keeping the pin, which 61.2% choose. It invites g4 and a pawn storm aimed at your own bishop; the alternative ...Bxf3 hands over the bishop pair and is the engine's preference of the five replies measured."
+                                      ],
+                                      "children": []
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "p9-bd2",
+                          "moveUci": "c1d2",
+                          "moveSan": "Bd2",
+                          "annotations": [
+                            "The band's most common fifth move, 45.5%, and 0.19 behind Nf3 by evaluation. It unpins nothing and prepares Nd5 ideas against your queen; the pin plan is simply not available."
+                          ],
+                          "children": [
+                            {
+                              "id": "p10-c6-vs-bd2",
+                              "moveUci": "c7c6",
+                              "moveSan": "c6",
+                              "annotations": [
+                                "Against the bishop setup there is no knight on f3 to pin, so build the house instead: c6 gives the queen b6 and a retreat, and 39.3% of players at band choose it here."
+                              ],
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "queen-placed",
+      "label": "3...Qa5 - the queen has an address for the rest of the game",
+      "trigger": {
+        "atSpineNode": "p6-qa5"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "castle-into-the-race",
+          "hold-the-pin",
+          "solid-house-first"
+        ]
+      }
+    },
+    {
+      "id": "pin-set",
+      "label": "5...Bg4 - the pin is on and the price is stated",
+      "trigger": {
+        "atSpineNode": "p10-bg4"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "race-committed",
+      "label": "7...O-O-O - kings on opposite wings",
+      "trigger": {
+        "atSpineNode": "p14-o-o-o"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
+      "actions": []
+    }
+  ],
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "feedbackPolicy": "delayed_checkpoint",
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p4-qxd5",
+      "p5-nc3",
+      "p6-qa5",
+      "p7-d4",
+      "p8-nf6",
+      "p9-nf3",
+      "p10-bg4",
+      "p11-be2",
+      "p12-nc6",
+      "p13-o-o",
+      "p14-o-o-o",
+      "p15-be3",
+      "p11-h3",
+      "p12-bh5-vs-h3",
+      "p9-bd2",
+      "p10-c6-vs-bd2"
+    ],
+    "plyHorizon": 12
+  },
+  "deviations": [
+    {
+      "at": {
+        "spineNodeId": "p5-nc3"
+      },
+      "moveUci": "d5d8",
+      "class": "accepted_alternative",
+      "note": "3...Qd8 is the Valencian, and at your band it is the MORE common retreat: 7,841,794 games against 7,160,241 for the spine's ...Qa5. At depth 22 the engine separates them by one centipawn, which is nothing. It is a different pack's repertoire, not a mistake."
+    },
+    {
+      "at": {
+        "spineNodeId": "p5-nc3"
+      },
+      "moveUci": "d5d6",
+      "class": "accepted_alternative",
+      "note": "3...Qd6, the Gubinsky-Melts, is the third main retreat: 1,277,395 games at band, and the engine's marginal pick of the three by two centipawns. Same family, different square."
+    },
+    {
+      "at": {
+        "spineNodeId": "p5-nc3"
+      },
+      "moveUci": "d5e5",
+      "class": "tactical_error",
+      "note": "3...Qe5+ measures 0.18 worse than the spine's ...Qa5 at depth 22 - the check accomplishes nothing and the queen will be hit again. Not a blunder; a tempo given away for no return."
+    },
+    {
+      "at": {
+        "spineNodeId": "p7-d4"
+      },
+      "moveUci": "b8c6",
+      "class": "concept_violation",
+      "note": "4...Nc6 attacks d4 but blocks the c-pawn that this whole structure needs for ...c6. It is the worst of the five replies measured at this node, 0.77 behind ...c6."
+    },
+    {
+      "at": {
+        "spineNodeId": "p9-nf3"
+      },
+      "moveUci": "c7c6",
+      "class": "accepted_alternative",
+      "note": "5...c6 is the engine's choice of the five replies measured here, 0.34 ahead of the spine's ...Bg4, and 20.1% of players at band play it. It builds the solid house first and leaves the bishop question open. The spine drills the popular move instead, and says so."
+    },
+    {
+      "at": {
+        "spineNodeId": "p9-nf3"
+      },
+      "moveUci": "c8f5",
+      "class": "accepted_alternative",
+      "note": "5...Bf5 is the Classical Variation of the catalogue. 12.5% at band, and 0.28 better than ...Bg4 by evaluation. The bishop sits outside the pawn chain without pinning anything."
+    },
+    {
+      "at": {
+        "spineNodeId": "p11-be2"
+      },
+      "moveUci": "e7e6",
+      "class": "accepted_alternative",
+      "note": "6...e6 is the second most common reply at band (29.7%) and is 0.08 behind ...Nc6 by evaluation - inside the noise. It is a slower version of the same plan and it does not commit to the race."
+    },
+    {
+      "at": {
+        "spineNodeId": "p11-be2"
+      },
+      "moveUci": "a5h5",
+      "class": "tactical_error",
+      "note": "6...Qh5 offers a queen trade the wrong way round: 2.04 for White at depth 22, and the worst of the six replies measured here by more than a pawn."
+    },
+    {
+      "at": {
+        "spineNodeId": "p13-o-o"
+      },
+      "moveUci": "c6d4",
+      "class": "tactical_error",
+      "note": "7...Nxd4 is the greedy capture and it is refuted by simple recapture: 8.Nxd4 measures +4.34 for White at depth 22, and the walked material census reads White 37 Black 35 - the pin does not hold: machine-counted at the position after 7.O-O, White has two defenders on e2 and two on f3, and only one Black piece bears on d4 against two White defenders. The worst of the five replies measured at this node."
+    },
+    {
+      "at": {
+        "spineNodeId": "p13-o-o"
+      },
+      "moveUci": "e7e6",
+      "class": "accepted_alternative",
+      "note": "7...e6 keeps the king in the middle a move longer; 18.1% at band. It costs 0.96 against ...O-O-O by evaluation and it declines the race the whole pack is about."
+    }
+  ],
+  "feedbackClaims": [
+    {
+      "id": "the-race-pays",
+      "text": "At the 1400/1600/1800 bands (Lichess blitz+rapid, 2024-01 through 2026-07) the position after 6...Nc6 was reached 101,089 times and Black scores 56.7% against White's 39.7%; after 7.O-O O-O-O, 41,554 games and Black scores 58.5% against 38.1%. Whatever the engine thinks of the Scandinavian, this particular race is one players at your band win.",
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
+    },
+    {
+      "id": "popular-not-best",
+      "text": "The spine's 5...Bg4 is the choice of 53.7% of players at band and the fourth of five replies by depth-22 evaluation, 0.34 behind 5...c6. This pack drills the move you will actually meet and play, and states the gap rather than hiding it.",
+      "evidenceTypes": [
+        "corpus_observed",
+        "engine_validated"
+      ]
+    },
+    {
+      "id": "the-move-that-stops-it",
+      "text": "6.h3 is played in only 18.1% of games at band and is the one White sixth move of the five measured where White outscores Black (52.7% to 43.6%) and the only one the engine puts above +1.00. The line this pack drills is available because most opponents do not play it.",
+      "evidenceTypes": [
+        "corpus_observed",
+        "engine_validated"
+      ]
+    },
+    {
+      "id": "queen-retreats-are-a-choice",
+      "text": "At depth 22 the three main queen retreats after 3.Nc3 measure 0.75, 0.76 and 0.77 - a spread of two centipawns. No instrument in this repository separates them, so choosing between them is repertoire, not accuracy.",
+      "evidenceTypes": [
+        "engine_validated"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "B01 Scandinavian Defense line names: lichess-org/chess-openings b.tsv at commit 4b8622759e7ae6f93f011cc6c83a3823401ab45e (CC0-1.0, no attribution required), fetched this session; sha256 310f0997d5a26ac6c9abfabac028e47e78f24356a6ba322cfffbf8f5a3f88d25. The trunk through 4...Nf6 is the catalogued Main Line / Mieses Variation row; the sibling 6.h3 branch is the catalogued Lasker Variation row. Every ply beyond the catalogue is band-frequency chosen, not invented.",
+      "RATING-BAND FREQUENCY (mechanical): content/candidates/priority-wave4b, priority-wave4b-deep, priority-wave4b-bg4 and priority-wave4b-sixth - Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07, emitted this session with the repo's own explorer pipeline (make candidate-emit PIPELINE=explorer). Every share percentage, game count and score percentage in this pack is read from those four artifacts.",
+      "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's AUTHORING_PROFILE - depth 22, Threads 1, Hash 16MB, MultiPV 1 - driven through apps/server's createPositionSeedEngineEvaluator, which is EngineSupervisor plus StockfishEvidenceExecutor, the engine path make candidate-emit --engine-eval uses. No second UCI integration was written. 10 decision positions, 50 candidate moves and 4 walked refutation lines were evaluated before any annotation was written; the numbers are in provenance.engineValidation. Objectives and plan classes were written before the pass, per the authoring rule; the pass then disciplined the lines.",
+      "MECHANICAL WALK: every spine move, every sibling branch and every deviation was walked with the repo's chessops dependency and its SAN legality check before encoding. Three drafted lines were refuted by the walk and are not in this pack: after 7...Nxd4, Bxe2xg4 is illegal because White's own knight stands on f3; after 6.h3 Qh5, Nxh5 is not a knight move; and 6...Qxd4 is not a queen move from a5. Lines are derived here, never recalled.",
+      "UNGROUNDED: the objective summary, the three plan-class descriptions, every spine annotation's strategic content, all deviation classes, and the reasoning that connects the measured numbers to advice are agent-authored prose with no citation and no human review. What is measured is the numbers; what is asserted is what they mean."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "NO shapes reference, deliberately, and a third shape entry is hereby commissioned. The trunk reaches kings castled on opposite wings, but content/shapes/opposite-castling-race.json covers only the White-long / Black-short orientation - checked mechanically this session: its trigger matches none of this pack's 15 walked trunk positions, and no other shipped entry matches any of them either. Per the mirroring law its colour-owned plans cannot simply be re-pointed, so this pack ships without a reference rather than with a wrong one, following the wave-4a London precedent.",
+      "The spine drills 5...Bg4 (53.7% at band) although the engine ranks it fourth of five at this node. The judgment that a band-popular move with a measurably worse evaluation is the right thing to drill is the pack's central authored claim and no instrument in this repository bears on it.",
+      "Deviation classes are agent-authored and objective-relative (rfc/archive/content-sourcing-foundation.md:772). Three of them sit beside evaluations that do not obviously support them: 3...Qe5+ is classed tactical_error at a measured cost of 0.18, 4...Nc6 is classed concept_violation at 0.74, and 7...e6 is classed accepted_alternative at 0.96. The numbers are recorded beside the classes and the classes were not changed to fit them.",
+      "The pack's central corpus claim - that Black's 56.7% and 58.5% at these nodes reflect the race rather than selection effects in who plays the Scandinavian - is an interpretation of the frequency data, not a measurement of it.",
+      "No machine-readable evidence slot exists for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory objective may not carry objective.grading at all, so the engine evidence lives in provenance.engineValidation and no evidence sidecar exists or can exist. Third independent attestation of the hole after wave B+N and grounding wave G1."
+    ],
+    "engineValidation": {
+      "ranAt": "2026-08-15",
+      "engine": "Stockfish 18",
+      "enginePath": "apps/server createPositionSeedEngineEvaluator (EngineSupervisor + StockfishEvidenceExecutor) at sourcing AUTHORING_PROFILE - the same engine path make candidate-emit --engine-eval uses",
+      "profile": {
+        "depth": 22,
+        "threads": 1,
+        "hashMb": 16,
+        "multiPv": 1
+      },
+      "unit": "centipawns from White's point of view (the executor's own convention, evidence-queue.ts whitePerspectiveScore). Candidate-relative: only the moves listed were evaluated, not all legal moves, so any ranking is a ranking of the measured set.",
+      "cannotGround": "deviation class, plan-class prose, annotations and feedbackClaims. Per rfc/archive/content-sourcing-foundation.md:772 deviation classes are relative to this pack's objective and no evaluation separates concept_violation from interesting_deviation. Numbers sit beside the authored classes, never in place of them.",
+      "decisions": [
+        {
+          "at": "after 2.exd5 (Black to move)",
+          "candidates": {
+            "Qxd5": 69,
+            "Nf6": 77,
+            "c6": 98,
+            "e6": 103
+          }
+        },
+        {
+          "at": "after 3.Nc3 (Black to move)",
+          "candidates": {
+            "Qd6": 75,
+            "Qd8": 76,
+            "Qa5": 77,
+            "Qe5+": 95,
+            "Qe6+": 109
+          }
+        },
+        {
+          "at": "after 4.d4 (Black to move)",
+          "candidates": {
+            "c6": 72,
+            "Nf6": 75,
+            "Bf5": 96,
+            "e5": 116,
+            "Nc6": 149
+          }
+        },
+        {
+          "at": "after 4...Nf6 (White to move)",
+          "candidates": {
+            "Nf3": 68,
+            "Bd2": 49,
+            "Bc4": 49,
+            "Bd3": -17,
+            "d5": -37
+          }
+        },
+        {
+          "at": "after 5.Nf3 (Black to move)",
+          "candidates": {
+            "c6": 71,
+            "Bf5": 77,
+            "Nc6": 97,
+            "Bg4": 105,
+            "e6": 118
+          }
+        },
+        {
+          "at": "after 5...Bg4 (White to move)",
+          "candidates": {
+            "h3": 109,
+            "Bd2": 58,
+            "Be2": 46,
+            "Be3": 24,
+            "Bc4": 0
+          }
+        },
+        {
+          "at": "after 6.Be2 (Black to move)",
+          "candidates": {
+            "Nc6": 43,
+            "e6": 51,
+            "c6": 51,
+            "Nbd7": 52,
+            "Bxf3": 84,
+            "Qh5": 204
+          }
+        },
+        {
+          "at": "after 6...Nc6 (White to move)",
+          "candidates": {
+            "h3": 39,
+            "Be3": 3,
+            "Bd2": -12,
+            "d5": -14,
+            "O-O": -21
+          }
+        },
+        {
+          "at": "after 7.O-O (Black to move)",
+          "candidates": {
+            "O-O-O": -16,
+            "e6": 80,
+            "h5": 167,
+            "Qh5": 234,
+            "Nxd4": 429
+          }
+        },
+        {
+          "at": "after 7...O-O-O (White to move)",
+          "candidates": {
+            "Be3": -120,
+            "a3": -144,
+            "h3": -145,
+            "Bd2": -160,
+            "d5": -170
+          }
+        },
+        {
+          "at": "walked refutation lines",
+          "candidates": {
+            "7...Nxd4 8.Nxd4": 434,
+            "7...Nxd4 8.Nxd4 Bxe2 9.Ndxe2": 399,
+            "6...Qh5 7.hxg4 (h3 line)": 365,
+            "6...Qh5 7.hxg4 Qxg4 (h3 line)": 507
+          }
+        }
+      ],
+      "materialCounts": "Standard 1/3/3/5/9 census on walked positions: the 7...O-O-O trunk position is 38-38; after 7...Nxd4 8.Nxd4 it is 37-35; after 8...Bxe2 9.Ndxe2 it is 34-32."
+    }
+  }
+}

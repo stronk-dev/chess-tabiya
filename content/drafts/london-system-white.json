@@ -31,6 +31,9 @@
     "bishop-outside-the-chain",
     "outpost-with-a-pawn-fork-behind-it"
   ],
+  "shapes": [
+    "london-wedge"
+  ],
   "planClasses": [
     {
       "id": "pyramid-order",
@@ -40,7 +43,11 @@
     {
       "id": "preserve-and-attack",
       "label": "Preserve the dark bishop, then attack with Ne5 and f4",
-      "description": "The bishop left home before e3 was played — the whole point of the system. When ...Bd6 offers the trade, Bg3 declines it; when ...Nxe5 removes the knight, dxe5 turns the outpost into a fork; and f4 behind the e5 pawn is the attacking plan the pyramid was built to launch."
+      "description": "The bishop left home before e3 was played — the whole point of the system. When ...Bd6 offers the trade, Bg3 declines it; when ...Nxe5 removes the knight, dxe5 turns the outpost into a fork; and f4 behind the e5 pawn is the attacking plan the pyramid was built to launch.",
+      "shapePlan": {
+        "shape": "london-wedge",
+        "plan": "white-clamp-on-e5"
+      }
     },
     {
       "id": "tension-rules",
@@ -288,7 +295,7 @@
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "This pack has NO shapes reference, deliberately: no library entry names the London wedge (c3/d4/e3 with the dark bishop outside) — bishop-good-bad is an endgame entry with different plan ownership, and closed-centre-chain's trigger is French-pinned. A London/system-pyramid shape entry is the commissioned ask, mirroring the wave-3 dxc5-residue precedent.",
+      "SHAPE ENTRY AUTHORED 2026-08-15 — this blocker is superseded and kept for the record. content/shapes/london-wedge.json now exists and this pack references it from the preserve-and-attack plan class, which points at the white-clamp-on-e5 plan. What that does NOT clear: the entry's own plan descriptions, watch items and typical mistakes are agent-authored and ungrounded exactly as this pack's prose is, so the reference moves the teaching into a reusable place without grounding it. What was machine-checked before the reference was made: the entry's trigger fires on seven (p11-c3 through p17-ne5) of this pack's spine positions and on no position of any other shipped pack, evaluated with the repo's own matchesStructuralExpression over all 487 walked spine positions in content/drafts. Original blocker text: \"This pack has NO shapes reference, deliberately: no library entry names the London wedge (c3/d4/e3 with the dark bishop outside) — bishop-good-bad is an endgame entry with different plan ownership, and closed-centre-chain's trigger is French-pinned. A London/system-pyramid shape entry is the commissioned ask, mirroring the wave-3 dxc5-residue precedent.\"",
       "The 'order is the theory' claim — that Londons fail by construction order rather than refutation at these bands — is a measurable corpus hypothesis nobody has measured.",
       "The spine drills the 3...c5 row while 3...e6 is the more common reply at band (28.1% vs 11.7%); a companion line for the ...e6/...Bd6 move orders is unwritten.",
       "ENGINE PASS RUN 2026-08-15 — this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 17 candidate moves across 11 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative — rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist."

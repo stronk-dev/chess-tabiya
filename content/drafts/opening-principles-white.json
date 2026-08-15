@@ -16,7 +16,7 @@
   },
   "objective": {
     "type": "play_until_checkpoint",
-    "summary": "Three habits, one drill: put a pawn in the centre, bring out a NEW piece every move, and castle before you attack anything. The finish line is not a memorised position \u2014 it is your king on g1 with a rook on f1, reached because every move did new work. The moves shown are one clean road there; the drill graduates you the moment the castle happens, by any principled order.",
+    "summary": "Three habits, one drill: put a pawn in the centre, bring out a NEW piece every move, and castle before you attack anything. The finish line is not a memorised position — it is your king on g1 with a rook on f1, reached because every move did new work. The moves shown are one clean road there; the drill graduates you the moment the castle happens, by any principled order.",
     "successConditions": [
       {
         "kind": "reach_checkpoint",
@@ -54,7 +54,7 @@
       "moveUci": "e2e4",
       "moveSan": "e4",
       "annotations": [
-        "Habit one, move one: a pawn takes a centre square and opens lines for the f1 bishop and the queen in a single move. Nothing is threatened and nothing needs to be \u2014 the centre is the profit."
+        "Habit one, move one: a pawn takes a centre square and opens lines for the f1 bishop and the queen in a single move. Nothing is threatened and nothing needs to be — the centre is the profit."
       ],
       "children": [
         {
@@ -70,7 +70,7 @@
               "moveUci": "g1f3",
               "moveSan": "Nf3",
               "annotations": [
-                "A new piece, toward the centre, with a threat attached: the knight attacks e5, so Black's reply is half-forced \u2014 you develop and take away their free choice at the same time. Compare this move's whole career with the queen's on the 2.Qh5 branch."
+                "A new piece, toward the centre, with a threat attached: the knight attacks e5, so Black's reply is half-forced — you develop and take away their free choice at the same time. Compare this move's whole career with the queen's on the 2.Qh5 branch."
               ],
               "children": [
                 {
@@ -78,7 +78,7 @@
                   "moveUci": "b8c6",
                   "moveSan": "Nc6",
                   "annotations": [
-                    "Black defends e5 with a developing move \u2014 the answer that costs nothing. Notice the pattern from the other side: a threat that can be met by development is not really a threat, it is a gift of time."
+                    "Black defends e5 with a developing move — the answer that costs nothing. Notice the pattern from the other side: a threat that can be met by development is not really a threat, it is a gift of time."
                   ],
                   "children": [
                     {
@@ -86,7 +86,7 @@
                       "moveUci": "f1c4",
                       "moveSan": "Bc4",
                       "annotations": [
-                        "The second new piece, and the last one standing between your king and the castle. From c4 the bishop eyes f7 \u2014 the one square only Black's king defends \u2014 but the point tonight is simpler: f1 is empty now, and g1 empties the moment you castle."
+                        "The second new piece, and the last one standing between your king and the castle. From c4 the bishop eyes f7 — the one square only Black's king defends — but the point tonight is simpler: f1 is empty now, and g1 empties the moment you castle."
                       ],
                       "children": [
                         {
@@ -94,7 +94,7 @@
                           "moveUci": "f8c5",
                           "moveSan": "Bc5",
                           "annotations": [
-                            "Black mirrors. The position is symmetric and calm, which is exactly why it is the right position to learn the finish in: your next move is a choice between castling, building, and hunting \u2014 and the drill asks you to make it on purpose."
+                            "Black mirrors. The position is symmetric and calm, which is exactly why it is the right position to learn the finish in: your next move is a choice between castling, building, and hunting — and the drill asks you to make it on purpose."
                           ],
                           "children": [
                             {
@@ -102,7 +102,7 @@
                               "moveUci": "e1g1",
                               "moveSan": "O-O",
                               "annotations": [
-                                "Habit three. Two pieces developed, king safe, rook already looking at the middle \u2014 after four moves you have finished the opening's only mandatory project. Everything sharp in this position (b4, d4, even Ng5 ideas) is still available, and now you can afford it."
+                                "Habit three. Two pieces developed, king safe, rook already looking at the middle — after four moves you have finished the opening's only mandatory project. Everything sharp in this position (b4, d4, even Ng5 ideas) is still available, and now you can afford it."
                               ],
                               "children": []
                             }
@@ -150,7 +150,7 @@
     },
     {
       "id": "castled-and-out",
-      "label": "King on g1, rook on f1 \u2014 the opening's finish line",
+      "label": "King on g1, rook on f1 — the opening's finish line",
       "trigger": {
         "fenPredicate": {
           "type": "structuralFeature",
@@ -214,7 +214,7 @@
       },
       "moveUci": "h2h4",
       "class": "concept_violation",
-      "note": "A wing pawn on move one claims nothing in the centre, opens a diagonal no piece wants, and loosens the field your king intends to castle into. It is not refuted by any single move \u2014 it is taxed by every normal move Black plays."
+      "note": "A wing pawn on move one claims nothing in the centre, opens a diagonal no piece wants, and loosens the field your king intends to castle into. It is not refuted by any single move — it is taxed by every normal move Black plays."
     },
     {
       "at": {
@@ -222,7 +222,7 @@
       },
       "moveUci": "g1h3",
       "class": "concept_violation",
-      "note": "The same knight, one square from its best home, choosing the rim: from h3 it touches two central squares instead of f3's four, and it stands on the h-file where ...Bxh3 is a standing offer. Develop toward the centre \u2014 the board is widest there."
+      "note": "The same knight, one square from its best home, choosing the rim: machine-counted 2026-08-15, a knight on h3 attacks none of the four centre squares while a knight on f3 attacks two of them, d4 and e5, and it stands on the h-file where ...Bxh3 is a standing offer. Develop toward the centre — the board is widest there."
     },
     {
       "at": {
@@ -238,7 +238,7 @@
       },
       "moveUci": "d1h5",
       "class": "concept_violation",
-      "note": "The early queen makes a real threat (Qxe5+) \u2014 and that is exactly the trap. Black answers with ...Nc6, a move they wanted to play anyway, and your strongest piece now stands where knights and pawns hit it with tempo. Threats that can be answered by development are donations. Play the branch out and count who develops faster."
+      "note": "The early queen makes a real threat (Qxe5+) — and that is exactly the trap. Black answers with ...Nc6, a move they wanted to play anyway, and your strongest piece now stands where knights and pawns hit it with tempo. Threats that can be answered by development are donations. Play the branch out and count who develops faster."
     },
     {
       "at": {
@@ -246,7 +246,7 @@
       },
       "moveUci": "f2f4",
       "class": "interesting_deviation",
-      "note": "The King's Gambit \u2014 a real opening with a real idea (deflect the e5 pawn, seize the centre with d4). It is not a principle violation; it is a promise to play accurately for ten moves with your king's cover already spent. Branch it to see the difference between a gambit and a mistake; drill it after 1400, not before."
+      "note": "The King's Gambit — a real opening with a real idea (deflect the e5 pawn, seize the centre with d4). It is not a principle violation; it is a promise to play accurately for ten moves with your king's cover already spent. Branch it to see the difference between a gambit and a mistake; drill it after 1400, not before."
     },
     {
       "at": {
@@ -254,7 +254,7 @@
       },
       "moveUci": "f1c4",
       "class": "accepted_alternative",
-      "note": "Bishop before knight is the same plan in a different order \u2014 the Italian bishop goes to its diagonal a move early. The spine prefers 2.Nf3 because it develops WITH a threat, but nothing about this move breaks a habit."
+      "note": "Bishop before knight is the same plan in a different order — the Italian bishop goes to its diagonal a move early. The spine prefers 2.Nf3 because it develops WITH a threat, but nothing about this move breaks a habit."
     },
     {
       "at": {
@@ -262,7 +262,7 @@
       },
       "moveUci": "f3e5",
       "class": "tactical_error",
-      "note": "Count the defenders before you take: e5 was attacked once and defended once, so 3.Nxe5 Nxe5 simply trades your knight for a pawn. The guard will show you the material arithmetic immediately \u2014 this is the exact reflex ('it's a free pawn') the counting habit replaces."
+      "note": "Count the defenders before you take: e5 was attacked once and defended once, so 3.Nxe5 Nxe5 simply trades your knight for a pawn. The guard will show you the material arithmetic immediately — this is the exact reflex ('it's a free pawn') the counting habit replaces."
     },
     {
       "at": {
@@ -270,7 +270,7 @@
       },
       "moveUci": "f3g5",
       "class": "tactical_error",
-      "note": "The same piece, moved twice, to a square where the queen takes it for free: 3...Qxg5 ends the game's interesting part. Before any piece lands on a forward square, ask the on-ramp question \u2014 what captures it, and what recaptures for me? Here the answers are 'the queen' and 'nothing'."
+      "note": "The same piece, moved twice, to a square where the queen takes it for free: 3...Qxg5 ends the game's interesting part. Before any piece lands on a forward square, ask the on-ramp question — what captures it, and what recaptures for me? Here the answers are 'the queen' and 'nothing'."
     },
     {
       "at": {
@@ -278,7 +278,7 @@
       },
       "moveUci": "f1b5",
       "class": "accepted_alternative",
-      "note": "The Ruy Lopez bishop: instead of eyeing f7 it presses the knight that defends e5. A fully principled second door \u2014 new piece, toward the centre, castle next. This pack keeps the c4 road only because its teaching positions are simpler."
+      "note": "The Ruy Lopez bishop: instead of eyeing f7 it presses the knight that defends e5. A fully principled second door — new piece, toward the centre, castle next. This pack keeps the c4 road only because its teaching positions are simpler."
     },
     {
       "at": {
@@ -286,7 +286,7 @@
       },
       "moveUci": "d2d4",
       "class": "accepted_alternative",
-      "note": "The Scotch: open the centre immediately while both sides are half-developed. Principled and sharp \u2014 after ...exd4 Nxd4 the game opens before anyone has castled, which is why the spine saves the centre break for after move four."
+      "note": "The Scotch: open the centre immediately while both sides are half-developed. Principled and sharp — after ...exd4 Nxd4 the game opens before anyone has castled, which is why the spine saves the centre break for after move four."
     },
     {
       "at": {
@@ -302,7 +302,7 @@
       },
       "moveUci": "f3g5",
       "class": "tactical_error",
-      "note": "The same lesson as one move earlier, now with the mate threat on f7 attached \u2014 and the same refutation: 4...Qxg5 takes the knight for nothing. A threat delivered by a hanging piece is not a threat."
+      "note": "The same lesson as one move earlier, now with the mate threat on f7 attached — and the same refutation: 4...Qxg5 takes the knight for nothing. A threat delivered by a hanging piece is not a threat."
     }
   ],
   "feedbackPolicy": "immediate_guard",
@@ -312,7 +312,7 @@
   "feedbackClaims": [
     {
       "id": "new-work-every-move",
-      "text": "An opening move earns its place by doing new work: claiming a centre square, developing a piece that has not moved, or castling. Moves that repeat old work \u2014 second pawn pushes, the same piece again, early queen walks \u2014 hand the opponent the one resource the opening is about: time.",
+      "text": "An opening move earns its place by doing new work: claiming a centre square, developing a piece that has not moved, or castling. Moves that repeat old work — second pawn pushes, the same piece again, early queen walks — hand the opponent the one resource the opening is about: time.",
       "evidenceTypes": [
         "author_principle"
       ]
@@ -327,7 +327,7 @@
     },
     {
       "id": "threats-costing-tempo",
-      "text": "At 1000-1400 the early queen usually wins material only when the defender panics. Against the calm answers \u2014 a developing move that defends, a pawn move that hits the queen \u2014 the attacker ends up two developing moves behind by move six. This pack's 2.Qh5 and 4.Qh5 branches exist to be played out, not believed.",
+      "text": "At 1000-1400 the early queen usually wins material only when the defender panics. Against the calm answers — a developing move that defends, a pawn move that hits the queen — the attacker ends up two developing moves behind by move six. This pack's 2.Qh5 and 4.Qh5 branches exist to be played out, not believed.",
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
@@ -344,21 +344,22 @@
   "provenance": {
     "reviewStatus": "draft",
     "sources": [
-      "Spine identity: the Italian Game / Giuoco Piano (C50), 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O, per lichess-org/chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/c.tsv) \u2014 CC0-1.0. The line is used as a VEHICLE for principles; the pack makes no claim that this is the best or main theoretical continuation.",
+      "Spine identity: the Italian Game / Giuoco Piano (C50), 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O, per lichess-org/chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/c.tsv) — CC0-1.0. The line is used as a VEHICLE for principles; the pack makes no claim that this is the best or main theoretical continuation.",
       "Named deviations from the same CC0 file: King's Gambit (2.f4), Ruy Lopez (3.Bb5), Scotch (3.d4), Evans Gambit (4.b4).",
       "MECHANICAL: every spine move and every deviation move was replayed legal with chessops this session (scratch harness derived UCI/SAN/FENs; `make pack-check` independently re-walks the spine and lints deviation side/legality). The two Ng5 refutations (...Qxg5 with the d8-g5 diagonal empty) and the Nxe5 recapture were verified as legal captures on the derived positions.",
       "MECHANICAL: the castled-and-out trigger (white king g1 AND white rook f1) is false at the start position and first becomes true on the spine at ply 7 (O-O); it cannot be true earlier on any legal path because a king on g1 with a rook on f1 requires the castle or a king walk that this 7-ply horizon does not permit... the horizon claim is the author's arithmetic, not machine-checked.",
-      "UNGROUNDED: every strategic claim \u2014 the objective summary, all three plan-class descriptions, all spine annotations, all deviation classifications and notes, and all feedbackClaims \u2014 is agent-authored prose with NO citation and NO human review, and \u2014 after the 2026-08-15 engine pass \u2014 with evaluated MOVES but still unevaluated PROSE. The principle vocabulary (centre, development, king safety, early-queen tax) is standard chess pedagogy rendered from model knowledge with no named source.",
-      "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile \u2014 depth 22, Threads 1, Hash 16MB, MultiPV 1 \u2014 run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 7 decision positions and 21 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
+      "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all deviation classifications and notes, and all feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE. The principle vocabulary (centre, development, king safety, early-queen tax) is standard chess pedagogy rendered from model knowledge with no named source.",
+      "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 7 decision positions and 21 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on a claim clears a blocker.",
-      "ENGINE-CHECKED 2026-08-15. Depth-22 costs against the best evaluated candidate: 1.h4 0.91, 1.Nh3 1.07, 1.f3 1.09, 2.Qh5 0.75; the tactical_error rows 3.Nxe5 2.64, 3.Ng5 4.16 and 4.Ng5 4.07. Every classified move costs something. On 2.Qh5 specifically: after 2.Qh5 Nc6 3.Bc4 g6 White evaluates -0.37, so the engine agrees the sortie is bad here \u2014 but that is not what the note claims. The note's claim is a practical tax at 1000-1400, which remains a Maia/corpus question, and NO corpus pull or Maia run was made for it in this pass. That half of the blocker is untouched. The pack's own 1.d4 accepted_alternative is also the best evaluated first move, 0.17 ahead of the spine's 1.e4.",
+      "ENGINE-CHECKED 2026-08-15. Depth-22 costs against the best evaluated candidate: 1.h4 0.91, 1.Nh3 1.07, 1.f3 1.09, 2.Qh5 0.75; the tactical_error rows 3.Nxe5 2.64, 3.Ng5 4.16 and 4.Ng5 4.07. Every classified move costs something. On 2.Qh5 specifically: after 2.Qh5 Nc6 3.Bc4 g6 White evaluates -0.37, so the engine agrees the sortie is bad here — but that is not what the note claims. The note's claim is a practical tax at 1000-1400, which remains a Maia/corpus question, and NO corpus pull or Maia run was made for it in this pass. That half of the blocker is untouched. The pack's own 1.d4 accepted_alternative is also the best evaluated first move, 0.17 ahead of the spine's 1.e4.",
       "The material arithmetic behind the three tactical_error branches (Nxe5, Ng5 twice) is rules-derived and was replayed legal, but the follow-up claims ('ends the game's interesting part') are unevaluated prose.",
       "The guard threshold (250cp) encodes the claim that piece-loss is the right firing line for 1000-1400 and tempo-loss is noise. That is an authored hypothesis about a rating band; no corpus or play-test evidence supports the specific number.",
-      "ENGINE PASS RUN 2026-08-15 \u2014 this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 21 candidate moves across 7 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative \u2014 rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist.",
-      "CORPUS-CHECKED 2026-08-15 and NOT ANSWERABLE from repo data: this pack targets the 1000-1400 band, but both shipped Lichess-explorer artifacts (content/candidates/priority/priority.json and content/candidates/priority-wave4a/priority.json) were pulled at ratings 1400/1600/1800 only. Every 'what players at this level actually play' claim in this pack therefore has no corpus behind it and cannot acquire one without a new explorer pull at the 1000/1200/1400 bands. The 2026-08-15 engine pass measured what the moves cost; it says nothing about how often they are played."
+      "ENGINE PASS RUN 2026-08-15 — this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 21 candidate moves across 7 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative — rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist.",
+      "CORPUS-CHECKED 2026-08-15 and NOT ANSWERABLE from repo data: this pack targets the 1000-1400 band, but both shipped Lichess-explorer artifacts (content/candidates/priority/priority.json and content/candidates/priority-wave4a/priority.json) were pulled at ratings 1400/1600/1800 only. Every 'what players at this level actually play' claim in this pack therefore has no corpus behind it and cannot acquire one without a new explorer pull at the 1000/1200/1400 bands. The 2026-08-15 engine pass measured what the moves cost; it says nothing about how often they are played.",
+      "PROSE GROUNDING PASS 2026-08-15. Wave G1 grounded MOVES and left prose, plan classes and deviation classes untouched by design. This pass checked the mechanically checkable subset of the prose - attacker and defender counts, piece mobility counts, legality, checkmate and pawn geometry - with the repo's own direct_attack_count, line_blockers and chessops move generation. One claim was refuted and corrected in place: the Nh3 deviation counted two central squares from h3 against four from f3; the measured counts are zero and two. Claims of this kind that were checked and held are not annotated. Strategic prose, plan-class descriptions and deviation classes remain exactly as ungrounded as before."
     ],
     "engineValidation": {
       "ranAt": "2026-08-15",

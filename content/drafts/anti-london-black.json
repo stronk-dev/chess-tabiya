@@ -30,21 +30,36 @@
     "challenge-the-system-piece",
     "know-the-opponent-plan"
   ],
+  "shapes": [
+    "london-wedge"
+  ],
   "planClasses": [
     {
       "id": "bishop-challenge",
       "label": "Trade or chase the f4 bishop (...Bd6, ...Nh5)",
-      "description": "The London is named after one bishop: every tempo it spends staying alive (Bg3, h3) is a tempo their attack never gets. ...Bd6 is the structural challenge; ...Nh5 is the concrete one — the spine plays the first and classifies the second."
+      "description": "The London is named after one bishop: every tempo it spends staying alive (Bg3, h3) is a tempo their attack never gets. ...Bd6 is the structural challenge; ...Nh5 is the concrete one — the spine plays the first and classifies the second.",
+      "shapePlan": {
+        "shape": "london-wedge",
+        "plan": "black-challenge-the-outside-bishop"
+      }
     },
     {
       "id": "b2-counterattack",
       "label": "Hit b2 while the bishop is away (...Qb6)",
-      "description": "Position-specific: the bishop's departure from c1 leaves b2 attended only by the queen, and after e3 the ...Qb6 jab arrives before c3/Nbd2 coordination is complete. Its catalogued form is the Poisoned Pawn row this pack's deviation transposes into, move for move."
+      "description": "Position-specific: the bishop's departure from c1 leaves b2 with no defender at all (machine-counted 2026-08-15: one White piece bears on b2 while the bishop is home, that piece being the bishop; zero once it is on f4), and after e3 the ...Qb6 jab arrives before c3/Nbd2 coordination is complete. Its catalogued form is the Poisoned Pawn row this pack's deviation transposes into, move for move.",
+      "shapePlan": {
+        "shape": "london-wedge",
+        "plan": "black-send-the-bill-to-b2"
+      }
     },
     {
       "id": "free-the-bad-bishop",
       "label": "Solve the c8 bishop (...b6/...Bb7)",
-      "description": "The counter-pyramid's honest cost is the c8 bishop behind ...e6. The plan that pays it off: ...b6, ...Bb7, and central breaks timed for when the long diagonal opens — the same asymmetry the London player is counting on, worked from the other side."
+      "description": "The counter-pyramid's honest cost is the c8 bishop behind ...e6. The plan that pays it off: ...b6, ...Bb7, and central breaks timed for when the long diagonal opens — the same asymmetry the London player is counting on, worked from the other side.",
+      "shapePlan": {
+        "shape": "london-wedge",
+        "plan": "black-fianchetto-the-light-bishop"
+      }
     }
   ],
   "spine": [
@@ -306,7 +321,7 @@
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "This pack has NO shapes reference, deliberately — the same London-wedge gap recorded in the mirrored White pack's blockers. When a system-pyramid entry exists, this pack's plan classes 1 and 3 should reference its Black-side plans.",
+      "SHAPE ENTRY AUTHORED 2026-08-15 — this blocker is superseded and kept for the record. content/shapes/london-wedge.json now exists and this pack references it from all three plan classes, as this blocker asked. What that does NOT clear: the entry's own plan descriptions, watch items and typical mistakes are agent-authored and ungrounded exactly as this pack's prose is, so the reference moves the teaching into a reusable place without grounding it. What was machine-checked before the reference was made: the entry's trigger fires on seven (p11-c3 through p17-ne5) of this pack's spine positions and on no position of any other shipped pack, evaluated with the repo's own matchesStructuralExpression over all 487 walked spine positions in content/drafts. Original blocker text: \"This pack has NO shapes reference, deliberately — the same London-wedge gap recorded in the mirrored White pack's blockers. When a system-pyramid entry exists, this pack's plan classes 1 and 3 should reference its Black-side plans.\"",
       "ENGINE-CHECKED 2026-08-15 and NOT supported either way: ...Bxg3 evaluates -0.33 against -0.28 for the spine's ...O-O, a 0.05 difference that is inside depth-22 noise and cannot carry the word 'soundest'. The doctrine is neither hardened nor refuted; the instrument simply does not distinguish the two orders, which is itself the answer to 'should it harden or fall on evidence'.",
       "Which challenge (...Bd6 / ...Qb6 / ...Nh5) actually scores best for Black at these bands is the pack's motivating question and remains unmeasured below the family root.",
       "The 'preparation asymmetry' claim is the anti-opening thesis itself — plausible, ledgered, and still unmeasured.",

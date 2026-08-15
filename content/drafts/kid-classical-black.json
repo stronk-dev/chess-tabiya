@@ -35,13 +35,18 @@
     "reroute-before-the-break"
   ],
   "shapes": [
-    "fianchetto-g7"
+    "fianchetto-g7",
+    "kid-chain-arrangement"
   ],
   "planClasses": [
     {
       "id": "seal-and-storm",
       "label": "Invite d5, then storm with ...f5-f4 and ...g5",
-      "description": "The main line's bargain: ...Nc6 provokes d5, the centre locks, and the kingside pawn storm becomes Black's whole game. In this pack it is the spine itself — Ne7, Nd7, ...f5 — with White's queenside race as the clock you play against."
+      "description": "The main line's bargain: ...Nc6 provokes d5, the centre locks, and the kingside pawn storm becomes Black's whole game. In this pack it is the spine itself — Ne7, Nd7, ...f5 — with White's queenside race as the clock you play against.",
+      "shapePlan": {
+        "shape": "kid-chain-arrangement",
+        "plan": "black-lock-with-f4-and-storm"
+      }
     },
     {
       "id": "keep-the-diagonal",
@@ -331,7 +336,7 @@
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "No shape entry names the King's Indian pawn-chain arrangement (White c4/d5/e4 against Black d6/e5): closed-centre-chain's trigger is pinned to the French/Caro squares and cannot fire here, and per the mirroring law a chain entry with different plan ownership must be authored separately. Until it exists, this pack's chain teaching is inlined and non-reusable.",
+      "SHAPE ENTRY AUTHORED 2026-08-15 — this blocker is superseded and kept for the record. content/shapes/kid-chain-arrangement.json now exists and this pack references it from the seal-and-storm plan class, which points at the black-lock-with-f4-and-storm plan. What that does NOT clear: the entry's own plan descriptions, watch items and typical mistakes are agent-authored and ungrounded exactly as this pack's prose is, so the reference moves the teaching into a reusable place without grounding it. What was machine-checked before the reference was made: the entry's trigger fires on seven (p15-d5 onward, including the ne8-modern tip) of this pack's spine positions and on no position of any other shipped pack, evaluated with the repo's own matchesStructuralExpression over all 487 walked spine positions in content/drafts. The mirroring claim this blocker asserted was also checked and holds: closed-centre-chain's trigger matches none of this pack's positions. Original blocker text: \"No shape entry names the King's Indian pawn-chain arrangement (White c4/d5/e4 against Black d6/e5): closed-centre-chain's trigger is pinned to the French/Caro squares and cannot fire here, and per the mirroring law a chain entry with different plan ownership must be authored separately. Until it exists, this pack's chain teaching is inlined and non-reusable.\"",
       "Which reroute (...Nd7 vs ...Ne8) is more common or scores better at these bands is unquantified; the explorer API could settle it below the family root and has not been queried.",
       "The 'defensive moves are race moves lost' claim is the pack's strongest generalization and is pure hypothesis — no corpus measurement of tempo-vs-result in KID races exists in this repo.",
       "ENGINE PASS RUN 2026-08-15 — this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 19 candidate moves across 11 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative — rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist."
