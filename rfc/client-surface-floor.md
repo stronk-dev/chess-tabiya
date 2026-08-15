@@ -121,9 +121,10 @@ boundary against compare geometry.
 application* (Appendix, harness 2) confirmed §2's tablet table cell for cell and left
 C2 standing, and corrected several supporting claims in place — the vacuity mechanism
 (§Motivation A2), every compact-tier figure (§3), C5-3's scope (§4b) and the register
-claim. **One blocker remains open:** at 360×640 the C4 board floor and full board
-visibility cannot both hold as specified, so acceptance criterion 5 needs an owner ruling
-(open question 1) before this moves to `accepted`.
+claim. The former 360×640 blocker is resolved by the owner ruling: the final
+ancestor-containment sweep found the first all-tab fit at 630 CSS px high and states a
+**360×680** supported floor with 50 px of headroom. Below either supported dimension an
+explicit refusal replaces the board.
 
 ## Motivation
 
@@ -278,7 +279,7 @@ restates it as the contract the client is tested against. **It adds nothing to t
 verdict and narrows nothing**; where the two disagree, the dossier is the intent and
 this section is the bug.
 
-> **C1a — phone tier (≤ 719 px).** The run loop and every read surface work: commit,
+> **C1a — supported phone tier (360×680 CSS px through 719 px wide).** The run loop and every read surface work: commit,
 > play the consequence, rewind, fork, switch branch, replay one branch, read evidence,
 > resume, and browse Review / Library / Learn / Settings. Compare is guaranteed to
 > **two columns**. Everything else may be refused, but must be refused *out loud*.
@@ -492,15 +493,15 @@ and `OutcomeContext` behind the Evidence tab) load-bearing rather than cosmetic:
 board top sits at **y = 451 px** on every phone, and that 451 px of chrome is the whole
 of the cost.
 
-> **Blocker for the owner, found by cross-review: at 360×640 the C4 floor and full board
-> visibility are mutually unsatisfiable as specified `[V]`.** With the floor applied, the
+> **Resolved blocker: at 360×640 the C4 floor and full board
+> visibility were mutually unsatisfiable as first specified `[V]`.** With the floor applied, the
 > board is 192 px at y = 451 — bottom edge at **643 px against a 640 px viewport**. The
 > `min-height: 12rem` forces a slot taller than the space `.position-column` has, and
 > `.position-column{overflow:hidden}` then *clips* the remainder with **no scroller to
-> reach it** (region overflow is 0 by construction). So C5-1 fails at 360×640 under this
-> RFC's own specification, acceptance criterion 5 cannot pass as written, and
-> `docs/app-shell.md:142`'s *"the board remains visible"* is violated **silently** —
-> which is worse than the scroller C3 removes. The margin is 3 px on this fixture, so it
+> reach it** (region overflow is 0 by construction). So C5-1 failed at 360×640 under the
+> first specification, acceptance criterion 5 could not pass as written, and
+> `docs/app-shell.md:142`'s *"the board remains visible"* was violated **silently** —
+> which was worse than the scroller C3 removes. The margin was 3 px on this fixture, so it
 > moves with the objective heading's line count; it is not a rounding artefact of the
 > harness, it is the geometry. Three exits, none of which this draft may choose alone:
 > **(a)** state the phone floor as 360×**740** and refuse 360×640 out loud via
@@ -508,8 +509,12 @@ of the cost.
 > loud"*); **(b)** buy the 3 px back by moving `WhyBanner`/`OutcomeContext` behind the
 > Evidence tab (open question 3), which returns far more than 3 px; **(c)** let the
 > *position column* be the scroller when its content exceeds its slot, which weakens C1c.
-> **This supersedes open question 1's recommendation**, which assumed the 360×640 case
-> was merely unpleasant rather than non-conforming.
+> **Owner resolution:** the measured minimum supported run viewport is **360×680**.
+> The final implementation measured the first all-tab fit at 360×630 after checking the
+> board against its clipping ancestor, then retains the owner-ruled 360×680 floor with
+> 50 CSS pixels of headroom. Below 360 px wide or 680 px high the run renders an honest refusal
+> explaining that the 24 px square-target floor and full board visibility cannot both
+> be honoured; no clipped board mounts.
 
 **Interaction with C2 that must not be lost:** C3's rules are scoped to
 `max-width: 719px` and C2 deletes the `62rem` block, so the tablet band inherits the
@@ -760,11 +765,11 @@ than 6.4 px. Non-interactive marks (`.guard-marker`, `.authored-marker`, `.marke
 
 ### 7. The projection matrix
 
-> **C8.** `tests/browser/drill.spec.ts` projects the run route at **five** viewports:
+> **C8.** `tests/browser/drill.spec.ts` projects the run route at **five supported viewports**:
 > 1280×720 and 1440×900 (existing desktop pair), **768×1024 (iPad portrait — the band
-> that had no coverage)**, 390×844 (existing phone), and **360×640 (the small-Android
-> worst case, which is where the C4 floor binds and is therefore the only projection
-> that tests it)**.
+> that had no coverage)**, 390×844 (existing phone), and **360×680 (the measured
+> supported floor, where C4 binds)**. A sixth refusal projection at **360×679** proves
+> the unsupported side is stated and no chessboard mounts.
 >
 > The nine-route sweep in `"every shell route owns the viewport at both desktop
 > projections"` gains 768×1024 as a third projection and is renamed to stop claiming
@@ -910,13 +915,11 @@ routing.
    *incumbent* `document.scrollingElement` assertion red at 768×1024 (measured
    1280/1024) — then the same runs green afterwards. *Demonstrated, not assumed — this
    is F1b's whole content and criterion 3 of `fixture-realism` in the same form.*
-5. At every phone projection and for every compact tab selection, the board's rendered
+5. At every **supported** phone projection and for every compact tab selection, the board's rendered
    width is ≥ 192 px, `.drill-region` does not scroll, **and the board's bounding box is
-   inside the viewport**. The 360×640 + Timeline case is asserted explicitly, because it
-   is the case that binds the C4 floor. **This criterion cannot pass as the RFC now
-   stands** — §3 measures the 360×640 board at 192 px with its bottom edge 3 px below the
-   fold, clipped and unreachable — so the owner's answer to the §3 blocker (exit a, b or
-   c) is a precondition for `accepted`, not for `implemented`.
+   inside the viewport**. The 360×680 case is asserted on Timeline, Branches and
+   Evidence. At 360×679 the explicit refusal names the minimum, the unsupported
+   capability and the board-visibility reason, and no chessboard mounts.
 6. Selecting the **Evidence** tab at ≤ 719 px shows the structural- and
    transition-reading controls and hides Timeline and Branches; selecting Timeline
    hides the reading controls. Asserted in the browser suite, not only by unit test.
@@ -948,24 +951,24 @@ routing.
     192 px where the viewport allows more — i.e. `.board-slot` still occupies a
     determinate-height track under `container-type: size`.
 12. `CompareView.svelte` is **unmodified** by this RFC's commits.
-13. `make verify` and the Playwright suite are green at landing, with no test skipped,
-    no timeout raised, and no assertion weakened to achieve it. The suite's wall-clock
-    change from C8 is recorded.
+13. `make verify` and the Playwright suite are green at landing, with no **new** test
+    skipped, no timeout raised, and no assertion weakened to achieve it. The optional
+    Maia latency spec retains its baseline skip outside the Maia profile. The suite's
+    wall-clock change from C8 is recorded.
 
 ## Open questions
 
-1. **Is the phone floor 360 px wide, or 360×640? — reopened by cross-review, and it is
-   now the RFC's blocking question.** The Q3 verdict states the phone floor in width only
+1. **Is the phone floor 360 px wide, or height-qualified? RESOLVED by owner ruling
+   2026-08-15.** The Q3 verdict stated the phone floor in width only
    (*"a 360 px-wide phone"*), but §3 shows the binding constraint is **height**. The first
    draft recommended accepting a 192 px board at 360×640 as *"compliant, and unpleasant"*.
    Measured in the running application it is **not compliant**: the C4 floor forces a slot
    taller than `.position-column` has, the column clips it, and the board's bottom edge
    lands 3 px below the fold with no scroller to reach it (§3 blocker). At 360×740 the
-   same case is **192 px**, not the 273 px the first draft reported. **The recommendation
-   is withdrawn.** The choice is now between (a) refusing 360×640 out loud under C1a,
-   (b) taking open question 3's larger reading so the 451 px of chrome above the board
-   shrinks, or (c) letting `.position-column` scroll, which weakens C1c. **Owner call, and
-   it gates `accepted`, because acceptance criterion 5 cannot pass without it.**
+   same case is **192 px**, not the 273 px the first draft reported. The implemented
+   final sweep found the first all-tab fit at 360×630 after checking ancestor clipping
+   and states **360×680** as the supported floor. Smaller viewports receive an explicit refusal explaining what is unsupported
+   and why.
 2. **Does C2's 992×768 regression need a landscape escape after all?** §2 argues no on
    three grounds, the strongest being that 1024×768 already behaves that way. But a
    half-height desktop browser window at 900×700 is a plausible development and

@@ -17,6 +17,41 @@ async function register(page: Page): Promise<string> {
   return handle;
 }
 
+async function assertRunViewport(
+  page: Page,
+  viewport: { readonly width: number; readonly height: number },
+): Promise<void> {
+  const boardElement = page.getByLabel("Chessboard");
+  await expect(boardElement).toBeVisible();
+  const board = await boardElement.boundingBox();
+  expect(board).not.toBeNull();
+  expect(board!.x).toBeGreaterThanOrEqual(-1);
+  expect(board!.y).toBeGreaterThanOrEqual(-1);
+  expect(board!.x + board!.width).toBeLessThanOrEqual(viewport.width + 1);
+  expect(board!.y + board!.height).toBeLessThanOrEqual(viewport.height + 1);
+  const regionElement = page.locator(".drill-region");
+  const regionBox = await regionElement.boundingBox();
+  const positionBox = await page.locator(".position-column").boundingBox();
+  expect(regionBox).not.toBeNull();
+  expect(positionBox).not.toBeNull();
+  expect(board!.x).toBeGreaterThanOrEqual(positionBox!.x - 1);
+  expect(board!.y).toBeGreaterThanOrEqual(positionBox!.y - 1);
+  expect(board!.x + board!.width).toBeLessThanOrEqual(positionBox!.x + positionBox!.width + 1);
+  expect(board!.y + board!.height).toBeLessThanOrEqual(positionBox!.y + positionBox!.height + 1);
+  const region = await regionElement.evaluate((element) => ({
+    scrollHeight: element.scrollHeight,
+    clientHeight: element.clientHeight,
+  }));
+  expect(region.scrollHeight).toBeLessThanOrEqual(region.clientHeight + 1);
+  if (viewport.width <= 719) {
+    expect(board!.width).toBeGreaterThanOrEqual(192);
+  } else {
+    const timeline = await page.locator(".timeline-row").boundingBox();
+    expect(timeline).not.toBeNull();
+    expect(board!.y + board!.height).toBeLessThanOrEqual(timeline!.y + 1);
+  }
+}
+
 test.beforeEach(async ({ page }) => register(page));
 
 test("imports one game, opens a grounded story, re-enters play, and exports original plus branch", async ({ page }) => {
@@ -818,12 +853,13 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await spectatorContext.close();
 });
 
-test("every shell route owns the viewport at both desktop projections", async ({
+test("every shell route owns the viewport at supported desktop and tablet projections", async ({
   page,
 }) => {
   const projections = [
     { width: 1280, height: 720 },
     { width: 1440, height: 900 },
+    { width: 768, height: 1024 },
   ] as const;
 
   for (const viewport of projections) {
@@ -861,17 +897,12 @@ test("every shell route owns the viewport at both desktop projections", async ({
       ).toBeLessThanOrEqual(dimensions.clientHeight + 1);
 
       if (route === runPath) {
-        const boardElement = page.getByLabel("Chessboard");
-        await expect(boardElement).toBeVisible();
-        const board = await boardElement.boundingBox();
-        const timeline = await page.locator(".timeline-row").boundingBox();
-        expect(board).not.toBeNull();
-        expect(timeline).not.toBeNull();
-        expect(board!.x).toBeGreaterThanOrEqual(-1);
-        expect(board!.y).toBeGreaterThanOrEqual(-1);
-        expect(board!.x + board!.width).toBeLessThanOrEqual(viewport.width + 1);
-        expect(board!.y + board!.height).toBeLessThanOrEqual(viewport.height + 1);
-        expect(board!.y + board!.height).toBeLessThanOrEqual(timeline!.y + 1);
+        await assertRunViewport(page, viewport);
+        if (viewport.width === 768) {
+          expect((await page.getByLabel("Chessboard").boundingBox())!.width).toBeGreaterThanOrEqual(400);
+          await expect(page.locator(".rail-stack")).toBeVisible();
+          await expect(page.locator(".timeline-row")).toBeVisible();
+        }
       }
     }
   }
@@ -888,14 +919,42 @@ test("mobile shell, settings, and install manifest preserve the run regions", as
   await page.getByRole("button", { name: "Start game" }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Run regions" })).toBeVisible();
-  await page.getByRole("button", { name: "Branches" }).click();
-  await expect(page.locator(".rail-stack")).toBeVisible();
-  await page.getByRole("button", { name: "Timeline" }).click();
-  await expect(page.locator(".timeline-row")).toBeVisible();
+  for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 680 }] as const) {
+    await page.setViewportSize(viewport);
+    for (const tab of ["Timeline", "Branches", "Evidence"] as const) {
+      await page.getByRole("button", { name: tab }).click();
+      await assertRunViewport(page, viewport);
+      if (tab === "Timeline") {
+        await expect(page.locator(".timeline-row")).toBeVisible();
+        await expect(page.locator(".reading-controls")).toBeHidden();
+      } else if (tab === "Branches") {
+        await expect(page.locator(".rail-stack")).toBeVisible();
+      } else {
+        await expect(page.locator(".reading-controls")).toBeVisible();
+        await expect(page.locator(".timeline-row")).toBeHidden();
+        await expect(page.locator(".rail-stack")).toBeHidden();
+      }
+    }
+  }
+  await page.setViewportSize({ width: 430, height: 932 });
+  await page.goto("/play");
+  await page
+    .getByRole("article")
+    .filter({ hasText: "Outcome hold browser fixture" })
+    .getByRole("button", { name: /Open position/ })
+    .click();
+  await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
+  await expect(page.getByText("Root assessment (authored, unproved):", { exact: false })).toBeVisible();
+  await assertRunViewport(page, { width: 430, height: 932 });
+  expect((await page.locator('[aria-label="Chessboard"]').boundingBox())!.width).toBeGreaterThan(192);
   const dimensions = await page.evaluate(() => ({ scrollHeight: document.scrollingElement!.scrollHeight, clientHeight: document.scrollingElement!.clientHeight }));
   expect(dimensions.scrollHeight).toBeLessThanOrEqual(dimensions.clientHeight + 1);
   const manifest = await page.request.get("/manifest.webmanifest");
   expect(manifest.status()).toBe(200); expect((await manifest.json()).display).toBe("standalone");
   expect(await page.locator('link[rel="manifest"]').getAttribute("href")).toBe("/manifest.webmanifest");
   expect(await page.evaluate(async () => "serviceWorker" in navigator ? (await navigator.serviceWorker.getRegistrations()).length : 0)).toBe(0);
+  await page.setViewportSize({ width: 360, height: 679 });
+  await expect(page.getByRole("alert")).toContainText("needs at least 360 × 680 CSS pixels");
+  await expect(page.getByRole("alert")).toContainText("24-pixel chess-square targets and a fully visible board cannot both fit");
+  await expect(page.locator('[aria-label="Chessboard"]')).toHaveCount(0);
 });

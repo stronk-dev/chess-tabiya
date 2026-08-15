@@ -177,7 +177,7 @@
   }
 
   .shape-marker{display:block;margin-top:.25rem;width:100%;padding:.3rem .45rem;border:1px solid var(--accent);border-radius:.45rem;background:transparent;color:var(--accent);font:.65rem/1.2 var(--display-font)}
-  .pivotal-marker{display:block!important;min-width:0!important;width:1.1rem!important;height:1.1rem;margin:.25rem auto 0;padding:0!important;border:0!important;background:transparent!important}.pivotal-marker span{display:block;width:.55rem;height:.55rem;margin:auto;border-radius:50%;background:var(--warning)}
+  .pivotal-marker{display:block!important;min-width:1.5rem;min-height:1.5rem;margin:.25rem auto 0;padding:0!important;border:0!important;background:transparent!important}.pivotal-marker span{display:block;width:.55rem;height:.55rem;margin:auto;border-radius:50%;background:var(--warning)}
 
   .confirm {
     margin-top: 0.5rem;

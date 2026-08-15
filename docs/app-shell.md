@@ -137,11 +137,19 @@ Overflow belongs to named inner regions:
 
 The drill screen is a fitted grid. Its square board is limited by both
 available width and remaining viewport height, with an explicit vertical
-reserve for objective controls and the timeline. Below 720px the shell and
-drill transform without changing their information model: navigation becomes
-a compact scrolling menu, the board remains visible, and Timeline, Branches,
-Evidence, and Session are explicit region tabs. The live simul wall becomes a
-single column and comparison/live panels stack.
+reserve for objective controls and the timeline. Tablet portrait uses that
+same fitted grid rather than the former rail-stacking breakpoint. Below 720px
+the shell and drill transform without changing their information model:
+navigation becomes a compact scrolling menu, the board remains visible, and
+Timeline, Branches, and Evidence are mutually exclusive region tabs. The live
+simul wall becomes a single column and comparison/live panels stack.
+
+The measured minimum supported run viewport is 360×680 CSS pixels. At that
+floor every compact region retains a fully visible board with at least 24px
+chess-square targets. Below either dimension the run mounts no board and states
+the unsupported minimum and its reason; it does not silently clip or shrink the
+board past the target floor. This floor applies to run play, not the surrounding
+catalogue and settings routes.
 
 `/settings` edits the same per-browser assistance records used by the in-run
 popover for pack, position, and imported sessions. It reports deployment
@@ -152,10 +160,13 @@ The web build is installable through `manifest.webmanifest` with a maskable
 Tabiya icon. No service worker or offline mutation queue ships, so installed
 use remains an online client to server-authoritative lease and grant checks.
 
-Playwright projects every route at 1280x720 and 1440x900. It asserts
+Playwright projects every route at 1280×720, 1440×900, and 768×1024. It asserts
 `document.scrollingElement.scrollHeight <= clientHeight + 1`; on a run it also
-asserts the board is inside the viewport within one pixel and ends above the
-timeline. This coverage caught and prevented a real board/timeline overlap.
+asserts the board is inside both the viewport and the non-scrolling drill region
+within one pixel and ends above the timeline outside the compact tier. Compact
+coverage exercises Timeline, Branches, and Evidence at 390×844 and the measured
+360×680 floor, plus the explicit refusal immediately below it. This coverage
+caught and prevented a real board/timeline overlap.
 
 ## Keyboard ownership
 

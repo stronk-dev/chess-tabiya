@@ -40,6 +40,7 @@
     resistanceSentences,
   } from "./outcome-presentation.js";
   import { loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
+  import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
 
   type RewindTarget =
     | { readonly nodeId: string }
@@ -155,11 +156,16 @@
   let speechAvailable = $state(false);
   let dismissedGuardSeq: number | undefined = $state();
   let selectedSquare: string | undefined = $state();
-  let compactTab: "timeline" | "branches" | "evidence" | "session" = $state("timeline");
+  let compactTab: "timeline" | "branches" | "evidence" = $state("timeline");
   let decidedness: Readonly<Record<string, Decidedness>> = $state({});
   let foldedBranchIds: string[] = $state([]);
   let pinnedExpanded: string[] = $state([]);
   let compareLimitNotice: string | undefined = $state();
+  let viewportSupport: RunViewportSupport = $state({ supported: true, width: 0, height: 0, reason: null });
+
+  function measureViewport(): void {
+    viewportSupport = runViewportSupport(globalThis.innerWidth, globalThis.innerHeight);
+  }
 
   let run = $derived(snapshot.run);
   let currentNode = $derived(activeNode(run));
@@ -628,6 +634,8 @@
   }
 
   onMount(() => {
+    measureViewport();
+    globalThis.addEventListener("resize", measureViewport);
     speechAvailable = typeof globalThis.speechSynthesis !== "undefined" && typeof globalThis.SpeechSynthesisUtterance !== "undefined" && globalThis.speechSynthesis.getVoices().length > 0;
     assistance = loadAssistance(run.sessionKind, preferenceStorage());
     try {
@@ -643,6 +651,7 @@
     }
   });
   onDestroy(() => {
+    globalThis.removeEventListener("resize", measureViewport);
     unregisterKeyboard?.();
     if (replayTimer !== undefined) clearInterval(replayTimer);
   });
@@ -664,7 +673,13 @@
 
 <div class="drill-region" data-keyboard-region="drill" bind:this={regionElement}>
 
-{#if comparison}
+{#if !viewportSupport.supported}
+  <section class="viewport-refusal" role="alert" aria-labelledby="viewport-refusal-title">
+    <p>Run viewport unavailable</p>
+    <h1 id="viewport-refusal-title">The chessboard cannot fit honestly here.</h1>
+    <p>{viewportSupport.reason}</p>
+  </section>
+{:else if comparison}
   <CompareView
     {run}
     {pack}
@@ -737,12 +752,11 @@
       </section>
     {/if}
 
-    <div class="workspace">
+    <div class="workspace" class:evidence-active={compactTab === "evidence"}>
       <nav class="compact-tabs" aria-label="Run regions">
         <button class:active={compactTab === "timeline"} onclick={() => compactTab = "timeline"}>Timeline</button>
         <button class:active={compactTab === "branches"} onclick={() => compactTab = "branches"}>Branches</button>
         <button class:active={compactTab === "evidence"} onclick={() => compactTab = "evidence"}>Evidence</button>
-        {#if viewerRole !== "host"}<button class:active={compactTab === "session"} onclick={() => compactTab = "session"}>Session</button>{/if}
       </nav>
       <section class="position-column" class:outcome={grading !== undefined || pack?.objective.type === "follow_theory"}>
         <div class="objective-copy">
@@ -770,7 +784,7 @@
           <OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
         {/if}
         {#if banner !== undefined}<WhyBanner model={banner} />{/if}
-        <div class="reading-controls">
+        <div class="reading-controls" class:compact-active={compactTab === "evidence"}>
           <section class="structural-reading" aria-label="Structural reading">
             <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Structural reading</button>
             {#if structuralOpen}
@@ -910,7 +924,7 @@
   </main>
 {/if}
 
-{#if checkpoint}
+{#if viewportSupport.supported && checkpoint}
   <CheckpointSheet
     {run}
     node={currentNode}
@@ -932,7 +946,7 @@
   />
 {/if}
 
-{#if terminalEvent?.type === "outcome.reached"}
+{#if viewportSupport.supported && terminalEvent?.type === "outcome.reached"}
   <TerminalSheet
     {run}
     outcome={terminalEvent.data.outcome}
@@ -950,9 +964,9 @@
   />
 {/if}
 
-{#if helpOpen}<KeyboardHelp onClose={closeHelp} />{/if}
+{#if viewportSupport.supported && helpOpen}<KeyboardHelp onClose={closeHelp} />{/if}
 
-{#if forkOpen}
+{#if viewportSupport.supported && forkOpen}
   <div class="modal-backdrop">
     <div role="dialog" aria-modal="true" aria-labelledby="fork-title">
       <form class="modal" onsubmit={(event) => { event.preventDefault(); void submitFork(); }}>
@@ -966,7 +980,7 @@
   </div>
 {/if}
 
-{#if checkpointPickerOpen}
+{#if viewportSupport.supported && checkpointPickerOpen}
   <div class="modal-backdrop">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="picker-title">
       <p>Rewind</p><h2 id="picker-title" tabindex="-1" bind:this={pickerHeading}>Choose a checkpoint.</h2>
@@ -984,8 +998,8 @@
   </div>
 {/if}
 
-{#if openShape}<ShapePanel entry={openShape} onClose={() => (openShapeId = undefined)} />{/if}
-{#if openPivotalNodeId !== undefined}
+{#if viewportSupport.supported && openShape}<ShapePanel entry={openShape} onClose={() => (openShapeId = undefined)} />{/if}
+{#if viewportSupport.supported && openPivotalNodeId !== undefined}
   <div class="modal-backdrop">
     <div class="modal guidance-panel" role="dialog" aria-modal="true" aria-labelledby="pivotal-title">
       <p>Pivotal marker</p><h2 id="pivotal-title">Recorded change</h2>
@@ -1010,6 +1024,18 @@
     min-height: 0;
     overflow: hidden;
   }
+
+  .viewport-refusal {
+    width: min(32rem, calc(100% - 2rem));
+    margin: auto;
+    padding: 1.25rem;
+    border: 1px solid var(--warning);
+    border-radius: 1rem;
+    background: var(--panel);
+  }
+  .viewport-refusal p:first-child { color: var(--warning); font: 700 .68rem ui-monospace, monospace; text-transform: uppercase; }
+  .viewport-refusal h1 { margin: .35rem 0; font: 500 1.6rem/1.1 var(--display-font); }
+  .viewport-refusal p:last-child { margin: 0; color: var(--muted); line-height: 1.45; }
 
   .drill {
     width: min(86rem, calc(100% - 2rem));
@@ -1321,59 +1347,57 @@
   .trajectory-status span { font-size: 0.72rem; }
   .trajectory-status p { flex-basis: 100%; margin: 0.25rem 0 0; font-size: 0.8rem; }
 
-  @media (max-width: 62rem) {
-    .drill-region {
-      overflow: auto;
-    }
-
-    .drill {
-      height: auto;
-      min-height: 100%;
-      overflow: visible;
-    }
-
-    .workspace {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto;
-      overflow: visible;
-    }
-
-    .timeline-row {
-      grid-column: 1;
-      grid-template-columns: 1fr;
-      max-height: none;
-      overflow: visible;
-    }
-
-    .position-column { overflow: visible; }
-    .board-frame { width: min(100%, 42rem); }
-  }
-
   @media (max-width: 719px) {
+    .drill-region { overflow: hidden; }
     .drill {
       width: min(100% - 1rem, 86rem);
+      height: 100%;
+      padding: .3rem 0;
+      overflow: hidden;
     }
 
     .topbar {
       grid-template-columns: 1fr auto;
+      padding: .2rem 0 .5rem;
     }
 
     .status {
       grid-column: 1 / -1;
       grid-row: 2;
-      margin-top: 0.5rem;
+      margin-top: 0.25rem;
     }
 
     .help {
       grid-column: 2;
       grid-row: 1;
     }
-    .compact-tabs { display: flex; grid-column: 1; gap: 0.25rem; overflow: auto; }
+    .workspace {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto minmax(0, 1fr) clamp(4rem, 18dvh, 8rem);
+      gap: .5rem;
+      overflow: hidden;
+    }
+    .workspace.evidence-active { grid-template-rows: auto minmax(0, 1fr) 0; }
+    .compact-tabs { display: flex; grid-column: 1; grid-row: 1; gap: 0.25rem; overflow: auto; }
     .compact-tabs button { padding: 0.4rem; border: 1px solid var(--line); border-radius: 0.45rem; background: var(--panel); }
     .compact-tabs button.active { border-color: var(--accent); color: var(--accent); }
-    .rail-stack, .timeline-row { display: none; }
-    .rail-stack.compact-active { display: grid; }
-    .timeline-row.compact-active { display: grid; }
-    .board-frame { width: min(100%, calc(100dvh - 21rem), 30rem); }
+    .position-column {
+      grid-column: 1;
+      grid-row: 2;
+      grid-template-rows: repeat(8, auto) minmax(0, 1fr);
+      gap: .25rem;
+      overflow: hidden;
+    }
+    .board-slot {
+      grid-row: -2 / -1;
+      container-type: size;
+      min-height: 12rem;
+    }
+    .rail-stack, .timeline-row, .reading-controls { display: none; }
+    .rail-stack, .timeline-row { grid-column: 1; grid-row: 3; min-height: 4rem; overflow: auto; }
+    .rail-stack.compact-active, .timeline-row.compact-active { display: grid; grid-template-columns: 1fr; }
+    .reading-controls.compact-active { display: grid; }
+    .board-frame,
+    .position-column.outcome .board-frame { width: min(100cqw, 100cqh); }
   }
 </style>
