@@ -27,9 +27,16 @@ which is itself queued work). There is no fourth state.
 | D61, D62 (vacuous phone assertion, inert tabs) | `rfc/client-surface-floor.md` — READY |
 | D65, D66, D67, D71, D72 (handshake discards the option table; abort leaves MultiPV; `sameEngine` band-blind) | `rfc/archive/engine-request-contract.md` — landed; residuals below |
 
-## 2. Unowned — needs an RFC, grouped so one draft covers each cluster
+## 2. Unowned — three waves, owner ruling 2026-08-15: *"just make nice waves… as long as we get them all done"*
 
-These are the real backlog. **Each cluster is one RFC.**
+Each cluster is one RFC. **Two drafts per wave**, because drafting all seven at once
+starved the review queue on 2026-08-15 — the failure mode is review throughput, not
+drafting capacity. A wave advances when its drafts are cross-reviewed and queued.
+
+**WAVE 1 (drafting now):** A (delivery) + B (engine leverage).
+**WAVE 2:** C (content-vocabulary wiring) + D (live-surface honesty).
+**WAVE 3:** E (dead vocabulary) + G (process). F is a content wave, not an RFC, and
+runs alongside whichever wave has room.
 
 **A. Delivery — the Q8 remedy.** D77 (0 of 131 feedback claims can reach a
 learner), D78 (compare strip discriminates at 1.01×), D79 (`stated_reasoning`
