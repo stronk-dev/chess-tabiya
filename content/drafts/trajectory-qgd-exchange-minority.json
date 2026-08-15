@@ -44,6 +44,7 @@
   ],
   "shapes": [
     "carlsbad",
+    "open-centre",
     { "shape": "rook-4v3-same-side", "relation": "prospective" }
   ],
   "planClasses": [

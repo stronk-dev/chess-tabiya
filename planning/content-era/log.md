@@ -2146,3 +2146,284 @@ square or region**. The claims the two numbers support are unchanged: the orphan
 half is a large minority of the work, and king geometry was the single biggest
 category of null notes that turned out to be wrong about the shipped vocabulary.
 Corrected by appending rather than editing, per the append-only law.
+
+## 2026-08-15 — Content fix wave: the expression-census triage worked through (claude)
+
+agent-research 55 · agent-encoding 60 · agent-engine-validation 50 · review 0 ·
+agent-revision 15 · agent-tooling-friction 15 · **total 195**, friction **7.7%**
+
+Scope: the five items in `planning/expression-census-triage.md` §7, plus two
+degenerate-case defects of the same class found while verifying them. Only
+`content/` and this log were touched. No commits. Instruments: the shipped
+`make expression-census` (driven with `{ expression }` in a loop for per-arm
+decomposition, i.e. the same `EXPR=` path the Makefile exposes),
+`make shape-check`, `make pack-check`. `matchesStructuralExpression` is the only
+oracle anywhere below; **no walker was rebuilt** — the first wave in eight that
+did not have to. No engine and no tablebase was consulted, so
+`agent-engine-validation` above is evaluator validation, not engine evidence.
+
+**Baseline reproduced exactly before any edit** (43 packs / 694 positions /
+159 subjects / 36 `neverFiresInCorpus` / 30 `firesOnlyOutsideShape` / 0
+`unsatisfiable` / 35 `satisfiabilityUnknown`), so every before/after number
+below is a diff against the triage's own figures `[V]`.
+
+### 1. D75 — `rook-4v3-same-side`'s trigger, fixed as a trigger
+
+Measured first: the trigger fired 41 times with no pawn constraint of any kind,
+splitting **17 positions with 0 black pawns and 1 white pawn** (the spines of
+`philidor-passive-rook-convert` 3 and `philidor-third-rank-hold` 14) from **24
+with 3 black and 4 white** (`rook-4v3-same-side-hold`) `[V]`. Reproduces the
+triage to the unit.
+
+Added two clauses to the trigger: Black has at least one pawn, and White's pawn
+count exceeds Black's by at least one. **`difference` semantics were verified
+rather than assumed** — `piece_count(white, pawn, difference, atLeast 1)` fires
+on the census's `king_and_one_white_pawn` degenerate board and not on
+`king_and_one_black_pawn`, so it is white-minus-black `[V]`.
+
+| Subject | Before | After |
+|---|---|---|
+| `/trigger` | 41/694, in-shape 41/41, fires on `rooks_only` | **24/694, 24/24, fires on no degenerate board** |
+| `black-king-first` | 10/41 in-shape | 9/24 |
+| `black-trade-pawns-not-rooks` | 0/41 | 0/24, now with a witness |
+| `black-sixth-rank-restraint` | 7/41 | **0/24 + `FIRES_ONLY_OUTSIDE_SHAPE`** |
+| `black-active-second-rank` | 7/41 | 7/24 |
+| `white-king-up-pawns-forward` | 11/41 | 6/24 |
+| `white-offer-rook-trades` | 0/41 | 0/24 |
+
+The informative row is `black-sixth-rank-restraint`: all seven of its in-shape
+hits were Philidor positions. A plan about restraining the stronger king in a
+4v3 was scoring only on the pawnless-for-Black family the loose trigger let in.
+That is the loose trigger's cost stated as a number, and it was invisible while
+the denominator was 41.
+
+**A claim of my own the machine refuted.** My first instinct was that the id
+`rook-4v3-same-side` implied an exact `4 v 3` count constraint. Measured
+against the corpus, **four candidate constraints — black ≥1; both sides ≥1;
+both ≥1 plus a white pawn-difference ≥1; and exactly 4v3 — admit precisely the
+same 24 positions, exclude precisely the same 17, and kill the `rooks_only`
+degenerate firing in all four cases** `[V]`. The corpus cannot discriminate
+between them at all, so the choice could not be made on evidence and had to be
+made on the entry's own authored text: its name says "**4v3 family**" and its
+declaring pack's objective says "rook and three against rook and four", while
+its plans describe trading pawns down. The family reading was chosen for that
+reason and the reason is recorded, not the number. The `watch` line "This fires
+for the family; count the pawns yourself" — written to excuse the missing
+constraint — was replaced with what the trigger now guarantees.
+
+### 2. D76 — `fianchetto-g7`'s mirrored arm: the triage's premise is refuted
+
+The triage calls arm 1 "an arm from the wrong side of the board … inside a
+**g7-specific** entry". **The entry is not g7-specific.** Its own trigger is
+`any[ all[pawn g6, bishop g7], mirrored(files, all[pawn g6, bishop g7]) ]` —
+the file mirror is already at entry level, admitting a b6/b7 queenside
+fianchetto `[V]`. All three non-null plan signatures carry the same mirror, and
+`white-trade-the-fianchetto-bishop`'s authored note states the intent outright:
+*"The mirrored arm covers the queenside fianchetto the trigger also admits,
+where the bishop is the light-squared one."* A signature that did not mirror
+could never be satisfied on a position the trigger admits.
+
+**Decision: the mirror belongs and was kept.** What was corrected is the entry
+`name`, which read "Kingside fianchetto (Black g7 bishop)" and is what makes
+every reader — the triage, and me before measuring — treat the mirror as a
+stray. It now names both wings. Measured: trigger 44/694, **all 44 through the
+unmirrored arm, 0 through the mirror** `[V]`; the mirror's zero is a coverage
+fact about the corpus, and a witness now proves the arm is satisfiable.
+
+**Is the diagonal condition right? Measured segment by segment over the 44
+in-shape positions:** `Bg7` fires 44/44; `Bg7 ∧ clear g7–f6` 44/44 (vacuous —
+`between()` is endpoint-exclusive and adjacent squares have no interior);
+`∧ clear g7–e5` 7/44; `∧ clear g7–d4` **0/44**, and every longer segment 0
+`[V]`. **The blocker is d4** — one of the central pawns the plan's own prose
+asks to be traded or levered away. The strict a1 endpoint additionally demands
+c3 and b2, which the prose does not name, but it costs nothing measurable here:
+0/44 either way. The condition was left alone and the measurement written into
+the plan's note. A sweep of every `line_blockers` use in `content/` found this
+is the only one, so no other expression carries the adjacent-square vacuity.
+
+### 3. `iqp-black` and `maroczy-bind` — decomposed, then witnessed
+
+Neither is broken; both are uncovered, and the decomposition says exactly where.
+
+- **`iqp-black`**: conjuncts fire 219 (`d5` black pawn), **1** (isolated black
+  d-pawn), 45 (d-file half-open for White) `[V]`. The killer is the isolated
+  d-pawn at 1 of 694 — one position of `carlsbad-minority-attack` — and it never
+  co-occurs with the half-open file (`isolated ∧ half-open = 0`).
+- **`maroczy-bind`**: conjuncts fire 58 (`c4`), 150 (`e4`), 45, 53 `[V]`. `c4`
+  never co-occurs with either half-open file: `c4 ∧ white half-open d = 0` and
+  `c4 ∧ black half-open c = 0`, because the 58 `c4` positions are all KID and
+  Leningrad spines where White keeps a d-pawn and Black a c-pawn.
+
+The detector family does match content (`carlsbad` 41, `iqp-white` 4 on the same
+corpus), so **this is a coverage fact about what has been authored, not evidence
+against the detector**, and no such claim is made here. Both triggers now carry
+a positive and a negative witness, so both are `satisfiable / basis: witness`
+instead of `unknown`.
+
+### 4. The eight c1 witnesses — 26 witnesses, 12 keys, all correct first try
+
+Written to **`content/witnesses/expression-witnesses.json`**, following the
+`knight-vs-bishop` template exactly: a legal `from` FEN, one SAN that makes the
+placement, a `reference` control that is the same board with the piece
+elsewhere. Every witness behaves as declared on the first run — **26/26 with
+`actual === expect`, zero `WITNESS_LINE_ILLEGAL`** `[V]`.
+
+`satisfiabilityUnknown` **35 → 24** `[V]`, better than the triage's predicted
+27, because three subjects beyond the eight were cheap once the file existed:
+the two §3 triggers and `rook-4v3-same-side/black-trade-pawns-not-rooks`. That
+last one matters for item 1: the `[1,2]` black-pawn interval **is** reachable in
+the corrected family (`hxg5` from a 4v3 leaves 4v2), so its 0/24 is now an
+honest coverage fact about a 24-position spine instead of an artefact of a
+trigger that admitted pawnless positions. Its third witness is a `degenerate`
+control on a pawnless rooks-only board, re-testing the existence clause the
+entry's note says was added after an earlier draft was vacuously true.
+
+**These eight remain coverage facts, not authoring errors, and nothing was
+"fixed" into something else.** Each expression still says what its prose says,
+arm for arm; the witnesses change what is *known* about them, not what they
+claim.
+
+**Handoff, and the one thing this wave could not finish:** the census's default
+witness path is `apps/server/src/fixtures/expression-witnesses.json`, inside
+Codex's boundary. `make expression-census WITNESSES=content/witnesses/expression-witnesses.json`
+gives 24; plain `make expression-census` still gives 35 `[V]`. The content file
+is a strict superset of the fixture (the `knight-vs-bishop` key is copied
+verbatim), so the change needed is one line — repoint the default at
+`content/witnesses/` and delete the fixture. Witnesses are authored content and
+belong beside the content, not in a server fixtures directory.
+
+### 5. D44 — nine orphan entries, decided per entry
+
+Two had machine evidence and were wired in; the other seven have none and were
+recorded in place.
+
+| Entry | Trigger firings | Decision |
+|---|---:|---|
+| `open-centre` | 1/694, all in `trajectory-qgd-exchange-minority` | **wired** into that pack (`present`) |
+| `queenless-middlegame` | 7/694, all in `trajectory-caro-advance-chain-bishops` | **wired** into that pack (`present`) |
+| `doubled-c-pawns`, `hanging-pawns`, `iqp-black`, `knight-vs-bishop`, `maroczy-bind`, `up-an-exchange`, `vancura` | 0/694 each | **stand alone**, reason recorded in each entry's `provenance.sources` |
+
+Both wirings pass `pack-check`, which means `SHAPE_REFERENCE_NEVER_PRESENT`
+does not fire — the validator confirms each trigger actually matches its new
+host's authored spine `[V]`. **No `prospective` reference was invented for any
+of the seven zero-firing orphans**: a prospective claim is a claim that the
+structure may arise later, which is chess judgment with no measurement behind
+it, and law 8 forbids manufacturing it. Five of the seven already carried a
+trigger-narrowing or trigger-gap note explaining what they deliberately do not
+cover; the new `D44 orphan status` line states the measurement (no referencing
+pack, 0 of 694, signatures verified only against constructed witnesses) so the
+next reader does not have to re-derive it.
+
+### 6. Two degenerate-case defects found while verifying — same class as D75
+
+The triage's §6 named three triggers firing on degenerate boards and observed
+that "nobody has looked yet". D75's fix removed one (`rook-4v3-same-side` on
+`rooks_only`) as a side effect. The other two are the same missing-existence-clause
+bug and were fixed the same way, with a clause requiring at least one pawn on
+the board:
+
+| Entry | Corpus firings | Degenerate firings |
+|---|---|---|
+| `open-centre` | 1 → **1** (unchanged) | `[queens_only]` → **`[]`** |
+| `pawn-opposition-key-squares` | 33 → **33** (unchanged) | `[bare_kings, king_and_one_white_pawn, king_and_one_black_pawn]` → **`[king_and_one_white_pawn, king_and_one_black_pawn]`** |
+
+`open-centre` fired on two kings and two queens because `open_file` reads true
+on any file with no pawns on it — a board with no pawns has an "open centre" on
+every file. `pawn-opposition-key-squares` is a pure "nothing heavier than a
+pawn" census and fired on bare kings, in an entry about pawn opposition. Both
+keep the boards that are genuine family members: K+P vs K is the canonical
+opposition ending and still fires. Corpus-firing counts are unchanged for both,
+which is what makes these safe corrections rather than re-authoring.
+`FIRES_ON_DEGENERATE` across the census: **45 → 43 subjects** `[V]`.
+
+### Verification run at the end of the wave
+
+- All **25** shape entries pass `shape-check` against `content/drafts`, exit 0.
+- All **43** packs pass `pack-check`, exit 0.
+- `make expression-census` exits 0 under both witness paths; **0 unsatisfiable**,
+  as before.
+- The full repo suite — **98 files / 608 tests** — passes with the edits in
+  place, including `packages/runtime/src/shape-firing.test.ts`, which reads
+  `rook-4v3-same-side` directly. The 2026-08-14 entry's caution that entry
+  `version` fields are "pinned by a runtime test outside this pass's boundary"
+  does **not** hold: nothing pins them, and every entry edited here had its
+  patch version bumped `[V]`.
+
+### Census diff, whole wave
+
+| Total | Before | After |
+|---|---:|---:|
+| subjects | 159 | 159 |
+| `neverFiresInCorpus` | 36 | 36 |
+| `firesOnlyOutsideShape` | 30 | **31** |
+| `inShapeDenominatorEmpty` | 40 | 40 |
+| `unsatisfiable` | **0** | **0** |
+| `satisfiabilityUnknown` | 35 | **24** |
+| `FIRES_ON_DEGENERATE` subjects | 45 | **43** |
+
+`firesOnlyOutsideShape` rising by one is the `black-sixth-rank-restraint` row
+above — the number went up because the denominator got honest, which is the
+intended direction.
+
+### Contract harvest
+
+1. **A shape entry has nowhere to record why its trigger says what it says.**
+   The schema is `additionalProperties: false`, so a `triggerNote` sibling to
+   `trigger` is rejected — I tried it and `shape-check` failed with
+   `SCHEMA_ADDITIONALPROPERTIES`. Every plan gets a `success.note` for exactly
+   this purpose and the trigger, the most consequential expression in the
+   entry, gets none. The rationale for D75's fix had to go into `watch` (player
+   text) and this log. **`trigger.note`, or a `triggerNote` string, is the
+   cheapest schema addition this wave found.**
+2. **`provenance.sources` is being used as the entry's notes field**, by three
+   prior waves and now by nine of my edits ("Trigger narrowing:", "Trigger
+   gap:", "Tablebase honesty:", "UNGROUNDED:", and now "D44 orphan status:").
+   It is validated only as "non-empty for published packs". Either name the
+   convention or give entries a `notes` array; right now provenance and
+   authoring commentary are the same field.
+3. **The witness fixture lives in `apps/`, and witnesses are content.** See the
+   §4 handoff. A content agent cannot lower `satisfiabilityUnknown` on the
+   default code path without writing outside `content/`.
+4. **`between()` being endpoint-exclusive makes adjacent-square `line_blockers`
+   vacuously true**, and nothing warns. `line_blockers g7→f6 = 0` fires on
+   44/44 in-shape positions and on all seven degenerate boards. Only one
+   `line_blockers` use exists in `content/` today and it is not adjacent, but a
+   lint for `from`/`to` adjacency is a two-line check.
+5. **The degenerate suite catches missing existence clauses, and it caught
+   three in this wave** (one via D75, two directly). The seven boards in
+   `DEGENERATE_POSITIONS` are doing more work per line than anything else in
+   the instrument.
+
+### Tooling friction — 15 of 195 minutes (7.7%)
+
+**The seventh-attestation item was built and the number moved.** Friction was
+70/345 (20%) in the signature-authoring pass and 40/310 (12.9%) in wave 4b;
+`make expression-census` shipping is why this wave is at 7.7%. No corpus
+walker, no firing census and no expression prober was written this session —
+the first time that is true in eight passes. What remains:
+
+1. **The census cannot probe an arbitrary FEN.** `shape-check` takes `PROBE=`
+   but only against a whole entry; the census takes `EXPR=` but only against the
+   corpus. Verifying "does this expression hold on *this* board" meant writing
+   witnesses and running the full census to read the answer back. `make
+   expression-census EXPR=… FEN=…` would close it.
+2. **`shape-check` re-bundles with esbuild on every invocation** (fourth
+   attestation), so checking 25 entries is 25 bundles. Calling
+   `apps/server/dist/shape-check.js` directly in a loop is the workaround
+   everyone is using; the target should take a glob.
+3. **`pack-check` on a glob reports every `*.sources.json`, `*.job.json` and
+   `*.evidence.json` sidecar as a failed pack.** The census already filters
+   those by name; `pack-check` should skip them rather than exit non-zero on
+   files that are not packs.
+
+### Not done, deliberately
+
+- **The 30 `FIRES_ONLY_OUTSIDE_SHAPE` subjects** (triage §4). Documented as
+  correct-by-construction under the run-end evaluation order; a watch list, not
+  a fix list. Re-diff after the next wave.
+- **D43's `knight-vs-bishop` passed-pawn fan.** Reported as coverage by the
+  instrument, unchanged here.
+- **No `prospective` shape reference invented** for any zero-firing orphan.
+- **No chess claim graded, created, or corrected on strategic grounds.** Every
+  correction above is either a measurement, a mismatch between an expression and
+  the entry's own authored text, or a degenerate-board vacuity.

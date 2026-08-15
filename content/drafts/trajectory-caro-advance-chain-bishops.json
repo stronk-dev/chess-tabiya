@@ -40,7 +40,8 @@
   ],
   "shapes": [
     "closed-centre-chain",
-    "bishop-good-bad"
+    "bishop-good-bad",
+    "queenless-middlegame"
   ],
   "planClasses": [
     {

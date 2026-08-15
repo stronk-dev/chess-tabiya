@@ -1,6 +1,6 @@
 {
   "id": "maroczy-bind",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Maroczy Bind",
   "phases": ["middlegame"],
   "trigger": { "kind": "feature", "feature": { "kind": "named_structure", "id": "maroczy-bind" } },
@@ -13,5 +13,5 @@
   ],
   "watch": ["White pawn control of b5 and d5 before either freeing break.", "Every minor-piece trade: the bind squeezes less with each pair off.", "The dark squares in front of the bind pawns once the c-pawns are gone."],
   "typicalMistakes": ["Breaking with the b- or d-pawn before it is supported, trading a cramp for a permanent weakness.", "Drifting without a break plan and slowly running out of squares.", "Stretching the bind pawns forward until the dark squares behind them collapse."],
-  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored strategic claims with no citation, engine evaluation, corpus frequency, or owner review; standard Maroczy doctrine rendered from model knowledge.", "Trigger basis: the shipped maroczy-bind catalogue convention (White pawns on c4 and e4, the d-file half-open for White, the c-file half-open for Black). The convention does not check Black's kingside arrangement or piece placement, so non-Sicilian positions matching the pawn signature also fire; the entry names the family, not the census."], "attribution": [] }
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored strategic claims with no citation, engine evaluation, corpus frequency, or owner review; standard Maroczy doctrine rendered from model knowledge.", "Trigger basis: the shipped maroczy-bind catalogue convention (White pawns on c4 and e4, the d-file half-open for White, the c-file half-open for Black). The convention does not check Black's kingside arrangement or piece placement, so non-Sicilian positions matching the pawn signature also fire; the entry names the family, not the census.", "D44 orphan status, measured 2026-08-15 with `make expression-census`: no pack under content/drafts references this entry and its trigger fires on 0 of the 694 authored spine positions. Decomposed, the four conjuncts fire 58, 150, 45 and 53 times, but a white pawn on c4 never co-occurs with either half-open file: the 58 c4 positions are all KID and Leningrad spines where White also keeps a d-pawn and Black a c-pawn. The detector family itself does match content - carlsbad fires 41 and iqp-white 4 - so this is a coverage fact about what has been authored, not evidence against the detector. A positive and a negative witness in content/witnesses/expression-witnesses.json now settle satisfiability."], "attribution": [] }
 }
