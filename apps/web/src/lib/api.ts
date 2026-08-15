@@ -572,6 +572,7 @@ export interface DrillClientApi extends RunApi {
     runId: string,
     branchIds: readonly string[],
   ): Promise<BranchComparison>;
+  branchDecidedness(runId: string, branchIds: readonly string[]): Promise<Readonly<Record<string, import("@chess-tabiya/runtime").Decidedness>>>;
   authoredFeedback(runId: string): Promise<AuthoredFeedbackPage>;
   reasoning(runId: string, checkpointId: string): Promise<ReasoningPage>;
   humanSplit(runId: string, nodeId: string): Promise<HumanSplitPage>;
@@ -1004,6 +1005,14 @@ export class DrillApi implements DrillClientApi {
       { method: "POST", body: { branchIds } },
     );
     return body.comparison;
+  }
+
+  async branchDecidedness(runId: string, branchIds: readonly string[]): Promise<Readonly<Record<string, import("@chess-tabiya/runtime").Decidedness>>> {
+    const body = await this.#json<{ readonly decidedness: Readonly<Record<string, import("@chess-tabiya/runtime").Decidedness>> }>(
+      `/runs/${encoded(runId)}/branch-decidedness`,
+      { method: "POST", body: { branchIds } },
+    );
+    return body.decidedness;
   }
 
   events(runId: string, sinceSeq = 0): Promise<EventsPage> {

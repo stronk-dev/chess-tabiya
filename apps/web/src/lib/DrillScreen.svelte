@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, RunRole, ShapeEntryView, VoicePage } from "./api.js";
-  import { SILENT_ASSISTANCE, branchPath, classifyPhase, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, permittedAssistance, pivotalMarkers, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup } from "@chess-tabiya/runtime";
+  import { BRANCH_COLLAPSE_FLOOR, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, permittedAssistance, pivotalMarkers, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
   import BranchRail from "./BranchRail.svelte";
@@ -64,6 +64,7 @@
     onFork: (label?: string, intent?: string) => void | Promise<void>;
     onSwitchBranch: (leafNodeId: string) => void | Promise<void>;
     onCompare: (branchIds: readonly string[]) => void | Promise<void>;
+    onClassifyBranches?: (branchIds: readonly string[]) => Promise<Readonly<Record<string, Decidedness>>>;
     onCloseCompare: () => void;
     onContinueCheckpoint: () => void | Promise<void>;
     onPrediction?: (uci: string) => void | Promise<void>;
@@ -102,6 +103,7 @@
     onFork,
     onSwitchBranch,
     onCompare,
+    onClassifyBranches,
     onCloseCompare,
     onContinueCheckpoint,
     onPrediction = () => {},
@@ -152,6 +154,10 @@
   let dismissedGuardSeq: number | undefined = $state();
   let selectedSquare: string | undefined = $state();
   let compactTab: "timeline" | "branches" | "evidence" | "session" = $state("timeline");
+  let decidedness: Readonly<Record<string, Decidedness>> = $state({});
+  let foldedBranchIds: string[] = $state([]);
+  let pinnedExpanded: string[] = $state([]);
+  let compareLimitNotice: string | undefined = $state();
 
   let run = $derived(snapshot.run);
   let currentNode = $derived(activeNode(run));
@@ -236,6 +242,7 @@
     currentNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack)),
   );
   let cards = $derived(branchCards(run));
+  let collapsedIds = $derived(collapsedBranchIds(run, decidedness, new Set(compareIds), new Set(pinnedExpanded)));
   let groups = $derived(groupsFromEvents(run));
   let activeGroup = $derived(groups.find((group) => group.members.some((member) => member.branchId === run.activeCursor.branchId)));
   let groupOrdinals = $derived(Object.fromEntries(groups.flatMap((group, groupIndex) => group.members.map((member) => [member.branchId, groupIndex + 1]))));
@@ -426,12 +433,37 @@
     if (compareIds.includes(branchId)) {
       compareIds = compareIds.filter((id) => id !== branchId);
     } else {
-      if (compareIds.length < 8) compareIds = [...compareIds, branchId];
+      if (compareIds.length < MAX_COMPARISON_BRANCHES) compareIds = [...compareIds, branchId];
+      pinnedExpanded = [...new Set([...pinnedExpanded, branchId])];
     }
   }
 
   function compareAllHere(forkNodeId: string): void {
-    compareIds = cards.filter((card) => card.forkNodeId === forkNodeId || card.id === run.activeCursor.branchId).map((card) => card.id).slice(0, 8);
+    const eligible = cards.filter((card) => card.forkNodeId === forkNodeId || card.id === run.activeCursor.branchId);
+    const ordered = [...eligible].sort((left, right) => left.id === run.activeCursor.branchId ? -1 : right.id === run.activeCursor.branchId ? 1 : collapsedIds.has(left.id) === collapsedIds.has(right.id) ? 0 : collapsedIds.has(left.id) ? 1 : -1);
+    compareIds = ordered.slice(0, MAX_COMPARISON_BRANCHES).map((card) => card.id);
+    compareLimitNotice = eligible.length > MAX_COMPARISON_BRANCHES ? `${eligible.length} branches fork here. Comparison renders at most eight columns; the first eight in rail order are selected.` : undefined;
+    pinnedExpanded = [...new Set([...pinnedExpanded, ...compareIds])];
+  }
+
+  function persistFolded(next: readonly string[]): void {
+    foldedBranchIds = [...next];
+    try { globalThis.localStorage?.setItem(`tabiya:branch-fold:v1:${run.id}`, JSON.stringify(foldedBranchIds)); } catch { /* Local view preference only. */ }
+  }
+
+  function foldBranch(branchId: string): void { persistFolded([...new Set([...foldedBranchIds, branchId])]); }
+  function restoreBranch(branchId: string): void {
+    persistFolded(foldedBranchIds.filter((id) => id !== branchId));
+    pinnedExpanded = [...new Set([...pinnedExpanded, branchId])];
+  }
+  async function classifyRemaining(): Promise<void> {
+    if (onClassifyBranches === undefined) return;
+    const ids = cards.filter((card) => decidedness[card.id]?.state !== "decided").slice(0, MAX_COMPARISON_BRANCHES).map((card) => card.id);
+    if (ids.length > 0) decidedness = Object.freeze({ ...decidedness, ...(await onClassifyBranches(ids)) });
+  }
+  async function switchVisibleBranch(nodeId: string, branchId: string): Promise<void> {
+    pinnedExpanded = [...new Set([...pinnedExpanded, branchId])];
+    await onSwitchBranch(nodeId);
   }
 
   function preview(nodeId: string): void {
@@ -590,6 +622,10 @@
   onMount(() => {
     speechAvailable = typeof globalThis.speechSynthesis !== "undefined" && typeof globalThis.SpeechSynthesisUtterance !== "undefined" && globalThis.speechSynthesis.getVoices().length > 0;
     assistance = loadAssistance(run.sessionKind, preferenceStorage());
+    try {
+      const stored = JSON.parse(globalThis.localStorage?.getItem(`tabiya:branch-fold:v1:${run.id}`) ?? "[]");
+      if (Array.isArray(stored) && stored.every((value) => typeof value === "string")) foldedBranchIds = stored;
+    } catch { foldedBranchIds = []; }
     if (regionElement === undefined) {
       throw new Error("Drill keyboard region did not mount");
     }
@@ -775,10 +811,18 @@
           branches={cards}
           activeBranchId={run.activeCursor.branchId}
           {compareIds}
-          onSwitch={onSwitchBranch}
+          onSwitch={switchVisibleBranch}
           onToggleCompare={toggleCompare}
           onCompareAllHere={compareAllHere}
           {groupOrdinals}
+          {decidedness}
+          collapsedBranchIds={collapsedIds}
+          {foldedBranchIds}
+          {compareLimitNotice}
+          onFold={foldBranch}
+          onRestore={restoreBranch}
+          onRestoreAll={() => persistFolded([])}
+          onClassify={onClassifyBranches === undefined ? undefined : classifyRemaining}
         />
       </div>
 

@@ -115,6 +115,7 @@ class ManualScheduler implements PollScheduler {
 
 class FakeApi implements DrillClientApi {
   run: DrillRun | undefined;
+  async branchDecidedness(): Promise<Readonly<Record<string, import("@chess-tabiya/runtime").Decidedness>>> { return {}; }
   created: CreateRunRequest | undefined;
   selected: SelectMoveRequest | undefined;
   writerIds: string[] = [];

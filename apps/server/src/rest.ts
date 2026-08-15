@@ -540,7 +540,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|share|flip|derivations|distill)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|share|flip|derivations|distill)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -1324,6 +1324,11 @@ export function createRestHandler(
             branchIds,
           ),
         });
+      }
+      if (route.action === "branch-decidedness") {
+        const branchIds = value.branchIds;
+        if (!Array.isArray(branchIds) || branchIds.some((id) => typeof id !== "string")) throw invalid("branchIds must be an array of strings");
+        return json(200, { decidedness: await service.branchDecidedness(route.runId, principal, branchIds) });
       }
       if (route.action === "analysis") {
         const body = closedRecord(value, "/", ["nodeIds", "kind", "multiPv", "depth", "movetime"]);

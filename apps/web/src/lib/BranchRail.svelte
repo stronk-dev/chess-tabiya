@@ -1,32 +1,46 @@
 <script lang="ts">
   import type { BranchCard } from "./screen-model.js";
+  import { renderCollapseExplanation, type Decidedness } from "@chess-tabiya/runtime";
 
   interface Props {
     branches: readonly BranchCard[];
     activeBranchId: string;
     compareIds: readonly string[];
-    onSwitch: (nodeId: string) => void | Promise<void>;
+    onSwitch: (nodeId: string, branchId: string) => void | Promise<void>;
     onToggleCompare: (branchId: string) => void;
     onCompareAllHere?: (forkNodeId: string) => void;
     groupOrdinals?: Readonly<Record<string, number>>;
+    decidedness?: Readonly<Record<string, Decidedness>>;
+    collapsedBranchIds?: ReadonlySet<string>;
+    foldedBranchIds?: readonly string[];
+    compareLimitNotice?: string | undefined;
+    onFold?: (branchId: string) => void;
+    onRestore?: (branchId: string) => void;
+    onRestoreAll?: () => void;
+    onClassify?: (() => void | Promise<void>) | undefined;
   }
 
-  let { branches, activeBranchId, compareIds, onSwitch, onToggleCompare, onCompareAllHere, groupOrdinals = {} }: Props =
+  let { branches, activeBranchId, compareIds, onSwitch, onToggleCompare, onCompareAllHere, groupOrdinals = {}, decidedness = {}, collapsedBranchIds = new Set(), foldedBranchIds = [], compareLimitNotice, onFold, onRestore, onRestoreAll, onClassify }: Props =
     $props();
+  let folded = $derived(new Set(foldedBranchIds));
+  let visible = $derived(branches.filter((branch) => !folded.has(branch.id) && !collapsedBranchIds.has(branch.id)));
+  let settled = $derived(branches.filter((branch) => collapsedBranchIds.has(branch.id) && !folded.has(branch.id)));
+  let hidden = $derived(branches.filter((branch) => folded.has(branch.id)));
+  let unclassified = $derived(branches.filter((branch) => decidedness[branch.id]?.state !== "decided").length);
 </script>
 
 <aside class="rail" aria-labelledby="branch-title">
   <div class="heading">
     <h2 id="branch-title">Branches</h2>
-    <span>{branches.length}</span>
+    <span>{branches.length} branches · {settled.length} settled · {hidden.length} hidden by you · {unclassified} not classified</span>
   </div>
   <ol>
-    {#each branches as branch, index}
+    {#each visible as branch, index}
       <li class:active={branch.id === activeBranchId}>
         <button
           class="branch-card"
           type="button"
-          onclick={() => onSwitch(branch.leafNodeId)}
+          onclick={() => onSwitch(branch.leafNodeId, branch.id)}
           aria-label={`Switch to branch ${index + 1}: ${branch.label}`}
         >
           <span class="number">{index + 1}</span>
@@ -48,11 +62,20 @@
           />
           compare
         </label>
+        {#if onFold}<button class="fold" type="button" onclick={() => onFold?.(branch.id)}>Hide</button>{/if}
       </li>
     {/each}
   </ol>
   {#if onCompareAllHere}
     <button type="button" onclick={() => onCompareAllHere(branches.find((branch) => branch.id === activeBranchId)?.forkNodeId ?? "")}>Compare all forked here</button>
+    {#if compareLimitNotice}<span class="reason" aria-live="polite">{compareLimitNotice}</span>{/if}
+  {/if}
+  {#if onClassify && unclassified > 0}<button type="button" onclick={() => onClassify?.()}>Classify remaining</button>{/if}
+  {#if settled.length > 0}
+    <details><summary>Settled outcomes ({settled.length})</summary><ul>{#each settled as branch}{@const fact = decidedness[branch.id]}<li><button type="button" onclick={() => onRestore?.(branch.id)}>{branch.label}</button>{#if fact?.state === "decided"}<span>{renderCollapseExplanation(branch.id, fact, branch.leafPly).text}</span>{/if}</li>{/each}</ul></details>
+  {/if}
+  {#if hidden.length > 0}
+    <details><summary>Hidden by you ({hidden.length})</summary><button type="button" onclick={() => onRestoreAll?.()}>Restore all</button><ul>{#each hidden as branch}<li><button type="button" onclick={() => onRestore?.(branch.id)}>{branch.label}</button></li>{/each}</ul></details>
   {/if}
 </aside>
 
@@ -160,6 +183,11 @@
     color: var(--muted);
     font-size: 0.7rem;
   }
+
+  .fold{margin:.15rem .4rem;border:0;background:transparent;color:var(--muted);font-size:.7rem;text-decoration:underline;cursor:pointer}
+  .reason,details span{display:block;color:var(--muted);font-size:.7rem;margin:.35rem 0}
+  details{margin-top:.5rem;font-size:.75rem}
+  details ul{list-style:none;padding:0;display:grid;gap:.35rem}
 
   .group-marker{grid-column:2;color:var(--accent);font:600 .62rem ui-monospace,monospace;text-transform:uppercase}
 </style>

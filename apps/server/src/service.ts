@@ -19,6 +19,8 @@ import {
   digestSessionSource,
   isPackSession,
   lineMembership,
+  branchDecidedness,
+  MAX_COMPARISON_BRANCHES,
   matchKeyPoints,
   opponentMovesFromEvents,
   permittedAssistance,
@@ -30,6 +32,7 @@ import {
   shapeFirings,
   suggestTitle,
   type BranchComparison,
+  type Decidedness,
   type BranchGroup,
   type AppendOpponentPlyOptions,
   type CommitMoveOptions,
@@ -85,6 +88,9 @@ import {
 } from "./progress.js";
 import { DEFAULT_STRONG_ENGINE_PROFILE } from "./strong-engine.js";
 import { OpponentSelector, type SelectMoveRequest } from "./opponent-selector.js";
+import type { TablebaseSource } from "./tablebase.js";
+import { learnerCategory } from "./sourcing/tablebase-category.js";
+import { countFenPieces } from "./sourcing/chess-facts.js";
 import {
   mayManageGrants,
   mayWrite,
@@ -289,6 +295,7 @@ export class RunService {
   readonly #opponentSelector: OpponentSelector | undefined;
   readonly #importFetch: typeof fetch;
   readonly #shapes: ShapeRegistry | undefined;
+  readonly #tablebase: TablebaseSource | undefined;
   readonly #simulations = new Map<string, {
     readonly runId: string;
     readonly sourceNodeId: string;
@@ -308,6 +315,7 @@ export class RunService {
       readonly opponentSelector?: OpponentSelector;
       readonly importFetch?: typeof fetch;
       readonly shapeRegistry?: ShapeRegistry;
+      readonly tablebaseSource?: TablebaseSource;
     } = {},
   ) {
     this.#storage = storage;
@@ -317,6 +325,7 @@ export class RunService {
     this.#opponentSelector = options.opponentSelector;
     this.#importFetch = options.importFetch ?? fetch;
     this.#shapes = options.shapeRegistry;
+    this.#tablebase = options.tablebaseSource;
     this.#evidenceMovetimeMs =
       options.evidenceMovetimeMs ?? DEFAULT_STRONG_ENGINE_PROFILE.movetimeMs;
     if (!Number.isSafeInteger(this.#evidenceMovetimeMs) || this.#evidenceMovetimeMs < 1) {
@@ -961,9 +970,9 @@ export class RunService {
     if (branchIds.length < 2 || new Set(branchIds).size !== branchIds.length) {
       throw new ServerError("INVALID_REQUEST", "compare requires at least two distinct branch ids");
     }
-    if (branchIds.length > 8) {
+    if (branchIds.length > MAX_COMPARISON_BRANCHES) {
       throw new ServerError("TOO_MANY_BRANCHES", "At most eight branches may be compared", {
-        details: { count: branchIds.length, limit: 8 },
+        details: { count: branchIds.length, limit: MAX_COMPARISON_BRANCHES },
       });
     }
     const run = requireRead(this.#storage, runId, principal).stored.run;
@@ -972,6 +981,39 @@ export class RunService {
     return !feedbackDisclosed(run)
       ? comparisonWithoutEngineFeedback(comparison)
       : comparison;
+  }
+
+  async branchDecidedness(runId: string, principal: Principal, branchIds: readonly string[]): Promise<Readonly<Record<string, Decidedness>>> {
+    if (branchIds.length < 1 || branchIds.length > MAX_COMPARISON_BRANCHES || new Set(branchIds).size !== branchIds.length) {
+      throw new ServerError(branchIds.length > MAX_COMPARISON_BRANCHES ? "TOO_MANY_BRANCHES" : "INVALID_REQUEST", "branch-decidedness requires one to eight distinct branch ids", { details: { count: branchIds.length, limit: MAX_COMPARISON_BRANCHES } });
+    }
+    const run = requireRead(this.#storage, runId, principal).stored.run;
+    const known = new Set(run.branches.map((branch) => branch.id));
+    if (branchIds.some((id) => !known.has(id))) throw new ServerError("INVALID_REQUEST", "branch-decidedness contains an unknown branch id");
+    const pack = run.packId === null ? undefined : this.#requiredPackRegistry().byDigest(run.packDigest!);
+    const objectiveValue = pack?.document.objective.type;
+    const objective = objectiveValue === "win" || objectiveValue === "hold" || objectiveValue === "save" || objectiveValue === "resist" ? objectiveValue : undefined;
+    const tablebase: Record<string, { category: import("./tablebase.js").TablebaseCategory; pieces: number; sourceId: string }> = {};
+    const unresolved: Record<string, "out_of_range" | "not_probed" | "provider_unavailable" | "withheld"> = {};
+    const free = branchDecidedness(run, { ...(objective === undefined ? {} : { objective }) });
+    for (const branchId of branchIds) {
+      if (free[branchId]?.state === "decided") continue;
+      if (!feedbackDisclosed(run)) { unresolved[branchId] = "withheld"; continue; }
+      const path = branchPath(run, branchId), leaf = path.at(-1)!;
+      const pieces = countFenPieces(leaf.fen);
+      if (pieces > 7) { unresolved[branchId] = "out_of_range"; continue; }
+      if (this.#tablebase === undefined) { unresolved[branchId] = "provider_unavailable"; continue; }
+      try {
+        const raw = await this.#tablebase.probe(leaf.fen);
+        const sideToMove = leaf.fen.split(" ")[1] === "b" ? "black" : "white";
+        const category = learnerCategory(sideToMove, raw.category, run.start.side);
+        tablebase[branchId] = { category, pieces, sourceId: "syzygy" };
+      } catch {
+        unresolved[branchId] = "provider_unavailable";
+      }
+    }
+    const projected = branchDecidedness(run, { ...(objective === undefined ? {} : { objective }), tablebase, unresolved });
+    return Object.freeze(Object.fromEntries(branchIds.map((id) => [id, projected[id]!])));
   }
 
   events(runId: string, principalOrSeq?: Principal | number, maybeSeq = 0): EventsPage {

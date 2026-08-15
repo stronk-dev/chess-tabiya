@@ -9,6 +9,7 @@ import { ServerError } from "./errors.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import type { TablebaseSource } from "./tablebase.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-12T12:00:00.000Z";
@@ -125,6 +126,21 @@ describe("pack-optional position runs", () => {
     expect(pgn).toContain('[Event "Tabiya session: position"]');
     expect(pgn).toContain(`[TabiyaSession "${initial.run.sessionDigest}"]`);
     expect(pgn).not.toContain("TabiyaPack");
+  });
+
+  it("converts tablebase results from side-to-move into the learner perspective", async () => {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    stores.push(storage);
+    const tablebaseSource: TablebaseSource = { kind: "mock", async probe() { return { category: "win", dtz: 1, moves: [] }; } };
+    const service = new RunService(storage, { tablebaseSource });
+    const handler = createRestHandler(service);
+    expect((await call(handler, "POST", "/runs", body("decidedness-perspective"))).status).toBe(201);
+    expect((await call(handler, "POST", "/runs/decidedness-perspective/moves", { uci: "e2e4", at })).status).toBe(200);
+    expect((await call(handler, "POST", "/runs/decidedness-perspective/reveal", { at })).status).toBe(200);
+    const graph = await (await call(handler, "GET", "/runs/decidedness-perspective/graph")).json() as { graph: { branches: { id: string }[] } };
+    const response = await call(handler, "POST", "/runs/decidedness-perspective/branch-decidedness", { branchIds: [graph.graph.branches[0]!.id] });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ decidedness: { [graph.graph.branches[0]!.id]: { state: "decided", shortfall: false, ground: { kind: "tablebase", category: "loss" } } } });
   });
 
   it("withholds injected durable evidence at every read surface before reveal", async () => {

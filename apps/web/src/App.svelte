@@ -582,6 +582,7 @@
         onFork={(label, intent) => controller.fork(label, intent)}
         onSwitchBranch={(nodeId) => controller.switchBranch(nodeId)}
         onCompare={(branchIds) => controller.compare(branchIds)}
+        onClassifyBranches={(branchIds) => api.branchDecidedness(session.runState!.run.id, branchIds)}
         onCloseCompare={() => controller.closeCompare()}
         onContinueCheckpoint={() => controller.continueCheckpoint()}
         onPrediction={(uci) => controller.recordPrediction(uci)}

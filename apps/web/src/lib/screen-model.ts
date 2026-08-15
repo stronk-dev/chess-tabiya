@@ -4,7 +4,7 @@ import {
   type DrillPackDefinition,
 } from "@chess-tabiya/schema/drill-pack";
 import {
-  branchPath,
+  branchPaths,
   historyFrom,
   spineNodeIdFor,
   spinePositionIndex,
@@ -34,6 +34,7 @@ export interface BranchCard {
   readonly intent?: string;
   readonly firstMove: string;
   readonly leafNodeId: string;
+  readonly leafPly: number;
   readonly objectiveState: ObjectiveState;
   readonly terminal: boolean;
   readonly forkNodeId: string;
@@ -137,8 +138,9 @@ export function timelineEntries(
 }
 
 export function branchCards(run: DrillRun): readonly BranchCard[] {
+  const paths = branchPaths(run);
   return run.branches.map((branch) => {
-    const path = branchPath(run, branch.id);
+    const path = paths.get(branch.id)!;
     const leaf = path.at(-1)!;
     const first = path.find(
       (node) => node.parentId === branch.forkNodeId && node.branchId === branch.id,
@@ -149,6 +151,7 @@ export function branchCards(run: DrillRun): readonly BranchCard[] {
       ...(branch.intent === undefined ? {} : { intent: branch.intent }),
       firstMove: first?.moveSan ?? "At fork",
       leafNodeId: leaf.id,
+      leafPly: leaf.ply,
       objectiveState: leaf.objectiveState,
       terminal: TERMINAL_STATES.has(leaf.objectiveState),
       forkNodeId: branch.forkNodeId,

@@ -676,7 +676,7 @@ test("branch group captures three candidates, rotates, recovers evidence, compar
 
   // The captured seed is the first learner ply. Play one more learner decision
   // in each member; the ordinary opponent loop lands between them.
-  await move(page, "d1", "d2");
+  await clickMove(page, "d1", "d2");
   if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) await page.getByRole("button", { name: "Continue" }).click();
   await page.getByRole("button", { name: "Next member" }).click();
   await page.getByLabel("Advance").selectOption("lockstep");
@@ -685,7 +685,7 @@ test("branch group captures three candidates, rotates, recovers evidence, compar
   if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.locator(".rail li.active .group-marker")).toBeVisible();
   await expect(page.locator(".rail li.active strong")).not.toHaveText(activeBeforeLockstep ?? "");
-  await move(page, "d1", "d2");
+  await clickMove(page, "d1", "d2");
   if (await page.getByRole("button", { name: "Continue" }).isVisible().catch(() => false)) await page.getByRole("button", { name: "Continue" }).click();
 
   await page.getByRole("button", { name: "Boards" }).click();

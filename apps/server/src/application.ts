@@ -348,6 +348,7 @@ export async function createApplication(
     progressStorage: storage,
     opponentSelector: selector,
     shapeRegistry: shapes,
+    ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
   });
   const identity = new IdentityService(storage, {
     cookieSecure: options.cookieSecure ?? true,

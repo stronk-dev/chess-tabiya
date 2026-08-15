@@ -12,6 +12,8 @@ import type {
   RunOutcome,
 } from "./types.js";
 
+export const MAX_COMPARISON_BRANCHES = 8;
+
 export interface NodeRef {
   readonly id: string;
   readonly ply: number;

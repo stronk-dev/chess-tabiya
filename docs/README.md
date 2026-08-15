@@ -12,6 +12,9 @@ Implemented foundation:
 - `branch-groups.md` — durable candidate sets over ordinary branches, four seed
   sources, controlled-resistance reply journals, sequential/lockstep play,
   semantic zoom, evidence recovery, comparison, and export.
+- `branch-set-scale.md` — decided-shortfall collapse without ranking, reversible
+  local folding, sequential learner-perspective tablebase classification, stated
+  comparison truncation, and one-pass rail projection.
 - `drill-pack-format.md` — living v0.17 schema, semantic authoring lint, canonical
   digest and URL tooling, executable checkpoint-action validation, pack/run PGN
   round-trip, and deferred content boundary.

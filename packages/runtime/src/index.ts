@@ -10,8 +10,9 @@ export {
   type LineMembershipEntry,
   type LineVerdict,
 } from "./line.js";
-export { BranchQueryError, branchPath } from "./branch-path.js";
+export { BranchQueryError, branchPath, branchPaths } from "./branch-path.js";
 export {
+  MAX_COMPARISON_BRANCHES,
   compareBranches,
   type BranchColumn,
   type BranchComparison,
@@ -24,6 +25,7 @@ export {
   type NodeRef,
   type ObjectiveTimelineEntry,
 } from "./compare.js";
+export { BRANCH_COLLAPSE_FLOOR, branchDecidedness, collapsedBranchIds, renderCollapseExplanation, type AssessmentCategory, type AssessmentObjective, type CollapseExplanation, type Decidedness, type DecidednessGround, type TablebaseCategory as BranchTablebaseCategory } from "./branch-scale.js";
 export { comparisonNarrative, comparisonStrips, type BranchStrips, type ComparisonNarrative, type NarrativeGroup, type PieceRoute, type StripEntry } from "./compare-strips.js";
 export {
   RuntimeError,

@@ -1,6 +1,6 @@
 # RFC: Branch-set scale — collapse by decidedness, fold by hand, and a bounded eval budget
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/05-in-run-experience.md` §1 invariants — **"An attempt is never
