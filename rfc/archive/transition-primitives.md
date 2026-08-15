@@ -1,6 +1,6 @@
 # RFC: Transition primitives — a move-primitive grammar, shipped with both of its consumers
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder and the

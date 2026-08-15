@@ -7,7 +7,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `transition-primitives.md` | implementing | — | pack schema **0.22** — an eighth `successCondition` arm for packs plus a closed-by-default Just Play reading. R3 removed the proposed live marker; no `PivotalKind` or assistance-preference widening. `structuralDelta` stays excluded and its reparsing cost is fixed independently |
 | `expression-census.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — no schema, no migration, no persisted field, no event; lands in any order. `make expression-census` (report-only), plus `CORPUS=`/`PROBE=`/multi-`FILE=` on `shape-check`. Separates **coverage** (never an error) from **satisfiability** (three-valued; only a sound refutation errors) |
 | `live-marker-quality.md` | draft (awaiting cross-review) | — | **claims nothing versioned**. Audits all four live markers (1 measured and failing, 3 never measured); narrows `irreversibility` to `last_of_role`; re-homes D48 (whose fix was leaving with `transition-primitives`' withdrawn live tier); closes the D51 permission bypass normatively. Proposes **L1–L6**, the standing admission rule for the live surface |
 
@@ -61,7 +60,7 @@ landing order, not lost data.
 | 0.18 | `archive/predicate-wave-3.md` | implemented — additive: `plan_consequence` success-condition kind, `king_zone`, `piece_distance`, `piece_count`, `pack.shapes` relation `present`/`prospective`. Ships `pawn_count` and `piece_reach_count scope:"every"` as deprecation WARNINGS (schema removal deferred to wave 4 because `registered_shapes` rows are immutable) |
 | 0.20 | `archive/opening-evidence-path.md` | implemented — additive: `$defs/objectiveGrading.assessedBy` gains a third `oneOf` member `kind: "engine"`. Retires `VERIFY_ASSESSMENT_NOT_SYZYGY`; narrows `OBJECTIVE_GRADING_UNSUPPORTED` to legs |
 | 0.21 | `archive/deviation-classes.md` | implemented — additive: `mistake` (`plan\|timing\|tactical`) and `cost` on `$defs/deviation`, `moveUci` on `guard.overrides[]`. Ships `cost` author-declared and UNBACKED per the 2026-08-15 coordinator ruling |
-| 0.22 | `transition-primitives.md` | implementing — additive: an eighth `successCondition` arm `transition_feature`, a `transitionFeature` `ObjectivePredicate` member, six transition leaves and a `position` bridge node. Widens `RULES_EVIDENCE_FACTS` by six (verified migration-free as a *mechanism* — refs are bare strings, no schema enum). **0.19 is frozen shut**, not free |
+| 0.22 | `archive/transition-primitives.md` | implemented — additive: an eighth `successCondition` arm `transition_feature`, a `transitionFeature` `ObjectivePredicate` member, six transition leaves and a `position` bridge node. Widens `RULES_EVIDENCE_FACTS` by six (verified migration-free as a *mechanism* — refs are bare strings, no schema enum). **0.19 is frozen shut**, not free |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.

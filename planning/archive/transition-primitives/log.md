@@ -18,3 +18,13 @@
   owner handoff.
 - Fixed `structuralDelta` eviction scanning to parse each FEN once while keeping the function
   outside every transition call path.
+
+## 2026-08-15 — completion
+
+- Independent implementation gates passed before archival: 565 tests across 92 files and 24
+  browser tests at zero retries (one optional Maia test skipped).
+- Final diff review caught and fixed the specified illegal-edge boundary: transition expressions
+  now refuse illegal or mismatched before/move/after triples instead of allowing a position-only
+  expression to evaluate them.
+- Canonical behavior lives in `docs/transition-primitives.md`; the RFC and this planning job are
+  archived under the completion protocol.
