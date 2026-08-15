@@ -125,6 +125,31 @@
 > today** — `king_zone`, `king_distance`, `piece_distance`, `piece_count`, the `pack.shapes`
 > relation, both retirements and the shape-entry 0.3 bump have no dependency on it.
 
+
+> **OWNER RULINGS 2026-08-15 — questions 1 and 6 are both resolved, and 1 was reframed.**
+>
+> **Q1 — `plan_consequence` ships, AND the 16-of-99 coverage is treated as a content defect, not
+> a format limit.** The owner: *"we need to fix this asap. fix all to include it properly. **we
+> are the authors**."* That reframing is the point: the 83 plan classes without a signature are
+> not evidence that the condition is premature — they are our own unwritten content. A signature
+> authoring pass is commissioned alongside this wave.
+>
+> **The honest bound, which the owner should see stated:** `design/research/authored-transitions-and-features.md`
+> measured that of 75 `signature: null` notes, only **18 are addressable by any vocabulary**; 49
+> are judgment, outcome or history. So an authoring pass can raise coverage substantially but
+> **cannot reach 99** — forcing a census onto a judgment plan is precisely the manufactured
+> verdict ADR-0005 forbids. The correct target is *every plan a census can honestly express*,
+> plus a named refusal for the rest. Where a plan resists expression, the authoring question to
+> ask is whether the PLAN should be restated as something checkable — that is authoring
+> discipline, and it is the half of the ceiling we control.
+>
+> **Q6 — the transition grammar SHIPS, with consumers.** The owner: *"ship it and make sure
+> they're integrated properly for the just play and drill packs."* This overturns §7 F4's
+> deferral and its `timingWindow`-precedent reasoning: the precedent is about shipping a grammar
+> with **no consumer**, and the ruling supplies two. The grammar plus its Just Play and
+> pack-authoring surfaces are commissioned as their own RFC rather than folded into 0.18, so this
+> wave is not coupled to an unlanded surface. §7 F4 becomes that RFC's specification input.
+
 ## Summary
 
 Wave 2 shipped on 2026-08-14 and was spent within a day. The 2026-08-15 dossier re-ran the

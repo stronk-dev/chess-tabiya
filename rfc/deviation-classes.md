@@ -43,6 +43,22 @@
 > neither wave scoped it. Shipping the field unbacked is honest; shipping it while each RFC
 > assumes the other verified it is not.
 
+
+> **OWNER RULING 2026-08-15 — `mistake` is MULTI-VALUED.** The RFC proposed a single-valued
+> enum defined as *the lesson the feedback teaches*, and its cross-review correctly found that
+> this **relocates** the ambiguity rather than dissolving it — well-defined as a decision
+> procedure for an author, not as a fact about the position. The owner ruled for the truthful
+> encoding: a deviation MAY carry more than one of `plan` / `timing` / `tactical`, because an
+> ordering mistake genuinely is both a plan error and a timing error.
+>
+> **What this obliges, and it must be written rather than assumed:** every surface that renders
+> a mistake now needs a stated rule for the multi-value case — feedback text, the compare strips,
+> narrative templates, and any progress grammar. "Pick the first" is not a rule, it is a silent
+> truncation of exactly the kind `absence is stated` forbids. Open question 1 is closed; the
+> 4-of-36 both-cases are now expressible without lying, and the count no longer needs to be
+> steady-state for the design to hold — which also discharges the reviewer's concern that the
+> evidence base was thin.
+
 ## Summary
 
 `deviations[].class` (`schemas/drill_pack.schema.json:743-751`) is one enum carrying at least three
