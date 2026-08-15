@@ -12,7 +12,14 @@
   },
   "start": {
     "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
-    "movesSan": ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5"],
+    "movesSan": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bc4",
+      "Bc5"
+    ],
     "side": "white"
   },
   "objective": {
@@ -24,7 +31,9 @@
     "forcing-sequence-literacy",
     "structure-as-a-purchase"
   ],
-  "shapes": ["iqp-white"],
+  "shapes": [
+    "iqp-white"
+  ],
   "planClasses": [
     {
       "id": "central-program",
@@ -35,7 +44,10 @@
       "id": "iqp-initiative",
       "label": "Play the isolani game you purchased",
       "description": "After ...d5 exd5 Nxd5 the structure is signed: White's d4 stands alone, and in exchange every White piece gets a file or a diagonal. The reusable isolani doctrine lives in the shape entry; this pack's job is to reach the tabiya with the pieces placed to use it.",
-      "shapePlan": { "shape": "iqp-white", "plan": "white-piece-attack" }
+      "shapePlan": {
+        "shape": "iqp-white",
+        "plan": "white-piece-attack"
+      }
     },
     {
       "id": "greco-gambit",
@@ -78,7 +90,7 @@
                       "moveUci": "c3d4",
                       "moveSan": "cxd4",
                       "annotations": [
-                        "Recapture toward the centre: two pawns abreast, and the c5 bishop must move again or pin. The wrong recapture question does not exist here — only the c-pawn can take."
+                        "Recapture toward the centre: two pawns abreast, and the c5 bishop must move again or pin."
                       ],
                       "children": [
                         {
@@ -168,30 +180,54 @@
     {
       "id": "your-tabiya",
       "label": "6...Bb4+ — sober Bd2 or the Greco gambit: choose",
-      "trigger": { "atSpineNode": "p12-bb4" },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atSpineNode": "p12-bb4"
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["central-program", "iqp-initiative", "greco-gambit"]
+        "planClassIds": [
+          "central-program",
+          "iqp-initiative",
+          "greco-gambit"
+        ]
       }
     },
     {
       "id": "structure-signed",
       "label": "9...Nxd5 — the isolani tabiya; count what you bought",
-      "trigger": { "atSpineNode": "p18-nxd5" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "p18-nxd5"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "past-the-book",
       "label": "You are past the authored line",
-      "trigger": { "atAuthoredBoundary": "crossed" },
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
       "actions": []
     }
   ],
   "authoredBoundary": {
     "spineNodeIds": [
-      "p7-c3", "p8-nf6", "p9-d4", "p10-exd4", "p11-cxd4", "p12-bb4",
-      "p13-bd2", "p14-bxd2", "p15-nbxd2", "p16-d5", "p17-exd5", "p18-nxd5",
+      "p7-c3",
+      "p8-nf6",
+      "p9-d4",
+      "p10-exd4",
+      "p11-cxd4",
+      "p12-bb4",
+      "p13-bd2",
+      "p14-bxd2",
+      "p15-nbxd2",
+      "p16-d5",
+      "p17-exd5",
+      "p18-nxd5",
       "b4-evans"
     ],
     "plyHorizon": 12
@@ -205,22 +241,28 @@
   },
   "deviations": [
     {
-      "at": { "spineNodeId": "p8-nf6" },
+      "at": {
+        "spineNodeId": "p8-nf6"
+      },
       "moveUci": "d2d3",
       "class": "accepted_alternative",
       "note": "5.d3 is the Giuoco Pianissimo — the other Italian repertoire, catalogued in its own rows: keep the tension for thirty moves and outplay slowly. A temperament choice, not an evaluation claim; this pack exists for players who want the direct program instead."
     },
     {
-      "at": { "spineNodeId": "p12-bb4" },
+      "at": {
+        "spineNodeId": "p12-bb4"
+      },
       "moveUci": "b1c3",
       "class": "interesting_deviation",
       "note": "7.Nc3 — the Greco Gambit (catalogued through 7...Nxe4 8.O-O in the Main Line row) — offers e4 for open lines while the b4 bishop and e4 knight dangle. Critical, theory-heavy, and unforgiving of half-memory: playing it unbooked is worse than not playing it. The classified door for the third plan class."
     },
     {
-      "at": { "spineNodeId": "p16-d5" },
+      "at": {
+        "spineNodeId": "p16-d5"
+      },
       "moveUci": "e4e5",
       "class": "interesting_deviation",
-      "note": "9.e5 declines the isolani and pushes past instead: the walked line 9...dxc4 10.exf6 Qxf6 trades the structural game for an unbalanced race where both sides have grabbed. Nothing in this repo has evaluated the result — play both ninth moves and compare the games you get."
+      "note": "9.e5 declines the isolani and pushes past instead: the walked line 9...dxc4 10.exf6 Qxf6 trades the structural game for an unbalanced race where both sides have grabbed. Evaluated 2026-08-15 (Stockfish 18, depth 22): the resulting position is -1.12 for White, and 9.e5 is 1.09 worse than the spine's 9.exd5 at the decision itself. Play both ninth moves and compare the games, not the numbers."
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",
@@ -228,17 +270,16 @@
     {
       "id": "chosen-and-common",
       "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the Italian position after 3.Bc4 was reached 44,467,486 times — the largest tabiya-depth family measured in this repo's wave-4a priority pull — with White scoring 50.1%, and 3...Bc5 (34.2%) is the most common reply this pack drills against.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "isolani-census",
       "text": "In the final tabiya White's d4 pawn has no pawn on the c- or e-file of either colour beside it and no White pawn ahead of it — the isolated queen's pawn as a checkable board fact, derived from the machine-walked position rather than asserted.",
-      "evidenceTypes": ["derived_feature"]
-    },
-    {
-      "id": "forcing-literacy",
-      "text": "From 5.d4 to 9...Nxd5 nearly every move is the position's only good answer to the previous one; drilling the sequence until it is automatic converts eight moves of risk into one decision — which is the whole trade this pack offers.",
-      "evidenceTypes": ["author_principle", "hypothesis"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     }
   ],
   "provenance": {
@@ -249,16 +290,243 @@
       "RATING-BAND FREQUENCY (mechanical): content/candidates/priority-wave4a/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07, emitted this session over seven candidate family roots. Used here: the C50 row — 44,467,486 games, whitePct 50.1 / drawPct 4.0 / blackPct 45.9; reply shares Bc5 34.2% / Nf6 29.8% / h6 13.6%. The artifact also records B01 Scandinavian at 56,347,011 games (a two-ply root, not depth-comparable) and C60 Ruy Lopez at 20,756,268. No deeper-node frequency was retrieved.",
       "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/c54-italian-game-classical-variation-center-attack, learner-side white, split-ply 6; the candidate directory is shared with the mirrored Black pack and records the most recent emit's job arguments). Hand-added plies 10-18 (the full forcing sequence to the isolani tabiya), the Evans sibling branch and all three deviations were walked move-by-move with a chessops scratch harness this session, including 9.e5 dxc4 10.exf6 Qxf6.",
       "SHAPE REFERENCE (mechanical): the isolani census at the final spine position — White pawn d4 with no White or Black pawn on the c- or e-files adjacent ranks aside, per the walked FEN r1bqk2r/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2QK2R — is hand-derived pawn arithmetic from the machine-walked position. iqp-white's trigger is the runtime's named_structure classifier, which was NOT executed against this position; if the classifier's definition differs from this census, the reference must be reviewed.",
-      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all deviation classifications and notes, and the non-derived feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review."
+      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all deviation classifications and notes, and the non-derived feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE.",
+      "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 12 decision positions and 18 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated. Spine moves the engine ranks materially below a sibling at the same position: b4 (b4-evans) 0.45 below c3."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
       "The iqp-white shape reference rests on hand-derived pawn arithmetic; running the shipped named_structure evaluator against the walked tabiya FEN would upgrade or refute it and has not been done.",
       "The family was selected over B01 Scandinavian (56.3M games at two plies vs the Italian's 44.5M at five): the depth-incommensurability judgment is recorded in the wave log, and the Scandinavian remains the obvious next family on raw totals.",
-      "The 'nearly every move is the only good answer' claim from 5.d4 onward is unverified by any engine pass; a single refutation inside the sequence would demote the pack's central promise.",
+      "ENGINE-CHECKED 2026-08-15 and REFUTED at three points inside the sequence, which is three more than the blocker's own stated bar of one. 5.d4 is 0.14 below 5.d3, 6.cxd4 is 0.28 below 6.e5, and 7...Bxd2+ is 0.13 below 7...Nxe4. The differences are small, but 'the position's only good answer' is not a small claim. The feedbackClaim forcing-literacy was DELETED rather than rewritten: a replacement would be a new authored judgment this pass cannot ground. Separately, the p11-cxd4 annotation asserted that only the c-pawn can recapture on d4; Qxd4, cxd4 and Nxd4 are all legal, and the false clause was deleted.",
       "Whether Bd2 or Nc3 is more common or scores better at these bands is unquantified below the family root.",
-      "No engine validation pass has been run on any position in this pack."
-    ]
+      "ENGINE PASS RUN 2026-08-15 — this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 18 candidate moves across 12 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative — rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist."
+    ],
+    "engineValidation": {
+      "ranAt": "2026-08-15",
+      "engine": "Stockfish 18",
+      "enginePath": "apps/server EngineSupervisor + StockfishEvidenceExecutor, sourcing AUTHORING_PROFILE (the same engine path make candidate-emit --engine-eval uses)",
+      "profile": {
+        "depth": 22,
+        "threads": 1,
+        "hashMb": 16,
+        "multiPv": 1
+      },
+      "scope": "every authored spine node's resulting position, every authored deviation's resulting position, and the engine's own best move at each decision position",
+      "unit": "centipawns from the side to move at the decision position; loss = the best evaluated candidate at that position minus this move. Candidate-relative and therefore a lower bound on the true loss: only authored moves plus the engine's depth-22 first move were evaluated, not all legal moves.",
+      "cannotGround": "deviation class, plan-class prose, annotations and feedbackClaims. Per rfc/archive/content-sourcing-foundation.md:772 the deviation classes are relative to this pack's objective and no evaluation separates concept_violation from interesting_deviation. Numbers below are recorded beside the authored classes, never substituted for them.",
+      "decisions": [
+        {
+          "at": "root",
+          "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "c3",
+              "uci": "c2c3",
+              "role": "spine:p7-c3",
+              "cp": 26,
+              "loss": 0
+            },
+            {
+              "san": "b4",
+              "uci": "b2b4",
+              "role": "spine:b4-evans",
+              "cp": -19,
+              "loss": 45
+            }
+          ]
+        },
+        {
+          "at": "after:p7-c3",
+          "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 4",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Nf6",
+              "uci": "g8f6",
+              "role": "spine:p8-nf6",
+              "cp": -24,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p8-nf6",
+          "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 1 5",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "d3",
+              "uci": "d2d3",
+              "role": "deviation#0:accepted_alternative",
+              "cp": 20,
+              "loss": 0
+            },
+            {
+              "san": "d4",
+              "uci": "d2d4",
+              "role": "spine:p9-d4",
+              "cp": 6,
+              "loss": 14
+            }
+          ]
+        },
+        {
+          "at": "after:p9-d4",
+          "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 5",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "exd4",
+              "uci": "e5d4",
+              "role": "spine:p10-exd4",
+              "cp": -2,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p10-exd4",
+          "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP3/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 6",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "e5",
+              "uci": "e4e5",
+              "role": "engine_best",
+              "cp": 12,
+              "loss": 0
+            },
+            {
+              "san": "cxd4",
+              "uci": "c3d4",
+              "role": "spine:p11-cxd4",
+              "cp": -16,
+              "loss": 28
+            }
+          ]
+        },
+        {
+          "at": "after:p11-cxd4",
+          "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BPP3/5N2/PP3PPP/RNBQK2R b KQkq - 0 6",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Bb4+",
+              "uci": "c5b4",
+              "role": "spine:p12-bb4",
+              "cp": 9,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p12-bb4",
+          "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP3PPP/RNBQK2R w KQkq - 1 7",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Bd2",
+              "uci": "c1d2",
+              "role": "spine:p13-bd2",
+              "cp": -16,
+              "loss": 0
+            },
+            {
+              "san": "Nc3",
+              "uci": "b1c3",
+              "role": "deviation#1:interesting_deviation",
+              "cp": -38,
+              "loss": 22
+            }
+          ]
+        },
+        {
+          "at": "after:p13-bd2",
+          "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP1B1PPP/RN1QK2R b KQkq - 2 7",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Nxe4",
+              "uci": "f6e4",
+              "role": "engine_best",
+              "cp": 13,
+              "loss": 0
+            },
+            {
+              "san": "Bxd2+",
+              "uci": "b4d2",
+              "role": "spine:p14-bxd2",
+              "cp": 0,
+              "loss": 13
+            }
+          ]
+        },
+        {
+          "at": "after:p14-bxd2",
+          "fen": "r1bqk2r/pppp1ppp/2n2n2/8/2BPP3/5N2/PP1b1PPP/RN1QK2R w KQkq - 0 8",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nbxd2",
+              "uci": "b1d2",
+              "role": "spine:p15-nbxd2",
+              "cp": 0,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p15-nbxd2",
+          "fen": "r1bqk2r/pppp1ppp/2n2n2/8/2BPP3/5N2/PP1N1PPP/R2QK2R b KQkq - 0 8",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "d5",
+              "uci": "d7d5",
+              "role": "spine:p16-d5",
+              "cp": 0,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p16-d5",
+          "fen": "r1bqk2r/ppp2ppp/2n2n2/3p4/2BPP3/5N2/PP1N1PPP/R2QK2R w KQkq - 0 9",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "exd5",
+              "uci": "e4d5",
+              "role": "spine:p17-exd5",
+              "cp": 0,
+              "loss": 0
+            },
+            {
+              "san": "e5",
+              "uci": "e4e5",
+              "role": "deviation#2:interesting_deviation",
+              "cp": -109,
+              "loss": 109
+            }
+          ]
+        },
+        {
+          "at": "after:p17-exd5",
+          "fen": "r1bqk2r/ppp2ppp/2n2n2/3P4/2BP4/5N2/PP1N1PPP/R2QK2R b KQkq - 0 9",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Nxd5",
+              "uci": "f6d5",
+              "role": "spine:p18-nxd5",
+              "cp": 0,
+              "loss": 0
+            }
+          ]
+        }
+      ]
+    }
   }
 }

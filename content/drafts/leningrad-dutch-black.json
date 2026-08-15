@@ -12,7 +12,11 @@
   },
   "start": {
     "fen": "rnbqkbnr/ppppp1pp/8/5p2/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
-    "movesSan": ["d4", "f5", "c4"],
+    "movesSan": [
+      "d4",
+      "f5",
+      "c4"
+    ],
     "side": "black"
   },
   "objective": {
@@ -24,7 +28,9 @@
     "one-break-openings",
     "kingside-space-with-a-hook"
   ],
-  "shapes": ["fianchetto-g7"],
+  "shapes": [
+    "fianchetto-g7"
+  ],
   "planClasses": [
     {
       "id": "prepare-e5",
@@ -40,7 +46,10 @@
       "id": "dark-square-press",
       "label": "Use the g7 bishop's long diagonal",
       "description": "When ...e5 finally trades on d4 or e5, the fianchettoed bishop becomes the best piece on the board or dies blunted — the reusable doctrine for that bishop lives in the shape entry; this pack's job is only to open its diagonal on Black's terms.",
-      "shapePlan": { "shape": "fianchetto-g7", "plan": "black-long-diagonal-pressure" }
+      "shapePlan": {
+        "shape": "fianchetto-g7",
+        "plan": "black-long-diagonal-pressure"
+      }
     }
   ],
   "spine": [
@@ -158,36 +167,64 @@
     {
       "id": "machine-decision",
       "label": "7.Nc3 — choose the last supporter of ...e5",
-      "trigger": { "atSpineNode": "p13-nc3" },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atSpineNode": "p13-nc3"
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["prepare-e5", "warsaw-restraint", "dark-square-press"]
+        "planClassIds": [
+          "prepare-e5",
+          "warsaw-restraint",
+          "dark-square-press"
+        ]
       }
     },
     {
       "id": "warsaw-built",
       "label": "...c6 — the restrained machine is complete",
-      "trigger": { "atSpineNode": "p14-c6" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "p14-c6"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "matulovic-built",
       "label": "...Nc6 — the direct machine is complete",
-      "trigger": { "atSpineNode": "nc6-matulovic" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "nc6-matulovic"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "past-the-book",
       "label": "You are past the authored line",
-      "trigger": { "atAuthoredBoundary": "crossed" },
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
       "actions": []
     }
   ],
   "authoredBoundary": {
     "spineNodeIds": [
-      "p4-nf6", "p5-g3", "p6-g6", "p7-bg2", "p8-bg7", "p9-nf3",
-      "p10-o-o", "p11-o-o", "p12-d6", "p13-nc3", "p14-c6", "nc6-matulovic"
+      "p4-nf6",
+      "p5-g3",
+      "p6-g6",
+      "p7-bg2",
+      "p8-bg7",
+      "p9-nf3",
+      "p10-o-o",
+      "p11-o-o",
+      "p12-d6",
+      "p13-nc3",
+      "p14-c6",
+      "nc6-matulovic"
     ],
     "plyHorizon": 11
   },
@@ -200,19 +237,25 @@
   },
   "deviations": [
     {
-      "at": { "spineNodeId": "p5-g3" },
+      "at": {
+        "spineNodeId": "p5-g3"
+      },
       "moveUci": "d7d6",
       "class": "accepted_alternative",
       "note": "3...d6 first is a move-order nuance, not a different opening: the same machine assembled from the other end. Its only real question is whether an early Nh3/Bf4 setup annoys this order more — unmeasured here."
     },
     {
-      "at": { "spineNodeId": "p13-nc3" },
+      "at": {
+        "spineNodeId": "p13-nc3"
+      },
       "moveUci": "d8e8",
       "class": "interesting_deviation",
       "note": "7...Qe8 is the third catalogued finisher: the queen backs ...e5 from e8 and dreams of swinging to h5 later. It spends the heaviest piece on the break's behalf — play it against the same White setup and compare which finisher's ...e5 lands cleanest."
     },
     {
-      "at": { "spineNodeId": "p13-nc3" },
+      "at": {
+        "spineNodeId": "p13-nc3"
+      },
       "moveUci": "e7e5",
       "class": "interesting_deviation",
       "note": "7...e5 immediately tests whether the break even needs a last supporter: the walked line runs 8.dxe5 dxe5 9.Qxd8 Rxd8 and the queens leave the board at once. Whether the resulting ending is fine for Black is exactly the kind of claim this repo cannot yet check — the classification is a timing question, not a verdict."
@@ -223,17 +266,24 @@
     {
       "id": "chosen-and-fighting",
       "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the Dutch position after 1.d4 f5 was reached 4,845,395 times, scoring 46.0% for Black against 49.8% for White — and 2.c4, this pack's preamble, is White's most common answer at 33.3%.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "one-break-discipline",
       "text": "The Leningrad is a one-break opening: a candidate move is good here almost exactly when it adds a net supporter to ...e5 or removes a White defender of e5 — a counting rule you can apply before every move of the spine.",
-      "evidenceTypes": ["author_principle"]
+      "evidenceTypes": [
+        "author_principle"
+      ]
     },
     {
       "id": "hook-honesty",
       "text": "...f5 and ...g6 are king cover spent as space: every Leningrad middlegame carries the g4/e6 holes and the h5-push hook as permanent features, and pretending otherwise is how the opening gets its bad reputation at club level.",
-      "evidenceTypes": ["author_principle", "hypothesis"]
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
     }
   ],
   "provenance": {
@@ -244,7 +294,8 @@
       "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the A80 row — 4,845,395 games, whitePct 49.8 / blackPct 46.0, and 2.c4 at 33.3% share. No deeper-node frequency was retrieved.",
       "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/a87-dutch-defense-leningrad-variation, learner-side black, split-ply 3; the candidate directory is shared with the mirrored White pack and records the most recent emit's job arguments). The hand-added plies 10-14 (castling, ...d6, Nc3 and both finisher tips) and all three deviations were walked move-by-move with the chessops harness, including the full 7...e5 queenless sequence.",
       "SHAPE REFERENCE (mechanical): fianchetto-g7's trigger (black pawn g6 + black bishop g7) first becomes true at spine node p8-bg7 and holds through every later spine position — no later authored move touches g6 or g7; derived from the walked FENs.",
-      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all three deviation notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review."
+      "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all three deviation notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE.",
+      "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 11 decision positions and 19 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
     "reviewers": [],
     "graduationBlockers": [
@@ -252,7 +303,233 @@
       "The 'one-break counting rule' feedbackClaim is the pack's strongest generalization and is authored doctrine with no source; the structural-feature vocabulary could express supporter counts on e5 and has not been asked to.",
       "The spine's preamble is the 2.c4 order (33.3% at band) but the finisher rows are catalogued under 2.g3 (2.0% at band): the transposition is machine-verified, but which order club opponents actually reach these tabiyas through is unquantified below the family root.",
       "Which finisher (...c6 / ...Nc6 / ...Qe8) is most common or scores best at these bands is unquantified.",
-      "No engine validation pass has been run on any position in this pack."
-    ]
+      "ENGINE PASS RUN 2026-08-15 — this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 19 candidate moves across 11 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative — rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist."
+    ],
+    "engineValidation": {
+      "ranAt": "2026-08-15",
+      "engine": "Stockfish 18",
+      "enginePath": "apps/server EngineSupervisor + StockfishEvidenceExecutor, sourcing AUTHORING_PROFILE (the same engine path make candidate-emit --engine-eval uses)",
+      "profile": {
+        "depth": 22,
+        "threads": 1,
+        "hashMb": 16,
+        "multiPv": 1
+      },
+      "scope": "every authored spine node's resulting position, every authored deviation's resulting position, and the engine's own best move at each decision position",
+      "unit": "centipawns from the side to move at the decision position; loss = the best evaluated candidate at that position minus this move. Candidate-relative and therefore a lower bound on the true loss: only authored moves plus the engine's depth-22 first move were evaluated, not all legal moves.",
+      "cannotGround": "deviation class, plan-class prose, annotations and feedbackClaims. Per rfc/archive/content-sourcing-foundation.md:772 the deviation classes are relative to this pack's objective and no evaluation separates concept_violation from interesting_deviation. Numbers below are recorded beside the authored classes, never substituted for them.",
+      "decisions": [
+        {
+          "at": "root",
+          "fen": "rnbqkbnr/ppppp1pp/8/5p2/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Nf6",
+              "uci": "g8f6",
+              "role": "spine:p4-nf6",
+              "cp": -55,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p4-nf6",
+          "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "g3",
+              "uci": "g2g3",
+              "role": "spine:p5-g3",
+              "cp": 59,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p5-g3",
+          "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "g6",
+              "uci": "g7g6",
+              "role": "spine:p6-g6",
+              "cp": -56,
+              "loss": 0
+            },
+            {
+              "san": "e6",
+              "uci": "e7e6",
+              "role": "engine_best",
+              "cp": -58,
+              "loss": 2
+            },
+            {
+              "san": "d6",
+              "uci": "d7d6",
+              "role": "deviation#0:accepted_alternative",
+              "cp": -63,
+              "loss": 7
+            }
+          ]
+        },
+        {
+          "at": "after:p6-g6",
+          "fen": "rnbqkb1r/ppppp2p/5np1/5p2/2PP4/6P1/PP2PP1P/RNBQKBNR w KQkq - 0 4",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Bg2",
+              "uci": "f1g2",
+              "role": "spine:p7-bg2",
+              "cp": 58,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p7-bg2",
+          "fen": "rnbqkb1r/ppppp2p/5np1/5p2/2PP4/6P1/PP2PPBP/RNBQK1NR b KQkq - 1 4",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Bg7",
+              "uci": "f8g7",
+              "role": "spine:p8-bg7",
+              "cp": -53,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p8-bg7",
+          "fen": "rnbqk2r/ppppp1bp/5np1/5p2/2PP4/6P1/PP2PPBP/RNBQK1NR w KQkq - 2 5",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nf3",
+              "uci": "g1f3",
+              "role": "spine:p9-nf3",
+              "cp": 63,
+              "loss": 0
+            },
+            {
+              "san": "Nc3",
+              "uci": "b1c3",
+              "role": "engine_best",
+              "cp": 60,
+              "loss": 3
+            }
+          ]
+        },
+        {
+          "at": "after:p9-nf3",
+          "fen": "rnbqk2r/ppppp1bp/5np1/5p2/2PP4/5NP1/PP2PPBP/RNBQK2R b KQkq - 3 5",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "d6",
+              "uci": "d7d6",
+              "role": "engine_best",
+              "cp": -53,
+              "loss": 0
+            },
+            {
+              "san": "O-O",
+              "uci": "e8g8",
+              "role": "spine:p10-o-o",
+              "cp": -63,
+              "loss": 10
+            }
+          ]
+        },
+        {
+          "at": "after:p10-o-o",
+          "fen": "rnbq1rk1/ppppp1bp/5np1/5p2/2PP4/5NP1/PP2PPBP/RNBQK2R w KQ - 4 6",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "O-O",
+              "uci": "e1g1",
+              "role": "spine:p11-o-o",
+              "cp": 65,
+              "loss": 0
+            },
+            {
+              "san": "b3",
+              "uci": "b2b3",
+              "role": "engine_best",
+              "cp": 57,
+              "loss": 8
+            }
+          ]
+        },
+        {
+          "at": "after:p11-o-o",
+          "fen": "rnbq1rk1/ppppp1bp/5np1/5p2/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 5 6",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "d6",
+              "uci": "d7d6",
+              "role": "spine:p12-d6",
+              "cp": -52,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p12-d6",
+          "fen": "rnbq1rk1/ppp1p1bp/3p1np1/5p2/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 0 7",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nc3",
+              "uci": "b1c3",
+              "role": "spine:p13-nc3",
+              "cp": 56,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p13-nc3",
+          "fen": "rnbq1rk1/ppp1p1bp/3p1np1/5p2/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b - - 1 7",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "c6",
+              "uci": "c7c6",
+              "role": "spine:p14-c6",
+              "cp": -56,
+              "loss": 0
+            },
+            {
+              "san": "Qe8",
+              "uci": "d8e8",
+              "role": "deviation#1:interesting_deviation",
+              "cp": -75,
+              "loss": 19
+            },
+            {
+              "san": "Nc6",
+              "uci": "b8c6",
+              "role": "spine:nc6-matulovic",
+              "cp": -92,
+              "loss": 36
+            },
+            {
+              "san": "e5",
+              "uci": "e7e5",
+              "role": "deviation#2:interesting_deviation",
+              "cp": -155,
+              "loss": 99
+            }
+          ]
+        }
+      ]
+    }
   }
 }

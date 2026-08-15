@@ -12,12 +12,14 @@
   },
   "start": {
     "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
-    "movesSan": ["e4"],
+    "movesSan": [
+      "e4"
+    ],
     "side": "black"
   },
   "objective": {
     "type": "play_until_checkpoint",
-    "summary": "White moved first, so your version of the three habits has one extra word: ANSWER the centre, develop a new piece every move, be ready to castle. The finish line is structural — both knights and your king's bishop off their home squares with your king still on e8, one move from castling — reached by any principled order, not by memorising this one.",
+    "summary": "White moved first, so your version of the three habits has one extra word: ANSWER the centre, develop a new piece every move, be ready to castle. The finish line is structural \u2014 both knights and your king's bishop off their home squares with your king still on e8, one move from castling \u2014 reached by any principled order, not by memorising this one.",
     "successConditions": [
       {
         "kind": "reach_checkpoint",
@@ -36,12 +38,12 @@
     {
       "id": "develop-toward-castling",
       "label": "Develop the kingside, castle next",
-      "description": "The drilled plan: knight to c6 with a job (defend e5), bishop to c5 or e7, knight to f6, castle. As the second player you do not need to win the opening — you need to leave it with equal pieces out and an equal king."
+      "description": "The drilled plan: knight to c6 with a job (defend e5), bishop to c5 or e7, knight to f6, castle. As the second player you do not need to win the opening \u2014 you need to leave it with equal pieces out and an equal king."
     },
     {
       "id": "challenge-the-centre",
       "label": "Challenge the centre with pawns (...d6, later ...d5)",
-      "description": "The plan you add after the pieces are out: ...d6 to reinforce e5 now, ...d5 later to ask White's centre the hard question. Listed so you can name it when a checkpoint asks — and postpone it when castling has not happened."
+      "description": "The plan you add after the pieces are out: ...d6 to reinforce e5 now, ...d5 later to ask White's centre the hard question. Listed so you can name it when a checkpoint asks \u2014 and postpone it when castling has not happened."
     },
     {
       "id": "hunt-material",
@@ -55,7 +57,7 @@
       "moveUci": "e7e5",
       "moveSan": "e5",
       "annotations": [
-        "The symmetric answer: take your half of the centre before White takes all of it. One move in, the game is equal in the only currencies the opening trades in — space and time."
+        "The symmetric answer: take your half of the centre before White takes all of it. One move in, the game is equal in the only currencies the opening trades in \u2014 space and time."
       ],
       "children": [
         {
@@ -71,7 +73,7 @@
               "moveUci": "b8c6",
               "moveSan": "Nc6",
               "annotations": [
-                "Defend by developing. The knight guards e5 from its best square, so White's threat cost you nothing — you were shown a threat and answered it with a move you wanted anyway. That exchange, repeated, is the whole art of defending the opening."
+                "Defend by developing. The knight guards e5 from its best square, so White's threat cost you nothing \u2014 you were shown a threat and answered it with a move you wanted anyway. That exchange, repeated, is the whole art of defending the opening."
               ],
               "children": [
                 {
@@ -79,7 +81,7 @@
                   "moveUci": "f1c4",
                   "moveSan": "Bc4",
                   "annotations": [
-                    "The Italian bishop takes aim at f7 — the square only your king defends. Nothing is threatened THIS move, but the address is now on file: every White queen or knight arriving near f7 from here on deserves one full second of your attention."
+                    "The Italian bishop takes aim at f7 \u2014 the square only your king defends. Nothing is threatened THIS move, but the address is now on file: every White queen or knight arriving near f7 from here on deserves one full second of your attention."
                   ],
                   "children": [
                     {
@@ -87,7 +89,7 @@
                       "moveUci": "f8c5",
                       "moveSan": "Bc5",
                       "annotations": [
-                        "Your bishop takes the mirror diagonal, eyeing f2, and — the quieter point — f8 is now empty. Castling has become a one-move option, which changes how safely you can meet everything White tries next."
+                        "Your bishop takes the mirror diagonal, eyeing f2, and \u2014 the quieter point \u2014 f8 is now empty. Castling has become a one-move option, which changes how safely you can meet everything White tries next."
                       ],
                       "children": [
                         {
@@ -95,7 +97,7 @@
                           "moveUci": "e1g1",
                           "moveSan": "O-O",
                           "annotations": [
-                            "White finishes first — they moved first, they castle first, and that is not a problem to fix but a rhythm to match. Your job is to arrive one move later, not to skip a step catching up."
+                            "White finishes first \u2014 they moved first, they castle first, and that is not a problem to fix but a rhythm to match. Your job is to arrive one move later, not to skip a step catching up."
                           ],
                           "children": [
                             {
@@ -103,7 +105,7 @@
                               "moveUci": "g8f6",
                               "moveSan": "Nf6",
                               "annotations": [
-                                "The last home minor on the kingside develops with a job — it attacks e4 — and the drill's finish line is reached: knights and king's bishop out, king one move from castling. Whatever White plays, your next move should be ...O-O unless something concrete forbids it."
+                                "The last home minor on the kingside develops with a job \u2014 it attacks e4 \u2014 and the drill's finish line is reached: knights and king's bishop out, king one move from castling. Whatever White plays, your next move should be ...O-O unless something concrete forbids it."
                               ],
                               "children": []
                             }
@@ -123,18 +125,30 @@
   "checkpoints": [
     {
       "id": "threat-answered-by-development",
-      "label": "Their knight attacks e5 — the on-ramp question",
-      "trigger": { "atSpineNode": "w2-nf3" },
-      "actions": ["compare_branches"]
+      "label": "Their knight attacks e5 \u2014 the on-ramp question",
+      "trigger": {
+        "atSpineNode": "w2-nf3"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "bishop-aims-at-f7",
-      "label": "The f7 address is on file — choose your plan",
-      "trigger": { "atSpineNode": "w3-bc4" },
-      "actions": ["compare_branches"],
+      "label": "The f7 address is on file \u2014 choose your plan",
+      "trigger": {
+        "atSpineNode": "w3-bc4"
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["develop-toward-castling", "challenge-the-centre", "hunt-material"]
+        "planClassIds": [
+          "develop-toward-castling",
+          "challenge-the-centre",
+          "hunt-material"
+        ]
       }
     },
     {
@@ -146,10 +160,29 @@
           "feature": {
             "kind": "all",
             "of": [
-              { "kind": "pieceOnSquare", "square": "b8", "piece": null },
-              { "kind": "pieceOnSquare", "square": "g8", "piece": null },
-              { "kind": "pieceOnSquare", "square": "f8", "piece": null },
-              { "kind": "pieceOnSquare", "square": "e8", "piece": { "color": "black", "role": "king" } }
+              {
+                "kind": "pieceOnSquare",
+                "square": "b8",
+                "piece": null
+              },
+              {
+                "kind": "pieceOnSquare",
+                "square": "g8",
+                "piece": null
+              },
+              {
+                "kind": "pieceOnSquare",
+                "square": "f8",
+                "piece": null
+              },
+              {
+                "kind": "pieceOnSquare",
+                "square": "e8",
+                "piece": {
+                  "color": "black",
+                  "role": "king"
+                }
+              }
             ]
           }
         }
@@ -158,7 +191,15 @@
     }
   ],
   "authoredBoundary": {
-    "spineNodeIds": ["b1-e5", "w2-nf3", "b2-nc6", "w3-bc4", "b3-bc5", "w4-castle", "b4-nf6"],
+    "spineNodeIds": [
+      "b1-e5",
+      "w2-nf3",
+      "b2-nc6",
+      "w3-bc4",
+      "b3-bc5",
+      "w4-castle",
+      "b4-nf6"
+    ],
     "plyHorizon": 7
   },
   "opponentPolicy": {
@@ -170,94 +211,124 @@
   },
   "deviations": [
     {
-      "at": { "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1" },
+      "at": {
+        "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+      },
       "moveUci": "c7c5",
       "class": "accepted_alternative",
-      "note": "The Sicilian: a real answer to the centre that fights for d4 from the side instead of occupying e5. Nothing unprincipled about it — but its positions are asymmetric and sharper, so this pack drills the symmetric road where the principles show undisguised."
+      "note": "The Sicilian: a real answer to the centre that fights for d4 from the side instead of occupying e5. Nothing unprincipled about it \u2014 but its positions are asymmetric and sharper, so this pack drills the symmetric road where the principles show undisguised."
     },
     {
-      "at": { "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1" },
+      "at": {
+        "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+      },
       "moveUci": "h7h5",
       "class": "concept_violation",
       "note": "The mirror of White's worst habit: a wing pawn that claims nothing, develops nothing, and loosens the field your king wants to castle toward. White simply continues with centre and pieces and is a clean tempo ahead."
     },
     {
-      "at": { "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1" },
+      "at": {
+        "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+      },
       "moveUci": "b8a6",
       "class": "concept_violation",
       "note": "The knight on the rim touches c5 and b4 and nothing in the centre; from c6 it would touch four central squares and defend e5 before that pawn is even attacked. Same piece, one square difference, half the job."
     },
     {
-      "at": { "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1" },
+      "at": {
+        "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+      },
       "moveUci": "f7f6",
       "class": "concept_violation",
-      "note": "This pawn does three bad things at once: it takes f6 from your knight, opens the h5-e8 diagonal straight at your king, and still does not develop anything. One move later this exact weakening becomes the Damiano disaster — play the 2...f6 branch and watch."
+      "note": "This pawn does three bad things at once: it takes f6 from your knight, opens the h5-e8 diagonal straight at your king, and still does not develop anything. One move later this exact weakening becomes the Damiano disaster \u2014 play the 2...f6 branch and watch."
     },
     {
-      "at": { "spineNodeId": "w2-nf3" },
+      "at": {
+        "spineNodeId": "w2-nf3"
+      },
       "moveUci": "f7f6",
       "class": "tactical_error",
-      "note": "The Damiano: defending e5 with the one pawn that exposes your king. 3.Nxe5! is the punishment — if ...fxe5 then Qh5+ forks king and the loose kingside, winning material back with interest. Defend pawns with pieces or with pawns that do not open your king."
+      "note": "The Damiano: defending e5 with the one pawn that exposes your king. 3.Nxe5! is the punishment \u2014 if ...fxe5 then Qh5+ forks king and the loose kingside, winning material back with interest. Defend pawns with pieces or with pawns that do not open your king."
     },
     {
-      "at": { "spineNodeId": "w2-nf3" },
+      "at": {
+        "spineNodeId": "w2-nf3"
+      },
       "moveUci": "d7d6",
       "class": "accepted_alternative",
       "note": "The Philidor: defend e5 with a modest pawn move that also frees the c8 bishop. Sound and solid; its cost is the f8 bishop's best diagonal. A legitimate second door for players who prefer a low wall to a mirror."
     },
     {
-      "at": { "spineNodeId": "w2-nf3" },
+      "at": {
+        "spineNodeId": "w2-nf3"
+      },
       "moveUci": "d8f6",
       "class": "concept_violation",
       "note": "The queen defends e5 but takes the f6 square from her own knight and stands where Nc3-d5 arrives with tempo. When a threat can be answered by a knight or a pawn, spending the queen on it is paying a bill with your largest banknote."
     },
     {
-      "at": { "spineNodeId": "w2-nf3" },
+      "at": {
+        "spineNodeId": "w2-nf3"
+      },
       "moveUci": "f8d6",
       "class": "concept_violation",
-      "note": "The bishop defends e5 by standing on d6 — in front of its own d-pawn. That pawn now cannot move, which means the c8 bishop cannot develop, which means castling long and the ...d5 break are both postponed indefinitely. One defensive move, three doors closed."
+      "note": "The bishop defends e5 by standing on d6 \u2014 in front of its own d-pawn. That pawn now cannot move, which means the c8 bishop cannot develop, which means castling long and the ...d5 break are both postponed indefinitely. One defensive move, three doors closed."
     },
     {
-      "at": { "spineNodeId": "w3-bc4" },
+      "at": {
+        "spineNodeId": "w3-bc4"
+      },
       "moveUci": "g8f6",
       "class": "accepted_alternative",
-      "note": "The Two Knights: develop with a counter-attack on e4 instead of mirroring. Fully principled and more combative — it also invites 4.Ng5, the one line where White's same-piece-twice sin actually collects f7. This pack's spine stays with ...Bc5 to keep the consequences inside the horizon."
+      "note": "The Two Knights: develop with a counter-attack on e4 instead of mirroring. Fully principled and more combative \u2014 it also invites 4.Ng5, the one line where White's same-piece-twice sin actually collects f7. This pack's spine stays with ...Bc5 to keep the consequences inside the horizon."
     },
     {
-      "at": { "spineNodeId": "w3-bc4" },
+      "at": {
+        "spineNodeId": "w3-bc4"
+      },
       "moveUci": "f8e7",
       "class": "accepted_alternative",
       "note": "The modest bishop: less scope than c5, zero targets offered, castling still enabled one move later. A perfectly principled choice whose only cost is ambition."
     },
     {
-      "at": { "spineNodeId": "w3-bc4" },
+      "at": {
+        "spineNodeId": "w3-bc4"
+      },
       "moveUci": "c6d4",
       "class": "interesting_deviation",
-      "note": "The Blackburne Shilling try: the same knight moves twice to bait 4.Nxe5?? Qg5!. Against the greedy move it wins brilliantly; against the calm 4.Nxd4! exd4 5.O-O White is simply better developed with the trap pocketed. Traps that lose to calm moves are loans, not plans — branch both replies and compare."
+      "note": "The Blackburne Shilling try: the same knight moves twice to bait 4.Nxe5?? Qg5!. Against the greedy move it wins brilliantly; against the calm 4.Nxd4! exd4 5.O-O White is simply better developed with the trap pocketed. Traps that lose to calm moves are loans, not plans \u2014 branch both replies and compare."
     },
     {
-      "at": { "spineNodeId": "w3-bc4" },
+      "at": {
+        "spineNodeId": "w3-bc4"
+      },
       "moveUci": "h7h6",
       "class": "concept_violation",
       "note": "A move that answers a threat nobody made. 3...h6 guards g5 against a knight that can be met when it actually arrives; meanwhile White castles or takes the centre for free. At this band, prophylaxis is usually a tempo donation wearing safety clothing."
     },
     {
-      "at": { "spineNodeId": "w4-castle" },
+      "at": {
+        "spineNodeId": "w4-castle"
+      },
       "moveUci": "g7g5",
       "class": "concept_violation",
       "note": "A pawn avalanche in front of the home your king was about to move into. It attacks nothing that cannot step aside and permanently loosens f6, h6 and h5. If the kingside pawns advance before the king decides where to live, the king ends up living behind the wreckage."
     },
     {
-      "at": { "spineNodeId": "w4-castle" },
+      "at": {
+        "spineNodeId": "w4-castle"
+      },
       "moveUci": "d8f6",
       "class": "concept_violation",
-      "note": "The queen sortie one move before the drill's finish line — again taking the knight's square, now with the added cost that ...Nf6 and ...O-O were one move away. The fastest way to fail this pack's objective is to give the queen the knight's job."
+      "note": "The queen sortie one move before the drill's finish line \u2014 again taking the knight's square, now with the added cost that ...Nf6 and ...O-O were one move away. The fastest way to fail this pack's objective is to give the queen the knight's job."
     },
     {
-      "at": { "spineNodeId": "w4-castle" },
+      "at": {
+        "spineNodeId": "w4-castle"
+      },
       "moveUci": "d7d6",
       "class": "accepted_alternative",
-      "note": "Reinforce e5 and free the c8 bishop first — the challenge-the-centre plan starting one move earlier than the spine's. Principled; just notice the knight and the castle are still waiting their turn."
+      "note": "Reinforce e5 and free the c8 bishop first \u2014 the challenge-the-centre plan starting one move earlier than the spine's. Principled; just notice the knight and the castle are still waiting their turn."
     }
   ],
   "feedbackPolicy": "immediate_guard",
@@ -267,40 +338,285 @@
   "feedbackClaims": [
     {
       "id": "second-player-exchange-rate",
-      "text": "As Black the opening is an exchange market: White shows threats, you answer them. You break even every time the answer is a move you wanted to play anyway — a developing defence, a pawn move with a second job — and you lose ground every time the answer only defends. Count your opening moves that did new work; five out of six is winning the market.",
-      "evidenceTypes": ["author_principle"]
+      "text": "As Black the opening is an exchange market: White shows threats, you answer them. You break even every time the answer is a move you wanted to play anyway \u2014 a developing defence, a pawn move with a second job \u2014 and you lose ground every time the answer only defends. Count your opening moves that did new work; five out of six is winning the market.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
     },
     {
       "id": "readiness-is-structural",
-      "text": "This drill's finish line is checked from the board itself: b8, g8 and f8 empty with the king still on e8 — both knights and the king's bishop developed, castling available. Any principled order reaches it; no memorised order is required.",
-      "evidenceTypes": ["author_principle", "derived_feature"]
+      "text": "This drill's finish line is checked from the board itself: b8, g8 and f8 empty with the king still on e8 \u2014 both knights and the king's bishop developed, castling available. Any principled order reaches it; no memorised order is required.",
+      "evidenceTypes": [
+        "author_principle",
+        "derived_feature"
+      ]
     },
     {
       "id": "traps-are-loans",
-      "text": "Trap moves like the Blackburne ...Nd4 win instantly against the move they were built for and lose ground against every calm reply. At 1000-1400 the calm reply arrives often enough that the trap's expected value is negative — but the habit it builds (hoping instead of developing) is the real cost.",
-      "evidenceTypes": ["author_principle", "hypothesis"]
+      "text": "Trap moves like the Blackburne ...Nd4 win instantly against the move they were built for and lose ground against every calm reply. At 1000-1400 the calm reply arrives often enough that the trap's expected value is negative \u2014 but the habit it builds (hoping instead of developing) is the real cost.",
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
     },
     {
       "id": "guard-counts-for-you",
-      "text": "The guard fires when a committed move costs about a piece (250 centipawns or more) — the Damiano branch and the greedy trap lines are its teaching cases here. It will not flag the modest bishop or the Philidor: at this band, quiet-but-sound must never be punished by the trainer.",
-      "evidenceTypes": ["author_principle"]
+      "text": "The guard fires when a committed move costs about a piece (250 centipawns or more) \u2014 the Damiano branch and the greedy trap lines are its teaching cases here. It will not flag the modest bishop or the Philidor: at this band, quiet-but-sound must never be punished by the trainer.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
     }
   ],
   "provenance": {
     "reviewStatus": "draft",
     "sources": [
-      "Spine identity: the Italian Game / Giuoco Piano (C50), 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O Nf6, per lichess-org/chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/c.tsv) — CC0-1.0. Deviation identities from the same file: Sicilian (1...c5), Philidor (2...d6), Two Knights (3...Nf6), Blackburne-Kostić Gambit (3...Nd4), Anti-Fried-Liver (3...h6), Hungarian-style 3...Be7. This pack is the colour mirror of opening-principles-white and drills the same tabiya from the other chair.",
+      "Spine identity: the Italian Game / Giuoco Piano (C50), 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O Nf6, per lichess-org/chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/c.tsv) \u2014 CC0-1.0. Deviation identities from the same file: Sicilian (1...c5), Philidor (2...d6), Two Knights (3...Nf6), Blackburne-Kosti\u0107 Gambit (3...Nd4), Anti-Fried-Liver (3...h6), Hungarian-style 3...Be7. This pack is the colour mirror of opening-principles-white and drills the same tabiya from the other chair.",
       "MECHANICAL: every spine move and every deviation move was replayed legal with chessops this session; `make pack-check` independently re-walks the spine and lints deviation side and legality. The Damiano punishment line (3.Nxe5 fxe5 4.Qh5+ g6 5.Qxe5+) and the Blackburne refutation (4.Nxd4 exd4) were replayed legal on the derived positions.",
       "MECHANICAL: the developed-ready-to-castle trigger (b8, g8, f8 empty; black king on e8) is false at the start position; on the spine its three emptiness conditions first hold simultaneously at ply 7 (...Nf6). The claim that no earlier spine ply satisfies it is board arithmetic on the derived FENs (b8 empties at ply 3, f8 at ply 5, g8 at ply 7).",
-      "UNGROUNDED: every strategic claim — objective summary, plan-class descriptions, spine annotations, deviation classifications and notes, and all feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review."
+      "UNGROUNDED: every strategic claim \u2014 objective summary, plan-class descriptions, spine annotations, deviation classifications and notes, and all feedbackClaims \u2014 is agent-authored prose with NO citation and NO human review, and \u2014 after the 2026-08-15 engine pass \u2014 with evaluated MOVES but still unevaluated PROSE.",
+      "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile \u2014 depth 22, Threads 1, Hash 16MB, MultiPV 1 \u2014 run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 7 decision positions and 24 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on a claim clears a blocker.",
-      "The six concept_violation classifications assert that legal, common club moves (1...h5, 1...Na6, 1...f6, 2...Qf6, 2...Bd6, 3...h6, 4...g5, 4...Qf6) are principle errors; all are engine-checkable at fixed depth and none has been checked. 3...h6 in particular is catalogued as the Anti-Fried-Liver DEFENSE in the cited CC0 file — the note's claim that it is premature HERE (against 3.Bc4+4.O-O rather than a Ng5 setup) is an authored judgment sharpened by, not settled by, the name collision.",
+      "ENGINE-CHECKED 2026-08-15. Depth-22 costs against the best evaluated candidate at each position: 1...h5 0.80, 1...Na6 0.86, 1...f6 1.09, 2...f6 1.35 (the tactical_error row), 2...Qf6 0.84, 2...Bd6 0.60, 3...h6 0.42, 4...Qf6 1.19, 4...g5 2.85. Every classified move costs something measurable and none is refuted; the smallest, 3...h6 at 0.42, is also the one the CC0 name collision points at, and the engine neither sharpens nor settles that argument. The classes were left as authored.",
       "The Damiano and Blackburne refutation lines were verified LEGAL only; the material and evaluation claims riding on them ('winning material back with interest', 'simply better developed') are unevaluated prose.",
       "The guard threshold (250cp) encodes the same authored band hypothesis as the white pack; no corpus or play-test evidence supports the number.",
-      "No engine validation pass has been run on any position in this pack."
-    ]
+      "ENGINE PASS RUN 2026-08-15 \u2014 this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 24 candidate moves across 7 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative \u2014 rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist.",
+      "CORPUS-CHECKED 2026-08-15 and NOT ANSWERABLE from repo data: this pack targets the 1000-1400 band, but both shipped Lichess-explorer artifacts (content/candidates/priority/priority.json and content/candidates/priority-wave4a/priority.json) were pulled at ratings 1400/1600/1800 only. Every 'what players at this level actually play' claim in this pack therefore has no corpus behind it and cannot acquire one without a new explorer pull at the 1000/1200/1400 bands. The 2026-08-15 engine pass measured what the moves cost; it says nothing about how often they are played."
+    ],
+    "engineValidation": {
+      "ranAt": "2026-08-15",
+      "engine": "Stockfish 18",
+      "enginePath": "apps/server EngineSupervisor + StockfishEvidenceExecutor, sourcing AUTHORING_PROFILE (the same engine path make candidate-emit --engine-eval uses)",
+      "profile": {
+        "depth": 22,
+        "threads": 1,
+        "hashMb": 16,
+        "multiPv": 1
+      },
+      "scope": "every authored spine node's resulting position, every authored deviation's resulting position, and the engine's own best move at each decision position",
+      "unit": "centipawns from the side to move at the decision position; loss = the best evaluated candidate at that position minus this move. Candidate-relative and therefore a lower bound on the true loss: only authored moves plus the engine's depth-22 first move were evaluated, not all legal moves.",
+      "cannotGround": "deviation class, plan-class prose, annotations and feedbackClaims. Per rfc/archive/content-sourcing-foundation.md:772 the deviation classes are relative to this pack's objective and no evaluation separates concept_violation from interesting_deviation. Numbers below are recorded beside the authored classes, never substituted for them.",
+      "decisions": [
+        {
+          "at": "root",
+          "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "e5",
+              "uci": "e7e5",
+              "role": "spine:b1-e5",
+              "cp": -29,
+              "loss": 0
+            },
+            {
+              "san": "c5",
+              "uci": "c7c5",
+              "role": "deviation#0:accepted_alternative",
+              "cp": -41,
+              "loss": 12
+            },
+            {
+              "san": "h5",
+              "uci": "h7h5",
+              "role": "deviation#1:concept_violation",
+              "cp": -109,
+              "loss": 80
+            },
+            {
+              "san": "Na6",
+              "uci": "b8a6",
+              "role": "deviation#2:concept_violation",
+              "cp": -115,
+              "loss": 86
+            },
+            {
+              "san": "f6",
+              "uci": "f7f6",
+              "role": "deviation#3:concept_violation",
+              "cp": -138,
+              "loss": 109
+            }
+          ]
+        },
+        {
+          "at": "after:b1-e5",
+          "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nf3",
+              "uci": "g1f3",
+              "role": "spine:w2-nf3",
+              "cp": 35,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:w2-nf3",
+          "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Nc6",
+              "uci": "b8c6",
+              "role": "spine:b2-nc6",
+              "cp": -32,
+              "loss": 0
+            },
+            {
+              "san": "d6",
+              "uci": "d7d6",
+              "role": "deviation#5:accepted_alternative",
+              "cp": -70,
+              "loss": 38
+            },
+            {
+              "san": "Bd6",
+              "uci": "f8d6",
+              "role": "deviation#7:concept_violation",
+              "cp": -92,
+              "loss": 60
+            },
+            {
+              "san": "Qf6",
+              "uci": "d8f6",
+              "role": "deviation#6:concept_violation",
+              "cp": -116,
+              "loss": 84
+            },
+            {
+              "san": "f6",
+              "uci": "f7f6",
+              "role": "deviation#4:tactical_error",
+              "cp": -167,
+              "loss": 135
+            }
+          ]
+        },
+        {
+          "at": "after:b2-nc6",
+          "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Bb5",
+              "uci": "f1b5",
+              "role": "engine_best",
+              "cp": 27,
+              "loss": 0
+            },
+            {
+              "san": "Bc4",
+              "uci": "f1c4",
+              "role": "spine:w3-bc4",
+              "cp": 22,
+              "loss": 5
+            }
+          ]
+        },
+        {
+          "at": "after:w3-bc4",
+          "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Nf6",
+              "uci": "g8f6",
+              "role": "deviation#8:accepted_alternative",
+              "cp": -30,
+              "loss": 0
+            },
+            {
+              "san": "Bc5",
+              "uci": "f8c5",
+              "role": "spine:b3-bc5",
+              "cp": -32,
+              "loss": 2
+            },
+            {
+              "san": "Be7",
+              "uci": "f8e7",
+              "role": "deviation#9:accepted_alternative",
+              "cp": -60,
+              "loss": 30
+            },
+            {
+              "san": "h6",
+              "uci": "h7h6",
+              "role": "deviation#11:concept_violation",
+              "cp": -72,
+              "loss": 42
+            },
+            {
+              "san": "Nd4",
+              "uci": "c6d4",
+              "role": "deviation#10:interesting_deviation",
+              "cp": -127,
+              "loss": 97
+            }
+          ]
+        },
+        {
+          "at": "after:b3-bc5",
+          "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "c3",
+              "uci": "c2c3",
+              "role": "engine_best",
+              "cp": 26,
+              "loss": 0
+            },
+            {
+              "san": "O-O",
+              "uci": "e1g1",
+              "role": "spine:w4-castle",
+              "cp": 25,
+              "loss": 1
+            }
+          ]
+        },
+        {
+          "at": "after:w4-castle",
+          "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Nf6",
+              "uci": "g8f6",
+              "role": "spine:b4-nf6",
+              "cp": -27,
+              "loss": 0
+            },
+            {
+              "san": "d6",
+              "uci": "d7d6",
+              "role": "deviation#14:accepted_alternative",
+              "cp": -31,
+              "loss": 4
+            },
+            {
+              "san": "Qf6",
+              "uci": "d8f6",
+              "role": "deviation#13:concept_violation",
+              "cp": -146,
+              "loss": 119
+            },
+            {
+              "san": "g5",
+              "uci": "g7g5",
+              "role": "deviation#12:concept_violation",
+              "cp": -312,
+              "loss": 285
+            }
+          ]
+        }
+      ]
+    }
   }
 }

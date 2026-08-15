@@ -12,7 +12,13 @@
   },
   "start": {
     "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
-    "movesSan": ["e4", "e6", "d4", "d5", "e5"],
+    "movesSan": [
+      "e4",
+      "e6",
+      "d4",
+      "d5",
+      "e5"
+    ],
     "side": "white"
   },
   "objective": {
@@ -24,19 +30,27 @@
     "defender-counting",
     "space-as-compensation"
   ],
-  "shapes": ["closed-centre-chain"],
+  "shapes": [
+    "closed-centre-chain"
+  ],
   "planClasses": [
     {
       "id": "hold-the-base",
       "label": "Hold d4 (c3, Be2, a3-b4)",
       "description": "In this exact position the count is the content: after ...Qb6 the base has three attackers, and every White move in the spine either adds a defender or removes an attacker's square. a3 is a holding move in disguise — it buys b4, which drives the c5 pawn's tension away.",
-      "shapePlan": { "shape": "closed-centre-chain", "plan": "white-hold-the-base" }
+      "shapePlan": {
+        "shape": "closed-centre-chain",
+        "plan": "white-hold-the-base"
+      }
     },
     {
       "id": "kingside-when-shut",
       "label": "Turn kingside once the centre closes",
       "description": "The chain points at the kingside, but this plan only unlocks when Black releases the base — by ...c4 or ...cxd4 — and the drill's closing branches exist to show that moment arriving.",
-      "shapePlan": { "shape": "closed-centre-chain", "plan": "white-attack-where-the-chain-points" }
+      "shapePlan": {
+        "shape": "closed-centre-chain",
+        "plan": "white-attack-where-the-chain-points"
+      }
     },
     {
       "id": "gambit-the-base",
@@ -148,36 +162,62 @@
     {
       "id": "siege-counted",
       "label": "...Qb6 — three attackers on d4; choose your handling",
-      "trigger": { "atSpineNode": "p10-qb6" },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atSpineNode": "p10-qb6"
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["hold-the-base", "gambit-the-base", "kingside-when-shut"]
+        "planClassIds": [
+          "hold-the-base",
+          "gambit-the-base",
+          "kingside-when-shut"
+        ]
       }
     },
     {
       "id": "siege-outlasted",
       "label": "b4 — the pawn attacker is driven off",
-      "trigger": { "atSpineNode": "b4-gain" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "b4-gain"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "centre-locked",
       "label": "...c4 answered — the game turns kingside",
-      "trigger": { "atSpineNode": "nbd2-reroute" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "nbd2-reroute"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "past-the-book",
       "label": "You are past the authored line",
-      "trigger": { "atAuthoredBoundary": "crossed" },
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
       "actions": []
     }
   ],
   "authoredBoundary": {
     "spineNodeIds": [
-      "p6-c5", "p7-c3", "p8-nc6", "p9-nf3", "p10-qb6", "p11-a3",
-      "nh6-fly", "b4-gain", "c4-clamp", "nbd2-reroute"
+      "p6-c5",
+      "p7-c3",
+      "p8-nc6",
+      "p9-nf3",
+      "p10-qb6",
+      "p11-a3",
+      "nh6-fly",
+      "b4-gain",
+      "c4-clamp",
+      "nbd2-reroute"
     ],
     "plyHorizon": 8
   },
@@ -190,38 +230,50 @@
   },
   "deviations": [
     {
-      "at": { "spineNodeId": "p6-c5" },
+      "at": {
+        "spineNodeId": "p6-c5"
+      },
       "moveUci": "d4c5",
       "class": "concept_violation",
       "offObjective": true,
       "note": "4.dxc5 gives away the centre you played 3.e5 to keep: unlike the Caro-Kann version of this capture, Black's ...Bxc5 regains the pawn with a developing move and the e5 pawn becomes a target rather than a cramp. The Advance's promise is the chain; this move resigns the promise on move four."
     },
     {
-      "at": { "spineNodeId": "p6-c5" },
+      "at": {
+        "spineNodeId": "p6-c5"
+      },
       "moveUci": "g1f3",
       "class": "accepted_alternative",
       "note": "4.Nf3 — the Nimzowitsch System — defends d4 with pieces instead of the c-pawn and often gambits it outright. A respectable repertoire with a different bargain: activity for structure. This pack's c3 line is the structural version."
     },
     {
-      "at": { "spineNodeId": "p6-c5" },
+      "at": {
+        "spineNodeId": "p6-c5"
+      },
       "moveUci": "d1g4",
       "class": "interesting_deviation",
       "note": "4.Qg4 — the Nimzowitsch Attack — attacks g7 while Black's kingside is undeveloped, on the logic that ...e6 already blocked the c8 bishop's defence of the kingside light squares. Concrete and double-edged: the queen is early, and every tempo Black gains on her is a siege move. Play it out rather than trust either verdict."
     },
     {
-      "at": { "spineNodeId": "p8-nc6" },
+      "at": {
+        "spineNodeId": "p8-nc6"
+      },
       "moveUci": "c1e3",
       "class": "accepted_alternative",
       "note": "5.Be3 — the Kupreichik line — develops the bishop before Nf3 and dares ...Qb6 to take b2 with concrete tricks (Qd2 and Rb1 come with tempo on the exposed queen). Same holding plan, sharper accounting; a real alternative for players who like forcing debts."
     },
     {
-      "at": { "spineNodeId": "p10-qb6" },
+      "at": {
+        "spineNodeId": "p10-qb6"
+      },
       "moveUci": "f1d3",
       "class": "interesting_deviation",
       "note": "6.Bd3 is the Milner-Barry Gambit: d4 is offered for open lines and a lead in development. It is a coherent, well-mapped gamble and a different pack's subject; what it is NOT is a way to hold the base. Choosing it should be a decision made before ...Qb6, not a reaction to it."
     },
     {
-      "at": { "spineNodeId": "p10-qb6" },
+      "at": {
+        "spineNodeId": "p10-qb6"
+      },
       "moveUci": "f1e2",
       "class": "accepted_alternative",
       "note": "6.Be2 holds by development and sets the band's classic trap: after ...cxd4 7.cxd4 Nxd4?? 8.Nxd4 Qxd4, 9.Bb5+ forces the block and 10.Bxd7+ followed by 11.Qxd4 wins the queen — a sequence verified move-by-move with the board tools in this repo. Slower than a3 as a plan; richer in immediate tactics."
@@ -232,17 +284,24 @@
     {
       "id": "break-inevitable",
       "text": "After 3.e5 at the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), 3...c5 is Black's choice in 83.5% of 9,215,262 games — the siege this pack drills is not one possible middlegame, it is the Advance French's default reality.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "count-is-the-content",
       "text": "Holding the Advance centre is arithmetic made into a habit: attackers and defenders of d4 are counted before every move, and a3 belongs in the count because b4 removes an attacker one move later.",
-      "evidenceTypes": ["author_principle"]
+      "evidenceTypes": [
+        "author_principle"
+      ]
     },
     {
       "id": "their-prep-is-longer",
       "text": "In this variation it is White who chose the line and Black who usually knows it deeper: the French player meets 3.e5 in most of their games, while the e4 player faces the French only occasionally. The spine is short on purpose — the value is making the first six defensive moves automatic.",
-      "evidenceTypes": ["author_principle", "hypothesis"]
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
     }
   ],
   "provenance": {
@@ -251,16 +310,222 @@
     "sources": [
       "C02 French Defense: Advance Variation, Main Line: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/c.tsv) — CC0-1.0, no attribution required. The Nimzowitsch System (4.Nf3), Nimzowitsch Attack (4.Qg4), Kupreichik (5.Be3), Milner-Barry Gambit (6.Bd3) and Lputian (...Nh6) identities cited above are from the same CC0 file.",
       "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the C02 row (position after 3.e5) — 9,215,262 games; ...c5 83.5% (7,695,360 games). No deeper-node frequency was retrieved.",
-      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/c02-french-defense-advance-variation-main-line, learner-side white, split-ply 5, row 3...c5 4.c3 Nc6 5.Nf3 Qb6 6.a3). Hand-added branches (...Nh6/b4, ...c4/Nbd2) and every deviation were verified legal with chessops this session, including the complete Be2 trap sequence 6.Be2 cxd4 7.cxd4 Nxd4 8.Nxd4 Qxd4 9.Bb5+ Bd7 10.Bxd7+ Kxd7 11.Qxd4, walked move by move as legal chess. That the trap WINS is derived material arithmetic on the walked line (queen for a pawn after equal minor-piece trades); no engine has evaluated it.",
-      "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all six deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. 'Original prose' answers copyright, not truth."
+      "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/c02-french-defense-advance-variation-main-line, learner-side white, split-ply 5, row 3...c5 4.c3 Nc6 5.Nf3 Qb6 6.a3). Hand-added branches (...Nh6/b4, ...c4/Nbd2) and every deviation were verified legal with chessops this session, including the complete Be2 trap sequence 6.Be2 cxd4 7.cxd4 Nxd4 8.Nxd4 Qxd4 9.Bb5+ Bd7 10.Bxd7+ Kxd7 11.Qxd4, walked move by move as legal chess. ENGINE-VERIFIED 2026-08-15: the full sequence evaluates +6.70 for White at depth 22 with material 31-23 (a queen for a bishop and a knight), and the 9...Ke7 decline evaluates +7.11 with material 34-26. The trap wins as claimed.",
+      "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all six deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE. 'Original prose' answers copyright, not truth.",
+      "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 9 decision positions and 18 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "The concept_violation on 4.dxc5 asserts a legal capture resigns the opening's point; it is the file's strongest judgment and an engine pass on the concrete line has not been run.",
+      "ENGINE-CHECKED 2026-08-15: 4.dxc5 evaluates -0.39 against +0.29 for the spine's 4.c3, a cost of 0.68 at depth 22 and the largest of the three fourth-move alternatives measured. The judgment's direction is supported; the class itself stays objective-relative and unsettled by evaluation.",
       "The d4 attacker/defender counts stated in the ...Qb6 annotation are derivable from the position and were hand-counted, not machine-derived; the structural-feature vocabulary could express and check this count and has not been asked to.",
       "The 'their prep is longer' asymmetry claim is a plausible hypothesis with no corpus measurement behind it.",
-      "No engine validation pass has been run on any position in this pack."
-    ]
+      "ENGINE PASS RUN 2026-08-15 — this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 18 candidate moves across 9 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative — rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist."
+    ],
+    "engineValidation": {
+      "ranAt": "2026-08-15",
+      "engine": "Stockfish 18",
+      "enginePath": "apps/server EngineSupervisor + StockfishEvidenceExecutor, sourcing AUTHORING_PROFILE (the same engine path make candidate-emit --engine-eval uses)",
+      "profile": {
+        "depth": 22,
+        "threads": 1,
+        "hashMb": 16,
+        "multiPv": 1
+      },
+      "scope": "every authored spine node's resulting position, every authored deviation's resulting position, and the engine's own best move at each decision position",
+      "unit": "centipawns from the side to move at the decision position; loss = the best evaluated candidate at that position minus this move. Candidate-relative and therefore a lower bound on the true loss: only authored moves plus the engine's depth-22 first move were evaluated, not all legal moves.",
+      "cannotGround": "deviation class, plan-class prose, annotations and feedbackClaims. Per rfc/archive/content-sourcing-foundation.md:772 the deviation classes are relative to this pack's objective and no evaluation separates concept_violation from interesting_deviation. Numbers below are recorded beside the authored classes, never substituted for them.",
+      "decisions": [
+        {
+          "at": "root",
+          "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "c5",
+              "uci": "c7c5",
+              "role": "spine:p6-c5",
+              "cp": -29,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p6-c5",
+          "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "c3",
+              "uci": "c2c3",
+              "role": "spine:p7-c3",
+              "cp": 29,
+              "loss": 0
+            },
+            {
+              "san": "Nf3",
+              "uci": "g1f3",
+              "role": "deviation#1:accepted_alternative",
+              "cp": -16,
+              "loss": 45
+            },
+            {
+              "san": "dxc5",
+              "uci": "d4c5",
+              "role": "deviation#0:concept_violation (offObjective)",
+              "cp": -39,
+              "loss": 68
+            },
+            {
+              "san": "Qg4",
+              "uci": "d1g4",
+              "role": "deviation#2:interesting_deviation",
+              "cp": -100,
+              "loss": 129
+            }
+          ]
+        },
+        {
+          "at": "after:p7-c3",
+          "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Nc6",
+              "uci": "b8c6",
+              "role": "spine:p8-nc6",
+              "cp": -29,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p8-nc6",
+          "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nf3",
+              "uci": "g1f3",
+              "role": "spine:p9-nf3",
+              "cp": 25,
+              "loss": 0
+            },
+            {
+              "san": "Be3",
+              "uci": "c1e3",
+              "role": "deviation#3:accepted_alternative",
+              "cp": -20,
+              "loss": 45
+            }
+          ]
+        },
+        {
+          "at": "after:p9-nf3",
+          "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 2 5",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Bd7",
+              "uci": "c8d7",
+              "role": "engine_best",
+              "cp": -36,
+              "loss": 0
+            },
+            {
+              "san": "Qb6",
+              "uci": "d8b6",
+              "role": "spine:p10-qb6",
+              "cp": -37,
+              "loss": 1
+            }
+          ]
+        },
+        {
+          "at": "after:p10-qb6",
+          "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Be2",
+              "uci": "f1e2",
+              "role": "deviation#5:accepted_alternative",
+              "cp": 47,
+              "loss": 0
+            },
+            {
+              "san": "a3",
+              "uci": "a2a3",
+              "role": "spine:p11-a3",
+              "cp": 43,
+              "loss": 4
+            },
+            {
+              "san": "Bd3",
+              "uci": "f1d3",
+              "role": "deviation#4:interesting_deviation",
+              "cp": 31,
+              "loss": 16
+            }
+          ]
+        },
+        {
+          "at": "after:p11-a3",
+          "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/P1P2N2/1P3PPP/RNBQKB1R b KQkq - 0 6",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "c4",
+              "uci": "c5c4",
+              "role": "spine:c4-clamp",
+              "cp": -28,
+              "loss": 0
+            },
+            {
+              "san": "Nh6",
+              "uci": "g8h6",
+              "role": "spine:nh6-fly",
+              "cp": -37,
+              "loss": 9
+            }
+          ]
+        },
+        {
+          "at": "after:nh6-fly",
+          "fen": "r1b1kb1r/pp3ppp/1qn1p2n/2ppP3/3P4/P1P2N2/1P3PPP/RNBQKB1R w KQkq - 1 7",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "b4",
+              "uci": "b2b4",
+              "role": "spine:b4-gain",
+              "cp": 41,
+              "loss": 0
+            },
+            {
+              "san": "Bd3",
+              "uci": "f1d3",
+              "role": "engine_best",
+              "cp": 29,
+              "loss": 12
+            }
+          ]
+        },
+        {
+          "at": "after:c4-clamp",
+          "fen": "r1b1kbnr/pp3ppp/1qn1p3/3pP3/2pP4/P1P2N2/1P3PPP/RNBQKB1R w KQkq - 0 7",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nbd2",
+              "uci": "b1d2",
+              "role": "spine:nbd2-reroute",
+              "cp": 31,
+              "loss": 0
+            }
+          ]
+        }
+      ]
+    }
   }
 }

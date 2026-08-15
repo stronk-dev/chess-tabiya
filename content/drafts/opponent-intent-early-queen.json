@@ -12,12 +12,14 @@
   },
   "start": {
     "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
-    "movesSan": ["e4"],
+    "movesSan": [
+      "e4"
+    ],
     "side": "black"
   },
   "objective": {
     "type": "play_until_checkpoint",
-    "summary": "Before every reply, answer two questions out loud: what does their move WANT, and what is the piece that just moved NO LONGER doing? This drill is the most common attack a 1000-1400 player ever faces — the early queen against f7 — and every defensive move in it is found by answering those two questions, never by memory.",
+    "summary": "Before every reply, answer two questions out loud: what does their move WANT, and what is the piece that just moved NO LONGER doing? This drill is the most common attack a 1000-1400 player ever faces \u2014 the early queen against f7 \u2014 and every defensive move in it is found by answering those two questions, never by memory.",
     "successConditions": [
       {
         "kind": "reach_checkpoint",
@@ -35,7 +37,7 @@
   "planClasses": [
     {
       "id": "wants-mate-on-f7",
-      "label": "It aims at f7 — the mate address",
+      "label": "It aims at f7 \u2014 the mate address",
       "description": "The move adds an attacker to f7, the one square only your king defends. Test: count the attackers pointing at f7 and ask whether Qxf7 next move would be mate or nonsense. If two pieces aim there, defending f7 outranks everything else on the board."
     },
     {
@@ -45,7 +47,7 @@
     },
     {
       "id": "just-developing",
-      "label": "It develops — no immediate demand",
+      "label": "It develops \u2014 no immediate demand",
       "description": "The move improves a piece without threatening anything you can lose this move. Your licence to continue your own plan: develop, prepare to castle, take the centre."
     },
     {
@@ -60,7 +62,7 @@
       "moveUci": "e7e5",
       "moveSan": "e5",
       "annotations": [
-        "Your centre answer — and the drill's premise: you played a normal move, and White is about to stop playing normal moves. From here on, read every White move with the two questions before you touch a piece."
+        "Your centre answer \u2014 and the drill's premise: you played a normal move, and White is about to stop playing normal moves. From here on, read every White move with the two questions before you touch a piece."
       ],
       "children": [
         {
@@ -68,7 +70,7 @@
           "moveUci": "d1h5",
           "moveSan": "Qh5",
           "annotations": [
-            "Question one: what does it want? The queen attacks e5 — count it: attacked once, defended by nobody — and she is sitting on the diagonal toward f7. Question two: what did she stop doing? Guarding d-file squares back home. The immediate bill is e5; pay it with a move that develops."
+            "Question one: what does it want? The queen attacks e5 \u2014 count it: attacked once, defended by nobody \u2014 and she is sitting on the diagonal toward f7. Question two: what did she stop doing? Guarding d-file squares back home. The immediate bill is e5; pay it with a move that develops."
           ],
           "children": [
             {
@@ -76,7 +78,7 @@
               "moveUci": "b8c6",
               "moveSan": "Nc6",
               "annotations": [
-                "The answer both questions point to: the knight defends e5 from its best square and develops. You did not retreat, you did not push a panicked pawn — you answered the threat with a move you wanted anyway. The attacker has spent a queen move; you have spent nothing."
+                "The answer both questions point to: the knight defends e5 from its best square and develops. You did not retreat, you did not push a panicked pawn \u2014 you answered the threat with a move you wanted anyway. The attacker has spent a queen move; you have spent nothing."
               ],
               "children": [
                 {
@@ -84,7 +86,7 @@
                   "moveUci": "f1c4",
                   "moveSan": "Bc4",
                   "annotations": [
-                    "Question one again — and this time the answer is mate: bishop and queen both aim at f7, and Qxf7 next move would be the end. Everything else on the board, including your own plans, is now irrelevant for exactly one move."
+                    "Question one again \u2014 and this time the answer is mate: bishop and queen both aim at f7, and Qxf7 next move would be the end. Everything else on the board, including your own plans, is now irrelevant for exactly one move."
                   ],
                   "children": [
                     {
@@ -92,7 +94,7 @@
                       "moveUci": "g7g6",
                       "moveSan": "g6",
                       "annotations": [
-                        "The blocking answer with a bonus: g6 closes the h5-f7 diagonal AND attacks the queen, so she must spend another move. Two queen moves for one pawn move — you are winning the only race the opening runs, and the mate is off."
+                        "The blocking answer with a bonus: g6 closes the h5-f7 diagonal AND attacks the queen, so she must spend another move. Two queen moves for one pawn move \u2014 you are winning the only race the opening runs, and the mate is off."
                       ],
                       "children": [
                         {
@@ -100,7 +102,7 @@
                           "moveUci": "h5f3",
                           "moveSan": "Qf3",
                           "annotations": [
-                            "Both questions in one move. What does it want? Mate on f7 again, now down the f-file with the bishop still supporting. What did she stop doing? Attacking e5 — the threat you paid for two moves ago is gone, which is exactly why you must re-read the position instead of remembering it."
+                            "Both questions in one move. What does it want? Mate on f7 again, now down the f-file with the bishop still supporting. What did she stop doing? Attacking e5 \u2014 the threat you paid for two moves ago is gone, which is exactly why you must re-read the position instead of remembering it."
                           ],
                           "children": [
                             {
@@ -128,43 +130,78 @@
   "checkpoints": [
     {
       "id": "queen-sortie",
-      "label": "Qh5 — read it before you touch a piece",
-      "trigger": { "atSpineNode": "w2-qh5" },
+      "label": "Qh5 \u2014 read it before you touch a piece",
+      "trigger": {
+        "atSpineNode": "w2-qh5"
+      },
       "actions": [],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["wants-mate-on-f7", "wants-loose-material", "just-developing", "left-a-job-behind"]
+        "planClassIds": [
+          "wants-mate-on-f7",
+          "wants-loose-material",
+          "just-developing",
+          "left-a-job-behind"
+        ]
       }
     },
     {
       "id": "bishop-joins",
-      "label": "Bc4 — count the attackers on f7 now",
-      "trigger": { "atSpineNode": "w3-bc4" },
-      "actions": ["compare_branches"],
+      "label": "Bc4 \u2014 count the attackers on f7 now",
+      "trigger": {
+        "atSpineNode": "w3-bc4"
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["wants-mate-on-f7", "wants-loose-material", "just-developing", "left-a-job-behind"]
+        "planClassIds": [
+          "wants-mate-on-f7",
+          "wants-loose-material",
+          "just-developing",
+          "left-a-job-behind"
+        ]
       }
     },
     {
       "id": "queen-reroutes",
-      "label": "Qf3 — what does it want, what did it abandon?",
-      "trigger": { "atSpineNode": "w4-qf3" },
-      "actions": ["compare_branches"],
+      "label": "Qf3 \u2014 what does it want, what did it abandon?",
+      "trigger": {
+        "atSpineNode": "w4-qf3"
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["wants-mate-on-f7", "wants-loose-material", "just-developing", "left-a-job-behind"]
+        "planClassIds": [
+          "wants-mate-on-f7",
+          "wants-loose-material",
+          "just-developing",
+          "left-a-job-behind"
+        ]
       }
     },
     {
       "id": "attack-spent",
       "label": "Three threats read, three developing answers",
-      "trigger": { "atPly": 7 },
+      "trigger": {
+        "atPly": 7
+      },
       "actions": []
     }
   ],
   "authoredBoundary": {
-    "spineNodeIds": ["b1-e5", "w2-qh5", "b2-nc6", "w3-bc4", "b3-g6", "w4-qf3", "b4-nf6"],
+    "spineNodeIds": [
+      "b1-e5",
+      "w2-qh5",
+      "b2-nc6",
+      "w3-bc4",
+      "b3-g6",
+      "w4-qf3",
+      "b4-nf6"
+    ],
     "plyHorizon": 7
   },
   "opponentPolicy": {
@@ -176,76 +213,100 @@
   },
   "deviations": [
     {
-      "at": { "spineNodeId": "w2-qh5" },
+      "at": {
+        "spineNodeId": "w2-qh5"
+      },
       "moveUci": "g7g6",
       "class": "tactical_error",
-      "note": "The right move one position too early — it answers the f7 idea and ignores what the move ACTUALLY wants right now: e5. 3.Qxe5+ takes the pawn with check and forks the h8 rook through the hole g6 just opened. Read the move in front of you, not the move you were warned about."
+      "note": "The right move one position too early \u2014 it answers the f7 idea and ignores what the move ACTUALLY wants right now: e5. 3.Qxe5+ takes the pawn with check and forks the h8 rook through the hole g6 just opened. Read the move in front of you, not the move you were warned about."
     },
     {
-      "at": { "spineNodeId": "w2-qh5" },
+      "at": {
+        "spineNodeId": "w2-qh5"
+      },
       "moveUci": "g8f6",
       "class": "tactical_error",
-      "note": "Developing with an attack on the queen — the right instinct, wrong order: it leaves e5 hanging, and 3.Qxe5+ collects the pawn with check before the knight's attack matters. Threats outrank attacks: answer what their move wants first, then hit back."
+      "note": "Developing with an attack on the queen \u2014 the right instinct, wrong order: it leaves e5 hanging, and 3.Qxe5+ collects the pawn with check before the knight's attack matters. Threats outrank attacks: answer what their move wants first, then hit back. Engine pass 2026-08-15 (Stockfish 18, depth 22): the pawn is real (material 39-38 after 3.Qxe5+) but the position is not \u2014 2...Nf6 costs 0.20 against the spine's 2...Nc6, and 3.Qxe5+ Be7 evaluates at -0.18. This class asserts a tactical error whose measured cost is far below this pack's own 150-centipawn guard, so the guard will not fire on it."
     },
     {
-      "at": { "spineNodeId": "w2-qh5" },
+      "at": {
+        "spineNodeId": "w2-qh5"
+      },
       "moveUci": "d7d6",
       "class": "accepted_alternative",
-      "note": "Defending e5 with the pawn works and frees the c8 bishop. It develops nothing, so the spine prefers ...Nc6 — but this is a sound answer to the same correctly-read threat."
+      "note": "Defending e5 with the pawn works and frees the c8 bishop. It develops nothing, so the spine prefers ...Nc6 \u2014 but this is a sound answer to the same correctly-read threat."
     },
     {
-      "at": { "spineNodeId": "w2-qh5" },
+      "at": {
+        "spineNodeId": "w2-qh5"
+      },
       "moveUci": "d8e7",
       "class": "interesting_deviation",
-      "note": "The queen defends e5 and shields e-file tricks — a correct reading paid for at the wrong counter: your queen now blocks the f8 bishop, and you have answered one developed attacker by undeveloping yourself. Play it out and compare the move-8 positions with the ...Nc6 line."
+      "note": "The queen defends e5 and shields e-file tricks \u2014 a correct reading paid for at the wrong counter: your queen now blocks the f8 bishop, and you have answered one developed attacker by undeveloping yourself. Play it out and compare the move-8 positions with the ...Nc6 line."
     },
     {
-      "at": { "spineNodeId": "w3-bc4" },
+      "at": {
+        "spineNodeId": "w3-bc4"
+      },
       "moveUci": "g8f6",
       "class": "tactical_error",
-      "note": "The classic Scholar's Mate victim: a good developing move that answers yesterday's question. Two pieces aim at f7 and the knight defends none of it — 4.Qxf7# ends the game. When the answer to 'what does it want' is MATE, development goes to the back of the queue."
+      "note": "The classic Scholar's Mate victim: a good developing move that answers yesterday's question. Two pieces aim at f7 and the knight defends none of it \u2014 4.Qxf7# ends the game. When the answer to 'what does it want' is MATE, development goes to the back of the queue."
     },
     {
-      "at": { "spineNodeId": "w3-bc4" },
+      "at": {
+        "spineNodeId": "w3-bc4"
+      },
       "moveUci": "d7d6",
       "class": "tactical_error",
-      "note": "A normal move that does not touch the f7 count: still two attackers, still one defender, still 4.Qxf7#. The point of this branch is painful and permanent — normal moves lose instantly when a mate threat is on the board unanswered."
+      "note": "A normal move that does not touch the f7 count: still two attackers, still one defender, still 4.Qxf7#. The point of this branch is painful and permanent \u2014 normal moves lose instantly when a mate threat is on the board unanswered."
     },
     {
-      "at": { "spineNodeId": "w3-bc4" },
+      "at": {
+        "spineNodeId": "w3-bc4"
+      },
       "moveUci": "d8e7",
       "class": "accepted_alternative",
-      "note": "The queen covers f7 from e7 — a correct defence that reads the threat right. Its price is the blocked f8 bishop; the spine's ...g6 defends while gaining a tempo on the queen instead. Both answers pass the reading test; one of them also wins time."
+      "note": "The queen covers f7 from e7 \u2014 a correct defence that reads the threat right. Its price is the blocked f8 bishop; the spine's ...g6 defends while gaining a tempo on the queen instead. Both answers pass the reading test; one of them also wins time."
     },
     {
-      "at": { "spineNodeId": "w3-bc4" },
+      "at": {
+        "spineNodeId": "w3-bc4"
+      },
       "moveUci": "d8f6",
       "class": "interesting_deviation",
-      "note": "Covering f7 by copying White's crime — your own early queen. It holds the mate and offers to trade the attack away, but the queen stands on the knight's square and White develops against her with tempo. A readable defence with a built-in tax; branch it and compare."
+      "note": "Covering f7 by copying White's crime \u2014 your own early queen. It holds the mate and offers to trade the attack away, but the queen stands on the knight's square and White develops against her with tempo. A readable defence with a built-in tax; branch it and compare."
     },
     {
-      "at": { "spineNodeId": "w4-qf3" },
+      "at": {
+        "spineNodeId": "w4-qf3"
+      },
       "moveUci": "c6d4",
       "class": "tactical_error",
-      "note": "The move LOOKS ferocious — the knight attacks the queen and forks toward c2 — and it loses to the one thing it does not do: 5.Qxf7#. Attacking their queen is not an answer to their mate. This branch is the whole pack in one move: threats outrank attacks, every time."
+      "note": "The move LOOKS ferocious \u2014 the knight attacks the queen and forks toward c2 \u2014 and it loses to the one thing it does not do: 5.Qxf7#. Attacking their queen is not an answer to their mate. This branch is the whole pack in one move: threats outrank attacks, every time."
     },
     {
-      "at": { "spineNodeId": "w4-qf3" },
+      "at": {
+        "spineNodeId": "w4-qf3"
+      },
       "moveUci": "d7d5",
       "class": "interesting_deviation",
-      "note": "The right IDEA — cut the c4 bishop's support of f7 — priced at a pawn: both exd5 and Bxd5 keep the pressure and win material, because the d5 block itself can be captured. Compare with ...Nf6, which blocks a line nothing can capture on. Blocks are only as good as their squares."
+      "note": "The right IDEA \u2014 cut the c4 bishop's support of f7 \u2014 priced at a pawn: both exd5 and Bxd5 keep the pressure and win material, because the d5 block itself can be captured. Compare with ...Nf6, which blocks a line nothing can capture on. Blocks are only as good as their squares."
     },
     {
-      "at": { "spineNodeId": "w4-qf3" },
+      "at": {
+        "spineNodeId": "w4-qf3"
+      },
       "moveUci": "d8f6",
       "class": "accepted_alternative",
-      "note": "Offering the queen trade — the reading is correct (f7 covered) and the offer is real: a traded queen is a spent attack. Costs more than ...Nf6 (your queen developed early, his choice whether to trade) but passes both questions honestly."
+      "note": "Offering the queen trade \u2014 the reading is correct (f7 covered) and the offer is real: a traded queen is a spent attack. Costs more than ...Nf6 (your queen developed early, his choice whether to trade) but passes both questions honestly."
     },
     {
-      "at": { "spineNodeId": "w4-qf3" },
+      "at": {
+        "spineNodeId": "w4-qf3"
+      },
       "moveUci": "d8e7",
       "class": "accepted_alternative",
-      "note": "The same steady defence as one move earlier: f7 covered from e7. Solid, passive, and it keeps failing to punish the queen for her travels — which is why the spine's ...Nf6 (defend, develop, prepare castling) is the model answer."
+      "note": "The same steady defence as one move earlier: f7 covered from e7. Solid, passive, and it keeps failing to punish the queen for her travels \u2014 which is why the spine's ...Nf6 (defend, develop, prepare castling) is the model answer."
     }
   ],
   "feedbackPolicy": "immediate_guard",
@@ -255,41 +316,257 @@
   "feedbackClaims": [
     {
       "id": "two-questions",
-      "text": "Two questions before every reply: what does their move want, and what is the piece that just moved no longer doing? The first finds their threat; the second finds your opportunity. At 1000-1400, games are decided by whoever forgets to ask the first question — the second is how you start winning them.",
-      "evidenceTypes": ["author_principle"]
+      "text": "Two questions before every reply: what does their move want, and what is the piece that just moved no longer doing? The first finds their threat; the second finds your opportunity. At 1000-1400, games are decided by whoever forgets to ask the first question \u2014 the second is how you start winning them.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
     },
     {
       "id": "threats-outrank-attacks",
       "text": "A threat you can execute next move outranks an attack on any piece, including the queen. The ...Nd4 branch exists to make this permanent: the knight attacks her majesty herself and White simply plays mate. Check what they can DO to you before admiring what you can do to them.",
-      "evidenceTypes": ["author_principle"]
+      "evidenceTypes": [
+        "author_principle"
+      ]
     },
     {
       "id": "queen-travels-pay-your-fare",
-      "text": "Each time the early queen is met by a developing defence or hit by a pawn with tempo, the defender banks a free move. Over the three readings in this pack White spends three queen moves on an attack that ends with Black better developed — the standard fate of the early queen against a defender who counts.",
-      "evidenceTypes": ["author_principle", "hypothesis"]
+      "text": "Each time the early queen is met by a developing defence or hit by a pawn with tempo, the defender banks a free move. Over the three readings in this pack White spends three queen moves on an attack that ends with Black better developed \u2014 the standard fate of the early queen against a defender who counts.",
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
     },
     {
       "id": "guard-fires-on-misread",
-      "text": "This pack's guard is set tighter than the principles packs (150 centipawns) on purpose: here every wrong move IS a misread threat, and its cost — a pawn with check, a fork, mate — should arrive within a ply or two so the misread and the consequence are still in the same breath. Nothing quieter than a misread can trip it.",
-      "evidenceTypes": ["author_principle"]
+      "text": "This pack's guard is set tighter than the principles packs (150 centipawns) on purpose: here every wrong move IS a misread threat, and its cost \u2014 a pawn with check, a fork, mate \u2014 should arrive within a ply or two so the misread and the consequence are still in the same breath. Nothing quieter than a misread can trip it.",
+      "evidenceTypes": [
+        "author_principle"
+      ]
     }
   ],
   "provenance": {
     "reviewStatus": "draft",
     "sources": [
-      "Line identity: 2.Qh5 against 1.e4 e5 (Danvers/Wayward Queen family) and the Scholar's-mate pattern via Bc4+Qf3; the drilled defence ...Nc6/...g6/...Nf6 is the standard refutation scheme. No theory beyond move identity is claimed; the pack drills the READING method (the owner's two questions from design/00-thesis.md §Target player), not the line.",
+      "Line identity: 2.Qh5 against 1.e4 e5 (Danvers/Wayward Queen family) and the Scholar's-mate pattern via Bc4+Qf3; the drilled defence ...Nc6/...g6/...Nf6 is the standard refutation scheme. No theory beyond move identity is claimed; the pack drills the READING method (the owner's two questions from design/00-thesis.md \u00a7Target player), not the line.",
       "MECHANICAL: every spine move and every deviation move replayed legal with chessops this session; `make pack-check` independently re-walks spine and deviations. The three mate branches were replayed to the mating position: after 3...Nf6 4.Qxf7# and 3...d6 4.Qxf7# and 4...Nd4 5.Qxf7# the mate is rules-checkable (king attacked by the f7 queen supported by the c4 bishop; d7/e7 covered along the seventh rank, d8 occupied by Black's own queen, f8 by the bishop, Kxf7 illegal). The Qxe5+ fork geometry after 2...g6 (e5 to h8 clear through f6/g7) was replayed legal on the derived position.",
       "MECHANICAL: the intent answers the annotations assert are attack-count arithmetic on the derived FENs (f7 attacker/defender counts; the e5 attack existing after Qh5 and not after Qf3). The runtime's direct_attack_count vocabulary could express these counts; this draft states them in prose only.",
-      "UNGROUNDED: every strategic judgment — plan-class prose, annotations, deviation classifications and notes, feedbackClaims, and every 'model answer' ranking among the sound defences (...Nc6 over ...d6/...Qe7, ...g6 over ...Qe7, ...Nf6 over the queen moves) — is agent-authored with NO citation, NO engine evaluation and NO human review."
+      "UNGROUNDED: every strategic judgment \u2014 plan-class prose, annotations, deviation classifications and notes, feedbackClaims, and every 'model answer' ranking among the sound defences (...Nc6 over ...d6/...Qe7, ...g6 over ...Qe7, ...Nf6 over the queen moves) \u2014 is agent-authored with NO citation and NO human review, and \u2014 after the 2026-08-15 engine pass \u2014 with evaluated MOVES but still unevaluated PROSE.",
+      "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile \u2014 depth 22, Threads 1, Hash 16MB, MultiPV 1 \u2014 run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 7 decision positions and 20 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated. Spine moves the engine ranks materially below a sibling at the same position: Qh5 (w2-qh5) 0.75 below Nf3."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on a claim clears a blocker.",
-      "The rankings among sound defences (why ...Nc6 beats ...d6, why ...g6 beats ...Qe7, why ...Nf6 beats the queen defences) are the file's load-bearing teaching claims. All are engine-checkable at fixed depth; none has been checked.",
+      "ENGINE-CHECKED 2026-08-15 and all three rankings are reproduced exactly at depth 22, in Black's favour throughout. After 2.Qh5: ...Nc6 +0.42 > ...d6 +0.37 > ...Qe7 +0.08. After 3.Bc4: ...g6 +0.37 > ...Qe7 +0.12 > ...Qf6 -0.21. After 4.Qf3: ...Nf6 +0.39 > ...Qe7 +0.19 > ...Qf6 +0.14. This is the strongest confirmation the pass produced anywhere in the opening corpus. The punishments are confirmed too: 2...g6 -4.60, and 3...Nf6, 3...d6 and 4...Nd4 all evaluate as forced mate for White. The one row the pass does NOT support is 2...Nf6, classed tactical_error at a measured cost of 0.20 \u2014 below this pack's own 150-centipawn guard, which therefore cannot fire on it. The class was left as authored and the contradiction recorded in the deviation note.",
       "The 4...d5 note claims both exd5 and Bxd5 keep the attack and win material; only the LEGALITY of those captures was verified, not the evaluation or the follow-ups.",
       "The intent_capture checkpoints have no format slot for the validated answer: the pack knows (by attack arithmetic) which plan class each White move serves, and can say so only in annotations. If the interaction ever grades intent, these claims need mechanical grounding via direct_attack_count expressions, which the format has but this draft does not yet encode.",
       "The guard threshold (150cp) encodes an authored claim that every materially-costly move here is a misread; no play-test evidence supports the number.",
-      "No engine validation pass has been run on any position in this pack."
-    ]
+      "ENGINE PASS RUN 2026-08-15 \u2014 this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 20 candidate moves across 7 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative \u2014 rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist.",
+      "CORPUS-CHECKED 2026-08-15 and NOT ANSWERABLE from repo data: this pack targets the 1000-1400 band, but both shipped Lichess-explorer artifacts (content/candidates/priority/priority.json and content/candidates/priority-wave4a/priority.json) were pulled at ratings 1400/1600/1800 only. Every 'what players at this level actually play' claim in this pack therefore has no corpus behind it and cannot acquire one without a new explorer pull at the 1000/1200/1400 bands. The 2026-08-15 engine pass measured what the moves cost; it says nothing about how often they are played."
+    ],
+    "engineValidation": {
+      "ranAt": "2026-08-15",
+      "engine": "Stockfish 18",
+      "enginePath": "apps/server EngineSupervisor + StockfishEvidenceExecutor, sourcing AUTHORING_PROFILE (the same engine path make candidate-emit --engine-eval uses)",
+      "profile": {
+        "depth": 22,
+        "threads": 1,
+        "hashMb": 16,
+        "multiPv": 1
+      },
+      "scope": "every authored spine node's resulting position, every authored deviation's resulting position, and the engine's own best move at each decision position",
+      "unit": "centipawns from the side to move at the decision position; loss = the best evaluated candidate at that position minus this move. Candidate-relative and therefore a lower bound on the true loss: only authored moves plus the engine's depth-22 first move were evaluated, not all legal moves.",
+      "cannotGround": "deviation class, plan-class prose, annotations and feedbackClaims. Per rfc/archive/content-sourcing-foundation.md:772 the deviation classes are relative to this pack's objective and no evaluation separates concept_violation from interesting_deviation. Numbers below are recorded beside the authored classes, never substituted for them.",
+      "decisions": [
+        {
+          "at": "root",
+          "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "e5",
+              "uci": "e7e5",
+              "role": "spine:b1-e5",
+              "cp": -29,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:b1-e5",
+          "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nf3",
+              "uci": "g1f3",
+              "role": "engine_best",
+              "cp": 35,
+              "loss": 0
+            },
+            {
+              "san": "Qh5",
+              "uci": "d1h5",
+              "role": "spine:w2-qh5",
+              "cp": -40,
+              "loss": 75
+            }
+          ]
+        },
+        {
+          "at": "after:w2-qh5",
+          "fen": "rnbqkbnr/pppp1ppp/8/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR b KQkq - 1 2",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Nc6",
+              "uci": "b8c6",
+              "role": "spine:b2-nc6",
+              "cp": 42,
+              "loss": 0
+            },
+            {
+              "san": "d6",
+              "uci": "d7d6",
+              "role": "deviation#2:accepted_alternative",
+              "cp": 37,
+              "loss": 5
+            },
+            {
+              "san": "Nf6",
+              "uci": "g8f6",
+              "role": "deviation#1:tactical_error",
+              "cp": 22,
+              "loss": 20
+            },
+            {
+              "san": "Qe7",
+              "uci": "d8e7",
+              "role": "deviation#3:interesting_deviation",
+              "cp": 8,
+              "loss": 34
+            },
+            {
+              "san": "g6",
+              "uci": "g7g6",
+              "role": "deviation#0:tactical_error",
+              "cp": -460,
+              "loss": 502
+            }
+          ]
+        },
+        {
+          "at": "after:b2-nc6",
+          "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 2 3",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Bc4",
+              "uci": "f1c4",
+              "role": "spine:w3-bc4",
+              "cp": -38,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:w3-bc4",
+          "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "g6",
+              "uci": "g7g6",
+              "role": "spine:b3-g6",
+              "cp": 37,
+              "loss": 0
+            },
+            {
+              "san": "Qe7",
+              "uci": "d8e7",
+              "role": "deviation#6:accepted_alternative",
+              "cp": 12,
+              "loss": 25
+            },
+            {
+              "san": "Qf6",
+              "uci": "d8f6",
+              "role": "deviation#7:interesting_deviation",
+              "cp": -21,
+              "loss": 58
+            },
+            {
+              "san": "Nf6",
+              "uci": "g8f6",
+              "role": "deviation#4:tactical_error",
+              "cp": -29999,
+              "loss": 30036
+            },
+            {
+              "san": "d6",
+              "uci": "d7d6",
+              "role": "deviation#5:tactical_error",
+              "cp": -29999,
+              "loss": 30036
+            }
+          ]
+        },
+        {
+          "at": "after:b3-g6",
+          "fen": "r1bqkbnr/pppp1p1p/2n3p1/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 4",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Qf3",
+              "uci": "h5f3",
+              "role": "spine:w4-qf3",
+              "cp": -42,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:w4-qf3",
+          "fen": "r1bqkbnr/pppp1p1p/2n3p1/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 1 4",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Nf6",
+              "uci": "g8f6",
+              "role": "spine:b4-nf6",
+              "cp": 39,
+              "loss": 0
+            },
+            {
+              "san": "Qe7",
+              "uci": "d8e7",
+              "role": "deviation#11:accepted_alternative",
+              "cp": 19,
+              "loss": 20
+            },
+            {
+              "san": "Qf6",
+              "uci": "d8f6",
+              "role": "deviation#10:accepted_alternative",
+              "cp": 14,
+              "loss": 25
+            },
+            {
+              "san": "d5",
+              "uci": "d7d5",
+              "role": "deviation#9:interesting_deviation",
+              "cp": -124,
+              "loss": 163
+            },
+            {
+              "san": "Nd4",
+              "uci": "c6d4",
+              "role": "deviation#8:tactical_error",
+              "cp": -29999,
+              "loss": 30038
+            }
+          ]
+        }
+      ]
+    }
   }
 }

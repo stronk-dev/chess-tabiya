@@ -12,7 +12,16 @@
   },
   "start": {
     "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
-    "movesSan": ["e4", "c5", "Nf3", "d6", "d4", "cxd4", "Nxd4", "Nf6"],
+    "movesSan": [
+      "e4",
+      "c5",
+      "Nf3",
+      "d6",
+      "d4",
+      "cxd4",
+      "Nxd4",
+      "Nf6"
+    ],
     "side": "white"
   },
   "objective": {
@@ -24,19 +33,27 @@
     "opposite-castling-commitment",
     "prophylaxis-before-storm"
   ],
-  "shapes": ["opposite-castling-race"],
+  "shapes": [
+    "opposite-castling-race"
+  ],
   "planClasses": [
     {
       "id": "english-attack-storm",
       "label": "The storm setup (Qd2, O-O-O, g4-h4)",
       "description": "In this pack's tabiya the storm is not yet launched: f3 has secured e4 and g4, and Qd2 plus O-O-O are the committal moves that turn the setup into the race.",
-      "shapePlan": { "shape": "opposite-castling-race", "plan": "white-h-file-storm" }
+      "shapePlan": {
+        "shape": "opposite-castling-race",
+        "plan": "white-h-file-storm"
+      }
     },
     {
       "id": "prophylaxis-first",
       "label": "Prophylaxis before the pawns move (Kb1, a timely h3)",
       "description": "The same setup can spend one tempo on king safety before the pawns run. Here that is Kb1 after castling — the concrete question is always whether Black's ...b5-b4 arrives during the tempo you spent.",
-      "shapePlan": { "shape": "opposite-castling-race", "plan": "white-prophylactic-tempo" }
+      "shapePlan": {
+        "shape": "opposite-castling-race",
+        "plan": "white-prophylactic-tempo"
+      }
     }
   ],
   "spine": [
@@ -191,49 +208,84 @@
     {
       "id": "tabiya-reached",
       "label": "The English Attack tabiya — the race is about to be signed",
-      "trigger": { "atSpineNode": "p15-f3" },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atSpineNode": "p15-f3"
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["english-attack-storm", "prophylaxis-first"]
+        "planClassIds": [
+          "english-attack-storm",
+          "prophylaxis-first"
+        ]
       }
     },
     {
       "id": "committed-to-the-race",
       "label": "Qd2 — castling long is now the only honest plan",
-      "trigger": { "atSpineNode": "qd2-commit" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "qd2-commit"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "clamp-answered",
       "label": "...h5 stopped g4; the setup continues anyway",
-      "trigger": { "atSpineNode": "qd2-vs-clamp" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "qd2-vs-clamp"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "harassment-fork",
       "label": "...Ng4 landed — the cost of the Be3-first order",
-      "trigger": { "atSpineNode": "bg5-sidestep" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "bg5-sidestep"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "one-setup-two-centres",
       "label": "...e6 instead of ...e5 — same White setup",
-      "trigger": { "atSpineNode": "f3-vs-scheveningen" },
+      "trigger": {
+        "atSpineNode": "f3-vs-scheveningen"
+      },
       "actions": []
     },
     {
       "id": "past-the-book",
       "label": "You are past the authored line",
-      "trigger": { "atAuthoredBoundary": "crossed" },
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
       "actions": []
     }
   ],
   "authoredBoundary": {
     "spineNodeIds": [
-      "p9-nc3", "p10-a6", "p11-be3", "p12-e5", "p13-nb3", "p14-be6", "p15-f3",
-      "be7-classical", "qd2-commit", "h5-clamp", "qd2-vs-clamp",
-      "ng4-harass", "bg5-sidestep", "e6-scheveningen", "f3-vs-scheveningen"
+      "p9-nc3",
+      "p10-a6",
+      "p11-be3",
+      "p12-e5",
+      "p13-nb3",
+      "p14-be6",
+      "p15-f3",
+      "be7-classical",
+      "qd2-commit",
+      "h5-clamp",
+      "qd2-vs-clamp",
+      "ng4-harass",
+      "bg5-sidestep",
+      "e6-scheveningen",
+      "f3-vs-scheveningen"
     ],
     "plyHorizon": 9
   },
@@ -246,51 +298,67 @@
   },
   "deviations": [
     {
-      "at": { "spineNodeId": "p10-a6" },
+      "at": {
+        "spineNodeId": "p10-a6"
+      },
       "moveUci": "f1e2",
       "class": "accepted_alternative",
       "note": "6.Be2 is the Opocensky Variation: castle short, keep the pawns at home, and outplay Black in a slower middlegame. A complete and respectable answer to the Najdorf — but a different repertoire, without the race this pack teaches."
     },
     {
-      "at": { "spineNodeId": "p10-a6" },
+      "at": {
+        "spineNodeId": "p10-a6"
+      },
       "moveUci": "c1g5",
       "class": "accepted_alternative",
       "note": "6.Bg5 is the classical main line and the sharpest theory battle in the whole opening. Against a booked-up Najdorf player it tests YOUR memory more than theirs — which is exactly what an anti pack should avoid signing up for."
     },
     {
-      "at": { "spineNodeId": "p10-a6" },
+      "at": {
+        "spineNodeId": "p10-a6"
+      },
       "moveUci": "f2f3",
       "class": "interesting_deviation",
       "note": "6.f3 first reaches the same tabiya while making ...Ng4 impossible one move earlier; the cost is telling Black the plan before Be3 is on the board and allowing ...Qb6 lines where the queen hits b2 with the bishop still on c1. Play both orders and compare — this is the pack's move-order lesson from the other side."
     },
     {
-      "at": { "spineNodeId": "p12-e5" },
+      "at": {
+        "spineNodeId": "p12-e5"
+      },
       "moveUci": "d4f3",
       "class": "interesting_deviation",
       "note": "7.Nf3 keeps the knight active but parks it on the square the f-pawn needs. You can still castle long, but the English Attack's storm no longer works as designed — the retreat choice IS the plan choice."
     },
     {
-      "at": { "spineNodeId": "p12-e5" },
+      "at": {
+        "spineNodeId": "p12-e5"
+      },
       "moveUci": "d4e2",
       "class": "accepted_alternative",
       "note": "7.Nde2 also keeps f3 free for the pawn and reroutes toward g3. Slower than Nb3 and the knight blocks the f1 bishop for a while; a real alternative with the same plan behind it."
     },
     {
-      "at": { "spineNodeId": "p12-e5" },
+      "at": {
+        "spineNodeId": "p12-e5"
+      },
       "moveUci": "d4f5",
       "class": "concept_violation",
       "offObjective": true,
       "note": "7.Nf5 walks into ...Bxf5 followed by ...d5: the bishop that took on f5 was Black's problem piece, and the pawn that recaptures opens your king's file. The knight retreat is not a concession, it is the plan — this jump trades your structure for one tempo of activity."
     },
     {
-      "at": { "spineNodeId": "p14-be6" },
+      "at": {
+        "spineNodeId": "p14-be6"
+      },
       "moveUci": "d1d2",
       "class": "concept_violation",
       "offObjective": true,
-      "note": "8.Qd2 before f3 re-opens the door this move order exists to close: ...Ng4 now hits the e3 bishop with the queen already committed. The setup's moves are cheap; their ORDER is the content. Play it out and watch where the bishop has to go."
+      "note": "8.Qd2 plays the queen before f3 — the order this pack exists to argue against. The 2026-08-15 engine pass does not support the concrete reason previously given here: at depth 22 the reply 8...Ng4 leaves White better (+1.08, up from +0.40 before it), and 8.Qd2 itself is the highest-scoring eighth move evaluated at this position (+0.40), ahead of the spine's 8.f3 (+0.31). The refuted mechanism has been removed. The class stays as authored because it is a claim about this pack's objective — the move order — which no evaluation settles; it is now a claim with an engine number standing against it."
     },
     {
-      "at": { "spineNodeId": "p14-be6" },
+      "at": {
+        "spineNodeId": "p14-be6"
+      },
       "moveUci": "h2h3",
       "class": "accepted_alternative",
       "note": "8.h3 is a real theory move here (it prepares g4 in one go and keeps ...Ng4 controlled by the pawn one square earlier). It commits the h-pawn before the king has decided where to live — a different storm mechanism, drilled in nobody's first repertoire but sound."
@@ -301,17 +369,24 @@
     {
       "id": "faced-not-chosen",
       "text": "After 1.e4 c5 at the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), 2.Nf3 is White's choice in 52.1% of 104,686,766 games — the open Sicilian is the single most common opening surface an e4 player faces without having chosen it.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "order-not-moves",
       "text": "The English Attack setup (Be3, f3, Qd2, O-O-O) is easy to memorize as a list and loses its point when the list is played in the wrong order: f3 before Qd2 is what makes ...Ng4 permanently impossible.",
-      "evidenceTypes": ["author_principle"]
+      "evidenceTypes": [
+        "author_principle"
+      ]
     },
     {
       "id": "one-setup-argument",
       "text": "Against both ...e5 and ...e6 centres the same White setup applies, which is the practical argument for the English Attack as the club answer to the Najdorf: your prep does not fork where Black's does.",
-      "evidenceTypes": ["author_principle", "hypothesis"]
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
     }
   ],
   "provenance": {
@@ -321,15 +396,298 @@
       "B90 Sicilian Defense: Najdorf Variation, English Attack: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/b.tsv) — CC0-1.0, no attribution required. Variation names cited in deviations (Opocensky, and the 6.Bg5/6.f3/8.h3 identities) are from the same CC0 file.",
       "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the B20 row (position after 1.e4 c5) — 104,686,766 games, 2.Nf3 share 52.1%. No deeper-node frequency was retrieved; every other popularity statement in this pack is unquantified prose.",
       "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/b90-sicilian-defense-najdorf-variation-english-attack, learner-side white, split-ply 8, longest matching row 6.Be3 e5 7.Nb3 Be6 8.f3). Hand-added branches (Be7/Qd2, h5/Qd2, Ng4/Bg5, e6/f3) and every deviation were verified legal with chessops this session: start FEN re-derived from the SAN list, full spine walked with SAN/UCI agreement, each deviation checked legal and White-to-move from the position after its anchor.",
-      "UNGROUNDED: every strategic claim — the objective summary, both plan-class descriptions, all spine annotations, all eight deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. 'Original prose' answers copyright, not truth."
+      "UNGROUNDED: every strategic claim — the objective summary, both plan-class descriptions, all spine annotations, all eight deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE. 'Original prose' answers copyright, not truth.",
+      "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 12 decision positions and 26 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). The only two things that clear a blocker are a citable source or mechanical validation that actually bears on the claim.",
-      "The two concept_violation judgments (7.Nf5 and 8.Qd2-before-f3) assert that legal moves are conceptual errors. The 8.Qd2 ...Ng4 claim is concretely checkable with Stockfish at fixed depth on the specific line; it has not been run.",
+      "ENGINE-CHECKED 2026-08-15 and the 8.Qd2 claim is REFUTED. After 8.Qd2 Ng4 White evaluates +1.08 at depth 22, up from +0.40 before it: the claimed open door costs Black, not White. Worse for the pack's central thesis, 8.Qd2 is itself the highest-scoring eighth move measured (+0.40), ahead of the spine's 8.f3 (+0.31). The deviation note's mechanism was deleted and the contrary number recorded in its place; the class was left as authored because it is a claim about this pack's objective (the move order), which no evaluation settles. The other judgment survives its check: 7.Nf5 evaluates -0.69 against +0.42 for the spine's 7.Nb3, a cost of 1.11.",
       "The claim that ...Ng4 is 'Black's standing resource' against a bishop on e3 without f3, and the entire move-order thesis, is standard theory rendered from model knowledge with no named source. A citable book/course reference (any Najdorf or English Attack monograph) would clear it; none is cited.",
-      "No engine validation pass has been run on any position in this pack.",
+      "ENGINE PASS RUN 2026-08-15 — this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 26 candidate moves across 12 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative — rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist.",
       "Popularity claims below the 1.e4 c5 root (which 6th moves club players actually face) are asserted only implicitly; the explorer API could quantify them and has not been queried below the family root."
-    ]
+    ],
+    "engineValidation": {
+      "ranAt": "2026-08-15",
+      "engine": "Stockfish 18",
+      "enginePath": "apps/server EngineSupervisor + StockfishEvidenceExecutor, sourcing AUTHORING_PROFILE (the same engine path make candidate-emit --engine-eval uses)",
+      "profile": {
+        "depth": 22,
+        "threads": 1,
+        "hashMb": 16,
+        "multiPv": 1
+      },
+      "scope": "every authored spine node's resulting position, every authored deviation's resulting position, and the engine's own best move at each decision position",
+      "unit": "centipawns from the side to move at the decision position; loss = the best evaluated candidate at that position minus this move. Candidate-relative and therefore a lower bound on the true loss: only authored moves plus the engine's depth-22 first move were evaluated, not all legal moves.",
+      "cannotGround": "deviation class, plan-class prose, annotations and feedbackClaims. Per rfc/archive/content-sourcing-foundation.md:772 the deviation classes are relative to this pack's objective and no evaluation separates concept_violation from interesting_deviation. Numbers below are recorded beside the authored classes, never substituted for them.",
+      "decisions": [
+        {
+          "at": "root",
+          "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nc3",
+              "uci": "b1c3",
+              "role": "spine:p9-nc3",
+              "cp": 42,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p9-nc3",
+          "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "a6",
+              "uci": "a7a6",
+              "role": "spine:p10-a6",
+              "cp": -40,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p10-a6",
+          "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Be3",
+              "uci": "c1e3",
+              "role": "spine:p11-be3",
+              "cp": 45,
+              "loss": 0
+            },
+            {
+              "san": "f3",
+              "uci": "f2f3",
+              "role": "deviation#2:interesting_deviation",
+              "cp": 36,
+              "loss": 9
+            },
+            {
+              "san": "Be2",
+              "uci": "f1e2",
+              "role": "deviation#0:accepted_alternative",
+              "cp": 31,
+              "loss": 14
+            },
+            {
+              "san": "Bg5",
+              "uci": "c1g5",
+              "role": "deviation#1:accepted_alternative",
+              "cp": 17,
+              "loss": 28
+            }
+          ]
+        },
+        {
+          "at": "after:p11-be3",
+          "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 6",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Ng4",
+              "uci": "f6g4",
+              "role": "spine:ng4-harass",
+              "cp": -34,
+              "loss": 0
+            },
+            {
+              "san": "e5",
+              "uci": "e7e5",
+              "role": "spine:p12-e5",
+              "cp": -37,
+              "loss": 3
+            },
+            {
+              "san": "e6",
+              "uci": "e7e6",
+              "role": "spine:e6-scheveningen",
+              "cp": -51,
+              "loss": 17
+            }
+          ]
+        },
+        {
+          "at": "after:p12-e5",
+          "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 0 7",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nb3",
+              "uci": "d4b3",
+              "role": "spine:p13-nb3",
+              "cp": 42,
+              "loss": 0
+            },
+            {
+              "san": "Nf3",
+              "uci": "d4f3",
+              "role": "deviation#3:interesting_deviation",
+              "cp": 28,
+              "loss": 14
+            },
+            {
+              "san": "Nde2",
+              "uci": "d4e2",
+              "role": "deviation#4:accepted_alternative",
+              "cp": 0,
+              "loss": 42
+            },
+            {
+              "san": "Nf5",
+              "uci": "d4f5",
+              "role": "deviation#5:concept_violation (offObjective)",
+              "cp": -69,
+              "loss": 111
+            }
+          ]
+        },
+        {
+          "at": "after:p13-nb3",
+          "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN1B3/PPP2PPP/R2QKB1R b KQkq - 1 7",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Be6",
+              "uci": "c8e6",
+              "role": "spine:p14-be6",
+              "cp": -40,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p14-be6",
+          "fen": "rn1qkb1r/1p3ppp/p2pbn2/4p3/4P3/1NN1B3/PPP2PPP/R2QKB1R w KQkq - 2 8",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Qd2",
+              "uci": "d1d2",
+              "role": "deviation#6:concept_violation (offObjective)",
+              "cp": 40,
+              "loss": 0
+            },
+            {
+              "san": "h3",
+              "uci": "h2h3",
+              "role": "deviation#7:accepted_alternative",
+              "cp": 37,
+              "loss": 3
+            },
+            {
+              "san": "f3",
+              "uci": "f2f3",
+              "role": "spine:p15-f3",
+              "cp": 31,
+              "loss": 9
+            }
+          ]
+        },
+        {
+          "at": "after:p15-f3",
+          "fen": "rn1qkb1r/1p3ppp/p2pbn2/4p3/4P3/1NN1BP2/PPP3PP/R2QKB1R b KQkq - 0 8",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "h5",
+              "uci": "h7h5",
+              "role": "spine:h5-clamp",
+              "cp": -39,
+              "loss": 0
+            },
+            {
+              "san": "Be7",
+              "uci": "f8e7",
+              "role": "spine:be7-classical",
+              "cp": -51,
+              "loss": 12
+            }
+          ]
+        },
+        {
+          "at": "after:be7-classical",
+          "fen": "rn1qk2r/1p2bppp/p2pbn2/4p3/4P3/1NN1BP2/PPP3PP/R2QKB1R w KQkq - 1 9",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Qd2",
+              "uci": "d1d2",
+              "role": "spine:qd2-commit",
+              "cp": 44,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:h5-clamp",
+          "fen": "rn1qkb1r/1p3pp1/p2pbn2/4p2p/4P3/1NN1BP2/PPP3PP/R2QKB1R w KQkq - 0 9",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nd5",
+              "uci": "c3d5",
+              "role": "engine_best",
+              "cp": 46,
+              "loss": 0
+            },
+            {
+              "san": "Qd2",
+              "uci": "d1d2",
+              "role": "spine:qd2-vs-clamp",
+              "cp": 32,
+              "loss": 14
+            }
+          ]
+        },
+        {
+          "at": "after:ng4-harass",
+          "fen": "rnbqkb1r/1p2pppp/p2p4/8/3NP1n1/2N1B3/PPP2PPP/R2QKB1R w KQkq - 2 7",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Bg5",
+              "uci": "e3g5",
+              "role": "spine:bg5-sidestep",
+              "cp": 34,
+              "loss": 0
+            },
+            {
+              "san": "Bc1",
+              "uci": "e3c1",
+              "role": "engine_best",
+              "cp": 33,
+              "loss": 1
+            }
+          ]
+        },
+        {
+          "at": "after:e6-scheveningen",
+          "fen": "rnbqkb1r/1p3ppp/p2ppn2/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 0 7",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Be2",
+              "uci": "f1e2",
+              "role": "engine_best",
+              "cp": 42,
+              "loss": 0
+            },
+            {
+              "san": "f3",
+              "uci": "f2f3",
+              "role": "spine:f3-vs-scheveningen",
+              "cp": 41,
+              "loss": 1
+            }
+          ]
+        }
+      ]
+    }
   }
 }

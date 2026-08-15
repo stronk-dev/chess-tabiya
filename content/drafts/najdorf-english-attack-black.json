@@ -12,7 +12,17 @@
   },
   "start": {
     "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
-    "movesSan": ["e4", "c5", "Nf3", "d6", "d4", "cxd4", "Nxd4", "Nf6", "Nc3"],
+    "movesSan": [
+      "e4",
+      "c5",
+      "Nf3",
+      "d6",
+      "d4",
+      "cxd4",
+      "Nxd4",
+      "Nf6",
+      "Nc3"
+    ],
     "side": "black"
   },
   "objective": {
@@ -24,19 +34,27 @@
     "break-timing",
     "counterplay-before-safety"
   ],
-  "shapes": ["opposite-castling-race"],
+  "shapes": [
+    "opposite-castling-race"
+  ],
   "planClasses": [
     {
       "id": "queenside-storm",
       "label": "Race on the queenside (...b5-b4, files at the white king)",
       "description": "In this tabiya the b-pawn is still at home and White has not yet castled long: the storm is a plan you are preparing, not one you can launch. Its concrete trigger is White's O-O-O.",
-      "shapePlan": { "shape": "opposite-castling-race", "plan": "black-queenside-file-storm" }
+      "shapePlan": {
+        "shape": "opposite-castling-race",
+        "plan": "black-queenside-file-storm"
+      }
     },
     {
       "id": "central-brake",
       "label": "Brake with ...d5 at the right moment",
       "description": "The Najdorf's freeing break. Here it is a threat to hold in reserve: played too early it trades queens into a structure you did not choose, played at the right moment it defuses the storm entirely.",
-      "shapePlan": { "shape": "opposite-castling-race", "plan": "black-central-brake" }
+      "shapePlan": {
+        "shape": "opposite-castling-race",
+        "plan": "black-central-brake"
+      }
     },
     {
       "id": "h5-clamp",
@@ -128,36 +146,60 @@
     {
       "id": "your-tabiya",
       "label": "8.f3 — choose your handling before the race is signed",
-      "trigger": { "atSpineNode": "p15-f3" },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atSpineNode": "p15-f3"
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["queenside-storm", "central-brake", "h5-clamp"]
+        "planClassIds": [
+          "queenside-storm",
+          "central-brake",
+          "h5-clamp"
+        ]
       }
     },
     {
       "id": "race-accepted",
       "label": "...Be7 — you will castle into the storm on purpose",
-      "trigger": { "atSpineNode": "be7-race" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "be7-race"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "clamp-chosen",
       "label": "...h5 — the storm is blunted, the hook is permanent",
-      "trigger": { "atSpineNode": "h5-stop" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "h5-stop"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "past-the-book",
       "label": "You are past the authored line",
-      "trigger": { "atAuthoredBoundary": "crossed" },
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
       "actions": []
     }
   ],
   "authoredBoundary": {
     "spineNodeIds": [
-      "p10-a6", "p11-be3", "p12-e5", "p13-nb3", "p14-be6", "p15-f3",
-      "be7-race", "h5-stop"
+      "p10-a6",
+      "p11-be3",
+      "p12-e5",
+      "p13-nb3",
+      "p14-be6",
+      "p15-f3",
+      "be7-race",
+      "h5-stop"
     ],
     "plyHorizon": 7
   },
@@ -170,37 +212,49 @@
   },
   "deviations": [
     {
-      "at": { "spineNodeId": "p11-be3" },
+      "at": {
+        "spineNodeId": "p11-be3"
+      },
       "moveUci": "e7e6",
       "class": "accepted_alternative",
       "note": "6...e6 keeps the small centre — a Scheveningen structure by a Najdorf move order. Fully sound; it trades the d5 concession for a passive-but-solid centre, and against the same White setup it leads to the Keres-flavoured g4 fights instead. A different repertoire choice, not an error."
     },
     {
-      "at": { "spineNodeId": "p11-be3" },
+      "at": {
+        "spineNodeId": "p11-be3"
+      },
       "moveUci": "f6g4",
       "class": "interesting_deviation",
       "note": "6...Ng4 — the Anti-English — punishes White for playing Be3 before f3 by hitting the bishop at once. It is theory's critical test and a memory battle: the resulting ...h6/...g5 lines are sharp enough that playing them unbooked is worse than not playing them. Know it exists; play it here and see why."
     },
     {
-      "at": { "spineNodeId": "p13-nb3" },
+      "at": {
+        "spineNodeId": "p13-nb3"
+      },
       "moveUci": "f8e7",
       "class": "accepted_alternative",
       "note": "7...Be7 first is a real theory order (the same tabiya usually appears after 8.f3 Be6). The difference is move-order nuance: with ...Be6 delayed, White gets extra options with g4 played one beat sooner in some lines. Same family, slightly different door."
     },
     {
-      "at": { "spineNodeId": "p13-nb3" },
+      "at": {
+        "spineNodeId": "p13-nb3"
+      },
       "moveUci": "d6d5",
       "class": "interesting_deviation",
       "note": "7...d5 plays the freeing break a move before ...Be6 supports it: after exd5 Nxd5 Nxd5 Qxd5 the queens come off into an ending where White's structure claims are exactly the kind of thing this repo cannot yet verify. The teaching point is that ...d5 is a TIMED resource, and this is the earliest — probably premature — timing. Play it out and compare against the reserve plan."
     },
     {
-      "at": { "spineNodeId": "p15-f3" },
+      "at": {
+        "spineNodeId": "p15-f3"
+      },
       "moveUci": "b7b5",
       "class": "accepted_alternative",
       "note": "8...b5 starts the race before finishing development — standard and sharp: the storm gains a beat, the king loses one. Choosing it honestly means accepting that White's g4-g5 will also arrive a beat sooner against your uncastled king."
     },
     {
-      "at": { "spineNodeId": "p15-f3" },
+      "at": {
+        "spineNodeId": "p15-f3"
+      },
       "moveUci": "b8d7",
       "class": "accepted_alternative",
       "note": "8...Nbd7 is flexible development that keeps ...b5, ...Be7 and ...d5 all available; its only cost is postponing every commitment, which against a fast storm can itself become the commitment."
@@ -211,17 +265,24 @@
     {
       "id": "chosen-and-even",
       "text": "At the 1400/1600/1800 rating bands (Lichess blitz+rapid, 2024-01 through 2026-07), the position after 1.e4 c5 scores 47.9% for Black against 47.9% for White across 104,686,766 games — the opening you chose is, by results at your level, a genuinely equal fight.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "order-on-your-side",
       "text": "Black's tabiya order is ...a6, ...e5, ...Be6, and only then the wing decisions: each earlier move is the prerequisite of the next, while ...h5, ...b5 and ...Be7 are choices that can wait one move without being lost.",
-      "evidenceTypes": ["author_principle"]
+      "evidenceTypes": [
+        "author_principle"
+      ]
     },
     {
       "id": "brake-is-a-threat",
       "text": "The ...d5 break does most of its work as a threat: as long as it hangs over the position, White's storm moves must each be checked against it, which is a tempo tax on the attack.",
-      "evidenceTypes": ["author_principle", "hypothesis"]
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ]
     }
   ],
   "provenance": {
@@ -231,15 +292,186 @@
       "B90 Sicilian Defense: Najdorf Variation, English Attack: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/b.tsv) — CC0-1.0, no attribution required. The Anti-English (6...Ng4), the Scheveningen ...e6 rows and the 7.Nb3 Be7 8.f3 sibling row cited in deviations are from the same CC0 file.",
       "RATING-BAND FREQUENCY (mechanical): content/candidates/priority/priority.json, Lichess explorer at ratings 1400/1600/1800, blitz+rapid, 2024-01 through 2026-07. Used here: the B20 row — 104,686,766 games, whitePct 47.9 / drawPct 4.2 / blackPct 47.9. No deeper-node frequency was retrieved.",
       "SPINE TRUNK: emitted by the openings sourcing pipeline (content/candidates/b90-sicilian-defense-najdorf-variation-english-attack, learner-side black, split-ply 9, longest matching row 6.Be3 e5 7.Nb3 Be6 8.f3; note the candidate directory is shared with the mirrored White pack and records the most recent emit's job arguments). Hand-added tips (...Be7, ...h5) and every deviation were verified legal with chessops this session, including that each deviation is a Black move from the position after its anchor.",
-      "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all six deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation and NO human review. 'Original prose' answers copyright, not truth."
+      "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all six deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE. 'Original prose' answers copyright, not truth.",
+      "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 7 decision positions and 15 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "No deviation here is graded stronger than interesting/accepted, deliberately: the sharpest candidate judgment (that 7...d5 is premature) is stated as a timing question rather than an error because nothing in this repo has checked it. If an engine pass later shows it loses concretely, the class should harden and cite that run.",
+      "ENGINE-CHECKED 2026-08-15: 7...d5 evaluates -1.82 against -0.40 for the spine's 7...Be6, a cost of 1.42 at depth 22 — the timing question now has a number against it. The class was NOT hardened despite this blocker's own instruction to harden it, because rfc/archive/content-sourcing-foundation.md:772 rules that a deviation class is relative to the pack's objective and no evaluation produces one. The run is cited instead, in provenance.engineValidation. This is a live disagreement between the pack's authored plan and the repo's grounding rule, and it is left visible rather than resolved.",
       "The claim that ...Be6-before-...Be7 is the canonical order, and the whole 'prerequisite order' feedbackClaim, are standard theory rendered from model knowledge with no named source.",
-      "No engine validation pass has been run on any position in this pack.",
+      "ENGINE PASS RUN 2026-08-15 — this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 15 candidate moves across 7 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative — rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist.",
       "Which of ...h5 / ...Be7 / ...b5 is actually most common at these bands is unquantified; the explorer API could settle it below the family root and has not been queried."
-    ]
+    ],
+    "engineValidation": {
+      "ranAt": "2026-08-15",
+      "engine": "Stockfish 18",
+      "enginePath": "apps/server EngineSupervisor + StockfishEvidenceExecutor, sourcing AUTHORING_PROFILE (the same engine path make candidate-emit --engine-eval uses)",
+      "profile": {
+        "depth": 22,
+        "threads": 1,
+        "hashMb": 16,
+        "multiPv": 1
+      },
+      "scope": "every authored spine node's resulting position, every authored deviation's resulting position, and the engine's own best move at each decision position",
+      "unit": "centipawns from the side to move at the decision position; loss = the best evaluated candidate at that position minus this move. Candidate-relative and therefore a lower bound on the true loss: only authored moves plus the engine's depth-22 first move were evaluated, not all legal moves.",
+      "cannotGround": "deviation class, plan-class prose, annotations and feedbackClaims. Per rfc/archive/content-sourcing-foundation.md:772 the deviation classes are relative to this pack's objective and no evaluation separates concept_violation from interesting_deviation. Numbers below are recorded beside the authored classes, never substituted for them.",
+      "decisions": [
+        {
+          "at": "root",
+          "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "a6",
+              "uci": "a7a6",
+              "role": "spine:p10-a6",
+              "cp": -40,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p10-a6",
+          "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Be3",
+              "uci": "c1e3",
+              "role": "spine:p11-be3",
+              "cp": 45,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p11-be3",
+          "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 6",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Ng4",
+              "uci": "f6g4",
+              "role": "deviation#1:interesting_deviation",
+              "cp": -34,
+              "loss": 0
+            },
+            {
+              "san": "e5",
+              "uci": "e7e5",
+              "role": "spine:p12-e5",
+              "cp": -37,
+              "loss": 3
+            },
+            {
+              "san": "e6",
+              "uci": "e7e6",
+              "role": "deviation#0:accepted_alternative",
+              "cp": -51,
+              "loss": 17
+            }
+          ]
+        },
+        {
+          "at": "after:p12-e5",
+          "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 0 7",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "Nb3",
+              "uci": "d4b3",
+              "role": "spine:p13-nb3",
+              "cp": 42,
+              "loss": 0
+            }
+          ]
+        },
+        {
+          "at": "after:p13-nb3",
+          "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN1B3/PPP2PPP/R2QKB1R b KQkq - 1 7",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "Be6",
+              "uci": "c8e6",
+              "role": "spine:p14-be6",
+              "cp": -40,
+              "loss": 0
+            },
+            {
+              "san": "Be7",
+              "uci": "f8e7",
+              "role": "deviation#2:accepted_alternative",
+              "cp": -45,
+              "loss": 5
+            },
+            {
+              "san": "d5",
+              "uci": "d6d5",
+              "role": "deviation#3:interesting_deviation",
+              "cp": -182,
+              "loss": 142
+            }
+          ]
+        },
+        {
+          "at": "after:p14-be6",
+          "fen": "rn1qkb1r/1p3ppp/p2pbn2/4p3/4P3/1NN1B3/PPP2PPP/R2QKB1R w KQkq - 2 8",
+          "sideToMove": "white",
+          "candidates": [
+            {
+              "san": "h3",
+              "uci": "h2h3",
+              "role": "engine_best",
+              "cp": 37,
+              "loss": 0
+            },
+            {
+              "san": "f3",
+              "uci": "f2f3",
+              "role": "spine:p15-f3",
+              "cp": 31,
+              "loss": 6
+            }
+          ]
+        },
+        {
+          "at": "after:p15-f3",
+          "fen": "rn1qkb1r/1p3ppp/p2pbn2/4p3/4P3/1NN1BP2/PPP3PP/R2QKB1R b KQkq - 0 8",
+          "sideToMove": "black",
+          "candidates": [
+            {
+              "san": "h5",
+              "uci": "h7h5",
+              "role": "spine:h5-stop",
+              "cp": -39,
+              "loss": 0
+            },
+            {
+              "san": "Nbd7",
+              "uci": "b8d7",
+              "role": "deviation#5:accepted_alternative",
+              "cp": -43,
+              "loss": 4
+            },
+            {
+              "san": "Be7",
+              "uci": "f8e7",
+              "role": "spine:be7-race",
+              "cp": -51,
+              "loss": 12
+            },
+            {
+              "san": "b5",
+              "uci": "b7b5",
+              "role": "deviation#4:accepted_alternative",
+              "cp": -97,
+              "loss": 58
+            }
+          ]
+        }
+      ]
+    }
   }
 }

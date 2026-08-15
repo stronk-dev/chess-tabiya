@@ -1471,3 +1471,221 @@ Not done, deliberately: no touch of `rfc/`, `design/`, `docs/`, `archive/`,
 `mate-two-bishops.json`, whose dead success condition is reported above rather
 than fixed); no shape-library entry for theoretical mates (still none exists);
 no Stockfish pass (everything is inside Syzygy range); no commits.
+
+## 2026-08-15 — Grounding wave G1: the first engine pass over the ungrounded opening packs (claude)
+
+The unpaid bill named in `design/research/pack-authoring-cost.md` §7 ("the
+28.8-minute opening pack has an unpaid bill of unknown size") and §8 (a grounding
+pass costing more than ~30 min/pack moves K10 back toward firing). It is now
+paid and measured.
+
+agent-research 55 · agent-encoding 50 · agent-engine-validation 85 · review 0 ·
+agent-revision 15 · agent-tooling-friction 35 · **total 185 for 18 packs = 10.3
+min/pack, friction 18.9%**
+
+Machine time outside the clocks, per the convention wave 5a set: 214 s for the
+main pass (5 parallel Stockfish processes) plus ~70 s for the targeted line
+checks. 387 engine jobs at depth 22 in total.
+
+### The list, derived rather than trusted
+
+The dossier says "fifteen opening packs". Derived from the files: **18** packs
+carry `phase: "opening"`, no `objective.grading` at all, no `*.evidence.json`
+sidecar, and the blocker "No engine validation pass has been run on any position
+in this pack" — `anti-caro-advance` (pack A), the six wave-2 packs
+(`caro-kann-advance-black`, `french-advance-black`, `anti-french-advance-white`,
+`london-system-white`, `anti-london-black`, `anti-caro-advance-early-c5`), the
+eight wave-4a packs (`italian-center-attack-white`,
+`anti-italian-center-attack-black`, `anti-sicilian-najdorf-english-attack`,
+`najdorf-english-attack-black`, `anti-kid-classical-white`,
+`kid-classical-black`, `anti-dutch-leningrad-white`, `leningrad-dutch-black`),
+and the three wave-5a on-ramp packs (`opening-principles-white`,
+`opening-principles-black`, `opponent-intent-early-queen`). The dossier's §4
+table counts 14 (waves 2 + 4a only); §7's "fifteen" appears to add pack A and
+drop the on-ramp three. Two more packs carry the same blocker but are not
+opening-phase and were **not** touched: `carlsbad-minority-attack` (middlegame)
+and the two cross-phase trajectories.
+
+### Instrument
+
+Stockfish 18 at the repo's own `AUTHORING_PROFILE` — depth 22, Threads 1, Hash
+16MB, MultiPV 1 — driven through `apps/server`'s `EngineSupervisor` and
+`StockfishEvidenceExecutor`, the same engine path `make candidate-emit
+--engine-eval` uses. No second UCI integration was written; a scratch entry file
+re-exported the repo's classes and was bundled with the repo's own esbuild.
+Every spine node's resulting position, every authored deviation's resulting
+position, and the engine's depth-22 first choice at each decision position:
+180 decision positions (103 unique FENs, siblings share lines), 358 candidate
+moves. Loss is reported **candidate-relative** — best evaluated candidate at a
+position minus this move — so it is a lower bound; all legal moves were not
+enumerated. Corpus claims were separately checked against
+`content/candidates/priority/priority.json` and `priority-wave4a/priority.json`.
+
+### What the engine refuted
+
+1. **`anti-caro-advance-early-c5` authored a piece blunder into a spine
+   mainline, and annotated it as an even trade.** The line 5.Be3 Bxc5 6.Bxc5
+   was captioned "Material is level again and the position is the receipt". It
+   is not: after 6.Bxc5 Black has **no legal recapture on c5**, material is
+   38-35 and the position evaluates **+4.54** for White. It joins the seven
+   authored chess errors machine validation caught in waves 5b and 5c
+   (`log.md:1050`, `:1269`) as the first one caught in an opening pack, and the
+   worst by magnitude. Spine nodes `bxc5-recoup` and `bxc5-trade`,
+   checkpoint `price-collected` and the two `authoredBoundary` entries were
+   **deleted**. No replacement line was authored — the `return-for-development`
+   plan class now names a plan with no line under it, which is the honest state.
+2. **`italian-center-attack-white` asserted a false legality fact.** The
+   `p11-cxd4` annotation said "the wrong recapture question does not exist here
+   — only the c-pawn can take". Qxd4, cxd4 and Nxd4 are all legal. Clause
+   deleted.
+3. **`italian-center-attack-white`'s central feedbackClaim is refuted at three
+   points, against a blocker whose own bar was one.** `forcing-literacy` claimed
+   "from 5.d4 to 9...Nxd5 nearly every move is the position's only good answer".
+   5.d4 is 0.14 below 5.d3; 6.cxd4 is 0.28 below 6.e5; 7...Bxd2+ is 0.13 below
+   7...Nxe4. The claim was **deleted**, not rewritten: a replacement would be a
+   new authored judgment this pass cannot ground.
+4. **`anti-dutch-leningrad-white` deviation #2's authored walked line drops a
+   piece.** "8.e4 fxe4 9.Nxe4" — after 9...Nxe4 the knight is defended by
+   nothing (the g2 bishop's diagonal is blocked by White's own knight on f3):
+   **-3.11**. 8.e4 itself is 1.65 below 8.Qb3. The walked line was removed and
+   no replacement ninth move authored.
+5. **`anti-sicilian-najdorf-english-attack`'s move-order thesis has the engine
+   against it.** Deviation #6 claimed 8.Qd2-before-f3 "re-opens the door:
+   ...Ng4 now hits the e3 bishop". At depth 22, 8.Qd2 Ng4 leaves White **+1.08**
+   (up from +0.40) — the door costs Black — and 8.Qd2 (+0.40) is the
+   highest-scoring eighth move measured, **ahead of the spine's 8.f3 (+0.31)**.
+   Mechanism deleted; class kept (see §"what the pass may not do"); the contrary
+   number recorded in its place.
+6. **`anti-caro-advance`'s model answer is the third-best of its own four
+   candidates.** 6.O-O — classed `concept_violation`, `offObjective` — is the
+   **top** candidate at +0.32; 6.c3 is +0.27; the spine's model answer 6.Be3 is
+   +0.09. The deviation note's own words ("not a blunder") are confirmed. The
+   pack's blocker asked exactly this question and got an answer it will not
+   enjoy.
+7. **`opponent-intent-early-queen` deviation #1 is classed `tactical_error` at a
+   measured cost of 0.20** — below the pack's own declared 150-centipawn guard,
+   which therefore can never fire on it. The note's *material* claim (3.Qxe5+
+   wins a pawn with check) is confirmed; the *grading* is not.
+8. **`anti-london-black`'s ...Bxg3 timing doctrine is unresolvable, not wrong.**
+   ...Bxg3 -0.33 against ...O-O -0.28: 0.05, inside noise. The blocker asked it
+   to "harden or fall on evidence"; the evidence does neither, which is the
+   answer.
+
+### What the engine confirmed
+
+- **`anti-french-advance-white`'s Be2 trap wins**, as the blocker said only
+  material arithmetic supported: 6.Be2 cxd4 7.cxd4 Nxd4 8.Nxd4 Qxd4 9.Bb5+ Bd7
+  10.Bxd7+ Kxd7 11.Qxd4 = **+6.70**, material 31-23; the 9...Ke7 decline
+  = +7.11. Blocker cleared.
+- **`anti-kid-classical-white`'s "7.dxe5 resolves level" is literally true** —
+  0.00 at depth 22 — and it costs White the whole 0.65 edge.
+- **`anti-italian-center-attack-black`'s 6...Nxe4 does not equalize**, which was
+  the stated condition for demoting the spine: -3.89, and -1.83 after the
+  authored 7.d5. The sibling 6...Bb6 costs 1.86; 7.d5 Ne7 = +1.81 for White.
+- **`opponent-intent-early-queen`'s three model-answer rankings reproduce
+  exactly**: ...Nc6 +0.42 > ...d6 +0.37 > ...Qe7 +0.08; ...g6 +0.37 > ...Qe7
+  +0.12 > ...Qf6 -0.21; ...Nf6 +0.39 > ...Qe7 +0.19 > ...Qf6 +0.14. Its
+  punishments too: 2...g6 -4.60, and 3...Nf6, 3...d6, 4...Nd4 all forced mate.
+  The strongest confirmation in the corpus.
+- **Every `corpus_observed` claim in all 18 packs checks out** against the two
+  shipped explorer artifacts — totals, share percentages and score percentages,
+  exactly. Zero corpus refutations.
+- **Zero structural problems.** All 200 spine moves legal with SAN/UCI
+  agreement, all 115 authored deviations legal at their anchors, on the first
+  walk. `pack-check` green on all 35 pack files after every edit.
+
+### The finding that matters most: there is no grounding path for an opening claim
+
+`make verify-draft FILE=content/drafts/anti-caro-advance.json` →
+`ERROR [VERIFY_ASSESSMENT_NOT_SYZYGY] objective.grading.assessedBy.kind must be
+syzygy`. That is not a tablebase-range accident that a Stockfish branch could
+fix later, because the slot itself does not exist: all 18 packs are
+`follow_theory` or `play_until_checkpoint`, and `pack-validation.ts:448` rejects
+`objective.grading` on any non-outcome objective with
+`OBJECTIVE_GRADING_UNSUPPORTED` (verified on a scratch copy). So an opening pack
+**cannot declare an assessment, cannot be `ledger_verified`, and cannot emit an
+`*.evidence.json` / `*.sources.json` / `*.job.json` sidecar** — the entire
+authoring-evidence machine is reachable only by outcome packs inside seven
+pieces. This is the same structural hole wave B+N hit from the trajectory side
+(`log.md:1417-1430`), now attested from the opening side: **two of the three
+phases in the product have no evidence-attachment path at all.**
+
+Consequence for this wave: the evidence was written into
+`provenance.engineValidation` (per-move FEN, SAN, UCI, role, centipawns, loss)
+plus a prose `sources` entry per pack. `provenance` is `additionalProperties:
+true`, so this validates — but it is a convention this wave invented, nothing
+validates its shape, no registry reads it, and `sourcing-check` does not know it
+exists. It is honest storage, not grounding.
+
+### What the pass may not do, and did not
+
+`rfc/archive/content-sourcing-foundation.md:772` rules that deviation classes are
+relative to the pack's objective and that **no evaluation separates
+`concept_violation` from `interesting_deviation`**. So no class was reclassified
+on a centipawn number anywhere in this wave, including the four places where the
+number plainly disagrees with the class (items 5, 6, 7 above and
+`najdorf-english-attack-black`'s 7...d5 at -1.42, whose own blocker instructed a
+future pass to harden the class). That instruction was **not** followed and the
+disagreement is left visible in the file. Law 8 cuts both ways: the engine may
+not manufacture the class any more than the LLM may.
+
+What was changed is only: false factual statements (legality, material,
+"nothing has evaluated this"), a spine line that hangs a piece, and one
+feedbackClaim the evidence refutes. Three deletions, four note rewrites, one
+plan-class description rewrite. Nothing was invented to replace what was
+removed.
+
+### Cost verdict — K10
+
+`design/research/pack-authoring-cost.md` §8 names the trigger: *"A grounding pass
+over the 15 opening packs costs more than ~30 min/pack"* would move K10 back
+toward firing. Measured: **10.3 min/pack**, friction 18.9%. The trigger does not
+fire. Fully-loaded opening pack = 28.8 (drafting) + 10.3 (grounding) ≈ **39.1
+min/pack**, at or just under the Syzygy-grounded endgame rate of 40.6 — which is
+§8's stated condition for closing K10 as settled-no on this half. The dossier's
+diagnosis was right (cost tracks the grounding bar, not the format) and its
+worry about the size of the bill was not: grounding 18 opening packs cost less
+per pack than authoring one did, because the engine pass is batched machine work
+and the expensive part — deciding what the numbers are allowed to change — is
+per-wave, not per-pack.
+
+The dossier's §4 "the 28.8-minute opening pack is a draft, not a publishable
+one" still stands, for a reason the cost table cannot show: the pass grounded
+**moves**, and every pack's prose, plan classes and deviation classes remain
+exactly as ungrounded as before.
+
+contract-gaps and frictions, sharpest first:
+1. **No evidence slot for a non-outcome pack.** Above. Second independent
+   attestation of the same hole after B+N. The `assessedBy` union would need an
+   `engine` member and `pack-validation` would need to allow grading on
+   `follow_theory` / `play_until_checkpoint` before an opening pack can carry
+   evidence at all.
+2. **No repo command evaluates a draft pack.** `make verify-draft` is
+   tablebase-only; `make candidate-emit --engine-eval` evaluates *candidate
+   seeds*, not an authored pack's spine and deviations. Every wave that wants
+   engine numbers must bundle the repo's engine classes into a scratch harness
+   itself — this wave did, with an esbuild `NODE_PATH` workaround because the
+   scratch entry lives outside the workspace. This is the same "throwaway
+   chess-verification harness" item `rfc/authoring-frictions.md` ranks first,
+   now at a **fifth** attestation and for the first time on the *engine* rather
+   than the tablebase side.
+3. **The deviation class carries two incompatible jobs and the pass made it
+   visible in four files.** A class that is objective-relative by rule cannot be
+   checked, hardened or softened by the only mechanical instrument the phase
+   has. Either the class needs an evaluation-bearing sibling field (an authored
+   claim plus a measured cost, separately), or packs must stop writing blockers
+   that promise a future engine pass will settle it — three packs currently do.
+4. **`guard.evalSwingCp` and `deviations[].class` are unrelated in the schema
+   and inconsistent in practice.** `opponent-intent-early-queen` declares a
+   150cp guard and classes a 20cp move `tactical_error`. Nothing validates the
+   pair.
+5. **The corpus artifacts cover 1400/1600/1800 only.** All three on-ramp packs
+   target 1000-1400, so every "what players at your level actually play" claim
+   in them is unanswerable from repo data without a new explorer pull. Recorded
+   as a blocker in each.
+
+Not done, deliberately: no touch of `rfc/`, `design/`, `docs/`, `archive/`,
+`apps/`, `packages/`, `schemas/`, `content/shapes/`, or any non-opening pack
+(including `carlsbad-minority-attack` and the two cross-phase trajectories,
+which carry the same blocker); no class reclassifications; no replacement lines
+for anything deleted; no commits.
