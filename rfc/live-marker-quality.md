@@ -1,6 +1,6 @@
 # RFC: Live marker quality — the admission rule for anything that speaks unasked
 
-- **Status:** draft
+- **Status:** draft — **cross-reviewed 2026-08-15; owner rulings applied; ready for codex once D68 is fixed or explicitly deferred**
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder and its 2026-08-14
@@ -980,7 +980,7 @@ owner's ruling and this RFC's §3 becomes its mirror.
    cheap to reverse and worth revisiting **after** the surface is used, not pre-emptively. §6.2 is
    the specification of this ruling; nothing in this RFC hedges toward the third-value option.
    *No action for the implementer beyond §6.2 and criterion 6.*
-3. **Should the `last_of_role` sentence render `queensOff`?** The field is set
+3. ~~**Should the `last_of_role` sentence render `queensOff`?**~~ **RESOLVED by owner ruling 2026-08-15: YES, render it.** Criterion 5 pins **seven** outputs with the new sentence written out; the six are not frozen. Rationale: the archived judgement calling the queens-off form *"the version of this fact players actually track"* was made when this was one sentence among many, and it is now the **only** sentence on the unasked surface — which raises the value of getting it right. *Superseded question:* The field is set
    (`transition.ts:255`) and never read (`renderPivotalMarker`, `pivotal.ts:74`), and
    `rfc/archive/adaptive-guidance.md` §4b calls the queens-off form
    *"the version of this fact players actually track"*. It is now the **only** sentence on the
