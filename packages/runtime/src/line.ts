@@ -133,6 +133,7 @@ export function lineMembership(
       const deviation = (pack.deviations ?? []).find((candidate) => {
         if (node.moveUci !== candidate.moveUci || parent === undefined) return false;
         if ("fen" in candidate.at) return transposeKey(candidate.at.fen) === parent.transposeKey;
+        if ("atStart" in candidate.at) return transposeKey(pack.start.fen) === parent.transposeKey;
         return anchors.get(candidate.at.spineNodeId) === parent.transposeKey;
       });
       const insideBoundary = insideAuthoredBoundary(pack, run, node);

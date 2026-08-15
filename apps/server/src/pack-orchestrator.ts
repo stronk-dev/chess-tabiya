@@ -18,6 +18,7 @@ import {
   legIndexAt,
   reachCheckpoint,
   transitionObjective,
+  transposeKey,
   structuralFeatureKinds,
   type DrillRun,
   type FenPredicate,
@@ -42,6 +43,7 @@ function simpleTriggerMatches(
   trigger: SimpleTrigger,
 ): boolean {
   const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
+  if ("atStart" in trigger) return node.parentId === null;
   if ("atPly" in trigger) return node.ply === trigger.atPly;
   if ("atSpineNode" in trigger) {
     return activeSpineNodeId(pack, run) === trigger.atSpineNode;
@@ -176,7 +178,9 @@ export function objectiveRules(
       const fromTransposeKey =
         "spineNodeId" in deviation.at
           ? anchors.get(deviation.at.spineNodeId)
-          : undefined;
+          : "atStart" in deviation.at
+            ? transposeKey(pack.start.fen)
+            : undefined;
       if (fromTransposeKey === undefined) return [];
       return (["active", "preserved"] as const).map((from) => ({
         id: `theory-deviation-${index}-${from}`,
@@ -276,6 +280,27 @@ export function objectiveRules(
     condition.to !== "degraded" ? conditionRules(condition, index, true) : [],
   );
   return [...automatic, ...degraded, ...resolution, ...remaining];
+}
+
+export function orchestratePackStart(
+  pack: DrillPackDefinition,
+  initial: DrillRun,
+): MutationResult {
+  let run = initial;
+  const root = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
+  for (const checkpoint of pack.checkpoints) {
+    if (
+      !("windowOpens" in checkpoint.trigger) &&
+      "atStart" in checkpoint.trigger &&
+      checkpointMatches(pack, run, checkpoint)
+    ) {
+      run = reachCheckpoint(run, checkpoint.id, root.createdAt).run;
+    }
+  }
+  return Object.freeze({
+    run,
+    emitted: Object.freeze(run.events.slice(initial.events.length)),
+  });
 }
 
 export function orchestratePackMove(

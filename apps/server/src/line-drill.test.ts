@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { appendOpponentPly, commitMove, createRun } from "@chess-tabiya/runtime";
+import { appendOpponentPly, commitMove, createRun, lineMembership } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
 import { projectAuthoredFeedback } from "./authored-feedback.js";
@@ -101,5 +101,13 @@ describe("Line Drill orchestration", () => {
     for (const [code, candidate] of cases) {
       expect(validatePackDocument(candidate).issues).toContainEqual(expect.objectContaining({ code, severity: "error" }));
     }
+  });
+
+  it("classifies a root-anchored first-move deviation", () => {
+    const document = structuredClone(pack) as DrillPackDefinition;
+    (document as any).deviations = [...(document.deviations ?? []), { at: { atStart: true }, moveUci: "h7h6", class: "interesting_deviation", offObjective: true, note: "Root alternative fixture." }];
+    let run = createRun({ id: "root-deviation", packId: document.id, packDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, startFen: document.start.fen, seed: 3, createdAt: at });
+    run = appendOpponentPly(run, { moveUci: "h7h6", policyModeApplied: "theory_strict", engine: { id: "mock", name: "Mock", version: "1", seedHonored: true } }, { at }).run;
+    expect(lineMembership(document, run, run.activeCursor.nodeId).at(-1)).toMatchObject({ verdict: "classified_deviation", deviationClass: "interesting_deviation" });
   });
 });

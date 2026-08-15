@@ -62,6 +62,11 @@ split ply, and emits the remaining moves as a single theory-strict spine ending 
 graduation. The committed D35 Queen’s Gambit Declined Exchange candidate demonstrates the
 complete offline path with six drill plies.
 
+Opening and Syzygy candidate IDs include the learner side, so emitting both chairs
+cannot overwrite a sibling or silently replace one registry identity. A conflicting
+pre-existing job is refused as `CANDIDATE_IDENTITY_COLLISION`. Position-seed batches may
+carry `--guard-cp` and `--guard-mate`; both values are part of the job digest.
+
 Syzygy/engine grounding, explorer priority, and puzzle-derived position seeds use this same
 artifact and validation boundary.
 

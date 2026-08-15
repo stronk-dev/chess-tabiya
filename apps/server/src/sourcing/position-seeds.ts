@@ -51,6 +51,8 @@ export interface PositionSeedOptions {
   readonly sourceRoot?: string;
   readonly engineEval?: boolean;
   readonly engineEvaluator?: PositionSeedEngineEvaluator;
+  readonly guardCp?: number | null;
+  readonly guardMate?: boolean;
   readonly rows?: AsyncIterable<string>;
   readonly source?: SourceEntry;
   /** Test/inspection seam. Production authoring keeps the RFC floor of 1000. */
@@ -234,6 +236,12 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
       checkpoints: [{ id: "consequence", label: "Consequence", trigger: { atPly: plies }, actions: [] }],
       opponentPolicy: { mode: "human_common", targetElo: clampElo(row.rating), seedMode: "per_branch" },
       feedbackPolicy: "immediate_guard",
+      ...((options.guardCp === undefined && options.guardMate === undefined) ? {} : {
+        guard: {
+          ...(options.guardCp === undefined ? {} : { evalSwingCp: options.guardCp }),
+          ...(options.guardMate === undefined ? {} : { fireOnMate: options.guardMate }),
+        },
+      }),
       provenance: { reviewStatus: "draft", sources: [`Lichess puzzle database (${PUZZLE_DUMP_URL}, etag ${String(source.origin.kind === "http" ? source.origin.etag : null)}) — CC0-1.0; database exports may be used for any purpose`], reviewers: [], licence: "CC-BY-SA-4.0", graduationBlockers: blockers },
     } satisfies DrillPackDefinition;
     const validation = validatePackDocument(pack);
@@ -251,7 +259,7 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
     const digest = await digestDrillPack(pack);
     const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: sourceEntries };
     const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: id, packVersion: pack.version, packDigest: digest, sourcedAt: sourceEntries.map((entry) => entry.retrievedAt).sort().at(-1)!, records, abstentions: [] };
-    const args = { ratingBand: [minimum, maximum], themes: options.themes ?? [], count: options.count, plies, minimumNbPlays: options.minimumNbPlays ?? 1000, engineEval: options.engineEval === true };
+    const args = { ratingBand: [minimum, maximum], themes: options.themes ?? [], count: options.count, plies, minimumNbPlays: options.minimumNbPlays ?? 1000, engineEval: options.engineEval === true, ...(options.guardCp === undefined ? {} : { guardCp: options.guardCp }), ...(options.guardMate === undefined ? {} : { guardMate: options.guardMate }) };
     const sourceEtags = sourceEntries.map((entry) => entry.origin.kind === "http" ? entry.origin.etag : null);
     const job = { schema: "tabiya.sourcing.job.v1", pipeline: "position-seeds", args, sourceEtags, emissionJobDigest: emissionJobDigest("position-seeds", args, sourceEtags) };
     const output = resolve(options.outputRoot ?? "content/candidates", id);

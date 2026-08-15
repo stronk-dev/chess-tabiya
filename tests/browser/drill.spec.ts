@@ -546,7 +546,12 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   ).toBeVisible();
   await expect(page.locator(".boards article")).toHaveCount(2);
   await expect(page.getByRole("heading", { name: "Recorded branch strips" })).toBeVisible();
-  await expect(page.locator(".sparkline span")).toHaveCount(2);
+  await expect(page.locator(".sparkline")).toHaveCount(2);
+  await expect.poll(() =>
+    page.locator(".sparkline").evaluateAll((sparklines) =>
+      sparklines.every((sparkline) => sparkline.querySelectorAll("span").length > 0),
+    ),
+  ).toBe(true);
   await page.getByRole("button", { name: "Narrative" }).click();
   await expect(page.getByText(/recorded branches share/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "quiet setup" })).toHaveCount(2);

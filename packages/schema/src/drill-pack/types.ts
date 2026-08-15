@@ -53,7 +53,8 @@ export interface PlanClass {
 
 export type DeviationLocation =
   | { readonly spineNodeId: string }
-  | { readonly fen: string };
+  | { readonly fen: string }
+  | { readonly atStart: true };
 
 export interface Deviation {
   readonly at: DeviationLocation;
@@ -64,6 +65,7 @@ export interface Deviation {
 }
 
 export type SimpleTrigger =
+  | { readonly atStart: true }
   | { readonly atPly: number }
   | { readonly atSpineNode: string }
   | { readonly atAuthoredBoundary: "crossed" }
@@ -136,6 +138,22 @@ export interface DrillPackDefinition {
   readonly checkpoints: readonly CheckpointDefinition[];
   readonly guard?: {
     readonly evalSwingCp?: number | null;
+    readonly fireOnMate?: boolean;
+    readonly rulesTier?: boolean;
+    readonly window?: { readonly fromPly: number; readonly toPly: number };
+    readonly overrides?: readonly {
+      readonly at: DeviationLocation;
+      readonly evalSwingCp?: number | null;
+      readonly fireOnMate?: boolean;
+    }[];
+  };
+  readonly variantOf?: {
+    readonly packId: string;
+    readonly relation:
+      | { readonly kind: "root_after_move"; readonly moveUci: string }
+      | { readonly kind: "same_root_other_side" }
+      | { readonly kind: "same_root_other_objective" };
+    readonly note?: string;
   };
   readonly concepts?: readonly string[];
   readonly shapes?: readonly string[];
@@ -160,6 +178,7 @@ export interface DrillPackDefinition {
 export interface TrajectoryLeg {
   readonly id: string;
   readonly entryCheckpointId?: string;
+  readonly branchLengthTarget?: number;
   readonly objective: DrillPackDefinition["objective"];
 }
 
@@ -175,7 +194,7 @@ export type RootAssessment =
   | { readonly kind: "authored"; readonly note: string }
   | {
       readonly kind: "syzygy";
-      readonly category: "win" | "loss" | "draw";
+      readonly category: "win" | "loss" | "draw" | "cursed-win" | "blessed-loss";
       readonly pieceCount: number;
       readonly sourceId: "syzygy";
       readonly retrievedAt: string;
@@ -213,7 +232,7 @@ export type SuccessCondition =
     })
   | (SuccessConditionBase & {
       readonly kind: "rules_fact";
-      readonly fact: "checkmate" | "stalemate";
+      readonly fact: "checkmate" | "stalemate" | "draw";
       readonly winner?: "white" | "black";
     })
   | (SuccessConditionBase & {

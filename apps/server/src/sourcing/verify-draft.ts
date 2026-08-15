@@ -13,6 +13,8 @@ import { countFenPieces } from "./chess-facts.js";
 import { liveTablebaseQuery, TABLEBASE_RATIONALE, type TablebaseAnswer, type TablebasePayload, type TablebaseQuery } from "./syzygy.js";
 import type { EvidenceAbstention, EvidenceLedger, EvidenceRecord, SourceEntry, SourceManifest, SourcingIssue } from "./types.js";
 import { SourcingError } from "./types.js";
+import { TABLEBASE_CATEGORIES, type TablebaseCategory } from "../tablebase.js";
+import { CATEGORY_RANK, learnerCategory as categoryForLearner } from "./tablebase-category.js";
 
 const AUTHOR_PACK_RATIONALE = "the author's own drill pack; its FENs and moves state facts about chess positions";
 const OFFLINE_FIXTURES = resolve("apps/server/src/sourcing/fixtures/verify-draft.json");
@@ -71,7 +73,7 @@ function enumerate(pack: DrillPackDefinition): readonly EnumeratedPosition[] {
   };
   walk(pack.spine ?? [], pack.start.fen, "/spine");
   for (const [index, deviation] of (pack.deviations ?? []).entries()) {
-    const anchor = "spineNodeId" in deviation.at ? byNode.get(deviation.at.spineNodeId) : deviation.at.fen;
+    const anchor = "spineNodeId" in deviation.at ? byNode.get(deviation.at.spineNodeId) : "fen" in deviation.at ? deviation.at.fen : pack.start.fen;
     if (anchor === undefined) throw new SourcingError("DRAFT_PACK_INVALID", `/deviations/${index}/at references an unknown spine node`);
     const played = afterMove(anchor, deviation.moveUci, `/deviations/${index}/moveUci`);
     values.push({ fen: played.fen, pointer: `/deviations/${index}/moveUci`, mover: played.mover, parentFen: anchor, opponentMove: played.mover !== pack.start.side, kind: "deviation" });
@@ -83,15 +85,8 @@ function tablebaseValues(fen: string, payload: TablebasePayload): Readonly<Recor
   return Object.freeze({ fen, pieceCount: countFenPieces(fen), category: payload.category, dtz: payload.dtz, precise_dtz: payload.precise_dtz, dtm: payload.dtm, checkmate: payload.checkmate, stalemate: payload.stalemate, insufficient_material: payload.insufficient_material });
 }
 
-function invert(category: string): string {
-  const pairs: Readonly<Record<string, string>> = { win: "loss", loss: "win", draw: "draw", "cursed-win": "blessed-loss", "blessed-loss": "cursed-win", "maybe-win": "maybe-loss", "maybe-loss": "maybe-win", "syzygy-win": "syzygy-loss", "syzygy-loss": "syzygy-win" };
-  return pairs[category] ?? category;
-}
-
-const CATEGORY_RANK: Readonly<Record<string, number>> = Object.freeze({ loss: 0, "syzygy-loss": 1, "maybe-loss": 2, "blessed-loss": 3, draw: 4, "cursed-win": 5, "maybe-win": 6, "syzygy-win": 7, win: 8 });
-
 function learnerCategory(fen: string, category: string, learner: "white" | "black"): string {
-  return position(fen).turn === learner ? category : invert(category);
+  return categoryForLearner(position(fen).turn, category as TablebaseCategory, learner);
 }
 
 function sidecars(file: string): VerifyDraftResult["paths"] {
@@ -133,6 +128,10 @@ export async function verifyDraft(file: string, options: VerifyDraftOptions = {}
   for (const item of positions) if (countFenPieces(item.fen) <= 7 && !answers.has(item.fen)) answers.set(item.fen, await query(item.fen));
   const root = answers.get(original.start.fen);
   if (root === undefined) throw new SourcingError("VERIFY_ASSESSMENT_CONTRADICTED", "root has no tablebase answer");
+  if (["syzygy-win", "maybe-win", "maybe-loss", "syzygy-loss", "unknown"].includes(root.payload.category)) {
+    throw new SourcingError("VERIFY_ASSESSMENT_INDETERMINATE", `queried root category ${root.payload.category} is not determinate enough for pack grading`);
+  }
+  if (!(TABLEBASE_CATEGORIES as readonly string[]).includes(root.payload.category)) throw new SourcingError("VERIFY_ASSESSMENT_INDETERMINATE", `queried root category ${root.payload.category} is unknown`);
   if (root.payload.category !== assessedBy.category || countFenPieces(original.start.fen) !== assessedBy.pieceCount) throw new SourcingError("VERIFY_ASSESSMENT_CONTRADICTED", `declared ${assessedBy.category}/${assessedBy.pieceCount} does not equal queried ${root.payload.category}/${countFenPieces(original.start.fen)}`);
 
   const warnings: string[] = [];
@@ -142,7 +141,7 @@ export async function verifyDraft(file: string, options: VerifyDraftOptions = {}
     if (parent === undefined || child === undefined) continue;
     const before = learnerCategory(item.parentFen, parent.payload.category, original.start.side);
     const after = learnerCategory(item.fen, child.payload.category, original.start.side);
-    if ((CATEGORY_RANK[after] ?? -1) < (CATEGORY_RANK[before] ?? -1)) {
+    if ((CATEGORY_RANK[after as keyof typeof CATEGORY_RANK] ?? -1) < (CATEGORY_RANK[before as keyof typeof CATEGORY_RANK] ?? -1)) {
       if (!item.opponentMove) throw new SourcingError("VERIFY_SPINE_CATEGORY_REGRESSION", `${item.pointer} changes learner category ${before} -> ${after}`);
       warnings.push(`${item.pointer}: opponent choice changes learner category ${before} -> ${after}`);
     }

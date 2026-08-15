@@ -22,6 +22,20 @@ Evidence is limited to legality and tablebase-result facts. It never grounds pro
 
 The emitted ledger and manifest pass the existing validators and linkage rules and must earn `ledger_verified` through the same `assessmentGrounding` function used by the pack registry. `OFFLINE=1` uses committed per-FEN fixtures, so all six verified endgame drafts exercise the closed loop in CI without network access.
 
+For exploration before a pack declares an assessment, `make tablebase-walk
+FILE=<pack.json>` (or `FENS=<positions.txt>`) emits a read-only
+`tabiya.sourcing.walk.v1` report. It probes authored positions and, by default,
+enumerates every legal move at learner decisions. `--max-queries` is a hard budget;
+`OFFLINE=1` records missing fixture successors as abstentions. The walker never edits a
+pack or writes admission sidecars. Successful online probes are cached without expiry
+under the gitignored `content/sources/syzygy/` directory, keyed by normalized position
+plus halfmove clock, so a repeat walk performs no network request.
+
+Pack declarations distinguish five determinate categories (`win`, `loss`, `draw`,
+`cursed-win`, `blessed-loss`) from uncertain Syzygy categories. Cursed/blessed roots are
+admitted only for compatible objectives and require a declared ply budget long enough to
+reach halfmove 100.
+
 ## Perfect tablebase resistance
 
 `perfect_tablebase` is an executable pack-run opponent mode. It is published only when a tablebase provider is configured and is recorded on every selection as `policyModeApplied: "perfect_tablebase"` with the synthetic identity `lichess-tablebase` / `Syzygy (tablebase.lichess.org/standard)` / `7man`.

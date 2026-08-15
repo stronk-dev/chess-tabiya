@@ -46,6 +46,16 @@ describe("verify-draft", () => {
     await expect(readFile(file.replace(/\.json$/, ".evidence.json"))).rejects.toMatchObject({ code: "ENOENT" });
   });
 
+  it("refuses an indeterminate queried root before writing sidecars", async () => {
+    const { file } = await fixture();
+    await expect(
+      verifyDraft(file, { query: async (fen) => answer(fen, "unknown") }),
+    ).rejects.toMatchObject({ code: "VERIFY_ASSESSMENT_INDETERMINATE" });
+    await expect(
+      readFile(file.replace(/\.json$/, ".evidence.json")),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+  });
+
   it("rejects a learner spine category regression", async () => {
     const { file, pack } = await fixture();
     const root = Chess.fromSetup(parseFen(pack.start.fen).unwrap()).unwrap();

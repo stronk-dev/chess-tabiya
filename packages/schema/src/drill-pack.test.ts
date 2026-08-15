@@ -53,13 +53,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.15", () => {
+describe("drill_pack.schema.json v0.16", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.15",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.16",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.15");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.16");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
@@ -72,6 +72,22 @@ describe("drill_pack.schema.json v0.15", () => {
     ]);
     expect(CHECKPOINT_ACTIONS).toEqual(["compare_branches"]);
     expect(typed.$defs.structuralFeature.oneOf.map((branch: any) => branch.properties.kind.const)).toEqual([...STRUCTURAL_FEATURE_KINDS]);
+  });
+
+  it("admits the additive v0.16 authoring vocabulary", () => {
+    const candidate = structuredClone(livingFixture) as any;
+    candidate.variantOf = { packId: "sibling-pack", relation: { kind: "same_root_other_side" } };
+    candidate.deviations = [{ at: { atStart: true }, moveUci: "c1e3", class: "accepted_alternative" }];
+    candidate.checkpoints.push({ id: "root-intent", trigger: { atStart: true }, actions: [] });
+    candidate.difficulty.branchLengthTarget = 23;
+    candidate.guard = { evalSwingCp: null, fireOnMate: true, window: { fromPly: 1, toPly: 8 }, overrides: [{ at: { atStart: true }, evalSwingCp: 120 }] };
+    candidate.feedbackPolicy = "immediate_guard";
+    expect(validate(candidate), JSON.stringify(validate.errors)).toBe(true);
+
+    const outcome = structuredClone(livingFixture) as any;
+    outcome.objective.grading = { assessedBy: { kind: "syzygy", category: "blessed-loss", pieceCount: 5, sourceId: "syzygy", retrievedAt: "2026-08-15T00:00:00.000Z" }, resolveAt: { kind: "terminal" } };
+    outcome.objective.successConditions = [{ kind: "rules_fact", fact: "draw", to: "achieved" }];
+    expect(validate(outcome), JSON.stringify(validate.errors)).toBe(true);
   });
 
   it("pins the two legacy schema passthroughs and keeps structural shapes closed", () => {
@@ -300,6 +316,18 @@ describe("drill pack authoring lint", () => {
       expect.arrayContaining([
         expect.objectContaining({ code: "TOO_MANY_PREDICTIONS" }),
       ]),
+    );
+  });
+
+  it("warns when a plan segment exceeds the authored plan band", () => {
+    const candidate = structuredClone(livingFixture) as DrillPackDefinition;
+    (candidate as any).mode = "plan";
+    (candidate as any).difficulty.branchLengthTarget = 24;
+    expect(lintDrillPack(candidate)).toContainEqual(
+      expect.objectContaining({
+        severity: "warning",
+        code: "SEGMENT_BEYOND_PLAN_BAND",
+      }),
     );
   });
 

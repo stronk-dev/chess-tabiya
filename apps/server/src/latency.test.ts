@@ -57,7 +57,9 @@ function freshRun(id: string): DrillRun {
 function runWithEventCount(id: string, eventCount: number): DrillRun {
   let run = freshRun(id);
   let moveIndex = 0;
-  while (true) {
+  // Keep the fixture below the third occurrence of its root position; D30 now
+  // correctly terminates that cycle as a threefold draw.
+  while (moveIndex < 7) {
     const actor = moveIndex % 2 === 0 ? "user" : "opponent";
     const addedEvents = actor === "opponent" ? 2 : 1;
     if (run.events.length + addedEvents > eventCount) break;

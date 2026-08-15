@@ -10,7 +10,7 @@ import {
 } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
-import { objectiveRules, orchestratePackMove } from "./pack-orchestrator.js";
+import { objectiveRules, orchestratePackMove, orchestratePackStart } from "./pack-orchestrator.js";
 import { validatePackDocument } from "./pack-validation.js";
 
 const at = "2026-08-12T12:00:00.000Z";
@@ -180,5 +180,20 @@ describe("Outcome Drill grading", () => {
     expect(run.events.filter((event) => event.type === "checkpoint.reached")).toHaveLength(2);
     expect(run.events.filter((event) => event.type === "segment.completed")).toHaveLength(0);
     expect(deriveSegments(run)).toEqual([]);
+  });
+
+  it("fires an atStart checkpoint before the first move", () => {
+    const document = { ...pack("hold"), checkpoints: [{ id: "root-intent", trigger: { atStart: true }, actions: [], interaction: { type: "intent_capture", planClassIds: ["hold"] } }] } as DrillPackDefinition;
+    const started = orchestratePackStart(document, root(document));
+    expect(started.emitted).toEqual([expect.objectContaining({ type: "checkpoint.reached", data: expect.objectContaining({ checkpointId: "root-intent", nodeId: started.run.nodes[0]!.id }) })]);
+  });
+
+  it("compiles the newly declarable draw rules fact without throwing", () => {
+    const document = pack("hold");
+    (document.objective as any).successConditions = [{ kind: "rules_fact", fact: "draw", to: "achieved" }];
+    const validation = validatePackDocument(document);
+    expect(validation.valid, JSON.stringify(validation.issues)).toBe(true);
+    expect(() => objectiveRules(document)).not.toThrow();
+    expect(objectiveRules(document).some((rule) => rule.evidenceRefs.includes("rules:draw"))).toBe(true);
   });
 });

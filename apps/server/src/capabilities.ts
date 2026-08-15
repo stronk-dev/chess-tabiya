@@ -7,6 +7,7 @@ import { FEEDBACK_POLICIES, type FeedbackPolicy } from "@chess-tabiya/schema/dri
 
 import type { EngineHealth, EngineIdentity } from "./engine-supervisor.js";
 import type { OpponentPolicyMode } from "./opponent-selector.js";
+import { ASSESSMENT_CATEGORIES, OBJECTIVE_ASSESSMENT_SETS, type TablebaseCategory } from "./tablebase.js";
 import {
   resolveStrongEngineProfile,
   type StrongEngineProfile,
@@ -59,6 +60,8 @@ export interface Capabilities {
   readonly policyModes: readonly OpponentPolicyMode[];
   readonly feedbackPolicies: readonly FeedbackPolicy[];
   readonly guardBasis: readonly ("rules" | "engine")[];
+  readonly assessmentCategories: readonly TablebaseCategory[];
+  readonly objectiveAssessmentSets: Readonly<Record<"win" | "hold" | "save" | "resist", readonly TablebaseCategory[]>>;
   readonly runSchemaVersion: string;
   readonly policyProfiles: {
     readonly strong_engine: StrongEngineProfile;
@@ -192,6 +195,8 @@ export class EngineCapabilities implements CapabilitiesProvider {
       guardBasis: providerState.judge === "none"
         ? Object.freeze(["rules"] as const)
         : Object.freeze(["rules", "engine"] as const),
+      assessmentCategories: ASSESSMENT_CATEGORIES,
+      objectiveAssessmentSets: OBJECTIVE_ASSESSMENT_SETS,
       runSchemaVersion: runtimeBuildInfo.runSchemaVersion,
       policyProfiles: Object.freeze({
         strong_engine: this.#strongEngineProfile,

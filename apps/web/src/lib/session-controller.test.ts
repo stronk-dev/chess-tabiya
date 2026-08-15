@@ -66,6 +66,8 @@ const capabilities: Capabilities = {
   policyModes: ["human_common", "strong_engine", "theory_strict"],
   feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],
   guardBasis: ["rules", "engine"],
+  assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
+  objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
   runSchemaVersion: "0.6",
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },

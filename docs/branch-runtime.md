@@ -124,7 +124,10 @@ Any non-terminal state may transition to any *different* state. Terminal states
 are absorbing, and a self-transition is not an event. Every accepted transition
 must carry at least one non-empty evidence reference; the runtime appends
 `objective.state_changed` and projects its state/evidence onto the active node.
-Play cannot continue from a terminal node.
+Play cannot continue from a terminal node. Terminal outcomes include checkmate,
+stalemate/insufficient material, halfmove-clock 100, and the third occurrence of one
+position on the active path. The latter two may leave legal moves on the board; the
+persisted `outcome.reached` event, not move availability, closes the node.
 
 Synchronous objective rules are engine-free and deterministic. Implemented
 predicates cover:

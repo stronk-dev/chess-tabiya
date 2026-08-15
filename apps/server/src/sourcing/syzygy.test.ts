@@ -124,7 +124,7 @@ describe("Syzygy sourcing", () => {
     }
   });
 
-  it("pins learner-ply checkpoint parity and omits out-of-schema difficulty", async () => {
+  it("pins learner-ply checkpoint parity and emits widened in-schema difficulty", async () => {
     const white = await emit(ROOK_4V3, "white");
     const black = await emit(ROOK_4V3, "black");
     const long = await emit(ROOK_4V3, "white", undefined, 24);
@@ -134,7 +134,7 @@ describe("Syzygy sourcing", () => {
     expect(whitePack.checkpoints[0].trigger.atPly % 2).toBe(1);
     expect(blackPack.checkpoints[0].trigger.atPly % 2).toBe(0);
     expect(whitePack.opponentPolicy.mode).not.toBe("theory_strict");
-    expect(longPack).not.toHaveProperty("difficulty");
+    expect(longPack.difficulty).toEqual({ branchLengthTarget: 25 });
   });
 
   it("records the D8 graduation blocker on in-range roots", async () => {

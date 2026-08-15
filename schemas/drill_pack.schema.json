@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.15",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.16",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.15 format for an engine-independent authored drill.",
+  "description": "Living v0.16 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -64,10 +64,40 @@
             { "type": "integer", "minimum": 50, "maximum": 1000 },
             { "type": "null" }
           ]
+        },
+        "fireOnMate": { "type": "boolean" },
+        "rulesTier": { "type": "boolean" },
+        "window": {
+          "type": "object",
+          "required": ["fromPly", "toPly"],
+          "properties": {
+            "fromPly": { "type": "integer", "minimum": 1 },
+            "toPly": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "overrides": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["at"],
+            "properties": {
+              "at": { "$ref": "#/$defs/deviationLocation" },
+              "evalSwingCp": {
+                "oneOf": [
+                  { "type": "integer", "minimum": 50, "maximum": 1000 },
+                  { "type": "null" }
+                ]
+              },
+              "fireOnMate": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
         }
       },
       "additionalProperties": false
     },
+    "variantOf": { "$ref": "#/$defs/variantOf" },
     "authoredBoundary": { "$ref": "#/$defs/authoredBoundary" },
     "deviations": {
       "type": "array",
@@ -139,7 +169,7 @@
         "branchLengthTarget": {
           "type": "integer",
           "minimum": 2,
-          "maximum": 20
+          "maximum": 40
         }
       },
       "additionalProperties": false
@@ -193,6 +223,7 @@
       "properties": {
         "id": { "$ref": "#/$defs/id" },
         "entryCheckpointId": { "$ref": "#/$defs/id" },
+        "branchLengthTarget": { "type": "integer", "minimum": 2, "maximum": 40 },
         "objective": { "$ref": "#/$defs/objective" }
       },
       "additionalProperties": false
@@ -217,7 +248,7 @@
               "required": ["kind", "category", "pieceCount", "sourceId", "retrievedAt"],
               "properties": {
                 "kind": { "const": "syzygy" },
-                "category": { "enum": ["win", "loss", "draw"] },
+                "category": { "enum": ["win", "loss", "draw", "cursed-win", "blessed-loss"] },
                 "pieceCount": { "type": "integer", "minimum": 2, "maximum": 7 },
                 "sourceId": { "const": "syzygy" },
                 "retrievedAt": { "type": "string", "format": "date-time" }
@@ -302,7 +333,7 @@
           "required": ["kind", "fact"],
           "properties": {
             "kind": { "const": "rules_fact" },
-            "fact": { "enum": ["checkmate", "stalemate"] },
+            "fact": { "enum": ["checkmate", "stalemate", "draw"] },
             "winner": { "enum": ["white", "black"] },
             "to": { "$ref": "#/$defs/conditionBase/properties/to" },
             "from": { "$ref": "#/$defs/conditionBase/properties/from" }
@@ -487,6 +518,12 @@
     },
     "simpleTrigger": {
       "oneOf": [
+        {
+          "type": "object",
+          "required": ["atStart"],
+          "properties": { "atStart": { "const": true } },
+          "additionalProperties": false
+        },
         {
           "type": "object",
           "required": ["atPly"],
@@ -675,6 +712,12 @@
       "oneOf": [
         {
           "type": "object",
+          "required": ["atStart"],
+          "properties": { "atStart": { "const": true } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
           "required": ["spineNodeId"],
           "properties": {
             "spineNodeId": { "$ref": "#/$defs/id" }
@@ -708,6 +751,40 @@
         },
         "offObjective": { "type": "boolean" },
         "note": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "variantOf": {
+      "type": "object",
+      "required": ["packId", "relation"],
+      "properties": {
+        "packId": { "$ref": "#/$defs/id" },
+        "note": { "$ref": "#/$defs/nonEmptyString" },
+        "relation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["kind", "moveUci"],
+              "properties": {
+                "kind": { "const": "root_after_move" },
+                "moveUci": { "$ref": "#/$defs/moveUci" }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["kind"],
+              "properties": { "kind": { "const": "same_root_other_side" } },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["kind"],
+              "properties": { "kind": { "const": "same_root_other_objective" } },
+              "additionalProperties": false
+            }
+          ]
+        }
       },
       "additionalProperties": false
     },

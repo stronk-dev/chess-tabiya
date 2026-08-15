@@ -9,7 +9,7 @@ import {
   type StructuralExpression,
   type StructuralFeature,
 } from "@chess-tabiya/schema/drill-pack";
-import { createRun, matchesStructuralExpression } from "@chess-tabiya/runtime";
+import { createRun, matchesStructuralExpression, transposeKey } from "@chess-tabiya/runtime";
 import { between } from "chessops/attacks";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
@@ -24,6 +24,12 @@ import {
 } from "./capabilities.js";
 import { checkpointMatches, objectiveRules } from "./pack-orchestrator.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
+import {
+  ASSESSMENT_CATEGORIES,
+  invertTablebaseCategory,
+  OBJECTIVE_ASSESSMENT_SETS,
+  type TablebaseCategory,
+} from "./tablebase.js";
 
 export interface PackValidationIssue {
   readonly severity: "error" | "warning";
@@ -41,6 +47,13 @@ export interface PackValidationResult {
 
 export interface PackShapeLookup {
   get(id: string): { readonly document: { readonly plans: readonly { readonly id: string }[] } } | undefined;
+}
+
+export interface PackSiblingLookup {
+  get(id: string): {
+    readonly start: { readonly fen: string; readonly side: "white" | "black" };
+    readonly objective: { readonly type: string };
+  } | undefined;
 }
 
 let schemaValidator: ValidateFunction | undefined;
@@ -88,6 +101,27 @@ function runtimeIssue(
   message: string,
 ): PackValidationIssue {
   return Object.freeze({ severity: "error", source: "runtime", code, path, message });
+}
+
+export function assessmentAdmissionCode(
+  objective: string,
+  category: string,
+): string | undefined {
+  if (!(ASSESSMENT_CATEGORIES as readonly string[]).includes(category)) {
+    return "ASSESSMENT_CATEGORY_INDETERMINATE";
+  }
+  if (objective === "win" && category === "cursed-win") {
+    return "CURSED_WIN_CANNOT_ROOT_WIN";
+  }
+  const admitted = OBJECTIVE_ASSESSMENT_SETS[
+    objective as keyof typeof OBJECTIVE_ASSESSMENT_SETS
+  ] as readonly TablebaseCategory[] | undefined;
+  if (admitted !== undefined && !admitted.includes(category as TablebaseCategory)) {
+    return ["win", "loss", "draw"].includes(category)
+      ? "SYZYGY_ASSESSMENT_MISMATCH"
+      : "ASSESSMENT_CATEGORY_MISMATCH";
+  }
+  return undefined;
 }
 
 const PLAN_OBJECTIVES = new Set([
@@ -203,10 +237,15 @@ function structuralIssuesInPack(pack: DrillPackDefinition): readonly PackValidat
   return Object.freeze(issues);
 }
 
-function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): readonly PackValidationIssue[] {
+function runtimeIssues(
+  pack: DrillPackDefinition,
+  shapes?: PackShapeLookup,
+  packs?: PackSiblingLookup,
+): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
   issues.push(...structuralIssuesInPack(pack));
   const raw = pack as unknown as Record<string, unknown>;
+  const difficulty = (raw.difficulty ?? {}) as { readonly branchLengthTarget?: number };
   const shapeIds = new Set(pack.shapes ?? []);
   for (const [index, shapeId] of (pack.shapes ?? []).entries()) {
     if (shapes !== undefined && shapes.get(shapeId) === undefined) issues.push(runtimeIssue("SHAPE_REFERENCE_UNKNOWN", `/shapes/${index}`, `unknown shape ${shapeId}`));
@@ -220,6 +259,33 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
   const spineIds = new Set<string>();
   const collectSpine = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[]): void => { for (const node of nodes) { spineIds.add(node.id); collectSpine(node.children); } };
   collectSpine(pack.spine ?? []);
+  if (pack.variantOf !== undefined) {
+    const path = "/variantOf";
+    if (pack.variantOf.packId === pack.id) {
+      issues.push(runtimeIssue("VARIANT_SELF_REFERENCE", `${path}/packId`, "a pack cannot be a variant of itself"));
+    } else if (packs !== undefined) {
+      const sibling = packs.get(pack.variantOf.packId);
+      if (sibling === undefined) {
+        issues.push(runtimeIssue("VARIANT_PACK_UNKNOWN", `${path}/packId`, `unknown sibling pack ${pack.variantOf.packId}`));
+      } else {
+        const relation = pack.variantOf.relation;
+        let proven = false;
+        if (relation.kind === "root_after_move") {
+          const position = Chess.fromSetup(parseFen(sibling.start.fen).unwrap()).unwrap();
+          const move = parseUci(relation.moveUci);
+          if (move !== undefined && position.isLegal(move)) {
+            position.play(move);
+            proven = transposeKey(makeFen(position.toSetup())) === transposeKey(pack.start.fen);
+          }
+        } else if (relation.kind === "same_root_other_side") {
+          proven = transposeKey(sibling.start.fen) === transposeKey(pack.start.fen) && sibling.start.side !== pack.start.side;
+        } else {
+          proven = transposeKey(sibling.start.fen) === transposeKey(pack.start.fen) && sibling.start.side === pack.start.side && sibling.objective.type !== pack.objective.type;
+        }
+        if (!proven) issues.push(runtimeIssue("VARIANT_RELATION_UNPROVEN", `${path}/relation`, `relation ${relation.kind} is not proven by the two pack roots`));
+      }
+    }
+  }
   const claimIds = new Set((pack.feedbackClaims ?? []).map((claim) => claim.id));
   for (const [checkpointIndex, checkpoint] of pack.checkpoints.entries()) {
     if (checkpoint.interaction?.type !== "stated_reasoning") continue;
@@ -300,6 +366,21 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
       ),
     );
   }
+  if (pack.guard?.window !== undefined && pack.guard.window.fromPly > pack.guard.window.toPly) {
+    issues.push(runtimeIssue("GUARD_WINDOW_EMPTY", "/guard/window", "guard window fromPly must not exceed toPly"));
+  }
+  const overrideKeys = new Set<string>();
+  for (const [index, override] of (pack.guard?.overrides ?? []).entries()) {
+    const key = "atStart" in override.at ? "start" : "fen" in override.at ? `fen:${transposeKey(override.at.fen)}` : `spine:${override.at.spineNodeId}`;
+    if ("spineNodeId" in override.at && !spineIds.has(override.at.spineNodeId)) {
+      issues.push(runtimeIssue("GUARD_OVERRIDE_ANCHOR_UNKNOWN", `/guard/overrides/${index}/at/spineNodeId`, `unknown spine node ${override.at.spineNodeId}`));
+    }
+    if (overrideKeys.has(key)) issues.push(runtimeIssue("GUARD_OVERRIDE_DUPLICATE", `/guard/overrides/${index}/at`, "guard overrides may not repeat an anchor"));
+    overrideKeys.add(key);
+  }
+  if (pack.guard?.rulesTier === false && pack.guard.evalSwingCp === null && pack.guard.fireOnMate === false) {
+    issues.push(runtimeIssue("GUARD_DISABLES_EVERYTHING", "/guard", "guard tuning disables rules, centipawn, and mate detection"));
+  }
 
   const opponentPolicy = raw.opponentPolicy as Record<string, unknown>;
   const opponentMode = opponentPolicy.mode;
@@ -352,6 +433,7 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
         seenEntries.add(leg.entryCheckpointId);
         const checkpoint = pack.checkpoints.find((candidate) => candidate.id === leg.entryCheckpointId);
         if (checkpoint !== undefined && "windowOpens" in checkpoint.trigger) issues.push(runtimeIssue("TRAJECTORY_LEG_ENTRY_NOT_SIMPLE", `/legs/${index}/entryCheckpointId`, "timing windows cannot open a trajectory leg"));
+        if (checkpoint !== undefined && !("windowOpens" in checkpoint.trigger) && "atStart" in checkpoint.trigger) issues.push(runtimeIssue("START_TRIGGER_NOT_FIRST_LEG", `/legs/${index}/entryCheckpointId`, "atStart cannot enter a later trajectory leg"));
       }
       if (leg.objective.type === "run_trajectory") issues.push(runtimeIssue("TRAJECTORY_NESTED_UNSUPPORTED", `/legs/${index}/objective/type`, "a trajectory leg cannot contain another trajectory"));
       if (leg.objective.type === "follow_theory") theoryCount += 1;
@@ -368,6 +450,10 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
       }
     }
     if (theoryCount > 1) issues.push(runtimeIssue("TRAJECTORY_MULTIPLE_THEORY_LEGS", "/legs", "a trajectory may contain at most one theory leg"));
+    if (difficulty.branchLengthTarget !== undefined) {
+      const sum = legs.reduce((total, leg) => total + (leg.branchLengthTarget ?? 0), 0);
+      if (sum > difficulty.branchLengthTarget) issues.push(runtimeIssue("TRAJECTORY_LENGTHS_EXCEED_PACK", "/legs", `leg targets total ${sum} plies but the pack declares ${difficulty.branchLengthTarget}`));
+    }
     const plyEntries = new Map<number, number>();
     for (const [index, leg] of legs.entries()) {
       const checkpoint = pack.checkpoints.find((candidate) => candidate.id === leg.entryCheckpointId);
@@ -508,7 +594,8 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
       if (
         outcomeObjective &&
         ["achieved", "failed", "transitioned"].includes(to) &&
-        condition.kind !== "outcome"
+        condition.kind !== "outcome" &&
+        !(condition.kind === "rules_fact" && condition.fact === "draw")
       ) {
         issues.push(
           runtimeIssue(
@@ -579,24 +666,29 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
     }
     const sideToMove = pack.start.fen.split(" ")[1] === "b" ? "black" : "white";
     const learner = pack.start.side;
-    const opposite = (value: "win" | "loss" | "draw") =>
-      value === "win" ? "loss" : value === "loss" ? "win" : "draw";
     const category = learner === sideToMove
       ? grading.assessedBy.category
-      : opposite(grading.assessedBy.category);
-    const expected = pack.objective.type === "win"
-      ? "win"
-      : pack.objective.type === "hold"
-        ? "draw"
-        : "loss";
-    if (category !== expected) {
+      : invertTablebaseCategory(grading.assessedBy.category);
+    const admissionCode = assessmentAdmissionCode(pack.objective.type, category);
+    if (admissionCode === "ASSESSMENT_CATEGORY_INDETERMINATE") {
+      issues.push(runtimeIssue("ASSESSMENT_CATEGORY_INDETERMINATE", "/objective/grading/assessedBy/category", `${category} is not a determinate root assessment`));
+    } else if (admissionCode === "CURSED_WIN_CANNOT_ROOT_WIN") {
+      issues.push(runtimeIssue("CURSED_WIN_CANNOT_ROOT_WIN", "/objective/grading/assessedBy/category", "the fifty-move rule makes a cursed-win conversion unreachable for a win objective"));
+    } else if (admissionCode !== undefined) {
       issues.push(
         runtimeIssue(
-          "SYZYGY_ASSESSMENT_MISMATCH",
+          admissionCode,
           "/objective/grading/assessedBy/category",
-          `${pack.objective.type} expects ${expected} from the learner perspective; received ${category}`,
+          `${pack.objective.type} does not admit learner-perspective category ${category}`,
         ),
       );
+    }
+    if (category === "cursed-win" || category === "blessed-loss") {
+      const halfmoves = Number.parseInt(pack.start.fen.split(" ")[4] ?? "0", 10);
+      const needed = Math.max(0, 100 - halfmoves);
+      if (difficulty.branchLengthTarget === undefined || difficulty.branchLengthTarget < needed) {
+        issues.push(runtimeIssue("RULE_DRAW_ROOT_NEEDS_SEGMENT_BUDGET", "/difficulty/branchLengthTarget", `rule-drawn root needs at least ${needed} plies to reach halfmove 100`));
+      }
     }
   }
 
@@ -622,15 +714,19 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
     });
     for (const [index, checkpoint] of pack.checkpoints.entries()) {
       const trigger = checkpoint.trigger;
+      if ("windowOpens" in trigger && ("atStart" in trigger.windowOpens || "atStart" in trigger.windowCloses)) {
+        issues.push(runtimeIssue("START_TRIGGER_IN_WINDOW", `/checkpoints/${index}/trigger`, "atStart cannot open or close a timing window"));
+        continue;
+      }
       if ("atPly" in trigger && trigger.atPly === 0) {
         issues.push(
           runtimeIssue(
             "CHECKPOINT_UNREACHABLE_AT_ROOT",
             `/checkpoints/${index}/trigger/atPly`,
-            "atPly 0 can never be evaluated because checkpoints run after a commit",
+            "atPly 0 can never be evaluated after a commit; use atStart for the root position",
           ),
         );
-      } else if (checkpointMatches(pack, root, checkpoint)) {
+      } else if (!("atStart" in trigger) && checkpointMatches(pack, root, checkpoint)) {
         issues.push(
           runtimeIssue(
             "CHECKPOINT_TRUE_AT_ROOT",
@@ -652,7 +748,7 @@ function runtimeIssues(pack: DrillPackDefinition, shapes?: PackShapeLookup): rea
   return Object.freeze(issues);
 }
 
-export function validatePackDocument(value: unknown, options: { readonly shapes?: PackShapeLookup } = {}): PackValidationResult {
+export function validatePackDocument(value: unknown, options: { readonly shapes?: PackShapeLookup; readonly packs?: PackSiblingLookup } = {}): PackValidationResult {
   const validate = validator();
   if (!validate(value)) {
     return Object.freeze({
@@ -672,7 +768,7 @@ export function validatePackDocument(value: unknown, options: { readonly shapes?
         message: issue.message,
       }),
     ),
-    ...runtimeIssues(document, options.shapes),
+    ...runtimeIssues(document, options.shapes, options.packs),
   ];
   return Object.freeze({
     valid: !issues.some((issue) => issue.severity === "error"),

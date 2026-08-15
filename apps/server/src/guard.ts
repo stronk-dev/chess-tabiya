@@ -5,6 +5,9 @@ import { opposite } from "chessops/util";
 import {
   MATERIAL_VALUES,
   appendEvents,
+  deviationAnchors,
+  historyFrom,
+  transposeKey,
   type DrillRun,
   type EvidenceAttachedEvent,
   type MutationResult,
@@ -77,6 +80,51 @@ function alreadyGenerated(run: DrillRun, nodeId: string): boolean {
   );
 }
 
+interface GuardSettings {
+  readonly evalSwingCp: number | null;
+  readonly fireOnMate: boolean;
+  readonly rulesTier: boolean;
+}
+
+function guardSettings(
+  pack: DrillPackDefinition,
+  run: DrillRun,
+  previous: Node,
+): GuardSettings {
+  const base = {
+    evalSwingCp: pack.guard?.evalSwingCp === undefined ? 200 : pack.guard.evalSwingCp,
+    fireOnMate: pack.guard?.fireOnMate ?? true,
+    rulesTier: pack.guard?.rulesTier ?? true,
+  };
+  if ((pack.guard?.overrides?.length ?? 0) === 0) return base;
+  const path = historyFrom(run, previous.id);
+  const spineKeys = deviationAnchors(pack);
+  const anchorKey = (at: import("@chess-tabiya/schema/drill-pack").DeviationLocation): string | undefined => {
+    if ("atStart" in at) return transposeKey(pack.start.fen);
+    if ("fen" in at) return transposeKey(at.fen);
+    return spineKeys.get(at.spineNodeId);
+  };
+  type Override = NonNullable<NonNullable<DrillPackDefinition["guard"]>["overrides"]>[number];
+  let selected: { readonly depth: number; readonly index: number; readonly value: Override } | undefined;
+  for (const [index, override] of (pack.guard?.overrides ?? []).entries()) {
+    const key = anchorKey(override.at);
+    if (key === undefined) continue;
+    const depth = path.map((node) => node.transposeKey).lastIndexOf(key);
+    if (depth < 0 || (selected !== undefined && depth <= selected.depth)) continue;
+    selected = { depth, index, value: override };
+  }
+  return {
+    evalSwingCp: selected?.value.evalSwingCp === undefined ? base.evalSwingCp : selected.value.evalSwingCp,
+    fireOnMate: selected?.value.fireOnMate ?? base.fireOnMate,
+    rulesTier: base.rulesTier,
+  };
+}
+
+function insideGuardWindow(pack: DrillPackDefinition, consequence: Node): boolean {
+  const window = pack.guard?.window;
+  return window === undefined || (consequence.ply >= window.fromPly && consequence.ply <= window.toPly);
+}
+
 function generate(
   run: DrillRun,
   nodeId: string,
@@ -88,6 +136,7 @@ function generate(
 }
 
 export function applyRulesGuard(
+  pack: DrillPackDefinition,
   run: DrillRun,
   consequenceId: string,
   at: string,
@@ -97,6 +146,9 @@ export function applyRulesGuard(
   }
   const triple = decisionTriple(run, consequenceId);
   if (triple === undefined) return Object.freeze({ run, emitted: Object.freeze([]) });
+  if (!insideGuardWindow(pack, triple.consequence) || !guardSettings(pack, run, triple.previous).rulesTier) {
+    return Object.freeze({ run, emitted: Object.freeze([]) });
+  }
   const learner = run.start.side;
   if (balance(triple.consequence.fen, learner) - balance(triple.previous.fen, learner) <= -3) {
     return generate(run, consequenceId, ["rules:material"], at);
@@ -123,7 +175,7 @@ function mateAgainstLearner(values: Readonly<Record<string, unknown>>, learner: 
   return learner === "white" ? mateIn < 0 : mateIn > 0;
 }
 
-function engineSwing(
+function centipawnSwing(
   previous: EvidenceAttachedEvent,
   consequence: EvidenceAttachedEvent,
   learner: Color,
@@ -131,7 +183,6 @@ function engineSwing(
 ): boolean {
   const before = previous.data.payload.values;
   const after = consequence.data.payload.values;
-  if (mateAgainstLearner(after, learner) && !mateAgainstLearner(before, learner)) return true;
   if (!Number.isSafeInteger(before.centipawns) || !Number.isSafeInteger(after.centipawns)) return false;
   const delta = (after.centipawns as number) - (before.centipawns as number);
   return learner === "white" ? delta <= -threshold : delta >= threshold;
@@ -144,22 +195,25 @@ export function applyRecordedEngineGuard(
   appliedEvidenceRefs: readonly string[],
   at: string,
 ): MutationResult {
-  if (run.feedbackPolicy !== "immediate_guard" || pack.guard?.evalSwingCp === null) {
+  if (run.feedbackPolicy !== "immediate_guard") {
     return Object.freeze({ run, emitted: Object.freeze([]) });
   }
-  const threshold = pack.guard?.evalSwingCp ?? 200;
   for (const consequence of run.nodes) {
     if (alreadyGenerated(run, consequence.id)) continue;
     const triple = decisionTriple(run, consequence.id);
     if (triple === undefined) continue;
+    if (!insideGuardWindow(pack, triple.consequence)) continue;
     if (appliedNodeId !== triple.previous.id && appliedNodeId !== consequence.id) continue;
     const previousEval = evalAt(run, triple.previous.id);
     const consequenceEval = evalAt(run, consequence.id);
-    if (
-      previousEval !== undefined &&
-      consequenceEval !== undefined &&
-      engineSwing(previousEval, consequenceEval, run.start.side, threshold)
-    ) {
+    const settings = guardSettings(pack, run, triple.previous);
+    const before = previousEval?.data.payload.values;
+    const after = consequenceEval?.data.payload.values;
+    const mate = before !== undefined && after !== undefined &&
+      mateAgainstLearner(after, run.start.side) && !mateAgainstLearner(before, run.start.side);
+    if (previousEval !== undefined && consequenceEval !== undefined &&
+      ((settings.fireOnMate && mate) ||
+        (settings.evalSwingCp !== null && centipawnSwing(previousEval, consequenceEval, run.start.side, settings.evalSwingCp)))) {
       const reference = appliedEvidenceRefs.find((candidate) => candidate.startsWith("engine:"));
       if (reference !== undefined) return generate(run, consequence.id, [reference], at);
     }

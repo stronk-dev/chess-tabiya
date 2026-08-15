@@ -320,7 +320,15 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
             `outcome.reached ${event.seq} must immediately follow its move.committed`,
           );
         }
-        const expected = terminalOutcome(positionFromFen(node.fen), data.start.side);
+        let repetitions = 0;
+        let cursor: Node | undefined = node;
+        while (cursor !== undefined) {
+          if (cursor.transposeKey === node.transposeKey) repetitions += 1;
+          cursor = cursor.parentId === null
+            ? undefined
+            : nodes.find((candidate) => candidate.id === cursor!.parentId);
+        }
+        const expected = terminalOutcome(positionFromFen(node.fen), data.start.side, repetitions);
         if (expected === undefined) {
           throw new TypeError(`outcome.reached ${event.seq} references a non-terminal node`);
         }

@@ -26,7 +26,8 @@ export type PackLintCode =
   | "DEVIATION_SHADOWS_SPINE_MOVE"
   | "SPINE_TRANSPOSITION_COLLISION"
   | "BOUNDARY_NODE_BEYOND_HORIZON"
-  | "CONCEPT_KEY_NOT_SLUG";
+  | "CONCEPT_KEY_NOT_SLUG"
+  | "SEGMENT_BEYOND_PLAN_BAND";
 
 export interface PackLintIssue {
   readonly severity: "error" | "warning";
@@ -298,12 +299,16 @@ export function lintDrillPack(
     const anchorPath = `/deviations/${index}`;
     const anchor = "spineNodeId" in deviation.at
       ? spineLocations.get(deviation.at.spineNodeId)?.position
-      : (() => {
-          try { return startPosition(deviation.at.fen); } catch { return undefined; }
-        })();
+      : "atStart" in deviation.at
+        ? position
+        : (() => {
+            try { return startPosition(deviation.at.fen); } catch { return undefined; }
+          })();
     const anchorKey = "spineNodeId" in deviation.at
       ? `spine:${deviation.at.spineNodeId}`
-      : `fen:${deviation.at.fen}`;
+      : "atStart" in deviation.at
+        ? "start"
+        : `fen:${deviation.at.fen}`;
     const duplicateKey = `${anchorKey}\0${deviation.moveUci}`;
     if (deviationKeys.has(duplicateKey)) {
       issues.push({ severity: "error", code: "DUPLICATE_DEVIATION", path: anchorPath, message: "Deviation anchor and move are duplicated" });
@@ -317,8 +322,9 @@ export function lintDrillPack(
       issues.push({ severity: "error", code: "ILLEGAL_DEVIATION_MOVE", path: `${anchorPath}/moveUci`, message: `Move ${deviation.moveUci} is illegal at its anchor` });
     }
     if (
-      "spineNodeId" in deviation.at &&
-      spineLocations.get(deviation.at.spineNodeId)?.node.children.some((child) => child.moveUci === deviation.moveUci)
+      (("spineNodeId" in deviation.at &&
+        spineLocations.get(deviation.at.spineNodeId)?.node.children.some((child) => child.moveUci === deviation.moveUci)) ||
+        ("atStart" in deviation.at && (pack.spine ?? []).some((child) => child.moveUci === deviation.moveUci)))
     ) {
       issues.push({ severity: "warning", code: "DEVIATION_SHADOWS_SPINE_MOVE", path: `${anchorPath}/moveUci`, message: "Deviation move is also an authored spine move; on-line takes precedence" });
     }
@@ -343,6 +349,15 @@ export function lintDrillPack(
         message: `Concept ${JSON.stringify(concept)} is pack-local and not slug-shaped`,
       });
     }
+  }
+  const target = (pack as unknown as { readonly mode?: string; readonly difficulty?: { readonly branchLengthTarget?: number } }).difficulty?.branchLengthTarget;
+  if ((pack as unknown as { readonly mode?: string }).mode === "plan" && target !== undefined && target > 20) {
+    issues.push({
+      severity: "warning",
+      code: "SEGMENT_BEYOND_PLAN_BAND",
+      path: "/difficulty/branchLengthTarget",
+      message: `Plan-mode segment target ${target} exceeds the declared 20-ply Plan Drill band`,
+    });
   }
   return Object.freeze(issues);
 }

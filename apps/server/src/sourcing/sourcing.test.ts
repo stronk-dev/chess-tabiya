@@ -64,6 +64,43 @@ describe("content sourcing foundation", () => {
     }
   });
 
+  it("keys mirrored opening emissions by learner side", async () => {
+    const outputRoot = await root();
+    const common = { eco: "D35", name: "Queen's Gambit Declined: Exchange Variation", splitPly: 8, outputRoot };
+    const white = await emitOpeningCandidate({ ...common, learnerSide: "white" });
+    const black = await emitOpeningCandidate({ ...common, learnerSide: "black" });
+    expect(white).not.toBe(black);
+    const [whitePack, blackPack, whiteJob, blackJob] = await Promise.all([
+      readJson(resolve(white, "pack.json")) as Promise<any>,
+      readJson(resolve(black, "pack.json")) as Promise<any>,
+      readJson(resolve(white, "job.json")) as Promise<any>,
+      readJson(resolve(black, "job.json")) as Promise<any>,
+    ]);
+    expect(whitePack.id).not.toBe(blackPack.id);
+    expect(whiteJob.args.learnerSide).toBe("white");
+    expect(blackJob.args.learnerSide).toBe("black");
+  });
+
+  it("refuses to overwrite a candidate directory owned by the other learner side", async () => {
+    const outputRoot = await root();
+    const options = {
+      eco: "D35",
+      name: "Queen's Gambit Declined: Exchange Variation",
+      splitPly: 8,
+      learnerSide: "white" as const,
+      outputRoot,
+    };
+    const directory = await emitOpeningCandidate(options);
+    await mutate(resolve(directory, "job.json"), (job) => {
+      job.args.learnerSide = "black";
+      job.emissionJobDigest = `sha256:${"0".repeat(64)}`;
+    });
+
+    await expect(emitOpeningCandidate(options)).rejects.toMatchObject({
+      code: "CANDIDATE_IDENTITY_COLLISION",
+    });
+  });
+
   it("uses chessops to reject an illegal third-party line without partial output", () => {
     expect(() => normalizeOpeningPgn("1. e4 e5 2. Bh6")).toThrow(/illegal SAN/);
   });

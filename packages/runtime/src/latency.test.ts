@@ -46,7 +46,7 @@ function freshRun(id: string): DrillRun {
 function runWithEventCount(eventCount: number): DrillRun {
   let run = freshRun(`latency-${eventCount}`);
   let moveIndex = 0;
-  while (true) {
+  while (moveIndex < 7) {
     const actor = moveIndex % 2 === 0 ? "user" : "opponent";
     const addedEvents = actor === "opponent" ? 2 : 1;
     if (run.events.length + addedEvents > eventCount) break;

@@ -99,12 +99,14 @@ export function projectPackDocument(
       legs: document.legs.map((leg) => ({
         id: leg.id,
         ...(leg.entryCheckpointId === undefined ? {} : { entryCheckpointId: leg.entryCheckpointId }),
+        ...(leg.branchLengthTarget === undefined ? {} : { branchLengthTarget: leg.branchLengthTarget }),
         objective: { type: leg.objective.type, summary: leg.objective.summary },
       })),
     }),
     feedbackPolicy: raw.feedbackPolicy,
     opponentPolicy: raw.opponentPolicy,
     ...(document.shapes === undefined ? {} : { shapes: document.shapes }),
+    ...(document.variantOf === undefined ? {} : { variantOf: document.variantOf }),
     spine: raw.mode === "line" ? [] : (document.spine ?? []).map(projectSpineNode),
     checkpoints: document.checkpoints.map((checkpoint) => ({
       id: checkpoint.id,
@@ -220,8 +222,24 @@ export class PackRegistry {
     options: { readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup } = {},
   ): Promise<PackRegistry> {
     const records = new Map<string, PackRecord>();
-    for (const { source, value, ledger, manifest } of documents) {
-      const document = freeze(validatedDocument(value, source, options.shapes));
+    const validated = documents.map(({ source, value, ledger, manifest }) => ({
+      source,
+      ledger,
+      manifest,
+      document: validatedDocument(value, source, options.shapes),
+    }));
+    const siblings = new Map(validated.map(({ document }) => [document.id, {
+      start: document.start,
+      objective: { type: document.objective.type },
+    }]));
+    for (const entry of validated) {
+      const checked = validatePackDocument(entry.document, { ...(options.shapes === undefined ? {} : { shapes: options.shapes }), packs: siblings });
+      if (!checked.valid || checked.document === undefined) {
+        const errors = checked.issues.filter((issue) => issue.severity === "error");
+        throw new ServerError("PACK_INVALID", `Pack ${entry.source} is invalid: ${errors.map((issue) => issue.message).join("; ")}`, { details: { source: entry.source, issues: errors } });
+      }
+      const document = freeze(checked.document);
+      const { source, ledger, manifest } = entry;
       if (records.has(document.id) && options.replaceDuplicates !== true) {
         throw new ServerError(
           "PACK_INVALID",

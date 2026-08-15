@@ -15,7 +15,10 @@ import {
   SUPPORTED_POLICY_MODES,
 } from "./capabilities.js";
 import { PackRegistry, SIDECAR_BASENAMES } from "./pack-registry.js";
-import { validatePackDocument } from "./pack-validation.js";
+import { assessmentAdmissionCode, validatePackDocument } from "./pack-validation.js";
+import { Chess } from "chessops/chess";
+import { makeFen, parseFen } from "chessops/fen";
+import { parseUci } from "chessops/util";
 
 const fixture = JSON.parse(
   readFileSync(
@@ -152,6 +155,111 @@ describe("pack authoring validation", () => {
     (rejected as unknown as Record<string, unknown>).guard = { evalSwingCp: null };
     expect(validatePackDocument(rejected).issues).toContainEqual(
       expect.objectContaining({ code: "GUARD_WITHOUT_IMMEDIATE_GUARD", path: "/guard" }),
+    );
+  });
+
+  it("validates guard windows, overrides, and the all-disabled refusal", () => {
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate as any).feedbackPolicy = "immediate_guard";
+    (candidate as any).guard = { window: { fromPly: 4, toPly: 2 }, overrides: [{ at: { spineNodeId: "missing" }, evalSwingCp: 100 }, { at: { atStart: true }, evalSwingCp: null }, { at: { atStart: true }, fireOnMate: false }], rulesTier: false, evalSwingCp: null, fireOnMate: false };
+    const codes = validatePackDocument(candidate).issues.map((issue) => issue.code);
+    expect(codes).toEqual(expect.arrayContaining(["GUARD_WINDOW_EMPTY", "GUARD_OVERRIDE_ANCHOR_UNKNOWN", "GUARD_OVERRIDE_DUPLICATE", "GUARD_DISABLES_EVERYTHING"]));
+  });
+
+  it("proves root-after-move variants and refuses false or absent siblings", () => {
+    const sibling = structuredClone(fixture) as DrillPackDefinition;
+    const board = Chess.fromSetup(parseFen(sibling.start.fen).unwrap()).unwrap();
+    const move = parseUci("c1e3")!;
+    board.play(move);
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate as any).id = "variant-child";
+    (candidate as any).start = { ...candidate.start, fen: makeFen(board.toSetup()) };
+    (candidate as any).variantOf = { packId: sibling.id, relation: { kind: "root_after_move", moveUci: "c1e3" } };
+    const packs = new Map([[sibling.id, { start: sibling.start, objective: { type: sibling.objective.type } }]]);
+    expect(validatePackDocument(candidate, { packs }).issues.filter((issue) => issue.code.startsWith("VARIANT_"))).toEqual([]);
+    (candidate as any).variantOf.relation.moveUci = "a1a8";
+    expect(validatePackDocument(candidate, { packs }).issues).toContainEqual(expect.objectContaining({ code: "VARIANT_RELATION_UNPROVEN" }));
+    (candidate as any).variantOf.packId = "absent";
+    expect(validatePackDocument(candidate, { packs }).issues).toContainEqual(expect.objectContaining({ code: "VARIANT_PACK_UNKNOWN" }));
+    expect(validatePackDocument(candidate).issues.some((issue) => issue.code === "VARIANT_PACK_UNKNOWN")).toBe(false);
+  });
+
+  it("refuses self-referential variants", () => {
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate as any).variantOf = {
+      packId: candidate.id,
+      relation: { kind: "same_root_other_side" },
+    };
+    expect(validatePackDocument(candidate).issues).toContainEqual(
+      expect.objectContaining({ code: "VARIANT_SELF_REFERENCE" }),
+    );
+  });
+
+  it("admits a budgeted blessed loss and refuses cursed-win conversion", () => {
+    const outcome = structuredClone(fixture) as DrillPackDefinition;
+    Object.assign(outcome as any, {
+      mode: "outcome",
+      start: { fen: "4k3/8/8/8/8/8/4P3/4K3 w - - 82 1", side: "white" },
+      difficulty: { branchLengthTarget: 18 },
+      checkpoints: [{ id: "resolution", trigger: { atPly: 1 }, actions: [] }],
+      objective: {
+        type: "hold",
+        summary: "Fixture",
+        grading: {
+          assessedBy: { kind: "syzygy", category: "blessed-loss", pieceCount: 3, sourceId: "syzygy", retrievedAt: "2026-08-15T00:00:00.000Z" },
+          resolveAt: { kind: "terminal" },
+        },
+      },
+    });
+    delete (outcome as any).authoredBoundary;
+    delete (outcome as any).deviations;
+    delete (outcome as any).spine;
+    const admitted = validatePackDocument(outcome);
+    expect(admitted.valid, JSON.stringify(admitted.issues)).toBe(true);
+    (outcome.objective as any).type = "win";
+    (outcome.objective.grading!.assessedBy as any).category = "cursed-win";
+    expect(validatePackDocument(outcome).issues).toContainEqual(expect.objectContaining({ code: "CURSED_WIN_CANNOT_ROOT_WIN" }));
+    (outcome as any).difficulty.branchLengthTarget = 8;
+    expect(validatePackDocument(outcome).issues).toContainEqual(expect.objectContaining({ code: "RULE_DRAW_ROOT_NEEDS_SEGMENT_BUDGET" }));
+  });
+
+  it("pins all assessment admission refusal families", () => {
+    expect(assessmentAdmissionCode("hold", "unknown")).toBe(
+      "ASSESSMENT_CATEGORY_INDETERMINATE",
+    );
+    expect(assessmentAdmissionCode("win", "blessed-loss")).toBe(
+      "ASSESSMENT_CATEGORY_MISMATCH",
+    );
+    expect(assessmentAdmissionCode("win", "cursed-win")).toBe(
+      "CURSED_WIN_CANNOT_ROOT_WIN",
+    );
+  });
+
+  it("carves out atStart while refusing it inside timing windows", () => {
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate as any).checkpoints = [{ id: "root", trigger: { atStart: true }, actions: [] }];
+    expect(validatePackDocument(candidate).issues.some((issue) => issue.code === "CHECKPOINT_TRUE_AT_ROOT")).toBe(false);
+    (candidate as any).checkpoints = [{ id: "bad", trigger: { windowOpens: { atStart: true }, windowCloses: { atPly: 2 }, luxuryMoveBudget: 0 }, actions: [] }];
+    expect(validatePackDocument(candidate).issues).toContainEqual(expect.objectContaining({ code: "START_TRIGGER_IN_WINDOW" }));
+  });
+
+  it("refuses atStart as a later trajectory entry and over-budget leg totals", () => {
+    const candidate = JSON.parse(
+      readFileSync("content/drafts/trajectory-mate-bishop-knight.json", "utf8"),
+    ) as DrillPackDefinition;
+    const entryId = candidate.legs![1]!.entryCheckpointId!;
+    const checkpoint = candidate.checkpoints.find((value) => value.id === entryId)!;
+    (checkpoint as any).trigger = { atStart: true };
+    const issues = validatePackDocument(candidate).issues;
+    expect(issues).toContainEqual(
+      expect.objectContaining({ code: "START_TRIGGER_NOT_FIRST_LEG" }),
+    );
+
+    (checkpoint as any).trigger = { atPly: 8 };
+    (candidate as any).difficulty.branchLengthTarget = 2;
+    for (const leg of candidate.legs!) (leg as any).branchLengthTarget = 2;
+    expect(validatePackDocument(candidate).issues).toContainEqual(
+      expect.objectContaining({ code: "TRAJECTORY_LENGTHS_EXCEED_PACK" }),
     );
   });
 

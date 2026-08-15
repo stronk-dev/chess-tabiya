@@ -22,6 +22,7 @@ export interface EvidenceSentence {
 const RULES_SENTENCES: Readonly<Record<RulesEvidenceFact, string>> = Object.freeze({
   checkmate: "The position is checkmate.",
   stalemate: "The position is stalemate.",
+  draw: "A draw is available under the rules at this position.",
   "draw-threefold": "Draw available: threefold repetition on this path.",
   "draw-50move": "Draw available: the 50-move rule applies on this path.",
   "draw-insufficient": "Draw: neither side has sufficient mating material.",

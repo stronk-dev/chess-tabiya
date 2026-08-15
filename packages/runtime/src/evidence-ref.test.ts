@@ -13,6 +13,7 @@ describe("evidence reference grammar", () => {
     expect(RULES_EVIDENCE_FACTS.map(rulesEvidenceRef)).toEqual([
       "rules:checkmate",
       "rules:stalemate",
+      "rules:draw",
       "rules:draw-threefold",
       "rules:draw-50move",
       "rules:draw-insufficient",

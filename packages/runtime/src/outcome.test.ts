@@ -77,6 +77,28 @@ describe("terminal outcome events", () => {
     });
   });
 
+  it("emits a fifty-move draw at 100 halfmoves but not 99", () => {
+    const start = "8/8/8/8/8/5k2/8/R3K3 w - - 98 1";
+    const second = commitMove(run("delayed_checkpoint", start), "a1a2", { at }).run;
+    expect(second.events.some((event) => event.type === "outcome.reached")).toBe(false);
+    const hundred = commitMove(second, "f3g3", { actor: "user", at }).run;
+    expect(hundred.events.at(-1)).toMatchObject({ type: "outcome.reached", data: { outcome: "draw" } });
+    expect(() => commitMove(hundred, "a2a3", { at })).toThrow(/Run is terminal/);
+  });
+
+  it("emits a draw only on the third path occurrence", () => {
+    let repeated = run("delayed_checkpoint", "4k3/8/8/8/8/8/8/R3K3 w - - 0 1");
+    for (const move of ["a1a2", "e8e7", "a2a1", "e7e8"] as const) repeated = commitMove(repeated, move, { actor: "user", at }).run;
+    expect(repeated.events.some((event) => event.type === "outcome.reached")).toBe(false);
+    for (const move of ["a1a2", "e8e7", "a2a1", "e7e8"] as const) repeated = commitMove(repeated, move, { actor: "user", at }).run;
+    expect(repeated.events.at(-1)).toMatchObject({ type: "outcome.reached", data: { outcome: "draw" } });
+  });
+
+  it("keeps checkmate ahead of the halfmove fallback", () => {
+    const won = commitMove(run("delayed_checkpoint", "7k/8/5KQ1/8/8/8/8/8 w - - 99 1"), "g6g7", { at }).run;
+    expect(won.events.at(-1)).toMatchObject({ type: "outcome.reached", data: { outcome: "win" } });
+  });
+
   it("refuses terminal roots with a named error", () => {
     try {
       run("delayed_checkpoint", "7k/6Q1/6K1/8/8/8/8/8 b - - 0 1");

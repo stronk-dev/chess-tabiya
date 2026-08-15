@@ -37,7 +37,9 @@ export type AuthoredFeedbackItem =
       readonly kind: "deviation";
       readonly id: string;
       readonly revealedBy: RevealAttribution;
-      readonly anchor: { readonly spineNodeId: string; readonly moveUci: string };
+      readonly anchor:
+        | { readonly spineNodeId: string; readonly moveUci: string }
+        | { readonly atStart: true; readonly moveUci: string };
       readonly note: string;
       readonly deviationClass?: string;
       readonly offObjective?: boolean;
@@ -142,14 +144,14 @@ function nodeSources(pack: DrillPackDefinition): ReadonlyMap<string, readonly No
   };
   visit(pack.spine ?? []);
   for (const [deviationIndex, deviation] of (pack.deviations ?? []).entries()) {
-    if (deviation.note === undefined || !("spineNodeId" in deviation.at)) continue;
-    add(deviation.at.spineNodeId, {
+    if (deviation.note === undefined || "fen" in deviation.at) continue;
+    const sourceKey = "atStart" in deviation.at ? "/start" : deviation.at.spineNodeId;
+    add(sourceKey, {
       kind: "deviation",
       id: `deviation#${deviationIndex}`,
-      anchor: {
-        spineNodeId: deviation.at.spineNodeId,
-        moveUci: deviation.moveUci,
-      },
+      anchor: "atStart" in deviation.at
+        ? { atStart: true, moveUci: deviation.moveUci }
+        : { spineNodeId: deviation.at.spineNodeId, moveUci: deviation.moveUci },
       note: deviation.note,
       deviationClass: deviation.class,
       ...(deviation.offObjective === undefined
@@ -260,7 +262,7 @@ export function projectAuthoredFeedback(
   const sourcesByNode = nodeSources(pack.document);
   const deliverable = new Set<string>();
   for (const [nodeId, sources] of sourcesByNode) {
-    if (!reachable.has(nodeId)) continue;
+    if (nodeId !== "/start" && !reachable.has(nodeId)) continue;
     for (const source of sources) deliverable.add(source.id);
   }
   for (const sourceId of planClassSourceIds(pack.document)) deliverable.add(sourceId);
@@ -283,6 +285,10 @@ export function projectAuthoredFeedback(
         if (!deliverable.has(source.id) || revealed.has(source.id)) continue;
         revealed.set(source.id, Object.freeze({ ...source, revealedBy: reveal.attribution }));
       }
+    }
+    for (const source of sourcesByNode.get("/start") ?? []) {
+      if (!deliverable.has(source.id) || revealed.has(source.id)) continue;
+      revealed.set(source.id, Object.freeze({ ...source, revealedBy: reveal.attribution }));
     }
 
     const checkpointEvents = run.events.filter(

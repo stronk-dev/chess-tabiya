@@ -1,4 +1,4 @@
-.PHONY: setup typecheck test test-browser schema-check build verify pack-check shape-check pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft up up-engines down
+.PHONY: setup typecheck test test-browser schema-check build verify pack-check shape-check pack-preview source-fetch candidate-emit candidate-attach sourcing-check verify-draft tablebase-walk up up-engines down
 
 setup:
 	pnpm install --frozen-lockfile
@@ -62,6 +62,11 @@ verify-draft:
 	@test -n "$(FILE)" || (echo "Usage: make verify-draft FILE=<path-to-pack.json> [OFFLINE=1]" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/verify-draft.ts --bundle --platform=node --format=esm --outfile=dist/verify-draft.js
 	OFFLINE="$(OFFLINE)" node apps/server/dist/verify-draft.js "$(abspath $(FILE))"
+
+tablebase-walk:
+	@test -n "$(FILE)$(FENS)" || (echo "Usage: make tablebase-walk FILE=<pack.json> [OUT=<report.json>] [OFFLINE=1] [ENUMERATE=decision|all|none] [MAX_QUERIES=N]" >&2; exit 2)
+	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/tablebase-walk.ts --bundle --platform=node --format=esm --outfile=dist/tablebase-walk.js
+	OFFLINE="$(OFFLINE)" node apps/server/dist/tablebase-walk.js $(if $(FILE),--file "$(abspath $(FILE))",--fens "$(abspath $(FENS))") $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(ENUMERATE),--enumerate "$(ENUMERATE)",) $(if $(MAX_QUERIES),--max-queries "$(MAX_QUERIES)",)
 
 up:
 	docker compose up --build --detach

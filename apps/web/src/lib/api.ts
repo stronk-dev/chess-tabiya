@@ -261,6 +261,8 @@ export interface Capabilities {
     | "immediate_guard"
   )[];
   readonly guardBasis: readonly ("rules" | "engine")[];
+  readonly assessmentCategories: readonly ("win" | "loss" | "draw" | "cursed-win" | "blessed-loss")[];
+  readonly objectiveAssessmentSets: Readonly<Record<"win" | "hold" | "save" | "resist", readonly string[]>>;
   readonly runSchemaVersion: string;
   readonly policyProfiles: {
     readonly strong_engine: {

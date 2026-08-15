@@ -30,6 +30,8 @@ async function main(): Promise<number> {
       const band = /^(\d+)-(\d+)$/.exec(args.get("rating-band") ?? "");
       if (!band) throw new SourcingError("RATING_BAND_REQUIRED", "--rating-band MIN-MAX is required");
       const engineEval = args.get("engine-eval") === "true";
+      const guardMateValue = args.get("guard-mate");
+      if (guardMateValue !== undefined && guardMateValue !== "true" && guardMateValue !== "false") throw new SourcingError("ARGUMENT_INVALID", "--guard-mate must be true or false");
       let engine: Awaited<ReturnType<typeof createPositionSeedEngineEvaluator>> | undefined;
       try {
         if (engineEval) {
@@ -44,6 +46,8 @@ async function main(): Promise<number> {
           ...(args.has("plies") ? { plies: Number(args.get("plies")) } : {}),
           ...(args.has("csv") ? { csv: args.get("csv")! } : {}),
           ...(args.has("output-root") ? { outputRoot: args.get("output-root")! } : {}),
+          ...(args.has("guard-cp") ? { guardCp: args.get("guard-cp") === "null" ? null : Number(args.get("guard-cp")) } : {}),
+          ...(guardMateValue === undefined ? {} : { guardMate: guardMateValue === "true" }),
           engineEval,
           ...(engine === undefined ? {} : { engineEvaluator: engine.evaluate }),
         });

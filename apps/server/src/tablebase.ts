@@ -4,6 +4,13 @@ import { countFenPieces } from "./sourcing/chess-facts.js";
 
 export const TABLEBASE_CATEGORIES = Object.freeze(["win","syzygy-win","maybe-win","cursed-win","draw","blessed-loss","maybe-loss","syzygy-loss","loss","unknown"] as const);
 export type TablebaseCategory = typeof TABLEBASE_CATEGORIES[number];
+export const ASSESSMENT_CATEGORIES = Object.freeze(["win", "loss", "draw", "cursed-win", "blessed-loss"] as const satisfies readonly TablebaseCategory[]);
+export const OBJECTIVE_ASSESSMENT_SETS = Object.freeze({
+  win: Object.freeze(["win"] as const),
+  hold: Object.freeze(["draw", "cursed-win", "blessed-loss"] as const),
+  save: Object.freeze(["loss", "blessed-loss"] as const),
+  resist: Object.freeze(["loss", "blessed-loss"] as const),
+} satisfies Readonly<Record<"win" | "hold" | "save" | "resist", readonly TablebaseCategory[]>>);
 export interface TablebaseMove { readonly uci:string; readonly san:string; readonly category:TablebaseCategory; readonly dtz:number|null; readonly preciseDtz:number|null }
 export interface TablebasePosition { readonly category:TablebaseCategory; readonly dtz:number|null; readonly moves:readonly TablebaseMove[] }
 export interface TablebaseSource { readonly kind:"lichess"|"mock"; probe(fen:string):Promise<TablebasePosition> }

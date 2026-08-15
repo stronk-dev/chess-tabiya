@@ -1,6 +1,6 @@
 # RFC: Authoring frictions — the full frictions wave
 
-- **Status:** draft
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/01-training-model.md` §Outcome types (`:81-91`) and the mode table (`:93-100`); `design/00-thesis.md` §Target player on-ramp knobs (`:148-154`) and the honest-target rule (`:84-96`); `design/04-content-architecture.md` §0a content-transfer test; `design/BACKLOG.md` rows **Opening-wave authoring frictions**, **Trajectory-format frictions**, **On-ramp wave frictions**, **Endgame-wave frictions**, **Wave-4a follow-ups**, **Mates-batch frictions**, **Cursed wins / blessed losses vs the outcome types**, **Declared-vs-executable vocabulary law**, and the defect rows **D29**, **D30**, **D31**. *Rows are cited by title throughout this RFC: `design/BACKLOG.md` line numbers shifted twice during this draft's review and are not a stable address.*

@@ -90,7 +90,7 @@ export async function emitOpeningCandidate(options: OpeningEmitOptions): Promise
   const rows = matching.map((row) => ({ row, moves: normalizeOpeningPgn(row.pgn) })).sort((left, right) => right.moves.length - left.moves.length || left.row.name.localeCompare(right.row.name));
   const selected = rows[0]!;
   if (options.splitPly >= selected.moves.length) throw new SourcingError("OPENINGS_SPLIT_INVALID", `split ply ${options.splitPly} leaves no drill plies`);
-  const id = slug(`${selected.row.eco}-${selected.row.name}`);
+  const id = `${slug(`${selected.row.eco}-${selected.row.name}`)}-${options.learnerSide}`;
   const startMoves = selected.moves.slice(0, options.splitPly);
   const drillMoves = selected.moves.slice(options.splitPly);
   const spine = spineChain(drillMoves, options.splitPly + 1);
@@ -149,7 +149,12 @@ export async function emitOpeningCandidate(options: OpeningEmitOptions): Promise
     const existing = await readJson(resolve(output, "job.json")) as Record<string, unknown>;
     await Promise.all(["pack.json", "evidence.json", "sources.json"].map((file) => access(resolve(output, file))));
     if (existing.emissionJobDigest === job.emissionJobDigest && (await checkSourcingDirectory(output)).valid) return output;
-  } catch {
+    const existingArgs = existing.args as Record<string, unknown> | undefined;
+    if (existing.emissionJobDigest !== job.emissionJobDigest && existingArgs?.learnerSide !== undefined && existingArgs.learnerSide !== options.learnerSide) {
+      throw new SourcingError("CANDIDATE_IDENTITY_COLLISION", `candidate ${id} already belongs to ${JSON.stringify(existingArgs)}; refused ${JSON.stringify(args)}`);
+    }
+  } catch (error) {
+    if (error instanceof SourcingError) throw error;
     // Missing, changed, incomplete or invalid output is re-emitted below.
   }
   await writeCanonicalJson(resolve(output, "pack.json"), pack);

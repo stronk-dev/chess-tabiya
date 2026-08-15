@@ -1,5 +1,5 @@
-import { readFile } from "node:fs/promises";
-import { basename, resolve } from "node:path";
+import { readFile, readdir } from "node:fs/promises";
+import { basename, extname, join, resolve } from "node:path";
 
 import {
   validatePackDocument,
@@ -22,6 +22,38 @@ function fileIssue(code: string, message: string): PackValidationIssue {
     path: "/",
     message,
   });
+}
+
+async function packJsonFiles(directory: string): Promise<readonly string[]> {
+  let entries;
+  try { entries = await readdir(directory, { withFileTypes: true }); }
+  catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") return []; throw error; }
+  const files: string[] = [];
+  for (const entry of entries) {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...await packJsonFiles(path));
+    else if (entry.isFile() && extname(entry.name) === ".json" && !isSidecarName(entry.name)) files.push(path);
+  }
+  return files;
+}
+
+async function siblingLookup(): Promise<Map<string, { readonly start: { readonly fen: string; readonly side: "white" | "black" }; readonly objective: { readonly type: string } }>> {
+  const files = [
+    ...await packJsonFiles(resolve("content/drafts")),
+    ...await packJsonFiles(resolve("content/packs")),
+  ];
+  const result = new Map<string, { start: { fen: string; side: "white" | "black" }; objective: { type: string } }>();
+  for (const file of files) {
+    try {
+      const value = JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>;
+      const start = value.start as Record<string, unknown> | undefined;
+      const objective = value.objective as Record<string, unknown> | undefined;
+      if (typeof value.id === "string" && typeof start?.fen === "string" && (start.side === "white" || start.side === "black") && typeof objective?.type === "string") {
+        result.set(value.id, { start: { fen: start.fen, side: start.side }, objective: { type: objective.type } });
+      }
+    } catch { /* A malformed unrelated pack is absent from this narrow lookup. */ }
+  }
+  return result;
 }
 
 export async function checkPackFile(file: string): Promise<PackCheckResult> {
@@ -70,7 +102,8 @@ export async function checkPackFile(file: string): Promise<PackCheckResult> {
     });
   }
   const shapes = await ShapeRegistry.loadDefault();
-  const result = validatePackDocument(value, { shapes });
+  const packs = await siblingLookup();
+  const result = validatePackDocument(value, { shapes, packs });
   return Object.freeze({ file: absolute, valid: result.valid, issues: result.issues });
 }
 

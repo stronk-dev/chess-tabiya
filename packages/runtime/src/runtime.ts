@@ -277,7 +277,10 @@ export function commitMove(
   }
   const cursorNode = getNode(original, original.activeCursor.nodeId);
   const position = positionFromFen(cursorNode.fen);
-  if (TERMINAL_OBJECTIVE_STATES.has(cursorNode.objectiveState) || position.isEnd()) {
+  const cursorHasOutcome = original.events.some(
+    (event) => event.type === "outcome.reached" && event.data.nodeId === cursorNode.id,
+  );
+  if (TERMINAL_OBJECTIVE_STATES.has(cursorNode.objectiveState) || position.isEnd() || cursorHasOutcome) {
     throw runTerminated(cursorNode.id);
   }
 
@@ -337,7 +340,9 @@ export function commitMove(
     createdAt: at,
     ...(options.clockState === undefined ? {} : { clockState: options.clockState }),
   };
-  const outcome = terminalOutcome(position, run.start.side);
+  const repetitions = historyFrom(run, run.activeCursor.nodeId)
+    .filter((candidate) => candidate.transposeKey === node.transposeKey).length + 1;
+  const outcome = terminalOutcome(position, run.start.side, repetitions);
   const next = appendEvents(run, [
     { type: "move.committed", at, data: { node } },
     ...(outcome === undefined

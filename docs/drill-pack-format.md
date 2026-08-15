@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.15; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.16; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -32,9 +32,16 @@ Version 0.15 adds the closed `stated_reasoning` checkpoint interaction. It carri
 authored spine moves, or typed feedback claims. Match phrases are author-owned and
 digest-versioned; the product has no global synonym or semantic-grading vocabulary.
 
+Version 0.16 adds root-addressable `atStart` checkpoint and deviation anchors,
+machine-proved `variantOf` sibling relations, optional per-leg length targets, and
+guard windows/overrides with independently switchable rules, centipawn, and forced-mate
+signals. Branch length targets now accept 2–40 plies; Plan Drill values above 20 carry a
+warning. Syzygy root declarations admit determinate `cursed-win` and `blessed-loss`
+categories under objective-specific admission rules, and `rules_fact: draw` is executable.
+
 `schemas/drill_pack.example.json` is the living Najdorf schema fixture. The
 fixture and schema under `archive/brief-v2/` remain frozen v0.1 inputs and are
-tested only against each other. The v0.1 fixture intentionally fails v0.15 because
+tested only against each other. The v0.1 fixture intentionally fails v0.16 because
 it has no required `feedbackPolicy` and uses superseded fields.
 
 ## Implemented v0.5 shape
@@ -50,15 +57,15 @@ it has no required `feedbackPolicy` and uses superseded fields.
   IDs. Prediction carries an optional board flip and records policy mass without a
   verdict. Stated reasoning names grounded key points and their literal match phrases.
 - The frozen simple trigger vocabulary is `atPly`, `atSpineNode`, `fenPredicate`,
-  and `materialBalance`. A timing window contains `windowOpens`, `windowCloses`,
+  `atStart`, and `materialBalance`. A timing window contains `windowOpens`, `windowCloses`,
   and a non-negative `luxuryMoveBudget`; each boundary uses a simple trigger.
 - `authoredBoundary` contains at least one of spine-node IDs, a non-negative ply
   horizon, or FEN predicates.
 - `deviations` replaces `acceptedAlternatives`. Every entry identifies a spine
-  node or FEN, a UCI move, and one required classification. It may also mark the
+  node, FEN, or the start position, a UCI move, and one required classification. It may also mark the
   move off-objective and carry a note.
-- `difficulty.branchLengthTarget` accepts 2–20 plies, covering the declared 2–8
-  on-ramp and 8–20 core bands. Rating bands may begin at 1000.
+- `difficulty.branchLengthTarget` accepts 2–40 plies. The declared 2–8 on-ramp
+  and 8–20 Plan bands remain teaching targets rather than schema ceilings. Rating bands may begin at 1000.
 - `capture_intent` is no longer accepted in checkpoint `actions`; it is represented
   by the typed interaction. The reserved provenance source `session_distilled` is
   accepted.

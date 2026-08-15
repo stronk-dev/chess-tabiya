@@ -69,7 +69,7 @@ import {
   publicEvents,
   publicNodes,
 } from "./feedback-policy.js";
-import { orchestratePackMove } from "./pack-orchestrator.js";
+import { orchestratePackMove, orchestratePackStart } from "./pack-orchestrator.js";
 import { applyRecordedEngineGuard, applyRulesGuard } from "./guard.js";
 import {
   PackRegistry,
@@ -210,7 +210,9 @@ function learnerToMove(run: DrillRun, node: DrillRun["nodes"][number]): boolean 
 }
 
 function terminalPosition(fen: string): boolean {
-  return Chess.fromSetup(parseFen(fen).unwrap()).unwrap().isEnd();
+  const position = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
+  // A bare FEN can carry the fifty-move counter, but repetition is path state.
+  return position.isEnd() || position.halfmoves >= 100;
 }
 
 function seedMoveSan(fen: string, uci: string): string {
@@ -398,6 +400,7 @@ export class RunService {
         cause: error,
       });
     }
+    if (pack !== undefined) run = orchestratePackStart(pack.document, run).run;
     const title = pack?.document.title;
     const root = run.nodes[0]!;
     const key = progressRootKey(run.sessionKind, run.packId ?? null, root.transposeKey);
@@ -628,7 +631,7 @@ export class RunService {
         (candidate) => candidate.id === result.run.activeCursor.nodeId,
       );
       if (consequence !== undefined) {
-        const guarded = applyRulesGuard(result.run, consequence.id, consequence.createdAt);
+        const guarded = applyRulesGuard(pack.document, result.run, consequence.id, consequence.createdAt);
         result = Object.freeze({
           run: guarded.run,
           emitted: Object.freeze([...result.emitted, ...guarded.emitted]),

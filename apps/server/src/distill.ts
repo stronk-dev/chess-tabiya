@@ -78,7 +78,7 @@ export function distillRun(run: DrillRun, source: PackRecord | undefined, input:
   const document = Object.freeze({
     id: input.packId, version: "0.1.0", title: input.title, mode: "outcome",
     phase: source?.document.phase ?? "middlegame",
-    difficulty: { minOnlineRapid: 1000, maxOnlineRapid: 2000, label: "Session-distilled draft", ...(length >= 2 && length <= 20 ? { branchLengthTarget: length } : {}) },
+    difficulty: { minOnlineRapid: 1000, maxOnlineRapid: 2000, label: "Session-distilled draft", ...(length >= 2 && length <= 40 ? { branchLengthTarget: length } : {}) },
     provenance: { reviewStatus: "draft", sources: ["session_distilled", `run ${run.id}; session identity ${run.sessionDigest}${run.packId === null ? "" : `; source ${run.packId}@${run.packDigest}`}`], graduationBlockers: blockers },
     start: run.start,
     objective: { type: "play_until_checkpoint", summary: "Play the recorded consequence to the mechanical checkpoint." },

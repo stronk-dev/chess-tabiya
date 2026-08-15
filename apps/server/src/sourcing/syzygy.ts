@@ -6,7 +6,7 @@ import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 
 import { validatePackDocument } from "../pack-validation.js";
-import { emissionJobDigest, sha256, writeCanonicalJson } from "./canonical.js";
+import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import { SourcingHttpClient } from "./http.js";
 import { ingestLocalFile } from "./inputs.js";
 import { withSourceLock } from "./lock.js";
@@ -130,7 +130,7 @@ export async function emitSyzygyCandidates(options: SyzygyEmitOptions): Promise<
   const collisions = new Map<string, number>();
   const outputs: string[] = [];
   for (const input of inputs) {
-    const baseId = `endgame-${slug(input.label)}`;
+    const baseId = `endgame-${slug(input.label)}-${options.learnerSide}`;
     const occurrence = (collisions.get(baseId) ?? 0) + 1;
     collisions.set(baseId, occurrence);
     const id = occurrence === 1 ? baseId : `${baseId}-${occurrence}`;
@@ -178,7 +178,7 @@ export async function emitSyzygyCandidates(options: SyzygyEmitOptions): Promise<
       title: input.label,
       mode: "outcome",
       phase: "endgame",
-      ...(atPly <= 20 ? { difficulty: { branchLengthTarget: atPly } } : {}),
+      ...(atPly <= 40 ? { difficulty: { branchLengthTarget: atPly } } : {}),
       start: { fen: input.fen, side: options.learnerSide },
       objective: { type: "play_until_checkpoint", summary: `Play this endgame out for ${atPly} plies from this position.`, successConditions: [{ kind: "reach_checkpoint", checkpointId: "endgame-played-out" }] },
       checkpoints: [{ id: "endgame-played-out", trigger: { atPly }, actions: [] }],
@@ -194,6 +194,16 @@ export async function emitSyzygyCandidates(options: SyzygyEmitOptions): Promise<
     const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: pack.id, packVersion: pack.version, packDigest: digest, sourcedAt, records, abstentions };
     const args = { positions: ingested.entry.origin.kind === "local-file" ? ingested.entry.origin.path : options.positions, learnerSide: options.learnerSide, opponent: options.opponent, checkpointPlies: options.checkpointPlies ?? 16, ...(options.targetElo === undefined ? {} : { targetElo: options.targetElo }) };
     const output = resolve(options.outputRoot ?? "content/candidates", id);
+    try {
+      const existing = await readJson(resolve(output, "job.json")) as Record<string, unknown>;
+      const existingArgs = existing.args as Record<string, unknown> | undefined;
+      const nextDigest = emissionJobDigest("syzygy", args, sourceEntries.map((entry) => entry.origin.kind === "http" ? entry.origin.etag : null));
+      if (existing.emissionJobDigest !== nextDigest && existingArgs?.learnerSide !== undefined && existingArgs.learnerSide !== options.learnerSide) {
+        throw new SourcingError("CANDIDATE_IDENTITY_COLLISION", `candidate ${id} already belongs to ${JSON.stringify(existingArgs)}; refused ${JSON.stringify(args)}`);
+      }
+    } catch (error) {
+      if (error instanceof SourcingError) throw error;
+    }
     await writeCanonicalJson(resolve(output, "pack.json"), pack);
     await writeCanonicalJson(resolve(output, "evidence.json"), ledger);
     await writeCanonicalJson(resolve(output, "sources.json"), manifest);

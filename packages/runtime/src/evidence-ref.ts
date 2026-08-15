@@ -1,6 +1,7 @@
 export const RULES_EVIDENCE_FACTS = Object.freeze([
   "checkmate",
   "stalemate",
+  "draw",
   "draw-threefold",
   "draw-50move",
   "draw-insufficient",

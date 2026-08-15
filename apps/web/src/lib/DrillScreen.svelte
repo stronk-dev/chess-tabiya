@@ -489,7 +489,13 @@
       .find(
         (candidate) =>
           candidate.type === "checkpoint.reached" &&
-          candidate.data.nodeId !== run.activeCursor.nodeId &&
+          (candidate.data.nodeId !== run.activeCursor.nodeId ||
+            (run.nodes.find((node) => node.id === candidate.data.nodeId)?.parentId === null &&
+              pack?.checkpoints.some((checkpoint) =>
+                checkpoint.id === candidate.data.checkpointId &&
+                !("windowOpens" in checkpoint.trigger) &&
+                "atStart" in checkpoint.trigger,
+              ))) &&
           path.has(candidate.data.nodeId),
       );
     return event?.type === "checkpoint.reached" ? event.data.checkpointId : undefined;

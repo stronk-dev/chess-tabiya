@@ -47,6 +47,7 @@ make build
 make test-browser
 make pack-check FILE=content/drafts/my-pack.json
 make pack-preview FILE=content/drafts/my-pack.json
+make tablebase-walk FILE=content/drafts/my-pack.json OFFLINE=1
 make up
 make up-engines
 make down
@@ -66,6 +67,10 @@ starts the built application in development mode with the selected draft in
 the registry; Node restarts the preview when that file changes. Drafts may
 replace a reviewed pack with the same id during preview, so edits can be tested
 without moving files into `content/packs/`.
+
+`make tablebase-walk` is the read-only Syzygy authoring instrument. It accepts one pack or
+a newline-delimited FEN file, can enumerate learner decisions, and writes only its report
+when `OUT` is supplied. It never promotes or rewrites content.
 
 Every JSON file beneath a served content directory is treated as a pack unless
 its basename is reserved as a sourcing sidecar: `evidence.json`, `sources.json`,

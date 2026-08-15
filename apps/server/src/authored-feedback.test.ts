@@ -103,6 +103,59 @@ function smallPack(overrides: Record<string, unknown> = {}): DrillPackDefinition
 }
 
 describe("authored feedback projection", () => {
+  it("persists an atStart checkpoint when a pack run is created", async () => {
+    const document = smallPack({
+      planClasses: [{ id: "root-plan", label: "Root plan" }],
+      checkpoints: [
+        {
+          id: "root-intent",
+          trigger: { atStart: true },
+          actions: [],
+          interaction: { type: "intent_capture", planClassIds: ["root-plan"] },
+        },
+      ],
+    });
+    const registry = await PackRegistry.fromDocuments([
+      { source: "root-checkpoint", value: document },
+    ]);
+    const storage = new SQLiteRunStorage();
+    try {
+      const service = new RunService(storage, { packRegistry: registry });
+      const run = await service.create(
+        {
+          id: "root-checkpoint",
+          session: { kind: "pack", packId: document.id },
+          policyConfig,
+          seed: 23,
+          createdAt: at,
+        },
+        "writer-a",
+      );
+      expect(run.events).toContainEqual(
+        expect.objectContaining({
+          type: "checkpoint.reached",
+          data: expect.objectContaining({ checkpointId: "root-intent" }),
+        }),
+      );
+      expect(storage.read("root-checkpoint")!.run.events).toContainEqual(
+        expect.objectContaining({
+          type: "checkpoint.reached",
+          data: expect.objectContaining({ checkpointId: "root-intent" }),
+        }),
+      );
+    } finally {
+      storage.close();
+    }
+  });
+
+  it("releases a root-anchored deviation note after a checkpoint reveal", async () => {
+    const document = smallPack({ deviations: [{ at: { atStart: true }, moveUci: "e2e4", class: "interesting_deviation", note: "Root alternative fixture." }] });
+    const pack = await registered(document);
+    let run = play(newRun(pack, "root-note"), ["e2e4"]);
+    run = reachCheckpoint(run, "reveal", at).run;
+    expect(projectAuthoredFeedback(pack, run).items).toContainEqual(expect.objectContaining({ kind: "deviation", anchor: { atStart: true, moveUci: "e2e4" }, note: "Root alternative fixture." }));
+  });
+
   it("reveals Pack A's actual main path without sibling or later-path leakage", async () => {
     const pack = await registered(packA);
     let run = play(newRun(pack, "main-path"), ["c8f5", "g1f3", "e7e6", "f1e2"]);

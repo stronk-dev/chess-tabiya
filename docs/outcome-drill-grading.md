@@ -17,6 +17,9 @@ requires:
   outcome, material-balance, or checkmate/stalemate rules facts and may state a
   target plus the non-terminal states from which they apply.
 
+`rules_fact: draw` is the one non-terminal rules condition that may resolve an
+outcome objective: it means a rules draw is available here.
+
 `hold` and `save` have the same terminal floor: win or draw succeeds and loss
 fails. Their distinction is the claimed root assessment, not a different fact
 at the end. `win` requires a win. `resist` succeeds on a loss only when its
@@ -40,6 +43,16 @@ ordinary checkpoint can never stop an outcome game by declaring success.
 Automatic win/draw/loss rules compile even when `successConditions` is absent. Authored
 conditions are additive; they are not an unlock token for terminal grading. This applies to
 top-level objectives and trajectory legs alike.
+
+The runtime emits `outcome.reached: draw` for threefold repetition on the active path and
+for a FEN whose halfmove clock reaches 100. Checkmate and ordinary chess termination are
+tested first, so mate at halfmove 100 remains a win or loss. A node carrying that event is
+terminal even when legal moves remain.
+
+Syzygy assessment admission is objective-specific: `win` accepts only `win`; `hold`
+accepts `draw`, `cursed-win`, or `blessed-loss`; `save` and `resist` accept `loss` or
+`blessed-loss`. The capability response publishes both the determinate category list and
+these sets.
 
 Rules are ordered so a degradation on the same committed node wins over
 checkpoint resolution. Checkpoint resolution uses `checkpointReachedHere`, not
