@@ -11,12 +11,15 @@ is good, bad, important, or the reason to choose a move.
 Pack schema 0.10 introduced `structuralFeature` as a `fenPredicate` variant and
 `structural_feature` as a success-condition kind. Expressions compose feature leaves with `all`,
 `any`, `not`, `pieceOnSquare`, and—since pack schema 0.13—bounded `quantified` and exact
-orientation `mirrored` nodes. The fifteen closed feature kinds are current-file pawn safety;
+orientation `mirrored` nodes. Pack schema 0.18 widens the vocabulary to eighteen closed feature kinds. They are current-file pawn safety;
 Tabiya’s strict outpost detector; backward, isolated, doubled, and passed pawns; open and
 colour-relative half-open files; exact blockers between aligned squares; one colour’s direct attack
 count; attack-reachable square counts for knights, bishops, rooks, and queens; and four code-defined
-structure conventions (Carlsbad, White IQP, Black IQP, and Maroczy Bind); plus bishop-square shade,
-per-colour or signed-difference pawn counts, and tempo-qualified direct or distant king opposition.
+structure conventions (Carlsbad, White IQP, Black IQP, and Maroczy Bind); bishop-square shade,
+per-colour or signed-difference pawn counts, tempo-qualified direct or distant king opposition,
+all-role piece census, current king edge/corner zones, and static empty-board distance for kings,
+knights, bishops, rooks, and queens. `pawn_count` and `piece_reach_count` with `scope: every`
+remain readable only for compatibility and emit authoring warnings; predicate wave 4 owns removal.
 
 `quantified` applies `some` or `every` to an ordered file range or square rectangle. It removes
 finite authoring fans without adding a new chess judgement. `mirrored` rewrites an expression over
@@ -25,6 +28,11 @@ two-axis rotation; opposition colour flips only when colours flip. Catalogue nam
 mirrored because their orientation is part of the convention. A files mirror may widen one shape
 entry, but a colour mirror requires a separately authored entry because plan-side labels are
 entry-wide.
+
+King zones and static distance are invariant under board reflection; their colours and
+piece-target colours flip only under colour reflection. A bishop distance to an unreachable
+opposite-colour square is false for every comparison, including `atLeast: 0`, rather than
+vacuously true.
 
 Pawn safety is explicitly current, not permanent. It ignores future captures into a new file and
 reports that scope in the sentence. Direct attack counts are per colour and are never subtracted
@@ -40,8 +48,9 @@ Author predicates and learner observations are different types. Arbitrary thresh
 line endpoints cannot be finitely enumerated. `structuralReading(fen)` instead emits a bounded,
 canonical observation projection: pawn/file facts, occupied-piece pawn safety and outposts,
 per-colour direct counts on occupied non-pawn squares, per-piece reach counts, slider rays, and
-catalogue matches. It includes exactly two per-colour pawn counts, bishop-square shade per bishop,
-and at most one opposition fact; it never emits signed pawn differences. The projection carries no
+catalogue matches. It includes exactly twelve per-colour/per-role piece counts, no legacy
+`pawn_count`, bishop-square shade per bishop, king edge/corner zones, one king-to-king distance,
+and at most one opposition fact; it never emits signed piece differences. The projection carries no
 score, rank, severity, advantage, or significance.
 
 `structuralDelta(parentFen, fen)` reports gained/lost observation identities and current pawn-file
@@ -66,7 +75,14 @@ existing evidence renderer has no FEN argument. Exact position-specific prose is
 current FEN in the structural reading. This prevents evidence text from inventing parameters that
 were not persisted.
 
-Pack B (`carlsbad-minority-attack`) now has one machine-graded target: Black has a backward c-pawn
+Pack schema 0.18 also adds `plan_consequence`. It resolves a pack plan class through its shape-plan
+reference to that shape plan's structural success signature, then compiles the result to the same
+FEN predicate used by an inline structural condition. Unknown, unbound, uncomputable, and
+never-present signatures fail closed at pack load. Revealed plan classes publish whether their
+structural consequence is graded, declared uncheckable, or unbound; the latter two are never turned
+into a learner verdict.
+
+Pack B (`carlsbad-minority-attack`) now has one objective-bound target: Black has a backward c-pawn
 and White has a half-open c-file. The condition is false at the root and becomes true after the
 minority attack’s structural concession; both leaves appear in the objective transition’s evidence.
 The alternative central and kingside plans are not graded without recorded intent.
@@ -86,7 +102,8 @@ Those require attributed evidence or later breadth contracts.
 
 The structural projection is instrumented rather than gated by wall-clock time. On 2026-08-14,
 200 samples on a quiet development machine measured **3.393 ms median** and **5.336 ms maximum**
-after the fifteen-kind widening.
+after the fifteen-kind widening. Predicate wave 3 retains the instrument-only rule with the widened
+eighteen-kind projection; wall-clock samples remain observations rather than gates.
 The same code reached **103.5 ms maximum** under parallel-agent load. That variance is why the unit
 test asserts only a non-vacuous finite sample: a gate that can report either answer on identical
 code is not evidence.

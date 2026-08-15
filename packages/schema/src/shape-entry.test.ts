@@ -14,7 +14,7 @@ const entries = readdirSync(new URL("../../../content/shapes/", import.meta.url)
   .sort()
   .map((name) => json(`../../../content/shapes/${name}`));
 
-describe("shape entry schema 0.2", () => {
+describe("shape entry schema 0.3", () => {
   it("is closed everywhere and shares the pack expression grammar", () => {
     const open: string[] = [];
     const walk = (value: unknown, path = ""): void => {
@@ -29,8 +29,8 @@ describe("shape entry schema 0.2", () => {
     expect(schema.$defs.structuralExpression).toEqual(packSchema.$defs.structuralExpression);
     expect(schema.$defs.structuralFeature).toEqual(packSchema.$defs.structuralFeature);
     expect(schema.$defs.structuralFeature.oneOf.map((branch: any) => branch.properties.kind.const)).toEqual(packSchema.$defs.structuralFeature.oneOf.map((branch: any) => branch.properties.kind.const));
-    expect(schema.$id).toBe("urn:chess-tabiya:schema:shape-entry:0.2");
-    expect(SHAPE_ENTRY_SCHEMA_VERSION).toBe("0.2");
+    expect(schema.$id).toBe("urn:chess-tabiya:schema:shape-entry:0.3");
+    expect(SHAPE_ENTRY_SCHEMA_VERSION).toBe("0.3");
   });
 
   it("validates all official entries", () => {

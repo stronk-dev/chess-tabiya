@@ -35,8 +35,8 @@ describe("predicate wave 2 official content", () => {
       expect(matchesStructuralExpression(fen, opposite.trigger)).toBe(oppositeExpected);
       expect(matchesStructuralExpression(fen, same.trigger) && matchesStructuralExpression(fen, opposite.trigger)).toBe(false);
     }
-    expect(same.version).toBe("0.2.0");
-    expect(opposite.version).toBe("0.2.0");
+    expect(same.version).toBe("0.2.1");
+    expect(opposite.version).toBe("0.3.0");
   });
 
   it("widens the Black fianchetto across files without claiming the White mirror", () => {
@@ -70,7 +70,8 @@ describe("predicate wave 2 official content", () => {
     const take = entry.plans.find((plan) => plan.id === "white-take-the-opposition")!.success.signature!;
     expect(matchesStructuralExpression("8/8/8/4K3/8/4k3/8/8 b - - 0 1", take)).toBe(true);
     expect(matchesStructuralExpression("8/8/8/4K3/8/4k3/8/8 w - - 0 1", take)).toBe(false);
-    expect(entry.version).toBe("0.2.0");
-    expect(entry.plans.filter((plan) => plan.id !== "white-take-the-opposition").every((plan) => plan.success.signature === null)).toBe(true);
+    expect(entry.version).toBe("0.2.1");
+    expect(entry.plans.filter((plan) => ["white-triangulate", "black-shoulder-and-race"].includes(plan.id)).every((plan) => plan.success.signature === null)).toBe(true);
+    expect(entry.plans.find((plan) => plan.id === "black-hold-the-opposition")?.success.signature).not.toBeNull();
   });
 });

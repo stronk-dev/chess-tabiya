@@ -35,7 +35,7 @@
     "counterplay-before-safety"
   ],
   "shapes": [
-    "opposite-castling-race"
+    { "shape": "opposite-castling-race", "relation": "prospective" }
   ],
   "planClasses": [
     {

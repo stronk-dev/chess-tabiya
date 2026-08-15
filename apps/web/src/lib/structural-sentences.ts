@@ -26,6 +26,9 @@ export function renderStructuralObservation(observation: StructuralObservation):
   if (observation.kind === "bishop_on_shade") return `${side(observation.color)}'s bishop on ${observation.squares[0]} stands on a ${observation.shade} square.`;
   if (observation.kind === "pawn_count") return `${side(observation.color)} has ${count(observation.count, "pawn")}.`;
   if (observation.kind === "king_opposition") return `${side(observation.color)} has the ${observation.form} opposition: kings on ${observation.squares.join(" and ")} with ${side(observation.color === "white" ? "black" : "white")} to move.`;
+  if (observation.kind === "piece_count") return `${side(observation.color)} has ${count(observation.count, observation.role ?? "piece")}.`;
+  if (observation.kind === "king_zone") return `${side(observation.color)}'s king on ${observation.squares[0]} stands ${observation.zone === "corner" ? "on a1, a8, h1 or h8" : "on the a-file, the h-file, the first rank or the eighth rank"}.`;
+  if (observation.kind === "piece_distance") return `The kings on ${observation.squares.join(" and ")} stand ${count(observation.count, "king-move")} apart.`;
   const exhaustive: never = observation.kind;
   throw new TypeError(`Unhandled structural observation: ${String(exhaustive)}`);
 }
@@ -56,6 +59,18 @@ function renderFeatureSpec(feature: StructuralFeature): string {
     return `${feature.color} has ${comparison(inverse, Math.abs(feature.count))} fewer pawn${feature.count === -1 ? "" : "s"} than ${other}`;
   }
   if (feature.kind === "king_opposition") return `${feature.color} has the ${feature.form} opposition`;
+  if (feature.kind === "piece_count") {
+    const noun = `${feature.role}${Math.abs(feature.count) === 1 ? "" : "s"}`;
+    if (feature.basis === "count") return `${feature.color} has ${comparison(feature.comparison, feature.count)} ${noun}`;
+    const other = feature.color === "white" ? "black" : "white";
+    return `${feature.color} has ${comparison(feature.comparison, feature.count)} more ${noun} than ${other}`;
+  }
+  if (feature.kind === "king_zone") return `${feature.color}'s king stands ${feature.zone === "corner" ? "on a1, a8, h1 or h8" : "on the a-file, the h-file, the first rank or the eighth rank"}`;
+  if (feature.kind === "piece_distance") {
+    const subject = feature.role === "king" ? `${feature.color}'s king` : `${feature.color}'s nearest ${feature.role}`;
+    const target = feature.target.kind === "square" ? feature.target.square : `the nearest ${feature.target.color} ${feature.target.role}`;
+    return `${subject} is ${comparison(feature.comparison, feature.count)} ${feature.role}-moves from ${target}`;
+  }
   const exhaustive: never = feature;
   throw new TypeError(`Unhandled structural feature: ${JSON.stringify(exhaustive)}`);
 }

@@ -1,6 +1,6 @@
 export const DRILL_RUN_SCHEMA_VERSION = "0.14" as const;
-export const DRILL_PACK_SCHEMA_VERSION = "0.17" as const;
-export const SHAPE_ENTRY_SCHEMA_VERSION = "0.2" as const;
+export const DRILL_PACK_SCHEMA_VERSION = "0.18" as const;
+export const SHAPE_ENTRY_SCHEMA_VERSION = "0.3" as const;
 
 export type DrillRunSchemaVersion = typeof DRILL_RUN_SCHEMA_VERSION;
 export type DrillPackSchemaVersion = typeof DRILL_PACK_SCHEMA_VERSION;

@@ -199,7 +199,7 @@ export interface DrillPackDefinition {
     readonly note?: string;
   };
   readonly concepts?: readonly string[];
-  readonly shapes?: readonly string[];
+  readonly shapes?: readonly ShapeReference[];
   readonly retryVariants?: readonly {
     readonly kind: RetryVariantKind;
     readonly note?: string;
@@ -217,6 +217,8 @@ export interface DrillPackDefinition {
   readonly feedbackClaims?: readonly FeedbackClaim[];
   readonly [key: string]: unknown;
 }
+
+export type ShapeReference = string | { readonly shape: string; readonly relation: "present" | "prospective" };
 
 export interface TrajectoryLeg {
   readonly id: string;
@@ -286,6 +288,10 @@ export type SuccessCondition =
       readonly kind: "timing_window";
       readonly windowId: string;
       readonly verdict: TempoVerdict;
+    })
+  | (SuccessConditionBase & {
+      readonly kind: "plan_consequence";
+      readonly planClassId: string;
     });
 import type { Color, FileName, Role, SquareName } from "chessops/types";
 
@@ -293,7 +299,7 @@ export const STRUCTURAL_FEATURE_KINDS = Object.freeze([
   "pawn_safe_square", "outpost", "backward_pawn", "isolated_pawn", "doubled_pawn",
   "passed_pawn", "open_file", "half_open_file", "line_blockers", "direct_attack_count",
   "piece_reach_count", "named_structure", "bishop_on_shade", "pawn_count",
-  "king_opposition",
+  "king_opposition", "piece_count", "king_zone", "piece_distance",
 ] as const);
 export type StructuralFeatureKind = (typeof STRUCTURAL_FEATURE_KINDS)[number];
 
@@ -312,7 +318,10 @@ export type StructuralFeature =
   | { readonly kind: "named_structure"; readonly id: "carlsbad" | "iqp-white" | "iqp-black" | "maroczy-bind" }
   | { readonly kind: "bishop_on_shade"; readonly color: Color; readonly shade: "light" | "dark" }
   | { readonly kind: "pawn_count"; readonly color: Color; readonly basis: "count" | "difference"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
-  | { readonly kind: "king_opposition"; readonly color: Color; readonly form: "direct" | "distant" };
+  | { readonly kind: "king_opposition"; readonly color: Color; readonly form: "direct" | "distant" }
+  | { readonly kind: "piece_count"; readonly color: Color; readonly role: Role; readonly basis: "count" | "difference"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "king_zone"; readonly color: Color; readonly zone: "edge" | "corner" }
+  | { readonly kind: "piece_distance"; readonly color: Color; readonly role: "king" | "knight" | "bishop" | "rook" | "queen"; readonly target: { readonly kind: "square"; readonly square: SquareName } | { readonly kind: "piece"; readonly color: Color; readonly role: Role }; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number };
 
 export type MirrorAxis = "colors" | "files" | "both";
 export type Quantifier = "some" | "every";

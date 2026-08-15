@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.17; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.18; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -48,6 +48,15 @@ The seven runtime verdicts are `unopened`, `open`, `in_time`, `over_budget`, `to
 contexts publish failure as their default, though automatic window detection is not part
 of this format.
 
+Version 0.18 widens the shared structural grammar to eighteen feature kinds with all-role
+`piece_count`, current `king_zone`, and static `piece_distance`. The legacy `pawn_count` leaf and
+`piece_reach_count` with `scope: every` are deprecated with authoring warnings. It adds the seventh
+success-condition kind, `plan_consequence`, which resolves a plan class through its referenced
+shape plan's structural success signature and fails closed when that consequence cannot be checked.
+Shape references now accept either a bare id (present on an authored spine) or
+`{shape, relation: "present" | "prospective"}`; only present references participate in detection
+and grading. These are pack/shape authoring changes only: run schema and storage are unchanged.
+
 The already-declared `practical_resistance` opponent policy is executable
 without changing pack bytes or the pack-schema version. Its two-provider
 capability gate, named refusals, and persisted measurement live in the run and
@@ -55,7 +64,7 @@ engine contracts; see `docs/engine-workers.md`.
 
 `schemas/drill_pack.example.json` is the living Najdorf schema fixture. The
 fixture and schema under `archive/brief-v2/` remain frozen v0.1 inputs and are
-tested only against each other. The v0.1 fixture intentionally fails v0.17 because
+tested only against each other. The v0.1 fixture intentionally fails v0.18 because
 it has no required `feedbackPolicy` and uses superseded fields.
 
 ## Implemented v0.5 shape
@@ -87,7 +96,8 @@ it has no required `feedbackPolicy` and uses superseded fields.
 - `objective` is closed. Outcome objectives (`win`, `hold`, `save`, and
   `resist`) require `grading`: an authored or Syzygy-declared root assessment
   plus a checkpoint or terminal resolution. `successConditions` is a closed
-  union of checkpoint, outcome, material-balance, rules-fact, structural, and timing-window conditions;
+  union of checkpoint, outcome, material-balance, rules-fact, structural, timing-window, and
+  plan-consequence conditions;
   conditions may declare their target state and applicable non-terminal source
   states.
 

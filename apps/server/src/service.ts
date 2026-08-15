@@ -48,7 +48,7 @@ import {
   RuntimeError,
 } from "@chess-tabiya/runtime";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
-import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+import { canonicalizeJson, normalizeShapeReferences } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 import { makeSan } from "chessops/san";
@@ -69,7 +69,7 @@ import {
   publicEvents,
   publicNodes,
 } from "./feedback-policy.js";
-import { orchestratePackMove, orchestratePackStart } from "./pack-orchestrator.js";
+import { orchestratePackMove, orchestratePackStart, planSignatureResolver } from "./pack-orchestrator.js";
 import { applyRecordedEngineGuard, applyRulesGuard } from "./guard.js";
 import {
   PackRegistry,
@@ -400,7 +400,7 @@ export class RunService {
         cause: error,
       });
     }
-    if (pack !== undefined) run = orchestratePackStart(pack.document, run).run;
+    if (pack !== undefined) run = orchestratePackStart(pack.document, run, planSignatureResolver(pack.document, this.#shapes)).run;
     const title = pack?.document.title;
     const root = run.nodes[0]!;
     const key = progressRootKey(run.sessionKind, run.packId ?? null, root.transposeKey);
@@ -599,7 +599,7 @@ export class RunService {
     const result =
       pack === undefined
         ? committed
-        : orchestratePackMove(pack.document, stored.run, committed);
+        : orchestratePackMove(pack.document, stored.run, committed, planSignatureResolver(pack.document, this.#shapes));
     this.#storage.save(result.run, lease);
     this.#project(result.run, lease.learnerId);
     this.#enqueueMoveEvidence(result.run);
@@ -625,7 +625,7 @@ export class RunService {
     let result =
       pack === undefined
         ? committed
-        : orchestratePackMove(pack.document, stored.run, committed);
+        : orchestratePackMove(pack.document, stored.run, committed, planSignatureResolver(pack.document, this.#shapes));
     if (pack !== undefined && result.run.feedbackPolicy === "immediate_guard") {
       const consequence = result.run.nodes.find(
         (candidate) => candidate.id === result.run.activeCursor.nodeId,
@@ -745,7 +745,7 @@ export class RunService {
     const attemptedShapes = new Set<string>();
     for (const attempt of this.#progress.progress(principal.learnerId)) {
       if (!attempt.countable || attempt.packId === null) continue;
-      for (const shape of this.#packRegistry.get(attempt.packId)?.document.shapes ?? []) attemptedShapes.add(shape);
+      for (const shape of normalizeShapeReferences(this.#packRegistry.get(attempt.packId)?.document.shapes)) attemptedShapes.add(shape.shape);
     }
     const triggers = this.#shapes.list().map((summary) => ({ id: summary.id, trigger: this.#shapes!.required(summary.id).document.trigger }));
     const encountered = new Map<string, Set<string>>();
@@ -756,7 +756,7 @@ export class RunService {
     }
     return Object.freeze([...encountered].filter(([id]) => !attemptedShapes.has(id)).map(([id, runIds]) => {
       const shape = this.#shapes!.required(id).summary;
-      const packIds = this.#packRegistry!.list().filter((pack) => this.#packRegistry!.get(pack.id)?.document.shapes?.includes(id)).map((pack) => pack.id).sort();
+      const packIds = this.#packRegistry!.list().filter((pack) => normalizeShapeReferences(this.#packRegistry!.get(pack.id)?.document.shapes).some((shape) => shape.shape === id)).map((pack) => pack.id).sort();
       return Object.freeze({ kind: "shape_encounter" as const, shapeId: id, shapeName: shape.name, runCount: runIds.size, runIds: Object.freeze([...runIds].sort()), packIds: Object.freeze(packIds), sentence: `You met ${shape.name} in ${runIds.size} of your preserved runs and have no countable attempt recorded in any pack that names it.` });
     }).sort((left, right) => right.runCount - left.runCount || left.shapeId.localeCompare(right.shapeId)).slice(0, 10));
   }
@@ -862,7 +862,7 @@ export class RunService {
           });
       const orchestrated = pack === undefined
         ? committed
-        : orchestratePackMove(pack.document, beforeCommit, committed);
+        : orchestratePackMove(pack.document, beforeCommit, committed, planSignatureResolver(pack.document, this.#shapes));
       scratch = orchestrated.run;
       members.push({ branchId: scratch.activeCursor.branchId, seedMoveUci: moveUci });
       evidenceNodeIds.push(scratch.activeCursor.nodeId);
@@ -1311,7 +1311,7 @@ export class RunService {
       return Object.freeze({ items: Object.freeze([]), hasWithheldAuthoredContent: false });
     }
     const pack = this.#requiredRegisteredPack(run)!;
-    return projectAuthoredFeedback(pack, run);
+    return projectAuthoredFeedback(pack, run, this.#shapes);
   }
 
   applyEvidence(
@@ -1631,6 +1631,7 @@ export class RunService {
       run,
       learnerId,
       ...(pack === undefined ? {} : { pack }),
+      ...(pack === undefined ? {} : { resolvePlanSignature: planSignatureResolver(pack, this.#shapes) }),
       ...(origins === undefined ? {} : { origins }),
     });
     const match=this.#matchContext(run.id);

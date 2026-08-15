@@ -1,7 +1,7 @@
 import { branchPath, type DrillRun, type ObjectiveState } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
-import { objectiveRules } from "./pack-orchestrator.js";
+import { objectiveRules, type PlanSignatureResolver } from "./pack-orchestrator.js";
 
 export type AttemptVerdict = "stable" | "unstable" | "open";
 export type AttemptOrigin = "fresh" | "duplicate" | "scheduled" | "in_run_retry";
@@ -78,6 +78,7 @@ export function projectAttempts(input: {
   readonly learnerId: string;
   readonly origins?: Readonly<Record<string, AttemptOriginInput>>;
   readonly concepts?: ConceptResolver;
+  readonly resolvePlanSignature?: PlanSignatureResolver;
 }): { readonly attempts: readonly AttemptRow[]; readonly conceptTags: readonly ConceptTagRow[] } {
   const { run, pack, learnerId } = input;
   if (run.sessionKind === "imported") {
@@ -86,7 +87,7 @@ export function projectAttempts(input: {
   const resolver = input.concepts ?? new PackScopedConceptResolver();
   const attempts: AttemptRow[] = [];
   const conceptTags: ConceptTagRow[] = [];
-  const graded = pack !== undefined && objectiveRules(pack).length > 0;
+  const graded = pack !== undefined && objectiveRules(pack, pack.objective, "/objective", input.resolvePlanSignature).length > 0;
   for (const [branchIndex, branch] of run.branches.entries()) {
     const path = branchPath(run, branch.id);
     const root = run.nodes.find((node) => node.id === branch.forkNodeId);

@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   createRun,
+  emptyBoardDistance,
   evaluateObjectivePredicate,
   matchesStructuralExpression,
   matchesStructuralFeature,
@@ -195,11 +196,26 @@ describe("structural predicates", () => {
 
   it("adds finite score-free census observations", () => {
     const reading = structuralReading("8/8/8/4K3/8/4k3/P7/B7 b - - 0 1");
-    expect(reading.features.filter((item) => item.kind === "pawn_count")).toHaveLength(2);
+    expect(reading.features.filter((item) => item.kind === "piece_count")).toHaveLength(12);
+    expect(reading.features.filter((item) => item.kind === "pawn_count")).toHaveLength(0);
     expect(reading.features).toEqual(expect.arrayContaining([
       expect.objectContaining({ kind: "bishop_on_shade", color: "white", shade: "dark", squares: ["a1"] }),
       expect.objectContaining({ kind: "king_opposition", color: "white", form: "direct" }),
+      expect.objectContaining({ kind: "piece_count", color: "white", role: "pawn", count: 1 }),
     ]));
     expect(JSON.stringify(reading)).not.toMatch(/score|rank|severity|favours/);
+  });
+
+  it("evaluates census, zones, and static piece distance without vacuous truth", () => {
+    const fen = "4k3/8/8/8/8/8/8/B3K2R w - - 0 1";
+    expect(matchesStructuralFeature(fen, { kind: "piece_count", color: "white", role: "rook", basis: "difference", comparison: "equal", count: 1 })).toBe(true);
+    expect(matchesStructuralFeature(fen, { kind: "king_zone", color: "black", zone: "edge" })).toBe(true);
+    expect(matchesStructuralFeature(fen, { kind: "king_zone", color: "black", zone: "corner" })).toBe(false);
+    expect(matchesStructuralFeature(fen, { kind: "piece_distance", color: "white", role: "bishop", target: { kind: "piece", color: "black", role: "king" }, comparison: "atLeast", count: 0 })).toBe(false);
+    expect(matchesStructuralFeature(fen, { kind: "piece_distance", color: "white", role: "rook", target: { kind: "piece", color: "black", role: "king" }, comparison: "equal", count: 2 })).toBe(true);
+    expect(emptyBoardDistance("knight", 0, 63)).toBe(6);
+    const maxima = { king: 0, knight: 0, bishop: 0, rook: 0, queen: 0 };
+    for (const role of Object.keys(maxima) as (keyof typeof maxima)[]) for (let from = 0; from < 64; from += 1) for (let to = 0; to < 64; to += 1) maxima[role] = Math.max(maxima[role], emptyBoardDistance(role, from, to) ?? 0);
+    expect(maxima).toEqual({ king: 7, knight: 6, bishop: 2, rook: 2, queen: 2 });
   });
 });

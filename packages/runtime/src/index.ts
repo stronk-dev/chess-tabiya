@@ -64,6 +64,7 @@ export {
 } from "./tempo.js";
 export {
   STRUCTURAL_FEATURE_KINDS,
+  emptyBoardDistance,
   matchesStructuralExpression,
   matchesStructuralFeature,
   mirrorExpression,
@@ -73,6 +74,8 @@ export {
   structuralReading,
   vacationReading,
   type FeatureComparison,
+  type DistanceRole,
+  type DistanceTarget,
   type FileRange,
   type FileTemplateFeature,
   type MirrorAxis,

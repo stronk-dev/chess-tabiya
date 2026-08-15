@@ -37,6 +37,9 @@ describe("evidence reference grammar", () => {
       "rules:structure-bishop-on-shade",
       "rules:structure-pawn-count",
       "rules:structure-king-opposition",
+      "rules:structure-piece-count",
+      "rules:structure-king-zone",
+      "rules:structure-piece-distance",
     ]);
     expect(packEvidenceRef("timing-window")).toBe("pack:timing-window");
     expect(engineEvidenceRef("evidence-job-7")).toBe("engine:evidence-job-7");

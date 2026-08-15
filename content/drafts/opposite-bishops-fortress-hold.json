@@ -36,12 +36,12 @@
         "feature": {
           "kind": "feature",
           "feature": {
-            "kind": "piece_reach_count",
+            "kind": "piece_count",
             "color": "white",
             "role": "queen",
-            "scope": "any",
+            "basis": "count",
             "comparison": "atLeast",
-            "count": 0
+            "count": 1
           }
         },
         "to": "degraded",

@@ -66,7 +66,7 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
   const panel = page.getByRole("complementary", { name: "Carlsbad structure" });
   await expect(panel).toContainText("Named plans for this structure — general to the kind of position, not advice for this one.");
   await expect(panel).toContainText("CC-BY-SA-4.0");
-  for (const label of ["Minority attack", "Central break", "Kingside attack", "Trade pieces", "Freeze the queenside", "Central counter-break"]) await expect(panel.getByText(label, { exact: true })).toBeVisible();
+  for (const label of ["Minority attack", "Achieve e3-e4", "Land h4-h5 against a hook", "Reach a queenless position with the c-pawn sound", "Get the pawn to a5 with b4 still empty", "Central counter-break"]) await expect(panel.getByText(label, { exact: true })).toBeVisible();
   const after = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
   expect(after.events).toHaveLength(before.events.length);
   await expect(page.getByText("Authored commentary withheld", { exact: false })).toHaveCount(0);

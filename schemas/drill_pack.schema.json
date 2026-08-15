@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.17",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.18",
   "title": "Tabiya Drill Pack",
   "description": "Living v0.17 format for an engine-independent authored drill.",
   "type": "object",
@@ -35,7 +35,10 @@
     "shapes": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/id" },
+      "items": { "oneOf": [
+        { "$ref": "#/$defs/id" },
+        { "type": "object", "required": ["shape", "relation"], "properties": { "shape": { "$ref": "#/$defs/id" }, "relation": { "enum": ["present", "prospective"] } }, "additionalProperties": false }
+      ] },
       "uniqueItems": true
     },
     "planClasses": {
@@ -368,6 +371,17 @@
             "from": { "$ref": "#/$defs/conditionBase/properties/from" }
           },
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "planClassId"],
+          "properties": {
+            "kind": { "const": "plan_consequence" },
+            "planClassId": { "$ref": "#/$defs/id" },
+            "to": { "$ref": "#/$defs/conditionBase/properties/to" },
+            "from": { "$ref": "#/$defs/conditionBase/properties/from" }
+          },
+          "additionalProperties": false
         }
       ]
     },
@@ -454,7 +468,16 @@
         { "type": "object", "required": ["kind", "id"], "properties": { "kind": { "const": "named_structure" }, "id": { "enum": ["carlsbad", "iqp-white", "iqp-black", "maroczy-bind"] } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color", "shade"], "properties": { "kind": { "const": "bishop_on_shade" }, "color": { "enum": ["white", "black"] }, "shade": { "enum": ["light", "dark"] } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color", "basis", "comparison", "count"], "properties": { "kind": { "const": "pawn_count" }, "color": { "enum": ["white", "black"] }, "basis": { "enum": ["count", "difference"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
-        { "type": "object", "required": ["kind", "color", "form"], "properties": { "kind": { "const": "king_opposition" }, "color": { "enum": ["white", "black"] }, "form": { "enum": ["direct", "distant"] } }, "additionalProperties": false }
+        { "type": "object", "required": ["kind", "color", "form"], "properties": { "kind": { "const": "king_opposition" }, "color": { "enum": ["white", "black"] }, "form": { "enum": ["direct", "distant"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "role", "basis", "comparison", "count"], "properties": { "kind": { "const": "piece_count" }, "color": { "enum": ["white", "black"] }, "role": { "enum": ["pawn", "knight", "bishop", "rook", "queen", "king"] }, "basis": { "enum": ["count", "difference"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "zone"], "properties": { "kind": { "const": "king_zone" }, "color": { "enum": ["white", "black"] }, "zone": { "enum": ["edge", "corner"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "role", "target", "comparison", "count"], "properties": { "kind": { "const": "piece_distance" }, "color": { "enum": ["white", "black"] }, "role": { "enum": ["king", "knight", "bishop", "rook", "queen"] }, "target": { "$ref": "#/$defs/distanceTarget" }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false }
+      ]
+    },
+    "distanceTarget": {
+      "oneOf": [
+        { "type": "object", "required": ["kind", "square"], "properties": { "kind": { "const": "square" }, "square": { "$ref": "#/$defs/square" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "role"], "properties": { "kind": { "const": "piece" }, "color": { "enum": ["white", "black"] }, "role": { "enum": ["pawn", "knight", "bishop", "rook", "queen", "king"] } }, "additionalProperties": false }
       ]
     },
     "structuralExpression": {

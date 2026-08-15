@@ -6,7 +6,7 @@ signatures, watch points, and provenance also work in pack-free Just Play sessio
 
 ## Entry anatomy and trust
 
-`schemas/shape_entry.schema.json` is the closed v0.2 format. An entry has an id and version,
+`schemas/shape_entry.schema.json` is the closed v0.3 format. An entry has an id and version,
 one or more phases, a structural trigger, plans for both colours, watch points, typical
 mistakes, and explicit provenance. Each plan may carry a structural success signature or
 `null` when the shipped arithmetic cannot honestly express one. The entry cannot contain a
@@ -20,6 +20,13 @@ used by pack objectives. Mirrored catalogue names are refused. Files mirroring p
 owners and can widen an entry's trigger only when every wing-pinned success signature widens with
 it. Colours or both axes change plan ownership and therefore require a separate entry with its own
 authored plan prose. There is one evaluator in `@chess-tabiya/runtime`.
+
+Schema 0.3 carries the same eighteen-leaf grammar as pack 0.18, including `piece_count`,
+`king_zone`, and static `piece_distance`. The duplicated grammar is sync-tested so a leaf cannot
+silently work in packs but fail in shape triggers. A non-null `plan.success.signature` is now also
+a pack-grading resolution target through `plan_consequence`; registration checks that a referenced
+present signature is exercised on an authored spine. A null signature remains an explicit,
+learner-visible refusal to grade that plan.
 
 Official entries load from `content/shapes/`. Community entries are immutable registered
 versions from Shape Studio. Channel is derived from the resolving source and is never an
@@ -36,6 +43,11 @@ the pack's own description as position-specific residue.
 
 Pack projection exposes only the shape ids. It still withholds plan classes, success
 conditions, annotations, deviations, and claims under the existing feedback policy.
+
+Pack schema 0.18 adds reference modality. A bare id means `present`; the object form may instead
+declare `prospective`. Present references must match at least one authored spine position and may
+fire or ground a plan consequence. Prospective references document a future handoff but never fire,
+grade, or open authored feedback. A shared normalizer is the only reader of the two wire forms.
 
 ## Derived firing and the UI
 

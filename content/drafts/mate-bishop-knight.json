@@ -39,12 +39,12 @@
               "of": {
                 "kind": "feature",
                 "feature": {
-                  "kind": "piece_reach_count",
+                  "kind": "piece_count",
                   "color": "white",
                   "role": "bishop",
-                  "scope": "any",
+                  "basis": "count",
                   "comparison": "atLeast",
-                  "count": 0
+                  "count": 1
                 }
               }
             },
@@ -53,12 +53,12 @@
               "of": {
                 "kind": "feature",
                 "feature": {
-                  "kind": "piece_reach_count",
+                  "kind": "piece_count",
                   "color": "white",
                   "role": "knight",
-                  "scope": "any",
+                  "basis": "count",
                   "comparison": "atLeast",
-                  "count": 0
+                  "count": 1
                 }
               }
             }

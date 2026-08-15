@@ -5,6 +5,7 @@ import {
   CHECKPOINT_ACTIONS,
   FEEDBACK_POLICIES,
   lintDrillPack,
+  normalizeShapeReferences,
   type DrillPackDefinition,
   type StructuralExpression,
   type StructuralFeature,
@@ -32,6 +33,8 @@ import {
   checkpointMatches,
   objectiveRules,
   PackCompileError,
+  planSignatureResolver,
+  type PlanSignatureResolver,
 } from "./pack-orchestrator.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
 import {
@@ -56,7 +59,7 @@ export interface PackValidationResult {
 }
 
 export interface PackShapeLookup {
-  get(id: string): { readonly document: { readonly plans: readonly { readonly id: string }[] } } | undefined;
+  get(id: string): { readonly document: { readonly trigger: StructuralExpression; readonly plans: readonly { readonly id: string; readonly success: { readonly note: string; readonly signature: StructuralExpression | null } }[] } } | undefined;
 }
 
 export interface PackSiblingLookup {
@@ -113,6 +116,10 @@ function runtimeIssue(
   return Object.freeze({ severity: "error", source: "runtime", code, path, message });
 }
 
+function runtimeWarning(code: string, path: string, message: string): PackValidationIssue {
+  return Object.freeze({ severity: "warning", source: "runtime", code, path, message });
+}
+
 export function assessmentAdmissionCode(
   objective: string,
   category: string,
@@ -160,6 +167,23 @@ function reasoningCheckpointFen(pack: DrillPackDefinition, checkpoint: DrillPack
   return found.length === 1 ? found[0] : undefined;
 }
 
+function authoredSpineFens(pack: DrillPackDefinition): readonly string[] {
+  const root = Chess.fromSetup(parseFen(pack.start.fen).unwrap()).unwrap();
+  const result = [makeFen(root.toSetup())];
+  const visit = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[], position: Chess): void => {
+    for (const node of nodes) {
+      const next = position.clone();
+      const move = parseUci(node.moveUci);
+      if (move === undefined || !next.isLegal(move)) continue;
+      next.play(move);
+      result.push(makeFen(next.toSetup()));
+      visit(node.children, next);
+    }
+  };
+  visit(pack.spine ?? [], root);
+  return Object.freeze(result);
+}
+
 export function structuralIssues(value: unknown, path = "", depth = 0): readonly PackValidationIssue[] {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return [];
   const issues: PackValidationIssue[] = [];
@@ -177,18 +201,36 @@ export function structuralIssues(value: unknown, path = "", depth = 0): readonly
     }
     if (feature.kind === "direct_attack_count" || feature.kind === "piece_reach_count") {
       if (feature.count < 0) issues.push(runtimeIssue("NEGATIVE_FEATURE_COUNT", `${featurePath}/count`, "feature counts cannot be negative"));
+      if (feature.kind === "piece_reach_count" && feature.scope === "every") issues.push(runtimeWarning("PIECE_REACH_SCOPE_EVERY_DEPRECATED", `${featurePath}/scope`, "piece_reach_count scope every is deprecated and will be removed in predicate wave 4"));
       return;
     }
     if (feature.kind === "pawn_count") {
       const valid = feature.basis === "count" ? feature.count >= 0 && feature.count <= 8 : feature.count >= -8 && feature.count <= 8;
       if (!valid) issues.push(runtimeIssue("PAWN_COUNT_OUT_OF_RANGE", `${featurePath}/count`, "pawn count must be attainable for its basis"));
+      issues.push(runtimeWarning("PAWN_COUNT_DEPRECATED", featurePath || "/", "pawn_count is deprecated; use piece_count with role pawn"));
+      return;
+    }
+    if (feature.kind === "piece_count") {
+      const maximum = feature.role === "pawn" ? 8 : feature.role === "queen" ? 9 : feature.role === "king" ? 1 : 10;
+      const valid = feature.basis === "count" ? feature.count >= 0 && feature.count <= maximum : feature.count >= -maximum && feature.count <= maximum;
+      if (!valid) issues.push(runtimeIssue("PIECE_COUNT_OUT_OF_RANGE", `${featurePath}/count`, `piece count must be attainable for ${feature.role}`));
+      return;
+    }
+    if (feature.kind === "piece_distance") {
+      if ((feature as { readonly role: string }).role === "pawn") {
+        issues.push(runtimeIssue("PIECE_DISTANCE_ROLE_UNSUPPORTED", `${featurePath}/role`, "pawn move graphs do not define a static undirected distance"));
+        return;
+      }
+      const maximum = feature.role === "king" ? 7 : feature.role === "knight" ? 6 : 2;
+      if (feature.count < 0 || feature.count > maximum) issues.push(runtimeIssue("PIECE_DISTANCE_OUT_OF_RANGE", `${featurePath}/count`, `${feature.role} distance must be between 0 and ${maximum}`));
+      if (feature.target.kind === "piece" && feature.target.color === feature.color && feature.target.role === feature.role) issues.push(runtimeIssue("PIECE_DISTANCE_SELF_TARGET", `${featurePath}/target`, "piece distance cannot target the same piece set"));
       return;
     }
     if (feature.kind === "named_structure") {
       if (underMirror) issues.push(runtimeIssue("MIRRORED_NAMED_STRUCTURE", featurePath, "named structures cannot appear under mirrored"));
       return;
     }
-    if (feature.kind === "pawn_safe_square" || feature.kind === "backward_pawn" || feature.kind === "isolated_pawn" || feature.kind === "doubled_pawn" || feature.kind === "passed_pawn" || feature.kind === "open_file" || feature.kind === "half_open_file" || feature.kind === "bishop_on_shade" || feature.kind === "king_opposition") return;
+    if (feature.kind === "pawn_safe_square" || feature.kind === "backward_pawn" || feature.kind === "isolated_pawn" || feature.kind === "doubled_pawn" || feature.kind === "passed_pawn" || feature.kind === "open_file" || feature.kind === "half_open_file" || feature.kind === "bishop_on_shade" || feature.kind === "king_opposition" || feature.kind === "king_zone") return;
     const exhaustive: never = feature;
     issues.push(runtimeIssue("STRUCTURAL_KIND_UNRECOGNISED", featurePath || "/", `unhandled structural feature ${JSON.stringify(exhaustive)}`));
   };
@@ -252,6 +294,7 @@ type ObjectiveCompiler = (
   pack: DrillPackDefinition,
   objective?: ObjectiveDefinition,
   pointerPrefix?: string,
+  resolvePlanSignature?: PlanSignatureResolver,
 ) => readonly unknown[];
 
 export function objectiveIssues(
@@ -260,6 +303,7 @@ export function objectiveIssues(
   pointerPrefix: string,
   checkpoints: ReadonlySet<string>,
   compile: ObjectiveCompiler = objectiveRules,
+  resolvePlanSignature?: PlanSignatureResolver,
 ): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
   const conditions = objective.successConditions;
@@ -294,7 +338,7 @@ export function objectiveIssues(
   }
 
   try {
-    const rules = compile(pack, objective, pointerPrefix);
+    const rules = compile(pack, objective, pointerPrefix, resolvePlanSignature);
     if (PLAN_OBJECTIVES.has(objective.type) && rules.length === 0) {
       issues.push(runtimeIssue("OBJECTIVE_GRADES_NOTHING", pointerPrefix, `${objective.type} declares a plan objective but compiles to no transition rules`));
     }
@@ -394,12 +438,23 @@ function runtimeIssues(
   compile: ObjectiveCompiler = objectiveRules,
 ): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
+  const resolved = planSignatureResolver(pack, shapes);
+  const resolvePlanSignature: PlanSignatureResolver = shapes === undefined
+    ? (planClassId) => pack.planClasses?.find((candidate) => candidate.id === planClassId)?.shapePlan === undefined
+      ? undefined
+      : { kind: "feature", feature: { kind: "piece_count", color: "white", role: "king", basis: "count", comparison: "equal", count: 1 } }
+    : resolved;
   issues.push(...structuralIssuesInPack(pack));
   const raw = pack as unknown as Record<string, unknown>;
   const difficulty = (raw.difficulty ?? {}) as { readonly branchLengthTarget?: number };
-  const shapeIds = new Set(pack.shapes ?? []);
-  for (const [index, shapeId] of (pack.shapes ?? []).entries()) {
-    if (shapes !== undefined && shapes.get(shapeId) === undefined) issues.push(runtimeIssue("SHAPE_REFERENCE_UNKNOWN", `/shapes/${index}`, `unknown shape ${shapeId}`));
+  const shapeReferences = normalizeShapeReferences(pack.shapes);
+  const shapeIds = new Set<string>();
+  for (const [index, reference] of shapeReferences.entries()) {
+    if (shapeIds.has(reference.shape)) issues.push(runtimeIssue("SHAPE_REFERENCE_DUPLICATE", `/shapes/${index}`, `duplicate shape ${reference.shape}`));
+    shapeIds.add(reference.shape);
+    const entry = shapes?.get(reference.shape);
+    if (shapes !== undefined && entry === undefined) issues.push(runtimeIssue("SHAPE_REFERENCE_UNKNOWN", `/shapes/${index}`, `unknown shape ${reference.shape}`));
+    if (entry !== undefined && reference.relation === "present" && !authoredSpineFens(pack).some((fen) => matchesStructuralExpression(fen, entry.document.trigger))) issues.push(runtimeIssue("SHAPE_REFERENCE_NEVER_PRESENT", `/shapes/${index}`, `shape ${reference.shape} never matches an authored spine position`));
   }
   for (const [index, planClass] of (pack.planClasses ?? []).entries()) {
     if (planClass.shapePlan === undefined) continue;
@@ -407,6 +462,24 @@ function runtimeIssues(
     const entry = shapes?.get(planClass.shapePlan.shape);
     if (entry !== undefined && !entry.document.plans.some((plan) => plan.id === planClass.shapePlan!.plan)) issues.push(runtimeIssue("SHAPE_PLAN_UNKNOWN", `/planClasses/${index}/shapePlan`, `shape ${planClass.shapePlan.shape} has no plan ${planClass.shapePlan.plan}`));
   }
+  const planClasses = new Map((pack.planClasses ?? []).map((planClass) => [planClass.id, planClass]));
+  const checkPlanConsequences = (objective: DrillPackDefinition["objective"], pointer: string): void => {
+    for (const [index, condition] of (objective.successConditions ?? []).entries()) {
+      if (condition.kind !== "plan_consequence") continue;
+      const conditionPath = `${pointer}/successConditions/${index}`;
+      const planClass = planClasses.get(condition.planClassId);
+      if (planClass === undefined) { issues.push(runtimeIssue("PLAN_CONSEQUENCE_UNKNOWN_PLAN_CLASS", `${conditionPath}/planClassId`, `unknown plan class ${condition.planClassId}`)); continue; }
+      if (planClass.shapePlan === undefined) { issues.push(runtimeIssue("PLAN_CONSEQUENCE_NO_SHAPE_PLAN", `${conditionPath}/planClassId`, `plan class ${condition.planClassId} has no shape plan`)); continue; }
+      const reference = shapeReferences.find((candidate) => candidate.shape === planClass.shapePlan!.shape);
+      if (reference?.relation === "prospective") { issues.push(runtimeIssue("PLAN_CONSEQUENCE_NO_SHAPE_PLAN", `${conditionPath}/planClassId`, `prospective shape ${reference.shape} cannot grade a present consequence`)); continue; }
+      const entry = shapes?.get(planClass.shapePlan.shape);
+      const plan = entry?.document.plans.find((candidate) => candidate.id === planClass.shapePlan!.plan);
+      if (entry !== undefined && plan?.success.signature === null) { issues.push(runtimeIssue("PLAN_CONSEQUENCE_NOT_COMPUTABLE", `${conditionPath}/planClassId`, plan.success.note)); continue; }
+      if (plan?.success.signature !== undefined && !authoredSpineFens(pack).some((fen) => matchesStructuralExpression(fen, plan.success.signature!))) issues.push(runtimeIssue("PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT", `${conditionPath}/planClassId`, `the authored signature for ${condition.planClassId} never matches an authored spine position`));
+    }
+  };
+  checkPlanConsequences(pack.objective, "/objective");
+  (pack.legs ?? []).forEach((leg, index) => checkPlanConsequences(leg.objective, `/legs/${index}/objective`));
   const spineIds = new Set<string>();
   const collectSpine = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[]): void => { for (const node of nodes) { spineIds.add(node.id); collectSpine(node.children); } };
   collectSpine(pack.spine ?? []);
@@ -510,7 +583,7 @@ function runtimeIssues(
       const ground = point.ground;
       if (ground.kind === "shape_plan") {
         const entry = shapes?.get(ground.shape);
-        if (!new Set(pack.shapes ?? []).has(ground.shape) || entry === undefined || !entry.document.plans.some((plan) => plan.id === ground.plan)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground`, `shape plan ${ground.shape}/${ground.plan} is not resolvable`));
+        if (!new Set(normalizeShapeReferences(pack.shapes).map((shape) => shape.shape)).has(ground.shape) || entry === undefined || !entry.document.plans.some((plan) => plan.id === ground.plan)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground`, `shape plan ${ground.shape}/${ground.plan} is not resolvable`));
       } else if (ground.kind === "spine_move" && !spineIds.has(ground.spineNodeId)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground/spineNodeId`, `unknown spine node ${ground.spineNodeId}`));
       else if (ground.kind === "claim" && !claimIds.has(ground.claimId)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground/claimId`, `unknown feedback claim ${ground.claimId}`));
       else if (ground.kind === "structural" && checkpointFen !== undefined && !matchesStructuralExpression(checkpointFen, ground.expression)) issues.push(runtimeIssue("KEY_POINT_GROUND_FALSE_AT_CHECKPOINT", `${pointPath}/ground/expression`, "structural ground is false at the statically resolved checkpoint position"));
@@ -728,9 +801,9 @@ function runtimeIssues(
     }
   }
 
-  issues.push(...objectiveIssues(pack, pack.objective, "/objective", checkpoints, compile));
+  issues.push(...objectiveIssues(pack, pack.objective, "/objective", checkpoints, compile, resolvePlanSignature));
   for (const [index, leg] of (pack.legs ?? []).entries()) {
-    issues.push(...objectiveIssues(pack, leg.objective, `/legs/${index}/objective`, checkpoints, compile));
+    issues.push(...objectiveIssues(pack, leg.objective, `/legs/${index}/objective`, checkpoints, compile, resolvePlanSignature));
   }
 
   try {

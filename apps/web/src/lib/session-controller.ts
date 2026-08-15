@@ -1,4 +1,4 @@
-import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import type { DrillPackDefinition, ShapeReference } from "@chess-tabiya/schema/drill-pack";
 import {
   historyFrom,
   groupsFromEvents,
@@ -621,8 +621,8 @@ export class DrillSessionController {
     });
   }
 
-  async #loadShapes(ids?: readonly string[]): Promise<readonly ShapeEntryView[]> {
-    const selected = ids ?? (await this.#api.shapes()).map((shape) => shape.id);
+  async #loadShapes(ids?: readonly ShapeReference[]): Promise<readonly ShapeEntryView[]> {
+    const selected = ids?.flatMap((reference) => typeof reference === "string" ? [reference] : reference.relation === "present" ? [reference.shape] : []) ?? (await this.#api.shapes()).map((shape) => shape.id);
     return Object.freeze(await Promise.all(selected.map(async (id) => (await this.#api.shape(id)).document)));
   }
 

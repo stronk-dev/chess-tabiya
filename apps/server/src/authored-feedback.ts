@@ -16,6 +16,7 @@ import {
 import { reachableAuthoredSpineIds } from "@chess-tabiya/schema/drill-pack";
 
 import type { PackRecord } from "./pack-registry.js";
+import type { PlanShapeLookup } from "./pack-orchestrator.js";
 
 export type RevealAttribution =
   | {
@@ -52,6 +53,8 @@ export type AuthoredFeedbackItem =
       readonly label: string;
       readonly description?: string;
       readonly shapePlan?: { readonly shape: string; readonly plan: string };
+      readonly gradability: "graded" | "declared_uncheckable" | "unbound";
+      readonly gradabilityNote?: string;
     }
   | {
       readonly kind: "theory_verdict";
@@ -247,6 +250,7 @@ function planClassSourceIds(pack: DrillPackDefinition): ReadonlySet<string> {
 export function projectAuthoredFeedback(
   pack: PackRecord,
   run: DrillRun,
+  shapes?: PlanShapeLookup,
 ): AuthoredFeedbackPage {
   const spine = new Map<string, SpineIndexEntry>();
   indexSpine(pack.document.spine ?? [], undefined, spine);
@@ -315,8 +319,11 @@ export function projectAuthoredFeedback(
         }
         revealed.set(
           sourceId,
-          Object.freeze({
-            kind: "plan_class",
+          Object.freeze((() => {
+            const plan = definition.shapePlan === undefined ? undefined : shapes?.get(definition.shapePlan.shape)?.document.plans.find((candidate) => candidate.id === definition.shapePlan!.plan);
+            const gradability = definition.shapePlan === undefined ? "unbound" as const : plan?.success.signature === null ? "declared_uncheckable" as const : plan?.success.signature === undefined ? "unbound" as const : "graded" as const;
+            return {
+            kind: "plan_class" as const,
             id: sourceId,
             revealedBy: reveal.attribution,
             anchor: { checkpointId: checkpoint.id },
@@ -325,7 +332,9 @@ export function projectAuthoredFeedback(
               ? {}
               : { description: definition.description }),
             ...(definition.shapePlan === undefined ? {} : { shapePlan: definition.shapePlan }),
-          }),
+            gradability,
+            ...(gradability === "declared_uncheckable" ? { gradabilityNote: plan!.success.note } : {}),
+          }; })()),
         );
       }
     }

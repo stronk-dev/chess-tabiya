@@ -17,6 +17,7 @@ export {
   type FenUrl,
   type ResolvedDrill,
 } from "./urls.js";
+export { normalizeShapeReference, normalizeShapeReferences, type NormalizedShapeReference } from "./shape-references.js";
 export {
   CHECKPOINT_ACTIONS,
   FEEDBACK_POLICIES,
@@ -49,6 +50,7 @@ export {
   type RankRange,
   type SimpleTrigger,
   type SpineNode,
+  type ShapeReference,
   type StructuralExpression,
   type StructuralFeature,
   type StructuralFeatureKind,

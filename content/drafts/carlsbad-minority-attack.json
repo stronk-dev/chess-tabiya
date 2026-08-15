@@ -39,17 +39,7 @@
     "type": "execute_break",
     "summary": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Execute the minority attack until Black has a backward c-pawn on White's half-open c-file.",
     "successConditions": [
-      {
-        "kind": "structural_feature",
-        "to": "achieved",
-        "feature": {
-          "kind": "all",
-          "of": [
-            { "kind": "feature", "feature": { "kind": "backward_pawn", "color": "black", "file": "c" } },
-            { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "c" } }
-          ]
-        }
-      }
+      { "kind": "plan_consequence", "planClassId": "minority-attack", "to": "achieved" }
     ]
   },
   "concepts": [
@@ -147,7 +137,31 @@
                                     "The moment the plan pays or does not. Three answers, three different games. ...axb5 keeps material level and leaves you pressing c6 down the half-open file. ...cxb5 hands Black doubled b-pawns and an isolated d5 in exchange for activity. ...c5 is the counter-break that ignores the wing and fights in the centre instead.",
                                     "And if Black plays none of them, bxc6 bxc6 is the textbook result: a backward pawn on c6 that no black pawn can ever defend, on a file where you have no pawn to block your own rooks. That structure outlives the middlegame, which is why this plan is the low-risk one."
                                   ],
-                                  "children": []
+                                  "children": [
+                                    {
+                                      "id": "h6-wait",
+                                      "moveUci": "h7h6",
+                                      "moveSan": "h6",
+                                      "annotations": [],
+                                      "children": [
+                                        {
+                                          "id": "bxc6-consequence",
+                                          "moveUci": "b5c6",
+                                          "moveSan": "bxc6",
+                                          "annotations": [],
+                                          "children": [
+                                            {
+                                              "id": "bxc6-recapture",
+                                              "moveUci": "b7c6",
+                                              "moveSan": "bxc6",
+                                              "annotations": [],
+                                              "children": []
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
                                 }
                               ]
                             }

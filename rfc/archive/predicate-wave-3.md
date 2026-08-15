@@ -1,6 +1,6 @@
 # RFC: Structural predicate vocabulary, wave 3 — census, kings, and the intent boundary
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/research/authored-transitions-and-features.md` §6 (the

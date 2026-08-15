@@ -421,12 +421,12 @@
                   "of": {
                     "kind": "feature",
                     "feature": {
-                      "kind": "piece_reach_count",
+                      "kind": "piece_count",
                       "color": "white",
                       "role": "bishop",
-                      "scope": "any",
+                      "basis": "count",
                       "comparison": "atLeast",
-                      "count": 0
+                      "count": 1
                     }
                   }
                 },
@@ -435,12 +435,12 @@
                   "of": {
                     "kind": "feature",
                     "feature": {
-                      "kind": "piece_reach_count",
+                      "kind": "piece_count",
                       "color": "white",
                       "role": "knight",
-                      "scope": "any",
+                      "basis": "count",
                       "comparison": "atLeast",
-                      "count": 0
+                      "count": 1
                     }
                   }
                 }
@@ -477,12 +477,12 @@
                   "of": {
                     "kind": "feature",
                     "feature": {
-                      "kind": "piece_reach_count",
+                      "kind": "piece_count",
                       "color": "white",
                       "role": "bishop",
-                      "scope": "any",
+                      "basis": "count",
                       "comparison": "atLeast",
-                      "count": 0
+                      "count": 1
                     }
                   }
                 },
@@ -491,12 +491,12 @@
                   "of": {
                     "kind": "feature",
                     "feature": {
-                      "kind": "piece_reach_count",
+                      "kind": "piece_count",
                       "color": "white",
                       "role": "knight",
-                      "scope": "any",
+                      "basis": "count",
                       "comparison": "atLeast",
-                      "count": 0
+                      "count": 1
                     }
                   }
                 }
@@ -537,12 +537,12 @@
                   "of": {
                     "kind": "feature",
                     "feature": {
-                      "kind": "piece_reach_count",
+                      "kind": "piece_count",
                       "color": "white",
                       "role": "bishop",
-                      "scope": "any",
+                      "basis": "count",
                       "comparison": "atLeast",
-                      "count": 0
+                      "count": 1
                     }
                   }
                 },
@@ -551,16 +551,42 @@
                   "of": {
                     "kind": "feature",
                     "feature": {
-                      "kind": "piece_reach_count",
+                      "kind": "piece_count",
                       "color": "white",
                       "role": "knight",
-                      "scope": "any",
+                      "basis": "count",
                       "comparison": "atLeast",
-                      "count": 0
+                      "count": 1
                     }
                   }
                 }
               ]
+            },
+            "to": "degraded",
+            "from": [
+              "active",
+              "preserved"
+            ]
+          },
+          {
+            "kind": "structural_feature",
+            "feature": {
+              "kind": "not",
+              "of": {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_distance",
+                  "color": "white",
+                  "role": "king",
+                  "target": {
+                    "kind": "piece",
+                    "color": "black",
+                    "role": "king"
+                  },
+                  "comparison": "atMost",
+                  "count": 2
+                }
+              }
             },
             "to": "degraded",
             "from": [
@@ -598,101 +624,12 @@
         "fenPredicate": {
           "type": "structuralFeature",
           "feature": {
-            "kind": "any",
-            "of": [
-              {
-                "kind": "quantified",
-                "quantifier": "some",
-                "over": {
-                  "squares": {
-                    "files": {
-                      "from": "a",
-                      "to": "a"
-                    },
-                    "ranks": {
-                      "from": 1,
-                      "to": 8
-                    }
-                  }
-                },
-                "feature": {
-                  "kind": "piece",
-                  "piece": {
-                    "color": "black",
-                    "role": "king"
-                  }
-                }
-              },
-              {
-                "kind": "quantified",
-                "quantifier": "some",
-                "over": {
-                  "squares": {
-                    "files": {
-                      "from": "h",
-                      "to": "h"
-                    },
-                    "ranks": {
-                      "from": 1,
-                      "to": 8
-                    }
-                  }
-                },
-                "feature": {
-                  "kind": "piece",
-                  "piece": {
-                    "color": "black",
-                    "role": "king"
-                  }
-                }
-              },
-              {
-                "kind": "quantified",
-                "quantifier": "some",
-                "over": {
-                  "squares": {
-                    "files": {
-                      "from": "a",
-                      "to": "h"
-                    },
-                    "ranks": {
-                      "from": 1,
-                      "to": 1
-                    }
-                  }
-                },
-                "feature": {
-                  "kind": "piece",
-                  "piece": {
-                    "color": "black",
-                    "role": "king"
-                  }
-                }
-              },
-              {
-                "kind": "quantified",
-                "quantifier": "some",
-                "over": {
-                  "squares": {
-                    "files": {
-                      "from": "a",
-                      "to": "h"
-                    },
-                    "ranks": {
-                      "from": 8,
-                      "to": 8
-                    }
-                  }
-                },
-                "feature": {
-                  "kind": "piece",
-                  "piece": {
-                    "color": "black",
-                    "role": "king"
-                  }
-                }
-              }
-            ]
+            "kind": "feature",
+            "feature": {
+              "kind": "king_zone",
+              "color": "black",
+              "zone": "edge"
+            }
           }
         }
       },

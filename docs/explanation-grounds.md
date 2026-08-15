@@ -12,12 +12,16 @@ This page is the cross-system contract. Runtime payload details remain in
 `docs/branch-runtime.md`; client episode behavior remains in
 `docs/drill-client.md`.
 
-Rung-0 structural grading adds fifteen `rules:structure-*` facts. They render generic detector
+Rung-0 structural grading now has eighteen `rules:structure-*` facts. They render generic detector
 grounds because evidence refs carry the feature kind but not its square/file parameters. Exact
 position-specific sentences are recomputed from the run FEN in the structural-reading surface.
 Those sentences have a no-valence contract; pawn safety states its current-file scope, direct attack
 counts never imply a balance, attack reach is not called legal mobility, and outpost/named-structure
 matches identify Tabiya's detector or catalogue convention.
+The three predicate-wave-3 additions are generic piece-count, king-zone, and static
+piece-distance facts. A `plan_consequence` transition additionally records the resolved
+`planClass#<id>` before its structural feature facts; that identifies the authored binding without
+claiming the learner intentionally followed it.
 
 The post-commit guard reuses `rules:material`, `rules:structure-direct-attack-count`, and
 existing `engine:<jobId>` references. Its prompt is rendered from recorded grounds; it adds no

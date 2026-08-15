@@ -7,6 +7,10 @@ import { positionFromFen } from "./chess.js";
 
 export type FeatureComparison = "atLeast" | "atMost" | "equal";
 export type ReachRole = "knight" | "bishop" | "rook" | "queen";
+export type DistanceRole = "king" | "knight" | "bishop" | "rook" | "queen";
+export type DistanceTarget =
+  | { readonly kind: "square"; readonly square: SquareName }
+  | { readonly kind: "piece"; readonly color: Color; readonly role: Role };
 export type ReachScope = "any" | "every";
 export type StructureId = "carlsbad" | "iqp-white" | "iqp-black" | "maroczy-bind";
 export type MirrorAxis = "colors" | "files" | "both";
@@ -42,7 +46,10 @@ export type StructuralFeature =
   | { readonly kind: "named_structure"; readonly id: StructureId }
   | { readonly kind: "bishop_on_shade"; readonly color: Color; readonly shade: "light" | "dark" }
   | { readonly kind: "pawn_count"; readonly color: Color; readonly basis: "count" | "difference"; readonly comparison: FeatureComparison; readonly count: number }
-  | { readonly kind: "king_opposition"; readonly color: Color; readonly form: "direct" | "distant" };
+  | { readonly kind: "king_opposition"; readonly color: Color; readonly form: "direct" | "distant" }
+  | { readonly kind: "piece_count"; readonly color: Color; readonly role: Role; readonly basis: "count" | "difference"; readonly comparison: FeatureComparison; readonly count: number }
+  | { readonly kind: "king_zone"; readonly color: Color; readonly zone: "edge" | "corner" }
+  | { readonly kind: "piece_distance"; readonly color: Color; readonly role: DistanceRole; readonly target: DistanceTarget; readonly comparison: FeatureComparison; readonly count: number };
 
 export { STRUCTURAL_FEATURE_KINDS };
 export type { StructuralFeatureKind };
@@ -69,7 +76,7 @@ export interface PawnSafety {
 export interface StructuralObservation {
   readonly kind: StructuralFeatureKind;
   readonly color?: Color;
-  readonly role?: ReachRole;
+  readonly role?: Role;
   readonly squares: readonly SquareName[];
   readonly file?: FileName;
   readonly count?: number;
@@ -77,6 +84,7 @@ export interface StructuralObservation {
   readonly provenanceNote?: string;
   readonly shade?: "light" | "dark";
   readonly form?: "direct" | "distant";
+  readonly zone?: "edge" | "corner";
 }
 
 export interface StructureMatch {
@@ -114,6 +122,7 @@ export interface VacationReading {
 const FILES = Object.freeze(["a", "b", "c", "d", "e", "f", "g", "h"] as const);
 const COLORS = Object.freeze(["white", "black"] as const);
 const REACH_ROLES = Object.freeze(["knight", "bishop", "rook", "queen"] as const);
+const ROLES = Object.freeze(["pawn", "knight", "bishop", "rook", "queen", "king"] as const);
 
 function fileIndex(file: FileName): number { return FILES.indexOf(file); }
 function rankOf(square: Square): number { return Math.floor(square / 8); }
@@ -121,6 +130,39 @@ function shadeOf(square: Square): "light" | "dark" { return ((square % 8) + rank
 function forward(color: Color): 1 | -1 { return color === "white" ? 1 : -1; }
 function compare(actual: number, comparison: FeatureComparison, expected: number): boolean {
   return comparison === "atLeast" ? actual >= expected : comparison === "atMost" ? actual <= expected : actual === expected;
+}
+
+function knightDistance(from: Square, to: Square): number {
+  if (from === to) return 0;
+  const seen = new Set<Square>([from]);
+  let frontier: Square[] = [from];
+  for (let distance = 1; distance <= 6; distance += 1) {
+    const next: Square[] = [];
+    for (const square of frontier) {
+      const file = square % 8, rank = rankOf(square);
+      for (const [df, dr] of [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]] as const) {
+        const nf = file + df, nr = rank + dr;
+        if (nf < 0 || nf > 7 || nr < 0 || nr > 7) continue;
+        const target = (nf + nr * 8) as Square;
+        if (target === to) return distance;
+        if (!seen.has(target)) { seen.add(target); next.push(target); }
+      }
+    }
+    frontier = next;
+  }
+  throw new TypeError("Knight distance exceeded the board diameter");
+}
+
+export function emptyBoardDistance(role: DistanceRole, from: Square, to: Square): number | undefined {
+  const fileGap = Math.abs((from % 8) - (to % 8));
+  const rankGap = Math.abs(rankOf(from) - rankOf(to));
+  if (role === "king") return Math.max(fileGap, rankGap);
+  if (role === "knight") return knightDistance(from, to);
+  if (role === "rook") return from === to ? 0 : fileGap === 0 || rankGap === 0 ? 1 : 2;
+  if (role === "bishop") return from === to ? 0 : shadeOf(from) !== shadeOf(to) ? undefined : fileGap === rankGap ? 1 : 2;
+  if (role === "queen") return from === to ? 0 : fileGap === 0 || rankGap === 0 || fileGap === rankGap ? 1 : 2;
+  const exhaustive: never = role;
+  throw new TypeError(`Unhandled distance role: ${exhaustive}`);
 }
 
 function opposition(position: ReturnType<typeof positionFromFen>, color: Color, form: "direct" | "distant"): boolean {
@@ -228,7 +270,8 @@ function mirrorFeature(feature: StructuralFeature, axis: MirrorAxis): Structural
   if (feature.kind === "direct_attack_count") return { ...feature, color: mirrorColor(feature.color, axis), square: mirrorSquare(feature.square, axis) };
   if (feature.kind === "piece_reach_count") return { ...feature, color: mirrorColor(feature.color, axis) };
   if (feature.kind === "bishop_on_shade") return { ...feature, color: mirrorColor(feature.color, axis), shade: axis === "both" ? feature.shade : feature.shade === "light" ? "dark" : "light" };
-  if (feature.kind === "pawn_count" || feature.kind === "king_opposition") return { ...feature, color: mirrorColor(feature.color, axis) };
+  if (feature.kind === "pawn_count" || feature.kind === "king_opposition" || feature.kind === "piece_count" || feature.kind === "king_zone") return { ...feature, color: mirrorColor(feature.color, axis) };
+  if (feature.kind === "piece_distance") return { ...feature, color: mirrorColor(feature.color, axis), target: feature.target.kind === "square" ? { ...feature.target, square: mirrorSquare(feature.target.square, axis) } : { ...feature.target, color: mirrorColor(feature.target.color, axis) } };
   if (feature.kind === "named_structure") throw new TypeError("named_structure cannot appear under mirrored");
   const exhaustive: never = feature;
   throw new TypeError(`Unhandled structural feature mirror: ${JSON.stringify(exhaustive)}`);
@@ -344,6 +387,29 @@ export function matchesStructuralFeature(fen: string, feature: StructuralFeature
     return compare(actual, feature.comparison, feature.count);
   }
   if (feature.kind === "king_opposition") return opposition(position, feature.color, feature.form);
+  if (feature.kind === "piece_count") {
+    const own = position.board.pieces(feature.color, feature.role).size();
+    const other = position.board.pieces(opposite(feature.color), feature.role).size();
+    return compare(feature.basis === "count" ? own : own - other, feature.comparison, feature.count);
+  }
+  if (feature.kind === "king_zone") {
+    const square = position.board.kingOf(feature.color);
+    if (square === undefined) return false;
+    const file = square % 8, rank = rankOf(square);
+    const fileEdge = file === 0 || file === 7, rankEdge = rank === 0 || rank === 7;
+    return feature.zone === "corner" ? fileEdge && rankEdge : fileEdge || rankEdge;
+  }
+  if (feature.kind === "piece_distance") {
+    const subjects = [...position.board.pieces(feature.color, feature.role)];
+    const targets = feature.target.kind === "square"
+      ? [parseSquare(feature.target.square)].filter((square): square is Square => square !== undefined)
+      : [...position.board.pieces(feature.target.color, feature.target.role)];
+    const distances = subjects.flatMap((subject) => targets.flatMap((target) => {
+      const value = emptyBoardDistance(feature.role, subject, target);
+      return value === undefined ? [] : [value];
+    }));
+    return distances.length > 0 && compare(Math.min(...distances), feature.comparison, feature.count);
+  }
   const exhaustive: never = feature;
   throw new TypeError(`Unhandled structural feature: ${JSON.stringify(exhaustive)}`);
 }
@@ -382,7 +448,7 @@ function canonicalObservations(values: readonly StructuralObservation[]): readon
 
 export function structuralReading(fen: string): StructuralReading {
   const position = positionFromFen(fen); const values: StructuralObservation[] = [];
-  for (const color of COLORS) values.push({ kind: "pawn_count", color, count: pawns(position, color).length, squares: [] });
+  for (const color of COLORS) for (const role of ROLES) values.push({ kind: "piece_count", color, role, count: position.board.pieces(color, role).size(), squares: [] });
   for (const color of COLORS) for (const file of FILES) {
     for (const kind of ["backward_pawn", "isolated_pawn", "doubled_pawn"] as const) if (matchesStructuralFeature(fen, { kind, color, file })) values.push({ kind, color, file, squares: [] });
     if (matchesStructuralFeature(fen, { kind: "half_open_file", color, file })) values.push({ kind: "half_open_file", color, file, squares: [] });
@@ -416,6 +482,13 @@ export function structuralReading(fen: string): StructuralReading {
     const own = position.board.kingOf(color), enemy = position.board.kingOf(opposite(color));
     if (own !== undefined && enemy !== undefined) values.push({ kind: "king_opposition", color, form, squares: [makeSquare(own), makeSquare(enemy)].sort() as SquareName[] });
   }
+  for (const color of COLORS) {
+    const square = position.board.kingOf(color);
+    if (square === undefined) continue;
+    for (const zone of ["edge", "corner"] as const) if (matchesStructuralFeature(fen, { kind: "king_zone", color, zone })) values.push({ kind: "king_zone", color, zone, squares: [makeSquare(square)] });
+  }
+  const whiteKing = position.board.kingOf("white"), blackKing = position.board.kingOf("black");
+  if (whiteKing !== undefined && blackKing !== undefined) values.push({ kind: "piece_distance", role: "king", squares: [makeSquare(whiteKing), makeSquare(blackKing)].sort() as SquareName[], count: emptyBoardDistance("king", whiteKing, blackKing)! });
   const structures = (Object.keys(STRUCTURE_METADATA) as StructureId[]).filter((id) => namedStructureMatches(fen, id)).map((id) => Object.freeze({ id, ...STRUCTURE_METADATA[id] }));
   for (const structure of structures) values.push({ kind: "named_structure", squares: [], provenanceNote: structure.provenanceNote });
   const skeletonKey = COLORS.flatMap((color) => pawns(position, color).map(makeSquare).sort().map((square) => `${color[0]}:${square}`)).join("|");

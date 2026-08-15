@@ -6,7 +6,7 @@ nothing versioned) · `tempo-vocabulary` (`ed48978`, pack 0.17) ·
 `resistance-spectrum` (`4977ff6`, run 0.14 / migration 19) · refusal-code
 coverage (`8fbab41`, 107 emitters classified).
 
-## 1. `rfc/predicate-wave-3.md` — READY NOW, take this next
+## 1. `rfc/archive/predicate-wave-3.md` — IMPLEMENTED
 
 Pack **0.18** + shape-entry **0.2 → 0.3** (the shape schema carries a duplicated
 `$defs/structuralFeature`; new leaves must land in **both** copies or shape
@@ -28,7 +28,7 @@ Owner rulings it now carries:
 - Intent grading is **grade the 45%, refuse the rest by name** — §5c-bis supplies
   capability publication, named refusal and applied record.
 
-## 2. `rfc/opening-evidence-path.md` — READY, take after item 1
+## 2. `rfc/opening-evidence-path.md` — READY, take next
 
 Pack **0.20** (behind 0.18, hence the ordering). Closes the opening half of the
 evidence hole. `assessedBy` gains `kind: "engine"`.

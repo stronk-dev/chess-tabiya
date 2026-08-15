@@ -44,7 +44,7 @@
   ],
   "shapes": [
     "carlsbad",
-    "rook-4v3-same-side"
+    { "shape": "rook-4v3-same-side", "relation": "prospective" }
   ],
   "planClasses": [
     {
@@ -720,23 +720,23 @@
               {
                 "kind": "feature",
                 "feature": {
-                  "kind": "piece_reach_count",
+                  "kind": "piece_count",
                   "color": "white",
                   "role": "rook",
-                  "scope": "any",
+                  "basis": "count",
                   "comparison": "atLeast",
-                  "count": 0
+                  "count": 1
                 }
               },
               {
                 "kind": "feature",
                 "feature": {
-                  "kind": "piece_reach_count",
+                  "kind": "piece_count",
                   "color": "black",
                   "role": "rook",
-                  "scope": "any",
+                  "basis": "count",
                   "comparison": "atLeast",
-                  "count": 0
+                  "count": 1
                 }
               },
               {
@@ -747,67 +747,67 @@
                     {
                       "kind": "feature",
                       "feature": {
-                        "kind": "piece_reach_count",
+                        "kind": "piece_count",
                         "color": "white",
                         "role": "queen",
-                        "scope": "any",
+                        "basis": "count",
                         "comparison": "atLeast",
-                        "count": 0
+                        "count": 1
                       }
                     },
                     {
                       "kind": "feature",
                       "feature": {
-                        "kind": "piece_reach_count",
+                        "kind": "piece_count",
                         "color": "black",
                         "role": "queen",
-                        "scope": "any",
+                        "basis": "count",
                         "comparison": "atLeast",
-                        "count": 0
+                        "count": 1
                       }
                     },
                     {
                       "kind": "feature",
                       "feature": {
-                        "kind": "piece_reach_count",
+                        "kind": "piece_count",
                         "color": "white",
                         "role": "bishop",
-                        "scope": "any",
+                        "basis": "count",
                         "comparison": "atLeast",
-                        "count": 0
+                        "count": 1
                       }
                     },
                     {
                       "kind": "feature",
                       "feature": {
-                        "kind": "piece_reach_count",
+                        "kind": "piece_count",
                         "color": "black",
                         "role": "bishop",
-                        "scope": "any",
+                        "basis": "count",
                         "comparison": "atLeast",
-                        "count": 0
+                        "count": 1
                       }
                     },
                     {
                       "kind": "feature",
                       "feature": {
-                        "kind": "piece_reach_count",
+                        "kind": "piece_count",
                         "color": "white",
                         "role": "knight",
-                        "scope": "any",
+                        "basis": "count",
                         "comparison": "atLeast",
-                        "count": 0
+                        "count": 1
                       }
                     },
                     {
                       "kind": "feature",
                       "feature": {
-                        "kind": "piece_reach_count",
+                        "kind": "piece_count",
                         "color": "black",
                         "role": "knight",
-                        "scope": "any",
+                        "basis": "count",
                         "comparison": "atLeast",
-                        "count": 0
+                        "count": 1
                       }
                     }
                   ]

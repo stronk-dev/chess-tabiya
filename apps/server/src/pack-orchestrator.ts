@@ -31,7 +31,22 @@ import {
   type ObjectivePredicate,
   type ObjectiveState,
   type ObjectiveTransitionRule,
+  type StructuralExpression,
 } from "@chess-tabiya/runtime";
+
+export type PlanSignatureResolver = (planClassId: string) => StructuralExpression | null | undefined;
+
+export interface PlanShapeLookup {
+  get(id: string): { readonly document: { readonly plans: readonly { readonly id: string; readonly success: { readonly note: string; readonly signature: StructuralExpression | null } }[] } } | undefined;
+}
+
+export function planSignatureResolver(pack: DrillPackDefinition, shapes?: PlanShapeLookup): PlanSignatureResolver {
+  return (planClassId) => {
+    const planClass = pack.planClasses?.find((candidate) => candidate.id === planClassId);
+    if (planClass?.shapePlan === undefined) return undefined;
+    return shapes?.get(planClass.shapePlan.shape)?.document.plans.find((plan) => plan.id === planClass.shapePlan!.plan)?.success.signature;
+  };
+}
 
 export class PackCompileError extends Error {
   readonly code: string;
@@ -196,6 +211,7 @@ function successPredicate(
   pack: DrillPackDefinition,
   condition: SuccessCondition,
   pointer: string,
+  resolvePlanSignature?: PlanSignatureResolver,
 ): ObjectivePredicate {
   if (condition.kind === "reach_checkpoint") {
     return { type: "checkpointReached", checkpointId: condition.checkpointId };
@@ -237,6 +253,11 @@ function successPredicate(
     }
     return timingPredicate(pack, window, condition.verdict);
   }
+  if (condition.kind === "plan_consequence") {
+    const signature = resolvePlanSignature?.(condition.planClassId);
+    if (signature == null) throw new PackCompileError("PLAN_CONSEQUENCE_UNRESOLVED", `${pointer}/planClassId`, `plan consequence ${condition.planClassId} has no resolved structural signature`);
+    return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: signature } };
+  }
   const exhaustive: never = condition;
   throw new PackCompileError(
     "SUCCESS_CONDITION_KIND_UNRECOGNISED",
@@ -248,6 +269,7 @@ function successPredicate(
 function conditionEvidenceRefs(
   condition: SuccessCondition,
   pointer: string,
+  resolvePlanSignature?: PlanSignatureResolver,
 ): readonly [string, ...string[]] {
   if (condition.kind === "reach_checkpoint") {
     return [packEvidenceRef(condition.checkpointId)];
@@ -270,6 +292,11 @@ function conditionEvidenceRefs(
   if (condition.kind === "timing_window") {
     return [tempoEvidenceRef(condition.windowId, condition.verdict)];
   }
+  if (condition.kind === "plan_consequence") {
+    const signature = resolvePlanSignature?.(condition.planClassId);
+    if (signature == null) throw new PackCompileError("PLAN_CONSEQUENCE_UNRESOLVED", `${pointer}/planClassId`, `plan consequence ${condition.planClassId} has no resolved structural signature`);
+    return [`planClass#${condition.planClassId}`, ...structuralFeatureKinds(signature).map((kind) => rulesEvidenceRef(`structure-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]))];
+  }
   const references = structuralFeatureKinds(condition.feature).map((kind) =>
     rulesEvidenceRef(`structure-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]),
   );
@@ -289,9 +316,10 @@ function conditionRules(
   index: number,
   outcomeObjective: boolean,
   pointerPrefix: string,
+  resolvePlanSignature?: PlanSignatureResolver,
 ): readonly ObjectiveTransitionRule[] {
   const pointer = `${pointerPrefix}/successConditions/${index}`;
-  const predicate = successPredicate(pack, condition, pointer);
+  const predicate = successPredicate(pack, condition, pointer, resolvePlanSignature);
   const to = condition.to ?? "achieved";
   const defaults: readonly ObjectiveState[] =
     to === "preserved"
@@ -307,7 +335,7 @@ function conditionRules(
     from,
     to,
     when: predicate,
-    evidenceRefs: conditionEvidenceRefs(condition, pointer),
+    evidenceRefs: conditionEvidenceRefs(condition, pointer, resolvePlanSignature),
   }));
 }
 
@@ -315,6 +343,7 @@ export function objectiveRules(
   pack: DrillPackDefinition,
   objective: DrillPackDefinition["objective"] = pack.objective,
   pointerPrefix = "/objective",
+  resolvePlanSignature?: PlanSignatureResolver,
 ): readonly ObjectiveTransitionRule[] {
   const raw = objective.successConditions;
   if (objective.type === "run_trajectory") return [];
@@ -357,7 +386,7 @@ export function objectiveRules(
             evidenceRefs: [packEvidenceRef(boundary.id)],
           }];
     const authored = Array.isArray(raw)
-      ? raw.flatMap((condition, index) => conditionRules(pack, condition, index, false, pointerPrefix))
+      ? raw.flatMap((condition, index) => conditionRules(pack, condition, index, false, pointerPrefix, resolvePlanSignature))
       : [];
     return [...degraded, ...resolution, ...authored];
   }
@@ -399,7 +428,7 @@ export function objectiveRules(
     });
     const authored = Array.isArray(raw)
       ? raw.flatMap((condition, index) =>
-          conditionRules(pack, condition, index, false, pointerPrefix))
+          conditionRules(pack, condition, index, false, pointerPrefix, resolvePlanSignature))
       : [];
     return [...defaults, ...authored];
   }
@@ -409,7 +438,7 @@ export function objectiveRules(
   if (!outcomeObjective) {
     if (!Array.isArray(raw)) return [];
     return raw.flatMap((condition, index) =>
-      conditionRules(pack, condition, index, false, pointerPrefix),
+      conditionRules(pack, condition, index, false, pointerPrefix, resolvePlanSignature),
     );
   }
 
@@ -449,7 +478,7 @@ export function objectiveRules(
   outcomeRule("loss", "failed");
 
   const degraded = conditions.flatMap((condition, index) =>
-    condition.to === "degraded" ? conditionRules(pack, condition, index, true, pointerPrefix) : [],
+    condition.to === "degraded" ? conditionRules(pack, condition, index, true, pointerPrefix, resolvePlanSignature) : [],
   );
   const resolution: ObjectiveTransitionRule[] = [];
   const resolveAt = objective.grading?.resolveAt;
@@ -466,7 +495,7 @@ export function objectiveRules(
     });
   }
   const remaining = conditions.flatMap((condition, index) =>
-    condition.to !== "degraded" ? conditionRules(pack, condition, index, true, pointerPrefix) : [],
+    condition.to !== "degraded" ? conditionRules(pack, condition, index, true, pointerPrefix, resolvePlanSignature) : [],
   );
   return [...automatic, ...degraded, ...resolution, ...remaining];
 }
@@ -474,6 +503,7 @@ export function objectiveRules(
 export function orchestratePackStart(
   pack: DrillPackDefinition,
   initial: DrillRun,
+  _resolvePlanSignature?: PlanSignatureResolver,
 ): MutationResult {
   let run = initial;
   const root = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
@@ -496,6 +526,7 @@ export function orchestratePackMove(
   pack: DrillPackDefinition,
   before: DrillRun,
   committed: MutationResult,
+  resolvePlanSignature?: PlanSignatureResolver,
 ): MutationResult {
   let run = committed.run;
   const active = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
@@ -508,12 +539,12 @@ export function orchestratePackMove(
     }
   }
   if (pack.legs === undefined) {
-    run = evaluateObjective(run, objectiveRules(pack), active.createdAt).run;
+    run = evaluateObjective(run, objectiveRules(pack, pack.objective, "/objective", resolvePlanSignature), active.createdAt).run;
   } else {
     const parentId = active.parentId;
     if (parentId == null) throw new TypeError("Committed trajectory node has no parent");
     const outgoing = legIndexAt(pack, before, parentId);
-    run = evaluateObjective(run, objectiveRules(pack, pack.legs[outgoing]!.objective), active.createdAt).run;
+    run = evaluateObjective(run, objectiveRules(pack, pack.legs[outgoing]!.objective, `/legs/${outgoing}/objective`, resolvePlanSignature), active.createdAt).run;
     const incoming = legIndexAt(pack, run, active.id);
     if (incoming > outgoing) {
       const state = run.nodes.find((node) => node.id === active.id)!.objectiveState;

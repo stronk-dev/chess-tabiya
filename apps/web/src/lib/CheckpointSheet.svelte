@@ -141,6 +141,7 @@
                   {#if plan}<p>{plan.description}</p>{/if}
                 {/if}
                 {#if item.description}<p>{item.description}</p>{/if}
+                {#if item.gradability === "declared_uncheckable"}<p>This plan has no structural signature, so the drill does not check it.</p>{#if item.gradabilityNote}<p>{item.gradabilityNote}</p>{/if}{/if}
               {:else}
                 <span class="kind">Theory</span><p>{theoryVerdictSentence(item, run)}</p>
               {/if}

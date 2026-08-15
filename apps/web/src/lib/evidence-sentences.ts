@@ -46,6 +46,9 @@ const RULES_SENTENCES: Readonly<Record<RulesEvidenceFact, string>> = Object.free
   "structure-bishop-on-shade": "The authored bishop-square-shade condition holds at this position.",
   "structure-pawn-count": "The authored pawn-count condition holds at this position.",
   "structure-king-opposition": "The authored king-opposition geometry and mover condition holds at this position.",
+  "structure-piece-count": "The authored piece-count condition holds at this position.",
+  "structure-king-zone": "The authored king-zone condition holds at this position.",
+  "structure-piece-distance": "The authored piece-distance condition holds at this position.",
 });
 
 const THEORY_SENTENCES: Readonly<Record<TheoryEvidenceFact, string>> = Object.freeze({

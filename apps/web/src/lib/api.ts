@@ -163,6 +163,8 @@ export type AuthoredFeedbackItem =
       readonly label: string;
       readonly description?: string;
       readonly shapePlan?: { readonly shape: string; readonly plan: string };
+      readonly gradability: "graded" | "declared_uncheckable" | "unbound";
+      readonly gradabilityNote?: string;
     }
   | {
       readonly kind: "theory_verdict";
