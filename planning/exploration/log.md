@@ -1749,3 +1749,41 @@ ruling. So does the deferred B+N mate. Neither blocks anything today.
 arrangement chain), Scandinavian wave-4b, and the pass that is still genuinely
 at zero — Stockfish validation of middlegame/opening authored claims, which no
 tablebase can settle. Then the owner's session and its invariant review.
+
+## 2026-08-15 — Q7 answered; K10 does not fire; the unpaid grounding bill
+
+**Landed.** `design/research/pack-authoring-cost.md` — the Q7/K10 verdict, from
+evidence the repo had been generating for four days and never harvesting: 33
+instrumented packs across nine waves. **43.5 agent-minutes per pack, tooling
+friction 11.6%** (9.2% excluding pack A), under the ~25% threshold that fires
+the build-tooling rule. K10 moves from `open` to `📊 evidence against firing`;
+Q7 from `🔬 job open` to answered `[P]`; C6 to qualified evidence with the word
+"reviewed" struck, since C1's reviewer pass was withdrawn 2026-08-13 and the
+gate had been describing a stage that no longer exists.
+
+**The finding under the verdict.** Cost tracks the **grounding bar, not the
+format**: opening packs are the cheapest in the corpus (28.8 min/pack) because
+they carry *zero* engine validation, while Syzygy-grounded endgames cost 40.6.
+So the average that makes K10 look safe is held down by 15 packs that have not
+paid their §3b bill. That grounding pass is now a ledger row, and it is the one
+piece of work that could move K10 back.
+
+**What the instrument got wrong about itself.** `content-era/plan.md` §1b
+predicted the pipeline would be dominated by `owner-review` + `revision`; they
+are 5.3% combined, while `encoding` + `research` are 71.9%. And the standing
+rule "encoding dominance means the format is wrong" would misfire here —
+encoding time is *prose*, not schema fights; waves 3 and 5a record zero of
+those. The decision rules need correcting before they are trusted again.
+
+**Blocked / unmeasured.** Runtime playtest cost has not been measured since
+2026-08-12 — no wave has played a run since. Pack A's 45 friction minutes were
+run-assembly, so the steady-state 9% describes drafting and *static* validation
+only. Neither fixed nor still-present: unmeasured. Ledgered.
+
+**Correction of record.** Claude repeatedly stated 41 authored packs, including
+in the brief that commissioned this dossier. The true count is 35 — the rest
+were `*.evidence/job/sources.json` sidecars and browser fixtures. The dossier
+caught it by counting.
+
+**Next.** The Q4a/Q4b author-capability dossier is in flight and is the one that
+rules on K7 and the E3 gate; this dossier deliberately did not.
