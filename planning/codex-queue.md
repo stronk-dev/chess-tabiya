@@ -1,5 +1,32 @@
 # Codex queue — refreshed 2026-08-15 (night)
 
+## 0. D91 — REGRESSION SHIPPED TODAY, TAKE THIS FIRST
+
+**Every Maia request in the product runs at band 1500 while recording the band that
+was requested.** `opponent-selector.ts:493-506` sends `setoption name Elo <band>`
+and **then** `SelfElo`/`OppoElo` at their advertised defaults — and **`Elo` is an
+alias for that pair**, so the later two discard it.
+
+Measured, 4 command orders × 12 positions × 3 bands: the shipped order changes the
+policy vector on **0 of 12** positions between band 1000 and 2400; `elo-only`,
+`elo-last` and `self-oppo` each change **12 of 12**; the shipped arm is
+**byte-identical to an `Elo 1500` request on 12/12** at both extremes. Verified by
+claude against the file.
+
+**It came in with `43c6c4a`** — the engine-request-contract implementation — whose
+§8 called the pair *"behaviourally a no-op"*, which is exactly backwards. It is a
+**`state` and `record` violation of the contract that shipped it**: R10's measured
+`[1000, 2400]` is inert, and **D60's closure was false and is re-opened**.
+
+**Fix: send `SelfElo`/`OppoElo` BEFORE `Elo`, or set the pair to the resolved band.
+Do not simply delete it.**
+
+**Both gates miss this by construction** — the unit test asserts the broken array
+against a fake client, and the real-engine suite sends a shape production never
+uses. The regression test must drive the **production** command path against a real
+engine and assert the policy vector *differs* between two bands.
+
+
 **Landed and verified today (9 waves):** `authoring-frictions` 0.16 ·
 `validator-integrity` · `tempo-vocabulary` 0.17 · `resistance-spectrum` run 0.14 ·
 `predicate-wave-3` 0.18 + shape-entry 0.3 · `opening-evidence-path` 0.20 ·

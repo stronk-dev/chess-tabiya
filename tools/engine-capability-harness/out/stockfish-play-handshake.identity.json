@@ -1,0 +1,17 @@
+{
+  "identity": {
+    "id": "stockfish-play",
+    "kind": "opponent",
+    "name": "Stockfish",
+    "version": "18",
+    "seedHonored": false,
+    "eloHonored": false
+  },
+  "profile": {
+    "movetimeMs": 100,
+    "threads": 1,
+    "hashMb": 16,
+    "multiPv": 1
+  },
+  "optionCount": 20
+}

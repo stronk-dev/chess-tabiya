@@ -1,0 +1,50 @@
+{
+  "arm": "band-command-order",
+  "arms": {
+    "elo-last": {
+      "of": 12,
+      "policyChanged_1000v2400": 12
+    },
+    "elo-only": {
+      "of": 12,
+      "policyChanged_1000v2400": 12
+    },
+    "self-oppo": {
+      "of": 12,
+      "policyChanged_1000v2400": 12
+    },
+    "shipped": {
+      "of": 12,
+      "policyChanged_1000v2400": 0
+    }
+  },
+  "bands": [
+    1000,
+    1500,
+    2400
+  ],
+  "eloLastEqualsEloOnly": {
+    "1000": 12,
+    "1500": 12,
+    "2400": 12
+  },
+  "positions": 12,
+  "probes": 144,
+  "selfOppoEqualsEloOnly": {
+    "1000": 12,
+    "1500": 12,
+    "2400": 12
+  },
+  "shippedArmVersus": {
+    "1000": {
+      "identicalToEloOnlyAt1500": 12,
+      "identicalToSameBandEloOnly": 0,
+      "of": 12
+    },
+    "2400": {
+      "identicalToEloOnlyAt1500": 12,
+      "identicalToSameBandEloOnly": 0,
+      "of": 12
+    }
+  }
+}
