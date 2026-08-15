@@ -10,6 +10,23 @@
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/expression-census/` (once implementing)
 
+
+> **ROUTED HERE by claude (coordinator), 2026-08-15 — `transition-primitives` open question 8
+> is this instrument's problem, not that RFC's.** Its cross-review asked: *a positive-polarity
+> condition that is correct but deliberately uncovered by its own pack is still refused* — the
+> outpost-shape case one wave later. Its two candidate remedies were a `witness` field (a new
+> authoring surface) or downgrading the refusal to a warning (which returns the `timingWindow`
+> answer to nothing).
+>
+> **Neither belongs in a vocabulary wave.** This RFC already specifies the witness protocol —
+> a legal FEN plus a *played* SAN continuation, with anchored / evictable / undefended /
+> reference roles and a bar of one positive plus one negative control — which is exactly the
+> evidence an author would attach to say *"uncovered on purpose, and here is why it is
+> satisfiable"*. §5's protocol should therefore state whether a witness can be **authored into
+> a pack or entry** rather than only constructed by the tool, and if so, what an inertness
+> refusal must do when one is present. That decision belongs with the instrument that defines
+> what a witness *is*.
+
 ## Register claim
 
 **This RFC claims nothing versioned.** No pack schema version, no run schema

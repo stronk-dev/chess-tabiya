@@ -95,9 +95,12 @@ The owner's 2026-08-15 ruling supplies the two consumers and this RFC ships all 
 together. The grammar is **six leaves and five nodes**, all of them set differences over two
 positions that already exist in the run. The **drill-pack consumer** is one new
 `successCondition` kind, `transition_feature`, with a validator rule that is the direct answer
-to the precedent: **a transition condition that is false at every transition of its own pack's
-spine is refused at load**, so the grammar cannot be authored inertly the way `timingWindow`
-was. The **Just Play consumer** is two surfaces that already exist and are reused verbatim:
+to the precedent: **a transition condition that never fires, in the direction its author
+claimed, on any of its own pack's authored transitions is refused at load**, so the grammar
+cannot be authored inertly the way `timingWindow` was. That rule is a **coverage** rule and §4.4a
+is explicit that it is not a satisfiability check — the distinction the repo measured on the
+knight-vs-bishop fan, where an expression fired on 0 of 346 corpus positions and was still
+correct. The **Just Play consumer** is two surfaces that already exist and are reused verbatim:
 the closed-by-default reading disclosure (`apps/web/src/lib/DrillScreen.svelte:729-737`) gains
 a transition sibling, and `PivotalKind` (`packages/runtime/src/pivotal.ts:10`) gains exactly
 one new marker — `defended_duty_acquired`, the 6.7%-firing overload count that the R1
@@ -111,7 +114,9 @@ lines are verbatim copies of code that already ships and is **private**; and the
 order by selectivity **overload 6.7% < check 7.1% < irreversibility 13.2% ≪ attacks 50.6% <
 lines 52.6% < escape squares 61.2% < defences 74.9%**. That ordering is not decoration — §5
 turns the 37-point gap between 13.2% and 50.6% into the rule that decides which primitive may
-appear unasked and which may only answer a question the learner asked.
+appear unasked and which may only answer a question the learner asked. **Two of those seven
+numbers are strict upper bounds** (§2.4), so the gap can only shrink; §5.4 and criterion 2 make
+the live tier conditional on re-measuring it rather than asserting the partition is settled.
 
 Three things are refused by name. **Routing-as-detector** does not come back, and §7 R1 states
 the structural mechanism that prevents it rather than promising restraint. **`structuralDelta`
@@ -296,9 +301,14 @@ the same `rules:structure-*` refs its embedded expression always did. What it bu
 3. **It makes `structuralDelta` unnecessary rather than merely unused** (§8).
 
 And it is cheap in the way that matters: `matchesStructuralExpression` is a *targeted*
-evaluator (verified: `structure.ts:417-431` dispatches straight to
-`matchesStructuralFeature`; it never calls `structuralReading`). Two `position` nodes cost two
-predicate evaluations, not two full readings.
+evaluator — verified by reading it this cross-review, it dispatches to
+`matchesStructuralFeature`, handles `pieceOnSquare` inline and recurses through
+`mirrored`/`quantified`, and **never** calls `structuralReading` or `structuralDelta`. Two
+`position` nodes cost two predicate evaluations, not two full readings. **One caveat, stated
+because criterion 6 turns on it:** a `position` node embedding `pawn_safe_square` or `outpost`
+does reach `pawnSafety`, at the shipped leaf's own cost. That is the author's choice of leaf, not
+a cost this grammar imposes, and it is why criterion 6 excludes the permitted edge's closure
+rather than forbidding it.
 
 **Not admitted as nodes, each with its reason.** `mirrored`, `quantified` **and `pieceOnSquare`**
 — the shipped `StructuralExpression` carries seven kinds, not five, and this draft's enumeration
@@ -439,13 +449,16 @@ a later wave does not reintroduce one: `overloaded`, `trapped`, `hanging`, `weak
 `blunder`, `mistake`, `improvement`, `tempo_gain`, `reposition`, `prophylactic`, `best_move`.
 Every one names a verdict about the move; `_changed` names a difference.
 
-**Names swept this pass** (re-run after 0.18 landed): **zero** occurrences of
+**Names swept this pass, and re-swept in cross-review on the 0.20 tree:** **zero** occurrences of
 `TransitionExpression`, `TransitionFeature`, `matchesTransitionExpression`,
-`transition_feature`, `transitionReading` or `TRANSITION_*` across `packages/`, `apps/`,
-`schemas/` and `content/`. `_OUT_OF_RANGE` matches the established refusal suffix
+`transition_feature`, `transitionReading`, `defended_duty_acquired` or `TRANSITION_*` across
+`packages/`, `apps/`, `schemas/`, `content/`, `tools/` and `tests/`. **No refusal-code collision:
+none of the six §4.4 codes, including the new `TRANSITION_EXPRESSION_NEVER_ABSENT`, exists on the
+tree.** `_OUT_OF_RANGE` matches the established refusal suffix
 (`PAWN_COUNT_OUT_OF_RANGE`, `OUTPOST_RANK_OUT_OF_RANGE`); `_NEVER_PRESENT` and
-`_ALWAYS_PRESENT` match `PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT`
-(`apps/server/src/pack-validation.ts:474`), which landed with 0.18.
+`_ALWAYS_PRESENT` match `PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT` and
+`SHAPE_REFERENCE_NEVER_PRESENT` (both `apps/server/src/pack-validation.ts`), which landed with
+0.18.
 
 ### 3. Cost, settled
 
@@ -511,12 +524,13 @@ transition.
 is why the transition predicate lands one level up (§4.2) instead.
 
 **Ordinal — now settled rather than conditional.** `$defs/successCondition`
-(`schemas/drill_pack.schema.json:303-387`) has **seven** arms on the current 0.18 tree —
-`reach_checkpoint`, `outcome`, `material_balance`, `rules_fact`, `structural_feature`,
-`timing_window`, and `plan_consequence` at `:379` — matched 1:1 by `SuccessCondition`
-(`packages/schema/src/drill-pack/types.ts:265-294`). **`transition_feature` is therefore the
-eighth arm, unconditionally.** The earlier hedge ("seventh if 0.18 stalls") is removed: 0.18
-landed while this draft was being written.
+has **seven** arms on the current **0.20** tree — `reach_checkpoint`, `outcome`,
+`material_balance`, `rules_fact`, `structural_feature`, `timing_window`, and `plan_consequence`
+— matched 1:1 by `SuccessCondition` (`packages/schema/src/drill-pack/types.ts`). **Counted
+programmatically in cross-review, on the tree as it stands after 0.20 landed:** 0.18 added the
+seventh and 0.20 added no arm at all (it widened `$defs/objectiveGrading.assessedBy`), so
+**`transition_feature` is the eighth arm, unconditionally.** The earlier hedge ("seventh if 0.18
+stalls") is removed.
 
 #### 4.2 The evaluator route, pinned to the call site
 
@@ -575,7 +589,7 @@ refusal.**
 | `renderTransitionObservation`, `renderTransitionSpec` (new, `apps/web/src/lib/transition-sentences.ts`) | — | `never` guards, mirroring `structural-sentences.ts:29-30,59-60` |
 | `renderPivotalMarker` (`packages/runtime/src/pivotal.ts:98-106`) | **not exhaustive** — `:102` casts `marker.detail as IrreversibilityDetail` and falls through | see §5.3: this is a latent defect that the widening would trip, and it is fixed here |
 
-#### 4.4 Load refusals — six rows, five of them new codes, and the first is the point of the RFC
+#### 4.4 Load refusals — seven rows, six new codes and one reused, and the first two are the point of the RFC
 
 **Read §4.4a first.** The first row was rewritten in cross-review: as originally drafted it
 refused a class of correct authoring, and the reason is a distinction the repo has already
@@ -1196,7 +1210,8 @@ this RFC changes that boundary or feeds it.
 | Promotion | The promoted piece is a different role on the same square, so it is **not** "the same piece in both positions"; `escape_squares_changed` and `defended_duties_changed` skip it, and `attacked_squares_changed` sees the new attack relations. Stated because it is the one place the same-square identity rule is surprising |
 | A capture on the target square | The both-occupied conjunct (§2.4) excludes it from the attack and defence leaves. Deliberate: the disappearance of a piece is not a fact about what the mover stopped defending |
 | `to`/`from` omitted on the condition | Inherits `$defs/conditionBase`'s shipped defaults exactly as the other arms do; nothing new |
-| A pack with no spine | The satisfiability checks (§4.4) cannot run and are **skipped**, not failed. A spine-less pack has no content to be inert against |
+| A pack with no spine **and** no deviations | The authored transition set (§4.4a) is empty, so the coverage checks cannot run and are **skipped**, not failed. A pack with no authored transitions has no content to be inert against |
+| A pack with no spine but with deviations, or vice versa | The set is whichever edges exist; the checks run against them. Only the empty set is skipped |
 
 ### 11. Schema changes
 
