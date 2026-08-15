@@ -1,19 +1,41 @@
-# Codex queue — refreshed 2026-08-15 (late night)
+# Codex queue — refreshed 2026-08-15 (late)
 
-## 0. D64 — IMPLEMENTED, pending independent review
+**D64 is CLOSED** (`8b1b44d`) — and closed the right way: the 135 fabricated records were
+**re-derived against the live tablebase**, not withdrawn. Claude independently re-measured:
+341 syzygy entries, **0** matching the synthesis signature; the six packs still return
+`ledger_verified`, now honestly. Verify exit 0.
 
-**135 of 341 committed tablebase provenance records are fabricated**, across six packs that
-all return `ledger_verified`. Each claims `status: 200` from a `tablebase.lichess.org` URL
-**no process contacted**, with a hash of the local fixture body. Confirmed twice
-independently, from opposite directions, with identical counts.
+## 0. Acceptance-criteria completion — AUTHORIZED NOW, no new RFC needed
 
-**`rfc/fixture-realism.md` now scopes it in** — read the banner at its head; it remains
-unarchived pending independent review. Five obligations landed together: stop `offlineQuery`
-asserting a network transaction it never made; add a validator refusing the manufactured shape
-(the timestamp is a pure function of the URL, which is exactly how both agents found it); make
-`"offline": true` actually **read** — seven job files record it and nothing consumes it;
-re-derive or honestly withdraw the six packs' grounding claims; and fix F3a's monotonic-shrink
-property, which was specified but unimplemented while documentation claimed it worked.
+Independent verification of tonight's three implementations found substantive work **inside
+already-accepted RFCs**. This is not new scope; it is the criteria those RFCs already carry.
+
+**`fixture-realism`:**
+- Criteria **3, 6, 8, 11** each say *"demonstrated, reverted, recorded"* — **none of those
+  demonstrations is recorded** in `planning/fixture-realism/log.md`. Criterion 11's is
+  *simulated inside the test itself*, which proves the helper works rather than that the gate
+  binds. Run each against the real tree, revert, and record the red run.
+- Minor but real: `productionSources()`/`packageContentTests()` recurse into
+  `packages/*/node_modules`. Harmless today only because pnpm's entries are symlinks; a
+  non-symlinked dependency with `.ts` files would silently pollute the discovered set.
+
+**`client-surface-floor`:**
+- Criteria **4, 7, 9** demand pre-change red runs be recorded; the log records the containment
+  correction but not those.
+- Criterion **8(a)** shipped as a regex on the exact string `viewerRole !== "host"` rather than
+  "no `viewerRole`-conditioned control" — `{#if viewerRole === "spectator"}` slips past it.
+- **C8** required the surviving `document.scrollingElement` guard be *kept **and annotated
+  in-file*** with why it is structurally constant at ≤719 px. A failure-message string landed;
+  the annotation did not.
+
+**Then:** both RFCs can archive — with the ledger flip **and** the `planning/exploration/log.md`
+entry in the archiving commit. Neither has the exploration-log entry yet.
+
+## 1. Everything else is genuinely gated
+
+Four drafts are in cross-review or author revision (`feedback-delivery` returned;
+`live-surface-honesty`, `format-surface`, `engine-leverage` pending). `teacher-surface` is
+owner-blocked by ruling. You are correct that none is authorized — take item 0 meanwhile.
 
 ## 1. Then the review queue drains into you
 
