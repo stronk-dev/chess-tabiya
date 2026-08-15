@@ -8,6 +8,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `authoring-frictions.md` | draft — **cross-reviewed, ready for codex** | — | claims **pack schema 0.16** (additive/widening); NO migration (register stays 18); NO run-schema change (stays 0.13). Eight frictions from four content waves, ordered by attestation; carries the cursed-win/blessed-loss admission ruling of 2026-08-15 |
+| `resistance-spectrum.md` | draft (awaiting cross-review) | — | claims **run schema 0.14** and **migration 19** (rebased by claude from 0.15/20 after the 0.14 holder was cancelled). No pack-schema claim: `practical_resistance` is already in the enum, so this is a partition move. Ownership pins: `practical-difficulty.ts` (new), the `eloHonored` seam |
 
 No active product RFCs.
 
@@ -117,6 +118,7 @@ writing it into a draft.
 | 16 | 15→16 | `archive/onramp-guard.md` | implemented — stamp-only: run schema `"0.10"`→`"0.11"` (`RunFeedbackPolicy` gains `immediate_guard`; no new event type, no data rewrite). Rebased from an initial 15 claim behind `repertoire-gap-finding`'s wave claim #1 |
 | 17 | 16→17 | `archive/open-answer-grading.md` | implemented — **stamp-only, no table** (transcripts are run events; run deletion is the retention story); run schema 0.11→**0.12** (`reasoning.recorded` event). Reconciled behind onramp-guard per the pinned wave order |
 | 18 | 17→18 | `archive/grounding-pair.md` | implemented — stamp-only: run schema 0.12→**0.13** (`RunOpponentMode`/`PolicyModeApplied` gain `perfect_tablebase`; no new event type, no data rewrite) |
+| 19 | 18→19 | `resistance-spectrum.md` | claimed 2026-08-15 — stamp-only: run schema 0.13→**0.14** (`practical_resistance` applied-record widenings, `eloHonored`/`eloApplied`). No data rewrite; historical group-journal rows compare equal |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
