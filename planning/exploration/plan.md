@@ -20,7 +20,7 @@ record). Evidence lands as dossiers in `design/research/`.
 | Q1b | Do target learners and coaches recognize and want the problem solved? | 💡 advisory (E2 demoted 2026-08-12; re-gates public push) | E2, K2–K3 |
 | Q1c | Does rehearsal improve learning versus simpler formats? | 💡 · requires slice | H1–H4, K1, K4, K8, C2–C4 |
 | Q2 | What source, deployment, monetization, and content-rights posture fits? | ✅ settled, **deployment axis amended 2026-08-12 to hosted multi-user** (owner ruling; fires ADR-0004's revisit trigger; AGPL §13 now binds). Other three axes unchanged | — |
-| Q3 | Mobile: scope or non-goal? | 💡 | — |
+| Q3 | Mobile: scope or non-goal? | 📊 evidence 2026-08-15 — **tolerate, responsive-only**: phone floor = run loop + read surfaces + 2-column compare; full-surface floor 768 px and **currently unmet** (the 720–992 px band); 4–8-way compare, branch groups ≥4, live session detail and studio named not-phone-shaped; mobile-native non-goal. `design/research/mobile-scope.md` | — |
 | Q4a | Can authors declare useful phase transitions and timing windows? | 📊 evidence 2026-08-15 — **split verdict**: boundaries yes (32/35 packs, 17 voluntary), timing windows **zero** (0/135 checkpoints). `design/research/authored-transitions-and-features.md` | E3, K7, C6 |
 | Q4b | Can deterministic features assist authors reliably? | 📊 evidence 2026-08-15 — reliable wherever the claim is a **census**, absent wherever it is a **judgment** (plans, intent, history, timing). §6 is the predicate roadmap. `design/research/authored-transitions-and-features.md` | K7 |
 | Q4c | Can automatic phase/structure recognition support Just Play without pretending certainty? | 💡 · breadth-blocking for Just Play; optional for curated packs | B2, B4 |
