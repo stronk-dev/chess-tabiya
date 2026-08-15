@@ -67,10 +67,10 @@ rationalized away.
 | K4 | Branch comparison does not improve understanding over engine lines | open | — |
 | K5 | Maia/corpus opponents produce incoherent plans over the required horizon | open | — |
 | K6 | Explanations remain generic despite curated packs | open | — |
-| K7 | Authors cannot reliably encode timing and structure without excessive custom code | open | — |
+| K7 | Authors cannot reliably encode timing and structure without excessive custom code | open | partial evidence BOTH ways in `design/research/pack-authoring-cost.md`: structure is encodable, timing is not (attested by packs A and C), and "custom code" is literal — a scratch verification harness was rebuilt every wave (4 attestations). Not a K7 verdict; Q4a/Q4b dossier is the one that rules |
 | K8 | Full-segment replay does not transfer to related positions | open | — |
 | K9 | Endgame mode is not materially faster or more usable than Chess Endgame Training | open | — |
-| K10 | Pack production cost is so high that only a handful can ever exist | open | — |
+| K10 | Pack production cost is so high that only a handful can ever exist | 📊 evidence against firing | `design/research/pack-authoring-cost.md` (2026-08-15): 33 instrumented packs over nine waves, **43.5 agent-min/pack**, tooling friction **11.6%** (9.2% excluding pack A) — under the ~25% build-tooling threshold. NOT closed: four cost components are unmeasured, chiefly the grounding bill for 15 ungrounded opening packs and runtime playtest cost, unmeasured since 2026-08-12 |
 
 ## Exploration-to-slice gate
 
@@ -100,7 +100,7 @@ Continue from vertical slice to product build when all of:
 | C3 | Second-attempt objective performance improves meaningfully | unmet | — |
 | C4 | Delayed related-position performance beats the baseline format | unmet | — |
 | C5 | Opponent coherence judged acceptable for ≥80% of branches | unmet | — |
-| C6 | Pack authors can create a reviewed pack with a documented, repeatable workflow | unmet | — |
+| C6 | Pack authors can create a ~~reviewed~~ pack with a documented, repeatable workflow | 📊 evidence, qualified | nine waves ran the same documented loop with a falling first-run validator error rate (`design/research/pack-authoring-cost.md`). **"reviewed" is struck**: C1's reviewer pass was withdrawn 2026-08-13, so the word describes a stage that no longer exists |
 | C7 | Endgame restart and response latency feel effectively instant | unmet | — |
 
 These gate **vertical slice → product build**. They are deliberately later than E1–E5:
