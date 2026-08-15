@@ -39,7 +39,50 @@
     "type": "execute_break",
     "summary": "You have the White side of the Carlsbad: pawns a2/b2 against a7/b7/c6, d4 against d5, no c-pawn on either wing of the file. Execute the minority attack until Black has a backward c-pawn on White's half-open c-file.",
     "successConditions": [
-      { "kind": "plan_consequence", "planClassId": "minority-attack", "to": "achieved" }
+      {
+        "kind": "transition_feature",
+        "transition": {
+          "kind": "all",
+          "of": [
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "slider_lines_changed",
+                "color": "white",
+                "direction": "opened",
+                "comparison": "atLeast",
+                "count": 1
+              }
+            },
+            {
+              "kind": "position",
+              "at": "after",
+              "expression": {
+                "kind": "all",
+                "of": [
+                  {
+                    "kind": "feature",
+                    "feature": {
+                      "kind": "backward_pawn",
+                      "color": "black",
+                      "file": "c"
+                    }
+                  },
+                  {
+                    "kind": "feature",
+                    "feature": {
+                      "kind": "half_open_file",
+                      "color": "white",
+                      "file": "c"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "to": "achieved"
+      }
     ]
   },
   "concepts": [

@@ -27,6 +27,12 @@ export const RULES_EVIDENCE_FACTS = Object.freeze([
   "structure-piece-count",
   "structure-king-zone",
   "structure-piece-distance",
+  "transition-attacked-squares-changed",
+  "transition-defended-squares-changed",
+  "transition-slider-lines-changed",
+  "transition-escape-squares-changed",
+  "transition-defended-duties-changed",
+  "transition-move-irreversibility",
 ] as const);
 
 export type RulesEvidenceFact = (typeof RULES_EVIDENCE_FACTS)[number];

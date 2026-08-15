@@ -231,6 +231,73 @@ describe("pack authoring validation", () => {
     expect(validatePackDocument(redundant).issues.some((issue) => issue.code === "DEVIATION_MISTAKE_TACTICAL_REDUNDANT")).toBe(false);
   });
 
+  it("loads a covered transition condition and refuses an uncovered positive condition", () => {
+    const covered = structuredClone(fixture) as any;
+    covered.objective.successConditions = [{
+      kind: "transition_feature",
+      transition: { kind: "feature", feature: { kind: "move_irreversibility", subkind: "clock_zeroed" } },
+    }];
+    expect(validatePackDocument(covered).issues.some((issue) => issue.code === "TRANSITION_EXPRESSION_NEVER_PRESENT")).toBe(false);
+
+    const uncovered = structuredClone(fixture) as any;
+    uncovered.objective.successConditions = [{
+      kind: "transition_feature",
+      transition: { kind: "feature", feature: { kind: "move_irreversibility", subkind: "castled" } },
+    }];
+    expect(validatePackDocument(uncovered).issues).toContainEqual(expect.objectContaining({
+      code: "TRANSITION_EXPRESSION_NEVER_PRESENT",
+      path: "/objective/successConditions/0/transition",
+    }));
+  });
+
+  it("pins transition-expression authoring bounds and constant-condition diagnostics", () => {
+    const outOfRange = structuredClone(fixture) as any;
+    outOfRange.objective.successConditions = [{
+      kind: "transition_feature",
+      transition: { kind: "feature", feature: { kind: "attacked_squares_changed", color: "white", direction: "gained", comparison: "atLeast", count: 5 } },
+    }];
+    expect(validatePackDocument(outOfRange).issues).toContainEqual(expect.objectContaining({
+      code: "TRANSITION_COUNT_OUT_OF_RANGE",
+      path: "/objective/successConditions/0/transition/feature/count",
+    }));
+
+    const tooDeep = structuredClone(fixture) as any;
+    tooDeep.objective.successConditions = [{
+      kind: "transition_feature",
+      transition: {
+        kind: "not",
+        of: { kind: "not", of: { kind: "not", of: { kind: "not", of: { kind: "not", of: { kind: "feature", feature: { kind: "move_irreversibility", subkind: "clock_zeroed" } } } } } },
+      },
+    }];
+    expect(validatePackDocument(tooDeep).issues).toContainEqual(expect.objectContaining({
+      code: "TRANSITION_EXPRESSION_TOO_DEEP",
+    }));
+
+    const tautology = {
+      kind: "feature",
+      feature: { kind: "attacked_squares_changed", color: "white", direction: "gained", comparison: "atLeast", count: 0 },
+    };
+    const alwaysPositive = structuredClone(fixture) as any;
+    alwaysPositive.objective.successConditions = [{ kind: "transition_feature", transition: tautology }];
+    expect(validatePackDocument(alwaysPositive).issues).toContainEqual(expect.objectContaining({
+      code: "TRANSITION_EXPRESSION_ALWAYS_PRESENT",
+      severity: "warning",
+    }));
+
+    const neverNegative = structuredClone(fixture) as any;
+    neverNegative.objective.successConditions = [{ kind: "transition_feature", transition: tautology, to: "degraded" }];
+    expect(validatePackDocument(neverNegative).issues).toContainEqual(expect.objectContaining({
+      code: "TRANSITION_EXPRESSION_NEVER_ABSENT",
+    }));
+  });
+
+  it("admits the authored negative transition condition demonstrated by a deviation edge", () => {
+    const pack = JSON.parse(readFileSync("content/drafts/mate-k-q-technique.json", "utf8")) as DrillPackDefinition;
+    const issues = validatePackDocument(pack).issues;
+    expect(issues.some((issue) => issue.code === "TRANSITION_EXPRESSION_NEVER_ABSENT")).toBe(false);
+    expect(issues.some((issue) => issue.code === "TRANSITION_EXPRESSION_NEVER_PRESENT")).toBe(false);
+  });
+
   it("proves root-after-move variants and refuses false or absent siblings", () => {
     const sibling = structuredClone(fixture) as DrillPackDefinition;
     const board = Chess.fromSetup(parseFen(sibling.start.fen).unwrap()).unwrap();

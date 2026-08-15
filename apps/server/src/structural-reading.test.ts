@@ -18,7 +18,7 @@ function newRun() {
 }
 
 describe("structural pack orchestration", () => {
-  it("grades Pack B's minority attack from both structural leaves", () => {
+  it("grades Pack B on the transition that produces both structural leaves", () => {
     expect(validatePackDocument(pack).valid).toBe(true);
     expect(objectiveRules(pack, pack.objective, "/objective", resolvePlan)).toHaveLength(3);
     let run = newRun();
@@ -32,7 +32,7 @@ describe("structural pack orchestration", () => {
     }
     const transitions = run.events.filter((event) => event.type === "objective.state_changed");
     expect(transitions).toHaveLength(1);
-    expect(transitions[0]).toMatchObject({ data: { from: "active", to: "achieved", evidenceRefs: ["planClass#minority-attack", "rules:structure-backward-pawn", "rules:structure-half-open-file"] } });
+    expect(transitions[0]).toMatchObject({ data: { from: "active", to: "achieved", evidenceRefs: ["rules:transition-slider-lines-changed", "rules:structure-backward-pawn", "rules:structure-half-open-file"] } });
   });
 
   it("refuses plan objectives that compile to nothing but preserves honest ungraded packs", () => {

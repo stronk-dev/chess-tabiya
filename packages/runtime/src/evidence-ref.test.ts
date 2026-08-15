@@ -8,6 +8,7 @@ import {
   rulesEvidenceRef,
   tempoEvidenceRef,
 } from "./evidence-ref.js";
+import { TRANSITION_FEATURE_KINDS } from "./transition.js";
 
 describe("evidence reference grammar", () => {
   it("constructs every v1 rules ref and scoped pack/engine refs", () => {
@@ -40,6 +41,12 @@ describe("evidence reference grammar", () => {
       "rules:structure-piece-count",
       "rules:structure-king-zone",
       "rules:structure-piece-distance",
+      "rules:transition-attacked-squares-changed",
+      "rules:transition-defended-squares-changed",
+      "rules:transition-slider-lines-changed",
+      "rules:transition-escape-squares-changed",
+      "rules:transition-defended-duties-changed",
+      "rules:transition-move-irreversibility",
     ]);
     expect(packEvidenceRef("timing-window")).toBe("pack:timing-window");
     expect(engineEvidenceRef("evidence-job-7")).toBe("engine:evidence-job-7");
@@ -53,5 +60,9 @@ describe("evidence reference grammar", () => {
     expect(isEngineEvidenceRef("engine:evidence-job-1")).toBe(true);
     expect(isEngineEvidenceRef("engine:")).toBe(false);
     expect(isEngineEvidenceRef("rules:material")).toBe(false);
+  });
+
+  it("keeps transition rule facts aligned with the executable leaf order", () => {
+    expect(RULES_EVIDENCE_FACTS.filter((fact) => fact.startsWith("transition-")).map((fact) => fact.slice("transition-".length).replaceAll("-", "_"))).toEqual(TRANSITION_FEATURE_KINDS);
   });
 });

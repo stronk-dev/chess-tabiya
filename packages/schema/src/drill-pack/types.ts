@@ -315,6 +315,10 @@ export type SuccessCondition =
   | (SuccessConditionBase & {
       readonly kind: "plan_consequence";
       readonly planClassId: string;
+    })
+  | (SuccessConditionBase & {
+      readonly kind: "transition_feature";
+      readonly transition: TransitionExpression;
     });
 import type { Color, FileName, Role, SquareName } from "chessops/types";
 
@@ -373,3 +377,26 @@ export type StructuralExpression =
   | { readonly kind: "mirrored"; readonly axis: MirrorAxis; readonly of: StructuralExpression }
   | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly files: FileRange }; readonly feature: FileTemplateFeature }
   | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly squares: SquareRegion }; readonly feature: SquareTemplateFeature };
+
+export const TRANSITION_FEATURE_KINDS = Object.freeze([
+  "attacked_squares_changed",
+  "defended_squares_changed",
+  "slider_lines_changed",
+  "escape_squares_changed",
+  "defended_duties_changed",
+  "move_irreversibility",
+] as const);
+export type TransitionFeatureKind = (typeof TRANSITION_FEATURE_KINDS)[number];
+export type TransitionFeature =
+  | { readonly kind: "attacked_squares_changed"; readonly color: Color; readonly direction: "gained" | "lost"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "defended_squares_changed"; readonly color: Color; readonly direction: "gained" | "lost"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "slider_lines_changed"; readonly color: Color; readonly direction: "opened" | "closed"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "escape_squares_changed"; readonly color: Color; readonly direction: "gained" | "lost"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "defended_duties_changed"; readonly color: Color; readonly direction: "acquired" | "released"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
+  | { readonly kind: "move_irreversibility"; readonly subkind: "castled" | "last_of_role" | "pawn_break" | "clock_zeroed" };
+export type TransitionExpression =
+  | { readonly kind: "all"; readonly of: readonly [TransitionExpression, ...TransitionExpression[]] }
+  | { readonly kind: "any"; readonly of: readonly [TransitionExpression, ...TransitionExpression[]] }
+  | { readonly kind: "not"; readonly of: TransitionExpression }
+  | { readonly kind: "feature"; readonly feature: TransitionFeature }
+  | { readonly kind: "position"; readonly at: "before" | "after"; readonly expression: StructuralExpression };

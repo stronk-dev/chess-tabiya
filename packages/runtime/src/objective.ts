@@ -6,6 +6,8 @@ import { RuntimeError, unknownNode } from "./errors.js";
 import { appendEvents } from "./events.js";
 import { assertObjectiveTransition } from "./objective-state.js";
 import { matchesStructuralExpression, type StructuralExpression } from "./structure.js";
+import { matchesTransitionExpression } from "./transition.js";
+import type { TransitionExpression } from "@chess-tabiya/schema/drill-pack";
 import {
   tempoMovesFromRun,
   windowStates,
@@ -91,6 +93,7 @@ export type ObjectivePredicate =
       readonly verdict: TempoVerdict;
       readonly openingTrigger?: ObjectivePredicate;
     }
+  | { readonly type: "transitionFeature"; readonly transition: TransitionExpression }
   | {
       readonly type: "all" | "any";
       readonly predicates: readonly [ObjectivePredicate, ...ObjectivePredicate[]];
@@ -301,12 +304,23 @@ export function evaluateObjectivePredicate(
       )[0];
       return state?.verdict === predicate.verdict;
     }
+    case "transitionFeature": {
+      if (node.parentId === null || node.moveUci === null) return false;
+      const parent = run.nodes.find((candidate) => candidate.id === node.parentId);
+      return parent === undefined
+        ? false
+        : matchesTransitionExpression(parent.fen, node.moveUci, node.fen, predicate.transition);
+    }
     case "all":
       return predicate.predicates.every((child) => evaluateObjectivePredicate(run, child));
     case "any":
       return predicate.predicates.some((child) => evaluateObjectivePredicate(run, child));
     case "not":
       return !evaluateObjectivePredicate(run, predicate.predicate);
+    default: {
+      const exhaustive: never = predicate;
+      throw new TypeError(`Unhandled objective predicate: ${JSON.stringify(exhaustive)}`);
+    }
   }
 }
 

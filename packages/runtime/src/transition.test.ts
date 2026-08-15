@@ -1,0 +1,62 @@
+import { readFileSync } from "node:fs";
+
+import { Chess } from "chessops/chess";
+import { INITIAL_FEN, makeFen, parseFen } from "chessops/fen";
+import { parseUci } from "chessops/util";
+import { describe, expect, it } from "vitest";
+
+import {
+  matchesTransitionExpression,
+  matchesTransitionFeature,
+  transitionReading,
+} from "./transition.js";
+
+function after(fen: string, moveUci: string): string {
+  const position = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
+  position.play(parseUci(moveUci)!);
+  return makeFen(position.toSetup());
+}
+
+describe("transition primitives", () => {
+  it("matches a played move and delegates position facts without a verdict", () => {
+    const fen = after(INITIAL_FEN, "e2e4");
+    expect(matchesTransitionFeature(INITIAL_FEN, "e2e4", fen, {
+      kind: "move_irreversibility",
+      subkind: "clock_zeroed",
+    })).toBe(true);
+    expect(matchesTransitionExpression(INITIAL_FEN, "e2e4", fen, {
+      kind: "all",
+      of: [
+        { kind: "feature", feature: { kind: "move_irreversibility", subkind: "clock_zeroed" } },
+        { kind: "position", at: "after", expression: { kind: "pieceOnSquare", square: "e4", piece: { color: "white", role: "pawn" } } },
+      ],
+    })).toBe(true);
+  });
+
+  it("returns a canonical rung-0 reading only for a legal committed edge", () => {
+    const fen = after(INITIAL_FEN, "e2e4");
+    const reading = transitionReading(INITIAL_FEN, "e2e4", fen);
+    expect(reading?.observations).toContainEqual(expect.objectContaining({
+      kind: "move_irreversibility",
+      subkind: "clock_zeroed",
+    }));
+    expect(reading).not.toHaveProperty("score");
+    expect(transitionReading(INITIAL_FEN, "e2e5", fen)).toBeNull();
+    expect(matchesTransitionExpression(INITIAL_FEN, "e2e5", fen, {
+      kind: "position",
+      at: "after",
+      expression: { kind: "pieceOnSquare", square: "e4", piece: { color: "white", role: "pawn" } },
+    })).toBe(false);
+    const wrongAfter = after(INITIAL_FEN, "d2d4");
+    expect(transitionReading(INITIAL_FEN, "e2e4", wrongAfter)).toBeNull();
+  });
+
+  it("keeps expensive structural projections outside the transition implementation", () => {
+    const source = readFileSync(new URL("./transition.ts", import.meta.url), "utf8");
+    const structureImport = source.match(/import\s*\{([\s\S]*?)\}\s*from\s*"\.\/structure\.js"/u)?.[1] ?? "";
+    expect(structureImport).toContain("matchesStructuralExpression");
+    expect(structureImport).toContain("structuralFeatureKinds");
+    expect(structureImport).not.toMatch(/structuralReading|structuralDelta|pawnSafety/u);
+    expect(source).not.toMatch(/\b(?:structuralReading|structuralDelta|pawnSafety)\s*\(/u);
+  });
+});

@@ -32,6 +32,20 @@
     },
     "successConditions": [
       {
+        "kind": "transition_feature",
+        "transition": {
+          "kind": "feature",
+          "feature": {
+            "kind": "move_irreversibility",
+            "subkind": "pawn_break"
+          }
+        },
+        "to": "preserved",
+        "from": [
+          "active"
+        ]
+      },
+      {
         "kind": "structural_feature",
         "feature": {
           "kind": "feature",

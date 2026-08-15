@@ -62,6 +62,13 @@ test("Just Play reaches a Carlsbad and opens a passive shape marker without muta
   await expect(marker).toBeVisible();
   const runId = page.url().split("/").at(-1)!;
   const before = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json() as { events: unknown[] };
+  const transitionButton = page.getByRole("button", { name: "What changed on this move?" });
+  await expect(transitionButton).toHaveAttribute("aria-expanded", "false");
+  await transitionButton.click();
+  await expect(transitionButton).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByRole("region", { name: "Transition reading" })).toContainText(/geometric transition census|halfmove clock|irreversibility convention/);
+  await transitionButton.click();
+  await expect(transitionButton).toHaveAttribute("aria-expanded", "false");
   await marker.click();
   const panel = page.getByRole("complementary", { name: "Carlsbad structure" });
   await expect(panel).toContainText("Named plans for this structure — general to the kind of position, not advice for this one.");

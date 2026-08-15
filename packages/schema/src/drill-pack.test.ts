@@ -18,6 +18,7 @@ import {
   PACK_PHASES,
   RETRY_VARIANT_KINDS,
   STRUCTURAL_FEATURE_KINDS,
+  TRANSITION_FEATURE_KINDS,
   parseDrillAddress,
   resolveDrillAddress,
   type DrillPackDefinition,
@@ -54,13 +55,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.21", () => {
+describe("drill_pack.schema.json v0.22", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.21",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.22",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.21");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.22");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
@@ -74,6 +75,7 @@ describe("drill_pack.schema.json v0.21", () => {
     expect(CHECKPOINT_ACTIONS).toEqual(["compare_branches"]);
     expect(typed.$defs.deviation.properties.mistake.items.enum).toEqual([...DEVIATION_MISTAKES]);
     expect(typed.$defs.structuralFeature.oneOf.map((branch: any) => branch.properties.kind.const)).toEqual([...STRUCTURAL_FEATURE_KINDS]);
+    expect(typed.$defs.transitionFeature.oneOf.map((branch: any) => branch.properties.kind.const)).toEqual([...TRANSITION_FEATURE_KINDS]);
   });
 
   it("requires a non-empty unique mistake set", () => {

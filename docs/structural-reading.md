@@ -82,10 +82,11 @@ never-present signatures fail closed at pack load. Revealed plan classes publish
 structural consequence is graded, declared uncheckable, or unbound; the latter two are never turned
 into a learner verdict.
 
-Pack B (`carlsbad-minority-attack`) now has one objective-bound target: Black has a backward c-pawn
-and White has a half-open c-file. The condition is false at the root and becomes true after the
-minority attack’s structural concession; both leaves appear in the objective transition’s evidence.
-The alternative central and kingside plans are not graded without recorded intent.
+Pack B (`carlsbad-minority-attack`) now grades the committed transition that produces its target:
+a White slider line opens and the resulting position has the grounded backward Black c-pawn on a
+White half-open c-file. This is a transition expression with embedded structural facts, not a static `plan_consequence`; see
+`docs/transition-primitives.md`. The alternative central and kingside plans are not graded without
+recorded intent.
 
 Plan-family packs that declare a graded objective but compile to no transition rules are refused at
 load with `OBJECTIVE_GRADES_NOTHING`. `play_until_checkpoint` is exempt because it explicitly makes

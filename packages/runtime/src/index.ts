@@ -39,6 +39,17 @@ export { shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape
 export { classifyPhase, renderPhaseReading, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type PhaseReading } from "./phase.js";
 export { SILENT_ASSISTANCE, permittedAssistance, type AssistanceConfig, type AssistanceContext, type AssistancePermission } from "./assistance.js";
 export { pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
+export {
+  TRANSITION_FEATURE_KINDS,
+  capturedRole,
+  irreversibility,
+  matchesTransitionExpression,
+  matchesTransitionFeature,
+  transitionFeatureKinds,
+  transitionReading,
+  type TransitionObservation,
+  type TransitionReading,
+} from "./transition.js";
 export { endgameReading, renderEndgameReading, type EndgameTypeId, type EndgameReading, type TechniqueRef } from "./endgame.js";
 export { retrospectivePivot } from "./adaptive.js";
 export { STORY_MATE_CP, STORY_PIVOT_CP, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";

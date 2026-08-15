@@ -24,6 +24,7 @@ import {
   transitionObjective,
   transposeKey,
   structuralFeatureKinds,
+  transitionFeatureKinds,
   type DrillRun,
   type FenPredicate,
   type MaterialBalancePredicate,
@@ -258,6 +259,9 @@ function successPredicate(
     if (signature == null) throw new PackCompileError("PLAN_CONSEQUENCE_UNRESOLVED", `${pointer}/planClassId`, `plan consequence ${condition.planClassId} has no resolved structural signature`);
     return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: signature } };
   }
+  if (condition.kind === "transition_feature") {
+    return { type: "transitionFeature", transition: condition.transition };
+  }
   const exhaustive: never = condition;
   throw new PackCompileError(
     "SUCCESS_CONDITION_KIND_UNRECOGNISED",
@@ -296,6 +300,17 @@ function conditionEvidenceRefs(
     const signature = resolvePlanSignature?.(condition.planClassId);
     if (signature == null) throw new PackCompileError("PLAN_CONSEQUENCE_UNRESOLVED", `${pointer}/planClassId`, `plan consequence ${condition.planClassId} has no resolved structural signature`);
     return [`planClass#${condition.planClassId}`, ...structuralFeatureKinds(signature).map((kind) => rulesEvidenceRef(`structure-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]))];
+  }
+  if (condition.kind === "transition_feature") {
+    const references = transitionFeatureKinds(condition.transition).map((kind) =>
+      kind.startsWith("structure:")
+        ? rulesEvidenceRef(`structure-${kind.slice("structure:".length).replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0])
+        : rulesEvidenceRef(`transition-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]),
+    );
+    if (references.length === 0) {
+      throw new PackCompileError("TRANSITION_CONDITION_HAS_NO_FEATURE", `${pointer}/transition`, "transition success condition has no feature leaf");
+    }
+    return references as [string, ...string[]];
   }
   const references = structuralFeatureKinds(condition.feature).map((kind) =>
     rulesEvidenceRef(`structure-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]),

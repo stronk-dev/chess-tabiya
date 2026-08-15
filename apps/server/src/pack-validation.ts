@@ -15,6 +15,7 @@ import {
   TEMPO_GRADEABLE_VERDICTS,
   createRun,
   matchesStructuralExpression,
+  matchesTransitionExpression,
   transposeKey,
 } from "@chess-tabiya/runtime";
 import { between } from "chessops/attacks";
@@ -183,6 +184,83 @@ function authoredSpineFens(pack: DrillPackDefinition): readonly string[] {
   };
   visit(pack.spine ?? [], root);
   return Object.freeze(result);
+}
+
+interface AuthoredTransition {
+  readonly before: string;
+  readonly moveUci: string;
+  readonly after: string;
+}
+
+function authoredTransitions(pack: DrillPackDefinition): readonly AuthoredTransition[] {
+  const root = Chess.fromSetup(parseFen(pack.start.fen).unwrap()).unwrap();
+  const result: AuthoredTransition[] = [];
+  const anchors = new Map<string, string>();
+  const visit = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[], position: Chess): void => {
+    for (const node of nodes) {
+      const next = position.clone();
+      const move = parseUci(node.moveUci);
+      if (move === undefined || !next.isLegal(move)) continue;
+      const before = makeFen(position.toSetup());
+      next.play(move);
+      const after = makeFen(next.toSetup());
+      result.push({ before, moveUci: node.moveUci, after });
+      anchors.set(node.id, after);
+      visit(node.children, next);
+    }
+  };
+  visit(pack.spine ?? [], root);
+  for (const deviation of pack.deviations ?? []) {
+    const before = "atStart" in deviation.at
+      ? pack.start.fen
+      : "fen" in deviation.at
+        ? deviation.at.fen
+        : anchors.get(deviation.at.spineNodeId);
+    if (before === undefined) continue;
+    try {
+      const position = Chess.fromSetup(parseFen(before).unwrap()).unwrap();
+      const move = parseUci(deviation.moveUci);
+      if (move === undefined || !position.isLegal(move)) continue;
+      position.play(move);
+      result.push({ before, moveUci: deviation.moveUci, after: makeFen(position.toSetup()) });
+    } catch {
+      // The deviation legality/FEN refusals own this case.
+    }
+  }
+  return Object.freeze(result);
+}
+
+function transitionExpressionIssues(
+  expression: import("@chess-tabiya/schema/drill-pack").TransitionExpression,
+  path: string,
+  depth = 0,
+): readonly PackValidationIssue[] {
+  const issues: PackValidationIssue[] = [];
+  if (depth > 4) issues.push(runtimeIssue("TRANSITION_EXPRESSION_TOO_DEEP", path, "transition expressions may be nested at most four levels"));
+  if (expression.kind === "all" || expression.kind === "any") {
+    expression.of.forEach((child, index) => issues.push(...transitionExpressionIssues(child, `${path}/of/${index}`, depth + 1)));
+  } else if (expression.kind === "not") {
+    issues.push(...transitionExpressionIssues(expression.of, `${path}/of`, depth + 1));
+  } else if (expression.kind === "position") {
+    issues.push(...structuralIssues(expression.expression, `${path}/expression`));
+  } else if (expression.kind === "feature") {
+    const feature = expression.feature;
+    if (feature.kind !== "move_irreversibility") {
+      if (feature.count < 0) issues.push(runtimeIssue("NEGATIVE_FEATURE_COUNT", `${path}/feature/count`, "feature counts cannot be negative"));
+      const maximum = {
+        attacked_squares_changed: 4,
+        defended_squares_changed: 3,
+        slider_lines_changed: 3,
+        escape_squares_changed: 11,
+        defended_duties_changed: 2,
+      }[feature.kind];
+      if (feature.count > maximum) issues.push(runtimeIssue("TRANSITION_COUNT_OUT_OF_RANGE", `${path}/feature/count`, `${feature.kind} count cannot exceed the landing-corpus maximum ${maximum}`));
+    }
+  } else {
+    const exhaustive: never = expression;
+    issues.push(runtimeIssue("TRANSITION_KIND_UNRECOGNISED", path, `unhandled transition expression ${JSON.stringify(exhaustive)}`));
+  }
+  return Object.freeze(issues);
 }
 
 export function structuralIssues(value: unknown, path = "", depth = 0): readonly PackValidationIssue[] {
@@ -482,6 +560,36 @@ function runtimeIssues(
   };
   checkPlanConsequences(pack.objective, "/objective");
   (pack.legs ?? []).forEach((leg, index) => checkPlanConsequences(leg.objective, `/legs/${index}/objective`));
+  let transitions: readonly AuthoredTransition[] = [];
+  try {
+    transitions = authoredTransitions(pack);
+  } catch {
+    // The start/spine legality refusals own this case.
+  }
+  const checkTransitionConditions = (objective: DrillPackDefinition["objective"], pointer: string): void => {
+    for (const [index, condition] of (objective.successConditions ?? []).entries()) {
+      if (condition.kind !== "transition_feature") continue;
+      const conditionPath = `${pointer}/successConditions/${index}/transition`;
+      issues.push(...transitionExpressionIssues(condition.transition, conditionPath));
+      if (transitions.length === 0) continue;
+      const results = transitions.map((edge) => matchesTransitionExpression(edge.before, edge.moveUci, edge.after, condition.transition));
+      const to = condition.to ?? "achieved";
+      const positive = to === "achieved" || to === "preserved" || to === "transitioned";
+      if (positive && !results.some(Boolean)) {
+        issues.push(runtimeIssue("TRANSITION_EXPRESSION_NEVER_PRESENT", conditionPath, [
+          `Coverage: 0 of ${transitions.length} authored transitions matched.`,
+          "Satisfiability: unestablished by pack validation.",
+          "Action: author a transition that reaches it or drop the claim; a separate witness does not create pack coverage.",
+        ].join(" ")));
+      } else if (!positive && results.every(Boolean)) {
+        issues.push(runtimeIssue("TRANSITION_EXPRESSION_NEVER_ABSENT", conditionPath, "failure transition expression fires on every authored transition"));
+      } else if (positive && transitions.length >= 4 && results.every(Boolean)) {
+        issues.push(runtimeWarning("TRANSITION_EXPRESSION_ALWAYS_PRESENT", conditionPath, "transition expression fires on every authored transition and may not discriminate"));
+      }
+    }
+  };
+  checkTransitionConditions(pack.objective, "/objective");
+  (pack.legs ?? []).forEach((leg, index) => checkTransitionConditions(leg.objective, `/legs/${index}/objective`));
   const spineIds = new Set<string>();
   const spineFens = new Map<string, string>();
   const spinePaths = new Map<string, readonly string[]>();

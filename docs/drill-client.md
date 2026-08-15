@@ -399,3 +399,11 @@ The resistance block separates the pack's requested mode, the applied mode
 recorded per opponent ply, and the engine identity. Historical `unknown` plies
 retain the earlier disclaimer; new plies no longer claim that applied policy is
 unknowable. Line Drill renders this context without inventing a root assessment.
+
+## Transition reading
+
+The drill screen exposes a closed-by-default transition reading for the displayed committed edge.
+It compares the node with its persisted parent and renders rules-derived counts only. The root has
+no transition, candidate moves are never accepted, and toggling the disclosure does not write to
+the run. R3 refused a live-marker tier, so this reading is always learner-initiated. See
+`docs/transition-primitives.md`.

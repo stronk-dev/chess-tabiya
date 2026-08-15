@@ -31,6 +31,41 @@
     },
     "successConditions": [
       {
+        "kind": "transition_feature",
+        "transition": {
+          "kind": "feature",
+          "feature": {
+            "kind": "escape_squares_changed",
+            "color": "black",
+            "direction": "lost",
+            "comparison": "atLeast",
+            "count": 2
+          }
+        },
+        "to": "preserved",
+        "from": [
+          "active"
+        ]
+      },
+      {
+        "kind": "transition_feature",
+        "transition": {
+          "kind": "feature",
+          "feature": {
+            "kind": "escape_squares_changed",
+            "color": "black",
+            "direction": "gained",
+            "comparison": "atLeast",
+            "count": 2
+          }
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      },
+      {
         "kind": "structural_feature",
         "feature": {
           "kind": "not",

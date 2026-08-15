@@ -1,17 +1,13 @@
-import { pawnAttacks } from "chessops/attacks";
-import type { Color, Role } from "chessops/types";
-import { parseUci } from "chessops/util";
+import type { Color } from "chessops/types";
 
 import { branchPath } from "./branch-path.js";
 import { positionFromFen } from "./chess.js";
 import { classifyPhase, type DetectedPhase } from "./phase.js";
 import type { DrillRun, Node, OpponentSelection } from "./types.js";
+import { irreversibility, type IrreversibilityDetail } from "./transition.js";
 
 export type PivotalKind = "irreversibility" | "phase_change" | "human_divergence" | "option_collapse";
-export type IrreversibilityDetail =
-  | { readonly subkind: "castled"; readonly color: Color }
-  | { readonly subkind: "last_of_role"; readonly color: Color; readonly role: Role; readonly queensOff: boolean }
-  | { readonly subkind: "pawn_break"; readonly color: Color };
+export type { IrreversibilityDetail } from "./transition.js";
 export interface PhaseChangeDetail { readonly from: Exclude<DetectedPhase, "unclear">; readonly to: Exclude<DetectedPhase, "unclear">; }
 export interface DivergenceDetail { readonly engine: OpponentSelection["engine"]; readonly targetElo?: number; readonly masses: readonly number[]; }
 export interface CollapseDetail { readonly color: Color; readonly priorCount: number; readonly count: number; readonly nextCount: number; }
@@ -29,32 +25,6 @@ function legalCount(fen: string): number {
   return count;
 }
 
-function capturedRole(parent: ReturnType<typeof positionFromFen>, node: ReturnType<typeof positionFromFen>, uci: string): { color: Color; role: Role } | undefined {
-  const move = parseUci(uci); if (move === undefined || !("from" in move)) return undefined;
-  const mover = parent.board.get(move.from); if (mover === undefined) return undefined;
-  const direct = parent.board.get(move.to);
-  if (direct !== undefined && direct.color !== mover.color) return direct;
-  if (mover.role === "pawn" && move.from % 8 !== move.to % 8 && node.board.get(move.to)?.role === "pawn") return { color: mover.color === "white" ? "black" : "white", role: "pawn" };
-  return undefined;
-}
-
-function irreversibility(parentNode: Node, node: Node): IrreversibilityDetail | undefined {
-  if (node.moveUci === null) return undefined;
-  const parent = positionFromFen(parentNode.fen), current = positionFromFen(node.fen);
-  const move = parseUci(node.moveUci); if (move === undefined || !("from" in move)) return undefined;
-  const mover = parent.board.get(move.from); if (mover === undefined) return undefined;
-  if (mover.role === "king" && Math.abs((move.to % 8) - (move.from % 8)) === 2) return { subkind: "castled", color: mover.color };
-  const captured = capturedRole(parent, current, node.moveUci);
-  if (captured !== undefined && current.board.pieces(captured.color, captured.role).isEmpty()) return { subkind: "last_of_role", color: captured.color, role: captured.role, queensOff: captured.role === "queen" && current.board.pieces(mover.color, "queen").isEmpty() };
-  if (mover.role === "pawn") {
-    if (captured !== undefined) return { subkind: "pawn_break", color: mover.color };
-    const enemyPawns = current.board.pieces(mover.color === "white" ? "black" : "white", "pawn");
-    const beforeContact = pawnAttacks(mover.color, move.from).intersects(parent.board.pieces(mover.color === "white" ? "black" : "white", "pawn"));
-    const afterContact = pawnAttacks(mover.color, move.to).intersects(enemyPawns);
-    if (!beforeContact && afterContact) return { subkind: "pawn_break", color: mover.color };
-  }
-  return undefined;
-}
 
 function divergence(run: DrillRun, pathIds: ReadonlySet<string>): readonly PivotalMarker[] {
   return run.events.flatMap((event) => {
@@ -80,7 +50,7 @@ export function pivotalMarkers(run: DrillRun, branchId: string): readonly Pivota
       lastDefinite = definite;
     }
     const parent = index === 0 ? undefined : path[index - 1];
-    if (parent !== undefined) { const detail = irreversibility(parent, node); if (detail !== undefined) markers.push(Object.freeze({ nodeId: node.id, kind: "irreversibility", detail: Object.freeze(detail), provenanceNote: PROVENANCE })); }
+    if (parent !== undefined && node.moveUci !== null) { const detail = irreversibility(parent.fen, node.moveUci, node.fen); if (detail !== undefined) markers.push(Object.freeze({ nodeId: node.id, kind: "irreversibility", detail: Object.freeze(detail), provenanceNote: PROVENANCE })); }
   }
   const decisions = path.map((node) => ({ node, color: positionFromFen(node.fen).turn, count: legalCount(node.fen) }));
   for (const color of ["white", "black"] as const) {

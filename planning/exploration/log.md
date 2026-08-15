@@ -2022,3 +2022,20 @@ answered, three of them refuting or inverting the assumption they tested.
 **Owed, and named so it is not discovered later:** `rfc/README.md` needs the
 claim-order note recording that `expression-census` should land **last** of the
 in-flight set to absorb the textual rebase rather than impose it.
+
+## 2026-08-15 (codex) — transition primitives implemented
+
+Pack schema 0.22 now has a sibling grammar for committed-edge facts, executable objective rules,
+six evidence refs, polarity-aware coverage refusals, and a learner-opened reading in both drills
+and Just Play. Three authored packs exercise it, including a negative condition demonstrated by a
+legal deviation edge. R3's measured fallback was applied: no live marker or new assistance setting.
+
+The production evaluator was oracle-checked over 634 spine transitions. Landing rates are 37.5%
+attacks, 34.1% defences, 54.1% slider lines, 94.0% geometric destinations, 12.1% duty crossings,
+and 34.2% irreversibility; median full reading was 51.32 µs per ply. One accepted-RFC premise was
+corrected during implementation: the old duty harness counted moved pieces at their new squares,
+whereas the specified leaf requires same-square identity. The stricter production semantics remain.
+
+The late owner rulings landed with the implementation: zero pack coverage stays an error with a
+three-part diagnosis, and `structuralDelta` now parses each FEN once during its eviction scan while
+remaining outside the transition call graph.

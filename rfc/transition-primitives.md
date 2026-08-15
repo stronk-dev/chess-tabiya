@@ -1,6 +1,6 @@
 # RFC: Transition primitives — a move-primitive grammar, shipped with both of its consumers
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder and the
@@ -31,7 +31,7 @@
 - **Parent / amends:** **`rfc/archive/predicate-wave-3.md` §7 F4** (its specification input,
   extended not re-derived), **`rfc/archive/outcome-drill-grading.md`** (a further
   `successCondition` kind), **`rfc/archive/drill-pack-format.md`** (pack schema 0.21 → 0.22,
-  additive), **`rfc/archive/adaptive-guidance.md`** (`PivotalKind` widens by one)
+  additive). **R3 removed the proposed adaptive-guidance / `PivotalKind` amendment.**
 - **Supersedes / superseded by:** —
 - **Pack schema:** **0.22.** **CORRECTED 2026-08-15 during cross-review: this draft originally
   claimed 0.19 and the claim is now impossible.** `DRILL_PACK_SCHEMA_VERSION`
@@ -868,7 +868,12 @@ key — it is `structuralOpen`, local state, closed by default, ungated
 v4, `assistance-preference.ts` gains no migration branch, and this RFC claims no client
 preference version. That is the whole integration.
 
-#### 5.3 Live — exactly one new marker, on the shipped path
+#### 5.3 Live — superseded by R3; no marker ships
+
+**This subsection is retained as rejected design history.** The measured R3 header and owner
+handoff supersede its normative language: `PivotalKind` and `PivotalMarker.detail` do not widen,
+`renderPivotalMarker` remains owned by `live-marker-quality`, and transition facts are available
+only through §5.2's learner-opened reading.
 
 `PivotalKind` (`packages/runtime/src/pivotal.ts:10`) widens by one:
 
@@ -1408,7 +1413,9 @@ deliberate and stated so a later wave does not read the gap as an oversight:
    `matchesTransitionExpression`, `matchesTransitionFeature`, `transitionReading` reaches any of
    the three. The draft's single "module-graph test asserting no transitive path" is **not** an
    acceptable substitute: it cannot pass, for the two reasons §8 states.
-7. **`renderPivotalMarker` is exhaustive, and the sentences are pinned before and after.**
+7. **SUPERSEDED BY R3.** No `PivotalKind` is added, so this RFC does not modify
+   `renderPivotalMarker`; D48 remains assigned to `live-marker-quality`. Original rejected
+   criterion retained below for history. **`renderPivotalMarker` is exhaustive, and the sentences are pinned before and after.**
    Converted to a `switch` over `marker.kind` ending in a `never` binding. **All six existing
    outputs across the four shipped kinds** — `phase_change`; `human_divergence`;
    `option_collapse` in both its one-move and n-move forms; and the three irreversibility
@@ -1428,11 +1435,9 @@ deliberate and stated so a later wave does not read the gap as an oversight:
 10. **One of the three is a plan-family pack** whose objective previously graded a position and
     now grades the transition that produced it, demonstrating `05` §5c's *grade a plan by its
     consequence*.
-11. **The Just Play surfaces are exercised by a browser test**: a `position` run reaches a
-    transition, the closed-by-default reading discloses on click and closes again, and with
-    `markers: "live"` a `defended_duty_acquired` dot appears on the timeline and opens into the
-    modal — mirroring the shipped `tests/browser/drill.spec.ts:52` Just Play assertion, and
-    asserting **no run mutation**.
+11. **The Just Play surface is exercised by a browser test**: a `position` run reaches a
+    transition, the closed-by-default reading discloses on click and closes again, and the event
+    count remains unchanged. **R3 removed the marker/modal half of the original criterion.**
 12. **The hypothetical boundary holds, as a tested boundary rather than a type** (§5.5, corrected).
     Two assertions: (a) no exported function, REST route or client call accepts a candidate move,
     a legal-move list or a proposed continuation for transition analysis; **and (b) no call site

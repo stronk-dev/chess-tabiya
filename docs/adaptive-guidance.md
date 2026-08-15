@@ -5,6 +5,11 @@ current phase, records arithmetic turning-point markers, names a small set of en
 and optionally exposes recorded human-model distributions. None of these projections is stored
 as run truth, changes objective grading, or prescribes a move. Assistance is silent by default.
 
+Transition primitives do not add a fifth pivotal-marker family. R3 measured the proposed live
+detector below its own usefulness bar, so the transition census is available only through the
+learner-opened reading described in `docs/transition-primitives.md`; `AssistanceConfig` is
+unchanged.
+
 `immediate_guard` is a separate, pack-authored on-ramp policy rather than an assistance
 preference. It may surface recorded engine evidence during play, but only after the learner's
 move stands and the consequence has begun; all other policies retain their existing defaults.

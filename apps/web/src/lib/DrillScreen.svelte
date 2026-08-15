@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, RunRole, ShapeEntryView, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, permittedAssistance, pivotalMarkers, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness } from "@chess-tabiya/runtime";
+  import { BRANCH_COLLAPSE_FLOOR, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, permittedAssistance, pivotalMarkers, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
   import BranchRail from "./BranchRail.svelte";
@@ -18,6 +18,7 @@
   import GroupPanel from "./GroupPanel.svelte";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
+  import { renderTransitionObservation } from "./transition-sentences.js";
   import { renderCorpusPage } from "./corpus-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
@@ -130,6 +131,7 @@
   let checkpointPickerOpen = $state(false);
   let replaying = $state(false);
   let structuralOpen = $state(false);
+  let transitionOpen = $state(false);
   let openShapeId: string | undefined = $state();
   let assistance: AssistanceConfig = $state(SILENT_ASSISTANCE);
   let openPivotalNodeId: string | undefined = $state();
@@ -274,6 +276,11 @@
       : (run.nodes.find((node) => node.id === previewNodeId) ?? currentNode),
   );
   let structure = $derived(structuralReading(displayedNode.fen));
+  let transition = $derived.by(() => {
+    if (displayedNode.parentId === null || displayedNode.moveUci === null) return null;
+    const parent = run.nodes.find((node) => node.id === displayedNode.parentId);
+    return parent === undefined ? null : transitionReading(parent.fen, displayedNode.moveUci, displayedNode.fen);
+  });
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameReading(displayedNode.fen));
   let assistancePermission = $derived(permittedAssistance({ sessionKind: run.sessionKind, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole }));
@@ -762,15 +769,26 @@
           <OutcomeContext {assessment} {resistance} grade={objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
         {/if}
         {#if banner !== undefined}<WhyBanner model={banner} />{/if}
-        <section class="structural-reading" aria-label="Structural reading">
-          <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Structural reading</button>
-          {#if structuralOpen}
-            <div class="structural-facts">
-              {#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}
-              {#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}
-            </div>
-          {/if}
-        </section>
+        <div class="reading-controls">
+          <section class="structural-reading" aria-label="Structural reading">
+            <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Structural reading</button>
+            {#if structuralOpen}
+              <div class="structural-facts">
+                {#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}
+                {#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}
+              </div>
+            {/if}
+          </section>
+          <section class="transition-reading" aria-label="Transition reading">
+            <button type="button" aria-expanded={transitionOpen} onclick={() => (transitionOpen = !transitionOpen)}>What changed on this move?</button>
+            {#if transitionOpen}
+              <div class="transition-facts">
+                {#if transition === null || transition.observations.length === 0}<p>No rung-0 transition observations at this move.</p>{/if}
+                {#each transition?.observations ?? [] as observation}<p>{renderTransitionObservation(observation)}</p>{/each}
+              </div>
+            {/if}
+          </section>
+        </div>
         <div class="board-slot">
           <div class="board-frame" class:previewing={previewNodeId !== undefined}>
             {#if previewNodeId}<span class="preview-label">Preview</span>{/if}
@@ -1104,7 +1122,9 @@
     font: 500 clamp(1.4rem, 3vw, 2.4rem) / 1.04 var(--display-font);
   }
 
-  .structural-reading > button {
+  .reading-controls { display:flex; flex-wrap:wrap; gap:.5rem; align-items:start; }
+  .structural-reading > button,
+  .transition-reading > button {
     padding: 0.45rem 0.65rem;
     border: 1px solid var(--line);
     border-radius: 0.55rem;

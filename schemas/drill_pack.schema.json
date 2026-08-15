@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.21",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.22",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.21 format for an engine-independent authored drill.",
+  "description": "Living v0.22 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -403,6 +403,17 @@
             "from": { "$ref": "#/$defs/conditionBase/properties/from" }
           },
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "transition"],
+          "properties": {
+            "kind": { "const": "transition_feature" },
+            "transition": { "$ref": "#/$defs/transitionExpression" },
+            "to": { "$ref": "#/$defs/conditionBase/properties/to" },
+            "from": { "$ref": "#/$defs/conditionBase/properties/from" }
+          },
+          "additionalProperties": false
         }
       ]
     },
@@ -510,6 +521,24 @@
         { "type": "object", "required": ["kind", "quantifier", "over", "feature"], "properties": { "kind": { "const": "quantified" }, "quantifier": { "enum": ["some", "every"] }, "over": { "type": "object", "required": ["files"], "properties": { "files": { "$ref": "#/$defs/fileRange" } }, "additionalProperties": false }, "feature": { "$ref": "#/$defs/fileTemplateFeature" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "quantifier", "over", "feature"], "properties": { "kind": { "const": "quantified" }, "quantifier": { "enum": ["some", "every"] }, "over": { "type": "object", "required": ["squares"], "properties": { "squares": { "$ref": "#/$defs/squareRegion" } }, "additionalProperties": false }, "feature": { "$ref": "#/$defs/squareTemplateFeature" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "square", "piece"], "properties": { "kind": { "const": "pieceOnSquare" }, "square": { "$ref": "#/$defs/square" }, "piece": { "oneOf": [{ "$ref": "#/$defs/piece" }, { "type": "null" }] } }, "additionalProperties": false }
+      ]
+    },
+    "transitionFeature": {
+      "oneOf": [
+        { "type": "object", "required": ["kind", "color", "direction", "comparison", "count"], "properties": { "kind": { "const": "attacked_squares_changed" }, "color": { "enum": ["white", "black"] }, "direction": { "enum": ["gained", "lost"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "direction", "comparison", "count"], "properties": { "kind": { "const": "defended_squares_changed" }, "color": { "enum": ["white", "black"] }, "direction": { "enum": ["gained", "lost"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "direction", "comparison", "count"], "properties": { "kind": { "const": "slider_lines_changed" }, "color": { "enum": ["white", "black"] }, "direction": { "enum": ["opened", "closed"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "direction", "comparison", "count"], "properties": { "kind": { "const": "escape_squares_changed" }, "color": { "enum": ["white", "black"] }, "direction": { "enum": ["gained", "lost"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "color", "direction", "comparison", "count"], "properties": { "kind": { "const": "defended_duties_changed" }, "color": { "enum": ["white", "black"] }, "direction": { "enum": ["acquired", "released"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "subkind"], "properties": { "kind": { "const": "move_irreversibility" }, "subkind": { "enum": ["castled", "last_of_role", "pawn_break", "clock_zeroed"] } }, "additionalProperties": false }
+      ]
+    },
+    "transitionExpression": {
+      "oneOf": [
+        { "type": "object", "required": ["kind", "of"], "properties": { "kind": { "enum": ["all", "any"] }, "of": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/transitionExpression" } } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "of"], "properties": { "kind": { "const": "not" }, "of": { "$ref": "#/$defs/transitionExpression" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "feature"], "properties": { "kind": { "const": "feature" }, "feature": { "$ref": "#/$defs/transitionFeature" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "at", "expression"], "properties": { "kind": { "const": "position" }, "at": { "enum": ["before", "after"] }, "expression": { "$ref": "#/$defs/structuralExpression" } }, "additionalProperties": false }
       ]
     },
     "fenPredicate": {

@@ -261,6 +261,7 @@ describe("fixed refusal-code coverage", () => {
     for (const code of [
       "NEGATIVE_FEATURE_COUNT",
       "STRUCTURAL_KIND_UNRECOGNISED",
+      "TRANSITION_KIND_UNRECOGNISED",
       "UNSUPPORTED_FEEDBACK_POLICY",
     ] as const) {
       expect(source).toContain(`"${code}"`);

@@ -49,6 +49,12 @@ const RULES_SENTENCES: Readonly<Record<RulesEvidenceFact, string>> = Object.free
   "structure-piece-count": "The authored piece-count condition holds at this position.",
   "structure-king-zone": "The authored king-zone condition holds at this position.",
   "structure-piece-distance": "The authored piece-distance condition holds at this position.",
+  "transition-attacked-squares-changed": "Tabiya's attacked-piece-square condition holds at this transition.",
+  "transition-defended-squares-changed": "Tabiya's defended-piece-square condition holds at this transition.",
+  "transition-slider-lines-changed": "Tabiya's slider-line blocker condition holds at this transition.",
+  "transition-escape-squares-changed": "Tabiya's geometric destination-square condition holds at this transition.",
+  "transition-defended-duties-changed": "Tabiya's defended-duty count condition holds at this transition.",
+  "transition-move-irreversibility": "Tabiya's rules-derived irreversibility condition holds at this transition.",
 });
 
 const THEORY_SENTENCES: Readonly<Record<TheoryEvidenceFact, string>> = Object.freeze({

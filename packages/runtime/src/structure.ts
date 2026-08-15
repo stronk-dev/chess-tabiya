@@ -179,8 +179,7 @@ function pawns(position: ReturnType<typeof positionFromFen>, color: Color): read
   return [...position.board.pieces(color, "pawn")];
 }
 
-export function pawnSafety(fen: string, color: Color, squareName: SquareName): PawnSafety {
-  const position = positionFromFen(fen);
+function pawnSafetyOnPosition(position: ReturnType<typeof positionFromFen>, color: Color, squareName: SquareName): PawnSafety {
   const square = parseSquare(squareName);
   if (square === undefined) throw new TypeError(`Invalid square: ${squareName}`);
   const targetFile = square % 8;
@@ -206,6 +205,10 @@ export function pawnSafety(fen: string, color: Color, squareName: SquareName): P
   pushAttackers.sort((a, b) => a.pushes - b.pushes || a.square.localeCompare(b.square));
   captureAttackers.sort((a, b) => a.captures - b.captures || a.square.localeCompare(b.square));
   return Object.freeze({ square: squareName, color, safe: pushAttackers.length === 0, basis: "current_pawn_files", pushAttackers: Object.freeze(pushAttackers), captureAttackers: Object.freeze(captureAttackers) });
+}
+
+export function pawnSafety(fen: string, color: Color, squareName: SquareName): PawnSafety {
+  return pawnSafetyOnPosition(positionFromFen(fen), color, squareName);
 }
 
 function directAttackCount(fen: string, color: Color, target: Square): number {
@@ -499,8 +502,9 @@ export function structuralDelta(parentFen: string, fen: string): StructuralDelta
   const before = structuralReading(parentFen).features, after = structuralReading(fen).features;
   const beforeKeys = new Map(before.map((item) => [observationIdentity(item), item])); const afterKeys = new Map(after.map((item) => [observationIdentity(item), item]));
   const evictionChanges: StructuralDelta["evictionChanges"][number][] = [];
+  const beforePosition = positionFromFen(parentFen), afterPosition = positionFromFen(fen);
   for (const color of COLORS) for (let square = 0; square < 64; square++) {
-    const name = makeSquare(square); const beforeSafety = pawnSafety(parentFen, color, name); const afterSafety = pawnSafety(fen, color, name);
+    const name = makeSquare(square); const beforeSafety = pawnSafetyOnPosition(beforePosition, color, name); const afterSafety = pawnSafetyOnPosition(afterPosition, color, name);
     const beforePush = beforeSafety.pushAttackers[0]?.pushes ?? null; const afterPush = afterSafety.pushAttackers[0]?.pushes ?? null;
     if (beforePush !== afterPush) evictionChanges.push({ square: name, color, pushesBefore: beforePush, pushesAfter: afterPush });
   }

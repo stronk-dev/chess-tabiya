@@ -14,23 +14,25 @@ const codes = (value: unknown, shapes?: PackShapeLookup) => validatePackDocument
 
 describe("predicate wave 3 validation", () => {
   it("resolves the Carlsbad plan consequence and refuses every unresolved form", () => {
-    expect(validatePackDocument(pack, { shapes: lookup() }).valid).toBe(true);
-    const resolved = planSignatureResolver(pack, lookup());
-    expect(objectiveRules(pack, pack.objective, "/objective", resolved)[0]?.evidenceRefs).toEqual([
+    const planPack = structuredClone(pack) as DrillPackDefinition;
+    (planPack.objective as any).successConditions = [{ kind: "plan_consequence", planClassId: "minority-attack", to: "achieved" }];
+    expect(validatePackDocument(planPack, { shapes: lookup() }).valid).toBe(true);
+    const resolved = planSignatureResolver(planPack, lookup());
+    expect(objectiveRules(planPack, planPack.objective, "/objective", resolved)[0]?.evidenceRefs).toEqual([
       "planClass#minority-attack",
       "rules:structure-backward-pawn",
       "rules:structure-half-open-file",
     ]);
 
-    const unknown = structuredClone(pack) as any;
+    const unknown = structuredClone(planPack) as any;
     unknown.objective.successConditions[0].planClassId = "missing";
     expect(codes(unknown, lookup())).toContain("PLAN_CONSEQUENCE_UNKNOWN_PLAN_CLASS");
 
-    const unbound = structuredClone(pack) as any;
+    const unbound = structuredClone(planPack) as any;
     delete unbound.planClasses[0].shapePlan;
     expect(codes(unbound, lookup())).toContain("PLAN_CONSEQUENCE_NO_SHAPE_PLAN");
 
-    const uncheckable = structuredClone(pack) as any;
+    const uncheckable = structuredClone(planPack) as any;
     uncheckable.objective.successConditions[0].planClassId = "central-break";
     const uncheckableShape = structuredClone(carlsbad);
     uncheckableShape.plans.find((plan: any) => plan.id === "white-central-break").success = { note: "No structural signature is authored.", signature: null };
@@ -38,7 +40,7 @@ describe("predicate wave 3 validation", () => {
 
     const impossibleShape = structuredClone(carlsbad);
     impossibleShape.plans[0].success.signature = { kind: "feature", feature: { kind: "piece_count", color: "white", role: "king", basis: "count", comparison: "equal", count: 0 } };
-    expect(codes(pack, lookup(impossibleShape))).toContain("PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT");
+    expect(codes(planPack, lookup(impossibleShape))).toContain("PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT");
   });
 
   it("refuses impossible distance queries and warns on the two deprecated forms", () => {

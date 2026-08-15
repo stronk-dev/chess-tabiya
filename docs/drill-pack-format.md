@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.21; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.22; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -64,6 +64,11 @@ centipawn, mate, or explicitly unmeasurable cost and is not evidence-backed by i
 mistake may reference a declared timing window. Immediate-guard packs warn when a tactical cost
 reaches no configured threshold, and guard overrides may scope a threshold to one legal UCI move.
 Human-judgment evidence refusals cover both the whole `mistake` array and its element pointers.
+
+Version 0.22 adds `transition_feature`, a success condition evaluated over a committed authored
+edge rather than one position. Its closed sibling grammar, evidence refs, and coverage refusals
+are described in `docs/transition-primitives.md`. The change is additive and does not alter pack
+digests.
 
 The already-declared `practical_resistance` opponent policy is executable
 without changing pack bytes or the pack-schema version. Its two-provider
