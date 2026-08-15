@@ -260,3 +260,5 @@ breadth.
 |---|---|---|---|
 | Native Position Arena matchmaking/clocks/moderation | 🟡 deferred depth | External challenge/invite + PGN-return Arena is required by B5; only native infrastructure stays deferred | External Arena use proves demand for native play |
 | Bulk corpus ingestion (Stage 1+) | 🟡 deferred; revival condition tested and **not fired** 2026-08-12 | Anonymous explorer access returned 401, but the same request with an owner-supplied operator token returned 200; Stage 0 suffices | Q6 later shows authenticated explorer data insufficient for pack spines |
+
+**R10 (2026-08-15, out-of-band):** *Over what `Elo` range is Maia band-calibrated?* — **answered**, `design/research/maia-band-calibrated-range.md`. Bound `[1000, 2400]`; out-of-range saturates silently (9000 is 5000). Raised by `engine-request-contract`; not a numbered exploration question.
