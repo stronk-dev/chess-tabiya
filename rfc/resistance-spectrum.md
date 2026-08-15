@@ -59,6 +59,37 @@ prevent being written twice) and the `eloHonored` capability seam in
 > **run schema 0.13 → 0.14, migration 19** (`STORAGE_VERSION` 18→19), frozen literals
 > `"0.13"` → `"0.14"`. Every 0.15 / migration-20 reference below reads as 0.14 / 19.
 
+
+> **R4 MEASURED, 2026-08-15 — §7b's classifier as specified FAILS, and the fix is one word.** `design/research/practical-difficulty-outside-tablebase.md`
+> ran the experiment this RFC specified over 171 in-range positions / 2,416 legal moves,
+> with Stockfish holding no tablebase access (`tbhits 0`, empty `SyzygyPath`, no `.rtbw` on disk).
+>
+> - The **centipawn-window** classifier §7b specifies peaks at **κ = 0.577** (accuracy 0.806) and
+>   gets its concession set right on only 66.1% of positions. It measures *distance from best*;
+>   the tablebase measures *change of outcome class*. **No window width reconciles them.**
+> - Classifying by **outcome class** at ±100 cp instead gives **κ = 1.000, accuracy 1.000, set
+>   match 1.000, zero false positives, zero false negatives** at depths 12 and 16 — Stockfish's
+>   position class equals the tablebase category on **171/171**. §2b's self-preservation gate has
+>   **zero unsafe admissions** at depth ≥ 6. Both readings come from the same MultiPV probe, so
+>   this costs nothing.
+> - **It repairs nothing outside the range**, because there a position has no outcome class:
+>   median |eval| **43 cp**, only **10.2%** of 284 out-of-range positions decided. The concession
+>   set reproduces across depth on 99.4–100% in range and **29–54%** out of it.
+> - **Cost**: against the <500 ms budget (`design/02-product-shape.md:162-163`) only depth 8 fits,
+>   and §2c needs one probe per candidate — a real selection is ≈620 ms at depth 8, which is also
+>   the least stable depth out of range. Cost is the second problem, not the first.
+>
+> **The reframe this forces: decidedness, not piece count, is the real gate.** The v1 scoping to
+> ≤7 pieces is right in effect and wrong in reason — a `practical_resistance` that probes once and
+> refuses by name when |eval| is inside the threshold would extend honestly to decided middlegames.
+>
+> **Open question 2 is settled affirmatively:** Maia advertises `Elo` (with `SelfElo`, `OppoElo`,
+> `Temperature`, `TopP`, `MultiPV`), so §3's `eloHonored` seam is a check that will pass, not a
+> refusal. Maia returned a policy scalar at **120/120** probes in and out of range; it caps at 20
+> candidates but those carry a median **99.99%** of the mass.
+> **D35 is now quantified:** a no-reset control changes **83.8%** of move evaluations and the
+> reported best move on **89/171** positions; the reset costs a flat 6 ms.
+
 ## Summary
 
 The opponent spectrum ships four modes and every one of them optimizes the same thing:
