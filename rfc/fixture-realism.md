@@ -32,6 +32,20 @@
 > possible for a bound that exists to sit beyond real output. The intent survives; the arithmetic
 > was wrong.
 
+
+> **CORRECTION, 2026-08-15 — this RFC's D64 deferral rests on a measurement that is WRONG,
+> and the error is this RFC's own subject matter.** It deferred D64 citing a cross-reviewed `[V]`
+> finding that zero committed syzygy entries matched the synthesis formula. `sha256()` returns a
+> **`"sha256:"`-prefixed** string (`canonical.ts:7-8`), so `explorer.ts:140`'s `.slice(7,15)`
+> takes the **first eight hex characters**, while the re-derivation compared characters 7–14 of a
+> bare digest — it could not match, by construction. Re-measured correctly: **135 of 341 entries
+> are manufactured, across six packs that carry `ledger_verified`**, and `offlineQuery` asserts
+> `status: 200` from a URL no process contacted.
+> **The irony is load-bearing, not decorative:** a document arguing that tests must assert against
+> real artifacts deferred its most serious finding on an assertion against a mis-derived value.
+> **D64 must be re-scoped INTO this RFC or explicitly re-homed before it is accepted**, and the
+> superseded measurement must be struck rather than left standing.
+
 ## Register claim
 
 **This RFC claims nothing versioned. Loudly, because that is the better outcome.**
