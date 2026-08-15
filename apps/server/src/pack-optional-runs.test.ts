@@ -132,9 +132,11 @@ describe("pack-optional position runs", () => {
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     stores.push(storage);
     const tablebaseSource: TablebaseSource = { kind: "mock", async probe() { return { category: "win", dtz: 1, moves: [] }; } };
-    const service = new RunService(storage, { tablebaseSource });
+    const service = new RunService(storage, { tablebaseSource, evidenceQueue: new EvidenceJobQueue(executor) });
     const handler = createRestHandler(service);
-    expect((await call(handler, "POST", "/runs", body("decidedness-perspective"))).status).toBe(201);
+    const request = body("decidedness-perspective");
+    request.session.start.fen = "4k3/8/8/8/8/8/4P3/4K2R w K - 0 1";
+    expect((await call(handler, "POST", "/runs", request)).status).toBe(201);
     expect((await call(handler, "POST", "/runs/decidedness-perspective/moves", { uci: "e2e4", at })).status).toBe(200);
     expect((await call(handler, "POST", "/runs/decidedness-perspective/reveal", { at })).status).toBe(200);
     const graph = await (await call(handler, "GET", "/runs/decidedness-perspective/graph")).json() as { graph: { branches: { id: string }[] } };

@@ -8,7 +8,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `deviation-classes.md` | draft — reviewed + **rewritten multi-valued**, ready | — | pack **0.21**. `mistake` is a SET (`minItems:1`, `uniqueItems`), `cost` author-declared and unbacked. Eight rendering surfaces given explicit multi-value rules; *pick-the-first* prohibited by name |
-| `branch-set-scale.md` | implementing | — | **claims nothing versioned**. Decided-shortfall collapse, sequential learner-perspective tablebase classification, manual local fold, stated compare truncation, and O(N+B) rail projection |
 | `transition-primitives.md` | draft (awaiting cross-review) | — | claims **pack schema 0.22** — rebased 2026-08-15: 0.19 was free as a register slot but the shared constant is monotonic and 0.20 landed over it, so 0.19 can no longer be claimed from below. The move-primitive grammar shipped **with both consumers** per the 2026-08-15 ruling: an eighth `successCondition` arm for packs, and a Just Play reading + one new `PivotalKind`. Excludes `structuralDelta` and **enforces the exclusion** with a module-graph test |
 | `expression-census.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — no schema, no migration, no persisted field, no event; lands in any order. `make expression-census` (report-only), plus `CORPUS=`/`PROBE=`/multi-`FILE=` on `shape-check`. Separates **coverage** (never an error) from **satisfiability** (three-valued; only a sound refutation errors) |
 | `live-marker-quality.md` | draft (awaiting cross-review) | — | **claims nothing versioned**. Audits all four live markers (1 measured and failing, 3 never measured); narrows `irreversibility` to `last_of_role`; re-homes D48 (whose fix was leaving with `transition-primitives`' withdrawn live tier); closes the D51 permission bypass normatively. Proposes **L1–L6**, the standing admission rule for the live surface |
@@ -218,6 +217,7 @@ before re-attempting this territory.
 | `archive/resistance-spectrum.md` | implemented | `docs/engine-workers.md`, `docs/outcome-drill-grading.md`, `docs/branch-runtime.md`, `docs/drill-pack-format.md` |
 | `archive/predicate-wave-3.md` | implemented | `docs/structural-reading.md`, `docs/drill-pack-format.md`, `docs/shape-library.md`, `docs/explanation-grounds.md` |
 | `archive/opening-evidence-path.md` | implemented | `docs/engine-grounding.md`, `docs/content-sourcing.md`, `docs/tablebase-grounding.md`, `docs/drill-pack-format.md` |
+| `archive/branch-set-scale.md` | implemented | `docs/branch-set-scale.md`, `docs/n-way-comparison.md`, `docs/branch-groups.md` |
 
 ## The archive sketches are quarry, not RFCs
 
