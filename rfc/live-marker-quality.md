@@ -21,6 +21,15 @@
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/live-marker-quality/` (once implementing)
 
+
+> **OWNER RULING 2026-08-15 (late) — open question 2 is decided: §6.2's conservative default
+> STANDS.** D51 is closed by gating the marker behind the stronger `humanSplit` permission. No
+> third permission value for mass-only rung-3 content. The owner accepted the stated cost with
+> open eyes: the marker leaves participants and spectators entirely, and leaves solo play until
+> delivery opens — which under `attempt_end` re-closes on the next committed move. Recorded as
+> cheap to reverse, and worth revisiting after the surface is actually used rather than
+> pre-emptively.
+
 ## Summary
 
 R3 measured whether a census-built hint is worth reading and produced two results this repo did

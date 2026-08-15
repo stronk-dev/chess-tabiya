@@ -115,6 +115,27 @@
 > observation level.** Silence-by-default and learner-initiated disclosure are what make that
 > acceptable; it should be stated, not assumed.
 
+
+> **OWNER RULINGS 2026-08-15 (late) — open questions 7 and 8 are decided.**
+> **Q7 — `structuralDelta`: FIX the cost, then leave it.** Not deleted (the discovered-threat
+> surface is a ledgered product idea, and deleting an exported function is a public-API
+> decision), and not left as-is (that is the trap where someone enables it later and ships the
+> cost). **This RFC now owns the fix**: rewrite `evictionChanges` (`structure.ts`) so each FEN is
+> parsed once instead of 256 `pawnSafety` calls each re-parsing — ~43% of its 1721 µs/ply, and
+> density-independent, so it costs 652 µs even on ≤8-piece endgames where the whole census costs
+> 7.5. **The exclusion is unaffected and criterion 6 still holds: fixing is not consuming**, and
+> the module-graph test must still assert no transitive path from the transition grammar to
+> `structuralDelta`/`vacationReading`/`pawnSafety`. `vacationReading` stays dead and untouched so
+> F4's discovered-threat trigger survives intact.
+>
+> **Q8 — `NEVER_PRESENT` stays an ERROR, with the improved diagnosis.** Confirms the
+> recommendation `expression-census` §5c put on the record. The refusal is defensible precisely
+> because its corpus is *the pack's own assertion*, and a witness does not contradict that. A
+> warning would return this to the `timingWindow` answer — a subsystem shipped with no
+> enforcement, zero uses across 145 checkpoints, a gate blocked for months. **Ship the three-row
+> diagnosis table** so a refused author sees exactly what was checked and where, rather than a
+> bare code. No `witness` field in this lane.
+
 ## Summary
 
 Every predicate in the shipped vocabulary is a feature of a *position*; none is a feature of

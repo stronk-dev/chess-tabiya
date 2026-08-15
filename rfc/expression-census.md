@@ -32,6 +32,18 @@
 > entry field, and a witness does not suppress an inertness refusal.** One residual half is
 > owner-facing and is filed as open question 8 below with the owner named.
 
+
+> **OWNER RULINGS 2026-08-15 (late) — open questions 4 and 8 are decided.**
+> **Q8 — the severity stays ERROR.** The owner took this RFC's own recorded recommendation:
+> keep `NEVER_PRESENT` at error and ship the §5c diagnosis. `transition-primitives` carries the
+> matching ruling; the question is closed in both files rather than pointing at each other.
+> **Q4 — NO CI job yet: the census ships as a command only.** The reasoning the RFC itself gave
+> is the reasoning that decided it — *a non-blocking CI job with no owner becomes noise*. It runs
+> at authoring and review time via `make expression-census`. Revisit once the numbers are
+> demonstrably being acted on; a gate that fails on coverage is refused outright, since coverage
+> is a fact rather than a defect and gating it would refuse correct-but-uncovered work at CI
+> instead of at load.
+
 ## Register claim
 
 **This RFC claims nothing versioned.** No pack schema version, no run schema
