@@ -7,11 +7,10 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `predicate-wave-3.md` | draft — reviewed, **owner items closed** | — | pack **0.18** + shape-entry **0.2→0.3** (duplicated `$defs`). `piece_distance` absorbed by owner ruling 2026-08-15 |
+| `predicate-wave-3.md` | implementing | — | pack **0.18** + shape-entry **0.2→0.3** (duplicated `$defs`). `piece_distance` absorbed by owner ruling 2026-08-15 |
 | `opening-evidence-path.md` | draft — **cross-reviewed, READY** | — | pack **0.20**. `assessedBy` gains `kind: "engine"`. Closes the opening half of the evidence hole |
 | `deviation-classes.md` | draft — reviewed, **1 owner question open** | — | pack **0.21**. Adds `mistake` + `cost`; does NOT split the `class` enum |
-| `branch-set-scale.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — pack stays 0.16, run 0.13, no migration, no new event, no new `BranchComparison` field. One writer-free read route + a versioned browser preference. Implements the 2026-08-15 branch ruling: collapse decided branches, bound the eval work, manual fold |
-| `predicate-wave-3.md` | draft (awaiting cross-review) | — | claims **pack schema 0.18** (additive) **and shape-entry schema 0.2 → 0.3** — the shape schema carries a DUPLICATED `$defs/structuralFeature` (`shape_entry.schema.json:47-75`), so new leaves must land in both copies or shape triggers silently cannot use them. No migration, no run-schema change |
+| `branch-set-scale.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — rebased 2026-08-15 after `ed48978` (pack 0.17) and `4977ff6` (run 0.14 / migration 19) landed the same day; the claim survives the rebase intact, which is the point. No migration, no new event, no new `BranchComparison` field. One writer-free read route + a versioned browser preference. Implements the 2026-08-15 branch ruling: collapse decided branches, bound the eval work, manual fold |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
 `onramp-guard`, then `open-answer-grading`. Shared-resource claims (migrations, pack
@@ -60,7 +59,7 @@ landing order, not lost data.
 | 0.15 | `archive/open-answer-grading.md` | implemented — additive: checkpoint `interaction` union gains `stated_reasoning` with grounded key points (closed four-kind union); reconciled behind 0.14 |
 | 0.16 | `archive/authoring-frictions.md` | implemented — additive/widening only: `deviationLocation` gains `{atStart}`, `simpleTrigger` gains `atStart`, new `variantOf` (three directional relations), `branchLengthTarget` max 20→40, guard gains `fireOnMate`/`rulesTier`/`window`/`overrides`, `rules_fact` enum gains `draw`, tablebase category enum widens to five determinate values. All committed content remains valid; no content digest moved |
 | 0.17 | `archive/tempo-vocabulary.md` | implemented — a timing window is a branch-local ledger: commitment opening, ordered closes, move-set readiness/tolerance, luxury spend, seven verdicts, authored `outpaced` control, and `tempo:` applied evidence. Additive plus removal of the unused checkpoint-local point-pair form; no committed content digest moved |
-| 0.18 | `predicate-wave-3.md` | claimed 2026-08-15 — additive: `plan_consequence` success-condition kind, `king_zone`, `king_distance`, `piece_count`, `pack.shapes` relation `present`/`prospective`. Ships `pawn_count` and `piece_reach_count scope:"every"` as deprecation WARNINGS (schema removal deferred to wave 4 because `registered_shapes` rows are immutable) |
+| 0.18 | `predicate-wave-3.md` | implementing — additive: `plan_consequence` success-condition kind, `king_zone`, `piece_distance`, `piece_count`, `pack.shapes` relation `present`/`prospective`. Ships `pawn_count` and `piece_reach_count scope:"every"` as deprecation WARNINGS (schema removal deferred to wave 4 because `registered_shapes` rows are immutable) |
 | 0.20 | `opening-evidence-path.md` | claimed 2026-08-15 — additive: `$defs/objectiveGrading.assessedBy` gains a third `oneOf` member `kind: "engine"`. Retires `VERIFY_ASSESSMENT_NOT_SYZYGY`; narrows `OBJECTIVE_GRADING_UNSUPPORTED` to legs |
 | 0.21 | `deviation-classes.md` | claimed 2026-08-15 — additive: `mistake` (`plan\|timing\|tactical`) and `cost` on `$defs/deviation`, `moveUci` on `guard.overrides[]`. Ships `cost` author-declared and UNBACKED per the 2026-08-15 coordinator ruling |
 

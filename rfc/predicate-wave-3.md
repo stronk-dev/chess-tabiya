@@ -1,6 +1,6 @@
 # RFC: Structural predicate vocabulary, wave 3 — census, kings, and the intent boundary
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/research/authored-transitions-and-features.md` §6 (the
@@ -31,16 +31,16 @@
   `successCondition` kind)
 - **Supersedes / superseded by:** —
 - **Migration:** **none, and that is normative.** Parent law 1c holds: a rung-0 fact is never
-  persisted. Run schema stays **0.13**; `STORAGE_VERSION` stays **18**. Nothing this RFC adds
+  persisted. Run schema stays **0.14**; `STORAGE_VERSION` stays **19**. Nothing this RFC adds
   is an event, and §5 explicitly refuses to become one (§7 F1).
 - **Pack schema:** **0.18.** Claimed in `rfc/README.md`'s register in the same edit that adds
   this RFC's Active row — a register edit outside this file's authority, flagged for the
   owner. Landing order: behind **0.16** (`authoring-frictions`) and **0.17**
   (`tempo-vocabulary`). **0.19 is free** — `rfc/archive/validator-integrity.md` deliberately declined
   it and claims nothing versioned — and this draft neither takes nor reserves it;
-  `rfc/resistance-spectrum.md` makes no pack-schema claim at all. Run schema **0.13** and
-  migration **18** are untouched, so nothing here contends with `resistance-spectrum`'s 0.14
-  and 19. This draft rebases rather than renumbering unilaterally if either predecessor stalls.
+  `rfc/archive/resistance-spectrum.md` makes no pack-schema claim at all. Run schema **0.14** and
+  migration **19** are untouched; `resistance-spectrum` has landed. This draft rebases rather
+  than renumbering unilaterally if either predecessor stalls.
 - **Shape-entry schema:** **0.3** — **yes, a bump is required.**
   `schemas/shape_entry.schema.json` carries a duplicated copy of `$defs/structuralFeature`
   (`:47-65`) and `$defs/structuralExpression` (`:66-76` — this draft wrote `47-75`, truncating
