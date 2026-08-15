@@ -25,6 +25,7 @@ function countKind(value: unknown, kind: string): number {
 function packageContentTests(directory: URL): readonly string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const url = new URL(entry.name, directory);
+    if (entry.name === "node_modules") return [];
     if (entry.isDirectory()) return packageContentTests(new URL(`${entry.name}/`, directory));
     if (!entry.isFile() || !entry.name.endsWith(".test.ts")) return [];
     const source = readFileSync(url, "utf8");

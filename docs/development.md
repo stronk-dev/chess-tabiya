@@ -67,6 +67,11 @@ Negative tests minimally mutate such an artifact when possible. Whole-tree refus
 discovery records existing unpinned debt beneath a frozen ceiling and rejects growth, while
 `SourcingError.code` is a closed compile-time vocabulary.
 
+Production functions whose inputs come directly from an external instrument carry the
+`@instrument-fed` source marker. The fixture-realism gate discovers those declarations and
+requires a register entry resolving to captured boundary evidence; a newly marked function
+cannot be absorbed without such a fixture.
+
 `make pack-check FILE=<path>` validates a draft against the living pack schema,
 the shipped chess lints, and the policies the current server can execute. It
 prints errors and warnings with JSON Pointer paths and exits non-zero on an

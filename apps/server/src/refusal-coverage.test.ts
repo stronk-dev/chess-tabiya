@@ -40,6 +40,7 @@ function testSources(directory: URL): string[] {
 function productionSources(directory: URL): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const url = new URL(entry.name, directory);
+    if (entry.name === "node_modules") return [];
     if (entry.isDirectory()) return productionSources(new URL(`${entry.name}/`, directory));
     return entry.isFile() && entry.name.endsWith(".ts") && !entry.name.endsWith(".test.ts")
       ? [readFileSync(url, "utf8")]

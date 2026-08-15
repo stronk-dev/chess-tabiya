@@ -2115,6 +2115,16 @@ The engine capability audit found that production stated `Elo <requested>` and t
 
 The regression gate uses the production `OpponentSelector` against the pinned real Maia image, not a synthetic client or a hand-shaped engine request. It records 1000 and 2400 as applied, asserts the production command order, and proves the two returned policy vectors differ. `INTEGRATION=maia pnpm test:maia` passed all three integration tests. D91 and the re-opened D60 are ready for independent review and owner-ledger closure; this implementation does not edit the design tier.
 
+## 2026-08-15 (codex) — fixture-realism and client-surface-floor completed
+
+Both already-implemented RFCs completed the acceptance work their first implementation logs had asserted but not demonstrated. Four fixture-realism mutations were run against the real tree and reverted: changing the deployed Maia identity failed the captured-identity test; advancing all 25 shape patch versions left the runtime suite green; a new undisposed `SourcingError` failed whole-tree refusal coverage; and a second marked instrument-fed production function failed the fixture register. Production discovery now ignores real `node_modules` directories rather than depending on pnpm symlinks.
+
+The client surface floor received the same treatment. Reintroduced layout defects made the tablet document 1280 px tall in a 1024 px viewport, put a compact board outside its clipping ancestor, and made the run region scroll; reintroduced `session`, a 16 px pivotal target, and a spectator-only rendered control each failed their guards. The viewer-role guard now checks all rendered markup rather than one condition spelling, while the surviving document-scroll assertion states its desktop/tablet scope in source.
+
+Final gates on the restored tree: `ENGINES_REQUIRED=1 make verify` passed **608 tests / 98 files**, schema and packaging clean, Svelte 0/0; `make test-browser` passed **24 at zero retries**, with only the baseline optional Maia-profile case skipped. Canonical behavior is reconciled in `docs/development.md`, `docs/tablebase-grounding.md`, `docs/content-sourcing.md`, and `docs/app-shell.md`. The RFCs and planning directories are archived. Ledger rows **D47, D54, D61, D62 and D69** close here; D63 remains open because compare geometry was explicitly outside `client-surface-floor`.
+
+**Post-archive gate note:** a second unchanged-tree browser run failed the served-Najdorf walkthrough after its branch move (**23 passed / 1 failed / 1 baseline skip**), while the immediately preceding and following runs passed **24 / 1 skip**. Retries remain unset. This is recorded as D104 rather than rationalized into the two completed viewport/fixture lifecycles.
+
 ## 2026-08-15 (night) — three RFCs accepted, D97 ruled, four agents out
 
 **Landed.** Content fix wave F (`41afe00`): D75 fixed one level above where it was

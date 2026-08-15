@@ -887,6 +887,9 @@ test("every shell route owns the viewport at supported desktop and tablet projec
     for (const route of routes) {
       await page.goto(route);
       await expect(page.getByText("Loading Tabiya…")).toHaveCount(0);
+      // At <=719px #app is fixed to the viewport, so document scrolling is
+      // structurally constant. Retain this as a desktop/tablet global-overflow
+      // guard; compact containment is proved separately by assertRunViewport.
       const dimensions = await page.evaluate(() => ({
         scrollHeight: document.scrollingElement!.scrollHeight,
         clientHeight: document.scrollingElement!.clientHeight,

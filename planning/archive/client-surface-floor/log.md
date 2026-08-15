@@ -30,3 +30,22 @@ The first sweep's 676-pixel figure checked the Chessground element against the v
 ## 2026-08-15 — final verification after the containment correction
 
 The strengthened browser helper now asserts that the board box fits inside `.position-column`, not merely inside the viewport. Both final gates are green on that assertion: `ENGINES_REQUIRED=1 make verify` passed 606 tests across 98 files; `make test-browser` passed 24 tests at zero retries in 38.7 seconds, with only the baseline optional Maia-profile spec skipped. The earlier 36.5-second full-suite observation and the final 38.7-second run differ by 2.2 seconds; no timeout or retry changed.
+
+## 2026-08-15 — acceptance demonstrations and guard audit completed
+
+The required red demonstrations were re-run against the current browser test and source guards, with each defect temporarily restored or minimally reintroduced and then reverted:
+
+- **Criterion 4 — containment is observable.** Reintroducing the removed `62rem` layout rules made the 768×1024 projection report document dimensions **1280 / 1024**, and made the compact board escape its position ancestor (**board bottom 646.125 px; position bottom 574.453125 px**). A separate compact containment injection made `.drill-region` report **640 px scroll height / 300 px client height**, proving C5-2 is not another constant document-scroll assertion. The injected rules were removed.
+- **Criterion 7 — the region vocabulary is closed over real regions.** Temporarily adding `session` to the `compactTab` union made `client-surface-floor.test.ts` fail its exact three-member assertion. The mutation was reverted.
+- **Criterion 9 — the target-size floor has teeth.** Temporarily reducing `.pivotal-marker` from `1.5rem` to `1rem` made the same suite fail the 24 CSS-pixel source guard while the shape marker still passed. The mutation was reverted.
+- **Criterion 8(a) — spelling-independent role guard.** The shipped regex only rejected the exact spelling `viewerRole !== "host"`. The guard now inspects all rendered markup and rejects any `viewerRole` use there while retaining `role: viewerRole` in script plumbing. A temporary `{#if viewerRole === "spectator"}` control failed it: **1 failed, 2 passed**. The control was removed.
+
+The surviving `document.scrollingElement` check now has its required in-file annotation: at ≤719 px the fixed `#app` makes document scrolling structurally constant, so that check remains a desktop/tablet global-overflow guard while compact containment is proved by `assertRunViewport`. With all demonstrations restored away, the four focused acceptance suites passed **24/24**.
+
+## 2026-08-15 — final completion verification
+
+`ENGINES_REQUIRED=1 make verify` passed **608 tests across 98 files** with schema and packaging checks clean and Svelte at 0 errors / 0 warnings. `make test-browser` passed **24 tests at zero retries**; the existing optional Maia-profile test was the sole skip. The lifecycle is complete; the shipped viewport, region and refusal model is canonical in `docs/app-shell.md`.
+
+## 2026-08-15 — unrelated post-archive browser flake recorded
+
+The first post-move rerun of `make test-browser` failed in the served-Najdorf walkthrough while waiting for `Active line 4 plies` after the branch move (**23 passed, 1 failed, 1 baseline skip**). No file changed; an immediate full rerun passed **24 with the same skip** at zero configured retries, matching the green pre-move run. This is not a viewport assertion and does not alter this RFC's acceptance result, but an authoritative gate cannot silently carry a race. It is recorded as D104 for separate diagnosis rather than hidden by retries.

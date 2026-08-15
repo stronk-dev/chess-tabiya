@@ -7,9 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `fixture-realism.md` | implementing | — | **claims nothing versioned**. Captured Maia fixtures, a one-ulp policy-mass tolerance, artifact-derived pins, discovery-based refusal coverage, and an instrument-fed fixture register |
 | `live-marker-quality.md` | implementing | — | **claims nothing versioned**. Narrows live `irreversibility` to `last_of_role`, makes pivotal rendering exhaustive, and applies the human-split permission to the client marker plus `/voice` and `/speech` delivery paths. Proposes **L1–L6**, the standing admission rule for the live surface |
-| `client-surface-floor.md` | implementing | — | **claims nothing versioned** — CSS, one nav element, one marker size, one Playwright spec; lands in any order. Deletes the `62rem` breakpoint rather than retargeting it, states the measured 360×680 run floor, and refuses smaller viewports honestly. `CompareView.svelte` remains outside scope |
 | `teacher-surface.md` | draft (awaiting cross-review) | — | claims **migration 21** (`STORAGE_VERSION` 20→21: four tables, `run_grants.expires_at`, `live_sessions.classroom_id`). **No run-schema change (0.15), no pack-schema change (0.22)** — so no rebase pressure on the pack lane. No new token scope, no fourth `RunRole`, no new session kind. Fixes D80 as a pure narrowing |
 | `engine-leverage.md` | **accepted** — ready for codex | — | claims **pack 0.23**, **run 0.16**, **migration 22**. Engine-condition surface, `cost` bound to existing evidence, `go nodes 50000` for `strong_engine` |
 | `vocabulary-wiring.md` | **accepted** — ready for codex | — | claims **pack 0.24** (yielded 0.23 to `engine-leverage`). Merges `plan_consequence` into `structural_feature{plan_signature}`; carries the D64 escalation |
@@ -233,6 +231,8 @@ before re-attempting this territory.
 | `archive/branch-set-scale.md` | implemented | `docs/branch-set-scale.md`, `docs/n-way-comparison.md`, `docs/branch-groups.md` |
 | `archive/deviation-classes.md` | implemented | `docs/drill-pack-format.md`, `docs/drill-client.md` |
 | `archive/engine-request-contract.md` | implemented | `docs/engine-workers.md`, `docs/branch-runtime.md`, `workers/maia/README.md` |
+| `archive/fixture-realism.md` | implemented | `docs/development.md`, `docs/tablebase-grounding.md`, `docs/content-sourcing.md` |
+| `archive/client-surface-floor.md` | implemented | `docs/app-shell.md` |
 
 ## The archive sketches are quarry, not RFCs
 

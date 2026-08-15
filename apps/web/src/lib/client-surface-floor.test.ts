@@ -14,7 +14,8 @@ describe("client surface floor", () => {
     for (const member of members) {
       expect(drill).toContain(`class:compact-active={compactTab === "${member}"}`);
     }
-    expect(drill).not.toMatch(/viewerRole\s*!==?\s*["']host["']/u);
+    const markup = drill.slice(drill.indexOf("</script>") + "</script>".length);
+    expect(markup).not.toContain("viewerRole");
     expect(drill).toContain("role: viewerRole");
   });
 

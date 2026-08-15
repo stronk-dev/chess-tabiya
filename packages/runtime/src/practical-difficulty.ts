@@ -29,6 +29,7 @@ export class PolicyMassError extends TypeError {
  * whose externally classified outcome differs. Missing policy mass is an
  * abstention: rank weights are selection aids, not measurements.
  */
+/** @instrument-fed Maia policy vector */
 export function humanConcessionMass(
   candidates: readonly PolicyMassCandidate[],
   concedingMoves: ReadonlySet<string>,

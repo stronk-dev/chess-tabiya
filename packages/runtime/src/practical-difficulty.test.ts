@@ -110,6 +110,14 @@ describe("humanConcessionMass", () => {
       validSide: "captured",
       refusalSide: "minimal-clone-mutation",
     }]);
+    const production = readFileSync(
+      new URL("./practical-difficulty.ts", import.meta.url),
+      "utf8",
+    );
+    const declared = [...production.matchAll(
+      /\/\*\*\s*@instrument-fed\b[^*]*\*\/\s*export function\s+(\w+)/gu,
+    )].map((match) => match[1]).sort();
+    expect(register.entries.map((entry) => entry.function).sort()).toEqual(declared);
     expect(unresolvedInstrumentFixtures(register.entries)).toEqual([]);
     expect(unresolvedInstrumentFixtures([
       ...register.entries,

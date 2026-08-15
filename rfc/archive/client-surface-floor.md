@@ -1,6 +1,6 @@
 # RFC: Client surface floor — the tablet band, and two shipped controls that lie
 
-- **Status:** implementing — cross-reviewed; owner minimum-viewport ruling applied 2026-08-15
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/02-product-shape.md:81-86` (Platform — OPEN, exploration Q3);

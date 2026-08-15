@@ -20,36 +20,15 @@ floor in **eight of nine fields**. Its own cross-review caught it against the RF
 that *"nothing it does can turn anything on"*. Bounded there to rung 0 with a test, so a
 later widening of the constant cannot smuggle in a second exception.
 
-## 1. Acceptance-criteria completion — still authorized, still unstarted
+## 1. Acceptance-criteria completion — completed and archived 2026-08-15
 
-Independent verification found substantive work **inside already-accepted RFCs**. Not new
-scope; the criteria those RFCs already carry. Take this when a landing above is blocked.
+`fixture-realism` and `client-surface-floor` completed every recorded red/green
+demonstration, hardened their production-discovery guards, passed both gates, and moved
+to `rfc/archive/` with their planning directories. **Do not take this item again.**
 
-**`fixture-realism`:**
-- Criteria **3, 6, 8, 11** each say *"demonstrated, reverted, recorded"* — **none of those
-  demonstrations is recorded** in `planning/fixture-realism/log.md`. Criterion 11's is
-  *simulated inside the test itself*, which proves the helper works rather than that the
-  gate binds. Run each against the real tree, revert, record the red run.
-- `productionSources()`/`packageContentTests()` recurse into `packages/*/node_modules`.
-  Harmless today only because pnpm's entries are symlinks; a non-symlinked dependency with
-  `.ts` files would silently pollute the discovered set.
-
-**`client-surface-floor`:**
-- Criteria **4, 7, 9** demand pre-change red runs be recorded; the log records the
-  containment correction but not those.
-- Criterion **8(a)** shipped as a regex on the exact string `viewerRole !== "host"` rather
-  than "no `viewerRole`-conditioned control" — `{#if viewerRole === "spectator"}` slips past.
-- **C8** required the surviving `document.scrollingElement` guard be kept **and annotated
-  in-file** with why it is structurally constant at ≤719 px. A failure-message string
-  landed; the annotation did not.
-
-**Then both can archive** — ledger flip **and** the `planning/exploration/log.md` entry in
-the archiving commit. Neither has the exploration-log entry yet.
-
-**One cross-draft collision, already resolved on paper:** `client-surface-floor` criterion
-8(b) asserts `permission.arrows === "sight"`. It lands first unchanged; `format-surface`
-amends that criterion to `boardLighting` alone when it retires the field. Do not
-pre-emptively change it.
+**Surviving cross-draft note:** archived `client-surface-floor` criterion 8(b) asserts
+`permission.arrows === "sight"`; `format-surface` owns removing that assertion when it
+retires the field.
 
 ## 2. Small and unowned — take whenever a wave has room
 
