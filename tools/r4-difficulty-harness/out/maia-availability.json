@@ -1,0 +1,45 @@
+{
+ "identity": {
+  "id": "maia-5m",
+  "kind": "opponent",
+  "name": "Maia3",
+  "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+  "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+  "seedHonored": false
+ },
+ "optionLines": [
+  "option name Elo type spin default 1500 min 0 max 5000",
+  "option name SelfElo type spin default 1500 min 0 max 5000",
+  "option name OppoElo type spin default 1500 min 0 max 5000",
+  "option name Temperature type string default 1.0",
+  "option name TopP type string default 1.0",
+  "option name MultiPV type spin default 5 min 1 max 20"
+ ],
+ "probes": 120,
+ "byRange": {
+  "inRange": {
+   "probes": 60,
+   "positions": 10,
+   "medianCandidates": 5.0,
+   "maxCandidates": 20,
+   "medianLegal": 5.0,
+   "allCandidatesCarriedPolicy": 60,
+   "policySumMedian": 1.0,
+   "policySumMin": 0.999991264965598,
+   "latencyMsMedian": 144.37889550000045,
+   "latencyMsMax": 334.991
+  },
+  "outOfRange": {
+   "probes": 60,
+   "positions": 10,
+   "medianCandidates": 20.0,
+   "maxCandidates": 20,
+   "medianLegal": 35.0,
+   "allCandidatesCarriedPolicy": 60,
+   "policySumMedian": 0.9998792632640688,
+   "policySumMin": 0.9891290422531502,
+   "latencyMsMedian": 166.71618750000107,
+   "latencyMsMax": 421.07708300000013
+  }
+ }
+}

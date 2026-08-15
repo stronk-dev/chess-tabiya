@@ -1,0 +1,549 @@
+{
+ "1": {
+  "positions": 284,
+  "meanLegalMoves": 31.841549295774648,
+  "goMs": {
+   "min": 0.11841700000150013,
+   "median": 0.6746665000002849,
+   "mean": 0.7510193732393893,
+   "p95": 1.3234160000001793,
+   "max": 5.4560419999997976
+  },
+  "resetMs": {
+   "median": 5.90729199999987,
+   "max": 9.931041999998342
+  },
+  "reachedRequestedDepth": 284,
+  "classifiers": {
+   "window50": {
+    "meanConcedeRate": 0.602048251244114,
+    "medianConcedeRate": 0.5917467948717949,
+    "positionsWithZeroConcessions": 0.01056338028169014,
+    "positionsWhereOnlyBestSurvives": 0.13732394366197184
+   },
+   "window100": {
+    "meanConcedeRate": 0.4459348128454183,
+    "medianConcedeRate": 0.35135135135135137,
+    "positionsWithZeroConcessions": 0.02112676056338028,
+    "positionsWhereOnlyBestSurvives": 0.09859154929577464
+   },
+   "window200": {
+    "meanConcedeRate": 0.3320257011117075,
+    "medianConcedeRate": 0.2379862700228833,
+    "positionsWithZeroConcessions": 0.035211267605633804,
+    "positionsWhereOnlyBestSurvives": 0.07042253521126761
+   },
+   "class100": {
+    "meanConcedeRate": 0.49810440575360937,
+    "medianConcedeRate": 0.4083333333333333,
+    "positionsWithZeroConcessions": 0.04225352112676056,
+    "positionsWhereOnlyBestSurvives": 0.11971830985915492,
+    "decidedPositions": 0.11267605633802817
+   },
+   "class150": {
+    "meanConcedeRate": 0.40577011050422734,
+    "medianConcedeRate": 0.30303030303030304,
+    "positionsWithZeroConcessions": 0.02464788732394366,
+    "positionsWhereOnlyBestSurvives": 0.08098591549295775,
+    "decidedPositions": 0.0880281690140845
+   },
+   "class300": {
+    "meanConcedeRate": 0.285375580234073,
+    "medianConcedeRate": 0.19292803970223327,
+    "positionsWithZeroConcessions": 0.045774647887323945,
+    "positionsWhereOnlyBestSurvives": 0.06338028169014084,
+    "decidedPositions": 0.06338028169014084
+   }
+  },
+  "absBestCp": {
+   "median": 38.0,
+   "p90": 108,
+   "max": 723,
+   "over100": 0.11267605633802817,
+   "over200": 0.08450704225352113,
+   "over500": 0.0528169014084507
+  }
+ },
+ "2": {
+  "positions": 284,
+  "meanLegalMoves": 31.841549295774648,
+  "goMs": {
+   "min": 0.14674999999988358,
+   "median": 1.9709579999998823,
+   "mean": 2.157991746478893,
+   "p95": 4.148624999999811,
+   "max": 6.316917000000103
+  },
+  "resetMs": {
+   "median": 5.887332999999671,
+   "max": 10.345500000000357
+  },
+  "reachedRequestedDepth": 284,
+  "classifiers": {
+   "window50": {
+    "meanConcedeRate": 0.6090486809667711,
+    "medianConcedeRate": 0.6035714285714285,
+    "positionsWithZeroConcessions": 0.0,
+    "positionsWhereOnlyBestSurvives": 0.09154929577464789
+   },
+   "window100": {
+    "meanConcedeRate": 0.4495179339275221,
+    "medianConcedeRate": 0.3684210526315789,
+    "positionsWithZeroConcessions": 0.014084507042253521,
+    "positionsWhereOnlyBestSurvives": 0.0528169014084507
+   },
+   "window200": {
+    "meanConcedeRate": 0.321382960332547,
+    "medianConcedeRate": 0.25,
+    "positionsWithZeroConcessions": 0.035211267605633804,
+    "positionsWhereOnlyBestSurvives": 0.035211267605633804
+   },
+   "class100": {
+    "meanConcedeRate": 0.5033085619733237,
+    "medianConcedeRate": 0.44281045751633985,
+    "positionsWithZeroConcessions": 0.03873239436619718,
+    "positionsWhereOnlyBestSurvives": 0.09507042253521127,
+    "decidedPositions": 0.1056338028169014
+   },
+   "class150": {
+    "meanConcedeRate": 0.3944608540236361,
+    "medianConcedeRate": 0.30536130536130535,
+    "positionsWithZeroConcessions": 0.02464788732394366,
+    "positionsWhereOnlyBestSurvives": 0.05985915492957746,
+    "decidedPositions": 0.05985915492957746
+   },
+   "class300": {
+    "meanConcedeRate": 0.2707482118038347,
+    "medianConcedeRate": 0.1883445945945946,
+    "positionsWithZeroConcessions": 0.045774647887323945,
+    "positionsWhereOnlyBestSurvives": 0.03873239436619718,
+    "decidedPositions": 0.03873239436619718
+   }
+  },
+  "absBestCp": {
+   "median": 40.0,
+   "p90": 101,
+   "max": 544,
+   "over100": 0.1056338028169014,
+   "over200": 0.04929577464788732,
+   "over500": 0.014084507042253521
+  }
+ },
+ "4": {
+  "positions": 284,
+  "meanLegalMoves": 31.841549295774648,
+  "goMs": {
+   "min": 0.23283299999820883,
+   "median": 7.415187500000457,
+   "mean": 7.642398619718266,
+   "p95": 14.271375000000262,
+   "max": 19.857833000000028
+  },
+  "resetMs": {
+   "median": 5.881146000000172,
+   "max": 14.608250000001135
+  },
+  "reachedRequestedDepth": 284,
+  "classifiers": {
+   "window50": {
+    "meanConcedeRate": 0.6256126817949944,
+    "medianConcedeRate": 0.6300751879699248,
+    "positionsWithZeroConcessions": 0.0035211267605633804,
+    "positionsWhereOnlyBestSurvives": 0.07394366197183098
+   },
+   "window100": {
+    "meanConcedeRate": 0.46370297490873613,
+    "medianConcedeRate": 0.39473684210526316,
+    "positionsWithZeroConcessions": 0.01056338028169014,
+    "positionsWhereOnlyBestSurvives": 0.04929577464788732
+   },
+   "window200": {
+    "meanConcedeRate": 0.32681125961528146,
+    "medianConcedeRate": 0.25611210494931425,
+    "positionsWithZeroConcessions": 0.028169014084507043,
+    "positionsWhereOnlyBestSurvives": 0.03873239436619718
+   },
+   "class100": {
+    "meanConcedeRate": 0.5098675265765872,
+    "medianConcedeRate": 0.43669871794871795,
+    "positionsWithZeroConcessions": 0.03169014084507042,
+    "positionsWhereOnlyBestSurvives": 0.07746478873239436,
+    "decidedPositions": 0.09154929577464789
+   },
+   "class150": {
+    "meanConcedeRate": 0.39618832945159166,
+    "medianConcedeRate": 0.31101190476190477,
+    "positionsWithZeroConcessions": 0.02112676056338028,
+    "positionsWhereOnlyBestSurvives": 0.056338028169014086,
+    "decidedPositions": 0.056338028169014086
+   },
+   "class300": {
+    "meanConcedeRate": 0.26991389296751367,
+    "medianConcedeRate": 0.19139194139194138,
+    "positionsWithZeroConcessions": 0.0528169014084507,
+    "positionsWhereOnlyBestSurvives": 0.035211267605633804,
+    "decidedPositions": 0.04225352112676056
+   }
+  },
+  "absBestCp": {
+   "median": 42.5,
+   "p90": 95,
+   "max": 608,
+   "over100": 0.09154929577464789,
+   "over200": 0.04929577464788732,
+   "over500": 0.014084507042253521
+  }
+ },
+ "6": {
+  "positions": 284,
+  "meanLegalMoves": 31.841549295774648,
+  "goMs": {
+   "min": 0.7716660000005504,
+   "median": 20.547792000000754,
+   "mean": 21.715734172535225,
+   "p95": 44.46649999999954,
+   "max": 61.31633299999976
+  },
+  "resetMs": {
+   "median": 5.906812000000173,
+   "max": 11.207750000000487
+  },
+  "reachedRequestedDepth": 284,
+  "classifiers": {
+   "window50": {
+    "meanConcedeRate": 0.6660878834747682,
+    "medianConcedeRate": 0.7055103884372177,
+    "positionsWithZeroConcessions": 0.0,
+    "positionsWhereOnlyBestSurvives": 0.09507042253521127
+   },
+   "window100": {
+    "meanConcedeRate": 0.4925721012562463,
+    "medianConcedeRate": 0.43243243243243246,
+    "positionsWithZeroConcessions": 0.014084507042253521,
+    "positionsWhereOnlyBestSurvives": 0.056338028169014086
+   },
+   "window200": {
+    "meanConcedeRate": 0.3395345892327452,
+    "medianConcedeRate": 0.25806451612903225,
+    "positionsWithZeroConcessions": 0.028169014084507043,
+    "positionsWhereOnlyBestSurvives": 0.04225352112676056
+   },
+   "class100": {
+    "meanConcedeRate": 0.5272866486483117,
+    "medianConcedeRate": 0.4654761904761905,
+    "positionsWithZeroConcessions": 0.028169014084507043,
+    "positionsWhereOnlyBestSurvives": 0.09154929577464789,
+    "decidedPositions": 0.1056338028169014
+   },
+   "class150": {
+    "meanConcedeRate": 0.40256127077003745,
+    "medianConcedeRate": 0.3114224137931034,
+    "positionsWithZeroConcessions": 0.02464788732394366,
+    "positionsWhereOnlyBestSurvives": 0.05985915492957746,
+    "decidedPositions": 0.05985915492957746
+   },
+   "class300": {
+    "meanConcedeRate": 0.2755945608369633,
+    "medianConcedeRate": 0.1943351691581432,
+    "positionsWithZeroConcessions": 0.04225352112676056,
+    "positionsWhereOnlyBestSurvives": 0.03873239436619718,
+    "decidedPositions": 0.03873239436619718
+   }
+  },
+  "absBestCp": {
+   "median": 45.0,
+   "p90": 103,
+   "max": 562,
+   "over100": 0.1056338028169014,
+   "over200": 0.04929577464788732,
+   "over500": 0.02112676056338028
+  }
+ },
+ "8": {
+  "positions": 284,
+  "meanLegalMoves": 31.841549295774648,
+  "goMs": {
+   "min": 1.4587920000194572,
+   "median": 77.05443700000615,
+   "mean": 81.86821796831032,
+   "p95": 172.2189580000122,
+   "max": 263.3507079999981
+  },
+  "resetMs": {
+   "median": 5.825645499979146,
+   "max": 12.223874999996042
+  },
+  "reachedRequestedDepth": 284,
+  "classifiers": {
+   "window50": {
+    "meanConcedeRate": 0.6639998416285612,
+    "medianConcedeRate": 0.7105263157894737,
+    "positionsWithZeroConcessions": 0.0035211267605633804,
+    "positionsWhereOnlyBestSurvives": 0.11267605633802817
+   },
+   "window100": {
+    "meanConcedeRate": 0.492826042888663,
+    "medianConcedeRate": 0.41982864137086906,
+    "positionsWithZeroConcessions": 0.014084507042253521,
+    "positionsWhereOnlyBestSurvives": 0.06338028169014084
+   },
+   "window200": {
+    "meanConcedeRate": 0.3387649652170655,
+    "medianConcedeRate": 0.25,
+    "positionsWithZeroConcessions": 0.02464788732394366,
+    "positionsWhereOnlyBestSurvives": 0.045774647887323945
+   },
+   "class100": {
+    "meanConcedeRate": 0.5150518101288521,
+    "medianConcedeRate": 0.46130952380952384,
+    "positionsWithZeroConcessions": 0.03873239436619718,
+    "positionsWhereOnlyBestSurvives": 0.0880281690140845,
+    "decidedPositions": 0.11971830985915492
+   },
+   "class150": {
+    "meanConcedeRate": 0.39743354084420274,
+    "medianConcedeRate": 0.3042929292929293,
+    "positionsWithZeroConcessions": 0.028169014084507043,
+    "positionsWhereOnlyBestSurvives": 0.056338028169014086,
+    "decidedPositions": 0.06690140845070422
+   },
+   "class300": {
+    "meanConcedeRate": 0.281138786831725,
+    "medianConcedeRate": 0.20460491889063318,
+    "positionsWithZeroConcessions": 0.03873239436619718,
+    "positionsWhereOnlyBestSurvives": 0.03873239436619718,
+    "decidedPositions": 0.04225352112676056
+   }
+  },
+  "absBestCp": {
+   "median": 46.0,
+   "p90": 106,
+   "max": 579,
+   "over100": 0.11971830985915492,
+   "over200": 0.04929577464788732,
+   "over500": 0.01056338028169014
+  }
+ },
+ "12": {
+  "positions": 284,
+  "meanLegalMoves": 31.841549295774648,
+  "goMs": {
+   "min": 7.4948330000042915,
+   "median": 938.0132079999894,
+   "mean": 959.321908292253,
+   "p95": 2076.444082999995,
+   "max": 2619.5431249999965
+  },
+  "resetMs": {
+   "median": 5.788395999989007,
+   "max": 78.72591599999578
+  },
+  "reachedRequestedDepth": 284,
+  "classifiers": {
+   "window50": {
+    "meanConcedeRate": 0.66089409706039,
+    "medianConcedeRate": 0.7101018675721562,
+    "positionsWithZeroConcessions": 0.01056338028169014,
+    "positionsWhereOnlyBestSurvives": 0.09507042253521127
+   },
+   "window100": {
+    "meanConcedeRate": 0.48179962696335726,
+    "medianConcedeRate": 0.41443053070960045,
+    "positionsWithZeroConcessions": 0.014084507042253521,
+    "positionsWhereOnlyBestSurvives": 0.06338028169014084
+   },
+   "window200": {
+    "meanConcedeRate": 0.33214781566240564,
+    "medianConcedeRate": 0.25290697674418605,
+    "positionsWithZeroConcessions": 0.028169014084507043,
+    "positionsWhereOnlyBestSurvives": 0.04225352112676056
+   },
+   "class100": {
+    "meanConcedeRate": 0.5076665369616106,
+    "medianConcedeRate": 0.44315245478036175,
+    "positionsWithZeroConcessions": 0.04225352112676056,
+    "positionsWhereOnlyBestSurvives": 0.08098591549295775,
+    "decidedPositions": 0.10211267605633803
+   },
+   "class150": {
+    "meanConcedeRate": 0.3929490739843722,
+    "medianConcedeRate": 0.3011627906976744,
+    "positionsWithZeroConcessions": 0.028169014084507043,
+    "positionsWhereOnlyBestSurvives": 0.045774647887323945,
+    "decidedPositions": 0.05985915492957746
+   },
+   "class300": {
+    "meanConcedeRate": 0.276832360596632,
+    "medianConcedeRate": 0.1951219512195122,
+    "positionsWithZeroConcessions": 0.04225352112676056,
+    "positionsWhereOnlyBestSurvives": 0.035211267605633804,
+    "decidedPositions": 0.03873239436619718
+   }
+  },
+  "absBestCp": {
+   "median": 43.0,
+   "p90": 100,
+   "max": 606,
+   "over100": 0.10211267605633803,
+   "over200": 0.0528169014084507,
+   "over500": 0.0035211267605633804
+  }
+ },
+ "16": {
+  "positions": 52,
+  "meanLegalMoves": 31.98076923076923,
+  "goMs": {
+   "min": 1020.1681249999674,
+   "median": 7659.593790999999,
+   "mean": 6827.212362115382,
+   "p95": 12255.803958000004,
+   "max": 15497.803125000006
+  },
+  "resetMs": {
+   "median": 6.070020499988459,
+   "max": 7.261666000005789
+  },
+  "reachedRequestedDepth": 52,
+  "classifiers": {
+   "window50": {
+    "meanConcedeRate": 0.6077655416084979,
+    "medianConcedeRate": 0.6088235294117648,
+    "positionsWithZeroConcessions": 0.0,
+    "positionsWhereOnlyBestSurvives": 0.038461538461538464
+   },
+   "window100": {
+    "meanConcedeRate": 0.4281519801277995,
+    "medianConcedeRate": 0.40107212475633525,
+    "positionsWithZeroConcessions": 0.019230769230769232,
+    "positionsWhereOnlyBestSurvives": 0.0
+   },
+   "window200": {
+    "meanConcedeRate": 0.29947069445688307,
+    "medianConcedeRate": 0.21543560606060608,
+    "positionsWithZeroConcessions": 0.038461538461538464,
+    "positionsWhereOnlyBestSurvives": 0.0
+   },
+   "class100": {
+    "meanConcedeRate": 0.4470449849887021,
+    "medianConcedeRate": 0.37797619047619047,
+    "positionsWithZeroConcessions": 0.019230769230769232,
+    "positionsWhereOnlyBestSurvives": 0.038461538461538464,
+    "decidedPositions": 0.057692307692307696
+   },
+   "class150": {
+    "meanConcedeRate": 0.3530819566504565,
+    "medianConcedeRate": 0.30500894454382826,
+    "positionsWithZeroConcessions": 0.019230769230769232,
+    "positionsWhereOnlyBestSurvives": 0.0,
+    "decidedPositions": 0.038461538461538464
+   },
+   "class300": {
+    "meanConcedeRate": 0.2671444091684233,
+    "medianConcedeRate": 0.1613953488372093,
+    "positionsWithZeroConcessions": 0.057692307692307696,
+    "positionsWhereOnlyBestSurvives": 0.0,
+    "decidedPositions": 0.038461538461538464
+   }
+  },
+  "absBestCp": {
+   "median": 41.0,
+   "p90": 79,
+   "max": 457,
+   "over100": 0.057692307692307696,
+   "over200": 0.038461538461538464,
+   "over500": 0.0
+  }
+ },
+ "crossDepthStability": {
+  "d1->d2|window100": {
+   "positions": 284,
+   "moveAgreement": 0.9290058608868739,
+   "setMatchRate": 0.38028169014084506
+  },
+  "d1->d2|class100": {
+   "positions": 284,
+   "moveAgreement": 0.9115337830366029,
+   "setMatchRate": 0.4154929577464789
+  },
+  "d1->d2|class150": {
+   "positions": 284,
+   "moveAgreement": 0.9511224151277231,
+   "setMatchRate": 0.5985915492957746
+  },
+  "d2->d4|window100": {
+   "positions": 284,
+   "moveAgreement": 0.933097423421431,
+   "setMatchRate": 0.2992957746478873
+  },
+  "d2->d4|class100": {
+   "positions": 284,
+   "moveAgreement": 0.9192745770209001,
+   "setMatchRate": 0.33098591549295775
+  },
+  "d2->d4|class150": {
+   "positions": 284,
+   "moveAgreement": 0.9506800840429062,
+   "setMatchRate": 0.4014084507042254
+  },
+  "d4->d6|window100": {
+   "positions": 284,
+   "moveAgreement": 0.9328762578790224,
+   "setMatchRate": 0.3485915492957746
+  },
+  "d4->d6|class100": {
+   "positions": 284,
+   "moveAgreement": 0.9235873050978658,
+   "setMatchRate": 0.29225352112676056
+  },
+  "d4->d6|class150": {
+   "positions": 284,
+   "moveAgreement": 0.9543293154926462,
+   "setMatchRate": 0.4894366197183099
+  },
+  "d6->d8|window100": {
+   "positions": 284,
+   "moveAgreement": 0.938958310295256,
+   "setMatchRate": 0.3485915492957746
+  },
+  "d6->d8|class100": {
+   "positions": 284,
+   "moveAgreement": 0.9357514099303329,
+   "setMatchRate": 0.36619718309859156
+  },
+  "d6->d8|class150": {
+   "positions": 284,
+   "moveAgreement": 0.9549928121198717,
+   "setMatchRate": 0.5070422535211268
+  },
+  "d8->d12|window100": {
+   "positions": 284,
+   "moveAgreement": 0.948357845847617,
+   "setMatchRate": 0.4014084507042254
+  },
+  "d8->d12|class100": {
+   "positions": 284,
+   "moveAgreement": 0.9346455822182904,
+   "setMatchRate": 0.397887323943662
+  },
+  "d8->d12|class150": {
+   "positions": 284,
+   "moveAgreement": 0.9616277783921265,
+   "setMatchRate": 0.5
+  },
+  "d12->d16|window100": {
+   "positions": 52,
+   "moveAgreement": 0.9753457606734817,
+   "setMatchRate": 0.6153846153846154
+  },
+  "d12->d16|class100": {
+   "positions": 52,
+   "moveAgreement": 0.973541791942273,
+   "setMatchRate": 0.5384615384615384
+  },
+  "d12->d16|class150": {
+   "positions": 52,
+   "moveAgreement": 0.9855682501503308,
+   "setMatchRate": 0.6730769230769231
+  }
+ }
+}
