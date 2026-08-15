@@ -49,6 +49,19 @@
 - **Planning:** `planning/predicate-wave-3/` (once implementing)
 
 
+> **R2 MEASUREMENT LANDED, 2026-08-15 — §7 F4's repositioning row and §4b's
+> delta claim are now contradicted by evidence and must be amended before any
+> transition wave inherits them.** `design/research/move-primitive-computability.md`
+> measured routing over 593 corpus transitions: exact arithmetic, perfect recall
+> (9/9), and a **98.7% false-positive rate** — 0.0% precision under the sharpest
+> filter. §4b routes the *delta* to the transition wave as "this metric's clearest
+> use"; the measurement says the **static** leaf is the attested, discriminating
+> half, corroborated by six shape-library notes that all name the static quantity.
+> The target square set is the judgment. Routing renders an authored destination;
+> it does not detect intent. F4's promotion trigger is **not** met by this research
+> (it requires an authoring wave to file a transition claim, or the RFC that ships
+> the discovered-threat surface) — the schedule is unchanged, the inheritance is not.
+
 > **ORDINAL RECONCILED by claude (register coordinator), 2026-08-15.** This RFC
 > describes `plan_consequence` as a **sixth** `$defs/successCondition` arm. On the
 > 0.16 tree `successCondition` has exactly five arms, so that was correct when
