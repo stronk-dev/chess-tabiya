@@ -42,3 +42,13 @@ The R5 probe set was regenerated from the current 37-pack corpus and the pinned
 moves outside the recorded window. Latency was median 173.2 ms, p95 230.5 ms,
 maximum 481.8 ms; zero calls exceeded the 500 ms per-instrument target. The
 regenerable raw JSONL remains in `/tmp`, not the repository.
+
+## 2026-08-15 — lifecycle complete
+
+Canonical behavior was folded into `docs/engine-workers.md` and
+`docs/branch-runtime.md`; Maia's expected option advertisement was recorded in
+`workers/maia/README.md`. Final implementation gates: 591 tests across 96 files,
+real Stockfish required, Svelte 0 errors / 0 warnings, schema and packaging
+clean; Playwright 24 passed at zero retries with only the optional Maia browser
+measurement skipped. The RFC and planning job are archived. D60 is explicitly
+not closed by this lifecycle.

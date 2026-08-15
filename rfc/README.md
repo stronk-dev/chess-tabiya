@@ -8,7 +8,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `live-marker-quality.md` | draft (awaiting cross-review) | — | **claims nothing versioned**. Audits all four live markers (1 measured and failing, 3 never measured); narrows `irreversibility` to `last_of_role`; re-homes D48 (whose fix was leaving with `transition-primitives`' withdrawn live tier); closes the D51 permission bypass normatively. Proposes **L1–L6**, the standing admission rule for the live surface |
-| `engine-request-contract.md` | implementing | — | claims **run schema 0.15** + **migration 20** (stamp-only) — **no longer contingent**: cross-review ruled 2026-08-15 to keep the `offWindow` marker, decisively because dropping it would leave the record silently omitting the played move at an unknown rate, i.e. the RFC would violate its own *record* obligation to save an integer. **No pack-schema claim: 0.23 stays free** (a band range is a deployment capability, not a document fact, so the bound lives in `/capabilities` + a named 422 and the committed `targetElo: 1939` pack stays valid) |
 | `client-surface-floor.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — CSS, one nav element, one marker size, one Playwright spec; lands in any order. Deletes the `62rem` breakpoint rather than retargeting it (it is a *width* breakpoint on a *height*-bound layout). Forward-declares a scope boundary for D63 (`compare-geometry` does **not** exist yet — not a dependency) and asserts `CompareView.svelte` is unmodified |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
@@ -123,7 +122,7 @@ writing it into a draft.
 | 17 | 16→17 | `archive/open-answer-grading.md` | implemented — **stamp-only, no table** (transcripts are run events; run deletion is the retention story); run schema 0.11→**0.12** (`reasoning.recorded` event). Reconciled behind onramp-guard per the pinned wave order |
 | 18 | 17→18 | `archive/grounding-pair.md` | implemented — stamp-only: run schema 0.12→**0.13** (`RunOpponentMode`/`PolicyModeApplied` gain `perfect_tablebase`; no new event type, no data rewrite) |
 | 19 | 18→19 | `archive/resistance-spectrum.md` | implemented — stamp-only: run schema 0.13→**0.14** (`practical_resistance` applied-record widenings, `eloHonored`/`eloApplied`). No data rewrite; historical group-journal rows compare equal |
-| 20 | 19→20 | `engine-request-contract.md` | implementing — stamp-only: run schema 0.14→**0.15** (`SelectionCandidate.offWindow`); D60's narrowing mechanism ships but D60 remains open pending R10 |
+| 20 | 19→20 | `archive/engine-request-contract.md` | implemented — stamp-only: run schema 0.14→**0.15** (`SelectionCandidate.offWindow`); D60's narrowing mechanism ships but D60 remains open pending R10 |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
@@ -219,6 +218,7 @@ before re-attempting this territory.
 | `archive/opening-evidence-path.md` | implemented | `docs/engine-grounding.md`, `docs/content-sourcing.md`, `docs/tablebase-grounding.md`, `docs/drill-pack-format.md` |
 | `archive/branch-set-scale.md` | implemented | `docs/branch-set-scale.md`, `docs/n-way-comparison.md`, `docs/branch-groups.md` |
 | `archive/deviation-classes.md` | implemented | `docs/drill-pack-format.md`, `docs/drill-client.md` |
+| `archive/engine-request-contract.md` | implemented | `docs/engine-workers.md`, `docs/branch-runtime.md`, `workers/maia/README.md` |
 
 ## The archive sketches are quarry, not RFCs
 

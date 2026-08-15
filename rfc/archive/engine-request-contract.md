@@ -1,7 +1,7 @@
 # RFC: The engine request contract — a request must close over its instrument's state
 
-- **Status:** implementing — adversarially cross-reviewed 2026-08-15 (see Changelog); six
-  blockers fixed in place, the register fork closed, owner accepted 2026-08-15
+- **Status:** implemented — adversarially cross-reviewed 2026-08-15 (see Changelog); six
+  blockers fixed in place, owner accepted 2026-08-15, shipped and verified 2026-08-15
 - **Author:** claude (agent), for Marco. Cross-review by a second agent
 - **Created:** 2026-08-15
 - **Design refs:** `design/03-product-breadth.md:145-148` (*"for a group to answer 'which of my
@@ -974,6 +974,14 @@ them already in the ledger, landed by claude on 2026-08-15 while this draft was 
    must be logged as such rather than reported as D60 closed.
 
 ## Changelog
+
+- 2026-08-15: implemented. Run schema 0.15 and migration 20 shipped stamp-only.
+  Both gates passed (591 tests / 96 files; browser 24 passed at zero retries,
+  optional Maia browser case skipped). The pinned Maia acceptance arm completed
+  700/700 calls with zero errors and zero off-window samples; median 173.2 ms,
+  p95 230.5 ms, maximum 481.8 ms. D60 remains open pending R10 as ruled: the
+  narrowing mechanism ships, but this deployment publishes only the engine's
+  `[0, 5000]` option-acceptance range.
 
 - 2026-08-15: created. Gives the four unhomed engine-path defects a home — **`strong_engine` is
   not reproducible** (D35), **The D35 analogue is real on the Maia path: an Elo-less request
