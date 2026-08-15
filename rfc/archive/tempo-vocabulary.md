@@ -1,6 +1,6 @@
 # RFC: Tempo vocabulary — a timing window becomes a measured interval
 
-- **Status:** draft
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/01-training-model.md` §Target mistake classes (`:144-150`) — *"right plan one move too slow"*, *"tension released too early or held too long"*, *"luxury move during a race"*; `design/04-content-architecture.md` §2d (`:228`, "one timing window where the tempo contract bites" per opening root) and §7 (`:309-311`, the three named first cases); `design/04-content-architecture.md` §0a (`:128-135`, the content-transfer audit); `design/03-product-breadth.md` B4 (`:284`, the *structural/temporal* evidence layer); `design/BACKLOG.md` rows **Tempo vocabulary encodes the wrong object (the E3 blocker)**, **B4 is blocked on tempo vocabulary, not on content effort**, **Tempo contract / timing windows (window opens/closes, luxury-move budget)**, **Authored explanation vocabulary**, **Declared-vs-executable vocabulary law**
@@ -274,7 +274,7 @@ Every chess claim in §8 is **quoted from the pack that already ships it** —
 `deviations[].note`. This RFC re-encodes claims the corpus already makes in prose;
 it originates none.
 
-#### 1.6 `outpaced` is computed and never graded
+#### 1.6 `outpaced` grading is context-specific
 
 If the opponent's arrival closes the window before the learner has had as many
 moves as readiness requires, the learner did not fail — the position was faster
@@ -283,10 +283,12 @@ than the plan. `anti-caro-advance`'s own spine contains this case: the
 Grading it would be the "dashboard, not a drill" failure ADR-0005 names.
 
 **Ruling: `outpaced` and `open` MAY drive a checkpoint — telling the learner what
-happened — and MAY NOT drive an objective transition.** The refusal is
-machine-checked (`TEMPO_VERDICT_UNGRADEABLE`, §7.5) and the gradeable set is
-published in `/capabilities` (§6), so the line is a negotiated fact and not a
-convention.
+happened. `open` never drives an objective transition. In an authored pack,
+`outpaced` drives a transition only when that window opts in with
+`gradeOutpaced: true`; omission defaults to ungraded. In an unauthored context,
+the published default is failure.** The authored refusal is machine-checked
+(`TEMPO_VERDICT_UNGRADEABLE`, §7.5) and both the gradeable set and unauthored
+default are published in `/capabilities` (§6).
 
 `unopened` is a third computed-but-ungraded verdict and is stricter still: it is
 **not authorable at all** — neither by a checkpoint nor by a success condition —
@@ -455,6 +457,7 @@ it for free because the field is `$defs/structuralExpression`.
     "tolerated": { "type": "array", "minItems": 1, "maxItems": 8,
       "items": { "$ref": "#/$defs/moveCondition" } },
     "luxuryMoveBudget": { "type": "integer", "minimum": 0, "maximum": 20 },
+    "gradeOutpaced": { "type": "boolean" },
     "note": { "type": "string", "minLength": 1, "maxLength": 400 }
   },
   "additionalProperties": false
@@ -577,7 +580,7 @@ export const TEMPO_VERDICTS: readonly TempoVerdict[];             // all seven
 /** The subset a pack may name at all; the schema's `tempoVerdict` enum binds to this. */
 export const AUTHORABLE_TEMPO_VERDICTS: readonly TempoVerdict[];  // the six minus `unopened` (§2.6)
 /** The subset an objective transition may be driven by. */
-export const TEMPO_GRADEABLE_VERDICTS: readonly TempoVerdict[];   // in_time, over_budget, too_slow, premature
+export const TEMPO_GRADEABLE_VERDICTS: readonly TempoVerdict[];   // in_time, over_budget, too_slow, premature, outpaced
 /** Declared-but-ungradeable, with the reason the loader quotes. */
 export const DECLARED_UNGRADEABLE_VERDICTS: readonly { readonly verdict: TempoVerdict; readonly reason: string }[];
 
@@ -905,9 +908,12 @@ declared window `w`, in declaration order:
 | `active`, `preserved` | `degraded` | verdict(`w`) is `too_slow` | `[tempoEvidenceRef(w, "too_slow")]` |
 | `active`, `preserved` | `degraded` | verdict(`w`) is `premature` | `[tempoEvidenceRef(w, "premature")]` |
 | `active`, `preserved` | `degraded` | verdict(`w`) is `over_budget` | `[tempoEvidenceRef(w, "over_budget")]` |
+| `active`, `preserved` | `degraded` | verdict(`w`) is `outpaced`, **only when `w.gradeOutpaced === true`** | `[tempoEvidenceRef(w, "outpaced")]` |
 | `active`, `degraded` | `preserved` | verdict(`w`) is `in_time` | `[tempoEvidenceRef(w, "in_time")]` |
 
-`outpaced`, `open` and `unopened` produce **no rule** (§1.6).
+`open` and `unopened` produce **no rule**. `outpaced` produces the same degraded
+rules as the other tempo errors only for windows with `gradeOutpaced: true`
+(§1.6).
 
 **When the recovery row can actually fire, stated because it constrains the
 fixture.** A window's verdict is monotone along a path: the §3.2 walk stops at the
@@ -959,7 +965,8 @@ the three verdicts that are computed but may not grade (§1.6), of which two
 
 1. **Capability publication.** `Capabilities` (`apps/server/src/capabilities.ts:57-68`)
    gains two readonly arrays, `tempoVerdicts` (all seven the deployment computes)
-   and `tempoGradeable` (the four that may drive a transition), sourced from
+   and `tempoGradeable` (the five the deployment can drive, with authored
+   `outpaced` still gated per window), plus `tempoDefaults.outpaced = "failed"`, sourced from
    `TEMPO_VERDICTS` / `TEMPO_GRADEABLE_VERDICTS` in the runtime — one writer, as
    `policyModes` is sourced from `RUN_OPPONENT_MODES` (`:15`). `/capabilities`
    therefore states the grading line rather than burying it in a validator.
@@ -967,10 +974,9 @@ the three verdicts that are computed but may not grade (§1.6), of which two
    per verdict, in the exact shape of `DECLARED_UNIMPLEMENTED_POLICY_MODES`
    (`capabilities.ts:17-24`). `pack-validation.ts` refuses a `timing_window`
    success condition naming one of them with `TEMPO_VERDICT_UNGRADEABLE` and
-   quotes the reason — e.g. *"outpaced is computed but never graded: the window
-   closed before the learner had enough moves to complete the plan, so no
-   judgment about the learner is available."* A pack naming it is told exactly
-   that, by name, before anything runs.
+   quotes the reason for `open`, and for `outpaced` when its referenced window
+   did not opt in. A pack is told exactly how to make the authored choice before
+   anything runs.
 3. **An applied record.** Every objective transition a window drives carries
    `tempo:<windowId>.<verdict>` in the persisted `evidenceRefs` of
    `objective.state_changed`, at the node where it applied. The verdict that
@@ -1437,8 +1443,9 @@ this draft's cross-review**:
    sibling, from the same run object. A `preserve_plan_window` pack with no window
    is refused with `PLAN_WINDOW_NEEDS_WINDOW`.
 5. **D8, all three legs.** `/capabilities` returns `tempoVerdicts` (7) and
-   `tempoGradeable` (4); a pack whose success condition names `outpaced` is
-   refused with `TEMPO_VERDICT_UNGRADEABLE` **quoting the published reason
+   `tempoGradeable` (5), plus the unauthored `outpaced: failed` default; a pack
+   whose success condition names `outpaced` without opting in is refused with
+   `TEMPO_VERDICT_UNGRADEABLE` **quoting the published reason
    string**, and so is one naming `open`; and criterion 4's evidence refs are the
    applied record. A test binds the schema's `tempoVerdict` enum to the exported
    `AUTHORABLE_TEMPO_VERDICTS` — the six of `TEMPO_VERDICTS` minus `unopened`,
@@ -1467,16 +1474,7 @@ this draft's cross-review**:
    **Named trigger:** the first consumer of a tempo verdict outside its own run.
    That RFC pays for the run-schema version and the migration; this one must not
    pre-pay for it.
-2. **Is `outpaced` correctly ungraded?** §1.6 rules that a learner who was given
-   fewer moves than the plan required is not judged. The counter-argument is real:
-   in `carlsbad-minority-attack` the learner *chose* the move order that invited
-   `...a5`, and `outpaced` declines to say so. This RFC keeps the judgment in the
-   deviation note where the author already wrote it, because grading a learner for
-   a consequence they had no move to avoid is the ADR-0005 failure. **This is a
-   grading-honesty ruling and the owner may overturn it**; if overturned, the
-   change is one entry moving from `DECLARED_UNGRADEABLE_VERDICTS` to
-   `TEMPO_GRADEABLE_VERDICTS` and one row in §5b, with no schema movement.
-3. **Is `too_slow` honest on a forced-release path?** §3.2 rule 2 now exempts a
+2. **Is `too_slow` honest on a forced-release path?** §3.2 rule 2 now exempts a
    forced closing move from `premature`, so a learner who had one legal move is
    not accused of releasing the tension early. The exempted case falls through to
    `outpaced` or `too_slow`, and `too_slow` is a graded verdict. It is defensible —
@@ -1485,13 +1483,18 @@ this draft's cross-review**:
    question as open question 2 and the owner may want it ungraded too. Raised at
    cross-review, unexercised by any §8 line, and changeable later as one clause in
    the precedence table with no schema movement.
-4. **Does `reasoningKeyPoint.ground` want a fifth kind, `{ kind: "timing", windowId }`?**
+3. **Does `reasoningKeyPoint.ground` want a fifth kind, `{ kind: "timing", windowId }`?**
    §4.1 shows the `claim` ground already carries a tempo claim to the learner, so
    nothing is blocked. A timing ground would attribute the sentence to the window
    itself rather than to the author's prose, which is the more honest attribution.
    Deferred to whichever RFC next opens that union; not blocking.
 
 ## Changelog
+
+- 2026-08-15: reconciled the post-review owner ruling: authored windows opt in
+  to `outpaced` grading, while unauthored contexts publish failure as their
+  default. Automatic unauthored window detection remains explicitly out of
+  scope, so this RFC pins but does not yet consume that default.
 
 - 2026-08-15: created. Drafted against `design/research/authored-transitions-and-features.md`
   (2026-08-15) and authored against `anti-caro-advance`, `carlsbad-minority-attack`

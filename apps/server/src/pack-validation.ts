@@ -9,7 +9,13 @@ import {
   type StructuralExpression,
   type StructuralFeature,
 } from "@chess-tabiya/schema/drill-pack";
-import { createRun, matchesStructuralExpression, transposeKey } from "@chess-tabiya/runtime";
+import {
+  DECLARED_UNGRADEABLE_VERDICTS,
+  TEMPO_GRADEABLE_VERDICTS,
+  createRun,
+  matchesStructuralExpression,
+  transposeKey,
+} from "@chess-tabiya/runtime";
 import { between } from "chessops/attacks";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
@@ -136,7 +142,7 @@ const KEY_POINT_JUDGEMENTS = new Set(["weak", "strong", "good", "bad", "better",
 
 function reasoningCheckpointFen(pack: DrillPackDefinition, checkpoint: DrillPackDefinition["checkpoints"][number]): string | undefined {
   const trigger = checkpoint.trigger;
-  if ("windowOpens" in trigger || (!("atSpineNode" in trigger) && !("atPly" in trigger))) return undefined;
+  if ("atWindow" in trigger || (!("atSpineNode" in trigger) && !("atPly" in trigger))) return undefined;
   const root = Chess.fromSetup(parseFen(pack.start.fen).unwrap()).unwrap();
   const found: string[] = [];
   const visit = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[], position: Chess, ply: number): void => {
@@ -267,6 +273,10 @@ export function objectiveIssues(
     ? pack.legs?.at(-1)?.objective.type
     : objective.type;
 
+  if (objective.type === "preserve_plan_window" && (pack.timingWindows?.length ?? 0) === 0) {
+    issues.push(runtimeIssue("PLAN_WINDOW_NEEDS_WINDOW", "/timingWindows", "preserve_plan_window requires at least one timing window"));
+  }
+
   if (outcomeObjective && grading === undefined) {
     issues.push(runtimeIssue("OBJECTIVE_GRADING_REQUIRED", `${pointerPrefix}/grading`, `${objective.type} objectives require grading`));
   }
@@ -301,6 +311,22 @@ export function objectiveIssues(
       const conditionPointer = `${pointerPrefix}/successConditions/${index}`;
       if (condition.kind === "reach_checkpoint" && !checkpoints.has(condition.checkpointId)) {
         issues.push(runtimeIssue("UNSUPPORTED_OBJECTIVE_CONDITION", conditionPointer, `unknown checkpoint ${condition.checkpointId}`));
+      }
+      if (condition.kind === "timing_window") {
+        const window = pack.timingWindows?.find((candidate) => candidate.id === condition.windowId);
+        if (window === undefined) {
+          issues.push(runtimeIssue("TIMING_WINDOW_UNKNOWN", `${conditionPointer}/windowId`, `unknown timing window ${condition.windowId}`));
+        } else {
+          if (!window.closes.some((close) => close.kind === "deadline")) {
+            issues.push(runtimeIssue("TIMING_WINDOW_NEVER_RESOLVES", conditionPointer, `graded timing window ${window.id} requires a deadline close`));
+          }
+          const gradeable = (TEMPO_GRADEABLE_VERDICTS as readonly string[]).includes(condition.verdict) &&
+            (condition.verdict !== "outpaced" || window.gradeOutpaced === true);
+          if (!gradeable) {
+            const reason = DECLARED_UNGRADEABLE_VERDICTS.find((entry) => entry.verdict === condition.verdict)?.reason ?? `${condition.verdict} is not gradeable`;
+            issues.push(runtimeIssue("TEMPO_VERDICT_UNGRADEABLE", `${conditionPointer}/verdict`, reason));
+          }
+        }
       }
       const to = condition.to ?? "achieved";
       if (theoryObjective && ["achieved", "failed", "transitioned"].includes(to)) {
@@ -384,6 +410,41 @@ function runtimeIssues(
   const spineIds = new Set<string>();
   const collectSpine = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[]): void => { for (const node of nodes) { spineIds.add(node.id); collectSpine(node.children); } };
   collectSpine(pack.spine ?? []);
+  const windowIds = new Set<string>();
+  const moveConditionKey = (condition: import("@chess-tabiya/schema/drill-pack").MoveCondition): string =>
+    "moveUci" in condition
+      ? `move:${condition.moveUci}`
+      : `piece:${condition.piece.color}:${condition.piece.role}:${condition.to ?? "*"}`;
+  for (const [index, window] of (pack.timingWindows ?? []).entries()) {
+    const path = `/timingWindows/${index}`;
+    if (windowIds.has(window.id)) issues.push(runtimeIssue("TIMING_WINDOW_DUPLICATE_ID", `${path}/id`, `duplicate timing window id ${window.id}`));
+    windowIds.add(window.id);
+    if ("onTrigger" in window.opens && "atSpineNode" in window.opens.onTrigger && !spineIds.has(window.opens.onTrigger.atSpineNode)) {
+      issues.push(runtimeIssue("UNKNOWN_SPINE_NODE", `${path}/opens/onTrigger/atSpineNode`, `unknown spine node ${window.opens.onTrigger.atSpineNode}`));
+    }
+    if ("onMove" in window.opens) {
+      const openings = new Set(window.opens.onMove.map(moveConditionKey));
+      for (const [closeIndex, close] of window.closes.entries()) {
+        if ((close.kind === "arrival" || close.kind === "release") && openings.has(moveConditionKey(close.move))) {
+          issues.push(runtimeIssue("TIMING_WINDOW_OPEN_IS_CLOSE", `${path}/closes/${closeIndex}/move`, "a move condition cannot both open and close a timing window"));
+        }
+      }
+    }
+    const readiness = new Set(window.readiness.of.map(moveConditionKey));
+    for (const [toleratedIndex, tolerated] of (window.tolerated ?? []).entries()) {
+      if (readiness.has(moveConditionKey(tolerated))) issues.push(runtimeIssue("TIMING_WINDOW_TOLERATES_READINESS", `${path}/tolerated/${toleratedIndex}`, "a move condition cannot be both readiness and tolerated"));
+    }
+    const smallestDeadline = Math.min(...window.closes.flatMap((close) => close.kind === "deadline" ? [close.afterLearnerMoves] : []));
+    const learnerPieceItems = window.readiness.of.filter((condition) => "piece" in condition && condition.piece.color === pack.start.side).length;
+    if (window.readiness.mode === "all" && Number.isFinite(smallestDeadline) && learnerPieceItems > smallestDeadline) {
+      issues.push(runtimeIssue("TIMING_WINDOW_READINESS_UNREACHABLE", `${path}/readiness/of`, `${learnerPieceItems} learner readiness moves cannot fit before deadline ${smallestDeadline}`));
+    }
+  }
+  for (const [index, checkpoint] of pack.checkpoints.entries()) {
+    if ("atWindow" in checkpoint.trigger && !windowIds.has(checkpoint.trigger.atWindow.windowId)) {
+      issues.push(runtimeIssue("TIMING_WINDOW_UNKNOWN", `/checkpoints/${index}/trigger/atWindow/windowId`, `unknown timing window ${checkpoint.trigger.atWindow.windowId}`));
+    }
+  }
   if (pack.variantOf !== undefined) {
     const path = "/variantOf";
     if (pack.variantOf.packId === pack.id) {
@@ -417,9 +478,9 @@ function runtimeIssues(
     if (pack.feedbackPolicy === "segment_end") {
       const trigger = checkpoint.trigger;
       const proven = !(
-        "windowOpens" in trigger || (!("atPly" in trigger) && !("atSpineNode" in trigger))
+        "atWindow" in trigger || (!("atPly" in trigger) && !("atSpineNode" in trigger))
       ) && pack.checkpoints.some((earlier) => {
-        if (earlier === checkpoint || "windowOpens" in earlier.trigger) return false;
+        if (earlier === checkpoint || "atWindow" in earlier.trigger) return false;
         if ("atPly" in trigger && "atPly" in earlier.trigger) return earlier.trigger.atPly < trigger.atPly;
         if ("atSpineNode" in trigger && "atSpineNode" in earlier.trigger) {
           const target = trigger.atSpineNode;
@@ -557,8 +618,8 @@ function runtimeIssues(
         if (seenEntries.has(leg.entryCheckpointId)) issues.push(runtimeIssue("TRAJECTORY_LEG_ENTRY_REUSED", `/legs/${index}/entryCheckpointId`, `entry checkpoint ${leg.entryCheckpointId} is reused`));
         seenEntries.add(leg.entryCheckpointId);
         const checkpoint = pack.checkpoints.find((candidate) => candidate.id === leg.entryCheckpointId);
-        if (checkpoint !== undefined && "windowOpens" in checkpoint.trigger) issues.push(runtimeIssue("TRAJECTORY_LEG_ENTRY_NOT_SIMPLE", `/legs/${index}/entryCheckpointId`, "timing windows cannot open a trajectory leg"));
-        if (checkpoint !== undefined && !("windowOpens" in checkpoint.trigger) && "atStart" in checkpoint.trigger) issues.push(runtimeIssue("START_TRIGGER_NOT_FIRST_LEG", `/legs/${index}/entryCheckpointId`, "atStart cannot enter a later trajectory leg"));
+        if (checkpoint !== undefined && "atWindow" in checkpoint.trigger) issues.push(runtimeIssue("TRAJECTORY_LEG_ENTRY_NOT_SIMPLE", `/legs/${index}/entryCheckpointId`, "timing windows cannot open a trajectory leg"));
+        if (checkpoint !== undefined && !("atWindow" in checkpoint.trigger) && "atStart" in checkpoint.trigger) issues.push(runtimeIssue("START_TRIGGER_NOT_FIRST_LEG", `/legs/${index}/entryCheckpointId`, "atStart cannot enter a later trajectory leg"));
       }
       if (leg.objective.type === "run_trajectory") issues.push(runtimeIssue("TRAJECTORY_NESTED_UNSUPPORTED", `/legs/${index}/objective/type`, "a trajectory leg cannot contain another trajectory"));
       if (leg.objective.type === "follow_theory") theoryCount += 1;
@@ -583,7 +644,7 @@ function runtimeIssues(
     for (const [index, leg] of legs.entries()) {
       const checkpoint = pack.checkpoints.find((candidate) => candidate.id === leg.entryCheckpointId);
       const trigger = checkpoint?.trigger;
-      if (trigger !== undefined && !("windowOpens" in trigger) && "atPly" in trigger) {
+      if (trigger !== undefined && !("atWindow" in trigger) && "atPly" in trigger) {
         if (plyEntries.has(trigger.atPly)) issues.push(runtimeIssue("TRAJECTORY_LEG_ENTRIES_COINCIDE", `/legs/${index}/entryCheckpointId`, `another leg also enters at ply ${trigger.atPly}`));
         plyEntries.set(trigger.atPly, index);
       }
@@ -617,7 +678,7 @@ function runtimeIssues(
   const boundary = pack.authoredBoundary;
   const boundaryCheckpoints = pack.checkpoints.filter(
     (checkpoint) =>
-      !("windowOpens" in checkpoint.trigger) &&
+      !("atWindow" in checkpoint.trigger) &&
       "atAuthoredBoundary" in checkpoint.trigger,
   );
   if (topLevelTheoryObjective && mode !== "line") {
@@ -691,10 +752,6 @@ function runtimeIssues(
     });
     for (const [index, checkpoint] of pack.checkpoints.entries()) {
       const trigger = checkpoint.trigger;
-      if ("windowOpens" in trigger && ("atStart" in trigger.windowOpens || "atStart" in trigger.windowCloses)) {
-        issues.push(runtimeIssue("START_TRIGGER_IN_WINDOW", `/checkpoints/${index}/trigger`, "atStart cannot open or close a timing window"));
-        continue;
-      }
       if ("atPly" in trigger && trigger.atPly === 0) {
         issues.push(
           runtimeIssue(

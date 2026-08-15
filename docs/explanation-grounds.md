@@ -244,8 +244,8 @@ This implementation improves comparison using shipped data, but it does not
 complete breadth gate B4. The following remain content-era work:
 
 - authored strategic claims and their triggers;
-- the “right plan, wrong timing” or spare-tempo contract;
-- timing-window explanation semantics;
+- authored content adopting the shipped timing-window contract broadly enough to
+  exercise its remaining chess cases;
 - per-assertion grounding for authored strategic claims (Outcome Drill root
   assessment and rules-derived result grading now ship separately);
 - durable corpus, Syzygy, and non-Stockfish evaluation evidence sources (ephemeral,
@@ -258,6 +258,13 @@ complete breadth gate B4. The following remain content-era work:
 Those contracts require a real authored pack to supply examples and failure
 cases. They must not be inferred from the schema fixture or added as generic
 vocabulary ahead of content.
+
+Tempo objectives add a `tempo:` evidence family. The reference identifies the authored
+window and computed verdict; when revealed pack metadata is available the client names
+the authored label and declared budget, while older or pre-metadata clients say only
+that a declared timing-window result was recorded. The persisted reference records the
+verdict that actually changed objective state; it does not claim the runtime inferred a
+strategic lesson.
 
 Line Drill now adds one closed evidence fact,
 `theory:off-objective-deviation`, rendered as the author's explicit

@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.16; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.17; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -39,9 +39,18 @@ signals. Branch length targets now accept 2–40 plies; Plan Drill values above 
 warning. Syzygy root declarations admit determinate `cursed-win` and `blessed-loss`
 categories under objective-specific admission rules, and `rules_fact: draw` is executable.
 
+Version 0.17 replaces the inert checkpoint-local timing pair with top-level timing
+windows. A window declares an opening commitment, ordered closes, a move-set readiness
+condition, tolerated moves, and a luxury-move budget. Checkpoints consume the derived
+ledger through `atWindow`; objectives consume it through `timing_window` conditions.
+The seven runtime verdicts are `unopened`, `open`, `in_time`, `over_budget`, `too_slow`,
+`outpaced`, and `premature`. Authored `outpaced` grading is opt-in per window; unauthored
+contexts publish failure as their default, though automatic window detection is not part
+of this format.
+
 `schemas/drill_pack.example.json` is the living Najdorf schema fixture. The
 fixture and schema under `archive/brief-v2/` remain frozen v0.1 inputs and are
-tested only against each other. The v0.1 fixture intentionally fails v0.16 because
+tested only against each other. The v0.1 fixture intentionally fails v0.17 because
 it has no required `feedbackPolicy` and uses superseded fields.
 
 ## Implemented v0.5 shape
@@ -57,8 +66,9 @@ it has no required `feedbackPolicy` and uses superseded fields.
   IDs. Prediction carries an optional board flip and records policy mass without a
   verdict. Stated reasoning names grounded key points and their literal match phrases.
 - The frozen simple trigger vocabulary is `atPly`, `atSpineNode`, `fenPredicate`,
-  `atStart`, and `materialBalance`. A timing window contains `windowOpens`, `windowCloses`,
-  and a non-negative `luxuryMoveBudget`; each boundary uses a simple trigger.
+  `atStart`, and `materialBalance`. `atWindow` is the separate checkpoint form for a
+  declared window verdict or live spend threshold; keeping it out of simple triggers
+  prevents windows from recursively opening on other windows.
 - `authoredBoundary` contains at least one of spine-node IDs, a non-negative ply
   horizon, or FEN predicates.
 - `deviations` replaces `acceptedAlternatives`. Every entry identifies a spine
@@ -72,7 +82,7 @@ it has no required `feedbackPolicy` and uses superseded fields.
 - `objective` is closed. Outcome objectives (`win`, `hold`, `save`, and
   `resist`) require `grading`: an authored or Syzygy-declared root assessment
   plus a checkpoint or terminal resolution. `successConditions` is a closed
-  union of checkpoint, outcome, material-balance, and rules-fact conditions;
+  union of checkpoint, outcome, material-balance, rules-fact, structural, and timing-window conditions;
   conditions may declare their target state and applicable non-terminal source
   states.
 

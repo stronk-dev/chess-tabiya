@@ -8,7 +8,7 @@ All register lanes are reconciled in `rfc/README.md` and cannot collide.
 `ENGINES_REQUIRED=1 make verify` exit 0, ledger flips correctly inside the
 implementing commits.
 
-## 1. `rfc/tempo-vocabulary.md` — READY
+## 1. `rfc/archive/tempo-vocabulary.md` — IMPLEMENTED
 
 Pack **0.17**. Unblocks the E3 and B4 gates. A timing window becomes a ledger
 kept between two events; computes the three tempo mistake classes named in

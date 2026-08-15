@@ -51,7 +51,7 @@ export function distillRun(run: DrillRun, source: PackRecord | undefined, input:
     const checkpoint = sourceCheckpoints.find((candidate) => candidate.id === event.data.checkpointId);
     if (checkpoint === undefined) continue;
     const trigger = checkpoint.trigger as unknown as Record<string, unknown>;
-    if ("atAuthoredBoundary" in trigger || "windowCloses" in trigger) {
+    if ("atAuthoredBoundary" in trigger || "atWindow" in trigger) {
       dropped.push(`${checkpoint.id}: authored-boundary timing cannot be remapped`);
       continue;
     }

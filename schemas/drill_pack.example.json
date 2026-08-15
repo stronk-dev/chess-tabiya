@@ -1,6 +1,6 @@
 {
   "id": "najdorf-transition-schema-example",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "title": "Najdorf: choose a setup and cross the theory boundary",
   "mode": "trajectory",
   "phase": "cross_phase",
@@ -94,11 +94,25 @@
       "id": "timing-window",
       "label": "Critical race resolved",
       "trigger": {
-        "windowOpens": { "atSpineNode": "najdorf-f3" },
-        "windowCloses": { "atSpineNode": "najdorf-b5" },
-        "luxuryMoveBudget": 1
+        "atWindow": { "windowId": "najdorf-race", "verdict": "in_time" }
       },
       "actions": ["compare_branches"]
+    }
+  ],
+  "timingWindows": [
+    {
+      "id": "najdorf-race",
+      "label": "Be ready when ...b5 lands",
+      "opens": { "onTrigger": { "atSpineNode": "najdorf-f3" } },
+      "closes": [
+        { "kind": "arrival", "move": { "moveUci": "b7b5" } },
+        { "kind": "deadline", "afterLearnerMoves": 2 }
+      ],
+      "readiness": {
+        "mode": "all",
+        "of": [{ "moveUci": "b7b5" }]
+      },
+      "luxuryMoveBudget": 1
     }
   ],
   "opponentPolicy": {

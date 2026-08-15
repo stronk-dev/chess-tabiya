@@ -1,0 +1,19 @@
+{
+  "id": "window-open-is-close",
+  "version": "0.1.0",
+  "title": "Timing window opens and closes on one move",
+  "mode": "plan",
+  "start": { "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1", "side": "white" },
+  "objective": { "type": "preserve_plan_window", "summary": "Keep the plan window." },
+  "checkpoints": [{ "id": "done", "trigger": { "atPly": 1 } }],
+  "timingWindows": [{
+    "id": "race",
+    "opens": { "onMove": [{ "moveUci": "e2e3" }] },
+    "closes": [{ "kind": "release", "move": { "moveUci": "e2e3" } }],
+    "readiness": { "mode": "any", "of": [{ "moveUci": "e2e3" }] },
+    "luxuryMoveBudget": 0
+  }],
+  "opponentPolicy": { "mode": "strong_engine", "seedMode": "per_run" },
+  "feedbackPolicy": "segment_end",
+  "provenance": { "reviewStatus": "schema_example" }
+}

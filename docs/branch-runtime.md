@@ -30,6 +30,13 @@ state, and the cursor can be rebuilt from it. Event `seq` values start at 1 and
 must remain contiguous; incremental readers ask for events whose sequence is
 greater than a supplied cursor.
 
+Shape firings, line membership, trajectory spans, and timing-window states are
+derived projections rather than events. A timing window walks only the root-to-node
+path, so rewinding above a close and choosing another branch recomputes counters and
+verdict from that sibling's moves; abandoned sibling spend cannot leak into it. Closed
+verdicts persist only when they drive the existing `objective.state_changed` event,
+through a `tempo:<window>.<verdict>` evidence reference.
+
 ### Nodes are path-keyed
 
 Every committed move creates a new node, even when its position transposes to one

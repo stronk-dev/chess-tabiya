@@ -44,6 +44,20 @@ export { voiceCheck, BANNED_JUDGEMENTS, PRESCRIPTIVE_VERBS, CHESS_LEXICON, type 
 export { matchKeyPoints, normalizeReasoningText } from "./reasoning.js";
 export { terminalOutcome } from "./outcome.js";
 export {
+  AUTHORABLE_TEMPO_VERDICTS,
+  DECLARED_UNGRADEABLE_VERDICTS,
+  TEMPO_GRADEABLE_VERDICTS,
+  TEMPO_VERDICTS,
+  UNAUTHORED_TEMPO_DEFAULTS,
+  tempoMovesFromRun,
+  unauthoredTempoTransition,
+  windowStates,
+  type TempoMove,
+  type TempoVerdict,
+  type TimingWindowState,
+  type TriggerResolver,
+} from "./tempo.js";
+export {
   STRUCTURAL_FEATURE_KINDS,
   matchesStructuralExpression,
   matchesStructuralFeature,
@@ -102,6 +116,7 @@ export {
   packAbsentEvidenceRef,
   rulesEvidenceRef,
   theoryEvidenceRef,
+  tempoEvidenceRef,
   type EngineEvidenceRef,
   type PackEvidenceRef,
   type PackAbsentEvidenceRef,
@@ -109,6 +124,7 @@ export {
   type RulesEvidenceRef,
   type TheoryEvidenceFact,
   type TheoryEvidenceRef,
+  type TempoEvidenceRef,
 } from "./evidence-ref.js";
 export {
   MATERIAL_VALUES,

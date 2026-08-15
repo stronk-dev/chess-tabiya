@@ -54,5 +54,10 @@ export {
   type StructuralFeatureKind,
   type SquareRegion,
   type SquareTemplateFeature,
-  type TimingWindowTrigger,
+  type TimingWindowDefinition,
+  type WindowTrigger,
+  type WindowOpening,
+  type WindowClosing,
+  type MoveCondition,
+  type TempoVerdict,
 } from "./types.js";

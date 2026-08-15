@@ -131,6 +131,15 @@ of the position. At a terminal node, the rules-derived result and objective grad
 remain separate. Adding this context can change the board's layout, so the board
 redraws after reactive layout settles rather than retaining stale pointer bounds.
 
+## Tempo objectives
+
+`preserve_plan_window` now has type-specific, non-terminal grading. For each declared
+window, `too_slow`, `premature`, and `over_budget` move `active` or `preserved` to
+`degraded`; `in_time` moves `active` or `degraded` to `preserved`. An authored window
+may additionally opt `outpaced` into degradation. The defaults deliberately use
+`degraded`, never terminal `failed`, because the learner must be able to rewind and
+retry. Every applied transition carries its `tempo:` evidence reference.
+
 ## Current limits
 
 - Authored endgame drafts, including the B+N trajectory root, have ledger-verified

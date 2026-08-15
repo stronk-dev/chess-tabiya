@@ -37,6 +37,7 @@ export const THEORY_EVIDENCE_FACTS = Object.freeze([
 export type TheoryEvidenceFact = (typeof THEORY_EVIDENCE_FACTS)[number];
 export type TheoryEvidenceRef = `theory:${TheoryEvidenceFact}`;
 export type EngineEvidenceRef = `engine:${string}`;
+export type TempoEvidenceRef = `tempo:${string}`;
 
 function evidenceId(value: string, label: string): string {
   const normalized = value.trim();
@@ -65,6 +66,10 @@ export function packAbsentEvidenceRef(checkpointId: string): PackAbsentEvidenceR
 
 export function theoryEvidenceRef(fact: TheoryEvidenceFact): TheoryEvidenceRef {
   return `theory:${fact}`;
+}
+
+export function tempoEvidenceRef(windowId: string, verdict: string): TempoEvidenceRef {
+  return `tempo:${evidenceId(windowId, "Window id")}.${evidenceId(verdict.replaceAll("_", "-"), "Tempo verdict")}`;
 }
 
 export function engineEvidenceRef(jobId: string): EngineEvidenceRef {

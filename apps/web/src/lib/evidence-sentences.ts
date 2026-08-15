@@ -5,6 +5,7 @@ import {
   packEvidenceRef,
   packAbsentEvidenceRef,
   rulesEvidenceRef,
+  tempoEvidenceRef,
   type EvidencePayload,
   type RulesEvidenceFact,
   type TheoryEvidenceFact,
@@ -92,6 +93,20 @@ export function evidenceSentenceTable(
       sourceLabel: "Pack",
     }));
   }
+  for (const window of pack.timingWindows ?? []) {
+    const label = window.label ?? window.id;
+    const sentences = {
+      in_time: `Timing window "${label}": the plan was complete before the window closed, within the declared budget of ${window.luxuryMoveBudget} luxury ${window.luxuryMoveBudget === 1 ? "move" : "moves"}.`,
+      over_budget: `Timing window "${label}": the plan was complete, but the declared luxury-move budget was exceeded.`,
+      too_slow: `Timing window "${label}": the window closed before the authored readiness set was complete.`,
+      premature: `Timing window "${label}": the authored release move arrived before the readiness set was complete.`,
+      outpaced: `Timing window "${label}": the window closed before enough learner moves were available for the authored readiness set.`,
+    } as const;
+    for (const [verdict, text] of Object.entries(sentences)) {
+      const reference = tempoEvidenceRef(window.id, verdict);
+      table.set(reference, Object.freeze({ reference, text, sourceLabel: "Pack" }));
+    }
+  }
   return table;
 }
 
@@ -133,6 +148,14 @@ export function renderEvidenceRef(
       sourceLabel:
         payload.source === "engine_validated" ? "Engine" : "Human model",
       payload,
+    });
+  }
+
+  if (reference.startsWith("tempo:")) {
+    return Object.freeze({
+      reference,
+      text: "A declared timing-window result was recorded.",
+      sourceLabel: "Pack",
     });
   }
 

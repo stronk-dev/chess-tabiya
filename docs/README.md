@@ -12,7 +12,7 @@ Implemented foundation:
 - `branch-groups.md` — durable candidate sets over ordinary branches, four seed
   sources, controlled-resistance reply journals, sequential/lockstep play,
   semantic zoom, evidence recovery, comparison, and export.
-- `drill-pack-format.md` — living v0.16 schema, semantic authoring lint, canonical
+- `drill-pack-format.md` — living v0.17 schema, semantic authoring lint, canonical
   digest and URL tooling, executable checkpoint-action validation, pack/run PGN
   round-trip, and deferred content boundary.
 - `engine-workers.md` — UCI supervision, Dockerized Maia and policy exposure,

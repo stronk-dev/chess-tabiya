@@ -72,13 +72,55 @@ export type SimpleTrigger =
   | { readonly fenPredicate: Readonly<Record<string, unknown>> }
   | { readonly materialBalance: Readonly<Record<string, unknown>> };
 
-export interface TimingWindowTrigger {
-  readonly windowOpens: SimpleTrigger;
-  readonly windowCloses: SimpleTrigger;
+export type TempoVerdict =
+  | "open"
+  | "in_time"
+  | "over_budget"
+  | "too_slow"
+  | "outpaced"
+  | "premature";
+
+export type MoveCondition =
+  | { readonly moveUci: string }
+  | {
+      readonly piece: { readonly color: Color; readonly role: Role };
+      readonly to?: SquareName;
+    };
+
+export type WindowOpening =
+  | { readonly fromStart: true }
+  | { readonly onMove: readonly MoveCondition[] }
+  | { readonly onTrigger: SimpleTrigger };
+
+export type WindowClosing =
+  | { readonly kind: "arrival"; readonly move: MoveCondition }
+  | { readonly kind: "release"; readonly move: MoveCondition }
+  | { readonly kind: "position"; readonly feature: StructuralExpression }
+  | { readonly kind: "deadline"; readonly afterLearnerMoves: number };
+
+export interface TimingWindowDefinition {
+  readonly id: string;
+  readonly label?: string;
+  readonly opens: WindowOpening;
+  readonly closes: readonly WindowClosing[];
+  readonly readiness: {
+    readonly mode: "all" | "any";
+    readonly of: readonly MoveCondition[];
+  };
+  readonly tolerated?: readonly MoveCondition[];
   readonly luxuryMoveBudget: number;
+  /** Authored contexts opt in; absence is deliberately ungraded. */
+  readonly gradeOutpaced?: boolean;
+  readonly note?: string;
 }
 
-export type CheckpointTrigger = SimpleTrigger | TimingWindowTrigger;
+export type WindowTrigger = {
+  readonly atWindow:
+    | { readonly windowId: string; readonly verdict: TempoVerdict }
+    | { readonly windowId: string; readonly spendAtLeast: number };
+};
+
+export type CheckpointTrigger = SimpleTrigger | WindowTrigger;
 
 export type CheckpointInteraction =
   | {
@@ -136,6 +178,7 @@ export interface DrillPackDefinition {
     readonly [key: string]: unknown;
   };
   readonly checkpoints: readonly CheckpointDefinition[];
+  readonly timingWindows?: readonly TimingWindowDefinition[];
   readonly guard?: {
     readonly evalSwingCp?: number | null;
     readonly fireOnMate?: boolean;
@@ -238,6 +281,11 @@ export type SuccessCondition =
   | (SuccessConditionBase & {
       readonly kind: "structural_feature";
       readonly feature: StructuralExpression;
+    })
+  | (SuccessConditionBase & {
+      readonly kind: "timing_window";
+      readonly windowId: string;
+      readonly verdict: TempoVerdict;
     });
 import type { Color, FileName, Role, SquareName } from "chessops/types";
 

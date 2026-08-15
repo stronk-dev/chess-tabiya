@@ -7,14 +7,12 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `tempo-vocabulary.md` | draft — **cross-reviewed, READY** | — | pack **0.17**. Additive plus one narrowing (`$defs/timingWindow` leaves the checkpoint-trigger union), blast radius measured at 0 across 264 content files. Unblocks E3 and B4 |
 | `predicate-wave-3.md` | draft — reviewed, **owner items closed** | — | pack **0.18** + shape-entry **0.2→0.3** (duplicated `$defs`). `piece_distance` absorbed by owner ruling 2026-08-15 |
 | `resistance-spectrum.md` | draft — **cross-reviewed, READY** | — | run **0.14**, migration **19**. `practical_resistance`; `fallible` proved not to be a mode |
 | `opening-evidence-path.md` | draft — **cross-reviewed, READY** | — | pack **0.20**. `assessedBy` gains `kind: "engine"`. Closes the opening half of the evidence hole |
 | `deviation-classes.md` | draft — reviewed, **1 owner question open** | — | pack **0.21**. Adds `mistake` + `cost`; does NOT split the `class` enum |
 | `branch-set-scale.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — pack stays 0.16, run 0.13, no migration, no new event, no new `BranchComparison` field. One writer-free read route + a versioned browser preference. Implements the 2026-08-15 branch ruling: collapse decided branches, bound the eval work, manual fold |
 | `resistance-spectrum.md` | draft (awaiting cross-review) | — | claims **run schema 0.14** and **migration 19** (rebased by claude from 0.15/20 after the 0.14 holder was cancelled). No pack-schema claim: `practical_resistance` is already in the enum, so this is a partition move. Ownership pins: `practical-difficulty.ts` (new), the `eloHonored` seam |
-| `tempo-vocabulary.md` | cross-reviewed, ready | — | claims **pack schema 0.17** — additive PLUS one narrowing (`$defs/timingWindow` leaves the checkpoint-trigger union); blast radius measured at 0 occurrences across all 264 JSON files under `content/`. No migration, no run-schema change, shape-entry stays 0.2. Implements `preserve_plan_window`; computes all three tempo mistake classes |
 | `predicate-wave-3.md` | draft (awaiting cross-review) | — | claims **pack schema 0.18** (additive) **and shape-entry schema 0.2 → 0.3** — the shape schema carries a DUPLICATED `$defs/structuralFeature` (`shape_entry.schema.json:47-75`), so new leaves must land in both copies or shape triggers silently cannot use them. No migration, no run-schema change |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
@@ -63,7 +61,7 @@ landing order, not lost data.
 | 0.14 | `archive/onramp-guard.md` | implemented — additive: `feedbackPolicy` enum gains `immediate_guard`; optional top-level `guard` tuning block |
 | 0.15 | `archive/open-answer-grading.md` | implemented — additive: checkpoint `interaction` union gains `stated_reasoning` with grounded key points (closed four-kind union); reconciled behind 0.14 |
 | 0.16 | `archive/authoring-frictions.md` | implemented — additive/widening only: `deviationLocation` gains `{atStart}`, `simpleTrigger` gains `atStart`, new `variantOf` (three directional relations), `branchLengthTarget` max 20→40, guard gains `fireOnMate`/`rulesTier`/`window`/`overrides`, `rules_fact` enum gains `draw`, tablebase category enum widens to five determinate values. All committed content remains valid; no content digest moved |
-| 0.17 | `tempo-vocabulary.md` | claimed 2026-08-15 — a timing window becomes a **ledger kept between two events**, not a pair of point triggers: `opens` is a commitment, `closes` an ordered array, `readiness` a move SET that may name OPPONENT moves. Seven verdicts, three of which are the tempo mistake classes named in `01-training-model.md:146-149`. Additive plus one narrowing, measured at 0 content occurrences |
+| 0.17 | `archive/tempo-vocabulary.md` | implemented — a timing window is a branch-local ledger: commitment opening, ordered closes, move-set readiness/tolerance, luxury spend, seven verdicts, authored `outpaced` control, and `tempo:` applied evidence. Additive plus removal of the unused checkpoint-local point-pair form; no committed content digest moved |
 | 0.18 | `predicate-wave-3.md` | claimed 2026-08-15 — additive: `plan_consequence` success-condition kind, `king_zone`, `king_distance`, `piece_count`, `pack.shapes` relation `present`/`prospective`. Ships `pawn_count` and `piece_reach_count scope:"every"` as deprecation WARNINGS (schema removal deferred to wave 4 because `registered_shapes` rows are immutable) |
 | 0.20 | `opening-evidence-path.md` | claimed 2026-08-15 — additive: `$defs/objectiveGrading.assessedBy` gains a third `oneOf` member `kind: "engine"`. Retires `VERIFY_ASSESSMENT_NOT_SYZYGY`; narrows `OBJECTIVE_GRADING_UNSUPPORTED` to legs |
 | 0.21 | `deviation-classes.md` | claimed 2026-08-15 — additive: `mistake` (`plan\|timing\|tactical`) and `cost` on `$defs/deviation`, `moveUci` on `guard.overrides[]`. Ships `cost` author-declared and UNBACKED per the 2026-08-15 coordinator ruling |
@@ -217,6 +215,7 @@ before re-attempting this territory.
 | `archive/grounding-pair.md` | implemented | `docs/tablebase-grounding.md`, `docs/content-sourcing.md`, `docs/engine-workers.md`, `docs/outcome-drill-grading.md` |
 | `archive/authoring-frictions.md` | implemented | `docs/drill-pack-format.md`, `docs/tablebase-grounding.md`, `docs/content-sourcing.md`, `docs/outcome-drill-grading.md`, `docs/branch-runtime.md`, `docs/development.md` |
 | `archive/validator-integrity.md` | implemented | `docs/drill-pack-format.md`, `docs/trajectory-drill.md`, `docs/outcome-drill-grading.md` |
+| `archive/tempo-vocabulary.md` | implemented | `docs/drill-pack-format.md`, `docs/drill-client.md`, `docs/branch-runtime.md`, `docs/explanation-grounds.md`, `docs/outcome-drill-grading.md`, `docs/structural-reading.md` |
 
 ## The archive sketches are quarry, not RFCs
 

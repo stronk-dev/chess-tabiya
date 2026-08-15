@@ -1,0 +1,12 @@
+{
+  "id": "window-unknown-reference",
+  "version": "0.1.0",
+  "title": "Unknown timing window reference",
+  "mode": "plan",
+  "start": { "fen": "8/8/8/8/8/8/4K3/7k w - - 0 1", "side": "white" },
+  "objective": { "type": "play_until_checkpoint", "summary": "Reach the checkpoint." },
+  "checkpoints": [{ "id": "window", "trigger": { "atWindow": { "windowId": "missing", "verdict": "in_time" } } }],
+  "opponentPolicy": { "mode": "strong_engine", "seedMode": "per_run" },
+  "feedbackPolicy": "segment_end",
+  "provenance": { "reviewStatus": "schema_example" }
+}

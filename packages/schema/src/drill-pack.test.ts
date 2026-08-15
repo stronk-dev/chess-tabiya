@@ -53,13 +53,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.16", () => {
+describe("drill_pack.schema.json v0.17", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.16",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.17",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.16");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.17");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
@@ -176,7 +176,7 @@ describe("drill_pack.schema.json v0.16", () => {
     }
   });
 
-  it("accepts every frozen simple-trigger kind and the timing-window form", () => {
+  it("accepts every frozen simple-trigger kind and the atWindow form", () => {
     const base = livingFixture as DrillPackDefinition;
     const triggerVariants = [
       { atPly: 3 },
@@ -195,11 +195,7 @@ describe("drill_pack.schema.json v0.16", () => {
           value: 0,
         },
       },
-      {
-        windowOpens: { atSpineNode: "najdorf-f3" },
-        windowCloses: { atSpineNode: "najdorf-b5" },
-        luxuryMoveBudget: 1,
-      },
+      { atWindow: { windowId: "najdorf-race", verdict: "in_time" } },
     ];
 
     for (const trigger of triggerVariants) {
@@ -209,6 +205,17 @@ describe("drill_pack.schema.json v0.16", () => {
       };
       expect(validate(candidate), JSON.stringify(validate.errors)).toBe(true);
     }
+    expect(validate({
+      ...base,
+      checkpoints: [{
+        ...base.checkpoints[0],
+        trigger: {
+          windowOpens: { atSpineNode: "najdorf-f3" },
+          windowCloses: { atSpineNode: "najdorf-b5" },
+          luxuryMoveBudget: 1,
+        },
+      }],
+    })).toBe(false);
   });
 
   it("enforces the v0.2 rename, interaction, and on-ramp boundaries", () => {
@@ -453,7 +460,7 @@ describe("drill pack URL forms", () => {
     const pack = livingFixture as DrillPackDefinition;
     const url = formatDrillUrl(pack.id, pack.version, "najdorf-e6");
     expect(url).toBe(
-      "/drill/najdorf-transition-schema-example@0.2.0/najdorf-e6",
+      "/drill/najdorf-transition-schema-example@0.3.0/najdorf-e6",
     );
     expect(parseDrillAddress(url)).toEqual({
       kind: "drill",

@@ -1931,3 +1931,15 @@ depth of coverage at 1400/1600/1800 and, decisively, whether positions Stockfish
 calls level show **skewed** human results. If level positions all return ~50/50
 the oracle adds nothing; if some return 60/40 that skew is the difficulty signal
 everything outside endgames needs.
+
+## 2026-08-15 — tempo vocabulary implementation (codex)
+
+- Pack schema 0.17 replaces the unused point-pair timing trigger with a branch-local
+  move ledger: commitment opening, move-set readiness, tolerated moves, ordered closes,
+  luxury spend, and seven computed verdicts.
+- `preserve_plan_window`, `atWindow`, `timing_window` conditions, `tempo:` evidence,
+  capability publication, and named validation refusals now execute. Authored windows
+  opt `outpaced` into grading; unauthored contexts publish failure as their default.
+- E3 remains partially met only because no authored content has yet adopted the new
+  object. The vocabulary/detector blocker itself is closed; automatic detection remains
+  deliberately out of scope.

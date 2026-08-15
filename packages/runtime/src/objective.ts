@@ -6,6 +6,12 @@ import { RuntimeError, unknownNode } from "./errors.js";
 import { appendEvents } from "./events.js";
 import { assertObjectiveTransition } from "./objective-state.js";
 import { matchesStructuralExpression, type StructuralExpression } from "./structure.js";
+import {
+  tempoMovesFromRun,
+  windowStates,
+  type TempoVerdict,
+} from "./tempo.js";
+import type { TimingWindowDefinition } from "@chess-tabiya/schema/drill-pack";
 import type {
   DrillRun,
   MutationResult,
@@ -70,6 +76,20 @@ export type ObjectivePredicate =
       readonly type: "deviationPlayed";
       readonly fromTransposeKey: string;
       readonly moveUci: string;
+    }
+  | { readonly type: "nodePly"; readonly ply: number }
+  | {
+      readonly type: "outsideAuthoredBoundary";
+      readonly plyHorizon?: number;
+      readonly spineTransposeKeys: readonly string[];
+      readonly fenPredicates: readonly FenPredicate[];
+    }
+  | {
+      readonly type: "timingWindow";
+      readonly window: TimingWindowDefinition;
+      readonly learner: Color;
+      readonly verdict: TempoVerdict;
+      readonly openingTrigger?: ObjectivePredicate;
     }
   | {
       readonly type: "all" | "any";
@@ -251,6 +271,35 @@ export function evaluateObjectivePredicate(
       if (node.moveUci !== predicate.moveUci || node.parentId === null) return false;
       const parent = run.nodes.find((candidate) => candidate.id === node.parentId);
       return parent?.transposeKey === predicate.fromTransposeKey;
+    }
+    case "nodePly":
+      return node.ply === predicate.ply;
+    case "outsideAuthoredBoundary": {
+      if (node.parentId === null) return false;
+      if (predicate.plyHorizon !== undefined && node.ply > predicate.plyHorizon) return true;
+      if (predicate.spineTransposeKeys.includes(node.transposeKey)) return false;
+      return !predicate.fenPredicates.some((fenPredicate) =>
+        matchesFenPredicate(node, fenPredicate),
+      );
+    }
+    case "timingWindow": {
+      const path = tempoMovesFromRun(run, node.id);
+      const state = windowStates(
+        [predicate.window],
+        path,
+        predicate.learner,
+        predicate.openingTrigger === undefined
+          ? undefined
+          : (_trigger, index) => {
+              const pathNodeId = path[index]?.nodeId;
+              if (pathNodeId === undefined) return false;
+              return evaluateObjectivePredicate(
+                { ...run, activeCursor: { ...run.activeCursor, nodeId: pathNodeId } },
+                predicate.openingTrigger!,
+              );
+            },
+      )[0];
+      return state?.verdict === predicate.verdict;
     }
     case "all":
       return predicate.predicates.every((child) => evaluateObjectivePredicate(run, child));

@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.16",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.17",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.16 format for an engine-independent authored drill.",
+  "description": "Living v0.17 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -51,6 +51,12 @@
       "type": "array",
       "minItems": 1,
       "items": { "$ref": "#/$defs/checkpoint" }
+    },
+    "timingWindows": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/timingWindow" }
     },
     "opponentPolicy": { "$ref": "#/$defs/opponentPolicy" },
     "feedbackPolicy": {
@@ -350,6 +356,18 @@
             "from": { "$ref": "#/$defs/conditionBase/properties/from" }
           },
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "windowId", "verdict"],
+          "properties": {
+            "kind": { "const": "timing_window" },
+            "windowId": { "$ref": "#/$defs/id" },
+            "verdict": { "$ref": "#/$defs/tempoVerdict" },
+            "to": { "$ref": "#/$defs/conditionBase/properties/to" },
+            "from": { "$ref": "#/$defs/conditionBase/properties/from" }
+          },
+          "additionalProperties": false
         }
       ]
     },
@@ -566,20 +584,137 @@
         }
       ]
     },
+    "moveCondition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["moveUci"],
+          "properties": { "moveUci": { "$ref": "#/$defs/moveUci" } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["piece"],
+          "properties": {
+            "piece": { "$ref": "#/$defs/piece" },
+            "to": { "$ref": "#/$defs/square" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "windowOpening": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["fromStart"],
+          "properties": { "fromStart": { "const": true } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["onMove"],
+          "properties": {
+            "onMove": { "type": "array", "minItems": 1, "maxItems": 8, "items": { "$ref": "#/$defs/moveCondition" } }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["onTrigger"],
+          "properties": { "onTrigger": { "$ref": "#/$defs/simpleTrigger" } },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "windowClosing": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "move"],
+          "properties": { "kind": { "const": "arrival" }, "move": { "$ref": "#/$defs/moveCondition" } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "move"],
+          "properties": { "kind": { "const": "release" }, "move": { "$ref": "#/$defs/moveCondition" } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "feature"],
+          "properties": { "kind": { "const": "position" }, "feature": { "$ref": "#/$defs/structuralExpression" } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "afterLearnerMoves"],
+          "properties": {
+            "kind": { "const": "deadline" },
+            "afterLearnerMoves": { "type": "integer", "minimum": 1, "maximum": 40 }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
     "timingWindow": {
       "type": "object",
-      "required": ["windowOpens", "windowCloses", "luxuryMoveBudget"],
+      "required": ["id", "opens", "closes", "readiness", "luxuryMoveBudget"],
       "properties": {
-        "windowOpens": { "$ref": "#/$defs/simpleTrigger" },
-        "windowCloses": { "$ref": "#/$defs/simpleTrigger" },
-        "luxuryMoveBudget": { "type": "integer", "minimum": 0 }
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "opens": { "$ref": "#/$defs/windowOpening" },
+        "closes": { "type": "array", "minItems": 1, "maxItems": 4, "items": { "$ref": "#/$defs/windowClosing" } },
+        "readiness": {
+          "type": "object",
+          "required": ["mode", "of"],
+          "properties": {
+            "mode": { "enum": ["all", "any"] },
+            "of": { "type": "array", "minItems": 1, "maxItems": 6, "items": { "$ref": "#/$defs/moveCondition" } }
+          },
+          "additionalProperties": false
+        },
+        "tolerated": { "type": "array", "minItems": 1, "maxItems": 8, "items": { "$ref": "#/$defs/moveCondition" } },
+        "luxuryMoveBudget": { "type": "integer", "minimum": 0, "maximum": 20 },
+        "gradeOutpaced": { "type": "boolean" },
+        "note": { "type": "string", "minLength": 1, "maxLength": 400 }
+      },
+      "additionalProperties": false
+    },
+    "tempoVerdict": {
+      "enum": ["open", "in_time", "over_budget", "too_slow", "outpaced", "premature"]
+    },
+    "windowTrigger": {
+      "type": "object",
+      "required": ["atWindow"],
+      "properties": {
+        "atWindow": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["windowId", "verdict"],
+              "properties": { "windowId": { "$ref": "#/$defs/id" }, "verdict": { "$ref": "#/$defs/tempoVerdict" } },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["windowId", "spendAtLeast"],
+              "properties": {
+                "windowId": { "$ref": "#/$defs/id" },
+                "spendAtLeast": { "type": "integer", "minimum": 1, "maximum": 20 }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
       },
       "additionalProperties": false
     },
     "trigger": {
       "oneOf": [
         { "$ref": "#/$defs/simpleTrigger" },
-        { "$ref": "#/$defs/timingWindow" }
+        { "$ref": "#/$defs/windowTrigger" }
       ]
     },
     "checkpointInteraction": {

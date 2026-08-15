@@ -3,6 +3,7 @@ import type {
   DrillPackDefinition,
   SimpleTrigger,
   SuccessCondition,
+  TimingWindowDefinition,
 } from "@chess-tabiya/schema/drill-pack";
 import {
   evaluateObjective,
@@ -15,6 +16,9 @@ import {
   spinePositionIndex,
   deviationAnchors,
   theoryEvidenceRef,
+  tempoEvidenceRef,
+  tempoMovesFromRun,
+  windowStates,
   legIndexAt,
   reachCheckpoint,
   transitionObjective,
@@ -75,14 +79,44 @@ function simpleTriggerMatches(
   });
 }
 
+function runAtNode(run: DrillRun, nodeId: string): DrillRun {
+  const node = run.nodes.find((candidate) => candidate.id === nodeId);
+  if (node === undefined) return run;
+  return { ...run, activeCursor: { nodeId, branchId: node.branchId } };
+}
+
+function timingState(
+  pack: DrillPackDefinition,
+  run: DrillRun,
+  window: TimingWindowDefinition,
+) {
+  const path = tempoMovesFromRun(run);
+  return windowStates(
+    [window],
+    path,
+    pack.start.side,
+    (trigger, index) => {
+      const nodeId = path[index]?.nodeId;
+      return nodeId !== undefined && simpleTriggerMatches(pack, runAtNode(run, nodeId), trigger);
+    },
+  )[0]!;
+}
+
 export function checkpointMatches(
   pack: DrillPackDefinition,
   run: DrillRun,
   checkpoint: CheckpointDefinition,
 ): boolean {
   const trigger = checkpoint.trigger;
-  if ("windowOpens" in trigger) {
-    return simpleTriggerMatches(pack, run, trigger.windowCloses);
+  if ("atWindow" in trigger) {
+    const window = pack.timingWindows?.find(
+      (candidate) => candidate.id === trigger.atWindow.windowId,
+    );
+    if (window === undefined) return false;
+    const state = timingState(pack, run, window);
+    return "verdict" in trigger.atWindow
+      ? state.verdict === trigger.atWindow.verdict
+      : state.spend >= trigger.atWindow.spendAtLeast;
   }
   return simpleTriggerMatches(pack, run, trigger);
 }
@@ -102,7 +136,64 @@ function reachedOnActivePath(
   );
 }
 
+function compiledOpeningTrigger(
+  pack: DrillPackDefinition,
+  window: TimingWindowDefinition,
+): ObjectivePredicate | undefined {
+  if (!("onTrigger" in window.opens)) return undefined;
+  const trigger = window.opens.onTrigger;
+  if ("atStart" in trigger) return { type: "nodePly", ply: 0 };
+  if ("atPly" in trigger) return { type: "nodePly", ply: trigger.atPly };
+  if ("atSpineNode" in trigger) {
+    const key = deviationAnchors(pack).get(trigger.atSpineNode);
+    if (key === undefined) {
+      throw new PackCompileError(
+        "TIMING_WINDOW_UNKNOWN_REFERENCE",
+        "/timingWindows",
+        `unknown opening spine node ${trigger.atSpineNode}`,
+      );
+    }
+    return { type: "fenPredicate", predicate: { type: "transposeKey", value: key } };
+  }
+  if ("atAuthoredBoundary" in trigger) {
+    const anchors = deviationAnchors(pack);
+    return {
+      type: "outsideAuthoredBoundary",
+      ...(pack.authoredBoundary?.plyHorizon === undefined
+        ? {}
+        : { plyHorizon: pack.authoredBoundary.plyHorizon }),
+      spineTransposeKeys: (pack.authoredBoundary?.spineNodeIds ?? []).flatMap(
+        (id) => anchors.get(id) ?? [],
+      ),
+      fenPredicates: (pack.authoredBoundary?.fenPredicates ?? []) as FenPredicate[],
+    };
+  }
+  if ("fenPredicate" in trigger) {
+    return { type: "fenPredicate", predicate: trigger.fenPredicate as FenPredicate };
+  }
+  return {
+    type: "materialBalance",
+    ...(trigger.materialBalance as Omit<MaterialBalancePredicate, "type">),
+  };
+}
+
+function timingPredicate(
+  pack: DrillPackDefinition,
+  window: TimingWindowDefinition,
+  verdict: import("@chess-tabiya/runtime").TempoVerdict,
+): ObjectivePredicate {
+  const openingTrigger = compiledOpeningTrigger(pack, window);
+  return {
+    type: "timingWindow",
+    window,
+    learner: pack.start.side,
+    verdict,
+    ...(openingTrigger === undefined ? {} : { openingTrigger }),
+  };
+}
+
 function successPredicate(
+  pack: DrillPackDefinition,
   condition: SuccessCondition,
   pointer: string,
 ): ObjectivePredicate {
@@ -135,6 +226,17 @@ function successPredicate(
   if (condition.kind === "structural_feature") {
     return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: condition.feature } };
   }
+  if (condition.kind === "timing_window") {
+    const window = pack.timingWindows?.find((candidate) => candidate.id === condition.windowId);
+    if (window === undefined) {
+      throw new PackCompileError(
+        "TIMING_WINDOW_UNKNOWN_REFERENCE",
+        `${pointer}/windowId`,
+        `unknown timing window ${condition.windowId}`,
+      );
+    }
+    return timingPredicate(pack, window, condition.verdict);
+  }
   const exhaustive: never = condition;
   throw new PackCompileError(
     "SUCCESS_CONDITION_KIND_UNRECOGNISED",
@@ -165,6 +267,9 @@ function conditionEvidenceRefs(
       );
     }
   }
+  if (condition.kind === "timing_window") {
+    return [tempoEvidenceRef(condition.windowId, condition.verdict)];
+  }
   const references = structuralFeatureKinds(condition.feature).map((kind) =>
     rulesEvidenceRef(`structure-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]),
   );
@@ -179,13 +284,14 @@ function conditionEvidenceRefs(
 }
 
 function conditionRules(
+  pack: DrillPackDefinition,
   condition: SuccessCondition,
   index: number,
   outcomeObjective: boolean,
   pointerPrefix: string,
 ): readonly ObjectiveTransitionRule[] {
   const pointer = `${pointerPrefix}/successConditions/${index}`;
-  const predicate = successPredicate(condition, pointer);
+  const predicate = successPredicate(pack, condition, pointer);
   const to = condition.to ?? "achieved";
   const defaults: readonly ObjectiveState[] =
     to === "preserved"
@@ -237,7 +343,7 @@ export function objectiveRules(
     });
     const boundary = pack.checkpoints.find(
       (checkpoint) =>
-        !("windowOpens" in checkpoint.trigger) &&
+        !("atWindow" in checkpoint.trigger) &&
         "atAuthoredBoundary" in checkpoint.trigger,
     );
     const resolution: readonly ObjectiveTransitionRule[] =
@@ -251,9 +357,51 @@ export function objectiveRules(
             evidenceRefs: [packEvidenceRef(boundary.id)],
           }];
     const authored = Array.isArray(raw)
-      ? raw.flatMap((condition, index) => conditionRules(condition, index, false, pointerPrefix))
+      ? raw.flatMap((condition, index) => conditionRules(pack, condition, index, false, pointerPrefix))
       : [];
     return [...degraded, ...resolution, ...authored];
+  }
+  if (objective.type === "preserve_plan_window") {
+    const defaults = (pack.timingWindows ?? []).flatMap((window, index) => {
+      const rules: ObjectiveTransitionRule[] = [];
+      for (const verdict of ["too_slow", "premature", "over_budget"] as const) {
+        for (const from of ["active", "preserved"] as const) {
+          rules.push({
+            id: `tempo-${index}-${verdict}-${from}`,
+            from,
+            to: "degraded",
+            when: timingPredicate(pack, window, verdict),
+            evidenceRefs: [tempoEvidenceRef(window.id, verdict)],
+          });
+        }
+      }
+      if (window.gradeOutpaced === true) {
+        for (const from of ["active", "preserved"] as const) {
+          rules.push({
+            id: `tempo-${index}-outpaced-${from}`,
+            from,
+            to: "degraded",
+            when: timingPredicate(pack, window, "outpaced"),
+            evidenceRefs: [tempoEvidenceRef(window.id, "outpaced")],
+          });
+        }
+      }
+      for (const from of ["active", "degraded"] as const) {
+        rules.push({
+          id: `tempo-${index}-in-time-${from}`,
+          from,
+          to: "preserved",
+          when: timingPredicate(pack, window, "in_time"),
+          evidenceRefs: [tempoEvidenceRef(window.id, "in_time")],
+        });
+      }
+      return rules;
+    });
+    const authored = Array.isArray(raw)
+      ? raw.flatMap((condition, index) =>
+          conditionRules(pack, condition, index, false, pointerPrefix))
+      : [];
+    return [...defaults, ...authored];
   }
   const outcomeObjective = ["win", "hold", "save", "resist"].includes(
     objective.type,
@@ -261,7 +409,7 @@ export function objectiveRules(
   if (!outcomeObjective) {
     if (!Array.isArray(raw)) return [];
     return raw.flatMap((condition, index) =>
-      conditionRules(condition, index, false, pointerPrefix),
+      conditionRules(pack, condition, index, false, pointerPrefix),
     );
   }
 
@@ -301,7 +449,7 @@ export function objectiveRules(
   outcomeRule("loss", "failed");
 
   const degraded = conditions.flatMap((condition, index) =>
-    condition.to === "degraded" ? conditionRules(condition, index, true, pointerPrefix) : [],
+    condition.to === "degraded" ? conditionRules(pack, condition, index, true, pointerPrefix) : [],
   );
   const resolution: ObjectiveTransitionRule[] = [];
   const resolveAt = objective.grading?.resolveAt;
@@ -318,7 +466,7 @@ export function objectiveRules(
     });
   }
   const remaining = conditions.flatMap((condition, index) =>
-    condition.to !== "degraded" ? conditionRules(condition, index, true, pointerPrefix) : [],
+    condition.to !== "degraded" ? conditionRules(pack, condition, index, true, pointerPrefix) : [],
   );
   return [...automatic, ...degraded, ...resolution, ...remaining];
 }
@@ -331,7 +479,7 @@ export function orchestratePackStart(
   const root = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
   for (const checkpoint of pack.checkpoints) {
     if (
-      !("windowOpens" in checkpoint.trigger) &&
+      !("atWindow" in checkpoint.trigger) &&
       "atStart" in checkpoint.trigger &&
       checkpointMatches(pack, run, checkpoint)
     ) {

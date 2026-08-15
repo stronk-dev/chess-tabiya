@@ -70,9 +70,12 @@ client's perspective. The server supports ordinary `reach_checkpoint` rules
 and the monotone Outcome Drill compiler documented in
 `outcome-drill-grading.md`, plus the frozen trigger vocabulary: `atPly`,
 `atSpineNode`,
-`fenPredicate`, `materialBalance`, and timing windows. A timing window fires
-when its authored closing trigger matches. Unsupported objective rules fail at
-pack load rather than being ignored.
+`fenPredicate`, `materialBalance`, and `atWindow`. Timing windows are branch-local
+derived ledgers over committed moves: readiness advances by authored move conditions,
+spend counts non-tolerated learner choices before readiness, and the first ordered close
+fixes the verdict. Checkpoints may observe a verdict or live spend threshold; objective
+rules may grade completed verdicts. Unsupported rules and unresolved window references
+fail at pack load rather than being ignored.
 
 After each successful move mutation, the service enqueues one asynchronous
 evaluation job for the active node. Its shipped default is the ratified

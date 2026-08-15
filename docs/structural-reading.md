@@ -55,6 +55,11 @@ canonical order and never ranks or compares the readings.
 
 ## Objective grounding
 
+The same closed `structuralExpression` grammar is also consumed by a timing window's
+`position` close. That use contributes to the timing verdict but does not mint a
+structural evidence reference; the applied objective record uses the window's `tempo:`
+reference instead.
+
 Every feature leaf in a successful structural conjunction contributes a generic `rules:structure-*`
 evidence reference. These durable refs name detector rules, not parameterized instances: the
 existing evidence renderer has no FEN argument. Exact position-specific prose is computed from the

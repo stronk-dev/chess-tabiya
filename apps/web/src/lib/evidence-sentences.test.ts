@@ -7,6 +7,7 @@ import {
   packEvidenceRef,
   packAbsentEvidenceRef,
   rulesEvidenceRef,
+  tempoEvidenceRef,
 } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
@@ -30,6 +31,11 @@ describe("evidence sentence contract", () => {
       ...pack.checkpoints.map((checkpoint) => packEvidenceRef(checkpoint.id)),
       ...pack.checkpoints.map((checkpoint) => packAbsentEvidenceRef(checkpoint.id)),
       ...THEORY_EVIDENCE_FACTS.map((fact) => `theory:${fact}`),
+      ...(pack.timingWindows ?? []).flatMap((window) =>
+        ["in_time", "over_budget", "too_slow", "premature", "outpaced"].map(
+          (verdict) => tempoEvidenceRef(window.id, verdict),
+        ),
+      ),
     ];
     const table = evidenceSentenceTable(pack);
 

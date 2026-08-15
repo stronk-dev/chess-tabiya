@@ -135,9 +135,7 @@ function startPosition(fen: string): Chess {
 function triggerNodeRefs(trigger: CheckpointTrigger): readonly string[] {
   const simpleRefs = (simple: SimpleTrigger): readonly string[] =>
     "atSpineNode" in simple ? [simple.atSpineNode] : [];
-  return "windowOpens" in trigger
-    ? [...simpleRefs(trigger.windowOpens), ...simpleRefs(trigger.windowCloses)]
-    : simpleRefs(trigger);
+  return "atWindow" in trigger ? [] : simpleRefs(trigger);
 }
 
 function lintSpine(

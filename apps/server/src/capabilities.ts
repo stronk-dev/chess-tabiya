@@ -1,5 +1,8 @@
 import {
   RUN_OPPONENT_MODES,
+  TEMPO_GRADEABLE_VERDICTS,
+  TEMPO_VERDICTS,
+  UNAUTHORED_TEMPO_DEFAULTS,
   runtimeBuildInfo,
   type RunOpponentMode,
 } from "@chess-tabiya/runtime";
@@ -59,6 +62,9 @@ export interface Capabilities {
   readonly engines: readonly EngineIdentity[];
   readonly policyModes: readonly OpponentPolicyMode[];
   readonly feedbackPolicies: readonly FeedbackPolicy[];
+  readonly tempoVerdicts: readonly string[];
+  readonly tempoGradeable: readonly string[];
+  readonly tempoDefaults: typeof UNAUTHORED_TEMPO_DEFAULTS;
   readonly guardBasis: readonly ("rules" | "engine")[];
   readonly assessmentCategories: readonly TablebaseCategory[];
   readonly objectiveAssessmentSets: Readonly<Record<"win" | "hold" | "save" | "resist", readonly TablebaseCategory[]>>;
@@ -192,6 +198,9 @@ export class EngineCapabilities implements CapabilitiesProvider {
       engines,
       policyModes: Object.freeze(SUPPORTED_POLICY_MODES.filter((mode)=>mode!=="perfect_tablebase"||providerState.tablebase!=="none")),
       feedbackPolicies: FEEDBACK_POLICIES,
+      tempoVerdicts: TEMPO_VERDICTS,
+      tempoGradeable: TEMPO_GRADEABLE_VERDICTS,
+      tempoDefaults: UNAUTHORED_TEMPO_DEFAULTS,
       guardBasis: providerState.judge === "none"
         ? Object.freeze(["rules"] as const)
         : Object.freeze(["rules", "engine"] as const),

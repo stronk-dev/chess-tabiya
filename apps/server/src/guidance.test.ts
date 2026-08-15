@@ -25,6 +25,7 @@ const capabilities: CapabilitiesProvider = {
   async get() {
     return {
       engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], runSchemaVersion: "0.11",
+      tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"], tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"], tempoDefaults: { outpaced: "failed" },
       assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
       objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
       policyProfiles: { strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 } },

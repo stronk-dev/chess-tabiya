@@ -6,6 +6,7 @@ import {
   isEngineEvidenceRef,
   packEvidenceRef,
   rulesEvidenceRef,
+  tempoEvidenceRef,
 } from "./evidence-ref.js";
 
 describe("evidence reference grammar", () => {
@@ -39,6 +40,7 @@ describe("evidence reference grammar", () => {
     ]);
     expect(packEvidenceRef("timing-window")).toBe("pack:timing-window");
     expect(engineEvidenceRef("evidence-job-7")).toBe("engine:evidence-job-7");
+    expect(tempoEvidenceRef("c5-race", "too_slow")).toBe("tempo:c5-race.too-slow");
   });
 
   it("rejects ambiguous ids and recognizes only populated engine refs", () => {

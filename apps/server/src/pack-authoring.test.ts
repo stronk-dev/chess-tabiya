@@ -214,6 +214,7 @@ describe("pack authoring validation", () => {
     delete (outcome as any).authoredBoundary;
     delete (outcome as any).deviations;
     delete (outcome as any).spine;
+    delete (outcome as any).timingWindows;
     const admitted = validatePackDocument(outcome);
     expect(admitted.valid, JSON.stringify(admitted.issues)).toBe(true);
     (outcome.objective as any).type = "win";
@@ -235,12 +236,12 @@ describe("pack authoring validation", () => {
     );
   });
 
-  it("carves out atStart while refusing it inside timing windows", () => {
+  it("carves out atStart and permits it as a top-level window opening", () => {
     const candidate = structuredClone(fixture) as DrillPackDefinition;
     (candidate as any).checkpoints = [{ id: "root", trigger: { atStart: true }, actions: [] }];
     expect(validatePackDocument(candidate).issues.some((issue) => issue.code === "CHECKPOINT_TRUE_AT_ROOT")).toBe(false);
-    (candidate as any).checkpoints = [{ id: "bad", trigger: { windowOpens: { atStart: true }, windowCloses: { atPly: 2 }, luxuryMoveBudget: 0 }, actions: [] }];
-    expect(validatePackDocument(candidate).issues).toContainEqual(expect.objectContaining({ code: "START_TRIGGER_IN_WINDOW" }));
+    (candidate as any).timingWindows = [{ id: "root-window", opens: { onTrigger: { atStart: true } }, closes: [{ kind: "deadline", afterLearnerMoves: 2 }], readiness: { mode: "any", of: [{ moveUci: "e2e4" }] }, luxuryMoveBudget: 0 }];
+    expect(validatePackDocument(candidate).issues.some((issue) => issue.code === "START_TRIGGER_IN_WINDOW")).toBe(false);
   });
 
   it("refuses atStart as a later trajectory entry and over-budget leg totals", () => {
