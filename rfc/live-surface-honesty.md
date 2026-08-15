@@ -1,6 +1,6 @@
 # RFC: Live surface honesty — a finishing pass on a surface that already ships
 
-- **Status:** draft
+- **Status:** accepted (cross-reviewed; fixes applied in place) — 2026-08-15
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/03-product-breadth.md` §Live and community — the **Streamer/Twitch**

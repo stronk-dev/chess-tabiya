@@ -1,6 +1,6 @@
 # RFC: Engine leverage — the instrument has already answered
 
-- **Status:** draft
+- **Status:** accepted (cross-reviewed; fixes applied in place) — 2026-08-15
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/02-product-shape.md:159-180` (the two-axis latency budget —
