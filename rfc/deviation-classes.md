@@ -59,13 +59,13 @@
 > `uniqueItems: true`) rather than an enum. §2.2 no longer rests the decomposition on the
 > both-case count. **§2.4 states, surface by surface, what each rendering site does when a deviation
 > carries two** — *"pick the first"* is prohibited by name, as a silent truncation of exactly the
-> kind `design/05-in-run-experience.md:41` forbids and `design/BACKLOG.md:116` (D41) already has an
+> kind `design/05-in-run-experience.md:41` forbids and `design/BACKLOG.md:118` (D41) already has an
 > open 🐞 for on a different field. §8.3 re-measures the back-fill under a multi-label classifier.
 > Open question 1 is closed and removed; the reason is recorded under **Closed questions**.
 
 ## Summary
 
-`deviations[].class` (`schemas/drill_pack.schema.json:877-886`) is one enum carrying at least three
+`deviations[].class` (`schemas/drill_pack.schema.json:878-886`) is one enum carrying at least three
 independent questions: **how does this move stand to what this pack teaches** (objective-relative,
 unmechanizable by ruling), **what kind of mistake is it** (plan / timing / tactical — a pedagogical
 choice), and **how bad is it by measurement** (centipawns, mate, or unmeasurable). Because the three
@@ -82,7 +82,7 @@ distinctions can never be checked at all. **No committed pack becomes invalid; n
 changes bytes.** The remaining value is realized by an opt-in authoring pass over 36 rows in 15 files,
 costed in §8.
 
-**Census baseline, re-derived on `d4f2fc5` for this revision.** The tree moved five times on
+**Census baseline, re-derived on `f962a7b` for this revision.** The tree moved five times on
 2026-08-15 (`ffc9817`, `047de02`, `ed48978`, `4977ff6`, `8fbab41`) and the corpus moved once inside
 that (`047de02` edited three trajectory packs). Re-counted rather than trusted: **43 pack files in
 `content/drafts/`, 37 of them carrying `deviations`, 275 deviation entries** — identical to the
@@ -91,13 +91,22 @@ no deviation. (The 43rd pack file is `trajectory-legs.browser.json`, which decla
 `spine`; a predicate that requires `spine` finds 42 and is the trap an earlier count fell into.)
 Every class count below was re-derived on the same commit. Re-derive again before implementing.
 
+**Everything below is cited against the committed tree at `f962a7b` (pack schema 0.17), and the
+working tree is not it.** `predicate-wave-3` (pack 0.18) is **mid-landing and uncommitted** as this
+revision is written — `packages/schema/src/index.ts` reads `"0.18"` and `SHAPE_ENTRY_SCHEMA_VERSION`
+`"0.3"` on disk while `HEAD` reads `"0.17"` / `"0.2"`, and `schemas/drill_pack.schema.json`,
+`authored-feedback.ts`, `api.ts`, `pack-validation.ts`, `types.ts` and both sheets are dirty. Line
+numbers in an uncommitted file are worth nothing, which is why §0's locate-by-symbol rule is stated
+before any of them: **every reference below names the symbol first and the `f962a7b` line second.**
+The implementer re-resolves lines against whatever has landed by then.
+
 ## Motivation
 
 **Three attestations, one defect.**
 
 1. **The defect sweep (Pack B, 2026-08-12).** One class name covers a timing mistake and a
    plan-coherence mistake. Those are different lessons and want different feedback
-   (`design/BACKLOG.md:172`).
+   (`design/BACKLOG.md:174`).
 2. **The objective-relativity ruling (2026-08-12).**
    `rfc/archive/content-sourcing-foundation.md:772` puts `deviations[].class` in the
    *human-only, permanently* column: classes are relative to **this pack's objective**, and *"engine
@@ -123,8 +132,8 @@ own frictions list says the fix shape out loud — *"the class needs an evaluati
 field (an authored claim plus a measured cost, separately)"* (`log.md:1672-1677`) — and names the
 guard defect beside it (`log.md:1678-1681`).
 
-**The guard defect, sharpened.** The ledger row (`design/BACKLOG.md:222`) says the 150cp guard can
-never fire on `opponent-intent-early-queen`'s taught move. Re-verified against `d4f2fc5`, it is
+**The guard defect, sharpened.** The ledger row (`design/BACKLOG.md:224`) says the 150cp guard can
+never fire on `opponent-intent-early-queen`'s taught move. Re-verified against `f962a7b`, it is
 worse: **neither tier's threshold is reachable.** The engine tier needs a 150cp swing
 (`apps/server/src/guard.ts`, `guardSettings` at `:89` and `centipawnSwing` at `:178`); the rules tier
 fires on a material swing of **3 pawns or more** (`applyRulesGuard` at `:138`, the `<= -3` comparison
@@ -137,7 +146,7 @@ met by either threshold on the move the ledger row is about.**
 **Bounded honestly, because cross-review found an earlier draft overreaching here.** The claim is
 about *this deviation*, not the whole pack. `opponent-intent-early-queen` declares 12 deviations, and
 three of them (#4, #5, #8 — the Scholar's Mate lines) carry mate sentinels in G1's own record
-(`loss` 30036, 30036, 30038 — re-verified on `d4f2fc5`), so the **mate tier reaches those** with
+(`loss` 30036, 30036, 30038 — re-verified on `f962a7b`), so the **mate tier reaches those** with
 `fireOnMate` at its default `true`. The defect is that the pack's *first* taught move sits in a gap
 between the thresholds it declares and the cost it measures, with nothing in the format able to
 notice. That is narrower than "the pack is unguarded" and it is still the defect: it is exactly the
@@ -153,9 +162,9 @@ mechanically check what, and **what every rendering surface does with a multi-va
 | Reclassifying anything by engine number | Law 8 and `content-sourcing-foundation.md:772`. G1's refusal is ratified here as a rule, not softened |
 | Removing or renaming any enum value | 275 committed deviations use four of the five; `theoryVerdictSentence` (`apps/web/src/lib/theory-presentation.ts:17`) renders the raw value to the learner. A rename is a corpus edit and a UI change for no new expressiveness |
 | Making `class` itself multi-valued | The ruling is about `mistake`. `class` is single-valued on all 275 committed rows, is printed verbatim, and is a **join key** (`DrillScreen.svelte:219`) whose `===` comparison a set would break silently — §2.4 S2 |
-| Retiring `required_theory` (0 uses in 275) | It is a zero-use vocabulary item and belongs to the **sunset rule** the ledger already wants (`design/BACKLOG.md:244`). Flagged in §9, not acted on |
-| Linking a deviation to a `planClass` | A separate ledger row (`design/BACKLOG.md:171`). It is the natural companion to a `mistake` set containing `plan` and is named in Open questions, not shipped — every axis is authoring cost (§1.4) |
-| An evidence-attachment path for opening packs | The live 🐞 at `design/BACKLOG.md:220`, owned by the evidence-path RFC. This RFC states exactly where its new field stops being a declaration and would become evidence, and does not build the path |
+| Retiring `required_theory` (0 uses in 275) | It is a zero-use vocabulary item and belongs to the **sunset rule** the ledger already wants (`design/BACKLOG.md:246`). Flagged in §9, not acted on |
+| Linking a deviation to a `planClass` | A separate ledger row (`design/BACKLOG.md:173`). It is the natural companion to a `mistake` set containing `plan` and is named in Open questions, not shipped — every axis is authoring cost (§1.4) |
+| An evidence-attachment path for opening packs | The live 🐞 at `design/BACKLOG.md:222`, owned by the evidence-path RFC. This RFC states exactly where its new field stops being a declaration and would become evidence, and does not build the path |
 
 ## Specification
 
@@ -174,20 +183,20 @@ mechanically check what, and **what every rendering surface does with a multi-va
   in §6. No enum value is added, removed or renamed. **Verified, not assumed:** no file under
   `content/`, `schemas/` or `apps/server/src/sourcing/fixtures/` contains a `"mistake"` or `"cost"`
   key today — it could not, because `$defs/deviation` is `additionalProperties: false`
-  (`schemas/drill_pack.schema.json:889`). All 37 pack files carrying `deviations` (275 entries), the
+  (`schemas/drill_pack.schema.json:890`). All 37 pack files carrying `deviations` (275 entries), the
   living fixture (`schemas/drill_pack.example.json`) and all **six** negative fixtures
   (`packages/schema/src/drill-pack.test.ts:43-50`) stay valid unchanged.
 - **Locate by symbol, not by line — the tree moved five times on 2026-08-15.** `ffc9817`
   (`authoring-frictions`), `047de02` (`validator-integrity`, which rewrote `pack-validation.ts` and
   edited three content packs), `ed48978` (`tempo-vocabulary`), `4977ff6` (`resistance-spectrum`) and
   `8fbab41` (authoring refusal coverage) all landed. Every line number in this RFC was re-verified
-  against `d4f2fc5`; every reference also names the **symbol**, which is the durable locator.
+  against `f962a7b`; every reference also names the **symbol**, which is the durable locator.
   `apps/server/src/guard.ts` references name `guardSettings`, `applyRulesGuard`,
   `applyRecordedEngineGuard`, `centipawnSwing`, `decisionTriple`, `mateAgainstLearner` and
   `hasUndefendedMajorOrMinor`.
 - **No digest moves.** Pack digests are content digests over the pack document
   (`packages/schema/src/drill-pack/digest.ts:58-66`); the `$id` is not part of any pack document
-  (re-verified on `d4f2fc5`: a pack's top-level keys are `id, version, title, mode, phase, difficulty,
+  (re-verified on `f962a7b`: a pack's top-level keys are `id, version, title, mode, phase, difficulty,
   start, objective, concepts, planClasses, spine, checkpoints, authoredBoundary, opponentPolicy,
   deviations, feedbackPolicy, feedbackClaims, provenance` — `version` is the pack's own content
   version). A pack that adopts none of the new keys is byte-identical after this RFC.
@@ -210,7 +219,7 @@ mechanically check what, and **what every rendering surface does with a multi-va
 #### 1.1 What the enum is actually doing
 
 Census of every `deviations[]` entry in `content/` (**37 files, 275 entries**, re-derived on
-`d4f2fc5`):
+`f962a7b`):
 
 | Class | Uses | Files | `offObjective` | What question does it answer? |
 |---|---:|---:|---:|---|
@@ -264,7 +273,7 @@ change the owner ruling forces — **none of them is a count of how many rows wo
    split of `concept_violation`, and that is where three of G1's four disagreements live.
 
 **The corpus reading, kept as description and no longer load-bearing.** Reading all **36**
-`concept_violation` notes at cross-review and re-reading them on `d4f2fc5`: **4** are pure timing,
+`concept_violation` notes at cross-review and re-reading them on `f962a7b`: **4** are pure timing,
 **4** are ordering mistakes that are timing **and** plan at once, and **28** are plan coherence. The
 eight non-plan rows are named in full so the reading is auditable rather than asserted:
 
@@ -297,7 +306,7 @@ deviation*. This RFC therefore spends its budget as follows and refuses the rest
 - `cost` is authored **where a number already exists** — 115 of the 275 committed deviations already
   carry one (§8.2);
 - the guard check fires only in `immediate_guard` packs, of which there are **7** — re-derived on
-  `d4f2fc5`: `conversion-up-a-piece`, `mate-k-q-technique`, `mate-k-r-technique`,
+  `f962a7b`: `conversion-up-a-piece`, `mate-k-q-technique`, `mate-k-r-technique`,
   `opening-principles-black`, `opening-principles-white`, `opponent-intent-early-queen`, plus
   `immediate-guard.browser.json`, which declares **no deviations at all** — so **31 of the 37
   deviation-carrying packs can never see it**;
@@ -307,7 +316,7 @@ deviation*. This RFC therefore spends its budget as follows and refuses the rest
 
 #### 2.1 Schema (pack 0.21, additive) — a set, not an enum
 
-`$defs/deviation` (`schemas/drill_pack.schema.json:872-890`) gains:
+`$defs/deviation` (`schemas/drill_pack.schema.json:872-891`) gains:
 
 ```json
 "mistake": {
@@ -324,7 +333,7 @@ deviation*. This RFC therefore spends its budget as follows and refuses the rest
 - **`uniqueItems: true`** makes `["plan","plan"]` invalid; combined with the three-member `items`
   enum it also bounds length at 3, so no `maxItems` is written (a redundant constraint that could
   drift out of step with the enum if a fourth value is ever admitted).
-- **`additionalProperties: false` is preserved** on `$defs/deviation` (`:889`), and `required` stays
+- **`additionalProperties: false` is preserved** on `$defs/deviation` (`:890`), and `required` stays
   `["at", "moveUci", "class"]` (`:874`). No other `$defs` member is touched.
 - **Array order carries no meaning.** Two packs declaring `["timing","plan"]` and `["plan","timing"]`
   make the same claim, have different digests (§0), and **render identically** because every surface
@@ -341,7 +350,7 @@ export type DeviationMistake = (typeof DEVIATION_MISTAKES)[number];
 
 `DEVIATION_MISTAKES` is the **single writer** of the vocabulary and of its canonical order: the
 schema's `items.enum` is asserted equal to it in `packages/schema/src/drill-pack.test.ts`'s
-"binds schema vocabularies to the shared constants" test (`:64-75`), which is the shipped pattern for
+"binds schema vocabularies to the shared constants" test (`:65-75`), which is the shipped pattern for
 `OBJECTIVE_TYPES`, `FEEDBACK_POLICIES` and `PACK_PHASES`.
 
 #### 2.2 Semantics — what the decomposition now rests on
@@ -427,7 +436,7 @@ enumerated by grep rather than by recollection.
 > without saying that it did.** *"Pick the first"* is prohibited by name: it is the silent truncation
 > `design/05-in-run-experience.md:41` ("Absence is stated, never simulated") forbids, and the repo
 > already carries an open 🐞 for exactly that failure shape on a different field —
-> `design/BACKLOG.md:116` (D41), `compareAllHere`'s bare `.slice(0, 8)`.
+> `design/BACKLOG.md:118` (D41), `compareAllHere`'s bare `.slice(0, 8)`.
 >
 > **Absence renders nothing.** When `mistake` is absent the surface emits no suffix, no placeholder
 > and no "(unclassified)". This is not a truncation: the author declared nothing, and printing a
@@ -437,7 +446,7 @@ enumerated by grep rather than by recollection.
 ##### 2.4.1 The surfaces, enumerated
 
 Every consumer of a deviation classification in the tree, found by grepping `deviationClass` and
-`kind: "deviation"` across `apps/` and `packages/` on `d4f2fc5`. The list is exhaustive; two surfaces
+`kind: "deviation"` across `apps/` and `packages/` on `f962a7b`. The list is exhaustive; two surfaces
 the ruling names (compare strips, progress grammar) turn out to consume nothing today, and saying so
 is part of the answer.
 
@@ -517,7 +526,7 @@ objects, so adding `deviationMistakes` to this conjunction would make it **alway
 supporting note would vanish from the checkpoint sheet — a silent drop of authored content, which is
 the worst version of the failure §2.4.0 exists to prevent, and one that no test of the *class* path
 would catch. `mistake` adds no discriminating power here in any case: `moveUci` already identifies
-the deviation within its anchor (`DUPLICATE_DEVIATION`, `lint.ts:311-315`, makes `(anchor, moveUci)`
+the deviation within its anchor (`DUPLICATE_DEVIATION`, `lint.ts:310-314`, makes `(anchor, moveUci)`
 unique). Stated as a normative refusal so a later pass does not "tighten" the join.
 
 ##### 2.4.4 S3 — the sheets, and the deliberate non-widening of the `deviation` item
@@ -525,7 +534,7 @@ unique). Stated as a normative refusal so a later pass does not "tighten" the jo
 `CheckpointSheet.svelte:131-148` and `TerminalSheet.svelte:47-54` render the authored-commentary list:
 a `deviation` item shows `item.note`; a `theory_verdict` item shows `theoryVerdictSentence(item, run)`.
 
-**Rule: the `deviation` authored-feedback item (`authored-feedback.ts:36-46`, projected at `:145-160`)
+**Rule: the `deviation` authored-feedback item (`authored-feedback.ts:36-46`, projected at `:149-160`)
 does NOT gain `mistake`, and neither does its wire type (`api.ts:150-157`).** There is therefore no
 multi-value case on this surface, because there is no value.
 
@@ -561,7 +570,7 @@ than assumed: `comparisonStrips` (`packages/runtime/src/compare-strips.ts:22`) a
 `comparisonNarrative` (`:56`) build their sentences from eval trails, structure readings, timing
 readings and piece routes. **Neither reads `deviations[]`, `class`, `note` or authored feedback at
 all** — `CompareView.svelte` receives the pack only to render evidence references
-(`renderEvidenceRef`, `:32`).
+(`renderEvidenceRef`, `:8`, `:33`).
 
 **Rule: their consumption of axis B stays zero in this RFC.** The rule for the multi-value case is
 therefore *"there is no case"*, stated so a reader does not go looking for one. If a later RFC puts a
@@ -627,7 +636,7 @@ New `$defs/deviationCost`, referenced by `$defs/deviation` as optional `cost`:
 - **`mate`** — the consequence is forced mate. `against: "learner"` is the guard-relevant case; it
   replaces the 30036-style sentinels G1 had to write into `provenance.engineValidation` (3 such
   candidates in `opponent-intent-early-queen` alone — `loss` 30036, 30036, 30038, re-verified on
-  `d4f2fc5`) to express mate on a centipawn scale.
+  `f962a7b`) to express mate on a centipawn scale.
 - **`unmeasurable`** — **the honest refusal slot, and the reason this axis is a union rather than an
   integer.** `reason` is prose stating why no number settles it. Its exemplar is already written:
   `anti-london-black`'s ...Bxg3 doctrine measures −0.33 against −0.28, *"0.05, inside noise … the
@@ -642,10 +651,10 @@ New `$defs/deviationCost`, referenced by `$defs/deviation` as optional `cost`:
   what number the author is standing on; it does not certify that anyone measured it. Today no
   opening pack can carry an evidence ledger at all (`pack-validation.ts`,
   `OBJECTIVE_GRADING_UNSUPPORTED` at `:284` on any non-outcome objective; the live 🐞 at
-  `design/BACKLOG.md:220`), so a certified form is unavailable regardless of what this RFC says. The
+  `design/BACKLOG.md:222`), so a certified form is unavailable regardless of what this RFC says. The
   coordinator ruling in the header states the consequence: **no surface may render a `cost` as
   engine-confirmed**, and no entry in `apps/server/src/capabilities.ts` claims it is verified —
-  re-verified on `d4f2fc5`, that file mentions no deviation field at all.
+  re-verified on `f962a7b`, that file mentions no deviation field at all.
 - `sourcing-check` (`apps/server/src/sourcing/check.ts:122`) keeps refusing
   `/deviations/\d+/class` verbatim, and **this RFC adds the `mistake` pointer to that same refusal**:
   the mistake axis is a pedagogical choice and no record may claim to support it.
@@ -658,7 +667,7 @@ New `$defs/deviationCost`, referenced by `$defs/deviation` as optional `cost`:
   numeric segments into arrays, so the element pointer is reachable and would otherwise be blessed.
 
   **Landing-order coupling — verified against `rfc/opening-evidence-path.md` §5b, which owns the same
-  line of code.** That RFC (pack 0.20, status *cross-reviewed, READY*, unlanded on `d4f2fc5`)
+  line of code.** That RFC (pack 0.20, status *cross-reviewed, READY*, unlanded on `f962a7b`)
   replaces `check.ts:122`'s inline `/^\/deviations\/\d+\/class$/`
   test with a `HUMAN_ONLY_POINTERS` list containing
   `/^\/deviations\/\d+\/(class|offObjective)$/` (`opening-evidence-path.md:750-751`), refused with
@@ -697,7 +706,7 @@ New `$defs/deviationCost`, referenced by `$defs/deviation` as optional `cost`:
 ### §4. The guard link
 
 `guard.evalSwingCp` and `deviations[].class` describe the same event and never consult each other
-(`design/BACKLOG.md:222`). They now consult each other in exactly one direction: **validation
+(`design/BACKLOG.md:224`). They now consult each other in exactly one direction: **validation
 compares two numbers the same author wrote, and reports when they cannot meet.** No runtime behaviour
 changes.
 
@@ -708,7 +717,7 @@ learner's move** with the eval **after the opponent's reply** — `centipawnSwin
 the decision triple built by `decisionTriple` (`:62`). A `cost` of kind `cp` is
 candidate-relative **at the learner's decision position** — the unit G1 recorded and defined
 (*"loss = the best evaluated candidate at that position minus this move"*,
-`opponent-intent-early-queen.json` `provenance.engineValidation.unit`, re-read on `d4f2fc5`). The two
+`opponent-intent-early-queen.json` `provenance.engineValidation.unit`, re-read on `f962a7b`). The two
 coincide only when the opponent replies with the engine's best move and search is consistent across
 the two positions.
 
@@ -756,10 +765,10 @@ Emitted by `pack-validation.ts` beside `GUARD_WITHOUT_IMMEDIATE_GUARD` (`:546-55
 | `{kind: "unmeasurable"}` | **not evaluated** — no number, no arithmetic, no warning |
 
 **Two resolution facts the implementer must not assume away, both re-verified in `guardSettings` on
-`d4f2fc5`:**
+`f962a7b`:**
 
 - **`rulesTier` is pack-level only.** §6's `overrides` are `{at, evalSwingCp?, fireOnMate?}`
-  (`schemas/drill_pack.schema.json:85-101`, types at `packages/schema/src/drill-pack/types.ts:187-191`)
+  (`schemas/drill_pack.schema.json:85-102`, types at `packages/schema/src/drill-pack/types.ts:187-191`)
   — there is no `rulesTier` member, and `guardSettings` returns `rulesTier: base.rulesTier`
   unconditionally (`guard.ts:119`). So row 2's `rulesTier` is read from `pack.guard`, never from the
   resolved override, and the message must not imply otherwise.
@@ -783,13 +792,13 @@ and that is a fact about the pack, not about chess.
 #### 4.3 `guard.overrides[].moveUci` — the remedy, and why it is needed
 
 `authoring-frictions` §6 gives `overrides` a `$defs/deviationLocation` anchor
-(`schemas/drill_pack.schema.json:846-871`, referenced at `:90`, resolution in `guardSettings`), which
+(`schemas/drill_pack.schema.json:846-871`, referenced at `:91`, resolution in `guardSettings`), which
 is **positional**. Deviations are **moves**. Lowering the threshold at an anchor therefore drags in
 every sibling at that anchor. In the pack that motivates this RFC, node `after:w2-qh5` carries
 **four** deviations, whose declared candidate losses are 5cp (`accepted_alternative` …d6), 20cp (the
 taught `tactical_error` …Nf6), 34cp (`interesting_deviation` …Qe7) and 502cp (`tactical_error` …g6)
 (`opponent-intent-early-queen.json` `provenance.engineValidation`, node `after:w2-qh5` — all four
-re-verified on `d4f2fc5`).
+re-verified on `f962a7b`).
 
 **The arithmetic, corrected.** An anchor-scoped override must be set at or below the taught move's
 number to reach it — i.e. **20cp or lower**. At 20cp the same override also covers the 34cp
@@ -833,11 +842,11 @@ identically for all four moves at this anchor, because the anchor is all the ove
   New: `GUARD_OVERRIDE_MOVE_ILLEGAL` (error) — `moveUci` is not legal at the resolved anchor
   position, reusing the position walk `packages/schema/src/drill-pack/lint.ts` already performs for
   deviations (`ILLEGAL_DEVIATION_MOVE` at `:320`, inside the deviation walk at `:296-329`).
-- **Landing note, re-verified on `d4f2fc5`.** `rfc/archive/authoring-frictions.md` **landed as
+- **Landing note, re-verified on `f962a7b`.** `rfc/archive/authoring-frictions.md` **landed as
   `ffc9817` on 2026-08-15**, and §6's refusals are **on the tree**, not pending: `pack-validation.ts`
   carries `GUARD_WITHOUT_IMMEDIATE_GUARD` (`:549`), `GUARD_WINDOW_EMPTY` (`:556`),
   `GUARD_OVERRIDE_ANCHOR_UNKNOWN` (`:562`), `GUARD_OVERRIDE_DUPLICATE` (`:564`) and
-  `GUARD_DISABLES_EVERYTHING` (`:568`), alongside the schema (`:65-104`), the types
+  `GUARD_DISABLES_EVERYTHING` (`:568`), alongside the schema (`:65-105`), the types
   (`packages/schema/src/drill-pack/types.ts:182-192`, whose `overrides` member is exactly
   `{at, evalSwingCp?, fireOnMate?}`) and the runtime (`guardSettings`). `047de02`'s rewrite of
   `pack-validation.ts` moved these lines but changed none of the five. **Every clause above is
@@ -899,9 +908,9 @@ without touching `:772` — because the thing it checks against is itself author
 
 **Status change since cross-review: `tempo-vocabulary` landed as `ed48978` (pack schema 0.17).** The
 earlier draft made this section contingent on that RFC and specified how to drop it whole. The
-contingency is discharged: the machinery is on the tree. Verified on `d4f2fc5` —
-top-level `timingWindows` at `schemas/drill_pack.schema.json:58-63`, `$defs/timingWindow` at
-`:664-687`, `TEMPO_VERDICTS` (seven values) at `packages/runtime/src/tempo.ts:14-22`, and
+contingency is discharged: the machinery is on the tree. Verified on `f962a7b` —
+top-level `timingWindows` at `schemas/drill_pack.schema.json:55-60`, `$defs/timingWindow` at
+`:661-684`, `TEMPO_VERDICTS` (seven values) at `packages/runtime/src/tempo.ts:14-22`, and
 `TIMING_WINDOW_UNKNOWN` emitted at two referencing sites, `apps/server/src/pack-validation.ts:318`
 (success-condition `timing_window.windowId`) and `:445` (checkpoint `trigger.atWindow.windowId`).
 `premature` (*"closed by the learner's own `release` move while unready"*) and `too_slow` are two of
@@ -929,7 +938,7 @@ move during a race*, is `over_budget`. A window is an authored, objective-relati
   acceptance test (Acceptance criterion 8) and a future authoring-tool affordance.
 
 **The corpus support is prospective, and that is stated rather than implied.** Re-verified on
-`d4f2fc5`: **no pack in `content/` declares `timingWindows` at all** — `tempo-vocabulary` landed the
+`f962a7b`: **no pack in `content/` declares `timingWindows` at all** — `tempo-vocabulary` landed the
 grammar and the content pass has not happened. `carlsbad-minority-attack` dev #3 (*"the right break
 played at the wrong time"*) remains the obvious first case, and that pack is worked end-to-end in
 `rfc/archive/tempo-vocabulary.md` §8.2 (`:1182`) and §8.3 (`:1232`) — but the window it would point at
@@ -969,7 +978,7 @@ change that silently invalidated the corpus would not be shippable; this one doe
 #### 8.2 `cost` is mechanically back-fillable for 115 of 275 deviations (42%)
 
 G1 wrote `provenance.engineValidation.decisions[].candidates[]` into its 18 opening packs with
-`role: "deviation#<index>:<class>"` and a `loss` integer. **Re-derived on `d4f2fc5`: 115
+`role: "deviation#<index>:<class>"` and a `loss` integer. **Re-derived on `f962a7b`: 115
 deviations across those 18 files carry a recoverable loss**, of which **3** are mate sentinels
 (|loss| ≥ 20000 — 30036, 30036, 30038, all in `opponent-intent-early-queen`). Unchanged by the corpus
 growth, for a reason that matters (§8.2a). The mapping role → `deviations[<index>]` →
@@ -980,7 +989,7 @@ legal.
 
 #### 8.2a The `provenance.engineValidation` convention has already forked — do not build on it
 
-**20** files carry an `engineValidation` block, not 18 (re-counted on `d4f2fc5`). The two `ae8aab7`
+**20** files carry an `engineValidation` block, not 18 (re-counted on `f962a7b`). The two `ae8aab7`
 added (`anti-scandinavian-white`, `scandinavian-mainline-black`) use an **incompatible shape**:
 `candidates` is a `{san: cp}` **object** with no `role` and no `loss`, and `unit` is *"centipawns
 from White's point of view … Candidate-relative: only the moves listed were evaluated"* — an absolute
@@ -996,7 +1005,7 @@ The single-valued draft refused this on a keyword classifier that scored **25% p
 over the 36 `concept_violation` rows, missing the canonical timing case. The owner ruling makes that
 measurement the wrong one: a classifier that may emit *multiple* labels has different precision and
 recall characteristics, and the honest question is now whether it gets the **set** right. Measured on
-`d4f2fc5` rather than assumed.
+`f962a7b` rather than assumed.
 
 **Setup.** Gold labels are the by-hand multi-label reading of all 36 rows from §1.3, lifted directly
 (4 rows `{timing}`, 4 rows `{plan, timing}`, 28 rows `{plan}`) — the committed cross-review reading,
@@ -1067,8 +1076,8 @@ the three may stop without breaking the others.
 
 ### §9. `required_theory`, and the sunset rule
 
-`required_theory` has **0 uses in 275 deviations across 37 files** (re-derived on `d4f2fc5`) — the
-only fully unused member of the enum. It is left in place: `design/BACKLOG.md:244`'s row "Sunset rule
+`required_theory` has **0 uses in 275 deviations across 37 files** (re-derived on `f962a7b`) — the
+only fully unused member of the enum. It is left in place: `design/BACKLOG.md:246`'s row "Sunset rule
 for zero-use vocabulary" (proposed by `predicate-wave-3` after it declined to retire zero-use feature
 kinds) says the repo has no stated rule for retiring declared-but-unused vocabulary, and minting an
 ad-hoc removal here would be the exact behaviour that row objects to. **Flagged, not acted on.** When
@@ -1082,7 +1091,7 @@ two conditions (§2.3) and one operand (§4.2 rule 3) and **mints no new code**:
 existing field is not a new failure mode. The emitter column is corrected from an earlier draft: there
 is **no `apps/server/src/lint.ts`** — the pack linter is `packages/schema/src/drill-pack/lint.ts`, and
 it already carries both severities (`AUTHORED_PROSE_AFTER_LAST_CHECKPOINT` is a shipped
-`severity: "warning"` at `:95-97`), so the two lint warnings need no new machinery.
+`severity: "warning"` at `:93-98`), so the two lint warnings need no new machinery.
 `pack-validation.ts`'s `runtimeIssue` helper (`:108`) hard-codes `severity: "error"`; a warning there
 is built inline, exactly as `KEY_POINT_PHRASE_IS_JUDGEMENT` already is.
 
@@ -1097,7 +1106,7 @@ is built inline, exactly as `KEY_POINT_PHRASE_IS_JUDGEMENT` already is.
 | `TIMING_WINDOW_UNKNOWN` | reused, widened | error | `apps/server/src/pack-validation.ts:318`, `:445` | gains `/deviations/<i>/timingWindowId` as a **third** referencing path (§6) |
 | `EVIDENCE_OVERREACH` | reused, widened | error | `apps/server/src/sourcing/check.ts:122` | pointer set gains `/^\/deviations\/\d+\/mistake(?:\/\d+)?$/` — **element suffix included**, because the field is an array (§3.3) — at the site §3.3's landing-order table selects |
 
-**Collision sweep, re-run on `d4f2fc5` because the tree moved five times.** The five new names were
+**Collision sweep, re-run on `f962a7b` because the tree moved five times.** The five new names were
 checked against (a) every `"UPPER_SNAKE"` string literal in `apps/`, `packages/` and `tools/`
 (**296 distinct** after the five landings) and (b) the code vocabulary of every active RFC —
 `predicate-wave-3`, `opening-evidence-path`, `branch-set-scale`. **Zero collisions.** Three
@@ -1145,11 +1154,11 @@ them.
 
 1. **Schema.** `$id` reads `:0.21`, `DRILL_PACK_SCHEMA_VERSION` is `"0.21"`, and the pinned
    expectations in `packages/schema/src/drill-pack.test.ts:56-62` move with them. **Baseline
-   re-verified on `d4f2fc5`:** all three now **agree at `0.17`** — the schema `$id` is
+   re-verified on `f962a7b`:** all three now **agree at `0.17`** — the schema `$id` is
    `urn:chess-tabiya:schema:drill-pack:0.17`, `DRILL_PACK_SCHEMA_VERSION` is `"0.17"`, and the test
    pins `"0.17"` under a `describe` titled `v0.17`. The 0.21 bump moves all three together from a
    clean baseline. The schema's `mistake.items.enum` is asserted equal to `DEVIATION_MISTAKES` in the
-   "binds schema vocabularies to the shared constants" test (`:64-75`), one writer for the vocabulary
+   "binds schema vocabularies to the shared constants" test (`:65-75`), one writer for the vocabulary
    and its canonical order.
 2. **Corpus untouched, verified.** `pack-check` is green on all 43 pack files in `content/drafts/`
    (37 of them carrying deviations), all fixtures and all six negative fixtures **before any content
@@ -1222,12 +1231,12 @@ them.
    would bind **21 `tactical_error` rows across the 6 authored `immediate_guard` packs**
    (`conversion-up-a-piece` 3, `mate-k-q-technique` 6, `mate-k-r-technique` 3,
    `opening-principles-black` 1, `opening-principles-white` 3, `opponent-intent-early-queen` 5 —
-   re-derived on `d4f2fc5` and unmoved, since neither Scandinavian pack is `immediate_guard`). It is
+   re-derived on `f962a7b` and unmoved, since neither Scandinavian pack is `immediate_guard`). It is
    refused here because **no repo command evaluates a draft pack** (§7) — requiring a number the repo
    cannot produce is a trap. Revisit the day that command exists; the friction is at its fifth
    attestation.
 2. **Does `mistake` including `"plan"` want `planClassId`?** The ledger row at
-   `design/BACKLOG.md:171` ("Deviations have no link to a plan class") is the natural companion: a
+   `design/BACKLOG.md:173` ("Deviations have no link to a plan class") is the natural companion: a
    plan error would name the plan it contradicts, grounding the declaration in an authored object
    instead of prose. Deliberately not shipped (§1.4). Whoever picks up that row should treat
    `mistake` ∋ `plan` as its consumer. **Multi-value sharpens this**: an ordering mistake declaring
@@ -1300,7 +1309,7 @@ them.
   is indifferent to the both-case count — which discharges the cross-review's thin-evidence concern.
   §2.3's redundancy warning narrowed to `mistake` **exactly** `["tactical"]`; §4.2 rule 3 and §6's
   window link restated as **membership**. §8.3 **re-measured under a multi-label classifier on
-  `d4f2fc5`**: exact set match 7 of 36 (19%), `timing` 25%/75%, `plan` 77%/31%, six rows emitting an
+  `f962a7b`**: exact set match 7 of 36 (19%), `timing` 25%/75%, `plan` 77%/31%, six rows emitting an
   empty set that `minItems: 1` cannot encode, and the canonical timing case now mislabelled
   confidently rather than missed — the back-fill is refused again, with new numbers. §3.3 corrected
   for the array shape: the `EVIDENCE_OVERREACH` pointer pattern must admit an **element suffix**
@@ -1308,9 +1317,9 @@ them.
   no longer contingent** — `tempo-vocabulary` landed as `ed48978`, so its citations move from the
   draft to shipped code, and §6 now states that **no pack declares `timingWindows` yet**, making its
   corpus support prospective. Open question 1 removed and answered under **Closed questions**;
-  remaining questions renumbered. Every line citation re-verified against `d4f2fc5` after five
+  remaining questions renumbered. Every line citation re-verified against `f962a7b` after five
   landings (`ffc9817`, `047de02`, `ed48978`, `4977ff6`, `8fbab41`) — `$defs/deviation` `:737-756` →
-  `:872-890`, guard schema `:59-99` → `:65-104`, types `:139-149` → `:182-192`, plus every
+  `:872-891`, guard schema `:59-99` → `:65-105`, types `:139-149` → `:182-192`, plus every
   `guard.ts` / `pack-validation.ts` / `lint.ts` / `authored-feedback.ts` symbol pinned to its current
   line. Corpus re-derived: 43 pack files / 37 with deviations / 275 entries, `concept_violation`
   36 in 15, `cost` back-fill 115 of 275 with 3 mate sentinels, 21 `tactical_error` rows in the 6

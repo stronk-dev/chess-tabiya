@@ -76,8 +76,8 @@ with a sibling evaluator — `matchesTransitionExpression(before, moveUci, after
 position by construction. F4 then refused to ship it, on the `timingWindow` precedent: a
 grammar shipped ahead of its consumer earns zero uses. That precedent is now sharper than
 when F4 wrote it — re-verified this pass, **`timingWindow` and `timingWindows` have 0
-matches across all of `content/`**, on a tree where pack schema 0.17 has *landed* and the
-whole subsystem (schema `$defs`, `successPredicate` arm, seven verdicts, six `TIMING_WINDOW_*`
+matches across all of `content/`**, on a tree where pack schema 0.17 has *landed* (and 0.18
+after it) and the whole subsystem (schema `$defs`, `successPredicate` arm, seven verdicts, six `TIMING_WINDOW_*`
 refusal codes) is code-complete.
 
 The owner's 2026-08-15 ruling supplies the two consumers and this RFC ships all three
@@ -139,12 +139,12 @@ earned **0 uses across all 145 corpus checkpoints**, blocking the E3 gate. Being
 makes a predicate *tempting*, not what makes it right.
 
 Re-verified on the current tree, and it is worse than F4 could state: pack schema **0.17 has
-landed** (`packages/schema/src/index.ts:2` reads `"0.17"`; `rfc/archive/tempo-vocabulary.md`
-is in the archive), so the timing-window subsystem is now fully shipped — `$defs/timingWindow`
-(`schemas/drill_pack.schema.json:661`), the `timing_window` success-condition arm (`:364`),
-`$defs/tempoVerdict` (`:685`), the `timingWindow` `ObjectivePredicate`
+landed** (`rfc/archive/tempo-vocabulary.md` is in the archive; the tree has since moved on to
+0.18), so the timing-window subsystem is now fully shipped — `$defs/timingWindow`
+(`schemas/drill_pack.schema.json:684`), the `timing_window` success-condition arm (`:367`),
+`$defs/tempoVerdict` (`:708`), the `timingWindow` `ObjectivePredicate`
 (`packages/runtime/src/objective.ts:87-93`), the `successPredicate` arm
-(`apps/server/src/pack-orchestrator.ts:229-238`), and six `TIMING_WINDOW_*` refusal codes —
+(`apps/server/src/pack-orchestrator.ts:245-256`), and six `TIMING_WINDOW_*` refusal codes —
 and **`grep -r timingWindow content/` returns 0 matches**, as does `timingWindows`. A complete,
 correct, unused subsystem. That is the failure this RFC must not reproduce.
 
@@ -155,7 +155,7 @@ F4 was not:
    acceptance criteria enforce it (§13, criteria 9–11).
 2. **The pack format refuses inert authoring.** `TRANSITION_EXPRESSION_NEVER_PRESENT` (§4.4)
    is a load error, evaluated by replaying the pack's own spine — machinery the validator
-   already runs (`apps/server/src/pack-validation.ts:143-161`). A pack cannot ship a
+   already runs (`authoredSpineFens`, `apps/server/src/pack-validation.ts:170-186`). A pack cannot ship a
    transition condition that never fires. There was no equivalent rule for `timingWindow`.
 3. **The Just Play consumer adds no new surface to go unused.** It widens two shipped ones.
    A marker that nobody opens is visibly dead in a place people already look.
@@ -608,7 +608,7 @@ candidate move, and §5.5 makes that a hard boundary rather than a convention.
 #### 5.2 On request — the reading projection
 
 A new bounded, canonical projection, the transition sibling of `structuralReading`
-(`structure.ts:383-423`):
+(`structure.ts:449-495`):
 
 ```ts
 export function transitionReading(before: string, moveUci: string, after: string): TransitionReading | null;
@@ -938,7 +938,7 @@ this RFC changes that boundary or feeds it.
 | Run root — `node.parentId === null` | `transitionFeature` is **`false`**. Never an error, never vacuously true (§4.2). The reading disclosure says so and renders nothing |
 | `node.moveUci === null` | `false`, same rule |
 | Parent node not found in `run.nodes` | `false`. Matches `deviationPlayed`'s shipped defensiveness (`objective.ts:270-274`) |
-| UCI not legal in `before` | `transitionReading` returns `null`; `matchesTransitionExpression` returns `false`. A run's nodes are legal by construction; a validator replaying a spine already skips illegal moves (`pack-validation.ts:152`) |
+| UCI not legal in `before` | `transitionReading` returns `null`; `matchesTransitionExpression` returns `false`. A run's nodes are legal by construction; a validator replaying a spine already skips illegal moves (`pack-validation.ts:177`) |
 | Castling, encoded either as king-two-squares or king-takes-rook | Handled by the shipped `parseUci` path already used by `irreversibility` (`pivotal.ts:44-46`); no new convention |
 | En passant | Handled by `capturedRole`'s shipped clause (`pivotal.ts:37`) |
 | Promotion | The promoted piece is a different role on the same square, so it is **not** "the same piece in both positions"; `escape_squares_changed` and `defended_duties_changed` skip it, and `attacked_squares_changed` sees the new attack relations. Stated because it is the one place the same-square identity rule is surprising |
@@ -972,30 +972,46 @@ validate unchanged against 0.19.
 `$defs/fenPredicate`, `$defs/structuralFeature`, `$defs/distanceTarget`, `$defs/timingWindow`,
 and `AssistanceConfig`.
 
-### 12. Relationship to `rfc/predicate-wave-3.md`
+### 12. Relationship to `rfc/predicate-wave-3.md`, which landed mid-draft
 
-**Not a dependency, in either direction.** That draft's `plan_consequence`, `piece_count`,
-`king_zone` and `piece_distance` are static leaves in the `structuralFeature` union; this RFC
-adds a sibling union and one success-condition arm, and touches none of them. They share only
-the `successCondition` ordinal (§4.1) and the schema file, both of which rebase cheaply.
+**It landed while this draft was being written**, and the draft was re-verified against the new
+tree rather than left describing the old one. Pack schema is **0.18**, shape-entry **0.3**,
+`plan_consequence` is the seventh `successCondition` arm (`schemas/drill_pack.schema.json:379`),
+and `piece_count` / `king_zone` / `piece_distance` ship (`:472-474`). `rfc/predicate-wave-3.md`
+is still in `rfc/` rather than `rfc/archive/` — implemented, not yet archived — so its section
+and line references in this file remain valid.
 
-**Three things flow the other way** and are recorded so the coordinator can see them:
+**Three consequences, all of which make this RFC smaller:**
 
-1. F4 is this RFC's specification input and is now **discharged** — the deferral it records is
-   overturned by the ruling and the category ships here. F4's text is not edited by this draft
-   (sibling-RFC edits are outside this draft's authority); the coordinator should mark it
-   discharged when this RFC is accepted.
-2. F4's promotion trigger — *"the first authoring wave to file a transition claim as a format
-   gap, or the RFC that ships the discovered-threat surface"* — was **not** met, and this RFC
-   does not claim it was. An **owner ruling** opened this lane instead, which is the mechanism
-   `rfc/0000-rfc-process.md` provides and the same one that opened wave 3 itself. Stated
-   plainly because a reader checking the trigger will find it unfired.
-3. The discovered-threat surface (`vacationReading`) is **still** unclaimed after this RFC.
-   §8 leaves it dead deliberately, so the second half of F4's trigger survives this RFC intact.
+1. **The ordinal is settled**, not conditional (§4.1). `transition_feature` is the eighth arm.
+2. **The `NEVER_PRESENT` refusal has a shipped sibling to copy** rather than an analogy to
+   argue: `PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT` and `authoredSpineFens`
+   (`apps/server/src/pack-validation.ts:170-186,474`) are exactly the shape §4.4 needs, one
+   field wider. That is the strongest single piece of evidence that §4.4's rule is
+   implementable as specified.
+3. **`piece_distance` shipping closes R2's loop.** The static half of the repositioning case is
+   now in the vocabulary, which is precisely why §7 R1 can refuse the delta without leaving the
+   owner's knight-reroute case unserved. The half that survived measurement shipped; the half
+   that failed it does not ship here.
 
-If 0.18 lands first, `transition_feature` is the eighth `successCondition` arm and this RFC's
-schema diff applies on top of it cleanly (disjoint `$defs`). If 0.18 stalls, this RFC rebases
-to 0.18 and `transition_feature` is the seventh. Either way nothing is renumbered unilaterally.
+**No shared surface remains.** `plan_consequence`, `piece_count`, `king_zone` and
+`piece_distance` are static leaves in the `structuralFeature` union; this RFC adds a sibling
+union and one success-condition arm and touches none of them.
+
+**Two things flow the other way**, recorded so the coordinator can act on them:
+
+1. **F4 is discharged by this RFC.** The deferral it records is overturned by the owner ruling
+   and the category ships here. F4's text is **not** edited by this draft — sibling-RFC edits
+   are outside this draft's authority — so the coordinator should mark it discharged when this
+   RFC is accepted, and should do so in the same commit that archives `predicate-wave-3`.
+2. **F4's promotion trigger was never met, and this RFC does not claim it was.** The trigger is
+   *"the first authoring wave to file a transition claim as a format gap, or the RFC that ships
+   the discovered-threat surface"*; neither has fired, re-checked by
+   `design/research/move-primitive-computability.md` §5. An **owner ruling** opened this lane
+   instead — the mechanism `rfc/0000-rfc-process.md` provides, and the same one that opened
+   wave 3 itself. Stated plainly, because a reader checking the trigger will find it unfired.
+   The discovered-threat surface (`vacationReading`) is **still** unclaimed after this RFC: §8
+   leaves it dead deliberately, so the second half of F4's trigger survives intact.
 
 ## Deviations from design
 
@@ -1044,7 +1060,7 @@ deliberate and stated so a later wave does not read the gap as an oversight:
 8. **The reading projection carries no verdict.** `transitionReading`'s output type has no
    score, rank, severity or significance field, and a unit test asserts that no template string
    in `transition-sentences.ts` and no leaf name contains a member of `KEY_POINT_JUDGEMENTS`
-   (`pack-validation.ts:141`).
+   (`pack-validation.ts:148`).
 9. **Three committed packs carry a firing `transition_feature` condition** (§4.6), landing in
    the same commits as the implementation, each verified to fire on its own spine and each
    graded — not `play_until_checkpoint`.
