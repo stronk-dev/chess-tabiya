@@ -1,0 +1,715 @@
+{
+  "id": "mate-bishop-knight",
+  "version": "0.1.0",
+  "title": "Bishop and knight: the walk to the corner your bishop owns",
+  "mode": "outcome",
+  "phase": "endgame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2200,
+    "label": "Club player drilling the hardest of the elementary mates in one sitting - the whole technique, root to checkmate"
+  },
+  "start": {
+    "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1",
+    "side": "white"
+  },
+  "objective": {
+    "type": "win",
+    "summary": "Bishop and knight against a bare king: the elementary mate nobody holds in one gulp. Mate exists in two corners only - the ones your bishop's colour can reach - and against best defence the king runs to the other two. The technique is a walk: fence with the bishop, cross with the knight, take ground with the king, and finish in a corner where nearly every quiet move is stalemate.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "win",
+        "pieceCount": 4,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-15T08:29:29.429Z"
+      },
+      "resolveAt": {
+        "kind": "terminal"
+      }
+    },
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "any",
+          "of": [
+            {
+              "kind": "not",
+              "of": {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "white",
+                  "role": "bishop",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              }
+            },
+            {
+              "kind": "not",
+              "of": {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_reach_count",
+                  "color": "white",
+                  "role": "knight",
+                  "scope": "any",
+                  "comparison": "atLeast",
+                  "count": 0
+                }
+              }
+            }
+          ]
+        },
+        "to": "degraded",
+        "from": [
+          "active",
+          "preserved"
+        ]
+      }
+    ]
+  },
+  "concepts": [
+    "bishop-coloured-corner",
+    "wrong-corner-defence",
+    "knight-crossing",
+    "diagonal-fence",
+    "stalemate-field",
+    "phase-decomposition",
+    "fifty-move-pressure"
+  ],
+  "planClasses": [
+    {
+      "id": "bishop-fence",
+      "label": "The bishop draws the fence",
+      "description": "The bishop's job is a diagonal the king may not cross. It never checks to make progress and it works from the far end of the line, where a bare king can never reach it."
+    },
+    {
+      "id": "knight-bridge",
+      "label": "The knight bridges the squares the bishop cannot see",
+      "description": "Half the board is the wrong colour for the bishop. The knight covers those squares, and because it needs several moves to cross the board it starts moving before you know where it will be needed."
+    },
+    {
+      "id": "corner-net",
+      "label": "The king takes the ground and closes the net",
+      "description": "Bishop and knight hold territory; only the king takes it. In the final corner the king stands two squares away and the last three moves are the net closing."
+    }
+  ],
+  "spine": [
+    {
+      "id": "p01-be5",
+      "moveUci": "c3e5",
+      "moveSan": "Be5",
+      "children": [
+        {
+          "id": "p02-kd7",
+          "moveUci": "e6d7",
+          "moveSan": "Kd7",
+          "children": [
+            {
+              "id": "p03-kd5",
+              "moveUci": "e4d5",
+              "moveSan": "Kd5",
+              "children": [
+                {
+                  "id": "p04-ke7",
+                  "moveUci": "d7e7",
+                  "moveSan": "Ke7",
+                  "children": [
+                    {
+                      "id": "p05-nf4",
+                      "moveUci": "d3f4",
+                      "moveSan": "Nf4",
+                      "children": [
+                        {
+                          "id": "p06-kd7",
+                          "moveUci": "e7d7",
+                          "moveSan": "Kd7",
+                          "children": [
+                            {
+                              "id": "p07-ng6",
+                              "moveUci": "f4g6",
+                              "moveSan": "Ng6",
+                              "children": [
+                                {
+                                  "id": "p08-kc8",
+                                  "moveUci": "d7c8",
+                                  "moveSan": "Kc8",
+                                  "children": [
+                                    {
+                                      "id": "p09-kc6",
+                                      "moveUci": "d5c6",
+                                      "moveSan": "Kc6",
+                                      "children": [
+                                        {
+                                          "id": "p10-kd8",
+                                          "moveUci": "c8d8",
+                                          "moveSan": "Kd8",
+                                          "children": [
+                                            {
+                                              "id": "p11-bg3",
+                                              "moveUci": "e5g3",
+                                              "moveSan": "Bg3",
+                                              "children": [
+                                                {
+                                                  "id": "p12-kc8",
+                                                  "moveUci": "d8c8",
+                                                  "moveSan": "Kc8",
+                                                  "children": [
+                                                    {
+                                                      "id": "p13-ne7",
+                                                      "moveUci": "g6e7",
+                                                      "moveSan": "Ne7+",
+                                                      "children": [
+                                                        {
+                                                          "id": "p14-kd8",
+                                                          "moveUci": "c8d8",
+                                                          "moveSan": "Kd8",
+                                                          "children": [
+                                                            {
+                                                              "id": "p15-kd6",
+                                                              "moveUci": "c6d6",
+                                                              "moveSan": "Kd6",
+                                                              "children": [
+                                                                {
+                                                                  "id": "p16-ke8",
+                                                                  "moveUci": "d8e8",
+                                                                  "moveSan": "Ke8",
+                                                                  "children": [
+                                                                    {
+                                                                      "id": "p17-ke6",
+                                                                      "moveUci": "d6e6",
+                                                                      "moveSan": "Ke6",
+                                                                      "children": [
+                                                                        {
+                                                                          "id": "p18-kd8",
+                                                                          "moveUci": "e8d8",
+                                                                          "moveSan": "Kd8",
+                                                                          "children": [
+                                                                            {
+                                                                              "id": "p19-bh2",
+                                                                              "moveUci": "g3h2",
+                                                                              "moveSan": "Bh2",
+                                                                              "children": [
+                                                                                {
+                                                                                  "id": "p20-ke8",
+                                                                                  "moveUci": "d8e8",
+                                                                                  "moveSan": "Ke8",
+                                                                                  "children": [
+                                                                                    {
+                                                                                      "id": "p21-bc7",
+                                                                                      "moveUci": "h2c7",
+                                                                                      "moveSan": "Bc7",
+                                                                                      "children": [
+                                                                                        {
+                                                                                          "id": "p22-kf8",
+                                                                                          "moveUci": "e8f8",
+                                                                                          "moveSan": "Kf8",
+                                                                                          "children": [
+                                                                                            {
+                                                                                              "id": "p23-nf5",
+                                                                                              "moveUci": "e7f5",
+                                                                                              "moveSan": "Nf5",
+                                                                                              "children": [
+                                                                                                {
+                                                                                                  "id": "p24-ke8",
+                                                                                                  "moveUci": "f8e8",
+                                                                                                  "moveSan": "Ke8",
+                                                                                                  "children": [
+                                                                                                    {
+                                                                                                      "id": "p25-nd6",
+                                                                                                      "moveUci": "f5d6",
+                                                                                                      "moveSan": "Nd6+",
+                                                                                                      "children": [
+                                                                                                        {
+                                                                                                          "id": "p26-kf8",
+                                                                                                          "moveUci": "e8f8",
+                                                                                                          "moveSan": "Kf8",
+                                                                                                          "children": [
+                                                                                                            {
+                                                                                                              "id": "p27-kf6",
+                                                                                                              "moveUci": "e6f6",
+                                                                                                              "moveSan": "Kf6",
+                                                                                                              "children": [
+                                                                                                                {
+                                                                                                                  "id": "p28-kg8",
+                                                                                                                  "moveUci": "f8g8",
+                                                                                                                  "moveSan": "Kg8",
+                                                                                                                  "children": [
+                                                                                                                    {
+                                                                                                                      "id": "p29-kg6",
+                                                                                                                      "moveUci": "f6g6",
+                                                                                                                      "moveSan": "Kg6",
+                                                                                                                      "children": [
+                                                                                                                        {
+                                                                                                                          "id": "p30-kf8",
+                                                                                                                          "moveUci": "g8f8",
+                                                                                                                          "moveSan": "Kf8",
+                                                                                                                          "children": [
+                                                                                                                            {
+                                                                                                                              "id": "p31-bd8",
+                                                                                                                              "moveUci": "c7d8",
+                                                                                                                              "moveSan": "Bd8",
+                                                                                                                              "children": [
+                                                                                                                                {
+                                                                                                                                  "id": "p32-kg8",
+                                                                                                                                  "moveUci": "f8g8",
+                                                                                                                                  "moveSan": "Kg8",
+                                                                                                                                  "children": [
+                                                                                                                                    {
+                                                                                                                                      "id": "p33-be7",
+                                                                                                                                      "moveUci": "d8e7",
+                                                                                                                                      "moveSan": "Be7",
+                                                                                                                                      "children": [
+                                                                                                                                        {
+                                                                                                                                          "id": "p34-kh8",
+                                                                                                                                          "moveUci": "g8h8",
+                                                                                                                                          "moveSan": "Kh8",
+                                                                                                                                          "children": [
+                                                                                                                                            {
+                                                                                                                                              "id": "p35-nf5",
+                                                                                                                                              "moveUci": "d6f5",
+                                                                                                                                              "moveSan": "Nf5",
+                                                                                                                                              "children": [
+                                                                                                                                                {
+                                                                                                                                                  "id": "p36-kg8",
+                                                                                                                                                  "moveUci": "h8g8",
+                                                                                                                                                  "moveSan": "Kg8",
+                                                                                                                                                  "children": [
+                                                                                                                                                    {
+                                                                                                                                                      "id": "p37-nh6",
+                                                                                                                                                      "moveUci": "f5h6",
+                                                                                                                                                      "moveSan": "Nh6+",
+                                                                                                                                                      "children": [
+                                                                                                                                                        {
+                                                                                                                                                          "id": "p38-kh8",
+                                                                                                                                                          "moveUci": "g8h8",
+                                                                                                                                                          "moveSan": "Kh8",
+                                                                                                                                                          "children": [
+                                                                                                                                                            {
+                                                                                                                                                              "id": "p39-bf6",
+                                                                                                                                                              "moveUci": "e7f6",
+                                                                                                                                                              "moveSan": "Bf6#",
+                                                                                                                                                              "children": []
+                                                                                                                                                            }
+                                                                                                                                                          ],
+                                                                                                                                                          "annotations": [
+                                                                                                                                                            "THE MATING NODE. Full enumeration: eighteen legal moves. Nine win; nine were queried DRAW - and eight of those nine draws are STALEMATE. Every bishop move on the board except one stalemates the defender, and the exception is mate. The ninth draw is Ng8, which simply hangs the knight. What separates the mating move from the eight stalemates is arithmetic you can do on the board: the king holds g7 and h7, the knight holds g8 and f7, and h8 has to be covered by a bishop that is not standing on a square the king could have used."
+                                                                                                                                                          ]
+                                                                                                                                                        }
+                                                                                                                                                      ],
+                                                                                                                                                      "annotations": [
+                                                                                                                                                        "Nh6+ takes g8. Be7 covers f8 and Kg6 covers h7, so the defender has one square: h8."
+                                                                                                                                                      ]
+                                                                                                                                                    }
+                                                                                                                                                  ]
+                                                                                                                                                }
+                                                                                                                                              ],
+                                                                                                                                              "annotations": [
+                                                                                                                                                "Nf5 covers g7 and h6 - and h6 is where the knight is going."
+                                                                                                                                              ]
+                                                                                                                                            }
+                                                                                                                                          ]
+                                                                                                                                        }
+                                                                                                                                      ],
+                                                                                                                                      "annotations": [
+                                                                                                                                        "Be7 covers f8. The black king is on g8 and h8 is its only legal square."
+                                                                                                                                      ]
+                                                                                                                                    }
+                                                                                                                                  ]
+                                                                                                                                }
+                                                                                                                              ],
+                                                                                                                              "annotations": [
+                                                                                                                                "The bishop wants the a3-f8 diagonal so that it can cover f8 from a distance. Its own knight stands on d6, the only square of that diagonal it can reach in one move, so it goes round: d8 now, e7 next. Two quiet moves, no checks."
+                                                                                                                              ]
+                                                                                                                            }
+                                                                                                                          ]
+                                                                                                                        }
+                                                                                                                      ],
+                                                                                                                      "annotations": [
+                                                                                                                        "Kg6 is the mating post. From g6 the white king holds f7, g7 and h7; the black king has f8, g8 and h8 and nothing else. Enumeration here: all eighteen legal moves still win, so nothing at this node can lose the point. Ke7 also wins - in twenty-four plies instead of ten. In a real game that difference is the fifty-move rule eating your win rather than the defender saving it."
+                                                                                                                      ]
+                                                                                                                    }
+                                                                                                                  ],
+                                                                                                                  "annotations": [
+                                                                                                                    "LEG TWO IS DONE. The black king stands inside the corner box - g7, g8, h7, h8 - the two-by-two square the mate happens in. Count what it cost: twenty plies of driving, against a defender queried as playing the most resistant reply available at every single turn. That is the phase this endgame is famous for."
+                                                                                                                  ]
+                                                                                                                }
+                                                                                                              ],
+                                                                                                              "annotations": [
+                                                                                                                "Kf6 takes f7 and g7. Nd6 still covers e8. One square left: g8."
+                                                                                                              ]
+                                                                                                            }
+                                                                                                          ]
+                                                                                                        }
+                                                                                                      ],
+                                                                                                      "annotations": [
+                                                                                                        "Nd6+ checks on e8. Bc7 covers d8 and Ke6 covers d7 and f7, so f8 is the only square, and the defender is one file further from the corner he wanted."
+                                                                                                      ]
+                                                                                                    }
+                                                                                                  ]
+                                                                                                }
+                                                                                              ],
+                                                                                              "annotations": [
+                                                                                                "The knight begins the second half of its crossing. From f5 it covers d6, e7 and g7 - the squares behind the king's line of retreat."
+                                                                                              ]
+                                                                                            }
+                                                                                          ]
+                                                                                        }
+                                                                                      ],
+                                                                                      "annotations": [
+                                                                                        "Bc7 takes b8 and d8 in one move. With Ke6 covering d7 and f7, the defender has one legal square left and it points at h8."
+                                                                                      ]
+                                                                                    }
+                                                                                  ]
+                                                                                }
+                                                                              ],
+                                                                              "annotations": [
+                                                                                "The bishop steps back to the far end of its own diagonal. Bishops work at any range: from h2 it holds the same b8-h2 line while standing where nothing will ever reach it."
+                                                                              ]
+                                                                            }
+                                                                          ]
+                                                                        }
+                                                                      ],
+                                                                      "annotations": [
+                                                                        "Ke6 repeats the idea one file to the right. The king is doing the driving; the pieces have not moved for two moves and do not need to."
+                                                                      ]
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              ],
+                                                              "annotations": [
+                                                                "The queried winner, and the shortest of the seven: Kd6 takes c7 and e7, and the defender has one legal move, forward into the half of the board where the bishop lives."
+                                                              ]
+                                                            }
+                                                          ],
+                                                          "annotations": [
+                                                            "The sharpest position in the pack. Full legal-move enumeration here: TWENTY legal moves, SEVEN win, THIRTEEN queried DRAW. Every king retreat draws - Kb5, Kb6, Kb7, Kc5, Kd5 - and so do seven of the nine bishop moves, the check Bc7+ among them. The highest concentration of drawing moves anywhere on this spine sits exactly on the seam between phase one and phase two."
+                                                          ]
+                                                        }
+                                                      ],
+                                                      "annotations": [
+                                                        "Ne7+ is a steering check, not a harassing one. It takes c8; b8 and d7 are already covered by the bishop and the king, so the defender has exactly one square, and it is the one the drive needs him on."
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "annotations": [
+                                                "The quiet move that draws the fence: from g3 the bishop owns the whole b8-h2 diagonal, which means b8 and c7 - the last two squares of the queenside corner the king still wanted. Nothing is attacked and everything is decided."
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "annotations": [
+                                        "The shoulder. Kc6 takes b7 and d7 and stands beside the defender instead of in front of him."
+                                      ]
+                                    }
+                                  ],
+                                  "annotations": [
+                                    "LEG ONE IS DONE, and the defender chose where. The king is on the edge - that was your objective - and it is on the a8 side, which was his: a8 is a light square and a dark-squared bishop can never attack it. Every Black reply on this spine is the most resistant one available, so this is not a lucky line. It is what phase one buys you, and why phase two exists."
+                                  ]
+                                }
+                              ],
+                              "annotations": [
+                                "Ng6 covers e7 and f8, the two squares the black king would use to come back along the sixth rank and the eighth. Fence squares; no checks."
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "annotations": [
+                        "The knight starts moving early. It is the slowest piece on an empty board and the defender only needs one move to change which side he runs to, so the knight leaves before you know exactly where it is needed."
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "annotations": [
+                "The king comes with the pieces. Bishop and knight can fence but they cannot take ground; every square the defender loses is a square your king walks onto."
+              ]
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        "Take a long diagonal first. This bishop is dark-squared, so the mate will happen in a dark corner - a1 or h8 - and every move of the next twenty is a walk toward one of them. Tablebase fact at this root: twenty-three moves are legal, twenty-two of them win, and the one move that throws the win is Bf6, the square this bishop eventually mates from, played while the defending king is still standing next to it."
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "name-the-machinery",
+      "label": "Before the drive: name what each piece is for",
+      "trigger": {
+        "atSpineNode": "p02-kd7"
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "bishop-fence",
+          "knight-bridge",
+          "corner-net"
+        ]
+      }
+    },
+    {
+      "id": "the-seam",
+      "label": "Thirteen of twenty legal moves draw here",
+      "trigger": {
+        "atSpineNode": "p14-kd8"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "the-mating-post",
+      "label": "The king takes its post; every move still wins and most of them cost ten moves",
+      "trigger": {
+        "atSpineNode": "p28-kg8"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "mate-or-stalemate",
+      "label": "The mating node: one bishop move mates, eight stalemate",
+      "trigger": {
+        "atSpineNode": "p38-kh8"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p01-be5",
+      "p02-kd7",
+      "p03-kd5",
+      "p04-ke7",
+      "p05-nf4",
+      "p06-kd7",
+      "p07-ng6",
+      "p08-kc8",
+      "p09-kc6",
+      "p10-kd8",
+      "p11-bg3",
+      "p12-kc8",
+      "p13-ne7",
+      "p14-kd8",
+      "p15-kd6",
+      "p16-ke8",
+      "p17-ke6",
+      "p18-kd8",
+      "p19-bh2",
+      "p20-ke8",
+      "p21-bc7",
+      "p22-kf8",
+      "p23-nf5",
+      "p24-ke8",
+      "p25-nd6",
+      "p26-kf8",
+      "p27-kf6",
+      "p28-kg8",
+      "p29-kg6",
+      "p30-kf8",
+      "p31-bd8",
+      "p32-kg8",
+      "p33-be7",
+      "p34-kh8",
+      "p35-nf5",
+      "p36-kg8",
+      "p37-nh6",
+      "p38-kh8",
+      "p39-bf6"
+    ],
+    "plyHorizon": 40
+  },
+  "opponentPolicy": {
+    "mode": "perfect_tablebase"
+  },
+  "deviations": [
+    {
+      "at": {
+        "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1"
+      },
+      "moveUci": "c3f6",
+      "class": "tactical_error",
+      "note": "Bf6?? is the only one of the twenty-three legal root moves that was queried DRAW: Kxf6, and the mate is gone with it. It is worth knowing exactly why the tempting square is poison this early - f6 is the mating square, and the mating square is next to the defending king for the whole first half of the technique.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "p12-kc8"
+      },
+      "moveUci": "g3c7",
+      "class": "tactical_error",
+      "note": "Bc7 was queried STALEMATE - the API returns stalemate true for the resulting position. The king on c8 is walled in by Kc6 and Ng6 and the bishop takes the last square away from him without giving check. In a bare-king mate the fence must always leave the defender one move.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "p14-kd8"
+      },
+      "moveUci": "c6d5",
+      "class": "tactical_error",
+      "note": "Kd5 was queried DRAW. It is one of five king retreats at this node that all draw (Kb5, Kb6, Kb7, Kc5, Kd5): the shoulder is the only thing keeping the defender on the back rank, and stepping back returns the whole board.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "p14-kd8"
+      },
+      "moveUci": "g3c7",
+      "class": "tactical_error",
+      "note": "Bc7+ was queried DRAW. A check, at the sharpest node in the drill, that throws the win - the clearest possible statement that checks are not progress in this endgame. Seven of the nine bishop moves here draw.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "p14-kd8"
+      },
+      "moveUci": "e7c8",
+      "class": "tactical_error",
+      "note": "Nc8 was queried DRAW. The knight abandons the kingside crossing it has been making since move three; without it the bishop cannot cover both colours of square and the king walks out.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "p28-kg8"
+      },
+      "moveUci": "f6e7",
+      "class": "interesting_deviation",
+      "note": "Ke7 was queried WIN, so nothing is lost by rules - but the mate distance goes from ten plies to twenty-four. Play it and compare: this is the deviation that shows what 'still winning' costs when the fifty-move count is the real opponent.",
+      "offObjective": false
+    },
+    {
+      "at": {
+        "spineNodeId": "p30-kf8"
+      },
+      "moveUci": "d6e8",
+      "class": "tactical_error",
+      "note": "Ne8 was queried DRAW: Kxe8. The knight is the only piece that can cover the light squares around h8, so any move that puts it where the king can reach it ends the drill.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "p36-kg8"
+      },
+      "moveUci": "e7f8",
+      "class": "tactical_error",
+      "note": "Bf8 was queried DRAW - the bishop steps onto the one square the cornered king can capture on.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "p36-kg8"
+      },
+      "moveUci": "g6h6",
+      "class": "interesting_deviation",
+      "note": "Kh6 was queried WIN, at a distance of fifty-eight plies instead of two. The mate is two moves away and this move puts it twenty-nine moves away. Nothing about the position changed except which squares your own king takes away from your own pieces.",
+      "offObjective": false
+    },
+    {
+      "at": {
+        "spineNodeId": "p38-kh8"
+      },
+      "moveUci": "e7g5",
+      "class": "tactical_error",
+      "note": "Bg5 was queried STALEMATE. So were Ba3, Bb4, Bc5, Bd6, Bd8, Bf8 and Bh4 - eight of the nine bishop moves available at the mating node.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "p38-kh8"
+      },
+      "moveUci": "e7d8",
+      "class": "tactical_error",
+      "note": "Bd8 was queried STALEMATE - the same field, from the other end of the same diagonal. The bishop is on the right diagonal and the wrong square; only f6 both keeps h8 covered and leaves the king a legal reply, which is what makes it mate rather than a draw.",
+      "offObjective": true
+    },
+    {
+      "at": {
+        "spineNodeId": "p38-kh8"
+      },
+      "moveUci": "h6g8",
+      "class": "tactical_error",
+      "note": "Ng8 was queried DRAW: Kxg8. The ninth drawing move at the mating node, and the only one that is not stalemate.",
+      "offObjective": true
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "root-is-a-queried-win",
+      "text": "This exact position is a four-piece Syzygy win queried at the root (category win, DTM 39 plies), and the authored spine is the DTM-optimal line for both sides: every White move is fastest-mate-preserving and the line ends in checkmate confirmed by rules arithmetic.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "opponent-plays-the-spine",
+      "text": "The Black replies are exactly what this pack's declared perfect_tablebase opponent selects: a reimplementation of the shipped rule (category-preserving, longest absolute DTZ, ties by lexicographically least UCI) reproduced all nineteen of them.",
+      "evidenceTypes": [
+        "tablebase_exact",
+        "derived_feature"
+      ]
+    },
+    {
+      "id": "stalemate-is-the-default",
+      "text": "At the final decision node every legal move was enumerated and queried: nine win, nine draw, and eight of those nine draws are stalemate. Every bishop move on the board except the mating one stalemates.",
+      "evidenceTypes": [
+        "tablebase_exact"
+      ]
+    },
+    {
+      "id": "result-not-moves",
+      "text": "Outcome drill: you are graded on delivering mate, not on matching the authored squares. In this endgame more than any other elementary mate that distinction has teeth, because a winning move that costs twenty-eight moves is still a winning move and still loses the game to the fifty-move rule.",
+      "evidenceTypes": [
+        "author_principle",
+        "tablebase_exact"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "sources": [
+      "ROOT: a constructed schematic - White Ke4, Bc3, Nd3; Black Ke6, White to move. Chosen so that the bishop is dark-squared, the lone king is off the edge, and the two pieces are already coordinated, so the drill is the technique rather than the coordination that precedes it. No book diagram is claimed. Queried category win, DTM 39 plies, four pieces.",
+      "TABLEBASE VERIFIED: the root and every position after every spine move were queried against Syzygy via tablebase.lichess.org /standard on 2026-08-15 (UTC), one request at a time with a cache and 429 backoff. The spine is the DTM-optimal line for both sides: distance to mate falls by exactly one ply after every one of the thirty-nine moves, from 39 at the root to mate. Checkmate at the final position is rules arithmetic (python-chess is_checkmate), not a tablebase claim.",
+      "FULL LEGAL-MOVE ENUMERATION AT EVERY LEARNER DECISION NODE. All twenty White-to-move spine positions were enumerated exhaustively - the /standard endpoint returns every legal move with its own category, so this is a complete enumeration and not a sample - and every category quoted in an annotation or a deviation note is the queried one, inverted from the resulting position's mover to the learner's perspective per docs/tablebase-grounding.md. Counts stated in the file and checkable against that data: 23 legal / 22 win / 1 draw at the root; 20 legal / 7 win / 13 draw at ply 14; 18 legal / all 18 win at ply 28; 18 legal / 9 win / 9 draw of which 8 stalemate at ply 38.",
+      "OPPONENT REPRODUCTION: all nineteen Black replies on this spine were reproduced by a reimplementation of the shipped perfect_tablebase selection rule (apps/server/src/opponent-selector.ts: keep only category-preserving legal moves, order a losing position by longest absolute DTZ, break every tie by lexicographically least UCI). The reimplementation returned the authored reply at every one of the nineteen nodes, so the authored line is what the declared opponent will actually play. The 2026-08-14 mates batch could not do this - it recorded perfect_tablebase as declared-unimplemented and fell back to human_common; the mode is now supported for roots of at most seven pieces and this pack uses it.",
+      "Move legality and SAN: python-chess 1.11.2 generated every SAN in this file from the position at that ply; `make pack-check` (chessops) is the authoritative second check.",
+      "WHY THIS PACK EXISTS ALONGSIDE trajectory-mate-bishop-knight. The B+N mate was commissioned as a multi-segment trajectory (owner ruling 2026-08-15). `make verify-draft` cannot attach evidence to a trajectory pack - it requires a top-level syzygy assessment and a trajectory's top-level objective is run_trajectory, which may not carry grading. This file is the same root and the same thirty-nine plies wrapped in an outcome objective so that the technique's tablebase evidence is machine-attached somewhere. It is also the missing member of the theoretical-mates family (mate-k-q-technique, mate-k-r-technique, mate-two-bishops), whose 2026-08-14 batch deliberately deferred B+N pending exactly this ruling.",
+      "difficulty.branchLengthTarget IS OMITTED, NOT FORGOTTEN. The spine is 39 plies and the schema caps the field at 20. Declaring any legal value would misdescribe the drill, so the field is absent and the pack states its length here instead. This is the same 20-ply cap the 2026-08-14 mates batch hit from the other direction (a 23-ply K+R finish that had to be discarded).",
+      "AUTHORED, NOT PROVED: every sentence of reasoning is the author's rendering of standard technique. The tablebase grounds categories and distances; square-coverage statements in the annotations are derivable FEN arithmetic and were checked by hand against the position at that ply.",
+      "No shape-library entry exists for theoretical mates; none is referenced. See graduationBlockers."
+    ],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13); only a citable source or mechanical validation that bears on a claim clears a blocker.",
+      "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
+      "No shape-library entry names the theoretical-mate geometry; commission one if the library should fire on K+B+N positions in Just Play.",
+      "perfect_tablebase is published only where a tablebase provider is configured; a deployment without one will not offer the opponent this content was verified against.",
+      "The drill has no fifty-move counter surfaced even though the annotations argue from it."
+    ]
+  },
+  "retryVariants": [
+    {
+      "kind": "different_material_details",
+      "note": "The rest of the theoretical-mates family, easiest first: mate-k-q-technique, mate-k-r-technique, mate-two-bishops."
+    },
+    {
+      "kind": "related_position_same_idea",
+      "note": "trajectory-mate-bishop-knight - the same root and the same thirty-nine plies cut into three graded phases (centre to edge, edge to the bishop's corner, mate)."
+    }
+  ]
+}

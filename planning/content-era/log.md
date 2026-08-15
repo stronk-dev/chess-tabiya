@@ -1317,3 +1317,157 @@ unchanged — all four Syzygy declarations remain admission-unverified); no
 Stockfish pass (everything is inside Syzygy range — the point of the root
 choices); no touch of `rfc/`, `design/`, `archive/`, `apps/`, `packages/`,
 `schemas/`, opening-named drafts, or ON-RAMP territory; no commits.
+
+## 2026-08-15 — B+N as a multi-segment trajectory (owner ruling 2026-08-15), session 1 (claude)
+
+agent-research 25 · agent-encoding 70 · agent-engine-validation 55 · review 0 · agent-revision 20 · agent-tooling-friction 25
+notes: **Two packs landed in `content/drafts/`, both `make pack-check` green.**
+The commissioned deliverable is the trajectory; the second file exists because
+of a format blockage described below.
+
+- `trajectory-mate-bishop-knight.json` (trajectory, 3 legs, 39-ply spine,
+  1400–2200, `perfect_tablebase` opponent) — **the commissioned pack.** Root is
+  a constructed schematic: White Ke4, Bc3 (dark), Nd3; Black Ke6, White to move.
+  Queried **win, DTM 39 plies, 4 pieces**. Spine is DTM-optimal for both sides —
+  distance to mate falls by **exactly one ply after every one of the 39 moves**
+  — and ends in `Bf6#` confirmed by rules arithmetic.
+- `mate-bishop-knight.json` (outcome, win, same root, same 39 plies) —
+  **`ledger_verified`**, sidecars emitted by `make verify-draft`. It exists only
+  because verify-draft structurally cannot touch a trajectory pack (gap #1). It
+  is also the theoretical-mates family member wave 5c deliberately deferred
+  ("no B+N pack … its place at any band is an open product question") — the
+  2026-08-15 ruling closed that question.
+
+**The three-phase decomposition was measured, not assumed.** Black-king square
+was computed after every ply of the verified line: the king first stands on an
+edge after **ply 8** (…Kc8), first stands inside the g7–h8 corner box after
+**ply 28** (…Kg8), and first stands **on h8 after ply 34**. Both leg boundaries
+are structural predicates over the run FEN (`quantified some … piece = black
+king`), and the **shipped** `matchesStructuralExpression` was run over the spine
+to confirm they first fire at plies 8 and 28 — not my reimplementation. Legs are
+therefore **8 / 20 / 11 plies**. The owner's decomposition survives contact with
+the tablebase: against the most resistant reply available at every turn the lone
+king ran to the a8 side — the corner a dark-squared bishop can never attack — so
+leg two is not an artefact of the line, it is what leg one buys.
+
+**THE 20-PLY CAP: it binds exactly, and only under one reading of leg two.**
+Leg two as authored is **20 plies — the cap with zero margin**. Leg two under
+the plain reading of the ruling ("drive it along the edge to a corner matching
+the bishop's colour", i.e. the king standing **on h8**) is **26 plies and does
+not fit**. The pack fits because I defined the leg-two boundary as the corner
+**box** rather than the corner square. That is a defensible reading of the
+phase, but it is a choice made to fit a cap, and it is recorded as one in the
+pack's provenance. Option (b) from the brief was not needed and option (a) was
+not used: the ruling's three phases stand.
+
+**Verification discipline (wave-5c standard replicated).**
+tablebase.lichess.org `/standard`, one request at a time, JSON cache, 429
+backoff. Every spine position queried; **full legal-move enumeration at all
+twenty White-to-move nodes** (the endpoint returns every legal move with its own
+category, so enumeration is exhaustive rather than sampled); every deviation
+category is the queried one after the documented inversion. A final self-check
+script re-reads the two **shipped** JSON files and re-verifies spines, SAN/UCI
+agreement, checkmate, per-ply DTM progress, every deviation category, every
+stalemate claim, and every count quoted in prose: **0 failures**.
+
+**Enumeration content the drafts could not have guessed:**
+- Root: 23 legal, 22 win, **1 draw — Bf6**, the square the bishop mates from
+  twenty moves later, played while the king still stands beside it.
+- Ply-14 node (`3k4/4N3/2K5/8/8/6B1/8/8 w`): 20 legal, **7 win, 13 draw**. All
+  five king retreats draw; seven of nine bishop moves draw, **including the
+  check Bc7+**. This is the sharpest position in the pack and it sits exactly on
+  the seam between phase one and phase two.
+- Ply-38 mating node: 18 legal, 9 win, 9 draw — and **eight of the nine draws
+  are STALEMATE. Every bishop move on the board except the mating one
+  stalemates.** Sharper than the B+B pack's "16 of 18".
+- Ply-28 node (leg-3 entry): **all 18 legal moves win**. Nothing there can lose
+  the point; Ke7 wins in 24 plies instead of 10. Encoded as an
+  `interesting_deviation` — the fifty-move rule as the real opponent.
+- Ply-12 `Bc7` and ply-36 `Kh6`: a mid-drill stalemate, and a winning move that
+  moves the mate from 2 plies to 58.
+
+**perfect_tablebase is now usable and this is the first pack to use it.**
+Wave 5c's gap #2 ("mates packs want the perfect_tablebase opponent and cannot
+have it") is **CLOSED**: the mode is supported for roots of ≤7 pieces
+(`pack-validation.ts` `PERFECT_TABLEBASE_OUT_OF_RANGE` is the only gate) and a
+provider-configured deployment publishes it. Stronger: I reimplemented the
+shipped selection rule (`opponent-selector.ts` — category-preserving moves only,
+losing position ordered by longest absolute DTZ, ties by lexicographically least
+UCI) and it **reproduced all nineteen authored Black replies**. The authored
+line is literally what the declared opponent will play.
+
+**Two authoring errors the harness caught in my own drafting:**
+1. Drafted the "you lost a piece" success condition by copying
+   `mate-two-bishops`'s shape, then reworked it into `quantified`/`pieceOnSquare`
+   nodes — which **crashed `pack-check` with an unhandled `TypeError:
+   Structural success condition has no feature leaf`** (see gap #4). Rebuilt on
+   a `piece_reach_count` feature leaf with `scope: "any"`.
+2. While doing (1) I found that **`mate-two-bishops.json`'s only success
+   condition can never fire**: `not(piece_reach_count … scope "every" … atLeast
+   0)`. `every` over an empty piece set is vacuously true, so the negation is
+   false exactly when the bishops are gone — backwards. Not touched (out of
+   scope, and it is frozen content), reported instead.
+Two prose errors were also caught before ship by hand-checking annotations
+against the position: a claim that Nd6+ "takes e8" (it *checks* on e8) and a
+claim that from ply 33 "every white move is either mate, a check, or a
+stalemate" (at ply 35 all nineteen legal moves win and none draw). Both
+rewritten to what the board actually says.
+
+contract-gaps and frictions, sharpest first:
+1. **A TRAJECTORY PACK CANNOT BE `ledger_verified`. Structural, not
+   incidental.** `make verify-draft` requires
+   `objective.grading.assessedBy.kind === "syzygy"` on the **top-level**
+   objective and refuses everything else with `VERIFY_ASSESSMENT_NOT_SYZYGY`
+   (observed, exact error). A trajectory's top-level objective is
+   `run_trajectory`, which the validator refuses to let carry grading at all
+   (`OBJECTIVE_GRADING_UNSUPPORTED`), and a leg may not carry a Syzygy
+   assessment either (`TRAJECTORY_LEG_SYZYGY_UNSUPPORTED`). So the *most*
+   machine-grounded pack in the repo has to declare its root assessment as
+   `kind: "authored"` and ships with **zero evidence sidecars**, while a
+   worse-grounded outcome pack over the identical spine earns
+   `ledger_verified` on the first try. A reader of the trajectory file alone
+   cannot distinguish its grounded win from a guessed one. This is why
+   `mate-bishop-knight.json` exists at all.
+2. **A leg carries only `id`, `entryCheckpointId`, `objective` — so per-leg
+   authoring is inexpressible, and a phase-rehearsal pack is exactly the thing
+   that needs it.** Three concrete losses in this pack: (a) **per-leg
+   `opponentPolicy`** — phase one is drillable against a weaker defender and
+   phase three must be perfect; one policy is declared for all three;
+   (b) **per-leg `shapes`**; (c) **per-leg `branchLengthTarget`** — this pack's
+   legs are 8 / 20 / 11 plies and the single pack-level field can only say
+   `20`, so the on-ramp-vs-core band the field encodes cannot be stated per
+   phase. (a) is the one with teeth: the whole thesis of resistance-varied
+   replay is per-phase.
+3. **`branchLengthTarget`'s 2–20 range, third attestation, now from both
+   sides.** Wave 5c hit it with a 23-ply K+R finish. Here: leg two is exactly
+   20 (see above), and the outcome sibling's 39-ply spine **cannot declare the
+   field at all** — no legal value describes the drill, so it is omitted and the
+   length is stated in provenance instead. A field that must be omitted to stay
+   honest is not doing its job.
+4. **A schema-valid structural success condition can crash `pack-check` instead
+   of failing it.** `conditionEvidenceRefs` throws a bare
+   `TypeError("Structural success condition has no feature leaf")` for any
+   expression built only from `quantified` / `pieceOnSquare` nodes — both are
+   first-class schema constructs since 0.13. Worse, for **outcome** objectives
+   `objectiveRules` is not called during validation at all (only
+   `PLAN_OBJECTIVES` are checked), so the identical condition passes
+   `pack-check` and would throw at runtime. Two defects in one: an unhandled
+   throw where a typed validation issue belongs, and a validation path that
+   does not exercise the rule compiler for outcome packs.
+5. **The `authored` assessment note is capped at 400 characters.** The note is
+   the only place to explain *why* an assessment is declared authored; my first
+   draft explaining gap #1 was refused by `SCHEMA_MAXLENGTH` and had to be
+   trimmed. Minor, but it bites precisely where honesty costs words.
+6. **Structural leg boundaries need king geometry and the vocabulary has none.**
+   "The black king is on an edge" had to be built from four `quantified` square
+   regions, and the objective type is `reach_structure` — a pawn-structure word
+   doing duty for a king-geometry target. It works and it is deterministic; it
+   is also four times longer than the fact it states.
+7. python-chess still not blessed in the repo toolchain (fourth attestation;
+   scratchpad venv again, 1.11.2).
+
+Not done, deliberately: no touch of `rfc/`, `design/`, `docs/`, `archive/`,
+`apps/`, `packages/`, `schemas/`, or any existing content pack (including
+`mate-two-bishops.json`, whose dead success condition is reported above rather
+than fixed); no shape-library entry for theoretical mates (still none exists);
+no Stockfish pass (everything is inside Syzygy range); no commits.

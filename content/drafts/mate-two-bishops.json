@@ -23,7 +23,7 @@
         "category": "win",
         "pieceCount": 4,
         "sourceId": "syzygy",
-        "retrievedAt": "2026-08-14T21:20:58.110Z"
+        "retrievedAt": "2026-08-15T08:34:28.191Z"
       },
       "resolveAt": {
         "kind": "terminal"
@@ -35,15 +35,25 @@
         "feature": {
           "kind": "not",
           "of": {
-            "kind": "feature",
-            "feature": {
-              "kind": "piece_reach_count",
-              "color": "white",
-              "role": "bishop",
-              "scope": "every",
-              "comparison": "atLeast",
-              "count": 0
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "bishop_on_shade",
+                  "color": "white",
+                  "shade": "light"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "bishop_on_shade",
+                  "color": "white",
+                  "shade": "dark"
+                }
+              }
+            ]
           }
         },
         "to": "degraded",
