@@ -21,14 +21,29 @@ fix (§9 — a runtime behaviour change; honour the normative ordering and the
 whose design-tier text is now written at `design/01-training-model.md` §Outcome
 types.
 
-## 2. `rfc/validator-integrity.md` — in cross-review, start after item 1
+## 2. `rfc/validator-integrity.md` — CROSS-REVIEWED, READY (ship behind item 1)
 
 Claims **nothing versioned** — no pack-schema bump, no migration, no run-schema
 change — so it can land in parallel with any other wave. Fixes D32 (seven of
 twelve objective types can pass validation and crash during play; independently
 confirmed by your own audit `6c7a579`), D33 (trajectories cannot be
 `ledger_verified`), and D37 (an archived RFC registered `implemented` whose
-`objectiveIssues` extraction never shipped).
+`objectiveIssues` extraction never shipped), and absorbs D39/D40 from your own audit.
+
+**Reviewed 2026-08-15: ready.** Ten blockers fixed. The one that would have
+shipped broken: §3c was missing the `outcomeObjective` rebase — that flag is
+computed once from `pack.objective.type` and gates FIVE of the twelve extracted
+codes, so `OBJECTIVE_GRADING_REQUIRED` could never have fired on a `hold` leg and
+`OBJECTIVE_GRADING_UNSUPPORTED` would newly have fired on the final leg of all
+three committed trajectory drafts. Three unrunnable acceptance criteria also
+fixed.
+
+**OPERATIONAL CAVEAT — read before starting.** This RFC's 66 `file:line`
+citations are exact at `8e6dc2f` and are **already wrong in the working tree**,
+because item 1 is mid-landing and moved every amended file (`pack-validation.ts`
++64, `pack-orchestrator.ts` +1/+32, `line.ts` +1, `evidence-ref.ts` +1, schema
++30). Ship it **behind** item 1 and **locate by symbol name, not by line**. The
+RFC now carries a baseline pin saying so.
 
 ## 3. `rfc/tempo-vocabulary.md` — CROSS-REVIEWED, READY
 

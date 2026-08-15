@@ -187,7 +187,7 @@ Out of this RFC, each with the reason rather than deferral language:
   hands to "the vocabulary lane" (F10). Neither is absorbed and neither is re-specified here.
 - **D32** (`design/BACKLOG.md:118`) — `conditionEvidenceRefs`
   (`apps/server/src/pack-orchestrator.ts:124-137`) throws a bare `TypeError` when
-  `structuralFeatureKinds` returns empty. `validator-integrity` (0.19) owns the fix. §5 is
+  `structuralFeatureKinds` returns empty. **`validator-integrity` owns the fix — and it claims NOTHING versioned; it declined 0.19** (contradiction corrected by claude as coordinator 2026-08-15; this draft's own header, §832 and changelog already said so). §5 is
   designed so the *new* condition kind can never reach that throw (§5c); the existing bug is
   not fixed here.
 - **Objective-type vocabulary.** D34's second half — `reach_structure` doing duty for a king
