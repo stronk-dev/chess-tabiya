@@ -10,6 +10,27 @@
 - **Supersedes / superseded by:** supersedes the timing-window fragment of `rfc/withdrawn/authoring-contracts-v03.md` §Deferred (`:118-124`), which deferred exactly this to exactly this trigger
 - **Planning:** `planning/tempo-vocabulary/` (once implementing)
 
+
+> **OWNER RULING 2026-08-15 — `outpaced` grading is SPLIT by context; open question 2 is
+> settled and this RFC's current refusal is only half right.** The owner: *"drill packs add
+> primitives, then use them in tailored experiences, so they must have FULL flexibility. But in
+> 'just play', one would argue that entering an outpaced race means you made a mistake."*
+>
+> - **Authored packs: a window MAY declare that `outpaced` grades.** Not a global refusal — an
+>   author-declared per-window choice, defaulting to ungraded. The capability publication and the
+>   named refusal stay exactly as specified; what changes is that the refusal becomes the DEFAULT
+>   rather than the only option, and a pack may opt in.
+> - **Just Play (and any unauthored context): `outpaced` grades as a failure by default**, because
+>   entering a race a tempo behind is a real mistake made earlier, and no author is present to say
+>   otherwise.
+>
+> The general principle the owner drew, now ledgered as "Authored contexts declare; unauthored
+> contexts default": wherever the product must pick a semantic, an authored context supplies it
+> and an unauthored context needs a *stated* default. The two must not collapse into one global
+> answer. **Implementer: this is a real change to §1.6 and to the `tempoGradeable` capability —
+> the declared-vs-executable law still applies to both branches, so the Just Play default needs
+> its own applied record, not an implicit one.**
+
 ## Summary
 
 Thirty-five authored packs declared a timing window **zero times across 135
