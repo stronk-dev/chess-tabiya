@@ -15,8 +15,9 @@ handoff record; item 5 is the next not-yet-implemented entry.
 **`practical_resistance` returns HTTP 500 on 75% of its own domain.** It shipped
 in `4977ff6` today and is broken. `packages/runtime/src/practical-difficulty.ts:32`
 guards `measuredMass > 1 + 1e-9` and throws a **raw `TypeError`** rather than a
-coded refusal. A real float32 softmax summed over ≤20 candidates accumulates
-error near **1e-6** — three orders of magnitude above that tolerance — so the
+coded refusal. A real float32 softmax accumulates error above that tolerance
+(measured max excess **9.25e-08**, about two orders of magnitude — claude's
+earlier "1e-6 / three orders" was an overstatement, corrected here) — so the
 guard rejects correct engine output. Measured: **30 of 40 in-range roots throw,
 20/20 repeats each**.
 
