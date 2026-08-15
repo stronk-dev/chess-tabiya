@@ -2114,3 +2114,55 @@ expression census's first real run found **zero genuinely dead expressions** acr
 The engine capability audit found that production stated `Elo <requested>` and then reset `SelfElo` and `OppoElo` to 1500; because `Elo` aliases that pair, every recorded band was inert. The production selector now states the two advertised defaults first and the resolved `Elo` alias last. The defaults remain request-scoped state rather than being deleted.
 
 The regression gate uses the production `OpponentSelector` against the pinned real Maia image, not a synthetic client or a hand-shaped engine request. It records 1000 and 2400 as applied, asserts the production command order, and proves the two returned policy vectors differ. `INTEGRATION=maia pnpm test:maia` passed all three integration tests. D91 and the re-opened D60 are ready for independent review and owner-ledger closure; this implementation does not edit the design tier.
+
+## 2026-08-15 (night) — three RFCs accepted, D97 ruled, four agents out
+
+**Landed.** Content fix wave F (`41afe00`): D75 fixed one level above where it was
+looked for — `rook-4v3-same-side`'s signature was sound, its *trigger* was loose;
+firings 41 → 24, and the seven "successes" of `black-sixth-rank-restraint` were all
+Philidor positions the loose trigger admitted. **D76's premise was refuted rather than
+applied**: `fianchetto-g7` is not g7-specific (its own trigger is
+`any[g6/g7, mirrored(files, g6/g7)]`), so the mirrored arm is correct and the entry
+*name* was the defect. 26 witnesses added across 12 keys; census `satisfiabilityUnknown`
+35 → 24, `unsatisfiable` still 0.
+
+**Accepted** (`f07a320`): `engine-leverage` (pack 0.23 / run 0.16 / migration 22),
+`vocabulary-wiring` (pack 0.24), `live-surface-honesty` (nothing versioned) — all
+cross-reviewed by an agent that did not write them, fixes applied in the body.
+`engine-leverage`'s hard dependency D64 closed in `8b1b44d`, unblocking its criterion 4.
+Codex has them in claim order; the review bottleneck that starved the queue has cleared.
+
+**Ledger.** D59 flipped ✅ after independent verification — it had been closed in code by
+`43c6c4a` a day earlier, but the commit shipped the fix under the engine-request
+contract's *state* obligation without naming the row, so the row stood open. This is the
+second instance of the same pattern (a fix landing under a law's name rather than a row's)
+and it argues the ledger flip should key on the defect, not the doctrine. D102 and D103
+added from wave F; D39/D40 re-verified closed.
+
+**Owner ruling — D97, and it is the third time in this shape.** Offered three ways to
+handle the 61 unbacked feedback claims (withhold: 49.0% delivered; deliver with stated
+absence: 78.2% nominal but 55.2% once spelled-out cardinals are caught — 28 of the 36
+newly delivered carry one, including *"nine win, nine draw"*; tier by label: 79.1%), the
+owner refused all three: ***"why not fix them properly?"***
+
+That is the correct reading and it inverts the work. `check.ts` does not merely lack a
+prose-preserving path, it **forbids** one — the templates require the supported prose to
+be the byte-exact rendered sentence, and the one path that works overwrites the author
+outright. So withholding was never deferral. New RFC `claim-backing.md` owns the remedy:
+make the debt **payable** by binding an instrument record to authored prose instead of
+replacing it. `feedback-delivery` lands behind it and its C6 fork is **dissolved rather
+than answered**. Provisionally holds pack 0.26, releasable if the remedy is validator-only.
+
+The standing hazard is named in the drafting brief: the byte-exact rule is not arbitrary —
+it is what makes the sentence answerable to the measurement. A remedy that relaxes it
+naively lets an author write anything and staple a record to it, which is law 8 failing
+from the authoring side rather than the rendering side.
+
+**Owner ruling — campaign.** The run-failure question (*"a run that cannot be lost is a
+playlist"*) waits for the intermediate-consequence dossier rather than being settled now.
+Ruling on the boss-node price while the intermediate-node question is open is the
+collapse the owner flagged when he said bosses-only leaves the intermediate without
+consequence.
+
+**Out now:** `format-surface` cross-review · campaign intermediate-consequence dossier ·
+middlegame content wave (Act II has exactly one pack today) · `claim-backing` draft.

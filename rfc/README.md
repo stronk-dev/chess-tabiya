@@ -15,6 +15,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `vocabulary-wiring.md` | **accepted** — ready for codex | — | claims **pack 0.24** (yielded 0.23 to `engine-leverage`). Merges `plan_consequence` into `structural_feature{plan_signature}`; carries the D64 escalation |
 | `live-surface-honesty.md` | **accepted** — ready for codex | — | **claims nothing versioned**. Makes `session.kind` behavioural at one read site; splits the assistance *ceiling* from the *preference* |
 | `feedback-delivery.md` | **revised 2026-08-15 — OWNER-BLOCKED on the C6 fork** | — | **claims nothing versioned**. The revision replaced the reviewer's `outcome.reached` conjunct (only 6 of 37 packs have a chess-terminal spine leaf, capping delivery at 18.3% structurally) and made the exhaustion predicate stricter — full authored spine, not `reachableAuthoredSpineIds`, which omits exactly the mating leaf in four packs. Cannot be accepted until the owner rules the withhold/deliver fork |
+| `claim-backing.md` | drafting — **owner-ruled remedy for D97** | — | Makes the unbacked-claim debt **payable**: a prose-preserving attachment path so an instrument record backs authored prose instead of replacing it. Owner refused all three C6 options (*"why not fix them properly?"*). Dissolves `feedback-delivery`'s fork; that RFC lands behind this one. Provisionally claims **pack 0.26** pending the draft's own finding |
 | `format-surface.md` | draft (awaiting cross-review) | — | claims **pack 0.25**; **no run-schema version, no migration** — and §4.4 shows that is a design constraint, not luck. Retires `arrows` and `SIMULATE_BUDGET_EXCEEDED`, refuses `retryVariants`, implements D96 (per-leg `opponentPolicy`/`shapes`) and D57 |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
@@ -72,7 +73,8 @@ landing order, not lost data.
 | 0.23 | `engine-leverage.md` | claimed 2026-08-15 — `guard.conditions[]`, `$defs/engineCondition`, a fourth `deviationCost` arm |
 | 0.24 | `vocabulary-wiring.md` | claimed 2026-08-15 — `plan_signature` leaf on `$defs/structuralExpression`; deprecates `plan_consequence` |
 | 0.25 | `format-surface.md` | claimed 2026-08-15 — per-leg `opponentPolicy` and `shapes` on `$defs/trajectoryLeg` (D96); `$defs/legOpponentPolicy`; `$defs/shapeReference` extracted from the duplicated inline grammar; `retryVariants` deprecation warning. No run-schema change, no migration. **Voids `validator-integrity` §5's recommendation that this successor claim 0.19** — 0.19 is frozen shut |
-| — | **0.26 is the next free pack lane** | recorded 2026-08-15 after a cross-review found three drafts holding lanes with no register rows — the exact collision class this register exists to prevent |
+| 0.26 | `claim-backing.md` | **provisionally claimed** 2026-08-15 pending the draft's finding on whether it needs a version at all. Released back to free if the remedy is validator-only |
+| — | **0.27 is the next free pack lane** | recorded 2026-08-15 after a cross-review found three drafts holding lanes with no register rows — the exact collision class this register exists to prevent |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.
