@@ -3,7 +3,7 @@
 - **Status:** draft (awaiting cross-review)
 - **Author:** claude
 - **Created:** 2026-08-15
-- **Design refs:** `design/BACKLOG.md` rows **D56** (`practical_resistance` returned HTTP 500 on 75% of its own domain; **the row was flipped to ✅ CLOSED by `960f91e` while this RFC was being drafted** — the arithmetic half is fixed, the fixture-discipline half that let it ship is §5a), **D47** (pin tests encode content facts — 4th instance), **D54** (marked ✅ CLOSED 2026-08-15 by `expression-census`; §4 shows the closure is narrower than the row reads), **D55** (an instrument that walks content must state its denominator), and **"Vocabulary audit: the reassuring half"** (the 107-emitter sweep). `design/research/maia-policy-scalar-stability.md` §8.1 is the measured evidence. *Every code site in this document is cited **by symbol name**. The working tree moved repeatedly during drafting: `packages/runtime/src/practical-difficulty.ts` and `.test.ts` were modified-uncommitted when §5a was first written and **landed as `960f91e` ("fix: tolerate Maia float32 policy mass") before this draft was finished** — §5a is written against the committed result and says which half it does not claim. `apps/server/src/opponent-selector.test.ts`'s fixture line numbers already differ from the ones the D56 dossier recorded this morning. **Locate by symbol first — every line number here is advisory.*** HEAD moved `4a893dc` → `960f91e` → `90bb5bf` during drafting; all measurements in §4 were re-run at `90bb5bf` and are unchanged.
+- **Design refs:** `design/BACKLOG.md` rows **D56** (`practical_resistance` returned HTTP 500 on 75% of its own domain; **the row was flipped to ✅ CLOSED by `960f91e` while this RFC was being drafted** — the arithmetic half is fixed, the fixture-discipline half that let it ship is §5a), **D47** (pin tests encode content facts — 4th instance), **D54** (**"CLOSED … NARROWER THAN IT READS — corrected 2026-08-15"**; the row now carries §4's measurements verbatim, landed by `cb32a68` after this draft was written — §4 is retained as the RFC's own independently re-verified statement of them, not as a discovery), **D55** (an instrument that walks content must state its denominator), **D64** (**`offlineQuery` manufactures the provenance it records** — §3's counterexample and a §6 follow-on; ledgered 2026-08-15), **D61** (**the phone-viewport browser assertion cannot fail** — the ledger's own third member of the tests-that-cannot-fail family, addressed by §6's denominator and open question 4), and **"Vocabulary audit: the reassuring half"** (the 107-emitter sweep). `design/research/maia-policy-scalar-stability.md` §8.1 is the measured evidence. *Every code site in this document is cited **by symbol name**. The working tree moved repeatedly during drafting: `packages/runtime/src/practical-difficulty.ts` and `.test.ts` were modified-uncommitted when §5a was first written and **landed as `960f91e` ("fix: tolerate Maia float32 policy mass") before this draft was finished** — §5a is written against the committed result and says which half it does not claim. `apps/server/src/opponent-selector.test.ts`'s fixture line numbers already differ from the ones the D56 dossier recorded this morning. **Locate by symbol first — every line number here is advisory.*** HEAD moved `4a893dc` → `960f91e` → `90bb5bf` during drafting and `90bb5bf` → `2c62275` → `cb32a68` → `efdd7e0` during cross-review; **every measurement in §4, §5 and §6 was re-run at `efdd7e0`** and the corrections that produced are marked `[cross-review]`.
 - **Exploration gate:** owner ruling 2026-08-12 opened the RFC tier (`rfc/README.md` §Exploration gate). This RFC is opened by D56: a feature shipped in commit `4977ff6` ("Implement practical resistance spectrum") in the morning of 2026-08-15 and was measured broken on three quarters of its own domain by the afternoon, with a green suite throughout.
 - **Depends on:** `rfc/archive/content-sourcing-foundation.md` (the manifest/digest/job-digest artifact triple this RFC borrows for fixtures), `rfc/archive/resistance-spectrum.md` (ships `practical_resistance` and `humanConcessionMass`), `rfc/archive/expression-census.md` §criterion 14 (the last widening of the refusal-coverage gate), `rfc/archive/validator-integrity.md` (the standing rule that a fall-through must become a named refusal rather than a `TypeError`)
 - **Parent / amends:** amends test suites and one error type. Introduces **no new subsystem, no new persisted state, no format change, and no product surface.**
@@ -14,21 +14,50 @@
 
 **This RFC claims nothing versioned. Loudly, because that is the better outcome.**
 
-No pack schema version (0.20 landed; 0.21 and 0.22 are claimed; **0.19 is frozen
-shut**), no run schema version, no shape-entry schema version, no migration
-number, no `$id` change, no new event, no new persisted field, no new HTTP route,
-no new `ServerErrorCode`. Nothing in this RFC has to negotiate landing order with
-`live-marker-quality.md` or with any archived-but-recent wave.
+No pack schema version (**0.20, 0.21 and 0.22 are all `implemented` in
+`rfc/README.md` §Pack-schema-version register — corrected `[cross-review]`, the
+draft read "0.21 and 0.22 are claimed"; 0.23 is free and spoken for by
+`engine-request-contract.md`'s explicit non-claim; **0.19 is frozen shut**), no
+run schema version, no shape-entry schema version, no migration number, no `$id`
+change, no new event, no new persisted field, no new HTTP route, no new
+`ServerErrorCode`.
 
 It touches exactly three kinds of thing: **test files**, **fixture files**, and
 **one error type's `code` field** (`SourcingError.code`, `string` → a closed
 union, `apps/server/src/sourcing/types.ts` `class SourcingError`). The union is a
 compile-time register, not a versioned artifact; adding to it costs nothing and
-collides with nobody.
+collides with nobody. Cascade check `[V, cross-review]`: all **100**
+`new SourcingError(` sites pass a string literal — there is no dynamic code
+anywhere — and every consumer of `.code` only interpolates it into a `console.error`
+string (`verify-draft.ts`, `tablebase-walk.ts`, `engine-walk.ts`,
+`source-fetch.ts`, `candidate-attach.ts`). Closing the union is a one-type edit
+with no downstream narrowing to negotiate.
+
+**Landing-order neighbours — one correction `[cross-review]`.** The draft said
+"nothing … has to negotiate landing order with `live-marker-quality.md` or with any
+archived-but-recent wave", and omitted `rfc/engine-request-contract.md`, which
+landed as a draft at `efdd7e0` *after* this draft was written. There is **no
+register collision** — it claims run schema 0.15 + migration 20, both contingent,
+and no pack-schema version. There **is a textual one**: it rewrites
+`apps/server/src/opponent-selector.ts` (`:434-443`, `:469-520`) and
+`apps/server/src/engine-supervisor.ts` (`parseIdentity`), and §5a of this RFC adds
+cases to `apps/server/src/opponent-selector.test.ts`. Neither ordering is blocking;
+whichever lands second rebases its test additions.
 
 The one adjacent claim to declare: `PRACTICAL_RESISTANCE_POLICY_MASS_INVALID` was
 added to `ServerErrorCode` **by the D56 fix `960f91e`**, not by this RFC. This RFC
 neither claims nor needs it (§5a).
+
+**A second unregistered vocabulary, named so its omission is not read as
+coverage** `[V, cross-review]`: `SourcingIssue.code`
+(`apps/server/src/sourcing/types.ts`, the interface immediately above
+`class SourcingError`) is *also* a bare `string`, carrying **15** distinct
+literals, and is invisible to the same gate for the same reason. §5c closes
+`SourcingError` only; `SourcingIssue` is a named §6 follow-on. Note for anyone
+tracing the citation: the `D54` ledger row cites `sourcing/types.ts:106` for
+`SourcingError.code`, but line 106 is **`SourcingIssue.code`** — `SourcingError`'s
+is the constructor parameter seven lines below. The row's claim is true of both
+fields; only the line is misattributed, and correcting it is ledger-tier.
 
 ## Summary
 
@@ -45,9 +74,11 @@ survivable (**E1–E4**, §2) — because a rule with no stated exceptions is vi
 immediately and correctly — specifies how a captured fixture records and refreshes
 its provenance by reusing the sourcing pipeline's existing manifest/digest
 precedent (**F2**, §3), specifies discovery-over-allowlist for the repo's own
-refusal gate (**F3**, §4), and fixes exactly three sites (§5). §6 draws the scope
-boundary: 94 test files and 16,596 lines exist, and this RFC rewrites none of them
-wholesale.
+refusal gate (**F3**, §4), and fixes exactly four sites (§5 — three from the draft
+plus **F4**, the gate that makes E4's floor enforceable, added in cross-review
+because without it the rule at the centre of D56 was the one rule nothing checked).
+§6 draws the scope boundary: 94 test files and 16,596 lines exist under `apps/` and
+`packages/`, and this RFC rewrites none of them wholesale.
 
 ## Motivation
 
@@ -159,12 +190,54 @@ sorted key list of the public shape projection is the same class — the list *i
 the projection contract.
 
 > **The ownership test that separates E1 from D47.** A literal is E1 only when the
-> value is defined by the same package the test lives in, and the test exists to
-> make changing it deliberate. If a **different writer** — the content author, a
-> sibling package, an external instrument — can turn the assertion red without
-> touching the code under test, it is not E1; it is D47. `SHAPE_ENTRY_SCHEMA_VERSION`
-> in `packages/schema` is E1. A `content/shapes/*.json` `version` string asserted
-> from `packages/runtime` is not.
+> test exists to make changing the value deliberate, **and** the only writer who can
+> turn the assertion red is one whose change the assertion is *about*. If a
+> **different writer** — the content author, a sibling package, an external
+> instrument — can turn the assertion red with a change the test is **not** about,
+> it is not E1; it is D47. `SHAPE_ENTRY_SCHEMA_VERSION` in `packages/schema` is E1.
+> A `content/shapes/*.json` `version` string asserted from `packages/runtime` is
+> not: the test is about `matchesStructuralExpression`, and a content migration is
+> not a fact about `matchesStructuralExpression`.
+
+**Two counterexamples the draft's first formulation misclassified, and the repair
+`[cross-review]`.** The draft stated the criterion as *"the value is defined by the
+same package the test lives in"* and *"if a different writer can turn the assertion
+red without touching the code under test, it is not E1"*. Applied mechanically it
+gets two cases wrong, in both directions:
+
+- **It excludes its own flagship example.** `packages/schema/src/drill-pack.test.ts`
+  asserts `schema.$id` where `schema` is read from
+  `schemas/drill_pack.schema.json` — the **repo-root `schemas/` directory**, not
+  `packages/schema` (`const schema = json("../../../schemas/drill_pack.schema.json")`;
+  `shape-entry.test.ts` reads `schemas/shape_entry.schema.json` the same way). A
+  writer editing `schemas/` turns the assertion red without touching
+  `packages/schema/src/index.ts`. "Same package" is the wrong boundary; "the
+  change the assertion is about" is the right one, and a schema `$id` bump is
+  exactly what that pin is about.
+- **It excludes F3a's own debt register.** §4's register is a literal list of
+  unpinned `SourcingError` codes living in `refusal-coverage.test.ts`, and it is
+  *designed* to go red when a **different writer** — whoever adds or tests a
+  sourcing code — changes the set, without touching `refusal-coverage.test.ts`.
+  Under the draft's wording the RFC's own central mechanism is "the pin-test
+  defect". Under the repaired wording it is E1, because going red **is** the signal
+  the register exists to produce: the change that turns it red is precisely the
+  change it is about.
+
+The repair costs nothing in discriminating power. D47's three literals still fail:
+a shape-entry version bump is not a fact about `matchesStructuralExpression`, so the
+redness is collateral rather than the point. **This is the criterion's load-bearing
+distinction — mis-attributed redness, not foreign authorship.** A test that goes red
+at the right writer for the right reason is a gate; a test that goes red at the
+wrong writer for an unrelated reason is D47.
+
+One check the repaired criterion passes cleanly `[V, cross-review]`:
+`apps/server/src/shape-registry.test.ts`'s pinned sorted key list looks like a
+content literal but is not — `projectDocument` in `shape-registry.ts` constructs
+all nine keys unconditionally from required schema fields, so no content edit can
+move it. Its sibling assertion in the same test derives the shape-id list from
+`readdir(content/shapes/)` with an in-file comment naming the D4 lesson. The file
+already applies both halves of this RFC correctly, which is why it is cited as the
+model rather than as work.
 
 **E2 — the path no valid artifact reaches.** Refusal and negative fixtures must
 exhibit states no correct artifact contains. `apps/server/src/refusal-coverage.test.ts`
@@ -189,9 +262,18 @@ its subject is the composition rule itself; `humanConcessionMass`'s
 `combines policy mass with an externally supplied concession set` is legitimate and
 stays. **The constraint E4 carries is a floor, not a licence:** a function whose
 production input comes from an instrument must have **at least one** fixture that
-is real instrument output (E3), and any *boundary or tolerance* in that function
-must be exercised by it. D56 is exactly E4 applied without its floor — every
-fixture was algebra, and the boundary was never crossed by a real distribution.
+is real instrument output (E3), and any *instrument-reachable boundary or tolerance*
+in that function must be exercised by it. D56 is exactly E4 applied without its
+floor — every fixture was algebra, and the boundary was never crossed by a real
+distribution.
+
+> **The floor is enforced by F4 (§5d), not by this paragraph `[cross-review]`.**
+> The draft stated the floor here and nowhere else, which left the one rule at the
+> centre of D56 as unchecked prose while its two lesser siblings each shipped a
+> gate. §5d adds the register that makes it fail. The word
+> *instrument-reachable* is also a cross-review repair: as originally written the
+> floor was unsatisfiable for the very function it was written about, because
+> `FLOAT32_POLICY_MASS_TOLERANCE` lies 41× outside anything Maia can emit (§5d).
 
 ### 2a. F1a — a derivation that is a tautology is not a fix
 
@@ -250,17 +332,57 @@ body.
 >    identity pin (1) carries the value and a self-digest is ceremony; F2 does not
 >    require it.
 
-**F2a — the refresh mechanism is the identity pin, and it is free.** Because the
+**F2a — the identity pin is the *notification*, and it is free.** Because the
 record repeats a repo constant and a test asserts equality, **moving the sidecar
-pin turns the fixture test red**, and the only green resolution is recapture. No
-scheduled job, no staleness clock, no new CI lane. When `MAIA3_SOURCE_COMMIT` or
-`DEFAULT_MAIA_IMAGE` moves, every fixture claiming to have come from that sidecar
-announces itself.
+pin turns the fixture test red**. No scheduled job, no staleness clock, no new CI
+lane. When `MAIA3_SOURCE_COMMIT` or `DEFAULT_MAIA_IMAGE` moves, every fixture
+claiming to have come from that sidecar announces itself.
 
-**F2b — recapture runs where the instrument runs.** The gated suite selected by
-`vitest.maia.config.ts` (`INTEGRATION=maia`) is where a captured Maia fixture is
-regenerated and where the captured values are re-asserted against a live sidecar.
-`make verify` never needs the sidecar; it only needs the fixture and the constant.
+> **Correction `[cross-review]`.** The draft said *"the only green resolution is
+> recapture"*. **That is false, and asserting it is the exact error this RFC exists
+> to name.** Editing the fixture's `image` field to the new constant is a one-token
+> green fix, and F2 clause 4 deliberately waives the digest for small captured
+> vectors — so **nothing binds the recorded identity to the recorded numbers**. A
+> transcribed identity field is a transcribed literal; F1 forbids that in an
+> assertion and F2 must not smuggle it back in as data. F2a is a *notification*
+> mechanism, not a forcing function, and the RFC must not claim otherwise.
+
+**F2b — recapture runs where the instrument runs, and F2b is what verifies.** The
+gated suite selected by `vitest.maia.config.ts` (`INTEGRATION=maia`) is where a
+captured Maia fixture is regenerated and where **the captured values are re-asserted
+against a live sidecar** — that assertion, not F2a's equality check, is the only
+thing that can fail a stale-but-relabelled fixture. `make verify` never needs the
+sidecar; it only needs the fixture and the constant. The honest statement of the
+pair: **F2a tells you a fixture may be stale; F2b is the only thing that can prove
+it is.** An identity-pin bump therefore carries an obligation to run the gated
+suite, and the implementation records that it ran.
+
+**F2c — where the identity assertion lives, and why it cannot live where the draft
+put it `[V, cross-review]`.** `packages/runtime/package.json` depends on
+`@chess-tabiya/schema` and `chessops`; **`apps/server/package.json` depends on
+`@chess-tabiya/runtime`, not the reverse.** A test in `packages/runtime` therefore
+**cannot `import { DEFAULT_MAIA_IMAGE } from "apps/server/src/maia.js"`** — which is
+exactly what acceptance criterion 3 requires and what open question 1's recommended
+fixture location (`packages/runtime/src/fixtures/`) would force. The draft did not
+notice the conflict; without this clause the RFC's headline mechanism is not
+implementable as written. Resolution, normative:
+
+> The captured vector and its F2 record are a **JSON sidecar under
+> `packages/runtime/src/fixtures/`** — open question 1's recommendation stands, as
+> it is the only form the `INTEGRATION=maia` suite can regenerate by writing a
+> file. The **identity assertion against `DEFAULT_MAIA_IMAGE` and `MAIA3_MODEL_ID`
+> lives in `apps/server`**, which can import both the constants and the fixture.
+> The `packages/runtime` test consumes the sidecar's candidate array and asserts
+> arithmetic only; it does not assert instrument identity, because it is in the
+> wrong package to do so.
+
+The alternative — reading `apps/server/src/maia.ts` as **text** from
+`packages/runtime`, the pattern `practical-difficulty.test.ts`'s
+`keeps one definition of the policy-mass/concession composition` already uses to
+walk `../../../apps/server/src/` — is **rejected**: a regex over source text is a
+derivation whose subject is the file's spelling rather than its value, and it goes
+green-and-vacuous the moment the constant moves file. The dependency direction is a
+fact about the repo; the assertion moves to fit it.
 
 ### 4. F3 — discovery over allowlists, for the repo's own refusal gate
 
@@ -273,25 +395,47 @@ literals, and asserts the `missing` set is empty against a test corpus built by 
 **recursive directory walk** (`testSources`). The asymmetry is the defect: the
 *tests* are discovered, the *emitters* are enumerated.
 
-**Measured against the working tree at `4a893dc`, re-run unchanged at `90bb5bf` `[V]`** (script: collect
+**Measured against the working tree at `4a893dc`, re-run unchanged at `90bb5bf`,
+independently re-run at `efdd7e0` `[V, cross-review]`** (script: collect
 `new SourcingError("CODE"` from every non-test `.ts` under
 `apps/server/src/sourcing/`, then search the concatenated `*.test.ts` corpus of
 `apps/server/src` and `packages/` for `"CODE"`):
 
-- **59 distinct `SourcingError` codes** exist.
-- **45 of them appear nowhere in the test corpus** — not in an assertion, not in a
-  comment. Among them: `DRAFT_PACK_INVALID`, `EMITTED_PACK_INVALID`,
-  `OPENINGS_PGN_ILLEGAL`, `PUZZLE_FEN_INVALID`, `LOCK_LOST`,
-  `VERIFY_ASSESSMENT_NOT_GROUNDABLE`, `VERIFY_LEDGER_MERGE_CONFLICT`,
-  `ZSTD_UNAVAILABLE`, `RATING_BAND_INVALID`, `SOURCE_UNAVAILABLE`.
+- **59 distinct `SourcingError` codes** exist — confirmed, and confirmed that not
+  one of them is emitted from a test file.
+- **45 of them are absent from the quoted-literal search.** Among them:
+  `DRAFT_PACK_INVALID`, `EMITTED_PACK_INVALID`, `OPENINGS_PGN_ILLEGAL`,
+  `PUZZLE_FEN_INVALID`, `LOCK_LOST`, `VERIFY_ASSESSMENT_NOT_GROUNDABLE`,
+  `VERIFY_LEDGER_MERGE_CONFLICT`, `ZSTD_UNAVAILABLE`, `RATING_BAND_INVALID`,
+  `SOURCE_UNAVAILABLE`.
 
-So the ledger row **D54 is marked ✅ CLOSED** and the row **"Vocabulary audit: the
-reassuring half"** records *"zero without a test disposition"*, while an entire
-refusal family — every refusal the content-sourcing pipeline can emit — is outside
-the scanner's field of view. Both statements are true *of what the scanner reads*.
-Neither is true of the repo. **The 107-emitter sweep was scoped to what the scanner
-could see**, which is the D55 lesson (state your denominator) applied to a gate
-rather than to a census.
+> **Correction, and a defect it exposes in the gate itself `[V, cross-review]`.**
+> The draft said the 45 *"appear nowhere in the test corpus — not in an assertion,
+> not in a comment"*. **For three of them that is false.**
+> `RATINGS_NOT_A_GROUP`, `SPEEDS_NOT_A_SPEED` and `WINDOW_INVALID` each have a
+> direct test disposition, written as an **unquoted alternation inside a
+> `toThrow(/…/)` regex** — e.g.
+> `.toThrow(/RATINGS_NOT_A_GROUP|ratings must/)`. The true count of codes with no
+> mention of any kind is **42**, not 45.
+>
+> This is not a bookkeeping nit. The existing gate matches with
+> `corpus.includes(\`"${code}"\`)` — **double-quoted substring** — so a
+> regex-shaped disposition is invisible to it. A discovery gate inheriting that
+> matching rule would put three already-tested codes into the F3a debt register,
+> and a register asserted to be *"exactly the current set"* that is wrong on the
+> day it lands is a gate asserting against a convenient invention. **F3b (below)
+> fixes the matching rule; the fix is a precondition for F3a, not a follow-on.**
+
+So the ledger row **"Vocabulary audit: the reassuring half"** records *"zero
+without a test disposition"* while an entire refusal family — every refusal the
+content-sourcing pipeline can emit — is outside the scanner's field of view. The
+statement is true *of what the scanner reads*; it is not true of the repo. **The
+107-emitter sweep was scoped to what the scanner could see**, which is the D55
+lesson (state your denominator) applied to a gate rather than to a census. The
+**D54** row itself no longer overstates: `cb32a68` landed the narrowing
+("NARROWER THAN IT READS — corrected 2026-08-15") carrying these figures, after
+this draft was written. §4 is retained as this RFC's independent re-verification of
+them, not as a discovery it can still claim.
 
 The asymmetry has a second cause worth fixing at the same time: `ServerError`'s
 code is a **closed union of 61 members** (`ServerErrorCode` in
@@ -306,19 +450,29 @@ all** — not a type, not a test, not a doc.
 > dated, and justified in the file — never as the discovery mechanism.
 >
 > **F3a.** Where flipping a gate from allowlist to discovery would fail
-> immediately (as here — 45 codes), the gate ships with an explicit **debt
-> register**: a literal, dated, commented list of the known-unpinned subjects,
-> asserted to be **exactly** the current set. The register is a contract literal
-> under E1 (this file owns it), and the gate additionally asserts it **only ever
-> shrinks**: a newly added code cannot be absorbed into the debt list, because a
-> new code not in the register makes `missing` non-empty.
+> immediately (as here — **111 codes**, §5c, not the 45 the draft assumed), the
+> gate ships with an explicit **debt register**: a literal, dated, commented list
+> of the known-unpinned subjects, asserted to be **exactly** the current set. The
+> register is a contract literal under E1 — it goes red at the writer whose change
+> it is about, which is the repaired E1 criterion of §2, not the draft's
+> "same package" one — and the gate additionally asserts it **only ever shrinks**:
+> a newly added code cannot be absorbed into the debt list, because a new code not
+> in the register makes `missing` non-empty.
+>
+> **F3b — the coverage predicate is code-shaped, not quote-shaped.** A subject
+> counts as disposed if the code appears in the test corpus as a **word-boundaried
+> token**, in any syntactic position — a quoted literal, a `toThrow(/A|B/)`
+> alternation, a template, an imported constant. Substring-of-a-quoted-string is
+> not the predicate; three real dispositions are invisible to it today (§4). A
+> discovery gate whose *own* matching rule mis-reports its subjects is the failure
+> this RFC names, one level up.
 
-That last clause is the whole point of F3a: today, adding a `SourcingError` code
+That shrink clause is the whole point of F3a: today, adding a `SourcingError` code
 costs nothing and is invisible. After F3a, adding one without a test fails
-`make verify`, while the 45 pre-existing ones are honest recorded debt rather than
-a silent hole or a 45-test blocking ransom.
+`make verify`, while the pre-existing ones are honest recorded debt rather than a
+silent hole or a hundred-test blocking ransom.
 
-### 5. The three fixes
+### 5. The four fixes
 
 Each is specified as *the test that fails today*.
 
@@ -340,11 +494,18 @@ correct fix, it converts a fall-through `TypeError` into a coded refusal exactly
 model **E2** fixture: `0.6 + 0.41 = 1.01` is materially invalid on purpose, a state
 no real softmax reaches, so inventing it is right.
 
-**Re-derived from the committed values `[V]`:** the captured vector sums to
-`1.00000000803310996` — an excess of **8.033e-9**, which is 8× the retired `1e-9`
-tolerance and would have thrown, and 475× *below* the new one. So the fixture is
-genuinely load-bearing against the old guard while sitting at the small end of the
-measured envelope (dossier max excess: 9.25e-08).
+**Re-derived from the committed values `[V]`, and re-derived a second time at
+`efdd7e0` `[V, cross-review]`:** the 11 committed masses sum to
+`1.00000000803310996` — an excess of **8.0331e-9**, which is **8.03×** the retired
+`1e-9` tolerance (so it would have thrown, and the fixture is genuinely
+load-bearing against the old guard) and **475×** *below* the new one. All three of
+the draft's §5a claims are confirmed exactly: the provenance is a comment at the
+top of `practical-difficulty.test.ts`; the excess sits at the small end of the
+measured envelope (dossier max 9.25e-08 — this fixture is **11.5× smaller** than
+the worst case it stands in for); and **every `maiaLines(...)` mass in
+`apps/server/src/opponent-selector.test.ts` is still a hand-written decimal summing
+to exactly 1 or less**, the sole exception being the deliberate `0.6 + 0.41` E2
+case. Point 3 below is the one that matters, and it is the one that is true.
 
 **What remains, and is this RFC's:**
 
@@ -353,9 +514,10 @@ measured envelope (dossier max excess: 9.25e-08).
    MultiPV 20, for <FEN>`. That is the right information in the one form no test
    can check and no refresh can act on. Under F2 it becomes a data record whose
    `image` field is asserted `toBe(DEFAULT_MAIA_IMAGE)` and whose model field is
-   asserted `toBe(MAIA3_MODEL_ID)`. **Test that fails today:** the identity
-   assertion — there is nothing to assert against, because the fixture carries no
-   fields.
+   asserted `toBe(MAIA3_MODEL_ID)` — **from `apps/server`, per F2c**, because
+   `packages/runtime` cannot import those constants. **Test that fails today:** the
+   identity assertion — there is nothing to assert against, because the fixture
+   carries no fields.
 2. **The captured vector is the small case.** Under E4's floor, the fixture set for
    `humanConcessionMass` must include a capture at or near the measured worst case
    (excess ≈ 9.25e-08, and the symmetric deficit ≈ −1.45e-07 for the abstention
@@ -388,13 +550,28 @@ FENs — and lose nothing. Where a genuine version relation matters it belongs i
 (`validates all official entries`).
 
 **Test that fails today:** a narrow guard, scoped to content-reading runtime tests,
-asserting that no test file under `packages/runtime/src/` matching `*-content.test.ts`
-contains a `.toBe("` applied to a semver-shaped literal. Three assertions fail it
+asserting no `.toBe("` applied to a semver-shaped literal. Three assertions fail it
 now; zero after the deletion. The guard is deliberately narrow — a repo-wide
 "no literals" lint would be both unenforceable and wrong under E1 — and its
-false-positive risk (a legitimate semver-shaped assertion in a future
-`*-content.test.ts`) is accepted, because that file class is *defined* as tests
-that read content and therefore must never pin it.
+false-positive risk (a legitimate semver-shaped assertion in such a file) is
+accepted, because that file class is *defined* as tests that read content and
+therefore must never pin it.
+
+> **The trigger is behavioural, not lexical `[cross-review]`.** The draft scoped
+> the guard to files *"matching `*-content.test.ts`"*. Measured: there is **exactly
+> one** such file in `packages/runtime/src/`, and it is the one being fixed. A
+> guard whose corpus is a single file, selected by a filename convention nothing
+> enforces, goes permanently silent the moment the next author names their file
+> anything else — which is a guard that cannot fail, in an RFC about tests that
+> cannot fail. **Normative form:** the guard's corpus is every `*.test.ts` under
+> `packages/*/src/` **that reads `content/`** — detectable because such a file
+> contains a `content/` path literal, as `predicate-wave-2-content.test.ts` does
+> (`new URL(\`../../../content/shapes/${id}.json\`, import.meta.url)`). That is the
+> property the rule is actually about. Verified `[V]`: today exactly one file in
+> `packages/runtime/src/` matches either definition, and it carries exactly the
+> three semver literals named above and no others, so both forms fail today by 3
+> and pass after the deletion — the behavioural form simply keeps failing in
+> future.
 
 Related and **already fixed** — cited as the model, not as work:
 `apps/server/src/pack-authoring.test.ts`'s `packDirs` derivation (`d0c9a8a`). No
@@ -423,43 +600,172 @@ Two changes to `apps/server/src/refusal-coverage.test.ts`'s
    `ServerErrorCode` in `apps/server/src/errors.ts`. This is the register that does
    not exist, it is compile-time-enforced, and it costs one type.
 
-**Test that fails today:** the discovery walk with an empty debt register — it
-reports **45 missing codes** (§4). It ships with those 45 in the F3a register,
-dated, so `make verify` is green on landing and red the moment a 46th appears.
+**Test that fails today:** the discovery walk with an empty debt register.
+
+> **The draft's number was wrong, and wrong in the direction that matters
+> `[V, cross-review]`.** It said the walk *"reports 45 missing codes (§4). It ships
+> with those 45 in the F3a register"*. But §4 measured **one** family
+> (`SourcingError`), while §5c specifies a walk over **seven** emission forms. The
+> walk was implemented exactly as specified above — six `new XError("…"` families
+> plus `issue("…"` plus the `code: "…"` object form, over every non-test `.ts`
+> under `apps/` and `packages/` — and run at `efdd7e0`:
+>
+> - **194 distinct codes discovered.**
+> - **111 missing** from the test corpus, not 45. By family:
+>   `SourcingError` 45, `ServerError` 31, `issue()` 18, `code:` 6,
+>   `PackCompileError` 5, `PackRunPgnError` 4, `BranchQueryError` 2,
+>   `RuntimeError` 1.
+>
+> The debt register is therefore **111 entries, not 45** — 2.5× the size the draft
+> budgeted, and acceptance criterion 7 as drafted ("`missing` is empty given the
+> F3a debt register") is **unsatisfiable with a 45-entry register**. The figure is
+> further adjusted by F3b: three `SourcingError` codes disposed by regex leave the
+> register once the matching predicate is fixed, and the same rule will discharge
+> an unknown number of the other 66 — **the implementation measures the register
+> under F3b's predicate and records the number it actually lands with; it does not
+> transcribe 111 from here.** That is F1 applied to this RFC's own arithmetic.
+>
+> **This does not change the design, and it changes the scope claim.** The
+> shrink-only mechanism is what makes 111 survivable rather than a project (§6),
+> and 31 unpinned `ServerError` codes are recorded debt in a family §6 explicitly
+> declines to pin — they are *registered* here, not *fixed*. But the draft's §6
+> claim that "all of it fits in the three sites of §5 plus one type change" was
+> only true because the register absorbs the difference; §6 now reads the in-scope
+> work as "four fixes, one type, and two registers".
+
+It ships with that register, dated, so `make verify` is green on landing and red
+the moment one more appears.
 
 The existing `expect(fixedCodes.size).toBeGreaterThanOrEqual(100)` floor is
-retained; under discovery its value rises well past 100 and the floor stops being
+retained; under discovery its value rises to 194 and the floor stops being
 informative, so it should be restated as a floor on the *discovered* set or
 removed — a judgement left to implementation, not a normative requirement here.
+
+#### 5d. F4 — the E4 floor gets a register, or the rule is prose `[cross-review]`
+
+**This is the fix the draft stopped one step short of, and it is at the centre of
+its own lesson.** Ask the question the RFC is for: *would the in-scope set have
+prevented D56?* §5a fixes the D56 fixture. §5b's guard enforces §5b. §5c's gate
+enforces §5c. But **E4's floor — "a function whose production input comes from an
+instrument must have at least one fixture that is real instrument output, and any
+boundary or tolerance in that function must be exercised by it" — has no enforcing
+gate anywhere in scope.** It is prose in §2. Prose in §2 is exactly what the `1e-9`
+guard had: a correct intent nothing checked.
+
+So the honest answer to *"is the in-scope set sufficient to prevent a repeat of
+D56?"* is **no, as drafted.** It prevents *this* instance and repairs *this*
+fixture. The next instrument-fed function that ships with a hand-chosen tolerance
+and algebra-only fixtures ships green, exactly as `humanConcessionMass` did on the
+morning of 2026-08-15, and nothing in this RFC turns red. Two of the draft's three
+fixes bought themselves a gate; the third — the one that names the failure — did
+not. F4 is that gate, and it is the difference between an RFC that fixes D56 and an
+RFC that fixes the class D56 belongs to.
+
+> **F4.** The repo carries an **instrument-fed register**: a literal, dated list of
+> the functions whose production input is instrument output, each naming the
+> captured fixture (F2) that satisfies E4's floor and, where the function carries a
+> tolerance or boundary, the fixture that crosses it. A test asserts the register
+> is **complete**: every entry resolves to an existing fixture whose recorded value
+> actually crosses the named bound. Unlike F3a's, this register **only ever grows** —
+> adding an instrument-fed function without a captured fixture means adding an
+> entry that fails to resolve.
+
+The register has **one entry on landing** — `humanConcessionMass`, with its two
+fixtures (the committed 8.03e-9 capture and §5a's required worst-case one) and the
+bound `FLOAT32_POLICY_MASS_TOLERANCE`. That is deliberate: F4's value is not the
+list, it is that a second instrument-fed function now has somewhere it must appear,
+and a reviewer of that future wave has one file to check. **Cost: one file, one
+test, one entry.** Refusing that cost is refusing the RFC's own conclusion.
+
+**Test that fails today:** the register with `humanConcessionMass` in it — its
+worst-case fixture does not exist (§5a point 2). The one instrument-fed function in
+the repo fails F4 today, which is the strongest available evidence that F4 is not
+ceremony.
+
+> **A contradiction inside E4 that the draft did not notice, and that F4 forces
+> into the open `[cross-review]`.** E4's floor says *"any boundary or tolerance in
+> that function must be exercised by"* a real captured fixture. Applied to
+> `humanConcessionMass`, that is **unsatisfiable**: the tolerance is
+> `FLOAT32_POLICY_MASS_TOLERANCE` = 3.815e-6, and the dossier's measured envelope
+> tops out at an excess of **9.25e-08** — 41× inside it. **No capture from this
+> instrument can cross this bound.** The RFC cannot hold both E4's floor as written
+> and the shipped tolerance; §5a's own acceptance criterion 1 quietly substitutes a
+> weaker bound (`> 5e-8`, the envelope) without saying it is doing so.
+>
+> **Resolution, normative.** E4's floor binds the **instrument-reachable** bound:
+> a captured fixture must cross the widest value the instrument can actually
+> produce, and where a function's declared bound lies outside that range, F4's
+> register **records the bound as instrument-unreachable, by name, with the measured
+> envelope beside it.** That record is the honest form. It also converts **open
+> question 2 from advisory to blocking for `accepted`**: by this RFC's own rule, a
+> guard no fixture can cross is a guard nothing tests, which is `1e-9`'s failure
+> with the sign flipped — too loose instead of too tight, and equally unexercised.
+> The draft routed that question away with *"not this RFC's to decide"*. F4 shows
+> it is: the register cannot be filled in honestly without an answer.
+
+**What F4 deliberately does not do.** It does not attempt to *discover* instrument-fed
+functions by walking the tree — there is no reliable syntactic marker for "this input
+came from an engine", and an unreliable discovery gate is worse than an honest
+register (the F3a lesson, applied to itself). It is an allowlist, and under F3 an
+allowlist is permitted only as a *deliberate exclusion, named, dated and justified in
+the file* — which is exactly what this is, and the file says so.
 
 ### 6. Scope
 
 **This is the section most likely to be the reason the RFC works or is ignored.**
-94 test files and 16,596 lines of test code exist under `apps/` and `packages/`. A
-rule that requires auditing all of them is a rule nobody applies, and it would be
-this RFC failing in exactly the way it describes: a correct principle with no
-affordable instance.
+94 test files and 16,596 lines of test code exist under `apps/` and `packages/`
+(verified exactly, `[V, cross-review]`). A rule that requires auditing all of them
+is a rule nobody applies, and it would be this RFC failing in exactly the way it
+describes: a correct principle with no affordable instance.
 
-**In scope now** (all of it fits in the three sites of §5 plus one type change):
+> **State the denominator — this RFC's own, since it invokes D55 against others
+> `[V, cross-review]`.** "94 files, 16,596 lines" counts `*.test.ts` under `apps/`
+> and `packages/`. It **excludes `tests/browser/`** — `drill.spec.ts`,
+> `match.spec.ts`, `maia-latency.spec.ts`, 3 files, 1,139 lines — which is a
+> different suite, a different runner, and **not** under the two roots named. The
+> draft did not say so. That omission matters because **`D61` lives there**: *"the
+> phone-viewport browser assertion cannot fail"*, ledgered 2026-08-15 as the
+> *"third member of the tests-that-cannot-fail family, after D56's tidy fixtures
+> and D54's single-file scanner"*. The ledger has already placed a third instance
+> of this RFC's own family inside the region this RFC silently excluded.
 
-- F1, E1–E4, F1a, F2, F3 written down as a rule — this document is the artifact.
-- The three fixes in §5, each with a test that fails today.
+**In scope now** (the four sites of §5, one type change, and two registers):
+
+- F1, E1–E4, F1a, F2/F2a–F2c, F3/F3a/F3b, F4 written down as a rule — this
+  document is the artifact.
+- The four fixes in §5, each with a test that fails today.
 - F2 provenance applied to **exactly one** fixture family: the captured Maia
   policy vectors of §5a. One family, one identity pin, one refresh mechanism.
 - `SourcingErrorCode` as a closed union.
+- Two registers: F3a's ~111-entry shrink-only refusal debt list, and F4's
+  one-entry grow-only instrument-fed list.
 
 **Follow-on** (named so they are not lost, deliberately not attempted here):
 
 - F2 provenance for `apps/server/src/sourcing/fixtures/verify-draft.json`,
   `tablebase-response.json` and `explorer-response.json`, and retiring the
-  provenance `offlineQuery` synthesizes at read time. These are real instances of
-  the same gap, but the sourcing pipeline is not currently failing because of them
-  and the sourcing checker already validates the *emitted* artifacts.
-- Retiring the 45 debt-register codes, in whatever waves touch them. The register's
+  provenance `offlineQuery` synthesizes at read time (**D64**). These are real
+  instances of the same gap. **The deferral is defensible and now measured rather
+  than asserted `[V, cross-review]`:** every `sourceId: "syzygy"` entry in every
+  committed `sources.json` under `content/` — **341 of them** — was re-derived
+  against `offlineQuery`'s synthesis formula
+  (`Date.UTC(2026, 7, 14) + parseInt(sha256(fen).slice(7, 15), 16) % 86_400_000`),
+  and **zero match**: their timestamps are sequential live-fetch clusters ~32 ms
+  apart. No manufactured provenance has reached a committed artifact. **What the
+  measurement also shows is that nothing prevents it:** no test asserts that a
+  committed manifest contains no synthesized entry, so the deferral rests on the
+  fact that nobody has committed an `OFFLINE=1` run, not on a mechanism. The
+  follow-on should carry that guard, and this RFC states the exposure rather than
+  leaving it implied.
+- Retiring the debt-register codes, in whatever waves touch them. The register's
   monotonic-shrink assertion is what makes this sustainable rather than a project.
+- **`SourcingIssue.code`** — a bare `string` with 15 distinct literals in the same
+  file as `SourcingError`, invisible to the same gate for the same reason (§Register
+  claim). §5c closes one of the two; the second is named here so its omission is not
+  read as coverage.
 - Extending the F3 discovery gate from refusal codes to the other enumerated
   allowlists in the test suite, once F3 has survived one wave.
-- The D56 ledger magnitude correction (§Motivation) — owner or ledger tier.
+- **D61 and `tests/browser/`** — see the "deliberately left alone" entry below.
 
 **Deliberately left alone**, and named so cross-review does not read the omission
 as an oversight:
@@ -471,18 +777,41 @@ as an oversight:
   pattern is the model, not a target.
 - **`.browser` fixtures and the denominator question** — that is D55 and it belongs
   to whatever instrument-reporting RFC picks it up, not here.
-- **`ServerErrorCode`'s 61 members.** They have a typed register already; pinning
-  all of them to tests is a much larger job with a much smaller payoff than the
-  `SourcingError` family, which has no register at all.
+- **`tests/browser/` and D61 — a *different* omission from the `.browser` one, and
+  the draft conflated them `[cross-review]`.** D55 is about which content fixtures
+  an instrument counts. **D61 is an assertion that cannot fail** — the phone
+  viewport check is vacuous because the shipped CSS makes `scrollHeight ===
+  clientHeight` constant — which is F1's family, not D55's, and it is in the suite
+  §6's denominator excludes. It is nonetheless **out of scope here**, for a reason
+  worth stating rather than routing away: F1 as written binds *assertions against
+  artifacts*, and D61's defect is an assertion against a **property the
+  implementation makes constant**, which F1 does not currently name. That is a
+  genuine extension of the rule — "an assertion whose expected value is forced by
+  the code under test asserts nothing", a sibling of F1a's tautology clause — and
+  it deserves its own pass with the browser suite in the denominator. **Named, not
+  routed to D55.**
+- **`ServerErrorCode`'s 61 members** (verified exactly, `[V, cross-review]`; 57 of
+  them are actually emitted). They have a typed register already; pinning all of
+  them to tests is a much larger job with a much smaller payoff than the
+  `SourcingError` family, which has no register at all. Note that §5c's discovery
+  walk nonetheless *records* 31 of them as debt (§5c) — recording is not pinning,
+  and the shrink-only rule means a new `ServerErrorCode` still cannot land untested.
 - **The tolerance value itself.** `32 * 2 ** -23` is the in-flight implementation's
   choice and this RFC does not relitigate it (but see open question 2).
 
 ## Deviations from design
 
 None. This RFC specifies no product surface, no learner-visible behaviour, and no
-content rule. It touches no `design/` claim; it proposes a correction to one
-`design/BACKLOG.md` row's arithmetic (§Motivation) and routes it rather than making
-it, per the design-tier-is-intent-tier law.
+content rule. It touches no `design/` claim.
+
+*Cleared during cross-review:* the draft closed this section by saying it *"proposes
+a correction to one `design/BACKLOG.md` row's arithmetic (§Motivation) and routes
+it"*, and §6 listed that correction as an open follow-on — while §Motivation
+already said *"no correction is owed"*. The three statements contradicted each
+other, and all three are now moot: `cb32a68` ("ledger: D54 closure narrowed; D64;
+and my own magnitude overstatement corrected") landed both the D56 magnitude
+correction and the D54 narrowing, after this draft was written. **Nothing is routed
+to the ledger tier by this RFC.**
 
 ## Acceptance criteria
 
@@ -492,26 +821,46 @@ it, per the design-tier-is-intent-tier law.
 2. Every captured fixture in scope carries a data provenance record (F2) with
    instrument identity, request parameters and `retrievedAt`, and no captured
    fixture's provenance lives only in a comment.
-3. A test asserts each captured Maia fixture's recorded image and model against
+3. A test **in `apps/server`** (per F2c — `packages/runtime` cannot import these
+   constants) asserts each captured Maia fixture's recorded image and model against
    `DEFAULT_MAIA_IMAGE` and `MAIA3_MODEL_ID`; changing either constant in
    `apps/server/src/maia.ts` and running `make verify` turns it red. *This is
    demonstrated, not assumed — the implementation records the observed failure.*
 4. At least one `apps/server/src/opponent-selector.test.ts` case drives a captured
    float32 vector through a full selection and asserts either a selection or a
    named `PRACTICAL_RESISTANCE_*` refusal. No path in that test can produce an
-   uncoded throw.
+   uncoded throw. **This is the criterion that closes D56's actual failure mode**
+   (a child measurement inside a four-position selection); 1, 2 and 3 close the
+   fixture-discipline half.
 5. `packages/runtime/src/predicate-wave-2-content.test.ts` contains no shape-entry
-   `version` literal, and the narrow `*-content.test.ts` semver guard passes.
+   `version` literal, and the semver guard passes — with the guard's corpus defined
+   **behaviourally** (test files under `packages/*/src/` that read `content/`), not
+   by the `*-content.test.ts` filename convention (§5b).
 6. Moving every committed `content/shapes/*.json` `version` to a new patch value
    leaves `pnpm test` green for `packages/runtime`. *Demonstrated on a scratch
-   branch, reverted, result recorded.*
-7. `refusal-coverage.test.ts` discovers emitters by walking the tree; the walk
-   finds `SourcingError` codes; `missing` is empty given the F3a debt register;
-   and the register is asserted to be exactly the current known-unpinned set.
+   branch, reverted, result recorded.* (Achievable: verified `[V]` that the three
+   literals in §5b are the **only** semver literals in any `packages/runtime`
+   test.)
+7. `refusal-coverage.test.ts` discovers emitters by walking the tree over **all
+   seven emission forms of §5c**, not `SourcingError` alone; `missing` is empty
+   given the F3a debt register; the register is asserted to be exactly the current
+   known-unpinned set; and **its size is the number the implementation measured
+   under F3b's predicate, recorded in the file, not the ~111 transcribed from
+   §5c.**
 8. Adding a new `SourcingError` code with no test mention fails `make verify`.
    *Demonstrated, reverted, recorded.*
 9. `SourcingError.code` is a closed union and `pnpm typecheck` passes.
-10. `make verify` is green at landing with no test skipped, no timeout raised, and
+10. **F3b:** at least the three codes disposed only by `toThrow(/…/)` alternation —
+    `RATINGS_NOT_A_GROUP`, `SPEEDS_NOT_A_SPEED`, `WINDOW_INVALID` — are recognised
+    as disposed and are **absent** from the debt register.
+11. **F4:** the instrument-fed register exists, contains `humanConcessionMass`, and
+    its entry resolves to a captured fixture that crosses the **instrument-reachable
+    bound** recorded for that function (see the E4 contradiction below — for
+    `humanConcessionMass` that is the measured envelope, ≥ 5e-8, *not*
+    `FLOAT32_POLICY_MASS_TOLERANCE`, which no capture can reach). The entry records
+    the unreachable bound explicitly. Adding a second instrument-fed function
+    without a fixture fails `make verify`. *Demonstrated, reverted, recorded.*
+12. `make verify` is green at landing with no test skipped, no timeout raised, and
     no fixture deleted to achieve it.
 
 ## Open questions
@@ -524,28 +873,44 @@ it, per the design-tier-is-intent-tier law.
    package has no fixtures directory today. **Recommendation: sidecar JSON under
    `packages/runtime/src/fixtures/`**, because a JSON fixture can be regenerated by
    the `INTEGRATION=maia` suite writing a file, and a `.ts` literal cannot.
+   **Resolved in part `[cross-review]`:** the sidecar location stands, but the
+   question was incomplete — it asked where the *record* lives and never asked where
+   the *assertion* lives. `packages/runtime` cannot import `apps/server`'s
+   constants, so the identity assertion cannot live beside the fixture. F2c splits
+   them and the question is closed on that basis.
 2. **Is `32 * 2 ** -23` (≈ 3.815e-6) the right tolerance, or 41× more generous than
    the evidence?** The measured maximum excess is 9.25e-08 ≈ 0.78 float32 ulp at
    1.0; the chosen bound admits distributions 41× further out than anything
    observed, which cannot be exhibited by the instrument and therefore cannot be
    tested. The counter-argument is that ulp-count bounds should be derived from the
    candidate cap (≤ 20 values), not from an observed sample, and 32 is that
-   reasoning. **Not this RFC's to decide — routed to whoever lands D56** — but it
-   should be *stated* in a comment as a derivation, since an untestable bound with
-   an unexplained constant is how `1e-9` got there in the first place.
+   reasoning. The draft said **"not this RFC's to decide — routed to whoever lands
+   D56"**. **Escalated to blocking-for-`accepted` `[cross-review]`:** §5d shows E4's
+   floor and this tolerance are mutually unsatisfiable — the floor requires a real
+   fixture to cross every bound, and no capture can cross this one. Whichever way it
+   is decided, the answer must be *stated as a derivation in a comment*, since an
+   untestable bound with an unexplained constant is how `1e-9` got there in the
+   first place. F4's register cannot be filled in honestly until it is answered.
 3. **Does F3a's debt register need an owner and an expiry, or is monotonic shrink
-   enough?** Monotonic shrink prevents growth but permits a permanent 45. The
-   `expression-census` precedent (Q4: *"a non-blocking CI job with no owner becomes
-   noise"*) argues an unowned list decays into furniture. **Recommendation: no
-   expiry, no owner, and a line in the register recording its size on the day it
-   landed** — so a later reader can see whether it has moved. A deadline nobody
-   agreed to is the failure mode the census already named.
-4. **Should F1 apply to `apps/web` tests?** The web suite tests presentation over
-   API shapes, where "the real artifact" is a server response that no unit test can
-   obtain. E3 covers it in principle (capture the response), but no capture
-   mechanism exists for the web tier and inventing one is out of proportion.
-   **Recommendation: out of scope, stated in §6 by omission — flagged here so
-   cross-review can overrule.**
+   enough?** Monotonic shrink prevents growth but permits a permanent register (of
+   ~111 entries, not the 45 the draft assumed — §5c). The `expression-census`
+   precedent (Q4: *"a non-blocking CI job with no owner becomes noise"*) argues an
+   unowned list decays into furniture, and the argument is **stronger at 111 than at
+   45**. **Recommendation: no expiry, no owner, and a line in the register recording
+   its size on the day it landed** — so a later reader can see whether it has moved.
+   A deadline nobody agreed to is the failure mode the census already named.
+4. **Should F1 apply to `apps/web` and `tests/browser/`?** The web suite tests
+   presentation over API shapes, where "the real artifact" is a server response that
+   no unit test can obtain. E3 covers it in principle (capture the response), but no
+   capture mechanism exists for the web tier and inventing one is out of proportion.
+   **Amended `[cross-review]`:** the draft asked only about `apps/web` and
+   recommended *"out of scope, stated in §6 by omission"*. **Scope by omission is
+   the D55 error** — §6 now states the denominator explicitly, and the answer is no
+   longer "by omission" for `tests/browser/`, where **D61** already records a third
+   member of this RFC's own family. The recommendation stands as *out of scope*, but
+   as a **named** exclusion with a stated reason (D61's defect is an assertion
+   against an implementation-forced constant, which F1 as written does not name —
+   §6), not as silence.
 5. **Does this RFC need a `docs/` page?** It amends no shipped subsystem, so there
    is nothing for `docs/` to describe canonically; the rule lives in the RFC and,
    once implemented, plausibly in `docs/development.md` beside `make verify`. **Owner
@@ -554,3 +919,29 @@ it, per the design-tier-is-intent-tier law.
 ## Changelog
 
 - 2026-08-15: created.
+- 2026-08-15: adversarial cross-review at `efdd7e0`. All §4 and §5 measurements
+  independently re-run; the D54 narrowing, the three D56 residue claims, and the
+  `verify-draft.json` / `verify-draft-engine.json` counterexample all confirmed.
+  Corrections and additions: **E1's ownership criterion repaired** (from "same
+  package" to "the change the assertion is about" — the draft's wording
+  misclassified both `schemas/`-backed `$id` pins and F3a's own register); **F2a's
+  "only green resolution is recapture" retracted** as false and F2b named as the
+  verifying half; **F2c added** — `packages/runtime` cannot import `apps/server`,
+  so acceptance criterion 3 was not implementable where open question 1 put the
+  fixture; **§5c's missing-code count corrected 45 → 111** across seven emission
+  forms (the draft reused a one-family figure for a seven-family walk, leaving the
+  register 2.5× under-budgeted); **F3b added** after finding three codes disposed
+  by `toThrow(/…/)` regex that the gate's quoted-substring predicate cannot see;
+  **§5b's guard trigger moved from a filename convention over one file to a
+  behavioural one**; **F4/§5d added** — E4's floor was the only rule in the RFC
+  with no enforcing gate, which is where the in-scope set stopped one step short of
+  preventing a repeat; **an unsatisfiability between E4's floor and
+  `FLOAT32_POLICY_MASS_TOLERANCE` named**, escalating open question 2 to blocking;
+  §6's denominator stated and **D61 / `tests/browser/` named rather than routed to
+  D55**; **D64's deferral upgraded from assertion to measurement** (341 committed
+  syzygy entries checked against `offlineQuery`'s synthesis formula — zero matches,
+  and no guard preventing a future one); `SourcingIssue.code` named as a second
+  unregistered vocabulary; register claim corrected (0.21/0.22 are implemented, not
+  claimed) and `engine-request-contract.md` added as a textual landing-order
+  neighbour; the §Deviations / §Motivation / §6 three-way contradiction about the
+  D56 ledger correction cleared (`cb32a68` landed it).
