@@ -21,8 +21,8 @@ record). Evidence lands as dossiers in `design/research/`.
 | Q1c | Does rehearsal improve learning versus simpler formats? | 💡 · requires slice | H1–H4, K1, K4, K8, C2–C4 |
 | Q2 | What source, deployment, monetization, and content-rights posture fits? | ✅ settled, **deployment axis amended 2026-08-12 to hosted multi-user** (owner ruling; fires ADR-0004's revisit trigger; AGPL §13 now binds). Other three axes unchanged | — |
 | Q3 | Mobile: scope or non-goal? | 💡 | — |
-| Q4a | Can authors declare useful phase transitions and timing windows? | 💡 | E3, K7, C6 |
-| Q4b | Can deterministic features assist authors reliably? | 💡 | K7 |
+| Q4a | Can authors declare useful phase transitions and timing windows? | 📊 evidence 2026-08-15 — **split verdict**: boundaries yes (32/35 packs, 17 voluntary), timing windows **zero** (0/135 checkpoints). `design/research/authored-transitions-and-features.md` | E3, K7, C6 |
+| Q4b | Can deterministic features assist authors reliably? | 📊 evidence 2026-08-15 — reliable wherever the claim is a **census**, absent wherever it is a **judgment** (plans, intent, history, timing). §6 is the predicate roadmap. `design/research/authored-transitions-and-features.md` | K7 |
 | Q4c | Can automatic phase/structure recognition support Just Play without pretending certainty? | 💡 · breadth-blocking for Just Play; optional for curated packs | B2, B4 |
 | Q5 | Can a runnable human/corpus policy stay coherent over 10–20 plies? | ✅ settled-go (validation-by-use, smoke 2026-08-12; revisit only if drill play contradicts) | H5 supported |
 | Q6 | How do we use historical games without the ingestion-first trap? | 💡 | — |
