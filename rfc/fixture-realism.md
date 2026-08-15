@@ -46,6 +46,38 @@
 > **D64 must be re-scoped INTO this RFC or explicitly re-homed before it is accepted**, and the
 > superseded measurement must be struck rather than left standing.
 
+
+> **D64 SCOPED IN, 2026-08-15 — this RFC does not archive until it lands.** The §6 deferral is
+> **struck**: its measurement was wrong by a seven-character offset, and its claim that no
+> manufactured provenance had reached a committed artifact was **already false when written**.
+>
+> **Confirmed twice, independently, from opposite directions: 135 of 341 committed `syzygy`
+> manifest entries are synthesised** — `lucena-bridge-convert` (22),
+> `opposite-bishops-fortress-hold` (14), `pawn-breakthrough-convert` (18),
+> `pawn-opposition-convert` (32), `philidor-third-rank-hold` (23),
+> `queen-vs-pawn-seventh-convert` (26) — and **`assessmentGrounding` returns `ledger_verified`
+> for all six packs**. Each entry records `origin.kind: "http"`, `status: 200` and a
+> `tablebase.lichess.org` URL, with a `sha256` **of the local fixture body**. No process
+> contacted that URL.
+>
+> **This is the RFC's own subject in its purest form** — a record that attests to a fixture while
+> claiming to attest to an instrument — so it belongs here rather than in a follow-on.
+>
+> **What the implementation owes:**
+> 1. **`offlineQuery` must stop asserting a network transaction it did not make.** An offline
+>    result is an offline result: no synthesised `retrievedAt`, no `status: 200`, no URL implying
+>    a fetch. `verify-draft-engine.json`'s per-FEN provenance is the shape that already works.
+> 2. **A validator that refuses the manufactured shape**, so this cannot recur silently. It is
+>    detectable exactly as both agents detected it — the timestamp is a pure function of the URL.
+> 3. **`"offline": true` must be READ.** Seven `job.json` files record it and **nothing consumes
+>    it**; a signal written and never read is how 135 entries passed for a day.
+> 4. **The six packs' grounding must be re-derived or their claim withdrawn.** They currently
+>    assert `ledger_verified` on fabricated provenance. Re-run against the real tablebase, or
+>    downgrade the assessment honestly — **do not leave the claim standing**.
+> 5. The F3a register's **monotonic-shrink property is specified and not implemented** (the test
+>    asserts exact equality against an editable file, so nothing prevents growth) while
+>    `docs/development.md` states discovery *"rejects growth"*. Fix the property or the doc.
+
 ## Register claim
 
 **This RFC claims nothing versioned. Loudly, because that is the better outcome.**

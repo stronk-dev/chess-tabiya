@@ -1,45 +1,35 @@
-# Codex queue — refreshed 2026-08-15 (night)
+# Codex queue — refreshed 2026-08-15 (late night)
 
-## 0. D91 — IMPLEMENTED, pending independent review
+## 0. D64 — READY NOW, and it is the most serious open item
 
-The production command path now sends the advertised `SelfElo`/`OppoElo`
-defaults before the resolved `Elo` alias, making the requested band final state.
-The regression test drives `OpponentSelector` against the pinned real Maia image,
-records 1000 and 2400 as applied, and proves their policy vectors differ. Do not
-take this item again; independently verify it and then close D91/D60 in the owner
-ledger.
+**135 of 341 committed tablebase provenance records are fabricated**, across six packs that
+all return `ledger_verified`. Each claims `status: 200` from a `tablebase.lichess.org` URL
+**no process contacted**, with a hash of the local fixture body. Confirmed twice
+independently, from opposite directions, with identical counts.
 
-**Every Maia request in the product runs at band 1500 while recording the band that
-was requested.** `opponent-selector.ts:493-506` sends `setoption name Elo <band>`
-and **then** `SelfElo`/`OppoElo` at their advertised defaults — and **`Elo` is an
-alias for that pair**, so the later two discard it.
+**`rfc/fixture-realism.md` now scopes it in** — read the banner at its head; it is implemented
+but **must not archive until D64 lands**. Five obligations, in order: stop `offlineQuery`
+asserting a network transaction it never made; add a validator refusing the manufactured shape
+(the timestamp is a pure function of the URL, which is exactly how both agents found it); make
+`"offline": true` actually **read** — seven job files record it and nothing consumes it;
+re-derive or honestly withdraw the six packs' grounding claims; and fix F3a's monotonic-shrink
+property, which is specified, unimplemented, and already documented as working.
 
-Measured, 4 command orders × 12 positions × 3 bands: the shipped order changes the
-policy vector on **0 of 12** positions between band 1000 and 2400; `elo-only`,
-`elo-last` and `self-oppo` each change **12 of 12**; the shipped arm is
-**byte-identical to an `Elo 1500` request on 12/12** at both extremes. Verified by
-claude against the file.
+## 1. Then the review queue drains into you
 
-**It came in with `43c6c4a`** — the engine-request-contract implementation — whose
-§8 called the pair *"behaviourally a no-op"*, which is exactly backwards. It is a
-**`state` and `record` violation of the contract that shipped it**: R10's measured
-`[1000, 2400]` is inert, and **D60's closure was false and is re-opened**.
+`engine-leverage` (pack 0.23 / run 0.16 / migration 22), `feedback-delivery` (nothing
+versioned — the Q8 remedy), `vocabulary-wiring` (pack 0.24) and `live-surface-honesty`
+(nothing versioned) are all in or entering cross-review. `teacher-surface` is reviewed and
+**owner-blocked** on `live-marker-quality` reaching `implemented` — that was an explicit
+ruling, not an oversight.
 
-**Fix: send `SelfElo`/`OppoElo` BEFORE `Elo`, or set the pair to the resolved band.
-Do not simply delete it.**
+## Protocol — two clarifications from tonight's verification
 
-**Both gates miss this by construction** — the unit test asserts the broken array
-against a fake client, and the real-engine suite sends a shape production never
-uses. The regression test must drive the **production** command path against a real
-engine and assert the policy vector *differs* between two bands.
-
-
-**Landed and verified today (9 waves):** `authoring-frictions` 0.16 ·
-`validator-integrity` · `tempo-vocabulary` 0.17 · `resistance-spectrum` run 0.14 ·
-`predicate-wave-3` 0.18 + shape-entry 0.3 · `opening-evidence-path` 0.20 ·
-`branch-set-scale` · `deviation-classes` 0.21 · `transition-primitives` 0.22 ·
-`expression-census` · `engine-request-contract` run 0.15 / migration 20.
-**591 tests / 96 files, browser 24 at zero retries.**
+- **`design/BACKLOG.md` is a shared ledger, not an intent doc.** Flipping the rows your own
+  commit ships is the protocol working, not a law-5 breach. Law 5 protects `design/00`–`06`.
+- **The exploration-log entry rides in the archiving commit.** Two of three implementations
+  tonight wrote only their own `planning/<rfc>/log.md`. For the second time, the one that
+  shipped a false deferral was one of those missing the exploration-log entry.
 
 ## 1. `rfc/fixture-realism.md` — IMPLEMENTED, pending independent review
 
