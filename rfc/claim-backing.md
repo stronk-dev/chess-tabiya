@@ -22,7 +22,7 @@
   tablebase census, and thirteen claims assert one* (**D110 🐞**); *Five claims assert what no
   instrument in this repository measures* (**D111 🐞**); *`$defs/feedbackClaim` is
   `additionalProperties: true`* (**D112 🐞**). **[cross-review] Seven more opened by the
-  cross-review** (`D128`–`D134`), each named at the point in the body where the measurement that
+  cross-review** (`D128`–`D136`), each named at the point in the body where the measurement that
   found it sits.
 - **Ledger row this RFC now owns and did not cite** `[cross-review]`: **D126** — *are explorer W/D/B
   result splits admissible as `corpus_observed`?* — was **owner-ruled ADMISSIBLE 2026-08-15** at
@@ -62,7 +62,10 @@ line number in this document is normative.***
 > prose)**, not 70 of 131 (49.0%). §4's *shape* survives — every bucket argument is about kinds of
 > debt, not about the size of the corpus — but **every number in §4 is a `d2f34f9` number and is
 > labelled as one there.** Criterion 9 already says the shipped figure wins over §4; the
-> cross-review makes that binding rather than gracious.
+> cross-review makes that binding rather than gracious. Three further figures in the body were
+> falsifiable and one criterion was vacuous — §1.3(a)'s census total, §1.3(c)'s absent-value list,
+> the Summary's percentage labelling, and criterion 9's threshold. Each is corrected where it lives,
+> below, not here. **D134.**
 >
 > The second corpus movement is worse than a stale count. Packs **with claims and no evidence ledger
 > at all** went from **5 (20 claims, 1 machine-labelled)** to **15 (55 claims, 15 machine-labelled)**.
@@ -91,21 +94,48 @@ then re-derives each reading from records **already in that pack's ledger** and 
 author's own words to match it. A span the author does not declare, and that looks like a machine
 reading, is a **refusal**.
 
-The binding is therefore not "a record is stapled to a sentence". It is: *every numeral, move token
-and result word in the sentence is either checked against an instrument or explicitly marked as the
-author's own, and the learner is shown which.*
+The binding is therefore not "a record is stapled to a sentence". It is: *every **cardinal**, move
+token and result word in the sentence is either checked against an instrument or explicitly marked as
+the author's own, and the learner is shown which.*
 
-**Pack schema 0.26 is released back to free.** The remedy is validator-and-ledger only: no `$defs`
-entry is added, no committed pack byte changes, no content digest moves, no migration, no run-schema
-stamp. That is a finding, not a convenience — the debt was never a format problem.
+> **[cross-review] That sentence said "every numeral" and it could not.** The frozen table in §3.4
+> is *"an English cardinal 0–999"*, and the corpus's numerals are not all cardinals: **24 of the 75
+> machine-labelled claims at HEAD carry an ordinal**, and in this corpus ordinals are chess
+> geometry, not decoration — *"every rook slide along the **sixth** rank"* (`tempo-is-the-lesson`),
+> *"rook to the **fourth**"* (`bridge-not-squeeze`), *"the **third** rank"*, *"queen-versus-**seventh**-pawn"*.
+> An ordinal is invisible to a cardinal sweep, so it is neither checked nor declared and the promise
+> was false as written. §3.4 now extends the frozen table to ordinals and states what that costs.
+> **D129.** The claim is narrowed here rather than in a banner, because the narrowed claim is the
+> one the mechanism can keep.
 
-**Measured outcome, and the honest half** `[V]`. Of the 61 claims carrying a machine-checkable label:
+**Pack schema 0.26 is released back to free.** The remedy is validator, ledger and one pack lint: no
+`$defs` entry is added, no committed pack byte changes, no content digest moves, no migration, no
+run-schema stamp. That is a finding, not a convenience — the debt was never a format problem.
+**`[cross-review]` All six of those claims were re-verified at `67f6ee0` and all six hold; the "and
+one pack lint" is the cross-review's addition (`CLAIM_ID_DUPLICATE`, §3.2), and a lint code is not a
+register row. §5.1 carries the verification table.**
+
+**Measured outcome, and the honest half** `[V]`, **all at `d2f34f9`; the corpus is 166 claims and 75
+machine-checkable labels at `67f6ee0` and the shape below is what survives, not the totals**. Of the
+61 claims carrying a machine-checkable label:
 **20 become backable with the records already committed** (an authoring pass, zero instrument runs);
 **36 become payable** — the instrument exists and is wired, but the query was never recorded, in a
 few cases never run; and **5 must still fail**, because no instrument in this repository measures
-what they assert. Delivered-claim share (against `rfc/feedback-delivery.md`'s delivery path):
-**70/131 (49.0%) day zero → 90/131 (64.5%) after a binding pass → 126/131 (95.4%) after the
-instrument waves → never 131.** If it admitted 131 it would be a licence, not a binding.
+what they assert. Delivered claims, and separately the share of claim **prose** they carry (against
+`rfc/feedback-delivery.md`'s delivery path, all at `d2f34f9`):
+**70/131 claims = 53.4% of claims and 49.0% of prose, day zero → 90/131 = 68.7% / 64.5% after a
+binding pass → 126/131 = 96.2% / 95.4% after the instrument waves → never 131.** If it admitted 131
+it would be a licence, not a binding.
+
+> **[cross-review] The percentages were attached to the wrong denominators.** The draft wrote
+> "70/131 (49.0%) → 90/131 (64.5%) → 126/131 (95.4%)", which reads as though 49.0% were 70 of 131.
+> It is not: **70/131 = 53.4%**, and 49.0% is the *character* share — 15,963 of 32,560 — because, as
+> `rfc/feedback-delivery.md` §3.2 already says in as many words, *"the withheld claims are slightly
+> longer on average, because the machine-checkable ones are the ones carrying numbers"*. §4's table
+> labels its column correctly; the Summary did not, and a summary that misstates its own headline
+> number is the failure this project keeps recording. Both series are now written out. All of §4's
+> arithmetic was re-derived and **is internally exact** — 20+36+5 = 61, 70+20 = 90, 90+36 = 126,
+> 15,963+5,040 = 21,003, +10,061 = 31,064, 32,560−31,064 = 1,496 `[V]`.
 
 ## Motivation
 
@@ -201,15 +231,38 @@ And the coverage is better than "the instrument ran". Over the 12 packs `[V]`:
 **The evidence exists. Only the binding is forbidden.** That is the whole of D97 and it is now
 verified rather than quoted.
 
+> **[cross-review] Every figure in §1.2 reproduced at `67f6ee0`, independently.** 12 packs with
+> `tablebase_exact` claims; the same 12 hold `tablebase_result` records; **341** records, **14–52**
+> per pack (min `opposite-bishops-fortress-hold` 14, max `mate-bishop-knight` and
+> `trajectory-mate-bishop-knight` 52 each); **12 of 12** roots recorded; **229 of 229** spine
+> positions recorded. `manufacturedTablebaseTimestamp` (`ledger-validation.ts`) was read rather than
+> trusted — `Date.UTC(2026, 7, 14)` plus `parseInt(sha256(fen).slice(7,15), 16) % 86_400_000`,
+> exactly as §1.2 describes — and **0 of 341** match. The categories present across all 341 records
+> are only `win` 129 / `loss` 129 / `draw` 83, which matters for §3.4's normalisation table and is
+> recorded there. `[V]`
+
 #### 1.3 What the ledger does *not* contain — measured, and it is the honest half
 
 Three findings, each new, each ledgered (D110/D111 below), each shaping §4's outcome.
 
-**(a) No position anywhere in the corpus has a complete legal-move tablebase census.** For each of
-the 12 packs the legal successors of the root and of every authored spine node were enumerated with
-`chessops` and matched against the pack's `tablebase_result` FENs. **0 of 241 positions is fully
-censused.** Root coverage ranges from **1 of 28** (`mate-two-bishops`) to **5 of 11**
-(`pawn-breakthrough-convert`); `philidor-passive-rook-convert` covers **4 of 21**. `[V]`
+**(a) No position in the corpus that offers a choice has a complete legal-move tablebase census.**
+For each of the 12 packs the legal successors of the root and of every authored spine node were
+enumerated with `chessops` and matched against the pack's `tablebase_result` FENs. Of 241 positions,
+**6 are terminal** (no legal move), **36 are fully censused — and every one of the 36 has exactly one
+legal move**, so its census is complete by having nothing to choose between; **0 of the remaining 199
+positions is fully censused.** Root coverage ranges from **1 of 28** (`mate-two-bishops`) to **5 of
+11** (`pawn-breakthrough-convert`); `philidor-passive-rook-convert` covers **4 of 21**. `[V]`
+
+> **[cross-review] The draft said "0 of 241" and that is false; 36 are censused.** Re-derived with
+> `chessops` 0.15.1 over the committed corpus at `67f6ee0`: the 36 are the forced links of the
+> mating spines — `mate-bishop-knight` and `trajectory-mate-bishop-knight` 11 each,
+> `mate-k-q-technique` 7, `mate-two-bishops` 5, `queen-vs-pawn-seventh-convert` 2 — all
+> single-legal-move positions. The **root coverage row reproduced exactly**, which is what shows the
+> two measurements used the same method and only the total differed. The corrected statement is
+> **stronger** than the draft's, not weaker: the population that matters is positions with a choice,
+> and there the count really is zero. A refutable "0 of 241" that a reviewer disproves in one run is
+> worse for D110 than a true "0 of 199", because the first thing an owner does with a falsified
+> figure is discount the finding it supports.
 
 That matters because the prose asserts the enumeration in so many words —
 `philidor-passive-rook-convert`'s `one-move-wins`: *"All twenty-one legal moves were enumerated and
@@ -219,6 +272,35 @@ stalemate."* The records for those enumerations are not in the ledger. Either th
 were never recorded, or the counts came from somewhere else. **This is the dossier's worked example
 generalised** — *the author ran the query, typed the number, and the ledger never learned about it* —
 and it is exactly what a binding mechanism makes visible instead of assumable. **D110.**
+
+> **[cross-review] D110's "thirteen claims assert one" and a phrase sweep's "four" are both right,
+> and the row must say which it means.** They apply different predicates and neither is wrong:
+>
+> - A **lexical** sweep for an explicit enumeration assertion finds **4 claims in 4 files** —
+>   `mate-bishop-knight/stalemate-is-the-default` and `trajectory-mate-bishop-knight/stalemate-is-the-default`
+>   (*"every legal move was enumerated and queried"*), `mate-two-bishops/corner-stalemate-field`
+>   (*"every legal White move was enumerated and queried"*), and
+>   `philidor-passive-rook-convert/one-move-wins` (*"All twenty-one legal moves were enumerated and
+>   queried"*). `[V]`
+> - The **semantic** predicate — a claim whose truth requires quantifying over the whole legal move
+>   set — adds uniqueness and partition claims that never use the word *enumerated*:
+>   `pawn-breakthrough-convert/order-is-the-content` (*"a6 is **the only** winning move on the
+>   board"*), `queen-vs-pawn-seventh-convert/only-checks-win` (*"**every** winning move is a check
+>   and **every** quiet move was queried as a draw"*), `pawn-opposition-convert/root-is-won-by-a-tempo`
+>   (*"survives **exactly three of White's six legal** first moves … **All three** retreats are
+>   tablebase draws"*). `[V]`
+>
+> **The thirteen is neither of these.** §4's Bucket 2 list is *"13 `tablebase_exact` claims that
+> assert a census **or an off-tree position** the ledger does not contain"*, and its own membership
+> proves the mixture: `knight-pawn-wins`' pawn-on-c2 comparison is a single unrecorded position, not
+> a census, and `lucena-bridge-convert`'s two verified-alternative claims are the same shape;
+> `tempo-is-the-lesson`'s *"every rook slide along the sixth rank"* quantifies over a **subset**,
+> which is Open question 1's case and which the strict `moveCensus@v1` cannot express at all.
+> **D110's row title therefore overstates the law-8 escalation** by counting three different debts
+> as one. The escalation is sized at **7 claims asserting a full-set census** (the 4 lexical plus the
+> 3 semantic), against a corpus in which **0 of 199 choice-bearing positions is censused**. The other
+> six of the thirteen are ordinary unrecorded-position debt and are cheaper. The row is corrected to
+> say so.
 
 **(b) Zero `explorer_frequency` records exist in the repository.** Across all **68** evidence ledgers
 under `content/`, the kind census is `engine_eval` 415, `tablebase_result` 341, `position_legality`
@@ -239,10 +321,19 @@ record kind that closes the gap.
 **(c) Some cited engine figures exist in no ledger at all.** `anti-scandinavian-white`'s
 `h3-is-the-move` reads *"h3 first at +1.09 and Bc4 last at 0.00"*; `just-take-it` reads *"+0.66
 against +0.01 … and −1.06"*; `the-race-you-lose` reads *"between −1.20 and −1.70"*. Searching every
-`engine_eval` record in all 68 ledgers: `0`, `66` and `76`/`77` are present; **`109`, `1`, `−106`,
-`−120`, `−170` appear nowhere.** Its sibling `scandinavian-mainline-black` *does* hold the `75` that
-`anti-scandinavian-white`'s `nothing-to-refute` cites — so the same authored assertion is backed in
-one pack and unrecorded in its sibling, because the run happened once. `[V]`
+`engine_eval` record in all 68 ledgers: `0`, `66`, `76`/`77` **and `1`** are present; **`109`,
+`−106`, `−120`, `−170` appear nowhere.** Its sibling `scandinavian-mainline-black` *does* hold the
+`75` that `anti-scandinavian-white`'s `nothing-to-refute` cites — so the same authored assertion is
+backed in one pack and unrecorded in its sibling, because the run happened once. `[V]`
+
+> **[cross-review] `1` was listed as absent and it is present.** Re-derived over every
+> `candidates[].centipawns` in all 68 committed ledgers: **157 distinct centipawn values**, and `1`
+> is among them (so is `52`, which `maroczy-bind-white-squeeze/engine-measured-root` cites). The
+> four genuinely absent values are `109`, `−106`, `−120`, `−170` — and the near-misses are worth
+> stating, because `−107` and `−110` *are* present: a value that exists somewhere in the corpus is
+> **not** evidence that the claim citing it is backed, since the record must be for *that position*.
+> This is the second reason §3.3's assertions must be keyed to a FEN rather than to a value, and the
+> third reason is D130 below: as drafted they are keyed to a FEN **that need not be this pack's**.
 
 #### 1.4 The overwrite, and why it is the same defect from the other side
 
@@ -326,6 +417,38 @@ any mechanical binding over free prose, it is where rung 5's *"provenance is the
 actually sits, and §3.6 answers it the only honest way available — by printing the instrument's own
 sentence beside the author's, so a learner can see the two disagree.
 
+> **[cross-review] Negation is the smallest hole, not the largest, and the draft named only the
+> smallest.** The residual sweep's alphabet is cardinals, SAN/square tokens and result words. **A
+> proposition built out of none of those has an empty residual and is admitted unexamined**, and
+> that is not hypothetical — three of the 75 machine-labelled claims at HEAD contain **no digit and
+> no spelled cardinal at all** `[V]`. The worked case is `philidor-third-rank-hold/passivity-loses`,
+> which the draft already cites in §2(A) and then does not carry through to (C):
+>
+> > *"The difference between the fence and a passive rook on the back rank is the difference between
+> > a tablebase draw and a tablebase loss in this position. 'Activity' here is not style advice; it
+> > was verified."*
+>
+> Declare *"a tablebase draw"* → `tablebase.category@v1`, *"a tablebase loss"* →
+> `tablebase.moveCategory@v1`. The residual is then **empty**, the sweep is silent, and the claim
+> ships `ledger_bound` — while its operative content is an **equivalence** ("the difference between
+> X and Y **is** the difference between draw and loss") that no record states, plus a **meta-claim
+> about its own provenance** ("it was verified") that the mechanism is supposed to be the sole judge
+> of. Four families sit in this gap and the corpus supplies each: **qualitative** (*"the bishop pair
+> compensates"*), **causal** (*"the passive rook did not just lose time; it chose the one square its
+> own king disconnects"* — `why-the-skewer-works`), **comparative**, and **scope** (*"in this
+> structure"*, *"always"*, *"by construction"* — `knight-pawn-wins`).
+>
+> **This is where the owner's D126 boundary lands, and the mechanism cannot hold it.** The ruling of
+> 2026-08-15 admits explorer result splits *"the split may be stated; it may never be converted into
+> a move verdict or a quality claim"*, and refuses *"…so Black is better here"* by name. That refused
+> clause carries **no cardinal, no SAN token and no result word**. It survives the sweep with an
+> empty residual on any claim that binds one percentage. **A mechanism whose stated job is provenance
+> at rung 5 admits, verbatim, the sentence its owner refused eight hours after this draft was
+> written.** That is not a reason to abandon (C)+(A); it is the reason the RFC must stop claiming the
+> sweep is a completeness guarantee and start claiming what it is: **a guarantee about the numerals,
+> and nothing about the proposition.** §3.4, §3.6 and criterion 4 are amended accordingly, and the
+> gap is ledgered rather than absorbed. **D131.**
+
 ### 3. The mechanism
 
 #### 3.1 `claimBindings` — a third array in the evidence ledger
@@ -380,16 +503,57 @@ For each binding, in `evidenceSupports`:
 > Pointer has no other addressing mode, but the pointer is no longer the *identity*; the id and the
 > digest are.
 
+> **[cross-review] It is not airtight, and the rebinding that survives it is one line of JSON.**
+> (2) and (3) close *reordering* and *editing*. They do not close **two claims sharing an `id`** —
+> and nothing refuses that. `validatePackDocument` builds `const claimIds = new Set((pack.feedbackClaims ?? []).map((claim) => claim.id))`
+> (`apps/server/src/pack-validation.ts`) purely to resolve `stated_reasoning` references; it never
+> compares the set's size to the array's length, and there is no `DUPLICATE_*` refusal for feedback
+> claims anywhere in the file `[V]` (the two that exist are `TIMING_WINDOW_DUPLICATE_ID` and
+> `TRAJECTORY_DUPLICATE_LEG_ID`). So: give claims 0 and 5 the same `id`; bind claim 0 honestly —
+> (2) resolves `/feedbackClaims/0/text` to an object whose `id` matches, (3) digests claim 0's own
+> text, (4) sees one binding for that id. **Every check passes.** §3.9 then asks *"does the ledger
+> hold a `claimBindings` entry for that claim"*, keyed by `claimId`, and answers yes **for claim 5
+> as well** — whose arbitrary prose now carries `ledger_bound` off claim 0's record. The digest that
+> was supposed to make the link content-keyed is keyed to the *other* sentence.
+>
+> Two additions close it, and the RFC takes both because either alone leaves a sharp edge:
+>
+> 6. **`feedbackClaims[].id` must be unique within a pack**, else **`CLAIM_ID_DUPLICATE`** at error
+>    severity, raised by `validatePackDocument` and therefore reaching every pack whether or not it
+>    has a ledger. Measured cost: **0 packs affected** — no committed pack has a duplicate claim id
+>    `[V]`.
+> 7. **§3.9's backing test resolves by pointer, not by id.** The binding's `pointer` identifies
+>    *which* claim is backed; `claimId` and `textSha256` are the checks that the pointer still means
+>    what it meant. Id-keyed lookup was the mechanism that let (6)'s absence become an exploit.
+>
+> **D132.** This is what "closed structurally rather than by a test" has to survive to be worth
+> saying, and the draft's version did not.
+
 And the fence gets stricter, not looser:
 
-5. **`record.supports` may no longer contain a `/feedbackClaims/…` pointer at all.** The
-   `explorerTemplate`/`engineTemplate` exemption in the `PROSE_POINTERS` test is removed for that
-   pattern; claim support flows through `claimBindings` or not at all. Measured cost: **0 records
-   affected** — no committed record points at a claim, and no templated record exists anywhere
-   `[V]`. Consequently the two template functions keep their **values** validation (they are how an
+5. **`record.supports` may no longer contain **any** `PROSE_POINTERS` pattern, whatever the record's
+   kind or template.** Claim support flows through `claimBindings` or not at all. Measured cost:
+   **0 records affected** — no committed record points at a claim (0 of 893 records across the 68
+   ledgers carry a `/feedbackClaims/…` support), and no templated record exists anywhere `[V]`.
+   Consequently the two template functions keep their **values** validation (they are how an
    `explorer_frequency` or a templated `engine_eval` record proves its own shape) and **lose their
    `supports`-must-be-a-claim-pointer clause and their byte-exact prose comparison**, both of which
    are now unreachable.
+
+> **[cross-review] As drafted, (5) *widened* the gate it claimed to narrow.** The draft removed the
+> template exemption *"for that pattern"* — the `/feedbackClaims/` one — and in the same breath
+> deleted the templates' requirement that `supports` **be** a claim pointer. But the exemption in
+> `check.ts` is **record-level, not pattern-level**: the guard reads
+> `(!isExplorerTemplate && !isEngineTemplate && PROSE_POINTERS.some((pattern) => pattern.test(pointer)))`,
+> so a record that satisfied either template is exempt from **all five** prose patterns at once.
+> Strike only the feedbackClaims pattern and delete the must-be-a-claim-pointer clause, and a
+> templated `engine_eval` may then support `/objective/summary`, `/planClasses/<i>/description`,
+> `/deviations/<i>/note` **or** `/spine/…/annotations/<i>` — with the byte-exact prose comparison
+> deleted too, so **nothing checks it at all**. `explorer_frequency` is blocked from `/spine…` by a
+> separate predicate in the same expression and from nothing else. That is a strictly larger hole
+> than the one D97 is about, opened by the clause that advertises itself as the narrowing. (5) is
+> rewritten above to strike the exemption for all five patterns, which is also what criterion 1
+> already tests for the claim pattern and now tests for the other four. **D133.**
 
 #### 3.3 The assertion registry
 
@@ -426,8 +590,52 @@ the reason §1.3(a) is a refusal rather than a caveat:
   mean the authored line.
 
 Categories are normalised through the shipped `learnerCategory`/`CATEGORY_RANK`
-(`apps/server/src/sourcing/tablebase-category.ts`) so `cursed_win`/`blessed_loss` are not silently
+(`apps/server/src/sourcing/tablebase-category.ts`) so `cursed-win`/`blessed-loss` are not silently
 read as `win`/`draw` by the prose check.
+
+> **[cross-review] Three registry corrections, each forced by reading the shipped values rather than
+> the shipped types.**
+>
+> **(i) The category spellings were wrong and the vocabulary is bigger than two.** The shipped
+> constants are **hyphenated** — `CATEGORY_RANK` in `tablebase-category.ts` and `TABLEBASE_CATEGORIES`
+> in `apps/server/src/tablebase.ts` both spell them `cursed-win` / `blessed-loss`, not
+> `cursed_win` / `blessed_loss` — and the full vocabulary is **nine** members plus `unknown`
+> (`syzygy-win`, `maybe-win`, `cursed-win`, `draw`, `blessed-loss`, `maybe-loss`, `syzygy-loss`,
+> `win`, `loss`). The committed corpus only ever holds **`win` 129 / `loss` 129 / `draw` 83** `[V]`,
+> so no prose has yet had to render a qualified category — which means the normalisation table must
+> **refuse** the other six rather than guess an English word for them. A `maybe-win` silently
+> matching the span *"win"* is exactly the failure §3.4 exists to prevent. This is the project's own
+> *pin encoding, not intent* rule applied to a contract RFC.
+>
+> **(ii) The registry cannot express `stalemate`, and four claims need it.** `tablebase_result.values`
+> carries `stalemate`, `checkmate` and `insufficient_material` on **341 of 341** records `[V]` — the
+> data is already there — but `tablebase.moveCensus@v1`'s `select` is `total|win|draw|loss`. So
+> *"eight of those nine draws are stalemate"* (`mate-bishop-knight/stalemate-is-the-default` and its
+> trajectory twin), *"the quiet alternatives … are stalemate"* (`mate-two-bishops/corner-stalemate-field`)
+> and `mate-k-q-technique/stalemate-is-the-content` are **not payable by the census wave**; they need
+> a registry entry the census wave does not supply. §4 puts all four in Bucket 2 on the strength of
+> the wave alone, and that is short by one row. Registry v1 gains
+> **`select: total|win|draw|loss|stalemate|checkmate`** on `tablebase.moveCensus@v1`, which costs
+> nothing because the fields are already recorded and validated.
+>
+> **(iii) Nothing requires an assertion's `fen` to belong to this pack.** Only
+> `tablebase.lineUniformCategory@v1` checks its FENs against the authored spine. `tablebase.category@v1`,
+> `tablebase.dtm@v1`, `tablebase.dtz@v1`, `tablebase.pieceCount@v1`, `engine.centipawns@v1`,
+> `engine.depth@v1` and the three `explorer.*` entries take **any** FEN that has a record in this
+> ledger. `philidor-third-rank-hold`'s `philidor-is-drawn` opens *"This **exact position** is a
+> tablebase draw"* and its ledger holds 23 `tablebase_result` records; corpus-wide there are 83 draw
+> records. Bind the span to any of them and the validator is satisfied while the sentence is about a
+> different position. Registry v1 therefore gains a standing precondition:
+>
+> > **Every `fen` argument must be a position this pack reaches** — the root, an authored spine node
+> > replayed from `start.fen`, or a legal successor of one of those (which covers deviations and
+> > declared alternatives) — else **`CLAIM_FEN_OFF_PACK`** at error severity. The pack already knows
+> > all three sets; `authoredPositionPointers` in `check.ts` walks two of them today.
+>
+> This is also what Open question 3 needs to be true. That question offers a bound claim's FENs as a
+> free anchor because they are *"author-supplied and machine-checked against the pack's own spine"* —
+> quoting `feedback-delivery`'s Open question 4 exactly. **Without this precondition that sentence is
+> false**, and the anchor Open question 3 offers would point wherever the author aimed it. **D130.**
 
 #### 3.4 The span check, and the residual sweep that closes (C)'s hole
 
@@ -440,9 +648,25 @@ For each `spans[]` entry:
 
 Normalisation is a closed, frozen table with no natural-language inference in it:
 
-- **Integers.** The span, trimmed, must be either digits (with optional `,` group separators) or an
-  English cardinal 0–999 from a frozen table (`nine` → 9, `twenty-one` → 21, `thirteen` → 13). This
-  is required by the corpus, not a nicety: the endgame packs write their quantities in words.
+- **Integers.** The span, trimmed, must be either digits (with optional `,` group separators), an
+  English cardinal 0–999 from a frozen table (`nine` → 9, `twenty-one` → 21, `thirteen` → 13), or an
+  English **ordinal** 1st–99th from the same frozen table (`fourth` → 4, `sixth` → 6, `twenty-first`
+  → 21). This is required by the corpus, not a nicety: the endgame packs write their quantities in
+  words, and they write their **ranks and files as ordinals**.
+
+  > **[cross-review] Ordinals were absent from the table and from the sweep, and they are 24 of the
+  > 75 machine-labelled claims at HEAD** `[V]` — `sixth` ×4, `first` ×11, `third`, `fourth`,
+  > `second`, `seventh`, `eighth`. In this corpus an ordinal is a board coordinate:
+  > `mate-k-r-technique/tempo-is-the-lesson` turns on *"every rook slide along the **sixth** rank
+  > from the long side"*, `lucena-bridge-convert/bridge-not-squeeze` on *"rook to the **fourth**"*.
+  > Leaving them out of the cardinal table did not make them safe — it made them **invisible to the
+  > residual sweep**, which is the opposite of safe, because the sweep's whole contribution is
+  > refusing what the author did not declare. Adding them to the table makes them declarable and
+  > makes the sweep noisy about them, which is the trade §3.4 already accepts everywhere else.
+  > **D129.** Fractions and iteratives (*"a third unprepared"*, *"twice"*, *"once"*) are **not**
+  > added: they are not integers, they occur 4 times, and each is an `authored` span on a claim that
+  > must carry a self-declared label — see the fence note below, which is where that answer stops
+  > working.
 - **Centipawn displays.** `displayCp` (`check.ts`) is reused verbatim, so `+1.09` ↔ `109`. The span
   may carry or omit the leading `+`.
 - **Percentages.** One decimal place, matching `pct()` in `explorer.ts`; `30.0%` ↔ `30.0`.
@@ -452,7 +676,10 @@ Normalisation is a closed, frozen table with no natural-language inference in it
   inflection table (`draw`↔`drawn`, `loss`↔`lost`). That table is English morphology, not chess
   semantics, and it is listed in full here so it cannot grow without an RFC.
 
-> **The residual sweep — the rule that makes the mapping complete rather than selective.** After
+> **The residual sweep — the rule that makes the mapping complete over the sweep's alphabet rather
+> than selective within it.** `[cross-review]` The alphabet is cardinals, ordinals, SAN/square
+> tokens and result words; **completeness is over that alphabet and nothing wider**, and §2's
+> cross-review note gives the proposition-level gap this leaves open (**D131**). After
 > every declared span (instrument and `authored` alike) is removed from `text`, the remainder is
 > scanned for machine-shaped tokens: a cardinal (digits or the frozen word table), a SAN or square
 > token, or a result word (`win`/`won`/`draw`/`drawn`/`loss`/`lost`/`stalemate`/`checkmate`). **Any
@@ -466,19 +693,60 @@ Normalisation is a closed, frozen table with no natural-language inference in it
 > least one self-declared label** (`author_principle`, `hypothesis`, `derived_feature`), else
 > `CLAIM_AUTHORED_SPAN_UNLABELLED`. A claim labelled `tablebase_exact` and nothing else must have an
 > empty residual — it claimed to be exact, and it is held to it. Measured `[V]`: of the 37
-> `tablebase_exact` claims, **18 carry a self-declared label as well** and 19 do not.
+> `tablebase_exact` claims, **18 carry a self-declared label as well** and 19 do not. **`[cross-review]`
+> Reproduced exactly at `67f6ee0` — but the fence binds syntactically and not much more: the label
+> set is author-chosen and checked only against a seven-member enum, so the escape costs one array
+> element. See the measurement below `§3.4`; the RFC's position is that binding the explorer window
+> removes the *reason* to reach for the relabel, not that the fence stops anyone who wants to.**
 
-Numerals with no chess content still need handling, and the answer is *declare them*: rating bands,
-date windows and piece counts are all `authored` spans on a claim that carries a self-declared
-label, or genuine assertions (`tablebase.pieceCount@v1` backs *"five pieces"*). The sweep is
+Numerals with no chess content still need handling, and the answer is *bind them where an instrument
+recorded them and declare them otherwise*: piece counts are genuine assertions
+(`tablebase.pieceCount@v1` backs *"five pieces"*), and **rating bands and date windows are genuine
+assertions too**, because `explorer_position_census` (§3.7) records `ratings`, `speeds`, `since` and
+`until` and the manifest's request URL is already checked against them. Registry v1 therefore gains
+**`explorer.window@v1`** (`select: since|until`) and **`explorer.ratingBand@v1`**. The sweep is
 deliberately noisy; noise here costs an author a line of JSON, and silence here costs a learner a
 false provenance statement.
 
+> **[cross-review] The draft's answer here was `authored`, and that answer collides with the draft's
+> own fence on every single `corpus_observed` claim in the corpus.** Measured at HEAD `[V]`:
+>
+> | | claims | of which carrying a self-declared label |
+> |---|---|---|
+> | `corpus_observed` | 36 | **0** |
+> | `engine_validated` | 8 | **0** |
+> | `tablebase_exact` | 37 | **18** (the draft's "18 of 37" reproduces exactly) |
+>
+> Every one of the 36 `corpus_observed` claims carries an explorer window written as digits —
+> `2024-01` to `2026-07`, or `2023-01` to `2025-12` on the ten new packs — and
+> `french-advance-chain-white/no-head-lever-here` also carries the band `1400-1800`. Those are
+> cardinals; the sweep flags them; registry v1 as drafted has **no assertion that returns them**; so
+> the only route was `authored`; and the fence closes `authored` to a claim with no self-declared
+> label. **Every `corpus_observed` claim in the corpus is therefore refused
+> `CLAIM_AUTHORED_SPAN_UNLABELLED` under the drafted rules** — which is to say the drafted mechanism
+> refuses Bucket 2's entire 23-claim explorer wave, the wave §4 counts as payable and the wave the
+> owner's D126 ruling exists to unblock. The fix above is the honest one: the window and band **are**
+> instrument readings, recorded in the census record and cross-checked against the request URL, so
+> they should be **bound**, not excused.
+>
+> **And this is why the fence, left as the answer, is decorative.** The alternative route an author
+> facing 36 refusals actually takes is to append `author_principle` to `evidenceTypes` — one string
+> in a JSON array, gated by nothing but the seven-member enum at
+> `schemas/drill_pack.schema.json` `$defs/feedbackClaim.evidenceTypes` `[V]`. **Nothing anywhere
+> checks that a claim labelled `author_principle` contains a principle.** So the fence's real
+> strength is not "the schema's own two-tier label vocabulary"; it is "the author has not yet
+> bothered". A mechanism that makes the cheap move the *relabelling* move is a mechanism that
+> converts machine-checkable claims into self-declared ones at scale, and §3.9 then admits them as
+> `self_declared` with no residual sweep at all. Binding the window closes the pressure at its
+> source. The residual pressure — a claim that could pay but relabels instead — is **not** closable
+> by the validator, is now criterion 13's job to *measure* rather than prevent, and is ledgered.
+> **D135.**
+
 #### 3.5 The overwrite is deleted
 
-`attachExplorerEvidence` **no longer assigns to `pack.feedbackClaims[claimIndex].text`**. The
-assignment line is removed, not gated behind a flag. In its place the tool requires the author to
-supply the span it is backing:
+`attachExplorerEvidence` **no longer mutates the pack at all** — neither
+`pack.feedbackClaims[claimIndex].text` nor `pack.provenance.sources`. Both assignments are removed,
+not gated behind a flag. In its place the tool requires the author to supply the span it is backing:
 
 ```
 make candidate-attach FILE=… TARGET=/feedbackClaims/3/text SAN=Bf5 SPAN="61.4%" FIELD=sharePct
@@ -486,12 +754,41 @@ make candidate-attach FILE=… TARGET=/feedbackClaims/3/text SAN=Bf5 SPAN="61.4%
 
 and writes a `claimBindings` entry rather than a `supports` pointer. With no `SPAN`, the tool
 refuses (`ATTACH_SPAN_REQUIRED`) instead of overwriting. The pack file becomes an **input** to the
-attach path rather than an output of it; `atomicCanonical` writes `evidence.json` and `sources.json`
-only. An author who genuinely wants a generated sentence writes it into the pack themselves and
-binds it like any other — a visible authoring edit, not a side effect of recording evidence.
+attach path rather than an output of it, on **both** of the function's two write branches:
+`atomicCanonical(directory, …)` writes `evidence.json` and `sources.json` only, and the flat-file
+branch — the one every `content/drafts/*.json` pack takes — drops `writeCanonicalJson(paths.pack, pack)`
+and writes only the ledger and the manifest. An author who genuinely wants a generated sentence
+writes it into the pack themselves and binds it like any other — a visible authoring edit, not a side
+effect of recording evidence.
 
 `digestDrillPack(pack)` is still recomputed into the ledger's `packDigest`, and now it is stable
 across an attach, which is the correct behaviour and was not achievable before.
+
+> **[cross-review] Removing one assignment does not make the digest stable, and the draft's
+> criterion 6 would have failed on the shipped code.** `attachExplorerEvidence` mutates the pack
+> **twice** before it digests it. The draft names the first:
+>
+> ```ts
+> pack.feedbackClaims[claimIndex].text = renderExplorerFrequency(values);
+> pack.provenance.sources = [...new Set([...(pack.provenance.sources ?? []), `lichess-explorer (…) — ${EXPLORER_RATIONALE}`])];
+> ```
+>
+> and then `const nextLedger = { ...ledger, packDigest: await digestDrillPack(pack), … }` runs over
+> the **mutated** object. Delete only the first line and `packDigest` still moves on the first attach
+> against any pack whose `provenance.sources` does not already carry the explorer rationale string,
+> and `pack.json` is still rewritten. Criterion 6 asserts *"leaves `pack.json` byte-identical, and
+> leaves the ledger's `packDigest` unchanged"* — it would have gone red against a faithful
+> implementation of the drafted §3.5, and gone red for a reason the RFC never mentioned.
+>
+> **The second assignment is a licence obligation, not bookkeeping, so dropping it silently is its
+> own defect.** It is how the Lichess explorer attribution reaches `provenance.sources`. Dropping the
+> write means an author must add the rationale line to the pack **by hand** before the attach, or the
+> pack ships an explorer-backed claim with no source line. §3.5 therefore refuses rather than
+> silently skips: **`ATTACH_SOURCE_LINE_MISSING`**, raised before any query, when the target pack's
+> `provenance.sources` does not already carry the explorer rationale. That keeps the pack an input,
+> keeps the digest stable, and keeps the obligation visible — the same shape criterion 12 uses for
+> CC-BY-SA. **D136.** No present corpus effect: **0 committed records point at a claim**, so no
+> attach has ever run against a committed pack `[V]`.
 
 #### 3.6 What the binding is worth to a learner
 
@@ -526,13 +823,56 @@ Without it the 23 `corpus_observed` claims are unbackable in shape as well as in
 it they are payable by one wave of explorer queries — the same queries that already produced the
 committed priority artifacts.
 
+> **[cross-review] D126 was owner-ruled after this draft was written, it names this RFC as its
+> owner, and it changes three things here.** The ruling (`design/BACKLOG.md`, landed `4e19b95`,
+> 2026-08-15): *"**ADMISSIBLE as `corpus_observed` (rung 4).** The boundary is now written so authors
+> stop self-refusing: **the split may be stated; it may never be converted into a move verdict or a
+> quality claim.** … Owned by `rfc/claim-backing.md` (the `explorer_position_census` record kind)"*.
+>
+> **(1) It ratifies §3.7 rather than complicating it.** The draft designed `explorer_position_census`
+> around `whitePct`/`drawPct`/`blackPct` on a hunch that the shape was right; the owner has since
+> ruled that the split is admissible evidence. §3.7 stands as written and is now grounded in a
+> ruling rather than in the author's reading. The `explorer.scorePct@v1` entry is the assertion the
+> ruling's own worked example needs.
+>
+> **(2) It makes more claims payable than §4 counts.** The ruling says it *"unblocks roughly half the
+> ungroundable list at zero extra instrument cost, including five packs carrying `cost: unmeasurable`
+> and four authored tempo budgets"*. §4's Bucket 2 counts 23 `corpus_observed` claims at `d2f34f9`;
+> at HEAD there are **36**, and the ruling reaches beyond `feedbackClaims` into `cost` and tempo
+> fields that §4 never measured. **§4's ceiling is a floor.** The RFC does not restate the ruling's
+> arithmetic, because the ruling's population was never measured claim by claim and inventing a
+> number here would be the error §4 spends a section avoiding.
+>
+> **(3) It states a boundary the mechanism provably cannot enforce, and that must be said here.**
+> *"…so Black is better here"* — the ruling's own named refusal — carries **no cardinal, no SAN token
+> and no result word**. Appended to a claim that binds one percentage, it survives the residual sweep
+> with an empty residual and ships `ledger_bound`. The sweep polices *numerals*; the ruling polices
+> *inference from numerals to verdict*; those are different objects. §2's cross-review note carries
+> the general form. The consequence for this section specifically: **`explorer_position_census`
+> unblocks the wave and does not, on its own, hold the line the owner drew** — the line is held by
+> §3.6's paired rendering, by authoring discipline, and by nothing mechanical. Recording that is
+> law 6, and the alternative — shipping the census kind while implying the boundary is enforced — is
+> the failure mode the ruling was written to prevent. **D131.**
+
 #### 3.8 Refusal codes, and the debt ceiling
 
 New `SourcingIssue` codes, all raised through `issue(...)` at default **error** severity:
 `CLAIM_POINTER_INVALID`, `CLAIM_POINTER_REBOUND`, `CLAIM_TEXT_DRIFTED`, `CLAIM_BINDING_DUPLICATE`,
 `CLAIM_SPAN_ABSENT`, `CLAIM_SPAN_AMBIGUOUS`, `CLAIM_SPAN_CONTRADICTED`,
 `CLAIM_ASSERTION_UNRECORDED`, `CLAIM_ASSERTION_UNDECLARED`, `CLAIM_CENSUS_INCOMPLETE`,
-`CLAIM_AUTHORED_SPAN_UNLABELLED`. One new `SourcingError`: `ATTACH_SPAN_REQUIRED`.
+`CLAIM_AUTHORED_SPAN_UNLABELLED`, **`[cross-review]` `CLAIM_FEN_OFF_PACK`** (§3.3). One new pack-lint
+code raised by `validatePackDocument` rather than by `sourcing-check`: **`CLAIM_ID_DUPLICATE`**
+(§3.2). Two new `SourcingError`s: `ATTACH_SPAN_REQUIRED` and **`ATTACH_SOURCE_LINE_MISSING`** (§3.5).
+
+> **`[cross-review]` Criterion 8's ceiling was checked and it genuinely binds.** `refusal-coverage.test.ts`
+> asserts `expect(missing).toEqual(debt)` and `expect(debt.every((code) => ceiling.codes.includes(code))).toBe(true)`,
+> where `missing` is recomputed from the production sources each run and `ceiling` holds **108
+> codes** frozen `2026-08-15` `[V]`. So an uncovered new code cannot be absorbed: it would appear in
+> `missing`, force an edit to the *register* fixture (`tabiya.test-fixture.refusal-debt.v2`), and
+> then fail the subset assertion against a ceiling it is not in. Every code above therefore ships
+> with a test or the suite is red. One precision the draft omits: it is the **register** fixture, not
+> the ceiling, that would have to be edited — criterion 8 forbids editing the ceiling, which is the
+> right prohibition, and the register is where the attempt would surface.
 
 `apps/server/src/refusal-coverage.test.ts` discovers refusal codes from production sources and
 holds a **frozen debt ceiling** (`fixtures/refusal-debt-ceiling.fixture.json`, `frozenAt`
@@ -567,6 +907,29 @@ exists"*. Same field, same fail-closed default for ledger-less packs, one predic
 All figures derived from the committed corpus at `d2f34f9` `[V]`; the 131/32,560/70/61 baselines
 reproduce `rfc/feedback-delivery.md` §3.2 exactly, which is the check that the population is the
 same one.
+
+> **[cross-review] The `d2f34f9` baselines reproduce exactly and the corpus has moved past them.**
+> Independently re-derived from `git ls-tree d2f34f9`: **51 pack files carrying 131 claims, 32,560
+> chars, 61 machine-labelled, 70 self-declared-only carrying 15,963 chars = 49.0%** `[V]`. Every
+> number in this section is sound *for that commit*. At `67f6ee0` the population is **166 claims /
+> 45,289 chars / 75 machine-labelled / 91 self-declared-only carrying 23,574 chars = 52.1%**, so
+> day zero is **91 of 166**. Criterion 9 already requires the shipped run to win over this table;
+> the cross-review's amendment to criterion 9 makes the **denominator** re-derived too, because a
+> criterion that pins "131 of 131" is unfalsifiable against a corpus of 166.
+>
+> **A third debt kind, which the three buckets do not have a slot for. D128.** Buckets 1 and 2 both
+> assume a pack *has* an evidence ledger. At `d2f34f9` that was nearly true — `feedback-delivery`
+> §1.2 measured 5 ledger-less packs carrying **1** machine-checkable label. At `67f6ee0` it is
+> **15 ledger-less packs carrying 55 claims, 15 of them machine-labelled and 5,353 chars** `[V]`:
+> `berlin-queenless-press`, `dragon-yugoslav-race` (×2), `french-advance-chain-white` (×2),
+> `grunfeld-exchange-fianchetto`, `iqp-black-tarrasch-defence`, `iqp-white-panov-attack`,
+> `kid-mar-del-plata-white`, `maroczy-bind-white-squeeze` (×2), `nimzo-doubled-c-pawns` (×2),
+> `open-centre-ruy-exchange`, `trajectory-caro-advance-chain-bishops`. For these there is no sidecar
+> to bind into, so the debt is **a sourcing run plus a ledger plus a binding**, not "the query was
+> never recorded". `feedback-delivery`'s C7 fails them closed correctly, which is the mechanism
+> working — but §4's sequence would silently attribute them to Bucket 2's wave and overstate what one
+> explorer pass buys. **Bucket 2 is hereby two buckets**: *recorded-instrument, unrecorded query*
+> and *no ledger at all*, and the implementing pass reports them separately.
 
 **The mechanism delivers nothing by itself.** It makes payment possible. What is delivered is a
 function of authoring passes, and the honest presentation is therefore a sequence, not a number.
@@ -618,6 +981,31 @@ cross-reference (row 4), re-label to `derived_feature` and bind against the pack
 author acts is the mechanism working.** A design that admitted all 131 would be one that had stopped
 checking.
 
+> **[cross-review] Bucket 3 survives, but two of the five rows give the wrong reason and the right
+> reason is a different clause.** Labels read at HEAD `[V]`:
+> `mate-bishop-knight/opponent-plays-the-spine` is `[tablebase_exact, derived_feature]` and
+> `trajectory-mate-bishop-knight/spine-is-the-opponent` is `[tablebase_exact, derived_feature]` —
+> **both already carry a self-declared label**, so the `authored` escape the draft treats as the
+> distinguishing feature of row 3 is *open* to rows 1 and 2. Row 3
+> (`wrong-corner-is-forced`, `[tablebase_exact]` alone) and row 5
+> (`why-the-skewer-works`, `[derived_feature, tablebase_exact]` — so its escape is open too) show the
+> draft applied the label check to one row and not the others.
+>
+> What actually keeps all five dark is **§3.9, not §3.4**: a machine label is backed only if the
+> binding holds *at least one instrument span whose assertion resolves from a record of the label's
+> mapped kind*. Rows 1 and 2 assert a reimplementation's output and contain **no tablebase reading to
+> bind** — declaring every span `authored` satisfies the sweep and still leaves zero instrument spans,
+> so `EVIDENCE_TYPE_UNBACKED` fires. That is a **stronger** closure than the label fence, because it
+> cannot be unlocked by editing `evidenceTypes`. The table's "why no binding can exist" column is
+> corrected to name it. Row 3's stated reason is fine but incidental; row 4's cross-ledger refusal
+> and row 5's mislabelling are unchanged and are the two genuine authoring remedies.
+>
+> **Consequence for criterion 11**, which tests that each Bucket 3 claim *"given a best-effort
+> binding, is refused"*: a best-effort binding for rows 1, 2 and 5 marks their spans `authored` and
+> **passes the residual sweep**. The refusal those tests must assert is `EVIDENCE_TYPE_UNBACKED`, not
+> `CLAIM_ASSERTION_UNDECLARED`, and the criterion is amended to say which code each row must raise —
+> otherwise the law-8 criterion passes for three rows by testing the wrong refusal.
+
 **Why 126, not 131, is the right ceiling.** Bucket 3 is 3.8% of the claims and 4.6% of the claim
 prose. That residue is the measurable content of law 8 in this corpus: it is exactly the set of
 sentences that assert machine authority without a machine behind them, and it was invisible until a
@@ -651,7 +1039,37 @@ binding mechanism forced the question.
 **That the remedy needed no format version is the finding, not the shortcut.** D97 read as a format
 defect — *the schema forbids the payment* — and it is not: the pack format was never asked. The
 forbidding lives entirely in `sourcing-check`'s overreach rule and in one emitter's assignment
-statement.
+statements.
+
+> **[cross-review] 0.26's release HOLDS. Every one of the six claims was checked at `67f6ee0`, and
+> one of them is now true for a smaller reason than the draft gives** `[V]`:
+>
+> | claim | verdict |
+> |---|---|
+> | `DRILL_PACK_SCHEMA_VERSION` untouched | **holds** — `packages/schema/src/index.ts` reads `"0.22"` at `67f6ee0` |
+> | `schemas/drill_pack.schema.json` `$id` untouched | **holds** — `urn:chess-tabiya:schema:drill-pack:0.22` at `67f6ee0` |
+> | no `$defs` entry added, widened or narrowed | **holds** — the mechanism lives in `EvidenceLedger`, which `validateLedger` checks in code; `schemas/` holds `drill_pack`, `drill_run`, `shape_entry` only |
+> | no committed pack byte changes, no content digest moves | **holds** — `git diff d2f34f9..67f6ee0 -- content/` is additive: ten new pack files and three `content/shapes/*.json` edits, none of them a pack this RFC touches |
+> | no migration, no run-schema stamp | **holds** — nothing in the mechanism is persisted per run |
+> | all 68 committed ledgers stay valid unchanged | **holds** — `claimBindings` is absent from all 68 `[V]`; `validateLedger` rejects only on `schema`, `sourcedAt`, `records[]` and `abstentions[]`, so an added optional key is inert; adding a seventh `EVIDENCE_KINDS` member is additive; and §3.2(5)'s stricter fence costs **0 records**, because **0 of 893 committed records carry a `/feedbackClaims/…` support and 0 carry any `templateId`** |
+>
+> **The smaller reason:** the draft's `CLAIM_ID_DUPLICATE` successor (§3.2's cross-review note)
+> *does* add a pack-lint refusal in `pack-validation.ts`. A refusal code is not a schema version —
+> `rfc/README.md`'s register tracks `$defs` and `$id`, not lint codes, and `feedback-delivery` §5.1
+> makes the same distinction — so **0.26 still releases**. It is recorded here rather than left for
+> the register writer to discover, because "the remedy is validator-and-ledger only" is now
+> "validator, ledger **and one pack lint**", and that sentence appears in the Summary, in
+> `rfc/README.md`'s Active row, and in the changelog. All three are corrected.
+>
+> **A concurrent implementation moved the version in the working tree and it does not disturb this.**
+> While the cross-review ran, `engine-leverage` began landing: `DRILL_PACK_SCHEMA_VERSION` and the
+> `$id` now read **0.23** and `$defs/engineCondition` and a fourth `deviationCost` arm are added —
+> exactly the rows `rfc/README.md` records for it, and exactly the branch under which **0.26 stays
+> free** (0.23 was not frozen shut, so `engine-leverage` did not need to take 0.26). §5.2's note
+> about renumbering is therefore moot in the direction that matters: **the released lane is
+> unclaimed and the next free pack lane is 0.26.** The cross-review also re-read
+> `attachExplorerEvidence` in that moved tree: **both pack mutations are still present**, so §3.5's
+> finding is live against the working tree and not only against `67f6ee0`.
 
 #### 5.2 Sibling interfaces
 
@@ -680,13 +1098,15 @@ the wrong question, because all three options priced a debt that could not be pa
 | **Open question 1** (C6 / C6′ / C6″ — withhold, deliver-with-absence, or tier by label) | **dissolved.** C6 (withhold the unbacked) is retained as the rule, because withholding is now genuine deferral: every withheld claim except the five of Bucket 3 has a payable path. C6′'s numeral heuristic and C6″'s label tiering are **withdrawn** — both existed only to soften a permanent refusal |
 | **§3.2 C6** (the admission rule) | shape unchanged (fail closed, `ledger_bound` / `self_declared`); the backing test is re-pointed from *"a record supports the pointer"* to *"a validating binding exists"* (§3.9) |
 | **§3.3 C7** (`PackRecord.boundClaimIds` from `check.ts`'s label→kind map) | same field, same empty-set default for ledger-less packs; the predicate reads `ledger.claimBindings` |
-| **Criterion 2** (70 admitted / 61 withheld) | **re-measured per wave.** The day-zero figure is unchanged at 70/61; §4's table replaces the single number with the sequence 70 → 90 → 126 |
+| **Criterion 2** (a **three-branch** criterion: 70/61 under C6, 106/25 under C6′, 107/24 under C6″, conditional on the Open-question-1 ruling) | **collapses to one branch and is re-measured per wave.** With C6′ and C6″ withdrawn, only the C6 branch survives; its day-zero figure is unchanged at 70/61 *at `d2f34f9`*, and §4's table replaces the single number with the sequence 70 → 90 → 126. `[cross-review]` The draft's §6 row rendered this as "70 admitted / 61 withheld", which is the C6 branch only — accurate in effect once the fork dissolves, wrong as a description of the criterion it amends |
 | **Criterion 3** (*"`ledger_bound` has no fixture in the committed corpus — this criterion must construct one"*) | still true at day zero, false after the binding pass; the constructed fixture becomes a real one |
 | **Criterion 14** (a reorder test must fail `sourcing-check` or demote to `self_declared`) | **superseded by a stronger form.** D98 is closed structurally (§3.2); the test asserts `CLAIM_POINTER_REBOUND` at error, and additionally that a claim pointer in `record.supports` is refused outright |
 | **Criterion 17** (D97 and D98 exist and are **not** flipped by that RFC) | still correct from its side; both are flipped by **this** RFC's archiving commit instead |
 | **Open question 5** (*who owns D97, and is the binding wave a content wave?*) | **answered.** This RFC owns it; the wave is content **plus** the two instrument runs of §4's Bucket 2 |
 | **Open question 4** (*what anchors a claim, eventually?*) | not claimed, but cheapened: a validating binding names FENs, all machine-checked against the pack's own spine, so a ledger-derived anchor becomes available without an authoring wave or a schema field. See Open question 3 |
-| C1, C2, C3, C4, C5, C8, C9, CR1–CR5, and the disclosure model | **untouched.** This RFC changes when a claim is *admitted*, never when it is *revealed* |
+| C1, C2, C3, C4, C5, C8, C9, CR1–CR5, and the disclosure model | **untouched.** This RFC changes when a claim is *admitted*, never when it is *revealed*. `[cross-review]` All fourteen identifiers were confirmed to exist in that RFC; C6′ and C6″ are the two the row omitted, and the first row above withdraws them |
+| **Criterion 3's ledger-less clause** (a pack with a `corpus_observed` claim and no `.evidence.json` withholds it; the two `pack-registry.ts` fallbacks yield an empty `boundClaimIds`) | **`[cross-review]` load-bearing where it was marginal, and it must be re-measured.** That RFC measured **5 ledger-less packs carrying 1 machine-checkable label**. At `67f6ee0` it is **15 packs carrying 15 machine-labelled claims** `[V]`. The clause is unchanged and correct; what changed is that the population it fails closed grew fifteenfold, so criterion 3's constructed fixture should be a real pack rather than a synthetic one |
+| **That RFC's own recommendation** (*"deliver rather than withhold — Option C (C6″) … Option B (C6′) if the fork must stay as cross-review posed it"*) | **`[cross-review]` reversed by the owner, and the reversal should be stated rather than absorbed.** §6's first row dissolves the fork and retains C6 — the option that RFC's author argued against. The owner's ruling is what carries it, and the reason it is now the right answer is exactly the one §6 gives: withholding became genuine deferral only once the debt became payable |
 
 ## Deviations from design
 
@@ -709,7 +1129,13 @@ Otherwise: none.
    contains `/feedbackClaims/<i>/text` raises `EVIDENCE_OVERREACH` **regardless of kind or
    template** — tested for `tablebase_result`, `explorer_frequency` with a valid template, and
    `engine_eval` with `engine-move-loss/v1`. The third and fourth cases pass today and must fail
-   after; a test written **before** the change records that inversion.
+   after; a test written **before** the change records that inversion. **`[cross-review]` And the
+   same for the other four `PROSE_POINTERS`**: a templated `engine_eval` supporting
+   `/objective/summary`, `/planClasses/0/description`, `/deviations/0/note` or
+   `/spine/0/annotations/0` must raise `EVIDENCE_OVERREACH` after the change. Those four **pass
+   today** under the record-level template exemption and would have kept passing under the drafted
+   §3.2(5), with the byte-exact comparison deleted — see §3.2's cross-review note. Without this the
+   criterion certifies a narrowing that is a net widening.
 2. **A `tablebase_result` record backs authored prose, and the prose is byte-unchanged.** End to end:
    take `philidor-third-rank-hold`'s `philidor-is-drawn`, author a binding with a
    `tablebase.category@v1` span, run `sourcing-check`, assert the pack validates, that
@@ -721,16 +1147,30 @@ Otherwise: none.
    `CLAIM_CENSUS_INCOMPLETE` (a `moveCensus` over a position with 4 of 21 successors recorded — use
    `philidor-passive-rook-convert` as it stands today, which is the real corpus state),
    `CLAIM_AUTHORED_SPAN_UNLABELLED`, `CLAIM_POINTER_REBOUND`, `CLAIM_TEXT_DRIFTED`.
-4. **The residual sweep is not decorative.** A binding that declares one of a sentence's three
-   numerals is refused with `CLAIM_ASSERTION_UNDECLARED`, naming the surviving token. Tested with
-   both a digit residue and a spelled-out residue (`"nine"`), since the corpus writes both.
+4. **The residual sweep is not decorative — and its limit is tested too.** A binding that declares
+   one of a sentence's three numerals is refused with `CLAIM_ASSERTION_UNDECLARED`, naming the
+   surviving token. Tested with a digit residue, a spelled-out residue (`"nine"`) **and an ordinal
+   residue (`"sixth"`)**, since the corpus writes all three `[V]`. **`[cross-review]` And one test
+   asserts the sweep's ceiling rather than its floor**: a claim binding a single valid span and
+   carrying an appended qualitative verdict — the owner's own refused example from D126,
+   *"…so Black is better here"* — **passes** the sweep with an empty residual. That test is not a
+   bug report; it is the executable statement of what §2 and §3.7 say in prose, so that no later
+   reader mistakes the sweep for a truth check. If someone later closes it, the closure is a design
+   change and needs an RFC.
 5. **The validator never queries.** A grep test asserts `claim-binding.ts` imports no fetch, no
    `ExplorerClient`, no `liveTablebaseQuery`, and no engine client; and a run of `sourcing-check`
    with the network unavailable produces identical output.
-6. **The overwrite is gone.** A grep test asserts `explorer.ts` contains no assignment to
-   `feedbackClaims`; `attachExplorerEvidence` without a span refuses with `ATTACH_SPAN_REQUIRED`;
-   with a span it writes a `claimBindings` entry, leaves `pack.json` byte-identical, and leaves the
-   ledger's `packDigest` unchanged.
+6. **The overwrite is gone, and so is the second one.** `[cross-review]` A grep test asserts
+   `explorer.ts` contains **no assignment to `pack.`** at all — not merely none to `feedbackClaims`,
+   because `pack.provenance.sources` is assigned two lines later and `digestDrillPack(pack)` runs
+   over the result, so the drafted criterion would have gone red on a faithful implementation
+   (§3.5). `attachExplorerEvidence` without a span refuses with `ATTACH_SPAN_REQUIRED`; against a
+   pack whose `provenance.sources` lacks the explorer rationale it refuses with
+   `ATTACH_SOURCE_LINE_MISSING` **before issuing any query**; with a span and a prepared pack it
+   writes a `claimBindings` entry, leaves `pack.json` byte-identical, and leaves the ledger's
+   `packDigest` unchanged. Tested on **both** write branches — the directory branch through
+   `atomicCanonical` and the flat-file branch that `content/drafts/*.json` uses — since only the
+   first was named in the draft.
 7. **Every committed ledger still validates unchanged.** `sourcing-check` over all 68 ledgers under
    `content/` produces the same issue set as at `d2f34f9`, code for code. `claimBindings` is
    optional and nothing regresses on its absence.
@@ -738,23 +1178,72 @@ Otherwise: none.
    `ATTACH_SPAN_REQUIRED` are discovered by `refusal-coverage.test.ts` **and covered by tests**;
    `fixtures/refusal-debt-ceiling.fixture.json` is not edited.
 9. **The measured outcome is reproduced by the shipped code, not by this document.** The Bucket
-   1/2/3 split (**20 / 36 / 5**) and the delivery sequence (**70 → 90 → 126 of 131**) are recomputed
-   in `planning/claim-backing/` from the shipped validator after the binding pass. **If the shipped
-   figure disagrees with §4, §4 is wrong and is corrected there rather than the code being bent to
-   it.** Bucket 3 must remain non-empty; a run that admits 131 of 131 fails this criterion.
+   1/2a/2b/3 split and the delivery sequence are recomputed in `planning/claim-backing/` from the
+   shipped validator after the binding pass, **against the corpus at the implementing commit, whose
+   size is re-derived and not inherited from §4**. **If the shipped figure disagrees with §4, §4 is
+   wrong and is corrected there rather than the code being bent to it.** The refusal residue is
+   named, not counted: **`philidor-passive-rook-convert/sibling-drill` and
+   `philidor-passive-rook-convert/why-the-skewer-works` must still be refused, by name**, unless an
+   author has performed the remedy §4 names for each; a run in which no claim is refused fails this
+   criterion.
+
+   > **`[cross-review]` The drafted form could be satisfied vacuously and was pinned to a dead
+   > denominator.** *"A run that admits 131 of 131 fails this criterion"* is unfalsifiable at HEAD,
+   > where there are **166** claims — the shipped code will never report 131 of 131 again, so the
+   > clause can never fire. And *"Bucket 3 must remain non-empty"* puts the threshold at **1**, which
+   > is the first integer off zero — the project's own standing rule, applied by the owner to the DTZ
+   > floor eight hours after this draft ("**a measurement can smuggle a verdict: the threshold must
+   > sit off the instrument's optimality boundary**"), rules that out. A count-of-one threshold sits
+   > *on* the boundary of "did anything refuse at all", and any implementation that refuses one
+   > trivial claim clears it. **Naming the claims moves the threshold off the boundary**: rows 4 and 5
+   > of §4's Bucket 3 table are the two whose refusals no relabelling can lift — row 4 because
+   > cross-ledger resolution is forbidden by §3.3, row 5 because a legality fact carries a
+   > `tablebase_exact` label — so they are the ones that test the mechanism rather than the count.
+   > Rows 1–3 are deliberately **not** named, because §4's cross-review note shows their refusal is
+   > authoring-dependent and criterion 11 already covers them with the right code.
 10. **The ledger and the log are updated in the archiving commit.** **D97** flips to ✅ with the
     measured split named and the owner ruling quoted; **D98** flips to ✅ with §3.2's structural
     closure; **D110**, **D111** and **D112** are opened by the drafting commit and carry their
-    measurements. `rfc/README.md`'s pack-schema register releases **0.26** (single-writer edit, not
-    made here). A dated entry lands in `planning/exploration/log.md`.
-11. **The five must still fail.** A test asserts that each Bucket 3 claim, given a best-effort
-    binding, is refused — and that the refusal names *which* token is undeclared. This is the law-8
-    criterion and it is the one that must not be softened to make a wave green.
+    measurements. **`[cross-review]` D110's row title is corrected to say which predicate it counts
+    (7 full-set census claims, not 13 — §1.3a); **D126** flips to 🔨 owned here and is named in §3.7;
+    and **D128**–**D136** are opened by the cross-review commit with the measurements that found
+    them.** `rfc/README.md`'s pack-schema register releases **0.26** (single-writer edit, not made
+    here). A dated entry lands in `planning/exploration/log.md`.
+11. **The five must still fail, each on the code that actually refuses it.** A test asserts that
+    each Bucket 3 claim, given a best-effort binding, is refused — and asserts **which** refusal:
+    rows 1, 2 and 5 raise **`EVIDENCE_TYPE_UNBACKED`** (a best-effort binding declares their spans
+    `authored`, passes the residual sweep, and still holds zero instrument spans of the mapped
+    kind — §3.9), row 3 raises `CLAIM_AUTHORED_SPAN_UNLABELLED` **and** the sweep names which token
+    survived, row 4 raises `CLAIM_ASSERTION_UNRECORDED` because the record is in another pack's
+    ledger. This is the law-8 criterion and it is the one that must not be softened to make a wave
+    green. **`[cross-review]` The drafted form asserted only "the refusal names which token is
+    undeclared", which is `CLAIM_ASSERTION_UNDECLARED` — the code that fires for exactly one of the
+    five. For rows 1, 2 and 5 it would have tested a refusal that does not happen, and a law-8
+    criterion that passes by asserting the wrong code is worse than no criterion.**
+
 12. **`licenceObligations` follows the binding.** Its CC-BY-SA attribution requirement currently
     triggers on records supporting `PROSE_POINTERS`; it must also trigger on records reached through
     a `claimBindings` assertion, or a CC-BY-SA-sourced record could back prose with no notice. No
     present effect (Lichess and Syzygy are both no-rights-asserted), which is why it needs a test
     rather than an observation.
+
+13. **`[cross-review]` The relabelling pressure is measured, since it cannot be prevented.** The
+    implementing pass reports, before and after the binding wave, how many claims **lost** a
+    machine-checkable label or **gained** a self-declared one. §3.4 shows the fence is unlocked by
+    one array element and that the cheapest response to a refusal is to relabel; §3.9 then admits
+    the result as `self_declared` with no sweep. Nothing in the validator can distinguish an honest
+    relabel from an evasive one, so the criterion is a **measurement with a named escalation**: a
+    net movement of machine labels to self-declared ones is reported to the owner as a finding under
+    law 6, not resolved by the implementer.
+
+14. **`[cross-review]` The new structural refusals fire.** `CLAIM_ID_DUPLICATE` on a pack with two
+    claims sharing an `id` (**0 committed packs affected today** `[V]`, so this is a constructed
+    fixture); `CLAIM_FEN_OFF_PACK` on a binding whose `tablebase.category@v1` names a FEN with a
+    record in this ledger that is **not** reachable from the pack's `start.fen` — built from
+    `philidor-third-rank-hold`, whose ledger holds 23 `tablebase_result` records, so the fixture is
+    the real corpus state; and a test that §3.9's backing test resolves **by pointer**, by
+    constructing the duplicate-id rebinding of §3.2's cross-review note and asserting the second
+    claim is **not** admitted.
 
 ## Open questions
 
@@ -779,6 +1268,21 @@ Otherwise: none.
    be revealed at the spine node its evidence names, incrementally, instead of at pack-wide
    exhaustion. **Not claimed here** — it is a delivery change and belongs to that RFC or its
    successor — but it is now cheap, and it is the single largest thing this work makes possible.
+
+   > **`[cross-review]` True only after §3.3 was fixed, and the fix is a precondition rather than a
+   > bonus.** As drafted, only `tablebase.lineUniformCategory@v1` checked its FENs against the spine;
+   > every other registry entry accepted any FEN with a record in the ledger. The phrase this
+   > question borrows — *"machine-checked against the pack's own spine"* — was therefore false for
+   > eight of the eleven registry entries, and an anchor derived from them would have pointed
+   > wherever the author aimed it. `CLAIM_FEN_OFF_PACK` (§3.3, **D130**) makes the borrowed sentence
+   > true, which is what turns this from a hope into an option. Also worth the owner's attention:
+   > `feedback-delivery`'s Open question 4 warns that a ledger-derived anchor *"can never cover the
+   > 37 `tablebase_exact` claims"* under the shipped contract, with the escape that *"the 341
+   > `tablebase_result` records already in the 12 affected ledgers do carry anchors, which is where a
+   > ledger-derived anchor would come from **if the contract were widened**"*. This RFC is that
+   > widening, so the claim to cheapen Open question 4 is consistent — **because** of §3.3's
+   > precondition, not in spite of it.
+
 4. **Should the five Bucket 3 claims be re-authored in this wave or left visibly dark?** Leaving them
    dark is defensible and is the mechanism working; re-authoring them is four labels and one
    sentence. **This is an owner call and it is an authoring decision, not a tooling one** — which is
@@ -799,3 +1303,24 @@ Otherwise: none.
   Three new ledger rows opened from measurements taken during drafting: no position in the corpus has
   a complete legal-move census (D110), five claims assert what no instrument measures (D111),
   `$defs/feedbackClaim` is `additionalProperties: true` (D112).
+- 2026-08-15, **adversarial cross-review** (a second agent; did not write the draft). Re-derived at
+  `67f6ee0`. **Pack 0.26's release HOLDS** — all six sub-claims verified in §5.1's table; the remedy
+  is now "validator, ledger and one pack lint". **The residual sweep survives as a numeral guarantee
+  and does not survive as a completeness guarantee**, and §2, §3.4, §3.7 and criterion 4 now say so.
+  Broken and fixed in the body: *"0 of 241 positions is fully censused"* (36 are — all single-legal-move
+  links; the true and stronger figure is 0 of 199 choice-bearing positions); centipawn `1` listed as
+  absent when it is present; the Summary attaching prose-char percentages to claim-count ratios;
+  §3.2(5) widening the gate it advertises as a narrowing, because the template exemption is
+  record-level not pattern-level; D98 not airtight, because duplicate `feedbackClaims[].id` is
+  refused nowhere and §3.9's id-keyed lookup turns that into a surviving rebinding; assertion `fen`
+  args not required to belong to the pack, which also falsified Open question 3's premise; the
+  `authored` fence refusing **all 36** `corpus_observed` claims on their date windows, because
+  registry v1 had no assertion returning them — the fix binds the window rather than excusing it;
+  ordinals outside the frozen table and therefore outside the sweep in 24 of 75 claims; §3.5
+  stabilising `packDigest` while a second pack mutation (`provenance.sources`) remained; two of
+  Bucket 3's five rows given the wrong reason; criterion 9 satisfiable vacuously and pinned to a dead
+  denominator; criterion 11 asserting a refusal code that fires for one of its five rows. Corpus
+  restated at HEAD: **166 claims, 75 machine-labelled, 15 packs with claims and no ledger** — the
+  third debt kind §4 had no slot for. **D126 was owner-ruled after the draft and names this RFC as
+  its owner**; §3.7 now carries it, including the part the mechanism cannot enforce. Rows opened:
+  **D128**–**D136**.
