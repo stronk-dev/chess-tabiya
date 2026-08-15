@@ -21,7 +21,15 @@
 - **Ledger rows this RFC opens** (law 4): *No position in the corpus has a complete legal-move
   tablebase census, and thirteen claims assert one* (**D110 🐞**); *Five claims assert what no
   instrument in this repository measures* (**D111 🐞**); *`$defs/feedbackClaim` is
-  `additionalProperties: true`* (**D112 🐞**).
+  `additionalProperties: true`* (**D112 🐞**). **[cross-review] Seven more opened by the
+  cross-review** (`D128`–`D134`), each named at the point in the body where the measurement that
+  found it sits.
+- **Ledger row this RFC now owns and did not cite** `[cross-review]`: **D126** — *are explorer W/D/B
+  result splits admissible as `corpus_observed`?* — was **owner-ruled ADMISSIBLE 2026-08-15** at
+  `4e19b95`, after this draft was written, and the ruling names *"`rfc/claim-backing.md` (the
+  `explorer_position_census` record kind)"* as its owner. The ruling carries a boundary — **"the
+  split may be stated; it may never be converted into a move verdict or a quality claim"** — and
+  §3.7 and §2 below are amended because **the residual sweep cannot enforce that boundary**.
 - **Depends on:** nothing unlanded. `rfc/archive/content-sourcing-foundation.md` ships the evidence
   ledger and `sourcing-check`; `rfc/archive/opening-evidence-path.md` ships the engine records;
   `rfc/archive/fixture-realism.md`'s D64 completion (`8b1b44d`, archived at `8bf2de8`) supplies the
@@ -42,6 +50,25 @@ recorded here so whoever re-derives after that pack lands expects 38 packs and 1
 37 and 131. Three sibling drafts (`engine-leverage`, `vocabulary-wiring`, `format-surface`) hold
 lanes ahead of this one and `rfc/feedback-delivery.md` lands behind it. **Locate by symbol name — no
 line number in this document is normative.***
+
+> **[cross-review] Re-verified at `67f6ee0` (2026-08-15), and the corpus half of the paragraph above
+> is now wrong.** `git diff d2f34f9..67f6ee0 -- apps/server/src/sourcing schemas packages/schema`
+> is **empty**, so **every code citation in §1, §3 and §5 stands unchanged** and every structural
+> figure over the twelve tablebase packs reproduced exactly (§1.2, §1.3b, §1.3c below carry the
+> re-derivations). But **`aee7c64` landed ten packs, not one.** The draft predicted "38 packs and
+> 134 claims"; HEAD carries **61 drill packs, 47 of them with claims, 166 claims / 45,289 chars, of
+> which 75 carry a machine-checkable label** — `corpus_observed` 36 (was 23), `tablebase_exact` 37
+> (unchanged), `engine_validated` 8. Day zero is therefore **91 of 166 delivered (52.1% of claim
+> prose)**, not 70 of 131 (49.0%). §4's *shape* survives — every bucket argument is about kinds of
+> debt, not about the size of the corpus — but **every number in §4 is a `d2f34f9` number and is
+> labelled as one there.** Criterion 9 already says the shipped figure wins over §4; the
+> cross-review makes that binding rather than gracious.
+>
+> The second corpus movement is worse than a stale count. Packs **with claims and no evidence ledger
+> at all** went from **5 (20 claims, 1 machine-labelled)** to **15 (55 claims, 15 machine-labelled)**.
+> §4's Bucket 2 rests on *"the instrument exists and is wired, but the query was never recorded"*;
+> for those ten new packs **there is no sidecar to record into**. That is a third kind of debt the
+> draft does not name, and §4 now names it. **D128.**
 
 ## Summary
 

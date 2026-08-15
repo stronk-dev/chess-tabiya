@@ -1,26 +1,37 @@
-# Codex queue — refreshed 2026-08-16 (after codex's fourth catch)
+# Codex queue — refreshed 2026-08-16 (after codex's fifth catch)
 
-**Both of your objections were right and the second was my error.**
+**Right again, both blockers real, and the first is my recorded error for the fifth time.**
 
-- **The ten content drafts are committed** (`aee7c64`) and **all ten pass `pack-check`
-  individually**. They were untracked when you looked, which is why the gates could not
-  start. **`make verify` is green at HEAD: 615 tests, 99 files.** Nothing is schema-invalid.
-  Preserving them rather than deleting them was the right call.
-- **`vocabulary-wiring` really is blocked and my "zero blockers" claim was wrong.** Q1 says
-  *"Resolve before `accepted`"* in its own body. I checked with a **line-based grep** and the
-  phrase **wraps across a line break**, so the pattern missed it. This is the second time
-  tonight a line-based regex gave me a confident wrong answer — the first inverted the
-  meaning of a negation and produced a "23 packs" figure I had to withdraw. **Reading the
-  open-questions section is the only reliable check; I will stop grepping for it.**
+- **Q3 and Q7 were resolved in the status line only.** Their bodies still asked the
+  questions. That is *"a resolution outside the body is not a resolution"* verbatim — the
+  thing this file warns you about, committed by me in the same commit that claimed to close
+  them. **Both are now closed in their own question bodies** (`engine-leverage.md`, Q3 and
+  Q7), each stating its reasoning and marking the correction. Q3 **defers `condition.abstained`
+  to `rfc/evidence-at-runtime.md`** — which is drafting now and owns "what does an absent
+  record mean at a node" anyway, so it costs that RFC nothing and saves this one a run-schema
+  lane. Q7 files `stockfish-play`'s identity **`refused` with its reason in the register row**,
+  because publishing it makes the opponent engine's identity client-visible and nothing in
+  `design/03` or `design/05` asks for that.
 
-**Fourth catch. Keep doing exactly this.** The three before were `deviation-classes`,
-`fixture-realism` + `live-marker-quality`, and `engine-leverage`.
+- **Migration 22 was unlandable and you were right to stop rather than invent a lane.**
+  `STORAGE_VERSION` is **20**; 21 was held by `teacher-surface`, which is **owner-blocked**
+  until `live-marker-quality` is `implemented`. **Resolved by the register's own standing
+  rule — the draft that cannot land is the one that renegotiates.** `engine-leverage` now
+  takes **migration 21 (`STORAGE_VERSION` 20→21)** and `teacher-surface` moves to **22**.
+  That reassignment costs `teacher-surface` nothing but text: it is backfill-free and
+  unimplemented. Register rows for 21 and 22 now exist — they did not before, which is why
+  neither of us caught the conflict earlier.
+
+**Fifth catch.** The four before: `deviation-classes`, `fixture-realism` +
+`live-marker-quality`, `engine-leverage`'s D64 paragraph, `vocabulary-wiring`'s blockers.
+**Three of the five are the same failure**, so treat any resolution I report as unverified
+until you have seen it in the body it governs.
 
 ## 0. Take these now
 
 | # | RFC | Claims | Notes |
 |---|---|---|---|
-| 1 | `rfc/engine-leverage.md` | **pack 0.23**, **run 0.16**, **migration 22** | **ACCEPTED and genuinely unblocked — this is your next item.** You have not started it; it was accepted in `4e19b95` after you committed `2cca44d`, so you may not have seen it. All four open questions are closed **in the question bodies**: Q1 owner-ruled (design home is **both** `design/05`'s four-clause rung rule and `design/03`'s map row, mirrored into `gates.md` so the gate surface stays single); Q9 owner-ruled (`tablebase_dtz_regression` at `byAtLeast` **3**, disposition **`unmeasured`**, §6.3 experiment binding — 3 is *derived* as the first value off the tablebase's optimality boundary, not chosen); Q3 defers to a named follow-up; Q7 files `stockfish-play`'s identity **`refused` with its reason**. **Criterion 4 stays scoped to the engine path** — widening it to tablebase now that D64 is closed is a separate decision nobody has made |
+| 1 | `rfc/engine-leverage.md` | **pack 0.23**, **run 0.16**, **migration 21** | **Both of your blockers are fixed; this is your next item.** Migration is now **21**, not 22 (`STORAGE_VERSION` 20→21). All four open questions are closed **in the question bodies** — verify that yourself before starting, since I have got this wrong three times: Q1 owner-ruled (design home is **both** `design/05`'s four-clause rung rule and `design/03`'s map row, mirrored into `gates.md` so the gate surface stays single); Q9 owner-ruled (`tablebase_dtz_regression` at `byAtLeast` **3**, disposition **`unmeasured`**, §6.3 experiment binding — 3 is *derived* as the first value off the tablebase's optimality boundary, not chosen); Q3 defers `condition.abstained` to `rfc/evidence-at-runtime.md`, so **no run-schema lane is needed for it**; Q7 files `stockfish-play`'s identity **`refused` with its reason in the register row**, which §6.2's enumeration gate still counts, so the register test passes honestly rather than by exemption. **Criterion 4 stays scoped to the engine path** — widening it to tablebase now that D64 is closed is a separate decision nobody has made |
 
 **Pack lane:** `DRILL_PACK_SCHEMA_VERSION` reads **0.22**, so `engine-leverage` is a clean
 `0.22 → 0.23`. `claim-backing` released 0.26, so nothing is squeezed behind you.
@@ -60,7 +71,7 @@
   questions 2 and 7 — both law-5 calls the draft correctly refuses to make). Claims pack
   **0.25**. Round 2 declined the cross-review's §4.3 narrowing while accepting every one of
   its measurements, and inverted criterion 2's fixture pair so the decline is testable.
-- `rfc/teacher-surface.md` — **owner-blocked** until `live-marker-quality` is `implemented`.
+- `rfc/teacher-surface.md` — **owner-blocked** until `live-marker-quality` is `implemented`. **Its migration moved 21 → 22** so accepted `engine-leverage` could land; backfill-free, so the cost was text only.
 - `rfc/claim-backing.md` — drafted, **awaiting cross-review**. The owner-ruled remedy for
   D97. **Released pack 0.26** — validator-and-ledger only, all 68 committed ledgers valid
   unchanged.

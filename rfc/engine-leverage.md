@@ -1,8 +1,9 @@
 # RFC: Engine leverage — the instrument has already answered
 
-- **Status:** **accepted 2026-08-15.** Open questions **1 and 9 are owner-ruled** (below,
-  in the questions themselves — not in this line). Questions **3 and 7** are closed by the
-  coordinator on their own stated fallbacks, which is within the standing ruling *"just
+- **Status:** **accepted 2026-08-15.** Open questions **1 and 9 are owner-ruled**, and
+  **3 and 7 are coordinator-closed — all four in the question bodies below**, corrected
+  2026-08-16 after codex found 3 and 7 resolved in this line only. Questions 3 and 7 are
+  closed on their own stated fallbacks, which is within the standing ruling *"just
   make nice waves… as long as we get them all done"*: **Q3 defers to a named follow-up**
   rather than folding a run-schema change onto three register claims, and **Q7 files
   `stockfish-play`'s identity `refused` with its reason** rather than making the opponent
@@ -98,7 +99,13 @@
     §2c / gap 6** instead (`#practicalResistance` sorts category-preserving replies by
     `localeCompare` and takes `.slice(0, 4)`, so the cut ignores the DTZ the same response
     already carries), and gap 6 is out of scope per §Motivation.
-  - `rfc/teacher-surface.md` (*draft*) — **migration order only.** It claims migration 21;
+  - `rfc/teacher-surface.md` (*draft, owner-blocked*) — **migration order: REASSIGNED
+    2026-08-16.** It formerly claimed migration 21 and this RFC sat behind it at 22. That
+    made 22 unlandable: `STORAGE_VERSION` is **20**, and 21 belongs to a draft that is
+    owner-blocked until `live-marker-quality` is `implemented`. Codex found this and stopped
+    rather than inventing a lane. **The register's own rule decides it — the draft that
+    cannot land is the one that renegotiates — so `teacher-surface` moves to 22 and this RFC
+    takes 21** (`STORAGE_VERSION` 20→21). Its original text follows: it claims migration 21;
     this RFC claims 22 and lands behind it. No other overlap: it changes no run or pack
     schema.
   - `rfc/fixture-realism.md` (*implementing*) — owns the instrument-fed fixture register.
@@ -137,9 +144,9 @@ of the registers.**
 |---|---|---|
 | **Pack schema** | **0.23** | Additive. `properties.guard` gains `conditions[]`; new `$defs/engineCondition` (closed four-arm union); `$defs/deviationCost` gains a fourth arm `category`. Every committed pack stays valid; **the version bump alone moves no content digest** — verified: pack documents carry no `$schema`/`schemaVersion` key, and `digestDrillPack` is RFC 8785 over the document (`packages/schema/src/drill-pack/digest.ts`), so the `$id` is not in the hashed bytes. **§2 is the separate case and it does move digests, deliberately — see the row below the table.** **0.19 is frozen shut; 0.22 is `transition-primitives`.** |
 | **Run schema** | **0.16** | Stamp + widen. `EvidenceKind` gains `"tablebase"`; `EvidenceSource` gains `"tablebase_exact"`; **the `evidence.attached` `payload.kind` and `payload.source` enums in `drill_run.schema.json` gain the same two values — this is the change that actually forces 0.16, and the TS types alone do not**; `$defs/selectionCandidate` gains optional `wdl` and `scoreCp`; `$defs/selectionEngine` gains optional `searchBound`. No event type is added or removed; no historical row is rewritten. |
-| **Migration** | **22** (`STORAGE_VERSION` 21→22) | **Stamp-only, behind `teacher-surface`'s 21.** Frozen literals `"0.15"`→`"0.16"`, no data rewrite — the migration-9 freeze lesson applies: write the literal, never the constant. |
+| **Migration** | **21** (`STORAGE_VERSION` **20→21**) | **Reassigned 2026-08-16 from 22.** `STORAGE_VERSION` is 20 at HEAD and 21 was held by owner-blocked `teacher-surface`, which now takes 22 — the register's rule is that the draft which cannot land renegotiates. Stamp-only: frozen literals `"0.15"`→`"0.16"`, no data rewrite. The migration-9 freeze lesson applies — **write the literal, never the constant.** |
 
-**If you are drafting in parallel: do not claim pack 0.23, run 0.16, or migration 22.**
+**If you are drafting in parallel: do not claim pack 0.23, run 0.16, or migration 21.**
 Rebase here rather than renumbering unilaterally.
 
 **Digests: two different claims, and an earlier draft ran them together.** The *schema
@@ -1455,12 +1462,22 @@ not its final contents.
    pack-level-only right, or does an endgame pack need *"this DTZ threshold at this
    anchor"*? Deferred pending one authored pack that wants it — the repo's own attestation
    bar.
-3. **C2's silence is silent.** A condition that does not evaluate because its measurement
+3. **C2's silence is silent. CLOSED 2026-08-15 by the coordinator: DEFER to a named
+   follow-up; do NOT fold it into run 0.16.** *(Corrected 2026-08-16 — this resolution was
+   first written only in the status line while this body still asked the question. Codex
+   refused to implement on exactly that basis and was right; it is claude's recorded
+   standing error and this is its fifth catch.)* The reasoning is the question's own: a
+   `condition.abstained` event costs a **run schema change on top of three register claims**
+   already in flight, and this RFC's landing risk is dominated by the number of shared
+   resources it holds, not by the size of any one of them. **The named follow-up is
+   `rfc/evidence-at-runtime.md`** (drafting), which owns the general problem of a record
+   being absent at a node and must decide what silence means there anyway — folding this in
+   costs it nothing and costs this RFC a lane it does not need.
+   **The defect stands and is real**: *"the tablebase was unreachable"* and *"the position
+   was decided"* remain indistinguishable in the record until that lands. *(Original
+   question follows.)* A condition that does not evaluate because its measurement
    is absent leaves no trace on the run. That is correct for the guard today, but it means
-   *"the tablebase was unreachable"* and *"the position was decided"* look identical from
-   the record. A `condition.abstained` event would fix it and costs a run schema change
-   this RFC declines to add on top of three register claims. Defer to a named follow-up, or
-   fold it into 0.16 before `accepted`?
+   those two outcomes look identical from the record.
 4. **Does the explorer condition arm ever land?** §3.3 refuses it pending run 0.16 gaining
    `corpus_observed` and a C1-satisfying asynchronous producer. R9's window (ply ≲ 20,
    ≥ 400 games) means such a condition is inapplicable across most of the board. Is a
@@ -1474,10 +1491,18 @@ not its final contents.
    deadline.** `unmeasured` is the only disposition that must be revisited. What forces the
    revisit — a date, a wave boundary, or a test that fails when an `unmeasured` row is
    older than N days?
-7. **`stockfish-play`'s identity** (§6.3) is the one row where the register test is
-   expected to fail on landing. Publish it (and accept that the opponent engine's identity
-   becomes client-visible), or file it `refused` with a reason? RFC ledger row 1 has been
-   open since `engine-request-contract`; this RFC surfaces it rather than deciding it.
+7. **`stockfish-play`'s identity. CLOSED 2026-08-15 by the coordinator: file it `refused`,
+   with the reason recorded in the register row itself.** *(Corrected 2026-08-16 — same
+   status-line-only error as question 3; see there.)* Publishing it would make the
+   **opponent engine's identity client-visible**, which is a disclosure decision this RFC
+   has no evidence for and no mandate to take: nothing in `design/03` or `design/05` asks
+   for it, and no authored content wants it. `refused` **with a stated reason** is the
+   disposition the register exists to carry — it is not silence, and §6.2's enumeration gate
+   still counts the row, so the register test passes honestly rather than by exemption.
+   **RFC ledger row 1 stays open**; this closes the disposition, not the underlying
+   question, and a later RFC with an actual client need may reverse it cheaply.
+   *(Original question follows.)* This is the one row where the register test was expected
+   to fail on landing.
 8. **Does §2's stamping make `verify-draft` a required step for any pack with
    deviations?** Today 5 of 37 packs have no ledger at all. Their deviations can never
    carry a bound cost. Is *"a pack with deviations and no ledger cannot be published"* the

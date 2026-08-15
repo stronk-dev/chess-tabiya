@@ -937,6 +937,6 @@ seat-symmetry sentence from §5.
   renderer; (8) a refusal-code register row, and a corrected `rfc/README.md` row; (9) Open
   question 1 re-posed — the `reviewing` widening **cannot be taken here** — and Open
   question 8 added for `flip`'s `requireRead`-only residue. Verified sound and unchanged:
-  migration 21 free and backfill-free, run `0.15`, pack `0.22` with `0.19` frozen shut,
+  migration **22** free and backfill-free (**reassigned 2026-08-16 from 21**: `STORAGE_VERSION` is 20 at HEAD, this RFC is owner-blocked until `live-marker-quality` is `implemented`, and the register's rule is that the draft which cannot land renegotiates — so accepted `engine-leverage` took 21), run `0.15`, pack `0.22` with `0.19` frozen shut,
   `mintLink`'s bounds, the two `public_tokens` scopes, `RUN_ROLES`, all six `/progress*`
   routes, the ledger row titles, and template compliance.
