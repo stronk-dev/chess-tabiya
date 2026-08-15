@@ -10,11 +10,10 @@ export interface HumanConcessionMass {
   readonly candidateCount: number;
 }
 
-// Maia emits float32 policy values. A normalized vector may therefore sum a
-// few float32 ulps above 1 after the values are parsed and accumulated here.
-// The sidecar currently returns at most 20 candidates; 32 ulps leaves room for
-// that accumulation while still refusing materially invalid distributions.
-export const FLOAT32_POLICY_MASS_TOLERANCE = 32 * 2 ** -23;
+// Maia's measured maximum excess is 9.25e-8. One float32 ulp at 1.0 gives
+// 1.29x headroom while keeping the guard close enough for a captured vector to
+// exercise its valid side. See maia-policy-mass-near-boundary.fixture.json.
+export const FLOAT32_POLICY_MASS_TOLERANCE = 2 ** -23;
 
 export class PolicyMassError extends TypeError {
   readonly code = "POLICY_MASS_INVALID" as const;

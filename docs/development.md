@@ -60,6 +60,13 @@ verification. `make build` separately proves the Svelte production bundle.
 `make test-browser` builds and starts the default mock-backed application and
 runs the full Playwright episode in a separate browser CI job.
 
+Tests use committed artifacts when the production path consumes an artifact. When
+an external instrument cannot run in the unit gate, its captured fixture carries
+machine-readable instrument, request, model, image, and retrieval provenance.
+Negative tests minimally mutate such an artifact when possible. Whole-tree refusal
+discovery records existing unpinned debt and rejects growth, while
+`SourcingError.code` is a closed compile-time vocabulary.
+
 `make pack-check FILE=<path>` validates a draft against the living pack schema,
 the shipped chess lints, and the policies the current server can execute. It
 prints errors and warnings with JSON Pointer paths and exits non-zero on an

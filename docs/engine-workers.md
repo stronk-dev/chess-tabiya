@@ -293,9 +293,12 @@ the seven-piece boundary; see `tablebase-grounding.md`.
 never weakens Stockfish and never falls back under the same name. The selector
 refuses out-of-range roots, unavailable instruments, missing preserving replies,
 the all-zero difficulty case, and materially invalid policy distributions by
-typed code. Maia's policy values are float32, so a normalized vector may sum a
-few float32 ulps above 1; the runtime admits at most 32 ulps of accumulation and
-refuses larger excess as `PRACTICAL_RESISTANCE_POLICY_MASS_INVALID`. Missing
+typed code. Maia's policy values are float32. The measured maximum excess is
+9.25e-8, so the runtime admits one float32 ulp at 1.0 (about 1.19e-7, 1.29x
+headroom) and refuses larger excess as
+`PRACTICAL_RESISTANCE_POLICY_MASS_INVALID`. A provenance-bearing captured vector
+exercises the valid side near the boundary; a minimal clone mutation exercises
+the refusal side. Missing
 Maia policy mass is an abstention: the recorded reply uses the stable UCI
 tiebreak and emits the existing degradation warning. A cold four-candidate
 selection can take roughly 580 ms; that is its declared per-selection budget,

@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 
 import type { StructuralExpression } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
@@ -22,6 +22,16 @@ function countKind(value: unknown, kind: string): number {
   return Object.entries(value).reduce((total, [key, child]) => total + (key === "kind" && child === kind ? 1 : countKind(child, kind)), 0);
 }
 
+function packageContentTests(directory: URL): readonly string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const url = new URL(entry.name, directory);
+    if (entry.isDirectory()) return packageContentTests(new URL(`${entry.name}/`, directory));
+    if (!entry.isFile() || !entry.name.endsWith(".test.ts")) return [];
+    const source = readFileSync(url, "utf8");
+    return source.includes("content/") ? [source] : [];
+  });
+}
+
 describe("predicate wave 2 official content", () => {
   it("makes same- and opposite-shade bishop entries mutually exclusive", () => {
     const same = shape("bishop-good-bad"), opposite = shape("opposite-coloured-bishops");
@@ -35,8 +45,6 @@ describe("predicate wave 2 official content", () => {
       expect(matchesStructuralExpression(fen, opposite.trigger)).toBe(oppositeExpected);
       expect(matchesStructuralExpression(fen, same.trigger) && matchesStructuralExpression(fen, opposite.trigger)).toBe(false);
     }
-    expect(same.version).toBe("0.2.1");
-    expect(opposite.version).toBe("0.3.0");
   });
 
   it("widens the Black fianchetto across files without claiming the White mirror", () => {
@@ -70,8 +78,15 @@ describe("predicate wave 2 official content", () => {
     const take = entry.plans.find((plan) => plan.id === "white-take-the-opposition")!.success.signature!;
     expect(matchesStructuralExpression("8/8/8/4K3/8/4k3/8/8 b - - 0 1", take)).toBe(true);
     expect(matchesStructuralExpression("8/8/8/4K3/8/4k3/8/8 w - - 0 1", take)).toBe(false);
-    expect(entry.version).toBe("0.2.1");
     expect(entry.plans.filter((plan) => ["white-triangulate", "black-shoulder-and-race"].includes(plan.id)).every((plan) => plan.success.signature === null)).toBe(true);
     expect(entry.plans.find((plan) => plan.id === "black-hold-the-opposition")?.success.signature).not.toBeNull();
+  });
+
+  it("keeps package tests behavioural instead of pinning content versions", () => {
+    const tests = packageContentTests(new URL("../../../packages/", import.meta.url));
+    expect(tests.length).toBeGreaterThan(0);
+    for (const source of tests) {
+      expect(source).not.toMatch(/\.toBe\(["']\d+\.\d+\.\d+["']\)/u);
+    }
   });
 });

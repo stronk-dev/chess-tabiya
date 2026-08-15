@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { INITIAL_FEN } from "chessops/fen";
 import {
   readBackReplay,
@@ -26,9 +28,20 @@ import {
   stockfishPlaySpec,
 } from "./strong-engine.js";
 import { FixtureTablebaseSource, parseTablebasePosition } from "./tablebase.js";
+import { DEFAULT_MAIA_IMAGE, MAIA3_MODEL_ID } from "./maia.js";
 
 const at = "2026-08-12T18:00:00.000Z";
 const digest = `sha256:${"4".repeat(64)}`;
+
+interface MaiaPolicyFixture {
+  readonly provenance: { readonly image: string; readonly modelId: string };
+  readonly candidates: readonly { readonly moveUci: string; readonly mass: number }[];
+}
+
+const maiaPolicyFixture = JSON.parse(readFileSync(
+  new URL("../../../packages/runtime/src/fixtures/maia-policy-mass-near-boundary.fixture.json", import.meta.url),
+  "utf8",
+)) as MaiaPolicyFixture;
 
 const maiaIdentity: EngineIdentity = {
   id: "maia-5m",
@@ -170,6 +183,11 @@ function practicalTablebase(conceding = true): FixtureTablebaseSource {
 }
 
 describe("pure opponent selector", () => {
+  it("pins captured Maia fixture identity to the deployed instrument", () => {
+    expect(maiaPolicyFixture.provenance.image).toBe(DEFAULT_MAIA_IMAGE);
+    expect(maiaPolicyFixture.provenance.modelId).toBe(MAIA3_MODEL_ID);
+  });
+
   it("chooses the category-preserving reply with greatest measured concession mass", async () => {
     const client = new FakeEngineClient((_engineId, engineRequest) => {
       const position = engineRequest.commands.find((command) => command.startsWith("position fen ")) ?? "";
@@ -233,6 +251,17 @@ describe("pure opponent selector", () => {
     await expect(response.json()).resolves.toMatchObject({
       error: { code: "PRACTICAL_RESISTANCE_POLICY_MASS_INVALID" },
     });
+  });
+
+  it("drives a captured float32 policy vector through practical selection", async () => {
+    const lines = maiaPolicyFixture.candidates.map(({ moveUci: move, mass }) => ({ move, mass }));
+    const selector = new OpponentSelector(
+      new FakeEngineClient(() => maiaLines(lines[0]!.move, lines)),
+      { tablebaseSource: practicalTablebase() },
+    );
+    await expect(selector.select({
+      ...request("practical_resistance"), startFen: practicalFen, historyUci: [],
+    })).rejects.toMatchObject({ code: "PRACTICAL_RESISTANCE_UNDECIDABLE" });
   });
 
   it("uses the deterministic UCI tiebreak when every Maia reading abstains", async () => {

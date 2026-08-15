@@ -1,0 +1,39 @@
+{
+  "schema": "tabiya.test-fixture.maia-policy.v1",
+  "provenance": {
+    "instrument": "Maia3",
+    "image": "chess-tabiya-maia:1e13597",
+    "engineVersion": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+    "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+    "retrievedAt": "2026-08-15T18:10:01Z",
+    "request": {
+      "fen": "6k1/2R3p1/2p1p2p/r2p4/3P4/4P2P/5PP1/6K1 b - - 1 28",
+      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "historyPlies": 55,
+      "elo": 1900,
+      "temperature": 0.8,
+      "topP": 0.92,
+      "multiPv": 17
+    },
+    "infoDigest": "78e024e535c9681e"
+  },
+  "candidates": [
+    { "moveUci": "a5a6", "mass": 0.857233345509 },
+    { "moveUci": "a5a1", "mass": 0.10376278311 },
+    { "moveUci": "c6c5", "mass": 0.00872528273612 },
+    { "moveUci": "g8h7", "mass": 0.00818408373743 },
+    { "moveUci": "e6e5", "mass": 0.00694582192227 },
+    { "moveUci": "g8f8", "mass": 0.0060899509117 },
+    { "moveUci": "a5a2", "mass": 0.00390311842784 },
+    { "moveUci": "a5b5", "mass": 0.00152938708197 },
+    { "moveUci": "a5a8", "mass": 0.00111226446461 },
+    { "moveUci": "g7g5", "mass": 0.000874932564329 },
+    { "moveUci": "a5a4", "mass": 0.000416937313275 },
+    { "moveUci": "h6h5", "mass": 0.000376885262085 },
+    { "moveUci": "a5a3", "mass": 0.000294744910207 },
+    { "moveUci": "a5a7", "mass": 0.000286813272396 },
+    { "moveUci": "a5c5", "mass": 0.000131540669827 },
+    { "moveUci": "g7g6", "mass": 0.0000794633087935 },
+    { "moveUci": "g8h8", "mass": 0.0000527372612851 }
+  ]
+}

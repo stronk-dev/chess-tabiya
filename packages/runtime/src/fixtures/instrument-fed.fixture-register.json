@@ -1,0 +1,13 @@
+{
+  "schema": "tabiya.test-fixture.instrument-fed-register.v1",
+  "measuredAt": "2026-08-15",
+  "entries": [
+    {
+      "function": "humanConcessionMass",
+      "fixture": "maia-policy-mass-near-boundary.fixture.json",
+      "boundary": "FLOAT32_POLICY_MASS_TOLERANCE",
+      "validSide": "captured",
+      "refusalSide": "minimal-clone-mutation"
+    }
+  ]
+}

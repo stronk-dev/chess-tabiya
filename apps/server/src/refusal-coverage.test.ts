@@ -37,6 +37,25 @@ function testSources(directory: URL): string[] {
   });
 }
 
+function productionSources(directory: URL): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const url = new URL(entry.name, directory);
+    if (entry.isDirectory()) return productionSources(new URL(`${entry.name}/`, directory));
+    return entry.isFile() && entry.name.endsWith(".ts") && !entry.name.endsWith(".test.ts")
+      ? [readFileSync(url, "utf8")]
+      : [];
+  });
+}
+
+function discoveredRefusalCodes(source: string): Set<string> {
+  const patterns = [
+    /new\s+(?:ServerError|SourcingError|RuntimeError|PackCompileError|PackRunPgnError|BranchQueryError)\s*\(\s*["']([A-Z][A-Z0-9_]+)["']/gu,
+    /\bissue\s*\(\s*["']([A-Z][A-Z0-9_]+)["']/gu,
+    /\bcode\s*:\s*["']([A-Z][A-Z0-9_]+)["']/gu,
+  ];
+  return new Set(patterns.flatMap((pattern) => [...source.matchAll(pattern)].map((match) => match[1]!)));
+}
+
 describe("fixed refusal-code coverage", () => {
   it("pins lint refusals whose shapes are otherwise easy to regress", () => {
     const duplicate = clone(example);
@@ -273,22 +292,26 @@ describe("fixed refusal-code coverage", () => {
 
   it("requires every fixed authoring refusal to have a direct test disposition", () => {
     const emitters = [
-      readFileSync(new URL("./pack-validation.ts", import.meta.url), "utf8"),
-      readFileSync(new URL("./shape-validation.ts", import.meta.url), "utf8"),
-      readFileSync(new URL("./expression-satisfiability.ts", import.meta.url), "utf8"),
-      readFileSync(new URL("../../../packages/schema/src/drill-pack/lint.ts", import.meta.url), "utf8"),
+      ...productionSources(new URL("./", import.meta.url)),
+      ...productionSources(new URL("../../../packages/", import.meta.url)),
     ].join("\n");
-    const fixedCodes = new Set(
-      [...emitters.matchAll(/"([A-Z][A-Z0-9_]+)"/gu)]
-        .map((match) => match[1]!)
-        .filter((code) => code !== "NFKC" && !/^R\d+$/u.test(code)),
-    );
+    const fixedCodes = discoveredRefusalCodes(emitters);
     const corpus = [
       ...testSources(new URL("./", import.meta.url)),
       ...testSources(new URL("../../../packages/", import.meta.url)),
     ].join("\n");
-    const missing = [...fixedCodes].filter((code) => !corpus.includes(`"${code}"`)).sort();
-    expect(missing).toEqual([]);
-    expect(fixedCodes.size).toBeGreaterThanOrEqual(100);
+    const debt = (JSON.parse(readFileSync(
+      new URL("./fixtures/refusal-debt.fixture.json", import.meta.url),
+      "utf8",
+    )) as { readonly codes: readonly string[] }).codes;
+    const missing = [...fixedCodes]
+      .filter((code) => !new RegExp(`\\b${code}\\b`, "u").test(corpus))
+      .sort();
+    expect(missing).toEqual(debt);
+    expect(new Set(debt).size).toBe(debt.length);
+    expect(fixedCodes.size).toBeGreaterThanOrEqual(190);
+    for (const disposedByRegex of ["RATINGS_NOT_A_GROUP", "SPEEDS_NOT_A_SPEED", "WINDOW_INVALID"]) {
+      expect(missing).not.toContain(disposedByRegex);
+    }
   });
 });
