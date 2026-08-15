@@ -9,6 +9,27 @@ shape-entry 0.3) · `opening-evidence-path` (0.20) · refusal-code coverage.
 
 **Four items are ready — more than when you last read this file.**
 
+## 0. D56 — TAKE THIS FIRST, no RFC needed, it is a one-line tolerance bug
+
+**`practical_resistance` returns HTTP 500 on 75% of its own domain.** It shipped
+in `4977ff6` today and is broken. `packages/runtime/src/practical-difficulty.ts:32`
+guards `measuredMass > 1 + 1e-9` and throws a **raw `TypeError`** rather than a
+coded refusal. A real float32 softmax summed over ≤20 candidates accumulates
+error near **1e-6** — three orders of magnitude above that tolerance — so the
+guard rejects correct engine output. Measured: **30 of 40 in-range roots throw,
+20/20 repeats each**.
+
+**No test caught it because every fixture mass is a hand-written decimal summing
+to ≤1** — the fixtures do not resemble real instrument output. Fix the tolerance
+to a float32-appropriate bound, convert the throw to a coded refusal, and add a
+fixture built from an actual Maia policy vector rather than a typed decimal.
+
+Three siblings from the same measurement, in the same file's neighbourhood
+(D57–D59 in the ledger): the vacuity gate can be skipped so the mode plays the
+lexicographically first reply under its own name; an Elo-less request inherits
+the previous request's band while recording `eloApplied` absent; and top-p can
+sample a `bestmove` outside the recorded candidate list.
+
 ## 1. `rfc/branch-set-scale.md` — READY, claims nothing versioned
 
 Collapse decided branches, bound the eval work, manual fold. Lands in any order.

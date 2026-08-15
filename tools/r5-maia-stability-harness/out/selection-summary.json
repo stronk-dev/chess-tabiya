@@ -1,0 +1,774 @@
+{
+ "narrow": [
+  {
+   "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000041327347",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000041327347",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 297.5
+  },
+  {
+   "fen": "1K6/1P1k4/8/8/8/8/r7/3R4 b - - 1 1",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000055593108",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000055593108",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 1450.8
+  },
+  {
+   "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1",
+   "pieceCount": 6,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000222065422",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000222065422",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 319.4
+  },
+  {
+   "fen": "3b4/4k3/8/2PKP3/8/8/4B3/8 w - - 1 2",
+   "pieceCount": 6,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000001099395108",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000001099395108",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 988.3
+  },
+  {
+   "fen": "7k/4B3/6KN/8/8/8/8/8 w - - 38 20",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "selection",
+   "distinctMessages": 1,
+   "message": null,
+   "refusalCode": null,
+   "distinctSelectedMoves": 1,
+   "selectedMove": "g6f5",
+   "distinctCandidateVectors": 1,
+   "candidates": [
+    {
+     "moveUci": "e7f6",
+     "rank": 1
+    },
+    {
+     "moveUci": "g6f5",
+     "rank": 2,
+     "concessionRatio": 0
+    },
+    {
+     "moveUci": "g6f6",
+     "rank": 3,
+     "concessionRatio": 0
+    },
+    {
+     "moveUci": "g6f7",
+     "rank": 4,
+     "concessionRatio": 0
+    }
+   ],
+   "medianLatencyMs": 519
+  },
+  {
+   "fen": "8/4k3/1bP1P3/3K4/8/8/4B3/8 b - - 0 3",
+   "pieceCount": 6,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000051186852",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000051186852",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 411.9
+  },
+  {
+   "fen": "8/4k3/2P1P3/b2K4/8/8/4B3/8 w - - 1 4",
+   "pieceCount": 6,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000421501",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000421501",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 499.6
+  }
+ ],
+ "wide": [
+  {
+   "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000041327347",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000041327347",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 278.3
+  },
+  {
+   "fen": "1K6/1P2k3/8/8/3R4/8/8/r7 w - - 4 3",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000417168098",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000417168098",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 565.8
+  },
+  {
+   "fen": "2k5/8/2K3N1/8/8/6B1/8/8 w - - 12 7",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000059605",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000059605",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 421.5
+  },
+  {
+   "fen": "3B2k1/8/3N2K1/8/8/8/8/8 w - - 32 17",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000014901",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000014901",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 185.1
+  },
+  {
+   "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1",
+   "pieceCount": 6,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000222065422",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000222065422",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 241.1
+  },
+  {
+   "fen": "3k4/4N3/4K3/8/8/6B1/8/8 w - - 18 10",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000029802",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000029802",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 402.9
+  },
+  {
+   "fen": "3k4/8/4K3/8/8/4P3/8/8 w - - 9 6",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.00000004796361",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.00000004796361",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 233.1
+  },
+  {
+   "fen": "3k4/R7/8/3K4/8/8/8/8 w - - 10 6",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000260774",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000260774",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 479.3
+  },
+  {
+   "fen": "4k3/8/3K2B1/8/3B4/8/8/8 b - - 3 2",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "selection",
+   "distinctMessages": 1,
+   "message": null,
+   "refusalCode": null,
+   "distinctSelectedMoves": 1,
+   "selectedMove": "e8f8",
+   "distinctCandidateVectors": 1,
+   "candidates": [
+    {
+     "moveUci": "e8d8",
+     "rank": 1,
+     "concessionRatio": 0
+    },
+    {
+     "moveUci": "e8f8",
+     "rank": 2,
+     "concessionRatio": 0.004982678980750609
+    }
+   ],
+   "medianLatencyMs": 545.1
+  },
+  {
+   "fen": "4k3/8/5K2/4P3/8/8/8/8 w - - 1 10",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "No category-preserving reply leaves measured concession mass",
+   "refusalCode": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 185.8
+  },
+  {
+   "fen": "4k3/R7/1r6/3KP3/8/8/8/8 w - - 1 4",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.00000005107693",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.00000005107693",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 607.8
+  },
+  {
+   "fen": "4k3/R7/1r6/4K3/4P3/8/8/8 w - - 1 2",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000078186982",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000078186982",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 888.3
+  },
+  {
+   "fen": "4k3/R7/3KP3/8/8/8/8/3r4 w - - 3 6",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000038940947",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000038940947",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 591
+  },
+  {
+   "fen": "4k3/R7/4PK2/8/8/8/8/5r2 w - - 7 8",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000004336953",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000004336953",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 606.7
+  },
+  {
+   "fen": "5k2/2B5/3NK3/8/8/8/8/8 w - - 26 14",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000059605",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000059605",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 771.3
+  },
+  {
+   "fen": "5k2/2Q5/8/8/8/8/6K1/8 w - - 6 4",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "No category-preserving reply leaves measured concession mass",
+   "refusalCode": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 814.5
+  },
+  {
+   "fen": "5k2/R7/4K3/8/8/8/8/8 w - - 14 8",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000014901",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000014901",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 232.3
+  },
+  {
+   "fen": "6k1/8/5KB1/2B5/8/8/8/8 w - - 10 6",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000059605",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000059605",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 407.6
+  },
+  {
+   "fen": "7R/4k3/8/3KP3/8/8/8/8 b - - 0 5",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000415891548",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000415891548",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 318
+  },
+  {
+   "fen": "7R/4k3/8/4K3/4P3/8/8/8 b - - 0 3",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000008643743",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000008643743",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 313.9
+  },
+  {
+   "fen": "7k/4Q3/8/8/6K1/8/8/8 w - - 14 8",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000029802",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000029802",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 233.7
+  },
+  {
+   "fen": "7k/R7/6K1/8/8/8/8/8 w - - 18 10",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "No category-preserving reply leaves measured concession mass",
+   "refusalCode": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 801
+  },
+  {
+   "fen": "8/1P2k3/1K6/8/3R4/8/8/1r6 w - - 8 5",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "No category-preserving reply leaves measured concession mass",
+   "refusalCode": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 1147.9
+  },
+  {
+   "fen": "8/1P2k3/8/1K6/3R4/8/8/1r6 w - - 12 7",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000788933818",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000788933818",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 284.7
+  },
+  {
+   "fen": "8/2k2K2/8/4P3/8/8/8/8 w - - 5 12",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000044355062",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000044355062",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 659.8
+  },
+  {
+   "fen": "8/3k4/6N1/3KB3/8/8/8/8 b - - 7 4",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "selection",
+   "distinctMessages": 1,
+   "message": null,
+   "refusalCode": null,
+   "distinctSelectedMoves": 1,
+   "selectedMove": "d7e8",
+   "distinctCandidateVectors": 1,
+   "candidates": [
+    {
+     "moveUci": "d7c8",
+     "rank": 1,
+     "concessionRatio": 0.003111275158810337
+    },
+    {
+     "moveUci": "d7d8",
+     "rank": 2,
+     "concessionRatio": 0.0036367003739823604
+    },
+    {
+     "moveUci": "d7e8",
+     "rank": 3,
+     "concessionRatio": 0.08345296232303116
+    }
+   ],
+   "medianLatencyMs": 896
+  },
+  {
+   "fen": "8/3k4/7R/3K4/8/8/8/8 b - - 5 3",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000212964353",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000212964353",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 1158.9
+  },
+  {
+   "fen": "8/3k4/7R/8/8/3K4/8/8 b - - 1 1",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "selection",
+   "distinctMessages": 1,
+   "message": null,
+   "refusalCode": null,
+   "distinctSelectedMoves": 1,
+   "selectedMove": "d7e7",
+   "distinctCandidateVectors": 1,
+   "candidates": [
+    {
+     "moveUci": "d7c7",
+     "rank": 1,
+     "concessionRatio": 0.00018465607984101648
+    },
+    {
+     "moveUci": "d7c8",
+     "rank": 2,
+     "concessionRatio": 0
+    },
+    {
+     "moveUci": "d7d8",
+     "rank": 3,
+     "concessionRatio": 0
+    },
+    {
+     "moveUci": "d7e7",
+     "rank": 4,
+     "concessionRatio": 0.0002824742215128134
+    }
+   ],
+   "medianLatencyMs": 1097.5
+  },
+  {
+   "fen": "8/3k4/8/3KB3/8/3N4/8/8 b - - 3 2",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "selection",
+   "distinctMessages": 1,
+   "message": null,
+   "refusalCode": null,
+   "distinctSelectedMoves": 1,
+   "selectedMove": "d7e7",
+   "distinctCandidateVectors": 1,
+   "candidates": [
+    {
+     "moveUci": "d7c8",
+     "rank": 1,
+     "concessionRatio": 0.003977395884314477
+    },
+    {
+     "moveUci": "d7d8",
+     "rank": 2,
+     "concessionRatio": 0.002359562306412493
+    },
+    {
+     "moveUci": "d7e7",
+     "rank": 3,
+     "concessionRatio": 0.004356977661987422
+    },
+    {
+     "moveUci": "d7e8",
+     "rank": 4,
+     "concessionRatio": 0
+    }
+   ],
+   "medianLatencyMs": 1135.9
+  },
+  {
+   "fen": "8/4k2R/4P3/3K4/8/8/8/8 b - - 2 7",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "selection",
+   "distinctMessages": 1,
+   "message": null,
+   "refusalCode": null,
+   "distinctSelectedMoves": 1,
+   "selectedMove": "e7e8",
+   "distinctCandidateVectors": 1,
+   "candidates": [
+    {
+     "moveUci": "e7d8",
+     "rank": 1,
+     "concessionRatio": 0.0001677203653664684
+    },
+    {
+     "moveUci": "e7e8",
+     "rank": 2,
+     "concessionRatio": 0.0005519900262461918
+    },
+    {
+     "moveUci": "e7f6",
+     "rank": 3,
+     "concessionRatio": 0.0005206082555535523
+    },
+    {
+     "moveUci": "e7f8",
+     "rank": 4,
+     "concessionRatio": 0.0003546397288195504
+    }
+   ],
+   "medianLatencyMs": 1216.2
+  },
+  {
+   "fen": "8/4k3/1bP1P3/3K4/8/8/4B3/8 b - - 0 3",
+   "pieceCount": 6,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000051186852",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000051186852",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 255.9
+  },
+  {
+   "fen": "8/4k3/8/4K3/8/4P3/8/8 b - - 4 3",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000033032894",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000033032894",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 531.4
+  },
+  {
+   "fen": "8/5K2/3k4/8/4P3/8/8/8 w - - 1 8",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "No category-preserving reply leaves measured concession mass",
+   "refusalCode": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 252.8
+  },
+  {
+   "fen": "8/7K/8/8/8/1Q6/1p6/2k5 w - - 4 3",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.00000002491274",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.00000002491274",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 249
+  },
+  {
+   "fen": "8/8/3k4/8/8/2Q5/6K1/8 w - - 0 1",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000596046001",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000596046001",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 478.2
+  },
+  {
+   "fen": "8/8/4k3/8/4K3/4P3/8/8 b - - 0 1",
+   "pieceCount": 3,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.00000004516857",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.00000004516857",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 445.8
+  },
+  {
+   "fen": "8/8/6K1/8/8/2Q5/kp6/8 w - - 8 5",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.000000029802",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.000000029802",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 190.7
+  },
+  {
+   "fen": "8/8/8/5K2/Q7/8/1p6/2k5 w - - 14 8",
+   "pieceCount": 4,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.00000004738069",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.00000004738069",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 247.1
+  },
+  {
+   "fen": "8/P7/1ppk4/8/8/8/6K1/8 b - - 0 4",
+   "pieceCount": 5,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000476993134",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000476993134",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 719.8
+  },
+  {
+   "fen": "8/p7/1Pp1k3/P7/8/8/6K1/8 b - - 0 2",
+   "pieceCount": 6,
+   "repeats": 20,
+   "outcome": "refusal",
+   "distinctMessages": 1,
+   "message": "measured policy mass cannot exceed 1; received 1.0000000222435823",
+   "refusalCode": "measured policy mass cannot exceed 1; received 1.0000000222435823",
+   "distinctSelectedMoves": 0,
+   "selectedMove": null,
+   "distinctCandidateVectors": null,
+   "candidates": null,
+   "medianLatencyMs": 252.6
+  }
+ ]
+}
