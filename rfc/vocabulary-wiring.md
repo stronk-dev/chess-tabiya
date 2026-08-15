@@ -1073,7 +1073,13 @@ on with its measurements corrected rather than dropping it.
 
 ## Open questions
 
-1. **Is `plan_signature` the right factoring, or should `plan_consequence` simply be removed?**
+1. **OWNER RULED 2026-08-15: MERGE — `plan_signature` is the right factoring.** The merge
+   preserves root firing and provenance while removing the redundancy, and — the deciding
+   reason — it **publishes the selection rule D89 says is missing** (*two grammars, one job,
+   no selection rule; the re-author already happened once, silently*). Deleting a zero-user
+   construct would be cheaper today and would leave that gap open to be re-found by the next
+   author. **Pack 0.24 stays a real lane.** *(Original question follows.)*
+   **Is `plan_signature` the right factoring, or should `plan_consequence` simply be removed?**
    §3c chooses the merge because it preserves root firing and provenance while removing the
    redundancy, and because removal of a zero-user construct is cheap enough to do later with more
    evidence. A reviewer who thinks a registry reference belongs at condition level rather than
@@ -1108,7 +1114,17 @@ on with its measurements corrected rather than dropping it.
    for exactly the error of calling a `prospective` subtlety a defect without checking the field.**
    Question, not a finding: does an author declaring a prospective shape expect a marker when it
    arrives?
-8. **Is a fourth *attest* obligation wanted anywhere, and if so whose?** §2b retracts it from this
+8. **OWNER RULED 2026-08-15: WIDEN THE CONTRACT BY AMENDMENT — no fourth law.** The
+   engine-request contract is amended so that **`record` explicitly covers any instrument,
+   stateful or not**, rather than being read broadly and left to each reader to infer. This
+   keeps the law count at three while closing the very gap this question named: *"leaving it
+   open is how a fourth law gets invented later by someone re-finding the same gap."* The
+   generalisation from engines to instruments is now written down rather than implied.
+   **The amendment is owed by whoever next touches the contract**, and it is a real
+   obligation, not a note — the contract is archived, so the amendment lands as a superseding
+   clause in the living tier, never as an edit to `rfc/archive/`. *(Original question
+   follows.)*
+   **Is a fourth *attest* obligation wanted anywhere, and if so whose?** §2b retracts it from this
    law and routes D64 to the engine-request contract's **record** obligation, generalised from
    engines to instruments. That generalisation is not free: the contract's other four obligations
    (*state*, *clear*, *bind*, *bound*) are all about a **stateful** instrument, and a tablebase

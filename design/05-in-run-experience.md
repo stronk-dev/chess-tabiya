@@ -161,7 +161,7 @@ sentence, lit square, arrow, spoken — because the source cannot be wrong.
 | **Sentence rows / lists** (rail, sheets) | shipped | the default form for every rung; grounded sentence templates |
 | **Timeline markers** | shipped | the passive-marker ruling's native form |
 | **Board overlays — lit squares** | 💡 the lighting-ladder row | legal / sight / disclosed-evidence levels |
-| **Board overlays — arrows & piece halos** | 💡 | arrows for *sight* (what this piece unblocks, where pressure runs) are rung-0-honest anytime the config allows; arrows for *moves* (best move, plan route) are verdicts and follow disclosure like every verdict |
+| **Board overlays — arrows & piece halos** | 💡 **three things, split 2026-08-15 by owner ruling** | **(a) LEARNER-DRAWN marks are outside this ladder entirely** — a mark you draw yourself is your own thought; the product asserts nothing, so no rung and no disclosure gate applies. Shipped-off today: `drawable: { enabled: false }`. **(b) HOST- or TEACHER-DRAWN marks relayed to viewers** are a *person's* claim, not the product's — they need **attribution**, not a rung, and they are the core communication tool for teaching and streaming. **(c) SYSTEM-DRAWN marks** are the only ones this ladder governs: arrows for *sight* (what this piece unblocks, where pressure runs) are rung-0-honest anytime the config allows; arrows for *moves* (best move, plan route) are verdicts and follow disclosure like every verdict. (c) has **no producer yet** — the structural reader emits square *sets*, not vectors |
 | **Sheets / panels** (checkpoint, terminal, story) | shipped | disclosure-gated by construction |
 | **Spoken voice** | wave — provider seam + TTS | renderer only; packet-bound |
 | **Story slides** | shipped | the post-game form, full ladder allowed |
@@ -172,6 +172,11 @@ sentence, lit square, arrow, spoken — because the source cannot be wrong.
 
 `AssistanceConfig` already picks sources per context; it grows to pick **forms**
 per context too (`boardLighting`, arrows, spoken — each off by default per §3a).
+**`arrows` in the config means form (c) only** — what the *system* may draw. Forms
+(a) and (b) are not assistance settings at all: a learner's own mark needs no
+permission from a disclosure model, and a teacher's mark is governed by attribution
+and by the live surface's admission rule, not by the ladder. Conflating the three
+under one name is what made the field look dead when only one of its three jobs is.
 A curated drill, Just Play, a match, a stream, and the on-ramp each get their
 own defaults; the learner adjusts within what disclosure permits. **No form may
 smuggle a source past its rung's rules** — the acceptance test for every new

@@ -1547,11 +1547,29 @@ wrong:
    this RFC would then be two RFCs. **Recommended owner: a follow-up that extends the census
    tool.** Until then the register's completeness is exactly as good as the last hand-audit,
    which is the state this RFC found and only partly improves. Stating that is the point.
-2. **Does `design/05`'s assistance ladder promise a directed-mark rung?** If yes, §3.1's
-   disposition is `unmeasured` (pending a directed structural primitive), not `retired`.
-   **Owner ruling wanted**; this draft may not read intent into a design doc (law 5). The
-   recommendation is `retired`, on the ground that the `evidence` rung is refused by
-   `engine-leverage` §6.3 under law 8 and a `sight` rung has no primitive.
+2. **OWNER RULED 2026-08-15 — and the question was the wrong shape. `arrows` MAY NOT be
+   retired; it is three things sharing one field name.** This draft (and the coordinator)
+   analysed `arrows` purely as a **system-output** channel, which is why `retired` looked
+   right. The owner's primary want is the opposite: *"these are useful for coaching,
+   teaching, streaming, ideating… during play you want to be able to draw arrows or
+   highlight shit… we need to find a place for them."* The split, now written into
+   `design/05` §Forms:
+   - **(a) Learner-drawn marks are outside the assistance ladder entirely.** A mark the
+     learner draws is *their own thought*; the product asserts nothing, so no rung and no
+     disclosure gate applies. Shipped-off today at one boolean — `Chessboard.svelte` sets
+     `drawable: { enabled: false, visible: true, autoShapes: [...overlays] }` and
+     chessground supports user drawing natively. **Not this RFC's**, and currently nobody's.
+   - **(b) Host- or teacher-drawn marks relayed to viewers** are a *person's* claim, not the
+     product's — attribution, not a rung. `live-surface-honesty` / `teacher-surface`
+     territory. **Not this RFC's.**
+   - **(c) System-drawn directed marks** are the only leg this format governs, and §3.1's
+     finding holds for it exactly: there is **no producer**. `boardOverlays`
+     (`DrillScreen.svelte:298`) derives from **`boardLighting`, not `arrows`**, and emits
+     `{orig: square}` with **no `dest`** — square highlights, not arrows. And
+     `assistance.arrows` is read by `AssistanceSettings.svelte` **alone**.
+   **§3.1's disposition for `arrows` therefore becomes `unmeasured`, not `retired`**, with
+   the named gap (the structural reader emits square *sets*, not vectors) and legs (a)/(b)
+   recorded as out of scope rather than absent. Ledgered as the `arrows` three-way row.
 3. **When should per-leg `perfect_tablebase` / `practical_resistance` be admitted?**
    `[round 2 — rewritten again. The cross-review narrowed this to one direction on the
    strength of its narrowing of §4.3; §4.3's ruling declined that narrowing, so the question
@@ -1604,12 +1622,16 @@ wrong:
    move count?** §3.4's residue: the window narrows silently, `offWindow` catches the
    consequence but nothing records the cause. This is a `bound` question about a published
    capability and belongs in `engine-leverage`'s dispositions register. Offered, not claimed.
-7. **Does `formatDispositions` belong on `/capabilities` at all?** A pack format is a
-   property of the *schema version*, not of the *deployment* — unlike policy modes, which
-   genuinely vary by which engines a host runs. The counter-argument, and the reason §2
-   publishes it anyway: a client that must decide whether to render a field needs one place
-   to ask, and `/capabilities` is that place today. **Resolvable before `accepted`;** if the
-   answer is no, the register still ships and only its publication site moves.
+7. **OWNER RULED 2026-08-15: NO — `formatDispositions` does not belong on
+   `/capabilities`.** The draft's own objection is upheld: a pack format is a property of
+   the **schema version**, not of the **deployment**, unlike policy modes which genuinely
+   vary by which engines a host runs. The ruling cites the live example of that confusion
+   in the same payload — **D117**, `capabilities.policyModes` advertises `human_common`,
+   `strong_engine` and `theory_strict` **unconditionally** while gating the other two on
+   provider availability, so a deployment with no engine configured still publishes three
+   selectable modes. Mixing schema-version facts into a deployment-capability payload is
+   what makes that class of error easy. **The register still ships unchanged; only its
+   publication site moves**, exactly as this question anticipated.
 
 ## Changelog
 
