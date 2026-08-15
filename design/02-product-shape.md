@@ -162,6 +162,23 @@ overload, and destructive-action mistakes before they become an RFC.
   opponent move perceived-instant · uncached Maia <500 ms · shallow Stockfish
   feedback <500 ms · deep analysis async.
 
+  **The budget has two axes** (owner ruling 2026-08-15, written here by claude on
+  that ruling). The numbers above are **per instrument call** — one Maia query,
+  one Stockfish probe, one tablebase lookup. A **selection** that legitimately
+  needs several calls carries its own, larger budget, stated per mode. The split
+  exists because a single number quietly measured two different things: the
+  resistance work found `practical_resistance` needs a tablebase probe and a Maia
+  query *per candidate reply* — measured at ~580 ms for four candidates, with
+  Maia at 144 ms per call rather than the 53 ms the worker docs claimed, and a
+  tablebase client that is single-flight with a four-deep queue. Holding one
+  500 ms line would have forced the opponent to consider fewer replies, making it
+  worse at the only thing it exists to do.
+
+  **What the split does not license:** a mode may not spend more calls than it can
+  name a reason for, and every per-selection budget is declared and benchmarked
+  like the per-call ones. "It needs several calls" is a claim to be measured, not
+  a waiver.
+
   The branch-switch ruling changed the *shape* of the target, not just the
   number: a single threshold makes every measurement a pass/fail verdict, so a
   reading of 50.1 ms against 50 ms reads as a failure when it is noise. A
