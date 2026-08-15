@@ -2687,3 +2687,287 @@ none asserts a chess consequence beyond the detector's own arithmetic and, where
 quoted, an explorer rarity bound. Also re-checked and unchanged: `pack-check` on
 all ten packs emits exactly one line each — **0 warnings and 0 errors**, not just
 a passing exit code `[V]`.
+
+## 2026-08-15 — Explorer-grounding wave: what the result-split ruling reaches, and the four places it does not (claude)
+
+One agent, ~71 min (orientation 18 · instruments 13 · explorer queries 8 ·
+authoring 12 · verification 8 · ledger and log 12) · **friction ≈ 27%**
+(19 of 71). That is higher than wave F's 7.7% and the middlegame wave's ~14%,
+and the reason is not waste: **this wave's subject had no instrument at all**, so
+building one was the work rather than a detour. Detail in Frictions below. No
+commits. Files touched: eleven packs in `content/drafts/`, two new disposable
+instruments in `apps/server/src/`, `design/BACKLOG.md` (D148–D157), this log.
+Nothing in `rfc/`, `design/00`–`06` or `archive/` was touched.
+
+Ledger block: **D148–D157**, as issued. No id outside the block was minted.
+
+### The ruling, applied
+
+`design/BACKLOG.md` D126, owner 2026-08-15: explorer W/D/B result splits are
+admissible `corpus_observed` evidence at rung 4 — *the split may be stated with
+its population; it may never be converted into a move verdict or a quality
+claim.* Read against `design/05` §3, which defines rung 4 as *"says what
+happened, not what is good"* with **popularity read as quality** as its named
+failure. A result split is neither popularity nor a verdict, which is why it
+lands on rung 4 rather than being refused; the *conversion* is the whole
+boundary.
+
+**Population, stated once and used everywhere below:** Lichess opening explorer,
+`variant=standard`, `ratings=1400,1600,1800`, `speeds=rapid,classical`,
+`since=2023-01`, `until=2025-12`, authenticated with the operator token,
+retrieved 2026-08-15 (UTC). This matches the middlegame wave, deliberately, per
+D124. **Every number was re-queried live and uncached** — the probe bypasses
+`ExplorerClient`'s 30-day cache — and **all eleven position totals reproduced the
+counts already in the corpus exactly** `[V]`: 10987, 8476, 7158, 6011, 5069,
+2634, 817, 815, 795, 742, 730.
+
+### What it grounded — eleven packs
+
+Every middlegame pack in the corpus now states its start position's recorded
+outcomes. This is a rung-4 fact about a **position**, which is a kind of evidence
+the corpus did not previously contain anywhere: until today every explorer number
+in every pack was a *move share*.
+
+| Pack | Games | W / D / B | % |
+|---|---:|---|---|
+| `kid-mar-del-plata-white` | 10987 | 5242 / 555 / 5190 | 47.7 / 5.1 / 47.2 |
+| `dragon-yugoslav-race` | 8476 | 4390 / 401 / 3685 | 51.8 / 4.7 / 43.5 |
+| `french-advance-chain-white` | 7158 | 3325 / 348 / 3485 | 46.5 / 4.9 / 48.7 |
+| `berlin-queenless-press` | 6011 | 2419 / 589 / 3003 | 40.2 / 9.8 / 50.0 |
+| `maroczy-bind-white-squeeze` | 5069 | 2629 / 371 / 2069 | 51.9 / 7.3 / 40.8 |
+| `open-centre-ruy-exchange` | 2634 | 1309 / 197 / 1128 | 49.7 / 7.5 / 42.8 |
+| `iqp-black-tarrasch-defence` | 817 | 432 / 67 / 318 | 52.9 / 8.2 / 38.9 |
+| `carlsbad-minority-attack` | 815 | 390 / 60 / 365 | 47.9 / 7.4 / 44.8 |
+| `iqp-white-panov-attack` | 795 | 404 / 53 / 338 | 50.8 / 6.7 / 42.5 |
+| `nimzo-doubled-c-pawns` | 742 | 321 / 40 / 381 | 43.3 / 5.4 / 51.3 |
+| `grunfeld-exchange-fianchetto` | 730 | 386 / 66 / 278 | 52.9 / 9.0 / 38.1 |
+
+`carlsbad-minority-attack` was added to the middlegame wave's ten because it is
+the eleventh middlegame pack and **it had no corpus evidence of any kind** — no
+band, no game count, no explorer query in the file. The pack `design/04` §8 names
+as the phase exemplar was the one pack that could not say which population it was
+authored against. Ledgered D157.
+
+Beyond the census, three packs got grounding the middlegame wave explicitly
+wanted:
+
+- **`kid-mar-del-plata-white`** — the wave's *"is Ne1 or b4 the better KID move
+  order at 2795 vs 2557 games"*. Both splits are now on record: Ne1 2795 games,
+  1377/149/1269; b4 2557 games, 1312/115/1130. **Neither is ranked**, and the
+  pack says so in the claim. Also the window's three landmarks — after Nd3 (783,
+  326/45/412), after f3 with readiness complete (639, 270/38/331), after ...f4,
+  the arrival (644, 271/38/335) — three splits inside one percentage point of
+  each other, recorded and left uninterpreted.
+- **`dragon-yugoslav-race`** — the arrival node (439 games, 231/20/188) and
+  h4-h5 itself within it (172 games, 92/9/71), plus the other branch's
+  readiness-complete node (239, 138/9/92). Recorded **side by side and not
+  compared**: they are different positions on different branches.
+- **`maroczy-bind-white-squeeze`** — the tolerated Qd2 (1161 games, 598/83/480),
+  and an explicit record that the window's own readiness-complete position
+  **abstains**.
+
+### What it did NOT reach — the more valuable half, four findings
+
+**1. It reaches zero of the four `cost: unmeasurable` deviations, and the block
+is the schema before it is the corpus.** `$defs/deviationCost` admits `cp`
+(basis engine/material), `mate` (basis engine/tablebase) and `unmeasurable` —
+there is no corpus basis, so a split cannot be written into the field. The
+semantic block is stronger: *cost* is a quality claim, so converting a split into
+one is exactly the refused conversion. And the corpus refuses independently —
+measured at `moves=40`:
+
+| Pack | Deviation | Games at its node | Verdict |
+|---|---|---|---|
+| `kid-mar-del-plata-white` | c4-c5 | **30** of 10987 | below floor |
+| `iqp-white-panov-attack` | d4-d5 | **2** of 158 | below floor |
+| `nimzo-doubled-c-pawns` | c4-c5 | **0** of 742 | no data |
+| `grunfeld-exchange-fianchetto` | …Bxd4 | **0** of 730 | no data |
+
+All four are under the **100-game floor at which this repo's own explorer client
+abstains** (`explorer.ts:91`). The general form is worth keeping: **a move worth
+authoring as a deviation is a move the band does not play, and that is the same
+property that denies it a split.** The instrument is strongest exactly where
+content needs it least. The four `cost.reason` strings now state the measured
+count and the abstention instead of *"no corpus evidence bears on this"*; all
+four costs stay `unmeasurable`. Ledgered D148 — which also corrects D126's own
+summary: there are **four** such deviations, not five. `maroczy-bind-white-squeeze`'s
+c4-c5 carries `{cp, 194, engine}` from the middlegame wave's single engine pass,
+and that wave's correction entry above is wrong on this point.
+
+**2. It reaches no timing-window budget or deadline, for a structural reason the
+ruling does not touch.** The explorer aggregates **per position**, so no query
+can condition an outcome on whether an event happened earlier or later in the
+same game. Every window's graduation blocker asks for the same missing thing —
+*"a corpus measurement relating the arrangement's completion to results at this
+band"* — and D126 changes what may be **said about** a position, not what may be
+**asked of** the index. All four budgets and deadlines remain authored numbers.
+Ledgered D155: the capability is per-game traversal, and calling it "the
+explorer" is why four waves have now re-derived that it does not exist.
+
+**3. Half the windows are beneath the abstention floor before that problem is
+even reached.** Measured:
+
+| Pack | Readiness complete | Arrival close |
+|---|---:|---:|
+| `maroczy-bind-white-squeeze` | **80** (101 one ply earlier) | — |
+| `iqp-white-panov-attack` | **29** | **12** |
+| `kid-mar-del-plata-white` | 639 | 644 |
+| `dragon-yugoslav-race` | 239 | 439 |
+
+The Maroczy window **crosses the floor inside itself** — 101 games after Rac1, 80
+after b3. Band data thins with depth and a window by construction lives deep;
+nothing warns an author about the trade. Ledgered D151.
+
+**4. Nothing at HEAD can bind a split to prose, so all of it is unbound.** Three
+gates in series: `EVIDENCE_KINDS` has no census kind; `explorer_frequency`'s
+values are validated **key-exact** against the eight move-share fields
+(`check.ts:128-132`); and its supported text must be **byte-equal** to
+`renderExplorerFrequency` (`check.ts:144`), which renders a share and no
+outcomes. `check.ts:202` maps `corpus_observed` to `explorer_frequency` alone, so
+a split sentence labelled `corpus_observed` would raise `EVIDENCE_TYPE_UNBACKED`
+the moment its pack acquired a ledger. The eleven packs have **no `.evidence.json`
+at all**, which is the only reason the label passes today.
+`rfc/claim-backing.md`'s `explorer_position_census` is the named fix and is not
+landed; per the brief it was not relied on and nothing was invented in its place.
+Ledgered D150.
+
+### Every claim wanted and refused — eleven, and the split between them is the answer
+
+The brief asked how much of the gap is vocabulary versus instrument. Counted:
+**seven of eleven are vocabulary and four are instrument**, and the seven are not
+a gap at all — they are the boundary working.
+
+*Refused because the sentence converts a split into a verdict (the number
+exists):*
+
+1. *"b4 scored 51.3 against Ne1's 49.3, so b4 is the better move order"* — the
+   middlegame wave's own named question. Both numbers are now in the pack; the
+   comparison is not.
+2. *"the three KID window splits are flat, so blunting before the lock changes
+   nothing"* — the flatness is stated, the inference is not.
+3. *"Nc2 scored 78.9/0.9/20.2 over 218 games at the Maroczy root, so Nc2 is the
+   move"* — the sharpest temptation in the whole dataset and the clearest refusal.
+4. *"…Nxd4 gives White 63.9 over 324 games, so it is a mistake for Black"*
+   (Dragon).
+5. *"readiness-complete 57.7 for White vs the arrival branch's 52.6, so arranging
+   first is worse for Black"* — refused twice: a verdict, and a comparison across
+   two different positions on two different branches.
+6. *"White scores 40.2 over 6011 games, so the Berlin queenless structure favours
+   Black at this band"*.
+7. *"Black scores 48.7 to White's 46.5 over 7158, so the French Advance chain is
+   not working for White at this band"*.
+
+*Refused because no admissible number exists (below the 100-game floor or zero
+games):*
+
+8. *"…f5 scores 90.9% for White"* (Grünfeld, 11 games).
+9. *"d4-d5 scored 1/0/1 in its two games"* (Panov IQP).
+10. *"d4-d5 scored 1/0/6 over seven games, so the premature break is punished"*
+    (Nimzo) — a verdict *and* below floor.
+11. *"the cost of c4-c5 is the drop from the position's split to the post-move
+    split"* — the conversion the boundary names, in its purest form.
+
+**The seven are permanent.** No amount of authoring turns a split into a verdict,
+and treating them as a backlog would be reading popularity as quality with extra
+steps. **The four are an instrument gap**, and three of the four are the same
+gap: the explorer's floor. So the honest sizing is that D126 closed the
+vocabulary question completely and left the instrument question exactly where it
+was.
+
+### Census delta — zero, and that is the finding
+
+`make expression-census WITNESSES=content/witnesses/expression-witnesses.json`,
+before and after:
+
+| | Before | After |
+|---|---:|---:|
+| packs / positions / transitions | 53 / 791 / 738 | 53 / 791 / 738 |
+| subjects | 184 | 184 |
+| `neverFiresInCorpus` | 30 | 30 |
+| `inShapeDenominatorEmpty` | 19 | 19 |
+| `firesOnlyOutsideShape` | 40 | 40 |
+| `satisfiabilityUnknown` | 23 | 23 |
+| `unsatisfiable` | 0 | 0 |
+
+Identical in all nine fields, which also reproduces the middlegame wave's
+after-numbers exactly `[V]`. **The census measures structural expressions, and
+this wave added none** — so the repo's only corpus-wide content instrument cannot
+see rung-4 evidence at all, and a wave that adds nothing but corpus grounding
+looks identical to a wave that adds nothing. Every prior wave used the census
+delta as its headline; this one has no headline instrument. Ledgered D152.
+
+**The default witness path now agrees**: `make expression-census` with no
+`WITNESSES=` produces a byte-identical report to the explicit run. Codex's fix is
+confirmed and D102's flagged path is closed.
+
+### Verification actually performed
+
+- `make pack-check` on all eleven packs: **11/11 exit 0**, each emitting exactly
+  one line — 0 warnings, 0 errors.
+- All eleven position totals re-queried **live and uncached**: 11/11 exact
+  against the counts already in the corpus.
+- `make expression-census` before (via `git stash` of `content/drafts`) and
+  after, plus a third run on the default witness path: 0 `unsatisfiable`
+  throughout, all three summaries identical.
+- **`make verify` is green**: typecheck clean across four projects, **99 test
+  files / 615 tests passing**, `schema:check` OK. Note for the record: D122's
+  pinned census test no longer fails — it was rewritten to assert an invariant
+  after the middlegame wave refused to edit it, and the gate is green without any
+  test being touched this wave.
+
+### Frictions, with time cost
+
+1. **No shipped command answers "what did the band score here"** (~8 min). The
+   only explorer path that reaches a pack is `make candidate-attach`, which
+   writes a move-share sentence and nothing else; nothing prints a split. Built
+   `apps/server/src/split-probe.ts`. This is D121's exact class — the question
+   every author of this wave's content must ask, with no oracle — and it is
+   ledgered for promotion as D156.
+2. **No way to get the FEN of a pack's spine node or a deviation's result**
+   (~5 min). `nodePosition` exists but is private to `explorer.ts` and only
+   resolves spine ids, never a deviation's after-position, which is what every
+   deviation-grounding question needs. Built `apps/server/src/fen-walk.ts`.
+3. **`explorerUrl` hard-codes `moves=12`** (~4 min, mid-flight rebuild and
+   re-query). Two packs could previously only *bound* their deviation's rarity;
+   at `moves=40` both are exactly **0**, a materially different sentence.
+   Ledgered D149.
+4. **`make expression-census` prints the entire report to stdout** (~4 min) —
+   232 KB of JSON with no summary mode, so the nine numbers every wave quotes
+   have to be extracted by a throwaway script. `OUT=` exists and is the
+   workaround; a `--summary` would have saved it.
+5. **There is no way to census a clean tree** (~2 min). Getting a *before* number
+   required `git stash push -- content/drafts`, run, `git stash pop`, with the
+   wave's work in the stash while the census ran.
+6. **The window note cap blocked the ruling's own sentence** (~0 min to hit,
+   0 to work around, high to report). The four notes are 337/394/372/359 of 400
+   characters and a population needs ~120, so the split could not go in the field
+   that exists to justify a threshold. Ledgered D153 as the measured form of
+   D123.
+
+### Not done, deliberately
+
+- **No `cost` was changed from `unmeasurable`.** Four reasons were sharpened with
+  measured counts; no split became a cost.
+- **No `explorer_position_census` record, and no evidence ledger invented** for
+  any of the eleven packs. `rfc/claim-backing.md` is in cross-review and was
+  neither read as binding nor pre-empted; where a claim needs a binding that does
+  not exist, the log says so (D150) rather than the pack inventing one.
+- **No timing window edited** — not the budgets, not the deadlines, not the
+  readiness sets, not the notes. Nothing measured this wave bears on any of them.
+- **No split below the 100-game floor was quoted as evidence** anywhere. Where a
+  position falls under it, the packs record the abstention instead.
+- **No move, plan or side graded**, and no split compared to another. Eleven
+  wanted sentences are recorded above instead of written.
+- **No shape entry, no `design/00`–`06`, no `rfc/`, no `archive/` touched.**
+- **No test edited.** `make verify` was green on the first run.
+
+### One correction owed upward
+
+D126's illustrative example reads *"1400–1800 players scored 47/31/22 over 5,069
+games"*. **5,069 is real** — it is the Maroczy root at this band, reproduced
+exactly this wave. **47/31/22 is not**: the measured split there is
+**51.9/7.3/40.8**, and a 31% draw rate occurs nowhere in the eleven positions
+censused (range 4.7–9.8%). No one has been misled and the illustration did its
+job, but a plausible split paired with a real count is D110's shape one tier up,
+in the document every agent reads first. Ledgered D154; the fix is one edit and
+it is the owner's, not this wave's.
