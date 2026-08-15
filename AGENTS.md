@@ -41,6 +41,13 @@ sidecar. The exploration job continues alongside (E4 harness, gates) — see
 5. Append a dated entry to `planning/exploration/log.md`: what landed, what changed,
    what's blocked, what's next.
 
+**`design/BACKLOG.md` is a shared ledger, not an intent doc** (clarified 2026-08-15 after a
+verification pass found the completion protocol and law 5 contradicting each other for any
+non-owner implementer). Law 5 protects the *intent* documents — `00`–`06` — which only the
+owner or claude-on-an-owner-ruling may write. **The ledger is a register every tier writes
+to**, exactly as `rfc/README.md` is, and an implementer flipping the rows its own commit ships
+is the protocol working rather than a law-5 breach.
+
 **RFC completion protocol includes the ledger AND the log.** Archiving an
 implemented RFC flips the `design/BACKLOG.md` rows it ships (💡→✅ with a one-line
 summary) **and appends its entry to `planning/exploration/log.md`** in the same
