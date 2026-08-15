@@ -1,7 +1,7 @@
 # RFC: The engine request contract — a request must close over its instrument's state
 
-- **Status:** draft — adversarially cross-reviewed 2026-08-15 (see Changelog); six blockers fixed
-  in place, the register fork closed, awaiting owner acceptance
+- **Status:** implementing — adversarially cross-reviewed 2026-08-15 (see Changelog); six
+  blockers fixed in place, the register fork closed, owner accepted 2026-08-15
 - **Author:** claude (agent), for Marco. Cross-review by a second agent
 - **Created:** 2026-08-15
 - **Design refs:** `design/03-product-breadth.md:145-148` (*"for a group to answer 'which of my
@@ -838,7 +838,8 @@ because a reviewer scanning for a schema `minimum` will not find one, and that i
    actually sent in **all** probes.
 5. **`TARGET_ELO_REQUIRED`.** With a stub engine advertising `Elo` with no `default`, an
    Elo-less request is refused 422 by name and no `setoption name Elo` is sent.
-6. **D60 closed.** `/capabilities` publishes `policyProfiles.human_common.elo` with a `source` and
+6. **D60 mechanism ships; D60 remains open pending R10.** `/capabilities` publishes
+   `policyProfiles.human_common.elo` with a `source` and
    the verbatim `advertised` pair; with a stub engine advertising `min`/`max`, a `targetElo`
    outside the range is refused 422 at **all five** request boundaries (§9) with the published
    range and `source` in the message; a stub advertising `[0, 5000]` plus a configured
