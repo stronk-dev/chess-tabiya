@@ -9,7 +9,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `0000-rfc-process.md` | accepted | — | process |
 | `fixture-realism.md` | implementing | — | **claims nothing versioned**. Captured Maia fixtures, a one-ulp policy-mass tolerance, artifact-derived pins, discovery-based refusal coverage, and an instrument-fed fixture register |
 | `live-marker-quality.md` | implementing | — | **claims nothing versioned**. Narrows live `irreversibility` to `last_of_role`, makes pivotal rendering exhaustive, and applies the human-split permission to the client marker plus `/voice` and `/speech` delivery paths. Proposes **L1–L6**, the standing admission rule for the live surface |
-| `client-surface-floor.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — CSS, one nav element, one marker size, one Playwright spec; lands in any order. Deletes the `62rem` breakpoint rather than retargeting it (it is a *width* breakpoint on a *height*-bound layout). Forward-declares a scope boundary for D63 (`compare-geometry` does **not** exist yet — not a dependency) and asserts `CompareView.svelte` is unmodified |
+| `client-surface-floor.md` | implementing | — | **claims nothing versioned** — CSS, one nav element, one marker size, one Playwright spec; lands in any order. Deletes the `62rem` breakpoint rather than retargeting it, states the measured 360×680 run floor, and refuses smaller viewports honestly. `CompareView.svelte` remains outside scope |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
 `onramp-guard`, then `open-answer-grading`. Shared-resource claims (migrations, pack

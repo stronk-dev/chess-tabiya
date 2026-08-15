@@ -1,7 +1,6 @@
 # RFC: Client surface floor — the tablet band, and two shipped controls that lie
 
-- **Status:** draft — **cross-reviewed 2026-08-15; owner ruling applied; ready for codex** — cross-reviewed 2026-08-15; **blocked on open question 1** (the
-  360×640 case, where acceptance criterion 5 cannot pass as specified)
+- **Status:** implementing — cross-reviewed; owner minimum-viewport ruling applied 2026-08-15
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/02-product-shape.md:81-86` (Platform — OPEN, exploration Q3);
@@ -34,7 +33,7 @@
   Introduces **no new subsystem, no persisted state, no format change, no new product
   surface, and no new route.**
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/client-surface-floor/` (once implementing)
+- **Planning:** `planning/client-surface-floor/`
 
 
 > **OWNER RULING 2026-08-15 — the 360×640 blocker is resolved: STATE A MINIMUM VIEWPORT AND
