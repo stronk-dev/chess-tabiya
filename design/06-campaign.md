@@ -37,10 +37,20 @@ shipped code, which changes this from a build into an assembly:
   `AssistanceConfig` v4 carries nine named axes of what is *switched on*. Honesty
   policy and inventory are already separate artefacts. The deck's slot vocabulary
   is those nine axes.
-- **The difficulty-availability axis exists** as `branchDecidedness`
-  (`decided` / `undecided` / `unknown`), each with a named ground.
-- **The encounter unlock exists** as `shapeRecommendations` — rung-0 arithmetic
-  over a shipped endpoint, provenance sentence included.
+- **A difficulty-availability axis exists at the BRANCH level** as `branchDecidedness`
+  (`decided` / `undecided` / `unknown`) — but it is not yet the axis §2a specifies, and
+  the difference matters. Only `decided` carries a **ground**; the other two carry a
+  `reason`. And `DecidednessGround` has exactly three kinds — terminal outcome,
+  objective terminal, tablebase — with **no human-outcome ground**, which is the very
+  thing R9 established as the openings' oracle. So the campaign axis is a **promotion**
+  of the branch-level one to campaign scale, plus a fourth ground that does not exist
+  yet. *(Corrected 2026-08-15 by the reconciliation gate: this doc originally claimed
+  the axis "exists… each with a named ground", dropping both qualifiers that
+  `planning/campaign-synthesis.md` had stated correctly. Design-tier overstatement,
+  claude's.)*
+- **The encounter unlock's DETECTOR exists** as `shapeRecommendations` — rung-0
+  arithmetic over a shipped endpoint, provenance sentence included. Nothing *gates* on
+  it; unlocking is the part still to build.
 
 What does **not** exist: any server-held notion of an earned inventory
 (`AssistanceConfig` lives in browser localStorage keyed by session kind, so it
@@ -74,7 +84,9 @@ rather than inventing a number across it.
 
 ### 2b. There is no IM/GM opponent, and the re-cut is better than the request
 
-Maia's bands run ≈1100–1900. Above them only `strong_engine` exists, which is not
+Maia's usable band is **`[1000, 2400]`** — measured by R10 and ruled by the owner
+2026-08-15, superseding the ≈1100–1900 figure this doc first carried from model
+knowledge. Above them only `strong_engine` exists, which is not
 a strong human but a different species; weakened Stockfish is rejected doctrine
 (`AGENTS.md`). So a literal "GM boss" is unavailable.
 
@@ -87,7 +99,7 @@ because that is the phase where difficulty must be authored anyway.
 
 This is stronger than the request. "Beat a GM" is a strength claim; "beat the
 Advance Caro-Kann's actual plan, with the right counter-theory unlocked" is the
-product's own claim. Caveat carried from R5: only three of six opponent modes are
+product's own claim. Caveat carried from R5: only three of the **five** shipped opponent modes are
 reproducible at all, and `practical_resistance` is scoped to decided positions.
 
 ### 2c. The rewind budget prices the thesis's own selling point
