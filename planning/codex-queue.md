@@ -7,16 +7,18 @@
 `expression-census` · `engine-request-contract` run 0.15 / migration 20.
 **591 tests / 96 files, browser 24 at zero retries.**
 
-## 1. `rfc/fixture-realism.md` — READY
+## 1. `rfc/fixture-realism.md` — READY (floor restated, contradiction resolved)
 
 Claims **nothing versioned**. Cross-reviewed; owner ruling applied **in the body**,
 not just a banner.
 
-**The ruling:** NARROW the tolerance toward the measured envelope, and the E4 floor
-**stands as written** — do *not* restate it as instrument-reachable. Pick the
-constant from the measured envelope (Maia's worst case is **9.25e-08** against the
-shipped **3.81e-06**, 41× wider), state the headroom factor, and add the fixture
-that crosses it. A later engine build that starts refusing is the guard working.
+**Owner ruling 2026-08-15, final — you were right that the first one was
+unsatisfiable.** Take your own recommendation: tolerance = **one float32 ulp**
+(`2**-23` ≈ 1.19e-07, **1.29× headroom** over the measured 9.25e-08); a **real
+captured fixture near the boundary from below** (the half that would have caught
+D56); and a **minimally mutated real fixture** to cross it and prove the refusal
+fires — E2's clone-and-break pattern, so nothing invented enters. The floor now
+reads *"a real fixture exercises every **reachable side** of the bound."*
 
 Cross-review found the RFC was one gate short: §5b and §5c each bought themselves a
 gate while **E4's floor — the rule at the centre of D56 — was prose nothing

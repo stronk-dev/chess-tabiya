@@ -1,6 +1,6 @@
 # RFC: Fixture realism — a test asserts against the artifact, not against a convenient invention
 
-- **Status:** draft — **cross-reviewed 2026-08-15; owner ruling applied; ready for codex**
+- **Status:** draft — **cross-reviewed, floor restated by owner ruling 2026-08-15; READY for codex, unblocked**
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/BACKLOG.md` rows **D56** (`practical_resistance` returned HTTP 500 on 75% of its own domain; **the row was flipped to ✅ CLOSED by `960f91e` while this RFC was being drafted** — the arithmetic half is fixed, the fixture-discipline half that let it ship is §5a), **D47** (pin tests encode content facts — 4th instance), **D54** (**"CLOSED … NARROWER THAN IT READS — corrected 2026-08-15"**; the row now carries §4's measurements verbatim, landed by `cb32a68` after this draft was written — §4 is retained as the RFC's own independently re-verified statement of them, not as a discovery), **D55** (an instrument that walks content must state its denominator), **D64** (**`offlineQuery` manufactures the provenance it records** — §3's counterexample and a §6 follow-on; ledgered 2026-08-15), **D61** (**the phone-viewport browser assertion cannot fail** — the ledger's own third member of the tests-that-cannot-fail family, addressed by §6's denominator and open question 4), and **"Vocabulary audit: the reassuring half"** (the 107-emitter sweep). `design/research/maia-policy-scalar-stability.md` §8.1 is the measured evidence. *Every code site in this document is cited **by symbol name**. The working tree moved repeatedly during drafting: `packages/runtime/src/practical-difficulty.ts` and `.test.ts` were modified-uncommitted when §5a was first written and **landed as `960f91e` ("fix: tolerate Maia float32 policy mass") before this draft was finished** — §5a is written against the committed result and says which half it does not claim. `apps/server/src/opponent-selector.test.ts`'s fixture line numbers already differ from the ones the D56 dossier recorded this morning. **Locate by symbol first — every line number here is advisory.*** HEAD moved `4a893dc` → `960f91e` → `90bb5bf` during drafting and `90bb5bf` → `2c62275` → `cb32a68` → `efdd7e0` during cross-review; **every measurement in §4, §5 and §6 was re-run at `efdd7e0`** and the corrections that produced are marked `[cross-review]`.
@@ -22,6 +22,28 @@
 > captured fixture must cross every bound. The implementer picks the constant **from the measured
 > envelope**, states the headroom factor, and adds the fixture that crosses it. A future engine
 > build that starts refusing is the guard working, not a regression.
+
+
+> **OWNER RULING 2026-08-15 (final) — the E4 floor is RESTATED and this RFC is unblocked.**
+> Codex found the previous ruling unsatisfiable and was right: any tolerance placed safely above
+> Maia's measured maximum (9.25e-08) can **never** be crossed by real output, while any tolerance
+> below it **rejects known-valid Maia output**. *"A real fixture crosses every bound"* therefore
+> has no solution.
+>
+> **The floor now reads: a real fixture must EXERCISE EVERY REACHABLE SIDE of the bound.** In
+> practice, three things together:
+> 1. **the tolerance is one float32 ulp** (`2**-23` ≈ 1.19e-07, **1.29× headroom** over the
+>    measured 9.25e-08) — chosen from the envelope, not invented;
+> 2. **a real captured fixture sits near the boundary from below**, proving the tolerance is
+>    placed correctly *relative to actual instrument output* — this is the half that would have
+>    caught D56;
+> 3. **a minimally mutated real fixture crosses it**, proving the refusal fires — the
+>    clone-and-break pattern this RFC's own E2 already sanctions, so no hand-invented data enters.
+>
+> **What is preserved and why it matters:** nothing may be asserted against invented data. What
+> is given up is only the claim that *real output itself* crosses a safety bound, which was never
+> possible for a bound that exists to sit beyond real output. The intent survives; the arithmetic
+> was wrong.
 
 ## Register claim
 
