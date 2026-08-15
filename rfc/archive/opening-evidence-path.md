@@ -1,6 +1,6 @@
 # RFC: The opening evidence path — grounding a claim no tablebase can settle
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/04-content-architecture.md` §2 (opening packs) and §8 (production model);

@@ -3,7 +3,7 @@
 - **Status:** draft
 - **Author:** claude
 - **Created:** 2026-08-15
-- **Design refs:** `design/BACKLOG.md` row **"No instrument answers 'where does this expression fire?'"** (7th attestation, 2026-08-15) and the defect rows **D43**, **D44**, **D49**; `design/04-content-architecture.md` §0a content-transfer test. *Rows and code sites are cited by title and by symbol name throughout. `apps/server/src/pack-validation.ts` is modified-uncommitted in the working tree this draft was written against and its line numbers moved twice during drafting (`authoredSpineFens` 170→171, `SHAPE_REFERENCE_NEVER_PRESENT` 457→459, `PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT` 478→480). Every line number below was re-read immediately before writing; **locate by symbol first**.*
+- **Design refs:** `design/BACKLOG.md` rows **"No instrument answers 'where does this expression fire?'"** (7th attestation, 2026-08-15) and **"Census measured: 43 of 64 in-shape signatures fire zero times in-shape"** (the numbers §Motivation re-derives); the defect rows **D43** and **D44**; and **D49**, which is **withdrawn, not open** — see §8, which is the reason it was withdrawn. `design/04-content-architecture.md` §0a content-transfer test. *Rows and code sites are cited by title and by symbol name throughout. `apps/server/src/pack-validation.ts` is modified-uncommitted in the working tree this draft was written against and its line numbers moved during drafting (`authoredSpineFens` 170→171, `SHAPE_REFERENCE_NEVER_PRESENT` 457→459, `PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT` 478→480). **Locate by symbol first — every line number in this document is advisory.** Cross-review 2026-08-15 re-derived every figure and re-read every cited site; the `schemas/drill_pack.schema.json` line ranges the first draft carried had already gone stale and have been replaced by `$defs` names.*
 - **Exploration gate:** owner ruling 2026-08-12 opened the RFC tier (`rfc/README.md` §Exploration gate). This RFC is opened by the 7th attestation of the ledger row above — the most-attested friction in the repo.
 - **Depends on:** `rfc/archive/structural-reading.md` (the expression grammar and `matchesStructuralExpression`), `rfc/archive/predicate-wave-2.md` (`mirrored`, `quantified`), `rfc/archive/predicate-wave-3.md` (`plan_consequence`, `PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT`, `piece_count`, `king_zone`, `piece_distance`, shape-reference relations), `rfc/archive/shape-library.md` (shape entries, `pack.shapes`), `rfc/archive/authoring-frictions.md` §1 (the report-only repo instrument precedent — `make tablebase-walk`)
 - **Parent / amends:** amends `shape-check` (`apps/server/src/shape-check.ts`) and `validateShapeEntry` (`apps/server/src/shape-validation.ts`). Introduces no new subsystem, no new persisted state, and no format change.
@@ -26,6 +26,11 @@
 > a pack or entry** rather than only constructed by the tool, and if so, what an inertness
 > refusal must do when one is present. That decision belongs with the instrument that defines
 > what a witness *is*.
+>
+> **Answered in §5c** (added at cross-review, 2026-08-15, because a routed question left
+> floating is a routed question dropped). The short form: **no, a witness is not a pack or
+> entry field, and a witness does not suppress an inertness refusal.** One residual half is
+> owner-facing and is filed as open question 8 below with the owner named.
 
 ## Register claim
 
@@ -35,16 +40,20 @@ persisted field, no `$id` change. It is authoring tooling plus two validator
 codes on existing severities.
 
 This is stated loudly because it is the better outcome, and because the register
-lane is contested today: `transition-primitives` claims pack **0.19**,
-`opening-evidence-path` claims **0.20**, `deviation-classes` claims **0.21**.
-The working tree already carries `DRILL_PACK_SCHEMA_VERSION = "0.20"`
-(`packages/schema/src/index.ts:2`) and `urn:chess-tabiya:schema:drill-pack:0.20`
-(`schemas/drill_pack.schema.json:3`) with `opening-evidence-path` mid-landing, so
-the "landed 0.18" figure circulating in coordination notes is already stale.
-**None of that matters to this RFC**: it can land before, between or after any of
-those three in any order, and rebasing it costs nothing. Shape-entry stays at
-`0.3` (`SHAPE_ENTRY_SCHEMA_VERSION`, `packages/schema/src/index.ts:3`); run stays
-at `0.14`; migration numbers are untouched.
+lane is contested today. **Lane state re-read at cross-review, 2026-08-15**, from
+`rfc/README.md`'s version register: `opening-evidence-path` claims **0.20**
+(status *implementing*), `deviation-classes` claims **0.21**,
+`transition-primitives` claims **0.22** — the first draft of this RFC said 0.19,
+which is stale: commit `d0075e6` rebased it because **0.19 is frozen shut**, the
+shared constant being monotonic and 0.20 having landed over it. The working tree
+carries `DRILL_PACK_SCHEMA_VERSION = "0.20"` (`packages/schema/src/index.ts`) and
+`urn:chess-tabiya:schema:drill-pack:0.20` (`schemas/drill_pack.schema.json` `$id`)
+with `opening-evidence-path` mid-landing, so the "landed 0.18" figure circulating
+in coordination notes is stale twice over. **None of that matters to this RFC**:
+it can land before, between or after any of those three in any order, and
+rebasing it costs nothing. Shape-entry stays at `0.3`
+(`SHAPE_ENTRY_SCHEMA_VERSION`); run stays at `0.14`; migration numbers are
+untouched.
 
 ## Summary
 
@@ -77,14 +86,18 @@ instrument. What that instrument found once it existed, on shipped content:
 | Finding | Measured |
 |---|---|
 | D43 — `knight-vs-bishop`'s passer fan | 0 of 440 knight-bearing positions; 9 of 615 corpus-wide, none containing a knight |
-| D49 — `opposite-castling-race` referenced by two packs | trigger fires on 0 of 668 corpus positions |
+| D49 (**withdrawn**) — `opposite-castling-race` referenced by two packs | trigger fires on 0 of 668 corpus positions. *Ledgered as a defect, then withdrawn the same day: both references declare `relation: "prospective"`, so no refusal is owed. §8 is the argument. It is listed here because the **measurement** was real and only a census can produce it — not because a defect was found* |
 | Orphan entries (D44) | eight of nine had triggers firing on zero corpus positions |
 | Vacuously-true conditions | the `mate-two-bishops` defect reproduced **four** times in one pass |
-| Over-loose conditions | two, one firing on 52 of 77 in-shape positions |
+| Over-loose conditions | `closed-centre-chain/white-hold-the-base`, too loose across **two successive drafts**; the first fired on 52 of 77 in-shape positions (`planning/content-era/log.md`). The ledger's summary phrasing "two over-loose ones" counts drafts, not signatures — one signature is the primary-source reading |
 | `timingWindow` | fully shipped subsystem, **0 matches in all of `content/`** |
 
 Every one of those was found by a hand-rolled instrument that was then thrown
-away.
+away. **Note what the D49 row demonstrates and the others do not:** the census's
+value is not that every number it prints is a defect. Four of these six rows are
+defects; two are measurements that turned out to be correct content. Both
+outcomes are the instrument working, and §1 exists so the tool cannot collapse
+them.
 
 ### Re-measured today, with the shipped evaluator
 

@@ -7,11 +7,11 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `opening-evidence-path.md` | implementing | — | pack **0.20**. `assessedBy` gains `kind: "engine"`. Closes the opening half of the evidence hole |
 | `deviation-classes.md` | draft — reviewed + **rewritten multi-valued**, ready | — | pack **0.21**. `mistake` is a SET (`minItems:1`, `uniqueItems`), `cost` author-declared and unbacked. Eight rendering surfaces given explicit multi-value rules; *pick-the-first* prohibited by name |
 | `branch-set-scale.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — rebased 2026-08-15 after `ed48978` (pack 0.17) and `4977ff6` (run 0.14 / migration 19) landed the same day; the claim survives the rebase intact, which is the point. No migration, no new event, no new `BranchComparison` field. One writer-free read route + a versioned browser preference. Implements the 2026-08-15 branch ruling: collapse decided branches, bound the eval work, manual fold |
 | `transition-primitives.md` | draft (awaiting cross-review) | — | claims **pack schema 0.22** — rebased 2026-08-15: 0.19 was free as a register slot but the shared constant is monotonic and 0.20 landed over it, so 0.19 can no longer be claimed from below. The move-primitive grammar shipped **with both consumers** per the 2026-08-15 ruling: an eighth `successCondition` arm for packs, and a Just Play reading + one new `PivotalKind`. Excludes `structuralDelta` and **enforces the exclusion** with a module-graph test |
 | `expression-census.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — no schema, no migration, no persisted field, no event; lands in any order. `make expression-census` (report-only), plus `CORPUS=`/`PROBE=`/multi-`FILE=` on `shape-check`. Separates **coverage** (never an error) from **satisfiability** (three-valued; only a sound refutation errors) |
+| `live-marker-quality.md` | draft (awaiting cross-review) | — | **claims nothing versioned**. Audits all four live markers (1 measured and failing, 3 never measured); narrows `irreversibility` to `last_of_role`; re-homes D48 (whose fix was leaving with `transition-primitives`' withdrawn live tier); closes the D51 permission bypass normatively. Proposes **L1–L6**, the standing admission rule for the live surface |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
 `onramp-guard`, then `open-answer-grading`. Shared-resource claims (migrations, pack
@@ -61,7 +61,7 @@ landing order, not lost data.
 | 0.16 | `archive/authoring-frictions.md` | implemented — additive/widening only: `deviationLocation` gains `{atStart}`, `simpleTrigger` gains `atStart`, new `variantOf` (three directional relations), `branchLengthTarget` max 20→40, guard gains `fireOnMate`/`rulesTier`/`window`/`overrides`, `rules_fact` enum gains `draw`, tablebase category enum widens to five determinate values. All committed content remains valid; no content digest moved |
 | 0.17 | `archive/tempo-vocabulary.md` | implemented — a timing window is a branch-local ledger: commitment opening, ordered closes, move-set readiness/tolerance, luxury spend, seven verdicts, authored `outpaced` control, and `tempo:` applied evidence. Additive plus removal of the unused checkpoint-local point-pair form; no committed content digest moved |
 | 0.18 | `archive/predicate-wave-3.md` | implemented — additive: `plan_consequence` success-condition kind, `king_zone`, `piece_distance`, `piece_count`, `pack.shapes` relation `present`/`prospective`. Ships `pawn_count` and `piece_reach_count scope:"every"` as deprecation WARNINGS (schema removal deferred to wave 4 because `registered_shapes` rows are immutable) |
-| 0.20 | `opening-evidence-path.md` | implementing — additive: `$defs/objectiveGrading.assessedBy` gains a third `oneOf` member `kind: "engine"`. Retires `VERIFY_ASSESSMENT_NOT_SYZYGY`; narrows `OBJECTIVE_GRADING_UNSUPPORTED` to legs |
+| 0.20 | `archive/opening-evidence-path.md` | implemented — additive: `$defs/objectiveGrading.assessedBy` gains a third `oneOf` member `kind: "engine"`. Retires `VERIFY_ASSESSMENT_NOT_SYZYGY`; narrows `OBJECTIVE_GRADING_UNSUPPORTED` to legs |
 | 0.21 | `deviation-classes.md` | claimed 2026-08-15 — additive: `mistake` (`plan\|timing\|tactical`) and `cost` on `$defs/deviation`, `moveUci` on `guard.overrides[]`. Ships `cost` author-declared and UNBACKED per the 2026-08-15 coordinator ruling |
 | 0.22 | `transition-primitives.md` | claimed 2026-08-15 — additive: an eighth `successCondition` arm `transition_feature`, a `transitionFeature` `ObjectivePredicate` member, six transition leaves and a `position` bridge node. Widens `RULES_EVIDENCE_FACTS` by six (verified migration-free as a *mechanism* — refs are bare strings, no schema enum). **0.19 is frozen shut**, not free |
 
@@ -216,6 +216,8 @@ before re-attempting this territory.
 | `archive/validator-integrity.md` | implemented | `docs/drill-pack-format.md`, `docs/trajectory-drill.md`, `docs/outcome-drill-grading.md` |
 | `archive/tempo-vocabulary.md` | implemented | `docs/drill-pack-format.md`, `docs/drill-client.md`, `docs/branch-runtime.md`, `docs/explanation-grounds.md`, `docs/outcome-drill-grading.md`, `docs/structural-reading.md` |
 | `archive/resistance-spectrum.md` | implemented | `docs/engine-workers.md`, `docs/outcome-drill-grading.md`, `docs/branch-runtime.md`, `docs/drill-pack-format.md` |
+| `archive/predicate-wave-3.md` | implemented | `docs/structural-reading.md`, `docs/drill-pack-format.md`, `docs/shape-library.md`, `docs/explanation-grounds.md` |
+| `archive/opening-evidence-path.md` | implemented | `docs/engine-grounding.md`, `docs/content-sourcing.md`, `docs/tablebase-grounding.md`, `docs/drill-pack-format.md` |
 
 ## The archive sketches are quarry, not RFCs
 
