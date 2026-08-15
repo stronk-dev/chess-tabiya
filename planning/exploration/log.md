@@ -1943,3 +1943,52 @@ everything outside endgames needs.
 - E3 remains partially met only because no authored content has yet adopted the new
   object. The vocabulary/detector blocker itself is closed; automatic detection remains
   deliberately out of scope.
+
+## 2026-08-15 (night) — R9: the oracle discriminates but does not reach
+
+**Landed.** `design/research/human-outcome-coverage-depth.md`. The owner ruled
+this the next research question this afternoon; it is answered.
+
+**The half that is a yes, with force.** Human win/draw/loss separates positions
+Stockfish cannot. At band 1600, 124 positions the engine calls level (|eval|
+< 50 cp) span human scores 0.405–0.600, and **Pearson(cp, score) = −0.079** —
+the engine explains **under 1%** of the variance in how humans actually do.
+Move-level is sharper: among **2,814 move pairs Stockfish cannot separate**
+(|Δcp| < 30), **475 (16.9%) are separated by ≥5 pp significantly**, to a maximum
+of 22.3 pp. R4's closing hypothesis is confirmed: where the engine has no result,
+the human corpus does.
+
+**The half that is a no, and it is not fixable with more data.** Usable coverage
+— n ≥ 400, a threshold stated *before* measuring — ends at **ply ~20** at
+position level and thins from **ply 12** at move level: mean moves clearing 400
+games falls from 10.1 at plies 4–7 to **0.17** at plies 20–23, against ~35 legal
+moves. Zero games by ply 27. And every population lever was measured rather than
+assumed: whole-database window ×3.51, all six speeds ×1.35, three merged buckets
+×3.10, **all three at once ×23.4** — a 23× larger population moves choice-level
+coverage from ply 19–21 to **ply 23**. No population setting reaches the
+middlegame.
+
+**The structural consequence, now a ledgered defect.** Engines are silent where
+positions are undecided (R4); humans are silent past ply ~20 (R9). **Measured
+difficulty covers endgames and the first ten moves, and the middlegame between
+them has no oracle of either kind.** Every design that assumed a measured
+difficulty mid-game — bosses, `practical_resistance` outside endgames, adaptive
+scaling — must use **authored** difficulty there and say so. The campaign
+cluster's difficulty-availability axis now has a third value, and it is the
+common case rather than the exception.
+
+**Instrument discipline, applied unprompted.** The agent found 13 of 17
+non-endgame packs are *censored* — their spines end before the data does — so a
+naive per-pack median would have reported a property of our corpus rather than of
+the explorer. It removed the corpus entirely with a greedy most-popular walk and
+landed on the same boundary. It also caught and recorded its own off-by-one join
+that had reported 2/154 coverage instead of 133/154. This is the Scandinavian
+lesson — check the instrument, not just the reading — applied without being told.
+
+**Two findings that touch shipped code.** The explorer's floor of 100 games
+(`explorer.ts:91`) is *exactly* the 60/40 resolution line, while the measured
+signal is 2.6 pp mean (4.9 pp p90) and needs n ≥ 400 — defensible as shipped and
+for nothing finer. And the on-ramp gap is worse than recorded: band 1000 has
+**45–100× fewer games** at plies 12–19, and **all 26 puzzle-derived on-ramp roots
+return 0–5 games at every band** — those positions are largely ungroundable by
+corpus evidence, not merely mis-banded.
