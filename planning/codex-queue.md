@@ -83,6 +83,30 @@ Contains **D51, a shipped disclosure bypass** (the marker modal prints Maia rung
 mass content past a permission the same modal enforces five lines below). If you
 want one thing from this file before it clears review, it is that.
 
+
+## Coming — three drafts in flight, none owner-gated
+
+**`rfc/engine-request-contract.md`** — the four homeless engine defects, bundled
+because they are one shape: *a request whose contract with its instrument is
+unstated, so the instrument's state leaks into the answer.* D35 (`strong_engine`
+not reproducible — 83.8% of evaluations change from hash carry-over, 6 ms fix),
+**D58** (an Elo-less Maia request inherits the previous request's band while
+recording `eloApplied` absent — and `ucinewgame` would NOT fix it, it resets board
+and history only), **D59** (top-p samples a `bestmove` outside the recorded
+candidate list, 1/700), **D60** (`targetElo` is an unbounded integer). This is the
+home D57–D59 were waiting for.
+
+**`rfc/fixture-realism.md`** — the root cause of D56, which you have now fixed
+twice over: once in the code and once in the method, by pinning a **real** Maia
+vector summing to `1.00000000803311` instead of a typed decimal. The RFC
+generalises exactly that instinct, and covers the two siblings: pin tests encoding
+content facts (4th occurrence, now a two-writer coordination failure) and the
+refusal scanner reading a single emitter file (D54 — which scopes your own
+107-emitter sweep to what it can see).
+
+**`rfc/mobile-scope.md`** *(research first)* — Q3, answerable now that a client
+exists rather than as strategy.
+
 ---
 
 ## Standing work — take whenever the queue above is blocked
