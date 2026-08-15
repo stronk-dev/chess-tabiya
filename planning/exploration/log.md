@@ -2227,3 +2227,72 @@ resolved, and the RFC's own open questions say *"before `accepted`"*. Both were 
 errors — the first is the standing queue-vs-body failure, now caught three times, and the
 second was accepting a draft its own text forbids accepting. Acceptance withdrawn in the
 status line; four rulings go to the owner.
+
+## 2026-08-15 (very late) — Act II exists; four rulings land; the ledger reaches nobody
+
+**Ten middlegame packs** (`aee7c64`). Every middle act in the corpus was
+`carlsbad-minority-attack`; it is now one of eleven, and nine of the ten structure
+families in `design/04` §3 have a pack. Every number came from a live instrument run —
+Lichess explorer at 1400/1600/1800, rapid+classical, 2023-01..2025-12; chessops censuses;
+the shipped structural evaluator; one depth-22 engine walk — and all ten start-position
+counts reproduced exactly on re-query. **The tempo layer has its first real use** after
+being required by `04` §2d and used by 0 of 20 opening packs: four packs declare a window,
+each replayed through `tempo.ts`, and **six declare no window with a measured reason**
+rather than by omission. Census: `neverFiresInCorpus` 36 → 30, `inShapeDenominatorEmpty`
+40 → 19, `unsatisfiable` still 0.
+
+**The wave turned `make verify` red by being correct**, and refused to fix it — the right
+call. `expression-census.test.ts` pinned `black-anchor-the-knight` at 0 firings; the wave
+gave it a home and it now fires 7. **D47's class, re-found one instrument over.** Claude
+rewrote the test to select subjects **by observation** rather than by name, asserting each
+population non-empty so an empty corpus cannot vacuously pass. A content wave editing a
+server test until its own output passes is the failure that pin exists to catch, and the
+wave not doing it is the protocol working.
+
+**Four owner rulings** (`4e19b95`):
+
+1. **Explorer W/D/B splits are ADMISSIBLE as `corpus_observed`.** All four content authors
+   had independently refused them under law 8 — which is *why* five packs carry
+   `cost: unmeasurable` and four tempo budgets are authored numbers. Four independent
+   refusals of admissible evidence is a boundary that was not written clearly enough, not
+   four mistakes. It is written now: **the split may be stated; it may never be converted
+   into a move verdict or a quality claim.**
+2. **`tablebase_dtz_regression` lands at `byAtLeast` 3, disposition `unmeasured`**, with
+   the experiment binding. 3 is *derived* — the first value provably off the tablebase's
+   optimality boundary — not chosen.
+3. **A node remembers the branch you SUBMIT.** `design/06` §5's premise was half wrong:
+   *no resource refusal exists* is true, *no failure state exists* is false. The failure
+   state ships one scope down — `ObjectiveState` has six values, three absorbing,
+   `degraded` one-way by validator rule and sealed across node boundaries, and the
+   intermediate/boss split is **a lint rule** (17 of 37 packs cannot end a run). The
+   campaign needed a **scope, not a mechanism**, and one verb closes both holes.
+4. **The engine-condition surface gets both homes** — a four-clause rung rule in `05`, a
+   map row in `03` that defines nothing — with the rule **mirrored into `gates.md`** so
+   the gate surface stays single. Claude flagged the split-gate risk in posing it; the
+   owner took it knowingly, and the mirror is the price.
+
+`engine-leverage` is accepted (Q1/Q9 ruled, Q3/Q7 closed on their stated fallbacks) and is
+codex's. `format-surface` passed round 2 — the author **declined** the cross-review's §4.3
+narrowing while accepting every one of its measurements, and inverted a fixture pair so the
+decline is testable.
+
+**The finding that outranks the rest, from chasing an owner question about the LLM.** The
+evidence ledger and the run-time packet are **two disconnected worlds**. `content/` holds
+**764 machine-validated records** — 391 `engine_eval`, 341 `tablebase_result`, 32
+`position_legality` — every one provenance-carrying and digest-bound, and **none of it
+reaches a learner**. `evidencePacket` never opens a pack's ledger; `classifyPhase(fen)` and
+`structuralReading(fen)` take a FEN and nothing else, so the classifier and the structural
+detector **cannot see the engine even in principle**. A run re-derives what the corpus
+already proved. Ledgered **D118**, and it reframes the assistance work: the surfaces are
+already wired (`VoiceScope` has six values, including the markers), so the gap is evidence,
+not plumbing.
+
+**Two claude corrections recorded as rows rather than edits** (D119, D120): the packet
+carries **rung 3** as well (human-divergence markers from recorded Maia policy masses), and
+the LLM reaches **six** surfaces, not one. Both errors *understated* what ships and would
+have sent an implementer to rebuild an existing path.
+
+**Process, twice in one night.** Ledger ids collided **twice** (D116, then D113–D119)
+because `design/BACKLOG.md` has no reservation mechanism — ids are assigned by reading the
+file, so a row committed between an agent's read and its write collides silently. Renumbered
+to D117 and D121–D127. This is a real cost of running 3–4 agents at a time and will recur.

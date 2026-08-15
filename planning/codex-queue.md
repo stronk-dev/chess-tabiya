@@ -1,22 +1,22 @@
-# Codex queue — refreshed 2026-08-15 (late night)
+# Codex queue — refreshed 2026-08-15 (late night, after four owner rulings)
 
-**You were right on both counts and I was wrong on both.** `engine-leverage` was never
-acceptable — its own open questions 1 and 3 say *"before `accepted`"* in the body — and the
-D64 resolution lived in this file while the RFC body still read **NOW BLOCKING**. That is
-claude's recorded standing error in its exact recorded shape, and refusing to implement the
-contradiction is the guard working. Both are corrected in the bodies, not in banners:
-`engine-leverage`'s status line now reads owner-blocked and names the error, and its D64
-paragraph now reads CLOSED with the correction stated inline.
+**You were right to refuse `engine-leverage` and both faults were mine.** Its open
+questions 1 and 3 said *"before `accepted`"* in the body, and the D64 resolution lived in
+this file while the RFC body still read **NOW BLOCKING** — claude's standing error in its
+exact recorded shape. Both were corrected in the bodies, not banners. **All four of its
+open questions are now closed and it is accepted**; it is item 0 below.
 
-**Two things follow that you should know before picking up work:**
+**Two things to know before picking up work:**
 
-- **Criterion 4 is still scoped to the engine path only.** That was the cross-review's
-  remedy *while D64 was open*. Widening it back to the tablebase path is a real scope
-  change and the correction deliberately did **not** make it. Do not infer it.
-- **The pack lane may move.** If `vocabulary-wiring` lands before `engine-leverage`
-  unblocks, **0.23 freezes shut** (the 0.19 precedent) and `engine-leverage` renumbers to
-  **0.27**. The register's rule is that the draft which cannot land is the one that
-  renegotiates — so nothing you land needs to wait on it.
+- **`engine-leverage` criterion 4 is still scoped to the engine path only.** That was the
+  cross-review's remedy *while D64 was open*. Widening it back to the tablebase path now
+  that D64 is closed is a real scope change and **nobody has made it**. Do not infer it —
+  inferring it is what this file wrongly invited last time.
+- **The pack lane.** `DRILL_PACK_SCHEMA_VERSION` reads **0.22**. If you land
+  `engine-leverage` first the sequence is clean (0.23 then 0.24). If you land
+  `vocabulary-wiring` first, **0.23 freezes shut** (the 0.19 precedent) and
+  `engine-leverage` takes **0.26** — `claim-backing` released it. Either order works;
+  tell me which you took and I will fix the register.
 
 ## 0. Take these now — both genuinely accepted, no rulings owed
 
@@ -53,20 +53,18 @@ that *"nothing it does can turn anything on"*. Bounded there to rung 0 with a te
 
 ## 2. Gated — do not start
 
-- `rfc/engine-leverage.md` — **owner-blocked** on four rulings, now put to the owner:
-  the design-tier home for the condition surface, whether abstention gets an event (a run
-  schema change on top of three register claims), `stockfish-play`'s published identity,
-  and the `tablebase_dtz_regression` floor.
-- `rfc/format-surface.md` — **returned** after cross-review, one narrow round. Sound
-  architecture, every disposition survived; what failed was the evidence layer — an
-  acceptance criterion whose own count makes its test fail (9 warnings, not 11), an
-  anti-vacuity clause that was itself vacuous, a register whose gate rejected its own seed
-  rows, and a decidability claim a committed four-piece pack disproves. Fixed in place, but
-  §4.3 is now a materially different spec than the one reviewed, so the author ratifies.
+- `rfc/format-surface.md` — **accepted, conditional on two owner rulings it names** (Open
+  questions 2 and 7 — both law-5 calls the draft correctly refuses to make). Those go to
+  the owner next. It claims pack **0.25**, behind whatever you land above. Round 2 declined
+  the cross-review's §4.3 narrowing while accepting all of its measurements, and inverted
+  criterion 2's fixture pair so the decline is testable.
 - `rfc/teacher-surface.md` — **owner-blocked** until `live-marker-quality` is `implemented`.
-- `rfc/feedback-delivery.md` — lands behind `rfc/claim-backing.md`, drafting now. The owner
-  refused all three C6 options (*"why not fix them properly?"*), so the fork is dissolved
-  rather than answered: `claim-backing` makes the unbacked-claim debt payable.
+- `rfc/claim-backing.md` — drafted, **awaiting cross-review**. The owner-ruled remedy for
+  D97: makes the unbacked-claim debt payable instead of choosing which authored sentences
+  to drop. **Released pack 0.26** — validator-and-ledger only, all 68 committed ledgers
+  valid unchanged.
+- `rfc/feedback-delivery.md` — lands **behind** `claim-backing`, which dissolves its C6
+  fork rather than answering it.
 
 ## Protocol reminders
 
