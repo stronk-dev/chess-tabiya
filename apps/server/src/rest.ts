@@ -14,6 +14,7 @@ import {
   comparisonNarrative,
   comparisonStrips,
   suggestTitle,
+  RUN_OPPONENT_MODES,
   type OpponentSelection,
   type SelectionCandidate,
   type SelectionEngineIdentity,
@@ -148,10 +149,20 @@ function parseSelectionCandidate(value: unknown, label: string): SelectionCandid
   ) {
     throw invalid(`${label}.mass must be between 0 and 1`);
   }
+  if (
+    candidate.concessionRatio !== undefined &&
+    (typeof candidate.concessionRatio !== "number" ||
+      !Number.isFinite(candidate.concessionRatio) ||
+      candidate.concessionRatio < 0 ||
+      candidate.concessionRatio > 1)
+  ) {
+    throw invalid(`${label}.concessionRatio must be between 0 and 1`);
+  }
   return {
     moveUci: requiredString(candidate.moveUci, `${label}.moveUci`),
     rank: candidate.rank,
     ...(candidate.mass === undefined ? {} : { mass: candidate.mass as number }),
+    ...(candidate.concessionRatio === undefined ? {} : { concessionRatio: candidate.concessionRatio as number }),
   };
 }
 
@@ -176,6 +187,12 @@ function parseSelectionEngine(value: unknown): SelectionEngineIdentity {
       engine.seedHonored,
       "selection.engine.seedHonored",
     ),
+    ...(engine.eloHonored === undefined
+      ? {}
+      : { eloHonored: requiredBoolean(engine.eloHonored, "selection.engine.eloHonored") }),
+    ...(engine.eloApplied === undefined
+      ? {}
+      : { eloApplied: requiredSafeInteger(engine.eloApplied, "selection.engine.eloApplied") }),
   };
 }
 
@@ -194,16 +211,10 @@ function parseOpponentSelection(value: unknown): OpponentSelection {
         selection.policyModeApplied,
         "selection.policyModeApplied",
       );
-      if (
-        mode !== "human_common" &&
-        mode !== "strong_engine" &&
-        mode !== "theory_strict" &&
-        mode !== "perfect_tablebase" &&
-        mode !== "unknown"
-      ) {
+      if (!([...RUN_OPPONENT_MODES, "enumerated", "unknown"] as readonly string[]).includes(mode)) {
         throw invalid("selection.policyModeApplied is unsupported");
       }
-      return mode;
+      return mode as OpponentSelection["policyModeApplied"];
     })(),
     ...(selection.candidates === undefined
       ? {}
@@ -509,6 +520,9 @@ export function errorResponse(error: unknown): Response {
                     || error.code === "GROUP_SEEDS_UNAVAILABLE"
                     || error.code === "TABLEBASE_OUT_OF_RANGE"
                     || error.code === "PERFECT_TABLEBASE_OUT_OF_RANGE"
+                    || error.code === "PRACTICAL_RESISTANCE_OUT_OF_RANGE"
+                    || error.code === "PRACTICAL_RESISTANCE_UNAVAILABLE"
+                    || error.code === "PRACTICAL_RESISTANCE_UNDECIDABLE"
                   ? 422
                 : 500;
   }

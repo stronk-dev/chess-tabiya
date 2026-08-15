@@ -108,11 +108,11 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.13", () => {
+describe("drill_run.schema.json v0.14", () => {
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.13",
+      $id: "urn:chess-tabiya:schema:drill-run:0.14",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });
@@ -418,5 +418,27 @@ describe("drill_run.schema.json v0.13", () => {
         selection: { ...distribution, policyModeApplied: "enumerated" },
       },
     }] }), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it("persists practical-resistance measurements and applied rating-band facts", () => {
+    const practicalPolicy = { mode: "practical_resistance", targetElo: 1800 };
+    const practicalStart = { ...event, data: { ...event.data, opponentPolicy: practicalPolicy } };
+    const selected = {
+      seq: 2,
+      type: "opponent.move_selected",
+      at,
+      data: {
+        nodeId: rootNode.id,
+        branchId: branch.id,
+        moveUci: "e2e4",
+        selection: {
+          moveUci: "e2e4",
+          policyModeApplied: "practical_resistance",
+          candidates: [{ moveUci: "e2e4", concessionRatio: 0.63, rank: 1 }],
+          engine: { id: "maia", name: "Maia", version: "3", seedHonored: false, eloHonored: true, eloApplied: 1800 },
+        },
+      },
+    };
+    expect(validate({ ...validRun, opponentPolicy: practicalPolicy, events: [practicalStart, selected] }), JSON.stringify(validate.errors)).toBe(true);
   });
 });

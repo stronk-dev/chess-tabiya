@@ -6,6 +6,7 @@ import { isNormal } from "chessops/types";
 import { parseUci } from "chessops/util";
 
 import {
+  humanConcessionMass,
   transposeKey,
   type OpponentSelection,
   type RunOpponentMode,
@@ -211,6 +212,17 @@ function currentPosition(request: SelectMoveRequest): Chess {
   return position;
 }
 
+function legalMoveCount(position: Chess): number {
+  let count = 0;
+  for (const [from, destinations] of position.allDests()) {
+    const promotions = position.board.getRole(from) === "pawn"
+      ? [...destinations].filter((to) => to < 8 || to >= 56).length
+      : 0;
+    count += destinations.size() + promotions * 3;
+  }
+  return count;
+}
+
 function positionCommand(request: SelectMoveRequest): string {
   return `position fen ${request.startFen}${
     request.historyUci.length === 0 ? "" : ` moves ${request.historyUci.join(" ")}`
@@ -249,7 +261,7 @@ function bestMove(lines: readonly string[]): string {
   return match[1]!;
 }
 
-function selectionIdentity(identity: EngineIdentity): SelectionEngineIdentity {
+function selectionIdentity(identity: EngineIdentity, eloApplied?: number): SelectionEngineIdentity {
   return Object.freeze({
     id: identity.id,
     name: identity.name,
@@ -259,6 +271,8 @@ function selectionIdentity(identity: EngineIdentity): SelectionEngineIdentity {
       ? {}
       : { containerDigest: identity.containerDigest }),
     seedHonored: identity.seedHonored,
+    eloHonored: identity.eloHonored === true,
+    ...(eloApplied === undefined ? {} : { eloApplied }),
   });
 }
 
@@ -266,13 +280,14 @@ function makeSelection(
   moveUci: string,
   candidates: readonly SelectionCandidate[],
   identity: EngineIdentity,
-  policyModeApplied: "human_common" | "strong_engine" | "theory_strict" | "perfect_tablebase",
+  policyModeApplied: RunOpponentMode,
+  eloApplied?: number,
 ): OpponentSelection {
   return Object.freeze({
     moveUci,
     policyModeApplied,
     ...(candidates.length === 0 ? {} : { candidates }),
-    engine: selectionIdentity(identity),
+    engine: selectionIdentity(identity, eloApplied),
   });
 }
 
@@ -397,11 +412,12 @@ export class OpponentSelector {
       ...(maia ? (["human_common", "theory_strict"] as const) : []),
       ...(strong ? (["strong_engine"] as const) : []),
       ...(this.#tablebase === undefined ? [] : (["perfect_tablebase"] as const)),
+      ...(maia && this.#tablebase !== undefined ? (["practical_resistance"] as const) : []),
     ]);
   }
 
   identityFor(mode: RunOpponentMode): SelectionEngineIdentity {
-    if (mode === "perfect_tablebase") return Object.freeze({id:"lichess-tablebase",name:"Syzygy (tablebase.lichess.org/standard)",version:"7man",seedHonored:true});
+    if (mode === "perfect_tablebase") return Object.freeze({id:"lichess-tablebase",name:"Syzygy (tablebase.lichess.org/standard)",version:"7man",seedHonored:true,eloHonored:false});
     return selectionIdentity(engineIdentity(
       this.#client,
       mode === "strong_engine" ? this.#strongEngineId : this.#maiaEngineId,
@@ -443,6 +459,8 @@ export class OpponentSelector {
         return this.#theoryStrict(request);
       case "perfect_tablebase":
         return this.#perfectTablebase(request);
+      case "practical_resistance":
+        return this.#practicalResistance(request);
       default:
         throw policyModeUnsupported(request.policy.mode);
     }
@@ -451,11 +469,15 @@ export class OpponentSelector {
   async #maia(
     request: SelectMoveRequest,
     multiPv?: number,
-  ): Promise<{ readonly lines: readonly string[]; readonly identity: EngineIdentity }> {
+  ): Promise<{ readonly lines: readonly string[]; readonly identity: EngineIdentity; readonly eloApplied?: number }> {
+    const identity = engineIdentity(this.#client, this.#maiaEngineId);
+    const eloApplied = request.policy.targetElo !== undefined && identity.eloHonored
+      ? request.policy.targetElo
+      : undefined;
     const commands = [
-      ...(request.policy.targetElo === undefined
+      ...(eloApplied === undefined
         ? []
-        : [`setoption name Elo value ${request.policy.targetElo}`]),
+        : [`setoption name Elo value ${eloApplied}`]),
       `setoption name Temperature value ${
         request.policy.temperature ?? DEFAULT_TEMPERATURE
       }`,
@@ -471,7 +493,8 @@ export class OpponentSelector {
     });
     return Object.freeze({
       lines,
-      identity: engineIdentity(this.#client, this.#maiaEngineId),
+      identity,
+      ...(eloApplied === undefined ? {} : { eloApplied }),
     });
   }
 
@@ -482,6 +505,7 @@ export class OpponentSelector {
       candidateLines(result.lines),
       result.identity,
       "human_common",
+      result.eloApplied,
     );
   }
 
@@ -534,7 +558,7 @@ export class OpponentSelector {
             ),
           )
         : matching;
-    return makeSelection(moveUci, candidates, result.identity, "theory_strict");
+    return makeSelection(moveUci, candidates, result.identity, "theory_strict", result.eloApplied);
   }
 
   async #perfectTablebase(request: SelectMoveRequest):Promise<OpponentSelection>{
@@ -552,5 +576,87 @@ export class OpponentSelector {
     const ordered=[...preserving].sort((left,right)=>winning?metric(left)-metric(right)||left.uci.localeCompare(right.uci):losing?metric(right)-metric(left)||left.uci.localeCompare(right.uci):left.uci.localeCompare(right.uci));
     const candidates=Object.freeze(ordered.map((move,index)=>Object.freeze({moveUci:move.uci,rank:index+1})));
     return Object.freeze({moveUci:ordered[0]!.uci,policyModeApplied:"perfect_tablebase",candidates,engine:this.identityFor("perfect_tablebase")});
+  }
+
+  async #practicalResistance(request: SelectMoveRequest): Promise<OpponentSelection> {
+    if (this.#tablebase === undefined) {
+      throw new ServerError("TABLEBASE_UNAVAILABLE", "Practical resistance requires a tablebase provider", { details: { retryAfterMs: 0 } });
+    }
+    const board = currentPosition(request);
+    const fen = makeFen(board.toSetup());
+    const root = await this.#tablebase.probe(fen);
+    if (root.category === "unknown") {
+      throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", "The root outcome class is unknown");
+    }
+    const preserving = root.moves
+      .filter((candidate) => {
+        const move = parseUci(candidate.uci);
+        return move !== undefined && board.isLegal(move) && invertTablebaseCategory(candidate.category) === root.category;
+      })
+      .sort((left, right) => left.uci.localeCompare(right.uci))
+      .slice(0, 4);
+    if (preserving.length === 0) {
+      throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", "No category-preserving reply is available");
+    }
+
+    const scored: {
+      readonly move: TablebaseMove;
+      readonly ratio: number | null;
+      readonly identity: EngineIdentity;
+      readonly eloApplied?: number;
+    }[] = [];
+    for (const candidate of preserving) {
+      const child = play(board, candidate.uci, `tablebase reply ${candidate.uci}`);
+      const childFen = makeFen(child.toSetup());
+      const childTablebase = await this.#tablebase.probe(childFen);
+      if (childTablebase.category === "unknown") {
+        throw new ServerError("PRACTICAL_RESISTANCE_UNAVAILABLE", `Outcome class after ${candidate.uci} is unknown`);
+      }
+      const childRequest: SelectMoveRequest = Object.freeze({
+        ...request,
+        historyUci: Object.freeze([...request.historyUci, candidate.uci]),
+      });
+      const maia = await this.#maia(childRequest, Math.max(8, legalMoveCount(child)));
+      const policy = candidateLines(maia.lines);
+      const conceding = new Set(
+        childTablebase.moves
+          .filter((reply) => invertTablebaseCategory(reply.category) !== childTablebase.category)
+          .map((reply) => reply.uci),
+      );
+      const mass = humanConcessionMass(policy, conceding);
+      const ratio = mass === null || mass.measuredMass <= 0
+        ? mass === null ? null : 0
+        : mass.concedingMass / mass.measuredMass;
+      scored.push(Object.freeze({
+        move: candidate,
+        ratio,
+        identity: maia.identity,
+        ...(maia.eloApplied === undefined ? {} : { eloApplied: maia.eloApplied }),
+      }));
+    }
+
+    const measured = scored.filter((candidate) => candidate.ratio !== null);
+    if (measured.length === scored.length && measured.every((candidate) => candidate.ratio === 0)) {
+      throw new ServerError("PRACTICAL_RESISTANCE_UNDECIDABLE", "No category-preserving reply leaves measured concession mass");
+    }
+    if (measured.length === 0) {
+      console.warn("DEGRADED_POLICY_MASS: Maia candidate omitted policy mass; practical resistance uses the lexicographically first preserving reply");
+    }
+    const ordered = [...(measured.length === 0 ? scored : measured)].sort((left, right) =>
+      (right.ratio ?? 0) - (left.ratio ?? 0) || left.move.uci.localeCompare(right.move.uci),
+    );
+    const selected = ordered[0]!;
+    const candidates = Object.freeze(scored.map((candidate, index): SelectionCandidate => Object.freeze({
+      moveUci: candidate.move.uci,
+      rank: index + 1,
+      ...(candidate.ratio === null ? {} : { concessionRatio: candidate.ratio }),
+    })));
+    return makeSelection(
+      selected.move.uci,
+      candidates,
+      selected.identity,
+      "practical_resistance",
+      selected.eloApplied,
+    );
   }
 }

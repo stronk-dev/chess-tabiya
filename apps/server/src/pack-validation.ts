@@ -588,6 +588,9 @@ function runtimeIssues(
   if (opponentMode === "perfect_tablebase" && countFenPieces(pack.start.fen) > 7) {
     issues.push(runtimeIssue("PERFECT_TABLEBASE_OUT_OF_RANGE", "/opponentPolicy/mode", "perfect_tablebase requires a root with at most seven pieces"));
   }
+  if (opponentMode === "practical_resistance" && countFenPieces(pack.start.fen) > 7) {
+    issues.push(runtimeIssue("PRACTICAL_RESISTANCE_OUT_OF_RANGE", "/opponentPolicy/mode", "practical_resistance requires a root with at most seven pieces"));
+  }
 
   const checkpoints = new Set(pack.checkpoints.map((checkpoint) => checkpoint.id));
   const legs = pack.legs;

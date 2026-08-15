@@ -210,6 +210,7 @@ export interface EngineCapability {
   readonly modelId?: string;
   readonly containerDigest?: string;
   readonly seedHonored: boolean;
+  readonly eloHonored?: boolean;
 }
 
 export type SurfaceId =
@@ -254,6 +255,7 @@ export interface Capabilities {
     | "strong_engine"
     | "theory_strict"
     | "perfect_tablebase"
+    | "practical_resistance"
   )[];
   readonly feedbackPolicies: readonly (
     | "delayed_checkpoint"

@@ -25,7 +25,7 @@ a pack may declare per window that it grades (default ungraded); **Just Play
 grades it as failure by default**. Both branches need the declared-vs-executable
 treatment; the Just Play default needs its own applied record, not an implicit one.
 
-## 2. `rfc/opening-evidence-path.md` — READY
+## 2. `rfc/opening-evidence-path.md` — BLOCKED ON REGISTER RECONCILIATION
 
 Pack **0.20**. Closes the opening half of the evidence hole (`validator-integrity`
 closed the trajectory half). `assessedBy` gains `kind: "engine"`.
@@ -41,7 +41,11 @@ Cross-review fixed a real regression: retiring `OBJECTIVE_GRADING_UNSUPPORTED`
 outright would have admitted an engine assessment on a trajectory **leg**, whose
 entry position is not statically bound. It is now *narrowed to legs*, not retired.
 
-## 3. `rfc/resistance-spectrum.md` — READY
+Codex re-review found two post-review stale premises on 2026-08-15: pack 0.20
+cannot land before the still-unlanded 0.18 owner, and the RFC's migration census
+names 20 opening packs while the tree contains 23. Reconcile both before starting.
+
+## 3. `rfc/archive/resistance-spectrum.md` — IMPLEMENTED
 
 Run **0.14**, migration **19**. Ships `practical_resistance`; proves `fallible`
 should not exist as a mode and fixes the unconditional `setoption name Elo`.

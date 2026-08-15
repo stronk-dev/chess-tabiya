@@ -44,6 +44,11 @@ export { voiceCheck, BANNED_JUDGEMENTS, PRESCRIPTIVE_VERBS, CHESS_LEXICON, type 
 export { matchKeyPoints, normalizeReasoningText } from "./reasoning.js";
 export { terminalOutcome } from "./outcome.js";
 export {
+  humanConcessionMass,
+  type HumanConcessionMass,
+  type PolicyMassCandidate,
+} from "./practical-difficulty.js";
+export {
   AUTHORABLE_TEMPO_VERDICTS,
   DECLARED_UNGRADEABLE_VERDICTS,
   TEMPO_GRADEABLE_VERDICTS,

@@ -38,6 +38,7 @@ const maiaIdentity: EngineIdentity = {
   modelId: "maia3-5m@test",
   containerDigest: `sha256:${"5".repeat(64)}`,
   seedHonored: false,
+  eloHonored: true,
 };
 const stockfishIdentity: EngineIdentity = {
   id: "stockfish-play",
@@ -45,6 +46,7 @@ const stockfishIdentity: EngineIdentity = {
   name: "Stockfish",
   version: "18",
   seedHonored: false,
+  eloHonored: false,
 };
 
 class FakeEngineClient implements SelectorEngineClient {
@@ -55,6 +57,7 @@ class FakeEngineClient implements SelectorEngineClient {
       engineId: string,
       request: EngineRequest,
     ) => readonly string[],
+    private readonly identities: Readonly<Record<string, EngineIdentity>> = {},
   ) {}
 
   async execute(
@@ -66,7 +69,7 @@ class FakeEngineClient implements SelectorEngineClient {
   }
 
   health(engineId: string): EngineHealth {
-    const identity = engineId === "maia-5m" ? maiaIdentity : stockfishIdentity;
+    const identity = this.identities[engineId] ?? (engineId === "maia-5m" ? maiaIdentity : stockfishIdentity);
     return { id: engineId, status: "ready", restartCount: 0, identity };
   }
 }
@@ -117,7 +120,112 @@ const transposingSpine: readonly SelectorSpineNode[] = [
   },
 ];
 
+const practicalFen = "8/8/8/8/8/2k5/4K3/7R b - - 0 1";
+const practicalB3 = "8/8/8/8/8/1k6/4K3/7R w - - 1 2";
+const practicalC2 = "8/8/8/8/8/8/2k1K3/7R w - - 1 2";
+
+function practicalTablebase(conceding = true): FixtureTablebaseSource {
+  return new FixtureTablebaseSource({
+    [practicalFen]: parseTablebasePosition({
+      category: "loss", dtz: -20,
+      moves: [
+        { uci: "c3b3", san: "Kb3", category: "win", dtz: 19, precise_dtz: 19 },
+        { uci: "c3c2", san: "Kc2", category: "win", dtz: 17, precise_dtz: 17 },
+      ],
+    }),
+    [practicalB3]: parseTablebasePosition({
+      category: "win", dtz: 19,
+      moves: [
+        { uci: "h1h3", san: "Rh3", category: conceding ? "draw" : "loss", dtz: 0, precise_dtz: 0 },
+        { uci: "e2f2", san: "Kf2", category: "loss", dtz: -18, precise_dtz: -18 },
+      ],
+    }),
+    [practicalC2]: parseTablebasePosition({
+      category: "win", dtz: 17,
+      moves: [
+        { uci: "h1h2", san: "Rh2", category: "loss", dtz: -16, precise_dtz: -16 },
+        { uci: "e2f2", san: "Kf2", category: conceding ? "draw" : "loss", dtz: 0, precise_dtz: 0 },
+      ],
+    }),
+  });
+}
+
 describe("pure opponent selector", () => {
+  it("chooses the category-preserving reply with greatest measured concession mass", async () => {
+    const client = new FakeEngineClient((_engineId, engineRequest) => {
+      const position = engineRequest.commands.find((command) => command.startsWith("position fen ")) ?? "";
+      return position.endsWith("moves c3b3")
+        ? maiaLines("e2f2", [{ move: "h1h3", mass: 0.1 }, { move: "e2f2", mass: 0.9 }])
+        : maiaLines("e2f2", [{ move: "h1h2", mass: 0.1 }, { move: "e2f2", mass: 0.9 }]);
+    });
+    const selector = new OpponentSelector(client, { tablebaseSource: practicalTablebase() });
+
+    const requestValue = {
+      ...request("practical_resistance"),
+      startFen: practicalFen,
+      historyUci: [],
+      policy: { mode: "practical_resistance", policyConfigDigest: digest, targetElo: 1800 },
+    };
+    await expect(selector.select(requestValue)).resolves.toMatchObject({
+      moveUci: "c3c2",
+      policyModeApplied: "practical_resistance",
+      candidates: [
+        { moveUci: "c3b3", rank: 1, concessionRatio: 0.1 },
+        { moveUci: "c3c2", rank: 2, concessionRatio: 0.9 },
+      ],
+      engine: { eloHonored: true, eloApplied: 1800 },
+    });
+    await expect(selector.select({
+      ...requestValue,
+      policy: { mode: "perfect_tablebase", policyConfigDigest: `sha256:${"6".repeat(64)}` },
+    })).resolves.toMatchObject({ moveUci: "c3b3", policyModeApplied: "perfect_tablebase" });
+    expect(selector.availableModes()).toContain("practical_resistance");
+  });
+
+  it("refuses vacuous practical resistance instead of playing alphabetically", async () => {
+    const client = new FakeEngineClient((_engineId, engineRequest) => {
+      const position = engineRequest.commands.find((command) => command.startsWith("position fen ")) ?? "";
+      return position.endsWith("moves c3b3")
+        ? maiaLines("h1h3", [{ move: "h1h3", mass: 0.7 }, { move: "e2f2", mass: 0.3 }])
+        : maiaLines("h1h2", [{ move: "h1h2", mass: 0.9 }, { move: "e2f2", mass: 0.1 }]);
+    });
+    const selector = new OpponentSelector(client, { tablebaseSource: practicalTablebase(false) });
+    await expect(selector.select({
+      ...request("practical_resistance"), startFen: practicalFen, historyUci: [],
+    })).rejects.toMatchObject({ code: "PRACTICAL_RESISTANCE_UNDECIDABLE" });
+  });
+
+  it("uses the deterministic UCI tiebreak when every Maia reading abstains", async () => {
+    const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const selector = new OpponentSelector(new FakeEngineClient(() => [
+        "info depth 1 multipv 1 score cp 0 pv e2f2",
+        "bestmove e2f2",
+      ]), { tablebaseSource: practicalTablebase() });
+      await expect(selector.select({
+        ...request("practical_resistance"), startFen: practicalFen, historyUci: [],
+      })).resolves.toMatchObject({ moveUci: "c3b3", candidates: [
+        { moveUci: "c3b3", rank: 1 },
+        { moveUci: "c3c2", rank: 2 },
+      ] });
+      expect(warning).toHaveBeenCalledWith(expect.stringContaining("DEGRADED_POLICY_MASS"));
+    } finally {
+      warning.mockRestore();
+    }
+  });
+
+  it("refuses when no legal reply preserves the tablebase category", async () => {
+    const noPreserving = new FixtureTablebaseSource({
+      [practicalFen]: parseTablebasePosition({
+        category: "loss", dtz: -20,
+        moves: [{ uci: "c3b3", san: "Kb3", category: "draw", dtz: 0, precise_dtz: 0 }],
+      }),
+    });
+    const selector = new OpponentSelector(new FakeEngineClient(() => []), { tablebaseSource: noPreserving });
+    await expect(selector.select({
+      ...request("practical_resistance"), startFen: practicalFen, historyUci: [],
+    })).rejects.toMatchObject({ code: "PRACTICAL_RESISTANCE_UNAVAILABLE" });
+  });
   it("inverts result-position categories and selects deterministic DTZ-perfect play", async () => {
     const fen = "4k3/6KP/8/8/8/8/8/8 w - - 0 1";
     const payload = parseTablebasePosition({
@@ -223,6 +331,22 @@ describe("pure opponent selector", () => {
       `position fen ${INITIAL_FEN} moves e2e4`,
       "go",
     ]);
+  });
+
+  it("does not send or record a requested Elo band when the engine does not advertise it", async () => {
+    const unbanded = { ...maiaIdentity, eloHonored: false };
+    const client = new FakeEngineClient(
+      () => maiaLines("e7e5", [{ move: "e7e5", mass: 1 }]),
+      { "maia-5m": unbanded },
+    );
+    const selector = new OpponentSelector(client);
+    const selection = await selector.select({
+      ...request("human_common"),
+      policy: { mode: "human_common", policyConfigDigest: digest, targetElo: 1800 },
+    });
+    expect(client.calls[0]?.request.commands).not.toContain("setoption name Elo value 1800");
+    expect(selection.engine).toMatchObject({ eloHonored: false });
+    expect(selection.engine.eloApplied).toBeUndefined();
   });
 
   it("uses movetime-limited Stockfish for strong_engine", async () => {
@@ -589,6 +713,19 @@ describe("selector/writer REST seam", () => {
     expect(readBackReplay(stored.events).opponentMoves.at(-1)).toMatchObject({
       moveUci: "e7e5",
       policyModeApplied: "human_common",
+    });
+
+    expect((await httpRequest(handler, "POST", "/runs/seam-run/moves", { uci: "g1f3", at })).status).toBe(200);
+    const enumerated = {
+      ...selection,
+      moveUci: "b8c6",
+      policyModeApplied: "enumerated" as const,
+      candidates: [{ moveUci: "b8c6", rank: 1, concessionRatio: 0.25 }],
+    };
+    expect((await httpRequest(handler, "POST", "/runs/seam-run/moves", { selection: enumerated, at })).status).toBe(200);
+    expect(readBackReplay(storage.read("seam-run")!.run.events).opponentMoves.at(-1)).toMatchObject({
+      moveUci: "b8c6",
+      policyModeApplied: "enumerated",
     });
   });
 });

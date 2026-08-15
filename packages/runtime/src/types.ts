@@ -40,6 +40,7 @@ export const RUN_OPPONENT_MODES = Object.freeze([
   "strong_engine",
   "theory_strict",
   "perfect_tablebase",
+  "practical_resistance",
 ] as const);
 export type RunOpponentMode = (typeof RUN_OPPONENT_MODES)[number];
 export type PolicyModeApplied = RunOpponentMode | "enumerated" | "unknown";
@@ -64,6 +65,7 @@ export interface PositionOpponentPolicy extends RunOpponentPolicy {
 export interface SelectionCandidate {
   readonly moveUci: string;
   readonly mass?: number;
+  readonly concessionRatio?: number;
   readonly rank: number;
 }
 
@@ -74,6 +76,8 @@ export interface SelectionEngineIdentity {
   readonly modelId?: string;
   readonly containerDigest?: string;
   readonly seedHonored: boolean;
+  readonly eloHonored?: boolean;
+  readonly eloApplied?: number;
 }
 
 export interface OpponentSelection {

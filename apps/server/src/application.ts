@@ -138,6 +138,7 @@ class MockEngineClient implements SelectorEngineClient {
     name: "Deterministic mock opponent",
     version: "1",
     seedHonored: true,
+    eloHonored: false,
   });
 
   start(): Promise<EngineIdentity> {
@@ -214,6 +215,7 @@ function maiaNetworkSpec(host: string, port: number): EngineSpec {
     name: "Maia3",
     version: MAIA3_SOURCE_COMMIT,
     modelId: MAIA3_MODEL_ID,
+    bandOption: "Elo",
     handshakeTimeoutMs: 60_000,
   });
 }

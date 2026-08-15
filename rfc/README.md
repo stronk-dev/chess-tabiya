@@ -8,11 +8,9 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `predicate-wave-3.md` | draft — reviewed, **owner items closed** | — | pack **0.18** + shape-entry **0.2→0.3** (duplicated `$defs`). `piece_distance` absorbed by owner ruling 2026-08-15 |
-| `resistance-spectrum.md` | draft — **cross-reviewed, READY** | — | run **0.14**, migration **19**. `practical_resistance`; `fallible` proved not to be a mode |
 | `opening-evidence-path.md` | draft — **cross-reviewed, READY** | — | pack **0.20**. `assessedBy` gains `kind: "engine"`. Closes the opening half of the evidence hole |
 | `deviation-classes.md` | draft — reviewed, **1 owner question open** | — | pack **0.21**. Adds `mistake` + `cost`; does NOT split the `class` enum |
 | `branch-set-scale.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — pack stays 0.16, run 0.13, no migration, no new event, no new `BranchComparison` field. One writer-free read route + a versioned browser preference. Implements the 2026-08-15 branch ruling: collapse decided branches, bound the eval work, manual fold |
-| `resistance-spectrum.md` | draft (awaiting cross-review) | — | claims **run schema 0.14** and **migration 19** (rebased by claude from 0.15/20 after the 0.14 holder was cancelled). No pack-schema claim: `practical_resistance` is already in the enum, so this is a partition move. Ownership pins: `practical-difficulty.ts` (new), the `eloHonored` seam |
 | `predicate-wave-3.md` | draft (awaiting cross-review) | — | claims **pack schema 0.18** (additive) **and shape-entry schema 0.2 → 0.3** — the shape schema carries a DUPLICATED `$defs/structuralFeature` (`shape_entry.schema.json:47-75`), so new leaves must land in both copies or shape triggers silently cannot use them. No migration, no run-schema change |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
@@ -125,7 +123,7 @@ writing it into a draft.
 | 16 | 15→16 | `archive/onramp-guard.md` | implemented — stamp-only: run schema `"0.10"`→`"0.11"` (`RunFeedbackPolicy` gains `immediate_guard`; no new event type, no data rewrite). Rebased from an initial 15 claim behind `repertoire-gap-finding`'s wave claim #1 |
 | 17 | 16→17 | `archive/open-answer-grading.md` | implemented — **stamp-only, no table** (transcripts are run events; run deletion is the retention story); run schema 0.11→**0.12** (`reasoning.recorded` event). Reconciled behind onramp-guard per the pinned wave order |
 | 18 | 17→18 | `archive/grounding-pair.md` | implemented — stamp-only: run schema 0.12→**0.13** (`RunOpponentMode`/`PolicyModeApplied` gain `perfect_tablebase`; no new event type, no data rewrite) |
-| 19 | 18→19 | `resistance-spectrum.md` | claimed 2026-08-15 — stamp-only: run schema 0.13→**0.14** (`practical_resistance` applied-record widenings, `eloHonored`/`eloApplied`). No data rewrite; historical group-journal rows compare equal |
+| 19 | 18→19 | `archive/resistance-spectrum.md` | implemented — stamp-only: run schema 0.13→**0.14** (`practical_resistance` applied-record widenings, `eloHonored`/`eloApplied`). No data rewrite; historical group-journal rows compare equal |
 
 A migration's *number* is the shared resource, but its *body* is shared too: an
 already-applied migration still runs on databases that never reached it, so a
@@ -216,6 +214,7 @@ before re-attempting this territory.
 | `archive/authoring-frictions.md` | implemented | `docs/drill-pack-format.md`, `docs/tablebase-grounding.md`, `docs/content-sourcing.md`, `docs/outcome-drill-grading.md`, `docs/branch-runtime.md`, `docs/development.md` |
 | `archive/validator-integrity.md` | implemented | `docs/drill-pack-format.md`, `docs/trajectory-drill.md`, `docs/outcome-drill-grading.md` |
 | `archive/tempo-vocabulary.md` | implemented | `docs/drill-pack-format.md`, `docs/drill-client.md`, `docs/branch-runtime.md`, `docs/explanation-grounds.md`, `docs/outcome-drill-grading.md`, `docs/structural-reading.md` |
+| `archive/resistance-spectrum.md` | implemented | `docs/engine-workers.md`, `docs/outcome-drill-grading.md`, `docs/branch-runtime.md`, `docs/drill-pack-format.md` |
 
 ## The archive sketches are quarry, not RFCs
 

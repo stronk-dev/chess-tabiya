@@ -48,6 +48,11 @@ The seven runtime verdicts are `unopened`, `open`, `in_time`, `over_budget`, `to
 contexts publish failure as their default, though automatic window detection is not part
 of this format.
 
+The already-declared `practical_resistance` opponent policy is executable
+without changing pack bytes or the pack-schema version. Its two-provider
+capability gate, named refusals, and persisted measurement live in the run and
+engine contracts; see `docs/engine-workers.md`.
+
 `schemas/drill_pack.example.json` is the living Najdorf schema fixture. The
 fixture and schema under `archive/brief-v2/` remain frozen v0.1 inputs and are
 tested only against each other. The v0.1 fixture intentionally fails v0.17 because

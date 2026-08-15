@@ -115,6 +115,13 @@ selections migrate to `unknown`; only those plies retain the byte-identical
 disclaimer that the run cannot prove which policy was applied. It also states
 that the record is not proof of perfect play.
 
+Run schema v0.14 adds the measured `practical_resistance` mode. Its selections
+persist the concession ratio for every measured category-preserving candidate.
+For Maia-backed modes, the resistance sheet also distinguishes a requested
+target Elo from an `eloApplied` value recorded by an engine that advertised the
+corresponding UCI option. Absence is rendered as unconfirmed calibration, not
+inferred from the engine name.
+
 ## Learner-facing result
 
 The drill and checkpoint/terminal sheets render:
@@ -148,6 +155,9 @@ retry. Every applied transition carries its `tempo:` evidence reference.
 - `perfect_tablebase` is selectable only where the capability registry publishes a
   configured tablebase provider. Provider loss is a named refusal, never an engine
   fallback presented as exact resistance.
+- `practical_resistance` requires both Maia and tablebase capabilities and a root
+  in tablebase range. It refuses rather than substituting when no measured
+  category-preserving reply has positive concession mass.
 - Stockfish scores are recorded evidence, not grading authority.
 - Historical plies pre-dating run schema v0.7 cannot identify the applied policy.
 - An authored root claim above seven pieces is reviewable content, not a

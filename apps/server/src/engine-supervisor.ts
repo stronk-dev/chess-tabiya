@@ -20,6 +20,7 @@ export interface EngineIdentity {
   readonly modelId?: string;
   readonly containerDigest?: string;
   readonly seedHonored: boolean;
+  readonly eloHonored?: boolean;
 }
 
 export interface RestartBackoff {
@@ -39,6 +40,7 @@ export interface EngineSpec {
   readonly modelId?: string;
   readonly containerDigest?: string;
   readonly seedOption?: string;
+  readonly bandOption?: string;
   readonly transcriptCapacity?: number;
   readonly handshakeTimeoutMs?: number;
   readonly restartBackoff?: RestartBackoff;
@@ -135,6 +137,8 @@ function parseIdentity(
       : { containerDigest: spec.containerDigest }),
     seedHonored:
       spec.seedOption === undefined ? false : optionNames.has(spec.seedOption),
+    eloHonored:
+      spec.bandOption === undefined ? false : optionNames.has(spec.bandOption),
   });
   return Object.freeze({
     identity,

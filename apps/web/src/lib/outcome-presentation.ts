@@ -92,6 +92,12 @@ export function resistanceSentences(run: DrillRun, nodeId: string): readonly str
     }
     lines.push("This path faced more than one engine.");
   }
+  if (requested.targetElo !== undefined) {
+    const applied = resistance.engines.some((entry) => entry.engine.eloApplied === requested.targetElo);
+    lines.push(applied
+      ? `The engine advertised its rating-band option and recorded target Elo ${requested.targetElo} as applied.`
+      : `Target Elo ${requested.targetElo} was requested but is not recorded as applied.`);
+  }
   if (resistance.unknownPlyCount > 0) {
     lines.push("The run records which engine played, not which policy it applied, so this names the engine, not proof that the requested policy produced these moves.");
   }

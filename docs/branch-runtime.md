@@ -342,6 +342,12 @@ frozen literals. It adds no invented fields: historical runs contain neither a
 group event nor an enumerated selection. The stamp is still required because
 reads and listings admit only the current run-schema version.
 
+Migration 19 stamps v0.13 snapshots and indexed rows to run schema v0.14 using
+the frozen literals `0.13` and `0.14`. It rewrites no event or selection data:
+the new practical-resistance mode, per-candidate concession ratio, and
+Elo-capability facts are additive. Historical group journals therefore replay
+and compare exactly as before the stamp.
+
 ## Derived Line Drill state
 
 `spinePositionIndex` resolves authored positions by transpose key, keeping the

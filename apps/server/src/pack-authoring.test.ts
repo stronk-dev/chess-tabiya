@@ -89,6 +89,20 @@ describe("pack authoring validation", () => {
     }));
   });
 
+  it("admits practical resistance only inside the classifier boundary", () => {
+    const admitted = structuredClone(fixture) as DrillPackDefinition;
+    (admitted.start as { fen: string }).fen = "8/8/8/8/8/2k5/4K3/7R b - - 0 1";
+    (admitted.opponentPolicy as { mode: string }).mode = "practical_resistance";
+    expect(validatePackDocument(admitted).issues.some((issue) => issue.code === "UNSUPPORTED_OPPONENT_POLICY")).toBe(false);
+
+    const refused = structuredClone(fixture) as DrillPackDefinition;
+    (refused.opponentPolicy as { mode: string }).mode = "practical_resistance";
+    expect(validatePackDocument(refused).issues).toContainEqual(expect.objectContaining({
+      code: "PRACTICAL_RESISTANCE_OUT_OF_RANGE",
+      path: "/opponentPolicy/mode",
+    }));
+  });
+
   it("reports living-schema failures with JSON pointers", () => {
     const { title: _title, ...missingTitle } = structuredClone(
       fixture as unknown as Record<string, unknown>,

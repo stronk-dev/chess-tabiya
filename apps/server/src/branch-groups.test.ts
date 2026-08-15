@@ -24,7 +24,7 @@ const fixture = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.exa
 
 const maia: EngineIdentity = {
   id: "maia-5m", kind: "opponent", name: "Maia3", version: "test",
-  modelId: "maia3-test", seedHonored: false,
+  modelId: "maia3-test", seedHonored: false, eloHonored: true,
 };
 const stockfish: EngineIdentity = {
   id: "stockfish-play", kind: "opponent", name: "Stockfish", version: "18",
@@ -87,7 +87,7 @@ function body(id: string, side: "white" | "black" = "white") {
       kind: "position" as const,
       start: { fen: INITIAL_FEN, side },
       feedbackPolicy: "attempt_end" as const,
-      opponentPolicy: { mode: "human_common" as const },
+      opponentPolicy: { mode: "human_common" as const, targetElo: 1600 },
     },
     policyConfig: { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } },
     seed: 41,
@@ -219,6 +219,7 @@ describe("branch-group service and REST contract", () => {
     const reused = await request(environment.handler, "POST", "/runs/group-journal/group-reply", { groupId: first.group.groupId });
     expect(reused.status).toBe(200);
     expect(await reused.json()).toEqual({ selection: recordedBody.selection, reusedFromNodeId: expect.any(String) });
+    expect(recordedBody.selection.engine).toMatchObject({ eloHonored: true, eloApplied: 1600 });
     expect(environment.engines.calls.filter((call) => call.engineId === "maia-5m")).toHaveLength(3);
     expect(memberA).toBeDefined();
   });

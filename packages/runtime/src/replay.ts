@@ -117,6 +117,8 @@ export function resistanceOnPath(run: DrillRun, nodeId: string): PathResistance 
       identity.modelId ?? null,
       identity.containerDigest ?? null,
       identity.seedHonored,
+      identity.eloHonored ?? false,
+      identity.eloApplied ?? null,
     ]);
     const previous = counts.get(key);
     counts.set(key, {

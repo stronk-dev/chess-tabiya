@@ -20,10 +20,6 @@ export const SUPPORTED_POLICY_MODES: readonly OpponentPolicyMode[] = RUN_OPPONEN
 
 export const DECLARED_UNIMPLEMENTED_POLICY_MODES = Object.freeze([
   { mode: "plan_defense", reason: "plan_defense is not selectable in v1; plan-defense selection is not implemented" },
-  {
-    mode: "practical_resistance",
-    reason: "practical_resistance is not selectable in v1; practical-resistance selection is not implemented",
-  },
   { mode: "human_external", reason: "human_external is not selectable in v1; external-human selection is not implemented" },
 ] as const);
 
@@ -196,7 +192,12 @@ export class EngineCapabilities implements CapabilitiesProvider {
     const providerState = providers(this.#engineMode, engines, this.#llmAvailable, this.#corpus, this.#tts, this.#tablebase);
     return Object.freeze({
       engines,
-      policyModes: Object.freeze(SUPPORTED_POLICY_MODES.filter((mode)=>mode!=="perfect_tablebase"||providerState.tablebase!=="none")),
+      policyModes: Object.freeze(SUPPORTED_POLICY_MODES.filter((mode) =>
+        mode === "perfect_tablebase"
+          ? providerState.tablebase !== "none"
+          : mode === "practical_resistance"
+            ? providerState.tablebase !== "none" && providerState.opponent !== "none"
+            : true)),
       feedbackPolicies: FEEDBACK_POLICIES,
       tempoVerdicts: TEMPO_VERDICTS,
       tempoGradeable: TEMPO_GRADEABLE_VERDICTS,

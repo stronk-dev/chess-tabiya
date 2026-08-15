@@ -103,6 +103,41 @@ describe("outcome presentation honesty", () => {
     expect(text).not.toContain("Applied policy:");
   });
 
+  it("distinguishes a requested Elo band from one the recorded engine applied", () => {
+    let honored = commitMove(run(), "e2e4", { actor: "user", at }).run;
+    honored = appendOpponentPly(honored, {
+      moveUci: "e7e5",
+      policyModeApplied: "human_common",
+      engine: {
+        id: "maia",
+        name: "Maia",
+        version: "1",
+        seedHonored: false,
+        eloHonored: true,
+        eloApplied: 1900,
+      },
+    }, { at }).run;
+    expect(resistanceSentences(honored, honored.activeCursor.nodeId)).toContain(
+      "The engine advertised its rating-band option and recorded target Elo 1900 as applied.",
+    );
+
+    let unhonored = commitMove(run(), "e2e4", { actor: "user", at }).run;
+    unhonored = appendOpponentPly(unhonored, {
+      moveUci: "e7e5",
+      policyModeApplied: "human_common",
+      engine: {
+        id: "fixture",
+        name: "Fixture",
+        version: "1",
+        seedHonored: false,
+        eloHonored: false,
+      },
+    }, { at }).run;
+    expect(resistanceSentences(unhonored, unhonored.activeCursor.nodeId)).toContain(
+      "Target Elo 1900 was requested but is not recorded as applied.",
+    );
+  });
+
   it("never turns non-terminal grades into chess results", () => {
     for (const state of ["preserved", "degraded"] as const) {
       const sentence = checkpointResolutionSentence("Authored horizon", state);

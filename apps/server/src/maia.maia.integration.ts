@@ -105,4 +105,35 @@ describe("Maia production sidecar integration", () => {
       })}\n`,
     );
   });
+
+  it("reports policy-vector stability across twenty identical requests", async () => {
+    const supervisor = new EngineSupervisor([
+      maiaDockerSpec({
+        image: process.env.MAIA_IMAGE ?? DEFAULT_MAIA_IMAGE,
+        ...(process.env.MAIA_IMAGE_DIGEST === undefined
+          ? {}
+          : { containerDigest: process.env.MAIA_IMAGE_DIGEST }),
+      }),
+    ]);
+    supervisors.push(supervisor);
+    await supervisor.start("maia-5m");
+
+    const vectors: string[][] = [];
+    for (let sample = 0; sample < 20; sample += 1) {
+      const lines = await supervisor.execute("maia-5m", {
+        commands: [
+          "setoption name Elo value 1800",
+          "setoption name MultiPV value 8",
+          "position fen rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+          "go",
+        ],
+        until: (line) => line.startsWith("bestmove "),
+        timeoutMs: 60_000,
+      });
+      vectors.push(lines.filter((line) => line.startsWith("info ") && line.includes(" policy ")));
+    }
+    expect(vectors.every((vector) => vector.length > 0)).toBe(true);
+    const stable = vectors.slice(1).every((vector) => JSON.stringify(vector) === JSON.stringify(vectors[0]));
+    process.stdout.write(`MAIA_POLICY_STABILITY ${JSON.stringify({ samples: vectors.length, byteIdentical: stable })}\n`);
+  });
 });

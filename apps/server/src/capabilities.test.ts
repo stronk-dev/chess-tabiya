@@ -48,6 +48,7 @@ describe("engine capabilities", () => {
         version: "18",
         containerDigest: `sha256:${"a".repeat(64)}`,
         seedHonored: false,
+        eloHonored: false,
       },
       "maia-5m": {
         id: "maia-5m",
@@ -57,6 +58,7 @@ describe("engine capabilities", () => {
         modelId: "maia3-5m@b6559de",
         containerDigest: `sha256:${"b".repeat(64)}`,
         seedHonored: false,
+        eloHonored: true,
       },
     };
     const observed: string[] = [];
@@ -85,7 +87,7 @@ describe("engine capabilities", () => {
       expect(response.status).toBe(200);
       expect(await response.json()).toEqual({
         engines: [identities["stockfish-analysis"], identities["maia-5m"]],
-        policyModes: ["human_common", "strong_engine", "theory_strict", "perfect_tablebase"],
+        policyModes: ["human_common", "strong_engine", "theory_strict", "perfect_tablebase", "practical_resistance"],
         feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"],
         tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"],
         tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"],
@@ -205,6 +207,7 @@ describe("engine capabilities", () => {
     });
     expect(descriptor.surfaces.play).toBe("unavailable-here");
     expect(descriptor.surfaces.justPlay).toBe("unavailable-here");
+    expect(descriptor.policyModes).not.toContain("practical_resistance");
   });
 
   it("rejects planned or unknown values at the server response boundary", () => {

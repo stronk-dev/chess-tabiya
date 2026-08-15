@@ -23,6 +23,7 @@ export function maiaDockerSpec(
     name: "Maia3",
     version: MAIA3_SOURCE_COMMIT,
     modelId: MAIA3_MODEL_ID,
+    bandOption: "Elo",
     ...(options.containerDigest === undefined
       ? {}
       : { containerDigest: options.containerDigest }),

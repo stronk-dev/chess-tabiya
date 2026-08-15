@@ -100,6 +100,10 @@ The tagged `INTEGRATION=maia` suite remains outside `make verify`. It plays a
 20-ply `human_common` continuation after the living Najdorf fixture's first
 spine move, checks every returned move for legality, and proves from the bounded
 transcript that all 20 requests contain the complete growing history.
+It also repeats one identical request twenty times and reports whether the
+returned policy vectors are byte-identical. The 2026-08-15 probe observed 20 of
+20 byte-identical vectors at target Elo 1800. Practical resistance remains
+deterministic by its persisted selection record regardless of that observation.
 
 ## Pure opponent selector and writer seam
 
@@ -118,6 +122,8 @@ The modes currently shipped are:
 | `human_common` | Maia using optional Elo, temperature, and top-p; temperature defaults to 0.8 and top-p to 0.92. |
 | `strong_engine` | Stockfish best move under the ratified, deployment-configurable movetime profile. |
 | `theory_strict` | Maia restricted to legal authored spine children while the current four-field `transposeKey` is on the spine. |
+| `perfect_tablebase` | A category-preserving Syzygy reply with deterministic DTZ/UCI ordering. |
+| `practical_resistance` | Among at most four category-preserving tablebase replies, choose the reply that leaves the greatest measured Maia policy mass on learner moves that concede the result. Refuse when the measurement is vacuous. |
 
 `theory_strict` derives every authored spine position, so a move-order deviation
 that transposes back resumes spine following. It asks Maia for at least eight
@@ -193,8 +199,8 @@ proves late results are discarded; a real Stockfish test proves `stop` is sent.
 
 ```text
 {
-  engines: [{ id, kind, name, version, modelId?, containerDigest?, seedHonored }],
-  policyModes: ["human_common", "strong_engine", "theory_strict"],
+  engines: [{ id, kind, name, version, modelId?, containerDigest?, seedHonored, eloHonored? }],
+  policyModes: ["human_common", "strong_engine", "theory_strict", "perfect_tablebase", "practical_resistance"],
   policyProfiles: {
     strong_engine: { movetimeMs, threads, hashMb, multiPv }
   },
@@ -206,6 +212,11 @@ Each engine entry is a strict superset of the `{id, version}` identity stored in
 `policyConfig.locus`. Container and model identity are present when deployment
 provides them; the reported strong-engine profile is the effective resolved
 deployment configuration.
+
+Maia's configured `Elo` option is checked against the live UCI handshake. The
+selector sends a requested rating band only when the option was advertised.
+Selections then persist `eloHonored` and, only when the command was sent,
+`eloApplied`; requested and applied bands remain separate facts in the client.
 
 Engine version prefers an explicitly pinned `spec.version`. Otherwise, when
 the advertised UCI name agrees with the configured name, the remainder of the
@@ -246,6 +257,15 @@ Known limitations:
 provider. It is deterministic, capability-published, and records its applied policy and
 synthetic provider identity. It never falls back to Stockfish or Maia on outage or above
 the seven-piece boundary; see `tablebase-grounding.md`.
+
+`practical_resistance` composes that tablebase gate with Maia policy mass. It
+never weakens Stockfish and never falls back under the same name. The selector
+refuses out-of-range roots, unavailable instruments, missing preserving replies,
+and the all-zero difficulty case by typed code. Missing Maia policy mass is an
+abstention: the recorded reply uses the stable UCI tiebreak and emits the existing
+degradation warning. A cold four-candidate selection can take roughly 580 ms;
+that is its declared per-selection budget, distinct from the per-instrument call
+budget.
 
 ## Recorded policy and server-owned theory spine
 

@@ -71,11 +71,13 @@ function stockfishSupervisor(
 
 function identitySupervisor(
   advertised: string,
-  configured: { readonly name?: string; readonly version?: string } = {},
+  configured: { readonly name?: string; readonly version?: string; readonly bandOption?: string } = {},
+  optionNames: readonly string[] = [],
 ): EngineSupervisor {
+  const optionLines = optionNames.map((name) => `option name ${name} type spin default 1500 min 1100 max 2000`);
   const script = [
     "const r=require('readline').createInterface({input:process.stdin});",
-    `r.on('line',l=>{if(l==='uci'){console.log(${JSON.stringify(`id name ${advertised}`)});console.log('uciok')}else if(l==='isready'){console.log('readyok')}else if(l==='quit'){process.exit(0)}});`,
+    `r.on('line',l=>{if(l==='uci'){console.log(${JSON.stringify(`id name ${advertised}`)});for(const x of ${JSON.stringify(optionLines)})console.log(x);console.log('uciok')}else if(l==='isready'){console.log('readyok')}else if(l==='quit'){process.exit(0)}});`,
   ].join("");
   return new EngineSupervisor([
     {
@@ -194,6 +196,14 @@ describe("UCI engine supervisor", () => {
       name: "Lc0",
       version: "v0.31.2",
     });
+  });
+
+  it("publishes whether the configured rating-band option was actually advertised", async () => {
+    const honored = identitySupervisor("Maia3 1", { bandOption: "Elo" }, ["Elo"]);
+    const absent = identitySupervisor("Fixture 1", { bandOption: "Elo" });
+    supervisors.push(honored, absent);
+    await expect(honored.start("identity-test")).resolves.toMatchObject({ eloHonored: true });
+    await expect(absent.start("identity-test")).resolves.toMatchObject({ eloHonored: false });
   });
 
   stockfishIt("restarts real Stockfish with backoff after an unexpected exit", async () => {

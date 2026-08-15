@@ -51,5 +51,6 @@ describe("Maia production sidecar definition", () => {
       containerDigest: digest,
     });
     expect(spec.seedOption).toBeUndefined();
+    expect(spec.bandOption).toBe("Elo");
   });
 });
