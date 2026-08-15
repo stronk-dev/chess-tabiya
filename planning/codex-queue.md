@@ -38,6 +38,17 @@ until you have seen it in the body it governs.
 
 ## 1. Small and unowned — take whenever a wave has room
 
+- **D140 — a LIVE disclosure gap, verified by claude, and the highest-priority item in this
+  section.** Four `/runs/:id/*` routes build an `evidencePacket`; **three call
+  `requireGuidanceDisclosure` and `/reasoning-review` does not** (`rest.ts` — the packet is
+  built right after `service.reasoningReviewAccess`, with no disclosure call, gating instead
+  on a role-blind checkpoint predicate). The packet carries **rung-3 content** —
+  `human_divergence` markers built from recorded Maia policy masses — so this is a rung-3
+  egress that skips the gate its three siblings enforce. **This is D68's shape exactly**
+  (`/voice` and `/speech` served `packet.sentences` after only a read check while sibling
+  routes refused with `ASSISTANCE_WITHHELD`), re-found at a fourth site. Small fix, real
+  exposure; take it ahead of the Elo batch.
+
 - **D60 — OWNER RULED: apply `[1000, 2400]` and close it.** Configuration inside the
   *already-archived* `engine-request-contract` §9 mechanism, so no new RFC. Dossier:
   `design/research/maia-band-calibrated-range.md`.
