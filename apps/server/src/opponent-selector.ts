@@ -495,10 +495,10 @@ export class OpponentSelector {
       return value === undefined ? [] : [`setoption name ${name} value ${value}`];
     });
     const commands = [
+      ...bandDefaults,
       ...(eloApplied === undefined
         ? []
         : [`setoption name Elo value ${eloApplied}`]),
-      ...bandDefaults,
       `setoption name Temperature value ${
         request.policy.temperature ?? DEFAULT_TEMPERATURE
       }`,

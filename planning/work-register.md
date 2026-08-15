@@ -14,8 +14,8 @@ which is itself queued work). There is no fourth state.
 
 | Item | Destination |
 |---|---|
-| **D91** — every Maia request runs at band 1500; `Elo` is an alias overwritten by the `SelfElo`/`OppoElo` defaults sent after it | **codex, top of queue.** Shipped today by `43c6c4a`; re-opens D60 and makes R10's band inert |
-| **D60 / D70** — the band bound, re-opened because D91 makes it inert | closes with D91 |
+| **D91** — every Maia request runs at band 1500; `Elo` is an alias overwritten by the `SelfElo`/`OppoElo` defaults sent after it | **implemented, pending independent review.** The defaults now precede `Elo`; a real-engine production-selector test proves bands 1000 and 2400 produce different policy vectors |
+| **D60 / D70** — the band bound, re-opened because D91 makes it inert | mechanism restored with D91; owner-ledger closure waits for independent review |
 | **D58** — an Elo-less Maia request inherits the previous request's band; nine of twelve malformed forms do the same | same file, same fix as D91 — route it into that change or it will be re-found by the next sweep |
 
 ## 1. Queued — an accepted or ready RFC owns these

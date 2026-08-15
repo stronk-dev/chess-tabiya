@@ -395,9 +395,9 @@ describe("pure opponent selector", () => {
       engine: { id: "maia-5m", modelId: "maia3-5m@test", seedHonored: false },
     });
     expect(client.calls[0]?.request.commands).toEqual([
-      "setoption name Elo value 1800",
       "setoption name SelfElo value 1500",
       "setoption name OppoElo value 1500",
+      "setoption name Elo value 1800",
       "setoption name Temperature value 0.7",
       "setoption name TopP value 0.9",
       "setoption name MultiPV value 20",

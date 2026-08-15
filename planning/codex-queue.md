@@ -1,6 +1,13 @@
 # Codex queue — refreshed 2026-08-15 (night)
 
-## 0. D91 — REGRESSION SHIPPED TODAY, TAKE THIS FIRST
+## 0. D91 — IMPLEMENTED, pending independent review
+
+The production command path now sends the advertised `SelfElo`/`OppoElo`
+defaults before the resolved `Elo` alias, making the requested band final state.
+The regression test drives `OpponentSelector` against the pinned real Maia image,
+records 1000 and 2400 as applied, and proves their policy vectors differ. Do not
+take this item again; independently verify it and then close D91/D60 in the owner
+ledger.
 
 **Every Maia request in the product runs at band 1500 while recording the band that
 was requested.** `opponent-selector.ts:493-506` sends `setoption name Elo <band>`

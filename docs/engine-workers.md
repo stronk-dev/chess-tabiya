@@ -60,7 +60,9 @@ defaults and ranges. `resetSearchState` sends `ucinewgame`, conditionally sends
 the advertised `Clear Hash` button, waits through `readyok`, and only then sends
 the search commands inside the same queued task. Stockfish opponent, enumeration,
 evidence, and authoring searches state MultiPV explicitly; evidence also states
-`UCI_ShowWDL` on every request. Maia states Elo, SelfElo, OppoElo, Temperature,
+`UCI_ShowWDL` on every request. Maia states SelfElo and OppoElo at their advertised
+defaults before stating the resolved Elo band, because `Elo` is the engine's alias
+for that pair and must be the final band-setting command. It then states Temperature,
 TopP, and a range-clamped MultiPV on every request. An absent requested Elo uses
 and records the engine-advertised default. Published deployment bounds are the
 intersection of the advertised range and any explicit `EngineSpec.bandRange`.

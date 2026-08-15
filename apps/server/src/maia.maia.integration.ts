@@ -136,4 +136,54 @@ describe("Maia production sidecar integration", () => {
     const stable = vectors.slice(1).every((vector) => JSON.stringify(vector) === JSON.stringify(vectors[0]));
     process.stdout.write(`MAIA_POLICY_STABILITY ${JSON.stringify({ samples: vectors.length, byteIdentical: stable })}\n`);
   });
+
+  it("drives distinct requested bands through the production selector command path", async () => {
+    const supervisor = new EngineSupervisor([
+      maiaDockerSpec({
+        image: process.env.MAIA_IMAGE ?? DEFAULT_MAIA_IMAGE,
+        ...(process.env.MAIA_IMAGE_DIGEST === undefined
+          ? {}
+          : { containerDigest: process.env.MAIA_IMAGE_DIGEST }),
+        transcriptCapacity: 4_096,
+      }),
+    ]);
+    supervisors.push(supervisor);
+    await supervisor.start("maia-5m");
+    const selector = new OpponentSelector(supervisor);
+    const position = "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2";
+
+    const vectorAt = async (targetElo: 1000 | 2400, digestDigit: string) => {
+      const selection = await selector.select({
+        startFen: position,
+        historyUci: [],
+        policy: {
+          mode: "human_common",
+          policyConfigDigest: `sha256:${digestDigit.repeat(64)}`,
+          targetElo,
+        },
+        seed: 91,
+      });
+      expect(selection.engine.eloApplied).toBe(targetElo);
+      return selection.candidates?.map(({ moveUci, mass }) => [moveUci, mass] as const) ?? [];
+    };
+
+    const low = await vectorAt(1000, "1");
+    const high = await vectorAt(2400, "2");
+    expect(low.length).toBeGreaterThan(0);
+    expect(high.length).toBeGreaterThan(0);
+    expect(high).not.toEqual(low);
+
+    const sent = supervisor
+      .transcript("maia-5m")
+      .filter((entry) => entry.direction === "sent")
+      .map((entry) => entry.line);
+    for (const targetElo of [1000, 2400] as const) {
+      const eloIndex = sent.indexOf(`setoption name Elo value ${targetElo}`);
+      expect(eloIndex).toBeGreaterThanOrEqual(2);
+      expect(sent.slice(eloIndex - 2, eloIndex)).toEqual([
+        "setoption name SelfElo value 1500",
+        "setoption name OppoElo value 1500",
+      ]);
+    }
+  });
 });

@@ -2108,3 +2108,9 @@ expression census's first real run found **zero genuinely dead expressions** acr
 36 zero-firing subjects, with every headline figure reproducing exactly.
 
 **Gate status: both lists non-empty. Done is not declared.**
+
+## 2026-08-15 — D91 Maia band regression repaired
+
+The engine capability audit found that production stated `Elo <requested>` and then reset `SelfElo` and `OppoElo` to 1500; because `Elo` aliases that pair, every recorded band was inert. The production selector now states the two advertised defaults first and the resolved `Elo` alias last. The defaults remain request-scoped state rather than being deleted.
+
+The regression gate uses the production `OpponentSelector` against the pinned real Maia image, not a synthetic client or a hand-shaped engine request. It records 1000 and 2400 as applied, asserts the production command order, and proves the two returned policy vectors differ. `INTEGRATION=maia pnpm test:maia` passed all three integration tests. D91 and the re-opened D60 are ready for independent review and owner-ledger closure; this implementation does not edit the design tier.
