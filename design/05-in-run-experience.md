@@ -78,6 +78,34 @@ how loudly each is presented.
 
 Two consequences follow, and they are the useful part of the ladder:
 
+**The engine-condition rule — when a rung-2 fact may FIRE, not just be shown**
+(written by claude 2026-08-15 on the owner's ruling, per the RFC-0000 agent rule;
+owned in implementation by `rfc/engine-leverage.md`). The ladder above governs what
+each source *can get wrong*. It did not govern the case where an engine reading acts
+as a **condition** — where a number decides that something happens rather than being
+displayed. That is a different question from disclosure and it belongs here, because
+it is a rung-2 admission rule rather than a new screen. Four clauses:
+
+1. **A condition may only reference a reading a recorded producer actually emits.**
+   An arm exists when its measurement has a producer in the tree, not when it is
+   expressible. This is why the corpus split arm is refused today.
+2. **A threshold must sit off its instrument's optimality boundary.** A condition
+   whose trigger point coincides with what the instrument calls optimal is not
+   measuring difficulty, it is issuing a verdict — and law 8 binds design as much as
+   product. `tablebase_dtz_regression`'s floor of **3** is derived this way, not
+   chosen: it is the first value provably off the boundary.
+3. **A threshold nothing measures is marked `unmeasured` and carries a binding
+   experiment.** It is the one disposition that must be revisited. An unbacked number
+   may ship; an unbacked number *dressed as a finding* may not.
+4. **Silence is still the default** (§3). A condition firing does not license
+   speaking; what may be said is governed by the disclosure model unchanged, and
+   *failing* a measurement demotes while *lacking* one does not.
+
+The gate surface stays single: any gate these clauses create is written here and
+mirrored into `planning/exploration/gates.md`. `03-product-breadth.md` carries the
+capability as a **map row**, never a second gate definition.
+
+
 **Rung 0 is underused — but "safest to show" is not "should be shown", and §3a
 corrects that.** It is the only rung that cannot manufacture chess truth, it needs no engine, no corpus
 and no network, and it teaches *seeing* rather than *being told* — which is the

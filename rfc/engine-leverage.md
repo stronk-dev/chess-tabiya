@@ -1,9 +1,14 @@
 # RFC: Engine leverage — the instrument has already answered
 
-- **Status:** draft — cross-reviewed, **OWNER-BLOCKED** on open questions 1, 3, 7 and 9,
-  each of which its own text says must be ruled *before* `accepted`. **Claude marked this
-  `accepted` in error on 2026-08-15 and codex correctly refused to implement it**; the
-  acceptance is withdrawn here rather than in a banner
+- **Status:** **accepted 2026-08-15.** Open questions **1 and 9 are owner-ruled** (below,
+  in the questions themselves — not in this line). Questions **3 and 7** are closed by the
+  coordinator on their own stated fallbacks, which is within the standing ruling *"just
+  make nice waves… as long as we get them all done"*: **Q3 defers to a named follow-up**
+  rather than folding a run-schema change onto three register claims, and **Q7 files
+  `stockfish-play`'s identity `refused` with its reason** rather than making the opponent
+  engine's identity client-visible. Both are recorded as decisions with reasons, not as
+  silence. *History: claude marked this `accepted` prematurely earlier on 2026-08-15 while
+  questions 1 and 3 stood, and codex correctly refused to implement it.*
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/02-product-shape.md:159-180` (the two-axis latency budget —
@@ -1431,11 +1436,20 @@ not its final contents.
 
 ## Open questions
 
-1. **The design-tier gap is the first one.** `design/03-product-breadth.md` names no
-   engine-condition surface, so §3 specifies against a dossier rather than an intent
-   document. Should the condition surface be named in `03`, or is `05-in-run-experience.md`
-   its home (it is closer to the assistance ladder than to the surface map)? **Owner
-   ruling wanted before `accepted`.**
+1. **The design-tier gap is the first one. OWNER RULED 2026-08-15: BOTH — a rung rule in
+   `design/05-in-run-experience.md` and a surface row in `design/03-product-breadth.md`.**
+   `design/03` names no engine-condition surface, so §3 specified against a dossier rather
+   than an intent document. The owner's ruling splits it deliberately: **`05` states when an
+   engine condition may fire and speak** (it is a rung-2 admission question, and `05`
+   already owns the rungs, the silence default and the live-surface admission rule), and
+   **`03` records that the capability exists on the map** so a user-facing surface is not
+   missing from the IA. The coordinator flagged the risk in posing it — gate definitions
+   split across two docs is the failure law 5 mirrors `gates.md` to prevent — and the owner
+   took it knowingly. **Consequence this RFC must honour: the gate surface stays single.**
+   Any gate this creates is written in `05` and mirrored into
+   `planning/exploration/gates.md`; `03`'s row is a *map entry*, never a second gate
+   definition. Both docs are owner tier and are written by claude on this ruling.
+
 2. **Per-anchor overrides of the new arms.** `guard.overrides[]` carries `evalSwingCp` and
    `fireOnMate` only; 0.23 deliberately does not widen it to the tablebase arms. Is
    pack-level-only right, or does an endgame pack need *"this DTZ threshold at this
@@ -1468,23 +1482,19 @@ not its final contents.
    deviations?** Today 5 of 37 packs have no ledger at all. Their deviations can never
    carry a bound cost. Is *"a pack with deviations and no ledger cannot be published"* the
    right rule, and is it this RFC's to make or the content wave's?
-9. **`tablebase_dtz_regression`'s floor — the one question C3 cannot answer itself, raised
-   by cross-review.** At `byAtLeast` 1–2 the arm is the tablebase's optimality boundary and
-   therefore a verdict; the floor is raised to 3 because 3 is the first value that is
-   *derivably* off the boundary. But **nothing measures where "materially harder to convert"
-   begins**, and this RFC may not invent it (Law 8 binds the RFC as much as the product).
-   Three ways out, and the owner's to pick: **(a)** land the arm at floor 3 with the
-   `unmeasured` disposition and a named experiment (this draft's position); **(b)** land the
-   arm `refused` in 0.23 and return with the experiment — the strictest reading of the
-   RFC's own *"an arm exists only when a recorded producer for its measurement exists"*,
-   extended to *"and a threshold it can honestly carry"*; **(c)** set a floor by ruling.
-   The experiment is cheap and named in §6.3, but it reads the 100 committed
-   `tablebase_result` deviation records and is therefore **behind D64**.
-10. **Does §2's digest movement need its own landing ceremony?** §2 rewrites committed pack
-   documents and their ledgers. `rfc/README.md`'s registers are the reviewer's to update, but
-   a content-tier rewrite across ~32 ledgers in an RFC whose register block advertises
-   *"additive"* deserves an explicit owner acknowledgement before `accepted`, not just an
-   acceptance criterion.
+9. **`tablebase_dtz_regression`'s floor. OWNER RULED 2026-08-15: land the arm at
+   `byAtLeast` floor **3**, disposition `unmeasured`, with the named experiment binding.**
+   This is option (a), the draft's own position, and the reason it is right is the reason
+   the question existed: at `byAtLeast` 1–2 the arm sits on the tablebase's **optimality
+   boundary**, so it would not be measuring difficulty — it would be issuing a verdict, and
+   law 8 binds this RFC as much as it binds the product. **3 is DERIVED, not chosen**: it is
+   the first value provably off that boundary. Nothing measures where *"materially harder to
+   convert"* begins and this RFC does not invent it — which is exactly what the `unmeasured`
+   disposition records. **`unmeasured` is the only disposition that must be revisited**, so
+   the experiment named in §6.3 is a binding obligation and question 6's expiry mechanism
+   governs it. This instantiates the standing rule that **a measurement can smuggle a
+   verdict: the threshold must sit off the instrument's optimality boundary** — here the
+   rule is applied rather than restated.
 
 ---
 

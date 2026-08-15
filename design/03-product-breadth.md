@@ -243,6 +243,22 @@ Anti-contamination controls **when** these appear. During committed play they
 may be withheld; at checkpoints, comparison, deep review, or explicit request
 they must be available according to mode and user settings.
 
+**The engine-condition surface** (added 2026-08-15 by claude on the owner's ruling,
+per the RFC-0000 agent rule). The list above is a **display** list: every entry is a
+layer a learner may be *shown*. A separate capability exists and had no row here — an
+engine reading used as a **condition**, where the number decides that something
+*happens* rather than being displayed. It belongs on this map because it is a
+user-facing capability that pack authors reach, and its absence is why
+`rfc/engine-leverage.md` had to specify against a research dossier rather than an
+intent document.
+
+**This row is a map entry, not a gate.** When such a condition may fire, and what may
+then be said, is governed by `05-in-run-experience.md`'s engine-condition rule and
+mirrored into `planning/exploration/gates.md` — the gate surface stays single, which
+is the constraint accepted when this ruling deliberately split the home across two
+docs. Nothing here defines admission; this document records only that the capability
+exists and is part of the surface.
+
 ## Stable application shell
 
 The desktop UI should be a viewport-contained application, not a growing

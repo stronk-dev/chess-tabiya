@@ -138,6 +138,26 @@ produces a mode menu, not a product (our own competitor research named this
 case). If surfaces accumulate while B4 stays unmet, that is K6/K4 evidence
 accruing by construction — escalate rather than continue.
 
+## Engine-condition rule — mirrored from `design/05-in-run-experience.md` §2
+
+Added 2026-08-15 by claude on the owner's ruling. The owner ruled the
+engine-condition surface's home to be **both** `design/05` (the rung rule) and
+`design/03` (a map row); this mirror is what keeps the gate surface single, per law 5.
+`03`'s row is a map entry and defines nothing. The normative text lives in `05`.
+
+1. A condition may only reference a reading a **recorded producer** actually emits.
+2. A threshold must sit **off its instrument's optimality boundary** — a trigger point
+   coinciding with what the instrument calls optimal is a verdict, not a measurement.
+3. A threshold nothing measures is marked **`unmeasured`** and carries a **binding
+   experiment**; it is the one disposition that must be revisited.
+4. **Silence remains the default.** A condition firing does not license speaking, and
+   *failing* a measurement demotes while *lacking* one does not.
+
+Worked instance: `tablebase_dtz_regression`'s `byAtLeast` floor of **3** is derived from
+clause 2 (the first value provably off the tablebase's optimality boundary) and carries
+clause 3's `unmeasured` disposition, because nothing measures where *"materially harder
+to convert"* begins. Owner-ruled 2026-08-15.
+
 ## Success metrics (measurement vocabulary for the above)
 
 - **Learning:** second-attempt objective achievement; related-position performance;

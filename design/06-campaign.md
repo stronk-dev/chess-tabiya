@@ -205,10 +205,41 @@ assistance lattice non-monotone**. It solves §1's one-build problem from the
 opposite side to the loadout: the loadout gives you choices, the suppressor gives
 those choices consequences.
 
-**The unresolved one, and it is a real hole: a run that cannot be lost is a
-playlist.** No resource refusal exists anywhere in the runtime, and no loadout
-mechanism creates one. The proposed resolution — **owner ruling wanted** — is to
-**price *declaring done*, not retrying**: rewind stays free inside an encounter, and
-the *submitted* attempt decides the run. That gives the campaign a failure state
-while leaving punishment-free experimentation exactly as the thesis promises.
+**SETTLED 2026-08-15 (owner ruling), and the premise was half wrong.** The text
+below originally read *"a run that cannot be lost is a playlist… no resource
+refusal exists anywhere in the runtime, and no loadout mechanism creates one."*
+The first clause of that is true and the second conflates two different things —
+`design/research/campaign-intermediate-consequence.md` found the conflation and it
+is why every earlier proposal reached for invented scarcity and collided with the
+thesis. **No *resource refusal* exists: true. No *failure state* exists: false.**
+
+**The failure state already ships, one scope level down, and no campaign document
+had cited it.** `ObjectiveState` has six values and only three are absorbing
+(`trajectory.ts:6`), so the runtime already separates *this node went badly and play
+continues* from *this node ended things*. `degraded` is **one-way by validator rule**
+(`OBJECTIVE_DEGRADED_IS_ONE_WAY`, `pack-validation.ts:469`), produced by **authored
+deviations** rather than by any grader — 76 of 275 carry `offObjective` — and it is
+**sealed across node boundaries**: a trajectory leg transition resets the objective to
+`active` only from `preserved`/`degraded`, storing the outgoing verdict as `sealedState`
+(`pack-orchestrator.ts:556-575`, `trajectory.ts:83-92`). Sharper still, **the
+intermediate/boss split is a lint rule**: `THEORY_ABSORBING_UNSUPPORTED` means **17 of 37
+packs literally cannot end a run**, and all three canonical trajectory packs are exactly
+three legs with only the last absorbing — §5's *"2 encounters + 1 act boss"* is the shape
+three authors independently wrote without coordinating.
+
+**So the campaign needs a scope, not a mechanism, and the ruling supplies it: a node
+remembers the branch you SUBMIT.** Rewind stays free inside an encounter; **declaring
+done** is what counts, and the submitted attempt decides both the node's sealed verdict
+and the run. This prices *committing*, never *retrying*, so `00-thesis.md`'s
+*"experimentation without cost"* is untouched — and **one ruling closes both holes**,
+because §5's boss node needed exactly the same verb. `reveal` is close enough to extend
+rather than invent.
+
+Two consequences follow and are scheduled rather than open. **Every seal is
+path-scoped** (`types.ts:102`), so rewinding to a clean line erases it — that is the
+thesis working, not a bug, and it is precisely why the *submitted* branch rather than the
+*standing* branch is the thing remembered. And **"did this run succeed" is computed
+nowhere**: `attempts` is per *branch*, so a **run-level roll-up** is the precondition for
+everything else here — the smallest new part, and the first one to build. **No budget,
+counter, currency, refusal class or clock is required by any of this.**
 
