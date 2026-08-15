@@ -30,6 +30,18 @@ a real phone; that is the standing recommendation in §6.
 
 ---
 
+
+> **TWO CORRECTIONS, claude 2026-08-15, from the `client-surface-floor` draft measuring what
+> this dossier predicted.** (1) **The board is not pushed above the fold on phones.** §2b's
+> arithmetic predicted it; measurement shows the board stays in the viewport at scroll-top at
+> every phone size, because `.position-column` precedes the region containers in DOM order. What
+> falls below the fold is the **timeline**. The defect is real and is *"the drill region is a
+> page scroller"*. (2) **One sub-24 px touch target, not two:** `.pivotal-marker` is 17.59 px and
+> fails; `.shape-marker` is **24.08 px** and passes by 0.08 px — this dossier said ≈23 px.
+> A third finding *strengthens* §2b: the vacuous scroll assertion is **width-independent**
+> (`#app{overflow:hidden}` is unconditional), so the desktop test's same assertion is equally
+> constant on 8 of its 9 routes.
+
 ## 1. What actually ships today
 
 The archived `rfc/archive/polish-surfaces.md` (wave claim #1, 2026-08-14) is the only RFC
