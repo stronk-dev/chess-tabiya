@@ -1,6 +1,6 @@
 # RFC: Validator integrity — a pack that passes `pack-check` must run
 
-- **Status:** draft
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/04-content-architecture.md` (the authoring loop `pack-check` guards);

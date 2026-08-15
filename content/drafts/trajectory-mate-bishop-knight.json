@@ -16,7 +16,19 @@
   },
   "objective": {
     "type": "run_trajectory",
-    "summary": "One continuous game: drive the lone king from the centre to an edge, drive it along the edge to the corner your bishop's colour can reach, and mate it there. The three legs are not three exercises stitched together - each one begins because of what your own moves did in the one before, and the boundary between them is a fact about where the black king is standing, not a move number."
+    "summary": "One continuous game: drive the lone king from the centre to an edge, drive it along the edge to the corner your bishop's colour can reach, and mate it there. The three legs are not three exercises stitched together - each one begins because of what your own moves did in the one before, and the boundary between them is a fact about where the black king is standing, not a move number.",
+    "grading": {
+      "assessedBy": {
+        "kind": "syzygy",
+        "category": "win",
+        "pieceCount": 4,
+        "sourceId": "syzygy",
+        "retrievedAt": "2026-08-15T10:40:53.018Z"
+      },
+      "resolveAt": {
+        "kind": "terminal"
+      }
+    }
   },
   "concepts": [
     "bishop-coloured-corner",
@@ -508,7 +520,7 @@
         "grading": {
           "assessedBy": {
             "kind": "authored",
-            "note": "Declared authored because the format refuses the truth: this is a four-piece Syzygy win queried at the root (win, DTM 39 plies), but a trajectory leg may not carry a syzygy assessment (TRAJECTORY_LEG_SYZYGY_UNSUPPORTED) and run_trajectory may not carry grading at all. The sibling pack mate-bishop-knight has the same spine and the machine-checked declaration."
+            "note": "Authored assessment of the dynamically reached final leg: a trajectory leg still cannot claim Syzygy exactness because its entry position depends on the played path. The trajectory's static four-piece root is independently ledger-verified as a Syzygy win; the terminal result remains rules-derived."
           },
           "resolveAt": {
             "kind": "terminal"
@@ -897,15 +909,14 @@
       "LEG DECOMPOSITION IS MEASURED, NOT ASSUMED. The owner's three phases were checked against the verified line rather than trusted. Black-king square after every ply was computed: the king first stands on an edge after ply 8 (...Kc8), first stands inside the g7-h8 corner box after ply 28 (...Kg8), and first stands ON h8 after ply 34. The three legs therefore span 8, 20 and 11 plies. Both leg boundaries are structural predicates over the run FEN (quantified 'some square in this region holds the black king'), false at the root and first true at the plies above; neither is a move number.",
       "THE 20-PLY CAP BINDS THIS PACK EXACTLY, AND ONLY UNDER ONE READING OF LEG TWO. difficulty.branchLengthTarget is capped at 20 by the schema. Leg two as authored is 20 plies - the cap with zero margin. Leg two under the plain reading of the ruling ('drive it along the edge to a corner matching the bishop's colour', i.e. the king standing ON h8) is 26 plies and does not fit. The pack fits because the leg-two boundary was defined as the corner BOX, which is a defensible reading of the phase but is a choice, and it is recorded here as one.",
       "branchLengthTarget IS A SINGLE PER-PACK FIELD AND THIS PACK HAS THREE LEG LENGTHS (8 / 20 / 11). The declared value 20 is the longest leg. There is no per-leg branchLengthTarget, so the on-ramp-vs-core band the field encodes cannot be stated per phase - which is exactly what a phase-rehearsal pack needs to state.",
-      "NOT LEDGER-VERIFIED, AND STRUCTURALLY CANNOT BE. `make verify-draft` requires objective.grading.assessedBy.kind == 'syzygy' on the TOP-LEVEL objective and refuses anything else with VERIFY_ASSESSMENT_NOT_SYZYGY. A trajectory's top-level objective is run_trajectory, which the validator refuses to let carry grading at all (OBJECTIVE_GRADING_UNSUPPORTED), and a leg may not carry a Syzygy assessment either (TRAJECTORY_LEG_SYZYGY_UNSUPPORTED). No trajectory pack can earn ledger_verified today. The evidence sidecars for this exact spine live on the sibling pack mate-bishop-knight, which is the same root and the same thirty-nine plies wrapped in an outcome objective.",
+      "ROOT LEDGER-VERIFIED. The trajectory carries a top-level Syzygy declaration for its static start position, and `make verify-draft` emitted this pack's own evidence ledger, source manifest, and job receipt. Dynamically reached legs remain authored assessments because their entry positions cannot be bound to a root tablebase record.",
       "PER-LEG AUTHORING IS INEXPRESSIBLE. A leg carries only id, entryCheckpointId and objective. This pack wants three different things per phase and can state none of them: a per-leg opponent policy (phase one could be drilled against a weaker defender and phase three must be perfect), per-leg shapes, and a per-leg branchLengthTarget. All three are declared once for the whole pack.",
       "AUTHORED, NOT PROVED: every sentence of reasoning - 'fence', 'shoulder', 'mating post', the three phase names, the claim that a dark-squared bishop mates in a dark corner - is the author's rendering of standard technique. The tablebase grounds categories and distances; square-coverage statements in the annotations are derivable FEN arithmetic and were checked by hand against the position at that ply.",
       "No shape-library entry exists for theoretical mates; none is referenced. See graduationBlockers."
     ],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13); only a citable source or mechanical validation that bears on a claim clears a blocker.",
-      "The leg-3 root assessment is declared 'authored' although it is machine-checked, because the format refuses a Syzygy declaration on a trajectory leg. A reader of this file alone cannot tell the difference between this pack's grounded win and a guessed one; that is a format defect, not an authoring one.",
-      "No evidence sidecars exist for this file and none can be produced while verify-draft requires a top-level syzygy assessment. Registry admission will show a declared, unverified assessment.",
+      "The dynamically reached leg-3 assessment remains authored: the root ledger proves the start is a win, not that every learner-produced leg-entry position preserves it.",
       "perfect_tablebase is declared as the opponent. It is published only where a tablebase provider is configured; a deployment without one will not offer the mode and the drill falls back to whatever the learner selects, which is not the opponent this content was verified against.",
       "The fifty-move pressure named in the annotations is real arithmetic but the runtime surfaces no counter; whether a mates pack should show the halfmove clock is an open product question.",
       "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not."

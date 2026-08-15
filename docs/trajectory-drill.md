@@ -15,6 +15,18 @@ trajectories, coincident authored ply entries, multiple theory legs, Syzygy asse
 a dynamically reached leg, premature terminal resolution, absorbing non-terminal middle
 legs, `transitioned` targets, and checkpoint conditions already true at leg entry.
 
+Every leg is compiled and validated with the same objective checks as a root
+objective. A `follow_theory` leg activates the pack-level authored-boundary
+contract even though the pack mode remains `trajectory`; the finite boundary and
+its crossing checkpoint make on-line membership observable instead of silently
+classifying the whole leg as unknown.
+
+The trajectory root may carry optional terminal grading as a grounding statement
+about its static start position. It does not produce objective transition rules or
+replace leg grading. Syzygy category admission is checked against the final leg's
+outcome type, while leg-level Syzygy declarations remain refused because their
+entry positions depend on the played path.
+
 Outcome legs inherit automatic terminal grading without needing a placeholder success
 condition. The first authored trajectories no longer carry material-balance conditions whose
 only purpose was to make the compiler enter its outcome branch.

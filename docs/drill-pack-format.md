@@ -82,7 +82,7 @@ vocabulary to `compare_branches`. An empty array means the checkpoint offers
 no pack-selectable action. Any other value fails runtime validation with its
 JSON Pointer and the allowed set; vocabulary grows only when a consumer grows.
 This is an executable-policy lint rather than a JSON-Schema enum, so it does
-did not require the earlier grading amendment; grading is the change that advanced
+not require the earlier grading amendment; grading is the change that advanced
 the schema `$id`.
 
 ## Semantic authoring lint
@@ -107,6 +107,22 @@ unsupported opponent and feedback policies, and unsupported objective
 conditions. These checks are shared by `make pack-check` and registry loading,
 so an authoring no-op cannot validate locally and then enter the served
 catalogue.
+
+Objective validation is compiler-backed and total. It compiles the root
+objective and every trajectory-leg objective before admission, using the same
+rule compiler play uses. Compiler failures become pointed validation issues,
+never escaping stack traces. The compiler specifically refuses structural
+conditions made only from placement or quantified-piece nodes because they
+cannot derive a grounded evidence reference. An unexpected compiler failure is
+reported as `OBJECTIVE_RULES_UNCOMPILABLE` rather than entering the catalogue.
+
+The same objective invariants apply at `/objective` and at every
+`/legs/{index}/objective`: grading requirements, resolution checkpoints,
+monotone transitions, absorbing-state restrictions, and supported conditions.
+Decimal equality against integral material balance is refused as impossible;
+a `rules_fact` winner is accepted only for checkmate. A pack that passes
+`pack-check` therefore cannot reach a rule-compilation path that validation did
+not exercise first.
 
 Stated-reasoning validation refuses duplicate point IDs, colliding phrases,
 unresolvable grounds, and structural grounds false at statically known checkpoint

@@ -14,6 +14,23 @@
     "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "side": "white"
   },
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p01-d4",
+      "p02-d5",
+      "p03-c4",
+      "p04-e6",
+      "p05-nc3",
+      "p06-nf6",
+      "p07-cd5",
+      "p08-ed5",
+      "p09-bg5",
+      "p10-be7",
+      "p11-e3",
+      "p12-c6"
+    ],
+    "plyHorizon": 12
+  },
   "objective": {
     "type": "run_trajectory",
     "summary": "One continuous game as White: reach the Carlsbad structure from the QGD Exchange, execute the minority attack until Black's c-pawn is a fixed target, and convert the rook ending that structure produces. Every leg boundary is a fact about the position your own moves created."
@@ -638,6 +655,14 @@
     }
   ],
   "checkpoints": [
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
+      "actions": []
+    },
     {
       "id": "carlsbad-standing",
       "label": "The Carlsbad structure stands",

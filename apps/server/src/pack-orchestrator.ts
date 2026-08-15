@@ -29,6 +29,18 @@ import {
   type ObjectiveTransitionRule,
 } from "@chess-tabiya/runtime";
 
+export class PackCompileError extends Error {
+  readonly code: string;
+  readonly pointer: string;
+
+  constructor(code: string, pointer: string, message: string) {
+    super(message);
+    this.name = "PackCompileError";
+    this.code = code;
+    this.pointer = pointer;
+  }
+}
+
 function activeSpineNodeId(
   pack: DrillPackDefinition,
   run: DrillRun,
@@ -90,7 +102,10 @@ function reachedOnActivePath(
   );
 }
 
-function successPredicate(condition: SuccessCondition): ObjectivePredicate {
+function successPredicate(
+  condition: SuccessCondition,
+  pointer: string,
+): ObjectivePredicate {
   if (condition.kind === "reach_checkpoint") {
     return { type: "checkpointReached", checkpointId: condition.checkpointId };
   }
@@ -121,10 +136,17 @@ function successPredicate(condition: SuccessCondition): ObjectivePredicate {
     return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: condition.feature } };
   }
   const exhaustive: never = condition;
-  throw new TypeError(`Unhandled success condition: ${JSON.stringify(exhaustive)}`);
+  throw new PackCompileError(
+    "SUCCESS_CONDITION_KIND_UNRECOGNISED",
+    `${pointer}/kind`,
+    `unhandled success condition: ${JSON.stringify(exhaustive)}`,
+  );
 }
 
-function conditionEvidenceRefs(condition: SuccessCondition): readonly [string, ...string[]] {
+function conditionEvidenceRefs(
+  condition: SuccessCondition,
+  pointer: string,
+): readonly [string, ...string[]] {
   if (condition.kind === "reach_checkpoint") {
     return [packEvidenceRef(condition.checkpointId)];
   }
@@ -132,11 +154,27 @@ function conditionEvidenceRefs(condition: SuccessCondition): readonly [string, .
     return [rulesEvidenceRef(`result-${condition.result}`)];
   }
   if (condition.kind === "material_balance") return [rulesEvidenceRef("material")];
-  if (condition.kind === "rules_fact") return [rulesEvidenceRef(condition.fact)];
+  if (condition.kind === "rules_fact") {
+    try {
+      return [rulesEvidenceRef(condition.fact)];
+    } catch (error) {
+      throw new PackCompileError(
+        "EVIDENCE_FACT_UNSUPPORTED",
+        `${pointer}/fact`,
+        error instanceof Error ? error.message : String(error),
+      );
+    }
+  }
   const references = structuralFeatureKinds(condition.feature).map((kind) =>
     rulesEvidenceRef(`structure-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]),
   );
-  if (references.length === 0) throw new TypeError("Structural success condition has no feature leaf");
+  if (references.length === 0) {
+    throw new PackCompileError(
+      "STRUCTURAL_CONDITION_HAS_NO_FEATURE",
+      `${pointer}/feature`,
+      "structural success condition has no feature leaf: an expression built only from pieceOnSquare or quantified-over-piece nodes derives no rules evidence reference",
+    );
+  }
   return references as [string, ...string[]];
 }
 
@@ -144,8 +182,10 @@ function conditionRules(
   condition: SuccessCondition,
   index: number,
   outcomeObjective: boolean,
+  pointerPrefix: string,
 ): readonly ObjectiveTransitionRule[] {
-  const predicate = successPredicate(condition);
+  const pointer = `${pointerPrefix}/successConditions/${index}`;
+  const predicate = successPredicate(condition, pointer);
   const to = condition.to ?? "achieved";
   const defaults: readonly ObjectiveState[] =
     to === "preserved"
@@ -161,13 +201,14 @@ function conditionRules(
     from,
     to,
     when: predicate,
-    evidenceRefs: conditionEvidenceRefs(condition),
+    evidenceRefs: conditionEvidenceRefs(condition, pointer),
   }));
 }
 
 export function objectiveRules(
   pack: DrillPackDefinition,
   objective: DrillPackDefinition["objective"] = pack.objective,
+  pointerPrefix = "/objective",
 ): readonly ObjectiveTransitionRule[] {
   const raw = objective.successConditions;
   if (objective.type === "run_trajectory") return [];
@@ -210,7 +251,7 @@ export function objectiveRules(
             evidenceRefs: [packEvidenceRef(boundary.id)],
           }];
     const authored = Array.isArray(raw)
-      ? raw.flatMap((condition, index) => conditionRules(condition, index, false))
+      ? raw.flatMap((condition, index) => conditionRules(condition, index, false, pointerPrefix))
       : [];
     return [...degraded, ...resolution, ...authored];
   }
@@ -220,7 +261,7 @@ export function objectiveRules(
   if (!outcomeObjective) {
     if (!Array.isArray(raw)) return [];
     return raw.flatMap((condition, index) =>
-      conditionRules(condition, index, false),
+      conditionRules(condition, index, false, pointerPrefix),
     );
   }
 
@@ -260,7 +301,7 @@ export function objectiveRules(
   outcomeRule("loss", "failed");
 
   const degraded = conditions.flatMap((condition, index) =>
-    condition.to === "degraded" ? conditionRules(condition, index, true) : [],
+    condition.to === "degraded" ? conditionRules(condition, index, true, pointerPrefix) : [],
   );
   const resolution: ObjectiveTransitionRule[] = [];
   const resolveAt = objective.grading?.resolveAt;
@@ -277,7 +318,7 @@ export function objectiveRules(
     });
   }
   const remaining = conditions.flatMap((condition, index) =>
-    condition.to !== "degraded" ? conditionRules(condition, index, true) : [],
+    condition.to !== "degraded" ? conditionRules(condition, index, true, pointerPrefix) : [],
   );
   return [...automatic, ...degraded, ...resolution, ...remaining];
 }

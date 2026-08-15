@@ -14,6 +14,19 @@
     "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "side": "black"
   },
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "p01-e4",
+      "p02-c6",
+      "p03-d4",
+      "p04-d5",
+      "p05-e5",
+      "p06-bf5",
+      "p07-nf3",
+      "p08-e6"
+    ],
+    "plyHorizon": 8
+  },
   "objective": {
     "type": "run_trajectory",
     "summary": "One continuous game as Black against 3.e5: free the problem bishop before the chain closes, break the base with ...c5 until the c-file is open, and trade down into the single-bishop ending where White's bishop is walled in by its own chain and yours is not. Every boundary is a structural fact your moves created."
@@ -611,6 +624,14 @@
     }
   ],
   "checkpoints": [
+    {
+      "id": "past-the-book",
+      "label": "You are past the authored line",
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
+      "actions": []
+    },
     {
       "id": "chain-closed",
       "label": "The chain stands: d4-e5 against d5-e6",

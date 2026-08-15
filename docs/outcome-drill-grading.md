@@ -20,6 +20,13 @@ requires:
 `rules_fact: draw` is the one non-terminal rules condition that may resolve an
 outcome objective: it means a rules draw is available here.
 
+A `run_trajectory` objective may carry optional root grading when its resolution
+is terminal. This is grounding for the trajectory's static start position, not
+another grade layered over its legs. A Syzygy declaration is checked against the
+effective objective of the final leg; that leg must be `win`, `hold`, `save`, or
+`resist`. Dynamically reached legs still cannot declare Syzygy exactness because
+their entry position is not statically bound.
+
 `hold` and `save` have the same terminal floor: win or draw succeeds and loss
 fails. Their distinction is the claimed root assessment, not a different fact
 at the end. `win` requires a win. `resist` succeeds on a loss only when its
@@ -126,8 +133,8 @@ redraws after reactive layout settles rather than retaining stale pointer bounds
 
 ## Current limits
 
-- Six authored endgame drafts have ledger-verified Syzygy assessments through
-  `make verify-draft`; other Syzygy declarations remain unverified until their own
+- Authored endgame drafts, including the B+N trajectory root, have ledger-verified
+  Syzygy assessments through `make verify-draft`; other declarations remain unverified until their own
   sibling artifacts pass the same admission path.
 - `perfect_tablebase` is selectable only where the capability registry publishes a
   configured tablebase provider. Provider loss is a named refusal, never an engine

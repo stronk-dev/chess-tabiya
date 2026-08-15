@@ -22,7 +22,11 @@ import {
   DECLARED_UNIMPLEMENTED_POLICY_MODES,
   SUPPORTED_POLICY_MODES,
 } from "./capabilities.js";
-import { checkpointMatches, objectiveRules } from "./pack-orchestrator.js";
+import {
+  checkpointMatches,
+  objectiveRules,
+  PackCompileError,
+} from "./pack-orchestrator.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
 import {
   ASSESSMENT_CATEGORIES,
@@ -237,10 +241,131 @@ function structuralIssuesInPack(pack: DrillPackDefinition): readonly PackValidat
   return Object.freeze(issues);
 }
 
+type ObjectiveDefinition = DrillPackDefinition["objective"];
+type ObjectiveCompiler = (
+  pack: DrillPackDefinition,
+  objective?: ObjectiveDefinition,
+  pointerPrefix?: string,
+) => readonly unknown[];
+
+export function objectiveIssues(
+  pack: DrillPackDefinition,
+  objective: ObjectiveDefinition,
+  pointerPrefix: string,
+  checkpoints: ReadonlySet<string>,
+  compile: ObjectiveCompiler = objectiveRules,
+): readonly PackValidationIssue[] {
+  const issues: PackValidationIssue[] = [];
+  const conditions = objective.successConditions;
+  const outcomeObjective = ["win", "hold", "save", "resist"].includes(
+    objective.type,
+  );
+  const theoryObjective = objective.type === "follow_theory";
+  const trajectoryObjective = objective.type === "run_trajectory";
+  const grading = objective.grading;
+  const effectiveObjectiveType = trajectoryObjective
+    ? pack.legs?.at(-1)?.objective.type
+    : objective.type;
+
+  if (outcomeObjective && grading === undefined) {
+    issues.push(runtimeIssue("OBJECTIVE_GRADING_REQUIRED", `${pointerPrefix}/grading`, `${objective.type} objectives require grading`));
+  }
+  if (!outcomeObjective && !trajectoryObjective && grading !== undefined) {
+    issues.push(runtimeIssue("OBJECTIVE_GRADING_UNSUPPORTED", `${pointerPrefix}/grading`, `grading is unsupported for ${objective.type} objectives`));
+  }
+  if (trajectoryObjective && grading?.resolveAt.kind === "checkpoint") {
+    issues.push(runtimeIssue("TRAJECTORY_GRADING_RESOLUTION_UNSUPPORTED", `${pointerPrefix}/grading/resolveAt`, "run_trajectory root grading may resolve only at terminal"));
+  }
+  if (grading?.resolveAt.kind === "checkpoint" && !checkpoints.has(grading.resolveAt.checkpointId)) {
+    issues.push(runtimeIssue("OBJECTIVE_RESOLUTION_UNKNOWN", `${pointerPrefix}/grading/resolveAt/checkpointId`, `unknown resolution checkpoint ${grading.resolveAt.checkpointId}`));
+  }
+  if (objective.type === "resist" && grading?.resolveAt.kind === "terminal") {
+    issues.push(runtimeIssue("OBJECTIVE_RESIST_NEEDS_CHECKPOINT", `${pointerPrefix}/grading/resolveAt`, "resist requires a checkpoint resolution so survival is measurable"));
+  }
+
+  try {
+    const rules = compile(pack, objective, pointerPrefix);
+    if (PLAN_OBJECTIVES.has(objective.type) && rules.length === 0) {
+      issues.push(runtimeIssue("OBJECTIVE_GRADES_NOTHING", pointerPrefix, `${objective.type} declares a plan objective but compiles to no transition rules`));
+    }
+  } catch (error) {
+    if (error instanceof PackCompileError) {
+      issues.push(runtimeIssue(error.code, error.pointer, error.message));
+    } else {
+      issues.push(runtimeIssue("OBJECTIVE_RULES_UNCOMPILABLE", pointerPrefix, error instanceof Error ? error.message : String(error)));
+    }
+  }
+
+  if (Array.isArray(conditions)) {
+    for (const [index, condition] of conditions.entries()) {
+      const conditionPointer = `${pointerPrefix}/successConditions/${index}`;
+      if (condition.kind === "reach_checkpoint" && !checkpoints.has(condition.checkpointId)) {
+        issues.push(runtimeIssue("UNSUPPORTED_OBJECTIVE_CONDITION", conditionPointer, `unknown checkpoint ${condition.checkpointId}`));
+      }
+      const to = condition.to ?? "achieved";
+      if (theoryObjective && ["achieved", "failed", "transitioned"].includes(to)) {
+        issues.push(runtimeIssue("THEORY_ABSORBING_UNSUPPORTED", `${conditionPointer}/to`, "follow_theory cannot enter an absorbing objective state"));
+      }
+      if (condition.from?.includes(to as "active" | "preserved" | "degraded")) {
+        issues.push(runtimeIssue("OBJECTIVE_SELF_TRANSITION", `${conditionPointer}/from`, `from may not contain target state ${to}`));
+      }
+      if (outcomeObjective && ["achieved", "failed", "transitioned"].includes(to) && condition.kind !== "outcome" && !(condition.kind === "rules_fact" && condition.fact === "draw")) {
+        issues.push(runtimeIssue("OBJECTIVE_ABSORBING_WITHOUT_OUTCOME", `${conditionPointer}/to`, "outcome objectives may enter an absorbing state only from an outcome condition"));
+      }
+      if (outcomeObjective && condition.kind === "outcome" && !["achieved", "failed"].includes(to)) {
+        issues.push(runtimeIssue("OBJECTIVE_OUTCOME_TARGET_INVALID", `${conditionPointer}/to`, "outcome conditions may target only achieved or failed"));
+      }
+      if ((outcomeObjective || theoryObjective) && to === "preserved" && condition.from?.includes("degraded")) {
+        issues.push(runtimeIssue("OBJECTIVE_DEGRADED_IS_ONE_WAY", `${conditionPointer}/from`, "degraded outcome objectives may not return to preserved"));
+      }
+      if (condition.kind === "material_balance" && condition.comparison === "equal" && !Number.isInteger(condition.value)) {
+        issues.push(runtimeIssue("MATERIAL_EQUALITY_UNSATISFIABLE", `${conditionPointer}/value`, `material balance is an integer difference of piece values, so an equal comparison against ${condition.value} can never be true`));
+      }
+      if (condition.kind === "rules_fact" && condition.winner !== undefined && condition.fact !== "checkmate") {
+        issues.push(runtimeIssue("RULES_FACT_WINNER_UNSUPPORTED", `${conditionPointer}/winner`, `winner is only meaningful for fact checkmate; ${condition.fact} has no winner`));
+      }
+    }
+  }
+
+  const isLeg = pointerPrefix.startsWith("/legs/");
+  if (!isLeg && grading?.assessedBy.kind === "syzygy") {
+    const count = countFenPieces(pack.start.fen);
+    if (count > 7 || grading.assessedBy.pieceCount !== count) {
+      issues.push(runtimeIssue("SYZYGY_ASSESSMENT_OUT_OF_RANGE", `${pointerPrefix}/grading/assessedBy/pieceCount`, `Syzygy assessment declares ${grading.assessedBy.pieceCount} pieces; FEN has ${count}`));
+    }
+    const sideToMove = pack.start.fen.split(" ")[1] === "b" ? "black" : "white";
+    const category = pack.start.side === sideToMove
+      ? grading.assessedBy.category
+      : invertTablebaseCategory(grading.assessedBy.category);
+    if (trajectoryObjective && !["win", "hold", "save", "resist"].includes(effectiveObjectiveType ?? "")) {
+      issues.push(runtimeIssue("TRAJECTORY_ASSESSMENT_NEEDS_OUTCOME_LEG", `${pointerPrefix}/grading/assessedBy/category`, "run_trajectory root assessment requires a final outcome leg"));
+    } else {
+      const admissionCode = assessmentAdmissionCode(effectiveObjectiveType ?? objective.type, category);
+      if (admissionCode === "ASSESSMENT_CATEGORY_INDETERMINATE") {
+        issues.push(runtimeIssue(admissionCode, `${pointerPrefix}/grading/assessedBy/category`, `${category} is not a determinate root assessment`));
+      } else if (admissionCode === "CURSED_WIN_CANNOT_ROOT_WIN") {
+        issues.push(runtimeIssue(admissionCode, `${pointerPrefix}/grading/assessedBy/category`, "the fifty-move rule makes a cursed-win conversion unreachable for a win objective"));
+      } else if (admissionCode !== undefined) {
+        issues.push(runtimeIssue(admissionCode, `${pointerPrefix}/grading/assessedBy/category`, `${effectiveObjectiveType} does not admit learner-perspective category ${category}`));
+      }
+    }
+    if (category === "cursed-win" || category === "blessed-loss") {
+      const halfmoves = Number.parseInt(pack.start.fen.split(" ")[4] ?? "0", 10);
+      const needed = Math.max(0, 100 - halfmoves);
+      const target = (pack as unknown as { readonly difficulty?: { readonly branchLengthTarget?: number } }).difficulty?.branchLengthTarget;
+      if (target === undefined || target < needed) {
+        issues.push(runtimeIssue("RULE_DRAW_ROOT_NEEDS_SEGMENT_BUDGET", "/difficulty/branchLengthTarget", `rule-drawn root needs at least ${needed} plies to reach halfmove 100`));
+      }
+    }
+  }
+  return Object.freeze(issues);
+}
+
 function runtimeIssues(
   pack: DrillPackDefinition,
   shapes?: PackShapeLookup,
   packs?: PackSiblingLookup,
+  compile: ObjectiveCompiler = objectiveRules,
 ): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
   issues.push(...structuralIssuesInPack(pack));
@@ -485,19 +610,17 @@ function runtimeIssues(
     }
   }
 
-  const conditions = pack.objective.successConditions;
-  const outcomeObjective = ["win", "hold", "save", "resist"].includes(
-    pack.objective.type,
+  const topLevelTheoryObjective = pack.objective.type === "follow_theory";
+  const theoryObjective = topLevelTheoryObjective || (pack.legs ?? []).some(
+    (leg) => leg.objective.type === "follow_theory",
   );
-  const grading = pack.objective.grading;
-  const theoryObjective = pack.objective.type === "follow_theory";
   const boundary = pack.authoredBoundary;
   const boundaryCheckpoints = pack.checkpoints.filter(
     (checkpoint) =>
       !("windowOpens" in checkpoint.trigger) &&
       "atAuthoredBoundary" in checkpoint.trigger,
   );
-  if (theoryObjective && mode !== "line") {
+  if (topLevelTheoryObjective && mode !== "line") {
     issues.push(runtimeIssue("THEORY_OBJECTIVE_NEEDS_LINE_MODE", "/mode", "follow_theory requires mode line"));
   }
   if (theoryObjective && boundary === undefined) {
@@ -522,118 +645,6 @@ function runtimeIssues(
       }
     }
   }
-  if (outcomeObjective && grading === undefined) {
-    issues.push(
-      runtimeIssue(
-        "OBJECTIVE_GRADING_REQUIRED",
-        "/objective/grading",
-        `${pack.objective.type} objectives require grading`,
-      ),
-    );
-  }
-  if (!outcomeObjective && grading !== undefined) {
-    issues.push(
-      runtimeIssue(
-        "OBJECTIVE_GRADING_UNSUPPORTED",
-        "/objective/grading",
-        `grading is unsupported for ${pack.objective.type} objectives`,
-      ),
-    );
-  }
-  if (grading?.resolveAt.kind === "checkpoint" && !checkpoints.has(grading.resolveAt.checkpointId)) {
-    issues.push(
-      runtimeIssue(
-        "OBJECTIVE_RESOLUTION_UNKNOWN",
-        "/objective/grading/resolveAt/checkpointId",
-        `unknown resolution checkpoint ${grading.resolveAt.checkpointId}`,
-      ),
-    );
-  }
-  if (pack.objective.type === "resist" && grading?.resolveAt.kind === "terminal") {
-    issues.push(
-      runtimeIssue(
-        "OBJECTIVE_RESIST_NEEDS_CHECKPOINT",
-        "/objective/grading/resolveAt",
-        "resist requires a checkpoint resolution so survival is measurable",
-      ),
-    );
-  }
-
-  if (PLAN_OBJECTIVES.has(pack.objective.type) && objectiveRules(pack).length === 0) {
-    issues.push(runtimeIssue("OBJECTIVE_GRADES_NOTHING", "/objective", `${pack.objective.type} declares a plan objective but compiles to no transition rules`));
-  }
-  for (const [index, leg] of (pack.legs ?? []).entries()) {
-    if (PLAN_OBJECTIVES.has(leg.objective.type) && objectiveRules(pack, leg.objective).length === 0) issues.push(runtimeIssue("OBJECTIVE_GRADES_NOTHING", `/legs/${index}/objective`, `${leg.objective.type} declares a plan objective but compiles to no transition rules`));
-  }
-
-  if (Array.isArray(conditions)) {
-    for (const [index, value] of conditions.entries()) {
-      const condition = value;
-      if (condition.kind === "reach_checkpoint" && !checkpoints.has(condition.checkpointId)) {
-        issues.push(
-          runtimeIssue(
-            "UNSUPPORTED_OBJECTIVE_CONDITION",
-            `/objective/successConditions/${index}`,
-            `unknown checkpoint ${condition.checkpointId}`,
-          ),
-        );
-      }
-      const to = condition.to ?? "achieved";
-      if (theoryObjective && ["achieved", "failed", "transitioned"].includes(to)) {
-        issues.push(runtimeIssue("THEORY_ABSORBING_UNSUPPORTED", `/objective/successConditions/${index}/to`, "follow_theory cannot enter an absorbing objective state"));
-      }
-      if (condition.from?.includes(to as "active" | "preserved" | "degraded")) {
-        issues.push(
-          runtimeIssue(
-            "OBJECTIVE_SELF_TRANSITION",
-            `/objective/successConditions/${index}/from`,
-            `from may not contain target state ${to}`,
-          ),
-        );
-      }
-      if (
-        outcomeObjective &&
-        ["achieved", "failed", "transitioned"].includes(to) &&
-        condition.kind !== "outcome" &&
-        !(condition.kind === "rules_fact" && condition.fact === "draw")
-      ) {
-        issues.push(
-          runtimeIssue(
-            "OBJECTIVE_ABSORBING_WITHOUT_OUTCOME",
-            `/objective/successConditions/${index}/to`,
-            "outcome objectives may enter an absorbing state only from an outcome condition",
-          ),
-        );
-      }
-      if (
-        outcomeObjective &&
-        condition.kind === "outcome" &&
-        !["achieved", "failed"].includes(to)
-      ) {
-        issues.push(
-          runtimeIssue(
-            "OBJECTIVE_OUTCOME_TARGET_INVALID",
-            `/objective/successConditions/${index}/to`,
-            "outcome conditions may target only achieved or failed",
-          ),
-        );
-      }
-      if (
-        (outcomeObjective || theoryObjective) &&
-        to === "preserved" &&
-        condition.from?.includes("degraded")
-      ) {
-        issues.push(
-          runtimeIssue(
-            "OBJECTIVE_DEGRADED_IS_ONE_WAY",
-            `/objective/successConditions/${index}/from`,
-            "degraded outcome objectives may not return to preserved",
-          ),
-        );
-      }
-    }
-  }
-
   if (
     theoryObjective &&
     boundary?.plyHorizon !== undefined &&
@@ -653,43 +664,9 @@ function runtimeIssues(
     }
   }
 
-  if (grading?.assessedBy.kind === "syzygy") {
-    const count = countFenPieces(pack.start.fen);
-    if (count > 7 || grading.assessedBy.pieceCount !== count) {
-      issues.push(
-        runtimeIssue(
-          "SYZYGY_ASSESSMENT_OUT_OF_RANGE",
-          "/objective/grading/assessedBy/pieceCount",
-          `Syzygy assessment declares ${grading.assessedBy.pieceCount} pieces; FEN has ${count}`,
-        ),
-      );
-    }
-    const sideToMove = pack.start.fen.split(" ")[1] === "b" ? "black" : "white";
-    const learner = pack.start.side;
-    const category = learner === sideToMove
-      ? grading.assessedBy.category
-      : invertTablebaseCategory(grading.assessedBy.category);
-    const admissionCode = assessmentAdmissionCode(pack.objective.type, category);
-    if (admissionCode === "ASSESSMENT_CATEGORY_INDETERMINATE") {
-      issues.push(runtimeIssue("ASSESSMENT_CATEGORY_INDETERMINATE", "/objective/grading/assessedBy/category", `${category} is not a determinate root assessment`));
-    } else if (admissionCode === "CURSED_WIN_CANNOT_ROOT_WIN") {
-      issues.push(runtimeIssue("CURSED_WIN_CANNOT_ROOT_WIN", "/objective/grading/assessedBy/category", "the fifty-move rule makes a cursed-win conversion unreachable for a win objective"));
-    } else if (admissionCode !== undefined) {
-      issues.push(
-        runtimeIssue(
-          admissionCode,
-          "/objective/grading/assessedBy/category",
-          `${pack.objective.type} does not admit learner-perspective category ${category}`,
-        ),
-      );
-    }
-    if (category === "cursed-win" || category === "blessed-loss") {
-      const halfmoves = Number.parseInt(pack.start.fen.split(" ")[4] ?? "0", 10);
-      const needed = Math.max(0, 100 - halfmoves);
-      if (difficulty.branchLengthTarget === undefined || difficulty.branchLengthTarget < needed) {
-        issues.push(runtimeIssue("RULE_DRAW_ROOT_NEEDS_SEGMENT_BUDGET", "/difficulty/branchLengthTarget", `rule-drawn root needs at least ${needed} plies to reach halfmove 100`));
-      }
-    }
+  issues.push(...objectiveIssues(pack, pack.objective, "/objective", checkpoints, compile));
+  for (const [index, leg] of (pack.legs ?? []).entries()) {
+    issues.push(...objectiveIssues(pack, leg.objective, `/legs/${index}/objective`, checkpoints, compile));
   }
 
   try {
@@ -748,7 +725,11 @@ function runtimeIssues(
   return Object.freeze(issues);
 }
 
-export function validatePackDocument(value: unknown, options: { readonly shapes?: PackShapeLookup; readonly packs?: PackSiblingLookup } = {}): PackValidationResult {
+export function validatePackDocument(value: unknown, options: {
+  readonly shapes?: PackShapeLookup;
+  readonly packs?: PackSiblingLookup;
+  readonly compileObjectiveRules?: ObjectiveCompiler;
+} = {}): PackValidationResult {
   const validate = validator();
   if (!validate(value)) {
     return Object.freeze({
@@ -768,7 +749,7 @@ export function validatePackDocument(value: unknown, options: { readonly shapes?
         message: issue.message,
       }),
     ),
-    ...runtimeIssues(document, options.shapes, options.packs),
+    ...runtimeIssues(document, options.shapes, options.packs, options.compileObjectiveRules),
   ];
   return Object.freeze({
     valid: !issues.some((issue) => issue.severity === "error"),

@@ -8,7 +8,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
 | `resistance-spectrum.md` | draft (awaiting cross-review) | — | claims **run schema 0.14** and **migration 19** (rebased by claude from 0.15/20 after the 0.14 holder was cancelled). No pack-schema claim: `practical_resistance` is already in the enum, so this is a partition move. Ownership pins: `practical-difficulty.ts` (new), the `eloHonored` seam |
-| `validator-integrity.md` | cross-reviewed, ready | — | **claims nothing versioned** — no pack-schema bump, no migration, no run-schema change; the D33 refusal lives in `runtimeIssues`, so relaxing it moves no `$id` and no digest. Deliberately did NOT take its contingent 0.19 lane, arguing that taking it would itself ship a new instance of the defect |
 | `tempo-vocabulary.md` | cross-reviewed, ready | — | claims **pack schema 0.17** — additive PLUS one narrowing (`$defs/timingWindow` leaves the checkpoint-trigger union); blast radius measured at 0 occurrences across all 264 JSON files under `content/`. No migration, no run-schema change, shape-entry stays 0.2. Implements `preserve_plan_window`; computes all three tempo mistake classes |
 | `predicate-wave-3.md` | draft (awaiting cross-review) | — | claims **pack schema 0.18** (additive) **and shape-entry schema 0.2 → 0.3** — the shape schema carries a DUPLICATED `$defs/structuralFeature` (`shape_entry.schema.json:47-75`), so new leaves must land in both copies or shape triggers silently cannot use them. No migration, no run-schema change |
 
@@ -209,6 +208,7 @@ before re-attempting this territory.
 | `archive/orphan-completion.md` | implemented | `docs/n-way-comparison.md`, `docs/pack-studio.md`, `docs/return-and-progression.md` |
 | `archive/grounding-pair.md` | implemented | `docs/tablebase-grounding.md`, `docs/content-sourcing.md`, `docs/engine-workers.md`, `docs/outcome-drill-grading.md` |
 | `archive/authoring-frictions.md` | implemented | `docs/drill-pack-format.md`, `docs/tablebase-grounding.md`, `docs/content-sourcing.md`, `docs/outcome-drill-grading.md`, `docs/branch-runtime.md`, `docs/development.md` |
+| `archive/validator-integrity.md` | implemented | `docs/drill-pack-format.md`, `docs/trajectory-drill.md`, `docs/outcome-drill-grading.md` |
 
 ## The archive sketches are quarry, not RFCs
 
