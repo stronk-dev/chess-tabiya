@@ -31,6 +31,23 @@
 > verified. Where a claim depends on a number (a count, an enum arity) the number was
 > re-derived first-hand rather than copied from a dossier, and three dossier/ledger
 > figures are **corrected** below (§3.3, §4.1, §1.4).
+>
+> **[cross-review] Re-derived at `0fbf0ef`.** Every count and every file:line citation in
+> this draft was re-run by a second reader who did not write it. Most held: the corpus
+> counts (43 / 139 / 36 / 10 / 9 — criterion 1), the `retryVariants` document/entry/kind
+> counts and the *4 of 11* `variantOf` coverage (§3.3), the D57 code quote verbatim, the
+> `#selectionRequest(run, nodeId, pack, mode, seed)` signature, `legIndexAt`'s signature and
+> export, and 14 of 15 spot-checked line citations. **Six classes of defect did not hold**
+> and are corrected inline, each marked `[cross-review]` with the measurement that forced
+> it: §2 (the anti-vacuity clause is itself vacuous, and the register's key cannot address
+> its own seed rows), §3.1 (two axis counts), §3.3 (the *11 of 11* prose-referent count is
+> **8 of 11**), §3.4 + §1d + §1e + criterion 13 (D59's ledger row is **already flipped**),
+> §4.3 (the piece-count refusal rests on a decidability claim that is false in the direction
+> that matters, and admits unguarded a mid-run 422 it refuses two modes to avoid), and §5
+> (`rfc/README.md` has moved under this draft). Criterion 9 asserted a count that makes its
+> own test fail. **Three of the corrections change the specification rather than the prose
+> (§4.3's three) and are the author's to ratify** — a reviewer may not narrow a shipped
+> surface unilaterally, so they are landed with the reasoning exposed rather than assumed.
 
 ## Summary
 
@@ -171,10 +188,14 @@ shipped mechanism to inventing one.**
 #### 1d. One correction owed to the framing
 
 The task brief describes D39 and D40 as open. They are not: `design/BACKLOG.md` marks both
-`✅ closed 2026-08-15 by validator-integrity`, and §3.4 verifies both in source. D59 is the
-reverse case — the **ledger row is still `💡 open` while the code is fixed**. Neither
+`✅ closed 2026-08-15 by validator-integrity`, and §3.4 verifies both in source. D59 was the
+reverse case — the **ledger row read `💡 open` while the code was fixed**. Neither
 correction weakens the through-line; the second sharpens it, because a ledger row that
 disagrees with the code about what exists is the same defect one tier up.
+
+> **[cross-review]** D59's row has since been flipped to `✅` (§3.4). The observation stands
+> as the reason the flip happened; the status claim does not, and is corrected wherever this
+> draft repeats it.
 
 #### 1e. Every row, disposed — the table this RFC exists to produce
 
@@ -190,7 +211,7 @@ Nothing is left unclassified. Where a classification is provisional, the disposi
 | **D57** *"The vacuity gate can be skipped…"* | excess-in-the-**record** | engine-request contract, **record** | **implement** | The mode is real, published and capability-gated; one conjunct lets an alphabetical selection wear its name. Both doors shut, plus one new named 422 | 3.5 |
 | **D39** *"decimal `material_balance` equal-conditions…"* | excess | declared-vs-executable | **already implemented** (`MATERIAL_EQUALITY_UNSATISFIABLE`) | Verified in source; ledger flipped. Cited as the law's own precedent | 3.4 |
 | **D40** *"`winner` is accepted for `stalemate` and then ignored"* | excess | declared-vs-executable | **already implemented** (`RULES_FACT_WINNER_UNSUPPORTED`) | Verified in source; ledger flipped. Same precedent | 3.4 |
-| **D59** *"top-p can sample a `bestmove` outside…"* | excess-in-the-**record** | engine-request contract, *state* + *record* | **already implemented** at `43c6c4a`; **ledger row not flipped** | Widened window + `offWindow` marker both ship. Reported to `engine-request-contract`'s owner rather than flipped by a second writer | 3.4 |
+| **D59** *"top-p can sample a `bestmove` outside…"* | excess-in-the-**record** | engine-request contract, *state* + *record* | **already implemented** at `43c6c4a`; ledger row **flipped ✅ since drafting** `[cross-review]` | Widened window + `offWindow` marker both ship. Reported to `engine-request-contract`'s owner rather than flipped by a second writer; the row now reads ✅ at `0fbf0ef` | 3.4 |
 | **D96** *"Per-leg `shapes` and `opponentPolicy` are inexpressible…"* | **deficit** | declared-vs-executable, read as the **D29 inversion** | **implement** | Blocks 4 of 6 launch trajectories; purely additive; invalidates zero packs. Claims pack **0.25** | 4 |
 
 **The silent state, named once.** Every row above spent time in a state that is neither
@@ -218,12 +239,28 @@ cannot:
 
 **Location.** `packages/schema/src/drill-pack/dispositions.ts`, exporting a frozen
 `FORMAT_DISPOSITIONS: readonly FormatDisposition[]` where
-`FormatDisposition = {pointer, disposition, reason, site?, successor?, removedAt?,
+`FormatDisposition = {pointer, value?, disposition, reason, site?, successor?, removedAt?,
 experiment?}` and `pointer` is a JSON Pointer into the pack schema (or the string
-`"assistance:<axis>"` for client-preference axes, which are not pack documents). It lives in
+`"assistance:<axis>"` for client-preference axes, or `"error:<CODE>"` for `ServerErrorCode`
+members — neither is a pack document). It lives in
 the schema package rather than the server so that `make pack-check` can emit its reasons
 offline, exactly as `DECLARED_UNIMPLEMENTED_POLICY_MODES` reasons already reach the loader
 (`apps/server/src/pack-validation.ts`, `UNSUPPORTED_OPPONENT_POLICY`).
+
+> **[cross-review] The key was wrong, and the register's own seed rows failed its own
+> gate.** As drafted, `pointer` alone was the row identity and was specified as *"a JSON
+> Pointer into the pack schema"*. Three of the rows this RFC lands are not addressable that
+> way. (a) The two seed rows below are **enum values**, not properties: both are
+> `/opponentPolicy/mode`, so as drafted they are one pointer twice — an identity collision
+> in a two-row seed. Verified: `$defs/opponentPolicy.mode` is a single seven-member `enum`
+> at one pointer (`schemas/drill_pack.schema.json`), and `DECLARED_UNIMPLEMENTED_POLICY_MODES`
+> keys its two rows by `mode`, not by pointer (`apps/server/src/capabilities.ts:22-25`).
+> (b) §3.2's row uses an `error:` namespace §2 never declared. (c) Gate clause 3 — *"fails
+> when a pointer in the register does not exist in the schema"* — rejects `assistance:arrows`
+> and `error:SIMULATE_BUDGET_EXCEEDED` outright, so the register as specified could not
+> contain the rows this RFC exists to write. **Corrected:** `value?` is added, row identity
+> is the pair `(pointer, value)`, the `error:` namespace is declared here rather than
+> introduced in passing, and clause 3 is scoped to schema-namespace pointers below.
 
 **Publication.** `apps/server/src/capabilities.ts` re-exports it on `/capabilities` as
 `formatDispositions`, alongside `engine-leverage`'s `capabilityDispositions`. A deployment
@@ -235,16 +272,42 @@ which policy modes it can select.
 1. Walks `schemas/drill_pack.schema.json` and collects every leaf property pointer and
    every closed-`enum` member (the same document the existing enum-parity test at
    `drill-pack.test.ts` already reads, so the walker has a precedent and a fixture).
-2. Collects every pointer named in `FORMAT_DISPOSITIONS`.
-3. **Fails when a pointer in the register does not exist in the schema** (a stale row).
+2. Collects every `(pointer, value)` pair named in `FORMAT_DISPOSITIONS`.
+3. **Fails when a schema-namespace pointer in the register does not exist in the schema**,
+   and, for a row carrying `value`, when that value is not a member of the enum at that
+   pointer (a stale row). Rows in the `assistance:` and `error:` namespaces are checked
+   against `AssistanceConfig`'s key set and the `ServerErrorCode` union respectively.
 4. **Fails when a `reached` row's named site does not exist** — the site is
    `{module, symbol}` and the test asserts the symbol is exported or referenced there.
 5. Does **not** attempt to prove reachedness by static analysis; that is undecidable in
    general and a test that pretends otherwise is worse than none. The register is
    author-maintained; the test keeps it *honest*, not *complete*.
-6. **Fails when the walk yields zero pointers**, for the reason `engine-leverage` §6.2 gives
-   about `EngineHealth.options`: an enumeration gate that can pass on an empty enumeration
-   is not a gate, and this repo has ledgered the vacuous-assertion shape before (D61).
+6. **Fails when `FORMAT_DISPOSITIONS` does not reproduce a floor derived from a live
+   constant.** The floor is computed, not written down: every member of the
+   `/opponentPolicy/mode` enum that is absent from `RUN_OPPONENT_MODES`
+   (`packages/runtime/src/types.ts:38`) must have a `refused` row whose `reason` is the
+   verbatim string `DECLARED_UNIMPLEMENTED_POLICY_MODES` carries for it. The test fails
+   when the register is empty, when it misses a member, or when a reason has drifted.
+
+> **[cross-review] The anti-vacuity clause did not carry over — it was itself the D61
+> shape.** As drafted, clause 6 read *"fails when the walk yields zero pointers"*. That
+> clause can never fire. The walk is over `schemas/drill_pack.schema.json`, a committed file
+> whose leaf-pointer count is a positive constant of the repository; reaching zero requires
+> deleting or corrupting the schema, at which point every other test in the package has
+> already failed. D61's ledgered definition of the failure is *"asserts against a property
+> the CSS makes constant"* — this was the same assertion against a property the committed
+> schema makes constant. **The clause `engine-leverage` §6.2 wrote is not analogous to this
+> one, and copying its words rather than its reasoning is what went wrong.** Its degenerate
+> quantity is real and reachable: `EngineHealth.options` is *optional*
+> (`engine-supervisor.ts`), so a live deployment genuinely produces `undefined` and a diff
+> against `undefined` genuinely passes by finding nothing. The quantity that degenerates
+> **here** is not the schema walk — it is `FORMAT_DISPOSITIONS` itself. Clauses 3, 4 and 5
+> all quantify over register rows, so **an empty register passes every clause of the gate as
+> drafted**, and so does a register that silently loses rows. Corrected clause 6 puts the
+> threshold off the instrument's optimality boundary by deriving the floor from a constant
+> that ships and grows (`DECLARED_UNIMPLEMENTED_POLICY_MODES`), so the gate fails when the
+> register shrinks below what the codebase already refuses — which is exactly the regression
+> the seed rows were chosen to be. Acceptance criterion 10 is corrected to match.
 
 **What the register does not claim.** It does not prove that every unreached declaration has
 been found — only that every declaration *the register names* is classified, and that no
@@ -252,11 +315,14 @@ classification has gone stale. The honest measure of completeness is Open questi
 
 **Seed rows.** The register lands with the rows this RFC decides (§3, §4), plus the two
 already-honest cases that establish the `refused` pattern predates it:
-`/opponentPolicy/mode` value `plan_defense` and value `human_external`, both `refused` with
+`{pointer: "/opponentPolicy/mode", value: "plan_defense"}` and
+`{pointer: "/opponentPolicy/mode", value: "human_external"}`, both `refused` with
 the verbatim reasons already in `DECLARED_UNIMPLEMENTED_POLICY_MODES`
-(`apps/server/src/capabilities.ts`). Those two rows are a **regression fixture**: the
+(`apps/server/src/capabilities.ts:22-25`). Those two rows are a **regression fixture**: the
 register must reproduce a refusal the codebase already gets right, or it is describing
-something other than what ships.
+something other than what ships — and under corrected clause 6 they are no longer written
+down at all, they are **derived** from that constant, so a third declared-and-unimplemented
+mode added later fails the gate instead of quietly widening the enum.
 
 ### 3. Half one — declared, shipped, reached by nothing
 
@@ -279,9 +345,22 @@ present**, so the arrow capability exists in the board component and no caller u
 
 **The zero is unique, and was re-derived here.** Counting non-test reads of each axis
 (`assistance.<axis>` or `.<axis> ===` across `apps/web/src`, `apps/server/src`,
-`packages/runtime/src`): `spoken` 6, `corpus` 5, `guided` 4, `markers` 3, `ambient` 2,
-`voice` 2, `boardLighting` 5 — and `arrows` **0**. It is not one weak axis among nine; it is
-the only one with nothing behind it.
+`packages/runtime/src`): `humanSplit` 12, `corpus` **8**, `spoken` 6, `guided` 4,
+`boardLighting` **3**, `markers` 3, `ambient` 2, `voice` 2 — and `arrows` **0**. It is not
+one weak axis among nine; it is the only one with nothing behind it.
+
+> **[cross-review] Two of these were wrong, both in the direction that mattered least.**
+> The draft read `corpus` 5 and `boardLighting` 5. Re-counted occurrence-by-occurrence at
+> `0fbf0ef`: `corpus` is **8** — `DrillScreen.svelte:715` packs four matches onto one line
+> and `:716`/`:717` three more, and the draft missed the two server reads
+> (`apps/server/src/shape-check.ts:28`, `apps/server/src/rest.ts:1066`); `boardLighting` is
+> **3**, at `DrillScreen.svelte:294` (×2) and `:825`, not 5. **The argument survives
+> unchanged and is slightly stronger**: `boardLighting` — the axis §3.1's own renderer
+> paragraph and `client-surface-floor` 8(b) both lean on — is thinner than the draft
+> claimed, and `arrows` is still the only zero. What this cost is precision, and precision
+> is what a count is for: an axis-read tally that is wrong on two of nine is not evidence a
+> reader can use without re-running it, which is why criterion 7 asserts the **zero**
+> directly rather than the ranking.
 
 **Disposition: `retired`, successor `null`.** Reasoning, in the order it was actually
 decided:
@@ -385,8 +464,8 @@ documents** (7 authored packs) carrying **11 entries**:
 | `same_root_new_defense` | 1 | `root_after_move` |
 | `alternate_plan_class` | 1 | `same_root_other_objective` |
 
-`variantOf` has **zero users** in `content/`, and covers 4 of 11 entries. Worse, every
-uncovered note names **several** sibling packs at once — *"the rest of the theoretical-mates
+`variantOf` has **zero users** in `content/`, and covers 4 of 11 entries. Worse, most
+uncovered notes name **several** sibling packs at once — *"the rest of the theoretical-mates
 family, easiest first: `mate-k-q-technique`, `mate-k-r-technique`, `mate-two-bishops`"*
 (`content/drafts/mate-bishop-knight.json`) — while `variantOf` is a **single object**, not
 an array. Retiring `retryVariants` today would delete expressiveness that seven authored
@@ -395,11 +474,37 @@ packs are using.
 > **Correction to a sibling draft, offered rather than asserted.** `vocabulary-wiring` §7
 > counts *"exactly two entries repo-wide use `related_position_same_idea` to name a sibling
 > pack id"* and widens to six on a looser reading. Both counts are right for what they
-> measure. The count that decides *this* disposition is different and larger: **every one of
-> the eleven entries names at least one real pack id in free text** — the four
-> `different_material_details` notes name two or three each. The prose stand-in is not an
-> occasional habit; it is unanimous, and it is unanimous because `variantOf` cannot hold a
-> list.
+> measure. The count that decides *this* disposition is different and larger: **8 of the
+> eleven entries name at least one real pack id in free text, and 5 of those name two or
+> three.** The prose stand-in is the dominant habit, and it is dominant because `variantOf`
+> cannot hold a list.
+>
+> **[cross-review] This count was the one that flipped the disposition, and it was wrong.**
+> The draft asserted *"every one of the eleven entries names at least one real pack id"* and
+> *"the four `different_material_details` notes"*. Re-derived at `0fbf0ef` by building the
+> set of **79** real pack ids in `content/` and substring-matching every note against it:
+> **8 of 11**, not 11 of 11, and `different_material_details` has **five** entries, not four.
+> The three that name nothing are `content/drafts/queen-vs-pawn-seventh-convert.json`'s
+> `opposite_side` entry — whose note defers to a save-side sibling **that does not exist**
+> — and the two entries in `schemas/drill_pack.example.json`, which carry **no `note` field
+> at all** (`note` is optional). The claim *"every uncovered note names several sibling packs
+> at once"* is also false: of the **7** uncovered entries, the five
+> `different_material_details` notes name 3/2/2/2/3, but the two `related_position_same_idea`
+> notes name exactly **one** each.
+>
+> **Does the corrected count still carry the disposition? Yes, and here is the test rather
+> than the assurance.** `refused`-not-`retired` needs one thing to be true: that `variantOf`
+> as it ships cannot absorb what content is using. Five of the seven uncovered entries name
+> two or three packs against a `variantOf` that is a single object — that is the array gap,
+> and it is unmoved. What the correction *does* remove is the word **unanimous**: at 8 of 11
+> the prose stand-in is dominant, not universal, and the unanimity was doing rhetorical work
+> the measurement does not support. The disposition stands on the array gap alone.
+>
+> **And the miss is itself the finding.** `queen-vs-pawn-seventh-convert.json` points at a
+> pack nobody wrote, and no validator can see it, because the referent is a substring of a
+> prose note. That is a sharper argument for `RETRY_VARIANTS_NOT_EXECUTABLE` than the
+> unanimity claim was — a dangling cross-reference invisible to the loader is what "names no
+> referent" costs in practice. Ledgered as a new row (`design/BACKLOG.md`).
 
 **Disposition: `refused` now, `retired` when its successor is a superset.** The reason
 published on the row, and emitted by the validator: *"`retryVariants` is a catalogue
@@ -462,7 +567,8 @@ argument that §1's answer is right: the law's most recent two uses were on defe
 had classified when it was written, and it needed nothing added.
 
 **D59** — *"top-p can sample a `bestmove` outside the recorded candidate list"* — **closed in
-code, open in the ledger.** `OpponentSelector#humanCommon` now (a) requests
+code and, since this draft was written, closed in the ledger too.**
+`OpponentSelector#humanCommon` now (a) requests
 `Math.max(8, legalMoveCount(...))` MultiPV — `engine-request-contract` §10(a), the *state*
 remedy; (b) retries once when `bestMove(...)` is absent from `candidateLines(...)`; and (c)
 appends the played move to the recorded candidate list as
@@ -472,11 +578,20 @@ through `SelectionCandidate` (`packages/runtime/src/types.ts:69`), `humanConcess
 (`packages/runtime/src/practical-difficulty.ts:36`), `pivotal.ts`, `rest.ts` and group
 seeding. **The persisted selection no longer omits the move actually played.**
 
-The `design/BACKLOG.md` D59 row is still `💡 open`. **This RFC does not flip it** — it is
-`engine-request-contract`'s to flip under the completion protocol, and a second writer
-guessing at a summary line is how registers rot. It is reported here, with the commit, so
-whoever runs the next reconciliation gate has the finding rather than re-deriving it.
-*A ledger row and the code disagreeing about what exists is this RFC's subject, one tier up.*
+> **[cross-review] Stale, and stale in the direction that closes the loop.** The draft read
+> *"The `design/BACKLOG.md` D59 row is still `💡 open`. This RFC does not flip it — it is
+> `engine-request-contract`'s to flip under the completion protocol, and a second writer
+> guessing at a summary line is how registers rot."* At `0fbf0ef` the row reads **`D59 ✅
+> CLOSED in code 2026-08-15 by `43c6c4a` (`engine-request-contract`), ledger flipped
+> 2026-08-15 after independent verification by claude — the row stood `open` for a day
+> because the closing commit shipped the fix under the contract's *state* obligation without
+> naming the row.`** The draft's refusal to flip it was right and its finding was acted on;
+> what is now wrong is only the tense. **Four places asserted the stale status and all four
+> are corrected** — here, §1d, §1e's D59 row, and acceptance criterion 13. This is worth
+> saying rather than silently editing: an RFC that reports a ledger row's state is holding a
+> snapshot, and *"a ledger row and the code disagreeing about what exists is this RFC's
+> subject, one tier up"* applies to this RFC's own reporting of it. The residue below is
+> unaffected — it is a property of the code, not of the row.
 
 **One residue, named and not claimed.** `#humanCommon` computes
 `width = min(requestedWidth, health.options.MultiPV.max)`. On an engine advertising a
@@ -549,8 +664,14 @@ different door").
 packages/runtime/src --include="*.ts" | sort -u` — none of
 `PRACTICAL_RESISTANCE_UNMEASURED`, `RETRY_VARIANTS_NOT_EXECUTABLE`,
 `LEG_POLICY_MODE_UNSUPPORTED`, `LEG_SHAPE_REF_UNLISTED` or `LEG_SHAPE_LIST_EMPTY` appears
-anywhere in the tree, nor in `rfc/`, nor in `schemas/`. Re-run at implementation time, since
-`engine-leverage` and `vocabulary-wiring` are both adding literals concurrently.
+anywhere in the tree, nor in `rfc/`, nor in `schemas/`. `[cross-review]` The two literals
+this review adds — `LEG_POLICY_ELO_UNHONORED` and `LEG_TARGET_ELO_OUT_OF_RANGE` — are also
+absent (note that the *existing* `TARGET_ELO_OUT_OF_RANGE` in `apps/server/src/engine-band.ts`
+is a different code and the `LEG_` prefix is what keeps them apart; if the implementer would
+rather reuse the existing code at a leg pointer than mint a second, that is a defensible
+simplification and the criterion should be written to whichever is chosen). Re-run at
+implementation time, since `engine-leverage` and `vocabulary-wiring` are both adding
+literals concurrently.
 
 **Why `implement` and not `refuse`.** `practical_resistance` is not a spare declaration: it
 is the only shipped mode that models *human difficulty* rather than engine strength, it has
@@ -634,17 +755,27 @@ relation qualifier instead. That is the same substitution `vocabulary-wiring` §
 for `variantOf`/`retryVariants`, on a second field, and it is what an inexpressible
 construct looks like from the content side.
 
-> **And it is happening right now, in the working tree this draft was written against.**
-> Both authored launch trajectories are modified-uncommitted as of drafting, and the diff in
-> both is a single addition to the **pack-level** `shapes` array: `open-centre` added to
+> **And it happened during drafting, in the working tree this draft was written against.**
+> Both authored launch trajectories were modified-uncommitted as of drafting, and the diff in
+> both was a single addition to the **pack-level** `shapes` array: `open-centre` added to
 > `trajectory-qgd-exchange-minority`, `queenless-middlegame` added to
-> `trajectory-caro-advance-chain-bishops`. Those are two of the three D44 orphan shapes §4.2
-> just named. Someone is closing D44 by attaching a **middlegame** shape to the pack root of
+> `trajectory-caro-advance-chain-bishops`. Those are two of the three D44 orphan shapes the
+> *third confirmation* below names. Someone is closing D44 by attaching a **middlegame**
+> shape to the pack root of
 > a trajectory whose first leg is an **opening**, because that is the only place the format
 > lets it go. The claim "a pack-level shape list is the wrong granularity for a
 > cross-phase pack" did not need a hypothetical: it is being demonstrated concurrently, by
 > a different agent, for a different reason. *This is offered as observation, not criticism
 > — the edit is correct given the format; the format is what is wrong.*
+>
+> **[cross-review] Both edits are now committed.** At `0fbf0ef`
+> `trajectory-qgd-exchange-minority` carries `["carlsbad", "open-centre", {shape:
+> "rook-4v3-same-side", relation: "prospective"}]` and
+> `trajectory-caro-advance-chain-bishops` carries `["closed-centre-chain",
+> "bishop-good-bad", "queenless-middlegame"]`. The observation is stronger for having
+> landed, not weaker — it is no longer a working-tree accident, it is the shipped corpus —
+> but the present tense above is now wrong and an implementer diffing for it will find
+> nothing to diff.
 
 **A third confirmation, from a different direction.** `vocabulary-wiring` §2c records that
 three of the nine pack-unreferenced shapes in **D44** — `open-centre`,
@@ -699,6 +830,18 @@ modes and `targetElo`. Note that the pack-level `mode` enum is seven wide while
 `DECLARED_UNIMPLEMENTED_POLICY_MODES`. **That gap is the declared-vs-executable law working
 correctly, and it is the pattern §4.3's refusals copy.**
 
+> **[cross-review] `targetElo`'s JSON Schema is unbounded at both levels, and that is
+> correct — but it is not sufficient.** `$defs/opponentPolicy.targetElo` is bare
+> `{"type": "integer"}` today, so the leg-level def introduces no drift and needs no
+> `minimum`/`maximum`: the admissible band is a **deployment** property (`engineBandProfile`
+> reads it off the live engine handshake), not a document one, and freezing numbers into the
+> schema would be the wrong instrument. The two constraints the narrowing was missing are
+> therefore validator-level, not schema-level, and are added to the refusal table above:
+> `LEG_POLICY_ELO_UNHONORED` (the `strong_engine` pairing, which no engine can record) and
+> `LEG_TARGET_ELO_OUT_OF_RANGE` (the band check, moved from selection time to load time so
+> it cannot land at ply 30). Both are checked where `UNSUPPORTED_OPPONENT_POLICY` already
+> is, from the same published capabilities.
+
 **Semantics.**
 
 - **Inheritance.** A leg with no `opponentPolicy` inherits the pack-level policy unchanged.
@@ -718,7 +861,9 @@ correctly, and it is the pattern §4.3's refusals copy.**
 
 | Refused per-leg | Code | Reason |
 |---|---|---|
-| `perfect_tablebase`, `practical_resistance` | `LEG_POLICY_MODE_UNSUPPORTED` | Both carry a **piece-count precondition** the pack root cannot answer for a later leg. `pack-validation.ts` checks them with `countFenPieces(pack.start.fen) > 7` — the *opening* root. A leg's entry position is produced by played moves and is not statically known, so a static check would refuse correct packs and a skipped check would 422 mid-run. **Deferring the check to the position is possible and is deliberately not done here**: it needs an authored fallback so a drill does not die at ply 30, and that is a design question with no attestation |
+| `perfect_tablebase`, `practical_resistance` — **only on a pack whose root exceeds seven pieces** `[cross-review]` | `LEG_POLICY_MODE_UNSUPPORTED` | Both carry a **piece-count precondition**. `pack-validation.ts:877,880` checks them with `countFenPieces(pack.start.fen) > 7` — the *opening* root. When the root is **above** seven, a later leg's entry position is produced by played moves and may descend into range at a ply no static check can name, so a static check would refuse correct packs and a skipped check would 422 mid-run; that direction stays refused. When the root is **at or below** seven the precondition is statically decidable and the refusal is dropped — see the correction below |
+| per-leg `targetElo` alongside `mode: "strong_engine"` `[cross-review]` | `LEG_POLICY_ELO_UNHONORED` | `appliedTargetElo` returns `undefined` whenever `health.identity.eloHonored !== true` (`apps/server/src/engine-band.ts:72`), and the shipped predicate naming the modes that honour a band — `policyUsesMaiaBand` (`engine-band.ts`) — admits `human_common`, `theory_strict` and `practical_resistance` and **not** `strong_engine`. A leg declaring `{mode: "strong_engine", targetElo: N}` is accepted by the schema, dropped by the engine, and never reaches `eloApplied`. That is a declared-and-unexecuted value in the RFC that exists to abolish them, and weakening Stockfish to honour it is rejected doctrine (`AGENTS.md` §Rejected). Refuse the pair at load |
+| per-leg `targetElo` outside the deployment's published band `[cross-review]` | `LEG_TARGET_ELO_OUT_OF_RANGE` | `appliedTargetElo` throws `TARGET_ELO_OUT_OF_RANGE` / `TARGET_ELO_REQUIRED` **at selection time**, and `pack-validation.ts` contains **zero** `targetElo` checks today (verified: `grep -n targetElo apps/server/src/pack-validation.ts` is empty). At pack level that surfaces on ply 1. Per-leg it surfaces at leg entry — mid-run — which is the exact failure this table refuses two modes to avoid. The band is a *deployment* property already in the validator's hand (it is how `UNSUPPORTED_OPPONENT_POLICY` is gated), so this one is checkable at load and must be |
 | `theory_strict` | `LEG_POLICY_MODE_UNSUPPORTED` | Off-spine by construction on any leg after the first, and its off-spine behaviour is *"degrades to `human_common` by name"* — an open ledgered friction (`opponent-selector.ts`, audit friction #9). Admitting it per-leg would ship a second instance of the defect this RFC exists to kill, in the RFC that kills it |
 | `temperature`, `topP`, `stockfishGuardCp` | schema `additionalProperties: false` | **Not recorded per selection.** `policyModeApplied` records the mode and `SelectionEngineIdentity.eloApplied`/`eloHonored` record the Elo (migration 19), but nothing in the run record distinguishes a ply played at `topP 0.92` from one at `0.99`. Admitting a per-leg value the record cannot tell apart would create a *record* violation in the same document that applies the *record* obligation to D57. **This is the constraint that keeps §4.4's no-run-schema claim true, not a convenience** |
 | `seedMode` | schema `additionalProperties: false` | Branch-seed derivation is a property of the *run*, not of a phase within it; a leg that reseeded would break replay determinism across a leg boundary. No attested want |
@@ -729,11 +874,61 @@ B+N mate drilled against a weaker defender while walking to the edge, perfect on
 technique starts — and that is `trajectory-mate-bishop-knight`'s attested want.
 
 **The restriction costs the launch set nothing, and this was checked rather than assumed.**
-Leg 3 of the QGD trajectory is a **4v3 rook ending — eleven pieces**, outside the 7-piece
-tablebase entirely. `design/04` §5 says so in terms: *"Syzygy grounds run terminals via
-material reduction, not pack roots — the 4v3 family is eleven pieces."* What those legs need
-is `strong_engine`, which has no positional precondition and is admitted. **The refused
-modes are refused for the cases that could not have used them.**
+Leg 3 of the QGD trajectory is far outside the 7-piece tablebase: the pack's own authored
+grading note says *"**Fourteen** units are on the board at leg entry, so no tablebase applies
+anywhere in this leg"* (`content/drafts/trajectory-qgd-exchange-minority.json`), and it is
+declared as heading for the `rook-4v3-same-side` shape, which `design/04` §5 puts at eleven —
+*"Syzygy grounds run terminals via material reduction, not pack roots — the 4v3 family is
+eleven pieces."* The Caro trajectory's leg 3 says *"Eighteen units are on the board at leg
+entry"*. What those legs need is `strong_engine`, which has no positional precondition and
+is admitted.
+
+> **[cross-review] Two defects here, and the second is the load-bearing one.**
+>
+> **(a) The number was wrong, and wrong in the way this RFC exists to catch.** The draft
+> read *"Leg 3 of the QGD trajectory is a **4v3 rook ending — eleven pieces**"*. Eleven is
+> the piece count of the **shape the leg is heading for**; the leg's **entry** position is
+> **fourteen**, by the pack's own note. The pack declares that shape as
+> `{shape: "rook-4v3-same-side", relation: "prospective"}` — *prospective*, i.e. not yet on
+> the board — which §4.2 quotes two paragraphs earlier for a different purpose. Checking a
+> per-leg precondition against a position the leg has not reached is precisely the error the
+> refusal is meant to prevent, committed in the sentence justifying the refusal. Both
+> numbers clear seven, so **the conclusion survives and the reasoning did not**.
+>
+> **(b) The decidability claim is false in the direction that matters, and it is false on a
+> committed pack.** *"A leg's entry position is produced by played moves and is not
+> statically known"* is true in general and irrelevant in one direction: **piece count is
+> monotonically non-increasing under legal play** — captures reduce it, promotion leaves it
+> unchanged, nothing raises it. So `countFenPieces(pack.start.fen) <= 7` **entails** that
+> every position reachable from that root, at every leg, is also at or below seven. The
+> precondition `pack-validation.ts:877,880` checks is exactly `> 7`, so for a root already
+> in range the static check is not merely possible — it is sound by construction, with no
+> position-time probe and no authored fallback.
+>
+> `content/drafts/trajectory-mate-bishop-knight.json` is a **committed three-leg trajectory
+> pack** whose root is `8/8/4k3/8/4K3/2BN4/8/8` — **four pieces** — declaring pack-level
+> `{mode: "perfect_tablebase"}`. Every leg of it is inside tablebase range and provably so.
+> The draft's own worked example one paragraph below is *that pack*, and the sentence **"The
+> refused modes are refused for the cases that could not have used them" is therefore
+> false**: that pack could have used them, soundly, at every leg. It costs nothing *today*
+> only because inheritance happens to cover its attested want (override leg 0 down to
+> `human_common`, inherit `perfect_tablebase` for legs 1–2) — which is a different reason
+> than the one given, and a reason that stops holding the moment an author wants the
+> opposite arrangement.
+>
+> **Corrected specification.** The refusal is narrowed to the undecidable direction: per-leg
+> `perfect_tablebase` and `practical_resistance` are refused with `LEG_POLICY_MODE_UNSUPPORTED`
+> when `countFenPieces(pack.start.fen) > 7`, and admitted otherwise. The admitting arm reuses
+> the *same* call at the *same* site the pack-level check already uses, so it adds one
+> condition and no new instrument. Open question 3 is rewritten to hold only what is left
+> genuinely open: the root-above-seven case that descends into range mid-run.
+>
+> **This is a specification change made by a reviewer and it is the author's to ratify.**
+> It widens what packs may say. The narrower alternative — keep the blanket refusal and
+> replace only the false justification with the true one (*inheritance covers the single
+> attested want*) — is defensible and is the fallback if the author declines the widening.
+> What is **not** defensible is the draft as written, because it refuses a construct on a
+> ground that a four-piece committed pack disproves.
 
 #### 4.4 Why this needs no run-schema version and no migration
 
@@ -755,6 +950,38 @@ re-verified by symbol:
 `mode` and `targetElo` — the two fields the selection record already distinguishes. That is
 not a coincidence in the design; it is the design's constraint, chosen so that the *record*
 obligation is satisfied by construction rather than by a new event type.
+
+> **[cross-review] The no-run-schema claim was attacked directly and it holds — after one
+> repair.** Method: enumerate every field of the persisted selection record and ask which of
+> them a per-leg override can move. `OpponentSelection` is exactly
+> `{moveUci, policyModeApplied, candidates?, engine}` and `SelectionEngineIdentity` is
+> `{id, name, version, modelId?, containerDigest?, seedHonored, eloHonored?, eloApplied?}`
+> (`packages/runtime/src/types.ts:73-89`). `#selectionRequest` builds the request from
+> `mode` (passed in) plus `run.opponentPolicy`'s `targetElo`/`temperature`/`topP` plus the
+> pack's `spine` (`apps/server/src/service.ts:1796-1818`). Under `additionalProperties:
+> false` on `$defs/legOpponentPolicy`, the only two values a leg can move are `mode` and
+> `targetElo`, and the only two record fields that can move with them are
+> `policyModeApplied` and `engine.eloApplied`. `run.opponentPolicy` is untouched, so
+> `resistanceOnPath`'s `requested` is not made a lie, and `PathResistance` is derived rather
+> than persisted (`packages/runtime/src/replay.ts`) so `requestedByLeg` needs nothing.
+> **No third field is reachable. The claim is true.**
+>
+> **The repair.** The claim was true of `mode` unconditionally and of `targetElo` only
+> *conditionally*, and the draft did not say so. `eloApplied` is written only when
+> `appliedTargetElo` returns a value, and it returns `undefined` whenever the engine does not
+> honour a band — so `{mode: "strong_engine", targetElo: N}` was an admissible leg override
+> whose second field could **never** reach the record. That is not a run-schema problem; it
+> is a declared-and-unexecuted value, this RFC's own subject, minted by this RFC. §4.3's new
+> `LEG_POLICY_ELO_UNHONORED` closes it, and with it closed the constraint is exact rather
+> than nearly-exact: **every admissible per-leg value lands in a field the record already
+> carries.**
+>
+> One consequence worth stating because a reader will find it: `sameEngine`
+> (`apps/server/src/service.ts:233-240`) compares `id`, `name`, `version`, `modelId`,
+> `containerDigest` and `seedHonored` — and **not** `eloApplied`. So two legs that differ
+> only in `targetElo` are `sameEngine`-equal. Criterion 5 asserts group reuse against
+> `compatibleAppliedMode`, which catches a **mode** straddle; it does not catch an **Elo**
+> straddle, and as drafted nothing does. Criterion 5 is corrected to assert both.
 
 **Shapes need nothing persisted.** Shape firings are derived projections
 (`shapeFirings(triggers, branchPath(...))`, consumed at `Service.progress` and in
@@ -790,17 +1017,70 @@ missed:
    so. Making the opponent policy server-authoritative is Open question 5 and a genuinely
    larger change.
 
+> **[cross-review] Verified, and criterion 3's test is a real gate — but it names a private
+> method.** `DrillSessionController#selectionRequest`
+> (`apps/web/src/lib/session-controller.ts:511-537`) does read `pack?.opponentPolicy ?? run.
+> opponentPolicy`, does construct `{mode, policyConfigDigest, targetElo?, temperature?,
+> topP?}`, and is the only builder on the ordinary reply path (`:500`,
+> `this.#api.selectMove(this.#selectionRequest())`); the server's is reached only from
+> `groupReply` and group seeding (`service.ts:833`, `:958`). §4.5's claim is correct as
+> written. **Would criterion 3's second test fail against a server-only landing? Yes** — a
+> server-only fix leaves `selectorMode(pack, capabilities)` (`session-controller.ts:137-158`)
+> reading `pack.opponentPolicy.mode` with no leg in sight, so the request posted at a leg-3
+> node still carries the pack-level mode and the assertion fails. It is a gate, not theatre.
+> Two precision fixes: `#selectionRequest` is **private** and cannot be called by a test, so
+> the criterion must assert on the `SelectMoveRequest` observed at the `DrillClientApi.
+> selectMove` boundary; and the digests diverge across the two builders
+> (`packDigest ?? sessionDigest` on the client, `run.sessionDigest` on the server), which is
+> pre-existing and out of scope but will surprise whoever writes the test.
+>
+> **One hole the split opens that §4.5 does not name.** `selectorMode` **silently falls
+> back**: a mode the deployment cannot select becomes `human_common`, or
+> `capabilities.policyModes[0]`, with no refusal and no record of the substitution. §4.3
+> refuses per-leg `theory_strict` on exactly this ground — *"its off-spine behaviour is
+> degrades to `human_common` by name"* — while admitting per-leg `strong_engine`, which
+> degrades the same way through this function on any deployment without a search engine. It
+> is worse per-leg than pack-level: `compatibleAppliedMode` (`service.ts:242-248`) has an arm
+> for `theory_strict → human_common` and **none** for `strong_engine → human_common`, so a
+> degraded leg-3 selection also stops matching for group reuse. **Normative addition:**
+> per-leg mode resolution refuses rather than falls back — a leg naming a mode absent from
+> `capabilities.policyModes` fails at pack load with `LEG_POLICY_MODE_UNSUPPORTED`, the same
+> code and the same gate `UNSUPPORTED_OPPONENT_POLICY` already uses at pack level. A leg is
+> authored; a fallback that rewrites it by name is the defect this RFC is named after.
+
 ### 5. Register claims — stated loudly
 
 | Resource | Claim | Note |
 |---|---|---|
-| **Pack schema 0.25** | **CLAIMED** | `rfc/README.md` records *"0.25 is the next free pack lane"*. 0.23 is `engine-leverage`'s, 0.24 is `vocabulary-wiring`'s, **0.19 is frozen shut** (the constant passed it — `validator-integrity` §5's recommendation to claim 0.19 for this successor is therefore **void**, and this RFC records that so a reader of the archived text does not act on it). Lands behind both predecessors; both are additive `$defs` plus an `$id` bump, so the rebase cost if either slips is one string |
-| **Run schema** | **none** | §4.4. `engine-leverage` holds 0.16 |
+| **Pack schema 0.25** | **CLAIMED — and registered** `[cross-review]` | 0.23 is `engine-leverage`'s, 0.24 is `vocabulary-wiring`'s, **0.19 is frozen shut** (the constant passed it — `validator-integrity` §5's recommendation to claim 0.19 for this successor is therefore **void**, and this RFC records that so a reader of the archived text does not act on it). Lands behind both predecessors; both are additive `$defs` plus an `$id` bump, so the rebase cost if either slips is one string |
+| **Run schema** | **none** | §4.4, and the cross-review's field-by-field verification of it. `engine-leverage` holds 0.16 |
 | **Migration number** | **none** | Nothing persisted changes shape |
 | **Shape-entry schema** | **none** | — |
-| `rfc/README.md` | **not edited by this draft** | The register row is drafted below for whoever lands it |
+| `rfc/README.md` | **already carries the row** `[cross-review]` | Registered by commit `f07a320` (*"rfc: accept three cross-reviewed drafts; register format-surface"*), not by this draft |
 
-Register row, ready to paste when this draft is accepted:
+> **[cross-review] Three claims in this table had gone stale under the draft, and the
+> shipped state is more favourable than the draft assumed.**
+>
+> - *"`rfc/README.md` records «0.25 is the next free pack lane»"* — it no longer does. At
+>   `0fbf0ef` the register carries a **0.25 row naming this RFC** (`rfc/README.md`) and
+>   records **0.27** as the next free lane, with 0.26 provisionally `claim-backing`'s. The
+>   lane is not merely free, it is held.
+> - *"`rfc/README.md` — not edited by this draft"* — still true of *this draft*, and no
+>   longer the operative fact: the row was written by the coordinator in `f07a320`, and its
+>   text matches the one drafted here. `rfc/README.md` is single-writer and is **not touched
+>   by this cross-review** either. The pasteable row is retained below only as the record of
+>   what was proposed.
+> - *"The pack `$id` moves `0.24 → 0.25`"* (§4.4) — conditional, not factual. At `0fbf0ef`
+>   `DRILL_PACK_SCHEMA_VERSION` is `"0.22"` and the `$id` reads
+>   `urn:chess-tabiya:schema:drill-pack:0.22`; 0.23 and 0.24 are **claimed and unimplemented**.
+>   The bump is `0.22 → 0.25` if this lands first and `0.24 → 0.25` if both predecessors land
+>   first. Nothing in this RFC depends on which — the `$id` is one string and pack digests are
+>   content digests — but an implementer reading *"moves 0.24 → 0.25"* against a tree reading
+>   `0.22` would stop, and stopping on a stale premise is the cost the moving-tree rule at the
+>   top of this document exists to avoid.
+
+Register row as proposed (now landed in `rfc/README.md` by `f07a320`, quoted here for the
+record):
 
 > `| 0.25 | format-surface.md | claimed 2026-08-15 — per-leg opponentPolicy and shapes on $defs/trajectoryLeg (D96); $defs/legOpponentPolicy; $defs/shapeReference extracted; retryVariants deprecation warning. No run-schema change, no migration |`
 
@@ -809,14 +1089,17 @@ Register row, ready to paste when this draft is accepted:
 **`client-surface-floor.md` — a real collision, with a resolution.** Its acceptance criterion
 8(b) requires a test asserting `permittedAssistance` returns *"`sight` rather than `evidence`
 for `boardLighting` **and `arrows`**"* for `participant` and `spectator`, and that test is
-committed at `apps/web/src/lib/client-surface-floor.test.ts:46`. §3.1 deletes the field the
-assertion names.
+committed at `apps/web/src/lib/client-surface-floor.test.ts:47` `[cross-review]` — the draft
+read `:46`, which is the **`boardLighting`** assertion one line above; the `arrows`
+assertion is `:47`, in a file that is itself modified-uncommitted, so an implementer should
+match on the `expect` text rather than the line. §3.1 deletes the field the assertion names.
 
 The criterion's stated *purpose* is *"C6b did not collaterally remove the role plumbing it
-shares with the permission path"*, and both fields are derived by the **same**
-`role === "solo" || role === "host"` expression on one line
-(`packages/runtime/src/assistance.ts:29`). `boardLighting` alone therefore proves exactly
-what the criterion set out to prove.
+shares with the permission path"*, and both fields are derived from the **same**
+`mayRequestSplit` binding — `role === "solo" || role === "host"`, defined at
+`packages/runtime/src/assistance.ts:28` and consumed by both fields on `:29`, which is the
+`:28-29` span `client-surface-floor` 8(b) itself cites. `boardLighting` alone therefore
+proves exactly what the criterion set out to prove.
 
 **Resolution:** `client-surface-floor` is `implementing` and older; it lands first,
 unchanged. This RFC lands after and, in the same commit that removes `arrows`, amends
@@ -886,21 +1169,43 @@ wrong:
    `legs[1].opponentPolicy.mode = "perfect_tablebase"` and fails with
    `LEG_POLICY_MODE_UNSUPPORTED` at pointer `/legs/1/opponentPolicy/mode`; a third declares
    `legs[0].shapes: ["not-in-pack-shapes"]` and fails with `LEG_SHAPE_REF_UNLISTED`.
+   `[cross-review]` The negative tablebase fixture must have a root **above seven pieces**,
+   since §4.3's corrected refusal is conditioned on that; a companion **positive** fixture
+   declares `legs[1].opponentPolicy.mode = "perfect_tablebase"` on a root at or below seven
+   (the shape of `content/drafts/trajectory-mate-bishop-knight.json`, whose root is four)
+   and **passes** — without that pair the narrowing is untested in the direction it widens.
+   Two further negatives: `legs[2].opponentPolicy = {mode: "strong_engine", targetElo: 2400}`
+   fails with `LEG_POLICY_ELO_UNHONORED`, and a leg `targetElo` outside the fixture
+   deployment's published band fails at **load** with `LEG_TARGET_ELO_OUT_OF_RANGE` rather
+   than at selection.
 3. **Per-leg resistance is honoured on both paths, and the test proves the *both*.** An
    end-to-end server test drives a three-leg trajectory whose leg 3 overrides to
    `strong_engine` and asserts the leg-3 opponent plies record
    `policyModeApplied: "strong_engine"` while leg-1 plies record `human_common`. A second
-   test asserts the **client's** `SessionController#selectionRequest` emits the leg's mode
-   at a leg-3 node — *this test must be shown failing against a
+   test asserts the **client** posts the leg's mode: it observes the `SelectMoveRequest`
+   handed to `DrillClientApi.selectMove` at a leg-3 node and asserts `policy.mode ===
+   "strong_engine"` — *this test must be shown failing against a
    server-only implementation*, since a server-only fix is the plausible partial landing.
+   `[cross-review]` The draft named `SessionController#selectionRequest`, which is
+   **private** (`#`-prefixed) and unreachable from a test; the assertion has to sit at the
+   API boundary. Confirmed the test **is** a gate: against a server-only landing the client
+   still calls `selectorMode(pack, capabilities)` on `pack.opponentPolicy.mode` and posts
+   `human_common` at leg 3, so the assertion fails. A third test asserts a leg naming a mode
+   the deployment cannot select is **refused at pack load** rather than silently rewritten
+   by `selectorMode`'s fallback (§4.5).
 4. **`resistanceOnPath` reports the split.** For that run,
    `requested` is the pack-level policy, `applied` contains both modes with correct ply
    counts, and `requestedByLeg` has one entry per leg with the resolved policy. Called
    without a pack, the function returns the identical value it returns today (a pinned
    snapshot proves the back-compatibility).
-5. **Group reuse respects the leg.** A group whose members straddle a leg boundary does not
-   reuse a selection recorded under the other leg's mode — asserted directly against
-   `compatibleAppliedMode`.
+5. **Group reuse respects the leg, in both fields.** A group whose members straddle a leg
+   boundary does not reuse a selection recorded under the other leg's mode — asserted
+   directly against `compatibleAppliedMode` — **and does not reuse one recorded under the
+   other leg's `targetElo`.** `[cross-review]` The second half was missing and nothing else
+   covers it: `sameEngine` (`apps/server/src/service.ts:233-240`) compares id, name, version,
+   `modelId`, `containerDigest` and `seedHonored` and **not** `eloApplied`, so two legs
+   differing only in Elo are `sameEngine`-equal and `compatibleAppliedMode`-equal, and the
+   reuse path at `:949` accepts the straddle. Assert the Elo straddle is refused as well.
 6. **D57: both doors are shut, and the *record* is the assertion.** With a stub Maia
    returning candidates that all carry `mass` and all resolve to `ratio === 0` **except one
    candidate with no `mass`**, `#practicalResistance` throws
@@ -921,31 +1226,61 @@ wrong:
    refuses an over-shape request with `SIMULATE_TOO_LARGE` 422 (regression).
 9. **D86: the warning fires exactly where the field is used.** `make pack-check` over the
    **7** authored packs carrying `retryVariants` emits `RETRY_VARIANTS_NOT_EXECUTABLE`
-   **11** times — once per entry — at pointer `/retryVariants/{i}`, each naming its
-   `variantOf` counterpart where one exists and saying "no counterpart yet" for
-   `different_material_details` and `related_position_same_idea`. **Every one is a
-   `warning`; no pack changes verdict**, and the count is asserted as `11`, not `> 0`, so a
-   later content edit that silently drops entries fails the test rather than the corpus.
+   **9** times — once per entry — at pointer `/retryVariants/{i}`, each naming its
+   `variantOf` counterpart where one exists (**2** of the 9: both `opposite_side` entries)
+   and saying "no counterpart yet" for the other **7** (five `different_material_details`,
+   two `related_position_same_idea`). Validating `schemas/drill_pack.example.json` as well
+   brings the total to **11** over **8** documents, and adds the two kinds authored content
+   never uses (`same_root_new_defense`, `alternate_plan_class`), both of which **do** have
+   counterparts. **Every one is a `warning`; no pack changes verdict**, and each count is
+   asserted exactly, not as `> 0`, so a later content edit that silently drops entries fails
+   the test rather than the corpus.
+   > **[cross-review] As drafted this criterion could not pass.** It asserted
+   > `RETRY_VARIANTS_NOT_EXECUTABLE` **11** times over *"the **7** authored packs"*. The 7
+   > authored packs carry **9** entries; the remaining 2 of the 11 live in
+   > `schemas/drill_pack.example.json`, which is not an authored pack. 7-and-11 cannot both
+   > be right, and a criterion asserting an exact count against the wrong population fails
+   > for the wrong reason — the failure mode criterion 1 was rewritten to avoid, reappearing
+   > four criteria later. Re-derived at `0fbf0ef`: 8 documents, 7 of them authored packs, 11
+   > entries, 9 of them authored. The counterpart split was also wrong: the draft assigned
+   > "no counterpart yet" to `different_material_details` and `related_position_same_idea`,
+   > which is right, but that is **7** of the authored 9, not the residue of 11.
 10. **The register is real and its gate is not vacuous.** `FORMAT_DISPOSITIONS` contains a
-    row for every item §3 and §4 decide, plus the two `DECLARED_UNIMPLEMENTED_POLICY_MODES`
-    seed rows. `/capabilities` publishes it. The gate test is **demonstrated failing** three
-    ways on deliberately broken inputs: a register row pointing at a pointer absent from the
-    schema; a `reached` row naming a module that does not export its symbol; and an empty
-    schema walk. The third is the anti-vacuity case and its absence would make the other two
-    theatre.
+    row for every item §3 and §4 decide, plus the two seed rows **derived from**
+    `DECLARED_UNIMPLEMENTED_POLICY_MODES` rather than transcribed. `/capabilities` publishes
+    it. The gate test is **demonstrated failing** four ways on deliberately broken inputs:
+    a register row pointing at a pointer absent from the schema; a row whose `value` is not
+    a member of the enum at its pointer; a `reached` row naming a module that does not export
+    its symbol; and — **the anti-vacuity case** — `FORMAT_DISPOSITIONS` with the
+    `plan_defense` row deleted, which must fail because corrected clause 6 derives the floor
+    from the live constant. **An empty register must fail. A register missing any
+    declared-and-unimplemented policy mode must fail. A register whose seed reason has
+    drifted from the constant's string must fail.**
+    > **[cross-review] The draft's third case was the vacuous one.** It demonstrated the
+    > gate failing on *"an empty schema walk"* — a state the committed
+    > `schemas/drill_pack.schema.json` cannot produce, so the demonstration requires feeding
+    > the test a synthetic empty schema and proves only that the assertion is wired, never
+    > that the system can reach the condition. The reachable degenerate state is an empty or
+    > shrinking **register**, which every clause as drafted passed. See §2's correction.
 11. **No behaviour change where none is claimed.** A recorded fixture run of a
     non-trajectory pack replays byte-identically; `resistanceOnPath` and `compare`
     snapshots for existing runs are unchanged.
 12. **Collision sweep re-run at implementation time.** `PRACTICAL_RESISTANCE_UNMEASURED`,
     `LEG_POLICY_MODE_UNSUPPORTED`, `LEG_SHAPE_REF_UNLISTED`, `LEG_SHAPE_LIST_EMPTY`,
-    `RETRY_VARIANTS_NOT_EXECUTABLE` are each absent from `apps/`, `packages/`, `schemas/`
-    and `rfc/` at the moment of landing — re-run, not trusted from this draft, because two
-    sibling RFCs are adding literals concurrently.
+    `RETRY_VARIANTS_NOT_EXECUTABLE`, `LEG_POLICY_ELO_UNHONORED` and
+    `LEG_TARGET_ELO_OUT_OF_RANGE` `[cross-review]` are each absent from `apps/`, `packages/`,
+    `schemas/` and `rfc/` at the moment of landing — re-run, not trusted from this draft,
+    because two sibling RFCs are adding literals concurrently.
 13. **Ledger and log.** `design/BACKLOG.md` rows D84, D85, D86, D57 and D96 flip with
-    one-line summaries; a dated entry lands in `planning/exploration/log.md`; the pack
-    register row (§5) is added to `rfc/README.md` — all in the landing commit, per the
-    completion protocol. The **D59** row is reported to the coordinator (§3.4) and left for
-    `engine-request-contract`'s owner to flip.
+    one-line summaries; a dated entry lands in `planning/exploration/log.md` — both in the
+    landing commit, per the completion protocol. `[cross-review]` Two corrections: the pack
+    register row is **already in `rfc/README.md`** (commit `f07a320`), so the landing commit
+    updates that row's status rather than adding it; and the **D59** row **has already been
+    flipped ✅** by its owner (§3.4), so nothing is owed to the coordinator there. Also flip
+    the new dangling-referent row §3.3 ledgered, if this RFC's `RETRY_VARIANTS_NOT_EXECUTABLE`
+    warning is judged to discharge it — it does **not**, since the warning fires on the field
+    and not on the unresolvable name inside the note, so that row stays open by default and
+    the landing commit must say which.
 
 ## Open questions
 
@@ -962,12 +1297,19 @@ wrong:
    **Owner ruling wanted**; this draft may not read intent into a design doc (law 5). The
    recommendation is `retired`, on the ground that the `evidence` rung is refused by
    `engine-leverage` §6.3 under law 8 and a `sight` rung has no primitive.
-3. **Should per-leg `perfect_tablebase` / `practical_resistance` be admitted with a
-   position-time check and an authored fallback?** §4.3 refuses them because a static check
-   is wrong and a mid-run 422 is worse. The launch set does not need them (the endings are
-   eleven pieces). A pure-endgame trajectory that steps *into* tablebase range mid-run
-   would. **Deferred pending one authored pack that wants it** — the repo's own attestation
-   bar, and the pattern `engine-leverage` used for `searchmoves`.
+3. **Should per-leg `perfect_tablebase` / `practical_resistance` be admitted on a pack whose
+   root is *above* seven pieces and descends into range mid-run?** `[cross-review] Rewritten
+   — as drafted this question was too wide, because §4.3 refused both directions and only
+   one of them is open.* The root-at-or-below-seven direction is **no longer open and no
+   longer refused**: piece count never increases under legal play, so the existing
+   `countFenPieces(pack.start.fen) <= 7` check is sound for every leg of such a pack, and
+   §4.3 now admits it. What remains genuinely undecidable is the descending case: a
+   trajectory that opens above seven and reaches a tablebase-exact ending at a ply no static
+   check can name. That needs a position-time probe **and** an authored fallback so the drill
+   does not die at ply 30, which is a design question with no attestation. The launch set
+   does not need it — the QGD ending enters at fourteen units and the Caro's at eighteen.
+   **Deferred pending one authored pack that wants it** — the repo's own attestation bar,
+   and the pattern `engine-leverage` used for `searchmoves`.
 4. **What does `variantOf` need to become a superset of `retryVariants`?** Measured in §3.3:
    it must become an **array**, and it needs relations covering
    `different_material_details` (5 entries) and `related_position_same_idea` (2). Only then
@@ -978,7 +1320,13 @@ wrong:
 5. **Should the opponent policy be server-authoritative?** §4.5 shows the main play path
    trusts the browser. Per-leg neither creates nor closes this. It is a security and
    record-integrity question, it touches five call sites, and it is nobody's. **Needs a
-   ledger row and an owner.**
+   ledger row and an owner.** `[cross-review]` Two of its components now have rows, filed by
+   this review rather than left to the question: **D107** (`selectorMode` silently rewrites
+   an authored mode in the browser, with no record and no `compatibleAppliedMode` arm) and
+   **D109** (the two `SelectMoveRequest` builders stamp different `policyConfigDigest`
+   values for the same run). Neither is the whole question — the authority question is still
+   unowned — but *"needs a ledger row"* is discharged for the two concrete defects found
+   while verifying §4.5, per law 4.
 6. **What happens when an engine's advertised MultiPV maximum is below the position's legal
    move count?** §3.4's residue: the window narrows silently, `offWindow` catches the
    consequence but nothing records the cause. This is a `bound` question about a published
@@ -1003,5 +1351,33 @@ wrong:
   three published figures: D96's *"#1–2 of 14"* (it is #2 of five within 14 unclaimed, and
   rank 7 of 7 by re-author cost); *"blocks four of six"* (right, but derived from 2-of-6
   covered, not 3-and-3); and `retryVariants`' prose-stand-in count (11 of 11 entries name a
-  pack id, not 2 or 6). Voids `validator-integrity` §5's recommendation to claim pack 0.19,
+  pack id, not 2 or 6 — **`[cross-review]` this third correction was itself wrong: it is
+  8 of 11, see §3.3**). Voids `validator-integrity` §5's recommendation to claim pack 0.19,
   which is frozen shut.
+- 2026-08-15: **adversarial cross-review**, by a reader who did not write the draft, at
+  `0fbf0ef`. Every count and file:line citation re-derived first-hand. **Held:** the corpus
+  counts (43/139/36/10/9), the `retryVariants` document/entry/kind tallies and the 4-of-11
+  `variantOf` coverage, the D57 code quote verbatim, `#selectionRequest`'s signature,
+  `legIndexAt`'s signature and export, 14 of 15 spot-checked line cites, and — attacked
+  field-by-field against `OpponentSelection` and `SelectionEngineIdentity` — **the
+  no-run-schema, no-migration claim**. **Broke and fixed in place:** §2's anti-vacuity clause
+  guarded a quantity the committed schema makes constant (the D61 shape) while an empty
+  register passed every clause — floor now derived from
+  `DECLARED_UNIMPLEMENTED_POLICY_MODES`; §2's row key could not address its own two seed rows
+  (both are enum *values* at one pointer) and its gate rejected its own `assistance:`/`error:`
+  rows — `value?` added, namespaces declared; §3.3's *"11 of 11 entries name a real pack id"*
+  is **8 of 11**, and `different_material_details` has **five** entries, not four (the
+  disposition survives on the array gap, not on unanimity); §3.1's `corpus` and
+  `boardLighting` axis counts were wrong (8 and 3, not 5 and 5); §4.3's *"eleven pieces"* is
+  the leg's **prospective** shape, not its entry position (**fourteen**, per the pack's own
+  note); **§4.3's decidability argument is false** in the direction that matters — piece count
+  never increases, so a root at or below seven decides every leg, and
+  `trajectory-mate-bishop-knight` is a committed four-piece three-leg trajectory the blanket
+  refusal was over-broad on; §4.3 admitted, unguarded, the mid-run 422 it refused two modes to
+  avoid (`targetElo` → `TARGET_ELO_OUT_OF_RANGE`) and admitted `targetElo` beside
+  `strong_engine`, which no engine can record; §4.5's `selectorMode` silently falls back to
+  `human_common` per-leg with no `compatibleAppliedMode` arm; §5's register claims and §3.4's
+  D59-is-open claim had both gone stale under the draft; **acceptance criterion 9 asserted 11
+  warnings over 7 packs that carry 9**, so it could not have passed. Three of these are
+  specification changes (§4.3's narrowing, the two `LEG_*_ELO_*` refusals, §4.5's
+  refuse-don't-fall-back) and are the **author's to ratify**.

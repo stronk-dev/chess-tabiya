@@ -1,6 +1,9 @@
 # RFC: Engine leverage — the instrument has already answered
 
-- **Status:** accepted (cross-reviewed; fixes applied in place) — 2026-08-15
+- **Status:** draft — cross-reviewed, **OWNER-BLOCKED** on open questions 1, 3, 7 and 9,
+  each of which its own text says must be ruled *before* `accepted`. **Claude marked this
+  `accepted` in error on 2026-08-15 and codex correctly refused to implement it**; the
+  acceptance is withdrawn here rather than in a banner
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/02-product-shape.md:159-180` (the two-axis latency budget —
@@ -45,18 +48,26 @@
     equal to the band the emitted command array actually applied, so the failure cannot
     recur in a new shape. D58 rides the same file and is still open; D60/D70 closed with
     D91. Neither is this RFC's.
-  - **D64 — manufactured syzygy provenance. NOW BLOCKING, and §2's tablebase path is
-    downstream of it.** `planning/work-register.md` §0 names D64 as *the* blocking item:
-    **135 of 341 committed syzygy entries are manufactured**, across **six packs carrying
-    `ledger_verified`**, because `offlineQuery` synthesises `retrievedAt` from a FEN hash
-    and asserts `status: 200` from a URL no process contacted (`design/BACKLOG.md` row
-    D64, ESCALATED 2026-08-15). §2.3's tablebase arithmetic reads exactly those
-    `tablebase_result` records, and §2.2 **stamps the result into the pack document and
-    digests it** — which would convert manufactured provenance into a machine-*bound*
-    number certified by the ledger's own digest. **Hard prerequisite: §2's tablebase path
-    may not land until D64 is closed** (`rfc/fixture-realism.md` is not yet archived and
-    can still scope it). §2's engine path is unaffected — `verify-draft-engine.json`
-    carries full per-FEN provenance and is the pattern D64 names as the one that works.
+  - **D64 — manufactured syzygy provenance. CLOSED 2026-08-15 by `8b1b44d`; the hard
+    prerequisite below is DISCHARGED.** *(Corrected 2026-08-15. The body carried
+    "NOW BLOCKING" for a day after closure while `planning/codex-queue.md` said the
+    opposite — claude's recorded standing error, a resolution living in a queue file while
+    the body contradicts it. Codex refused to implement the contradiction, which is the
+    guard working.)* The defect was real: **135 of 341 committed syzygy entries were
+    manufactured**, across **six packs carrying `ledger_verified`**, because `offlineQuery`
+    synthesised `retrievedAt` from a FEN hash and asserted `status: 200` from a URL no
+    process contacted (`design/BACKLOG.md` row D64). It was closed the right way — the 135
+    records were **re-derived against the live tablebase**, not withdrawn — and claude
+    independently re-measured 341 entries with **0** matching the synthesis signature.
+    §2.3's tablebase arithmetic reads exactly those records and §2.2 stamps the result into
+    the pack document and digests it, so before closure this path would have converted
+    manufactured provenance into a digest-certified number (ledgered as **D99**).
+    **Now unblocked — but criterion 4 is still scoped to the engine path only**, which was
+    the cross-review's remedy while D64 was open. Whether to widen it back to the tablebase
+    path is a live decision this correction deliberately does NOT make on its own: it is a
+    scope change, and the RFC is owner-blocked regardless. §2's engine path was never
+    affected — `verify-draft-engine.json` carries full per-FEN provenance and is the pattern
+    D64 named as the one that works.
   - `rfc/archive/engine-request-contract.md` — owns the five obligations (**state**,
     **clear**, **bind**, **bound**, **record**). §4 discharges the **record** obligation
     for the new search bound; §3 discharges it for every condition firing. Its open

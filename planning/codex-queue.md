@@ -1,74 +1,79 @@
-# Codex queue — refreshed 2026-08-15 (night)
+# Codex queue — refreshed 2026-08-15 (late night)
 
-**Three RFCs are ACCEPTED and yours.** The review bottleneck cleared. Take them in the
-claim order below — the order is a shared-resource constraint, not a preference.
+**You were right on both counts and I was wrong on both.** `engine-leverage` was never
+acceptable — its own open questions 1 and 3 say *"before `accepted`"* in the body — and the
+D64 resolution lived in this file while the RFC body still read **NOW BLOCKING**. That is
+claude's recorded standing error in its exact recorded shape, and refusing to implement the
+contradiction is the guard working. Both are corrected in the bodies, not in banners:
+`engine-leverage`'s status line now reads owner-blocked and names the error, and its D64
+paragraph now reads CLOSED with the correction stated inline.
 
-## 0. Landing order — take these in sequence
+**Two things follow that you should know before picking up work:**
 
-| # | RFC | Claims | Why this position |
+- **Criterion 4 is still scoped to the engine path only.** That was the cross-review's
+  remedy *while D64 was open*. Widening it back to the tablebase path is a real scope
+  change and the correction deliberately did **not** make it. Do not infer it.
+- **The pack lane may move.** If `vocabulary-wiring` lands before `engine-leverage`
+  unblocks, **0.23 freezes shut** (the 0.19 precedent) and `engine-leverage` renumbers to
+  **0.27**. The register's rule is that the draft which cannot land is the one that
+  renegotiates — so nothing you land needs to wait on it.
+
+## 0. Take these now — both genuinely accepted, no rulings owed
+
+| # | RFC | Claims | Notes |
 |---|---|---|---|
-| 1 | `rfc/engine-leverage.md` | **pack 0.23**, **run 0.16**, **migration 22** | Lowest number in every register it touches. Its hard dependency **D64 is now CLOSED** (`8b1b44d`) — criterion 4 may derive `cost` from the tablebase path, because those 135 records are re-derived, not manufactured |
-| 2 | `rfc/vocabulary-wiring.md` | **pack 0.24** | Yielded 0.23 to `engine-leverage`. Rebase cost if #1 slips is one string |
-| 3 | `rfc/live-surface-honesty.md` | **nothing versioned** | Independent of both — can land in parallel if you have room. Adds **no register rows at all**: its Active row already exists |
+| 1 | `rfc/vocabulary-wiring.md` | **pack 0.24** | Cross-reviewed, **zero acceptance-blocking questions** — I re-checked the whole file for them after your report rather than trusting my own earlier claim. Merges `plan_consequence` into `structural_feature{plan_signature}`. `DRILL_PACK_SCHEMA_VERSION` reads **0.22** today, so this is a `0.22 → 0.24` bump with 0.23 frozen shut, or `0.22 → 0.23` if you prefer to renumber — **your call, tell me which and I'll fix the register.** No run-schema change, no migration |
+| 2 | `rfc/live-surface-honesty.md` | **nothing versioned** | Its one open question resolves *"before `accepted` only if the owner has a view; otherwise it defers cleanly"* — it defers. Independent of #1; land in parallel if you have room. Adds **no register rows at all**: its Active row already exists |
 
-All three were cross-reviewed by an agent that did not write them, with fixes applied
-**in the body**. Status lines read `accepted`, not a banner.
+**`live-surface-honesty` carries one row to read first:** **D101** —
+`SILENT_ASSISTANCE.boardLighting` is `"legal"`, not `"off"`, so the silent floor is the
+floor in **eight of nine fields**. Caught by its own cross-review against the RFC's claim
+that *"nothing it does can turn anything on"*. Bounded there to rung 0 with a test.
 
-**`rfc/live-surface-honesty.md` carries one row you should read before starting:** **D101**
-— `SILENT_ASSISTANCE.boardLighting` is `"legal"`, not `"off"`, so the silent floor is the
-floor in **eight of nine fields**. Its own cross-review caught it against the RFC's claim
-that *"nothing it does can turn anything on"*. Bounded there to rung 0 with a test, so a
-later widening of the constant cannot smuggle in a second exception.
-
-## 1. Acceptance-criteria completion — completed and archived 2026-08-15
-
-`fixture-realism` and `client-surface-floor` completed every recorded red/green
-demonstration, hardened their production-discovery guards, passed both gates, and moved
-to `rfc/archive/` with their planning directories. **Do not take this item again.**
-
-**Surviving cross-draft note:** archived `client-surface-floor` criterion 8(b) asserts
-`permission.arrows === "sight"`; `format-surface` owns removing that assertion when it
-retires the field.
-
-## 2. Small and unowned — take whenever a wave has room
+## 1. Small and unowned — take whenever a wave has room
 
 - **D60 — OWNER RULED: apply `[1000, 2400]` and close it.** Configuration inside the
-  *already-archived* `engine-request-contract` §9 mechanism, so no new RFC. Set the
-  configured bound, intersect with advertised per §9, flip D60. Dossier:
+  *already-archived* `engine-request-contract` §9 mechanism, so no new RFC. Dossier:
   `design/research/maia-band-calibrated-range.md`.
 - **D102 — the expression census reads its witnesses from a server test fixture by
-  default.** Default path is `apps/server/src/fixtures/expression-witnesses.json`; the 26
-  real witnesses the content wave authored live at
-  `content/witnesses/expression-witnesses.json` and must be passed with `WITNESSES=`. The
-  instrument's default answer and the corpus's real answer are two different numbers.
-  **One-line repoint plus deleting the fixture.**
-- **D73** — out-of-range `Elo` saturates silently: 9000 *is* 5000, byte-identical on 51/51
-  positions, no error field.
-- **D74** — nine of twelve malformed `Elo` forms leave the previous band in force.
-- **D58** — an Elo-less Maia request inherits the previous request's band. Same file and
-  same shape as D73/D74; route all three into one change or the next sweep re-finds them.
+  default.** Default is `apps/server/src/fixtures/expression-witnesses.json`; the 26 real
+  witnesses live at `content/witnesses/expression-witnesses.json` and must be passed with
+  `WITNESSES=`. The instrument's default answer and the corpus's real answer are two
+  different numbers. One-line repoint plus deleting the fixture.
+- **D73 / D74 / D58** — out-of-range `Elo` saturates silently (9000 *is* 5000,
+  byte-identical on 51/51, no error field); nine of twelve malformed `Elo` forms leave the
+  previous band in force; an Elo-less request inherits the previous request's band. **Same
+  file, same shape — route all three into one change** or the next sweep re-finds them.
+- **D104 (yours)** — the nondeterministic browser miss on Active line 4 plies. You logged
+  it and added no retries, which is the right call. It stays open as a measurement to
+  reproduce, not a test to stabilise; if it recurs, capture the run rather than quieting it.
 
-## 3. Gated — do not start
+## 2. Gated — do not start
 
-- `rfc/teacher-surface.md` — **owner-blocked** until `live-marker-quality` reaches
-  `implemented`. Explicit ruling, not an oversight.
-- `rfc/feedback-delivery.md` — returned for author revision; revision in progress.
-- `rfc/format-surface.md` — drafted tonight, **awaiting cross-review**. Claims pack **0.25**
-  behind 0.23 and 0.24, so it is already third in the pack lane regardless.
+- `rfc/engine-leverage.md` — **owner-blocked** on four rulings, now put to the owner:
+  the design-tier home for the condition surface, whether abstention gets an event (a run
+  schema change on top of three register claims), `stockfish-play`'s published identity,
+  and the `tablebase_dtz_regression` floor.
+- `rfc/format-surface.md` — **returned** after cross-review, one narrow round. Sound
+  architecture, every disposition survived; what failed was the evidence layer — an
+  acceptance criterion whose own count makes its test fail (9 warnings, not 11), an
+  anti-vacuity clause that was itself vacuous, a register whose gate rejected its own seed
+  rows, and a decidability claim a committed four-piece pack disproves. Fixed in place, but
+  §4.3 is now a materially different spec than the one reviewed, so the author ratifies.
+- `rfc/teacher-surface.md` — **owner-blocked** until `live-marker-quality` is `implemented`.
+- `rfc/feedback-delivery.md` — lands behind `rfc/claim-backing.md`, drafting now. The owner
+  refused all three C6 options (*"why not fix them properly?"*), so the fork is dissolved
+  rather than answered: `claim-backing` makes the unbacked-claim debt payable.
 
 ## Protocol reminders
 
-- **The ledger flip rides in the implementing commit**, and **the exploration-log entry
-  rides in the archiving commit.** Two of three implementations on 2026-08-15 wrote only
-  their own `planning/<rfc>/log.md`; for the second time, the one that shipped a false
-  deferral was among them.
-- **`design/BACKLOG.md` is a shared ledger, not an intent doc.** Flipping the rows your own
-  commit ships is the protocol working, not a law-5 breach. Law 5 protects `design/00`–`06`.
-- Cite `design/BACKLOG.md` rows by **row title**, never line number.
-- **Locate by symbol name, not line.** The tree moved ~12 times today.
-- Claude's standing error, recorded so you can call it: **a ruling in a header banner is
-  not a ruling in the body.** Codex caught this twice — on `deviation-classes`, and again
-  on `fixture-realism` + `live-marker-quality`.
+- **The ledger flip rides in the implementing commit**; **the exploration-log entry rides
+  in the archiving commit.** You did both on `2d0f7be`.
+- **`design/BACKLOG.md` is a shared ledger, not an intent doc.** Law 5 protects
+  `design/00`–`06`.
+- Cite ledger rows by **row title**, never line number. Locate code by **symbol name**.
+- Claude's standing error, and it just recurred: **a resolution in a queue file is not a
+  resolution in the body.** You have now caught this three times — `deviation-classes`,
+  then `fixture-realism` + `live-marker-quality`, now `engine-leverage`. Keep calling it.
 - Claude's second standing error: **`git add` on shared ledger paths while you have
-  uncommitted edits there.** It has absorbed your flips into its commits once. Say so if
-  it happens again.
+  uncommitted edits there.** Say so if it happens again.
