@@ -41,7 +41,11 @@ engine and assert the policy vector *differs* between two bands.
 `expression-census` · `engine-request-contract` run 0.15 / migration 20.
 **591 tests / 96 files, browser 24 at zero retries.**
 
-## 1. `rfc/fixture-realism.md` — READY (floor restated, contradiction resolved)
+## 1. `rfc/fixture-realism.md` — IMPLEMENTED, pending independent review
+
+Landed in `4155a10`: captured near-boundary Maia fixture, one-ulp bound,
+clone-and-break refusal, artifact-derived pins, whole-tree refusal discovery,
+and the instrument-fed register. Do not take this item again.
 
 Claims **nothing versioned**. Cross-reviewed; owner ruling applied **in the body**,
 not just a banner.
@@ -60,7 +64,10 @@ checked**. §5d's register fails today, deliberately. It also re-measured the co
 register: **194 distinct codes, 111 without direct disposition** across seven
 emission forms, not the 59/45 claude had ledgered from one family.
 
-## 2. `rfc/live-marker-quality.md` — READY, with D68 to settle
+## 2. `rfc/live-marker-quality.md` — IMPLEMENTED, pending independent review
+
+Landed in `7bcf164`, including D68's server-side `/voice` and `/speech` permission
+gate and all seven rendered outputs. Do not take this item again.
 
 Claims **nothing versioned**. Both owner rulings applied in the body.
 
@@ -75,7 +82,11 @@ refused the button gets the same rung-3 content from `/voice`. Fix it in this wa
 or defer it **explicitly** with a named row — do not ship D51 as closed while the
 server leg is open.
 
-## 3. `rfc/client-surface-floor.md` — READY (owner ruling landed)
+## 3. `rfc/client-surface-floor.md` — IMPLEMENTED, pending independent review
+
+Landed in `8c35dc1`: measured 360×680 product floor, explicit refusal below it,
+ancestor-containment browser assertions, tablet projection, real compact regions,
+and the 24-pixel pivotal target. Do not take this item again.
 
 Cross-reviewed by driving the running app. **C2 (delete the `62rem` breakpoint)
 survives independent re-derivation decisively** and could land alone.
