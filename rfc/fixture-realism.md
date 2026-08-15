@@ -1,6 +1,6 @@
 # RFC: Fixture realism — a test asserts against the artifact, not against a convenient invention
 
-- **Status:** draft — **cross-reviewed, floor restated by owner ruling 2026-08-15; READY for codex, unblocked**
+- **Status:** implementing — cross-reviewed; final owner ruling applied 2026-08-15
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/BACKLOG.md` rows **D56** (`practical_resistance` returned HTTP 500 on 75% of its own domain; **the row was flipped to ✅ CLOSED by `960f91e` while this RFC was being drafted** — the arithmetic half is fixed, the fixture-discipline half that let it ship is §5a), **D47** (pin tests encode content facts — 4th instance), **D54** (**"CLOSED … NARROWER THAN IT READS — corrected 2026-08-15"**; the row now carries §4's measurements verbatim, landed by `cb32a68` after this draft was written — §4 is retained as the RFC's own independently re-verified statement of them, not as a discovery), **D55** (an instrument that walks content must state its denominator), **D64** (**`offlineQuery` manufactures the provenance it records** — §3's counterexample and a §6 follow-on; ledgered 2026-08-15), **D61** (**the phone-viewport browser assertion cannot fail** — the ledger's own third member of the tests-that-cannot-fail family, addressed by §6's denominator and open question 4), and **"Vocabulary audit: the reassuring half"** (the 107-emitter sweep). `design/research/maia-policy-scalar-stability.md` §8.1 is the measured evidence. *Every code site in this document is cited **by symbol name**. The working tree moved repeatedly during drafting: `packages/runtime/src/practical-difficulty.ts` and `.test.ts` were modified-uncommitted when §5a was first written and **landed as `960f91e` ("fix: tolerate Maia float32 policy mass") before this draft was finished** — §5a is written against the committed result and says which half it does not claim. `apps/server/src/opponent-selector.test.ts`'s fixture line numbers already differ from the ones the D56 dossier recorded this morning. **Locate by symbol first — every line number here is advisory.*** HEAD moved `4a893dc` → `960f91e` → `90bb5bf` during drafting and `90bb5bf` → `2c62275` → `cb32a68` → `efdd7e0` during cross-review; **every measurement in §4, §5 and §6 was re-run at `efdd7e0`** and the corrections that produced are marked `[cross-review]`.
@@ -8,20 +8,7 @@
 - **Depends on:** `rfc/archive/content-sourcing-foundation.md` (the manifest/digest/job-digest artifact triple this RFC borrows for fixtures), `rfc/archive/resistance-spectrum.md` (ships `practical_resistance` and `humanConcessionMass`), `rfc/archive/expression-census.md` §criterion 14 (the last widening of the refusal-coverage gate), `rfc/archive/validator-integrity.md` (the standing rule that a fall-through must become a named refusal rather than a `TypeError`)
 - **Parent / amends:** amends test suites and one error type. Introduces **no new subsystem, no new persisted state, no format change, and no product surface.**
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/fixture-realism/` (once implementing)
-
-
-> **OWNER RULING 2026-08-15 — the tolerance NARROWS toward the measured envelope, so the E4
-> floor stands as written.** Open question 2 is resolved and no longer blocks. The shipped
-> `FLOAT32_POLICY_MASS_TOLERANCE = 32 * 2**-23` (3.8147e-06) is **41.2× wider** than Maia's
-> measured worst case (9.25e-08, `maia-policy-scalar-stability.md`), which both let invalid mass
-> pass silently across a 41× band and made this RFC's own floor unsatisfiable — no real vector
-> can cross a bound 475× outside where the committed fixture sits.
-> **Do NOT restate the floor as *instrument-reachable*.** Narrow the bound to just above what the
-> instrument produces, with headroom for a different image, and keep the floor as written: a real
-> captured fixture must cross every bound. The implementer picks the constant **from the measured
-> envelope**, states the headroom factor, and adds the fixture that crosses it. A future engine
-> build that starts refusing is the guard working, not a regression.
+- **Planning:** `planning/fixture-realism/`
 
 
 > **OWNER RULING 2026-08-15 (final) — the E4 floor is RESTATED and this RFC is unblocked.**
@@ -297,18 +284,21 @@ its subject is the composition rule itself; `humanConcessionMass`'s
 `combines policy mass with an externally supplied concession set` is legitimate and
 stays. **The constraint E4 carries is a floor, not a licence:** a function whose
 production input comes from an instrument must have **at least one** fixture that
-is real instrument output (E3), and any *instrument-reachable boundary or tolerance*
-in that function must be exercised by it. D56 is exactly E4 applied without its
-floor — every fixture was algebra, and the boundary was never crossed by a real
-distribution.
+is real instrument output (E3), and that fixture must exercise every **reachable
+side** of each boundary in the function. A real capture near a safety boundary from
+below exercises the valid side; a minimal clone-and-break mutation of that capture
+may exercise the refusal side under E2. D56 is exactly E4 applied without its floor:
+every fixture was algebra, so no fixture established where real Maia output sits
+relative to the tolerance.
 
 > **The floor is enforced by F4 (§5d), not by this paragraph `[cross-review]`.**
 > The draft stated the floor here and nowhere else, which left the one rule at the
 > centre of D56 as unchecked prose while its two lesser siblings each shipped a
-> gate. §5d adds the register that makes it fail. The word
-> *instrument-reachable* is also a cross-review repair: as originally written the
-> floor was unsatisfiable for the very function it was written about, because
-> `FLOAT32_POLICY_MASS_TOLERANCE` lies 41× outside anything Maia can emit (§5d).
+> gate. §5d adds the register that makes it fail. The final owner ruling corrected
+> an arithmetic impossibility in the earlier wording: a safety bound deliberately
+> above the instrument envelope cannot be crossed by valid instrument output. The
+> reachable-side formulation preserves the real-fixture requirement without asking
+> a valid capture to be invalid.
 
 ### 2a. F1a — a derivation that is a tautology is not a fix
 
@@ -717,26 +707,14 @@ worst-case fixture does not exist (§5a point 2). The one instrument-fed functio
 the repo fails F4 today, which is the strongest available evidence that F4 is not
 ceremony.
 
-> **A contradiction inside E4 that the draft did not notice, and that F4 forces
-> into the open `[cross-review]`.** E4's floor says *"any boundary or tolerance in
-> that function must be exercised by"* a real captured fixture. Applied to
-> `humanConcessionMass`, that is **unsatisfiable**: the tolerance is
-> `FLOAT32_POLICY_MASS_TOLERANCE` = 3.815e-6, and the dossier's measured envelope
-> tops out at an excess of **9.25e-08** — 41× inside it. **No capture from this
-> instrument can cross this bound.** The RFC cannot hold both E4's floor as written
-> and the shipped tolerance; §5a's own acceptance criterion 1 quietly substitutes a
-> weaker bound (`> 5e-8`, the envelope) without saying it is doing so.
->
-> **Resolution, normative.** E4's floor binds the **instrument-reachable** bound:
-> a captured fixture must cross the widest value the instrument can actually
-> produce, and where a function's declared bound lies outside that range, F4's
-> register **records the bound as instrument-unreachable, by name, with the measured
-> envelope beside it.** That record is the honest form. It also converts **open
-> question 2 from advisory to blocking for `accepted`**: by this RFC's own rule, a
-> guard no fixture can cross is a guard nothing tests, which is `1e-9`'s failure
-> with the sign flipped — too loose instead of too tight, and equally unexercised.
-> The draft routed that question away with *"not this RFC's to decide"*. F4 shows
-> it is: the register cannot be filled in honestly without an answer.
+> **The earlier E4 wording was unsatisfiable; the final owner ruling resolves it.**
+> Maia's measured maximum excess is **9.25e-08**. The tolerance becomes one float32
+> ulp (`2**-23`, approximately `1.19e-07`), giving **1.29× headroom** over that
+> maximum. F4 therefore requires two linked fixtures: a real captured vector near
+> the boundary from below, and a minimally mutated clone of that vector which
+> crosses the bound and proves the typed refusal. The real fixture establishes the
+> placement of the bound; the E2 mutation establishes the refusal. Neither half is
+> replaced by invented input.
 
 **What F4 deliberately does not do.** It does not attempt to *discover* instrument-fed
 functions by walking the tree — there is no reliable syntactic marker for "this input
@@ -831,8 +809,9 @@ as an oversight:
   `SourcingError` family, which has no register at all. Note that §5c's discovery
   walk nonetheless *records* 31 of them as debt (§5c) — recording is not pinning,
   and the shrink-only rule means a new `ServerErrorCode` still cannot land untested.
-- **The tolerance value itself.** `32 * 2 ** -23` is the in-flight implementation's
-  choice and this RFC does not relitigate it (but see open question 2).
+- **Tolerance policy beyond this measured correction.** This RFC narrows the current
+  value to one float32 ulp under the final owner ruling. Any later policy for a
+  different instrument or candidate cap remains outside scope.
 
 ## Deviations from design
 
@@ -889,12 +868,10 @@ to the ledger tier by this RFC.**
     `RATINGS_NOT_A_GROUP`, `SPEEDS_NOT_A_SPEED`, `WINDOW_INVALID` — are recognised
     as disposed and are **absent** from the debt register.
 11. **F4:** the instrument-fed register exists, contains `humanConcessionMass`, and
-    its entry resolves to a captured fixture that crosses the **instrument-reachable
-    bound** recorded for that function (see the E4 contradiction below — for
-    `humanConcessionMass` that is the measured envelope, ≥ 5e-8, *not*
-    `FLOAT32_POLICY_MASS_TOLERANCE`, which no capture can reach). The entry records
-    the unreachable bound explicitly. Adding a second instrument-fed function
-    without a fixture fails `make verify`. *Demonstrated, reverted, recorded.*
+    its entry resolves to a real captured fixture near the one-ulp tolerance from
+    below. A minimally mutated clone of that fixture crosses the tolerance and
+    produces the typed refusal. Adding a second instrument-fed function without a
+    real fixture fails `make verify`. *Demonstrated, reverted, recorded.*
 12. `make verify` is green at landing with no test skipped, no timeout raised, and
     no fixture deleted to achieve it.
 
@@ -913,19 +890,13 @@ to the ledger tier by this RFC.**
    the *assertion* lives. `packages/runtime` cannot import `apps/server`'s
    constants, so the identity assertion cannot live beside the fixture. F2c splits
    them and the question is closed on that basis.
-2. **Is `32 * 2 ** -23` (≈ 3.815e-6) the right tolerance, or 41× more generous than
-   the evidence?** The measured maximum excess is 9.25e-08 ≈ 0.78 float32 ulp at
-   1.0; the chosen bound admits distributions 41× further out than anything
-   observed, which cannot be exhibited by the instrument and therefore cannot be
-   tested. The counter-argument is that ulp-count bounds should be derived from the
-   candidate cap (≤ 20 values), not from an observed sample, and 32 is that
-   reasoning. The draft said **"not this RFC's to decide — routed to whoever lands
-   D56"**. **RESOLVED by owner ruling 2026-08-15 — NO LONGER BLOCKING.** The tolerance narrows toward the measured envelope and the E4 floor stands as written (it is *not* restated as instrument-reachable): the implementer picks the constant from the measured envelope — Maia's worst case is 9.25e-08 against the shipped 3.81e-06 — states the headroom factor, and adds the fixture that crosses it. A later engine build that starts refusing is the guard working. *Superseded escalation:* §5d shows E4's
-   floor and this tolerance are mutually unsatisfiable — the floor requires a real
-   fixture to cross every bound, and no capture can cross this one. Whichever way it
-   is decided, the answer must be *stated as a derivation in a comment*, since an
-   untestable bound with an unexplained constant is how `1e-9` got there in the
-   first place. F4's register cannot be filled in honestly until it is answered.
+2. **What tolerance follows from the measured Maia envelope? RESOLVED by final
+   owner ruling 2026-08-15.** Use one float32 ulp (`2**-23`, approximately
+   `1.19e-07`), which gives 1.29× headroom over the measured maximum excess of
+   `9.25e-08`. A real captured fixture exercises the valid side near the boundary;
+   an E2 minimal mutation of that fixture crosses the bound and exercises the typed
+   refusal. The governing floor is now: *a real fixture exercises every reachable
+   side of the bound.*
 3. **Does F3a's debt register need an owner and an expiry, or is monotonic shrink
    enough?** Monotonic shrink prevents growth but permits a permanent register (of
    ~111 entries, not the 45 the draft assumed — §5c). The `expression-census`

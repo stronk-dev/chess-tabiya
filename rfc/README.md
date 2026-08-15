@@ -7,6 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
+| `fixture-realism.md` | implementing | — | **claims nothing versioned**. Captured Maia fixtures, a one-ulp policy-mass tolerance, artifact-derived pins, discovery-based refusal coverage, and an instrument-fed fixture register |
 | `live-marker-quality.md` | implementing | — | **claims nothing versioned**. Narrows live `irreversibility` to `last_of_role`, makes pivotal rendering exhaustive, and applies the human-split permission to the client marker plus `/voice` and `/speech` delivery paths. Proposes **L1–L6**, the standing admission rule for the live surface |
 | `client-surface-floor.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — CSS, one nav element, one marker size, one Playwright spec; lands in any order. Deletes the `62rem` breakpoint rather than retargeting it (it is a *width* breakpoint on a *height*-bound layout). Forward-declares a scope boundary for D63 (`compare-geometry` does **not** exist yet — not a dependency) and asserts `CompareView.svelte` is unmodified |
 
