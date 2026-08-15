@@ -74,7 +74,14 @@
 > 4. **The six packs' grounding must be re-derived or their claim withdrawn.** They currently
 >    assert `ledger_verified` on fabricated provenance. Re-run against the real tablebase, or
 >    downgrade the assessment honestly — **do not leave the claim standing**.
-> 5. The F3a register's **monotonic-shrink property is specified and not implemented** (the test
+> 5. **Strike the CORROBORATION too, not just the number.** The deferral supported its "zero"
+>    by describing the timestamps as *"sequential live-fetch clusters ~32 ms apart."* Partitioned
+>    by the formula that is **true of exactly the 206 entries it did not miss and false of the 135
+>    it did**: genuine entries have a **30 ms** median gap, manufactured ones **2,232,578 ms**
+>    (~37 min), scattered by the modulo. **The corroboration was a selection effect.** Left
+>    standing, the archived RFC keeps a refuted `[V]` *plus* a plausible-sounding sentence that
+>    will re-persuade the next reader — which is worse than the bare number.
+> 6. The F3a register's **monotonic-shrink property is specified and not implemented** (the test
 >    asserts exact equality against an editable file, so nothing prevents growth) while
 >    `docs/development.md` states discovery *"rejects growth"*. Fix the property or the doc.
 
