@@ -1992,3 +1992,33 @@ for nothing finer. And the on-ramp gap is worse than recorded: band 1000 has
 **45–100× fewer games** at plies 12–19, and **all 26 puzzle-derived on-ramp roots
 return 0–5 games at every band** — those positions are largely ungroundable by
 corpus evidence, not merely mis-banded.
+
+## 2026-08-15 (late) — four rulings; nothing owner-gated remains before codex
+
+**Ruled.** (1) A success condition that never fires on its own pack's line stays
+an **error**, with the three-row diagnosis table shipped so a refused author sees
+what was checked and where. The refusal is defensible because its corpus is *the
+pack's own assertion*; a warning would return this to the `timingWindow` answer —
+a subsystem shipped with no enforcement, zero uses across 145 checkpoints, a gate
+blocked for months. (2) **`structuralDelta` is fixed, not deleted and not left**:
+`transition-primitives` now owns rewriting `evictionChanges` so each FEN is parsed
+once rather than 256 `pawnSafety` calls each re-parsing — 43% of its 1721 µs/ply,
+density-independent, so it costs 652 µs even on ≤8-piece endgames where the entire
+transition census costs 7.5. The exclusion and its module-graph test are
+unaffected: **fixing is not consuming.** (3) D51 closes by gating the marker behind
+the stronger permission, cost accepted with open eyes — the marker leaves
+participants and spectators, and leaves solo play until delivery opens. (4) The
+census ships as a **command only**; a non-blocking CI job with no owner becomes
+noise, and a gate that fails on coverage would refuse correct-but-uncovered work
+at CI instead of at load.
+
+**State.** Six waves landed and verified today; `branch-set-scale` archived and
+`deviation-classes` in flight. `transition-primitives` (0.22) and
+`expression-census` (nothing versioned) are unblocked by these rulings;
+`live-marker-quality` is in cross-review. **Nothing is owner-gated ahead of
+codex.** The session-independent research queue is empty — R1–R5 and R9 all
+answered, three of them refuting or inverting the assumption they tested.
+
+**Owed, and named so it is not discovered later:** `rfc/README.md` needs the
+claim-order note recording that `expression-census` should land **last** of the
+in-flight set to absorb the textual rebase rather than impose it.
