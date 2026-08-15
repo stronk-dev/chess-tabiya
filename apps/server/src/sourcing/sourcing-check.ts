@@ -1,25 +1,26 @@
-import { checkSourcingDirectory } from "./check.js";
+import { checkSourcingDirectory, checkSourcingFile } from "./check.js";
 
 export function formatSourcingIssue(issue: { severity: string; path: string; code: string; message: string }): string {
   return `${issue.severity.toUpperCase()} ${issue.path} [${issue.code}] ${issue.message}`;
 }
 
 async function main(): Promise<number> {
-  const directory = process.argv[2];
-  if (!directory) {
-    console.error("Usage: make sourcing-check DIR=<candidate-directory>");
+  const target = process.argv[2];
+  const mode = process.argv[3] ?? "directory";
+  if (!target) {
+    console.error("Usage: make sourcing-check DIR=<candidate-directory> or FILE=<pack.json>");
     return 2;
   }
-  const result = await checkSourcingDirectory(directory);
+  const result = mode === "file" ? await checkSourcingFile(target) : await checkSourcingDirectory(target);
   for (const value of result.issues) {
     const line = formatSourcingIssue(value);
     if (value.severity === "error") console.error(line); else console.warn(line);
   }
   if (!result.valid) {
-    console.error(`Sourcing check failed: ${directory}`);
+    console.error(`Sourcing check failed: ${target}`);
     return 1;
   }
-  console.log(`Sourcing check passed (${result.strict ? "strict" : "audit"}): ${directory}`);
+  console.log(`Sourcing check passed (${result.strict ? "strict" : "audit"}): ${target}`);
   return 0;
 }
 

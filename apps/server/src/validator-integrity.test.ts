@@ -165,7 +165,7 @@ describe("validator integrity", () => {
       kind: "checkpoint",
       checkpointId: "mate-or-stalemate",
     };
-    expect(issue(checkpoint, "TRAJECTORY_GRADING_RESOLUTION_UNSUPPORTED")).toMatchObject({
+    expect(issue(checkpoint, "OBJECTIVE_GRADING_RESOLUTION_INERT")).toMatchObject({
       path: "/objective/grading/resolveAt",
     });
 

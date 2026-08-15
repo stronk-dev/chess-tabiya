@@ -41,6 +41,8 @@ Implemented foundation:
 - `tablebase-grounding.md` — draft verification into ledger-verified Syzygy sidecars,
   deterministic perfect tablebase resistance, capability publication, and named refusal
   boundaries.
+- `engine-grounding.md` — fixed-depth opening assessments, manifest-linked engine
+  evidence, draft verification, the read-only engine walker, and the “not a proof” boundary.
 - `outcome-drill-grading.md` — win/hold/save/resist grading, monotone outcome
   transitions, exact-assessment admission, path-scoped resistance identity, and
   the learner-facing honesty contract.

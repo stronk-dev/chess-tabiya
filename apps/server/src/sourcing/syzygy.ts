@@ -12,13 +12,13 @@ import { ingestLocalFile } from "./inputs.js";
 import { withSourceLock } from "./lock.js";
 import type { EvidenceLedger, SourceEntry, SourceManifest } from "./types.js";
 import { SourcingError } from "./types.js";
+import { AUTHORING_PROFILE } from "./authoring-profile.js";
+export { AUTHORING_PROFILE } from "./authoring-profile.js";
 export { countFenPieces } from "./chess-facts.js";
 import { countFenPieces } from "./chess-facts.js";
 
 export const TABLEBASE_RATIONALE = "Syzygy tablebase facts are free of copyright under Feist and Football Dataco; the API transports computed chess facts rather than a third-party work";
 export const AUTHOR_POSITION_RATIONALE = "the author's own position list; a list of FENs states facts about chess positions";
-export const AUTHORING_PROFILE = Object.freeze({ depth: 22, threads: 1, hashMb: 16, multiPv: 1, timeoutMs: 120_000 });
-
 export interface TablebasePayload {
   readonly checkmate: boolean;
   readonly stalemate: boolean;

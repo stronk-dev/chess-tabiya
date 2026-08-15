@@ -14,6 +14,18 @@ type ProjectedAssessment =
       readonly pieceCount: number;
       readonly sourceId: "syzygy";
       readonly retrievedAt: string;
+    }
+  | {
+      readonly kind: "engine";
+      readonly score:
+        | { readonly kind: "cp"; readonly centipawns: number }
+        | { readonly kind: "mate"; readonly movesToMate: number };
+      readonly perspective: "white";
+      readonly depth: number;
+      readonly engineId: string;
+      readonly engineVersion: string;
+      readonly sourceId: string;
+      readonly retrievedAt: string;
     };
 
 export interface ProjectedGrading {
@@ -48,6 +60,13 @@ export function assessmentSentence(grading: ProjectedGrading): string {
   }
   if (grading.assessedBy.kind === "authored") {
     return `Root assessment (authored, unproved): ${grading.assessedBy.note}`;
+  }
+  if (grading.assessedBy.kind === "engine") {
+    if (grading.grounding !== "ledger_verified") return "Root assessment (declared, unproved): an engine evaluation is declared but no matching evidence record backs it, so it is shown as a claim.";
+    const score = grading.assessedBy.score.kind === "cp"
+      ? `${grading.assessedBy.score.centipawns >= 0 ? "+" : ""}${(grading.assessedBy.score.centipawns / 100).toFixed(2)}`
+      : `mate ${grading.assessedBy.score.movesToMate}`;
+    return `Root assessment: ${score} for White — ${grading.assessedBy.engineId} ${grading.assessedBy.engineVersion} at depth ${grading.assessedBy.depth}, retrieved ${grading.assessedBy.retrievedAt}. An engine evaluation at a fixed depth, not a proof.`;
   }
   return "Root assessment (authored, unproved): A tablebase result is declared but no matching evidence record backs it, so it is shown as a claim.";
 }

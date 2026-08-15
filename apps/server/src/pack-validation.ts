@@ -37,6 +37,7 @@ import {
   type PlanSignatureResolver,
 } from "./pack-orchestrator.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
+import { AUTHORING_PROFILE } from "./sourcing/authoring-profile.js";
 import {
   ASSESSMENT_CATEGORIES,
   invertTablebaseCategory,
@@ -304,6 +305,7 @@ export function objectiveIssues(
   checkpoints: ReadonlySet<string>,
   compile: ObjectiveCompiler = objectiveRules,
   resolvePlanSignature?: PlanSignatureResolver,
+  scope: "root" | "leg" = "root",
 ): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
   const conditions = objective.successConditions;
@@ -324,11 +326,11 @@ export function objectiveIssues(
   if (outcomeObjective && grading === undefined) {
     issues.push(runtimeIssue("OBJECTIVE_GRADING_REQUIRED", `${pointerPrefix}/grading`, `${objective.type} objectives require grading`));
   }
-  if (!outcomeObjective && !trajectoryObjective && grading !== undefined) {
+  if (scope === "leg" && !outcomeObjective && grading !== undefined) {
     issues.push(runtimeIssue("OBJECTIVE_GRADING_UNSUPPORTED", `${pointerPrefix}/grading`, `grading is unsupported for ${objective.type} objectives`));
   }
-  if (trajectoryObjective && grading?.resolveAt.kind === "checkpoint") {
-    issues.push(runtimeIssue("TRAJECTORY_GRADING_RESOLUTION_UNSUPPORTED", `${pointerPrefix}/grading/resolveAt`, "run_trajectory root grading may resolve only at terminal"));
+  if (scope === "root" && !outcomeObjective && grading?.resolveAt.kind === "checkpoint") {
+    issues.push(runtimeIssue("OBJECTIVE_GRADING_RESOLUTION_INERT", `${pointerPrefix}/grading/resolveAt`, `${objective.type} does not consume checkpoint grading resolution`));
   }
   if (grading?.resolveAt.kind === "checkpoint" && !checkpoints.has(grading.resolveAt.checkpointId)) {
     issues.push(runtimeIssue("OBJECTIVE_RESOLUTION_UNKNOWN", `${pointerPrefix}/grading/resolveAt/checkpointId`, `unknown resolution checkpoint ${grading.resolveAt.checkpointId}`));
@@ -592,6 +594,9 @@ function runtimeIssues(
   const mode = raw.mode;
 
   const provenance = raw.provenance as Record<string, unknown>;
+  for (const key of ["engineValidation", "tablebaseValidation", "evidence", "records"] as const) {
+    if (key in provenance) issues.push(runtimeIssue("PROVENANCE_EVIDENCE_INLINE", `/provenance/${key}`, "evidence belongs in the pack's *.evidence.json sidecar; see make verify-draft"));
+  }
   const reviewStatus = provenance.reviewStatus;
   if (reviewStatus === "published") {
     const sources = provenance.sources;
@@ -664,6 +669,11 @@ function runtimeIssues(
   if (opponentMode === "practical_resistance" && countFenPieces(pack.start.fen) > 7) {
     issues.push(runtimeIssue("PRACTICAL_RESISTANCE_OUT_OF_RANGE", "/opponentPolicy/mode", "practical_resistance requires a root with at most seven pieces"));
   }
+  const rootAssessment = pack.objective.grading?.assessedBy;
+  if (rootAssessment?.kind === "engine") {
+    if (rootAssessment.depth < AUTHORING_PROFILE.depth) issues.push(runtimeIssue("ENGINE_ASSESSMENT_DEPTH_BELOW_FLOOR", "/objective/grading/assessedBy/depth", `engine assessment depth must be at least ${AUTHORING_PROFILE.depth}`));
+    if (countFenPieces(pack.start.fen) <= 7) issues.push(runtimeIssue("ENGINE_ASSESSMENT_ON_TABLEBASE_ROOT", "/objective/grading/assessedBy/kind", "engine assessment cannot substitute for an exact tablebase result on a root with at most seven pieces"));
+  }
 
   const checkpoints = new Set(pack.checkpoints.map((checkpoint) => checkpoint.id));
   const legs = pack.legs;
@@ -700,6 +710,7 @@ function runtimeIssues(
       if (leg.objective.type === "run_trajectory") issues.push(runtimeIssue("TRAJECTORY_NESTED_UNSUPPORTED", `/legs/${index}/objective/type`, "a trajectory leg cannot contain another trajectory"));
       if (leg.objective.type === "follow_theory") theoryCount += 1;
       if (leg.objective.grading?.assessedBy.kind === "syzygy") issues.push(runtimeIssue("TRAJECTORY_LEG_SYZYGY_UNSUPPORTED", `/legs/${index}/objective/grading/assessedBy`, "leg entry positions are not statically bound to a Syzygy record"));
+      if (leg.objective.grading?.assessedBy.kind === "engine") issues.push(runtimeIssue("TRAJECTORY_LEG_ENGINE_UNSUPPORTED", `/legs/${index}/objective/grading/assessedBy`, "leg entry positions are not statically bound to an engine evidence record"));
       if (index < legs.length - 1 && leg.objective.grading?.resolveAt.kind === "terminal") issues.push(runtimeIssue("TRAJECTORY_NONFINAL_TERMINAL_RESOLUTION", `/legs/${index}/objective/grading/resolveAt`, "only the final trajectory leg may resolve at terminal"));
       for (const [conditionIndex, condition] of (leg.objective.successConditions ?? []).entries()) {
         const to = condition.to ?? "achieved";
@@ -801,9 +812,9 @@ function runtimeIssues(
     }
   }
 
-  issues.push(...objectiveIssues(pack, pack.objective, "/objective", checkpoints, compile, resolvePlanSignature));
+  issues.push(...objectiveIssues(pack, pack.objective, "/objective", checkpoints, compile, resolvePlanSignature, "root"));
   for (const [index, leg] of (pack.legs ?? []).entries()) {
-    issues.push(...objectiveIssues(pack, leg.objective, `/legs/${index}/objective`, checkpoints, compile, resolvePlanSignature));
+    issues.push(...objectiveIssues(pack, leg.objective, `/legs/${index}/objective`, checkpoints, compile, resolvePlanSignature, "leg"));
   }
 
   try {

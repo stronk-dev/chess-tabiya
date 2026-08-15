@@ -243,6 +243,18 @@ export type RootAssessment =
       readonly pieceCount: number;
       readonly sourceId: "syzygy";
       readonly retrievedAt: string;
+    }
+  | {
+      readonly kind: "engine";
+      readonly score:
+        | { readonly kind: "cp"; readonly centipawns: number }
+        | { readonly kind: "mate"; readonly movesToMate: number };
+      readonly perspective: "white";
+      readonly depth: number;
+      readonly engineId: string;
+      readonly engineVersion: string;
+      readonly sourceId: string;
+      readonly retrievedAt: string;
     };
 
 export interface ObjectiveGrading {

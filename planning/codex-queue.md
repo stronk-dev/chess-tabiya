@@ -28,7 +28,7 @@ Owner rulings it now carries:
 - Intent grading is **grade the 45%, refuse the rest by name** — §5c-bis supplies
   capability publication, named refusal and applied record.
 
-## 2. `rfc/opening-evidence-path.md` — READY, take next
+## 2. `rfc/archive/opening-evidence-path.md` — IMPLEMENTED
 
 Pack **0.20** (behind 0.18, hence the ordering). Closes the opening half of the
 evidence hole. `assessedBy` gains `kind: "engine"`.

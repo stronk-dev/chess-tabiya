@@ -1,5 +1,5 @@
 import { access } from "node:fs/promises";
-import { resolve, sep } from "node:path";
+import { basename, dirname, extname, resolve, sep } from "node:path";
 
 import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
@@ -34,6 +34,24 @@ const PROSE_POINTERS = [
   /^\/deviations\/\d+\/note$/,
   /^\/feedbackClaims\/\d+\/text$/,
 ];
+const HUMAN_ONLY_POINTERS = [
+  /^\/deviations\/\d+\/(?:class|offObjective)$/,
+  /^\/difficulty(?:\/|$)/,
+  /^\/checkpoints\/\d+\/label$/,
+];
+
+export const ENGINE_MOVE_LOSS_TEMPLATE_ID = "engine-move-loss/v1";
+
+function displayCp(value: number): string {
+  return `${value >= 0 ? "+" : ""}${(value / 100).toFixed(2)}`;
+}
+
+export function renderEngineMoveLoss(values: Readonly<Record<string, unknown>>): string {
+  const candidates = values.candidates as readonly { readonly san: string; readonly centipawns: number }[];
+  const measured = candidates.find((candidate) => candidate.san === values.moveSan)!;
+  const best = candidates.find((candidate) => candidate.san === values.bestSan)!;
+  return `${String(values.moveSan)} evaluates ${displayCp(measured.centipawns)} for White at depth ${String(values.depth)} (${String(values.engineName)} ${String(values.engineVersion)}). Of the ${candidates.length} moves measured at this position, the best, ${String(values.bestSan)}, evaluates ${displayCp(best.centipawns)}; the difference is ${String(values.lossCp)} centipawns. Only the listed moves were measured, so this is a lower bound.`;
+}
 
 export interface SourcingCheckResult {
   readonly valid: boolean;
@@ -41,7 +59,7 @@ export interface SourcingCheckResult {
   readonly issues: readonly SourcingIssue[];
 }
 
-function resolvePointer(document: unknown, pointer: string): { found: boolean; value?: unknown } {
+export function resolvePointer(document: unknown, pointer: string): { found: boolean; value?: unknown } {
   if (pointer === "") return { found: true, value: document };
   if (!pointer.startsWith("/")) return { found: false };
   let current: unknown = document;
@@ -109,9 +127,44 @@ function explorerTemplate(record: EvidenceRecord, pack: unknown, manifest: Sourc
   return true;
 }
 
-function evidenceSupports(pack: unknown, ledger: EvidenceLedger, manifest: SourceManifest | undefined, issues: SourcingIssue[]): void {
+function engineTemplate(record: EvidenceRecord, pack: unknown, recordIndex: number, issues: SourcingIssue[]): boolean {
+  if (record.kind !== "engine_eval" || record.templateId !== ENGINE_MOVE_LOSS_TEMPLATE_ID) return false;
+  const path = `/records/${recordIndex}`;
+  const values = record.values;
+  const candidates = values.candidates;
+  let valid = nonEmpty(values.moveSan) && nonEmpty(values.bestSan) && nonEmpty(values.atFen) && nonEmpty(values.engineName) && nonEmpty(values.engineVersion) && values.perspective === "white" && Number.isInteger(values.depth) && Array.isArray(candidates) && candidates.length >= 2 && candidates.every((candidate) => object(candidate) && exactKeys(candidate, ["san", "uci", "centipawns"]) && nonEmpty(candidate.san) && nonEmpty(candidate.uci) && Number.isInteger(candidate.centipawns)) && Number.isInteger(values.lossCp);
+  if (valid) {
+    try {
+      const turn = Chess.fromSetup(parseFen(String(values.atFen)).unwrap()).unwrap().turn;
+      const rows = candidates as readonly { readonly san: string; readonly centipawns: number }[];
+      const measured = rows.find((candidate) => candidate.san === values.moveSan);
+      const ordered = [...rows].sort((a, b) => turn === "white" ? b.centipawns - a.centipawns || a.san.localeCompare(b.san) : a.centipawns - b.centipawns || a.san.localeCompare(b.san));
+      const best = ordered[0];
+      const loss = measured === undefined || best === undefined ? undefined : turn === "white" ? best.centipawns - measured.centipawns : measured.centipawns - best.centipawns;
+      valid = measured !== undefined && best !== undefined && best.san === values.bestSan && loss === values.lossCp;
+    } catch { valid = false; }
+  }
+  if (!valid) issues.push(issue("EVIDENCE_VALUES_INVALID", `${path}/values`, "engine-move-loss/v1 requires a self-consistent measured candidate set"));
+  const pointer = record.supports[0];
+  if (record.supports.length !== 1 || !/^\/feedbackClaims\/\d+\/text$/.test(pointer ?? "")) issues.push(issue("EVIDENCE_OVERREACH", `${path}/supports`, "engine move loss may support exactly one feedbackClaims text"));
+  else if (valid) {
+    const target = resolvePointer(pack, pointer!);
+    if (!target.found || target.value !== renderEngineMoveLoss(values)) issues.push(issue("EVIDENCE_OVERREACH", `${path}/supports/0`, "supported engine sentence is not the byte-exact generated template"));
+  }
+  return true;
+}
+
+export function evidenceSupports(pack: unknown, ledger: EvidenceLedger, manifest: SourceManifest | undefined, issues: SourcingIssue[]): void {
+  const templatedPointers = new Map<string, number>();
   ledger.records.forEach((record: EvidenceRecord, recordIndex) => {
     const isExplorerTemplate = explorerTemplate(record, pack, manifest, recordIndex, issues);
+    const isEngineTemplate = engineTemplate(record, pack, recordIndex, issues);
+    if (record.templateId !== undefined && record.supports.length === 1) {
+      const pointer = record.supports[0]!;
+      const previous = templatedPointers.get(pointer);
+      if (previous !== undefined) issues.push(issue("EVIDENCE_TEMPLATE_CONFLICT", `/records/${recordIndex}/supports/0`, `templated pointer is already supported by record ${previous}`));
+      else templatedPointers.set(pointer, recordIndex);
+    }
     record.supports.forEach((pointer, supportIndex) => {
       const path = `/records/${recordIndex}/supports/${supportIndex}`;
       const resolved = resolvePointer(pack, pointer);
@@ -119,15 +172,45 @@ function evidenceSupports(pack: unknown, ledger: EvidenceLedger, manifest: Sourc
       if (record.kind === "puzzle_provenance" && pointer === "/start/fen" && resolved.value !== record.anchor.fen) {
         issues.push(issue("EVIDENCE_VALUES_INVALID", path, "puzzle_provenance replay anchor must equal pack /start/fen"));
       }
-      if ((!isExplorerTemplate && PROSE_POINTERS.some((pattern) => pattern.test(pointer))) || /^\/deviations\/\d+\/class$/.test(pointer) || (record.kind === "explorer_frequency" && (/^\/difficulty(?:\/|$)/.test(pointer) || /^\/spine(?:\/|$)/.test(pointer)))) {
+      if (HUMAN_ONLY_POINTERS.some((pattern) => pattern.test(pointer)) || ((!isExplorerTemplate && !isEngineTemplate && PROSE_POINTERS.some((pattern) => pattern.test(pointer))) || (record.kind === "explorer_frequency" && /^\/spine(?:\/|$)/.test(pointer)))) {
         issues.push(issue("EVIDENCE_OVERREACH", path, `B6a has no registered template or grading contract for ${pointer}`));
       }
-      if (record.templateId !== undefined && !isExplorerTemplate) issues.push(issue("EVIDENCE_OVERREACH", `/records/${recordIndex}/templateId`, "template is not registered for this evidence kind"));
+      if (record.templateId !== undefined && !isExplorerTemplate && !isEngineTemplate) issues.push(issue("EVIDENCE_OVERREACH", `/records/${recordIndex}/templateId`, "template is not registered for this evidence kind"));
     });
   });
+  if (object(pack) && Array.isArray(pack.feedbackClaims)) {
+    const map: Readonly<Record<string, EvidenceRecord["kind"]>> = { engine_validated: "engine_eval", tablebase_exact: "tablebase_result", corpus_observed: "explorer_frequency" };
+    const published = object(pack.provenance) && pack.provenance.reviewStatus === "published";
+    pack.feedbackClaims.forEach((raw, index) => {
+      if (!object(raw) || !Array.isArray(raw.evidenceTypes)) return;
+      for (const label of raw.evidenceTypes) {
+        const kind = map[String(label)];
+        if (kind === undefined) continue;
+        const pointer = `/feedbackClaims/${index}/text`;
+        if (!ledger.records.some((record) => record.kind === kind && record.supports.includes(pointer))) issues.push(issue("EVIDENCE_TYPE_UNBACKED", `/feedbackClaims/${index}/evidenceTypes`, `${String(label)} has no matching evidence record`, published ? "error" : "warning"));
+      }
+    });
+  }
 }
 
-function evidenceSemantics(ledger: EvidenceLedger, issues: SourcingIssue[]): void {
+function authoredPositionPointers(pack: unknown): readonly string[] {
+  if (!object(pack)) return [];
+  const pointers = ["/start/fen"];
+  const walk = (nodes: unknown, base: string): void => {
+    if (!Array.isArray(nodes)) return;
+    nodes.forEach((raw, index) => {
+      if (!object(raw)) return;
+      const pointer = `${base}/${index}`;
+      pointers.push(`${pointer}/moveUci`);
+      walk(raw.children, `${pointer}/children`);
+    });
+  };
+  walk(pack.spine, "/spine");
+  if (Array.isArray(pack.deviations)) pack.deviations.forEach((_value, index) => pointers.push(`/deviations/${index}/moveUci`));
+  return Object.freeze(pointers);
+}
+
+export function evidenceSemantics(ledger: EvidenceLedger, issues: SourcingIssue[], manifest?: SourceManifest, pack?: unknown): void {
   const tablebaseFens = new Set(
     ledger.records
       .filter((record) => record.kind === "tablebase_result" && typeof record.values.fen === "string")
@@ -159,15 +242,22 @@ function evidenceSemantics(ledger: EvidenceLedger, issues: SourcingIssue[]): voi
     }
     if (record.kind === "engine_eval") {
       const required = ["depth", "threads", "hashMb", "multiPv", "timeoutMs", "engineId", "engineName", "engineVersion"];
-      if (required.some((key) => record.values[key] === undefined) || record.values.movetimeMs !== undefined || record.values.requestedMovetimeMs !== undefined) {
+      if (required.some((key) => record.values[key] === undefined) || record.values.perspective !== "white" || record.values.movetimeMs !== undefined || record.values.requestedMovetimeMs !== undefined) {
         issues.push(issue("EVIDENCE_VALUES_INVALID", `/records/${index}/values`, "authoring engine evidence requires identity, depth, threads, hashMb, multiPv and timeoutMs; movetime is forbidden"));
       }
+      const entry = manifest?.entries.find((candidate) => candidate.sourceId === record.sourceId && candidate.retrievedAt === record.retrievedAt);
+      if (entry?.origin.kind !== "engine" || !("depth" in entry.origin.budget) || entry.origin.budget.depth !== record.values.depth || entry.origin.engineVersion !== record.values.engineVersion || entry.origin.profile.multiPv !== record.values.multiPv) issues.push(issue("ENGINE_INSTRUMENT_UNRECORDED", `/records/${index}`, "engine evidence must match its manifest engine origin, depth, version and MultiPV"));
       const fen = typeof record.values.fen === "string" ? record.values.fen : typeof record.anchor.fen === "string" ? record.anchor.fen : undefined;
       if (fen !== undefined && tablebaseFens.has(fen)) {
         issues.push(issue("EVIDENCE_KIND_MISMATCH", `/records/${index}`, "engine_eval cannot substitute for tablebase_result on the same <=7-piece position"));
       }
     }
   });
+  if (object(pack) && object(pack.objective) && object(pack.objective.grading) && object(pack.objective.grading.assessedBy) && pack.objective.grading.assessedBy.kind === "engine") {
+    const covered = new Set(ledger.records.filter((record) => record.kind === "engine_eval" && record.templateId === undefined).flatMap((record) => record.supports));
+    const missing = authoredPositionPointers(pack).filter((pointer) => !covered.has(pointer));
+    if (missing.length > 0) issues.push(issue("ENGINE_COVERAGE_INCOMPLETE", "/records", `engine evidence is missing ${missing.length} authored position record(s)`, "warning"));
+  }
 }
 
 function licenceObligations(pack: Record<string, unknown>, manifest: SourceManifest, ledger: EvidenceLedger, issues: SourcingIssue[]): void {
@@ -224,7 +314,7 @@ export async function checkSourcingDirectory(directory: string, options: { reado
       priorityLinkage(manifest, await readJson(resolve(absolute, "priority.json")), issues);
     } catch (error) { issues.push(issue("PRIORITY_READ_ERROR", "/priority.json", error instanceof Error ? error.message : String(error))); }
   }
-  if (ledger) evidenceSemantics(ledger, issues);
+  if (ledger) evidenceSemantics(ledger, issues, manifest, pack);
   if (ledger && object(job) && job.pipeline === "position-seeds" && object(job.args) && job.args.engineEval !== true && ledger.records.some((record) => record.kind === "engine_eval")) {
     issues.push(issue("EVIDENCE_KIND_UNEXPECTED", "/records", "position-seeds may contain engine_eval only when the recorded job has engineEval: true"));
   }
@@ -244,20 +334,59 @@ export async function checkSourcingDirectory(directory: string, options: { reado
     object(pack.objective) &&
     object(pack.objective.grading) &&
     object(pack.objective.grading.assessedBy) &&
-    pack.objective.grading.assessedBy.kind === "syzygy" &&
+    (pack.objective.grading.assessedBy.kind === "syzygy" || pack.objective.grading.assessedBy.kind === "engine") &&
     assessmentGrounding({
       document: pack as unknown as import("@chess-tabiya/schema/drill-pack").DrillPackDefinition,
       ledger,
       manifest,
     }) === "unverified"
   ) {
+    const engine = pack.objective.grading.assessedBy.kind === "engine";
     issues.push(
       issue(
-        "SYZYGY_ASSESSMENT_UNGROUNDED",
+        engine ? "ENGINE_ASSESSMENT_UNGROUNDED" : "SYZYGY_ASSESSMENT_UNGROUNDED",
         "/objective/grading/assessedBy",
-        "Syzygy assessment has no valid, manifest-linked tablebase evidence record",
+        engine ? "engine assessment has no valid, manifest-linked engine_eval evidence record" : "Syzygy assessment has no valid, manifest-linked tablebase evidence record",
       ),
     );
+  }
+  const effective = strict ? issues : issues.map((value) => ({ ...value, severity: "warning" as const }));
+  return Object.freeze({ strict, issues: Object.freeze(effective), valid: !effective.some((value) => value.severity === "error") });
+}
+
+export async function checkSourcingFile(file: string, options: { readonly strict?: boolean } = {}): Promise<SourcingCheckResult> {
+  const absolute = resolve(file);
+  const directory = dirname(absolute);
+  const stem = basename(absolute).slice(0, -extname(absolute).length);
+  const strict = options.strict ?? true;
+  const issues: SourcingIssue[] = [];
+  let pack: unknown;
+  let ledger: EvidenceLedger | undefined;
+  let manifest: SourceManifest | undefined;
+  try {
+    pack = await readJson(absolute);
+    const result = validatePackDocument(pack);
+    issues.push(...result.issues.map((value) => issue(`PACK_${value.code}`, value.path, value.message, value.severity)));
+  } catch (error) { issues.push(issue("PACK_READ_ERROR", "/pack.json", error instanceof Error ? error.message : String(error))); }
+  try { ledger = validateLedger(await readJson(resolve(directory, `${stem}.evidence.json`)), issues); }
+  catch (error) { issues.push(issue("EVIDENCE_READ_ERROR", "/evidence.json", error instanceof Error ? error.message : String(error))); }
+  try { manifest = validateManifest(await readJson(resolve(directory, `${stem}.sources.json`)), issues); }
+  catch (error) { issues.push(issue("MANIFEST_READ_ERROR", "/sources.json", error instanceof Error ? error.message : String(error))); }
+  if (manifest && ledger) linkage(manifest, ledger, issues);
+  if (ledger) evidenceSemantics(ledger, issues, manifest, pack);
+  if (pack && ledger) {
+    evidenceSupports(pack, ledger, manifest, issues);
+    if (manifest && object(pack)) licenceObligations(pack, manifest, ledger, issues);
+    if (object(pack) && ledger.packId !== pack.id) issues.push(issue("EVIDENCE_PACK_MISMATCH", "/packId", "ledger packId does not match pack"));
+    if (object(pack) && ledger.packVersion !== pack.version) issues.push(issue("EVIDENCE_PACK_MISMATCH", "/packVersion", "ledger packVersion does not match pack"));
+    if (typeof ledger.packDigest === "string") {
+      const digest = await digestDrillPack(pack);
+      if (digest !== ledger.packDigest) issues.push(issue("EVIDENCE_DIGEST_STALE", "/packDigest", `stored ${ledger.packDigest}; current ${digest}; re-confirm evidence`, "warning"));
+    }
+  }
+  if (strict && object(pack) && object(pack.objective) && object(pack.objective.grading) && object(pack.objective.grading.assessedBy) && ["syzygy", "engine"].includes(String(pack.objective.grading.assessedBy.kind)) && assessmentGrounding({ document: pack as unknown as import("@chess-tabiya/schema/drill-pack").DrillPackDefinition, ledger, manifest }) === "unverified") {
+    const engine = pack.objective.grading.assessedBy.kind === "engine";
+    issues.push(issue(engine ? "ENGINE_ASSESSMENT_UNGROUNDED" : "SYZYGY_ASSESSMENT_UNGROUNDED", "/objective/grading/assessedBy", engine ? "engine assessment has no valid, manifest-linked engine_eval evidence record" : "Syzygy assessment has no valid, manifest-linked tablebase evidence record"));
   }
   const effective = strict ? issues : issues.map((value) => ({ ...value, severity: "warning" as const }));
   return Object.freeze({ strict, issues: Object.freeze(effective), valid: !effective.some((value) => value.severity === "error") });

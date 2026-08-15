@@ -80,7 +80,9 @@ not a falsely tablebase-grounded pack.
 
 In-range records preserve the backend category, DTZ, precise DTZ, DTM, and terminal flags,
 including nulls. Tablebase evidence and engine evidence are distinct kinds, and the checker
-rejects either kind on the wrong side of the range boundary. Neither may support prose.
+rejects either kind on the wrong side of the range boundary. Tablebase facts do not support
+prose; engine evidence may support only literal measurements and the closed
+`engine-move-loss/v1` template, never authored chess judgments.
 
 A pack's `assessedBy.kind: syzygy` declaration does not earn an exact label.
 Registry admission derives `ledger_verified` only when the complete ledger and
@@ -97,11 +99,12 @@ source, and job artifacts, refuses a contradicted root or learner-category spine
 regression, and requires the existing registry admission function to return
 `ledger_verified`. `OFFLINE=1` uses committed per-FEN fixtures.
 
-The optional above-range authoring substitute uses Stockfish at depth 22, Threads 1, Hash
-16 MB, and MultiPV 1 in a fresh authoring context, with a 120-second timeout. Fixed depth is
-recorded evidence, not a wall-clock reproducibility claim; the engine identity and profile
-must travel with the result. The general evidence executor’s timeout remains five seconds
-unless a caller explicitly supplies the new override.
+The above-range authoring instrument uses Stockfish at depth 22, Threads 1, Hash
+16 MB, and MultiPV 1 in a fresh authoring context, with a 120-second timeout. It clears
+the engine hash before every position. Fixed depth is recorded evidence, not a wall-clock
+reproducibility claim; engine identity and profile travel with the result. Engine-assessed
+drafts use the same `verify-draft` command and manifest-linked admission as Syzygy drafts,
+while `make engine-walk` provides a read-only report before an assessment is declared.
 
 Generated endgame packs are spine-less outcome drills. The opponent is explicitly
 `strong_engine` or `human_common`, the checkpoint is aligned to a learner ply, and roots in

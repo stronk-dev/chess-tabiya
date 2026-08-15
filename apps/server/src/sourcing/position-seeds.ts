@@ -19,7 +19,7 @@ import { checkSourcingDirectory } from "./check.js";
 import { SourceLock } from "./lock.js";
 import type { EvidenceLedger, EvidenceRecord, SourceEntry, SourceManifest } from "./types.js";
 import { SourcingError } from "./types.js";
-import { AUTHORING_PROFILE } from "./syzygy.js";
+import { AUTHORING_PROFILE } from "./authoring-profile.js";
 
 export const PUZZLE_DUMP_URL = "https://database.lichess.org/lichess_db_puzzle.csv.zst";
 export const PUZZLE_DUMP_ETAG = '"6a6ef08b-12248997"';
@@ -72,10 +72,15 @@ export async function createPositionSeedEngineEvaluator(command: string, args: r
   return {
     async evaluate(fen) {
       const retrievedAt = new Date().toISOString();
+      await supervisor.execute("stockfish-authoring", {
+        commands: ["ucinewgame", "setoption name Clear Hash", "isready"],
+        until: (line) => line === "readyok",
+        timeoutMs: 15_000,
+      });
       const payload = await executor.execute({ id: `authoring-${Date.now()}`, runId: "content-sourcing", nodeId: "start", fen, kind: "eval", depth: AUTHORING_PROFILE.depth, timeoutMs: AUTHORING_PROFILE.timeoutMs }, new AbortController().signal);
       return {
         source: { sourceId: "stockfish-authoring", retrievedAt, origin: { kind: "engine", engineId: identity.id, engineName: identity.name, engineVersion: identity.version, profile: { threads: AUTHORING_PROFILE.threads, hashMb: AUTHORING_PROFILE.hashMb, multiPv: AUTHORING_PROFILE.multiPv }, budget: { depth: AUTHORING_PROFILE.depth }, fen, evidenceKind: "engine_eval" }, licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: "output of a locally executed engine; not a third-party work" } },
-        values: { fen, ...payload.values, depth: AUTHORING_PROFILE.depth, threads: AUTHORING_PROFILE.threads, hashMb: AUTHORING_PROFILE.hashMb, multiPv: AUTHORING_PROFILE.multiPv, timeoutMs: AUTHORING_PROFILE.timeoutMs, engineId: identity.id, engineName: identity.name, engineVersion: identity.version },
+        values: { fen, ...payload.values, perspective: "white", depth: AUTHORING_PROFILE.depth, threads: AUTHORING_PROFILE.threads, hashMb: AUTHORING_PROFILE.hashMb, multiPv: AUTHORING_PROFILE.multiPv, timeoutMs: AUTHORING_PROFILE.timeoutMs, engineId: identity.id, engineName: identity.name, engineVersion: identity.version },
       };
     },
     async close() { await supervisor.shutdown(); },

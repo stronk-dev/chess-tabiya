@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.18",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.20",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.17 format for an engine-independent authored drill.",
+  "description": "Living v0.20 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -260,6 +260,26 @@
                 "category": { "enum": ["win", "loss", "draw", "cursed-win", "blessed-loss"] },
                 "pieceCount": { "type": "integer", "minimum": 2, "maximum": 7 },
                 "sourceId": { "const": "syzygy" },
+                "retrievedAt": { "type": "string", "format": "date-time" }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["kind", "score", "perspective", "depth", "engineId", "engineVersion", "sourceId", "retrievedAt"],
+              "properties": {
+                "kind": { "const": "engine" },
+                "score": {
+                  "oneOf": [
+                    { "type": "object", "required": ["kind", "centipawns"], "properties": { "kind": { "const": "cp" }, "centipawns": { "type": "integer", "minimum": -10000, "maximum": 10000 } }, "additionalProperties": false },
+                    { "type": "object", "required": ["kind", "movesToMate"], "properties": { "kind": { "const": "mate" }, "movesToMate": { "type": "integer", "minimum": -500, "maximum": 500 } }, "additionalProperties": false }
+                  ]
+                },
+                "perspective": { "const": "white" },
+                "depth": { "type": "integer", "minimum": 1, "maximum": 99 },
+                "engineId": { "$ref": "#/$defs/nonEmptyString" },
+                "engineVersion": { "$ref": "#/$defs/nonEmptyString" },
+                "sourceId": { "$ref": "#/$defs/nonEmptyString" },
                 "retrievedAt": { "type": "string", "format": "date-time" }
               },
               "additionalProperties": false

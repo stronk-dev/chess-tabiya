@@ -21,7 +21,25 @@
   },
   "objective": {
     "type": "follow_theory",
-    "summary": "You answered 1.e4 with 1...d5 and you are about to spend a tempo on the queen. This pack drills what you get for it: the queen on a5 already facing the side you will attack, the pin on f3, the knight to c6, and castling long into a race that players at your band win far more often than they lose. It also shows you the one White sixth move that takes the race away."
+    "summary": "You answered 1.e4 with 1...d5 and you are about to spend a tempo on the queen. This pack drills what you get for it: the queen on a5 already facing the side you will attack, the pin on f3, the knight to c6, and castling long into a race that players at your band win far more often than they lose. It also shows you the one White sixth move that takes the race away.",
+    "grading": {
+      "assessedBy": {
+        "kind": "engine",
+        "score": {
+          "kind": "cp",
+          "centipawns": 66
+        },
+        "perspective": "white",
+        "depth": 22,
+        "engineId": "stockfish-authoring",
+        "engineVersion": "18",
+        "sourceId": "stockfish-authoring",
+        "retrievedAt": "2026-08-15T12:56:47.853Z"
+      },
+      "resolveAt": {
+        "kind": "terminal"
+      }
+    }
   },
   "concepts": [
     "tempo-for-placement",
@@ -412,132 +430,7 @@
       "The spine drills 5...Bg4 (53.7% at band) although the engine ranks it fourth of five at this node. The judgment that a band-popular move with a measurably worse evaluation is the right thing to drill is the pack's central authored claim and no instrument in this repository bears on it.",
       "Deviation classes are agent-authored and objective-relative (rfc/archive/content-sourcing-foundation.md:772). Three of them sit beside evaluations that do not obviously support them: 3...Qe5+ is classed tactical_error at a measured cost of 0.18, 4...Nc6 is classed concept_violation at 0.74, and 7...e6 is classed accepted_alternative at 0.96. The numbers are recorded beside the classes and the classes were not changed to fit them.",
       "The pack's central corpus claim - that Black's 56.7% and 58.5% at these nodes reflect the race rather than selection effects in who plays the Scandinavian - is an interpretation of the frequency data, not a measurement of it.",
-      "No machine-readable evidence slot exists for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory objective may not carry objective.grading at all, so the engine evidence lives in provenance.engineValidation and no evidence sidecar exists or can exist. Third independent attestation of the hole after wave B+N and grounding wave G1."
-    ],
-    "engineValidation": {
-      "ranAt": "2026-08-15",
-      "engine": "Stockfish 18",
-      "enginePath": "apps/server createPositionSeedEngineEvaluator (EngineSupervisor + StockfishEvidenceExecutor) at sourcing AUTHORING_PROFILE - the same engine path make candidate-emit --engine-eval uses",
-      "profile": {
-        "depth": 22,
-        "threads": 1,
-        "hashMb": 16,
-        "multiPv": 1
-      },
-      "unit": "centipawns from White's point of view (the executor's own convention, evidence-queue.ts whitePerspectiveScore). Candidate-relative: only the moves listed were evaluated, not all legal moves, so any ranking is a ranking of the measured set.",
-      "cannotGround": "deviation class, plan-class prose, annotations and feedbackClaims. Per rfc/archive/content-sourcing-foundation.md:772 deviation classes are relative to this pack's objective and no evaluation separates concept_violation from interesting_deviation. Numbers sit beside the authored classes, never in place of them.",
-      "decisions": [
-        {
-          "at": "after 2.exd5 (Black to move)",
-          "candidates": {
-            "Qxd5": 69,
-            "Nf6": 77,
-            "c6": 98,
-            "e6": 103
-          }
-        },
-        {
-          "at": "after 3.Nc3 (Black to move)",
-          "candidates": {
-            "Qd6": 75,
-            "Qd8": 76,
-            "Qa5": 77,
-            "Qe5+": 95,
-            "Qe6+": 109
-          }
-        },
-        {
-          "at": "after 4.d4 (Black to move)",
-          "candidates": {
-            "c6": 72,
-            "Nf6": 75,
-            "Bf5": 96,
-            "e5": 116,
-            "Nc6": 149
-          }
-        },
-        {
-          "at": "after 4...Nf6 (White to move)",
-          "candidates": {
-            "Nf3": 68,
-            "Bd2": 49,
-            "Bc4": 49,
-            "Bd3": -17,
-            "d5": -37
-          }
-        },
-        {
-          "at": "after 5.Nf3 (Black to move)",
-          "candidates": {
-            "c6": 71,
-            "Bf5": 77,
-            "Nc6": 97,
-            "Bg4": 105,
-            "e6": 118
-          }
-        },
-        {
-          "at": "after 5...Bg4 (White to move)",
-          "candidates": {
-            "h3": 109,
-            "Bd2": 58,
-            "Be2": 46,
-            "Be3": 24,
-            "Bc4": 0
-          }
-        },
-        {
-          "at": "after 6.Be2 (Black to move)",
-          "candidates": {
-            "Nc6": 43,
-            "e6": 51,
-            "c6": 51,
-            "Nbd7": 52,
-            "Bxf3": 84,
-            "Qh5": 204
-          }
-        },
-        {
-          "at": "after 6...Nc6 (White to move)",
-          "candidates": {
-            "h3": 39,
-            "Be3": 3,
-            "Bd2": -12,
-            "d5": -14,
-            "O-O": -21
-          }
-        },
-        {
-          "at": "after 7.O-O (Black to move)",
-          "candidates": {
-            "O-O-O": -16,
-            "e6": 80,
-            "h5": 167,
-            "Qh5": 234,
-            "Nxd4": 429
-          }
-        },
-        {
-          "at": "after 7...O-O-O (White to move)",
-          "candidates": {
-            "Be3": -120,
-            "a3": -144,
-            "h3": -145,
-            "Bd2": -160,
-            "d5": -170
-          }
-        },
-        {
-          "at": "walked refutation lines",
-          "candidates": {
-            "7...Nxd4 8.Nxd4": 434,
-            "7...Nxd4 8.Nxd4 Bxe2 9.Ndxe2": 399,
-            "6...Qh5 7.hxg4 (h3 line)": 365,
-            "6...Qh5 7.hxg4 Qxg4 (h3 line)": 507
-          }
-        }
-      ],
-      "materialCounts": "Standard 1/3/3/5/9 census on walked positions: the 7...O-O-O trunk position is 38-38; after 7...Nxd4 8.Nxd4 it is 37-35; after 8...Bxe2 9.Ndxe2 it is 34-32."
-    }
+      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof."
+    ]
   }
 }

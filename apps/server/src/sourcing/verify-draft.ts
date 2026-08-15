@@ -7,17 +7,20 @@ import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 
 import { validatePackDocument } from "../pack-validation.js";
+import { evidenceSemantics, evidenceSupports } from "./check.js";
 import { assessmentGrounding, linkage, validateLedger, validateManifest } from "./ledger-validation.js";
-import { emissionJobDigest, sha256, writeCanonicalJson } from "./canonical.js";
+import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import { countFenPieces } from "./chess-facts.js";
 import { liveTablebaseQuery, TABLEBASE_RATIONALE, type TablebaseAnswer, type TablebasePayload, type TablebaseQuery } from "./syzygy.js";
 import type { EvidenceAbstention, EvidenceLedger, EvidenceRecord, SourceEntry, SourceManifest, SourcingIssue } from "./types.js";
 import { SourcingError } from "./types.js";
 import { TABLEBASE_CATEGORIES, type TablebaseCategory } from "../tablebase.js";
 import { CATEGORY_RANK, learnerCategory as categoryForLearner } from "./tablebase-category.js";
+import { createPositionSeedEngineEvaluator, type PositionSeedEngineAnswer, type PositionSeedEngineEvaluator } from "./position-seeds.js";
 
 const AUTHOR_PACK_RATIONALE = "the author's own drill pack; its FENs and moves state facts about chess positions";
 const OFFLINE_FIXTURES = resolve("apps/server/src/sourcing/fixtures/verify-draft.json");
+const OFFLINE_ENGINE_FIXTURES = resolve("apps/server/src/sourcing/fixtures/verify-draft-engine.json");
 
 interface EnumeratedPosition {
   readonly fen: string;
@@ -30,6 +33,9 @@ interface EnumeratedPosition {
 
 export interface VerifyDraftOptions {
   readonly query?: TablebaseQuery;
+  readonly engineEvaluator?: PositionSeedEngineEvaluator;
+  readonly engineCommand?: string;
+  readonly engineArgs?: readonly string[];
   readonly now?: () => Date;
   readonly offline?: boolean;
 }
@@ -109,11 +115,13 @@ function assertArtifacts(pack: DrillPackDefinition, ledger: EvidenceLedger, mani
   validateLedger(ledger, issues);
   validateManifest(manifest, issues);
   linkage(manifest, ledger, issues);
+  evidenceSemantics(ledger, issues, manifest, pack);
+  evidenceSupports(pack, ledger, manifest, issues);
   if (issues.some((issue) => issue.severity === "error")) throw new SourcingError("DRAFT_PACK_INVALID", issues.map((issue) => `${issue.path} ${issue.code}: ${issue.message}`).join("; "));
   if (assessmentGrounding({ document: pack, ledger, manifest }) !== "ledger_verified") throw new SourcingError("DRAFT_PACK_INVALID", "emitted sidecars did not earn ledger_verified admission");
 }
 
-export async function verifyDraft(file: string, options: VerifyDraftOptions = {}): Promise<VerifyDraftResult> {
+async function verifySyzygyDraft(file: string, options: VerifyDraftOptions = {}): Promise<VerifyDraftResult> {
   const absolute = resolve(file);
   const bytes = new Uint8Array(await readFile(absolute));
   const raw = JSON.parse(new TextDecoder().decode(bytes)) as unknown;
@@ -178,6 +186,119 @@ export async function verifyDraft(file: string, options: VerifyDraftOptions = {}
   await writeCanonicalJson(paths.manifest, manifest);
   await writeCanonicalJson(paths.job, { schema: "tabiya.sourcing.job.v1", pipeline: "verify-draft", args, sourceEtags: manifest.entries.map((entry) => entry.origin.kind === "http" ? entry.origin.etag : null), emissionJobDigest: emissionJobDigest("verify-draft", args, manifest.entries.map((entry) => entry.origin.kind === "http" ? entry.origin.etag : null)) });
   return { pack, ledger, manifest, warnings: Object.freeze(warnings), paths };
+}
+
+function engineScore(values: Readonly<Record<string, unknown>>): { readonly kind: "cp"; readonly centipawns: number } | { readonly kind: "mate"; readonly movesToMate: number } {
+  if (Number.isInteger(values.centipawns)) return { kind: "cp", centipawns: Number(values.centipawns) };
+  if (Number.isInteger(values.mateIn)) return { kind: "mate", movesToMate: Number(values.mateIn) };
+  throw new SourcingError("VERIFY_ENGINE_UNAVAILABLE", "engine evaluation returned neither centipawns nor mateIn");
+}
+
+function scoreText(score: ReturnType<typeof engineScore>): string {
+  return score.kind === "cp" ? `${score.centipawns}cp` : `mate ${score.movesToMate}`;
+}
+
+async function offlineEngineEvaluator(fen: string): Promise<PositionSeedEngineAnswer> {
+  const fixture = await readJson(OFFLINE_ENGINE_FIXTURES) as Record<string, PositionSeedEngineAnswer>;
+  const answer = fixture[fen];
+  if (answer === undefined) throw new SourcingError("VERIFY_ENGINE_UNAVAILABLE", `offline fixture missing FEN ${fen}`);
+  return answer;
+}
+
+async function existingArtifacts(paths: VerifyDraftResult["paths"]): Promise<{ readonly ledger?: EvidenceLedger; readonly manifest?: SourceManifest }> {
+  try {
+    return { ledger: await readJson(paths.ledger) as EvidenceLedger, manifest: await readJson(paths.manifest) as SourceManifest };
+  } catch {
+    return {};
+  }
+}
+
+async function verifyEngineDraft(file: string, options: VerifyDraftOptions): Promise<VerifyDraftResult> {
+  const absolute = resolve(file);
+  const bytes = new Uint8Array(await readFile(absolute));
+  const raw = JSON.parse(new TextDecoder().decode(bytes)) as unknown;
+  const validation = validatePackDocument(raw);
+  if (!validation.valid) throw new SourcingError("DRAFT_PACK_INVALID", validation.issues.map((issue) => `${issue.path} ${issue.code}: ${issue.message}`).join("; "));
+  const original = raw as DrillPackDefinition;
+  const assessedBy = original.objective.grading?.assessedBy;
+  if (assessedBy?.kind !== "engine") throw new SourcingError("VERIFY_ASSESSMENT_NOT_GROUNDABLE", "objective assessment has no supported verification instrument");
+
+  const positions = enumerate(original);
+  let owned: Awaited<ReturnType<typeof createPositionSeedEngineEvaluator>> | undefined;
+  const evaluate = options.engineEvaluator ?? (options.offline
+    ? offlineEngineEvaluator
+    : (owned = await createPositionSeedEngineEvaluator(options.engineCommand ?? "stockfish", options.engineArgs)).evaluate);
+  const answers = new Map<string, PositionSeedEngineAnswer>();
+  try {
+    for (const item of positions) {
+      if (answers.has(item.fen)) continue;
+      try { answers.set(item.fen, await evaluate(item.fen)); }
+      catch (error) {
+        if (error instanceof SourcingError) throw error;
+        throw new SourcingError("VERIFY_ENGINE_UNAVAILABLE", error instanceof Error ? error.message : String(error));
+      }
+    }
+  } finally {
+    await owned?.close();
+  }
+  const root = answers.get(original.start.fen);
+  if (root === undefined) throw new SourcingError("VERIFY_ENGINE_UNAVAILABLE", "root has no engine answer");
+  const measured = engineScore(root.values);
+  const declared = assessedBy.score;
+  const agrees = measured.kind === declared.kind && (measured.kind === "cp" ? measured.centipawns === (declared as { centipawns: number }).centipawns : measured.movesToMate === (declared as { movesToMate: number }).movesToMate);
+  if (!agrees || root.values.engineId !== assessedBy.engineId || root.values.engineVersion !== assessedBy.engineVersion || root.values.depth !== assessedBy.depth) {
+    throw new SourcingError("VERIFY_ASSESSMENT_CONTRADICTED", `declared ${scoreText(declared)} at depth ${assessedBy.depth} by ${assessedBy.engineId} ${assessedBy.engineVersion}; this run measured ${scoreText(measured)} — re-declare, or re-check the engine build`);
+  }
+
+  const warnings: string[] = [];
+  for (const item of positions) {
+    if (item.kind !== "spine" || item.opponentMove || item.parentFen === undefined) continue;
+    const parent = answers.get(item.parentFen), child = answers.get(item.fen);
+    if (parent === undefined || child === undefined) continue;
+    const before = engineScore(parent.values), after = engineScore(child.values);
+    if (before.kind === "cp" && after.kind === "cp") warnings.push(`${item.pointer}: learner move measured ${after.centipawns}cp; parent measured ${before.centipawns}cp (${before.centipawns - after.centipawns}cp difference)`);
+  }
+
+  const pack = structuredClone(original) as DrillPackDefinition;
+  if (pack.objective.grading?.assessedBy.kind !== "engine") throw new SourcingError("VERIFY_ASSESSMENT_NOT_GROUNDABLE", "engine assessment disappeared during verification");
+  (pack.objective.grading.assessedBy as { sourceId: string; retrievedAt: string }).sourceId = root.source.sourceId;
+  (pack.objective.grading.assessedBy as { sourceId: string; retrievedAt: string }).retrievedAt = root.source.retrievedAt;
+  const digest = await digestDrillPack(pack);
+  const authorRetrievedAt = (options.now?.() ?? new Date()).toISOString();
+  const author: SourceEntry = { sourceId: "author-pack", retrievedAt: authorRetrievedAt, origin: { kind: "local-file", path: absolute.replace(`${resolve(".")}/`, ""), sha256: sha256(bytes), bytes: bytes.byteLength }, licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: AUTHOR_PACK_RATIONALE } };
+  const produced: EvidenceRecord[] = [{ kind: "position_legality", anchor: { fen: pack.start.fen }, sourceId: author.sourceId, retrievedAt: author.retrievedAt, grounds: "machine_validation", values: { fen: pack.start.fen, pieceCount: countFenPieces(pack.start.fen) }, supports: ["/start/fen"] }];
+  for (const item of positions) {
+    const answer = answers.get(item.fen)!;
+    produced.push({ kind: "engine_eval", anchor: { fen: item.fen }, sourceId: answer.source.sourceId, retrievedAt: answer.source.retrievedAt, grounds: "machine_validation", values: answer.values, supports: [item.pointer] });
+  }
+  const paths = sidecars(absolute);
+  const existing = await existingArtifacts(paths);
+  const preservedRecords = (existing.ledger?.records ?? []).filter((record) => record.kind !== "engine_eval" && record.kind !== "position_legality");
+  const records = [...preservedRecords, ...produced];
+  const used = new Set(records.map((record) => `${record.sourceId}\0${record.retrievedAt}`));
+  const entries = new Map<string, SourceEntry>();
+  for (const entry of existing.manifest?.entries ?? []) if (used.has(`${entry.sourceId}\0${entry.retrievedAt}`)) entries.set(`${entry.sourceId}\0${entry.retrievedAt}`, entry);
+  entries.set(`${author.sourceId}\0${author.retrievedAt}`, author);
+  for (const answer of answers.values()) entries.set(`${answer.source.sourceId}\0${answer.source.retrievedAt}`, answer.source);
+  for (const record of preservedRecords) if (!entries.has(`${record.sourceId}\0${record.retrievedAt}`)) throw new SourcingError("VERIFY_LEDGER_MERGE_CONFLICT", `preserved record has no manifest entry: ${record.sourceId} ${record.retrievedAt}`);
+  const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: Object.freeze([...entries.values()]) };
+  const sourcedAt = manifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!;
+  const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: pack.id, packVersion: pack.version, packDigest: digest, sourcedAt, records: Object.freeze(records), abstentions: Object.freeze((existing.ledger?.abstentions ?? []).filter((value) => value.kind !== "engine_eval")) };
+  assertArtifacts(pack, ledger, manifest);
+  const args = { file: absolute.replace(`${resolve(".")}/`, ""), offline: options.offline === true };
+  await writeFile(absolute, `${JSON.stringify(pack, null, 2)}\n`, "utf8");
+  await writeCanonicalJson(paths.ledger, ledger);
+  await writeCanonicalJson(paths.manifest, manifest);
+  await writeCanonicalJson(paths.job, { schema: "tabiya.sourcing.job.v1", pipeline: "verify-draft", args, sourceEtags: manifest.entries.map((entry) => entry.origin.kind === "http" ? entry.origin.etag : null), emissionJobDigest: emissionJobDigest("verify-draft", args, manifest.entries.map((entry) => entry.origin.kind === "http" ? entry.origin.etag : null)) });
+  return { pack, ledger, manifest, warnings: Object.freeze(warnings), paths };
+}
+
+export async function verifyDraft(file: string, options: VerifyDraftOptions = {}): Promise<VerifyDraftResult> {
+  const raw = JSON.parse(await readFile(resolve(file), "utf8")) as DrillPackDefinition;
+  const kind = raw.objective?.grading?.assessedBy?.kind;
+  if (kind === "syzygy") return verifySyzygyDraft(file, options);
+  if (kind === "engine") return verifyEngineDraft(file, options);
+  throw new SourcingError("VERIFY_ASSESSMENT_NOT_GROUNDABLE", "objective assessment has no supported verification instrument");
 }
 
 async function main(): Promise<number> {

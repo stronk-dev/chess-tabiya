@@ -27,7 +27,25 @@
   },
   "objective": {
     "type": "follow_theory",
-    "summary": "You chose the King's Indian: concede the centre now to attack the king later. Against the classical setup, play the committal sequence in the right order — castle, ...e5, ...Nc6 inviting d5, then reroute and release ...f5 — knowing that every move signs you deeper into the race."
+    "summary": "You chose the King's Indian: concede the centre now to attack the king later. Against the classical setup, play the committal sequence in the right order — castle, ...e5, ...Nc6 inviting d5, then reroute and release ...f5 — knowing that every move signs you deeper into the race.",
+    "grading": {
+      "assessedBy": {
+        "kind": "engine",
+        "score": {
+          "kind": "cp",
+          "centipawns": 58
+        },
+        "perspective": "white",
+        "depth": 22,
+        "engineId": "stockfish-authoring",
+        "engineVersion": "18",
+        "sourceId": "stockfish-authoring",
+        "retrievedAt": "2026-08-15T12:52:02.650Z"
+      },
+      "resolveAt": {
+        "kind": "terminal"
+      }
+    }
   },
   "concepts": [
     "centre-concession-for-attack",
@@ -339,233 +357,7 @@
       "SHAPE ENTRY AUTHORED 2026-08-15 — this blocker is superseded and kept for the record. content/shapes/kid-chain-arrangement.json now exists and this pack references it from the seal-and-storm plan class, which points at the black-lock-with-f4-and-storm plan. What that does NOT clear: the entry's own plan descriptions, watch items and typical mistakes are agent-authored and ungrounded exactly as this pack's prose is, so the reference moves the teaching into a reusable place without grounding it. What was machine-checked before the reference was made: the entry's trigger fires on seven (p15-d5 onward, including the ne8-modern tip) of this pack's spine positions and on no position of any other shipped pack, evaluated with the repo's own matchesStructuralExpression over all 487 walked spine positions in content/drafts. The mirroring claim this blocker asserted was also checked and holds: closed-centre-chain's trigger matches none of this pack's positions. Original blocker text: \"No shape entry names the King's Indian pawn-chain arrangement (White c4/d5/e4 against Black d6/e5): closed-centre-chain's trigger is pinned to the French/Caro squares and cannot fire here, and per the mirroring law a chain entry with different plan ownership must be authored separately. Until it exists, this pack's chain teaching is inlined and non-reusable.\"",
       "Which reroute (...Nd7 vs ...Ne8) is more common or scores better at these bands is unquantified; the explorer API could settle it below the family root and has not been queried.",
       "The 'defensive moves are race moves lost' claim is the pack's strongest generalization and is pure hypothesis — no corpus measurement of tempo-vs-result in KID races exists in this repo.",
-      "ENGINE PASS RUN 2026-08-15 — this blocker is superseded and kept for the record. Stockfish 18 at depth 22 (Threads 1, Hash 16MB, MultiPV 1) evaluated 19 candidate moves across 11 decision positions in this pack; the numbers are in provenance.engineValidation. What the pass CANNOT clear: deviation classes, plan-class prose, spine annotations and feedbackClaims stay agent-authored and objective-relative — rfc/archive/content-sourcing-foundation.md:772 rules that no evaluation separates concept_violation from interesting_deviation, and this pass did not try. There is also no machine-readable evidence slot for an opening pack: make verify-draft refuses anything that is not a syzygy assessment (VERIFY_ASSESSMENT_NOT_SYZYGY), and a follow_theory / play_until_checkpoint objective may not carry objective.grading at all, so the evidence lives in provenance.engineValidation and no *.evidence.json sidecar exists or can exist."
-    ],
-    "engineValidation": {
-      "ranAt": "2026-08-15",
-      "engine": "Stockfish 18",
-      "enginePath": "apps/server EngineSupervisor + StockfishEvidenceExecutor, sourcing AUTHORING_PROFILE (the same engine path make candidate-emit --engine-eval uses)",
-      "profile": {
-        "depth": 22,
-        "threads": 1,
-        "hashMb": 16,
-        "multiPv": 1
-      },
-      "scope": "every authored spine node's resulting position, every authored deviation's resulting position, and the engine's own best move at each decision position",
-      "unit": "centipawns from the side to move at the decision position; loss = the best evaluated candidate at that position minus this move. Candidate-relative and therefore a lower bound on the true loss: only authored moves plus the engine's depth-22 first move were evaluated, not all legal moves.",
-      "cannotGround": "deviation class, plan-class prose, annotations and feedbackClaims. Per rfc/archive/content-sourcing-foundation.md:772 the deviation classes are relative to this pack's objective and no evaluation separates concept_violation from interesting_deviation. Numbers below are recorded beside the authored classes, never substituted for them.",
-      "decisions": [
-        {
-          "at": "root",
-          "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 5",
-          "sideToMove": "black",
-          "candidates": [
-            {
-              "san": "O-O",
-              "uci": "e8g8",
-              "role": "spine:p10-o-o",
-              "cp": -60,
-              "loss": 0
-            }
-          ]
-        },
-        {
-          "at": "after:p10-o-o",
-          "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQ - 2 6",
-          "sideToMove": "white",
-          "candidates": [
-            {
-              "san": "Be2",
-              "uci": "f1e2",
-              "role": "spine:p11-be2",
-              "cp": 60,
-              "loss": 0
-            }
-          ]
-        },
-        {
-          "at": "after:p11-be2",
-          "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - 3 6",
-          "sideToMove": "black",
-          "candidates": [
-            {
-              "san": "Bg4",
-              "uci": "c8g4",
-              "role": "deviation#1:interesting_deviation",
-              "cp": -61,
-              "loss": 0
-            },
-            {
-              "san": "e5",
-              "uci": "e7e5",
-              "role": "spine:p12-e5",
-              "cp": -65,
-              "loss": 4
-            },
-            {
-              "san": "c5",
-              "uci": "c7c5",
-              "role": "deviation#0:accepted_alternative",
-              "cp": -76,
-              "loss": 15
-            }
-          ]
-        },
-        {
-          "at": "after:p12-e5",
-          "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
-          "sideToMove": "white",
-          "candidates": [
-            {
-              "san": "O-O",
-              "uci": "e1g1",
-              "role": "spine:p13-o-o",
-              "cp": 65,
-              "loss": 0
-            }
-          ]
-        },
-        {
-          "at": "after:p13-o-o",
-          "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 1 7",
-          "sideToMove": "black",
-          "candidates": [
-            {
-              "san": "exd4",
-              "uci": "e5d4",
-              "role": "deviation#2:accepted_alternative",
-              "cp": -58,
-              "loss": 0
-            },
-            {
-              "san": "Nbd7",
-              "uci": "b8d7",
-              "role": "deviation#3:accepted_alternative",
-              "cp": -64,
-              "loss": 6
-            },
-            {
-              "san": "Nc6",
-              "uci": "b8c6",
-              "role": "spine:p14-nc6",
-              "cp": -74,
-              "loss": 16
-            }
-          ]
-        },
-        {
-          "at": "after:p14-nc6",
-          "fen": "r1bq1rk1/ppp2pbp/2np1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 2 8",
-          "sideToMove": "white",
-          "candidates": [
-            {
-              "san": "d5",
-              "uci": "d4d5",
-              "role": "spine:p15-d5",
-              "cp": 70,
-              "loss": 0
-            }
-          ]
-        },
-        {
-          "at": "after:p15-d5",
-          "fen": "r1bq1rk1/ppp2pbp/2np1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 8",
-          "sideToMove": "black",
-          "candidates": [
-            {
-              "san": "Ne7",
-              "uci": "c6e7",
-              "role": "spine:p16-ne7",
-              "cp": -63,
-              "loss": 0
-            },
-            {
-              "san": "Na5",
-              "uci": "c6a5",
-              "role": "deviation#4:interesting_deviation",
-              "cp": -300,
-              "loss": 237
-            }
-          ]
-        },
-        {
-          "at": "after:p16-ne7",
-          "fen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 1 9",
-          "sideToMove": "white",
-          "candidates": [
-            {
-              "san": "b4",
-              "uci": "b2b4",
-              "role": "engine_best",
-              "cp": 71,
-              "loss": 0
-            },
-            {
-              "san": "Ne1",
-              "uci": "f3e1",
-              "role": "spine:p17-ne1",
-              "cp": 69,
-              "loss": 2
-            }
-          ]
-        },
-        {
-          "at": "after:p17-ne1",
-          "fen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/2P1P3/2N5/PP2BPPP/R1BQNRK1 b - - 2 9",
-          "sideToMove": "black",
-          "candidates": [
-            {
-              "san": "Nd7",
-              "uci": "f6d7",
-              "role": "spine:p18-nd7",
-              "cp": -73,
-              "loss": 0
-            },
-            {
-              "san": "Ne8",
-              "uci": "f6e8",
-              "role": "spine:ne8-modern",
-              "cp": -73,
-              "loss": 0
-            }
-          ]
-        },
-        {
-          "at": "after:p18-nd7",
-          "fen": "r1bq1rk1/pppnnpbp/3p2p1/3Pp3/2P1P3/2N5/PP2BPPP/R1BQNRK1 w - - 3 10",
-          "sideToMove": "white",
-          "candidates": [
-            {
-              "san": "f3",
-              "uci": "f2f3",
-              "role": "spine:p19-f3",
-              "cp": 67,
-              "loss": 0
-            }
-          ]
-        },
-        {
-          "at": "after:p19-f3",
-          "fen": "r1bq1rk1/pppnnpbp/3p2p1/3Pp3/2P1P3/2N2P2/PP2B1PP/R1BQNRK1 b - - 0 10",
-          "sideToMove": "black",
-          "candidates": [
-            {
-              "san": "f5",
-              "uci": "f7f5",
-              "role": "spine:p20-f5",
-              "cp": -67,
-              "loss": 0
-            },
-            {
-              "san": "Kh8",
-              "uci": "g8h8",
-              "role": "engine_best",
-              "cp": -69,
-              "loss": 2
-            }
-          ]
-        }
-      ]
-    }
+      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof."
+    ]
   }
 }

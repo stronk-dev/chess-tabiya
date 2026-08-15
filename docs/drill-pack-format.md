@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.18; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.20; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -94,7 +94,7 @@ it has no required `feedbackPolicy` and uses superseded fields.
   by the typed interaction. The reserved provenance source `session_distilled` is
   accepted.
 - `objective` is closed. Outcome objectives (`win`, `hold`, `save`, and
-  `resist`) require `grading`: an authored or Syzygy-declared root assessment
+  `resist`) require `grading`: an authored, Syzygy-declared, or fixed-depth engine root assessment
   plus a checkpoint or terminal resolution. `successConditions` is a closed
   union of checkpoint, outcome, material-balance, rules-fact, structural, timing-window, and
   plan-consequence conditions;

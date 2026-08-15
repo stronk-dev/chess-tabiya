@@ -1,5 +1,5 @@
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { basename, dirname, extname, resolve } from "node:path";
 
 import { transposeKey } from "@chess-tabiya/runtime";
 import { digestDrillPack, type SpineNode } from "@chess-tabiya/schema/drill-pack";
@@ -10,7 +10,7 @@ import { parseUci } from "chessops/util";
 
 import { validatePackDocument } from "../pack-validation.js";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
-import { checkSourcingDirectory } from "./check.js";
+import { checkSourcingDirectory, checkSourcingFile } from "./check.js";
 import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import { ingestLocalFile } from "./inputs.js";
 import { withSourceLock } from "./lock.js";
@@ -225,10 +225,17 @@ async function atomicCanonical(directory: string, documents: Record<string, unkn
   for (const name of Object.keys(documents)) await rename(resolve(directory, `${name}${suffix}`), resolve(directory, name));
 }
 
-export async function attachExplorerEvidence(options: { readonly directory: string; readonly spineNodeId?: string; readonly moveSan: string; readonly target: string; readonly query: Omit<ExplorerQuery, "fen">; readonly client: { stats(query: ExplorerQuery): Promise<ExplorerStats> } }): Promise<"attached" | "abstained"> {
-  const clean = await checkSourcingDirectory(options.directory, { strict: true });
+export async function attachExplorerEvidence(options: { readonly directory?: string; readonly file?: string; readonly spineNodeId?: string; readonly moveSan: string; readonly target: string; readonly query: Omit<ExplorerQuery, "fen">; readonly client: { stats(query: ExplorerQuery): Promise<ExplorerStats> } }): Promise<"attached" | "abstained"> {
+  if ((options.directory === undefined) === (options.file === undefined)) throw new SourcingError("INVALID_REQUEST", "provide exactly one of directory or file");
+  const flatFile = options.file === undefined ? undefined : resolve(options.file);
+  const directory = flatFile === undefined ? resolve(options.directory!) : dirname(flatFile);
+  const stem = flatFile === undefined ? undefined : basename(flatFile).slice(0, -extname(flatFile).length);
+  const paths = flatFile === undefined
+    ? { pack: resolve(directory, "pack.json"), ledger: resolve(directory, "evidence.json"), manifest: resolve(directory, "sources.json") }
+    : { pack: flatFile, ledger: resolve(directory, `${stem}.evidence.json`), manifest: resolve(directory, `${stem}.sources.json`) };
+  const clean = flatFile === undefined ? await checkSourcingDirectory(directory, { strict: true }) : await checkSourcingFile(flatFile, { strict: true });
   if (!clean.valid) throw new SourcingError("CANDIDATE_NOT_CLEAN", clean.issues.map((value) => value.code).join(", "));
-  const [pack, ledger, manifest] = await Promise.all([readJson(resolve(options.directory, "pack.json")) as Promise<any>, readJson(resolve(options.directory, "evidence.json")) as Promise<any>, readJson(resolve(options.directory, "sources.json")) as Promise<any>]);
+  const [pack, ledger, manifest] = await Promise.all([readJson(paths.pack) as Promise<any>, readJson(paths.ledger) as Promise<any>, readJson(paths.manifest) as Promise<any>]);
   if (!/^\/feedbackClaims\/\d+\/text$/.test(options.target)) throw new SourcingError("ATTACH_TARGET_FORBIDDEN", "target must be an existing /feedbackClaims/<i>/text");
   const claimIndex = Number(options.target.split("/")[2]);
   if (!Array.isArray(pack.feedbackClaims) || typeof pack.feedbackClaims[claimIndex]?.text !== "string") throw new SourcingError("ATTACH_TARGET_FORBIDDEN", "target feedback claim does not exist");
@@ -237,13 +244,14 @@ export async function attachExplorerEvidence(options: { readonly directory: stri
   const nextManifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: [...manifest.entries.filter((entry: SourceEntry) => !(entry.sourceId === result.source.sourceId && entry.retrievedAt === result.source.retrievedAt && entry.origin.kind === "http" && result.source.origin.kind === "http" && entry.origin.url === result.source.origin.url)), result.source].sort((a, b) => a.sourceId.localeCompare(b.sourceId) || a.retrievedAt.localeCompare(b.retrievedAt)) };
   if (result.kind === "abstention") {
     const nextLedger = { ...ledger, sourcedAt: nextManifest.entries.map((entry) => entry.retrievedAt).sort().at(-1), abstentions: [...ledger.abstentions.filter((value: any) => !(value.kind === "explorer_frequency" && JSON.stringify(value.anchor) === JSON.stringify(anchor.anchor))), { kind: "explorer_frequency", anchor: anchor.anchor, sourceId: result.source.sourceId, retrievedAt: result.source.retrievedAt, reason: result.reason, detail: result.detail }] };
-    const temporary = resolve(options.directory, `.attach-check-${process.pid}`);
+    const temporary = resolve(directory, `.attach-check-${process.pid}`);
     await mkdir(temporary, { recursive: true });
     await Promise.all([writeCanonicalJson(resolve(temporary, "pack.json"), pack), writeCanonicalJson(resolve(temporary, "evidence.json"), nextLedger), writeCanonicalJson(resolve(temporary, "sources.json"), nextManifest)]);
     const checked = await checkSourcingDirectory(temporary, { strict: true });
     await rm(temporary, { recursive: true, force: true });
     if (!checked.valid) throw new SourcingError("ATTACH_CHECK_FAILED", checked.issues.map((value) => `${value.code}:${value.message}`).join("; "));
-    await atomicCanonical(options.directory, { "evidence.json": nextLedger, "sources.json": nextManifest });
+    if (flatFile === undefined) await atomicCanonical(directory, { "evidence.json": nextLedger, "sources.json": nextManifest });
+    else await Promise.all([writeCanonicalJson(paths.ledger, nextLedger), writeCanonicalJson(paths.manifest, nextManifest)]);
     return "abstained";
   }
   const move = result.moves.find((value) => value.san === options.moveSan);
@@ -257,12 +265,13 @@ export async function attachExplorerEvidence(options: { readonly directory: stri
   const records = [...ledger.records.filter((value: EvidenceRecord) => !(value.kind === record.kind && value.templateId === record.templateId && value.supports[0] === record.supports[0] && value.sourceId === record.sourceId && value.retrievedAt === record.retrievedAt)), record].sort((a, b) => a.kind.localeCompare(b.kind) || String(a.templateId).localeCompare(String(b.templateId)) || String(a.supports[0]).localeCompare(String(b.supports[0])) || a.sourceId.localeCompare(b.sourceId) || a.retrievedAt.localeCompare(b.retrievedAt));
   const nextLedger: EvidenceLedger = { ...ledger, packDigest: await digestDrillPack(pack), sourcedAt: nextManifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!, records };
   if (!validatePackDocument(pack).valid) throw new SourcingError("ATTACHED_PACK_INVALID", "generated explorer sentence made the pack invalid");
-  const temporary = resolve(options.directory, `.attach-check-${process.pid}`);
+  const temporary = resolve(directory, `.attach-check-${process.pid}`);
   await mkdir(temporary, { recursive: true });
   await Promise.all([writeCanonicalJson(resolve(temporary, "pack.json"), pack), writeCanonicalJson(resolve(temporary, "evidence.json"), nextLedger), writeCanonicalJson(resolve(temporary, "sources.json"), nextManifest)]);
   const checked = await checkSourcingDirectory(temporary, { strict: true });
   await rm(temporary, { recursive: true, force: true });
   if (!checked.valid) throw new SourcingError("ATTACH_CHECK_FAILED", checked.issues.map((value) => `${value.code}:${value.message}`).join("; "));
-  await atomicCanonical(options.directory, { "pack.json": pack, "evidence.json": nextLedger, "sources.json": nextManifest });
+  if (flatFile === undefined) await atomicCanonical(directory, { "pack.json": pack, "evidence.json": nextLedger, "sources.json": nextManifest });
+  else await Promise.all([writeCanonicalJson(paths.pack, pack), writeCanonicalJson(paths.ledger, nextLedger), writeCanonicalJson(paths.manifest, nextManifest)]);
   return "attached";
 }

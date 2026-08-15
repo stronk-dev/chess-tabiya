@@ -60,6 +60,14 @@ describe("outcome presentation honesty", () => {
     expect(assessmentSentence(exact)).toContain("Syzygy tablebase, 6 pieces");
     expect(assessmentSentence(exact)).toContain("Exact.");
     expect(assessmentSentence({ ...exact, grounding: "unverified" })).not.toMatch(/Syzygy|exact/);
+
+    const measured: ProjectedGrading = {
+      assessedBy: { kind: "engine", score: { kind: "cp", centipawns: 54 }, perspective: "white", depth: 22, engineId: "stockfish-authoring", engineVersion: "18", sourceId: "stockfish-authoring", retrievedAt: at },
+      resolveAt: { kind: "terminal" },
+      grounding: "ledger_verified",
+    };
+    expect(assessmentSentence(measured)).toBe("Root assessment: +0.54 for White — stockfish-authoring 18 at depth 22, retrieved 2026-08-12T12:00:00.000Z. An engine evaluation at a fixed depth, not a proof.");
+    expect(assessmentSentence({ ...measured, grounding: "unverified" })).toBe("Root assessment (declared, unproved): an engine evaluation is declared but no matching evidence record backs it, so it is shown as a claim.");
   });
 
   it("states the request before play and the recorded engine after play without claiming policy", () => {

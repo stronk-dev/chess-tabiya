@@ -383,7 +383,7 @@ export function assessmentGrounding(input: {
   readonly manifest?: unknown;
 }): "ledger_verified" | "unverified" {
   const assessedBy = input.document.objective.grading?.assessedBy;
-  if (assessedBy?.kind !== "syzygy") return "unverified";
+  if (assessedBy?.kind !== "syzygy" && assessedBy?.kind !== "engine") return "unverified";
 
   const issues: SourcingIssue[] = [];
   const ledger = validateLedger(input.ledger, issues);
@@ -392,17 +392,16 @@ export function assessmentGrounding(input: {
   linkage(manifest, ledger, issues);
   if (issues.length > 0) return "unverified";
 
-  const matches = ledger.records.filter(
-    (record) =>
-      record.kind === "tablebase_result" &&
-      record.grounds === "machine_validation" &&
-      record.values.fen === input.document.start.fen &&
-      record.values.category === assessedBy.category &&
-      record.values.pieceCount === assessedBy.pieceCount &&
-      record.sourceId === assessedBy.sourceId &&
-      record.retrievedAt === assessedBy.retrievedAt &&
-      record.supports.includes("/start/fen") &&
-      ledger.packId === input.document.id,
-  );
+  const matches = ledger.records.filter((record) => {
+    if (record.grounds !== "machine_validation" || record.values.fen !== input.document.start.fen || record.sourceId !== assessedBy.sourceId || record.retrievedAt !== assessedBy.retrievedAt || !record.supports.includes("/start/fen") || ledger.packId !== input.document.id) return false;
+    if (assessedBy.kind === "syzygy") return record.kind === "tablebase_result" && record.values.category === assessedBy.category && record.values.pieceCount === assessedBy.pieceCount;
+    const scoreMatches = assessedBy.score.kind === "cp"
+      ? record.values.centipawns === assessedBy.score.centipawns && record.values.mateIn === undefined
+      : record.values.mateIn === assessedBy.score.movesToMate && record.values.centipawns === undefined;
+    if (record.kind !== "engine_eval" || !scoreMatches || record.values.perspective !== "white" || record.values.depth !== assessedBy.depth || record.values.multiPv !== 1 || record.values.engineId !== assessedBy.engineId || record.values.engineVersion !== assessedBy.engineVersion) return false;
+    const entry = manifest.entries.find((candidate) => candidate.sourceId === record.sourceId && candidate.retrievedAt === record.retrievedAt);
+    if (entry?.origin.kind !== "engine") return false;
+    return entry.origin.fen === input.document.start.fen && "depth" in entry.origin.budget && entry.origin.budget.depth === assessedBy.depth && entry.origin.engineVersion === assessedBy.engineVersion && entry.origin.profile.multiPv === 1;
+  });
   return matches.length === 1 ? "ledger_verified" : "unverified";
 }
