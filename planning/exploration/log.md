@@ -1887,3 +1887,47 @@ and then ruled that it needs research before design. `planning/campaign-research
 records R1–R8, split into what can run now and what must wait for the first
 session — because the campaign wraps the core loop, and a wrong loop makes the
 wrapper wasted work.
+
+## 2026-08-15 (late) — four owner rulings, logged
+
+Recorded here because a cross-review correctly refused to treat one of them as
+ratified: they had been applied to RFCs and to `design/BACKLOG.md` but never
+written to the append-only log, so no implementing agent could verify them.
+That is a process defect in claude's handling, not in the rulings.
+
+**1. Branch-set scale — pruning and collapse, NOT ranking.** *"If you make 9
+branches it becomes cumbersome… if 4 are completely lost that is obvious pruning
+so it can be hidden from main views but if you expand or w/e ez prune… we don't
+want to overload the entire machine with 99 branches of eval AND the user ux."*
+The `n-way-comparison` refusal (never ranks, never names a winner) **stands
+untouched**. The owner's framing supplied the honest key: *completely lost* is a
+**decided** position, and R4 measured that outcome class is exact exactly there.
+A decided branch may be collapsed because that states a settled fact; an
+undecided branch may never be auto-collapsed because nothing can honestly call it
+worse. Decidedness does the work ranking was being asked to do, with no verdict.
+Drafting as `rfc/branch-set-scale.md`.
+
+**2. Intent grading — grade the 45%, refuse the rest BY NAME.** The measured
+ceiling stands (49 of 75 unmeasurable plan notes are judgment, outcome or
+history). Where a declared intent has a census target the run reports whether it
+occurred; where it does not, the product **says so** — visible refusal, never
+silence. This overturns `predicate-wave-3` F1's "the correct behaviour is
+silence"; its cross-review added §5c-bis supplying capability publication, named
+refusal and applied record, since the uncovered case previously satisfied 1 of
+the declared-vs-executable law's 3 legs.
+
+**3. `outpaced` — authored contexts declare, unauthored contexts default.** A
+pack may declare per window whether `outpaced` grades (default ungraded); **Just
+Play grades it as a failure**, because entering a race a tempo behind is a real
+mistake made earlier and no author is present to say otherwise. The
+generalisation is the valuable part and is ledgered as its own row: wherever the
+product must choose a semantic, an authored context supplies it and an
+unauthored context needs a *stated* default — the two must never collapse into
+one global answer.
+
+**4. The human oracle is the next research question (R9).** Human win/draw/loss
+counts are the only oracle that exists where engines have no result. Measuring
+depth of coverage at 1400/1600/1800 and, decisively, whether positions Stockfish
+calls level show **skewed** human results. If level positions all return ~50/50
+the oracle adds nothing; if some return 60/40 that skew is the difficulty signal
+everything outside endgames needs.
