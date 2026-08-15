@@ -58,6 +58,23 @@ states explicitly rather than inheriting by accident.
 > neither wave scoped it. Shipping the field unbacked is honest; shipping it while each RFC
 > assumes the other verified it is not.
 
+
+> **CROSS-FILE CORRECTION, claude 2026-08-15 — §5b's `HUMAN_ONLY_POINTERS` alternation is
+> insufficient once `deviation-classes` (0.21) lands, and the reason is a real bug rather than a
+> naming quibble.** That RFC makes `mistake` a **multi-valued array** on the owner's ruling. A
+> JSON pointer into an array element — `/deviations/0/mistake/1` — is **resolvable**
+> (`check.ts:117`'s `resolvePointer` walks numeric segments), so an alternation anchored as
+> `(class|offObjective|mistake)$` would refuse the *field* and silently **admit the element**,
+> letting an evidence record support one member of a set the format declares human-only. The
+> other two pointers are scalars and cannot express this.
+>
+> **Whichever RFC lands second must carry the element suffix**, i.e. the `mistake` arm reads
+> `/^\/deviations\/\d+\/mistake(?:\/\d+)?$/`. If 0.20 lands first, this file's list is correct
+> as written for the two scalars and `deviation-classes` adds the third arm with its suffix; if
+> 0.21 lands first, this file must not narrow the arm back to `$`. Recorded here so the
+> implementer sees it in whichever file they open first — this is the same unowned-seam failure
+> the `cost` hand-off produced, caught before it shipped rather than after.
+
 ## Summary
 
 Two of the product's three phases have no way to attach evidence to a pack. All **20** opening packs

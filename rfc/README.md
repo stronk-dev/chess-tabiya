@@ -9,7 +9,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `0000-rfc-process.md` | accepted | — | process |
 | `predicate-wave-3.md` | implementing | — | pack **0.18** + shape-entry **0.2→0.3** (duplicated `$defs`). `piece_distance` absorbed by owner ruling 2026-08-15 |
 | `opening-evidence-path.md` | draft — **cross-reviewed, READY** | — | pack **0.20**. `assessedBy` gains `kind: "engine"`. Closes the opening half of the evidence hole |
-| `deviation-classes.md` | draft — reviewed, **1 owner question open** | — | pack **0.21**. Adds `mistake` + `cost`; does NOT split the `class` enum |
+| `deviation-classes.md` | draft — reviewed + **rewritten multi-valued**, ready | — | pack **0.21**. `mistake` is a SET (`minItems:1`, `uniqueItems`), `cost` author-declared and unbacked. Eight rendering surfaces given explicit multi-value rules; *pick-the-first* prohibited by name |
 | `branch-set-scale.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — rebased 2026-08-15 after `ed48978` (pack 0.17) and `4977ff6` (run 0.14 / migration 19) landed the same day; the claim survives the rebase intact, which is the point. No migration, no new event, no new `BranchComparison` field. One writer-free read route + a versioned browser preference. Implements the 2026-08-15 branch ruling: collapse decided branches, bound the eval work, manual fold |
 | `transition-primitives.md` | draft (awaiting cross-review) | — | claims **pack schema 0.19** (0.18 has LANDED). The move-primitive grammar shipped **with both consumers** per the 2026-08-15 ruling: an eighth `successCondition` arm for packs, and a Just Play reading + one new `PivotalKind`. Excludes `structuralDelta` and **enforces the exclusion** with a module-graph test |
 

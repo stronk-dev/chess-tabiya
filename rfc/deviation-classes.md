@@ -374,8 +374,9 @@ well-defined as a decision procedure for an author, not as a fact about the posi
 dissolves that argument rather than answering it**, and the old justification is removed rather than
 left standing:
 
-- **The both-case count is no longer evidence for anything.** A set encodes 0, 1, 2 or 3 kinds
-  natively. Whether the corpus contains 4 both-cases, 12 or 40 changes no schema, no check, no
+- **The both-case count is no longer evidence for anything.** A set encodes 1, 2 or 3 kinds
+  natively, and nothing declared by absence. Whether the corpus contains 4 both-cases, 12 or 40
+  changes no schema, no check, no
   surface and no cost estimate. The design is **indifferent to the count**, which is the strongest
   available answer to the cross-review's concern that the evidence base was thin: an argument that
   does not depend on a number cannot be undermined by that number moving.
