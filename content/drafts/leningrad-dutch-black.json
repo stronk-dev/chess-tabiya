@@ -260,7 +260,12 @@
       },
       "moveUci": "d7d6",
       "class": "accepted_alternative",
-      "note": "3...d6 first is a move-order nuance, not a different opening: the same machine assembled from the other end. Its only real question is whether an early Nh3/Bf4 setup annoys this order more — unmeasured here."
+      "note": "3...d6 first is a move-order nuance, not a different opening: the same machine assembled from the other end. Its only real question is whether an early Nh3/Bf4 setup annoys this order more — unmeasured here.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -268,7 +273,12 @@
       },
       "moveUci": "d8e8",
       "class": "interesting_deviation",
-      "note": "7...Qe8 is the third catalogued finisher: the queen backs ...e5 from e8 and dreams of swinging to h5 later. It spends the heaviest piece on the break's behalf — play it against the same White setup and compare which finisher's ...e5 lands cleanest."
+      "note": "7...Qe8 is the third catalogued finisher: the queen backs ...e5 from e8 and dreams of swinging to h5 later. It spends the heaviest piece on the break's behalf — play it against the same White setup and compare which finisher's ...e5 lands cleanest.",
+      "cost": {
+        "kind": "cp",
+        "loss": 7,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -276,7 +286,12 @@
       },
       "moveUci": "e7e5",
       "class": "interesting_deviation",
-      "note": "7...e5 immediately tests whether the break even needs a last supporter: the walked line runs 8.dxe5 dxe5 9.Qxd8 Rxd8 and the queens leave the board at once. Whether the resulting ending is fine for Black is exactly the kind of claim this repo cannot yet check — the classification is a timing question, not a verdict."
+      "note": "7...e5 immediately tests whether the break even needs a last supporter: the walked line runs 8.dxe5 dxe5 9.Qxd8 Rxd8 and the queens leave the board at once. Whether the resulting ending is fine for Black is exactly the kind of claim this repo cannot yet check — the classification is a timing question, not a verdict.",
+      "cost": {
+        "kind": "cp",
+        "loss": 88,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

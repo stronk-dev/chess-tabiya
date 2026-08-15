@@ -85,17 +85,21 @@ budget. Its shipped v1 profile is:
 
 | Setting | Default |
 |---|---:|
-| Search limit | 100 ms per move |
+| Search limit | 50,000 nodes per move |
+| Movetime fallback | 100 ms per move |
 | Threads | 1 |
 | Hash | 16 MB |
 | MultiPV | 1 |
 
 `DEFAULT_STRONG_ENGINE_PROFILE`, `resolveStrongEngineProfile`, and
 `stockfishPlaySpec` are the shared configuration surface. The play spec applies
-the UCI options; `OpponentSelector` applies the movetime. Deployments may replace
-any positive integer value and should pass the same resolved profile to the play
-spec, selector, and capability provider. `GET /capabilities` reports the
-effective profile under `policyProfiles.strong_engine`.
+the UCI options; `OpponentSelector` applies `go nodes 50000` by default and uses
+the movetime only when `nodes` is explicitly `null`. Deployments may replace any
+positive integer value and should pass the same resolved profile to the play
+spec, selector, and capability provider. Each new selection records the applied
+`searchBound`; historical selections omit it and it is never inferred.
+`GET /capabilities` reports the effective profile under
+`policyProfiles.strong_engine`.
 
 This profile is deliberately separate from evidence jobs, which choose their
 own depth or movetime asynchronously. Every persisted Stockfish evidence payload
@@ -147,7 +151,9 @@ deterministic by its persisted selection record regardless of that observation.
 ```
 
 It returns a chosen UCI move, optional ranked candidates and policy masses, and
-the exact engine/model identity. It does not read, lease, or append to a run.
+the exact engine/model identity. Candidate rows may also carry the score and WDL
+already emitted by the engine; they are measurements, never move grades. It does
+not read, lease, or append to a run.
 The modes currently shipped are:
 
 | Mode | Behavior |
@@ -184,17 +190,20 @@ The engine layer made two declared amendments to the implemented branch-runtime
 wire format:
 
 - v0.3 added `evidence.attached` with `{nodeId, evidenceRefs, payload}`. Payload
-  kinds are `eval`, `wdl`, and `bestline`; sources are
-  `engine_validated` or `human_model_predicted`. Projection adds unique evidence
+  kinds now include `eval`, `wdl`, `bestline`, and exact tablebase measurements;
+  sources include `engine_validated`, `human_model_predicted`, and
+  `tablebase_exact`. Projection adds unique evidence
   references to the named node without changing objective state.
 - v0.4 made `opponent.move_selected.selection` mandatory and typed. It records
   the chosen move, optional ranked candidates with optional policy mass, and
   engine identity (`id`, name/version, optional model/container identifiers,
   and `seedHonored`).
 
-The living schema is now v0.9; it retains both engine amendments, the v0.5
+The living schema is now v0.16; it retains both engine amendments, the v0.5
 session identity/reveal contract, the v0.6 terminal outcome contract, and the
-recorded applied-policy field documented in `docs/branch-runtime.md`.
+recorded applied-policy field documented in `docs/branch-runtime.md`. New strong
+engine selections also retain their applied search bound; historical events are
+left absent by migration 21.
 Evidence sources remain
 separate events and typed payloads; Stockfish values and Maia predictions are
 never averaged into one number.
@@ -235,8 +244,10 @@ proves late results are discarded; a real Stockfish test proves `stop` is sent.
   engines: [{ id, kind, name, version, modelId?, containerDigest?, seedHonored, eloHonored? }],
   policyModes: ["human_common", "strong_engine", "theory_strict", "perfect_tablebase", "practical_resistance"],
   policyProfiles: {
-    strong_engine: { movetimeMs, threads, hashMb, multiPv }
+    strong_engine: { nodes, movetimeMs, threads, hashMb, multiPv }
   },
+  costBasis,
+  capabilityDispositions,
   runSchemaVersion
 }
 ```

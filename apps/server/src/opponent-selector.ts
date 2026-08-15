@@ -239,6 +239,8 @@ function candidateLines(lines: readonly string[]): readonly SelectionCandidate[]
     const moveMatch = /\bpv ([a-h][1-8][a-h][1-8][qrbn]?)\b/.exec(line);
     if (!rankMatch || !moveMatch) continue;
     const massMatch = /\bpolicy ([0-9]+(?:\.[0-9]+)?(?:e[+-]?\d+)?)\b/i.exec(line);
+    const scoreMatch = /\bscore cp (-?\d+)\b/.exec(line);
+    const wdlMatch = /\bwdl (\d+) (\d+) (\d+)\b/.exec(line);
     const mass = massMatch === null ? undefined : Number(massMatch[1]);
     if (mass !== undefined && (!Number.isFinite(mass) || mass < 0 || mass > 1)) {
       throw invalid(`Engine returned invalid policy mass: ${massMatch![1]}`);
@@ -247,6 +249,8 @@ function candidateLines(lines: readonly string[]): readonly SelectionCandidate[]
       moveUci: moveMatch[1]!,
       rank: Number(rankMatch[1]),
       ...(mass === undefined ? {} : { mass }),
+      ...(scoreMatch === null ? {} : { scoreCp: Number(scoreMatch[1]) }),
+      ...(wdlMatch === null ? {} : { wdl: Object.freeze({ win: Number(wdlMatch[1]), draw: Number(wdlMatch[2]), loss: Number(wdlMatch[3]) }) }),
     });
     candidates.set(candidate.moveUci, candidate);
   }
@@ -263,7 +267,11 @@ function bestMove(lines: readonly string[]): string {
   return match[1]!;
 }
 
-function selectionIdentity(identity: EngineIdentity, eloApplied?: number): SelectionEngineIdentity {
+function selectionIdentity(
+  identity: EngineIdentity,
+  eloApplied?: number,
+  searchBound?: Readonly<{ kind: "nodes" | "movetime"; value: number }>,
+): SelectionEngineIdentity {
   return Object.freeze({
     id: identity.id,
     name: identity.name,
@@ -275,6 +283,7 @@ function selectionIdentity(identity: EngineIdentity, eloApplied?: number): Selec
     seedHonored: identity.seedHonored,
     eloHonored: identity.eloHonored === true,
     ...(eloApplied === undefined ? {} : { eloApplied }),
+    ...(searchBound === undefined ? {} : { searchBound }),
   });
 }
 
@@ -284,12 +293,13 @@ function makeSelection(
   identity: EngineIdentity,
   policyModeApplied: RunOpponentMode,
   eloApplied?: number,
+  searchBound?: Readonly<{ kind: "nodes" | "movetime"; value: number }>,
 ): OpponentSelection {
   return Object.freeze({
     moveUci,
     policyModeApplied,
     ...(candidates.length === 0 ? {} : { candidates }),
-    engine: selectionIdentity(identity, eloApplied),
+    engine: selectionIdentity(identity, eloApplied, searchBound),
   });
 }
 
@@ -369,6 +379,7 @@ export class OpponentSelector {
   readonly #maiaEngineId: string;
   readonly #strongEngineId: string;
   readonly #strongEngineMovetimeMs: number;
+  readonly #strongEngineNodes: number | null;
   readonly #strongEngineMultiPv: number;
   readonly #tablebase: TablebaseSource | undefined;
   readonly #cache = new Map<string, Promise<OpponentSelection>>();
@@ -387,6 +398,7 @@ export class OpponentSelector {
         : { movetimeMs: options.strongEngineMovetimeMs }),
     });
     this.#strongEngineMovetimeMs = profile.movetimeMs;
+    this.#strongEngineNodes = profile.nodes;
     this.#strongEngineMultiPv = profile.multiPv;
     this.#tablebase = options.tablebaseSource;
   }
@@ -549,21 +561,26 @@ export class OpponentSelector {
   }
 
   async #strongEngine(request: SelectMoveRequest): Promise<OpponentSelection> {
+    const searchBound = this.#strongEngineNodes === null
+      ? Object.freeze({ kind: "movetime" as const, value: this.#strongEngineMovetimeMs })
+      : Object.freeze({ kind: "nodes" as const, value: this.#strongEngineNodes });
     const lines = await this.#client.execute(this.#strongEngineId, {
       commands: [
         `setoption name MultiPV value ${this.#strongEngineMultiPv}`,
         positionCommand(request),
-        `go movetime ${this.#strongEngineMovetimeMs}`,
+        `go ${searchBound.kind} ${searchBound.value}`,
       ],
       resetSearchState: true,
       until: (line) => line.startsWith("bestmove "),
-      timeoutMs: Math.max(5_000, this.#strongEngineMovetimeMs * 10),
+      timeoutMs: searchBound.kind === "nodes" ? 5_000 : Math.max(5_000, searchBound.value * 10),
     });
     return makeSelection(
       bestMove(lines),
       candidateLines(lines),
       engineIdentity(this.#client, this.#strongEngineId),
       "strong_engine",
+      undefined,
+      searchBound,
     );
   }
 

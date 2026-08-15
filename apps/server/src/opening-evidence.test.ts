@@ -8,7 +8,7 @@ import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { validatePackDocument } from "./pack-validation.js";
-import { evidenceSupports, renderEngineMoveLoss } from "./sourcing/check.js";
+import { deviationCostEvidenceIssues, evidenceSupports, renderEngineMoveLoss } from "./sourcing/check.js";
 import { engineWalk } from "./sourcing/engine-walk.js";
 import { assessmentGrounding } from "./sourcing/ledger-validation.js";
 import type { EvidenceLedger, EvidenceRecord, SourceManifest, SourcingIssue } from "./sourcing/types.js";
@@ -30,6 +30,7 @@ describe("opening engine evidence", () => {
   it("migrates every non-browser opening draft into manifest-linked engine evidence", async () => {
     const names = (await readdir("content/drafts")).filter((name) => name.endsWith(".json") && !name.endsWith(".browser.json") && !name.endsWith(".evidence.json") && !name.endsWith(".sources.json") && !name.endsWith(".job.json"));
     const openings: string[] = [];
+    let newlyBoundCosts = 0;
     for (const name of names) {
       const pack = JSON.parse(await readFile(resolve("content/drafts", name), "utf8")) as DrillPackDefinition & { provenance: Record<string, unknown> };
       if (pack.phase !== "opening") continue;
@@ -38,12 +39,17 @@ describe("opening engine evidence", () => {
       expect(pack.objective.grading?.assessedBy.kind, name).toBe("engine");
       const stem = name.slice(0, -5), value = await artifact(stem);
       expect(grounding(value.pack, value.ledger, value.manifest), name).toBe("ledger_verified");
+      const costIssues: SourcingIssue[] = [];
+      deviationCostEvidenceIssues(value.pack, value.ledger.records, costIssues);
+      expect(costIssues, name).toEqual([]);
+      newlyBoundCosts += value.pack.deviations?.filter((deviation) => deviation.cost?.kind !== "unmeasurable" && deviation.cost?.basis === "engine").length ?? 0;
       const root = value.ledger.records.find((record) => record.kind === "engine_eval" && record.supports.includes("/start/fen"));
       const source = value.manifest.entries.find((entry) => entry.sourceId === root?.sourceId && entry.retrievedAt === root?.retrievedAt);
       expect(source?.origin.kind, name).toBe("engine");
       if (source?.origin.kind === "engine") expect(source.origin.fen, name).toBe(pack.start.fen);
     }
     expect(openings).toHaveLength(20);
+    expect(newlyBoundCosts).toBe(135);
   });
 
   it("requires one exact root record and its exact engine instrument", async () => {
@@ -100,7 +106,7 @@ describe("opening engine evidence", () => {
   });
 
   it("keeps engine evidence out of human judgments and pins the move-loss template", async () => {
-    const { pack } = await artifact("anti-caro-advance");
+    const { pack, ledger } = await artifact("anti-caro-advance");
     const base: EvidenceRecord = { kind: "engine_eval", anchor: { fen: pack.start.fen }, sourceId: "fixture", retrievedAt: "2026-08-15T00:00:00.000Z", grounds: "machine_validation", values: { fen: pack.start.fen, centipawns: 20, perspective: "white", depth: 22, threads: 1, hashMb: 16, multiPv: 1, timeoutMs: 1, engineId: "fixture", engineName: "Stockfish", engineVersion: "18" }, supports: [] };
     for (const pointer of ["/deviations/0/class", "/deviations/0/offObjective", "/deviations/0/mistake", "/deviations/0/mistake/1", "/difficulty/label", "/checkpoints/0/label"]) {
       const issues: SourcingIssue[] = [];
@@ -113,10 +119,10 @@ describe("opening engine evidence", () => {
     templatedPack.feedbackClaims[0].text = renderEngineMoveLoss(values);
     const record = { ...base, templateId: "engine-move-loss/v1", values, supports: ["/feedbackClaims/0/text"] };
     const valid: SourcingIssue[] = [];
-    evidenceSupports(templatedPack, { schema: "tabiya.sourcing.evidence.v1", sourcedAt: base.retrievedAt, records: [record], abstentions: [] }, undefined, valid);
+    evidenceSupports(templatedPack, { ...ledger, records: [...ledger.records, record] }, undefined, valid);
     expect(valid).toEqual([]);
     const invalid: SourcingIssue[] = [];
-    evidenceSupports(templatedPack, { schema: "tabiya.sourcing.evidence.v1", sourcedAt: base.retrievedAt, records: [{ ...record, values: { ...values, lossCp: 11 } }, record], abstentions: [] }, undefined, invalid);
+    evidenceSupports(templatedPack, { ...ledger, records: [...ledger.records, { ...record, values: { ...values, lossCp: 11 } }, record] }, undefined, invalid);
     expect(invalid.map((issue) => issue.code)).toEqual(expect.arrayContaining(["EVIDENCE_VALUES_INVALID", "EVIDENCE_TEMPLATE_CONFLICT"]));
   });
 });

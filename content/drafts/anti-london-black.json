@@ -274,7 +274,12 @@
       },
       "moveUci": "d8b6",
       "class": "interesting_deviation",
-      "note": "4...Qb6 — the position after it is FEN-identical to the London System: Poisoned Pawn Variation row (reached there by 1.d4 Nf6 2.Nf3 d5 order; transposition machine-verified this session). The queen hits the b2 square the bishop left behind; White's catalogued answer is 5.Nc3. The sharpest anti-London try at this band, and a different pack's full subject."
+      "note": "4...Qb6 — the position after it is FEN-identical to the London System: Poisoned Pawn Variation row (reached there by 1.d4 Nf6 2.Nf3 d5 order; transposition machine-verified this session). The queen hits the b2 square the bishop left behind; White's catalogued answer is 5.Nc3. The sharpest anti-London try at this band, and a different pack's full subject.",
+      "cost": {
+        "kind": "cp",
+        "loss": 14,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -282,7 +287,12 @@
       },
       "moveUci": "c5d4",
       "class": "accepted_alternative",
-      "note": "6...cxd4 releases the tension; the walked recapture is 7.exd4, keeping White's c3-d4 chain and opening the e-file side of their pyramid. Releasing costs you the standing ...cxd4 threat — after it, White's pieces stop having to price it in. Sound, and slightly obliging."
+      "note": "6...cxd4 releases the tension; the walked recapture is 7.exd4, keeping White's c3-d4 chain and opening the e-file side of their pyramid. Releasing costs you the standing ...cxd4 threat — after it, White's pieces stop having to price it in. Sound, and slightly obliging.",
+      "cost": {
+        "kind": "cp",
+        "loss": 2,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -290,7 +300,12 @@
       },
       "moveUci": "f6h5",
       "class": "interesting_deviation",
-      "note": "7...Nh5 hunts the bishop a second time. Two tempi for the bishop pair is the open question the classification refuses to answer for you: the walked line confirms only that the knight stands safe on h5 and the bishop must decide again."
+      "note": "7...Nh5 hunts the bishop a second time. Two tempi for the bishop pair is the open question the classification refuses to answer for you: the walked line confirms only that the knight stands safe on h5 and the bishop must decide again.",
+      "cost": {
+        "kind": "cp",
+        "loss": 17,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -298,7 +313,12 @@
       },
       "moveUci": "d6g3",
       "class": "accepted_alternative",
-      "note": "7...Bxg3 8.hxg3 resolves the bishop question by handing White the half-open h-file toward your castled king — derived from the walked recapture, and exactly why the spine waits: taking on g3 is soundest before ...O-O, or when the h-file cannot matter."
+      "note": "7...Bxg3 8.hxg3 resolves the bishop question by handing White the half-open h-file toward your castled king — derived from the walked recapture, and exactly why the spine waits: taking on g3 is soundest before ...O-O, or when the h-file cannot matter.",
+      "cost": {
+        "kind": "cp",
+        "loss": 12,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

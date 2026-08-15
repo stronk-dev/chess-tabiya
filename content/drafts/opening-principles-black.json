@@ -38,7 +38,7 @@
         "engineId": "stockfish-authoring",
         "engineVersion": "18",
         "sourceId": "stockfish-authoring",
-        "retrievedAt": "2026-08-15T12:52:00.760Z"
+        "retrievedAt": "2026-08-15T12:55:23.608Z"
       },
       "resolveAt": {
         "kind": "terminal"
@@ -234,7 +234,12 @@
       },
       "moveUci": "c7c5",
       "class": "accepted_alternative",
-      "note": "The Sicilian: a real answer to the centre that fights for d4 from the side instead of occupying e5. Nothing unprincipled about it — but its positions are asymmetric and sharper, so this pack drills the symmetric road where the principles show undisguised."
+      "note": "The Sicilian: a real answer to the centre that fights for d4 from the side instead of occupying e5. Nothing unprincipled about it — but its positions are asymmetric and sharper, so this pack drills the symmetric road where the principles show undisguised.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -242,7 +247,12 @@
       },
       "moveUci": "h7h5",
       "class": "concept_violation",
-      "note": "The mirror of White's worst habit: a wing pawn that claims nothing, develops nothing, and loosens the field your king wants to castle toward. White simply continues with centre and pieces and is a clean tempo ahead."
+      "note": "The mirror of White's worst habit: a wing pawn that claims nothing, develops nothing, and loosens the field your king wants to castle toward. White simply continues with centre and pieces and is a clean tempo ahead.",
+      "cost": {
+        "kind": "cp",
+        "loss": 70,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -250,7 +260,12 @@
       },
       "moveUci": "b8a6",
       "class": "concept_violation",
-      "note": "The knight on the rim touches c5 and b4 and nothing in the centre; from c6 it would attack two of the four centre squares, d4 and e5, and defend e5 before that pawn is even attacked (machine-counted 2026-08-15; the 'four central squares' this note previously claimed is wrong). Same piece, one square difference, half the job."
+      "note": "The knight on the rim touches c5 and b4 and nothing in the centre; from c6 it would attack two of the four centre squares, d4 and e5, and defend e5 before that pawn is even attacked (machine-counted 2026-08-15; the 'four central squares' this note previously claimed is wrong). Same piece, one square difference, half the job.",
+      "cost": {
+        "kind": "cp",
+        "loss": 66,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -258,7 +273,12 @@
       },
       "moveUci": "f7f6",
       "class": "concept_violation",
-      "note": "This pawn does three bad things at once: it takes f6 from your knight, opens the h5-e8 diagonal straight at your king, and still does not develop anything. One move later this exact weakening becomes the Damiano disaster — play the 2...f6 branch and watch."
+      "note": "This pawn does three bad things at once: it takes f6 from your knight, opens the h5-e8 diagonal straight at your king, and still does not develop anything. One move later this exact weakening becomes the Damiano disaster — play the 2...f6 branch and watch.",
+      "cost": {
+        "kind": "cp",
+        "loss": 86,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -266,7 +286,12 @@
       },
       "moveUci": "f7f6",
       "class": "tactical_error",
-      "note": "The Damiano: defending e5 with the one pawn that exposes your king. 3.Nxe5! is the punishment — if ...fxe5 then Qh5+ forks king and the loose kingside, winning material back with interest. Defend pawns with pieces or with pawns that do not open your king."
+      "note": "The Damiano: defending e5 with the one pawn that exposes your king. 3.Nxe5! is the punishment — if ...fxe5 then Qh5+ forks king and the loose kingside, winning material back with interest. Defend pawns with pieces or with pawns that do not open your king.",
+      "cost": {
+        "kind": "cp",
+        "loss": 107,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -274,7 +299,12 @@
       },
       "moveUci": "d7d6",
       "class": "accepted_alternative",
-      "note": "The Philidor: defend e5 with a modest pawn move that also frees the c8 bishop. Sound and solid; its cost is the f8 bishop's best diagonal. A legitimate second door for players who prefer a low wall to a mirror."
+      "note": "The Philidor: defend e5 with a modest pawn move that also frees the c8 bishop. Sound and solid; its cost is the f8 bishop's best diagonal. A legitimate second door for players who prefer a low wall to a mirror.",
+      "cost": {
+        "kind": "cp",
+        "loss": 25,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -282,7 +312,12 @@
       },
       "moveUci": "d8f6",
       "class": "concept_violation",
-      "note": "The queen defends e5 but takes the f6 square from her own knight and stands where Nc3-d5 arrives with tempo. When a threat can be answered by a knight or a pawn, spending the queen on it is paying a bill with your largest banknote."
+      "note": "The queen defends e5 but takes the f6 square from her own knight and stands where Nc3-d5 arrives with tempo. When a threat can be answered by a knight or a pawn, spending the queen on it is paying a bill with your largest banknote.",
+      "cost": {
+        "kind": "cp",
+        "loss": 89,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -290,7 +325,12 @@
       },
       "moveUci": "f8d6",
       "class": "concept_violation",
-      "note": "The bishop defends e5 by standing on d6 — in front of its own d-pawn. That pawn now cannot move, which means the c8 bishop cannot develop, which means castling long and the ...d5 break are both postponed indefinitely. One defensive move, three doors closed."
+      "note": "The bishop defends e5 by standing on d6 — in front of its own d-pawn. That pawn now cannot move, which means the c8 bishop cannot develop, which means castling long and the ...d5 break are both postponed indefinitely. One defensive move, three doors closed.",
+      "cost": {
+        "kind": "cp",
+        "loss": 65,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -298,7 +338,12 @@
       },
       "moveUci": "g8f6",
       "class": "accepted_alternative",
-      "note": "The Two Knights: develop with a counter-attack on e4 instead of mirroring. Fully principled and more combative — it also invites 4.Ng5, the one line where White's same-piece-twice sin actually collects f7. This pack's spine stays with ...Bc5 to keep the consequences inside the horizon."
+      "note": "The Two Knights: develop with a counter-attack on e4 instead of mirroring. Fully principled and more combative — it also invites 4.Ng5, the one line where White's same-piece-twice sin actually collects f7. This pack's spine stays with ...Bc5 to keep the consequences inside the horizon.",
+      "cost": {
+        "kind": "cp",
+        "loss": 2,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -306,7 +351,12 @@
       },
       "moveUci": "f8e7",
       "class": "accepted_alternative",
-      "note": "The modest bishop: less scope than c5, zero targets offered, castling still enabled one move later. A perfectly principled choice whose only cost is ambition."
+      "note": "The modest bishop: less scope than c5, zero targets offered, castling still enabled one move later. A perfectly principled choice whose only cost is ambition.",
+      "cost": {
+        "kind": "cp",
+        "loss": 26,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -314,7 +364,12 @@
       },
       "moveUci": "c6d4",
       "class": "interesting_deviation",
-      "note": "The Blackburne Shilling try: the same knight moves twice to bait 4.Nxe5?? Qg5!. Against the greedy move it wins brilliantly; against the calm 4.Nxd4! exd4 5.O-O White is simply better developed with the trap pocketed. Traps that lose to calm moves are loans, not plans — branch both replies and compare."
+      "note": "The Blackburne Shilling try: the same knight moves twice to bait 4.Nxe5?? Qg5!. Against the greedy move it wins brilliantly; against the calm 4.Nxd4! exd4 5.O-O White is simply better developed with the trap pocketed. Traps that lose to calm moves are loans, not plans — branch both replies and compare.",
+      "cost": {
+        "kind": "cp",
+        "loss": 92,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -322,7 +377,12 @@
       },
       "moveUci": "h7h6",
       "class": "concept_violation",
-      "note": "A move that answers a threat nobody made. 3...h6 guards g5 against a knight that can be met when it actually arrives; meanwhile White castles or takes the centre for free. At this band, prophylaxis is usually a tempo donation wearing safety clothing."
+      "note": "A move that answers a threat nobody made. 3...h6 guards g5 against a knight that can be met when it actually arrives; meanwhile White castles or takes the centre for free. At this band, prophylaxis is usually a tempo donation wearing safety clothing.",
+      "cost": {
+        "kind": "cp",
+        "loss": 49,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -330,7 +390,12 @@
       },
       "moveUci": "g7g5",
       "class": "concept_violation",
-      "note": "A pawn avalanche in front of the home your king was about to move into. It attacks nothing that cannot step aside and permanently loosens f6, h6 and h5. If the kingside pawns advance before the king decides where to live, the king ends up living behind the wreckage."
+      "note": "A pawn avalanche in front of the home your king was about to move into. It attacks nothing that cannot step aside and permanently loosens f6, h6 and h5. If the kingside pawns advance before the king decides where to live, the king ends up living behind the wreckage.",
+      "cost": {
+        "kind": "cp",
+        "loss": 273,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -338,7 +403,12 @@
       },
       "moveUci": "d8f6",
       "class": "concept_violation",
-      "note": "The queen sortie one move before the drill's finish line — again taking the knight's square, now with the added cost that ...Nf6 and ...O-O were one move away. The fastest way to fail this pack's objective is to give the queen the knight's job."
+      "note": "The queen sortie one move before the drill's finish line — again taking the knight's square, now with the added cost that ...Nf6 and ...O-O were one move away. The fastest way to fail this pack's objective is to give the queen the knight's job.",
+      "cost": {
+        "kind": "cp",
+        "loss": 109,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -346,7 +416,12 @@
       },
       "moveUci": "d7d6",
       "class": "accepted_alternative",
-      "note": "Reinforce e5 and free the c8 bishop first — the challenge-the-centre plan starting one move earlier than the spine's. Principled; just notice the knight and the castle are still waiting their turn."
+      "note": "Reinforce e5 and free the c8 bishop first — the challenge-the-centre plan starting one move earlier than the spine's. Principled; just notice the knight and the castle are still waiting their turn.",
+      "cost": {
+        "kind": "cp",
+        "loss": 4,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "immediate_guard",

@@ -1,8 +1,9 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 import { afterEach, describe, expect, it } from "vitest";
 
 import { EngineSupervisor, parseEngineOptions } from "./engine-supervisor.js";
+import { OpponentSelector } from "./opponent-selector.js";
 import {
   engineUnavailable,
   policyModeUnsupported,
@@ -49,6 +50,15 @@ if (stockfish === undefined) {
   console.warn(`\n${warning}\n`);
 }
 const stockfishIt = stockfish === undefined ? it.skip : it;
+const strongEngineCorpus = JSON.parse(
+  readFileSync(new URL("./fixtures/strong-engine-51.json", import.meta.url), "utf8"),
+) as {
+  readonly positions: readonly {
+    readonly startFen: string;
+    readonly historyUci: readonly string[];
+    readonly fen: string;
+  }[];
+};
 
 function stockfishSupervisor(
   overrides: Partial<ConstructorParameters<typeof EngineSupervisor>[0][number]> = {},
@@ -196,6 +206,41 @@ describe("UCI engine supervisor", () => {
     await supervisor.shutdown();
     expect(supervisor.health("stockfish-analysis").status).toBe("stopped");
   });
+
+  stockfishIt("runs the 51-position reproducibility corpus at the recorded 50000-node bound", async () => {
+    const supervisor = stockfishSupervisor();
+    supervisors.push(supervisor);
+    await supervisor.start("stockfish-analysis");
+    const durations: number[] = [];
+    expect(strongEngineCorpus.positions).toHaveLength(51);
+    for (const [positionIndex, position] of strongEngineCorpus.positions.entries()) {
+      const selections = [];
+      for (let repeat = 0; repeat < 2; repeat += 1) {
+        const selector = new OpponentSelector(supervisor, { strongEngineId: "stockfish-analysis" });
+        const started = performance.now();
+        selections.push(await selector.select({
+          startFen: position.startFen,
+          historyUci: position.historyUci,
+          policy: {
+            mode: "strong_engine" as const,
+            policyConfigDigest: `sha256:${"c".repeat(64)}`,
+          },
+          seed: positionIndex + 1,
+        }));
+        durations.push(performance.now() - started);
+      }
+      expect(selections[0]!.moveUci, position.fen).toBe(selections[1]!.moveUci);
+      expect(selections[0]!.candidates?.[0]?.scoreCp, position.fen).toBe(selections[1]!.candidates?.[0]?.scoreCp);
+      expect(selections[0]!.engine.searchBound).toEqual({ kind: "nodes", value: 50_000 });
+      expect(selections[1]!.engine.searchBound).toEqual({ kind: "nodes", value: 50_000 });
+    }
+    const sent = supervisor.transcript("stockfish-analysis").filter((entry) => entry.direction === "sent");
+    expect(sent.some((entry) => entry.line === "go nodes 50000")).toBe(true);
+    const ordered = [...durations].sort((left, right) => left - right);
+    console.info(
+      `STRONG_ENGINE_50000_NODES calls=${durations.length} median=${ordered[Math.floor(ordered.length / 2)]!.toFixed(1)}ms p95=${ordered[Math.floor(ordered.length * 0.95)]!.toFixed(1)}ms max=${ordered.at(-1)!.toFixed(1)}ms over500=${durations.filter((value) => value > 500).length}`,
+    );
+  }, 30_000);
 
   it("derives advertised versions without overriding configured identity", async () => {
     const derived = identitySupervisor("Stockfish 17.1", { name: "Stockfish" });

@@ -284,7 +284,12 @@
       },
       "moveUci": "h2h3",
       "class": "accepted_alternative",
-      "note": "6.h3 keeps Be2 and g4 options open and blunts a later ...Bg4 pin before it exists. A real system with its own theory; no row identity is claimed for this exact move order and none is cited."
+      "note": "6.h3 keeps Be2 and g4 options open and blunts a later ...Bg4 pin before it exists. A real system with its own theory; no row identity is claimed for this exact move order and none is cited.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -292,7 +297,12 @@
       },
       "moveUci": "d4e5",
       "class": "accepted_alternative",
-      "note": "7.dxe5 dxe5 8.Qxd8 Rxd8 trades queens on Black's terms of material and yours of temperament: the walked line runs 9.Nxe5 Nxe4 and the fireworks resolve level. It defuses the storm entirely at the price of playing for two results against a prepared opponent. The full sequence was machine-walked as legal chess; no engine has graded it."
+      "note": "7.dxe5 dxe5 8.Qxd8 Rxd8 trades queens on Black's terms of material and yours of temperament: the walked line runs 9.Nxe5 Nxe4 and the fireworks resolve level. It defuses the storm entirely at the price of playing for two results against a prepared opponent. The full sequence was machine-walked as legal chess; no engine has graded it.",
+      "cost": {
+        "kind": "cp",
+        "loss": 59,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -300,7 +310,12 @@
       },
       "moveUci": "d4d5",
       "class": "accepted_alternative",
-      "note": "7.d5 — the Petrosian Variation — seals immediately, before ...Nc6 can ask the question. Its structural cost: d5 arrives without tempo, and Black's knight keeps the choice of ...Nbd7/...Na6 routes rather than being pushed to e7."
+      "note": "7.d5 — the Petrosian Variation — seals immediately, before ...Nc6 can ask the question. Its structural cost: d5 arrives without tempo, and Black's knight keeps the choice of ...Nbd7/...Na6 routes rather than being pushed to e7.",
+      "cost": {
+        "kind": "cp",
+        "loss": 6,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -308,7 +323,12 @@
       },
       "moveUci": "c1e3",
       "class": "accepted_alternative",
-      "note": "8.Be3 holds the tension with a piece and dares ...Ng4: the walked reply hits the bishop immediately, and the resulting Bg5/h6 dance is a genuine theory battle. Same family of positions, more concrete questions per move."
+      "note": "8.Be3 holds the tension with a piece and dares ...Ng4: the walked reply hits the bishop immediately, and the resulting Bg5/h6 dance is a genuine theory battle. Same family of positions, more concrete questions per move.",
+      "cost": {
+        "kind": "cp",
+        "loss": 27,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -316,7 +336,12 @@
       },
       "moveUci": "c1e3",
       "class": "accepted_alternative",
-      "note": "10.Be3 — the Neo-Classical row — develops before f3, betting that ...f5 can be met with piece pressure on the dark squares. The pack's f3 spine is the traditional order; both are catalogued lines."
+      "note": "10.Be3 — the Neo-Classical row — develops before f3, betting that ...f5 can be met with piece pressure on the dark squares. The pack's f3 spine is the traditional order; both are catalogued lines.",
+      "cost": {
+        "kind": "cp",
+        "loss": 3,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

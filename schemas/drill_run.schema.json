@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-run:0.15",
+  "$id": "urn:chess-tabiya:schema:drill-run:0.16",
   "title": "Tabiya Drill Run",
-  "description": "Living v0.15 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
+  "description": "Living v0.16 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
   "type": "object",
   "required": [
     "schemaVersion",
@@ -21,7 +21,7 @@
     "activeCursor"
   ],
   "properties": {
-    "schemaVersion": { "const": "0.15" },
+    "schemaVersion": { "const": "0.16" },
     "id": { "$ref": "#/$defs/id" },
     "sessionKind": { "enum": ["pack", "position", "imported"] },
     "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
@@ -119,6 +119,8 @@
         "mass": { "type": "number", "minimum": 0, "maximum": 1 },
         "concessionRatio": { "type": "number", "minimum": 0, "maximum": 1 },
         "offWindow": { "type": "boolean" },
+        "scoreCp": { "type": "integer" },
+        "wdl": { "type": "object", "required": ["win", "draw", "loss"], "properties": { "win": { "type": "integer", "minimum": 0 }, "draw": { "type": "integer", "minimum": 0 }, "loss": { "type": "integer", "minimum": 0 } }, "additionalProperties": false },
         "rank": { "type": "integer", "minimum": 1 }
       },
       "additionalProperties": false
@@ -134,7 +136,8 @@
         "containerDigest": { "$ref": "#/$defs/id" },
         "seedHonored": { "type": "boolean" },
         "eloHonored": { "type": "boolean" },
-        "eloApplied": { "type": "integer" }
+        "eloApplied": { "type": "integer" },
+        "searchBound": { "type": "object", "required": ["kind", "value"], "properties": { "kind": { "enum": ["nodes", "movetime"] }, "value": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }
       },
       "additionalProperties": false
     },
@@ -483,9 +486,9 @@
                   "type": "object",
                   "required": ["kind", "source", "values"],
                   "properties": {
-                    "kind": { "enum": ["eval", "wdl", "bestline"] },
+                    "kind": { "enum": ["eval", "wdl", "bestline", "tablebase"] },
                     "source": {
-                      "enum": ["engine_validated", "human_model_predicted"]
+                      "enum": ["engine_validated", "human_model_predicted", "tablebase_exact"]
                     },
                     "values": {
                       "type": "object",

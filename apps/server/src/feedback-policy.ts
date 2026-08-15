@@ -3,7 +3,7 @@ import {
   eventsSince,
   feedbackDeliveryOpen,
   feedbackDisclosed,
-  isEngineEvidenceRef,
+  isMachineEvidenceRef,
   type DrillRun,
   type DrillRunEvent,
   type Node,
@@ -47,7 +47,7 @@ export function publicNodes(
       Object.freeze({
         ...node,
         evidenceRefs: Object.freeze(
-          node.evidenceRefs.filter((reference) => !isEngineEvidenceRef(reference)),
+          node.evidenceRefs.filter((reference) => !isMachineEvidenceRef(reference)),
         ),
       }),
     ),
@@ -58,7 +58,7 @@ function engineFeedbackEvent(event: DrillRunEvent): boolean {
   if (event.type === "evidence.attached") return true;
   return (
     event.type === "objective.state_changed" &&
-    event.data.evidenceRefs.some(isEngineEvidenceRef)
+    event.data.evidenceRefs.some(isMachineEvidenceRef)
   );
 }
 

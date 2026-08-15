@@ -203,7 +203,7 @@ export async function emitExplorerPriority(options: PriorityEmitOptions): Promis
   return output;
 }
 
-export interface ExplorerTemplateValues { readonly moveSan: string; readonly playedCount: number; readonly total: number; readonly sharePct: number; readonly ratings: readonly RatingGroup[]; readonly speeds: readonly Speed[]; readonly since: string; readonly until: string }
+export interface ExplorerTemplateValues { readonly moveSan: string; readonly playedCount: number; readonly total: number; readonly sharePct: number; readonly white: number; readonly draws: number; readonly black: number; readonly ratings: readonly RatingGroup[]; readonly speeds: readonly Speed[]; readonly since: string; readonly until: string }
 
 export function renderExplorerFrequency(values: ExplorerTemplateValues): string {
   return `${values.moveSan} is played in ${values.sharePct.toFixed(1)}% of ${values.total} games from this position (Lichess explorer, rating buckets ${values.ratings.join(",")}, speeds ${values.speeds.join(",")}, ${values.since} to ${values.until}).`;
@@ -258,7 +258,7 @@ export async function attachExplorerEvidence(options: { readonly directory?: str
   if (!move) throw new SourcingError("MOVE_NOT_IN_RESPONSE", `${options.moveSan} is absent from the explorer response`);
   const total = result.white + result.draws + result.black;
   const playedCount = move.white + move.draws + move.black;
-  const values: ExplorerTemplateValues = { moveSan: move.san, playedCount, total, sharePct: pct(playedCount, total), ratings: result.ratings, speeds: result.speeds, since: result.window.since, until: result.window.until };
+  const values: ExplorerTemplateValues = { moveSan: move.san, playedCount, total, sharePct: pct(playedCount, total), white: move.white, draws: move.draws, black: move.black, ratings: result.ratings, speeds: result.speeds, since: result.window.since, until: result.window.until };
   pack.feedbackClaims[claimIndex].text = renderExplorerFrequency(values);
   pack.provenance.sources = [...new Set([...(pack.provenance.sources ?? []), `lichess-explorer (${result.source.origin.kind === "http" ? result.source.origin.url : "explorer"}) — ${EXPLORER_RATIONALE}`])];
   const record: EvidenceRecord = { kind: "explorer_frequency", anchor: anchor.anchor, sourceId: result.source.sourceId, retrievedAt: result.source.retrievedAt, grounds: "machine_validation", templateId: EXPLORER_TEMPLATE_ID, values: values as unknown as Readonly<Record<string, unknown>>, supports: [options.target] };

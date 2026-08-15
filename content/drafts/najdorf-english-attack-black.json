@@ -238,7 +238,12 @@
       },
       "moveUci": "e7e6",
       "class": "accepted_alternative",
-      "note": "6...e6 keeps the small centre — a Scheveningen structure by a Najdorf move order. Fully sound; it trades the d5 concession for a passive-but-solid centre, and against the same White setup it leads to the Keres-flavoured g4 fights instead. A different repertoire choice, not an error."
+      "note": "6...e6 keeps the small centre — a Scheveningen structure by a Najdorf move order. Fully sound; it trades the d5 concession for a passive-but-solid centre, and against the same White setup it leads to the Keres-flavoured g4 fights instead. A different repertoire choice, not an error.",
+      "cost": {
+        "kind": "cp",
+        "loss": 4,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -246,7 +251,12 @@
       },
       "moveUci": "f6g4",
       "class": "interesting_deviation",
-      "note": "6...Ng4 — the Anti-English — punishes White for playing Be3 before f3 by hitting the bishop at once. It is theory's critical test and a memory battle: the resulting ...h6/...g5 lines are sharp enough that playing them unbooked is worse than not playing them. Know it exists; play it here and see why."
+      "note": "6...Ng4 — the Anti-English — punishes White for playing Be3 before f3 by hitting the bishop at once. It is theory's critical test and a memory battle: the resulting ...h6/...g5 lines are sharp enough that playing them unbooked is worse than not playing them. Know it exists; play it here and see why.",
+      "cost": {
+        "kind": "cp",
+        "loss": 5,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -254,7 +264,12 @@
       },
       "moveUci": "f8e7",
       "class": "accepted_alternative",
-      "note": "7...Be7 first is a real theory order (the same tabiya usually appears after 8.f3 Be6). The difference is move-order nuance: with ...Be6 delayed, White gets extra options with g4 played one beat sooner in some lines. Same family, slightly different door."
+      "note": "7...Be7 first is a real theory order (the same tabiya usually appears after 8.f3 Be6). The difference is move-order nuance: with ...Be6 delayed, White gets extra options with g4 played one beat sooner in some lines. Same family, slightly different door.",
+      "cost": {
+        "kind": "cp",
+        "loss": 4,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -262,7 +277,12 @@
       },
       "moveUci": "d6d5",
       "class": "interesting_deviation",
-      "note": "7...d5 plays the freeing break a move before ...Be6 supports it: after exd5 Nxd5 Nxd5 Qxd5 the queens come off into an ending where White's structure claims are exactly the kind of thing this repo cannot yet verify. The teaching point is that ...d5 is a TIMED resource, and this is the earliest — probably premature — timing. Play it out and compare against the reserve plan."
+      "note": "7...d5 plays the freeing break a move before ...Be6 supports it: after exd5 Nxd5 Nxd5 Qxd5 the queens come off into an ending where White's structure claims are exactly the kind of thing this repo cannot yet verify. The teaching point is that ...d5 is a TIMED resource, and this is the earliest — probably premature — timing. Play it out and compare against the reserve plan.",
+      "cost": {
+        "kind": "cp",
+        "loss": 129,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -270,7 +290,12 @@
       },
       "moveUci": "b7b5",
       "class": "accepted_alternative",
-      "note": "8...b5 starts the race before finishing development — standard and sharp: the storm gains a beat, the king loses one. Choosing it honestly means accepting that White's g4-g5 will also arrive a beat sooner against your uncastled king."
+      "note": "8...b5 starts the race before finishing development — standard and sharp: the storm gains a beat, the king loses one. Choosing it honestly means accepting that White's g4-g5 will also arrive a beat sooner against your uncastled king.",
+      "cost": {
+        "kind": "cp",
+        "loss": 72,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -278,7 +303,12 @@
       },
       "moveUci": "b8d7",
       "class": "accepted_alternative",
-      "note": "8...Nbd7 is flexible development that keeps ...b5, ...Be7 and ...d5 all available; its only cost is postponing every commitment, which against a fast storm can itself become the commitment."
+      "note": "8...Nbd7 is flexible development that keeps ...b5, ...Be7 and ...d5 all available; its only cost is postponing every commitment, which against a fast storm can itself become the commitment.",
+      "cost": {
+        "kind": "cp",
+        "loss": 10,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

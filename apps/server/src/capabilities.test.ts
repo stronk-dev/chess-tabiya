@@ -2,6 +2,7 @@ import { runtimeBuildInfo } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
 import {
+  assertAdvertisedCapabilityDispositions,
   assertSurfaceCapabilities,
   EngineCapabilities,
   type CapabilityEngineClient,
@@ -101,12 +102,15 @@ describe("engine capabilities", () => {
         tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"],
         tempoDefaults: { outpaced: "failed" },
         guardBasis: ["rules", "engine"],
+        costBasis: ["material", "engine", "tablebase"],
+        capabilityDispositions: expect.any(Array),
         assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
         objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
         runSchemaVersion: runtimeBuildInfo.runSchemaVersion,
         policyProfiles: {
           strong_engine: {
             movetimeMs: 100,
+            nodes: 50_000,
             threads: 1,
             hashMb: 16,
             multiPv: 1,
@@ -254,16 +258,39 @@ describe("engine capabilities", () => {
       [identity.id],
       {
         engineMode: "maia",
-        strongEngineProfile: { movetimeMs: 175, threads: 2, hashMb: 32 },
+        strongEngineProfile: { movetimeMs: 175, nodes: null, threads: 2, hashMb: 32 },
       },
     ).get();
 
     expect(descriptor.policyProfiles.strong_engine).toEqual({
       movetimeMs: 175,
+      nodes: null,
       threads: 2,
       hashMb: 32,
       multiPv: 1,
     });
+  });
+
+  it("covers every advertised engine option and refuses a vacuous option table", () => {
+    const stockfish = ready({
+      id: "stockfish-analysis",
+      kind: "judge",
+      name: "Stockfish",
+      version: "18",
+      seedHonored: false,
+    });
+    const covered = {
+      ...stockfish,
+      options: ["Threads", "Hash", "Clear Hash", "MultiPV", "UCI_ShowWDL", "Ponder"].map((name) => ({
+        name,
+        type: name === "Clear Hash" ? "button" as const : "spin" as const,
+      })),
+    };
+    expect(() => assertAdvertisedCapabilityDispositions([covered])).not.toThrow();
+    expect(() => assertAdvertisedCapabilityDispositions([{ ...stockfish, options: [{ name: "Mystery", type: "check" }] }]))
+      .toThrow(/Mystery/);
+    expect(() => assertAdvertisedCapabilityDispositions([stockfish]))
+      .toThrow(/stockfish-analysis published no option table/);
   });
 
   it("is a strict superset of policyConfig.locus engine identity fields", async () => {

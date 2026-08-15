@@ -164,6 +164,12 @@ describe("Maia production sidecar integration", () => {
         seed: 91,
       });
       expect(selection.engine.eloApplied).toBe(targetElo);
+      expect(selection.candidates?.every((candidate) => candidate.scoreCp !== undefined && candidate.wdl !== undefined)).toBe(true);
+      process.stdout.write(`MAIA_CANDIDATE_WDL ${JSON.stringify({
+        targetElo,
+        rows: selection.candidates?.length ?? 0,
+        sums: selection.candidates?.map((candidate) => candidate.wdl!.win + candidate.wdl!.draw + candidate.wdl!.loss) ?? [],
+      })}\n`);
       return selection.candidates?.map(({ moveUci, mass }) => [moveUci, mass] as const) ?? [];
     };
 

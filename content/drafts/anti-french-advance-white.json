@@ -36,7 +36,7 @@
         "engineId": "stockfish-authoring",
         "engineVersion": "18",
         "sourceId": "stockfish-authoring",
-        "retrievedAt": "2026-08-15T12:53:41.491Z"
+        "retrievedAt": "2026-08-15T12:59:06.003Z"
       },
       "resolveAt": {
         "kind": "terminal"
@@ -254,7 +254,12 @@
       "moveUci": "d4c5",
       "class": "concept_violation",
       "offObjective": true,
-      "note": "4.dxc5 gives away the centre you played 3.e5 to keep: unlike the Caro-Kann version of this capture, Black's ...Bxc5 regains the pawn with a developing move and the e5 pawn becomes a target rather than a cramp. The Advance's promise is the chain; this move resigns the promise on move four."
+      "note": "4.dxc5 gives away the centre you played 3.e5 to keep: unlike the Caro-Kann version of this capture, Black's ...Bxc5 regains the pawn with a developing move and the e5 pawn becomes a target rather than a cramp. The Advance's promise is the chain; this move resigns the promise on move four.",
+      "cost": {
+        "kind": "cp",
+        "loss": 74,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -262,7 +267,12 @@
       },
       "moveUci": "g1f3",
       "class": "accepted_alternative",
-      "note": "4.Nf3 — the Nimzowitsch System — defends d4 with pieces instead of the c-pawn and often gambits it outright. A respectable repertoire with a different bargain: activity for structure. This pack's c3 line is the structural version."
+      "note": "4.Nf3 — the Nimzowitsch System — defends d4 with pieces instead of the c-pawn and often gambits it outright. A respectable repertoire with a different bargain: activity for structure. This pack's c3 line is the structural version.",
+      "cost": {
+        "kind": "cp",
+        "loss": 47,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -270,7 +280,12 @@
       },
       "moveUci": "d1g4",
       "class": "interesting_deviation",
-      "note": "4.Qg4 — the Nimzowitsch Attack — attacks g7 while Black's kingside is undeveloped, on the logic that ...e6 already blocked the c8 bishop's defence of the kingside light squares. Concrete and double-edged: the queen is early, and every tempo Black gains on her is a siege move. Play it out rather than trust either verdict."
+      "note": "4.Qg4 — the Nimzowitsch Attack — attacks g7 while Black's kingside is undeveloped, on the logic that ...e6 already blocked the c8 bishop's defence of the kingside light squares. Concrete and double-edged: the queen is early, and every tempo Black gains on her is a siege move. Play it out rather than trust either verdict.",
+      "cost": {
+        "kind": "cp",
+        "loss": 133,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -278,7 +293,12 @@
       },
       "moveUci": "c1e3",
       "class": "accepted_alternative",
-      "note": "5.Be3 — the Kupreichik line — develops the bishop before Nf3 and dares ...Qb6 to take b2 with concrete tricks (Qd2 and Rb1 come with tempo on the exposed queen). Same holding plan, sharper accounting; a real alternative for players who like forcing debts."
+      "note": "5.Be3 — the Kupreichik line — develops the bishop before Nf3 and dares ...Qb6 to take b2 with concrete tricks (Qd2 and Rb1 come with tempo on the exposed queen). Same holding plan, sharper accounting; a real alternative for players who like forcing debts.",
+      "cost": {
+        "kind": "cp",
+        "loss": 56,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -286,7 +306,12 @@
       },
       "moveUci": "f1d3",
       "class": "interesting_deviation",
-      "note": "6.Bd3 is the Milner-Barry Gambit: d4 is offered for open lines and a lead in development. It is a coherent, well-mapped gamble and a different pack's subject; what it is NOT is a way to hold the base. Choosing it should be a decision made before ...Qb6, not a reaction to it."
+      "note": "6.Bd3 is the Milner-Barry Gambit: d4 is offered for open lines and a lead in development. It is a coherent, well-mapped gamble and a different pack's subject; what it is NOT is a way to hold the base. Choosing it should be a decision made before ...Qb6, not a reaction to it.",
+      "cost": {
+        "kind": "cp",
+        "loss": 4,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -294,7 +319,12 @@
       },
       "moveUci": "f1e2",
       "class": "accepted_alternative",
-      "note": "6.Be2 holds by development and sets the band's classic trap: after ...cxd4 7.cxd4 Nxd4?? 8.Nxd4 Qxd4, 9.Bb5+ forces the block and 10.Bxd7+ followed by 11.Qxd4 wins the queen — a sequence verified move-by-move with the board tools in this repo. Slower than a3 as a plan; richer in immediate tactics."
+      "note": "6.Be2 holds by development and sets the band's classic trap: after ...cxd4 7.cxd4 Nxd4?? 8.Nxd4 Qxd4, 9.Bb5+ forces the block and 10.Bxd7+ followed by 11.Qxd4 wins the queen — a sequence verified move-by-move with the board tools in this repo. Slower than a3 as a plan; richer in immediate tactics.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

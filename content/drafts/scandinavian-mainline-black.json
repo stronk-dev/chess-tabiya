@@ -306,7 +306,12 @@
       },
       "moveUci": "d5d8",
       "class": "accepted_alternative",
-      "note": "3...Qd8 is the Valencian, and at your band it is the MORE common retreat: 7,841,794 games against 7,160,241 for the spine's ...Qa5. At depth 22 the engine separates them by one centipawn, which is nothing. It is a different pack's repertoire, not a mistake."
+      "note": "3...Qd8 is the Valencian, and at your band it is the MORE common retreat: 7,841,794 games against 7,160,241 for the spine's ...Qa5. At depth 22 the engine separates them by one centipawn, which is nothing. It is a different pack's repertoire, not a mistake.",
+      "cost": {
+        "kind": "cp",
+        "loss": 4,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -314,7 +319,12 @@
       },
       "moveUci": "d5d6",
       "class": "accepted_alternative",
-      "note": "3...Qd6, the Gubinsky-Melts, is the third main retreat: 1,277,395 games at band, and the engine's marginal pick of the three by two centipawns. Same family, different square."
+      "note": "3...Qd6, the Gubinsky-Melts, is the third main retreat: 1,277,395 games at band, and the engine's marginal pick of the three by two centipawns. Same family, different square.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -322,7 +332,12 @@
       },
       "moveUci": "d5e5",
       "class": "tactical_error",
-      "note": "3...Qe5+ measures 0.18 worse than the spine's ...Qa5 at depth 22 - the check accomplishes nothing and the queen will be hit again. Not a blunder; a tempo given away for no return."
+      "note": "3...Qe5+ measures 0.18 worse than the spine's ...Qa5 at depth 22 - the check accomplishes nothing and the queen will be hit again. Not a blunder; a tempo given away for no return.",
+      "cost": {
+        "kind": "cp",
+        "loss": 23,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -330,7 +345,12 @@
       },
       "moveUci": "b8c6",
       "class": "concept_violation",
-      "note": "4...Nc6 attacks d4 but blocks the c-pawn that this whole structure needs for ...c6. It is the worst of the five replies measured at this node, 0.77 behind ...c6."
+      "note": "4...Nc6 attacks d4 but blocks the c-pawn that this whole structure needs for ...c6. It is the worst of the five replies measured at this node, 0.77 behind ...c6.",
+      "cost": {
+        "kind": "cp",
+        "loss": 58,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -338,7 +358,12 @@
       },
       "moveUci": "c7c6",
       "class": "accepted_alternative",
-      "note": "5...c6 is the engine's choice of the five replies measured here, 0.34 ahead of the spine's ...Bg4, and 20.1% of players at band play it. It builds the solid house first and leaves the bishop question open. The spine drills the popular move instead, and says so."
+      "note": "5...c6 is the engine's choice of the five replies measured here, 0.34 ahead of the spine's ...Bg4, and 20.1% of players at band play it. It builds the solid house first and leaves the bishop question open. The spine drills the popular move instead, and says so.",
+      "cost": {
+        "kind": "cp",
+        "loss": 5,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -346,7 +371,12 @@
       },
       "moveUci": "c8f5",
       "class": "accepted_alternative",
-      "note": "5...Bf5 is the Classical Variation of the catalogue. 12.5% at band, and 0.28 better than ...Bg4 by evaluation. The bishop sits outside the pawn chain without pinning anything."
+      "note": "5...Bf5 is the Classical Variation of the catalogue. 12.5% at band, and 0.28 better than ...Bg4 by evaluation. The bishop sits outside the pawn chain without pinning anything.",
+      "cost": {
+        "kind": "cp",
+        "loss": 6,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -354,7 +384,12 @@
       },
       "moveUci": "e7e6",
       "class": "accepted_alternative",
-      "note": "6...e6 is the second most common reply at band (29.7%) and is 0.08 behind ...Nc6 by evaluation - inside the noise. It is a slower version of the same plan and it does not commit to the race."
+      "note": "6...e6 is the second most common reply at band (29.7%) and is 0.08 behind ...Nc6 by evaluation - inside the noise. It is a slower version of the same plan and it does not commit to the race.",
+      "cost": {
+        "kind": "cp",
+        "loss": 3,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -362,7 +397,12 @@
       },
       "moveUci": "a5h5",
       "class": "tactical_error",
-      "note": "6...Qh5 offers a queen trade the wrong way round: 2.04 for White at depth 22, and the worst of the six replies measured here by more than a pawn."
+      "note": "6...Qh5 offers a queen trade the wrong way round: 2.04 for White at depth 22, and the worst of the six replies measured here by more than a pawn.",
+      "cost": {
+        "kind": "cp",
+        "loss": 176,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -370,7 +410,12 @@
       },
       "moveUci": "c6d4",
       "class": "tactical_error",
-      "note": "7...Nxd4 is the greedy capture and it is refuted by simple recapture: 8.Nxd4 measures +4.34 for White at depth 22, and the walked material census reads White 37 Black 35 - the pin does not hold: machine-counted at the position after 7.O-O, White has two defenders on e2 and two on f3, and only one Black piece bears on d4 against two White defenders. The worst of the five replies measured at this node."
+      "note": "7...Nxd4 is the greedy capture and it is refuted by simple recapture: 8.Nxd4 measures +4.34 for White at depth 22, and the walked material census reads White 37 Black 35 - the pin does not hold: machine-counted at the position after 7.O-O, White has two defenders on e2 and two on f3, and only one Black piece bears on d4 against two White defenders. The worst of the five replies measured at this node.",
+      "cost": {
+        "kind": "cp",
+        "loss": 444,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -378,7 +423,12 @@
       },
       "moveUci": "e7e6",
       "class": "accepted_alternative",
-      "note": "7...e6 keeps the king in the middle a move longer; 18.1% at band. It costs 0.96 against ...O-O-O by evaluation and it declines the race the whole pack is about."
+      "note": "7...e6 keeps the king in the middle a move longer; 18.1% at band. It costs 0.96 against ...O-O-O by evaluation and it declines the race the whole pack is about.",
+      "cost": {
+        "kind": "cp",
+        "loss": 83,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackClaims": [

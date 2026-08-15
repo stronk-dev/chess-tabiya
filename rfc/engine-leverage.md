@@ -1,6 +1,6 @@
 # RFC: Engine leverage — the instrument has already answered
 
-- **Status:** **accepted 2026-08-15.** Open questions **1 and 9 are owner-ruled**, and
+- **Status:** **implementing 2026-08-16.** Open questions **1 and 9 are owner-ruled**, and
   **3 and 7 are coordinator-closed — all four in the question bodies below**, corrected
   2026-08-16 after codex found 3 and 7 resolved in this line only. Questions 3 and 7 are
   closed on their own stated fallbacks, which is within the standing ruling *"just
@@ -105,9 +105,8 @@
     owner-blocked until `live-marker-quality` is `implemented`. Codex found this and stopped
     rather than inventing a lane. **The register's own rule decides it — the draft that
     cannot land is the one that renegotiates — so `teacher-surface` moves to 22 and this RFC
-    takes 21** (`STORAGE_VERSION` 20→21). Its original text follows: it claims migration 21;
-    this RFC claims 22 and lands behind it. No other overlap: it changes no run or pack
-    schema.
+    takes 21** (`STORAGE_VERSION` 20→21). `teacher-surface` now claims migration 22 and
+    lands behind this RFC. No other overlap: it changes no run or pack schema.
   - `rfc/fixture-realism.md` (*implementing*) — owns the instrument-fed fixture register.
     Audit §0 was a fixture-realism failure (`opponent-selector.test.ts` asserts the
     regression exactly as written; the real-engine suite sends a command shape the
@@ -1288,7 +1287,7 @@ not its final contents.
 **Register**
 
 1. `DRILL_PACK_SCHEMA_VERSION` is `"0.23"`, `DRILL_RUN_SCHEMA_VERSION` is `"0.16"`, the
-   two `$id`s match, and `STORAGE_VERSION` is 22 with a stamp-only migration body written
+   two `$id`s match, and `STORAGE_VERSION` is 21 with a stamp-only migration body written
    with **frozen string literals** (`"0.15"`→`"0.16"`), never the constants.
 2. All **37** authored packs and all **7** committed `*.browser.json` fixtures validate
    unchanged under 0.23 — 6 in `content/drafts/` plus `schemas/fixtures/drill-pack/

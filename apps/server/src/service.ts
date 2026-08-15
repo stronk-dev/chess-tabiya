@@ -25,7 +25,7 @@ import {
   opponentMovesFromEvents,
   permittedAssistance,
   revealFeedback,
-  isEngineEvidenceRef,
+  isMachineEvidenceRef,
   rewind,
   rewindToCheckpoint,
   storyMoments,
@@ -178,7 +178,7 @@ function comparisonWithoutEngineFeedback(
           ...entry,
           evidenceRefs: Object.freeze(
             entry.evidenceRefs.filter(
-              (reference) => !isEngineEvidenceRef(reference),
+              (reference) => !isMachineEvidenceRef(reference),
             ),
           ),
         }),
@@ -1091,6 +1091,7 @@ export class RunService {
     writerId: string,
     input: {
       readonly nodeIds: readonly string[];
+      readonly kind?: "bestline" | "eval" | "wdl";
       readonly multiPv?: number;
       readonly depth?: number;
       readonly movetime?: number;
@@ -1105,7 +1106,7 @@ export class RunService {
     }
     return Object.freeze(input.nodeIds.map((nodeId) => this.enqueueEvidence(runId, principal, {
       nodeId,
-      kind: "bestline",
+      kind: input.kind ?? "bestline",
       ...(input.multiPv === undefined ? {} : { multiPv: input.multiPv }),
       ...(input.depth === undefined ? {} : { depth: input.depth }),
       ...(input.movetime === undefined ? {} : { movetime: input.movetime }),
@@ -1772,7 +1773,13 @@ export class RunService {
   #enqueueMoveEvidence(run: DrillRun, nodeId = run.activeCursor.nodeId): void {
     const node = run.nodes.find((candidate) => candidate.id === nodeId);
     if (node === undefined) throw new TypeError("Run active cursor has no node");
-    this.#requiredEvidenceQueue().enqueue({
+    const queue = this.#requiredEvidenceQueue();
+    if (this.#tablebase !== undefined && countFenPieces(node.fen) <= 7 &&
+      !queue.outstanding(run.id).some((job) => job.nodeId === node.id && job.kind === "tablebase") &&
+      !run.events.some((event) => event.type === "evidence.attached" && event.data.nodeId === node.id && event.data.payload.kind === "tablebase")) {
+      queue.enqueue({ runId: run.id, nodeId: node.id, fen: node.fen, kind: "tablebase" });
+    }
+    queue.enqueue({
       runId: run.id,
       nodeId,
       fen: node.fen,

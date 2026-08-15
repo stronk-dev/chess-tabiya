@@ -180,6 +180,23 @@ describe("pack authoring validation", () => {
     expect(codes).toEqual(expect.arrayContaining(["GUARD_WINDOW_EMPTY", "GUARD_OVERRIDE_ANCHOR_UNKNOWN", "GUARD_OVERRIDE_DUPLICATE", "GUARD_DISABLES_EVERYTHING"]));
   });
 
+  it("uses explicit conditions in both guard validation copies", () => {
+    const candidate = structuredClone(fixture) as any;
+    candidate.feedbackPolicy = "immediate_guard";
+    candidate.guard = {
+      rulesTier: false,
+      evalSwingCp: null,
+      fireOnMate: false,
+      conditions: [{ kind: "engine_eval_swing", cp: 120 }],
+    };
+    candidate.deviations[0].class = "tactical_error";
+    candidate.deviations[0].mistake = ["tactical"];
+    candidate.deviations[0].cost = { kind: "cp", loss: 130, basis: "engine" };
+    const codes = validatePackDocument(candidate).issues.map((issue) => issue.code);
+    expect(codes).not.toContain("GUARD_DISABLES_EVERYTHING");
+    expect(codes).not.toContain("GUARD_CANNOT_REACH_DEVIATION");
+  });
+
   it("validates deviation mistake, timing, cost, and move-scoped guard declarations", () => {
     const candidate = structuredClone(fixture) as DrillPackDefinition;
     (candidate as any).feedbackPolicy = "immediate_guard";

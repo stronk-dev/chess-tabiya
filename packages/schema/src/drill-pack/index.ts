@@ -36,6 +36,7 @@ export {
   type DeviationMistake,
   type DeviationLocation,
   type DrillPackDefinition,
+  type EngineCondition,
   type FeedbackClaim,
   type FeedbackPolicy,
   type FileRange,

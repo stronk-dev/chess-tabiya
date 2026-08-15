@@ -108,11 +108,11 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.15", () => {
+describe("drill_run.schema.json v0.16", () => {
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.15",
+      $id: "urn:chess-tabiya:schema:drill-run:0.16",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });
@@ -153,6 +153,34 @@ describe("drill_run.schema.json v0.15", () => {
     };
 
     expect(validate(fixedSeedRun), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it("records candidate measurements and the applied strong-engine search bound", () => {
+    const selectionEvent = {
+      seq: 2,
+      type: "opponent.move_selected",
+      at,
+      data: {
+        nodeId: rootNode.id,
+        branchId: branch.id,
+        moveUci: "e2e4",
+        selection: {
+          moveUci: "e2e4",
+          policyModeApplied: "strong_engine",
+          candidates: [{ moveUci: "e2e4", rank: 1, scoreCp: 23, wdl: { win: 412, draw: 537, loss: 51 } }],
+          engine: {
+            id: "stockfish-play",
+            name: "Stockfish",
+            version: "18",
+            seedHonored: false,
+            searchBound: { kind: "nodes", value: 50_000 },
+          },
+        },
+      },
+    };
+    expect(validate({ ...validRun, events: [event, selectionEvent] }), JSON.stringify(validate.errors)).toBe(true);
+    selectionEvent.data.selection.engine.searchBound.value = 0;
+    expect(validate({ ...validRun, events: [event, selectionEvent] })).toBe(false);
   });
 
   it("validates a position session and rejects invalid session pairings", () => {

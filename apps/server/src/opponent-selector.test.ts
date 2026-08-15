@@ -333,7 +333,7 @@ describe("pure opponent selector", () => {
       code: "TABLEBASE_UNAVAILABLE",
     });
   });
-  it("ships the ratified 100 ms, one-thread, 16 MB strong-engine profile", async () => {
+  it("ships the ratified 50000-node, one-thread, 16 MB strong-engine profile", async () => {
     const client = new FakeEngineClient(() => ["bestmove c7c5"]);
     const selector = new OpponentSelector(client);
 
@@ -342,13 +342,15 @@ describe("pure opponent selector", () => {
 
     expect(DEFAULT_STRONG_ENGINE_PROFILE).toEqual({
       movetimeMs: 100,
+      nodes: 50_000,
       threads: 1,
       hashMb: 16,
       multiPv: 1,
     });
     expect(client.calls[0]?.request.commands[0]).toBe("setoption name MultiPV value 1");
     expect(client.calls[0]?.request.resetSearchState).toBe(true);
-    expect(client.calls[0]?.request.commands.at(-1)).toBe("go movetime 100");
+    expect(client.calls[0]?.request.commands.at(-1)).toBe("go nodes 50000");
+    expect(selection.engine.searchBound).toEqual({ kind: "nodes", value: 50_000 });
     expect(stockfishPlaySpec()).toMatchObject({
       id: "stockfish-play",
       kind: "opponent",
@@ -458,11 +460,11 @@ describe("pure opponent selector", () => {
       expect(engineId).toBe("stockfish-play");
       return ["info depth 4 multipv 1 score cp 25 pv c7c5", "bestmove c7c5"];
     });
-    const selector = new OpponentSelector(client, { strongEngineMovetimeMs: 125 });
+    const selector = new OpponentSelector(client, { strongEngineMovetimeMs: 125, strongEngineProfile: { nodes: null } });
 
     await expect(selector.select(request("strong_engine"))).resolves.toMatchObject({
       moveUci: "c7c5",
-      engine: { id: "stockfish-play", name: "Stockfish" },
+      engine: { id: "stockfish-play", name: "Stockfish", searchBound: { kind: "movetime", value: 125 } },
     });
     expect(client.calls[0]?.request.commands.at(-1)).toBe("go movetime 125");
     expect(client.calls[0]?.request.commands[0]).toBe("setoption name MultiPV value 1");
@@ -523,7 +525,13 @@ describe("pure opponent selector", () => {
     expect(selection.moveUci).toBe("c7c5");
     expect(selection.policyModeApplied).toBe("theory_strict");
     expect(selection.candidates).toEqual([
-      { moveUci: "c7c5", mass: 0.1, rank: 2 },
+      {
+        moveUci: "c7c5",
+        mass: 0.1,
+        rank: 2,
+        scoreCp: 0,
+        wdl: { win: 300, draw: 400, loss: 300 },
+      },
     ]);
     expect(client.calls[0]?.request.commands).toContain(
       "setoption name MultiPV value 8",
@@ -554,8 +562,20 @@ describe("pure opponent selector", () => {
 
     expect(["e7e5", "c7c5"]).toContain(selection.moveUci);
     expect(selection.candidates).toEqual([
-      { moveUci: "e7e5", mass: 0, rank: 1 },
-      { moveUci: "c7c5", mass: 0, rank: 2 },
+      {
+        moveUci: "e7e5",
+        mass: 0,
+        rank: 1,
+        scoreCp: 0,
+        wdl: { win: 300, draw: 400, loss: 300 },
+      },
+      {
+        moveUci: "c7c5",
+        mass: 0,
+        rank: 2,
+        scoreCp: 0,
+        wdl: { win: 300, draw: 400, loss: 300 },
+      },
     ]);
   });
 

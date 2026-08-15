@@ -1,5 +1,6 @@
 import {
   engineEvidenceRef,
+  tablebaseEvidenceRef,
   type EvidenceKind,
   type EvidencePayload,
   type JobObserver,
@@ -10,6 +11,8 @@ import {
 
 import type { EngineRequest } from "./engine-supervisor.js";
 import { engineUnavailable } from "./errors.js";
+import type { TablebaseSource } from "./tablebase.js";
+import { countFenPieces } from "./sourcing/chess-facts.js";
 
 export interface EvidenceJobInput {
   readonly runId: string;
@@ -82,6 +85,7 @@ function whitePerspectiveScore(value: number, fen: string): number {
 export class EvidenceJobQueue implements JobObserver {
   readonly #executor: EvidenceExecutor;
   readonly #upgrader: ObjectiveEvidenceUpgrader | undefined;
+  readonly #tablebase: TablebaseSource | undefined;
   readonly #maxConcurrency: number;
   readonly #pending: QueuedEvidence[] = [];
   readonly #running = new Map<string, QueuedEvidence>();
@@ -97,17 +101,22 @@ export class EvidenceJobQueue implements JobObserver {
     options: {
       readonly maxConcurrency?: number;
       readonly objectiveUpgrader?: ObjectiveEvidenceUpgrader;
+      readonly tablebaseSource?: TablebaseSource;
     } = {},
   ) {
     this.#executor = executor;
     this.#maxConcurrency = options.maxConcurrency ?? 2;
     positiveInteger(this.#maxConcurrency, "Evidence queue concurrency");
     this.#upgrader = options.objectiveUpgrader;
+    this.#tablebase = options.tablebaseSource;
   }
 
   enqueue(input: EvidenceJobInput): EvidenceJob {
-    if ((input.depth === undefined) === (input.movetime === undefined)) {
+    if (input.kind !== "tablebase" && (input.depth === undefined) === (input.movetime === undefined)) {
       throw new TypeError("Evidence job requires exactly one of depth or movetime");
+    }
+    if (input.kind === "tablebase" && (input.depth !== undefined || input.movetime !== undefined)) {
+      throw new TypeError("Tablebase evidence jobs do not take an engine search bound");
     }
     if (input.depth !== undefined) positiveInteger(input.depth, "Evidence depth");
     if (input.movetime !== undefined) {
@@ -211,12 +220,12 @@ export class EvidenceJobQueue implements JobObserver {
 
   async #execute(queued: QueuedEvidence): Promise<void> {
     try {
-      const payload = freezePayload(
-        await this.#executor.execute(queued.job, queued.controller.signal),
-      );
+      const payload = freezePayload(queued.job.kind === "tablebase"
+        ? await this.#tablebasePayload(queued.job)
+        : await this.#executor.execute(queued.job, queued.controller.signal));
       if (queued.cancelled || queued.controller.signal.aborted) return;
 
-      const evidenceRef = engineEvidenceRef(queued.job.id);
+      const evidenceRef = queued.job.kind === "tablebase" ? tablebaseEvidenceRef(queued.job.id) : engineEvidenceRef(queued.job.id);
       const evidenceRefs = Object.freeze([evidenceRef]) as readonly [string];
       let objectiveProposal: ObjectiveEvidenceProposal | null = null;
       if (
@@ -272,6 +281,23 @@ export class EvidenceJobQueue implements JobObserver {
       this.#activeCount -= 1;
       this.#pump();
     }
+  }
+
+  async #tablebasePayload(job: EvidenceJob): Promise<EvidencePayload> {
+    if (this.#tablebase === undefined) throw new TypeError("Tablebase evidence source is not configured");
+    const result = await this.#tablebase.probe(job.fen);
+    return Object.freeze({
+      kind: "tablebase",
+      source: "tablebase_exact",
+      values: Object.freeze({
+        fen: job.fen,
+        pieceCount: countFenPieces(job.fen),
+        category: result.category,
+        dtz: result.dtz,
+        preciseDtz: result.preciseDtz ?? null,
+        sourceId: this.#tablebase.kind === "lichess" ? "tablebase.lichess.org" : "tablebase-fixture",
+      }),
+    });
   }
 
   #settleIdle(): void {

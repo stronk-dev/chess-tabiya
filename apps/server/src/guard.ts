@@ -14,6 +14,7 @@ import {
   type Node,
 } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import type { EngineCondition } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 
@@ -84,6 +85,35 @@ interface GuardSettings {
   readonly evalSwingCp: number | null;
   readonly fireOnMate: boolean;
   readonly rulesTier: boolean;
+  readonly conditions: readonly EngineCondition[];
+}
+
+function baseConditions(pack: DrillPackDefinition): readonly EngineCondition[] {
+  if (pack.guard?.conditions !== undefined) return pack.guard.conditions;
+  const evalSwingCp = pack.guard?.evalSwingCp === undefined ? 200 : pack.guard.evalSwingCp;
+  const fireOnMate = pack.guard?.fireOnMate ?? true;
+  return Object.freeze([
+    ...(evalSwingCp === null ? [] : [{ kind: "engine_eval_swing" as const, cp: evalSwingCp }]),
+    ...(fireOnMate ? [{ kind: "engine_mate_appears" as const }] : []),
+  ]);
+}
+
+function overrideConditions(
+  conditions: readonly EngineCondition[],
+  override: { readonly evalSwingCp?: number | null; readonly fireOnMate?: boolean } | undefined,
+): readonly EngineCondition[] {
+  if (override === undefined) return conditions;
+  const retained = conditions.filter((condition) =>
+    condition.kind !== "engine_eval_swing" && condition.kind !== "engine_mate_appears");
+  const existingEval = conditions.find((condition): condition is Extract<EngineCondition, { kind: "engine_eval_swing" }> => condition.kind === "engine_eval_swing");
+  const existingMate = conditions.some((condition) => condition.kind === "engine_mate_appears");
+  const cp = override.evalSwingCp === undefined ? existingEval?.cp : override.evalSwingCp;
+  const mate = override.fireOnMate ?? existingMate;
+  return Object.freeze([
+    ...retained,
+    ...(cp === undefined || cp === null ? [] : [{ kind: "engine_eval_swing" as const, cp }]),
+    ...(mate ? [{ kind: "engine_mate_appears" as const }] : []),
+  ]);
 }
 
 function guardSettings(
@@ -96,6 +126,7 @@ function guardSettings(
     evalSwingCp: pack.guard?.evalSwingCp === undefined ? 200 : pack.guard.evalSwingCp,
     fireOnMate: pack.guard?.fireOnMate ?? true,
     rulesTier: pack.guard?.rulesTier ?? true,
+    conditions: baseConditions(pack),
   };
   if ((pack.guard?.overrides?.length ?? 0) === 0) return base;
   const path = historyFrom(run, previous.id);
@@ -121,10 +152,12 @@ function guardSettings(
     ) continue;
     selected = { depth, moveScoped, index, value: override };
   }
+  const conditions = overrideConditions(base.conditions, selected?.value);
   return {
     evalSwingCp: selected?.value.evalSwingCp === undefined ? base.evalSwingCp : selected.value.evalSwingCp,
     fireOnMate: selected?.value.fireOnMate ?? base.fireOnMate,
     rulesTier: base.rulesTier,
+    conditions,
   };
 }
 
@@ -177,6 +210,48 @@ function evalAt(run: DrillRun, nodeId: string): EvidenceAttachedEvent | undefine
   );
 }
 
+function tablebaseAt(run: DrillRun, nodeId: string): EvidenceAttachedEvent | undefined {
+  return [...run.events].reverse().find(
+    (event): event is EvidenceAttachedEvent => event.type === "evidence.attached" &&
+      event.data.nodeId === nodeId && event.data.payload.kind === "tablebase" &&
+      event.data.payload.source === "tablebase_exact",
+  );
+}
+
+const CATEGORY_RANK: Readonly<Record<string, number>> = Object.freeze({
+  loss: 0, "blessed-loss": 1, draw: 2, "cursed-win": 3, win: 4,
+});
+
+function learnerTablebaseCategory(event: EvidenceAttachedEvent, learner: Color): string | undefined {
+  const values = event.data.payload.values;
+  if (!Number.isSafeInteger(values.pieceCount) || Number(values.pieceCount) > 7) return undefined;
+  if (typeof values.category !== "string" || !(values.category in CATEGORY_RANK)) return undefined;
+  const turn = typeof values.fen === "string" ? values.fen.split(/\s+/)[1] : undefined;
+  if (turn !== "w" && turn !== "b") return undefined;
+  const side = turn === "w" ? "white" : "black";
+  if (side === learner) return values.category;
+  return ({ win: "loss", loss: "win", draw: "draw", "cursed-win": "blessed-loss", "blessed-loss": "cursed-win" } as const)[values.category as "win" | "loss" | "draw" | "cursed-win" | "blessed-loss"];
+}
+
+function tablebaseCondition(
+  condition: Extract<EngineCondition, { kind: "tablebase_category_regression" | "tablebase_dtz_regression" }>,
+  previous: EvidenceAttachedEvent,
+  consequence: EvidenceAttachedEvent,
+  learner: Color,
+): boolean {
+  const beforeCategory = learnerTablebaseCategory(previous, learner);
+  const afterCategory = learnerTablebaseCategory(consequence, learner);
+  if (beforeCategory === undefined || afterCategory === undefined) return false;
+  if (condition.kind === "tablebase_category_regression") {
+    return CATEGORY_RANK[afterCategory]! < CATEGORY_RANK[beforeCategory]!;
+  }
+  if (beforeCategory !== afterCategory) return false;
+  const before = previous.data.payload.values.preciseDtz ?? previous.data.payload.values.dtz;
+  const after = consequence.data.payload.values.preciseDtz ?? consequence.data.payload.values.dtz;
+  return typeof before === "number" && typeof after === "number" &&
+    Math.abs(after) - Math.abs(before) >= condition.byAtLeast;
+}
+
 function mateAgainstLearner(values: Readonly<Record<string, unknown>>, learner: Color): boolean {
   if (!Number.isSafeInteger(values.mateIn)) return false;
   const mateIn = values.mateIn as number;
@@ -215,15 +290,24 @@ export function applyRecordedEngineGuard(
     const previousEval = evalAt(run, triple.previous.id);
     const consequenceEval = evalAt(run, consequence.id);
     const settings = guardSettings(pack, run, triple.previous, triple.learnerMove.moveUci!);
+    const previousTablebase = tablebaseAt(run, triple.previous.id);
+    const consequenceTablebase = tablebaseAt(run, consequence.id);
     const before = previousEval?.data.payload.values;
     const after = consequenceEval?.data.payload.values;
     const mate = before !== undefined && after !== undefined &&
       mateAgainstLearner(after, run.start.side) && !mateAgainstLearner(before, run.start.side);
-    if (previousEval !== undefined && consequenceEval !== undefined &&
-      ((settings.fireOnMate && mate) ||
-        (settings.evalSwingCp !== null && centipawnSwing(previousEval, consequenceEval, run.start.side, settings.evalSwingCp)))) {
-      const reference = appliedEvidenceRefs.find((candidate) => candidate.startsWith("engine:"));
-      if (reference !== undefined) return generate(run, consequence.id, [reference], at);
+    for (const condition of settings.conditions) {
+      const engineMatched = previousEval !== undefined && consequenceEval !== undefined &&
+        ((condition.kind === "engine_mate_appears" && mate) ||
+          (condition.kind === "engine_eval_swing" && centipawnSwing(previousEval, consequenceEval, run.start.side, condition.cp)));
+      const tablebaseMatched = previousTablebase !== undefined && consequenceTablebase !== undefined &&
+        (condition.kind === "tablebase_category_regression" || condition.kind === "tablebase_dtz_regression") &&
+        tablebaseCondition(condition, previousTablebase, consequenceTablebase, run.start.side);
+      const namespace = engineMatched ? "engine:" : tablebaseMatched ? "tablebase:" : undefined;
+      if (namespace !== undefined) {
+        const reference = appliedEvidenceRefs.find((candidate) => candidate.startsWith(namespace));
+        if (reference !== undefined) return generate(run, consequence.id, [reference], at);
+      }
     }
   }
   return Object.freeze({ run, emitted: Object.freeze([]) });

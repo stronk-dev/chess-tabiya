@@ -2,6 +2,7 @@ import type { EngineSpec } from "./engine-supervisor.js";
 
 export interface StrongEngineProfile {
   readonly movetimeMs: number;
+  readonly nodes: number | null;
   readonly threads: number;
   readonly hashMb: number;
   readonly multiPv: number;
@@ -9,6 +10,7 @@ export interface StrongEngineProfile {
 
 export const DEFAULT_STRONG_ENGINE_PROFILE: StrongEngineProfile = Object.freeze({
   movetimeMs: 100,
+  nodes: 50_000,
   threads: 1,
   hashMb: 16,
   multiPv: 1,
@@ -25,6 +27,7 @@ export function resolveStrongEngineProfile(
 ): StrongEngineProfile {
   const profile = Object.freeze({ ...DEFAULT_STRONG_ENGINE_PROFILE, ...overrides });
   positiveInteger(profile.movetimeMs, "Strong-engine movetime");
+  if (profile.nodes !== null) positiveInteger(profile.nodes, "Strong-engine node count");
   positiveInteger(profile.threads, "Strong-engine thread count");
   positiveInteger(profile.hashMb, "Strong-engine hash size");
   positiveInteger(profile.multiPv, "Strong-engine MultiPV");

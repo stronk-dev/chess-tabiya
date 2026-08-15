@@ -221,7 +221,12 @@
       },
       "moveUci": "d8b6",
       "class": "accepted_alternative",
-      "note": "4...Qb6 before ...Nc6 is a real move order with one practical edge — it discourages White's Be3 setups a beat earlier — and one cost: the queen commits before White's system is known. Same siege, different door."
+      "note": "4...Qb6 before ...Nc6 is a real move order with one practical edge — it discourages White's Be3 setups a beat earlier — and one cost: the queen commits before White's system is known. Same siege, different door.",
+      "cost": {
+        "kind": "cp",
+        "loss": 11,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -229,7 +234,12 @@
       },
       "moveUci": "c8d7",
       "class": "accepted_alternative",
-      "note": "5...Bd7 — the Euwe Variation — solves the French bishop's whole life early, preparing ...Bb5 to trade it before the position decides it is bad. Slower on the siege by one move; permanently better for the worst piece. A legitimate different bargain."
+      "note": "5...Bd7 — the Euwe Variation — solves the French bishop's whole life early, preparing ...Bb5 to trade it before the position decides it is bad. Slower on the siege by one move; permanently better for the worst piece. A legitimate different bargain.",
+      "cost": {
+        "kind": "cp",
+        "loss": 2,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -237,7 +247,12 @@
       },
       "moveUci": "g8e7",
       "class": "accepted_alternative",
-      "note": "5...Nge7 routes the knight to f5 via a square that does not invite Bxh6. It blocks the f8 bishop for a while, which is why the Nh6 route is the spine's choice — but both roads lead to f5, and choosing by taste is fine."
+      "note": "5...Nge7 routes the knight to f5 via a square that does not invite Bxh6. It blocks the f8 bishop for a while, which is why the Nh6 route is the spine's choice — but both roads lead to f5, and choosing by taste is fine.",
+      "cost": {
+        "kind": "cp",
+        "loss": 30,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -246,7 +261,12 @@
       "moveUci": "f7f6",
       "class": "concept_violation",
       "offObjective": true,
-      "note": "5...f6 chips the chain's head while the base fight is unresolved — the canonical impatience in this structure. exf6 hands White the e5 square and opens the position while your king still lives on e8 and your pieces point at d4, not at the centreline. The lever is real; this timing donates it."
+      "note": "5...f6 chips the chain's head while the base fight is unresolved — the canonical impatience in this structure. exf6 hands White the e5 square and opens the position while your king still lives on e8 and your pieces point at d4, not at the centreline. The lever is real; this timing donates it.",
+      "cost": {
+        "kind": "cp",
+        "loss": 38,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -254,7 +274,12 @@
       },
       "moveUci": "c5c4",
       "class": "interesting_deviation",
-      "note": "6...c4 trades the siege for a bind: d4 is released, and in exchange the queenside is frozen with ...Na5-b3 as the long-term plan. A known strategy with a known cost — White's pieces turn kingside with free hands. Choosing it is a matter of style; drifting into it is a mistake. Play both and compare."
+      "note": "6...c4 trades the siege for a bind: d4 is released, and in exchange the queenside is frozen with ...Na5-b3 as the long-term plan. A known strategy with a known cost — White's pieces turn kingside with free hands. Choosing it is a matter of style; drifting into it is a mistake. Play both and compare.",
+      "cost": {
+        "kind": "cp",
+        "loss": 7,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -263,7 +288,12 @@
       "moveUci": "c5d4",
       "class": "concept_violation",
       "offObjective": true,
-      "note": "6...cxd4 releases the tension exactly when it was cheapest for White to live with: after cxd4 the c3 square returns to the b1 knight, b2 stops being loose the moment the rook comes to b1, and your siege has traded its standing threat for one open file. Keep the tension until resolving it wins something concrete."
+      "note": "6...cxd4 releases the tension exactly when it was cheapest for White to live with: after cxd4 the c3 square returns to the b1 knight, b2 stops being loose the moment the rook comes to b1, and your siege has traded its standing threat for one open file. Keep the tension until resolving it wins something concrete.",
+      "cost": {
+        "kind": "cp",
+        "loss": 52,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

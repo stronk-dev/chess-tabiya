@@ -224,7 +224,12 @@
       },
       "moveUci": "d2d4",
       "class": "accepted_alternative",
-      "note": "1.d4 is the same habit through the other door: a pawn in the centre, lines opened for the c1 bishop and the queen. This pack drills the e4 road because its consequences arrive faster, not because d4 is worse."
+      "note": "1.d4 is the same habit through the other door: a pawn in the centre, lines opened for the c1 bishop and the queen. This pack drills the e4 road because its consequences arrive faster, not because d4 is worse.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -232,7 +237,12 @@
       },
       "moveUci": "h2h4",
       "class": "concept_violation",
-      "note": "A wing pawn on move one claims nothing in the centre, opens a diagonal no piece wants, and loosens the field your king intends to castle into. It is not refuted by any single move — it is taxed by every normal move Black plays."
+      "note": "A wing pawn on move one claims nothing in the centre, opens a diagonal no piece wants, and loosens the field your king intends to castle into. It is not refuted by any single move — it is taxed by every normal move Black plays.",
+      "cost": {
+        "kind": "cp",
+        "loss": 64,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -240,7 +250,12 @@
       },
       "moveUci": "g1h3",
       "class": "concept_violation",
-      "note": "The same knight, one square from its best home, choosing the rim: machine-counted 2026-08-15, a knight on h3 attacks none of the four centre squares while a knight on f3 attacks two of them, d4 and e5, and it stands on the h-file where ...Bxh3 is a standing offer. Develop toward the centre — the board is widest there."
+      "note": "The same knight, one square from its best home, choosing the rim: machine-counted 2026-08-15, a knight on h3 attacks none of the four centre squares while a knight on f3 attacks two of them, d4 and e5, and it stands on the h-file where ...Bxh3 is a standing offer. Develop toward the centre — the board is widest there.",
+      "cost": {
+        "kind": "cp",
+        "loss": 87,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -248,7 +263,12 @@
       },
       "moveUci": "f2f3",
       "class": "concept_violation",
-      "note": "One move, three costs: the knight's best square is occupied by a pawn, the e1-h4 diagonal past your king is open, and no piece is closer to developing. Play it and watch how fast ...e5 and ...Qh4+ ideas appear."
+      "note": "One move, three costs: the knight's best square is occupied by a pawn, the e1-h4 diagonal past your king is open, and no piece is closer to developing. Play it and watch how fast ...e5 and ...Qh4+ ideas appear.",
+      "cost": {
+        "kind": "cp",
+        "loss": 95,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -256,7 +276,12 @@
       },
       "moveUci": "d1h5",
       "class": "concept_violation",
-      "note": "The early queen makes a real threat (Qxe5+) — and that is exactly the trap. Black answers with ...Nc6, a move they wanted to play anyway, and your strongest piece now stands where knights and pawns hit it with tempo. Threats that can be answered by development are donations. Play the branch out and count who develops faster."
+      "note": "The early queen makes a real threat (Qxe5+) — and that is exactly the trap. Black answers with ...Nc6, a move they wanted to play anyway, and your strongest piece now stands where knights and pawns hit it with tempo. Threats that can be answered by development are donations. Play the branch out and count who develops faster.",
+      "cost": {
+        "kind": "cp",
+        "loss": 72,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -264,7 +289,12 @@
       },
       "moveUci": "f2f4",
       "class": "interesting_deviation",
-      "note": "The King's Gambit — a real opening with a real idea (deflect the e5 pawn, seize the centre with d4). It is not a principle violation; it is a promise to play accurately for ten moves with your king's cover already spent. Branch it to see the difference between a gambit and a mistake; drill it after 1400, not before."
+      "note": "The King's Gambit — a real opening with a real idea (deflect the e5 pawn, seize the centre with d4). It is not a principle violation; it is a promise to play accurately for ten moves with your king's cover already spent. Branch it to see the difference between a gambit and a mistake; drill it after 1400, not before.",
+      "cost": {
+        "kind": "cp",
+        "loss": 105,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -272,7 +302,12 @@
       },
       "moveUci": "f1c4",
       "class": "accepted_alternative",
-      "note": "Bishop before knight is the same plan in a different order — the Italian bishop goes to its diagonal a move early. The spine prefers 2.Nf3 because it develops WITH a threat, but nothing about this move breaks a habit."
+      "note": "Bishop before knight is the same plan in a different order — the Italian bishop goes to its diagonal a move early. The spine prefers 2.Nf3 because it develops WITH a threat, but nothing about this move breaks a habit.",
+      "cost": {
+        "kind": "cp",
+        "loss": 27,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -280,7 +315,12 @@
       },
       "moveUci": "f3e5",
       "class": "tactical_error",
-      "note": "Count the defenders before you take: e5 was attacked once and defended once, so 3.Nxe5 Nxe5 simply trades your knight for a pawn. The guard will show you the material arithmetic immediately — this is the exact reflex ('it's a free pawn') the counting habit replaces."
+      "note": "Count the defenders before you take: e5 was attacked once and defended once, so 3.Nxe5 Nxe5 simply trades your knight for a pawn. The guard will show you the material arithmetic immediately — this is the exact reflex ('it's a free pawn') the counting habit replaces.",
+      "cost": {
+        "kind": "cp",
+        "loss": 277,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -288,7 +328,12 @@
       },
       "moveUci": "f3g5",
       "class": "tactical_error",
-      "note": "The same piece, moved twice, to a square where the queen takes it for free: 3...Qxg5 ends the game's interesting part. Before any piece lands on a forward square, ask the on-ramp question — what captures it, and what recaptures for me? Here the answers are 'the queen' and 'nothing'."
+      "note": "The same piece, moved twice, to a square where the queen takes it for free: 3...Qxg5 ends the game's interesting part. Before any piece lands on a forward square, ask the on-ramp question — what captures it, and what recaptures for me? Here the answers are 'the queen' and 'nothing'.",
+      "cost": {
+        "kind": "cp",
+        "loss": 425,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -296,7 +341,12 @@
       },
       "moveUci": "f1b5",
       "class": "accepted_alternative",
-      "note": "The Ruy Lopez bishop: instead of eyeing f7 it presses the knight that defends e5. A fully principled second door — new piece, toward the centre, castle next. This pack keeps the c4 road only because its teaching positions are simpler."
+      "note": "The Ruy Lopez bishop: instead of eyeing f7 it presses the knight that defends e5. A fully principled second door — new piece, toward the centre, castle next. This pack keeps the c4 road only because its teaching positions are simpler.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -304,7 +354,12 @@
       },
       "moveUci": "d2d4",
       "class": "accepted_alternative",
-      "note": "The Scotch: open the centre immediately while both sides are half-developed. Principled and sharp — after ...exd4 Nxd4 the game opens before anyone has castled, which is why the spine saves the centre break for after move four."
+      "note": "The Scotch: open the centre immediately while both sides are half-developed. Principled and sharp — after ...exd4 Nxd4 the game opens before anyone has castled, which is why the spine saves the centre break for after move four.",
+      "cost": {
+        "kind": "cp",
+        "loss": 21,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -312,7 +367,12 @@
       },
       "moveUci": "b2b4",
       "class": "interesting_deviation",
-      "note": "The Evans Gambit: a wing pawn offered to drag the c5 bishop off its diagonal and build the big centre with tempo. On the spine's own terms it breaks a habit; in chess history it is a celebrated idea. Branch it, watch what White gets for the pawn, and file it under 'later'."
+      "note": "The Evans Gambit: a wing pawn offered to drag the c5 bishop off its diagonal and build the big centre with tempo. On the spine's own terms it breaks a habit; in chess history it is a celebrated idea. Branch it, watch what White gets for the pawn, and file it under 'later'.",
+      "cost": {
+        "kind": "cp",
+        "loss": 49,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -320,7 +380,12 @@
       },
       "moveUci": "f3g5",
       "class": "tactical_error",
-      "note": "The same lesson as one move earlier, now with the mate threat on f7 attached — and the same refutation: 4...Qxg5 takes the knight for nothing. A threat delivered by a hanging piece is not a threat."
+      "note": "The same lesson as one move earlier, now with the mate threat on f7 attached — and the same refutation: 4...Qxg5 takes the knight for nothing. A threat delivered by a hanging piece is not a threat.",
+      "cost": {
+        "kind": "cp",
+        "loss": 433,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "immediate_guard",

@@ -143,6 +143,12 @@ function requiredSafeInteger(value: unknown, label: string): number {
   return value;
 }
 
+function requiredPositiveSafeInteger(value: unknown, label: string): number {
+  const parsed = requiredSafeInteger(value, label);
+  if (parsed < 1) throw invalid(`${label} must be a positive safe integer`);
+  return parsed;
+}
+
 function parseSelectionCandidate(value: unknown, label: string): SelectionCandidate {
   const candidate = record(value, label);
   if (
@@ -170,17 +176,44 @@ function parseSelectionCandidate(value: unknown, label: string): SelectionCandid
   ) {
     throw invalid(`${label}.concessionRatio must be between 0 and 1`);
   }
+  if (
+    candidate.scoreCp !== undefined &&
+    (typeof candidate.scoreCp !== "number" || !Number.isSafeInteger(candidate.scoreCp))
+  ) {
+    throw invalid(`${label}.scoreCp must be a safe integer`);
+  }
+  const wdl = candidate.wdl === undefined ? undefined : record(candidate.wdl, `${label}.wdl`);
   return {
     moveUci: requiredString(candidate.moveUci, `${label}.moveUci`),
     rank: candidate.rank,
     ...(candidate.mass === undefined ? {} : { mass: candidate.mass as number }),
     ...(candidate.concessionRatio === undefined ? {} : { concessionRatio: candidate.concessionRatio as number }),
     ...(candidate.offWindow === undefined ? {} : { offWindow: requiredBoolean(candidate.offWindow, `${label}.offWindow`) }),
+    ...(candidate.scoreCp === undefined ? {} : { scoreCp: candidate.scoreCp as number }),
+    ...(wdl === undefined
+      ? {}
+      : {
+          wdl: {
+            win: requiredSafeInteger(wdl.win, `${label}.wdl.win`),
+            draw: requiredSafeInteger(wdl.draw, `${label}.wdl.draw`),
+            loss: requiredSafeInteger(wdl.loss, `${label}.wdl.loss`),
+          },
+        }),
   };
 }
 
 function parseSelectionEngine(value: unknown): SelectionEngineIdentity {
   const engine = record(value, "selection.engine");
+  const searchBound = engine.searchBound === undefined
+    ? undefined
+    : record(engine.searchBound, "selection.engine.searchBound");
+  if (
+    searchBound !== undefined &&
+    searchBound.kind !== "nodes" &&
+    searchBound.kind !== "movetime"
+  ) {
+    throw invalid("selection.engine.searchBound.kind is unsupported");
+  }
   return {
     id: requiredString(engine.id, "selection.engine.id"),
     name: requiredString(engine.name, "selection.engine.name"),
@@ -206,6 +239,14 @@ function parseSelectionEngine(value: unknown): SelectionEngineIdentity {
     ...(engine.eloApplied === undefined
       ? {}
       : { eloApplied: requiredSafeInteger(engine.eloApplied, "selection.engine.eloApplied") }),
+    ...(searchBound === undefined
+      ? {}
+      : {
+          searchBound: {
+            kind: searchBound.kind as "nodes" | "movetime",
+            value: requiredPositiveSafeInteger(searchBound.value, "selection.engine.searchBound.value"),
+          },
+        }),
   };
 }
 
@@ -1351,12 +1392,13 @@ export function createRestHandler(
       }
       if (route.action === "analysis") {
         const body = closedRecord(value, "/", ["nodeIds", "kind", "multiPv", "depth", "movetime"]);
-        if (body.kind !== "bestline") throw invalid("analysis kind must be bestline");
+        if (body.kind !== "bestline" && body.kind !== "eval" && body.kind !== "wdl") throw invalid("analysis kind must be bestline, eval, or wdl");
         if (!Array.isArray(body.nodeIds) || body.nodeIds.some((id) => typeof id !== "string")) {
           throw invalid("nodeIds must be an array of strings");
         }
         return json(202, { jobs: service.analysis(route.runId, principal, writerId(request), {
           nodeIds: body.nodeIds,
+          kind: body.kind,
           ...(body.multiPv === undefined ? {} : { multiPv: requiredSafeInteger(body.multiPv, "multiPv") }),
           ...(body.depth === undefined ? {} : { depth: requiredSafeInteger(body.depth, "depth") }),
           ...(body.movetime === undefined ? {} : { movetime: requiredSafeInteger(body.movetime, "movetime") }),

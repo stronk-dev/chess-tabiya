@@ -83,7 +83,7 @@ describe("Lichess explorer sourcing", () => {
     const move = stats.moves[0]!;
     expect(move.white + move.draws + move.black).toBe(40204);
     expect(stats.window).toEqual({ since: "2024-01", until: "2026-07" });
-    expect(renderExplorerFrequency({ moveSan: move.san, playedCount: 40204, total: 128034, sharePct: 31.4, ratings: stats.ratings, speeds: stats.speeds, since: stats.window.since, until: stats.window.until })).toBe("Bf5 is played in 31.4% of 128034 games from this position (Lichess explorer, rating buckets 1400,1600,1800, speeds blitz,rapid, 2024-01 to 2026-07).");
+    expect(renderExplorerFrequency({ moveSan: move.san, playedCount: 40204, total: 128034, sharePct: 31.4, white: move.white, draws: move.draws, black: move.black, ratings: stats.ratings, speeds: stats.speeds, since: stats.window.since, until: stats.window.until })).toBe("Bf5 is played in 31.4% of 128034 games from this position (Lichess explorer, rating buckets 1400,1600,1800, speeds blitz,rapid, 2024-01 to 2026-07).");
   });
 
   it("emits an honest unavailable priority artifact that strict-checks", async () => {

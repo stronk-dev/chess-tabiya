@@ -55,13 +55,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.22", () => {
+describe("drill_pack.schema.json v0.23", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.22",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.23",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.22");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.23");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
@@ -103,6 +103,42 @@ describe("drill_pack.schema.json v0.22", () => {
     outcome.objective.grading = { assessedBy: { kind: "syzygy", category: "blessed-loss", pieceCount: 5, sourceId: "syzygy", retrievedAt: "2026-08-15T00:00:00.000Z" }, resolveAt: { kind: "terminal" } };
     outcome.objective.successConditions = [{ kind: "rules_fact", fact: "draw", to: "achieved" }];
     expect(validate(outcome), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it("admits only the closed engine-condition vocabulary and keeps DTZ off the optimality boundary", () => {
+    const candidate = structuredClone(livingFixture) as any;
+    candidate.guard = {
+      conditions: [
+        { kind: "engine_eval_swing", cp: 120 },
+        { kind: "engine_mate_appears" },
+        { kind: "tablebase_category_regression" },
+        { kind: "tablebase_dtz_regression", byAtLeast: 3 },
+      ],
+    };
+    expect(validate(candidate), JSON.stringify(validate.errors)).toBe(true);
+
+    candidate.guard.conditions[3].byAtLeast = 2;
+    expect(validate(candidate)).toBe(false);
+    candidate.guard.conditions[3] = { kind: "bestline" };
+    expect(validate(candidate)).toBe(false);
+  });
+
+  it("admits learner-relative tablebase category costs", () => {
+    const candidate = structuredClone(livingFixture) as any;
+    candidate.deviations[0].cost = {
+      kind: "category",
+      from: "win",
+      to: "draw",
+      basis: "tablebase",
+    };
+    expect(validate(candidate), JSON.stringify(validate.errors)).toBe(true);
+    candidate.deviations[0].cost = {
+      kind: "category",
+      from: "draw",
+      to: "win",
+      basis: "tablebase",
+    };
+    expect(validate(candidate)).toBe(false);
   });
 
   it("pins the two legacy schema passthroughs and keeps structural shapes closed", () => {

@@ -380,7 +380,12 @@
       },
       "moveUci": "d2d4",
       "class": "accepted_alternative",
-      "note": "3.d4 first is a move order, not an error: 0.36 behind 3.Nc3 at depth 22 because the queen is not asked to move yet."
+      "note": "3.d4 first is a move order, not an error: 0.36 behind 3.Nc3 at depth 22 because the queen is not asked to move yet.",
+      "cost": {
+        "kind": "cp",
+        "loss": 41,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -388,7 +393,12 @@
       },
       "moveUci": "f1e2",
       "class": "concept_violation",
-      "note": "3.Be2 develops and asks nothing; the worst of the five third moves measured, at -1.14 against +0.72 for Nc3. The whole point of taking on d5 was the tempo, and this move declines it."
+      "note": "3.Be2 develops and asks nothing; the worst of the five third moves measured, at -1.14 against +0.72 for Nc3. The whole point of taking on d5 was the tempo, and this move declines it.",
+      "cost": {
+        "kind": "cp",
+        "loss": 199,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -396,7 +406,12 @@
       },
       "moveUci": "b2b4",
       "class": "interesting_deviation",
-      "note": "4.b4, the catalogued Leonhardt Gambit, offers a wing pawn to deflect the queen. Measured at -0.15 against +0.71 for 4.d4, so it is a real gambit rather than a refutation. Play it out if you want to see what a tempo is worth."
+      "note": "4.b4, the catalogued Leonhardt Gambit, offers a wing pawn to deflect the queen. Measured at -0.15 against +0.71 for 4.d4, so it is a real gambit rather than a refutation. Play it out if you want to see what a tempo is worth.",
+      "cost": {
+        "kind": "cp",
+        "loss": 82,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -404,7 +419,12 @@
       },
       "moveUci": "g1f3",
       "class": "accepted_alternative",
-      "note": "4.Nf3 measures one centipawn behind 4.d4 at depth 22. The instruments do not separate them; pick by which structure you want."
+      "note": "4.Nf3 measures one centipawn behind 4.d4 at depth 22. The instruments do not separate them; pick by which structure you want.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -412,7 +432,12 @@
       },
       "moveUci": "c1d2",
       "class": "accepted_alternative",
-      "note": "5.Bd2 is the band's most common fifth move, 45.5% against 35.8% for the spine's Nf3, and 0.19 behind it by evaluation. It prepares Nd5 ideas against the queen; the pin never happens because the knight stays home."
+      "note": "5.Bd2 is the band's most common fifth move, 45.5% against 35.8% for the spine's Nf3, and 0.19 behind it by evaluation. It prepares Nd5 ideas against the queen; the pin never happens because the knight stays home.",
+      "cost": {
+        "kind": "cp",
+        "loss": 10,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -420,7 +445,12 @@
       },
       "moveUci": "d4d5",
       "class": "concept_violation",
-      "note": "5.d5 pushes past instead of developing and is the worst of the five fifth moves measured, at -0.37 - White is now the one with a loose pawn and an undeveloped kingside."
+      "note": "5.d5 pushes past instead of developing and is the worst of the five fifth moves measured, at -0.37 - White is now the one with a loose pawn and an undeveloped kingside.",
+      "cost": {
+        "kind": "cp",
+        "loss": 111,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -428,7 +458,12 @@
       },
       "moveUci": "f1c4",
       "class": "concept_violation",
-      "note": "6.Bc4 develops toward a square the pin has already devalued: 0.00 at depth 22, the worst of the five sixth moves measured, and 43.1% for White at band against 53.2% for Black. It neither asks the bishop a question nor prepares to."
+      "note": "6.Bc4 develops toward a square the pin has already devalued: 0.00 at depth 22, the worst of the five sixth moves measured, and 43.1% for White at band against 53.2% for Black. It neither asks the bishop a question nor prepares to.",
+      "cost": {
+        "kind": "cp",
+        "loss": 119,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -436,7 +471,12 @@
       },
       "moveUci": "c1d2",
       "class": "accepted_alternative",
-      "note": "6.Bd2 is second best of the five measured (0.58) and second most popular (21.2%), and White still scores only 44.5% at band. A reasonable move inside a plan that does not solve the pin."
+      "note": "6.Bd2 is second best of the five measured (0.58) and second most popular (21.2%), and White still scores only 44.5% at band. A reasonable move inside a plan that does not solve the pin.",
+      "cost": {
+        "kind": "cp",
+        "loss": 74,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -444,7 +484,12 @@
       },
       "moveUci": "f1e2",
       "class": "concept_violation",
-      "note": "7.Be2 having already played h3 spends the tempo twice: 0.41 against 1.35 for 7.g4, the worst of the four seventh moves measured. If you are not going to follow h3 with g4, h3 was not the move."
+      "note": "7.Be2 having already played h3 spends the tempo twice: 0.41 against 1.35 for 7.g4, the worst of the four seventh moves measured. If you are not going to follow h3 with g4, h3 was not the move.",
+      "cost": {
+        "kind": "cp",
+        "loss": 73,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -452,7 +497,12 @@
       },
       "moveUci": "g4g5",
       "class": "tactical_error",
-      "note": "8.g5 chases the knight but abandons the point of the advance: 0.11 against 1.15 for 8.Ne5, the worst of the four eighth moves measured."
+      "note": "8.g5 chases the knight but abandons the point of the advance: 0.11 against 1.15 for 8.Ne5, the worst of the four eighth moves measured.",
+      "cost": {
+        "kind": "cp",
+        "loss": 111,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackClaims": [

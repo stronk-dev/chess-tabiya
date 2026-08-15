@@ -236,7 +236,12 @@
       },
       "moveUci": "g7g6",
       "class": "tactical_error",
-      "note": "The right move one position too early — it answers the f7 idea and ignores what the move ACTUALLY wants right now: e5. 3.Qxe5+ takes the pawn with check and forks the h8 rook through the hole g6 just opened. Read the move in front of you, not the move you were warned about."
+      "note": "The right move one position too early — it answers the f7 idea and ignores what the move ACTUALLY wants right now: e5. 3.Qxe5+ takes the pawn with check and forks the h8 rook through the hole g6 just opened. Read the move in front of you, not the move you were warned about.",
+      "cost": {
+        "kind": "cp",
+        "loss": 521,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -244,7 +249,12 @@
       },
       "moveUci": "g8f6",
       "class": "tactical_error",
-      "note": "Developing with an attack on the queen — the right instinct, wrong order: it leaves e5 hanging, and 3.Qxe5+ collects the pawn with check before the knight's attack matters. Threats outrank attacks: answer what their move wants first, then hit back. Engine pass 2026-08-15 (Stockfish 18, depth 22): the pawn is real (material 39-38 after 3.Qxe5+) but the position is not — 2...Nf6 costs 0.20 against the spine's 2...Nc6, and 3.Qxe5+ Be7 evaluates at -0.18. This class asserts a tactical error whose measured cost is far below this pack's own 150-centipawn guard, so the guard will not fire on it."
+      "note": "Developing with an attack on the queen — the right instinct, wrong order: it leaves e5 hanging, and 3.Qxe5+ collects the pawn with check before the knight's attack matters. Threats outrank attacks: answer what their move wants first, then hit back. Engine pass 2026-08-15 (Stockfish 18, depth 22): the pawn is real (material 39-38 after 3.Qxe5+) but the position is not — 2...Nf6 costs 0.20 against the spine's 2...Nc6, and 3.Qxe5+ Be7 evaluates at -0.18. This class asserts a tactical error whose measured cost is far below this pack's own 150-centipawn guard, so the guard will not fire on it.",
+      "cost": {
+        "kind": "cp",
+        "loss": 9,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -252,7 +262,12 @@
       },
       "moveUci": "d7d6",
       "class": "accepted_alternative",
-      "note": "Defending e5 with the pawn works and frees the c8 bishop. It develops nothing, so the spine prefers ...Nc6 — but this is a sound answer to the same correctly-read threat."
+      "note": "Defending e5 with the pawn works and frees the c8 bishop. It develops nothing, so the spine prefers ...Nc6 — but this is a sound answer to the same correctly-read threat.",
+      "cost": {
+        "kind": "cp",
+        "loss": 13,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -260,7 +275,12 @@
       },
       "moveUci": "d8e7",
       "class": "interesting_deviation",
-      "note": "The queen defends e5 and shields e-file tricks — a correct reading paid for at the wrong counter: your queen now blocks the f8 bishop, and you have answered one developed attacker by undeveloping yourself. Play it out and compare the move-8 positions with the ...Nc6 line."
+      "note": "The queen defends e5 and shields e-file tricks — a correct reading paid for at the wrong counter: your queen now blocks the f8 bishop, and you have answered one developed attacker by undeveloping yourself. Play it out and compare the move-8 positions with the ...Nc6 line.",
+      "cost": {
+        "kind": "cp",
+        "loss": 21,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -268,7 +288,12 @@
       },
       "moveUci": "g8f6",
       "class": "tactical_error",
-      "note": "The classic Scholar's Mate victim: a good developing move that answers yesterday's question. Two pieces aim at f7 and the knight defends none of it — 4.Qxf7# ends the game. When the answer to 'what does it want' is MATE, development goes to the back of the queue."
+      "note": "The classic Scholar's Mate victim: a good developing move that answers yesterday's question. Two pieces aim at f7 and the knight defends none of it — 4.Qxf7# ends the game. When the answer to 'what does it want' is MATE, development goes to the back of the queue.",
+      "cost": {
+        "kind": "mate",
+        "against": "learner",
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -276,7 +301,12 @@
       },
       "moveUci": "d7d6",
       "class": "tactical_error",
-      "note": "A normal move that does not touch the f7 count: still two attackers, still one defender, still 4.Qxf7#. The point of this branch is painful and permanent — normal moves lose instantly when a mate threat is on the board unanswered."
+      "note": "A normal move that does not touch the f7 count: still two attackers, still one defender, still 4.Qxf7#. The point of this branch is painful and permanent — normal moves lose instantly when a mate threat is on the board unanswered.",
+      "cost": {
+        "kind": "mate",
+        "against": "learner",
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -284,7 +314,12 @@
       },
       "moveUci": "d8e7",
       "class": "accepted_alternative",
-      "note": "The queen covers f7 from e7 — a correct defence that reads the threat right. Its price is the blocked f8 bishop; the spine's ...g6 defends while gaining a tempo on the queen instead. Both answers pass the reading test; one of them also wins time."
+      "note": "The queen covers f7 from e7 — a correct defence that reads the threat right. Its price is the blocked f8 bishop; the spine's ...g6 defends while gaining a tempo on the queen instead. Both answers pass the reading test; one of them also wins time.",
+      "cost": {
+        "kind": "cp",
+        "loss": 34,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -292,7 +327,12 @@
       },
       "moveUci": "d8f6",
       "class": "interesting_deviation",
-      "note": "Covering f7 by copying White's crime — your own early queen. It holds the mate and offers to trade the attack away, but the queen stands on the knight's square and White develops against her with tempo. A readable defence with a built-in tax; branch it and compare."
+      "note": "Covering f7 by copying White's crime — your own early queen. It holds the mate and offers to trade the attack away, but the queen stands on the knight's square and White develops against her with tempo. A readable defence with a built-in tax; branch it and compare.",
+      "cost": {
+        "kind": "cp",
+        "loss": 61,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -300,7 +340,12 @@
       },
       "moveUci": "c6d4",
       "class": "tactical_error",
-      "note": "The move LOOKS ferocious — the knight attacks the queen and forks toward c2 — and it loses to the one thing it does not do: 5.Qxf7#. Attacking their queen is not an answer to their mate. This branch is the whole pack in one move: threats outrank attacks, every time."
+      "note": "The move LOOKS ferocious — the knight attacks the queen and forks toward c2 — and it loses to the one thing it does not do: 5.Qxf7#. Attacking their queen is not an answer to their mate. This branch is the whole pack in one move: threats outrank attacks, every time.",
+      "cost": {
+        "kind": "mate",
+        "against": "learner",
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -308,7 +353,12 @@
       },
       "moveUci": "d7d5",
       "class": "interesting_deviation",
-      "note": "The right IDEA — cut the c4 bishop's support of f7 — priced at a pawn: both exd5 and Bxd5 keep the pressure and win material, because the d5 block itself can be captured. Compare with ...Nf6, which blocks a line nothing can capture on. Blocks are only as good as their squares."
+      "note": "The right IDEA — cut the c4 bishop's support of f7 — priced at a pawn: both exd5 and Bxd5 keep the pressure and win material, because the d5 block itself can be captured. Compare with ...Nf6, which blocks a line nothing can capture on. Blocks are only as good as their squares.",
+      "cost": {
+        "kind": "cp",
+        "loss": 167,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -316,7 +366,12 @@
       },
       "moveUci": "d8f6",
       "class": "accepted_alternative",
-      "note": "Offering the queen trade — the reading is correct (f7 covered) and the offer is real: a traded queen is a spent attack. Costs more than ...Nf6 (your queen developed early, his choice whether to trade) but passes both questions honestly."
+      "note": "Offering the queen trade — the reading is correct (f7 covered) and the offer is real: a traded queen is a spent attack. Costs more than ...Nf6 (your queen developed early, his choice whether to trade) but passes both questions honestly.",
+      "cost": {
+        "kind": "cp",
+        "loss": 33,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -324,7 +379,12 @@
       },
       "moveUci": "d8e7",
       "class": "accepted_alternative",
-      "note": "The same steady defence as one move earlier: f7 covered from e7. Solid, passive, and it keeps failing to punish the queen for her travels — which is why the spine's ...Nf6 (defend, develop, prepare castling) is the model answer."
+      "note": "The same steady defence as one move earlier: f7 covered from e7. Solid, passive, and it keeps failing to punish the queen for her travels — which is why the spine's ...Nf6 (defend, develop, prepare castling) is the model answer.",
+      "cost": {
+        "kind": "cp",
+        "loss": 25,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "immediate_guard",

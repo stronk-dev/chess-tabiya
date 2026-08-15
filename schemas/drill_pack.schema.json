@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.22",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.23",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.22 format for an engine-independent authored drill.",
+  "description": "Living v0.23 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -103,6 +103,11 @@
             },
             "additionalProperties": false
           }
+        },
+        "conditions": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/engineCondition" }
         }
       },
       "additionalProperties": false
@@ -946,7 +951,32 @@
       "oneOf": [
         { "type": "object", "required": ["kind", "loss", "basis"], "properties": { "kind": { "const": "cp" }, "loss": { "type": "integer", "minimum": 0, "maximum": 30000 }, "basis": { "enum": ["engine", "material"] } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "against", "basis"], "properties": { "kind": { "const": "mate" }, "against": { "enum": ["learner", "opponent"] }, "basis": { "enum": ["engine", "tablebase"] } }, "additionalProperties": false },
-        { "type": "object", "required": ["kind", "reason"], "properties": { "kind": { "const": "unmeasurable" }, "reason": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false }
+        { "type": "object", "required": ["kind", "reason"], "properties": { "kind": { "const": "unmeasurable" }, "reason": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
+        {
+          "type": "object",
+          "required": ["kind", "from", "to", "basis"],
+          "properties": {
+            "kind": { "const": "category" },
+            "from": { "enum": ["win", "loss", "draw", "cursed-win", "blessed-loss"] },
+            "to": { "enum": ["win", "loss", "draw", "cursed-win", "blessed-loss"] },
+            "basis": { "const": "tablebase" }
+          },
+          "oneOf": [
+            { "properties": { "from": { "const": "blessed-loss" }, "to": { "const": "loss" } } },
+            { "properties": { "from": { "const": "draw" }, "to": { "enum": ["blessed-loss", "loss"] } } },
+            { "properties": { "from": { "const": "cursed-win" }, "to": { "enum": ["draw", "blessed-loss", "loss"] } } },
+            { "properties": { "from": { "const": "win" }, "to": { "enum": ["cursed-win", "draw", "blessed-loss", "loss"] } } }
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "engineCondition": {
+      "oneOf": [
+        { "type": "object", "required": ["kind", "cp"], "properties": { "kind": { "const": "engine_eval_swing" }, "cp": { "type": "integer", "minimum": 50, "maximum": 1000 }, "id": { "$ref": "#/$defs/id" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind"], "properties": { "kind": { "const": "engine_mate_appears" }, "id": { "$ref": "#/$defs/id" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind"], "properties": { "kind": { "const": "tablebase_category_regression" }, "id": { "$ref": "#/$defs/id" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "byAtLeast"], "properties": { "kind": { "const": "tablebase_dtz_regression" }, "byAtLeast": { "type": "integer", "minimum": 3, "maximum": 500 }, "id": { "$ref": "#/$defs/id" } }, "additionalProperties": false }
       ]
     },
     "deviation": {

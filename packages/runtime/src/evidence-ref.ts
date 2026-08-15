@@ -46,6 +46,7 @@ export const THEORY_EVIDENCE_FACTS = Object.freeze([
 export type TheoryEvidenceFact = (typeof THEORY_EVIDENCE_FACTS)[number];
 export type TheoryEvidenceRef = `theory:${TheoryEvidenceFact}`;
 export type EngineEvidenceRef = `engine:${string}`;
+export type TablebaseEvidenceRef = `tablebase:${string}`;
 export type TempoEvidenceRef = `tempo:${string}`;
 
 function evidenceId(value: string, label: string): string {
@@ -85,6 +86,14 @@ export function engineEvidenceRef(jobId: string): EngineEvidenceRef {
   return `engine:${evidenceId(jobId, "Engine job id")}`;
 }
 
+export function tablebaseEvidenceRef(jobId: string): TablebaseEvidenceRef {
+  return `tablebase:${evidenceId(jobId, "Tablebase job id")}`;
+}
+
 export function isEngineEvidenceRef(reference: string): reference is EngineEvidenceRef {
   return reference.startsWith("engine:") && reference.length > "engine:".length;
+}
+
+export function isMachineEvidenceRef(reference: string): reference is EngineEvidenceRef | TablebaseEvidenceRef {
+  return isEngineEvidenceRef(reference) || (reference.startsWith("tablebase:") && reference.length > "tablebase:".length);
 }

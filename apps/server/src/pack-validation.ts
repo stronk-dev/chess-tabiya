@@ -7,6 +7,7 @@ import {
   lintDrillPack,
   normalizeShapeReferences,
   type DrillPackDefinition,
+  type EngineCondition,
   type StructuralExpression,
   type StructuralFeature,
 } from "@chess-tabiya/schema/drill-pack";
@@ -807,13 +808,19 @@ function runtimeIssues(
       }
     }
   }
-  if (pack.guard?.rulesTier === false && pack.guard.evalSwingCp === null && pack.guard.fireOnMate === false) {
+  const declaredConditions = pack.guard?.conditions;
+  const baseConditions: readonly EngineCondition[] = declaredConditions ?? Object.freeze([
+    ...(pack.guard?.evalSwingCp === null ? [] : [{ kind: "engine_eval_swing" as const, cp: pack.guard?.evalSwingCp ?? 200 }]),
+    ...(pack.guard?.fireOnMate === false ? [] : [{ kind: "engine_mate_appears" as const }]),
+  ]);
+  if (pack.guard?.rulesTier === false && baseConditions.length === 0) {
     issues.push(runtimeIssue("GUARD_DISABLES_EVERYTHING", "/guard", "guard tuning disables rules, centipawn, and mate detection"));
   }
   const guardBase = {
-    evalSwingCp: pack.guard?.evalSwingCp === undefined ? 200 : pack.guard.evalSwingCp,
-    fireOnMate: pack.guard?.fireOnMate ?? true,
+    evalSwingCp: baseConditions.find((condition) => condition.kind === "engine_eval_swing")?.cp ?? null,
+    fireOnMate: baseConditions.some((condition) => condition.kind === "engine_mate_appears"),
     rulesTier: pack.guard?.rulesTier ?? true,
+    conditions: baseConditions,
   };
   const deviationGuardSettings = (deviation: NonNullable<DrillPackDefinition["deviations"]>[number]): typeof guardBase => {
     const pathKeys: readonly string[] = "spineNodeId" in deviation.at
@@ -836,6 +843,11 @@ function runtimeIssues(
       evalSwingCp: selected?.value.evalSwingCp === undefined ? guardBase.evalSwingCp : selected.value.evalSwingCp,
       fireOnMate: selected?.value.fireOnMate ?? guardBase.fireOnMate,
       rulesTier: guardBase.rulesTier,
+      conditions: Object.freeze([
+        ...guardBase.conditions.filter((condition) => condition.kind !== "engine_eval_swing" && condition.kind !== "engine_mate_appears"),
+        ...((selected?.value.evalSwingCp === undefined ? guardBase.evalSwingCp : selected.value.evalSwingCp) === null ? [] : [{ kind: "engine_eval_swing" as const, cp: (selected?.value.evalSwingCp === undefined ? guardBase.evalSwingCp : selected.value.evalSwingCp)! }]),
+        ...((selected?.value.fireOnMate ?? guardBase.fireOnMate) ? [{ kind: "engine_mate_appears" as const }] : []),
+      ]),
     };
   };
   if (pack.feedbackPolicy === "immediate_guard") {
@@ -849,10 +861,12 @@ function runtimeIssues(
           : settings.rulesTier && cost.loss >= 300
         : cost.kind === "mate" && cost.against === "learner"
           ? settings.fireOnMate
+          : cost.kind === "category"
+            ? settings.conditions.some((condition) => condition.kind === "tablebase_category_regression")
           : true;
       if (!reaches) {
         const declared = cost.kind === "cp" ? `${cost.loss}cp (${cost.basis})` : `${cost.kind}`;
-        issues.push(runtimeWarning("GUARD_CANNOT_REACH_DEVIATION", `/deviations/${index}/cost`, `declared cost ${declared} does not reach any guard threshold in force at this anchor (evalSwingCp ${String(settings.evalSwingCp)}, rulesTier ${String(settings.rulesTier)} (pack-level), fireOnMate ${String(settings.fireOnMate)}); add a guard.overrides entry for this move, or reconsider the class`));
+        issues.push(runtimeWarning("GUARD_CANNOT_REACH_DEVIATION", `/deviations/${index}/cost`, `declared cost ${declared} does not reach any guard threshold in force at this anchor (the one-ply cost and two-ply consequence guard span different positions; evalSwingCp ${String(settings.evalSwingCp)}, rulesTier ${String(settings.rulesTier)} (pack-level), fireOnMate ${String(settings.fireOnMate)}); add a guard.overrides entry for this move, or reconsider the class`));
       }
     }
   }

@@ -17,6 +17,7 @@ import { SourcingError } from "./types.js";
 import { TABLEBASE_CATEGORIES, type TablebaseCategory } from "../tablebase.js";
 import { CATEGORY_RANK, learnerCategory as categoryForLearner } from "./tablebase-category.js";
 import { createPositionSeedEngineEvaluator, type PositionSeedEngineAnswer, type PositionSeedEngineEvaluator } from "./position-seeds.js";
+import { stampDeviationCosts } from "./deviation-cost.js";
 
 const AUTHOR_PACK_RATIONALE = "the author's own drill pack; its FENs and moves state facts about chess positions";
 const OFFLINE_FIXTURES = resolve("apps/server/src/sourcing/fixtures/verify-draft.json");
@@ -176,7 +177,6 @@ async function verifySyzygyDraft(file: string, options: VerifyDraftOptions = {})
   const pack = structuredClone(original) as any;
   pack.objective.grading.assessedBy.sourceId = root.source.sourceId;
   pack.objective.grading.assessedBy.retrievedAt = root.source.retrievedAt;
-  const digest = await digestDrillPack(pack as DrillPackDefinition);
   const authorRetrievedAt = (options.now?.() ?? new Date()).toISOString();
   const author: SourceEntry = { sourceId: "author-pack", retrievedAt: authorRetrievedAt, origin: { kind: "local-file", path: absolute.replace(`${resolve(".")}/`, ""), sha256: sha256(bytes), bytes: bytes.byteLength }, licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: AUTHOR_PACK_RATIONALE } };
   const records: EvidenceRecord[] = [{ kind: "position_legality", anchor: { fen: pack.start.fen }, sourceId: author.sourceId, retrievedAt: author.retrievedAt, grounds: "machine_validation", values: { fen: pack.start.fen, pieceCount: countFenPieces(pack.start.fen) }, supports: ["/start/fen"] }];
@@ -189,6 +189,8 @@ async function verifySyzygyDraft(file: string, options: VerifyDraftOptions = {})
       records.push({ kind: "tablebase_result", anchor: { fen: item.fen }, sourceId: answer.source.sourceId, retrievedAt: answer.source.retrievedAt, grounds: "machine_validation", values: tablebaseValues(item.fen, answer.payload), supports: [item.pointer] });
     }
   }
+  stampDeviationCosts(pack as DrillPackDefinition, records, "tablebase");
+  const digest = await digestDrillPack(pack as DrillPackDefinition);
   const entries = new Map<string, SourceEntry>();
   entries.set(`${author.sourceId}\0${author.retrievedAt}`, author);
   for (const answer of answers.values()) entries.set(`${answer.source.sourceId}\0${answer.source.retrievedAt}`, answer.source);
@@ -281,7 +283,6 @@ async function verifyEngineDraft(file: string, options: VerifyDraftOptions): Pro
   if (pack.objective.grading?.assessedBy.kind !== "engine") throw new SourcingError("VERIFY_ASSESSMENT_NOT_GROUNDABLE", "engine assessment disappeared during verification");
   (pack.objective.grading.assessedBy as { sourceId: string; retrievedAt: string }).sourceId = root.source.sourceId;
   (pack.objective.grading.assessedBy as { sourceId: string; retrievedAt: string }).retrievedAt = root.source.retrievedAt;
-  const digest = await digestDrillPack(pack);
   const authorRetrievedAt = (options.now?.() ?? new Date()).toISOString();
   const author: SourceEntry = { sourceId: "author-pack", retrievedAt: authorRetrievedAt, origin: { kind: "local-file", path: absolute.replace(`${resolve(".")}/`, ""), sha256: sha256(bytes), bytes: bytes.byteLength }, licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: AUTHOR_PACK_RATIONALE } };
   const produced: EvidenceRecord[] = [{ kind: "position_legality", anchor: { fen: pack.start.fen }, sourceId: author.sourceId, retrievedAt: author.retrievedAt, grounds: "machine_validation", values: { fen: pack.start.fen, pieceCount: countFenPieces(pack.start.fen) }, supports: ["/start/fen"] }];
@@ -289,6 +290,8 @@ async function verifyEngineDraft(file: string, options: VerifyDraftOptions): Pro
     const answer = answers.get(item.fen)!;
     produced.push({ kind: "engine_eval", anchor: { fen: item.fen }, sourceId: answer.source.sourceId, retrievedAt: answer.source.retrievedAt, grounds: "machine_validation", values: answer.values, supports: [item.pointer] });
   }
+  stampDeviationCosts(pack, produced, "engine");
+  const digest = await digestDrillPack(pack);
   const paths = sidecars(absolute);
   const existing = await existingArtifacts(paths);
   const preservedRecords = (existing.ledger?.records ?? []).filter((record) => record.kind !== "engine_eval" && record.kind !== "position_legality");

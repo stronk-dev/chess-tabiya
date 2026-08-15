@@ -324,7 +324,12 @@
       },
       "moveUci": "f1e2",
       "class": "accepted_alternative",
-      "note": "6.Be2 is the Opocensky Variation: castle short, keep the pawns at home, and outplay Black in a slower middlegame. A complete and respectable answer to the Najdorf — but a different repertoire, without the race this pack teaches."
+      "note": "6.Be2 is the Opocensky Variation: castle short, keep the pawns at home, and outplay Black in a slower middlegame. A complete and respectable answer to the Najdorf — but a different repertoire, without the race this pack teaches.",
+      "cost": {
+        "kind": "cp",
+        "loss": 13,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -332,7 +337,12 @@
       },
       "moveUci": "c1g5",
       "class": "accepted_alternative",
-      "note": "6.Bg5 is the classical main line and the sharpest theory battle in the whole opening. Against a booked-up Najdorf player it tests YOUR memory more than theirs — which is exactly what an anti pack should avoid signing up for."
+      "note": "6.Bg5 is the classical main line and the sharpest theory battle in the whole opening. Against a booked-up Najdorf player it tests YOUR memory more than theirs — which is exactly what an anti pack should avoid signing up for.",
+      "cost": {
+        "kind": "cp",
+        "loss": 21,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -340,7 +350,12 @@
       },
       "moveUci": "f2f3",
       "class": "interesting_deviation",
-      "note": "6.f3 first reaches the same tabiya while making ...Ng4 impossible one move earlier; the cost is telling Black the plan before Be3 is on the board and allowing ...Qb6 lines where the queen hits b2 with the bishop still on c1. Play both orders and compare — this is the pack's move-order lesson from the other side."
+      "note": "6.f3 first reaches the same tabiya while making ...Ng4 impossible one move earlier; the cost is telling Black the plan before Be3 is on the board and allowing ...Qb6 lines where the queen hits b2 with the bishop still on c1. Play both orders and compare — this is the pack's move-order lesson from the other side.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -348,7 +363,12 @@
       },
       "moveUci": "d4f3",
       "class": "interesting_deviation",
-      "note": "7.Nf3 keeps the knight active but parks it on the square the f-pawn needs. You can still castle long, but the English Attack's storm no longer works as designed — the retreat choice IS the plan choice."
+      "note": "7.Nf3 keeps the knight active but parks it on the square the f-pawn needs. You can still castle long, but the English Attack's storm no longer works as designed — the retreat choice IS the plan choice.",
+      "cost": {
+        "kind": "cp",
+        "loss": 10,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -356,7 +376,12 @@
       },
       "moveUci": "d4e2",
       "class": "accepted_alternative",
-      "note": "7.Nde2 also keeps f3 free for the pawn and reroutes toward g3. Slower than Nb3 and the knight blocks the f1 bishop for a while; a real alternative with the same plan behind it."
+      "note": "7.Nde2 also keeps f3 free for the pawn and reroutes toward g3. Slower than Nb3 and the knight blocks the f1 bishop for a while; a real alternative with the same plan behind it.",
+      "cost": {
+        "kind": "cp",
+        "loss": 34,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -365,7 +390,12 @@
       "moveUci": "d4f5",
       "class": "concept_violation",
       "offObjective": true,
-      "note": "7.Nf5 walks into ...Bxf5 followed by ...d5: the bishop that took on f5 was Black's problem piece, and the pawn that recaptures opens your king's file. The knight retreat is not a concession, it is the plan — this jump trades your structure for one tempo of activity."
+      "note": "7.Nf5 walks into ...Bxf5 followed by ...d5: the bishop that took on f5 was Black's problem piece, and the pawn that recaptures opens your king's file. The knight retreat is not a concession, it is the plan — this jump trades your structure for one tempo of activity.",
+      "cost": {
+        "kind": "cp",
+        "loss": 105,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -374,7 +404,12 @@
       "moveUci": "d1d2",
       "class": "concept_violation",
       "offObjective": true,
-      "note": "8.Qd2 plays the queen before f3 — the order this pack exists to argue against. The 2026-08-15 engine pass does not support the concrete reason previously given here: at depth 22 the reply 8...Ng4 leaves White better (+1.08, up from +0.40 before it), and 8.Qd2 itself is the highest-scoring eighth move evaluated at this position (+0.40), ahead of the spine's 8.f3 (+0.31). The refuted mechanism has been removed. The class stays as authored because it is a claim about this pack's objective — the move order — which no evaluation settles; it is now a claim with an engine number standing against it."
+      "note": "8.Qd2 plays the queen before f3 — the order this pack exists to argue against. The 2026-08-15 engine pass does not support the concrete reason previously given here: at depth 22 the reply 8...Ng4 leaves White better (+1.08, up from +0.40 before it), and 8.Qd2 itself is the highest-scoring eighth move evaluated at this position (+0.40), ahead of the spine's 8.f3 (+0.31). The refuted mechanism has been removed. The class stays as authored because it is a claim about this pack's objective — the move order — which no evaluation settles; it is now a claim with an engine number standing against it.",
+      "cost": {
+        "kind": "cp",
+        "loss": 11,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -382,7 +417,12 @@
       },
       "moveUci": "h2h3",
       "class": "accepted_alternative",
-      "note": "8.h3 is a real theory move here (it prepares g4 in one go and keeps ...Ng4 controlled by the pawn one square earlier). It commits the h-pawn before the king has decided where to live — a different storm mechanism, drilled in nobody's first repertoire but sound."
+      "note": "8.h3 is a real theory move here (it prepares g4 in one go and keeps ...Ng4 controlled by the pawn one square earlier). It commits the h-pawn before the king has decided where to live — a different storm mechanism, drilled in nobody's first repertoire but sound.",
+      "cost": {
+        "kind": "cp",
+        "loss": 14,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

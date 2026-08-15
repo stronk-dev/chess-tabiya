@@ -256,7 +256,12 @@
       },
       "moveUci": "d4c5",
       "class": "interesting_deviation",
-      "note": "5.dxc5 cashes the centre for a pawn Black usually regains: the walked line ...e6 shows the simplest recovery route, and the pyramid the system is named for never gets built. Whether the pawn can be kept is unverified — play it and find out what you give up trying."
+      "note": "5.dxc5 cashes the centre for a pawn Black usually regains: the walked line ...e6 shows the simplest recovery route, and the pyramid the system is named for never gets built. Whether the pawn can be kept is unverified — play it and find out what you give up trying.",
+      "cost": {
+        "kind": "cp",
+        "loss": 29,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -264,7 +269,12 @@
       },
       "moveUci": "c2c4",
       "class": "interesting_deviation",
-      "note": "6.c4 breaks the London contract mid-build and steers for Queen's Gambit structures with the bishop already outside. A legitimate hybrid with its own theory; inside this pack it is a different opening wearing your move order."
+      "note": "6.c4 breaks the London contract mid-build and steers for Queen's Gambit structures with the bishop already outside. A legitimate hybrid with its own theory; inside this pack it is a different opening wearing your move order.",
+      "cost": {
+        "kind": "cp",
+        "loss": 62,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -272,7 +282,12 @@
       },
       "moveUci": "f4d6",
       "class": "accepted_alternative",
-      "note": "7.Bxd6 Qxd6 concedes the trade to gain time and simplicity: the walked recapture leaves Black's queen developed but the dark-square bishop pair question closed. A sound, drier choice — the pack's spine keeps the bishop because the pack's claim is about what the bishop is for."
+      "note": "7.Bxd6 Qxd6 concedes the trade to gain time and simplicity: the walked recapture leaves Black's queen developed but the dark-square bishop pair question closed. A sound, drier choice — the pack's spine keeps the bishop because the pack's claim is about what the bishop is for.",
+      "cost": {
+        "kind": "cp",
+        "loss": 36,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

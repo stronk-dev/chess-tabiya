@@ -70,6 +70,14 @@ edge rather than one position. Its closed sibling grammar, evidence refs, and co
 are described in `docs/transition-primitives.md`. The change is additive and does not alter pack
 digests.
 
+Version 0.23 makes deviation cost a machine-bound measurement. `verify-draft` may stamp
+centipawn, mate, or tablebase-category cost only from the current engine or tablebase invocation;
+an unbacked or contradicted declaration is refused rather than trusted. Immediate guards gain a
+closed `conditions` list for engine evaluation/mate and tablebase category/DTZ regressions. The
+legacy scalar guard fields desugar to the same list, so existing packs keep their behavior.
+Tablebase conditions are learner-relative, require both probes at seven pieces or fewer, and cite
+the exact `tablebase:` record that fired them.
+
 The already-declared `practical_resistance` opponent policy is executable
 without changing pack bytes or the pack-schema version. Its two-provider
 capability gate, named refusals, and persisted measurement live in the run and
@@ -100,7 +108,7 @@ it has no required `feedbackPolicy` and uses superseded fields.
   horizon, or FEN predicates.
 - `deviations` replaces `acceptedAlternatives`. Every entry identifies a spine
   node, FEN, or the start position, a UCI move, and one required classification. It may also mark the
-  move off-objective, carry a note, declare one or more mistake kinds, record an unbacked cost, and
+  move off-objective, carry a note, declare one or more mistake kinds, record a machine-bound cost, and
   link a timing mistake to a timing window.
 - `difficulty.branchLengthTarget` accepts 2–40 plies. The declared 2–8 on-ramp
   and 8–20 Plan bands remain teaching targets rather than schema ceilings. Rating bands may begin at 1000.

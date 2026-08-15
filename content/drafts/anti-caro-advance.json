@@ -35,7 +35,7 @@
         "engineId": "stockfish-authoring",
         "engineVersion": "18",
         "sourceId": "stockfish-authoring",
-        "retrievedAt": "2026-08-15T12:49:53.465Z"
+        "retrievedAt": "2026-08-15T12:57:22.148Z"
       },
       "resolveAt": {
         "kind": "terminal"
@@ -235,7 +235,12 @@
       },
       "moveUci": "f1d3",
       "class": "accepted_alternative",
-      "note": "4.Bd3 invites the trade of Black's good bishop. Playable and popular, but it gives up the pair and a tempo after ...Bxd3."
+      "note": "4.Bd3 invites the trade of Black's good bishop. Playable and popular, but it gives up the pair and a tempo after ...Bxd3.",
+      "cost": {
+        "kind": "cp",
+        "loss": 11,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -243,7 +248,12 @@
       },
       "moveUci": "b1c3",
       "class": "interesting_deviation",
-      "note": "4.Nc3 keeps g4 ideas alive. A different pack's subject; here it leaves the c5 race unaddressed."
+      "note": "4.Nc3 keeps g4 ideas alive. A different pack's subject; here it leaves the c5 race unaddressed.",
+      "cost": {
+        "kind": "cp",
+        "loss": 13,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -251,7 +261,12 @@
       },
       "moveUci": "c2c3",
       "class": "accepted_alternative",
-      "note": "c3 is the other main answer and reaches the same teaching point: the break is met by preparation, not panic."
+      "note": "c3 is the other main answer and reaches the same teaching point: the break is met by preparation, not panic.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -259,7 +274,12 @@
       },
       "moveUci": "d4c5",
       "class": "interesting_deviation",
-      "note": "Taking here is not refuted, but with Be2 already played the recapture race favours Black's development. Play it out and compare."
+      "note": "Taking here is not refuted, but with Be2 already played the recapture race favours Black's development. Play it out and compare.",
+      "cost": {
+        "kind": "cp",
+        "loss": 57,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -268,7 +288,12 @@
       "moveUci": "e1g1",
       "class": "concept_violation",
       "offObjective": true,
-      "note": "Castling into the break is not a blunder, but it ignores the objective: the centre resolves while your pieces are not ready."
+      "note": "Castling into the break is not a blunder, but it ignores the objective: the centre resolves while your pieces are not ready.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

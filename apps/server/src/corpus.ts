@@ -20,7 +20,7 @@ export interface CorpusPopulation {
 
 export interface CorpusQuery extends CorpusPopulation { readonly fen: string; }
 export type CorpusResult =
-  | { readonly kind: "stats"; readonly total: number; readonly white: number; readonly draws: number; readonly black: number; readonly moves: readonly { readonly san: string; readonly uci: string; readonly playedCount: number; readonly sharePct: number }[]; readonly recency: { readonly kind: "month"; readonly lastPlayedMonth: string } | { readonly kind: "absent" }; readonly population: CorpusPopulation }
+  | { readonly kind: "stats"; readonly total: number; readonly white: number; readonly draws: number; readonly black: number; readonly moves: readonly { readonly san: string; readonly uci: string; readonly playedCount: number; readonly sharePct: number; readonly white: number; readonly draws: number; readonly black: number }[]; readonly recency: { readonly kind: "month"; readonly lastPlayedMonth: string } | { readonly kind: "absent" }; readonly population: CorpusPopulation }
   | { readonly kind: "abstention"; readonly reason: "no_data_at_band" | "source_unavailable"; readonly detail: string; readonly population: CorpusPopulation };
 export interface CorpusSource { stats(query: CorpusQuery): Promise<CorpusResult>; }
 
@@ -53,7 +53,7 @@ export function parseCorpusResponse(raw: unknown, query: CorpusQuery): CorpusRes
   const total = white + draws + black;
   if (!Number.isSafeInteger(total)) return unavailable(query, "invalid explorer response");
   if (total < 100) return Object.freeze({ kind: "abstention", reason: "no_data_at_band", detail: `total ${total} < 100`, population: population(query) });
-  const moves: { san: string; uci: string; playedCount: number; sharePct: number }[] = [];
+  const moves: { san: string; uci: string; playedCount: number; sharePct: number; white: number; draws: number; black: number }[] = [];
   if (!Array.isArray(body.moves)) return unavailable(query, "invalid explorer response");
   for (const item of body.moves) {
     if (item === null || typeof item !== "object" || Array.isArray(item)) return unavailable(query, "invalid explorer response");
@@ -62,7 +62,7 @@ export function parseCorpusResponse(raw: unknown, query: CorpusQuery): CorpusRes
     if (typeof move.san !== "string" || typeof move.uci !== "string" || mw === undefined || md === undefined || mb === undefined) return unavailable(query, "invalid explorer response");
     const playedCount = mw + md + mb;
     if (!Number.isSafeInteger(playedCount)) return unavailable(query, "invalid explorer response");
-    moves.push({ san: move.san, uci: move.uci, playedCount, sharePct: pct(playedCount, total) });
+    moves.push({ san: move.san, uci: move.uci, playedCount, sharePct: pct(playedCount, total), white: mw, draws: md, black: mb });
   }
   moves.sort((a, b) => b.playedCount - a.playedCount || a.san.localeCompare(b.san));
   let newest: string | undefined, historyValid = true;

@@ -5,7 +5,7 @@ const population = { source: "lichess-explorer" as const, ratings: [1400], speed
 describe("corpus sentence closure", () => {
   it("renders facts with the byte-pinned popularity guard in every result", () => {
     const pages = [
-      { nodeId: "n", committedMoveSan: "e4", result: { kind: "stats" as const, total: 120, white: 60, draws: 20, black: 40, moves: [{ san: "e4", uci: "e2e4", playedCount: 60, sharePct: 50 }], recency: { kind: "month" as const, lastPlayedMonth: "2019-04" }, population } },
+      { nodeId: "n", committedMoveSan: "e4", result: { kind: "stats" as const, total: 120, white: 60, draws: 20, black: 40, moves: [{ san: "e4", uci: "e2e4", playedCount: 60, sharePct: 50, white: 30, draws: 10, black: 20 }], recency: { kind: "month" as const, lastPlayedMonth: "2019-04" }, population } },
       { nodeId: "n", committedMoveSan: "a3", result: { kind: "stats" as const, total: 120, white: 60, draws: 20, black: 40, moves: [], recency: { kind: "absent" as const }, population } },
       { nodeId: "n", committedMoveSan: null, result: { kind: "abstention" as const, reason: "no_data_at_band" as const, detail: "total 37 < 100", population } },
       { nodeId: "n", committedMoveSan: null, result: { kind: "abstention" as const, reason: "source_unavailable" as const, detail: "HTTP 429", population } },

@@ -61,7 +61,15 @@ export type DeviationMistake = (typeof DEVIATION_MISTAKES)[number];
 export type DeviationCost =
   | { readonly kind: "cp"; readonly loss: number; readonly basis: "engine" | "material" }
   | { readonly kind: "mate"; readonly against: "learner" | "opponent"; readonly basis: "engine" | "tablebase" }
-  | { readonly kind: "unmeasurable"; readonly reason: string };
+  | { readonly kind: "unmeasurable"; readonly reason: string }
+  | { readonly kind: "category"; readonly from: AssessmentCategory; readonly to: AssessmentCategory; readonly basis: "tablebase" };
+
+export type AssessmentCategory = "win" | "loss" | "draw" | "cursed-win" | "blessed-loss";
+export type EngineCondition =
+  | { readonly kind: "engine_eval_swing"; readonly cp: number; readonly id?: string }
+  | { readonly kind: "engine_mate_appears"; readonly id?: string }
+  | { readonly kind: "tablebase_category_regression"; readonly id?: string }
+  | { readonly kind: "tablebase_dtz_regression"; readonly byAtLeast: number; readonly id?: string };
 
 export interface Deviation {
   readonly at: DeviationLocation;
@@ -193,6 +201,7 @@ export interface DrillPackDefinition {
     readonly evalSwingCp?: number | null;
     readonly fireOnMate?: boolean;
     readonly rulesTier?: boolean;
+    readonly conditions?: readonly EngineCondition[];
     readonly window?: { readonly fromPly: number; readonly toPly: number };
     readonly overrides?: readonly {
       readonly at: DeviationLocation;

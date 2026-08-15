@@ -14,6 +14,7 @@ import {
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { FixtureTablebaseSource } from "./tablebase.js";
 
 const INITIAL_FEN =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -170,6 +171,74 @@ describe("evidence job queue", () => {
     ]);
   });
 
+  it("stages exact tablebase evidence without serving move verdicts", async () => {
+    const fen = "4k3/8/8/8/8/8/7P/4K3 w - - 0 1";
+    const tablebase = new FixtureTablebaseSource({
+      [fen]: {
+        category: "draw",
+        dtz: 0,
+        preciseDtz: 0,
+        moves: [{ uci: "h2h3", san: "h3", category: "draw", dtz: 0, preciseDtz: 0 }],
+      },
+    });
+    const queue = new EvidenceJobQueue({
+      async execute() {
+        throw new Error("engine executor must not run for tablebase evidence");
+      },
+    }, { tablebaseSource: tablebase });
+    queue.enqueue({ runId: "tablebase-run", nodeId: "node", fen, kind: "tablebase" });
+    await queue.whenIdle();
+    const [result] = queue.page("tablebase-run").results;
+    expect(result?.evidenceRefs).toEqual(["tablebase:evidence-job-1"]);
+    expect(result?.payload).toEqual({
+      kind: "tablebase",
+      source: "tablebase_exact",
+      values: {
+        fen,
+        pieceCount: 3,
+        category: "draw",
+        dtz: 0,
+        preciseDtz: 0,
+        sourceId: "tablebase-fixture",
+      },
+    });
+    expect(Object.keys(result!.payload.values).sort()).toEqual([
+      "category", "dtz", "fen", "pieceCount", "preciseDtz", "sourceId",
+    ]);
+  });
+
+  it("adds tablebase evidence beside engine evidence without touching opponent selection", async () => {
+    const startFen = "4k3/8/8/8/8/8/7P/4K3 w - - 0 1";
+    const childFen = "4k3/8/8/8/8/7P/8/4K3 b - - 0 1";
+    const tablebase = new FixtureTablebaseSource({
+      [childFen]: { category: "draw", dtz: 0, preciseDtz: 0, moves: [] },
+    });
+    const queue = new EvidenceJobQueue({
+      async execute() {
+        return { kind: "eval", source: "engine_validated", values: { centipawns: 0 } };
+      },
+    }, { tablebaseSource: tablebase });
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    const service = new RunService(storage, { evidenceQueue: queue, tablebaseSource: tablebase });
+    try {
+      await service.create({
+        ...createInput("tablebase-producer"),
+        session: {
+          kind: "position",
+          start: { fen: startFen, side: "white" },
+          feedbackPolicy: "attempt_end",
+          opponentPolicy: { mode: "human_common" },
+        },
+      }, "writer-a");
+      service.move("tablebase-producer", "writer-a", "h2h3", { at });
+      await queue.whenIdle();
+      expect(queue.outstanding("tablebase-producer").map((entry) => entry.kind).sort())
+        .toEqual(["eval", "tablebase"]);
+    } finally {
+      storage.close();
+    }
+  });
+
   it("starts jobs FIFO while respecting bounded concurrency", async () => {
     const gates = [deferred<EvidencePayload>(), deferred<EvidencePayload>(), deferred<EvidencePayload>()];
     const starts: string[] = [];
@@ -251,6 +320,29 @@ describe("evidence staging and writer application", () => {
 
   afterEach(() => {
     for (const storage of stores.splice(0)) storage.close();
+  });
+
+  it("accepts explicit eval and WDL analysis requests through REST", async () => {
+    const queue = new EvidenceJobQueue({
+      async execute(current) {
+        return payload(current.kind);
+      },
+    });
+    const storage = new SQLiteRunStorage();
+    stores.push(storage);
+    const service = new RunService(storage, { evidenceQueue: queue });
+    const handler = createRestHandler(service);
+    const run = await service.create(createInput("analysis-kinds"), "writer-a");
+    for (const kind of ["eval", "wdl"] as const) {
+      const response = await request(handler, "POST", "/runs/analysis-kinds/analysis", {
+        nodeIds: [run.activeCursor.nodeId],
+        kind,
+        depth: 12,
+      });
+      expect(response.status).toBe(202);
+    }
+    await queue.whenIdle();
+    expect(queue.page("analysis-kinds").results.map((result) => result.payload.kind)).toEqual(["eval", "wdl"]);
   });
 
   it("stages over GET, enforces the writer lease, then appends position evidence without inventing an objective", async () => {

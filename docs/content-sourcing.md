@@ -99,6 +99,12 @@ source, and job artifacts, refuses a contradicted root or learner-category spine
 regression, and requires the existing registry admission function to return
 `ledger_verified`. `OFFLINE=1` uses committed per-FEN fixtures.
 
+The same invocation binds deviation costs when it has both the deviation anchor and
+after-move record. Engine runs stamp learner-relative cp/mate cost; tablebase runs stamp
+learner-relative category cost. Only records produced by that invocation are eligible:
+preserved sidecar rows cannot acquire a new cost by implication. Existing machine costs must
+match the measured value within the format tolerance or verification refuses before writing.
+
 The above-range authoring instrument uses Stockfish at depth 22, Threads 1, Hash
 16 MB, and MultiPV 1 in a fresh authoring context, with a 120-second timeout. It clears
 the engine hash before every position. Fixed depth is recorded evidence, not a wall-clock
@@ -126,6 +132,10 @@ and a real calendar window. Ratings and speeds are canonicalized against the pub
 Lichess enums; all request parameters are explicit; 401/403 abstain immediately and never
 substitute another population. Counts are derived from white/draw/black result fields—the
 response has no trustworthy `total` or echoed time window—and rows below 100 games abstain.
+
+Explorer move records retain the move-level White/draw/Black split alongside the count and
+share. The runtime corpus page renders that split with the standing warning that population
+outcomes describe what happened, not what is good; no objective or condition consumes it.
 
 Gate 0 succeeded through operator authentication. The exact anonymous request returned HTTP
 401 from nginx while advertising `Authorization`; the identical request with a scope-less

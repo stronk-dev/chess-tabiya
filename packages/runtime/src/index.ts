@@ -135,6 +135,8 @@ export {
   THEORY_EVIDENCE_FACTS,
   engineEvidenceRef,
   isEngineEvidenceRef,
+  isMachineEvidenceRef,
+  tablebaseEvidenceRef,
   packEvidenceRef,
   packAbsentEvidenceRef,
   rulesEvidenceRef,

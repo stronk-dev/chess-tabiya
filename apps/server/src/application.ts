@@ -332,6 +332,7 @@ export async function createApplication(
 
   const evidenceQueue = new EvidenceJobQueue(evidenceExecutor, {
     maxConcurrency: 2,
+    ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
   });
   const service = new RunService(storage, {
     evidenceQueue,

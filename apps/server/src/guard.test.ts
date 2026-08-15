@@ -198,4 +198,62 @@ describe("post-commit guard", () => {
     played = appendOpponentPly(played, selection("d8d1"), { at }).run;
     expect(applyRulesGuard(tunedPack(fen, { rulesTier: false }), played, played.activeCursor.nodeId, at).emitted).toEqual([]);
   });
+
+  it("fires a tablebase category regression with the tablebase citation", () => {
+    const fen = "4k3/8/8/8/8/8/7P/4K3 b - - 0 1";
+    const document = tunedPack(fen, {
+      conditions: [{ kind: "tablebase_category_regression" }],
+    });
+    let played = appendOpponentPly(run(fen), selection("e8f7"), { at }).run;
+    const previousId = played.activeCursor.nodeId;
+    played = commitMove(played, "h2h3", { at }).run;
+    played = appendOpponentPly(played, selection("f7g6"), { at }).run;
+    const consequenceId = played.activeCursor.nodeId;
+    played = attachEvidence(played, previousId, ["tablebase:before"], {
+      kind: "tablebase",
+      source: "tablebase_exact",
+      values: { fen: played.nodes.find((node) => node.id === previousId)!.fen, pieceCount: 3, category: "win", dtz: 8, preciseDtz: 8, sourceId: "fixture" },
+    }, at).run;
+    played = attachEvidence(played, consequenceId, ["tablebase:after"], {
+      kind: "tablebase",
+      source: "tablebase_exact",
+      values: { fen: played.nodes.find((node) => node.id === consequenceId)!.fen, pieceCount: 3, category: "draw", dtz: 0, preciseDtz: 0, sourceId: "fixture" },
+    }, at).run;
+    expect(applyRecordedEngineGuard(document, played, consequenceId, ["tablebase:after"], at).emitted[0]).toMatchObject({
+      type: "feedback.generated",
+      data: { evidenceRefs: ["tablebase:after"] },
+    });
+    expect(applyRecordedEngineGuard(document, played, consequenceId, ["engine:after"], at).emitted).toEqual([]);
+  });
+
+  it("keeps tablebase guards silent on incomplete, out-of-range, or small DTZ evidence", () => {
+    const fen = "4k3/8/8/8/8/8/7P/4K3 b - - 0 1";
+    const document = tunedPack(fen, {
+      conditions: [{ kind: "tablebase_dtz_regression", byAtLeast: 3 }],
+    });
+    let played = appendOpponentPly(run(fen), selection("e8f7"), { at }).run;
+    const previousId = played.activeCursor.nodeId;
+    played = commitMove(played, "h2h3", { at }).run;
+    played = appendOpponentPly(played, selection("f7g6"), { at }).run;
+    const consequenceId = played.activeCursor.nodeId;
+    played = attachEvidence(played, previousId, ["tablebase:before"], {
+      kind: "tablebase",
+      source: "tablebase_exact",
+      values: { fen: played.nodes.find((node) => node.id === previousId)!.fen, pieceCount: 3, category: "win", dtz: 8, preciseDtz: 8, sourceId: "fixture" },
+    }, at).run;
+    expect(applyRecordedEngineGuard(document, played, previousId, ["tablebase:before"], at).emitted).toEqual([]);
+    played = attachEvidence(played, consequenceId, ["tablebase:after"], {
+      kind: "tablebase",
+      source: "tablebase_exact",
+      values: { fen: played.nodes.find((node) => node.id === consequenceId)!.fen, pieceCount: 3, category: "win", dtz: 10, preciseDtz: 10, sourceId: "fixture" },
+    }, at).run;
+    expect(applyRecordedEngineGuard(document, played, consequenceId, ["tablebase:after"], at).emitted).toEqual([]);
+
+    let outOfRange = attachEvidence(played, consequenceId, ["tablebase:range"], {
+      kind: "tablebase",
+      source: "tablebase_exact",
+      values: { fen: played.nodes.find((node) => node.id === consequenceId)!.fen, pieceCount: 8, category: "win", dtz: 20, preciseDtz: 20, sourceId: "fixture" },
+    }, at).run;
+    expect(applyRecordedEngineGuard(document, outOfRange, consequenceId, ["tablebase:range"], at).emitted).toEqual([]);
+  });
 });

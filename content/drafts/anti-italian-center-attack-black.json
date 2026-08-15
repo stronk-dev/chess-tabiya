@@ -36,7 +36,7 @@
         "engineId": "stockfish-authoring",
         "engineVersion": "18",
         "sourceId": "stockfish-authoring",
-        "retrievedAt": "2026-08-15T12:54:57.554Z"
+        "retrievedAt": "2026-08-15T12:53:59.505Z"
       },
       "resolveAt": {
         "kind": "terminal"
@@ -281,7 +281,12 @@
       },
       "moveUci": "d8e7",
       "class": "accepted_alternative",
-      "note": "4...Qe7 — the Closed Variation row — holds e5 with the queen and retreats the bishop to b6 when d4 comes, keeping the centre shut. Sturdy, passive, catalogued; a different temperament from the spine's counterattack."
+      "note": "4...Qe7 — the Closed Variation row — holds e5 with the queen and retreats the bishop to b6 when d4 comes, keeping the centre shut. Sturdy, passive, catalogued; a different temperament from the spine's counterattack.",
+      "cost": {
+        "kind": "cp",
+        "loss": 81,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -289,7 +294,12 @@
       },
       "moveUci": "d7d6",
       "class": "accepted_alternative",
-      "note": "4...d6 — the La Bourdonnais row — supports e5 with a pawn and accepts a slower game. Its known cost is that d4 comes anyway and after ...exd4 cxd4 the b6-retreat position arrives with White's centre already standing."
+      "note": "4...d6 — the La Bourdonnais row — supports e5 with a pawn and accepts a slower game. Its known cost is that d4 comes anyway and after ...exd4 cxd4 the b6-retreat position arrives with White's centre already standing.",
+      "cost": {
+        "kind": "cp",
+        "loss": 43,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -297,7 +307,12 @@
       },
       "moveUci": "c5b6",
       "class": "interesting_deviation",
-      "note": "5...Bb6 declines the pawn and keeps the bishop's diagonal — at the price of the centre: the machine-walked consequence of declining is that White's d-pawns roll (the same d5-with-tempo geometry the ...exd4 annotation warns about arrives one beat later). Whether the bishop's diagonal repays the space is unverified — play it and see."
+      "note": "5...Bb6 declines the pawn and keeps the bishop's diagonal — at the price of the centre: the machine-walked consequence of declining is that White's d-pawns roll (the same d5-with-tempo geometry the ...exd4 annotation warns about arrives one beat later). Whether the bishop's diagonal repays the space is unverified — play it and see.",
+      "cost": {
+        "kind": "cp",
+        "loss": 94,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -305,7 +320,12 @@
       },
       "moveUci": "c5b6",
       "class": "interesting_deviation",
-      "note": "6...Bb6 retreats into the pawns' path: the walked line 7.d5 Ne7 shows the push arriving with tempo on the c6 knight — derived geometry, not evaluation. The retreat keeps pieces on; the spine's check trades them at a better moment."
+      "note": "6...Bb6 retreats into the pawns' path: the walked line 7.d5 Ne7 shows the push arriving with tempo on the c6 knight — derived geometry, not evaluation. The retreat keeps pieces on; the spine's check trades them at a better moment.",
+      "cost": {
+        "kind": "cp",
+        "loss": 191,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -313,7 +333,12 @@
       },
       "moveUci": "f6e4",
       "class": "interesting_deviation",
-      "note": "6...Nxe4 grabs the pawn the whole line dangles: the walked answer 7.d5 again hits c6 with tempo, and the knight on e4 must justify itself in lines this repo has not evaluated. The grab is critical theory, not refuted here — it is classified as the door you should open knowingly or not at all."
+      "note": "6...Nxe4 grabs the pawn the whole line dangles: the walked answer 7.d5 again hits c6 with tempo, and the knight on e4 must justify itself in lines this repo has not evaluated. The grab is critical theory, not refuted here — it is classified as the door you should open knowingly or not at all.",
+      "cost": {
+        "kind": "cp",
+        "loss": 397,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

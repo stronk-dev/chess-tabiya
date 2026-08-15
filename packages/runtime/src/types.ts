@@ -8,8 +8,8 @@ export type ObjectiveState =
   | "failed"
   | "achieved"
   | "transitioned";
-export type EvidenceKind = "eval" | "wdl" | "bestline";
-export type EvidenceSource = "engine_validated" | "human_model_predicted";
+export type EvidenceKind = "eval" | "wdl" | "bestline" | "tablebase";
+export type EvidenceSource = "engine_validated" | "human_model_predicted" | "tablebase_exact";
 
 export interface EvidencePayload {
   readonly kind: EvidenceKind;
@@ -67,6 +67,8 @@ export interface SelectionCandidate {
   readonly mass?: number;
   readonly concessionRatio?: number;
   readonly offWindow?: boolean;
+  readonly scoreCp?: number;
+  readonly wdl?: Readonly<{ win: number; draw: number; loss: number }>;
   readonly rank: number;
 }
 
@@ -79,6 +81,7 @@ export interface SelectionEngineIdentity {
   readonly seedHonored: boolean;
   readonly eloHonored?: boolean;
   readonly eloApplied?: number;
+  readonly searchBound?: Readonly<{ kind: "nodes" | "movetime"; value: number }>;
 }
 
 export interface OpponentSelection {

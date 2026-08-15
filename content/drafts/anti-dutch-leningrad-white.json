@@ -282,7 +282,12 @@
       },
       "moveUci": "b1c3",
       "class": "accepted_alternative",
-      "note": "3.Nc3 (9.2% at the family root) develops toward the e4 break before the fianchetto. A real alternative order whose main cost is allowing ...d5 setups where the c3 knight bites on granite."
+      "note": "3.Nc3 (9.2% at the family root) develops toward the e4 break before the fianchetto. A real alternative order whose main cost is allowing ...d5 setups where the c3 knight bites on granite.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -290,7 +295,12 @@
       },
       "moveUci": "g1h3",
       "class": "interesting_deviation",
-      "note": "5.Nh3 aims the knight at f4/g5 instead of vetoing ...e5 from f3 — the idea catalogued in the Leningrad Carlsbad row (under the 2.g3 order). It trades the veto for attacking squares; whether the veto was worth more is exactly what playing both here should show you."
+      "note": "5.Nh3 aims the knight at f4/g5 instead of vetoing ...e5 from f3 — the idea catalogued in the Leningrad Carlsbad row (under the 2.g3 order). It trades the veto for attacking squares; whether the veto was worth more is exactly what playing both here should show you.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -298,7 +308,12 @@
       },
       "moveUci": "e2e4",
       "class": "interesting_deviation",
-      "note": "8.e4 is the third plan played immediately, and the 2026-08-15 engine pass priced it: at depth 22 it is 1.65 worse than 8.Qb3 and 0.73 worse than the spine's 8.d5, and the recapture this note previously asserted — 8...fxe4 9.Nxe4 — drops a piece, because after 9...Nxe4 the knight on e4 is defended by nothing (the g2 bishop's diagonal is blocked by its own knight on f3). The unsupported walked line has been removed rather than replaced; no alternative ninth move is authored here."
+      "note": "8.e4 is the third plan played immediately, and the 2026-08-15 engine pass priced it: at depth 22 it is 1.65 worse than 8.Qb3 and 0.73 worse than the spine's 8.d5, and the recapture this note previously asserted — 8...fxe4 9.Nxe4 — drops a piece, because after 9...Nxe4 the knight on e4 is defended by nothing (the g2 bishop's diagonal is blocked by its own knight on f3). The unsupported walked line has been removed rather than replaced; no alternative ninth move is authored here.",
+      "cost": {
+        "kind": "cp",
+        "loss": 166,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

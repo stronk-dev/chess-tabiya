@@ -37,7 +37,7 @@
         "engineId": "stockfish-authoring",
         "engineVersion": "18",
         "sourceId": "stockfish-authoring",
-        "retrievedAt": "2026-08-15T12:59:54.634Z"
+        "retrievedAt": "2026-08-15T12:54:02.512Z"
       },
       "resolveAt": {
         "kind": "terminal"
@@ -264,7 +264,12 @@
       },
       "moveUci": "d2d3",
       "class": "accepted_alternative",
-      "note": "5.d3 is the Giuoco Pianissimo — the other Italian repertoire, catalogued in its own rows: keep the tension for thirty moves and outplay slowly. A temperament choice, not an evaluation claim; this pack exists for players who want the direct program instead."
+      "note": "5.d3 is the Giuoco Pianissimo — the other Italian repertoire, catalogued in its own rows: keep the tension for thirty moves and outplay slowly. A temperament choice, not an evaluation claim; this pack exists for players who want the direct program instead.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -272,7 +277,12 @@
       },
       "moveUci": "b1c3",
       "class": "interesting_deviation",
-      "note": "7.Nc3 — the Greco Gambit (catalogued through 7...Nxe4 8.O-O in the Main Line row) — offers e4 for open lines while the b4 bishop and e4 knight dangle. Critical, theory-heavy, and unforgiving of half-memory: playing it unbooked is worse than not playing it. The classified door for the third plan class."
+      "note": "7.Nc3 — the Greco Gambit (catalogued through 7...Nxe4 8.O-O in the Main Line row) — offers e4 for open lines while the b4 bishop and e4 knight dangle. Critical, theory-heavy, and unforgiving of half-memory: playing it unbooked is worse than not playing it. The classified door for the third plan class.",
+      "cost": {
+        "kind": "cp",
+        "loss": 44,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -280,7 +290,12 @@
       },
       "moveUci": "e4e5",
       "class": "interesting_deviation",
-      "note": "9.e5 declines the isolani and pushes past instead: the walked line 9...dxc4 10.exf6 Qxf6 trades the structural game for an unbalanced race where both sides have grabbed. Evaluated 2026-08-15 (Stockfish 18, depth 22): the resulting position is -1.12 for White, and 9.e5 is 1.09 worse than the spine's 9.exd5 at the decision itself. Play both ninth moves and compare the games, not the numbers."
+      "note": "9.e5 declines the isolani and pushes past instead: the walked line 9...dxc4 10.exf6 Qxf6 trades the structural game for an unbalanced race where both sides have grabbed. Evaluated 2026-08-15 (Stockfish 18, depth 22): the resulting position is -1.12 for White, and 9.e5 is 1.09 worse than the spine's 9.exd5 at the decision itself. Play both ninth moves and compare the games, not the numbers.",
+      "cost": {
+        "kind": "cp",
+        "loss": 110,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

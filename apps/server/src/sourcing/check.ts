@@ -1,13 +1,14 @@
 import { access } from "node:fs/promises";
 import { basename, dirname, extname, resolve, sep } from "node:path";
 
-import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
+import { digestDrillPack, type DeviationCost, type DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 
 import { validatePackDocument } from "../pack-validation.js";
 import { readJson } from "./canonical.js";
+import { deriveDeviationCost, deviationCostMatches } from "./deviation-cost.js";
 import { EXPLORER_TEMPLATE_ID, renderExplorerFrequency, RATING_GROUPS, SPEEDS, type ExplorerTemplateValues } from "./explorer.js";
 import {
   type EvidenceLedger,
@@ -124,12 +125,13 @@ function offlineJobProvenance(job: unknown, manifest: SourceManifest | undefined
 function explorerTemplate(record: EvidenceRecord, pack: unknown, manifest: SourceManifest | undefined, recordIndex: number, issues: SourcingIssue[]): boolean {
   if (record.kind !== "explorer_frequency") return false;
   const path = `/records/${recordIndex}`;
-  const keys = ["moveSan", "playedCount", "total", "sharePct", "ratings", "speeds", "since", "until"];
+  const keys = ["moveSan", "playedCount", "total", "sharePct", "white", "draws", "black", "ratings", "speeds", "since", "until"];
   const values = record.values;
   const validKeys = exactKeys(values as Record<string, unknown>, keys) && keys.every((key) => values[key] !== undefined);
   const ratings = values.ratings;
   const speeds = values.speeds;
-  const valid = record.templateId === EXPLORER_TEMPLATE_ID && validKeys && nonEmpty(values.moveSan) && Number.isSafeInteger(values.playedCount) && Number(values.playedCount) >= 0 && Number.isSafeInteger(values.total) && Number(values.total) >= 100 && typeof values.sharePct === "number" && values.sharePct >= 0 && values.sharePct <= 100 && Array.isArray(ratings) && ratings.length > 0 && ratings.every((value) => RATING_GROUPS.includes(value as never)) && Array.isArray(speeds) && speeds.length > 0 && speeds.every((value) => SPEEDS.includes(value as never)) && /^\d{4}-(0[1-9]|1[0-2])$/.test(String(values.since)) && /^\d{4}-(0[1-9]|1[0-2])$/.test(String(values.until)) && Number(values.sharePct) === Math.round(Number(values.playedCount) / Number(values.total) * 1000) / 10;
+  const outcomeValid = Number.isSafeInteger(values.white) && Number.isSafeInteger(values.draws) && Number.isSafeInteger(values.black) && Number(values.white) + Number(values.draws) + Number(values.black) === Number(values.playedCount);
+  const valid = outcomeValid && record.templateId === EXPLORER_TEMPLATE_ID && validKeys && nonEmpty(values.moveSan) && Number.isSafeInteger(values.playedCount) && Number(values.playedCount) >= 0 && Number.isSafeInteger(values.total) && Number(values.total) >= 100 && typeof values.sharePct === "number" && values.sharePct >= 0 && values.sharePct <= 100 && Array.isArray(ratings) && ratings.length > 0 && ratings.every((value) => RATING_GROUPS.includes(value as never)) && Array.isArray(speeds) && speeds.length > 0 && speeds.every((value) => SPEEDS.includes(value as never)) && /^\d{4}-(0[1-9]|1[0-2])$/.test(String(values.since)) && /^\d{4}-(0[1-9]|1[0-2])$/.test(String(values.until)) && Number(values.sharePct) === Math.round(Number(values.playedCount) / Number(values.total) * 1000) / 10;
   if (!valid) issues.push(issue("EVIDENCE_VALUES_INVALID", `${path}/values`, "explorer-move-share/v1 requires exactly the typed and derived frequency values"));
   const sourceEntry = manifest?.entries.find((entry) => entry.sourceId === record.sourceId && entry.retrievedAt === record.retrievedAt && entry.origin.kind === "http");
   if (sourceEntry?.origin.kind === "http") {
@@ -208,6 +210,33 @@ export function evidenceSupports(pack: unknown, ledger: EvidenceLedger, manifest
         if (kind === undefined) continue;
         const pointer = `/feedbackClaims/${index}/text`;
         if (!ledger.records.some((record) => record.kind === kind && record.supports.includes(pointer))) issues.push(issue("EVIDENCE_TYPE_UNBACKED", `/feedbackClaims/${index}/evidenceTypes`, `${String(label)} has no matching evidence record`, published ? "error" : "warning"));
+      }
+    });
+  }
+  deviationCostEvidenceIssues(pack, ledger.records, issues);
+}
+
+export function deviationCostEvidenceIssues(
+  pack: unknown,
+  records: readonly EvidenceRecord[],
+  issues: SourcingIssue[],
+): void {
+  if (object(pack) && Array.isArray(pack.deviations)) {
+    const published = object(pack.provenance) && pack.provenance.reviewStatus === "published";
+    pack.deviations.forEach((raw, index) => {
+      if (!object(raw) || !object(raw.cost)) return;
+      const basis = raw.cost.basis;
+      if (basis !== "engine" && basis !== "tablebase") return;
+      let derived: DeviationCost | undefined;
+      try {
+        derived = deriveDeviationCost(pack as unknown as DrillPackDefinition, records, index, basis);
+      } catch {
+        derived = undefined;
+      }
+      if (derived === undefined) {
+        issues.push(issue("DEVIATION_COST_UNBACKED", `/deviations/${index}/cost`, `${basis} cost has no matching before/after evidence pair`, published ? "error" : "warning"));
+      } else if (!deviationCostMatches(raw.cost as unknown as DeviationCost, derived)) {
+        issues.push(issue("DEVIATION_COST_CONTRADICTED", `/deviations/${index}/cost`, `declared cost contradicts measured ${JSON.stringify(derived)}`));
       }
     });
   }

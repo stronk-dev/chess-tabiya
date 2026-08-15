@@ -280,7 +280,12 @@
       },
       "moveUci": "c7c5",
       "class": "accepted_alternative",
-      "note": "6...c5 steers for Benoni structures after d5: a legitimate repertoire fork that trades the ...e5 chain war for queenside counterplay against the d5 wedge. A different family, not an error."
+      "note": "6...c5 steers for Benoni structures after d5: a legitimate repertoire fork that trades the ...e5 chain war for queenside counterplay against the d5 wedge. A different family, not an error.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -288,7 +293,12 @@
       },
       "moveUci": "c8g4",
       "class": "interesting_deviation",
-      "note": "6...Bg4 pins the knight that guards d4 before committing the centre. It spends the c8 bishop — the piece the main line keeps for the kingside attack — to make ...exd4 and ...Nc6 bite harder. Play it out and see which army you would rather attack with."
+      "note": "6...Bg4 pins the knight that guards d4 before committing the centre. It spends the c8 bishop — the piece the main line keeps for the kingside attack — to make ...exd4 and ...Nc6 bite harder. Play it out and see which army you would rather attack with.",
+      "cost": {
+        "kind": "cp",
+        "loss": 3,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -296,7 +306,12 @@
       },
       "moveUci": "e5d4",
       "class": "accepted_alternative",
-      "note": "7...exd4 is the keep-the-diagonal plan made concrete: after Nxd4 the g7 bishop stares at a real target and the game is about e4, not about pawn storms. The classified door for the second plan class."
+      "note": "7...exd4 is the keep-the-diagonal plan made concrete: after Nxd4 the g7 bishop stares at a real target and the game is about e4, not about pawn storms. The classified door for the second plan class.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -304,7 +319,12 @@
       },
       "moveUci": "b8d7",
       "class": "accepted_alternative",
-      "note": "7...Nbd7 postpones the choice: ...c6, ...exd4 and ...a5 all stay available. Against the classical race its cost is a tempo of ambiguity — the e7-g6 reroute that powers ...f5 is not on this knight's map."
+      "note": "7...Nbd7 postpones the choice: ...c6, ...exd4 and ...a5 all stay available. Against the classical race its cost is a tempo of ambiguity — the e7-g6 reroute that powers ...f5 is not on this knight's map.",
+      "cost": {
+        "kind": "cp",
+        "loss": 15,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -312,7 +332,12 @@
       },
       "moveUci": "c6a5",
       "class": "interesting_deviation",
-      "note": "8...Na5 hits c4 instead of retreating to e7. The question it must answer is where the knight goes when b3 comes and the storm needs it back home. Stated as a question because nothing in this repo has checked the answer — play both and compare."
+      "note": "8...Na5 hits c4 instead of retreating to e7. The question it must answer is where the knight goes when b3 comes and the storm needs it back home. Stated as a question because nothing in this repo has checked the answer — play both and compare.",
+      "cost": {
+        "kind": "cp",
+        "loss": 244,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

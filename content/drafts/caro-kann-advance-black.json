@@ -273,7 +273,12 @@
       },
       "moveUci": "c6c5",
       "class": "interesting_deviation",
-      "note": "4...c5 strikes before ...e6, with the bishop already out. It is a real alternative order; the difference from the spine is that dxc5 now comes while your e-pawn still stands on e7, and regaining the pawn costs the tempo the spine's order saves. Play both and compare where the c-pawn's second move went."
+      "note": "4...c5 strikes before ...e6, with the bishop already out. It is a real alternative order; the difference from the spine is that dxc5 now comes while your e-pawn still stands on e7, and regaining the pawn costs the tempo the spine's order saves. Play both and compare where the c-pawn's second move went.",
+      "cost": {
+        "kind": "cp",
+        "loss": 106,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -281,7 +286,12 @@
       },
       "moveUci": "b8d7",
       "class": "accepted_alternative",
-      "note": "5...Nd7 develops first and keeps ...c5 in hand — the patient order. It concedes White one free developing move; whether the break is better prepared or merely later is exactly the comparison this checkpoint exists for."
+      "note": "5...Nd7 develops first and keeps ...c5 in hand — the patient order. It concedes White one free developing move; whether the break is better prepared or merely later is exactly the comparison this checkpoint exists for.",
+      "cost": {
+        "kind": "cp",
+        "loss": 6,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -289,7 +299,12 @@
       },
       "moveUci": "g8e7",
       "class": "accepted_alternative",
-      "note": "5...Ne7 heads for f5 or g6, keeping the f-pawn free for a later ...f6 chip. Slower against the castled-and-ready plan, but it is the move that keeps BOTH levers alive longest."
+      "note": "5...Ne7 heads for f5 or g6, keeping the f-pawn free for a later ...f6 chip. Slower against the castled-and-ready plan, but it is the move that keeps BOTH levers alive longest.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -297,7 +312,12 @@
       },
       "moveUci": "c5d4",
       "class": "accepted_alternative",
-      "note": "6...cxd4 resolves the tension into piece play against d4. This is main-line theory in its own right; what you give up is the standing threat, which was taxing every White move. Choose it when White's setup is finished, not before."
+      "note": "6...cxd4 resolves the tension into piece play against d4. This is main-line theory in its own right; what you give up is the standing threat, which was taxing every White move. Choose it when White's setup is finished, not before.",
+      "cost": {
+        "kind": "cp",
+        "loss": 22,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -305,7 +325,12 @@
       },
       "moveUci": "b8d7",
       "class": "accepted_alternative",
-      "note": "6...Nd7 keeps every option and adds a defender to the queenside before committing the queen. The quiet handling of a position you are already comfortable in."
+      "note": "6...Nd7 keeps every option and adds a defender to the queenside before committing the queen. The quiet handling of a position you are already comfortable in.",
+      "cost": {
+        "kind": "cp",
+        "loss": 31,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -314,7 +339,12 @@
       "moveUci": "c5c4",
       "class": "concept_violation",
       "offObjective": true,
-      "note": "6...c4 closes the position and releases d4 from all pressure. The c-pawn spent two tempi to arrive at a square where it attacks nothing, and White's pieces are now free to turn to the kingside where the space already favours them. The break was your rent on the position; this move stops paying it."
+      "note": "6...c4 closes the position and releases d4 from all pressure. The c-pawn spent two tempi to arrive at a square where it attacks nothing, and White's pieces are now free to turn to the kingside where the space already favours them. The break was your rent on the position; this move stops paying it.",
+      "cost": {
+        "kind": "cp",
+        "loss": 73,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",

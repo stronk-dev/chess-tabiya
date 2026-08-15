@@ -37,7 +37,7 @@
         "engineId": "stockfish-authoring",
         "engineVersion": "18",
         "sourceId": "stockfish-authoring",
-        "retrievedAt": "2026-08-15T12:48:21.679Z"
+        "retrievedAt": "2026-08-15T12:50:49.748Z"
       },
       "resolveAt": {
         "kind": "terminal"
@@ -288,7 +288,12 @@
       },
       "moveUci": "f1b5",
       "class": "interesting_deviation",
-      "note": "5.Bb5 pins the regaining knight and fights for the c5 pawn tactically. Sharper than the spine's development order; after ...Qa5+ ideas both sides must know concrete lines, which is exactly the invitation this pack's plan declines to send."
+      "note": "5.Bb5 pins the regaining knight and fights for the c5 pawn tactically. Sharper than the spine's development order; after ...Qa5+ ideas both sides must know concrete lines, which is exactly the invitation this pack's plan declines to send.",
+      "cost": {
+        "kind": "cp",
+        "loss": 9,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -296,7 +301,12 @@
       },
       "moveUci": "c1e3",
       "class": "accepted_alternative",
-      "note": "5.Be3 offers the same exchange logic as the ...e6 branch one move earlier: hold with a piece, and if ...Ng4 or ...Qa5+ come, the concrete lines hold up. Equivalent plan, different move order."
+      "note": "5.Be3 offers the same exchange logic as the ...e6 branch one move earlier: hold with a piece, and if ...Ng4 or ...Qa5+ come, the concrete lines hold up. Equivalent plan, different move order.",
+      "cost": {
+        "kind": "cp",
+        "loss": 13,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -305,7 +315,12 @@
       "moveUci": "b2b4",
       "class": "concept_violation",
       "offObjective": true,
-      "note": "5.b4 holds the pawn with pawns before a single piece is developed. ...a5 hits immediately and every defence of b4 costs another non-developing move — the exact debt spiral the spine's c3-first order avoids. The extra pawn is not worth being three tempi behind in an open position."
+      "note": "5.b4 holds the pawn with pawns before a single piece is developed. ...a5 hits immediately and every defence of b4 costs another non-developing move — the exact debt spiral the spine's c3-first order avoids. The extra pawn is not worth being three tempi behind in an open position.",
+      "cost": {
+        "kind": "cp",
+        "loss": 81,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -313,7 +328,12 @@
       },
       "moveUci": "g1f3",
       "class": "accepted_alternative",
-      "note": "5.Nf3 first, deciding about the c5 pawn only after seeing Black's next move. Loses nothing and commits to nothing; the spine plays Be3 first only to make the exchange-offer idea explicit."
+      "note": "5.Nf3 first, deciding about the c5 pawn only after seeing Black's next move. Loses nothing and commits to nothing; the spine plays Be3 first only to make the exchange-offer idea explicit.",
+      "cost": {
+        "kind": "cp",
+        "loss": 0,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -321,7 +341,12 @@
       },
       "moveUci": "d1g4",
       "class": "interesting_deviation",
-      "note": "5.Qg4 exploits the one drawback of ...e6 — the c8 bishop no longer guards g7's diagonal escort, so the f8 bishop must choose between g7 duty and taking on c5. An early queen sortie with real bite here; it also hands Black developing moves with tempo if mishandled. Play it out before trusting it."
+      "note": "5.Qg4 exploits the one drawback of ...e6 — the c8 bishop no longer guards g7's diagonal escort, so the f8 bishop must choose between g7 duty and taking on c5. An early queen sortie with real bite here; it also hands Black developing moves with tempo if mishandled. Play it out before trusting it.",
+      "cost": {
+        "kind": "cp",
+        "loss": 13,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -329,7 +354,12 @@
       },
       "moveUci": "f1e2",
       "class": "accepted_alternative",
-      "note": "6.Be2 breaks the pin before bracing. Solid, one beat slower on the queenside; against it Black's ...e6 regain arrives with the b4 clamp not yet available."
+      "note": "6.Be2 breaks the pin before bracing. Solid, one beat slower on the queenside; against it Black's ...e6 regain arrives with the b4 clamp not yet available.",
+      "cost": {
+        "kind": "cp",
+        "loss": 98,
+        "basis": "engine"
+      }
     },
     {
       "at": {
@@ -337,7 +367,12 @@
       },
       "moveUci": "b2b4",
       "class": "interesting_deviation",
-      "note": "6.b4 clamps immediately, without c3 behind it. Now ...a5 comes with ...axb4 and there is no c3 pawn to recapture toward the centre — the same clamp, structurally weaker by exactly one preparing move. A concrete illustration of why move order is the pack's subject."
+      "note": "6.b4 clamps immediately, without c3 behind it. Now ...a5 comes with ...axb4 and there is no c3 pawn to recapture toward the centre — the same clamp, structurally weaker by exactly one preparing move. A concrete illustration of why move order is the pack's subject.",
+      "cost": {
+        "kind": "cp",
+        "loss": 42,
+        "basis": "engine"
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",
