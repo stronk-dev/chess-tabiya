@@ -24,7 +24,7 @@ import {
   type EngineRequest,
   type EngineSpec,
 } from "./engine-supervisor.js";
-import { MAIA3_MODEL_ID, MAIA3_SOURCE_COMMIT } from "./maia.js";
+import { maiaNetworkSpec } from "./maia.js";
 import {
   OpponentSelector,
   type SelectorEngineClient,
@@ -203,20 +203,6 @@ function stockfishAnalysisSpec(command: string): EngineSpec {
     command,
     name: "Stockfish",
     options: Object.freeze({ Threads: 1, Hash: 16, MultiPV: 1 }),
-  });
-}
-
-function maiaNetworkSpec(host: string, port: number): EngineSpec {
-  return Object.freeze({
-    id: "maia-5m",
-    kind: "opponent",
-    command: "nc",
-    args: Object.freeze([host, String(port)]),
-    name: "Maia3",
-    version: MAIA3_SOURCE_COMMIT,
-    modelId: MAIA3_MODEL_ID,
-    bandOption: "Elo",
-    handshakeTimeoutMs: 60_000,
   });
 }
 

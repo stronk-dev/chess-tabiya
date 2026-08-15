@@ -4,9 +4,11 @@ import { describe, expect, it } from "vitest";
 
 import {
   DEFAULT_MAIA_IMAGE,
+  MAIA3_BAND_RANGE,
   MAIA3_MODEL_ID,
   MAIA3_SOURCE_COMMIT,
   maiaDockerSpec,
+  maiaNetworkSpec,
 } from "./maia.js";
 
 const dockerfile = readFileSync(
@@ -48,9 +50,17 @@ describe("Maia production sidecar definition", () => {
       name: "Maia3",
       version: MAIA3_SOURCE_COMMIT,
       modelId: MAIA3_MODEL_ID,
+      bandRange: MAIA3_BAND_RANGE,
       containerDigest: digest,
     });
     expect(spec.seedOption).toBeUndefined();
     expect(spec.bandOption).toBe("Elo");
+    expect(spec.bandRange).toEqual({ min: 1000, max: 2400 });
+    expect(maiaNetworkSpec("maia", 7000)).toMatchObject({
+      command: "nc",
+      args: ["maia", "7000"],
+      bandOption: "Elo",
+      bandRange: { min: 1000, max: 2400 },
+    });
   });
 });

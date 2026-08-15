@@ -68,9 +68,11 @@ export {
 } from "./engine-supervisor.js";
 export {
   DEFAULT_MAIA_IMAGE,
+  MAIA3_BAND_RANGE,
   MAIA3_MODEL_ID,
   MAIA3_SOURCE_COMMIT,
   maiaDockerSpec,
+  maiaNetworkSpec,
   type MaiaDockerSpecOptions,
 } from "./maia.js";
 export {

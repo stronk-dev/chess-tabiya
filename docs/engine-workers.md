@@ -64,8 +64,11 @@ evidence, and authoring searches state MultiPV explicitly; evidence also states
 TopP, and a range-clamped MultiPV on every request. An absent requested Elo uses
 and records the engine-advertised default. Published deployment bounds are the
 intersection of the advertised range and any explicit `EngineSpec.bandRange`.
-This deployment currently configures no narrower competence range, so the
-published `[0, 5000]` is an option-acceptance bound, not a chess-strength claim.
+The shipped Maia deployment configures `[1000, 2400]`, measured by R10 as the
+widest interval whose policy trajectory remains ordered and whose returned
+candidate mass remains readable. This is a deployment bound, not a claim that
+Maia plays at an exact human rating. Requests outside it receive the named
+`TARGET_ELO_OUT_OF_RANGE` refusal before reaching the engine.
 
 Human-common requests widen their candidate window to the smaller of the legal
 move count (with a floor of eight) and the advertised MultiPV maximum. If a
