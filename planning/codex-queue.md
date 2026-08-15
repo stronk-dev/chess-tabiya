@@ -82,9 +82,10 @@ capability claims it is verified and no surface may render it engine-confirmed.
 
 ## Standing work — take whenever the queue above is blocked
 
-**A. Refusal-code test coverage.** Your audit (`6c7a579`) found 78 codes, 33
-test-pinned, **45 with no direct coverage**. Mechanical, no design input, hardens
-every wave above.
+**A. Refusal-code test coverage — IMPLEMENTED.** The audit (`6c7a579`) found 78
+codes and 45 without direct coverage. The post-wave recount found 107 emitter
+literals and 41 still unpinned; constructed invalid-document tests, explicit
+schema-shadowed dispositions, and a drift guard now leave zero unclassified.
 
 **B. D35 — `strong_engine` is not reproducible.** `go movetime` with no
 `ucinewgame`/`Clear Hash` anywhere in the server. Now *measured*: hash carry-over
