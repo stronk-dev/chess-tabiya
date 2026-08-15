@@ -7,7 +7,8 @@
 shape-entry 0.3) · `opening-evidence-path` (0.20) · refusal-code coverage.
 **546 tests / 88 files.**
 
-**Four items are ready — more than when you last read this file.**
+**Items 0–4 below are implemented and verified.** Their notes remain as the
+handoff record; item 5 is the next not-yet-implemented entry.
 
 ## 0. D56 — IMPLEMENTED, no RFC needed
 
@@ -30,7 +31,7 @@ lexicographically first reply under its own name; an Elo-less request inherits
 the previous request's band while recording `eloApplied` absent; and top-p can
 sample a `bestmove` outside the recorded candidate list.
 
-## 1. `rfc/branch-set-scale.md` — READY, claims nothing versioned
+## 1. `rfc/archive/branch-set-scale.md` — IMPLEMENTED, claims nothing versioned
 
 Collapse decided branches, bound the eval work, manual fold. Lands in any order.
 Cross-review caught the near-miss worth knowing: the rule was `decided ∧
@@ -41,7 +42,7 @@ the tablebase ground collapses nothing, ever. Also: tablebase categories are
 returned **for the side to move**, so the learner-perspective conversion is
 mandatory or collapse folds winning branches on a coin flip.
 
-## 2. `rfc/deviation-classes.md` — READY (the hold is lifted)
+## 2. `rfc/archive/deviation-classes.md` — IMPLEMENTED
 
 Pack **0.21**. The owner ruled `mistake` **multi-valued** and the body has been
 rewritten to match — it is a set (`minItems: 1`, `uniqueItems`), not an enum.
@@ -54,7 +55,7 @@ so the human-only refusal must read `…/mistake(?:/\d+)?$` — anchored at the 
 alone it would refuse `mistake` and silently **admit the element**. Whichever of
 this and 0.20 landed second owns carrying it; 0.20 has landed, so it is yours.
 
-## 3. `rfc/transition-primitives.md` — READY, pack **0.22**
+## 3. `rfc/archive/transition-primitives.md` — IMPLEMENTED, pack **0.22**
 
 **0.19 is frozen shut** — it was free as a register slot, but the schema constant
 is monotonic and 0.20 passed it. The move-primitive grammar with its pack
@@ -66,7 +67,7 @@ signals on 2.1% of played moves vs 3.4% of unplayed alternatives — **0.61×, t
 wrong direction**. The on-request reading ships; the live marker does not. Its
 `renderPivotalMarker` fix moved to item 5.
 
-## 4. `rfc/expression-census.md` — READY, claims nothing versioned
+## 4. `rfc/archive/expression-census.md` — IMPLEMENTED, claims nothing versioned
 
 The instrument behind the repo's most-attested friction. Cross-review found **two
 of its own refutation rules unsound** and fixed both with nine executed
