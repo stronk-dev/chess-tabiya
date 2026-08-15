@@ -1117,7 +1117,15 @@ on with its measurements corrected rather than dropping it.
    to the content-sourcing artifact triple in `docs/content-sourcing.md`. **Resolve before
    `accepted`** — not because §6 depends on it (it does not), but because leaving it open is how a
    fourth law gets invented later by someone re-finding the same gap.
-9. **Where do per-leg `shapes`/`opponentPolicy` and `deviation.planClassId` actually go?** §2c
+9. **Where do per-leg `shapes`/`opponentPolicy` and `deviation.planClassId` actually go?**
+   **HALF-ANSWERED by the coordinator 2026-08-15, and the half that remains is the real one.**
+   Per-leg `shapes`/`opponentPolicy` is **D96**, and `rfc/format-surface.md` — drafted after
+   this question was written — **owns and implements it** at pack 0.25. So the "hypothetical
+   RFC no register row owns" now exists and is registered; that half is destinated and the
+   ledger row is flipped. **`deviation.planClassId` is not covered by `format-surface` and
+   remains genuinely undestinated**, so this question bundled two items and only one found a
+   home. Still blocking on that half, exactly as the question's own reasoning requires.
+   *(Original text follows.)* §2c
    excludes the first on the spine test and I agree with the exclusion, but it hands both to a
    hypothetical "additive authoring-expressiveness RFC" that no register row owns. They are #1 and
    #2 of 14 in the completeness audit and together block four of the six `design/04` §5 launch
