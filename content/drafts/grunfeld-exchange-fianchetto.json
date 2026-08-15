@@ -1,0 +1,313 @@
+{
+  "id": "grunfeld-exchange-fianchetto",
+  "version": "0.1.0",
+  "title": "Grunfeld Exchange: the g7 bishop and the pawn standing in its way",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Black playing the g7 fianchetto against White's centre in the Grunfeld Exchange",
+    "branchLengthTarget": 10
+  },
+  "start": {
+    "fen": "r1bq1rk1/pp2ppbp/2n3p1/8/3PP3/4BN2/P3BPPP/R2Q1RK1 b - - 0 11",
+    "movesSan": [
+      "d4", "Nf6", "c4", "g6", "Nc3", "d5", "cxd5", "Nxd5", "e4", "Nxc3",
+      "bxc3", "Bg7", "Nf3", "c5", "Be2", "O-O", "O-O", "Nc6", "Be3", "cxd4",
+      "cxd4"
+    ],
+    "side": "black"
+  },
+  "objective": {
+    "type": "reach_structure",
+    "summary": "You have the Black side and it is your move. The shape library's fianchetto-g7 entry fires on this position because of two facts you can see: a black pawn on g6 and a black bishop on g7. Its Black plan asks for one measurable thing — the bishop still on g7 with no piece or pawn anywhere on the g7-a1 diagonal. Computed here, exactly one square on that diagonal is occupied, and the occupant is White's d4 pawn, which you attack three times and White defends three times. Reach the entry's own signature; the pack does not tell you the route.",
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "to": "achieved",
+        "feature": {
+          "kind": "any",
+          "of": [
+            {
+              "kind": "all",
+              "of": [
+                { "kind": "pieceOnSquare", "square": "g7", "piece": { "color": "black", "role": "bishop" } },
+                { "kind": "feature", "feature": { "kind": "line_blockers", "from": "g7", "to": "a1", "comparison": "equal", "count": 0 } }
+              ]
+            },
+            {
+              "kind": "mirrored",
+              "axis": "files",
+              "of": {
+                "kind": "all",
+                "of": [
+                  { "kind": "pieceOnSquare", "square": "g7", "piece": { "color": "black", "role": "bishop" } },
+                  { "kind": "feature", "feature": { "kind": "line_blockers", "from": "g7", "to": "a1", "comparison": "equal", "count": 0 } }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "structural_feature",
+        "to": "degraded",
+        "feature": {
+          "kind": "not",
+          "of": { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "black", "shade": "dark" } }
+        }
+      }
+    ]
+  },
+  "concepts": [
+    "fianchetto",
+    "long-diagonal",
+    "central-pawn-duo",
+    "open-c-file"
+  ],
+  "shapes": ["fianchetto-g7"],
+  "planClasses": [
+    {
+      "id": "clear-the-diagonal",
+      "label": "Clear the g7-a1 diagonal",
+      "description": "The library's diagonal plan, and the one this pack's objective copies verbatim. Its signature is two tests joined: a black bishop standing on g7, and zero occupied squares between g7 and a1. Measured on the seven positions this pack authors, the blocker count is 1 at the start and after 11...Bg4, and 2 from 12.e5 onward; the signature itself is satisfied at none of the seven. The entry's own note records the same thing measured over 694 authored spine positions across the whole corpus: g7-d4 clear fired 0 times.",
+      "shapePlan": { "shape": "fianchetto-g7", "plan": "black-long-diagonal-pressure" }
+    },
+    {
+      "id": "keep-the-roof",
+      "label": "Keep the bishop as the king's roof",
+      "description": "The library's other Black plan. Its success signature is null — the entry declines to encode one, on the stated ground that whether the remaining pieces can re-guard the dark squares is not pawn arithmetic. That means this pack cannot grade this class and does not try: choosing it records your intent and nothing else. That is the honest state of the vocabulary, not a gap in this file.",
+      "shapePlan": { "shape": "fianchetto-g7", "plan": "black-guard-the-dark-squares" }
+    },
+    {
+      "id": "the-trade-you-are-avoiding",
+      "label": "What a trade of the dark-squared bishops would settle",
+      "description": "The opponent's plan in the same entry, listed because this pack's objective degrades on exactly its signature. That signature is a pair of tests: the g6 pawn still on the board, and no black bishop of the dark shade anywhere. A bishop cannot change shade, so this distinguishes a bishop that was traded from one that merely moved — which is why the objective can use it as a definition rather than an opinion. Measured on this pack's seven authored positions: satisfied at none.",
+      "shapePlan": { "shape": "fianchetto-g7", "plan": "white-trade-the-fianchetto-bishop" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "bg4-pin",
+      "moveUci": "c8g4",
+      "moveSan": "Bg4",
+      "annotations": [
+        "Read the skeleton first. White pawns: a2, d4, e4, f2, g2, h2. Black pawns: a7, b7, e7, f7, g6, h7. Neither side has a c-pawn, so the c-file is fully open — computed, and it is open at all seven positions this pack authors.",
+        "Computed in this position: d4 is attacked three times by White (queen d1, bishop e3, knight f3) and three times by Black (knight c6, bishop g7, queen d8). One of those three black attackers is the fianchetto bishop, and the pawn it is attacking is the single occupied square on its own diagonal.",
+        "Lichess explorer, rapid+classical, rating bands 1400/1600/1800, 2023-01 to 2025-12: this position occurs in 730 games. Bg4 is the most-played move at 519 (71.1%), then b6 46 (6.3%), e6 39 (5.3%), e5 30 (4.1%), a6 28 (3.8%), Bd7 15 (2.1%). Every move on this spine is the most-played move at its own node."
+      ],
+      "children": [
+        {
+          "id": "e5-advance",
+          "moveUci": "e4e5",
+          "moveSan": "e5",
+          "annotations": [
+            "644 games; e5 is the most played at 230 (35.7%), then d5 185 (28.7%), Rb1 169 (26.2%), h3 22 (3.4%), Rc1 17 (2.6%). Three moves share this position almost evenly, so the spine's choice here is a 35.7% choice, not a consensus.",
+            "This is the measured turning point for the objective. Before it, the g7-a1 diagonal had one occupied square (d4) and the expression 'at most one blocker' was satisfied. After it there are two (d4 and e5) and it is not. Recomputed at the same moment: d4 is still attacked three times by White, but only twice by Black (knight c6, queen d8) — the bishop's line to it now runs through a pawn.",
+            "The pack states the arithmetic and stops. Whether adding a second pawn to the diagonal is worth what it costs is not something anything in this repo has measured."
+          ],
+          "children": [
+            {
+              "id": "e6-block",
+              "moveUci": "e7e6",
+              "moveSan": "e6",
+              "annotations": [
+                "612 games; e6 is the most played at 162 (26.5%), then Rc8 100 (16.3%), Qa5 57 (9.3%), Bxf3 51 (8.3%), f6 46 (7.5%). No move here reaches even 27% of the band."
+              ],
+              "children": [
+                {
+                  "id": "h3-question",
+                  "moveUci": "h2h3",
+                  "moveSan": "h3",
+                  "annotations": [
+                    "183 games; h3 is the most played at 114 (62.3%), then Rb1 27 (14.8%), Qd2 17 (9.3%), Rc1 10 (5.5%), a3 5 (2.7%). Computed here: f3 is attacked twice by White (bishop e2, pawn g2) and once by Black (bishop g4)."
+                  ],
+                  "children": [
+                    {
+                      "id": "bxf3-trade",
+                      "moveUci": "g4f3",
+                      "moveSan": "Bxf3",
+                      "annotations": [
+                        "115 games; Bxf3 is the most played at 69 (60.0%), then Bf5 45 (39.1%) and f6 1 (0.9%) — a two-move position at this band.",
+                        "Note which bishop this is. The objective degrades only if Black's dark-squared bishop leaves the board; this is the light-squared one, so the objective's degrade condition is untouched by the trade. That is a statement about the encoding, checked against the position, not about the value of the exchange."
+                      ],
+                      "children": [
+                        {
+                          "id": "bxf3-recapture",
+                          "moveUci": "e2f3",
+                          "moveSan": "Bxf3",
+                          "annotations": [
+                            "69 games, and Bxf3 is played in all 69 (100%). This is where the band's data ends: three years of rapid and classical games at 1400-1800 contain sixty-nine examples of this position.",
+                            "Recomputed at the last authored position: d4 is now attacked twice by White (queen d1, bishop e3) and twice by Black (knight c6, queen d8); e5 is attacked once by White (pawn d4) and twice by Black (knight c6, bishop g7). The diagonal still has two occupied squares, so the objective is still unreached — past here you are on your own, which is the point of playing it rather than reading it."
+                          ],
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "rc8-file",
+              "moveUci": "a8c8",
+              "moveSan": "Rc8",
+              "annotations": [
+                "The second-most-played reply at 100 of 612 (16.3%). The c-file is fully open at every position this pack authors — computed from the skeletons, neither of which contains a c-pawn: White a2, d4, e4, f2, g2, h2 and Black a7, b7, e7, f7, g6, h7. Play this branch and compare it against the ...e6 spine: the diagonal blocker count is the same two in both, and the rook is not."
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-choice",
+      "label": "Before your first move: which of the library's two Black plans are you playing?",
+      "trigger": { "atStart": true },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["clear-the-diagonal", "keep-the-roof"]
+      }
+    },
+    {
+      "id": "second-blocker",
+      "label": "The diagonal went from one occupied square to two",
+      "trigger": { "atSpineNode": "e5-advance" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "diagonal-cleared",
+      "label": "The g7-a1 diagonal is empty and the bishop is still on g7",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              { "kind": "pieceOnSquare", "square": "g7", "piece": { "color": "black", "role": "bishop" } },
+              { "kind": "feature", "feature": { "kind": "line_blockers", "from": "g7", "to": "a1", "comparison": "equal", "count": 0 } }
+            ]
+          }
+        }
+      },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "dark-bishop-gone",
+      "label": "Black has no dark-squared bishop left",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "not",
+            "of": { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "black", "shade": "dark" } }
+          }
+        }
+      },
+      "actions": ["compare_branches"]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "bg4-pin",
+      "e5-advance",
+      "e6-block",
+      "h3-question",
+      "bxf3-trade",
+      "bxf3-recapture",
+      "rc8-file"
+    ],
+    "plyHorizon": 6
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "atStart": true },
+      "moveUci": "b7b6",
+      "class": "accepted_alternative",
+      "note": "The second-most-played move in the start position at this band: 46 of 730 (6.3%). It changes neither the blocker count on the g7-a1 diagonal nor the attacker count on d4 — computed, both are unchanged by a pawn move on b6."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "e7e6",
+      "class": "accepted_alternative",
+      "note": "39 of 730 (5.3%). The same move the spine plays two plies later, played now. Nothing in this repo has measured which order is better; the counts say only that the band plays it here about a thirteenth as often as ...Bg4."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "e7e5",
+      "class": "interesting_deviation",
+      "note": "30 of 730 (4.1%). Definitional consequence, computed: e5 is one of the five squares on the g7-a1 diagonal, so a black pawn arriving there raises this pack's blocker count from one to two by Black's own hand. Whether that trade of a blocker for a central pawn is worth it is not measured here."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "c8d7",
+      "class": "interesting_deviation",
+      "note": "Bd7: 15 of 730 (2.1%). The same bishop as the spine's ...Bg4, on a different square. Neither move touches the objective, which is about the other bishop."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "g7d4",
+      "class": "concept_violation",
+      "offObjective": true,
+      "mistake": ["plan"],
+      "note": "Bxd4 does not appear among the twelve most-played moves the explorer returns for this position; the twelfth, Nb4, has 2 of 730, so this move has at most 2 games at this band. It is off-objective by definition and not by grade: the fianchetto-g7 trigger is a conjunction of a black pawn on g6 and a black bishop on g7, and this move removes the second conjunct, so the structure this pack rehearses stops being detected the moment it is played. The objective's degrade condition is separate and fires only if the bishop leaves the board.",
+      "cost": { "kind": "unmeasurable", "reason": "No engine or tablebase pass has been run on any position in this pack, and the corpus returns no usable count for this move, so the only stated consequence is the detector's." }
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "line-is-attested",
+      "text": "At the Lichess 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12) the start position occurs in 730 games and ...Bg4 accounts for 519 of them (71.1%). After that the band splits: the node counts run 730, 644, 612, 183, 115, 69, and at the second node three different moves take 35.7%, 28.7% and 26.2%.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "one-pawn-in-the-way",
+      "text": "The whole objective is one number. At the start position the g7-a1 diagonal has exactly one occupied square and its occupant is White's d4 pawn; the shape entry's own signature wants zero. After 12.e5 the count is two, and it stays two for the rest of the authored line. The signature is satisfied at none of the seven positions this pack authors — checked with the shipped structural evaluator, not asserted.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "d4-attacker-counts",
+      "text": "Computed from the positions, not recalled: d4 is attacked three times by White (queen d1, bishop e3, knight f3) and three times by Black (knight c6, bishop g7, queen d8) at the start. After 12.e5 it is three against two, the bishop's line now running through a pawn. After 13...Bxf3 14.Bxf3 it is two against two.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "no-doubled-c-pawns-here",
+      "text": "A measured negative worth carrying: this structure has no doubled White c-pawns for the shape library's doubled-c-pawns entry to detect. White has one c-pawn on c3 before the recorded move 11.cxd4 and none at all after it, so that entry's trigger is satisfied at none of the seven positions this pack authors, and this pack therefore references only fianchetto-g7.",
+      "evidenceTypes": ["derived_feature"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "OPENING IDENTITY: the move order to the start position is the Grunfeld Defence, Exchange Variation with Nf3 and Be2; the name-to-line skeleton is lichess-org/chess-openings (CC0-1.0, no attribution required). No opening-name claim beyond the family label is made in this pack.",
+      "RATING-BAND FREQUENCY (mechanical, retrieved 2026-08-15): Lichess opening explorer, https://explorer.lichess.ovh/lichess, variant=standard, ratings=1400,1600,1800, speeds=rapid,classical, since=2023-01, until=2025-12, moves=12, topGames=0, recentGames=0, authenticated with the operator token. Every count and percentage in this file was read from that endpoint at the node it is quoted on: root 730, after ...Bg4 644, after e5 612, after ...e6 183, after h3 115, after ...Bxf3 69. The start node was reached by walking from the position after 10.Be3 (1228 games), where ...cxd4 is the second-most-played move at 416 (33.9%) and the recapture 11.cxd4 is played in 392 of 416 (94.2%); the resulting position's 730 games exceed the 416 that reach it in this move order because the explorer counts transpositions. Shares are recomputed from white+draws+black, which is the only total the response supports.",
+      "SPINE SELECTION RULE (mechanical): every move on the main spine is the most-played move at that node at this band, with no ties encountered. The single sibling branch (12...Rc8) is the second-most-played move at its node. The start position itself was not selected by the most-played rule: it is the position after the second-most-played move at the 10.Be3 node and its forced-looking recapture, chosen because the learner must be to move at the start and because that branch has the thicker data downstream. The counts for both branches are stated above so the choice is auditable.",
+      "STRUCTURAL READINGS (mechanical, chessops and the shipped structural evaluator): the pawn skeletons, the attacker counts for d4, e5 and f3, the open c-file, and every g7-a1 blocker count were computed from the FENs in this file, not recalled.",
+      "SHAPE REFERENCE (mechanical): the fianchetto-g7 entry's trigger was evaluated with the shipped structural evaluator against all seven positions this pack authors and fires on all seven. Its plan success signatures were evaluated against the same seven: black-long-diagonal-pressure 0/7, white-trade-the-fianchetto-bishop 0/7, white-h-file-lever 0/7, and black-guard-the-dark-squares has no signature at all. The doubled-c-pawns entry's trigger was evaluated against the same seven and fires on none, so it is not referenced. The plan classes reference the entry's own plans rather than restating them; the entry's plan prose carries its own UNGROUNDED provenance and this pack does not improve it.",
+      "UNGROUNDED: the objective's premise — that reaching the entry's clear-diagonal signature is the thing to play for in this structure — is this pack's one strategic premise, and no evidence here establishes it. The entry's plan prose is itself agent-authored and uncited by its own admission. Nothing measured says the diagonal is worth more than the d4 pawn that blocks it, nor that a Black player at this band should prefer this plan to the other.",
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no engine evaluation has been run on any position here, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one. No timing window is declared; the reason is recorded in the graduation blockers."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The objective is uncited. The routes out are a citable source that states the diagonal plan for this structure, or a corpus measurement relating the diagonal's clearing to results at this band; neither has been done.",
+      "No timing window is declared, and the measurement that decided it is recorded here: at the node after the learner's first move, White's two central levers are the two most-played moves (e4-e5 at 230 of 644, 35.7%; d4-d5 at 185 of 644, 28.7%). An arrival close on either would shut the window after one learner move, so any readiness set of more than one move would report too_slow on the corpus's own main line. The structure has a lever but not a race with room in it.",
+      "The objective's achieved signature is satisfied at none of the seven authored positions, so the spine itself never demonstrates the target. That is deliberate — the target is reached in play, past the authored boundary — but it means nothing in this file shows a learner what success looks like.",
+      "No engine pass has been run on this pack, so the single concept_violation records an unmeasurable cost, and the count for that move is only an upper bound (at most 2 of 730) because the explorer returned twelve moves and it was not among them."
+    ]
+  }
+}

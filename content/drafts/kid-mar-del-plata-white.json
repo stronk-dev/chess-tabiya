@@ -1,0 +1,353 @@
+{
+  "id": "kid-mar-del-plata-white",
+  "version": "0.1.0",
+  "title": "Mar del Plata: the arrangement before the lock",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "White in the King's Indian chain, racing his own arrangement against Black's f-pawn",
+    "branchLengthTarget": 12
+  },
+  "start": {
+    "fen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 1 9",
+    "movesSan": [
+      "d4", "Nf6", "c4", "g6", "Nc3", "Bg7", "e4", "d6", "Nf3", "O-O",
+      "Be2", "e5", "O-O", "Nc6", "d5", "Ne7"
+    ],
+    "side": "white"
+  },
+  "objective": {
+    "type": "preserve_plan_window",
+    "summary": "You are White in the King's Indian chain: pawns on c4, d5 and e4 against Black's on d6 and e5. Black's f-pawn is coming. Put the two pieces of the shape library's blunting arrangement that this spine reaches — the knight on d3 and the pawn on f3 — on their squares before a black pawn lands on f4, and spend at most one move on anything else. The window records only whether the arrangement was finished before the arrival; it does not say the arrangement is correct.",
+    "successConditions": [
+      { "kind": "timing_window", "windowId": "blunt-before-the-lock", "verdict": "in_time", "to": "achieved" },
+      { "kind": "timing_window", "windowId": "blunt-before-the-lock", "verdict": "over_budget", "to": "degraded" },
+      { "kind": "timing_window", "windowId": "blunt-before-the-lock", "verdict": "too_slow", "to": "failed" },
+      { "kind": "timing_window", "windowId": "blunt-before-the-lock", "verdict": "premature", "to": "failed" },
+      { "kind": "plan_consequence", "planClassId": "strike-the-base", "to": "achieved" }
+    ]
+  },
+  "concepts": [
+    "kid-chain-arrangement",
+    "opposite-wing-race",
+    "arrangement-before-action",
+    "lever-arrival"
+  ],
+  "shapes": ["kid-chain-arrangement"],
+  "planClasses": [
+    {
+      "id": "blunt-the-f-pawn",
+      "label": "Put the kingside arrangement on its squares",
+      "description": "The library's blunting plan. Its success signature is unusual in that it is literally a list of squares — a pawn on f3, a knight on d3 or d2, and a rook on f2 or e1 — so this pack's timing window mirrors it directly. Two of the three are reached on this spine, at learner moves two and four; no rook reaches f2 or e1 inside the authored horizon, so the window's readiness set is the subset the spine actually measures and the third element is stated here rather than graded.",
+      "shapePlan": { "shape": "kid-chain-arrangement", "plan": "white-blunt-the-f-pawn" }
+    },
+    {
+      "id": "strike-the-base",
+      "label": "Land the pawn on c5",
+      "description": "The library's queenside break. Its success signature asks for a White pawn on c5 with Black's d6 pawn and White's d5 pawn both still standing. Measured: in the start position c5 is attacked zero times by White and once by Black (pawn d6); after the spine's eighth ply it is attacked once by each side, the White attacker being the knight that arrived on d3. The break is played on this spine and this condition is reached there.",
+      "shapePlan": { "shape": "kid-chain-arrangement", "plan": "white-strike-the-base-with-c5" }
+    },
+    {
+      "id": "cash-the-c-file",
+      "label": "Come out of the break with no pawn of your own on the c-file",
+      "description": "The library's follow-up plan, whose signature is a file condition rather than a square: no White pawn left on the c-file, with d5 and e4 both still up. It is not reached inside this pack's horizon — after the break White's pawn stands on c5, which is on the c-file. The corpus's next move at the node one ply past this spine is a rook to c1 in 607 of 624 games (97.3%), which is where that plan starts.",
+      "shapePlan": { "shape": "kid-chain-arrangement", "plan": "white-cash-the-break-into-the-c-file" }
+    }
+  ],
+  "timingWindows": [
+    {
+      "id": "blunt-before-the-lock",
+      "label": "Arrangement before the f-pawn locks the centre",
+      "opens": { "fromStart": true },
+      "closes": [
+        { "kind": "arrival", "move": { "piece": { "color": "black", "role": "pawn" }, "to": "f4" } },
+        { "kind": "release", "move": { "piece": { "color": "white", "role": "pawn" }, "to": "c5" } },
+        { "kind": "deadline", "afterLearnerMoves": 6 }
+      ],
+      "readiness": {
+        "mode": "all",
+        "of": [
+          { "piece": { "color": "white", "role": "knight" }, "to": "d3" },
+          { "piece": { "color": "white", "role": "pawn" }, "to": "f3" }
+        ]
+      },
+      "tolerated": [{ "moveUci": "f3e1" }, { "moveUci": "c1d2" }],
+      "luxuryMoveBudget": 1,
+      "gradeOutpaced": false,
+      "note": "Readiness is two of the three squares the entry's blunting signature names; the rook element is not reached on this spine. Both tolerated moves are the most-played at their node (Ne1 2795/10987; Bd2 651/768). The close is f4, not f5, because the measured order is f5 first (769/783) then f4 (633/639). The release is c4-c5 because the detector requires a White pawn on c4."
+    }
+  ],
+  "spine": [
+    {
+      "id": "ne1-reroute",
+      "moveUci": "f3e1",
+      "moveSan": "Ne1",
+      "annotations": [
+        "Read the pawns first. White: a2, b2, c4, d5, e4, f2, g2, h2. Black: a7, b7, c7, d6, e5, f7, g6, h7. The five pawns the shape library detects as this structure — White c4, d5, e4 and Black d6, e5 — are all on the board, and the centre is locked: d5 and d6 face each other, e4 and e5 face each other, and neither pair has a capture.",
+        "Computed from this position: f5 is attacked three times by Black (pawn g6, knight e7, bishop c8) and once by White (pawn e4). c5 is attacked once by Black (pawn d6) and zero times by White. d6 is defended twice (pawn c7, queen d8) and attacked zero times. e4 is attacked once by each side (White knight c3, Black knight f6). The two breaks are mirror images and Black's is currently the better attended.",
+        "Lichess explorer, rapid+classical, rating bands 1400/1600/1800, 2023-01 to 2025-12: this position occurs in 10987 games. Ne1 is the most played at 2795 (25.4%), then b4 2557 (23.3%), Bg5 1663 (15.1%), h3 1398 (12.7%), Be3 1070 (9.7%), Nd2 340 (3.1%), a3 162, Bd2 154, Qc2 152, Re1 152, b3 129, Rb1 101. Every move on this spine is the most-played move at its node.",
+        "This move is tolerated by the timing window rather than counted against its budget, because it is the corpus's most-played move here and because no knight reaches d3 in this arrangement without it."
+      ],
+      "children": [
+        {
+          "id": "nd7-clear",
+          "moveUci": "f6d7",
+          "moveSan": "Nd7",
+          "annotations": [
+            "2793 games; Nd7 is the most played at 1632 (58.4%), then Ne8 823 (29.5%), c6 123 (4.4%), h6 57 (2.0%), a5 47 (1.7%). Both of the top two moves take the knight off f6, which is the square Black's own f-pawn has to pass."
+          ],
+          "children": [
+            {
+              "id": "nd3-post",
+              "moveUci": "e1d3",
+              "moveSan": "Nd3",
+              "annotations": [
+                "1635 games; Nd3 is the most played at 785 (48.0%), then Be3 635 (38.8%), f3 138 (8.4%), b4 33 (2.0%), f4 30 (1.8%).",
+                "This is the first of the two readiness moves this pack's window counts. Measured consequence at the spine's eighth ply: the knight on d3 is the only White attacker of c5 in that position — before it arrived, White attacked c5 zero times."
+              ],
+              "children": [
+                {
+                  "id": "f5-storm",
+                  "moveUci": "f7f5",
+                  "moveSan": "f5",
+                  "annotations": [
+                    "783 games; f5 is played in 769 (98.2%), and the next four moves together account for 11. This is the arrival the structure is named for, and the window does not close on it — the measured order is f5 now, f4 four plies later, and the arrangement is finished in between."
+                  ],
+                  "children": [
+                    {
+                      "id": "bd2-step",
+                      "moveUci": "c1d2",
+                      "moveSan": "Bd2",
+                      "annotations": [
+                        "768 games; Bd2 is the most played at 651 (84.8%), then f3 91 (11.8%), exf5 7 (0.9%), f4 6 (0.8%), Bg5 4 (0.5%). The second-most-played move here is the spine's own next move played one move earlier.",
+                        "The window tolerates this move on the same rule as Ne1: it is the corpus's most-played move at this node. That is a statement about the corpus, not about the move."
+                      ],
+                      "children": [
+                        {
+                          "id": "nf6-return",
+                          "moveUci": "d7f6",
+                          "moveSan": "Nf6",
+                          "annotations": [
+                            "652 games; Nf6 is the most played at 633 (97.1%), then f4 15 (2.3%). The knight comes back to f6 now that the f-pawn has passed it."
+                          ],
+                          "children": [
+                            {
+                              "id": "f3-blunt",
+                              "moveUci": "f2f3",
+                              "moveSan": "f3",
+                              "annotations": [
+                                "639 games; f3 is played in 634 (99.2%), then c5 4 (0.6%) and Bf3 1 (0.2%). This completes the window's readiness set: knight on d3, pawn on f3.",
+                                "Computed two plies later, once Black has locked: e4 is attacked twice by White (knight c3, pawn f3) and once by Black (knight f6). Before f3 it was one against one."
+                              ],
+                              "children": [
+                                {
+                                  "id": "f4-lock",
+                                  "moveUci": "f5f4",
+                                  "moveSan": "f4",
+                                  "annotations": [
+                                    "639 games; f4 is played in 633 (99.1%) and the four next moves are singletons. This is the arrival that closes the window. The centre now has four locked pawn pairs and no captures between them, so neither side can open the middle: White's pawns are a2, b2, c4, d5, e4, f3, g2, h2 and Black's are a7, b7, c7, d6, e5, f4, g6, h7."
+                                  ],
+                                  "children": [
+                                    {
+                                      "id": "c5-break",
+                                      "moveUci": "c4c5",
+                                      "moveSan": "c5",
+                                      "annotations": [
+                                        "644 games; c5 is played in 626 (97.2%), then Rc1 7 (1.1%), b4 4 (0.6%), Be1 3 (0.5%), a4 2 (0.3%). This is the position where the library's white-strike-the-base-with-c5 signature becomes true: a White pawn on c5 with Black's d6 pawn and White's d5 pawn both still standing.",
+                                        "Note what the same move does to the shape detector: it takes the White pawn off c4, and the entry's trigger requires one there. From here the pack's structure is no longer the detected structure — which is a fact about the detector, not a verdict on the move."
+                                      ],
+                                      "children": [
+                                        {
+                                          "id": "g5-storm",
+                                          "moveUci": "g6g5",
+                                          "moveSan": "g5",
+                                          "annotations": [
+                                            "627 games; g5 is played in 623 (99.4%) and the rest are singletons. Two pawn races on opposite wings with a locked centre between them. One ply past this pack's spine the corpus plays Rc1 in 607 of 624 games (97.3%), which is where the library's cash-the-break plan begins — this pack stops before it."
+                                          ],
+                                          "children": []
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "be3-alternative",
+              "moveUci": "c1e3",
+              "moveSan": "Be3",
+              "annotations": [
+                "The second-most-played move at this node: 635 of 1635 (38.8%), against Nd3's 785 (48.0%). It is not one of the window's two readiness moves and it is not on its tolerated list, so this pack's window counts it as the one move the budget allows. That is a statement about this pack's encoding of the arrangement, not about the move."
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-choice",
+      "label": "Before your first move: which of the library's three White plans are you playing?",
+      "trigger": { "atStart": true },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["blunt-the-f-pawn", "strike-the-base", "cash-the-c-file"]
+      }
+    },
+    {
+      "id": "arrangement-complete",
+      "label": "Knight on d3, pawn on f3 — the readiness set is on the board",
+      "trigger": { "atSpineNode": "f3-blunt" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "budget-spent",
+      "label": "Two moves inside the window that were neither readiness nor the tolerated Ne1 and Bd2",
+      "trigger": { "atWindow": { "windowId": "blunt-before-the-lock", "spendAtLeast": 2 } },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "centre-locked",
+      "label": "A black pawn stands on f4 with White's e4 and d5 still behind it",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              { "kind": "pieceOnSquare", "square": "f4", "piece": { "color": "black", "role": "pawn" } },
+              { "kind": "pieceOnSquare", "square": "e4", "piece": { "color": "white", "role": "pawn" } },
+              { "kind": "pieceOnSquare", "square": "d5", "piece": { "color": "white", "role": "pawn" } },
+              { "kind": "pieceOnSquare", "square": "e5", "piece": { "color": "black", "role": "pawn" } }
+            ]
+          }
+        }
+      },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "break-landed",
+      "label": "The pawn has arrived on c5 and the detected structure has ended with it",
+      "trigger": { "atSpineNode": "c5-break" },
+      "actions": ["compare_branches"]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "ne1-reroute",
+      "nd7-clear",
+      "nd3-post",
+      "f5-storm",
+      "bd2-step",
+      "nf6-return",
+      "f3-blunt",
+      "f4-lock",
+      "c5-break",
+      "g5-storm",
+      "be3-alternative"
+    ],
+    "plyHorizon": 10
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "atStart": true },
+      "moveUci": "b2b4",
+      "class": "accepted_alternative",
+      "note": "b4: 2557 of 10987 (23.3%), within 238 games of the spine's Ne1. It prepares the same c4-c5 break from the other side and it is neither a readiness move nor a tolerated one, so this window counts it as the single move its budget allows. Nothing here says whether the queenside or the kingside arrangement comes first; the window only counts."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "c1g5",
+      "class": "accepted_alternative",
+      "note": "Bg5: 1663 of 10987 (15.1%), the third-most-played move here. Measured consequence at the start position: it puts a piece on the square Black's own knight vacates when the f-pawn advances, and it is not on the window's readiness list, so it spends the budget."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "h2h3",
+      "class": "interesting_deviation",
+      "note": "h3: 1398 of 10987 (12.7%). A door rather than an error: none of the three plans the shape entry gives White is this move, and no engine or corpus evidence in this repo bears on it. Open it and compare it against the spine's route."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "c4c5",
+      "class": "concept_violation",
+      "offObjective": true,
+      "mistake": ["timing"],
+      "timingWindowId": "blunt-before-the-lock",
+      "note": "The break played first. It is off-objective by construction and by arithmetic, not by grade: this pack's window names c4-c5 as its release, so playing it before the readiness set is on the board records the verdict premature; and the shape entry's detector requires a White pawn on c4, so after this move the structure the pack is about is no longer detected. It is also rare here — it falls outside the twelve most-played moves at this node, which together cover 10673 of the 10987 games, so it occurs in at most 314 of them (2.9%).",
+      "cost": { "kind": "unmeasurable", "reason": "No engine or corpus evidence in this repo bears on the value of the resulting position; the only measured consequences are the window verdict and the loss of detection." }
+    },
+    {
+      "at": { "spineNodeId": "nd7-clear" },
+      "moveUci": "f2f3",
+      "class": "accepted_alternative",
+      "note": "f3 before the knight: 138 of the 1635 games at this node (8.4%) against Nd3's 785 (48.0%). It satisfies one of the two readiness conditions in the other order, so the window scores it as readiness rather than spend. Which order is preferable is not measured here; the window is indifferent to it by construction."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "arrival-is-measured",
+      "text": "The race in this pack is measured, not assumed. After the knight lands on d3, Black plays ...f5 in 769 of 783 games (98.2%) at the 1400/1600/1800 bands; four plies later ...f4 arrives in 633 of 639 (99.1%); the move after that, White plays c4-c5 in 626 of 644 (97.2%). Those three numbers are what the window's opening, its close and its release are set against.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "mirror-breaks",
+      "text": "Both breaks in this structure are plain pawn geometry and the counts on their squares are computable. In the start position c5 is attacked once by Black (pawn d6) and zero times by White, while f5 is attacked three times by Black (pawn g6, knight e7, bishop c8) and once by White (pawn e4). After the spine's knight reaches d3, c5 is attacked once by each side.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "break-ends-detection",
+      "text": "The move this pack's spine builds toward is also the move that ends the structure it is about: the shape entry's trigger requires a White pawn on c4, and c4-c5 leaves none there. That is a fact about the detector's definition, not an assessment of the break.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "window-thresholds-are-authored",
+      "text": "The window's numbers are this pack's encoding, not a measurement: a luxury budget of one move and a deadline of six learner moves are authored thresholds, and the readiness set is two of the three squares the shape entry's blunting signature names, because the third is not reached on the corpus line inside the authored horizon.",
+      "evidenceTypes": ["author_principle"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "OPENING IDENTITY: the move order to the start position is the King's Indian Defence, Classical Variation, Mar del Plata tabiya; the name-to-line skeleton is lichess-org/chess-openings (CC0-1.0, no attribution required). No opening-name claim beyond the family label is made in this pack.",
+      "RATING-BAND FREQUENCY (mechanical, retrieved 2026-08-15): Lichess opening explorer, https://explorer.lichess.ovh/lichess, variant=standard, ratings=1400,1600,1800, speeds=rapid,classical, since=2023-01, until=2025-12, moves=12, authenticated with the operator token. Every count and percentage in this file was read from that endpoint at the node it is quoted on: start position 10987 (full returned distribution Ne1 2795, b4 2557, Bg5 1663, h3 1398, Be3 1070, Nd2 340, a3 162, Bd2 154, Qc2 152, Re1 152, b3 129, Rb1 101, summing to 10673 of 10987), after Ne1 2793, after Nd7 1635, after Nd3 783, after f5 768, after Bd2 652, after Nf6 639, after f3 639, after f4 644, after c5 627, and the node one ply past the spine 624. Shares are recomputed from white+draws+black, which is the only total the response supports.",
+      "SPINE SELECTION RULE (mechanical): every spine move is the most-played move at its node at this band, with no ties. The one authored branch (Be3 at the third node) is the second-most-played move there and is labelled with both counts. The spine deliberately continues four plies past the point where content/drafts/anti-kid-classical-white.json stops, so the two packs overlap on the opening moves and diverge where the middlegame race is decided.",
+      "STRUCTURAL READINGS (mechanical, chessops): the pawn skeletons at the start position and after the lock, and every attacker/defender count quoted for c5, d6, e4, f5 and f4, were computed from the FENs in this file with the chessops attack tables, not recalled.",
+      "SHAPE REFERENCE (mechanical): the kid-chain-arrangement entry's trigger is the five-pawn conjunction c4/d5/e4 White, d6/e5 Black. It fires on the start position and on every spine position up to and including the lock, which is what make pack-check verifies by refusing SHAPE_REFERENCE_NEVER_PRESENT; it stops firing after the spine's c4-c5, and that is stated at the node. The objective also consumes the entry's own white-strike-the-base-with-c5 success signature through a plan_consequence condition, so pack-check verifies that the signature is reached on the authored spine. The three plan classes reference the entry's plans rather than restating them; the entry's plan prose carries its own UNGROUNDED provenance and this pack does not improve it.",
+      "TIMING (measured, then authored): the window is declared because the arrival is measured rather than felt — 769 of 783 (98.2%) for ...f5 and 633 of 639 (99.1%) for ...f4 — and because the shape entry's blunting plan states its own squares, so the readiness set mirrors a signature instead of inventing one. What is authored and not measured: the choice of f4 rather than f5 as the close, the luxury budget of one, the deadline of six learner moves, the two tolerated moves, and the decision to drop the rook element of the arrangement from readiness.",
+      "UNGROUNDED: the objective's framing — that finishing the kingside arrangement before the lock is the thing worth measuring here — is this pack's authored premise. Nothing in this repo establishes it. The corpus shows what the band played and in what order; it does not show what is correct. No engine evaluation has been run on any position in this pack.",
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, neither wing's race is asserted to be faster, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The objective's premise — arrangement before the lock — is uncited. The routes out are a citable source that states White's plan in the Mar del Plata, or a corpus measurement relating the arrangement's completion to results at this band; neither has been done.",
+      "The window's thresholds are authored: the budget of one, the deadline of six, and the tolerated pair are the author's encoding of the teaching point, and nothing measured says those are the right numbers.",
+      "The readiness set is a proper subset of the shape entry's own signature. Whether a rook on f2 or e1 belongs in the race is unmeasured; it is omitted because the corpus line does not reach it inside the authored horizon, which is an argument about data coverage, not about chess.",
+      "No engine pass has been run on this pack. The single concept_violation (c4-c5 played first) records an unmeasurable cost for exactly that reason.",
+      "The shape entry kid-chain-arrangement carries its own UNGROUNDED provenance for all six of its plan descriptions, including the three this pack references. Referencing them does not launder them."
+    ]
+  }
+}

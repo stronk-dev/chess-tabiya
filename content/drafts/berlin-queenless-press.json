@@ -1,0 +1,350 @@
+{
+  "id": "berlin-queenless-press",
+  "version": "0.1.0",
+  "title": "Berlin queenless middlegame: bring the king in before anything else changes",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "White in the queenless middlegame of the Berlin Defence, after the queens come off on d8",
+    "branchLengthTarget": 10
+  },
+  "start": {
+    "fen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9",
+    "movesSan": [
+      "e4", "e5", "Nf3", "Nc6", "Bb5", "Nf6", "O-O", "Nxe4", "d4", "Nd6",
+      "Bxc6", "dxc6", "dxe5", "Nf5", "Qxd8+", "Kxd8"
+    ],
+    "side": "white"
+  },
+  "objective": {
+    "type": "reach_structure",
+    "summary": "You have the White side and it is your move. Both queens are off, both sides keep a rook and a minor piece, and that conjunction is exactly what the shape library's queenless-middlegame trigger tests. Black's king stands on d8 and the FEN grants neither side castling rights; yours sits on g1. The objective is the entry's own king plan, copied verbatim: get your king into the four central files between the second and fifth ranks while Black's king is not there. Measured across the eleven positions this pack authors, that never happens — the corpus's most-played line leaves your king on g1 for eight plies. Reaching it is the drill. The objective carries one extra conjunct the entry does not: a king-distance of at most two from e4. It narrows nothing, because every square in the region c2-f5 is within a king-distance of two of e4 by arithmetic, and it is there because the validator requires a structural success condition to contain a feature leaf; the checkpoint of the same name uses the entry's expression unaltered.",
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "to": "achieved",
+        "feature": {
+          "kind": "all",
+          "of": [
+            {
+              "kind": "quantified",
+              "quantifier": "some",
+              "over": { "squares": { "files": { "from": "c", "to": "f" }, "ranks": { "from": 2, "to": 5 } } },
+              "feature": { "kind": "piece", "piece": { "color": "white", "role": "king" } }
+            },
+            {
+              "kind": "not",
+              "of": {
+                "kind": "quantified",
+                "quantifier": "some",
+                "over": { "squares": { "files": { "from": "c", "to": "f" }, "ranks": { "from": 2, "to": 5 } } },
+                "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } }
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": { "kind": "piece_distance", "color": "white", "role": "king", "target": { "kind": "square", "square": "e4" }, "comparison": "atMost", "count": 2 }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "structural_feature",
+        "to": "degraded",
+        "feature": {
+          "kind": "not",
+          "of": {
+            "kind": "all",
+            "of": [
+              { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } } },
+              { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } } },
+              { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } },
+              { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } },
+              { "kind": "any", "of": [
+                { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } },
+                { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }
+              ] },
+              { "kind": "any", "of": [
+                { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } },
+                { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }
+              ] }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "concepts": [
+    "queenless-middlegame",
+    "doubled-pawns",
+    "king-activity",
+    "open-d-file"
+  ],
+  "shapes": ["queenless-middlegame"],
+  "planClasses": [
+    {
+      "id": "king-into-the-game",
+      "label": "Walk the king into the middle",
+      "description": "The library's king plan, and the one this pack's objective is built on (verbatim in the king-arrived checkpoint; with one implied extra conjunct in the objective, for the reason given in the objective summary). Its signature is a region test, not a judgment: a white king somewhere in files c to f between ranks 2 and 5, and no black king in the same region. The entry's own note says the region is an authored choice and that the census cannot say the king is safe there. Measured on the eleven positions this pack authors: satisfied at none. The second half is already satisfied at all eleven — Black's king never leaves the back rank on this spine — so the only untrue clause is where your own king is.",
+      "shapePlan": { "shape": "queenless-middlegame", "plan": "white-king-into-the-game" }
+    },
+    {
+      "id": "press-for-the-first-weakness",
+      "label": "Press until something concedes",
+      "description": "The library's technique plan. Read its signature before you choose it: it tests whether some file carries an isolated or a doubled black pawn. Measured on the eleven positions this pack authors, it is satisfied at all eleven, including the start position before you have moved — Black's c-pawns were doubled by the recapture that reached this position. The entry says outright that the vocabulary cannot tell an induced weakness from an inherited one, and here the distinction is the whole plan, so this pack does not use this signature to grade anything.",
+      "shapePlan": { "shape": "queenless-middlegame", "plan": "white-first-weakness" }
+    },
+    {
+      "id": "what-black-is-doing",
+      "label": "The stance you are pressing against",
+      "description": "Listed so the opponent's side of the entry is visible, not to be chosen. Both of the entry's Black plans have a null success signature: the entry declines to encode one on the stated grounds that neutralization is duration rather than a position property, and that the timing of the first asymmetry cannot be fixed in advance for the family. Nothing in this pack grades Black, and nothing could.",
+      "shapePlan": { "shape": "queenless-middlegame", "plan": "black-neutralize-at-par" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "nc3-develop",
+      "moveUci": "b1c3",
+      "moveSan": "Nc3",
+      "annotations": [
+        "Read the skeleton first. White pawns: a2, b2, c2, e5, f2, g2, h2. Black pawns: a7, b7, c6, c7, f7, g7, h7. Neither side has a d-pawn, so the d-file is fully open — computed, and it is open at all eleven positions this pack authors. Black's c-pawns are doubled from this position onward.",
+        "Lichess explorer, rapid+classical, rating bands 1400/1600/1800, 2023-01 to 2025-12: this position occurs in 6011 games. Nc3 is the most-played move at 2260 (37.6%), then Bg5+ 1221 (20.3%), Rd1+ 1205 (20.0%), Ng5 323 (5.4%), h3 302 (5.0%), Bf4 168 (2.8%), Nbd2 151 (2.5%), b3 136 (2.3%). Three moves take 77.9% of the band between them, so the spine's first move is a plurality rather than a consensus.",
+        "Computed here: e5 is attacked once by White (knight f3) and zero times by Black; c6 is attacked zero times by White and once by Black (pawn b7); the black king on d8 defends c7. After this move, d5 is attacked once by each side (knight c3 against pawn c6)."
+      ],
+      "children": [
+        {
+          "id": "ke8-step",
+          "moveUci": "d8e8",
+          "moveSan": "Ke8",
+          "annotations": [
+            "2244 games; Ke8 is the most played at 517 (23.0%), then Bd7 421 (18.8%), Be6 337 (15.0%), Be7 295 (13.1%), h6 202 (9.0%). Five moves share this position and none of them reaches a quarter of it.",
+            "Computed after it: the black king stands on e8 and d1 is attacked twice by White (rook f1, knight c3). The objective's region is files c to f, ranks 2 to 5; e8 is outside it, as d8 was, so the objective's second clause stays satisfied."
+          ],
+          "children": [
+            {
+              "id": "h3-prepare",
+              "moveUci": "h2h3",
+              "moveSan": "h3",
+              "annotations": [
+                "513 games; h3 is the most played at 149 (29.0%), then Bf4 88 (17.2%), Rd1 75 (14.6%), Bg5 61 (11.9%), b3 46 (9.0%). Computed: after this move g4 is attacked once by White (pawn h3) and zero times by Black."
+              ],
+              "children": [
+                {
+                  "id": "be6-post",
+                  "moveUci": "c8e6",
+                  "moveSan": "Be6",
+                  "annotations": [
+                    "175 games; Be6 is the most played at 50 (28.6%), then a5 41 (23.4%), h5 30 (17.1%), Be7 20 (11.4%), h6 16 (9.1%).",
+                    "Computed after it: the knight on f5 is attacked zero times by White and defended once by Black (bishop e6); the bishop on e6 is attacked zero times by White and defended once by Black (pawn f7)."
+                  ],
+                  "children": [
+                    {
+                      "id": "g4-gain",
+                      "moveUci": "g2g4",
+                      "moveSan": "g4",
+                      "annotations": [
+                        "53 games; g4 is the most played at 32 (60.4%), then Rd1 13 (24.5%), Bf4 3 (5.7%), b3 2 (3.8%), Bg5 2 (3.8%). This is where the band's data starts to run thin.",
+                        "Computed at this moment: f5 is now attacked once by White (pawn g4) and defended once by Black (bishop e6). Two moves earlier White attacked it zero times. That is the arithmetic of the move; it is not a claim that pushing pawns in front of your own king is right, and no engine in this repo has been asked."
+                      ],
+                      "children": [
+                        {
+                          "id": "ne7-retreat",
+                          "moveUci": "f5e7",
+                          "moveSan": "Ne7",
+                          "annotations": [
+                            "32 games, and Ne7 is played in all 32 (100%). It is the only reply the band's games at this node contain."
+                          ],
+                          "children": [
+                            {
+                              "id": "nd4-post",
+                              "moveUci": "f3d4",
+                              "moveSan": "Nd4",
+                              "annotations": [
+                                "34 games at this node — more than the 32 that reached it in this move order, because the explorer counts transpositions. Nd4 is the most played at 18 (52.9%), then Ng5 10 (29.4%), b3 2 (5.9%), Ne4 1 (2.9%), Bg5 1 (2.9%). Eighteen games is where three years of rapid and classical play at 1400-1800 stops being a guide.",
+                                "Computed at the last authored position: the knight on d4 is the first White piece in this pack to attack c6, which Black defends twice (pawn b7, knight e7); it also attacks the bishop on e6, defended once (pawn f7). Black's pawn skeleton is a7, b7, c6, c7, f7, g7, h7 — byte for byte the same as it was eight plies ago. Yours has changed twice, both times on the kingside.",
+                                "One thing has not moved at all: your king, still on g1. The objective's region is c to f, ranks 2 to 5. Past this point the pack has nothing more to show you, which is the point of playing it out."
+                              ],
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bd7-develop",
+          "moveUci": "c8d7",
+          "moveSan": "Bd7",
+          "annotations": [
+            "The second-most-played reply at 421 of 2244 (18.8%), and the branch where Black leaves the king on d8 for a while. The corpus continues 10.Rd1 (115 of 421, 27.3%) and then 10...Kc8 (117 of 156, 75.0%) — the highest-agreement move anywhere in this pack. Play it out and compare: the black king walks to the queenside instead of the centre, and in both branches it stays outside the region this pack's objective tests."
+          ],
+          "children": []
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-choice",
+      "label": "Before your first move: which of the library's two White plans are you playing?",
+      "trigger": { "atStart": true },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["king-into-the-game", "press-for-the-first-weakness"]
+      }
+    },
+    {
+      "id": "kingside-pawns-moved",
+      "label": "Two of your own pawn moves have been on the kingside",
+      "trigger": { "atSpineNode": "g4-gain" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "last-authored-position",
+      "label": "Eight plies in: Black's pawns are unchanged and your king has not moved",
+      "trigger": { "atSpineNode": "nd4-post" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "king-arrived",
+      "label": "Your king stands in the central region and Black's does not",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "quantified",
+                "quantifier": "some",
+                "over": { "squares": { "files": { "from": "c", "to": "f" }, "ranks": { "from": 2, "to": 5 } } },
+                "feature": { "kind": "piece", "piece": { "color": "white", "role": "king" } }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "quantified",
+                  "quantifier": "some",
+                  "over": { "squares": { "files": { "from": "c", "to": "f" }, "ranks": { "from": 2, "to": 5 } } },
+                  "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "actions": ["compare_branches"]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "nc3-develop",
+      "ke8-step",
+      "h3-prepare",
+      "be6-post",
+      "g4-gain",
+      "ne7-retreat",
+      "nd4-post",
+      "bd7-develop"
+    ],
+    "plyHorizon": 7
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "atStart": true },
+      "moveUci": "c1g5",
+      "class": "accepted_alternative",
+      "note": "Bg5+ is the second-most-played move in the start position at this band: 1221 of 6011 (20.3%). Nothing in this pack compares it against Nc3 — the two are separated by 17 percentage points of popularity and by nothing else that has been measured here."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "f1d1",
+      "class": "accepted_alternative",
+      "note": "Rd1+ is the third-most-played move: 1205 of 6011 (20.0%). Computed: the d-file is fully open at every one of the eleven positions this pack authors, neither side having a d-pawn, so the rook faces the black king down an empty file at every one of them."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "h2h3",
+      "class": "accepted_alternative",
+      "note": "302 of 6011 (5.0%). The same move the spine plays two plies later. Nothing in this repo has measured which order is better; the counts say only that the band plays it here about a seventh as often as Nc3."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "f3g5",
+      "class": "interesting_deviation",
+      "note": "Ng5: 323 of 6011 (5.4%). Computed in the start position: the knight on f3 is the only White attacker of the e5 pawn, which Black attacks zero times. This move removes that attacker's defence of e5 while leaving the pawn unattacked; whether that matters is not measured here."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "b2b3",
+      "class": "interesting_deviation",
+      "note": "b3: 136 of 6011 (2.3%). Computed from the skeletons: Black has four queenside pawns (a7, b7, c6, c7) to White's three (a2, b2, c2). This pack has measured no consequence of the move beyond the skeleton change itself, which is why it is a door and not an error."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "c2c4",
+      "class": "interesting_deviation",
+      "note": "c4: 51 of 6011 (0.8%), the tenth-most-played move in the returned table and the one with the highest average opponent rating in the returned table (1949 against the position's spread of roughly 1713 to 1949). A rating average is not an assessment; it is the mean Elo of the players who chose it."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "position-is-common-agreement-is-not",
+      "text": "At the Lichess 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12) the start position occurs in 6011 games, but the band does not agree on what to do: Nc3 2260 (37.6%), Bg5+ 1221 (20.3%) and Rd1+ 1205 (20.0%) take 77.9% between them. The node counts down the spine run 6011, 2244, 513, 175, 53, 32, 34, and the largest share at any node after the first is the 100% of a position with 32 games in it.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "the-weakness-was-inherited",
+      "text": "Black's pawn skeleton is a7, b7, c6, c7, f7, g7, h7 at every one of the eleven positions this pack authors — it does not change once in eight plies. The shape entry's first-weakness plan checks for an isolated or doubled black pawn on some file, and that check is satisfied at the start position, before White has moved, because the doubled c-pawn came from the recapture that produced the position. Eight plies of the corpus's most-played moves induce nothing.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "the-king-never-moves",
+      "text": "The objective's signature was evaluated against all eleven authored positions and is satisfied at none. The clause that fails is always the same one: White's king is on g1 at all eleven. The other clause — that Black's king is outside the central region — is satisfied at all eleven, the black king standing on d8, e8 or c8 throughout. The drill is the clause the corpus does not play.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "no-race-here",
+      "text": "This pack declares no timing window, and the reason is measured rather than stylistic. Black's pawns never move on this spine, so there is no pawn arrival for a window to close on; the band's first move splits three ways at 37.6/20.3/20.0 rather than converging on one lever; and both of the shape entry's Black plans carry a null success signature, so the library itself declines to name the moment Black's counterplay arrives. A window here would have had to invent its own deadline.",
+      "evidenceTypes": ["derived_feature"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "OPENING IDENTITY: the move order to the start position is the Ruy Lopez, Berlin Defence, Berlin Wall / queenless middlegame after 9.Qxd8+ Kxd8; the name-to-line skeleton is lichess-org/chess-openings (CC0-1.0, no attribution required). No opening-name claim beyond the family label is made in this pack.",
+      "RATING-BAND FREQUENCY (mechanical, retrieved 2026-08-15): Lichess opening explorer, https://explorer.lichess.ovh/lichess, variant=standard, ratings=1400,1600,1800, speeds=rapid,classical, since=2023-01, until=2025-12, moves=12, topGames=0, recentGames=0, authenticated with the operator token. Every count and percentage in this file was read from that endpoint at the node it is quoted on: root 6011, after Nc3 2244, after ...Ke8 513, after h3 175, after ...Be6 53, after g4 32, after ...Ne7 34; and in the sibling branch after ...Bd7 421, after Rd1 156. Node counts that exceed the count of games reaching them in this move order are transposition counts and are labelled as such where quoted. Shares are recomputed from white+draws+black, which is the only total the response supports. The average-rating figures quoted for the c4 deviation are the endpoint's own averageRating field.",
+      "SPINE SELECTION RULE (mechanical): every move on the main spine is the most-played move at that node at this band, with no ties encountered. The single sibling branch (9...Bd7) is the second-most-played move at its node, and its quoted continuation follows the most-played move at each node.",
+      "STRUCTURAL READINGS (mechanical, chessops and the shipped structural evaluator): the pawn skeletons, the open d-file, and every attacker/defender count in this file (e5, c6, c7, d1, d5, g4, f5, e6) were computed from the FENs in this file, not recalled.",
+      "SHAPE REFERENCE (mechanical): the queenless-middlegame entry's trigger was evaluated with the shipped structural evaluator against all eleven positions this pack authors and fires on all eleven. Its plan success signatures were evaluated against the same eleven: white-first-weakness 11/11 (including the start position), white-king-into-the-game 0/11; black-neutralize-at-par and black-time-the-first-asymmetry have no signature at all, so nothing in this pack is built on them. The plan classes reference the entry's own plans rather than restating them; the entry's plan prose carries its own UNGROUNDED provenance and this pack does not improve it. The objective's achieved condition is the entry's king signature plus a third conjunct — white king within a king-distance of 2 of e4 — added because the validator rejects a structural success condition with no feature leaf (STRUCTURAL_CONDITION_HAS_NO_FEATURE); the conjunct is implied by the region clause, since files c-f and ranks 2-5 are exactly the squares within 2 of e4 in both coordinates, so it changes nothing about what is graded. The king-arrived checkpoint carries the entry's expression unaltered, and the 0/11 census above was run on the unaltered expression.",
+      "UNGROUNDED: the objective's premise — that walking the king into the centre is the thing to play for in this structure — is this pack's one strategic premise, and no evidence here establishes it. The region it names (files c to f, ranks 2 to 5) is the shape entry's authored choice, and the entry says so itself. The corpus at this band does not play it: the king is on g1 at all eleven authored positions, which is evidence about what the band does, not about what is right.",
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no engine evaluation has been run on any position here, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one. In particular nothing here says that Black's doubled c-pawns are a weakness — only that the shape entry's signature for a weakness is satisfied by them, from move one."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The objective is uncited. The routes out are a citable source that states the king-activity plan for queenless middlegames, or a corpus measurement relating an early king walk to results at this band; neither has been done. The corpus measured here points the other way in the weak sense that nobody plays it.",
+      "The objective's achieved signature is satisfied at none of the eleven authored positions, so the spine never demonstrates the target. That is deliberate — the target is reached in play, past the authored boundary — but nothing in this file shows a learner what success looks like.",
+      "No timing window is declared. The negative was measured and is recorded in the no-race-here feedback claim: no black pawn moves anywhere on this spine, so there is no arrival to close on; the band's first move splits three ways rather than naming one lever; and both Black plans in the referenced shape entry have null success signatures, so the library cannot say when Black's counterplay has arrived. Any deadline would have been authored out of nothing, which is the one thing the timing layer must not be used for.",
+      "No engine pass has been run on this pack, so no deviation carries a measured cost. There is also no concept_violation: the referenced entry's trigger needs both sides to keep a queenless position with a rook and a minor, and no single legal move from the start position can break that conjunction, so nothing here is off-objective by definition.",
+      "The referenced entry's own trigger-narrowing note applies to this pack: the trigger proves queenless but cannot prove the symmetry its name promises, and cannot mark the middlegame-endgame boundary. This pack inherits both limits."
+    ]
+  }
+}

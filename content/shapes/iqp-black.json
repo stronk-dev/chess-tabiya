@@ -1,6 +1,6 @@
 {
   "id": "iqp-black",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "Black isolated queen pawn",
   "phases": ["middlegame"],
   "trigger": { "kind": "feature", "feature": { "kind": "named_structure", "id": "iqp-black" } },
@@ -12,5 +12,5 @@
   ],
   "watch": ["Who occupies d4.", "The attacker and defender counts around the blockading square."],
   "typicalMistakes": ["Blockading with the wrong piece.", "Trading into the attack.", "Allowing d5-d4 without a cost."],
-  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored shape example with no citation, engine evaluation, corpus frequency, or owner review.", "D44 orphan status, measured 2026-08-15 with `make expression-census`: no pack under content/drafts references this entry and its trigger fires on 0 of the 694 authored spine positions. Decomposed, the trigger's three conjuncts fire 219, 1 and 45 times: the killing conjunct is the isolated black d-pawn at 1 of 694 (one position of carlsbad-minority-attack), and it never co-occurs with a d-file half-open for White. The detector family itself does match content - carlsbad fires 41 and iqp-white 4 on the same corpus - so this is a coverage fact about what has been authored, not evidence against the detector. A positive and a negative witness in content/witnesses/expression-witnesses.json now settle satisfiability."], "attribution": [] }
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["UNGROUNDED: agent-authored shape example with no citation, engine evaluation, corpus frequency, or owner review.", "D44 orphan status, measured 2026-08-15 with `make expression-census`: no pack under content/drafts references this entry and its trigger fires on 0 of the 694 authored spine positions. Decomposed, the trigger's three conjuncts fire 219, 1 and 45 times: the killing conjunct is the isolated black d-pawn at 1 of 694 (one position of carlsbad-minority-attack), and it never co-occurs with a d-file half-open for White. The detector family itself does match content - carlsbad fires 41 and iqp-white 4 on the same corpus - so this is a coverage fact about what has been authored, not evidence against the detector. A positive and a negative witness in content/witnesses/expression-witnesses.json now settle satisfiability.", "D44 ORPHAN STATUS SUPERSEDED 2026-08-15 (middlegame content wave): content/drafts/iqp-black-tarrasch-defence.json now references this entry, and the census over the enlarged corpus gives trigger 7 of 791 and white-blockade-and-trade 6. The zero-firing statement above was true when written and is kept for the record."], "attribution": [] }
 }

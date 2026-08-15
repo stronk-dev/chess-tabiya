@@ -1,0 +1,473 @@
+{
+  "id": "maroczy-bind-white-squeeze",
+  "version": "0.1.0",
+  "title": "Maroczy bind: hold the clamp while the break is being prepared",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "White holding the Maroczy bind against the Accelerated Dragon setup",
+    "branchLengthTarget": 10
+  },
+  "start": {
+    "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 w - - 2 10",
+    "movesSan": [
+      "e4",
+      "c5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "cxd4",
+      "Nxd4",
+      "g6",
+      "c4",
+      "Bg7",
+      "Be3",
+      "Nf6",
+      "Nc3",
+      "O-O",
+      "Be2",
+      "d6",
+      "O-O",
+      "Bd7"
+    ],
+    "side": "white"
+  },
+  "objective": {
+    "type": "preserve_plan_window",
+    "summary": "You have the White side of the Maroczy bind: pawns on c4 and e4, the d-file half-open for you, the c-file half-open for Black. Complete the restraining arrangement — a rook on c1 and the pawn on b3 — before Black's ...b5 lever arrives, and without spending more than one move on anything else.",
+    "successConditions": [
+      {
+        "kind": "timing_window",
+        "windowId": "hold-the-b5-lever",
+        "verdict": "in_time",
+        "to": "achieved"
+      },
+      {
+        "kind": "timing_window",
+        "windowId": "hold-the-b5-lever",
+        "verdict": "over_budget",
+        "to": "degraded"
+      },
+      {
+        "kind": "timing_window",
+        "windowId": "hold-the-b5-lever",
+        "verdict": "too_slow",
+        "to": "failed"
+      },
+      {
+        "kind": "timing_window",
+        "windowId": "hold-the-b5-lever",
+        "verdict": "premature",
+        "to": "failed"
+      }
+    ]
+  },
+  "concepts": [
+    "maroczy-bind",
+    "break-restraint",
+    "lever-arrival",
+    "arrangement-before-action"
+  ],
+  "shapes": [
+    "maroczy-bind"
+  ],
+  "planClasses": [
+    {
+      "id": "hold-the-bind",
+      "label": "Hold the bind with both breaks unplayed",
+      "description": "The library's restraint plan, played here: finish the arrangement that keeps ...b5 and ...d5 off the board. Its success is the shape entry's own signature — the bind still detected, no black pawn on b5 or d5 — not a sentence in this pack.",
+      "shapePlan": {
+        "shape": "maroczy-bind",
+        "plan": "white-space-squeeze"
+      }
+    },
+    {
+      "id": "clamp-on-d5",
+      "label": "Occupy d5",
+      "description": "The library's occupation plan. Measured in the start position: d5 is attacked three times by White (knight c3, pawn c4, pawn e4) and once by Black (knight f6). The shape entry's success signature is stricter than arrival — it requires d5 to be a detected outpost, which it is not while Black still has an e-pawn.",
+      "shapePlan": {
+        "shape": "maroczy-bind",
+        "plan": "white-d5-clamp"
+      }
+    }
+  ],
+  "timingWindows": [
+    {
+      "id": "hold-the-b5-lever",
+      "label": "Arrangement before the lever",
+      "opens": {
+        "fromStart": true
+      },
+      "closes": [
+        {
+          "kind": "arrival",
+          "move": {
+            "piece": {
+              "color": "black",
+              "role": "pawn"
+            },
+            "to": "b5"
+          }
+        },
+        {
+          "kind": "release",
+          "move": {
+            "piece": {
+              "color": "white",
+              "role": "pawn"
+            },
+            "to": "c5"
+          }
+        },
+        {
+          "kind": "deadline",
+          "afterLearnerMoves": 4
+        }
+      ],
+      "readiness": {
+        "mode": "all",
+        "of": [
+          {
+            "piece": {
+              "color": "white",
+              "role": "rook"
+            },
+            "to": "c1"
+          },
+          {
+            "piece": {
+              "color": "white",
+              "role": "pawn"
+            },
+            "to": "b3"
+          }
+        ]
+      },
+      "tolerated": [
+        {
+          "moveUci": "d1d2"
+        }
+      ],
+      "luxuryMoveBudget": 1,
+      "gradeOutpaced": false,
+      "note": "Readiness is the two queenside moves this spine plays: rook to c1, pawn to b3. Tolerating Qd2 is a corpus fact, not a preference - it is the most-played move at the band here (1161 of 5069). The release close names c4-c5 because the shape detector requires a White pawn on c4. Deadline four = the authored spine's own learner-move count."
+    }
+  ],
+  "spine": [
+    {
+      "id": "qd2-connect",
+      "moveUci": "d1d2",
+      "moveSan": "Qd2",
+      "annotations": [
+        "Read the structure first. White pawns: a2, b2, c4, e4, f2, g2, h2. Black pawns: a7, b7, d6, e7, f7, g6, h7. Neither side has a c-pawn on the c-file for the other to block, so the c-file is half-open for Black and the d-file is half-open for White — the pawn signature the shape library detects as the Maroczy bind.",
+        "Computed from this position: b5 is attacked three times by White (knight c3, pawn c4, knight d4) and zero times by Black; d5 is attacked three times by White (knight c3, pawn c4, pawn e4) and once by Black (knight f6). Both of Black's freeing pawn levers land on squares White currently outnumbers.",
+        "Lichess explorer, rapid+classical, rating bands 1400/1600/1800, 2023-01 to 2025-12: this position occurs in 5069 games. Qd2 is the most-played move at 1161 (22.9%), then f3 879 (17.3%), Rc1 729 (14.4%), f4 578 (11.4%). Every move on this spine is the most-played move at this band; the counts are stated at each node so you can see how thin the data becomes."
+      ],
+      "children": [
+        {
+          "id": "rc8-file",
+          "moveUci": "a8c8",
+          "moveSan": "Rc8",
+          "annotations": [
+            "1296 games here; Rc8 is the most played at 302 (23.3%), then Nxd4 253 (19.5%) and a6 213 (16.4%). Black's rook goes to the file Black has no pawn on."
+          ],
+          "children": [
+            {
+              "id": "rac1-oppose",
+              "moveUci": "a1c1",
+              "moveSan": "Rac1",
+              "annotations": [
+                "313 games; Rac1 is the most played at 70 (22.4%), then f3 65 (20.8%) and b3 49 (15.7%). This is the first of the two moves this pack's timing window counts as readiness.",
+                "Which rook: the a1 rook is the one not needed on f1, and it is the rook that ends up opposite Black's on the only file with no pawns of either colour."
+              ],
+              "children": [
+                {
+                  "id": "a6-prepare",
+                  "moveUci": "a7a6",
+                  "moveSan": "a6",
+                  "annotations": [
+                    "101 games; a6 and Ne5 are tied as the most played at 32 each (31.7%). Recount b5 after this move: White still attacks it three times (knight c3, pawn c4, knight d4) and Black now defends it once (pawn a6). The lever is being prepared, and the count says it is not ready.",
+                    "This is the move the timing window is measured against. From here the window closes on a black pawn reaching b5, on your own c4-c5, or after your fourth move — whichever comes first."
+                  ],
+                  "children": [
+                    {
+                      "id": "b3-brace",
+                      "moveUci": "b2b3",
+                      "moveSan": "b3",
+                      "annotations": [
+                        "113 games; b3 is the most played at 36 (31.9%), then f3 29 (25.7%) and Rfd1 17 (15.0%). Computed: before b3 the c4 pawn was defended once (bishop e2); after b3 it is defended twice (bishop e2, pawn b3). That is what this move does to the position — the rest is your judgment, not this pack's claim.",
+                        "Readiness is now complete: rook on c1, pawn on b3. Anything you play from here is outside the arrangement, and the window's budget is one such move."
+                      ],
+                      "children": [
+                        {
+                          "id": "ng4-hit",
+                          "moveUci": "f6g4",
+                          "moveSan": "Ng4",
+                          "annotations": [
+                            "80 games; Ng4 is the most played at 27 (33.8%). Black attacks the bishop on e3 — the piece that is currently the second defender of the knight on d4."
+                          ],
+                          "children": [
+                            {
+                              "id": "bxg4-take",
+                              "moveUci": "e2g4",
+                              "moveSan": "Bxg4",
+                              "annotations": [
+                                "27 games; Bxg4 is the most played at 21 (77.8%), the alternatives being Nxc6 4 and Bg5 2. Note what leaves the board on the next two moves and what does not: the c4 and e4 pawns are untouched by this trade, so the detected structure survives it."
+                              ],
+                              "children": [
+                                {
+                                  "id": "bxg4-recapture",
+                                  "moveUci": "d7g4",
+                                  "moveSan": "Bxg4",
+                                  "annotations": [
+                                    "21 games, and Bxg4 is played in all 21 (100%). This is where the band's data runs out — three years of rapid and classical games at 1400-1800 contain twenty-one examples of this position. Past here you are on your own, which is the point of playing it out rather than reading it."
+                                  ],
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "nxd4-trade",
+          "moveUci": "c6d4",
+          "moveSan": "Nxd4",
+          "annotations": [
+            "The second-most-played reply at 253 (19.5%) of 1296. After it, Bxd4 is played in 253 of 253 games (100%) — the only recapture the band's games contain — and then Bc6 in 219 of 307 (71.3%). Play it out from the White side and compare it against the ...a6 spine: the bind's pawns are the same, the pieces are not."
+          ],
+          "children": []
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-choice",
+      "label": "Before your first move: which of the library's two White plans are you playing?",
+      "trigger": {
+        "atStart": true
+      },
+      "actions": [
+        "compare_branches"
+      ],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": [
+          "hold-the-bind",
+          "clamp-on-d5"
+        ]
+      }
+    },
+    {
+      "id": "arrangement-complete",
+      "label": "Rook on c1, pawn on b3 — the arrangement is on the board",
+      "trigger": {
+        "atSpineNode": "b3-brace"
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "budget-spent",
+      "label": "Two moves inside the window that were neither the arrangement nor the tolerated Qd2",
+      "trigger": {
+        "atWindow": {
+          "windowId": "hold-the-b5-lever",
+          "spendAtLeast": 2
+        }
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    },
+    {
+      "id": "lever-landed",
+      "label": "A black pawn stands on b5 and the bind is still detected",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "pieceOnSquare",
+                "square": "b5",
+                "piece": {
+                  "color": "black",
+                  "role": "pawn"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "named_structure",
+                  "id": "maroczy-bind"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "actions": [
+        "compare_branches"
+      ]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "qd2-connect",
+      "rc8-file",
+      "rac1-oppose",
+      "a6-prepare",
+      "b3-brace",
+      "ng4-hit",
+      "bxg4-take",
+      "bxg4-recapture",
+      "nxd4-trade"
+    ],
+    "plyHorizon": 8
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": {
+        "atStart": true
+      },
+      "moveUci": "f2f3",
+      "class": "accepted_alternative",
+      "note": "The second-most-played move in the start position at this band: 879 of 5069 (17.3%). It is not one of this window's two readiness moves, so the window counts it as a spent move — which is a statement about this pack's authored plan, not about the move. Measured (Stockfish 18, depth 22, MultiPV 1, this session): the position after f3 is +55 centipawns for White; the best evaluated candidate here is +77. Loss is candidate-relative and a lower bound — not every legal move was enumerated.",
+      "cost": {
+        "kind": "cp",
+        "loss": 22,
+        "basis": "engine"
+      }
+    },
+    {
+      "at": {
+        "atStart": true
+      },
+      "moveUci": "a1c1",
+      "class": "accepted_alternative",
+      "note": "Rc1 immediately: 729 of 5069 (14.4%), the third-most-played move here. It completes half the readiness arrangement one move earlier than the spine does, so the same window scores it as readiness rather than spend. Measured at the same fixed depth: +34 after Rc1 against a best evaluated candidate of +77.",
+      "cost": {
+        "kind": "cp",
+        "loss": 43,
+        "basis": "engine"
+      }
+    },
+    {
+      "at": {
+        "atStart": true
+      },
+      "moveUci": "f2f4",
+      "class": "interesting_deviation",
+      "note": "578 of 5069 (11.4%). A different plan for the same structure: the shape entry's White plans are restraint and the d5 clamp, and this move is neither. Nothing in this repo has measured whether it is better or worse here, so it is classified as a door, not an error — open it and compare. Measured at the same fixed depth: +32 after f4 against a best evaluated candidate of +77. A number, not a verdict.",
+      "cost": {
+        "kind": "cp",
+        "loss": 45,
+        "basis": "engine"
+      }
+    },
+    {
+      "at": {
+        "atStart": true
+      },
+      "moveUci": "d4c6",
+      "class": "interesting_deviation",
+      "note": "Nxc6: 84 of 5069 (1.7%), and the recapture split at this band is measured — Bxc6 69 (82.1%), bxc6 15 (17.9%). The 17.9% branch ends the structure this pack is about by definition rather than by judgment: the detector requires the c-file to be half-open for Black, and a black pawn back on c6 is a black pawn on the c-file. Play both recaptures and see which position you would rather hold. Measured at the same fixed depth: +50 after Nxc6 against a best evaluated candidate of +77.",
+      "cost": {
+        "kind": "cp",
+        "loss": 27,
+        "basis": "engine"
+      }
+    },
+    {
+      "at": {
+        "atStart": true
+      },
+      "moveUci": "c4c5",
+      "class": "concept_violation",
+      "offObjective": true,
+      "mistake": [
+        "timing"
+      ],
+      "timingWindowId": "hold-the-b5-lever",
+      "note": "c4-c5 is the release this pack's timing window names. It is off-objective by construction and by arithmetic, not by grade: the objective is to keep the detected bind while the arrangement is completed, and the detector requires a White pawn on c4. Whether the resulting position is good is a separate question this pack does not answer — the window records only that the plan ended before it was ready. Measured at the same fixed depth: the start position is +75 for White and the position after c4-c5 is -117, a candidate-relative loss of 194 centipawns against the best evaluated candidate (+77). That is a fixed-depth measurement, not a proof.",
+      "cost": {
+        "kind": "cp",
+        "loss": 194,
+        "basis": "engine"
+      }
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "bind-is-attested",
+      "text": "This is not a rare position: at the Lichess 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12) the start position of this pack occurs in 5069 games, and the arrangement this drill asks for — rook to c1, pawn to b3 — is the most-played move in the corpus at both of the moments the spine plays it (70 of 313, 36 of 113).",
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
+    },
+    {
+      "id": "lever-counts",
+      "text": "Both of Black's freeing levers land on squares White outnumbers in the start position: b5 is attacked three times by White and zero times by Black, d5 three times by White and once by Black. After ...a6, b5 is three against one. These are piece-attack counts computed from the position, not an assessment of the position.",
+      "evidenceTypes": [
+        "derived_feature"
+      ]
+    },
+    {
+      "id": "structure-is-a-definition",
+      "text": "Two moves in this pack end the Maroczy bind as a detected structure rather than as a matter of opinion: c4-c5 removes the c4 pawn the detector requires, and Nxc6 bxc6 restores a black pawn to the half-open c-file. Everything else on the spine leaves the pawn signature intact.",
+      "evidenceTypes": [
+        "derived_feature"
+      ]
+    },
+    {
+      "id": "engine-measured-root",
+      "text": "Fixed-depth measurement, not a proof: Stockfish 18 at depth 22 (Threads 1, Hash 16 MB, MultiPV 1) evaluates this pack's start position at +75 centipawns for White, and every authored spine position between +52 and +82. The one move this pack calls off-objective, c4-c5, measures -117 at the same depth.",
+      "evidenceTypes": [
+        "engine_validated"
+      ]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "OPENING IDENTITY: the move order to the start position is the Sicilian Accelerated Dragon, Maroczy Bind family; the name-to-line skeleton is lichess-org/chess-openings (CC0-1.0, no attribution required). No opening-name claim beyond the family label is made in this pack.",
+      "RATING-BAND FREQUENCY (mechanical, retrieved 2026-08-15): Lichess opening explorer, https://explorer.lichess.ovh/lichess, variant=standard, ratings=1400,1600,1800, speeds=rapid,classical, since=2023-01, until=2025-12, authenticated with the operator token. Every count and percentage in this file was read from that endpoint at the node it is quoted on: root 5069, after Qd2 1296, after ...Rc8 313, after Rac1 101, after ...a6 113, after b3 80, after ...Ng4 27, after Bxg4 21, and the Nxc6 recapture split 84 -> Bxc6 69 / bxc6 15. Shares are recomputed from white+draws+black, which is the only total the response supports.",
+      "SPINE SELECTION RULE (mechanical): every spine move is the most-played move at that node at this band. The one tie (a6 and Ne5, 32 each after Rac1) was broken toward a6 because it is the move the pack's timing window is about; the tie is stated at the node.",
+      "STRUCTURAL READINGS (mechanical, chessops): the pawn skeletons, the attacker/defender counts for b5, c4 and d5, and the claim that b3 changes c4's defender count from one to two were computed from the FENs in this file with the chessops attack tables, not recalled.",
+      "SHAPE REFERENCE (mechanical): the maroczy-bind entry's trigger is the named_structure detector, and it fires on this pack's start position and on every spine position (verified with make shape-check PROBE and the expression census after this pack landed). The plan classes reference the entry's own plans rather than restating them; the entry's plan prose carries its own UNGROUNDED provenance and this pack does not improve it.",
+      "UNGROUNDED: the objective summary's framing (that completing the arrangement before the lever arrives is the right way to play the structure) is the pack's one authored strategic premise. It is not established by any evidence here. The corpus shows what the band plays, not what is correct; the attack counts show what attacks what, not what matters. No engine evaluation has been run on any position in this pack.",
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one.",
+      "ENGINE PASS (mechanical, 2026-08-15): make engine-walk over this pack — Stockfish 18 at the repo's authoring profile (depth 22, Threads 1, Hash 16 MB, MultiPV 1), 21 queries, no abstentions. Recorded White-perspective centipawns: start +75; spine Qd2 +52, ...Rc8 +74, Rac1 +65, ...a6 +68, b3 +75, ...Ng4 +80, Bxg4 +82, ...Bxg4 +77; sibling ...Nxd4 +59; deviations f3 +55, Rc1 +34, f4 +32, Nxc6 +50, c4-c5 -117. Deviation costs in this file are candidate-relative losses against the best evaluated candidate (+77, the engine's own first choice Nc2) and are LOWER BOUNDS: legal moves were not exhaustively enumerated. Engine evidence supports these literal numbers only — it does not ground any deviation class, the offObjective flag, or any plan claim in this pack.",
+      "TEMPO WINDOW VERIFIED (mechanical): the authored spine was replayed through the shipped evaluator (packages/runtime/src/tempo.ts windowStates, learner white). Result: readiness satisfied 2 of 2, spend 0 of budget 1, closedBy deadline at bxg4-take, verdict in_time. The window is therefore reachable and non-vacuous on the line the pack teaches; the budget of one and the deadline of four are authored numbers, and only the fact that the spine resolves them was measured."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The objective's premise — arrangement before lever — is uncited. The routes out are a citable source that states the restraint plan for this structure, or a corpus measurement relating the arrangement's completion to results at this band; neither has been done.",
+      "An engine pass has been run (see ENGINE PASS in sources) and the deviation costs are now measured rather than declared unmeasurable. What it does not do is ground the objective's premise, any deviation class, or the timing window's thresholds — a fixed-depth score is a measurement of a position, not of a plan.",
+      "The timing window's numbers are authored: a luxury budget of one and a deadline of five learner moves are the author's encoding of the teaching point, and nothing measured says those are the right thresholds."
+    ]
+  }
+}

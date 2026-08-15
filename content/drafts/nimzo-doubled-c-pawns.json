@@ -1,0 +1,313 @@
+{
+  "id": "nimzo-doubled-c-pawns",
+  "version": "0.1.0",
+  "title": "Sämisch doubled c-pawns: what the pair bought",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "White with the doubled c-pawns and the bishop pair after ...Bxc3+ bxc3",
+    "branchLengthTarget": 8
+  },
+  "start": {
+    "fen": "r2q1rk1/pbpn1ppp/1p1ppn2/6B1/2PP4/P1PBPN2/5PPP/R2QK2R w KQ - 2 10",
+    "movesSan": [
+      "d4", "Nf6", "c4", "e6", "Nc3", "Bb4", "a3", "Bxc3+", "bxc3", "O-O",
+      "Nf3", "b6", "Bg5", "Bb7", "e3", "d6", "Bd3", "Nbd7"
+    ],
+    "side": "white"
+  },
+  "objective": {
+    "type": "reach_structure",
+    "summary": "You are White with the structure the recapture on c3 created: pawns doubled on c3 and c4, no pawn on the b-file, and both bishops still on the board. The shape library gives White two plans for this structure and each states its own arrangement — a pawn duo on d4 and e4, or both bishops plus a rook on the half-open b-file. This pack's objective is reached when either arrangement is on the board with the doubled pair still there. It does not say which one is better, or that either is worth playing for.",
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } },
+            { "kind": "pieceOnSquare", "square": "e4", "piece": { "color": "white", "role": "pawn" } },
+            { "kind": "pieceOnSquare", "square": "c4", "piece": { "color": "white", "role": "pawn" } },
+            { "kind": "feature", "feature": { "kind": "doubled_pawn", "color": "white", "file": "c" } }
+          ]
+        },
+        "to": "achieved"
+      },
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "white", "shade": "light" } },
+            { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "white", "shade": "dark" } },
+            { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "b" } },
+            {
+              "kind": "quantified",
+              "quantifier": "some",
+              "over": { "squares": { "files": { "from": "b", "to": "b" }, "ranks": { "from": 1, "to": 8 } } },
+              "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } }
+            }
+          ]
+        },
+        "to": "achieved"
+      },
+      {
+        "kind": "structural_feature",
+        "feature": { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "doubled_pawn", "color": "white", "file": "c" } } },
+        "to": "degraded"
+      }
+    ]
+  },
+  "concepts": [
+    "doubled-c-pawns",
+    "bishop-pair",
+    "half-open-b-file",
+    "centre-duo"
+  ],
+  "shapes": ["doubled-c-pawns"],
+  "planClasses": [
+    {
+      "id": "roll-the-centre",
+      "label": "Put a pawn on e4 beside the one on d4",
+      "description": "The library's first White plan. Its success signature is two squares: White pawns on d4 and e4. Measured in the start position, e4 is empty and attacked once by White (bishop d3) and twice by Black (knight f6, bishop b7); the same two-against-one reading holds at the last position of this spine. Corpus note at this band: e3-e4 is played in 69 of the 742 games in the start position (9.3%) and in 58 of 381 (15.2%) at the node two moves later.",
+      "shapePlan": { "shape": "doubled-c-pawns", "plan": "white-centre-roll" }
+    },
+    {
+      "id": "bishops-and-the-b-file",
+      "label": "Both bishops plus a rook on the b-file",
+      "description": "The library's second White plan, whose signature is an arrangement rather than a claim about line quality: both White bishops still on the board and a White rook somewhere on the half-open b-file. Measured: White's pawns are a3, c3, c4, d4, e3, f2, g2, h2, so the b-file carries no White pawn while Black's stands on b6 — which is exactly the half-open condition the shape entry's own trigger uses. A rook to b1 is played in 4 of 742 games here (0.5%) and 24 of 381 (6.3%) two moves later.",
+      "shapePlan": { "shape": "doubled-c-pawns", "plan": "white-open-for-the-bishops" }
+    },
+    {
+      "id": "what-black-fixes",
+      "label": "The clamp Black is playing for",
+      "description": "Black's plan from the same entry, listed here because this spine walks straight into its success signature: a black pawn on c5 in front of the still-doubled pair with the White pawn on c4 fixed behind it. It arrives on the spine's fourth ply. Measured at that moment: c4 is attacked zero times by Black and defended once by White (bishop d3), and d4 goes from zero Black attackers to one.",
+      "shapePlan": { "shape": "doubled-c-pawns", "plan": "black-fix-the-front-pawn" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "oo-tuck",
+      "moveUci": "e1h1",
+      "moveSan": "O-O",
+      "annotations": [
+        "Read the pawns first. White: a3, c3, c4, d4, e3, f2, g2, h2. Black: a7, b6, c7, d6, e6, f7, g7, h7. Two White pawns stand on the c-file and none on the b-file, and Black has a pawn on b6 — the three conditions the shape library's doubled-c-pawns entry uses as its trigger, all present.",
+        "Computed from this position: c4 is attacked once by White (bishop d3) and zero times by Black. d4 is defended three times (pawn c3, pawn e3, knight f3) and attacked zero times. c5 is attacked three times by Black (pawn b6, pawn d6, knight d7) and once by White (pawn d4). e4 is attacked once by White (bishop d3) and twice by Black (knight f6, bishop b7).",
+        "Lichess explorer, rapid+classical, rating bands 1400/1600/1800, 2023-01 to 2025-12: this position occurs in 742 games. O-O is the most played at 489 (65.9%), then Qc2 104 (14.0%), e4 69 (9.3%), Bc2 29 (3.9%), h4 15 (2.0%), h3 8, d5 7, Qe2 5, Be2 4, Rb1 4, a4 3, Bxf6 2. Every move on this spine is the most-played move at its node."
+      ],
+      "children": [
+        {
+          "id": "h6-question",
+          "moveUci": "h7h6",
+          "moveSan": "h6",
+          "annotations": [
+            "550 games; h6 is the most played at 197 (35.8%), then c5 119 (21.6%), Qe8 109 (19.8%), Qc8 41 (7.5%), Re8 31 (5.6%). Black asks the bishop on g5 — one of the two bishops the second plan's signature requires — what it intends to do."
+          ],
+          "children": [
+            {
+              "id": "bh4-hold",
+              "moveUci": "g5h4",
+              "moveSan": "Bh4",
+              "annotations": [
+                "197 games; Bh4 is played in 184 (93.4%), then Bxf6 8 (4.1%), Bf4 3 (1.5%), Re1 1, Qc2 1. Keeping the bishop keeps the second plan's signature reachable; taking on f6 removes a White bishop and makes it unreachable by definition. That is arithmetic about the signature, not an opinion about the trade."
+              ],
+              "children": [
+                {
+                  "id": "c5-clamp",
+                  "moveUci": "c7c5",
+                  "moveSan": "c5",
+                  "annotations": [
+                    "820 games at this node (larger than the 184 that reached it by the spine move, because other move orders transpose here). c5 is the most played at 254 (31.0%), then Qe8 169 (20.6%), Qc8 113 (13.8%), g5 83 (10.1%), Re8 81 (9.9%).",
+                    "This move satisfies the shape entry's black-fix-the-front-pawn signature: a black pawn on c5, a White pawn still on c4, and the White c-pawns still doubled. Recomputed after it: c4 is still attacked zero times by Black and defended once by White, and d4 now has one Black attacker (pawn c5) against three White defenders (pawn c3, pawn e3, knight f3)."
+                  ],
+                  "children": [
+                    {
+                      "id": "re1-centre",
+                      "moveUci": "f1e1",
+                      "moveSan": "Re1",
+                      "annotations": [
+                        "381 games; Re1 is the most played at 98 (25.7%), then e4 58 (15.2%), d5 34 (8.9%), Qc2 27 (7.1%), Rb1 24 (6.3%). Two of the five most-played moves here are the first moves of the two plans this pack names, and the corpus's most-played move is neither."
+                      ],
+                      "children": [
+                        {
+                          "id": "qc7-line",
+                          "moveUci": "d8c7",
+                          "moveSan": "Qc7",
+                          "annotations": [
+                            "109 games; Qc7 is the most played at 70 (64.2%), then Re8 8 (7.3%), g5 7 (6.4%), Qc8 6 (5.5%), e5 5 (4.6%). This is where the band's data thins to three figures. Recomputed here: e4 is still attacked once by White (bishop d3) and twice by Black (knight f6, bishop b7), and c4 still has one White defender and no Black attacker. Neither of this pack's two success arrangements is on the board, and the corpus does not put one there.",
+                            "Past this point you are playing, not reading. Both plans are still available and this pack has no evidence about either."
+                          ],
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "qe8-regroup",
+                  "moveUci": "d8e8",
+                  "moveSan": "Qe8",
+                  "annotations": [
+                    "The second-most-played reply at 169 of 820 (20.6%). Black leaves the c-pawn on c7 for now, so the front pawn on c4 is not yet fixed and the black-fix-the-front-pawn signature is not satisfied. Play it out and compare it against the clamped branch: the same structure, one restraint fewer."
+                  ],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-choice",
+      "label": "Before your first move: which of the library's White plans are you playing?",
+      "trigger": { "atStart": true },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["roll-the-centre", "bishops-and-the-b-file"]
+      }
+    },
+    {
+      "id": "clamp-landed",
+      "label": "A black pawn stands on c5 with the White c-pawn fixed on c4 behind it",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              { "kind": "pieceOnSquare", "square": "c5", "piece": { "color": "black", "role": "pawn" } },
+              { "kind": "pieceOnSquare", "square": "c4", "piece": { "color": "white", "role": "pawn" } },
+              { "kind": "feature", "feature": { "kind": "doubled_pawn", "color": "white", "file": "c" } }
+            ]
+          }
+        }
+      },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "duo-on-the-board",
+      "label": "Pawns on d4 and e4 with the doubled pair still behind them",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } },
+              { "kind": "pieceOnSquare", "square": "e4", "piece": { "color": "white", "role": "pawn" } },
+              { "kind": "feature", "feature": { "kind": "doubled_pawn", "color": "white", "file": "c" } }
+            ]
+          }
+        }
+      },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "end-of-data",
+      "label": "One hundred and nine games deep: the corpus thins out here",
+      "trigger": { "atSpineNode": "qc7-line" },
+      "actions": ["compare_branches"]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "oo-tuck",
+      "h6-question",
+      "bh4-hold",
+      "c5-clamp",
+      "re1-centre",
+      "qc7-line",
+      "qe8-regroup"
+    ],
+    "plyHorizon": 6
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "atStart": true },
+      "moveUci": "e3e4",
+      "class": "accepted_alternative",
+      "note": "The roll played at once: 69 of 742 (9.3%), the third-most-played move here. It reaches this pack's first success arrangement on move ten — pawns on d4 and e4 with the doubled pair still on c3 and c4. Measured against it: e4 is attacked twice by Black (knight f6, bishop b7) and once by White (bishop d3) before the pawn arrives."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "d1c2",
+      "class": "accepted_alternative",
+      "note": "Qc2: 104 of 742 (14.0%), the second-most-played move here. It is neither of the two arrangements this pack's objective checks, so a run that plays it has to reach one of them later or not at all."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "a1b1",
+      "class": "interesting_deviation",
+      "note": "Rb1: 4 of 742 (0.5%). It is the rook move the second plan's signature asks for, and it is the second-rarest move in the returned distribution at this node. The gap between what the plan names and what this band plays is itself the measurement; nothing here says which is right."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "g5f6",
+      "class": "interesting_deviation",
+      "note": "Bxf6: 2 of 742 (0.3%), the rarest move in the returned distribution. Its consequence is definitional rather than evaluative: the second plan's signature requires a White bishop on each shade, and after this trade one shade is empty for the rest of the game, so that arrangement can no longer be reached. Whether the resulting position is better is not measured anywhere in this repo."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "c4c5",
+      "class": "concept_violation",
+      "offObjective": true,
+      "mistake": ["plan"],
+      "note": "c4-c5 ends the structure this pack is about by definition, not by grade: the shape entry's trigger requires a White pawn on c4, and after this push there is none — the pawns are doubled on c3 and c5 instead. It is also outside the twelve most-played moves at this node, which together cover 739 of the 742 games, so it occurs in at most 3 of them (0.4%).",
+      "cost": { "kind": "unmeasurable", "reason": "No engine or corpus evidence in this repo bears on the value of the resulting position; the only measured consequence is that the pack's structure stops being detected." }
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "which-tabiya-is-attested",
+      "text": "Two Nimzo-Indian routes to White doubled c-pawns were measured this session at the 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12). The Sämisch position after 4.a3 Bxc3+ 5.bxc3 occurs in 75774 games; the Classical/Karpov position after 9.Bxc3 Bxc3 bxc3 occurs in 193. The second one also does not have this structure on the board: its c4 square holds a bishop and White has a single c-pawn, so the shape entry's trigger cannot fire on it. This pack is authored from the first.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "trigger-is-a-pawn-count",
+      "text": "The three conditions that make this the detected structure are all pawn arithmetic read off the position: two White pawns on the c-file, one of them on c4, and no White pawn on the b-file while Black has one on b6. White's full skeleton here is a3, c3, c4, d4, e3, f2, g2, h2.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "corpus-does-not-play-the-plans",
+      "text": "The corpus line this spine follows reaches neither of the two arrangements the shape library gives White. At the start position e3-e4 is played in 69 of 742 games (9.3%) and a rook to b1 in 4 of 742 (0.5%); two moves later they are 58 of 381 (15.2%) and 24 of 381 (6.3%), and the most-played move at that node is neither. That is a measurement of what this band plays, not a claim that the plans are wrong or that the band is.",
+      "evidenceTypes": ["corpus_observed"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "OPENING IDENTITY: the move order to the start position is the Nimzo-Indian Defence, Sämisch Variation; the name-to-line skeleton is lichess-org/chess-openings (CC0-1.0, no attribution required). No opening-name claim beyond the family label is made in this pack.",
+      "TABIYA SELECTION (mechanical, retrieved 2026-08-15): both candidate roots were measured before authoring. Classical/Karpov, FEN rnbq1rk1/pp3ppp/4pn2/2p5/2BP4/2P1PN2/P4PPP/R1BQ1RK1 b - - 0 9: 193 games. Sämisch, FEN rnbqk2r/pppp1ppp/4pn2/8/2PP4/P1P5/4PPPP/R1BQKBNR b KQkq - 0 5: 75774 games. The Sämisch was chosen on the count and on a second, harder ground: the Classical/Karpov position does not carry this structure at all — its c4 square holds the bishop that recaptured there and White has one c-pawn, not two — so the doubled-c-pawns entry's trigger is false on it.",
+      "RATING-BAND FREQUENCY (mechanical, retrieved 2026-08-15): Lichess opening explorer, https://explorer.lichess.ovh/lichess, variant=standard, ratings=1400,1600,1800, speeds=rapid,classical, since=2023-01, until=2025-12, moves=12, authenticated with the operator token. Every count and percentage in this file was read from that endpoint at the node it is quoted on: Sämisch root after 5.bxc3 75774, start position 742 (full returned distribution O-O 489, Qc2 104, e4 69, Bc2 29, h4 15, h3 8, d5 7, Qe2 5, Be2 4, Rb1 4, a4 3, Bxf6 2, summing to 739 of 742), after O-O 550, after h6 197, after Bh4 820, after c5 381, after Re1 109. Shares are recomputed from white+draws+black, which is the only total the response supports. Where a node total exceeds the count of the move that reached it, that is the explorer's transposition arithmetic and it is stated at the node.",
+      "SPINE SELECTION RULE (mechanical): every spine move is the most-played move at its node at this band, with no ties, walked from the 75774-game Sämisch root. The one authored branch (Qe8 at the third node) is the second-most-played move there and is labelled with both counts.",
+      "STRUCTURAL READINGS (mechanical, chessops): the pawn skeletons and every attacker/defender count quoted for c4, c5, d4 and e4 at the start position, after ...c5 and at the last spine position were computed from the FENs in this file with the chessops attack tables, not recalled.",
+      "SHAPE REFERENCE (mechanical): the doubled-c-pawns entry's trigger is the conjunction of doubled White c-pawns, a White pawn on c4, and the b-file half-open for White. It fires on the start position and on every spine position here, which is what make pack-check verifies by refusing SHAPE_REFERENCE_NEVER_PRESENT. Before this pack the entry's own provenance recorded it as an orphan — zero references and zero firings across 694 authored spine positions — and that line in content/shapes/doubled-c-pawns.json is now out of date; this pack does not edit it. The three plan classes reference the entry's plans rather than restating them; the entry's plan prose carries its own UNGROUNDED provenance and this pack does not improve it.",
+      "TIMING: no timing window is declared, and the reason is measured. A window needs an opponent lever whose arrival ends the preparation and whose timing is worth racing. Black's clamp ...c5 is the only candidate here and it is not decisive on either count: it is played in 119 of 550 (21.6%) at one node and 254 of 820 (31.0%) at another, so it is not an arrival the learner can be graded against, and White's own plan moves are rarer still (e3-e4 at 9.3% and 15.2%, a rook to b1 at 0.5% and 6.3%). Declaring a race between two moves that most games at this band do not play would be inventing a window rather than measuring one.",
+      "UNGROUNDED: the objective's framing — that the two library arrangements are what is worth reaching in this structure — is this pack's authored premise, and the corpus measurement above actively shows the band does not pursue either. Nothing here establishes that the band is wrong or that the plans are right. No engine evaluation has been run on any position in this pack.",
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, the bishop pair is not asserted to be compensation for anything, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The objective's premise is uncited and, unusually, is in visible tension with this pack's own corpus measurement: the two arrangements the objective checks are played in under a sixth of the games at every node measured. The routes out are a citable source that states White's plan in this structure, or a corpus measurement relating either arrangement to results at this band; neither has been done.",
+      "No engine pass has been run on this pack. The single concept_violation (c4-c5) records an unmeasurable cost for exactly that reason, and the Bxf6 deviation stops at a definitional consequence for the same reason.",
+      "The spine is six plies and its last node has 109 games. Anything a learner reaches past it is unattested at this band by this instrument.",
+      "The shape entry doubled-c-pawns carries its own UNGROUNDED provenance for all five of its plan descriptions, including the three this pack references. Referencing them does not launder them. Its recorded orphan status is now stale and needs an owner-side census rerun that is not this pack's to do."
+    ]
+  }
+}

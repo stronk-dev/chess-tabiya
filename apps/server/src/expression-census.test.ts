@@ -25,19 +25,40 @@ describe("expression census", () => {
     expect(report.corpus.fixturePacks).toEqual(packFiles().filter((name) => name.endsWith(".browser.json")).map((name) => JSON.parse(readFileSync(`content/drafts/${name}`, "utf8")).id).sort());
   });
 
+  // Selects subjects BY OBSERVATION, never by name. The earlier form pinned
+  // `black-anchor-the-knight` at 0 firings and `opposite-castling-race` at five empty
+  // denominators; the 2026-08-15 middlegame wave gave both a home (the anchor fires 7),
+  // so authoring correct content turned `make verify` red — D47's class, re-found one
+  // instrument over. A census total is a fact about the corpus and moves whenever content
+  // lands; what must hold is the SEPARATION between coverage and satisfiability. Each
+  // population is asserted non-empty first, so an empty corpus cannot vacuously pass.
   it("separates zero coverage from satisfiability and preserves empty denominators", () => {
     const report = fullReport;
-    const anchor = report.subjects.find((subject: any) => subject.site.subject.plan === "black-anchor-the-knight");
-    expect(anchor.coverage.corpus.fires).toBe(0);
-    expect(anchor.satisfiability.verdict).toBe("satisfiable");
-    expect(anchor.observations).toContain("NEVER_FIRES_IN_CORPUS");
-    expect(anchor.observations).not.toContain("UNSATISFIABLE");
-    const race = report.subjects.filter((subject: any) => subject.site.subject.shape === "opposite-castling-race");
-    expect(race).toHaveLength(5);
-    expect(race.every((subject: any) => subject.observations.includes("IN_SHAPE_DENOMINATOR_EMPTY"))).toBe(true);
-    for (const plan of ["black-central-counter", "white-build-the-bridge"]) {
-      expect(report.subjects.find((subject: any) => subject.site.subject.plan === plan).observations).toContain("FIRES_ONLY_OUTSIDE_SHAPE");
+    const never = report.subjects.filter((subject: any) => subject.observations.includes("NEVER_FIRES_IN_CORPUS"));
+    expect(never.length).toBeGreaterThan(0);
+    for (const subject of never) {
+      // Firing nowhere is a coverage fact. Only a sound refutation may say UNSATISFIABLE.
+      expect(subject.coverage.corpus.fires).toBe(0);
+      expect(subject.observations).not.toContain("UNSATISFIABLE");
+      expect(subject.coverage.corpus.faults).toBeUndefined();
     }
+    expect(never.some((subject: any) => subject.satisfiability.verdict === "satisfiable")).toBe(true);
+
+    const empty = report.subjects.filter((subject: any) => subject.observations.includes("IN_SHAPE_DENOMINATOR_EMPTY"));
+    expect(empty.length).toBeGreaterThan(0);
+    // An empty denominator is preserved as its own observation, never collapsed into a rate.
+    for (const subject of empty) expect(subject.coverage.inShape.of).toBe(0);
+
+    const outside = report.subjects.filter((subject: any) => subject.observations.includes("FIRES_ONLY_OUTSIDE_SHAPE"));
+    expect(outside.length).toBeGreaterThan(0);
+    for (const subject of outside) {
+      expect(subject.coverage.corpus.fires).toBeGreaterThan(0);
+      expect(subject.coverage.inShape.fires).toBe(0);
+      expect(subject.coverage.inShape.of).toBeGreaterThan(0);
+    }
+
+    // The three classifications are distinct: firing nowhere is not firing outside.
+    expect(never.some((subject: any) => outside.includes(subject))).toBe(false);
   });
 
   it("reports vacuous degeneracy without turning it into an error", () => {

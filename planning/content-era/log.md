@@ -2427,3 +2427,263 @@ the first time that is true in eight passes. What remains:
 - **No chess claim graded, created, or corrected on strategic grounds.** Every
   correction above is either a measurement, a mismatch between an expression and
   the entry's own authored text, or a degenerate-board vacuity.
+
+## 2026-08-15 — Middlegame wave: ten structure packs, and the tempo layer's first use (claude)
+
+lead-agent 155 min (orientation 25 · instruments 25 · exemplar pack 35 · engine
+pass 5 · review and verification 35 · ledger and log 30) · three authoring
+agents in parallel, 19.5 + 22.5 + 22.8 min wall · **friction ≈ 14%**
+(lead 23 of 155; agents self-reported 15% / 10% / 11%). Compare wave F at 7.7%:
+that wave rebuilt no walker, this one built four disposable instruments and
+**three agents each rebuilt the same one** (D113). No commits. Files touched:
+ten new packs in `content/drafts/`, three `content/shapes/` provenance
+corrections, `design/BACKLOG.md`, this log.
+
+### What landed — nine of the ten families in `design/04` §3
+
+Every middle act in the corpus was `carlsbad-minority-attack`. It is now one of
+eleven. Each pack is `mode: plan`, `phase: middlegame`, references exactly the
+shape entry whose trigger fires on its own spine, and passes `make pack-check`
+with exit 0.
+
+| Pack | Structure / shape entry | Learner | Start-position games at the band | Window |
+|---|---|---|---:|---|
+| `maroczy-bind-white-squeeze` | Maroczy bind / `maroczy-bind` | White | 5069 | ✅ |
+| `iqp-white-panov-attack` | White isolani / `iqp-white` | White | 795 | ✅ |
+| `iqp-black-tarrasch-defence` | Black isolani / `iqp-black` | Black | 817 | — |
+| `open-centre-ruy-exchange` | Open centre / `open-centre` | Black | 2634 | — |
+| `french-advance-chain-white` | Pawn chain / `closed-centre-chain` | White | 7158 | — |
+| `kid-mar-del-plata-white` | KID chain / `kid-chain-arrangement` | White | 10987 | ✅ |
+| `nimzo-doubled-c-pawns` | Doubled c-pawns / `doubled-c-pawns` | White | 742 | — |
+| `dragon-yugoslav-race` | Opposite castling / `opposite-castling-race` | Black | 8476 | ✅ |
+| `grunfeld-exchange-fianchetto` | Fianchetto / `fianchetto-g7` | Black | 730 | — |
+| `berlin-queenless-press` | Queenless / `queenless-middlegame` | White | 6011 | — |
+
+Both chairs are represented (six White, four Black), and the isolani ships from
+**both sides of the same structure**. All ten start-position counts were
+re-queried at review and **all ten reproduce exactly** `[V]`.
+
+**The band is stated, not assumed:** Lichess explorer, `ratings=1400,1600,1800`,
+`speeds=rapid,classical`, `since=2023-01`, `until=2025-12`, authenticated with
+the operator token. Shares are recomputed from `white+draws+black` because the
+response carries no trustworthy total. **This is not the band the opening wave
+used** (blitz+rapid, 2024-01..2026-07) — ledgered as D116, because nothing in a
+pack records its population in a machine-readable field.
+
+### The tempo layer stopped being shipped-and-unused
+
+`timingWindows` was used by **0 of 20 opening packs** and 0 of everything else.
+Four of these ten declare one, and each was **replayed through the shipped
+evaluator** (`packages/runtime/src/tempo.ts` `windowStates`) rather than assumed:
+
+| Pack | Readiness | Closes on | Verdict on the authored spine |
+|---|---|---|---|
+| `maroczy-bind-white-squeeze` | rook→c1, pawn→b3 | ...b5 arrival · c4-c5 release · deadline 4 | `in_time`, spend 0/1, closed by deadline |
+| `iqp-white-panov-attack` | rook→e1, bishop→e4 | ...Ne7 arrival · d4-d5 release · deadline 4 | `in_time`, spend 0/1, closed by arrival |
+| `kid-mar-del-plata-white` | knight→d3, pawn→f3 | ...f4 arrival · c4-c5 release · deadline 6 | `in_time`, spend 0/1, closed by arrival |
+| `dragon-yugoslav-race` | rook→c8, knight→e5, rook→c5 | h4-h5 arrival · ...Rxc3 release · deadline 4 | `in_time`, spend 0/1, closed by deadline |
+
+`dragon-yugoslav-race` also drove the evaluator over two off-spine paths and got
+`too_slow` (2 of 3 readiness) and `in_time` at exactly budget, so the window
+discriminates rather than always passing `[V]`.
+
+**Every arrival is a measured frequency, not a feeling.** KID: after Nd3, ...f5
+lands in 769/783 (98.2%) and ...f4 four plies later in 633/639 (99.1%). Dragon:
+h4-h5 is the most-played move at 172/439 (39.2%) in the branch where the window
+can close. Maroczy: the tolerated Qd2 is the most-played move at the root
+(1161/5069). Panov: the arrival ...Ne7 is 12/29 (41.4%) at its node.
+
+**Six packs declare no window, and the reason is measured in every case** — this
+is the more useful half of the finding:
+
+- `french-advance-chain-white`: ...f6, the head lever, appears in **0 of 3769**
+  games at the node after 10.Na4 and at most 3 of 164 later. A window against a
+  lever that never arrives is a feeling with a number pasted on it.
+- `grunfeld-exchange-fianchetto`: the opposite failure — White's two central
+  levers are the *two most-played moves* (35.7% and 28.7%), so any readiness set
+  bigger than one move reports `too_slow` on the corpus's own main line. A lever
+  with no room in front of it.
+- `berlin-queenless-press`: Black's pawn skeleton is `a7 b7 c6 c7 f7 g7 h7` at
+  **all 11** authored positions — nothing arrives; and both of the entry's Black
+  plans carry a `null` success signature, so the library itself declines to name
+  the moment counterplay appears.
+- `iqp-black-tarrasch-defence`: the blockading knight is already on d4 at ply 0,
+  and d4 is occupied in all nine authored positions, so ...d5-d4 is illegal
+  throughout — there is no arrival to race.
+- `open-centre-ruy-exchange`: the only candidate race ends in a forced recapture
+  (Rxd1, 269 of 269).
+- `nimzo-doubled-c-pawns`: neither side's candidate move is dominant enough to
+  grade against (...c5 21.6%/31.0%; e3-e4 9.3%/15.2%).
+
+### Census delta — `WITNESSES=content/witnesses/expression-witnesses.json` both times
+
+| | Before | After |
+|---|---:|---:|
+| packs / positions / transitions | 43 / 694 / 651 | **53 / 791 / 738** |
+| subjects | 159 | **184** (25 new expression sites) |
+| `neverFiresInCorpus` | 36 | **30** |
+| `inShapeDenominatorEmpty` | 40 | **19** |
+| `firesOnlyOutsideShape` | 31 | **40** |
+| `satisfiabilityUnknown` | 24 | **23** |
+| `unsatisfiable` | 0 | **0** |
+
+**13 subjects left `neverFiresInCorpus`** — the three D44 orphans this wave
+adopted (`maroczy-bind` trigger 0→10, `doubled-c-pawns` 0→8, `iqp-black` 0→7),
+`opposite-castling-race`'s trigger (0→12, an unlisted orphan in effect), and
+seven plan signatures that had never been exhibited by any authored position.
+`inShapeDenominatorEmpty` halving is the same fact from the other side: a plan
+signature can only be measured *inside its shape* once some pack makes the
+trigger fire.
+
+**`firesOnlyOutsideShape` rising by 9 is the intended direction**, exactly as in
+wave F: ten plan signatures now have a real denominator and fire only outside it.
+The sharpest instance is a content finding, not a defect —
+`opposite-castling-race`'s three storm signatures fire 0 times inside the shape
+across the Dragon pack's 12 positions, i.e. **eight plies of the corpus's own
+most-played moves open no file at either king.**
+
+Three shape entries carried a `D44 orphan status` line asserting zero references
+and zero firings. Those statements are now false, so each entry got a dated
+supersession line (original text kept, per the log's own rules) and a patch
+version bump. All 25 entries pass `shape-check`.
+
+### The measured gap: hanging pawns has no tabiya at this band
+
+Nine of ten `04` §3 families shipped. The tenth was skipped **on evidence**:
+along the standard QGD Tartakower route the pre-break node has **39 games** and
+the first position where `hanging-pawns`'s trigger can fire has **14** — under
+the 100-game floor the repo's own explorer client uses to abstain. The trigger
+requires White to have neither a c- nor a d-pawn and Black neither a b- nor an
+e-pawn, which is four exchanges deep; the band's data is exhausted before the
+structure exists. Ledgered as D117: *not authored* and *not reachable at this
+band* currently look identical in the content map.
+
+### What could not be grounded — the wave's most valuable output
+
+Aggregated across four authors. Each line is a sentence someone wanted to write
+and deleted, with the instrument that would settle it.
+
+**Needs an engine pass** (Stockfish is installed; only `maroczy-bind-white-squeeze`
+got one this wave): is this recapture better than that one · does 12.e5 concede
+what it restrains · is the symmetric isolani after ...Nxd4 exd4 balanced · does
+11.g4 weaken White's king (the vocabulary has `king_zone` but no king-safety
+feature) · what does c4-c5 actually cost (four packs record
+`cost: unmeasurable` purely for want of this) · is Ne1 or b4 the better KID move
+order at 2795 vs 2557 games.
+
+**Needs a corpus instrument the explorer cannot be** — anything conditioned on a
+later event, because the explorer aggregates per position: does the Rc8/Ne5/Rc5
+arrangement actually precede ...Rxc3 · does completing an arrangement before a
+lever arrives correlate with results (this is the evidence *every* timing window
+in the wave lacks, and it is why the budgets and deadlines are authored numbers) ·
+does White's queenside break arrive before Black's storm in the Mar del Plata ·
+is ...f6 the standard answer to the French chain that these players simply do not
+play (0 of 3769 is one line at one band).
+
+**Needs a citable source** — the four premises the packs are built on and admit
+they cannot support: the isolani buys activity now and becomes a weakness later ·
+the bishop pair compensates for doubled c-pawns · walking the king in is *the*
+plan in the Berlin structure · restraint-before-the-lever is how a bind is held.
+
+**Needs an owner ruling, and it is the cheap one:** the explorer returns a
+white/draw/black split on every row the wave already fetched. All four authors
+refused to use it, reading a win rate as a graded move assessment under law 8.
+If result splits are admissible `corpus_observed` evidence, roughly half of the
+first list becomes partially groundable at **zero additional cost**. Ledgered as
+D118.
+
+**One claim was refuted rather than merely ungrounded:** the brief handed the
+Grünfeld agent "White has doubled c-pawns here". White has a single c-pawn on c3
+after `bxc3` and none after `cxd4`; the agent verified it from the skeleton and
+against the `doubled-c-pawns` trigger (0 of 7 positions) and recorded the
+negative in the pack rather than the claim.
+
+### Verification actually performed
+
+- `make pack-check` on all ten packs: **10/10 exit 0**, no errors, no warnings.
+- All ten start-position explorer counts re-queried at review: **10/10 exact**.
+- Four timing windows replayed through the shipped `windowStates`: **4/4
+  `in_time`, spend 0**, plus two deliberately failing paths on the Dragon pack.
+- `shape-check` on all 25 shape entries after the provenance corrections: 25/25.
+- `make expression-census` before and after with the explicit content witness
+  file (D102's flagged path), 0 `unsatisfiable` both times.
+- One engine pass: `make engine-walk` over the Maroczy pack, 21 queries at depth
+  22, no abstentions; its five deviation costs are candidate-relative losses
+  against the best evaluated candidate and are recorded as lower bounds.
+- Targeted test run: `expression-census`, `pack-authoring`, `shape-validation`,
+  `shape-firing` — **55 pass, 1 fails**, and the failure is D114: a test that
+  pins a census snapshot as a content fact. Not edited, deliberately.
+
+### Contract harvest
+
+1. **`shape-check PROBE=` answers nothing** (D113). Three authors, three
+   identical disposable evaluators, one missing print statement. This is the
+   single highest-value fix before the next content wave.
+2. **A test pins content facts and blocks `make verify`** (D114, same class as
+   D47). Authoring correct content turned the gate red; the wave refused to edit
+   the test to match its own output.
+3. **`timingWindows[].note` caps at 400 characters** (D115) while every other
+   prose field is unbounded — so the rationale for an authored threshold ends up
+   in provenance, where the runtime cannot show it.
+4. **Two explorer populations, both in prose** (D116). No pack can state its band
+   in a field, so no two packs' numbers are comparable by machine.
+5. **The library can author a signature the pack layer refuses to grade on**
+   (D119): `queenless-middlegame/white-king-into-the-game` is placement-only and
+   hits `STRUCTURAL_CONDITION_HAS_NO_FEATURE`. `shape-check` accepts the entry,
+   `pack-check` refuses the pack that copies it.
+6. **"Most-played" and "the shape keeps firing" are rival authoring rules**
+   (friction row added to the ledger). The French chain dissolves within three
+   plies of the most-played walk; the Grünfeld's most-played reply ends the race;
+   the Maroczy survives intact. No instrument sees the conflict.
+7. **Two hard lints are invisible from the template**: a plan whose
+   `success.signature` is `null` can never back a success condition
+   (`PLAN_CONSEQUENCE_NOT_COMPUTABLE`), and the signature must fire on an
+   authored spine FEN (`PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT`). Both were
+   found by reading `pack-validation.ts` before writing, not from any document.
+
+### Not done, deliberately
+
+- **No engine pass on nine of the ten packs.** One was run end to end to prove
+  the path and to price it (80 seconds, 21 queries); the other nine record
+  `cost: unmeasurable` where an engine would have measured, rather than
+  borrowing a number.
+- **No use of explorer result splits** anywhere, pending D118.
+- **`expression-census.test.ts` left failing** (D114). A content wave editing a
+  server test so its own output passes is the failure mode the pin exists for.
+- **No shape entry's plans, triggers or watch text were changed** — only three
+  provenance lines that had become factually false, each superseded rather than
+  rewritten.
+- **No `prospective` shape reference invented**, and no second shape referenced
+  where the trigger did not fire on the spine (the Grünfeld pack wanted
+  `doubled-c-pawns` and measured 0 of 7).
+- **No chess claim graded or created.** Every deviation class in the ten packs is
+  `accepted_alternative` or `interesting_deviation` except the four
+  `concept_violation`s, each of which is true by the shape detector's own
+  definition (the move removes a pawn the detector requires) and says so in those
+  terms.
+
+## 2026-08-15 — CORRECTION to the middlegame-wave entry above (claude, same session)
+
+Two errors in the entry's final bullet, found by counting after writing it
+instead of before, which is the wrong order and is why this correction exists.
+
+1. **There are five `concept_violation` deviations across the ten packs, not
+   four.** Full census of the 55 authored deviations, counted with a script:
+   `accepted_alternative` **29**, `interesting_deviation` **21**,
+   `concept_violation` **5**, `tactical_error` **0**, `required_theory` **0**.
+   The five are `grunfeld-exchange-fianchetto` (…Bxd4), `iqp-white-panov-attack`
+   (d4-d5), `kid-mar-del-plata-white` (c4-c5), `maroczy-bind-white-squeeze`
+   (c4-c5) and `nimzo-doubled-c-pawns` (c4-c5) `[V]`.
+2. **"the move removes a pawn the detector requires" is true of four of them, not
+   five.** The Grünfeld case removes the *bishop* conjunct: `fianchetto-g7`'s
+   trigger is a black pawn on g6 **and** a black bishop on g7, and …Bxd4 takes the
+   second one off g7. The general form the bullet should have used: each of the
+   five removes a conjunct of its own shape entry's trigger, so the structure
+   stops being detected on that move — four pawn conjuncts and one piece conjunct.
+
+Re-verified while correcting, and both hold: all five carry `offObjective: true`,
+a declared `mistake` kind, and a `cost` of `unmeasurable` with a stated reason;
+none asserts a chess consequence beyond the detector's own arithmetic and, where
+quoted, an explorer rarity bound. Also re-checked and unchanged: `pack-check` on
+all ten packs emits exactly one line each — **0 warnings and 0 errors**, not just
+a passing exit code `[V]`.

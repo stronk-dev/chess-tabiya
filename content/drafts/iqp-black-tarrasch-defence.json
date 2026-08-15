@@ -1,0 +1,306 @@
+{
+  "id": "iqp-black-tarrasch-defence",
+  "version": "0.1.0",
+  "title": "Black isolated queen's pawn: the knight already sits on the blockade square",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 2000,
+    "label": "Black holding the isolated d-pawn in the Tarrasch Defence, Rubinstein set-up",
+    "branchLengthTarget": 10
+  },
+  "start": {
+    "fen": "r1bq1rk1/pp2bppp/2n2n2/3p2B1/3N4/2N3P1/PP2PPBP/R2Q1RK1 b - - 0 10",
+    "movesSan": [
+      "d4", "d5", "c4", "e6", "Nc3", "c5", "cxd5", "exd5", "Nf3", "Nc6",
+      "g3", "Nf6", "Bg2", "Be7", "O-O", "O-O", "Bg5", "cxd4", "Nxd4"
+    ],
+    "side": "black"
+  },
+  "objective": {
+    "type": "prevent_opponent_plan",
+    "summary": "The same structure as the White isolated queen's pawn pack, from the other chair: your pawns are a7, b7, d5, f7, g7, h7, and the d-pawn has no neighbour on the c- or e-file. White's knight is already on d4, which is the shape library's White plan for this structure — so this drill is not about stopping it arriving, it is about getting it off that square while your d-pawn is still the isolated one on the board. The corpus's most-played continuation reaches that, and then dissolves the structure entirely two plies later; both moments are checkpoints.",
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            { "kind": "not", "of": { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "knight" } } },
+            { "kind": "feature", "feature": { "kind": "isolated_pawn", "color": "black", "file": "d" } }
+          ]
+        },
+        "to": "achieved"
+      },
+      {
+        "kind": "structural_feature",
+        "feature": { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "named_structure", "id": "iqp-black" } } },
+        "to": "transitioned"
+      }
+    ]
+  },
+  "concepts": [
+    "isolated-queens-pawn",
+    "blockade-square",
+    "blockader-removal",
+    "structure-dissolution"
+  ],
+  "shapes": ["iqp-black"],
+  "planClasses": [
+    {
+      "id": "attack-with-pieces",
+      "label": "Keep pieces and play on the open lines",
+      "description": "The library's attacking plan for this chair. Its success signature in the shape entry is null, so nothing in this pack grades it; what this position measures instead is the census of the two central squares — d4 is attacked once by each side at the start, d5 twice by each side.",
+      "shapePlan": { "shape": "iqp-black", "plan": "black-piece-attack" }
+    },
+    {
+      "id": "push-to-d4",
+      "label": "Get the pawn to d4",
+      "description": "The library's advance plan. Its success signature checks arrival only: a black pawn on d4 and none on d5. Computed on this spine: d4 is occupied in all nine authored positions — by a White knight for six of them, by a black knight for one, and by a White pawn for the last three — so ...d5-d4 is not a legal move at any of them.",
+      "shapePlan": { "shape": "iqp-black", "plan": "black-d4-break" }
+    },
+    {
+      "id": "white-blockade",
+      "label": "What the objective is written against",
+      "description": "The library's White plan for this structure, named here because this pack's success condition is its negation. Its signature — a White knight on d4 with Black's d-pawn still isolated — was evaluated on this spine: it holds at the start position and stops holding after ...Nxd4. The pack grades that state change and nothing more.",
+      "shapePlan": { "shape": "iqp-black", "plan": "white-blockade-and-trade" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "h6-question",
+      "moveUci": "h7h6",
+      "moveSan": "h6",
+      "annotations": [
+        "Read the structure first. Black pawns: a7, b7, d5, f7, g7, h7. White pawns: a2, b2, e2, f2, g3, h2. Black's d-pawn has no neighbour on the c- or e-file and White has no d-pawn, which is the pawn signature the shape library detects as the Black isolated queen's pawn. The detector fires on this position.",
+        "Computed from this position: d4 is occupied by a White knight and attacked once by each side (White queen d1, Black knight c6); d5 is occupied by Black's isolated pawn and attacked twice by each side (White bishop g2 and knight c3, Black knight f6 and queen d8). The shape entry's White plan — a knight on d4 with Black's d-pawn still isolated — is already satisfied here, before your first move.",
+        "Lichess explorer, rapid+classical, rating bands 1400/1600/1800, 2023-01 to 2025-12: this position occurs in 817 games. h6 is the most-played move at 254 (31.1%), then Be6 216 (26.4%), Nxd4 191 (23.4%), Qb6 44 (5.4%), Re8 31 (3.8%). Every move on this spine is the most-played move at its node at this band; each node states its counts.",
+        "Computed on the position after this move: f6 is attacked once by White (bishop g5) and defended twice by Black (bishop e7, pawn g7)."
+      ],
+      "children": [
+        {
+          "id": "bxf6-trade",
+          "moveUci": "g5f6",
+          "moveSan": "Bxf6",
+          "annotations": [
+            "253 games here; Bxf6 is the most played at 103 (40.7%), then Be3 65 (25.7%), Bf4 64 (25.3%), Nxc6 13 (5.1%), Bc1 3 (1.2%)."
+          ],
+          "children": [
+            {
+              "id": "bxf6-recapture",
+              "moveUci": "e7f6",
+              "moveSan": "Bxf6",
+              "annotations": [
+                "103 games, and Bxf6 is played in all 103 (100%) — the only recapture the band's games contain. Recount d5 afterwards: White still attacks it twice (bishop g2, knight c3), Black now defends it once (queen d8), because the knight that defended it from f6 is gone."
+              ],
+              "children": [
+                {
+                  "id": "e3-guard",
+                  "moveUci": "e2e3",
+                  "moveSan": "e3",
+                  "annotations": [
+                    "111 games; e3 is the most played at 49 (44.1%), then Nxc6 30 (27.0%), Nb3 14 (12.6%), Nxd5 8 (7.2%), Ndb5 5 (4.5%). Computed before and after: White's attackers of d4 go from one (queen d1) to two (queen d1, pawn e3), and Black's from one to two (knight c6, bishop f6).",
+                    "The pawn on e3 is the move that makes the next two plies a pawn recapture rather than a piece recapture. That is arithmetic about what can capture on d4, not a claim about whether White should play it."
+                  ],
+                  "children": [
+                    {
+                      "id": "nxd4-remove",
+                      "moveUci": "c6d4",
+                      "moveSan": "Nxd4",
+                      "annotations": [
+                        "80 games; Nxd4 is the most played at 57 (71.3%), then Be6 13 (16.3%), Re8 5 (6.3%), Ne7 2 (2.5%), Qb6 1 (1.3%). This is the position where this pack's success condition first holds: no White knight on d4, and Black's d-pawn still the isolated one. Both halves were evaluated on the FEN.",
+                        "The shape entry's White plan signature stops holding here for the same reason, and the entry's own trigger still fires. Evaluated on this position, Tabiya's outpost detector does not read d4 as a Black outpost, so the square your knight now stands on is occupied, not owned."
+                      ],
+                      "children": [
+                        {
+                          "id": "exd4-recapture",
+                          "moveUci": "e3d4",
+                          "moveSan": "exd4",
+                          "annotations": [
+                            "57 games, and exd4 is played in all 57 (100%) — the only recapture in the band. Read the new skeleton: White pawns a2, b2, d4, f2, g3, h2; Black pawns a7, b7, d5, f7, g7, h6. Computed on this position, White's d-pawn is now isolated as well as Black's, and the shape entry's trigger stops firing.",
+                            "Decomposed, the trigger's three conjuncts were evaluated separately here: a black pawn on d5 still holds, Black's d-pawn is still isolated, and the d-file half-open for White does not hold, because White now has a pawn on it. That third conjunct is the whole of the difference."
+                          ],
+                          "children": [
+                            {
+                              "id": "be6-develop",
+                              "moveUci": "c8e6",
+                              "moveSan": "Be6",
+                              "annotations": [
+                                "60 games; Be6 is the most played at 48 (80.0%), then Qb6 8 (13.3%), Re8 2 (3.3%), Bf5 2 (3.3%)."
+                              ],
+                              "children": [
+                                {
+                                  "id": "qb3-pressure",
+                                  "moveUci": "d1b3",
+                                  "moveSan": "Qb3",
+                                  "annotations": [
+                                    "57 games; Qb3 is the most played at 16 (28.1%), then Re1 11 (19.3%), f4 8 (14.0%), Qd3 7 (12.3%), Qa4 5 (8.8%). This is the thinnest node on the spine and the most-played move here holds under a third of it — the count is stated so you can weigh the selection rule yourself.",
+                                    "The position you are now playing out is the mirror of the one this pack started from with the colours reversed and both d-pawns isolated. Nothing measured here says which side that favours."
+                                  ],
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "be3-retreat",
+          "moveUci": "g5e3",
+          "moveSan": "Be3",
+          "annotations": [
+            "The second-most-played reply at 65 of 253 (25.7%), within four games of Bf4 at 64. The bishop steps back instead of trading, and the knight that defends d5 stays on f6. The resulting position is reached by 81 games in this band, where Black plays Re8 21 (25.9%), Be6 14 (17.3%), Bg4 14 (17.3%), Nxd4 11 (13.6%), a6 4 (4.9%). Play it against the trade and compare: the pawn skeletons are identical, the pieces are not."
+          ],
+          "children": []
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-choice",
+      "label": "Before your first move: which of the library's two Black plans are you playing?",
+      "trigger": { "atStart": true },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["attack-with-pieces", "push-to-d4"]
+      }
+    },
+    {
+      "id": "pawn-reaches-e3",
+      "label": "A White pawn stands on e3 — d4 is two against two",
+      "trigger": { "atSpineNode": "e3-guard" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "blockader-removed",
+      "label": "No White knight on d4 and your d-pawn is still the isolated one",
+      "trigger": { "atSpineNode": "nxd4-remove" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "both-pawns-isolated",
+      "label": "Both d-pawns are isolated — the structure this pack detects is gone",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              { "kind": "feature", "feature": { "kind": "isolated_pawn", "color": "white", "file": "d" } },
+              { "kind": "feature", "feature": { "kind": "isolated_pawn", "color": "black", "file": "d" } }
+            ]
+          }
+        }
+      },
+      "actions": ["compare_branches"]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "h6-question",
+      "bxf6-trade",
+      "bxf6-recapture",
+      "e3-guard",
+      "nxd4-remove",
+      "exd4-recapture",
+      "be6-develop",
+      "qb3-pressure",
+      "be3-retreat"
+    ],
+    "plyHorizon": 8
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1800,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "atStart": true },
+      "moveUci": "c8e6",
+      "class": "accepted_alternative",
+      "note": "Be6: 216 of 817 (26.4%), the second-most-played move in the start position at this band, four and a half points behind h6. It leaves the bishop on g5 where it is and the knight on d4 where it is, so this pack's success condition is untouched by it."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "c6d4",
+      "class": "interesting_deviation",
+      "note": "Nxd4 immediately: 191 of 817 (23.4%) at this node. The resulting position is reached by 192 games in the same band and Qxd4 is played in all 192 (100%) — the only reply the corpus contains. Evaluated on that position, the shape entry's White plan signature no longer holds, because it names a knight on d4 and the piece standing there is a queen. This pack's success condition is satisfied one move in. Whether that is a good way to spend the move is not measured here."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "d8b6",
+      "class": "accepted_alternative",
+      "note": "Qb6: 44 of 817 (5.4%). Outside the spine, and it changes neither the d4 occupancy nor the pawn skeleton the detector reads."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "f8e8",
+      "class": "accepted_alternative",
+      "note": "Re8: 31 of 817 (3.8%), the fifth-most-played move in the band's table for this position."
+    },
+    {
+      "at": { "spineNodeId": "e3-guard" },
+      "moveUci": "c8e6",
+      "class": "accepted_alternative",
+      "note": "Be6 instead of the trade on d4: 13 of 80 (16.3%) at this node, against 57 (71.3%) for Nxd4. Playing it leaves a White knight on d4, so this pack's success condition stays unsatisfied and the shape entry's White plan signature keeps holding — a fact about the two expressions, not about the move."
+    },
+    {
+      "at": { "spineNodeId": "exd4-recapture" },
+      "moveUci": "c8f5",
+      "class": "interesting_deviation",
+      "note": "Bf5: 2 of 60 (3.3%) at this node, against Be6 48 (80.0%). Two games in three years of this band at these ratings is the whole evidence base for it; the deviation exists so the comparison view has something to open, not because anything here measured it."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "position-is-attested",
+      "text": "At the Lichess 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12) the start position occurs in 817 games, and the spine stays in measurable territory the whole way: 253, 103, 111, 80, 57, 60 and 57 games at the seven following nodes. Two of the eight spine moves are the only move the band contains at their node — the recapture ...Bxf6 (103 of 103) and exd4 (57 of 57).",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "blockade-square-census",
+      "text": "The census of d4 is computed at each quoted position: one attacker each at the start (White queen d1, Black knight c6); two each after White's pawn reaches e3 (queen d1 and pawn e3 against knight c6 and bishop f6); a White pawn standing on the square after the recapture. These are attack counts and occupancy, not an assessment.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "the-structure-dissolves",
+      "text": "The shape entry's trigger was evaluated on all nine authored positions of this pack: it fires on the first six and stops at the seventh. Decomposed, the failing conjunct is the d-file being half-open for White — after exd4 White has a d-pawn — while a black pawn on d5 and Black's isolated d-pawn both still hold, and White's d-pawn is now isolated too. The structure this pack is named after leaves the board by definition, not by opinion.",
+      "evidenceTypes": ["derived_feature"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "OPENING IDENTITY: the move order to the start position is the Tarrasch Defence, Rubinstein/fianchetto family; the name-to-line skeleton is lichess-org/chess-openings (CC0-1.0, no attribution required). No opening-name claim beyond the family label is made in this pack.",
+      "RATING-BAND FREQUENCY (mechanical, retrieved 2026-08-15): Lichess opening explorer, https://explorer.lichess.ovh/lichess, variant=standard, ratings=1400,1600,1800, speeds=rapid,classical, since=2023-01, until=2025-12, authenticated with the operator token. Every count and percentage in this file was read from that endpoint at the node it is quoted on: root 817 (h6 254, Be6 216, Nxd4 191, Qb6 44, Re8 31), after h6 253 (Bxf6 103, Be3 65, Bf4 64, Nxc6 13, Bc1 3), after Bxf6 103 (...Bxf6 103), after ...Bxf6 111 (e3 49, Nxc6 30, Nb3 14, Nxd5 8, Ndb5 5), after e3 80 (Nxd4 57, Be6 13, Re8 5, Ne7 2, Qb6 1), after ...Nxd4 57 (exd4 57), after exd4 60 (Be6 48, Qb6 8, Re8 2, Bf5 2), after ...Be6 57 (Qb3 16, Re1 11, f4 8, Qd3 7, Qa4 5), the immediate ...Nxd4 branch position 192 (Qxd4 192), and the ...h6 Be3 branch position 81 (Re8 21, Be6 14, Bg4 14, Nxd4 11, a6 4). Shares are recomputed from white+draws+black, which is the only total the response supports.",
+      "SPINE SELECTION RULE (mechanical): every spine move is the most-played move at that node at this band, with no ties to break. The sibling branch Be3 is the second-most-played reply at its node and was chosen because it is the branch on which the f6 knight survives.",
+      "STRUCTURAL READINGS (mechanical, chessops): the pawn skeletons, the attacker and defender counts for d4, d5 and f6 at each quoted position, and the occupancy of d4 across all nine authored positions, and the outpost detector's reading of d4 for Black after ...Nxd4 were computed from the FENs in this file with the chessops attack tables, not recalled.",
+      "SHAPE REFERENCE (mechanical): the iqp-black entry's trigger is the named_structure detector; it was evaluated on every authored position of this pack and fires on the first six, stopping after exd4. Its three conjuncts were then evaluated individually on that position to identify which one fails. The entry's White plan signature (a White knight on d4 with Black's d-pawn isolated) was evaluated at the start position (holds), after ...Nxd4 (does not hold) and after the immediate ...Nxd4 Qxd4 branch (does not hold). The plan classes reference the entry's own plans rather than restating them.",
+      "UNGROUNDED: the objective summary's framing — that getting White's knight off d4 while the isolani is still on the board is what this position is about for Black — is this pack's one authored strategic premise. The corpus shows what the band plays, not what is correct; the attack counts show what attacks what, not what matters. No engine evaluation has been run on any position in this pack.",
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one. In particular, nothing here claims that the symmetric isolated-pawn position the spine reaches favours either side, and nothing claims that a knight on d4 is bad for Black."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+      "The objective's premise — removing the blockading knight while the isolani stands — is uncited. The routes out are a citable source that states a plan for this structure from the isolani's side, or a corpus measurement relating the removal to results at this band; neither has been done.",
+      "No engine pass has been run on this pack. Every note that could have carried a cost carries none for that reason.",
+      "This pack declares no timing window. The measured reason is recorded in the objective summary and the first spine annotation: the blockading knight is already on d4 in the start position, so there is no arrival to race, and no other opponent lever on this spine ends a preparation. If a race is later found here, the window is the honest way to encode it.",
+      "The success condition's second rule sends the run to transitioned when the detector stops firing. That is a definitional state change, but calling it a transition rather than a failure is an authoring choice with no measurement behind it."
+    ]
+  }
+}
