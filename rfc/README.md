@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `authoring-frictions.md` | draft (in cross-review) | — | claims **pack schema 0.16** (additive/widening); NO migration (register stays 18); NO run-schema change (stays 0.13). Eight frictions from four content waves, ordered by attestation; carries the cursed-win/blessed-loss admission ruling of 2026-08-15 |
+| `authoring-frictions.md` | draft — **cross-reviewed, ready for codex** | — | claims **pack schema 0.16** (additive/widening); NO migration (register stays 18); NO run-schema change (stays 0.13). Eight frictions from four content waves, ordered by attestation; carries the cursed-win/blessed-loss admission ruling of 2026-08-15 |
 
 No active product RFCs.
 
@@ -56,6 +56,7 @@ landing order, not lost data.
 | 0.13 | `archive/predicate-wave-2.md` | implemented — additive: `structuralFeature` gains `bishop_on_shade`, `pawn_count` and `king_opposition`; `structuralExpression` gains `mirrored` and `quantified`; shape-entry schema 0.1 → 0.2 with the same duplicated grammar. No migration; rung-0 facts remain derived |
 | 0.14 | `archive/onramp-guard.md` | implemented — additive: `feedbackPolicy` enum gains `immediate_guard`; optional top-level `guard` tuning block |
 | 0.15 | `archive/open-answer-grading.md` | implemented — additive: checkpoint `interaction` union gains `stated_reasoning` with grounded key points (closed four-kind union); reconciled behind 0.14 |
+| 0.16 | `authoring-frictions.md` | claimed 2026-08-15 — additive/widening only: `deviationLocation` gains `{atStart}`, `simpleTrigger` gains `atStart`, new `variantOf` (three directional relations), `branchLengthTarget` max 20→40, guard gains `fireOnMate`/`rulesTier`/`window`/`overrides`, `rules_fact` enum gains `draw`, tablebase category enum widens to five determinate values. Verified: all 39 candidates, every draft, the example and all six negative fixtures stay valid; no digest moves |
 
 Landing order follows the numbers. A draft that cannot land behind its
 predecessor renegotiates here rather than renumbering unilaterally.

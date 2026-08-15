@@ -90,6 +90,25 @@ same structure, opposite side · same outcome, different material details
 Hold vs save is load-bearing: hold tests correct defence from a drawable position;
 save tests practical resourcefulness from a worse one.
 
+**Draws by rule are outcomes** (owner ruling 2026-08-15, written here by claude
+on that ruling). A position repeated three times, or a fifty-move counter run
+out, **is a draw** — both sides in any real game take it, and a draw is a routine
+tournament result. The run reports the outcome and the objective resolves its
+direction: success under *hold* and *save*, failure under *win*. There is no
+claim-versus-automatic distinction inside a drill; rehearsal ends where the game
+would. Recorded because the code knew this before the design did — `terminalOutcome`
+reported only mate, stalemate and insufficient material, so a hold saved by
+repetition, one of the most common real defensive resources, could not be graded
+at all (D29/D30).
+
+This also bounds what a **win** objective may be authored on. A *cursed win* —
+theoretically winning, but not convertible within the fifty-move rule — cannot
+carry "finish the conversion", because no quality of play reaches it; such a
+position is refused as a win root. Its mirror is trainable: the defender's side
+of a cursed win, or a *blessed loss*, is a legitimate **hold**, where the
+counter itself is the resource being learned. The refusal attaches to the
+objective, never to the position.
+
 ## The four modes (mode contracts: `archive/brief-v2/product/drill_modes.md`)
 
 | Mode | Phase | Core loop | Graded on |
