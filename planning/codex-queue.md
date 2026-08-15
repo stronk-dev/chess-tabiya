@@ -22,6 +22,7 @@ paragraph now reads CLOSED with the correction stated inline.
 
 | # | RFC | Claims | Notes |
 |---|---|---|---|
+| 0 | `rfc/engine-leverage.md` | **pack 0.23**, **run 0.16**, **migration 22** | **NOW ACCEPTED** — you were right to refuse it before. Q1 and Q9 are owner-ruled **in the questions themselves**, not in a banner: the condition surface's design home is **both** `design/05` (a four-clause rung rule) and `design/03` (a map row that defines nothing), mirrored into `gates.md` so the gate surface stays single; and `tablebase_dtz_regression` lands at `byAtLeast` **3**, disposition **`unmeasured`**, with the §6.3 experiment binding. Q3 and Q7 are closed by the coordinator on their own stated fallbacks — Q3 **defers to a named follow-up** rather than folding a run-schema change onto three register claims, Q7 files `stockfish-play`'s identity **`refused` with its reason**. **Criterion 4 is still scoped to the engine path**; widening it to tablebase now that D64 is closed is a separate decision nobody has made |
 | 1 | `rfc/vocabulary-wiring.md` | **pack 0.24** | Cross-reviewed, **zero acceptance-blocking questions** — I re-checked the whole file for them after your report rather than trusting my own earlier claim. Merges `plan_consequence` into `structural_feature{plan_signature}`. `DRILL_PACK_SCHEMA_VERSION` reads **0.22** today, so this is a `0.22 → 0.24` bump with 0.23 frozen shut, or `0.22 → 0.23` if you prefer to renumber — **your call, tell me which and I'll fix the register.** No run-schema change, no migration |
 | 2 | `rfc/live-surface-honesty.md` | **nothing versioned** | Its one open question resolves *"before `accepted` only if the owner has a view; otherwise it defers cleanly"* — it defers. Independent of #1; land in parallel if you have room. Adds **no register rows at all**: its Active row already exists |
 
@@ -44,6 +45,8 @@ that *"nothing it does can turn anything on"*. Bounded there to rung 0 with a te
   byte-identical on 51/51, no error field); nine of twelve malformed `Elo` forms leave the
   previous band in force; an Elo-less request inherits the previous request's band. **Same
   file, same shape — route all three into one change** or the next sweep re-finds them.
+- **D122 — a unit test pinned two content facts and the middlegame wave turned `make verify` red. Already fixed by claude** (`aee7c64`): `expression-census.test.ts` now selects subjects **by observation**, never by name, with each population asserted non-empty so an empty corpus cannot vacuously pass. Listed so you do not re-find it. It is **D47's class one instrument over**, which is worth knowing before you write the next content-adjacent assertion.
+- **D126 is OWNER-RULED and it unblocks content, not code:** explorer **W/D/B result splits are admissible as `corpus_observed`**. The split may be stated; it may **never** be converted into a move verdict or a quality claim. `claim-backing` owns the `explorer_position_census` record kind. Relevant to you only if a validator rule needs to enforce that boundary.
 - **D104 (yours)** — the nondeterministic browser miss on Active line 4 plies. You logged
   it and added no retries, which is the right call. It stays open as a measurement to
   reproduce, not a test to stabilise; if it recurs, capture the run rather than quieting it.
