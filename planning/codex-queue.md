@@ -30,9 +30,9 @@ confirmed by your own audit `6c7a579`), D33 (trajectories cannot be
 `ledger_verified`), and D37 (an archived RFC registered `implemented` whose
 `objectiveIssues` extraction never shipped).
 
-## 3. `rfc/tempo-vocabulary.md` — in cross-review
+## 3. `rfc/tempo-vocabulary.md` — CROSS-REVIEWED, READY
 
-Pack **0.17**. Unblocks the E3 and B4 gates. A timing window becomes a ledger
+Pack **0.17**. Unblocks the E3 and B4 gates. **Reviewed 2026-08-15: ready.** Six specification-level blockers fixed, including a layering violation that would have stopped you at the first `onTrigger` window (`simpleTriggerMatches` is module-private, evaluates against `run.activeCursor`, and lives in a package `packages/runtime` cannot import — the RFC now injects a `TriggerResolver`). All 14 verdict cells in §8 were independently re-derived and agreed. **Re-confirm line-pinned edits against the tree at implementation time — 0.16 landed underneath this review and shifted every schema citation.** A timing window becomes a ledger
 kept between two events; computes the three tempo mistake classes named in
 `design/01-training-model.md:146-149`; implements `preserve_plan_window`.
 
