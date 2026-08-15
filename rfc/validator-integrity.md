@@ -530,10 +530,11 @@ per the file's shipped convention (`pack-validation.ts:85-91`).
 | `TRAJECTORY_GRADING_RESOLUTION_UNSUPPORTED` | `run_trajectory` top-level grading with `resolveAt.kind: "checkpoint"` | `/objective/grading/resolveAt` |
 | `TRAJECTORY_ASSESSMENT_NEEDS_OUTCOME_LEG` | `run_trajectory` top-level syzygy assessment whose final leg is not an outcome objective | `/objective/grading/assessedBy/category` |
 
-**Collision sweep.** `grep -rhoE '"[A-Z][A-Z_]{4,}"'` across `apps/server/src`,
-`packages/schema/src` and `packages/runtime/src` yields 251 distinct literals; none of the six
+**Collision sweep.** `grep -rhoE '[A-Z_]{5,}' apps/server/src packages/schema/src
+packages/runtime/src --include="*.ts" | sort -u` yields **444** distinct literals; none of the six
 appears. A second sweep across `rfc/`, `docs/`, `design/` and `planning/` — which catches codes
-claimed by the parallel drafts — also yields no match for any of the six.
+claimed by the parallel drafts, `rfc/authoring-frictions.md` included — also yields no match for
+any of the six.
 
 No existing code is renamed, retired, or given a different meaning. Twelve existing codes gain a
 second pointer shape (`/legs/{i}/objective/…`), which `rfc/archive/trajectory-drill.md` §10 already

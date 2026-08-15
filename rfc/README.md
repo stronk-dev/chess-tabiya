@@ -9,6 +9,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `0000-rfc-process.md` | accepted | — | process |
 | `authoring-frictions.md` | draft — **cross-reviewed, ready for codex** | — | claims **pack schema 0.16** (additive/widening); NO migration (register stays 18); NO run-schema change (stays 0.13). Eight frictions from four content waves, ordered by attestation; carries the cursed-win/blessed-loss admission ruling of 2026-08-15 |
 | `resistance-spectrum.md` | draft (awaiting cross-review) | — | claims **run schema 0.14** and **migration 19** (rebased by claude from 0.15/20 after the 0.14 holder was cancelled). No pack-schema claim: `practical_resistance` is already in the enum, so this is a partition move. Ownership pins: `practical-difficulty.ts` (new), the `eloHonored` seam |
+| `validator-integrity.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — no pack-schema bump, no migration, no run-schema change; the D33 refusal lives in `runtimeIssues`, so relaxing it moves no `$id` and no digest. Deliberately did NOT take its contingent 0.19 lane, arguing that taking it would itself ship a new instance of the defect |
 
 No active product RFCs.
 

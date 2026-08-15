@@ -859,8 +859,21 @@ runs to `:204`. The missing half is two separate defects, both now ledgered:
 `rules_fact` enum gains `"draw"`, mapping to the shipped `rulesFact/draw`
 predicate through the existing `successPredicate` branch
 (`pack-orchestrator.ts:109-116`), which passes `condition.fact` through
-unchanged. Zero runtime code changes; `conditionEvidenceRefs` already emits
+unchanged. `conditionEvidenceRefs` already emits
 `rulesEvidenceRef(condition.fact)` (`:133`).
+
+> **CORRECTION, 2026-08-15 (claude, after the `validator-integrity` draft
+> caught it): "zero runtime code changes" was FALSE, and shipping it as written
+> would have created a fresh instance of D32 — inside the wave that exists to
+> prevent it.** `RULES_EVIDENCE_FACTS` (`packages/runtime/src/evidence-ref.ts:1-26`)
+> contains `draw-threefold`, `draw-50move` and `draw-insufficient` but **no bare
+> `"draw"`**, and `rulesEvidenceRef` throws for any fact outside that list
+> (`:50-55`). Because outcome objectives are never compiled during validation
+> (the D32 defect itself), such a pack would pass `make pack-check` and throw
+> when played. **§8 therefore also adds `"draw"` to `RULES_EVIDENCE_FACTS`**, with
+> a test that authors a `rules_fact: "draw"` condition on an outcome objective,
+> asserts `pack-check` green, and then asserts it evaluates without throwing.
+> Verified by claude against the shipped file before this correction was written.
 
 **How a blessed-loss Hold pack actually grades, after §9.** Through the
 automatic outcome rule, authoring nothing:
