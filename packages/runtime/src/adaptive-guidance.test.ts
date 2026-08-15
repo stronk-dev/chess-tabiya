@@ -8,6 +8,8 @@ import {
   commitMove,
   createRun,
   endgameReading,
+  liveAdmitted,
+  liveMarkers,
   permittedAssistance,
   pivotalMarkers,
   renderEndgameReading,
@@ -19,6 +21,7 @@ import {
   type DrillRun,
   type EvidencePacket,
   type Node,
+  type PivotalMarker,
 } from "./index.js";
 
 const at = "2026-08-14T00:00:00.000Z";
@@ -62,8 +65,15 @@ describe("adaptive guidance runtime", () => {
     expect(pivotalMarkers(castle, castle.activeCursor.branchId).some((item) => item.kind === "irreversibility" && (item.detail as { subkind?: string }).subkind === "castled")).toBe(true);
     const queen = commitMove(created("queen", "4k3/4q3/8/8/8/8/4R3/4K3 w - - 0 1"), "e2e7", { at }).run;
     expect(pivotalMarkers(queen, queen.activeCursor.branchId).some((item) => item.kind === "irreversibility" && (item.detail as { subkind?: string }).subkind === "last_of_role")).toBe(true);
+    const pawn = commitMove(created("pawn", "4k3/p7/8/4p3/3P4/8/8/4K3 w - - 0 1"), "d4e5", { at }).run;
+    expect(pivotalMarkers(pawn, pawn.activeCursor.branchId).some((item) => item.kind === "irreversibility" && (item.detail as { subkind?: string }).subkind === "pawn_break")).toBe(true);
     const quiet = commitMove(created("quiet", start), "g1f3", { at }).run;
     expect(pivotalMarkers(quiet, quiet.activeCursor.branchId).filter((item) => item.kind === "irreversibility")).toEqual([]);
+
+    const free = { sessionKind: "position" as const, deliveryOpen: true, role: "solo" as const };
+    expect(liveMarkers(castle, castle.activeCursor.branchId, free).filter((item) => item.kind === "irreversibility")).toEqual([]);
+    expect(liveMarkers(pawn, pawn.activeCursor.branchId, free).filter((item) => item.kind === "irreversibility")).toEqual([]);
+    expect(liveMarkers(queen, queen.activeCursor.branchId, free).filter((item) => item.kind === "irreversibility")).toHaveLength(1);
   });
 
   it("requires sustained same-side legal-option collapse and suppresses a one-check release", () => {
@@ -82,7 +92,54 @@ describe("adaptive guidance runtime", () => {
     const markers = pivotalMarkers(run([start], [event]), "main").filter((item) => item.kind === "human_divergence");
     expect(markers).toHaveLength(1);
     expect(renderPivotalMarker(markers[0]!)[0]).toMatch(/Maia-1500.*31%.*24%.*19%.*recorded mass/);
+    expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", deliveryOpen: false, role: "solo" }).filter((item) => item.kind === "human_divergence")).toEqual([]);
+    expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", deliveryOpen: true, role: "host" }).filter((item) => item.kind === "human_divergence")).toHaveLength(1);
+    expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", deliveryOpen: true, role: "participant" }).filter((item) => item.kind === "human_divergence")).toEqual([]);
+    expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", deliveryOpen: true, role: "spectator" }).filter((item) => item.kind === "human_divergence")).toEqual([]);
     expect(pivotalMarkers(run([start], [{ ...event, data: { ...event.data, selection: { ...selection, policyModeApplied: "strong_engine" as const } } }]), "main").filter((item) => item.kind === "human_divergence")).toEqual([]);
+  });
+
+  it("pins every pivotal sentence and keeps live admission exhaustive", () => {
+    const marker = (kind: PivotalMarker["kind"], detail: PivotalMarker["detail"]): PivotalMarker => ({ nodeId: "n0", kind, detail, provenanceNote: "fixture" });
+    const engine = { id: "maia", name: "Maia-1500", version: "1", seedHonored: false };
+    const fixtures = [
+      [marker("phase_change", { from: "opening", to: "middlegame" }), "opening → middlegame, detected by Tabiya's phase bands."],
+      [marker("human_divergence", { engine, masses: [.4, .3, .2] }), "Maia-1500's recorded policy split: 40% / 30% / 20% of recorded mass."],
+      [marker("option_collapse", { color: "white", priorCount: 8, count: 1, nextCount: 1 }), "One legal move is available: forced under Tabiya's count convention."],
+      [marker("option_collapse", { color: "white", priorCount: 8, count: 2, nextCount: 2 }), "2 legal moves are available under Tabiya's count convention."],
+      [marker("irreversibility", { subkind: "castled", color: "white" }), "white castled."],
+      [marker("irreversibility", { subkind: "last_of_role", color: "black", role: "rook", queensOff: false }), "black has no rooks remaining."],
+      [marker("irreversibility", { subkind: "last_of_role", color: "black", role: "queen", queensOff: true }), "The queens have left the board."],
+      [marker("irreversibility", { subkind: "pawn_break", color: "white" }), "white created or resolved pawn contact."],
+    ] as const;
+    expect(fixtures.map(([item]) => renderPivotalMarker(item)[0])).toEqual(fixtures.map(([, sentence]) => sentence));
+    for (const [item] of fixtures) for (const banned of BANNED_JUDGEMENTS) {
+      expect(renderPivotalMarker(item).join(" ").toLowerCase()).not.toMatch(new RegExp(`\\b${banned}\\b`, "u"));
+    }
+    const free = permittedAssistance({ sessionKind: "position", deliveryOpen: true, role: "solo" });
+    const locked = permittedAssistance({ sessionKind: "position", deliveryOpen: false, role: "solo" });
+    expect(fixtures.filter(([item]) => liveAdmitted(item, free)).map(([item]) => item.kind)).toEqual([
+      "phase_change", "human_divergence", "option_collapse", "option_collapse", "irreversibility", "irreversibility",
+    ]);
+    expect(fixtures.filter(([item]) => liveAdmitted(item, locked)).map(([item]) => item.kind)).toEqual([
+      "phase_change", "option_collapse", "option_collapse", "irreversibility", "irreversibility",
+    ]);
+  });
+
+  it("narrows only the unasked client projection", () => {
+    const sources = {
+      story: readFileSync(new URL("./story.ts", import.meta.url), "utf8"),
+      comparison: readFileSync(new URL("./compare-strips.ts", import.meta.url), "utf8"),
+      evidence: readFileSync(new URL("../../../apps/server/src/guidance.ts", import.meta.url), "utf8"),
+      client: readFileSync(new URL("../../../apps/web/src/lib/DrillScreen.svelte", import.meta.url), "utf8"),
+    };
+    expect(sources.story).toContain("pivotalMarkers(run, branchId)");
+    expect(sources.comparison).toContain("pivotalMarkers(run, column.branchId)");
+    expect(sources.evidence).toContain("pivotalMarkers(input.run, input.node.branchId)");
+    expect(sources.story).not.toContain("liveMarkers");
+    expect(sources.comparison).not.toContain("liveMarkers");
+    expect(sources.evidence).not.toContain("liveMarkers");
+    expect(sources.client.match(/liveMarkers\(/gu)).toHaveLength(1);
   });
 
   it("implements the assistance table with silence as the universal default", () => {

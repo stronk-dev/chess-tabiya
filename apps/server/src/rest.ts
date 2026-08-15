@@ -34,6 +34,7 @@ import {
 import {
   RunService,
   type CreateRunRequest,
+  type GuidanceAccess,
   type ImportGameRequest,
   type RewindTarget,
 } from "./service.js";
@@ -86,6 +87,17 @@ function sessionJoinPage(token: string, join: { readonly title: string; readonly
 
 function invalid(message: string): ServerError {
   return new ServerError("INVALID_REQUEST", message);
+}
+
+function requireGuidanceDisclosure(access: GuidanceAccess): void {
+  const permission = permittedAssistance({
+    sessionKind: access.run.sessionKind,
+    deliveryOpen: feedbackDeliveryOpen(access.run),
+    role: access.role,
+  });
+  if (permission.humanSplit === "locked_off") {
+    throw new ServerError("ASSISTANCE_WITHHELD", "Guidance containing human-model distribution is withheld in this context");
+  }
 }
 
 function record(value: unknown, label = "body"): Record<string, unknown> {
@@ -1109,12 +1121,14 @@ export function createRestHandler(
           if (!Array.isArray(body.branches) || body.branches.some((branch) => typeof branch !== "string")) throw invalid("branches must be an array of strings");
           const comparison = service.compare(route.runId, principal, body.branches as string[]);
           const access = service.guidanceAccess(route.runId, principal, comparison.forkNodeId);
+          requireGuidanceDisclosure(access);
           const narrative = comparisonNarrative(access.run, comparison, comparisonStrips(access.run, comparison));
           const base = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
           const packet = Object.freeze({ ...base, authored: Object.freeze([]), sentences: Object.freeze(narrative.groups.flatMap((group) => group.sentences)) });
           return json(200, { ...(await renderVoice(voiceProvider, packet, voicePersona, "compare")), scope });
         }
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
+        requireGuidanceDisclosure(access);
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.story(route.runId, principal) : undefined;
         const packet = story === undefined
@@ -1129,6 +1143,7 @@ export function createRestHandler(
         const scope = requiredString(body.scope, "scope");
         if (scope !== "marker" && scope !== "reading" && scope !== "steering" && scope !== "story") throw invalid("scope must be marker, reading, steering, or story");
         const access = service.guidanceAccess(route.runId, principal, requiredString(body.nodeId, "nodeId"));
+        requireGuidanceDisclosure(access);
         const basePacket = evidencePacket({ run: access.run, node: access.node, ...(access.pack === undefined ? {} : { pack: access.pack.document }), authored: service.authoredFeedback(route.runId, principal), ...(shapes === undefined ? {} : { shapes }) });
         const story = scope === "story" ? service.story(route.runId, principal) : undefined;
         const packet = story === undefined ? basePacket : Object.freeze({ ...basePacket, sentences: Object.freeze([...basePacket.sentences, suggestTitle(story), ...(story.moments.find((moment) => moment.nodeId === access.node.id)?.sentences ?? [])]) });

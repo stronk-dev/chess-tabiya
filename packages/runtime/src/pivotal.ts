@@ -1,5 +1,6 @@
 import type { Color } from "chessops/types";
 
+import { permittedAssistance, type AssistanceContext } from "./assistance.js";
 import { branchPath } from "./branch-path.js";
 import { positionFromFen } from "./chess.js";
 import { classifyPhase, type DetectedPhase } from "./phase.js";
@@ -65,12 +66,59 @@ export function pivotalMarkers(run: DrillRun, branchId: string): readonly Pivota
   return Object.freeze(markers.sort((a, b) => (order.get(a.nodeId)! - order.get(b.nodeId)!) || a.kind.localeCompare(b.kind)));
 }
 
+export function liveAdmitted(
+  marker: PivotalMarker,
+  permission: ReturnType<typeof permittedAssistance>,
+): boolean {
+  switch (marker.kind) {
+    case "irreversibility":
+      return (marker.detail as IrreversibilityDetail).subkind === "last_of_role";
+    case "human_divergence":
+      // Grandfathered-unmeasured (§3.1), but never allowed around the rung-3 gate.
+      return permission.humanSplit === "free";
+    case "phase_change":
+    case "option_collapse":
+      // Grandfathered-unmeasured (§3.1); measurement, not argument, decides demotion.
+      return true;
+    default: {
+      const exhaustive: never = marker.kind;
+      return exhaustive;
+    }
+  }
+}
+
+export function liveMarkers(
+  run: DrillRun,
+  branchId: string,
+  context: AssistanceContext,
+): readonly PivotalMarker[] {
+  const permission = permittedAssistance(context);
+  return Object.freeze(pivotalMarkers(run, branchId).filter((marker) => liveAdmitted(marker, permission)));
+}
+
 export function renderPivotalMarker(marker: PivotalMarker): readonly string[] {
-  if (marker.kind === "phase_change") { const detail = marker.detail as PhaseChangeDetail; return Object.freeze([`${detail.from} → ${detail.to}, detected by Tabiya's phase bands.`]); }
-  if (marker.kind === "human_divergence") { const detail = marker.detail as DivergenceDetail; return Object.freeze([`${detail.engine.name}'s recorded policy split: ${detail.masses.slice(0, 3).map((mass) => `${Math.round(mass * 100)}%`).join(" / ")} of recorded mass.`]); }
-  if (marker.kind === "option_collapse") { const detail = marker.detail as CollapseDetail; return Object.freeze([detail.count === 1 ? "One legal move is available: forced under Tabiya's count convention." : `${detail.count} legal moves are available under Tabiya's count convention.`]); }
-  const detail = marker.detail as IrreversibilityDetail;
-  if (detail.subkind === "castled") return Object.freeze([`${detail.color} castled.`]);
-  if (detail.subkind === "last_of_role") return Object.freeze([`${detail.color} has no ${detail.role}s remaining.`]);
-  return Object.freeze([`${detail.color} created or resolved pawn contact.`]);
+  switch (marker.kind) {
+    case "phase_change": {
+      const detail = marker.detail as PhaseChangeDetail;
+      return Object.freeze([`${detail.from} → ${detail.to}, detected by Tabiya's phase bands.`]);
+    }
+    case "human_divergence": {
+      const detail = marker.detail as DivergenceDetail;
+      return Object.freeze([`${detail.engine.name}'s recorded policy split: ${detail.masses.slice(0, 3).map((mass) => `${Math.round(mass * 100)}%`).join(" / ")} of recorded mass.`]);
+    }
+    case "option_collapse": {
+      const detail = marker.detail as CollapseDetail;
+      return Object.freeze([detail.count === 1 ? "One legal move is available: forced under Tabiya's count convention." : `${detail.count} legal moves are available under Tabiya's count convention.`]);
+    }
+    case "irreversibility": {
+      const detail = marker.detail as IrreversibilityDetail;
+      if (detail.subkind === "castled") return Object.freeze([`${detail.color} castled.`]);
+      if (detail.subkind === "last_of_role") return Object.freeze([detail.queensOff ? "The queens have left the board." : `${detail.color} has no ${detail.role}s remaining.`]);
+      return Object.freeze([`${detail.color} created or resolved pawn contact.`]);
+    }
+    default: {
+      const exhaustive: never = marker.kind;
+      return exhaustive;
+    }
+  }
 }

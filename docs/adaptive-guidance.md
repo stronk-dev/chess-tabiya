@@ -60,9 +60,17 @@ would be theatre.
 
 ## Pivotal markers
 
-`pivotalMarkers(run, branchId)` derives a stable, path-ordered list from persisted FENs and
-events. The timeline renders a dot only when markers are enabled. Nothing opens automatically;
-the learner must open a dot to see its sentences.
+`pivotalMarkers(run, branchId)` derives the complete, stable, path-ordered list from persisted
+FENs and events. Learner-requested comparison, story, and evidence-packet surfaces keep that
+complete projection. `liveMarkers(run, branchId, context)` is the narrower unasked projection
+used by the timeline: castling and pawn-contact irreversibility are omitted, while capture of the
+last piece of a role remains. A capture leaving both sides queenless renders “The queens have
+left the board.” Nothing opens automatically; the learner must open a dot to see its sentences.
+
+The live projection also applies the human-split permission. Recorded human divergence is absent
+for participants and spectators, and for solo/host viewers while feedback delivery is closed.
+Phase-change and option-collapse markers remain live but explicitly grandfathered and unmeasured;
+the admission register records that debt rather than treating their presence as evidence.
 
 Four detector families ship:
 
@@ -118,7 +126,10 @@ detector-attributed phase, structural matches and observations, pivotal markers,
 matching shape references, already-revealed authored prose, and the deterministic sentences for
 all of them. The packet is assembled before an external provider is consulted.
 
-`POST /runs/:id/voice` accepts a node and `marker`, `reading`, `steering`, or `story` scope. A deployment
+`POST /runs/:id/voice` accepts a node and `marker`, `reading`, `steering`, or `story` scope. Voice
+and speech packets can contain recorded human-model divergence, so both routes enforce the same
+human-split permission before returning text or audio: participants, spectators, and pre-release
+solo/host viewers receive typed `ASSISTANCE_WITHHELD`. A deployment
 with no provider returns typed `VOICE_UNAVAILABLE` (HTTP 503), and the client does not show the
 persona preference. With a provider, `voiceCheck` rejects new square or move tokens, ungrounded
 chess nouns and judgments, and a closed set of prescriptive verbs. One failed rendering may be

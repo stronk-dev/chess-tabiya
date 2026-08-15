@@ -63,7 +63,7 @@ the three irreversibility sentences in `renderPivotalMarker` (now `:73-75`).*
 > longer blocks. After the narrowing, `last_of_role` is the **only** marker sentence a learner
 > sees unasked, and `rfc/archive/adaptive-guidance.md` §4b calls the queens-off form *"the version
 > of this fact players actually track"*. The field is computed (`transition.ts:255`) and never
-> read (`pivotal.ts:74`) — wire it. **Criterion 5 pins SEVEN outputs**, with the new sentence
+> read (`pivotal.ts:74`) — wire it. **Criterion 5 pins all EIGHT constructible outputs**, with the new sentence
 > written out; the six are not frozen. Rationale recorded: the archived judgement was made when
 > this was one sentence among many, and it is now the only one, which raises the value of getting
 > it right rather than lowering it.
@@ -766,7 +766,7 @@ dispatch stops being latent.
 **The fix, unchanged from `rfc/archive/transition-primitives.md` §5.3 minus its dependency:**
 
 - `renderPivotalMarker` becomes a `switch` over `marker.kind` ending in a `never` binding.
-- **All six existing outputs across the four kinds are byte-identical**: `phase_change` (`:69`);
+- **All seven existing outputs across the four kinds are byte-identical**: `phase_change` (`:69`);
   `human_divergence` (`:70`); `option_collapse` in both its one-move and n-move forms (`:71`);
   and the three irreversibility sentences `castled`, `last_of_role`, pawn contact (`:73-75`).
   Pinned by a test written **before** the conversion.
@@ -916,9 +916,9 @@ owner's ruling and this RFC's §3 becomes its mirror.
    one `.pivotal-marker` dot, on the last-of-role node; with `markers: "off"`, zero, and a
    timeline byte-identical to today's (adaptive-guidance law 1d, unchanged).
 5. **D48 is closed.** `renderPivotalMarker` is a `switch` with a `never` binding; a test written
-   before the conversion pins **all seven** outputs byte-identically (`phase_change`;
+   before the conversion pins **all eight** outputs byte-identically (`phase_change`;
    `human_divergence`; `option_collapse` × 2; `castled`; `last_of_role`; pawn contact — six
-   strings across four kinds); and a type-level test asserts that adding a fifth `PivotalKind`
+   existing strings across four kinds, plus the queens-off `last_of_role` form); and a type-level test asserts that adding a fifth `PivotalKind`
    member fails to compile rather than rendering the pawn-contact sentence.
 6. **The divergence gate holds on every delivery path.** A test
    asserts a `human_divergence` marker is present in `pivotalMarkers` and absent from
@@ -972,7 +972,7 @@ owner's ruling and this RFC's §3 becomes its mirror.
    cheap to reverse and worth revisiting **after** the surface is used, not pre-emptively. §6.2 is
    the specification of this ruling; nothing in this RFC hedges toward the third-value option.
    *No action for the implementer beyond §6.2 and criterion 6.*
-3. ~~**Should the `last_of_role` sentence render `queensOff`?**~~ **RESOLVED by owner ruling 2026-08-15: YES, render it.** Criterion 5 pins **seven** outputs with the new sentence written out; the six are not frozen. Rationale: the archived judgement calling the queens-off form *"the version of this fact players actually track"* was made when this was one sentence among many, and it is now the **only** sentence on the unasked surface — which raises the value of getting it right. *Superseded question:* The field is set
+3. ~~**Should the `last_of_role` sentence render `queensOff`?**~~ **RESOLVED by owner ruling 2026-08-15: YES, render it.** Criterion 5 pins **eight** constructible outputs with the new sentence written out; the seven existing outputs are not frozen. Rationale: the archived judgement calling the queens-off form *"the version of this fact players actually track"* was made when this was one sentence among many, and it is now the **only** sentence on the unasked surface — which raises the value of getting it right. *Superseded question:* The field is set
    (`transition.ts:255`) and never read (`renderPivotalMarker`, `pivotal.ts:74`), and
    `rfc/archive/adaptive-guidance.md` §4b calls the queens-off form
    *"the version of this fact players actually track"*. It is now the **only** sentence on the

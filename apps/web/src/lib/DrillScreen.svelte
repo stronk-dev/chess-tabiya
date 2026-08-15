@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, RunRole, ShapeEntryView, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, permittedAssistance, pivotalMarkers, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness } from "@chess-tabiya/runtime";
+  import { BRANCH_COLLAPSE_FLOOR, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, liveMarkers, permittedAssistance, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness } from "@chess-tabiya/runtime";
   import { onDestroy, onMount, tick } from "svelte";
 
   import BranchRail from "./BranchRail.svelte";
@@ -283,12 +283,13 @@
   });
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameReading(displayedNode.fen));
-  let assistancePermission = $derived(permittedAssistance({ sessionKind: run.sessionKind, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole }));
+  let assistanceContext = $derived({ sessionKind: run.sessionKind, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole });
+  let assistancePermission = $derived(permittedAssistance(assistanceContext));
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
   let selectedObservations = $derived(selectedSquare === undefined ? [] : structure.features.filter((item) => item.squares.some((square) => square === selectedSquare)));
   let boardOverlays = $derived((effectiveLighting === "sight" || effectiveLighting === "evidence") ? selectedObservations.flatMap((item) => item.squares.map((square) => ({ orig: square, brush: "blue" }))) : []);
   let overlayCaption = $derived(selectedObservations.map(renderStructuralObservation));
-  let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkers(run, run.activeCursor.branchId) : []);
+  let projectedPivotal = $derived(assistance.markers === "live" ? liveMarkers(run, run.activeCursor.branchId, assistanceContext) : []);
   let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: marker.kind.replaceAll("_", " ") })));
   let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
   let guidedShapes = $derived.by(() => {

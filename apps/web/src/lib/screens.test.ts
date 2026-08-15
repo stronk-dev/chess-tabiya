@@ -172,6 +172,34 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("renders only live-admitted irreversibility markers", async () => {
+    const config = { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } };
+    const session = (fen: string) => ({ kind: "position" as const, start: { fen, side: "white" as const }, feedbackPolicy: "attempt_end" as const, opponentPolicy: { mode: "human_common" as const } });
+    const props = (run: DrillRun) => ({
+      snapshot: { run, access: "writer" as const, pendingEvidence: 0, withheld: false },
+      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    });
+
+    const castleRoot = createRun({ id: "live-castle", session: session("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1"), sessionDigest: `sha256:${"d".repeat(64)}`, policyConfig: config, seed: 1, createdAt: at });
+    const castle = commitMove(castleRoot, "e1g1", { at }).run;
+    let component = mount(DrillScreen, { target: target(), props: props(castle) });
+    await tick();
+    expect(document.querySelectorAll(".pivotal-marker")).toHaveLength(0);
+    await unmount(component);
+    document.body.replaceChildren();
+
+    const queenRoot = createRun({ id: "live-queens-off", session: session("4k3/4q3/8/8/8/8/4R3/4K3 w - - 0 1"), sessionDigest: `sha256:${"e".repeat(64)}`, policyConfig: config, seed: 1, createdAt: at });
+    const queen = commitMove(queenRoot, "e2e7", { at }).run;
+    component = mount(DrillScreen, { target: target(), props: props(queen) });
+    await tick();
+    expect(document.querySelectorAll(".pivotal-marker")).toHaveLength(1);
+    document.querySelector<HTMLButtonElement>(".pivotal-marker")!.click();
+    await tick();
+    expect(document.querySelector(".guidance-panel")?.textContent).toContain("The queens have left the board.");
+    await unmount(component);
+  });
+
   it("shows a passive shape marker in pack-free play and opens the attributed plans panel", async () => {
     const run = createRun({
       id: "just-play-shape",

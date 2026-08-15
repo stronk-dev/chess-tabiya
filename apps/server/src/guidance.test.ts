@@ -12,6 +12,7 @@ import { SQLiteRunStorage } from "./storage.js";
 import { FixtureCorpusSource } from "./corpus.js";
 import { ExternalHttpVoiceProvider } from "./external-voice.js";
 import { ExternalHttpTtsProvider, type TtsProvider } from "./external-tts.js";
+import { IdentityService } from "./identity.js";
 
 const FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-14T00:00:00.000Z";
@@ -34,7 +35,7 @@ const capabilities: CapabilitiesProvider = {
     };
   },
 };
-function request(path: string, method = "GET", body?: unknown): Request { return new Request(`http://tabiya.test${path}`, { method, headers: body === undefined ? {} : { "content-type": "application/json" }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) }); }
+function request(path: string, method = "GET", body?: unknown, cookie?: string): Request { return new Request(`http://tabiya.test${path}`, { method, headers: { ...(body === undefined ? {} : { "content-type": "application/json" }), ...(cookie === undefined ? {} : { cookie }) }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) }); }
 
 describe("adaptive guidance server seams", () => {
   const stores: SQLiteRunStorage[] = [];
@@ -84,6 +85,7 @@ describe("adaptive guidance server seams", () => {
 
     const sent: string[] = [];
     const tts: TtsProvider = { async synthesize(text) { sent.push(text); return { bytes: new Uint8Array([1, 2, 3]), contentType: "audio/test" }; } };
+    service.reveal("guide", "writer", at);
     const before = service.events("guide", 0).events;
     const handler = createRestHandler(service, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, tts);
     const response = await handler(request("/runs/guide/speech", "POST", input));
@@ -91,6 +93,47 @@ describe("adaptive guidance server seams", () => {
     expect([...new Uint8Array(await response.arrayBuffer())]).toEqual([1, 2, 3]);
     expect(sent).toHaveLength(1); expect(sent[0]).toContain("opening"); expect(sent[0]).not.toContain("guide");
     expect(service.events("guide", 0).events).toEqual(before);
+  });
+
+  it("withholds voice and speech behind the same human-split permission", async () => {
+    const { service, run } = await setup();
+    const provider: VoiceProvider = { async render(_packet, _persona, deterministicText) { return deterministicText; } };
+    const tts: TtsProvider = { async synthesize() { return { bytes: new Uint8Array([1]), contentType: "audio/test" }; } };
+    const handler = createRestHandler(service, undefined, undefined, undefined, undefined, undefined, undefined, undefined, provider, undefined, undefined, undefined, tts);
+    const voice = { nodeId: run.activeCursor.nodeId, scope: "reading" };
+    const speech = { nodeId: run.activeCursor.nodeId, scope: "reading" };
+    for (const [path, body] of [["/runs/guide/voice", voice], ["/runs/guide/speech", speech]] as const) {
+      const withheld = await handler(request(path, "POST", body));
+      expect(withheld.status).toBe(409);
+      expect(await withheld.json()).toMatchObject({ error: { code: "ASSISTANCE_WITHHELD" } });
+    }
+    service.reveal("guide", "writer", at);
+    expect((await handler(request("/runs/guide/voice", "POST", voice))).status).toBe(200);
+    expect((await handler(request("/runs/guide/speech", "POST", speech))).status).toBe(200);
+  });
+
+  it("never opens voice or speech to participants and spectators", async () => {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
+    const identity = new IdentityService(storage, { cookieSecure: false, derive: async (password, salt) => Buffer.alloc(32, password.length + salt.length) });
+    const host = await identity.register({ handle: "voice-host", password: "correct horse battery staple" });
+    const participant = await identity.register({ handle: "voice-participant", password: "correct horse battery staple" });
+    const spectator = await identity.register({ handle: "voice-spectator", password: "correct horse battery staple" });
+    const service = new RunService(storage, { evidenceQueue: new EvidenceJobQueue(executor) });
+    const run = await service.create({ id: "role-guide", session: { kind: "position", start: { fen: FEN, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 4, createdAt: at }, { writerId: "host-writer", learnerId: host.learner.id });
+    const hostPrincipal = { learnerId: host.learner.id, handle: host.learner.handle };
+    service.updateGrant("role-guide", hostPrincipal, "host-writer", { op: "grant", handle: participant.learner.handle, role: "participant" }, at);
+    service.updateGrant("role-guide", hostPrincipal, "host-writer", { op: "grant", handle: spectator.learner.handle, role: "spectator" }, at);
+    service.reveal("role-guide", hostPrincipal, "host-writer", at);
+    const provider: VoiceProvider = { async render(_packet, _persona, deterministicText) { return deterministicText; } };
+    const tts: TtsProvider = { async synthesize() { return { bytes: new Uint8Array([1]), contentType: "audio/test" }; } };
+    const handler = createRestHandler(service, undefined, undefined, identity, undefined, undefined, undefined, undefined, provider, undefined, undefined, undefined, tts);
+    for (const session of [participant, spectator]) for (const path of ["voice", "speech"] as const) {
+      const response = await handler(request(`/runs/role-guide/${path}`, "POST", { nodeId: run.activeCursor.nodeId, scope: "reading" }, session.cookie));
+      expect(response.status).toBe(409);
+      expect(await response.json()).toMatchObject({ error: { code: "ASSISTANCE_WITHHELD" } });
+    }
+    expect((await handler(request("/runs/role-guide/voice", "POST", { nodeId: run.activeCursor.nodeId, scope: "reading" }, host.cookie))).status).toBe(200);
+    expect((await handler(request("/runs/role-guide/speech", "POST", { nodeId: run.activeCursor.nodeId, scope: "reading" }, host.cookie))).status).toBe(200);
   });
 
   it("posts only text bytes to the external TTS provider", async () => {
