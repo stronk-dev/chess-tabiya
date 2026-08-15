@@ -35,8 +35,15 @@ shipped code, which changes this from a build into an assembly:
 - **The two-axis split the whole design rests on is already implemented.**
   `permittedAssistance` computes what *may honestly be shown* from context;
   `AssistanceConfig` v4 carries nine named axes of what is *switched on*. Honesty
-  policy and inventory are already separate artefacts. The deck's slot vocabulary
-  is those nine axes.
+  policy and inventory are already separate artefacts.
+  **But the deck is NOT those nine axes** — corrected 2026-08-15 by `design/research/campaign-effect-vocabulary.md`, against
+  this doc's original claim. **All nine are monotone**, so the lattice has one
+  maximal element and the number of distinct builds over them is **1**. Nine
+  monotone toggles are a settings panel: a deck requires **opportunity cost**, and
+  monotone axes have none. The deck is instead a **per-lens loadout with a slot
+  budget** over the **34 attested lenses** (15 of 18 structural features, 3 of 6
+  transition primitives, 16 of 25 shape entries) — which yields **278,256** distinct
+  five-slot builds at **zero authoring cost**.
 - **A difficulty-availability axis exists at the BRANCH level** as `branchDecidedness`
   (`decided` / `undecided` / `unknown`) — but it is not yet the axis §2a specifies, and
   the difference matters. Only `decided` carries a **ground**; the other two carry a
@@ -113,6 +120,15 @@ first collides with nothing. The third is **already the rule** — the loop is
 commit → play the consequence → *then* rewind. Only **how often** is a real
 conflict with the thesis, and `05` §1 already provides the venue for amending an
 invariant deliberately rather than by accident.
+
+**And the tension mostly dissolves once the deck is a loadout rather than a retry
+budget** (`design/research/campaign-effect-vocabulary.md`). Every proposal so far assumed opportunity cost had to be
+*invented* as scarcity — which is what prices "experimentation without cost". It
+does not, because the cost has **already been measured**: the all-on state is the
+**unreadable** one, not the best one (median 58 observations per position, 13 of
+them unconditional, the compare strip at 8.31 entries/ply and 1.01× lift). A slot
+budget is therefore **the product refusing to print noise**, not withholding a
+reward — no invariant is touched and nothing is sold back.
 
 ## 3. Standing laws for the campaign
 
