@@ -169,6 +169,29 @@ describe("post-commit guard", () => {
     expect(applyRecordedEngineGuard(tunedPack(fen, { evalSwingCp: 120, window: { fromPly: 4, toPly: 8 } }), played, consequenceId, ["engine:after"], at).emitted).toEqual([]);
   });
 
+  it("prefers an equal-depth move-scoped override and leaves its sibling on the base threshold", () => {
+    const fen = "4k3/8/8/8/8/8/7P/4K3 b - - 0 1";
+    const document = tunedPack(fen, {
+      evalSwingCp: 250,
+      overrides: [
+        { at: { atStart: true }, evalSwingCp: 220 },
+        { at: { atStart: true }, moveUci: "h2h3", evalSwingCp: 120 },
+      ],
+    });
+    const exercise = (learnerMove: string) => {
+      let played = appendOpponentPly(run(fen), selection("e8f7"), { at }).run;
+      const previousId = played.activeCursor.nodeId;
+      played = commitMove(played, learnerMove, { at }).run;
+      played = appendOpponentPly(played, selection("f7g6"), { at }).run;
+      const consequenceId = played.activeCursor.nodeId;
+      played = attachEvidence(played, previousId, ["engine:before"], { kind: "eval", source: "engine_validated", values: { centipawns: 0 } }, at).run;
+      played = attachEvidence(played, consequenceId, ["engine:after"], { kind: "eval", source: "engine_validated", values: { centipawns: -130 } }, at).run;
+      return applyRecordedEngineGuard(document, played, consequenceId, ["engine:after"], at).emitted;
+    };
+    expect(exercise("h2h3")).toHaveLength(1);
+    expect(exercise("h2h4")).toEqual([]);
+  });
+
   it("lets rulesTier disable deterministic material feedback", () => {
     const fen = "3rk3/8/8/8/8/8/7P/3Q2K1 w - - 0 1";
     let played = commitMove(run(fen), "h2h3", { at }).run;

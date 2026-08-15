@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.20",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.21",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.20 format for an engine-independent authored drill.",
+  "description": "Living v0.21 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -92,6 +92,7 @@
             "required": ["at"],
             "properties": {
               "at": { "$ref": "#/$defs/deviationLocation" },
+              "moveUci": { "$ref": "#/$defs/moveUci" },
               "evalSwingCp": {
                 "oneOf": [
                   { "type": "integer", "minimum": 50, "maximum": 1000 },
@@ -912,6 +913,13 @@
         }
       ]
     },
+    "deviationCost": {
+      "oneOf": [
+        { "type": "object", "required": ["kind", "loss", "basis"], "properties": { "kind": { "const": "cp" }, "loss": { "type": "integer", "minimum": 0, "maximum": 30000 }, "basis": { "enum": ["engine", "material"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "against", "basis"], "properties": { "kind": { "const": "mate" }, "against": { "enum": ["learner", "opponent"] }, "basis": { "enum": ["engine", "tablebase"] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "reason"], "properties": { "kind": { "const": "unmeasurable" }, "reason": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false }
+      ]
+    },
     "deviation": {
       "type": "object",
       "required": ["at", "moveUci", "class"],
@@ -928,7 +936,10 @@
           ]
         },
         "offObjective": { "type": "boolean" },
-        "note": { "$ref": "#/$defs/nonEmptyString" }
+        "note": { "$ref": "#/$defs/nonEmptyString" },
+        "mistake": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["plan", "timing", "tactical"] } },
+        "cost": { "$ref": "#/$defs/deviationCost" },
+        "timingWindowId": { "$ref": "#/$defs/id" }
       },
       "additionalProperties": false
     },

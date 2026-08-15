@@ -180,6 +180,57 @@ describe("pack authoring validation", () => {
     expect(codes).toEqual(expect.arrayContaining(["GUARD_WINDOW_EMPTY", "GUARD_OVERRIDE_ANCHOR_UNKNOWN", "GUARD_OVERRIDE_DUPLICATE", "GUARD_DISABLES_EVERYTHING"]));
   });
 
+  it("validates deviation mistake, timing, cost, and move-scoped guard declarations", () => {
+    const candidate = structuredClone(fixture) as DrillPackDefinition;
+    (candidate as any).feedbackPolicy = "immediate_guard";
+    (candidate as any).guard = {
+      evalSwingCp: 150,
+      overrides: [
+        { at: { atStart: true }, evalSwingCp: 120 },
+        { at: { atStart: true }, moveUci: "c1e3", evalSwingCp: 50 },
+        { at: { atStart: true }, moveUci: "a1a8", evalSwingCp: 50 },
+      ],
+    };
+    Object.assign((candidate.deviations as any[])[0], {
+      class: "tactical_error",
+      mistake: ["timing", "tactical"],
+      cost: { kind: "cp", basis: "engine", loss: 20 },
+      timingWindowId: "najdorf-race",
+    });
+    const result = validatePackDocument(candidate);
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: "GUARD_OVERRIDE_MOVE_ILLEGAL", path: "/guard/overrides/2/moveUci" }),
+      expect.objectContaining({ code: "GUARD_CANNOT_REACH_DEVIATION", severity: "warning" }),
+    ]));
+    expect(result.issues.some((issue) => issue.code === "GUARD_OVERRIDE_DUPLICATE")).toBe(false);
+    expect(result.issues.some((issue) => issue.code === "DEVIATION_WINDOW_WITHOUT_TIMING_MISTAKE")).toBe(false);
+
+    const wrongWindow = structuredClone(candidate) as any;
+    wrongWindow.guard.overrides.pop();
+    wrongWindow.deviations[0].mistake = ["plan"];
+    wrongWindow.deviations[0].timingWindowId = "missing";
+    const wrongIssues = validatePackDocument(wrongWindow).issues;
+    expect(wrongIssues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: "DEVIATION_WINDOW_WITHOUT_TIMING_MISTAKE", path: "/deviations/0/timingWindowId" }),
+      expect.objectContaining({ code: "TIMING_WINDOW_UNKNOWN", path: "/deviations/0/timingWindowId" }),
+    ]));
+  });
+
+  it("warns narrowly for deviation mistake declarations without refusing the pack", () => {
+    const accepted = structuredClone(fixture) as any;
+    accepted.deviations[0].mistake = ["timing"];
+    const acceptedResult = validatePackDocument(accepted);
+    expect(acceptedResult.valid).toBe(true);
+    expect(acceptedResult.issues).toContainEqual(expect.objectContaining({ code: "DEVIATION_MISTAKE_ON_ACCEPTED", severity: "warning" }));
+
+    const redundant = structuredClone(fixture) as any;
+    redundant.deviations[0].class = "tactical_error";
+    redundant.deviations[0].mistake = ["tactical"];
+    expect(validatePackDocument(redundant).issues).toContainEqual(expect.objectContaining({ code: "DEVIATION_MISTAKE_TACTICAL_REDUNDANT" }));
+    redundant.deviations[0].mistake = ["timing", "tactical"];
+    expect(validatePackDocument(redundant).issues.some((issue) => issue.code === "DEVIATION_MISTAKE_TACTICAL_REDUNDANT")).toBe(false);
+  });
+
   it("proves root-after-move variants and refuses false or absent siblings", () => {
     const sibling = structuredClone(fixture) as DrillPackDefinition;
     const board = Chess.fromSetup(parseFen(sibling.start.fen).unwrap()).unwrap();

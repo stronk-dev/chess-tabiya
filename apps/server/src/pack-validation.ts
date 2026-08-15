@@ -483,8 +483,37 @@ function runtimeIssues(
   checkPlanConsequences(pack.objective, "/objective");
   (pack.legs ?? []).forEach((leg, index) => checkPlanConsequences(leg.objective, `/legs/${index}/objective`));
   const spineIds = new Set<string>();
-  const collectSpine = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[]): void => { for (const node of nodes) { spineIds.add(node.id); collectSpine(node.children); } };
-  collectSpine(pack.spine ?? []);
+  const spineFens = new Map<string, string>();
+  const spinePaths = new Map<string, readonly string[]>();
+  let rootPosition: Chess | undefined;
+  try {
+    rootPosition = Chess.fromSetup(parseFen(pack.start.fen).unwrap()).unwrap();
+  } catch {
+    // INVALID_START_FEN/START_POSITION_UNRUNNABLE own this refusal. Later
+    // semantic checks must not turn it into an unhandled exception.
+  }
+  const rootKey = rootPosition === undefined ? undefined : transposeKey(makeFen(rootPosition.toSetup()));
+  const collectSpine = (
+    nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[],
+    position: Chess,
+    pathKeys: readonly string[],
+  ): void => {
+    for (const node of nodes) {
+      spineIds.add(node.id);
+      const next = position.clone();
+      const move = parseUci(node.moveUci);
+      if (move === undefined || !next.isLegal(move)) continue;
+      next.play(move);
+      const fen = makeFen(next.toSetup());
+      const nextPath = [...pathKeys, transposeKey(fen)];
+      spineFens.set(node.id, fen);
+      spinePaths.set(node.id, nextPath);
+      collectSpine(node.children, next, nextPath);
+    }
+  };
+  if (rootPosition !== undefined && rootKey !== undefined) {
+    collectSpine(pack.spine ?? [], rootPosition, [rootKey]);
+  }
   const windowIds = new Set<string>();
   const moveConditionKey = (condition: import("@chess-tabiya/schema/drill-pack").MoveCondition): string =>
     "moveUci" in condition
@@ -518,6 +547,16 @@ function runtimeIssues(
   for (const [index, checkpoint] of pack.checkpoints.entries()) {
     if ("atWindow" in checkpoint.trigger && !windowIds.has(checkpoint.trigger.atWindow.windowId)) {
       issues.push(runtimeIssue("TIMING_WINDOW_UNKNOWN", `/checkpoints/${index}/trigger/atWindow/windowId`, `unknown timing window ${checkpoint.trigger.atWindow.windowId}`));
+    }
+  }
+  for (const [index, deviation] of (pack.deviations ?? []).entries()) {
+    if (deviation.timingWindowId === undefined) continue;
+    const path = `/deviations/${index}/timingWindowId`;
+    if (!deviation.mistake?.includes("timing")) {
+      issues.push(runtimeIssue("DEVIATION_WINDOW_WITHOUT_TIMING_MISTAKE", path, "timingWindowId requires mistake to include timing"));
+    }
+    if (!windowIds.has(deviation.timingWindowId)) {
+      issues.push(runtimeIssue("TIMING_WINDOW_UNKNOWN", path, `unknown timing window ${deviation.timingWindowId}`));
     }
   }
   if (pack.variantOf !== undefined) {
@@ -635,15 +674,79 @@ function runtimeIssues(
   }
   const overrideKeys = new Set<string>();
   for (const [index, override] of (pack.guard?.overrides ?? []).entries()) {
-    const key = "atStart" in override.at ? "start" : "fen" in override.at ? `fen:${transposeKey(override.at.fen)}` : `spine:${override.at.spineNodeId}`;
+    const key = `${"atStart" in override.at ? "start" : "fen" in override.at ? `fen:${transposeKey(override.at.fen)}` : `spine:${override.at.spineNodeId}`}\0${override.moveUci ?? "*"}`;
     if ("spineNodeId" in override.at && !spineIds.has(override.at.spineNodeId)) {
       issues.push(runtimeIssue("GUARD_OVERRIDE_ANCHOR_UNKNOWN", `/guard/overrides/${index}/at/spineNodeId`, `unknown spine node ${override.at.spineNodeId}`));
     }
-    if (overrideKeys.has(key)) issues.push(runtimeIssue("GUARD_OVERRIDE_DUPLICATE", `/guard/overrides/${index}/at`, "guard overrides may not repeat an anchor"));
+    if (overrideKeys.has(key)) issues.push(runtimeIssue("GUARD_OVERRIDE_DUPLICATE", `/guard/overrides/${index}/at`, "guard overrides may not repeat an anchor and move scope"));
     overrideKeys.add(key);
+    if (override.moveUci !== undefined) {
+      const fen = "atStart" in override.at
+        ? pack.start.fen
+        : "fen" in override.at
+          ? override.at.fen
+          : spineFens.get(override.at.spineNodeId);
+      if (fen !== undefined) {
+        try {
+          const anchor = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
+          const move = parseUci(override.moveUci);
+          if (move === undefined || !anchor.isLegal(move)) {
+            issues.push(runtimeIssue("GUARD_OVERRIDE_MOVE_ILLEGAL", `/guard/overrides/${index}/moveUci`, `move ${override.moveUci} is illegal at its guard anchor`));
+          }
+        } catch {
+          // The anchor's own FEN refusal is more precise.
+        }
+      }
+    }
   }
   if (pack.guard?.rulesTier === false && pack.guard.evalSwingCp === null && pack.guard.fireOnMate === false) {
     issues.push(runtimeIssue("GUARD_DISABLES_EVERYTHING", "/guard", "guard tuning disables rules, centipawn, and mate detection"));
+  }
+  const guardBase = {
+    evalSwingCp: pack.guard?.evalSwingCp === undefined ? 200 : pack.guard.evalSwingCp,
+    fireOnMate: pack.guard?.fireOnMate ?? true,
+    rulesTier: pack.guard?.rulesTier ?? true,
+  };
+  const deviationGuardSettings = (deviation: NonNullable<DrillPackDefinition["deviations"]>[number]): typeof guardBase => {
+    const pathKeys: readonly string[] = "spineNodeId" in deviation.at
+      ? spinePaths.get(deviation.at.spineNodeId) ?? []
+      : "atStart" in deviation.at
+        ? rootKey === undefined ? [] : [rootKey]
+        : [transposeKey(deviation.at.fen)];
+    type Override = NonNullable<NonNullable<DrillPackDefinition["guard"]>["overrides"]>[number];
+    let selected: { readonly depth: number; readonly moveScoped: boolean; readonly value: Override } | undefined;
+    for (const override of pack.guard?.overrides ?? []) {
+      if (override.moveUci !== undefined && override.moveUci !== deviation.moveUci) continue;
+      const key = "atStart" in override.at ? rootKey : "fen" in override.at ? transposeKey(override.at.fen) : spineFens.has(override.at.spineNodeId) ? transposeKey(spineFens.get(override.at.spineNodeId)!) : undefined;
+      if (key === undefined) continue;
+      const depth = pathKeys.lastIndexOf(key);
+      const moveScoped = override.moveUci !== undefined;
+      if (depth < 0 || (selected !== undefined && (depth < selected.depth || (depth === selected.depth && Number(moveScoped) <= Number(selected.moveScoped))))) continue;
+      selected = { depth, moveScoped, value: override };
+    }
+    return {
+      evalSwingCp: selected?.value.evalSwingCp === undefined ? guardBase.evalSwingCp : selected.value.evalSwingCp,
+      fireOnMate: selected?.value.fireOnMate ?? guardBase.fireOnMate,
+      rulesTier: guardBase.rulesTier,
+    };
+  };
+  if (pack.feedbackPolicy === "immediate_guard") {
+    for (const [index, deviation] of (pack.deviations ?? []).entries()) {
+      const cost = deviation.cost;
+      if (cost === undefined || (deviation.class !== "tactical_error" && !deviation.mistake?.includes("tactical"))) continue;
+      const settings = deviationGuardSettings(deviation);
+      const reaches = cost.kind === "cp"
+        ? cost.basis === "engine"
+          ? settings.evalSwingCp !== null && cost.loss >= settings.evalSwingCp
+          : settings.rulesTier && cost.loss >= 300
+        : cost.kind === "mate" && cost.against === "learner"
+          ? settings.fireOnMate
+          : true;
+      if (!reaches) {
+        const declared = cost.kind === "cp" ? `${cost.loss}cp (${cost.basis})` : `${cost.kind}`;
+        issues.push(runtimeWarning("GUARD_CANNOT_REACH_DEVIATION", `/deviations/${index}/cost`, `declared cost ${declared} does not reach any guard threshold in force at this anchor (evalSwingCp ${String(settings.evalSwingCp)}, rulesTier ${String(settings.rulesTier)} (pack-level), fireOnMate ${String(settings.fireOnMate)}); add a guard.overrides entry for this move, or reconsider the class`));
+      }
+    }
   }
 
   const opponentPolicy = raw.opponentPolicy as Record<string, unknown>;

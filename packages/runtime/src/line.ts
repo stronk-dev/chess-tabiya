@@ -19,6 +19,7 @@ export interface LineMembershipEntry {
   readonly verdict: LineVerdict;
   readonly spineNodeId?: string;
   readonly deviationClass?: string;
+  readonly deviationMistakes?: readonly string[];
   readonly insideBoundary: boolean;
 }
 
@@ -151,7 +152,12 @@ export function lineMembership(
         insideBoundary,
         ...(verdict === "on_line" && spineNodeId !== undefined ? { spineNodeId } : {}),
         ...(verdict === "classified_deviation"
-          ? { deviationClass: deviation!.class }
+          ? {
+              deviationClass: deviation!.class,
+              ...(deviation!.mistake === undefined
+                ? {}
+                : { deviationMistakes: deviation!.mistake }),
+            }
           : {}),
       });
     }),

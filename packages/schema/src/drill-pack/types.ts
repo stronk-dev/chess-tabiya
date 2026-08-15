@@ -56,12 +56,22 @@ export type DeviationLocation =
   | { readonly fen: string }
   | { readonly atStart: true };
 
+export const DEVIATION_MISTAKES = ["plan", "timing", "tactical"] as const;
+export type DeviationMistake = (typeof DEVIATION_MISTAKES)[number];
+export type DeviationCost =
+  | { readonly kind: "cp"; readonly loss: number; readonly basis: "engine" | "material" }
+  | { readonly kind: "mate"; readonly against: "learner" | "opponent"; readonly basis: "engine" | "tablebase" }
+  | { readonly kind: "unmeasurable"; readonly reason: string };
+
 export interface Deviation {
   readonly at: DeviationLocation;
   readonly moveUci: string;
   readonly class: string;
   readonly offObjective?: boolean;
   readonly note?: string;
+  readonly mistake?: readonly DeviationMistake[];
+  readonly cost?: DeviationCost;
+  readonly timingWindowId?: string;
 }
 
 export type SimpleTrigger =
@@ -186,6 +196,7 @@ export interface DrillPackDefinition {
     readonly window?: { readonly fromPly: number; readonly toPly: number };
     readonly overrides?: readonly {
       readonly at: DeviationLocation;
+      readonly moveUci?: string;
       readonly evalSwingCp?: number | null;
       readonly fireOnMate?: boolean;
     }[];

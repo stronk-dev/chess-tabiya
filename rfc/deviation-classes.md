@@ -1,6 +1,6 @@
 # RFC: Deviation classes — separating the axes the enum collapsed
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/01-training-model.md:142-149` (target mistake classes — *"right plan one

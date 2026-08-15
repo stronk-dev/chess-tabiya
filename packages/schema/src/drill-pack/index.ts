@@ -20,6 +20,7 @@ export {
 export { normalizeShapeReference, normalizeShapeReferences, type NormalizedShapeReference } from "./shape-references.js";
 export {
   CHECKPOINT_ACTIONS,
+  DEVIATION_MISTAKES,
   FEEDBACK_POLICIES,
   OBJECTIVE_TYPES,
   PACK_PHASES,
@@ -30,6 +31,8 @@ export {
   type CheckpointInteraction,
   type CheckpointTrigger,
   type Deviation,
+  type DeviationCost,
+  type DeviationMistake,
   type DeviationLocation,
   type DrillPackDefinition,
   type FeedbackClaim,

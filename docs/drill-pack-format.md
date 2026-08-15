@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.20; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.21; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -57,6 +57,14 @@ Shape references now accept either a bare id (present on an authored spine) or
 `{shape, relation: "present" | "prospective"}`; only present references participate in detection
 and grading. These are pack/shape authoring changes only: run schema and storage are unchanged.
 
+Version 0.21 separates three deviation axes without changing the existing class. Optional
+`mistake` is a non-empty set of `plan`, `timing`, and `tactical`; learner-visible theory verdicts
+render every declared value in canonical order. Optional `cost` records an author-declared
+centipawn, mate, or explicitly unmeasurable cost and is not evidence-backed by itself. A timing
+mistake may reference a declared timing window. Immediate-guard packs warn when a tactical cost
+reaches no configured threshold, and guard overrides may scope a threshold to one legal UCI move.
+Human-judgment evidence refusals cover both the whole `mistake` array and its element pointers.
+
 The already-declared `practical_resistance` opponent policy is executable
 without changing pack bytes or the pack-schema version. Its two-provider
 capability gate, named refusals, and persisted measurement live in the run and
@@ -87,7 +95,8 @@ it has no required `feedbackPolicy` and uses superseded fields.
   horizon, or FEN predicates.
 - `deviations` replaces `acceptedAlternatives`. Every entry identifies a spine
   node, FEN, or the start position, a UCI move, and one required classification. It may also mark the
-  move off-objective and carry a note.
+  move off-objective, carry a note, declare one or more mistake kinds, record an unbacked cost, and
+  link a timing mistake to a timing window.
 - `difficulty.branchLengthTarget` accepts 2–40 plies. The declared 2–8 on-ramp
   and 8–20 Plan bands remain teaching targets rather than schema ceilings. Rating bands may begin at 1000.
 - `capture_intent` is no longer accepted in checkpoint `actions`; it is represented

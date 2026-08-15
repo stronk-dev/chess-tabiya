@@ -174,6 +174,7 @@ export type AuthoredFeedbackItem =
       readonly verdict: "on_line" | "classified_deviation" | "unknown";
       readonly spineNodeId?: string;
       readonly deviationClass?: string;
+      readonly deviationMistakes?: readonly string[];
     };
 
 export interface AuthoredFeedbackPage {

@@ -90,6 +90,7 @@ function guardSettings(
   pack: DrillPackDefinition,
   run: DrillRun,
   previous: Node,
+  learnerMoveUci: string,
 ): GuardSettings {
   const base = {
     evalSwingCp: pack.guard?.evalSwingCp === undefined ? 200 : pack.guard.evalSwingCp,
@@ -105,13 +106,20 @@ function guardSettings(
     return spineKeys.get(at.spineNodeId);
   };
   type Override = NonNullable<NonNullable<DrillPackDefinition["guard"]>["overrides"]>[number];
-  let selected: { readonly depth: number; readonly index: number; readonly value: Override } | undefined;
+  let selected: { readonly depth: number; readonly moveScoped: boolean; readonly index: number; readonly value: Override } | undefined;
   for (const [index, override] of (pack.guard?.overrides ?? []).entries()) {
+    if (override.moveUci !== undefined && override.moveUci !== learnerMoveUci) continue;
     const key = anchorKey(override.at);
     if (key === undefined) continue;
     const depth = path.map((node) => node.transposeKey).lastIndexOf(key);
-    if (depth < 0 || (selected !== undefined && depth <= selected.depth)) continue;
-    selected = { depth, index, value: override };
+    const moveScoped = override.moveUci !== undefined;
+    if (
+      depth < 0 ||
+      (selected !== undefined &&
+        (depth < selected.depth ||
+          (depth === selected.depth && Number(moveScoped) <= Number(selected.moveScoped))))
+    ) continue;
+    selected = { depth, moveScoped, index, value: override };
   }
   return {
     evalSwingCp: selected?.value.evalSwingCp === undefined ? base.evalSwingCp : selected.value.evalSwingCp,
@@ -146,7 +154,7 @@ export function applyRulesGuard(
   }
   const triple = decisionTriple(run, consequenceId);
   if (triple === undefined) return Object.freeze({ run, emitted: Object.freeze([]) });
-  if (!insideGuardWindow(pack, triple.consequence) || !guardSettings(pack, run, triple.previous).rulesTier) {
+  if (!insideGuardWindow(pack, triple.consequence) || !guardSettings(pack, run, triple.previous, triple.learnerMove.moveUci!).rulesTier) {
     return Object.freeze({ run, emitted: Object.freeze([]) });
   }
   const learner = run.start.side;
@@ -206,7 +214,7 @@ export function applyRecordedEngineGuard(
     if (appliedNodeId !== triple.previous.id && appliedNodeId !== consequence.id) continue;
     const previousEval = evalAt(run, triple.previous.id);
     const consequenceEval = evalAt(run, consequence.id);
-    const settings = guardSettings(pack, run, triple.previous);
+    const settings = guardSettings(pack, run, triple.previous, triple.learnerMove.moveUci!);
     const before = previousEval?.data.payload.values;
     const after = consequenceEval?.data.payload.values;
     const mate = before !== undefined && after !== undefined &&

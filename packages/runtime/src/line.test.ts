@@ -35,6 +35,7 @@ function pack(horizon = 2): DrillPackDefinition {
       at: { spineNodeId: "e4" },
       moveUci: "c7c5",
       class: "accepted_alternative",
+      mistake: ["timing", "plan"],
     }],
   };
 }
@@ -69,6 +70,7 @@ describe("line membership", () => {
     expect(lineMembership(pack(), classified, classified.activeCursor.nodeId).at(-1)).toMatchObject({
       verdict: "classified_deviation",
       deviationClass: "accepted_alternative",
+      deviationMistakes: ["timing", "plan"],
     });
     const unknown = run(["e2e4", "e7e6"]);
     expect(lineMembership(pack(), unknown, unknown.activeCursor.nodeId).at(-1)).toMatchObject({ verdict: "unknown" });

@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import { DRILL_PACK_SCHEMA_VERSION } from "./index.js";
 import {
   CHECKPOINT_ACTIONS,
+  DEVIATION_MISTAKES,
   FEEDBACK_POLICIES,
   canonicalizeJson,
   digestDrillPack,
@@ -53,13 +54,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.20", () => {
+describe("drill_pack.schema.json v0.21", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.20",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.21",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.20");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.21");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
@@ -71,7 +72,19 @@ describe("drill_pack.schema.json v0.20", () => {
       ...RETRY_VARIANT_KINDS,
     ]);
     expect(CHECKPOINT_ACTIONS).toEqual(["compare_branches"]);
+    expect(typed.$defs.deviation.properties.mistake.items.enum).toEqual([...DEVIATION_MISTAKES]);
     expect(typed.$defs.structuralFeature.oneOf.map((branch: any) => branch.properties.kind.const)).toEqual([...STRUCTURAL_FEATURE_KINDS]);
+  });
+
+  it("requires a non-empty unique mistake set", () => {
+    for (const mistake of [[], ["plan", "plan"]]) {
+      const candidate = structuredClone(livingFixture) as any;
+      candidate.deviations[0].mistake = mistake;
+      expect(validate(candidate), JSON.stringify(mistake)).toBe(false);
+    }
+    const candidate = structuredClone(livingFixture) as any;
+    candidate.deviations[0].mistake = ["plan", "timing"];
+    expect(validate(candidate), JSON.stringify(validate.errors)).toBe(true);
   });
 
   it("admits the additive v0.16 authoring vocabulary", () => {

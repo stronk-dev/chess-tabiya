@@ -389,7 +389,9 @@ selection sends `packId`; the server supplies the validated spine internally.
 After a normal authored-feedback reveal, the checkpoint and terminal sheets may
 show path-scoped theory verdicts. Copy is deliberately non-evaluative: on-line,
 the author's deviation class verbatim, or “this pack has no statement about
-this move.” Any unknown verdict also prints “Unknown is not a judgement.”
+this move.” When the author declares deviation mistake kinds, the classified
+verdict appends every value in canonical `plan, timing, tactical` order; it never
+picks one or generates connective prose. Any unknown verdict also prints “Unknown is not a judgement.”
 Verdicts are excluded from the withheld-content counter because future played
 plies are unbounded.
 

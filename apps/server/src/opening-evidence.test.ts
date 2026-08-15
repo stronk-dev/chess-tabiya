@@ -102,7 +102,7 @@ describe("opening engine evidence", () => {
   it("keeps engine evidence out of human judgments and pins the move-loss template", async () => {
     const { pack } = await artifact("anti-caro-advance");
     const base: EvidenceRecord = { kind: "engine_eval", anchor: { fen: pack.start.fen }, sourceId: "fixture", retrievedAt: "2026-08-15T00:00:00.000Z", grounds: "machine_validation", values: { fen: pack.start.fen, centipawns: 20, perspective: "white", depth: 22, threads: 1, hashMb: 16, multiPv: 1, timeoutMs: 1, engineId: "fixture", engineName: "Stockfish", engineVersion: "18" }, supports: [] };
-    for (const pointer of ["/deviations/0/class", "/deviations/0/offObjective", "/difficulty/label", "/checkpoints/0/label"]) {
+    for (const pointer of ["/deviations/0/class", "/deviations/0/offObjective", "/deviations/0/mistake", "/deviations/0/mistake/1", "/difficulty/label", "/checkpoints/0/label"]) {
       const issues: SourcingIssue[] = [];
       evidenceSupports(pack, { schema: "tabiya.sourcing.evidence.v1", sourcedAt: base.retrievedAt, records: [{ ...base, supports: [pointer] }], abstentions: [] }, undefined, issues);
       expect(issues, pointer).toContainEqual(expect.objectContaining({ code: "EVIDENCE_OVERREACH" }));

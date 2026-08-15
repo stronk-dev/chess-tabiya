@@ -24,6 +24,8 @@ export type PackLintCode =
   | "ILLEGAL_DEVIATION_MOVE"
   | "DUPLICATE_DEVIATION"
   | "DEVIATION_SHADOWS_SPINE_MOVE"
+  | "DEVIATION_MISTAKE_ON_ACCEPTED"
+  | "DEVIATION_MISTAKE_TACTICAL_REDUNDANT"
   | "SPINE_TRANSPOSITION_COLLISION"
   | "BOUNDARY_NODE_BEYOND_HORIZON"
   | "CONCEPT_KEY_NOT_SLUG"
@@ -325,6 +327,13 @@ export function lintDrillPack(
         ("atStart" in deviation.at && (pack.spine ?? []).some((child) => child.moveUci === deviation.moveUci)))
     ) {
       issues.push({ severity: "warning", code: "DEVIATION_SHADOWS_SPINE_MOVE", path: `${anchorPath}/moveUci`, message: "Deviation move is also an authored spine move; on-line takes precedence" });
+    }
+    const mistakes = deviation.mistake;
+    if (mistakes !== undefined && (deviation.class === "accepted_alternative" || deviation.class === "required_theory")) {
+      issues.push({ severity: "warning", code: "DEVIATION_MISTAKE_ON_ACCEPTED", path: `${anchorPath}/mistake`, message: `Deviation class ${deviation.class} conflicts with declared mistake set ${mistakes.join(", ")}` });
+    }
+    if (deviation.class === "tactical_error" && mistakes?.length === 1 && mistakes[0] === "tactical") {
+      issues.push({ severity: "warning", code: "DEVIATION_MISTAKE_TACTICAL_REDUNDANT", path: `${anchorPath}/mistake`, message: `Deviation mistake set ${mistakes.join(", ")} restates class tactical_error` });
     }
   }
   const horizon = pack.authoredBoundary?.plyHorizon;

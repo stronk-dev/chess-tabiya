@@ -36,6 +36,7 @@ const PROSE_POINTERS = [
 ];
 const HUMAN_ONLY_POINTERS = [
   /^\/deviations\/\d+\/(?:class|offObjective)$/,
+  /^\/deviations\/\d+\/mistake(?:\/\d+)?$/,
   /^\/difficulty(?:\/|$)/,
   /^\/checkpoints\/\d+\/label$/,
 ];
