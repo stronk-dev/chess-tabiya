@@ -1,6 +1,6 @@
 # RFC: Live marker quality — the admission rule for anything that speaks unasked
 
-- **Status:** draft — **cross-reviewed 2026-08-15; owner rulings applied; ready for codex once D68 is fixed or explicitly deferred**
+- **Status:** implementing — **cross-reviewed 2026-08-15; owner rulings applied; D68 absorbed by the implementation**
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder and its 2026-08-14
@@ -296,16 +296,12 @@ in weaker form, from `/voice` — with no marker preference set and with `marker
 the identical defect shape as the modal one, one tier down, and `liveMarkers` cannot reach it
 because `/voice` is not a live surface.
 
-**Scope ruling, stated rather than smuggled.** This RFC does **not** fix it, for two reasons that
-are about ownership and not about severity: the fix is a server permission check on a
-learner-*initiated* route, which §Scope puts out of scope and §2 holds to a truth standard rather
-than a permission standard; and it is a `guidance.ts` / `rest.ts` change with an
-`ASSISTANCE_WITHHELD` refusal, which is a different blast radius from a runtime projection and a
-one-line client call. What this RFC does instead is **name it, size it, and refuse to let §6.2 be
-read as closing it** — see the corrected claim in §6.2 and criterion 6. It needs its own ledger
-row before this RFC is `accepted`; claude writes ledger rows, and this draft may not. The
-proposed row title: *`evidencePacket` serves rung-3 divergence content past the permission
-`/human-split` enforces*.
+**Scope ruling, amended by the refreshed implementation handoff.** D68 is acceptance-blocking and
+is fixed in this wave. Both `/voice` and `/speech` compute the same
+`permittedAssistance({ sessionKind, deliveryOpen, role })` value used by `/human-split` and refuse
+with the existing `ASSISTANCE_WITHHELD` code when `humanSplit === "locked_off"`. This protects
+every packet scope because every packet may contain the divergence source; it does not inspect or
+redact prose after construction. No new permission value or refusal code is introduced.
 
 **And it constrains L4(b).** L4(b)'s ceiling is *"what the viewer could obtain on request under
 `permittedAssistance`"* — deliberately the permission table, not the endpoints' actual behaviour,
@@ -851,10 +847,9 @@ and ruled for the conservative gate anyway. Consequently, and by design:
   been used rather than pre-emptively. Reversal is a change to one arm of `liveAdmitted` plus
   criterion 6's test.
 
-**And it closes one of the two legs of D51.** §1.1c-ii found the same rung-3 payload reachable
-from `POST …/voice` and `POST …/speech`, which carry no permission check at all. **This section
-does not close that**, and the criterion-6 test must not be read as evidence that it did; the
-scope ruling and the owed ledger row are in §1.1c-ii.
+**And the wave closes both delivery legs.** The runtime/client projection closes D51's live-modal
+leg. The REST checks specified in §1.1c-ii close D68's `/voice` and `/speech` leg. Both use the
+same `humanSplit` permission; neither invents a weaker mass-only permission.
 
 #### 6.3 `option_collapse` — obligation only
 
@@ -875,7 +870,7 @@ created by *this* forcing move, not by the position) and predictions are not evi
 | Run schema (`DrillRun.schemaVersion`) | **none** | No event type, no event payload, no node field. `pivotalMarkers` is and stays a pure projection over the run |
 | `PivotalKind` | **unchanged at four members** | The enum is not widened or narrowed; `last_of_role` is a `detail.subkind`, not a kind |
 | Shape / evidence-fact registers | **none** | No `RULES_EVIDENCE_FACTS` entry, no shape schema change |
-| Refusal codes (`ServerErrorCode`, `apps/server/src/errors.ts:1-...`) | **none** | **Collision sweep run 2026-08-15 and clean by construction: this RFC adds no server code path and therefore no refusal code.** Everything it specifies is a runtime projection (`liveAdmitted`, `liveMarkers`), a pure render function (`renderPivotalMarker`) and one Svelte call site. Recorded because the §1.1c-ii finding, *if* it is ever fixed, needs **`ASSISTANCE_WITHHELD`** — which already exists (`errors.ts:9`) and is already the code `/human-split` and `/corpus` use for exactly this refusal, so even that future fix introduces no new member |
+| Refusal codes (`ServerErrorCode`, `apps/server/src/errors.ts:1-...`) | **none** | D68 reuses **`ASSISTANCE_WITHHELD`**, already emitted by `/human-split` and `/corpus`; no new member is introduced |
 | Migrations | **none** | No storage migration; nothing is persisted by this RFC |
 
 If a future proposal adds a **per-kind** live toggle — the natural response to §1.0's "opt-in but
@@ -925,15 +920,15 @@ owner's ruling and this RFC's §3 becomes its mirror.
    `human_divergence`; `option_collapse` × 2; `castled`; `last_of_role`; pawn contact — six
    strings across four kinds); and a type-level test asserts that adding a fifth `PivotalKind`
    member fails to compile rather than rendering the pawn-contact sentence.
-6. **The divergence gate holds on the live surface, and the criterion says which surface.** A test
+6. **The divergence gate holds on every delivery path.** A test
    asserts a `human_divergence` marker is present in `pivotalMarkers` and absent from
    `liveMarkers` for a participant, for a spectator, and for a solo viewer with
    `feedbackDeliveryOpen === false`; and present for solo/host with delivery open. A second test
    asserts `DrillScreen` renders no divergence sentence in the modal in the locked cases. **This
-   criterion closes the client leg of D51 only.** A third test — a *characterisation* test, not a
-   fix — asserts that `evidencePacket` still carries the divergence sentence for a locked-out
-   principal, with a comment naming §1.1c-ii and the owed ledger row, so the server leg is
-   recorded in the test suite rather than only in prose and cannot be mistaken for closed.
+   criterion closes the client leg of D51.** Server tests assert `/voice` and `/speech` return
+   `ASSISTANCE_WITHHELD` for participant, spectator, and pre-disclosure solo contexts, then open
+   for solo/host after disclosure. `evidencePacket` remains a viewer-independent projection; the
+   permission is enforced before either route serves or synthesises its sentences.
 7. **Law 8 at the surface.** A test asserts no string returned by `renderPivotalMarker` for any
    constructible marker contains a member of `BANNED_JUDGEMENTS`
    (`packages/runtime/src/voice.ts:21`).
@@ -953,14 +948,11 @@ owner's ruling and this RFC's §3 becomes its mirror.
     D51, D52 and D53 — **already exist**, written by claude on 2026-08-15; the first draft's claim
     that *"this draft did not write them"* was true when written and is now stale. What this
     criterion requires is therefore the **flip**, not the creation: **D50, D48, D51, D52 and D53
-    are each resolved or explicitly re-scoped with a one-line summary in the same commit that
+    are each resolved or explicitly re-scoped with a one-line summary in the owner-tier closeout
     archives this RFC** (the ledger half of the RFC completion protocol) — D50 and D48 to ✅, D51
-    to a **narrowed** closure naming the client leg only, and D52/D53 left ✅-less with their
-    obligations restated, since this RFC records them rather than discharging them. **One row is
-    genuinely owed and does not yet exist:** the §1.1c-ii server-side finding
-    (*`evidencePacket` serves rung-3 divergence content past the permission `/human-split`
-    enforces*). It must be in the ledger before this RFC is `accepted`, and claude writes it —
-    this RFC may not.
+    to a closure naming the client leg, D68 to a closure naming the server leg, and D52/D53 left
+    ✅-less with their obligations restated, since this RFC records them rather than discharging
+    them. The implementing agent does not edit the owner-tier backlog.
 
 ## Open questions
 

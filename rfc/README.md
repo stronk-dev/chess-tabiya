@@ -7,7 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `live-marker-quality.md` | draft (awaiting cross-review) | — | **claims nothing versioned**. Audits all four live markers (1 measured and failing, 3 never measured); narrows `irreversibility` to `last_of_role`; re-homes D48 (whose fix was leaving with `transition-primitives`' withdrawn live tier); closes the D51 permission bypass normatively. Proposes **L1–L6**, the standing admission rule for the live surface |
+| `live-marker-quality.md` | implementing | — | **claims nothing versioned**. Narrows live `irreversibility` to `last_of_role`, makes pivotal rendering exhaustive, and applies the human-split permission to the client marker plus `/voice` and `/speech` delivery paths. Proposes **L1–L6**, the standing admission rule for the live surface |
 | `client-surface-floor.md` | draft (awaiting cross-review) | — | **claims nothing versioned** — CSS, one nav element, one marker size, one Playwright spec; lands in any order. Deletes the `62rem` breakpoint rather than retargeting it (it is a *width* breakpoint on a *height*-bound layout). Forward-declares a scope boundary for D63 (`compare-geometry` does **not** exist yet — not a dependency) and asserts `CompareView.svelte` is unmodified |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
