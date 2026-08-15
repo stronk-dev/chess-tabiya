@@ -164,3 +164,51 @@ One dependency this doc inherits: `design/research/mobile-scope.md` names the
 campaign as one of the few things that would reopen its own verdict. A phone-first
 map is a different map, so the mobile ruling may want to come **before** the map
 is designed rather than after.
+
+## 5. Run shape, and what actually escalates
+
+Added 2026-08-15 from `design/research/roguelike-run-design.md`, which studied real roguelikes rather than gamified
+education, on the owner's instruction.
+
+**What escalates here is LEGIBILITY, not power.** That is the honest reframe and it
+governs everything below. A lens changes what you can *see*; a position does not
+care what you know. The power curve is flat **by construction**, and every device
+that would make it compound is on the refused list (escalating numeric economies are
+law-8 violations; a pursuit clock is a retry price by another name). It is a smaller
+promise than Slay the Spire's — and one this product can keep.
+
+**Consequence for the model we copy:** because marginal value goes *negative* past
+the measured noise floor (D78: median 58 observations per position, compare strip
+8.31 entries/ply at 1.01× lift), the optimisation is **the smallest sufficient set,
+not the strongest set**. That is **Into the Breach's** shape, not Spire's. Take ITB
+as the structural model, **Balatro as the boss model**, and Spire only for the map
+and the draft.
+
+**The run: 9 nodes, three acts of three, ~35–55 minutes.** Argued from three
+converging numbers rather than taste — 9 nodes consume 24.3% of the catalogue
+(**4.1 runs before repetition**, against 2.5 at fifteen); the middlegame bill is
+**2.2 agent-hours** rather than 9.75; and a Spire node is a 60–90 s combat, so node
+parity would overshoot minute parity roughly fourfold.
+
+**Acts are the difficulty-availability tiers of §2a, so stakes escalate in
+DECIDABILITY:** Act I outcome-measured (`theory_strict`), Act II authored
+(`human_common` plus an authored plan), Act III tablebase-measured
+(`perfect_tablebase` — literally unbeatable, already shipped, and a stronger climax
+than anything in the comparison set). Encounters are bounded by the **shipped**
+`plyHorizon`: 36 of 37 packs already declare one, median 12 ply, 17 of them
+voluntarily.
+
+**The mechanism nobody had proposed, and the best one: a capability-suppressing
+boss** (Balatro's boss blind). It is law-8-legal *by construction* — it speaks about
+the learner's information, never about chess — and it is **what makes the monotone
+assistance lattice non-monotone**. It solves §1's one-build problem from the
+opposite side to the loadout: the loadout gives you choices, the suppressor gives
+those choices consequences.
+
+**The unresolved one, and it is a real hole: a run that cannot be lost is a
+playlist.** No resource refusal exists anywhere in the runtime, and no loadout
+mechanism creates one. The proposed resolution — **owner ruling wanted** — is to
+**price *declaring done*, not retrying**: rewind stays free inside an encounter, and
+the *submitted* attempt decides the run. That gives the campaign a failure state
+while leaving punishment-free experimentation exactly as the thesis promises.
+
