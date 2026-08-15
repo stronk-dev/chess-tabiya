@@ -41,6 +41,10 @@ export interface EngineSpec {
   readonly containerDigest?: string;
   readonly seedOption?: string;
   readonly bandOption?: string;
+  readonly bandRange?: {
+    readonly min?: number;
+    readonly max?: number;
+  };
   readonly transcriptCapacity?: number;
   readonly handshakeTimeoutMs?: number;
   readonly restartBackoff?: RestartBackoff;
@@ -57,15 +61,71 @@ export interface EngineHealth {
   readonly status: EngineStatus;
   readonly restartCount: number;
   readonly identity?: EngineIdentity;
+  readonly options?: readonly EngineOption[];
+  readonly bandOption?: string;
+  readonly bandRange?: {
+    readonly min?: number;
+    readonly max?: number;
+  };
   readonly lastError?: string;
+}
+
+export interface EngineOption {
+  readonly name: string;
+  readonly type: "check" | "spin" | "combo" | "button" | "string";
+  readonly default?: string;
+  readonly min?: number;
+  readonly max?: number;
+  readonly vars?: readonly string[];
 }
 
 export interface EngineRequest {
   readonly commands: readonly string[];
   readonly afterCommands?: readonly string[];
+  readonly resetSearchState?: boolean;
   readonly until: (line: string) => boolean;
   readonly timeoutMs?: number;
   readonly signal?: AbortSignal;
+}
+
+const OPTION_TYPES = Object.freeze(["check", "spin", "combo", "button", "string"] as const);
+
+export function parseEngineOptions(lines: readonly string[]): readonly EngineOption[] {
+  return Object.freeze(lines.flatMap((line) => {
+    const match = /^option name (.+) type (check|spin|combo|button|string)(?: (.*))?$/u.exec(line);
+    if (match === null) return [];
+    const [, name, typeValue, tail = ""] = match;
+    const type = typeValue as EngineOption["type"];
+    if (!(OPTION_TYPES as readonly string[]).includes(type)) return [];
+    const fields = [...tail.matchAll(/(?:^| )(default|min|max|var) (?=\S)/gu)];
+    const values = new Map<string, string[]>();
+    for (const [index, field] of fields.entries()) {
+      const key = field[1]!;
+      const start = field.index! + field[0].length;
+      const end = fields[index + 1]?.index ?? tail.length;
+      const value = tail.slice(start, end).trim();
+      if (value !== "") values.set(key, [...(values.get(key) ?? []), value]);
+    }
+    const numeric = (key: "min" | "max"): number | undefined => {
+      const value = values.get(key)?.at(-1);
+      if (value === undefined) return undefined;
+      const parsed = Number(value);
+      if (!Number.isFinite(parsed)) throw new TypeError(`Engine option ${name} has invalid ${key}: ${value}`);
+      return parsed;
+    };
+    const min = type === "spin" ? numeric("min") : undefined;
+    const max = type === "spin" ? numeric("max") : undefined;
+    return [Object.freeze({
+      name: name!,
+      type,
+      ...(values.get("default")?.at(-1) === undefined ? {} : { default: values.get("default")!.at(-1)! }),
+      ...(min === undefined ? {} : { min }),
+      ...(max === undefined ? {} : { max }),
+      ...(type !== "combo" || values.get("var") === undefined
+        ? {}
+        : { vars: Object.freeze(values.get("var")!) }),
+    })];
+  }));
 }
 
 const DEFAULT_BACKOFF: RestartBackoff = {
@@ -114,7 +174,7 @@ function positiveDuration(value: number, label: string): void {
 function parseIdentity(
   spec: EngineSpec,
   lines: readonly string[],
-  optionNames: ReadonlySet<string>,
+  options: readonly EngineOption[],
 ): { readonly identity: EngineIdentity; readonly mismatch?: string } {
   const advertised = lines.find((line) => line.startsWith("id name "))?.slice(8).trim();
   const [advertisedName = "unknown", ...advertisedVersionParts] =
@@ -126,6 +186,7 @@ function parseIdentity(
     advertised?.startsWith(`${spec.name} `) === true;
   const name = spec.name ?? advertisedName;
   const version = spec.version ?? (agrees ? advertisedVersion : "unknown");
+  const optionNames = new Set(options.map((option) => option.name));
   const identity = Object.freeze({
     id: spec.id,
     kind: spec.kind,
@@ -158,6 +219,7 @@ class ManagedUciEngine {
   #waiters = new Set<LineWaiter>();
   #status: EngineStatus = "stopped";
   #identity: EngineIdentity | undefined;
+  #options: readonly EngineOption[] | undefined;
   #startPromise: Promise<EngineIdentity> | undefined;
   #requestQueue: Promise<void> = Promise.resolve();
   #restartTimer: ReturnType<typeof setTimeout> | undefined;
@@ -174,6 +236,15 @@ class ManagedUciEngine {
     if (backoff.maximumMs < backoff.initialMs) {
       throw new TypeError("Restart maximum delay cannot be below initial delay");
     }
+    if (spec.bandRange?.min !== undefined && !Number.isSafeInteger(spec.bandRange.min)) {
+      throw new TypeError("Engine band minimum must be a safe integer");
+    }
+    if (spec.bandRange?.max !== undefined && !Number.isSafeInteger(spec.bandRange.max)) {
+      throw new TypeError("Engine band maximum must be a safe integer");
+    }
+    if (spec.bandRange?.min !== undefined && spec.bandRange.max !== undefined && spec.bandRange.min > spec.bandRange.max) {
+      throw new TypeError("Engine band minimum cannot exceed its maximum");
+    }
     this.#spec = spec;
     this.#backoff = backoff;
     this.#transcript = new TranscriptRing(
@@ -187,6 +258,9 @@ class ManagedUciEngine {
       status: this.#status,
       restartCount: this.#restartCount,
       ...(this.#identity === undefined ? {} : { identity: this.#identity }),
+      ...(this.#options === undefined ? {} : { options: this.#options }),
+      ...(this.#spec.bandOption === undefined ? {} : { bandOption: this.#spec.bandOption }),
+      ...(this.#spec.bandRange === undefined ? {} : { bandRange: this.#spec.bandRange }),
       ...(this.#lastError === undefined ? {} : { lastError: this.#lastError }),
     });
   }
@@ -232,14 +306,24 @@ class ManagedUciEngine {
     try {
       const timeout = this.#spec.handshakeTimeoutMs ?? DEFAULT_TIMEOUT_MS;
       const uciLines = await this.#exchange("uci", (line) => line === "uciok", timeout);
-      const optionNames = new Set(
-        uciLines.flatMap((line) => {
-          const match = /^option name (.+?) type /.exec(line);
-          return match?.[1] === undefined ? [] : [match[1]];
-        }),
-      );
-      const parsedIdentity = parseIdentity(this.#spec, uciLines, optionNames);
+      const parsedOptions = parseEngineOptions(uciLines);
+      const parsedIdentity = parseIdentity(this.#spec, uciLines, parsedOptions);
       this.#identity = parsedIdentity.identity;
+      this.#options = parsedOptions;
+      const advertisedBand = this.#spec.bandOption === undefined
+        ? undefined
+        : parsedOptions.find((option) => option.name === this.#spec.bandOption && option.type === "spin");
+      const effectiveMin = Math.max(
+        advertisedBand?.min ?? Number.NEGATIVE_INFINITY,
+        this.#spec.bandRange?.min ?? Number.NEGATIVE_INFINITY,
+      );
+      const effectiveMax = Math.min(
+        advertisedBand?.max ?? Number.POSITIVE_INFINITY,
+        this.#spec.bandRange?.max ?? Number.POSITIVE_INFINITY,
+      );
+      if (effectiveMin > effectiveMax) {
+        throw new TypeError(`Engine ${this.#spec.id} publishes no value inside its configured band range`);
+      }
       if (parsedIdentity.mismatch !== undefined) {
         this.#transcript.push("lifecycle", parsedIdentity.mismatch);
       }
@@ -283,6 +367,18 @@ class ManagedUciEngine {
         if (request.signal?.aborted) {
           onAbort();
           throw abortError();
+        }
+        if (request.resetSearchState === true) {
+          this.#send("ucinewgame");
+          if (this.#options?.some((option) => option.name === "Clear Hash") === true) {
+            this.#send("setoption name Clear Hash");
+          }
+          await this.#exchange(
+            "isready",
+            (line) => line === "readyok",
+            Math.min(request.timeoutMs ?? DEFAULT_TIMEOUT_MS, 5_000),
+          );
+          if (request.signal?.aborted) throw abortError();
         }
         const response = this.#waitFor(
           request.until,

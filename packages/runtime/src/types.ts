@@ -66,6 +66,7 @@ export interface SelectionCandidate {
   readonly moveUci: string;
   readonly mass?: number;
   readonly concessionRatio?: number;
+  readonly offWindow?: boolean;
   readonly rank: number;
 }
 

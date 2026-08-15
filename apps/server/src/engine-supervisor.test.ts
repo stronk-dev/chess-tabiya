@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { EngineSupervisor } from "./engine-supervisor.js";
+import { EngineSupervisor, parseEngineOptions } from "./engine-supervisor.js";
 import {
   engineUnavailable,
   policyModeUnsupported,
@@ -112,6 +112,22 @@ describe("UCI engine supervisor", () => {
     await Promise.all(supervisors.splice(0).map((supervisor) => supervisor.shutdown()));
   });
 
+  it("parses the full advertised UCI option contract", () => {
+    expect(parseEngineOptions([
+      "option name Clear Hash type button",
+      "option name Elo type spin default 1500 min 0 max 5000",
+      "option name Temperature type string default 1.0",
+      "option name Style type combo default Normal var Normal var Risky Attack",
+      "option name Ponder type check default false",
+    ])).toEqual([
+      { name: "Clear Hash", type: "button" },
+      { name: "Elo", type: "spin", default: "1500", min: 0, max: 5000 },
+      { name: "Temperature", type: "string", default: "1.0" },
+      { name: "Style", type: "combo", default: "Normal", vars: ["Normal", "Risky Attack"] },
+      { name: "Ponder", type: "check", default: "false" },
+    ]);
+  });
+
   stockfishIt("handshakes, warms, configures, identifies, queries, and shuts down real Stockfish", async () => {
     const supervisor = stockfishSupervisor({
       modelId: "test-nnue-identity",
@@ -129,9 +145,14 @@ describe("UCI engine supervisor", () => {
       seedHonored: false,
     });
     expect(identity.version).not.toBe("unknown");
+    expect(supervisor.health("stockfish-analysis").options).toEqual(expect.arrayContaining([
+      expect.objectContaining({ name: "Clear Hash", type: "button" }),
+      expect.objectContaining({ name: "MultiPV", type: "spin", min: 1 }),
+    ]));
 
     const response = await supervisor.execute("stockfish-analysis", {
       commands: ["position startpos", "go depth 2"],
+      resetSearchState: true,
       until: (line) => line.startsWith("bestmove "),
       timeoutMs: 15_000,
     });
@@ -153,6 +174,15 @@ describe("UCI engine supervisor", () => {
         expect.objectContaining({ direction: "received", line: "uciok" }),
       ]),
     );
+    const sent = transcript.filter((entry) => entry.direction === "sent").map((entry) => entry.line);
+    const reset = sent.lastIndexOf("ucinewgame");
+    expect(sent.slice(reset, reset + 5)).toEqual([
+      "ucinewgame",
+      "setoption name Clear Hash",
+      "isready",
+      "position startpos",
+      "go depth 2",
+    ]);
 
     for (let index = 0; index < 40; index += 1) {
       await supervisor.checkHealth("stockfish-analysis");

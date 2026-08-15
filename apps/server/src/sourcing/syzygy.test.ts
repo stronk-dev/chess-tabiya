@@ -172,7 +172,7 @@ describe("Syzygy sourcing", () => {
         requests.push(request);
         return ["info depth 22 multipv 1 score cp 12 pv e2e4", "bestmove e2e4"];
       },
-    }, "stockfish-authoring");
+    }, "stockfish-authoring", 1);
     await executor.execute({ id: "job", runId: "run", nodeId: "node", fen: ROOK_4V3, kind: "eval", depth: 22, timeoutMs: 120_000 }, new AbortController().signal);
     expect(requests[0].commands).toContain("go depth 22");
     expect(requests[0].timeoutMs).toBe(120_000);

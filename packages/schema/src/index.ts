@@ -1,4 +1,4 @@
-export const DRILL_RUN_SCHEMA_VERSION = "0.14" as const;
+export const DRILL_RUN_SCHEMA_VERSION = "0.15" as const;
 export const DRILL_PACK_SCHEMA_VERSION = "0.22" as const;
 export const SHAPE_ENTRY_SCHEMA_VERSION = "0.3" as const;
 

@@ -29,7 +29,7 @@ function legalCount(fen: string): number {
 function divergence(run: DrillRun, pathIds: ReadonlySet<string>): readonly PivotalMarker[] {
   return run.events.flatMap((event) => {
     if (event.type !== "opponent.move_selected" || !pathIds.has(event.data.nodeId) || event.data.selection.policyModeApplied !== "human_common") return [];
-    const candidates = event.data.selection.candidates;
+    const candidates = event.data.selection.candidates?.filter((item) => item.offWindow !== true);
     if (candidates === undefined || candidates.length === 0 || candidates.some((item) => item.mass === undefined)) return [];
     const total = candidates.reduce((sum, item) => sum + item.mass!, 0); if (!(total > 0)) return [];
     const masses = candidates.map((item) => item.mass! / total).sort((a, b) => b - a);

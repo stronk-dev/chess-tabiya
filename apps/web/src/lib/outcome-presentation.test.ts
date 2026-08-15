@@ -146,6 +146,46 @@ describe("outcome presentation honesty", () => {
     );
   });
 
+  it("distinguishes one engine at two recorded band configurations", () => {
+    let value = commitMove(run(), "e2e4", { actor: "user", at }).run;
+    value = appendOpponentPly(value, {
+      moveUci: "e7e5",
+      policyModeApplied: "human_common",
+      engine: { id: "maia", name: "Maia", version: "1", seedHonored: false, eloHonored: true },
+    }, { at }).run;
+    value = commitMove(value, "g1f3", { actor: "user", at }).run;
+    value = appendOpponentPly(value, {
+      moveUci: "b8c6",
+      policyModeApplied: "human_common",
+      engine: { id: "maia", name: "Maia", version: "1", seedHonored: false, eloHonored: true, eloApplied: 1500 },
+    }, { at }).run;
+    const sentences = resistanceSentences(value, value.activeCursor.nodeId);
+    expect(sentences).toContain("Maia (maia v1, band not recorded): 1 plies.");
+    expect(sentences).toContain("Maia (maia v1, band 1500): 1 plies.");
+    expect(sentences).toContain("This path faced more than one engine configuration.");
+    expect(sentences).not.toContain("This path faced more than one engine.");
+  });
+
+  it("names an engine-applied default band the session did not choose", () => {
+    const base = createRun({
+      id: "default-band",
+      session: { kind: "position", start: { fen: INITIAL_FEN, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"c".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    let value = commitMove(base, "e2e4", { actor: "user", at }).run;
+    value = appendOpponentPly(value, {
+      moveUci: "e7e5",
+      policyModeApplied: "human_common",
+      engine: { id: "maia", name: "Maia", version: "1", seedHonored: false, eloHonored: true, eloApplied: 1500 },
+    }, { at }).run;
+    expect(resistanceSentences(value, value.activeCursor.nodeId)).toContain(
+      "The session did not choose a rating band; the engine recorded Elo 1500 as applied.",
+    );
+  });
+
   it("never turns non-terminal grades into chess results", () => {
     for (const state of ["preserved", "degraded"] as const) {
       const sentence = checkpointResolutionSentence("Authored horizon", state);

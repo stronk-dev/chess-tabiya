@@ -26,6 +26,7 @@ import {
   engineUnavailable,
   policyModeUnsupported,
 } from "./errors.js";
+import { appliedTargetElo } from "./engine-band.js";
 import {
   resolveStrongEngineProfile,
   type StrongEngineProfile,
@@ -391,6 +392,7 @@ export class OpponentSelector {
   }
 
   select(request: SelectMoveRequest): Promise<OpponentSelection> {
+    this.validatePolicy(request.policy);
     const key = selectionCacheKey(request);
     const cached = this.#cache.get(key);
     if (cached !== undefined) return cached;
@@ -404,6 +406,16 @@ export class OpponentSelector {
 
   cacheSize(): number {
     return this.#cache.size;
+  }
+
+  validatePolicy(policy: Pick<SelectorPolicy, "mode" | "targetElo">): void {
+    if (
+      policy.mode === "human_common"
+      || policy.mode === "theory_strict"
+      || policy.mode === "practical_resistance"
+    ) {
+      appliedTargetElo(this.#client.health(this.#maiaEngineId), policy.targetElo);
+    }
   }
 
   availableModes(): readonly RunOpponentMode[] {
@@ -438,7 +450,7 @@ export class OpponentSelector {
         positionCommand(request),
         `go movetime ${this.#strongEngineMovetimeMs}`,
       ],
-      afterCommands: [`setoption name MultiPV value ${this.#strongEngineMultiPv}`],
+      resetSearchState: true,
       until: (line) => line.startsWith("bestmove "),
       timeoutMs: Math.max(5_000, this.#strongEngineMovetimeMs * 10),
     });
@@ -469,21 +481,29 @@ export class OpponentSelector {
 
   async #maia(
     request: SelectMoveRequest,
-    multiPv?: number,
+    multiPv: number,
   ): Promise<{ readonly lines: readonly string[]; readonly identity: EngineIdentity; readonly eloApplied?: number }> {
+    const health = this.#client.health(this.#maiaEngineId);
     const identity = engineIdentity(this.#client, this.#maiaEngineId);
-    const eloApplied = request.policy.targetElo !== undefined && identity.eloHonored
-      ? request.policy.targetElo
-      : undefined;
+    const eloApplied = appliedTargetElo(health, request.policy.targetElo);
+    const spin = (name: string) => health.options?.find((item) => item.name === name && item.type === "spin");
+    const optionDefault = (name: string) => health.options?.find((item) => item.name === name)?.default;
+    const maximum = spin("MultiPV")?.max;
+    const appliedMultiPv = maximum === undefined ? multiPv : Math.min(multiPv, maximum);
+    const bandDefaults = ["SelfElo", "OppoElo"].flatMap((name) => {
+      const value = optionDefault(name);
+      return value === undefined ? [] : [`setoption name ${name} value ${value}`];
+    });
     const commands = [
       ...(eloApplied === undefined
         ? []
         : [`setoption name Elo value ${eloApplied}`]),
+      ...bandDefaults,
       `setoption name Temperature value ${
         request.policy.temperature ?? DEFAULT_TEMPERATURE
       }`,
       `setoption name TopP value ${request.policy.topP ?? DEFAULT_TOP_P}`,
-      ...(multiPv === undefined ? [] : [`setoption name MultiPV value ${multiPv}`]),
+      `setoption name MultiPV value ${appliedMultiPv}`,
       positionCommand(request),
       "go",
     ];
@@ -500,10 +520,28 @@ export class OpponentSelector {
   }
 
   async #humanCommon(request: SelectMoveRequest): Promise<OpponentSelection> {
-    const result = await this.#maia(request, 8);
+    const health = this.#client.health(this.#maiaEngineId);
+    const maximum = health.options?.find((item) => item.name === "MultiPV" && item.type === "spin")?.max;
+    const requestedWidth = Math.max(8, legalMoveCount(currentPosition(request)));
+    const width = maximum === undefined ? requestedWidth : Math.min(requestedWidth, maximum);
+    let result = await this.#maia(request, width);
+    let candidates = candidateLines(result.lines);
+    let moveUci = bestMove(result.lines);
+    if (!candidates.some((candidate) => candidate.moveUci === moveUci)) {
+      result = await this.#maia(request, width);
+      candidates = candidateLines(result.lines);
+      moveUci = bestMove(result.lines);
+    }
+    if (!candidates.some((candidate) => candidate.moveUci === moveUci)) {
+      const maxRank = candidates.reduce((rank, candidate) => Math.max(rank, candidate.rank), 0);
+      candidates = Object.freeze([
+        ...candidates,
+        Object.freeze({ moveUci, rank: maxRank + 1, offWindow: true as const }),
+      ]);
+    }
     return makeSelection(
-      bestMove(result.lines),
-      candidateLines(result.lines),
+      moveUci,
+      candidates,
       result.identity,
       "human_common",
       result.eloApplied,
@@ -513,9 +551,11 @@ export class OpponentSelector {
   async #strongEngine(request: SelectMoveRequest): Promise<OpponentSelection> {
     const lines = await this.#client.execute(this.#strongEngineId, {
       commands: [
+        `setoption name MultiPV value ${this.#strongEngineMultiPv}`,
         positionCommand(request),
         `go movetime ${this.#strongEngineMovetimeMs}`,
       ],
+      resetSearchState: true,
       until: (line) => line.startsWith("bestmove "),
       timeoutMs: Math.max(5_000, this.#strongEngineMovetimeMs * 10),
     });

@@ -25,6 +25,13 @@ const actualMaiaPolicyVector = Object.freeze([
 ]);
 
 describe("humanConcessionMass", () => {
+  it("excludes an off-window played move from mass arithmetic", () => {
+    expect(humanConcessionMass([
+      { moveUci: "e2e4", mass: 0.6 },
+      { moveUci: "d2d4", mass: 0.4 },
+      { moveUci: "g1f3", offWindow: true },
+    ], new Set(["d2d4"]))).toEqual({ concedingMass: 0.4, measuredMass: 1, candidateCount: 2 });
+  });
   it("combines policy mass with an externally supplied concession set", () => {
     expect(humanConcessionMass([
       { moveUci: "a2a3", mass: 0.4 },

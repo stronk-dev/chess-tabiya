@@ -20,6 +20,14 @@ function ready(identity: EngineIdentity): EngineHealth {
   };
 }
 
+function bandReady(identity: EngineIdentity): EngineHealth {
+  return {
+    ...ready(identity),
+    bandOption: "Elo",
+    options: [{ name: "Elo", type: "spin", default: "1500", min: 0, max: 5000 }],
+  };
+}
+
 function healthClient(
   healthById: Readonly<Record<string, EngineHealth>>,
   observed: string[] = [],
@@ -66,7 +74,7 @@ describe("engine capabilities", () => {
       healthClient(
         {
           "stockfish-analysis": ready(identities["stockfish-analysis"]!),
-          "maia-5m": ready(identities["maia-5m"]!),
+          "maia-5m": bandReady(identities["maia-5m"]!),
         },
         observed,
       ),
@@ -102,6 +110,15 @@ describe("engine capabilities", () => {
             threads: 1,
             hashMb: 16,
             multiPv: 1,
+          },
+          human_common: {
+            elo: {
+              min: 0,
+              max: 5000,
+              default: 1500,
+              source: "advertised",
+              advertised: { min: 0, max: 5000 },
+            },
           },
         },
         providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "lichess" },

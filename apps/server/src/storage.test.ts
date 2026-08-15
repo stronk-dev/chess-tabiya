@@ -86,6 +86,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 17, name: "stated reasoning run schema" },
       { version: 18, name: "perfect tablebase run schema" },
       { version: 19, name: "practical resistance run schema" },
+      { version: 20, name: "engine request record run schema" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -103,7 +104,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(19);
+    ).toBe(20);
     inspection.close();
   });
 
@@ -129,7 +130,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       PRAGMA user_version=13;
     `);fixture.close();
 
-    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"},{version:16,name:"immediate guard run schema"},{version:17,name:"stated reasoning run schema"},{version:18,name:"perfect tablebase run schema"},{version:19,name:"practical resistance run schema"}]);
+    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"},{version:16,name:"immediate guard run schema"},{version:17,name:"stated reasoning run schema"},{version:18,name:"perfect tablebase run schema"},{version:19,name:"practical resistance run schema"},{version:20,name:"engine request record run schema"}]);
     expect(upgraded.liveSession(session.id)?.title).toBe("Old class");expect(upgraded.publicTokenByHash("hash-old")).toMatchObject({scope:"story_read",runId:value.id});upgraded.close();
     const inspection=new DatabaseSync(filename);expect((inspection.prepare("PRAGMA foreign_key_check").all())).toEqual([]);for(const table of ["session_proposals","session_vote_windows","session_invitations","arena_legs"]){const targets=(inspection.prepare(`PRAGMA foreign_key_list(${table})`).all() as readonly Record<string,unknown>[]).map((row)=>row.table);expect(targets).toContain("live_sessions");expect(targets).not.toContain("live_sessions_v14");}expect(String((inspection.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='live_sessions'").get() as {sql:string}).sql)).toContain("'match'");inspection.close();
     const freshFile=join(directory,"fresh.sqlite"),freshStorage=new SQLiteRunStorage(freshFile,{onMigration:()=>{}});freshStorage.close();const upgradedSchema=new DatabaseSync(filename),freshSchema=new DatabaseSync(freshFile);
@@ -193,8 +194,9 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 17, name: "stated reasoning run schema" },
       { version: 18, name: "perfect tablebase run schema" },
       { version: 19, name: "practical resistance run schema" },
+      { version: 20, name: "engine request record run schema" },
     ]);
-    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.14");
+    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.15");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
     expect(upgraded.read(forged.id)).toBeUndefined();
     upgraded.close();
@@ -283,8 +285,9 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 17, name: "stated reasoning run schema" },
       { version: 18, name: "perfect tablebase run schema" },
       { version: 19, name: "practical resistance run schema" },
+      { version: 20, name: "engine request record run schema" },
     ]);
-    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.14");
+    expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.15");
     expect(upgraded.read(quarantined.id)).toBeUndefined();
     upgraded.close();
 
@@ -352,8 +355,8 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 16, name: "immediate guard run schema" }, { version: 17, name: "stated reasoning run schema" }, { version: 18, name: "perfect tablebase run schema" }, { version: 19, name: "practical resistance run schema" }]);
-    expect(upgraded.read("guard-migration")?.run.schemaVersion).toBe("0.14");
+    expect(log).toEqual([{ version: 16, name: "immediate guard run schema" }, { version: 17, name: "stated reasoning run schema" }, { version: 18, name: "perfect tablebase run schema" }, { version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }]);
+    expect(upgraded.read("guard-migration")?.run.schemaVersion).toBe("0.15");
     upgraded.close();
 
     const reopenedLog: StorageMigrationLog[] = [];
@@ -394,10 +397,42 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 19, name: "practical resistance run schema" }]);
+    expect(log).toEqual([{ version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }]);
     const after = upgraded.read(selected.id)!.run;
-    expect(after.schemaVersion).toBe("0.14");
+    expect(after.schemaVersion).toBe("0.15");
     expect(after.events).toEqual(selected.events);
+    upgraded.close();
+  });
+
+  it("stamps v0.14 snapshots to v0.15 without inventing off-window candidates", () => {
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-storage-engine-request-"));
+    directories.push(directory);
+    const filename = join(directory, "engine-request.sqlite");
+    const initial = new SQLiteRunStorage(filename, { onMigration: () => {} });
+    const selected = appendOpponentPly(run("engine-request-migration"), {
+      moveUci: "e2e4",
+      policyModeApplied: "human_common",
+      candidates: [{ moveUci: "e2e4", rank: 1, mass: 0.75 }],
+      engine: { id: "maia", name: "Maia", version: "1", seedHonored: false },
+    }, { at: createdAt }).run;
+    initial.create(selected, "writer", "Engine request migration");
+    initial.close();
+
+    const fixture = new DatabaseSync(filename);
+    const before = fixture.prepare("SELECT snapshot_json FROM drill_runs WHERE id = ?").get(selected.id) as { snapshot_json: string };
+    const snapshot = JSON.parse(before.snapshot_json) as Record<string, unknown>;
+    fixture.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.14' WHERE id = ?")
+      .run(JSON.stringify({ ...snapshot, schemaVersion: "0.14" }), selected.id);
+    fixture.exec("PRAGMA user_version = 19");
+    fixture.close();
+
+    const log: StorageMigrationLog[] = [];
+    const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
+    expect(log).toEqual([{ version: 20, name: "engine request record run schema" }]);
+    const after = upgraded.read(selected.id)!.run;
+    expect(after.schemaVersion).toBe("0.15");
+    expect(after.events).toEqual(selected.events);
+    expect(after.events.some((event) => event.type === "opponent.move_selected" && event.data.selection.candidates?.some((candidate) => candidate.offWindow !== undefined))).toBe(false);
     upgraded.close();
   });
 });

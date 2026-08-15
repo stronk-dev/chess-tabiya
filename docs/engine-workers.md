@@ -9,7 +9,7 @@ which returned data becomes part of the run.
 
 The implementation lives in `apps/server`; the Maia image lives in
 `workers/maia`. The living drill-run wire format is
-`schemas/drill_run.schema.json` v0.4.
+`schemas/drill_run.schema.json` v0.15.
 
 ## UCI supervisor
 
@@ -44,6 +44,34 @@ restart, transcript bounds, abort/preemption, identity, and shutdown. A local
 machine without Stockfish prints a prominent warning and skips those cases; CI
 sets `ENGINES_REQUIRED=1`, so absence fails verification. `SF_CMD` plus the JSON
 array `SF_ARGS` can name a non-standard executable.
+
+### Engine request contract
+
+Every engine request closes over the instrument state its answer depends on:
+
+- **state** — every answer-changing option is sent by that request, never inherited;
+- **clear** — unwanted accumulated search state is reset by that request;
+- **bind** — option-setting, reset, and search occupy one serialized queue entry;
+- **bound** — sent values lie inside the deployment-published range or refuse by name;
+- **record** — the applied band and the move actually played are persisted.
+
+The UCI handshake retains the complete advertised option table, including spin
+defaults and ranges. `resetSearchState` sends `ucinewgame`, conditionally sends
+the advertised `Clear Hash` button, waits through `readyok`, and only then sends
+the search commands inside the same queued task. Stockfish opponent, enumeration,
+evidence, and authoring searches state MultiPV explicitly; evidence also states
+`UCI_ShowWDL` on every request. Maia states Elo, SelfElo, OppoElo, Temperature,
+TopP, and a range-clamped MultiPV on every request. An absent requested Elo uses
+and records the engine-advertised default. Published deployment bounds are the
+intersection of the advertised range and any explicit `EngineSpec.bandRange`.
+This deployment currently configures no narrower competence range, so the
+published `[0, 5000]` is an option-acceptance bound, not a chess-strength claim.
+
+Human-common requests widen their candidate window to the smaller of the legal
+move count (with a floor of eight) and the advertised MultiPV maximum. If a
+sampled `bestmove` remains outside the window after one retry, the played move is
+persisted with `offWindow: true` and no invented mass. Ranked/mass consumers and
+rendered distributions exclude that marker.
 
 ## Ratified strong-engine profile
 
@@ -133,7 +161,7 @@ among authored children with the branch seed. A position not found on the spine
 uses `human_common`; `authoredBoundary` affects later feedback voice, not
 selection.
 
-Selections are cached by `(policyConfigDigest, branchSeed, historyHash)`.
+Selections are cached by `(policyConfigDigest, packId, branchSeed, historyHash)`.
 `historyHash` covers the start FEN and every UCI move. Identical drill retries
 therefore reuse the same promise/result, while different branch seeds or histories
 miss. Failed requests are evicted.
@@ -289,8 +317,8 @@ spine governs available theory replies; those boundaries can differ.
 
 The selector exposes strong-engine enumeration for branch-group seeding. A
 request temporarily sets MultiPV to the requested two through eight lines,
-waits through `bestmove`, and resets MultiPV before releasing the supervisor's
-serialized request. The recorded distribution identifies the strong engine and
+waits through `bestmove`, and relies on no later restore: every subsequent
+strong-engine request states its own configured width. The recorded distribution identifies the strong engine and
 each machine-seeded move records `policyModeApplied: enumerated`; enumeration
 is not misreported as an opponent-policy sample.
 

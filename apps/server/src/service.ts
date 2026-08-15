@@ -333,6 +333,10 @@ export class RunService {
     }
   }
 
+  validateOpponentPolicy(policy: Pick<import("@chess-tabiya/runtime").RunOpponentPolicy, "mode" | "targetElo">): void {
+    this.#opponentSelector?.validatePolicy(policy);
+  }
+
   async create(input: CreateRunRequest, leaseInput: LeaseHolder | string): Promise<DrillRun> {
     const lease = this.#lease(leaseInput);
     if (lease.learnerId === "__legacy") this.#principal("legacy-create");
@@ -394,6 +398,7 @@ export class RunService {
               opponentPolicy,
             };
           })();
+      this.validateOpponentPolicy(session.opponentPolicy);
       const sessionDigest = await digestSessionSource(session);
       run = createRun({
         id: input.id,
@@ -462,6 +467,7 @@ export class RunService {
       feedbackPolicy: "attempt_end" as const,
       opponentPolicy: input.opponentPolicy,
     };
+    this.validateOpponentPolicy(session.opponentPolicy);
     let run: DrillRun;
     try {
       run = createRun({
@@ -568,7 +574,7 @@ export class RunService {
     if(this.#storage.createDerivedRun===undefined)throw new ServerError("STORAGE_FAILURE","Run derivation storage is unavailable");
     const id=`flip-${randomUUID()}`,writerId=`writer-${randomUUID()}`,mode=resistance??(source.opponentPolicy.mode==="strong_engine"?"strong_engine":"human_common"),createdAt=new Date().toISOString();
     const session={kind:"position" as const,start:canonicalRunStart({fen:node.fen,side:source.start.side==="white"?"black":"white"}),feedbackPolicy:"attempt_end" as const,opponentPolicy:{mode,...(mode==="human_common"&&source.opponentPolicy.targetElo!==undefined?{targetElo:source.opponentPolicy.targetElo}:{})}};
-    const run=createRun({id,session,sessionDigest:await digestSessionSource(session),policyConfig:source.policyConfig,seed:Math.floor(Math.random()*2_147_483_647),createdAt});
+    this.validateOpponentPolicy(session.opponentPolicy);const run=createRun({id,session,sessionDigest:await digestSessionSource(session),policyConfig:source.policyConfig,seed:Math.floor(Math.random()*2_147_483_647),createdAt});
     const derivation:RunDerivation={derivedRunId:id,sourceRunId:runId,sourceBranchId:node.branchId,sourceNodeId:nodeId,kind:"flip_sides",createdAt};
     this.#storage.createDerivedRun(run,{writerId,learnerId:principal.learnerId},"Opposite-side replay",derivation);this.#project(run,principal.learnerId,{[run.branches[0]!.id]:{origin:"fresh",derivedFromRunId:runId}});return Object.freeze({run,writerId,derivation});
   }
@@ -576,7 +582,7 @@ export class RunService {
   async createRepertoireGapRun(input:{readonly repertoireId:string;readonly gapKey:string;readonly fen:string;readonly side:"white"|"black";readonly targetElo:number;readonly resistance:"human_common"|"strong_engine";readonly learnerId:string}){
     if(!this.#opponentSelector?.availableModes().includes(input.resistance))throw new ServerError("POLICY_MODE_UNSUPPORTED",`Policy mode is not available: ${input.resistance}`);
     if(this.#storage.createRepertoireGapRun===undefined)throw new ServerError("STORAGE_FAILURE","Repertoire gap-run storage is unavailable");
-    const id=`gap-${randomUUID()}`,writerId=`writer-${randomUUID()}`,createdAt=new Date().toISOString(),session={kind:"position" as const,start:canonicalRunStart({fen:input.fen,side:input.side}),feedbackPolicy:"attempt_end" as const,opponentPolicy:{mode:input.resistance,...(input.resistance==="human_common"?{targetElo:input.targetElo}:{})}},policyConfig={seedMode:"fixed" as const,locus:{executedAt:"server" as const,engineIds:Object.freeze([]),modelIds:Object.freeze([])}};
+    const id=`gap-${randomUUID()}`,writerId=`writer-${randomUUID()}`,createdAt=new Date().toISOString(),session={kind:"position" as const,start:canonicalRunStart({fen:input.fen,side:input.side}),feedbackPolicy:"attempt_end" as const,opponentPolicy:{mode:input.resistance,...(input.resistance==="human_common"?{targetElo:input.targetElo}:{})}},policyConfig={seedMode:"fixed" as const,locus:{executedAt:"server" as const,engineIds:Object.freeze([]),modelIds:Object.freeze([])}};this.validateOpponentPolicy(session.opponentPolicy);
     const run=createRun({id,session,sessionDigest:await digestSessionSource(session),policyConfig,seed:Math.floor(Math.random()*2_147_483_647),createdAt}),lease={writerId,learnerId:input.learnerId},link:RepertoireGapRunRecord={runId:id,repertoireId:input.repertoireId,gapKey:input.gapKey,createdAt};
     this.#storage.createRepertoireGapRun(run,lease,"Repertoire gap",link);this.#project(run,input.learnerId,{[run.branches[0]!.id]:{origin:"fresh"}});return Object.freeze({runId:id,writerId,run});
   }
@@ -828,7 +834,7 @@ export class RunService {
       distribution = input.source === "human_replies"
         ? await selector.select(request)
         : await selector.enumerate(request, requestedSize);
-      candidates = Object.freeze((distribution.candidates ?? []).slice(0, requestedSize).map((candidate) => candidate.moveUci));
+      candidates = Object.freeze((distribution.candidates ?? []).filter((candidate) => candidate.offWindow !== true).slice(0, requestedSize).map((candidate) => candidate.moveUci));
     }
     if (candidates.length < 2) {
       throw new ServerError("GROUP_SEEDS_UNAVAILABLE", "At least two group seeds are required");

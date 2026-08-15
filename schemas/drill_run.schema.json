@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-run:0.14",
+  "$id": "urn:chess-tabiya:schema:drill-run:0.15",
   "title": "Tabiya Drill Run",
-  "description": "Living v0.14 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
+  "description": "Living v0.15 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
   "type": "object",
   "required": [
     "schemaVersion",
@@ -21,7 +21,7 @@
     "activeCursor"
   ],
   "properties": {
-    "schemaVersion": { "const": "0.14" },
+    "schemaVersion": { "const": "0.15" },
     "id": { "$ref": "#/$defs/id" },
     "sessionKind": { "enum": ["pack", "position", "imported"] },
     "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
@@ -118,6 +118,7 @@
         "moveUci": { "$ref": "#/$defs/id" },
         "mass": { "type": "number", "minimum": 0, "maximum": 1 },
         "concessionRatio": { "type": "number", "minimum": 0, "maximum": 1 },
+        "offWindow": { "type": "boolean" },
         "rank": { "type": "integer", "minimum": 1 }
       },
       "additionalProperties": false

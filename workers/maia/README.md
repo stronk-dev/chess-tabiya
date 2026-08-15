@@ -42,3 +42,6 @@ and integration-test compatibility.
 First contact against the pinned source advertises `Elo`, `SelfElo`, `OppoElo`,
 `Temperature`, `TopP`, and `MultiPV`. It advertises no seed option, therefore
 `seedHonored` is `false`; replay and the selection cache provide repeatability.
+The three Elo spins advertise `default 1500 min 0 max 5000`; MultiPV advertises
+`default 5 min 1 max 20`. These are accepted UCI option bounds, not evidence of
+the model's calibrated chess-strength range.

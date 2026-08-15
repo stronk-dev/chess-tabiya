@@ -58,6 +58,7 @@ class FakeEngineClient implements SelectorEngineClient {
       request: EngineRequest,
     ) => readonly string[],
     private readonly identities: Readonly<Record<string, EngineIdentity>> = {},
+    private readonly healthOverrides: Readonly<Record<string, EngineHealth>> = {},
   ) {}
 
   async execute(
@@ -69,8 +70,26 @@ class FakeEngineClient implements SelectorEngineClient {
   }
 
   health(engineId: string): EngineHealth {
+    const override = this.healthOverrides[engineId];
+    if (override !== undefined) return override;
     const identity = this.identities[engineId] ?? (engineId === "maia-5m" ? maiaIdentity : stockfishIdentity);
-    return { id: engineId, status: "ready", restartCount: 0, identity };
+    return {
+      id: engineId,
+      status: "ready",
+      restartCount: 0,
+      identity,
+      ...(identity.eloHonored === true
+        ? {
+            bandOption: "Elo",
+            options: [
+              { name: "Elo", type: "spin" as const, default: "1500", min: 0, max: 5000 },
+              { name: "SelfElo", type: "spin" as const, default: "1500", min: 0, max: 5000 },
+              { name: "OppoElo", type: "spin" as const, default: "1500", min: 0, max: 5000 },
+              { name: "MultiPV", type: "spin" as const, default: "5", min: 1, max: 20 },
+            ],
+          }
+        : {}),
+    };
   }
 }
 
@@ -298,6 +317,8 @@ describe("pure opponent selector", () => {
       hashMb: 16,
       multiPv: 1,
     });
+    expect(client.calls[0]?.request.commands[0]).toBe("setoption name MultiPV value 1");
+    expect(client.calls[0]?.request.resetSearchState).toBe(true);
     expect(client.calls[0]?.request.commands.at(-1)).toBe("go movetime 100");
     expect(stockfishPlaySpec()).toMatchObject({
       id: "stockfish-play",
@@ -346,9 +367,11 @@ describe("pure opponent selector", () => {
     });
     expect(client.calls[0]?.request.commands).toEqual([
       "setoption name Elo value 1800",
+      "setoption name SelfElo value 1500",
+      "setoption name OppoElo value 1500",
       "setoption name Temperature value 0.7",
       "setoption name TopP value 0.9",
-      "setoption name MultiPV value 8",
+      "setoption name MultiPV value 20",
       `position fen ${INITIAL_FEN} moves e2e4`,
       "go",
     ]);
@@ -370,6 +393,37 @@ describe("pure opponent selector", () => {
     expect(selection.engine.eloApplied).toBeUndefined();
   });
 
+  it("states and records the engine-advertised default band when targetElo is omitted", async () => {
+    const client = new FakeEngineClient(() => maiaLines("e7e5", [{ move: "e7e5", mass: 1 }]));
+    const selection = await new OpponentSelector(client).select(request("human_common"));
+    expect(selection.engine).toMatchObject({ eloHonored: true, eloApplied: 1500 });
+    expect(client.calls[0]?.request.commands).toContain("setoption name Elo value 1500");
+  });
+
+  it("refuses target bands outside the effective published range", () => {
+    const selector = new OpponentSelector(new FakeEngineClient(() => []));
+    expect(() => selector.select(request("human_common", {
+      policy: { mode: "human_common", policyConfigDigest: digest, targetElo: 5001 },
+    }))).toThrow(expect.objectContaining({ code: "TARGET_ELO_OUT_OF_RANGE" }));
+  });
+
+  it("retries a sampled move outside the requested window and records the residual", async () => {
+    let calls = 0;
+    const client = new FakeEngineClient(() => {
+      calls += 1;
+      return maiaLines(calls === 1 ? "g8f6" : "b8c6", [{ move: "e7e5", mass: 0.6 }]);
+    });
+    const selection = await new OpponentSelector(client).select(request("human_common"));
+    expect(client.calls).toHaveLength(2);
+    expect(selection).toMatchObject({
+      moveUci: "b8c6",
+      candidates: [
+        { moveUci: "e7e5", rank: 1, mass: 0.6 },
+        { moveUci: "b8c6", rank: 2, offWindow: true },
+      ],
+    });
+  });
+
   it("uses movetime-limited Stockfish for strong_engine", async () => {
     const client = new FakeEngineClient((engineId) => {
       expect(engineId).toBe("stockfish-play");
@@ -382,9 +436,10 @@ describe("pure opponent selector", () => {
       engine: { id: "stockfish-play", name: "Stockfish" },
     });
     expect(client.calls[0]?.request.commands.at(-1)).toBe("go movetime 125");
+    expect(client.calls[0]?.request.commands[0]).toBe("setoption name MultiPV value 1");
   });
 
-  it("enumerates strong-engine candidates and restores MultiPV after bestmove", async () => {
+  it("enumerates strong-engine candidates without relying on a later restore", async () => {
     const client = new FakeEngineClient(() => [
       "info depth 8 multipv 1 score cp 35 pv c7c5",
       "info depth 8 multipv 2 score cp 20 pv e7e5",
@@ -409,9 +464,8 @@ describe("pure opponent selector", () => {
       `position fen ${INITIAL_FEN} moves e2e4`,
       "go movetime 100",
     ]);
-    expect(client.calls[0]?.request.afterCommands).toEqual([
-      "setoption name MultiPV value 1",
-    ]);
+    expect(client.calls[0]?.request.afterCommands).toBeUndefined();
+    expect(client.calls[0]?.request.resetSearchState).toBe(true);
     expect(selector.availableModes()).toEqual([
       "human_common",
       "theory_strict",
@@ -561,7 +615,7 @@ describe("pure opponent selector", () => {
       expect(selection.moveUci).toBe("g8f6");
       expect(selection.policyModeApplied).toBe("human_common");
       expect(client.calls[0]?.request.commands).toContain(
-        "setoption name MultiPV value 8",
+        "setoption name MultiPV value 20",
       );
       expect(warning).toHaveBeenCalledWith(
         expect.stringContaining("DEGRADED_THEORY_SPINE"),

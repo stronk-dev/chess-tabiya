@@ -9,6 +9,7 @@ import {
 import { FEEDBACK_POLICIES, type FeedbackPolicy } from "@chess-tabiya/schema/drill-pack";
 
 import type { EngineHealth, EngineIdentity } from "./engine-supervisor.js";
+import { engineBandProfile, type EngineBandProfile } from "./engine-band.js";
 import type { OpponentPolicyMode } from "./opponent-selector.js";
 import { ASSESSMENT_CATEGORIES, OBJECTIVE_ASSESSMENT_SETS, type TablebaseCategory } from "./tablebase.js";
 import {
@@ -67,6 +68,9 @@ export interface Capabilities {
   readonly runSchemaVersion: string;
   readonly policyProfiles: {
     readonly strong_engine: StrongEngineProfile;
+    readonly human_common: {
+      readonly elo: EngineBandProfile;
+    };
   };
   readonly providers: CapabilityProviders;
   readonly surfaces: SurfaceCapabilities;
@@ -181,14 +185,24 @@ export class EngineCapabilities implements CapabilitiesProvider {
   }
 
   async get(): Promise<Capabilities> {
+    const healthRows = this.#engineIds.map((engineId) => this.#client.health(engineId));
     const engines = Object.freeze(
-      this.#engineIds.flatMap((engineId) => {
-        const health = this.#client.health(engineId);
+      healthRows.flatMap((health) => {
         return health.status === "ready" && health.identity !== undefined
           ? [health.identity]
           : [];
       }),
     );
+    const opponentHealth = healthRows.find((health) => health.identity?.kind === "opponent");
+    const elo = opponentHealth?.identity?.eloHonored === true
+      ? engineBandProfile(opponentHealth)
+      : Object.freeze({
+          min: null,
+          max: null,
+          default: null,
+          source: "unpublished" as const,
+          advertised: Object.freeze({ min: null, max: null }),
+        });
     const providerState = providers(this.#engineMode, engines, this.#llmAvailable, this.#corpus, this.#tts, this.#tablebase);
     return Object.freeze({
       engines,
@@ -210,6 +224,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
       runSchemaVersion: runtimeBuildInfo.runSchemaVersion,
       policyProfiles: Object.freeze({
         strong_engine: this.#strongEngineProfile,
+        human_common: Object.freeze({ elo }),
       }),
       providers: providerState,
       surfaces: surfaces(providerState),

@@ -276,6 +276,15 @@ export interface Capabilities {
       readonly hashMb: number;
       readonly multiPv: number;
     };
+    readonly human_common: {
+      readonly elo: {
+        readonly min: number | null;
+        readonly max: number | null;
+        readonly default: number | null;
+        readonly source: "advertised" | "configured" | "advertised+configured" | "unpublished";
+        readonly advertised: { readonly min: number | null; readonly max: number | null };
+      };
+    };
   };
   readonly providers: {
     readonly opponent: "maia" | "mock" | "none";

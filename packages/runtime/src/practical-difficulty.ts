@@ -1,6 +1,7 @@
 export interface PolicyMassCandidate {
   readonly moveUci: string;
   readonly mass?: number;
+  readonly offWindow?: boolean;
 }
 
 export interface HumanConcessionMass {
@@ -33,10 +34,11 @@ export function humanConcessionMass(
   candidates: readonly PolicyMassCandidate[],
   concedingMoves: ReadonlySet<string>,
 ): HumanConcessionMass | null {
-  if (candidates.length === 0 || candidates.some((candidate) => candidate.mass === undefined)) return null;
+  const measured = candidates.filter((candidate) => candidate.offWindow !== true);
+  if (measured.length === 0 || measured.some((candidate) => candidate.mass === undefined)) return null;
   let concedingMass = 0;
   let measuredMass = 0;
-  for (const candidate of candidates) {
+  for (const candidate of measured) {
     const mass = candidate.mass!;
     if (!Number.isFinite(mass) || mass < 0 || mass > 1 + FLOAT32_POLICY_MASS_TOLERANCE) {
       throw new PolicyMassError(`policy mass must be between 0 and 1 within float32 tolerance; received ${String(mass)}`);
@@ -47,5 +49,5 @@ export function humanConcessionMass(
   if (measuredMass > 1 + FLOAT32_POLICY_MASS_TOLERANCE) {
     throw new PolicyMassError(`measured policy mass cannot exceed 1 within float32 tolerance; received ${String(measuredMass)}`);
   }
-  return Object.freeze({ concedingMass, measuredMass, candidateCount: candidates.length });
+  return Object.freeze({ concedingMass, measuredMass, candidateCount: measured.length });
 }

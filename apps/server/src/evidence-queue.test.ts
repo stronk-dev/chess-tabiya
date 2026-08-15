@@ -86,12 +86,13 @@ async function request(
 
 describe("evidence job queue", () => {
   it("extracts typed eval, WDL, and best-line evidence from analysis Stockfish", async () => {
-    const requests: { engineId: string; commands: readonly string[]; signal?: AbortSignal }[] = [];
+    const requests: { engineId: string; commands: readonly string[]; resetSearchState?: boolean; signal?: AbortSignal }[] = [];
     const executor = new StockfishEvidenceExecutor({
       async execute(engineId, request) {
         requests.push({
           engineId,
           commands: request.commands,
+          ...(request.resetSearchState === undefined ? {} : { resetSearchState: request.resetSearchState }),
           ...(request.signal === undefined ? {} : { signal: request.signal }),
         });
         if (request.commands.includes("setoption name UCI_ShowWDL value true")) {
@@ -102,7 +103,7 @@ describe("evidence job queue", () => {
         }
         return ["info depth 15 score mate 3 pv e2e4 e7e5", "bestmove e2e4"];
       },
-    });
+    }, "stockfish-analysis", 1);
     const signal = new AbortController().signal;
     const base = {
       id: "job",
@@ -159,6 +160,14 @@ describe("evidence job queue", () => {
     expect(requests).toHaveLength(4);
     expect(requests.every((request) => request.engineId === "stockfish-analysis")).toBe(true);
     expect(requests.every((request) => request.signal === signal)).toBe(true);
+    expect(requests.every((request) => request.resetSearchState === true)).toBe(true);
+    expect(requests.every((request) => request.commands.includes("setoption name MultiPV value 1"))).toBe(true);
+    expect(requests.map((request) => request.commands.find((command) => command.startsWith("setoption name UCI_ShowWDL")))).toEqual([
+      "setoption name UCI_ShowWDL value false",
+      "setoption name UCI_ShowWDL value false",
+      "setoption name UCI_ShowWDL value true",
+      "setoption name UCI_ShowWDL value false",
+    ]);
   });
 
   it("starts jobs FIFO while respecting bounded concurrency", async () => {

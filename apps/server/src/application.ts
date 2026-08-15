@@ -314,10 +314,11 @@ export async function createApplication(
 
   if (engineMode === "maia") {
     const stockfish = options.stockfishCommand ?? "stockfish";
+    const analysisSpec = stockfishAnalysisSpec(stockfish);
     supervisor = new EngineSupervisor([
       maiaNetworkSpec(options.maiaHost ?? "maia", options.maiaPort ?? 7000),
       stockfishPlaySpec({ command: stockfish }),
-      stockfishAnalysisSpec(stockfish),
+      analysisSpec,
     ]);
     await supervisor.startAll();
     selector = new OpponentSelector(supervisor, tablebaseSource === undefined ? {} : { tablebaseSource });
@@ -325,7 +326,11 @@ export async function createApplication(
       "stockfish-analysis",
       "maia-5m",
     ], { engineMode: "maia", llmAvailable: options.voiceProvider !== undefined, corpus: corpusSource === undefined ? "none" : "lichess-explorer", tts: options.ttsProvider === undefined ? "none" : "external", tablebase: tablebaseSource?.kind ?? "none" });
-    evidenceExecutor = new StockfishEvidenceExecutor(supervisor);
+    evidenceExecutor = new StockfishEvidenceExecutor(
+      supervisor,
+      analysisSpec.id,
+      Number(analysisSpec.options?.MultiPV),
+    );
   } else {
     const mock = new MockEngineClient();
     selector = new OpponentSelector(mock, {

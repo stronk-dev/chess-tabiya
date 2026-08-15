@@ -314,10 +314,17 @@ function searchProvenance(job: EvidenceJob, engineId: string) {
 export class StockfishEvidenceExecutor implements EvidenceExecutor {
   readonly #client: EvidenceEngineClient;
   readonly #engineId: string;
+  readonly #configuredMultiPv: number;
 
-  constructor(client: EvidenceEngineClient, engineId = "stockfish-analysis") {
+  constructor(
+    client: EvidenceEngineClient,
+    engineId: string,
+    configuredMultiPv: number,
+  ) {
+    positiveInteger(configuredMultiPv, "Configured evidence MultiPV");
     this.#client = client;
     this.#engineId = engineId;
+    this.#configuredMultiPv = configuredMultiPv;
   }
 
   async execute(job: EvidenceJob, signal: AbortSignal): Promise<EvidencePayload> {
@@ -327,12 +334,12 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
         : `go depth ${job.depth}`;
     const lines = await this.#client.execute(this.#engineId, {
       commands: [
-        ...(job.kind === "wdl" ? ["setoption name UCI_ShowWDL value true"] : []),
-        ...(job.multiPv === undefined ? [] : [`setoption name MultiPV value ${job.multiPv}`]),
+        `setoption name UCI_ShowWDL value ${job.kind === "wdl" ? "true" : "false"}`,
+        `setoption name MultiPV value ${job.multiPv ?? this.#configuredMultiPv}`,
         `position fen ${job.fen}`,
         go,
       ],
-      ...(job.multiPv === undefined ? {} : { afterCommands: ["setoption name MultiPV value 1"] }),
+      resetSearchState: true,
       until: (line) => line.startsWith("bestmove "),
       timeoutMs: job.timeoutMs ?? Math.max(5_000, (job.movetime ?? 0) * 10),
       signal,

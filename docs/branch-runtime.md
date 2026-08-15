@@ -348,6 +348,12 @@ the new practical-resistance mode, per-candidate concession ratio, and
 Elo-capability facts are additive. Historical group journals therefore replay
 and compare exactly as before the stamp.
 
+Migration 20 stamps v0.14 snapshots and indexed rows to run schema v0.15 using
+the frozen literals `0.14` and `0.15`. The only wire widening is optional
+`SelectionCandidate.offWindow`, marking a played engine sample that was outside
+its reported MultiPV window. Historical selections are not rewritten and replay
+remains byte-identical.
+
 ## Derived Line Drill state
 
 `spinePositionIndex` resolves authored positions by transpose key, keeping the

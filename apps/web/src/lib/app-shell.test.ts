@@ -74,6 +74,7 @@ const capabilities: Capabilities = {
   runSchemaVersion: "0.6",
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
+    human_common: { elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } } },
   },
   providers: { opponent: "mock", judge: "mock", llm: "none", corpus: "mock", tts: "none", tablebase: "mock" },
   surfaces: {

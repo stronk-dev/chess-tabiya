@@ -163,6 +163,7 @@ function parseSelectionCandidate(value: unknown, label: string): SelectionCandid
     rank: candidate.rank,
     ...(candidate.mass === undefined ? {} : { mass: candidate.mass as number }),
     ...(candidate.concessionRatio === undefined ? {} : { concessionRatio: candidate.concessionRatio as number }),
+    ...(candidate.offWindow === undefined ? {} : { offWindow: requiredBoolean(candidate.offWindow, `${label}.offWindow`) }),
   };
 }
 
@@ -524,6 +525,8 @@ export function errorResponse(error: unknown): Response {
                     || error.code === "PRACTICAL_RESISTANCE_UNAVAILABLE"
                     || error.code === "PRACTICAL_RESISTANCE_UNDECIDABLE"
                     || error.code === "PRACTICAL_RESISTANCE_POLICY_MASS_INVALID"
+                    || error.code === "TARGET_ELO_REQUIRED"
+                    || error.code === "TARGET_ELO_OUT_OF_RANGE"
                   ? 422
                 : 500;
   }

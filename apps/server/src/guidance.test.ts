@@ -28,7 +28,7 @@ const capabilities: CapabilitiesProvider = {
       tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"], tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"], tempoDefaults: { outpaced: "failed" },
       assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
       objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
-      policyProfiles: { strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 } },
+      policyProfiles: { strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 }, human_common: { elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } } } },
       providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock", tts: "none", tablebase: "none" },
       surfaces: { play: "available", review: "available", learn: "available", live: "available", create: "available", justPlay: "available", fromPosition: "available" },
     };
@@ -56,7 +56,7 @@ describe("adaptive guidance server seams", () => {
     const open = await handler(request(`/runs/guide/human-split?nodeId=${encodeURIComponent(run.activeCursor.nodeId)}`));
     expect(open.status).toBe(200);
     expect(await open.json()).toMatchObject({ engine: { name: "Maia fixture" }, candidates: [{ mass: .31 }, { mass: .24 }, { mass: .19 }] });
-    expect(client.calls[0]!.commands).toContain("setoption name MultiPV value 8");
+    expect(client.calls[0]!.commands).toContain("setoption name MultiPV value 20");
     service.move("guide", "writer", "e2e4", { at });
     const current = service.graph("guide").activeCursor.nodeId;
     expect((await handler(request(`/runs/guide/human-split?nodeId=${encodeURIComponent(current)}`))).status).toBe(409);

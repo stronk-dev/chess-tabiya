@@ -68,15 +68,14 @@ export type PositionSeedEngineEvaluator = (fen: string) => Promise<PositionSeedE
 export async function createPositionSeedEngineEvaluator(command: string, args: readonly string[] = []): Promise<{ readonly evaluate: PositionSeedEngineEvaluator; close(): Promise<void> }> {
   const supervisor = new EngineSupervisor([{ id: "stockfish-authoring", kind: "judge", name: "Stockfish", command, args, options: { Threads: AUTHORING_PROFILE.threads, Hash: AUTHORING_PROFILE.hashMb, MultiPV: AUTHORING_PROFILE.multiPv }, handshakeTimeoutMs: 15_000 }]);
   const identity = await supervisor.start("stockfish-authoring");
-  const executor = new StockfishEvidenceExecutor(supervisor, "stockfish-authoring");
+  const executor = new StockfishEvidenceExecutor(
+    supervisor,
+    "stockfish-authoring",
+    AUTHORING_PROFILE.multiPv,
+  );
   return {
     async evaluate(fen) {
       const retrievedAt = new Date().toISOString();
-      await supervisor.execute("stockfish-authoring", {
-        commands: ["ucinewgame", "setoption name Clear Hash", "isready"],
-        until: (line) => line === "readyok",
-        timeoutMs: 15_000,
-      });
       const payload = await executor.execute({ id: `authoring-${Date.now()}`, runId: "content-sourcing", nodeId: "start", fen, kind: "eval", depth: AUTHORING_PROFILE.depth, timeoutMs: AUTHORING_PROFILE.timeoutMs }, new AbortController().signal);
       return {
         source: { sourceId: "stockfish-authoring", retrievedAt, origin: { kind: "engine", engineId: identity.id, engineName: identity.name, engineVersion: identity.version, profile: { threads: AUTHORING_PROFILE.threads, hashMb: AUTHORING_PROFILE.hashMb, multiPv: AUTHORING_PROFILE.multiPv }, budget: { depth: AUTHORING_PROFILE.depth }, fen, evidenceKind: "engine_eval" }, licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: "output of a locally executed engine; not a third-party work" } },
