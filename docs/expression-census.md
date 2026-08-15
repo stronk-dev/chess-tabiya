@@ -7,7 +7,7 @@ The report keeps two questions separate:
 - **Coverage:** where the expression fires in the current corpus. Zero is a fact, never an error.
 - **Satisfiability:** `unsatisfiable` only when one of the closed, sound R1–R8 refutation rules proves it; `satisfiable` when a corpus or played witness exhibits it; otherwise `unknown`.
 
-Witnesses live in `apps/server/src/fixtures/expression-witnesses.json`. Each starts from a legal FEN and reaches the tested position through SAN. Illegal or ambiguous SAN is refused as `WITNESS_LINE_ILLEGAL`; witnesses never enter corpus coverage and never suppress a pack-local inertness refusal.
+Witnesses live in `content/witnesses/expression-witnesses.json`, which is also the command's default. Each starts from a legal FEN and reaches the tested position through SAN. Illegal or ambiguous SAN is refused as `WITNESS_LINE_ILLEGAL`; witnesses never enter corpus coverage and never suppress a pack-local inertness refusal.
 
 The fixed degeneracy suite reports expressions that fire on sparse legal boards. That is a warning, not a chess verdict. Evaluator exceptions are isolated as `EVALUATION_FAULT`, excluded from coverage counts, and never reclassified as unsatisfiable.
 

@@ -5,7 +5,6 @@ import type { StructuralExpression } from "@chess-tabiya/schema/drill-pack";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
 
-import witnesses from "./fixtures/expression-witnesses.json" with { type: "json" };
 import { runExpressionCensus } from "./expression-census.js";
 import { checkShapeFile } from "./shape-check.js";
 import { validateShapeEntry } from "./shape-validation.js";
@@ -14,7 +13,8 @@ function packFiles(): string[] {
   return readdirSync("content/drafts").filter((name) => name.endsWith(".json") && !/\.(?:evidence|job|sources)\.json$/u.test(name));
 }
 
-const fullReport = runExpressionCensus({ witnesses: witnesses as any });
+const witnesses = JSON.parse(readFileSync("content/witnesses/expression-witnesses.json", "utf8"));
+const fullReport = runExpressionCensus({ witnesses });
 
 describe("expression census", () => {
   it("walks every pack including root-only fixtures and reports the fixture split", () => {
@@ -50,8 +50,8 @@ describe("expression census", () => {
 
   it("is deterministic and does not mutate content", () => {
     const before = packFiles().map((name) => [name, statSync(`content/drafts/${name}`).mtimeMs, createHash("sha256").update(readFileSync(`content/drafts/${name}`)).digest("hex")] as const);
-    const one = canonicalizeJson(runExpressionCensus({ witnesses: witnesses as any }));
-    const two = canonicalizeJson(runExpressionCensus({ witnesses: witnesses as any }));
+    const one = canonicalizeJson(runExpressionCensus({ witnesses }));
+    const two = canonicalizeJson(runExpressionCensus({ witnesses }));
     expect(two).toBe(one);
     expect(packFiles().map((name) => [name, statSync(`content/drafts/${name}`).mtimeMs, createHash("sha256").update(readFileSync(`content/drafts/${name}`)).digest("hex")])).toEqual(before);
   }, 20_000);
@@ -60,6 +60,8 @@ describe("expression census", () => {
     const source = readFileSync(new URL("./expression-census.ts", import.meta.url), "utf8");
     expect(source).toContain('import { authoredSpineFens } from "./pack-validation.js"');
     expect(source).toContain('import { matchesStructuralExpression } from "@chess-tabiya/runtime"');
+    expect(source).toContain('resolve("content/witnesses/expression-witnesses.json")');
+    expect(source).not.toContain('resolve("apps/server/src/fixtures/expression-witnesses.json")');
     expect(source).not.toMatch(/chessops\/(?:util|chess)|\.spine|moveUci|parseUci/u);
     const makefile = readFileSync("Makefile", "utf8");
     expect(makefile.match(/^verify:.*$/mu)?.[0]).not.toContain("expression-census");

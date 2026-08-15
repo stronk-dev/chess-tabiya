@@ -204,7 +204,7 @@ function option(name: string): string | undefined {
 
 async function main(): Promise<number> {
   try {
-    const witnessPath = option("--witnesses") ?? resolve("apps/server/src/fixtures/expression-witnesses.json");
+    const witnessPath = option("--witnesses") ?? resolve("content/witnesses/expression-witnesses.json");
     const witnesses = JSON.parse(await readFile(witnessPath, "utf8")) as Record<string, readonly ExpressionWitness[]>;
     const expressionPath = option("--expr");
     const selectedFiles = option("--file")?.split(",").filter(Boolean);
