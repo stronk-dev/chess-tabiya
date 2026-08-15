@@ -1,130 +1,16 @@
 {
   "id": "pawn-breakthrough-outside-passer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Pure pawn ending — outside passer and breakthrough",
   "phases": ["endgame"],
-  "trigger": {
-    "kind": "all",
-    "of": [
-      {
-        "kind": "not",
-        "of": {
-          "kind": "any",
-          "of": [
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
-          ]
-        }
-      },
-      {
-        "kind": "any",
-        "of": [
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a2"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a3"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a7"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b2"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b3"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b7"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g2"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g3"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g7"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h2"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h3"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h7"}}
-        ]
-      }
-    ]
-  },
+  "trigger": { "kind": "all", "of": [{ "kind": "not", "of": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }] } }, { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a2" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a3" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b2" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b3" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g2" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g3" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h2" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h3" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h7" } }] }] },
   "plans": [
-    {
-      "id": "white-passer-as-decoy",
-      "side": "white",
-      "label": "The outside passer is a decoy",
-      "description": "The wing passer's job is usually not to queen: push it just far enough that the defending king must leave the centre to stop it, then walk your own king into the pawns the defender abandoned.",
-      "success": {"note":"Decoy value is measured in king tempi, which the vocabulary cannot count.","signature":null}
-    },
-    {
-      "id": "white-breakthrough",
-      "side": "white",
-      "label": "Break through the fixed front",
-      "description": "Against a fixed pawn front with the kings far away, sacrifice one or two pawns to sell a single runner through; the material is irrelevant if the runner queens. Count the enemy king's return trip to the queening square before spending the pawns.",
-      "success": {
-        "note": "A far-advanced passer is what the arithmetic can see; whether it outruns the counter-race it cannot.",
-        "signature": {
-          "kind": "any",
-          "of": [
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a6"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b6"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c6"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d6"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e6"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f6"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g6"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h6"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h7"}}
-          ]
-        }
-      }
-    },
-    {
-      "id": "black-blockade-cheaply",
-      "side": "black",
-      "label": "Blockade at the cheapest square",
-      "description": "Stop the passer with the king on the most economical square — close enough to catch it, far enough to keep an eye on the other wing — and only abandon the blockade for a race you have counted to the end.",
-      "success": {"note":"Holding is an outcome and has no structural signature here.","signature":null}
-    },
-    {
-      "id": "black-keep-the-front-fluid",
-      "side": "black",
-      "label": "Keep your pawn front unfixed",
-      "description": "A fixed pawn front is breakthrough fuel: keep tension or spare pawn moves on the wing where the opponent has the majority, so no sacrifice sells a runner through a wall of your own making.",
-      "success": {"note":"Fixedness of a pawn front is not in the shipped feature set.","signature":null}
-    }
+    { "id": "white-passer-as-decoy", "side": "white", "label": "Drag the defending king to the far wing", "description": "The wing passer's job is usually not to queen: push it far enough that the defending king must go and stop it, leaving your pawns on the opposite wing unattended.", "success": { "note": "RESTATED PLAN. The plan was 'The outside passer is a decoy', whose success was measured in king tempi. It is now the geometry the tempi buy: the defending king stands on one edge wing while White still has pawns on the far side of the board. It counts where the king is, not how many moves it wasted getting there. Original success note: 'Decoy value is measured in king tempi, which the vocabulary cannot count.'", "signature": { "kind": "any", "of": [{ "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "b" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "e", "to": "h" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "pawn" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "g", "to": "h" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "d" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "pawn" } } }] }] } } },
+    { "id": "white-breakthrough", "side": "white", "label": "Break through the fixed front", "description": "Against a fixed pawn front with the kings far away, sacrifice one or two pawns to sell a single runner through; the material is irrelevant if the runner queens. Count the enemy king's return trip to the queening square before spending the pawns.", "success": { "note": "A far-advanced passer is what the arithmetic can see; whether it outruns the counter-race it cannot.", "signature": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "c6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "c7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "d6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "d7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "e6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "e7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "f6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "f7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h7" } }] } } },
+    { "id": "black-blockade-cheaply", "side": "black", "label": "King on or beside the passer's file", "description": "Stop the passer with the king: get it onto the passed pawn's file or a neighbouring one, and only abandon it for a race you have counted to the end.", "success": { "note": "RESTATED PLAN. The plan was 'Blockade at the cheapest square', whose success was holding. It is now the blockade itself, expressed one file at a time: White has a passed pawn on some file and Black's king stands on that file or one beside it. 'Cheapest' is not measured — the census cannot tell an economical blockade from a desperate one. Original success note: 'Holding is an outcome and has no structural signature here.'", "signature": { "kind": "any", "of": [{ "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "a" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "b" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "b", "to": "b" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "c" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "c", "to": "c" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "b", "to": "d" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "d", "to": "d" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "c", "to": "e" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "e", "to": "e" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "d", "to": "f" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "f", "to": "f" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "e", "to": "g" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "g", "to": "g" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "f", "to": "h" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "h", "to": "h" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "g", "to": "h" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }] } } },
+    { "id": "black-keep-the-front-fluid", "side": "black", "label": "Keep your pawn front unfixed", "description": "A fixed pawn front is breakthrough fuel: keep tension or spare pawn moves on the wing where the opponent has the majority, so no sacrifice sells a runner through a wall of your own making.", "success": { "note": "Fixedness of a pawn front is not in the shipped feature set.", "signature": null } }
   ],
-  "watch": [
-    "The trigger requires an existing passed pawn on a wing file; a breakthrough position before the sacrifice has no passer yet and is invisible to this vocabulary — the family is wider than the trigger.",
-    "'Outside' means far from the kings, and kings are invisible to the trigger; a wing passer next to both kings is not an outside passer. Verify on the board.",
-    "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."
-  ],
-  "typicalMistakes": [
-    "Racing the outside passer to promotion instead of using it as bait, stranding your king on the edge while the defender's king eats the centre.",
-    "Breaking through one tempo early and losing the queening race by exactly that tempo.",
-    "Fixing your own pawns into the wall the opponent's breakthrough needs.",
-    "Abandoning the blockade for an uncounted race."
-  ],
-  "provenance": {
-    "licence": "CC-BY-SA-4.0",
-    "sources": [
-      "Family per design/04-content-architecture.md section 4 (pawn: breakthrough, outside passer).",
-      "Tablebase honesty: typical positions of this family exceed seven pieces, so no tablebase ground truth exists for them; small cases are tablebase-verifiable in principle. Nothing in this entry was tablebase-checked.",
-      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
-      "Trigger gap: pre-breakthrough censuses (majority but no passer yet) and the king-relative meaning of 'outside' are both inexpressible; the trigger names the wing-passer half of the family and records the rest here."
-    ],
-    "attribution": []
-  }
+  "watch": ["The trigger requires an existing passed pawn on a wing file; a breakthrough position before the sacrifice has no passer yet and is invisible to this vocabulary — the family is wider than the trigger.", "'Outside' means far from the kings, and kings are invisible to the trigger; a wing passer next to both kings is not an outside passer. Verify on the board.", "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."],
+  "typicalMistakes": ["Racing the outside passer to promotion instead of using it as bait, stranding your king on the edge while the defender's king eats the centre.", "Breaking through one tempo early and losing the queening race by exactly that tempo.", "Fixing your own pawns into the wall the opponent's breakthrough needs.", "Abandoning the blockade for an uncounted race."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["Family per design/04-content-architecture.md section 4 (pawn: breakthrough, outside passer).", "Tablebase honesty: typical positions of this family exceed seven pieces, so no tablebase ground truth exists for them; small cases are tablebase-verifiable in principle. Nothing in this entry was tablebase-checked.", "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.", "Trigger gap: pre-breakthrough censuses (majority but no passer yet) and the king-relative meaning of 'outside' are both inexpressible; the trigger names the wing-passer half of the family and records the rest here."], "attribution": [] }
 }

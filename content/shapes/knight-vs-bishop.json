@@ -1,100 +1,16 @@
 {
   "id": "knight-vs-bishop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Knight against bishop — the structure decides",
   "phases": ["endgame"],
-  "trigger": {
-    "kind": "all",
-    "of": [
-      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}},
-      {
-        "kind": "not",
-        "of": {
-          "kind": "any",
-          "of": [
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}}
-          ]
-        }
-      }
-    ]
-  },
+  "trigger": { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "not", "of": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }] } }] },
   "plans": [
-    {
-      "id": "white-open-and-stretch",
-      "side": "white",
-      "label": "Open the position, play both wings",
-      "description": "Open the pawn structure and create play on both wings: the bishop defends one flank and attacks the other in a single move, while the knight commutes for three or four.",
-      "success": {"note":"Open-versus-fixed and one-wing-versus-two are structural judgments the shipped features cannot express.","signature":null}
-    },
-    {
-      "id": "white-passer-outruns-the-knight",
-      "side": "white",
-      "label": "The far passer outruns the knight",
-      "description": "A passed pawn on the rook's file is the bishop's favourite: the bishop escorts or stops it from across the board while the knight's short legs and the edge's missing squares make its geometry ugly.",
-      "success": {
-        "note": "A rook-file passer is the shape; the knight's actual travel distance is geometry the signature cannot count.",
-        "signature": {
-          "kind": "any",
-          "of": [
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a2"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a3"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a4"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a5"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a6"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h2"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h3"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h4"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h5"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h6"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h7"}}
-          ]
-        }
-      }
-    },
-    {
-      "id": "black-fix-one-wing",
-      "side": "black",
-      "label": "Fix the pawns, keep one front",
-      "description": "Fix the pawn structure — ideally with the enemy pawns on the bishop's own colour — and keep all play on one wing; a closed, one-front board is the knight's board, because reach beats range when nothing is far away.",
-      "success": {"note":"Holding-by-structure is an outcome; fixedness is not in the feature set.","signature":null}
-    },
-    {
-      "id": "black-anchor-the-knight",
-      "side": "black",
-      "label": "Anchor the knight on a hole",
-      "description": "Plant the knight on a protected square the bishop cannot contest — a hole of the wrong colour for the bishop — and make it the fixed point the defence turns on; an anchored knight blockades, forks, and never gets traded at a bad moment.",
-      "success": {
-        "note": "The outpost feature exists in the vocabulary but takes a specific square; naming one here would bind family prose to one position, so the signature stays null.",
-        "signature": null
-      }
-    }
+    { "id": "white-open-and-stretch", "side": "white", "label": "Open a file and keep pawns on both wings", "description": "Open the pawn structure and create play on both wings: at least one file is fully open and White still has pawns on both the queenside and the kingside.", "success": { "note": "RESTATED PLAN. The plan was 'Open the position, play both wings', whose success was two structural judgments. It is now the two facts underneath them: some file is fully open, and White has pawns on both wings. 'Open' here means a pawnless file, which is stricter than the word means at the board. Original success note: 'Open-versus-fixed and one-wing-versus-two are structural judgments the shipped features cannot express.'", "signature": { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "files": { "from": "a", "to": "h" } }, "feature": { "kind": "open_file" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "c" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "pawn" } } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "f", "to": "h" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "pawn" } } }] } } },
+    { "id": "white-passer-outruns-the-knight", "side": "white", "label": "The far passer outruns the knight", "description": "A passed pawn on the rook's file is the bishop's favourite: the bishop escorts or stops it from across the board while the knight's short legs and the edge's missing squares make its geometry ugly.", "success": { "note": "A rook-file passer is the shape; the knight's actual travel distance is geometry the signature cannot count.", "signature": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a2" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a3" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h2" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h3" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h7" } }] } } },
+    { "id": "black-fix-one-wing", "side": "black", "label": "Keep every pawn on one side of the board", "description": "Keep all play on one wing; a one-front board is the knight's board, because reach beats range when nothing is far away. The fixing half of the old plan is not measured here.", "success": { "note": "RESTATED PLAN. The plan was 'Fix the pawns, keep one front', two claims of which only one is expressible. It is now the one front alone: every pawn left on the board, of either colour, stands on one side of the d/e boundary. Fixedness is dropped, not measured. Original success note: 'Holding-by-structure is an outcome; fixedness is not in the feature set.' Degenerate-case guard: the earlier draft of this signature was vacuously true over an empty piece set, so an existence clause was added. A pawnless board satisfied 'every pawn is on one side' with no pawns at all; at least one pawn must now exist.", "signature": { "kind": "any", "of": [{ "kind": "all", "of": [{ "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "pawn", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "pawn", "basis": "count", "comparison": "atLeast", "count": 1 } }] }, { "kind": "not", "of": { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "d" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "pawn" } } } }, { "kind": "not", "of": { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "d" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "pawn" } } } }] }, { "kind": "all", "of": [{ "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "pawn", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "pawn", "basis": "count", "comparison": "atLeast", "count": 1 } }] }, { "kind": "not", "of": { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "e", "to": "h" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "pawn" } } } }, { "kind": "not", "of": { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "e", "to": "h" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "pawn" } } } }] }] } } },
+    { "id": "black-anchor-the-knight", "side": "black", "label": "Anchor the knight on a hole", "description": "Plant the knight on a protected square the bishop cannot contest — a hole of the wrong colour for the bishop — and make it the fixed point the defence turns on; an anchored knight blockades, forks, and never gets traded at a bad moment.", "success": { "note": "A Black knight standing on a square that Tabiya's strict outpost detector calls an outpost: pawn-defended, on relative ranks four to six, and safe from any pawn eviction. The earlier note declined this because naming one square would bind family prose to one position; enumerating the whole domain — the eighteen non-edge squares where a Black outpost can exist — does not. It says the knight is anchored; it does not say the bishop cannot contest the square.", "signature": { "kind": "any", "of": [{ "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "b3", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "b3" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "b4", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "b4" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "b5", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "b5" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "c3", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "c3" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "c4", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "c4" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "c5", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "c5" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "d3", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "d3" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "d4" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "d5", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "d5" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "e3", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "e3" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "e4", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "e4" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "e5", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "e5" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "f3", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "f3" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "f4", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "f4" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "f5", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "f5" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "g3", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "g3" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "g4", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "g4" } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "g5", "piece": { "color": "black", "role": "knight" } }, { "kind": "feature", "feature": { "kind": "outpost", "color": "black", "square": "g5" } }] }] } } }
   ],
-  "watch": [
-    "The trigger sees only the material census — bishop for White, knight for Black; whether the structure favours knight or bishop (fixed or fluid, one wing or two) is exactly the judgment it cannot make.",
-    "Pawn counts are not expressible; this fires level or unbalanced alike. Count the pawns.",
-    "Colour convention: White is authored as the bishop side. Mirror the plans when the knight side is yours; the trigger fires only for this orientation."
-  ],
-  "typicalMistakes": [
-    "Letting the pawns fix on your bishop's colour, converting the bishop side's edge into a bad-bishop ending.",
-    "Opening a second front while holding the knight — the knight cannot defend two wings.",
-    "Trading bishop for knight, or knight for bishop, into an uncounted pawn ending; the minor-piece battle is worthless the move after it is resolved.",
-    "Evicting the anchored knight with a pawn move that leaves a worse hole behind."
-  ],
-  "provenance": {
-    "licence": "CC-BY-SA-4.0",
-    "sources": [
-      "Family per design/04-content-architecture.md section 4 (minor piece: knight vs bishop by structure).",
-      "Tablebase honesty: typical positions of this family exceed seven pieces; no tablebase ground truth exists for them and none was consulted.",
-      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
-      "Trigger gap: every structural claim that decides this family — fixedness, wing count, colour complexes, knight anchors — is outside the shipped vocabulary; the trigger names the census only."
-    ],
-    "attribution": []
-  }
+  "watch": ["The trigger sees only the material census — bishop for White, knight for Black; whether the structure favours knight or bishop (fixed or fluid, one wing or two) is exactly the judgment it cannot make.", "Pawn counts are not expressible; this fires level or unbalanced alike. Count the pawns.", "Colour convention: White is authored as the bishop side. Mirror the plans when the knight side is yours; the trigger fires only for this orientation."],
+  "typicalMistakes": ["Letting the pawns fix on your bishop's colour, converting the bishop side's edge into a bad-bishop ending.", "Opening a second front while holding the knight — the knight cannot defend two wings.", "Trading bishop for knight, or knight for bishop, into an uncounted pawn ending; the minor-piece battle is worthless the move after it is resolved.", "Evicting the anchored knight with a pawn move that leaves a worse hole behind."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["Family per design/04-content-architecture.md section 4 (minor piece: knight vs bishop by structure).", "Tablebase honesty: typical positions of this family exceed seven pieces; no tablebase ground truth exists for them and none was consulted.", "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.", "Trigger gap: every structural claim that decides this family — fixedness, wing count, colour complexes, knight anchors — is outside the shipped vocabulary; the trigger names the census only."], "attribution": [] }
 }

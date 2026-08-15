@@ -1932,3 +1932,217 @@ Not done, deliberately: no touch of `rfc/`, `design/`, `docs/`, `archive/`,
 mirrored orientation is commissioned, not bolted on); no third shape entry
 authored without a commission; no reclassifications; no replacement rationale
 for the withdrawn Najdorf move-order reason; no commits.
+
+## 2026-08-15 (claude) — the signature authoring pass
+
+Owner ruling, this date: *"we need to fix this asap. fix all to include it
+properly. **we are the authors**."* The target was
+`plans[].success.signature` in `content/shapes/`, and the ruling's real content
+was the second sentence: the null rate is not only a vocabulary ceiling, it is
+half our own unwritten content.
+
+```
+agent-research 55 · agent-encoding 110 · agent-engine-validation 85 · review 0 · agent-revision 25 · agent-tooling-friction 70
+```
+
+### Re-measured first; the numbers in the commission were already stale
+
+`design/research/authored-transitions-and-features.md` measured 103 plans across
+23 entries, 75 null. The corpus had moved by the time this pass started:
+**25 entries, 117 plans, 39 with a signature, 78 null (67%)** `[V]`. The
+commission's `matchesStructuralExpression` line reference (`structure.ts:351`)
+had also moved to `:417`, because `piece_count`, `king_zone` and
+`piece_distance` landed the same day and the shape-entry schema went to 0.3.
+
+### After
+
+**96 of 117 plans carry a signature; 21 remain null.** 57 signatures authored:
+48 of them required **restating the plan**, 9 did not.
+
+| | before | after |
+|---|---|---|
+| plans with a signature | 39 (33%) | **96 (82%)** |
+| plans with `signature: null` | 78 | **21** |
+| entries with no signature at all | 3 | **0** |
+
+### The three categories, and which one carried the pass
+
+1. **Translation (9 plans).** The plan already named its own census and the old
+   note was simply wrong about the vocabulary. The clearest case:
+   `fianchetto-g7/white-trade-the-fianchetto-bishop` was null on "detection
+   cannot tell a traded bishop from one that merely moved away" — but a bishop
+   can never change shade, so `bishop_on_shade` decides exactly that, and
+   `pieceOnSquare` was the wrong instrument rather than the vocabulary being
+   short. Same shape at `london-wedge/black-challenge-the-outside-bishop`.
+   `pawn-opposition-key-squares/black-hold-the-opposition` was null on "holding
+   is an outcome" while `king_opposition` — a first-class predicate that reads
+   the side to move — sat unused. `rook-4v3-same-side/black-trade-pawns-not-rooks`
+   was null on "pawn-count progress is outside this vocabulary"; `piece_count`
+   reaches it directly.
+2. **Restatement (48 plans) — the owner's point, and the half we control.**
+   Every one declares itself in its own note with the words `RESTATED PLAN.`,
+   quotes the original success note verbatim, and states what the new census
+   does *not* say. Nothing was silently rewritten. The recurring move is
+   converting an unmeasurable claim into the checkable state it aims at:
+   "hold the draw" → "the rook is on the sixth and White's king is not"
+   (`philidor/black-third-rank-defence`); "squeeze on space" → "the bind stands
+   and neither break has landed" (`maroczy-bind/white-space-squeeze`); "give the
+   exchange back to win" → "no rooks, no Black minor, White a pawn up"
+   (`up-an-exchange/white-return-the-exchange`). `rook-4v3-same-side` went 0/6
+   to 6/6 this way and is referenced by two packs.
+3. **Refusal (21 plans).** Left null with the reason stated. Fortresses,
+   zugzwang, tempo ledgers, colour complexes, "was the trade worth it", race
+   counting. **No signature was invented to clear a null.**
+
+### Two null reasons were rewritten rather than cleared
+
+`piece_distance` landed today and measures king-to-pawn distance exactly, which
+retires the stated reason for `queen-vs-pawn-on-seventh/black-count-the-far-king`
+("king distance is geometry outside this vocabulary") and half the reason for
+`white-know-the-drawn-files`. Both stay null, with the honest reason substituted:
+**the measurement now exists; the threshold that turns it into success does not.**
+Writing "distance ≥ 4 means the defence holds" would be manufacturing a verdict
+under a census label — ADR-0005 through the content door. This is the sharpest
+contract note of the pass: a new predicate can retire a *reason* for a null
+without retiring the null.
+
+### Verification — what was actually run, and what it caught
+
+Every signature was checked against the **shipped** `matchesStructuralExpression`
+and `positionFromFen`, bundled unmodified with esbuild, never reimplemented.
+
+- **114 witness assertions, 114 pass** `[V]`. Each authored signature has a
+  success witness where it fires and a reference witness where it does not.
+  Every witness is given as a legal FEN plus a SAN continuation, so the tested
+  position is *legally reached* rather than hand-assembled.
+- **Corpus firing census** over 668 positions from 37 packs, produced by
+  replaying every spine node from each pack's `start.fen`.
+- **Degenerate-position suite** — bare kings, kings plus one pawn, pawnless
+  boards, off-shade bishops — run against every authored signature, after the
+  `mate-two-bishops` defect (a condition vacuously true over an empty set).
+- **Fan stress test** for the one enumerated signature, across all 18 squares
+  in its domain, after the `knight-vs-bishop` `passed_pawn` defect (a well-formed
+  12-arm fan that fired on 0 of 440 applicable positions).
+
+Failures found *during* drafting, all fixed before landing:
+
+- **4 signatures were vacuously true over empty piece sets** — the shipped
+  `mate-two-bishops` defect, reproduced four times by this pass and caught by
+  the suite written because of it. `knight-vs-bishop/black-fix-one-wing` said
+  "every pawn is on one side" and fired on a board with no pawns;
+  `rook-4v3-same-side/black-trade-pawns-not-rooks` counted trading the *last*
+  pawn as success; `carlsbad/black-piece-trades` was satisfied by the c-pawn
+  being **captured**, since `not(backward_pawn c)` is true when there is no
+  c-pawn; `up-an-exchange/white-activate-before-cashing` fired on a pawnless
+  board where every file is open for free. All four now carry an explicit
+  existence clause and say so in their notes.
+- **`closed-centre-chain/white-hold-the-base` was too loose twice.** First draft
+  used fixed thresholds and fired on 52 of 77 in-shape positions, including
+  roots where nothing was attacking d4. Adding "Black must actually be bearing
+  on it" was still an approximation. It was then rewritten to express the plan's
+  real claim — *defenders at least equal to attackers* — by case-splitting
+  `direct_attack_count` over the attainable range. **The vocabulary has no
+  operator comparing two counts, but the comparison is expressible by
+  enumeration.** That is a contract finding, not a workaround.
+- **5 witness lines were illegal chess** and the harness refused them: a king
+  walking onto a square the enemy bishop covered, an ambiguous `Rxd1` with two
+  rooks able to reach d1, a pinned pawn push, a king stepping onto a square a
+  pawn attacked, and a "trade pawns" line that traded *White's* pawn.
+- One signature hit **`STRUCTURAL_EXPRESSION_TOO_DEEP`** when a guard clause was
+  wrapped around an existing four-level expression; fixed by pushing the guard
+  into each arm instead of around the whole.
+
+### The knight-vs-bishop fan, and why 0 firings is not the same defect twice
+
+`knight-vs-bishop/black-anchor-the-knight` is an 18-arm enumeration of every
+square where a Black knight can stand on a strict outpost. It fires on **0 of
+the 346 corpus positions containing a black knight** — numerically the same
+picture as the shipped defect. It is not the same thing, and the difference was
+measured rather than asserted: across all 18 squares and both defending-pawn
+configurations, **36 of 36 anchored positions fire true, 36 of 36
+pawn-evictable positions fire false, and 36 of 36 undefended-knight positions
+fire false**, with all 36 anchored positions also satisfying the entry's own
+trigger `[V]`. The expression discriminates correctly; the corpus simply
+contains no black knight on a strict outpost. **"Fires nowhere" is only a defect
+when the expression is unsatisfiable, and that is a different measurement from
+counting corpus hits** — which is exactly the check the shipped defect never got.
+
+### 9 of 25 entries are referenced by no pack, and it bears on the number
+
+`doubled-c-pawns`, `hanging-pawns`, `iqp-black`, `knight-vs-bishop`,
+`maroczy-bind`, `open-centre`, `queenless-middlegame`, `up-an-exchange`,
+`vancura`. **22 of the 57 signatures authored (39%) landed in entries no pack
+references**, against 35 in entries authors actually use. Eight of those nine
+orphans also have triggers that fire on **zero** corpus positions, so their
+signatures could be verified only against constructed witnesses — legal and
+legally reached, but not drawn from authored content. The 82% coverage headline
+should be read with that split beside it: on used entries alone the pass moved
+coverage from 39/74 to 74/74 minus the refusals, and the orphan half is
+insurance against packs that do not exist yet.
+
+A separate finding worth a row: **`opposite-castling-race` is referenced by two
+packs and its trigger fires on 0 of 668 corpus positions.** A referenced entry
+that never matches the referencing packs' own positions is a different failure
+from an orphan, and it is not one this pass was commissioned to fix.
+
+### Contract harvest
+
+1. **Two counts can be compared by enumeration.** `direct_attack_count` has no
+   relational form, but case-splitting over the attainable range expresses
+   "defenders ≥ attackers" exactly. Applies wherever the shipped vocabulary
+   offers a count but no comparison.
+2. **`quantified` over a square region with the `piece` template is the king-geometry
+   primitive**, and it was already shipped. "King on the sixth rank or beyond",
+   "king on the passed pawn's file", "king sheltering beside its pawn" are all
+   region tests. Eleven of this pass's signatures are king geometry that three
+   separate null notes had declared outside the vocabulary.
+3. **A new predicate can retire a null's stated *reason* without retiring the
+   null.** See `piece_distance` above. The gap list should record reasons, not
+   just nulls, or it will overstate what new predicates buy.
+4. **`piece_count` retires the `piece_reach_count atLeast 0` existence idiom.**
+   Every new signature uses `piece_count`; the 43 shipped uses of the old hack
+   are now legacy. `pawn_count` is deprecated in the validator and none of this
+   pass's work uses it.
+5. **Success signatures are read at the end of a run, when the entry's own
+   trigger may no longer hold.** `lucena/white-run-out-the-checks` is true when
+   a queen exists, which the Lucena trigger forbids — correct, because the pawn
+   promoted. Nothing in the schema states this evaluation order, and several
+   signatures only make sense under it.
+
+### Tooling friction — 70 of 345 minutes (20%)
+
+1. **No "where does this expression fire" instrument, seventh attestation.**
+   The single largest block of the clock. This pass again rebuilt a corpus
+   walker, a firing census and an expression prober from scratch in a
+   scratchpad. `make shape-firing FILE=<entry> CORPUS=content/drafts` remains
+   the highest-value missing target, and it is what caught both loose
+   signatures and all four vacuous ones.
+2. **No legality feedback while writing witnesses.** Five illegal SAN lines were
+   found only by running them. A `make fen FROM=<fen> SANS=...` would have
+   removed the whole revision block.
+3. **`shape-check` takes one file per invocation** and re-bundles with esbuild
+   each time, so validating 25 entries means 25 bundles. A glob would help;
+   `shape-check` still never passes the `probeFen` the library already accepts
+   (fourth attestation).
+4. **No degenerate-case harness in the repo.** The empty-set suite that caught
+   four vacuous signatures is scratchpad code. Given that `mate-two-bishops`
+   shipped exactly this bug, it belongs in `shape-check`.
+
+### Not done, deliberately
+
+No touch of `rfc/`, `design/`, `docs/`, `archive/`, `apps/`, `packages/`,
+`schemas/`. No entry `version` field was changed — the edits are material and a
+bump is defensible, but versions are pinned by a runtime test outside this
+pass's boundary, so the decision is left to whoever owns that pin. No signature
+invented to clear a null. No commits.
+
+**Correction, same entry, same date.** Two numbers above were written from a
+hand count and are wrong; the recomputed values are `[V]`. The used/orphan split
+sentence in *"9 of 25 entries are referenced by no pack"* should read: on the 16
+entries a pack actually references, coverage moved **23/73 → 58/73**; on the 9
+orphan entries it moved **16/44 → 38/44**. And "eleven of this pass's signatures
+are king geometry" undercounts — **15 of the 57 authored signatures test a king's
+square or region**. The claims the two numbers support are unchanged: the orphan
+half is a large minority of the work, and king geometry was the single biggest
+category of null notes that turned out to be wrong about the shipped vocabulary.
+Corrected by appending rather than editing, per the append-only law.

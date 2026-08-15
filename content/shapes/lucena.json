@@ -1,93 +1,16 @@
 {
   "id": "lucena",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Lucena position (rook and pawn versus rook, pawn on the seventh)",
   "phases": ["endgame"],
-  "trigger": {
-    "kind": "all",
-    "of": [
-      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-      {
-        "kind": "not",
-        "of": {
-          "kind": "any",
-          "of": [
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
-          ]
-        }
-      },
-      {
-        "kind": "any",
-        "of": [
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b7"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c7"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d7"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e7"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f7"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g7"}}
-        ]
-      }
-    ]
-  },
+  "trigger": { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "not", "of": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }] } }, { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "c7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "d7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "e7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "f7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g7" } }] }] },
   "plans": [
-    {
-      "id": "white-build-the-bridge",
-      "side": "white",
-      "label": "Build the bridge",
-      "description": "Walk the rook to the fourth rank first, then step the king out of the promotion square diagonally; when the checks come, block them by lowering the rook in front of the king — the bridge that escorts the pawn home.",
-      "success": {
-        "note": "The signature sees only that a white queen now exists; it cannot see that the bridge produced the promotion.",
-        "signature": {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}}
-      }
-    },
-    {
-      "id": "white-run-out-the-checks",
-      "side": "white",
-      "label": "Run the checking rook out of distance",
-      "description": "If the checking rook stands too close, walk the king toward it: each check loses the rook a file until it must abandon the checks or the pawn queens.",
-      "success": {"note":"King-to-rook distance is geometry outside this vocabulary.","signature":null}
-    },
-    {
-      "id": "black-long-side-checks",
-      "side": "black",
-      "label": "Checks from the long side",
-      "description": "Keep the rook checking from the long side of the pawn — with several files between rook and pawn — so the attacking king cannot approach the rook and shelter beside the pawn at the same time.",
-      "success": {"note":"Holding is an outcome and has no structural signature here.","signature":null}
-    },
-    {
-      "id": "black-king-short-side",
-      "side": "black",
-      "label": "King to the short side",
-      "description": "Put the defending king on the short side of the pawn so it does not block its own rook's checking lane on the long side.",
-      "success": {"note":"Which side is short depends on the pawn's file and the kings — not rules arithmetic.","signature":null}
-    }
+    { "id": "white-build-the-bridge", "side": "white", "label": "Build the bridge", "description": "Walk the rook to the fourth rank first, then step the king out of the promotion square diagonally; when the checks come, block them by lowering the rook in front of the king — the bridge that escorts the pawn home.", "success": { "note": "The signature sees only that a white queen now exists; it cannot see that the bridge produced the promotion.", "signature": { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } } } },
+    { "id": "white-run-out-the-checks", "side": "white", "label": "Queen the pawn", "description": "If the checking rook stands too close, walk the king toward it: each check loses the rook a file until it must abandon the checks or the pawn queens.", "success": { "note": "RESTATED PLAN. The plan was 'Run the checking rook out of distance', whose success was king-to-rook geometry. It is now the outcome the plan names in its own last clause — 'or the pawn queens': White has a queen and no pawn left. It does not say the checks were what ended. Original success note: 'King-to-rook distance is geometry outside this vocabulary.'", "signature": { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "pawn", "basis": "count", "comparison": "equal", "count": 0 } }] } } },
+    { "id": "black-long-side-checks", "side": "black", "label": "Checks from the long side", "description": "Keep the rook checking from the long side of the pawn — with several files between rook and pawn — so the attacking king cannot approach the rook and shelter beside the pawn at the same time.", "success": { "note": "Holding is an outcome and has no structural signature here.", "signature": null } },
+    { "id": "black-king-short-side", "side": "black", "label": "King to the short side", "description": "Put the defending king on the short side of the pawn so it does not block its own rook's checking lane on the long side.", "success": { "note": "Which side is short depends on the pawn's file and the kings — not rules arithmetic.", "signature": null } }
   ],
-  "watch": [
-    "Fires for the rook-and-pawn-versus-rook census with a passed knight- to bishop-file pawn on the seventh; whether the attacking king stands in front of the pawn and the defending king is cut off — the actual Lucena conditions — is king geometry this vocabulary cannot express. Verify on the board.",
-    "A rook pawn on the seventh is deliberately excluded from the trigger: with an a- or h-pawn the bridge often fails and the position is a different, far more drawish story.",
-    "Extra pawns are not excluded by the census; count them yourself.",
-    "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."
-  ],
-  "typicalMistakes": [
-    "Checking or shuffling with the attacker's rook instead of building the bridge — the win has a concrete four-step shape, not a squeeze.",
-    "Building the bridge on the fifth or sixth rank, where the king finds no shelter behind it.",
-    "Defending with checks from one or two files away: out of checking distance the attacking king simply walks to the rook.",
-    "Putting the defending king on the long side, where it blocks its own rook's checks."
-  ],
-  "provenance": {
-    "licence": "CC-BY-SA-4.0",
-    "sources": [
-      "Technique name \"Lucena\" is a standard endgame-literature name; it matches the runtime technique index (packages/runtime/src/endgame.ts) described in docs/adaptive-guidance.md.",
-      "Tablebase honesty: the minimal census here (king, rook and pawn versus king and rook — five pieces) is inside Syzygy's seven-piece range, so a tablebase CAN verify win/draw claims for concrete positions of this family. No tablebase was consulted while authoring this entry and no verification is claimed; the only check run was `make shape-check` (schema plus trigger evaluation).",
-      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
-      "Trigger gap: the defining king placements (attacking king on the promotion square, defending king cut off) are inexpressible in the shipped feature vocabulary; the trigger names the material family plus the seventh-rank passed pawn and records the rest here."
-    ],
-    "attribution": []
-  }
+  "watch": ["Fires for the rook-and-pawn-versus-rook census with a passed knight- to bishop-file pawn on the seventh; whether the attacking king stands in front of the pawn and the defending king is cut off — the actual Lucena conditions — is king geometry this vocabulary cannot express. Verify on the board.", "A rook pawn on the seventh is deliberately excluded from the trigger: with an a- or h-pawn the bridge often fails and the position is a different, far more drawish story.", "Extra pawns are not excluded by the census; count them yourself.", "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."],
+  "typicalMistakes": ["Checking or shuffling with the attacker's rook instead of building the bridge — the win has a concrete four-step shape, not a squeeze.", "Building the bridge on the fifth or sixth rank, where the king finds no shelter behind it.", "Defending with checks from one or two files away: out of checking distance the attacking king simply walks to the rook.", "Putting the defending king on the long side, where it blocks its own rook's checks."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["Technique name \"Lucena\" is a standard endgame-literature name; it matches the runtime technique index (packages/runtime/src/endgame.ts) described in docs/adaptive-guidance.md.", "Tablebase honesty: the minimal census here (king, rook and pawn versus king and rook — five pieces) is inside Syzygy's seven-piece range, so a tablebase CAN verify win/draw claims for concrete positions of this family. No tablebase was consulted while authoring this entry and no verification is claimed; the only check run was `make shape-check` (schema plus trigger evaluation).", "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.", "Trigger gap: the defining king placements (attacking king on the promotion square, defending king cut off) are inexpressible in the shipped feature vocabulary; the trigger names the material family plus the seventh-rank passed pawn and records the rest here."], "attribution": [] }
 }

@@ -1,129 +1,17 @@
 {
   "id": "philidor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Philidor position (rook and pawn versus rook, third-rank defence)",
   "phases": ["endgame"],
-  "trigger": {
-    "kind": "all",
-    "of": [
-      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-      {
-        "kind": "not",
-        "of": {
-          "kind": "any",
-          "of": [
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
-          ]
-        }
-      },
-      {
-        "kind": "any",
-        "of": [
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g6"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h4"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h5"}},
-          {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h6"}}
-        ]
-      }
-    ]
-  },
+  "trigger": { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "not", "of": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }] } }, { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "c4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "c5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "c6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "d4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "d5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "d6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "e4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "e5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "e6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "f4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "f5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "f6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g6" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h4" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h5" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h6" } }] }] },
   "plans": [
-    {
-      "id": "black-third-rank-defence",
-      "side": "black",
-      "label": "Third-rank defence",
-      "description": "Park the rook on the defender's third rank and leave it there: the fence keeps the attacking king off the sixth, and without its king in front the pawn cannot make progress.",
-      "success": {"note":"Holding is an outcome and has no structural signature here.","signature":null}
-    },
-    {
-      "id": "black-drop-behind-on-the-push",
-      "side": "black",
-      "label": "Drop to the rear when the pawn advances",
-      "description": "The moment the pawn steps onto the defender's third rank the fence has done its work: swing the rook to the far end of the board behind the pawn and check forever — the advanced pawn itself has stripped the king of shelter.",
-      "success": {"note":"The timing — rook leaves the third rank exactly when the pawn arrives — is move order, not a position census.","signature":null}
-    },
-    {
-      "id": "black-king-on-the-path",
-      "side": "black",
-      "label": "King stays on the promotion path",
-      "description": "Keep the defending king in front of the pawn or on its queening square's file; the whole defence assumes the king does not get driven off sideways.",
-      "success": {"note":"King geometry is outside this vocabulary.","signature":null}
-    },
-    {
-      "id": "white-king-before-pawn",
-      "side": "white",
-      "label": "King forward before the pawn",
-      "description": "Advance the king and force the defending rook to abandon the third rank before touching the pawn; pushing the pawn early is the concession the defence is waiting for.",
-      "success": {
-        "note": "Reaching the seventh is progress the arithmetic can see; whether it is a won Lucena depends on the kings, which it cannot see.",
-        "signature": {
-          "kind": "any",
-          "of": [
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"a7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"b7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"c7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"d7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"e7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"f7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"g7"}},
-            {"kind":"feature","feature":{"kind":"passed_pawn","color":"white","square":"h7"}}
-          ]
-        }
-      }
-    },
-    {
-      "id": "white-squeeze-the-passive-rook",
-      "side": "white",
-      "label": "Punish a passive rook",
-      "description": "If the defender abandons the third-rank plan for passive rook placement, plant the king on the sixth rank and use zugzwang; passive defence loses exactly where the Philidor set-up holds.",
-      "success": {"note":"Zugzwang is a to-move property no static census expresses.","signature":null}
-    }
+    { "id": "black-third-rank-defence", "side": "black", "label": "Rook on the sixth, White's king kept off it", "description": "Park the rook on the defender's third rank and leave it there: the fence keeps the attacking king off the sixth, and without its king in front the pawn cannot make progress.", "success": { "note": "RESTATED PLAN. The plan was 'Third-rank defence', whose success was holding. It is now the set-up that does the holding: Black's rook stands on its third rank — the sixth — and White's king has not reached that rank. The fence being on the board is checkable; that it held to the end is not. Original success note: 'Holding is an outcome and has no structural signature here.'", "signature": { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "h" }, "ranks": { "from": 6, "to": 6 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "rook" } } }, { "kind": "not", "of": { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "h" }, "ranks": { "from": 6, "to": 6 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "king" } } } }] } } },
+    { "id": "black-drop-behind-on-the-push", "side": "black", "label": "Pawn on the sixth, rook swung to the rear rank", "description": "The moment the pawn steps onto the defender's third rank the fence has done its work: the rook stands on the far rank behind the pawn, ready to check forever.", "success": { "note": "RESTATED PLAN. The plan was 'Drop to the rear when the pawn advances', whose success was move order. It is now the arrangement the move order produces: White's passed pawn stands on the sixth rank and Black's rook is on the far rank behind it. It cannot say the rook left at the right moment — only that both facts are true together. Original success note: 'The timing — rook leaves the third rank exactly when the pawn arrives — is move order, not a position census.'", "signature": { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "h" }, "ranks": { "from": 6, "to": 6 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "h" }, "ranks": { "from": 1, "to": 1 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "rook" } } }] } } },
+    { "id": "black-king-on-the-path", "side": "black", "label": "King stays on the promotion path", "description": "Keep the defending king in front of the pawn or on its queening square's file; the whole defence assumes the king does not get driven off sideways.", "success": { "note": "Black's king stands on the file of White's passed pawn, expressed one file at a time. The earlier note put king geometry outside the vocabulary; a file-restricted quantified region reaches this particular piece of it exactly. It certifies the king is on the promotion path, not that it can stay there.", "signature": { "kind": "any", "of": [{ "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "a" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "a" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "b", "to": "b" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "b", "to": "b" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "c", "to": "c" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "c", "to": "c" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "d", "to": "d" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "d", "to": "d" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "e", "to": "e" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "e", "to": "e" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "f", "to": "f" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "f", "to": "f" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "g", "to": "g" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "g", "to": "g" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "h", "to": "h" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "h", "to": "h" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }] } } },
+    { "id": "white-king-before-pawn", "side": "white", "label": "King forward before the pawn", "description": "Advance the king and force the defending rook to abandon the third rank before touching the pawn; pushing the pawn early is the concession the defence is waiting for.", "success": { "note": "Reaching the seventh is progress the arithmetic can see; whether it is a won Lucena depends on the kings, which it cannot see.", "signature": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "a7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "b7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "c7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "d7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "e7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "f7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "g7" } }, { "kind": "feature", "feature": { "kind": "passed_pawn", "color": "white", "square": "h7" } }] } } },
+    { "id": "white-squeeze-the-passive-rook", "side": "white", "label": "Plant the king on the sixth rank", "description": "If the defender abandons the third-rank plan for passive rook placement, plant the king on the sixth rank; passive defence loses exactly where the Philidor set-up holds.", "success": { "note": "RESTATED PLAN. The plan was 'Punish a passive rook', whose success rested on zugzwang. It is now the first half of the plan's own recipe: White's king has reached the sixth rank, which is exactly what the third-rank defence exists to prevent. The zugzwang half is dropped — a static census cannot see whose move it is to lose. Original success note: 'Zugzwang is a to-move property no static census expresses.'", "signature": { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "h" }, "ranks": { "from": 6, "to": 6 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "king" } } } } }
   ],
-  "watch": [
-    "Fires while a passed pawn stands on ranks four to six of the rook-and-pawn-versus-rook census; the defining features — defending king in front of the pawn, rook on the third rank — are king and rook geometry this vocabulary cannot express. Verify on the board.",
-    "Extra pawns are not excluded by the census and change the defence; count them.",
-    "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."
-  ],
-  "typicalMistakes": [
-    "Abandoning the third rank before the pawn forces it, or one move after — the rook leaves exactly when the pawn arrives.",
-    "Defending with side checks from short distance instead of the rear-checking plan.",
-    "Letting the attacking king reach the sixth rank without a fight, after which the third-rank fence no longer exists.",
-    "As the attacker, pushing the pawn to the sixth early and handing the defender the rear-checking draw."
-  ],
-  "provenance": {
-    "licence": "CC-BY-SA-4.0",
-    "sources": [
-      "Technique name \"Philidor\" is a standard endgame-literature name; it matches the runtime technique index (packages/runtime/src/endgame.ts) described in docs/adaptive-guidance.md.",
-      "Tablebase honesty: the minimal census here (king, rook and pawn versus king and rook — five pieces) is inside Syzygy's seven-piece range, so a tablebase CAN verify win/draw claims for concrete positions of this family. No tablebase was consulted while authoring this entry and no verification is claimed; the only check run was `make shape-check` (schema plus trigger evaluation).",
-      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
-      "Trigger gap: ranks four to six approximate 'the pawn has not yet passed the defensive fence'; the true condition is the defending king standing on the pawn's path, which is inexpressible."
-    ],
-    "attribution": []
-  }
+  "watch": ["Fires while a passed pawn stands on ranks four to six of the rook-and-pawn-versus-rook census; the defining features — defending king in front of the pawn, rook on the third rank — are king and rook geometry this vocabulary cannot express. Verify on the board.", "Extra pawns are not excluded by the census and change the defence; count them.", "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."],
+  "typicalMistakes": ["Abandoning the third rank before the pawn forces it, or one move after — the rook leaves exactly when the pawn arrives.", "Defending with side checks from short distance instead of the rear-checking plan.", "Letting the attacking king reach the sixth rank without a fight, after which the third-rank fence no longer exists.", "As the attacker, pushing the pawn to the sixth early and handing the defender the rear-checking draw."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["Technique name \"Philidor\" is a standard endgame-literature name; it matches the runtime technique index (packages/runtime/src/endgame.ts) described in docs/adaptive-guidance.md.", "Tablebase honesty: the minimal census here (king, rook and pawn versus king and rook — five pieces) is inside Syzygy's seven-piece range, so a tablebase CAN verify win/draw claims for concrete positions of this family. No tablebase was consulted while authoring this entry and no verification is claimed; the only check run was `make shape-check` (schema plus trigger evaluation).", "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.", "Trigger gap: ranks four to six approximate 'the pawn has not yet passed the defensive fence'; the true condition is the defending king standing on the pawn's path, which is inexpressible."], "attribution": [] }
 }

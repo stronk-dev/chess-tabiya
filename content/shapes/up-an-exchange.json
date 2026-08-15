@@ -1,90 +1,17 @@
 {
   "id": "up-an-exchange",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Up an exchange — rook against minor piece",
   "phases": ["endgame"],
-  "trigger": {
-    "kind": "all",
-    "of": [
-      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-      {"kind":"not","of":{"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}}},
-      {
-        "kind": "any",
-        "of": [
-          {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-          {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
-        ]
-      },
-      {
-        "kind": "not",
-        "of": {
-          "kind": "any",
-          "of": [
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}}
-          ]
-        }
-      }
-    ]
-  },
+  "trigger": { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } } }, { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }] }, { "kind": "not", "of": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }] } }] },
   "plans": [
-    {
-      "id": "white-activate-before-cashing",
-      "side": "white",
-      "label": "The rook earns the exchange first",
-      "description": "The extra exchange converts through activity, not arithmetic: seize open lines, attack pawns from behind and from the side, and make the minor piece defend — a passive rook is worth less than an anchored knight.",
-      "success": {"note":"Rook activity quality is not rules arithmetic.","signature":null}
-    },
-    {
-      "id": "white-stretch-two-wings",
-      "side": "white",
-      "label": "Stretch the defence across two wings",
-      "description": "Create threats on both wings and switch between them in one rook move; the minor piece commutes, the defending king can hold one front only, and the second weakness falls.",
-      "success": {"note":"Wing counts and switching distance are outside this vocabulary.","signature":null}
-    },
-    {
-      "id": "white-return-the-exchange",
-      "side": "white",
-      "label": "Give the exchange back to win",
-      "description": "The cleanest conversion is often returning the rook for the minor piece and a pawn, into a counted, winning pawn ending; price that ending at every moment the defender's piece and a pawn stand on one line.",
-      "success": {"note":"Whether the resulting pawn ending wins is not expressed by this vocabulary.","signature":null}
-    },
-    {
-      "id": "black-fortress-on-one-wing",
-      "side": "black",
-      "label": "Fortress on one wing",
-      "description": "Pawns on one wing, the minor piece anchored on a protected square, the king guarding the entry squares: if the rook has no entry point and no pawn to attack twice, the exchange means nothing.",
-      "success": {"note":"A fortress is an outcome, not a census; no structural signature is honest here.","signature":null}
-    },
-    {
-      "id": "black-no-new-weaknesses",
-      "side": "black",
-      "label": "Move no pawn without a reason",
-      "description": "Every pawn move creates a square or a target the rook can work against; keep the pawns where the minor piece and king defend them, and make the rook prove it can enter before conceding anything.",
-      "success": {"note":"Weakness creation is a judgment the feature set cannot make.","signature":null}
-    }
+    { "id": "white-activate-before-cashing", "side": "white", "label": "Rook on the seventh or on an open file", "description": "The extra exchange converts through activity, not arithmetic: get the rook to the seventh rank or onto a fully open file before cashing anything in.", "success": { "note": "RESTATED PLAN. The plan was 'The rook earns the exchange first', whose success was rook activity in general. It is now the two placements the phrase concretely means: the rook stands on the seventh rank, or on a fully open file. A rook can be active in ways this misses, and inactive on an open file that leads nowhere. Original success note: 'Rook activity quality is not rules arithmetic.' Degenerate-case guard: the earlier draft of this signature was vacuously true over an empty piece set, so an existence clause was added. On a pawnless board every file is open, so the open-file arms fired for free; at least one pawn must exist.", "signature": { "kind": "all", "of": [{ "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "pawn", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "pawn", "basis": "count", "comparison": "atLeast", "count": 1 } }] }, { "kind": "any", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "h" }, "ranks": { "from": 7, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } } }, { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "a" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "a" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } } }] }, { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "b" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "b", "to": "b" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } } }] }, { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "c" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "c", "to": "c" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } } }] }, { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "d" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "d", "to": "d" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } } }] }, { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "e" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "e", "to": "e" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } } }] }, { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "f" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "f", "to": "f" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } } }] }, { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "g" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "g", "to": "g" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } } }] }, { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "open_file", "file": "h" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "h", "to": "h" }, "ranks": { "from": 1, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } } }] }] }] } } },
+    { "id": "white-stretch-two-wings", "side": "white", "label": "A passer on one wing, pawns still on the other", "description": "Create a second front: a passed pawn on one wing while pawns still stand on the other, so the minor piece must commute and the defending king can hold only one side.", "success": { "note": "RESTATED PLAN. The plan was 'Stretch the defence across two wings', whose success was wing counts and switching distance. It is now the two-front position itself: a White passed pawn on one wing and White pawns still standing on the other. How fast the rook switches between them is not measured. Original success note: 'Wing counts and switching distance are outside this vocabulary.'", "signature": { "kind": "any", "of": [{ "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "c" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "f", "to": "h" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "pawn" } } }] }, { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "f", "to": "h" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "c" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "pawn" } } }] }] } } },
+    { "id": "white-return-the-exchange", "side": "white", "label": "Give the exchange back into a pawn ending", "description": "The cleanest conversion is often returning the rook for the minor piece and a pawn, reaching a pure pawn ending a pawn to the good. Pricing that ending is still the player's job.", "success": { "note": "RESTATED PLAN. The plan was 'Give the exchange back to win', whose success was whether the pawn ending wins. It is now the ending it steers into: no rooks and no Black minor piece remain, and White is at least a pawn up. Whether that ending wins is left where the plan left it — uncounted. Original success note: 'Whether the resulting pawn ending wins is not expressed by this vocabulary.'", "signature": { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "rook", "basis": "count", "comparison": "equal", "count": 0 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "rook", "basis": "count", "comparison": "equal", "count": 0 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "bishop", "basis": "count", "comparison": "equal", "count": 0 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "knight", "basis": "count", "comparison": "equal", "count": 0 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "pawn", "basis": "difference", "comparison": "atLeast", "count": 1 } }] } } },
+    { "id": "black-fortress-on-one-wing", "side": "black", "label": "Fortress on one wing", "description": "Pawns on one wing, the minor piece anchored on a protected square, the king guarding the entry squares: if the rook has no entry point and no pawn to attack twice, the exchange means nothing.", "success": { "note": "A fortress is an outcome, not a census; no structural signature is honest here.", "signature": null } },
+    { "id": "black-no-new-weaknesses", "side": "black", "label": "Move no pawn without a reason", "description": "Every pawn move creates a square or a target the rook can work against; keep the pawns where the minor piece and king defend them, and make the rook prove it can enter before conceding anything.", "success": { "note": "Weakness creation is a judgment the feature set cannot make.", "signature": null } }
   ],
-  "watch": [
-    "Pawn counts are outside the vocabulary: this fires whether the exchange is clean or fully compensated by pawns — count the pawns before trusting the label 'up'.",
-    "Entry squares for the rook and king are the real question of this family and are not expressible; the trigger names the material census only.",
-    "Colour convention: White is authored as the rook side. Mirror when reversed; the trigger fires only for this orientation."
-  ],
-  "typicalMistakes": [
-    "Keeping the rook when returning the exchange won on the spot — the material habit outliving the position.",
-    "Grabbing a poisoned pawn and letting the fortress set up while the rook is away.",
-    "As the defender, advancing a fortress pawn onto a square the rook attacks sideways — a fortress pawn that moves stops being a fortress pawn.",
-    "Trading pawns as the rook side: each pawn pair that leaves the board moves the position toward the drawn bare-minor ending."
-  ],
-  "provenance": {
-    "licence": "CC-BY-SA-4.0",
-    "sources": [
-      "Family per design/04-content-architecture.md section 4 (practical conversion: up-an-exchange; rook + minor called 'the practical nightmare band').",
-      "Tablebase honesty: typical positions of this family exceed seven pieces; no tablebase ground truth exists for them and none was consulted.",
-      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
-      "Trigger gap: the census requires White's only piece to be the rook and Black's to be one minor; rook-and-minor versus rook-and-minor exchange-up positions, and pawn compensation, are not expressible and are recorded here."
-    ],
-    "attribution": []
-  }
+  "watch": ["Pawn counts are outside the vocabulary: this fires whether the exchange is clean or fully compensated by pawns — count the pawns before trusting the label 'up'.", "Entry squares for the rook and king are the real question of this family and are not expressible; the trigger names the material census only.", "Colour convention: White is authored as the rook side. Mirror when reversed; the trigger fires only for this orientation."],
+  "typicalMistakes": ["Keeping the rook when returning the exchange won on the spot — the material habit outliving the position.", "Grabbing a poisoned pawn and letting the fortress set up while the rook is away.", "As the defender, advancing a fortress pawn onto a square the rook attacks sideways — a fortress pawn that moves stops being a fortress pawn.", "Trading pawns as the rook side: each pawn pair that leaves the board moves the position toward the drawn bare-minor ending."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["Family per design/04-content-architecture.md section 4 (practical conversion: up-an-exchange; rook + minor called 'the practical nightmare band').", "Tablebase honesty: typical positions of this family exceed seven pieces; no tablebase ground truth exists for them and none was consulted.", "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.", "Trigger gap: the census requires White's only piece to be the rook and Black's to be one minor; rook-and-minor versus rook-and-minor exchange-up positions, and pawn compensation, are not expressible and are recorded here."], "attribution": [] }
 }

@@ -1,101 +1,16 @@
 {
   "id": "opposite-coloured-bishops",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "name": "Opposite-coloured bishops — blockade and fortress zone",
   "phases": ["endgame"],
-  "trigger": {
-    "kind": "all",
-    "of": [
-      {
-        "kind": "all",
-        "of": [
-          {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-          {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-          {"kind":"not","of":{"kind":"any","of":[
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
-          ]}}
-        ]
-      },
-      {
-        "kind": "any",
-        "of": [
-          {"kind":"all","of":[
-            {"kind":"feature","feature":{"kind":"bishop_on_shade","color":"white","shade":"light"}},
-            {"kind":"not","of":{"kind":"feature","feature":{"kind":"bishop_on_shade","color":"white","shade":"dark"}}},
-            {"kind":"feature","feature":{"kind":"bishop_on_shade","color":"black","shade":"dark"}},
-            {"kind":"not","of":{"kind":"feature","feature":{"kind":"bishop_on_shade","color":"black","shade":"light"}}}
-          ]},
-          {"kind":"all","of":[
-            {"kind":"feature","feature":{"kind":"bishop_on_shade","color":"white","shade":"dark"}},
-            {"kind":"not","of":{"kind":"feature","feature":{"kind":"bishop_on_shade","color":"white","shade":"light"}}},
-            {"kind":"feature","feature":{"kind":"bishop_on_shade","color":"black","shade":"light"}},
-            {"kind":"not","of":{"kind":"feature","feature":{"kind":"bishop_on_shade","color":"black","shade":"dark"}}}
-          ]}
-        ]
-      },
-      {"kind":"feature","feature":{"kind":"pawn_count","color":"white","basis":"difference","comparison":"atLeast","count":1}},
-      {"kind":"quantified","quantifier":"some","over":{"squares":{"files":{"from":"a","to":"h"},"ranks":{"from":2,"to":7}}},"feature":{"kind":"passed_pawn","color":"white"}}
-    ]
-  },
+  "trigger": { "kind": "all", "of": [{ "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "not", "of": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }] } }] }, { "kind": "any", "of": [{ "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "white", "shade": "light" } }, { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "white", "shade": "dark" } } }, { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "black", "shade": "dark" } }, { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "black", "shade": "light" } } }] }, { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "white", "shade": "dark" } }, { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "white", "shade": "light" } } }, { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "black", "shade": "light" } }, { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "black", "shade": "dark" } } }] }] }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "basis": "difference", "comparison": "atLeast", "count": 1, "role": "pawn" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "h" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }] },
   "plans": [
-    {
-      "id": "white-two-wings-two-passers",
-      "side": "white",
-      "label": "Passers on both wings",
-      "description": "One passed pawn is a blockade waiting to happen: the winning shape is passed pawns on both wings, too far apart for one bishop and king to hold both. Trade or sacrifice toward the second passer, not toward simplification.",
-      "success": {
-        "note": "Two wing passers is the structural shape; whether the defending king still reaches both is king geometry the signature cannot see.",
-        "signature": {"kind":"all","of":[
-          {"kind":"quantified","quantifier":"some","over":{"squares":{"files":{"from":"a","to":"c"},"ranks":{"from":2,"to":7}}},"feature":{"kind":"passed_pawn","color":"white"}},
-          {"kind":"quantified","quantifier":"some","over":{"squares":{"files":{"from":"f","to":"h"},"ranks":{"from":2,"to":7}}},"feature":{"kind":"passed_pawn","color":"white"}}
-        ]}
-      }
-    },
-    {
-      "id": "white-king-breaks-the-blockade",
-      "side": "white",
-      "label": "The king breaks the blockade",
-      "description": "The bishop cannot evict a blockader on the other colour — only the king can. Walk it in on the squares the defending bishop does not control and escort the pawn square by square.",
-      "success": {"note":"King routes and colour complexes are outside this vocabulary.","signature":null}
-    },
-    {
-      "id": "black-fortress-on-your-colour",
-      "side": "black",
-      "label": "Blockade on your bishop's colour",
-      "description": "Stop the passer on a square your bishop defends, with the king covering the squares of the other colour; a correct blockade holds by geometry no matter how large the material deficit reads.",
-      "success": {"note":"A fortress is an outcome, not a census; no structural signature is honest here.","signature":null}
-    },
-    {
-      "id": "black-bishop-for-the-last-pawn",
-      "side": "black",
-      "label": "Sell the bishop for the last dangerous pawn",
-      "description": "The bishop's final job is to give itself for the pawn that would break the fortress, when the remaining position is a counted draw; price that liquidation before the fortress cracks, not after.",
-      "success": {"note":"Whether the resulting ending is drawn is not expressed by this vocabulary.","signature":null}
-    }
+    { "id": "white-two-wings-two-passers", "side": "white", "label": "Passers on both wings", "description": "One passed pawn is a blockade waiting to happen: the winning shape is passed pawns on both wings, too far apart for one bishop and king to hold both. Trade or sacrifice toward the second passer, not toward simplification.", "success": { "note": "Two wing passers is the structural shape; whether the defending king still reaches both is king geometry the signature cannot see.", "signature": { "kind": "all", "of": [{ "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "c" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "f", "to": "h" }, "ranks": { "from": 2, "to": 7 } } }, "feature": { "kind": "passed_pawn", "color": "white" } }] } } },
+    { "id": "white-king-breaks-the-blockade", "side": "white", "label": "Walk the king to the sixth rank", "description": "The bishop cannot evict a blockader on the other colour — only the king can. Walk it in until it stands on the sixth rank or beyond.", "success": { "note": "RESTATED PLAN. The plan was 'The king breaks the blockade', whose success was a colour-complex route. It is now the arrival: White's king stands on the sixth rank or beyond. It does not say the king arrived beside the passer or on squares the defending bishop cannot see. Original success note: 'King routes and colour complexes are outside this vocabulary.'", "signature": { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "h" }, "ranks": { "from": 6, "to": 8 } } }, "feature": { "kind": "piece", "piece": { "color": "white", "role": "king" } } } } },
+    { "id": "black-fortress-on-your-colour", "side": "black", "label": "Blockade on your bishop's colour", "description": "Stop the passer on a square your bishop defends, with the king covering the squares of the other colour; a correct blockade holds by geometry no matter how large the material deficit reads.", "success": { "note": "A fortress is an outcome, not a census; no structural signature is honest here.", "signature": null } },
+    { "id": "black-bishop-for-the-last-pawn", "side": "black", "label": "Sell the bishop for the last dangerous pawn", "description": "The bishop's final job is to give itself for the pawn that would break the fortress, when the remaining position is a counted draw; price that liquidation before the fortress cracks, not after.", "success": { "note": "Whether the resulting ending is drawn is not expressed by this vocabulary.", "signature": null } }
   ],
-  "watch": [
-    "The drawing tendency of this family is why 'trading into it while ahead' appears as a mistake in other entries — recognizing the fortress before entering it is most of the technique.",
-    "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."
-  ],
-  "typicalMistakes": [
-    "Trading the last rooks into an opposite-bishops ending while up a pawn — handing the defender exactly the fortress this entry describes.",
-    "Blockading on the colour your bishop does not control, where the blockade can be evicted.",
-    "Advancing all pawns onto one wing, where a single blockade square holds everything.",
-    "As the attacker, trading pawns instead of creating the second passer."
-  ],
-  "provenance": {
-    "licence": "CC-BY-SA-4.0",
-    "sources": [
-      "Family per design/04-content-architecture.md section 4 (minor piece: opposite-colour drawing zones; practical conversion: up-a-pawn-with-opposite-bishops, fortress recognition). This entry covers both rows because their censuses are structurally identical.",
-      "Tablebase honesty: typical positions of this family exceed seven pieces; no tablebase ground truth exists for them and none was consulted.",
-      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
-      "Trigger scope: literal bishop-square shade distinguishes this family from same-coloured bishops; White must have at least one more pawn and a passed pawn, matching this entry's authored conversion scenario without asserting whether it wins."
-    ],
-    "attribution": []
-  }
+  "watch": ["The drawing tendency of this family is why 'trading into it while ahead' appears as a mistake in other entries — recognizing the fortress before entering it is most of the technique.", "Colour convention: White is authored as the stronger/attacking side. Mirror the plans when the colours are reversed; the trigger fires only for the White-side census."],
+  "typicalMistakes": ["Trading the last rooks into an opposite-bishops ending while up a pawn — handing the defender exactly the fortress this entry describes.", "Blockading on the colour your bishop does not control, where the blockade can be evicted.", "Advancing all pawns onto one wing, where a single blockade square holds everything.", "As the attacker, trading pawns instead of creating the second passer."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["Family per design/04-content-architecture.md section 4 (minor piece: opposite-colour drawing zones; practical conversion: up-a-pawn-with-opposite-bishops, fortress recognition). This entry covers both rows because their censuses are structurally identical.", "Tablebase honesty: typical positions of this family exceed seven pieces; no tablebase ground truth exists for them and none was consulted.", "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.", "Trigger scope: literal bishop-square shade distinguishes this family from same-coloured bishops; White must have at least one more pawn and a passed pawn, matching this entry's authored conversion scenario without asserting whether it wins."], "attribution": [] }
 }

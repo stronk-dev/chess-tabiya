@@ -1,115 +1,16 @@
 {
   "id": "queen-vs-pawn-on-seventh",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Queen against a pawn on the seventh",
   "phases": ["endgame"],
-  "trigger": {
-    "kind": "all",
-    "of": [
-      {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"queen","scope":"any","comparison":"atLeast","count":0}},
-      {"kind":"not","of":{"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}}},
-      {
-        "kind": "not",
-        "of": {
-          "kind": "any",
-          "of": [
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"rook","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"bishop","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"white","role":"knight","scope":"any","comparison":"atLeast","count":0}},
-            {"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"knight","scope":"any","comparison":"atLeast","count":0}}
-          ]
-        }
-      },
-      {
-        "kind": "any",
-        "of": [
-          {"kind":"pieceOnSquare","square":"a2","piece":{"color":"black","role":"pawn"}},
-          {"kind":"pieceOnSquare","square":"b2","piece":{"color":"black","role":"pawn"}},
-          {"kind":"pieceOnSquare","square":"c2","piece":{"color":"black","role":"pawn"}},
-          {"kind":"pieceOnSquare","square":"d2","piece":{"color":"black","role":"pawn"}},
-          {"kind":"pieceOnSquare","square":"e2","piece":{"color":"black","role":"pawn"}},
-          {"kind":"pieceOnSquare","square":"f2","piece":{"color":"black","role":"pawn"}},
-          {"kind":"pieceOnSquare","square":"g2","piece":{"color":"black","role":"pawn"}},
-          {"kind":"pieceOnSquare","square":"h2","piece":{"color":"black","role":"pawn"}}
-        ]
-      }
-    ]
-  },
+  "trigger": { "kind": "all", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } } }, { "kind": "not", "of": { "kind": "any", "of": [{ "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }, { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } }] } }, { "kind": "any", "of": [{ "kind": "pieceOnSquare", "square": "a2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "b2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "c2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "d2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "e2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "f2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "g2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "h2", "piece": { "color": "black", "role": "pawn" } }] }] },
   "plans": [
-    {
-      "id": "white-zigzag-approach",
-      "side": "white",
-      "label": "Zigzag checks, king steps in",
-      "description": "Check by zigzag toward the pawn until the defending king is forced onto its own promotion square; that blocked pawn buys the tempo, and your king takes one step closer. Repeat until the king arrives to mate or take the pawn.",
-      "success": {
-        "note": "The signature sees that no pawn stands one step from promotion and no queen replaced it; it cannot see stalemate, so the corner traps are still yours to avoid.",
-        "signature": {
-          "kind": "all",
-          "of": [
-            {
-              "kind": "not",
-              "of": {
-                "kind": "any",
-                "of": [
-                  {"kind":"pieceOnSquare","square":"a2","piece":{"color":"black","role":"pawn"}},
-                  {"kind":"pieceOnSquare","square":"b2","piece":{"color":"black","role":"pawn"}},
-                  {"kind":"pieceOnSquare","square":"c2","piece":{"color":"black","role":"pawn"}},
-                  {"kind":"pieceOnSquare","square":"d2","piece":{"color":"black","role":"pawn"}},
-                  {"kind":"pieceOnSquare","square":"e2","piece":{"color":"black","role":"pawn"}},
-                  {"kind":"pieceOnSquare","square":"f2","piece":{"color":"black","role":"pawn"}},
-                  {"kind":"pieceOnSquare","square":"g2","piece":{"color":"black","role":"pawn"}},
-                  {"kind":"pieceOnSquare","square":"h2","piece":{"color":"black","role":"pawn"}}
-                ]
-              }
-            },
-            {"kind":"not","of":{"kind":"feature","feature":{"kind":"piece_reach_count","color":"black","role":"queen","scope":"any","comparison":"atLeast","count":0}}}
-          ]
-        }
-      }
-    },
-    {
-      "id": "white-know-the-drawn-files",
-      "side": "white",
-      "label": "Know the drawn files",
-      "description": "Against a bishop pawn or a rook pawn the zigzag alone does not win: the defender hides in the stalemate corner, and capturing or cornering draws. The recognition is the technique — win only when your own king is already close enough to help before the stalemate resource appears.",
-      "success": {"note":"Which file the pawn stands on is expressible, but 'king close enough' is not; the recognition stays with the player.","signature":null}
-    },
-    {
-      "id": "black-shelter-and-choose-the-corner",
-      "side": "black",
-      "label": "Shelter the king, choose the corner",
-      "description": "Keep the king beside the pawn so no check wins it outright, and steer toward the queening corner that carries the stalemate resource — with a bishop or rook pawn, threatening to leave the king with no legal move is the whole defence.",
-      "success": {"note":"Holding is an outcome and has no structural signature here.","signature":null}
-    },
-    {
-      "id": "black-count-the-far-king",
-      "side": "black",
-      "label": "Count the attacking king",
-      "description": "The defence holds exactly when the attacking king is too far to join in time; count its fastest path before committing your king to the pawn, and use each forced king-to-promotion-square moment to measure the race again.",
-      "success": {"note":"King distance is geometry outside this vocabulary.","signature":null}
-    }
+    { "id": "white-zigzag-approach", "side": "white", "label": "Zigzag checks, king steps in", "description": "Check by zigzag toward the pawn until the defending king is forced onto its own promotion square; that blocked pawn buys the tempo, and your king takes one step closer. Repeat until the king arrives to mate or take the pawn.", "success": { "note": "The signature sees that no pawn stands one step from promotion and no queen replaced it; it cannot see stalemate, so the corner traps are still yours to avoid.", "signature": { "kind": "all", "of": [{ "kind": "not", "of": { "kind": "any", "of": [{ "kind": "pieceOnSquare", "square": "a2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "b2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "c2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "d2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "e2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "f2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "g2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "pieceOnSquare", "square": "h2", "piece": { "color": "black", "role": "pawn" } }] } }, { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } } }] } } },
+    { "id": "white-know-the-drawn-files", "side": "white", "label": "Know the drawn files", "description": "Against a bishop pawn or a rook pawn the zigzag alone does not win: the defender hides in the stalemate corner, and capturing or cornering draws. The recognition is the technique — win only when your own king is already close enough to help before the stalemate resource appears.", "success": { "note": "Null. Which file the pawn stands on is expressible and so, since piece_distance landed, is how far the attacking king is. The plan is still a recognition plan: its content is knowing when the two together add up to a win, and that sum is the player's calculation, not a census. Encoding a distance threshold here would put a verdict in the entry's mouth.", "signature": null } },
+    { "id": "black-shelter-and-choose-the-corner", "side": "black", "label": "King sheltering beside its pawn", "description": "Keep the king beside the pawn so no check wins it outright. Which corner carries the stalemate resource is the other half of the defence, and it is not measured here.", "success": { "note": "RESTATED PLAN. The plan was 'Shelter the king, choose the corner', whose success was holding. It is now the shelter alone: the pawn stands on the seventh rank and Black's king is in the three-by-three box around it, so no single check wins the pawn outright. The corner half — steering toward the stalemate file — is not measured, and this census makes no claim that the position is drawn. Original success note: 'Holding is an outcome and has no structural signature here.'", "signature": { "kind": "any", "of": [{ "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "a2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "b" }, "ranks": { "from": 1, "to": 3 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "b2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "a", "to": "c" }, "ranks": { "from": 1, "to": 3 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "c2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "b", "to": "d" }, "ranks": { "from": 1, "to": 3 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "d2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "c", "to": "e" }, "ranks": { "from": 1, "to": 3 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "e2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "d", "to": "f" }, "ranks": { "from": 1, "to": 3 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "f2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "e", "to": "g" }, "ranks": { "from": 1, "to": 3 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "g2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "f", "to": "h" }, "ranks": { "from": 1, "to": 3 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }, { "kind": "all", "of": [{ "kind": "pieceOnSquare", "square": "h2", "piece": { "color": "black", "role": "pawn" } }, { "kind": "quantified", "quantifier": "some", "over": { "squares": { "files": { "from": "g", "to": "h" }, "ranks": { "from": 1, "to": 3 } } }, "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } } }] }] } } },
+    { "id": "black-count-the-far-king", "side": "black", "label": "Count the attacking king", "description": "The defence holds exactly when the attacking king is too far to join in time; count its fastest path before committing your king to the pawn, and use each forced king-to-promotion-square moment to measure the race again.", "success": { "note": "Null, and the reason changed today rather than going away. piece_distance now measures king-to-pawn distance exactly, so the fact this plan turns on is no longer outside the vocabulary. What is still outside it is the threshold: 'too far to join in time' depends on the pawn's file, the defending king and whose move it is, and picking a number would be manufacturing a verdict rather than counting a fact. The measurement is available; the judgment that turns it into success is not ours to invent.", "signature": null } }
   ],
-  "watch": [
-    "The census cannot say 'only one pawn': extra pawns on either side fire the same trigger and change everything — count them before trusting any plan here.",
-    "Whether a concrete position of the minimal family is won or drawn is a tablebase fact, not a judgment; this entry names the technique, a tablebase names the result.",
-    "Colour convention: White is authored as the queen side, Black as the pawn side, pawn one step from promotion. Mirror when reversed; the trigger fires only for this orientation."
-  ],
-  "typicalMistakes": [
-    "Checking without gaining the promotion-square tempo — checks that let the defending king shuffle between two free squares achieve nothing forever.",
-    "Capturing the bishop pawn in the corner into stalemate, the stock half-point giveaway.",
-    "Approaching with the queen when the position needed the king move now — the zigzag's whole product is king tempi, and wasting one can concede the draw.",
-    "As the defender, stepping the king in front of the pawn voluntarily, donating the tempo the attacker was working for."
-  ],
-  "provenance": {
-    "licence": "CC-BY-SA-4.0",
-    "sources": [
-      "Family per design/04-content-architecture.md section 4 (queen: queen vs pawn on 7th).",
-      "Tablebase honesty: the minimal census (king and queen versus king and pawn — four pieces) is deep inside Syzygy range, so a tablebase CAN verify every result claim in this family, including the drawn bishop- and rook-pawn cases. No tablebase was consulted while authoring; the drawn-file claims are standard literature and stand ungrounded in this repo.",
-      "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.",
-      "Trigger note: 'pawn on the seventh' is authored as a Black pawn on rank two via piece-on-square leaves — the one endgame family here whose defining feature the vocabulary can state exactly. The census still cannot exclude extra pawns; that gap is recorded in watch."
-    ],
-    "attribution": []
-  }
+  "watch": ["The census cannot say 'only one pawn': extra pawns on either side fire the same trigger and change everything — count them before trusting any plan here.", "Whether a concrete position of the minimal family is won or drawn is a tablebase fact, not a judgment; this entry names the technique, a tablebase names the result.", "Colour convention: White is authored as the queen side, Black as the pawn side, pawn one step from promotion. Mirror when reversed; the trigger fires only for this orientation."],
+  "typicalMistakes": ["Checking without gaining the promotion-square tempo — checks that let the defending king shuffle between two free squares achieve nothing forever.", "Capturing the bishop pawn in the corner into stalemate, the stock half-point giveaway.", "Approaching with the queen when the position needed the king move now — the zigzag's whole product is king tempi, and wasting one can concede the draw.", "As the defender, stepping the king in front of the pawn voluntarily, donating the tempo the attacker was working for."],
+  "provenance": { "licence": "CC-BY-SA-4.0", "sources": ["Family per design/04-content-architecture.md section 4 (queen: queen vs pawn on 7th).", "Tablebase honesty: the minimal census (king and queen versus king and pawn — four pieces) is deep inside Syzygy range, so a tablebase CAN verify every result claim in this family, including the drawn bishop- and rook-pawn cases. No tablebase was consulted while authoring; the drawn-file claims are standard literature and stand ungrounded in this repo.", "UNGROUNDED: plan, watch, and mistake prose is authored endgame-literature consensus rendered by the author; no engine or tablebase has graded any claim in this entry.", "Trigger note: 'pawn on the seventh' is authored as a Black pawn on rank two via piece-on-square leaves — the one endgame family here whose defining feature the vocabulary can state exactly. The census still cannot exclude extra pawns; that gap is recorded in watch."], "attribution": [] }
 }
