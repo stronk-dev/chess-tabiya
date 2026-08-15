@@ -1836,3 +1836,54 @@ dossier read the fixed version. Both observations true, different versions.
 **Next.** Two of nine exploration questions closed in one day from evidence
 already on disk. The predicate roadmap (§6, seven items ≥2 attestations) is now
 an evidence-ordered queue rather than a wish list.
+
+## 2026-08-15 (evening) — five RFCs drafted, eight authored claims refuted, a research gate held
+
+**Drafted, all cross-review pending except the first.** `authoring-frictions`
+(ready for codex, pack 0.16), `tempo-vocabulary` (0.17), `predicate-wave-3`
+(0.18 + shape-entry 0.3), `validator-integrity` (claims nothing versioned),
+`resistance-spectrum` (run 0.14 / migration 19, rebased by the register writer
+after its lane freed). Registers reconciled centrally; no collisions.
+
+**Two RFCs were commissioned and killed the same hour.** Own-game import and the
+~8-moment story were already shipped (`docs/game-import-and-story.md`), including
+story re-entry branches and PGN export. They were listed as open in
+`planning/open-work-inventory.md` — the file written that morning *to be* the
+trustworthy list. It now carries a verification pass correcting itself. The
+standing lesson, learned twice in one day: **a ledger row is a claim about the
+past, not evidence about the present.**
+
+**The content finding that justifies the whole day.** Grounding wave G1 ran the
+first engine-validation pass ever performed on opening content — 18 packs, 180
+decision positions, 387 engine jobs through the repo's own supervisor. Eight
+authored claims refuted, the worst being a **piece blunder in a spine mainline
+annotated as an even trade**: after 5.Be3 Bxc5 6.Bxc5 Black has no legal
+recapture (verified independently with chessops — zero recaptures on c5), and the
+text read *"Material is level again and the position is the receipt."* Refuted
+claims were deleted, never replaced by invention; no deviation class was
+reclassified, leaving four number-versus-class disagreements visible rather than
+papered over.
+
+**The structural finding underneath it.** Two of three phases have **no
+evidence-attachment path**: `pack-validation.ts:448` refuses grading on
+non-outcome objectives, so opening packs cannot be `ledger_verified` — the same
+hole B+N hit from the trajectory side. G1's evidence lives in
+`provenance.engineValidation`, which validates only because that object accepts
+anything. Honest storage, not grounding.
+
+**Cross-draft catch.** `validator-integrity` found that `authoring-frictions` §8
+was about to ship a *new* instance of D32 inside the wave meant to prevent it —
+`RULES_EVIDENCE_FACTS` has no bare `"draw"`, so the widened enum would pass
+`pack-check` and throw when played. Verified against the shipped file and
+corrected before codex reached it.
+
+**Gates.** K10 strengthened: the opening grounding bill is paid at 10.3 min/pack,
+fully-loaded 39.1 vs the endgame 40.6 — the trigger does not fire. Still
+unmeasured: **runtime playtest cost, because nobody has played a run since
+2026-08-12.**
+
+**Held, deliberately.** The owner generated a large campaign/roguelike cluster
+and then ruled that it needs research before design. `planning/campaign-research-queue.md`
+records R1–R8, split into what can run now and what must wait for the first
+session — because the campaign wraps the core loop, and a wrong loop makes the
+wrapper wasted work.
