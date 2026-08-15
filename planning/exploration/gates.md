@@ -66,7 +66,7 @@ rationalized away.
 | K3 | Users ignore branches and simply restart | open | — |
 | K4 | Branch comparison does not improve understanding over engine lines | open | — |
 | K5 | Maia/corpus opponents produce incoherent plans over the required horizon | open | — |
-| K6 | Explanations remain generic despite curated packs | open | — |
+| K6 | Explanations remain generic despite curated packs | open | — | **📊 partial evidence FOR firing, 2026-08-15 (`design/research/feedback-versus-the-dashboard.md`):** the feedback is generic on what is **delivered**, not on what is **authored** — 235 deviation notes are bound to named non-spine moves and reach learners, while **0 of 131 feedback claims have any delivery path** and 22.1% of a 202,479-character authored prose corpus cannot reach anyone. **The remedy is delivery, not authoring.**
 | K7 | Authors cannot reliably encode timing and structure without excessive custom code | open, split by evidence | structure is reliably encodable (`design/research/authored-transitions-and-features.md` §5.1–5.2); **timing is not encodable at all** (§4, two independent attestations, 0/135 usage). The criterion does not fire on a conjunction with one half confirmed working; the timing half is logged as partial kill-criterion evidence |
 | K8 | Full-segment replay does not transfer to related positions | open | — |
 | K9 | Endgame mode is not materially faster or more usable than Chess Endgame Training | open | — |

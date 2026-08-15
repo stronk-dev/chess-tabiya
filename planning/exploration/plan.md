@@ -27,7 +27,7 @@ record). Evidence lands as dossiers in `design/research/`.
 | Q5 | Can a runnable human/corpus policy stay coherent over 10–20 plies? | ✅ settled-go (validation-by-use, smoke 2026-08-12; revisit only if drill play contradicts) | H5 supported |
 | Q6 | How do we use historical games without the ingestion-first trap? | 💡 | — |
 | Q7 | What does a drill pack cost to author? | ✅ answered `[P]` 2026-08-15 — `design/research/pack-authoring-cost.md`; residual named: opening-pack grounding cost and runtime playtest cost are unmeasured (`planning/content-era/`, six-category instrumentation) | K10, K7, C6 |
-| Q8 | Can feedback beat "Stockfish labels + prose"? | 💡 | K6, C1 |
+| Q8 | Can feedback beat "Stockfish labels + prose"? | 📊 evidence 2026-08-15 — **split verdict: YES on honesty, timing and re-entry** (shipped, measured, structural); **not yet on specificity**; **forfeit on the claim layer** — 0 of 131 authored feedback claims are deliverable, while what IS delivered discriminates the played move at ≈1.01×. `design/research/feedback-versus-the-dashboard.md` | K6, C1 |
 | Q9 | Is branch/rewind/compare understandable without branch explosion or comparison overload? | 💡 | E5, K3, C2 |
 
 ## Q1 — Novelty, problem value, and learning effect
