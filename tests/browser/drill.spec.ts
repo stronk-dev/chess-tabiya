@@ -932,7 +932,7 @@ test("every shell route owns the viewport at supported desktop and tablet projec
 test("mobile shell, settings, and install manifest preserve the run regions", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/settings");
-  const position = page.getByRole("group", { name: "position" });
+  const position = page.getByRole("group", { name: "Just Play" });
   await position.getByLabel("Board lighting").selectOption("sight");
   await page.reload();
   await expect(position.getByLabel("Board lighting")).toHaveValue("sight");

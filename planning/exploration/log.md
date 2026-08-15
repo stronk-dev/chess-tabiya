@@ -2296,3 +2296,14 @@ have sent an implementer to rebuild an existing path.
 because `design/BACKLOG.md` has no reservation mechanism — ids are assigned by reading the
 file, so a row committed between an agent's read and its write collides silently. Renumbered
 to D117 and D121–D127. This is a real cost of running 3–4 agents at a time and will recur.
+
+## 2026-08-15 — live-surface-honesty implemented
+
+The live finishing pass shipped six independent assistance preference profiles without
+widening the permission ceiling, exact member-versus-relayed vote attribution on both live
+surfaces, and the server's full two-to-eight labelled option and 15–600 second window in the
+host form. `ENGINES_REQUIRED=1 make verify` passed at 615 tests / 99 files; the zero-retry
+browser gate passed 24 with the optional Maia measurement skipped. The browser gate caught one
+stale `position` selector after the profile label became `Just Play`; it was corrected rather
+than retried. D81, D82, and D83 are closed. Canonical behavior is in `docs/live-sessions.md`
+and `docs/adaptive-guidance.md`.
