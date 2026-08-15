@@ -23,7 +23,7 @@
         "category": "win",
         "pieceCount": 3,
         "sourceId": "syzygy",
-        "retrievedAt": "2026-08-14T09:18:52.124Z"
+        "retrievedAt": "2026-08-15T20:11:20.485Z"
       },
       "resolveAt": {
         "kind": "checkpoint",
@@ -532,8 +532,8 @@
     "reviewStatus": "draft",
     "sources": [
       "Start position is the canonical kings-in-opposition teaching setup (White Ke4, Pe2; Black Ke6), constructed, not taken from a source diagram.",
-      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root: win, and per-move categories at the root split exactly as stated (e3, Kd4, Kf4 win; Kd3, Ke3, Kf3 draw). The authored 23-ply line was verified win-preserving move by move; an earlier draft line containing e5+ was caught BY this verification as a win-throwing error and demoted to the deviation it now is.",
-      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars).",
+      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, re-queried 2026-08-15 (UTC). Root: win, and per-move categories at the root split exactly as stated (e3, Kd4, Kf4 win; Kd3, Ke3, Kf3 draw). The authored 23-ply line was verified win-preserving move by move; an earlier draft line containing e5+ was caught BY this verification as a win-throwing error and demoted to the deviation it now is.",
+      "The Syzygy root assessment is ledger-verified by the sibling evidence and source manifests re-derived from live tablebase responses on 2026-08-15; offline fixture output is explicitly ineligible for that admission.",
       "FIRST USE of the king_opposition structural predicate (wave-2 vocabulary) in a pack objective: the preserved-transition condition and the opposition-taken checkpoint both evaluate it mechanically. What the predicate sees — alignment, odd gap, opponent to move — is exactly the textbook definition; what it cannot see (key squares, races) stays authored, as the shape entry already records.",
       "AUTHORED, NOT PROVED: all prose reasoning; categories only are machine facts.",
       "Plan classes reference content/shapes/pawn-opposition-key-squares.json.",
@@ -541,7 +541,6 @@
     ],
     "graduationBlockers": [
       "Prose explanations are authored; categories are tablebase-grounded.",
-      "Syzygy assessment declared, not ledger-verified.",
       "No human-play evidence for the difficulty banding of this on-ramp-adjacent material."
     ]
   }

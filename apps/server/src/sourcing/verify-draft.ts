@@ -11,7 +11,7 @@ import { evidenceSemantics, evidenceSupports } from "./check.js";
 import { assessmentGrounding, linkage, validateLedger, validateManifest } from "./ledger-validation.js";
 import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import { countFenPieces } from "./chess-facts.js";
-import { liveTablebaseQuery, TABLEBASE_RATIONALE, type TablebaseAnswer, type TablebasePayload, type TablebaseQuery } from "./syzygy.js";
+import { liveTablebaseQuery, type TablebaseAnswer, type TablebasePayload, type TablebaseQuery } from "./syzygy.js";
 import type { EvidenceAbstention, EvidenceLedger, EvidenceRecord, SourceEntry, SourceManifest, SourcingIssue } from "./types.js";
 import { SourcingError } from "./types.js";
 import { TABLEBASE_CATEGORIES, type TablebaseCategory } from "../tablebase.js";
@@ -100,17 +100,33 @@ function sidecars(file: string): VerifyDraftResult["paths"] {
   return { ledger: resolve(directory, `${stem}.evidence.json`), manifest: resolve(directory, `${stem}.sources.json`), job: resolve(directory, `${stem}.job.json`) };
 }
 
-async function offlineQuery(fen: string): Promise<TablebaseAnswer> {
-  const raw = JSON.parse(await readFile(OFFLINE_FIXTURES, "utf8")) as Record<string, TablebasePayload>;
-  const payload = raw[fen];
-  if (payload === undefined) throw new SourcingError("TABLEBASE_SOURCE_UNAVAILABLE", `offline fixture missing FEN ${fen}`);
-  const bytes = new TextEncoder().encode(JSON.stringify(payload));
-  const offset = Number.parseInt(sha256(fen).slice(7, 15), 16) % 86_400_000;
-  const retrievedAt = new Date(Date.UTC(2026, 7, 14) + offset).toISOString();
-  return { payload, source: { sourceId: "syzygy", retrievedAt, origin: { kind: "http", url: `https://tablebase.lichess.org/standard?fen=${encodeURIComponent(fen)}`, status: 200, sha256: sha256(bytes), bytes: bytes.byteLength, etag: null }, licence: { basis: "no-rights-asserted", spdx: null, noticeText: null, rationale: TABLEBASE_RATIONALE } } };
+async function createOfflineQuery(retrievedAt: string): Promise<TablebaseQuery> {
+  const bytes = new Uint8Array(await readFile(OFFLINE_FIXTURES));
+  const raw = JSON.parse(new TextDecoder().decode(bytes)) as Record<string, TablebasePayload>;
+  const source: SourceEntry = {
+    sourceId: "syzygy-offline-fixture",
+    retrievedAt,
+    origin: {
+      kind: "local-file",
+      path: OFFLINE_FIXTURES.replace(`${resolve(".")}/`, ""),
+      sha256: sha256(bytes),
+      bytes: bytes.byteLength,
+    },
+    licence: {
+      basis: "no-rights-asserted",
+      spdx: null,
+      noticeText: null,
+      rationale: "committed tablebase response fixture used for offline transformation tests; it is not evidence of a network query",
+    },
+  };
+  return async (fen: string): Promise<TablebaseAnswer> => {
+    const payload = raw[fen];
+    if (payload === undefined) throw new SourcingError("TABLEBASE_SOURCE_UNAVAILABLE", `offline fixture missing FEN ${fen}`);
+    return { payload, source };
+  };
 }
 
-function assertArtifacts(pack: DrillPackDefinition, ledger: EvidenceLedger, manifest: SourceManifest): void {
+function assertArtifacts(pack: DrillPackDefinition, ledger: EvidenceLedger, manifest: SourceManifest, requireGrounding: boolean): void {
   const issues: SourcingIssue[] = [];
   validateLedger(ledger, issues);
   validateManifest(manifest, issues);
@@ -118,7 +134,7 @@ function assertArtifacts(pack: DrillPackDefinition, ledger: EvidenceLedger, mani
   evidenceSemantics(ledger, issues, manifest, pack);
   evidenceSupports(pack, ledger, manifest, issues);
   if (issues.some((issue) => issue.severity === "error")) throw new SourcingError("DRAFT_PACK_INVALID", issues.map((issue) => `${issue.path} ${issue.code}: ${issue.message}`).join("; "));
-  if (assessmentGrounding({ document: pack, ledger, manifest }) !== "ledger_verified") throw new SourcingError("DRAFT_PACK_INVALID", "emitted sidecars did not earn ledger_verified admission");
+  if (requireGrounding && assessmentGrounding({ document: pack, ledger, manifest }) !== "ledger_verified") throw new SourcingError("DRAFT_PACK_INVALID", "emitted sidecars did not earn ledger_verified admission");
 }
 
 async function verifySyzygyDraft(file: string, options: VerifyDraftOptions = {}): Promise<VerifyDraftResult> {
@@ -131,7 +147,9 @@ async function verifySyzygyDraft(file: string, options: VerifyDraftOptions = {})
   const assessedBy = original.objective.grading?.assessedBy;
   if (assessedBy?.kind !== "syzygy") throw new SourcingError("VERIFY_ASSESSMENT_NOT_SYZYGY", "objective.grading.assessedBy.kind must be syzygy");
   const positions = enumerate(original);
-  const query = options.query ?? (options.offline ? offlineQuery : liveTablebaseQuery);
+  const query = options.query ?? (options.offline
+    ? await createOfflineQuery((options.now?.() ?? new Date()).toISOString())
+    : liveTablebaseQuery);
   const answers = new Map<string, TablebaseAnswer>();
   for (const item of positions) if (countFenPieces(item.fen) <= 7 && !answers.has(item.fen)) answers.set(item.fen, await query(item.fen));
   const root = answers.get(original.start.fen);
@@ -177,7 +195,7 @@ async function verifySyzygyDraft(file: string, options: VerifyDraftOptions = {})
   const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: Object.freeze([...entries.values()]) };
   const sourcedAt = manifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!;
   const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: pack.id, packVersion: pack.version, packDigest: digest, sourcedAt, records: Object.freeze(records), abstentions: Object.freeze(abstentions) };
-  assertArtifacts(pack, ledger, manifest);
+  assertArtifacts(pack, ledger, manifest, options.offline !== true);
 
   const paths = sidecars(absolute);
   const args = { file: absolute.replace(`${resolve(".")}/`, ""), offline: options.offline === true };
@@ -284,7 +302,7 @@ async function verifyEngineDraft(file: string, options: VerifyDraftOptions): Pro
   const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: Object.freeze([...entries.values()]) };
   const sourcedAt = manifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!;
   const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: pack.id, packVersion: pack.version, packDigest: digest, sourcedAt, records: Object.freeze(records), abstentions: Object.freeze((existing.ledger?.abstentions ?? []).filter((value) => value.kind !== "engine_eval")) };
-  assertArtifacts(pack, ledger, manifest);
+  assertArtifacts(pack, ledger, manifest, true);
   const args = { file: absolute.replace(`${resolve(".")}/`, ""), offline: options.offline === true };
   await writeFile(absolute, `${JSON.stringify(pack, null, 2)}\n`, "utf8");
   await writeCanonicalJson(paths.ledger, ledger);
@@ -307,7 +325,8 @@ async function main(): Promise<number> {
   try {
     const result = await verifyDraft(file, { offline: process.env.OFFLINE === "1" });
     for (const warning of result.warnings) console.warn(`WARNING ${warning}`);
-    console.log(`Verified ${result.pack.id}: ledger_verified`);
+    const grounding = assessmentGrounding({ document: result.pack, ledger: result.ledger, manifest: result.manifest });
+    console.log(`Verified ${result.pack.id}: ${grounding}${process.env.OFFLINE === "1" ? " (offline fixture; not promotion evidence)" : ""}`);
     return 0;
   } catch (error) {
     if (error instanceof SourcingError) { console.error(`ERROR [${error.code}] ${error.message}`); return 1; }

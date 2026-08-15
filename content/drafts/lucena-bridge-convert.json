@@ -23,7 +23,7 @@
         "category": "win",
         "pieceCount": 5,
         "sourceId": "syzygy",
-        "retrievedAt": "2026-08-14T07:58:59.150Z"
+        "retrievedAt": "2026-08-15T20:11:12.199Z"
       },
       "resolveAt": {
         "kind": "checkpoint",
@@ -402,15 +402,14 @@
     "reviewStatus": "draft",
     "sources": [
       "Start position is a constructed schematic Lucena (White Kb8, Pb7, Rc1; Black Kd7, Ra2): attacking king on the promotion square, pawn on the seventh, defending king cut off by one file. It is a standard textbook configuration; no specific book diagram or game is claimed as the source.",
-      "TABLEBASE VERIFIED: the root and every position after every spine move were queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root category: win for White (DTZ 15, DTM 41). Every spine position remains a win for White; after Rb4 every Black legal move is lost. The eight deviation moves listed each carry the queried category stated in their notes (Rc2 loss / Ra1, Rd7+, Rd8, Kc5 draw / Rc7+, Kc7, Kc6 win).",
-      "The Syzygy assessment declaration in objective.grading is NOT ledger-verified: no evidence.json/sources.json sidecars were produced for this draft, so registry admission will correctly display it as a declared, unverified assessment (docs/outcome-drill-grading.md). The queries above really happened; the pack format simply has no admitted evidence attached.",
+      "TABLEBASE VERIFIED: the root and every position after every spine move were queried against Syzygy via tablebase.lichess.org /standard, re-queried 2026-08-15 (UTC). Root category: win for White (DTZ 15, DTM 41). Every spine position remains a win for White; after Rb4 every Black legal move is lost. The eight deviation moves listed each carry the queried category stated in their notes (Rc2 loss / Ra1, Rd7+, Rd8, Kc5 draw / Rc7+, Kc7, Kc6 win).",
+      "The Syzygy root assessment is ledger-verified by the sibling evidence and source manifests re-derived from live tablebase responses on 2026-08-15; offline fixture output is explicitly ineligible for that admission.",
       "AUTHORED, NOT PROVED: all prose — annotations, plan-class descriptions, deviation explanations beyond the stated categories, and the feedback-claim reasoning — is the author's rendering of standard endgame technique. The tablebase grounds every win/draw/loss category cited; it does not ground any 'because' in the prose.",
       "Technique name 'Lucena' and the two plan classes reference content/shapes/lucena.json; the pack drills what that entry teaches.",
       "Move legality: every spine and deviation move was parsed from its exact position with python-chess 1.11.2 at build time; `make pack-check` (schema + chessops spine lint) is the authoritative second check."
     ],
     "graduationBlockers": [
       "Prose explanations are authored consensus without a citable per-sentence source; the tablebase grounds the categories, not the reasons. Wikibooks or an equivalent citable treatment of the Lucena bridge would clear the remaining prose blockers.",
-      "The Syzygy root assessment is declared but not ledger-verified (no sourcing sidecars); producing candidate-format evidence for this root would upgrade it.",
       "No engine pass and no human-play (Maia/corpus) evidence on how often defenders find the checking defence at the target band; the difficulty block is authored judgment."
     ]
   }

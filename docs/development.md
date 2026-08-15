@@ -64,7 +64,7 @@ Tests use committed artifacts when the production path consumes an artifact. Whe
 an external instrument cannot run in the unit gate, its captured fixture carries
 machine-readable instrument, request, model, image, and retrieval provenance.
 Negative tests minimally mutate such an artifact when possible. Whole-tree refusal
-discovery records existing unpinned debt and rejects growth, while
+discovery records existing unpinned debt beneath a frozen ceiling and rejects growth, while
 `SourcingError.code` is a closed compile-time vocabulary.
 
 `make pack-check FILE=<path>` validates a draft against the living pack schema,

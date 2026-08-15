@@ -1,19 +1,19 @@
 # Codex queue — refreshed 2026-08-15 (late night)
 
-## 0. D64 — READY NOW, and it is the most serious open item
+## 0. D64 — IMPLEMENTED, pending independent review
 
 **135 of 341 committed tablebase provenance records are fabricated**, across six packs that
 all return `ledger_verified`. Each claims `status: 200` from a `tablebase.lichess.org` URL
 **no process contacted**, with a hash of the local fixture body. Confirmed twice
 independently, from opposite directions, with identical counts.
 
-**`rfc/fixture-realism.md` now scopes it in** — read the banner at its head; it is implemented
-but **must not archive until D64 lands**. Five obligations, in order: stop `offlineQuery`
+**`rfc/fixture-realism.md` now scopes it in** — read the banner at its head; it remains
+unarchived pending independent review. Five obligations landed together: stop `offlineQuery`
 asserting a network transaction it never made; add a validator refusing the manufactured shape
 (the timestamp is a pure function of the URL, which is exactly how both agents found it); make
 `"offline": true` actually **read** — seven job files record it and nothing consumes it;
 re-derive or honestly withdraw the six packs' grounding claims; and fix F3a's monotonic-shrink
-property, which is specified, unimplemented, and already documented as working.
+property, which was specified but unimplemented while documentation claimed it worked.
 
 ## 1. Then the review queue drains into you
 

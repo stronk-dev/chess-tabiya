@@ -1,5 +1,7 @@
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
+import { sha256 } from "./canonical.js";
+
 import {
   ABSTENTION_REASONS,
   EVIDENCE_KINDS,
@@ -15,6 +17,19 @@ const DENIED_HOSTS = new Set([
   "www.pgnmentor.com",
 ]);
 const DENIED_SOURCE_IDS = new Set(["ecochessopeningcodes"]);
+
+function manufacturedTablebaseTimestamp(url: string): string | undefined {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname !== "tablebase.lichess.org" || parsed.pathname !== "/standard") return;
+    const fen = parsed.searchParams.get("fen");
+    if (fen === null) return;
+    const offset = Number.parseInt(sha256(fen).slice(7, 15), 16) % 86_400_000;
+    return new Date(Date.UTC(2026, 7, 14) + offset).toISOString();
+  } catch {
+    return;
+  }
+}
 
 export function issue(
   code: string,
@@ -248,6 +263,20 @@ export function validateManifest(
     }
     seen.add(key);
     validateOrigin(raw, path, issues);
+    if (
+      object(raw.origin) &&
+      raw.origin.kind === "http" &&
+      typeof raw.origin.url === "string" &&
+      raw.retrievedAt === manufacturedTablebaseTimestamp(raw.origin.url)
+    ) {
+      issues.push(
+        issue(
+          "MANIFEST_PROVENANCE_SYNTHETIC",
+          `${path}/retrievedAt`,
+          "tablebase HTTP retrieval time is a deterministic function of the request URL rather than an observed transaction",
+        ),
+      );
+    }
     validateLicence(raw.licence, `${path}/licence`, issues);
   });
   return value as unknown as SourceManifest;
@@ -394,7 +423,17 @@ export function assessmentGrounding(input: {
 
   const matches = ledger.records.filter((record) => {
     if (record.grounds !== "machine_validation" || record.values.fen !== input.document.start.fen || record.sourceId !== assessedBy.sourceId || record.retrievedAt !== assessedBy.retrievedAt || !record.supports.includes("/start/fen") || ledger.packId !== input.document.id) return false;
-    if (assessedBy.kind === "syzygy") return record.kind === "tablebase_result" && record.values.category === assessedBy.category && record.values.pieceCount === assessedBy.pieceCount;
+    if (assessedBy.kind === "syzygy") {
+      if (record.kind !== "tablebase_result" || record.values.category !== assessedBy.category || record.values.pieceCount !== assessedBy.pieceCount) return false;
+      const entry = manifest.entries.find((candidate) => candidate.sourceId === record.sourceId && candidate.retrievedAt === record.retrievedAt);
+      if (entry?.origin.kind !== "http" || entry.origin.status !== 200) return false;
+      try {
+        const url = new URL(entry.origin.url);
+        return url.hostname === "tablebase.lichess.org" && url.pathname === "/standard" && url.searchParams.get("fen") === input.document.start.fen;
+      } catch {
+        return false;
+      }
+    }
     const scoreMatches = assessedBy.score.kind === "cp"
       ? record.values.centipawns === assessedBy.score.centipawns && record.values.mateIn === undefined
       : record.values.mateIn === assessedBy.score.movesToMate && record.values.centipawns === undefined;

@@ -8,7 +8,9 @@ import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { assessmentGrounding } from "./ledger-validation.js";
+import { checkSourcingFile } from "./check.js";
+import { sha256 } from "./canonical.js";
+import { assessmentGrounding, validateManifest } from "./ledger-validation.js";
 import { TABLEBASE_RATIONALE, type TablebaseAnswer, type TablebasePayload } from "./syzygy.js";
 import { verifyDraft } from "./verify-draft.js";
 
@@ -38,6 +40,45 @@ describe("verify-draft", () => {
     expect(result.ledger.packDigest).toBe(await digestDrillPack(result.pack));
     expect(result.ledger.records.some((record) => record.supports[0]?.startsWith("/spine/"))).toBe(true);
     expect(result.ledger.records.some((record) => record.supports[0]?.startsWith("/deviations/"))).toBe(true);
+  });
+
+  it("records offline tablebase fixtures as local input and does not grant ledger_verified", async () => {
+    const { file } = await fixture();
+    const result = await verifyDraft(file, {
+      offline: true,
+      now: () => new Date("2026-08-15T12:00:00.000Z"),
+    });
+    const tablebaseSource = result.manifest.entries.find((entry) => entry.sourceId === "syzygy-offline-fixture");
+    expect(tablebaseSource?.origin.kind).toBe("local-file");
+    expect(assessmentGrounding({ document: result.pack, ledger: result.ledger, manifest: result.manifest })).toBe("unverified");
+
+    const forgedManifest = structuredClone(result.manifest) as any;
+    const forged = forgedManifest.entries.find((entry: any) => entry.sourceId === "syzygy-offline-fixture");
+    forged.origin = {
+      kind: "http",
+      url: `https://tablebase.lichess.org/standard?fen=${encodeURIComponent(result.pack.start.fen)}`,
+      status: 200,
+      sha256: `sha256:${"2".repeat(64)}`,
+      bytes: 2,
+      etag: null,
+    };
+    await writeFile(result.paths.manifest, JSON.stringify(forgedManifest), "utf8");
+    const checked = await checkSourcingFile(file);
+    expect(checked.issues.map((issue) => issue.code)).toContain("OFFLINE_JOB_HTTP_PROVENANCE");
+  });
+
+  it("refuses the deterministic timestamp shape used by manufactured tablebase provenance", () => {
+    const fen = "8/8/8/8/8/8/4k3/4K3 w - - 0 1";
+    const offset = Number.parseInt(sha256(fen).slice(7, 15), 16) % 86_400_000;
+    const issues: any[] = [];
+    validateManifest({
+      schema: "tabiya.sourcing.manifest.v1",
+      entries: [{
+        ...answer(fen, "draw").source,
+        retrievedAt: new Date(Date.UTC(2026, 7, 14) + offset).toISOString(),
+      }],
+    }, issues);
+    expect(issues.map((issue) => issue.code)).toContain("MANIFEST_PROVENANCE_SYNTHETIC");
   });
 
   it("refuses a contradicted declaration without writing sidecars", async () => {

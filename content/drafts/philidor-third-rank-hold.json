@@ -23,7 +23,7 @@
         "category": "draw",
         "pieceCount": 5,
         "sourceId": "syzygy",
-        "retrievedAt": "2026-08-14T13:43:16.760Z"
+        "retrievedAt": "2026-08-15T20:11:23.257Z"
       },
       "resolveAt": {
         "kind": "checkpoint",
@@ -484,15 +484,14 @@
     "reviewStatus": "draft",
     "sources": [
       "Start position is a constructed schematic Philidor (White Ke5, Pe4, Ra7; Black Ke8, Rh6): defending king on the promotion path, defending rook on its third rank, pawn not yet on the defender's third. Standard textbook configuration; no specific diagram claimed.",
-      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root category: draw. Every authored Black move preserves the draw; every deviation note states its queried category (Rh8, Ra6, Rc6, Rxe6, and the w-kd6 Rh1 are losses; Rh1/Rh5+ at root, Rb8, Rb6+ are draws).",
-      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars); registry admission will show a declared, unverified assessment. The queries happened; no admitted evidence artifact exists.",
+      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, re-queried 2026-08-15 (UTC). Root category: draw. Every authored Black move preserves the draw; every deviation note states its queried category (Rh8, Ra6, Rc6, Rxe6, and the w-kd6 Rh1 are losses; Rh1/Rh5+ at root, Rb8, Rb6+ are draws).",
+      "The Syzygy root assessment is ledger-verified by the sibling evidence and source manifests re-derived from live tablebase responses on 2026-08-15; offline fixture output is explicitly ineligible for that admission.",
       "AUTHORED, NOT PROVED: all prose reasoning. The tablebase grounds categories only. The claim that the premature rook drop is 'harder in practice' though drawn is explicitly an authored practical judgment with no instrument behind it in this repo.",
       "Technique name 'Philidor' and all three plan classes reference content/shapes/philidor.json.",
       "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check."
     ],
     "graduationBlockers": [
       "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
-      "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
       "The practical-difficulty judgments (fence easier than early rear-checking; side checks fragile) are exactly the save/resist-adjacent judgments design/04 §7 says need human-play evidence; none exists here."
     ]
   }

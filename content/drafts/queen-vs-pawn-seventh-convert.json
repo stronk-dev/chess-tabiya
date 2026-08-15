@@ -23,7 +23,7 @@
         "category": "win",
         "pieceCount": 4,
         "sourceId": "syzygy",
-        "retrievedAt": "2026-08-14T04:29:11.598Z"
+        "retrievedAt": "2026-08-15T20:12:25.632Z"
       },
       "resolveAt": {
         "kind": "checkpoint",
@@ -459,16 +459,15 @@
     "reviewStatus": "draft",
     "sources": [
       "Start position constructed: White Kh7, Qe4; Black Kc1, Pb2 — queen already posted on the b1-h7 diagonal, king at near-maximal distance, knight pawn (the won file) one step from promotion.",
-      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root: win (DTZ 29, DTM 31). Root move split verified: exactly the six checks Qc4+/Qe1+/Qh1+/Qe3+/Qf4+/Qc6+ win; every quiet queen move and every king move draws; Qb1+ and Qc2+ lose. At the first frozen-tempo node, Qxb2+ was verified a draw and Qc1+/Qc2+ verified losses. The 18-ply spine is the tablebase's optimal winding (both sides best by DTM).",
+      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, re-queried 2026-08-15 (UTC). Root: win (DTZ 29, DTM 31). Root move split verified: exactly the six checks Qc4+/Qe1+/Qh1+/Qe3+/Qf4+/Qc6+ win; every quiet queen move and every king move draws; Qb1+ and Qc2+ lose. At the first frozen-tempo node, Qxb2+ was verified a draw and Qc1+/Qc2+ verified losses. The 18-ply spine is the tablebase's optimal winding (both sides best by DTM).",
       "COMPANION QUERY: the same position with the black pawn on c2 instead of b2 (8/7K/8/8/4Q3/8/2p5/2k5 w) was queried the same day: category draw. That single query grounds this pack's drawn-files claim for the bishop-pawn case; the rook-pawn case is asserted from the same standard theory and was NOT queried.",
-      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars).",
+      "The Syzygy root assessment is ledger-verified by the sibling evidence and source manifests re-derived from live tablebase responses on 2026-08-15; offline fixture output is explicitly ineligible for that admission.",
       "VARIANTS RULE: design/04 §4 asks for convert/hold/save variants per root where material permits. Material permits a defender-side variant here; the pack format does not permit two objectives or two start sides in one file, so this file is the convert pack and the retryVariants note records the deliberate deferral. This is a format finding, logged in planning/content-era/log.md.",
       "AUTHORED, NOT PROVED: all prose reasoning; categories only are machine facts.",
       "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative."
     ],
     "graduationBlockers": [
       "Prose explanations are authored; categories are tablebase-grounded.",
-      "Syzygy assessment declared, not ledger-verified.",
       "The rook-pawn drawn-file claim inside the drawn-files plan class is standard theory NOT queried here; one further tablebase query would clear it and should be made when the hold-side pack is authored."
     ]
   }

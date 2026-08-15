@@ -300,15 +300,30 @@ describe("fixed refusal-code coverage", () => {
       ...testSources(new URL("./", import.meta.url)),
       ...testSources(new URL("../../../packages/", import.meta.url)),
     ].join("\n");
-    const debt = (JSON.parse(readFileSync(
+    const register = JSON.parse(readFileSync(
       new URL("./fixtures/refusal-debt.fixture.json", import.meta.url),
       "utf8",
-    )) as { readonly codes: readonly string[] }).codes;
+    )) as {
+      readonly schema: string;
+      readonly codes: readonly string[];
+    };
+    const ceiling = JSON.parse(readFileSync(
+      new URL("./fixtures/refusal-debt-ceiling.fixture.json", import.meta.url),
+      "utf8",
+    )) as {
+      readonly schema: string;
+      readonly codes: readonly string[];
+    };
+    const debt = register.codes;
     const missing = [...fixedCodes]
       .filter((code) => !new RegExp(`\\b${code}\\b`, "u").test(corpus))
       .sort();
     expect(missing).toEqual(debt);
     expect(new Set(debt).size).toBe(debt.length);
+    expect(register.schema).toBe("tabiya.test-fixture.refusal-debt.v2");
+    expect(ceiling.schema).toBe("tabiya.test-fixture.refusal-debt-ceiling.v1");
+    expect(new Set(ceiling.codes).size).toBe(ceiling.codes.length);
+    expect(debt.every((code) => ceiling.codes.includes(code))).toBe(true);
     expect(fixedCodes.size).toBeGreaterThanOrEqual(190);
     for (const disposedByRegex of ["RATINGS_NOT_A_GROUP", "SPEEDS_NOT_A_SPEED", "WINDOW_INVALID"]) {
       expect(missing).not.toContain(disposedByRegex);

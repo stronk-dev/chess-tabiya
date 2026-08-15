@@ -23,7 +23,7 @@
         "category": "draw",
         "pieceCount": 6,
         "sourceId": "syzygy",
-        "retrievedAt": "2026-08-14T15:35:04.852Z"
+        "retrievedAt": "2026-08-15T20:11:16.083Z"
       },
       "resolveAt": {
         "kind": "checkpoint",
@@ -324,15 +324,14 @@
     "reviewStatus": "draft",
     "sources": [
       "Start position constructed for this pack: White Kd5, Be2, Pc5, Pe5; Black Kd7, Bd8. Chosen so the standard division-of-labour fortress (king on the e-file, bishop on the a5-d8 diagonal) is available but not yet built, and so the whole root sits at six pieces, comfortably inside Syzygy range. An earlier candidate root was discarded during authoring because the tablebase check revealed the defender could simply win a pawn (bishop takes e5 unpunishable) — the honesty instrument shaped the content.",
-      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root: draw. Per-move categories at the root and at both probed later nodes are as stated in each deviation note (Bb6/Bf6 at root, Ke8, Bd4, Kf6 lost; Kc7, Bc7, Kd8 drawn).",
-      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars).",
+      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, re-queried 2026-08-15 (UTC). Root: draw. Per-move categories at the root and at both probed later nodes are as stated in each deviation note (Bb6/Bf6 at root, Ke8, Bd4, Kf6 lost; Kc7, Bc7, Kd8 drawn).",
+      "The Syzygy root assessment is ledger-verified by the sibling evidence and source manifests re-derived from live tablebase responses on 2026-08-15; offline fixture output is explicitly ineligible for that admission.",
       "WHAT CANNOT BE CENSUSED: the fortress itself. The blockade-set checkpoint detects the piece configuration (pieceOnSquare facts); it does not and cannot detect unbreakability. For THIS root unbreakability happens to be tablebase-provable and was proved; for the family in general (more pawns, more pieces) it is not, and content/shapes/opposite-coloured-bishops.json §plans records that no structural signature is honest for holding.",
       "AUTHORED, NOT PROVED: all prose reasoning; categories only are machine facts.",
       "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative."
     ],
     "graduationBlockers": [
       "Prose explanations are authored; categories are tablebase-grounded.",
-      "Syzygy assessment declared, not ledger-verified.",
       "The general fortress-recognition skill this pack gestures at (above seven pieces, real games) has no instrument in this repo and never will below the census boundary; this pack grounds one root of it and says so."
     ]
   }

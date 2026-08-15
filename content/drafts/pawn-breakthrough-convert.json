@@ -23,7 +23,7 @@
         "category": "win",
         "pieceCount": 7,
         "sourceId": "syzygy",
-        "retrievedAt": "2026-08-14T18:37:32.322Z"
+        "retrievedAt": "2026-08-15T20:11:18.321Z"
       },
       "resolveAt": {
         "kind": "checkpoint",
@@ -378,15 +378,14 @@
     "reviewStatus": "draft",
     "sources": [
       "Start position is the classic three-abreast-versus-two breakthrough schematic (White a5, b5, c5, Kg2; Black a7, b7, Ke6), constructed. The 3v3 version is the more famous textbook diagram; this 3v2 form was chosen because seven pieces sit inside Syzygy range, so every claim of this pack could be machine-checked.",
-      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, queried 2026-08-14 (UTC). Root: win (DTZ 1). Root move split verified: c6 and b6 win, a6 and Kh1 draw, king moves win. After 1...bxc6: b6 is the unique win, bxc6 draws, all else loses. After 2...axb6: a6 is the unique win, axb6 draws, all else loses. Every deviation note's category is the queried one.",
-      "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars).",
+      "TABLEBASE VERIFIED: root and every position after every spine move queried against Syzygy via tablebase.lichess.org /standard, re-queried 2026-08-15 (UTC). Root: win (DTZ 1). Root move split verified: c6 and b6 win, a6 and Kh1 draw, king moves win. After 1...bxc6: b6 is the unique win, bxc6 draws, all else loses. After 2...axb6: a6 is the unique win, axb6 draws, all else loses. Every deviation note's category is the queried one.",
+      "The Syzygy root assessment is ledger-verified by the sibling evidence and source manifests re-derived from live tablebase responses on 2026-08-15; offline fixture output is explicitly ineligible for that admission.",
       "SHAPE-TRIGGER HONESTY: content/shapes/pawn-breakthrough-outside-passer.json cannot fire at this root — no passed pawn exists until move three. The entry's own provenance records this exact gap ('the family is wider than the trigger'); the reference here is to what the pack hands off to, not what is detectable at the start.",
       "AUTHORED, NOT PROVED: all prose reasoning, including the 'seals the front' mechanism behind the a6 draw — the tablebase grounds the category, not the explanation.",
       "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative."
     ],
     "graduationBlockers": [
       "Prose explanations are authored; categories are tablebase-grounded.",
-      "Syzygy assessment declared, not ledger-verified.",
       "The famous 3v3 sibling root (a5b5c5 vs a7b7c7) is eight pieces and outside tablebase range; a pack for it would need the Stockfish authoring substitute of docs/content-sourcing.md and is deliberately not smuggled in here."
     ]
   }

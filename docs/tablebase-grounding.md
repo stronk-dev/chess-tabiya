@@ -20,7 +20,7 @@ The command writes flat sibling artifacts:
 
 Evidence is limited to legality and tablebase-result facts. It never grounds prose or a deviation class. A queried root must exactly match the declared category and piece count; the tool updates only the root declaration's `sourceId` and `retrievedAt`. A learner spine move that worsens the learner-perspective tablebase category is refused, while a category-changing opponent reply is retained with a warning.
 
-The emitted ledger and manifest pass the existing validators and linkage rules and must earn `ledger_verified` through the same `assessmentGrounding` function used by the pack registry. `OFFLINE=1` uses committed per-FEN fixtures, so all eleven tablebase-verified drafts exercise the closed loop in CI without network access.
+An online run's emitted ledger and manifest pass the existing validators and linkage rules and must earn `ledger_verified` through the same `assessmentGrounding` function used by the pack registry. `OFFLINE=1` uses committed per-FEN fixtures to exercise transformation and validation without network access. Those inputs are recorded as local files and deliberately remain `unverified`: an offline fixture is not evidence that an HTTP tablebase query occurred. Promotion requires a successful, manifest-linked query to `tablebase.lichess.org` for the assessed root.
 
 For exploration before a pack declares an assessment, `make tablebase-walk
 FILE=<pack.json>` (or `FENS=<positions.txt>`) emits a read-only

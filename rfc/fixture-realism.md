@@ -808,21 +808,13 @@ describes: a correct principle with no affordable instance.
 
 **Follow-on** (named so they are not lost, deliberately not attempted here):
 
-- F2 provenance for `apps/server/src/sourcing/fixtures/verify-draft.json`,
-  `tablebase-response.json` and `explorer-response.json`, and retiring the
-  provenance `offlineQuery` synthesizes at read time (**D64**). These are real
-  instances of the same gap. **The deferral is defensible and now measured rather
-  than asserted `[V, cross-review]`:** every `sourceId: "syzygy"` entry in every
-  committed `sources.json` under `content/` — **341 of them** — was re-derived
-  against `offlineQuery`'s synthesis formula
-  (`Date.UTC(2026, 7, 14) + parseInt(sha256(fen).slice(7, 15), 16) % 86_400_000`),
-  and **zero match**: their timestamps are sequential live-fetch clusters ~32 ms
-  apart. No manufactured provenance has reached a committed artifact. **What the
-  measurement also shows is that nothing prevents it:** no test asserts that a
-  committed manifest contains no synthesized entry, so the deferral rests on the
-  fact that nobody has committed an `OFFLINE=1` run, not on a mechanism. The
-  follow-on should carry that guard, and this RFC states the exposure rather than
-  leaving it implied.
+- F2 provenance for `tablebase-response.json` and `explorer-response.json` outside
+  `verify-draft`. **D64 is no longer deferred:** the correction banner above gives
+  the complete remeasurement and this lifecycle now makes `verify-draft.json` an
+  honestly recorded local input, rejects the manufactured timestamp shape, and
+  consumes the job's `offline` flag. The former zero-match claim and its
+  "sequential live-fetch" corroboration were refuted by the prefix-offset error and
+  are intentionally absent here rather than retained as historical evidence.
 - Retiring the debt-register codes, in whatever waves touch them. The register's
   monotonic-shrink assertion is what makes this sustainable rather than a project.
 - **`SourcingIssue.code`** — a bare `string` with 15 distinct literals in the same
@@ -997,9 +989,8 @@ to the ledger tier by this RFC.**
   preventing a repeat; **an unsatisfiability between E4's floor and
   `FLOAT32_POLICY_MASS_TOLERANCE` named**, escalating open question 2 to blocking;
   §6's denominator stated and **D61 / `tests/browser/` named rather than routed to
-  D55**; **D64's deferral upgraded from assertion to measurement** (341 committed
-  syzygy entries checked against `offlineQuery`'s synthesis formula — zero matches,
-  and no guard preventing a future one); `SourcingIssue.code` named as a second
+  D55**; **D64's original deferral was later refuted and superseded by the scoped-in
+  correction at the head of this RFC**; `SourcingIssue.code` named as a second
   unregistered vocabulary; register claim corrected (0.21/0.22 are implemented, not
   claimed) and `engine-request-contract.md` added as a textual landing-order
   neighbour; the §Deviations / §Motivation / §6 three-way contradiction about the

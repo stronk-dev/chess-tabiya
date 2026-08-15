@@ -102,6 +102,25 @@ function priorityLinkage(manifest: SourceManifest, value: unknown, issues: Sourc
   if (value.sourcedAt !== maximum) issues.push(issue("EVIDENCE_TIMESTAMP_DERIVED", "/sourcedAt", `sourcedAt must equal maximum consumed retrievedAt ${String(maximum)}`));
 }
 
+function offlineJobProvenance(job: unknown, manifest: SourceManifest | undefined, issues: SourcingIssue[]): void {
+  if (
+    !object(job) ||
+    job.pipeline !== "verify-draft" ||
+    !object(job.args) ||
+    job.args.offline !== true ||
+    manifest === undefined
+  ) return;
+  manifest.entries.forEach((entry, index) => {
+    if (entry.origin.kind === "http") {
+      issues.push(issue(
+        "OFFLINE_JOB_HTTP_PROVENANCE",
+        `/entries/${index}/origin`,
+        "a verify-draft job recorded as offline cannot claim an HTTP transaction",
+      ));
+    }
+  });
+}
+
 function explorerTemplate(record: EvidenceRecord, pack: unknown, manifest: SourceManifest | undefined, recordIndex: number, issues: SourcingIssue[]): boolean {
   if (record.kind !== "explorer_frequency") return false;
   const path = `/records/${recordIndex}`;
@@ -310,6 +329,7 @@ export async function checkSourcingDirectory(directory: string, options: { reado
     } catch (error) { issues.push(issue("PACK_READ_ERROR", "/pack.json", error instanceof Error ? error.message : String(error))); }
   }
   if (manifest && ledger) linkage(manifest, ledger, issues);
+  offlineJobProvenance(job, manifest, issues);
   if (manifest && !ledger && await exists(resolve(absolute, "priority.json"))) {
     try {
       priorityLinkage(manifest, await readJson(resolve(absolute, "priority.json")), issues);
@@ -364,6 +384,7 @@ export async function checkSourcingFile(file: string, options: { readonly strict
   let pack: unknown;
   let ledger: EvidenceLedger | undefined;
   let manifest: SourceManifest | undefined;
+  let job: unknown;
   try {
     pack = await readJson(absolute);
     const result = validatePackDocument(pack);
@@ -373,7 +394,9 @@ export async function checkSourcingFile(file: string, options: { readonly strict
   catch (error) { issues.push(issue("EVIDENCE_READ_ERROR", "/evidence.json", error instanceof Error ? error.message : String(error))); }
   try { manifest = validateManifest(await readJson(resolve(directory, `${stem}.sources.json`)), issues); }
   catch (error) { issues.push(issue("MANIFEST_READ_ERROR", "/sources.json", error instanceof Error ? error.message : String(error))); }
+  try { job = await readJson(resolve(directory, `${stem}.job.json`)); } catch { /* job is auxiliary and optional for legacy packs */ }
   if (manifest && ledger) linkage(manifest, ledger, issues);
+  offlineJobProvenance(job, manifest, issues);
   if (ledger) evidenceSemantics(ledger, issues, manifest, pack);
   if (pack && ledger) {
     evidenceSupports(pack, ledger, manifest, issues);
