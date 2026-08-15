@@ -39,24 +39,30 @@ refused the button gets the same rung-3 content from `/voice`. Fix it in this wa
 or defer it **explicitly** with a named row — do not ship D51 as closed while the
 server leg is open.
 
-## 3. `rfc/client-surface-floor.md` — BLOCKED on one owner ruling
+## 3. `rfc/client-surface-floor.md` — READY (owner ruling landed)
 
 Cross-reviewed by driving the running app. **C2 (delete the `62rem` breakpoint)
 survives independent re-derivation decisively** and could land alone.
 
-**Blocked:** at **360×640** the proposed board floor and full board visibility are
-mutually unsatisfiable — the board's bottom lands at 643 px against a 640 px
-viewport **with no scroller**, which is worse than the page-scrolling it replaces.
-Acceptance criterion 5 cannot pass. Owner ruling pending on three exits.
+**Owner ruling 2026-08-15:** state a **minimum supported viewport and refuse below
+it**. The board floor stands; below the floor the client shows an honest refusal
+rather than a board whose last rank is silently unreachable — naming the refusal
+instead of degrading quietly, as the product does everywhere else. You owe two
+things: the floor as a **measured** number (the review's data puts it near 360×700
+— confirm, do not copy) and refusal text saying *what* is unsupported and *why*.
+Criterion 5 is rewritten against the supported range. **C2 may still land alone.**
 
 ---
 
 ## Open, no RFC yet
 
-- **D60** stays open as you correctly left it. **R10 has now measured the answer:**
-  `[1000, 2400]`, the widest interval that is strictly ordered *and* readable,
-  refusing nothing that exists (all 63 `targetElo` values in `content/` are
-  1100–1939) while refusing 50 and 9000. Applying it is an owner call.
+- **D60 — OWNER RULED 2026-08-15: apply `[1000, 2400]` and close it.** This is
+  configuration inside the *already-accepted and archived* `engine-request-contract`
+  §9 mechanism, so it needs no new RFC — set the configured bound, intersect with
+  advertised as §9 specifies, and flip D60. R10's dossier is
+  `design/research/maia-band-calibrated-range.md`. Take it whenever a wave has room;
+  it is small and it closes a defect that currently answers a different question than
+  the one asked.
 - **D73** — out-of-range `Elo` **saturates silently**: 9000 *is* 5000,
   byte-identical on 51/51 positions, no error field.
 - **D74** — nine of twelve malformed `Elo` forms leave the previous band in force.

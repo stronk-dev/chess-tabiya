@@ -1,6 +1,6 @@
 # RFC: Client surface floor — the tablet band, and two shipped controls that lie
 
-- **Status:** draft — cross-reviewed 2026-08-15; **blocked on open question 1** (the
+- **Status:** draft — **cross-reviewed 2026-08-15; owner ruling applied; ready for codex** — cross-reviewed 2026-08-15; **blocked on open question 1** (the
   360×640 case, where acceptance criterion 5 cannot pass as specified)
 - **Author:** claude
 - **Created:** 2026-08-15
@@ -35,6 +35,21 @@
   surface, and no new route.**
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/client-surface-floor/` (once implementing)
+
+
+> **OWNER RULING 2026-08-15 — the 360×640 blocker is resolved: STATE A MINIMUM VIEWPORT AND
+> REFUSE BELOW IT.** Open question 1 is closed and this RFC is unblocked.
+> The board floor stands; below the supported floor the client shows an **honest refusal** rather
+> than a board whose last rank is silently unreachable. Rationale on the record: this is how the
+> product handles every other capability it cannot honour — **name the refusal instead of
+> degrading quietly** — and a board clipped with no scroller is exactly the silent degradation
+> the assistance doctrine forbids elsewhere.
+> **The implementer owes two things:** the floor as a *measured* number (derive it from where the
+> board floor and full visibility stop conflicting — the review's data puts it near 360×700,
+> confirm rather than copy), and the refusal text, which must say what is unsupported and why,
+> not merely that it is. Acceptance criterion 5 is rewritten against the supported range.
+> **C2 may still land alone** if the phone tier needs another pass — it survived independent
+> re-derivation and is clean on its own.
 
 ## Register claim
 
