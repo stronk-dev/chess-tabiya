@@ -274,12 +274,14 @@ describe("fixed refusal-code coverage", () => {
   it("requires every fixed authoring refusal to have a direct test disposition", () => {
     const emitters = [
       readFileSync(new URL("./pack-validation.ts", import.meta.url), "utf8"),
+      readFileSync(new URL("./shape-validation.ts", import.meta.url), "utf8"),
+      readFileSync(new URL("./expression-satisfiability.ts", import.meta.url), "utf8"),
       readFileSync(new URL("../../../packages/schema/src/drill-pack/lint.ts", import.meta.url), "utf8"),
     ].join("\n");
     const fixedCodes = new Set(
       [...emitters.matchAll(/"([A-Z][A-Z0-9_]+)"/gu)]
         .map((match) => match[1]!)
-        .filter((code) => code !== "NFKC"),
+        .filter((code) => code !== "NFKC" && !/^R\d+$/u.test(code)),
     );
     const corpus = [
       ...testSources(new URL("./", import.meta.url)),

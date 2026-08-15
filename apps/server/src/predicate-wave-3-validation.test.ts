@@ -39,7 +39,7 @@ describe("predicate wave 3 validation", () => {
     expect(codes(uncheckable, lookup(uncheckableShape))).toContain("PLAN_CONSEQUENCE_NOT_COMPUTABLE");
 
     const impossibleShape = structuredClone(carlsbad);
-    impossibleShape.plans[0].success.signature = { kind: "feature", feature: { kind: "piece_count", color: "white", role: "king", basis: "count", comparison: "equal", count: 0 } };
+    impossibleShape.plans[0].success.signature = { kind: "pieceOnSquare", square: "a1", piece: { color: "black", role: "queen" } };
     expect(codes(planPack, lookup(impossibleShape))).toContain("PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT");
   });
 
@@ -60,7 +60,7 @@ describe("predicate wave 3 validation", () => {
 
     const absent = structuredClone(pack) as any;
     const never = structuredClone(carlsbad);
-    never.trigger = { kind: "feature", feature: { kind: "piece_count", color: "white", role: "king", basis: "count", comparison: "equal", count: 0 } };
+    never.trigger = { kind: "pieceOnSquare", square: "a1", piece: { color: "black", role: "queen" } };
     expect(codes(absent, lookup(never))).toContain("SHAPE_REFERENCE_NEVER_PRESENT");
   });
 });

@@ -169,7 +169,7 @@ function reasoningCheckpointFen(pack: DrillPackDefinition, checkpoint: DrillPack
   return found.length === 1 ? found[0] : undefined;
 }
 
-function authoredSpineFens(pack: DrillPackDefinition): readonly string[] {
+export function authoredSpineFens(pack: DrillPackDefinition): readonly string[] {
   const root = Chess.fromSetup(parseFen(pack.start.fen).unwrap()).unwrap();
   const result = [makeFen(root.toSetup())];
   const visit = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[], position: Chess): void => {

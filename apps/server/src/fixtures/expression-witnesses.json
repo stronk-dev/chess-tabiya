@@ -1,0 +1,18 @@
+{
+  "content/shapes/knight-vs-bishop.json#/plans/3/success/signature": [
+    {
+      "id": "knight-vs-bishop/black-anchor-the-knight/d5-anchored",
+      "from": "4k3/8/2p2n2/8/8/8/8/2B1K3 b - - 0 1",
+      "sans": ["Nd5"],
+      "role": "anchored",
+      "expect": true
+    },
+    {
+      "id": "knight-vs-bishop/black-anchor-the-knight/reference",
+      "from": "4k3/8/2p2n2/8/8/8/8/2B1K3 b - - 0 1",
+      "sans": ["Ng4"],
+      "role": "reference",
+      "expect": false
+    }
+  ]
+}

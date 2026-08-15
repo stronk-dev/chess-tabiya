@@ -83,6 +83,10 @@ updates, lint plus optional probe-FEN matching, immutable community registration
 and account-deletion tombstoning. Migration 10 owns `shape_drafts` and
 `registered_shapes`; run schema stays v0.8 because firings are derived.
 
+`make expression-census` measures every trigger and non-null success signature over the authored
+position corpus. Coverage labels are diagnostic only. A closed sound-refutation arm rejects a
+proven-unsatisfiable shape expression while preserving the lint route's optional probe result.
+
 ## Measured envelope and limits
 
 Four official entries evaluated over all 16 Pack B spine positions in a 20-sample local run

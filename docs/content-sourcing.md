@@ -106,6 +106,10 @@ reproducibility claim; engine identity and profile travel with the result. Engin
 drafts use the same `verify-draft` command and manifest-linked admission as Syzygy drafts,
 while `make engine-walk` provides a read-only report before an assessment is declared.
 
+Structural content has a separate offline instrument, `make expression-census`. Its corpus hits
+may exhibit satisfiability, but neither high nor zero coverage is chess evidence; the command
+never promotes, rewrites, or grounds authored claims.
+
 Generated endgame packs are spine-less outcome drills. The opponent is explicitly
 `strong_engine` or `human_common`, the checkpoint is aligned to a learner ply, and roots in
 tablebase range state that `perfect_tablebase` is selectable only where its provider is

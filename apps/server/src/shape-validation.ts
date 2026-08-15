@@ -8,6 +8,7 @@ import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.
 import addFormats from "ajv-formats";
 
 import { structuralIssues, type PackValidationIssue } from "./pack-validation.js";
+import { refuteStructuralExpression } from "./expression-satisfiability.js";
 
 export interface ShapeValidationResult {
   readonly valid: boolean;
@@ -54,6 +55,13 @@ export function validateShapeEntry(value: unknown, options: { readonly probeFen?
   const expressionValid = !issues.some((candidate) => candidate.severity === "error");
   if (expressionValid && matchesStructuralExpression(INITIAL_FEN, document.trigger)) {
     issues.push(issue("SHAPE_TRIGGER_TRUE_AT_INITIAL", "/trigger", "shape trigger must not match the standard initial position"));
+  }
+  const triggerRefutation = refuteStructuralExpression(document.trigger);
+  if (triggerRefutation !== undefined) issues.push(issue("STRUCTURAL_EXPRESSION_UNSATISFIABLE", "/trigger", `${triggerRefutation.rule}: ${triggerRefutation.message}`));
+  for (const [index, plan] of document.plans.entries()) {
+    if (plan.success.signature === null) continue;
+    const refutation = refuteStructuralExpression(plan.success.signature);
+    if (refutation !== undefined) issues.push(issue("STRUCTURAL_EXPRESSION_UNSATISFIABLE", `/plans/${index}/success/signature`, `${refutation.rule}: ${refutation.message}`));
   }
   const ids = new Set<string>();
   for (const [index, plan] of document.plans.entries()) {

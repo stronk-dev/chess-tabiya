@@ -48,6 +48,7 @@ make test-browser
 make pack-check FILE=content/drafts/my-pack.json
 make pack-preview FILE=content/drafts/my-pack.json
 make tablebase-walk FILE=content/drafts/my-pack.json OFFLINE=1
+make expression-census OUT=/tmp/expression-census.json
 make up
 make up-engines
 make down
@@ -71,6 +72,11 @@ without moving files into `content/packs/`.
 `make tablebase-walk` is the read-only Syzygy authoring instrument. It accepts one pack or
 a newline-delimited FEN file, can enumerate learner decisions, and writes only its report
 when `OUT` is supplied. It never promotes or rewrites content.
+
+`make expression-census` is the offline, report-only structural-expression instrument. It
+separates corpus coverage from three-valued satisfiability and never treats a zero firing count
+as a defect. See `docs/expression-census.md`. `shape-check` also accepts `PROBE=`, comma/glob
+multi-file `FILE=`, and opt-in `CORPUS=` warnings.
 
 Every JSON file beneath a served content directory is treated as a pack unless
 its basename is reserved as a sourcing sidecar: `evidence.json`, `sources.json`,

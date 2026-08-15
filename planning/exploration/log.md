@@ -2039,3 +2039,15 @@ whereas the specified leaf requires same-square identity. The stricter productio
 The late owner rulings landed with the implementation: zero pack coverage stays an error with a
 three-part diagnosis, and `structuralDelta` now parses each FEN once during its eviction scan while
 remaining outside the transition call graph.
+
+## 2026-08-15 (codex) — expression census implementing
+
+The repo now has the read-only instrument rebuilt manually across seven content waves. It walks all
+six structural-expression host sites and reports coverage separately from sound, three-valued
+satisfiability. The current tree reproduces 43 packs / 694 positions / 159 subjects; a committed
+played witness proves the uncovered knight-outpost fan satisfiable without manufacturing coverage.
+
+Cross-review's corrected R1 and R6 are pinned by their nine counterexamples and generated legal
+positions. One remaining polarity typo was found in the RFC's degeneracy criterion and corrected:
+the empty-set vacuity belongs to `every`, not to its surrounding negation. Shape checking gains
+opt-in corpus warnings, probing, and multi-file use; coverage remains outside `make verify`.
