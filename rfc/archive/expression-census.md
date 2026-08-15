@@ -1,6 +1,6 @@
 # RFC: Expression census — where does this expression fire?
 
-- **Status:** implementing
+- **Status:** implemented
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/BACKLOG.md` rows **"No instrument answers 'where does this expression fire?'"** (7th attestation, 2026-08-15) and **"Census measured: 43 of 64 in-shape signatures fire zero times in-shape"** (the numbers §Motivation re-derives); the defect rows **D43** and **D44**; and **D49**, which is **withdrawn, not open** — see §8, which is the reason it was withdrawn. `design/04-content-architecture.md` §0a content-transfer test. *Rows and code sites are cited by title and by symbol name throughout. `apps/server/src/pack-validation.ts` is modified-uncommitted in the working tree this draft was written against and its line numbers moved during drafting (`authoredSpineFens` 170→171, `SHAPE_REFERENCE_NEVER_PRESENT` 457→459, `PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT` 478→480). **Locate by symbol first — every line number in this document is advisory.** Cross-review 2026-08-15 re-derived every figure and re-read every cited site; the `schemas/drill_pack.schema.json` line ranges the first draft carried had already gone stale and have been replaced by `$defs` names.*

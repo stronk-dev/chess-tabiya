@@ -8,3 +8,10 @@
 - The current corpus reproduces 43 packs, 694 positions, 159 subjects, 36 corpus-zero subjects, 30 outside-only subjects, and 40 empty in-shape denominators. The committed witness raises one zero-coverage subject to satisfiable, leaving 35 unknown rather than the RFC's empty-fixture estimate of 36.
 - `shape-check` now supports `PROBE=`, comma/glob multi-file input, and opt-in `CORPUS=` warnings. A first implementation reran the entire census once per file; a live all-shapes check exposed the multiplicative cost, and the CLI was changed to census the selected set once.
 - Pre-archive gates passed: 576 tests across 94 files; 24 browser tests at zero retries (one optional Maia test skipped); Svelte reported 0 errors and 0 warnings.
+
+## 2026-08-15 — completion
+
+- Canonical behavior is distilled into `docs/expression-census.md`; the implementation and
+  report-only command are complete with no versioned-format or migration claim.
+- The RFC and planning job move to their archives under the completion protocol. Both gates are
+  rerun after the moves before closeout.

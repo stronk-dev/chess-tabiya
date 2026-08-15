@@ -7,7 +7,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
-| `expression-census.md` | implementing | — | **claims nothing versioned** — no schema, no migration, no persisted field, no event. `make expression-census` is report-only; `shape-check` gains `CORPUS=`/`PROBE=`/multi-`FILE=`. Coverage never errors; only a sound satisfiability refutation does |
 | `live-marker-quality.md` | draft (awaiting cross-review) | — | **claims nothing versioned**. Audits all four live markers (1 measured and failing, 3 never measured); narrows `irreversibility` to `last_of_role`; re-homes D48 (whose fix was leaving with `transition-primitives`' withdrawn live tier); closes the D51 permission bypass normatively. Proposes **L1–L6**, the standing admission rule for the live surface |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
