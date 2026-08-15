@@ -2176,3 +2176,54 @@ consequence.
 
 **Out now:** `format-surface` cross-review · campaign intermediate-consequence dossier ·
 middlegame content wave (Act II has exactly one pack today) · `claim-backing` draft.
+
+## 2026-08-15 (late night) — law 8 found failing from the authoring side
+
+**`rfc/claim-backing.md` drafted** — the owner-ruled remedy for D97. It **released pack
+0.26**: the fix is validator-and-ledger only. No `$defs` touched, no committed pack byte
+changes, no digest moves, no migration, no run schema, and all 68 committed ledgers stay
+valid unchanged. Delivery goes **49.0% day zero → 64.5% on already-committed records →
+95.4% after the instrument waves, and never 131 of 131** — an acceptance criterion makes
+full admission a *failure*, which is the shape law 8 requires.
+
+`EVIDENCE_OVERREACH` is **narrowed, not widened** — claim pointers become unconditionally
+forbidden in `record.supports`, removing the two template exemptions at a measured cost of
+zero records. The C6 fork is dissolved as the owner ruled: withholding becomes genuine
+deferral, so C6′ and C6″ are withdrawn as softeners for a refusal that no longer exists.
+
+**The escalation, and it is the one worth reading.** The draft found — and claude
+independently verified — that **the product is manufacturing chess truth in its own
+content**. `philidor-passive-rook-convert` asserts *"All twenty-one legal moves were
+enumerated and queried: thirteen draw… seven lose… That exclusivity is a machine fact
+about this position."* Its ledger holds 25 `tablebase_result` records at **25 distinct
+anchor FENs** — a walk *down the spine*, one per position — and **exactly one** anchors at
+the root being enumerated. No instrument in this repo produced that breakdown.
+
+The claim is probably *true*. That is not the standard. Law 8 has always been read as a
+constraint on **rendering** — the "Stockfish: +0.54 / LLM: 'Ne5 centralizes'" dashboard.
+This is the same violation from the **authoring** side, and it is harder to see precisely
+because the sentence is well-informed. **D110/D111 are logged as kill-criterion-adjacent
+under law 6**: the product exhibiting its own named anti-pattern in its own corpus is
+evidence against the thesis's central promise, and it is escalated rather than filed as a
+content bug.
+
+**Claude's own error inside this finding, recorded because it is instructive.** A first
+sweep reported *23 packs* carrying enumeration assertions. **Wrong, withdrawn.** 22 of the
+23 were the **opposite** — the honest disclaimer *"all legal moves were not enumerated"*
+that every engine-pass note carries by design. The regex missed the negation, and the
+error inverted the meaning of the evidence. Two scopes are now recorded rather than one
+being chosen: a phrase-level sweep finds **4 assertions across 3 files**; the drafting
+agent's claim-level detector finds **13**. They measure different things and both stand.
+
+Also new: **D112** — `$defs/feedbackClaim` is `additionalProperties: true`, so any future
+claim field validates silently unchecked. **Zero `explorer_frequency` records exist
+repo-wide**, and several cited engine figures (`+1.09`, `−1.06`, `−1.20`, `−1.70`) appear
+in no ledger anywhere in `content/`.
+
+**Process.** Codex archived `fixture-realism` and `client-surface-floor` (`2d0f7be`) with
+every red/green demonstration recorded, then **refused the next queue item and was right**:
+`engine-leverage`'s body still read *NOW BLOCKING* on D64 while the queue file said
+resolved, and the RFC's own open questions say *"before `accepted`"*. Both were claude's
+errors — the first is the standing queue-vs-body failure, now caught three times, and the
+second was accepting a draft its own text forbids accepting. Acceptance withdrawn in the
+status line; four rulings go to the owner.
