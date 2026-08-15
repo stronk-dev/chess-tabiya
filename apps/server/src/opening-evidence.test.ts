@@ -2,6 +2,9 @@ import { readdir, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import { Chess } from "chessops/chess";
+import { parseFen } from "chessops/fen";
+import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { validatePackDocument } from "./pack-validation.js";
@@ -78,9 +81,14 @@ describe("opening engine evidence", () => {
 
   it("walks engine positions without editing and refuses exhaustive enumeration", async () => {
     const { pack } = await artifact("anti-caro-advance");
-    const evaluate = async (fen: string) => ({ source: { sourceId: "fixture", retrievedAt: "2026-08-15T00:00:00.000Z", origin: { kind: "engine" as const, engineId: "fixture", engineName: "Fixture", engineVersion: "1", profile: { threads: 1, hashMb: 16, multiPv: 1 }, budget: { depth: 22 }, fen, evidenceKind: "engine_eval" }, licence: { basis: "no-rights-asserted" as const, spdx: null, noticeText: null, rationale: "fixture" } }, values: { fen, centipawns: 0, depth: 22, perspective: "white", threads: 1, hashMb: 16, multiPv: 1, timeoutMs: 1, engineId: "fixture", engineName: "Fixture", engineVersion: "1" } });
+    const evaluate = async (fen: string) => {
+      const board = Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
+      const first = [...board.allDests()].flatMap(([from, destinations]) => [...destinations].map((to) => ({ from, to }))).find((move) => board.isLegal(move));
+      return { source: { sourceId: "fixture", retrievedAt: "2026-08-15T00:00:00.000Z", origin: { kind: "engine" as const, engineId: "fixture", engineName: "Fixture", engineVersion: "1", profile: { threads: 1, hashMb: 16, multiPv: 1 }, budget: { depth: 22 }, fen, evidenceKind: "engine_eval" }, licence: { basis: "no-rights-asserted" as const, spdx: null, noticeText: null, rationale: "fixture" } }, values: { fen, centipawns: 0, depth: 22, perspective: "white", threads: 1, hashMb: 16, multiPv: 1, timeoutMs: 1, engineId: "fixture", engineName: "Fixture", engineVersion: "1", ...(first === undefined ? {} : { bestMoveUci: makeUci(first) }) } };
+    };
     const report = await engineWalk({ pack, evaluate, maxQueries: 100 });
     expect((report.subject as any).instrument).toBe("engine");
+    expect((report.nodes as any[]).some((node) => node.moves.length === 1)).toBe(true);
     await expect(engineWalk({ pack, evaluate, enumerate: "all" })).rejects.toMatchObject({ code: "WALK_ENUMERATE_UNSUPPORTED" });
   });
 

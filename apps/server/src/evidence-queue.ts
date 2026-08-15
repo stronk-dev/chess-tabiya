@@ -345,6 +345,7 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
         this.#engineId,
       );
       const score = /\bscore (cp|mate) (-?\d+)\b/.exec(line)!;
+      const bestMove = [...lines].reverse().find((candidate) => candidate.startsWith("bestmove "))?.split(/\s+/)[1];
       return Object.freeze({
         kind: "eval",
         source: "engine_validated",
@@ -353,6 +354,7 @@ export class StockfishEvidenceExecutor implements EvidenceExecutor {
           ...(score[1] === "cp"
             ? { centipawns: whitePerspectiveScore(Number(score[2]), job.fen) }
             : { mateIn: whitePerspectiveScore(Number(score[2]), job.fen) }),
+          ...(bestMove === undefined || bestMove === "(none)" ? {} : { bestMoveUci: bestMove }),
           ...(depthValue(line) === undefined ? {} : { depth: depthValue(line) }),
         }),
       });

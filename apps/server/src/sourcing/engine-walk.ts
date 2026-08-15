@@ -57,14 +57,33 @@ export async function engineWalk(options: EngineWalkOptions): Promise<Readonly<R
   let owned: Awaited<ReturnType<typeof createPositionSeedEngineEvaluator>> | undefined;
   const evaluate = options.evaluate ?? (owned = await createPositionSeedEngineEvaluator(options.command ?? "stockfish")).evaluate;
   const nodes: unknown[] = [];
+  const answers = new Map<string, Awaited<ReturnType<PositionSeedEngineEvaluator>>>();
+  let queries = 0;
+  const probe = async (fen: string) => {
+    const existing = answers.get(fen);
+    if (existing !== undefined) return existing;
+    if (queries >= maxQueries) throw new SourcingError("WALK_QUERY_BUDGET_EXCEEDED", `engine walk exceeded ${maxQueries} queries`);
+    queries += 1;
+    const answer = await evaluate(fen);
+    answers.set(fen, answer);
+    return answer;
+  };
   try {
     for (const value of values) {
-      const answer = await evaluate(value.fen);
+      const answer = await probe(value.fen);
       const board = Chess.fromSetup(parseFen(value.fen).unwrap()).unwrap();
-      nodes.push({ pointer: value.pointer, fen: value.fen, ply: value.ply, sideToMove: board.turn, pieceCount: countFenPieces(value.fen), ...(Number.isInteger(answer.values.centipawns) ? { cp: answer.values.centipawns } : { mateIn: answer.values.mateIn }), depth: answer.values.depth, perspective: "white", moves: [] });
+      const moves: unknown[] = [];
+      if ((options.enumerate ?? "decision") === "decision" && board.turn === options.pack.start.side && typeof answer.values.bestMoveUci === "string") {
+        const move = parseUci(answer.values.bestMoveUci);
+        if (move === undefined || !board.isLegal(move)) throw new SourcingError("VERIFY_ENGINE_UNAVAILABLE", `engine returned illegal best move ${String(answer.values.bestMoveUci)}`);
+        const child = board.clone(); child.play(move);
+        const childFen = makeFen(child.toSetup()), childAnswer = await probe(childFen);
+        moves.push({ uci: answer.values.bestMoveUci, fen: childFen, ...(Number.isInteger(childAnswer.values.centipawns) ? { cp: childAnswer.values.centipawns } : { mateIn: childAnswer.values.mateIn }), depth: childAnswer.values.depth, perspective: "white" });
+      }
+      nodes.push({ pointer: value.pointer, fen: value.fen, ply: value.ply, sideToMove: board.turn, pieceCount: countFenPieces(value.fen), ...(Number.isInteger(answer.values.centipawns) ? { cp: answer.values.centipawns } : { mateIn: answer.values.mateIn }), depth: answer.values.depth, perspective: "white", moves });
     }
   } finally { await owned?.close(); }
-  return Object.freeze({ schema: "tabiya.sourcing.walk.v1", subject: { kind: "pack", packId: options.pack.id, learnerSide: options.pack.start.side, instrument: "engine" }, queries: values.length, nodes, abstentions: [], spineTerminal: null });
+  return Object.freeze({ schema: "tabiya.sourcing.walk.v1", subject: { kind: "pack", packId: options.pack.id, learnerSide: options.pack.start.side, instrument: "engine" }, queries, nodes, abstentions: [], spineTerminal: null });
 }
 
 function args(values: readonly string[]): Map<string, string> {

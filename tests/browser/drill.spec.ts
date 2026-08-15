@@ -525,7 +525,7 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   await page.getByLabel("Label").fill("quiet setup");
   await page.getByLabel("Intent").fill("Compare a lower-commitment setup");
   await page.getByRole("button", { name: "Create branch" }).click();
-  await move(page, "d1", "d2");
+  await clickMove(page, "d1", "d2");
   await expect(page.getByText("Active line 4 plies")).toBeVisible();
 
   const branchStart = await page.evaluate(() => performance.now());

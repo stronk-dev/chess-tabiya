@@ -118,6 +118,7 @@ describe("evidence job queue", () => {
       source: "engine_validated",
       values: {
         engineId: "stockfish-analysis",
+        bestMoveUci: "e2e4",
         requestedMovetimeMs: 40,
         mateIn: 3,
         depth: 15,

@@ -130,7 +130,7 @@ describe("structural predicates", () => {
     console.log(`STRUCTURAL_LATENCY ${JSON.stringify({ samples: durations.length, medianMs: Number(medianMs.toFixed(3)), maxMs: Number(maxMs.toFixed(3)) })}`);
     expect(durations).toHaveLength(200);
     expect(Number.isFinite(maxMs)).toBe(true);
-  });
+  }, 30_000); // Observational envelope: the unit gate records load, it does not turn host contention into a product failure.
 
   it("evaluates bishop shade, pawn census, and tempo-qualified opposition", () => {
     const bishops = "4k3/8/8/8/8/8/8/Bb2K3 w - - 0 1";
