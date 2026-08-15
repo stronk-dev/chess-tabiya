@@ -1787,3 +1787,52 @@ caught it by counting.
 
 **Next.** The Q4a/Q4b author-capability dossier is in flight and is the one that
 rules on K7 and the E3 gate; this dossier deliberately did not.
+
+## 2026-08-15 — Q4a/Q4b answered; E3 partially met; the tempo contract is unauthorable
+
+**Landed.** `design/research/authored-transitions-and-features.md` — the second
+harvest of the content era's own evidence, over the same 35 packs.
+
+**Q4a, split verdict.** Authors declared phase boundaries reliably **and by
+hand**: 32 of 35 packs carry an `authoredBoundary`, **17 of them under no
+validator compulsion**, `plyHorizon` equals the deepest spine path in 19 of 32,
+and all **6 of 6** cross-phase trajectory leg boundaries fire at the exact ply
+the author claimed, verified under the shipped `matchesStructuralExpression`.
+That is the half E3 was written to test, and it is met without any detector.
+
+**The other half is zero.** A timing window was declared **0 times across 135
+checkpoints** — and it is a refusal, not an oversight. `04-content-architecture.md:228`
+*requires* one per opening root; 18 of 18 opening packs have none. Packs A and C
+independently recorded that a single `simpleTrigger` cannot express
+plan-readiness-as-a-move-set or multi-move drift. And `windowOpens` /
+`luxuryMoveBudget` have **no evaluator anywhere** — `pack-orchestrator.ts:64-73`
+reduces a window to its close trigger.
+
+**Why that is bigger than a format gap.** *Right plan one move too slow* and
+*tension released too early* are named target mistake classes in
+`01-training-model.md`. The tempo contract carries thesis weight, and it is
+currently unauthorable. E3 → **partially met**; K7 → **open, split by
+evidence** (structure encodable, timing not, logged as partial kill-criterion
+evidence per law 6). It also corrects how B4 has been carried: blocked on
+**vocabulary, not content effort** — no amount of authoring discharges it.
+
+**Q4b lands a sharper boundary than the question asked for.** Deterministic
+features assist reliably wherever the authored claim is a **census** (22/25
+shape references and 14/14 in-spine structural triggers fire, zero evaluator
+errors; the gap→predicate→adoption loop closed inside one day for all five
+wave-2 predicates) and assist with **nothing** wherever the claim is a
+**judgment** — plans, intent, history, timing. The authors said so themselves:
+**75 of 103 shape plans ship `signature: null`**. Seven of fifteen feature kinds
+have never appeared in a pack, and all 43 `piece_reach_count` leaves are the
+`atLeast 0` existence hack — a missing existence predicate wearing a costume.
+
+**Corrections of record.** The dossier independently re-derived the corpus size
+as **35 packs and 23 shapes**, confirming the count claude had been overstating.
+And it flagged an apparent contradiction between the B+N wave report and the
+shipped `mate-two-bishops.json`; resolved in place — the report was correct
+against the 08-14 file, claude fixed the dead condition in `25b4584`, and the
+dossier read the fixed version. Both observations true, different versions.
+
+**Next.** Two of nine exploration questions closed in one day from evidence
+already on disk. The predicate roadmap (§6, seven items ≥2 attestations) is now
+an evidence-ordered queue rather than a wish list.
