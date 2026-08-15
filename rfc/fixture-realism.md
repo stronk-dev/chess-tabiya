@@ -10,6 +10,19 @@
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/fixture-realism/` (once implementing)
 
+
+> **OWNER RULING 2026-08-15 — the tolerance NARROWS toward the measured envelope, so the E4
+> floor stands as written.** Open question 2 is resolved and no longer blocks. The shipped
+> `FLOAT32_POLICY_MASS_TOLERANCE = 32 * 2**-23` (3.8147e-06) is **41.2× wider** than Maia's
+> measured worst case (9.25e-08, `maia-policy-scalar-stability.md`), which both let invalid mass
+> pass silently across a 41× band and made this RFC's own floor unsatisfiable — no real vector
+> can cross a bound 475× outside where the committed fixture sits.
+> **Do NOT restate the floor as *instrument-reachable*.** Narrow the bound to just above what the
+> instrument produces, with headroom for a different image, and keep the floor as written: a real
+> captured fixture must cross every bound. The implementer picks the constant **from the measured
+> envelope**, states the headroom factor, and adds the fixture that crosses it. A future engine
+> build that starts refusing is the guard working, not a regression.
+
 ## Register claim
 
 **This RFC claims nothing versioned. Loudly, because that is the better outcome.**

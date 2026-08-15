@@ -58,6 +58,16 @@ the three irreversibility sentences in `renderPivotalMarker` (now `:73-75`).*
 > with the ruling's terms. No section hedges toward the third-value alternative. Cross-review
 > 2026-08-15 checked this specifically.
 
+
+> **OWNER RULING 2026-08-15 — render the queens-off form.** Open question 3 is resolved and no
+> longer blocks. After the narrowing, `last_of_role` is the **only** marker sentence a learner
+> sees unasked, and `rfc/archive/adaptive-guidance.md` §4b calls the queens-off form *"the version
+> of this fact players actually track"*. The field is computed (`transition.ts:255`) and never
+> read (`pivotal.ts:74`) — wire it. **Criterion 5 pins SEVEN outputs**, with the new sentence
+> written out; the six are not frozen. Rationale recorded: the archived judgement was made when
+> this was one sentence among many, and it is now the only one, which raises the value of getting
+> it right rather than lowering it.
+
 ## Summary
 
 R3 measured whether a census-built hint is worth reading and produced two results this repo did
