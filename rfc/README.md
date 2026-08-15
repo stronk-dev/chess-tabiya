@@ -7,6 +7,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | RFC | Status | Parent | Implementation |
 |---|---|---|---|
 | `0000-rfc-process.md` | accepted | — | process |
+| `authoring-frictions.md` | draft (in cross-review) | — | claims **pack schema 0.16** (additive/widening); NO migration (register stays 18); NO run-schema change (stays 0.13). Eight frictions from four content waves, ordered by attestation; carries the cursed-win/blessed-loss admission ruling of 2026-08-15 |
 
 No active product RFCs.
 
