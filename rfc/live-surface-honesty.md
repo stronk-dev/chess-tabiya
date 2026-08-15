@@ -89,8 +89,10 @@ named three finite remainders, of which it ruled two defect-class and one genuin
    namespace, 128-character keys, 50 000-voter cap, adapter-must-be-a-designated-learner rule
    in `LiveSessionService.castVote`), but nothing authenticates to Twitch or YouTube and
    relays. That is an out-of-repo bot against a shipped API, and it stays blocked on B5's
-   standing revival condition (*"can not be validated by use without other humans… a streamer
-   audience"*, `design/03-product-breadth.md:384-386`). **Out of scope here, deliberately**;
+   standing revival condition — *"none of it can be validated by use without other humans (a
+   streamer audience, a coach, an opponent); its BACKLOG revival conditions… remain in force
+   and are the real trigger"* (`design/03-product-breadth.md:384-388`). **Out of scope here,
+   deliberately**;
 2. the **attribution line** — §5;
 3. a **vote form that matches the server** — §5.
 
@@ -106,13 +108,15 @@ from ever behaving differently for a stream than for a private drill.
 - **`permittedAssistance` and its four enforcement sites** — owned in flight by
   `rfc/live-marker-quality.md`, narrowed by `rfc/teacher-surface.md` §5. §4 does not touch the
   ceiling; it touches the learner's *preferences* under it.
-- **D80** (assistance keyed on governance role, so the host-seated player gets evidence the
-  guest cannot) — **owned by `rfc/teacher-surface.md` §5**, which fixes it as a pure narrowing
-  by adding a required `seatedInContest` to `AssistanceContext`. Named, not absorbed.
+- **D80 — *Assistance is keyed on governance role, not playing status — so one player at a
+  match gets evidence the other cannot*** — **owned by `rfc/teacher-surface.md` §5**, which
+  fixes it as a pure narrowing by adding a required `seatedInContest` to `AssistanceContext`.
+  Named, not absorbed.
 - **The teacher/classroom surface** — that RFC's, entirely.
-- **D62** (the inert compact **Session** tab, which is why an observed learner on a phone
-  cannot see who is watching) — owned by `rfc/client-surface-floor.md`. It is the in-run half
-  of this surface's who-is-here honesty and it is not re-fixed here.
+- **D62 — *Two of four compact region tabs are inert, and one is dead by construction*** — owned
+  by `rfc/client-surface-floor.md`. Its **Session** half is why an observed learner on a phone
+  cannot see who is watching: the in-run half of this surface's who-is-here honesty, and it is
+  not re-fixed here.
 - **The chat adapter bridge**, above.
 - **Cohorts, team relays and scheduled pack nights.** The roster half belongs to
   `rfc/teacher-surface.md`; relays and matchmaking remain outside minimal-real scope by the
@@ -207,20 +211,33 @@ signed-in members, on the one surface aimed at people who cannot check.
 
 ### 3.1 The measurement
 
-`session.kind` is branched on in exactly two places server-wide, **both requiring `match`**:
-`LiveSessionService.create`'s match board-control guard, and `LiveSessionService.importArenaLeg`'s
-PGN-leg guard. Two further storage-side guards on match seating and two client display branches
-(the session-detail eyebrow, and the match-only invitation leg / Arena section in `App.svelte`)
-are the whole of it. **No code path anywhere behaves differently for `stream` than for
-`academy`.** Both are labels on the same aggregate; the differentiating machinery is
-`boardControl`, not `kind`. So per-context policy has no field to hang on — which is exactly
-what D82 needs and cannot get.
+`session.kind` is branched on in exactly two places in `LiveSessionService`, **both requiring
+`match`**: `create`'s match board-control guard (`input.kind !== "match"` under
+`boardControl === "match"`) and `importLeg`'s PGN-leg guard. Two further guards inside
+`RunStorage.createLiveSession` — the match-seating insert and the `kind === "match" &&
+boardControl !== "match"` arena-leg insert — are the rest of the server side; four server
+branches in total, every one of them testing `match`. Client-side there are three: the
+session-detail eyebrow, the match-only invitation leg (in the form and again in
+`inviteLiveParticipant`'s payload), and the Arena section. **No code path anywhere behaves
+differently for `stream` than for `academy`.** Both are labels on the same aggregate; the
+differentiating machinery is `boardControl`, not `kind`. So per-context policy has no field to
+hang on — which is exactly what D82 needs and cannot get.
+
+(The ledger row **D81 — *`session.kind` is decorative*** says "exactly two behavioural branches
+server-wide"; it is counting the service, and the two storage guards are inside the same
+`create` call it names. The count above is the exhaustive one and does not change the row's
+finding.)
 
 ### 3.2 The position: read the enum; do not widen it
 
-**`session.kind` should become behavioural, at the smallest possible size: one read, in one
-place, of one member — `stream`.** Not a fourth member. Not a new branch in the session
-service. §4's assistance-profile derivation is the read, and it is the only one this RFC adds.
+**`session.kind` should become behavioural, at the smallest possible size: one read site, in the
+client, of members that already exist.** Not a fourth member. Not a new branch in the session
+service. §4's assistance-profile derivation is that site, and it is the only read this RFC adds.
+
+Stated exactly, because §4.3 is the normative text and it reads **two** members, not one:
+`stream` is the member the design tier asks for, and `match` is read at the same site purely as
+a **preference-profile selector** (§3.3's middle case). Neither read is a permission input, and
+no member is added.
 
 The warrant is design-tier and specific. `design/05-in-run-experience.md` §4 (`:301-322`) names
 four things that vary by context, and the third is *"What assistance is permitted here?… **A
@@ -256,15 +273,23 @@ and this RFC confirms it independently: §4's fix does not add a `SESSION_KINDS`
 |---|---|---|
 | Operation | **widen** the enum with a fourth member | **read** the three members that exist |
 | Purpose | express a standing relation (classroom ↔ session) | distinguish one live context (`stream`) |
-| Better alternative | yes — `live_sessions.classroom_id`, a relation that answers *which* classroom | **none exists** |
+| Better alternative | yes — `live_sessions.classroom_id`, a relation that answers *which* classroom | **none; the three candidates are all worse, below** |
 
-That last row is the whole argument. A classroom has a better referent than a label, so the
-label is refused. A **stream has no other referent at all**: there is no `stream_states` table,
-no relation, no run field, nothing in the persisted world that says "an audience is watching
-this" except the enum member the product already stores, constrains, validates and renders in a
-dropdown. Refusing to read it would not be conservatism; it would leave a shipped, closed,
-owner-visible field permanently decorative while the design tier asks twice for the distinction
-it encodes.
+That last row is the whole argument, and it was checked rather than asserted. A classroom has a
+better referent than a label, so the label is refused. **A stream has no comparable referent.**
+There is no `stream_states` table and no run field; three things in the persisted world touch
+the neighbourhood, and each was examined and rejected:
+
+| Candidate | What it actually means | Why it is not the referent |
+|---|---|---|
+| `run_grants.role = 'spectator'` (`RUN_ROLES`, `apps/server/src/storage.ts`) | a named, authenticated learner may read this run | It answers *who may read*, per person, and is present identically in academy and match sessions. A stream's audience is precisely the population with **no** grant — it watches OBS output and votes through a relay. Zero spectator grants is the normal state of a streamed run |
+| `public_tokens` with `scope: "session_join"` and `invitedRole: "spectator"` | a revocable, expiring invitation for one named seat | Same objection, plus it is an invitation rather than a state: minting one does not make a run broadcast, and a stream needs none |
+| `live_sessions.vote_adapter_learner_id` | a chat relay account is configured | The closest candidate, and still wrong. It is nullable and **NULL in every session that exists today**, because the bridge that would use it is blocked on B5. Deriving "streamed" from it would make the profile flip when a host configures a relay — a different fact, and one the product cannot yet produce |
+
+So the enum member is the only fact that says *this session is a broadcast*, and it is one the
+product already stores, constrains, validates and renders in a dropdown. Refusing to read it
+would not be conservatism; it would leave a shipped, closed, owner-visible field permanently
+decorative while the design tier asks twice for the distinction it encodes.
 
 `match` is the instructive middle case and it proves the rule rather than breaking it: it *does*
 have a better referent (`match_states`), and `teacher-surface` §5 correctly reads that relation
@@ -311,10 +336,14 @@ invisible. They are separated here and stay separated:
 
 **This RFC changes only the right-hand column.** `AssistanceContext` is not edited, no field is
 added or removed, `permittedAssistance` is byte-for-byte unchanged, and the four enforcement
-sites are untouched. A preference can never exceed the ceiling — the client renders
-`assistancePermission.* === "locked_off"` as locked regardless of what is stored — so widening
-the preference key set cannot widen disclosure. **The change is a partition of an existing key
-space, not a permission change.**
+sites are untouched. A preference can never exceed the ceiling, checked field by field in
+`DrillScreen.svelte`: `humanSplit` and `corpus` render their controls `disabled` and their
+request buttons behind `assistancePermission.* === "free"`; `boardLighting` is clamped by
+`effectiveLighting` (`"evidence"` degrades to `"sight"` when the permission is not `evidence`);
+and `arrows` is clamped vacuously because **no client surface renders arrows at all** — a
+stored preference with no consumer, reported in §7 rather than fixed here. Widening the
+preference key set therefore cannot widen disclosure. **The change is a partition of an
+existing key space, not a permission change.**
 
 Note in passing, and do not fix here: `AssistanceContext.sessionKind` is declared and **never
 read** by `permittedAssistance`. It is a field on a type two other drafts are actively editing.
@@ -346,14 +375,28 @@ export function assistanceProfile(input: {
 `saveAssistance` follow. The key namespace stays `tabiya.assistance.v1.<profile>` and
 `AssistanceConfig.version` stays `4`.
 
+The three input types are all already available at that file with **type-only** imports and no
+cycle: `RunSessionKind` and `RunFeedbackPolicy` from `@chess-tabiya/runtime` (the module already
+imports from it), and `SessionKind` from `./api.js`, which declares it at
+`apps/web/src/lib/api.ts` and does not import `assistance-preference.js`.
+
 Each clause is a verified fact, not a heuristic:
 
 - **on-ramp** is `run.feedbackPolicy === "immediate_guard"`, the member
   `archive/onramp-guard.md` added at pack schema 0.14 / run schema 0.11, and the one arm of
   `feedbackDisclosed` that returns `true` unconditionally;
 - **stream** is `session.kind === "stream"` — §3;
-- **match** is `session.kind === "match"`, which `LiveSessionService.create` already requires to
-  be an untouched `position` run, so the profile is a strict refinement of the bucket it leaves;
+- **match** is `session.kind === "match"`, which covers **both** shipped match contexts, and the
+  bucket it draws from is wider than `position`. Checked, because the obvious claim is false:
+  the *"untouched `position` run"* requirement in `LiveSessionService.create` is gated on
+  **`boardControl === "match"`** (the native two-player match), **not** on `kind === "match"`.
+  The imported-Arena path is `kind === "match"` with `boardControl !== "match"` — that is
+  exactly the branch that inserts the two `arena_legs` rows — and it carries no such
+  requirement, so an Arena session may sit on a `pack` or already-played run. The `match`
+  profile therefore siphons from `position` **and possibly `pack`/`imported`**. That is safe
+  because of §4.5's floor, not because of any refinement: whatever bucket a run leaves, the new
+  key reads absent. Both contexts are *a match* in `design/05:147`'s sense, which is why one
+  profile is right for both;
 - everything else falls through to the shipped `RunSessionKind`, so **`pack`, `position` and
   `imported` keep their exact present meaning and their stored values**.
 
@@ -367,11 +410,16 @@ person playing it, and the guard is the point of that context. Cheap to flip; Op
   `undefined`), and its two preference calls become
   `assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind })`.
 - `App.svelte` passes `activeLiveDetail?.session.kind` at its `<DrillScreen>` usage.
-  `activeLiveDetail` is already fetched for the `run` route and already refreshed by the 2 s
-  poll, so no new request is introduced.
+  `activeLiveDetail` is already fetched on entry to the `run` route (from the `liveSessions`
+  list, matched on `runId`) and already refreshed by `syncLivePolling`'s 2 s interval, so **no
+  new request is introduced**. One shipped limit inherited rather than created: the poll reads
+  `activeLiveDetail?.session.id` and returns early when it is `undefined`, so a session opened
+  on a run the learner is *already* sitting on is not picked up until the next navigation. The
+  profile inherits that latency exactly; Open question 6 states it.
 - `AssistanceSettings.svelte`'s three hardcoded `loadAssistance` calls become a loop over
   `ASSISTANCE_PROFILES`, rendering six labelled sections: *Curated drill*, *Just Play*,
-  *Imported game*, *Native match*, *Streamed session*, *On-ramp*.
+  *Imported game*, *Match / Arena*, *Streamed session*, *On-ramp* — the fourth label matching
+  the client's own kind dropdown, because §4.3 shows the profile covers both match contexts.
 - The overlay route renders no assistance rail and gains nothing here. The stream profile
   governs the drill screens of the host and of anyone watching in a full client — which is
   where a rail exists to configure.
@@ -384,12 +432,24 @@ specified, and that is the honest direction:** a learner who enabled everything 
 Play* — their own game, where §4 of `design/05` says they may want everything — has not thereby
 asked for it in a match against another human or in front of an audience.
 
-**Direction check, as arithmetic.** For every existing learner and every context, the stored
-configuration after this change is either identical (the three shipped profiles) or
-`SILENT_ASSISTANCE` (the three new ones), and `SILENT_ASSISTANCE` is the floor of
-`AssistanceConfig`. The change is therefore **monotone non-increasing in assistance**, and it
-is consistent with `design/05` §3a (*the default is silence*). Nothing this RFC does can turn
-anything on.
+**Direction check, as arithmetic — and it has exactly one exception, which is stated rather
+than rounded off.** For every existing learner and every context, the resolved configuration
+after this change is either identical (the three shipped profiles) or `SILENT_ASSISTANCE` (the
+three new ones). `SILENT_ASSISTANCE` is the floor of `AssistanceConfig` in **eight of its nine
+fields** — `markers`/`guided`/`humanSplit`/`corpus`/`spoken`/`arrows`/`ambient` are their
+enums' `off`, `voice` is `authored`. The ninth is **`boardLighting: "legal"`**, and the enum is
+`off | legal | sight | evidence`, so a learner who had explicitly set `boardLighting: "off"`
+under *Just Play* and then plays in a `stream`, `match` or on-ramp context resolves to `legal`
+— **one cell that rises**, from no highlighting to legal-move highlighting.
+
+That cell is rung 0. `legal` renders the rules and nothing else: no engine, no corpus, no
+tablebase, no authored claim, and no disclosure-bearing content of any kind. It is also the
+shipped product default that every fresh context has always started from. So the precise claim,
+and the one the acceptance criteria test, is: **the change is monotone non-increasing in every
+disclosure-bearing channel, and no evidence a run has not disclosed can be turned on by it.**
+The single non-monotone cell is rules-tier and is named here so it is a decision rather than an
+accident. It is consistent with `design/05` §3a (*the default is silence*) — silence is about
+claims, and `legal` makes none.
 
 ## 5. D83 — *the chat-relay attribution line is absent*, and the vote form offers a quarter of its range
 
@@ -415,16 +475,31 @@ the adapter beside the whole tally would attribute *member* votes to the adapter
 second untruth. The relayed count is already derivable, exactly and cheaply, because
 `session_votes.voter_key` carries a CHECK admitting only `learner:%` and `chat:%`:
 
-1. **`VoteTally` gains `readonly relayed: number`** — the count of rows in the window whose
-   `voter_key LIKE 'chat:%'`, one extra aggregate inside `RunStorage.voteTally` beside its
-   existing `GROUP BY choice_uci`. The field is added in **both** declarations,
-   `apps/server/src/live-types.ts` and the client mirror in `apps/web/src/lib/api.ts`, per the
-   §3.9 precedent that a projection declared twice must not drift.
+1. **`VoteTally` gains `readonly relayed: number`** — one extra aggregate inside
+   `RunStorage.voteTally` beside its existing `GROUP BY choice_uci`, counting rows of this
+   `(session_id, window_id)` whose `voter_key LIKE 'chat:%'` **and whose `choice_uci` is one of
+   the window's options**. The second conjunct is what makes `relayed ≤ total` a theorem rather
+   than an observation: `total` is summed over the window's options, so an unmatched row would
+   otherwise be counted in one and not the other. (`castVote` refuses a `choiceUci` outside the
+   options and the options are immutable after `createVoteWindow`, so today the two sets
+   coincide; the aggregate is written to stay exact if that ever stops being true.) Recasts need
+   no special handling: `session_votes`' primary key is `(session_id, window_id, voter_key)` and
+   `castVote` upserts on it, so one key is one row whatever it does. The field is added in
+   **both** declarations, `apps/server/src/live-types.ts` and the client mirror in
+   `apps/web/src/lib/api.ts`, per the §3.9 precedent that a projection declared twice must not
+   drift.
 2. **`LiveSessionDetail` gains `readonly voteAdapter?: LeaseIdentity`** — `{ learnerId, handle }`,
    resolved in `LiveSessionService`'s detail projection with `RunStorage.learnerById`, following
-   the shipped `leaseHeldBy` idiom exactly. Absent when no adapter is configured, or when the
-   adapter account no longer resolves (`live_sessions.vote_adapter_learner_id` is
-   `ON DELETE SET NULL`). Mirrored in `apps/web/src/lib/api.ts`.
+   the shipped `leaseHeldBy` idiom exactly. `LeaseIdentity` is the shipped name in both files
+   (`apps/server/src/storage.ts`, which `live-types.ts` already imports from, and
+   `apps/web/src/lib/api.ts`); no new type is introduced. Absent when
+   `session.voteAdapterLearnerId` is undefined — which is **also how a deleted adapter account
+   presents**, because `live_sessions.vote_adapter_learner_id` is
+   `REFERENCES learners(id) ON DELETE SET NULL`, so the column is nulled rather than left
+   dangling and `learnerById` is never called with a stale id. The `learnerById === undefined`
+   arm is therefore an unreachable-today fallback, kept because a revocation path that unsets
+   the adapter differently must not be able to reintroduce the defect silently. Mirrored in
+   `apps/web/src/lib/api.ts`.
 3. **Both the overlay and the session-detail tally render exactly one line beneath the tally**,
    chosen by the counts, never omitted:
 
@@ -457,10 +532,17 @@ Specification:
   written once as constants mirroring `openVote`'s check; the client never re-implements the
   check, it only stops offering the control.
 - **Labels are host-authored and separate from the move.** `VoteOption` already carries
-  `{ moveUci, label }`; the client currently assigns `label = moveUci`, which is why plans are
-  unreachable. The label input defaults to the UCI as typed and is editable. **Law 8:** a label
-  is attributed human text from the host, never generated and never a claim about the position.
+  `{ moveUci, label }`, and the route already parses `label` as a **required** string
+  (`rest.ts`'s `options` mapper), so the plan-label path is complete server-side and the gap is
+  entirely the client's: it assigns `label = moveUci`. The label input defaults to the UCI as
+  typed and is editable. **Law 8:** a label is attributed human text from the host, never
+  generated and never a claim about the position.
 - **The prompt is an input**, defaulting to `"Which continuation?"`.
+- **Label and prompt carry a client-side `maxlength`** (label 40, prompt 120) because both are
+  rendered on the overlay, which is a fixed-width video surface with no wrapping budget. The
+  server bounds neither today; adding a server bound would be a new refusal, so it is
+  deliberately not proposed — the client stops offering what it cannot render, exactly as it
+  does for the option count.
 - **The window is an input**, defaulting to 60 and bounded 15–600.
 - **The client adds no legality claim of its own.** Legality stays server-side in `legalAt`; the
   client submits and renders the refusal. It must not grey out, reorder or annotate moves.
@@ -483,7 +565,7 @@ revival condition, and that is correct.
 | The teacher / classroom surface, enrolment, assignments, rosters | `rfc/teacher-surface.md` | Standing and asynchronous; a different consent object from a session |
 | **D62** — the inert compact **Session** tab and its inverted role condition | `rfc/client-surface-floor.md` | It is the reason an observed learner on a phone cannot see who is watching — the in-run half of this surface's who-is-here honesty. Declared as a dependency; **I4 is unmet on a phone until it lands** |
 | The `permittedAssistance` table and its four enforcement sites | `rfc/live-marker-quality.md` | §2's I2 is stated *about* that table; this RFC does not edit it. Lands in any order |
-| The chat adapter bridge | nobody — blocked | `design/03:384-386`, B5's revival condition |
+| The chat adapter bridge | nobody — blocked | `design/03:384-388`, B5's revival condition |
 | Cohorts, scheduled pack nights, team relays | `rfc/teacher-surface.md` (roster half); ledger (relays) | Not a broadcast concern |
 
 ## 7. Register claims — **this RFC claims nothing versioned, and that is the better outcome**
@@ -498,12 +580,12 @@ Stated loudly, because the drafting brief asked for it and because it is true.
 | **`SESSION_KINDS`** | **read, never widened.** Three members in, three members out. No CHECK constraint moves, no route validation changes |
 | **`RunSessionKind`** | **unchanged** (`pack \| position \| imported`). `AssistanceProfile` is a **new client-local type** in `apps/web/src/lib/`, not a widening of the runtime type |
 | **`permittedAssistance` / `AssistanceContext`** | **untouched.** Owned by `rfc/live-marker-quality.md`; narrowed by `rfc/teacher-surface.md` §5. Neither is blocked by, nor blocks, this RFC |
-| **Preference key namespace** | additive only: `tabiya.assistance.v1.<profile>` gains three namespaces (`match`, `stream`, `onramp`). `v1` unchanged, `AssistanceConfig.version` stays `4`, no stored value is read or rewritten |
-| **REST response shape** | two additive optional/derived fields — `VoteTally.relayed`, `LiveSessionDetail.voteAdapter` — each declared in **both** the server type and the `apps/web/src/lib/api.ts` mirror |
-| **Refusal codes** | **none.** No `ServerErrorCode` member is added; the vote-bound refusals already exist as `INVALID_REQUEST` |
+| **Preference key namespace** | additive only: `tabiya.assistance.v1.<profile>` gains three namespaces (`match`, `stream`, `onramp`). `v1` unchanged, `AssistanceConfig.version` stays `4`, the four `migrate` arms are untouched, and **no stored value is rewritten** — the three shipped keys are read exactly as today and keep their meaning |
+| **REST response shape** | two additive derived fields — `VoteTally.relayed` (**required**, always computable from `session_votes`) and `LiveSessionDetail.voteAdapter` (**optional**, absent when the column is NULL) — each declared in **both** the server type and the `apps/web/src/lib/api.ts` mirror, which are the only two declarations of either type in the tree (verified) |
+| **Refusal codes** | **none.** No `ServerErrorCode` member is added. Swept: the option-count and `durationSeconds` bounds refuse as **`INVALID_REQUEST`**; the vote path can also return the shipped **`VOTE_WINDOW_CLOSED`** and **`VOTE_INTAKE_FULL`**; the rail routes use the shipped **`ASSISTANCE_WITHHELD`** (`live-marker-quality`'s, unchanged here). §5.2's form renders whichever it receives and re-implements none of them |
 | **Token surface** | **none.** `public_tokens` untouched |
-| **`rfc/README.md`** | **not edited by this draft**, per the drafting instruction. The accepting commit adds one **Active** row reading *claims nothing versioned* — and **no register rows at all**, because there is nothing to register |
-| **Ledger rows this RFC ships** (owner tier; reported, not edited) | **D81** — closed by §3/§4's single read of `kind === "stream"`. **D82** — closed on the code side by §4; its `DESIGN-GAP:` half is reported below. **D83** — closed by §5, including the duration and prompt hardcodes, which are the same defect shape as the option hardcode the row names |
+| **`rfc/README.md`** | **not edited by this draft**, per the drafting instruction — and its **Active row already exists**, added by `c7fe539` (*"register the three unregistered drafts"*) when this draft was registered. So the accepting commit adds **no row at all**: it flips this one's status and adds **no register rows**, because there is nothing to register |
+| **Ledger rows this RFC ships** | **D81 — *`session.kind` is decorative*** — closed by §3/§4's single read site. **D82 — *Five named assistance contexts against three shipped preference keys*** — closed on the code side by §4; its `DESIGN-GAP:` half is reported below. **D83 — *The chat-relay attribution line is absent*** — closed by §5, including the duration and prompt hardcodes, which are the same defect shape as the option hardcode the row names. **These rows are not "owner tier":** `AGENTS.md` (2026-08-15) settles that `design/BACKLOG.md` is a **shared register every tier writes to**, so the implementing commit flips all three 💡→✅ with one-line summaries **and appends its entry to `planning/exploration/log.md`**, per the completion protocol. This draft leaves them unflipped only because they are not yet shipped |
 
 **Corrections and doc changes reported, not made** (`design/` and `docs/` are not this agent's
 to edit):
@@ -514,11 +596,21 @@ to edit):
 2. **`design/05-in-run-experience.md:147`** — names five contexts; the shipped and specified set
    is **six**, because `imported` (`archive/game-import-and-story.md`) is a real context the
    sentence omits. Either it names six, or `imported` is declared not to be a context of its own.
-3. **`AssistanceContext.sessionKind` is declared and never read.** Reported for whoever next
-   owns that type; deliberately not touched here while two drafts are editing it.
-4. **New ledger row proposed:** the vote form's `durationSeconds` and `prompt` are hardcoded
-   against a 15–600 s server range and a free-text field — the same finishing-pass class as
-   D83's option count, swept together in §5.2, and worth a row so the sweep is traceable.
+3. **`AssistanceContext.sessionKind` is declared and never read** by `permittedAssistance`
+   (verified against `packages/runtime/src/assistance.ts`). Reported for whoever next owns that
+   type; deliberately not touched here while two drafts are editing it.
+4. **New ledger row owed — not merely proposed:** the vote form's `durationSeconds` and
+   `prompt` are hardcoded against a 15–600 s server range and a free-text field — the same
+   finishing-pass class as D83's option count, swept together in §5.2. Law 4 makes the row due
+   **at utterance**, so it is owed by whoever next writes the ledger, not by the accepting
+   commit; this draft could not add it because its edit boundary was one file.
+5. **New ledger row owed — `arrows` is a preference with no consumer.**
+   `AssistanceConfig.arrows` is stored, migrated across four config versions, offered as a
+   three-way `<select>` in `AssistanceSettings.svelte`, and capped by `permittedAssistance` —
+   and **no client surface reads it**. A control that renders and does nothing is the D62 class
+   (*"Two of four compact region tabs are inert, and one is dead by construction"*), on the same
+   settings screen §4.4 edits. Found by this cross-review; out of scope here because it is a
+   renderer question, not a keying question.
 
 ## Deviations from design
 
@@ -547,8 +639,14 @@ Otherwise: none.
    guard on the 2026-08-12 ruling.)
 2. For a run at every disclosure state, `permittedAssistance` for `participant` and `spectator`
    is pointwise ≤ its value for `host` and `solo` under `locked_off < free`, `sight < evidence`.
-   The test asserts the ordering, not the literal table, so it survives
-   `rfc/live-marker-quality.md` and `rfc/teacher-surface.md` §5 unchanged. (I2.)
+   The test asserts the **ordering**, not the literal table, so neither
+   `rfc/live-marker-quality.md`'s enforcement work (verified: `7bcf164` changed `rest.ts`,
+   `pivotal.ts` and `DrillScreen.svelte`, and **did not touch
+   `packages/runtime/src/assistance.ts`**) nor `rfc/teacher-surface.md` §5's narrowing
+   (`mayRequestSplit ∧ ¬seatedInContest`, monotone decreasing) can falsify it. Stated exactly:
+   what survives is the *assertion*; when §5 lands, the test's context literals gain the new
+   required `seatedInContest` field, which is a compile-time edit at one constructor and is the
+   coupling working. (I2.)
 3. `permittedAssistance` returns byte-identical tables before and after this RFC for all four
    roles at both `deliveryOpen` values — the regression guard that §4 is a preference change and
    not a permission change.
@@ -559,11 +657,18 @@ Otherwise: none.
    `stream` for an `attempt_end` run in a `stream` session; `match` in a `match` session;
    and the run's own `sessionKind` with no live session, for each of `pack`, `position`,
    `imported`. Six cases, one per profile, plus the precedence case (`immediate_guard` **and**
-   `stream` → `onramp`).
+   `stream` → `onramp`), plus the Arena case that §4.3's corrected bullet names: a `pack` run in
+   a `kind: "match"`, `boardControl: "host_directed"` session returns `match`, not `pack`.
 5. A learner with a stored `tabiya.assistance.v1.position` configuration opens a run in a
    `stream` session and receives `SILENT_ASSISTANCE`, not the stored Just Play configuration;
    the stored `position` value is unchanged on disk. Saving under `stream` does not write the
    `position` key.
+5b. **The §4.5 direction check is a test, including its exception.** For a stored configuration
+   with every field set to its maximum, resolving under each of the three new profiles returns
+   `SILENT_ASSISTANCE`; and for a stored configuration with `boardLighting: "off"`, the
+   resolved value differs from the stored one in **exactly one field**, `boardLighting`, and in
+   no disclosure-bearing field. The test names the exception so a later widening of
+   `SILENT_ASSISTANCE` cannot smuggle a second one in.
 6. `AssistanceSettings.svelte` renders one section per `ASSISTANCE_PROFILES` member; a test
    fails if a profile is added without a section, so the count cannot silently regress to three.
 7. `SESSION_KINDS` still has exactly three members and the `live_sessions` CHECK is unchanged; a
@@ -577,8 +682,9 @@ Otherwise: none.
    votes and no resolvable adapter, the fourth line renders. No path renders a tally with no
    line beneath it. (I4.)
 9. `VoteTally.relayed` counts exactly the `chat:%` keys: a test casts through both paths and
-   asserts `relayed` and `total` independently, and that `relayed` is unaffected by recasts from
-   an already-seen key.
+   asserts `relayed` and `total` independently, that `relayed ≤ total` holds in every case, and
+   that `relayed` is unaffected by recasts from an already-seen key (the
+   `(session_id, window_id, voter_key)` upsert).
 10. `VoteTally` and `LiveSessionDetail` are asserted structurally identical between
     `apps/server/src/live-types.ts` and `apps/web/src/lib/api.ts` for the two new fields — the
     §3.9 anti-drift rule.
@@ -622,13 +728,35 @@ profile selects defaults and never a permission.
    statement of it — but it is a new rendered claim on a shipped surface rather than a
    correction to one, so it is a question rather than a specification. `rfc/client-surface-floor.md`
    owns the region it would live in.
-6. **Does anything need to happen when a stream session closes?** The profile derivation reads
-   the *open* live session; when the session closes, the same run falls back to `position` or
-   `pack` and the learner's Just Play preferences reapply. That is probably right — the audience
-   is gone — but it means a learner's rail can change mid-run without them acting. Stated so it
-   is a decision rather than an accident.
+6. **What happens when a live session opens or closes under a run in progress?** The derivation
+   reads the *open* live session, so both edges exist. **Closing:** the run falls back to
+   `position` or `pack` and the learner's Just Play preferences reapply — probably right, the
+   audience is gone, but the rail changes mid-run without the learner acting. **Opening:** the
+   shipped poll only refreshes a session it already knows about (§4.4), so a run that becomes
+   streamed while the learner sits on it keeps the Just Play rail until they navigate — the
+   wrong direction, since that is the window where an audience appeared and the rail did not
+   change. Both are inherited client behaviours rather than new ones; the fix for the second is
+   one unconditional `liveSessions()` lookup in the poll, which is a request this RFC declined
+   to add on its own authority. Stated so both are decisions rather than accidents.
 
 ## Changelog
 
 - 2026-08-15: created. Drafted on `design/research/broadcast-and-teacher-surfaces.md` §§2.4, 3,
   6, 7.1 and 8, against the working tree of the same day. Claims nothing versioned.
+- 2026-08-15: **adversarial cross-review, fixed in place.** Every §1 primitive, every quoted
+  archive/design/docs sentence, and every register claim re-verified against the working tree;
+  **"nothing versioned" holds** — `session_votes.voter_key`'s CHECK (`learner:%` / `chat:%`) and
+  `live_sessions.vote_adapter_learner_id` (`ON DELETE SET NULL`, resolved through the shipped
+  `learnerById`) make both new fields derived, so `STORAGE_VERSION` stays 20, run 0.15, pack
+  0.22, migration 21 free for `teacher-surface`, 0.23/0.24 unclaimed by this draft and 0.19
+  frozen shut. Six corrections: §3.1's branch count was under-inclusive (four server branches,
+  three client); §3.2 claimed one member read where §4.3 reads two; §3.3's *"no other referent"*
+  was absolute and is now the three candidates it was really about; **§4.3's `match` bullet
+  asserted an untouched-`position` guard that is gated on `boardControl`, not `kind`** — the
+  Arena path falsified it; **§4.5's *"nothing can turn on"* had one false cell** —
+  `SILENT_ASSISTANCE.boardLighting` is `legal`, not `off`, so a learner who set `off` sees it
+  rise, which is now stated, bounded to rung 0, and tested; and §5.1's `relayed` aggregate and
+  deleted-adapter case are now exact. `rfc/README.md`'s Active row was found to already exist
+  (`c7fe539`), the ledger clause was corrected from "owner tier" to the shared-register rule
+  plus the log obligation, and two owed ledger rows are named (the vote-form duration/prompt
+  hardcodes, and `arrows` — a stored, migrated, configurable preference with no renderer).
