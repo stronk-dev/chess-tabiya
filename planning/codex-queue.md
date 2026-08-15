@@ -1,82 +1,65 @@
-# Codex queue — refreshed 2026-08-15
+# Codex queue — refreshed 2026-08-15 (evening)
 
-Ordered. Take the top unstarted item; do not wait for anything below it.
-All register lanes are reconciled in `rfc/README.md` and cannot collide.
+**Landed today, all verified by claude at `ENGINES_REQUIRED=1 make verify` exit 0:**
+`authoring-frictions` (`ffc9817`, pack 0.16) · `validator-integrity` (`047de02`,
+nothing versioned) · `tempo-vocabulary` (`ed48978`, pack 0.17) ·
+`resistance-spectrum` (`4977ff6`, run 0.14 / migration 19) · refusal-code
+coverage (`8fbab41`, 107 emitters classified).
 
-**Landed today:** `authoring-frictions` (`ffc9817`, pack 0.16) and
-`validator-integrity` (`047de02`, nothing versioned). Both verified by claude at
-`ENGINES_REQUIRED=1 make verify` exit 0, ledger flips correctly inside the
-implementing commits.
-
-## 1. `rfc/archive/tempo-vocabulary.md` — IMPLEMENTED
-
-Pack **0.17**. Unblocks the E3 and B4 gates. A timing window becomes a ledger
-kept between two events; computes the three tempo mistake classes named in
-`design/01-training-model.md`; implements `preserve_plan_window`.
-
-Cross-reviewed: six specification-level blockers fixed, including a layering
-violation that would have stopped you at the first `onTrigger` window
-(`simpleTriggerMatches` is module-private and lives in a package
-`packages/runtime` cannot import — the RFC injects a `TriggerResolver`). All 14
-verdict cells in §8 were independently re-derived.
-
-**Carries an owner ruling (2026-08-15):** `outpaced` grading is split by context —
-a pack may declare per window that it grades (default ungraded); **Just Play
-grades it as failure by default**. Both branches need the declared-vs-executable
-treatment; the Just Play default needs its own applied record, not an implicit one.
-
-## 2. `rfc/opening-evidence-path.md` — BLOCKED ON REGISTER RECONCILIATION
-
-Pack **0.20**. Closes the opening half of the evidence hole (`validator-integrity`
-closed the trajectory half). `assessedBy` gains `kind: "engine"`.
-
-The spine to preserve: **a tablebase record grounds a claim by settling it; an
-engine record grounds a claim by making it falsifiable at a named cost.** An
-opening pack may be `ledger_verified` while every strategic assertion in it stays
-ungrounded — its sentence ends `"not a proof"` against the syzygy branch's
-`"Exact."`, and **no pack-level verified badge may be derived** (acceptance
-criterion 19 exists to keep it that way).
-
-Cross-review fixed a real regression: retiring `OBJECTIVE_GRADING_UNSUPPORTED`
-outright would have admitted an engine assessment on a trajectory **leg**, whose
-entry position is not statically bound. It is now *narrowed to legs*, not retired.
-
-Codex re-review found two post-review stale premises on 2026-08-15: pack 0.20
-cannot land before the still-unlanded 0.18 owner, and the RFC's migration census
-names 20 opening packs while the tree contains 23. Reconcile both before starting.
-
-## 3. `rfc/archive/resistance-spectrum.md` — IMPLEMENTED
-
-Run **0.14**, migration **19**. Ships `practical_resistance`; proves `fallible`
-should not exist as a mode and fixes the unconditional `setoption name Elo`.
-
-Cross-review dropped two central mechanisms that were wrong: the `sameEngine` +
-`eloApplied` extension **would have caused the desync it promised to prevent**,
-and §2b fell through to **alphabetical play** in the 46.2% of positions with no
-conceding move (now a named vacuity refusal). Candidate cap is 8 → 4.
-
-**Carries an owner ruling (2026-08-15):** the latency budget now has two axes —
-per instrument call and per selection (`design/02-product-shape.md`). This mode's
-~580 ms is a declared per-selection budget, not a breach.
-
-## 4. `rfc/predicate-wave-3.md` — owner items closed, final pass in flight
+## 1. `rfc/predicate-wave-3.md` — READY NOW, take this next
 
 Pack **0.18** + shape-entry **0.2 → 0.3** (the shape schema carries a duplicated
-`$defs/structuralFeature`; new leaves must land in **both** copies).
+`$defs/structuralFeature`; new leaves must land in **both** copies or shape
+triggers silently cannot use them).
 
-Two owner rulings landed on it: intent grading is **grade the 45%, refuse the
-rest by name** (overturning its wholesale refusal), and **`piece_distance` is
-absorbed** into this wave. An agent is writing the latter in now.
+**Previously blocked on three things; all three are cleared:** the cross-review
+is committed, the status note names which open questions gate acceptance, and
+both owner-facing questions are ruled.
 
-## 5. `rfc/deviation-classes.md` — 1 OWNER QUESTION OPEN
+Owner rulings it now carries:
+- **`plan_consequence` SHIPS** (Q1). Its 16-of-99 coverage is a *content* defect,
+  not a format limit — *"we are the authors"*. A signature authoring pass runs in
+  parallel; do not wait for it.
+- **`piece_distance` is absorbed** into this wave. Ship it as the **static** leaf
+  only — the delta form was refuted at a 98.7% false-positive rate. Note the
+  measured limits: rook/bishop/queen take only the values {1,2} against a king
+  target corpus-wide, and 85 of 440 positions have every white bishop off-shade,
+  so the vacuity refusal is load-bearing.
+- Intent grading is **grade the 45%, refuse the rest by name** — §5c-bis supplies
+  capability publication, named refusal and applied record.
 
-Pack **0.21**. Adds `mistake` and `cost`; deliberately does **not** split the
-`class` enum — of 36 `concept_violation` rows, 4 are genuinely *both* plan and
-timing, so a two-value split makes them unauthorable. **Do not start this one
-until the owner rules on whether a single-valued `mistake` is acceptable.**
+## 2. `rfc/opening-evidence-path.md` — READY, take after item 1
 
-`cost` ships **author-declared and UNBACKED** by coordinator ruling — no
-capability claims it is verified and no surface may render it engine-confirmed.
+Pack **0.20** (behind 0.18, hence the ordering). Closes the opening half of the
+evidence hole. `assessedBy` gains `kind: "engine"`.
+
+The stale corpus count you flagged is fixed — it is **20** opening packs, not 18
+(the Scandinavian pair landed after G1). The spine to preserve: a tablebase
+record grounds a claim by *settling* it; an engine record grounds a claim by
+making it *falsifiable at a named cost*. An opening pack may be `ledger_verified`
+while every strategic assertion in it stays ungrounded — hence `"not a proof"`
+against the syzygy branch's `"Exact."`, and **no pack-level verified badge**.
+
+Cross-review caught a real regression: retiring `OBJECTIVE_GRADING_UNSUPPORTED`
+outright would have admitted an engine assessment on a trajectory **leg**, whose
+entry position is not statically bound. It is *narrowed to legs*, not retired.
+
+## 3. `rfc/branch-set-scale.md` — in cross-review
+
+Claims **nothing versioned**. Collapse decided branches, bound the eval work,
+manual fold. Note its finding: **compare already spends zero engine work**, so 99
+branches never meant 99 evaluations — the real cost is the O(B·N) branch rail.
+
+## 4. `rfc/deviation-classes.md` — being rewritten, do NOT take yet
+
+Pack **0.21**. The owner ruled `mistake` **multi-valued**; the body still
+specifies a single-valued enum, so an agent is rewriting it. Taking it now would
+implement the superseded design.
+
+## 5. `rfc/transition-primitives.md` — being drafted
+
+The move-primitive grammar, shipping **with** its Just Play and drill-pack
+consumers per the owner ruling.
 
 ---
 
