@@ -921,7 +921,7 @@ owner's ruling and this RFC's §3 becomes its mirror.
    one `.pivotal-marker` dot, on the last-of-role node; with `markers: "off"`, zero, and a
    timeline byte-identical to today's (adaptive-guidance law 1d, unchanged).
 5. **D48 is closed.** `renderPivotalMarker` is a `switch` with a `never` binding; a test written
-   before the conversion pins **all six** outputs byte-identically (`phase_change`;
+   before the conversion pins **all seven** outputs byte-identically (`phase_change`;
    `human_divergence`; `option_collapse` × 2; `castled`; `last_of_role`; pawn contact — six
    strings across four kinds); and a type-level test asserts that adding a fifth `PivotalKind`
    member fails to compile rather than rendering the pawn-contact sentence.

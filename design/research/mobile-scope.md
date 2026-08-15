@@ -31,8 +31,11 @@ a real phone; that is the standing recommendation in §6.
 ---
 
 
-> **TWO CORRECTIONS, claude 2026-08-15, from the `client-surface-floor` draft measuring what
-> this dossier predicted.** (1) **The board is not pushed above the fold on phones.** §2b's
+> **CORRECTION WITHDRAWN 2026-08-15 — this dossier was RIGHT and the correction was wrong.**
+> The `client-surface-floor` cross-review drove the running application and found the board **is**
+> below the fold at 360×640 and 360×740, on every tab. §2b stands. Claude relayed the incorrect
+> correction to the owner and has retracted it. The second correction below still holds.
+> *Superseded text:* (1) **The board is not pushed above the fold on phones.** §2b's
 > arithmetic predicted it; measurement shows the board stays in the viewport at scroll-top at
 > every phone size, because `.position-column` precedes the region containers in DOM order. What
 > falls below the fold is the **timeline**. The defect is real and is *"the drill region is a
