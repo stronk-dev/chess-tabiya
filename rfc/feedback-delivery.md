@@ -1,10 +1,16 @@
 # RFC: Feedback delivery — give the claim layer a learner, and stop the strip printing the census
 
-- **Status:** **draft — author round 2026-08-16, UNBLOCKED and no longer owner-gated.** Its
-  dependency `rfc/archive/claim-backing.md` is implemented and archived; **Open question 1 is
-  closed rather than re-asked** (the C6 fork dissolved with the debt it priced), and Open question 5
-  is answered. What the RFC now needs is **cross-review**, not a ruling. Claims **nothing
-  versioned** — no pack lane, no migration position, no run-schema stamp, no refusal code.
+- **Status:** **draft — cross-reviewed 2026-08-16, and it owes the owner ONE narrowed question.**
+  Its dependency `rfc/archive/claim-backing.md` is implemented and archived. The **three-way C6 fork
+  is dead and must not be re-asked** (it priced a debt that is now payable, and the owner's
+  2026-08-16 instruction forbids re-asking it). But the author round closed Open question 1
+  outright, and cross-review found that overreached: **the 2026-08-15 ruling refused all three
+  options including C6**, so it cannot be the authority for shipping C6. **Open question 1 is
+  therefore NARROWED, not closed** — what survives is a sequencing question (does Job 1 land ahead
+  of the binding wave, delivering 98 of 196 claims of which 97 read *"No machine record is
+  attached"*, or behind it?). Open question 5 is answered. Claims **nothing
+  versioned** — no pack lane, no migration position, no run-schema stamp, no refusal code — and
+  widens exactly one TypeScript value type by one member (§3.3(d)).
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder; **rung 5 at `:76`** —
@@ -137,17 +143,39 @@ moved by fifty or more (`CompareView.svelte`'s strip block was `:91` and is `:13
 > ## AUTHOR ROUND, 2026-08-16 — Open question 1 is CLOSED, not re-asked, and the blocker was gone
 > ## for a day before anyone noticed
 >
+> ### ⚠ SUPERSEDED BY CROSS-REVIEW, 2026-08-16 — the fork is dead but the closure overreached.
+> ### Open question 1 is **NARROWED**, not closed: the 2026-08-15 ruling refused **all three**
+> ### options, C6 included, so it cannot be the authority for shipping C6. Read this block as the
+> ### author round's argument, and Open question 1 as it now stands for the disposition.
+>
 > **`rfc/archive/claim-backing.md` is implemented and archived at pack schema 0.26.** The attach
 > path is not a proposal any more; it is `claimBindings` in the evidence ledger, validated by
 > `validateClaimBindings` (`apps/server/src/sourcing/claim-binding.ts`), and it is **already wired
 > into the delivery-side field this RFC specifies** — `PackRecord` carries `boundClaimIds` *and*
 > `claimBackings` (`apps/server/src/pack-registry.ts`), so §3.3's C7 has shipped ahead of the RFC
-> that asked for it. `planning/work-register.md` §2 still read *"OWNER-BLOCKED on the C6 fork"*
-> until `532c7e2`. **The register was stale for a day on the item it calls the highest product
-> value of anything unowned**, which is the same failure class as the content-wave closeout added
-> to `AGENTS.md` this morning, one tier over.
+> that asked for it. **The register was stale for a day on the item
+> `planning/work-register.md` §2 calls the highest product value of anything unowned**, which is the
+> same failure class as the content-wave closeout added to `AGENTS.md` this morning, one tier over.
 >
-> **Open question 1 does not need an owner ruling and is closed here rather than re-asked.** The
+> **Corrected at cross-review 2026-08-16 — the stale text was in a different file, and the
+> misattribution has already propagated.** This round asserted that *"`planning/work-register.md` §2
+> still read 'OWNER-BLOCKED on the C6 fork' until `532c7e2`."* **That string never existed in
+> `planning/work-register.md`** (`git log -S` over that path returns nothing), and `532c7e2` touched
+> **only `rfc/README.md`**. The stale block lived in `rfc/README.md`'s Active-table row for this
+> RFC, verbatim at `532c7e2^`: *"revised 2026-08-15 — OWNER-BLOCKED on the C6 fork … Cannot be
+> accepted until the owner rules the withhold/deliver fork."* The point stands; the file does not.
+> Two consequences: **[[D433]]'s row title carries the same misattribution** and is its owner's to
+> correct; and `rfc/README.md`'s row **still ends with *"Cannot be accepted until the owner rules
+> the withhold/deliver fork"*** even after `532c7e2` rewrote its head — so that register row is
+> *currently* stale, in the opposite direction from the one this round claimed, and Open question 1's
+> narrowing means its head is now wrong too. `planning/work-register.md` is separately stale on
+> cluster A (still *"Unowned"*, still carrying D77's superseded "0 of 131"), which is a real defect
+> and is the one this paragraph should have named.
+>
+> **Open question 1 does not need an owner ruling and is closed here rather than re-asked.**
+> *(Superseded at cross-review 2026-08-16: the fork is dead, but one narrowed owner question
+> survives it. See Open question 1 as it now stands — the paragraph below is kept because law 7's
+> spirit applies to a superseded argument as much as to a log entry.)* The
 > three-way fork priced a debt that could not be paid; the owner already refused all three options
 > on 2026-08-15 (*"why not fix them properly?"*, `claim-backing`'s exploration gate) and
 > `claim-backing` §6 retained **C6 — withhold the unbacked** — and formally **withdrew C6′ and
@@ -228,7 +256,10 @@ checked *on a surface* because there is no surface. This RFC makes the binding *
 delivery time** — a claim whose machine-checkable label has no validating `claimBindings` entry is
 **not delivered as though the record existed**.
 
-**The rule is C6 — withhold the unbacked — and it is settled rather than forked.** The draft posed
+**The rule is C6 — withhold the unbacked — and the fork that surrounded it is dead.** *(What is
+**not** settled, after cross-review: whether Job 1 lands ahead of the binding wave or behind it.
+The owner's only ruling on this refused a 49.0% delivery share; C6 ships 50.0%. See Open question 1,
+which is narrowed rather than closed.)* The draft posed
 C6 / C6′ / C6″ as an owner fork because withholding was not deferral: `/feedbackClaims/\d+/text` was
 a `PROSE_POINTER` that only a registered explorer or engine template could support, both templates
 required the supported prose to be the byte-exact rendered sentence, and the one shipped emitter
@@ -239,8 +270,11 @@ by symbol at `532c7e2` (§1.2): `attachExplorerEvidence` writes a binding and **
 `pack.feedbackClaims[i].text`**; the template exemption is gone from the overreach guard so a claim
 pointer in `record.supports` is refused **unconditionally**; and claim backing lives in
 `ledger.claimBindings`, span by span, with the author's sentence intact. `claim-backing` §6
-retained C6 and **withdrew C6′ and C6″**. **Open question 1 is therefore closed in this round, not
-re-asked** — the fork was a way of pricing an unpayable debt, and the debt is payable.
+retained C6 and **withdrew C6′ and C6″**. **The three-way fork is therefore dead and is not
+re-asked** — it was a way of pricing an unpayable debt, and the debt is payable. *(Cross-review
+2026-08-16: the author round wrote "closed" here. The fork is closed; **Open question 1 is not** —
+the same ruling refused C6 too, so what survives is a narrowed sequencing question. §3.2 and Open
+question 1 carry it.)*
 
 **What is left is a wave, and it is measured** `[V]` `[2026-08-16]`. Day zero — this RFC lands,
 nothing further is authored — delivers **98 of 196 claims, 26,735 of 61,531 characters (50.0% of
@@ -482,6 +516,19 @@ redirected, because its last statement writes into the repo). Old figure → new
 | same-kind lift | 1.11× | **1.09×** |
 | authored fork pairs / Jaccard median / median differing observations | 44 / 65.7% / 36 | **62 / 64.4% / 38** |
 
+**Two things a re-runner needs, because the harness supplies neither**
+`[cross-review 2026-08-16]` `[V]`. **(a) "Lift" is not a quantity the harness prints.** It is
+recovered as *(the played move's firing rate) ÷ (the within-position mean share of quiet
+alternatives that also fire)* — here `(753/754) / 0.9944544 = 1.004244`, and same-kind lift as
+`0.998674 / 0.919520 = 1.086 ≈ 1.09×`. Both reproduce exactly, but the definition lives only in this
+document, so **criterion 5 must restate it rather than ask for "lift"**. **(b) The committed harness
+output is stale.** `tools/q8-feedback-surface-harness/q8-output.md` as committed at `a7d5569` still
+reports the **37-pack** run (634 transitions, 5,266 entries, mean 8.31), so a reader checking this
+table against the artefact in the repo will conclude this table is wrong. It is not — the harness
+re-runs unmodified (`npx vitest run --config tools/q8-feedback-surface-harness/vitest.config.ts`,
+~16 s) and reproduces every figure in the right-hand column. The stale artefact is a ledger row's to
+fix, not this RFC's.
+
 **Every column moved the wrong way.** The strip prints 26% more sentences and discriminates
 slightly less well than when D78 was filed. This is the strongest available form of the defect: it
 is not a stale measurement that a bigger corpus repaired, it is a property of the computation that a
@@ -650,14 +697,30 @@ costs nothing.
 
 **What changed from the reviewer's version, and why (i) got stricter rather than looser.**
 Cross-review scoped coverage to `reachableAuthoredSpineIds(pack.document)`
-(`packages/schema/src/drill-pack/lint.ts:49-72`). Read at the symbol, that function returns *the
-union of the ancestor chains of the pack's checkpoint anchors* — and returns the whole spine only
-when some checkpoint uses a trigger that is neither `atSpineNode` nor `atAuthoredBoundary` (`:61`).
-That is narrower than the object being protected, and the gap is not hypothetical: **re-measured
-over the 50-pack corpus for this round, the finding reproduces exactly** — **5 of 50 claim-bearing
-packs (holding 21 of 196 claims) have a nonempty difference, and all 50 use `atSpineNode` triggers
-only, so none short-circuits to the whole spine** `[V]` `[2026-08-16]`. The checkpoint-chain set
-omits **exactly the mating leaf** in four packs —
+(`packages/schema/src/drill-pack/lint.ts:53`). Read at the symbol, that function returns *the
+union of the ancestor chains of the pack's checkpoint anchors* — and **bails out with `return all`
+the moment it meets a checkpoint whose trigger is neither `atSpineNode` nor `atAuthoredBoundary`**.
+That is narrower than the object being protected, and the gap is not hypothetical: **5 of 50
+claim-bearing packs (holding 21 of 196 claims) have a nonempty difference** `[V]` `[2026-08-16]`.
+
+> **The previous revision's explanation of that 5 was wrong, and correcting it makes the argument
+> for full-spine exhaustion stronger rather than weaker** `[cross-review 2026-08-16]` `[V]`. It
+> asserted *"all 50 use `atSpineNode` triggers only, so none short-circuits to the whole spine"*.
+> **Both halves are false.** Across the 201 checkpoints the trigger census is `atSpineNode` **127**,
+> `atAuthoredBoundary` **19**, `fenPredicate` **32**, `atStart` **13**, `atPly` **6**, `atWindow`
+> **4**; only **5 of 50** packs use `atSpineNode` exclusively, and **28 of 50** contain at least one
+> trigger that trips the bail-out and therefore short-circuit to the whole spine. **The 5-pack /
+> 21-claim figure is correct, but it is a measurement of where the bail-out does *not* fire, not of
+> where checkpoints happen to cover the spine.** Had the stated premise been true — no
+> short-circuit anywhere — the gap would be **32 packs and 141 of 196 claims**, six times larger.
+> So `reachableAuthoredSpineIds` is unfit as C1's coverage set for a reason worse than the one
+> given: its agreement with the full spine is mostly an artefact of a bail-out path, and the moment
+> a pack's checkpoints are all `atSpineNode` — which is the tidy authoring habit, and the direction
+> `vocabulary-wiring` and the checkpoint waves push — the set **narrows**. A coverage predicate that
+> silently tightens as authoring improves is the opposite of what C1 needs. **Full-spine exhaustion
+> is not merely stricter; it is the only one of the two that is stable under authoring.**
+
+The checkpoint-chain set omits **exactly the mating leaf** in four packs —
 `mate-bishop-knight`'s `p39-bf6` (38 of 39 spine nodes), `mate-k-q-technique`'s `w-qe8-mate`
 (18 of 19), `mate-k-r-technique`'s `w-ra8-mate` (18 of 19), `mate-two-bishops`'s `w-bd4-mate`
 (16 of 17) — and omits three nodes of `carlsbad-minority-attack` (`h6-wait`, `bxc6-consequence`,
@@ -684,6 +747,16 @@ claim-bearing packs, with the draft's 37-pack figures beside it:
 19 + 14 + 17 = 50 packs; 73 + 56 + 67 = 196 claims `[V]`. **The single-line class is frozen at
 exactly the same 19 packs and 73 claims** — every one of the nineteen packs added since the draft
 branches — and the split of the new work is 7 learner-only against 6 opponent-turn.
+
+> **The classification requires replay, and criterion 6 must not shortcut it**
+> `[cross-review 2026-08-16]` `[V]`. Whose turn it is at a branch point was determined by replaying
+> each spine line from `start.fen` with `chessops` and reading `position.turn`, against
+> `pack.start.side` as the learner. **That is not the same as parity of depth from `start.side`**:
+> **5 packs have a `start.fen` whose side to move is not `start.side`** — `anti-caro-advance`,
+> `anti-french-advance-white`, `carlsbad-minority-attack`, `rook-4v3-same-side` and
+> `trajectory-caro-advance-chain-bishops`. Classifying by parity instead gives 19 / 15 / 16 packs
+> and **34 packs, 132 claims, 67.3%** learner-exhaustible — a 1.5-point error in the number criterion
+> 6's kill gate is read against. The figures above are the replay figures.
 
 So **33 of 50 packs (129 of 196 claims, 65.8%) are exhaustible by learner action alone**, against
 the draft's 26 of 37 (93 of 131, 71.0%). **The share fell by five points as the corpus grew**, which
@@ -760,7 +833,9 @@ This looks inconsistent with Job 2 and is not, for two reasons that are both in 
     readonly revealedBy: RevealAttribution;     // the latest released occurrence (C1 (iii))
     readonly anchor: { readonly claimId: string };
     readonly text: string;
-    readonly evidenceTypes: readonly string[];  // verbatim from the pack
+    readonly evidenceTypes: readonly string[];  // `<declared>` — verbatim from the pack
+    readonly earnedEvidenceTypes: readonly string[];  // `<earned>` — the machine labels the binding
+                                                //   actually earned; empty for `self_declared` (C8)
     readonly binding: "ledger_bound" | "author_attributed" | "self_declared";
     readonly authorSpans: readonly string[];    // author-attributed segments, verbatim
     readonly principles: readonly {
@@ -779,9 +854,22 @@ field fails it. The three values are **not computed here**: they are read verbat
 `PackRecord.claimBackings.get(claimId).binding`, which already ships
 (`apps/server/src/pack-registry.ts`) and whose `ledger_bound` / `author_attributed` split comes
 from `validateClaimBindings`'s `disposition` — `ledger_bound` iff **every** segment is
-instrument-attributed. `authorSpans` and `principles` are likewise read from the same record.
+instrument-attributed (which is a weaker guarantee than the name suggests; C8 states the real one).
+`authorSpans` and `principles` are likewise read from the same record.
 **This RFC computes none of it and adds no new I/O; it plumbs an already-projected value onto an
 item.** §2.6 C5(4) states the one case the shipped projection does not cover.
+
+**`earnedEvidenceTypes` is the one value this RFC does derive, and it is a two-line derivation over
+an already-projected field** `[cross-review 2026-08-16]`. `PackRecord.claimBackings.get(claimId)`
+carries `rendered` — one sentence per instrument-attributed span, each prefixed by the instrument
+that produced it (`Syzygy at …`, `Engine at …`, `Lichess explorer at …`, from `evaluate`'s `rendered`
+strings). `earnedEvidenceTypes` is the set of `evidenceTypes` labels whose `MACHINE_LABELS` mapping
+includes a record kind present in that binding's `instrumentKinds`. The cleanest implementation
+exposes `instrumentKinds` on the `claimBackings` value rather than re-deriving it from `rendered`'s
+prose — **that is a one-field widening of a map `claim-backing` already ships, not a new
+computation**, and it is the only place this RFC touches `pack-registry.ts` (§5.8 item 5 is amended
+accordingly: this RFC reads the fields and widens exactly one). Where no binding exists,
+`earnedEvidenceTypes` is empty and C8's third form applies.
 
 `KIND_ORDER` (`:112`) gains `claim: 4`, after `theory_verdict`, so claim prose sorts last within an
 occurrence — an author's judgement is the last thing said, beneath the derived facts, which is the
@@ -902,6 +990,15 @@ C6 because withholding was not deferral — 37 claims could never earn admission
 107/79.1%) were arguments for softening a permanent refusal, and there is no longer a permanent
 refusal to soften.
 
+**One correction to how that ruling is cited** `[cross-review 2026-08-16]`. `claim-backing`'s
+exploration gate says the owner *"refused all three"* — **C6 included**, at a measured 49.0%
+delivered share — and its changelog repeats it. `claim-backing` §6 then *retained* C6 in its own
+voice, on its own reasoning (*"both existed only to soften a permanent refusal"*), in a section
+about a document it does not own. So the ruling authorises striking C6′ and C6″, whose premise is
+gone; it **does not select C6**, and no primary source shows the owner choosing it. C6 is right on
+the merits argued in this section and it is what this RFC specifies — but it is **not owner-ruled**,
+and the residual decision it leaves is Open question 1's narrowed sequencing question.
+
 **Why C6 is the right shape and not merely a strict one.** Once C1 ships, an unbacked
 `corpus_observed` label is no longer a note in a file: it is a **false provenance statement shown to
 a learner** about a corpus query that no record supports. The dossier §6's worked example is the
@@ -934,6 +1031,12 @@ wave beside it.
 **This is the section the author round exists to produce.** For each machine-checkable class:
 can `claimBindings` carry it, and if it is not carried today, why — stated as a refusal code or a
 missing record, never as an intention.
+
+> **Read the per-class table with §3.2a beside it** `[cross-review 2026-08-16]`. The table answers
+> *"can the class carry it"*, which is a question about assertion kinds and record kinds. It does
+> **not** answer *"can this claim's sentence pass the checker"*, which is a question about prose and
+> which refuses inside every class. §3.2a measures that second question and it is the larger of the
+> two blockers.
 
 | class | claims | withheld | packs | can `claimBindings` carry it? |
 |---|---|---|---|---|
@@ -992,11 +1095,16 @@ record kind in the corpus:
   `kind: "explorer_position_census"` records, and `check.ts` validates their shape
   (`EVIDENCE_VALUES_INVALID`, *"explorer_position_census requires the exact census shape and derived
   move shares"*).
-- **38 of the 60 sit in 15 packs with no `.evidence.json` at all** `[V]` — `berlin-queenless-press`,
-  `carlsbad-minority-attack`, `dragon-yugoslav-race`, `french-advance-chain-white`,
+- **38 of the 60 sit in 15 packs with no `.evidence.json` at all** `[V]`. The 15, enumerated in full
+  — the previous revision listed eleven plus *"the three uncommitted-then-committed centre packs"*,
+  which is fourteen, and omitted `trajectory-caro-advance-chain-bishops` `[cross-review]`:
+  `berlin-queenless-press`, `carlsbad-minority-attack`,
+  `closed-centre-chain-black-base-strike`, `dragon-yugoslav-race`, `french-advance-chain-white`,
   `grunfeld-exchange-fianchetto`, `iqp-black-tarrasch-defence`, `iqp-white-panov-attack`,
-  `kid-mar-del-plata-white`, `maroczy-bind-white-squeeze`, `nimzo-doubled-c-pawns`,
-  `open-centre-ruy-exchange` and the three uncommitted-then-committed centre packs among them. For
+  `kid-mar-del-plata-white`, `london-wedge-black-counterplay`, `maroczy-bind-white-squeeze`,
+  `nimzo-doubled-c-pawns`, `open-centre-french-exchange-black`, `open-centre-ruy-exchange`,
+  `trajectory-caro-advance-chain-bishops`. Those 15 hold **39** machine-labelled claims in total
+  (the 38 `corpus_observed` plus one other), which is the population criterion 3(a) names. For
   those the debt is **a sourcing run plus a ledger plus a binding**, which is `claim-backing`'s D128
   and is a materially different cost from *"the query was never recorded"*. C7's empty-set default
   fails them closed correctly.
@@ -1025,8 +1133,74 @@ precisely matters because it is the largest label in the corpus:
   population the three-valued `binding` exists for (§2.5), and today **1 of the 16 is bound**.
 - Where `claimBindings` *does* touch this class, it does so as a **refusal, not a carrier**:
   `CLAIM_AUTHOR_LABEL_REQUIRED` fires when a validating binding leaves an author-attributed segment
-  and the claim does **not** carry `author_principle`.
+  and the claim does **not** carry `author_principle`. **§3.2a measures how far that refusal
+  actually reaches, and it reaches much further than this bullet implies.**
 **Verdict: carried, but by the registry rather than the ledger — and it is already at 100%.**
+
+##### 3.2a `CLAIM_AUTHOR_LABEL_REQUIRED` is the largest single blocker in the residue, and the author round missed it
+
+**Added at cross-review 2026-08-16** `[V]`. The per-class table above prices the residue as records
+plus a handful of authoring fixes. Measured at the shipped checker, the dominant blocker is neither.
+
+**The mechanism, read at the symbol.** `validateClaimBindings` (`apps/server/src/sourcing/claim-binding.ts`)
+pushes `CLAIM_AUTHOR_LABEL_REQUIRED` when `authorSegments.length > 0` and the claim does not carry
+`author_principle`. `issue(...)` defaults to severity **`error`**, and — the part that matters — the
+binding is admitted to the result set only under `if (issues.length === before)`, so **any** issue
+raised for a binding keeps its claim out of `boundClaimIds` entirely, which is the set C6 reads.
+A claim in this state is withheld no matter how many records its ledger holds.
+
+**Why it is not escapable by declaring more spans.** `authorSegments` is computed by cutting the
+claim's text with `segments(...)` and keeping every segment that does not *wholly contain* an
+instrument span's range. An instrument span must `normalizes` to an assertion's result — a number, a
+tablebase category word, or a SAN move — and every one of those is a `MACHINE_TOKEN` match. **So a
+segment containing no `MACHINE_TOKEN` at all can never be instrument-attributed by any binding
+anyone can write**, and its presence forces `authorSegments` to be non-empty. Declaring it
+`authored: true` does not help: `authored` spans are removed from the `MACHINE_TOKEN` *remainder*
+(which is what `CLAIM_ASSERTION_UNDECLARED` sweeps), but `authorSegments` is recomputed from the
+**original** `claim.text`, so the segment is still counted.
+
+**Measured over the 98 withheld claims** `[V]` `[2026-08-16]`, by replicating the shipped
+`segments(...)` splitter and `MACHINE_TOKEN` verbatim:
+
+| | claims |
+|---|---|
+| withheld (an unbacked machine-checkable label) | **98** |
+| …of which do **not** carry `author_principle` | **83** |
+| …of which provably carry ≥1 segment with **no** `MACHINE_TOKEN` — a guaranteed `authorSegment` | **63** |
+
+*Why "provably": every value an assertion can return — a centipawn string, a percentage, a bare or
+comma-grouped number, a spelled-out cardinal, a `win`/`draw`/`loss` category word, a SAN move, a
+rating band, a date window — is itself a `MACHINE_TOKEN` match, so a span that `normalizes` can never
+lie inside a token-free segment. One caveat, recorded rather than relied on: the shipped filter
+locates each segment with `claim.text.indexOf(segment)`, which takes the **first** occurrence, so a
+claim with two identical segments would compare an instrument range against the wrong window. No
+corpus claim has duplicate segments today, and the direction of the error would only ever
+under-count. **Ledger row proposed, not claimed here.***
+
+**Those 63 cannot be bound by any ledger addition.** Their remedy is an edit to the *pack*: add
+`author_principle` to `evidenceTypes` and name a `principles` entry. That is a content change to 63
+of 196 claims, against a registry of **13** principles of which 12 are referenced today. The
+remaining 20 (83 − 63) are not proven safe either — a segment can contain a `MACHINE_TOKEN` and
+still have no assertion able to produce it — so **63 is a floor and 83 is the ceiling**.
+
+**Three consequences this RFC must carry rather than discover later.**
+
+1. **The wave is not a ledger wave.** §3.2's per-class verdicts (*"payable by a tablebase-census
+   wave"*, *"payable, the binding constraint is authored wording"*, *"payable, the biggest single
+   wave in the corpus"*) are all true and all incomplete: each of them additionally requires the
+   `evidenceTypes` edit above for the majority of its claims. Open question 5's *"content plus two
+   instrument runs"* is corrected to **content plus two instrument runs plus a 63-claim
+   `evidenceTypes` pass**.
+2. **Open question 8 is the same question, and it is not optional.** OQ8 asks whether a
+   `derived_feature`-only claim *should* carry a principle reference, and calls it non-blocking
+   authoring. For these 63 the equivalent edit is a **precondition of binding at all**, and the
+   principle chosen is rendered to the learner by C8's second form. Whoever runs the wave is making
+   63 rung-5 provenance decisions, not 31 optional ones.
+3. **The pack digest moves and the ledgers must be re-stamped.** An `evidenceTypes` edit changes the
+   pack, so `digestDrillPack` moves and every existing sidecar raises `EVIDENCE_DIGEST_STALE`
+   (`check.ts`, severity **warning**). It does **not** raise `CLAIM_TEXT_DRIFTED`, because
+   `textSha256` digests `claim.text` and the text is untouched — so existing bindings survive the
+   edit. This RFC still changes no pack byte itself (§5.1 stands); the wave it prices does.
 
 #### 3.3 C7 — where binding is computed, and it has already shipped
 
@@ -1043,29 +1217,78 @@ precisely matters because it is the largest label in the corpus:
 RFC that specified it, and the shipped shape is *wider* than the draft asked for: the draft wanted
 one derived set, and the tree carries the set plus a per-claim record with the rendered instrument
 sentences, the author-attributed spans and the resolved principle rows. **This RFC therefore adds no
-field to `PackRecord` and no computation at registration.** What it must do is (a) consume the map,
-(b) specify the default for the 31 claims the map has no entry for (§2.6 C5(4)), and (c) keep the
-fail-closed property under test (criterion 3). The precedent the draft cited — `assessmentGrounding`
+field to `PackRecord`, and one member to the value type of a map `PackRecord` already carries.**
+What it must do is (a) consume the map, (b) specify the default for the 31 claims the map has no
+entry for (§2.6 C5(4)), (c) keep the fail-closed property under test (criterion 3), and (d) carry
+`instrumentKinds` through onto the `claimBackings` value so C8 can render `<earned>` rather than
+`<declared>` (§2.5, §3.4). The precedent the draft cited — `assessmentGrounding`
 as a ledger-derived field attached at load — is now the pattern this follows rather than the one it
 imitates.
+
+> **(d) is the one place the previous revision's *"reads the fields and adds none"* was too strong**
+> `[cross-review 2026-08-16]`. `ValidatedClaimBinding` already computes `instrumentKinds`
+> (`claim-binding.ts`); `pack-registry.ts` currently discards it when building the `claimBackings`
+> value. Carrying it through is a one-member widening of an existing value type inside an existing
+> loop — **no new I/O, no new computation, no `PackRecord` field, and nothing versioned** (§5.1
+> stands: this is a TypeScript interface member, not a schema, a migration or a refusal code). It is
+> stated here rather than absorbed because *"this RFC adds no field"* was the sentence that made C7
+> look like a pure read, and [[D400]]'s lesson is that a specified-then-already-present field is a
+> hazard in **both** directions.
 
 #### 3.4 C8 — what a learner actually reads
 
 > **C8.** A delivered claim renders as the author's sentence plus one provenance line, and the
-> provenance line states the labels and the binding without grading either:
+> provenance line states the labels and the binding without grading either.
 >
-> - `binding: "ledger_bound"` → *"Author's claim. Evidence recorded for: `<labels>`."*
-> - `binding: "author_attributed"` → *"Author's claim. Evidence recorded for: `<labels>`. The rest
+> **`<earned>` is not `evidenceTypes`.** Every form below interpolates **`<earned>`** — the
+> machine-checkable labels the binding actually earned, derived from
+> `PackRecord.claimBackings.get(claimId).rendered`'s record kinds through `MACHINE_LABELS` — and
+> **`<declared>`**, the claim's full `evidenceTypes` verbatim. The two are different sets and the
+> distinction is load-bearing: `<declared>` contains labels whose entire meaning is that **no record
+> exists** (`hypothesis`, `derived_feature`), and `author_principle`, which §3.2 establishes
+> *"resolves against the registry, not the ledger"*. **A provenance line that says "evidence
+> recorded for" over `<declared>` asserts a machine record for labels no instrument was ever asked
+> about.** `[cross-review 2026-08-16 — this fires on day zero, see below.]`
+>
+> - `binding: "ledger_bound"` → *"Author's claim. Every part of it carries a recorded reading:
+>   `<earned>`."* Also declared, with no record attached: `<declared minus earned>`, when that set is
+>   non-empty.
+> - `binding: "author_attributed"` → *"Author's claim. Evidence recorded for: `<earned>`. The rest
 >   is the author's judgement, resting on: `<principle name>` — `<statement>`. It can be wrong when:
 >   `<counterCase>`."*
-> - `binding: "self_declared"` → *"Author's claim, author-declared: `<labels>`. No machine record is
->   attached."* Where the claim carries `author_principle`, the principle clause of the second form
->   is appended, because the registry row is projected for it too.
+> - `binding: "self_declared"` → *"Author's claim, author-declared: `<declared>`. No machine record
+>   is attached."* Where the claim carries `author_principle`, the principle clause of the second
+>   form is appended, because the registry row is projected for it too. `<earned>` is empty by
+>   construction here, so `<declared>` is the honest set and no "evidence recorded" phrasing appears.
 >
 > No sentence may say the claim is true, correct, strong, verified-as-good, or better than an
 > alternative. The vocabulary floor is `BANNED_JUDGEMENTS` (`packages/runtime/src/voice.ts`); the
 > ceiling is law 8 / ADR-0005. **All three forms are frozen templates over projected values — no
 > LLM writes any part of them.**
+
+**Why `<earned>` rather than `<declared>`, and why this is not a wording preference**
+`[cross-review 2026-08-16]` `[V]`. The previous revision interpolated `evidenceTypes` verbatim into
+all three forms. Measured against the corpus, that **misfires on day zero, on the only claim it can
+fire on**: `philidor-third-rank-hold`'s `philidor-is-drawn` — the single bound claim in 196 — carries
+`["tablebase_exact", "author_principle"]`, and would have rendered *"Evidence recorded for:
+tablebase_exact, **author_principle**."* §3.2's own verdict on that label is *"Not applicable, and
+that is the answer — it is self-declared and resolves against the registry, not the ledger."* The
+line would state, on the product's first delivered claim, that a record backs a label that by
+construction has none. It is not a large error and it is exactly the error rung 5 has no other
+defence against: `design/05:76` grants rung 5 no review workflow, so **provenance is the only
+safeguard**, and a provenance line that overstates is the failure of the only safeguard there is.
+It generalises beyond the one claim: **19 of the 99 machine-labelled claims also carry a non-machine
+label** (16 `author_principle`, 4 `derived_feature`) `[V]`, so 19 of the wave's outputs would carry
+the same overstatement. Criterion 20a pins it.
+
+**And `ledger_bound` states a weaker guarantee than its name implies, so C8 states the real one.**
+`disposition` is `ledger_bound` iff `authorSegments` is empty, and a segment counts as
+instrument-attributed when **some** instrument span's range lies inside it — not when every word
+does. A segment reading *"This exact position is a tablebase draw (Syzygy, five pieces), and every
+position along the authored defence was queried and remains drawn"* is instrument-attributed on the
+strength of the single span `draw`. So `ledger_bound` means *every segment carries at least one
+recorded reading*, which is what C8's first form now says, rather than *every claim in the sentence
+is verified*, which is what *"Author's claim. Evidence recorded for: …"* invited a learner to read.
 
 **The third form is `claim-backing`'s ask and it is what makes the principle registry worth its
 migration.** Without it, `author_principle` is a validator artifact a learner never sees; with it, a
@@ -1074,13 +1297,16 @@ that rule fails**. It is the same move `renderEndgameReading` makes with *"Techn
 in Tabiya's index."* (`packages/runtime/src/endgame.ts:46`): state the basis, state the absence,
 grade nothing.
 
-**The second form is the important one for volume, because almost every admitted claim takes it
+**The *third* form is the important one for volume, because almost every admitted claim takes it
 today** — **97 of the 98** admitted claims are `self_declared` (§3.2), so *"No machine record is
 attached"* is what a learner reads on all but one claim at day zero. That is the axis Q8 says we win
-on, and C8 keeps winning it while shipping more prose than zero.
+on, and C8 keeps winning it while shipping more prose than zero. *(The previous revision called this
+"the second form" while describing the third; corrected at cross-review, and it is the sentence
+Open question 1's narrowed sequencing question turns on.)*
 
-Surfaces: `apps/web/src/lib/TerminalSheet.svelte` (the `{#each authoredItems}` arm chain, `:47-51`)
-gains a `claim` branch, and `apps/web/src/lib/CheckpointSheet.svelte` gains the same branch. **Both
+Surfaces: `apps/web/src/lib/TerminalSheet.svelte` (the `{#each authoredItems}` arm chain, `:49-52`
+at `158ba47`) gains a `claim` branch, and `apps/web/src/lib/CheckpointSheet.svelte` gains the same
+branch (`:133-146`). **Both
 are real surfaces, not exhaustiveness padding**: C1 (iii) attributes claims to whichever released
 occurrence is latest, which is a checkpoint occurrence in any pack whose authored tree is exhausted
 before a chess-terminal position — **44 of 50 packs** (§2.2b). The arm is also **not optional**:
@@ -1129,6 +1355,16 @@ was wrong twice, in ways the corpus has since made worse:
    match. Routing claim text into the packet would hand the renderer permission to say *"winning"*,
    *"mistake"* and *"punish"*, and to name moves, at positions the author never wrote about. That is
    **law 8 / ADR-0005** arriving through the exact door §2.1 refused to open by inference.
+
+   **Read the 117 with its composition, because the headline overstates the rhetoric while the
+   mechanism holds exactly** `[cross-review 2026-08-16]` `[V]`. **94 of the 117** match on the single
+   word **`move`**, and almost always as a noun (*"a developing move"*, *"every move spent"*) rather
+   than the imperative the list exists to catch; the next largest are `attack` 15 and `play` 9. The
+   51-claim restricted figure is likewise **41/51** driven by `wins` and `winning`. **This does not
+   weaken C9 at all** — `voiceCheck` is a *containment* test, so routing a claim containing the noun
+   *"move"* into `packet.sentences` licenses the renderer to emit *"move"* as a verb, which is
+   precisely the widening C9 exists to prevent. But *"117 prescription-bearing claims"* must not be
+   read as 117 imperatives, and the load-bearing sentence here is the mechanism, not the count.
 
 **Quieter is correct here.** The claim is rung-5 authored prose with no anchor; the packet is the
 rung-6 renderer's evidence base. `claim-backing` §3.11 asks explicitly that C9 not be weakened, and
@@ -1363,9 +1599,23 @@ class of drift this morning.)*
   (`opponent-contracts`, run schema 0.16→**0.17**); `DRILL_RUN_SCHEMA_VERSION` is **`"0.17"`**. The
   draft's "migration 20 / run schema 0.15" is three migrations stale. **This RFC takes no migration
   position**, which matters more than usual right now: **[[D423]] records that three documents
-  (`teacher-surface`, `opponent-contracts`, `learner-rating`) already hold one migration position as
-  `STORAGE_VERSION + 1`, and the register cannot see the collision.** Adding a fourth silent holder
-  would make this RFC part of that defect rather than a reader of it. No new event type either: claim
+  (`teacher-surface`, `opponent-contracts`, `learner-rating`) hold one migration position as
+  `STORAGE_VERSION + 1`, and the register cannot see the collision.** Adding a further silent holder
+  would make this RFC part of that defect rather than a reader of it.
+  *(Corrected at cross-review 2026-08-16: **D423's collision is two-way, not three-way.**
+  `opponent-contracts` **landed** its migration at 23 today (`6ba0736`; `storage.ts` carries
+  `version: 23`, run schema 0.16→0.17, and `STORAGE_VERSION = 23`) and is no longer a *holder* — it
+  is the head. `teacher-surface` and `learner-rating` remain, both holding a position rather than an
+  integer. **This RFC would have been the third silent holder, not the fourth.** Two registers
+  disagree with this and both are stale rather than wrong-in-substance: `rfc/README.md`'s migration
+  register still lists 21 and 23 as "implementing" and `rfc/opponent-contracts.md` is still in
+  `rfc/` rather than `rfc/archive/`; and `rfc/learner-rating.md` §9 still reads *"three active
+  documents hold `STORAGE_VERSION + 1`"*. **The shipped `storage.ts` is the arbiter and it says
+  two.** Neither is this RFC's to fix — both are named in the cross-review report.)*
+  *(Freshness note: HEAD moved twice during this cross-review — `graduation-clearance` is now
+  **accepted** (`3a24d6d`), which strengthens rather than changes its hold on lane 0.28, and
+  `learner-rating` was revised (`8157803`). Neither touches anything this RFC claims, because this
+  RFC claims nothing.)* No new event type either: claim
   delivery is a *projection* over the run's existing events and reveal occurrences — C1 persists
   nothing, and projections are never persisted — the same reasoning `archive/shape-library.md` used
   to keep run schema at 0.8 for firings.
@@ -1518,7 +1768,12 @@ different regions — merge-conflict-adjacent, no semantic overlap. Both RFCs al
 
 #### 5.7 `rfc/teacher-surface.md` — confirmed clear
 
-Claims **migration 21** only; run schema stays 0.15, pack schema stays 0.22. Zero hits on
+*(Restated at cross-review 2026-08-16: **it no longer claims migration 21, or any integer.** Its
+body was rewritten to claim *a position, not a number*, and explicitly calls both 21 and 22 dead —
+which is why it is one of [[D423]]'s two remaining `STORAGE_VERSION + 1` holders (§5.1). The
+sentence below is the `8744adb` reading and is kept only to mark what moved; the non-interference
+finding it supports is unaffected, and was re-verified.)* It formerly claimed **migration 21**
+only; run schema stays 0.15, pack schema stays 0.22. Zero hits on
 `PackRecord`, `pack-registry`, `authored-feedback`, `AuthoredFeedbackItem`, `feedbackClaims`,
 `compare-strips` or either sheet. It reads `feedbackDisclosed`/`feedbackDeliveryOpen` read-only and
 states *"There is no per-viewer disclosure and this RFC adds none"* — which is also why §2.2a marks
@@ -1561,7 +1816,50 @@ implemented and archived at pack 0.26. Interfaces, in both directions:
    `apps/web/src/lib/{api,CompareView,TerminalSheet,CheckpointSheet,structural-sentences}.*` and
    `apps/server/src/guidance.ts` (as a *pinned unmodified* site). The one file both touch is
    `apps/server/src/pack-registry.ts`, and `claim-backing` has already made that edit — **this RFC
-   reads the fields and adds none.**
+   reads those fields and widens exactly one value type by one member** (`instrumentKinds` onto the
+   `claimBackings` value, §3.3(d)). `claim-backing` is archived, so the widening cannot collide with
+   it; it is additive and every existing reader is unaffected.
+
+#### 5.9 `rfc/measurement-records.md` — the sibling that can change what C6 admits, and §5 had no entry for it
+
+**Added at cross-review 2026-08-16.** §§5.2–5.8 clear six siblings by symbol. `measurement-records`
+was mentioned once in this document, in §5.1, and only to note that it holds shape-entry 0.4. **It
+is the sibling with the most direct reach into C6**, and the reach does not go through any symbol
+this RFC names, which is exactly why a symbol sweep missed it.
+
+1. **It governs the code path that computes `claimBackings`.** Its §6a deferral clause names
+   `apps/server/src/pack-registry.ts:266` — *"`PackRegistry.loadDefault` — the running server,
+   feeding `claimBackings` onto `PackRecord`"* — as a runtime path it defers work on, and states
+   that *"a deferred span produces no `claimBackings` entry and no change to `PackRecord`"*.
+   **C6's admission predicate is a read of exactly that map and of `boundClaimIds` beside it.** So
+   `measurement-records` can move claims from admitted to withheld without touching
+   `authored-feedback.ts`, `compare-strips.ts`, or any other file in this RFC's surface.
+2. **The consequence C6 does not currently name.** Under that clause a claim is withheld from a
+   learner because **a census was too expensive to run at pack-load time**, not because it is
+   unbacked. C6 fails closed, which is the right default and is what §3.3 asks for — but *"withheld"*
+   would then mean three different things (not bound / bound-but-deferred / structurally unbindable)
+   behind one delivery behaviour, and C8's third form would render *"No machine record is attached"*
+   for a claim whose record exists and was simply not evaluated. **That is a false provenance line by
+   the same mechanism §3.4 corrects for `<declared>`.** Whichever RFC lands second owns reconciling
+   it; this RFC's position is that a deferred span must not be presented as an absent record.
+3. **`CLAIM_ASSERTION_KINDS` grows from 15 to 21** and refusal codes grow by nine, one of them at a
+   **new `"info"` severity** requiring a widening of `SourcingIssue.severity`. **That widening is not
+   inert for C6.** `validateClaimBindings` admits a binding only under `if (issues.length === before)`
+   — it does not inspect severity — so **an `info` issue raised inside that function blocks the
+   binding as completely as an `error` does**, and the claim silently leaves `boundClaimIds`. If
+   `CENSUS_ASSERTION_DEFERRED` is ever raised on that array rather than beside it, C6 withholds on an
+   informational message. Flagged from this side; `measurement-records` §6a appears to intend the
+   deferral to bypass the array, and that intent needs to survive implementation.
+4. **No file or symbol collision.** Its surface is the assertion registry, the census record kinds and
+   the shape-entry lane; it names none of `AuthoredFeedbackItem`, `KIND_ORDER`, `StripEntry`,
+   `CompareView`, `authoredText` or `guidance.ts`. **The interface is semantic, not textual**, and
+   neither RFC blocks the other.
+
+*(Also swept and clear: `rfc/dead-vocabulary.md` — accepted 2026-08-16, claims nothing versioned,
+report-only, zero symbol overlap. `rfc/graduation-clearance.md` — holds pack lane 0.28; reads
+`boundClaimIds`/`claimBackings` read-only as empty on unverified packs, which agrees with §3.3's
+fail-closed fallbacks. `rfc/learner-rating.md` — its R15 prohibits any `feedbackClaims` assertion
+argument as a rating input, a constraint on this RFC's data rather than a collision with it.)*
 
 ## Deviations from design
 
@@ -1659,11 +1957,31 @@ used as-is.
    the draft and this round, and a criterion that pins "98 of 196" is unfalsifiable against the next
    corpus. This is an admission count and is independent of C1 — do not conflate it with how many
    claims a *run* delivers, which criterion 6 measures.
-2a. **The admitted set agrees with `make expression-census`.** The implementation's admitted count
-    minus its `self_declared` count must equal the census's **`backedClaims`** for the same tree
-    (**1** at `[2026-08-16]`). Two independent readers of the same ledger disagreeing is the finding;
-    matching is the pass. This criterion is what makes criterion 2's number checkable by a command
-    rather than by a script nobody re-runs.
+2a. **The admitted set is cross-checked against `make expression-census`, and the comparison is
+    stated at the right granularity — the previous revision's equality was unsatisfiable.**
+    `[cross-review 2026-08-16]` The previous form required *"admitted count minus `self_declared`
+    count must equal the census's `backedClaims`"*. Read at the symbol, that equality is **false by
+    construction as soon as the wave it prices runs**, for two independent reasons:
+    **(i) `backedClaims` is a sum over `(pack, evidenceType)` citations, not a count of claims**
+    (`evidenceCensus`, `apps/server/src/expression-census.ts` — `citations.reduce((sum, citation) =>
+    sum + citation.backing.backedClaims, 0)`), so a claim carrying two machine labels contributes
+    **2**. **Six claims in the corpus carry two** (`corpus_observed` + `engine_validated`, all in
+    `anti-scandinavian-white` and `scandinavian-mainline-black`) `[V]` `[2026-08-16]`.
+    **(ii) `expression-census` never calls `validateClaimBindings`.** It tests only that a
+    `claimBindings` entry exists whose assertion-kind *prefix* maps to a record kind present in the
+    ledger — it does not check `normalizes`, span presence or ambiguity, FEN reachability, census
+    completeness, or the label-earned rule. It therefore counts **declared** bindings where C6
+    counts **validating** ones.
+    The equality holds today only because the joined set is a **singleton**, which is a criterion
+    that passes while measuring nothing.
+    **What is asserted instead.** (a) The implementation's set of admitted-and-not-`self_declared`
+    **claim ids** is a **subset** of the census's set of claim indexes counted as backed, mapped to
+    ids. (b) Every id in the census's set that is **not** in the implementation's set is reported
+    with the `SourcingIssue` code `validateClaimBindings` raised for it — the divergence is the
+    census's laxity and each instance must be explained by a named refusal, never left as a count.
+    (c) The two totals are recorded side by side with the multi-label claims listed separately, so
+    the citation-sum inflation is visible rather than mistaken for a disagreement. A divergence with
+    **no** named refusal behind it is the finding; a fully explained divergence is the pass.
 3. **C6 fails closed, in three directions.** (a) A pack with a `corpus_observed` claim and no
    `.evidence.json` withholds it — **and this is a real population now, not a constructed one: 15
    packs carry 39 machine-labelled claims with no sidecar at all** (§3.2). (b) Adding a validating
@@ -1691,7 +2009,11 @@ used as-is.
    re-run in the same tree, not taken from this document**: §1.3's `[2026-08-16]` figures (754
    transitions, 6,659 entries, 8.83/ply, lift 1.004x) are themselves 35%-larger-corpus numbers, and
    the harness at `tools/q8-feedback-surface-harness/` runs unmodified, so there is no excuse for
-   comparing a filtered 2026-08-17 projection against an unfiltered 2026-08-15 one.
+   comparing a filtered 2026-08-17 projection against an unfiltered 2026-08-15 one. **"Lift" is
+   reported with its definition spelled out** — *(played-move firing rate) ÷ (within-position mean
+   share of quiet alternatives that also fire)* — because the harness does not print it and §1.3
+   records that it is recoverable only by hand `[cross-review]`. **The committed
+   `q8-output.md` is not an acceptable baseline**: it is a 37-pack artefact (§1.3).
 6. **C1's reach is measured, and the result is blocking — the kill gate.** Over the corpus
    walkthrough set, record (a) the share of walkthroughs that reach any `outcome.reached`, (b) the
    share that satisfy C1's **exhaustion predicate** — the number that actually governs delivery —
@@ -1801,25 +2123,32 @@ used as-is.
     frozen template. **The author's claim sentence is explicitly out of this criterion's scope**
     (66 of 196 carry a judgement word), because [[D421]] establishes that authored prose has no gate
     and this RFC does not build one.
+20a. **No provenance line asserts a record for a label no instrument earned.** `[cross-review
+    2026-08-16]` A test asserts that for every delivered claim, the label set interpolated into an
+    *"evidence recorded"* clause is `earnedEvidenceTypes` and never `evidenceTypes` — specifically
+    that `philidor-third-rank-hold`'s `philidor-is-drawn`, which is the corpus's **only** bound claim
+    and carries `["tablebase_exact", "author_principle"]`, renders *"Evidence recorded for:
+    tablebase_exact"* and **not** *"…tablebase_exact, author_principle"*. The negative direction is
+    tested too: a claim carrying `hypothesis` alongside a bound machine label must not name
+    `hypothesis` in that clause. **The population is 19 of the 99 machine-labelled claims** (§3.4),
+    so this is a real set at wave completion and a singleton today; the count is re-derived at
+    implementation. This criterion exists because rung 5 has no review workflow, so an overstated
+    provenance line is the failure of the only safeguard `design/05:76` grants it.
 
 ## Open questions
 
-1. **CLOSED 2026-08-16 — the C6 fork dissolved and no owner ruling is needed. It is recorded here
-   rather than deleted, because a question that was the whole reason an RFC was blocked should show
-   its closure, not vanish.**
+1. **NARROWED 2026-08-16, not closed — the three-way fork is dead, and one owner question survives
+   it. `[cross-review 2026-08-16]` The author round closed this question outright; cross-review
+   re-read the primary sources and found the closure claimed more from the ruling than the ruling
+   says.**
 
    *The question was:* should an unbacked machine-checkable label **withhold** the claim (C6),
    **deliver it with a stated absence unless its text carries a cardinal number** (C6′), or
    **deliver it unless its label class has a legal record path** (C6″)? The draft called this the
    owner decision the RFC existed to ask, and recommended C6″.
 
-   **Why it is closed, in three steps, none of which is this author's judgement:**
+   **What the 2026-08-15 ruling does settle, and it is most of this:**
 
-   - **The owner already ruled, on 2026-08-15, and refused the fork itself.** Offered the three
-     options with their measured shares (49.0% / 78.2% / 79.1%), the ruling was *"why not fix them
-     properly?"* — recorded as `rfc/archive/claim-backing.md`'s exploration gate, and the third
-     landing of that ruling in that shape (cf. *"we need to fix this asap. fix all to include it
-     properly. we are the authors"*). **Re-asking it would be asking the owner to re-rule a ruling.**
    - **The premise that made it a fork is now false in the tree.** All three options were ways of
      pricing a debt that **could not be paid**: 37 claims failed `EVIDENCE_OVERREACH` at error
      permanently, and the only working emitter deleted the author's sentence. §1.2 re-verifies by
@@ -1827,13 +2156,62 @@ used as-is.
      `tablebase_result` record backs an authored sentence **today**, unchanged, in
      `philidor-third-rank-hold`. **Withholding is now deferral, which is what C6 was always assumed
      to be.**
-   - **`claim-backing` §6 disposed of the two alternatives explicitly.** C6 is retained; **C6′ and
-     C6″ are withdrawn**, on the stated ground that both existed only to soften a permanent refusal.
-     §3.2 strikes them from this document. The draft's recommendation is **reversed, and the
-     reversal is stated rather than absorbed**: the option this RFC's author argued against is the
-     one that ships, and it is right now for exactly the reason it was wrong then.
+   - **C6′ and C6″ are dead on the ruling's own logic, and this needs no further ruling.** Both were
+     heuristics for choosing which authored sentences to show *anyway* while the debt was unpayable
+     — C6′ a digit proxy, C6″ a label tiering. Neither has a purpose once the debt is payable, and
+     `rfc/archive/claim-backing.md` §6 withdrew both on exactly that ground. §3.2 strikes them from
+     this document. **The draft's recommendation (C6″) is reversed, and the reversal is stated
+     rather than absorbed.**
+   - **Re-asking the three-way fork is forbidden and this RFC does not re-ask it.** The owner's
+     2026-08-16 instruction on this document is explicit: *"Do not re-ask the owner the three-way
+     question; it was a symptom of enforcing before building."*
 
-   **The delivery rule, stated once so nothing has to be inferred from the history above:**
+   **What the ruling does NOT settle, and the author round read it as settling** `[cross-review]`:
+
+   - **The owner refused all three options, C6 included.** `claim-backing`'s exploration gate says
+     so in its own words — *"the owner refused all three"* — and its changelog repeats it: *"after
+     all three C6 options were refused."* `planning/exploration/log.md`'s 2026-08-15 entry records
+     the same. The share the owner was shown for the withhold option was **49.0% delivered**. **C6
+     ships a 50.0% delivered share.** The author round cited that refusal as its authority for not
+     asking, and then adopted one of the refused options; the retention of C6 is
+     `claim-backing` §6's own reasoning, in its own voice, about a document it does not own. The
+     previous revision's *"three steps, none of which is this author's judgement"* was therefore
+     wrong on its third step, and is withdrawn.
+   - **The one owner utterance aimed at this document is a reframing, and it asked for a
+     restatement.** *"i dont understand… what are we missing? can't we implement it properly? what
+     do we gain/lose?"* — the block above it in this file is headed *"it reframes Open question 1
+     rather than answering it"*, and its instruction was to **restate** OQ1 against a working attach
+     path *"and report what residue, if any, still cannot be bound"*. This round discharged the
+     residue half (§3.2). It did not have an answer to *"what do we gain/lose"* to offer, because
+     the gain/loss depends on the sequencing below.
+
+   **The narrowed question, and it is a sequencing decision with a visible learner consequence:**
+
+   > **Does Job 1 land ahead of the binding wave, or behind it?**
+   >
+   > **Ahead** (what this RFC currently specifies): the delivery path ships now. A learner who
+   > exhausts a pack's authored spine reads **98 of 196 claims**, and **97 of those 98** carry the
+   > `self_declared` provenance line — *"Author's claim, author-declared: `<declared>`. No machine
+   > record is attached."* One claim in the entire corpus reads as instrument-backed. The other 98
+   > claims stay dark. **Gain:** the claim layer stops being structurally undeliverable, D77 closes,
+   > and every subsequent authoring wave lands on a surface instead of on a pile. **Loss:** the
+   > product's first delivery of rung-5 prose is 99% unbacked, at a 50.0% share the owner was shown
+   > as 49.0% and refused.
+   >
+   > **Behind:** the wave runs first (§3.2 prices it: an explorer position-census pass, a tablebase
+   > legal-successor census pass, and — see §3.2's `CLAIM_AUTHOR_LABEL_REQUIRED` finding — a pack
+   > edit on **63 claims**), then Job 1 delivers a mostly-backed corpus. **Gain:** the first thing a
+   > learner reads about a claim's provenance is mostly *"evidence recorded"*. **Loss:** D77 stays
+   > open for the length of the wave, and the wave has no surface to be validated against while it
+   > runs — which is §3.1's own argument for why delivery is the fix.
+   >
+   > **This RFC's author position is *ahead*, on §3.1's ground** — *"the labels' failure is not that
+   > they are unbacked in a file; it is that nothing has ever asked them a question at the moment
+   > they matter."* **It is stated as a position, not as a closure**, because the only ruling on
+   > record refused this share and the difference between then and now — a queue rather than a wall
+   > — is precisely the thing the owner has not been told.
+
+   **The delivery rule, unchanged by the narrowing and stated once so nothing has to be inferred:**
 
    > A claim is **delivered** iff every machine-checkable label it carries
    > (`corpus_observed`, `engine_validated`, `tablebase_exact`) is backed by a **validating
@@ -1844,18 +2222,32 @@ used as-is.
    > `PackRecord.claimBackings` and defaulting to `self_declared` where no entry exists.
    > **Day zero: 98 of 196 delivered, 26,735 of 61,531 characters** `[V]` `[2026-08-16]`.
 
-   **The one condition that reopens this question, and it is not a preference.** If a class turns
+   **The one condition that reopens the *fork*, and it is not a preference.** If a class turns
    out to be **structurally unbindable** — not "the wave has not run", but "the shipped checker
    cannot accept any record for this shape" — then the withheld set stops being a queue for that
-   class and the fork comes back for it alone. §3.2 checked all four classes against the shipped
-   checker and **found no such class**: `tablebase_exact` is proven bindable in the corpus,
+   class and the fork comes back for it alone. §3.2 checked all four **label classes** against the
+   shipped checker and found no such class: `tablebase_exact` is proven bindable in the corpus,
    `engine_validated` is bindable for the two registered engine assertions, `corpus_observed` is
    blocked by **missing records** rather than by any refusal (`CLAIM_ASSERTION_UNRECORDED`, with the
-   emitter shipped), and `author_principle` is not a machine label at all. The nearest thing to a
-   permanent residue is the handful of claims `claim-backing` §4 Bucket 3 named — cross-ledger
-   citations and assertions no instrument in this repository measures — and **their remedy is
-   authoring, not a ruling**. That is the honest answer to *"what residue still cannot be bound"*:
-   **a wave and a few sentences, not a class.**
+   emitter shipped), and `author_principle` is not a machine label at all.
+
+   **That check was necessary and not sufficient, and cross-review found why** `[cross-review]`
+   `[V]` `[2026-08-16]`. The classes are label classes; the shipped checker does not refuse by
+   label. `validateClaimBindings` admits a binding only when **no issue at all was raised for it**
+   (`if (issues.length === before)`, `claim-binding.ts`) — severity is irrelevant to admission —
+   so a refusal raised on a *sentence's shape* withholds the claim just as completely as a missing
+   record does, and it does so inside every class. §3.2 now measures the largest such refusal:
+   **`CLAIM_AUTHOR_LABEL_REQUIRED` gates 63 of the 98 withheld claims**, and its remedy is a pack
+   edit rather than a ledger entry. **This does not reopen the fork** — the remedy is authoring, and
+   the fork was about what to show while there was no remedy — but it does mean *"the withheld set
+   is a queue"* is a claim about the corpus's **prose**, not only about its records, and the queue
+   is longer and differently shaped than the class table alone implies.
+
+   So the honest answer to *"what residue still cannot be bound"* is: **no class is a wall; two
+   instrument waves plus a 63-claim `evidenceTypes` edit is the queue; and the handful of claims
+   `claim-backing` §4 Bucket 3 named — cross-ledger citations and assertions no instrument in this
+   repository measures — is the only genuinely permanent residue.** The earlier phrasing, *"a wave
+   and a few sentences, not a class"*, understated the middle term and is withdrawn.
 
    **Nothing else in this question survives.** Options A/B/C, their tables, the numeral-proxy
    analysis and the spelled-out-cardinal finding are all withdrawn with C6′ and C6″. *(One fragment
@@ -1906,7 +2298,12 @@ used as-is.
    widening, or an emitter that attaches rather than overwrites"*. **It got the third one**, plus a
    new ledger artifact, and `claim-backing` §6 states the ownership: it owns D97 and D98, both now
    ✅, and the wave is **content plus the instrument runs** — an explorer position-census pass and a
-   tablebase legal-successor census pass (§3.2). This RFC deliberately does not claim any of it, and
+   tablebase legal-successor census pass (§3.2), **plus a third component the author round did not
+   price: an `evidenceTypes` edit on 63 of the 98 withheld claims, because
+   `CLAIM_AUTHOR_LABEL_REQUIRED` refuses their bindings outright until they carry `author_principle`
+   and name a principle** (§3.2a, `[cross-review 2026-08-16]`). That third component is content work
+   on the *pack*, not the ledger, and it makes 63 rung-5 provenance decisions that C8's second form
+   renders to a learner. This RFC deliberately does not claim any of it, and
    criterion 17 asserts that its commit re-flips neither row. **The residual question is scheduling,
    not ownership**, and it has a number: the wave is worth **98 claims and 34,796 characters**, of
    which the single largest tranche is 60 `corpus_observed` claims blocked on **zero** explorer
@@ -1933,6 +2330,17 @@ used as-is.
    delivery one**, and §2.6 C5(4) makes the delivery behaviour explicit either way so it is not
    blocking. Ledger row proposed; whoever runs the binding wave should decide it in the same pass,
    because they will be reading all 196 claims anyway.
+
+   **Cross-review 2026-08-16 sharpens this and doubles it.** §3.2a establishes that the *same*
+   edit — add `author_principle`, name a principle — is a **precondition of binding at all** for
+   **63 of the 98 withheld claims**, because `CLAIM_AUTHOR_LABEL_REQUIRED` refuses their bindings
+   until they carry it. So the question is not 31 optional decisions on the admitted side; it is
+   **63 mandatory decisions on the withheld side plus 31 optional ones on the admitted side, 94 in
+   all**, against a registry of **13** principles of which 12 are referenced today. Whether 13
+   principles can honestly carry 94 more claims — or whether the registry grows, and who authors the
+   `counterCase` for each new entry — is the real shape of this question, and it is a **content**
+   question with a rung-5 provenance consequence rendered by C8. Still not blocking for *this* RFC's
+   delivery mechanism; squarely blocking for the wave. **Ledger row proposed, restated at this size.**
 
 ## Changelog
 
@@ -2034,3 +2442,58 @@ used as-is.
   **[[D423]]**'s three-way `STORAGE_VERSION + 1` collision.
   Criteria 2, 3, 5, 6, 9, 10, 11, 13, 14, 15 and 17 rewritten; **2a, 18, 19 and 20 added**; §5.8
   added for the `claim-backing` interface; Open question **8** added.
+- 2026-08-16: **adversarial cross-review by an agent that did not write the author round.** Every
+  measured figure re-derived independently over the committed 50-pack corpus at `158ba47` — **196
+  claims / 61,531 chars; 98 admitted / 26,735 chars (50.0% / 43.4%); 98 withheld / 34,796; label
+  census 82/60/43/37/24/8/0; 99 machine-labelled; 32 sidecars / 764 records at 391/341/32 with **0**
+  of either explorer kind; 1 `claimBindings` ledger; 0 support pointers at `/feedbackClaims`; key
+  sets 114/82; min 2 / median 4 / max 7 / mean 3.92; `author_principle` 82 all resolving, 16 also
+  machine-labelled; `derived_feature`-only 31 / 11,256 chars; 201 checkpoints, 0 `stated_reasoning`;
+  6 terminal-leaf packs / 24 claims (12.2%); 19/14/17 exhaustibility packs, 33 of 50 and 129 of 196
+  (65.8%); spine 5/12/64/754/15.1; 123 of 196 move-or-square; 66 / 117 / 136 vocabulary; and the
+  full Q8 harness re-run at 754 / 753 / 6,659 / 8.83 / 18,470 / 99.4454% / 91.9520% / lift 1.00424**
+  — **all reproduce exactly.** The RFC's arithmetic is sound. Seven defects fixed in place:
+  **(1) Open question 1 is NARROWED, not closed.** The closure's first ground misread the ruling it
+  cited: the owner **refused all three options including C6** (`claim-backing`'s own gate line and
+  changelog), so the refusal cannot be authority for shipping C6; C6's retention is
+  `claim-backing` §6's reasoning in its own voice. The one owner utterance aimed at this document is
+  headed *"reframes … rather than answering"* and asked for a **restatement**. The three-way fork
+  stays dead and is not re-asked; what replaces it is a **sequencing question** with both sides
+  priced. *"Three steps, none of which is this author's judgement"* withdrawn.
+  **(2) §3.2a added — the largest blocker in the residue was missing.** `CLAIM_AUTHOR_LABEL_REQUIRED`
+  is `error`, and `validateClaimBindings` admits a binding only under `if (issues.length === before)`,
+  so it withholds outright. **63 of the 98 withheld claims provably trip it** (83 lack
+  `author_principle`; 63 of those carry a segment with no `MACHINE_TOKEN`, which no binding can ever
+  instrument-attribute), and their remedy is a **pack edit**, not a ledger entry. OQ1's *"a wave and
+  a few sentences"* and OQ5's *"content plus two instrument runs"* are corrected.
+  **(3) C8 rendered a false provenance line, and it fires on day zero.** It interpolated
+  `evidenceTypes` verbatim, so the corpus's **only** bound claim would have read *"Evidence recorded
+  for: tablebase_exact, **author_principle**"* — a machine record asserted for a label §3.2 itself
+  says resolves against the registry, not the ledger; 19 of 99 machine-labelled claims carry a
+  non-machine label. C8 now interpolates `<earned>`; C4 gains `earnedEvidenceTypes`; §3.3(d) carries
+  `instrumentKinds` through; criterion **20a** added. `ledger_bound`'s form also restated, because
+  the disposition is a per-*segment* containment test, not a per-word guarantee.
+  **(4) Criterion 2a was unsatisfiable.** `expression-census`'s `backedClaims` is a **sum over
+  `(pack, evidenceType)` citations** — 6 corpus claims carry two machine labels and would count
+  twice — and it **never calls `validateClaimBindings`**, so it counts declared rather than
+  validating bindings. The equality held only because the joined set is a singleton. Replaced by a
+  subset assertion plus a named-refusal explanation for every divergence.
+  **(5) §2.2c's `reachableAuthoredSpineIds` explanation was false.** *"All 50 use `atSpineNode`
+  triggers only"* — actually **only 5 of 50**, and **28 of 50** trip the function's `return all`
+  bail-out. The 5-pack / 21-claim gap is right but measures where the bail-out does *not* fire;
+  without it the gap would be **32 packs / 141 claims**. Corrected, and the correction **strengthens**
+  the case for full-spine exhaustion: the set narrows as authoring gets tidier.
+  **(6) Register and provenance corrections.** [[D423]]'s collision is **two-way, not three** —
+  `opponent-contracts` landed migration 23 today. §5.7's `teacher-surface` summary restated (it
+  claims a position, not migration 21). The *"`planning/work-register.md` read 'OWNER-BLOCKED'"*
+  anecdote is **misattributed** — that string only ever lived in `rfc/README.md`, whose row still
+  carries a stale trailing sentence today; [[D433]]'s row title inherits the error. §3.2's 15-pack
+  list completed (`trajectory-caro-advance-chain-bishops` was missing from an enumeration of 14).
+  **(7) §5.9 added for `rfc/measurement-records.md`** — the undiscussed sibling whose §6a deferral
+  clause governs `pack-registry.ts:266`, the exact block C6 reads, and whose new `"info"` severity
+  would block a binding outright because `validateClaimBindings` ignores severity.
+  Also recorded: the committed `q8-output.md` is a stale 37-pack artefact; "lift" is defined nowhere
+  in the harness and is now pinned in §1.3 and criterion 5; the exhaustibility split needs **replay**
+  (5 packs have `start.fen`'s side ≠ `start.side`; parity gives 67.3% instead of 65.8%); and 94 of
+  §3.5's 117 `PRESCRIPTIVE_VERBS` matches are the noun *"move"*, which leaves C9's mechanism intact
+  and its headline overstated.
