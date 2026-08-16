@@ -1,15 +1,19 @@
 # RFC: Learner rating
 
-- **Status:** **draft — adversarially cross-reviewed 2026-08-16.** The review landed one
-  **blocker** (D395, the selection-vs-rendering invariant, now **R15**, with **R16** closing
-  the `BANNED_JUDGEMENTS` route-around D393 leaves open), **withdrew the tablebase
-  adjudication** in §5.4 as a contradiction of this RFC's own §1 test, **corrected the
-  register facts**, which had gone stale under the draft (`STORAGE_VERSION` 22→**23**, run
-  schema 0.16→**0.17**), narrowed **R6** to what it can actually enforce, tightened **R10**
-  so an owner ruling can go either way, corrected one calibration `rd`, one disclosure
-  magnitude, and the §11.2 doctrine reading. **The estimable-window argument survives its
-  arithmetic and does not survive its falsifier as written** — F-W was circular and is
-  rewritten (§7.3, AC-7). Not accepted: open questions 1, 3, 5, 6, 8, 9 and 10 stand
+- **Status:** **draft — author round 2026-08-16, on two owner rulings.** **Ruling 1 reverses
+  R10**: leaderboards and cross-learner comparison are now a **designed surface**, specified in
+  §10a as the **cohort standing**, with the refusal's one empirical ground — we do not police
+  self-cheating — carried forward as a **stated limitation on the surface itself** rather than as
+  a reason not to build it. **Ruling 2 answers open question 1**: a campaign boss is a **full
+  game, not a pack**, so the boss changes and the rating does not (§5.3a). Both rulings are folded
+  into the body; open questions 1 and 10 are marked answered rather than renumbered, so every
+  cross-reference in this document and in its siblings still resolves. Also this round: the
+  **F-W/AC-7 rewrite is made coherent** ("minimum across models" was undefined over intervals; the
+  simulation had no arrival rate — D420), a **fourth site repeating the estimable window without
+  its gauge caveat** is fixed (§7.3 qualification 3 — D424), and the register is re-verified late
+  (§9). Prior round: adversarial cross-review 2026-08-16 landed **R15**/**R16** for D395, withdrew
+  the §5.4 tablebase adjudication, and corrected the register facts and one calibration `rd`.
+  Not accepted: open questions 3, 5, 6, 8, 9, 11 and 12 stand
 - **Author:** claude
 - **Cross-review:** claude (agent), 2026-08-16 — every figure re-derived from
   `tools/d333-band-outcome-harness/out/` and every code reference relocated **by symbol
@@ -28,13 +32,21 @@
   properly"* — plus its owner extension **D365** (*"make it configurable in the profile or when
   opponents win/lose against bots readjust… there must be measures for this"*). Its one hard
   prerequisite, **D333/D324**, was answered 2026-08-16 by
-  `design/research/maia-band-outcome-transfer.md`
+  `design/research/maia-band-outcome-transfer.md`.
+  **Two further owner rulings, 2026-08-16, are the reason for this round:**
+  **(1)** *"add leaderboards and cross-learner comparison… maybe local chess clubs want to use us
+  at some point? who knows… add it properly, re-evaluate the refusal and why it was there and what
+  it unlocks"* — R10 **reversed**, §8b and §10a.
+  **(2)** on open question 1, *a campaign boss is a full game, not a pack* — §5.3a.
 - **Depends on:** `rfc/archive/return-and-progression.md` (`attempts.result` — the only durable
   win/loss/draw store), `rfc/archive/engine-request-contract.md` and
   `rfc/archive/resistance-spectrum.md` (`eloHonored`/`eloApplied` per-move record),
   `rfc/archive/learner-identity-and-authorization.md` (`learners`, the learner id).
-  **Lands behind `teacher-surface.md` and `opponent-contracts.md`** in the migration order
-  (see §9.1); **three** active documents now hold `STORAGE_VERSION + 1` (D384)
+  **`teacher-surface.md` is now a hard dependency, not only a migration-order neighbour** —
+  §10a's standing is scoped to its `classrooms` / `classroom_members` and adds no second
+  grouping object and no second consent model (§10a.2). **Lands behind `teacher-surface.md` and
+  `opponent-contracts.md`** in the migration order (see §9.1); the ladder now carries a **fourth
+  claim** ([[D423]], §9.1)
 - **Parent / amends:** **nothing.** The draft claimed it amended `docs/return-and-progression.md`;
   **cross-review found no contradiction to amend** — all three of that doc's no-rating
   sentences are scoped to surfaces R14 keeps the rating off, and each survives verbatim.
@@ -50,9 +62,19 @@ rules-terminal position against a *calibrated* Maia band at full material, with 
 and no rewind.** It ships the calibration table read directly off
 `design/research/maia-band-outcome-transfer.md` §5 — four measured rungs, no interpolation, no
 invented number — a publication rule that abstains until the rating deviation is smaller than
-the resolution the instrument can support, and **sixteen** named refusals. It claims **no pack
+the resolution the instrument can support, and **sixteen** named refusals — one of which, **R10**,
+was reversed by owner ruling into a designed surface and survives as three narrower clauses. It claims **no pack
 schema lane, no run schema lane, and one migration position** (create-table/index only, no
 backfill).
+
+**Two owner rulings landed after the cross-review and this round implements them.** The first
+**reverses R10**: cross-learner comparison ships, as the **cohort standing** of §10a — scoped to a
+classroom the learner joined and then *published into by their own act*, ranked by results,
+**grouped** rather than ranked by rating, defaulting to the honour-roll form, and carrying on its
+face the limitation the refusal was built on: **these games were played alone against a bot and
+nobody witnessed them.** The second rules that **a campaign boss is a full game, not a pack**
+(§5.3a) — which changes the boss, not the rating, and makes it the first campaign encounter
+required to produce a rules-terminal outcome.
 
 **The first refusal is the one that had to be written before anything else, and it is not
 about rating quality.** `design/research/band-flattery-and-buried-value.md` established that
@@ -253,11 +275,15 @@ on validity, so the uncertainty term does not protect against a mis-specified op
 
 ### Scope boundary — explicitly out
 
-Matchmaking and adaptive difficulty (Open questions Q5); any rating on the campaign map or as a gate; any
-cross-learner surface; rating for imported games (`sessionKind: "imported"` projects no attempt
-at all, `progress.ts:84-86`); rating for pack sessions (§5.3 explains why the horizon forbids
-it); rating any opponent mode other than a calibrated `human_common` band; and the human-anchor
-experiment itself, which is a research question this RFC names and does not run.
+Matchmaking and adaptive difficulty (Open questions Q5); any rating on the campaign map or as a
+gate; rating for imported games (`sessionKind: "imported"` projects no attempt at all,
+`progress.ts:84-86`); rating for pack sessions (§5.3 explains why the horizon forbids it); rating
+any opponent mode other than a calibrated `human_common` band; and the human-anchor experiment
+itself, which is a research question this RFC names and does not run.
+
+*"Any cross-learner surface" was on this list until owner ruling 1 and is now in scope, bounded*
+*by §10a: one standing per classroom, no standing that spans classrooms, and no global table
+ever.*
 
 ## Specification
 
@@ -295,7 +321,11 @@ experiment itself, which is a research question this RFC names and does not run.
 A run is **rated-eligible** iff all of the following hold. Each has its refusal number from §8.
 
 1. It was declared rated at creation, before its first ply (§10.1). — R11
-2. `sessionKind === "position"`. Not `pack` (R2), not `imported` (R1).
+2. `sessionKind === "position"`. Not `pack` (R2), not `imported` (R1). **A campaign boss
+   satisfies this rather than excepting it** — owner ruling 2 makes a boss a game, and a game in
+   this tree is a `position` session. `RunSessionKind` stays the shipped three-member union
+   (`"pack" | "position" | "imported"`, `packages/runtime/src/types.ts`); no fourth kind is added
+   here, and §5.3a is the whole of the change.
 3. `opponentPolicy.mode === "human_common"` and `targetElo` is one of the four ladder rungs in
    §4.1. — R1, R3
 4. The engine handshake reported `eloHonored: true` and `appliedTargetElo` resolved to the
@@ -486,22 +516,106 @@ shown or when.
 
 #### 5.3 Why pack sessions cannot be rated
 
-A pack encounter ends at `authoredBoundary.plyHorizon`, not at checkmate. *Count re-derived at
-cross-review: **50** documents under `content/` declare a `plyHorizon`, all of them in
-`content/drafts/` (152 `.json` drafts; `content/packs/` is empty), **median 11**. The draft's
-"47 of 89 … median 10" is not reproducible against the tree as it now stands — the corpus moved,
-which is why the argument below turns on the horizon **existing at all**, not on how many carry
-one.* A truncated game has no rules-terminal result, and producing one would require assessing the
-final position — which is an engine or authored verdict, i.e. the exact thing §1 forbids. **The
-horizon is the reason packs are unrated**, and it is a principled reason rather than a scoping
-convenience: it would hold at one pack or at a thousand.
+A pack encounter ends at `authoredBoundary.plyHorizon`, not at checkmate — the horizon is what
+line membership stops at (`plyHorizon` in `packages/runtime/src/line.ts`) and what the boundary
+predicate reports reached past (`packages/runtime/src/objective.ts`). *Corpus re-derived at this
+round against a tree that had moved again: of the **152** `.json` files under `content/drafts/`,
+**56 are drill packs** (the other 96 are shape-entry, emission-job and sourcing artefacts;
+`content/packs/` is empty), and **50 of those 56 declare an `authoredBoundary.plyHorizon`, median
+11** `[V]`. The cross-review's "50 … median 11" is confirmed; what is new is the denominator,
+which is 56 packs rather than 152 documents.* A truncated game has no rules-terminal result, and
+producing one would require assessing the final position — which is an engine or authored verdict,
+i.e. the exact thing §1 forbids. **The horizon is the reason packs are unrated**, and it is a
+principled reason rather than a scoping convenience: it would hold at one pack or at a thousand.
 
-This has a consequence the campaign must hear: `06` §5's boss encounters are packs, and the
-suppressed-boss configuration is otherwise the ideal rated object —
-`coaching-versus-cheating-and-the-band-curve.md` §1 (`:55`) calls it *"a complete specification of
-'2000-Elo skills required'"*, and its §4d tests the owner proposal against it. Either a boss is
-played out with no horizon, or bosses are unrated.
-Open questions Q1 puts that to the owner rather than deciding it.
+**And the corpus shows the truncation is not merely a technicality it would be pedantic to
+insist on.** **26 of the 56 packs already declare `objective.grading.resolveAt.kind: "terminal"`,
+and 25 of those also declare a `plyHorizon`** — twenty of them at 7–13 ply `[V]`. *"Resolve at
+terminal"* and *"stop at ply 7"* are asserted on the same object, nothing in
+`apps/server/src/pack-validation.ts` objects to the pair, and the horizon is what actually fires.
+So the pack vocabulary **already claims a terminality it does not deliver**. That is the gap owner
+ruling 2 closes, and it is why the ruling changes the boss rather than the rating.
+
+#### 5.3a Owner ruling 2 — a campaign boss is a full game, not a pack
+
+**The ruling, 2026-08-16, answering open question 1:** a boss encounter runs to a real terminal
+result and rates like any other game. The rating is not relaxed for it; the boss is rebuilt to
+meet it. The ruling is well aimed: the suppressed-boss configuration was already the closest thing
+in this repo to a rated object — `coaching-versus-cheating-and-the-band-curve.md` §1 (`:55`) calls
+it *"a complete specification of '2000-Elo skills required'"* — and the only thing standing
+between it and a result was the horizon.
+
+**What that means concretely, and it is a bigger change than one field.** A rated boss is a
+`position` session created against a calibrated rung — the object `POST /rated-games` already
+creates (§10.2) — with the campaign supplying the start FEN, the side and the band. It is **not a
+pack with the horizon deleted**, and the reason is structural rather than stylistic: `objective`
+and `checkpoints` are in the pack schema's top-level `required` list
+(`schemas/drill_pack.schema.json`), so a pack **cannot** exist without an authored objective, and
+an authored objective is the first row of R2's refused-inputs list. Encoding the boss as a
+horizon-free pack would leave the refused input present on the object and refused only by
+discipline; encoding it as a game makes it **absent**. That is the same argument §9.3 makes about
+the run schema, applied one tier up: *a thing that is not on the object cannot leak from it.*
+
+`authoredBoundary` is **not** in that required list, so "a pack with no boundary" is
+representable, and **six of the 56 drafts already are one** `[V]`. The ruling does not need that
+affordance and deliberately does not use it.
+
+**Four consequences, stated here rather than left to be discovered.**
+
+1. **A boss becomes a different object from every other campaign encounter.** Every other node is
+   an authored encounter bounded by a horizon and sealed by an `ObjectiveState` from
+   `successConditions`; a boss is a game bounded by the rules and sealed by `terminalOutcome`. So
+   **the map now has two verdict producers, and which one seals a node is a property of the node**
+   — the authored one everywhere, the rules one at a boss. They are not interchangeable and neither
+   is computed from the other, which is §1's line drawn across the campaign rather than only across
+   the rating. A boss may still carry authored copy — a briefing before the first ply — because
+   briefing copy is campaign copy and reaches no update (R2); what it may not carry is an authored
+   *verdict*, since a boss has a real one.
+2. **Only Act II can host a rated boss, and this is measured rather than chosen.** `06` §5's acts
+   escalate in decidability: Act I is `theory_strict`, Act III is `perfect_tablebase`. Neither has
+   a calibrated band, so both are refused by R1 — and Act I is refused twice over, because
+   `THEORY_NEEDS_AUTHORED_BOUNDARY` and `BOUNDARY_NEEDS_PLY_HORIZON`
+   (`apps/server/src/pack-validation.ts`) make a `follow_theory` objective **structurally
+   incapable** of running to a rules-terminal result: the validator requires it to declare a
+   finite horizon. Act III is refused twice as well — R1 for the band, and **R5 on material**, and
+   the second refusal is exact rather than approximate: `PERFECT_TABLEBASE_OUT_OF_RANGE` reads
+   *"perfect_tablebase requires a root with **at most seven pieces**"*
+   (`apps/server/src/pack-validation.ts`) `[V]`, against R5's floor of 21. **The campaign's climax act is the one act that cannot carry a rated
+   result**, so the rated axis runs orthogonally to the decidability axis rather than alongside it.
+3. **The material precondition is already satisfied by the shape Act II uses, and this is
+   measured.** Across the 56 packs, start-position piece counts by mode: **`plan` mode is 14 for
+   14 at ≥21 pieces**; `outcome` mode is **13 of 15 below 21**; `line` mode is 21 of 23 at ≥21
+   `[V]`. `06` §2b's middlegame boss is *"`human_common` at a band plus an authored plan"*, whose
+   closest corpus analogue is `mode: "plan"`, so R5 costs the ruling nothing where it applies and
+   refuses exactly the endgame shape it was written to refuse. The mapping from §2b's prose to the
+   `plan` mode is an inference, not a schema fact; the precondition is checked per encounter from
+   the start FEN either way, never assumed from the mode.
+4. **The rated boss and `06` §5's submitted-branch ruling collide, and the collision is real.**
+   `06` §5 rules that *"rewind stays free inside an encounter; **declaring done** is what
+   counts"*, and R11 voids any rated game containing a rewind. For a rated boss these cannot both
+   hold: either the boss is the one encounter where rewind is closed, or a rated boss is
+   unrateable in practice because the first rewind voids it. This RFC does **not** decide it —
+   `06` is intent tier (law 5) and the ruling is the owner's. **Open question 11.**
+
+**What `design/06-campaign.md` needs, named and not written** (law 5 — the RFC tier may not edit
+the design tier):
+
+- **§5's encounter vocabulary.** *"Encounters are bounded by the **shipped** `plyHorizon`"* is now
+  false of one encounter class. The doc needs a boss row that is bounded by the rules instead, and
+  a sentence saying which of the two verdict producers seals which object.
+- **§5's act ladder.** The rated boss exists in Act II only, for the three reasons above. `06`
+  currently reads as though the three acts differ in decidability alone; they now also differ in
+  whether a result exists at all.
+- **§2a's difficulty-availability axis.** Its four labels — measured-by-outcome,
+  measured-by-tablebase, authored, none — are all properties of a **position**. A boss that plays
+  to terminal produces a *result*, which is a property of the **encounter**, so it does not fit on
+  that axis and needs either a fifth label or a second axis. `06` should say which.
+- **§2b's boss-per-phase table.** It gives three bosses; exactly one of them can be a game with a
+  rated result, and the doc should say which and why the other two are not.
+- **§5's `plyHorizon` corpus claim.** *"36 of 37 packs already declare one, median 12 ply"* is
+  stale against the tree measured above (50 of 56, median 11) `[V]` — a bookkeeping fix, listed so
+  it lands with the rest.
+- **§2c/§5's rewind ruling**, if and only if open question 11 is answered in R11's favour.
 
 #### 5.4 No adjudication at all — and why the tablebase is not the exception the draft made it
 
@@ -726,7 +840,12 @@ nothing.** F-W is rewritten below, and AC-7 with it.
    journey* and got 0.207–0.400 against a required 0.714. That is the correct number for the
    question it asked. This is a different question — *estimable window ÷ journey*, which comes
    out at **1.09** — and it needs an assumption D337's number did not. Both belong in the ledger;
-   §12 proposes the row.
+   §12 proposes the row. **The 1.09 is a ratio of widths and says nothing about containment, and
+   this is the exact site D424 predicted would decay** — a coverage ratio above 1 reads as *"it
+   fits"*, and it does not: the same arithmetic puts the journey's floor **6 points outside** the
+   window's, and the window's position is a gauge artefact of the 1500-BCS origin (§4.2,
+   qualification 2 above). *Approximately the width of*, never *fits* — including here, where the
+   number is most likely to be quoted alone.
 4. **It does not rescue the anchor.** A 1092-point window whose zero is arbitrary is still
    arbitrary. §7.4 is not weakened by §7.3, and neither is R7.
 5. **Draws are unmodelled, in the conservative direction.** The `E(1−E)` variance term treats a
@@ -738,21 +857,42 @@ nothing.** F-W is rewritten below, and AC-7 with it.
 the four rungs, and credit the estimator only where the recovered rating's 95% interval contains
 the truth on ≥90% of replicates. Three things the draft's version lacked are **required**:
 
-- **More than one response model, and the published bracket is the minimum across them.** At
-  minimum: (a) the logistic — the null the constant was derived under; (b) a heavier-shouldered
-  alternative (Thurstone/normal), which reaches saturation sooner in the tails; (c) a
-  **saturating** family with a floor draw rate, which is the failure mode actually feared —
+- **More than one response model, and the published bracket is the *intersection* across them.**
+  At minimum: (a) the logistic — the null the constant was derived under; (b) a
+  heavier-shouldered alternative (Thurstone/normal), which reaches saturation sooner in the tails;
+  (c) a **saturating** family with a floor draw rate, which is the failure mode actually feared —
   *"a learner far above band 2200 may simply score 1.000 forever"*. A bracket that survives only
-  under (a) is a bracket that was assumed, not tested.
-- **The shipped period structure, not a single 200-game batch.** §6.3 closes a period at 12 games
-  or 7 days and re-widens RD toward 350 between periods. A coverage result computed over one
-  200-game batch does not transfer to a learner who plays twelve games a month, and the
-  publication rule (RD ≤ 60) binds hardest exactly where the bracket is widest: at the skirt
-  edge, `SE(D) = 491/√n`, so **RD ≤ 60 needs ≈67 games** against the extreme rung, against ≈34 at
-  parity. F-W must report, per true rating, both interval coverage **and** how many periods pass
-  before anything is publishable at all.
-- **A stated null.** The simulation is credited against ≥90% coverage; below that at any true
-  rating inside [1006, 2098], the bracket contracts to the largest sub-interval that clears it.
+  under (a) is a bracket that was assumed, not tested. *Sharpened this round: the cross-review
+  wrote "the **minimum** across them", which is undefined over intervals — the minimum of
+  [1006, 2098] and [1100, 1900] is not a quantity. The operative rule is **per-point**: a true
+  rating is inside the published bracket only if it clears the coverage null under **every**
+  model, and the bracket is the largest contiguous run of grid points that do. That is an
+  intersection, it is well defined, and on the drafted wording an implementer could equally have
+  taken the narrowest **width** and centred it wherever they liked.*
+- **The shipped period structure, not a single 200-game batch — and a stated arrival rate, which
+  the shipped structure makes load-bearing.** §6.3 closes a period on **whichever comes first: 12
+  sealed games or 7 days with at least one**, and re-widens RD toward 350 between periods. *Also
+  sharpened this round: "12 games or 7 days" cannot be simulated without saying how fast the
+  learner plays, because the arrival rate is what decides which of the two clauses ever fires.*
+  F-W must therefore run **at least two arrival rates — one count-closing (≥12 rated games a week,
+  where the 7-day clause never fires) and one clock-closing (≤3 a week, where every period closes
+  on the clock with the pre-period widening applied against a handful of games)** — and report
+  each separately. The publication rule (RD ≤ 60) binds hardest exactly where the bracket is
+  widest: at the skirt edge, `SE(D) = 491/√n`, so **RD ≤ 60 needs ≈67 games** against the extreme
+  rung, against ≈34 at parity. F-W must report, per true rating **and per arrival rate**, both
+  interval coverage **and** how many periods pass before anything is publishable at all. **The
+  clock-closing arm is the one that matters commercially and it is the one nobody has run:** a
+  learner playing three rated games a week is the expected case, and whether their RD ever reaches
+  60 is a question about this product's core promise that no line of this RFC currently answers.
+- **A stated null, and a stated resolution.** The simulation is credited against ≥90% interval
+  coverage — deliberately slack against the nominal 95%, so a 5-point shortfall is tolerated and a
+  larger one is not. Below it at any true rating inside [1006, 2098], the bracket contracts to the
+  largest contiguous run of grid points that clears it under every model. **The grid is 100 points
+  wide, so the contracted bracket is resolved to ±50 and is published rounded to the grid** — it
+  may not be printed to the point, which would assert a precision the simulation's own spacing
+  cannot support. (Note the scale: the 6-point shortfall §4.2 records at the floor is an order of
+  magnitude below what this criterion can resolve, which is why that shortfall is a statement
+  about the *arithmetic as derived* and not something AC-7 can adjudicate.)
 
 **The bracket is whatever that simulation says it is.** If it comes back narrower than
 [1006, 2098] — and under (c) it will — the constant moves and the copy moves with it. This is an
@@ -770,7 +910,13 @@ Every surface that prints the rating prints, in the same view:
    `[1000, 2200]` is worth **≈480 real Elo at full material** and **≈347 over the corpus as
    authored**, i.e. **a 100-band step is ≈40 real Elo at full material, not 100**;
 5. that "unassisted" means **every assistance the server can refuse**, and that six of the nine
-   assistance axes are browser-rendered and therefore neither refused nor detected (§5.2, D389).
+   assistance axes are browser-rendered and therefore neither refused nor detected (§5.2, D389);
+6. **on any surface where a learner can see another learner's rating, record or mark** — i.e.
+   every §10a surface — that **these games were played alone against a bot and nobody witnessed
+   them**, in that register and not softer. This is obligation 5's ceiling restated for the one
+   context where it stops being a caveat about the learner's own number and becomes a caveat about
+   a comparison. **Added by owner ruling 1**, which reversed R10 without reversing its ground:
+   §8b sets out why this obligation is the reversal's whole price.
 
 *Correction by cross-review on obligation 4: the draft printed **≈290**, which is the wrong
 quantity for the span it is attached to.* 289.6 Elo is the corpus-wide value of `[1000, **2400**]`
@@ -797,7 +943,7 @@ Each is named, each has a reason that is a measurement or a law, and each is a t
 | **R7** | Publishing the number as an **external-scale equivalent** (FIDE / Lichess / Chess.com), or converting to one | The anchor is unmeasured; the whole calibration is engine-vs-engine |
 | **R8** | Publishing a **point estimate outside the bracket or at score saturation** | §7.3. Report a bound instead |
 | **R9** | Making the rating **purchasable, sellable, or a gate on content** | ADR-0007. D334's surviving distinction: winning may unlock convenience and variety, **never content** |
-| **R10** | **This rating — the number, its interval, its band-equivalent, and any ordering derived from them — on any cross-learner surface.** Not a leaderboard, not a percentile, not a cohort mean, not a "you are ahead of N learners", not a sort key | Barth: *"For most players, the only thing a global leaderboard manages to tell you is that you suck (and not even by how much)"* and *"Getting your name at the top of the leaderboards is a fantastic incentive for cheating"* (`fun-mechanics-outside-roguelikes.md:769-771`) `[P]`; and the standing constraint from that dossier — the population is the learner's own history, never other learners. **Restated by cross-review to name the object rather than the shape** — see below |
+| **R10** | **REVERSED AND REPLACED by owner ruling 1, 2026-08-16.** Cross-learner comparison ships (§10a). What R10 now refuses is the three things the reversal did **not** buy: **(a) any standing that spans classrooms, including a global or all-learners table, at any size**; **(b) the rating as a sort key or a rank** — a standing may be *ordered* by results and *grouped* by rating, never ranked by it; **(c) any standing entry a learner did not publish by their own act**, including one derived from `classroom_members` alone | Each clause keeps the half of the old rationale that survived measurement, and drops the half that did not. (a) is Barth's finding read to its actual scope: *"For most players, the only thing a **global** leaderboard manages to tell you is that you suck (and not even by how much)"* (`fun-mechanics-outside-roguelikes.md:769-771`) `[P]` — a claim about global tables, not about a club of twenty. (b) is the instrument's own resolution floor applied to the display: the dossier's resolvable step is **60 Elo** (§3), so two members closer than that are not distinguishable however much either plays, and a rank asserts a distinction the instrument cannot make (§10a.4). (c) is `teacher-surface` §2.1's rule transposed — enrolment authorises addressing, never reading — and is why the standing needs its own consent rather than inheriting one (§10a.2). **The old rationale's cheating half is not dropped and not refuted; it is discharged as a disclosure obligation** (§7.4 obligation 6), because it was always a statement about our games rather than about our arithmetic (§8b) |
 | **R11** | Rating a game containing a **rewind or fork**, rating more than one branch of a run, or rating the same run twice | `attempts` PK is `(run_id, branch_id)`, so a rewound run yields several results. Rating them would reward rewinding until you win |
 | **R12** | **Any adjudication of an unfinished game — engine evaluation *and* tablebase probe** | Only `terminalOutcome` may seal. **Widened by cross-review:** the draft admitted a tablebase-exact seal; a tablebase result is a fact about the position *under optimal play*, not about the game, so it fails §1's own test, and Maia converts only 88.1–91.9% of won endgames in practice (§5.4). Owner may reopen it as a *disclosed adjudication* — Open question 9 |
 | **R13** | Maia's own **expected score** `0.5 + cp/2000` as a rating input | `maia-wdl-versus-human-outcome.md` §9.5: the value head's band response carries **no information** about the band's outcome shift (Pearson 0.021–0.044, sign agreement 47.2–52.0%). Retained as a diagnostic only (§AC-8) |
@@ -834,35 +980,103 @@ separately declines to build any of them in v1, and Open question 5 keeps that a
 than a default. The line is not *"the rating must never be read"*; it is *"the rating must never
 be an argument to a sentence about a move."*
 
-#### 8b. R10, restated to survive the ruling that is already pending
+#### 8b. R10 reversed — the re-evaluation, and what survives it
 
-`design/research/league-as-return-loop.md` §C1 hits R10 head-on and escalates it as owner-facing:
-*"A league standing is a ranked table of learners, and no league exists without one."* That
-dossier declines to route around the refusal and instead offers the distinction it thinks is
-rulable — R10 refuses ranking learners by **a number the product manufactured about them**, while
-a league table ranks by **what happened**, which is the same object class the owner ruled
-admissible as `corpus_observed`. Its recommendation is explicit: *"R10 should be reworded to say
-**what** it refuses … rather than **what shape** it refuses — as written it also forbids a record
-of game results that nothing in its rationale objects to."*
+**The ruling, 2026-08-16:** *"add leaderboards and cross-learner comparison… maybe local chess
+clubs want to use us at some point? who knows… **add it properly, re-evaluate the refusal and why
+it was there and what it unlocks**."* This section is the re-evaluation. §10a is the surface.
 
-**Cross-review adopts that correction, because it is right on this RFC's own terms and because
-R10 as drafted was making a ruling that is not this RFC's to make.** The table row above now
-names the object — *this rating, its interval, its band-equivalent, and any ordering derived from
-them* — and R10 is therefore stable under either outcome:
+**R10 had three grounds. Two narrow; one survives whole; none was baseless.**
 
-- **If the owner rules the distinction load-bearing**, a league standing built from `attempts`
-  results is untouched by R10, and nothing here has to be reopened. What R10 still refuses is
-  putting the **rating** in that table or using it as a seed, a section boundary or a sort key —
-  which is also what keeps `docs/return-and-progression.md:48-49` true (§11.2).
-- **If the owner rules it a loophole**, R10 is *narrower* than the ruling and the ruling simply
-  extends past it. Nothing here contradicts a stricter answer.
+**Ground 1 — Barth. Narrows to *global*, and the narrowing is in the quotation itself.**
+*"For most players, the only thing a **global** leaderboard manages to tell you is that you suck
+(and not even by how much)"* (`fun-mechanics-outside-roguelikes.md:769-771`) `[P]`. The measured
+harm is *unreachability at scale*: a table whose top is occupied by strangers you will never
+approach. A named cohort of a club is not that object — and the league is the worked example, since
+its own competitive unit is a **team of 8 boards**, nested inside a 44-team, **352-rostered**
+season with a **121-deep bench** (`league-as-return-loop.md` §1.4, §5.1) `[V]`. **The thing that
+makes a 352-player league bearable is that you actually play inside a group of eight.** So ground 1
+does not die; it becomes **R10(a)**: no standing spans classrooms, and there is no all-learners
+table at any size. The refusal was right about the thing it measured and was applied to a thing it
+had not.
 
-**What R10 must not be read as doing is deciding the league question by drafting.** The
-dossier's second observation is the one that would have made that mistake expensive: the 4545
-league's own history records cheating investigations affecting final standings in three seasons,
-against a product that already declines to police self-cheating — so the argument against a table
-is real, it is empirical, and it deserves an owner ruling rather than a refusal inherited from an
-RFC about a different object. Recorded as Open question 10.
+Barth's **second** sentence — *"Getting your name at the top of the leaderboards is a fantastic
+incentive for cheating"* `[P]` — narrows to nothing at all. It is about incentive, not scale, a
+cohort of twenty has it as much as a pool of twenty thousand, and it belongs to ground 3 rather
+than to ground 1.
+
+**Ground 2 — *"the population is the learner's own history, never other learners."* Narrows to a
+default, and the reversal is what shows it was a default all along.** That constraint was inherited
+from the return loop, where it is load-bearing because nothing in the return loop is consented to
+by a second person. A standing is. The clause survives as **R10(c)**: a learner appears in a
+standing because they published themselves into it, never because someone enrolled them.
+
+**Ground 3 — self-cheating, and Barth's incentive sentence with it. Survives entirely, is the only
+ground with observed evidence behind it, and is not dischargeable by design.**
+`league-as-return-loop.md` §C1 records that the 4545
+league's history has **cheating investigations affecting the final standings in Seasons 7, 8 and
+17**, in some cases forcing tiebreakers to be re-applied, and that its ToS converts a mid-season
+account closure into forfeit losses for the whole season `[V]`. Against that, this product's own
+posture is explicit and shipped: *"it does not pretend to prevent a host from cheating on
+themselves"* (`docs/live-sessions.md`, §Accepted limitation) `[V]`. **So the clearest real-world
+instance of a ranked amateur chess table produced repeated scandals under supervision we do not
+have.** Nothing in §10a fixes that, nothing in §10a claims to, and the reversal's entire price is
+that the limitation is **stated on the surface rather than used as a reason not to build it** —
+§7.4 obligation 6, at the four sites §10a.5 fixes.
+
+**The distinction the league study offered — tested, and it does not survive.** That dossier's
+proposed rescue was that R10 refuses *a manufactured skill number compared across people*, while a
+standing merely *records what happened* — the `corpus_observed` class. **Applied to this RFC the
+distinction dissolves, and it dissolves against §1.** §1's whole licence argument is that this
+rating **is not a manufactured claim about the learner**: a Glicko-2 update reads a prior, a
+measured opponent rating, and a score `terminalOutcome` produced, and *"a rating in this product is
+arithmetic over rules facts… It says what happened, never what was good."* If that argument is
+sound — and R15, R16 and the entire §8 table are built on it — then *manufacturedness* cannot be
+what keeps the rating out of a table, because the rating is not manufactured. The distinction was
+offered in good faith and it is the correct distinction for a *different* rating; **for this one it
+proves too much.**
+
+**What replaces it is sharper, and it changes the design rather than only the wording.** The
+problem was never the arithmetic; it is the **provenance of the games the arithmetic reads**. A
+4545 standing ranks games played under arbiters, moderators and an anti-cheat regime — and it was
+*still* corrupted three times. Ours ranks games played alone, against a bot, in a tab we do not
+police, with six of nine assistance axes unrefusable (§5.2, D389). **The defect is unwitnessed
+games, not a manufactured number** — and relocating it from law 8 to provenance is what makes it
+tractable, because a provenance defect has a disclosure and a design response where a law-8 defect
+would have neither. Concretely it produces three rules that the manufacturedness framing would
+never have generated:
+
+- prefer forms whose value does not depend on being unfalsified — **marks and records over
+  estimates**, which is why the honour roll is the default (§10a.3);
+- state the provenance where the comparison is made, not in a policy page (§7.4 obligation 6);
+- make *witnessed* play a thing a cohort could one day require rather than a thing we claim
+  (open question 12).
+
+**What it unlocks, which is the half the refusal never weighed.** The owner's ground is the club
+and coach cohort, and the adjacent surface already exists: `rfc/teacher-surface.md` ships
+`classrooms` and `classroom_members` with a consent model that survived two adversarial passes.
+**A standing is not a new social object; it is a second read over one that is already consented
+to.** That is the whole reason §10a is short. `league-as-return-loop.md` §7's verdict was
+*import-don't-host* on a feasibility ceiling — C6, *"a league is the one return-loop mechanism
+whose minimum input is a population"* `[V]` — and a classroom standing is the version of the
+mechanism whose minimum input is **one club**, which is the population a coach brings with them.
+
+**And the honour roll is now a presentation option, not a compromise — so the question is whether
+it is the default.** It is (§10a.3), and the reason is not deference: **it is the only form that is
+publishable on day one.** §7.2 withholds a point estimate until RD ≤ 60, which needs ≈34 rated
+games at parity and ≈67 at the skirt (§7.3); a rating column in a new club's standing is therefore
+empty for every member for weeks. Marks and records are built from **sealed events**, so they are
+populated from the first game. **The form that is honest about the instrument and the form that
+actually works on day one are, for once, the same form** — which is why the honour roll stops being
+a compromise the moment it stops being a fallback.
+
+**ADR-0007 and D334 are checked against the standing explicitly and it clears both.** No standing
+position, mark or rank may unlock content, be purchased, or be sold; a mark is earned by playing,
+per `06` §3 law 2. `league-as-return-loop.md` §C2 supplies the calibration and the boundary: 4545
+pays nothing and its `SeasonPrize` model *"has no monetary field anywhere"* `[V]`, while its
+alternate-queue priority is **convenience gated on conduct** — inside D334's *"convenience and
+variety, never content"* envelope — and the dossier's own note is that **priority gated on
+*results* would not be** `[V]`. §10a.6 refuses that case by name.
 
 ### 9. Register claims
 
@@ -887,9 +1101,21 @@ above needed no edit, only the prose around it did. Per D392, no integer appears
 acceptance criterion here. **Re-derive `STORAGE_VERSION` at landing; do not trust this
 paragraph.**
 
-**Three active documents now hold `STORAGE_VERSION + 1`**, not two: `teacher-surface` (draft),
-`opponent-contracts` (accepted, and its own header marks the position **CONTESTED**), and this
-RFC. This RFC lands **behind both** and takes whatever position is next at its turn.
+**Re-verified late, this round, against the tree rather than against the draft:**
+`STORAGE_VERSION` reads **23** (`apps/server/src/storage.ts`, `export const STORAGE_VERSION = 23`)
+`[V]` — unmoved since cross-review, which is the first time a figure in this document has survived
+a round.
+
+**Three active documents hold `STORAGE_VERSION + 1` ([[D423]]) and this round makes this RFC's
+share of that contention larger, so it is stated as a fourth claim rather than hidden inside the
+third.** The holders are `teacher-surface` (draft), `opponent-contracts` (**implementing**, its
+own header marks the position **CONTESTED**), and this RFC — which now carries **two independent
+table sets**, the rating's three (§10.1) and the standing's three (§10a.7). Counted by document
+the ladder has three claimants; **counted by claim it has four, and this is the fourth.** They
+land in one migration body because they land in one commit; if the owner ever splits the standing
+into its own RFC, that RFC is a fourth *document* and D423's count moves again. Also verified this
+round: `feedback-delivery` **declines** to become a silent fourth holder and says so in its own
+register section `[V]`; `graduation-clearance` claims **no** migration position `[V]`.
 
 Body: **create-table/index only. No backfill, no snapshot rewrite, no stamp.** Nothing historical
 is rated — every historical run was played under an unknown assistance state against an
@@ -901,18 +1127,24 @@ at HEAD, not this RFC's to fix, but the implementer will meet it.
 #### 9.2 Pack schema — **none.**
 
 Nothing about a pack changes. Rated-eligibility is *derived* (§3) from the run's opponent policy,
-start material and assistance state — never authored. `DRILL_PACK_SCHEMA_VERSION` is **"0.27"** at
-cross-review (`packages/schema/src/index.ts:2`). *The draft added "0.28 stays free —
-`opponent-contracts` may keep 0.28"; both halves are stale: `opponent-contracts` was accepted with
-its 0.28 claim **released** by its own cross-review (D385), so 0.28 is unclaimed for a reason that
-has nothing to do with this RFC.* This RFC claims no pack lane and releases none.
+start material and assistance state — never authored. **And owner ruling 2 does not change that**:
+a boss is a `position` session, so the ruling adds no pack field, no `authoredBoundary` variant and
+no boss flag (§5.3a). `DRILL_PACK_SCHEMA_VERSION` reads **"0.27"** at this round
+(`packages/schema/src/index.ts`) `[V]`, unmoved. *The cross-review's note that 0.28 is "unclaimed"
+is now stale in the other direction: `opponent-contracts` did release it (D385), and
+`rfc/graduation-clearance.md` has since **claimed and kept** 0.28 for `$defs/graduationEntry` —
+its §7 verdict reads "**keep 0.28**" `[V]`.* This RFC claims no pack lane, releases none, and
+contests `graduation-clearance`'s not at all.
 
 #### 9.3 Run schema — **none.**
 
 *The draft claimed `DRILL_RUN_SCHEMA_VERSION` is **"0.16"** and that "0.17 stays free". Both moved
-under it: the constant reads **"0.17"** at cross-review (`packages/schema/src/index.ts:1`) —
-`opponent-contracts`' `orderingBasis` landed — so the next free lane is 0.18 and this RFC does not
-want it either.* No new event type and no widened field. The rating is a **projection**, not drill
+under it: the constant reads **"0.17"** (`packages/schema/src/index.ts`) `[V]`, re-verified
+unmoved this round — `opponent-contracts`' `orderingBasis` landed — so the next free lane is 0.18
+and this RFC does not want it either.* No new event type and no widened field. **Owner ruling 2
+does not want one either**: a boss is a game, and a game is a `position` run, which is a shape the
+0.17 schema already describes. **Owner ruling 1 does not want one either**: a standing reads
+`rated_games`, and `rated_games` reads the event log. The rating is a **projection**, not drill
 content; the run event log stays the source of truth and `rated_games` is a materialised read over
 it. This also avoids the `RunStorage.list` filter (`WHERE r.schema_version = ?`) that any run bump
 would force a stamp migration for.
@@ -921,7 +1153,7 @@ would force a stamp migration for.
 enters a run event, a run snapshot or an engine request cannot reach a renderer that reads them,
 which is half of R15 discharged by the register claim rather than by discipline.
 
-#### 9.4 Shape-entry schema — none. `/capabilities` — one additive `reached` entry and three `refused` (§10.4).
+#### 9.4 Shape-entry schema — none. `/capabilities` — **two** additive `reached` entries and three `refused`, one of them narrowed rather than deleted (§10.4).
 
 `SHAPE_ENTRY_SCHEMA_VERSION` is untouched. `/capabilities` is a register of dispositions, not a
 versioned resource, so the entries are additive rows rather than a lane claim.
@@ -1026,7 +1258,8 @@ counted in `abandoned_games`.
 
 #### 10.4 `/capabilities`
 
-One additive row, following the register's own recording-vs-grading predicate:
+Two additive `reached` rows and three `refused`, all following the register's own
+recording-vs-grading predicate. The first `reached` row:
 
 ```ts
 { instrument: "Glicko-2", capability: "learner rating from rules-terminal results",
@@ -1044,10 +1277,265 @@ and **three** refusals made machine-readable so they cannot be reintroduced by s
 { instrument: "Glicko-2", capability: "rating as an input to what is said about a move",
   disposition: "refused",
   reason: "A rating may select what a learner is shown and is never an argument to a rendering" },
-{ instrument: "Glicko-2", capability: "cross-learner comparison of the rating",
+{ instrument: "Glicko-2", capability: "cross-learner comparison outside a joined cohort",
   disposition: "refused",
-  reason: "The population is the learner's own history" },
+  reason: "A standing spans one classroom the learner published themselves into; there is no global table" },
 ```
+
+*The third entry was `"cross-learner comparison of the rating" / "The population is the learner's
+own history"` before owner ruling 1. It is **narrowed, not deleted**, and it is narrowed in the
+register rather than in prose so the reversal is machine-readable in the same place the refusal
+was.* One further `reached` entry is added for the surface the ruling opens:
+
+```ts
+{ instrument: "Glicko-2", capability: "cohort standing over rated results",
+  disposition: "reached",
+  reason: "Results, marks and grouped ratings for learners who published themselves into one classroom; the games are unwitnessed and the surface says so",
+  surface: "standing" },
+```
+
+### 10a. The cohort standing — the surface R10 used to refuse
+
+Owner ruling 1. §8b is the re-evaluation; this is the specification. **It is short because it
+adds no social object** — every question about *who these people are to each other* was answered
+by `rfc/teacher-surface.md` and is not reopened here.
+
+#### 10a.1 Objects and vocabulary
+
+- **Cohort** — a `classrooms` row (`rfc/teacher-surface.md` §3.2). Not a new object, not a
+  league, not a global pool. **A standing spans exactly one classroom and never two.**
+- **Standing** — at most one per classroom, opened by a teacher of that classroom, over a
+  declared window.
+- **Entry** — one learner's presence in one standing, created **only** by that learner.
+- **Record** — a member's sealed rated games in the window as W/D/L by opponent band. A rules
+  fact, `corpus_observed`-class.
+- **Mark** — a permanent, event-derived, unordered badge (§10a.3). No number.
+
+#### 10a.2 Consent — reused, not duplicated
+
+`teacher-surface` §2.1's model is two objects, never one: a **grant** is about a run, an
+**enrolment** is about a person, and *"what it does not authorise"* for an enrolment is
+**reading anything at all**. That table decides this design without further argument:
+
+**A standing is a reading surface, so enrolment cannot authorise it.** A learner in a classroom
+has consented to being *addressed* — assigned to, invited — and to nothing else. Displaying their
+results to the other members is reading, so it needs the shape `teacher-surface` gave to reading:
+the **submission** shape (§2.2), which is *specific, explicit, enumerable, revocable, expiring*.
+
+So, transposing that RFC's normative rule verbatim in form:
+
+> **No code path may derive a `standing_members` row from a `classroom_members` row alone.**
+> The only writer of standing entries is `POST /cohorts/:id/standing {op:"publish"}`, whose
+> actor is the **learner**, on themselves.
+
+The five submission properties, each honoured:
+
+| `teacher-surface` §2.2 property | Here |
+|---|---|
+| **specific** | one classroom's standing, not "standings" |
+| **explicit** | a POST the learner makes; never a side effect of enrolling, of playing, or of a teacher's action |
+| **enumerable** | `GET /cohorts/:id/standing` lists every entry with its handle, so a member can always see who can see them — the §2.4 requirement, met by the same mechanism |
+| **revocable** | `{op:"withdraw"}` by the entrant at any time, with no teacher veto; withdrawal removes the entry and its record from the standing immediately |
+| **expiring** | an entry does not outlive the standing's window, and a `left` enrolment (`classroom_members.state`) withdraws it automatically |
+
+**A teacher may open a standing and may not enter anyone into it, including themselves by
+default.** That asymmetry is `teacher-surface` §2.1's *"who may create / who must consent"* row,
+unchanged. **No new `RunRole`, no fourth `member_role`, no new `public_tokens` scope, no
+anonymous join** — the same four negatives `teacher-surface` §3.2 already holds.
+
+**What this RFC does not touch:** `run_grants`, `assignments`, `assignment_submissions`,
+`permittedAssistance`, and the grant-expiry rule of `teacher-surface` §4.3. A standing entry mints
+**no grant** and confers **no read on any run** — a member sees another member's *counts and
+marks*, never their games, their branches, their events or their evidence. Seeing a game still
+requires a grant, minted the way it already is.
+
+#### 10a.3 What a standing shows — three layers, and the default is the first
+
+**Layer 1 — Marks. Default, always on, and the only layer that is populated on day one.**
+The honour-roll form from `league-as-return-loop.md` §1.5: *"Gold indicates previous 1st place
+finishers. Silver… Bronze…"* — *"a result in season N marks your name in every future season's
+table"* `[V]`. Permanent name shading, **no number, no ordering, no ranking**.
+
+**One deliberate divergence from the precedent, and it is the point:** 4545's shading is
+**placement-derived**, and placement is an ordering. Ours is **event-derived**, so no mark is a
+function of anyone else's result:
+
+| Mark | Earned by | Class |
+|---|---|---|
+| bronze | first **sealed rated win** against band 1400 | rules fact |
+| silver | first sealed rated win against band 1800 | rules fact |
+| gold | first sealed rated win against band 2200 | rules fact |
+
+Each mark records `(run_id, calibration_id, earned_at)`, is permanent, and **survives calibration
+retirement** — it is a record that a game happened, and retiring the instrument does not un-happen
+it. The `calibration_id` travels with the mark so the copy can name which instrument it was earned
+against.
+
+**Normative: a mark is not a milestone and does not render in the milestone list.** They are the
+same object *class* and must stay different objects, because
+`docs/return-and-progression.md:48-49` says of milestones that *"they never add a skill
+percentage, score, streak, rating, ranking, or **cross-learner comparison**"* `[V]` — and a mark
+does appear in a cross-learner comparison. Keeping the surfaces apart is what keeps that shipped
+sentence true verbatim after owner ruling 1; merging them is what would break it (§11.2).
+
+**Two honesty constraints on mark copy, both non-negotiable.** (a) A mark names **the event**,
+never a level: *"beat band 2200 on 2026-09-01"*, never *"reached 2200"* — the first is a rules
+fact, the second is the band-equivalent wearing a mark's clothes and is refused by R10(b) and R3.
+(b) **A mark is not rare and must never be presented as rarity.** From the calibration's own
+ladder, the band-1400 reference engine scores **0.8431** against band 2200
+(`derived.json` → `fullMaterialLadder`) `[V]`, so a learner at the 1500-BCS origin takes roughly
+**one game in six** off band 2200 and the gold mark is expected within a handful of attempts. It
+is a participation record, and `06` §3 law 5 — *"Rarity is not value"* — is the standing law that
+says so.
+
+**Layer 2 — Record. Opt-in with the entry, and the layer a club actually wants.** Per member:
+rated games sealed in the window, W/D/L, split by opponent band, plus the abandonment count
+(§7.4 obligation 3, which does not stop applying because the surface got wider). Every cell is
+`attempts.result` counted — nothing derived, nothing estimated.
+
+**Layer 3 — Rating. Opt-in separately, per member, off by default, and shaped by §7.2 before it
+leaves the server.** A member whose §7.2 state withholds a point estimate has **no rating cell** —
+not a blank, not "provisional", not a dash that sorts: the field is absent (AC-9's rule, applied
+here). Where present it is the band-equivalent **with its interval**, never bare.
+
+**Why layers 1 and 2 are the default and layer 3 is not** — §8b's argument, restated as the rule
+an implementer follows: **RD ≤ 60 needs ≈34 rated games at parity and ≈67 at the skirt (§7.3), so
+in a new classroom every rating cell is absent for weeks.** A surface whose default view is empty
+teaches its users that it is broken. Marks and records are sealed-event counts and are populated
+from the first game.
+
+#### 10a.4 Ordering — rank by results, group by rating
+
+**The standing is ordered by a rules fact, and never by the rating.** The default ordering is
+league-shaped and needs no invention: **game points (1 / ½ / 0) over the window, tiebroken by
+games played, then by handle** — 4545's own first two tiebreak keys `[V]`, minus the ones that
+need a pairing structure we do not have. Every input is a count of sealed results.
+
+**The rating groups, it does not rank.** Where layer 3 is shown, members are placed into the
+calibration's own resolvable steps — **≈150 band points at full material** (60 / 0.400, §3) —
+and within a group they sit in the standing's result order. **No rank number is derived from the
+rating, and no two members are ever ordered relative to each other by it.**
+
+**The reason is measurement, not modesty, and it holds in two independent ways.**
+
+1. **The instrument's floor, which no amount of play removes.** The dossier's resolvable step is
+   **60 Elo** (§3, `derivedThresholds.rungElo`) and the calibration's own rung deviation is
+   **24.1** (§4.1). Two members within 60 BCS of each other are **not distinguishable by this
+   instrument at any RD**, so an ordering between them is asserted, not measured. This is R3 and
+   §7.2 applied to a display: **where the instrument cannot resolve, the product does not print.**
+2. **The published interval, which is at its widest exactly where a new cohort sits.** §7.1
+   publishes `rating ± 2·RD` and the publication floor is RD ≤ 60, so a member who has just become
+   publishable carries **±120 BCS — ±300 band points after the inverse transfer** (§7.1's
+   inflation). In a new classroom that is every member who has one at all, so a ranked table would
+   be at its most confident-looking precisely when it is least resolved.
+
+AC-14 makes both a test rather than a convention, and states the falsifiable form: **permuting
+every member's rating must not change the returned order by one byte.**
+
+#### 10a.5 Where the self-cheating limitation is stated — four sites, all normative
+
+R10's surviving ground (§8b, ground 3) is discharged here or it is not discharged at all.
+
+1. **On the standing itself**, as a permanent line in the view — not a tooltip, not a footer link,
+   not behind a disclosure toggle. Same posture and same register as `docs/live-sessions.md`'s
+   own **§Accepted limitation** heading, which states *"it does not pretend to prevent a host from
+   cheating on themselves"* `[V]`. The standing's line says the corresponding thing about games:
+   **these games were played alone against a bot and nobody witnessed them.**
+2. **At the publish gesture**, in the confirmation, so the consent in §10a.2 is *informed* consent
+   about what the entry is worth as well as about who can see it.
+3. **In `§7.4` as obligation 6**, which makes it fire on every multi-learner surface rather than
+   only on this one — so a later surface inherits it instead of re-deciding it.
+4. **In `/capabilities`**, as the `reason` on the `cohort standing over rated results` row
+   (§10.4). This is the machine-readable site, and it is the one that stops the limitation being
+   quietly dropped in a redesign — the same job the three `refused` rows do for R2, R15 and
+   R10(a).
+
+**Stated, and not overstated.** The line says the games were unwitnessed. It does **not** say the
+standing is meaningless, and it does not accuse anyone: `league-as-return-loop.md` §5.1 records
+that the mechanism it is modelled on converts at **92–95%** with honest play being the
+overwhelming norm `[V]`. The honest posture is the product's usual one — say what the instrument
+can and cannot support, then let the reader decide.
+
+#### 10a.6 The standing's own refusals
+
+Each is a clause of R10 or of a standing law, and each is a test (AC-13 – AC-16).
+
+| Refused | Because |
+|---|---|
+| Any standing spanning more than one classroom; any global, all-learners, regional or cross-cohort table; any "you are ahead of N learners" computed outside a classroom | R10(a). Barth's finding is about global tables and this is where it binds |
+| Rating as a rank, a sort key, a seed, a section boundary or a tiebreak | R10(b), §10a.4. Overlapping intervals; the ordering would assert what the instrument cannot resolve |
+| Any entry the learner did not create; any teacher-created, admin-created or inferred entry; any entry derived from `classroom_members` | R10(c), §10a.2, transposing `teacher-surface` §2.1 |
+| A standing position, rank or mark **unlocking content, or being purchased or sold** | **ADR-0007**, and D334's surviving distinction. `league-as-return-loop.md` §C2 marks the boundary precisely: 4545's alternate-queue priority is *convenience gated on conduct* and inside the envelope, while **priority gated on results is not** `[V]` — so a standing may never buy a rung, a pack, a rating advantage or queue position |
+| A member's runs, branches, events or evidence, from the standing | A standing is counts and marks. Seeing a game needs a grant, minted by its host, unchanged |
+| Any cohort statistic that is an estimate rather than a count — cohort mean rating, percentile, z-score, "top 10%" | §7.2's discipline does not weaken because the population changed. A mean of mostly-absent point estimates is a number about nothing |
+| Rating any member's games differently because they are in a standing | R15. A standing is a **read** over `rated_games`; being in one changes no update, no opponent, no precondition |
+| Evaluative or congratulatory copy anywhere on the standing, and any routing of standing copy through the voice/LLM layer | R16. A standing is the most tempting praise surface this product has ever had, and it is authored copy, which `BANNED_JUDGEMENTS` does not reach ([[D421]]) |
+
+#### 10a.7 Storage and routes
+
+```sql
+CREATE TABLE cohort_standings (
+  classroom_id TEXT PRIMARY KEY REFERENCES classrooms(id) ON DELETE CASCADE,
+  opened_by_learner_id TEXT NOT NULL,
+  window_from TEXT NOT NULL,
+  window_to TEXT,
+  opened_at TEXT NOT NULL,
+  closed_at TEXT
+) STRICT;
+
+CREATE TABLE standing_members (
+  classroom_id TEXT NOT NULL REFERENCES cohort_standings(classroom_id) ON DELETE CASCADE,
+  learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+  show_record INTEGER NOT NULL DEFAULT 1,
+  show_rating INTEGER NOT NULL DEFAULT 0,
+  published_at TEXT NOT NULL,
+  PRIMARY KEY (classroom_id, learner_id)
+) STRICT;
+
+CREATE TABLE learner_marks (
+  learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+  mark TEXT NOT NULL CHECK (mark IN ('bronze','silver','gold')),
+  calibration_id TEXT NOT NULL,
+  run_id TEXT NOT NULL,
+  earned_at TEXT NOT NULL,
+  PRIMARY KEY (learner_id, mark)
+) STRICT;
+```
+
+Notes, each load-bearing:
+
+- **`show_rating` defaults to 0 and `show_record` to 1**, which is §10a.3's default expressed
+  where it cannot be forgotten by a client.
+- **Withdrawal is a `DELETE`, not a tombstone.** A withdrawn entry leaves nothing behind; the
+  learner's `rated_games` are untouched, because the standing never owned them.
+- **`ON DELETE CASCADE` against `learners(id)` here, which diverges from `teacher-surface`'s bare
+  `TEXT` posture, and the divergence is deliberate.** That RFC avoids the FK because its §4.1a
+  found cascading from `learners` **strands grants**. A standing entry and a mark strand nothing:
+  they mint no authorization and mean nothing without the account, so deleting the account should
+  delete them — which is §10.1's own posture, applied consistently within this RFC.
+  `opened_by_learner_id` is bare `TEXT` for the opposite reason: a standing outlives the teacher
+  who opened it.
+- Literal CHECK strings, per the migration-9 freeze lesson (`rfc/README.md`).
+- **No cached string, label or ordering is stored.** The standing is computed at
+  `GET /cohorts/:id/standing`, for the same reason §10.1 refuses a denormalised band-equivalent:
+  a stored rendering is a rendering a later surface can pick up without passing through §7.2.
+
+| Method + path | Behaviour |
+|---|---|
+| `POST /cohorts/:id/standing` `{op:"open"\|"close"\|"window"}` | **Teacher of that classroom only.** Configures the standing. Creates and enters nobody |
+| `POST /cohorts/:id/standing` `{op:"publish"\|"withdraw"\|"showRating"\|"hideRating"\|"showRecord"\|"hideRecord"}` | **Acts on the caller, always.** No `handle` parameter exists on these ops, which is R10(c) enforced by the absence of the argument rather than by a check |
+| `GET /cohorts/:id/standing` | The standing, **shaped by §7.2 server-side per member** before it leaves. Requires an `active` `classroom_members` row; a non-member gets the same not-found response an unknown classroom gets |
+| `GET /marks` | The caller's own marks |
+
+All behind `authenticate()` → `Principal`, like `/progress` and like §10.2's three routes.
+Caps mirror `teacher-surface` §3.2's, which mirror the shipped `mintLink` bounds: a standing
+inherits its classroom's 200-member cap and adds none of its own.
+
+**The standing is its own client surface and is not `/learn`.** R14 keeps the rating off the
+return loop's three surfaces and §11.2 shows all three shipped no-rating sentences survive because
+of it; rendering a standing inside `/learn` would break the third one (*"This is an attempt history
+and return queue, not a mastery score"*, `App.svelte`) by placement alone. The classroom is the
+standing's home, alongside `teacher-surface` §7.2's assignment card.
 
 Field names and the `disposition` domain are read off `CapabilityDisposition`
 (`apps/server/src/capabilities.ts:103-112`: `instrument`, `capability`, `disposition`, `reason`,
@@ -1059,13 +1547,14 @@ machine-readable, which is the third of §8a's mechanisms.
 
 ### 11.1 Sibling RFCs
 
-*Statuses re-derived at cross-review; three of the four rows in the draft were stale.*
+*Statuses re-derived at cross-review, and again this round; two more had moved.*
 
 | RFC | Overlap | Resolution |
 |---|---|---|
-| `teacher-surface.md` (**draft**) | **Migration ladder** — both want `STORAGE_VERSION + 1`. Also both touch `/learn`, and it requests an ownership pin on `permittedAssistance` | This RFC lands **behind** it and takes the next position at its turn. `permittedAssistance` is untouched (§5.2), so the pin is not contested. The `/learn` collision is **not** doctrinal either — §11.2, corrected |
-| `pack-graduation.md` (**implemented 2026-08-16, `rfc/archive/`** — the draft said "accepted") | **None.** All its state is pack-scoped; pack 0.27 has landed | Nothing to negotiate |
-| `opponent-contracts.md` (**accepted 2026-08-16** — the draft said "draft") | **Migration ladder, third claimant.** Its run 0.17 has **landed**; its pack 0.28 claim was **released** by its own cross-review (D385); its header marks its migration position **CONTESTED** | This RFC claims no pack and no run lane, so it contests neither. On the migration it lands **behind** this one too (§9.1). *The draft's "both lanes stay free" was wrong in both directions and is withdrawn* |
+| `teacher-surface.md` (**draft**) | **Now a hard dependency, not only a migration neighbour.** §10a's standing is scoped to its `classrooms` / `classroom_members` and transposes its §2.1/§2.2 consent model rather than inventing one. Still: migration ladder, `/learn`, and its ownership pin on `permittedAssistance` | This RFC lands **behind** it and takes the next position at its turn — which is now a **correctness** requirement, not a courtesy: §10a.7's tables carry a foreign key into `classrooms`. `permittedAssistance` is untouched (§5.2), so the pin is not contested. The `/learn` collision is **not** doctrinal — §11.2 |
+| `pack-graduation.md` (**implemented 2026-08-16, `rfc/archive/`**) | **None.** All its state is pack-scoped; pack 0.27 has landed | Nothing to negotiate |
+| `opponent-contracts.md` (**implementing 2026-08-16** — the cross-review said "accepted"; it moved again) | **Migration ladder.** Its run 0.17 has **landed**; its pack 0.28 claim was **released** by its own cross-review (D385); its header marks its migration position **CONTESTED** | This RFC claims no pack and no run lane, so it contests neither. On the migration it lands **behind** this one too (§9.1) |
+| `graduation-clearance.md` (**draft, author round complete 2026-08-16**) | **Pack lane 0.28** — which the cross-review recorded as unclaimed. It is claimed: that RFC's §7 verdict is *"keep 0.28"* for `$defs/graduationEntry` `[V]` | **No collision.** This RFC claims no pack lane (§9.2). It claims no migration position either, so it is not on the ladder |
 | `engine-leverage.md` (implementing) | Its `searchBound` record on `SelectionEngineIdentity` (`packages/runtime/src/types.ts:99`, `{ kind: "nodes" \| "movetime"; value: number }`) is what a future `strong_engine` rung would need (Open questions Q3) | Read-only dependency |
 | `measurement-records.md` (draft) | **None structurally**, but D392's lesson binds here: no acceptance criterion in this RFC pins a version integer | Adopted (§9.1) |
 
@@ -1098,6 +1587,18 @@ tier's to write either way): a doc for the rating's own surface, and one sentenc
 loop's surfaces**, not of the product — so a later reader does not infer a product-wide
 prohibition from three surface-scoped sentences and quietly relitigate D332. The scheduler stays
 *"not an FSRS/SM-2 mastery model"* (`:69`) — untouched and still true.
+
+**Owner ruling 1 puts one of the three sentences under real pressure and it still holds — but
+only because of a design choice §10a had to make deliberately.** `docs/return-and-progression.md`
+`:48-49` says milestones *"never add a skill percentage, score, streak, rating, ranking, or
+**cross-learner comparison**"*, and §10a.3's marks are, in the league dossier's own words, *"the
+same object class as our shipped milestones"*. If a mark rendered **in the milestone list**, that
+sentence would become false — not by the standing existing, but by the milestone surface acquiring
+something that appears in a cross-learner comparison. **So marks are a separate object and do not
+render on the milestone surface**, and that is a normative clause of §10a.3 rather than an
+implementation preference. Recorded here because it is the one place ruling 1 came within one UI
+decision of contradicting shipped doctrine, and because the cheap-looking alternative — *"marks are
+just milestones, put them in the list"* — is the one that breaks it.
 
 **This matters beyond bookkeeping.** R14 was carrying more weight than the draft credited it
 with: it is not only a scope boundary, it is the sole reason three pieces of shipped doctrine
@@ -1228,7 +1729,73 @@ Rows still proposed:
    D384 named this at two; it is now three, and this RFC is a worked example of the second half of
    that row — it reasoned from `STORAGE_VERSION` 22 and run schema 0.16 while both moved under it.
    **The position rule held; the surrounding prose did not.** Cheapest guard: the register records
-   *claimants* on a position, not only the position.
+   *claimants* on a position, not only the position. **Landed as [[D423]]; addendum owed** —
+   counting by *document* undercounts, because this RFC now carries two independent table sets and
+   is the **fourth claim** on the ladder (§9.1). The register should count claims.
+
+**Proposed by this author round (owner rulings 1 and 2):**
+
+9. **New 💡 — R10 is reversed; cross-learner comparison ships as the cohort standing.** Owner
+   ruling 2026-08-16: *"add leaderboards and cross-learner comparison… add it properly,
+   re-evaluate the refusal and why it was there and what it unlocks."* Specified in
+   `rfc/learner-rating.md` §10a: one standing per classroom (never across), entries created only
+   by their subject, **ranked by results and grouped — never ranked — by rating**, honour-roll
+   marks as the default layer, and the unwitnessed-games limitation stated at four normative
+   sites. Unlocks the club/coach cohort by reading `teacher-surface`'s classroom rather than
+   inventing a social object. **This row supersedes the leaderboard clause of R10 as drafted; it
+   does not supersede R10, which survives as three narrower clauses.**
+10. **New 🐞 — *"a manufactured number vs. a record of what happened"* does not separate this
+    rating from a leaderboard, and it fails against our own licence argument.**
+    `league-as-return-loop.md` §C1 offered it as the rulable distinction. But
+    `learner-rating` §1's whole licence is that a Glicko-2 update over `terminalOutcome` results
+    **is not manufactured** — *"it says what happened, never what was good."* Both cannot hold. The
+    distinction is correct for a rating built on move grading and **proves too much** for one built
+    on rules facts. **The defect that actually justified the refusal is provenance — the games are
+    unwitnessed — and relocating it there is what makes it addressable** (disclosure, and a
+    possible witnessed-play cohort option) rather than a law-8 argument with no remedy. Generalises:
+    *before refusing a surface on the ground that a number is manufactured, check whether the
+    document doing the refusing has already argued that it is not.*
+11. **New 💡 — a campaign boss is a full game, not a pack (owner ruling, 2026-08-16).** Answers
+    `learner-rating` open question 1 by changing the boss rather than the rating: a boss runs to a
+    rules-terminal result as a `position` session and rates like any other game
+    (`rfc/learner-rating.md` §5.3a). **Consequences owed to `design/06-campaign.md`** (law 5, not
+    acted on): §5's encounter vocabulary gains an encounter not bounded by `plyHorizon`; the rated
+    boss is **Act II only** — Act I is refused by `THEORY_NEEDS_AUTHORED_BOUNDARY` /
+    `BOUNDARY_NEEDS_PLY_HORIZON` and Act III by R1 and R5, so **the campaign's climax act is the
+    one that cannot carry a result**; §2a gains a fourth difficulty-availability class; §2b should
+    say which of its three bosses can be a game; and §5's *"36 of 37 packs declare a `plyHorizon`,
+    median 12"* is **50 of 56, median 11** at HEAD `[V]`.
+12. **New 🐞 — the pack corpus already claims a terminality it does not deliver.** **26 of the 56
+    packs under `content/drafts/` declare `objective.grading.resolveAt.kind: "terminal"`, and 25
+    of them also declare an `authoredBoundary.plyHorizon`** — twenty at 7–13 ply `[V]`. The
+    horizon is what fires; the declaration is decorative on those 25. Nothing in
+    `apps/server/src/pack-validation.ts` objects to the pair, though it already validates near
+    neighbours (`TRAJECTORY_NONFINAL_TERMINAL_RESOLUTION`). **Cheapest guard is one lint rule:
+    `resolveAt: terminal` and a `plyHorizon` on the same object is a contradiction.** Found while
+    specifying the boss ruling, which is the first encounter that needs the declaration to be true.
+13. **New 🐞 — `learner_marks` and milestones are the same object class and must not become the
+    same surface.** `docs/return-and-progression.md:48-49` says milestones *"never add a skill
+    percentage, score, streak, rating, ranking, or cross-learner comparison"* `[V]`, and a standing
+    mark **does** appear in a cross-learner comparison. Rendering marks in the milestone list would
+    falsify a shipped doctrine sentence by a UI decision that looks like tidying. Pinned in
+    `learner-rating` §10a.3 and §11.2; ledgered because the same trap exists for any future badge.
+14. **New 🐞 — "the minimum across models" is undefined over intervals, and a period-structured
+    simulation with no arrival rate is underspecified.** Both are residue of [[D420]]'s fix in
+    `learner-rating` AC-7: the rule is now the **intersection** (a grid point is in the bracket
+    only if it clears the null under every model) and F-W must run **at least two arrival rates**,
+    one count-closing and one clock-closing, because §6.3 closes a period on *"12 games or 7 days"*
+    and which clause fires is entirely a function of how fast the learner plays. **The
+    clock-closing arm is the one that matters and nobody has run it:** whether a learner playing
+    three rated games a week ever reaches RD ≤ 60 is unanswered, and the publication rule makes it
+    the difference between a product with a rating and a product with a permanently provisional
+    one.
+15. **New 🐞 — [[D424]] had a fourth site, and it was the most dangerous one.** The cross-review
+    fixed §2, §4.2 and §7.3 qualification 2. §7.3 qualification **3** still reported *estimable
+    window ÷ journey = **1.09*** with no caveat attached — **a ratio above 1 reads as "it fits",
+    and the same arithmetic puts the journey's floor 6 points outside the window.** A width ratio
+    is not a containment claim. Fixed in place; ledgered because *"the caveat survived in three of
+    four sites"* is exactly the decay D424 describes, observed one round later in the document that
+    recorded it.
 
 ## Deviations from design
 
@@ -1240,7 +1807,13 @@ Rows still proposed:
 2. **`design/06-campaign.md` §5's acts escalate in decidability, and rated play is available in
    exactly one of the three tiers.** Act I (`theory_strict`) and Act III (`perfect_tablebase`)
    have no calibrated band, so the campaign's ladder and the rating's ladder are not the same
-   object. Named, not resolved (Open questions Q1).
+   object. **Owner ruling 2 turns this from an open question into a required design-tier change,
+   and §5.3a lists it in full**: `06` needs a boss row in §5's encounter vocabulary (a boss is
+   bounded by the rules, not by `plyHorizon`), a statement that the rated boss lives in Act II
+   only, a fourth class on §2a's difficulty-availability axis, a note on §2b's boss table saying
+   which of the three bosses can carry a result, and a corpus fix (*"36 of 37 packs, median 12"* is
+   50 of 56, median 11 `[V]`). **Not acted on here — law 5.** The one part §5.3a does not name a
+   change for is the rewind collision, which is a ruling rather than an edit (open question 11).
 3. **`coaching-versus-cheating-and-the-band-curve.md` concluded that a learner model *"does
    not and should not exist"* (the sentence sits at `:424`, inside §4c, which is refusing adaptive
    difficulty on §3's ground).** The D332 ruling supersedes the first half. This RFC does **not**
@@ -1252,7 +1825,16 @@ Rows still proposed:
    (§5.3).*
 4. **No deviation from `design/05-in-run-experience.md`.** `permittedAssistance` and the honesty
    ladder are untouched (§5.2).
-5. **`design/research/band-flattery-and-buried-value.md` §5.5 asked for an invariant to be pinned
+5. **`design/research/league-as-return-loop.md` §C1's recommendation is adopted in outcome and
+   rejected in reasoning, and the divergence is deliberate.** That dossier recommended rewording
+   R10 around the distinction *manufactured number vs. record of what happened*. Owner ruling 1
+   reversed R10 outright, and §8b then finds the distinction **does not survive contact with this
+   RFC's own §1** — if the rating is arithmetic over rules facts, manufacturedness cannot be what
+   excludes it from a table. The dossier's *conclusion* (escalate, do not route around; the
+   shading survives either way) was right and is implemented; its *ground* is replaced by
+   provenance. Flagged because a reader comparing the two documents will otherwise think one of
+   them is wrong about the other.
+6. **`design/research/band-flattery-and-buried-value.md` §5.5 asked for an invariant to be pinned
    before this RFC lands, and named the code rule it should take.** This RFC adopts it verbatim as
    R15 rather than paraphrasing it, because the dossier's wording is the one the ledger row D395
    carries and a reworded invariant is a second invariant. Not a deviation — recorded because the
@@ -1268,7 +1850,10 @@ Rows still proposed:
   changed container digest, a `targetElo` reaching an update, **a tablebase probe attempting to
   seal**, an attempt to read `/progress/recommendations` from rating state, **a rating value
   reaching a rendering module (AC-11)**, and **a praise word in rating copy (AC-12)**. Each must
-  be refused **by name**, not by absence.
+  be refused **by name**, not by absence. **R10's three surviving clauses are named cases too**,
+  and are the ones the reversal makes newly falsifiable: a standing read spanning two classrooms,
+  a response ordered by rating, and a standing entry created by anyone but its subject
+  (AC-13 – AC-15).
 - **AC-2 (Glicko-2 conformance).** The implementation reproduces Glickman's worked example
   (player 1500/200/0.06 versus 1400/30, 1550/100, 1700/300 with results 1/0/0) to within 1e-4 on
   `r'`, `RD'` and `σ'`.
@@ -1293,13 +1878,18 @@ Rows still proposed:
 - **AC-7 (the bracket is simulated under more than one model, or it is not tested).** F-W runs:
   simulated learners at true BCS 950, 1050, …, 2150 against the four rungs, **under at least three
   response models — logistic, Thurstone/normal, and a saturating family with a floor draw rate —
-  and under the shipped period structure of §6.3 (12 games or 7 days, with the pre-period RD
-  widening), not one flat 200-game batch.** Credited at ≥90% interval coverage. **The published
-  bracket is the minimum across models**, and the report must also state, per true rating, how
-  many periods elapse before RD ≤ 60 makes anything publishable. If the result disagrees with
-  [1006, 2098], the constant and the copy move. **A run under the logistic alone does not satisfy
-  this criterion** — that is the null the bracket was derived under, and a simulator drawing from
-  it cannot falsify it.
+  under the shipped period structure of §6.3 (12 games or 7 days, with the pre-period RD
+  widening), not one flat 200-game batch, and at at least two arrival rates: one count-closing
+  (≥12 rated games/week) and one clock-closing (≤3/week).** Credited at ≥90% interval coverage
+  against a nominal 95% interval. **The published bracket is the *intersection* across models** —
+  the largest contiguous run of grid points clearing the null under **every** model — **and is
+  reported rounded to the 100-point grid, never to the point.** The report must also state, **per
+  true rating and per arrival rate**, how many periods elapse before RD ≤ 60 makes anything
+  publishable. If the result disagrees with [1006, 2098], the constant and the copy move. **A run
+  under the logistic alone does not satisfy this criterion** — that is the null the bracket was
+  derived under, and a simulator drawing from it cannot falsify it. **Nor does a run at one
+  arrival rate**: "12 games or 7 days" has no meaning until the rate is stated, and the
+  clock-closing arm is the one that decides whether an ordinary learner ever publishes.
 - **AC-8 (the cross-check is a diagnostic and stays one).** Maia's `0.5 + cp/2000` expected score
   is recorded alongside rated games and compared against the rating's predicted score in a
   report; a test asserts it reaches no update path.
@@ -1327,17 +1917,56 @@ Rows still proposed:
   text, (b) `BANNED_JUDGEMENTS` (all 30 words at `3e6fe2e`) intersects it nowhere, and (c) no
   rating surface reaches `/voice`, `/speech` or `/reasoning-review`. **(b) is deliberately run on
   authored strings, which `voiceCheck` never sees** — that is the point of the criterion.
+  **The standing surface is inside the same frozen set**, which is where AC-12 does most of its
+  work after owner ruling 1: a table of people is the most tempting praise surface in the product.
+- **AC-13 (a standing entry has exactly one possible author).** A test asserts (a) a teacher
+  cannot create a `standing_members` row for anyone, by any route, including their own classroom;
+  (b) no code path derives a `standing_members` row from a `classroom_members` row — the
+  reachability form of §10a.2's rule, asserted the way AC-11 asserts R15; (c) `{op:"publish"}` and
+  `{op:"withdraw"}` accept **no handle argument**, so the refusal is structural rather than
+  checked; (d) setting `classroom_members.state = 'left'` removes the entry from
+  `GET /cohorts/:id/standing` in the same read.
+- **AC-14 (the standing ranks results and groups ratings).** A property test over generated
+  cohorts asserts that (a) the returned member order is a total order on `(game points, games
+  played, handle)` and is **byte-identical** when every member's rating is permuted arbitrarily —
+  the falsifiable form of *"the rating is never a sort key"*; (b) no response field carries a rank,
+  percentile, cohort mean or z-score; (c) two members are placed in different rating groups only
+  when their groups differ by at least one calibration rung step; (d) a member whose §7.2 state
+  withholds a point estimate has **no rating field at all** in the response, not a null.
+- **AC-15 (no standing spans a classroom, and no standing leaks a run).** Tests assert (a) every
+  standing read is parameterised by exactly one `classroom_id` and no route aggregates two; (b) a
+  caller without an `active` `classroom_members` row receives the same not-found response as for
+  an unknown classroom; (c) the standing response contains no run id, branch id, event, FEN, move
+  or evidence reference; (d) being a standing member changes no rated-game precondition, no
+  opponent selection and no update — asserted by driving identical runs for a member and a
+  non-member and comparing `rated_games` and `learner_ratings` byte-for-byte.
+- **AC-16 (the limitation is on the surface, and it is on all four sites).** A rendering test
+  asserts the unwitnessed-games sentence appears in the standing view itself, in the publish
+  confirmation, and in every §7.4-obligated multi-learner rendering; and a register test asserts
+  the `/capabilities` row for `cohort standing over rated results` exists with the limitation in
+  its `reason`, and that the narrowed refusal row for cross-cohort comparison is present. **All
+  four, or the reversal has not shipped its price** (§10a.5).
+- **AC-17 (a rated boss is a game, and only where it can be one).** Tests assert (a) a rated boss
+  run has `sessionKind === "position"` and no pack id; (b) a boss configured against
+  `theory_strict` or `perfect_tablebase` is refused as rated by **name** (`R1`), and a boss whose
+  start position is under 21 pieces by `R5`; (c) `RunSessionKind` still has exactly three members;
+  (d) no `objective`, `ObjectiveState`, `successConditions` or `sealedState` value is reachable
+  from the rated-game projector — the R2 half of §5.3a, asserted over the module graph the way
+  AC-11 asserts R15.
 
 ## Open questions
 
-Resolved before `accepted`, or deferred to a named future RFC.
+Resolved before `accepted`, or deferred to a named future RFC. **Numbering is preserved across
+rounds rather than compacted** — the two questions the owner answered on 2026-08-16 are marked
+answered in place, so every cross-reference in this document and in `league-as-return-loop.md`
+still resolves.
 
-1. **Can a campaign boss be rated?** §5.3 makes the horizon the reason packs cannot be, and
-   `coaching-versus-cheating-and-the-band-curve.md` §4d makes the suppressed boss the ideal rated
-   object. The fork is the owner's: (a) bosses stay unrated and the rating lives only in Just
-   Play; (b) a boss may declare no horizon and be played out, which makes it rateable and changes
-   `06` §5's encounter shape; (c) a boss is rated only when its final position is inside the
-   tablebase (§5.4), which fits Act III and nothing else. **Owner call.**
+1. ~~**Can a campaign boss be rated?**~~ **ANSWERED — owner ruling 2, 2026-08-16: a campaign boss
+   is a full game, not a pack.** Neither of the drafted forks was taken. The boss changes, not the
+   rating: a rated boss is a `position` session played to a rules-terminal result against a
+   calibrated rung. Folded into **§5.3a**, with its four consequences and the six changes
+   `design/06-campaign.md` needs. The one part not settled by the ruling is the rewind collision,
+   carried forward as **open question 11**.
 2. **Should 11–20 pieces be rated?** Refused here on n = 48 — the thinnest cell in the study, not
    a measured null. The cheap fix is one arm on the existing harness (`tools/d333-band-outcome-
    harness/`) restricted to that band of material. Defer or run.
@@ -1376,15 +2005,39 @@ Resolved before `accepted`, or deferred to a named future RFC.
    rather than as a result** — a sixth §7.4 obligation, and a count printed beside the rating the
    way `abandoned_games` is. That trades one measured bias for a shorter game. **Owner call; the
    default until then is refused.**
-10. **Does R10 refuse the table, or the number?** Raised head-on by
-    `design/research/league-as-return-loop.md` §C1 and escalated there as owner-facing: no league
-    exists without a standing, and a standing ranks by *what happened* rather than by a
-    manufactured number — the same distinction that made D332 law-8-legal in the first place.
-    §8b restates R10 to name the object rather than the shape, so **it survives either ruling**
-    and neither pre-empts it. What R10 continues to refuse under both is putting **this rating**
-    into any such table. The dossier's alternative if the ruling goes against the table — the
-    league's own *permanent shading*, a mark with no number and no ordering — is the same object
-    class as our shipped milestones and is unaffected by anything here. **Owner call.**
+10. ~~**Does R10 refuse the table, or the number?**~~ **ANSWERED — owner ruling 1, 2026-08-16:
+    R10 is reversed and cross-learner comparison ships.** Neither horn was taken either: the
+    re-evaluation in **§8b** finds the *number-versus-table* distinction **does not survive**,
+    because §1 has already argued this rating is not a manufactured number. What replaces it is
+    **provenance** — the games are unwitnessed — which keeps the refusal's one empirical ground
+    (4545's Seasons 7, 8 and 17) as a **stated limitation** at the four sites in §10a.5 rather than
+    as a reason not to build. The honour-roll shading is not the fallback; it is the **default
+    layer** (§10a.3), for the measured reason that it is the only layer populated before RD ≤ 60.
+    Surface specified in **§10a**. R10 survives as three narrower clauses.
+
+**Opened by this round:**
+
+11. **Does a rated boss close rewind, or does a rated boss not exist?** `06` §5's settled ruling is
+    that *"rewind stays free inside an encounter; **declaring done** is what counts"*, and **R11
+    voids any rated game containing a rewind** because otherwise the learner rewinds until they
+    win. For a boss these cannot both hold. Three answers: (a) the boss is the one encounter where
+    rewind is closed, and the campaign says so before the first ply — which prices *this* node's
+    experimentation and reopens §11.4's tension at a place the learner cannot avoid if they want
+    the rating; (b) a boss is played twice — a free encounter and a separately-entered rated
+    attempt, so nothing is closed and the rating is opt-in per boss; (c) bosses run to terminal for
+    the campaign's sake and are simply not rated, which keeps the ruling and drops the rating from
+    the campaign entirely. **This RFC does not choose: `06` is intent tier. Owner call.** (b) is
+    the only one that touches neither the thesis's *"experimentation without cost"* nor R11, and is
+    what the author would recommend if asked.
+12. **May a cohort require witnessed play?** §8b relocates R10's surviving ground from
+    manufacturedness to **provenance**, and a provenance defect has a design response the old
+    framing did not admit: a standing could accept only games played inside a live session with at
+    least one spectator grant — the shipped `run_grants` / live-session machinery, no new
+    mechanism — turning *"nobody witnessed them"* into a per-cohort choice rather than a global
+    caveat. **The default specified here is not to require it**, because it would empty most
+    standings and because we have one learner (`league-as-return-loop.md` C6). Named so the
+    default is not chosen by silence, and because a chess club is exactly the population that
+    would want it. **Owner call.**
 
 ## Changelog
 
@@ -1406,3 +2059,33 @@ Resolved before `accepted`, or deferred to a named future RFC.
   and **falsifier F-W was circular** — rewritten with three response models and the shipped period
   structure (AC-7), with the pool span operative until it runs. §12 reconciled against D388/D389/
   D390, which have landed.
+- 2026-08-16: **author round on two owner rulings, plus the cross-review's residue.**
+  **Ruling 1 — R10 reversed.** The refusal is replaced by a designed surface: **§10a, the cohort
+  standing** (objects, consent, three layers, ordering, disclosure sites, refusals, storage,
+  routes), with **§8b rewritten as the re-evaluation** the ruling asked for. Findings: Barth's
+  ground narrows to *global*, the own-history ground narrows to a *default*, and the self-cheating
+  ground **survives whole** and is discharged as **§7.4 obligation 6** at four normative sites
+  (§10a.5). **The number-versus-table distinction was tested and does not survive** — it
+  contradicts §1 — and is replaced by **provenance**, which changes the design (marks-first
+  default, witnessed-play option). The honour roll is the **default layer**, on the measured ground
+  that RD ≤ 60 leaves every rating cell absent for weeks. `/capabilities`: the cross-learner
+  refusal is **narrowed, not deleted**, and a `reached` row is added. R10 survives as three clauses;
+  ADR-0007 and D334 checked explicitly (§10a.6). `teacher-surface` becomes a **hard dependency**;
+  its consent model is transposed, not duplicated.
+  **Ruling 2 — a campaign boss is a full game, not a pack.** **§5.3a** added: a rated boss is a
+  `position` session played to `terminalOutcome`; encoded as a game rather than as a horizon-free
+  pack because `objective` is in the pack schema's `required` list and is R2's first refused input.
+  Four consequences stated (a boss is a different object class; Act II only, with Act I refused by
+  `THEORY_NEEDS_AUTHORED_BOUNDARY`; the `plan` shape is 14/14 at ≥21 pieces; the R11-vs-`06`-§5
+  rewind collision), and **six changes named for `design/06-campaign.md`** without editing it
+  (law 5). Open question 1 folded in; open question **11** opened for the rewind collision.
+  **Residue: [[D420]]** — AC-7's *"minimum across models"* was undefined over intervals and is now
+  the **intersection**; the simulation had **no arrival rate**, so *"12 games or 7 days"* was
+  unsimulable, and two rates are now required, one clock-closing; grid resolution pinned at ±50.
+  **[[D424]]** — the caveat survives at §2, §4.2 and §7.3 q2 as fixed, and a **fourth site** was
+  found and fixed: §7.3 q3's *"1.09"* is a width ratio, not containment.
+  **Register re-verified late** `[V]`: pack **0.27** (0.28 **claimed and kept** by
+  `graduation-clearance` — the cross-review's "unclaimed" is stale), run **0.17**,
+  `STORAGE_VERSION` **23**; `opponent-contracts` moved to **implementing**; on the contested
+  ladder this RFC is stated as the **fourth claim** (§9.1, [[D423]]). Refusal count stays 16, one
+  reversed and narrowed. AC-13 – AC-17 added. Seven ledger rows proposed (§12 items 9–15).
