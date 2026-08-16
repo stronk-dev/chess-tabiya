@@ -58,6 +58,25 @@ the three irreversibility sentences in `renderPivotalMarker` (now `:73-75`).*
 > with the ruling's terms. No section hedges toward the third-value alternative. Cross-review
 > 2026-08-15 checked this specifically.
 
+> **OWNER AMENDMENT 2026-08-16 — the ruling above stands; one word in its accepted cost is
+> narrowed.** The 2026-08-15 record is left exactly as written, because it is the record of what
+> was decided; this is the later ruling stated beside it, not an edit to it. **What changes:**
+> the accepted cost read *"the marker leaves participants and spectators entirely, on every run,
+> **permanently**"*. `permanently` is narrowed to **the duration of live play**. **What does not
+> change:** during live play, a participant or spectator still gets nothing — the contamination
+> concern the conservative gate was built for is untouched.
+>
+> **Why the word had to move.** A teacher reviewing a student's submitted game is *mechanically*
+> a spectator on that run, so `permanently` caught a case nobody was ruling on. The owner's
+> 2026-08-16 ruling — *"add them and ship no deferral"* — gives a submission-granted teacher the
+> **run host's own table** on a finished, disclosed run with **no live session open**, and the
+> marker's admission arm is `permission.humanSplit === "free"`, so it follows with no change to
+> `liveAdmitted`. The gate's own rationale is **structurally absent** in that state: there is no
+> game in progress to be contaminated by reading it.
+>
+> **This is the reversal §6.2 recorded as cheap, spent on one conjunct rather than on the arm.**
+> `rfc/teacher-surface.md` §5.2 owns the predicate; this RFC owns the marker.
+
 
 > **OWNER RULING 2026-08-15 — render the queens-off form.** Open question 3 is resolved and no
 > longer blocks. After the narrowing, `last_of_role` is the **only** marker sentence a learner
@@ -839,7 +858,10 @@ moves-with-masses, and that `rfc/archive/adaptive-guidance.md` §4d renders no m
 so gating the weaker disclosure by the stronger one's permission over-tightens. The owner heard it
 and ruled for the conservative gate anyway. Consequently, and by design:
 
-- the marker **leaves participants and spectators entirely**, on every run, permanently;
+- the marker **leaves participants and spectators entirely**, on every run, ~~permanently~~
+  **for the duration of live play** (**owner amendment 2026-08-16**, see the banner above — a
+  reviewing teacher on a finished, disclosed run with no live session open is the one exception,
+  and it arrives through `rfc/teacher-surface.md` §5.2's predicate, not through a change here);
 - it **leaves solo and host play until the run opens feedback delivery** — and because
   `feedbackDeliveryOpen` closes again on `attempt_end`, it **re-closes on the next committed
   move**. In a drill that is a narrow and intermittent window, not a steady state;
@@ -972,6 +994,15 @@ owner's ruling and this RFC's §3 becomes its mirror.
    cheap to reverse and worth revisiting **after** the surface is used, not pre-emptively. §6.2 is
    the specification of this ruling; nothing in this RFC hedges toward the third-value option.
    *No action for the implementer beyond §6.2 and criterion 6.*
+   **AMENDED 2026-08-16 (owner):** *permanently* → *for the duration of live play*. **The
+   third-value option stays refused** — the exception is not a weaker permission, it is the same
+   `humanSplit === "free"` permission reached by a reviewer who is on the **run host's own arm**.
+   **Implementer: criterion 6 changes in two clauses, and both were mis-stated in the drafting.**
+   Its server clause and its `liveMarkers` clause each need *"non-reviewing spectator"* rather
+   than *"spectator"*. The `liveMarkers` half is an `AssistanceContext` **object-literal** unit
+   test with no session layer in it at all — so the compatibility this ruling relies on is held
+   by the `granted_via = 'submission'` conjunct, i.e. **by fixture convention**, not by
+   construction. That was claimed as by-construction and it is not; do not weaken the conjunct.
 3. ~~**Should the `last_of_role` sentence render `queensOff`?**~~ **RESOLVED by owner ruling 2026-08-15: YES, render it.** Criterion 5 pins **eight** constructible outputs with the new sentence written out; the seven existing outputs are not frozen. Rationale: the archived judgement calling the queens-off form *"the version of this fact players actually track"* was made when this was one sentence among many, and it is now the **only** sentence on the unasked surface — which raises the value of getting it right. *Superseded question:* The field is set
    (`transition.ts:255`) and never read (`renderPivotalMarker`, `pivotal.ts:74`), and
    `rfc/archive/adaptive-guidance.md` §4b calls the queens-off form

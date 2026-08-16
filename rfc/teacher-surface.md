@@ -1,12 +1,19 @@
 # RFC: Teacher surface — the roster is not a grant
 
-- **Status:** **draft — the owner ruling of 2026-08-16 is discharged in the body. One
-  small owner confirmation is now open, raised by the adversarial cross-review of
-  2026-08-16 and stated at Open question 1:** §5.2 narrows the recorded terms of
-  `live-marker-quality`'s 2026-08-15 ruling from *"the marker leaves participants and
-  spectators entirely, on every run, permanently"* to *non-reviewing* spectators. That
-  follows from the later ruling and is not a fork; it is surfaced because the author round
-  simultaneously crossed that ruling in §5.2e and cited it as untouchable in §5.3.
+- **Status:** **draft — both owner questions are now discharged; cross-review corrections are
+  landed; ready to be marked `accepted` in the register.** The 2026-08-16 ruling dissolved
+  Open question 1 (*"add them and ship no deferral"*), and the one narrowing that ruling
+  implied was **confirmed by the owner on 2026-08-16**: `live-marker-quality`'s recorded cost
+  changes from *"the marker leaves participants and spectators entirely, on every run,
+  **permanently**"* to **for the duration of live play**. The 2026-08-15 record is left intact
+  and the amendment is stated beside it, not written over it. **Live play is unchanged** — a
+  spectator watching a game in progress still gets nothing; the exception is a reviewing
+  teacher on a **finished, disclosed** run with **no live session open**, where the gate's own
+  contamination rationale is structurally absent. **The third-value permission stays refused**:
+  the reviewer reaches the marker on the run host's own arm, not through a weaker permission.
+  It was put to the owner rather than taken by an author because §6.2 is the recorded terms of
+  an owner ruling, and citing-a-ruling-that-says-the-opposite failed twice in this repo on
+  2026-08-16 alone.
   The block recorded in `rfc/README.md` was Open question 1: *does the
   review surface work without Maia and the corpus?* **The owner refused the fork and ruled
   that teacher mode ships complete** — *"why do you not give option: add them and ship no
