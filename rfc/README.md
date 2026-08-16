@@ -12,6 +12,7 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `engine-leverage.md` | **implementing 2026-08-16** — Q1/Q9 owner-ruled, Q3/Q7 closed on their stated fallbacks | `planning/engine-leverage/` | claims **pack 0.23**, **run 0.16**, **migration 21** (reassigned 2026-08-16 from 22 — `STORAGE_VERSION` was **20**, so 22 was unlandable while owner-blocked `teacher-surface` held 21). Engine-condition surface, `cost` bound to existing evidence, `go nodes 50000` for `strong_engine`. **Claude marked this `accepted` in error; codex refused to implement it and was right** — the RFC's own text says questions 1 and 3 must be ruled *before* `accepted` |
 | `vocabulary-wiring.md` | **accepted 2026-08-16** — Q1/Q8 owner-ruled, Q9 closed against work-register §4a | — | claims **pack 0.24** (yielded 0.23 to `engine-leverage`). Merges `plan_consequence` into `structural_feature{plan_signature}`; carries the D64 escalation |
 | `feedback-delivery.md` | **revised 2026-08-15 — OWNER-BLOCKED on the C6 fork** | — | **claims nothing versioned**. The revision replaced the reviewer's `outcome.reached` conjunct (only 6 of 37 packs have a chess-terminal spine leaf, capping delivery at 18.3% structurally) and made the exhaustion predicate stricter — full authored spine, not `reachableAuthoredSpineIds`, which omits exactly the mating leaf in four packs. Cannot be accepted until the owner rules the withhold/deliver fork |
+| `board-annotation.md` | draft — **returned by cross-review 2026-08-16**, one round | — | Implements the owner's arrows ruling, legs **(a)** learner-drawn and **(b)** host-relayed; leg (c) stays with `format-surface`. Marks live in a new `run_marks` table, never the run event log. **Claims a migration POSITION, not the number 23** — its review found that claiming an integer above an unlanded one seals that one shut permanently |
 | `claim-backing.md` | **round 2 complete — ready to accept**, two owner-gated open questions that do not block | — | Makes the unbacked-claim debt **payable**: a prose-preserving attachment path so an instrument record backs authored prose instead of replacing it. Owner refused all three C6 options (*"why not fix them properly?"*). Dissolves `feedback-delivery`'s fork; that RFC lands behind this one. **Pack 0.26 RELEASED** — the remedy is validator-and-ledger only: no `$defs` touched, no committed pack byte changes, no digest moves, no migration, no run schema, and all 68 committed ledgers stay valid unchanged. Delivery goes 49.0% → 64.5% on already-committed records → 95.4% after the instrument waves, and **never 131 of 131** — a criterion makes full admission a *failure* |
 | `format-surface.md` | **accepted 2026-08-16** — Q2/Q7 owner-ruled and applied throughout the body, not just the questions | — | claims **pack 0.25**; **no run-schema version, no migration** — and §4.4 shows that is a design constraint, not luck. Retires `arrows` and `SIMULATE_BUDGET_EXCEEDED`, refuses `retryVariants`, implements D96 (per-leg `opponentPolicy`/`shapes`) and D57 |
 
@@ -135,6 +136,21 @@ writing it into a draft.
 | 18 | 17→18 | `archive/grounding-pair.md` | implemented — stamp-only: run schema 0.12→**0.13** (`RunOpponentMode`/`PolicyModeApplied` gain `perfect_tablebase`; no new event type, no data rewrite) |
 | 19 | 18→19 | `archive/resistance-spectrum.md` | implemented — stamp-only: run schema 0.13→**0.14** (`practical_resistance` applied-record widenings, `eloHonored`/`eloApplied`). No data rewrite; historical group-journal rows compare equal |
 | 20 | 19→20 | `archive/engine-request-contract.md` | implemented — stamp-only: run schema 0.14→**0.15** (`SelectionCandidate.offWindow`); D60's narrowing mechanism ships but D60 remains open pending R10 |
+**MIGRATION NUMBERS ARE ASSIGNED AT LANDING, NOT AT CLAIM — instituted 2026-08-16, and this
+register was wrong until now.** `storage.ts` migrates with `if (migration.version <= version)
+continue`, so **a database that reaches N skips every migration numbered below N that lands
+afterwards, silently and permanently.** A claimed-but-unlanded number is therefore not a
+reservation; it is a hole that the next migration to land will seal shut. Claude created
+exactly that hazard on 2026-08-16 by telling `board-annotation` to claim **23** while **22**
+(`teacher-surface`) was claimed, owner-blocked and unlanded — its cross-review caught it.
+
+**The rule:** a draft claims a **position in the landing order**, never a number. The number is
+taken when the migration actually lands, and it is always `STORAGE_VERSION + 1`. The rows below
+record order and history; a row for an unlanded migration is a *claim on the next free slot at
+its turn*, not on the integer printed in it. **An implementer who finds the next contiguous
+number already taken renegotiates here rather than skipping.** The earlier 21/22 reassignment
+was sound for the same reason — the draft that could not land is the one that moved.
+
 | 21 | 20→21 | `engine-leverage.md` | **implementing 2026-08-16** — stamp-only: run schema 0.15→**0.16**. **Reassigned from 22.** Migration body uses frozen literals, never the moving schema constant |
 | 22 | 21→22 | `teacher-surface.md` | **claimed 2026-08-16, reassigned from 21** — four tables, `run_grants.expires_at`, `live_sessions.classroom_id`. Backfill-free, so the reassignment costs it nothing but text. Owner-blocked; lands behind 21 |
 
