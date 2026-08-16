@@ -95,6 +95,39 @@ must be authored, the row was split and the sentence sent to the authored side. 
 which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
 writer does not exist yet.
 
+## 0-KILL. [[D507]] — a kill criterion's usability clause fires on a layout bug. Take it now.
+
+**Measured hands-on 2026-08-16** (`design/research/endgame-latency-versus-cet.md`): at 1440×1000,
+**5 of 6 served endgame packs cannot receive their own authored first move**; at **1280×720 and
+1366×768, all 64 squares of all 6 are unhittable**. The board overflows `.position-column` by
+**64–164 px** and is drawn under the timeline; `.drill-region` does not scroll and
+`scrollIntoView` moves it **0 px**.
+
+**The trigger is authored objective length** — **68** chars in the schema example against
+**277–444** in the endgame packs. That is why the single pack production served is **0/64
+occluded** and the whole corpus is not, and why nothing caught it.
+
+**`assertRunViewport` would fail on all six packs at the very viewports it tests** — its desktop
+projections run on the schema-example pack and its compact ones on a pack-less Just Play run.
+**Fix the invariant's fixtures in the same pass**, or the next content wave reopens this.
+Same shape as [[D482]].
+
+**Related and already in the UX lane:** `.board-frame`'s `calc(100dvh - 34rem)` → the
+container-query sizing **already present in the same file's mobile branch**
+(`DrillScreen.svelte:1479-1480`) — ~2 lines, and the board roughly doubles ([[D496]]).
+
+**Take [[D509]] with it before the draft shelf lands:** `/capabilities` advertises
+`perfect_tablebase` and `practical_resistance` and both return **HTTP 503 for every position**
+under `ENGINE_MODE=mock` (empty `FixtureTablebaseSource`). **Two corpus packs declare
+`perfect_tablebase`**, so [[D502]]'s shelf puts them in front of a learner and onto a 503.
+
+**And [[D510]]**: `/select-move` returns an **untyped HTTP 500** on a checkmate position under
+`human_common` where `perfect_tablebase` returns a typed 503 — and `human_common` is the mode
+every default and rated run uses. [[D56]]'s family.
+
+**Do not take [[D508]]** — it is a finding, not a defect: CET's endpoint measures **30.8 ms**
+against our **30.1 ms** on the same FENs, so there is no speed gap to win and nothing to fix.
+
 ## 0-OWNER. COMPLETED 2026-08-17 — two rulings landed 2026-08-16
 
 **[[D502]] — the corpus reaches learners through BOTH channels.** Ship all 56 packs behind a
