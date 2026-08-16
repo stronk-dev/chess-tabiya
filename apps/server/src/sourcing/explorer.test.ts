@@ -48,10 +48,13 @@ describe("Lichess explorer sourcing", () => {
     expect(() => normalizeExplorerQuery({ ...BASE_QUERY, speeds: ["bullet", "bullet"] })).toThrow(/speeds must/);
     expect(() => normalizeExplorerQuery({ ...BASE_QUERY, since: "2026-13" })).toThrow(/WINDOW_INVALID|real YYYY/);
     expect(() => normalizeExplorerQuery({ ...BASE_QUERY, since: "2026-07", until: "2024-01" })).toThrow(/WINDOW_INVALID|since/);
+    expect(() => normalizeExplorerQuery({ ...BASE_QUERY, moves: 0 })).toThrow(/ARGUMENT_INVALID|positive safe integer/);
     expect(normalizeExplorerQuery({ ...BASE_QUERY, speeds: ["rapid", "blitz"], since: "2024-01", until: "2024-01" }).speeds).toEqual(["blitz", "rapid"]);
+    expect(normalizeExplorerQuery(BASE_QUERY).moves).toBe(12);
     const url = new URL(explorerUrl(BASE_QUERY));
     expect(Object.fromEntries(url.searchParams)).toEqual({ variant: "standard", fen: START, ratings: "1400,1600,1800", speeds: "blitz,rapid", since: "2024-01", until: "2026-07", moves: "12", topGames: "0", recentGames: "0", history: "false" });
     expect(explorerUrl({ ...BASE_QUERY, speeds: ["rapid", "blitz"] })).toBe(explorerUrl(BASE_QUERY));
+    expect(new URL(explorerUrl({ ...BASE_QUERY, moves: 40 })).searchParams.get("moves")).toBe("40");
   });
 
   it("abstains after exactly one 401 without substituting a band or leaking the token", async () => {

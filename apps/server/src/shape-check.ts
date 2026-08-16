@@ -35,6 +35,10 @@ export async function checkShapeFile(file: string, options: { readonly probeFen?
   }
 }
 
+export function formatProbeResult(file: string, probeMatches: boolean): string {
+  return `PROBE ${probeMatches ? "FIRES" : "DOES NOT FIRE"}: ${file}#/trigger`;
+}
+
 async function main(): Promise<number> {
   const expand = (value: string): readonly string[] => {
     if (!value.includes("*")) return [value];
@@ -57,6 +61,7 @@ async function main(): Promise<number> {
   }
   for (const result of results) {
     for (const candidate of [...result.issues, ...(warningsByFile.get(result.file) ?? [])]) (candidate.severity === "warning" ? console.warn : console.error)(formatPackIssue(candidate));
+    if (result.probeMatches !== undefined) console.log(formatProbeResult(result.file, result.probeMatches));
     if (!result.valid) { console.error(`Shape check failed: ${result.file}`); failed = true; }
     else console.log(`Shape check passed: ${result.file}`);
   }

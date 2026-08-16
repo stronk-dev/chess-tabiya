@@ -18,7 +18,7 @@ async function main(): Promise<void> {
   const token = (await readFile(".env.lichess", "utf8")).split("\n").find((line) => line.startsWith("LICHESS_TOKEN="))?.slice("LICHESS_TOKEN=".length).trim();
   const fens = process.argv.slice(2);
   for (const [index, fen] of fens.entries()) {
-    const url = explorerUrl({ fen, ratings: RATINGS, speeds: SPEEDS, since: SINCE, until: UNTIL }).replace("moves=12", `moves=${process.env.MOVES ?? "12"}`);
+    const url = explorerUrl({ fen, ratings: RATINGS, speeds: SPEEDS, since: SINCE, until: UNTIL, moves: Number(process.env.MOVES ?? "12") });
     if (index > 0) await new Promise((done) => setTimeout(done, 1500));
     const response = await fetch(url, { headers: { "user-agent": "chess-tabiya-sourcing/0.0.0 (+https://github.com/stronk-dev/chess-tabiya; repository-owner)", ...(token ? { authorization: `Bearer ${token}` } : {}) } });
     if (!response.ok) { console.log(`FEN ${fen}\n  HTTP ${response.status}`); continue; }

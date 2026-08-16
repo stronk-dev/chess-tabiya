@@ -129,7 +129,7 @@ author may add v0.3 grading only under the assessment-admission contract above.
 
 The explorer client asks one closed question: frequency at explicit rating buckets, speeds,
 and a real calendar window. Ratings and speeds are canonicalized against the published
-Lichess enums; all request parameters are explicit; 401/403 abstain immediately and never
+Lichess enums; the returned-move depth is explicit when requested and defaults to 12; all request parameters are explicit; 401/403 abstain immediately and never
 substitute another population. Counts are derived from white/draw/black result fields—the
 response has no trustworthy `total` or echoed time window—and rows below 100 games abstain.
 

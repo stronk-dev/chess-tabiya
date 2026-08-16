@@ -1,12 +1,14 @@
 import { createHash } from "node:crypto";
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { resolve } from "node:path";
 
 import type { StructuralExpression } from "@chess-tabiya/schema/drill-pack";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
 
-import { runExpressionCensus } from "./expression-census.js";
-import { checkShapeFile } from "./shape-check.js";
+import { evidenceCensus, runExpressionCensus } from "./expression-census.js";
+import { checkShapeFile, formatProbeResult } from "./shape-check.js";
 import { validateShapeEntry } from "./shape-validation.js";
 
 function packFiles(): string[] {
@@ -23,6 +25,31 @@ describe("expression census", () => {
     expect(report.corpus.positions).toBeGreaterThan(report.corpus.packs);
     expect(report.corpus.packsWithoutSpine).toContain("trajectory-legs-browser");
     expect(report.corpus.fixturePacks).toEqual(packFiles().filter((name) => name.endsWith(".browser.json")).map((name) => JSON.parse(readFileSync(`content/drafts/${name}`, "utf8")).id).sort());
+  });
+
+  it("reports each pack's evidence rungs, backing, and corpus population", () => {
+    const report = fullReport;
+    expect(report.evidence.packs.length).toBeGreaterThan(0);
+    expect(report.evidence.totals.claims).toBeGreaterThan(0);
+    const citations = report.evidence.packs.flatMap((pack: any) => pack.citations);
+    const corpus = citations.filter((citation: any) => citation.evidenceType === "corpus_observed");
+    expect(corpus.length).toBeGreaterThan(0);
+    expect(corpus.every((citation: any) => citation.rung === 4 && citation.backing.kind === "ledger")).toBe(true);
+    expect(report.evidence.totals.byRung.map((row: any) => row.rung)).toContain(4);
+  });
+
+  it("matches ledger backing and exposes its machine-readable population", () => {
+    const root = mkdtempSync(resolve(tmpdir(), "tabiya-evidence-census-"));
+    const file = resolve(root, "sample.json");
+    const pack = JSON.parse(readFileSync("content/drafts/anti-caro-advance-early-c5.json", "utf8"));
+    pack.feedbackClaims = [{ id: "observed", text: "Generated corpus sentence", evidenceTypes: ["corpus_observed"] }];
+    writeFileSync(file, JSON.stringify(pack));
+    writeFileSync(file.replace(/\.json$/u, ".evidence.json"), JSON.stringify({
+      schema: "tabiya.sourcing.evidence.v1", sourcedAt: "2026-08-16T00:00:00.000Z", abstentions: [],
+      records: [{ kind: "explorer_frequency", anchor: { fen: pack.start.fen }, sourceId: "lichess-explorer", retrievedAt: "2026-08-16T00:00:00.000Z", grounds: "citable_source", supports: ["/feedbackClaims/0/text"], values: { ratings: [1400, 1600, 1800], speeds: ["blitz", "rapid"], since: "2024-01", until: "2026-07", total: 9346096 } }],
+    }));
+    const report = evidenceCensus(new Map([[file, pack]]));
+    expect(report.packs[0]?.citations[0]).toMatchObject({ evidenceType: "corpus_observed", rung: 4, backing: { kind: "ledger", backedClaims: 1, records: 1 }, populations: [{ ratings: [1400, 1600, 1800], speeds: ["blitz", "rapid"], since: "2024-01", until: "2026-07", total: 9346096 }] });
   });
 
   // Selects subjects BY OBSERVATION, never by name. The earlier form pinned
@@ -102,4 +129,9 @@ describe("expression census", () => {
     expect(result.valid).toBe(true);
     expect(result.issues.some((issue) => issue.severity === "warning" && issue.code === "SHAPE_TRIGGER_NEVER_FIRES_IN_CORPUS")).toBe(true);
   }, 10_000);
+
+  it("prints an unambiguous result for each shape probe", () => {
+    expect(formatProbeResult("content/shapes/carlsbad.json", true)).toBe("PROBE FIRES: content/shapes/carlsbad.json#/trigger");
+    expect(formatProbeResult("content/shapes/carlsbad.json", false)).toBe("PROBE DOES NOT FIRE: content/shapes/carlsbad.json#/trigger");
+  });
 });

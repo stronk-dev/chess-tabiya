@@ -13,6 +13,7 @@ import {
   expressionSatisfiability,
   type ExpressionWitness,
 } from "./expression-satisfiability.js";
+import type { EvidenceLedger, EvidenceRecord } from "./sourcing/types.js";
 
 export type CensusSubjectKind = "shape_trigger" | "shape_plan_signature" | "pack_success_condition" | "pack_fen_predicate" | "pack_window_closing" | "pack_key_point_ground" | "bare_expression";
 export interface CensusSubject {
@@ -26,6 +27,21 @@ export interface CensusSubject {
   readonly trigger?: StructuralExpression;
 }
 interface CorpusPosition { readonly packId: string; readonly file: string; readonly ply: number; readonly fen: string }
+
+const EVIDENCE_RUNG: Readonly<Record<string, number>> = Object.freeze({
+  derived_feature: 0,
+  tablebase_exact: 1,
+  engine_validated: 2,
+  human_model_predicted: 3,
+  corpus_observed: 4,
+  author_principle: 5,
+  hypothesis: 5,
+});
+const LEDGER_KIND: Readonly<Record<string, EvidenceRecord["kind"]>> = Object.freeze({
+  tablebase_exact: "tablebase_result",
+  engine_validated: "engine_eval",
+  corpus_observed: "explorer_frequency",
+});
 
 function absolutePly(fen: string): number {
   const fields = fen.split(" ");
@@ -49,6 +65,68 @@ function displayPath(file: string): string {
 }
 
 function readJson(file: string): any { return JSON.parse(readFileSync(file, "utf8")); }
+
+function evidenceLedgerPath(packFile: string): string {
+  return packFile.endsWith("/pack.json") ? resolve(packFile, "../evidence.json") : packFile.replace(/\.json$/u, ".evidence.json");
+}
+
+function evidenceLedger(packFile: string): EvidenceLedger | undefined {
+  try {
+    const value = readJson(evidenceLedgerPath(packFile));
+    return value?.schema === "tabiya.sourcing.evidence.v1" && Array.isArray(value.records) ? value as EvidenceLedger : undefined;
+  } catch { return undefined; }
+}
+
+function populationOf(record: EvidenceRecord): Record<string, unknown> | undefined {
+  if (record.kind !== "explorer_frequency") return undefined;
+  const { ratings, speeds, since, until, total } = record.values;
+  if (!Array.isArray(ratings) || !Array.isArray(speeds) || typeof since !== "string" || typeof until !== "string" || !Number.isSafeInteger(total)) return undefined;
+  return { ratings, speeds, since, until, total };
+}
+
+export function evidenceCensus(packDocuments: ReadonlyMap<string, DrillPackDefinition>) {
+  const packs = [...packDocuments].flatMap(([absolute, pack]) => {
+    const claims = pack.feedbackClaims ?? [];
+    if (claims.length === 0) return [];
+    const ledger = evidenceLedger(absolute);
+    const citations = [...new Set(claims.flatMap((claim) => claim.evidenceTypes))].sort().map((evidenceType) => {
+      const claimIndexes = claims.flatMap((claim, index) => claim.evidenceTypes.includes(evidenceType) ? [index] : []);
+      const ledgerKind = LEDGER_KIND[evidenceType];
+      const matching = ledgerKind === undefined ? [] : ledger?.records.filter((record) => record.kind === ledgerKind && claimIndexes.some((index) => record.supports.includes(`/feedbackClaims/${index}/text`))) ?? [];
+      const backedClaims = ledgerKind === undefined ? 0 : claimIndexes.filter((index) => matching.some((record) => record.supports.includes(`/feedbackClaims/${index}/text`))).length;
+      const populations = matching.flatMap((record) => {
+        const population = populationOf(record);
+        return population === undefined ? [] : [canonicalizeJson(population)];
+      });
+      return {
+        evidenceType,
+        rung: EVIDENCE_RUNG[evidenceType] ?? null,
+        claims: claimIndexes.length,
+        backing: ledgerKind === undefined
+          ? { kind: evidenceType === "derived_feature" ? "derived" : evidenceType === "author_principle" || evidenceType === "hypothesis" ? "authored" : "unregistered", backedClaims: 0, records: 0 }
+          : { kind: "ledger", backedClaims, records: matching.length },
+        populations: [...new Set(populations)].sort().map((value) => JSON.parse(value)),
+      };
+    });
+    return [{ packId: pack.id, file: displayPath(absolute), claims: claims.length, citations }];
+  }).sort((left, right) => left.file.localeCompare(right.file));
+  const citations = packs.flatMap((pack) => pack.citations);
+  const rungs = [...new Set(citations.map((citation) => citation.rung))].sort((a, b) => (a ?? 99) - (b ?? 99)).map((rung) => ({
+    rung,
+    claims: citations.filter((citation) => citation.rung === rung).reduce((sum, citation) => sum + citation.claims, 0),
+    backedClaims: citations.filter((citation) => citation.rung === rung).reduce((sum, citation) => sum + citation.backing.backedClaims, 0),
+  }));
+  return Object.freeze({
+    packs: Object.freeze(packs),
+    totals: {
+      packs: packs.length,
+      claims: packs.reduce((sum, pack) => sum + pack.claims, 0),
+      backedClaims: citations.reduce((sum, citation) => sum + citation.backing.backedClaims, 0),
+      populations: citations.reduce((sum, citation) => sum + citation.populations.length, 0),
+      byRung: rungs,
+    },
+  });
+}
 
 function packSubjects(pack: DrillPackDefinition, file: string): readonly CensusSubject[] {
   const result: CensusSubject[] = [];
@@ -192,6 +270,7 @@ export function runExpressionCensus(options: CensusOptions = {}): any {
   return Object.freeze({
     schema: "tabiya.authoring.census.v1",
     corpus: { roots: roots.map(displayPath), packs: packDocuments.size, fixturePacks: fixturePacks.sort(), positions: positions.length, transitions: positions.length - packDocuments.size, packsWithoutSpine: packsWithoutSpine.sort(), shapeEntries: shapeFiles.length },
+    evidence: evidenceCensus(packDocuments),
     subjects: Object.freeze(records),
     totals: { subjects: records.length, neverFiresInCorpus: count("NEVER_FIRES_IN_CORPUS"), firesOnlyOutsideShape: count("FIRES_ONLY_OUTSIDE_SHAPE"), inShapeDenominatorEmpty: count("IN_SHAPE_DENOMINATOR_EMPTY"), unsatisfiable: count("UNSATISFIABLE"), satisfiabilityUnknown: count("SATISFIABILITY_UNKNOWN") },
   });

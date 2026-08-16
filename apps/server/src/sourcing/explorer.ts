@@ -30,7 +30,10 @@ export interface ExplorerQuery {
   readonly speeds: readonly Speed[];
   readonly since: string;
   readonly until: string;
+  readonly moves?: number;
 }
+
+export type NormalizedExplorerQuery = Omit<ExplorerQuery, "moves"> & { readonly moves: number };
 
 export interface ExplorerMove {
   readonly uci: string;
@@ -49,12 +52,14 @@ export type ExplorerFetch = (url: string, init: RequestInit) => Promise<Response
 
 function unique<T>(values: readonly T[]): boolean { return new Set(values).size === values.length; }
 
-export function normalizeExplorerQuery(query: ExplorerQuery): ExplorerQuery {
+export function normalizeExplorerQuery(query: ExplorerQuery): NormalizedExplorerQuery {
   if (query.ratings.length === 0 || !unique(query.ratings) || query.ratings.some((rating) => !RATING_GROUPS.includes(rating))) throw new SourcingError("RATINGS_NOT_A_GROUP", `ratings must be unique members of ${RATING_GROUPS.join(",")}`);
   if (query.speeds.length === 0 || !unique(query.speeds) || query.speeds.some((speed) => !SPEEDS.includes(speed))) throw new SourcingError("SPEEDS_NOT_A_SPEED", `speeds must be unique members of ${SPEEDS.join(",")}`);
   const month = /^\d{4}-(0[1-9]|1[0-2])$/;
   if (!month.test(query.since) || !month.test(query.until) || query.since > query.until) throw new SourcingError("WINDOW_INVALID", "since/until must be real YYYY-MM values with since <= until");
-  return Object.freeze({ ...query, ratings: Object.freeze([...query.ratings].sort((a, b) => a - b)), speeds: Object.freeze([...query.speeds].sort((a, b) => SPEEDS.indexOf(a) - SPEEDS.indexOf(b))) });
+  const moves = query.moves ?? 12;
+  if (!Number.isSafeInteger(moves) || moves < 1) throw new SourcingError("ARGUMENT_INVALID", "moves must be a positive safe integer");
+  return Object.freeze({ ...query, moves, ratings: Object.freeze([...query.ratings].sort((a, b) => a - b)), speeds: Object.freeze([...query.speeds].sort((a, b) => SPEEDS.indexOf(a) - SPEEDS.indexOf(b))) });
 }
 
 export function explorerUrl(raw: ExplorerQuery): string {
@@ -66,7 +71,7 @@ export function explorerUrl(raw: ExplorerQuery): string {
   url.searchParams.set("speeds", query.speeds.join(","));
   url.searchParams.set("since", query.since);
   url.searchParams.set("until", query.until);
-  url.searchParams.set("moves", "12");
+  url.searchParams.set("moves", String(query.moves));
   url.searchParams.set("topGames", "0");
   url.searchParams.set("recentGames", "0");
   url.searchParams.set("history", "false");
@@ -194,11 +199,11 @@ export async function emitExplorerPriority(options: PriorityEmitOptions): Promis
   const sourcedAt = entries.map((entry) => entry.retrievedAt).sort().at(-1)!;
   const output = resolve(options.outputRoot ?? "content/candidates/priority");
   const query = normalizeExplorerQuery({ ...options.query, fen: lines[0]?.fen ?? makeFen(Chess.default().toSetup()) });
-  const priority = { schema: "tabiya.sourcing.priority.v1", status: rows.length > 0 ? "available" : "unavailable", input: { sourceId: ingested.entry.sourceId, retrievedAt: ingested.entry.retrievedAt }, query: { ratings: query.ratings, speeds: query.speeds, since: query.since, until: query.until, moves: 12, topGames: 0, recentGames: 0, history: false }, sourcedAt, rows, abstentions };
+  const priority = { schema: "tabiya.sourcing.priority.v1", status: rows.length > 0 ? "available" : "unavailable", input: { sourceId: ingested.entry.sourceId, retrievedAt: ingested.entry.retrievedAt }, query: { ratings: query.ratings, speeds: query.speeds, since: query.since, until: query.until, moves: query.moves, topGames: 0, recentGames: 0, history: false }, sourcedAt, rows, abstentions };
   const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries };
   await writeCanonicalJson(resolve(output, "priority.json"), priority);
   await writeCanonicalJson(resolve(output, "sources.json"), manifest);
-  const args = { lines: ingested.entry.origin.kind === "local-file" ? ingested.entry.origin.path : options.lines, ratings: query.ratings, speeds: query.speeds, since: query.since, until: query.until };
+  const args = { lines: ingested.entry.origin.kind === "local-file" ? ingested.entry.origin.path : options.lines, ratings: query.ratings, speeds: query.speeds, since: query.since, until: query.until, moves: query.moves };
   await writeCanonicalJson(resolve(output, "job.json"), { schema: "tabiya.sourcing.job.v1", pipeline: "explorer", args, sourceEtags: entries.map((entry) => entry.origin.kind === "http" ? entry.origin.etag : null), emissionJobDigest: emissionJobDigest("explorer", args, entries.map((entry) => entry.origin.kind === "http" ? entry.origin.etag : null)) });
   return output;
 }
