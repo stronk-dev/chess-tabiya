@@ -1,12 +1,44 @@
-# Codex queue — rebuilt from the ledger 2026-08-16
+# Codex queue — refreshed 2026-08-16 (late)
 
-**This file was stale and I rebuilt it by querying `design/BACKLOG.md` rather than my own
-memory of what I had queued.** Every defect in the previous version — D107, D108, D109, D117,
-D121, D140, D149, D152 — was **already closed by you**. The queue had become a record of
-finished work. Third time tonight; the fix is that the queue is now derived, not remembered.
+## 0. TAKE FIRST — a contradiction inside work you just landed
 
-Also flipped: **D122**, which I fixed myself in `aee7c64` and never ledgered. Same
-defect-vs-doctrine mismatch that left D59 open for a day.
+**`plan_signature` is refused, demanded and faulted by three different instruments.** It is
+the construct `vocabulary-wiring` shipped at pack **0.24**, and a content wave hit the
+contradiction while trying to use it:
+
+- the **linter DEMANDS** it — `PLAN_SIGNATURE_INLINED` fires on a shape signature written
+  inline;
+- **`pack-check` REFUSES** it inside any `fenPredicate`, via `START_POSITION_UNRUNNABLE`;
+- the **census FAULTS** on it at **all 827 positions**.
+
+So the only legal way to satisfy the linter is a form another instrument rejects, and the
+wave shipped its three packs with the inline copies *because the successor is unusable there*
+— `PLAN_SIGNATURE_INLINED` now fires on expressions that cannot legally be written any other
+way. **Confirmed independently by claude**: census `satisfiabilityUnknown` rose **23 → 26**
+and the three new unknowns are exactly that wave's `plan_signature` objectives.
+
+Context that makes this worth taking first rather than filing: the corpus was **4 packs on
+the deprecated `plan_consequence` and 0 on the successor**, so the merge landed with no
+customer to exercise it, and **neither `PLAN_SIGNATURE_INLINED` nor `START_POSITION_UNRUNNABLE`
+appears in the ledger or the log**. This is the first real use, and it failed.
+
+Rows: D347 (the three-way disagreement), D353 (the census delta going the wrong way).
+
+## 1. Then — a broken exemplar and a closed vocabulary
+
+- **D346** — `carlsbad-minority-attack`, the pack `design/04` §8 names as the middlegame
+  exemplar, declares `plyHorizon: 8` with its deepest authored spine node at **ply 11**. Its
+  last three nodes are in neither `spineNodeIds` nor under the cap, **and its objective
+  materialises exactly there.** Nothing warns. `plyHorizon` equals the deepest spine ply in
+  19/20 opening and 10/11 middlegame packs, so this is the one place the invariant everyone
+  assumes is actually violated.
+- **D348** — **21 of 25 shape entries cannot be named in any expression**: `named_structure`'s
+  vocabulary is closed at four structures, so every structure-keyed predicate in the corpus is
+  a hand copy of the library rather than a reference to it.
+- **D351** — no `make` target computes an attack count. A pack claim was wrong **in both
+  directions** until an evaluator was hand-built for it (d4 asserted 3-attacked/2-defended;
+  actually 2 against 3, because a queen was blocked by its own pawn). That is a diagram anyone
+  would misread, and nothing in the repo would have caught it.
 
 ## 0. The main course — two accepted RFCs, land in lane order
 
