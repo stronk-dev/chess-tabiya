@@ -6,6 +6,17 @@ of it is properly queued so we don't lose it or defer it."* The ledger holds the
 findings; this file holds the **routing**. Every open defect appears exactly once,
 with a destination. A row with no destination is a bug in this file.
 
+> **⚠ THIS FILE IS 121 ROWS STALE AND ITS INVARIANT IS FALSE — measured 2026-08-16, [[D487]].**
+> It names **78 distinct ids, highest D365**. The ledger is at **D486**. Of the **121** rows above
+> D365 it names **zero** — every row created on the project's two highest-output days. By the rule
+> stated directly above, this file currently contains **121 bugs**.
+>
+> **Do not read it as an answer to "what is unscheduled".** The current answer is
+> `planning/defect-triage.md`, which routes all 289 open rows, plus `planning/app-reality-check.md`
+> for what a user actually sees. **Until this file is DERIVED rather than written, it will go stale
+> again** — the invariant below is prose, nothing produces this file, and no `make` target checks
+> it. That is the same failure as [[D450]] and [[D477]]: a normative rule with no reader.
+
 **Rule:** nothing is "deferred" here. An item is either **queued** (an RFC owns it),
 **owner-gated** (named, with the question), or **unowned** (needs an RFC drafted —
 which is itself queued work). There is no fourth state.
