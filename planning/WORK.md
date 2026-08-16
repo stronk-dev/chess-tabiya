@@ -21,7 +21,7 @@ created on the project's two highest-output days ([[D487]]).
 |---|---|---|
 | **Implementation** | `planning/codex-queue.md` | What the implementer takes next, in order |
 | **Defects** | `planning/defect-triage.md` | All 289 open rows routed into 9 batches + 7 buckets |
-| **RFCs to draft** | `planning/rfc-drafting-queue.md` | The unowned RFC-shaped rows collapsed into documents |
+| **RFCs to draft** | `planning/rfc-drafting-queue.md` | **40 unowned rows → 7 documents (4:1).** Write `shared-resource-registers` first — not the most valuable, but the only one currently *producing wrong work*: three of four registers are wrong at HEAD and five of the seven documents must claim a lane |
 | **Research** | `planning/research-queue.md` | Hypotheses, kill criteria and measurement questions, ranked |
 | **UX** | `planning/ux-work-lane.md` | What to fix so a person can use the thing |
 
@@ -43,6 +43,20 @@ written in prose has no reader**. That is now the dominant defect class in this 
 
 Same family: [[D450]] (a permission rule in a doc that no test reads), [[D459]] (the defect
 table's own header mislabels column 3 and produced four misreads).
+
+## 0b. Owner rulings of 2026-08-16 — act on these
+
+- **[[D502]] — the corpus reaches learners through BOTH channels.** A **disclosed draft channel
+  now** (all 56 behind an *unreviewed draft* badge; the registry already carries
+  `channel: "official" | "community"` and the UI renders it), and a **graduated shelf** as packs
+  earn it. **Not by flipping `NODE_ENV`.** Unblocks K1–K4, K8, R6–R8 and a real play session, and
+  gives the graduation machinery a consumer.
+- **[[D502]] — the schema example fixture is removed from the served library.** It is a format
+  fixture, not content; it validates the schema in tests and never reaches a user.
+- **[[D493]] is a defect fix, not a ruling** — `SILENT_ASSISTANCE.boardLighting` was flipped
+  `"legal"` → `"off"` at `f304384` **the same day**, on a constant-tidiness rationale, while the
+  docs and all three migration branches still say `"legal"`. **One token.** Silence over
+  *evidence* stays; the rules floor was never on the ladder.
 
 ## 1. Live and user-affecting — outranks everything below
 
