@@ -1,16 +1,19 @@
 # RFC: Feedback delivery — give the claim layer a learner, and stop the strip printing the census
 
-- **Status:** **draft — cross-reviewed 2026-08-16, and it owes the owner ONE narrowed question.**
-  Its dependency `rfc/archive/claim-backing.md` is implemented and archived. The **three-way C6 fork
-  is dead and must not be re-asked** (it priced a debt that is now payable, and the owner's
-  2026-08-16 instruction forbids re-asking it). But the author round closed Open question 1
-  outright, and cross-review found that overreached: **the 2026-08-15 ruling refused all three
-  options including C6**, so it cannot be the authority for shipping C6. **Open question 1 is
-  therefore NARROWED, not closed** — what survives is a sequencing question (does Job 1 land ahead
-  of the binding wave, delivering 98 of 196 claims of which 97 read *"No machine record is
-  attached"*, or behind it?). Open question 5 is answered. Claims **nothing
-  versioned** — no pack lane, no migration position, no run-schema stamp, no refusal code — and
-  widens exactly one TypeScript value type by one member (§3.3(d)).
+- **Status:** **accepted 2026-08-16 — the owner gate is closed and every open question that
+  blocked acceptance is settled.** The narrowed Open question 1 was ruled on 2026-08-16
+  ([[D462]], `4ca7792`): **neither arm — both, in that order. Ship the surface, then run the
+  binding wave before anyone plays.** The **three-way C6 fork is dead and must not be re-asked**
+  (it priced a debt that is now payable, and the owner's 2026-08-16 instruction forbids re-asking
+  it). Open question 5 is answered. **Open questions 2, 3, 4, 6 and 7 are non-blocking in their own
+  words** and stay open behind measurements this RFC's criteria produce (4 behind criterion 6(b), 6
+  behind 16, 7 behind 4). **Open question 8 is non-blocking for the delivery mechanism and
+  *blocking for stage 2*** — it is 94 rung-5 provenance decisions and criterion 22 hands it to the
+  wave's brief.
+  **The ruling makes Job 1 a two-stage landing and §0 specifies it**: stage 1 ships the surface,
+  stage 2 runs the binding wave, and **the RFC is not `implemented` until stage 2's measurement is
+  recorded**. Claims **nothing versioned** — no pack lane, no migration position, no run-schema
+  stamp, no refusal code — and widens exactly one TypeScript value type by one member (§3.3(d)).
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder; **rung 5 at `:76`** —
@@ -37,6 +40,17 @@
   closed (criterion 11). **D167 🔨** is `claim-backing`'s request against *this* RFC's `binding`
   field and is discharged by §2.5 in this round. **D417 🐞** and **D421 🐞**, both found 2026-08-16,
   are read as constraints on §3.4 and C9 respectively (§3.5) and neither is claimed here.
+  **Six further rows were produced by this RFC's rounds, landed in the ledger by claude, and are
+  reflected here rather than re-derived — all open, none claimed** `[final author pass 2026-08-16]`:
+  **D430** (*`explorer_frequency` is a dead alternative inside a live map*, §1.2d, and it shapes
+  §2.5's export note), **D431** (*31 claims reach delivery through a map entry that is never
+  written*, §2.6 C5(4), criterion 18), **D432** (*`RECORDED_READING_DISPOSITIONS` freezes a corpus
+  FACT as a runtime disposition*, §3.2, a stage-2 hazard), **D444** (*`expression-census`'s
+  `backedClaims` double-counts and never validates*, criterion 2a), **D445** (*`authorSegments`
+  locates spans with `indexOf`*, §3.2a), and **D433** (*an RFC's unblocking has no closeout
+  protocol*, whose row title carries a misattribution this document created and then corrected — see
+  the 2026-08-16 author-round block). **D462 💡** is the owner ruling this RFC's §0 implements, and
+  it is the only row here that is not a defect.
 - **Depends on:** nothing unlanded. **`rfc/archive/claim-backing.md` (implemented 2026-08-16, pack
   0.26) is the hard dependency and it has landed** — it supplies `claimBindings`, the assertion
   registry, the principle registry, and the `PackRecord.boundClaimIds` / `PackRecord.claimBackings`
@@ -53,7 +67,9 @@
   authored shapes become four) and `rfc/archive/n-way-comparison.md` (the comparison structure
   strip gains an admission filter). Amends neither at the disclosure model, which is untouched.
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/feedback-delivery/` (once implementing)
+- **Planning:** `planning/feedback-delivery/` — created at stage 1 and **kept open through stage 2**,
+  because §0.1 makes this RFC's completion depend on a measurement taken after the surface ships.
+  Criteria 21 and 23 both write into it.
 
 *Every code site below was first read in the working tree at **`8445562`** on 2026-08-15,
 **re-verified against a clean tree at `a9c31a6`** during the 2026-08-15 adversarial cross-review, and
@@ -66,6 +82,32 @@ was measured at; the ones marked `[2026-08-16]` are this round's and the ones wi
 `8744adb` numbers **that have been superseded and are kept only where the comparison is the point**.
 **Locate by symbol name first — every line number in this document is advisory**, and several have
 moved by fifty or more (`CompareView.svelte`'s strip block was `:91` and is `:135`).*
+
+> **Fifth verification, at HEAD `6722130`, for the final author pass that takes this to `accepted`**
+> `[V]` `[2026-08-16]`. Five commits landed after the cross-review (`329c62b`, `d77a9f1`,
+> `2d564cb`, `8c389f0`, `6722130`). **Every corpus figure in this document was re-derived from
+> `content/drafts/` at HEAD and every one reproduces exactly** — 50 claim-bearing packs, 196 claims,
+> 61,531 characters, 99 machine-labelled, the 82/60/43/37/24/8/0 label census, key sets 114/82,
+> min 2 / median 4 / max 7 / mean 3.92, 32 sidecars / 764 records at 391/341/32 with **0** of either
+> explorer kind, 1 `claimBindings` ledger, 201 checkpoints with **0** `stated_reasoning`, the
+> 127/19/32/13/6/4 trigger census, spine 5/12/64/**754**/15.1, 123 of 196 move-or-square, 31
+> `derived_feature`-only at 11,256 chars, 98 admitted / 26,735 chars against 98 withheld / 34,796,
+> and §3.2a's **83 / 63**. `make expression-census` at HEAD reports `claims: 196`, `packs: 50`,
+> **`backedClaims: 1`**. The Q8 harness was re-run unmodified and reproduces §1.3's whole right-hand
+> column — 754 transitions, 6,659 entries, mean 8.83 / median 9 / p95 18 / max 24, 18,470 quiet
+> alternatives at 99.4% and 92.0% same-kind, 62 fork pairs at Jaccard median 64.4% with median 38
+> differing — and it **still overwrites the committed 37-pack artefact**, which was restored.
+> **Three things moved and are corrected in place:** `0.29`, not `0.28`, is the next free pack lane
+> (§2.1, §5.1, Open question 4); `graduation-clearance` was **returned to author** at `8c389f0` and
+> has since completed a second author round, and it still holds `0.28`; and `dead-vocabulary`
+> shipped its declaration census at `329c62b`, which independently reproduces this document's label
+> census and is adopted as a criterion instrument (§1.2c, criterion 2). **Nothing this RFC specifies
+> inverted.** `make verify` at HEAD is **736 tests / 114 files, green** — with one caveat recorded
+> as a ledger row rather than swallowed: `expression-census.test.ts` runs 17 tests in **35.1 s**
+> against vitest's **20 s per-test** default, and its two `runDeclarationCensus` cases **both timed
+> out** during a `make verify` run that overlapped the Q8 harness, then passed in isolation
+> (17/17, 35.1 s). That is a load-dependent fragility on `make verify` itself — the repo's own gate —
+> not on anything this RFC specifies.
 
 > **Revision status, 2026-08-15 — the author's response to cross-review.** This draft was
 > adversarially cross-reviewed by an agent that did not write it, and has now been revised by its
@@ -256,10 +298,11 @@ checked *on a surface* because there is no surface. This RFC makes the binding *
 delivery time** — a claim whose machine-checkable label has no validating `claimBindings` entry is
 **not delivered as though the record existed**.
 
-**The rule is C6 — withhold the unbacked — and the fork that surrounded it is dead.** *(What is
-**not** settled, after cross-review: whether Job 1 lands ahead of the binding wave or behind it.
-The owner's only ruling on this refused a 49.0% delivery share; C6 ships 50.0%. See Open question 1,
-which is narrowed rather than closed.)* The draft posed
+**The rule is C6 — withhold the unbacked — and the fork that surrounded it is dead.** *(The
+sequencing question cross-review left open — whether Job 1 lands ahead of the binding wave or behind
+it — was **ruled on 2026-08-16**: neither arm, **both, in that order**. Ship the surface, then run
+the wave before anyone plays. §0 specifies the two-stage landing the ruling requires and criteria
+21–23 pin its three obligations.)* The draft posed
 C6 / C6′ / C6″ as an owner fork because withholding was not deferral: `/feedbackClaims/\d+/text` was
 a `PROSE_POINTER` that only a registered explorer or engine template could support, both templates
 required the supported prose to be the byte-exact rendered sentence, and the one shipped emitter
@@ -272,9 +315,10 @@ pointer in `record.supports` is refused **unconditionally**; and claim backing l
 `ledger.claimBindings`, span by span, with the author's sentence intact. `claim-backing` §6
 retained C6 and **withdrew C6′ and C6″**. **The three-way fork is therefore dead and is not
 re-asked** — it was a way of pricing an unpayable debt, and the debt is payable. *(Cross-review
-2026-08-16: the author round wrote "closed" here. The fork is closed; **Open question 1 is not** —
-the same ruling refused C6 too, so what survives is a narrowed sequencing question. §3.2 and Open
-question 1 carry it.)*
+2026-08-16 corrected the author round's "closed" here: the fork was closed, but **Open question 1
+was not**, because the same ruling refused C6 too — what survived was a narrowed sequencing
+question. **That question was then ruled on 2026-08-16** ([[D462]]) and Open question 1 is now
+closed in full. §3.2, §0 and Open question 1 carry the disposition.)*
 
 **What is left is a wave, and it is measured** `[V]` `[2026-08-16]`. Day zero — this RFC lands,
 nothing further is authored — delivers **98 of 196 claims, 26,735 of 61,531 characters (50.0% of
@@ -345,6 +389,109 @@ the absence rather than legislating an anchor nobody authored.
   *unmodified* site by `rfc/live-marker-quality.md` §4.2 criterion 3. See §5.2.
 
 ## Specification
+
+### 0. The landing shape — Job 1 lands in two stages, and stage 1 is not completion
+
+**This section exists because the owner ruling that closed Open question 1 is not "do both" — it is
+a sequencing commitment with three obligations, and an RFC that merely *mentions* them will discharge
+none of them.** The ruling ([[D462]], `4ca7792`, recorded verbatim at Open question 1) is:
+
+> **Ship the surface, then run the binding wave before anyone plays.**
+
+Its reasoning is a fact rather than a preference: **nobody has played a run since 2026-08-12**, so
+the *ahead* arm's priced loss — the product's first delivery of rung-5 prose being 99% unbacked — is
+paid to an audience that does not exist, and the *behind* arm's priced loss — a wave with no surface
+to validate against — is removed by shipping first. **Both arms' losses evaporate only while that
+fact holds**, which is obligation 3.
+
+#### 0.1 The two stages, and what each one is
+
+| | **Stage 1 — the surface** | **Stage 2 — the wave** |
+|---|---|---|
+| what lands | C1–C9 and CR1–CR5: the delivery path, the admission gate, the provenance lines, the strip filter | validating `claimBindings` for the withheld claims, by the three kinds of work §0.2 prices |
+| the RFC's status | `implementing` | `implementing`, then `implemented` on stage 2's measurement |
+| the measurement | **day zero: 98 of 196 claims, 26,735 of 61,531 characters (50.0% / 43.4%)** `[V]` `[2026-08-16]` | the same measurement, re-derived by the same shipped predicate, at wave end |
+| criteria | 1–20a | **21, 22, 23** |
+
+> **Obligation 1 — Job 1 is not complete when it ships, and the acceptance record must say so at the
+> end of the wave rather than at day zero.** Day zero's 98/196 is a **starting** measurement. This
+> RFC does **not** move to `implemented`, does **not** move to `rfc/archive/`, and its
+> `design/BACKLOG.md` rows are **not** flipped, on stage 1 alone. Criterion 21 is the mechanism, and
+> it is deliberately **not** a share: §3.2 and Open question 1 both establish that a genuinely
+> permanent residue exists (`claim-backing` §4 Bucket 3 — cross-ledger citations and assertions no
+> instrument in this repository measures), so **any criterion demanding a percentage at wave end
+> would be unsatisfiable by construction**. What criterion 21 demands instead is that **every claim
+> still withheld at wave end is withheld for a named refusal**, which is satisfiable, and which
+> is the only form that distinguishes *"the queue is worked"* from *"the queue was abandoned"*.
+
+#### 0.2 Obligation 2 — the wave is three kinds of work, and pricing it as two misses most of it
+
+§3.2's per-class verdicts price **records**. §3.2a measures what they miss. Stated once, as a
+commissioning brief, because a wave planned from the class table alone would be scoped at roughly a
+third of its own size `[V]` `[2026-08-16]`:
+
+| kind of work | population | what it is | where it lands |
+|---|---|---|---|
+| **(a) instrument runs** | **60** `corpus_observed` claims in **31** packs, and **36** `tablebase_exact` claims in **12** | an explorer position-census pass (the corpus holds **0** records of that kind and **0** of `explorer_frequency`) and a tablebase legal-successor census pass (`CLAIM_CENSUS_INCOMPLETE` requires a record for **every** legal successor) | `*.evidence.json` `records` |
+| **(b) pack edits** | **63 of the 98 withheld**, floor; **83** ceiling (§3.2a) | add `author_principle` to `evidenceTypes` **and** name a `principles` entry, without which `CLAIM_AUTHOR_LABEL_REQUIRED` refuses the binding outright — severity is irrelevant, because `validateClaimBindings` admits only under `if (issues.length === before)` | `content/drafts/*.json`, the **pack** |
+| **(c) prose fixes** | unbounded within (a); the binding constraint for `engine_validated` | `normalizes` is exact — *"+0.66"* binds, *"0.7"* and *"about two thirds"* do not; and 15 of the 31 `corpus_observed` packs have **no `.evidence.json` at all**, so their debt is a sourcing run plus a ledger plus a binding | `content/drafts/*.json`, the **pack** |
+
+**Two facts about (b) that this pass measured and that materially change its price, in opposite
+directions** `[V]` `[2026-08-16]`:
+
+- **The registry cannot refuse any of the 63 on phase grounds.** The 63 span **33 packs** and all
+  three phases (13 opening / 34 middlegame / 16 endgame), and **all 13 shipped `content/principles/`
+  entries list all three phases**, so `CLAIM_PRINCIPLE_OFF_PHASE` (`pack-validation.ts`, warning)
+  cannot fire for any of them and no phase gap forces the registry to grow. That is a real
+  de-risking of the largest component, and it was not known when Open question 8 was written.
+- **What it does not de-risk is the honesty question, which is the whole of Open question 8.** 13
+  principles, 12 of them referenced today, would carry **94** further claims (63 mandatory on the
+  withheld side, 31 optional on the admitted side). Whether they can honestly do so — or whether the
+  registry grows, and who authors each new entry's required `counterCase` — is a **content**
+  judgement with a rung-5 provenance consequence that C8's second form renders to a learner. It is
+  not blocking for the delivery mechanism and it is **squarely blocking for the wave**.
+
+**(b) and (c) are content work on the pack, and therefore the wave is a content wave.** It carries
+`AGENTS.md`'s content closeout — it flips the `design/BACKLOG.md` rows it fixes and appends its entry
+to `planning/content-era/log.md` **in the commit that ships the content**. **This RFC does not author
+the wave and does not own it**; what it owns is refusing to be marked complete before the wave's
+result is measured on the surface this RFC ships. **Commissioning it is a separate act and needs a
+named owner** — `rfc/archive/claim-backing.md`, which Open question 5 named as the wave's owner, is
+archived and cannot own execution.
+
+#### 0.3 Obligation 3 — the no-learner-sees-it property expires, and here is its trip
+
+The ruling's premise is that **no learner meets the 97-of-98 `self_declared` state**, and that holds
+only while nobody plays. It is a condition, not a background assumption:
+
+> **The expiry condition.** If a play session occurs on any pack carrying `feedbackClaims` after
+> stage 1 lands and before stage 2 completes, **the ruling's premise is spent**: a learner has met
+> the day-zero provenance state, the *ahead* arm's loss has been paid, and the sequencing question
+> is live again. It is then escalated to the owner as a live question rather than re-decided here.
+>
+> **The named trip, so this is noticed rather than discovered — and it is documentary, because the
+> runtime cannot supply it.** `main.ts` defaults `databasePath` to **`:memory:`**
+> (`process.env.DATABASE_PATH ?? ":memory:"`), and no `.db` file exists in this repository, so
+> **there is no durable run store to query** and a trip phrased as *"the latest `move.committed`
+> timestamp moves"* would be unsatisfiable — which is the class of defect this RFC's criterion 2a
+> was already corrected for once. The record that actually carries this fact is the **append-only
+> log**: `planning/exploration/log.md` states it in its own words today
+> (*"nobody has played a run since 2026-08-12"*), and law 7 makes it non-rewritable.
+> **The trip is therefore: a dated entry in `planning/exploration/log.md` or
+> `planning/content-era/log.md`, appended after stage 1's commit and before stage 2's measurement,
+> that records a play session or an owner walkthrough on any pack carrying `feedbackClaims`.**
+> Stage 1's commit records the current basis — the log line and its date — so the comparison has a
+> fixed start. Criterion 23 pins it. The trip is deliberately a *play* event and not a *delivery*
+> event: a run that never exhausts its spine delivers no claim at all (C1), so a claim-delivery
+> counter would read zero through exactly the sessions that spend the premise.
+
+**This is not a veto on playing.** It is a statement of what playing costs while the wave is
+unfinished, so that the cost is chosen rather than incurred silently — and the cost is the owner's
+to spend, not the implementer's to prevent. **The condition is expected to hold** on the observed
+record: `planning/exploration/log.md` has said so continuously since 2026-08-12, across every wave
+in between. **It is written down because *expected to hold* is not *checked*** — a distinction this
+document has already paid for twice, at criterion 2a's unsatisfiable equality and at §2.2a's
+*"holds by construction"*.
 
 ### 1. What ships today, read from the code
 
@@ -448,6 +595,37 @@ independent recount over `content/drafts/`:
 claims**. It is unbackable by construction (D87: no Maia evidence kind exists in `EVIDENCE_KINDS`)
 and moot in practice. `hypothesis` and `derived_feature` are self-declared by design.
 
+> **A second, independent instrument now reproduces this table, and it shipped after the
+> cross-review** `[V]` `[2026-08-16]`. `rfc/dead-vocabulary.md`'s declaration census
+> (`apps/server/src/declaration-census.ts`, reached by `make expression-census DECLARATIONS=1`,
+> landed `329c62b`) derives the pack schema's declared vocabulary and counts each subject's corpus
+> firings, producers and consumers. Run at HEAD it emits, without being asked about this RFC:
+>
+> | subject | firings | producers | consumers |
+> |---|---|---|---|
+> | `/feedbackClaims` | **50** | 0 | 8 |
+> | `/feedbackClaims/*/text` | **196** | 8 | 39 |
+> | `/feedbackClaims/*/evidenceTypes` | **196** | 0 | 5 |
+> | `…="author_principle"` | **82** | 0 | 3 |
+> | `…="corpus_observed"` | **60** | 0 | 1 |
+> | `…="derived_feature"` | **43** | 0 | **0** |
+> | `…="tablebase_exact"` | **37** | 0 | 2 |
+> | `…="hypothesis"` | **24** | 0 | **0** |
+> | `…="engine_validated"` | **8** | 0 | 7 |
+> | `…="human_model_predicted"` | **0** | 0 | **0** |
+>
+> **Every count matches the hand-derived census above, from a different code path.** Two things
+> follow that this RFC uses rather than merely notes. **(a) The census is adopted as criterion 2's
+> corroborating instrument** — it is a shipped, repeatable derivation of the denominator, where the
+> previous rounds re-derived it with a throwaway script each time. **(b) `derived_feature` (43
+> firings) and `hypothesis` (24) have zero consumers today, and C8 gives them one**: they are
+> interpolated into the `<declared>` set of the third provenance line. That is a mechanically
+> observable consequence of this RFC landing, and criterion 2 records it. **What the census does
+> *not* answer is [[D430]]** — `MACHINE_LABELS` is a module-private const in
+> `apps/server/src/sourcing/claim-binding.ts`, not a declaration in any of the census's four
+> namespaces (`schema`, `error`, `assistance`, `runtime`), so the dead `explorer_frequency`
+> alternative stays invisible to it.
+
 **(d) One dead alternative in the shipped map, and it is worth naming because it will mislead the
 wave.** `MACHINE_LABELS` (`claim-binding.ts`) maps `corpus_observed` to
 `["explorer_frequency", "explorer_position_census"]`, but **no assertion kind can ever return
@@ -457,7 +635,10 @@ through `uniqueRecord(ledger.records, "explorer_position_census", fen)` and retu
 never back a `corpus_observed` label through a binding, and the same dead alternative is mirrored
 in `check.ts`'s map and in `expression-census.ts`. Harmless today (0 records of either kind) and
 misleading the moment someone tries to pay the `corpus_observed` debt with the older record kind.
-**Ledger row proposed, not claimed here.**
+**This landed as [[D430]] — *`explorer_frequency` is a dead alternative inside a live map* — which
+is open and is not claimed here.** §2.5 records the consequence for the implementer: the map is
+module-private, so `earnedEvidenceTypes` must export it rather than add a fourth copy of the same
+dead alternative.
 
 #### 1.3 The compare strip — what it computes, and what it discards
 
@@ -490,7 +671,8 @@ Four properties, all verified, all load-bearing:
    half is generic by construction* finding, in the one place where a parameter is available and
    thrown away.
 4. **It is twice-gated, and the RFC says so rather than overstating the harm.**
-   `CompareView.svelte:91` renders the strip inside a closed `<details><summary>Structure and
+   `CompareView.svelte:135` (re-verified at HEAD; it was `:91` when the draft was written) renders
+   the strip inside a closed `<details><summary>Structure and
    timing</summary>`, and the compare view itself is opened by the learner. So
    `rfc/live-marker-quality.md`'s L1–L6 — the standing admission rule for anything that speaks
    **unasked** — **does not bind this surface**, and this RFC does not pretend it does. What binds
@@ -549,8 +731,8 @@ A claim has no anchor (§1.1c). Three routes exist and two are refused:
   or by a validated instrument. **No inferred anchoring, in this RFC or a later one, without an
   authored or ledger-recorded basis.**
 - **Refused for now: require an authored anchor.** Adding `at` to `$defs/feedbackClaim` is a
-  pack-schema change (**the next free lane is `0.28`, and `rfc/graduation-clearance.md` is holding
-  it; see §5.1**) *and* a **196-claim** authoring wave, and it would deliver **zero** claims until
+  pack-schema change (**the next free lane is `0.29`; `0.28` is claimed and held by
+  `rfc/graduation-clearance.md` — see §5.1**) *and* a **196-claim** authoring wave, and it would deliver **zero** claims until
   that wave completes. Q8's verdict is that the remedy is delivery, not authoring; spending a
   schema number and an authoring wave to deliver nothing today is the opposite trade. **This
   refusal is now much closer than it was** — see §2.2c's accepted cost and Open question 4.
@@ -871,6 +1053,26 @@ computation**, and it is the only place this RFC touches `pack-registry.ts` (§5
 accordingly: this RFC reads the fields and widens exactly one). Where no binding exists,
 `earnedEvidenceTypes` is empty and C8's third form applies.
 
+> **Two shipped facts the implementer will hit in the first hour, both re-read at HEAD and neither
+> stated by the previous rounds** `[V]` `[2026-08-16]`.
+>
+> **(a) `MACHINE_LABELS` is not exported.** It is a module-private `const` in
+> `apps/server/src/sourcing/claim-binding.ts`, beside the equally private `MACHINE_TOKEN`,
+> `RATE_TOKEN` and `segments`; the module's exports are `CLAIM_ASSERTION_KINDS`,
+> `ValidatedClaimBinding`, `validateClaimBindings` and `claimBindingForPointer` and nothing else.
+> The `earnedEvidenceTypes` derivation therefore needs it **exported**, not copied — a second copy
+> of a label→kind map is the defect [[D430]] already records three times over (`claim-binding.ts`,
+> `check.ts`, `expression-census.ts` each hold one, and all three carry the same dead
+> `explorer_frequency` alternative). **Export the existing const; do not add a fourth copy.**
+>
+> **(b) `authorSpans` is not the same shape on both arms of `claimBackings`, and C4's comment must
+> not be read as if it were.** `pack-registry.ts` writes `authorSpans: binding.authorSpans` on the
+> binding arm — which `validateClaimBindings` sets to `authorSegments`, the **cut segments** — and
+> `authorSpans: [claim.text]` on the `author_principle`-without-machine-label arm, which is the
+> **whole sentence as one span**. Both are correct for their case and C8 renders neither as a list,
+> but a surface that assumes "segments" gets a one-element array of the entire claim for **66 of the
+> 67** rows the map holds today (§0.1). Stated so it is designed for rather than discovered.
+
 `KIND_ORDER` (`:112`) gains `claim: 4`, after `theory_verdict`, so claim prose sorts last within an
 occurrence — an author's judgement is the last thing said, beneath the derived facts, which is the
 ladder's own ordering (rung 5 sits above rungs 0–4 in *what it can get wrong*).
@@ -889,6 +1091,15 @@ Three edits, none of which introduce a new data source:
    `revealed` map and therefore inheriting deduplication, freezing, ordering and `revealedBy`
    attribution unchanged. Running it after the loop rather than inside it is what makes (iii)
    one line: the loop has already established which occurrences `revealIsReleased` admits.
+   **One honesty correction re-read at HEAD** `[V]` `[2026-08-16]`: the loop **discards** that
+   information as it goes — it is written `for (const reveal of revealEvents(pack, run)) { if
+   (!revealIsReleased(pack, run, reveal)) continue; … }` and keeps no reference to the last admitted
+   `reveal`. So (iii) is *one assignment inside the existing loop* (`latest = reveal`) plus its read
+   after, not a free read of an existing variable. It remains true that **no new predicate, index or
+   I/O is introduced**, which is what the sentence was claiming; it is not true that nothing is
+   added. Note also that `items` sorts by `revealedBy.eventSeq` **before** `KIND_ORDER`, so C4's
+   `claim: 4` orders claims last **within one occurrence** — which is exactly what §2.5 says and is
+   worth confirming rather than assuming, because a reader could take it for a global ordering.
 2. **`deliverable` (`:268`) gains the admitted claim ids** (§3.2), so
    `hasWithheldAuthoredContent` (`:369`) keeps its meaning. Note the practical
    consequence C1's exhaustion predicate creates: an admitted claim is in `deliverable` from the
@@ -911,10 +1122,16 @@ Three edits, none of which introduce a new data source:
    `authorSpans` and empty `principles`.** That is the correct value — the claim carries no
    machine-checkable label, so C6 admits it, and no record is attached — but it is the value of a
    *missing map entry*, which is exactly how a fail-open bug is written. Criterion 3 tests it in
-   both directions and criterion 18 pins the count.
+   both directions and criterion 18 pins the count. **The registration asymmetry itself landed as
+   [[D431]] — *31 claims reach delivery through a map entry that is never written* — which is open
+   and is not claimed here; this RFC fixes the consequence, not the asymmetry.** Re-derived at HEAD
+   `[V]` `[2026-08-16]`: the fall-through set is **exactly** the 31 `derived_feature`-only claims —
+   not merely coextensive with them by coincidence but equal to them, because the 97 admitted claims
+   with no machine label split 66 carrying `author_principle` (arm two) and 31 carrying
+   `derived_feature` alone.
    *(The narrower question — whether a claim whose only label is the rung-0 `derived_feature` should
    carry `author_principle` too, and therefore a principle reference — is an **authoring** question
-   about 31 claims, not a delivery question, and this RFC does not take it. Ledger row proposed.)*
+   about 31 claims, not a delivery question, and this RFC does not take it. Open question 8.)*
 
 **Cost: no new I/O, no new event, no new table, no new endpoint.** `GET /runs/:id/authored-feedback`
 (`apps/server/src/rest.ts:1010`) returns a longer `items` array of the same shape.
@@ -996,8 +1213,20 @@ delivered share — and its changelog repeats it. `claim-backing` §6 then *reta
 voice, on its own reasoning (*"both existed only to soften a permanent refusal"*), in a section
 about a document it does not own. So the ruling authorises striking C6′ and C6″, whose premise is
 gone; it **does not select C6**, and no primary source shows the owner choosing it. C6 is right on
-the merits argued in this section and it is what this RFC specifies — but it is **not owner-ruled**,
-and the residual decision it leaves is Open question 1's narrowed sequencing question.
+the merits argued in this section and it is what this RFC specifies — but the 2026-08-15 ruling is
+**not** its authority.
+
+> **The 2026-08-16 ruling is, and it is quoted rather than characterised**
+> `[final author pass 2026-08-16]`. [[D462]] (`4ca7792`) answers the sequencing question C6's
+> retention left behind: ***"Ship the surface, then run the binding wave before anyone plays."***
+> That is a ruling **for shipping C6's admission rule now**, on the express condition that the wave
+> follows it before a learner arrives — which is precisely what the 2026-08-15 refusal of a 49.0%
+> share was refusing to accept as a *destination*. **The two rulings do not conflict; the second
+> supplies the condition the first found missing.** The residual decision is gone; what replaces it
+> is an obligation, specified in §0 and pinned by criteria 21–23. This paragraph is kept, unaltered
+> above the line, because the failure it recorded — closing a question by citing a ruling that says
+> the opposite — is one this document committed once and must not commit again while quoting a
+> ruling in its favour.
 
 **Why C6 is the right shape and not merely a strict one.** Once C1 ships, an unbacked
 `corpus_observed` label is no longer a note in a file: it is a **false provenance statement shown to
@@ -1113,7 +1342,10 @@ record kind in the corpus:
   `disposition: "refused"`, reason *"No loadable pack producer emits this position-census record
   kind"* — a **corpus fact frozen as a runtime disposition**. It is true today and becomes false the
   moment the wave runs, and `assertRecordedReadingDispositions` will not catch it because the table
-  is complete either way. Recorded here; **ledger row proposed, not claimed.**
+  is complete either way. **This landed as [[D432]] — *`RECORDED_READING_DISPOSITIONS` freezes a
+  corpus FACT as a runtime disposition* — which is open and is not claimed here.** It is a
+  **stage-2 hazard rather than a stage-1 one**: the disposition becomes false the moment §0.2's
+  instrument run lands, so whoever runs the wave inherits it, and criterion 22's brief carries it.
 **Verdict: payable, and it is the biggest single wave in the corpus.**
 
 **`author_principle` — 82 claims across 35 packs, resolving to 12 of the 13 shipped registry
@@ -1175,7 +1407,8 @@ lie inside a token-free segment. One caveat, recorded rather than relied on: the
 locates each segment with `claim.text.indexOf(segment)`, which takes the **first** occurrence, so a
 claim with two identical segments would compare an instrument range against the wrong window. No
 corpus claim has duplicate segments today, and the direction of the error would only ever
-under-count. **Ledger row proposed, not claimed here.***
+under-count. **This landed as [[D445]] — *`authorSegments` locates spans with `indexOf`, so a
+repeated sentence is measured against the wrong window* — which is open and is not claimed here.***
 
 **Those 63 cannot be bound by any ledger addition.** Their remedy is an edit to the *pack*: add
 `author_principle` to `evidenceTypes` and name a `principles` entry. That is a content change to 63
@@ -1201,6 +1434,13 @@ still have no assertion able to produce it — so **63 is a floor and 83 is the 
    (`check.ts`, severity **warning**). It does **not** raise `CLAIM_TEXT_DRIFTED`, because
    `textSha256` digests `claim.text` and the text is untouched — so existing bindings survive the
    edit. This RFC still changes no pack byte itself (§5.1 stands); the wave it prices does.
+   **And the stale digest cannot withhold a claim, which is worth stating because C6 reads a set
+   that a nearby warning might be assumed to poison** `[V]` `[2026-08-16]`. `EVIDENCE_DIGEST_STALE`
+   is raised in `checkSourcingFile`, a CLI path; `pack-registry.ts` calls `validateLedger` (shape
+   validation only, no digest test) and then `validateClaimBindings`, whose admission gate
+   `if (issues.length === before)` captures `before` **inside** the per-binding loop, so no
+   pre-existing issue on the array can keep a claim out of `boundClaimIds`. **The re-stamp is a
+   `sourcing-check` hygiene obligation on the wave, not a delivery blocker.**
 
 #### 3.3 C7 — where binding is computed, and it has already shipped
 
@@ -1301,8 +1541,11 @@ grade nothing.
 today** — **97 of the 98** admitted claims are `self_declared` (§3.2), so *"No machine record is
 attached"* is what a learner reads on all but one claim at day zero. That is the axis Q8 says we win
 on, and C8 keeps winning it while shipping more prose than zero. *(The previous revision called this
-"the second form" while describing the third; corrected at cross-review, and it is the sentence
-Open question 1's narrowed sequencing question turns on.)*
+"the second form" while describing the third; corrected at cross-review. This is the sentence Open
+question 1's sequencing question turned on, and the 2026-08-16 ruling's answer is that **no learner
+ever reads it** — the wave runs before anyone plays. **97-of-98 is therefore a day-zero property
+with an expiry, not a shipped experience**, which is exactly why §0.3 gives the expiry a trip and
+criterion 23 checks it. If the trip fires, this sentence is what a learner actually got.)*
 
 Surfaces: `apps/web/src/lib/TerminalSheet.svelte` (the `{#each authoredItems}` arm chain, `:49-52`
 at `158ba47`) gains a `claim` branch, and `apps/web/src/lib/CheckpointSheet.svelte` gains the same
@@ -1591,9 +1834,15 @@ class of drift this morning.)*
   digests content, not the `$id`). The draft said the next free lane was 0.25; **five lanes have
   landed or been claimed since** — 0.23 `engine-leverage`, 0.24 `vocabulary-wiring`, 0.25
   `archive/format-surface.md`, **0.26 `archive/claim-backing.md`**, 0.27 `archive/pack-graduation.md`
-  — and **0.28 is the next free lane, currently held by `rfc/graduation-clearance.md`**. §2.1 and
-  Open question 4 are corrected to say so. This RFC claims none of them and is unaffected by their
-  landing order.
+  — and **`0.29` is the next free lane; `0.28` is claimed and held by
+  `rfc/graduation-clearance.md`**. §2.1 and Open question 4 are corrected to say so. This RFC claims
+  none of them and is unaffected by their landing order.
+  *(Corrected at this pass: the previous revision wrote **"0.28 is the next free lane, currently held
+  by `graduation-clearance`"**, which is self-contradictory — a held lane is not free — and it is
+  **the same sentence shape [[D461]] corrected in `rfc/README.md` itself**, where the register's
+  next-free row read `0.28` four lines below the row claiming and keeping it. The register at HEAD
+  is unambiguous: `0.28 | graduation-clearance.md | claimed and held by a draft returned to author`,
+  then `— | **0.29 is the next free pack lane**`.)*
 - **Migration: nothing.** No table, no column, no `STORAGE_VERSION` bump, no run-schema stamp.
   `STORAGE_VERSION` is **23** (`apps/server/src/storage.ts`) and **migration 23** is the head
   (`opponent-contracts`, run schema 0.16→**0.17**); `DRILL_RUN_SCHEMA_VERSION` is **`"0.17"`**. The
@@ -1602,20 +1851,28 @@ class of drift this morning.)*
   (`teacher-surface`, `opponent-contracts`, `learner-rating`) hold one migration position as
   `STORAGE_VERSION + 1`, and the register cannot see the collision.** Adding a further silent holder
   would make this RFC part of that defect rather than a reader of it.
-  *(Corrected at cross-review 2026-08-16: **D423's collision is two-way, not three-way.**
-  `opponent-contracts` **landed** its migration at 23 today (`6ba0736`; `storage.ts` carries
+  *(Corrected at cross-review 2026-08-16: **D423's contest is two documents, not three.**
+  `opponent-contracts` **landed** its migration at 23 (`6ba0736`; `storage.ts` carries
   `version: 23`, run schema 0.16→0.17, and `STORAGE_VERSION = 23`) and is no longer a *holder* — it
   is the head. `teacher-surface` and `learner-rating` remain, both holding a position rather than an
-  integer. **This RFC would have been the third silent holder, not the fourth.** Two registers
-  disagree with this and both are stale rather than wrong-in-substance: `rfc/README.md`'s migration
-  register still lists 21 and 23 as "implementing" and `rfc/opponent-contracts.md` is still in
-  `rfc/` rather than `rfc/archive/`; and `rfc/learner-rating.md` §9 still reads *"three active
-  documents hold `STORAGE_VERSION + 1`"*. **The shipped `storage.ts` is the arbiter and it says
-  two.** Neither is this RFC's to fix — both are named in the cross-review report.)*
-  *(Freshness note: HEAD moved twice during this cross-review — `graduation-clearance` is now
-  **accepted** (`3a24d6d`), which strengthens rather than changes its hold on lane 0.28, and
-  `learner-rating` was revised (`8157803`). Neither touches anything this RFC claims, because this
-  RFC claims nothing.)* No new event type either: claim
+  integer. **This RFC would have been the third silent holder, not the fourth.**
+  **The shipped `storage.ts` is the arbiter, it is re-read at HEAD, and it still says 23.** That is
+  deliberately the citation: `opponent-contracts`'s archival was in flight during this pass, so a
+  claim about which directory its file sits in would be stale before this sentence was finished,
+  while a claim about `STORAGE_VERSION` is not. **D423's own row has since been sharpened past this
+  correction and disagrees with it in a way that is not a contradiction**: its addendum records that
+  *"the register counts DOCUMENTS and should count CLAIMS"*, so by document the contest is
+  `teacher-surface` + `learner-rating`, and by claim it is four, because `learner-rating` carries two
+  independent table sets by itself. That row also names **this** RFC as having taken **no** migration
+  position deliberately, which is the discipline working. None of it is this RFC's to fix.)*
+  *(Freshness note, rewritten at the final author pass because the cross-review's version is now
+  false `[V]` `[2026-08-16]`: `graduation-clearance` was accepted at `3a24d6d`, **returned to author
+  at `8c389f0` after implementation review** on four contract blockers ([[D464]]–[[D467]]), and has
+  since completed a second author round. **Its hold on lane 0.28 is unaffected by any of that** —
+  the register's row says the lane stays reserved while the blockers are corrected. `learner-rating`
+  was revised (`8157803`). None of it touches anything this RFC claims, because this RFC claims
+  nothing — which is the point of stating the register facts rather than depending on them.)*
+  No new event type either: claim
   delivery is a *projection* over the run's existing events and reveal occurrences — C1 persists
   nothing, and projections are never persisted — the same reasoning `archive/shape-library.md` used
   to keep run schema at 0.8 for firings.
@@ -1712,9 +1969,11 @@ records are `engine-leverage`'s, entirely**, and it says so from its side: *"`rf
 #### 5.4 `rfc/client-surface-floor.md` — no geometry, no CSS
 
 CR4's `CompareView.svelte` edit is a single render expression inside the existing `<details>` at
-`:91`. It adds **no `@media` rule**, changes no selector, and moves no element. The file contains
-**zero** `@media` rules today (verified: `grep -c "@media"` returns 0; the whole `<style>` block is
-one minified line at `:128`) and CR4 adds none. Criterion 10 pins it.
+**`:135`** (`:91` when the draft was written; re-verified at HEAD). It adds **no `@media` rule**,
+changes no selector, and moves no element. The file contains
+**zero** `@media` rules today (verified at HEAD: `grep -c "@media"` returns 0; the whole `<style>`
+block is one minified line, now at **`:166`**, not the draft's `:128`) and CR4 adds none.
+Criterion 10 pins it.
 
 **The draft cited a criterion that does not exist, and understated the real interaction.**
 
@@ -1728,7 +1987,7 @@ one minified line at `:128`) and CR4 adds none. Criterion 10 pins it.
 - **That criterion is self-scoped, so CR4 does not break it** — the conclusion the draft reached is
   right. But `client-surface-floor` §8 states the *intent* behind it: *"a promise not to touch
   `CompareView.svelte`, held by criterion 12, so that whoever picks up **D63** inherits the file
-  unmoved."* **CR4 moves it.** D63's future owner inherits one changed markup expression at `:91`
+  unmoved."* **CR4 moves it.** D63's future owner inherits one changed markup expression at `:135`
   and an unchanged `<style>` block. That is a real, if small, cost to another RFC's stated plan and
   it is recorded here rather than left for D63's owner to discover.
 
@@ -1855,11 +2114,22 @@ this RFC names, which is exactly why a symbol sweep missed it.
    `CompareView`, `authoredText` or `guidance.ts`. **The interface is semantic, not textual**, and
    neither RFC blocks the other.
 
-*(Also swept and clear: `rfc/dead-vocabulary.md` — accepted 2026-08-16, claims nothing versioned,
-report-only, zero symbol overlap. `rfc/graduation-clearance.md` — holds pack lane 0.28; reads
-`boundClaimIds`/`claimBackings` read-only as empty on unverified packs, which agrees with §3.3's
-fail-closed fallbacks. `rfc/learner-rating.md` — its R15 prohibits any `feedbackClaims` assertion
-argument as a rating input, a constraint on this RFC's data rather than a collision with it.)*
+*(Also swept and clear, **re-checked at HEAD `6722130` because three of the four moved**
+`[V]` `[2026-08-16]`: `rfc/dead-vocabulary.md` — **now `implementing`, not `accepted`**: its
+declaration census landed at `329c62b` as `apps/server/src/declaration-census.ts` behind
+`DECLARATIONS=1`, and it still **claims nothing versioned**. Symbol overlap with this RFC's surface
+is **still zero** — `authored-feedback`, `AuthoredFeedbackItem`, `feedbackClaims`, `compare-strips`,
+`CompareView`, `StripEntry`, `boundClaimIds` and `claimBackings` occur zero times in it. What
+changed is not a collision but an **instrument**: §1.2(c) adopts its census as criterion 2's
+corroborating derivation of the claim denominator, and records that C8 gives `derived_feature` and
+`hypothesis` their first consumers. `rfc/graduation-clearance.md` — **returned to author at
+`8c389f0`** on [[D464]]–[[D467]] and now through a second author round; it **still holds pack lane
+0.28**, and it still reads `boundClaimIds`/`claimBackings` read-only as empty on unverified packs,
+which agrees with §3.3's fail-closed fallbacks. `rfc/opponent-contracts.md` — implemented at
+`6ba0736`, hardened at `d77a9f1` / `2d564cb`, **clear to archive**; it is the migration head at 23
+and touches nothing here (§5.1). `rfc/learner-rating.md` — its R15 prohibits any `feedbackClaims`
+assertion argument as a rating input, a constraint on this RFC's data rather than a collision with
+it.)*
 
 ## Deviations from design
 
@@ -1957,6 +2227,12 @@ used as-is.
    the draft and this round, and a criterion that pins "98 of 196" is unfalsifiable against the next
    corpus. This is an admission count and is independent of C1 — do not conflate it with how many
    claims a *run* delivers, which criterion 6 measures.
+   **It is measured at BOTH stages** (§0.1): once at stage 1, where 98/196 is the *starting* number,
+   and again at stage 2, where criterion 21 reads it. The denominator is corroborated by
+   `make expression-census DECLARATIONS=1`, whose `/feedbackClaims/*/evidenceTypes/*="…"` firings are
+   the label census by an independent derivation (§1.2c); the same run records that `derived_feature`
+   (43 firings) and `hypothesis` (24) went from **0** consumers to one, because C8 interpolates them
+   into `<declared>`.
 2a. **The admitted set is cross-checked against `make expression-census`, and the comparison is
     stated at the right granularity — the previous revision's equality was unsatisfiable.**
     `[cross-review 2026-08-16]` The previous form required *"admitted count minus `self_declared`
@@ -1982,6 +2258,13 @@ used as-is.
     (c) The two totals are recorded side by side with the multi-label claims listed separately, so
     the citation-sum inflation is visible rather than mistaken for a disagreement. A divergence with
     **no** named refusal behind it is the finding; a fully explained divergence is the pass.
+    **And the day-zero run of this criterion is recorded as vacuous rather than as a pass.** The
+    joined set is a **singleton** today (`philidor-third-rank-hold/philidor-is-drawn`), so the subset
+    assertion holds trivially and part (b) selects an empty set — which is the second standing
+    hazard, *a criterion that passes while measuring nothing*, arriving in the criterion written to
+    fix the first one. **It becomes a real measurement at stage 2 and nowhere earlier**, so it is run
+    at both stages and its stage-1 result is written into `planning/feedback-delivery/` with the word
+    *vacuous* against it. [[D444]] is the row.
 3. **C6 fails closed, in three directions.** (a) A pack with a `corpus_observed` claim and no
    `.evidence.json` withholds it — **and this is a real population now, not a constructed one: 15
    packs carry 39 machine-labelled claims with no sidecar at all** (§3.2). (b) Adding a validating
@@ -2013,7 +2296,19 @@ used as-is.
    reported with its definition spelled out** — *(played-move firing rate) ÷ (within-position mean
    share of quiet alternatives that also fire)* — because the harness does not print it and §1.3
    records that it is recoverable only by hand `[cross-review]`. **The committed
-   `q8-output.md` is not an acceptable baseline**: it is a 37-pack artefact (§1.3).
+   `q8-output.md` is not an acceptable baseline**: it is a 37-pack artefact (§1.3) — re-confirmed at
+   HEAD, where the harness still reports 634 transitions and 5,266 entries in the committed file and
+   **overwrites it with the 754/6,659 run when executed**, so a re-runner must restore it afterwards
+   or land a separate correction; that artefact is a ledger row's to fix, not this RFC's.
+   **Where the N = 4 and N = 8 columns come from must be decided by the implementer, and this RFC
+   does not pretend they are free** `[final author pass 2026-08-16]`. The Q8 harness measures
+   **authored fork pairs** — 62 of them at HEAD — which is **N = 2 only**; the corpus contains no
+   4-way or 8-way authored fork. The N = 4 and N = 8 measurements therefore require runs constructed
+   for the purpose (branch a fork four and eight ways through the shipped runtime, up to
+   `MAX_COMPARISON_BRANCHES = 8`), which is the same instrument the kill gate needs in criterion 6
+   and should be built once. **Reporting only N = 2 does not satisfy this criterion**, because CR5's
+   whole point is that CR1's selectivity is weakest at N = 8 and criterion 16's reopening threshold
+   is defined there.
 6. **C1's reach is measured, and the result is blocking — the kill gate.** Over the corpus
    walkthrough set, record (a) the share of walkthroughs that reach any `outcome.reached`, (b) the
    share that satisfy C1's **exhaustion predicate** — the number that actually governs delivery —
@@ -2029,6 +2324,20 @@ used as-is.
    and full-spine exhaustion is attainable by learner action alone in **33 of 50 packs, 129 of 196
    claims (65.8%)**, down from 71.0% (§2.2c). **The gate threshold is unchanged at 10% and is not
    renegotiated by either movement.**
+   **The instrument does not exist and the implementer must build it — stated here because a kill
+   gate whose measurement has no named producer is a gate that will be skipped**
+   `[final author pass 2026-08-16]` `[V]`. There is **no corpus-walkthrough harness in this
+   repository**: `tools/` holds fourteen question-scoped harnesses and none of them plays runs
+   (`grep -rl walkthrough tools/ apps/server/src packages/` returns nothing), and
+   `apps/server/src/corpus.ts` is the Lichess explorer client, not a run driver. What criterion 6
+   needs is a **disposable harness under `tools/`**, labelled research tooling and tied to this
+   criterion per `rfc/0000-rfc-process.md` §Exploration gate, that drives runs through the shipped
+   runtime and reports (a), (b) and (c). Two properties of the thing being measured set its cost and
+   neither is optional: it must **rewind and branch**, because 14 of 50 packs are exhaustible only
+   that way; and it must **drive the opponent policy across attempts**, because **17 of 50 packs'
+   exhaustion depends on the opponent playing each authored reply** and the learner cannot force it
+   (§2.2c). A harness that plays each pack's mainline once measures the **19**-pack single-line class
+   and reports a share that is wrong in the direction that trips the gate.
 7. **CR3's degenerate cases are tested**: `N < 2` emits the unfiltered strip; identical branches
    emit an empty strip and the existing empty state.
 8. **The anti-contamination boundary holds.** `drill-client-server.test.ts:158`
@@ -2050,8 +2359,12 @@ used as-is.
     by this RFC's commits"*) is self-scoped and CR4 does not break it, but D63's future owner still
     inherits one changed markup expression, as §5.4 records.
 11. **The ledger and the log are updated in the archiving commit** (`AGENTS.md` RFC completion
-    protocol). Precisely, and rewritten in this round because half the rows moved:
-    **D77** flips to ✅ with the admission split **and C1's measured reach** named, and its
+    protocol) — **which is stage 2's commit, not stage 1's** (§0.1). Stage 1 lands the surface and
+    leaves every row below **open**, because a row flipped to ✅ on the day-zero share would record
+    50.0% as the outcome of a wave that had not run. Precisely, and rewritten in this round because
+    half the rows moved:
+    **D77** flips to ✅ with the **end-of-wave** admission split **and C1's measured reach** named
+    — not day zero's 98/196, which criterion 21 keeps beside it as the starting measurement — and its
     *"0 of 131 … 22.1% of a 202,479-character authored prose corpus"* text is corrected in the same
     edit — the corpus is **196 claims / 61,531 chars over 50 packs**, and the percentage is retired
     rather than refreshed because its denominator has moved twice (§Summary);
@@ -2078,9 +2391,13 @@ used as-is.
     `rfc/README.md`'s pack-schema and migration registers are unchanged by this RFC, and the Active
     row it eventually gets says **claims nothing versioned**. At implementation time the implementer
     re-reads `DRILL_PACK_SCHEMA_VERSION`, `DRILL_RUN_SCHEMA_VERSION` and `STORAGE_VERSION` from the
-    tree rather than from §5.1 — they were 0.22/0.15/20 in the draft and are **0.27/0.17/23** now —
-    and asserts this RFC moved none of them. **No migration position is taken**, which also keeps
-    this RFC out of [[D423]]'s three-way `STORAGE_VERSION + 1` collision.
+    tree rather than from §5.1 — they were 0.22/0.15/20 in the draft, and are **0.27 / 0.17 / 23**,
+    re-verified at HEAD `6722130` — and asserts this RFC moved none of them. It likewise re-reads
+    the **next free pack lane** rather than quoting it: `0.29` at HEAD, with `0.28` claimed and held
+    by `graduation-clearance`. **No migration position is taken**, which also keeps this RFC out of
+    [[D423]]'s `STORAGE_VERSION + 1` contest — **which is two documents at HEAD, not the three the
+    draft said**, and four by that row's own claim-counting addendum. The criterion is that this RFC
+    joins it at neither count.
 14. **The index-pointer hazard is pinned — superseded form.** The draft's reorder test (*"fails
     `sourcing-check` or demotes to `self_declared`"*) is **replaced** by `claim-backing`'s stronger
     closure, which this RFC asserts from the delivery side: reordering a pack's `feedbackClaims`
@@ -2120,7 +2437,10 @@ used as-is.
     A test asserts that the three rendered provenance lines contain no `BANNED_JUDGEMENTS` and no
     `PRESCRIPTIVE_VERBS` word for every projected `claimBackings` row in the corpus — including the
     principle `statement` and `counterCase` fields, which are authored prose interpolated into a
-    frozen template. **The author's claim sentence is explicitly out of this criterion's scope**
+    frozen template. **The population is 67 rows at day zero** `[V]` `[2026-08-16]` — 1 written by
+    `pack-registry.ts`'s binding arm and 66 by its `author_principle`-without-machine-label arm — so
+    this criterion selects a real set now and not only at wave end; the count is re-derived at
+    implementation. **The author's claim sentence is explicitly out of this criterion's scope**
     (66 of 196 carry a judgement word), because [[D421]] establishes that authored prose has no gate
     and this RFC does not build one.
 20a. **No provenance line asserts a record for a label no instrument earned.** `[cross-review
@@ -2134,13 +2454,88 @@ used as-is.
     so this is a real set at wave completion and a singleton today; the count is re-derived at
     implementation. This criterion exists because rung 5 has no review workflow, so an overstated
     provenance line is the failure of the only safeguard `design/05:76` grants it.
+21. **THE COMPLETION CRITERION — the acceptance record carries the delivered share at the END of the
+    wave, and this RFC is not `implemented` before it does.** *(Owner ruling 2026-08-16, [[D462]]
+    obligation 1.)* `planning/feedback-delivery/` records the admission measurement **twice**: at
+    stage 1 with the label *starting measurement* (98 of 196 claims, 26,735 of 61,531 characters at
+    `[2026-08-16]`, re-derived not quoted), and again at stage 2 from the **same shipped predicate**
+    over the **same shipped code**. The status transition to `implemented`, the move to
+    `rfc/archive/`, and criterion 11's ledger flips all hang on the second record existing.
+    **What the criterion demands is not a share.** §3.2 and Open question 1 both establish a
+    genuinely permanent residue (`claim-backing` §4 Bucket 3), so *"N% delivered at wave end"* would
+    be **unsatisfiable by construction** — the failure mode this document has already committed once,
+    in criterion 2a's withdrawn equality. What is demanded instead:
+    **(a)** the stage-2 admitted/withheld counts and character counts, beside the stage-1 pair, with
+    the delta stated;
+    **(b)** **every** claim still withheld at stage 2 is listed with a **named reason**, never a
+    residual count — and the reason takes one of exactly **two** forms, because `validateClaimBindings`
+    cannot supply one for both. **(b-i) A binding was declared and refused**: list the
+    `SourcingIssue` code(s) it raised (`CLAIM_ASSERTION_UNRECORDED`, `CLAIM_CENSUS_INCOMPLETE`,
+    `CLAIM_FEN_OFF_PACK`, `CLAIM_AUTHOR_LABEL_REQUIRED`, `CLAIM_SPAN_CONTRADICTED`, …).
+    **(b-ii) No binding was declared at all**: `validateClaimBindings` iterates
+    `ledger.claimBindings` and **raises nothing for a claim nobody wrote a binding for** — re-read at
+    the symbol `[V]` `[2026-08-16]` — so demanding an issue code here would be *unsatisfiable for
+    exactly the claims the wave did not reach*, which is the failure this criterion was written to
+    avoid. The named reason for these is the state itself, *no binding declared*, plus **which of
+    §0.2's three kinds of work would supply one** (an instrument run, a pack edit, or a prose fix).
+    All 98 withheld claims are in (b-ii) today, and 0 are in (b-i).
+    **A withheld claim with neither form of reason is the finding and blocks the transition.**
+    **(c)** each named reason is classified as *permanent* (no instrument in this repository can
+    produce the record; cross-ledger citation) or *deferred* (the wave chose not to pay it), and a
+    *deferred* classification names who holds it. The wave is allowed to end incomplete; it is not
+    allowed to end unaccounted.
+    **The set this criterion selects is non-empty today by 98 claims**, so it cannot pass vacuously
+    at stage 2 unless the wave delivered everything, which §3.2 says it cannot.
+22. **The wave is commissioned as three kinds of work, and its own count is re-derived rather than
+    inherited.** *([[D462]] obligation 2.)* Before stage 2 begins, its brief enumerates all three
+    populations of §0.2 — instrument runs, **pack edits**, and prose fixes — and re-derives each from
+    the corpus at that moment rather than from this document. The pack-edit population is the one
+    that must not be lost: **63 of the 98 withheld claims provably trip
+    `CLAIM_AUTHOR_LABEL_REQUIRED`, floor, with 83 the ceiling** (§3.2a), and their remedy is an edit
+    to `content/drafts/*.json` — `evidenceTypes` gains `author_principle` and `principles` names a
+    registry entry — not a ledger entry. A brief that prices only the two instrument runs is
+    **rejected as under-scoped**, because it would miss roughly two thirds of its own work.
+    Two supporting facts are re-derived with it: **all 13 `content/principles/` entries list all
+    three phases**, so `CLAIM_PRINCIPLE_OFF_PHASE` cannot refuse any of the 63 (§0.2); and the 63
+    span **33 packs**, so the edit is a corpus-wide pass rather than a few files. Because (b) and (c)
+    change pack bytes, the wave carries **`AGENTS.md`'s content closeout** — ledger rows and a
+    `planning/content-era/log.md` entry **in the commit that ships the content** — and its brief says
+    so. It also carries the two rows that go stale on the wave's own success: **[[D432]]**
+    (`RECORDED_READING_DISPOSITIONS` records `explorer_position_census` as `refused` because *"no
+    loadable pack producer emits"* it — false the moment the explorer pass runs, and
+    `assertRecordedReadingDispositions` cannot catch it) and **§3.2a item 3** (an `evidenceTypes`
+    edit moves `digestDrillPack`, so every existing sidecar raises `EVIDENCE_DIGEST_STALE` and must
+    be re-stamped; `CLAIM_TEXT_DRIFTED` does **not** fire, because `textSha256` digests the claim
+    text and the text is untouched). **This RFC does not author the wave**; criterion 22 is satisfied
+    by the brief existing, naming an owner, and carrying the three populations and these two rows.
+23. **The no-learner-sees-it premise is checked at stage 2, not assumed.** *([[D462]] obligation 3.)*
+    Stage 1's commit records in `planning/feedback-delivery/log.md` the current basis for the
+    ruling's premise — the `planning/exploration/log.md` line stating that nobody has played a run
+    since **2026-08-12**, with its date — and stage 2's measurement commit asserts that **no dated
+    entry appended to `planning/exploration/log.md` or `planning/content-era/log.md` in between
+    records a play session or owner walkthrough on a pack carrying `feedbackClaims`.** If one does,
+    the assertion **fails by design**: the premise is spent, a learner has met the day-zero
+    provenance state, and Open question 1's sequencing question is escalated to the owner as live
+    rather than re-decided by the implementer. **A failure here is not a bug to be fixed in the
+    code**; it is the condition §0.3 exists to make visible. The trip is documentary because it must
+    be: `main.ts` defaults `databasePath` to `":memory:"` and no run store persists, so there is no
+    event count to read (§0.3).
 
 ## Open questions
 
-1. **NARROWED 2026-08-16, not closed — the three-way fork is dead, and one owner question survives
-   it. `[cross-review 2026-08-16]` The author round closed this question outright; cross-review
-   re-read the primary sources and found the closure claimed more from the ruling than the ruling
-   says.**
+1. **CLOSED BY OWNER RULING 2026-08-16 ([[D462]], `4ca7792`) — and closed on the narrowed question,
+   not the dead one.** *The history is kept in full below because two of this document's worst
+   errors happened in it, and law 7's spirit applies to a superseded argument as much as to a log
+   entry.* The three-way fork died when `claim-backing` paid the debt it priced; the **sequencing**
+   question that survived it — ahead of the binding wave or behind — was put to the owner with both
+   arms priced, and answered **neither arm: both, in that order.** The ruling and its three
+   obligations are at the end of this entry; **§0 specifies them and criteria 21–23 pin them.**
+   Nothing here is re-asked.
+   *(Historical header, kept: "NARROWED 2026-08-16, not closed — the three-way fork is dead, and one
+   owner question survives it. `[cross-review 2026-08-16]` The author round closed this question
+   outright; cross-review re-read the primary sources and found the closure claimed more from the
+   ruling than the ruling says." That correction was right, and the ruling below is what answered
+   the question it re-opened.)*
 
    *The question was:* should an unbacked machine-checkable label **withhold** the claim (C6),
    **deliver it with a stated absence unless its text carries a cardinal number** (C6′), or
@@ -2221,19 +2616,33 @@ used as-is.
    one to receive it, and the *behind* arm's cost was a wave with no surface to validate against,
    which shipping first removes.
 
-   **What this ruling obliges, so it is not read as merely "do both":**
+   **What this ruling obliges, so it is not read as merely "do both". Each obligation is
+   SPECIFIED in §0 and PINNED by a criterion; the bullets below are the index, not the
+   specification** `[final author pass 2026-08-16]`:
 
    - **Job 1 is not "done" when it ships.** The wave is part of the same commitment, and the
      acceptance record must carry the delivered share **at the end of the wave**, not at day
      zero. Day zero's 98/196 (50.0%) is a *starting* measurement.
+     → **§0.1** makes it a two-stage landing (this RFC stays `implementing` between them, and
+     criterion 11's ledger flips move to stage 2's commit); **criterion 21** is the completion
+     criterion, and it demands a **named refusal for every still-withheld claim** rather than a
+     share, because a share would be unsatisfiable against the permanent residue §3.2 measures.
    - **The wave's scope is now known and is not only sourcing** — §3.2a's finding stands:
      **63 of the 98 withheld claims provably trip `CLAIM_AUTHOR_LABEL_REQUIRED`**, and their
      remedy is a **pack edit**, not a ledger entry. A wave planned as two instrument runs would
      miss two thirds of its own work.
+     → **§0.2** prices it as three kinds of work with each population measured, adds the two
+     facts this pass derived (no principle-phase gap blocks the 63; they span 33 packs), and
+     records that (b) and (c) make the wave a **content wave** with `AGENTS.md`'s content
+     closeout; **criterion 22** rejects an under-scoped brief.
    - **The no-learner-sees-it property is an obligation with an expiry.** It holds only while
      nobody plays. If a play session happens before the wave completes, the ruling's premise is
      gone and this question is live again — **stated here so that is noticed rather than
      discovered.**
+     → **§0.3** states the condition and its **named trip**, which is documentary rather than a
+     runtime counter because `main.ts` defaults `databasePath` to `":memory:"` and no run store
+     persists; **criterion 23** asserts it at stage 2, and a failure there escalates to the owner
+     rather than being fixed in code.
 
    **The delivery rule, unchanged by the narrowing and stated once so nothing has to be inferred:**
 
@@ -2298,8 +2707,9 @@ used as-is.
    predicate is all-or-nothing per pack, so a learner who drills three of a pack's four authored
    lines gets nothing, and **17 of 50 packs' exhaustion depends on the opponent policy** rather than
    on the learner. An anchor makes delivery incremental instead. Three candidates, none taken here:
-   - **an authored `at` on `$defs/feedbackClaim`** — pack lane **0.28**, currently held by
-     `rfc/graduation-clearance.md` (§5.1), plus a **196-claim** wave. *The `$def` is now
+   - **an authored `at` on `$defs/feedbackClaim`** — the next free pack lane, **`0.29`** at HEAD
+     (`0.28` is claimed and held by `rfc/graduation-clearance.md`; §5.1), plus a **196-claim**
+     wave. *The `$def` is now
      `additionalProperties: false`, so this can no longer be smuggled in unversioned — which is
      D112's closure working as intended.*
    - **a ledger-derived anchor** — **this is the candidate that changed.** The draft said it *"no
@@ -2327,11 +2737,21 @@ used as-is.
    `CLAIM_AUTHOR_LABEL_REQUIRED` refuses their bindings outright until they carry `author_principle`
    and name a principle** (§3.2a, `[cross-review 2026-08-16]`). That third component is content work
    on the *pack*, not the ledger, and it makes 63 rung-5 provenance decisions that C8's second form
-   renders to a learner. This RFC deliberately does not claim any of it, and
-   criterion 17 asserts that its commit re-flips neither row. **The residual question is scheduling,
-   not ownership**, and it has a number: the wave is worth **98 claims and 34,796 characters**, of
-   which the single largest tranche is 60 `corpus_observed` claims blocked on **zero** explorer
-   records.
+   renders to a learner. This RFC deliberately does not **author** any of it, and
+   criterion 17 asserts that its commit re-flips neither row. The wave is worth **98 claims and
+   34,796 characters**, of which the single largest tranche is 60 `corpus_observed` claims blocked on
+   **zero** explorer records.
+
+   **Amended by the owner ruling, and the amendment is the part that matters**
+   `[final author pass 2026-08-16]`. *"The residual question is scheduling, not ownership"* was true
+   when written and is now only half true. Scheduling is **settled** — [[D462]] rules the wave runs
+   after stage 1 and before anyone plays (§0.1). **Ownership is not**, and this pass will not paper
+   over it: OQ5 named `rfc/archive/claim-backing.md` as the wave's owner, and that RFC is
+   **archived**, so it can own the *design* of the binding mechanism but cannot own the *execution*
+   of a corpus pass. §0.2 states what the wave is; **criterion 22 requires the brief to name an
+   owner**; nothing in this repository currently does. That is the single largest thing an
+   implementer needs that no document supplies, and it is a commissioning act rather than a
+   specification gap — which is why it blocks stage 2 and not acceptance.
 6. **Does CR1 survive N = 8?** CR5 records that `common` shrinks monotonically in the
    column count and that `MAX_COMPARISON_BRANCHES = 8`, so CR1's selectivity is weakest exactly
    where `archive/branch-set-scale.md` put the most columns. Criterion 16 measures it. The
@@ -2365,6 +2785,18 @@ used as-is.
    `counterCase` for each new entry — is the real shape of this question, and it is a **content**
    question with a rung-5 provenance consequence rendered by C8. Still not blocking for *this* RFC's
    delivery mechanism; squarely blocking for the wave. **Ledger row proposed, restated at this size.**
+
+   **The final author pass measured the half of this that is mechanical, and it comes back clean —
+   which sharpens the remaining half rather than shrinking it** `[V]` `[2026-08-16]`. The 63
+   mandatory edits span **33 packs** and all three phases (**13 opening / 34 middlegame / 16
+   endgame**), and **all 13 shipped `content/principles/` entries list all three phases**, so
+   `CLAIM_PRINCIPLE_OFF_PHASE` (`pack-validation.ts`, warning) cannot fire for any of them and **no
+   phase gap forces the registry to grow**. So the registry will not *refuse* the 94; the question is
+   entirely whether a human author judges each of 94 claims to genuinely rest on one of 13 general
+   rules, and law 8 forbids manufacturing that judgement. **A validator that cannot refuse is exactly
+   the condition under which rung 5's "provenance is the only safeguard" has to be honoured by hand**
+   (`design/05:76`), which is the reason this is the wave's blocking question and not a lint.
+   §0.2 carries it into the commissioning brief and criterion 22 requires it there.
 
 ## Changelog
 
@@ -2521,3 +2953,51 @@ used as-is.
   (5 packs have `start.fen`'s side ≠ `start.side`; parity gives 67.3% instead of 65.8%); and 94 of
   §3.5's 117 `PRESCRIPTIVE_VERBS` matches are the noun *"move"*, which leaves C9's mechanism intact
   and its headline overstated.
+- 2026-08-16: **final author pass — `draft` → `accepted`.** The owner gate closed on Open question 1
+  at `4ca7792` ([[D462]]): *"ship the surface, then run the binding wave before anyone plays."*
+  Verified a **fifth** time, at HEAD `6722130`, past five commits the cross-review did not see
+  (`329c62b`, `d77a9f1`, `2d564cb`, `8c389f0`, `6722130`). **Every corpus figure and the entire Q8
+  harness table reproduce exactly**; `make expression-census` reports `claims: 196`, `packs: 50`,
+  `backedClaims: 1`; `make verify` is 736 tests / 114 files green.
+  **The substantive change is §0, added because the ruling's three obligations were mentioned and
+  not specified.**
+  **(1) §0.1 — Job 1 lands in two stages** and this RFC is not `implemented` until stage 2's
+  measurement exists. **Criterion 21** is the completion criterion, and it deliberately demands a
+  **named refusal for every still-withheld claim** rather than a delivered share, because §3.2's
+  permanent residue makes any share unsatisfiable — the same defect class as criterion 2a's
+  withdrawn equality. Criterion 11's ledger flips move to stage 2's commit; criteria 2 and 2a are
+  measured at both stages, and 2a's day-zero run is recorded as **vacuous** rather than as a pass,
+  because its joined set is a singleton.
+  **(2) §0.2 — the wave is priced as three kinds of work**, with the pack-edit population (63 floor
+  / 83 ceiling) carried as a first-class component and **criterion 22** rejecting a brief that
+  prices only the two instrument runs. Two facts measured for the first time in this pass: the 63
+  span **33 packs** and 13/34/16 by phase, and **all 13 principle-registry entries list all three
+  phases**, so `CLAIM_PRINCIPLE_OFF_PHASE` cannot refuse any of them and no phase gap forces the
+  registry to grow — which de-risks the mechanics of Open question 8 and leaves its content
+  judgement untouched. Because (b) and (c) change pack bytes, the wave is a **content wave** and
+  carries `AGENTS.md`'s content closeout.
+  **(3) §0.3 — the no-learner-sees-it property is given a named trip**, and the trip is documentary:
+  `main.ts` defaults `databasePath` to `":memory:"` and no run store persists, so a runtime-event
+  trip would have been unsatisfiable. The record is the append-only log. **Criterion 23** asserts it
+  at stage 2 and escalates rather than repairs on failure.
+  **Corrections at HEAD:** **`0.29`, not `0.28`, is the next free pack lane** — the previous
+  revision's *"0.28 is the next free lane, currently held by `graduation-clearance`"* is
+  self-contradictory and is [[D461]]'s exact sentence shape, fixed in §2.1, §5.1 and Open question 4;
+  `graduation-clearance` was **returned to author** at `8c389f0` on D464–D467, not left accepted, and
+  still holds 0.28; `dead-vocabulary` is **implementing**, not accepted, and its declaration census
+  shipped; criterion 13's *"three-way"* D423 contest is **two documents** at HEAD (four by that row's
+  claim-counting addendum); `CompareView.svelte`'s strip block is `:135` in §1.3(4) and §5.4, which
+  still said `:91`, and its `<style>` block is `:166`, not `:128`.
+  **Three implementer-facing gaps closed in the text**, none of which changes the specification:
+  `MACHINE_LABELS` is **module-private** and must be exported rather than copied a fourth time
+  ([[D430]]); `claimBackings.authorSpans` is **cut segments on one arm and the whole sentence on the
+  other**, and 66 of the 67 day-zero rows take the second; and **criterion 6's kill-gate instrument
+  does not exist** — no corpus-walkthrough harness is in `tools/`, and the one that gets built must
+  rewind-and-branch and drive the opponent policy or it will measure only the 19 single-line packs
+  and report a share that trips the gate for the wrong reason.
+  **Adopted:** `dead-vocabulary`'s declaration census independently reproduces §1.2(c)'s whole label
+  census from a different code path and becomes criterion 2's corroborating instrument (§1.2c); it
+  also shows `derived_feature` and `hypothesis` at **zero** consumers, which C8 changes.
+  **Left open deliberately:** the wave has **no named owner** — Open question 5 named
+  `claim-backing`, which is archived and cannot own execution. That is a commissioning act, it
+  blocks stage 2 rather than acceptance, and criterion 22 requires the brief to fix it.
