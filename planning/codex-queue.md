@@ -1,106 +1,174 @@
-# Codex queue — rebuilt 2026-08-16 after the opponent-contracts follow-ups
+# Codex queue — rewritten in full 2026-08-16
 
-Derived from `rfc/README.md` and `design/BACKLOG.md` at `6722130`, not from memory.
-Everything in the previous queue is discharged: `dead-vocabulary` shipped at `329c62b`,
-D452–D454 and the rest of D382 at `d77a9f1`, D455/D456/D458 at `2d564cb`, and
-`graduation-clearance` came back to the author at `8c389f0`.
+**Rewritten wholesale, not patched, because two of my last three edits to this file silently
+did nothing.** They were scripted string replacements anchored on section headings you had
+already rewritten at `a702372`; the anchors stopped matching, the replacements no-opped, and I
+committed them with messages describing content that was never in the file. **So you never saw
+[[D468]], [[D469]], or the two RFCs accepted since.** That is why the queue looked thin and you
+went looking for work elsewhere. Ledgered as [[D478]].
 
-**You were right to return `graduation-clearance`, and the premature acceptance was mine.**
-I closed its four author-call open questions and marked it accepted; closing open questions is
-not the same as being buildable, and D464–D467 are four things you needed that were not written
-down. **D467 is specifically my error as queue author** — I told you to put a `git blame -L n,n`
-check into runtime pack validation, on a review's recommendation, without asking where that
-check runs. The production image has no `.git`. It is back with the author with that framing.
+**You were right to stop on `teacher-surface`, and you named both places while I fixed one.**
+The Status line *and* Open question 1 both said an owner was waiting. Both now say otherwise
+(`224e258` and this wave). Fifth instance of the queue-vs-body failure, ledgered as [[D477]]
+with the point that five instances is a **missing instrument**, not a habit: the rule lives in
+this file as a lesson and nothing reads it.
 
-**D416's rule worked the first time it was asked for.** `d77a9f1` names *"Closes D452, D453,
-and D454; fully closes D382"* in its body, so the closeout is findable with `git log --grep`.
-That is the whole ask.
+---
 
-## 0. `rfc/teacher-surface.md` — BLOCKED: governing body still says draft
+## 0. [[D468]] — a live boot failure. Take this before anything else.
 
-**Do not implement from this queue entry.** The register and the earlier text below say
-accepted, but the RFC's own Status says **"draft … ready to be marked `accepted`"** and Open
-question 1 still says **"One thing is now waiting on an owner."** This is the standing
-queue-vs-body failure again. The body must be reconciled first; law 1 makes a queue banner
-insufficient authorization.
+**Not hypothetical and not scheduled work.** `GRADUATION_RULING_UNCITED` resolves living-tier
+paths against `process.cwd()` (`pack-validation.ts:848-851`). All **43** acceptances cite
+`planning/exploration/log.md#L1231` (40) or `docs/tablebase-grounding.md` (3). `apps/server/Dockerfile`
+copies **only** dist, web dist, schemas and content; `.dockerignore` excludes `.git`. The issue
+is **error** severity and `PackRegistry.load` throws `PACK_INVALID` (`pack-registry.ts:252/258`).
 
-Both owner questions are discharged. Claims **one migration position** (`STORAGE_VERSION + 1`;
-head is **23**) — `ALTER TABLE run_grants ADD COLUMN granted_via TEXT`, nullable, **no backfill,
-no CHECK**. Four tables, `run_grants.expires_at`, `live_sessions.classroom_id`. **No run- or
-pack-schema change, no new token scope, no fourth `RunRole`, no new session kind.** Also claims
-**D92** and **D93**, which both named this RFC as owner and had never been claimed.
+**So the first graduated pack carrying an acceptance makes the server fail to boot, and 40 of 56
+drafts carry one.** Reproduced with one `cd`: `node apps/server/dist/pack-check.js` on
+`anti-caro-advance-early-c5.json` prints *"Pack check passed"* from the repo root and
+`ERROR [GRADUATION_RULING_UNCITED]` from a temp directory.
 
-**One rule carries the whole design:** on a terminal, disclosed run with no live session open, a
+**The framing generalises:** a check whose evidence is excluded by `.dockerignore` is **not a
+weaker check in production — it is a different check under an identical code name.**
+`graduation-clearance` §3.2c specifies the split: a runtime *shape* rule with a zero-filesystem
+budget, and an authoring *admission* rule that may read `.git`. **The `repoRoot` option was
+explicitly refused** — one code name with two silent behaviours is the defect, not the fix.
+
+Take **[[D469]]** with it: `release.yml` runs **nothing** between checkout (`:17`) and
+build/push (`:24-33`), which is why this could reach production undetected. [[D208]]'s shape,
+one workflow over.
+
+## 0b. `rfc/graduation-clearance.md` — ACCEPTED 2026-08-16, second round
+
+**You returned this once and you were right to.** The first acceptance was granted on the wrong
+test — its four author-call open questions were closed, and **none of the four blockers you
+returned was an open question** ([[D473]], recorded as claude's error). The test now applied is
+**buildability**: every obligation resolving to a named symbol, command or home. If it still
+fails anywhere, return it again — the loop is the check.
+
+- **D464** — `clearance.recordKind`, required iff `kind` is `ledger_record`, enum **transcribed
+  from the shipped `EVIDENCE_KINDS`** (`sourcing/types.ts:57`), with criterion 13 asserting
+  set-equality so a new evidence kind cannot silently become unexpressible.
+- **D465** — all 30 resolved entries walked: **29 resolve, 1 does not**. Eighth kind
+  `referent_removed` + `absentIds`, admissible on `resolved` only, refused on `blocking`.
+  **Stage B is 29 mechanical + 1 by hand**, not a 30-entry migration.
+- **D466** — the writer is `make graduation-clear` → `clearGraduationEntries`, modelled on the
+  shipped `verifyDraft` (`verify-draft.ts:323`). **Mandatory `packDigest` re-stamp** —
+  `digestDrillPack` canonicalizes the whole document and `EVIDENCE_DIGEST_STALE` is only a
+  warning, so skipping it drifts silently. **One-line change at `graduation-report.ts:8`** or
+  the new sidecar suffix is counted as a pack.
+- **D467** — two rules, two homes, two input budgets, stated as a table. See item 0.
+
+**Correction to carry:** §1.2 named the **wrong join** for two review rounds ([[D471]]).
+`uniqueRecord` joins on **FEN** (a claim assertion names a position); `evidenceSupports` joins on
+a **JSON pointer** (evidence names a pack node). Corroborated across all 32 ledgers: **764
+records, 764 supports pointers, 1:1, zero prose pointers**. The predicate is now written as an
+expression rather than prose, which is the actual remedy.
+
+**Criterion 16 touches `.github/workflows/release.yml`** — outside `rfc/`, flagged so it is
+scoped in rather than discovered late.
+
+## 0c. `rfc/feedback-delivery.md` — ACCEPTED 2026-08-16, **two-stage landing**
+
+**Do not archive this on stage 1.** Stage 1 ships the delivery surface; stage 2 runs the binding
+wave; the RFC stays `implementing` between them and moves to `implemented` only when stage 2's
+measurement exists. **Criterion 11's ledger flips ride in STAGE 2's commit** — no row closes on a
+day-zero share. Claims **nothing versioned and no migration position**.
+
+Seven things you would otherwise hit cold:
+
+- **`MACHINE_LABELS` is module-private** and `earnedEvidenceTypes` needs it. **Export it; do not
+  copy it** — a fourth copy replicates [[D430]]'s dead `explorer_frequency` alternative again.
+- **`claimBackings.authorSpans` is two different shapes**: cut segments on the binding arm,
+  `[claim.text]` — the **whole sentence** — on the `author_principle` arm, which is **66 of the
+  67** day-zero rows.
+- **C1(iii) is not a free read.** The reveal loop is
+  `for (…) { if (!revealIsReleased(…)) continue; … }` and keeps no reference to the last admitted
+  reveal. One assignment inside the loop, not zero.
+- **Criterion 6's kill-gate instrument does not exist**, and it must rewind-and-branch **and**
+  drive the opponent policy — **14 of 50** packs need the first, **17 of 50** the second. A
+  mainline-only harness measures the 19 single-line packs and trips the gate for the wrong reason.
+- **`items` sorts by `revealedBy.eventSeq` before `KIND_ORDER`** — `claim: 4` is last *within an
+  occurrence*, not globally.
+- **A stale pack digest cannot withhold a claim.** `EVIDENCE_DIGEST_STALE` is a CLI warning and
+  `validateClaimBindings`' `before` is captured **inside** the per-binding loop. The re-stamp is
+  hygiene, not a delivery blocker — do not spend stage 1 on it.
+- **Re-running the Q8 harness overwrites its committed artefact** ([[D446]]) and dirties the tree.
+
+**Stage 2 has no owner and cannot start without one** ([[D476]]). `claim-backing` was named for
+it and then archived; an archived RFC can own a mechanism's design, not a corpus pass's
+execution. **Do not adopt it silently** — commissioning it is claude's to arrange.
+
+## 0d. `rfc/teacher-surface.md` — ACCEPTED, body reconciled, UNBLOCKED
+
+Both places you named now read `accepted`: the Status line at `224e258` and **Open question 1**
+in this wave. **Nothing waits on an owner.** The owner confirmed the one narrowing on 2026-08-16 —
+`live-marker-quality` §6.2's cost from *"permanently"* to **"for the duration of live play"**,
+with the 2026-08-15 record left intact beside it.
+
+Claims **one migration position** (`STORAGE_VERSION + 1`; head **23**) — `ALTER TABLE run_grants
+ADD COLUMN granted_via TEXT`, nullable, **no backfill, no CHECK**. Four tables,
+`run_grants.expires_at`, `live_sessions.classroom_id`. **No run- or pack-schema change, no new
+token scope, no fourth `RunRole`, no new session kind.** Also claims **D92** and **D93**.
+
+**One rule carries the design:** on a terminal, disclosed run with no live session open, a
 submission-granted teacher gets **the run host's own table** — never a reviewer tier. `reviewing`
 sits in the **role** disjunct and never beside `deliveryOpen`, because `design/05` §3a-i says
-*"the run — not the viewer — carries the barrier"*. So a reviewer reaches the run's disclosure
-line and can never pass it.
+*"the run — not the viewer — carries the barrier"*.
 
-**Go straight to these four criteria — each exists because the specification as written passed
-every other check:**
+**Go straight to these four criteria — each exists because the spec as written passed every
+other check:** **7a** counts *statements, not sites* (both promotion sites contain a fresh-grant
+`INSERT` as well as an `UPDATE`); **10c's second fixture** (the original was a solo pack, where
+every candidate implementation agrees — the [[D444]] shape); **10e's extended loop**, ranging over
+the two sides independently and shown failing against the old predicate; and **10g**, which
+exists because a reviewer could see strictly *more* than the run's own host — `seatedInContest`
+had no time bound and sessions are **closed, never deleted**.
 
-- **7a** counts **statements, not sites**. Every miscount across three revisions had one shape:
-  a function listed while one of its two statements was not. §4.3's write table is **seven rows /
-  twelve statements**, and **both promotion sites contain a fresh-grant `INSERT` as well as the
-  `UPDATE`** the table originally described.
-- **10c's second fixture.** The original deep-equality fixture was a **solo pack**, where every
-  candidate implementation agrees — the [[D444]] shape.
-- **10e's extended loop** must range over the two sides **independently**, and be shown failing
-  against the old predicate. Held equal, it can never construct the pairing that occurs in
-  production.
-- **10g**, which exists because a reviewer could see strictly **more** than the run's own host:
-  `seatedInContest` had no time bound, `match_states` cascades from `live_sessions`, and sessions
-  are **closed, never deleted** — so the seat was permanent. Bounded now by `closed_at IS NULL`.
-
-**Do not weaken the `granted_via = 'submission'` conjunct.** The compatibility with
+**Do not weaken the `granted_via = 'submission'` conjunct.** Compatibility with
 `live-marker-quality` is held by it — **by fixture convention, not by construction** as the author
-round claimed. That RFC's criterion 6 is an `AssistanceContext` **object-literal** unit test with
-no session layer in it at all.
+round claimed. **Criterion 6 there changes in two clauses** (*"non-reviewing spectator"*) at this
+RFC's landing.
 
-**Owner amendment 2026-08-16 that this RFC depends on:** `live-marker-quality`'s accepted cost
-narrows from *"the marker leaves participants and spectators entirely, on every run,
-**permanently**"* to **"for the duration of live play"**. Live play is unchanged; the third-value
-permission stays refused. **Criterion 6 there changes in two clauses** (*"non-reviewing
-spectator"*) at this RFC's landing, and §6.2's recorded ruling terms carry the amendment beside
-the original — the 2026-08-15 record is not overwritten.
+## 1. A defect batch is coming — this is the real throughput fix
 
-## 0b. `rfc/archive/opponent-contracts.md` — DISCHARGED at `3276a37`
+`planning/defect-triage.md` is being written now: a routing pass over all **278 open ledger
+rows**, bucketed into batches of 5–15 touching related code, live user-affecting ones first.
+**The one-RFC-at-a-time cadence was the bottleneck, not the ledger.** When it lands, **work the
+top batch as a batch** — one pass, one test run, one commit naming the rows it closes ([[D416]]).
 
-Archived with its planning directory and append-only exploration entry after both gates passed.
-The migration and archive registers now point at the archived RFC. D457 remains open exactly as
-required; the closeout did not promote the unvalidated historical tie counts.
+A guard worth shipping inside any batch: **a status-parity check over every Active row** in
+`make verify`, comparing the register cell to the RFC body's `**Status:**` line. That is
+[[D477]]'s remedy and it would have caught all five instances.
 
-The independent review's blocking follow-up [[D452]] is closed at `d77a9f1`. The conditional body
-correction — **A10 fired and was scored a pass** — landed at `e0ae0b2`. Archive it: move to
-`rfc/archive/`, flip any remaining rows it ships, and **append its entry to
-`planning/exploration/log.md` in the archiving commit** (RFC completion protocol, both halves).
-
-**[[D457]] stays open and must not be flipped**: the census keys on rounded `dtz` where the
-runtime uses `preciseDtz`, so the *delta* stands and the *tie counts* are unvalidated.
-
-## 1. Not takeable yet
+## 2. Not takeable yet
 
 `learner-rating` (open questions 11 and 12), `measurement-records` (returned to author).
 `engine-leverage`, `vocabulary-wiring` and `live-marker-quality` are **implementing** — do not
 re-enter them.
 
-## 2. Still do NOT take
+## 3. Still do NOT take
 
 **D348** (needs a versioned lane), **D351** (needs an accepted authoring-instrument RFC),
 **D104** (not reproduced in 20 isolated runs — your refusal of a speculative patch was correct),
 and the schema-shaped rows.
 
+## Discharged this wave
+
+`opponent-contracts` archived at `3276a37` with **[[D457]] correctly left open**;
+`dead-vocabulary` shipped at `329c62b`; [[D474]]'s gate flake fixed at `0752638` by caching the
+declaration-census source scans — **that row can flip when you next touch the ledger.**
+
 ## Protocol reminders
 
 - **The ledger flip rides in the implementing commit**; **the log entry rides in the archiving
-  commit**; **name the rows you flip in the subject or body** ([[D416]]).
+  commit**; **name the rows you flip in the subject or body** ([[D416]]). You did this at
+  `d77a9f1` the first time it was asked for.
 - **`design/BACKLOG.md` is a shared ledger, not an intent doc.** Law 5 protects `design/00`–`06`.
-- **[[D419]]: column 3 of the defect table is NOT a status.** It holds pre-implementation
-  provenance and is not updated on flip, so a ✅ row can still read `🔨 fixed in …` or `💡 open`.
-  **[[D459]]: the table's own header calls column 3 "Status" and is wrong.** Read column 1.
+- **[[D419]]: column 3 of the defect table is NOT a status**, and **[[D459]]: the table's own
+  header calls it "Status" and is wrong.** Read column 1.
 - Cite ledger rows by **row title**, never line number. Locate code by **symbol name**.
-- Claude's standing error, caught by you three times: **a resolution in a queue file is not a
-  resolution in the body.** Both items above read their status in their own bodies first.
-- Claude's second standing error: **`git add` on shared ledger paths while you have uncommitted
-  edits there.** Four instances. I now check `git status` before touching `rfc/README.md`.
-- Claude's third standing error: **a line-based grep is not a reading.**
+- Claude's standing errors, all of which fired again this session: **a resolution in a register
+  is not a resolution in the body** (five instances, [[D477]]); **a scripted edit that silently
+  no-ops is worse than no edit**, because it ships under a commit message describing content
+  that is not there ([[D478]]); **`git add` on shared ledger paths while you have uncommitted
+  edits** (four instances); **a line-based grep is not a reading.**

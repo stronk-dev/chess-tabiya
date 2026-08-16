@@ -1745,14 +1745,16 @@ a route that contradicts the table.
    *sentences* rather than over *tests* — which is why the remedy is three textual edits
    and not a redesign.**
 
-   **One thing is now waiting on an owner, and it is small.** Not the review rail — §5.2 is
-   complete and no fork is left inside it — but **edit (3) above**: narrowing
-   `live-marker-quality` §6.2's recorded ruling from *"participants and spectators
-   entirely, on every run, permanently"* to *non-reviewing* spectators. The 2026-08-16
-   ruling plainly authorises the review surface and this is a consequence of it, so the
-   expected answer is *yes, that follows*; it is surfaced rather than assumed because the
-   author round both crossed that ruling (§5.2e) and cited it as untouchable (§5.3) in the
-   same pass, and a document may not do both. Open questions 9, 10 and 11 are author calls
+   **ANSWERED — nothing is waiting on an owner.** The one item that was, **edit (3)**, was
+   **confirmed by the owner on 2026-08-16**: `live-marker-quality` §6.2's recorded cost
+   narrows from *"participants and spectators entirely, on every run, **permanently**"* to
+   **"for the duration of live play"**. The 2026-08-15 record is left intact and the
+   amendment is stated beside it, not written over it. **Live play is unchanged** — a
+   spectator watching a game in progress still gets nothing — and **the third-value
+   permission stays refused**; the reviewer reaches the marker on the run host's own arm.
+   It was surfaced rather than assumed because the author round both crossed that ruling
+   (§5.2e) and cited it as untouchable (§5.3) in the same pass, and a document may not do
+   both. Open questions 9, 10 and 11 are author calls
    with stated defaults, not blocks (11 is `learner-rating`'s to resolve); questions 2–7
    were never blocks.
 2. **Teacher-initiated observation requests.** This RFC ships only learner-initiated
