@@ -439,6 +439,9 @@
         "derived_feature",
         "author_principle",
         "tablebase_exact"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     },
     {
@@ -446,6 +449,9 @@
       "text": "Outcome drill: win by any sound route — slower zigzags and other approach squares were verified winning. Graded on the result.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "result-not-moves"
       ]
     }
   ],

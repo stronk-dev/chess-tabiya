@@ -44,31 +44,45 @@
     "pawn-trade-counting",
     "king-centralization"
   ],
-  "shapes": ["rook-4v3-same-side"],
+  "shapes": [
+    "rook-4v3-same-side"
+  ],
   "planClasses": [
     {
       "id": "king-first",
       "label": "King before rook",
       "description": "Here the rook on d8 already owns the open file and guards the back rank.",
-      "shapePlan": { "shape": "rook-4v3-same-side", "plan": "black-king-first" }
+      "shapePlan": {
+        "shape": "rook-4v3-same-side",
+        "plan": "black-king-first"
+      }
     },
     {
       "id": "active-second-rank",
       "label": "Rook to the second rank",
       "description": "Here leaving d8 also leaves the back rank, with an immediate cost.",
-      "shapePlan": { "shape": "rook-4v3-same-side", "plan": "black-active-second-rank" }
+      "shapePlan": {
+        "shape": "rook-4v3-same-side",
+        "plan": "black-active-second-rank"
+      }
     },
     {
       "id": "sixth-rank-restraint",
       "label": "Rook on the sixth",
       "description": "In this position the e-pawn can advance with tempo against the restraining rook.",
-      "shapePlan": { "shape": "rook-4v3-same-side", "plan": "black-sixth-rank-restraint" }
+      "shapePlan": {
+        "shape": "rook-4v3-same-side",
+        "plan": "black-sixth-rank-restraint"
+      }
     },
     {
       "id": "trade-pawns-not-rooks",
       "label": "Trade pawns, never rooks",
       "description": "The concrete task here is to decline White's offered rook trade on d1-d8.",
-      "shapePlan": { "shape": "rook-4v3-same-side", "plan": "black-trade-pawns-not-rooks" }
+      "shapePlan": {
+        "shape": "rook-4v3-same-side",
+        "plan": "black-trade-pawns-not-rooks"
+      }
     }
   ],
   "spine": [
@@ -493,6 +507,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "material-serves-purpose"
       ]
     },
     {
@@ -500,6 +517,9 @@
       "text": "The defender trades pawns and refuses rooks; the attacker wants the exact opposite. Every pair of pawns that comes off shortens the defence, and the rooks are what make the position holdable at all.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "material-serves-purpose"
       ]
     },
     {
@@ -508,6 +528,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "material-serves-purpose"
       ]
     },
     {
@@ -516,6 +539,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "structure-outlives-arrangement"
       ]
     },
     {
@@ -523,6 +549,9 @@
       "text": "This is an outcome drill. You are graded on whether the result survived, not on whether you found the move an engine likes — a defence that holds by a different route is a pass.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "result-not-moves"
       ]
     }
   ],
@@ -539,10 +568,10 @@
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No reviewer has looked at this file and none will; nothing here is labelled as checked, and every blocker below is cleared by a citation or by mechanical evidence or not at all.",
-      "This position holds eleven pieces. Syzygy tops out at seven, so no tablebase ground truth exists for the root or for any node in this pack, and none can be obtained \u2014 this is a permanent property of the material, not a task nobody has run yet. Stockfish at fixed depth on every spine node and every deviation is therefore the only mechanical instrument that applies here, and it has not been run.",
+      "This position holds eleven pieces. Syzygy tops out at seven, so no tablebase ground truth exists for the root or for any node in this pack, and none can be obtained — this is a permanent property of the material, not a task nobody has run yet. Stockfish at fixed depth on every spine node and every deviation is therefore the only mechanical instrument that applies here, and it has not been run.",
       "The load-bearing claim -- that this material is a theoretical draw held by accurate defence -- needs a citable endgame reference. None was consulted.",
       "The w-ra8/w-ra7 line asserts that 1...Rd2 concedes a pawn move to the back-rank check. It is the pack's most concrete tactical claim, it drives the whole king-first-versus-activity comparison, and it is unverified.",
-      "The deviation classes split into two halves with different fates. The concrete half \u2014 the two concept_violations (passive Rd7, accepting the rook trade) \u2014 is engine-checkable at fixed depth and has not been checked. The other half is not: the claim that the pawn ending after a rook trade is harder to hold than the rook ending is a practical judgment about human play, stated as a judgment precisely because it cannot be stated as a fact, and no instrument in this repo can promote it to one.",
+      "The deviation classes split into two halves with different fates. The concrete half — the two concept_violations (passive Rd7, accepting the rook trade) — is engine-checkable at fixed depth and has not been checked. The other half is not: the claim that the pawn ending after a rook trade is harder to hold than the rook ending is a practical judgment about human play, stated as a judgment precisely because it cannot be stated as a fact, and no instrument in this repo can promote it to one.",
       "Practical-difficulty judgments -- which defensive scheme a 1500-2000 player actually holds -- need Maia or corpus evidence. design/04 §7 says save/resist objectives need practical-difficulty judgment that only authored endgame content can express; this pack expresses it with no evidence underneath.",
       "The still-holding checkpoint uses a materialBalance trigger whose runtime behaviour the author did not verify; if it is inert, the pack's only executable success condition is inert too. This one is not a grounding question and does not need a source: it is settled by playing the pack, which is the check that caught D12 here after three readings missed it."
     ]

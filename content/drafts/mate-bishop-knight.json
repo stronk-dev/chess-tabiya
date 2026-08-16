@@ -678,6 +678,9 @@
       "evidenceTypes": [
         "author_principle",
         "tablebase_exact"
+      ],
+      "principles": [
+        "result-not-moves"
       ]
     }
   ],

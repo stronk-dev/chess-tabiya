@@ -1,0 +1,26 @@
+{
+  "id": "construction-order-matters",
+  "version": "0.1.0",
+  "name": "Construction order matters",
+  "statement": "When one setup move makes the next safe, the order is part of the plan rather than a cosmetic move sequence.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "If the moves are independently legal and effective, changing their order need not change the plan.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

@@ -12,7 +12,10 @@
   },
   "variantOf": {
     "packId": "philidor-third-rank-hold",
-    "relation": { "kind": "root_after_move", "moveUci": "h6h8" }
+    "relation": {
+      "kind": "root_after_move",
+      "moveUci": "h6h8"
+    }
   },
   "start": {
     "fen": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2",
@@ -437,6 +440,9 @@
       "evidenceTypes": [
         "tablebase_exact",
         "author_principle"
+      ],
+      "principles": [
+        "technique-is-conditional"
       ]
     },
     {
@@ -444,6 +450,9 @@
       "text": "Outcome drill: after the skewer you are graded on converting, not on matching the authored squares. The tablebase confirms several escorts; king-before-pawn is the one that generalizes across the family.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "result-not-moves"
       ]
     }
   ],

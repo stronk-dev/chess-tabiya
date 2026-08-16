@@ -1,6 +1,6 @@
 # RFC: Claim backing — an instrument record may back an author's sentence without replacing it
 
-- **Status:** draft
+- **Status:** implementing
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder; **rung 5** — *"Authored

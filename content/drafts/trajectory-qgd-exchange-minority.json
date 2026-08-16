@@ -45,7 +45,10 @@
   "shapes": [
     "carlsbad",
     "open-centre",
-    { "shape": "rook-4v3-same-side", "relation": "prospective" }
+    {
+      "shape": "rook-4v3-same-side",
+      "relation": "prospective"
+    }
   ],
   "planClasses": [
     {
@@ -879,6 +882,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "construction-order-matters"
       ]
     },
     {
@@ -886,6 +892,9 @@
       "text": "Black's trades in this line are not passivity but the standard defensive method in the Carlsbad: fewer pieces make the fixed weakness harder to attack. The trajectory's question is whether the weakness survives the simplification anyway.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "material-serves-purpose"
       ]
     },
     {

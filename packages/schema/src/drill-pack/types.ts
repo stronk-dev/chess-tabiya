@@ -171,6 +171,7 @@ export interface FeedbackClaim {
   readonly id: string;
   readonly text: string;
   readonly evidenceTypes: readonly string[];
+  readonly principles?: readonly string[];
 }
 
 export interface CheckpointDefinition {

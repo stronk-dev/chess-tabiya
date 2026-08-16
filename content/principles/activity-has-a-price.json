@@ -1,0 +1,26 @@
+{
+  "id": "activity-has-a-price",
+  "version": "0.1.0",
+  "name": "Activity has a price",
+  "statement": "Active pieces gain useful reach by leaving some prior defensive task, so the released duty should be named before the move is chosen.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "A move can improve activity without conceding anything when another piece or structural fact already covers the old duty.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

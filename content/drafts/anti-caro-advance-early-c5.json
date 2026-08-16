@@ -389,6 +389,9 @@
       "text": "The capture's justification is a tempo ledger, not greed: with the c8 bishop undeveloped, dxc5 costs White nothing, while every Black move spent regaining the pawn is a developing move White gets for free.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     },
     {
@@ -397,6 +400,9 @@
       "evidenceTypes": [
         "author_principle",
         "derived_feature"
+      ],
+      "principles": [
+        "structure-outlives-arrangement"
       ]
     }
   ],

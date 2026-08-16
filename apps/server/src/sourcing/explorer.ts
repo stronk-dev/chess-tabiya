@@ -8,13 +8,12 @@ import { makeFen, parseFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
 import { parseUci } from "chessops/util";
 
-import { validatePackDocument } from "../pack-validation.js";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { checkSourcingDirectory, checkSourcingFile } from "./check.js";
 import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import { ingestLocalFile } from "./inputs.js";
 import { withSourceLock } from "./lock.js";
-import type { EvidenceLedger, EvidenceRecord, SourceEntry, SourceManifest } from "./types.js";
+import type { ClaimAssertion, EvidenceLedger, EvidenceRecord, SourceEntry, SourceManifest } from "./types.js";
 import { SourcingError } from "./types.js";
 
 export const RATING_GROUPS = [0, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as const;
@@ -230,7 +229,7 @@ async function atomicCanonical(directory: string, documents: Record<string, unkn
   for (const name of Object.keys(documents)) await rename(resolve(directory, `${name}${suffix}`), resolve(directory, name));
 }
 
-export async function attachExplorerEvidence(options: { readonly directory?: string; readonly file?: string; readonly spineNodeId?: string; readonly moveSan: string; readonly target: string; readonly query: Omit<ExplorerQuery, "fen">; readonly client: { stats(query: ExplorerQuery): Promise<ExplorerStats> } }): Promise<"attached" | "abstained"> {
+export async function attachExplorerEvidence(options: { readonly directory?: string; readonly file?: string; readonly spineNodeId?: string; readonly moveSan: string; readonly target: string; readonly span?: string; readonly field?: "sharePct" | "total" | "whitePct" | "drawPct" | "blackPct" | "since" | "until" | "ratingBand"; readonly query: Omit<ExplorerQuery, "fen">; readonly client: { stats(query: ExplorerQuery): Promise<ExplorerStats> } }): Promise<"attached" | "abstained"> {
   if ((options.directory === undefined) === (options.file === undefined)) throw new SourcingError("INVALID_REQUEST", "provide exactly one of directory or file");
   const flatFile = options.file === undefined ? undefined : resolve(options.file);
   const directory = flatFile === undefined ? resolve(options.directory!) : dirname(flatFile);
@@ -244,6 +243,8 @@ export async function attachExplorerEvidence(options: { readonly directory?: str
   if (!/^\/feedbackClaims\/\d+\/text$/.test(options.target)) throw new SourcingError("ATTACH_TARGET_FORBIDDEN", "target must be an existing /feedbackClaims/<i>/text");
   const claimIndex = Number(options.target.split("/")[2]);
   if (!Array.isArray(pack.feedbackClaims) || typeof pack.feedbackClaims[claimIndex]?.text !== "string") throw new SourcingError("ATTACH_TARGET_FORBIDDEN", "target feedback claim does not exist");
+  if (options.span === undefined || options.span.length === 0 || options.field === undefined) throw new SourcingError("ATTACH_SPAN_REQUIRED", "--span and --field are required; pack prose is never generated or overwritten");
+  if (!(pack.provenance?.sources ?? []).some((source: unknown) => typeof source === "string" && source.includes(EXPLORER_RATIONALE))) throw new SourcingError("ATTACH_SOURCE_LINE_MISSING", `pack provenance.sources must already contain the explorer rationale: ${EXPLORER_RATIONALE}`);
   const anchor = nodePosition(pack, options.spineNodeId);
   const result = await options.client.stats({ ...options.query, fen: anchor.fen });
   const nextManifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: [...manifest.entries.filter((entry: SourceEntry) => !(entry.sourceId === result.source.sourceId && entry.retrievedAt === result.source.retrievedAt && entry.origin.kind === "http" && result.source.origin.kind === "http" && entry.origin.url === result.source.origin.url)), result.source].sort((a, b) => a.sourceId.localeCompare(b.sourceId) || a.retrievedAt.localeCompare(b.retrievedAt)) };
@@ -263,20 +264,20 @@ export async function attachExplorerEvidence(options: { readonly directory?: str
   if (!move) throw new SourcingError("MOVE_NOT_IN_RESPONSE", `${options.moveSan} is absent from the explorer response`);
   const total = result.white + result.draws + result.black;
   const playedCount = move.white + move.draws + move.black;
-  const values: ExplorerTemplateValues = { moveSan: move.san, playedCount, total, sharePct: pct(playedCount, total), white: move.white, draws: move.draws, black: move.black, ratings: result.ratings, speeds: result.speeds, since: result.window.since, until: result.window.until };
-  pack.feedbackClaims[claimIndex].text = renderExplorerFrequency(values);
-  pack.provenance.sources = [...new Set([...(pack.provenance.sources ?? []), `lichess-explorer (${result.source.origin.kind === "http" ? result.source.origin.url : "explorer"}) — ${EXPLORER_RATIONALE}`])];
-  const record: EvidenceRecord = { kind: "explorer_frequency", anchor: anchor.anchor, sourceId: result.source.sourceId, retrievedAt: result.source.retrievedAt, grounds: "machine_validation", templateId: EXPLORER_TEMPLATE_ID, values: values as unknown as Readonly<Record<string, unknown>>, supports: [options.target] };
-  const records = [...ledger.records.filter((value: EvidenceRecord) => !(value.kind === record.kind && value.templateId === record.templateId && value.supports[0] === record.supports[0] && value.sourceId === record.sourceId && value.retrievedAt === record.retrievedAt)), record].sort((a, b) => a.kind.localeCompare(b.kind) || String(a.templateId).localeCompare(String(b.templateId)) || String(a.supports[0]).localeCompare(String(b.supports[0])) || a.sourceId.localeCompare(b.sourceId) || a.retrievedAt.localeCompare(b.retrievedAt));
-  const nextLedger: EvidenceLedger = { ...ledger, packDigest: await digestDrillPack(pack), sourcedAt: nextManifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!, records };
-  if (!validatePackDocument(pack).valid) throw new SourcingError("ATTACHED_PACK_INVALID", "generated explorer sentence made the pack invalid");
+  const values = { fen: anchor.fen, total, whitePct: pct(result.white, total), drawPct: pct(result.draws, total), blackPct: pct(result.black, total), topMoves: result.moves.map((candidate) => { const count = candidate.white + candidate.draws + candidate.black; return { san: candidate.san, uci: candidate.uci, playedCount: count, sharePct: pct(count, total) }; }), ratings: result.ratings, speeds: result.speeds, since: result.window.since, until: result.window.until };
+  const record: EvidenceRecord = { kind: "explorer_position_census", anchor: anchor.anchor, sourceId: result.source.sourceId, retrievedAt: result.source.retrievedAt, grounds: "machine_validation", values, supports: options.spineNodeId === undefined || options.spineNodeId === "root" ? ["/start/fen"] : [] };
+  const records = [...ledger.records.filter((value: EvidenceRecord) => !(value.kind === record.kind && value.values.fen === anchor.fen)), record].sort((a, b) => a.kind.localeCompare(b.kind) || String(a.values.fen).localeCompare(String(b.values.fen)) || a.sourceId.localeCompare(b.sourceId) || a.retrievedAt.localeCompare(b.retrievedAt));
+  const assertion: ClaimAssertion = options.field === "sharePct" ? { kind: "explorer.moveSharePct@v1", args: { fen: anchor.fen, san: move.san } } : options.field === "total" ? { kind: "explorer.total@v1", args: { fen: anchor.fen } } : options.field === "whitePct" || options.field === "drawPct" || options.field === "blackPct" ? { kind: "explorer.scorePct@v1", args: { fen: anchor.fen, side: options.field.replace("Pct", "") } } : options.field === "ratingBand" ? { kind: "explorer.ratingBand@v1", args: { fen: anchor.fen } } : { kind: "explorer.window@v1", args: { fen: anchor.fen }, select: options.field };
+  const binding = { claimId: pack.feedbackClaims[claimIndex].id, pointer: options.target, textSha256: sha256(pack.feedbackClaims[claimIndex].text), spans: [{ span: options.span, assertion }] };
+  const claimBindings = [...(ledger.claimBindings ?? []).filter((value: { pointer: string }) => value.pointer !== options.target), binding];
+  const nextLedger: EvidenceLedger = { ...ledger, packDigest: await digestDrillPack(pack), sourcedAt: nextManifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!, records, claimBindings };
   const temporary = resolve(directory, `.attach-check-${process.pid}`);
   await mkdir(temporary, { recursive: true });
   await Promise.all([writeCanonicalJson(resolve(temporary, "pack.json"), pack), writeCanonicalJson(resolve(temporary, "evidence.json"), nextLedger), writeCanonicalJson(resolve(temporary, "sources.json"), nextManifest)]);
   const checked = await checkSourcingDirectory(temporary, { strict: true });
   await rm(temporary, { recursive: true, force: true });
   if (!checked.valid) throw new SourcingError("ATTACH_CHECK_FAILED", checked.issues.map((value) => `${value.code}:${value.message}`).join("; "));
-  if (flatFile === undefined) await atomicCanonical(directory, { "pack.json": pack, "evidence.json": nextLedger, "sources.json": nextManifest });
-  else await Promise.all([writeCanonicalJson(paths.pack, pack), writeCanonicalJson(paths.ledger, nextLedger), writeCanonicalJson(paths.manifest, nextManifest)]);
+  if (flatFile === undefined) await atomicCanonical(directory, { "evidence.json": nextLedger, "sources.json": nextManifest });
+  else await Promise.all([writeCanonicalJson(paths.ledger, nextLedger), writeCanonicalJson(paths.manifest, nextManifest)]);
   return "attached";
 }

@@ -120,7 +120,7 @@ describe("opening engine evidence", () => {
     const record = { ...base, templateId: "engine-move-loss/v1", values, supports: ["/feedbackClaims/0/text"] };
     const valid: SourcingIssue[] = [];
     evidenceSupports(templatedPack, { ...ledger, records: [...ledger.records, record] }, undefined, valid);
-    expect(valid).toEqual([]);
+    expect(valid).toContainEqual(expect.objectContaining({ code: "EVIDENCE_OVERREACH" }));
     const invalid: SourcingIssue[] = [];
     evidenceSupports(templatedPack, { ...ledger, records: [...ledger.records, { ...record, values: { ...values, lossCp: 11 } }, record] }, undefined, invalid);
     expect(invalid.map((issue) => issue.code)).toEqual(expect.arrayContaining(["EVIDENCE_VALUES_INVALID", "EVIDENCE_TEMPLATE_CONFLICT"]));

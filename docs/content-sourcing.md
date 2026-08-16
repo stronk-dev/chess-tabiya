@@ -37,8 +37,8 @@ inspection is advisory so hand-authored packs do not acquire sidecar requirement
 
 Licence obligations are derived rather than stored as booleans. The accepted rows are
 CC0-1.0, CC-BY-SA-4.0 with notice text, and `no-rights-asserted` with a rationale. Every
-emitted candidate declares CC-BY-SA-4.0 wholesale. B6a registers no prose template, so its
-evidence can ground line geometry and identity but no explanatory prose or move grade.
+emitted candidate declares CC-BY-SA-4.0 wholesale. Evidence records may not support prose
+pointers. Authored claims instead use span-level `claimBindings`; direct support remains forbidden.
 
 ## Reproducibility and source access
 
@@ -80,9 +80,9 @@ not a falsely tablebase-grounded pack.
 
 In-range records preserve the backend category, DTZ, precise DTZ, DTM, and terminal flags,
 including nulls. Tablebase evidence and engine evidence are distinct kinds, and the checker
-rejects either kind on the wrong side of the range boundary. Tablebase facts do not support
-prose; engine evidence may support only literal measurements and the closed
-`engine-move-loss/v1` template, never authored chess judgments.
+rejects either kind on the wrong side of the range boundary. Tablebase and engine facts do not
+support prose directly. A claim binding may re-derive a literal span from records already in that
+pack's ledger; authored residue stays separately attributed and cannot borrow an instrument label.
 
 A pack's `assessedBy.kind: syzygy` declaration does not earn an exact label.
 Registry admission derives `ledger_verified` only when the complete ledger and
@@ -150,13 +150,12 @@ credential for authoring; self-hosters may configure their own. A future learner
 Lichess account link is a separate optional identity/import feature and is never a content
 prerequisite or a source of per-user credentials for this pipeline.
 
-One machine-generated prose crossing is defined for future available data:
-`explorer-move-share/v1`. `candidate-attach` accepts an author-selected response move and an
-existing feedback-claim text, generates the exact count/share sentence, and atomically
-updates the pack plus source/evidence sidecars after a strict pre-check. The checker
-re-derives the percentage, verifies the request population/window from the manifest URL,
-and requires byte equality. Explorer evidence cannot infer difficulty, grade a deviation,
-or support any other prose.
+`candidate-attach` accepts an author-selected response move, an existing feedback-claim span, and
+the scalar that span states. It refuses when the pack's source attribution line is absent, queries
+only after that pre-check, writes an `explorer_position_census` plus a binding, and never writes the
+pack. The checker re-derives counts, shares, outcomes, population, and window from the manifest and
+census. Explorer evidence cannot infer difficulty, grade a deviation, or turn a population result
+into a move verdict.
 
 ## Puzzle-derived consequence seeds
 

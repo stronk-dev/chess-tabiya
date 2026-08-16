@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:chess-tabiya:schema:principle-entry:0.1",
+  "title": "Tabiya Principle Entry",
+  "type": "object",
+  "required": ["id", "version", "name", "statement", "phases", "standsOn", "counterCase", "provenance"],
+  "properties": {
+    "id": { "$ref": "#/$defs/id" },
+    "version": { "$ref": "#/$defs/semver" },
+    "name": { "$ref": "#/$defs/nonEmptyString" },
+    "statement": { "$ref": "#/$defs/nonEmptyString" },
+    "phases": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["opening", "middlegame", "endgame"] } },
+    "standsOn": { "enum": ["chess_tradition", "authors_practice", "instrument_pattern"] },
+    "counterCase": { "$ref": "#/$defs/nonEmptyString" },
+    "provenance": { "$ref": "#/$defs/provenance" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "semver": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$" },
+    "provenance": {
+      "type": "object",
+      "required": ["licence", "sources", "attribution"],
+      "properties": {
+        "licence": { "$ref": "#/$defs/nonEmptyString" },
+        "sources": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "attribution": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["title", "author", "licence"],
+            "properties": {
+              "title": { "$ref": "#/$defs/nonEmptyString" },
+              "author": { "$ref": "#/$defs/nonEmptyString" },
+              "url": { "type": "string", "format": "uri" },
+              "licence": { "$ref": "#/$defs/nonEmptyString" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

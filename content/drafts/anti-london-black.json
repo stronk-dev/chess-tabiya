@@ -343,6 +343,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "preparation-is-asymmetric"
       ]
     }
   ],

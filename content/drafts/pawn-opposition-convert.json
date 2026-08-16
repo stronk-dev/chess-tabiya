@@ -510,6 +510,9 @@
       "evidenceTypes": [
         "derived_feature",
         "author_principle"
+      ],
+      "principles": [
+        "authored-teaching-is-declared"
       ]
     },
     {
@@ -518,6 +521,9 @@
       "evidenceTypes": [
         "tablebase_exact",
         "author_principle"
+      ],
+      "principles": [
+        "authored-teaching-is-declared"
       ]
     },
     {
@@ -525,6 +531,9 @@
       "text": "Outcome drill: promote and win by any sound route. The authored line is one of several tablebase wins; the graded thing is the result.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "result-not-moves"
       ]
     }
   ],

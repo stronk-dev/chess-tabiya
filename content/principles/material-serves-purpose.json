@@ -1,0 +1,26 @@
+{
+  "id": "material-serves-purpose",
+  "version": "0.1.0",
+  "name": "Material serves the conversion",
+  "statement": "In conversion play, material may be exchanged or returned when doing so advances the actual winning or drawing mechanism.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "Material remains decisive when the proposed concession removes the resources needed to complete the objective.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

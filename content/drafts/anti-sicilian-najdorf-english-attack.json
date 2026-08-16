@@ -439,6 +439,9 @@
       "text": "The English Attack setup (Be3, f3, Qd2, O-O-O) is easy to memorize as a list and loses its point when the list is played in the wrong order: f3 before Qd2 is what makes ...Ng4 permanently impossible.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "construction-order-matters"
       ]
     },
     {
@@ -447,6 +450,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "preparation-is-asymmetric"
       ]
     }
   ],

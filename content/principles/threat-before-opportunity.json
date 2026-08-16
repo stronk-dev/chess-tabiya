@@ -1,0 +1,26 @@
+{
+  "id": "threat-before-opportunity",
+  "version": "0.1.0",
+  "name": "Threat before opportunity",
+  "statement": "A reply should account for the opponent's immediate threat before pursuing a new opportunity.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "When the opponent has no executable threat, forcing play or development may properly take priority.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

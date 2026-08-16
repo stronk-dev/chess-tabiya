@@ -330,6 +330,9 @@
       "text": "The Leningrad has one break and its name is ...e5: a White move is working here almost exactly when it adds a watcher of e5, restrains the break's preparation, or opens play somewhere the break cannot help.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "preparation-is-asymmetric"
       ]
     },
     {
@@ -338,6 +341,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "structure-outlives-arrangement"
       ]
     }
   ],

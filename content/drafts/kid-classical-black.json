@@ -354,6 +354,9 @@
       "text": "Black's committal order is castle, then ...e5, then ...Nc6, then the reroute: each move is safe because the previous one prepared it, while playing them out of order hands White free forks like the dxe5/Qxd8 tricks against an uncastled king.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "preparation-is-asymmetric"
       ]
     },
     {
@@ -362,6 +365,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     }
   ],

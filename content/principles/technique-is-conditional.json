@@ -1,0 +1,26 @@
+{
+  "id": "technique-is-conditional",
+  "version": "0.1.0",
+  "name": "Technique is conditional",
+  "statement": "Named techniques apply when their defining geometry and timing are present, not merely because the material family has the same name.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "A nearby but different geometry can require another scheme even with identical material.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

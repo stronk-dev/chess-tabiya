@@ -42,10 +42,10 @@ const EVIDENCE_RUNG: Readonly<Record<string, number>> = Object.freeze({
   author_principle: 5,
   hypothesis: 5,
 });
-const LEDGER_KIND: Readonly<Record<string, EvidenceRecord["kind"]>> = Object.freeze({
-  tablebase_exact: "tablebase_result",
-  engine_validated: "engine_eval",
-  corpus_observed: "explorer_frequency",
+const LEDGER_KIND: Readonly<Record<string, readonly EvidenceRecord["kind"][]>> = Object.freeze({
+  tablebase_exact: ["tablebase_result"],
+  engine_validated: ["engine_eval"],
+  corpus_observed: ["explorer_frequency", "explorer_position_census"],
 });
 
 function absolutePly(fen: string): number {
@@ -83,7 +83,7 @@ function evidenceLedger(packFile: string): EvidenceLedger | undefined {
 }
 
 function populationOf(record: EvidenceRecord): Record<string, unknown> | undefined {
-  if (record.kind !== "explorer_frequency") return undefined;
+  if (record.kind !== "explorer_frequency" && record.kind !== "explorer_position_census") return undefined;
   const { ratings, speeds, since, until, total } = record.values;
   if (!Array.isArray(ratings) || !Array.isArray(speeds) || typeof since !== "string" || typeof until !== "string" || !Number.isSafeInteger(total)) return undefined;
   return { ratings, speeds, since, until, total };
@@ -96,9 +96,11 @@ export function evidenceCensus(packDocuments: ReadonlyMap<string, DrillPackDefin
     const ledger = evidenceLedger(absolute);
     const citations = [...new Set(claims.flatMap((claim) => claim.evidenceTypes))].sort().map((evidenceType) => {
       const claimIndexes = claims.flatMap((claim, index) => claim.evidenceTypes.includes(evidenceType) ? [index] : []);
-      const ledgerKind = LEDGER_KIND[evidenceType];
-      const matching = ledgerKind === undefined ? [] : ledger?.records.filter((record) => record.kind === ledgerKind && claimIndexes.some((index) => record.supports.includes(`/feedbackClaims/${index}/text`))) ?? [];
-      const backedClaims = ledgerKind === undefined ? 0 : claimIndexes.filter((index) => matching.some((record) => record.supports.includes(`/feedbackClaims/${index}/text`))).length;
+      const ledgerKinds = LEDGER_KIND[evidenceType];
+      const bindings = claimIndexes.flatMap((index) => ledger?.claimBindings?.filter((binding) => binding.pointer === `/feedbackClaims/${index}/text`) ?? []);
+      const assertionFamilies = new Set(bindings.flatMap((binding) => binding.spans.flatMap((span) => "assertion" in span ? [span.assertion.kind.split(".")[0]] : [])));
+      const matching = ledgerKinds === undefined ? [] : ledger?.records.filter((record) => ledgerKinds.includes(record.kind) && assertionFamilies.has(record.kind === "tablebase_result" ? "tablebase" : record.kind === "engine_eval" ? "engine" : "explorer")) ?? [];
+      const backedClaims = ledgerKinds === undefined ? 0 : claimIndexes.filter((index) => (ledger?.claimBindings ?? []).some((binding) => binding.pointer === `/feedbackClaims/${index}/text` && binding.spans.some((span) => "assertion" in span && ledgerKinds.includes(span.assertion.kind.startsWith("tablebase.") ? "tablebase_result" : span.assertion.kind.startsWith("engine.") ? "engine_eval" : "explorer_position_census")))).length;
       const populations = matching.flatMap((record) => {
         const population = populationOf(record);
         return population === undefined ? [] : [canonicalizeJson(population)];
@@ -107,7 +109,7 @@ export function evidenceCensus(packDocuments: ReadonlyMap<string, DrillPackDefin
         evidenceType,
         rung: EVIDENCE_RUNG[evidenceType] ?? null,
         claims: claimIndexes.length,
-        backing: ledgerKind === undefined
+        backing: ledgerKinds === undefined
           ? { kind: evidenceType === "derived_feature" ? "derived" : evidenceType === "author_principle" || evidenceType === "hypothesis" ? "authored" : "unregistered", backedClaims: 0, records: 0 }
           : { kind: "ledger", backedClaims, records: matching.length },
         populations: [...new Set(populations)].sort().map((value) => JSON.parse(value)),

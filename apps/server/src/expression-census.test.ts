@@ -42,11 +42,13 @@ describe("expression census", () => {
     const root = mkdtempSync(resolve(tmpdir(), "tabiya-evidence-census-"));
     const file = resolve(root, "sample.json");
     const pack = JSON.parse(readFileSync("content/drafts/anti-caro-advance-early-c5.json", "utf8"));
-    pack.feedbackClaims = [{ id: "observed", text: "Generated corpus sentence", evidenceTypes: ["corpus_observed"] }];
+    const claimText = "The corpus contains 9,346,096 games in this window.";
+    pack.feedbackClaims = [{ id: "observed", text: claimText, evidenceTypes: ["corpus_observed"] }];
     writeFileSync(file, JSON.stringify(pack));
     writeFileSync(file.replace(/\.json$/u, ".evidence.json"), JSON.stringify({
       schema: "tabiya.sourcing.evidence.v1", sourcedAt: "2026-08-16T00:00:00.000Z", abstentions: [],
-      records: [{ kind: "explorer_frequency", anchor: { fen: pack.start.fen }, sourceId: "lichess-explorer", retrievedAt: "2026-08-16T00:00:00.000Z", grounds: "citable_source", supports: ["/feedbackClaims/0/text"], values: { ratings: [1400, 1600, 1800], speeds: ["blitz", "rapid"], since: "2024-01", until: "2026-07", total: 9346096 } }],
+      records: [{ kind: "explorer_frequency", anchor: { fen: pack.start.fen }, sourceId: "lichess-explorer", retrievedAt: "2026-08-16T00:00:00.000Z", grounds: "citable_source", supports: ["/start/fen"], values: { ratings: [1400, 1600, 1800], speeds: ["blitz", "rapid"], since: "2024-01", until: "2026-07", total: 9346096 } }],
+      claimBindings: [{ claimId: "observed", pointer: "/feedbackClaims/0/text", textSha256: `sha256:${createHash("sha256").update(claimText).digest("hex")}`, spans: [{ span: "9,346,096", assertion: { kind: "explorer.total@v1", args: { fen: pack.start.fen } } }] }],
     }));
     const report = evidenceCensus(new Map([[file, pack]]));
     expect(report.packs[0]?.citations[0]).toMatchObject({ evidenceType: "corpus_observed", rung: 4, backing: { kind: "ledger", backedClaims: 1, records: 1 }, populations: [{ ratings: [1400, 1600, 1800], speeds: ["blitz", "rapid"], since: "2024-01", until: "2026-07", total: 9346096 }] });

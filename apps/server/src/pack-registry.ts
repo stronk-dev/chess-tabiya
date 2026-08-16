@@ -11,8 +11,11 @@ import {
 } from "@chess-tabiya/schema/drill-pack";
 
 import { ServerError } from "./errors.js";
-import { validatePackDocument, type PackShapeLookup } from "./pack-validation.js";
+import { validatePackDocument, type PackPrincipleLookup, type PackShapeLookup } from "./pack-validation.js";
 import { assessmentGrounding } from "./sourcing/ledger-validation.js";
+import { validateLedger } from "./sourcing/ledger-validation.js";
+import { validateClaimBindings } from "./sourcing/claim-binding.js";
+import type { SourcingIssue } from "./sourcing/types.js";
 
 export const SIDECAR_BASENAMES = Object.freeze([
   "evidence.json",
@@ -46,6 +49,13 @@ export interface PackRecord {
   readonly assessmentGrounding: AssessmentGrounding;
   readonly channel: "official" | "community";
   readonly publisherHandle?: string;
+  readonly boundClaimIds: ReadonlySet<string>;
+  readonly claimBackings: ReadonlyMap<string, {
+    readonly binding: "ledger_bound" | "author_attributed" | "self_declared";
+    readonly rendered: readonly string[];
+    readonly authorSpans: readonly string[];
+    readonly principles: readonly { readonly id: string; readonly name: string; readonly statement: string; readonly standsOn: string; readonly counterCase: string }[];
+  }>;
 }
 
 function projectSpineNode(node: SpineNode): unknown {
@@ -123,8 +133,8 @@ export function projectPackDocument(
   });
 }
 
-function validatedDocument(value: unknown, source: string, shapes?: PackShapeLookup): DrillPackDefinition {
-  const result = validatePackDocument(value, { ...(shapes === undefined ? {} : { shapes }) });
+function validatedDocument(value: unknown, source: string, shapes?: PackShapeLookup, principles?: PackPrincipleLookup): DrillPackDefinition {
+  const result = validatePackDocument(value, { ...(shapes === undefined ? {} : { shapes }), ...(principles === undefined ? {} : { principles }) });
   if (!result.valid || result.document === undefined) {
     const errors = result.issues.filter((issue) => issue.severity === "error");
     throw new ServerError(
@@ -219,21 +229,21 @@ export class PackRegistry {
       readonly ledger?: unknown;
       readonly manifest?: unknown;
     }[],
-    options: { readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup } = {},
+    options: { readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup; readonly principles?: PackPrincipleLookup } = {},
   ): Promise<PackRegistry> {
     const records = new Map<string, PackRecord>();
     const validated = documents.map(({ source, value, ledger, manifest }) => ({
       source,
       ledger,
       manifest,
-      document: validatedDocument(value, source, options.shapes),
+      document: validatedDocument(value, source, options.shapes, options.principles),
     }));
     const siblings = new Map(validated.map(({ document }) => [document.id, {
       start: document.start,
       objective: { type: document.objective.type },
     }]));
     for (const entry of validated) {
-      const checked = validatePackDocument(entry.document, { ...(options.shapes === undefined ? {} : { shapes: options.shapes }), packs: siblings });
+      const checked = validatePackDocument(entry.document, { ...(options.shapes === undefined ? {} : { shapes: options.shapes }), ...(options.principles === undefined ? {} : { principles: options.principles }), packs: siblings });
       if (!checked.valid || checked.document === undefined) {
         const errors = checked.issues.filter((issue) => issue.severity === "error");
         throw new ServerError("PACK_INVALID", `Pack ${entry.source} is invalid: ${errors.map((issue) => issue.message).join("; ")}`, { details: { source: entry.source, issues: errors } });
@@ -251,6 +261,19 @@ export class PackRegistry {
       const feedbackPolicy = raw.feedbackPolicy as FeedbackPolicy;
       const digest = await digestDrillPack(document);
       const grounding = assessmentGrounding({ document, ledger, manifest });
+      const bindingIssues: SourcingIssue[] = [];
+      const validatedLedger = validateLedger(ledger, bindingIssues);
+      const validBindings = validatedLedger === undefined ? [] : validateClaimBindings(document, validatedLedger, bindingIssues);
+      const claimBackings = new Map<string, PackRecord["claimBackings"] extends ReadonlyMap<string, infer V> ? V : never>();
+      const principleRows = (ids: readonly string[] | undefined) => Object.freeze((ids ?? []).flatMap((id) => {
+        const principle = options.principles?.get(id)?.document as { readonly id?: string; readonly name?: string; readonly statement?: string; readonly standsOn?: string; readonly counterCase?: string } | undefined;
+        return principle?.id === undefined || principle.name === undefined || principle.statement === undefined || principle.standsOn === undefined || principle.counterCase === undefined ? [] : [Object.freeze({ id: principle.id, name: principle.name, statement: principle.statement, standsOn: principle.standsOn, counterCase: principle.counterCase })];
+      }));
+      for (const claim of document.feedbackClaims ?? []) {
+        const binding = validBindings.find((candidate) => candidate.claimId === claim.id);
+        if (binding !== undefined) claimBackings.set(claim.id, Object.freeze({ binding: binding.disposition, rendered: binding.rendered, authorSpans: binding.authorSpans, principles: principleRows(claim.principles) }));
+        else if (claim.evidenceTypes.includes("author_principle") && !claim.evidenceTypes.some((label) => ["corpus_observed", "engine_validated", "tablebase_exact"].includes(label))) claimBackings.set(claim.id, Object.freeze({ binding: "self_declared", rendered: Object.freeze([]), authorSpans: Object.freeze([claim.text]), principles: principleRows(claim.principles) }));
+      }
       const summary: PackSummary = freeze({
         id: document.id,
         version: document.version,
@@ -270,6 +293,8 @@ export class PackRegistry {
           summary,
           feedbackPolicy,
           assessmentGrounding: grounding,
+          boundClaimIds: Object.freeze(new Set(validBindings.map((binding) => binding.claimId))),
+          claimBackings,
           channel: "official",
         }),
       );
@@ -283,6 +308,7 @@ export class PackRegistry {
       readonly draftFile?: string;
       readonly draftsDirectory?: string;
       readonly shapes?: PackShapeLookup;
+      readonly principles?: PackPrincipleLookup;
     } = {},
   ): Promise<PackRegistry> {
     const fixture = fileURLToPath(
@@ -325,6 +351,7 @@ export class PackRegistry {
     return PackRegistry.fromDocuments(documents, {
       replaceDuplicates: options.development === true,
       ...(options.shapes === undefined ? {} : { shapes: options.shapes }),
+      ...(options.principles === undefined ? {} : { principles: options.principles }),
     });
   }
 
@@ -372,6 +399,8 @@ export class PackRegistry {
       }),
       feedbackPolicy: raw.feedbackPolicy as FeedbackPolicy,
       assessmentGrounding: "unverified",
+      boundClaimIds: Object.freeze(new Set<string>()),
+      claimBackings: new Map<string, never>(),
       channel: "community",
       publisherHandle,
     });
@@ -395,6 +424,8 @@ export class PackRegistry {
       }),
       feedbackPolicy: raw.feedbackPolicy as FeedbackPolicy,
       assessmentGrounding: "unverified",
+      boundClaimIds: Object.freeze(new Set<string>()),
+      claimBackings: new Map<string, never>(),
       channel: "community",
     });
     this.#digests.set(digest, record);

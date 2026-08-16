@@ -1,0 +1,26 @@
+{
+  "id": "result-not-moves",
+  "version": "0.1.0",
+  "name": "Grade the result, not the route",
+  "statement": "A consequence drill grades the declared result rather than imitation of an authored line.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "The route matters when the objective explicitly grades a named technique or intermediate structure.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

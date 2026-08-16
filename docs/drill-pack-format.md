@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.25; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.26; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -90,6 +90,12 @@ replaces the pack policy for that leg and is intentionally limited to `human_com
 `strong_engine`, with only a recordable `targetElo`; omitted policies inherit. Leg shapes
 must also appear in the pack-level shape list. The JSON Schema now has one shared
 `shapeReference` definition for both sites.
+
+Version 0.26 closes `feedbackClaim` and adds optional, unique `principles` references. A claim
+carrying `author_principle` must name at least one official entry from the principle registry;
+pack-check refuses missing and unknown references and warns when the entry does not list the pack's
+phase. The registry makes authored judgement attributable, not machine-true. Its entries require a
+statement, basis, provenance, and an explicit counter-case. See `docs/claim-backing.md`.
 
 The schema package exports `FORMAT_DISPOSITIONS`, a versioned register of declarations that
 are reached, refused, retired, unmeasured, or impossible. It is not a deployment capability

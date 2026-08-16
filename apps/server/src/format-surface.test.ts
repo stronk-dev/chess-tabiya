@@ -26,7 +26,7 @@ describe("format surface 0.25", () => {
     const value = candidate();
     const result = validatePackDocument(value);
     expect(result.valid, JSON.stringify(result.issues)).toBe(true);
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.25");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.26");
   });
 
   it("refuses every inert or unrecordable per-leg form by name", () => {

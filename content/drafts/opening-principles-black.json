@@ -434,6 +434,9 @@
       "text": "As Black the opening is an exchange market: White shows threats, you answer them. You break even every time the answer is a move you wanted to play anyway — a developing defence, a pawn move with a second job — and you lose ground every time the answer only defends. Count your opening moves that did new work; five out of six is winning the market.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "threat-before-opportunity"
       ]
     },
     {
@@ -442,6 +445,9 @@
       "evidenceTypes": [
         "author_principle",
         "derived_feature"
+      ],
+      "principles": [
+        "authored-teaching-is-declared"
       ]
     },
     {
@@ -450,6 +456,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "development-can-be-attack"
       ]
     },
     {
@@ -457,6 +466,9 @@
       "text": "The guard fires when a committed move costs about a piece (250 centipawns or more) — the Damiano branch and the greedy trap lines are its teaching cases here. It will not flag the modest bishop or the Philidor: at this band, quiet-but-sound must never be punished by the trainer.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "guard-calibration-is-authored"
       ]
     }
   ],

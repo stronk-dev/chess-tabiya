@@ -1,0 +1,26 @@
+{
+  "id": "tempo-is-the-currency",
+  "version": "0.1.0",
+  "name": "Tempo is the currency",
+  "statement": "In races and opening development, a move spent only reacting is a move not spent advancing the side's own task.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "A defensive move that also advances the task does double duty and should not be counted as a lost tempo.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

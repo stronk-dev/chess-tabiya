@@ -92,25 +92,36 @@
     "plan-exclusivity",
     "backward-pawn-target"
   ],
-  "shapes": ["carlsbad"],
+  "shapes": [
+    "carlsbad"
+  ],
   "planClasses": [
     {
       "id": "minority-attack",
       "label": "Minority attack (a3, Rab1, b4-b5)",
       "description": "In this tabiya the plan is already supported: Nc3 and Bd3 both bear on b5 before the pawn ever gets there, which is why it is the pack's main line.",
-      "shapePlan": { "shape": "carlsbad", "plan": "white-minority-attack" }
+      "shapePlan": {
+        "shape": "carlsbad",
+        "plan": "white-minority-attack"
+      }
     },
     {
       "id": "central-break",
       "label": "Central break (f3 and e3-e4)",
       "description": "The reason the knight went to e2 rather than f3: here the break needs f3, a rook to e1, and only then e4.",
-      "shapePlan": { "shape": "carlsbad", "plan": "white-central-break" }
+      "shapePlan": {
+        "shape": "carlsbad",
+        "plan": "white-central-break"
+      }
     },
     {
       "id": "kingside-attack",
       "label": "Kingside attack (Ng3, the g6 hook, h4-h5)",
       "description": "In this position h7 starts with three defenders, so the attack is a plan to change that count; h4-h5 only gains a tempo once a Black knight has come to g6.",
-      "shapePlan": { "shape": "carlsbad", "plan": "white-kingside-attack" }
+      "shapePlan": {
+        "shape": "carlsbad",
+        "plan": "white-kingside-attack"
+      }
     }
   ],
   "spine": [
@@ -475,13 +486,18 @@
     {
       "id": "band-result-split",
       "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 815 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15) the outcomes were 390 white wins, 60 draws and 365 black wins (47.9/7.4/44.8%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "minority-target",
       "text": "The minority attack's aim is a structure, not a pawn. Two pawns advance against three so that the exchange on c6 leaves Black a backward pawn on a file where White has no pawn — a target that survives every trade into the ending.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "structure-outlives-arrangement"
       ]
     },
     {
@@ -490,6 +506,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "preparation-is-asymmetric"
       ]
     },
     {
@@ -498,6 +517,9 @@
       "evidenceTypes": [
         "author_principle",
         "derived_feature"
+      ],
+      "principles": [
+        "count-before-conclusion"
       ]
     },
     {
@@ -506,6 +528,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "structure-outlives-arrangement"
       ]
     }
   ],

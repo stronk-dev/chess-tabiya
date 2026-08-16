@@ -380,6 +380,9 @@
       "evidenceTypes": [
         "tablebase_exact",
         "author_principle"
+      ],
+      "principles": [
+        "technique-is-conditional"
       ]
     },
     {
@@ -388,6 +391,9 @@
       "evidenceTypes": [
         "tablebase_exact",
         "author_principle"
+      ],
+      "principles": [
+        "count-before-conclusion"
       ]
     },
     {
@@ -395,6 +401,9 @@
       "text": "This is an outcome drill: you are graded on promoting and winning, not on matching the authored moves. A win by another tablebase-sound route is a pass.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "result-not-moves"
       ]
     }
   ],

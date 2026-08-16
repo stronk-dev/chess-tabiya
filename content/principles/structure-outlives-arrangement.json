@@ -1,0 +1,26 @@
+{
+  "id": "structure-outlives-arrangement",
+  "version": "0.1.0",
+  "name": "Structures outlive arrangements",
+  "statement": "A durable pawn concession or fixed square can remain relevant after the pieces that created it have moved or traded.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "A pawn break or exchange can dissolve the structure, after which the old plan no longer has the same basis.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

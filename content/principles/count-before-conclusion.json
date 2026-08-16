@@ -1,0 +1,26 @@
+{
+  "id": "count-before-conclusion",
+  "version": "0.1.0",
+  "name": "Count before concluding",
+  "statement": "Concrete attacker, defender, pawn, or route counts should be checked before drawing a strategic conclusion from a position.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "Exact counts do not by themselves establish which side is better or which move should be played.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

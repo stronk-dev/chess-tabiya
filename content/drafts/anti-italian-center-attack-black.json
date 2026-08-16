@@ -363,6 +363,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     }
   ],

@@ -454,7 +454,11 @@
       "id": "philidor-is-drawn",
       "text": "This exact position is a tablebase draw (Syzygy, five pieces), and every position along the authored defence was queried and remains drawn. The passive-rook alternative at the root was queried and is lost. Both categories are machine facts about these positions.",
       "evidenceTypes": [
-        "tablebase_exact"
+        "tablebase_exact",
+        "author_principle"
+      ],
+      "principles": [
+        "authored-teaching-is-declared"
       ]
     },
     {
@@ -463,6 +467,9 @@
       "evidenceTypes": [
         "author_principle",
         "tablebase_exact"
+      ],
+      "principles": [
+        "construction-order-matters"
       ]
     },
     {
@@ -477,6 +484,9 @@
       "text": "Outcome drill: you are graded on holding, not on matching the authored squares. The tablebase confirms several drawing set-ups; the authored one is the one worth memorising.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "result-not-moves"
       ]
     }
   ],

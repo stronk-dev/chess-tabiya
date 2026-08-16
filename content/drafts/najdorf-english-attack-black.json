@@ -325,6 +325,9 @@
       "text": "Black's tabiya order is ...a6, ...e5, ...Be6, and only then the wing decisions: each earlier move is the prerequisite of the next, while ...h5, ...b5 and ...Be7 are choices that can wait one move without being lost.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "construction-order-matters"
       ]
     },
     {
@@ -333,6 +336,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "threat-before-opportunity"
       ]
     }
   ],

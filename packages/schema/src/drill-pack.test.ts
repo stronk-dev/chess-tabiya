@@ -55,13 +55,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.25", () => {
+describe("drill_pack.schema.json v0.26", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.25",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.26",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.25");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.26");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
@@ -151,7 +151,7 @@ describe("drill_pack.schema.json v0.25", () => {
       for (const [key, child] of Object.entries(object)) walk(child, `${path}/${key}`);
     };
     walk(schema, "");
-    expect(paths).toEqual(["/$defs/feedbackClaim", "/$defs/provenance"]);
+    expect(paths).toEqual(["/$defs/provenance"]);
     expect((schema as any).$defs.structuralFeature.oneOf.every((branch: any) => branch.additionalProperties === false)).toBe(true);
     expect((schema as any).$defs.structuralExpression.oneOf.every((branch: any) => branch.additionalProperties === false)).toBe(true);
   });

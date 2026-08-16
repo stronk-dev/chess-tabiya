@@ -894,6 +894,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "structure-outlives-arrangement"
       ]
     },
     {
@@ -902,6 +905,9 @@
       "evidenceTypes": [
         "derived_feature",
         "author_principle"
+      ],
+      "principles": [
+        "authored-teaching-is-declared"
       ]
     },
     {

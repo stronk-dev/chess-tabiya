@@ -341,6 +341,9 @@
       "text": "Holding the Advance centre is arithmetic made into a habit: attackers and defenders of d4 are counted before every move, and a3 belongs in the count because b4 removes an attacker one move later.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "count-before-conclusion"
       ]
     },
     {
@@ -349,6 +352,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "preparation-is-asymmetric"
       ]
     }
   ],

@@ -308,6 +308,9 @@
       "text": "The Leningrad is a one-break opening: a candidate move is good here almost exactly when it adds a net supporter to ...e5 or removes a White defender of e5 — a counting rule you can apply before every move of the spine.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "count-before-conclusion"
       ]
     },
     {
@@ -316,6 +319,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "structure-outlives-arrangement"
       ]
     }
   ],

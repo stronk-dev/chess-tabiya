@@ -358,6 +358,9 @@
       "text": "Against a committed pawn storm, prophylaxis is measured in single moves: f3 because Ne1 freed it, Nd3 because it pushes c5 — each defensive-looking move must also be a race move, or it is a tempo donated to the attack.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     },
     {
@@ -366,6 +369,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     }
   ],

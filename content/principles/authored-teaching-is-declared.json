@@ -1,0 +1,26 @@
+{
+  "id": "authored-teaching-is-declared",
+  "version": "0.1.0",
+  "name": "Authored teaching is declared",
+  "statement": "A teaching decomposition, threshold, or narration is identified as authored when the machine evidence establishes only narrower position facts.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "A statement directly re-derived from a recorded instrument should be attributed to that instrument instead.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

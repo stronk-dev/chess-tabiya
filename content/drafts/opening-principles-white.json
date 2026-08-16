@@ -398,6 +398,9 @@
       "text": "An opening move earns its place by doing new work: claiming a centre square, developing a piece that has not moved, or castling. Moves that repeat old work — second pawn pushes, the same piece again, early queen walks — hand the opponent the one resource the opening is about: time.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     },
     {
@@ -406,6 +409,9 @@
       "evidenceTypes": [
         "author_principle",
         "derived_feature"
+      ],
+      "principles": [
+        "construction-order-matters"
       ]
     },
     {
@@ -414,6 +420,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "threat-before-opportunity"
       ]
     },
     {
@@ -421,6 +430,9 @@
       "text": "This pack's guard fires when a committed move costs roughly a piece (250 centipawns or more, about the two Ng5/Nxe5 branches). It stays silent through small inaccuracies on purpose: at this band the habit being built is 'don't lose pieces', and a guard that also flagged tempo losses would bury that lesson in noise.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "guard-calibration-is-authored"
       ]
     }
   ],

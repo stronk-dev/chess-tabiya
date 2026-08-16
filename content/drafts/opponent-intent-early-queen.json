@@ -397,6 +397,9 @@
       "text": "Two questions before every reply: what does their move want, and what is the piece that just moved no longer doing? The first finds their threat; the second finds your opportunity. At 1000-1400, games are decided by whoever forgets to ask the first question — the second is how you start winning them.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "threat-before-opportunity"
       ]
     },
     {
@@ -404,6 +407,9 @@
       "text": "A threat you can execute next move outranks an attack on any piece, including the queen. The ...Nd4 branch exists to make this permanent: the knight attacks her majesty herself and White simply plays mate. Check what they can DO to you before admiring what you can do to them.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "threat-before-opportunity"
       ]
     },
     {
@@ -412,6 +418,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     },
     {
@@ -419,6 +428,9 @@
       "text": "This pack's guard is set tighter than the principles packs (150 centipawns) on purpose: here every wrong move IS a misread threat, and its cost — a pawn with check, a fork, mate — should arrive within a ply or two so the misread and the consequence are still in the same breath. Nothing quieter than a misread can trip it.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "guard-calibration-is-authored"
       ]
     }
   ],

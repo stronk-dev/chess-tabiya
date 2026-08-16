@@ -433,6 +433,9 @@
       "evidenceTypes": [
         "author_principle",
         "tablebase_exact"
+      ],
+      "principles": [
+        "authored-teaching-is-declared"
       ]
     },
     {
@@ -440,6 +443,9 @@
       "text": "Outcome drill: you are graded on delivering mate, not on matching the authored squares. The tablebase confirms many winning routes; the authored one is the repeatable method worth keeping.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "result-not-moves"
       ]
     }
   ],

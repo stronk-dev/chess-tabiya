@@ -71,6 +71,10 @@ export interface PackShapeLookup {
   get(id: string): { readonly document: { readonly trigger: StructuralExpression; readonly plans: readonly { readonly id: string; readonly success: { readonly note: string; readonly signature: StructuralExpression | null } }[] } } | undefined;
 }
 
+export interface PackPrincipleLookup {
+  get(id: string): { readonly document: { readonly phases: readonly ("opening" | "middlegame" | "endgame")[] } } | undefined;
+}
+
 export interface PackSiblingLookup {
   get(id: string): {
     readonly start: { readonly fen: string; readonly side: "white" | "black" };
@@ -523,6 +527,7 @@ function runtimeIssues(
   pack: DrillPackDefinition,
   shapes?: PackShapeLookup,
   packs?: PackSiblingLookup,
+  principles?: PackPrincipleLookup,
   compile: ObjectiveCompiler = objectiveRules,
 ): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
@@ -719,6 +724,25 @@ function runtimeIssues(
     }
   }
   const claimIds = new Set((pack.feedbackClaims ?? []).map((claim) => claim.id));
+  if (claimIds.size !== (pack.feedbackClaims ?? []).length) {
+    const seen = new Set<string>();
+    for (const [index, claim] of (pack.feedbackClaims ?? []).entries()) {
+      if (seen.has(claim.id)) issues.push(runtimeIssue("CLAIM_ID_DUPLICATE", `/feedbackClaims/${index}/id`, `duplicate feedback claim id ${claim.id}`));
+      seen.add(claim.id);
+    }
+  }
+  for (const [index, claim] of (pack.feedbackClaims ?? []).entries()) {
+    const path = `/feedbackClaims/${index}`;
+    const authorPrinciple = claim.evidenceTypes.includes("author_principle");
+    if (authorPrinciple && (claim.principles === undefined || claim.principles.length === 0)) {
+      issues.push(runtimeIssue("CLAIM_PRINCIPLE_MISSING", `${path}/principles`, "author_principle requires at least one principle reference"));
+    }
+    for (const [principleIndex, id] of (claim.principles ?? []).entries()) {
+      const entry = principles?.get(id);
+      if (principles !== undefined && entry === undefined) issues.push(runtimeIssue("CLAIM_PRINCIPLE_UNKNOWN", `${path}/principles/${principleIndex}`, `unknown principle ${id}`));
+      if (entry !== undefined && !entry.document.phases.includes(pack.phase as "opening" | "middlegame" | "endgame")) issues.push(runtimeWarning("CLAIM_PRINCIPLE_OFF_PHASE", `${path}/principles/${principleIndex}`, `principle ${id} does not list phase ${String(pack.phase)}`));
+    }
+  }
   for (const [checkpointIndex, checkpoint] of pack.checkpoints.entries()) {
     if (checkpoint.interaction?.type !== "stated_reasoning") continue;
     if (pack.feedbackPolicy === "segment_end") {
@@ -1153,6 +1177,7 @@ function runtimeIssues(
 export function validatePackDocument(value: unknown, options: {
   readonly shapes?: PackShapeLookup;
   readonly packs?: PackSiblingLookup;
+  readonly principles?: PackPrincipleLookup;
   readonly compileObjectiveRules?: ObjectiveCompiler;
 } = {}): PackValidationResult {
   const validate = validator();
@@ -1174,7 +1199,7 @@ export function validatePackDocument(value: unknown, options: {
         message: issue.message,
       }),
     ),
-    ...runtimeIssues(document, options.shapes, options.packs, options.compileObjectiveRules),
+    ...runtimeIssues(document, options.shapes, options.packs, options.principles, options.compileObjectiveRules),
   ];
   return Object.freeze({
     valid: !issues.some((issue) => issue.severity === "error"),

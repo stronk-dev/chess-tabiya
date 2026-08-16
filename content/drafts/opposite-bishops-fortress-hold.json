@@ -303,6 +303,9 @@
       "evidenceTypes": [
         "tablebase_exact",
         "author_principle"
+      ],
+      "principles": [
+        "count-before-conclusion"
       ]
     },
     {
@@ -317,6 +320,9 @@
       "text": "Outcome drill: hold the draw by any tablebase-sound configuration — the queenside-jobs version passes identically. The graded thing is the half point.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "result-not-moves"
       ]
     }
   ],

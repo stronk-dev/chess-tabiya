@@ -1,0 +1,26 @@
+{
+  "id": "development-can-be-attack",
+  "version": "0.1.0",
+  "name": "Development can do attacking work",
+  "statement": "A developing move is especially efficient when it also contests the position's current structural target.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "Development that ignores a forcing threat or misplaces a piece does not become good merely by being development.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

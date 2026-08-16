@@ -1,0 +1,26 @@
+{
+  "id": "guard-calibration-is-authored",
+  "version": "0.1.0",
+  "name": "Guard calibration is authored",
+  "statement": "A feedback guard's threshold and silence band are authored teaching choices, not measurements of universal chess error.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "A different learner band or teaching objective can justify a different threshold.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

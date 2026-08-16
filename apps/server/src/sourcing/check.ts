@@ -9,7 +9,8 @@ import { parseUci } from "chessops/util";
 import { validatePackDocument } from "../pack-validation.js";
 import { readJson } from "./canonical.js";
 import { deriveDeviationCost, deviationCostMatches } from "./deviation-cost.js";
-import { EXPLORER_TEMPLATE_ID, renderExplorerFrequency, RATING_GROUPS, SPEEDS, type ExplorerTemplateValues } from "./explorer.js";
+import { claimBindingForPointer, validateClaimBindings } from "./claim-binding.js";
+import { EXPLORER_TEMPLATE_ID, RATING_GROUPS, SPEEDS } from "./explorer.js";
 import {
   type EvidenceLedger,
   type EvidenceRecord,
@@ -122,7 +123,7 @@ function offlineJobProvenance(job: unknown, manifest: SourceManifest | undefined
   });
 }
 
-function explorerTemplate(record: EvidenceRecord, pack: unknown, manifest: SourceManifest | undefined, recordIndex: number, issues: SourcingIssue[]): boolean {
+function explorerTemplate(record: EvidenceRecord, _pack: unknown, manifest: SourceManifest | undefined, recordIndex: number, issues: SourcingIssue[]): boolean {
   if (record.kind !== "explorer_frequency") return false;
   const path = `/records/${recordIndex}`;
   const keys = ["moveSan", "playedCount", "total", "sharePct", "white", "draws", "black", "ratings", "speeds", "since", "until"];
@@ -138,18 +139,10 @@ function explorerTemplate(record: EvidenceRecord, pack: unknown, manifest: Sourc
     const url = new URL(sourceEntry.origin.url);
     if (url.searchParams.get("ratings") !== (Array.isArray(ratings) ? ratings.join(",") : "") || url.searchParams.get("speeds") !== (Array.isArray(speeds) ? speeds.join(",") : "") || url.searchParams.get("since") !== values.since || url.searchParams.get("until") !== values.until) issues.push(issue("EVIDENCE_VALUES_INVALID", `${path}/values`, "record band/window differs from the explorer request URL"));
   }
-  const pointer = record.supports[0];
-  if (record.supports.length !== 1 || !/^\/feedbackClaims\/\d+\/text$/.test(pointer ?? "")) {
-    issues.push(issue("EVIDENCE_OVERREACH", `${path}/supports`, "explorer frequency may support exactly one feedbackClaims text"));
-  } else if (valid) {
-    const target = resolvePointer(pack, pointer!);
-    const rendered = renderExplorerFrequency(values as unknown as ExplorerTemplateValues);
-    if (!target.found || target.value !== rendered) issues.push(issue("EVIDENCE_OVERREACH", `${path}/supports/0`, "supported explorer sentence is not the byte-exact generated template"));
-  }
   return true;
 }
 
-function engineTemplate(record: EvidenceRecord, pack: unknown, recordIndex: number, issues: SourcingIssue[]): boolean {
+function engineTemplate(record: EvidenceRecord, _pack: unknown, recordIndex: number, issues: SourcingIssue[]): boolean {
   if (record.kind !== "engine_eval" || record.templateId !== ENGINE_MOVE_LOSS_TEMPLATE_ID) return false;
   const path = `/records/${recordIndex}`;
   const values = record.values;
@@ -167,12 +160,6 @@ function engineTemplate(record: EvidenceRecord, pack: unknown, recordIndex: numb
     } catch { valid = false; }
   }
   if (!valid) issues.push(issue("EVIDENCE_VALUES_INVALID", `${path}/values`, "engine-move-loss/v1 requires a self-consistent measured candidate set"));
-  const pointer = record.supports[0];
-  if (record.supports.length !== 1 || !/^\/feedbackClaims\/\d+\/text$/.test(pointer ?? "")) issues.push(issue("EVIDENCE_OVERREACH", `${path}/supports`, "engine move loss may support exactly one feedbackClaims text"));
-  else if (valid) {
-    const target = resolvePointer(pack, pointer!);
-    if (!target.found || target.value !== renderEngineMoveLoss(values)) issues.push(issue("EVIDENCE_OVERREACH", `${path}/supports/0`, "supported engine sentence is not the byte-exact generated template"));
-  }
   return true;
 }
 
@@ -200,22 +187,25 @@ export function evidenceSupports(
       if (record.kind === "puzzle_provenance" && pointer === "/start/fen" && resolved.value !== record.anchor.fen) {
         issues.push(issue("EVIDENCE_VALUES_INVALID", path, "puzzle_provenance replay anchor must equal pack /start/fen"));
       }
-      if (HUMAN_ONLY_POINTERS.some((pattern) => pattern.test(pointer)) || ((!isExplorerTemplate && !isEngineTemplate && PROSE_POINTERS.some((pattern) => pattern.test(pointer))) || (record.kind === "explorer_frequency" && /^\/spine(?:\/|$)/.test(pointer)))) {
+      if (HUMAN_ONLY_POINTERS.some((pattern) => pattern.test(pointer)) || PROSE_POINTERS.some((pattern) => pattern.test(pointer)) || (record.kind === "explorer_frequency" && /^\/spine(?:\/|$)/.test(pointer))) {
         issues.push(issue("EVIDENCE_OVERREACH", path, `B6a has no registered template or grading contract for ${pointer}`));
       }
       if (record.templateId !== undefined && !isExplorerTemplate && !isEngineTemplate) issues.push(issue("EVIDENCE_OVERREACH", `/records/${recordIndex}/templateId`, "template is not registered for this evidence kind"));
     });
   });
   if (object(pack) && Array.isArray(pack.feedbackClaims)) {
-    const map: Readonly<Record<string, EvidenceRecord["kind"]>> = { engine_validated: "engine_eval", tablebase_exact: "tablebase_result", corpus_observed: "explorer_frequency" };
+    const document = pack as unknown as DrillPackDefinition;
+    const bindings = validateClaimBindings(document, ledger, issues);
+    const map: Readonly<Record<string, readonly EvidenceRecord["kind"][]>> = { engine_validated: ["engine_eval"], tablebase_exact: ["tablebase_result"], corpus_observed: ["explorer_frequency", "explorer_position_census"] };
     const published = object(pack.provenance) && pack.provenance.reviewStatus === "published";
     pack.feedbackClaims.forEach((raw, index) => {
       if (!object(raw) || !Array.isArray(raw.evidenceTypes)) return;
       for (const label of raw.evidenceTypes) {
-        const kind = map[String(label)];
-        if (kind === undefined) continue;
+        const kinds = map[String(label)];
+        if (kinds === undefined) continue;
         const pointer = `/feedbackClaims/${index}/text`;
-        if (!ledger.records.some((record) => record.kind === kind && record.supports.includes(pointer))) issues.push(issue("EVIDENCE_TYPE_UNBACKED", `/feedbackClaims/${index}/evidenceTypes`, `${String(label)} has no matching evidence record`, published ? "error" : "warning"));
+        const binding = claimBindingForPointer(bindings, pointer);
+        if (binding === undefined || !binding.instrumentKinds.some((kind) => kinds.includes(kind))) issues.push(issue("EVIDENCE_TYPE_UNBACKED", `/feedbackClaims/${index}/evidenceTypes`, `${String(label)} has no matching validating claim binding`, published ? "error" : "warning"));
       }
     });
   }
@@ -295,6 +285,18 @@ export function evidenceSemantics(ledger: EvidenceLedger, issues: SourcingIssue[
         issues.push(issue("EVIDENCE_KIND_MISMATCH", `/records/${index}/values/pieceCount`, "tablebase_result requires a mechanically counted position with at most 7 pieces"));
       }
     }
+    if (record.kind === "explorer_position_census") {
+      const values = record.values;
+      const keys = ["fen", "total", "whitePct", "drawPct", "blackPct", "topMoves", "ratings", "speeds", "since", "until"];
+      const rows = values.topMoves;
+      const valid = exactKeys(values as Record<string, unknown>, keys) && keys.every((key) => values[key] !== undefined) && nonEmpty(values.fen) && Number.isSafeInteger(values.total) && Number(values.total) >= 100 && typeof values.whitePct === "number" && typeof values.drawPct === "number" && typeof values.blackPct === "number" && Math.abs(Number(values.whitePct) + Number(values.drawPct) + Number(values.blackPct) - 100) <= 0.2 && Array.isArray(rows) && rows.every((raw) => object(raw) && exactKeys(raw, ["san", "uci", "playedCount", "sharePct"]) && nonEmpty(raw.san) && nonEmpty(raw.uci) && Number.isSafeInteger(raw.playedCount) && Number(raw.playedCount) >= 0 && typeof raw.sharePct === "number" && raw.sharePct === Math.round(Number(raw.playedCount) / Number(values.total) * 1000) / 10) && Array.isArray(values.ratings) && values.ratings.length > 0 && values.ratings.every((value) => RATING_GROUPS.includes(value as never)) && Array.isArray(values.speeds) && values.speeds.length > 0 && values.speeds.every((value) => SPEEDS.includes(value as never)) && /^\d{4}-(0[1-9]|1[0-2])$/.test(String(values.since)) && /^\d{4}-(0[1-9]|1[0-2])$/.test(String(values.until));
+      if (!valid) issues.push(issue("EVIDENCE_VALUES_INVALID", `/records/${index}/values`, "explorer_position_census requires the exact census shape and derived move shares"));
+      const entry = manifest?.entries.find((candidate) => candidate.sourceId === record.sourceId && candidate.retrievedAt === record.retrievedAt && candidate.origin.kind === "http");
+      if (entry?.origin.kind === "http") {
+        const url = new URL(entry.origin.url);
+        if (url.searchParams.get("fen") !== values.fen || url.searchParams.get("ratings") !== (Array.isArray(values.ratings) ? values.ratings.join(",") : "") || url.searchParams.get("speeds") !== (Array.isArray(values.speeds) ? values.speeds.join(",") : "") || url.searchParams.get("since") !== values.since || url.searchParams.get("until") !== values.until) issues.push(issue("EVIDENCE_VALUES_INVALID", `/records/${index}/values`, "census band/window/FEN differs from the explorer request URL"));
+      }
+    }
     if (record.kind === "engine_eval") {
       const required = ["depth", "threads", "hashMb", "multiPv", "timeoutMs", "engineId", "engineName", "engineVersion"];
       if (required.some((key) => record.values[key] === undefined) || record.values.perspective !== "white" || record.values.movetimeMs !== undefined || record.values.requestedMovetimeMs !== undefined) {
@@ -321,7 +323,8 @@ function licenceObligations(pack: Record<string, unknown>, manifest: SourceManif
   const attributions = Array.isArray(provenance.attribution) ? provenance.attribution : [];
   for (const entry of manifest.entries) {
     if (entry.licence.basis !== "spdx" || entry.licence.spdx !== "CC-BY-SA-4.0") continue;
-    const contributesProse = ledger.records.some((record) => record.sourceId === entry.sourceId && record.retrievedAt === entry.retrievedAt && record.supports.some((pointer) => PROSE_POINTERS.some((pattern) => pattern.test(pointer))));
+    const boundAssertions = new Set((ledger.claimBindings ?? []).flatMap((binding) => binding.spans.flatMap((span) => "assertion" in span ? [span.assertion.kind.split(".")[0]] : [])));
+    const contributesProse = ledger.records.some((record) => record.sourceId === entry.sourceId && record.retrievedAt === entry.retrievedAt && (record.supports.some((pointer) => PROSE_POINTERS.some((pattern) => pattern.test(pointer))) || boundAssertions.has(record.kind === "tablebase_result" ? "tablebase" : record.kind === "engine_eval" ? "engine" : record.kind === "explorer_position_census" || record.kind === "explorer_frequency" ? "explorer" : "")));
     if (!contributesProse) continue;
     const matching = attributions.some((raw) => object(raw) && raw.sourceId === entry.sourceId && raw.licence === "CC-BY-SA-4.0" && raw.noticeText === entry.licence.noticeText);
     if (!matching) issues.push(issue("ATTRIBUTION_MISSING", "/provenance/attribution", `missing CC-BY-SA-4.0 attribution for ${entry.sourceId}`));

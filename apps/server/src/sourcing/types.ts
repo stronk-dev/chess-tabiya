@@ -58,6 +58,7 @@ export const EVIDENCE_KINDS = [
   "opening_identity",
   "position_legality",
   "explorer_frequency",
+  "explorer_position_census",
   "tablebase_result",
   "engine_eval",
   "puzzle_provenance",
@@ -91,6 +92,23 @@ export interface EvidenceAbstention {
   readonly detail: string;
 }
 
+export interface ClaimAssertion {
+  readonly kind: string;
+  readonly args: Readonly<Record<string, unknown>>;
+  readonly select?: string;
+}
+
+export type ClaimSpan =
+  | { readonly span: string; readonly assertion: ClaimAssertion }
+  | { readonly span: string; readonly authored: true };
+
+export interface ClaimBinding {
+  readonly claimId: string;
+  readonly pointer: string;
+  readonly textSha256: string;
+  readonly spans: readonly ClaimSpan[];
+}
+
 export interface EvidenceLedger {
   readonly schema: "tabiya.sourcing.evidence.v1";
   readonly packId?: string;
@@ -99,6 +117,7 @@ export interface EvidenceLedger {
   readonly sourcedAt: string;
   readonly records: readonly EvidenceRecord[];
   readonly abstentions: readonly EvidenceAbstention[];
+  readonly claimBindings?: readonly ClaimBinding[];
 }
 
 export interface SourcingIssue {
@@ -112,9 +131,10 @@ export type SourcingErrorCode =
   | "ANCHOR_UNRESOLVED"
   | "ARGUMENT_INVALID"
   | "ARGUMENT_MISSING"
-  | "ATTACHED_PACK_INVALID"
   | "ATTACH_CHECK_FAILED"
   | "ATTACH_TARGET_FORBIDDEN"
+  | "ATTACH_SPAN_REQUIRED"
+  | "ATTACH_SOURCE_LINE_MISSING"
   | "AUTHORING_MULTIPV_UNSUPPORTED"
   | "CANDIDATE_IDENTITY_COLLISION"
   | "CANDIDATE_NOT_CLEAN"

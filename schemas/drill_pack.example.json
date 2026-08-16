@@ -147,7 +147,8 @@
     {
       "id": "timing-claim-placeholder",
       "text": "Compare when each side completed its declared action; human review is required.",
-      "evidenceTypes": ["author_principle", "engine_validated", "derived_feature"]
+      "evidenceTypes": ["author_principle", "engine_validated", "derived_feature"],
+      "principles": ["authored-teaching-is-declared"]
     }
   ],
   "retryVariants": [

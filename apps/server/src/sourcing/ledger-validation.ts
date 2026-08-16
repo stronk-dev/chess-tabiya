@@ -339,6 +339,20 @@ export function validateLedger(
       );
     }
   }
+  if (value.claimBindings !== undefined) {
+    if (!Array.isArray(value.claimBindings)) {
+      issues.push(issue("EVIDENCE_INVALID", "/claimBindings", "claimBindings must be an array"));
+    } else for (const [index, raw] of value.claimBindings.entries()) {
+      if (!object(raw) || !exactKeys(raw, ["claimId", "pointer", "textSha256", "spans"]) || !nonEmpty(raw.claimId) || !nonEmpty(raw.pointer) || !/^sha256:[a-f0-9]{64}$/.test(String(raw.textSha256)) || !Array.isArray(raw.spans) || raw.spans.length === 0) {
+        issues.push(issue("EVIDENCE_INVALID", `/claimBindings/${index}`, "invalid claim binding"));
+        continue;
+      }
+      for (const [spanIndex, span] of raw.spans.entries()) {
+        const valid = object(span) && nonEmpty(span.span) && ((span.authored === true && exactKeys(span, ["span", "authored"])) || (object(span.assertion) && exactKeys(span, ["span", "assertion"]) && nonEmpty(span.assertion.kind) && object(span.assertion.args) && exactKeys(span.assertion, ["kind", "args", "select"])));
+        if (!valid) issues.push(issue("EVIDENCE_INVALID", `/claimBindings/${index}/spans/${spanIndex}`, "claim span must be authored or carry a typed assertion"));
+      }
+    }
+  }
   return issues.length === issueCount
     ? (value as unknown as EvidenceLedger)
     : undefined;

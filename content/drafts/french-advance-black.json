@@ -310,6 +310,9 @@
       "text": "In the Advance French, Black's developing moves and attacking moves are the same moves: ...c5, ...Nc6, ...Qb6 and the knight route to f5 all point at d4. That coincidence is why the cramped side is not worse — every tempo does double duty.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     },
     {
@@ -318,6 +321,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     }
   ],

@@ -303,6 +303,9 @@
       "text": "...c5 attacks the base of the pawn chain. Whoever is better developed when it lands usually wins the resulting tension.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "structure-outlives-arrangement"
       ]
     },
     {
@@ -311,6 +314,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "tempo-is-the-currency"
       ]
     }
   ],

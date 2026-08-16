@@ -361,6 +361,9 @@
       "text": "The Caro-Kann's identity in one rule: the light-squared bishop leaves the pawn chain before ...e6 closes it. Every White system against the Advance is priced by how hard it works to make that bishop a liability.",
       "evidenceTypes": [
         "author_principle"
+      ],
+      "principles": [
+        "construction-order-matters"
       ]
     },
     {
@@ -369,6 +372,9 @@
       "evidenceTypes": [
         "author_principle",
         "hypothesis"
+      ],
+      "principles": [
+        "preparation-is-asymmetric"
       ]
     }
   ],

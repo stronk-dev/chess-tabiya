@@ -7,6 +7,7 @@ import {
 } from "./pack-validation.js";
 import { isSidecarName } from "./pack-registry.js";
 import { ShapeRegistry } from "./shape-registry.js";
+import { PrincipleRegistry } from "./principle-registry.js";
 
 export interface PackCheckResult {
   readonly file: string;
@@ -137,8 +138,9 @@ export async function checkPackFile(file: string): Promise<PackCheckResult> {
     });
   }
   const shapes = await ShapeRegistry.loadDefault();
+  const principles = await PrincipleRegistry.loadDefault();
   const packs = await siblingLookup();
-  const result = validatePackDocument(value, { shapes, packs });
+  const result = validatePackDocument(value, { shapes, packs, principles });
   return Object.freeze({ file: absolute, valid: result.valid, issues: result.issues });
 }
 

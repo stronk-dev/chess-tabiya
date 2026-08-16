@@ -39,6 +39,7 @@ import { IdentityService } from "./identity.js";
 import { stockfishPlaySpec } from "./strong-engine.js";
 import { LiveSessionService } from "./live-session.js";
 import { ShapeRegistry } from "./shape-registry.js";
+import { PrincipleRegistry } from "./principle-registry.js";
 import { ShapeStudio } from "./shape-studio.js";
 import type { VoiceProvider } from "./guidance.js";
 import { FixtureCorpusSource, LichessCorpusSource, type CorpusSource } from "./corpus.js";
@@ -278,11 +279,13 @@ export async function createApplication(
   if (databasePath !== ":memory:") await mkdir(dirname(databasePath), { recursive: true });
   const storage = new SQLiteRunStorage(databasePath);
   const shapes = await ShapeRegistry.loadDefault();
+  const principles = await PrincipleRegistry.loadDefault();
   const shapeStudio = new ShapeStudio(storage, shapes);
   await shapeStudio.hydrate();
   const registry = await PackRegistry.loadDefault({
     development: options.development === true,
     shapes,
+    principles,
     ...(options.draftPackFile === undefined
       ? {}
       : { draftFile: options.draftPackFile }),

@@ -1,0 +1,26 @@
+{
+  "id": "preparation-is-asymmetric",
+  "version": "0.1.0",
+  "name": "Preparation is asymmetric",
+  "statement": "A recurring structure may be more familiar to the player who reaches it through a narrower repertoire than to the opponent who meets it occasionally.",
+  "phases": [
+    "opening",
+    "middlegame",
+    "endgame"
+  ],
+  "standsOn": "authors_practice",
+  "counterCase": "Individual experience can reverse the population-level preparation asymmetry.",
+  "provenance": {
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "Synthesized from the authored claims in content/drafts during the claim-backing migration; no machine or external source establishes the judgement."
+    ],
+    "attribution": [
+      {
+        "title": "Tabiya authored claim corpus",
+        "author": "Tabiya",
+        "licence": "CC-BY-SA-4.0"
+      }
+    ]
+  }
+}

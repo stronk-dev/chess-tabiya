@@ -135,28 +135,50 @@
     {
       "id": "trade-taken",
       "label": "Rooks off — choose your winning scheme",
-      "trigger": { "atSpineNode": "b1-kxd8" },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atSpineNode": "b1-kxd8"
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["trade-pieces-keep-pawns", "king-to-the-centre", "knight-raid"]
+        "planClassIds": [
+          "trade-pieces-keep-pawns",
+          "king-to-the-centre",
+          "knight-raid"
+        ]
       }
     },
     {
       "id": "kings-in-the-centre",
       "label": "The march is done — the knight decides",
-      "trigger": { "atSpineNode": "w4-kd3" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "w4-kd3"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "conversion-check",
       "label": "End of the authored technique — the finish is yours",
-      "trigger": { "atPly": 8 },
+      "trigger": {
+        "atPly": 8
+      },
       "actions": []
     }
   ],
   "authoredBoundary": {
-    "spineNodeIds": ["w1-rxd8", "b1-kxd8", "w2-kf1", "b2-ke7", "w3-ke2", "b3-kd6", "w4-kd3"],
+    "spineNodeIds": [
+      "w1-rxd8",
+      "b1-kxd8",
+      "w2-kf1",
+      "b2-ke7",
+      "w3-ke2",
+      "b3-kd6",
+      "w4-kd3"
+    ],
     "plyHorizon": 8
   },
   "opponentPolicy": {
@@ -168,55 +190,73 @@
   },
   "deviations": [
     {
-      "at": { "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1" },
+      "at": {
+        "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1"
+      },
       "moveUci": "e1f1",
       "class": "concept_violation",
       "note": "Ask the second question about your OWN move: what did the king stop doing on e1? Sharing the defence of d1. Nothing hangs — after 1...Rxd1+ the knight recaptures — but look where that leaves it: your winning piece dragged backward to d1, undeveloped by a king sidestep, and the trade happened on their initiative anyway. A free choice deferred is a small piece of the win given away."
     },
     {
-      "at": { "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1" },
+      "at": {
+        "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1"
+      },
       "moveUci": "c3d5",
       "class": "tactical_error",
       "note": "The knight leaps to the beautiful central square — and the e6 pawn simply takes it. Count the cheapest attacker of the square you are moving to, every time, even when you are winning. Especially when you are winning: the whole advantage rides on this one piece."
     },
     {
-      "at": { "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1" },
+      "at": {
+        "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1"
+      },
       "moveUci": "c3b5",
       "class": "accepted_alternative",
       "note": "The raid, one move early: Nb5 eyes a7 and c7 and still guards d-file entries badly. Black answers ...Rxd1+ Kxd1 and the trade happens anyway — on their initiative. Same destination, minus the tempo; the spine takes the trade first because free choices should be exercised, not deferred."
     },
     {
-      "at": { "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1" },
+      "at": {
+        "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1"
+      },
       "moveUci": "e3e4",
       "class": "concept_violation",
       "note": "Not losing — planless. The pawn advances toward nothing while the rook trade stays pending on Black's terms. When you are winning, the first habit to drill is doing the forcing housekeeping (trades, threats answered) before any move that merely looks forward."
     },
     {
-      "at": { "spineNodeId": "b1-kxd8" },
+      "at": {
+        "spineNodeId": "b1-kxd8"
+      },
       "moveUci": "c3d5",
       "class": "tactical_error",
       "note": "The same square, the same pawn, one move later — ...exd5 and the extra piece is gone, leaving a drawn-at-best pawn ending. Worth meeting twice on purpose: the blunder that costs the win rarely looks like a blunder, it looks like centralisation."
     },
     {
-      "at": { "spineNodeId": "b1-kxd8" },
+      "at": {
+        "spineNodeId": "b1-kxd8"
+      },
       "moveUci": "c3b5",
       "class": "accepted_alternative",
       "note": "Now the raid is fully sound: rooks are off, Nb5 hits a7, and ...a6 is met by Nd4 with the queenside pawns fixed as targets. A faster, sharper road than the king march — the spine prefers the march because it is the same technique in every winning endgame, not just this one."
     },
     {
-      "at": { "spineNodeId": "b1-kxd8" },
+      "at": {
+        "spineNodeId": "b1-kxd8"
+      },
       "moveUci": "e3e4",
       "class": "concept_violation",
       "note": "Pawns before the king. It cannot be punished here — nothing can punish you — but drills build defaults, and the default this position teaches is king first: the pawn that advances early fixes itself on squares the defender's king will attack later."
     },
     {
-      "at": { "spineNodeId": "b2-ke7" },
+      "at": {
+        "spineNodeId": "b2-ke7"
+      },
       "moveUci": "b2b4",
       "class": "concept_violation",
       "note": "Starting the pawns while the king is half-marched. Same lesson, sharper form: every pawn move is one your king did not make, and pawns cannot move backward to undo what the advance loosened."
     },
     {
-      "at": { "spineNodeId": "b3-kd6" },
+      "at": {
+        "spineNodeId": "b3-kd6"
+      },
       "moveUci": "c3d5",
       "class": "tactical_error",
       "note": "Third offer of the same square, cruellest version: now BOTH the e6 pawn and the king on d6 attack d5, and the knight is defended by nobody. When a square has been poisoned once, re-read it every single time — the poison does not expire because your position improved."
@@ -230,22 +270,43 @@
     {
       "id": "trades-compress-the-win",
       "text": "A piece up, every piece trade is a raise and every pawn trade is a pay cut: pieces off the board shrink their capacity to resist while your extra knight stays extra; pawns off the board shrink the queening material your knight exists to escort. Accept piece trades, decline pawn trades, and the endgame plays itself.",
-      "evidenceTypes": ["author_principle"]
+      "evidenceTypes": [
+        "author_principle"
+      ],
+      "principles": [
+        "material-serves-purpose"
+      ]
     },
     {
       "id": "king-second-piece",
       "text": "Once the last major piece leaves the board, the king's danger premium expires — there is nothing left to check it from a distance. From that move on, a king in the centre is worth roughly a minor piece of activity, and the side that marches first banks the difference.",
-      "evidenceTypes": ["author_principle", "hypothesis"]
+      "evidenceTypes": [
+        "author_principle",
+        "hypothesis"
+      ],
+      "principles": [
+        "count-before-conclusion"
+      ]
     },
     {
       "id": "result-not-moves",
       "text": "This is an outcome drill resolved at the end of the game: you are graded on finishing the win, not on matching the model moves. A win by knight raid, by pawn storm, or by slow squeeze is a pass; the model line is one clean road, not the road.",
-      "evidenceTypes": ["author_principle"]
+      "evidenceTypes": [
+        "author_principle"
+      ],
+      "principles": [
+        "result-not-moves"
+      ]
     },
     {
       "id": "guard-holds-the-material",
       "text": "The guard here is the material guard-rail (200 centipawns, about two-thirds of the knight): its teaching cases are the three Nd5 offers, each of which hands back the whole advantage in one move. Below that line it stays silent — a winning position played slowly is not an error at this band.",
-      "evidenceTypes": ["author_principle"]
+      "evidenceTypes": [
+        "author_principle"
+      ],
+      "principles": [
+        "guard-calibration-is-authored"
+      ]
     }
   ],
   "provenance": {

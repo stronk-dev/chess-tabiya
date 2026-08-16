@@ -387,6 +387,9 @@
       "evidenceTypes": [
         "author_principle",
         "derived_feature"
+      ],
+      "principles": [
+        "authored-teaching-is-declared"
       ]
     },
     {
@@ -395,6 +398,9 @@
       "evidenceTypes": [
         "author_principle",
         "tablebase_exact"
+      ],
+      "principles": [
+        "result-not-moves"
       ]
     }
   ],
