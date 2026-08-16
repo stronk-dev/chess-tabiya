@@ -199,9 +199,11 @@ question is to drop it.
 What *is* missing is not a law but an **instrument**. The declared-vs-executable law has
 been normative since `defect-sweep` and has never had one: it is enforced by whoever
 happens to read the code next to the schema. `engine-leverage` §6.2 solved exactly this for
-instrument capabilities — a frozen table, published on `/capabilities`, with a test that
-fails when an advertised capability has no row. §2 applies that mechanism to format
-declarations. **Prefer applying an existing law to naming a new one; prefer generalising a
+instrument capabilities — a frozen table with a test that fails when an advertised
+capability has no row. §2 applies that **mechanism** to format declarations, but **not its
+publication site**: `engine-leverage` publishes on `/capabilities` because instrument
+capabilities are deployment facts, and the owner ruled 2026-08-16 that format dispositions
+are **schema-version** facts and ship with the schema instead (§7 open question 7). **Prefer applying an existing law to naming a new one; prefer generalising a
 shipped mechanism to inventing one.**
 
 #### 1d. One correction owed to the framing
@@ -223,7 +225,7 @@ Nothing is left unclassified. Where a classification is provisional, the disposi
 
 | Row (ledger title, abbreviated) | Direction | Law applied | **Disposition** | One-line justification | §
 |---|---|---|---|---|---|
-| **D84** *"`arrows` is a fully-plumbed no-op"* | excess | declared-vs-executable | **retire** | `sight` has no directed structural primitive; `evidence` is a move verdict already refused under law 8. Nothing left to implement that is not a lie | 3.1 |
+| **D84** *"`arrows` is a fully-plumbed no-op"* | **deficit, not excess** *(reclassified 2026-08-16 by owner ruling, see Open question 2)* | — | **`unmeasured`, NOT retired** | The measurement holds: `sight` has no directed structural primitive (the reader emits square *sets*) and `evidence` is a move verdict refused under law 8. **The disposition does not follow from it.** `design/05` promises arrows-for-sight, and the owner ruled `arrows` is three things: learner-drawn (outside the ladder entirely), host-relayed (attribution, not a rung), and system-drawn (this row). Legs (a) and (b) belong to `rfc/board-annotation.md`. **This RFC may not retire the field** | 3.1 |
 | **D85** *"`SIMULATE_BUDGET_EXCEEDED` is declared and never thrown"* | excess | declared-vs-executable (principle; remedy clause vacuous) | **retire** | Implementing it means inventing a budget, i.e. inventing product from a defect row. Re-mint with the economy that needs it | 3.2 |
 | **D86** *"`retryVariants` has no runtime effect"* | excess | declared-vs-executable | **refused** now, `retired` when its successor is a superset | It names no referent, so it cannot be executed as declared; `variantOf` is the executable successor and covers **4 of 11** committed entries. `retired` needs a `removedAt` this RFC cannot honestly fill | 3.3 |
 | — *"`segment_end` is used zero times"* (D86's second half) | **neither** | none — not a format defect | **`reached`; content gap** | Fully executable and gated; zero authored uses. Belongs to `vocabulary-wiring`'s *reach* failure, not here. Split out so D86 does not close as if both halves were one finding | 3.3 |
@@ -377,7 +379,18 @@ mode added later fails the gate instead of quietly widening the enum.
 
 ### 3. Half one — declared, shipped, reached by nothing
 
-#### 3.1 D84 — *"`arrows` is a fully-plumbed no-op"* → **retire**
+#### 3.1 D84 — *"`arrows` is a fully-plumbed no-op"* → **`unmeasured`**
+
+> **[owner ruling 2026-08-16 — this section's disposition changed and the body below is
+> corrected to match, not annotated.]** The draft read `retire`. The owner refused it:
+> *"these are useful for coaching, teaching, streaming, ideating... we need to find a place
+> for them."* Everything this section **measures** stands unchanged: the field is plumbed,
+> nothing renders it, and `sight` has no directed primitive. What changes is what follows.
+> A promise in `design/05` with no producer is **`unmeasured`**, not dead; retiring it would
+> delete a design commitment by way of a format cleanup. Legs (a) learner-drawn and (b)
+> host-relayed belong to `rfc/board-annotation.md`. Only the **system-drawn** leg is this
+> RFC-s, and it is the leg with no producer. **The field survives; the disposition records
+> the gap.**
 
 **Verified.** `AssistanceConfig.arrows: "off" | "sight" | "evidence"`
 (`packages/runtime/src/assistance.ts:12`); defaulted in `SILENT_ASSISTANCE` (`:17`);
@@ -446,12 +459,18 @@ to a user-visible surface.
 - `apps/web/src/lib/assistance-preference.ts` gains a **version 5**: the v4 arm strips
   `arrows`; the v3/v2/v1 arms stop writing it. This is the file's fourth upgrade arm and
   follows the three already there exactly.
-- The `<select>` is removed from `AssistanceSettings.svelte`.
-- `FORMAT_DISPOSITIONS` gains `{pointer: "assistance:arrows", disposition: "retired",
-  successor: null, reason: "no renderer consumed it; a directed mark has no structural
-  primitive, and an evidence arrow is a verdict refused by engine-leverage §6.3"}` — the
-  row survives the deletion so the decision is discoverable, which is the whole point of a
-  register.
+- **The `<select>` STAYS in `AssistanceSettings.svelte`** *(corrected 2026-08-16 by owner
+  ruling)*. The draft removed it. `assistance.arrows` remains the config axis for the
+  **system-drawn** leg, and removing the control would make the surviving field unreachable,
+  a worse declared-vs-executable defect than the one this section opened with.
+- `FORMAT_DISPOSITIONS` gains `{pointer: "assistance:arrows", disposition: "unmeasured",
+  successor: null, reason: "design/05 promises arrows-for-sight; no directed structural
+  primitive exists (the reader emits square sets, not vectors). The evidence rung stays
+  refused by engine-leverage §6.3 under law 8. Learner-drawn and host-relayed marks are
+  board-annotation-s and are not this axis."}`. **`unmeasured` carries a revisit obligation**
+  (`engine-leverage` open question 6), so this row must be revisited when a directed
+  primitive lands. That obligation is the whole difference between `unmeasured` and
+  `retired`, and the reason the ruling is not a naming preference.
 - The committed test `apps/web/src/lib/client-surface-floor.test.ts:47` asserts
   `permission.arrows === "sight"`; that line is deleted here. `[round 2]` It is no longer a
   cross-draft item — `client-surface-floor` is **archived** (`rfc/archive/`), so nothing is
@@ -1298,10 +1317,31 @@ outright: it drops the `expect(permission.arrows).toBe("sight")` line and leaves
 paragraph just above, proves everything 8(b) set out to prove. **The test loses an assertion;
 it does not lose its subject.** Criterion 7 asserts the deletion.
 
-**`engine-leverage.md`** — §2's register publishes `formatDispositions` on `/capabilities`
-next to that RFC's `capabilityDispositions`. Two additive fields on one payload, no shared
-key. The *pattern* is borrowed and cited; no code is shared, so there is no landing-order
-constraint beyond the pack-lane order.
+**`engine-leverage.md`** — **[owner ruling 2026-08-16: `formatDispositions` does NOT go on
+`/capabilities`.]** The draft published it there, next to that RFC's
+`capabilityDispositions`, on the argument that a client deciding whether to render a field
+needs one place to ask. The owner upheld this RFC-s own objection instead: **a pack format is
+a property of the SCHEMA VERSION, not of the DEPLOYMENT**, unlike policy modes, which
+genuinely vary by which engines a host runs. The live example of that confusion sits in the
+same payload — **D117**: `capabilities.policyModes` gates `perfect_tablebase` and
+`practical_resistance` on provider availability and advertises `human_common`,
+`strong_engine` and `theory_strict` **unconditionally**, so a deployment with no engine
+publishes three selectable modes. Mixing schema-version facts into a deployment payload is
+what makes that class of error easy.
+
+**The register still ships unchanged; only its publication site moves** — exactly as this
+RFC-s own open question 7 anticipated. It is emitted with the schema, alongside
+`DRILL_PACK_SCHEMA_VERSION`, so it versions with the thing it describes. The *pattern* is
+still borrowed from `engine-leverage` §6.2 and cited; no code is shared and there is no
+landing-order constraint beyond the pack-lane order.
+
+**A second reason the ruling is right, from that RFC-s own review:** `engine-leverage` was
+**returned** partly because its `capabilityDispositions` register has one call site in the
+tree, in a test, handed a hand-authored list built to match it — and against the real
+Stockfish the repo tests with, **eight advertised options have no row** (D193). A register
+whose contents are a property of the deployment must be checked against that deployment.
+`formatDispositions` has no such exposure precisely because it is not deployment-dependent,
+which is the distinction the ruling draws.
 
 **`vocabulary-wiring.md`** — §2c excluded D96 on the spine test and its Open question 9 asks
 for a destination. **This RFC is that destination**, and it accepts the exclusion's reasoning
@@ -1322,8 +1362,17 @@ descriptively and proposes nothing.
 Three points where this RFC comes close enough to the design tier that silence would be
 wrong:
 
-1. **`design/05-in-run-experience.md`'s assistance ladder loses a rung** when `arrows` is
-   retired. The design doc describes the ladder's *shape*; `arrows` was never one of its
+1. **RULED 2026-08-16, and the draft-s reading was wrong.** This paragraph argued the ladder
+   loses nothing when `arrows` is retired, because *"`arrows` was never one of its named
+   rungs"*. **`design/05`-s Forms table names it explicitly** — *"arrows for sight (what this
+   piece unblocks, where pressure runs) are rung-0-honest anytime the config allows"*, status
+   💡 — and the section immediately after lists `arrows` among the forms `AssistanceConfig`
+   grows to pick. The draft asked the owner to confirm the ladder made no such promise; the
+   doc had already made it. **Disposition is `unmeasured`.** The owner also split the axis
+   three ways, which neither the draft nor the coordinator saw: the ladder governs only the
+   **system-drawn** leg, because a mark the learner draws asserts nothing and a mark a teacher
+   draws is that person-s claim. `design/05` now carries the split.
+   *(Original text, superseded.)* The design doc describes the ladder's *shape*; `arrows` was never one of its
    named rungs, and removing an axis that renders nothing changes what the learner
    experiences by zero. Per law 5 this RFC proposes and does not write; if the owner reads
    the ladder as promising a directed-mark rung, §3.1's disposition flips from `retired` to

@@ -101,6 +101,38 @@ Then the volume, with measured arithmetic: **9 middlegame packs ≈ 9.75 agent-h
 is the minimum that makes a phase-shaped map possible at all — today every middle
 act is `carlsbad-minority-attack`. Spire parity is **56 hours, 64% middlegame**.
 
+## 4a. Authoring-expressiveness cluster — created 2026-08-16
+
+`rfc/vocabulary-wiring.md` open question 9 required *"either a work-register cluster or an
+owner-gated row"* before that draft could be accepted, on the grounds that handing items to
+*"a later wave"* is not a destination — the failure that RFC-s own §5c warns about, applied to
+itself. **Half of Q9 resolved on its own:** per-leg `shapes`/`opponentPolicy` is **D96**, and
+`rfc/format-surface.md` — drafted after the question was written — owns and implements it at
+pack 0.25.
+
+**This cluster is the other half, and it exists so the remainder has a name rather than a
+wave.** Members:
+
+| Item | State |
+|---|---|
+| **`deviation.planClassId`** — ranked beside D96 by the completeness audit; additive; no register row owns it. `format-surface` names it and explicitly does **not** take it | unowned, **clustered here** |
+| **D105** — a `retryVariants` note names a pack that does not exist, and nothing can see it | unowned |
+| **D106** — `targetElo` accepted beside `strong_engine` and silently dropped; `format-surface` scoped it out by name | unowned |
+| **D127** — the shape library can author a plan success signature the pack layer refuses to grade on | unowned |
+
+**Why a cluster and not four rows:** all four are *authoring expressiveness* — an author can
+write something the runtime cannot honour, or cannot write something the runtime would
+honour. That is one subject, and the three RFCs that touched it each declined it for the same
+correct reason: it was not theirs. A cluster is the destination that stops the fifth RFC
+declining it too.
+
+**Entry condition for the RFC that takes this:** it must arrive with a measured count of
+authored uses per member, because two of the four (`planClassId`, D106) may have **zero**
+attested wants — and the repo-s standing attestation bar (*"deferred pending one authored pack
+that wants it"*, used by `engine-leverage` for `searchmoves` and by `format-surface` for
+per-leg tablebase modes) would then dispose of them without a schema change at all. **Measure
+before drafting.**
+
 ## 5. Research still open
 
 R6, R7, R8 (experiential — rewind budget, scarcity, whether the loop rewards

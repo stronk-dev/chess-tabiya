@@ -1,6 +1,11 @@
 # RFC: Vocabulary wiring — what a construct must earn before the format admits it
 
-- **Status:** accepted (cross-reviewed; fixes applied in place) — 2026-08-15
+- **Status:** **accepted 2026-08-16.** All acceptance-blocking open questions are closed **in
+  their own bodies**: Q1 and Q8 owner-ruled, Q9 closed by the coordinator against a named
+  work-register cluster. Q2/Q3/Q4/Q5/Q6/Q7 were never acceptance-blocking. Superseded
+  "resolve before accepted" strings inside preserved original text are struck through and
+  labelled, so a search for them cannot produce a false blocker — codex was given a false
+  clear on this RFC once already, from exactly that search.
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/04-content-architecture.md` §5 (the trajectory launch set) and §0a (the
@@ -1083,8 +1088,9 @@ on with its measurements corrected rather than dropping it.
    §3c chooses the merge because it preserves root firing and provenance while removing the
    redundancy, and because removal of a zero-user construct is cheap enough to do later with more
    evidence. A reviewer who thinks a registry reference belongs at condition level rather than
-   expression level would keep `plan_consequence` and instead forbid inlining. **Resolve before
-   `accepted`** — it decides whether the schema bump is needed at all.
+   expression level would keep `plan_consequence` and instead forbid inlining. ~~Resolve before
+   `accepted`~~ **— SUPERSEDED by the ruling at the head of this question. Left in place so the
+   original reasoning is readable; it is not an open blocker.**
 2. **Should `PLAN_SIGNATURE_INLINED` be an error rather than a warning?** §3c argues warning,
    because a pack may legitimately assert a fact coinciding with a registry signature it never
    bound. If the corpus contains no such case — measurable, and not measured here — error is
@@ -1130,8 +1136,8 @@ on with its measurements corrected rather than dropping it.
    (*state*, *clear*, *bind*, *bound*) are all about a **stateful** instrument, and a tablebase
    fixture is not one. A reviewer could reasonably say the contract should be widened by an
    amendment rather than read broadly, or that provenance forgery deserves a rule of its own next
-   to the content-sourcing artifact triple in `docs/content-sourcing.md`. **Resolve before
-   `accepted`** — not because §6 depends on it (it does not), but because leaving it open is how a
+   to the content-sourcing artifact triple in `docs/content-sourcing.md`. ~~Resolve before
+   `accepted`~~ **— SUPERSEDED by the ruling at the head of this question; not an open blocker** — not because §6 depends on it (it does not), but because leaving it open is how a
    fourth law gets invented later by someone re-finding the same gap.
 9. **Where do per-leg `shapes`/`opponentPolicy` and `deviation.planClassId` actually go?**
    **HALF-ANSWERED by the coordinator 2026-08-15, and the half that remains is the real one.**
@@ -1140,7 +1146,16 @@ on with its measurements corrected rather than dropping it.
    RFC no register row owns" now exists and is registered; that half is destinated and the
    ledger row is flipped. **`deviation.planClassId` is not covered by `format-surface` and
    remains genuinely undestinated**, so this question bundled two items and only one found a
-   home. Still blocking on that half, exactly as the question's own reasoning requires.
+   home. **CLOSED 2026-08-16 — the remaining half now has a destination.** This question
+   demanded *"either a work-register cluster or an owner-gated row"*, and the cluster exists:
+   `planning/work-register.md` §4a, **Authoring-expressiveness**, holding `deviation.planClassId`
+   alongside D105, D106 and D127. It is a cluster rather than four rows because all four are one
+   subject — an author can write what the runtime cannot honour, or cannot write what it would —
+   and because three RFCs declined the subject for the same correct reason (it was not theirs),
+   which is precisely how an item gets lost. The cluster carries an **entry condition**: whoever
+   takes it must arrive with a measured count of authored uses per member, since two may have
+   **zero** attested wants, and the repo's standing attestation bar would then dispose of them
+   with no schema change at all. **This question no longer blocks acceptance.**
    *(Original text follows.)* §2c
    excludes the first on the spine test and I agree with the exclusion, but it hands both to a
    hypothetical "additive authoring-expressiveness RFC" that no register row owns. They are #1 and
