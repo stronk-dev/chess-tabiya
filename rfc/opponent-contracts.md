@@ -1,6 +1,6 @@
 # RFC: Opponent contracts — what a mode executes, what it may claim, and what it must refuse
 
-- **Status:** draft — **adversarially cross-reviewed 2026-08-16 (see Changelog).** The pack
+- **Status:** **accepted 2026-08-16** — adversarially cross-reviewed (pack lane released, see Changelog), and **owner question 2 ruled in the body below on 2026-08-16**. Codex correctly refused to implement while this line read `draft`: *a resolution in a queue file is not a resolution in the body.*
   **0.28** claim is **RELEASED** by the cross-review (§5, open question 1); the run-schema
   0.17 claim, the migration position, the `/capabilities` change, and both substantive
   findings survive. Six line references were corrected against the tree, one precedent
@@ -912,12 +912,17 @@ is the only versioned one this RFC makes.
    fact"* scopes what the register **describes**, not what **mutating** it costs; the type's
    `removedAt`-without-`addedAt` asymmetry is the register saying so in its own shape. Full
    reasoning and the requested `rfc/README.md` wording: **§5.1**.
-2. **Is the digest tiebreak the right trade, or is legibility worth the measured bias?**
-   §3.3 accepts opacity to buy neutrality. The alternative — keep `localeCompare`, publish
-   the 2.6× enrichment as a declared property of the mode, and change nothing — is coherent,
-   cheaper, and preserves an author's ability to predict the reply by reading. This RFC
-   chose against it because the bias is toward *irreversible simplification* in exactly the
-   objective (`hold`) whose content is the opposite. **Owner-facing.**
+2. ~~**Is the digest tiebreak the right trade, or is legibility worth the measured bias?**~~
+   **RULED 2026-08-16 — the neutral digest tiebreak stands.** The owner chose correctness over
+   legibility. Reasoning recorded: the bias is **2.6× toward irreversible simplification**
+   (10.6% capture-or-pawn against 4.02% uniform, exact binomial p = 0.0166) in `hold`, the one
+   objective whose content is the opposite — and *declaring* a defect is not the same as fixing
+   one. **The accepted cost is legibility:** an author can no longer predict the reply by reading
+   the move list, and §3.3 already states this. The counterfactual magnitude was put to the owner
+   honestly (≈4 excess simplifying replies over 66 drawn roots, and **no shipped pack pairs
+   `perfect_tablebase` with `hold` today**) and did not change the ruling — the fix lands before
+   the pairing exists rather than after.
+
 3. **How often does `practical_resistance` refuse on the twelve packs' Maia-side positions?**
    §2.1 verifies the `PRACTICAL_RESISTANCE_UNDECIDABLE` code path but nothing measures its
    frequency, and that frequency decides whether `practical_resistance` is a real alternative
