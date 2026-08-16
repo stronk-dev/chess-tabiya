@@ -71,6 +71,16 @@ type StatePatch = {
 
 const TERMINAL_STATES = new Set(["achieved", "failed", "transitioned"]);
 
+export function sessionErrorMessage(error: unknown): string {
+  if ((error instanceof ApiError && error.code === "RUN_TERMINATED") || (error instanceof Error && /Run is terminal at node:/u.test(error.message))) {
+    return "This attempt is complete. Rewind to an earlier move to try another branch.";
+  }
+  if (error instanceof ApiError && error.code === "MATCH_LIVE") {
+    return "Pause the live match before rewinding, branching, or revealing feedback.";
+  }
+  return error instanceof Error ? error.message : String(error);
+}
+
 function browserStorage(): KeyValueStorage {
   if (typeof localStorage === "undefined") {
     throw new Error("The drill client requires browser localStorage");
@@ -653,7 +663,7 @@ export class DrillSessionController {
   #fail(error: unknown): void {
     this.#patch({
       busy: false,
-      error: error instanceof Error ? error.message : String(error),
+      error: sessionErrorMessage(error),
     });
   }
 

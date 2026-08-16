@@ -37,9 +37,10 @@ if (ttsMode !== undefined && ttsMode !== "external_http") throw new TypeError(`U
 if (ttsMode === "external_http" && process.env.TABIYA_TTS_PROVIDER_URL === undefined) throw new TypeError("TABIYA_TTS_PROVIDER_URL is required for external_http");
 const ttsTimeout = process.env.TABIYA_TTS_PROVIDER_TIMEOUT_MS === undefined ? 4_000 : Number(process.env.TABIYA_TTS_PROVIDER_TIMEOUT_MS);
 if (!Number.isSafeInteger(ttsTimeout) || ttsTimeout < 1) throw new TypeError("TABIYA_TTS_PROVIDER_TIMEOUT_MS must be a positive safe integer");
-if (process.env.DRAFT_PACK_FILE !== undefined && !development) {
-  throw new TypeError("DRAFT_PACK_FILE requires NODE_ENV=development");
+if ((process.env.DRAFT_PACK_FILE !== undefined || process.env.DRAFT_PACK_FILES !== undefined) && !development) {
+  throw new TypeError("Explicit draft pack files require NODE_ENV=development");
 }
+const draftPackFiles = process.env.DRAFT_PACK_FILES?.split(",").map((path) => path.trim()).filter((path) => path.length > 0);
 const application = await createApplication({
   development,
   engineMode,
@@ -48,6 +49,7 @@ const application = await createApplication({
   ...(process.env.DRAFT_PACK_FILE === undefined
     ? {}
     : { draftPackFile: process.env.DRAFT_PACK_FILE }),
+  ...(draftPackFiles === undefined ? {} : { draftPackFiles }),
   ...(process.env.STATIC_DIRECTORY === undefined
     ? {}
     : { staticDirectory: process.env.STATIC_DIRECTORY }),

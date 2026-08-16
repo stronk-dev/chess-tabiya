@@ -376,7 +376,10 @@ The development Compose file builds local images. Tagged releases build the
 server and Maia images for amd64 and arm64, publish version- and commit-SHA
 tags to GHCR, and attach a generated Compose file whose two images are pinned
 to the exact build digests. The devcontainer reuses the Compose toolchain and
-includes Node, pnpm, and Stockfish.
+includes Node, pnpm, and Stockfish. The server image carries the exact
+append-only owner-ruling register and permanent-property source used by pack
+admission, so accepted graduation citations resolve identically in the source
+tree and in packaged operation.
 
 ## Current boundary
 
@@ -384,9 +387,18 @@ The drill-client implementation and later amendments now provide the
 playable mechanism, route shell, persistent history, honest capabilities,
 fitted regions, one keyboard ownership model, checkpoint-scoped authored prose,
 recorded comparison evidence, honest Outcome Drill grading, N-way comparison,
-and branch-group rehearsal. The broader theory/explanation vocabulary and
-reviewed content remain incomplete. The living Najdorf pack is still a schema example; the
-presence of grading UI does not turn unreviewed chess assertions into truth.
+and branch-group rehearsal. The default catalogue serves committed drafts as
+`community` content with an explicit **unreviewed draft** label and separately
+serves graduated packs as `official`; an official record wins if the two
+channels reuse an id. The drill-pack schema example remains validation input
+and is never served as learner content. This makes the authored corpus playable
+without presenting unreviewed chess assertions as reviewed truth.
+
+Terminal and live-match failures are translated at the session-controller
+boundary into recovery instructions. A completed attempt tells the learner to
+rewind before branching, and a live match tells them to pause before using
+rewind, branch, or reveal; internal run/node identifiers do not become screen
+copy.
 
 ## Line Drill recall and verdict delivery
 

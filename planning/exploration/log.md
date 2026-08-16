@@ -3087,3 +3087,34 @@ has now been audited; D419/D459 are addressed by relabelling the third table col
 `Disposition / history (not status)`; and D474's declaration-census cache fix had already landed.
 The pass changed statuses only after checking the current referent and kept every partial row
 open with its title narrowed to the actual residue.
+
+## 2026-08-16 — the packaged catalogue became playable without overstating trust
+
+The owner ruled that committed drafts belong in the learner catalogue now, provided their trust
+state is explicit. Packaged operation now loads `content/drafts/` as `community` content in every
+environment, labels each entry **unreviewed draft**, and keeps an `official` record when the two
+channels reuse an id. The drill-pack schema example remains a validation fixture and is no longer
+served. Production packaging includes the draft corpus, closing D481 and D502 without changing
+`NODE_ENV` or presenting unreviewed chess claims as reviewed.
+
+The same closeout repairs three first-run regressions measured in the owner's walkthrough. The
+rules-floor board lighting is `legal` again (D493), the board uses the dimensions of its actual
+layout slot rather than a fixed viewport subtraction (D496), and terminal/live-match failures are
+translated into recovery instructions instead of internal run and node identifiers (D495).
+
+Implementation of `graduation-clearance` stopped before mutating content after finding D503: six
+blockers classified as `shape_firing` belong to packs with no shape reference, while the accepted
+schema requires the subject to resolve and the transition writer can evaluate only a named shape.
+The RFC is returned under its own buildability clause; no subject or chess intent was invented.
+
+## 2026-08-16 — packaged admission now carries its cited ruling register
+
+Rebuilding the actual Compose stack after opening the draft catalogue reproduced D468: local
+validation resolved accepted-condition citations against `planning/exploration/log.md`, but the
+production image did not contain that file and restarted before binding its port. The image now
+ships that exact append-only register and packaging verification asserts its presence. This was
+not reproducible in the source-tree gates; the packaged-stack check was the evidence instrument.
+
+The same admission census contains three permanent-property references to
+`docs/tablebase-grounding.md`; that exact source is packaged and pinned too. Both citation classes
+therefore run the same check in the source tree and the production image.

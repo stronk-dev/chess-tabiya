@@ -1208,8 +1208,8 @@
     width: 100%;
     min-height: 0;
     justify-self: center;
-    display: grid;
-    grid-template-rows: auto auto auto minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 0.8rem;
     overflow: hidden;
   }
@@ -1265,15 +1265,17 @@
     min-width: 0;
     min-height: 0;
     width: 100%;
-    height: 100%;
+    flex: 1 1 0;
+    align-self: stretch;
     display: grid;
     place-items: center;
     overflow: hidden;
+    container-type: size;
   }
 
   .board-frame {
     position: relative;
-    width: min(100%, max(10rem, calc(100dvh - 34rem)), 40rem);
+    width: min(100cqw, 100cqh);
     height: auto;
     aspect-ratio: 1;
     justify-self: center;
@@ -1283,7 +1285,7 @@
   }
 
   .position-column.outcome .board-frame {
-    width: min(100%, max(10rem, calc(100dvh - 42rem)), 34rem);
+    width: min(100cqw, 100cqh);
     height: auto;
   }
 
@@ -1461,6 +1463,7 @@
     .compact-tabs button { padding: 0.4rem; border: 1px solid var(--line); border-radius: 0.45rem; background: var(--panel); }
     .compact-tabs button.active { border-color: var(--accent); color: var(--accent); }
     .position-column {
+      display: grid;
       grid-column: 1;
       grid-row: 2;
       grid-template-rows: repeat(8, auto) minmax(0, 1fr);

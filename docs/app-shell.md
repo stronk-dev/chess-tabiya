@@ -135,10 +135,11 @@ Overflow belongs to named inner regions:
 - the timeline scrolls horizontally and remains vertically bounded; and
 - comparison owns its content overflow.
 
-The drill screen is a fitted grid. Its square board is limited by both
-available width and remaining viewport height, with an explicit vertical
-reserve for objective controls and the timeline. Tablet portrait uses that
-same fitted grid rather than the former rail-stacking breakpoint. Below 720px
+The drill screen is a fitted grid. Its board slot is a size container, and the
+square board uses the smaller of that container's available width and height;
+it does not estimate the remaining viewport with a fixed control-height
+subtraction. Tablet portrait uses that same fitted grid rather than the former
+rail-stacking breakpoint. Below 720px
 the shell and drill transform without changing their information model:
 navigation becomes a compact scrolling menu, the board remains visible, and
 Timeline, Branches, and Evidence are mutually exclusive region tabs. The live

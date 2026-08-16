@@ -325,7 +325,7 @@ test("library exposes phase honestly and survives a malformed pack response", as
     ["Carlsbad structure", "middlegame"],
     ["Rook endings", "endgame"],
     ["Caro-Kann Advance", "opening"],
-    ["Najdorf", "cross phase"],
+    ["Trajectory: QGD Exchange", "cross phase"],
   ] as const;
   for (const [name, phase] of expected) {
     const card = page.getByRole("article").filter({ hasText: name }).first();

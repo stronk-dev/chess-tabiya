@@ -53,6 +53,7 @@ export interface ApplicationOptions {
   readonly databasePath?: string;
   readonly development?: boolean;
   readonly draftPackFile?: string;
+  readonly draftPackFiles?: readonly string[];
   readonly engineMode?: EngineMode;
   readonly staticDirectory?: string;
   readonly maiaHost?: string;
@@ -289,6 +290,9 @@ export async function createApplication(
     ...(options.draftPackFile === undefined
       ? {}
       : { draftFile: options.draftPackFile }),
+    ...(options.draftPackFiles === undefined
+      ? {}
+      : { draftFiles: options.draftPackFiles }),
   });
   const studio = new PackStudio(storage, registry, shapes);
   studio.hydrate();

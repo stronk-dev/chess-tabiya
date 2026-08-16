@@ -14,7 +14,7 @@ export interface AssistanceConfig {
 }
 
 export const SILENT_ASSISTANCE: AssistanceConfig = Object.freeze({
-  version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off",
+  version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off",
 });
 
 export type AssistancePermission = "free" | "locked_off" | "sight" | "evidence";

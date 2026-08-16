@@ -541,6 +541,32 @@ describe("pack authoring validation", () => {
 });
 
 describe("development draft registry", () => {
+  it("keeps the official record when an unreviewed draft reuses its id", async () => {
+    const official = { ...structuredClone(fixture), title: "Official title" };
+    const draft = {
+      ...structuredClone(fixture),
+      title: "Draft title",
+      provenance: { ...structuredClone(fixture.provenance), reviewStatus: "draft" },
+    };
+
+    for (const documents of [
+      [
+        { source: "official.json", value: official, channel: "official" as const },
+        { source: "draft.json", value: draft, channel: "community" as const },
+      ],
+      [
+        { source: "draft.json", value: draft, channel: "community" as const },
+        { source: "official.json", value: official, channel: "official" as const },
+      ],
+    ]) {
+      const registry = await PackRegistry.fromDocuments(documents);
+      expect(registry.required(fixture.id).summary).toMatchObject({
+        title: "Official title",
+        channel: "official",
+      });
+    }
+  });
+
   it("uses one sidecar vocabulary for recursive discovery", async () => {
     const directory = await temporaryDirectory();
     const nested = join(directory, "candidate");
@@ -578,19 +604,19 @@ describe("development draft registry", () => {
       draftsDirectory: candidates.pathname,
     });
     // Derived, not hand-pinned (the D4 lesson): one registry entry per dir
-    // that actually contains a pack.json, plus the served schema example.
-    // Counting raw dirs would pass only while exactly one non-pack dir
-    // (priority/) exists - a coincidence, not an invariant.
-    expect(registry.list()).toHaveLength(packDirs + 1); // +1: the served schema example
+    // that actually contains a pack.json. The schema example is validation
+    // input, never learner content.
+    expect(registry.list()).toHaveLength(packDirs);
     expect(registry.list().filter((entry) => entry.reviewStatus === "draft")).toHaveLength(packDirs);
   });
 
-  it("ignores committed drafts in production and loads them in development", async () => {
+  it("serves committed drafts as disclosed community content in every environment", async () => {
     const directory = await temporaryDirectory();
     const draft = {
       ...structuredClone(fixture),
       id: "development-only-pack",
       title: "Development-only pack",
+      provenance: { ...structuredClone(fixture.provenance), reviewStatus: "draft" },
     };
     await writeFile(join(directory, "draft.json"), JSON.stringify(draft), "utf8");
 
@@ -598,7 +624,7 @@ describe("development draft registry", () => {
       development: false,
       draftsDirectory: directory,
     });
-    expect(production.get(draft.id)).toBeUndefined();
+    expect(production.required(draft.id).summary).toMatchObject({ title: draft.title, reviewStatus: "draft", channel: "community" });
 
     const development = await PackRegistry.loadDefault({
       development: true,

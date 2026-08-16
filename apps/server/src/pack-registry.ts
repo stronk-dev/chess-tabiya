@@ -231,14 +231,16 @@ export class PackRegistry {
       readonly value: unknown;
       readonly ledger?: unknown;
       readonly manifest?: unknown;
+      readonly channel?: "official" | "community";
     }[],
     options: { readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup; readonly principles?: PackPrincipleLookup } = {},
   ): Promise<PackRegistry> {
     const records = new Map<string, PackRecord>();
-    const validated = documents.map(({ source, value, ledger, manifest }) => ({
+    const validated = documents.map(({ source, value, ledger, manifest, channel = "official" }) => ({
       source,
       ledger,
       manifest,
+      channel,
       document: validatedDocument(value, source, options.shapes, options.principles),
     }));
     const siblings = new Map(validated.map(({ document }) => [document.id, {
@@ -252,8 +254,10 @@ export class PackRegistry {
         throw new ServerError("PACK_INVALID", `Pack ${entry.source} is invalid: ${errors.map((issue) => issue.message).join("; ")}`, { details: { source: entry.source, issues: errors } });
       }
       const document = freeze(checked.document);
-      const { source, ledger, manifest } = entry;
-      if (records.has(document.id) && options.replaceDuplicates !== true) {
+      const { source, ledger, manifest, channel } = entry;
+      const previous = records.get(document.id);
+      if (previous !== undefined && previous.channel === "official" && channel === "community" && options.replaceDuplicates !== true) continue;
+      if (previous !== undefined && previous.channel === channel && options.replaceDuplicates !== true) {
         throw new ServerError(
           "PACK_INVALID",
           `Duplicate pack id ${document.id} from ${source}`,
@@ -287,7 +291,7 @@ export class PackRegistry {
         phase: typeof raw.phase === "string" ? (raw.phase as PackPhase) : null,
         difficulty: raw.difficulty ?? null,
         reviewStatus: provenance.reviewStatus as string,
-        channel: "official",
+        channel,
       });
       records.set(
         document.id,
@@ -300,7 +304,7 @@ export class PackRegistry {
           positionEvidence,
           boundClaimIds: Object.freeze(new Set(validBindings.map((binding) => binding.claimId))),
           claimBackings,
-          channel: "official",
+          channel,
         }),
       );
     }
@@ -311,31 +315,27 @@ export class PackRegistry {
     options: {
       readonly development?: boolean;
       readonly draftFile?: string;
+      readonly draftFiles?: readonly string[];
       readonly draftsDirectory?: string;
       readonly shapes?: PackShapeLookup;
       readonly principles?: PackPrincipleLookup;
     } = {},
   ): Promise<PackRegistry> {
-    const fixture = fileURLToPath(
-      new URL("../../../schemas/drill_pack.example.json", import.meta.url),
-    );
     const contentDirectory = fileURLToPath(
       new URL("../../../content/packs/", import.meta.url),
     );
     const draftsDirectory =
       options.draftsDirectory ??
       fileURLToPath(new URL("../../../content/drafts/", import.meta.url));
-    if (options.draftFile !== undefined && options.development !== true) {
+    if ((options.draftFile !== undefined || (options.draftFiles?.length ?? 0) > 0) && options.development !== true) {
       throw new TypeError("Draft packs may only be loaded in development mode");
     }
-    const productionPaths = [fixture, ...(await jsonFiles(contentDirectory))];
-    const draftPaths =
-      options.development === true
-        ? [
-            ...(await jsonFiles(draftsDirectory)),
-            ...(options.draftFile === undefined ? [] : [options.draftFile]),
-          ]
-        : [];
+    const productionPaths = await jsonFiles(contentDirectory);
+    const draftPaths = [
+      ...(await jsonFiles(draftsDirectory)),
+      ...(options.draftFile === undefined ? [] : [options.draftFile]),
+      ...(options.draftFiles ?? []),
+    ];
     const paths = [
       ...productionPaths,
       ...draftPaths.filter(
@@ -350,6 +350,7 @@ export class PackRegistry {
           value: JSON.parse(await readFile(path, "utf8")) as unknown,
           ledger: await optionalJson(sidecars.ledger),
           manifest: await optionalJson(sidecars.manifest),
+          channel: productionPaths.includes(path) ? "official" as const : "community" as const,
         };
       }),
     );

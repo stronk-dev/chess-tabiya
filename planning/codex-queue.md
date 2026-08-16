@@ -30,10 +30,17 @@ template registry its own remedy requires. Four process rows also closed in the 
 D418, D419, D459 and the already-shipped D474. The table header now calls column 3
 **Disposition / history (not status)**. **A1 is blocked on status reconciliation:**
 `rfc/README.md` calls `graduation-clearance` accepted, while the RFC's governing Status line says
-**draft** and explicitly says the second author round *"does not re-declare"* acceptance. Do not
-implement it or patch D467 outside it until the body itself is accepted.
+**draft** and explicitly says the second author round *"does not re-declare"* acceptance. That
+status mismatch was later reconciled, but implementation then found **[[D503]]**: six entries the
+literal classifier assigns to `shape_firing` have no shape reference, while `subject` must resolve
+and the writer requires a named shape. `graduation-clearance` is returned on buildability again;
+do not implement it or patch D467 outside it until the body supplies an honest subject/predicate.
 
-Then: **A1** (4 rows — item 0 below, the boot failure and the ungated release) → **A2** (6 —
+The learner-facing half of A1 landed on 2026-08-17: D468, D481, D493, D495, D496 and D502 are
+closed and the packaged stack was exercised against its persisted volume. **D469 remains** as
+the independent release-workflow residue; graduation-clearance remains returned on D503.
+
+Then: **A1** (D469 plus the returned RFC) → **A2** (6 —
 opponent selection serves the wrong move) → **A3** (5 — disclosure holes on live surfaces) →
 **B1** (7 — claim binding and the evidence maps, one file, one live in the corpus) → **B3**
 (4 — corpus denominators and fixture contamination; widest downstream effect for the least
@@ -63,7 +70,7 @@ must be authored, the row was split and the sentence sent to the authored side. 
 which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
 writer does not exist yet.
 
-## 0-OWNER. Two rulings landed 2026-08-16 — these outrank the batches
+## 0-OWNER. COMPLETED 2026-08-17 — two rulings landed 2026-08-16
 
 **[[D502]] — the corpus reaches learners through BOTH channels.** Ship all 56 packs behind a
 clear **unreviewed draft** badge, and promote onto an official shelf as clearance lands. The
@@ -96,7 +103,7 @@ turns out to fix *both* `Run is terminal at node: run-<uuid>:node:4` **and** the
 
 Full lane: `planning/ux-work-lane.md`. Entry point for everything: `planning/WORK.md`.
 
-## 0. [[D468]] — a live boot failure. Take this before anything else.
+## 0. [[D468]] — CLOSED 2026-08-17; [[D469]] remains takeable
 
 **Not hypothetical and not scheduled work.** `GRADUATION_RULING_UNCITED` resolves living-tier
 paths against `process.cwd()` (`pack-validation.ts:848-851`). All **43** acceptances cite
@@ -119,7 +126,7 @@ Take **[[D469]]** with it: `release.yml` runs **nothing** between checkout (`:17
 build/push (`:24-33`), which is why this could reach production undetected. [[D208]]'s shape,
 one workflow over.
 
-## 0b. `rfc/graduation-clearance.md` — ACCEPTED 2026-08-16, second round
+## 0b. `rfc/graduation-clearance.md` — RETURNED ON [[D503]]
 
 **You returned this once and you were right to.** The first acceptance was granted on the wrong
 test — its four author-call open questions were closed, and **none of the four blockers you

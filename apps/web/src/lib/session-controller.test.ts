@@ -33,8 +33,9 @@ import type {
   RunSummary,
   SelectMoveRequest,
 } from "./api.js";
+import { ApiError } from "./api.js";
 import type { PollScheduler } from "./run-state.js";
-import { DrillSessionController } from "./session-controller.js";
+import { DrillSessionController, sessionErrorMessage } from "./session-controller.js";
 import {
   WriterSession,
   type KeyValueStorage,
@@ -403,6 +404,14 @@ function controller(api = new FakeApi(), storage = new MemoryStorage()) {
 }
 
 describe("DrillSessionController", () => {
+  it("turns terminal and live-match conflicts into recovery instructions", () => {
+    expect(sessionErrorMessage(new ApiError(409, "RUN_TERMINATED", "Run is terminal at node: opaque-id"))).toBe(
+      "This attempt is complete. Rewind to an earlier move to try another branch.",
+    );
+    expect(sessionErrorMessage(new ApiError(409, "MATCH_LIVE", "raw server message"))).toBe(
+      "Pause the live match before rewinding, branching, or revealing feedback.",
+    );
+  });
   it("does not select another opponent move after the learner delivers mate", async () => {
     const terminalPack = {
       ...pack,

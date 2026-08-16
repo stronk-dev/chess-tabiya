@@ -55,14 +55,15 @@ describe("assistance preference", () => {
     expect(values.get(assistanceKey("position"))).toBe(JSON.stringify(position));
   });
 
-  it("keeps every fresh assistance profile fully silent", () => {
+  it("keeps fresh profiles evidence-silent with legal board mechanics", () => {
     const maximum = { version: 4, markers: "live", guided: "live", humanSplit: "on_request", corpus: "on_request", voice: "persona", spoken: "provider", boardLighting: "evidence", arrows: "evidence", ambient: "on" } as const;
     for (const profile of ["match", "stream", "onramp"] as const) {
       expect(loadAssistance(profile, { getItem: () => null, setItem() {} })).toEqual(SILENT_ASSISTANCE);
       const storedOff = { ...maximum, markers: "off" as const, guided: "off" as const, humanSplit: "off" as const, corpus: "off" as const, voice: "authored" as const, spoken: "off" as const, boardLighting: "off" as const, arrows: "off" as const, ambient: "off" as const };
       const resolved = loadAssistance(profile, { getItem: () => null, setItem() {} });
       const changed = Object.keys(resolved).filter((key) => resolved[key as keyof typeof resolved] !== storedOff[key as keyof typeof storedOff]);
-      expect(changed).toEqual([]);
+      expect(changed).toEqual(["boardLighting"]);
+      expect(resolved.boardLighting).toBe("legal");
     }
   });
 

@@ -78,10 +78,20 @@ required(
 );
 
 required(
-  readFileSync(".dockerignore", "utf8")
-    .split(/\r?\n/u)
-    .includes("content/drafts"),
-  "Production image context must exclude content/drafts",
+  !readFileSync(".dockerignore", "utf8").split(/\r?\n/u).includes("content/drafts"),
+  "Production image context must include disclosed draft packs",
+);
+required(
+  readFileSync("apps/server/Dockerfile", "utf8").includes(
+    "COPY planning/exploration/log.md planning/exploration/log.md",
+  ),
+  "Production image must include the append-only ruling register used by pack admission",
+);
+required(
+  readFileSync("apps/server/Dockerfile", "utf8").includes(
+    "COPY docs/tablebase-grounding.md docs/tablebase-grounding.md",
+  ),
+  "Production image must include the permanent-property source used by pack admission",
 );
 
 console.log("packaging verification: OK");

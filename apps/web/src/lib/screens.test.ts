@@ -415,8 +415,8 @@ describe("Layer 3 screens", () => {
       mode: pack.mode as string,
       phase: "opening",
       difficulty: pack.difficulty,
-      reviewStatus: "schema_example",
-      channel: "official",
+      reviewStatus: "draft",
+      channel: "community",
     };
     const component = mount(PackList, {
       target: target(),
@@ -424,7 +424,7 @@ describe("Layer 3 screens", () => {
     });
 
     expect(document.body.textContent).toContain("advanced club");
-    expect(document.body.textContent).toContain("schema example");
+    expect(document.body.textContent).toContain("unreviewed draft");
     expect(document.body.textContent).toContain("opening");
     document.querySelector<HTMLButtonElement>(".pack-card button")!.click();
     expect(onSelect).toHaveBeenCalledWith(pack.id);

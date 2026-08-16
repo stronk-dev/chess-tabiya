@@ -150,7 +150,7 @@ describe("adaptive guidance runtime", () => {
   });
 
   it("implements the assistance table with silence as the universal default", () => {
-    expect(SILENT_ASSISTANCE).toEqual({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" });
+    expect(SILENT_ASSISTANCE).toEqual({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" });
     expect(permittedAssistance({ sessionKind: "pack", deliveryOpen: false, role: "solo" }).humanSplit).toBe("locked_off");
     expect(permittedAssistance({ sessionKind: "position", deliveryOpen: true, role: "host" }).humanSplit).toBe("free");
     expect(permittedAssistance({ sessionKind: "position", deliveryOpen: true, role: "participant" }).humanSplit).toBe("locked_off");

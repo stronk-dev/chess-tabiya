@@ -195,14 +195,10 @@ describe("drill-client pack registry", () => {
     );
   });
 
-  it("loads the living schema fixture through the default boot registry", async () => {
+  it("serves committed drafts and never serves the schema fixture", async () => {
     const registry = await PackRegistry.loadDefault();
-    expect(registry.list()).toContainEqual(
-      expect.objectContaining({
-        id: fixture.id,
-        reviewStatus: "schema_example",
-      }),
-    );
+    expect(registry.list()).not.toContainEqual(expect.objectContaining({ reviewStatus: "schema_example" }));
+    expect(registry.list()).toContainEqual(expect.objectContaining({ reviewStatus: "draft", channel: "community" }));
   });
 
   it("refuses semantic lint failures and unsupported v1 policies", async () => {
