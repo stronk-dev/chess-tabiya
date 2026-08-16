@@ -2868,3 +2868,23 @@ its `opponentPolicy` is `human_common` with a `targetElo`.
 The whole study is engine-vs-engine, which is what makes it law-8-clean, and the step from
 "band 1800 beats band 1500 by 70 Elo" to "a 1500-rated human would too" has no evidence in
 this repo.
+
+## 2026-08-16 — Pack graduation implemented
+
+Pack schema 0.27 replaces free-text graduation blockers with stable, typed `blocking`,
+`resolved`, and cited `accepted` conditions. Provenance is closed over its five attested legacy
+keys; inline evidence stays sidecar-only. All emitters now produce the typed shape.
+
+The landing report re-derived 56 draft documents (220 blocking / 30 resolved / 43 accepted),
+36 candidate documents (143 blocking), zero legacy entries, and zero graduable packs. Candidates
+remain schema subjects and are explicitly not graduation subjects. The accepted-condition page is
+committed and byte-pinned; the report prints each root separately and no misleading merged blocker
+total.
+
+The publication boundary is executable before its first subject: official packs are checked at
+strict sourcing severity, draft failures are ratcheted at 18, real-pack promotion is tested with a
+published flip plus digest restamp, and duplicate ids across draft/published roots refuse. Every
+hardcoded real-pack test path now resolves across both roots.
+
+Verification: `ENGINES_REQUIRED=1 make verify` passed 700 tests across 110 files with schema and
+packaging clean; `make test-browser` passed 25 tests at zero retries. No authored pack was promoted.

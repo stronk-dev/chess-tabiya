@@ -24,7 +24,7 @@ appears in the ledger or the log**. This is the first real use, and it failed.
 
 Rows: D347 (the three-way disagreement), D353 (the census delta going the wrong way).
 
-## 0a. Accepted RFCs — two remain, take in lane order
+## 0a. Accepted RFCs — one remains
 
 **These were mis-flagged "do not start" until 2026-08-16 (late). They are accepted and
 implementable now.** Lane order matters only where a pack-schema number does; the two
@@ -32,10 +32,10 @@ that claim nothing versioned can be taken at any point.
 
 | # | RFC | Claims | Note |
 |---|---|---|---|
-| 1 | `rfc/pack-graduation.md` | pack **0.27** | Accepted. Graduation is a **move**, not a copy; `graduationBlockers` entries become `blocking`/`resolved`/`accepted` objects |
-| 2 | `rfc/evidence-at-runtime.md` | **nothing versioned** | Accepted, one owner call open (the voice seam) — does not block. Closes D118 by deleting a discard: `loadDefault` already reads every ledger and drops 764 records |
+| 1 | `rfc/evidence-at-runtime.md` | **nothing versioned** | Accepted, one owner call open (the voice seam) — does not block. Closes D118 by deleting a discard: `loadDefault` already reads every ledger and drops 764 records |
 
 `format-surface` implemented and archived 2026-08-16 at pack 0.25; both gates passed.
+`pack-graduation` implemented and archived 2026-08-16 at pack 0.27; 700 unit tests and 25 browser tests passed, and the landing corpus has zero legacy entries and zero graduable packs.
 
 **Register drift corrected in the same pass:** `engine-leverage` holds **migration 21**
 (landed — `STORAGE_VERSION` is 21 at HEAD), not 22. Its own text said 22 in two places and

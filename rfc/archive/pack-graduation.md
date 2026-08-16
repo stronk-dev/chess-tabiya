@@ -1,6 +1,6 @@
 # RFC: Pack graduation
 
-- **Status:** **implementing 2026-08-16** — returned once by cross-review, all four returns
+- **Status:** **implemented 2026-08-16** — returned once by cross-review, all four returns
   ratified in the author round with three amendments. Two owner-facing open questions remain
   and neither blocks implementation. — **author return round complete 2026-08-16, ready to accept.** The
   cross-review returned the draft for four things it did not count; all four are ratified, three
