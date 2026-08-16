@@ -78,9 +78,12 @@ were not persisted.
 Pack schema 0.24 factors registry references into the expression grammar. A `plan_signature` leaf
 resolves a pack plan class through its shape-plan reference and compiles to the same FEN predicate
 as the registered structural signature, with a `planClass#<id>` evidence ref. It can be used in a
-position condition or inside a transition's before/after position node. Unknown, unbound,
-uncomputable, nested, and never-present signatures fail closed at pack load. The older
-`plan_consequence` condition is deprecated.
+position condition, inside a transition's before/after position node, and at the other pack-local
+structural-expression sites: checkpoint and authored-boundary FEN predicates, timing-window
+position clauses, and structural key-point grounds. Pack validation and the expression census
+resolve through the same registry seam before evaluating; the registry-free runtime continues to
+reject unresolved raw references. Unknown, unbound, uncomputable, nested, and never-present
+signatures fail closed at pack load. The older `plan_consequence` condition is deprecated.
 
 The selection rule has one axis and one modifier. If the claim can be checked from one diagram,
 use `structural_feature`; if it needs two positions or a move property, use `transition_feature`.

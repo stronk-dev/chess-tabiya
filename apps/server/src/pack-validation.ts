@@ -36,6 +36,7 @@ import {
 } from "./guard-conditions.js";
 import {
   checkpointMatches,
+  expandStructuralExpression,
   expandTransitionExpression,
   objectiveRules,
   PackCompileError,
@@ -757,7 +758,14 @@ function runtimeIssues(
         if (!new Set(normalizeShapeReferences(pack.shapes).map((shape) => shape.shape)).has(ground.shape) || entry === undefined || !entry.document.plans.some((plan) => plan.id === ground.plan)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground`, `shape plan ${ground.shape}/${ground.plan} is not resolvable`));
       } else if (ground.kind === "spine_move" && !spineIds.has(ground.spineNodeId)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground/spineNodeId`, `unknown spine node ${ground.spineNodeId}`));
       else if (ground.kind === "claim" && !claimIds.has(ground.claimId)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground/claimId`, `unknown feedback claim ${ground.claimId}`));
-      else if (ground.kind === "structural" && checkpointFen !== undefined && !matchesStructuralExpression(checkpointFen, ground.expression)) issues.push(runtimeIssue("KEY_POINT_GROUND_FALSE_AT_CHECKPOINT", `${pointPath}/ground/expression`, "structural ground is false at the statically resolved checkpoint position"));
+      else if (ground.kind === "structural" && checkpointFen !== undefined && !matchesStructuralExpression(
+        checkpointFen,
+        expandStructuralExpression(
+          ground.expression,
+          `${pointPath}/ground/expression`,
+          resolvePlanSignature,
+        ).value,
+      )) issues.push(runtimeIssue("KEY_POINT_GROUND_FALSE_AT_CHECKPOINT", `${pointPath}/ground/expression`, "structural ground is false at the statically resolved checkpoint position"));
     }
   }
   const mode = raw.mode;
@@ -1078,7 +1086,13 @@ function runtimeIssues(
             "atPly 0 can never be evaluated after a commit; use atStart for the root position",
           ),
         );
-      } else if (!("atStart" in trigger) && checkpointMatches(pack, root, checkpoint)) {
+      } else if (!("atStart" in trigger) && checkpointMatches(
+        pack,
+        root,
+        checkpoint,
+        resolvePlanSignature,
+        `/checkpoints/${index}/trigger`,
+      )) {
         issues.push(
           runtimeIssue(
             "CHECKPOINT_TRUE_AT_ROOT",

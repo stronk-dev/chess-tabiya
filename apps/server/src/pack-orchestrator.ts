@@ -128,6 +128,65 @@ export function expandTransitionExpression(
   return { value: expression, planEvidenceRefs: [] };
 }
 
+function expandFenPredicate(
+  predicate: FenPredicate,
+  pointer: string,
+  resolvePlanSignature?: PlanSignatureResolver,
+): FenPredicate {
+  if (predicate.type !== "structuralFeature") return predicate;
+  return {
+    ...predicate,
+    feature: expandStructuralExpression(
+      predicate.feature,
+      `${pointer}/feature`,
+      resolvePlanSignature,
+    ).value,
+  };
+}
+
+function expandTimingWindow(
+  window: TimingWindowDefinition,
+  pointer: string,
+  resolvePlanSignature?: PlanSignatureResolver,
+): TimingWindowDefinition {
+  return {
+    ...window,
+    closes: window.closes.map((close, index) =>
+      close.kind === "position"
+        ? {
+            ...close,
+            feature: expandStructuralExpression(
+              close.feature,
+              `${pointer}/closes/${index}/feature`,
+              resolvePlanSignature,
+            ).value,
+          }
+        : close,
+    ),
+  };
+}
+
+export function expandPackAuthoredBoundary(
+  pack: DrillPackDefinition,
+  resolvePlanSignature?: PlanSignatureResolver,
+): DrillPackDefinition {
+  const boundary = pack.authoredBoundary;
+  if (boundary?.fenPredicates === undefined) return pack;
+  return {
+    ...pack,
+    authoredBoundary: {
+      ...boundary,
+      fenPredicates: boundary.fenPredicates.map((predicate, index) =>
+        expandFenPredicate(
+          predicate as FenPredicate,
+          `/authoredBoundary/fenPredicates/${index}`,
+          resolvePlanSignature,
+        ),
+      ),
+    },
+  };
+}
+
 function activeSpineNodeId(
   pack: DrillPackDefinition,
   run: DrillRun,
@@ -140,6 +199,8 @@ function simpleTriggerMatches(
   pack: DrillPackDefinition,
   run: DrillRun,
   trigger: SimpleTrigger,
+  resolvePlanSignature?: PlanSignatureResolver,
+  pointer = "/checkpoints",
 ): boolean {
   const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
   if ("atStart" in trigger) return node.parentId === null;
@@ -148,12 +209,20 @@ function simpleTriggerMatches(
     return activeSpineNodeId(pack, run) === trigger.atSpineNode;
   }
   if ("atAuthoredBoundary" in trigger) {
-    return !insideAuthoredBoundary(pack, run, node);
+    return !insideAuthoredBoundary(
+      expandPackAuthoredBoundary(pack, resolvePlanSignature),
+      run,
+      node,
+    );
   }
   if ("fenPredicate" in trigger) {
     return evaluateObjectivePredicate(run, {
       type: "fenPredicate",
-      predicate: trigger.fenPredicate as FenPredicate,
+      predicate: expandFenPredicate(
+        trigger.fenPredicate as FenPredicate,
+        `${pointer}/fenPredicate`,
+        resolvePlanSignature,
+      ),
     });
   }
   return evaluateObjectivePredicate(run, {
@@ -172,15 +241,23 @@ function timingState(
   pack: DrillPackDefinition,
   run: DrillRun,
   window: TimingWindowDefinition,
+  resolvePlanSignature?: PlanSignatureResolver,
+  pointer = "/timingWindows",
 ) {
   const path = tempoMovesFromRun(run);
   return windowStates(
-    [window],
+    [expandTimingWindow(window, pointer, resolvePlanSignature)],
     path,
     pack.start.side,
     (trigger, index) => {
       const nodeId = path[index]?.nodeId;
-      return nodeId !== undefined && simpleTriggerMatches(pack, runAtNode(run, nodeId), trigger);
+      return nodeId !== undefined && simpleTriggerMatches(
+        pack,
+        runAtNode(run, nodeId),
+        trigger,
+        resolvePlanSignature,
+        `${pointer}/opens/onTrigger`,
+      );
     },
   )[0]!;
 }
@@ -189,6 +266,8 @@ export function checkpointMatches(
   pack: DrillPackDefinition,
   run: DrillRun,
   checkpoint: CheckpointDefinition,
+  resolvePlanSignature?: PlanSignatureResolver,
+  pointer = "/checkpoints",
 ): boolean {
   const trigger = checkpoint.trigger;
   if ("atWindow" in trigger) {
@@ -196,12 +275,25 @@ export function checkpointMatches(
       (candidate) => candidate.id === trigger.atWindow.windowId,
     );
     if (window === undefined) return false;
-    const state = timingState(pack, run, window);
+    const windowIndex = pack.timingWindows?.indexOf(window) ?? -1;
+    const state = timingState(
+      pack,
+      run,
+      window,
+      resolvePlanSignature,
+      windowIndex < 0 ? "/timingWindows" : `/timingWindows/${windowIndex}`,
+    );
     return "verdict" in trigger.atWindow
       ? state.verdict === trigger.atWindow.verdict
       : state.spend >= trigger.atWindow.spendAtLeast;
   }
-  return simpleTriggerMatches(pack, run, trigger);
+  return simpleTriggerMatches(
+    pack,
+    run,
+    trigger,
+    resolvePlanSignature,
+    pointer,
+  );
 }
 
 function reachedOnActivePath(
@@ -222,6 +314,8 @@ function reachedOnActivePath(
 function compiledOpeningTrigger(
   pack: DrillPackDefinition,
   window: TimingWindowDefinition,
+  resolvePlanSignature?: PlanSignatureResolver,
+  pointer = "/timingWindows",
 ): ObjectivePredicate | undefined {
   if (!("onTrigger" in window.opens)) return undefined;
   const trigger = window.opens.onTrigger;
@@ -240,6 +334,7 @@ function compiledOpeningTrigger(
   }
   if ("atAuthoredBoundary" in trigger) {
     const anchors = deviationAnchors(pack);
+    const expandedPack = expandPackAuthoredBoundary(pack, resolvePlanSignature);
     return {
       type: "outsideAuthoredBoundary",
       ...(pack.authoredBoundary?.plyHorizon === undefined
@@ -248,11 +343,18 @@ function compiledOpeningTrigger(
       spineTransposeKeys: (pack.authoredBoundary?.spineNodeIds ?? []).flatMap(
         (id) => anchors.get(id) ?? [],
       ),
-      fenPredicates: (pack.authoredBoundary?.fenPredicates ?? []) as FenPredicate[],
+      fenPredicates: (expandedPack.authoredBoundary?.fenPredicates ?? []) as FenPredicate[],
     };
   }
   if ("fenPredicate" in trigger) {
-    return { type: "fenPredicate", predicate: trigger.fenPredicate as FenPredicate };
+    return {
+      type: "fenPredicate",
+      predicate: expandFenPredicate(
+        trigger.fenPredicate as FenPredicate,
+        `${pointer}/opens/onTrigger/fenPredicate`,
+        resolvePlanSignature,
+      ),
+    };
   }
   return {
     type: "materialBalance",
@@ -264,11 +366,24 @@ function timingPredicate(
   pack: DrillPackDefinition,
   window: TimingWindowDefinition,
   verdict: import("@chess-tabiya/runtime").TempoVerdict,
+  resolvePlanSignature?: PlanSignatureResolver,
 ): ObjectivePredicate {
-  const openingTrigger = compiledOpeningTrigger(pack, window);
+  const index = pack.timingWindows?.indexOf(window) ?? -1;
+  const pointer = index < 0 ? "/timingWindows" : `/timingWindows/${index}`;
+  const expandedWindow = expandTimingWindow(
+    window,
+    pointer,
+    resolvePlanSignature,
+  );
+  const openingTrigger = compiledOpeningTrigger(
+    pack,
+    expandedWindow,
+    resolvePlanSignature,
+    pointer,
+  );
   return {
     type: "timingWindow",
-    window,
+    window: expandedWindow,
     learner: pack.start.side,
     verdict,
     ...(openingTrigger === undefined ? {} : { openingTrigger }),
@@ -320,7 +435,12 @@ function successPredicate(
         `unknown timing window ${condition.windowId}`,
       );
     }
-    return timingPredicate(pack, window, condition.verdict);
+    return timingPredicate(
+      pack,
+      window,
+      condition.verdict,
+      resolvePlanSignature,
+    );
   }
   if (condition.kind === "plan_consequence") {
     const signature = resolvePlanSignature?.(condition.planClassId);
@@ -592,15 +712,21 @@ export function objectiveRules(
 export function orchestratePackStart(
   pack: DrillPackDefinition,
   initial: DrillRun,
-  _resolvePlanSignature?: PlanSignatureResolver,
+  resolvePlanSignature?: PlanSignatureResolver,
 ): MutationResult {
   let run = initial;
   const root = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
-  for (const checkpoint of pack.checkpoints) {
+  for (const [index, checkpoint] of pack.checkpoints.entries()) {
     if (
       !("atWindow" in checkpoint.trigger) &&
       "atStart" in checkpoint.trigger &&
-      checkpointMatches(pack, run, checkpoint)
+      checkpointMatches(
+        pack,
+        run,
+        checkpoint,
+        resolvePlanSignature,
+        `/checkpoints/${index}/trigger`,
+      )
     ) {
       run = reachCheckpoint(run, checkpoint.id, root.createdAt).run;
     }
@@ -619,10 +745,16 @@ export function orchestratePackMove(
 ): MutationResult {
   let run = committed.run;
   const active = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
-  for (const checkpoint of pack.checkpoints) {
+  for (const [index, checkpoint] of pack.checkpoints.entries()) {
     if (
       !reachedOnActivePath(run, checkpoint.id) &&
-      checkpointMatches(pack, run, checkpoint)
+      checkpointMatches(
+        pack,
+        run,
+        checkpoint,
+        resolvePlanSignature,
+        `/checkpoints/${index}/trigger`,
+      )
     ) {
       run = reachCheckpoint(run, checkpoint.id, active.createdAt).run;
     }

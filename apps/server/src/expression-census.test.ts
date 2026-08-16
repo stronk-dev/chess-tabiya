@@ -96,6 +96,23 @@ describe("expression census", () => {
     expect(report.subjects[0].observations).not.toContain("UNSATISFIABLE");
   });
 
+  it("resolves pack-local plan signatures before measuring coverage", () => {
+    const subjects = fullReport.subjects.filter((subject: any) =>
+      [
+        "closed-centre-chain-black-base-strike",
+        "london-wedge-black-counterplay",
+        "open-centre-french-exchange-black",
+      ].includes(subject.site.subject.pack) &&
+      subject.site.subject.kind === "pack_success_condition",
+    );
+    expect(subjects).toHaveLength(3);
+    for (const subject of subjects) {
+      expect(subject.coverage.corpus.faults).toBeUndefined();
+      expect(subject.observations).not.toContain("EVALUATION_FAULT");
+      expect(subject.satisfiability.verdict).not.toBe("unknown");
+    }
+  });
+
   it("is deterministic and does not mutate content", () => {
     const before = packFiles().map((name) => [name, statSync(`content/drafts/${name}`).mtimeMs, createHash("sha256").update(readFileSync(`content/drafts/${name}`)).digest("hex")] as const);
     const one = canonicalizeJson(runExpressionCensus({ witnesses }));

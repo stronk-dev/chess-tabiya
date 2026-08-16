@@ -25,3 +25,16 @@
 - The full gate initially exposed three strict-null errors in the concurrent untracked
   `author-round-probe.test.ts`; the corrections were non-behavioural assertions over already
   established corpus shapes and remain outside this lifecycle's staged file set.
+
+## 2026-08-16 — D347/D353 follow-up
+
+- The first three content users exposed that only objective compilation expanded
+  `plan_signature`: checkpoint and boundary validation evaluated raw expressions, while the
+  expression census faulted once per corpus position.
+- Routed checkpoint triggers, authored boundaries, timing-window position clauses, structural
+  key-point grounds, and pack census subjects through the same registry expander. The runtime's
+  unresolved-reference refusal remains unchanged.
+- The census returned from 26 to 23 `satisfiabilityUnknown` subjects; the three new pack subjects
+  are satisfiable with zero evaluation faults. `ENGINES_REQUIRED=1 make verify` passed 672 tests
+  across 104 files with Svelte 0/0, and the zero-retry browser gate passed 24 with the optional
+  Maia latency test skipped.

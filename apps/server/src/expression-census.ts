@@ -9,6 +9,11 @@ import { matchesStructuralExpression } from "@chess-tabiya/runtime";
 
 import { authoredSpineFens } from "./pack-validation.js";
 import {
+  expandStructuralExpression,
+  planSignatureResolver,
+  type PlanSignatureResolver,
+} from "./pack-orchestrator.js";
+import {
   DEGENERATE_POSITIONS,
   expressionSatisfiability,
   type ExpressionWitness,
@@ -128,26 +133,52 @@ export function evidenceCensus(packDocuments: ReadonlyMap<string, DrillPackDefin
   });
 }
 
-function packSubjects(pack: DrillPackDefinition, file: string): readonly CensusSubject[] {
+function censusExpression(
+  expression: StructuralExpression,
+  pointer: string,
+  resolvePlanSignature: PlanSignatureResolver,
+): StructuralExpression {
+  try {
+    return expandStructuralExpression(
+      expression,
+      pointer,
+      resolvePlanSignature,
+    ).value;
+  } catch {
+    // Invalid or unresolved references remain visible as evaluation faults. The
+    // census reports bad authoring; it does not turn it into a process crash.
+    return expression;
+  }
+}
+
+function packSubjects(
+  pack: DrillPackDefinition,
+  file: string,
+  resolvePlanSignature: PlanSignatureResolver,
+): readonly CensusSubject[] {
   const result: CensusSubject[] = [];
   const visit = (value: unknown, pointer: string): void => {
     if (value === null || typeof value !== "object") return;
     if (Array.isArray(value)) { value.forEach((child, index) => visit(child, `${pointer}/${index}`)); return; }
     const object = value as Record<string, any>;
     if (object.kind === "structural_feature" && object.feature !== undefined) {
-      result.push({ file, pointer: `${pointer}/feature`, kind: "pack_success_condition", expression: object.feature, packId: pack.id });
+      const subjectPointer = `${pointer}/feature`;
+      result.push({ file, pointer: subjectPointer, kind: "pack_success_condition", expression: censusExpression(object.feature, subjectPointer, resolvePlanSignature), packId: pack.id });
       return;
     }
     if (object.type === "structuralFeature" && object.feature !== undefined) {
-      result.push({ file, pointer: `${pointer}/feature`, kind: "pack_fen_predicate", expression: object.feature, packId: pack.id });
+      const subjectPointer = `${pointer}/feature`;
+      result.push({ file, pointer: subjectPointer, kind: "pack_fen_predicate", expression: censusExpression(object.feature, subjectPointer, resolvePlanSignature), packId: pack.id });
       return;
     }
     if (object.kind === "position" && object.feature !== undefined && pointer.includes("/timingWindows/")) {
-      result.push({ file, pointer: `${pointer}/feature`, kind: "pack_window_closing", expression: object.feature, packId: pack.id });
+      const subjectPointer = `${pointer}/feature`;
+      result.push({ file, pointer: subjectPointer, kind: "pack_window_closing", expression: censusExpression(object.feature, subjectPointer, resolvePlanSignature), packId: pack.id });
       return;
     }
     if (object.kind === "structural" && object.expression !== undefined && pointer.includes("/keyPoints/")) {
-      result.push({ file, pointer: `${pointer}/expression`, kind: "pack_key_point_ground", expression: object.expression, packId: pack.id });
+      const subjectPointer = `${pointer}/expression`;
+      result.push({ file, pointer: subjectPointer, kind: "pack_key_point_ground", expression: censusExpression(object.expression, subjectPointer, resolvePlanSignature), packId: pack.id });
       return;
     }
     for (const [key, child] of Object.entries(object)) visit(child, `${pointer}/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`);
@@ -241,10 +272,21 @@ export function runExpressionCensus(options: CensusOptions = {}): any {
     fens.forEach((fen) => positions.push({ packId: pack.id, file: displayPath(absolute), ply: absolutePly(fen) - rootPly, fen }));
   }
   const shapeFiles = filesUnder(resolve(options.shapeRoot ?? "content/shapes")).filter((file) => file.endsWith(".json"));
-  let subjects: CensusSubject[] = [];
-  for (const [absolute, pack] of packDocuments) subjects.push(...packSubjects(pack, displayPath(absolute)));
+  const shapeRecords = new Map<string, { readonly document: ShapeEntryDefinition }>();
   for (const absolute of shapeFiles) {
-    const entry = readJson(absolute) as ShapeEntryDefinition;
+    const document = readJson(absolute) as ShapeEntryDefinition;
+    shapeRecords.set(document.id, { document });
+  }
+  let subjects: CensusSubject[] = [];
+  for (const [absolute, pack] of packDocuments) {
+    subjects.push(...packSubjects(
+      pack,
+      displayPath(absolute),
+      planSignatureResolver(pack, shapeRecords),
+    ));
+  }
+  for (const absolute of shapeFiles) {
+    const entry = shapeRecords.get((readJson(absolute) as ShapeEntryDefinition).id)!.document;
     subjects.push(...shapeSubjects(entry, displayPath(absolute)));
   }
   if (options.files !== undefined) {

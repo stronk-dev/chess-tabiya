@@ -16,7 +16,11 @@ import {
 import { reachableAuthoredSpineIds } from "@chess-tabiya/schema/drill-pack";
 
 import type { PackRecord } from "./pack-registry.js";
-import type { PlanShapeLookup } from "./pack-orchestrator.js";
+import {
+  expandPackAuthoredBoundary,
+  planSignatureResolver,
+  type PlanShapeLookup,
+} from "./pack-orchestrator.js";
 
 export type RevealAttribution =
   | {
@@ -341,7 +345,11 @@ export function projectAuthoredFeedback(
     }
 
     if (pack.document.objective.type === "follow_theory") {
-      for (const entry of lineMembership(pack.document, run, reveal.nodeId)) {
+      const runtimePack = expandPackAuthoredBoundary(
+        pack.document,
+        planSignatureResolver(pack.document, shapes),
+      );
+      for (const entry of lineMembership(runtimePack, run, reveal.nodeId)) {
         const id = `theory#${entry.nodeId}`;
         if (revealed.has(id)) continue;
         revealed.set(id, Object.freeze({

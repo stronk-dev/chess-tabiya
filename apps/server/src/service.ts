@@ -72,7 +72,7 @@ import {
   publicEvents,
   publicNodes,
 } from "./feedback-policy.js";
-import { orchestratePackMove, orchestratePackStart, planSignatureResolver } from "./pack-orchestrator.js";
+import { expandPackAuthoredBoundary, orchestratePackMove, orchestratePackStart, planSignatureResolver } from "./pack-orchestrator.js";
 import { applyRecordedEngineGuard, applyRulesGuard } from "./guard.js";
 import {
   PackRegistry,
@@ -811,7 +811,14 @@ export class RunService {
       if (pack === undefined) {
         throw new ServerError("NO_AUTHORED_VARIATIONS", "Position sessions have no authored variations");
       }
-      const membership = lineMembership(pack.document, stored.run, sourceNode.id);
+      const membership = lineMembership(
+        expandPackAuthoredBoundary(
+          pack.document,
+          planSignatureResolver(pack.document, this.#shapes),
+        ),
+        stored.run,
+        sourceNode.id,
+      );
       const spineId = membership.at(-1)?.spineNodeId;
       const choices = (spineId === undefined
         ? pack.document.spine
@@ -909,7 +916,12 @@ export class RunService {
       group,
       run: scratch,
       emitted: scratch.events.slice(stored.run.events.length),
-      comparison: compareBranches(scratch, members.map((member) => member.branchId), pack === undefined ? {} : { pack: pack.document }),
+      comparison: compareBranches(scratch, members.map((member) => member.branchId), pack === undefined ? {} : {
+        pack: expandPackAuthoredBoundary(
+          pack.document,
+          planSignatureResolver(pack.document, this.#shapes),
+        ),
+      }),
     });
   }
 
@@ -978,7 +990,12 @@ export class RunService {
     }
     const run = requireRead(this.#storage, runId, principal).stored.run;
     const pack = run.packId === null ? undefined : this.#requiredPackRegistry().byDigest(run.packDigest!);
-    const comparison = compareBranches(run, branchIds, pack === undefined ? {} : { pack: pack.document });
+    const comparison = compareBranches(run, branchIds, pack === undefined ? {} : {
+      pack: expandPackAuthoredBoundary(
+        pack.document,
+        planSignatureResolver(pack.document, this.#shapes),
+      ),
+    });
     return !feedbackDisclosed(run)
       ? comparisonWithoutEngineFeedback(comparison)
       : comparison;
@@ -1259,7 +1276,14 @@ export class RunService {
       return undefined;
     };
     const current = stored.run.nodes.find((node) => node.id === stored.run.activeCursor.nodeId)!;
-    const memberships = lineMembership(pack.document, stored.run, current.id);
+    const memberships = lineMembership(
+      expandPackAuthoredBoundary(
+        pack.document,
+        planSignatureResolver(pack.document, this.#shapes),
+      ),
+      stored.run,
+      current.id,
+    );
     const currentSpineId = memberships.at(-1)?.spineNodeId;
     const choices = (currentSpineId === undefined ? pack.document.spine : find(pack.document.spine ?? [], currentSpineId)?.children) ?? [];
     if (choices.length < 2) throw new ServerError("NO_AUTHORED_VARIATIONS", "This position has fewer than two authored variations");
@@ -1293,7 +1317,12 @@ export class RunService {
     this.#simulations.set(simulationId, { runId, sourceNodeId, scratch, branchIds, moves, createdAt: Date.now() });
     return Object.freeze({
       simulationId,
-      comparison: compareBranches(scratch, branchIds, { pack: pack.document }),
+      comparison: compareBranches(scratch, branchIds, {
+        pack: expandPackAuthoredBoundary(
+          pack.document,
+          planSignatureResolver(pack.document, this.#shapes),
+        ),
+      }),
       branches: Object.freeze(branchIds.map((branchId, indexValue) => ({
         index: indexValue,
         label: scratch.branches.find((branch) => branch.id === branchId)!.label,

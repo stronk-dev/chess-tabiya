@@ -288,6 +288,9 @@ move itself, uses `transition_feature`. The practical test is whether one diagra
 When a registered shape plan already names the structural fact, use a `plan_signature` expression
 leaf instead of copying the signature. The server expands that leaf before runtime evaluation and
 adds `planClass#<id>` evidence attribution. It works inside either position grammar, including a
-transition expression's before/after position node. `plan_consequence` remains readable but is
-deprecated; author `structural_feature` with `plan_signature` instead. Pack check warns when a
-bound plan signature has been copied inline.
+transition expression's before/after position node, checkpoint and authored-boundary FEN
+predicates, timing-window position clauses, and structural key-point grounds. Pack validation and
+the expression census use the same expansion seam, while the registry-free runtime still refuses
+an unresolved raw reference. `plan_consequence` remains readable but is deprecated; author
+`structural_feature` with `plan_signature` instead. Pack check warns when a bound plan signature
+has been copied inline.

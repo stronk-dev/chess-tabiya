@@ -1,10 +1,10 @@
 import { readFileSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { matchesStructuralExpression } from "@chess-tabiya/runtime";
+import { commitMove, createRun, lineMembership, matchesStructuralExpression } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
-import { objectiveRules, planSignatureResolver } from "./pack-orchestrator.js";
+import { checkpointMatches, expandPackAuthoredBoundary, objectiveRules, planSignatureResolver } from "./pack-orchestrator.js";
 import { constructReachReport } from "./pack-check.js";
 import { validatePackDocument, type PackShapeLookup } from "./pack-validation.js";
 import { validateShapeEntry } from "./shape-validation.js";
@@ -51,6 +51,66 @@ describe("vocabulary wiring", () => {
     expect(rule.evidenceRefs).toContain("planClass#minority-attack");
     expect(JSON.stringify(rule.when)).not.toContain("plan_signature");
     expect(() => validatePackDocument(pack, { shapes: lookup() })).not.toThrow();
+  });
+
+  it("expands plan_signature before checkpoint and boundary validation", () => {
+    const pack = structuredClone(sourcePack) as any;
+    pack.checkpoints = [{
+      id: "plan-reached",
+      trigger: {
+        fenPredicate: {
+          type: "structuralFeature",
+          feature: { kind: "plan_signature", planClassId: "minority-attack" },
+        },
+      },
+    }];
+    pack.authoredBoundary = {
+      plyHorizon: 20,
+      fenPredicates: [{
+        type: "structuralFeature",
+        feature: { kind: "plan_signature", planClassId: "minority-attack" },
+      }],
+    };
+    const validation = validatePackDocument(pack, { shapes: lookup() });
+    expect(validation.issues).not.toContainEqual(expect.objectContaining({ code: "START_POSITION_UNRUNNABLE" }));
+
+    const rootShape = structuredClone(sourceShape);
+    rootShape.plans.find((plan: any) => plan.id === "white-minority-attack").success.signature = {
+      kind: "pieceOnSquare", square: "g8", piece: { color: "black", role: "king" },
+    };
+    const run = createRun({
+      id: "plan-signature-checkpoint",
+      session: {
+        kind: "pack",
+        packId: pack.id,
+        packDigest: `sha256:${"0".repeat(64)}`,
+        start: pack.start,
+        feedbackPolicy: "delayed_checkpoint",
+        opponentPolicy: { mode: "human_common" },
+      },
+      sessionDigest: `sha256:${"0".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 0,
+      createdAt: "2000-01-01T00:00:00.000Z",
+    });
+    expect(checkpointMatches(
+      pack,
+      run,
+      pack.checkpoints[0],
+      planSignatureResolver(pack, lookup(rootShape)),
+      "/checkpoints/0/trigger",
+    )).toBe(true);
+
+    const played = commitMove(run, pack.spine[0].moveUci, {
+      at: "2000-01-01T00:00:01.000Z",
+    }).run;
+    const runtimePack = expandPackAuthoredBoundary(
+      pack,
+      planSignatureResolver(pack, lookup(rootShape)),
+    );
+    expect(lineMembership(runtimePack, played, played.activeCursor.nodeId).at(-1)).toMatchObject({
+      insideBoundary: true,
+    });
   });
 
   it("warns on the real inline plan signature and refuses nested registry references", () => {
