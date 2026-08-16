@@ -1,11 +1,21 @@
 # RFC: Graduation clearance — how a blocker stops blocking
 
-- **Status:** **returned to author 2026-08-16 after implementation review** — four contract
-  blockers remain: `ledger_record` cannot name the record kind it promises to verify; the 30
-  historical `resolved` entries are not all representable by the proposed resolvable subject;
-  the automatic blocking→resolved transition has no specified writer; and the line-level
-  `git blame` admission check is assigned to a runtime validator shipped without Git history.
-  **Do not implement until D464–D467 are closed in the governing sections.** The preceding
+- **Status:** **draft — second author round complete 2026-08-16, answering the implementation
+  review that returned this RFC at `8c389f0`.** All four contract blockers are now specified at a
+  named symbol: **D464** by a required `clearance.recordKind` drawn from the shipped `EVIDENCE_KINDS`
+  enum plus the `supports`-pointer rule that decides it (§1.2b); **D465** by an eighth clearance kind
+  `referent_removed`, admissible on `resolved` only, after measuring that the affected population is
+  **1 of 30**, not "some" (§2.2a); **D466** by a named writer — `make graduation-clear` /
+  `clearGraduationEntries` — with its transition document, digest obligation and report-exclusion
+  change stated (§6.5); **D467** by **splitting one rule into two honest ones**, because the
+  authoring-time check and the runtime check cannot be the same rule and the RFC now says so at the
+  Dockerfile line (§3.2c). **The acceptance the implementer returned was premature and this round
+  does not re-declare it:** four things the implementer needed were unspecified, and closing open
+  questions is not the same as being buildable. **This round also found that D467's defect already
+  ships** — `GRADUATION_RULING_UNCITED` resolves `planning/` and `docs/` paths against `process.cwd()`
+  inside `validatePackDocument`, and neither directory exists in the production image, so the code the
+  RFC was leaning on as precedent is itself an authoring-time check stranded at runtime (§3.2c,
+  reported as a new ledger row). The preceding
   author-round record is retained below as history: author round complete, cross-review corrections landed, and
   **all four author-call open questions closed in this document** (1, 2, 3, 7); question 5 stays
   deliberately deferred to the first content wave with its follow-up recorded. **No owner ruling is
@@ -47,29 +57,57 @@
   prerequisites.
 - **Parent / amends:** **completes `rfc/archive/pack-graduation.md`.** That RFC shipped the state
   machine, the gate predicate, the report and the migration, and shipped `clearedBy` as *"optional,
-  free text"* (§1). This RFC gives `clearedBy` a grammar and makes it required. It amends nothing
-  that RFC decided; it specifies the one thing it deliberately left unspecified.
+  free text"* (§1). This RFC gives `clearedBy` a grammar and makes it required.
+  **[author round 2] *"It amends nothing that RFC decided"* is withdrawn as of §3.2c, and RFC-0000
+  rule 3 requires saying so rather than letting it stand.** This RFC now **changes implemented
+  behaviour** that `pack-graduation` shipped: `GRADUATION_RULING_UNCITED`'s resolution and
+  date-containment arms move out of `validatePackDocument` into the graduation sweep, and
+  `GRADUATION_CLEAREDBY_UNRESOLVED` is withdrawn with the field it guards. Both changes are the
+  follow-up this RFC already is — it declares `pack-graduation` as its parent — and neither touches
+  the archived document, which stays immutable. **The reason for the change is [[D468]]: those arms
+  resolve `planning/` and `docs/` against `process.cwd()` inside a validator that ships in an image
+  containing neither.**
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/graduation-clearance/` (once implementing)
 
-## Implementation review — 2026-08-16
+## Implementation review — 2026-08-16, and where each blocker is now answered
 
 The RFC did not survive implementation review. These are contract questions, not coding details,
-so no implementation was started:
+so no implementation was started. **Each is answered in the section named beside it; the review's own
+words are kept verbatim so a later reader can check the answer against the question rather than
+against a paraphrase of it.**
 
 1. `clearance.kind: "ledger_record"` says it verifies a **named evidence-record kind**, but the
    proposed object carries only `kind`, `subject`, and `instrument`. It cannot distinguish an
    `engine_eval` obligation from an `explorer_position_census` obligation.
+   → **[[D464]] answered in §1.2b.** `recordKind` is added, closed over the shipped seven-value
+   `EVIDENCE_KINDS` (`apps/server/src/sourcing/types.ts:57`), and the deciding predicate is stated as
+   a `kind` + `supports` match over the pack's ledger. The measurement that makes it decidable also
+   **moves the B/C boundary**, and §1.2b states that rather than leaving it to Stage A.
 2. Stage B requires every one of the 30 historical `resolved` entries to gain a clearance with a
    currently resolvable `subject`. Several resolutions describe removed nodes or lines; the RFC
    supplies no honest encoding for a historical subject that no longer exists.
+   → **[[D465]] answered in §2.2a, and the premise is corrected by measurement rather than argued
+   with.** All 30 were walked: **29 name a subject that resolves today, 1 does not** — "several" is
+   one entry. That one is **not reclassified away**; the grammar gains `referent_removed`, whose
+   predicate is *the named ids are absent*, which is a standing predicate exactly as §2.1 requires
+   and which correctly re-opens if a deleted line comes back.
 3. Criterion 3 requires four blocking entries to become resolved automatically, but the named
    checker returns issues and has no mutation output or transition owner. Which command writes the
    state transition, and what it writes, is unspecified.
+   → **[[D466]] answered in §6.5.** `checkSourcingFile` stays a pure reporter; a new
+   `clearGraduationEntries` (`make graduation-clear`) owns the transition, modelled on the shipped
+   `verifyDraft` writer, and its output shape, its digest obligation and the one-line
+   `graduation-report.ts` change its sidecar forces are all named.
 4. `GRADUATION_RULING_SELF_MINTED` is assigned to `validatePackDocument`, while the production
    server image contains neither `.git` nor a Git executable/history. The RFC must place that check
    on a build/promotion path that actually has its evidence, or specify how runtime validation can
    perform it without silently weakening official versus community admission.
+   → **[[D467]] answered in §3.2c, and the honest answer is that they cannot be one rule.** The
+   authoring-time rule is an *admission* rule and needs a Git checkout; the runtime rule is a *shape*
+   rule and can only read the document. They are specified as two codes with two homes and two
+   different guarantees. The section also reports that **this defect is already shipped one code
+   earlier**, which is why "move the check" would not have been a complete answer.
 
 ## Summary
 
@@ -353,7 +391,8 @@ author asserting clearance is exactly the thing §0.3 measured going wrong.
 
 #### §1.2 The clearance kinds
 
-Seven kinds, closed. The corpus population column is the output of the **ordered first-match keyword
+Seven kinds, closed — **eight after §2.2a adds `referent_removed`, which is admissible on
+`resolved` only and therefore has no row in a table of *blocking* populations.** The corpus population column is the output of the **ordered first-match keyword
 ruleset published as a literal in §5.1a**, plus the hand classification of its 17-entry residue in
 §5.1b. It is still **labelled a hand audit rather than a measurement** because `pack-graduation`
 §4.3 established, on this same corpus, that *"a status recorded in prose cannot be migrated
@@ -364,7 +403,7 @@ are `[V]`.
 | # | `kind` | Cleared when | Deciding predicate (shipped) | Corpus |
 |---|---|---|---|---|
 | A | `assessment_grounded` | `objective.grading.assessedBy` resolves against the pack's ledger | `assessmentGrounding(...)` returns `"ledger_verified"` (`apps/server/src/sourcing/ledger-validation.ts:423`) `[V]` | 5 |
-| B | `ledger_record` | a record of a named `kind`, anchored to a named FEN, exists in the pack's `.evidence.json` and validates | `checkSourcingFile` over the pack. **Note the asymmetry:** the 32 committed ledgers hold only `position_legality` (32), `engine_eval` (391) and `tablebase_result` (341); `explorer_position_census` is a supported kind (`apps/server/src/sourcing/claim-binding.ts:93`) with **zero committed instances** `[V]` | 38 (engine) + 46 (corpus) |
+| B | `ledger_record` | a record of the `clearance.recordKind` in the pack's `.evidence.json` carries `clearance.subject` in its `supports` (§1.2b) — **[author round 2] not *"anchored to a named FEN"*, which was this row's wording for two rounds and named the wrong join** ([[D471]]) | `checkSourcingFile` over the pack; the relation is the one `evidenceSupports` (`check.ts:166`) already lints. **Note the asymmetry:** the 32 committed ledgers hold only `position_legality` (32), `engine_eval` (391) and `tablebase_result` (341); `explorer_position_census` is a supported kind (`apps/server/src/sourcing/claim-binding.ts:93`) with **zero committed instances** `[V]` | 38 (engine) + 46 (corpus) |
 | C | `claim_bound` | a `claimBindings` entry binds `subject` to a source with a matching text digest | `validateClaimBindings` (`apps/server/src/sourcing/claim-binding.ts:174`); `runExpressionCensus` reports `backing.backedClaims` per claim `[V]` | 55 |
 | D | `shape_firing` | a named shape entry's trigger fires on at least one of this pack's positions | `runExpressionCensus` / `checkShapeFile`; the negative is already a code — `SHAPE_TRIGGER_NEVER_FIRES_IN_CORPUS` (`apps/server/src/shape-check.ts:13`) `[V]` | 24 |
 | E | `pointer_authored` | the text at `subject` no longer matches the stated placeholder predicate | string comparison at `subject` against `clearance.placeholder` | 11 |
@@ -439,6 +478,81 @@ entries are cleared by the *same command* that clears a `claim_bound` entry, whi
 `explorer_position_census` record and the `claimBindings` entry in one atomic write
 (`sourcing/explorer.ts:268–273`) `[V]`. **The authored-prose-plus-a-source class is 46 + 55 = 101 of
 220**, and this RFC prices it once.
+
+#### §1.2b [author round 2 — closes [[D464]]] `ledger_record` names its record kind, and the pointer rule that decides it moves the B/C boundary
+
+**The blocker, restated so the fix is checkable against it:** *"`clearance.kind: "ledger_record"`
+carries `subject` and `instrument` but no evidence `recordKind`, so `engine_eval` and
+`explorer_position_census` obligations are indistinguishable at the exact predicate meant to
+re-derive them."* Correct as written, and §1.2's own row B compounded it by describing the predicate
+in prose (*"a record of a named `kind`, anchored to a named FEN"*) that no field in §1 could carry.
+
+**The field.** `clearance.recordKind` is **required when and only when `kind` is `ledger_record`**,
+and its value set is the shipped enum, not a new one:
+
+```ts
+export const EVIDENCE_KINDS = [
+  "opening_identity", "position_legality", "explorer_frequency", "explorer_position_census",
+  "tablebase_result", "engine_eval", "puzzle_provenance",
+] as const;                                 // apps/server/src/sourcing/types.ts:57
+```
+
+`[V]`, read at the symbol. Seven values; **three have committed instances** — over the 32 ledgers in
+`content/drafts/` there are **764 records: `engine_eval` 391, `tablebase_result` 341,
+`position_legality` 32** `[V]`, computed by walking every `*.evidence.json` at HEAD. The enum is
+reused rather than restated so that a kind added to `EVIDENCE_KINDS` cannot silently become
+unexpressible in a clearance; `GRADUATION_CLEARANCE_RECORDKIND_UNKNOWN` (error) is the guard, and
+criterion 13 asserts the two lists are the same list.
+
+**The deciding predicate, at the symbol.** A `ledger_record` clearance holds when the pack's ledger
+contains a record of the named kind that **supports the clearance's own subject**:
+
+> `ledger.records.some((record) => record.kind === clearance.recordKind && record.supports.includes(clearance.subject))`
+
+This is not a new linking concept. `evidenceSupports` (`apps/server/src/sourcing/check.ts:166`)
+already treats `record.supports` as a list of JSON pointers into the pack and already raises
+`EVIDENCE_ANCHOR_BROKEN` at `:186` when one does not resolve `[V]` — so *"a record's claim on a pack
+pointer"* is a shipped, linted relation and `clearance.subject` is the same kind of thing on the
+other side of it. The FEN is not the join key and §1.2's row B was wrong to make it one:
+`uniqueRecord` (`claim-binding.ts:59`) joins on FEN because a **claim assertion** names a position,
+whereas a **graduation subject** names a pack node. Both are shipped; this RFC needed the second.
+
+**And the measurement changes something the draft assumed.** Over all 764 committed records the
+`supports` pointers take exactly three shapes — `/start/fen` (64), `/spine/…/moveUci` (465) and
+`/deviations/<i>/moveUci` (235) `[V]`. **Zero records support a `/feedbackClaims/<i>/text`
+pointer, and none ever can**, because `check.ts:190` raises `EVIDENCE_OVERREACH` on any record whose
+`supports` matches `PROSE_POINTERS` (`:32`) or `HUMAN_ONLY_POINTERS` (`:39`) `[V]`. It raises at
+**error** — `issue()` defaults to `"error"` (`ledger-validation.ts:34–38`) and `checkSourcingFile`
+defaults to `strict: true` (`check.ts:420`), which is the mode every gate in this RFC runs in `[V]` —
+so this is a refusal and not a note. So:
+
+> **Normative.** A `ledger_record` clearance whose `subject` matches `PROSE_POINTERS` or
+> `HUMAN_ONLY_POINTERS` is **unsatisfiable by construction** and is an error —
+> `GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE`. Such an entry is `claim_bound`, whose predicate
+> reaches prose through `claimBindings` and no other way.
+
+**This is the B(corpus)/C boundary, decided by a mechanism instead of by a keyword.** §4.2 already
+found the two classes are *one cost* — `attachExplorerEvidence` writes the
+`explorer_position_census` record and the `claimBindings` entry in one atomic write
+(`explorer.ts:268–273`). The pointer rule now says which *kind* each entry takes, and the answer is
+sharper than §5.1a's rule 2 could be: read at `explorer.ts:268`, that record's `supports` is
+`["/start/fen"]` when the anchor is the pack root and **`[]` otherwise** `[V]`. Therefore
+
+- an entry about the **root position's** corpus figures may be `ledger_record` with
+  `recordKind: "explorer_position_census"` and `subject: "/start/fen"`; and
+- an entry about a **quantified sentence** — which is what rule 2's *" games"*, `popularity`,
+  `at band` keywords actually match — is `claim_bound`, because the only record that could reach it
+  supports nothing.
+
+**What this does to §5.1a's counts, stated rather than quietly applied.** Rule 2's **46** is a
+*rule* count over statements, and it always was; it is not a kind count, because the kind depends on
+the `subject` and no subject exists in the corpus yet. §1.2's *"B 38 (engine) + 46 (corpus)"* cell
+is therefore replaced by: **B(engine) 38; the 46 rule-2 entries split between `ledger_record` and
+`claim_bound` at Stage A by the pointer rule above, and the split is a diff a reviewer reads.**
+**No number below moves**, because §4.2 already prices B(corpus) and C as one class of **101**, which
+is the figure planning consumes and which is invariant under this boundary `[V]`. What moves is that
+the boundary is now decided by a lint instead of by a keyword — which is what D464 was asking for and
+is a strictly better outcome than the `recordKind` field alone.
 
 #### §1.3 What `claim_bound` checks, and what it refuses to check
 
@@ -540,6 +654,98 @@ different only in wording, and it is what the 30 identical boilerplate strings p
 `GRADUATION_RESOLVED_WITHOUT_CLEARANCE` (error) fires on a `resolved` entry with no
 `resolved.clearance`, or one whose `clearance.kind` is `unbuilt` or `unreachable` — those two kinds
 have no predicate and therefore cannot resolve, only be accepted or stay blocking.
+**[author round 2] `referent_removed` (§2.2a) is the third kind this code must know about, and it is
+in the *allowed* list, not the refused one** — it has a predicate, it is only ever `resolved`, and it
+is the single kind that may appear on a `resolved` entry and on no other state. The refused set stays
+exactly `{unbuilt, unreachable}`.
+
+##### §2.2a [author round 2 — closes [[D465]]] A resolution whose work was a **deletion** gets a predicate, because the alternative is a forged subject
+
+**The blocker said the subject grammar cannot honestly represent work whose referent was deleted, so
+Stage B is not a mechanical migration over its claimed population. The grammar half is right. The
+population half was measured, and it is one entry, not "some".**
+
+All 30 `resolved` entries in `content/drafts/` were walked at HEAD — every pointer below was
+resolved by actually walking the parsed document, not matched by grep. The result:
+
+| | count |
+|---|---|
+| resolved entries in `content/drafts/` | **30**, over **24** distinct pack files |
+| distinct `resolved.by` strings | **1** (the §0.3 finding reproduces exactly) |
+| **(a)** a subject of depth ≥ 1 resolves in the current document | **29** |
+| **(b)** the statement's primary referent was removed | **1** |
+| **(c)** ambiguous | **0** |
+
+`[V]`. The 30 fall in five textual families — **`engine-evidence-now-…` 19, `prose-grounding-pass…`
+5, `shape-entry-authored…` 4, `resolved-in-v0-2-0…` 1, `refuted-and-deleted…` 1**, summing to 30
+`[V]` — and the first four families each have one obvious subject: the 19 → `/objective/grading/assessedBy`,
+which resolves to a `{kind:"engine", depth:22, …}` object in all 19 `[V]`; the 5 → the annotation,
+plan-class description or deviation the pass corrected, each still present in place `[V]`; the 4 + 1
+shape-referencing entries → `/shapes/<i>` plus the `planClasses/<i>/shapePlan` that names the
+authored plan, all resolving `[V]`. **The fifth family is one entry and is the whole of D465.**
+
+**The one that does not, in full, because a reader must be able to disagree with the reading.**
+`content/drafts/anti-caro-advance-early-c5.json`, `/provenance/graduationBlockers/5`, id
+`refuted-and-deleted-2026-08-15-the-pack-s-largest-single`:
+
+> REFUTED AND DELETED 2026-08-15 — the pack's largest single error. … **Spine nodes `bxc5-recoup`
+> and `bxc5-trade`, checkpoint `price-collected` and the two `authoredBoundary` entries were
+> removed.** No replacement line was authored, because authoring one would be manufacturing chess
+> this pass cannot ground.
+
+Verified absent at HEAD: the document's 13 spine ids are
+`dxc5-take, nc6-active, nf3-dev, bg4-pin, c3-brace, e6-late, b4-clamp, e6-bid, be3-shield,
+nf3-decline, cxd4-free, nxd4-central, c3-prop` and its 5 checkpoint ids are `grab-decision,
+clamp-standing, decline-compared, prop-compared, past-the-book` — **none of the three named ids
+survives as an id anywhere in the document** `[V]`.
+
+**The ruling: the grammar expresses it. It is not reclassified and Stage B's population is not
+narrowed.** An eighth clearance kind is added:
+
+| # | `kind` | Cleared when | Deciding predicate |
+|---|---|---|---|
+| H | `referent_removed` | every id in `absentIds` is absent under `subject` | `subject` resolves to a container; no descendant object's `id` is in `absentIds` |
+
+```jsonc
+{ "state": "resolved",
+  "resolved": { "at": "2026-08-15",
+    "clearance": { "kind": "referent_removed", "subject": "/spine",
+                   "absentIds": ["bxc5-recoup", "bxc5-trade"] },
+    "by": "…" } }
+```
+
+**Four properties, and they are the reason this is a grammar fix rather than a workaround.**
+
+1. **It is a standing predicate, which is the whole of §2.1's rule.** *The named ids are absent* is
+   re-evaluated on every run exactly as *the ledger holds a record* is. It is not a sentence about
+   the past.
+2. **It re-derives in the useful direction.** If a later author re-introduces `bxc5-recoup`, the
+   predicate stops holding and `GRADUATION_RESOLUTION_STALE` fires — which is **correct**: a refuted
+   line coming back should re-open the blocker that refuted it. No other encoding of this entry has
+   that property, and the alternatives (invent a pointer, or file it under the surviving
+   `/planClasses/1`) both silently lose it.
+3. **`subject` still resolves, so §1.4(2)'s depth-≥1 rule is untouched.** The container is named, not
+   the hole. `absentIds` carries the removed names, because a JSON pointer indexes by position and
+   the corpus names spine nodes and checkpoints by `id` — the deleted things had ids and never had
+   stable pointers `[V]`.
+4. **It is admissible on `resolved` only, and the automatic writer never emits it.** A `blocking`
+   entry may not carry `kind: "referent_removed"` —
+   `GRADUATION_CLEARANCE_REMOVAL_ON_BLOCKING` (error) — because *"I deleted the thing the blocker
+   was about"* is the purest laundering move in the vocabulary, and §6.5's `clearGraduationEntries`
+   emits kinds A–E and nothing else. The only route into this kind is a hand edit in a reviewable
+   diff, which is where a deletion belongs.
+
+**What this does not fix, stated because §1.4(1) forbids implying otherwise.** The same walk found
+**two more dangling referents in the same corpus, outside the blocker list**: **20** packs'
+`provenance.sources` promise *"Per-move centipawns and losses are in `provenance.engineValidation`"*
+and **0 of the 20 carry a `provenance.engineValidation` key** — the data is in the `.evidence.json`
+sidecar and in `deviations[].cost` `[V]`; the count is **20 and not the 19 packs that carry the
+engine-evidence resolution**, so the two populations are close and are not the same set — and
+`anti-caro-advance-early-c5.json`'s `/provenance/sources/6`
+still cites the deleted `bxc5-recoup` by name `[V]`. Those are prose, this RFC lints clearances and
+not prose, and the honest disposal is a ledger row rather than a scope increase (§Ledger rows).
+`PROVENANCE_EVIDENCE_INLINE` (`pack-validation.ts:868`) already refuses the key those 19 sentences
+promise, so the sentences are not merely stale — they describe a shape the validator forbids `[V]`.
 
 #### §2.3 A `resolved` entry that stops re-deriving demotes itself
 
@@ -659,6 +865,13 @@ already shipped"* is true and *"so re-running them costs nothing"* is not.
      │
      └──── kind is `unreachable` AND a ruling exists ────▶ accepted   (§3; never returns)
 ```
+
+**[author round 2] `referent_removed` (H) sits on no edge in this diagram, and that is the point.**
+It is a clearance a `resolved` entry *carries*, never a route a `blocking` entry *takes*: there is no
+`blocking → resolved` edge for H, because the transition writer (§6.5) emits kinds A–E only and
+`GRADUATION_CLEARANCE_REMOVAL_ON_BLOCKING` refuses the kind on a `blocking` entry outright (§2.2a).
+The edge H *does* own is the return arrow — a re-introduced referent stops the predicate holding and
+the entry demotes to `blocking` by §2.3 like any other stale resolution.
 
 There is no edge from `blocking` to `accepted` for the mechanical kinds A–E, and no edge from
 `unbuilt` to `accepted` at all. **`unbuilt` cannot be accepted** — that edge is the laundering
@@ -837,6 +1050,140 @@ standard met exactly: the honest case pays one extra commit, the dishonest case 
 standalone falsification of the owner's own log. **Calling that "closed" would be the convention-as-
 mechanism error §Deviations says this review will not let the RFC make; calling it "narrowed to a
 visible forgery" is the true statement.**
+
+##### §3.2c [author round 2 — closes [[D467]]] The authoring-time rule and the runtime rule cannot be the same rule, and pretending otherwise is what §3.2b's own blame arm would have shipped
+
+**The implementer's finding is correct and §3.2b earned it.** §3.2b specified the blame arm and then
+assigned it — in §6.3's table — to `validatePackDocument`, which is the wrong side of a boundary that
+this round had to go and read rather than assume. **The instruction that produced that assignment did
+not ask where the check runs, and this section is the answer to the question that was skipped.**
+
+**What the production image contains, read at the Dockerfile.** `apps/server/Dockerfile:21` opens a
+**fresh** final stage (`FROM node:24.10.0-bookworm-slim`, nothing carried from the build context),
+`:27` sets `WORKDIR /app`, and `:28–31` are the **only four** `COPY` lines in it:
+
+```
+28  COPY --from=build /app/apps/server/dist apps/server/dist
+29  COPY --from=build /app/apps/web/dist   apps/web/dist
+30  COPY --from=build /app/schemas         schemas
+31  COPY --from=build /app/content         content
+```
+
+`[V]`. `:23–25` installs `netcat-openbsd` and `stockfish` and nothing else, so **there is no `git`
+binary in the image** `[V]`. And `.dockerignore:1` is `.git`, which excludes the repository from the
+**build context itself** — not merely from the final stage — so no `RUN` in the build stage could
+reach the history either; `:8` excludes `content/drafts` `[V]`. The whole file is 8 lines.
+
+**Three consequences, each verified at the symbol.**
+
+1. **`validatePackDocument` has no base directory and never did.** Its signature is
+   `validatePackDocument(value: unknown, options: { shapes?, packs?, principles?, compileObjectiveRules? })`
+   (`pack-validation.ts:1255`) — **synchronous, and with no `root`/`repoRoot`/`cwd` member** `[V]`.
+   So every repo-relative check inside it silently re-bases onto `process.cwd()`, which is `/app`.
+2. **The defect D467 names is already shipped, one code earlier.** `GRADUATION_RULING_UNCITED`
+   resolves its citation with bare `resolve(file)` and reads it:
+   `:848 const absolute = resolve(file); :849 let cited = existsSync(absolute); :851 contents = readFileSync(absolute, "utf8")`
+   `[V]`. **All 43 committed acceptances cite one of two paths — 40 × `planning/exploration/log.md#L1231`
+   and 3 × `docs/tablebase-grounding.md`** `[V]` — and **neither `planning/` nor `docs/` is copied
+   into the image** (`:28–31` above). `runtimeIssue` is severity **error** (`pack-validation.ts:142–148`)
+   and `PackRegistry.load` throws `ServerError("PACK_INVALID")` on any error-severity issue
+   (`pack-registry.ts:252`, `:258`) `[V]`, so a
+   graduated pack carrying an acceptance would make the **server fail to boot** — not degrade, fail.
+   **40 of the 56 draft documents carry at least one `accepted` entry** `[V]`, so this is not an edge
+   case waiting on an unusual pack; it is the modal pack.
+   It has never fired because `content/packs/` is empty and the only production document is
+   `schemas/drill_pack.example.json`, whose `graduationBlockers` is `[]` `[V]`. **This is D237's
+   *"a gate added before its first subject is free"* running in reverse: a gate that is wrong before
+   its first subject is also free, and stays invisible until the day this RFC exists to bring about.**
+
+   **Reproduced, not reasoned about — one `cd` is the whole experiment.** Running the built
+   `apps/server/dist/pack-check.js` over `content/drafts/anti-caro-advance-early-c5.json` — one of
+   the **40** draft documents carrying at least one `accepted` entry at HEAD `[V]`:
+
+   ```
+   $ node apps/server/dist/pack-check.js .../anti-caro-advance-early-c5.json   # cwd = repo root
+   Pack check passed: .../anti-caro-advance-early-c5.json
+
+   $ cd /tmp/anywhere && node .../pack-check.js .../anti-caro-advance-early-c5.json
+   ERROR /provenance/graduationBlockers/0/accepted/rulingRef [GRADUATION_RULING_UNCITED]
+     accepted condition citation does not resolve: planning/exploration/log.md#L1231
+   ```
+
+   `[V]`. **Same file, same bundle, same code — pass and error, decided by the working directory.**
+   The production image's working directory is `/app` (`Dockerfile:27`), which is the second case.
+   This is the reproduction criterion 15 turns into a test, and it is why *"move the `git blame`
+   check"* would have been an incomplete answer: the check next to it was already broken in the
+   same way.
+3. **A Git dependency would be the first in the codebase.** The tree has exactly two
+   `node:child_process` users: `engine-supervisor.ts:1`, which spawns a **declared runtime**
+   dependency the image installs (`Dockerfile:24`), and `tools/verify-packaging.mjs:11`, which spawns
+   `docker` and **was deliberately placed in `tools/` rather than in server code** `[V]`. The second
+   is the precedent, and it points away from `validatePackDocument`.
+
+**The ruling: two rules, two homes, two guarantees — stated separately because they are not the same
+guarantee and a reader must not be able to mistake one for the other.**
+
+| | **Runtime rule — *shape*** | **Authoring rule — *admission*** |
+|---|---|---|
+| Code | `GRADUATION_RULING_UNANCHORED` (error) | `GRADUATION_RULING_SELF_MINTED` (error) |
+| Home | `validatePackDocument` (`pack-validation.ts`) | the graduation sweep — `graduationReport(roots, { verify: true })` and the `make verify` test that drives it |
+| Inputs | **the document, and nothing else** | a Git checkout: `.git`, a `git` binary, and the living tier on disk |
+| What it decides | `accepted.rulingRef` matches `<file>#L<line>` **and** `<file>` is in the §3.2a(1) living-tier allow-list | the cited **line** does not blame to the commit under review or to the all-zero `Not Committed Yet` sentinel |
+| Where it holds | everywhere a pack is validated, **including the community channel and the production image** | only where the evidence exists: a developer checkout and CI |
+| What it cannot do | tell an old ruling from one minted five seconds ago | run in production, ever |
+
+**And the existing check moves with it, because leaving it behind would make this RFC honest and the
+code it sits next to dishonest.** `GRADUATION_RULING_UNCITED` is split on the same seam it already
+has in its own body: the **grammar arm** (`:842–844`, a regex over `rulingRef`) needs no filesystem
+and stays in `validatePackDocument`; the **resolution and date-containment arms** (`:848–857`) move to
+the authoring sweep, where `planning/` and `docs/` exist. `GRADUATION_CLEAREDBY_UNRESOLVED`
+(`:860–865`) is withdrawn with `clearedBy` itself (§6.2) and takes its `existsSync` with it, and
+`GRADUATION_CLEARANCE_BLOCKEDBY_UNRESOLVED` — its replacement — is an **authoring-side** code for the
+same reason: a `blockedBy` naming `design/BACKLOG.md` or an `rfc/` path is checking a file the image
+does not contain. **Net effect on `validatePackDocument`: it stops touching the filesystem for
+graduation entirely**, and the only `node:fs` call left in it is the module-relative schema read at
+`:91–94`, which resolves through `import.meta.url` into `/app/schemas` and is the one path the image
+does provide `[V]`.
+
+**The shape of the sweep, because "home: the graduation sweep" is not yet a callable thing and an
+implementer would stop here.** `graduationReport` returns
+`{ text, acceptedPage, legacy, graduable }` today (`graduation-report.ts:11`) — **no issues channel**
+`[V]`. It gains one: in `--verify` mode the result carries
+`issues: readonly SourcingIssue[]` (the shape `sourcing/check.ts` already uses), and the mode's exit
+code is non-zero on any `severity: "error"`. **The default mode is unchanged and must stay
+unchanged**, because `writeAcceptedConditions` regenerates a byte-checked committed file and §6.4
+already forbids it acquiring an instrument dependency — so the admission codes fire **only** in
+verify mode, and the three places that must therefore run verify mode are named: the
+`graduation-report.test.ts` case that `make verify` reaches through `pnpm test`, `verify.yml`, and —
+per criterion 16 — `release.yml`. **A code whose home is a mode nobody runs is D426's failure with a
+new address.**
+
+**Where the admission rule is actually enforced, and the gap this exposes.** `verify.yml:16` checks
+out with `actions/checkout` and `:29` runs `make verify`, so a Git-bearing sweep is available on every
+push. **`release.yml` is the hole**: `:17` checks out and `:24–33` hands the context straight to
+`docker/build-push-action` — **it runs no content gate at all** `[V]`. So this RFC's landing includes
+one workflow line: the graduation admission sweep runs in `release.yml` before the image is built.
+Without it, the admission rule is enforced on pushes and not on the artefact that ships, which is the
+same shape of gap D208 already records for `sourcing-check`.
+
+**The official-versus-community question the review asked, answered rather than deflected.** Moving
+the admission rule off the runtime path means **a community pack registered through `PackStudio` can
+carry a self-minted acceptance and the server will not catch it.** That is a real weakening and it is
+named. What bounds it is what §2.3b measured: `PackRegistry.addCommunity` (`pack-registry.ts:390–414`)
+hard-codes `assessmentGrounding: "unverified"`, an empty `positionEvidence`, empty `boundClaimIds`
+and empty `claimBackings`, and refuses to overwrite an `official` record of the same id `[V]`. **So
+the community exposure is a false acceptance list and never false evidence** — the identical bound
+[[D436]] states for a laundered `resolved`, reached by the identical route, which is a point in
+favour of the reading rather than a coincidence. The **shape** rule still applies to community packs
+at runtime, so a community `rulingRef` must still be anchored and must still name a living-tier
+document; what it may lie about is *when the ruling was written*, and only an image with the
+repository's history could ever have told.
+
+**What this section refuses to do.** It does not add a `repoRoot` option to `validatePackDocument` so
+the fs checks can "work in both places". That option would make the checks *silently* strong in a
+checkout and *silently* weak in the image — one code name, two behaviours, no way for a reader of an
+issue list to know which one they got. **Two rules honestly stated beat one rule that degrades in
+production**, and the degrading version is precisely what the returned draft specified.
 
 #### §3.3 The one new obligation: an acceptance must state its unreachability, not its inconvenience
 
@@ -1301,15 +1648,31 @@ object:
   "required": ["kind", "subject"],
   "properties": {
     "kind": { "enum": ["assessment_grounded", "ledger_record", "claim_bound", "shape_firing",
-                       "pointer_authored", "unbuilt", "unreachable"] },
+                       "pointer_authored", "unbuilt", "unreachable", "referent_removed"] },
     "subject": { "type": "string", "pattern": "^/[^/]" },
+    "recordKind": { "enum": ["opening_identity", "position_legality", "explorer_frequency",
+                             "explorer_position_census", "tablebase_result", "engine_eval",
+                             "puzzle_provenance"] },
     "instrument": { "$ref": "#/$defs/nonEmptyString" },
     "blockedBy": { "$ref": "#/$defs/nonEmptyString" },
-    "placeholder": { "$ref": "#/$defs/nonEmptyString" }
+    "placeholder": { "$ref": "#/$defs/nonEmptyString" },
+    "absentIds": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } }
   },
   "additionalProperties": false
 }
 ```
+
+**[author round 2] Two properties added and one enum widened, each traceable to a returned blocker.**
+`recordKind` is the [[D464]] fix (§1.2b) and its value list is **transcribed from `EVIDENCE_KINDS`
+(`apps/server/src/sourcing/types.ts:57`), not invented** — criterion 13 asserts the two are the same
+seven strings, so a future evidence kind cannot become unexpressible in a clearance without a red
+test. `absentIds` and the eighth `kind` are the [[D465]] fix (§2.2a); `absentIds` reuses
+`$defs/id` because the things it names are pack ids, and `minItems: 1` is what stops an empty array
+from making `referent_removed` vacuously true. **The four conditional requirements** — `instrument`
+for A–E, `blockedBy` for `unbuilt`, `placeholder` for `pointer_authored`, `recordKind` **and**
+`absentIds` for their own kinds — stay in the lints for the reason the next paragraph already gives,
+and the arithmetic that reason rests on only got worse: a `oneOf` on `state` × `kind` would now be
+**twenty-four** armed.
 
 **[cross-review] `pattern` tightened from `^/` to `^/[^/]`.** The draft's `^/` matched the bare
 document root, so *"this pack is ungrounded"* — the exact shape §1 refuses as *"a blocker nobody
@@ -1335,8 +1698,8 @@ reopening the object that RFC closed. The lane is claimed instead (§7).
 | Stage | Population | Rule |
 |---|---|---|
 | 0 | `content/candidates/` — 143 entries, 36 documents | each emitter blocker template gets one checked-in `clearance`; the emitters write it and Stage 0 backfills the same object. Keyed on the template id, not on the rendered statement `[V]` — **but see the correction below: 3 of the 143 are not emitter output and do need judgement** |
-| A | `content/drafts/` — 220 blocking entries | the **§5.1a ruleset, published as a literal**, assigns a candidate `kind`; **the 17 residue are classified by hand in §5.1b, not defaulted** (open question 4's ruling — the draft defaulted them to `unreachable`, the one kind eligible for `accepted`). Every assignment is written into the commit for review as a diff, and the classifier ships under `tools/` so the diff is re-derivable (criterion 11) |
-| B | `content/drafts/` — 30 resolved entries | each gains `resolved.clearance`; the 4 measured stale ones (§4.1) are **not** hand-resolved — the checker resolves them, which is the migration's own first test |
+| A | `content/drafts/` — 220 blocking entries | the **§5.1a ruleset, published as a literal**, assigns a candidate `kind`; **the 17 residue are classified by hand in §5.1b, not defaulted** (open question 4's ruling — the draft defaulted them to `unreachable`, the one kind eligible for `accepted`). Every assignment is written into the commit for review as a diff, and the classifier ships under `tools/` so the diff is re-derivable (criterion 11). **[author round 2] Stage A also writes the `subject`, and for the 46 rule-2 entries the subject *decides the kind*** — a position/move pointer takes `ledger_record` + `recordKind`, a prose pointer takes `claim_bound`, and `GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE` refuses the combination that cannot hold (§1.2b). **The ruleset therefore assigns a candidate kind for six of its seven rules and a candidate *pair* for rule 2**, which is stated here rather than left as a surprise at implementation ([[D464]]) |
+| B | `content/drafts/` — 30 resolved entries | each gains `resolved.clearance`; the 4 measured stale ones (§4.1) are **not** hand-resolved — **`make graduation-clear` (§6.5) resolves them**, which is the migration's own first test. **[author round 2] The population splits 29 + 1, measured**: 29 take a subject that resolves today (§2.2a's four families), and **1** — `anti-caro-advance-early-c5`'s `refuted-and-deleted-…` — takes `kind: "referent_removed"` with `absentIds: ["bxc5-recoup","bxc5-trade"]`. **Stage B is a mechanical migration over 29 and a one-line hand entry over 1, and the RFC says which is which rather than claiming 30** ([[D465]]) |
 | C | 5 browser fixtures (§0.4) | `blocking` → `accepted`, `kind: "out_of_scope"`, `unreachableBecause` naming the fixture role. First `out_of_scope` instances in the corpus |
 
 **[cross-review] Stage 0's premise is wrong in two ways, both small and both load-bearing for the
@@ -1418,23 +1781,40 @@ graduation codes it already raises (`GRADUATION_ENTRY_LEGACY_SHAPE`, `GRADUATION
 `GRADUATION_BLOCKERS_OUTSTANDING`, which is a `ServerError` thrown by `PackStudio.register`
 (`pack-studio.ts:123`), not an issue `validatePackDocument` raises:
 
-| Code | Condition | Severity | Home |
-|---|---|---|---|
-| `GRADUATION_CLEARANCE_MISSING` | `state: "blocking"` with no `clearance` | error | `validatePackDocument` |
-| `GRADUATION_CLEARANCE_SUBJECT_UNRESOLVED` | `clearance.subject` is not a depth-≥1 pointer that resolves in this document (§1.4(2)) | error | `validatePackDocument` |
-| `GRADUATION_CLEARANCE_INSTRUMENT_MISSING` | a mechanical `kind` (A–E) with no `instrument` | error | `validatePackDocument` |
-| `GRADUATION_CLEARANCE_PLACEHOLDER_MISSING` **[cross-review]** | `kind: "pointer_authored"` with no `placeholder` — the predicate would have no input (§1.4(3)) | error | `validatePackDocument` |
-| `GRADUATION_CLEARANCE_BLOCKEDBY_UNRESOLVED` | `kind: "unbuilt"` with a missing or non-existent `blockedBy` path | error (replaces the warning-level `GRADUATION_CLEAREDBY_UNRESOLVED`) | `validatePackDocument` |
-| `GRADUATION_RESOLVED_WITHOUT_CLEARANCE` | `resolved` with no `resolved.clearance`, or one whose kind is `unbuilt`/`unreachable` | error | `validatePackDocument` |
-| `GRADUATION_ACCEPTED_WITHOUT_UNREACHABILITY` | `accepted` with missing/blank `unreachableBecause` | error | `validatePackDocument` |
-| `GRADUATION_RULING_SELF_MINTED` **[cross-review, revised author round]** | `accepted.rulingRef` resolves outside the living intent tier; **or** `git blame -L n,n` on the cited line reports the commit under review or the all-zero *Not Committed Yet* sentinel; **or**, for an anchorless ref, `git log --diff-filter=A` shows the file first added by this commit (§3.2b) | error | `validatePackDocument` |
-| `GRADUATION_RULING_UNANCHORED` **[author round]** | `accepted.rulingRef` carries no `#L<line>` anchor — required for **all three** `accepted.kind` values, replacing withdrawn tightening 3 (§3.2b) | error | `validatePackDocument` |
-| `GRADUATION_RESOLUTION_STALE` | a `resolved` entry whose `resolved.clearance` no longer re-derives (§2.3) | warning in `content/drafts/`, **error** in `content/packs/` | `checkSourcingFile` |
+**[author round 2] The Home column is now load-bearing and is split three ways, because §3.2c
+establishes that `validatePackDocument` runs inside an image with no repository in it.** A code
+whose home is `validatePackDocument` **must decide from the document alone** — no `existsSync`, no
+`readFileSync`, no `git`. A code whose home is the **graduation sweep** may use the checkout. A code
+whose home is `checkSourcingFile` may use the pack's sidecars, which do ship. Three homes, three
+input budgets, and the budget is the reason for the assignment in every row below.
 
-`GRADUATION_RULING_UNCITED` is additionally **tightened in place** (§3.2a): the `#L<line>` arm reads
+| Code | Condition | Severity | Home | Inputs it may use |
+|---|---|---|---|---|
+| `GRADUATION_CLEARANCE_MISSING` | `state: "blocking"` with no `clearance` | error | `validatePackDocument` | document |
+| `GRADUATION_CLEARANCE_SUBJECT_UNRESOLVED` | `clearance.subject` is not a depth-≥1 pointer that resolves in this document (§1.4(2)) | error | `validatePackDocument` | document |
+| `GRADUATION_CLEARANCE_INSTRUMENT_MISSING` | a mechanical `kind` (A–E) with no `instrument` | error | `validatePackDocument` | document |
+| `GRADUATION_CLEARANCE_PLACEHOLDER_MISSING` **[cross-review]** | `kind: "pointer_authored"` with no `placeholder` — the predicate would have no input (§1.4(3)) | error | `validatePackDocument` | document |
+| `GRADUATION_CLEARANCE_RECORDKIND_MISSING` **[author round 2, [[D464]]]** | `kind: "ledger_record"` with no `recordKind`, or a `recordKind` on any other kind (§1.2b) | error | `validatePackDocument` | document |
+| `GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE` **[author round 2, [[D464]]]** | `kind: "ledger_record"` whose `subject` matches `PROSE_POINTERS` (`check.ts:32`) or `HUMAN_ONLY_POINTERS` (`:39`) — `EVIDENCE_OVERREACH` guarantees no record can ever support it, so the entry is `claim_bound` (§1.2b) | error | `validatePackDocument` | document |
+| `GRADUATION_CLEARANCE_ABSENTIDS_MISSING` **[author round 2, [[D465]]]** | `kind: "referent_removed"` with no non-empty `absentIds`, or `absentIds` on any other kind (§2.2a) | error | `validatePackDocument` | document |
+| `GRADUATION_CLEARANCE_REMOVAL_ON_BLOCKING` **[author round 2, [[D465]]]** | `kind: "referent_removed"` on a `blocking` entry — *"I deleted the thing the blocker was about"* is not a discharge (§2.2a(4)) | error | `validatePackDocument` | document |
+| `GRADUATION_RESOLVED_WITHOUT_CLEARANCE` | `resolved` with no `resolved.clearance`, or one whose kind is `unbuilt`/`unreachable` | error | `validatePackDocument` | document |
+| `GRADUATION_ACCEPTED_WITHOUT_UNREACHABILITY` | `accepted` with missing/blank `unreachableBecause` | error | `validatePackDocument` | document |
+| `GRADUATION_RULING_UNANCHORED` **[author round]** | `accepted.rulingRef` carries no `#L<line>` anchor, or names a file outside the §3.2a(1) living-tier list — required for **all three** `accepted.kind` values, replacing withdrawn tightening 3 (§3.2b). **[author round 2] This is the whole of the runtime rule** (§3.2c): a regex over the string, zero filesystem | error | `validatePackDocument` | document |
+| `GRADUATION_CLEARANCE_BLOCKEDBY_UNRESOLVED` | `kind: "unbuilt"` with a missing or non-existent `blockedBy` path | error (replaces the warning-level `GRADUATION_CLEAREDBY_UNRESOLVED`) | **graduation sweep** **[author round 2 — moved]**: `blockedBy` names `design/BACKLOG.md` or an `rfc/` path, and the image contains neither (§3.2c) | checkout |
+| `GRADUATION_RULING_SELF_MINTED` **[cross-review, revised author round, re-homed author round 2]** | `git blame --porcelain -L n,n -- <file>` on the cited line reports the commit under review or the all-zero *Not Committed Yet* sentinel (§3.2b) | error | **graduation sweep** — never `validatePackDocument`; §3.2c is the whole argument and [[D467]] is the finding | checkout + `.git` + `git` binary |
+| `GRADUATION_RULING_UNCITED` **[author round 2 — split, not moved]** | **grammar arm** (`pack-validation.ts:842–844`): `rulingRef` is not `<file>` or `<file>#L<line>` | error | `validatePackDocument` | document |
+| `GRADUATION_RULING_UNCITED` (same code, second home) | **resolution + date arms** (`:848–857`): the cited path exists and the cited **line** contains the ruling's quoted date | error | **graduation sweep** **[author round 2 — moved]**: it resolves `planning/` and `docs/` against `process.cwd()`, and neither ships (§3.2c) | checkout |
+| `GRADUATION_RESOLUTION_STALE` | a `resolved` entry whose `resolved.clearance` no longer re-derives (§2.3) | warning in `content/drafts/`, **error** in `content/packs/` | `checkSourcingFile` | document + sidecars |
+
+`GRADUATION_RULING_UNCITED` is additionally **tightened** (§3.2a): the `#L<line>` arm reads
 the cited line and requires it to contain the ruling's quoted date rather than merely requiring the
 file to have that many lines, and the hard-coded one-file allow-list at `pack-validation.ts:853`
-widens to §3.2a(1)'s list. **[author round] The draft's third tightening — extending date
+widens to §3.2a(1)'s list. **[author round 2] "In place" is withdrawn: the tightened arms land in the
+graduation sweep, not in `validatePackDocument`, because that is where their evidence exists.** The
+allow-list half survives in `validatePackDocument` as a **string** test under
+`GRADUATION_RULING_UNANCHORED` — checking that a `rulingRef` *names* a living-tier document costs no
+filesystem; checking that the document *says what it is quoted as saying* costs a repository (§3.2c). **[author round] The draft's third tightening — extending date
 containment to all three `accepted.kind` values — is withdrawn, not softened: it fails 3 of 3
 committed `permanent_property` entries, whose rulings carry no date and whose cited document
 contains none** `[V]`. `GRADUATION_RULING_UNANCHORED` replaces it, and the *closing* work is done by
@@ -1474,9 +1854,18 @@ for criterion 7 and has no schema standing in for it.** Two of three handed back
 
 `GRADUATION_RESOLUTION_STALE` is the one that matters, and it is the only one that requires the
 ledger, so it lives in `checkSourcingFile` (which already reads the sidecar) rather than in
-`validatePackDocument` (which does not). `pack-graduation` criterion 14 already wired
-`checkSourcingDirectory` over `content/packs/` at strict inside `make verify` and a ≤15-of-47
-ratchet over `content/drafts/`; **this RFC adds a predicate to a sweep that already runs.**
+`validatePackDocument` (which does not — and §3.2c makes that separation normative rather than
+incidental). `pack-graduation` criterion 14 already wired
+`checkSourcingFile` over `content/packs/` at strict inside `make verify` and a ratchet over
+`content/drafts/`; **this RFC adds a predicate to a sweep that already runs.**
+**[author round 2] Two corrections to that sentence, both from reading the sweep instead of the
+criterion.** It is `checkSourcingFile` per file, not `checkSourcingDirectory`, and it lives in
+`apps/server/src/graduation-report.test.ts:70–77` — a **vitest case**, reached by `make verify` only
+through `pnpm test`, which is why [[D208]] (*"`make verify` never runs `sourcing-check`"*) is still
+open and correct about the Makefile `[V]`. And the ratchet is
+**`expect(failing.length).toBeLessThanOrEqual(18)`** at `:76` over the non-`.browser` drafts `[V]` —
+**18, not the "≤15-of-47" this RFC quoted for two rounds.** Nothing turns on the number; it is
+corrected because §5.1's own standard forbids quoting a figure a command prints without printing it.
 **[cross-review] It does, however, add one new sweep**, and the draft's *"and adds no new sweep"*
 was wrong: §6.4's per-entry verdict requires `graduation-report.ts` — today a pure `node:fs` JSON
 reader that imports nothing from `pack-validation` or `sourcing` `[V]` — to call the checker. See
@@ -1487,7 +1876,11 @@ comes with kind D.
 
 `graduation-report.ts:39` changes from `clears via ${entry.clearedBy ?? "(unspecified)"}` to
 printing `clearance.kind` + `clearance.subject` + the checker's verdict — `holds` / `does not hold`
-/ `no predicate`. Two lines are added to each root's header: **`clearable: N`** (blocking entries
+/ `no predicate`. **[author round 2] `recordKind` prints beside `kind` for `ledger_record` entries**,
+because §1.2b makes it the field that decides which instrument a reader should reach for, and a
+report that prints `ledger_record` alone reproduces exactly the ambiguity [[D464]] returned this RFC
+for. **And `graduation-report.ts:8`'s file filter gains `graduation` to its
+`(?:evidence|job|sources)` alternation** (§6.5), or the transition documents are counted as packs. Two lines are added to each root's header: **`clearable: N`** (blocking entries
 whose kind is A–E — **179** at HEAD `[V]`) and **`unclearable: N`** (`unbuilt` + `unreachable` —
 **41** `[V]`),
 because the whole point of the vocabulary is that those two numbers stop being the same number.
@@ -1500,6 +1893,128 @@ stays a pure JSON read and prints `clearance.kind` + `clearance.subject` with no
 dependency on a Stockfish container or a corpus walk to do it. (b) `clearable`/`unclearable` are
 derived from `clearance.kind` alone and are therefore available in **both** modes — they are the
 two numbers planning consumes, and they must not be the ones that need an instrument to print.
+
+#### §6.5 [author round 2 — closes [[D466]]] The writer that owns `blocking` → `resolved`, and what it writes
+
+**The blocker: *"`checkSourcingFile` returns issues; it does not mutate a pack or emit a transition
+document. The command that owns blocking→resolved, and its output shape, are absent."* It is exactly
+right, and it is right at the symbol.** `checkSourcingFile(file, options): Promise<SourcingCheckResult>`
+(`sourcing/check.ts:416`) ends `return Object.freeze({ strict, issues, valid })` `[V]` — a frozen
+report with no document in it. Criterion 3 asked four entries to become `resolved` "automatically"
+and named nothing that could write the word.
+
+**The writer is a new command, and it is modelled on one that already ships rather than invented.**
+`verifyDraft` (`sourcing/verify-draft.ts:323`) is the same shape: it reads a pack and its sidecars,
+runs an instrument, **rewrites the pack in place** — `writeFile(absolute, …, "utf8")` with
+two-space-indented JSON at `verify-draft.ts:210` and `:316` — rewrites the ledger and manifest
+through `writeCanonicalJson`, and emits a **job document** (`tabiya.sourcing.job.v1`) recording
+pipeline, args and an emission digest `[V]`.
+Every piece §6.5 needs exists there.
+
+> **`make graduation-clear FILE=<path-to-pack.json>` → `apps/server/src/sourcing/graduation-clear.ts`,
+> exporting `clearGraduationEntries(file: string, options?: { readonly now?: () => Date; readonly
+> census?: ExpressionCensus }): Promise<GraduationTransitionResult>`.**
+
+**What it does, in order, with every predicate named at its shipped symbol.**
+
+1. Read `pack`, `<stem>.evidence.json`, `<stem>.sources.json` with `readJson`, the way
+   `attachExplorerEvidence` does at `explorer.ts:242` `[V]`.
+2. For every entry with `state: "blocking"`, evaluate its `clearance`:
+
+   | kind | predicate | symbol |
+   |---|---|---|
+   | A `assessment_grounded` | `assessmentGrounding({ document, ledger, manifest }) === "ledger_verified"` | `sourcing/ledger-validation.ts:423` `[V]` |
+   | B `ledger_record` | a record whose `kind === clearance.recordKind` has `clearance.subject` in its `supports` | §1.2b; the relation `evidenceSupports` already lints (`check.ts:166`) `[V]` |
+   | C `claim_bound` | `validateClaimBindings(pack, ledger, issues)` returns a binding whose `pointer === clearance.subject` **and contributes no issue** | `sourcing/claim-binding.ts:174` `[V]` |
+   | D `shape_firing` | the named shape entry's trigger fires on ≥ 1 position, read from **one** cached census per invocation | `runExpressionCensus` (`apps/server/src/expression-census.ts:262`) `[V]`; the cost constraint is §2.3b's, and `options.census` is how it is honoured |
+   | E `pointer_authored` | `resolvePointer(pack, clearance.subject).value !== clearance.placeholder` | `check.ts:65` `[V]` |
+   | F `unbuilt`, G `unreachable`, H `referent_removed` | **never evaluated; never written.** §2.2a(4) | — |
+
+3. For each entry whose predicate **holds**, replace it with
+   `{ id, state: "resolved", statement, resolved: { at, clearance, by } }` — `clearance` **byte-identical
+   to the one the entry carried while blocking** (§2.2), and **`by` machine-rendered from the predicate's
+   own output**, never authored. This is the clause that stops §0.3's failure recurring: 30
+   byte-identical `resolved.by` strings exist today precisely because a human typed them, and a
+   rendered string like `assessmentGrounding = ledger_verified; 27 tablebase_result records support
+   /objective/grading/assessedBy` differs per entry because the evidence does.
+4. **Re-stamp the digest, and this is not optional.** `digestDrillPack` canonicalizes the **whole**
+   document (`packages/schema/src/drill-pack/digest.ts` — `digestCanonicalJson(pack)` over every key,
+   `provenance` included) `[V]`, so a state transition moves the pack digest and
+   `checkSourcingFile` would then raise `EVIDENCE_DIGEST_STALE` at `check.ts:446` — at **warning**,
+   which is why it would be a silent drift rather than a red build, and why criterion 10 asserts a
+   count of zero rather than trusting the severity `[V]`. The command sets
+   `ledger.packDigest = await digestDrillPack(pack)` and rewrites the ledger in the same call.
+   **A writer that changes a pack and does not re-stamp reddens criterion 10 on its first run.**
+5. Write `<stem>.graduation.json` through `writeCanonicalJson` — the transition document:
+
+```jsonc
+{ "schema": "tabiya.graduation.transition.v1",
+  "packId": "mate-k-q-technique", "at": "2026-08-16T…Z",
+  "packDigestBefore": "sha256:…", "packDigestAfter": "sha256:…",
+  "transitions": [ { "id": "syzygy-root-unverified", "from": "blocking", "to": "resolved",
+                     "clearance": { "kind": "assessment_grounded", "subject": "/objective/grading/assessedBy",
+                                    "instrument": "make verify-draft" },
+                     "evidence": "assessmentGrounding = ledger_verified" } ],
+  "held": [ { "id": "…", "kind": "ledger_record", "recordKind": "engine_eval", "verdict": "does not hold" },
+            { "id": "…", "kind": "unbuilt", "verdict": "no predicate" } ] }
+```
+
+   `held` is not decoration: it is the per-entry verdict §6.4 promises, produced by the command that
+   already computed it, so the `--verify` report reads a file instead of re-running instruments.
+
+6. **Refuse rather than half-write.** If any predicate evaluation raises, the command writes nothing
+   and exits non-zero — `attachExplorerEvidence`'s discipline (`explorer.ts:274–279`: build in a temp
+   directory, re-check at strict, `ATTACH_CHECK_FAILED` before any real write) `[V]`, and the reason
+   is the same: a partially-transitioned pack is worse than an untransitioned one.
+
+**Two consequences that must land in the same commit or the writer breaks something else.**
+
+- **`graduation-report.ts:8` must exclude the new suffix.** Its file filter is
+  `!/\.(?:evidence|job|sources)\.json$/u` `[V]`; without `graduation` in that alternation, every
+  transition document is read as a pack and the report's `documents:` count silently grows. **This is
+  a one-line change and it is the kind of one-line change an RFC that did not name the sidecar would
+  have discovered in production.**
+- **`checkSourcingFile` keeps its signature and stays a reporter.** The graduation pass §2.3 adds to
+  it raises `GRADUATION_RESOLUTION_STALE`; it still returns `{strict, issues, valid}` and still
+  mutates nothing. **The reporter and the writer are different commands on purpose** — §2.1's rule is
+  that a checker *decides*, and a checker that also rewrites the thing it judges is the rubber stamp
+  in a new costume.
+
+**Criterion 3 is rewritten against this** (see §Acceptance criteria): *"one checker run demotes"*
+becomes *"one `make graduation-clear` run over each of the four packs writes exactly four transitions
+and four `held` lists containing no fifth transition"*, which is a thing a test can call.
+
+#### §6.6 [author round 2] What this round could **not** specify, with the proof rather than the cost
+
+**Three things. None of them is a blocker, each is proved rather than pleaded, and none is "it would
+be expensive".**
+
+1. **The final `ledger_record` / `claim_bound` split of rule 2's 46 entries is not a number this RFC
+   can print.** §1.2b makes the kind a **function of the `subject`**, and **no blocking entry in the
+   corpus has a subject**: `clearance` does not exist in pack 0.27's schema and its predecessor
+   `clearedBy` is carried by **0 of 293 entries in `content/drafts/` and 0 of 143 in
+   `content/candidates/`** `[V]`. So the split is not withheld, it is **not yet defined** — the
+   function has no input until Stage A writes one. What is defined and is asserted is the **sum**:
+   B(corpus) + C = **101 of 220** (§4.2), which is the figure planning consumes and is invariant
+   under the boundary wherever it falls. **Printing a split here would be manufacturing the very
+   thing [[D434]] says a document must not do**: a derived count whose deriver does not exist.
+2. **No mechanism can tell *the owner ruled* from *an agent wrote a ruling the owner has not read*.**
+   §3.2b establishes this and this round does not improve on it; §3.2c narrows the *place* the check
+   lives without changing the floor. The proof is §3.1's: the second party was struck by an owner
+   ruling on 2026-08-13 and no mechanism substitutes for one. **The blame arm forces a standalone
+   falsification of the owner's own log in its own commit, and that is the ceiling, not the goal.**
+3. **A `#L<line>` anchor into a mutable living-tier document can drift, and only the checkout can
+   ever notice.** `planning/exploration/log.md` is append-only by law 7 so its line 1231 is stable
+   `[V]`; `docs/tablebase-grounding.md` is not, and this RFC already had to route around it being
+   under uncommitted edit (§3.2b). After the §3.2c split the drift is caught on **every CI run**,
+   because the sweep re-reads the cited line — but it is caught **nowhere at runtime**, because the
+   document is not in the image (`Dockerfile:28–31`) `[V]`. **That is a limit of the artefact, not of
+   the specification**, and the honest form of it is the one §3.2c's table already states: the
+   runtime rule decides *shape*, and shape is all a document can carry about a file it does not have.
+
+**What is *not* on this list, and was on the returned draft's implicit one: all four returned
+blockers.** Each is specified at a named symbol above. **"Unspecifiable" is a claim about the tree,
+not a budget line, and this section is the only place in this RFC entitled to use the word.**
 
 ### §7 Register and version claims
 
@@ -1529,10 +2044,24 @@ two numbers planning consumes, and they must not be the ones that need an instru
   the most.** `DRILL_PACK_SCHEMA_VERSION` is `"0.27"` (`packages/schema/src/index.ts:2`), the schema
   `$id` is `urn:chess-tabiya:schema:drill-pack:0.27`, `$defs/graduationEntry` is
   `{"required":["id","state","statement"],…,"oneOf":[…],"additionalProperties":false}` and
-  `$defs/provenance` is `additionalProperties: false`; `rfc/README.md:78` still records *"0.28 is the
-  next free pack lane"*, and `opponent-contracts` — now **implementing** — still holds **no pack
-  lane** `[V]`. Nothing released or claimed 0.28 under this round. **This RFC does not edit
-  `rfc/README.md`; it requests the row.**
+  `$defs/provenance` is `additionalProperties: false`; `opponent-contracts` — now **implementing** —
+  still holds **no pack lane** `[V]`. Nothing released or claimed 0.28 under that round. **This RFC
+  does not edit `rfc/README.md`; it requests the row.**
+  **[author round 2] Re-verified a fourth time at HEAD `6722130`, and the register moved *toward* this
+  RFC.** `DRILL_PACK_SCHEMA_VERSION` is `"0.27"` and the schema `$id` is
+  `urn:chess-tabiya:schema:drill-pack:0.27` `[V]`. **`rfc/README.md:78` now records 0.28 as *"claimed
+  and held by a draft returned to author 2026-08-16 — the lane remains reserved while D464–D467 are
+  corrected"*, and `:79` records *"0.29 is the next free pack lane"*** `[V]` — so the claim §7 made is
+  now a landed register row and the free lane has moved on. **The lane claim is unchanged and is
+  strengthened by this round, not weakened:** §6.1 now adds *seven* `$defs`-level changes rather than
+  five — the two new `clearance` properties (`recordKind`, `absentIds`) and the widened `kind` enum are
+  the additions — and both host objects are still `additionalProperties: false`, so there is still no
+  unversioned place to put any of it. **One register defect this round must report rather than fix,
+  because editing `rfc/README.md` is out of this RFC's scope:** two Active rows still read *"0.28
+  remains free"* (`:12`, `opponent-contracts`) and *"0.28 stays free"* (`:14`,
+  `measurement-records`) while `:78` records the lane as held `[V]`. That is [[D461]]'s exact defect —
+  *"the register contradicting itself inside four lines"* — surviving its own correction, which fixed
+  `:79` and left the two Active rows. Reported at §Ledger rows.
 - **`STORAGE_VERSION`: nothing.** No table, no column, no bump, and therefore **no migration
   position is claimed**. **[author round] `STORAGE_VERSION` reads 23** (`apps/server/src/storage.ts:407`)
   `[V]` — the draft and the cross-review both read **22**, and `opponent-contracts`' migration 23
@@ -1579,6 +2108,18 @@ hand-off), `:410–411` and `:423–424` (the two governing sentences) `[V]`. `c
 `packages/schema/`, `apps/server/src/sourcing/`, `pack-validation.ts`, `pack-studio.ts` and the
 `Makefile` are unchanged since `b9fd803`, so every measurement in this RFC — corrected figures
 included — was re-derived at the same tree the review read. D246's rule, applied twice.
+
+**[author round 2] Applied a fourth time, and the tree is moving *under this round* rather than
+between rounds.** At the moment this section was last re-checked, `rfc/feedback-delivery.md` and
+`rfc/measurement-records.md` carried uncommitted edits from concurrent work — `feedback-delivery.md`
+was modified **after** this document's own last edit `[V]` — so D246's rule was applied to the files
+this RFC actually cites rather than to the repo as a whole. **All of them are byte-unchanged from
+HEAD `6722130`**: `packages/schema/`, `schemas/`, `apps/server/src/`, `content/`, `Makefile`,
+`.dockerignore`, `.github/`, `tools/` and `rfc/README.md` show no working-tree modification `[V]`,
+and `DRILL_PACK_SCHEMA_VERSION` `"0.27"` / `DRILL_RUN_SCHEMA_VERSION` `"0.17"`
+(`packages/schema/src/index.ts:1–2`) and `STORAGE_VERSION` **23** (`storage.ts:407`) re-read identical
+after every measurement above `[V]`. **This RFC edits `rfc/graduation-clearance.md` and nothing
+else.**
 
 **[author round] Applied a third time, and the tree had moved again.** **Eleven** commits landed
 between `b9fd803` and this round `[V]`. Re-checked rather than trusted: `content/`,
@@ -1652,10 +2193,19 @@ RFC do is call a convention a mechanism.**
    `content/candidates/` carries a `clearance` with a resolving `subject`; every `resolved` entry
    carries a `resolved.clearance`; `make graduation-report` prints **zero** `(unspecified)`.
 3. **The four stale entries clear without an author.** With the migration's Stage B leaving them
-   `blocking`, one checker run demotes `mate-k-q-technique`, `mate-k-r-technique`,
-   `mate-two-bishops` and `philidor-passive-rook-convert`'s `assessment_grounded` entries to
-   `resolved`, and a test asserts exactly those four and no others. **This is the criterion that
-   proves the vocabulary is a bridge and not a form.**
+   `blocking`, **one `make graduation-clear` run per pack** demotes `mate-k-q-technique`,
+   `mate-k-r-technique`, `mate-two-bishops` and `philidor-passive-rook-convert`'s
+   `assessment_grounded` entries to `resolved`, and a test asserts exactly those four and no others.
+   **This is the criterion that proves the vocabulary is a bridge and not a form.**
+   **[author round 2 — [[D466]]] Rewritten against a command that exists, because *"one checker run
+   demotes"* named no writer.** The assertion is: `clearGraduationEntries(file)` over each of the four
+   returns a `GraduationTransitionResult` whose `transitions` has **length 1** and whose `held` lists
+   the pack's other **five** blocking entries with a `does not hold` / `no predicate` verdict — all
+   four packs carry **six** blocking entries at HEAD `[V]`. The test additionally asserts that the
+   pack's `.graduation.json` is written, that `ledger.packDigest` equals a fresh
+   `digestDrillPack(pack)` afterwards (§6.5(4)), and that `graduationReport()`'s `documents:` count for
+   `content/drafts` is **unchanged at 56** — which fails if the `graduation-report.ts:8` filter change
+   was missed, and is the cheapest possible detector for it.
 4. **Demotion is provable.** A negative test deletes a `tablebase_result` record from a fixture
    ledger and asserts `GRADUATION_RESOLUTION_STALE` fires **and `graduationReport(roots, { verify:
    true })` drops that pack from its graduable set**. **[cross-review] The draft said *"the gate
@@ -1736,6 +2286,50 @@ RFC do is call a convention a mechanism.**
     `2026-08-13` `[V]`, and 3 `permanent_property` once the migration adds their anchors. **A test
     asserting only (b) and (c) would go green while the door stayed open**, which is why the order is
     normative and not stylistic.
+    **[author round 2] Assertion (a) moves with its code.** Per §3.2c it is a **graduation-sweep**
+    assertion, not a `validatePackDocument` one, and the test must run it in a checkout. **(b) and
+    (c) split**: (b) stays a `validatePackDocument` unit test, and (c)'s *"line n contains the
+    ruling's date"* half moves to the sweep with the arm that performs it.
+13. **[author round 2 — [[D464]]] `recordKind` is the shipped enum, asserted against the shipped
+    enum.** A test imports `EVIDENCE_KINDS` from `apps/server/src/sourcing/types.ts` and asserts it is
+    set-equal to `clearance.recordKind`'s enum in `schemas/drill_pack.schema.json` — **seven strings,
+    both sides** `[V]`. Asserting a literal seven-item list on the schema side alone would pass while
+    a new evidence kind silently became unexpressible in a clearance, which is the failure this
+    criterion exists to catch. A second assertion covers the pointer rule: a `ledger_record` clearance
+    with `subject: "/feedbackClaims/0/text"` raises `GRADUATION_CLEARANCE_SUBJECT_UNSUPPORTABLE`, and
+    the same entry with `kind: "claim_bound"` does not. **Non-vacuity is established first**: the test
+    asserts that `PROSE_POINTERS` (`check.ts:32`) actually contains the `/feedbackClaims/\d+/text`
+    pattern before asserting the lint keys on it.
+14. **[author round 2 — [[D465]]] The one removed-referent resolution is expressible and re-derives
+    both ways.** After Stage B, `content/drafts/anti-caro-advance-early-c5.json`'s entry
+    `refuted-and-deleted-2026-08-15-the-pack-s-largest-single` carries
+    `resolved.clearance.kind: "referent_removed"` with `absentIds` naming `bxc5-recoup` and
+    `bxc5-trade`, and **two** assertions run: the predicate **holds** on the committed document, and
+    re-inserting a spine node with id `bxc5-recoup` into a copy makes `GRADUATION_RESOLUTION_STALE`
+    fire. **The second assertion is the criterion**; the first alone would pass on a predicate that
+    can never fail. A third asserts `GRADUATION_CLEARANCE_REMOVAL_ON_BLOCKING` on the same clearance
+    attached to a `blocking` entry. **Population check, per the rule that a criterion must select a
+    non-empty set:** this criterion selects **1 of 30** resolved entries and the other 29 are covered
+    by criterion 2 — measured, not assumed (§2.2a).
+15. **[author round 2 — [[D467]]] `validatePackDocument` touches no filesystem for graduation, and the
+    test proves it by changing the answer's environment rather than by reading the code.** A test
+    validates a document carrying an `accepted` entry whose `rulingRef` is
+    `planning/exploration/log.md#L1231` **from two different working directories** — the repo root and
+    a fresh `mkdtemp` — and asserts the returned issue-code multisets are **identical**. **Today that
+    test fails, and this was run rather than predicted**: `pack-check` over
+    `content/drafts/anti-caro-advance-early-c5.json` prints *"Pack check passed"* from the repo root
+    and raises `GRADUATION_RULING_UNCITED` from a temp directory, because `pack-validation.ts:848–851`
+    resolves against `process.cwd()` `[V]` (§3.2c has the transcript). **It is the only
+    assertion in this RFC that reproduces the production behaviour without building an image**, which
+    is why it is the one that must exist. A second assertion pins the split: the sweep, run in the
+    checkout, still raises `GRADUATION_RULING_SELF_MINTED` for a self-minted citation — so moving the
+    arms did not delete the guarantee, it relocated it.
+16. **[author round 2 — [[D467]]] The admission rule runs on the artefact that ships.**
+    `.github/workflows/release.yml` runs the graduation admission sweep before
+    `docker/build-push-action`. At HEAD it runs **no content gate at all** between `actions/checkout`
+    (`:17`) and the build (`:24–33`) `[V]`, so this is an added step rather than a modified one. **A
+    criterion that only asserted the sweep exists would pass while the release path never called it**
+    — which is [[D208]]'s shape, recorded for `sourcing-check`, reproduced one workflow over.
 
 ## Open questions
 
@@ -2055,6 +2649,81 @@ The highest id in use is **D427** `[V]`, so this round takes **D434–D436**. Th
   evidence** — which changes D417's fix from a storage sidecar to a surface question, and is the kind
   of thing the next author would otherwise have to rediscover by reading the registry constructor.
 
+### [author round 2] New rows this round opens — **D468–D473**, for claude to land
+
+The highest id in use is **D467** `[V]` (verified by sweeping `^| D<digits>` over
+`design/BACKLOG.md` at HEAD), so this round takes **D468–D473**. This RFC does not edit
+`design/BACKLOG.md`.
+
+- **D468** 🐞 *A pack-validation lint resolves living-tier paths against `process.cwd()`, and the
+  production image contains neither of the two directories every acceptance in the corpus cites.*
+  `GRADUATION_RULING_UNCITED` does `resolve(file)` → `existsSync` → `readFileSync`
+  (`pack-validation.ts:848–851`) `[V]`. `apps/server/Dockerfile:21` opens a fresh final stage whose
+  only four `COPY` lines are `apps/server/dist`, `apps/web/dist`, `schemas` and `content` (`:28–31`),
+  and `.dockerignore:1` excludes `.git` from the build context entirely `[V]`. **All 43 committed
+  acceptances cite `planning/exploration/log.md#L1231` (40) or `docs/tablebase-grounding.md` (3)**
+  `[V]` — neither directory ships. `runtimeIssue` is severity **error** (`:142–148`) and
+  `PackRegistry.load` throws `ServerError("PACK_INVALID")` on any error (`pack-registry.ts:252`,
+  `:258`), so **the first graduated pack carrying an acceptance makes the server fail to boot**, not
+  degrade — and **40 of the 56 draft documents carry at least one `accepted` entry** `[V]`, so it is
+  the modal pack rather than an edge case. It has never fired because
+  `content/packs/` is empty and `schemas/drill_pack.example.json`'s `graduationBlockers` is `[]`
+  `[V]`. **Reproduced with one `cd`, not argued**: `node apps/server/dist/pack-check.js` over
+  `content/drafts/anti-caro-advance-early-c5.json` prints *"Pack check passed"* from the repo root and
+  `ERROR … [GRADUATION_RULING_UNCITED] accepted condition citation does not resolve:
+  planning/exploration/log.md#L1231` from a temp directory — same file, same bundle, decided by the
+  working directory `[V]`, and the image's is `/app` (`Dockerfile:27`). **General form: a check whose
+  evidence is excluded by `.dockerignore` is not a weaker check in production — it is a *different*
+  check, and the code name is identical in both.** Found while
+  answering [[D467]], which is the same defect one code later and the reason the RFC's
+  `git blame` arm was assigned to the wrong home.
+- **D469** 🐞 *The release workflow builds and pushes the production image with no content gate at
+  all.* `.github/workflows/release.yml:17` checks out and `:24–33` hands the context straight to
+  `docker/build-push-action` `[V]`; `verify.yml:29` runs `make verify` on every push, but nothing runs
+  on the tag that produces the artefact. So every admission rule this repo has — including the ones
+  `graduation-clearance` is adding — is enforced on commits and **not on the image**. **This is
+  [[D208]]'s shape** (*"a maturity step that exits its own gate"*) one workflow over, and it is why an
+  authoring-time admission rule needs a named enforcement point rather than a named home.
+- **D470** 🐞 *Twenty packs' `provenance.sources` promise data in a key that zero of them carry and
+  that the validator forbids.* Each says *"Per-move centipawns and losses are in
+  `provenance.engineValidation`"*; **0 of 20 carry the key**, the data is in the `.evidence.json`
+  sidecar and in `deviations[].cost`, and `PROVENANCE_EVIDENCE_INLINE` (`pack-validation.ts:868`)
+  **raises an error on that exact key** `[V]` — so the sentences do not merely point at nothing, they
+  point at a shape the schema refuses. Same walk found `anti-caro-advance-early-c5.json`'s
+  `/provenance/sources/6` still citing the deleted spine node `bxc5-recoup` by name `[V]`.
+  **The general form is [[D465]]'s, one field over: `graduationBlockers` is about to get a lint that
+  makes its referents re-derivable, and `provenance.sources` — the neighbouring prose, in the same
+  object, read by the same humans — will still have none.**
+- **D471** 🐞 *Evidence joins to a pack by two different keys depending on the consumer, and an RFC
+  that describes the join in prose picks the wrong one.* `uniqueRecord` (`claim-binding.ts:59`) joins
+  a record to a **FEN**, because a claim assertion names a position; `evidenceSupports`
+  (`check.ts:166`) joins a record to a **JSON pointer** via `record.supports`, because evidence names
+  a pack node — and `EVIDENCE_ANCHOR_BROKEN` (`:186`) lints the second `[V]`. `graduation-clearance`
+  §1.2 described its `ledger_record` predicate as *"anchored to a named FEN"* and then gave the
+  clearance a `subject` pointer, so its prose named one join and its schema named the other. **The
+  measurement that settles it also settles a class boundary**: over 764 committed records the
+  `supports` pointers are `/start/fen` 64, `/spine/…/moveUci` 465, `/deviations/<i>/moveUci` 235 —
+  **zero prose pointers, and `check.ts:190` guarantees zero forever** `[V]`. **General form: when a
+  spec describes a predicate in prose instead of as an expression over named fields, the field list
+  and the sentence can disagree for two review rounds without either being obviously wrong.**
+- **D472** 🐞 *[[D461]]'s correction fixed the register row it was about and left the two Active rows
+  that repeated the stale half.* `rfc/README.md:78` records 0.28 as **claimed and held**; `:79` records
+  0.29 as next free — and `:12` still reads *"0.28 remains free"* and `:14` *"0.28 stays free"* `[V]`.
+  D461's own text names *"two Active rows repeated the stale half"* as part of the defect, so the row
+  describes the fix it did not make. **General form: a correction that quotes the full extent of a
+  defect and repairs one instance of it reads, to the next reader, as a closed defect.**
+- **D473** 💡 *An RFC was marked `accepted` because its open questions were closed, and the two are
+  not the same test.* `graduation-clearance` closed four author-call open questions and was accepted
+  on 2026-08-16; an implementation review returned it hours later with four blockers, and **none of
+  the four was an open question** — they were an **absent field** ([[D464]]), an **absent grammar for
+  a measured population** ([[D465]]), an **absent writer** ([[D466]]) and a **check assigned to a
+  process that cannot run it** ([[D467]]). All four are answerable only by asking *"who calls this,
+  with what, where"*, which no open-question list asks. **The cheap guard is the one this round used
+  and it costs one pass: for every acceptance criterion, name the function that makes it true and the
+  environment that function runs in.** Two of the four blockers would have been caught by the second
+  half of that sentence alone. Sibling of [[D426]] (*"an RFC's acceptance criteria are checked against
+  its behaviour, and a code name is not behaviour"*), extended from the criteria to the specification.
+
 ## Changelog
 
 - 2026-08-16: created. `make graduation-report` re-run at HEAD rather than quoted: 56/220/30/43 for
@@ -2148,3 +2817,50 @@ The highest id in use is **D427** `[V]`, so this round takes **D434–D436**. Th
   `$defs` closed, `rfc/README.md:78` still records 0.28 free, and `opponent-contracts` still holds no
   pack lane `[V]`. **This RFC claims no migration position, which is why [[D423]]'s three-way
   contest does not reach it.**
+- 2026-08-16: **second author round, answering the implementation review that returned this RFC at
+  `8c389f0`. All four contract blockers are specified at a named symbol; the RFC does not re-declare
+  itself accepted.** Measured at HEAD `6722130`. **Reproduced independently at HEAD before anything
+  was written:** `content/drafts` 56 documents / 220 blocking / 30 resolved / 43 accepted and
+  `content/candidates` 36 / 143 `[V]`; **0 of 293 + 143 entries carry `clearedBy`** `[V]`; 32 ledgers
+  holding **764** records — `engine_eval` 391, `tablebase_result` 341, `position_legality` 32 `[V]`;
+  the four `assessment_grounded` packs still carrying 27/25/25/25 `tablebase_result`, 0 `engine_eval`
+  and **six** blocking entries each `[V]`. **[[D464]] closed (§1.2b):** `clearance.recordKind` is
+  added, transcribed from `EVIDENCE_KINDS` (`sourcing/types.ts:57`), and the deciding predicate is a
+  `kind` + `supports` match — **not** the FEN join §1.2 described in prose, which belongs to
+  `uniqueRecord` and to claim assertions. The measurement that settles it also moves the B/C
+  boundary from a keyword to a lint: over 764 records the `supports` pointers are `/start/fen` 64,
+  `/spine/…/moveUci` 465, `/deviations/<i>/moveUci` 235 — **zero prose pointers**, and `check.ts:190`
+  makes that permanent, so a `ledger_record` clearance on a prose subject is unsatisfiable by
+  construction and is now an error `[V]`. **[[D465]] closed (§2.2a), and its premise corrected by
+  measurement:** all 30 resolved entries were walked — **29 name a subject that resolves, 1 does
+  not**, so *"several"* is one entry; **1** distinct `resolved.by` string, reproducing §0.3 `[V]`. The
+  one entry is **not reclassified**; the grammar gains `referent_removed` + `absentIds`, whose
+  predicate is *the named ids are absent* — a standing predicate that correctly **re-opens** if a
+  refuted line comes back, admissible on `resolved` only, and never emitted by the writer.
+  **[[D466]] closed (§6.5):** `make graduation-clear` / `clearGraduationEntries`, modelled on the
+  shipped `verifyDraft` writer (`verify-draft.ts:323`), with the six predicates named at their
+  symbols, a `tabiya.graduation.transition.v1` document, the mandatory `packDigest` re-stamp, and the
+  one-line `graduation-report.ts:8` filter change its sidecar forces. **[[D467]] closed (§3.2c) by
+  refusing to make it one rule:** the Dockerfile's final stage copies four directories and installs
+  no `git` (`:21–31`), `.dockerignore:1` excludes `.git` from the build context, and
+  `validatePackDocument` (`:1255`) is synchronous **with no base-directory option** — so the runtime
+  rule is a *shape* rule (`GRADUATION_RULING_UNANCHORED`, document only) and the authoring rule is an
+  *admission* rule (`GRADUATION_RULING_SELF_MINTED`, checkout + `.git`), with two homes and two
+  guarantees. **Found while doing it:** the defect **already ships** — `GRADUATION_RULING_UNCITED`
+  resolves `planning/` and `docs/` against `process.cwd()` at error severity, and neither directory is
+  in the image, so a graduated pack with an acceptance would make the server **fail to boot** `[V]`.
+  Its resolution arms move with the new one. **Corrected in this RFC's own text:** *"the seven
+  kinds"* → eight; *"anchored to a named FEN"* → a `supports` pointer match; *"tightened **in
+  place**"* → tightened in the sweep; the ratchet quoted for two rounds as *"≤15-of-47"* is
+  **`toBeLessThanOrEqual(18)`** at `graduation-report.test.ts:76`, and the sweep is
+  `checkSourcingFile` in a **vitest case**, not `checkSourcingDirectory` in the Makefile — which is
+  why [[D208]] is still open and right `[V]`. **Register re-verified a fourth time:**
+  `DRILL_PACK_SCHEMA_VERSION` `"0.27"`, `DRILL_RUN_SCHEMA_VERSION` `"0.17"`
+  (`packages/schema/src/index.ts:1–2`), `STORAGE_VERSION` **23** (`storage.ts:407`), and
+  `rfc/README.md:78` now records **0.28 claimed and held by this RFC** with `:79` recording **0.29 as
+  the next free lane** `[V]` — so this round's schema additions land inside a lane the register
+  already assigns. **Added:** §1.2b, §2.2a, §3.2c, §6.5, §6.6, criteria 13–16, a rewritten criterion
+  3, the split-home lint table, and rows **D468–D473**. **Stated rather than solved (§6.6):** the
+  final B/C split is not printable because no blocking entry has a subject yet (**0 of 293** `[V]`);
+  the owner-versus-agent floor is §3.1's struck reviewer and is unchanged; and a `#L` anchor into a
+  mutable document drifts undetectably at runtime, because the document is not in the image.
