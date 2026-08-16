@@ -2735,7 +2735,10 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       CREATE TABLE IF NOT EXISTS progress_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL) STRICT;
     `);
     const rows = this.#database.prepare(
-      "SELECT snapshot_json, owner_learner_id FROM drill_runs ORDER BY id",
+      `SELECT snapshot_json, owner_learner_id
+       FROM drill_runs
+       WHERE schema_version = '0.7'
+       ORDER BY id`,
     ).all() as readonly Record<string, unknown>[];
     const insert = this.#database.prepare(`
       INSERT OR IGNORE INTO attempts (

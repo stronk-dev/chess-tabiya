@@ -264,6 +264,9 @@
     if (routerStarted) return;
     routerStarted = true;
     router.start();
+    void loadRoute(router.route);
+    syncLivePolling(router.route);
+    syncStoryPolling(router.route);
   }
 
   function syncLivePolling(next:AppRoute):void{
@@ -474,6 +477,7 @@
     unsubscribeController = controller.subscribe((next) => (session = next));
     unsubscribeRouter = router.subscribe((next) => {
       route = next;
+      if (learner === undefined) return;
       void loadRoute(next);
       syncLivePolling(next);
       syncStoryPolling(next);

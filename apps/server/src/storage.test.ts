@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
-import { appendOpponentPly, createRun, fork, readBackReplay, resistanceOnPath } from "@chess-tabiya/runtime";
+import { appendOpponentPly, commitMove, createRun, fork, readBackReplay, resistanceOnPath } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { SQLiteRunStorage, type StorageMigrationLog } from "./storage.js";
@@ -39,7 +39,11 @@ describe("SQLite run-storage migrations and summaries", () => {
     const directory = mkdtempSync(join(tmpdir(), "tabiya-storage-migration-"));
     directories.push(directory);
     const filename = join(directory, "legacy.sqlite");
-    const legacyRun = run("legacy-run");
+    const playedRun = commitMove(run("legacy-run"), "e2e4", {
+      actor: "user",
+      at: createdAt,
+    }).run;
+    const { sessionKind: _sessionKind, ...legacyRun } = playedRun;
     const fixture = new DatabaseSync(filename);
     fixture.exec(`
       CREATE TABLE drill_runs (

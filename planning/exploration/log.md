@@ -3055,3 +3055,19 @@ instability introduced by the first neutral key and the REST reconstruction gaps
 remains open:** the historical census used rounded `dtz` while runtime uses `preciseDtz`;
 the instrument now matches runtime, but no newly retained corpus has validated the old tie
 counts. Archival records the shipped contract and does not promote that measurement.
+
+## 2026-08-16 — the persisted development stack exposed a legacy-migration crash
+
+The packaged server failed before binding its port against the existing Docker volume. The
+volume contained an attempt-producing v0.4 run that migration 3 had correctly quarantined;
+migration 6 nevertheless projected every stored row into the attempts table, where the old
+snapshot's absent `sessionKind` became an unbindable SQLite parameter. D479 closes the mismatch
+without deleting or rewriting the quarantined run: migration 6 now backfills only its frozen
+v0.7 input population, and the migration fixture reproduces the old snapshot shape and learner
+move that the prior zero-attempt fixture missed.
+
+The first real registration then exposed D480: the auth gate had already requested `/play`
+while signed out, but successful registration only started the history listener and never
+reloaded that failed route. The valid cookie therefore appeared broken until refresh. Route
+loading now waits for a learner and authentication explicitly loads the current route; the
+regression fixes the request ordering rather than relying on response timing.

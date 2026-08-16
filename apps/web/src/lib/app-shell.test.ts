@@ -190,6 +190,56 @@ afterEach(() => {
 });
 
 describe("application shell", () => {
+  it("waits for authentication before loading and reloads the current route after registration", async () => {
+    history.replaceState(null, "", "/play");
+    let authenticated = false;
+    let packCalls = 0;
+    const base = api();
+    const authApi: DrillClientApi = {
+      ...base,
+      async session() {
+        throw new Error("AUTH_REQUIRED");
+      },
+      async register(handle: string) {
+        authenticated = true;
+        return {
+          id: "learner-new",
+          handle,
+          displayName: handle,
+          createdAt: "2026-08-16T20:00:00.000Z",
+        };
+      },
+      async packs() {
+        packCalls += 1;
+        if (!authenticated) throw new Error("AUTH_REQUIRED");
+        return [packSummary];
+      },
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: authApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Create an account"));
+    expect(packCalls).toBe(0);
+    document.querySelector<HTMLButtonElement>(".auth-gate > button")!.click();
+    const inputs = document.querySelectorAll<HTMLInputElement>(".auth-gate input");
+    inputs[0]!.value = "new_learner";
+    inputs[0]!.dispatchEvent(new Event("input", { bubbles: true }));
+    inputs[1]!.value = "browser-test-password";
+    inputs[1]!.dispatchEvent(new Event("input", { bubbles: true }));
+    document.querySelector<HTMLFormElement>(".auth-gate form")!.dispatchEvent(
+      new SubmitEvent("submit", { bubbles: true, cancelable: true }),
+    );
+
+    await vi.waitFor(() =>
+      expect(document.body.textContent).toContain("Choose a position worth returning to."),
+    );
+    expect(packCalls).toBe(1);
+    expect(document.body.textContent).not.toContain("AUTH_REQUIRED");
+    await unmount(component);
+  });
+
   it("reconstructs a run directly from a reload-safe deep link", async () => {
     history.replaceState(null, "", "/play/run/route-run");
     const component = mount(App, {

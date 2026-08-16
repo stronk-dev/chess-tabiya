@@ -123,7 +123,7 @@ writing it into a draft.
 | 3 | 2→3 | `archive/pack-optional-runs.md` | implemented after migration 2 |
 | 4 | 3→4 | `archive/terminal-outcome-events.md` | implemented; upgrades ordinary v0.5 snapshots and quarantines pre-producer outcome events. Its body is frozen to literal `"0.6"` by `archive/line-drill-theory-grading.md` §11b so later schema constants cannot mis-stamp rows before migration 5 |
 | 5 | 4→5 | `archive/line-drill-theory-grading.md` | implemented — run schema v0.7; adds `policyModeApplied` to `opponent.move_selected.selection`, historical selections migrate to `unknown` and are never inferred |
-| 6 | 5→6 | `archive/return-and-progression.md` | implemented — attempts, schedules, progress and position statistics; create-table/index plus one-time backfill |
+| 6 | 5→6 | `archive/return-and-progression.md` | implemented — attempts, schedules, progress and position statistics; create-table/index plus one-time backfill. Body corrected 2026-08-16: the backfill selects only the frozen `schema_version = '0.7'`, so quarantined pre-0.5 rows never enter `projectAttempts`. |
 | 7 | 6→7 | `archive/pack-studio.md` | implemented — studio drafts, retained playtest bytes, and registered packs |
 | 8 | 7→8 | `archive/n-way-comparison.md` | implemented — run schema v0.8, branch origin and prediction event |
 | 9 | 8→9 | `archive/live-session-platform.md` | implemented — live-session tables; create-table/index only |
