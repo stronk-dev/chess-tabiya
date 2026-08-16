@@ -3,6 +3,7 @@ import {
   createRun,
   type DrillRun,
   type DrillRunEvent,
+  type SelectionCandidate,
 } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
@@ -78,7 +79,8 @@ describe("machine-evidence withholding", () => {
             mass: 0.4,
             scoreCp: 31,
             wdl: Object.freeze({ win: 401, draw: 500, loss: 99 }),
-          })]),
+            futureMeasurement: 17,
+          }) as SelectionCandidate & { readonly futureMeasurement: number }]),
           engine: Object.freeze({ id: "stockfish-play", name: "Stockfish", version: "18", seedHonored: false }),
         }),
       }),

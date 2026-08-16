@@ -7,6 +7,7 @@ import {
   type DrillRun,
   type DrillRunEvent,
   type Node,
+  type SelectionCandidate,
 } from "@chess-tabiya/runtime";
 
 function reasoningDeliveryOpen(run: DrillRun, event: Extract<DrillRunEvent, { readonly type: "reasoning.recorded" }>): boolean {
@@ -23,19 +24,20 @@ function publicReasoningEvent(run: DrillRun, event: DrillRunEvent): DrillRunEven
 function publicSelectionEvent(run: DrillRun, event: DrillRunEvent): DrillRunEvent {
   if (event.type !== "opponent.move_selected" || feedbackDisclosed(run)) return event;
   const candidates = event.data.selection.candidates;
-  if (candidates === undefined || candidates.every((candidate) => candidate.scoreCp === undefined && candidate.wdl === undefined)) {
-    return event;
-  }
+  if (candidates === undefined) return event;
   return Object.freeze({
     ...event,
     data: Object.freeze({
       ...event.data,
       selection: Object.freeze({
         ...event.data.selection,
-        candidates: Object.freeze(candidates.map((candidate) => {
-          const { scoreCp: _scoreCp, wdl: _wdl, ...publicCandidate } = candidate;
-          return Object.freeze(publicCandidate);
-        })),
+        candidates: Object.freeze(candidates.map((candidate): SelectionCandidate => Object.freeze({
+          moveUci: candidate.moveUci,
+          rank: candidate.rank,
+          ...(candidate.mass === undefined ? {} : { mass: candidate.mass }),
+          ...(candidate.concessionRatio === undefined ? {} : { concessionRatio: candidate.concessionRatio }),
+          ...(candidate.offWindow === undefined ? {} : { offWindow: candidate.offWindow }),
+        }))),
       }),
     }),
   }) as DrillRunEvent;
