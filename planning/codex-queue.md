@@ -62,6 +62,10 @@ takeable subset is B2's D219/D229/D258/D213, re-derived against the current tree
 contiguous migration range, the assessment category has one declaration, and one executable run
 pins all three authoritative event adjacencies. The record-only B2 rows remain untouched.
 
+**B3 fixture subset landed 2026-08-17:** D227 and D257 are closed. Default catalogue discovery
+uses the exported pack-document predicate and excludes `.browser.json`; the browser server names
+its six fixtures explicitly. D262 remains a terminology rule, and D211 was already closed.
+
 **Two findings in that document outrank most of the batches.** `db243f5` edited nineteen defect
 rows and **changed column 3 only** — writing *"✅ closed by pack-graduation 0.27"* into the
 disposition while leaving column 1 at 🐞/💡. So [[D418]] is exactly right, and **the wave that

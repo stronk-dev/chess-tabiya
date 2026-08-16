@@ -90,16 +90,19 @@ separates corpus coverage from three-valued satisfiability and never treats a ze
 as a defect. See `docs/expression-census.md`. `shape-check` also accepts `PROBE=`, comma/glob
 multi-file `FILE=`, and opt-in `CORPUS=` warnings.
 
-Every JSON file beneath a served content directory is treated as a pack unless
-its basename is reserved as a sourcing sidecar: `evidence.json`, `sources.json`,
-`job.json`, or `priority.json`, including `<pack>.{reserved-name}` flat siblings.
-The registry and sidecar resolver share this list. New sidecar kinds must join
-that single list before they are placed beside served packs.
+Every pack-shaped JSON file beneath a served content directory is treated as a
+pack unless its basename is reserved as a sourcing sidecar (`evidence.json`,
+`sources.json`, `job.json`, or `priority.json`, including flat siblings) or it
+ends in `.browser.json`. The registry and sidecar resolver share the sidecar
+list; browser fixtures enter only through explicit development injection.
+New sidecar kinds must join the single reserved list before placement beside
+served packs.
 
 `content/drafts/` is committed because the agent-authored, owner-reviewed
 revision history is part of the content-production evidence. The registry
-reads it only in development mode, rejects an explicit draft in production,
-and the Docker build context excludes it entirely.
+serves committed drafts in every environment as `community` content labelled
+**unreviewed draft**. The Docker build therefore includes the directory.
+Explicit extra draft paths remain development-only.
 
 `make up` starts the production bundle with the deterministic mock opponent.
 `make up-engines` adds the healthchecked Maia sidecar and uses Stockfish from

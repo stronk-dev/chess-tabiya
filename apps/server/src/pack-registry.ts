@@ -169,11 +169,7 @@ async function jsonFiles(directory: string): Promise<readonly string[]> {
   for (const entry of entries) {
     const path = join(directory, entry.name);
     if (entry.isDirectory()) files.push(...(await jsonFiles(path)));
-    else if (
-      entry.isFile() &&
-      extname(entry.name) === ".json" &&
-      !isSidecarName(entry.name)
-    ) {
+    else if (entry.isFile() && isPackDocumentName(entry.name)) {
       files.push(path);
     }
   }
@@ -183,6 +179,14 @@ async function jsonFiles(directory: string): Promise<readonly string[]> {
 export function isSidecarName(name: string): boolean {
   return SIDECAR_BASENAMES.some(
     (reserved) => name === reserved || name.endsWith(`.${reserved}`),
+  );
+}
+
+export function isPackDocumentName(name: string): boolean {
+  return (
+    extname(name) === ".json" &&
+    !name.endsWith(".browser.json") &&
+    !isSidecarName(name)
   );
 }
 

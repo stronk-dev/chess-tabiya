@@ -199,6 +199,16 @@ describe("drill-client pack registry", () => {
     const registry = await PackRegistry.loadDefault();
     expect(registry.list()).not.toContainEqual(expect.objectContaining({ reviewStatus: "schema_example" }));
     expect(registry.list()).toContainEqual(expect.objectContaining({ reviewStatus: "draft", channel: "community" }));
+    expect(registry.list().map((entry) => entry.id)).not.toEqual(
+      expect.arrayContaining([
+        "immediate-guard-browser",
+        "line-boundary-browser",
+        "outcome-hold-browser",
+        "outcome-resist-browser",
+        "stated-reasoning-browser",
+        "trajectory-legs-browser",
+      ]),
+    );
   });
 
   it("refuses semantic lint failures and unsupported v1 policies", async () => {

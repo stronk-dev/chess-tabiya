@@ -7,9 +7,11 @@ checkpoint and objective evaluation, feedback timing, and opponent selection.
 
 ## Pack registry and routes
 
-`PackRegistry.loadDefault()` loads the living
-`schemas/drill_pack.example.json` fixture and every JSON document below
-`content/packs/` when that directory exists. Loading is fail-fast: malformed
+`PackRegistry.loadDefault()` loads pack documents below `content/packs/` and
+`content/drafts/`. The channels remain distinct: graduated packs are `official`
+and committed drafts are `community`. Schema examples and `*.browser.json` test
+fixtures are not discovered as learner content; tests may inject fixture paths
+explicitly in development mode. Loading is fail-fast: malformed
 core fields, duplicate pack IDs, unsupported v1 semantics, and semantic lint
 errors produce a typed `PACK_INVALID` error. The server accepts
 `delayed_checkpoint`, `segment_end`, and `immediate_guard`; the removed
@@ -393,7 +395,8 @@ and branch-group rehearsal. The default catalogue serves committed drafts as
 `community` content with an explicit **unreviewed draft** label and separately
 serves graduated packs as `official`; an official record wins if the two
 channels reuse an id. The drill-pack schema example remains validation input
-and is never served as learner content. This makes the authored corpus playable
+and browser fixtures remain test input; neither is served as learner content.
+This makes the authored corpus playable
 without presenting unreviewed chess assertions as reviewed truth.
 
 Terminal and live-match failures are translated at the session-controller

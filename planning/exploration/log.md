@@ -3151,3 +3151,14 @@ One real checkmating run now pins the three event gaps that emitters keep closed
 selection immediately precedes its committed move, an ending checkpoint immediately precedes
 its segment, and a terminal move immediately precedes its outcome. The test documents the
 synchronous bracketing without widening the event schema or changing replay semantics.
+
+## 2026-08-17 — browser fixtures left the learner catalogue
+
+Default pack discovery now excludes `*.browser.json` through one exported predicate. The six
+fixtures remain available to the zero-retry browser gate only because Playwright injects their
+paths explicitly. This closes the gap between the authored-corpus denominator and what the
+learner catalogue serves: test documents are test input, not community packs.
+
+The first browser run after the change went red on the immediate-guard and stated-reasoning
+fixtures, proving the old suite depended on implicit discovery. After moving all six paths to
+the explicit test-server contract, the full browser gate returned to 24 passed at zero retries.
