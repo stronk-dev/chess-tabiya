@@ -431,10 +431,37 @@ move. The census refutes that (`design/research/maia-endgame-fidelity.md` §7, o
 | **drawn** | **66** | **7 (10.6%), Wilson [5.2%, 20.3%]** | **4.02%** | **2.6×** |
 | losing | 223 | 14 (6.3%), Wilson [3.8%, 10.3%] | 2.99% | 2.1× |
 
-The winning row is a **DTZ effect and is intended**: minimising |DTZ| means moving toward the
-next zeroing move, and captures and pawn moves *are* the zeroing moves. The drawn row cannot
-be a DTZ effect — no DTZ term acts there — so it is an artifact of alphabetical order alone,
-and its interval excludes the uniform expectation.
+~~The winning row is a **DTZ effect and is intended**~~ — **REFUTED 2026-08-16 by the
+implementation's own re-run, and this paragraph is corrected before archiving rather than
+frozen.** The original reading was: minimising |DTZ| means moving toward the next zeroing
+move, and captures and pawn moves *are* the zeroing moves, so the winning row is explained and
+only the drawn row is a defect. **The DTZ comparator did not change; only the residual
+tiebreak did. All three rows moved.**
+
+| root | n | pre-fix | ratio | post-fix | ratio | exact p, pre → post |
+|---|---:|---:|---:|---:|---:|---|
+| winning | 218 | 32 (14.68%) | 1.571× | **24 (11.01%)** | **1.178×** | 0.0101 → 0.414 |
+| drawn | 66 | 7 (10.61%) | 2.635× | **3 (4.55%)** | **1.129×** | 0.0167 → 0.749 |
+| losing | 223 | 14 (6.28%) | 2.096× | **2 (0.90%)** | **0.300×** | 0.0090 → 0.073 |
+
+**69% of the won-root excess over uniform was lexicographic, not DTZ** (11.63 → 3.63 picks
+above expectation); pre-fix the winning interval *excluded* the 9.34% uniform expectation,
+post-fix it covers it. **The losing row is the cleaner refutation and this RFC never explained
+it**: in a losing root DTZ orders *descending*, away from zeroing, so a capture-or-pawn
+enrichment there runs **against** the DTZ gradient and can only come from the alphabet. It
+fell to 0.30× — *below* uniform, exactly as a working DTZ-descending comparator predicts.
+
+**What survives, and what does not.** The remedy is unaffected: §3.3 clause 2 already specified
+*"every residual tie — equal |DTZ|, both-null DTZ, and the whole drawn root"*, and the shipped
+comparator applies `neutralTiebreak` in all three arms, **so the winning side is covered by
+specification and not incidentally**. What was wrong is the **diagnosis**: D371 was localised
+to drawn roots in `hold`, and `localeCompare`'s simplification bias was never confined there.
+
+**Confidence, stated honestly.** The drawn arm — the headline — is the *weakest* evidence here.
+At n = 66 the post-fix Wilson interval [1.56%, 12.53%] covers the uniform 4.02% **and also
+covers the pre-fix 10.61%**, so that arm alone cannot distinguish *fixed* from *unchanged*.
+The conclusion is carried by the analytic argument, the 10,000-sample index-uniformity test,
+and the two arms where the sample size actually is — n = 218 and n = 223.
 
 **The mechanism, stated without judgment:** UCI strings sort by origin file then origin rank,
 so `localeCompare` systematically prefers moves originating on the a- and b-files and on low
@@ -867,10 +894,19 @@ is the only versioned one this RFC makes.
   order is uniform (χ² over index buckets, and no bucket materially over-represented), and the
   capture-or-pawn selection rate equals the set's own capture-or-pawn fraction. A9 then
   corroborates on the real corpus rather than carrying the claim alone.
-- A10. **The won-root enrichment must not move.** The same re-run must leave the winning row
-  at **1.57×** within its interval. If it moves materially, the winning-row enrichment was
-  partly lexicographic rather than wholly a DTZ effect, and §3.2's reading of the census is
-  wrong — this criterion exists to be able to fail.
+- A10. **VERDICT CORRECTED 2026-08-16: A10 FAILED, and was scored a pass.** The criterion read:
+  *the won-root enrichment must not move; the same re-run must leave the winning row at 1.57×
+  within its interval. If it moves materially, the winning-row enrichment was partly
+  lexicographic rather than wholly a DTZ effect, and §3.2's reading of the census is wrong —
+  this criterion exists to be able to fail.* **It moved: 1.571× → 1.178×, from an interval
+  excluding uniform (p = 0.0101) to one covering it (p = 0.414).** It was recorded as a pass on
+  the narrowest available reading — 11.01% sits **0.4 pp** inside the pre-fix interval
+  [10.59, 19.99]. The implementer *noticed and reported the movement* and did not draw the
+  consequence the criterion itself names. §3.2 is corrected above. **The precondition A10's own
+  cross-review demanded was met — `t` = 130 of 218 won roots have tied optimal DTZ — so this is
+  a non-vacuous failure, not a vacuous pass.** A criterion whose failure clause fires and is
+  read as a pass is worse than one that cannot fail, because it produces a record of having
+  been tested.
   **And its ability to fail is itself a precondition that must be reported, not assumed**
   `[cross-review 2026-08-16]`. A10 can only fail where the new tiebreak actually acts on a won
   root — i.e. where the argmin-|DTZ| set has **more than one member**. If won-root |DTZ| ties
