@@ -133,6 +133,26 @@ that wants it"*, used by `engine-leverage` for `searchmoves` and by `format-surf
 per-leg tablebase modes) would then dispose of them without a schema change at all. **Measure
 before drafting.**
 
+## 4b. Variants and foreign chess — queued 2026-08-16, deliberately not launched
+
+Owner ideas, ledgered as **D327** (variants in Just Play) and **D328** (westernised xiangqi
+and shogi). **Nothing is running on these** — the owner asked for them queued while six waves
+are already in flight, and this is where they wait so they are not re-uttered as new.
+
+**Entry condition, and it is one cheap measurement rather than a research programme:**
+*where does the chess coupling actually sit?* `positionFromFen` is the single call into
+chessops (`Chess.fromSetup(parseFen(fen).unwrap())`), 13 runtime files import chessops, and a
+`variant` column already exists in storage. If the branch runtime-s own types are FEN-shaped
+only through `Node.fen` and `transposeKey`, and both target games have FEN-like notations
+(SFEN, xiangqi FEN), then the shell may be reusable and this is an adapter. If the coupling is
+diffuse, D328 is a second product sharing a shell and should be said so out loud. **That
+measurement decides the shape of both rows and should precede any drafting.**
+
+**Sequencing note:** D327 tier 1 (Chess960) is the cheapest real member — same pieces, same
+rules, tablebase and structural reading intact, and `UCI_Chess960` is already an advertised
+Stockfish option (see **D193**). It is the natural probe for the whole cluster, because it
+tests the *variant plumbing* without testing the *detector* question at all.
+
 ## 5. Research — two states, and the distinction is the standing sequence
 
 **The owner's sequence is breadth → content → ONE play session at the end.** R6, R7 and R8 are
