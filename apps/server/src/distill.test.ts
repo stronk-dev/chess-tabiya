@@ -1,7 +1,7 @@
 import { INITIAL_FEN } from "chessops/fen";
 import { commitMove, createRun, fork, rewind } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
-import { distillRun } from "./distill.js";
+import { assertDistilledPack, distillRun } from "./distill.js";
 import { validatePackDocument } from "./pack-validation.js";
 
 const at="2026-08-14T12:00:00.000Z";
@@ -9,4 +9,5 @@ function run(){let value=createRun({id:"source",packId:"source-pack",packDigest:
 
 describe("run distillation",()=>{
   it("creates a validation-clean blocked seed and classless fork proposal deterministically",()=>{const source=run(),first=distillRun(source,undefined,{packId:"distilled-source",title:"Distilled source"}),second=distillRun(source,undefined,{packId:"distilled-source",title:"Distilled source"});expect(first).toEqual(second);expect(first.proposals).toHaveLength(1);expect(first.proposals[0]).not.toHaveProperty("class");expect(first.document).not.toHaveProperty("deviations");expect((first.document.provenance as any).graduationBlockers.length).toBeGreaterThan(0);const validation=validatePackDocument(first.document);expect(validation.issues).toEqual([]);expect(validation.valid).toBe(true);});
+  it("refuses an invalid emitted document before returning it",()=>{expect(()=>assertDistilledPack({})).toThrow(/EMITTED_PACK_INVALID|SCHEMA_/u);});
 });

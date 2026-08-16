@@ -19,6 +19,7 @@ import {
   type ExpressionWitness,
 } from "./expression-satisfiability.js";
 import type { EvidenceLedger, EvidenceRecord } from "./sourcing/types.js";
+import { MACHINE_LABEL_EVIDENCE_KINDS } from "./sourcing/claim-binding.js";
 import { runDeclarationCensus } from "./declaration-census.js";
 
 export type CensusSubjectKind = "shape_trigger" | "shape_plan_signature" | "pack_success_condition" | "pack_fen_predicate" | "pack_window_closing" | "pack_key_point_ground" | "bare_expression";
@@ -43,12 +44,6 @@ const EVIDENCE_RUNG: Readonly<Record<string, number>> = Object.freeze({
   author_principle: 5,
   hypothesis: 5,
 });
-const LEDGER_KIND: Readonly<Record<string, readonly EvidenceRecord["kind"][]>> = Object.freeze({
-  tablebase_exact: ["tablebase_result"],
-  engine_validated: ["engine_eval"],
-  corpus_observed: ["explorer_frequency", "explorer_position_census"],
-});
-
 function absolutePly(fen: string): number {
   const fields = fen.split(" ");
   return (Number(fields[5] ?? "1") - 1) * 2 + (fields[1] === "b" ? 1 : 0);
@@ -97,7 +92,7 @@ export function evidenceCensus(packDocuments: ReadonlyMap<string, DrillPackDefin
     const ledger = evidenceLedger(absolute);
     const citations = [...new Set(claims.flatMap((claim) => claim.evidenceTypes))].sort().map((evidenceType) => {
       const claimIndexes = claims.flatMap((claim, index) => claim.evidenceTypes.includes(evidenceType) ? [index] : []);
-      const ledgerKinds = LEDGER_KIND[evidenceType];
+      const ledgerKinds = MACHINE_LABEL_EVIDENCE_KINDS[evidenceType];
       const bindings = claimIndexes.flatMap((index) => ledger?.claimBindings?.filter((binding) => binding.pointer === `/feedbackClaims/${index}/text`) ?? []);
       const assertionFamilies = new Set(bindings.flatMap((binding) => binding.spans.flatMap((span) => "assertion" in span ? [span.assertion.kind.split(".")[0]] : [])));
       const matching = ledgerKinds === undefined ? [] : ledger?.records.filter((record) => ledgerKinds.includes(record.kind) && assertionFamilies.has(record.kind === "tablebase_result" ? "tablebase" : record.kind === "engine_eval" ? "engine" : "explorer")) ?? [];

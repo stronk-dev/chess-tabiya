@@ -71,6 +71,11 @@ fails when its committed artifact is stale, and refreshes only under explicit `U
 D477 overlaps the in-flight shared-resource-registers RFC; D416/D402 are protocol work, not an
 unowned code patch. The other B4 rows were already closed.
 
+**B8 takeable members landed 2026-08-17:** D207 and D239 are closed. Missing ledgers no longer
+mask machine-labelled claims, and distillation now shares every other emitter's self-validation
+refusal. D430's map-duplication half also landed; its vocabulary-removal half remains RFC-owned.
+The remaining B8 rows are schema/content work and stay untouched.
+
 **Two findings in that document outrank most of the batches.** `db243f5` edited nineteen defect
 rows and **changed column 3 only** — writing *"✅ closed by pack-graduation 0.27"* into the
 disposition while leaving column 1 at 🐞/💡. So [[D418]] is exactly right, and **the wave that

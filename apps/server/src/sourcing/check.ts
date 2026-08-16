@@ -9,7 +9,11 @@ import { parseUci } from "chessops/util";
 import { validatePackDocument } from "../pack-validation.js";
 import { readJson } from "./canonical.js";
 import { deriveDeviationCost, deviationCostMatches } from "./deviation-cost.js";
-import { claimBindingForPointer, validateClaimBindings } from "./claim-binding.js";
+import {
+  MACHINE_LABEL_EVIDENCE_KINDS,
+  claimBindingForPointer,
+  validateClaimBindings,
+} from "./claim-binding.js";
 import { EXPLORER_TEMPLATE_ID, RATING_GROUPS, SPEEDS } from "./explorer.js";
 import {
   type EvidenceLedger,
@@ -196,12 +200,11 @@ export function evidenceSupports(
   if (object(pack) && Array.isArray(pack.feedbackClaims)) {
     const document = pack as unknown as DrillPackDefinition;
     const bindings = validateClaimBindings(document, ledger, issues);
-    const map: Readonly<Record<string, readonly EvidenceRecord["kind"][]>> = { engine_validated: ["engine_eval"], tablebase_exact: ["tablebase_result"], corpus_observed: ["explorer_frequency", "explorer_position_census"] };
     const published = object(pack.provenance) && pack.provenance.reviewStatus === "published";
     pack.feedbackClaims.forEach((raw, index) => {
       if (!object(raw) || !Array.isArray(raw.evidenceTypes)) return;
       for (const label of raw.evidenceTypes) {
-        const kinds = map[String(label)];
+        const kinds = MACHINE_LABEL_EVIDENCE_KINDS[String(label)];
         if (kinds === undefined) continue;
         const pointer = `/feedbackClaims/${index}/text`;
         const binding = claimBindingForPointer(bindings, pointer);
@@ -210,6 +213,23 @@ export function evidenceSupports(
     });
   }
   deviationCostEvidenceIssues(pack, costRecords, issues);
+}
+
+function missingLedgerClaimIssues(pack: unknown, issues: SourcingIssue[]): void {
+  if (!object(pack) || !Array.isArray(pack.feedbackClaims)) return;
+  const published = object(pack.provenance) && pack.provenance.reviewStatus === "published";
+  pack.feedbackClaims.forEach((raw, index) => {
+    if (!object(raw) || !Array.isArray(raw.evidenceTypes)) return;
+    for (const label of raw.evidenceTypes) {
+      if (MACHINE_LABEL_EVIDENCE_KINDS[String(label)] === undefined) continue;
+      issues.push(issue(
+        "EVIDENCE_TYPE_UNBACKED",
+        `/feedbackClaims/${index}/evidenceTypes`,
+        `${String(label)} has no evidence ledger`,
+        published ? "error" : "warning",
+      ));
+    }
+  });
 }
 
 export function deviationCostEvidenceIssues(
@@ -377,6 +397,7 @@ export async function checkSourcingDirectory(directory: string, options: { reado
   if (ledger && object(job) && job.pipeline === "position-seeds" && object(job.args) && job.args.engineEval !== true && ledger.records.some((record) => record.kind === "engine_eval")) {
     issues.push(issue("EVIDENCE_KIND_UNEXPECTED", "/records", "position-seeds may contain engine_eval only when the recorded job has engineEval: true"));
   }
+  if (pack && !ledger) missingLedgerClaimIssues(pack, issues);
   if (pack && ledger) {
     evidenceSupports(pack, ledger, manifest, issues);
     if (manifest && object(pack)) licenceObligations(pack, manifest, ledger, issues);
@@ -436,6 +457,7 @@ export async function checkSourcingFile(file: string, options: { readonly strict
   if (manifest && ledger) linkage(manifest, ledger, issues);
   offlineJobProvenance(job, manifest, issues);
   if (ledger) evidenceSemantics(ledger, issues, manifest, pack);
+  if (pack && !ledger) missingLedgerClaimIssues(pack, issues);
   if (pack && ledger) {
     evidenceSupports(pack, ledger, manifest, issues);
     if (manifest && object(pack)) licenceObligations(pack, manifest, ledger, issues);

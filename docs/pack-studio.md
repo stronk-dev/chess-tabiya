@@ -60,6 +60,8 @@ needed, returns classless fork proposals, and always declares graduation
 blockers. It never copies authored grading, deviation classes, claims, plan
 classes, annotations, or engine evidence. Registration therefore remains
 impossible until a human supplies and grounds the missing judgment.
+The distillation emitter validates the completed document before returning it
+and refuses `EMITTED_PACK_INVALID`, matching every other pack emitter.
 
 ## Pack format 0.8
 

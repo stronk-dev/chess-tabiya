@@ -44,6 +44,22 @@ async function engineFixture(): Promise<{ directory: string; file: string; pack:
 }
 
 describe("verify-draft", () => {
+  it("reports machine-labelled claims even when their evidence ledger is absent", async () => {
+    const { file, pack } = await engineFixture();
+    const labelled = structuredClone(pack) as DrillPackDefinition & {
+      feedbackClaims: Array<{ id: string; text: string; evidenceTypes: string[] }>;
+    };
+    labelled.feedbackClaims = [{
+      id: "fixture-machine-label",
+      text: "Fixture claim used only to exercise missing-ledger routing.",
+      evidenceTypes: ["corpus_observed"],
+    }];
+    await writeFile(file, JSON.stringify(labelled), "utf8");
+    const checked = await checkSourcingFile(file);
+    expect(checked.issues.map((issue) => issue.code)).toContain("EVIDENCE_READ_ERROR");
+    expect(checked.issues.map((issue) => issue.code)).toContain("EVIDENCE_TYPE_UNBACKED");
+  });
+
   it("writes flat sidecars that earn the existing ledger_verified admission", async () => {
     const { file, pack } = await fixture();
     const firstDeviation = pack.deviations![0]!;

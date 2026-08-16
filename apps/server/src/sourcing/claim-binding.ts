@@ -165,7 +165,7 @@ function normalizes(span: string, assertion: ClaimAssertion, value: unknown): bo
 
 const MACHINE_TOKEN = /(?:\b\d+(?:[,.]\d+)*(?:%|st|nd|rd|th)?\b|\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth|twentieth)(?:-[a-z]+)?\b|\b(?:[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h][1-8])\b|\b(?:win|won|draw|drawn|loss|lost|stalemate|checkmate)\b)/gi;
 const RATE_TOKEN = /(?:[+-]?\d+\.\d+%?)/;
-const MACHINE_LABELS: Readonly<Record<string, readonly EvidenceRecord["kind"][]>> = Object.freeze({ corpus_observed:["explorer_frequency","explorer_position_census"], engine_validated:["engine_eval"], tablebase_exact:["tablebase_result"] });
+export const MACHINE_LABEL_EVIDENCE_KINDS: Readonly<Record<string, readonly EvidenceRecord["kind"][]>> = Object.freeze({ corpus_observed:["explorer_frequency","explorer_position_census"], engine_validated:["engine_eval"], tablebase_exact:["tablebase_result"] });
 
 function segments(text: string): readonly string[] {
   return text.split(/(?<=[.?!])\s+(?=[A-Z"'“(])|(?<=[;:])\s+|\s+[—–]\s+|\s+-\s+|,?\s+(?=(?:so|therefore|thus|hence|which means|because|since)\b)/i).map((part) => part.trim()).filter(Boolean);
@@ -203,7 +203,7 @@ export function validateClaimBindings(pack: DrillPackDefinition, ledger: Evidenc
     if (residue !== null) issues.push(issue("CLAIM_ASSERTION_UNDECLARED", base, `undeclared machine-shaped token ${residue[0]}`));
     const authorSegments = segments(claim.text).filter((segment) => { const start=claim.text.indexOf(segment), end=start+segment.length; return !instrumentRanges.some((range) => range.start >= start && range.end <= end); });
     if (authorSegments.length > 0 && !claim.evidenceTypes.includes("author_principle")) issues.push(issue("CLAIM_AUTHOR_LABEL_REQUIRED", `/feedbackClaims/${index}/evidenceTypes`, "this claim contains authored assertion; add author_principle and name the principle it rests on"));
-    for (const label of claim.evidenceTypes) if (MACHINE_LABELS[label] !== undefined && !kinds.some((kind) => MACHINE_LABELS[label]!.includes(kind))) issues.push(issue("CLAIM_LABEL_UNEARNED", `/feedbackClaims/${index}/evidenceTypes`, `${label} has no instrument-attributed segment`));
+    for (const label of claim.evidenceTypes) if (MACHINE_LABEL_EVIDENCE_KINDS[label] !== undefined && !kinds.some((kind) => MACHINE_LABEL_EVIDENCE_KINDS[label]!.includes(kind))) issues.push(issue("CLAIM_LABEL_UNEARNED", `/feedbackClaims/${index}/evidenceTypes`, `${label} has no instrument-attributed segment`));
     if (authorSegments.some((segment) => RATE_TOKEN.test(segment))) issues.push(issue("CLAIM_READING_UNATTRIBUTED", `/feedbackClaims/${index}/text`, "a rate cannot be routed as authored judgement"));
     if (issues.length === before) result.push(Object.freeze({ binding, pointer: binding.pointer, claimId: binding.claimId, instrumentKinds: Object.freeze(kinds), rendered: Object.freeze(rendered), authorSpans: Object.freeze(authorSegments), disposition: authorSegments.length === 0 ? "ledger_bound" : "author_attributed" }));
   }

@@ -16,6 +16,10 @@ uniformity, legal-move censuses and unique moves; engine centipawns and depth; a
 outcome shares, move shares, windows, and rating bands. `explorer_position_census` is the ledger
 record that carries the last family.
 
+A missing ledger is reported twice on purpose: once as the missing sidecar and once for every
+machine-labelled claim that consequently has no backing. The sidecar failure must not mask the
+size or location of the unbacked-claim population.
+
 Bindings classify a claim as `ledger_bound` only when every segment is instrument-attributed, or
 `author_attributed` when instrument and author segments coexist. Pure authored claims remain
 `self_declared`. Registration projects the instrument readings, author spans, and resolved

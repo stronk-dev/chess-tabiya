@@ -1,7 +1,9 @@
 import { branchPath, type DrillRun } from "@chess-tabiya/runtime";
 import type { GraduationEntry } from "@chess-tabiya/schema/drill-pack";
 import type { PackRecord } from "./pack-registry.js";
+import { validatePackDocument } from "./pack-validation.js";
 import { ServerError } from "./errors.js";
+import { SourcingError } from "./sourcing/types.js";
 
 export interface DistillProposal {
   readonly kind: "deviation";
@@ -21,6 +23,16 @@ export interface Distillation {
 }
 
 const distilledId = (nodeId: string) => `distilled-${nodeId.toLowerCase().replace(/[^a-z0-9-]+/g,"-").replace(/-+/g,"-").replace(/-$/g,"")}`;
+
+export function assertDistilledPack(document: unknown): void {
+  const validation = validatePackDocument(document);
+  if (!validation.valid) {
+    throw new SourcingError(
+      "EMITTED_PACK_INVALID",
+      validation.issues.map((value) => `${value.path} ${value.code}: ${value.message}`).join("; "),
+    );
+  }
+}
 
 export function distillRun(run: DrillRun, source: PackRecord | undefined, input: { readonly packId: string; readonly title: string; readonly branchId?: string }): Distillation {
   const allowed = run.branches.filter((branch) => branch.origin !== "simulated");
@@ -87,5 +99,6 @@ export function distillRun(run: DrillRun, source: PackRecord | undefined, input:
     opponentPolicy: run.opponentPolicy,
     spine: build(root.id), checkpoints,
   });
+  assertDistilledPack(document);
   return Object.freeze({ document, proposals: Object.freeze(proposals), dropped: Object.freeze(dropped) });
 }

@@ -3173,3 +3173,16 @@ committed report said 37 packs and 634 transitions while the current corpus meas
 After the explicit refresh, the ordinary run passed. The artifact's SHA-256 remained
 `3996e4476aa181303ae754272f85529c793c2ec49e451960d4b7e19bfdcf8bc2` before and after that ordinary
 run, demonstrating that verification now detects drift without causing it.
+
+## 2026-08-17 — the graduation-emitter residue stopped masking its failures
+
+The two independently takeable B8 defects are closed. A missing evidence ledger still reports
+`EVIDENCE_READ_ERROR`, but now also reports `EVIDENCE_TYPE_UNBACKED` at every machine-labelled
+claim it masks. This makes the size and location of the unbacked population visible instead of
+collapsing it into one missing-file error.
+
+Run distillation now validates the completed pack before returning and refuses
+`EMITTED_PACK_INVALID`, matching the openings, Syzygy and position-seed emitters. A planted invalid
+document proves the refusal path. The machine-label-to-record map was exported and is now consumed
+by binding validation, sourcing checks and the expression census; D430 remains open only for its
+RFC-owned dead-vocabulary half.
