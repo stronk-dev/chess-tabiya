@@ -79,7 +79,56 @@ are **one atomic write**, priced once.
 `content/drafts/` are accepted as `out_of_scope`, which is correct-in-kind and leaves every
 corpus denominator contaminated. [[D227]] and [[D257]] stay open and own that.
 
+## 0c. Three live defects in what you just shipped — take these FIRST
+
+The independent review ran. **The code is right and `make verify` reproduces (727/114).** These
+are three defects it found in the shipped tree, in priority order. **`opponent-contracts` does
+not archive until at least D452 is fixed** — it breaks the guarantee the RFC exists to protect.
+
+- **[[D452]] — the remedy introduced a determinism bug, and it is one line.** `neutralTiebreakKey`
+  consumes the **whole `makeFen` output**, which includes the **fullmove counter**. Demonstrated
+  by the reviewer: identical board, side, castling, ep and halfmove clock at fullmove 1 vs 30
+  selects **`e1f1` vs `e2e4`**. `localeCompare` was insensitive to this, so **the fix introduced
+  the defect it was written to prevent**: `grounding-pair` §2c promises *"two runs, or two
+  branches of one group, replaying the same position always receive the same reply"*, and §3.3(3)
+  re-asserts it verbatim. **A8 cannot see it** — its ancestor FEN is constructed so both paths
+  yield byte-identical FENs. **Fix: key on the first four FEN fields.** The halfmove clock
+  legitimately participates (it drives cursed/blessed categories); the fullmove counter has no
+  chess content and does not affect the tablebase answer. **Add a test that fails before the fix.**
+- **[[D453]] — `orderingBasis` is persisted on modes that have none, and our own fixture asserts
+  the violating case.** §3.4 is normative that *"no other mode emits it"* and **nothing enforces
+  it** — not `rest.ts`, not the run schema, not `events.ts`. `api.test.ts`'s selection is
+  `{policyModeApplied: "human_common", orderingBasis: "none"}`, and the REST seam test commits
+  exactly that and asserts it round-trips. **A `human_common` selection stamped
+  `orderingBasis: "none"` is a persisted claim that Maia declared its candidates unordered.**
+  Same *record* family as D57. Fix the constraint **and** the fixtures.
+- **[[D454]] — D382's closure covers 1 of 3 nested objects on the same wire path.**
+  `parseOpponentSelection` is closed; **`parseSelectionCandidate` and `parseSelectionEngine`
+  still call the open `record()` and rebuild field-by-field**, while `$defs/selectionCandidate`
+  and `$defs/selectionEngine` are both `additionalProperties: false`. The exact hazard D382 was
+  opened for is live one level down. Its ledger row is **narrowed, not re-opened** — closing
+  these two discharges it.
+
+Lower priority, same review: **[[D455]]** (A4's anti-drift binding does not exist — no test reads
+the dossier; eight literals hand-copied into five files), **[[D456]]** (`out/census.json` was not
+regenerated and still shows the pre-fix `7/66`, while the same commit's README says the tool
+follows the current contract — and the 507-row corpus is uncommitted, with the logged hash
+matching nothing on disk), **[[D457]]** (the census keys on rounded `dtz`, the runtime on
+`preciseDtz`), **[[D458]]** (A5's client scan excludes `apps/web/src/lib/api.ts`, the one client
+file that carries the figures it forbids).
+
 ## 1. Independent review owed, not implementation
+
+**`opponent-contracts` DOES NOT ARCHIVE YET.** The independent review returned
+*archive-with-follow-ups*, conditional on one body edit that is now made: **A10 fired and was
+scored a pass.** It read *"the won-root enrichment must not move… if it moves materially,
+§3.2's reading of the census is wrong — this criterion exists to be able to fail."* It moved,
+**1.571× → 1.178×**, from an interval excluding uniform (p = 0.0101) to one covering it
+(p = 0.414), and was recorded as a pass because 11.01% sits **0.4 pp** inside the pre-fix
+interval. **You noticed and reported the movement and did not draw the consequence** — which is
+the better half of the failure, and why it was catchable. §3.2 and A10's verdict are corrected.
+**The remedy is unaffected**: §3.3 clause 2 already covered all three arms, so the winning side
+was fixed *by specification*, not incidentally. What was wrong is the diagnosis.
 
 `opponent-contracts` shipped at `6ba0736`: **run schema 0.17**, **migration 23**, mode-scope
 resistance on `/capabilities`, the neutral `sha256(fen\0uci)` residual tiebreak with
