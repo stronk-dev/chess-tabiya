@@ -19,6 +19,7 @@ import {
   type ExpressionWitness,
 } from "./expression-satisfiability.js";
 import type { EvidenceLedger, EvidenceRecord } from "./sourcing/types.js";
+import { runDeclarationCensus } from "./declaration-census.js";
 
 export type CensusSubjectKind = "shape_trigger" | "shape_plan_signature" | "pack_success_condition" | "pack_fen_predicate" | "pack_window_closing" | "pack_key_point_ground" | "bare_expression";
 export interface CensusSubject {
@@ -254,6 +255,8 @@ export interface CensusOptions {
   readonly expression?: StructuralExpression;
   readonly witnesses?: Readonly<Record<string, readonly ExpressionWitness[]>>;
   readonly degenerates?: boolean;
+  readonly declarations?: boolean;
+  readonly declarationSourceOverrides?: Readonly<Record<string, string>>;
 }
 
 export function runExpressionCensus(options: CensusOptions = {}): any {
@@ -315,12 +318,27 @@ export function runExpressionCensus(options: CensusOptions = {}): any {
     };
   });
   const count = (label: string) => records.filter((record) => record.observations.includes(label)).length;
+  const declarationReport = options.declarations === true
+    ? runDeclarationCensus({
+        packs: [...packDocuments.values()],
+        ...(options.declarationSourceOverrides === undefined ? {} : { sourceOverrides: options.declarationSourceOverrides }),
+      })
+    : undefined;
   return Object.freeze({
     schema: "tabiya.authoring.census.v1",
     corpus: { roots: roots.map(displayPath), packs: packDocuments.size, fixturePacks: fixturePacks.sort(), positions: positions.length, transitions: positions.length - packDocuments.size, packsWithoutSpine: packsWithoutSpine.sort(), shapeEntries: shapeFiles.length },
     evidence: evidenceCensus(packDocuments),
     subjects: Object.freeze(records),
-    totals: { subjects: records.length, neverFiresInCorpus: count("NEVER_FIRES_IN_CORPUS"), firesOnlyOutsideShape: count("FIRES_ONLY_OUTSIDE_SHAPE"), inShapeDenominatorEmpty: count("IN_SHAPE_DENOMINATOR_EMPTY"), unsatisfiable: count("UNSATISFIABLE"), satisfiabilityUnknown: count("SATISFIABILITY_UNKNOWN") },
+    ...(declarationReport === undefined ? {} : { declarations: declarationReport.declarations }),
+    totals: {
+      subjects: records.length,
+      neverFiresInCorpus: count("NEVER_FIRES_IN_CORPUS"),
+      firesOnlyOutsideShape: count("FIRES_ONLY_OUTSIDE_SHAPE"),
+      inShapeDenominatorEmpty: count("IN_SHAPE_DENOMINATOR_EMPTY"),
+      unsatisfiable: count("UNSATISFIABLE"),
+      satisfiabilityUnknown: count("SATISFIABILITY_UNKNOWN"),
+      ...(declarationReport === undefined ? {} : { declarations: declarationReport.totals }),
+    },
   });
 }
 
@@ -342,6 +360,7 @@ async function main(): Promise<number> {
       ...(selectedExpression === undefined ? {} : { expression: selectedExpression }),
       witnesses,
       degenerates: option("--degenerate") !== "0",
+      declarations: option("--declarations") === "1",
     });
     const output = `${canonicalizeJson(report)}\n`;
     const out = option("--out");

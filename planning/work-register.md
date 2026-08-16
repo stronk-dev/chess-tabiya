@@ -43,7 +43,9 @@ drafting capacity. A wave advances when its drafts are cross-reviewed and queued
 **WAVE 1 (drafting now):** A (delivery) + B (engine leverage).
 **WAVE 2:** C (content-vocabulary wiring) + D (live-surface honesty).
 **WAVE 3:** E (dead vocabulary) + G (process). F is a content wave, not an RFC, and
-runs alongside whichever wave has room.
+runs alongside whichever wave has room. **Cluster E's product dispositions landed through
+`rfc/archive/format-surface.md`; `rfc/dead-vocabulary.md` owns only the residual, report-only
+declaration census.**
 
 **A. Delivery — the Q8 remedy.** D77 (0 of 131 feedback claims can reach a
 learner), D78 (compare strip discriminates at 1.01×), D79 (`stated_reasoning`
@@ -69,9 +71,13 @@ host-seated player gets evidence the guest cannot), D81 (`session.kind` is
 decorative), D82 (five assistance contexts, three shipped keys), D83 (missing
 attribution line; vote form hardcodes 2 of 8 options).
 
-**E. Dead and no-op vocabulary.** D84 (`arrows` fully plumbed, no renderer), D85
-(`SIMULATE_BUDGET_EXCEEDED` declared, never thrown), D86 (`retryVariants` has no
-runtime effect), D39, D40, D57, D59.
+**E. Dead and no-op vocabulary — owned and disposed.** `rfc/archive/format-surface.md`
+owns D84 (`arrows`, classified `unmeasured`), D85
+(`SIMULATE_BUDGET_EXCEEDED`, retired), D86 (`retryVariants`, refused with `variantOf` as its
+incomplete successor), and D57 (recording disposition); D39 and D40 closed earlier through
+`validator-integrity`. `rfc/dead-vocabulary.md` owns the residual declaration census only:
+measurement of producers, consumers, refusal sites, and corpus firings without turning zero
+into a verdict.
 
 **F. Content fixes — ✅ RAN 2026-08-15 (`41afe00`), re-verified and flowed back 2026-08-16.** *The register called this unlaunched for a day because a content wave has no completion protocol: it shipped its fixes and lost its rows.* **F. Content fixes — a content wave, not an RFC.** D75 (`rook-4v3-same-side`'s
 trigger is loose, not its signature), D76 (`fianchetto-g7` arm from the wrong side
@@ -119,6 +125,7 @@ wave.** Members:
 | **D105** — a `retryVariants` note names a pack that does not exist, and nothing can see it | unowned |
 | **D106** — `targetElo` accepted beside `strong_engine` and silently dropped; `format-surface` scoped it out by name | unowned |
 | **D127** — the shape library can author a plan success signature the pack layer refuses to grade on | unowned |
+| **D86 stage two** — retire `retryVariants` only after `variantOf` can express all retained relations | measured: **2** packs already author `variantOf`; those packs retain **3** `retryVariants` entries the singular relation cannot express. Needs the `variantOf` array widening before retirement |
 
 **Why a cluster and not four rows:** all four are *authoring expressiveness* — an author can
 write something the runtime cannot honour, or cannot write something the runtime would

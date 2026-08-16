@@ -10,6 +10,7 @@ import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
 
 import { evidenceCensus, runExpressionCensus } from "./expression-census.js";
+import { runDeclarationCensus } from "./declaration-census.js";
 import { checkShapeFile, formatProbeResult } from "./shape-check.js";
 import { validateShapeEntry } from "./shape-validation.js";
 
@@ -19,6 +20,7 @@ function packFiles(): string[] {
 
 const witnesses = JSON.parse(readFileSync("content/witnesses/expression-witnesses.json", "utf8"));
 const fullReport = runExpressionCensus({ witnesses });
+const fullDeclarationReport = runExpressionCensus({ witnesses, declarations: true });
 
 describe("expression census", () => {
   it("walks every pack including root-only fixtures and reports the fixture split", () => {
@@ -134,7 +136,104 @@ describe("expression census", () => {
     expect(source).not.toMatch(/chessops\/(?:util|chess)|\.spine|moveUci|parseUci/u);
     const makefile = readFileSync("Makefile", "utf8");
     expect(makefile.match(/^verify:.*$/mu)?.[0]).not.toContain("expression-census");
+    expect(makefile).toContain('$(if $(DECLARATIONS),--declarations "$(DECLARATIONS)",)');
   });
+
+  it("enumerates all four declaration namespaces from live sources", () => {
+    expect(fullDeclarationReport.declarations.length).toBeGreaterThan(0);
+    expect(Object.keys(fullDeclarationReport.totals.declarations).sort()).toEqual([
+      "assistance", "corpus", "error", "runtime", "schema",
+    ]);
+    for (const namespace of ["schema", "error", "assistance", "runtime"]) {
+      const rows = fullDeclarationReport.declarations.filter((row: any) => row.namespace === namespace);
+      expect(rows.length).toBeGreaterThan(0);
+      expect(rows.every((row: any) => row.declaredAt.module.length > 0 && row.declaredAt.symbol.length > 0)).toBe(true);
+    }
+  });
+
+  it("derives each declaration namespace rather than pinning a subject list", () => {
+    const baseline = runDeclarationCensus();
+    const schema = JSON.parse(readFileSync("schemas/drill_pack.schema.json", "utf8"));
+    schema.$defs.opponentPolicy.properties.mode.enum.push("fixture_mode");
+    const errors = readFileSync("apps/server/src/errors.ts", "utf8").replace(
+      '| "TARGET_ELO_OUT_OF_RANGE";',
+      '| "TARGET_ELO_OUT_OF_RANGE"\n  | "FIXTURE_ERROR";',
+    );
+    const assistance = readFileSync("packages/runtime/src/assistance.ts", "utf8").replace(
+      'readonly arrows: "off" | "sight" | "evidence";',
+      'readonly arrows: "off" | "sight" | "evidence" | "fixture";',
+    );
+    const transition = readFileSync("packages/runtime/src/transition.ts", "utf8").replace(
+      'export type IrreversibilityDetail =',
+      'export type IrreversibilityDetail =\n  | { readonly subkind: "fixture" }',
+    );
+    const cases = [
+      ["schema", { "schemas/drill_pack.schema.json": JSON.stringify(schema) }],
+      ["error", { "apps/server/src/errors.ts": errors }],
+      ["assistance", { "packages/runtime/src/assistance.ts": assistance }],
+      ["runtime", { "packages/runtime/src/transition.ts": transition }],
+    ] as const;
+    for (const [namespace, sourceOverrides] of cases) {
+      const mutated = runDeclarationCensus({ sourceOverrides });
+      expect(mutated.totals[namespace].subjects).toBe(baseline.totals[namespace].subjects + 1);
+    }
+  }, 20_000);
+
+  it("finds producerless error codes without misclassifying the six observed near misses", () => {
+    const rows = fullDeclarationReport.declarations.filter((row: any) => row.namespace === "error");
+    expect(rows.filter((row: any) => row.producers.length === 0).map((row: any) => row.subject)).toEqual([]);
+    for (const code of [
+      "VOICE_UNAVAILABLE", "TTS_UNAVAILABLE", "CORPUS_UNAVAILABLE",
+      "PERFECT_TABLEBASE_OUT_OF_RANGE", "PRACTICAL_RESISTANCE_OUT_OF_RANGE",
+      "REPERTOIRE_IMPORT_LIMIT",
+    ]) {
+      expect(rows.find((row: any) => row.subject === code)?.producers.length).toBeGreaterThan(0);
+    }
+    const errors = readFileSync("apps/server/src/errors.ts", "utf8").replace(
+      '| "TARGET_ELO_OUT_OF_RANGE";',
+      '| "TARGET_ELO_OUT_OF_RANGE"\n  | "FIXTURE_PRODUCERLESS";',
+    );
+    const fixture = runDeclarationCensus({ sourceOverrides: { "apps/server/src/errors.ts": errors } });
+    expect(fixture.declarations.find((row) => row.namespace === "error" && row.subject === "FIXTURE_PRODUCERLESS")?.producers).toEqual([]);
+  });
+
+  it("reproduces the clock-zeroed refutation on the shared transition denominator", () => {
+    const rows = fullDeclarationReport.declarations.filter((row: any) => row.namespace === "runtime");
+    const observation = (value: string) => rows.find((row: any) => row.subject === `TransitionObservation=${JSON.stringify(value)}`);
+    const clock = observation("clock_zeroed");
+    expect(clock).toMatchObject({ corpusFirings: expect.any(Number) });
+    expect(clock.producers.length).toBeGreaterThanOrEqual(2);
+    expect(clock.corpusFirings).toBeGreaterThan(0);
+    const others = ["pawn_break", "castled", "last_of_role"].map((value) => observation(value));
+    expect(others.every((row: any) => row?.corpusFirings > 0)).toBe(true);
+    expect(clock.corpusFirings).toBeGreaterThan(others.reduce((sum: number, row: any) => sum + row.corpusFirings, 0));
+    expect(fullDeclarationReport.totals.declarations.corpus.transitions).toBe(fullDeclarationReport.corpus.transitions);
+  });
+
+  it("keeps zeros factual and separates refusal sites from consumers", () => {
+    const declarations = fullDeclarationReport.declarations;
+    expect(JSON.stringify(declarations)).not.toMatch(/"(?:dead|unreachable|unsatisfiable|unused)"/u);
+    const retry = declarations.find((row: any) => row.namespace === "schema" && row.subject === "/retryVariants");
+    expect(retry).toMatchObject({
+      consumers: [],
+      refusalSites: [{ module: "apps/server/src/pack-validation.ts", symbol: "runtimeIssues", code: "RETRY_VARIANTS_NOT_EXECUTABLE" }],
+      dispositionRow: "/retryVariants",
+    });
+  });
+
+  it("keeps declaration discovery opt-in, deterministic, and content-read-only", () => {
+    expect(runExpressionCensus({ witnesses })).toEqual(runExpressionCensus({ witnesses, declarations: false }));
+    expect(fullReport).not.toHaveProperty("declarations");
+    const trackedRoots = ["content", "schemas", "packages"];
+    const walk = (path: string): string[] => readdirSync(path, { withFileTypes: true }).flatMap((entry) => {
+      const child = resolve(path, entry.name);
+      return entry.isDirectory() && entry.name !== "node_modules" && entry.name !== "dist" ? walk(child) : entry.isFile() ? [child] : [];
+    });
+    const digest = () => trackedRoots.flatMap(walk).sort().map((file) => [file, createHash("sha256").update(readFileSync(file)).digest("hex")]);
+    const before = digest();
+    expect(canonicalizeJson(runExpressionCensus({ witnesses, declarations: true }))).toBe(canonicalizeJson(fullDeclarationReport));
+    expect(digest()).toEqual(before);
+  }, 30_000);
 
   it("refuses a proven impossibility without dropping probeMatches", () => {
     const entry = JSON.parse(readFileSync("content/shapes/carlsbad.json", "utf8"));

@@ -1,6 +1,7 @@
 # RFC: Dead vocabulary — the wave's rows are owned; its instrument is not
 
-- **Status:** **accepted 2026-08-16**, after cross-review; corrections landed in the body.
+- **Status:** **implementing 2026-08-16**, after acceptance and cross-review; implementation
+  is complete pending full gates and independent review.
   All three Open questions are explicitly non-blocking by their own text — 1 is *not claimed*
   and routed to whichever RFC next edits `dispositions.ts`, 2 is *deferred to first use* on
   [[D53]]'s free-parameter grounds, 3 is *routed* to whichever RFC next owns
