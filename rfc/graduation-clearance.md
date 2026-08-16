@@ -1,6 +1,12 @@
 # RFC: Graduation clearance — how a blocker stops blocking
 
-- **Status:** **accepted 2026-08-16** — author round complete, cross-review corrections landed, and
+- **Status:** **returned to author 2026-08-16 after implementation review** — four contract
+  blockers remain: `ledger_record` cannot name the record kind it promises to verify; the 30
+  historical `resolved` entries are not all representable by the proposed resolvable subject;
+  the automatic blocking→resolved transition has no specified writer; and the line-level
+  `git blame` admission check is assigned to a runtime validator shipped without Git history.
+  **Do not implement until D464–D467 are closed in the governing sections.** The preceding
+  author-round record is retained below as history: author round complete, cross-review corrections landed, and
   **all four author-call open questions closed in this document** (1, 2, 3, 7); question 5 stays
   deliberately deferred to the first content wave with its follow-up recorded. **No owner ruling is
   owed.** Question 1's cheap answer is taken *and* fenced: accepting six browser fixtures as
@@ -45,6 +51,25 @@
   that RFC decided; it specifies the one thing it deliberately left unspecified.
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/graduation-clearance/` (once implementing)
+
+## Implementation review — 2026-08-16
+
+The RFC did not survive implementation review. These are contract questions, not coding details,
+so no implementation was started:
+
+1. `clearance.kind: "ledger_record"` says it verifies a **named evidence-record kind**, but the
+   proposed object carries only `kind`, `subject`, and `instrument`. It cannot distinguish an
+   `engine_eval` obligation from an `explorer_position_census` obligation.
+2. Stage B requires every one of the 30 historical `resolved` entries to gain a clearance with a
+   currently resolvable `subject`. Several resolutions describe removed nodes or lines; the RFC
+   supplies no honest encoding for a historical subject that no longer exists.
+3. Criterion 3 requires four blocking entries to become resolved automatically, but the named
+   checker returns issues and has no mutation output or transition owner. Which command writes the
+   state transition, and what it writes, is unspecified.
+4. `GRADUATION_RULING_SELF_MINTED` is assigned to `validatePackDocument`, while the production
+   server image contains neither `.git` nor a Git executable/history. The RFC must place that check
+   on a build/promotion path that actually has its evidence, or specify how runtime validation can
+   perform it without silently weakening official versus community admission.
 
 ## Summary
 

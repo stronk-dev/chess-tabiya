@@ -1,10 +1,12 @@
-# Codex queue — rebuilt 2026-08-16 after `opponent-contracts` landed
+# Codex queue — refreshed 2026-08-16 after implementation review
 
-Derived from `rfc/README.md` and `design/BACKLOG.md` at `6ba0736`, not from memory.
-`opponent-contracts` is committed (`feat: implement opponent contracts`), so the previous
-item 0 is discharged and this file was empty behind it again.
+Derived from `rfc/README.md` and `design/BACKLOG.md`, not from memory. **There is no takeable
+implementation item at current HEAD.** `dead-vocabulary` is implemented pending independent
+review; `graduation-clearance` was returned to author on D464–D467; the opponent-contract review
+follow-ups through D458 have landed, with D457 deliberately still open pending a retained-corpus
+rerun.
 
-## 0. `rfc/dead-vocabulary.md` — ACCEPTED 2026-08-16, take it
+## 0. `rfc/dead-vocabulary.md` — DONE, pending independent review
 
 Cross-reviewed and accepted the same day. **Claims nothing versioned** — no pack lane, no run
 schema, no migration, no `STORAGE_VERSION` position. It extends the shipped
@@ -40,18 +42,19 @@ to flip D360's ledger row, which already reads `✅ refuted 2026-08-16`.
 `make verify` **and** writes no content. Criterion 13 asserts the second half, which the
 draft had asserted only in prose.
 
-## 0b. `rfc/graduation-clearance.md` — ACCEPTED 2026-08-16, take it after `dead-vocabulary`
+## 0b. `rfc/graduation-clearance.md` — RETURNED TO AUTHOR, do not take
 
 Claims **pack schema 0.28** — earned, not discretionary: `$defs/provenance` and
 `$defs/graduationEntry` are **both `additionalProperties: false` at 0.27**, so there is no
 unversioned hiding place for five `$defs`-level changes. **No migration position, no run
 schema, no shape-entry** — deliberately, so it does not join [[D423]]'s three-way contest.
 
-**All four author-call open questions are closed in the body.** Question 5 is deferred to the
-first content wave *by design*, with its follow-up recorded. **No owner ruling is owed** —
-do not wait for one.
+The prior author-call open questions are closed, but implementation review found four new contract
+blockers in D464–D467. They require an author round, not an implementer's inference: add the ledger
+record-kind discriminator; represent historical resolved subjects honestly; name the transition
+writer and output; and place the Git-backed admission check on a path that actually has Git history.
 
-Three things that changed under the RFC and that you should read before implementing:
+Historical review notes follow; they are not authorization to implement:
 
 - **The classifier ruleset is now PUBLISHED** (§5.1a, seven literal keyword rules) and every
   count is its output. The residue is **17, not 12** — and the four entries the cross-review
@@ -79,7 +82,7 @@ are **one atomic write**, priced once.
 `content/drafts/` are accepted as `out_of_scope`, which is correct-in-kind and leaves every
 corpus denominator contaminated. [[D227]] and [[D257]] stay open and own that.
 
-## 0c. Three live defects in what you just shipped — take these FIRST
+## 0c. Opponent-contract review defects — DONE through D458; D457 measurement remains open
 
 The independent review ran. **The code is right and `make verify` reproduces (727/114).** These
 are three defects it found in the shipped tree, in priority order. **`opponent-contracts` does
