@@ -262,6 +262,18 @@ export function projectRun(events: readonly DrillRunEvent[]): DrillRun {
         break;
       }
       case "opponent.move_selected":
+        if (
+          event.data.selection.orderingBasis !== undefined &&
+          event.data.selection.policyModeApplied !== "perfect_tablebase"
+        ) {
+          throw new TypeError(
+            `opponent.move_selected ${event.seq} orderingBasis requires perfect_tablebase`,
+          );
+        }
+        if (!nodes.some((node) => node.id === event.data.nodeId)) {
+          throw unknownNode(event.data.nodeId);
+        }
+        break;
       case "feedback.revealed":
         if (!nodes.some((node) => node.id === event.data.nodeId)) {
           throw unknownNode(event.data.nodeId);

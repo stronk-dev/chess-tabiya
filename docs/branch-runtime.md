@@ -358,8 +358,9 @@ remains byte-identical.
 
 Migration 23 stamps v0.16 snapshots and indexed rows to run schema v0.17 using
 the frozen literals `0.16` and `0.17`. It adds no event and infers no ordering:
-historical opponent selections keep `orderingBasis` absent. New selections may record
-`dtz_ascending`, `dtz_descending`, or `none`, and read-back replay preserves the value.
+historical opponent selections keep `orderingBasis` absent. New `perfect_tablebase`
+selections record `dtz_ascending`, `dtz_descending`, or `none`; other modes cannot carry
+the field, and read-back replay preserves the value.
 
 ## Derived Line Drill state
 

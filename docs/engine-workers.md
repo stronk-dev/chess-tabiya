@@ -216,7 +216,7 @@ The living schema is now v0.17; it retains both engine amendments, the v0.5
 session identity/reveal contract, the v0.6 terminal outcome contract, and the
 recorded applied-policy field documented in `docs/branch-runtime.md`. New strong
 engine selections also retain their applied search bound. Perfect-tablebase selections
-record `orderingBasis` as `dtz_ascending`, `dtz_descending`, or `none`; migration 23
+alone record `orderingBasis` as `dtz_ascending`, `dtz_descending`, or `none`; migration 23
 stamps historical v0.16 runs without inferring that optional fact.
 Candidate records may retain exact centipawn and WDL measurements. UCI
 `upperbound` and `lowerbound` lines are not recorded as exact measurements, and

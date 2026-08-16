@@ -18,7 +18,6 @@ const run = createRun({
 const selection: OpponentSelection = {
   moveUci: "h2h1",
   policyModeApplied: "human_common",
-  orderingBasis: "none",
   engine: {
     id: "mock",
     name: "Mock",
@@ -194,7 +193,7 @@ describe("DrillApi", () => {
       historyUci: [],
       policy: { mode: "human_common", policyConfigDigest: run.packDigest! },
       seed: 7,
-    })).resolves.toMatchObject({ orderingBasis: "none" });
+    })).resolves.toMatchObject({ policyModeApplied: "human_common" });
     await api.humanSplit(run.id, run.nodes[0]!.id);
     await api.voice(run.id, run.nodes[0]!.id, "reading");
     await api.move(run.id, { uci: "a2a3" }, "writer-one");
@@ -224,9 +223,7 @@ describe("DrillApi", () => {
     });
 
     const moveCalls = calls.filter((call) => new URL(call.url).pathname.endsWith("/moves"));
-    expect(JSON.parse(String(moveCalls[1]!.init!.body))).toMatchObject({
-      selection: { orderingBasis: "none" },
-    });
+    expect(JSON.parse(String(moveCalls[1]!.init!.body)).selection).not.toHaveProperty("orderingBasis");
 
     expect(calls.map((call) => new URL(call.url).pathname)).toEqual([
       "/capabilities",

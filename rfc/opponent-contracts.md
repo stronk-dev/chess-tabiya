@@ -536,8 +536,10 @@ ground that if a choice is arbitrary, *arbitrary-and-uncorrelated* is honest whi
    DTZ-optimality argument stands untouched.
 2. **Every residual tie** — equal |DTZ|, both-null DTZ, and the whole drawn root — is broken
    by `neutralTiebreak`, defined as ascending hex order of
-   `sha256(fen + "\0" + uci)`, where `fen` is the same string the mode already probes with
-   (`makeFen(currentPosition(request).toSetup())`, `:626`, carrying the true halfmove clock),
+   `sha256(positionKey + "\0" + uci)`, where `positionKey` is the first five fields of the
+   FEN the mode already probes with (`makeFen(currentPosition(request).toSetup())`, `:626`):
+   board, side to move, castling, en-passant, and the true halfmove clock. The fullmove
+   counter is excluded because it has no chess content,
    with `uci.localeCompare` retained as a final total-order guarantee that is unreachable in
    practice.
 3. `neutralTiebreak` uses **no seed and no history**. It is a pure function of the position,

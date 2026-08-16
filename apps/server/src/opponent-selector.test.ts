@@ -400,6 +400,19 @@ describe("pure opponent selector", () => {
     expect(direct.orderingBasis).toBe("none");
   });
 
+  it("ignores only the fullmove counter in the neutral position key", () => {
+    const fullmoveOne = "4k3/6KP/8/8/8/8/8/8 w - - 17 1";
+    const fullmoveThirty = "4k3/6KP/8/8/8/8/8/8 w - - 17 30";
+    const differentHalfmove = "4k3/6KP/8/8/8/8/8/8 w - - 18 30";
+
+    expect(neutralTiebreakKey(fullmoveOne, "h7h8q")).toBe(
+      neutralTiebreakKey(fullmoveThirty, "h7h8q"),
+    );
+    expect(neutralTiebreakKey(fullmoveOne, "h7h8q")).not.toBe(
+      neutralTiebreakKey(differentHalfmove, "h7h8q"),
+    );
+  });
+
   it("selects uniformly by set index without enriching a synthetic move class", () => {
     const positions = 10_000;
     const setSize = 8;
@@ -925,6 +938,55 @@ describe("selector/writer REST seam", () => {
     expect(await rejected.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
     expect(storage.read("seam-run")!.run.events).toHaveLength(beforeSelection);
 
+    const unknownCandidateField = await httpRequest(
+      handler,
+      "POST",
+      "/runs/seam-run/moves",
+      {
+        selection: {
+          ...selection,
+          candidates: [{ ...selection.candidates![0]!, futureMeasurement: 1 }],
+        },
+        at,
+      },
+    );
+    expect(unknownCandidateField.status).toBe(400);
+    expect(await unknownCandidateField.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
+
+    const unknownEngineField = await httpRequest(
+      handler,
+      "POST",
+      "/runs/seam-run/moves",
+      {
+        selection: {
+          ...selection,
+          engine: { ...selection.engine, futureIdentity: "unknown" },
+        },
+        at,
+      },
+    );
+    expect(unknownEngineField.status).toBe(400);
+    expect(await unknownEngineField.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
+
+    const misplacedOrderingBasis = await httpRequest(
+      handler,
+      "POST",
+      "/runs/seam-run/moves",
+      { selection: { ...selection, orderingBasis: "none" }, at },
+    );
+    expect(misplacedOrderingBasis.status).toBe(400);
+    expect(await misplacedOrderingBasis.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
+
+    const missingTablebaseOrdering = await httpRequest(
+      handler,
+      "POST",
+      "/runs/seam-run/moves",
+      { selection: { ...selection, policyModeApplied: "perfect_tablebase" }, at },
+    );
+    expect(missingTablebaseOrdering.status).toBe(400);
+    expect(await missingTablebaseOrdering.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
+    expect(storage.read("seam-run")!.run.events).toHaveLength(beforeSelection);
+
     const forbidden = await httpRequest(
       handler,
       "POST",
@@ -937,12 +999,11 @@ describe("selector/writer REST seam", () => {
       error: { code: "NOT_ACTIVE_WRITER" },
     });
 
-    const orderedSelection = { ...selection, orderingBasis: "none" as const };
     const committed = await httpRequest(
       handler,
       "POST",
       "/runs/seam-run/moves",
-      { selection: orderedSelection, at },
+      { selection, at },
     );
     expect(committed.status).toBe(200);
     const stored = storage.read("seam-run")!.run;
@@ -953,8 +1014,8 @@ describe("selector/writer REST seam", () => {
     expect(readBackReplay(stored.events).opponentMoves.at(-1)).toMatchObject({
       moveUci: "e7e5",
       policyModeApplied: "human_common",
-      orderingBasis: "none",
     });
+    expect(readBackReplay(stored.events).opponentMoves.at(-1)).not.toHaveProperty("orderingBasis");
 
     expect((await httpRequest(handler, "POST", "/runs/seam-run/moves", { uci: "g1f3", at })).status).toBe(200);
     const enumerated = {

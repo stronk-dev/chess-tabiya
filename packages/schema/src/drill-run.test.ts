@@ -179,6 +179,60 @@ describe("drill_run.schema.json v0.17", () => {
       },
     };
     expect(validate({ ...validRun, events: [event, selectionEvent] }), JSON.stringify(validate.errors)).toBe(true);
+    expect(
+      validate({
+        ...validRun,
+        events: [
+          event,
+          {
+            ...selectionEvent,
+            data: {
+              ...selectionEvent.data,
+              selection: { ...selectionEvent.data.selection, orderingBasis: "none" },
+            },
+          },
+        ],
+      }),
+    ).toBe(false);
+    expect(
+      validate({
+        ...validRun,
+        events: [
+          event,
+          {
+            ...selectionEvent,
+            data: {
+              ...selectionEvent.data,
+              selection: {
+                ...selectionEvent.data.selection,
+                policyModeApplied: "perfect_tablebase",
+              },
+            },
+          },
+        ],
+      }),
+      JSON.stringify(validate.errors),
+    ).toBe(true);
+    expect(
+      validate({
+        ...validRun,
+        events: [
+          event,
+          {
+            ...selectionEvent,
+            data: {
+              ...selectionEvent.data,
+              selection: {
+                ...selectionEvent.data.selection,
+                policyModeApplied: "perfect_tablebase",
+                orderingBasis: "none",
+              },
+            },
+          },
+        ],
+      }),
+      JSON.stringify(validate.errors),
+    ).toBe(true);
     selectionEvent.data.selection.engine.searchBound.value = 0;
     expect(validate({ ...validRun, events: [event, selectionEvent] })).toBe(false);
   });

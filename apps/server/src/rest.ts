@@ -151,7 +151,15 @@ function requiredPositiveSafeInteger(value: unknown, label: string): number {
 }
 
 function parseSelectionCandidate(value: unknown, label: string): SelectionCandidate {
-  const candidate = record(value, label);
+  const candidate = closedRecord(value, `/${label.replaceAll(".", "/").replaceAll("[", "/").replaceAll("]", "")}`, [
+    "moveUci",
+    "mass",
+    "concessionRatio",
+    "offWindow",
+    "scoreCp",
+    "wdl",
+    "rank",
+  ]);
   if (
     typeof candidate.rank !== "number" ||
     !Number.isSafeInteger(candidate.rank) ||
@@ -183,7 +191,13 @@ function parseSelectionCandidate(value: unknown, label: string): SelectionCandid
   ) {
     throw invalid(`${label}.scoreCp must be a safe integer`);
   }
-  const wdl = candidate.wdl === undefined ? undefined : record(candidate.wdl, `${label}.wdl`);
+  const wdl = candidate.wdl === undefined
+    ? undefined
+    : closedRecord(candidate.wdl, `/${label.replaceAll(".", "/").replaceAll("[", "/").replaceAll("]", "")}/wdl`, [
+        "win",
+        "draw",
+        "loss",
+      ]);
   return {
     moveUci: requiredString(candidate.moveUci, `${label}.moveUci`),
     rank: candidate.rank,
@@ -204,10 +218,20 @@ function parseSelectionCandidate(value: unknown, label: string): SelectionCandid
 }
 
 function parseSelectionEngine(value: unknown): SelectionEngineIdentity {
-  const engine = record(value, "selection.engine");
+  const engine = closedRecord(value, "/selection/engine", [
+    "id",
+    "name",
+    "version",
+    "modelId",
+    "containerDigest",
+    "seedHonored",
+    "eloHonored",
+    "eloApplied",
+    "searchBound",
+  ]);
   const searchBound = engine.searchBound === undefined
     ? undefined
-    : record(engine.searchBound, "selection.engine.searchBound");
+    : closedRecord(engine.searchBound, "/selection/engine/searchBound", ["kind", "value"]);
   if (
     searchBound !== undefined &&
     searchBound.kind !== "nodes" &&
@@ -265,32 +289,40 @@ function parseOpponentSelection(value: unknown): OpponentSelection {
   if (Array.isArray(selection.candidates) && selection.candidates.length === 0) {
     throw invalid("selection.candidates cannot be empty");
   }
+  const policyModeApplied = (() => {
+    const mode = requiredString(
+      selection.policyModeApplied,
+      "selection.policyModeApplied",
+    );
+    if (!([...RUN_OPPONENT_MODES, "enumerated", "unknown"] as readonly string[]).includes(mode)) {
+      throw invalid("selection.policyModeApplied is unsupported");
+    }
+    return mode as OpponentSelection["policyModeApplied"];
+  })();
+  const orderingBasis = selection.orderingBasis === undefined
+    ? undefined
+    : (() => {
+        const basis = requiredString(
+          selection.orderingBasis,
+          "selection.orderingBasis",
+        );
+        if (!["dtz_ascending", "dtz_descending", "none"].includes(basis)) {
+          throw invalid("selection.orderingBasis is unsupported");
+        }
+        return basis as NonNullable<OpponentSelection["orderingBasis"]>;
+      })();
+  if (policyModeApplied === "perfect_tablebase" && orderingBasis === undefined) {
+    throw invalid("selection.orderingBasis is required for perfect_tablebase");
+  }
+  if (policyModeApplied !== "perfect_tablebase" && orderingBasis !== undefined) {
+    throw invalid("selection.orderingBasis is only supported for perfect_tablebase");
+  }
   return {
     moveUci: requiredString(selection.moveUci, "selection.moveUci"),
-    policyModeApplied: (() => {
-      const mode = requiredString(
-        selection.policyModeApplied,
-        "selection.policyModeApplied",
-      );
-      if (!([...RUN_OPPONENT_MODES, "enumerated", "unknown"] as readonly string[]).includes(mode)) {
-        throw invalid("selection.policyModeApplied is unsupported");
-      }
-      return mode as OpponentSelection["policyModeApplied"];
-    })(),
-    ...(selection.orderingBasis === undefined
+    policyModeApplied,
+    ...(orderingBasis === undefined
       ? {}
-      : {
-          orderingBasis: (() => {
-            const basis = requiredString(
-              selection.orderingBasis,
-              "selection.orderingBasis",
-            );
-            if (!["dtz_ascending", "dtz_descending", "none"].includes(basis)) {
-              throw invalid("selection.orderingBasis is unsupported");
-            }
-            return basis as NonNullable<OpponentSelection["orderingBasis"]>;
-          })(),
-        }),
+      : { orderingBasis }),
     ...(selection.candidates === undefined
       ? {}
       : {

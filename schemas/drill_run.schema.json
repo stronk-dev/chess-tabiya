@@ -159,6 +159,15 @@
         },
         "engine": { "$ref": "#/$defs/selectionEngine" }
       },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "policyModeApplied": { "const": "perfect_tablebase" } },
+            "required": ["policyModeApplied"]
+          },
+          "else": { "properties": { "orderingBasis": false } }
+        }
+      ],
       "additionalProperties": false
     },
     "executionLocus": {

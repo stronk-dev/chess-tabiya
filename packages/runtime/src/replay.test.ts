@@ -116,6 +116,24 @@ describe("authoritative read-back replay", () => {
     );
   });
 
+  it("rejects an ordering basis on a non-tablebase selection", () => {
+    const events: readonly DrillRunEvent[] = playedRun().events.map((event) =>
+      event.type === "opponent.move_selected" && event.data.moveUci === "e7e5"
+        ? {
+            ...event,
+            data: {
+              ...event.data,
+              selection: { ...event.data.selection, orderingBasis: "none" as const },
+            },
+          }
+        : event,
+    );
+
+    expect(() => readBackReplay(events)).toThrowError(
+      "orderingBasis requires perfect_tablebase",
+    );
+  });
+
   it("derives resistance from committed children without sibling leakage", () => {
     let run = createRun({
       id: "resistance-run",

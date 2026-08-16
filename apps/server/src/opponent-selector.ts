@@ -184,7 +184,8 @@ function historyHash(request: SelectMoveRequest): string {
 
 /** Position-pure order for moves whose selector basis declares them equal. */
 export function neutralTiebreakKey(fen: string, moveUci: string): string {
-  return createHash("sha256").update(fen).update("\0").update(moveUci).digest("hex");
+  const positionKey = fen.trim().split(/\s+/u).slice(0, 5).join(" ");
+  return createHash("sha256").update(positionKey).update("\0").update(moveUci).digest("hex");
 }
 
 function neutralTiebreak(fen: string, leftUci: string, rightUci: string): number {
