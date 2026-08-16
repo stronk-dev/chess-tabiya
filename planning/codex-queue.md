@@ -21,12 +21,15 @@ All **289** open rows routed. **Work batches, not rows**: one pass, one test run
 naming the rows it closes ([[D416]]). Take them in the order below; the file has the full
 membership, the files each batch touches, and the members flagged as riskier than they look.
 
-**A0 first, because it is free and it changes what everything else looks like.** The triage
-found **40 rows already done and 19 more partly done** — the ledger overstates the remaining
-work by roughly a fifth. **29 of the 40 were verified at the symbol; 11 are claimed-only.**
-Verify and flip the 29, verify-then-decide the 11, and rewrite the 19 titles down to their
-actual residue rather than closing them. **Do not bulk-flip on the triage's say-so** — [[D400]]
-and [[D401]] entered this ledger as false records exactly that way.
+**A0 completed 2026-08-16 by re-reading the rows and their current symbols.** The triage's
+headline was conservative and its partial list contained an internal count error: **45** routed
+rows were fully closed, not 40, and **15** retained a real residue, not 19. D203, D204, D209 and
+D210 were fully shipped; D400 was answered/superseded. D204's four emitters are typed — the
+remaining legacy schema arm is a different residue — while D240 genuinely lacks the shared
+template registry its own remedy requires. Four process rows also closed in the same pass:
+D418, D419, D459 and the already-shipped D474. The table header now calls column 3
+**Disposition / history (not status)**. **Next is the accepted `graduation-clearance` lifecycle,**
+which owns the non-standalone parts of A1; do not patch D467 outside it.
 
 Then: **A1** (4 rows — item 0 below, the boot failure and the ungated release) → **A2** (6 —
 opponent selection serves the wrong move) → **A3** (5 — disclosure holes on live surfaces) →

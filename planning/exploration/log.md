@@ -3071,3 +3071,19 @@ while signed out, but successful registration only started the history listener 
 reloaded that failed route. The valid cookie therefore appeared broken until refresh. Route
 loading now waits for a learner and authentication explicitly loads the current route; the
 regression fixes the request ordering rather than relying on response timing.
+
+## 2026-08-16 — A0 reconciled the defect ledger against shipped symbols
+
+The first defect-triage batch re-read every proposed closure before changing column 1. The
+triage headline understated the result and its partial list had an internal count mismatch:
+45 routed rows are fully closed and 15 retain a named residue, rather than 40 and 19. D203,
+D204, D209 and D210 are shipped; D400 is answered and superseded. The residue rewrites now say
+only what remains — for example, engine option metadata is retained while honour semantics are
+still inferred from presence, and Q8 recomputes while its committed artefact remains stale and
+its test still writes into the tree.
+
+Four process rows closed alongside the reconciliation. D418's unaudited pack-graduation block
+has now been audited; D419/D459 are addressed by relabelling the third table column
+`Disposition / history (not status)`; and D474's declaration-census cache fix had already landed.
+The pass changed statuses only after checking the current referent and kept every partial row
+open with its title narrowed to the actual residue.
