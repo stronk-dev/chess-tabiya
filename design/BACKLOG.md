@@ -134,7 +134,11 @@ next free id above the highest registered block.
 | D203–D212 | `pack-graduation` cross-review | landed |
 | D213–D222 | `board-annotation` cross-review | landed |
 | D223–D232 | `evidence-at-runtime` cross-review | issued, in flight |
-| D233– | codex and any unblocked worker | next free is above the highest row above |
+| D237–D246 | `pack-graduation` author round | issued, in flight |
+| D247–D256 | `board-annotation` author round | issued, in flight |
+| D257–D266 | `evidence-at-runtime` author round | issued, in flight |
+| D233–D236 | codex and the coordinator | in use |
+| D267– | next free |  |
 
 **Live collision, 2026-08-16: `D203` is used twice.** The `pack-graduation` cross-review was
 issued the block **D203–D212** and may use no other id; while it was measuring, the selection-
