@@ -132,4 +132,36 @@ describe("own-game import", () => {
     expect(queue.outstanding(imported.run.id)).toEqual([]);
     expect(service.story(imported.run.id, principal).pendingEvidence).toBe(0);
   });
+
+  it("does not let a tablebase failure suppress story eval evidence for the same node", async () => {
+    const executor: EvidenceExecutor = { async execute() { return { kind: "eval", source: "engine_validated", values: { centipawns: 12 } }; } };
+    const queue = new EvidenceJobQueue(executor, { maxConcurrency: 1 });
+    queue.enqueue({
+      runId: "story-kind-isolation",
+      nodeId: "story-kind-isolation:node:0",
+      fen: "8/8/8/8/8/8/4K3/6k1 w - - 0 1",
+      kind: "tablebase",
+    });
+    await queue.whenIdle();
+    expect(queue.failures("story-kind-isolation")).toEqual([
+      expect.objectContaining({ nodeId: "story-kind-isolation:node:0", kind: "tablebase" }),
+    ]);
+
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    stores.push(storage);
+    const service = new RunService(storage, { evidenceQueue: queue });
+    const imported = await service.importGame({
+      id: "story-kind-isolation",
+      side: "white",
+      opponentPolicy: { mode: "human_common" },
+      policyConfig,
+      seed: 4,
+      source: { kind: "pgn", pgn: PGN },
+    }, "story-writer");
+
+    expect(imported.evidencePass.jobs).toBe(imported.run.nodes.length);
+    expect(queue.outstanding(imported.run.id)).toEqual(expect.arrayContaining([
+      expect.objectContaining({ nodeId: imported.run.nodes[0]!.id, kind: "eval" }),
+    ]));
+  });
 });

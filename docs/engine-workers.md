@@ -206,6 +206,11 @@ session identity/reveal contract, the v0.6 terminal outcome contract, and the
 recorded applied-policy field documented in `docs/branch-runtime.md`. New strong
 engine selections also retain their applied search bound; historical events are
 left absent by migration 21.
+Candidate records may retain exact centipawn and WDL measurements. UCI
+`upperbound` and `lowerbound` lines are not recorded as exact measurements, and
+public run/event projections remove both fields until feedback disclosure opens;
+the selected move and non-evaluation candidate data remain available so play is
+not stalled by the evidence barrier.
 Evidence sources remain
 separate events and typed payloads; Stockfish values and Maia predictions are
 never averaged into one number.
@@ -216,6 +221,9 @@ never averaged into one number.
 `eval|wdl|bestline` and exactly one positive depth or movetime limit. It starts
 jobs FIFO with a configurable global concurrency bound (default two). Results
 are immutable and staged outside the run with a per-run sequence cursor.
+Failures retain their evidence kind as well as run and node identity. Story
+completion treats only failed `eval` jobs as failed evals; a tablebase failure
+cannot suppress or falsely complete the Stockfish pass for the same node.
 
 The read/apply flow is:
 

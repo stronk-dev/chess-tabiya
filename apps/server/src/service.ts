@@ -1606,7 +1606,7 @@ export class RunService {
     if (queue === undefined) {
       return Object.freeze({ ready: false, pending: path.filter((node) => !durable.has(node.id)).length, enqueued: 0 });
     }
-    const failed = new Set(queue.failures(run.id).map((failure) => failure.nodeId));
+    const failed = new Set(queue.failures(run.id).filter((failure) => failure.kind === "eval").map((failure) => failure.nodeId));
     const outstanding = new Set(queue.outstanding(run.id).filter((job) => job.kind === "eval").map((job) => job.nodeId));
     let enqueued = 0;
     for (const node of path) {

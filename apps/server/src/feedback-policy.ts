@@ -20,8 +20,33 @@ function publicReasoningEvent(run: DrillRun, event: DrillRunEvent): DrillRunEven
   return Object.freeze({ ...event, data: Object.freeze({ ...event.data, detections: Object.freeze([]) }) }) as DrillRunEvent;
 }
 
+function publicSelectionEvent(run: DrillRun, event: DrillRunEvent): DrillRunEvent {
+  if (event.type !== "opponent.move_selected" || feedbackDisclosed(run)) return event;
+  const candidates = event.data.selection.candidates;
+  if (candidates === undefined || candidates.every((candidate) => candidate.scoreCp === undefined && candidate.wdl === undefined)) {
+    return event;
+  }
+  return Object.freeze({
+    ...event,
+    data: Object.freeze({
+      ...event.data,
+      selection: Object.freeze({
+        ...event.data.selection,
+        candidates: Object.freeze(candidates.map((candidate) => {
+          const { scoreCp: _scoreCp, wdl: _wdl, ...publicCandidate } = candidate;
+          return Object.freeze(publicCandidate);
+        })),
+      }),
+    }),
+  }) as DrillRunEvent;
+}
+
+function publicEvent(run: DrillRun, event: DrillRunEvent): DrillRunEvent {
+  return publicSelectionEvent(run, publicReasoningEvent(run, event));
+}
+
 export function publicRunSnapshot(run: DrillRun): DrillRun {
-  return Object.freeze({ ...run, events: Object.freeze(run.events.map((event) => publicReasoningEvent(run, event))) });
+  return Object.freeze({ ...run, events: Object.freeze(run.events.map((event) => publicEvent(run, event))) });
 }
 
 export function publicMutationPayload<T>(value: T): T {
@@ -34,7 +59,7 @@ export function publicMutationPayload<T>(value: T): T {
   return Object.freeze({
     ...record,
     run: publicRunSnapshot(run),
-    ...(Array.isArray(record.emitted) ? { emitted: Object.freeze((record.emitted as DrillRunEvent[]).map((event) => publicReasoningEvent(run, event))) } : {}),
+    ...(Array.isArray(record.emitted) ? { emitted: Object.freeze((record.emitted as DrillRunEvent[]).map((event) => publicEvent(run, event))) } : {}),
   }) as T;
 }
 
@@ -76,7 +101,7 @@ export function publicEvents(
   const barrier = candidates.findIndex(engineFeedbackEvent);
   const events = barrier === -1 ? candidates : candidates.slice(0, barrier);
   return Object.freeze({
-    events: Object.freeze(events.map((event) => publicReasoningEvent(run, event))),
+    events: Object.freeze(events.map((event) => publicEvent(run, event))),
     nextSeq: events.at(-1)?.seq ?? sinceSeq,
     ...(barrier === -1 ? {} : { withheld: true as const }),
   });

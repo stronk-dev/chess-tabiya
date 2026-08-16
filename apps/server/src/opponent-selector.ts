@@ -239,8 +239,9 @@ function candidateLines(lines: readonly string[]): readonly SelectionCandidate[]
     const moveMatch = /\bpv ([a-h][1-8][a-h][1-8][qrbn]?)\b/.exec(line);
     if (!rankMatch || !moveMatch) continue;
     const massMatch = /\bpolicy ([0-9]+(?:\.[0-9]+)?(?:e[+-]?\d+)?)\b/i.exec(line);
-    const scoreMatch = /\bscore cp (-?\d+)\b/.exec(line);
-    const wdlMatch = /\bwdl (\d+) (\d+) (\d+)\b/.exec(line);
+    const scoreIsBound = /\b(?:upperbound|lowerbound)\b/.test(line);
+    const scoreMatch = scoreIsBound ? null : /\bscore cp (-?\d+)\b/.exec(line);
+    const wdlMatch = scoreIsBound ? null : /\bwdl (\d+) (\d+) (\d+)\b/.exec(line);
     const mass = massMatch === null ? undefined : Number(massMatch[1]);
     if (mass !== undefined && (!Number.isFinite(mass) || mass < 0 || mass > 1)) {
       throw invalid(`Engine returned invalid policy mass: ${massMatch![1]}`);

@@ -53,6 +53,7 @@ export interface EvidenceJobFailure {
   readonly jobId: string;
   readonly runId: string;
   readonly nodeId: string;
+  readonly kind: EvidenceKind;
   readonly message: string;
 }
 
@@ -272,6 +273,7 @@ export class EvidenceJobQueue implements JobObserver {
             jobId: queued.job.id,
             runId: queued.job.runId,
             nodeId: queued.job.nodeId,
+            kind: queued.job.kind,
             message: error instanceof Error ? error.message : String(error),
           }),
         );

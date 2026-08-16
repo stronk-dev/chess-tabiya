@@ -368,6 +368,16 @@ describe("pure opponent selector", () => {
     });
   });
 
+  it("does not record aspiration-window bounds as exact candidate evaluations", async () => {
+    const client = new FakeEngineClient(() => [
+      "info depth 10 multipv 1 score cp 21 wdl 420 500 80 pv c7c5",
+      "info depth 11 multipv 1 score cp 35 upperbound wdl 450 480 70 pv c7c5",
+      "bestmove c7c5",
+    ]);
+    const selection = await new OpponentSelector(client).select(request("strong_engine"));
+    expect(selection.candidates).toEqual([{ moveUci: "c7c5", rank: 1 }]);
+  });
+
   it("selects human-common Maia output with mapped policy knobs", async () => {
     const client = new FakeEngineClient(() =>
       maiaLines("e7e5", [
