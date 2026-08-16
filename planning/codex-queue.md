@@ -15,6 +15,49 @@ this file as a lesson and nothing reads it.
 
 ---
 
+## THE BATCH DOCUMENT IS LIVE — `planning/defect-triage.md`
+
+All **289** open rows routed. **Work batches, not rows**: one pass, one test run, one commit
+naming the rows it closes ([[D416]]). Take them in the order below; the file has the full
+membership, the files each batch touches, and the members flagged as riskier than they look.
+
+**A0 first, because it is free and it changes what everything else looks like.** The triage
+found **40 rows already done and 19 more partly done** — the ledger overstates the remaining
+work by roughly a fifth. **29 of the 40 were verified at the symbol; 11 are claimed-only.**
+Verify and flip the 29, verify-then-decide the 11, and rewrite the 19 titles down to their
+actual residue rather than closing them. **Do not bulk-flip on the triage's say-so** — [[D400]]
+and [[D401]] entered this ledger as false records exactly that way.
+
+Then: **A1** (4 rows — item 0 below, the boot failure and the ungated release) → **A2** (6 —
+opponent selection serves the wrong move) → **A3** (5 — disclosure holes on live surfaces) →
+**B1** (7 — claim binding and the evidence maps, one file, one live in the corpus) → **B3**
+(4 — corpus denominators and fixture contamination; widest downstream effect for the least
+work) → **B4** (8 — the gate on the gate; zero runtime risk, cheapest here) → **B8** (6 — the
+graduation-emitter residue) → **B5** (8) → **B2** (6, three of which are record-only and
+flagged).
+
+**B6 and B7 are listed as traps**, not batches: B6 is mostly owner-tier `DESIGN-GAP:` rows with
+one takeable member, B7 is convention with one.
+
+**Two findings in that document outrank most of the batches.** `db243f5` edited nineteen defect
+rows and **changed column 3 only** — writing *"✅ closed by pack-graduation 0.27"* into the
+disposition while leaving column 1 at 🐞/💡. So [[D418]] is exactly right, and **the wave that
+fixed the defects performed [[D419]]'s defect while doing it.** The disposition is not
+trustworthy either: of the nineteen, 13 shipped, 4 are partial, and **2 (D207, D239) never
+started** — which is why they are in a batch rather than in the closable set. Separately, a
+**24% stale rate among rows nobody suspected**: 6 full closures out of ~25 sampled on a hunch.
+
+**The content split you can act on is §7.** **27 mechanical rows reduce to five jobs**, three of
+which are a shipped `make` target pointed at the corpus: the explorer position-census wave (60
+`corpus_observed` claims against **0** backing records — 22 directly attachable, 38 needing a
+sidecar first), the tablebase legal-successor census (**0 of 277** choice-bearing positions
+censused), the engine pass (8 claims), the fixture relocation, and citation/digest repair.
+**Nothing was over-called into it**: where the record is mechanical but the sentence it backs
+must be authored, the row was split and the sentence sent to the authored side. Note
+`packDigest` re-stamps are done for drafts but **26 of 36 candidate ledgers are digest-stale**,
+which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
+writer does not exist yet.
+
 ## 0. [[D468]] — a live boot failure. Take this before anything else.
 
 **Not hypothetical and not scheduled work.** `GRADUATION_RULING_UNCITED` resolves living-tier
