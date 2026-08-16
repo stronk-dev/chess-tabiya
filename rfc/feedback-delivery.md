@@ -2211,6 +2211,30 @@ used as-is.
    > record refused this share and the difference between then and now — a queue rather than a wall
    > — is precisely the thing the owner has not been told.
 
+   **OWNER RULING 2026-08-16 — neither arm; both, in that order.** *"Ship the surface, then run
+   the wave before anyone plays."* Job 1 lands **ahead**, and the binding wave runs against it
+   **before any play session**, so no learner ever meets the 97-of-98 `self_declared` state.
+   The reasoning the ruling turns on, and it is a fact rather than a preference: **nobody has
+   played a run since 2026-08-12**, so the *"first delivery of rung-5 prose is 99% unbacked"*
+   cost is paid to an audience that does not exist. The **loss** each arm was priced for
+   therefore evaporates on both sides — the *ahead* arm's cost was a first impression with no
+   one to receive it, and the *behind* arm's cost was a wave with no surface to validate against,
+   which shipping first removes.
+
+   **What this ruling obliges, so it is not read as merely "do both":**
+
+   - **Job 1 is not "done" when it ships.** The wave is part of the same commitment, and the
+     acceptance record must carry the delivered share **at the end of the wave**, not at day
+     zero. Day zero's 98/196 (50.0%) is a *starting* measurement.
+   - **The wave's scope is now known and is not only sourcing** — §3.2a's finding stands:
+     **63 of the 98 withheld claims provably trip `CLAIM_AUTHOR_LABEL_REQUIRED`**, and their
+     remedy is a **pack edit**, not a ledger entry. A wave planned as two instrument runs would
+     miss two thirds of its own work.
+   - **The no-learner-sees-it property is an obligation with an expiry.** It holds only while
+     nobody plays. If a play session happens before the wave completes, the ruling's premise is
+     gone and this question is live again — **stated here so that is noticed rather than
+     discovered.**
+
    **The delivery rule, unchanged by the narrowing and stated once so nothing has to be inferred:**
 
    > A claim is **delivered** iff every machine-checkable label it carries
