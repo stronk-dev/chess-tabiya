@@ -45,7 +45,7 @@ export function graduationReport(roots: readonly string[] = ["content/drafts", "
   for (const kind of [...new Set(accepted.map(({ entry }) => entry.accepted!.kind))].sort()) {
     acceptedLines.push(`## ${kind}`, "");
     for (const { packId, entry } of accepted.filter((row) => row.entry.accepted!.kind === kind).sort((a,b) => a.packId.localeCompare(b.packId) || a.entry.id.localeCompare(b.entry.id))) {
-      acceptedLines.push(`- **${packId}/${entry.id}** — ${entry.statement}  \n  Ruling: ${entry.accepted!.ruling} ([source](${entry.accepted!.rulingRef}))`);
+      acceptedLines.push(`- **${packId}/${entry.id}** — ${entry.statement}\n  Ruling: ${entry.accepted!.ruling} ([source](${entry.accepted!.rulingRef}))`);
     }
     acceptedLines.push("");
   }
