@@ -1,0 +1,133 @@
+{
+ "corpusPositions": 507,
+ "packs": {
+  "lucena-bridge-convert": 197,
+  "mate-bishop-knight": 33,
+  "mate-k-q-technique": 33,
+  "mate-k-r-technique": 33,
+  "mate-two-bishops": 32,
+  "opposite-bishops-fortress-hold": 33,
+  "pawn-breakthrough-convert": 28,
+  "pawn-opposition-convert": 30,
+  "philidor-passive-rook-convert": 24,
+  "philidor-third-rank-hold": 33,
+  "queen-vs-pawn-seventh-convert": 31
+ },
+ "byResultClass": {
+  "win": {
+   "positions": 218,
+   "critical": 160
+  },
+  "loss": {
+   "positions": 223,
+   "critical": 0
+  },
+  "draw": {
+   "positions": 66,
+   "critical": 44
+  }
+ },
+ "byPack": {
+  "lucena-bridge-convert": {
+   "positions": 197,
+   "critical": 88
+  },
+  "mate-bishop-knight": {
+   "positions": 33,
+   "critical": 9
+  },
+  "mate-k-q-technique": {
+   "positions": 33,
+   "critical": 16
+  },
+  "mate-k-r-technique": {
+   "positions": 33,
+   "critical": 6
+  },
+  "mate-two-bishops": {
+   "positions": 32,
+   "critical": 6
+  },
+  "opposite-bishops-fortress-hold": {
+   "positions": 33,
+   "critical": 15
+  },
+  "pawn-breakthrough-convert": {
+   "positions": 28,
+   "critical": 3
+  },
+  "pawn-opposition-convert": {
+   "positions": 30,
+   "critical": 10
+  },
+  "philidor-passive-rook-convert": {
+   "positions": 24,
+   "critical": 7
+  },
+  "philidor-third-rank-hold": {
+   "positions": 33,
+   "critical": 29
+  },
+  "queen-vs-pawn-seventh-convert": {
+   "positions": 31,
+   "critical": 15
+  }
+ },
+ "bySideOfThePack": {
+  "learner-side": {
+   "positions": 250,
+   "critical": 191
+  },
+  "maia-side": {
+   "positions": 257,
+   "critical": 13
+  }
+ },
+ "perfectTablebasePick": {
+  "win": {
+   "n": 218,
+   "capture": 13,
+   "pawn": 20,
+   "captureOrPawn": 32
+  },
+  "draw": {
+   "n": 66,
+   "capture": 0,
+   "pawn": 7,
+   "captureOrPawn": 7
+  },
+  "loss": {
+   "n": 223,
+   "capture": 1,
+   "pawn": 13,
+   "captureOrPawn": 14
+  }
+ },
+ "preservingMovePool": {
+  "win": {
+   "n": 3561,
+   "capture": 46,
+   "pawn": 134,
+   "captureOrPawn": 158
+  },
+  "draw": {
+   "n": 745,
+   "capture": 0,
+   "pawn": 38,
+   "captureOrPawn": 38
+  },
+  "loss": {
+   "n": 2213,
+   "capture": 31,
+   "pawn": 47,
+   "captureOrPawn": 67
+  }
+ },
+ "pieceCounts": {
+  "5": 216,
+  "4": 133,
+  "3": 97,
+  "6": 46,
+  "7": 15
+ }
+}

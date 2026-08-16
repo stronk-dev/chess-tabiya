@@ -1,0 +1,1033 @@
+{
+ "identity": [
+  {
+   "kind": "identity",
+   "identity": {
+    "id": "maia-5m",
+    "kind": "opponent",
+    "name": "Maia3",
+    "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+    "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+    "seedHonored": false,
+    "eloHonored": true
+   },
+   "options": [
+    {
+     "name": "Elo",
+     "type": "spin",
+     "default": "1500",
+     "min": 0,
+     "max": 5000
+    },
+    {
+     "name": "SelfElo",
+     "type": "spin",
+     "default": "1500",
+     "min": 0,
+     "max": 5000
+    },
+    {
+     "name": "OppoElo",
+     "type": "spin",
+     "default": "1500",
+     "min": 0,
+     "max": 5000
+    },
+    {
+     "name": "Temperature",
+     "type": "string",
+     "default": "1.0"
+    },
+    {
+     "name": "TopP",
+     "type": "string",
+     "default": "1.0"
+    },
+    {
+     "name": "MultiPV",
+     "type": "spin",
+     "default": "5",
+     "min": 1,
+     "max": 20
+    }
+   ],
+   "bandRange": {
+    "min": 1000,
+    "max": 2400
+   }
+  }
+ ],
+ "probeErrors": 0,
+ "completeRepeatRounds": 6,
+ "probesScored": 810,
+ "positions": 45,
+ "bands": [
+  1100,
+  1500,
+  1900
+ ],
+ "bandApplication": {
+  "probesWithRequestedEloSent": 810,
+  "probesWithSelfOppoBeforeElo": 810,
+  "positionBandCellsPolicyStableAcrossRepeats": [
+   135,
+   135
+  ],
+  "positionsWithDistinctPolicyPerBand": [
+   45,
+   45
+  ],
+  "bandCollisions": []
+ },
+ "illegalOrOffListBestmoves": 0,
+ "preservation": {
+  "1100": {
+   "probes": 270,
+   "preserved": 238,
+   "maiaRate": [
+    0.8814814814814815,
+    0.7851851851851852,
+    0.9629629629629629
+   ],
+   "randomRate": [
+    0.6696118809240003,
+    0.581013099178731,
+    0.7520413618863262
+   ],
+   "pairedDelta": [
+    0.21186960055748116,
+    0.10948115793600034,
+    0.3144250112013109
+   ],
+   "wilsonOverProbes": [
+    0.8814814814814815,
+    0.837474595514217,
+    0.9147851049841734
+   ],
+   "transitions": {
+    "win->win": 190,
+    "draw->draw": 48,
+    "win->draw": 32
+   }
+  },
+  "1500": {
+   "probes": 270,
+   "preserved": 240,
+   "maiaRate": [
+    0.8888888888888888,
+    0.7925925925925926,
+    0.9703703703703703
+   ],
+   "randomRate": [
+    0.6696118809240003,
+    0.581013099178731,
+    0.7520413618863262
+   ],
+   "pairedDelta": [
+    0.21927700796488858,
+    0.12268969356623598,
+    0.319605897708016
+   ],
+   "wilsonOverProbes": [
+    0.8888888888888888,
+    0.8458128882013478,
+    0.9210537967727392
+   ],
+   "transitions": {
+    "win->win": 192,
+    "draw->draw": 48,
+    "win->draw": 30
+   }
+  },
+  "1900": {
+   "probes": 270,
+   "preserved": 248,
+   "maiaRate": [
+    0.9185185185185185,
+    0.8444444444444444,
+    0.9851851851851852
+   ],
+   "randomRate": [
+    0.6696118809240003,
+    0.581013099178731,
+    0.7520413618863262
+   ],
+   "pairedDelta": [
+    0.24890663759451817,
+    0.15592735366245872,
+    0.3510171375894707
+   ],
+   "wilsonOverProbes": [
+    0.9185185185185185,
+    0.8797170949781553,
+    0.9455775278987196
+   ],
+   "transitions": {
+    "win->win": 200,
+    "draw->draw": 48,
+    "win->draw": 22
+   }
+  }
+ },
+ "sampledBandResponse": {
+  "lowBand": 1100,
+  "highBand": 1900,
+  "positionsBetterAtHighBand": 2,
+  "positionsWorseAtHighBand": 0,
+  "positionsTied": 43,
+  "signTestTwoSidedP": 0.5
+ },
+ "randomTransitionsPerPosition": {
+  "win->win": 24.343,
+  "win->loss": 3.966,
+  "win->draw": 8.692,
+  "draw->draw": 5.79,
+  "draw->loss": 2.21
+ },
+ "perPositionVersusUniform": {
+  "positions": 45,
+  "maiaWorseThanUniform": 4,
+  "maiaBetterThanUniform": 41,
+  "equal": 0,
+  "worstTen": [
+   {
+    "key": "5k2/8/8/8/3K4/4P3/8/8 w - - 3 3",
+    "pack": "pawn-opposition-convert",
+    "probes": 18,
+    "maiaErrorRate": 1.0,
+    "uniformErrorRate": 0.375,
+    "preserving": 5,
+    "dropping": 3
+   },
+   {
+    "key": "8/3k4/8/8/5K2/8/4P3/8 w - - 2 2",
+    "pack": "pawn-opposition-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.7222,
+    "uniformErrorRate": 0.1,
+    "preserving": 9,
+    "dropping": 1
+   },
+   {
+    "key": "8/2k5/8/8/8/5K2/4P3/8 w - - 4 3",
+    "pack": "pawn-opposition-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.5556,
+    "uniformErrorRate": 0.1111,
+    "preserving": 8,
+    "dropping": 1
+   },
+   {
+    "key": "8/p4k2/2p5/PP6/8/8/6K1/8 w - - 0 4",
+    "pack": "pawn-breakthrough-convert",
+    "probes": 18,
+    "maiaErrorRate": 1.0,
+    "uniformErrorRate": 0.9091,
+    "preserving": 1,
+    "dropping": 10
+   },
+   {
+    "key": "2k5/8/3K4/8/3BB3/8/8/8 w - - 2 2",
+    "pack": "mate-two-bishops",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0312,
+    "preserving": 31,
+    "dropping": 1
+   },
+   {
+    "key": "1k6/4K3/8/8/3B4/3B4/8/8 w - - 6 4",
+    "pack": "mate-two-bishops",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0312,
+    "preserving": 31,
+    "dropping": 1
+   },
+   {
+    "key": "8/2k5/5B2/8/4K3/3N4/8/8 w - - 4 3",
+    "pack": "mate-bishop-knight",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0385,
+    "preserving": 25,
+    "dropping": 1
+   },
+   {
+    "key": "8/6k1/8/2B5/4K3/3N4/8/8 w - - 4 3",
+    "pack": "mate-bishop-knight",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.04,
+    "preserving": 24,
+    "dropping": 1
+   },
+   {
+    "key": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1",
+    "pack": "mate-bishop-knight",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0435,
+    "preserving": 22,
+    "dropping": 1
+   },
+   {
+    "key": "8/8/5k2/8/1B2K3/3N4/8/8 w - - 2 2",
+    "pack": "mate-bishop-knight",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0476,
+    "preserving": 20,
+    "dropping": 1
+   }
+  ],
+  "rows": [
+   {
+    "key": "5k2/8/8/8/3K4/4P3/8/8 w - - 3 3",
+    "pack": "pawn-opposition-convert",
+    "probes": 18,
+    "maiaErrorRate": 1.0,
+    "uniformErrorRate": 0.375,
+    "preserving": 5,
+    "dropping": 3
+   },
+   {
+    "key": "8/3k4/8/8/5K2/8/4P3/8 w - - 2 2",
+    "pack": "pawn-opposition-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.7222,
+    "uniformErrorRate": 0.1,
+    "preserving": 9,
+    "dropping": 1
+   },
+   {
+    "key": "8/2k5/8/8/8/5K2/4P3/8 w - - 4 3",
+    "pack": "pawn-opposition-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.5556,
+    "uniformErrorRate": 0.1111,
+    "preserving": 8,
+    "dropping": 1
+   },
+   {
+    "key": "8/p4k2/2p5/PP6/8/8/6K1/8 w - - 0 4",
+    "pack": "pawn-breakthrough-convert",
+    "probes": 18,
+    "maiaErrorRate": 1.0,
+    "uniformErrorRate": 0.9091,
+    "preserving": 1,
+    "dropping": 10
+   },
+   {
+    "key": "2k5/8/3K4/8/3BB3/8/8/8 w - - 2 2",
+    "pack": "mate-two-bishops",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0312,
+    "preserving": 31,
+    "dropping": 1
+   },
+   {
+    "key": "1k6/4K3/8/8/3B4/3B4/8/8 w - - 6 4",
+    "pack": "mate-two-bishops",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0312,
+    "preserving": 31,
+    "dropping": 1
+   },
+   {
+    "key": "8/2k5/5B2/8/4K3/3N4/8/8 w - - 4 3",
+    "pack": "mate-bishop-knight",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0385,
+    "preserving": 25,
+    "dropping": 1
+   },
+   {
+    "key": "8/6k1/8/2B5/4K3/3N4/8/8 w - - 4 3",
+    "pack": "mate-bishop-knight",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.04,
+    "preserving": 24,
+    "dropping": 1
+   },
+   {
+    "key": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1",
+    "pack": "mate-bishop-knight",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0435,
+    "preserving": 22,
+    "dropping": 1
+   },
+   {
+    "key": "8/8/5k2/8/1B2K3/3N4/8/8 w - - 2 2",
+    "pack": "mate-bishop-knight",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0476,
+    "preserving": 20,
+    "dropping": 1
+   },
+   {
+    "key": "3k4/8/8/8/8/7K/8/2Q5 w - - 4 3",
+    "pack": "mate-k-q-technique",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0769,
+    "preserving": 24,
+    "dropping": 2
+   },
+   {
+    "key": "8/3k4/8/8/4K3/6B1/1N6/8 w - - 6 4",
+    "pack": "mate-bishop-knight",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0952,
+    "preserving": 19,
+    "dropping": 2
+   },
+   {
+    "key": "8/2k1K3/8/8/3BB3/8/8/8 w - - 4 3",
+    "pack": "mate-two-bishops",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.0968,
+    "preserving": 28,
+    "dropping": 3
+   },
+   {
+    "key": "8/3k4/8/8/8/2Q4K/8/8 w - - 2 2",
+    "pack": "mate-k-q-technique",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.1034,
+    "preserving": 26,
+    "dropping": 3
+   },
+   {
+    "key": "3b4/4k3/8/2P1P3/2K5/8/4B3/8 b - - 2 2",
+    "pack": "opposite-bishops-fortress-hold",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.125,
+    "preserving": 7,
+    "dropping": 1
+   },
+   {
+    "key": "3k4/8/B1K5/b1P1P3/8/8/8/8 b - - 4 3",
+    "pack": "opposite-bishops-fortress-hold",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.125,
+    "preserving": 7,
+    "dropping": 1
+   },
+   {
+    "key": "8/8/8/4k3/1Q6/8/6K1/8 w - - 6 4",
+    "pack": "mate-k-q-technique",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.129,
+    "preserving": 27,
+    "dropping": 4
+   },
+   {
+    "key": "8/8/2k5/8/8/1Q6/6K1/8 w - - 4 3",
+    "pack": "mate-k-q-technique",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.129,
+    "preserving": 27,
+    "dropping": 4
+   },
+   {
+    "key": "8/1P6/4k3/1K6/7R/2r5/8/8 w - - 14 8",
+    "pack": "lucena-bridge-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.1304,
+    "preserving": 20,
+    "dropping": 3
+   },
+   {
+    "key": "8/5k2/8/R3K3/4P3/8/8/1r6 w - - 5 4",
+    "pack": "philidor-third-rank-hold",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.1333,
+    "preserving": 13,
+    "dropping": 2
+   },
+   {
+    "key": "8/8/4k3/7R/8/3K4/8/8 w - - 4 3",
+    "pack": "mate-k-r-technique",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.1364,
+    "preserving": 19,
+    "dropping": 3
+   },
+   {
+    "key": "7R/2k5/8/8/8/3K4/8/8 w - - 4 3",
+    "pack": "mate-k-r-technique",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.1364,
+    "preserving": 19,
+    "dropping": 3
+   },
+   {
+    "key": "8/4k3/7R/8/8/3K4/8/8 w - - 2 2",
+    "pack": "mate-k-r-technique",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.1364,
+    "preserving": 19,
+    "dropping": 3
+   },
+   {
+    "key": "8/3k4/7R/8/8/4K3/8/8 w - - 4 3",
+    "pack": "mate-k-r-technique",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.1364,
+    "preserving": 19,
+    "dropping": 3
+   },
+   {
+    "key": "8/pp6/4k3/PPP5/8/8/6K1/8 w - - 0 1",
+    "pack": "pawn-breakthrough-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.1818,
+    "preserving": 9,
+    "dropping": 2
+   },
+   {
+    "key": "1K6/1P1k4/8/8/8/8/1r6/2R5 w - - 6 4",
+    "pack": "lucena-bridge-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.1875,
+    "preserving": 13,
+    "dropping": 3
+   },
+   {
+    "key": "3k3r/R7/8/4K3/4P3/8/8/8 w - - 5 4",
+    "pack": "philidor-passive-rook-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.7222,
+    "uniformErrorRate": 0.9524,
+    "preserving": 1,
+    "dropping": 20
+   },
+   {
+    "key": "8/p7/2p1k3/PP6/8/8/6K1/8 w - - 0 2",
+    "pack": "pawn-breakthrough-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.6667,
+    "uniformErrorRate": 0.9091,
+    "preserving": 1,
+    "dropping": 10
+   },
+   {
+    "key": "4k3/R7/6r1/8/4PK2/8/8/8 w - - 3 3",
+    "pack": "philidor-third-rank-hold",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.2632,
+    "preserving": 14,
+    "dropping": 5
+   },
+   {
+    "key": "4k3/R7/1r6/4K3/4P3/8/8/8 w - - 1 2",
+    "pack": "philidor-third-rank-hold",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.2778,
+    "preserving": 13,
+    "dropping": 5
+   },
+   {
+    "key": "4k3/R7/8/4K3/4P3/8/8/7r w - - 1 2",
+    "pack": "philidor-third-rank-hold",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.2857,
+    "preserving": 15,
+    "dropping": 6
+   },
+   {
+    "key": "1K6/1P6/4k3/8/8/3R4/8/2r5 w - - 10 6",
+    "pack": "lucena-bridge-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.3125,
+    "preserving": 11,
+    "dropping": 5
+   },
+   {
+    "key": "8/1P2k3/1K6/8/3R4/8/8/6r1 w - - 8 5",
+    "pack": "lucena-bridge-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.32,
+    "preserving": 17,
+    "dropping": 8
+   },
+   {
+    "key": "8/KP2k3/8/8/3R4/1r6/8/8 w - - 10 6",
+    "pack": "lucena-bridge-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.381,
+    "preserving": 13,
+    "dropping": 8
+   },
+   {
+    "key": "8/7K/8/5Q2/8/1k6/1p6/8 w - - 4 3",
+    "pack": "queen-vs-pawn-seventh-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.4483,
+    "preserving": 16,
+    "dropping": 13
+   },
+   {
+    "key": "3b4/4k3/2P5/3KPB2/8/8/8/8 b - - 4 4",
+    "pack": "opposite-bishops-fortress-hold",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.5,
+    "preserving": 3,
+    "dropping": 3
+   },
+   {
+    "key": "3b4/4k3/2P5/3KP3/8/8/4B3/8 b - - 0 2",
+    "pack": "opposite-bishops-fortress-hold",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.5,
+    "preserving": 3,
+    "dropping": 3
+   },
+   {
+    "key": "8/7K/8/8/4Q3/8/1p1k4/8 w - - 6 4",
+    "pack": "queen-vs-pawn-seventh-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.5161,
+    "preserving": 15,
+    "dropping": 16
+   },
+   {
+    "key": "8/8/5k2/3K4/8/4P3/8/8 w - - 3 3",
+    "pack": "pawn-opposition-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.5714,
+    "preserving": 3,
+    "dropping": 4
+   },
+   {
+    "key": "8/2k5/2B5/4K3/3B4/8/8/8 w - - 6 4",
+    "pack": "mate-two-bishops",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.6154,
+    "preserving": 10,
+    "dropping": 16
+   },
+   {
+    "key": "8/7K/8/8/2Q5/8/1p6/3k4 w - - 2 2",
+    "pack": "queen-vs-pawn-seventh-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.6333,
+    "preserving": 11,
+    "dropping": 19
+   },
+   {
+    "key": "8/7K/8/8/4Q3/8/1p6/2k5 w - - 0 1",
+    "pack": "queen-vs-pawn-seventh-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.8065,
+    "preserving": 6,
+    "dropping": 25
+   },
+   {
+    "key": "R6r/4k3/8/4K3/4P3/8/8/8 w - - 3 3",
+    "pack": "philidor-passive-rook-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.8889,
+    "preserving": 2,
+    "dropping": 16
+   },
+   {
+    "key": "R6r/5k2/8/4K3/4P3/8/8/8 w - - 3 3",
+    "pack": "philidor-passive-rook-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.9474,
+    "preserving": 1,
+    "dropping": 18
+   },
+   {
+    "key": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2",
+    "pack": "philidor-passive-rook-convert",
+    "probes": 18,
+    "maiaErrorRate": 0.0,
+    "uniformErrorRate": 0.9524,
+    "preserving": 1,
+    "dropping": 20
+   }
+  ]
+ },
+ "errorConcentration": {
+  "1100": {
+   "positionsWith2plusErrors": 6,
+   "meanModalErrorShare": 0.9583333333333334,
+   "meanUniformExpectedModalShare": 0.5892708333333331,
+   "meanDistinctErrorMoves": 1.1666666666666667,
+   "meanAvailableDroppingMoves": 7.5
+  },
+  "1500": {
+   "positionsWith2plusErrors": 6,
+   "meanModalErrorShare": 1.0,
+   "meanUniformExpectedModalShare": 0.5830416666666667,
+   "meanDistinctErrorMoves": 1.0,
+   "meanAvailableDroppingMoves": 7.5
+  },
+  "1900": {
+   "positionsWith2plusErrors": 5,
+   "meanModalErrorShare": 0.95,
+   "meanUniformExpectedModalShare": 0.6402083333333332,
+   "meanDistinctErrorMoves": 1.2,
+   "meanAvailableDroppingMoves": 7.0
+  }
+ },
+ "planConservation": {
+  "1100": {
+   "errors": 32,
+   "samePieceAsAPreservingMove": 22,
+   "expectedUnderUniformOverDropping": 17.8,
+   "sameRoleAsAPreservingMove": 22,
+   "expectedRoleUnderUniform": 19.0
+  },
+  "1500": {
+   "errors": 30,
+   "samePieceAsAPreservingMove": 19,
+   "expectedUnderUniformOverDropping": 15.45,
+   "sameRoleAsAPreservingMove": 19,
+   "expectedRoleUnderUniform": 16.65
+  },
+  "1900": {
+   "errors": 22,
+   "samePieceAsAPreservingMove": 12,
+   "expectedUnderUniformOverDropping": 13.2,
+   "sameRoleAsAPreservingMove": 12,
+   "expectedRoleUnderUniform": 13.8
+  }
+ },
+ "errorsByPack": {
+  "lucena-bridge-convert": [
+   0,
+   90
+  ],
+  "mate-bishop-knight": [
+   0,
+   90
+  ],
+  "mate-k-q-technique": [
+   0,
+   72
+  ],
+  "mate-k-r-technique": [
+   0,
+   72
+  ],
+  "mate-two-bishops": [
+   0,
+   72
+  ],
+  "opposite-bishops-fortress-hold": [
+   0,
+   72
+  ],
+  "pawn-breakthrough-convert": [
+   30,
+   54
+  ],
+  "pawn-opposition-convert": [
+   41,
+   72
+  ],
+  "philidor-passive-rook-convert": [
+   13,
+   72
+  ],
+  "philidor-third-rank-hold": [
+   0,
+   72
+  ],
+  "queen-vs-pawn-seventh-convert": [
+   0,
+   72
+  ]
+ },
+ "errorsByPackAndBand": {
+  "pawn-breakthrough-convert@1100": [
+   12,
+   18
+  ],
+  "pawn-breakthrough-convert@1500": [
+   12,
+   18
+  ],
+  "pawn-breakthrough-convert@1900": [
+   6,
+   18
+  ],
+  "pawn-opposition-convert@1100": [
+   16,
+   24
+  ],
+  "pawn-opposition-convert@1500": [
+   13,
+   24
+  ],
+  "pawn-opposition-convert@1900": [
+   12,
+   24
+  ],
+  "philidor-passive-rook-convert@1100": [
+   4,
+   24
+  ],
+  "philidor-passive-rook-convert@1500": [
+   5,
+   24
+  ],
+  "philidor-passive-rook-convert@1900": [
+   4,
+   24
+  ]
+ },
+ "errorsByDtzBucket": {
+  "|dtz|11-30": [
+   0,
+   288
+  ],
+  "|dtz|<=10": [
+   84,
+   432
+  ],
+  "|dtz|>30": [
+   0,
+   90
+  ]
+ },
+ "errorsByResultClass": {
+  "draw": [
+   0,
+   144
+  ],
+  "win": [
+   84,
+   666
+  ]
+ },
+ "errorsByPieceCount": {
+  "3": [
+   41,
+   216
+  ],
+  "4": [
+   0,
+   234
+  ],
+  "5": [
+   13,
+   234
+  ],
+  "6": [
+   30,
+   108
+  ],
+  "7": [
+   0,
+   18
+  ]
+ },
+ "fiftyMoveHorizonPositions": [
+  0,
+  0
+ ],
+ "policyBeliefVersusSampler": {
+  "1100": {
+   "positionsWithPolicy": 45,
+   "argmaxOfPolicyPreserves": 39,
+   "meanRawPolicyMassOnDroppingMoves": 0.13026679363230276,
+   "meanShareOfDroppingMassOnItsTopMove": 0.6969422830220218,
+   "sameIfDroppingMassWereUniform": 0.4503845551378446
+  },
+  "1500": {
+   "positionsWithPolicy": 45,
+   "argmaxOfPolicyPreserves": 39,
+   "meanRawPolicyMassOnDroppingMoves": 0.11181798959315699,
+   "meanShareOfDroppingMassOnItsTopMove": 0.6836467975866786,
+   "sameIfDroppingMassWereUniform": 0.4227732159345733
+  },
+  "1900": {
+   "positionsWithPolicy": 45,
+   "argmaxOfPolicyPreserves": 40,
+   "meanRawPolicyMassOnDroppingMoves": 0.09134710093048258,
+   "meanShareOfDroppingMassOnItsTopMove": 0.6787679779472273,
+   "sameIfDroppingMassWereUniform": 0.4071724920409131
+  }
+ },
+ "policyBandResponse": {
+  "pairs": 45,
+  "droppingMassLowerAt1900ThanAt1100": 30,
+  "higher": 10,
+  "signTestTwoSidedP": 0.0022214337732293643,
+  "strictlyDecreasingAcrossAllThreeBands": 22,
+  "meanAbsoluteChange": 0.043058022273679455
+ },
+ "errorRecurrence": [
+  {
+   "key": "8/p4k2/2p5/PP6/8/8/6K1/8 w - - 0 4",
+   "pack": "pawn-breakthrough-convert",
+   "dropping": 10,
+   "perBand": {
+    "1100": {
+     "b5c6": 6
+    },
+    "1500": {
+     "b5c6": 6
+    },
+    "1900": {
+     "b5c6": 6
+    }
+   },
+   "sharedByAllBandsThatErred": [
+    "b5c6"
+   ]
+  },
+  {
+   "key": "8/3k4/8/8/5K2/8/4P3/8 w - - 2 2",
+   "pack": "pawn-opposition-convert",
+   "dropping": 1,
+   "perBand": {
+    "1100": {
+     "e2e4": 6
+    },
+    "1500": {
+     "e2e4": 5
+    },
+    "1900": {
+     "e2e4": 2
+    }
+   },
+   "sharedByAllBandsThatErred": [
+    "e2e4"
+   ]
+  },
+  {
+   "key": "3k3r/R7/8/4K3/4P3/8/8/8 w - - 5 4",
+   "pack": "philidor-passive-rook-convert",
+   "dropping": 20,
+   "perBand": {
+    "1100": {
+     "e5e6": 3,
+     "e5d6": 1
+    },
+    "1500": {
+     "e5d6": 5
+    },
+    "1900": {
+     "e5d6": 3,
+     "e5e6": 1
+    }
+   },
+   "sharedByAllBandsThatErred": [
+    "e5d6"
+   ]
+  },
+  {
+   "key": "8/p7/2p1k3/PP6/8/8/6K1/8 w - - 0 2",
+   "pack": "pawn-breakthrough-convert",
+   "dropping": 10,
+   "perBand": {
+    "1100": {
+     "b5c6": 6
+    },
+    "1500": {
+     "b5c6": 6
+    },
+    "1900": {}
+   },
+   "sharedByAllBandsThatErred": [
+    "b5c6"
+   ]
+  },
+  {
+   "key": "5k2/8/8/8/3K4/4P3/8/8 w - - 3 3",
+   "pack": "pawn-opposition-convert",
+   "dropping": 3,
+   "perBand": {
+    "1100": {
+     "e3e4": 6
+    },
+    "1500": {
+     "e3e4": 6
+    },
+    "1900": {
+     "e3e4": 6
+    }
+   },
+   "sharedByAllBandsThatErred": [
+    "e3e4"
+   ]
+  },
+  {
+   "key": "8/2k5/8/8/8/5K2/4P3/8 w - - 4 3",
+   "pack": "pawn-opposition-convert",
+   "dropping": 1,
+   "perBand": {
+    "1100": {
+     "e2e4": 4
+    },
+    "1500": {
+     "e2e4": 2
+    },
+    "1900": {
+     "e2e4": 4
+    }
+   },
+   "sharedByAllBandsThatErred": [
+    "e2e4"
+   ]
+  }
+ ],
+ "agreementWithPerfectTablebasePick": {
+  "1100": [
+   50,
+   270
+  ],
+  "1500": [
+   48,
+   270
+  ],
+  "1900": [
+   61,
+   270
+  ]
+ }
+}
