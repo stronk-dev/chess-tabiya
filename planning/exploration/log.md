@@ -2935,3 +2935,62 @@ control's reason as visible.
 body still says `draft` and leaves owner-facing open question 2 unresolved. That question chooses
 between the digest tiebreak and retaining the measured lexicographic bias, so it changes code and
 cannot be inferred from the queue banner.
+
+## 2026-08-16 — D401 verified: the contradiction was a column misread, and the flip had already run
+
+**Retraction, and it goes on the permanent record because two ledger rows and a
+commit message carried the false claim.** D400 reported that `claim-backing`'s log
+entry — *"D97, D98, D112, D129, D130, D132–D134, D136, D163–D166, D169, D170, and
+D172 close"* — was contradicted by the ledger, and D401 stated it as *"zero of
+those fifteen read ✅."* **That is false, and the log side was the correct one.**
+
+All sixteen read ✅ in **column 1** of `design/BACKLOG.md`, and have since
+`3b16127`. The 🔨/💡 glyphs were read out of **column 3, the disposition note**,
+where fourteen still carried *"🔨 fixed in `rfc/archive/claim-backing.md` …"* and
+two — D97 and D112 — still read *"💡 open"* beside a ✅ status. **The rows disagreed
+with themselves; the log never disagreed with the ledger.**
+
+**Why it was invisible, and this is the finding.** The flip ran in `3b16127`,
+**69 seconds before** the implementing commit `5a63225`, under the subject *"law:
+content waves get the same closeout as RFCs; D367 and D372 closed"* — which names
+none of the sixteen. **Eighteen status characters flipped; two named.** A
+reverse-trace keyed on the implementing and archiving commits therefore finds
+nothing, which is exactly what happened — twice, to two separate passes.
+`5b65048` is a pure path rewrite because there was nothing left to flip.
+
+**Two further D400 statements are withdrawn on measurement, and they invert its
+conclusion.** `pack-graduation` did **not** flip 13 rows: `db243f5` and `b6b5d9a`
+changed **zero** status characters, and D203–D212, D237–D246, D138, D141 and D162
+are all still unverified — **it is the worse case, not the counterexample**.
+`evidence-at-runtime` flipped **two** rows, not four, and is the batch's only
+clean instance. So the cluster's real remainder belongs to `pack-graduation`
+(D418), and `claim-backing` — the RFC both passes accused — is the one that did
+it right.
+
+**All sixteen observables were re-derived against the shipped tree; fifteen are
+closed.** The prose-preserving attach path exists and never writes `pack.json`;
+prose pointers raise `EVIDENCE_OVERREACH` with no template exemption;
+`$defs/feedbackClaim` is closed; the residual sweep sees word and numeric
+ordinals including hyphenated compounds; the authored-span fence narrows to
+`author_principle` alone. D170's migration reproduces **exactly** — 82
+`author_principle` claims across 35 pack files resolving to 12 entries, largest
+15.9%.
+
+**One is changed, and it is a live hole (D417).** D166 claims a rate is refused
+inside an author-attributed segment. The shipped guard is decimal-only:
+*"f5 scores 90.9% for White"* raises `CLAIM_READING_UNATTRIBUTED`; ***"f5 scores
+91% for White"* raises nothing.** The one refusal the routing must not lift is
+lifted by dropping a decimal point.
+
+**The protocol finding (D416): this is not a slip, it is a lane split.** Across
+the last 25 commits the division is perfectly clean — every `feat:`/`fix:` commit
+is untrailered (the implementer's lane), every `ledger:`/`rfc:`/`research:`
+commit carries the session trailer (claude's). The completion protocol says the
+flip rides *"in the same commit"* — **a sentence only one agent can satisfy.**
+The cheap fix, in the same spirit as the log clause the protocol already carries:
+**require the closeout commit to name the rows it flips.** One line would have
+turned this investigation into a `git log --grep`.
+
+**And a reading rule (D419): the disposition column is not a status.** Three
+readers in two days took it for one, and two of them wrote false rows into the
+ledger as a result.
