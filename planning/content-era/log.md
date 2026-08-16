@@ -3644,3 +3644,194 @@ describing cluster F as never launched. **And the generalisable finding is the o
 routing:** a content wave has no completion protocol, which is exactly why this cluster shipped
 its fixes and lost its rows — the RFC protocol's ledger-and-log clause has no content-tier
 counterpart.
+
+## 2026-08-16 — D379: two shape entries were false at HEAD, and the sentence was wronger than the number (claude)
+
+**The ledger row named the defect precisely and it reproduced exactly.** `kid-chain-arrangement`
+claimed *"fires on exactly 14 nodes … and nowhere else in the corpus"* against **487 spine
+positions of the 37 shipped packs**; `london-wedge` claimed the same shape of thing. The
+instrument reads **24 of 827 across three packs** and **19 of 827 across three packs**. Both
+were true when written. Content wave F's second pass swept for the string `694` and could not
+see either, because these two were pinned to **487** — an even older denominator. **A sweep
+keyed on the denominator the sweeper happens to remember cannot converge**, which is the
+argument for [[D368]] and is now demonstrated twice rather than once.
+
+**The correction that mattered was not the numeral.** *"and nowhere else in the corpus"* is
+false regardless of what number precedes it: both entries now fire across three packs. Editing
+`14` → `24` and leaving the clause standing would have produced a claim that is arithmetically
+right and semantically inverted — the exact corruption `rfc/measurement-records.md` cites as
+its motivating case (a silent `doubled-c-pawns` refresh yielding *"fires on 8 of 827 … It
+stands alone deliberately"*). The clause was **withdrawn in writing** in both files, not
+quietly dropped, and the original sentence is kept beside its correction per the convention the
+wave-F entries already use in `doubled-c-pawns`, `open-centre` and `hanging-pawns`.
+
+### Method — re-derivation, deliberately not the method that missed these
+
+Nothing was grepped. `make expression-census` was run for the baseline, and a disposable probe
+(session scratchpad, never in the repo) walked all 56 packs' authored spines with the repo's
+own `matchesStructuralExpression`, `chessops` and the census's own pack-file filter, reporting
+**per-pack node ids** for every trigger and every plan signature of all 25 shape entries. Every
+numeric claim in the two files was then checked against that table, and every claim in the
+other 23 was checked the same way — by re-derivation, not by matching a remembered number.
+
+### The two false propositions, verbatim
+
+| File | Before (kept in place) | After (appended correction) |
+|---|---|---|
+| `kid-chain-arrangement` | *"Firing census over all 487 spine positions of the 37 shipped packs in content/drafts: this trigger fires on exactly 14 nodes, the seven from p15-d5 onward in each of the two King's Indian packs (including the b4 Bayonet and the modern knight-to-e8 branch tips), and nowhere else in the corpus."* | *"…it is the PROPOSITION that changed, not only the numerals: this trigger fires on 24 nodes across THREE packs, so 'and nowhere else in the corpus' is false and is withdrawn."* — anti-kid-classical-white **7**, kid-classical-black **7** (both unmoved, node for node), kid-mar-del-plata-white **10** |
+| `london-wedge` | *"Firing census over all 487 spine positions of the 37 shipped packs in content/drafts: this trigger fires on exactly 14 nodes, the seven from p11-c3 to p17-ne5 in each of the two London packs, and nowhere else in the corpus."* | *"…this trigger fires on 19 nodes across THREE packs, so 'and nowhere else in the corpus' is false and is withdrawn."* — anti-london-black **7**, london-system-white **7** (both unmoved), london-wedge-black-counterplay **5** |
+
+In both cases the entire increase is the third pack, and in both cases that pack's **own start
+position already stands inside the structure** — which is why the growth was invisible to a
+sweep looking at the two packs the sentence named.
+
+### A second defect, found only because the sweep was complete
+
+`kid-chain-arrangement` also claimed, twice, that **"at the shipped tabiya the g7 bishop's line
+to a1 carries exactly three blockers … the nearest of them Black's own e5 pawn."** Re-derived at
+the start FEN of `anti-kid-classical-white` and of `kid-classical-black`: the diagonal carries
+**four** blockers — the f6 knight, White's **d4 pawn**, the c3 knight, the b2 pawn — and the
+nearest is Black's own **knight on f6**, not the e5 pawn. Three-with-e5-nearest is the reading
+only from **p18-nd7 onward**, after the knight leaves f6 and White pushes d4-d5. Across all 24
+firing positions the count is 3 or 4 and never fewer. **This one is not corpus drift** — no
+denominator would have caught it, because it is a claim about a *named position* and there was
+never an instrument pointed at it. It was almost certainly false when written.
+
+### Everything else checked in the two files
+
+| Claim | Verdict |
+|---|---|
+| kid: false at the standard initial position | **holds**, re-checked |
+| kid: `closed-centre-chain`'s trigger fires on no position in this structure (stated in provenance and in a typical mistake) | **holds** — evaluated both directions: 0 of the 24 kid firings match `closed-centre-chain`, 0 of its 92 firings match this trigger |
+| kid: pawn geometry — c5 attacks b6/d6, f5 attacks e4/g4, e4 attacks d5/f5, d6 attacks c5/e5 | **holds**, re-counted with `direct_attack_count` on bare boards (1 on each named square, 0 on the squares beside them) |
+| kid: `fianchetto-g7` *"fires on every position of both King's Indian packs"* | **needs the qualifier it did not need at two packs**: 14/14 anti-kid-classical-white, 13/13 kid-classical-black, **11 of 12** kid-mar-del-plata-white. Corrected; the ownership point it supports is unaffected |
+| kid: the ...f5 signature fires at p20-f5, the last spine node of both KID packs | **holds**, and now also 4 nodes of kid-mar-del-plata-white — 6 across three packs. The same success **note** said *"the position both shipped King's Indian pack spines end on"*; corrected |
+| kid: trigger scope — Czech Benoni fires, KIA/closed-Spanish chains without the c4 pawn do not | **unaffected**: the trigger was not edited, so its constructed witnesses stand |
+| kid: the other five plan signatures | counted and recorded for the first time: c5-strike **2**, c-file **0**, blunt-the-f-pawn **0**, ...f4 lock **3**, slow-the-queenside **1** — and that last one fires in `carlsbad-minority-attack`, outside the structure, which is what an arrangement signature with no chain conjunct does |
+| london: false at the standard initial position | **holds** |
+| london: nine named squares all dark; c1 bishop has exactly one destination (d2) on the bare and the Colle position; mirror after ...e6 gives c8 exactly one (d7); d4 attacks c5 and e5 | **all hold**, each re-enumerated |
+| london: *"at every one of the 14 firing nodes b2 has zero White defenders, and d4 three-against-two (two against two after the knight reaches e5)"* | **substance holds at 19 of 19**: b2 zero everywhere; d4 is 3-vs-2 at 14 nodes and 2-vs-2 at 5 — and those 5 are **exactly** the five with a White knight on e5, so the parenthesis is a rule, not an artefact of the old sample |
+| london watch: *"across all fourteen positions … the answer is none"* | corrected to **nineteen across three packs**; the answer is still none |
+| london: *"the e5 clamp fires at p17-ne5 of both packs"* | **holds**, plus 4 nodes of london-wedge-black-counterplay — 6 across three packs |
+| london: the b2 refutation of `anti-london-black`'s authored claim (0 White defenders with the bishop out, 1 with it on c1) | **holds**, both counts re-derived on the pack's own deviation position |
+| london: Black's d5 pawn has no capture while White's pawns sit on c3/e3 | **holds** — a black pawn stands on d5 at all 19 firings and has a capture at none of them |
+
+### The other 23 entries, re-derived — and the count is zero
+
+Every corpus-measured claim in the remaining 23 shape entries was re-derived against the same
+table. **Nothing further is stale.** Wave F's nine were found by one method; a second, method-
+independent pass found the two it missed and **no third**.
+
+| Entry | Claim | Re-derived |
+|---|---|---|
+| `doubled-c-pawns` | trigger 8 of 827, all in `nimzo-doubled-c-pawns`; `black-fix-the-front-pawn` 3 | **8 / 8 / 3** ✔ |
+| `iqp-black` | trigger 7 of 827 all in its pack; `white-blockade-and-trade` 6; siblings *iqp-white 12 across three packs*, *carlsbad 41* | **7 / 6 / 12 / 41** ✔ |
+| `maroczy-bind` | trigger 10 all in its pack; `white-space-squeeze` 10; `black-dark-square-strategy` 1 | **10 / 10 / 1** ✔ |
+| `open-centre` | 16 of 827 across four packs — 9 / 3 / 3 / 1 by pack | **16, split exactly as written** ✔ |
+| `pawn-opposition-key-squares` | 33 of 827 (9 `pawn-breakthrough-convert`, 24 `pawn-opposition-convert`) | **33, same split** ✔ |
+| `hanging-pawns`, `knight-vs-bishop`, `up-an-exchange`, `vancura` | trigger 0 of 827; unreferenced; *"four of twenty-five entries are orphans"* | **all four still 0 and still unreferenced; the orphan set is still exactly those four** ✔ |
+| `knight-vs-bishop` D43/D55 line | fan 9 of 827 and 4 of 804 with fixtures excluded; none of the nine contains a knight; `satisfiabilityUnknown` 23→22 | **9 / 4 / 804 non-fixture / 0 with a knight / totals report 22** ✔ |
+| `advance-caro-dxc5-residue`, `bishop-good-bad`, `carlsbad`, `closed-centre-chain`, `fianchetto-g7`, `iqp-white`, `lucena`, `opposite-castling-race`, `opposite-coloured-bishops`, `pawn-breakthrough-outside-passer`, `philidor`, `queen-vs-pawn-on-seventh`, `queenless-middlegame`, `rook-4v3-same-side` | carry **no corpus-count claim of their own** — orientation conventions, family citations and trigger-scope notes only | nothing to go stale ✔ |
+
+### Changed
+
+- `content/shapes/kid-chain-arrangement.json` 0.1.0 → **0.1.1** — five prose corrections
+  (census proposition, the tabiya blocker count in provenance and again in `watch`, the
+  `fianchetto-g7` coverage qualifier, the plan-signature line and its `...f5` success note).
+- `content/shapes/london-wedge.json` 0.1.0 → **0.1.1** — four prose corrections (census
+  proposition, the b2/d4 arithmetic re-scoped to 19 nodes, the `watch` b2 item, the e5-clamp
+  signature line).
+- **No trigger, no plan signature, no watch/mistake list membership, no objective, no spine
+  move, no deviation class touched.** Prose and `version` only.
+
+### Before / after census
+
+`make expression-census` run before and after, same corpus both times (56 packs, 827 positions,
+25 shape entries, 771 transitions — unchanged throughout).
+
+| Total | Before | After |
+|---|---|---|
+| `subjects` | 192 | 192 |
+| `unsatisfiable` | 0 | 0 |
+| `satisfiabilityUnknown` | 22 | 22 |
+| `neverFiresInCorpus` | 30 | 30 |
+| `firesOnlyOutsideShape` | 39 | 39 |
+| `inShapeDenominatorEmpty` | 19 | 19 |
+
+Subject-level diff: **zero of 192 subjects moved** — firings, denominators and satisfiability
+verdicts all byte-identical before and after. That is the intended result and it was checked
+rather than assumed: a total that moved would have meant an edited expression, which was not
+this task. Regression: `make shape-check` green on **25 of 25** entries with
+`CORPUS=content/drafts,content/packs`.
+
+### Cost — six categories, `agent-*` clock
+
+```
+## 2026-08-16 — D379 shape-claim re-derivation, session 1
+research 20 · encoding 25 · engine-validation 45 · review 0 · revision 10 · tooling-friction 25
+```
+
+Total ~125 min. `engine-validation` is corpus validation, not engine: three full census runs,
+four probe runs over all 827 positions, the 25-shape regression sweep and the subject-level
+before/after diff. **No Stockfish, Syzygy or Maia call was made and none is claimed.**
+`tooling-friction` **25 of 125 = 20%**, below the ~25% tooling-verdict line — compare wave F
+second pass 17%, wave F 7.7%, middlegame ~14%, explorer ~27%. `revision` is 10 because the
+first probe sampled only *firing* positions, so the tabiya blocker claim looked merely odd
+until a second pass measured the pack start positions the sentence actually names.
+
+### Frictions, with time cost — ~25 of ~125 minutes (20%)
+
+1. **The census reports no node ids** (~10 min). `coverage.corpus` gives `fires`, `of`, per-pack
+   counts, a ply list and three sample FENs — enough to know *that* a claim moved, never enough
+   to write the corrected sentence, which needs *which* nodes. A spine walker with node ids was
+   built again. **The previous wave logged this same walker as friction #1 and it is still the
+   fastest thing to rebuild rather than reuse.**
+2. **`make shape-check` and `make expression-census` answer different halves of one question**
+   (~8 min). `shape-check FILE=` prints warnings and a pass/fail; it never prints the entry's
+   own coverage table. `expression-census` prints the coverage but for all 192 subjects at once
+   and without node ids. Neither answers *"what does this one entry read right now"*, which is
+   the only question a claim-correction pass asks.
+3. **`make expression-census` still prints its whole report to stdout** (~2 min). `OUT=` remains
+   the workaround; **third consecutive wave logging it**.
+4. **Nothing could have flagged either defect** (~3 min to conclude, and it is the finding —
+   see below).
+5. **Building the probe outside the repo cost a resolution detour** (~2 min): workspace deps
+   live in `apps/server/node_modules`, so a scratchpad instrument needs a symlink before esbuild
+   resolves `@chess-tabiya/runtime` and `chessops`. Cheap, but it is the tax on "harnesses are
+   disposable and must not land in the tree".
+
+### Contract gaps
+
+- **A measurement record of counts alone would not have caught this defect.** The previous wave
+  proposed `{ measuredAt, packs, positions }` for [[D368]]. That catches a stale *denominator* —
+  it would **not** have caught *"and nowhere else in the corpus"*, because both numbers can be
+  refreshed while the proposition inverts. A record must carry the **pack identity set**, not
+  just a pack count: `packs: ["anti-london-black", "london-system-white"]` makes *"nowhere
+  else"* mechanically checkable as a subset assertion, and a new pack entering the set is a
+  lint failure rather than a silent lie. This is a strengthening of D368, learned from the case
+  that motivated it.
+- **A new class, and nothing in D368 covers it: the position-anchored claim.** *"At the shipped
+  tabiya the g7 bishop's line to a1 carries exactly three blockers"* has no denominator, no
+  numerator and no corpus — it is a claim about **one named position**, and it was wrong.
+  Measurement records need an optional **position anchor** (a FEN, or a `pack#node` reference)
+  so that claims of this shape are re-derivable at all. Today the only way to check one is for
+  a human to notice the sentence and go look.
+- Both gaps belong to `rfc/measurement-records.md`, which is in review and was **not touched**.
+
+### Not done, deliberately
+
+- **No expression edited to make a number move.** Every change is a sentence corrected to what
+  the instrument says; the subject-level census diff is the proof.
+- **The original claims were kept, never overwritten** — the convention the wave-F entries
+  established, and the reason a reader can still see what was true in August and why it stopped
+  being true.
+- **No claim invented to replace a refuted one.** Where the corrected reading needed a qualifier
+  (`fianchetto-g7` at 11 of 12), the qualifier is stated rather than the sentence deleted.
+- **`design/BACKLOG.md` not touched** — concurrent agents collide on it. **D379 should flip
+  💡 → ✅**: *"both entries' propositions rewritten and re-derived — 24 of 827 / 19 of 827, each
+  across three packs, 'nowhere else in the corpus' withdrawn; a full re-derivation sweep of the
+  other 23 entries found nothing further stale."* Two ledger additions are also owed and are
+  named above: D368 needs the **pack identity set**, not a pack count, and needs a **position
+  anchor** for claims that name a position rather than a corpus.
+- **No `design/`, `rfc/`, `docs/`, `apps/`, `packages/` or `archive/` file touched, and nothing
+  committed.**
