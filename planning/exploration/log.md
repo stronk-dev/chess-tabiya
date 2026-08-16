@@ -2763,3 +2763,25 @@ framing: `practical_resistance` is **not** broken — that tolerance defect clos
 (mechanical "plan conservation") **failed to discriminate and is reported as a
 negative**. The judgment word — calling these "the textbook club-player error" — is
 flagged inline as judgment; the measurement stands without it.
+
+## 2026-08-16 — Claim backing implemented and archived
+
+Pack schema 0.26 makes authored claim debt payable without rewriting the author's sentence.
+Evidence ledgers may now carry claim-id plus text-digest bindings to a closed assertion registry;
+direct evidence support for prose is refused across every prose pointer; explorer attachment writes
+evidence and bindings while leaving the pack byte-identical. The first real binding backs
+`philidor-third-rank-hold/philidor-is-drawn` from its existing tablebase records.
+
+The authored side is explicit rather than disguised as machine evidence: 82 `author_principle`
+claims now resolve to 12 used official principle entries, each with provenance and a counter-case.
+The largest entry covers 13 claims (15.9%), below the one-third concentration tripwire. D97, D98,
+D112, D129, D130, D132–D134, D136, D163–D166, D169, D170, and D172 close. Missing legal-move
+censuses, ledgerless packs, unmeasured claims, rendering work owned by `feedback-delivery`, and the
+provenance-note vocabulary remain open by name; implementing the mechanism did not manufacture
+their evidence.
+
+Final verification: `ENGINES_REQUIRED=1 make verify` passed 695 tests across 109 files with schema
+and packaging clean; `make test-browser` passed 24 tests at zero retries, with the optional Maia
+measurement skipped. The first unit-gate run exposed one legacy census fixture using the forbidden
+direct-prose pointer; replacing it with a real claim binding made the instrument agree with the new
+contract.

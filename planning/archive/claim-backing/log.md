@@ -17,3 +17,8 @@
 - 2026-08-16: concentration check after migration: 82 author-principle claims, 12 referenced
   entries, largest entry `result-not-moves` at 13 claims (15.9%), below the one-third escalation
   threshold; no duplicate counter-cases. No machine label was removed to make the migration pass.
+- 2026-08-16: final gates green: `ENGINES_REQUIRED=1 make verify` passed 695 tests across 109
+  files with schema and packaging clean; `make test-browser` passed 24 tests at zero retries with
+  the optional Maia measurement skipped. The first unit-gate run correctly rejected a legacy
+  direct-prose-pointer census fixture; converting it to a real claim binding made the contract and
+  the instrument agree.

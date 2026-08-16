@@ -106,7 +106,7 @@ written. **Locate by symbol name first — every line number in this document is
 > `pack.feedbackClaims[i].text = renderExplorerFrequency(values)` and then records evidence for
 > the sentence *it* wrote. Authored prose was never given a path, and the contract forbids one.
 >
-> **`rfc/claim-backing.md` (accepted, pack 0.26) is that implementation.** It adds `claimBindings`:
+> **`rfc/archive/claim-backing.md` (implemented, pack 0.26) is that implementation.** It adds `claimBindings`:
 > the author keeps their own sentence and declares, span by span, which verbatim fragments are
 > instrument readings; the validator re-derives each reading from records already in that pack's
 > ledger and requires the author's words to match. The author's voice survives and the numbers

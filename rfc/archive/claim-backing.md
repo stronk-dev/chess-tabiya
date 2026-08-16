@@ -1,6 +1,6 @@
 # RFC: Claim backing — an instrument record may back an author's sentence without replacing it
 
-- **Status:** implementing
+- **Status:** implemented 2026-08-16
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-15
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder; **rung 5** — *"Authored
@@ -57,7 +57,7 @@
 - **Parent / amends:** amends `rfc/archive/content-sourcing-foundation.md` at `evidenceSupports`
   and the evidence-ledger shape. Amends nothing in the pack format.
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/claim-backing/` (once implementing)
+- **Planning:** `planning/archive/claim-backing/`
 
 *Every code site below was read in a clean tree at **`d2f34f9`** on 2026-08-15, and every corpus
 figure was derived from the committed `content/` tree at the same commit. **Re-verified at

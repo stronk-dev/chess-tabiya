@@ -295,7 +295,7 @@ Loosening `voiceCheck` remains the named anti-pattern, and this RFC does not tou
 - **Any cross-node arithmetic** — swings, losses, deltas, ranks, "this move cost X". §3.5
   makes this a normative refusal rather than an omission, and §11 explains why the same
   arithmetic is legitimate in `engine-leverage` and illegitimate here.
-- **Binding a record to authored prose.** `rfc/claim-backing.md`'s territory
+- **Binding a record to authored prose.** `rfc/archive/claim-backing.md`'s territory
   (`claimBindings`, the assertion registry, the residual sweep). This RFC **never reads
   `record.supports`** — §11.
 - **Rung 4.** No `explorer_frequency` record exists anywhere in the repository (0 across all
@@ -696,7 +696,7 @@ this projection has no use for.
    `PackRegistry` does not load `[V]`.
 
 **`record.supports` is not read.** Not at admission, not at lookup, not anywhere. That is the
-mechanical boundary against `rfc/claim-backing.md` (§11.2).
+mechanical boundary against `rfc/archive/claim-backing.md` (§11.2).
 
 ### 3.4 Value narrowing — an allow-list, not the raw bag
 
@@ -1205,7 +1205,7 @@ So the honest statement is the third one, and it is written here rather than lef
 **rung 4 is refused because the record kind that could carry the owner's ruling does not
 exist yet, not because nobody wants the number.** That is still clause 1 — a record kind with
 no producer is exactly what clause 1 refuses — but it is a refusal with a **named, specified,
-in-review unblocker** (`rfc/claim-backing.md` §3.7's `explorer_position_census`) rather than
+in-review unblocker** (`rfc/archive/claim-backing.md` §3.7's `explorer_position_census`) rather than
 an absence of demand. When records of that kind exist in a loadable pack, this projection
 gains **one registry row** and nothing else changes; §8.3 and §11.2 hold unaltered. **The
 distinction that keeps this a refusal rather than a deferral is that this RFC ships no
@@ -1642,7 +1642,7 @@ today — `GET /runs/:id/corpus` is a live, disclosure-gated, LLM-free explorer 
 is outside the packet, so no renderer may word it and no `voiceCheck` binds it. The two rung-4
 paths are unjoined. **D147.**
 
-The unblocker is named and not claimed: `rfc/claim-backing.md` §3.7's
+The unblocker is named and not claimed: `rfc/archive/claim-backing.md` §3.7's
 `explorer_position_census`. When records of that kind exist in a loadable pack, this
 projection admits them by adding **one row** to §5.1's registry — no new gate, no new
 sentence mechanism, no schema move. That is the argument for building the registry as a
@@ -1835,7 +1835,7 @@ live measurement suppresses the recorded one. **Landing order is free in both di
 if `engine-leverage` lands first, §3.7's suppression rule is live on arrival, and if this one
 lands first the rule sits dormant until the producer exists.
 
-### 11.2 `rfc/claim-backing.md` — in cross-review, pack 0.26 released
+### 11.2 `rfc/archive/claim-backing.md` — implemented at pack 0.26
 
 Both RFCs touch the same 32 ledgers and neither touches the other's direction.
 

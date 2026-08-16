@@ -27,7 +27,7 @@
   deployment serves ONE pack — the schema example — and none of the 47 authored ones"**
   (D162, owner-gated): *fix the gate properly — do not curate a subset, and do not delete
   the gate.*
-- **Depends on:** nothing unlanded. `rfc/claim-backing.md` is a **hard prerequisite for the
+- **Depends on:** nothing unlanded. `rfc/archive/claim-backing.md` is a **hard prerequisite for the
   packs it names** (§7) but not for this RFC's mechanics — **[cross-review] except for a
   landing-order obligation**: `claim-backing` round 2 re-claimed pack 0.26 and moves 35 pack
   digests / 29 ledgers, overlapping this RFC's 47 / 32, so whichever lands second re-stamps
@@ -507,7 +507,7 @@ provenance` and `$defs/feedbackClaim` are the last open objects in the pack sche
 provenance's openness is load-bearing (`licence`/`reviewers`/`graduationBlockers` are
 undeclared) — declare the vocabulary, then close them"*. **[cross-review] The draft then said
 *"`$defs/feedbackClaim` stays open; this RFC closes one of the two"* — that is stale at HEAD.**
-`rfc/claim-backing.md` round 2 (`aebe1a5`) re-claimed pack **0.26** and its §5.1 flips
+`rfc/archive/claim-backing.md` round 2 (`aebe1a5`) re-claimed pack **0.26** and its §5.1 flips
 `$defs/feedbackClaim` to `additionalProperties: false`, *"closing D112 at zero cost — all 182
 of 182 claims have the key set exactly `{id, text, evidenceTypes}`"* (`rfc/README.md` pack-version register, row **0.26**) `[V]`.
 So `defect-batch-2` §6's row is closed by **two** RFCs, one object each, and this RFC closes
@@ -800,9 +800,9 @@ pre-existing stale warnings. Note this is *not* a rebase of the pack `$id`, whic
 `$id`"*). It is the field change that moves them.
 
 **[cross-review] Criterion 6 is only true if this RFC lands last, and nothing says so.**
-`rfc/claim-backing.md` round 2 also moves digests: its §3.10 and §5.1 price *"the 35-pack,
+`rfc/archive/claim-backing.md` round 2 also moves digests: its §3.10 and §5.1 price *"the 35-pack,
 29-ledger digest movement"* and explicitly withdraw the draft's *"no committed pack byte
-changes, no content digest moves"* (`rfc/claim-backing.md` §3.10/§5.1; `rfc/README.md` register row **0.26**)
+changes, no content digest moves"* (`rfc/archive/claim-backing.md` §3.10/§5.1; `rfc/README.md` register row **0.26**)
 `[V]`. The two packs sets overlap — this RFC moves all 47, that one moves 35 of the same
 files — so **whichever lands second re-stales up to 29 of the 32 ledgers the first one just
 freshened**, and each RFC's own acceptance criterion asserts a state the other one breaks. This
@@ -1083,7 +1083,7 @@ things — the row's *"Tablebase opponent selection; unowned"* is correct for th
 **Three things this table says that must not be softened.**
 
 1. **No in-flight RFC graduates a single pack on its own.** — verified: the string
-   `graduation` appears **0 times** in `rfc/claim-backing.md` at HEAD `[V]`, and the same holds
+   `graduation` appears **0 times** in `rfc/archive/claim-backing.md` at HEAD `[V]`, and the same holds
    for `engine-leverage` and `vocabulary-wiring`. They supply *mechanisms*; **content waves
    clear blockers.** The RFC's payoff is that the count becomes knowable and the waves become
    countable. **[cross-review] The clause *"`claim-backing` claims no pack version, touches no
@@ -1536,7 +1536,7 @@ minted.
   authored packs in `content/drafts/`, excluding the six `*.browser.json` fixtures.
 - 2026-08-16: **adversarial cross-review, all figures re-derived at HEAD `a7e700d` and
   re-verified at `9df06c6`** (not `1b89123` — `expression-census.{ts,test.ts}`, `rfc/README.md`
-  and `rfc/claim-backing.md` all moved in between; `content/`, `schemas/`, `packages/schema/`,
+  and `rfc/archive/claim-backing.md` all moved in between; `content/`, `schemas/`, `packages/schema/`,
   `apps/server/src/sourcing/`, `pack-validation.ts`, `pack-studio.ts`, `pack-registry.ts` and
   the `Makefile` did **not** move across either step, so every measurement below stands at both
   commits `[V]`). **Reproduced unchanged:** 47 packs / 240 entries / 177 distinct / min 2 max
