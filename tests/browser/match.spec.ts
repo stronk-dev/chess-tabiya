@@ -146,6 +146,8 @@ test("two learners alternate a native match, pause to branch, and return to the 
     await expect(wall.getByLabel("Chessboard")).toBeVisible();
     await wall.getByRole("button", { name: "Open" }).click();
     await expect(coach.page).toHaveURL(new RegExp(`/live/session/${sessionId}$`));
+    await expect(coach.page.getByLabel("Move authorship")).toContainText(`Move 1 · @${white.handle}`);
+    await expect(coach.page.getByLabel("Move authorship")).toContainText(`Move 2 · @${black.handle}`);
   } finally {
     await Promise.all([coach.context.close(), white.context.close(), black.context.close()]);
   }

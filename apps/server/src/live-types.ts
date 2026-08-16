@@ -104,6 +104,7 @@ export interface LiveSessionDetail {
   readonly leaseHeldBy: { readonly learnerId: string; readonly handle: string };
   readonly voteAdapter?: LeaseIdentity;
   readonly grants: readonly import("./storage.js").RunGrant[];
+  readonly moveAuthorship: readonly import("./live-session.js").MoveAuthorship[];
   readonly proposals: readonly SessionProposal[];
   readonly vote?: VoteTally;
   readonly invitations: readonly SessionInvitation[];

@@ -51,6 +51,8 @@ describe("live session platform",()=>{
     expect(journal.entries.map((entry:any)=>entry.kind)).toContain("board.granted");
     const authors=deriveMoveAuthorship(storage.read("live-run")!.run,journal.entries,alice.learner.id);
     expect(authors.map((entry)=>entry.learnerId)).toEqual([alice.learner.id,bob.learner.id]);
+    const attributedDetail=await (await request(handler,"GET",`/sessions/${session.id}`,{cookie:bob.cookie})).json() as any;
+    expect(attributedDetail.moveAuthorship).toEqual(authors);
   });
 
   it("rejects adapter keys from ordinary learners and reports declared statuses",async()=>{

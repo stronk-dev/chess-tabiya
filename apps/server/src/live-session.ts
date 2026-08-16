@@ -102,7 +102,8 @@ export class LiveSessionService {
     const latest=this.#storage.voteWindow(sessionId);
     const match=this.#storage.matchState(sessionId);
     const voteAdapter=session.voteAdapterLearnerId===undefined?undefined:this.#storage.learnerById(session.voteAdapterLearnerId);
-    return Object.freeze({session,role:this.#storage.runRole(session.runId,principal.learnerId)!,activeNodeId:stored.run.activeCursor.nodeId,leaseHeldBy:{learnerId:holder.id,handle:holder.handle},...(voteAdapter===undefined?{}:{voteAdapter:{learnerId:voteAdapter.id,handle:voteAdapter.handle}}),grants:this.#storage.grants(session.runId),proposals,
+    const moveAuthorship=deriveMoveAuthorship(stored.run,this.#storage.sessionJournal(sessionId,0),session.createdBy);
+    return Object.freeze({session,role:this.#storage.runRole(session.runId,principal.learnerId)!,activeNodeId:stored.run.activeCursor.nodeId,leaseHeldBy:{learnerId:holder.id,handle:holder.handle},...(voteAdapter===undefined?{}:{voteAdapter:{learnerId:voteAdapter.id,handle:voteAdapter.handle}}),grants:this.#storage.grants(session.runId),moveAuthorship,proposals,
       ...(latest===undefined?{}:{vote:this.#tallyWithDerivedState(session,latest.id)}),invitations:this.#storage.invitations(sessionId),legs:this.#storage.arenaLegs(sessionId),...(match===undefined?{}:{match})});
   }
 
