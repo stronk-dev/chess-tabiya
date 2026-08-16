@@ -360,9 +360,13 @@ the ordinary browser job. Timings are evidence written to `test-results/`, not
 hard CI thresholds: the planning log records the budgets and whether the
 observed machine met them.
 
-A second Playwright projection checks every route at 1280x720 and 1440x900.
-It asserts that the document itself has no vertical overflow and that the
-drill board remains wholly within the viewport and above the timeline.
+A second Playwright projection checks every route at 1280x720, 1440x900, and
+768x1024. It asserts that the document itself has no vertical overflow and that
+the drill board remains wholly within the viewport and above the timeline. A
+corpus projection additionally exercises all six served endgame packs across
+the measured failing desktop sizes and requires a board of at least 192px;
+long objective prose scrolls inside its own bounded region instead of consuming
+the board's interaction area.
 
 ## Packaged operation
 

@@ -29,6 +29,7 @@ async function assertRunViewport(
   expect(board!.y).toBeGreaterThanOrEqual(-1);
   expect(board!.x + board!.width).toBeLessThanOrEqual(viewport.width + 1);
   expect(board!.y + board!.height).toBeLessThanOrEqual(viewport.height + 1);
+  expect(board!.width).toBeGreaterThanOrEqual(192);
   const regionElement = page.locator(".drill-region");
   const regionBox = await regionElement.boundingBox();
   const positionBox = await page.locator(".position-column").boundingBox();
@@ -43,14 +44,21 @@ async function assertRunViewport(
     clientHeight: element.clientHeight,
   }));
   expect(region.scrollHeight).toBeLessThanOrEqual(region.clientHeight + 1);
-  if (viewport.width <= 719) {
-    expect(board!.width).toBeGreaterThanOrEqual(192);
-  } else {
+  if (viewport.width > 719) {
     const timeline = await page.locator(".timeline-row").boundingBox();
     expect(timeline).not.toBeNull();
     expect(board!.y + board!.height).toBeLessThanOrEqual(timeline!.y + 1);
   }
 }
+
+const ENDGAME_VIEWPORT_PACKS = [
+  "Lucena: build the bridge and promote",
+  "Philidor: the third-rank fence holds the draw",
+  "Bishop and knight: the walk to the corner your bishop owns",
+  "Rook mate: the fence, the opposition, and the tempo move",
+  "King and pawn: opposition, key squares, promotion",
+  "Queen against a knight pawn on the seventh: the zigzag",
+] as const;
 
 test.beforeEach(async ({ page }) => register(page));
 
@@ -934,6 +942,30 @@ test("every shell route owns the viewport at supported desktop and tablet projec
           await expect(page.locator(".timeline-row")).toBeVisible();
         }
       }
+    }
+  }
+});
+
+test("served endgame packs keep the board above the timeline at supported desktop projections", async ({
+  page,
+}) => {
+  const projections = [
+    { width: 1280, height: 720 },
+    { width: 1366, height: 768 },
+    { width: 1440, height: 900 },
+    { width: 1440, height: 1000 },
+    { width: 768, height: 1024 },
+  ] as const;
+
+  for (const viewport of projections) {
+    await page.setViewportSize(viewport);
+    for (const title of ENDGAME_VIEWPORT_PACKS) {
+      await page.goto("/play");
+      const card = page.getByRole("article").filter({ hasText: title });
+      await expect(card, `${title} should be served`).toHaveCount(1);
+      await card.getByRole("button", { name: /Open position/ }).click();
+      await expect(page.getByLabel("Chessboard")).toBeVisible();
+      await assertRunViewport(page, viewport);
     }
   }
 });

@@ -164,10 +164,13 @@ use remains an online client to server-authoritative lease and grant checks.
 Playwright projects every route at 1280×720, 1440×900, and 768×1024. It asserts
 `document.scrollingElement.scrollHeight <= clientHeight + 1`; on a run it also
 asserts the board is inside both the viewport and the non-scrolling drill region
-within one pixel and ends above the timeline outside the compact tier. Compact
-coverage exercises Timeline, Branches, and Evidence at 390×844 and the measured
-360×680 floor, plus the explicit refusal immediately below it. This coverage
-caught and prevented a real board/timeline overlap.
+within one pixel, is at least 192px square, and ends above the timeline outside
+the compact tier. A corpus regression runs that invariant against all six served
+endgame packs at 1280×720, 1366×768, 1440×900, 1440×1000, and 768×1024. Long
+authored objectives retain their complete text in a bounded scroll region so the
+board keeps its playable floor. Compact coverage exercises Timeline, Branches,
+and Evidence at 390×844 and the measured 360×680 floor, plus the explicit refusal
+immediately below it.
 
 ## Keyboard ownership
 

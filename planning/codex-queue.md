@@ -95,7 +95,7 @@ must be authored, the row was split and the sentence sent to the authored side. 
 which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
 writer does not exist yet.
 
-## 0-KILL. [[D507]] — a kill criterion's usability clause fires on a layout bug. Take it now.
+## 0-KILL. [[D507]] — COMPLETED 2026-08-17
 
 **Measured hands-on 2026-08-16** (`design/research/endgame-latency-versus-cet.md`): at 1440×1000,
 **5 of 6 served endgame packs cannot receive their own authored first move**; at **1280×720 and
@@ -127,6 +127,11 @@ every default and rated run uses. [[D56]]'s family.
 
 **Do not take [[D508]]** — it is a finding, not a defect: CET's endpoint measures **30.8 ms**
 against our **30.1 ms** on the same FENs, so there is no speed gap to win and nothing to fix.
+
+**D507 closeout:** long objectives retain their complete text in a bounded scroll region and the
+board retains a 192px interaction floor. `assertRunViewport` now runs against all six served
+endgame packs at 1280×720, 1366×768, 1440×900, 1440×1000, and 768×1024. The pre-change
+regression reproduced a hidden 0px board and then a 90.7px board before the floor held.
 
 ## 0-OWNER. COMPLETED 2026-08-17 — two rulings landed 2026-08-16
 

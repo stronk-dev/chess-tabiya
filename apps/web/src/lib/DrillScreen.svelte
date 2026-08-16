@@ -1224,8 +1224,10 @@
 
   .objective-copy h1 {
     max-width: 30ch;
+    max-height: clamp(5.5rem, 16dvh, 10rem);
     margin: 0.25rem 0 0;
-    font: 500 clamp(1.4rem, 3vw, 2.4rem) / 1.04 var(--display-font);
+    overflow: auto;
+    font: 500 clamp(1.25rem, min(3vw, 3dvh), 2.4rem) / 1.08 var(--display-font);
   }
 
   .reading-controls { display:flex; flex-wrap:wrap; gap:.5rem; align-items:start; }
@@ -1427,6 +1429,14 @@
   .trajectory-status .active-leg { color: var(--ink); background: var(--paper-soft); }
   .trajectory-status span { font-size: 0.72rem; }
   .trajectory-status p { flex-basis: 100%; margin: 0.25rem 0 0; font-size: 0.8rem; }
+
+  @media (min-width: 720px) and (max-height: 800px) {
+    .position-column { gap: 0.25rem; }
+    .objective-copy h1 {
+      max-height: 3rem;
+      font-size: 1.25rem;
+    }
+  }
 
   @media (max-width: 719px) {
     .drill-region { overflow: hidden; }

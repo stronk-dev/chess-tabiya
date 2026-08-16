@@ -3186,3 +3186,17 @@ Run distillation now validates the completed pack before returning and refuses
 document proves the refusal path. The machine-label-to-record map was exported and is now consumed
 by binding validation, sourcing checks and the expression census; D430 remains open only for its
 RFC-owned dead-vocabulary half.
+
+## 2026-08-17 — the endgame board became playable at the measured failing viewports
+
+D507 reproduced against the served corpus rather than the schema-example fixture: the first
+1280×720 run rendered Lucena's board at zero size, and the first containment repair left only a
+90.7px board. Long authored objectives now keep their complete text in a bounded scroll region;
+the short desktop tier tightens that region and spacing so the board retains a 192px interaction
+floor without overlapping the timeline.
+
+The browser invariant now requires that floor at every supported viewport and runs against all
+six served endgame packs at 1280×720, 1366×768, 1440×900, 1440×1000, and 768×1024. The targeted
+zero-retry regression passes across all thirty pack/viewport combinations. D508 remains a finding,
+not work: the measured tablebase call is at latency parity with CET, so no speed advantage is
+claimed or patched.
