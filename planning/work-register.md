@@ -73,7 +73,7 @@ attribution line; vote form hardcodes 2 of 8 options).
 (`SIMULATE_BUDGET_EXCEEDED` declared, never thrown), D86 (`retryVariants` has no
 runtime effect), D39, D40, D57, D59.
 
-**F. Content fixes — a content wave, not an RFC.** D75 (`rook-4v3-same-side`'s
+**F. Content fixes — ✅ RAN 2026-08-15 (`41afe00`), re-verified and flowed back 2026-08-16.** *The register called this unlaunched for a day because a content wave has no completion protocol: it shipped its fixes and lost its rows.* **F. Content fixes — a content wave, not an RFC.** D75 (`rook-4v3-same-side`'s
 trigger is loose, not its signature), D76 (`fianchetto-g7` arm from the wrong side
 of the board), D43, D44, D55, D63.
 
