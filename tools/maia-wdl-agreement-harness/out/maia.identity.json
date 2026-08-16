@@ -1,0 +1,55 @@
+{
+  "identity": {
+    "id": "maia-5m",
+    "kind": "opponent",
+    "name": "Maia3",
+    "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+    "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+    "seedHonored": false,
+    "eloHonored": true
+  },
+  "options": [
+    {
+      "name": "Elo",
+      "type": "spin",
+      "default": "1500",
+      "min": 0,
+      "max": 5000
+    },
+    {
+      "name": "SelfElo",
+      "type": "spin",
+      "default": "1500",
+      "min": 0,
+      "max": 5000
+    },
+    {
+      "name": "OppoElo",
+      "type": "spin",
+      "default": "1500",
+      "min": 0,
+      "max": 5000
+    },
+    {
+      "name": "Temperature",
+      "type": "string",
+      "default": "1.0"
+    },
+    {
+      "name": "TopP",
+      "type": "string",
+      "default": "1.0"
+    },
+    {
+      "name": "MultiPV",
+      "type": "spin",
+      "default": "5",
+      "min": 1,
+      "max": 20
+    }
+  ],
+  "bandRange": {
+    "min": 1000,
+    "max": 2400
+  }
+}
