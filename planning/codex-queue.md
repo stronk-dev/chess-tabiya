@@ -81,10 +81,28 @@ corpus denominator contaminated. [[D227]] and [[D257]] stay open and own that.
 
 ## 1. Independent review owed, not implementation
 
-`opponent-contracts` shipped **run schema 0.17**, **migration 23**, mode-scope resistance on
-`/capabilities`, and the neutral `sha256(fen\0uci)` drawn-root tiebreak with
-`orderingBasis: "none"`. The lifecycle stays open for **an independent review** — not for
-another design decision, and not for you, since you implemented it.
+`opponent-contracts` shipped at `6ba0736`: **run schema 0.17**, **migration 23**, mode-scope
+resistance on `/capabilities`, the neutral `sha256(fen\0uci)` residual tiebreak with
+`orderingBasis: "none"`, and a **closed REST parse** so future selection fields are rejected
+rather than silently dropped (D382). Verified `ENGINES_REQUIRED=1 make verify` 727/114 and
+`make test-browser` 24 passed. The lifecycle stays open for **an independent review** — not
+for another design decision, and not for you, since you implemented it. **You were right not
+to archive it.**
+
+**The census result worth carrying forward:** drawn roots came in at **4.55% against a 4.02%
+uniform expectation** — the 2.6× enrichment is gone. But **won roots moved too, 1.57× → 1.18×**,
+and nobody predicted that, because the remedy was specified for drawn roots only. **130 won
+roots had tied optimal DTZ**, so the residual tiebreak carries far more traffic on the winning
+side than the defect report implied. Recorded on D371 rather than smoothed over: `localeCompare`'s
+simplification bias was never confined to the case that was measured.
+
+**On the ledger flips — you were right about the substance and wrong about the commit, and that
+is itself the finding.** They landed in `3c7d278`, not `1037004` (which touched only `log.md`).
+`3c7d278` is a **claude** commit subject-lined *"rulings: teacher mode ships complete, band is
+provenance…"*, naming none of D370/D371/D382 and nothing about opponent contracts; `6ba0736`
+changed zero ledger characters. **Fourth instance, and the first after [[D416]] wrote the rule
+against it.** That even you could not locate your own absorbed flips is the sharpest evidence
+for the rule: a flip under an unrelated subject is invisible to everyone, including its author.
 
 ## 2. Still do NOT take
 
