@@ -1,14 +1,20 @@
 # RFC: Pack graduation
 
-- **Status:** draft — **[cross-review] RETURNED 2026-08-16, one round.** The mechanism holds
-  and every scripted number reproduces at HEAD; the return is for **scope**, not for design:
-  the migration is 383 entries across 83 documents rather than 240 across 47 (§3.1a), the four
-  emitters that write the field were never retyped (§1.6), `accepted` is reachable by assertion
-  (§1.2), and the published-severity clean set is 4 rather than 7 (§5). All four are fixed in
-  the body below and each needs the author to re-price rather than the reviewer to assert.
-  *(`rfc/README.md` is single-writer and this cross-review does not edit it; the status cell
-  there is requested to read the same.)*
-- **Author:** claude (agent), for Marco
+- **Status:** **accepted 2026-08-16** — returned once by cross-review, all four returns
+  ratified in the author round with three amendments. Two owner-facing open questions remain
+  and neither blocks implementation. — **author return round complete 2026-08-16, ready to accept.** The
+  cross-review returned the draft for four things it did not count; all four are ratified, three
+  of them with the author's own amendment, and none is declined. The measurements behind them
+  were re-run rather than re-read (§5's checker sweep, the candidate census, the digest
+  freshness pass, the ruling-citation population) and all reproduce at HEAD `0241a98`. **Two
+  author rulings the reviewer left open are made in the body:** `content/candidates/` is in
+  scope for the schema and the typing and is **not** a graduation subject (§0.3, open question
+  6), and the never-wired published-severity check is **partly this RFC's** — a strict gate over
+  `content/packs/` here, a ratchet over `content/drafts/` here, and a named owner for the flip
+  (§5.1, criterion 14, open question 3).
+  *(`rfc/README.md` is single-writer and neither this cross-review nor this author round edits
+  it; the status cell there is requested to read the same.)*
+- **Author:** claude (agent), for Marco — return round 2026-08-16, ledger block **D237–D246**
 - **Cross-review:** claude (agent), 2026-08-16 — ledger block **D203–D212**, all figures
   re-derived at `a7e700d` and re-verified at `9df06c6`
 - **Created:** 2026-08-16
@@ -57,6 +63,17 @@ The second gate is worse than reported: running the checker rather than re-deriv
 **43 of 47 failing at published severity, 4 clean not 7, and 15 of 47 failing at draft severity
 today** (§5) — and `sourcing-check` is not part of `make verify` at all, so after a pack moves,
 the check that escalated it stops seeing it (§5, §6, criterion 14).
+
+**[author round] All four returns are ratified and the fourth one reorders this summary.** The
+headline was *"graduation exits the gates"*, and §6 fixed that for the two `readdir` sweeps.
+The cross-review found the same disease at a third gate and worse — **the published-severity
+sourcing check was never wired to anything at all**, so §5's *"a pack graduates only if
+`sourcing-check` also passes"* described a command a human types, aimed at the directory a
+published pack has just left. That is not a footnote to the mechanism; it is the mechanism's
+load-bearing half missing. **The corrected headline is: two of the three gates graduation
+escapes are `readdir` sweeps that can be widened, and the third was never a gate.** §5.1 rules
+what this RFC does about it, and the ruling is deliberately partial rather than deferred,
+because a full wiring would redden `make verify` for a debt §0.3 refuses to pay here.
 
 ## Motivation
 
@@ -121,6 +138,33 @@ in `content/drafts/` and missed `content/candidates/`, §3.1a), **the four emitt
 the field** (§1.6), the mechanical definition of graduation, and the repo-wide consequences of
 `content/packs/` becoming non-empty.
 
+**[author round] `content/candidates/` is in scope for the schema and the typing, and is not a
+graduation subject. Both halves are rulings, and the second is the one the cross-review left
+open.** The reviewer's §3.1a is ratified as measured — re-derived independently at HEAD:
+**36 `content/candidates/*/pack.json` documents, 143 bare-string entries, 7 distinct texts,
+min 1 / max 6 per pack, none empty, zero matching Stage A's substring, and exactly the same
+five provenance keys with no sixth** `[V]`. `packages/schema/src/drill-pack.test.ts`'s
+*"validates every committed pack document under the closed policy"* enumerates them and asserts
+`validate(value)` is `true`, so the schema change reaches them whether this RFC mentions them
+or not.
+
+**The exclusion the return invited was considered and is declined, on this RFC's own argument.**
+Excluding candidates from the closed-schema policy means narrowing `drill-pack.test.ts` to stop
+sweeping a directory of documents that the same emitters produce and the same validator
+accepts — that is *"a gate you graduate out of is not a gate"* (§6) applied in advance, and
+paying for a cheap schema change by deleting a check is the exact move this RFC exists to
+refuse. There is no second schema to move them to that does not immediately drift from the
+first. So they migrate, mechanically, via §4.0.
+
+**What is ruled *out* is the other reading — that a candidate is a thing that graduates.** A
+candidate is pre-draft emitter output; the graduation gate (§2) and the three-step mechanical
+definition (§5) apply to `content/drafts/` → `content/packs/` and to nothing else. A candidate's
+`blocking` entries are what the candidate→draft promotion path must read, and this RFC does not
+own that path. The consequence is a reporting rule, not a mechanism: **`graduation-report`
+prints no corpus-wide `blocking` total at all** — every total is per root (§3.3, criterion 3) —
+because a single number of ~340 merges 143 emitter placeholders with 197 authored debts and
+would be read as a content measurement. This answers open question 6 rather than deferring it.
+
 **Out of scope, explicitly:** (a) *doing* any of the grounding work the blockers record —
 this RFC makes the debt legible and countable, it does not pay it; (b) curating a subset of
 packs for promotion, which the owner refused by name; (c) any change to what
@@ -128,7 +172,8 @@ packs for promotion, which the owner refused by name; (c) any change to what
 `EVIDENCE_TYPE_UNBACKED` and `DEVIATION_COST_UNBACKED` from warning to error on published and
 that stays exactly as it is; (d) community packs' registration path beyond a one-predicate
 change (`PackStudio.register`); (e) reintroducing a pack review workflow, which is refused by
-the 2026-08-13 owner ruling this RFC finally files in the right place.
+the 2026-08-13 owner ruling this RFC finally files in the right place; **(f) [author round] the
+candidate→draft promotion path, and any reading of a candidate's blockers as content debt.**
 
 ## Specification
 
@@ -199,6 +244,14 @@ and they are **two different conditions** `[V]`:
   of a deployment's configuration. It is a `permanent_property` candidate, and Stage B must not
   file it with the other three by keyword.
 
+**[author round] Ratified — 5 entries in 5 packs, and the 3 + 2 split is visible in the strings
+themselves, not inferred.** Re-grepped at HEAD: the three substitution entries all read *"that
+mode is declared-unimplemented in v1, so `human_common` at 1200/1700 stands in"*, and the two
+provider entries read *"published only where a tablebase provider is configured"* `[V]`. The
+draft's *five*-versus-*four* self-contradiction (§1.1/§7 against open question 2) was a
+symptom of exactly this: **two populations under one keyword count as one number until someone
+reads the sentences.** §7's class-table row and open question 2 are corrected accordingly.
+
 A fourth state would let every substitution entry stop counting, and *"we are waiting on
 someone else"* is the single most reusable sentence in software. **A blocker whose fix lives in
 another RFC is `blocking`, with `clearedBy` naming that RFC.** It costs the three substitution
@@ -266,7 +319,9 @@ draft's own guard is weaker than it states.** Three measured defects:
    criterion 10 asserts only that the report *runs* and that its graduable-set line reproduces.
 3. **The concession is unnecessary, and the corpus proves it.** Owner rulings in this
    repository are written down and dated. `grep -o "owner ruling 20..-..-.."` over `design/`
-   returns **21 dated mentions across 8 distinct dates** `[V]`, and this RFC's own canonical
+   returns **21 dated mentions across ~~8~~ 6 distinct dates** (**[author round]** — the 21
+   reproduces exactly; the dates are 2026-08-10, -11, -12, -13, -15, -16, which is six, and the
+   reviewer's *eight* was a case-folding artefact) `[V]`, and this RFC's own canonical
    ruling — the 2026-08-13 no-review-workflow one — is recorded in **five** living-tier
    locations: `planning/exploration/log.md:1231`, `planning/exploration/gates.md:98`,
    `design/BACKLOG.md:528`, `design/research/README.md:120`,
@@ -279,10 +334,36 @@ draft's own guard is weaker than it states.** Three measured defects:
 absent, when the path does not exist, or — for `kind: "owner_ruling"` — when the referenced
 file does not contain the date `accepted.ruling` quotes. This is exactly the citation standard
 `design/research/README.md` already imposes on every dossier sentence, and the migration pays
-it once: Stage A's 37 canonical entries all take
-`planning/exploration/log.md#2026-08-13-owner-rulings`, and the single `permanent_property`
-takes the Syzygy 7-piece bound. **`accepted` then costs a real citation rather than a
-sentence**, and the printed page becomes a *second* guard rather than the only one.
+it once: Stage A's 37 canonical entries all take the 2026-08-13 owner-rulings entry in
+`planning/exploration/log.md`, and the single `permanent_property` takes the Syzygy 7-piece
+bound. **`accepted` then costs a real citation rather than a sentence**, and the printed page
+becomes a *second* guard rather than the only one.
+
+**[author round] Ratified, and the citation is satisfiable for all 37 — verified rather than
+assumed, because a required citation that cannot be paid blocks the migration it exists to
+enable.** The target resolves: `planning/exploration/log.md` line **1231** is
+`## 2026-08-13 (owner rulings) — no review workflow; predictions show numbers, not verdicts`,
+and the file contains the string `2026-08-13` `[V]`, which is the whole of what
+`GRADUATION_RULING_UNCITED` checks. All 37 entries quote the **same** ruling in seven wording
+variants (§4.1), so they take the **same** `rulingRef` and the citation cost of Stage A is one
+reference, not 37 — the lint is a floor on honesty, not a research task.
+
+**Two amendments to the reviewer's fix, both about the form of the reference.**
+
+1. **The anchor the reviewer wrote does not resolve, and the schema must not invite it.**
+   `planning/exploration/log.md#2026-08-13-owner-rulings` is not the slug of that heading — the
+   GitHub-style slug carries the whole title through *"…not-verdicts"*. **`rulingRef` takes
+   `path` or `path#L<line>`, and nothing else.** A slug form would need an anchor resolver the
+   lint does not have and would fail open on every typo, which is how a citation lint becomes
+   decoration. Stage A's canonical reference is therefore
+   **`planning/exploration/log.md#L1231`**.
+2. **A line reference into `log.md` is stable, and that is not a coincidence.** Law 7 makes
+   `planning/exploration/log.md` append-only, so line 1231 can never move; the one living-tier
+   file that is a safe line-citation target is the one the rule protects. Where a future
+   `accepted` entry cites a *mutable* file, `rulingRef` must be the bare path and
+   `accepted.ruling` must quote the dated sentence, which is what the date check already
+   enforces. This is recorded as a rule rather than a preference: **`#L<line>` is permitted only
+   into append-only files.**
 
 **And the page must be a committed artifact, not a command.** `make graduation-report`
 writes its `accepted` section to a checked-in file (`content/accepted-conditions.md`), and a
@@ -343,6 +424,38 @@ emitter that produces a document the schema now refuses. **All four emitters emi
 with stable `id`s, and both test assertions move to the typed shape, in the migration commit.**
 Acceptance criterion 12.
 
+**[author round] Ratified without reservation — this is the return's sharpest finding and the
+draft's §1.4 conclusion (*"the objection is recorded, not acted on"*) was simply wrong about
+what it was declining.** §1.4 declined a *rename*; §3.1 performs a *retype*, and a retype is not
+optional for a producer whose output is validated. Re-verified at HEAD: four writers, all
+`string[]`, at `distill.ts:82`, `sourcing/openings.ts:116`, `sourcing/position-seeds.ts:249`,
+`sourcing/syzygy.ts:187`; two readers; `validatePackDocument` compiling the JSON schema through
+Ajv (`pack-validation.ts`, `validator()` → `ajv.compile(schema)`); and both named test
+assertions present in the legacy shape `[V]`. And the break is harder than the two red tests
+say: **three of the four emitters validate their own output and throw.**
+`openings.ts:120`, `position-seeds.ts:252` and `syzygy.ts:190` each run `validatePackDocument`
+on the document they just built and raise `SourcingError("EMITTED_PACK_INVALID")` when it fails
+`[V]`, and `valid` is `!issues.some(severity === "error")` with schema violations at error
+(`pack-validation.ts`) `[V]`. So without §1.6 those three emitters do not emit an invalid
+document — **they stop emitting at all**, at run time, for every future sourcing wave. Only
+`distill.ts` lacks the self-check, and it is the one whose test carries the assertion instead.
+
+**One amendment the reviewer's fix needs to be implementable: *stable* `id`s cannot be derived
+from the emitted text, because two of the seven texts are templated.** `sourcing/syzygy.ts`
+emits `` `opponent mode ${options.opponent} is an authoring choice…` `` and
+`` `…this draft still requests ${options.opponent}, which can deviate from perfect play` ``, so
+a text-derived id changes with the caller's options `[V]`. **The `id` is a property of the
+emitter's blocker *template*, not of its rendered statement.** Each emitter declares a named,
+checked-in template list — id plus template — and emits `{id, state: "blocking", statement}`
+where `statement` is the rendered text; §4.0's Stage 0 reads the same list to assign ids to the
+already-emitted candidates. That is what makes *"Stage 0 and §1.6 must agree on those `id`s"*
+(§4.0) a mechanical check rather than a convention: **the agreement is a shared constant, and
+criterion 12 asserts the migrated `content/candidates/` ids are exactly the ids a fresh
+emission produces.** The four texts unique to `position-seeds.ts` and the shared
+`objective.summary` placeholder cover 5 of the candidate corpus's 7 texts; the remaining two
+(the `immediate_blunder_guard` defect note ×2, the rendered `strong_engine` choice ×1) are
+authored or interpolated residue and take Stage 0's generated ids.
+
 #### §1.5 Legacy strings block
 
 A plain `string` entry (the pre-migration shape) is **treated as `blocking`** by the gate
@@ -401,6 +514,15 @@ So `defect-batch-2` §6's row is closed by **two** RFCs, one object each, and th
 the second of the two rather than one of two open ones. No lane collision (§8.1) — but the
 sentence claiming feedbackClaim stays open is withdrawn.
 
+**[author round] Ratified, with the tense made exact.** At HEAD both objects are still open in
+the shipped schema: `$defs/feedbackClaim.additionalProperties` is `true` and
+`$defs/provenance.additionalProperties` is `true` with only `reviewStatus` and `sources`
+declared `[V]` — `claim-backing` has not landed. So the correct statement is **forward-looking**:
+this RFC no longer *can* claim to be closing one of two remaining open objects, because the
+other one is claimed. Whichever of the two lands first closes one and leaves the other open for
+exactly as long as the second takes. The withdrawal is right; the `defect-batch-2` §6 row is
+closed by two RFCs jointly and by neither alone.
+
 `graduationBlockers` is declared as an array of `$defs/graduationEntry`, a closed object with
 `required: ["id","state","statement"]`, `state` a closed three-value enum, `accepted` and
 `resolved` as closed sub-objects, and a `oneOf` binding `state` to its companion
@@ -440,6 +562,15 @@ Three consequences the draft does not carry:
 Fixes, all landed below: §4.0 adds the mechanical candidate stage; §3.3 walks
 `content/candidates/*/pack.json`; criteria 1 and 3 name the population.
 
+**[author round] Every figure in this section reproduces at HEAD, independently counted, and the
+scope growth is accepted** — 36 documents, 143 entries, 7 distinct texts, min 1 / max 6, none
+empty, zero Stage-A matches, five provenance keys and no sixth `[V]`; and the closed-policy
+test's document list is unchanged at HEAD from the version the reviewer read `[V]`. §0.3 rules
+what *kind* of scope this is: schema and typing, not graduation. **The third consequence above
+is upgraded from a report fix to a rule** — §3.3 prints no merged corpus total at all, rather
+than printing one alongside the per-root breakdown, because the merged number has no honest
+reading (§0.3).
+
 **Migration ordering constraint:** the schema tightening and the content migration must land
 in the **same commit**, because closing `additionalProperties` and typing the array
 invalidates all **83** committed pack documents the instant either half lands alone.
@@ -474,8 +605,10 @@ build is red)** **[cross-review]** and prints, deterministically:
 
 - per pack: counts by state, and the `id` + `statement` **+ `clearedBy`** of every `blocking`
   entry (**[cross-review]** §1.1 — an unprinted pointer cannot be audited);
-- corpus totals by state, **per root**, so `content/candidates/`'s legacy residue cannot hide
-  inside a corpus-wide zero;
+- totals by state **per root, and only per root** — so `content/candidates/`'s legacy residue
+  cannot hide inside a corpus-wide zero, and (**[author round]**, §0.3) so no merged
+  `blocking` total is ever printed: ~340 across three roots adds 143 emitter placeholders to
+  197 authored debts and would be quoted as a content measurement;
 - **the full `accepted` page** — every `accepted` entry, grouped by `kind`, with its `ruling`
   **and its `rulingRef`**;
 - the graduable set: packs with zero `blocking` entries.
@@ -508,6 +641,15 @@ typed form, so Stage 0 and §1.6 must agree on those `id`s.
 
 There is no hand audit here and no error mode worth naming: the stage can only produce
 `blocking`, which is §4.4's safe direction by construction.
+
+**[author round] The stage is ratified, and *"generated `id`"* is pinned so that the agreement
+with §1.6 is mechanical rather than aspirational.** Ids come from the emitter template registry
+§1.6 introduces, keyed on the **template**, not on the rendered statement — two of the seven
+candidate texts are interpolated (`syzygy.ts` renders `options.opponent` into both), so a
+text-derived id is not stable across callers `[V]`. The two texts with no emitter template (the
+`immediate_blunder_guard` defect note in 2 packs, the rendered `strong_engine` choice in 1) take
+a slug of their first clause. Criterion 12 asserts a fresh emission produces the ids Stage 0
+wrote, which is the only check that catches the two stages drifting apart later.
 
 #### §4.1 Stage A — mechanical, one pattern, 37 entries
 
@@ -567,6 +709,13 @@ Because the corpus's own prose defeats it, measured two ways:
    still / untouched / not a proof / stays / cannot / left as authored / says nothing*) returns
    **47 of 48** `[V]`. So 42 is a **floor**, not a measurement, and the `[V]` label on it is
    downgraded to what it is: a judgment, bounded below by a reproducible 47.
+   **[author round] 48-across-19 reproduces exactly; the proxy returns 45, not 47, and the
+   difference is the point.** Re-run at HEAD with the same nine tokens, the proxy hits **45 of
+   48** `[V]`; the reviewer's 47 is reachable only with a looser tokenization. Neither number is
+   the answer — **a proxy whose result moves by two on a word-boundary choice is exactly the
+   instrument §4.3 exists to refuse**, and quoting it to three significant figures repeats the
+   draft's original error in the other direction. The claim that survives: **42 is a hand-counted
+   floor, and no mechanical proxy tried so far scores below it.** That is what Stage B is for.
 2. **The prefixes are not reliable signals of state, and the draft found two of the
    inversions** — *"CORPUS-CHECKED … and NOT ANSWERABLE"* and *"STILL UNTESTED after the
    2026-08-15 engine pass"*. **[cross-review] The second was attributed to the wrong pack:
@@ -663,6 +812,20 @@ digest re-stamp is a landing-order obligation, not a one-time act — whichever 
 second re-stamps every ledger its own change moved, and criterion 6 is restated as `0`
 `EVIDENCE_DIGEST_STALE` **at the end of the landing commit**, not as a permanent property.**
 
+**[author round] The race is real and the restatement holds — both halves re-verified.** The
+digest arithmetic reproduces independently at HEAD: recomputing `digestDrillPack` over all 47
+packs against their ledgers gives **32 ledgers, 32 of 32 carrying `packDigest`, 27 fresh, 5
+stale** — `mate-bishop-knight`, `mate-k-q-technique`, `mate-k-r-technique`,
+`philidor-passive-rook-convert`, `trajectory-mate-bishop-knight` `[V]`. And `claim-backing`'s
+side is quoted correctly: its §3.10 prices *"the 35-pack, 29-ledger digest movement"* and states
+**"Of the 35 packs, 29 have a ledger and 6 do not"**, explicitly withdrawing its own
+*"no committed pack byte changes, no content digest moves"* `[V]`. **End-of-commit is the only
+form of criterion 6 that both RFCs can hold simultaneously**, and it costs this RFC nothing:
+re-stamping 32 ledgers is already in the migration commit, so the change is to what the
+criterion *asserts*, not to what the commit *does*. The obligation it creates — *whichever lands
+second re-stamps* — is symmetric and belongs in both RFCs; this one carries its half, and the
+other half is a request against a sibling RFC this round may not edit.
+
 ### §5 What graduation mechanically is
 
 Today graduation is implied by a directory and by nothing else. This RFC rules that it is
@@ -750,6 +913,66 @@ escalated for**. Open question 3 raises this as *gate-or-check*; it belongs in t
 fact, because the sentence above reads as mechanical and is not. Criterion 14 pins the minimum
 fix: whatever runs it must take both roots.
 
+**[author round] Every number in §5 was re-measured by running the checker a second time, and
+all of them reproduce at HEAD `0241a98`.** The draft's derivation was re-derived once and
+believed; the reviewer's was run once; a number that is load-bearing enough to reverse a
+section deserves the second run. `checkSourcingFile` over all 47 packs, each as committed and
+again against a temp copy with `reviewStatus: "published"` and its sidecars alongside:
+**4 clean at published** (`anti-caro-advance`, `opening-principles-black`,
+`opening-principles-white`, `opponent-intent-early-queen`), **43 failing**, **15 failing at
+draft severity today**, and **66 `EVIDENCE_TYPE_UNBACKED` across 28 packs** `[V]`. The 15 that
+fail at draft severity are **exactly** the 15 with no `.evidence.json` and no `.sources.json` —
+the two sets are identical, not merely the same size `[V]`. And the 97 reconciles arithmetically
+rather than by inspection: 97 machine-checkable labels corpus-wide, **31** of them in the **12**
+ledger-less packs that carry one, **66** in packs the checker reaches `[V]`. This matters
+because `apps/server/src/sourcing/check.ts` and `pack-validation.ts` both moved between the
+reviewer's commit and HEAD; the numbers survived the move, and now that is known rather than
+assumed.
+
+#### §5.1 **[author round]** The second gate was never wired — what this RFC does about it, and what it does not
+
+**Ruling: partly this RFC's, and the split is drawn where cost changes, not where convenience
+does.** The finding — the ledger row **"`make verify` never runs `sourcing-check`, and after a
+pack graduates it would run on the wrong root"**, and it outranks the mechanism — is that §5's
+escalation is enforced by a command a human types at `DIR=content/drafts`, the one root a
+published pack has just left.
+This RFC's own headline is that graduation must not mean exiting the gates; declaring the third
+gate someone else's problem while widening the two easy ones would make §6's argument
+self-serving. But wiring it whole is not free, and the measurement says so: **15 of 47 drafts
+fail `sourcing-check` today, at draft severity**, for debt §0.3(a) explicitly refuses to pay
+here. A criterion that reddens `make verify` for content debt this RFC declines to touch is a
+criterion that gets waived, and a waived gate is worse than an unwired one because it looks
+enforced.
+
+So the check is split into three, by what each part costs today:
+
+| Part | What lands here | Cost at HEAD |
+|---|---|---|
+| **(i) `content/packs/` — a strict gate, in `make verify`** | a test runs `checkSourcingDirectory` over `content/packs/` at strict severity and fails on any error | **zero** — the directory holds only `.gitkeep`, and open question 1 ships the graduable set empty. It cannot be red until someone graduates a pack that should not have graduated, which is precisely the event it exists to catch |
+| **(ii) `content/drafts/` — a ratchet, in `make verify`** | a test asserts **at most 15 of 47** drafts fail `checkSourcingFile` at their committed status, with the failing set printed | **zero, and it goes green today.** Paying debt never reddens it; incurring new debt does. It makes the debt countable, which is this RFC's entire thesis applied to the axis §5 measures |
+| **(iii) the flip to strict over `content/drafts/`** | **not this RFC's** | would be red on 15 packs on the day it lands |
+
+**(iii) has a named owner and a mechanical trigger, because *"a later wave"* is not a
+destination and §7 says so about other people's RFCs.** The owner is **whichever content wave
+first drives the ratchet in (ii) to `0`** — at that moment the ratchet's bound and a strict gate
+are the same assertion, and flipping it is a one-line change in the same commit, with no
+judgment left to make. The ledger row *"`make verify` never runs `sourcing-check`, and after
+graduation it would run on the wrong root"* (D208) stays open until that flip, and the ratchet
+number is its progress measure: **15 today, 0 at close.** That is a destination with a number on
+it, which is the standard §7 holds other RFCs to.
+
+**Why (i) is non-negotiable rather than deferred to the first graduation.** The first graduation
+is exactly the commit that cannot also be trusted to invent its own gate: it is the commit whose
+author most wants the pack to pass. `content/packs/` being empty is what makes the gate free
+*now* and impossible to introduce cheaply *later* — after the first pack lands, adding a strict
+sweep means either the pack passes (in which case the gate cost nothing and should have been
+there) or it does not (in which case the gate is under pressure to be weakened on its first
+use). **The cheapest moment to build a gate is while the thing it guards does not exist yet**,
+and that moment is this RFC.
+
+This answers open question 3: **gate for `content/packs/`, ratchet for `content/drafts/`,
+strict flip owned and triggered.** Criterion 14 is restated to all three parts.
+
 ### §6 The production-catalogue switch
 
 Once `content/packs/` is non-empty, every gate that reasons about "the corpus" changes
@@ -791,7 +1014,11 @@ here, and the second is the more important one — a gate you graduate *out of* 
    leaves the published-severity check running on `DIR=content/drafts` and therefore on
    everything **except** the packs that were escalated to published severity. That is the one
    place where the maturity gate still points backwards after this RFC, and criterion 14 is the
-   floor.
+   floor. **[author round] It is no longer the floor: §5.1 turns it into a ceiling for
+   `content/packs/` (a strict gate inside `make verify`, free because the directory is empty)
+   and a ratchet for `content/drafts/` (≤15 of 47, green today), with the strict flip owned by
+   the wave that drives the ratchet to 0.** After this RFC the maturity gate points *forward*
+   for the root that matters and is *counted* for the root that does not yet.
 3. **`make verify` has two hard breakages, not one.** `drill-pack.test.ts` reddens on the
    schema tightening because of `content/candidates/` (§3.1a), independently of whether any
    pack ever moves.
@@ -839,6 +1066,15 @@ evidence sidecars at all and fail at draft severity today. The `1 (anti-caro-adv
 unaffected. The left-hand column is this RFC's own hand audit and is left as the draft states
 it, labelled as such — but note that the two columns are now measured to different standards,
 which is exactly why the draft's own caveat below matters more than it did.
+
+**[author round] The right-hand column's `4` is confirmed by a second independent run of the
+shipped checker at HEAD, and the asymmetry between the columns is now stated as a rule.** The
+left column is a hand audit of prose; the right column is a tool's output. **Where the two
+disagree, the tool wins and the hand audit is relabelled, never the reverse** — that is what the
+draft got backwards when it derived §5 by hand and reported the derivation as the gate. The
+three packs the correction removes (`conversion-up-a-piece`, `rook-4v3-same-side`,
+`trajectory-qgd-exchange-minority`) are all in the 15 that carry no sidecars at all `[V]`, so
+they were never clean in any sense — they were unmeasured, and unmeasured scored as clean.
 
 **[cross-review] The `perfect_tablebase` row of the class table above reads `5`.** Per §1.1 it
 is 3 substitution entries + 2 provider-availability entries, which are cleared by different
@@ -909,6 +1145,29 @@ The lane-collision reasoning itself is verified sound: `DRILL_PACK_SCHEMA_VERSIO
 skipping 0.26 (*"taking 0.26 would put this RFC in a rebase race"*) was not caution, it was
 correct, and the race it predicted has since happened.
 
+**[author round] The 0.27 claim stands, its register row exists, and two lane facts moved
+again.** Re-checked at HEAD `0241a98`: `rfc/README.md`'s pack-version register carries the
+**0.27** row naming `pack-graduation.md` and records **0.28** as the next free lane `[V]`;
+`DRILL_PACK_SCHEMA_VERSION` reads **`"0.23"`** and the schema `$id` is
+`urn:chess-tabiya:schema:drill-pack:0.23` `[V]` — `engine-leverage` landed its 0.23 in
+`18d2832`, so 0.23 is now *consumed* rather than *implementing*, which is one lane further along
+than §8.1's prose says. **And 0.24 is being written into the working tree as this round is
+authored** — an uncommitted `vocabulary-wiring` implementation has
+`DRILL_PACK_SCHEMA_VERSION = "0.24"` and `$id … :0.24` on disk at HEAD+dirty `[V]`. Neither
+touches 0.27. The register's *"invalidates all 47 committed packs"* wording is still **83** per
+§3.1a and its digest clause still needs §4.5's ordering language; both remain requests against a
+single-writer file this RFC may not edit.
+
+**[author round] The register rule that changed under this RFC does not touch it, confirmed
+rather than assumed.** `rfc/README.md` instituted **"MIGRATION NUMBERS ARE ASSIGNED AT LANDING,
+NOT AT CLAIM"** on 2026-08-16, on the measured hazard that `storage.ts` migrates with
+`if (migration.version <= version) continue`, so a claimed-but-unlanded number is a hole the
+next landing seals shut `[V]`. The rule is scoped to **storage migration numbers**; pack-schema
+lanes are still claimed by number, which is why the 0.27 row exists at all. §8.2 rules this RFC
+takes **no migration, no table, no column and no `STORAGE_VERSION` bump**, so it holds no
+migration claim that could become a hole — it is not in the rule's population. Recorded here
+because *"the rule does not apply to us"* is a sentence worth having a citation behind.
+
 #### §8.2 Everything else: nothing
 
 - **Run schema: nothing.** `graduationBlockers` is never persisted in a run; no event, no
@@ -947,7 +1206,10 @@ assumed and never specified. The 2026-08-13 no-review-workflow ruling is preserv
 3. **Migration completeness.** **[cross-review]** All **383** entries across **83** pack
    documents are typed — 240 in `content/drafts/` and 143 in `content/candidates/` (§3.1a);
    `make graduation-report` prints `0` legacy-shape entries **per root**, so a root the report
-   does not walk cannot contribute a silent zero.
+   does not walk cannot contribute a silent zero. **[author round] The report prints no merged
+   corpus-wide `blocking` total at all** (§0.3, §3.3) — a single ~340 that adds 143 emitter
+   placeholders to 197 authored debts has no honest reading, and a number with no honest reading
+   is a number someone will quote.
 4. **Stage A is bounded.** The migration script asserts that every entry matching the
    no-review-workflow substring is byte-identical to one of the **seven** attested variants,
    and **fails** otherwise. 37 of 37 must match. Each of the seven variants' trailing clauses
@@ -956,7 +1218,11 @@ assumed and never specified. The 2026-08-13 no-review-workflow ruling is preserv
    `accepted` one.
 5. **Stage B split count is reported, not asserted.** The migration commit's message records
    the realised `blocking` / `resolved` / `accepted` totals and the number of compound splits;
-   §4.2's ~197 / ~48 / ~39 is a prediction and the shipped numbers are binding over it.
+   §4.2's ~197 / ~48 / ~~~39~~ **~38** (**[author round]** — the criterion still carried the
+   pre-correction `accepted` total that §1.2 correction 1 and §4.2 both fixed) is a prediction
+   and the shipped numbers are binding over it. **The totals are reported per root**, since
+   `content/candidates/`'s 143 are `blocking` by construction and adding them to the drafts
+   figure produces the merged number criterion 3 forbids printing.
 6. **Digests.** At the **end of the landing commit** (**[cross-review]** §4.5 — not as a
    permanent property, because `claim-backing`'s 35-pack / 29-ledger wave moves an overlapping
    set), `make sourcing-check DIR=content/drafts` reports **0** `EVIDENCE_DIGEST_STALE` — 32 of
@@ -991,11 +1257,17 @@ assumed and never specified. The 2026-08-13 no-review-workflow ruling is preserv
     contain the quoted ruling's date. All 37 Stage-A entries and the single
     `permanent_property` carry a resolving `rulingRef`. `content/accepted-conditions.md` is
     committed and a test asserts it is byte-identical to a fresh `make graduation-report` run.
-14. **[cross-review] The published-severity check sees both roots** (§5, §6). Whatever invokes
-    `checkSourcingDirectory` / `checkSourcingFile` over the corpus takes `content/drafts` **and**
-    `content/packs`, so a pack does not exit the evidence check by being escalated into it. If
-    the answer to open question 3 is *stay a check*, this criterion is the documented invocation
-    in `docs/`; if it is *become a gate*, it is a test.
+14. **[author round, superseding the cross-review's floor] The published-severity check is
+    wired, in three parts** (§5.1). (a) A test inside `make verify` runs
+    `checkSourcingDirectory` over **`content/packs/`** at strict severity and fails on any
+    error — green today because the directory is empty, and red the first time a pack is
+    graduated that should not have been. (b) A test inside `make verify` asserts **at most 15 of
+    47** `content/drafts/` packs fail `checkSourcingFile` at their committed status, printing the
+    failing set — a ratchet, green today, that paying debt can only improve. (c) The flip of (b)
+    to strict is **not** in this RFC; it is owned by the content wave that drives the ratchet to
+    `0` and lands in that wave's commit. The ledger row *"`make verify` never runs
+    `sourcing-check`, and after graduation it would run on the wrong root"* stays open until (c).
+    **No invocation of either checker over the corpus may name only one root.**
 
 ## Open questions
 
@@ -1020,10 +1292,16 @@ assumed and never specified. The 2026-08-13 no-review-workflow ruling is preserv
    judgment the ruling in §1.2 would license — and note §1.2 correction 1 found the corpus has
    only **one** attested `permanent_property` and **zero** attested `out_of_scope`, so
    whichever way this goes it sets the precedent for a kind that has none.*
-3. **Does `sourcing-check` at published severity become a *gate* or stay a *check*?** §5
-   states it as a fact of the shipped severity rules; it is not wired into any promotion
-   script because there is no promotion script. Deferred to whichever RFC ships the first
-   graduation, which is question 1's answer.
+3. ~~**Does `sourcing-check` at published severity become a *gate* or stay a *check*?**~~
+   **[author round] ANSWERED in §5.1, and the answer is both, split by root.** It becomes a
+   **strict gate** over `content/packs/` inside `make verify` — free today because the directory
+   is empty, and impossible to add cheaply once it is not. It becomes a **ratchet** over
+   `content/drafts/` — at most 15 of 47 failing, green today, tightening as debt is paid. The
+   flip of the ratchet to strict is **not** deferred to *"whichever RFC ships the first
+   graduation"*, which was a non-answer; it is owned by the content wave that drives the ratchet
+   to `0`, and the ratchet number is that wave's progress measure. Not an owner call —
+   the reason this was ever a question was that the draft priced the check as a fact instead of
+   as a gate, and §5.1 prices it.
 4. **Should `graduationBlockers` be renamed?** §1.4 says no, on cost. Recorded as deferred to
    any future RFC that already has reason to touch every emitter.
 5. **Who audits Stage B?** The migration reads 203 entries and the auditor's judgment is the
@@ -1039,10 +1317,20 @@ assumed and never specified. The 2026-08-13 no-review-workflow ruling is preserv
    no position on whether a candidate is a graduation *subject* or merely a document that must
    stay schema-valid. All 143 of its entries are emitter placeholders that no wave is scheduled
    to clear, so leaving them `blocking` forever is harmless — until someone reads a corpus-wide
-   `blocking` total of ~340 as a content measurement. **Recommended: `graduation-report`
+   `blocking` total of ~340 as a content measurement. ~~**Recommended: `graduation-report`
    segregates candidates from packs in every total (criterion 3), and the question of whether a
-   candidate can graduate is deferred to whichever RFC owns the candidate→draft promotion path.**
-   *Owner call only if the segregation is judged insufficient.*
+   candidate can graduate is deferred to whichever RFC owns the candidate→draft promotion path.**~~
+   **[author round] RULED in §0.3, not deferred. No: a candidate is not a graduation subject.**
+   The gate (§2) and the three-step definition (§5) apply to `content/drafts/` → `content/packs/`
+   and to nothing else; a candidate's `blocking` entries are input to the candidate→draft
+   promotion path, which this RFC does not own and now names as out of scope (§0.3(f)). The
+   segregation is strengthened past the reviewer's recommendation: **the report prints no merged
+   total at all**, rather than printing one beside the per-root breakdown — segregating a number
+   that still gets printed only slows down its misreading. The considered alternative was
+   excluding candidates from the closed-schema policy entirely, and it is declined in §0.3 on
+   this RFC's own argument: buying a cheap schema change by narrowing a sweep is the failure
+   shape §6 is named after. *Not an owner call — this is a scope ruling with a measured cost on
+   both sides, and it is the author's to make.*
 
 ## Ledger rows
 
@@ -1168,6 +1456,80 @@ the body where the measurement that found it sits. No id outside this block was 
   The general form: **a number derived by script and a name recalled from reading are not the
   same evidence class, and `[V]` on both hides which is which.** (§1.2, §4.3)
 
+### Ledger rows — author return-round block **D237–D246**
+
+Opened by the author's return round on the cross-review, 2026-08-16. Each is named at the point
+in the body where the measurement or the ruling that found it sits. No id outside this block was
+minted.
+
+- **D237** 💡 *The cheapest moment to build a gate is while the thing it guards does not exist.*
+  `content/packs/` holds only `.gitkeep`, so a strict `sourcing-check` sweep over it costs zero
+  today and can never be red without someone having graduated a pack that should not have. After
+  the first pack lands, the same gate is either redundant or under pressure to be weakened on its
+  first use, by the author who most wants that pack to pass. The general form: **a gate added
+  before its first subject is free and uncontested; the same gate added after is a negotiation.**
+  (§5.1)
+- **D238** 💡 *A ratchet is the honest form of a gate you cannot afford to close.* 15 of 47 drafts
+  fail `sourcing-check` today at draft severity, and `pack-graduation` refuses to pay content
+  debt — so it asserts **≤15**, prints the failing set, and names the wave that drives it to 0 as
+  the owner of the strict flip. **A criterion that reddens the build for debt the RFC declines to
+  pay is a criterion that gets waived, and a waived gate reads as enforced.** The number is the
+  destination that *"a later wave"* was standing in for. (§5.1, criterion 14)
+- **D239** 🐞 *Three of the four `graduationBlockers` emitters validate their own output and
+  throw.* `openings.ts:120`, `position-seeds.ts:252` and `syzygy.ts:190` each call
+  `validatePackDocument` on the document they just built and raise
+  `SourcingError("EMITTED_PACK_INVALID")` when it fails, and schema violations are error-severity
+  — so typing the array without retyping the emitters does not produce invalid documents, it
+  **stops three emitters from emitting at all**. Sharpens the row *"Four emitters write
+  `string[]` into a field an in-flight RFC types"* (**D204**): the two red tests were the
+  visible half of the break. (§1.6)
+- **D240** 🐞 *A blocker `id` derived from the emitted statement is not stable, because two
+  emitter blockers are templated.* `syzygy.ts` interpolates `options.opponent` into two of its
+  three blocker texts, so the same blocker renders differently per caller. Ids must key on the
+  **template**, in a checked-in registry both the emitter and the migration read. The general
+  form: **an identity derived from rendered output is an identity that moves when the caller
+  changes.** (§1.6, §4.0)
+- **D241** 🐞 *`rulingRef`'s worked example does not resolve, and a citation lint that fails open
+  on anchors is decoration.* `planning/exploration/log.md#2026-08-13-owner-rulings` is not the
+  slug of that heading. The fix is a narrower grammar — `path` or `path#L<line>`, nothing else —
+  and the observation that makes it safe: **law 7 makes `planning/exploration/log.md`
+  append-only, so it is the one living-tier file whose line numbers are a stable citation
+  target.** `#L<line>` is permitted only into append-only files. (§1.2)
+- **D242** 💡 *The ruling citation `accepted` now costs is payable once for all 37 entries.* The
+  37 no-review-workflow entries quote one ruling in seven wordings, so they take one `rulingRef`
+  — `planning/exploration/log.md#L1231` — and `GRADUATION_RULING_UNCITED` checks path existence
+  plus date containment, both of which hold. **A citation requirement is only a real guard when
+  the honest case can pay it cheaply and the dishonest case cannot pay it at all**; verified
+  before the requirement was ratified, because a lint that blocks its own migration is worse than
+  no lint. (§1.2)
+- **D243** 🐞 *A merged corpus-wide `blocking` total has no honest reading, so the report must not
+  print one.* ~340 across three roots adds 143 emitter placeholders no wave is scheduled to clear
+  to ~197 authored debts. Segregating a number that still gets printed only slows its misreading
+  down. Strengthens the reporting fix in the row *"`content/candidates/`'s 36 pack documents are
+  inside the closed schema policy and outside every graduation instrument"* (**D203**) from
+  *"per root as well"* to *"per root only"*.
+  (§0.3, §3.3, criterion 3)
+- **D244** 💡 *`content/candidates/` is inside the schema and outside graduation, and those are
+  two different questions that a single `readdir` conflated.* The candidates migrate because a
+  shipped test validates them; they are **not** graduation subjects, because the gate is a
+  drafts→packs move. The alternative — excluding them from the closed-schema policy — was
+  declined on the RFC's own argument: **buying a cheap schema change by narrowing a sweep is the
+  failure shape the RFC is named after.** (§0.3, open question 6)
+- **D245** 🐞 *A loose mechanical proxy that moves by two on a word-boundary choice was quoted as
+  a bound.* §4.3's residual-clause proxy returns **45** of 48 at HEAD with the nine tokens as
+  written, and **47** only with a looser tokenization; the reviewer published 47 as a
+  reproducible floor under a hand-counted 42. Both are true and neither is the answer. The
+  general form: **a proxy built to be loose cannot also be cited to the unit — quoting its exact
+  value repeats the error it was built to expose.** (§4.3)
+- **D246** 🐞 *Two live cross-RFC numbers moved under this RFC while it was being reviewed, in
+  opposite directions.* `engine-leverage` **landed** 0.23 (`18d2832`), so the register's
+  *"implementing"* is stale; and an uncommitted `vocabulary-wiring` implementation carries
+  `DRILL_PACK_SCHEMA_VERSION = "0.24"` on disk at HEAD. Neither touches 0.27, and the
+  migration-numbers-at-landing rule (`rfc/README.md`, 2026-08-16) is scoped to storage numbers,
+  which this RFC does not claim. The general form: **an RFC round that measures a moving tree
+  must pin its commit and re-check the lanes, because two of the four cross-RFC facts checked
+  here were true when written and false when read.** (§8.1)
+
 ## Changelog
 
 - 2026-08-16: created. All figures re-derived at `1b89123`; the corpus population is the 47
@@ -1193,3 +1555,33 @@ the body where the measurement that found it sits. No id outside this block was 
   sentences (§3.1, §7); the already-granted 0.27 register row (§8.1); six more prefix inversions
   and one misattributed one (§4.3); and three misattributed pack names (§1.2, §4.3). New ledger
   block **D203–D212**.
+- 2026-08-16: **author return round, all returned figures re-measured at HEAD `0241a98`** (the
+  tree moved twice during the round — `7650d41` → `0241a98` — and carried an uncommitted
+  `vocabulary-wiring` implementation throughout; `content/`, `schemas/`, `packages/schema/
+  drill-pack.test.ts`'s closed-policy list, the four emitters, `pack-studio.ts`, `pack-registry.ts`
+  and the `Makefile` were untouched by both, while `sourcing/check.ts` and `pack-validation.ts`
+  **did** move since the cross-review's `a7e700d` — which is why §5 was re-run rather than
+  re-read `[V]`). **Ratified, all four returns, none declined:** the candidate population
+  (36 documents / 143 entries / 7 texts / 0 Stage-A matches / no sixth provenance key,
+  independently re-counted); the four un-retyped emitters; `accepted.rulingRef`; and the
+  published-severity numbers (4 clean / 43 fail / 15 fail at draft today / 66 across 28 packs /
+  97 = 66 + 31 in 12 ledger-less packs, re-run with the shipped checker). Also reproduced: 47 /
+  240 / 177 / min 2 max 7 / 0 empty; 37 ruling entries in 7 variants 25/4/4/1/1/1/1; 48
+  resolution-marked across 19 packs; `perfect_tablebase` 3 + 2; 32 ledgers, 27 fresh, the same 5
+  stale; 16 files hardcoding a drafts path with 5 naming `anti-caro-advance`; `STILL UNTESTED`
+  in `anti-italian-center-attack-black`; the three `CORPUS-CHECKED … NOT ANSWERABLE` packs, both
+  `ENGINE-CHECKED … REFUTED` packs, `anti-caro-advance`'s defect-opening entry, the four
+  `UNGROUNDED`-as-debt entries and `maroczy-bind-white-squeeze`'s unmarked completed pass;
+  `make verify` = `typecheck test schema-check` with no corpus-wide `checkSourcingDirectory`
+  caller; the 0.27 register row and 0.28 as next free. **Amended by the author, each in the
+  section it governs:** the candidate scope ruling (§0.3, open question 6 — in scope for the
+  schema, not a graduation subject, exclusion declined); the emitter template-id registry (§1.6,
+  §4.0) and the three emitters that throw rather than emit; `rulingRef`'s grammar narrowed to
+  `path` / `path#L<line>` with the append-only-file rule (§1.2); the never-wired sourcing gate
+  split into a strict `content/packs/` gate, a ≤15-of-47 `content/drafts/` ratchet and an owned
+  strict flip (§5.1, criterion 14, open question 3); the report's merged corpus total removed
+  (§3.3, criterion 3). **Corrected against the cross-review:** owner-ruling dates are 6 distinct,
+  not 8 (§1.2); the §4.3 residual proxy returns 45, not 47, and is restated as unquotable to the
+  unit; `engine-leverage` has *landed* 0.23 and `vocabulary-wiring`'s 0.24 is in the working tree
+  (§8.1). **Confirmed not to apply:** the migration-numbers-at-landing rule, since §8.2 claims no
+  migration. New ledger block **D237–D246**.
