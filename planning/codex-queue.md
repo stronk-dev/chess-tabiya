@@ -1,61 +1,80 @@
-# Codex queue — rebuilt 2026-08-16 after evidence-at-runtime
+# Codex queue — rebuilt 2026-08-16 after `opponent-contracts` landed
 
-**You were right that it was empty.** Five accepted RFCs have now landed
-(`board-annotation`, `claim-backing`, `pack-graduation`, `format-surface`,
-`evidence-at-runtime`) and the queue had not been refilled behind them. Rebuilt from
-`rfc/README.md` and `design/BACKLOG.md`, not from memory.
+Derived from `rfc/README.md` and `design/BACKLOG.md` at `6ba0736`, not from memory.
+`opponent-contracts` is committed (`feat: implement opponent contracts`), so the previous
+item 0 is discharged and this file was empty behind it again.
 
-**My error, twice tonight, and you caught it:** I ran `git add design/` and `git add rfc/`
-while you had uncommitted register edits, absorbing them into my commits. Ledgered as D372;
-the rule is that I add the paths I authored, never a shared directory, while you are working.
+## 0. `rfc/dead-vocabulary.md` — ACCEPTED 2026-08-16, take it
 
-## 0. `rfc/opponent-contracts.md` — implementing; pending independent review
+Cross-reviewed and accepted the same day. **Claims nothing versioned** — no pack lane, no run
+schema, no migration, no `STORAGE_VERSION` position. It extends the shipped
+`make expression-census` with a **declaration census** behind `DECLARATIONS=1`: producers /
+consumers / corpus-firings / **refusal sites** per declaration, report-only.
 
-The owner ruled the digest tiebreak in the RFC body on 2026-08-16. Codex reviewed and
-implemented it; the lifecycle remains open for gate results and independent review, not for
-another design decision.
+Read the changelog first — the cross-review fixed **four specification defects in the census
+design**, and three of them are the kind that pass every test while measuring nothing:
 
-Claims **run schema 0.17** (`OpponentSelection.orderingBasis`), a **stamp-only migration at
-position `STORAGE_VERSION + 1`** (22 at HEAD), and an unversioned `/capabilities` change.
-**No pack lane** — 0.28 was claimed defensively and **released** in review.
+- **§3a's join key.** Schema rows in `FORMAT_DISPOSITIONS` are **bare pointers**
+  (`/retryVariants`); only `assistance:` and `error:` carry a namespace prefix. The draft
+  specified a uniform `` `${namespace}${subject}` `` join, which **silently matches zero
+  schema declarations** — a census that reports nothing wrong because it looked nowhere.
+- **§3b's producer forms.** The draft's definition missed two real syntactic shapes. A
+  deliberately naive classifier reported **three false zero-producer codes** —
+  `PERFECT_TABLEBASE_OUT_OF_RANGE` and `PRACTICAL_RESISTANCE_OUT_OF_RANGE` (emitted via
+  `runtimeIssue`, a different constructor) and `REPERTOIRE_IMPORT_LIMIT` (a literal nested in
+  a ternary, so not the argument node). The fixture doubled 3 → 6; criterion 5 was rewritten.
+- **A refusal emitter is not a consumer** ([[D429]]). `/retryVariants` gained one at HEAD.
+  Count it and **every `refused` row self-reports as healthy the moment its warning ships**.
+  There is now a fourth column, `refusalSites`, plus criterion 14.
+- **`tools/` was never in the excluded set** — and it must not be. `vacationReading` is the
+  case that proves it: its *only* caller anywhere is `tools/r1r2-primitives-harness/r1.test.ts`.
+  Exclude `tools/` and a documented-but-dead vocabulary reads as invisible instead of dead.
 
-Two defects, both measured:
+**Two acceptance criteria were unsatisfiable as drafted** and are fixed: both instructed you
+to flip D360's ledger row, which already reads `✅ refuted 2026-08-16`.
 
-- **D371** — `perfect_tablebase` plays the **alphabet** when holding a draw. `grounding-pair`
-  §2c specified the drawn tie (lexicographically least UCI) and required determinism and
-  purity while **assuming neutrality it never named**. `localeCompare` lacks it: the drawn-root
-  pick is **10.6% capture-or-pawn against 4.02% uniform** — a 2.6× enrichment toward
-  irreversible simplification in `hold`, the one objective whose content is the opposite.
-  Remedy: a **named refusal to order** (`orderingBasis: "none"`) plus a neutral
-  `sha256(fen\0uci)` tiebreak. **Only `hold` reaches the unordered case** — `save`/`resist`
-  give the learner `["loss","blessed-loss"]`, so the opponent is winning and takes the
-  ascending-DTZ arm.
-- **D370** — resistance is published at **mode scope** on `/capabilities`, never per move.
+**Zero is never a verdict.** The governing distinction is kept in separate columns:
+*fires nowhere* is a coverage fact; *cannot fire* is a bug. Only the second justifies a refusal.
 
-**Read A13 before you start.** It was written to fail against the current tree: `rest.ts`
-**rebuilds** the opponent selection field-by-field, so `orderingBasis` would be **silently
-dropped on the wire while every test passed** (D382). Same shape as D235.
+**Honour both halves of `docs/expression-census.md:26`** — the instrument is absent from
+`make verify` **and** writes no content. Criterion 13 asserts the second half, which the
+draft had asserted only in prose.
 
-## 1. Still do NOT take
+## 1. Independent review owed, not implementation
+
+`opponent-contracts` shipped **run schema 0.17**, **migration 23**, mode-scope resistance on
+`/capabilities`, and the neutral `sha256(fen\0uci)` drawn-root tiebreak with
+`orderingBasis: "none"`. The lifecycle stays open for **an independent review** — not for
+another design decision, and not for you, since you implemented it.
+
+## 2. Still do NOT take
 
 **D348** (needs a versioned lane), **D351** (needs an accepted authoring-instrument RFC),
-**D104** (not reproduced in 20 isolated runs — your call to refuse a speculative patch was
-correct), and the schema-shaped rows. `engine-leverage` and `vocabulary-wiring` are
-**implementing** — do not re-enter them.
+**D104** (not reproduced in 20 isolated runs — your refusal of a speculative patch was
+correct), and the schema-shaped rows. `engine-leverage`, `vocabulary-wiring` and
+`live-marker-quality` are **implementing** — do not re-enter them.
+
+Four RFCs are mid-author-round and none is takeable yet: `feedback-delivery`,
+`graduation-clearance`, `learner-rating`, `measurement-records`.
 
 ## Protocol reminders
 
 - **The ledger flip rides in the implementing commit**; **the exploration-log entry rides
-  in the archiving commit.** You did both on `2d0f7be`.
+  in the archiving commit.** **New, from [[D416]]: name the rows you flip in the commit
+  subject or body.** `3b16127` flipped 18 status characters and named 2, which is how two
+  false reconciliation records ([[D400]], [[D401]]) got written.
 - **`design/BACKLOG.md` is a shared ledger, not an intent doc.** Law 5 protects
   `design/00`–`06`.
+- **[[D419]]: column 3 of the defect table is NOT a status.** It holds pre-implementation
+  provenance and is not updated on flip, so a `✅` row can still read `🔨 fixed in …` or
+  `💡 open`. Read column 1. This misread produced both false records above.
 - Cite ledger rows by **row title**, never line number. Locate code by **symbol name**.
 - Claude's standing error, caught by you three times: **a resolution in a queue file is not
   a resolution in the body** — `deviation-classes`, `fixture-realism` + `live-marker-quality`,
-  `engine-leverage`.
-- Claude's **third** standing error, new tonight and now twice: **a line-based grep is not a
-  reading.** It missed a `"Resolve before \`accepted\`"` that wrapped across a line break,
-  and separately inverted a negation into a claim about "23 packs" that had to be withdrawn.
-  When I tell you a document contains or lacks something, ask whether I read it.
+  `engine-leverage`. `dead-vocabulary`'s body reads `accepted` before this file said so.
+- Claude's **third** standing error: **a line-based grep is not a reading.** It missed a
+  `"Resolve before \`accepted\`"` wrapped across a line break, and separately inverted a
+  negation into a claim about "23 packs" that had to be withdrawn. When I tell you a document
+  contains or lacks something, ask whether I read it.
 - Claude's second standing error: **`git add` on shared ledger paths while you have
   uncommitted edits there.** Say so if it happens again.
