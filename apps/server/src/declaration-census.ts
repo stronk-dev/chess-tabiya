@@ -83,6 +83,8 @@ function sourceText(root: string, file: string, overrides: Readonly<Record<strin
 }
 
 function productionFiles(root: string): readonly string[] {
+  const cached = productionFileCache.get(root);
+  if (cached !== undefined) return cached;
   const result: string[] = [];
   const visit = (path: string): void => {
     let entries;
@@ -99,11 +101,20 @@ function productionFiles(root: string): readonly string[] {
   };
   visit(resolve(root, "apps"));
   visit(resolve(root, "packages"));
-  return result.sort();
+  const files = Object.freeze(result.sort());
+  productionFileCache.set(root, files);
+  return files;
 }
 
+const productionFileCache = new Map<string, readonly string[]>();
+const parsedSourceCache = new Map<string, { readonly text: string; readonly source: ts.SourceFile }>();
+
 function parseSource(file: string, text: string): ts.SourceFile {
-  return ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, file.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+  const cached = parsedSourceCache.get(file);
+  if (cached?.text === text) return cached.source;
+  const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, file.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+  parsedSourceCache.set(file, { text, source });
+  return source;
 }
 
 function site(root: string, file: string, node: ts.Node): DeclarationSite {
