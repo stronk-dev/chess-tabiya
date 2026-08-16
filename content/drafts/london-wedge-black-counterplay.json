@@ -1,0 +1,443 @@
+{
+  "id": "london-wedge-black-counterplay",
+  "version": "0.1.0",
+  "title": "London wedge: the plan menu from the other chair",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 1700,
+    "label": "Black, on move, facing a completed London wedge",
+    "branchLengthTarget": 6
+  },
+  "start": {
+    "fen": "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P4/2PBPNB1/PP1N1PPP/R2QK2R b KQ - 5 8",
+    "movesSan": [
+      "d4",
+      "Nf6",
+      "Nf3",
+      "d5",
+      "Bf4",
+      "c5",
+      "e3",
+      "Nc6",
+      "c3",
+      "e6",
+      "Nbd2",
+      "Bd6",
+      "Bg3",
+      "O-O",
+      "Bd3"
+    ],
+    "side": "black"
+  },
+  "objective": {
+    "type": "reach_structure",
+    "summary": "White has built the wedge — pawns on c3, d4 and e3 with the dark-squared bishop outside on g3 — and every White piece is now placed. You are Black and it is your move. Reach a position where no Black pawn stands on the c-file while White's d4 pawn still does: that is the shape library's own success signature for Black's c-file plan in this structure, and it is the only thing this pack grades. The rest of the drill is the price of getting there, which you play out rather than read.",
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": { "kind": "plan_signature", "planClassId": "c-file-trade" },
+        "to": "achieved"
+      }
+    ]
+  },
+  "concepts": [
+    "london-wedge",
+    "half-open-file",
+    "plan-menu",
+    "bishop-locked-behind-its-own-pawn",
+    "structure-ends-on-a-recapture"
+  ],
+  "shapes": ["london-wedge"],
+  "planClasses": [
+    {
+      "id": "c-file-trade",
+      "label": "Trade the c-pawn and take the file",
+      "description": "The library's c-file plan and this pack's objective. Its signature is a fact about pawns: no Black pawn on the c-file while White's d4 pawn still stands. Measured on this spine — it is false at the start and true from the recapture onward, so it is a state change rather than a fact about the root.",
+      "shapePlan": { "shape": "london-wedge", "plan": "black-trade-the-c-pawn-for-the-file" }
+    },
+    {
+      "id": "challenge-the-bishop",
+      "label": "Trade the wedge bishop off",
+      "description": "The library's other reachable Black plan here: the bishop on d6 stands opposite the bishop on g3 and can simply take it. Its signature requires White's pawns still on d4 and e3 with no White dark-squared bishop left, so it holds after ...Bxg3 hxg3 played from the start position and NOT after the c-pawn trade, because the recapture exd4 takes the e3 pawn off. Both orders are authored; the signature distinguishes them.",
+      "shapePlan": { "shape": "london-wedge", "plan": "black-challenge-the-outside-bishop" }
+    },
+    {
+      "id": "fianchetto-the-light-bishop",
+      "label": "Fianchetto the light-squared bishop",
+      "description": "The library's b7 plan. Its signature requires a Black bishop on b7, a pawn on e6, and NO Black pawn on d5. Evaluated on every authored position in this pack: the bishop does reach b7, and the d5 pawn never leaves, so the signature is false throughout. That is recorded rather than worked around — the plan is begun here and finished somewhere past this pack's spine.",
+      "shapePlan": { "shape": "london-wedge", "plan": "black-fianchetto-the-light-bishop" }
+    },
+    {
+      "id": "free-the-bishop-first",
+      "label": "The plan that is already foreclosed",
+      "description": "The library's fifth Black plan — get the queen's bishop to f5 or g4 before the e-pawn shuts its diagonal — and the entry's own named typical mistake for this chair. Enumerated on the start position with the repo's own move generator: the c8 bishop has exactly one legal destination, d7. Neither f5 nor g4 is reachable, because both sit on the c8-h3 diagonal behind Black's own e6 pawn, and b7 is occupied by Black's own b-pawn. The plan is listed so the drill can name what was already spent, not so it can be chosen.",
+      "shapePlan": { "shape": "london-wedge", "plan": "black-free-the-light-bishop-first" }
+    },
+    {
+      "id": "white-e5-clamp",
+      "label": "What you are playing against",
+      "description": "The library's main White plan for this structure: a knight on e5 with the c3 and d4 pawns still behind it. Evaluated on every authored position in this pack: false at the start, true at both Ne5 nodes, and — on the ...b6 branch only — true at every position after it, because nothing there dislodges the knight. On the main line it holds for one ply and then stops, because the trade on e5 removes the knight. This pack does not grade it and does not compare it with the objective; it marks where it lands so you can see what you bought and what you sold.",
+      "shapePlan": { "shape": "london-wedge", "plan": "white-clamp-on-e5" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "cxd4-strike",
+      "moveUci": "c5d4",
+      "moveSan": "cxd4",
+      "annotations": [
+        "Read the structure before choosing. White pawns: a2, b2, c3, d4, e3, f2, g2, h2, with the dark-squared bishop outside on g3 — that is the wedge the shape library detects. Black pawns: a7, b7, c5, d5, e6, f7, g7, h7.",
+        "Lichess explorer, rapid+classical, rating bands 1400/1600/1800, 2023-01 to 2025-12, retrieved 2026-08-16: this position occurs in 16116 games, and fourteen different Black moves are played at least a hundred times. That is the widest attested plan menu of any position in this corpus, and it is why this position is the pack's root rather than a node on someone's main line. cxd4 is the fourth-most-played at 2066 (12.8%); Re8 3437 (21.3%), b6 3264 (20.3%) and c4 2474 (15.4%) are ahead of it.",
+        "The move itself is the library's c-file plan, played immediately. Nothing here says it is the best of the fourteen; the pack's objective is this plan because it is the one whose success the library can state as a fact about pawns."
+      ],
+      "children": [
+        {
+          "id": "exd4-recapture",
+          "moveUci": "e3d4",
+          "moveSan": "exd4",
+          "annotations": [
+            "2065 games at this node; exd4 is the most played at 1610 (78.0%), cxd4 404 (19.6%), Nxd4 45 (2.2%). The resulting position occurs in 11576 games, and the recorded outcomes there are 6111 white wins, 621 draws and 4844 black wins (52.8/5.4/41.8%).",
+            "The objective is now satisfied and the structure that named this pack is gone in the same move. Computed from the position: Black has no pawn on the c-file and White's d4 pawn stands, so the library's c-file signature holds; and White has no pawn on e3, so the wedge trigger — c3 AND d4 AND e3 plus the outside bishop — no longer fires. Whichever pawn recaptures, one of the wedge's three pawns leaves the board. That is a detector fact, not a judgment about who benefited."
+          ],
+          "children": [
+            {
+              "id": "re8-file",
+              "moveUci": "f8e8",
+              "moveSan": "Re8",
+              "annotations": [
+                "The most-played move at this band, 4606 of 11576 (39.8%). The rook takes the file the e-pawn just vacated."
+              ],
+              "children": [
+                {
+                  "id": "ne5-clamp",
+                  "moveUci": "f3e5",
+                  "moveSan": "Ne5",
+                  "annotations": [
+                    "4797 games at this node; Ne5 is the most played at 2741 (57.1%), then O-O 801 (16.7%) and Qc2 763 (15.9%). The library's White plan lands: a knight on e5 with c3 and d4 still behind it. Both signatures now hold at once — your file and his square. This pack states that and stops."
+                  ],
+                  "children": [
+                    {
+                      "id": "nxe5-remove",
+                      "moveUci": "c6e5",
+                      "moveSan": "Nxe5",
+                      "annotations": [
+                        "3214 games at this node. Nxe5 is played 152 times (4.7%); Qc7 1197 (37.2%), Bxe5 766 (23.8%) and Nd7 392 (12.2%) are all more common. This branch is authored because of what the recapture does, not because it is popular, and the share is stated so you can see the difference."
+                      ],
+                      "children": [
+                        {
+                          "id": "dxe5-recapture",
+                          "moveUci": "d4e5",
+                          "moveSan": "dxe5",
+                          "annotations": [
+                            "157 games at the previous node and dxe5 is played in 154 of them (98.1%). The resulting position has 139 games — and one ply further on the band's data falls to 7, below the hundred-game floor at which this repo's own explorer client abstains. This is the end of the evidence, not the end of the game.",
+                            "Computed: White's d4 pawn is gone, so the c-file signature this pack grades stops holding here. You reached the objective at move nine and the position stopped being the one the objective was about at move eleven. That is the honest shape of a middlegame plan and it is why the drill continues past the moment it is satisfied."
+                          ],
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "bxg3-after-trade",
+              "moveUci": "d6g3",
+              "moveSan": "Bxg3",
+              "annotations": [
+                "754 of 11576 (6.5%). The same bishop trade as the third root branch, one move later — and the library's signature for it no longer holds, because the recapture on move nine already took the e3 pawn the signature requires. Same move, same idea, different detected consequence."
+              ],
+              "children": [
+                {
+                  "id": "hxg3-after-trade",
+                  "moveUci": "h2g3",
+                  "moveSan": "hxg3",
+                  "annotations": [],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b6-fianchetto",
+      "moveUci": "b7b6",
+      "moveSan": "b6",
+      "annotations": [
+        "3264 of 16116 (20.3%), the second-most-played move at the band. The queen's bishop cannot come out through e6, so it goes round the back: this is the library's b7 plan begun.",
+        "The resulting position occurs in 3899 games, and the recorded outcomes are 1733 white wins, 228 draws and 1938 black wins (44.4/5.8/49.7%)."
+      ],
+      "children": [
+        {
+          "id": "ne5-clamp-early",
+          "moveUci": "f3e5",
+          "moveSan": "Ne5",
+          "annotations": [
+            "1714 of 3899 (44.0%), the most-played reply. The clamp arrives a move earlier here than on the main line, and for the same reason: nothing Black has played contests e5. The library's White signature holds from this move on."
+          ],
+          "children": [
+            {
+              "id": "bb7-diagonal",
+              "moveUci": "c8b7",
+              "moveSan": "Bb7",
+              "annotations": [
+                "1725 games at this node; Bb7 is the most played at 1061 (61.5%), then Qc7 386 (22.4%) and Bxe5 161 (9.3%). The bishop reaches the long diagonal — and the library's b7 signature still does not hold, because it also requires the d5 pawn to be gone and it is not. The plan is half done and the census says so."
+              ],
+              "children": [
+                {
+                  "id": "f4-stonewall",
+                  "moveUci": "f2f4",
+                  "moveSan": "f4",
+                  "annotations": [
+                    "1748 games at this node; f4 is the most played at 586 (33.5%), then Ndf3 437 (25.0%) and O-O 233 (13.3%). The pawn behind the knight: White is spending a move to make the clamp permanent rather than to develop. The resulting position has 639 games, and one more ply of the band's most-played moves keeps it above the floor."
+                  ],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bxg3-immediate",
+      "moveUci": "d6g3",
+      "moveSan": "Bxg3",
+      "annotations": [
+        "479 of 16116 (3.0%). Take the bishop the whole structure was built around, before anything else changes. This is the branch where the library's bishop-challenge signature actually holds, because White's c3, d4 and e3 pawns are all still on the board when the dark-squared bishop leaves it."
+      ],
+      "children": [
+        {
+          "id": "hxg3-immediate",
+          "moveUci": "h2g3",
+          "moveSan": "hxg3",
+          "annotations": [
+            "479 games at the previous node and hxg3 is played in 476 of them (99.4%); fxg3 appears twice. The resulting position occurs in 890 games with recorded outcomes 499 white wins, 31 draws and 360 black wins (56.1/3.5/40.4%).",
+            "Computed: White's g-pawns are doubled, White has no pawn on the h-file, and White has no dark-squared bishop. Those are the facts. What the open h-file is worth to the rook that now stands behind it is not something this pack, the library or the corpus can tell you, which is exactly why it is a branch to play out."
+          ],
+          "children": []
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "plan-choice",
+      "label": "Fourteen attested moves. Which plan are you playing?",
+      "trigger": { "atStart": true },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["c-file-trade", "challenge-the-bishop", "fianchetto-the-light-bishop", "free-the-bishop-first"]
+      }
+    },
+    {
+      "id": "file-taken",
+      "label": "No Black pawn on the c-file, White's d4 pawn still there",
+      "trigger": { "atSpineNode": "exd4-recapture" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "clamp-landed",
+      "label": "A White knight stands on e5 with the wedge pawns behind it",
+      "trigger": {
+        "fenPredicate": {
+          "type": "structuralFeature",
+          "feature": {
+            "kind": "all",
+            "of": [
+              { "kind": "pieceOnSquare", "square": "e5", "piece": { "color": "white", "role": "knight" } },
+              { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } },
+              { "kind": "pieceOnSquare", "square": "c3", "piece": { "color": "white", "role": "pawn" } }
+            ]
+          }
+        }
+      },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "structure-gone",
+      "label": "The d4 pawn is gone and so is the thing the objective was about",
+      "trigger": { "atSpineNode": "dxe5-recapture" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "bishop-traded",
+      "label": "The wedge bishop is off the board",
+      "trigger": { "atSpineNode": "hxg3-immediate" },
+      "actions": ["compare_branches"]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "cxd4-strike",
+      "exd4-recapture",
+      "re8-file",
+      "ne5-clamp",
+      "nxe5-remove",
+      "dxe5-recapture",
+      "bxg3-after-trade",
+      "hxg3-after-trade",
+      "b6-fianchetto",
+      "ne5-clamp-early",
+      "bb7-diagonal",
+      "f4-stonewall",
+      "bxg3-immediate",
+      "hxg3-immediate"
+    ],
+    "plyHorizon": 16,
+    "fenPredicates": [
+      {
+        "type": "structuralFeature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } },
+            { "kind": "pieceOnSquare", "square": "e3", "piece": { "color": "white", "role": "pawn" } },
+            { "kind": "pieceOnSquare", "square": "c3", "piece": { "color": "white", "role": "pawn" } },
+            {
+              "kind": "any",
+              "of": [
+                { "kind": "pieceOnSquare", "square": "f4", "piece": { "color": "white", "role": "bishop" } },
+                { "kind": "pieceOnSquare", "square": "g3", "piece": { "color": "white", "role": "bishop" } },
+                { "kind": "pieceOnSquare", "square": "h2", "piece": { "color": "white", "role": "bishop" } }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "structuralFeature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            {
+              "kind": "any",
+              "of": [
+                { "kind": "feature", "feature": { "kind": "open_file", "file": "c" } },
+                { "kind": "feature", "feature": { "kind": "half_open_file", "color": "black", "file": "c" } }
+              ]
+            },
+            { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } }
+          ]
+        }
+      }
+    ]
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1500,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "atStart": true },
+      "moveUci": "f8e8",
+      "class": "accepted_alternative",
+      "note": "Re8, the most-played move at this band: 3437 of 16116 (21.3%). It commits to none of the four Black plans this pack names and keeps all of them available, which is a real answer to a position with fourteen attested moves. The objective is unsatisfied while you play it, and that is a statement about this pack's chosen plan, not about the move."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "c5c4",
+      "class": "interesting_deviation",
+      "note": "c4: 2474 of 16116 (15.4%), the third-most-played move. It resolves the same tension in the opposite direction — the pawn goes past d4 instead of trading itself for it, so the c-file stays shut and the objective becomes unreachable while the pawn stands there. Computed: the library's c-file signature requires no Black pawn on the file, and a Black pawn on c4 is a Black pawn on the file. Whether the space is worth the file is a question nothing in this repo can answer, so it is a door rather than an error."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "d8b6",
+      "class": "interesting_deviation",
+      "note": "Qb6: 158 of 16116 (1.0%), and it is the library's fifth Black plan — send the bill to b2. Computed on the position after it: the b2 pawn is attacked once, by the queen down the file, and defended zero times, because the dark-squared bishop left c1 for the wedge and the queen's knight went to d2 rather than c3. Undefended is a board fact; free is a calculation, and this pack does not do the calculation for you."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "c8d7",
+      "class": "concept_violation",
+      "offObjective": true,
+      "mistake": ["plan"],
+      "note": "Bd7: 106 of 16116 (0.7%). It is off-objective by arithmetic rather than by grade. Enumerated with the repo's move generator on the start position: the c8 bishop's legal destinations are d7 and nothing else — f5 and g4 both sit on the c8-h3 diagonal behind Black's own e6 pawn, and b7 is behind Black's own b-pawn. So the library's free-the-bishop-first plan cannot be played from here at all, and Bd7 is the move that spends a tempo confirming it. The pack marks this because the shape entry names the same thing as its typical mistake for this chair, one move earlier in the game.",
+      "cost": {
+        "kind": "unmeasurable",
+        "reason": "No engine pass has been run on this pack, and the corpus cannot price it: the position after Bd7 has 106 games at the band, which is above the floor for a split but a split is not a cost. Converting one into a cost is the conversion the owner ruling of 2026-08-15 refuses."
+      }
+    },
+    {
+      "at": { "spineNodeId": "exd4-recapture" },
+      "moveUci": "b7b6",
+      "class": "accepted_alternative",
+      "note": "b6 after the trade: 647 of 11576 (5.6%). Both of Black's plans in one order — the file first, the diagonal second. The library's b7 signature still will not hold, for the same measured reason as on the ...b6 branch: the d5 pawn does not leave."
+    },
+    {
+      "at": { "spineNodeId": "ne5-clamp-early" },
+      "moveUci": "d6e5",
+      "class": "accepted_alternative",
+      "note": "Bxe5 immediately: 161 of 1725 (9.3%). It removes the clamp by trading the bishop for the knight, which ends the library's White signature on the spot and hands White the recapture choice. Neither consequence is graded here; play both recaptures and compare the pawn skeletons."
+    },
+    {
+      "at": { "spineNodeId": "b6-fianchetto" },
+      "moveUci": "e3e4",
+      "class": "interesting_deviation",
+      "note": "e4: 279 of 3899 (7.2%). The library's third White plan — unlock the wedge — and the one that dissolves the structure from White's side rather than Black's. Computed: with no White pawn on e3 the wedge trigger stops firing, exactly as it does after the recapture on this pack's main line. Two different moves by two different players, one detector consequence."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "band-result-split",
+      "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 16116 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-16) the outcomes were 7976 white wins, 823 draws and 7317 black wins (49.5/5.1/45.4%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "the-menu-is-attested",
+      "text": "Fourteen different Black moves are played at least a hundred times at this position at this band: Re8 3437, b6 3264, c4 2474, cxd4 2066, a6 975, h6 959, Qc7 930, Qe7 482, Bxg3 479, Nh5 213, Qb6 158, Ne7 113, Bd7 106, a5 102, out of 16116 games. That is a fact about what was played, and it is the reason this position is a plan-choice root. It is not a claim that all fourteen are good, and no ranking is implied by the order, which is simply descending frequency.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "the-bishop-is-locked",
+      "text": "Black's queen's bishop cannot reach f5 or g4 from c8 in this position, and the reason is Black's own pawn on e6: both squares lie on the c8-h3 diagonal behind it. Enumerated with the repo's move generator on the start position, the bishop has exactly one legal destination. This is rules arithmetic, not an assessment - the shape library names the same thing as this chair's typical mistake, and here it has already happened.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "the-structure-ends-on-a-recapture",
+      "text": "The wedge this pack is named after stops being a detected structure on the recapture, whichever pawn makes it: the trigger requires White pawns on c3, d4 and e3 together, and exd4 removes the third while cxd4 removes the first. The objective's own signature outlives it by two moves and then also ends, when d4 is captured. Both statements were evaluated with the repo's structural evaluator on the authored positions; neither is a claim about whether any of it was good for either side.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "where-the-evidence-stops",
+      "text": "The band's data on this pack's main line runs out at the eleventh move: the position after Nxe5 dxe5 occurs in 139 games, and one ply later the count is 7 - below the hundred-game floor at which this repo's explorer client abstains. Every count quoted in this pack is at or above that floor. Past it the drill is still playable and the corpus simply has nothing to say, which is a property of the band and the depth, not of the position.",
+      "evidenceTypes": ["corpus_observed"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "OPENING IDENTITY: the move order to the start position is the London System (1.d4 with an early Bf4 and the c3/d4/e3 pawn wedge); the name-to-line skeleton is lichess-org/chess-openings (CC0-1.0, no attribution required). No opening-name claim beyond the family label is made in this pack.",
+      "RATING-BAND FREQUENCY (mechanical, retrieved 2026-08-16): Lichess opening explorer, https://explorer.lichess.ovh/lichess, variant=standard, ratings=1400,1600,1800, speeds=rapid,classical, since=2023-01, until=2025-12, authenticated with the operator token. This is the population the middlegame and explorer-grounding waves used, matched deliberately per design/BACKLOG.md D124 so this pack's numbers are comparable with theirs. Every count and share in this file was read from that endpoint at the node it is quoted on: root 16116, after cxd4 2065, after exd4 11576, after Re8 4797, after Ne5 3214, after Nxe5 157, after dxe5 139, one ply further 7; after b6 3899, after Ne5 1725, after Bb7 1748, after f4 639; after Bxg3 479, after hxg3 890. Shares are recomputed from white+draws+black, which is the only total the response supports.",
+      "RESULT SPLITS (mechanical, retrieved 2026-08-16, same query): admissible corpus_observed evidence under the owner ruling of 2026-08-15 (design/BACKLOG.md D126), whose boundary is that a split may be stated with its population and may never be converted into a move verdict or a quality claim. Measured here: start position 16116 games, 7976 white / 823 draw / 7317 black (49.5/5.1/45.4%); after exd4 11576 games, 6111/621/4844 (52.8/5.4/41.8%); after b6 3899 games, 1733/228/1938 (44.4/5.8/49.7%); after hxg3 890 games, 499/31/360 (56.1/3.5/40.4%). Those four splits are stated side by side and are NOT compared with one another: they are four different positions on three different branches, and the middlegame corpus already carries an explicit refusal of exactly that comparison (planning/content-era/log.md, explorer-grounding wave, refused claim 5). No verdict, preference, cost or ranking anywhere in this pack derives from any of these numbers. The repo's explorer client abstains below 100 games at a position (apps/server/src/sourcing/explorer.ts); that floor is applied here and the one position below it is recorded as an abstention rather than quoted.",
+      "SPINE SELECTION RULE (mechanical, and it is NOT most-played): the root move cxd4 is the fourth-most-played move at the band (12.8%) and was chosen because it is the move whose consequence the shape library can state as a signature. Every OTHER spine move is the most-played move at its node, with two stated exceptions: Nxe5 (152 of 3214, 4.7%) and the two Bxg3 branches (6.5% and 3.0%), each authored for the detector consequence it produces and each carrying its share in the annotation. The middlegame wave's rule was most-played everywhere; this pack departs from it deliberately and says so at every node where it does.",
+      "STRUCTURAL READINGS (mechanical, this session, with the repo's own evaluator packages/runtime/src/structure.ts matchesStructuralExpression driven over the authored FENs): the london-wedge trigger fires at the start position and on the ...b6 branch and stops firing after either recapture on d4; black-trade-the-c-pawn-for-the-file is false at the start, true from exd4-recapture through ne5-clamp and nxe5-remove, and false again after dxe5-recapture; black-challenge-the-outside-bishop is true after hxg3-immediate and false after hxg3-after-trade; white-clamp-on-e5 is true at ne5-clamp and ne5-clamp-early and false everywhere else; black-fianchetto-the-light-bishop is false at every authored position. The c8 bishop's legal-destination count, and the attacker/defender count on b2 after Qb6, were enumerated with the repo's chessops dependency rather than recalled.",
+      "AUTHORED BOUNDARY, and this is a design decision rather than a measurement (see the graduation blockers): plyHorizon is 16 while the deepest authored spine node is at ply 6. Measured across all 47 packs in content/drafts at HEAD, plyHorizon equals the deepest authored spine ply in 19 of 20 opening packs and 10 of 11 middlegame packs, and NO pack in the corpus declares authoredBoundary.fenPredicates at all - so the field records how much prose was written and nothing else, and the 11/8/24 act ramp in design/06 is a restatement of authored spine length rather than an encounter-length knob. This pack separates the two. The spine stops at ply 6 because that is where the band's evidence stops (139 games at ply 6, 7 at ply 7); the horizon runs to 16 because the two fenPredicates below - the shape library's own wedge trigger, and the objective plan's own success signature - are structure-keyed rather than move-keyed, and the library entry they come from is authored guidance that is valid wherever it fires. Authored territory therefore follows the structure while it lasts instead of ending where the author stopped typing. One of the two predicates references the library through the plan_signature leaf; the other is a hand copy, and the reason is stated in the next entry.",
+      "TWO CONSTRUCTS FOUND BY RUNNING THE CHECKER, NOT BY READING A DOCUMENT (2026-08-16). This pack was first written with plan_consequence success conditions and hand-copied structural expressions, which is how the other four packs in the corpus that use plan_consequence are written. make pack-check answered with PLAN_CONSEQUENCE_DEPRECATED (use structural_feature with a plan_signature leaf) and PLAN_SIGNATURE_INLINED (this expression duplicates the registered signature for a named plan class). Measured across content/drafts at HEAD before this wave: 4 packs use the deprecated plan_consequence and 0 packs anywhere use plan_signature, and neither code appears in design/BACKLOG.md or planning/content-era/log.md. This pack is the first user of plan_signature anywhere in the corpus - and it can only be the first user in ONE of the three places the two warnings point at. Measured by running the checker: with plan_signature in the objective's success condition the pack passes; with plan_signature in a checkpoint fenPredicate or in an authoredBoundary fenPredicate the pack FAILS with ERROR /start/fen START_POSITION_UNRUNNABLE, 'plan_signature must be expanded before runtime evaluation'. So the objective uses the successor construct and both fenPredicates are written out by hand, which means PLAN_SIGNATURE_INLINED is raised on an expression that cannot legally be written any other way. The remaining copy is the london-wedge trigger, which has no reference form at all: plan_signature names a plan class, and named_structure's id vocabulary is closed at carlsbad, iqp-white, iqp-black and maroczy-bind, so no London structure can be named at all.",
+      "SHAPE REFERENCE (mechanical): the london-wedge entry's trigger fires on this pack's start position, verified with the repo's own evaluator. Before this pack the entry had two customers and both were opening packs (content/drafts/london-system-white.json, content/drafts/anti-london-black.json); its five Black plans had no customer of any kind. The plan classes here reference the entry's plans rather than restating them, and the entry's own prose carries its own UNGROUNDED provenance which this pack does not improve.",
+      "UNGROUNDED: the objective's framing - that taking the c-file is a plan worth playing for in this structure - is this pack's one authored strategic premise and nothing here establishes it. The corpus says what the band played; the detector says which pawns are where. Neither says the file is worth having. No engine evaluation has been run on any position in this pack.",
+      "NOT CLAIMED: no move in this pack is graded better or worse than another; no plan is asserted to be best; the objective is not asserted to be the strongest of the fourteen attested moves; the four quoted result splits are not compared with each other; and no deviation note asserts a chess consequence beyond an explicitly measured one."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No sign-off will ever clear a blocker below; a citable source or mechanical validation that bears on the claim are the only two things that will.",
+      "THE OBJECTIVE'S PREMISE IS UNCITED. That Black's counterplay against a London wedge runs down the c-file is asserted by the shape library entry and by this pack, and neither cites anything. The 2026-08-16 citation pass found that Wikipedia's structure articles are theme inventories which never sequence or prioritise what they list (design/BACKLOG.md D272); no source was sought for this pack and none is claimed.",
+      "THE PLYHORIZON OF 16 AND THE TWO FENPREDICATES ARE AUTHORED, NOT MEASURED. What is measured is the corpus census that motivated them - 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, and 0 of 47 packs use fenPredicates - and the ply at which this line's band evidence dies. Nothing measured says 16 is the right cap, and nothing measured says a structure-keyed grant is better for a learner than a move-keyed one. This is the first pack in the corpus to try it and it should be read as a proposal.",
+      "BOTH BOUNDARY PREDICATES AND THE CLAMP CHECKPOINT ARE HAND COPIES, AND THE CHECKER BOTH DEMANDS AND REFUSES THE ALTERNATIVE. pack-check raises PLAN_SIGNATURE_INLINED on the copied expressions and tells the author to use plan_signature instead; substituting plan_signature into either fenPredicate makes the same checker raise ERROR START_POSITION_UNRUNNABLE and the pack stops passing. The construct works in the objective's success condition, where this pack uses it, and nowhere else this pack needed it. So two of three warnings cannot be cleared by any edit to this file, and the copies stay - which means if the london-wedge entry's trigger or its c-file plan signature changes, this pack silently disagrees with the library and nothing checks that. That is the re-authoring design/04 section 0a warns about, arriving through a validator instruction that the runtime does not honour.",
+      "ONE PLAN CLASS IS LISTED AND NEVER SATISFIED. black-fianchetto-the-light-bishop's signature is false at every authored position because the d5 pawn never leaves. That is recorded as a measurement rather than fixed by extending the spine, because the corpus has no data past ply 6 on any of these branches to extend it honestly with.",
+      "NO ENGINE PASS. The single concept_violation (Bd7) rests on a legal-move enumeration, which is exact for what it claims - the bishop cannot reach f5 or g4 - and says nothing about whether Bd7 costs anything. Its cost is unmeasurable and the reason is stated in the deviation.",
+      "NO CORPUS INSTRUMENT REACHES THE COMPARISON THE PACK IS REALLY ABOUT. The drill asks whether taking the file before the clamp lands is worth it, which is a claim about the ORDER of two events in one game. The explorer aggregates per position and cannot condition an outcome on an earlier event (design/BACKLOG.md D155); this is the fifth wave to arrive at that missing instrument."
+    ],
+    "attribution": []
+  }
+}

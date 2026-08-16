@@ -3189,3 +3189,282 @@ Ledgered **D275**.
   specific text; the ideas are cited and the sentences are ours.
 - **The three pre-existing stale digests were not re-stamped** (D269).
 - **No test edited, no `design/00`–`06`, no `rfc/`, no `archive/` touched.**
+
+## 2026-08-16 — The 1400–1799 band wave: three received middlegames, and why "make Act II longer" is the wrong instruction (claude)
+
+**Ledger block D345–D354, all ten used.** One agent, ~157 min (orientation and
+reading 25 · instruments 12 · explorer probing 35 · authoring 45 · verification
+and correction 20 · ledger and log 20) · **friction ≈ 23%** (36 of 157, itemised
+below). No commits. Files touched: three new packs in `content/drafts/`, two new
+disposable instruments in `apps/server/src/`, `design/BACKLOG.md`, this log.
+Nothing in `rfc/`, `design/00`–`06` or `archive/` was touched, and no test was
+edited.
+
+### The gap, and what was authored against it
+
+`design/research/coaching-versus-cheating-and-the-band-curve.md` measured that the
+declared opponent band is a two-point step function while the declared *learner*
+band is continuous across 1000–2000. Reproduced at HEAD before authoring:
+`targetElo` **< 1400: 6 · 1400–1799: 2 · ≥ 1800: 37 · none: 2** over 47 packs.
+
+Three packs, all `phase: middlegame`, all `mode: plan`, all `human_common`:
+
+| Pack | Structure / shape entry | Chair | `targetElo` | Root games | Spine ply | `plyHorizon` |
+|---|---|---|---:|---:|---:|---:|
+| `london-wedge-black-counterplay` | London wedge / `london-wedge` | Black | **1500** | 16116 | 6 | 16 |
+| `open-centre-french-exchange-black` | Open centre / `open-centre` | Black | **1650** | 2695 | 6 | 16 |
+| `closed-centre-chain-black-base-strike` | d4/e5 chain / `closed-centre-chain` | Black | **1750** | 28420 | 8 | 18 |
+
+**Why these three and not a count.** Each earns its place three ways, and all
+three are measured rather than argued:
+
+1. **Act II is the thinnest act by decidability** (`design/06` §5 — Act I
+   outcome-measured, Act II authored, Act III tablebase-measured), so a pack in
+   the missing band is worth most there.
+2. **All three put the learner in the structure the OPPONENT chose.** The London,
+   the Exchange French and the French Advance are what a 1500 receives, not what
+   they pick. `design/04` §2c's anti-opening whitespace — *"half of real losses
+   come from positions your opponent chose"* — has never been applied to Act II
+   before; every existing middlegame pack drills a plan its owner selected.
+3. **Each is the first customer for a shape entry's unserved chair.**
+   `london-wedge`'s **five Black plans**, `open-centre`'s **two White plans** and
+   `closed-centre-chain`'s **two Black plans** had **zero middlegame customers
+   between them** at HEAD `[V]`. `london-wedge` had two customers and both were
+   opening packs.
+
+**Population, stated once:** Lichess opening explorer, `variant=standard`,
+`ratings=1400,1600,1800`, `speeds=rapid,classical`, `since=2023-01`,
+`until=2025-12`, authenticated, retrieved 2026-08-16 (UTC) — the middlegame and
+explorer waves' population, matched deliberately per D124. **Every number was
+queried live**, and the three root totals plus one interior node were **re-queried
+at review and reproduced exactly** `[V]`.
+
+### Band distribution after the wave, re-measured with the same script shape
+
+| `opponentPolicy.targetElo` | before | after |
+|---|---:|---:|
+| < 1400 | 6 | **6** |
+| **1400–1799** | **2** | **5** |
+| ≥ 1800 | 37 | **37** |
+| none declared | 2 | **2** |
+| total packs | 47 | **50** |
+
+The five are `london-wedge-black-counterplay` (1500), `pawn-opposition-convert`
+(1500), `open-centre-french-exchange-black` (1650), `mate-two-bishops` (1700),
+`closed-centre-chain-black-base-strike` (1750). **The step function survives**:
+37 of 50 packs still sit at ≥1800, and most of them declare a *learner* band of
+1400–2000. Closing that is a **re-band of existing packs**, which is an owner call
+about what a declared opponent Elo means, not another authoring round. Ledgered
+D354.
+
+### The brief's horizon question, answered — and the instruction was the wrong one
+
+The brief noted the act ramp runs **11 → 8 → 24** and asked whether Act II's
+horizon should be longer. Three measurements, in the order they were taken:
+
+**1. The ramp is not an encounter-length knob.** Over all 47 packs at HEAD,
+`plyHorizon` equals the **deepest authored spine ply exactly** in **19 of 20**
+opening packs and **10 of 11** middlegame packs; endgames are the only family with
+slack (12 of 14, median +7). And **`authoredBoundary.fenPredicates` has 0 uses in
+47 packs**. So the number records how much spine an author typed. Ledgered D345.
+
+**2. The one middlegame exception is the exemplar, and it is broken.**
+`carlsbad-minority-attack` has `plyHorizon: 8` and a deepest spine node at **ply
+11**; its last three nodes are in neither `spineNodeIds` nor under the cap — and
+its objective (backward c6 on White's half-open c-file) materialises exactly
+there. **The pack `design/04` §8 names as the phase exemplar grades a state its
+own boundary declares unauthored.** Nothing warns, because
+`BOUNDARY_NODE_BEYOND_HORIZON` only fires on *listed* nodes. Ledgered D346.
+
+**3. A longer Act II cannot be bought with more spine, because the band's evidence
+dies first.** Measured live on three independent lines: London **139 games at ply
+6, 7 at ply 7**; Exchange French **141 at ply 4, 18 at ply 5**; French Advance
+**3816 at ply 8** — the exception, and its cause is measured too (six of its eight
+moves are recaptures played at 72–98%, so the depth is bought by *forcing*). Add
+6–8 to a middlegame tabiya's ply 13–21 and you land at 19–29, which is where
+`design/06` §2a's inherited *"human outcome data dies at ply ~20"* already put it.
+**They are the same number.** Ledgered D349.
+
+**So the answer is: not longer spine — different territory.** All three packs
+declare a horizon above their deepest spine node and grant the difference through
+`authoredBoundary.fenPredicates`, keyed on the shape entry's trigger and, where
+one exists, the objective plan's signature. These are the **corpus's first three
+uses of the field**. The claim is that a library entry is authored guidance valid
+wherever its trigger fires, so authored territory keyed to the trigger is honest
+in a way that territory keyed to how far someone typed is not. **It is a proposal,
+labelled as one in all three packs and in D352**: nothing measured says 16 or 18
+is the right cap, or that a structure-keyed grant serves a learner better.
+
+### The construct the checker demands, refuses and faults on
+
+The first draft of pack one used `plan_consequence`, like the four packs in the
+corpus that use it. `make pack-check` answered `PLAN_CONSEQUENCE_DEPRECATED` —
+*"use `structural_feature` with a `plan_signature` leaf"* — and
+`PLAN_SIGNATURE_INLINED` on two hand-written expressions. Following both
+instructions produced three different answers from three code paths `[V]`:
+
+| Where | Result |
+|---|---|
+| objective `successConditions[].feature` | **passes** — `pack-orchestrator.ts:84` expands it at compile time |
+| `checkpoints[].trigger.fenPredicate` | **`ERROR START_POSITION_UNRUNNABLE`**, *"plan_signature must be expanded before runtime evaluation"* (`structure.ts:303`) |
+| `authoredBoundary.fenPredicates[]` | same error, pack stops passing |
+| `make expression-census` | **827 faults per subject**, satisfiability `unknown` — it evaluates raw expressions |
+
+Before this wave: **4 packs on the deprecated construct, 0 packs anywhere using
+`plan_signature`**, and neither code named in `design/BACKLOG.md` or in this log —
+the deprecation has been printing unnoticed exactly as D269's stale digests were.
+All three packs use `plan_signature` in the one place it works and keep the hand
+copies where it is refused, so **`PLAN_SIGNATURE_INLINED` is raised on two
+expressions that cannot legally be written any other way.** Choosing the
+deprecated construct instead, to make a census number look better, was considered
+and refused. Ledgered D347.
+
+**And the copy cannot be removed even in principle for the trigger half.**
+`plan_signature` resolves a *plan class*; the only trigger-shaped leaf,
+`named_structure`, has a closed id vocabulary of four structures, so **21 of the
+25 shipped shape entries cannot be named in any expression** — including all three
+this wave used. Ledgered D348 with the cheapest fix (`shape_trigger`, mirroring
+`plan_signature`).
+
+### Census delta — and it goes the wrong way for doing the right thing
+
+`make expression-census WITNESSES=content/witnesses/expression-witnesses.json`,
+before and after:
+
+| | Before | After |
+|---|---:|---:|
+| packs / positions / transitions | 53 / 791 / 738 | **56 / 827 / 771** |
+| subjects | 184 | **192** |
+| `neverFiresInCorpus` | 30 | 30 |
+| `inShapeDenominatorEmpty` | 19 | 19 |
+| `firesOnlyOutsideShape` | 40 | **39** |
+| `satisfiabilityUnknown` | 23 | **26** |
+| `unsatisfiable` | 0 | **0** |
+
+The before-numbers reproduce the explorer wave's after-numbers exactly `[V]`.
+**D152 said the census is blind to corpus grounding; this wave is the control** —
+it added structural expressions and the census moved, so D152 is a statement about
+the census's *subject*, not a defect. But **`satisfiabilityUnknown` rose by
+exactly 3, and the three are this wave's three `plan_signature` objectives**: 0
+subjects in the corpus faulted before, 3 do now. A wave quoting the delta as a
+headline without reading the fault list would have reported a regression.
+Ledgered D353.
+
+### What could not be grounded — the more valuable half
+
+**Refused because the sentence would convert a split into a verdict.** Four
+positions carry result splits in pack one alone and they are stated side by side
+and never compared, because they are four different positions on three different
+branches — the comparison the explorer-grounding wave refused by name. The
+sharpest temptation this time was pack three's root: **41.6 / 4.5 / 53.9 over
+28,420 games**, the most lopsided root split in the corpus, in a pack about
+whether Black's plan works. Not written.
+
+**Refused because no admissible number exists.** The head-strike plan in the
+French Advance (`black-chip-the-head`) is played **17 times in 28,420 games** at
+the root — a shape-library plan the band effectively does not contain. Stated as
+rarity; nothing inferred. Two `unmeasurable` costs carry that reason verbatim.
+
+**Wanted and impossible for a structural reason.** All three packs are about
+**order** — take the file before the clamp lands, contest before you develop,
+strike before White releases the tension — and D155's per-game traversal still
+does not exist. What the wave found instead is the one timing-shaped thing the
+explorer *can* say: in pack two, `...Re8` occurs **339 of 2695** at the root and
+**48 of 822** six plies later on the other branch, i.e. **above the floor at one
+depth and below it at the other**. That is a fact about what the corpus can be
+asked, not about which timing is better, so it survives D126 intact. Ledgered
+D350 as a technique, explicitly not as a substitute.
+
+**Needs a citation and did not get one.** All three objective premises are
+uncited. The 2026-08-16 citation pass established (D272) that encyclopedic
+structure articles are theme inventories that never sequence what they list, which
+is the exact shape of all three claims. One is *nearly* cited by accident: D270
+recorded that `Pawn_structure` §e5-chain names d4 as the square **Black** attacks
+— which is why pack three exists at all — but that source was read for a different
+pack, was not re-fetched here, and is quoted in provenance as a ledger finding
+rather than as a citation. Fetching it is the cheapest single improvement anyone
+could make to that file and its graduation blockers say so.
+
+### One claim was wrong until an evaluator was run
+
+The first draft of `closed-centre-chain-black-base-strike` asserted that d4 is
+attacked **three** times (c5 pawn, c6 knight, b6 queen) and defended **two** (c3
+pawn, f3 knight). The repo's own `direct_attack_count` says **two against three**:
+the b6 queen is blocked by **Black's own c5 pawn**, and the **White queen on d1**
+defends d4. Both halves wrong, in opposite directions, from a diagram any reader
+would read the same way — and it is the one kind of sentence that looks least like
+a chess opinion. Same family as D110, D161 and D119. The correction is in the
+pack's own provenance rather than silently applied, and D351 carries the standing
+rule: **an attack count may only be asserted after the evaluator has returned it**,
+and no `make` target computes one.
+
+The probe also corrected a second, smaller claim before it shipped: the White e5
+clamp's signature was described as holding "at both Ne5 nodes and nowhere else",
+and it in fact holds at **four** positions, because on the `...b6` branch nothing
+dislodges the knight.
+
+### Verification actually performed
+
+- `make pack-check` on all three packs: **3/3 pass**. Pack one emits two
+  `PLAN_SIGNATURE_INLINED` warnings that cannot be cleared (D347) and all three
+  emit the pre-existing corpus-wide `CONSTRUCT_UNREACHED` advisory; **0 errors**.
+- Every referenced shape trigger and every plan signature evaluated at **every
+  authored position** of all three packs with the repo's own
+  `matchesStructuralExpression`, and each pack's prose states the result. Two
+  prose claims were corrected by that run.
+- Legal-move enumeration for the locked c8 bishop (exactly one destination, d7)
+  and `direct_attack_count` at five positions, with the repo's own evaluator.
+- Four positions re-queried **live** at review: 16116, 2695, 28420, 25172 — **4/4
+  exact**.
+- `make expression-census` before and after with the explicit witness file, plus a
+  fault-list read; **0 `unsatisfiable` both times**.
+- **`make verify` is green, first run** — typecheck clean across four projects,
+  **104 test files / 670 tests passing**, `schema:check` OK. **No test was edited
+  and none needed to be.**
+
+### Frictions, with time cost — ~36 of ~157 minutes (23%)
+
+Compare wave F 7.7%, middlegame ~14%, explorer ~27%, citation pass ~30%.
+
+1. **Nothing walks a line and prints what the band did** (~7 min). `split-probe.ts`
+   takes FENs, hard-codes `ratings=1400,1600,1800`, and prints one position at a
+   time; authoring a middlegame pack means walking twenty candidate plies and
+   reading the counts at each. Built `apps/server/src/line-probe.ts` (SAN line
+   walk, `RATINGS=`/`SPEEDS=`/`FEN=` overrides, per-ply split and top moves). This
+   is D121's class again and it is the third wave to build a variant.
+2. **Nothing answers "does this plan's signature fire here"** (~6 min). D113 was
+   fixed — `shape-check PROBE=` now prints trigger firing — but plan **signatures**
+   are what `plan_consequence` and `plan_signature` grade on, and nothing prints
+   them. Built `apps/server/src/shape-probe.ts`, which also walks a whole pack.
+   It immediately corrected two prose claims, so this is the highest-value 6
+   minutes in the wave.
+3. **The `plan_signature` round trip** (~9 min): write the deprecated construct →
+   warned → switch all three sites → pack fails → revert two of three → rewrite
+   the provenance and the blocker that had described the situation wrongly.
+   Ledgered D347.
+4. **No target computes an attacker/defender count** (~5 min, two throwaway
+   bundles). See D351 — this is the friction that let a wrong number nearly ship.
+5. **No target reports `plyHorizon` against spine depth** (~5 min, a third
+   throwaway). The census in D345/D346 is nine lines of script and answers a
+   question every content wave has an opinion about.
+6. **`make expression-census` still prints 232 KB to stdout** (~4 min). `OUT=` is
+   the workaround and was used; the fault list that turned out to matter most had
+   to be extracted with another throwaway.
+
+### Not done, deliberately
+
+- **No engine pass.** All three packs record `cost: unmeasurable` where an engine
+  would have measured, with the reason stated per deviation, rather than borrowing
+  a number.
+- **No result split converted into a cost, a verdict, a preference or a
+  comparison**, and no split below the 100-game floor quoted as evidence. The one
+  sub-floor number in the wave (48 games) is used only to say the corpus abstains,
+  and its own pack flags that a reader could mistake it for a measurement.
+- **No shape entry edited.** Three entries gained their first middlegame customer;
+  none had its trigger, plans, watch text or provenance touched.
+- **No `graduationBlocker` deleted.** All three packs ship with blockers written
+  from scratch; where a finding was half-cleared (the boundary-copy blocker in
+  pack one) it was **split and rewritten**, not retired.
+- **No test edited, and no construct chosen for how it scores.** `plan_signature`
+  costs this wave three `satisfiabilityUnknown` subjects and was used anyway.
+- **No `design/00`–`06`, `rfc/` or `archive/` file touched.**

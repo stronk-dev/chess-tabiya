@@ -1,0 +1,371 @@
+{
+  "id": "closed-centre-chain-black-base-strike",
+  "version": "0.1.0",
+  "title": "Closed centre from below: strike the base before it is taken away",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1500,
+    "maxOnlineRapid": 1900,
+    "label": "Black under a d4/e5 pawn chain with the c-pawn still on the board",
+    "branchLengthTarget": 8
+  },
+  "start": {
+    "fen": "r1b1kb1r/pp2nppp/1qn1p3/2ppP3/3P4/2P2N2/PP2BPPP/RNBQ1RK1 b kq - 6 7",
+    "movesSan": [
+      "e4",
+      "e6",
+      "d4",
+      "d5",
+      "e5",
+      "c5",
+      "c3",
+      "Nc6",
+      "Nf3",
+      "Qb6",
+      "Be2",
+      "Nge7",
+      "O-O"
+    ],
+    "side": "black"
+  },
+  "objective": {
+    "type": "reach_structure",
+    "summary": "White's pawns on d4 and e5 form a chain that points at your king's side; your pawns on d5 and e6 face it. The chain's base on d4 is the square everything on your queenside is pointed at, and your c-pawn is standing opposite the pawn that holds it. Reach a position where the c-file is open or half-open for you while White's d4 and e5 pawns both still stand: that is the shape library's own success signature for Black's base plan in this structure. The chain has to still be there. A strike that arrives after White has dissolved the centre himself is not this objective.",
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": { "kind": "plan_signature", "planClassId": "base-strike" },
+        "to": "achieved"
+      }
+    ]
+  },
+  "concepts": [
+    "pawn-chain",
+    "attack-the-base",
+    "tension-belongs-to-whoever-resolves-it",
+    "structure-ends-on-a-recapture"
+  ],
+  "shapes": ["closed-centre-chain"],
+  "planClasses": [
+    {
+      "id": "base-strike",
+      "label": "Strike the base with the c-pawn",
+      "description": "The library's base plan and this pack's objective. Its signature is a fact about pawns and nothing else: the c-file open or half-open for Black, White's d4 pawn standing, White's e5 pawn standing. Evaluated on this spine, it is false at the start, true from the recapture on d4 through three further plies, and false again once the d4 pawn is captured — so it is a state change that also has an end, and both moments are checkpoints.",
+      "shapePlan": { "shape": "closed-centre-chain", "plan": "black-strike-the-base" }
+    },
+    {
+      "id": "chip-the-head",
+      "label": "Remove the chain head from e5",
+      "description": "The library's other Black plan: get White's e5 pawn off the board while both d-pawns still stand. Measured at this band, this is the plan the corpus barely contains — from the start position the f-pawn strike f7-f6 is played in 17 of 28420 games (0.1%), and the position after it was not queried because a seventeen-game node is far below the hundred-game floor this repo abstains under. The plan is listed because the library offers it and because a drill should say when the band simply does not play something.",
+      "shapePlan": { "shape": "closed-centre-chain", "plan": "black-chip-the-head" }
+    },
+    {
+      "id": "white-holds-the-base",
+      "label": "What the objective is played against",
+      "description": "The library's defensive White plan: the d4 pawn still stands and White has at least as many defenders on it as Black has attackers. It is named here because the whole drill is a count on one square, and the entry states that count case by case rather than as a threshold guess. This pack does not grade it and does not claim that holding or losing the count decides anything.",
+      "shapePlan": { "shape": "closed-centre-chain", "plan": "white-hold-the-base" }
+    },
+    {
+      "id": "white-storm",
+      "label": "Where the chain points",
+      "description": "The library's attacking White plan — a White pawn reaching f5, g5 or h5 with d4 and e5 still standing. Evaluated on every authored position in this pack, the signature is false throughout: no authored line gets a White pawn to the fifth rank on the kingside. It is listed because it is the reason the base is worth attacking at all, and recorded as unreached here rather than asserted.",
+      "shapePlan": { "shape": "closed-centre-chain", "plan": "white-attack-where-the-chain-points" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "cxd4-strike",
+      "moveUci": "c5d4",
+      "moveSan": "cxd4",
+      "annotations": [
+        "Read the structure first. White pawns: a2, b2, c3, d4, e5, f2, g2, h2. Black pawns: a7, b7, c5, d5, e6, f7, g7, h7. The chain is d4-e5 against d5-e6 and the shape library detects exactly that.",
+        "Lichess explorer, rapid+classical, rating bands 1400/1600/1800, 2023-01 to 2025-12, retrieved 2026-08-16: this position occurs in 28420 games. cxd4 is played 3935 times (13.8%), a long way behind Nf5 22308 (78.5%) and ahead of Ng6 1613 (5.7%) and Bd7 286 (1.0%). It is the pack's main line because it is the move that satisfies the objective, and the share is stated so the difference between those two things is visible.",
+        "Computed on this position with the repo's own attack tables, and it is not what it looks like: d4 is attacked TWICE by Black — the c5 pawn and the c6 knight — and defended THREE times by White — the c3 pawn, the f3 knight and the queen on d1. The queen on b6 is not one of the attackers, because Black's own c5 pawn stands in front of it on the b6-d4 diagonal. So the base is not falling; the strike is a trade, not a win of the square, and the library's White defensive plan holds here by the library's own count."
+      ],
+      "children": [
+        {
+          "id": "cxd4-recapture",
+          "moveUci": "c3d4",
+          "moveSan": "cxd4",
+          "annotations": [
+            "4018 games at this node and cxd4 is the most played at 3724 (92.7%), then Nxd4 253 (6.3%). The resulting position occurs in 19477 games, with recorded outcomes 7617 white wins, 876 draws and 10984 black wins (39.1/4.5/56.4%).",
+            "The objective is satisfied here. Computed: neither side has a pawn on the c-file, so it is open; White's d4 and e5 pawns both stand, so the chain the plan is about is still on the board. The pawn that used to defend the base is now the base. That is the whole trade this plan makes, stated as pawns rather than as advice."
+          ],
+          "children": [
+            {
+              "id": "nf5-blockade",
+              "moveUci": "e7f5",
+              "moveSan": "Nf5",
+              "annotations": [
+                "19477 games at this node and Nf5 is played in 18994 of them (97.5%). The knight takes the square in front of the head and adds a third attacker to d4. The resulting position occurs in 25172 games.",
+                "Counted with the repo's own attack tables at all three moments: at the start position d4 was two Black attackers against three White defenders; after the trade and recapture it is two against two; after this knight move it is three against two. The library's White defensive plan is exactly that comparison, and it holds at the first two positions and stops holding here — verified with the shape entry's own signature, not by reading the board."
+              ],
+              "children": [
+                {
+                  "id": "nc3-develop",
+                  "moveUci": "b1c3",
+                  "moveSan": "Nc3",
+                  "annotations": [
+                    "25172 games at this node; Nc3 is the most played at 8956 (35.6%), then Be3 7846 (31.2%), b3 2887 (11.5%) and Qa4 1819 (7.2%). The resulting position occurs in 10270 games."
+                  ],
+                  "children": [
+                    {
+                      "id": "nfxd4-take",
+                      "moveUci": "f5d4",
+                      "moveSan": "Nfxd4",
+                      "annotations": [
+                        "10270 games at this node and Nfxd4 is the most played at 7427 (72.3%), then Ncxd4 1598 (15.6%) and Bd7 552 (5.4%). The base falls.",
+                        "Computed: with no White pawn on d4 the library's base signature stops holding and so does the chain trigger itself, which requires White pawns on d4 and e5 together. You reached the objective four plies ago and the structure it was about ends here. Which of the two knights takes is the corpus's own second question — the alternative recapture order occurs 1598 times and is a branch worth rewinding for."
+                      ],
+                      "children": [
+                        {
+                          "id": "nxd4-recapture",
+                          "moveUci": "f3d4",
+                          "moveSan": "Nxd4",
+                          "annotations": [
+                            "7421 games at this node and Nxd4 is the most played at 5907 (79.6%), then Be3 684 (9.2%) and Na4 558 (7.5%). The resulting position occurs in 5902 games."
+                          ],
+                          "children": [
+                            {
+                              "id": "nxd4-second",
+                              "moveUci": "c6d4",
+                              "moveSan": "Nxd4",
+                              "annotations": [
+                                "5902 games at this node, and the band is split almost exactly in two: Nxd4 2955 (50.1%) and Qxd4 2833 (48.0%), with Nxd4 the marginally more played. Both are authored territory — one keeps the queen where it was, the other puts it on the square the whole file has been pointing at. The resulting position after the knight recapture occurs in 3816 games.",
+                                "This is the only node in this pack where two moves are within three percentage points of each other. The pack does not break the tie; it records it and hands you the rewind."
+                              ],
+                              "children": [
+                                {
+                                  "id": "be3-develop",
+                                  "moveUci": "c1e3",
+                                  "moveSan": "Be3",
+                                  "annotations": [
+                                    "3816 games at this node; Be3 is the most played at 2100 (55.0%), then Bd3 418 (11.0%) and Na4 405 (10.6%). Eight plies from the start position and the band still has two thousand games on the most-played move — this is the deepest surviving line of the three packs in its wave, and the reason is that every move on it was forced or near-forced."
+                                  ],
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nf5-first",
+      "moveUci": "e7f5",
+      "moveSan": "Nf5",
+      "annotations": [
+        "The most-played move at this band by a distance: 22308 of 28420 (78.5%). The knight goes to the blockading square first and the strike waits. The resulting position occurs in 31046 games, with recorded outcomes 13061 white wins, 1371 draws and 16614 black wins (42.1/4.4/53.5%)."
+      ],
+      "children": [
+        {
+          "id": "dxc5-release",
+          "moveUci": "d4c5",
+          "moveSan": "dxc5",
+          "annotations": [
+            "31046 games at this node and dxc5 is the most played at 9049 (29.1%), then Be3 4043 (13.0%), b3 2810 (9.1%), Bd3 2670 (8.6%) and Na3 2465 (7.9%). White resolves the tension himself.",
+            "Computed: with no White pawn on d4 the chain trigger stops firing and the library's base signature can no longer hold on this branch at all — its first conjunct needs a White pawn on d4 and there will not be one again. The objective is not merely unmet here, it is unreachable, and it became unreachable on a White move. That is what this branch is for: the tension belongs to whoever resolves it, and on the corpus's own most-played line that is not you."
+          ],
+          "children": [
+            {
+              "id": "bxc5-recapture",
+              "moveUci": "f8c5",
+              "moveSan": "Bxc5",
+              "annotations": [
+                "9046 games at this node and Bxc5 is played in 8892 of them (98.3%); Qxc5 accounts for 127 (1.4%). Black gets the pawn back and a developed bishop, and the centre is open instead of blocked. Whether that is a fair exchange for the plan that just evaporated is a question this pack does not answer and has no instrument to answer with."
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "strike-or-wait",
+      "label": "Three attackers, two defenders on d4. Now, or after the knight comes to f5?",
+      "trigger": { "atStart": true },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["base-strike", "chip-the-head", "white-holds-the-base"]
+      }
+    },
+    {
+      "id": "file-open-chain-standing",
+      "label": "The c-file is open and both chain pawns are still on the board",
+      "trigger": { "atSpineNode": "cxd4-recapture" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "base-gone",
+      "label": "The d4 pawn is captured — objective satisfied, structure over",
+      "trigger": { "atSpineNode": "nfxd4-take" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "tension-released-by-white",
+      "label": "White took on c5 first and the plan is now unreachable",
+      "trigger": { "atSpineNode": "dxc5-release" },
+      "actions": ["compare_branches"]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "cxd4-strike",
+      "cxd4-recapture",
+      "nf5-blockade",
+      "nc3-develop",
+      "nfxd4-take",
+      "nxd4-recapture",
+      "nxd4-second",
+      "be3-develop",
+      "nf5-first",
+      "dxc5-release",
+      "bxc5-recapture"
+    ],
+    "plyHorizon": 18,
+    "fenPredicates": [
+      {
+        "type": "structuralFeature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } },
+            { "kind": "pieceOnSquare", "square": "e5", "piece": { "color": "white", "role": "pawn" } },
+            { "kind": "pieceOnSquare", "square": "d5", "piece": { "color": "black", "role": "pawn" } },
+            { "kind": "pieceOnSquare", "square": "e6", "piece": { "color": "black", "role": "pawn" } }
+          ]
+        }
+      }
+    ]
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1750,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "atStart": true },
+      "moveUci": "e7g6",
+      "class": "accepted_alternative",
+      "note": "Ng6: 1613 of 28420 (5.7%), the third-most-played move. The knight goes to the other side of the head instead of in front of it, hitting e5 rather than blockading d4. It leaves both of Black's library plans available and commits to neither, which is a real answer to a position whose tension has not been resolved yet."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "c5c4",
+      "class": "concept_violation",
+      "offObjective": true,
+      "mistake": ["plan"],
+      "note": "c4: 44 of 28420 (0.2%). Off-objective by the detector's own arithmetic rather than by grade: the library's base plan needs the c-file open or half-open for Black, and a Black pawn on c4 is a Black pawn on the c-file, so the signature can never hold while it stands there. What is worth counting is what the move does NOT change. Computed before and after: d4 is attacked twice by Black and defended three times by White in both positions. The pawn stops attacking d4 and the queen on b6 starts, in the same move, because the pawn was the piece blocking the queen's diagonal. Whether the space on c4 is worth the file is not something this pack, the library or the corpus can tell you.",
+      "cost": {
+        "kind": "unmeasurable",
+        "reason": "No engine pass has been run on this pack. The corpus cannot price it either: the move occurs in 44 of 28420 games, and even if the resulting position cleared the hundred-game floor a result split is not a cost — converting one into a cost is the conversion the owner ruling of 2026-08-15 refuses."
+      }
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "f7f6",
+      "class": "interesting_deviation",
+      "note": "f6: 17 of 28420 (0.1%). This is the library's other Black plan for the structure — take the head off e5 — and at this band, at this position, it is played once in every seventeen hundred games. That is a measurement of what the band does, not of what the move is worth. It is authored as a door because the shape entry names it as one of Black's two plans and this pack would otherwise ship a structure with half its plan set silently unavailable.",
+      "cost": {
+        "kind": "unmeasurable",
+        "reason": "Seventeen games is far below the hundred-game floor at which apps/server/src/sourcing/explorer.ts abstains, so no split exists to quote and no engine pass was run. The rarity is stated as rarity and nothing is inferred from it."
+      }
+    },
+    {
+      "at": { "spineNodeId": "nf5-blockade" },
+      "moveUci": "c1e3",
+      "class": "accepted_alternative",
+      "note": "Be3: 7846 of 25172 (31.2%), within five points of the spine's Nc3. White adds a defender to the base instead of developing toward the queenside. The library's White defensive plan is exactly this count, and the entry states it case by case rather than as a threshold, so the two moves are two different arithmetics rather than a better and a worse."
+    },
+    {
+      "at": { "spineNodeId": "nc3-develop" },
+      "moveUci": "c6d4",
+      "class": "accepted_alternative",
+      "note": "Ncxd4: 1598 of 10270 (15.6%), the other capture order. Same pawn removed, different knight left standing, and therefore a different position after the recaptures finish. The pack authors one order and names the other; comparing them is what the rewind is for."
+    },
+    {
+      "at": { "spineNodeId": "nxd4-recapture" },
+      "moveUci": "b6d4",
+      "class": "accepted_alternative",
+      "note": "Qxd4: 2833 of 5902 (48.0%), against the spine's Nxd4 at 2955 (50.1%). A two-point gap over five thousand nine hundred games is the closest split in this pack and it is stated rather than broken. The queen has been on b6 since move five aiming down this diagonal; whether it should end up on the square it was aiming at is precisely the kind of question this repo has no instrument for."
+    },
+    {
+      "at": { "spineNodeId": "nf5-first" },
+      "moveUci": "c1e3",
+      "class": "interesting_deviation",
+      "note": "Be3 instead of the release: 4043 of 31046 (13.0%). White keeps the tension and defends the base, so the chain survives and the objective stays reachable one move longer. Play this beside the dxc5 branch: the difference between them is not a move Black made, and that is the point of the pair."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "band-result-split",
+      "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 28420 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-16) the outcomes were 11816 white wins, 1290 draws and 15314 black wins (41.6/4.5/53.9%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "the-count-on-d4",
+      "text": "In the start position White's d4 pawn is attacked twice by Black, by the c5 pawn and the c6 knight, and defended three times by White, by the c3 pawn, the f3 knight and the d1 queen. The queen on b6 does not attack d4: Black's own c5 pawn stands on the diagonal between them. After the c-pawn goes past to c4 instead of trading itself the counts are unchanged at two against three, because the pawn stops attacking d4 and unblocks the queen in the same move. Both counts were computed from the positions with the repo's own attack tables rather than recalled, and neither is an assessment of the position.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "the-objective-outlives-itself",
+      "text": "The library's base signature - the c-file open or half-open for Black with White's d4 and e5 pawns both standing - is false in this pack's start position, true from the recapture on d4 for three further plies, and false again once the d4 pawn is captured. On the other authored branch it becomes permanently unreachable, on a White move, because White's own d4-pawn capture removes the conjunct the signature needs. All of this was evaluated with the repo's structural evaluator on the authored positions and none of it says whether anything was good.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "one-plan-is-nearly-absent-at-this-band",
+      "text": "The shape library gives Black two plans in this structure. At this position and this band the base strike is played 3935 times in 28420 games and the head strike f7-f6 is played 17 times. Seventeen is far below the hundred-game floor at which this repo's explorer client abstains, so nothing further can be asked about it. This is a statement about what these players did, not about the two plans.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "where-the-evidence-stops",
+      "text": "This pack's main line is eight plies long and its last node still has 3816 games behind it at this band, with the most-played reply accounting for 2100. That is unusually deep for a middlegame line in this corpus and the reason is that six of the eight moves are recaptures or near-forced: the position after cxd4 is played 92.7% one way, Nf5 97.5%, Nfxd4 72.3%, Nxd4 79.6%. Depth here is bought by forcing, not by popularity.",
+      "evidenceTypes": ["corpus_observed"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "OPENING IDENTITY: the move order to the start position is the French Defence, Advance Variation, Milner-Barry/main-line move order with Be2; the name-to-line skeleton is lichess-org/chess-openings (CC0-1.0, no attribution required). No opening-name claim beyond the family label is made in this pack.",
+      "RATING-BAND FREQUENCY (mechanical, retrieved 2026-08-16): Lichess opening explorer, https://explorer.lichess.ovh/lichess, variant=standard, ratings=1400,1600,1800, speeds=rapid,classical, since=2023-01, until=2025-12, authenticated with the operator token — the population the middlegame and explorer-grounding waves used, matched deliberately per design/BACKLOG.md D124. Every count and share in this file was read from that endpoint at the node it is quoted on: root 28420; after cxd4 4018, after cxd4 19477, after Nf5 25172, after Nc3 10270, after Nfxd4 7421, after Nxd4 5902, after Nxd4 3816; after Nf5 (root branch) 31046, after dxc5 9046. Shares are recomputed from white+draws+black, which is the only total the response supports.",
+      "RESULT SPLITS (mechanical, retrieved 2026-08-16, same query): admissible corpus_observed evidence under the owner ruling of 2026-08-15 (design/BACKLOG.md D126); the boundary is that a split may be stated with its population and may never be converted into a move verdict or a quality claim. Measured here: start position 28420 games, 11816 white / 1290 draw / 15314 black (41.6/4.5/53.9%); after cxd4 cxd4 19477 games, 7617/876/10984 (39.1/4.5/56.4%); after Nf5 31046 games, 13061/1371/16614 (42.1/4.4/53.5%). The three are stated at the nodes they belong to and are NOT compared: they sit on two different branches, and the explorer-grounding wave refused that comparison by name. No verdict, preference, cost or ranking anywhere in this pack derives from any of these numbers. The repo's explorer client abstains below 100 games at a position (apps/server/src/sourcing/explorer.ts); no split below that floor is quoted anywhere in this file.",
+      "SPINE SELECTION RULE (mechanical, and it is NOT most-played at the root): the root has two children. cxd4 is the second-most-played move at the band (13.8%) and is the main line because it is the move that satisfies the objective; Nf5 is the most-played move (78.5%) and is the second branch. Every other spine move is the most-played move at its node, and one of them — Nxd4 at 50.1% against Qxd4 at 48.0% — is a near-tie that is stated at the node rather than resolved.",
+      "STRUCTURAL READINGS (mechanical, this session, with the repo's own evaluator packages/runtime/src/structure.ts matchesStructuralExpression driven over the authored FENs): the closed-centre-chain trigger fires at the start position, drops out for exactly one ply at cxd4-strike while a Black pawn stands on d4, resumes at cxd4-recapture, and stops for good at nfxd4-take on the main branch and at dxc5-release on the other; black-strike-the-base is false at the start and at cxd4-strike, true from cxd4-recapture through nc3-develop, and false from nfxd4-take onward; white-hold-the-base holds at the start, at cxd4-recapture and at nf5-first; black-chip-the-head and white-attack-where-the-chain-points are false at every authored position. The attacker and defender counts on d4, before and after the c-pawn goes past, were computed with the repo's own direct_attack_count feature rather than recalled — and they CORRECTED this pack's first draft, which asserted three Black attackers including the b6 queen and two White defenders. The queen is blocked by Black's own c5 pawn and the White queen on d1 defends the square; the true count is two against three, and the draft's numbers were wrong in both directions until the evaluator was run.",
+      "AUTHORED BOUNDARY, a design decision rather than a measurement (see the graduation blockers): plyHorizon is 18 while the deepest authored spine node is at ply 8. Measured across all 47 packs in content/drafts at HEAD, plyHorizon equals the deepest authored spine ply in 19 of 20 opening packs and 10 of 11 middlegame packs, and NO pack in the corpus declares authoredBoundary.fenPredicates — so today the field records how much prose was written and nothing else, and the 11/8/24 act ramp in design/06 section 5 is a restatement of authored spine length rather than an encounter-length knob. The single fenPredicate here is the chain itself — White pawns on d4 and e5, Black pawns on d5 and e6 — which is a byte copy of the closed-centre-chain entry's trigger, because no expression leaf names a shape entry's trigger and named_structure's id vocabulary is closed at four structures that do not include this one. Authored territory therefore lasts exactly as long as the chain does, capped at 18 ply, which is the honest scope of what the library entry can speak about.",
+      "SHAPE REFERENCE (mechanical): the closed-centre-chain entry's trigger fires on this pack's start position, verified with the repo's own evaluator. Before this pack the entry had five customers — three opening packs, one cross-phase pack and content/drafts/french-advance-chain-white.json — and its two Black plans had no customer at all. This pack is the first. The plan classes reference the entry's plans rather than restating them; the entry's own prose carries its own provenance, which this pack does not improve.",
+      "WHY THE BLACK CHAIR, AND WHAT THE 2026-08-16 CITATION PASS FOUND: that pass recorded (design/BACKLOG.md D270) that en.wikipedia.org/wiki/Pawn_structure section e5-chain gives White's themes as a kingside mating attack and the f2-f4-f5 break, and names d4 only as the square Black attacks — so the source pointed away from the White pack's objective and toward this one. That is the reason this chair was authored, and it is NOT a citation: no source was fetched for this pack, the finding is quoted from the corpus's own ledger, and the objective's premise remains uncited below.",
+      "PLAN_SIGNATURE, THIRD INSTRUMENT (mechanical, 2026-08-16): make expression-census over the whole corpus reports this pack's objective success condition as a subject with 827 corpus FAULTS - one per censused position - with the message 'plan_signature must be expanded before runtime evaluation', and therefore as satisfiability 'unknown'. Before this wave 0 subjects in the corpus faulted; after it, 3 do, one per pack in the wave, and the cause is the same leaf in each. apps/server/src/pack-orchestrator.ts expands plan_signature at compile time so the objective is evaluable when a run is built; apps/server/src/expression-census.ts evaluates raw expressions and cannot. So three instruments give three answers about one construct: the linter DEMANDS it (PLAN_SIGNATURE_INLINED), the checker REFUSES it in a fenPredicate (START_POSITION_UNRUNNABLE), and the census FAULTS on it everywhere. This pack uses it anyway, in the one place it passes, because the alternative is plan_consequence and that is deprecated - choosing a deprecated construct so a census number looks better is not a trade this wave was willing to make. The census cost is recorded here and in the wave's log entry rather than avoided.",
+      "UNGROUNDED: that striking the base is the plan worth playing for in this structure is this pack's authored premise and nothing here establishes it. The corpus says what the band played; the detector says which pawns are where and how many pieces bear on d4. Neither says the base is the right target, and neither says striking early beats striking late. No engine evaluation has been run on any position in this pack.",
+      "NOT CLAIMED: no move is graded better or worse than another; the near-tie at the sixth ply is not broken; the two branches are not compared by result; no split is converted into a cost; and no deviation note asserts a chess consequence beyond an explicitly measured one."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No sign-off will ever clear a blocker below; a citable source or mechanical validation that bears on the claim are the only two things that will.",
+      "THE OBJECTIVE'S PREMISE IS UNCITED. That the base rather than the head is Black's target in a d4/e5 chain is asserted by the shape library entry and by this pack. The 2026-08-16 citation pass found a source that assigns the base attack to Black (design/BACKLOG.md D270), which is why this chair exists — but that source was read for a different pack and no source was fetched for this one, so the premise is unbacked here. Fetching and quoting it is a cheap, bounded next step and is the single highest-value thing anyone could do to this file.",
+      "THE TIMING CLAIM IS THE PACK'S REAL CONTENT AND IT HAS NO INSTRUMENT. The drill contrasts striking on move seven against being unable to strike after White plays dxc5, which is a claim about the ORDER of two events inside one game. The explorer aggregates per position and cannot condition an outcome on an earlier event (design/BACKLOG.md D155). What the pack can and does state instead is the detector's own before-and-after, which is arithmetic, not evidence about which order is better.",
+      "THE PLYHORIZON OF 18 AND THE FENPREDICATE ARE AUTHORED. What is measured is the corpus census that motivated them — 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, 0 of 47 use fenPredicates. Nothing measured says 18 is the right cap or that structure-keyed authored territory serves a learner better than move-keyed territory. Read it as a proposal.",
+      "THE FENPREDICATE IS A HAND COPY OF THE LIBRARY'S TRIGGER and cannot be anything else: plan_signature names a plan class, not a shape trigger, and named_structure's id vocabulary does not contain this structure. If the entry's trigger changes, this pack silently disagrees with it and nothing checks that.",
+      "ONE OF THE STRUCTURE'S TWO BLACK PLANS IS EFFECTIVELY ABSENT AT THIS BAND. The head strike f7-f6 occurs 17 times in 28420 games here. The pack authors it as a door and states the rarity, but a drill whose library entry offers two plans and whose corpus supports one is a content gap somebody should look at, not a fact to be satisfied with.",
+      "NO ENGINE PASS. The one concept_violation, c5-c4, rests on two exact facts — a Black pawn on the c-file cannot satisfy a signature that requires the file clear of Black pawns, and the attacker count on d4 drops from three to two — and says nothing about whether the move costs anything. Its cost is unmeasurable and the reason is stated in the deviation.",
+      "THE PACK STOPS WHERE THE OBJECTIVE IS ALREADY OVER. The main line runs four plies past the point where the structure dissolves, deliberately, so the learner plays the consequence rather than reading it. Nothing measured says four is the right number of plies for that, and nothing in the format lets the pack distinguish plies-after-success from plies-before it."
+    ],
+    "attribution": []
+  }
+}

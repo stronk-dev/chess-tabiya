@@ -1,0 +1,300 @@
+{
+  "id": "open-centre-french-exchange-black",
+  "version": "0.1.0",
+  "title": "Open centre, Exchange French: the file is not shared until you say so",
+  "mode": "plan",
+  "phase": "middlegame",
+  "difficulty": {
+    "minOnlineRapid": 1400,
+    "maxOnlineRapid": 1800,
+    "label": "Black in a symmetrical open centre where White has already taken the file",
+    "branchLengthTarget": 6
+  },
+  "start": {
+    "fen": "rnbq1rk1/ppp1nppp/3b4/3p4/3P4/3B1N2/PPP2PPP/RNBQR1K1 b - - 7 7",
+    "movesSan": [
+      "e4",
+      "e6",
+      "d4",
+      "d5",
+      "exd5",
+      "exd5",
+      "Nf3",
+      "Bd6",
+      "Bd3",
+      "Ne7",
+      "O-O",
+      "O-O",
+      "Re1"
+    ],
+    "side": "black"
+  },
+  "objective": {
+    "type": "prevent_opponent_plan",
+    "summary": "The pawns are a mirror — a7/b7/c7/d5/f7/g7/h7 against a2/b2/c2/d4/f2/g2/h2 — and neither side has an e-pawn, so the e-file is open for both. White has just played Re1 and the shape library's White plan for this structure already holds: the file is open, White has a rook on it, and you have none. This drill ends that. Get a rook onto the open e-file while the file is still open — nothing more, and nothing about whether the resulting game is better for you.",
+    "successConditions": [
+      {
+        "kind": "structural_feature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            { "kind": "not", "of": { "kind": "plan_signature", "planClassId": "white-file-ownership" } },
+            { "kind": "feature", "feature": { "kind": "open_file", "file": "e" } }
+          ]
+        },
+        "to": "achieved"
+      }
+    ]
+  },
+  "concepts": [
+    "open-centre",
+    "file-ownership",
+    "symmetry-and-the-extra-tempo",
+    "plan-now-or-plan-later"
+  ],
+  "shapes": ["open-centre"],
+  "planClasses": [
+    {
+      "id": "white-file-ownership",
+      "label": "What the objective is written against",
+      "description": "The library's White plan for this structure, named here because this pack's success condition is its negation. Its signature is exact and has no judgment in it: the central file is open, White has a rook on it, Black has none. Evaluated on this spine, it holds at the start position and at every position on the developing branch, and stops holding the moment a Black rook reaches the file. The pack grades that state change and nothing more.",
+      "shapePlan": { "shape": "open-centre", "plan": "white-seize-the-file" }
+    },
+    {
+      "id": "black-outpost",
+      "label": "Central outpost",
+      "description": "The library's other Black plan: a knight on d4 or e4 that the detector reads as an outpost. Evaluated on every authored position in this pack, the signature is false throughout — d4 holds a White pawn all the way down the spine, and no Black knight reaches e4 on any authored line. Listed because it is the plan the structure normally offers, and recorded as unreachable here rather than quietly dropped.",
+      "shapePlan": { "shape": "open-centre", "plan": "black-central-outpost" }
+    },
+    {
+      "id": "level-it-out",
+      "label": "Trade the queens with the file still open",
+      "description": "The library's neutralising plan, whose signature demands both queens off the board while a central file is still open. Evaluated here: false at every authored position, because no authored line trades queens. It is the plan the objective is a first step toward, and this pack stops well short of it.",
+      "shapePlan": { "shape": "open-centre", "plan": "black-neutralize-and-level" }
+    }
+  ],
+  "spine": [
+    {
+      "id": "re8-contest",
+      "moveUci": "f8e8",
+      "moveSan": "Re8",
+      "annotations": [
+        "Read the position first. Neither side has an e-pawn; every other pawn is on its mirror square. The only asymmetry on the board is that it is your move and White's rook is already on e1.",
+        "Lichess explorer, rapid+classical, rating bands 1400/1600/1800, 2023-01 to 2025-12, retrieved 2026-08-16: this position occurs in 2695 games. Re8 is played 339 times (12.6%), behind Bf5 1048 (38.9%), Bg4 364 (13.5%) and level with c6 325 (12.1%). It is the pack's main line because it is the move that satisfies the objective, not because it is the most played, and the two are stated separately on purpose.",
+        "Computed: after this move the library's White signature stops holding, because it requires Black to have no rook on the file. That is the whole objective and it took one move."
+      ],
+      "children": [
+        {
+          "id": "bg5-pin",
+          "moveUci": "c1g5",
+          "moveSan": "Bg5",
+          "annotations": [
+            "339 games at this node; Bg5 is the most played at 116 (34.2%), then c3 61 (18.0%) and Nc3 38 (11.2%). The resulting position occurs in 151 games. White develops with a threat against the knight that now has a rook behind it, and the file is contested rather than owned.",
+            "This is where the band's evidence on this branch becomes thin. One ply further the most-played reply f6 accounts for 94 of these 151 games, and the position it reaches was not queried because the node it comes from is already close to the hundred-game floor this repo abstains under. The drill continues; the corpus does not."
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "bf5-develop",
+      "moveUci": "c8f5",
+      "moveSan": "Bf5",
+      "annotations": [
+        "The most-played move at this band, 1048 of 2695 (38.9%). Develop first, contest the file later. The bishop comes out to the square White's own bishop is aiming at, and the resulting position occurs in 1535 games.",
+        "The objective is not satisfied while you play this, and that is not a criticism of the move — it is the pack's actual subject. Play this branch out and then look at what it costs to come back for the file."
+      ],
+      "children": [
+        {
+          "id": "bg5-pin-main",
+          "moveUci": "c1g5",
+          "moveSan": "Bg5",
+          "annotations": [
+            "1535 games at this node; Bg5 is the most played at 510 (33.2%), then c3 236 (15.4%), Rxe7 224 (14.6%) and Bxf5 175 (11.4%). The resulting position occurs in 513 games."
+          ],
+          "children": [
+            {
+              "id": "f6-fence",
+              "moveUci": "f7f6",
+              "moveSan": "f6",
+              "annotations": [
+                "513 games at this node and f6 is the most played at 399 (77.8%), with Bxd3 110 (21.4%) the only other move above two games. The pawn answers the pin. Note what it also does to the rook that has not moved yet: f8 is no longer a square the rook wants to leave in a hurry."
+              ],
+              "children": [
+                {
+                  "id": "bh4-retreat",
+                  "moveUci": "g5h4",
+                  "moveSan": "Bh4",
+                  "annotations": [
+                    "399 games at this node; Bh4 is the most played at 292 (73.2%), then Be3 54 (13.5%) and Bxf5 31 (7.8%). The resulting position occurs in 659 games."
+                  ],
+                  "children": [
+                    {
+                      "id": "bxd3-trade",
+                      "moveUci": "f5d3",
+                      "moveSan": "Bxd3",
+                      "annotations": [
+                        "659 games at this node; Bxd3 is the most played at 377 (57.2%), then c6 89 (13.5%) and Qd7 81 (12.3%). The bishop that came out on move eight comes off on move eleven, and the file is still White's."
+                      ],
+                      "children": [
+                        {
+                          "id": "qxd3-recapture",
+                          "moveUci": "d1d3",
+                          "moveSan": "Qxd3",
+                          "annotations": [
+                            "377 games at this node and Qxd3 is played in 373 of them (98.9%); cxd3 appears four times. The resulting position occurs in 822 games, so the branch is still well above the floor.",
+                            "Here is the measurement this pack exists for. In this position Re8 — the same move, the same plan, six plies later — occurs in 48 of the 822 games, below the hundred-game floor at which this repo's explorer client abstains. At the root it occurs in 339 of 2695 and is fully attested. One move, one plan, two depths, and the band's evidence covers exactly one of them. Nothing here says the early rook is better; what is stated is that only one of the two is a thing the corpus can be asked about."
+                          ],
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "file-choice",
+      "label": "White owns the file. Take it now, or develop and come back?",
+      "trigger": { "atStart": true },
+      "actions": ["compare_branches"],
+      "interaction": {
+        "type": "intent_capture",
+        "planClassIds": ["white-file-ownership", "black-outpost", "level-it-out"]
+      }
+    },
+    {
+      "id": "file-contested",
+      "label": "A Black rook stands on the open e-file",
+      "trigger": { "atSpineNode": "re8-contest" },
+      "actions": ["compare_branches"]
+    },
+    {
+      "id": "still-uncontested",
+      "label": "Six plies in, the file is still White's alone",
+      "trigger": { "atSpineNode": "qxd3-recapture" },
+      "actions": ["compare_branches"]
+    }
+  ],
+  "authoredBoundary": {
+    "spineNodeIds": [
+      "re8-contest",
+      "bg5-pin",
+      "bf5-develop",
+      "bg5-pin-main",
+      "f6-fence",
+      "bh4-retreat",
+      "bxd3-trade",
+      "qxd3-recapture"
+    ],
+    "plyHorizon": 16,
+    "fenPredicates": [
+      {
+        "type": "structuralFeature",
+        "feature": {
+          "kind": "all",
+          "of": [
+            { "kind": "feature", "feature": { "kind": "open_file", "file": "e" } },
+            { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } },
+            { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }
+          ]
+        }
+      }
+    ]
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "targetElo": 1650,
+    "temperature": 0.8,
+    "topP": 0.92,
+    "seedMode": "per_branch"
+  },
+  "deviations": [
+    {
+      "at": { "atStart": true },
+      "moveUci": "c8g4",
+      "class": "accepted_alternative",
+      "note": "Bg4: 364 of 2695 (13.5%), the third-most-played move. The same developing idea as the main branch with the bishop on the other diagonal, aimed at the knight that defends d4 rather than at the bishop that defends the king. It leaves the objective unsatisfied for the same reason Bf5 does, and the pack says nothing about which square is better."
+    },
+    {
+      "at": { "atStart": true },
+      "moveUci": "c7c6",
+      "class": "accepted_alternative",
+      "note": "c6: 325 of 2695 (12.1%). A move that changes the pawn mirror rather than the piece placement — after it Black's d5 pawn has a defender and the c-file has a Black pawn on it. The library's Black plans for this structure are both about pieces, so nothing in the entry names this; it is authored territory because it is played, not because the library covers it."
+    },
+    {
+      "at": { "spineNodeId": "bf5-develop" },
+      "moveUci": "e1e7",
+      "class": "interesting_deviation",
+      "note": "Rxe7: 224 of 1535 (14.6%). White spends the rook that owns the file to take the knight that a rook on e8 would have defended. It is the sharpest thing in the position and it changes what the objective is about — after the exchange the file is still open, but the piece that owned it is gone, so the library's White signature ends by White's own hand. Whether the material is worth it is a concrete question this pack does not answer, and there is no engine pass here to answer it with."
+    },
+    {
+      "at": { "spineNodeId": "bg5-pin-main" },
+      "moveUci": "f5d3",
+      "class": "accepted_alternative",
+      "note": "Bxd3 immediately: 110 of 513 (21.4%), the only other move above two games here. It trades on d3 before the pawn goes to f6, which means the knight on e7 is still pinned when the dust settles. The two orders are both authored; the difference between them is one pawn move, and this pack measures neither."
+    },
+    {
+      "at": { "spineNodeId": "re8-contest" },
+      "moveUci": "e1e7",
+      "class": "interesting_deviation",
+      "note": "Rxe7 after the rooks are opposed: 20 of 339 (5.9%). Worth playing out beside the same capture on the other branch, because the two are not the same transaction — here a Black rook is already on the file and recaptures, and there it is not. That comparison is exactly what the drill's rewind is for."
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "feedbackClaims": [
+    {
+      "id": "band-result-split",
+      "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 2695 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-16) the outcomes were 1297 white wins, 208 draws and 1190 black wins (48.1/7.7/44.2%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "the-file-is-already-owned",
+      "text": "The shape library's White plan for this structure - the central file is open, White has a rook on it, Black has none - already holds in this pack's start position, and it holds at every position on the developing branch through move eleven. It stops holding on the move a Black rook reaches the file. Both statements were evaluated with the repo's own structural evaluator on the authored positions; neither says anything about whether owning the file is worth anything.",
+      "evidenceTypes": ["derived_feature"]
+    },
+    {
+      "id": "same-move-two-depths",
+      "text": "Re8 occurs in 339 of the 2695 games at this pack's start position, and in 48 of the 822 games at the position six plies later on the developing branch (Lichess explorer, same population, retrieved 2026-08-16). The second is below the hundred-game floor at which this repo's explorer client abstains, so the corpus can be asked about the early rook and cannot be asked about the late one. That is a fact about the evidence, not about the moves: no comparison, preference or cost is derived from it here.",
+      "evidenceTypes": ["corpus_observed"]
+    },
+    {
+      "id": "the-mirror-is-exact",
+      "text": "In the start position Black's pawns stand on a7, b7, c7, d5, f7, g7 and h7 and White's on a2, b2, c2, d4, f2, g2 and h2 - the same seven files, the same shape, reflected. Neither side has an e-pawn, so the e-file is open for both. This was read off the position rather than recalled, and it is a description of the pawns, not a claim that the position is equal.",
+      "evidenceTypes": ["derived_feature"]
+    }
+  ],
+  "provenance": {
+    "reviewStatus": "draft",
+    "licence": "CC-BY-SA-4.0",
+    "sources": [
+      "OPENING IDENTITY: the move order to the start position is the French Defence, Exchange Variation; the name-to-line skeleton is lichess-org/chess-openings (CC0-1.0, no attribution required). No opening-name claim beyond the family label is made in this pack.",
+      "RATING-BAND FREQUENCY (mechanical, retrieved 2026-08-16): Lichess opening explorer, https://explorer.lichess.ovh/lichess, variant=standard, ratings=1400,1600,1800, speeds=rapid,classical, since=2023-01, until=2025-12, authenticated with the operator token — the population the middlegame and explorer-grounding waves used, matched deliberately per design/BACKLOG.md D124. Every count and share in this file was read from that endpoint at the node it is quoted on: root 2695; after Re8 339, after Bg5 151; after Bf5 1535, after Bg5 513, after f6 399, after Bh4 659, after Bxd3 377, after Qxd3 822, and Re8 within that last node 48. Shares are recomputed from white+draws+black, which is the only total the response supports.",
+      "RESULT SPLITS (mechanical, retrieved 2026-08-16, same query): admissible corpus_observed evidence under the owner ruling of 2026-08-15 (design/BACKLOG.md D126); the boundary is that a split may be stated with its population and may never be converted into a move verdict or a quality claim. Measured here: start position 2695 games, 1297 white / 208 draw / 1190 black (48.1/7.7/44.2%). Only the root split is quoted, deliberately: every other position on this spine sits on one of two branches, and comparing splits across branches is the comparison the explorer-grounding wave refused by name. No verdict, preference, cost or ranking anywhere in this pack derives from any of these numbers. The repo's explorer client abstains below 100 games at a position (apps/server/src/sourcing/explorer.ts) and that floor is applied here; the one sub-floor number in the file, Re8's 48 games at ply 7, is stated as an abstention and used only to describe where the evidence ends.",
+      "SPINE SELECTION RULE (mechanical, and it is NOT most-played at the root): the root has two children. Re8 is the fourth-most-played move at the band (12.6%) and is the main line because it is the move that satisfies the objective; Bf5 is the most-played move (38.9%) and is the second branch. Every other spine move is the most-played move at its node. The shares are stated at every node so the departure is visible rather than implied.",
+      "STRUCTURAL READINGS (mechanical, this session, with the repo's own evaluator packages/runtime/src/structure.ts matchesStructuralExpression driven over the authored FENs): the open-centre trigger fires at the start position and at every authored position; white-seize-the-file holds at the start and on every position of the Bf5 branch, and stops holding at re8-contest; black-central-outpost and black-neutralize-and-level are false at every authored position. The pawn skeleton in the objective summary and in the mirror claim was read from the FEN, not recalled.",
+      "AUTHORED BOUNDARY, a design decision rather than a measurement (see the graduation blockers): plyHorizon is 16 while the deepest authored spine node is at ply 6. Measured across all 47 packs in content/drafts at HEAD, plyHorizon equals the deepest authored spine ply in 19 of 20 opening packs and 10 of 11 middlegame packs, and NO pack in the corpus declares authoredBoundary.fenPredicates — so the field currently records how much prose was written and nothing else, and the 11/8/24 act ramp in design/06 section 5 is a restatement of authored spine length rather than an encounter-length knob. The measured reason the middlegame spines are short is not authorial laziness: on this pack's own main line the band's evidence for the objective's move falls below the abstention floor at ply 7. So a longer Act II cannot be bought with more corpus-backed spine, and the honest way to lengthen it is territory that is keyed to the structure rather than to the move list. The single fenPredicate here is the open-centre condition this pack's guidance is actually about — a central file still open with both queens still on — so authored territory lasts as long as the structure does, capped at 16 ply.",
+      "SHAPE REFERENCE (mechanical): the open-centre entry's trigger fires on this pack's start position, verified with the repo's own evaluator. Before this pack the entry had two customers — content/drafts/open-centre-ruy-exchange.json and the cross-phase content/drafts/trajectory-qgd-exchange-minority.json — and its White plans had no customer at all. This pack is the first to name one, and it names it as the thing the objective is written against rather than as something to execute. Plan classes reference the entry's plans rather than restating them; the entry's own prose carries its own provenance, which this pack does not improve.",
+      "PLAN_SIGNATURE, THIRD INSTRUMENT (mechanical, 2026-08-16): make expression-census over the whole corpus reports this pack's objective success condition as a subject with 827 corpus FAULTS - one per censused position - with the message 'plan_signature must be expanded before runtime evaluation', and therefore as satisfiability 'unknown'. Before this wave 0 subjects in the corpus faulted; after it, 3 do, one per pack in the wave, and the cause is the same leaf in each. apps/server/src/pack-orchestrator.ts expands plan_signature at compile time so the objective is evaluable when a run is built; apps/server/src/expression-census.ts evaluates raw expressions and cannot. So three instruments give three answers about one construct: the linter DEMANDS it (PLAN_SIGNATURE_INLINED), the checker REFUSES it in a fenPredicate (START_POSITION_UNRUNNABLE), and the census FAULTS on it everywhere. This pack uses it anyway, in the one place it passes, because the alternative is plan_consequence and that is deprecated - choosing a deprecated construct so a census number looks better is not a trade this wave was willing to make. The census cost is recorded here and in the wave's log entry rather than avoided.",
+      "UNGROUNDED: that contesting the open file is what Black should be doing in this structure is this pack's authored premise and nothing here establishes it. The corpus says what the band played; the detector says which pieces are on which file. Neither says the file is worth contesting, and neither says early is better than late. No engine evaluation has been run on any position in this pack.",
+      "NOT CLAIMED: no move is graded better or worse than another; the early rook is not asserted to be better than the late one, and the two are contrasted only by how much evidence exists about each; no split is compared with another; and no deviation note asserts a chess consequence beyond an explicitly measured one."
+    ],
+    "reviewers": [],
+    "graduationBlockers": [
+      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No sign-off will ever clear a blocker below; a citable source or mechanical validation that bears on the claim are the only two things that will.",
+      "THE OBJECTIVE'S PREMISE IS UNCITED. That Black's job in a symmetrical open centre is to contest the file White took first is asserted by the shape library entry and by this pack, and neither cites anything. The 2026-08-16 citation pass established that encyclopedic structure articles are theme inventories and never sequence what they list (design/BACKLOG.md D272), which is precisely the shape of this claim.",
+      "THE TIMING CONTRAST IS EVIDENCE-SHAPED, NOT RESULT-SHAPED, AND THAT IS A CEILING. The pack contrasts contesting the file at ply 1 against contesting it at ply 7 purely by whether the corpus can be asked about each. It cannot say the early rook scored better, because that is a per-position aggregate on two different branches, and it cannot say the plan arrived in time, because the explorer cannot condition an outcome on when something happened inside a game (design/BACKLOG.md D155). This is the sixth wave to arrive at that missing instrument.",
+      "THE PLYHORIZON OF 16 AND THE FENPREDICATE ARE AUTHORED. What is measured is the corpus census that motivated them — 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, 0 of 47 use fenPredicates — and the ply at which this line's band evidence dies. Nothing measured says 16 is the right cap or that structure-keyed authored territory serves a learner better than move-keyed territory.",
+      "TWO OF THE THREE PLAN CLASSES ARE NEVER SATISFIED ON THIS SPINE, MEASURED. black-central-outpost is false throughout because d4 holds a White pawn on every authored position and no Black knight reaches e4; black-neutralize-and-level is false throughout because no authored line trades queens. Both are recorded rather than removed, because a plan that the structure offers and this position does not reach is a fact worth carrying.",
+      "NO ENGINE PASS. Two deviations turn on the Rxe7 exchange and neither is priced; there is no cost field on either, because a candidate-relative centipawn loss is the only thing this repo can measure there and no engine walk was run.",
+      "THE SUB-FLOOR NUMBER IS LOAD-BEARING. The claim that the late rook is unattested rests on a 48-game count, which is under the abstention floor. It is used only to say the corpus abstains, never as evidence about the move — but a reader who takes 48 as a measurement rather than as an absence has been misled, and nothing in the format distinguishes the two."
+    ],
+    "attribution": []
+  }
+}
