@@ -11,6 +11,11 @@ import { FEEDBACK_POLICIES, type FeedbackPolicy } from "@chess-tabiya/schema/dri
 import type { EngineHealth, EngineIdentity } from "./engine-supervisor.js";
 import { engineBandProfile, type EngineBandProfile } from "./engine-band.js";
 import type { OpponentPolicyMode } from "./opponent-selector.js";
+import {
+  RECORDED_READING_DISPOSITIONS,
+  assertRecordedReadingDispositions,
+  type RecordedReadingDisposition,
+} from "./position-evidence.js";
 import { ASSESSMENT_CATEGORIES, OBJECTIVE_ASSESSMENT_SETS, type TablebaseCategory } from "./tablebase.js";
 import {
   resolveStrongEngineProfile,
@@ -65,6 +70,7 @@ export interface Capabilities {
   readonly guardBasis: readonly ("rules" | "engine")[];
   readonly costBasis: readonly ("material" | "engine" | "tablebase")[];
   readonly capabilityDispositions: readonly CapabilityDisposition[];
+  readonly recordedReadingKinds: readonly RecordedReadingDisposition[];
   readonly assessmentCategories: readonly TablebaseCategory[];
   readonly objectiveAssessmentSets: Readonly<Record<"win" | "hold" | "save" | "resist", readonly TablebaseCategory[]>>;
   readonly runSchemaVersion: string;
@@ -147,6 +153,22 @@ export function assertAdvertisedCapabilityDispositions(
   for (const row of dispositions) {
     if (row.disposition === "unmeasured" && (row.experiment === undefined || row.experiment.trim() === "")) {
       throw new TypeError(`${row.instrument} ${row.capability} is unmeasured without an experiment`);
+    }
+  }
+}
+
+export function assertRecordedReadingCapabilityDispositions(
+  dispositions: readonly CapabilityDisposition[] = CAPABILITY_DISPOSITIONS,
+): void {
+  assertRecordedReadingDispositions();
+  const required = [
+    ["Stockfish", "score cp / mate"],
+    ["Syzygy", "category"],
+    ["Syzygy", "dtz / precise_dtz as a recorded measurement"],
+  ] as const;
+  for (const [instrument, capability] of required) {
+    if (!dispositions.some((row) => row.instrument === instrument && row.capability === capability && row.disposition === "reached")) {
+      throw new TypeError(`Recorded-reading admission lacks a reached capability disposition for ${instrument} ${capability}`);
     }
   }
 }
@@ -279,6 +301,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
           advertised: Object.freeze({ min: null, max: null }),
         });
     const providerState = providers(this.#engineMode, engines, this.#llmAvailable, this.#corpus, this.#tts, this.#tablebase);
+    assertRecordedReadingCapabilityDispositions();
     return Object.freeze({
       engines,
       policyModes: Object.freeze(SUPPORTED_POLICY_MODES.filter((mode) =>
@@ -304,6 +327,7 @@ export class EngineCapabilities implements CapabilitiesProvider {
         ...(providerState.tablebase === "none" ? [] : ["tablebase" as const]),
       ]),
       capabilityDispositions: CAPABILITY_DISPOSITIONS,
+      recordedReadingKinds: RECORDED_READING_DISPOSITIONS,
       assessmentCategories: ASSESSMENT_CATEGORIES,
       objectiveAssessmentSets: OBJECTIVE_ASSESSMENT_SETS,
       runSchemaVersion: runtimeBuildInfo.runSchemaVersion,

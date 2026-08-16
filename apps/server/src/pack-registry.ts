@@ -9,9 +9,11 @@ import {
   type PackPhase,
   type SpineNode,
 } from "@chess-tabiya/schema/drill-pack";
+import type { PositionEvidenceIndex } from "@chess-tabiya/runtime";
 
 import { ServerError } from "./errors.js";
 import { validatePackDocument, type PackPrincipleLookup, type PackShapeLookup } from "./pack-validation.js";
+import { buildPositionEvidenceIndex } from "./position-evidence.js";
 import { assessmentGrounding } from "./sourcing/ledger-validation.js";
 import { validateLedger } from "./sourcing/ledger-validation.js";
 import { validateClaimBindings } from "./sourcing/claim-binding.js";
@@ -49,6 +51,7 @@ export interface PackRecord {
   readonly assessmentGrounding: AssessmentGrounding;
   readonly channel: "official" | "community";
   readonly publisherHandle?: string;
+  readonly positionEvidence: PositionEvidenceIndex;
   readonly boundClaimIds: ReadonlySet<string>;
   readonly claimBackings: ReadonlyMap<string, {
     readonly binding: "ledger_bound" | "author_attributed" | "self_declared";
@@ -261,6 +264,7 @@ export class PackRegistry {
       const feedbackPolicy = raw.feedbackPolicy as FeedbackPolicy;
       const digest = await digestDrillPack(document);
       const grounding = assessmentGrounding({ document, ledger, manifest });
+      const positionEvidence = buildPositionEvidenceIndex({ ledger, grounding, packDigest: digest });
       const bindingIssues: SourcingIssue[] = [];
       const validatedLedger = validateLedger(ledger, bindingIssues);
       const validBindings = validatedLedger === undefined ? [] : validateClaimBindings(document, validatedLedger, bindingIssues);
@@ -293,6 +297,7 @@ export class PackRegistry {
           summary,
           feedbackPolicy,
           assessmentGrounding: grounding,
+          positionEvidence,
           boundClaimIds: Object.freeze(new Set(validBindings.map((binding) => binding.claimId))),
           claimBackings,
           channel: "official",
@@ -399,6 +404,7 @@ export class PackRegistry {
       }),
       feedbackPolicy: raw.feedbackPolicy as FeedbackPolicy,
       assessmentGrounding: "unverified",
+      positionEvidence: new Map(),
       boundClaimIds: Object.freeze(new Set<string>()),
       claimBackings: new Map<string, never>(),
       channel: "community",
@@ -424,6 +430,7 @@ export class PackRegistry {
       }),
       feedbackPolicy: raw.feedbackPolicy as FeedbackPolicy,
       assessmentGrounding: "unverified",
+      positionEvidence: new Map(),
       boundClaimIds: Object.freeze(new Set<string>()),
       claimBackings: new Map<string, never>(),
       channel: "community",

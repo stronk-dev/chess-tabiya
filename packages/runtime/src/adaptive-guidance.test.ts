@@ -178,7 +178,7 @@ describe("adaptive guidance runtime", () => {
   });
 
   it("checks voice introductions while pinning the known plain-English leak", () => {
-    const packet: EvidencePacket = { fen: start, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], sentences: ["A backward pawn is recorded."] };
+    const packet: EvidencePacket = { fen: start, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], sentences: ["A backward pawn is recorded."] };
     expect(voiceCheck(packet, "A weak pawn is recorded.").violations).toContain("judgement:weak");
     expect(voiceCheck(packet, "Push the tall one two squares.").violations).toContain("prescription:push");
     expect(voiceCheck(packet, "The c4 square matters.").valid).toBe(false);

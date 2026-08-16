@@ -1,11 +1,53 @@
 import type { PackPhase } from "@chess-tabiya/schema/drill-pack";
 
+import type { AssessmentCategory } from "./branch-scale.js";
 import type { EndgameReading } from "./endgame.js";
 import type { DetectedPhase } from "./phase.js";
 import type { PivotalMarker } from "./pivotal.js";
 import type { StructuralObservation, StructureMatch } from "./structure.js";
 
 export interface ShapeEntryRef { readonly id: string; readonly name: string; readonly attribution: string; }
+
+export interface EngineReadingValues {
+  readonly centipawns?: number;
+  readonly mateIn?: number;
+  readonly depth: number;
+  readonly multiPv: 1;
+  readonly perspective: "white";
+  readonly engineId: string;
+  readonly engineName: string;
+  readonly engineVersion: string;
+}
+
+export interface TablebaseReadingValues {
+  readonly category: AssessmentCategory;
+  readonly dtz: number | null;
+  readonly preciseDtz: number | null;
+  readonly dtm: number | null;
+  readonly pieceCount: number;
+  readonly checkmate: boolean;
+  readonly stalemate: boolean;
+  readonly insufficientMaterial: boolean;
+}
+
+export type RecordedReading =
+  | {
+      readonly kind: "engine_eval";
+      readonly fen: string;
+      readonly sourceId: string;
+      readonly retrievedAt: string;
+      readonly values: EngineReadingValues;
+    }
+  | {
+      readonly kind: "tablebase_result";
+      readonly fen: string;
+      readonly sourceId: string;
+      readonly retrievedAt: string;
+      readonly values: TablebaseReadingValues;
+    };
+
+export type PositionEvidenceIndex = ReadonlyMap<string, readonly RecordedReading[]>;
+
 export interface EvidencePacket {
   readonly fen: string;
   readonly phase: { readonly source: "author"; readonly value: PackPhase } | { readonly source: "detector"; readonly value: DetectedPhase };
@@ -15,7 +57,36 @@ export interface EvidencePacket {
   readonly endgame: EndgameReading | null;
   readonly plans: readonly ShapeEntryRef[];
   readonly authored: readonly { readonly id: string; readonly text: string; readonly attribution: string }[];
+  readonly readings: readonly RecordedReading[];
   readonly sentences: readonly string[];
+}
+
+function recordedDate(retrievedAt: string): string {
+  return retrievedAt.slice(0, 10);
+}
+
+function signedPawns(centipawns: number): string {
+  const pawns = centipawns / 100;
+  return `${pawns >= 0 ? "+" : ""}${pawns.toFixed(2)}`;
+}
+
+/** Frozen prose over recorded values. There is deliberately no absence arm. */
+export function renderRecordedReading(reading: RecordedReading): readonly string[] {
+  const date = recordedDate(reading.retrievedAt);
+  if (reading.kind === "engine_eval") {
+    const prefix = `Recorded reading at this position: ${reading.values.engineName} ${reading.values.engineVersion} at depth ${reading.values.depth}, single line,`;
+    const result = reading.values.mateIn === undefined
+      ? `scored ${signedPawns(reading.values.centipawns!)} from White's side`
+      : `reported mate in ${reading.values.mateIn} from White's side`;
+    return Object.freeze([`${prefix} ${result} when this pack was authored on ${date}.`]);
+  }
+  const measures = [
+    ...(reading.values.dtz === null ? [] : [`DTZ ${Math.abs(reading.values.dtz)}`]),
+    ...(reading.values.dtm === null ? [] : [`DTM ${Math.abs(reading.values.dtm)}`]),
+  ];
+  return Object.freeze([
+    `Recorded reading at this position: Syzygy, ${reading.values.pieceCount} pieces — ${reading.values.category} from White's side${measures.length === 0 ? "" : `, ${measures.join(", ")}`} — queried when this pack was authored on ${date}.`,
+  ]);
 }
 
 export const BANNED_JUDGEMENTS = Object.freeze(["weak", "strong", "good", "bad", "better", "worse", "advantage", "winning", "losing", "should", "must", "best", "worst", "mistake", "blunder", "punish", "wins", "loses"]);

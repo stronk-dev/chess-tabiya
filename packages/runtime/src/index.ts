@@ -53,7 +53,20 @@ export {
 export { endgameReading, renderEndgameReading, type EndgameTypeId, type EndgameReading, type TechniqueRef } from "./endgame.js";
 export { retrospectivePivot } from "./adaptive.js";
 export { STORY_MATE_CP, STORY_PIVOT_CP, storyMoments, suggestTitle, type StoryEvaluation, type StoryMoment, type StoryMomentKind, type StoryProjection, type StoryTitleInput } from "./story.js";
-export { voiceCheck, BANNED_JUDGEMENTS, PRESCRIPTIVE_VERBS, CHESS_LEXICON, type EvidencePacket, type ShapeEntryRef, type VoiceCheckResult } from "./voice.js";
+export {
+  voiceCheck,
+  renderRecordedReading,
+  BANNED_JUDGEMENTS,
+  PRESCRIPTIVE_VERBS,
+  CHESS_LEXICON,
+  type EngineReadingValues,
+  type EvidencePacket,
+  type PositionEvidenceIndex,
+  type RecordedReading,
+  type ShapeEntryRef,
+  type TablebaseReadingValues,
+  type VoiceCheckResult,
+} from "./voice.js";
 export { matchKeyPoints, normalizeReasoningText } from "./reasoning.js";
 export { terminalOutcome } from "./outcome.js";
 export {

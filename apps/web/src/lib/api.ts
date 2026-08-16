@@ -270,6 +270,11 @@ export interface Capabilities {
     | "immediate_guard"
   )[];
   readonly guardBasis: readonly ("rules" | "engine")[];
+  readonly recordedReadingKinds: readonly {
+    readonly kind: string;
+    readonly disposition: "admitted" | "refused";
+    readonly reason: string;
+  }[];
   readonly assessmentCategories: readonly ("win" | "loss" | "draw" | "cursed-win" | "blessed-loss")[];
   readonly objectiveAssessmentSets: Readonly<Record<"win" | "hold" | "save" | "resist", readonly string[]>>;
   readonly runSchemaVersion: string;

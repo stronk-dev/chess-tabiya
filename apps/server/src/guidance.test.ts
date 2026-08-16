@@ -30,7 +30,7 @@ class MaiaClient implements SelectorEngineClient {
 const capabilities: CapabilitiesProvider = {
   async get() {
     return {
-      engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], costBasis: ["material"], capabilityDispositions: [], runSchemaVersion: "0.16",
+      engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], costBasis: ["material"], capabilityDispositions: [], recordedReadingKinds: [], runSchemaVersion: "0.16",
       tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"], tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"], tempoDefaults: { outpaced: "failed" },
       assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
       objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
@@ -76,7 +76,7 @@ describe("adaptive guidance server seams", () => {
     expect(await response.json()).toMatchObject({ error: { code: "VOICE_UNAVAILABLE" } });
     let calls = 0;
     const provider: VoiceProvider = { async render() { calls += 1; return "Play e2e4 because it is best."; } };
-    const packet = { fen: FEN, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], sentences: ["Detected by Tabiya's phase bands: opening."] } satisfies EvidencePacket;
+    const packet = { fen: FEN, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], sentences: ["Detected by Tabiya's phase bands: opening."] } satisfies EvidencePacket;
     expect(await renderVoice(provider, packet, "plain")).toEqual({ text: packet.sentences[0], source: "deterministic" });
     expect(calls).toBe(2);
   });
@@ -226,7 +226,7 @@ describe("adaptive guidance server seams", () => {
   });
 
   it("sends only the pinned external voice packet and falls back after transport failures", async () => {
-    const packet = { fen: FEN, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], sentences: ["Detected by Tabiya's phase bands: opening."] } satisfies EvidencePacket;
+    const packet = { fen: FEN, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], sentences: ["Detected by Tabiya's phase bands: opening."] } satisfies EvidencePacket;
     const bodies: unknown[] = [];
     const provider = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", key: "SENTINEL_SECRET", fetch: async (_input, init) => {
       bodies.push(JSON.parse(String(init?.body)) as unknown);
@@ -248,6 +248,43 @@ describe("adaptive guidance server seams", () => {
     } });
     expect(await renderVoice(timeoutProvider, packet, "plain", "reading")).toEqual({ text: packet.sentences[0], source: "deterministic" });
     expect(timeouts).toBe(2);
+  });
+
+  it("keeps recorded readings out of provider input and appends their frozen prose for the learner", async () => {
+    const pack = JSON.parse(readFileSync(new URL("../../../content/drafts/anti-caro-advance.json", import.meta.url), "utf8")) as DrillPackDefinition;
+    const ledger = JSON.parse(readFileSync(new URL("../../../content/drafts/anti-caro-advance.evidence.json", import.meta.url), "utf8")) as unknown;
+    const manifest = JSON.parse(readFileSync(new URL("../../../content/drafts/anti-caro-advance.sources.json", import.meta.url), "utf8")) as unknown;
+    const registry = await PackRegistry.fromDocuments([{ source: "anti-caro", value: pack, ledger, manifest }]);
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} }); stores.push(storage);
+    const service = new RunService(storage, { packRegistry: registry, evidenceQueue: new EvidenceJobQueue(executor) });
+    const run = await service.create({ id: "recorded-guide", session: { kind: "pack", packId: pack.id }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at }, "writer");
+    const selected = (moveUci: string) => ({
+      moveUci,
+      policyModeApplied: "human_common" as const,
+      engine: { id: "fixture", name: "Fixture", version: "1", seedHonored: true },
+    });
+    service.opponentPly(run.id, "writer", selected("c8f5"), { at });
+    service.move(run.id, "writer", "g1f3", { at });
+    service.opponentPly(run.id, "writer", selected("e7e6"), { at });
+    service.move(run.id, "writer", "f1e2", { at });
+    const bodies: unknown[] = [];
+    const provider = new ExternalHttpVoiceProvider({ url: "https://voice.test/render", fetch: async (_input, init) => {
+      bodies.push(JSON.parse(String(init?.body)) as unknown);
+      return Response.json({ text: "Authored packet." });
+    } });
+    const handler = createRestHandler(service, undefined, undefined, undefined, undefined, undefined, undefined, undefined, provider);
+    const response = await handler(request(`/runs/${run.id}/voice`, "POST", { nodeId: run.activeCursor.nodeId, scope: "reading" }));
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ text: expect.stringContaining("Recorded reading at this position: Stockfish 18") });
+    expect(JSON.stringify(bodies)).not.toMatch(/Recorded reading|Stockfish|Syzygy|DTZ|DTM|depth/);
+  });
+
+  it("pins every evidence-packet construction site behind disclosure", () => {
+    const source = readFileSync(new URL("./rest.ts", import.meta.url), "utf8");
+    const sites = [...source.matchAll(/\bevidencePacket\(/gu)].map((match) => match.index!);
+    expect(sites).toHaveLength(4);
+    for (const index of sites) expect(source.slice(Math.max(0, index - 800), index)).toContain("requireGuidanceDisclosure(");
+    expect("Clear, concise Tabiya voice. Do not add chess claims.").not.toMatch(/reading|recorded|coverage|queried|silent|absent/i);
   });
 
   it("withholds ephemeral corpus evidence until reveal and closes it on the next move", async () => {

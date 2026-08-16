@@ -6,15 +6,18 @@ import {
   renderEndgameReading,
   renderPhaseReading,
   renderPivotalMarker,
+  renderRecordedReading,
   structuralReading,
   voiceCheck,
   type DrillRun,
   type EvidencePacket,
   type Node,
+  type PositionEvidenceIndex,
 } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition, PackPhase } from "@chess-tabiya/schema/drill-pack";
 
 import type { AuthoredFeedbackPage } from "./authored-feedback.js";
+import { recordedReadingsAt } from "./position-evidence.js";
 import type { ShapeRegistry } from "./shape-registry.js";
 
 export type VoiceScope = "marker" | "reading" | "steering" | "story" | "compare" | "reasoning";
@@ -27,7 +30,7 @@ function authoredText(item: AuthoredFeedbackPage["items"][number]): string | und
   return undefined;
 }
 
-export function evidencePacket(input: { readonly run: DrillRun; readonly node: Node; readonly pack?: DrillPackDefinition; readonly authored: AuthoredFeedbackPage; readonly shapes?: ShapeRegistry }): EvidencePacket {
+export function evidencePacket(input: { readonly run: DrillRun; readonly node: Node; readonly pack?: DrillPackDefinition; readonly packEvidence?: PositionEvidenceIndex; readonly authored: AuthoredFeedbackPage; readonly shapes?: ShapeRegistry }): EvidencePacket {
   const reading = structuralReading(input.node.fen);
   const detected = classifyPhase(input.node.fen);
   const phase = input.pack === undefined ? { source: "detector" as const, value: detected.phase } : { source: "author" as const, value: input.pack.phase as PackPhase };
@@ -41,8 +44,15 @@ export function evidencePacket(input: { readonly run: DrillRun; readonly node: N
     const text = authoredText(item);
     return text === undefined ? [] : [{ id: item.id, text, attribution: `authored:${item.revealedBy.kind}:${item.revealedBy.eventSeq}` }];
   });
+  const readings = recordedReadingsAt(input.packEvidence, input.node, input.run);
   const sentences = [input.pack === undefined ? renderPhaseReading(detected) : `This pack declares: ${input.pack.phase}.`, ...reading.structures.map((item) => `Detected structure: ${item.name}. ${item.provenanceNote}`), ...markers.flatMap(renderPivotalMarker), ...renderEndgameReading(endgame), ...authored.map((item) => `${item.text} (${item.attribution})`)];
-  return Object.freeze({ fen: input.node.fen, phase: Object.freeze(phase), structures: reading.structures, observations: reading.features, markers: Object.freeze(markers), endgame, plans: Object.freeze(plans), authored: Object.freeze(authored), sentences: Object.freeze(sentences) });
+  return Object.freeze({ fen: input.node.fen, phase: Object.freeze(phase), structures: reading.structures, observations: reading.features, markers: Object.freeze(markers), endgame, plans: Object.freeze(plans), authored: Object.freeze(authored), readings, sentences: Object.freeze(sentences) });
+}
+
+export function appendRecordedReadings(text: string, packet: EvidencePacket): string {
+  const rendered = packet.readings.flatMap(renderRecordedReading).join("\n");
+  if (rendered === "") return text;
+  return text === "" ? rendered : `${text}\n${rendered}`;
 }
 
 export async function renderVoice(provider: VoiceProvider, packet: EvidencePacket, persona: string, scope: VoiceScope = "reading"): Promise<{ readonly text: string; readonly source: "provider" | "deterministic" }> {
@@ -50,10 +60,10 @@ export async function renderVoice(provider: VoiceProvider, packet: EvidencePacke
   for (let attempt = 0; attempt < 2; attempt += 1) {
     try {
       const output = await provider.render(packet, persona, deterministic, scope);
-      if (voiceCheck(packet, output).valid) return Object.freeze({ text: output, source: "provider" });
+      if (voiceCheck(packet, output).valid) return Object.freeze({ text: appendRecordedReadings(output, packet), source: "provider" });
     } catch {
       // Provider failures share the same one-retry then deterministic fallback path.
     }
   }
-  return Object.freeze({ text: deterministic, source: "deterministic" });
+  return Object.freeze({ text: appendRecordedReadings(deterministic, packet), source: "deterministic" });
 }

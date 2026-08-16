@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   assertAdvertisedCapabilityDispositions,
+  assertRecordedReadingCapabilityDispositions,
   assertSurfaceCapabilities,
   EngineCapabilities,
   type CapabilityEngineClient,
@@ -51,6 +52,10 @@ function healthClient(
 }
 
 describe("engine capabilities", () => {
+  it("binds admitted recorded readings to reached instrument dispositions", () => {
+    expect(() => assertRecordedReadingCapabilityDispositions()).not.toThrow();
+    expect(() => assertRecordedReadingCapabilityDispositions([])).toThrow(/recorded-reading admission lacks/i);
+  });
   it("reports engine providers from current supervisor readiness", async () => {
     const identities: Readonly<Record<string, EngineIdentity>> = {
       "stockfish-analysis": {
@@ -110,6 +115,15 @@ describe("engine capabilities", () => {
           expect.objectContaining({ instrument: "Stockfish", capability: "score cp / mate" }),
           expect.objectContaining({ instrument: "Maia", capability: "policy mass" }),
         ]),
+        recordedReadingKinds: [
+          { kind: "opening_identity", disposition: "refused", reason: expect.any(String) },
+          { kind: "position_legality", disposition: "refused", reason: expect.any(String) },
+          { kind: "explorer_frequency", disposition: "refused", reason: expect.any(String) },
+          { kind: "explorer_position_census", disposition: "refused", reason: expect.any(String) },
+          { kind: "tablebase_result", disposition: "admitted", reason: expect.any(String) },
+          { kind: "engine_eval", disposition: "admitted", reason: expect.any(String) },
+          { kind: "puzzle_provenance", disposition: "refused", reason: expect.any(String) },
+        ],
         assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
         objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
         runSchemaVersion: runtimeBuildInfo.runSchemaVersion,

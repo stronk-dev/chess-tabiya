@@ -113,6 +113,13 @@ provider is configured, and any provider output that fails the packet check
 degrades to deterministic text rather than widening the claim set. See
 `adaptive-guidance.md`.
 
+Digest-current pack ledgers now supply server-local, position-keyed recorded Stockfish and
+Syzygy readings after the same guidance-disclosure decision. They are historical authoring
+measurements, not run evidence: live same-kind evidence wins, tablebase halfmove clocks must
+match, and no cross-node delta or verdict is computed. Structured readings never enter an
+external voice provider's packet; frozen attributed prose is appended after provider
+rendering. See `recorded-evidence.md`.
+
 ## Authored checkpoint reveal
 
 `GET /packs/:id` never contains authored annotations, deviations, plan classes,

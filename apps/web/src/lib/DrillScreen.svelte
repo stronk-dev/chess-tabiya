@@ -21,6 +21,7 @@
   import { renderStructuralObservation } from "./structural-sentences.js";
   import { renderTransitionObservation } from "./transition-sentences.js";
   import { renderCorpusPage } from "./corpus-sentences.js";
+  import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
     activeNode,
@@ -1087,6 +1088,7 @@
       {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Show recorded human-model split</button>{/if}
       {#if humanSplit}<p class="guidance-sentence">{humanSplit.engine.name}, rating target {humanSplit.targetElo ?? "unrated"}: {humanSplit.candidates.filter((candidate) => candidate.offWindow !== true).map((candidate) => `${candidate.moveUci} ${candidate.mass === undefined ? "mass unavailable" : `${Math.round(candidate.mass * 100)}%`}`).join(" · ")}</p>{/if}
       {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" onclick={() => void requestVoice("marker")}>Revoice this packet</button>{/if}
+      {#if voicePage?.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
       {#if voicePage}<p class="guidance-sentence">{voicePage.text}</p>{/if}
       <button type="button" onclick={() => (openPivotalNodeId = undefined)}>Close</button>
     </div>
