@@ -438,6 +438,13 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("objective achieved");
     expect(document.body.textContent).toContain("M-2");
     expect(document.body.textContent).toContain("Recorded branch strips");
+    expect(document.querySelector(".boards")?.getAttribute("data-zoom")).toBe("near");
+    expect(document.querySelectorAll(".boards [aria-label='Chessboard']")).toHaveLength(1);
+    document.querySelector<HTMLButtonElement>(".zoom-control button")!.click();
+    await tick();
+    expect(document.querySelector(".boards")?.getAttribute("data-zoom")).toBe("far");
+    expect(document.querySelectorAll(".boards [aria-label='Chessboard']")).toHaveLength(0);
+    expect(document.body.textContent).toContain("active");
     expect(document.querySelectorAll(".sparkline span")).toHaveLength(comparison.columns.reduce((total,column)=>total+comparison.evidence[column.branchId]!.length,0));
     document.querySelector<HTMLButtonElement>(".narrative > button")!.click();
     await tick();

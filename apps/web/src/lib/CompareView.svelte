@@ -5,6 +5,11 @@
   import Chessboard from "./Chessboard.svelte";
   import HonestControl from "./HonestControl.svelte";
   import type { StartSide } from "./board-model.js";
+  import {
+    COMPARISON_CELL_FLOOR_REM,
+    defaultComparisonZoom,
+    type ComparisonZoomBand,
+  } from "./compare-geometry.js";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { comparisonNode } from "./screen-model.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
@@ -24,6 +29,9 @@
   let heading: HTMLHeadingElement;
   let narrativeOpen = $state(false);
   let personaText = $state<string | undefined>();
+  // Comparison identity is fixed for this mounted screen; user changes own the zoom afterwards.
+  // svelte-ignore state_referenced_locally
+  let zoom: ComparisonZoomBand = $state(defaultComparisonZoom(comparison.columns.length));
   let strips = $derived(comparisonStrips(run, comparison));
   let narrative = $derived(comparisonNarrative(run, comparison, strips));
 
@@ -38,6 +46,15 @@
     const pawns = entry.score.value / 100;
     return `${pawns >= 0 ? "+" : ""}${pawns.toFixed(2)}`;
   }
+  function outcomeAt(nodeId: string): string | undefined {
+    const event = [...run.events]
+      .reverse()
+      .find(
+        (candidate) =>
+          candidate.type === "outcome.reached" && candidate.data.nodeId === nodeId,
+      );
+    return event?.type === "outcome.reached" ? event.data.outcome : undefined;
+  }
   onMount(() => heading?.focus());
 </script>
 
@@ -47,12 +64,33 @@
     <button type="button" onclick={onClose}>Close <kbd>Tab</kbd></button>
   </header>
 
-  <div class="boards" style={`--branches:${comparison.columns.length}`} aria-live="polite">
+  <div class="zoom-control" aria-label="Comparison detail">
+    <button type="button" aria-pressed={zoom === "far"} onclick={() => (zoom = "far")}>Overview</button>
+    <button type="button" aria-pressed={zoom === "mid"} onclick={() => (zoom = "mid")}>Summary</button>
+    <button type="button" aria-pressed={zoom === "near"} onclick={() => (zoom = "near")}>Boards</button>
+  </div>
+
+  <div
+    class="boards"
+    data-zoom={zoom}
+    style={`--branches:${comparison.columns.length};--cell-floor:${COMPARISON_CELL_FLOOR_REM[zoom]}rem`}
+    aria-live="polite"
+  >
     {#each comparison.columns as column}
       {@const node = comparisonNode(run, comparison, step, column.branchId)}
       <article class:absent={!node} data-branch-id={column.branchId}>
         <h3>{column.label}{column.origin === "simulated" ? " · simulated" : ""}</h3>
-        {#if node}<Chessboard fen={node.fen} {startSide} lastMove={node.moveUci} disabled onMove={() => {}} />
+        {#if node}
+          {@const outcome = outcomeAt(node.id)}
+          <p class="cell-state">{node.objectiveState}{outcome === undefined ? "" : ` · ${outcome}`}</p>
+          {#if zoom === "mid" || zoom === "near"}
+            <dl>
+              <div><dt>Last move</dt><dd>{node.moveSan ?? "No move"}</dd></div>
+              <div><dt>Ply</dt><dd>{node.ply}</dd></div>
+              <div><dt>Checkpoints</dt><dd>{node.checkpointRefs.length}</dd></div>
+            </dl>
+          {/if}
+          {#if zoom === "near"}<Chessboard fen={node.fen} {startSide} lastMove={node.moveUci} disabled onMove={() => {}} />{/if}
         {:else}<div class="line-ended">Line ended</div>{/if}
       </article>
     {/each}
@@ -125,5 +163,5 @@
 </section>
 
 <style>
-  .compare{width:min(96rem,calc(100% - 2rem));height:100%;margin:auto;padding:1rem 0;overflow:auto}.compare>header,.stepper{display:flex;justify-content:space-between;align-items:center;gap:1rem}.compare header p{margin:0;color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.12em}h2{margin:.2rem 0 0;font:500 clamp(1.6rem,3vw,2.8rem)/1 var(--display-font)}button{padding:.65rem .8rem;border:1px solid var(--line);border-radius:.65rem;background:var(--panel);color:inherit}.boards,.results,.strip-band{display:grid;grid-template-columns:repeat(var(--branches,2),minmax(15rem,1fr));gap:.8rem;margin:1rem 0;overflow-x:auto}.strip-band>h3{grid-column:1/-1}.strip-band article,.boards article,.results>article{min-width:15rem;padding:.7rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.sparkline{display:flex;gap:.2rem;color:var(--accent)}.narrative{padding:1rem;border:1px solid var(--line);border-radius:.8rem}.boards article.absent{opacity:.45}.line-ended{aspect-ratio:1;display:grid;place-items:center;background:var(--panel-soft)}.stepper{justify-content:center}.trajectory{margin:1rem 0}.trajectory-row{display:grid;grid-template-columns:12rem 1fr;gap:.5rem}.fork-marker{display:inline-block;color:var(--accent);font:700 .75rem ui-monospace,monospace}.evidence-entry{margin-right:.35rem}.results{grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))}.results p{margin:.35rem 0;color:var(--muted)}.scores{display:grid;gap:.25rem;font: .76rem ui-monospace,monospace}
+  .compare{width:min(96rem,calc(100% - 2rem));height:100%;margin:auto;padding:1rem 0;overflow:auto}.compare>header,.stepper{display:flex;justify-content:space-between;align-items:center;gap:1rem}.compare header p{margin:0;color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.12em}h2{margin:.2rem 0 0;font:500 clamp(1.6rem,3vw,2.8rem)/1 var(--display-font)}button{padding:.65rem .8rem;border:1px solid var(--line);border-radius:.65rem;background:var(--panel);color:inherit}.zoom-control{display:flex;justify-content:flex-end;gap:.25rem;margin-top:1rem}.zoom-control button[aria-pressed="true"]{border-color:var(--accent)}.boards,.results,.strip-band{display:grid;grid-template-columns:repeat(var(--branches,2),minmax(var(--cell-floor,15rem),1fr));gap:.8rem;margin:1rem 0;overflow-x:auto;overscroll-behavior:contain}.strip-band>h3{grid-column:1/-1}.strip-band article,.boards article,.results>article{min-width:var(--cell-floor,15rem);padding:.7rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.boards h3,.boards p{overflow-wrap:anywhere}.cell-state{color:var(--muted);font-size:.72rem;text-transform:uppercase}.boards dl{display:grid;gap:.2rem;margin:.45rem 0;font-size:.7rem}.boards dl div{display:flex;justify-content:space-between;gap:.35rem}.boards dt{color:var(--muted)}.boards dd{margin:0}.sparkline{display:flex;gap:.2rem;color:var(--accent)}.narrative{padding:1rem;border:1px solid var(--line);border-radius:.8rem}.boards article.absent{opacity:.45}.line-ended{min-height:3rem;display:grid;place-items:center;background:var(--panel-soft)}.boards[data-zoom="near"] .line-ended{aspect-ratio:1}.stepper{justify-content:center}.trajectory{margin:1rem 0}.trajectory-row{display:grid;grid-template-columns:12rem 1fr;gap:.5rem}.fork-marker{display:inline-block;color:var(--accent);font:700 .75rem ui-monospace,monospace}.evidence-entry{margin-right:.35rem}.results{grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));--cell-floor:16rem}.results p{margin:.35rem 0;color:var(--muted)}.scores{display:grid;gap:.25rem;font: .76rem ui-monospace,monospace}
 </style>
