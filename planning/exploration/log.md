@@ -2994,3 +2994,49 @@ turned this investigation into a `git log --grep`.
 **And a reading rule (D419): the disposition column is not a status.** Three
 readers in two days took it for one, and two of them wrote false rows into the
 ledger as a result.
+
+## 2026-08-16 — four owner rulings, and a correction to how claude asks
+
+**The correction first, because it changed one of the answers.** Teacher mode was
+put to the owner as three options: ship without the Maia split and corpus rungs,
+defer with a stated trigger, or hide the absent rungs. The owner: *"why do you not
+give option: add them and ship, no deferral… literally covered all options except
+**implement properly**."*
+
+That is the **second** time in this session. The C6 fork in `feedback-delivery`
+had the same shape — three ways to present an unbacked claim, when what was
+missing was the attach path, which `claim-backing` then supplied and the fork
+dissolved. **The pattern: claude measures a gap, silently reclassifies it as a
+constraint, and asks the owner to choose a way to live with it.** Ledgered as a
+process defect with a concrete rule — every fork put to the owner must include
+removing the constraint, or state in the prompt why removing it is impossible.
+
+**1. Teacher mode ships complete.** Build the human-model split and the corpus
+rungs into the teacher surface. No degraded first version. `teacher-surface` is
+cross-reviewed and ready on the mechanics; its Open question 1 is answered by
+construction rather than by choosing a subset.
+
+**2. Endgame `targetElo` becomes provenance, not difficulty.** The twelve packs
+keep their declared band as a record of **who the pack was authored for**,
+explicitly not a resistance setting — the same move as the live-relay clock. The
+evidence stands: the band ties on 43 of 45 endgame positions because transfer
+tracks pieces remaining (0.40 full material, 0.07 reduced). **The distinction has
+to be enforced or it decays back into a knob**, and that enforcement is the work
+this ruling creates.
+
+**3. Leaderboards and cross-learner comparison are admitted — R10 reversed, not
+narrowed.** *"Add it properly, re-evaluate the refusal and why it was there and
+what it unlocks."* The re-evaluation must keep what was right in R10: its
+rationale was that we do not prevent self-cheating, and the league study found
+that concern **observed rather than theoretical** — 4545's own history records
+investigations altering standings across three seasons. So comparison ships with
+the limitation **stated**, not pretended away. It unlocks the club and coach
+cohort, and makes the honour-roll form a presentation choice rather than a
+compromise.
+
+**4. A campaign boss is a full game, not a pack.** Packs cannot be rated —
+`plyHorizon` truncation leaves no rules-terminal result and manufacturing one
+needs a position verdict law 8 forbids. So a boss runs to a real terminal result
+and rates like any other game. **Consequence to design rather than discover:** a
+boss becomes a different object from every other encounter, and the first
+campaign element required to produce a rules-terminal outcome.
