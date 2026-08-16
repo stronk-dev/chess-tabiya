@@ -83,8 +83,11 @@ a repeat), so the run may be stopped at any point and the analysis still sees a
 ## Artifacts in `out/`
 
 Summary JSON only — `census.json`, `analysis.json`, `resistance.json`. The
-per-probe JSONL and the 507-position corpus are regenerable (the walk is seeded
-and deterministic) and are not kept.
+per-probe JSONL and the original 507-position corpus were not kept. That omission means the
+post-`opponent-contracts` census cannot be reproduced byte-for-byte from the repository; a
+seeded walk over today's changed content would be a new corpus, not a reconstruction. The
+surviving `census.json` is therefore the historical D366 snapshot, not output from the current
+selector contract. Future runs must retain the source JSONL beside their summary.
 
 `probe-set.json` **is** kept, at 120 KB: it is the 60 probed positions with the
 tablebase's exact class and DTZ for every legal move, which is what makes every
@@ -95,7 +98,7 @@ Run of record: **1,095 probes, 0 errors, 6 complete repeat rounds**, at
 declare), against `chess-tabiya-maia:dev` (Maia-3 source `1e13597`, 5M
 checkpoint).
 
-`census.py` follows the current selector contract: DTZ remains primary in won/lost
-roots and every residual tie uses `sha256(fen + "\\0" + uci)`. Its report includes
-`dtzTiedRoots`, making explicit whether a won-root re-run had enough ties for a tiebreak
-change to affect the aggregate.
+`census.py` follows the current selector contract for new runs: `preciseDtz` (falling back to
+rounded `dtz`) remains primary in won/lost roots and every residual tie uses the first five FEN
+fields plus UCI, excluding only the fullmove counter. Its report includes `dtzTiedRoots`, making
+explicit whether a won-root re-run had enough ties for a tiebreak change to affect the aggregate.

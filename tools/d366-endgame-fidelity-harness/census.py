@@ -43,7 +43,13 @@ def is_pawn_move(san):
 
 
 def neutral_key(fen, uci):
-    return hashlib.sha256((fen + "\0" + uci).encode()).hexdigest()
+    position_key = " ".join(fen.split()[:5])
+    return hashlib.sha256((position_key + "\0" + uci).encode()).hexdigest()
+
+
+def dtz_metric(move):
+    precise = move.get("preciseDtz")
+    return abs(precise if precise is not None else (move.get("dtz") or 0))
 
 
 def main():
@@ -79,14 +85,14 @@ def main():
         winning = "win" in row["category"]
         losing = "loss" in row["category"]
         primary = [
-            abs(m["dtz"] or 0) if winning else (-abs(m["dtz"] or 0) if losing else 0)
+            dtz_metric(m) if winning else (-dtz_metric(m) if losing else 0)
             for m in preserving
         ]
         dtz_ties[own] += 1 if sum(value == min(primary) for value in primary) > 1 else 0
         ordered = sorted(
             preserving,
             key=lambda m: (
-                abs(m["dtz"] or 0) if winning else (-abs(m["dtz"] or 0) if losing else 0),
+                dtz_metric(m) if winning else (-dtz_metric(m) if losing else 0),
                 neutral_key(row["fen"], m["uci"]),
                 m["uci"],
             ),

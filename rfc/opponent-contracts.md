@@ -918,6 +918,14 @@ is the only versioned one this RFC makes.
   enough that the winning row could not move outside its interval regardless of the tiebreak,
   A10 is **declared vacuous in the record** and carries no evidential weight — which is a
   finding about the census, not a pass.
+
+  **Reproducibility correction, 2026-08-16:** the 507-row source JSONL used for the recorded
+  A9/A10 re-run was not committed, and its logged digest resolves to no repository file.
+  `tools/d366-endgame-fidelity-harness/out/census.json` is the historical pre-fix snapshot,
+  not the output of that re-run. The figures above remain a run record but are **not
+  independently reproducible from this tree**. The stronger regenerability claim is withdrawn;
+  the corrected instrument now retains `preciseDtz` and excludes only the FEN fullmove counter,
+  but D457 remains open until a new retained corpus validates its tie counts.
 - A11. `PERFECT_TABLEBASE_UNORDERED_OBJECTIVE` fires for a `perfect_tablebase` + `hold` pack,
   does **not** fire for `save`, `resist`, or `win`, and all committed packs still validate
   with zero new errors and zero new warnings.

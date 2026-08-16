@@ -168,6 +168,7 @@ interface Record_ {
     readonly moverCategory: TablebaseCategory;
     readonly moverClass: string | null;
     readonly dtz: number | null;
+    readonly preciseDtz: number | null;
   }[];
 }
 
@@ -212,7 +213,7 @@ async function main(): Promise<void> {
           san: move.san,
           category: invertTablebaseCategory(move.moverCategory),
           dtz: move.dtz,
-          preciseDtz: null,
+          preciseDtz: move.preciseDtz ?? null,
         })),
       });
     }
@@ -277,6 +278,7 @@ async function main(): Promise<void> {
           moverCategory: mover,
           moverClass: resultClass(mover),
           dtz: move.dtz,
+          preciseDtz: move.preciseDtz,
         };
       }),
     };
