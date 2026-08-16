@@ -3468,3 +3468,13 @@ Compare wave F 7.7%, middlegame ~14%, explorer ~27%, citation pass ~30%.
 - **No test edited, and no construct chosen for how it scores.** `plan_signature`
   costs this wave three `satisfiabilityUnknown` subjects and was used anyway.
 - **No `design/00`–`06`, `rfc/` or `archive/` file touched.**
+
+## 2026-08-16 — Carlsbad exemplar boundary correction
+
+- D346's mechanical reproduction was correct: the objective transition occurs on pack ply 11,
+  while the exemplar declared `plyHorizon: 8` and therefore graded outside its own authored
+  boundary.
+- Raised the horizon to 11 and pinned the objective node against it in the existing structural
+  orchestration test. The pack still validates; no chess claim or authored move changed.
+- Deliberately did not generalise this into a blanket spine-depth rule: trajectory roots carry
+  leg boundaries and are the known counterexample to that inference.

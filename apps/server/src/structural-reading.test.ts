@@ -33,6 +33,8 @@ describe("structural pack orchestration", () => {
     const transitions = run.events.filter((event) => event.type === "objective.state_changed");
     expect(transitions).toHaveLength(1);
     expect(transitions[0]).toMatchObject({ data: { from: "active", to: "achieved", evidenceRefs: ["rules:transition-slider-lines-changed", "rules:structure-backward-pawn", "rules:structure-half-open-file"] } });
+    const objectiveNode = run.nodes.find((node) => node.id === transitions[0]!.data.nodeId)!;
+    expect(pack.authoredBoundary?.plyHorizon).toBeGreaterThanOrEqual(objectiveNode.ply);
   });
 
   it("refuses plan objectives that compile to nothing but preserves honest ungraded packs", () => {
