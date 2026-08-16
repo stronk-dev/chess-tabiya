@@ -2449,3 +2449,162 @@ Both are ledger rows rather than design edits, per law 5.
 repaired the same evening at `0985fa4`, with a real-engine integration arm. The band lever
 works; nothing has yet measured that it changes the **result** rather than the distribution,
 which is now the campaign cluster's cheapest unrun experiment (D324).
+
+## 2026-08-16 — Maia's WDL measured against R9's ground truth: a real signal, and not the oracle
+
+The binding experiment registered in production code — `capabilities.ts:108`,
+`{ capability: "per-move wdl", disposition: "unmeasured", experiment: "D87 compare Maia
+WDL with R9 ground truth" }` — has been run. It landed as
+`design/research/maia-wdl-versus-human-outcome.md` with
+`tools/maia-wdl-agreement-harness/`. 1,475 Maia probes and 279 Stockfish depth-12 probes,
+against **R9's committed explorer readings reused unchanged** rather than a fresh pull, so
+the two dossiers are literally commensurable and no second explorer client exists.
+
+**D236 is confirmed and upgraded.** The WDL sums to 1000 not as an observation over one
+run but **by construction** — `_probabilities_to_permille` distributes a largest-remainder
+rounding over a softmax (`uci.py:186-193`), verified on 27,330 of 27,330 candidate rows.
+The same read settles two things nobody had: `cp_from_wdl` is `win − loss`, so **`score
+cp` and `wdl` are one output** and expected score is exactly `0.5 + cp/2000`; and the
+frame is the root side to move, taken from `invert_wdl` rather than inferred from
+agreement, which would have been circular.
+
+**The verdict is split and the split is the finding.** On the population as a whole —
+5,379 human-decided move pairs — Maia's WDL orders them at **72.2%** against explorer play
+counts at **76.8%** and Stockfish depth 12 at **84.2%**, with a 50% floor and a **94–99%**
+ceiling measured as the ground truth's own cross-band reproducibility. By the null this
+dossier preregistered (*beat what is already on the wire*, not *beat chance*) that is a
+refusal. **But splitting the population by the ratio of the two moves' play counts inverts
+it**: where the counts are within 2× — the half where popularity cannot answer — the WDL
+holds **65.1%** while the counts collapse to **54.7%**, and **Maia's own policy head goes
+to 34.4%**, significantly *worse* than chance, tightening to 24.9% at a 1.25× ratio. That
+is `design/05` rung 4's *popularity is not quality* appearing as a measured inversion
+rather than a caution, and it is a live warning for every policy-mass object we ship,
+`humanConcessionMass` included.
+
+**It does not reach past ply 20, and the control is what makes that decisive.** Pooled
+agreement decays monotonically **81.2 → 75.3 → 68.8 → 61.2 → 47.9%** by ply bucket, the
+last being indistinguishable from a coin. If deep pairs were merely noisier every
+instrument would decay together — **Stockfish over the identical pairs is flat, 84.8% at
+ply 0–3 and 87.7% at 16–19.** What crosses the wall is availability: `wdl` is emitted on
+100% of rows at ply 40+ and its within-position spread *grows* from 10.3 pp to 35.9 pp, an
+instrument that never abstains and speaks more emphatically the further it gets from any
+check. **So `design/06` §2a is unchanged — the middlegame stays authored — and it is now a
+measured position rather than an inherited one.** The one live candidate for a fourth
+difficulty-availability tier has been tested and did not qualify.
+
+**No `gates.md` change, stated so the absence is auditable.** The evidence touches no
+hypothesis, no kill criterion and no continuation gate. What it does touch is the
+engine-condition rule mirrored there — clause 3's *binding experiment* — and that rule's
+normative text is owner tier (`design/05` §2), so the outcome is recorded here and in the
+ledger rather than written into a mirror. Related: it is evidence about **D324** (*the
+band moves the distribution; nothing has measured that it moves the result*) from the
+outcome side — Maia's band-to-band movement correlates with the human population's at
+**Pearson 0.021–0.044, sign agreement 47–52%**, against a real human movement of 1.2–2.2 pp
+after sampling noise is subtracted. It does not settle D324, whose arm measures played
+games, but it points.
+
+**Two corrections to our own records, both in the safe direction.** The audit's *"explorer
+per-move split is fetched and discarded at parse time"* is **stale at HEAD** —
+`parseCorpusResponse` keeps it and `corpus-sentences.ts:16-20` renders it, closed by
+`engine-leverage`. And the audit's *"WDL spreads 0.191 median expected score"* reads the
+whole MultiPV-20 list; on the moves humans play often enough to measure the spread is
+**4.9 pp against the human 9.2 pp** — Maia is under-dispersed by half, not over-confident.
+
+Also confirmed live: the Maia command order repaired by `0985fa4` does apply the requested
+band (**5,466/5,466** candidate rows identical to an `Elo`-only request), so the primary
+arm is the shipped instrument.
+
+**Process finding worth keeping (D294).** The reason this question was answerable at all
+is that someone put the experiment in a string in production code, next to the capability
+it gated. Three other `unmeasured` capabilities carry named experiments; this is the first
+one discharged, and it came back a refusal — which is the field working. Ledgered
+**D287–D294**; D295–D296 unspent. The register-row flip is code and belongs to work
+cluster B.
+
+## 2026-08-16 — Mechanics × modes: there are not four modes, and the half-integrations moved one layer down
+
+**Landed:** `design/research/mechanics-by-mode.md` (coverage-matrix row added), ledger rows
+**D307–D316**, an evidence note under the Lucas-Chess watch item in `gates.md`. Owner brief:
+*"making sure we have all the right breadth in mechanics and they're not implemented
+half-assed, but fully integrated for the drills vs just play vs coaching/streaming/teaching vs
+campaign."*
+
+**The framing was wrong, and finding that out is the result.** The product does not have four
+modes with four mechanic sets. `DrillScreen` is mounted at **exactly one place**
+(`App.svelte:574`), and driving the real client shows a pack drill and a Just Play game
+presenting the **same 18 and 19 controls**, differing only by an inert ambient glyph. Live
+**never creates a run** — it wraps one, adds session controls, and neither of its surfaces
+renders any authored vocabulary; `session.kind` has four server comparisons of which two are
+creation-time guards, and **`academy` — the mode the owner calls *coaching/teaching* — has zero
+behavioural consumers anywhere in the code**. Campaign is 0 hits outside disposable harnesses.
+So the half-integrations are not *inside* the modes: they are at the **entries** (what a mode may
+declare when it starts), in the **content** that fills the shared panels, and in a handful of
+**controls that exist on one surface and not the other**. Thirteen are ranked by cost × value.
+
+**Owner check 1 — *"configurable as to what is exposed"*: the config is mode-aware in its
+addressing and not in its content.** `permittedAssistance` takes `sessionKind` and **never reads
+it** (`assistance.ts:27-30`), so pack, position and imported runs receive byte-identical
+permissions — there is no lever to make Just Play more permissive than a curated drill *even if
+the owner rules that it should be*, which is what `design/05` §4 asks for. And `loadAssistance`
+returns `SILENT_ASSISTANCE` for **all six** profiles, so §3-forms' *"each gets its own defaults"*
+is unimplemented: six profiles buy six empty localStorage slots the learner fills by hand, six
+times (D307). Two of nine axes drive nothing — `arrows` is typed, migrated, validated,
+*permissioned* and read by no renderer (already ledgered, and owned by the accepted
+`board-annotation`), and `ambient` is a `<button>` with no `onclick`. **No single surface
+configures all nine**: six in `/settings`, six in-run, three overlapping, and the config is read
+once at `onMount` (D311). The hard consequence: **`api.reveal` has no call site in the run
+screen**, so under the triple-fenced `attempt_end` policy **rungs 3, 4 and 6 are structurally
+unreachable during a Just Play game**. The owner's *"gives the FULL toolkit"* is, as shipped,
+rung 0 plus a permanently disabled panel until the game ends — and the fix is one button
+(D308). It is the highest cost:value item in the audit.
+
+**Owner check 2 — *"it steers you by classifying openings, strategies, endgames"*: aspirational,
+with one real exception.** All four non-test consumers of `classifyPhase`, `structuralReading`,
+`endgameReading`, `shapeFirings` and `pivotalMarkers` are **renderers**. Nothing selects an
+opponent, a band, a position, an objective, a pack, a next node or an assistance rung from a
+classification. `shapeRecommendations` ranks shapes you met in your own preserved runs, emits a
+`packIds` list — and the client's entry point is `navigate("/play")`, dropping the learner on an
+unfiltered grid to find the pack by eye. `PackList` has **0** filters against `03:70-72`'s
+*"first-class navigation and filters"*, and `/learn` names the three phases **0** times. The one
+genuine steer is **repertoire gap finding**, which really does turn corpus classification into
+the position you play next — and even it exposes only the top-ranked gap while the server accepts
+any, and its write-back verb has zero client callers, so scanning never converges (D316).
+
+**Guided mode is inverted, and this one contradicts a design section in code.** The mechanism
+`05` §3b specifies — the shape library rendered live — **already ships ungated in every mode**
+via timeline shape markers, printing §3b's own sentence verbatim; a position run even loads the
+**full 25-entry catalogue** where a pack loads only its declared subset. What the switch labelled
+*"Named-pattern guidance"* gates is a strictly **smaller duplicate** inside the pivotal-marker
+modal that additionally needs an unrelated switch on. So §3a's silence default is violated in
+code, and the band-shaping and fading §3b requires have no implementation surface at all (D309).
+Related: that same modal is the **only** client call site of `renderEndgameReading`, so B10's
+*"endgame steering names a technique"* is reachable only when an unrelated forward detector has
+fired (D310).
+
+**Blocked / owed to the owner tier — three `DESIGN-GAP:` flags, none acted on here per law 5.**
+(1) `05` §4 and §3-forms require assistance to vary by context and nothing in the code can express
+that. (2) **`03:35-39` promises pack-free theory recognition and no document anywhere states why
+it is absent** — every export in `line.ts` takes a `DrillPackDefinition`, `compare.ts:300` sets
+`theory: null` without one, and the renderer says *"the pack"* in all three sentences. That is the
+largest promise/behaviour gap in the product, and it is a `Q4c` research question before it is an
+RFC. (3) `05` §3b specifies guided mode as a chosen mode and it ships on by default.
+
+**Concurrent-work note.** The `D317–D326` job (coaching-vs-cheating / the 1000→2000 trajectory) was
+in flight against the same code and independently found the `permittedAssistance` `sessionKind`
+gap; its log entry names it D321 while this pass carries it inside D307. Two ids for one fact is
+the cost of parallel blocks and is recorded here rather than reconciled unilaterally — whichever
+lands second should point at the first.
+
+**Method honesty, because the rule is that counts are run.** A first pass reported *"10 authored
+packs are silently not served"*; that was a **stale server process from another agent's session**
+still bound to the probe port, and the finding is **withdrawn** in the dossier. Re-measured on a
+fresh build and a free port: 0 unserved. Eleven prior figures were corrected in the same pass,
+including `03:95` overstating the `MATCH_LIVE` refusal list by one verb (compare is *not*
+refused), `03:299` being stale (narrative mode ships), `variantOf` now used by two packs, and
+`0 of 20` opening timing windows **still exactly 0** — the four windows added this week are all
+middlegame, so the `04` §2d gap is untouched.
+
+**Next.** The three cheapest fixes are an afternoon each and unblock the most: a reveal control
+in the run screen, a per-profile default table, and a `tablebase:` branch in
+`evidence-sentences.ts` — which is the *actual* residual behind B4's Syzygy row, since the other
+Syzygy path already ships and is pressable.

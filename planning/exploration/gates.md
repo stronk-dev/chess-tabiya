@@ -148,6 +148,30 @@ produces a mode menu, not a product (our own competitor research named this
 case). If surfaces accumulate while B4 stays unmet, that is K6/K4 evidence
 accruing by construction — escalate rather than continue.
 
+**Watch-item evidence, 2026-08-16 (`design/research/mechanics-by-mode.md`), and it
+splits.** *Against* the failure mode, decisively: there is **no mode menu**. `DrillScreen`
+is mounted at exactly one place (`App.svelte:574`) and a pack drill and a Just Play game
+present the **same 18/19 controls**, measured hands-on; Live never creates a run of its own;
+the rung-0 lens layer is pack-independent and in fact *wider* without a pack. The unifying
+protocol Lucas Chess lacks is the thing this product actually has. *For* it, on a narrower
+axis: the failure has moved from *surfaces without depth* to **capabilities without entry
+points** — simulate has two complete server verbs and zero client bytes (its specified
+acceptance test was never written); `duplicate` and `schedule` have no client caller; the
+live audience cannot cast a vote from a browser; and **rungs 3, 4 and 6 are structurally
+unreachable during a Just Play game** because no reveal control exists in the run screen.
+That last one is B4-adjacent and is the row to watch: the evidence *layers* are built, but
+in the product's widest mode they cannot be opened while playing. Thirteen such gaps are
+ranked in the dossier; **no gate definition is changed by this note.**
+
+**Two gate-row corrections owed to `design/03` (owner tier — escalated, not edited here,
+and deliberately not applied to this mirror so the surface stays single):** B1/B8's residual
+*"`/settings` remains display-only"* is **stale** — it renders 36 live assistance controls
+across six contexts, measured hands-on; and B4's *"Syzygy runtime rendering"* residual is
+**over-broad** — the `branch-decidedness` → `BranchRail.svelte:75` path ships and is
+pressable, and the true residual is a single missing `tablebase:` branch in
+`evidence-sentences.ts:143`. Also `03:299`'s B3 residual (narrative mode + difference
+strips) is stale: both ship and both render.
+
 ## Engine-condition rule — mirrored from `design/05-in-run-experience.md` §2
 
 Added 2026-08-15 by claude on the owner's ruling. The owner ruled the
