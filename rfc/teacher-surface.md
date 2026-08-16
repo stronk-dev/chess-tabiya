@@ -1,7 +1,11 @@
 # RFC: Teacher surface — the roster is not a grant
 
-- **Status:** **draft — both owner questions are now discharged; cross-review corrections are
-  landed; ready to be marked `accepted` in the register.** The 2026-08-16 ruling dissolved
+- **Status:** **accepted 2026-08-16.** Both owner questions are discharged and the cross-review
+  corrections are landed. **No item awaits an owner.** (Corrected 2026-08-16: this block read
+  *"draft … ready to be marked accepted"* while the register read `accepted`, and the
+  implementer correctly refused to build against the contradiction. That is claude's standing
+  error — **a resolution in a register is not a resolution in the body** — and this is its
+  fifth instance.) The 2026-08-16 ruling dissolved
   Open question 1 (*"add them and ship no deferral"*), and the one narrowing that ruling
   implied was **confirmed by the owner on 2026-08-16**: `live-marker-quality`'s recorded cost
   changes from *"the marker leaves participants and spectators entirely, on every run,
