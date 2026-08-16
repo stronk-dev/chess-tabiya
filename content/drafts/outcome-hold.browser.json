@@ -16,22 +16,45 @@
         "kind": "authored",
         "note": "Browser fixture assessment; not a claim about the position."
       },
-      "resolveAt": { "kind": "checkpoint", "checkpointId": "hold-horizon" }
+      "resolveAt": {
+        "kind": "checkpoint",
+        "checkpointId": "hold-horizon"
+      }
     },
     "successConditions": []
   },
   "spine": [
     {
-      "id": "e4", "moveUci": "e2e4", "moveSan": "e4", "children": [
+      "id": "e4",
+      "moveUci": "e2e4",
+      "moveSan": "e4",
+      "children": [
         {
-          "id": "e5", "moveUci": "e7e5", "moveSan": "e5", "children": [
+          "id": "e5",
+          "moveUci": "e7e5",
+          "moveSan": "e5",
+          "children": [
             {
-              "id": "nf3", "moveUci": "g1f3", "moveSan": "Nf3", "children": [
+              "id": "nf3",
+              "moveUci": "g1f3",
+              "moveSan": "Nf3",
+              "children": [
                 {
-                  "id": "nc6", "moveUci": "b8c6", "moveSan": "Nc6", "children": [
+                  "id": "nc6",
+                  "moveUci": "b8c6",
+                  "moveSan": "Nc6",
+                  "children": [
                     {
-                      "id": "bb5", "moveUci": "f1b5", "moveSan": "Bb5", "children": [
-                        { "id": "a6", "moveUci": "a7a6", "moveSan": "a6", "children": [] }
+                      "id": "bb5",
+                      "moveUci": "f1b5",
+                      "moveSan": "Bb5",
+                      "children": [
+                        {
+                          "id": "a6",
+                          "moveUci": "a7a6",
+                          "moveSan": "a6",
+                          "children": []
+                        }
                       ]
                     }
                   ]
@@ -44,14 +67,29 @@
     }
   ],
   "checkpoints": [
-    { "id": "hold-horizon", "label": "Authored hold horizon", "trigger": { "atPly": 4 }, "actions": [] }
+    {
+      "id": "hold-horizon",
+      "label": "Authored hold horizon",
+      "trigger": {
+        "atPly": 4
+      },
+      "actions": []
+    }
   ],
-  "opponentPolicy": { "mode": "theory_strict", "seedMode": "fixed" },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "seedMode": "fixed"
+  },
   "feedbackPolicy": "delayed_checkpoint",
   "provenance": {
     "reviewStatus": "draft",
     "sources": [],
-    "reviewers": [],
-    "graduationBlockers": ["Test-only fixture; never publish as chess content."]
+    "graduationBlockers": [
+      {
+        "id": "test-only-fixture-never-publish-as-chess-content",
+        "state": "blocking",
+        "statement": "Test-only fixture; never publish as chess content."
+      }
+    ]
   }
 }

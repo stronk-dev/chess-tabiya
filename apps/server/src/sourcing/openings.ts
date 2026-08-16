@@ -111,9 +111,8 @@ export async function emitOpeningCandidate(options: OpeningEmitOptions): Promise
     provenance: {
       reviewStatus: "draft",
       sources: [sourceString],
-      reviewers: [],
       licence: "CC-BY-SA-4.0",
-      graduationBlockers: ["objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft"],
+      graduationBlockers: [{ id: "mechanical-objective-placeholder", state: "blocking", statement: "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft" }],
     },
   } satisfies DrillPackDefinition;
   const validation = validatePackDocument(pack);

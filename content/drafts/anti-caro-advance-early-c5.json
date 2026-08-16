@@ -418,14 +418,54 @@
       "UNGROUNDED: every strategic claim — the objective summary, both plan-class descriptions, all spine annotations, all seven deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE. 'Original prose' answers copyright, not truth.",
       "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 12 decision positions and 26 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated. Spine moves the engine ranks materially below a sibling at the same position: Bxc5 (bxc5-recoup) 4.24 below Nd7."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "RESOLVED in v0.2.0 (kept for the record): earlier versions carried no shapes reference because no library entry named the post-dxc5 structure. content/shapes/advance-caro-dxc5-residue.json now does — naming only what the predicates verify (doubled white c-pawns, the c5/e5 pawns against d5, c-file half-open for Black, d-file half-open for White; NOT an open c-file, and NOT an isolated d5 while Black's e-pawn stands). The entry's strategic prose inherits this pack's grounding blockers.",
-      "ENGINE-CHECKED 2026-08-15, partly settled and partly destroyed. 5.b4 evaluates 0.88 below the spine's 5.Nf3 at depth 22, and after 5.b4 a5 the position is -0.15 with Black already the better side — the direction of the note holds, while 'three tempi behind' is a count no evaluation produces and stays authored. The hold-versus-return assessment lost half its content in the same pass: the return line this pack authored (5.Be3 Bxc5 6.Bxc5) hangs a bishop and has been deleted.",
-      "The claim that dxc5 is 'the critical test' of 3...c5 is standard theory rendered from model knowledge with no named source.",
-      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
-      "REFUTED AND DELETED 2026-08-15 — the pack's largest single error. The spine line 5.Be3 Bxc5 6.Bxc5 was authored as an even trade ('Material is level again'). It is not: after 6.Bxc5 the only legal capture on c5 was White's, Black has no recapture, and the position evaluates +4.54 for White at depth 22 with material 38-35. Spine nodes bxc5-recoup and bxc5-trade, checkpoint price-collected and the two authoredBoundary entries were removed. No replacement line was authored, because authoring one would be manufacturing chess this pass cannot ground: the return-for-development plan class now names a plan with no line under it."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "resolved-in-v0-2-0-kept-for-the-record-earlier-versions-",
+        "state": "resolved",
+        "statement": "RESOLVED in v0.2.0 (kept for the record): earlier versions carried no shapes reference because no library entry named the post-dxc5 structure. content/shapes/advance-caro-dxc5-residue.json now does — naming only what the predicates verify (doubled white c-pawns, the c5/e5 pawns against d5, c-file half-open for Black, d-file half-open for White; NOT an open c-file, and NOT an isolated d5 while Black's e-pawn stands). The entry's strategic prose inherits this pack's grounding blockers.",
+        "resolved": {
+          "at": "2026-08-16",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      },
+      {
+        "id": "engine-checked-2026-08-15-partly-settled-and-partly-dest",
+        "state": "blocking",
+        "statement": "ENGINE-CHECKED 2026-08-15, partly settled and partly destroyed. 5.b4 evaluates 0.88 below the spine's 5.Nf3 at depth 22, and after 5.b4 a5 the position is -0.15 with Black already the better side — the direction of the note holds, while 'three tempi behind' is a count no evaluation produces and stays authored. The hold-versus-return assessment lost half its content in the same pass: the return line this pack authored (5.Be3 Bxc5 6.Bxc5) hangs a bishop and has been deleted."
+      },
+      {
+        "id": "the-claim-that-dxc5-is-the-critical-test-of-3-c5-is-stan",
+        "state": "blocking",
+        "statement": "The claim that dxc5 is 'the critical test' of 3...c5 is standard theory rendered from model knowledge with no named source."
+      },
+      {
+        "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
+        "state": "resolved",
+        "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
+        "resolved": {
+          "at": "2026-08-16",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      },
+      {
+        "id": "refuted-and-deleted-2026-08-15-the-pack-s-largest-single",
+        "state": "resolved",
+        "statement": "REFUTED AND DELETED 2026-08-15 — the pack's largest single error. The spine line 5.Be3 Bxc5 6.Bxc5 was authored as an even trade ('Material is level again'). It is not: after 6.Bxc5 the only legal capture on c5 was White's, Black has no recapture, and the position evaluates +4.54 for White at depth 22 with material 38-35. Spine nodes bxc5-recoup and bxc5-trade, checkpoint price-collected and the two authoredBoundary entries were removed. No replacement line was authored, because authoring one would be manufacturing chess this pass cannot ground: the return-for-development plan class now names a plan with no line under it.",
+        "resolved": {
+          "at": "2026-08-15",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      }
     ]
   }
 }

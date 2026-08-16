@@ -358,15 +358,55 @@
       "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all deviation notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE.",
       "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 13 decision positions and 25 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated. Spine moves the engine ranks materially below a sibling at the same position: e4 (e4-staunton) 0.51 below Bg5."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "First-move alternatives (2.Bf4, 2.e4) cannot be deviations in a follow_theory pack — no spine node precedes ply 1 — so they are sibling root branches. Third attestation of wave-2 friction #3; the format should bless the idiom or grow a start-anchor.",
-      "The trade-the-g7-bishop plan is a hands-off declaration: the authored spine never begins Be3/Qd2/Bh6, so the shapePlan reference names a target the drill does not reach (wave-2 friction #5 pattern, noted honestly).",
-      "ENGINE-CHECKED 2026-08-15 for the comparison, not for the claim. The two authored plans are within a tenth of a pawn of each other and of the engine's preference: 8.d5 is 0.08 below 8.Qb3 and 8.Rb1 is 0.15 below, so the pack's 'both are authored, the comparison is the drill' framing survives. The 'hole on d6' assertion is a structural claim no evaluation addresses and it stays ungrounded. The pass also refuted this pack's third plan: deviation #2's authored walked line 8.e4 fxe4 9.Nxe4 drops a piece (-3.11), and the line was removed rather than replaced.",
-      "Whether d5 or Rb1 is more common or scores better at these bands is unquantified below the family root.",
-      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
-      "PROSE GROUNDING PASS 2026-08-15. Wave G1 grounded MOVES and left prose, plan classes and deviation classes untouched by design. This pass checked the mechanically checkable subset of the prose - attacker and defender counts, piece mobility counts, legality, checkmate and pawn geometry - with the repo's own direct_attack_count, line_blockers and chessops move generation. One claim was refuted and corrected in place: the p5-g3 annotation said ...f5 stopped guarding e4 and d5; a pawn on f5 guards e4, and d5 was never guarded by a black f-pawn at all. Claims of this kind that were checked and held are not annotated. Strategic prose, plan-class descriptions and deviation classes remain exactly as ungrounded as before."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "first-move-alternatives-2-bf4-2-e4-cannot-be-deviations-",
+        "state": "blocking",
+        "statement": "First-move alternatives (2.Bf4, 2.e4) cannot be deviations in a follow_theory pack — no spine node precedes ply 1 — so they are sibling root branches. Third attestation of wave-2 friction #3; the format should bless the idiom or grow a start-anchor."
+      },
+      {
+        "id": "the-trade-the-g7-bishop-plan-is-a-hands-off-declaration-",
+        "state": "blocking",
+        "statement": "The trade-the-g7-bishop plan is a hands-off declaration: the authored spine never begins Be3/Qd2/Bh6, so the shapePlan reference names a target the drill does not reach (wave-2 friction #5 pattern, noted honestly)."
+      },
+      {
+        "id": "engine-checked-2026-08-15-for-the-comparison-not-for-the",
+        "state": "blocking",
+        "statement": "ENGINE-CHECKED 2026-08-15 for the comparison, not for the claim. The two authored plans are within a tenth of a pawn of each other and of the engine's preference: 8.d5 is 0.08 below 8.Qb3 and 8.Rb1 is 0.15 below, so the pack's 'both are authored, the comparison is the drill' framing survives. The 'hole on d6' assertion is a structural claim no evaluation addresses and it stays ungrounded. The pass also refuted this pack's third plan: deviation #2's authored walked line 8.e4 fxe4 9.Nxe4 drops a piece (-3.11), and the line was removed rather than replaced."
+      },
+      {
+        "id": "whether-d5-or-rb1-is-more-common-or-scores-better-at-the",
+        "state": "blocking",
+        "statement": "Whether d5 or Rb1 is more common or scores better at these bands is unquantified below the family root."
+      },
+      {
+        "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
+        "state": "resolved",
+        "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
+        "resolved": {
+          "at": "2026-08-16",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      },
+      {
+        "id": "prose-grounding-pass-2026-08-15-wave-g1-grounded-moves-a",
+        "state": "resolved",
+        "statement": "PROSE GROUNDING PASS 2026-08-15. Wave G1 grounded MOVES and left prose, plan classes and deviation classes untouched by design. This pass checked the mechanically checkable subset of the prose - attacker and defender counts, piece mobility counts, legality, checkmate and pawn geometry - with the repo's own direct_attack_count, line_blockers and chessops move generation. One claim was refuted and corrected in place: the p5-g3 annotation said ...f5 stopped guarding e4 and d5; a pawn on f5 guards e4, and d5 was never guarded by a black f-pawn at all. Claims of this kind that were checked and held are not annotated. Strategic prose, plan-class descriptions and deviation classes remain exactly as ungrounded as before.",
+        "resolved": {
+          "at": "2026-08-15",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      }
     ]
   }
 }

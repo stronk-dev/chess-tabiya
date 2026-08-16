@@ -395,9 +395,21 @@
       "CITATION PASS (2026-08-16): the closest compatible source found for this pack is en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority (CC BY-SA 4.0, read 2026-08-16), which states that \"it is easiest to create a passed pawn if you have a pawn majority\" and that \"without kings, a pawn breakthrough becomes easier, since there is no enemy king to hamper the creation of a passed pawn\" — the majority-plus-distant-kings premise of this root. THE PASS FAILED FOR THE CENTRAL CLAIM: no CC-BY-SA or CC0 source was found that states the three-against-two breakthrough mechanism or that its sacrifice order is not interchangeable. en.wikipedia.org/wiki/Breakthrough_(chess) does not exist (HTTP 404, checked 2026-08-16); en.wikipedia.org/wiki/Passed_pawn covers piece sacrifices to clear a promotion path, not the pawn breakthrough; en.wikibooks.org/wiki/Chess/The_Endgame/Pawn_Endings covers the opposition and the rule of the square but not breakthroughs. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "CITED 2026-08-16 (partial, and the smaller half). The premise that a majority with distant kings is where a breakthrough works is stated by en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority (CC BY-SA 4.0), attributed in provenance.attribution.",
-      "STILL UNBACKED, AND NOT FOR WANT OF LOOKING: the breakthrough mechanism itself — sacrifice into the majority so one runner emerges — has no compatible cited source. The 2026-08-16 pass checked Wikipedia's Breakthrough (chess) title (404), Passed pawn (piece sacrifices only) and Wikibooks' Chess/The Endgame/Pawn Endings (no breakthrough section). The order claim (\"the wrong first pawn seals the front\") IS tablebase-grounded in this pack; the general technique it instantiates is not, and the compatible-source shelf appears genuinely empty for it.",
-      "The famous 3v3 sibling root (a5b5c5 vs a7b7c7) is eight pieces and outside tablebase range; a pack for it would need the Stockfish authoring substitute of docs/content-sourcing.md and is deliberately not smuggled in here."
+      {
+        "id": "cited-2026-08-16-partial-and-the-smaller-half-the-premis",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (partial, and the smaller half). The premise that a majority with distant kings is where a breakthrough works is stated by en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority (CC BY-SA 4.0), attributed in provenance.attribution."
+      },
+      {
+        "id": "still-unbacked-and-not-for-want-of-looking-the-breakthro",
+        "state": "blocking",
+        "statement": "STILL UNBACKED, AND NOT FOR WANT OF LOOKING: the breakthrough mechanism itself — sacrifice into the majority so one runner emerges — has no compatible cited source. The 2026-08-16 pass checked Wikipedia's Breakthrough (chess) title (404), Passed pawn (piece sacrifices only) and Wikibooks' Chess/The Endgame/Pawn Endings (no breakthrough section). The order claim (\"the wrong first pawn seals the front\") IS tablebase-grounded in this pack; the general technique it instantiates is not, and the compatible-source shelf appears genuinely empty for it."
+      },
+      {
+        "id": "the-famous-3v3-sibling-root-a5b5c5-vs-a7b7c7-is-eight-pi",
+        "state": "blocking",
+        "statement": "The famous 3v3 sibling root (a5b5c5 vs a7b7c7) is eight pieces and outside tablebase range; a pack for it would need the Stockfish authoring substitute of docs/content-sourcing.md and is deliberately not smuggled in here."
+      }
     ],
     "licence": "CC-BY-SA-4.0",
     "attribution": [

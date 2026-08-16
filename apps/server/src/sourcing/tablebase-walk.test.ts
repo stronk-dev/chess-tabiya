@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -9,7 +11,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { tablebaseWalk } from "./tablebase-walk.js";
 import { fixtureTablebaseQuery } from "./syzygy.js";
 
-const philidor = JSON.parse(readFileSync(new URL("../../../../content/drafts/philidor-third-rank-hold.json", import.meta.url), "utf8")) as DrillPackDefinition;
+const philidor = JSON.parse(readFileSync(new URL(resolvePackPath("philidor-third-rank-hold"), import.meta.url), "utf8")) as DrillPackDefinition;
 const temporaryDirectories: string[] = [];
 
 afterEach(async () => {

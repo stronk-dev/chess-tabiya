@@ -62,6 +62,24 @@ rewind adds value**.
   band-1400 reference on R5's stratified position set; **pass = monotone score across all four
   arms with non-overlapping 95% CIs.** If it fails, K5's horizon question is moot for the
   campaign because the ladder has no rungs. Ledgered as **D324**.
+- **RUN, and the narrower claim is CONFIRMED — 2026-08-16**
+  (`design/research/maia-band-outcome-transfer.md`, `tools/d333-band-outcome-harness/`).
+  16,660 complete games, band against band, 1,020 per ladder rung. The pre-registered
+  criterion **passes exactly as written**: scores **0.3069 / 0.4990 / 0.6304 / 0.7652**
+  against the fixed band-1400 reference, monotone, all three adjacent 95% CIs disjoint
+  under both naive and opening-clustered intervals `[V]`. **So the requested band IS a
+  difficulty lever and not only a policy lever, and the ladder does have rungs.**
+  **Two qualifications the criterion could not express, both measured.** (1) *Monotone
+  with disjoint CIs* tests **order**, not **scale**; the scale is the transfer ratio and
+  it is **0.289 [0.269, 0.309]** over the pack corpus, **0.400 [0.379, 0.421]** on
+  full-material positions — 100 band points buy 29–40 real Elo, not 100 (D335). Any dial
+  with a positive ratio passes this criterion at sufficient n (D342). (2) A **100-band
+  step is real but below the resolution a learner can experience**: 22.1 and 26.9 Elo
+  against a ±60 session-scale threshold, so the usable rung is ≈150–208 band points and
+  `[1000, 2400]` is five to nine rungs, not fourteen (D336). **H5's main statement is
+  untouched** — no Stockfish was run and no branch was graded — and so is **K5**, which is
+  about plan coherence over a horizon and is not inspected by an outcome count.
+  Consequence for the 1000→2000 curve is escalated as D337.
 
 ## Kill criteria
 
@@ -75,7 +93,7 @@ rationalized away.
 | K2 | Users rarely continue past the book boundary | open | — |
 | K3 | Users ignore branches and simply restart | open | — |
 | K4 | Branch comparison does not improve understanding over engine lines | open | — |
-| K5 | Maia/corpus opponents produce incoherent plans over the required horizon | open | — |
+| K5 | Maia/corpus opponents produce incoherent plans over the required horizon | open | — · **not touched by the D324 pass, recorded so it is not read as such (2026-08-16, `maia-band-outcome-transfer.md` §10):** that experiment counted 16,660 game results and inspected no plan. It does establish that band-conditioned opposition differs in **outcome** as well as in policy, which removes one alternative explanation for a future K5 reading, and it establishes that the opponent plays to a natural termination — 13,061 checkmates and **0 ply-cap adjudications in 16,660 games**, mean length 63 plies — so *"the opponent cannot sustain a game"* is not the shape K5 would fire in |
 | K6 | Explanations remain generic despite curated packs | open | — | **📊 partial evidence FOR firing, 2026-08-15 (`design/research/feedback-versus-the-dashboard.md`):** the feedback is generic on what is **delivered**, not on what is **authored** — 235 deviation notes are bound to named non-spine moves and reach learners, while **0 of 131 feedback claims have any delivery path** and 22.1% of a 202,479-character authored prose corpus cannot reach anyone. **The remedy is delivery, not authoring.** · **📊 second partial evidence FOR firing, 2026-08-16 (`design/research/conjunction-hypothesis.md`, R11):** the *generated* half of the explanation layer cannot be made specific by combining primitives. Over 721 transitions and 19,099 alternatives, the best of 55 conjunctions reaches 35.7% precision and 2.73× discrimination against 69.4% and 12.64× for the best **single** primitive; only 7 of 55 are measurable at all and their median lift is **0.66×**, worse than a random quiet move; no triple of transition primitives reaches 10 witnesses in the whole corpus. **The route out of genericness is not composition** — it is the authored tier K6's first note already identified, plus the rare single primitives (`last_of_role` at 12.64×). **The criterion is not called: this is evidence about one mechanism that was proposed to fix K6, not evidence that curated packs stay generic** — the authored deviation notes still discriminate by construction.
 | K7 | Authors cannot reliably encode timing and structure without excessive custom code | open, split by evidence | structure is reliably encodable (`design/research/authored-transitions-and-features.md` §5.1–5.2); **timing is not encodable at all** (§4, two independent attestations, 0/135 usage). The criterion does not fire on a conjunction with one half confirmed working; the timing half is logged as partial kill-criterion evidence |
 | K8 | Full-segment replay does not transfer to related positions | open | — |

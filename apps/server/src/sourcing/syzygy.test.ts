@@ -140,7 +140,10 @@ describe("Syzygy sourcing", () => {
   it("records the D8 graduation blocker on in-range roots", async () => {
     const { directory } = await emit(SEVEN, "white", fixtureTablebaseQuery);
     const pack = await readJson(resolve(directory, "pack.json")) as any;
-    expect(pack.provenance.graduationBlockers).toContain("Exact tablebase grading is available for this root and perfect_tablebase is selectable where the provider is published; this draft still requests strong_engine, which can deviate from perfect play");
+    expect(pack.provenance.graduationBlockers).toContainEqual(expect.objectContaining({
+      state: "blocking",
+      statement: "Exact tablebase grading is available for this root and perfect_tablebase is selectable where the provider is published; this draft still requests strong_engine, which can deviate from perfect play",
+    }));
     expect(pack.provenance.licence).toBe("CC-BY-SA-4.0");
     expect(JSON.stringify(pack)).not.toContain("unlicensed-data");
   });

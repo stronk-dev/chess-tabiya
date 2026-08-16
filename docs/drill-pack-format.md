@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.26; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.27; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -96,6 +96,11 @@ carrying `author_principle` must name at least one official entry from the princ
 pack-check refuses missing and unknown references and warns when the entry does not list the pack's
 phase. The registry makes authored judgement attributable, not machine-true. Its entries require a
 statement, basis, provenance, and an explicit counter-case. See `docs/claim-backing.md`.
+
+Version 0.27 closes the pack provenance object over its five attested keys and replaces free-text
+graduation blockers with typed `blocking`, `resolved`, and `accepted` entries. Blocking entries
+fail closed; accepted entries require a resolvable ruling citation. Candidate packs use the same
+schema but are not graduation subjects. See `docs/pack-graduation.md`.
 
 The schema package exports `FORMAT_DISPOSITIONS`, a versioned register of declarations that
 are reached, refused, retired, unmeasured, or impossible. It is not a deployment capability

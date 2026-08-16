@@ -13,8 +13,24 @@
   "start": {
     "fen": "r1bq1rk1/pp2bppp/2n1p3/3n4/3P4/2NB1N2/PP3PPP/R1BQ1RK1 w - - 4 10",
     "movesSan": [
-      "e4", "c6", "d4", "d5", "exd5", "cxd5", "c4", "Nf6", "Nc3", "e6",
-      "Nf3", "Be7", "cxd5", "Nxd5", "Bd3", "O-O", "O-O", "Nc6"
+      "e4",
+      "c6",
+      "d4",
+      "d5",
+      "exd5",
+      "cxd5",
+      "c4",
+      "Nf6",
+      "Nc3",
+      "e6",
+      "Nf3",
+      "Be7",
+      "cxd5",
+      "Nxd5",
+      "Bd3",
+      "O-O",
+      "O-O",
+      "Nc6"
     ],
     "side": "white"
   },
@@ -22,10 +38,30 @@
     "type": "preserve_plan_window",
     "summary": "You have the White side of the isolated queen's pawn: pawns on a2, b2, d4, f2, g2, h2, and the d-pawn with no neighbour on the c- or e-file. Black's blockading knight is already on d5 — this pack does not ask you to prevent its arrival, because the corpus line that reaches this position put it there. It asks you to complete the arrangement this spine plays — a rook to e1 and the bishop to e4 — before Black's second defender of d5 arrives, and without spending more than one move on anything else.",
     "successConditions": [
-      { "kind": "timing_window", "windowId": "arrangement-before-the-second-defender", "verdict": "in_time", "to": "achieved" },
-      { "kind": "timing_window", "windowId": "arrangement-before-the-second-defender", "verdict": "over_budget", "to": "degraded" },
-      { "kind": "timing_window", "windowId": "arrangement-before-the-second-defender", "verdict": "too_slow", "to": "failed" },
-      { "kind": "timing_window", "windowId": "arrangement-before-the-second-defender", "verdict": "premature", "to": "failed" }
+      {
+        "kind": "timing_window",
+        "windowId": "arrangement-before-the-second-defender",
+        "verdict": "in_time",
+        "to": "achieved"
+      },
+      {
+        "kind": "timing_window",
+        "windowId": "arrangement-before-the-second-defender",
+        "verdict": "over_budget",
+        "to": "degraded"
+      },
+      {
+        "kind": "timing_window",
+        "windowId": "arrangement-before-the-second-defender",
+        "verdict": "too_slow",
+        "to": "failed"
+      },
+      {
+        "kind": "timing_window",
+        "windowId": "arrangement-before-the-second-defender",
+        "verdict": "premature",
+        "to": "failed"
+      }
     ]
   },
   "concepts": [
@@ -34,39 +70,86 @@
     "attacker-count-on-the-blockade-square",
     "arrangement-before-reinforcement"
   ],
-  "shapes": ["iqp-white"],
+  "shapes": [
+    "iqp-white"
+  ],
   "planClasses": [
     {
       "id": "attack-with-pieces",
       "label": "Keep pieces and play on the open lines",
       "description": "The library's attacking plan for this chair. Its success signature in the shape entry is null, so nothing in this pack grades whether it worked; what this position measures instead is the attacker census of d5, which starts at one White attacker (knight c3) against two Black defenders (pawn e6, queen d8).",
-      "shapePlan": { "shape": "iqp-white", "plan": "white-piece-attack" }
+      "shapePlan": {
+        "shape": "iqp-white",
+        "plan": "white-piece-attack"
+      }
     },
     {
       "id": "push-the-isolani",
       "label": "Get the pawn to d5",
       "description": "The library's advance plan. Its success signature checks arrival only — a White pawn on d5 and none on d4 — not timing. Computed on this spine: a black knight stands on d5 in all seven authored positions, so d4-d5 is not a legal move at any of them. The advance becomes available only on branches where the blockader leaves, such as the ...Nf6 sibling below.",
-      "shapePlan": { "shape": "iqp-white", "plan": "white-d5-break" }
+      "shapePlan": {
+        "shape": "iqp-white",
+        "plan": "white-d5-break"
+      }
     }
   ],
   "timingWindows": [
     {
       "id": "arrangement-before-the-second-defender",
       "label": "Arrangement before the second defender",
-      "opens": { "fromStart": true },
+      "opens": {
+        "fromStart": true
+      },
       "closes": [
-        { "kind": "arrival", "move": { "piece": { "color": "black", "role": "knight" }, "to": "e7" } },
-        { "kind": "release", "move": { "piece": { "color": "white", "role": "pawn" }, "to": "d5" } },
-        { "kind": "deadline", "afterLearnerMoves": 4 }
+        {
+          "kind": "arrival",
+          "move": {
+            "piece": {
+              "color": "black",
+              "role": "knight"
+            },
+            "to": "e7"
+          }
+        },
+        {
+          "kind": "release",
+          "move": {
+            "piece": {
+              "color": "white",
+              "role": "pawn"
+            },
+            "to": "d5"
+          }
+        },
+        {
+          "kind": "deadline",
+          "afterLearnerMoves": 4
+        }
       ],
       "readiness": {
         "mode": "all",
         "of": [
-          { "piece": { "color": "white", "role": "rook" }, "to": "e1" },
-          { "piece": { "color": "white", "role": "bishop" }, "to": "e4" }
+          {
+            "piece": {
+              "color": "white",
+              "role": "rook"
+            },
+            "to": "e1"
+          },
+          {
+            "piece": {
+              "color": "white",
+              "role": "bishop"
+            },
+            "to": "e4"
+          }
         ]
       },
-      "tolerated": [{ "moveUci": "a2a3" }],
+      "tolerated": [
+        {
+          "moveUci": "a2a3"
+        }
+      ],
       "luxuryMoveBudget": 1,
       "gradeOutpaced": false,
       "note": "Readiness is the two moves this spine plays: the rook to e1 (the e-file is half-open for White — computed) and the bishop to e4. Computed d5 counts: 1 White against 2 Black at the start, 2 against 2 after Be4, 2 against 3 after a black knight reaches e7 — the arrival close, and the most-played move at its node (12 of 29, 41.4%). Tolerating a3 is a corpus fact: 170 of 795 (21.4%) at the root."
@@ -152,30 +235,52 @@
     {
       "id": "plan-choice",
       "label": "Before your first move: which of the library's two White plans are you playing?",
-      "trigger": { "atStart": true },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atStart": true
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["attack-with-pieces", "push-the-isolani"]
+        "planClassIds": [
+          "attack-with-pieces",
+          "push-the-isolani"
+        ]
       }
     },
     {
       "id": "arrangement-complete",
       "label": "Rook on e1, bishop on e4 — d5 is attacked twice and defended twice",
-      "trigger": { "atSpineNode": "be4-second-attacker" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "be4-second-attacker"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "second-defender-arrived",
       "label": "A black knight reached e7 — d5 is two against three",
-      "trigger": { "atSpineNode": "nce7-reinforce" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "nce7-reinforce"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "budget-spent",
       "label": "Two moves inside the window that were neither the arrangement nor the tolerated a3",
-      "trigger": { "atWindow": { "windowId": "arrangement-before-the-second-defender", "spendAtLeast": 2 } },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atWindow": {
+          "windowId": "arrangement-before-the-second-defender",
+          "spendAtLeast": 2
+        }
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "blockader-left-d5",
@@ -186,13 +291,31 @@
           "feature": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "pieceOnSquare", "square": "d5", "piece": { "color": "black", "role": "knight" } } },
-              { "kind": "feature", "feature": { "kind": "named_structure", "id": "iqp-white" } }
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "pieceOnSquare",
+                  "square": "d5",
+                  "piece": {
+                    "color": "black",
+                    "role": "knight"
+                  }
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "named_structure",
+                  "id": "iqp-white"
+                }
+              }
             ]
           }
         }
       },
-      "actions": ["compare_branches"]
+      "actions": [
+        "compare_branches"
+      ]
     }
   ],
   "authoredBoundary": {
@@ -216,44 +339,61 @@
   },
   "deviations": [
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "a2a3",
       "class": "accepted_alternative",
       "note": "The second-most-played move in the start position at this band: 170 of 795 (21.4%). This pack's window tolerates it, so it does not count against the budget — that is a statement about this file's encoding, not about the move."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c3d5",
       "class": "interesting_deviation",
       "note": "Nxd5: 162 of 795 (20.4%), the third-most-played move here. The recapture split at this band is measured — Qxd5 137 (84.6%), exd5 25 (15.4%) — and the two recaptures part company by definition rather than by judgment. After Qxd5 the shape entry's trigger still fires; after exd5 it does not, because the detector requires the d-file to be half-open for Black and exd5 puts a black pawn back on it. Both were checked with the detector; which position you would rather play is not something this pack measures."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "d1c2",
       "class": "accepted_alternative",
       "note": "Qc2: 56 of 795 (7.0%). It is neither of the window's two readiness moves, so the window counts it as one spent move and the budget is one."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c1e3",
       "class": "accepted_alternative",
       "note": "Be3: 28 of 795 (3.5%), the fifth-most-played move in the band's table for this position. Also outside readiness, so also a spent move by this pack's arithmetic."
     },
     {
-      "at": { "spineNodeId": "nf6-unblockade" },
+      "at": {
+        "spineNodeId": "nf6-unblockade"
+      },
       "moveUci": "a2a3",
       "class": "accepted_alternative",
       "note": "With the blockader gone, a3 is the most-played move in the band at this node: 48 of 158 (30.4%). The window is still open here — the rook is on e1 but the bishop is not on e4 — so this pack's encoding scores a3 as the one move the budget allows."
     },
     {
-      "at": { "spineNodeId": "nf6-unblockade" },
+      "at": {
+        "spineNodeId": "nf6-unblockade"
+      },
       "moveUci": "d4d5",
       "class": "concept_violation",
       "offObjective": true,
-      "mistake": ["timing"],
+      "mistake": [
+        "timing"
+      ],
       "timingWindowId": "arrangement-before-the-second-defender",
       "note": "d4-d5 is the release this pack's window names, and this is the only authored position where it is legal. It is off-objective by construction and by arithmetic, not by grade: readiness is incomplete here (no bishop on e4), so the window records the verdict premature. Structurally it is true by definition that the pack's shape stops being detected — the detector requires a White pawn on d4 — and equally true by definition that the shape entry's own advance signature starts holding. Both were computed on the resulting position.",
-      "cost": { "kind": "unmeasurable", "reason": "No engine evaluation or corpus result measurement in this repo bears on the resulting position; the only measured consequences are that the detector stops firing and the entry's advance signature starts holding. The owner ruling of 2026-08-15 admits explorer result splits as corpus_observed evidence, and it does not reach this deviation: at this node the band has 158 games in total and d4-d5 accounts for 2 of them (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15, moves=40), far below the 100-game floor at which this repo's explorer client abstains. A result split exists for the node, not for the move, and a split is in any case a record of what happened rather than a cost." }
+      "cost": {
+        "kind": "unmeasurable",
+        "reason": "No engine evaluation or corpus result measurement in this repo bears on the resulting position; the only measured consequences are that the detector stops firing and the entry's advance signature starts holding. The owner ruling of 2026-08-15 admits explorer result splits as corpus_observed evidence, and it does not reach this deviation: at this node the band has 158 games in total and d4-d5 accounts for 2 of them (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15, moves=40), far below the 100-game floor at which this repo's explorer client abstains. A result split exists for the node, not for the move, and a split is in any case a record of what happened rather than a cost."
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",
@@ -261,27 +401,37 @@
     {
       "id": "band-result-split",
       "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 795 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15) the outcomes were 404 white wins, 53 draws and 338 black wins (50.8/6.7/42.5%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "split-abstains-where-the-window-lives",
       "text": "The result split does not reach this pack's timing window. The position where readiness completes (after Be4) has 29 games at this band and the position its arrival close fires on (after ...Nce7) has 12 - both below the 100-game floor at which this repo's own explorer client abstains (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15). The window's budget of one and deadline of four therefore remain authored numbers, and no result evidence exists at this band to set them against.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "position-is-attested",
       "text": "This is not a rare position: at the Lichess 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12) the start position occurs in 795 games, and both of the moves this drill asks for are the most-played move at the moment the spine plays them — Re1 239 of 795 (30.1%) and Be4 25 of 79 (31.6%). Four plies later the same band contains 12 games, and six plies later 4.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "d5-census-moves",
       "text": "The attacker census of d5 changes three times in six plies, and every number is computed from the position: one White attacker against two Black defenders at the start; two against two once the bishop reaches e4; two against three once a black knight reaches e7. These are attack counts, not an assessment of the position.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     },
     {
       "id": "structure-is-a-definition",
       "text": "Three moves in this pack end the detected structure by definition rather than by opinion: Nxd5 exd5 restores a black pawn to the d-file the detector requires to be half-open for Black, and d4-d5 removes the White d4 pawn the detector requires. Qxd5 does neither, and the detector still fires. Each was checked by running the shape entry's trigger on the resulting position.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     }
   ],
   "provenance": {
@@ -298,14 +448,42 @@
       "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one. In particular, nothing here claims that Black's knight reaching d5 first is a problem for White, or that d4-d5 is bad — only that the window's rules record it as premature and that the detector stops firing.",
       "CITATION PASS (2026-08-16): the structural plan is now cited; the specific arrangement is not. en.wikipedia.org/wiki/Isolated_pawn (CC BY-SA 4.0, read 2026-08-16) states the isolani owner's plan — \"either advance thematically with d4-d5 opening the position and dissolving the IQP, or use the greater activity of his pieces to launch an attack\" — and the defender's — \"blockade the pawn on d4 with a piece (most likely a knight)\" and \"exchange pieces as much as possible\". en.wikipedia.org/wiki/Pawn_structure §Queen's Gambit - Isolani formation (CC BY-SA 4.0, section wikitext read via the MediaWiki action=parse API the same day) gives \"Themes for White: d4-d5 break, sacrifice of the isolani, outpost on e5, kingside attack\" and \"Themes for Black: Blockading the isolani, trading pieces for a favorable endgame\". WHAT THEY DO NOT SUPPLY: the concrete arrangement this pack grades — Re1 and Be4 before ...Nce7 — appears in no consulted source. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "CITED 2026-08-16 (the structural half). The IQP owner's plan set — the d5 break, the e5 outpost, piece activity and the kingside attack — and the defender's blockade-and-trade answer are stated by en.wikipedia.org/wiki/Isolated_pawn and en.wikipedia.org/wiki/Pawn_structure §Queen's Gambit - Isolani formation (both CC BY-SA 4.0), attributed in provenance.attribution.",
-      "STILL UNCITED after the 2026-08-16 pass: the objective grades a specific arrangement — Re1 and Be4 completed before ...Nce7 — and no consulted source names it. The cited sources supply the plan family, not this move order, and a corpus measurement relating the arrangement's completion to results at this band is still not done.",
-      "No engine pass has been run on this pack. The single concept_violation (d4-d5 on the ...Nf6 branch) records an unmeasurable cost for exactly that reason.",
-      "The timing window's numbers are authored: a luxury budget of one and a deadline of four learner moves are the author's encoding of the teaching point, and nothing measured says those are the right thresholds.",
-      "The band's data is thin past ply four: 12 games after ...Nce7 and 4 after h4. The last two spine moves are the most-played moves of a handful of games, and no measurement in this repo says they are representative."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "cited-2026-08-16-the-structural-half-the-iqp-owner-s-pla",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (the structural half). The IQP owner's plan set — the d5 break, the e5 outpost, piece activity and the kingside attack — and the defender's blockade-and-trade answer are stated by en.wikipedia.org/wiki/Isolated_pawn and en.wikipedia.org/wiki/Pawn_structure §Queen's Gambit - Isolani formation (both CC BY-SA 4.0), attributed in provenance.attribution."
+      },
+      {
+        "id": "still-uncited-after-the-2026-08-16-pass-the-objective-gr",
+        "state": "blocking",
+        "statement": "STILL UNCITED after the 2026-08-16 pass: the objective grades a specific arrangement — Re1 and Be4 completed before ...Nce7 — and no consulted source names it. The cited sources supply the plan family, not this move order, and a corpus measurement relating the arrangement's completion to results at this band is still not done."
+      },
+      {
+        "id": "no-engine-pass-has-been-run-on-this-pack-the-single-conc",
+        "state": "blocking",
+        "statement": "No engine pass has been run on this pack. The single concept_violation (d4-d5 on the ...Nf6 branch) records an unmeasurable cost for exactly that reason."
+      },
+      {
+        "id": "the-timing-window-s-numbers-are-authored-a-luxury-budget",
+        "state": "blocking",
+        "statement": "The timing window's numbers are authored: a luxury budget of one and a deadline of four learner moves are the author's encoding of the teaching point, and nothing measured says those are the right thresholds."
+      },
+      {
+        "id": "the-band-s-data-is-thin-past-ply-four-12-games-after-nce",
+        "state": "blocking",
+        "statement": "The band's data is thin past ply four: 12 games after ...Nce7 and 4 after h4. The last two spine moves are the most-played moves of a handful of games, and no measurement in this repo says they are representative."
+      }
     ],
     "attribution": [
       {

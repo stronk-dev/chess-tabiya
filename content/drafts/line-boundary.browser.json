@@ -45,18 +45,27 @@
     {
       "id": "past-cap",
       "label": "The authored support cap is crossed",
-      "trigger": { "atAuthoredBoundary": "crossed" },
+      "trigger": {
+        "atAuthoredBoundary": "crossed"
+      },
       "actions": []
     },
     {
       "id": "after-unknown",
       "label": "The pack is silent here",
-      "trigger": { "atPly": 5 },
+      "trigger": {
+        "atPly": 5
+      },
       "actions": []
     }
   ],
   "authoredBoundary": {
-    "spineNodeIds": ["be3", "e6", "f3", "b5"],
+    "spineNodeIds": [
+      "be3",
+      "e6",
+      "f3",
+      "b5"
+    ],
     "plyHorizon": 2
   },
   "opponentPolicy": {
@@ -67,7 +76,9 @@
   "feedbackPolicy": "delayed_checkpoint",
   "provenance": {
     "reviewStatus": "draft",
-    "sources": ["Browser acceptance fixture; no chess claim beyond authored membership."],
-    "reviewers": []
+    "sources": [
+      "Browser acceptance fixture; no chess claim beyond authored membership."
+    ],
+    "graduationBlockers": []
   }
 }

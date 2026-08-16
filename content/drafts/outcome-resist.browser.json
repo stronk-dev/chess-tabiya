@@ -16,18 +16,35 @@
         "kind": "authored",
         "note": "Browser fixture assessment; not a claim about the position."
       },
-      "resolveAt": { "kind": "checkpoint", "checkpointId": "resistance-horizon" }
+      "resolveAt": {
+        "kind": "checkpoint",
+        "checkpointId": "resistance-horizon"
+      }
     },
     "successConditions": []
   },
   "spine": [
     {
-      "id": "f3", "moveUci": "f2f3", "moveSan": "f3", "children": [
+      "id": "f3",
+      "moveUci": "f2f3",
+      "moveSan": "f3",
+      "children": [
         {
-          "id": "e5-resist", "moveUci": "e7e5", "moveSan": "e5", "children": [
+          "id": "e5-resist",
+          "moveUci": "e7e5",
+          "moveSan": "e5",
+          "children": [
             {
-              "id": "g4", "moveUci": "g2g4", "moveSan": "g4", "children": [
-                { "id": "qh4", "moveUci": "d8h4", "moveSan": "Qh4#", "children": [] }
+              "id": "g4",
+              "moveUci": "g2g4",
+              "moveSan": "g4",
+              "children": [
+                {
+                  "id": "qh4",
+                  "moveUci": "d8h4",
+                  "moveSan": "Qh4#",
+                  "children": []
+                }
               ]
             }
           ]
@@ -36,14 +53,29 @@
     }
   ],
   "checkpoints": [
-    { "id": "resistance-horizon", "label": "Resistance horizon", "trigger": { "atPly": 2 }, "actions": [] }
+    {
+      "id": "resistance-horizon",
+      "label": "Resistance horizon",
+      "trigger": {
+        "atPly": 2
+      },
+      "actions": []
+    }
   ],
-  "opponentPolicy": { "mode": "theory_strict", "seedMode": "fixed" },
+  "opponentPolicy": {
+    "mode": "theory_strict",
+    "seedMode": "fixed"
+  },
   "feedbackPolicy": "delayed_checkpoint",
   "provenance": {
     "reviewStatus": "draft",
     "sources": [],
-    "reviewers": [],
-    "graduationBlockers": ["Test-only fixture; never publish as chess content."]
+    "graduationBlockers": [
+      {
+        "id": "test-only-fixture-never-publish-as-chess-content",
+        "state": "blocking",
+        "statement": "Test-only fixture; never publish as chess content."
+      }
+    ]
   }
 }

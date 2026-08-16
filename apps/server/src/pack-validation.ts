@@ -1,4 +1,5 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
@@ -112,6 +113,22 @@ function schemaPath(error: ErrorObject): string {
 }
 
 function schemaIssue(error: ErrorObject): PackValidationIssue {
+  if (
+    error.keyword === "additionalProperties" &&
+    error.instancePath === "/provenance" &&
+    ["engineValidation", "tablebaseValidation", "evidence", "records"].includes(
+      String(error.params.additionalProperty),
+    )
+  ) {
+    const key = String(error.params.additionalProperty);
+    return Object.freeze({
+      severity: "error",
+      source: "schema",
+      code: "PROVENANCE_EVIDENCE_INLINE",
+      path: `/provenance/${key}`,
+      message: "evidence belongs in the pack's *.evidence.json sidecar; see make verify-draft",
+    });
+  }
   return Object.freeze({
     severity: "error",
     source: "schema",
@@ -131,6 +148,12 @@ function runtimeIssue(
 
 function runtimeWarning(code: string, path: string, message: string): PackValidationIssue {
   return Object.freeze({ severity: "warning", source: "runtime", code, path, message });
+}
+
+export function graduationEntryIsBlocking(value: unknown): boolean {
+  if (typeof value === "string") return true;
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return true;
+  return (value as Record<string, unknown>).state === "blocking";
 }
 
 export function assessmentAdmissionCode(
@@ -796,11 +819,58 @@ function runtimeIssues(
   const mode = raw.mode;
 
   const provenance = raw.provenance as Record<string, unknown>;
+  const graduationEntries = Array.isArray(provenance.graduationBlockers)
+    ? provenance.graduationBlockers
+    : [];
+  const graduationIds = new Set<string>();
+  for (const [index, entry] of graduationEntries.entries()) {
+    const path = `/provenance/graduationBlockers/${index}`;
+    if (typeof entry === "string") {
+      issues.push(runtimeWarning("GRADUATION_ENTRY_LEGACY_SHAPE", path, "legacy graduation blocker strings fail closed as blocking; save the draft in the typed format"));
+      continue;
+    }
+    if (entry === null || typeof entry !== "object" || Array.isArray(entry)) continue;
+    const row = entry as Record<string, unknown>;
+    const id = String(row.id ?? "");
+    if (graduationIds.has(id)) issues.push(runtimeIssue("GRADUATION_ID_DUPLICATE", `${path}/id`, `duplicate graduation entry id ${id}`));
+    graduationIds.add(id);
+    if (row.state === "accepted" && row.accepted !== null && typeof row.accepted === "object" && !Array.isArray(row.accepted)) {
+      const accepted = row.accepted as Record<string, unknown>;
+      const ruling = String(accepted.ruling ?? "");
+      const rulingRef = String(accepted.rulingRef ?? "");
+      const match = /^(?<file>[^#]+)(?:#L(?<line>[1-9][0-9]*))?$/u.exec(rulingRef);
+      if (match?.groups?.file === undefined || rulingRef.includes("#") && match.groups.line === undefined) {
+        issues.push(runtimeIssue("GRADUATION_RULING_UNCITED", `${path}/accepted/rulingRef`, "accepted conditions require a repo-relative path or append-only #L<line> reference"));
+      } else {
+        const file = match.groups.file;
+        const line = match.groups.line === undefined ? undefined : Number(match.groups.line);
+        const absolute = resolve(file);
+        let cited = existsSync(absolute);
+        let contents = "";
+        if (cited) contents = readFileSync(absolute, "utf8");
+        if (line !== undefined) {
+          cited = cited && file === "planning/exploration/log.md" && contents.split(/\r?\n/u)[line - 1] !== undefined;
+        }
+        const date = /20\d\d-\d\d-\d\d/u.exec(ruling)?.[0];
+        if (accepted.kind === "owner_ruling" && (date === undefined || !contents.includes(date))) cited = false;
+        if (!cited) issues.push(runtimeIssue("GRADUATION_RULING_UNCITED", `${path}/accepted/rulingRef`, `accepted condition citation does not resolve: ${rulingRef}`));
+      }
+    }
+    if (row.state === "blocking" && typeof row.clearedBy === "string") {
+      for (const token of row.clearedBy.match(/(?:rfc|docs|content|packages|apps)\/[A-Za-z0-9_./-]+/gu) ?? []) {
+        const file = token.replace(/[),.;:]+$/u, "");
+        if (!existsSync(resolve(file))) issues.push(runtimeWarning("GRADUATION_CLEAREDBY_UNRESOLVED", `${path}/clearedBy`, `graduation remedy path does not resolve: ${file}`));
+      }
+    }
+  }
   for (const key of ["engineValidation", "tablebaseValidation", "evidence", "records"] as const) {
     if (key in provenance) issues.push(runtimeIssue("PROVENANCE_EVIDENCE_INLINE", `/provenance/${key}`, "evidence belongs in the pack's *.evidence.json sidecar; see make verify-draft"));
   }
   const reviewStatus = provenance.reviewStatus;
   if (reviewStatus === "published") {
+    for (const [index, entry] of graduationEntries.entries()) if (graduationEntryIsBlocking(entry)) {
+      issues.push(runtimeIssue("GRADUATION_BLOCKING_ON_PUBLISHED", `/provenance/graduationBlockers/${index}`, "published packs cannot carry blocking graduation entries"));
+    }
     const sources = provenance.sources;
     if (!Array.isArray(sources) || sources.length === 0) {
       issues.push(

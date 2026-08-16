@@ -418,8 +418,16 @@
       "Move legality: every spine and deviation move was parsed from its exact position with python-chess 1.11.2 at build time; `make pack-check` (schema + chessops spine lint) is the authoritative second check."
     ],
     "graduationBlockers": [
-      "Prose explanations are authored consensus without a citable per-sentence source; the tablebase grounds the categories, not the reasons. Wikibooks or an equivalent citable treatment of the Lucena bridge would clear the remaining prose blockers.",
-      "No engine pass and no human-play (Maia/corpus) evidence on how often defenders find the checking defence at the target band; the difficulty block is authored judgment."
+      {
+        "id": "prose-explanations-are-authored-consensus-without-a-cita",
+        "state": "blocking",
+        "statement": "Prose explanations are authored consensus without a citable per-sentence source; the tablebase grounds the categories, not the reasons. Wikibooks or an equivalent citable treatment of the Lucena bridge would clear the remaining prose blockers."
+      },
+      {
+        "id": "no-engine-pass-and-no-human-play-maia-corpus-evidence-on",
+        "state": "blocking",
+        "statement": "No engine pass and no human-play (Maia/corpus) evidence on how often defenders find the checking defence at the target band; the difficulty block is authored judgment."
+      }
     ]
   }
 }

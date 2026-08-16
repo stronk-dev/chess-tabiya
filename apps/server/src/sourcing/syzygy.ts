@@ -168,9 +168,9 @@ export async function emitSyzygyCandidates(options: SyzygyEmitOptions): Promise<
       abstentions = [{ kind: "tablebase_result", anchor: { fen: input.fen }, sourceId: ingested.entry.sourceId, retrievedAt: ingested.entry.retrievedAt, reason: "out_of_range", detail: `${pieces} pieces; Syzygy covers <=7` }];
     }
     const blockers = [
-      "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft",
-      `opponent mode ${options.opponent} is an authoring choice that must be reviewed for this convert/hold/save drill`,
-      ...(pieces <= 7 ? [`Exact tablebase grading is available for this root and perfect_tablebase is selectable where the provider is published; this draft still requests ${options.opponent}, which can deviate from perfect play`] : []),
+      { id: "mechanical-objective-placeholder", state: "blocking" as const, statement: "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft" },
+      { id: "opponent-policy-authored", state: "blocking" as const, statement: `opponent mode ${options.opponent} is an authoring choice that must be reviewed for this convert/hold/save drill` },
+      ...(pieces <= 7 ? [{ id: "tablebase-opponent-not-selected", state: "blocking" as const, statement: `Exact tablebase grading is available for this root and perfect_tablebase is selectable where the provider is published; this draft still requests ${options.opponent}, which can deviate from perfect play` }] : []),
     ];
     const pack = {
       id,
@@ -184,7 +184,7 @@ export async function emitSyzygyCandidates(options: SyzygyEmitOptions): Promise<
       checkpoints: [{ id: "endgame-played-out", trigger: { atPly }, actions: [] }],
       opponentPolicy: options.opponent === "strong_engine" ? { mode: "strong_engine" } : { mode: "human_common", targetElo: options.targetElo ?? 1800, seedMode: "per_branch" },
       feedbackPolicy: "delayed_checkpoint",
-      provenance: { reviewStatus: "draft", sources: provenanceSources, reviewers: [], licence: "CC-BY-SA-4.0", graduationBlockers: blockers },
+      provenance: { reviewStatus: "draft", sources: provenanceSources, licence: "CC-BY-SA-4.0", graduationBlockers: blockers },
     } satisfies DrillPackDefinition;
     const validation = validatePackDocument(pack);
     if (!validation.valid) throw new SourcingError("EMITTED_PACK_INVALID", validation.issues.map((value) => `${value.path} ${value.code}: ${value.message}`).join("; "));

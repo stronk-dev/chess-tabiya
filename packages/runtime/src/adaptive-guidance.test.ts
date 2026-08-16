@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
@@ -185,7 +187,7 @@ describe("adaptive guidance runtime", () => {
   });
 
   it("records the combined guidance envelope over Pack B and a 60-ply position run without gating it", () => {
-    const pack = JSON.parse(readFileSync(new URL("../../../content/drafts/carlsbad-minority-attack.json", import.meta.url), "utf8")) as { id: string; start: { fen: string }; spine: readonly { moveUci: string; children?: readonly unknown[] }[] };
+    const pack = JSON.parse(readFileSync(new URL(resolvePackPath("carlsbad-minority-attack"), import.meta.url), "utf8")) as { id: string; start: { fen: string }; spine: readonly { moveUci: string; children?: readonly unknown[] }[] };
     const root = createRun({ id: "adaptive-pack-envelope", packId: pack.id, packDigest: `sha256:${"a".repeat(64)}`, startFen: pack.start.fen, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
     const packRuns: DrillRun[] = [root];
     const walk = (nodes: readonly { moveUci: string; children?: readonly unknown[] }[], parent: DrillRun): void => {

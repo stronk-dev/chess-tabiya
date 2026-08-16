@@ -388,13 +388,41 @@
       "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all six deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE. 'Original prose' answers copyright, not truth.",
       "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 9 decision positions and 18 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "ENGINE-CHECKED 2026-08-15: 6...c4 evaluates -1.01 against -0.20 for the spine's 6...Qb6, a cost of 0.81 at depth 22 and the largest deviation cost in this pack. What ...c4 costs is now measured. Whether it 'stops the opening's plan' is an objective-relative claim the number does not reach, so the class was left as authored.",
-      "The claim that the inserted h4/h5 pawns favour Black in 'most endings' is an endgame-consequence assertion no evidence in this repo supports.",
-      "The 'prep ends around move five or six' claim is a hypothesis about club preparation with no corpus measurement behind it; explorer novelty-depth data could test a proxy for it.",
-      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "engine-checked-2026-08-15-6-c4-evaluates-1-01-against-0-",
+        "state": "blocking",
+        "statement": "ENGINE-CHECKED 2026-08-15: 6...c4 evaluates -1.01 against -0.20 for the spine's 6...Qb6, a cost of 0.81 at depth 22 and the largest deviation cost in this pack. What ...c4 costs is now measured. Whether it 'stops the opening's plan' is an objective-relative claim the number does not reach, so the class was left as authored."
+      },
+      {
+        "id": "the-claim-that-the-inserted-h4-h5-pawns-favour-black-in-",
+        "state": "blocking",
+        "statement": "The claim that the inserted h4/h5 pawns favour Black in 'most endings' is an endgame-consequence assertion no evidence in this repo supports."
+      },
+      {
+        "id": "the-prep-ends-around-move-five-or-six-claim-is-a-hypothe",
+        "state": "blocking",
+        "statement": "The 'prep ends around move five or six' claim is a hypothesis about club preparation with no corpus measurement behind it; explorer novelty-depth data could test a proxy for it."
+      },
+      {
+        "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
+        "state": "resolved",
+        "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
+        "resolved": {
+          "at": "2026-08-16",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      }
     ]
   }
 }

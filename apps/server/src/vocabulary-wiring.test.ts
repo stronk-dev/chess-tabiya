@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFileSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -10,7 +12,7 @@ import { validatePackDocument, type PackShapeLookup } from "./pack-validation.js
 import { validateShapeEntry } from "./shape-validation.js";
 
 const json = (relative: string): any => JSON.parse(readFileSync(new URL(relative, import.meta.url), "utf8"));
-const sourcePack = json("../../../content/drafts/carlsbad-minority-attack.json") as DrillPackDefinition;
+const sourcePack = json(resolvePackPath("carlsbad-minority-attack")) as DrillPackDefinition;
 const sourceShape = json("../../../content/shapes/carlsbad.json");
 const lookup = (document = sourceShape): PackShapeLookup => ({ get: (id) => id === "carlsbad" ? { document } : undefined });
 

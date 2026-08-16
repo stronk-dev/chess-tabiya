@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFile, writeFile, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -26,7 +28,7 @@ function answer(fen: string, category: string): TablebaseAnswer {
 async function fixture(): Promise<{ directory: string; file: string; pack: DrillPackDefinition }> {
   const directory = await mkdtemp(join(tmpdir(), "tabiya-verify-draft-"));
   directories.push(directory);
-  const pack = JSON.parse(await readFile("content/drafts/lucena-bridge-convert.json", "utf8")) as DrillPackDefinition;
+  const pack = JSON.parse(await readFile(resolvePackPath("lucena-bridge-convert"), "utf8")) as DrillPackDefinition;
   const file = join(directory, "lucena.json");
   await writeFile(file, JSON.stringify(pack), "utf8");
   return { directory, file, pack };
@@ -35,7 +37,7 @@ async function fixture(): Promise<{ directory: string; file: string; pack: Drill
 async function engineFixture(): Promise<{ directory: string; file: string; pack: DrillPackDefinition }> {
   const directory = await mkdtemp(join(tmpdir(), "tabiya-verify-engine-draft-"));
   directories.push(directory);
-  const pack = JSON.parse(await readFile("content/drafts/anti-caro-advance.json", "utf8")) as DrillPackDefinition;
+  const pack = JSON.parse(await readFile(resolvePackPath("anti-caro-advance"), "utf8")) as DrillPackDefinition;
   const file = join(directory, "anti-caro.json");
   await writeFile(file, JSON.stringify(pack), "utf8");
   return { directory, file, pack };

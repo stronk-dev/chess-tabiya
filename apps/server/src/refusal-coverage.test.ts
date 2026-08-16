@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFileSync, readdirSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -10,9 +12,9 @@ function document(path: string): DrillPackDefinition {
 }
 
 const example = document("../../../schemas/drill_pack.example.json");
-const trajectory = document("../../../content/drafts/trajectory-mate-bishop-knight.json");
-const line = document("../../../content/drafts/anti-caro-advance.json");
-const outcome = document("../../../content/drafts/rook-4v3-same-side.json");
+const trajectory = document(resolvePackPath("trajectory-mate-bishop-knight"));
+const line = document(resolvePackPath("anti-caro-advance"));
+const outcome = document(resolvePackPath("rook-4v3-same-side"));
 const reasoning = document("../../../content/drafts/stated-reasoning.browser.json");
 
 function clone(value: DrillPackDefinition): any {
@@ -115,7 +117,7 @@ describe("fixed refusal-code coverage", () => {
     admitted.objective.grading.resolveAt = { kind: "checkpoint", checkpointId: admitted.checkpoints[0].id };
     has(admitted, "OBJECTIVE_GRADING_RESOLUTION_INERT");
 
-    const trajectoryLeg = structuredClone(JSON.parse(readFileSync("content/drafts/trajectory-mate-bishop-knight.json", "utf8")));
+    const trajectoryLeg = structuredClone(JSON.parse(readFileSync(resolvePackPath("trajectory-mate-bishop-knight"), "utf8")));
     trajectoryLeg.legs[0].objective.grading = { assessedBy: { kind: "authored", note: "Fixture" }, resolveAt: { kind: "terminal" } };
     has(trajectoryLeg, "OBJECTIVE_GRADING_UNSUPPORTED");
 
@@ -270,7 +272,7 @@ describe("fixed refusal-code coverage", () => {
     shallow.start.fen = "8/8/8/8/8/8/4k3/4K3 w - - 0 1";
     has(shallow, "ENGINE_ASSESSMENT_ON_TABLEBASE_ROOT");
 
-    const engineLeg = structuredClone(JSON.parse(readFileSync("content/drafts/trajectory-mate-bishop-knight.json", "utf8")));
+    const engineLeg = structuredClone(JSON.parse(readFileSync(resolvePackPath("trajectory-mate-bishop-knight"), "utf8")));
     engineLeg.legs[0].objective.grading = { assessedBy: { kind: "authored", note: "Fixture" }, resolveAt: { kind: "terminal" } };
     engineLeg.legs[0].objective.grading.assessedBy = { kind: "engine", score: { kind: "cp", centipawns: 0 }, perspective: "white", depth: 22, engineId: "sf", engineVersion: "18", sourceId: "sf", retrievedAt: "2026-08-15T00:00:00.000Z" };
     has(engineLeg, "TRAJECTORY_LEG_ENGINE_UNSUPPORTED");

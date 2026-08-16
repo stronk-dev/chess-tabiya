@@ -1,1 +1,102 @@
-{"checkpoints":[{"actions":[],"id":"line-end","trigger":{"atPly":7}}],"feedbackPolicy":"delayed_checkpoint","id":"a87-dutch-defense-leningrad-variation","mode":"line","objective":{"successConditions":[{"checkpointId":"line-end","kind":"reach_checkpoint"}],"summary":"Play the recorded line to its end: 7 plies from this position.","type":"play_until_checkpoint"},"opponentPolicy":{"mode":"theory_strict"},"phase":"opening","provenance":{"graduationBlockers":["objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft"],"licence":"CC-BY-SA-4.0","reviewStatus":"draft","reviewers":[],"sources":["A87 Dutch Defense: Leningrad Variation: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/a.tsv) — CC0-1.0, no attribution required"]},"spine":[{"children":[{"children":[{"children":[{"children":[{"children":[{"children":[{"children":[],"id":"p9-nf3","moveSan":"Nf3","moveUci":"g1f3"}],"id":"p8-bg7","moveSan":"Bg7","moveUci":"f8g7"}],"id":"p7-bg2","moveSan":"Bg2","moveUci":"f1g2"}],"id":"p6-g6","moveSan":"g6","moveUci":"g7g6"}],"id":"p5-g3","moveSan":"g3","moveUci":"g2g3"}],"id":"p4-nf6","moveSan":"Nf6","moveUci":"g8f6"}],"id":"p3-c4","moveSan":"c4","moveUci":"c2c4"}],"start":{"fen":"rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2","movesSan":["d4","f5"],"side":"white"},"title":"Dutch Defense: Leningrad Variation","version":"0.1.0"}
+{
+  "checkpoints": [
+    {
+      "actions": [],
+      "id": "line-end",
+      "trigger": {
+        "atPly": 7
+      }
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "id": "a87-dutch-defense-leningrad-variation",
+  "mode": "line",
+  "objective": {
+    "successConditions": [
+      {
+        "checkpointId": "line-end",
+        "kind": "reach_checkpoint"
+      }
+    ],
+    "summary": "Play the recorded line to its end: 7 plies from this position.",
+    "type": "play_until_checkpoint"
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict"
+  },
+  "phase": "opening",
+  "provenance": {
+    "graduationBlockers": [
+      {
+        "id": "mechanical-objective-placeholder",
+        "state": "blocking",
+        "statement": "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft"
+      }
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "reviewStatus": "draft",
+    "sources": [
+      "A87 Dutch Defense: Leningrad Variation: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/a.tsv) — CC0-1.0, no attribution required"
+    ]
+  },
+  "spine": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [],
+                              "id": "p9-nf3",
+                              "moveSan": "Nf3",
+                              "moveUci": "g1f3"
+                            }
+                          ],
+                          "id": "p8-bg7",
+                          "moveSan": "Bg7",
+                          "moveUci": "f8g7"
+                        }
+                      ],
+                      "id": "p7-bg2",
+                      "moveSan": "Bg2",
+                      "moveUci": "f1g2"
+                    }
+                  ],
+                  "id": "p6-g6",
+                  "moveSan": "g6",
+                  "moveUci": "g7g6"
+                }
+              ],
+              "id": "p5-g3",
+              "moveSan": "g3",
+              "moveUci": "g2g3"
+            }
+          ],
+          "id": "p4-nf6",
+          "moveSan": "Nf6",
+          "moveUci": "g8f6"
+        }
+      ],
+      "id": "p3-c4",
+      "moveSan": "c4",
+      "moveUci": "c2c4"
+    }
+  ],
+  "start": {
+    "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+    "movesSan": [
+      "d4",
+      "f5"
+    ],
+    "side": "white"
+  },
+  "title": "Dutch Defense: Leningrad Variation",
+  "version": "0.1.0"
+}

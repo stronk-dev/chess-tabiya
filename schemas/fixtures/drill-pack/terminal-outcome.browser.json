@@ -66,9 +66,12 @@
   "provenance": {
     "reviewStatus": "draft",
     "sources": [],
-    "reviewers": [],
     "graduationBlockers": [
-      "Test-only fixture; never publish as authored chess content."
+      {
+        "id": "test-only-fixture",
+        "state": "blocking",
+        "statement": "Test-only fixture; never publish as authored chess content."
+      }
     ]
   }
 }

@@ -13,8 +13,24 @@
   "start": {
     "fen": "r2q1rk1/pbpn1ppp/1p1ppn2/6B1/2PP4/P1PBPN2/5PPP/R2QK2R w KQ - 2 10",
     "movesSan": [
-      "d4", "Nf6", "c4", "e6", "Nc3", "Bb4", "a3", "Bxc3+", "bxc3", "O-O",
-      "Nf3", "b6", "Bg5", "Bb7", "e3", "d6", "Bd3", "Nbd7"
+      "d4",
+      "Nf6",
+      "c4",
+      "e6",
+      "Nc3",
+      "Bb4",
+      "a3",
+      "Bxc3+",
+      "bxc3",
+      "O-O",
+      "Nf3",
+      "b6",
+      "Bg5",
+      "Bb7",
+      "e3",
+      "d6",
+      "Bd3",
+      "Nbd7"
     ],
     "side": "white"
   },
@@ -27,10 +43,38 @@
         "feature": {
           "kind": "all",
           "of": [
-            { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } },
-            { "kind": "pieceOnSquare", "square": "e4", "piece": { "color": "white", "role": "pawn" } },
-            { "kind": "pieceOnSquare", "square": "c4", "piece": { "color": "white", "role": "pawn" } },
-            { "kind": "feature", "feature": { "kind": "doubled_pawn", "color": "white", "file": "c" } }
+            {
+              "kind": "pieceOnSquare",
+              "square": "d4",
+              "piece": {
+                "color": "white",
+                "role": "pawn"
+              }
+            },
+            {
+              "kind": "pieceOnSquare",
+              "square": "e4",
+              "piece": {
+                "color": "white",
+                "role": "pawn"
+              }
+            },
+            {
+              "kind": "pieceOnSquare",
+              "square": "c4",
+              "piece": {
+                "color": "white",
+                "role": "pawn"
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "doubled_pawn",
+                "color": "white",
+                "file": "c"
+              }
+            }
           ]
         },
         "to": "achieved"
@@ -40,14 +84,52 @@
         "feature": {
           "kind": "all",
           "of": [
-            { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "white", "shade": "light" } },
-            { "kind": "feature", "feature": { "kind": "bishop_on_shade", "color": "white", "shade": "dark" } },
-            { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "b" } },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "bishop_on_shade",
+                "color": "white",
+                "shade": "light"
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "bishop_on_shade",
+                "color": "white",
+                "shade": "dark"
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "half_open_file",
+                "color": "white",
+                "file": "b"
+              }
+            },
             {
               "kind": "quantified",
               "quantifier": "some",
-              "over": { "squares": { "files": { "from": "b", "to": "b" }, "ranks": { "from": 1, "to": 8 } } },
-              "feature": { "kind": "piece", "piece": { "color": "white", "role": "rook" } }
+              "over": {
+                "squares": {
+                  "files": {
+                    "from": "b",
+                    "to": "b"
+                  },
+                  "ranks": {
+                    "from": 1,
+                    "to": 8
+                  }
+                }
+              },
+              "feature": {
+                "kind": "piece",
+                "piece": {
+                  "color": "white",
+                  "role": "rook"
+                }
+              }
             }
           ]
         },
@@ -55,7 +137,17 @@
       },
       {
         "kind": "structural_feature",
-        "feature": { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "doubled_pawn", "color": "white", "file": "c" } } },
+        "feature": {
+          "kind": "not",
+          "of": {
+            "kind": "feature",
+            "feature": {
+              "kind": "doubled_pawn",
+              "color": "white",
+              "file": "c"
+            }
+          }
+        },
         "to": "degraded"
       }
     ]
@@ -66,25 +158,36 @@
     "half-open-b-file",
     "centre-duo"
   ],
-  "shapes": ["doubled-c-pawns"],
+  "shapes": [
+    "doubled-c-pawns"
+  ],
   "planClasses": [
     {
       "id": "roll-the-centre",
       "label": "Put a pawn on e4 beside the one on d4",
       "description": "The library's first White plan. Its success signature is two squares: White pawns on d4 and e4. Measured in the start position, e4 is empty and attacked once by White (bishop d3) and twice by Black (knight f6, bishop b7); the same two-against-one reading holds at the last position of this spine. Corpus note at this band: e3-e4 is played in 69 of the 742 games in the start position (9.3%) and in 58 of 381 (15.2%) at the node two moves later.",
-      "shapePlan": { "shape": "doubled-c-pawns", "plan": "white-centre-roll" }
+      "shapePlan": {
+        "shape": "doubled-c-pawns",
+        "plan": "white-centre-roll"
+      }
     },
     {
       "id": "bishops-and-the-b-file",
       "label": "Both bishops plus a rook on the b-file",
       "description": "The library's second White plan, whose signature is an arrangement rather than a claim about line quality: both White bishops still on the board and a White rook somewhere on the half-open b-file. Measured: White's pawns are a3, c3, c4, d4, e3, f2, g2, h2, so the b-file carries no White pawn while Black's stands on b6 — which is exactly the half-open condition the shape entry's own trigger uses. A rook to b1 is played in 4 of 742 games here (0.5%) and 24 of 381 (6.3%) two moves later.",
-      "shapePlan": { "shape": "doubled-c-pawns", "plan": "white-open-for-the-bishops" }
+      "shapePlan": {
+        "shape": "doubled-c-pawns",
+        "plan": "white-open-for-the-bishops"
+      }
     },
     {
       "id": "what-black-fixes",
       "label": "The clamp Black is playing for",
       "description": "Black's plan from the same entry, listed here because this spine walks straight into its success signature: a black pawn on c5 in front of the still-doubled pair with the White pawn on c4 fixed behind it. It arrives on the spine's fourth ply. Measured at that moment: c4 is attacked zero times by Black and defended once by White (bishop d3), and d4 goes from zero Black attackers to one.",
-      "shapePlan": { "shape": "doubled-c-pawns", "plan": "black-fix-the-front-pawn" }
+      "shapePlan": {
+        "shape": "doubled-c-pawns",
+        "plan": "black-fix-the-front-pawn"
+      }
     }
   ],
   "spine": [
@@ -165,11 +268,18 @@
     {
       "id": "plan-choice",
       "label": "Before your first move: which of the library's White plans are you playing?",
-      "trigger": { "atStart": true },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atStart": true
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["roll-the-centre", "bishops-and-the-b-file"]
+        "planClassIds": [
+          "roll-the-centre",
+          "bishops-and-the-b-file"
+        ]
       }
     },
     {
@@ -181,14 +291,37 @@
           "feature": {
             "kind": "all",
             "of": [
-              { "kind": "pieceOnSquare", "square": "c5", "piece": { "color": "black", "role": "pawn" } },
-              { "kind": "pieceOnSquare", "square": "c4", "piece": { "color": "white", "role": "pawn" } },
-              { "kind": "feature", "feature": { "kind": "doubled_pawn", "color": "white", "file": "c" } }
+              {
+                "kind": "pieceOnSquare",
+                "square": "c5",
+                "piece": {
+                  "color": "black",
+                  "role": "pawn"
+                }
+              },
+              {
+                "kind": "pieceOnSquare",
+                "square": "c4",
+                "piece": {
+                  "color": "white",
+                  "role": "pawn"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "doubled_pawn",
+                  "color": "white",
+                  "file": "c"
+                }
+              }
             ]
           }
         }
       },
-      "actions": ["compare_branches"]
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "duo-on-the-board",
@@ -199,20 +332,47 @@
           "feature": {
             "kind": "all",
             "of": [
-              { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } },
-              { "kind": "pieceOnSquare", "square": "e4", "piece": { "color": "white", "role": "pawn" } },
-              { "kind": "feature", "feature": { "kind": "doubled_pawn", "color": "white", "file": "c" } }
+              {
+                "kind": "pieceOnSquare",
+                "square": "d4",
+                "piece": {
+                  "color": "white",
+                  "role": "pawn"
+                }
+              },
+              {
+                "kind": "pieceOnSquare",
+                "square": "e4",
+                "piece": {
+                  "color": "white",
+                  "role": "pawn"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "doubled_pawn",
+                  "color": "white",
+                  "file": "c"
+                }
+              }
             ]
           }
         }
       },
-      "actions": ["compare_branches"]
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "end-of-data",
       "label": "One hundred and nine games deep: the corpus thins out here",
-      "trigger": { "atSpineNode": "qc7-line" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "qc7-line"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     }
   ],
   "authoredBoundary": {
@@ -236,37 +396,52 @@
   },
   "deviations": [
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "e3e4",
       "class": "accepted_alternative",
       "note": "The roll played at once: 69 of 742 (9.3%), the third-most-played move here. It reaches this pack's first success arrangement on move ten — pawns on d4 and e4 with the doubled pair still on c3 and c4. Measured against it: e4 is attacked twice by Black (knight f6, bishop b7) and once by White (bishop d3) before the pawn arrives."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "d1c2",
       "class": "accepted_alternative",
       "note": "Qc2: 104 of 742 (14.0%), the second-most-played move here. It is neither of the two arrangements this pack's objective checks, so a run that plays it has to reach one of them later or not at all."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "a1b1",
       "class": "interesting_deviation",
       "note": "Rb1: 4 of 742 (0.5%). It is the rook move the second plan's signature asks for, and it is the second-rarest move in the returned distribution at this node. The gap between what the plan names and what this band plays is itself the measurement; nothing here says which is right."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "g5f6",
       "class": "interesting_deviation",
       "note": "Bxf6: 2 of 742 (0.3%), the rarest move in the returned distribution. Its consequence is definitional rather than evaluative: the second plan's signature requires a White bishop on each shade, and after this trade one shade is empty for the rest of the game, so that arrangement can no longer be reached. Whether the resulting position is better is not measured anywhere in this repo."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c4c5",
       "class": "concept_violation",
       "offObjective": true,
-      "mistake": ["plan"],
+      "mistake": [
+        "plan"
+      ],
       "note": "c4-c5 ends the structure this pack is about by definition, not by grade: the shape entry's trigger requires a White pawn on c4, and after this push there is none — the pawns are doubled on c3 and c5 instead. It is also outside the twelve most-played moves at this node, which together cover 739 of the 742 games, so it occurs in at most 3 of them (0.4%).",
-      "cost": { "kind": "unmeasurable", "reason": "No engine or corpus evidence in this repo bears on the value of the resulting position; the only measured consequence is that the pack's structure stops being detected. The owner ruling of 2026-08-15 admits explorer result splits as corpus_observed evidence, and it does not reach this deviation: c4-c5 is played in 0 of the 742 games at this position (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15, moves=40), so there is no split to state. The earlier bound of at most three games is now an exact zero." }
+      "cost": {
+        "kind": "unmeasurable",
+        "reason": "No engine or corpus evidence in this repo bears on the value of the resulting position; the only measured consequence is that the pack's structure stops being detected. The owner ruling of 2026-08-15 admits explorer result splits as corpus_observed evidence, and it does not reach this deviation: c4-c5 is played in 0 of the 742 games at this position (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15, moves=40), so there is no split to state. The earlier bound of at most three games is now an exact zero."
+      }
     }
   ],
   "feedbackPolicy": "delayed_checkpoint",
@@ -274,22 +449,30 @@
     {
       "id": "band-result-split",
       "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 742 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15) the outcomes were 321 white wins, 40 draws and 381 black wins (43.3/5.4/51.3%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "which-tabiya-is-attested",
       "text": "Two Nimzo-Indian routes to White doubled c-pawns were measured this session at the 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12). The Sämisch position after 4.a3 Bxc3+ 5.bxc3 occurs in 75774 games; the Classical/Karpov position after 9.Bxc3 Bxc3 bxc3 occurs in 193. The second one also does not have this structure on the board: its c4 square holds a bishop and White has a single c-pawn, so the shape entry's trigger cannot fire on it. This pack is authored from the first.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "trigger-is-a-pawn-count",
       "text": "The three conditions that make this the detected structure are all pawn arithmetic read off the position: two White pawns on the c-file, one of them on c4, and no White pawn on the b-file while Black has one on b6. White's full skeleton here is a3, c3, c4, d4, e3, f2, g2, h2.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     },
     {
       "id": "corpus-does-not-play-the-plans",
       "text": "The corpus line this spine follows reaches neither of the two arrangements the shape library gives White. At the start position e3-e4 is played in 69 of 742 games (9.3%) and a rook to b1 in 4 of 742 (0.5%); two moves later they are 58 of 381 (15.2%) and 24 of 381 (6.3%), and the most-played move at that node is neither. That is a measurement of what this band plays, not a claim that the plans are wrong or that the band is.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     }
   ],
   "provenance": {
@@ -308,14 +491,42 @@
       "NOT CLAIMED: no move in this pack is graded better or worse than another, the bishop pair is not asserted to be compensation for anything, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one.",
       "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Nimzo-Indian_Defence (CC BY-SA 4.0, read 2026-08-16) states the bargain this pack is about — Black \"is generally prepared to concede the bishop pair by playing Bxc3\", inflicting doubled c-pawns; White gets the bishop pair and central advances, and Black aims to \"close the position to reduce the scope of White's bishops\" and to \"blockade the white pawn centre from advancing\". WHAT IT DOES NOT SUPPLY: the source states the bargain, not this pack's arrangements, and it does not resolve the tension this pack already records with its own corpus measurement — the two arrangements the objective checks are played in under a sixth of games at every node measured. A citation of the idea does not answer a frequency finding. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "CITED 2026-08-16 (the bishop-pair-for-doubled-pawns bargain). What each side gets from ...Bxc3, and Black's close-and-blockade answer, is stated by en.wikipedia.org/wiki/Nimzo-Indian_Defence (CC BY-SA 4.0), attributed in provenance.attribution.",
-      "STILL LIVE after the 2026-08-16 pass, and the citation does not touch it: this pack's own corpus measurement shows the two arrangements the objective checks played in under a sixth of the games at every node measured. A source that states the structural bargain says nothing about whether these arrangements are what players reach, and no corpus measurement relating either arrangement to results at this band has been done. This blocker was never only a citation gap.",
-      "No engine pass has been run on this pack. The single concept_violation (c4-c5) records an unmeasurable cost for exactly that reason, and the Bxf6 deviation stops at a definitional consequence for the same reason.",
-      "The spine is six plies and its last node has 109 games. Anything a learner reaches past it is unattested at this band by this instrument.",
-      "The shape entry doubled-c-pawns carries its own UNGROUNDED provenance for all five of its plan descriptions, including the three this pack references. Referencing them does not launder them. Its recorded orphan status is now stale and needs an owner-side census rerun that is not this pack's to do."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "cited-2026-08-16-the-bishop-pair-for-doubled-pawns-barga",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (the bishop-pair-for-doubled-pawns bargain). What each side gets from ...Bxc3, and Black's close-and-blockade answer, is stated by en.wikipedia.org/wiki/Nimzo-Indian_Defence (CC BY-SA 4.0), attributed in provenance.attribution."
+      },
+      {
+        "id": "still-live-after-the-2026-08-16-pass-and-the-citation-do",
+        "state": "blocking",
+        "statement": "STILL LIVE after the 2026-08-16 pass, and the citation does not touch it: this pack's own corpus measurement shows the two arrangements the objective checks played in under a sixth of the games at every node measured. A source that states the structural bargain says nothing about whether these arrangements are what players reach, and no corpus measurement relating either arrangement to results at this band has been done. This blocker was never only a citation gap."
+      },
+      {
+        "id": "no-engine-pass-has-been-run-on-this-pack-the-single-conc",
+        "state": "blocking",
+        "statement": "No engine pass has been run on this pack. The single concept_violation (c4-c5) records an unmeasurable cost for exactly that reason, and the Bxf6 deviation stops at a definitional consequence for the same reason."
+      },
+      {
+        "id": "the-spine-is-six-plies-and-its-last-node-has-109-games-a",
+        "state": "blocking",
+        "statement": "The spine is six plies and its last node has 109 games. Anything a learner reaches past it is unattested at this band by this instrument."
+      },
+      {
+        "id": "the-shape-entry-doubled-c-pawns-carries-its-own-unground",
+        "state": "blocking",
+        "statement": "The shape entry doubled-c-pawns carries its own UNGROUNDED provenance for all five of its plan descriptions, including the three this pack references. Referencing them does not launder them. Its recorded orphan status is now stale and needs an owner-side census rerun that is not this pack's to do."
+      }
     ],
     "attribution": [
       {

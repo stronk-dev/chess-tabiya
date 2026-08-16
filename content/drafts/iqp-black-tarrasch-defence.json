@@ -13,8 +13,25 @@
   "start": {
     "fen": "r1bq1rk1/pp2bppp/2n2n2/3p2B1/3N4/2N3P1/PP2PPBP/R2Q1RK1 b - - 0 10",
     "movesSan": [
-      "d4", "d5", "c4", "e6", "Nc3", "c5", "cxd5", "exd5", "Nf3", "Nc6",
-      "g3", "Nf6", "Bg2", "Be7", "O-O", "O-O", "Bg5", "cxd4", "Nxd4"
+      "d4",
+      "d5",
+      "c4",
+      "e6",
+      "Nc3",
+      "c5",
+      "cxd5",
+      "exd5",
+      "Nf3",
+      "Nc6",
+      "g3",
+      "Nf6",
+      "Bg2",
+      "Be7",
+      "O-O",
+      "O-O",
+      "Bg5",
+      "cxd4",
+      "Nxd4"
     ],
     "side": "black"
   },
@@ -27,15 +44,41 @@
         "feature": {
           "kind": "all",
           "of": [
-            { "kind": "not", "of": { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "knight" } } },
-            { "kind": "feature", "feature": { "kind": "isolated_pawn", "color": "black", "file": "d" } }
+            {
+              "kind": "not",
+              "of": {
+                "kind": "pieceOnSquare",
+                "square": "d4",
+                "piece": {
+                  "color": "white",
+                  "role": "knight"
+                }
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "isolated_pawn",
+                "color": "black",
+                "file": "d"
+              }
+            }
           ]
         },
         "to": "achieved"
       },
       {
         "kind": "structural_feature",
-        "feature": { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "named_structure", "id": "iqp-black" } } },
+        "feature": {
+          "kind": "not",
+          "of": {
+            "kind": "feature",
+            "feature": {
+              "kind": "named_structure",
+              "id": "iqp-black"
+            }
+          }
+        },
         "to": "transitioned"
       }
     ]
@@ -46,25 +89,36 @@
     "blockader-removal",
     "structure-dissolution"
   ],
-  "shapes": ["iqp-black"],
+  "shapes": [
+    "iqp-black"
+  ],
   "planClasses": [
     {
       "id": "attack-with-pieces",
       "label": "Keep pieces and play on the open lines",
       "description": "The library's attacking plan for this chair. Its success signature in the shape entry is null, so nothing in this pack grades it; what this position measures instead is the census of the two central squares — d4 is attacked once by each side at the start, d5 twice by each side.",
-      "shapePlan": { "shape": "iqp-black", "plan": "black-piece-attack" }
+      "shapePlan": {
+        "shape": "iqp-black",
+        "plan": "black-piece-attack"
+      }
     },
     {
       "id": "push-to-d4",
       "label": "Get the pawn to d4",
       "description": "The library's advance plan. Its success signature checks arrival only: a black pawn on d4 and none on d5. Computed on this spine: d4 is occupied in all nine authored positions — by a White knight for six of them, by a black knight for one, and by a White pawn for the last three — so ...d5-d4 is not a legal move at any of them.",
-      "shapePlan": { "shape": "iqp-black", "plan": "black-d4-break" }
+      "shapePlan": {
+        "shape": "iqp-black",
+        "plan": "black-d4-break"
+      }
     },
     {
       "id": "white-blockade",
       "label": "What the objective is written against",
       "description": "The library's White plan for this structure, named here because this pack's success condition is its negation. Its signature — a White knight on d4 with Black's d-pawn still isolated — was evaluated on this spine: it holds at the start position and stops holding after ...Nxd4. The pack grades that state change and nothing more.",
-      "shapePlan": { "shape": "iqp-black", "plan": "white-blockade-and-trade" }
+      "shapePlan": {
+        "shape": "iqp-black",
+        "plan": "white-blockade-and-trade"
+      }
     }
   ],
   "spine": [
@@ -168,24 +222,39 @@
     {
       "id": "plan-choice",
       "label": "Before your first move: which of the library's two Black plans are you playing?",
-      "trigger": { "atStart": true },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atStart": true
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["attack-with-pieces", "push-to-d4"]
+        "planClassIds": [
+          "attack-with-pieces",
+          "push-to-d4"
+        ]
       }
     },
     {
       "id": "pawn-reaches-e3",
       "label": "A White pawn stands on e3 — d4 is two against two",
-      "trigger": { "atSpineNode": "e3-guard" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "e3-guard"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "blockader-removed",
       "label": "No White knight on d4 and your d-pawn is still the isolated one",
-      "trigger": { "atSpineNode": "nxd4-remove" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "nxd4-remove"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "both-pawns-isolated",
@@ -196,13 +265,29 @@
           "feature": {
             "kind": "all",
             "of": [
-              { "kind": "feature", "feature": { "kind": "isolated_pawn", "color": "white", "file": "d" } },
-              { "kind": "feature", "feature": { "kind": "isolated_pawn", "color": "black", "file": "d" } }
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "isolated_pawn",
+                  "color": "white",
+                  "file": "d"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "isolated_pawn",
+                  "color": "black",
+                  "file": "d"
+                }
+              }
             ]
           }
         }
       },
-      "actions": ["compare_branches"]
+      "actions": [
+        "compare_branches"
+      ]
     }
   ],
   "authoredBoundary": {
@@ -228,37 +313,49 @@
   },
   "deviations": [
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c8e6",
       "class": "accepted_alternative",
       "note": "Be6: 216 of 817 (26.4%), the second-most-played move in the start position at this band, four and a half points behind h6. It leaves the bishop on g5 where it is and the knight on d4 where it is, so this pack's success condition is untouched by it."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c6d4",
       "class": "interesting_deviation",
       "note": "Nxd4 immediately: 191 of 817 (23.4%) at this node. The resulting position is reached by 192 games in the same band and Qxd4 is played in all 192 (100%) — the only reply the corpus contains. Evaluated on that position, the shape entry's White plan signature no longer holds, because it names a knight on d4 and the piece standing there is a queen. This pack's success condition is satisfied one move in. Whether that is a good way to spend the move is not measured here."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "d8b6",
       "class": "accepted_alternative",
       "note": "Qb6: 44 of 817 (5.4%). Outside the spine, and it changes neither the d4 occupancy nor the pawn skeleton the detector reads."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "f8e8",
       "class": "accepted_alternative",
       "note": "Re8: 31 of 817 (3.8%), the fifth-most-played move in the band's table for this position."
     },
     {
-      "at": { "spineNodeId": "e3-guard" },
+      "at": {
+        "spineNodeId": "e3-guard"
+      },
       "moveUci": "c8e6",
       "class": "accepted_alternative",
       "note": "Be6 instead of the trade on d4: 13 of 80 (16.3%) at this node, against 57 (71.3%) for Nxd4. Playing it leaves a White knight on d4, so this pack's success condition stays unsatisfied and the shape entry's White plan signature keeps holding — a fact about the two expressions, not about the move."
     },
     {
-      "at": { "spineNodeId": "exd4-recapture" },
+      "at": {
+        "spineNodeId": "exd4-recapture"
+      },
       "moveUci": "c8f5",
       "class": "interesting_deviation",
       "note": "Bf5: 2 of 60 (3.3%) at this node, against Be6 48 (80.0%). Two games in three years of this band at these ratings is the whole evidence base for it; the deviation exists so the comparison view has something to open, not because anything here measured it."
@@ -269,22 +366,30 @@
     {
       "id": "band-result-split",
       "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 817 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15) the outcomes were 432 white wins, 67 draws and 318 black wins (52.9/8.2/38.9%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "position-is-attested",
       "text": "At the Lichess 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12) the start position occurs in 817 games, and the spine stays in measurable territory the whole way: 253, 103, 111, 80, 57, 60 and 57 games at the seven following nodes. Two of the eight spine moves are the only move the band contains at their node — the recapture ...Bxf6 (103 of 103) and exd4 (57 of 57).",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "blockade-square-census",
       "text": "The census of d4 is computed at each quoted position: one attacker each at the start (White queen d1, Black knight c6); two each after White's pawn reaches e3 (queen d1 and pawn e3 against knight c6 and bishop f6); a White pawn standing on the square after the recapture. These are attack counts and occupancy, not an assessment.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     },
     {
       "id": "the-structure-dissolves",
       "text": "The shape entry's trigger was evaluated on all nine authored positions of this pack: it fires on the first six and stops at the seventh. Decomposed, the failing conjunct is the d-file being half-open for White — after exd4 White has a d-pawn — while a black pawn on d5 and Black's isolated d-pawn both still hold, and White's d-pawn is now isolated too. The structure this pack is named after leaves the board by definition, not by opinion.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     }
   ],
   "provenance": {
@@ -301,14 +406,42 @@
       "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one. In particular, nothing here claims that the symmetric isolated-pawn position the spine reaches favours either side, and nothing claims that a knight on d4 is bad for Black.",
       "CITATION PASS (2026-08-16): the structural plan is now cited; the removal premise is an inference from it. en.wikipedia.org/wiki/Isolated_pawn (CC BY-SA 4.0, read 2026-08-16) states that the side facing an isolani will \"blockade the pawn on d4 with a piece (most likely a knight) or prevent its advance long enough to increase pressure on it until it falls\", and that the isolani's owner should \"use the IQP to support an attack or dissolve it before the endgame\" via the d4-d5 break. en.wikipedia.org/wiki/Pawn_structure §Giuoco Piano - Isolani formation (CC BY-SA 4.0, section wikitext read via the MediaWiki action=parse API the same day) states the owner's theme as \"Maintaining control over the weak square in front of the isolated queen pawn as it advances to prevent enemy blockade\". WHAT THEY DO NOT SUPPLY: neither source says REMOVE the blockading piece; they say prevent or outlast the blockade. This pack's objective goes one step further than its source. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "CITED 2026-08-16 (the structure, not the move). That the blockade of the square in front of the isolani is the pawn's central problem, and that contesting it is the owner's job, is stated by en.wikipedia.org/wiki/Isolated_pawn and en.wikipedia.org/wiki/Pawn_structure §Giuoco Piano - Isolani formation (both CC BY-SA 4.0), attributed in provenance.attribution.",
-      "STILL UNCITED after the 2026-08-16 pass, with the gap now named precisely: the cited sources say the owner must PREVENT or OUTLAST the blockade; this pack's objective grades REMOVING the blockading knight while the isolani still stands. That is a stronger and more specific claim than any consulted source makes, and a corpus measurement relating the removal to results at this band is still not done.",
-      "No engine pass has been run on this pack. Every note that could have carried a cost carries none for that reason.",
-      "This pack declares no timing window. The measured reason is recorded in the objective summary and the first spine annotation: the blockading knight is already on d4 in the start position, so there is no arrival to race, and no other opponent lever on this spine ends a preparation. If a race is later found here, the window is the honest way to encode it.",
-      "The success condition's second rule sends the run to transitioned when the detector stops firing. That is a definitional state change, but calling it a transition rather than a failure is an authoring choice with no measurement behind it."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "cited-2026-08-16-the-structure-not-the-move-that-the-blo",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (the structure, not the move). That the blockade of the square in front of the isolani is the pawn's central problem, and that contesting it is the owner's job, is stated by en.wikipedia.org/wiki/Isolated_pawn and en.wikipedia.org/wiki/Pawn_structure §Giuoco Piano - Isolani formation (both CC BY-SA 4.0), attributed in provenance.attribution."
+      },
+      {
+        "id": "still-uncited-after-the-2026-08-16-pass-with-the-gap-now",
+        "state": "blocking",
+        "statement": "STILL UNCITED after the 2026-08-16 pass, with the gap now named precisely: the cited sources say the owner must PREVENT or OUTLAST the blockade; this pack's objective grades REMOVING the blockading knight while the isolani still stands. That is a stronger and more specific claim than any consulted source makes, and a corpus measurement relating the removal to results at this band is still not done."
+      },
+      {
+        "id": "no-engine-pass-has-been-run-on-this-pack-every-note-that",
+        "state": "blocking",
+        "statement": "No engine pass has been run on this pack. Every note that could have carried a cost carries none for that reason."
+      },
+      {
+        "id": "this-pack-declares-no-timing-window-the-measured-reason-",
+        "state": "blocking",
+        "statement": "This pack declares no timing window. The measured reason is recorded in the objective summary and the first spine annotation: the blockading knight is already on d4 in the start position, so there is no arrival to race, and no other opponent lever on this spine ends a preparation. If a race is later found here, the window is the honest way to encode it."
+      },
+      {
+        "id": "the-success-condition-s-second-rule-sends-the-run-to-tra",
+        "state": "blocking",
+        "statement": "The success condition's second rule sends the run to transitioned when the detector stops firing. That is a definitional state change, but calling it a transition rather than a failure is an authoring choice with no measurement behind it."
+      }
     ],
     "attribution": [
       {

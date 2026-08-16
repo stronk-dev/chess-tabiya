@@ -1,4 +1,5 @@
 import { readdir, readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -14,7 +15,9 @@ import { assessmentGrounding } from "./sourcing/ledger-validation.js";
 import type { EvidenceLedger, EvidenceRecord, SourceManifest, SourcingIssue } from "./sourcing/types.js";
 
 async function artifact(stem: string): Promise<{ pack: DrillPackDefinition; ledger: EvidenceLedger; manifest: SourceManifest }> {
-  const root = resolve("content/drafts");
+  const root = ["content/drafts", "content/packs"]
+    .map((candidate) => resolve(candidate))
+    .find((candidate) => existsSync(resolve(candidate, `${stem}.json`)))!;
   return {
     pack: JSON.parse(await readFile(resolve(root, `${stem}.json`), "utf8")),
     ledger: JSON.parse(await readFile(resolve(root, `${stem}.evidence.json`), "utf8")),
@@ -28,11 +31,11 @@ function grounding(pack: DrillPackDefinition, ledger: EvidenceLedger, manifest: 
 
 describe("opening engine evidence", () => {
   it("migrates every non-browser opening draft into manifest-linked engine evidence", async () => {
-    const names = (await readdir("content/drafts")).filter((name) => name.endsWith(".json") && !name.endsWith(".browser.json") && !name.endsWith(".evidence.json") && !name.endsWith(".sources.json") && !name.endsWith(".job.json"));
+    const names = (await Promise.all(["content/drafts", "content/packs"].map(async (root) => (await readdir(root)).filter((name) => name.endsWith(".json") && !name.endsWith(".browser.json") && !name.endsWith(".evidence.json") && !name.endsWith(".sources.json") && !name.endsWith(".job.json")).map((name) => [root, name] as const)))).flat();
     const openings: string[] = [];
     let newlyBoundCosts = 0;
-    for (const name of names) {
-      const pack = JSON.parse(await readFile(resolve("content/drafts", name), "utf8")) as DrillPackDefinition & { provenance: Record<string, unknown> };
+    for (const [root, name] of names) {
+      const pack = JSON.parse(await readFile(resolve(root, name), "utf8")) as DrillPackDefinition & { provenance: Record<string, unknown> };
       if (pack.phase !== "opening") continue;
       openings.push(name);
       expect(pack.provenance.engineValidation, name).toBeUndefined();
@@ -43,8 +46,8 @@ describe("opening engine evidence", () => {
       deviationCostEvidenceIssues(value.pack, value.ledger.records, costIssues);
       expect(costIssues, name).toEqual([]);
       newlyBoundCosts += value.pack.deviations?.filter((deviation) => deviation.cost?.kind !== "unmeasurable" && deviation.cost?.basis === "engine").length ?? 0;
-      const root = value.ledger.records.find((record) => record.kind === "engine_eval" && record.supports.includes("/start/fen"));
-      const source = value.manifest.entries.find((entry) => entry.sourceId === root?.sourceId && entry.retrievedAt === root?.retrievedAt);
+      const rootRecord = value.ledger.records.find((record) => record.kind === "engine_eval" && record.supports.includes("/start/fen"));
+      const source = value.manifest.entries.find((entry) => entry.sourceId === rootRecord?.sourceId && entry.retrievedAt === rootRecord?.retrievedAt);
       expect(source?.origin.kind, name).toBe("engine");
       if (source?.origin.kind === "engine") expect(source.origin.fen, name).toBe(pack.start.fen);
     }
@@ -102,7 +105,9 @@ describe("opening engine evidence", () => {
     const { pack } = await artifact("anti-caro-advance");
     const invalid = structuredClone(pack) as any;
     invalid.provenance.engineValidation = {};
-    expect(validatePackDocument(invalid).issues).toContainEqual(expect.objectContaining({ code: "PROVENANCE_EVIDENCE_INLINE", path: "/provenance/engineValidation" }));
+    expect(validatePackDocument(invalid).issues).toContainEqual(
+      expect.objectContaining({ code: "PROVENANCE_EVIDENCE_INLINE", path: "/provenance/engineValidation" }),
+    );
   });
 
   it("keeps engine evidence out of human judgments and pins the move-loss template", async () => {

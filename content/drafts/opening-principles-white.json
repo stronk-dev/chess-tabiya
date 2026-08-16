@@ -446,15 +446,55 @@
       "UNGROUNDED: every strategic claim — the objective summary, all three plan-class descriptions, all spine annotations, all deviation classifications and notes, and all feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE. The principle vocabulary (centre, development, king safety, early-queen tax) is standard chess pedagogy rendered from model knowledge with no named source.",
       "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 7 decision positions and 21 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on a claim clears a blocker.",
-      "ENGINE-CHECKED 2026-08-15. Depth-22 costs against the best evaluated candidate: 1.h4 0.91, 1.Nh3 1.07, 1.f3 1.09, 2.Qh5 0.75; the tactical_error rows 3.Nxe5 2.64, 3.Ng5 4.16 and 4.Ng5 4.07. Every classified move costs something. On 2.Qh5 specifically: after 2.Qh5 Nc6 3.Bc4 g6 White evaluates -0.37, so the engine agrees the sortie is bad here — but that is not what the note claims. The note's claim is a practical tax at 1000-1400, which remains a Maia/corpus question, and NO corpus pull or Maia run was made for it in this pass. That half of the blocker is untouched. The pack's own 1.d4 accepted_alternative is also the best evaluated first move, 0.17 ahead of the spine's 1.e4.",
-      "The material arithmetic behind the three tactical_error branches (Nxe5, Ng5 twice) is rules-derived and was replayed legal, but the follow-up claims ('ends the game's interesting part') are unevaluated prose.",
-      "The guard threshold (250cp) encodes the claim that piece-loss is the right firing line for 1000-1400 and tempo-loss is noise. That is an authored hypothesis about a rating band; no corpus or play-test evidence supports the specific number.",
-      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
-      "CORPUS-CHECKED 2026-08-15 and NOT ANSWERABLE from repo data: this pack targets the 1000-1400 band, but both shipped Lichess-explorer artifacts (content/candidates/priority/priority.json and content/candidates/priority-wave4a/priority.json) were pulled at ratings 1400/1600/1800 only. Every 'what players at this level actually play' claim in this pack therefore has no corpus behind it and cannot acquire one without a new explorer pull at the 1000/1200/1400 bands. The 2026-08-15 engine pass measured what the moves cost; it says nothing about how often they are played.",
-      "PROSE GROUNDING PASS 2026-08-15. Wave G1 grounded MOVES and left prose, plan classes and deviation classes untouched by design. This pass checked the mechanically checkable subset of the prose - attacker and defender counts, piece mobility counts, legality, checkmate and pawn geometry - with the repo's own direct_attack_count, line_blockers and chessops move generation. One claim was refuted and corrected in place: the Nh3 deviation counted two central squares from h3 against four from f3; the measured counts are zero and two. Claims of this kind that were checked and held are not annotated. Strategic prose, plan-class descriptions and deviation classes remain exactly as ungrounded as before."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on a claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "engine-checked-2026-08-15-depth-22-costs-against-the-bes",
+        "state": "blocking",
+        "statement": "ENGINE-CHECKED 2026-08-15. Depth-22 costs against the best evaluated candidate: 1.h4 0.91, 1.Nh3 1.07, 1.f3 1.09, 2.Qh5 0.75; the tactical_error rows 3.Nxe5 2.64, 3.Ng5 4.16 and 4.Ng5 4.07. Every classified move costs something. On 2.Qh5 specifically: after 2.Qh5 Nc6 3.Bc4 g6 White evaluates -0.37, so the engine agrees the sortie is bad here — but that is not what the note claims. The note's claim is a practical tax at 1000-1400, which remains a Maia/corpus question, and NO corpus pull or Maia run was made for it in this pass. That half of the blocker is untouched. The pack's own 1.d4 accepted_alternative is also the best evaluated first move, 0.17 ahead of the spine's 1.e4."
+      },
+      {
+        "id": "the-material-arithmetic-behind-the-three-tactical-error-",
+        "state": "blocking",
+        "statement": "The material arithmetic behind the three tactical_error branches (Nxe5, Ng5 twice) is rules-derived and was replayed legal, but the follow-up claims ('ends the game's interesting part') are unevaluated prose."
+      },
+      {
+        "id": "the-guard-threshold-250cp-encodes-the-claim-that-piece-l",
+        "state": "blocking",
+        "statement": "The guard threshold (250cp) encodes the claim that piece-loss is the right firing line for 1000-1400 and tempo-loss is noise. That is an authored hypothesis about a rating band; no corpus or play-test evidence supports the specific number."
+      },
+      {
+        "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
+        "state": "resolved",
+        "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
+        "resolved": {
+          "at": "2026-08-16",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      },
+      {
+        "id": "corpus-checked-2026-08-15-and-not-answerable-from-repo-d",
+        "state": "blocking",
+        "statement": "CORPUS-CHECKED 2026-08-15 and NOT ANSWERABLE from repo data: this pack targets the 1000-1400 band, but both shipped Lichess-explorer artifacts (content/candidates/priority/priority.json and content/candidates/priority-wave4a/priority.json) were pulled at ratings 1400/1600/1800 only. Every 'what players at this level actually play' claim in this pack therefore has no corpus behind it and cannot acquire one without a new explorer pull at the 1000/1200/1400 bands. The 2026-08-15 engine pass measured what the moves cost; it says nothing about how often they are played."
+      },
+      {
+        "id": "prose-grounding-pass-2026-08-15-wave-g1-grounded-moves-a",
+        "state": "resolved",
+        "statement": "PROSE GROUNDING PASS 2026-08-15. Wave G1 grounded MOVES and left prose, plan classes and deviation classes untouched by design. This pass checked the mechanically checkable subset of the prose - attacker and defender counts, piece mobility counts, legality, checkmate and pawn geometry - with the repo's own direct_attack_count, line_blockers and chessops move generation. One claim was refuted and corrected in place: the Nh3 deviation counted two central squares from h3 against four from f3; the measured counts are zero and two. Claims of this kind that were checked and held are not annotated. Strategic prose, plan-class descriptions and deviation classes remain exactly as ungrounded as before.",
+        "resolved": {
+          "at": "2026-08-15",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      }
     ]
   }
 }

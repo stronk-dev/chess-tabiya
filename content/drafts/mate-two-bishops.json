@@ -417,12 +417,36 @@
       "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Checkmate §Basic checkmates (CC BY-SA 4.0, read 2026-08-16) states that with two bishops the king and bishops cooperate to \"drive the enemy king to an edge of the board, and then into a corner\", with mate in \"a maximum of 19 moves\". That is the rolling-wall plus king-leads method this pack drills. WHAT IT DOES NOT SUPPLY: the adjacent-diagonal wall geometry, the two-square king distance in the corner-net, and the corner-stalemate density claim are authored. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "CITED 2026-08-16 (partial). The drive-to-edge-then-corner method and the 19-move bound are stated by en.wikipedia.org/wiki/Checkmate §Basic checkmates (CC BY-SA 4.0), attributed in provenance.attribution.",
-      "STILL UNBACKED after the 2026-08-16 citation pass: the adjacent-diagonal \"rolling wall\" formulation, the two-squares-away king placement in the final net, and \"nearly every quiet move is stalemate\" are authored prose with no consulted source. The stalemate density is mechanically checkable and was not checked.",
-      "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
-      "No shape-library entry names the theoretical-mate geometry; commission one if the library should fire on B+B positions in Just Play.",
-      "The natural opponent for a mates pack is perfect_tablebase; that mode is declared-unimplemented in v1, so human_common at 1700 stands in.",
-      "The fifty-move pressure claim is stated but the drill has no counter surfaced; whether the runtime should show the count in mates packs is an open product question."
+      {
+        "id": "cited-2026-08-16-partial-the-drive-to-edge-then-corner-m",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (partial). The drive-to-edge-then-corner method and the 19-move bound are stated by en.wikipedia.org/wiki/Checkmate §Basic checkmates (CC BY-SA 4.0), attributed in provenance.attribution."
+      },
+      {
+        "id": "still-unbacked-after-the-2026-08-16-citation-pass-the-ad",
+        "state": "blocking",
+        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the adjacent-diagonal \"rolling wall\" formulation, the two-squares-away king placement in the final net, and \"nearly every quiet move is stalemate\" are authored prose with no consulted source. The stalemate density is mechanically checkable and was not checked."
+      },
+      {
+        "id": "the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
+        "state": "blocking",
+        "statement": "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced."
+      },
+      {
+        "id": "no-shape-library-entry-names-the-theoretical-mate-geomet",
+        "state": "blocking",
+        "statement": "No shape-library entry names the theoretical-mate geometry; commission one if the library should fire on B+B positions in Just Play."
+      },
+      {
+        "id": "the-natural-opponent-for-a-mates-pack-is-perfect-tableba",
+        "state": "blocking",
+        "statement": "The natural opponent for a mates pack is perfect_tablebase; that mode is declared-unimplemented in v1, so human_common at 1700 stands in."
+      },
+      {
+        "id": "the-fifty-move-pressure-claim-is-stated-but-the-drill-ha",
+        "state": "blocking",
+        "statement": "The fifty-move pressure claim is stated but the drill has no counter surfaced; whether the runtime should show the count in mates packs is an open product question."
+      }
     ],
     "licence": "CC-BY-SA-4.0",
     "attribution": [

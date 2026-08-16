@@ -44,6 +44,7 @@ export {
   type EngineCondition,
   type FeedbackClaim,
   type FeedbackPolicy,
+  type GraduationEntry,
   type FileRange,
   type FileTemplateFeature,
   type MirrorAxis,

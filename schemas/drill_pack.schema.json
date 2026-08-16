@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.26",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.27",
   "title": "Tabiya Drill Pack",
   "description": "Living v0.25 format for an engine-independent authored drill.",
   "type": "object",
@@ -1094,6 +1094,41 @@
       },
       "additionalProperties": false
     },
+    "graduationEntry": {
+      "type": "object",
+      "required": ["id", "state", "statement"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "state": { "enum": ["blocking", "resolved", "accepted"] },
+        "statement": { "$ref": "#/$defs/nonEmptyString" },
+        "clearedBy": { "$ref": "#/$defs/nonEmptyString" },
+        "resolved": {
+          "type": "object",
+          "required": ["at", "by"],
+          "properties": {
+            "at": { "type": "string", "format": "date" },
+            "by": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        "accepted": {
+          "type": "object",
+          "required": ["kind", "ruling", "rulingRef"],
+          "properties": {
+            "kind": { "enum": ["owner_ruling", "permanent_property", "out_of_scope"] },
+            "ruling": { "$ref": "#/$defs/nonEmptyString" },
+            "rulingRef": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "oneOf": [
+        { "properties": { "state": { "const": "blocking" } }, "not": { "anyOf": [{ "properties": { "resolved": {} }, "required": ["resolved"] }, { "properties": { "accepted": {} }, "required": ["accepted"] }] } },
+        { "properties": { "state": { "const": "resolved" }, "resolved": {} }, "required": ["resolved"], "not": { "anyOf": [{ "properties": { "clearedBy": {} }, "required": ["clearedBy"] }, { "properties": { "accepted": {} }, "required": ["accepted"] }] } },
+        { "properties": { "state": { "const": "accepted" }, "accepted": {} }, "required": ["accepted"], "not": { "anyOf": [{ "properties": { "clearedBy": {} }, "required": ["clearedBy"] }, { "properties": { "resolved": {} }, "required": ["resolved"] }] } }
+      ],
+      "additionalProperties": false
+    },
     "provenance": {
       "type": "object",
       "required": ["reviewStatus"],
@@ -1104,9 +1139,27 @@
         "sources": {
           "type": "array",
           "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "licence": { "$ref": "#/$defs/nonEmptyString" },
+        "reviewers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "attribution": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "graduationBlockers": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "$ref": "#/$defs/graduationEntry" },
+              { "$ref": "#/$defs/nonEmptyString" }
+            ]
+          }
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     }
   }
 }

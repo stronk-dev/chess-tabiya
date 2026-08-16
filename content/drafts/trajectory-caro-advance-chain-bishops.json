@@ -929,14 +929,42 @@
       "LIQUIDATION HONESTY: the trade sequence from ply 21 to 45 (knights on g3 and b3, queens on b3, both rook pairs on the c-file, the last recapture Bxc1) is a single agent-authored plausible continuation, chosen so that every capture has a legal recapture (verified) and so that the heavy-piece trades run down the file the ...c5 break opened. It is not forced, not engine-checked, and not claimed to be best play; it is the causal road this guided trajectory rehearses.",
       "UNGROUNDED: every strategic claim - leg summaries, annotations, deviation judgments, the 5...Bg4 concept_violation, and the leg-3 authored hold assessment - is agent-authored prose with no citation, no engine evaluation and no human review."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13); only a citable source or mechanical validation that bears on a claim clears a blocker.",
-      "The central claim - that the chain's pawn-colour census makes the single-bishop ending structurally better for Black - is exactly the kind of endgame-consequence assertion the sibling packs' blockers flag. The census itself is mechanical; the evaluation needs an engine pass or a citable endgame source, and has neither.",
-      "The authored liquidation (plies 21-45) is one plausible road; nothing grounds how often 1400-2000 games from this middlegame reach any bishop ending. Explorer data cannot see this deep; the Go corpus pipeline is the instrument that could.",
-      "5.Bd3 and the entire trade-toward-the-ending plan are uncited model knowledge; the concept_violation on 5...Bg4 is the file's strongest uncited judgment and is engine-checkable at fixed depth.",
-      "The ...a5 endgame deviation note raises a colour-complex question and deliberately does not answer it; answering it honestly requires engine evidence this repo has not produced.",
-      "Inherited from the closed-centre-chain entry: its trigger encodes only the d4-e5 versus d5-e6 interlock, and its plan prose is uncited Nimzowitsch-tradition doctrine."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13); only a citable source or mechanical validation that bears on a claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "the-central-claim-that-the-chain-s-pawn-colour-census-ma",
+        "state": "blocking",
+        "statement": "The central claim - that the chain's pawn-colour census makes the single-bishop ending structurally better for Black - is exactly the kind of endgame-consequence assertion the sibling packs' blockers flag. The census itself is mechanical; the evaluation needs an engine pass or a citable endgame source, and has neither."
+      },
+      {
+        "id": "the-authored-liquidation-plies-21-45-is-one-plausible-ro",
+        "state": "blocking",
+        "statement": "The authored liquidation (plies 21-45) is one plausible road; nothing grounds how often 1400-2000 games from this middlegame reach any bishop ending. Explorer data cannot see this deep; the Go corpus pipeline is the instrument that could."
+      },
+      {
+        "id": "5-bd3-and-the-entire-trade-toward-the-ending-plan-are-un",
+        "state": "blocking",
+        "statement": "5.Bd3 and the entire trade-toward-the-ending plan are uncited model knowledge; the concept_violation on 5...Bg4 is the file's strongest uncited judgment and is engine-checkable at fixed depth."
+      },
+      {
+        "id": "the-a5-endgame-deviation-note-raises-a-colour-complex-qu",
+        "state": "blocking",
+        "statement": "The ...a5 endgame deviation note raises a colour-complex question and deliberately does not answer it; answering it honestly requires engine evidence this repo has not produced."
+      },
+      {
+        "id": "inherited-from-the-closed-centre-chain-entry-its-trigger",
+        "state": "blocking",
+        "statement": "Inherited from the closed-centre-chain entry: its trigger encodes only the d4-e5 versus d5-e6 interlock, and its plan prose is uncited Nimzowitsch-tradition doctrine."
+      }
     ]
   }
 }

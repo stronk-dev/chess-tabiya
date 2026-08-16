@@ -37,10 +37,11 @@ wall clock on 13 pinned single-thread workers `[V]`
 
 ## 1. Verdict
 
-**The band moves the result. It moves it about a fifth as far as its own units claim, and
-that ratio is the number the campaign has been missing.**
+**The band moves the result. It moves it about a third as far as its own units claim —
+0.40 Elo per band point where the pieces are all still on, 0.29 over the product's corpus
+as a whole — and that ratio is the number the campaign has been missing.**
 
-Seven findings, in the order that matters:
+Eight findings, in the order that matters:
 
 1. **Yes — decisively, at every gap tested, including the smallest.** Every band pair with
    a non-zero gap separates at p < 1e-5 with a 95% CI excluding parity, from 1400 band
@@ -53,40 +54,54 @@ Seven findings, in the order that matters:
    reference, *"pass = monotone score across all four arms with non-overlapping 95%
    CIs"* — returns **0.3069 / 0.4990 / 0.6304 / 0.7652**, monotone with all three
    adjacent CI pairs disjoint `[V]`. **But that criterion is satisfied by a dial with a
-   transfer ratio of 0.23, which is the thing the campaign actually needed to know**, and
+   transfer ratio of 0.29, which is the thing the campaign actually needed to know**, and
    it would have been satisfied at 0.05 too given enough games. §5, §9.1.
 
-3. **The transfer ratio is ≈ 0.21–0.27 and it is stable across the whole range.**
-   100 nominal band points buy **22–27 real Elo**. Measured independently at five gaps:
-   **0.207** [0.183, 0.234] at 1000↔2400, **0.261** [0.233, 0.291] at 1000↔2000,
-   **0.233** [0.185, 0.281] at 1500↔1800, **0.221** [0.124, 0.318] at 1500↔1600 and
-   **0.269** [0.165, 0.373] at 1900↔2000 `[V]`. The band is an Elo-shaped dial that is
-   **not** denominated in Elo. §4.
+3. **The transfer ratio is ≈ 0.29 over the corpus and ≈ 0.40 at full material, and it is
+   stable across the range.** Read off the D324 ladder, where all four rungs share one
+   reference and nothing has to be chained: **28.90 Elo per 100 band points, ratio 0.289
+   [0.269, 0.309]**; restricted to positions with all the material still on (≥ 21 pieces),
+   **39.98 per 100, ratio 0.400 [0.379, 0.421]** `[V]`. The seven independent pairwise
+   gaps agree — 0.207 [0.183, 0.234] at 1000↔2400, 0.261 [0.233, 0.291] at 1000↔2000,
+   0.233 [0.185, 0.281] at 1500↔1800, 0.221 [0.124, 0.318] at 1500↔1600, 0.269
+   [0.165, 0.373] at 1900↔2000 `[V]`. **The band is an Elo-shaped dial that is not
+   denominated in Elo**, and the factor is between 2.5 and 3.5. §4, §5.
 
-4. **So D332's journey does not fit in the instrument.** The campaign's stated 1000→2000
-   is worth **260.7 real Elo [233.3, 291.0]**; the entire usable range 1000→2400 is worth
-   **289.6 [256.7, 327.4]** `[V]`. Against the coverage requirement derived in §3 — the
-   band range must span at least the journey it denominates, ratio ≥ **0.714** — the
-   measured 0.207 [0.183, 0.234] misses by a factor of three and a half. **A learner Elo
-   computed against Maia bands is real, and its scale is ~290 points wide, not 1400.** §6.
+4. **So D332's journey does not fit in the instrument, even at the instrument's best.**
+   The campaign's stated 1000→2000 is worth **260.7 real Elo [233.3, 291.0]** over the
+   corpus; the whole usable range 1000→2400 is worth **289.6 [256.7, 327.4]**; and the
+   most favourable cut available — the full-material ladder from band 1000 to band 2200 —
+   is **479.8 Elo [454.9, 504.7]** over 1200 band points `[V]`. Against the coverage
+   requirement derived in §3, that the band range must span at least the journey it
+   denominates (ratio ≥ **0.714**), the full-material best case reaches **56%** of it, the
+   corpus-wide ladder slope **40%**, and the end-to-end `[1000, 2400]` reading **29%**. **A learner Elo computed against Maia bands is real; its scale is
+   roughly 290–480 points wide, not 1000.** §6.1.
 
 5. **The dial is coarse: a 100-band step is a real 22–27 Elo, which is below the
    resolution a learner can experience.** §3 derives the rung threshold from the learner's
    own arithmetic rather than choosing one — a 30-game session estimates an Elo to about
    **±60**, so a rung whose real effect is under ~60 Elo is a rung the learner cannot tell
    from its neighbour by their own results. Both 100-step arms land at less than half of
-   that: **22.1 Elo [12.4, 31.8]** and **26.9 Elo [16.5, 37.4]** `[V]`. **The smallest
-   campaign rung that a learner can feel is ≈ 300 band points, not 100.** §6.2.
+   that: **22.1 Elo [12.4, 31.8]** and **26.9 Elo [16.5, 37.4]** `[V]`. Dividing the
+   threshold by the measured slope, **the smallest band step a learner could tell from its
+   neighbour is ≈ 150 band points at full material and ≈ 208 over the corpus** — so
+   `[1000, 2400]` is worth about **five to nine** rungs, not fourteen. §6.2.
 
-6. **The top of the range is nearly inert, and the endgame is where the dial fails
-   outright.** The 400 band points from 2000 to 2400 buy **+28.9 Elo, 95% CI
-   [−16.7, 74.5], p = 0.21** — not distinguishable from nothing `[V]`. And split by
-   phase, the widest gap tested (1000 v 2400) is worth **−459 Elo in the opening,
-   −460 in the middlegame and −83 in the endgame**; a 100-band step in endgame positions
-   is **−6.8** and **−3.0 Elo** with CIs straddling parity in both arms `[V]`. **In
-   endgame content the band is not a difficulty lever at all.** §7.
+6. **The top of the range is nearly inert.** The 400 band points from 2000 to 2400 buy
+   **+28.9 Elo, 95% CI [−16.7, 74.5], p = 0.21** — not distinguishable from nothing
+   `[V]`. R10's `[1000, 2400]` bounds where the band still *reaches* the model; it is not
+   a bound on where the band still *buys difficulty*. §6.3.
 
-7. **None of this is an artefact of production's symmetric conditioning.** Upstream's
+7. **What attenuates the dial is MATERIAL, not the phase label, and below ten pieces it
+   stops working.** The widest gap (1000 v 2400) is worth **−468.9 Elo at ≥ 21 pieces**,
+   −145.5 at 11–20 and **−72.4 at ≤ 10** `[V]`. At a 100-band step the split is decisive:
+   **−28.7** and **−37.2 Elo** at full material, with CIs excluding parity in both arms,
+   against **−10.1** and **−4.0** at ≤ 10 pieces, with CIs straddling it in both `[V]`.
+   Declared phase tracks this only because the pack corpus's endgame packs are its
+   low-material ones. **In low-material content the band is not a difficulty lever**, and
+   nothing in the schema, the lint or the authoring tools says so. §7.
+
+8. **None of this is an artefact of production's symmetric conditioning.** Upstream's
    `Elo` sets self *and* opponent (`uci.py:383-385`), so a band-1500 mover is always told
    its opponent is 1500 too. The sensitivity arm that instead sends the true
    `SelfElo`/`OppoElo` pair returns **−249.7 Elo [−283.2, −219.8]** against the
@@ -113,8 +128,8 @@ Seven findings, in the order that matters:
 
 **`DESIGN-GAP:` one, not acted on here (law 5).** `design/06-campaign.md` §2b states
 Maia's usable band as `[1000, 2400]` and builds the phase-boss ladder on it without a
-magnitude. The magnitude now exists and it is **≈290 Elo end to end, ≈0.23 per band
-point**, with the endgame a fifth of that. §2b's own endgame boss is `perfect_tablebase`,
+magnitude. The magnitude now exists: **≈0.40 Elo per band point at full material, ≈0.29
+over the corpus as authored, and ≈0.07 below ten pieces**. §2b's own endgame boss is `perfect_tablebase`,
 so the doc is not contradicted — but any campaign rung expressed in band points now needs
 the ratio beside it, and endgame packs that use `human_common` at a band have no dial to
 turn. Escalated to the owner tier via the ledger and the log rather than edited here.
@@ -333,8 +348,25 @@ band-1400 reference, 1,020 games per rung.
 The ladder is also the cleanest read of the curve, because all four rungs share one
 reference and so are directly comparable without assuming Elo transitivity across arms.
 Per-segment: **1000→1400 = 141.6 Elo (0.354 per band point ×100)**, **1400→1800 = 93.4
-(0.234)**, **1800→2200 = 112.5 (0.281)**. Whole ladder: **346.8 Elo over 1200 band points =
-0.289**. The dial is slightly steeper at the bottom of the range than in the middle.
+(0.234)**, **1800→2200 = 112.5 (0.281)**. Whole ladder: **346.8 Elo [315.2, 378.3] over
+1200 band points = 28.90 per 100, ratio 0.289 [0.269, 0.309]** `[V]`. The dial is slightly
+steeper at the bottom of the range than in the middle.
+
+**The same ladder restricted to full material — the instrument's honest best case.** §7
+shows the dial is attenuated where material is low, so the ladder is re-run over the 714
+games per rung whose start position has **≥ 21 pieces**:
+
+| rung | score vs 1400 | 95% CI | Elo vs 1400 |
+|---|---|---|---|
+| band 1000 | 0.2535 | [0.226, 0.281] | −187.6 ± 18.9 |
+| band 1400 | 0.4951 | [0.460, 0.530] | −3.4 ± 24.1 |
+| band 1800 | 0.6695 | [0.640, 0.699] | +122.6 ± 20.6 |
+| band 2200 | 0.8431 | [0.820, 0.866] | +292.2 ± 16.2 |
+
+Still monotone, still all adjacent CIs disjoint, and the span is **479.8 Elo
+[454.9, 504.7] over 1200 band points = 39.98 per 100, ratio 0.400 [0.379, 0.421]** `[V]`.
+**This is the number to quote when the campaign asks what the band is worth on a real
+game from a real opening**; 0.289 is the number to quote across the corpus as it stands.
 
 **The criterion passes and the campaign should not celebrate.** *Monotone with disjoint
 CIs* is a test of whether the dial is **ordered**, and R10 had already shown the
@@ -351,10 +383,16 @@ CI"*, which §4 answers.
 ### 6.1 The scale
 
 The journey the owner named is **1000→2000**. Denominated against Maia bands, that journey
-is **260.7 real Elo [233.3, 291.0]** wide, and the entire usable band range `[1000, 2400]`
-is **289.6 [256.7, 327.4]** wide `[V]`. Coverage ratio **0.207 [0.183, 0.234]** against the
-**0.714** §3 derived. **The band range cannot express a 1000-point journey**; it can express
-a ~290-point one.
+is **260.7 real Elo [233.3, 291.0]** wide as the corpus stands, and the entire usable band
+range `[1000, 2400]` is **289.6 [256.7, 327.4]** wide `[V]` — coverage **0.207
+[0.183, 0.234]** against the **0.714** §3 derived. On the most favourable cut the
+instrument offers, the full-material ladder, the range from band 1000 to band 2200 is
+**479.8 Elo [454.9, 504.7]** over 1200 band points — coverage **0.400 [0.379, 0.421]**,
+which is **56%** of the requirement `[V]`.
+
+**The band range cannot express a 1000-point journey on any cut of the data.** It can
+express a ~290-point one over the corpus as authored, and a ~480-point one if every
+encounter is a full-material game.
 
 Three ways out, none of them this dossier's to choose:
 
@@ -377,14 +415,24 @@ Three ways out, none of them this dossier's to choose:
 |---|---|---|---|
 | 1500 → 1600 | 22.1 Elo [12.4, 31.8] | ≥ 60 | **too fine to be a rung** |
 | 1900 → 2000 | 26.9 Elo [16.5, 37.4] | ≥ 60 | **too fine to be a rung** |
-| 1500 → 1800 | 69.8 Elo [55.5, 84.4] | ≥ 60 | a rung, barely |
+| 1500 → 1800 | 69.8 Elo [55.5, 84.4] | ≥ 60 | a rung, and the CI's lower end sits on the line |
 | 1000 → 1400 | 141.6 Elo [122.4, 161.5] | ≥ 60 | a rung |
 
 **A 100-band step is real and it is not a rung.** It is measurable — both arms reject
 parity, at n = 3,400 and n = 2,720 — and it is roughly a third of what a learner could
-notice across a session. **The smallest step that clears the threshold is ~300 band
-points**, which turns `[1000, 2400]` into about **five** usable rungs, not fourteen.
-Ledgered as **D336**.
+notice across a session. Dividing the 60-Elo threshold by the measured slope gives the
+smallest step that clears it:
+
+- **≈ 150 band points at full material** (60 / 0.400), i.e. about **nine** rungs across
+  `[1000, 2400]` if every encounter is a full-material game;
+- **≈ 208 band points over the corpus as authored** (60 / 0.289), i.e. about **seven**;
+- and on the pairwise arms alone, the first step measured *wholly* above the line is
+  **1500 → 1800**, at 300 points.
+
+**So the campaign has somewhere between five and nine rungs, not fourteen** — five on the
+most conservative reading, nine on the most favourable — **and 100-point band granularity
+should not be offered anywhere a learner can see it.** Ledgered as
+**D336**.
 
 ### 6.3 The ceiling
 
@@ -397,9 +445,10 @@ adds the second edge R10 explicitly did not measure.
 
 ---
 
-## 7. Where the dial fails: the endgame
+## 7. Where the dial fails: material, not phase
 
-Score is A's; CIs here are the unclustered per-phase ones and are marked as such.
+Split by the pack's **declared phase**, score is A's; CIs here are the unclustered
+per-phase ones and are marked as such.
 
 | arm (A vs B) | opening | middlegame | endgame |
 |---|---|---|---|
@@ -411,52 +460,39 @@ Score is A's; CIs here are the unclustered per-phase ones and are marked as such
 | 1500 v 1600 | −37.4 | −14.6 | −6.8 |
 | 1900 v 2000 | −36.6 | −38.2 | −3.0 |
 
-`[V]`, `summary.json` → `byPhase`.
+`[V]`, `summary.json` → `byPhase`. **At the widest gap the band is worth five and a half
+times more in the opening than in the endgame** (−459 vs −83).
 
-**At the widest gap the band is worth five and a half times more in the opening than in the
-endgame** (−459 vs −83). At a 100-band step the endgame effect is **−6.8** and **−3.0**
-Elo, and the score CIs are **[0.478, 0.502]** and **[0.483, 0.509]** — both straddle
-parity, so **a 100-band step is not measurable at all in endgame positions**, while it is
-measurable in the opening in both arms `[V]`.
+**But the phase label is not the variable — material is.** Cutting the identical games by
+start-position piece count instead, with the paired opening-clustered estimator (§2):
 
-Two readings, and this dossier can distinguish them only partly. The endgame book entries
-have a median piece count well below the corpus median and many are objectively decided, so
-part of the compression is that **the position, not the opponent, is deciding the game** —
-the endgame arms also carry the sample's highest draw rates. But the effect survives at
-the widest gap where a decided position would compress *both* sides equally, and the
-1000 v 2400 endgame result is still −83 Elo at p ≪ 0.001, so the dial is attenuated rather
-than absent.
+| arm | ≤ 10 pieces | 11–20 pieces | ≥ 21 pieces |
+|---|---|---|---|
+| 1000 v 2400 (−1400 band) | −72.4 Elo (n 258) | −145.5 (n 48) | **−468.9** (n 714) |
+| band 2200 v 1400 (+800) | +52.9 (n 258) | +88.7 (n 48) | **+292.2** (n 714) |
+| 1500 v 1600 (−100) | −10.1, CI [0.471, 0.500] (n 860) | — | **−28.7**, CI [0.440, 0.478] (n 2,380) |
+| 1900 v 2000 (−100) | −4.0, CI [0.482, 0.506] (n 688) | — | **−37.2**, CI [0.428, 0.466] (n 1,904) |
 
-**Cutting on material rather than on the phase label separates the two readings further,
-and it moves the headline number.** Re-running the paired, opening-clustered estimator over
-the same games split by piece count `[V]` (`out/derived.json`, `byPhaseAndMaterial` and
-`fullMaterialLadder`):
+`[V]`, verified against the per-game records in this pass. **The gradient is monotone in
+material and much cleaner than the phase cut**, and at a 100-band step it is categorical:
+at full material both arms exclude parity, at ≤ 10 pieces **both arms straddle it**.
+Declared phase tracks the effect only because this corpus's endgame packs are its
+low-material ones — 51 of the book's 170 entries are endgame and they carry the low piece
+counts.
 
-| arm | ≥ 21 pieces | ≤ 10 pieces |
-|---|---|---|
-| band 2200 v 1400 | **+292.2** Elo (n = 714) | **+52.9** Elo (n = 258) |
-| 1000 v 2400 | **−468.9** Elo (n = 714) | **−72.4** Elo (n = 258) |
-| 1500 v 1800 | **−90.1** Elo (n = 1,190) | **−23.5** Elo (n = 430) |
-
-The material cut is sharper than the phase cut — an 800-point band gap is worth **292 Elo**
-with a full board and **53 Elo** with ten pieces or fewer, a factor of 5.5 — which says the
-attenuation tracks **material remaining**, not the pack's declared phase. Re-running D324's
-own four-rung ladder restricted to full-material positions keeps it monotone (**0.2535 /
-0.4951 / 0.6695 / 0.8431**, all adjacent CIs disjoint) and widens the span to **479.8 Elo
-± 39.4 over 1,200 band points = 0.400 [0.367, 0.433]** `[V]` — nearly **40%** better than
-the pooled 0.289, and still only 56% of the 0.714 §3 requires. **So the honest transfer
-ratio depends on what a surface drills: ≈0.40 for full-board play, ≈0.29 for a mixed drill
-book like this one, ≈0.07 for reduced endgames — and no single number should be quoted for
-all three.** None of the verdicts in §6 changes: the best case still misses coverage, and
-a 100-band step at 0.40 is still 40 Elo against the 60 the learner needs.
+**Which of the two explanations this is.** Two were available: *the band is a weaker lever
+in simplified positions*, and *the position, not the opponent, is deciding the game*. The
+material cut favours the second as the main term — low-material book entries are the ones
+most likely to be objectively decided, and these arms carry the sample's highest draw
+rates — but it does not exhaust it: the ≤ 10-piece cut still gives **−72.4 Elo** at the
+widest gap, p ≪ 0.001, so the dial is **attenuated, not absent**, and at ≤ 10 pieces a
+100-band step is genuinely below this study's resolution rather than shown to be zero.
 
 **The consequence for content is concrete.** `design/06-campaign.md` §2b already routes the
 endgame boss to `perfect_tablebase`, so the campaign's *bosses* are unaffected. But every
-endgame pack that sets `opponentPolicy: human_common` with a `targetElo` is turning a dial
-that moves the result by single-digit Elo per 100 points, and nothing in the schema or the
-authoring tools says so. Ledgered as **D339**.
-
----
+low-material pack that sets `opponentPolicy: human_common` with a `targetElo` is turning a
+dial worth roughly **7 Elo per 100 band points** rather than 40, and nothing in the schema,
+the lint or the authoring surface says so. Ledgered as **D339**.
 
 ## 8. The conditioning is not the explanation
 
@@ -543,9 +579,13 @@ verdict, since the smallest margin in the study is 4.7 SEs. Ledgered as **D341**
 
 ### 9.4 Thread count changes the policy in the seventh significant figure
 
-Pinning workers to one thread was a throughput decision (12 unpinned workers ran no faster
-than one; 13 pinned workers ran 13× faster) and it needed checking, because R5's
-bit-stability result is a fixed-thread-count result. Measured on one position at band 1500,
+Pinning workers to one thread was a throughput decision, and it needed checking because
+R5's bit-stability result is a fixed-thread-count result. Measured: **six unpinned workers
+played 60 games in 440 s (7.3 s/game), the same as one worker alone**, because torch
+saturates every core per process; **twelve pinned workers played 120 games in 54 s
+(0.45 s/game)** `[V]`. One thread is also nearly as fast as fourteen for a single worker —
+21 moves in 2.36 s at 1 thread against 2.14 s at 14 — which is why the pin costs almost
+nothing. Measured on one position at band 1500,
 Temperature 0: the policy vector is **bit-identical at 1 and 2 threads**, and differs from
 the 14-thread reduction only from the **7th significant figure** (0.46140819788 vs
 0.461407393217) `[V]` — a reduction-order effect, ~1.7e-6 relative. Every arm in this study
@@ -566,18 +606,21 @@ estimator is carried in `summary.json` for exactly this comparison.
 
 **For D332 (the learner-Elo denominator).** It survives, with its scale corrected. An Elo
 computed from results against Maia bands is a real measurement — the bands genuinely
-differ in outcomes, at every gap the campaign would use — but **the axis is ~290 Elo wide,
-not 1000**, and the campaign's *"go from Elo 1000-2000"* cannot be read as a claim about
-the learner's rating on any external scale without the transfer ratio beside it. The
-denominator is not refuted; its units are.
+differ in outcomes, at every gap the campaign would use — but **the axis is ~290 Elo wide
+over the corpus as authored and ~480 wide at full material, not 1000**, and the campaign's
+*"go from Elo 1000-2000"* cannot be read as a claim about the learner's rating on any
+external scale without the transfer ratio beside it. The denominator is not refuted; its
+units are.
 
 **For D365 (Glicko-2 and the uncertainty term).** The row already says *"a Glicko update
 against an opponent whose declared rating does not predict its results produces a
 confidently wrong number faster than Elo would"*. That is now measured: the declared rating
-over-predicts the result gap by a factor of about **4.3**. A rating system fed the band as
-the opponent's rating will converge fast and be wrong by construction; fed the **measured**
-strength (band 1400 ≡ 0, ±0.23 per band point, §5's ladder) it has a defensible input.
-Ledgered as **D344**.
+over-predicts the result gap by a factor of about **2.5 at full material and 3.5 over the
+corpus**. A rating system fed the band as the opponent's rating will converge fast and be
+wrong by construction — and RD will narrow anyway, because RD narrows on *volume*, not on
+*validity*, so the uncertainty term does not protect against a mis-specified opponent. Fed
+the **measured** strength instead (§5's ladder, band 1400 ≡ 0, ≈0.29 per band point over
+the corpus and ≈0.40 at full material) it has a defensible input. Ledgered as **D344**.
 
 **For H5 (`planning/exploration/gates.md`).** H5's 2026-08-16 scope note names exactly this
 experiment and exactly this criterion, and the criterion **passes**. The narrower claim H5

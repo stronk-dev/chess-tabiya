@@ -19,6 +19,7 @@ function pack(horizon = 2): DrillPackDefinition {
   return {
     id: "line-test",
     version: "1",
+    provenance: { reviewStatus: "draft" },
     mode: "line",
     start: { fen: INITIAL_FEN, side: "white" },
     objective: { type: "follow_theory", summary: "Recall the line" },

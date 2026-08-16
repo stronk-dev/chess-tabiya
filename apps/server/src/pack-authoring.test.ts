@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -309,15 +311,15 @@ describe("pack authoring validation", () => {
   });
 
   it("admits the authored negative transition condition demonstrated by a deviation edge", () => {
-    const pack = JSON.parse(readFileSync("content/drafts/mate-k-q-technique.json", "utf8")) as DrillPackDefinition;
+    const pack = JSON.parse(readFileSync(resolvePackPath("mate-k-q-technique"), "utf8")) as DrillPackDefinition;
     const issues = validatePackDocument(pack).issues;
     expect(issues.some((issue) => issue.code === "TRANSITION_EXPRESSION_NEVER_ABSENT")).toBe(false);
     expect(issues.some((issue) => issue.code === "TRANSITION_EXPRESSION_NEVER_PRESENT")).toBe(false);
   });
 
   it("proves root-after-move variants and refuses false or absent siblings", () => {
-    const sibling = JSON.parse(readFileSync("content/drafts/philidor-third-rank-hold.json", "utf8")) as DrillPackDefinition;
-    const candidate = JSON.parse(readFileSync("content/drafts/philidor-passive-rook-convert.json", "utf8")) as DrillPackDefinition;
+    const sibling = JSON.parse(readFileSync(resolvePackPath("philidor-third-rank-hold"), "utf8")) as DrillPackDefinition;
+    const candidate = JSON.parse(readFileSync(resolvePackPath("philidor-passive-rook-convert"), "utf8")) as DrillPackDefinition;
     const packs = new Map([[sibling.id, { start: sibling.start, objective: { type: sibling.objective.type } }]]);
     expect(validatePackDocument(candidate, { packs }).issues.filter((issue) => issue.code.startsWith("VARIANT_"))).toEqual([]);
     const board = Chess.fromSetup(parseFen(sibling.start.fen).unwrap()).unwrap();
@@ -333,8 +335,8 @@ describe("pack authoring validation", () => {
     expect(validatePackDocument(absent, { packs }).issues).toContainEqual(expect.objectContaining({ code: "VARIANT_PACK_UNKNOWN" }));
     expect(validatePackDocument(absent).issues.some((issue) => issue.code === "VARIANT_PACK_UNKNOWN")).toBe(false);
 
-    const mate = JSON.parse(readFileSync("content/drafts/mate-bishop-knight.json", "utf8")) as DrillPackDefinition;
-    const trajectory = JSON.parse(readFileSync("content/drafts/trajectory-mate-bishop-knight.json", "utf8")) as DrillPackDefinition;
+    const mate = JSON.parse(readFileSync(resolvePackPath("mate-bishop-knight"), "utf8")) as DrillPackDefinition;
+    const trajectory = JSON.parse(readFileSync(resolvePackPath("trajectory-mate-bishop-knight"), "utf8")) as DrillPackDefinition;
     const trajectoryPacks = new Map([[mate.id, { start: mate.start, objective: { type: mate.objective.type } }]]);
     expect(validatePackDocument(trajectory, { packs: trajectoryPacks }).issues.filter((issue) => issue.code.startsWith("VARIANT_"))).toEqual([]);
   });
@@ -401,7 +403,7 @@ describe("pack authoring validation", () => {
 
   it("refuses atStart as a later trajectory entry and over-budget leg totals", () => {
     const candidate = JSON.parse(
-      readFileSync("content/drafts/trajectory-mate-bishop-knight.json", "utf8"),
+      readFileSync(resolvePackPath("trajectory-mate-bishop-knight"), "utf8"),
     ) as DrillPackDefinition;
     const entryId = candidate.legs![1]!.entryCheckpointId!;
     const checkpoint = candidate.checkpoints.find((value) => value.id === entryId)!;

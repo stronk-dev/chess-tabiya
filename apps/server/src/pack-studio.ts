@@ -5,7 +5,7 @@ import { canonicalizeJson, type DrillPackDefinition, type JsonValue } from "@che
 import type { Principal } from "./authorization.js";
 import { ServerError } from "./errors.js";
 import { PackRegistry } from "./pack-registry.js";
-import { validatePackDocument, type PackValidationResult } from "./pack-validation.js";
+import { graduationEntryIsBlocking, validatePackDocument, type PackValidationResult } from "./pack-validation.js";
 import { SQLiteRunStorage, type StoredPackDraft } from "./storage.js";
 import type { ShapeRegistry } from "./shape-registry.js";
 
@@ -119,7 +119,7 @@ export class PackStudio {
     const raw = structuredClone(draft.document) as Record<string, unknown>;
     const provenance = raw.provenance as Record<string, unknown>;
     const blockers = provenance.graduationBlockers;
-    if (Array.isArray(blockers) && blockers.length > 0) {
+    if (Array.isArray(blockers) && blockers.some(graduationEntryIsBlocking)) {
       throw new ServerError("GRADUATION_BLOCKERS_OUTSTANDING", "Clear declared graduation blockers before registration");
     }
     provenance.reviewStatus = "published";

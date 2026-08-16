@@ -55,13 +55,13 @@ function negativeFixture(filename: string): unknown {
   return json(`../../../schemas/fixtures/drill-pack/${filename}`);
 }
 
-describe("drill_pack.schema.json v0.26", () => {
+describe("drill_pack.schema.json v0.27", () => {
   it("validates the amended living Najdorf fixture against the living schema", () => {
     expect(validate(livingFixture), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-pack:0.26",
+      $id: "urn:chess-tabiya:schema:drill-pack:0.27",
     });
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.26");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.27");
   });
 
   it("binds schema vocabularies to the shared constants", () => {
@@ -151,7 +151,7 @@ describe("drill_pack.schema.json v0.26", () => {
       for (const [key, child] of Object.entries(object)) walk(child, `${path}/${key}`);
     };
     walk(schema, "");
-    expect(paths).toEqual(["/$defs/provenance"]);
+    expect(paths).toEqual([]);
     expect((schema as any).$defs.structuralFeature.oneOf.every((branch: any) => branch.additionalProperties === false)).toBe(true);
     expect((schema as any).$defs.structuralExpression.oneOf.every((branch: any) => branch.additionalProperties === false)).toBe(true);
   });
@@ -210,6 +210,9 @@ describe("drill_pack.schema.json v0.26", () => {
     const drafts = readdirSync(new URL("../../../content/drafts/", import.meta.url), { withFileTypes: true })
       .filter((entry) => entry.isFile() && entry.name.endsWith(".json") && ![".evidence.json", ".sources.json", ".job.json"].some((suffix) => entry.name.endsWith(suffix)))
       .map((entry) => new URL(`../../../content/drafts/${entry.name}`, import.meta.url));
+    const packs = readdirSync(new URL("../../../content/packs/", import.meta.url), { withFileTypes: true })
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".json") && ![".evidence.json", ".sources.json", ".job.json"].some((suffix) => entry.name.endsWith(suffix)))
+      .map((entry) => new URL(`../../../content/packs/${entry.name}`, import.meta.url));
     const candidates = readdirSync(new URL("../../../content/candidates/", import.meta.url), { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => new URL(`../../../content/candidates/${entry.name}/pack.json`, import.meta.url))
@@ -218,6 +221,7 @@ describe("drill_pack.schema.json v0.26", () => {
       new URL("../../../schemas/drill_pack.example.json", import.meta.url),
       new URL("../../../schemas/fixtures/drill-pack/terminal-outcome.browser.json", import.meta.url),
       ...drafts,
+      ...packs,
       ...candidates,
     ];
     expect(documents.length).toBeGreaterThan(2);

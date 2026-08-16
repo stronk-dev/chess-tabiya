@@ -13,8 +13,24 @@
   "start": {
     "fen": "r3kb1r/pp1b1ppp/1qn1p3/3pPn2/3P4/2N2N2/PP2BPPP/R1BQ1RK1 w kq - 3 10",
     "movesSan": [
-      "e4", "e6", "d4", "d5", "e5", "c5", "c3", "Nc6", "Nf3", "Qb6",
-      "Be2", "Bd7", "O-O", "cxd4", "cxd4", "Nge7", "Nc3", "Nf5"
+      "e4",
+      "e6",
+      "d4",
+      "d5",
+      "e5",
+      "c5",
+      "c3",
+      "Nc6",
+      "Nf3",
+      "Qb6",
+      "Be2",
+      "Bd7",
+      "O-O",
+      "cxd4",
+      "cxd4",
+      "Nge7",
+      "Nc3",
+      "Nf5"
     ],
     "side": "white"
   },
@@ -22,14 +38,31 @@
     "type": "reach_structure",
     "summary": "You are White in the closed d4-e5 against d5-e6 chain. Computed from the start position: the base pawn d4 is attacked three times (knight f5, knight c6, queen b6) and defended twice (queen d1, knight f3). The shape library's white-hold-the-base plan is satisfied when the base still stands and White's defender count on it is at least Black's attacker count; that census — not an opinion about how to play the structure — is what this pack grades.",
     "successConditions": [
-      { "kind": "plan_consequence", "planClassId": "hold-the-base", "to": "achieved" },
+      {
+        "kind": "plan_consequence",
+        "planClassId": "hold-the-base",
+        "to": "achieved"
+      },
       {
         "kind": "structural_feature",
         "feature": {
           "kind": "any",
           "of": [
-            { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "d" } },
-            { "kind": "feature", "feature": { "kind": "open_file", "file": "d" } }
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "half_open_file",
+                "color": "white",
+                "file": "d"
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "open_file",
+                "file": "d"
+              }
+            }
           ]
         },
         "to": "failed"
@@ -42,19 +75,27 @@
     "defender-count",
     "lever-absence"
   ],
-  "shapes": ["closed-centre-chain"],
+  "shapes": [
+    "closed-centre-chain"
+  ],
   "planClasses": [
     {
       "id": "hold-the-base",
       "label": "Keep the count on d4 from going against you",
       "description": "The library's base plan. Its success signature is a comparison written out case by case: the d4 pawn still on the board, and White's attacker count on d4 at least equal to Black's. Measured in the start position that comparison reads two against three, so the signature is false here; the spine reaches a position where it is true. Nothing in this pack says the comparison is what matters — only that it is what the signature counts.",
-      "shapePlan": { "shape": "closed-centre-chain", "plan": "white-hold-the-base" }
+      "shapePlan": {
+        "shape": "closed-centre-chain",
+        "plan": "white-hold-the-base"
+      }
     },
     {
       "id": "point-the-chain",
       "label": "Get a kingside pawn to the fifth rank",
       "description": "The library's other White plan. Its success signature asks for a White pawn on f5, g5 or h5 with d4 and e5 both still standing. One arithmetic note about this spine: after the recapture on move 12 White's pawns are a2, b2, d4, e3, e5, g2, h2 — there is no White pawn left on the f-file, so of the three squares in the signature only g5 and h5 remain reachable by a pawn.",
-      "shapePlan": { "shape": "closed-centre-chain", "plan": "white-attack-where-the-chain-points" }
+      "shapePlan": {
+        "shape": "closed-centre-chain",
+        "plan": "white-attack-where-the-chain-points"
+      }
     }
   ],
   "spine": [
@@ -157,18 +198,29 @@
     {
       "id": "plan-choice",
       "label": "Before your first move: which of the library's two White plans are you playing?",
-      "trigger": { "atStart": true },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atStart": true
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["hold-the-base", "point-the-chain"]
+        "planClassIds": [
+          "hold-the-base",
+          "point-the-chain"
+        ]
       }
     },
     {
       "id": "count-flipped",
       "label": "The recapture on e3 changed the census on d4 from two-against-three to three-against-one",
-      "trigger": { "atSpineNode": "fxe3-recapture" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "fxe3-recapture"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "base-census-turned",
@@ -179,14 +231,41 @@
           "feature": {
             "kind": "all",
             "of": [
-              { "kind": "pieceOnSquare", "square": "d4", "piece": { "color": "white", "role": "pawn" } },
-              { "kind": "feature", "feature": { "kind": "direct_attack_count", "square": "d4", "color": "white", "comparison": "atLeast", "count": 3 } },
-              { "kind": "feature", "feature": { "kind": "direct_attack_count", "square": "d4", "color": "black", "comparison": "atMost", "count": 2 } }
+              {
+                "kind": "pieceOnSquare",
+                "square": "d4",
+                "piece": {
+                  "color": "white",
+                  "role": "pawn"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "direct_attack_count",
+                  "square": "d4",
+                  "color": "white",
+                  "comparison": "atLeast",
+                  "count": 3
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "direct_attack_count",
+                  "square": "d4",
+                  "color": "black",
+                  "comparison": "atMost",
+                  "count": 2
+                }
+              }
             ]
           }
         }
       },
-      "actions": ["compare_branches"]
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "head-chipped",
@@ -197,19 +276,39 @@
           "feature": {
             "kind": "all",
             "of": [
-              { "kind": "pieceOnSquare", "square": "f6", "piece": { "color": "black", "role": "pawn" } },
-              { "kind": "pieceOnSquare", "square": "e5", "piece": { "color": "white", "role": "pawn" } }
+              {
+                "kind": "pieceOnSquare",
+                "square": "f6",
+                "piece": {
+                  "color": "black",
+                  "role": "pawn"
+                }
+              },
+              {
+                "kind": "pieceOnSquare",
+                "square": "e5",
+                "piece": {
+                  "color": "white",
+                  "role": "pawn"
+                }
+              }
             ]
           }
         }
       },
-      "actions": ["compare_branches"]
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "end-of-data",
       "label": "Fifty-four games deep: the corpus stops here",
-      "trigger": { "atSpineNode": "oo-castle" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "oo-castle"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     }
   ],
   "authoredBoundary": {
@@ -235,31 +334,41 @@
   },
   "deviations": [
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c1e3",
       "class": "accepted_alternative",
       "note": "Be3 at once: 1270 of 7158 (17.7%), the second-most-played move here. It is the same move the spine plays two moves later, arriving before Black's queen has been asked to leave b6 — so the count on d4 becomes three defenders against three attackers instead of three against two. Both counts were computed; which position you prefer is not measured anywhere in this repo."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c3b5",
       "class": "accepted_alternative",
       "note": "Nb5: 591 of 7158 (8.3%). The knight leaves the defence of nothing — it was not one of d4's two defenders in the start position — and heads for d6, a square Black's e-pawn cannot cover while it stands on e6."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "e2b5",
       "class": "interesting_deviation",
       "note": "Bb5: 525 of 7158 (7.3%). It offers a trade of the bishop for the knight on c6, which is one of d4's three attackers and also the only Black piece currently attacking e5. Whether removing it helps is not something this pack measures; the counts before and after are arithmetic you can read on the board."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "a2a3",
       "class": "interesting_deviation",
       "note": "a3: 196 of 7158 (2.7%). A door rather than an error: neither of the shape entry's two White plans is this move, and no engine or corpus evidence in this repo bears on it. Open it and compare it against the spine."
     },
     {
-      "at": { "spineNodeId": "nxe3-trade" },
+      "at": {
+        "spineNodeId": "nxe3-trade"
+      },
       "moveUci": "h2h4",
       "class": "interesting_deviation",
       "note": "Declining the recapture with h4: 1 of the 163 games at this node (0.6%) against fxe3's 162 (99.4%). The measured consequence is a pawn count, not a judgment — after h4 Black's knight is still on e3 and White's f-pawn is still on f2, so the pawn skeleton the shape detector reads is unchanged and the material count is not."
@@ -270,22 +379,30 @@
     {
       "id": "band-result-split",
       "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 7158 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15) the outcomes were 3325 white wins, 348 draws and 3485 black wins (46.5/4.9/48.7%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "base-census-flips",
       "text": "The census on the base pawn is the one number that moves on this spine. In the start position d4 is attacked three times by Black and defended twice by White; after Black trades on e3 and White recaptures with the f-pawn it is attacked once and defended three times. Both readings are attacker counts computed from the position, not an assessment of it.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     },
     {
       "id": "no-head-lever-here",
       "text": "The chip-the-head lever this structure is known for does not appear at this band on this line. At the 3769-game node after 10.Na4 the explorer's returned move list accounts for all 3769 games and contains no ...f6 at all; at the 164-game node after 12.fxe3 the list covers 161 of 164 games and again contains no ...f6, so it occurs in at most 3. That is a corpus observation about what 1400-1800 players played, not a claim that the lever is unavailable.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "structure-is-attested",
       "text": "This is not a rare middlegame: at the Lichess 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12) the start position occurs in 7158 games, and the spine's first move is played in 3769 of them (52.7%).",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     }
   ],
   "provenance": {
@@ -303,14 +420,42 @@
       "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no deviation note asserts a chess consequence beyond an explicitly measured one, and the absence of ...f6 from the corpus is not claimed to mean the move is bad.",
       "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/French_Defence (CC BY-SA 4.0, read 2026-08-16) states that in the Advance Variation Black is \"almost always playing c7-c5 early on to attack White's pawn chain at its base\", and notes the pressure on d4 from ...Qb6 with the g1-a7 diagonal. en.wikipedia.org/wiki/Pawn_structure §e5-chain (CC BY-SA 4.0, section wikitext read via the MediaWiki action=parse API the same day) gives \"Themes for White: Kingside mating attack, f2-f4-f5 break\" and \"Themes for Black: Exchanging the hemmed-in queen's bishop, c7-c5 and f7-f6 breaks\", and states that \"Attacking the head of the pawn chain with f7-f6 is seen as frequently as attacking its base\". WHAT THEY DO NOT SUPPLY, AND WHERE THEY POINT ELSEWHERE: the cited sources name White's theme as a kingside mating attack, not as holding the d4 base. Base defence appears only as the thing Black attacks. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "CITED 2026-08-16 (Black's side of it). That ...c5 attacks the chain at its base, and that ...Qb6 loads the pressure on d4, is stated by en.wikipedia.org/wiki/French_Defence and en.wikipedia.org/wiki/Pawn_structure §e5-chain (both CC BY-SA 4.0), attributed in provenance.attribution. The structure the objective is about is no longer uncited.",
-      "STILL UNCITED, AND THE CITATION LEANS AGAINST IT: the premise is that holding the base census is WHITE'S plan here, and the cited sources give White's theme in the e5-chain as a kingside mating attack with f2-f4-f5, mentioning d4 defence only as the target of Black's play. No consulted CC-BY-SA source states base-holding as White's plan. The corpus measurement relating the census to results at this band is also still not done.",
-      "No engine pass has been run on this pack. Every deviation note therefore stops at an arithmetic consequence and none of them prices the resulting position.",
-      "The shape entry closed-centre-chain carries its own UNGROUNDED provenance for all four of its plan descriptions, including the two this pack references. Referencing them does not launder them.",
-      "The ...f6 absence is measured against the explorer's twelve-move response cap, not against a full move distribution. At the 164-game node three games are outside the returned list, so the ceiling of three is an upper bound, not a count."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "cited-2026-08-16-black-s-side-of-it-that-c5-attacks-the-",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (Black's side of it). That ...c5 attacks the chain at its base, and that ...Qb6 loads the pressure on d4, is stated by en.wikipedia.org/wiki/French_Defence and en.wikipedia.org/wiki/Pawn_structure §e5-chain (both CC BY-SA 4.0), attributed in provenance.attribution. The structure the objective is about is no longer uncited."
+      },
+      {
+        "id": "still-uncited-and-the-citation-leans-against-it-the-prem",
+        "state": "blocking",
+        "statement": "STILL UNCITED, AND THE CITATION LEANS AGAINST IT: the premise is that holding the base census is WHITE'S plan here, and the cited sources give White's theme in the e5-chain as a kingside mating attack with f2-f4-f5, mentioning d4 defence only as the target of Black's play. No consulted CC-BY-SA source states base-holding as White's plan. The corpus measurement relating the census to results at this band is also still not done."
+      },
+      {
+        "id": "no-engine-pass-has-been-run-on-this-pack-every-deviation",
+        "state": "blocking",
+        "statement": "No engine pass has been run on this pack. Every deviation note therefore stops at an arithmetic consequence and none of them prices the resulting position."
+      },
+      {
+        "id": "the-shape-entry-closed-centre-chain-carries-its-own-ungr",
+        "state": "blocking",
+        "statement": "The shape entry closed-centre-chain carries its own UNGROUNDED provenance for all four of its plan descriptions, including the two this pack references. Referencing them does not launder them."
+      },
+      {
+        "id": "the-f6-absence-is-measured-against-the-explorer-s-twelve",
+        "state": "blocking",
+        "statement": "The ...f6 absence is measured against the explorer's twelve-move response cap, not against a full move distribution. At the 164-game node three games are outside the returned list, so the ceiling of three is an upper bound, not a count."
+      }
     ],
     "attribution": [
       {

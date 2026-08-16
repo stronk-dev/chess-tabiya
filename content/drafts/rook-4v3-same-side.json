@@ -565,15 +565,52 @@
       "Technique names used in the prose (Philidor-style third-rank restraint, rook on the seventh, second-rank activity) name established methods. The name is the only thing being cited: it is not evidence for any evaluation stated in this pack.",
       "Move legality is the only mechanically verified property of this file. Every spine move, and the start position, were checked by `make pack-check` (v0.2 schema plus the chessops spine-legality lint). Deviation moves are asserted legal by the author and are NOT checked by that lint."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No reviewer has looked at this file and none will; nothing here is labelled as checked, and every blocker below is cleared by a citation or by mechanical evidence or not at all.",
-      "This position holds eleven pieces. Syzygy tops out at seven, so no tablebase ground truth exists for the root or for any node in this pack, and none can be obtained — this is a permanent property of the material, not a task nobody has run yet. Stockfish at fixed depth on every spine node and every deviation is therefore the only mechanical instrument that applies here, and it has not been run.",
-      "The load-bearing claim -- that this material is a theoretical draw held by accurate defence -- needs a citable endgame reference. None was consulted.",
-      "The w-ra8/w-ra7 line asserts that 1...Rd2 concedes a pawn move to the back-rank check. It is the pack's most concrete tactical claim, it drives the whole king-first-versus-activity comparison, and it is unverified.",
-      "The deviation classes split into two halves with different fates. The concrete half — the two concept_violations (passive Rd7, accepting the rook trade) — is engine-checkable at fixed depth and has not been checked. The other half is not: the claim that the pawn ending after a rook trade is harder to hold than the rook ending is a practical judgment about human play, stated as a judgment precisely because it cannot be stated as a fact, and no instrument in this repo can promote it to one.",
-      "Practical-difficulty judgments -- which defensive scheme a 1500-2000 player actually holds -- need Maia or corpus evidence. design/04 §7 says save/resist objectives need practical-difficulty judgment that only authored endgame content can express; this pack expresses it with no evidence underneath.",
-      "The still-holding checkpoint uses a materialBalance trigger whose runtime behaviour the author did not verify; if it is inert, the pack's only executable success condition is inert too. This one is not a grounding question and does not need a source: it is settled by playing the pack, which is the check that caught D12 here after three readings missed it."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No reviewer has looked at this file and none will; nothing here is labelled as checked, and every blocker below is cleared by a citation or by mechanical evidence or not at all.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "outside-tablebase-range",
+        "state": "accepted",
+        "statement": "This position holds eleven pieces. Syzygy tops out at seven, so no tablebase ground truth exists for the root or for any node in this pack, and none can be obtained — this is a permanent property of the material, not a task nobody has run yet. Stockfish at fixed depth on every spine node and every deviation is therefore the only mechanical instrument that applies here, and it has not been run.",
+        "accepted": {
+          "kind": "permanent_property",
+          "ruling": "An eleven-piece root is outside Syzygy's seven-piece boundary.",
+          "rulingRef": "docs/tablebase-grounding.md"
+        }
+      },
+      {
+        "id": "the-load-bearing-claim-that-this-material-is-a-theoretic",
+        "state": "blocking",
+        "statement": "The load-bearing claim -- that this material is a theoretical draw held by accurate defence -- needs a citable endgame reference. None was consulted."
+      },
+      {
+        "id": "the-w-ra8-w-ra7-line-asserts-that-1-rd2-concedes-a-pawn-",
+        "state": "blocking",
+        "statement": "The w-ra8/w-ra7 line asserts that 1...Rd2 concedes a pawn move to the back-rank check. It is the pack's most concrete tactical claim, it drives the whole king-first-versus-activity comparison, and it is unverified."
+      },
+      {
+        "id": "the-deviation-classes-split-into-two-halves-with-differe",
+        "state": "blocking",
+        "statement": "The deviation classes split into two halves with different fates. The concrete half — the two concept_violations (passive Rd7, accepting the rook trade) — is engine-checkable at fixed depth and has not been checked. The other half is not: the claim that the pawn ending after a rook trade is harder to hold than the rook ending is a practical judgment about human play, stated as a judgment precisely because it cannot be stated as a fact, and no instrument in this repo can promote it to one."
+      },
+      {
+        "id": "practical-difficulty-judgments-which-defensive-scheme-a-",
+        "state": "blocking",
+        "statement": "Practical-difficulty judgments -- which defensive scheme a 1500-2000 player actually holds -- need Maia or corpus evidence. design/04 §7 says save/resist objectives need practical-difficulty judgment that only authored endgame content can express; this pack expresses it with no evidence underneath."
+      },
+      {
+        "id": "the-still-holding-checkpoint-uses-a-materialbalance-trig",
+        "state": "blocking",
+        "statement": "The still-holding checkpoint uses a materialBalance trigger whose runtime behaviour the author did not verify; if it is inert, the pack's only executable success condition is inert too. This one is not a grounding question and does not need a source: it is settled by playing the pack, which is the check that caught D12 here after three readings missed it."
+      }
     ]
   }
 }

@@ -1,1 +1,76 @@
-{"checkpoints":[{"actions":[],"id":"consequence","label":"Consequence","trigger":{"atPly":6}}],"difficulty":{"branchLengthTarget":6,"maxOnlineRapid":1349,"minOnlineRapid":1049},"feedbackPolicy":"immediate_guard","id":"onramp-00aas","mode":"outcome","objective":{"successConditions":[{"checkpointId":"consequence","kind":"reach_checkpoint"}],"summary":"Play on from this position for 6 plies against an opponent near your rating.","type":"play_until_checkpoint"},"opponentPolicy":{"mode":"human_common","seedMode":"per_branch","targetElo":1199},"phase":"middlegame","provenance":{"graduationBlockers":["The objective transitions on reaching the checkpoint, i.e. on playing the position out. No shipped mechanism grades how it was played out or what happened to the position; adding one is an authored act.","The start position is whatever the puzzle's solution produced; it is not asserted to be winning, equal, or better for the learner. No engine or tablebase has evaluated it.","objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft","targetElo clamp [1100, 2000] is an authoring convention, not a Maia capability claim","No authored plan, deviation, or feedback claim exists; a reviewer must add any chess judgement rather than infer one from puzzle metadata."],"licence":"CC-BY-SA-4.0","reviewStatus":"draft","reviewers":[],"sources":["Lichess puzzle database (https://database.lichess.org/lichess_db_puzzle.csv.zst, etag \"6a6ef08b-12248997\") — CC0-1.0; database exports may be used for any purpose"]},"start":{"fen":"5rk1/1p2q1pp/5p2/8/1P6/6P1/PPBr2PP/R4R1K w - - 0 23","side":"black"},"title":"Play on from Lichess puzzle 00Aas","version":"0.1.0"}
+{
+  "checkpoints": [
+    {
+      "actions": [],
+      "id": "consequence",
+      "label": "Consequence",
+      "trigger": {
+        "atPly": 6
+      }
+    }
+  ],
+  "difficulty": {
+    "branchLengthTarget": 6,
+    "maxOnlineRapid": 1349,
+    "minOnlineRapid": 1049
+  },
+  "feedbackPolicy": "immediate_guard",
+  "id": "onramp-00aas",
+  "mode": "outcome",
+  "objective": {
+    "successConditions": [
+      {
+        "checkpointId": "consequence",
+        "kind": "reach_checkpoint"
+      }
+    ],
+    "summary": "Play on from this position for 6 plies against an opponent near your rating.",
+    "type": "play_until_checkpoint"
+  },
+  "opponentPolicy": {
+    "mode": "human_common",
+    "seedMode": "per_branch",
+    "targetElo": 1199
+  },
+  "phase": "middlegame",
+  "provenance": {
+    "graduationBlockers": [
+      {
+        "id": "outcome-ungraded",
+        "state": "blocking",
+        "statement": "The objective transitions on reaching the checkpoint, i.e. on playing the position out. No shipped mechanism grades how it was played out or what happened to the position; adding one is an authored act."
+      },
+      {
+        "id": "start-assessment-absent",
+        "state": "blocking",
+        "statement": "The start position is whatever the puzzle's solution produced; it is not asserted to be winning, equal, or better for the learner. No engine or tablebase has evaluated it."
+      },
+      {
+        "id": "mechanical-objective-placeholder",
+        "state": "blocking",
+        "statement": "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft"
+      },
+      {
+        "id": "target-elo-authored",
+        "state": "blocking",
+        "statement": "targetElo clamp [1100, 2000] is an authoring convention, not a Maia capability claim"
+      },
+      {
+        "id": "authored-teaching-absent",
+        "state": "blocking",
+        "statement": "No authored plan, deviation, or feedback claim exists; a reviewer must add any chess judgement rather than infer one from puzzle metadata."
+      }
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "reviewStatus": "draft",
+    "sources": [
+      "Lichess puzzle database (https://database.lichess.org/lichess_db_puzzle.csv.zst, etag \"6a6ef08b-12248997\") — CC0-1.0; database exports may be used for any purpose"
+    ]
+  },
+  "start": {
+    "fen": "5rk1/1p2q1pp/5p2/8/1P6/6P1/PPBr2PP/R4R1K w - - 0 23",
+    "side": "black"
+  },
+  "title": "Play on from Lichess puzzle 00Aas",
+  "version": "0.1.0"
+}

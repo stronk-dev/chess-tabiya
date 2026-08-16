@@ -13,8 +13,25 @@
   "start": {
     "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - - 6 10",
     "movesSan": [
-      "e4", "c5", "Nf3", "d6", "d4", "cxd4", "Nxd4", "Nf6", "Nc3", "g6",
-      "Be3", "Bg7", "f3", "O-O", "Qd2", "Nc6", "Bc4", "Bd7", "O-O-O"
+      "e4",
+      "c5",
+      "Nf3",
+      "d6",
+      "d4",
+      "cxd4",
+      "Nxd4",
+      "Nf6",
+      "Nc3",
+      "g6",
+      "Be3",
+      "Bg7",
+      "f3",
+      "O-O",
+      "Qd2",
+      "Nc6",
+      "Bc4",
+      "Bd7",
+      "O-O-O"
     ],
     "side": "black"
   },
@@ -22,10 +39,30 @@
     "type": "preserve_plan_window",
     "summary": "You have the Black side, and Black is the side to move in this position — that is why this pack seats you here rather than opposite. The kings stand on opposite wings: White's on c1, yours on g8, which is exactly the pair of conditions the shape library's opposite-castling-race trigger tests. Complete this pack's authored queenside arrangement — rook to c8, knight to e5, rook to c5 — before White's h-pawn reaches h5, and without spending more than one move outside that arrangement. Everything the window records is arithmetic about your move order; none of it is a claim that the arrangement is correct.",
     "successConditions": [
-      { "kind": "timing_window", "windowId": "arrange-before-h5", "verdict": "in_time", "to": "achieved" },
-      { "kind": "timing_window", "windowId": "arrange-before-h5", "verdict": "over_budget", "to": "degraded" },
-      { "kind": "timing_window", "windowId": "arrange-before-h5", "verdict": "too_slow", "to": "failed" },
-      { "kind": "timing_window", "windowId": "arrange-before-h5", "verdict": "premature", "to": "failed" }
+      {
+        "kind": "timing_window",
+        "windowId": "arrange-before-h5",
+        "verdict": "in_time",
+        "to": "achieved"
+      },
+      {
+        "kind": "timing_window",
+        "windowId": "arrange-before-h5",
+        "verdict": "over_budget",
+        "to": "degraded"
+      },
+      {
+        "kind": "timing_window",
+        "windowId": "arrange-before-h5",
+        "verdict": "too_slow",
+        "to": "failed"
+      },
+      {
+        "kind": "timing_window",
+        "windowId": "arrange-before-h5",
+        "verdict": "premature",
+        "to": "failed"
+      }
     ]
   },
   "concepts": [
@@ -34,46 +71,106 @@
     "arrangement-before-action",
     "tempo-count"
   ],
-  "shapes": ["opposite-castling-race"],
+  "shapes": [
+    "opposite-castling-race"
+  ],
   "planClasses": [
     {
       "id": "open-a-queenside-file",
       "label": "Open a file at the white king",
       "description": "The library's Black storm plan. Its success signature is a file test, not a plan test: it asks whether the a-file or the b-file is open, or half-open for Black. Measured on the twelve positions this pack authors, that signature is satisfied on none of them — eight plies of the corpus's most-played moves do not open a queenside file. Choosing this class says which measurement you are playing toward, not that it is the better one.",
-      "shapePlan": { "shape": "opposite-castling-race", "plan": "black-queenside-file-storm" }
+      "shapePlan": {
+        "shape": "opposite-castling-race",
+        "plan": "black-queenside-file-storm"
+      }
     },
     {
       "id": "open-a-central-file",
       "label": "Open a file in the middle",
       "description": "The library's other Black plan. Its success signature asks only whether the d-file or the e-file is fully open — no pawn of either colour on it. Measured on this pack's twelve authored positions: satisfied on none. Black keeps pawns on d6 and e7 the whole way down this spine, so the file test cannot pass while the spine is followed.",
-      "shapePlan": { "shape": "opposite-castling-race", "plan": "black-central-brake" }
+      "shapePlan": {
+        "shape": "opposite-castling-race",
+        "plan": "black-central-brake"
+      }
     },
     {
       "id": "the-storm-you-are-racing",
       "label": "What White's h-pawn is trying to reach",
       "description": "Not your plan — the opponent's, listed so the window's close has a name in the library. Its success signature is the mirror-image file test: the h-file open, or half-open for White. Measured on this pack's twelve authored positions: satisfied on none, because on this spine Black's pawn stops on h5 and White's stands on h4. The window closes on the pawn's arrival, which is earlier than the file test.",
-      "shapePlan": { "shape": "opposite-castling-race", "plan": "white-h-file-storm" }
+      "shapePlan": {
+        "shape": "opposite-castling-race",
+        "plan": "white-h-file-storm"
+      }
     }
   ],
   "timingWindows": [
     {
       "id": "arrange-before-h5",
       "label": "Arrangement before the h-pawn arrives",
-      "opens": { "fromStart": true },
+      "opens": {
+        "fromStart": true
+      },
       "closes": [
-        { "kind": "arrival", "move": { "piece": { "color": "white", "role": "pawn" }, "to": "h5" } },
-        { "kind": "release", "move": { "piece": { "color": "black", "role": "rook" }, "to": "c3" } },
-        { "kind": "deadline", "afterLearnerMoves": 4 }
+        {
+          "kind": "arrival",
+          "move": {
+            "piece": {
+              "color": "white",
+              "role": "pawn"
+            },
+            "to": "h5"
+          }
+        },
+        {
+          "kind": "release",
+          "move": {
+            "piece": {
+              "color": "black",
+              "role": "rook"
+            },
+            "to": "c3"
+          }
+        },
+        {
+          "kind": "deadline",
+          "afterLearnerMoves": 4
+        }
       ],
       "readiness": {
         "mode": "all",
         "of": [
-          { "piece": { "color": "black", "role": "rook" }, "to": "c8" },
-          { "piece": { "color": "black", "role": "knight" }, "to": "e5" },
-          { "piece": { "color": "black", "role": "rook" }, "to": "c5" }
+          {
+            "piece": {
+              "color": "black",
+              "role": "rook"
+            },
+            "to": "c8"
+          },
+          {
+            "piece": {
+              "color": "black",
+              "role": "knight"
+            },
+            "to": "e5"
+          },
+          {
+            "piece": {
+              "color": "black",
+              "role": "rook"
+            },
+            "to": "c5"
+          }
         ]
       },
-      "tolerated": [{ "piece": { "color": "black", "role": "pawn" }, "to": "h5" }],
+      "tolerated": [
+        {
+          "piece": {
+            "color": "black",
+            "role": "pawn"
+          },
+          "to": "h5"
+        }
+      ],
       "luxuryMoveBudget": 1,
       "gradeOutpaced": false,
       "note": "Measured, not assumed. On this spine White's h-pawn never reaches h5, because 12...h5 is played in 759 of 1277 (59.4%) — the same count that makes ...h5 tolerated rather than spend. In the 12...Nc4 branch (428 of 1277) the corpus plays 13.Bxc4 Rxc4, and there h4-h5 is the most-played move at 172 of 439 (39.2%). That 172 is the arrival this window closes on."
@@ -199,24 +296,42 @@
     {
       "id": "plan-choice",
       "label": "Before your first move: which of the library's two Black plans are you playing toward?",
-      "trigger": { "atStart": true },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atStart": true
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["open-a-queenside-file", "open-a-central-file"]
+        "planClassIds": [
+          "open-a-queenside-file",
+          "open-a-central-file"
+        ]
       }
     },
     {
       "id": "arrangement-complete",
       "label": "Rook on c5, knight on e5, and the window's deadline reached on the same move",
-      "trigger": { "atSpineNode": "rc5-lift" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "rc5-lift"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "budget-spent",
       "label": "Two moves inside the window that were neither the arrangement nor the tolerated ...h5",
-      "trigger": { "atWindow": { "windowId": "arrange-before-h5", "spendAtLeast": 2 } },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atWindow": {
+          "windowId": "arrange-before-h5",
+          "spendAtLeast": 2
+        }
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "queenside-file-opened",
@@ -227,15 +342,43 @@
           "feature": {
             "kind": "any",
             "of": [
-              { "kind": "feature", "feature": { "kind": "open_file", "file": "a" } },
-              { "kind": "feature", "feature": { "kind": "half_open_file", "color": "black", "file": "a" } },
-              { "kind": "feature", "feature": { "kind": "open_file", "file": "b" } },
-              { "kind": "feature", "feature": { "kind": "half_open_file", "color": "black", "file": "b" } }
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "open_file",
+                  "file": "a"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "half_open_file",
+                  "color": "black",
+                  "file": "a"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "open_file",
+                  "file": "b"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "half_open_file",
+                  "color": "black",
+                  "file": "b"
+                }
+              }
             ]
           }
         }
       },
-      "actions": ["compare_branches"]
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "white-storm-file-opened",
@@ -246,13 +389,28 @@
           "feature": {
             "kind": "any",
             "of": [
-              { "kind": "feature", "feature": { "kind": "open_file", "file": "h" } },
-              { "kind": "feature", "feature": { "kind": "half_open_file", "color": "white", "file": "h" } }
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "open_file",
+                  "file": "h"
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "half_open_file",
+                  "color": "white",
+                  "file": "h"
+                }
+              }
             ]
           }
         }
       },
-      "actions": ["compare_branches"]
+      "actions": [
+        "compare_branches"
+      ]
     }
   ],
   "authoredBoundary": {
@@ -280,37 +438,49 @@
   },
   "deviations": [
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "a7a6",
       "class": "accepted_alternative",
       "note": "The second-most-played move in the start position at this band: 1347 of 8476 (15.9%). It is not one of this window's three readiness moves and it is not the tolerated ...h5, so the window counts it as the one move the budget allows. Play it and you have spent the budget before the arrangement starts."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c6e5",
       "class": "accepted_alternative",
       "note": "Ne5 immediately: 669 of 8476 (7.9%), the third-most-played move here. The window's readiness set is unordered, so this scores as readiness rather than spend — the same three moves in a different order still complete the arrangement."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "d8a5",
       "class": "interesting_deviation",
       "note": "373 of 8476 (4.4%). A queen move rather than one of the three arrangement moves, so the window counts one spend. Nothing measured in this repo compares it against the spine; open it and compare the positions yourself."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "a8b8",
       "class": "interesting_deviation",
       "note": "Rb8: 363 of 8476 (4.3%). Computed consequence for this pack's encoding only — readiness names a black rook arriving on c8, and this rook goes to b8, so the item stays unmatched and the move counts as spend. Whether the b-file is a better home for the rook is not something this pack has measured."
     },
     {
-      "at": { "spineNodeId": "bb3-retreat" },
+      "at": {
+        "spineNodeId": "bb3-retreat"
+      },
       "moveUci": "c6d4",
       "class": "interesting_deviation",
       "note": "Nxd4: 1085 of 4740 (22.9%), the second-most-played move after 11.Bb3. What it does to this pack is definitional rather than evaluative: readiness names a black knight arriving on e5, and after this trade Black's only knight left is the one on f6, so that readiness item can still match but the piece that the spine uses for it is gone. The window will read whatever your knight actually does."
     },
     {
-      "at": { "spineNodeId": "bg5-pin" },
+      "at": {
+        "spineNodeId": "bg5-pin"
+      },
       "moveUci": "e5c4",
       "class": "accepted_alternative",
       "note": "Nc4 here instead of the rook lift: 45 of 310 (14.5%). The same fork as at move 12, one move later. The window's third readiness item is a black rook reaching c5; a knight reaching c4 does not match it, so this move counts as spend and, if it is your fourth move, the deadline closes with readiness incomplete."
@@ -321,32 +491,44 @@
     {
       "id": "band-result-split",
       "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 8476 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15) the outcomes were 4390 white wins, 401 draws and 3685 black wins (51.8/4.7/43.5%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "split-at-the-arrival-is-recorded-not-compared",
       "text": "The arrival this window closes on has recorded outcomes of its own at this band (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15): at the node reached after ...Nc4 Bxc4 Rxc4 there are 439 games, 231 white / 20 draw / 188 black, and h4-h5 itself accounts for 172 of them with 92 white / 9 draw / 71 black. On the other branch, the position where the pack's readiness set is complete after ...Rc5 has 239 games, 138 white / 9 draw / 92 black. Those are two different positions on two different branches; they are recorded side by side and are not compared, and neither supports a claim about whether arranging before h4-h5 is the better way to play. The window's budget of one and deadline of four remain authored numbers, because the explorer aggregates per position and cannot report a result conditioned on which side arrived first.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "line-is-attested",
       "text": "This is a heavily played line, not a curiosity: at the Lichess 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12) the start position occurs in 8476 games, and Rc8 accounts for 4784 of them (56.4%). The spine follows the most-played move at every node, and the node counts fall 8476, 4808, 4740, 2779, 1277, 928, 310, 239 — by the last position the band contains 239 games.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "neither-storm-arrives",
       "text": "Eight plies of the corpus's own most-played moves do not open a file at either king. The shape entry's four plan signatures were evaluated against all twelve positions this pack authors: black-queenside-file-storm fires on none, black-central-brake on none, white-h-file-storm on none, and white-prophylactic-tempo on exactly one — the last, where the white king stands on b1. That is a census result about these twelve positions, not a statement about the opening.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     },
     {
       "id": "the-arrival-is-measured",
       "text": "The pawn arrival this window closes on was measured, not assumed. It does not occur on the spine, because 12...h5 is played in 759 of 1277 games (59.4%). It occurs in the 12...Nc4 branch (428 of 1277, 33.5%): after 13.Bxc4 Rxc4 the position has 439 games and h4-h5 is the most-played move at 172 of them (39.2%).",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "c3-counts",
       "text": "Computed from the positions, not recalled: c3 is attacked twice by White (pawn b2, queen d2) and zero times by Black in the start position; after ...Rc8 the rook is Black's first attacker, one against two; and after ...Rc5 it is still one against two. The count does not change over the spine even though the rook does.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     }
   ],
   "provenance": {
@@ -363,14 +545,42 @@
       "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no engine evaluation has been run on any position here, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one. In particular the 12...Nc4 branch, which the window reports as too_slow, is not claimed to be inferior — the note at that node says exactly why the report is about this pack's encoding.",
       "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation (CC BY-SA 4.0, read 2026-08-16) states the Yugoslav Attack race this pack drills — White castles queenside, trades the Dragon bishop with Bh6 and storms with h4-h5 and g4, aiming \"at delivering mate down the h-file\", while \"Black's strategy is centred around the c-file and the ability to push the a- and b-pawns\", with ...Ne5-c4 and the exchange sacrifice on c3 named as themes. The article calls these \"race-to-mate pawn storms on opposite sides of the board\". WHAT IT DOES NOT SUPPLY: this pack's specific three-move arrangement, and the claim that it must be complete before the h-pawn arrives, are not stated by the source. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "CITED 2026-08-16 (the arrangement's components, not its deadline). Black's ...Rc8/...Ne5-c4/c-file counterplay and the mutual-race framing are stated by en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation (CC BY-SA 4.0), attributed in provenance.attribution.",
-      "STILL UNCITED after the 2026-08-16 pass: the deadline — this arrangement completed before the h-pawn arrives — is the objective's whole content and the cited source states no such tempo relation. This is a timing-window claim blocked on the game-level corpus (D155), and the corpus measurement relating completion to results at this band is still not done.",
-      "The window's numbers are authored: a luxury budget of one and a deadline of four learner moves are the author's encoding of the teaching point. The deadline was set to the number of learner moves the spine takes to complete the readiness set; nothing measured says four is the right threshold.",
-      "No engine pass has been run on this pack, so no deviation carries a measured cost and there is no concept_violation: no single legal move from the start position removes a piece the shape entry's trigger requires, so nothing here is off-objective by definition.",
-      "The shape entry this pack references encodes only the White-long-against-Black-short orientation and reads king placement as a proxy for castling, per its own trigger-narrowing note. This pack inherits that narrowing."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "cited-2026-08-16-the-arrangement-s-components-not-its-de",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (the arrangement's components, not its deadline). Black's ...Rc8/...Ne5-c4/c-file counterplay and the mutual-race framing are stated by en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation (CC BY-SA 4.0), attributed in provenance.attribution."
+      },
+      {
+        "id": "still-uncited-after-the-2026-08-16-pass-the-deadline-thi",
+        "state": "blocking",
+        "statement": "STILL UNCITED after the 2026-08-16 pass: the deadline — this arrangement completed before the h-pawn arrives — is the objective's whole content and the cited source states no such tempo relation. This is a timing-window claim blocked on the game-level corpus (D155), and the corpus measurement relating completion to results at this band is still not done."
+      },
+      {
+        "id": "the-window-s-numbers-are-authored-a-luxury-budget-of-one",
+        "state": "blocking",
+        "statement": "The window's numbers are authored: a luxury budget of one and a deadline of four learner moves are the author's encoding of the teaching point. The deadline was set to the number of learner moves the spine takes to complete the readiness set; nothing measured says four is the right threshold."
+      },
+      {
+        "id": "no-engine-pass-has-been-run-on-this-pack-so-no-deviation",
+        "state": "blocking",
+        "statement": "No engine pass has been run on this pack, so no deviation carries a measured cost and there is no concept_violation: no single legal move from the start position removes a piece the shape entry's trigger requires, so nothing here is off-objective by definition."
+      },
+      {
+        "id": "the-shape-entry-this-pack-references-encodes-only-the-wh",
+        "state": "blocking",
+        "statement": "The shape entry this pack references encodes only the White-long-against-Black-short orientation and reads king placement as a proxy for castling, per its own trigger-narrowing note. This pack inherits that narrowing."
+      }
     ],
     "attribution": [
       {

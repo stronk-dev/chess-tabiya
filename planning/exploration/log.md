@@ -2785,3 +2785,86 @@ and packaging clean; `make test-browser` passed 24 tests at zero retries, with t
 measurement skipped. The first unit-gate run exposed one legacy census fixture using the forbidden
 direct-prose pointer; replacing it with a real claim binding made the instrument agree with the new
 contract.
+---
+
+## 2026-08-16 — D333/D324: the band moves the RESULT, at about a third of its own units
+
+**Landed.** `design/research/maia-band-outcome-transfer.md` and
+`tools/d333-band-outcome-harness/` (disposable, exploration gate). **16,660 complete games /
+1,049,001 Maia forward passes**, 12 arms, band against band, on a 170-position book cut from
+the committed pack corpus — paired openings with colours swapped inside every pair, SEs
+clustered on the opening, **no engine adjudication of any kind**, 0 voids and 0 ply-cap
+terminations in the whole run. 2 h 16 min on 13 pinned single-thread workers.
+
+**The answer is yes, and the number is the transfer ratio.** Every band gap separates, down
+to 100 points: 1000v2400 **−289.6 Elo**, 1000v2000 **−260.7**, 1500v1800 **−69.8**,
+1500v1600 **−22.1** (p 7.7e-06), 1900v2000 **−26.9** — against a same-band control at
+**0.4956 [0.475, 0.517] p = 0.68** and a Temperature positive control at **+468 Elo**.
+**D324's pre-registered ladder passes exactly as written** (0.3069 / 0.4990 / 0.6304 /
+0.7652 vs a fixed band-1400 reference, monotone, all adjacent CIs disjoint). **H5's
+2026-08-16 scope note is therefore confirmed: the requested band is a difficulty lever and
+not only a policy lever.** `gates.md` updated.
+
+**And the pass settles the wrong question, which is the finding worth carrying.** *Monotone
+with non-overlapping CIs* is a test of **order** — and R10 had already shown the
+distribution is ordered. The campaign needed **scale**. The scale is **0.289 [0.269, 0.309]
+Elo per band point over the corpus and 0.400 [0.379, 0.421] at full material**: 100 band
+points buy **29–40 real Elo, not 100**. Any dial with a positive ratio passes D324's
+criterion at sufficient n; this one would have passed at 0.05.
+
+**What that does to D332.** The denominator survives and its units do not. The stated
+1000→2000 journey is worth **260.7 Elo [233.3, 291.0]**; the whole usable `[1000, 2400]` is
+**289.6**; the most favourable cut available — the full-material ladder from band 1000 to
+2200 — is **479.8 [454.9, 504.7]**. The coverage requirement was derived before the run
+from D332's own journey over R10's own range (ratio ≥ 1000/1400 = **0.714**), and the
+corpus-wide figure reaches 29% of it, the best case 56%. **A learner Elo against Maia bands
+is a real measurement on a ~290–480-point axis, not a 1000-point one.** And a **100-band
+step is real but not a rung**: 22.1 and 26.9 Elo against a ±60 threshold derived from the
+SE of a learner's own 30-game session, so the usable step is **≈150–208 band points** and
+the range is five to nine rungs, not fourteen.
+
+**Two edges where the dial stops.** 2000→2400 buys **+28.9 Elo, CI [−16.7, 74.5],
+p = 0.21** — R10's bound is on where the band still *reaches* the model, not where it still
+*buys difficulty*. And **material, not the declared phase, is what attenuates it**: the
+widest gap is worth **−468.9 Elo at ≥21 pieces, −145.5 at 11–20, −72.4 at ≤10**, and a
+100-band step is **−28.7/−37.2** at full material with CIs excluding parity against
+**−10.1/−4.0** below ten pieces with CIs straddling it. Every low-material pack setting
+`human_common` + `targetElo` is turning a dial worth ~7 Elo per 100 points and nothing warns
+the author.
+
+**The methodological by-product is bigger than it looks, and it nearly ate the study.**
+`maia3-uci` calls `seed_everything(cfg.seed)` at process start with **`--seed` defaulting to
+42**, and the shipped ENTRYPOINT passes none — so every Maia sidecar this product has ever
+started ran at seed 42, and **two fresh sidecars given the same requests return
+byte-identical moves**. The first run of this harness, unseeded across twelve workers,
+produced **611 of 611 mirrored pairs with byte-identical move lists**, a 50.8% duplicate
+rate, and a same-band control reporting **exactly 0.500 with a standard error of exactly
+0.0** — the most confident possible wrong answer, from the one arm whose job was to catch
+exactly that. Fixed with a distinct `--seed` per worker and an odd worker count; the whole
+run was then re-done from scratch. **This also corrects a reading of R5**: `human_common` is
+reproducible **by process replay**, which `rfc/archive/resistance-spectrum.md` open question
+1 never costed. R5's mechanism description was right; its conclusion was one step too broad.
+
+**Changed.** Ten ledger rows (D335–D344) and the id-block registry line; D333 ✅, D324 ✅
+(passed, framing superseded), D291 ✅ (its WDL half stands and its outcome half is now
+measured); one coverage-matrix row; `work-register` §5; `gates.md` H5 (confirmed) and K5
+(explicitly *not* touched, recorded so the pass is not misread).
+
+**Blocked / owed to the owner tier — one `DESIGN-GAP:`, not acted on here per law 5.**
+`design/06-campaign.md` §2b states the usable band as `[1000, 2400]` and builds the
+phase-boss ladder on it with no magnitude. The magnitude now exists — ≈0.40 Elo per band
+point at full material, ≈0.29 over the corpus, ≈0.07 below ten pieces — and §2b's endgame
+boss being `perfect_tablebase` means the doc is not contradicted, only under-specified. The
+owner questions are **D337** (which of the three exits for the 1000→2000 journey) and
+**D336** (fix the campaign's rung size at ~150–300 band points).
+
+**Next.** D344 is the one thing that should not wait: whatever implements D332/D365 must
+take a **calibrated** opponent rating, stored separately from `targetElo`, because a Glicko
+RD narrows on volume rather than validity and will not catch a mis-specified opponent. The
+cheap follow-on is D339's lint — warn when a pack's start position is below ~15 pieces and
+its `opponentPolicy` is `human_common` with a `targetElo`.
+
+**Not run, and named so it is not assumed.** Nothing here measures a *human* against a band.
+The whole study is engine-vs-engine, which is what makes it law-8-clean, and the step from
+"band 1800 beats band 1500 by 70 Elo" to "a 1500-rated human would too" has no evidence in
+this repo.

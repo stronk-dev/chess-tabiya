@@ -225,11 +225,11 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
     collisionCounts.set(baseId, occurrence);
     const id = occurrence === 1 ? baseId : `${baseId}-${occurrence}`;
     const blockers = [
-      "The objective transitions on reaching the checkpoint, i.e. on playing the position out. No shipped mechanism grades how it was played out or what happened to the position; adding one is an authored act.",
-      "The start position is whatever the puzzle's solution produced; it is not asserted to be winning, equal, or better for the learner. No engine or tablebase has evaluated it.",
-      "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft",
-      "targetElo clamp [1100, 2000] is an authoring convention, not a Maia capability claim",
-      "No authored plan, deviation, or feedback claim exists; a reviewer must add any chess judgement rather than infer one from puzzle metadata.",
+      { id: "outcome-ungraded", state: "blocking" as const, statement: "The objective transitions on reaching the checkpoint, i.e. on playing the position out. No shipped mechanism grades how it was played out or what happened to the position; adding one is an authored act." },
+      { id: "start-assessment-absent", state: "blocking" as const, statement: "The start position is whatever the puzzle's solution produced; it is not asserted to be winning, equal, or better for the learner. No engine or tablebase has evaluated it." },
+      { id: "mechanical-objective-placeholder", state: "blocking" as const, statement: "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft" },
+      { id: "target-elo-authored", state: "blocking" as const, statement: "targetElo clamp [1100, 2000] is an authoring convention, not a Maia capability claim" },
+      { id: "authored-teaching-absent", state: "blocking" as const, statement: "No authored plan, deviation, or feedback claim exists; a reviewer must add any chess judgement rather than infer one from puzzle metadata." },
     ];
     const pack = {
       id, version: "0.1.0", title: `Play on from Lichess puzzle ${row.puzzleId}`, mode: "outcome",
@@ -246,7 +246,7 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
           ...(options.guardMate === undefined ? {} : { fireOnMate: options.guardMate }),
         },
       }),
-      provenance: { reviewStatus: "draft", sources: [`Lichess puzzle database (${PUZZLE_DUMP_URL}, etag ${String(source.origin.kind === "http" ? source.origin.etag : null)}) — CC0-1.0; database exports may be used for any purpose`], reviewers: [], licence: "CC-BY-SA-4.0", graduationBlockers: blockers },
+      provenance: { reviewStatus: "draft", sources: [`Lichess puzzle database (${PUZZLE_DUMP_URL}, etag ${String(source.origin.kind === "http" ? source.origin.etag : null)}) — CC0-1.0; database exports may be used for any purpose`], licence: "CC-BY-SA-4.0", graduationBlockers: blockers },
     } satisfies DrillPackDefinition;
     const validation = validatePackDocument(pack);
     if (!validation.valid) throw new SourcingError("EMITTED_PACK_INVALID", validation.issues.map((value) => `${value.path} ${value.code}: ${value.message}`).join("; "));

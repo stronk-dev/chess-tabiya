@@ -549,14 +549,42 @@
       "MECHANICAL WALK: every spine move, every sibling branch and every deviation was walked with the repo's chessops dependency and its SAN legality check before encoding. Drafted lines the walk refuted and which are therefore NOT in this pack: after 6.h3 Qh5 the reply Nxh5 is not a knight move; after 8.Ne5 the reply ...Nxe5 is not available to the f6 knight; and after 7...Nxd4 in the Be2 branch, Bxg4 is illegal because White's own knight stands on f3.",
       "UNGROUNDED: the objective summary, the three plan-class descriptions, every spine annotation's strategic content, all deviation classes, and the reasoning connecting the measured numbers to advice are agent-authored prose with no citation and no human review."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "NO shapes reference, deliberately, and a shape entry is hereby commissioned. The Be2 branch reaches kings castled on opposite wings, but content/shapes/opposite-castling-race.json covers only the White-long / Black-short orientation - checked mechanically this session: its trigger matches none of this pack's walked positions, and no other shipped entry matches any of them either. Per the mirroring law its colour-owned plans cannot be re-pointed at the reversed arrangement, so this pack ships without a reference rather than with a wrong one.",
-      "The pack's thesis - that 6.h3 is the move to drill - rests on two instruments agreeing (band score and depth-22 evaluation). Neither measures whether a 1400-2000 player can handle the resulting loosened kingside, which is the actual question a repertoire choice asks. That gap is unmeasurable with anything in this repository.",
-      "Deviation classes are agent-authored and objective-relative (rfc/archive/content-sourcing-foundation.md:772). Two sit beside numbers that read oddly: 4.Nf3 is classed accepted_alternative at a 0.01 cost, and 8.g5 is classed tactical_error at 1.04 with no tactic involved. The numbers are recorded beside the classes and the classes were not changed to fit them.",
-      "The h3 line's band evidence stops at 13 plies (25,245 games after 7.g4). Everything the pack says about the position after 8.Ne5 is engine evaluation plus authored prose, with no frequency behind it.",
-      "No machine-readable evidence slot exists for an opening pack: make verify-draft refuses anything that is not a syzygy assessment, and a follow_theory objective may not carry objective.grading, so the engine evidence lives in provenance.engineValidation and no evidence sidecar exists or can exist."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "no-shapes-reference-deliberately-and-a-shape-entry-is-he",
+        "state": "blocking",
+        "statement": "NO shapes reference, deliberately, and a shape entry is hereby commissioned. The Be2 branch reaches kings castled on opposite wings, but content/shapes/opposite-castling-race.json covers only the White-long / Black-short orientation - checked mechanically this session: its trigger matches none of this pack's walked positions, and no other shipped entry matches any of them either. Per the mirroring law its colour-owned plans cannot be re-pointed at the reversed arrangement, so this pack ships without a reference rather than with a wrong one."
+      },
+      {
+        "id": "the-pack-s-thesis-that-6-h3-is-the-move-to-drill-rests-o",
+        "state": "blocking",
+        "statement": "The pack's thesis - that 6.h3 is the move to drill - rests on two instruments agreeing (band score and depth-22 evaluation). Neither measures whether a 1400-2000 player can handle the resulting loosened kingside, which is the actual question a repertoire choice asks. That gap is unmeasurable with anything in this repository."
+      },
+      {
+        "id": "deviation-classes-are-agent-authored-and-objective-relat",
+        "state": "blocking",
+        "statement": "Deviation classes are agent-authored and objective-relative (rfc/archive/content-sourcing-foundation.md:772). Two sit beside numbers that read oddly: 4.Nf3 is classed accepted_alternative at a 0.01 cost, and 8.g5 is classed tactical_error at 1.04 with no tactic involved. The numbers are recorded beside the classes and the classes were not changed to fit them."
+      },
+      {
+        "id": "the-h3-line-s-band-evidence-stops-at-13-plies-25-245-gam",
+        "state": "blocking",
+        "statement": "The h3 line's band evidence stops at 13 plies (25,245 games after 7.g4). Everything the pack says about the position after 8.Ne5 is engine evaluation plus authored prose, with no frequency behind it."
+      },
+      {
+        "id": "no-machine-readable-evidence-slot-exists-for-an-opening-",
+        "state": "blocking",
+        "statement": "No machine-readable evidence slot exists for an opening pack: make verify-draft refuses anything that is not a syzygy assessment, and a follow_theory objective may not carry objective.grading, so the engine evidence lives in provenance.engineValidation and no evidence sidecar exists or can exist."
+      }
     ]
   }
 }

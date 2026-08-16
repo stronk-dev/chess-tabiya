@@ -13,8 +13,22 @@
   "start": {
     "fen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9",
     "movesSan": [
-      "e4", "e5", "Nf3", "Nc6", "Bb5", "Nf6", "O-O", "Nxe4", "d4", "Nd6",
-      "Bxc6", "dxc6", "dxe5", "Nf5", "Qxd8+", "Kxd8"
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bb5",
+      "Nf6",
+      "O-O",
+      "Nxe4",
+      "d4",
+      "Nd6",
+      "Bxc6",
+      "dxc6",
+      "dxe5",
+      "Nf5",
+      "Qxd8+",
+      "Kxd8"
     ],
     "side": "white"
   },
@@ -31,21 +45,65 @@
             {
               "kind": "quantified",
               "quantifier": "some",
-              "over": { "squares": { "files": { "from": "c", "to": "f" }, "ranks": { "from": 2, "to": 5 } } },
-              "feature": { "kind": "piece", "piece": { "color": "white", "role": "king" } }
+              "over": {
+                "squares": {
+                  "files": {
+                    "from": "c",
+                    "to": "f"
+                  },
+                  "ranks": {
+                    "from": 2,
+                    "to": 5
+                  }
+                }
+              },
+              "feature": {
+                "kind": "piece",
+                "piece": {
+                  "color": "white",
+                  "role": "king"
+                }
+              }
             },
             {
               "kind": "not",
               "of": {
                 "kind": "quantified",
                 "quantifier": "some",
-                "over": { "squares": { "files": { "from": "c", "to": "f" }, "ranks": { "from": 2, "to": 5 } } },
-                "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } }
+                "over": {
+                  "squares": {
+                    "files": {
+                      "from": "c",
+                      "to": "f"
+                    },
+                    "ranks": {
+                      "from": 2,
+                      "to": 5
+                    }
+                  }
+                },
+                "feature": {
+                  "kind": "piece",
+                  "piece": {
+                    "color": "black",
+                    "role": "king"
+                  }
+                }
               }
             },
             {
               "kind": "feature",
-              "feature": { "kind": "piece_distance", "color": "white", "role": "king", "target": { "kind": "square", "square": "e4" }, "comparison": "atMost", "count": 2 }
+              "feature": {
+                "kind": "piece_distance",
+                "color": "white",
+                "role": "king",
+                "target": {
+                  "kind": "square",
+                  "square": "e4"
+                },
+                "comparison": "atMost",
+                "count": 2
+              }
             }
           ]
         }
@@ -58,18 +116,110 @@
           "of": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } } },
-              { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } } },
-              { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } },
-              { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "rook", "basis": "count", "comparison": "atLeast", "count": 1 } },
-              { "kind": "any", "of": [
-                { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } },
-                { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }
-              ] },
-              { "kind": "any", "of": [
-                { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "knight", "basis": "count", "comparison": "atLeast", "count": 1 } },
-                { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "bishop", "basis": "count", "comparison": "atLeast", "count": 1 } }
-              ] }
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "feature",
+                  "feature": {
+                    "kind": "piece_count",
+                    "color": "white",
+                    "role": "queen",
+                    "basis": "count",
+                    "comparison": "atLeast",
+                    "count": 1
+                  }
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "feature",
+                  "feature": {
+                    "kind": "piece_count",
+                    "color": "black",
+                    "role": "queen",
+                    "basis": "count",
+                    "comparison": "atLeast",
+                    "count": 1
+                  }
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_count",
+                  "color": "white",
+                  "role": "rook",
+                  "basis": "count",
+                  "comparison": "atLeast",
+                  "count": 1
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_count",
+                  "color": "black",
+                  "role": "rook",
+                  "basis": "count",
+                  "comparison": "atLeast",
+                  "count": 1
+                }
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "feature",
+                    "feature": {
+                      "kind": "piece_count",
+                      "color": "white",
+                      "role": "knight",
+                      "basis": "count",
+                      "comparison": "atLeast",
+                      "count": 1
+                    }
+                  },
+                  {
+                    "kind": "feature",
+                    "feature": {
+                      "kind": "piece_count",
+                      "color": "white",
+                      "role": "bishop",
+                      "basis": "count",
+                      "comparison": "atLeast",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "feature",
+                    "feature": {
+                      "kind": "piece_count",
+                      "color": "black",
+                      "role": "knight",
+                      "basis": "count",
+                      "comparison": "atLeast",
+                      "count": 1
+                    }
+                  },
+                  {
+                    "kind": "feature",
+                    "feature": {
+                      "kind": "piece_count",
+                      "color": "black",
+                      "role": "bishop",
+                      "basis": "count",
+                      "comparison": "atLeast",
+                      "count": 1
+                    }
+                  }
+                ]
+              }
             ]
           }
         }
@@ -82,25 +232,36 @@
     "king-activity",
     "open-d-file"
   ],
-  "shapes": ["queenless-middlegame"],
+  "shapes": [
+    "queenless-middlegame"
+  ],
   "planClasses": [
     {
       "id": "king-into-the-game",
       "label": "Walk the king into the middle",
       "description": "The library's king plan, and the one this pack's objective is built on (verbatim in the king-arrived checkpoint; with one implied extra conjunct in the objective, for the reason given in the objective summary). Its signature is a region test, not a judgment: a white king somewhere in files c to f between ranks 2 and 5, and no black king in the same region. The entry's own note says the region is an authored choice and that the census cannot say the king is safe there. Measured on the eleven positions this pack authors: satisfied at none. The second half is already satisfied at all eleven — Black's king never leaves the back rank on this spine — so the only untrue clause is where your own king is.",
-      "shapePlan": { "shape": "queenless-middlegame", "plan": "white-king-into-the-game" }
+      "shapePlan": {
+        "shape": "queenless-middlegame",
+        "plan": "white-king-into-the-game"
+      }
     },
     {
       "id": "press-for-the-first-weakness",
       "label": "Press until something concedes",
       "description": "The library's technique plan. Read its signature before you choose it: it tests whether some file carries an isolated or a doubled black pawn. Measured on the eleven positions this pack authors, it is satisfied at all eleven, including the start position before you have moved — Black's c-pawns were doubled by the recapture that reached this position. The entry says outright that the vocabulary cannot tell an induced weakness from an inherited one, and here the distinction is the whole plan, so this pack does not use this signature to grade anything.",
-      "shapePlan": { "shape": "queenless-middlegame", "plan": "white-first-weakness" }
+      "shapePlan": {
+        "shape": "queenless-middlegame",
+        "plan": "white-first-weakness"
+      }
     },
     {
       "id": "what-black-is-doing",
       "label": "The stance you are pressing against",
       "description": "Listed so the opponent's side of the entry is visible, not to be chosen. Both of the entry's Black plans have a null success signature: the entry declines to encode one on the stated grounds that neutralization is duration rather than a position property, and that the timing of the first asymmetry cannot be fixed in advance for the family. Nothing in this pack grades Black, and nothing could.",
-      "shapePlan": { "shape": "queenless-middlegame", "plan": "black-neutralize-at-par" }
+      "shapePlan": {
+        "shape": "queenless-middlegame",
+        "plan": "black-neutralize-at-par"
+      }
     }
   ],
   "spine": [
@@ -194,24 +355,39 @@
     {
       "id": "plan-choice",
       "label": "Before your first move: which of the library's two White plans are you playing?",
-      "trigger": { "atStart": true },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atStart": true
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["king-into-the-game", "press-for-the-first-weakness"]
+        "planClassIds": [
+          "king-into-the-game",
+          "press-for-the-first-weakness"
+        ]
       }
     },
     {
       "id": "kingside-pawns-moved",
       "label": "Two of your own pawn moves have been on the kingside",
-      "trigger": { "atSpineNode": "g4-gain" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "g4-gain"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "last-authored-position",
       "label": "Eight plies in: Black's pawns are unchanged and your king has not moved",
-      "trigger": { "atSpineNode": "nd4-post" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "nd4-post"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "king-arrived",
@@ -225,23 +401,59 @@
               {
                 "kind": "quantified",
                 "quantifier": "some",
-                "over": { "squares": { "files": { "from": "c", "to": "f" }, "ranks": { "from": 2, "to": 5 } } },
-                "feature": { "kind": "piece", "piece": { "color": "white", "role": "king" } }
+                "over": {
+                  "squares": {
+                    "files": {
+                      "from": "c",
+                      "to": "f"
+                    },
+                    "ranks": {
+                      "from": 2,
+                      "to": 5
+                    }
+                  }
+                },
+                "feature": {
+                  "kind": "piece",
+                  "piece": {
+                    "color": "white",
+                    "role": "king"
+                  }
+                }
               },
               {
                 "kind": "not",
                 "of": {
                   "kind": "quantified",
                   "quantifier": "some",
-                  "over": { "squares": { "files": { "from": "c", "to": "f" }, "ranks": { "from": 2, "to": 5 } } },
-                  "feature": { "kind": "piece", "piece": { "color": "black", "role": "king" } }
+                  "over": {
+                    "squares": {
+                      "files": {
+                        "from": "c",
+                        "to": "f"
+                      },
+                      "ranks": {
+                        "from": 2,
+                        "to": 5
+                      }
+                    }
+                  },
+                  "feature": {
+                    "kind": "piece",
+                    "piece": {
+                      "color": "black",
+                      "role": "king"
+                    }
+                  }
                 }
               }
             ]
           }
         }
       },
-      "actions": ["compare_branches"]
+      "actions": [
+        "compare_branches"
+      ]
     }
   ],
   "authoredBoundary": {
@@ -266,37 +478,49 @@
   },
   "deviations": [
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c1g5",
       "class": "accepted_alternative",
       "note": "Bg5+ is the second-most-played move in the start position at this band: 1221 of 6011 (20.3%). Nothing in this pack compares it against Nc3 — the two are separated by 17 percentage points of popularity and by nothing else that has been measured here."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "f1d1",
       "class": "accepted_alternative",
       "note": "Rd1+ is the third-most-played move: 1205 of 6011 (20.0%). Computed: the d-file is fully open at every one of the eleven positions this pack authors, neither side having a d-pawn, so the rook faces the black king down an empty file at every one of them."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "h2h3",
       "class": "accepted_alternative",
       "note": "302 of 6011 (5.0%). The same move the spine plays two plies later. Nothing in this repo has measured which order is better; the counts say only that the band plays it here about a seventh as often as Nc3."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "f3g5",
       "class": "interesting_deviation",
       "note": "Ng5: 323 of 6011 (5.4%). Computed in the start position: the knight on f3 is the only White attacker of the e5 pawn, which Black attacks zero times. This move removes that attacker's defence of e5 while leaving the pawn unattacked; whether that matters is not measured here."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "b2b3",
       "class": "interesting_deviation",
       "note": "b3: 136 of 6011 (2.3%). Computed from the skeletons: Black has four queenside pawns (a7, b7, c6, c7) to White's three (a2, b2, c2). This pack has measured no consequence of the move beyond the skeleton change itself, which is why it is a door and not an error."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c2c4",
       "class": "interesting_deviation",
       "note": "c4: 51 of 6011 (0.8%), the tenth-most-played move in the returned table and the one with the highest average opponent rating in the returned table (1949 against the position's spread of roughly 1713 to 1949). A rating average is not an assessment; it is the mean Elo of the players who chose it."
@@ -307,27 +531,37 @@
     {
       "id": "band-result-split",
       "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 6011 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15) the outcomes were 2419 white wins, 589 draws and 3003 black wins (40.2/9.8/50.0%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "position-is-common-agreement-is-not",
       "text": "At the Lichess 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12) the start position occurs in 6011 games, but the band does not agree on what to do: Nc3 2260 (37.6%), Bg5+ 1221 (20.3%) and Rd1+ 1205 (20.0%) take 77.9% between them. The node counts down the spine run 6011, 2244, 513, 175, 53, 32, 34, and the largest share at any node after the first is the 100% of a position with 32 games in it.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "the-weakness-was-inherited",
       "text": "Black's pawn skeleton is a7, b7, c6, c7, f7, g7, h7 at every one of the eleven positions this pack authors — it does not change once in eight plies. The shape entry's first-weakness plan checks for an isolated or doubled black pawn on some file, and that check is satisfied at the start position, before White has moved, because the doubled c-pawn came from the recapture that produced the position. Eight plies of the corpus's most-played moves induce nothing.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     },
     {
       "id": "the-king-never-moves",
       "text": "The objective's signature was evaluated against all eleven authored positions and is satisfied at none. The clause that fails is always the same one: White's king is on g1 at all eleven. The other clause — that Black's king is outside the central region — is satisfied at all eleven, the black king standing on d8, e8 or c8 throughout. The drill is the clause the corpus does not play.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     },
     {
       "id": "no-race-here",
       "text": "This pack declares no timing window, and the reason is measured rather than stylistic. Black's pawns never move on this spine, so there is no pawn arrival for a window to close on; the band's first move splits three ways at 37.6/20.3/20.0 rather than converging on one lever; and both of the shape entry's Black plans carry a null success signature, so the library itself declines to name the moment Black's counterplay arrives. A window here would have had to invent its own deadline.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     }
   ],
   "provenance": {
@@ -344,15 +578,47 @@
       "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no engine evaluation has been run on any position here, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one. In particular nothing here says that Black's doubled c-pawns are a weakness — only that the shape entry's signature for a weakness is satisfied by them, from move one.",
       "CITATION PASS (2026-08-16): this is the pass's clearest partial failure and it is recorded as one. en.wikipedia.org/wiki/Berlin_Defence (CC BY-SA 4.0, read 2026-08-16) does back the position's description — after 8...Kxd8 Black is in \"an endgame where Black has lost castling rights\", White has \"a pawn majority on the kingside\", Black has the bishop pair, \"doubled pawns and a king misplaced in the centre\", and 9...Bd7 is played \"intending a later ...Kc8\", which is the king walk this pack drills. WHERE IT POINTS THE OTHER WAY: the source calls the position an ENDGAME, not a queenless middlegame, states that \"Black can hold the endgame with accurate play\", and describes the king as MISPLACED rather than as an asset — the opposite valence to a king-activity plan. It supplies no king-activity plan for queenless middlegames at all. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "CITED 2026-08-16 (the position and the king walk only). That Black loses castling rights, that the king regroups toward c8, and the bishop-pair-against-kingside-majority imbalance are stated by en.wikipedia.org/wiki/Berlin_Defence (CC BY-SA 4.0), attributed in provenance.attribution.",
-      "STILL UNCITED, AND THE CITATION ARGUES AGAINST THE FRAMING: the objective wants a king-activity plan for queenless middlegames, and the one compatible source found calls this position an endgame, calls Black's king \"misplaced in the centre\", and says \"Black can hold the endgame with accurate play\". That is a source for the position, not for the plan, and its valence is the reverse of this pack's. The pack's own corpus measurement already pointed the same way in the weak sense that nobody plays it. Two independent signals now lean against this objective and the honest next step is to re-examine it, not to cite harder.",
-      "The objective's achieved signature is satisfied at none of the eleven authored positions, so the spine never demonstrates the target. That is deliberate — the target is reached in play, past the authored boundary — but nothing in this file shows a learner what success looks like.",
-      "No timing window is declared. The negative was measured and is recorded in the no-race-here feedback claim: no black pawn moves anywhere on this spine, so there is no arrival to close on; the band's first move splits three ways rather than naming one lever; and both Black plans in the referenced shape entry have null success signatures, so the library cannot say when Black's counterplay has arrived. Any deadline would have been authored out of nothing, which is the one thing the timing layer must not be used for.",
-      "No engine pass has been run on this pack, so no deviation carries a measured cost. There is also no concept_violation: the referenced entry's trigger needs both sides to keep a queenless position with a rook and a minor, and no single legal move from the start position can break that conjunction, so nothing here is off-objective by definition.",
-      "The referenced entry's own trigger-narrowing note applies to this pack: the trigger proves queenless but cannot prove the symmetry its name promises, and cannot mark the middlegame-endgame boundary. This pack inherits both limits."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "cited-2026-08-16-the-position-and-the-king-walk-only-tha",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (the position and the king walk only). That Black loses castling rights, that the king regroups toward c8, and the bishop-pair-against-kingside-majority imbalance are stated by en.wikipedia.org/wiki/Berlin_Defence (CC BY-SA 4.0), attributed in provenance.attribution."
+      },
+      {
+        "id": "still-uncited-and-the-citation-argues-against-the-framin",
+        "state": "blocking",
+        "statement": "STILL UNCITED, AND THE CITATION ARGUES AGAINST THE FRAMING: the objective wants a king-activity plan for queenless middlegames, and the one compatible source found calls this position an endgame, calls Black's king \"misplaced in the centre\", and says \"Black can hold the endgame with accurate play\". That is a source for the position, not for the plan, and its valence is the reverse of this pack's. The pack's own corpus measurement already pointed the same way in the weak sense that nobody plays it. Two independent signals now lean against this objective and the honest next step is to re-examine it, not to cite harder."
+      },
+      {
+        "id": "the-objective-s-achieved-signature-is-satisfied-at-none-",
+        "state": "blocking",
+        "statement": "The objective's achieved signature is satisfied at none of the eleven authored positions, so the spine never demonstrates the target. That is deliberate — the target is reached in play, past the authored boundary — but nothing in this file shows a learner what success looks like."
+      },
+      {
+        "id": "no-timing-window-is-declared-the-negative-was-measured-a",
+        "state": "blocking",
+        "statement": "No timing window is declared. The negative was measured and is recorded in the no-race-here feedback claim: no black pawn moves anywhere on this spine, so there is no arrival to close on; the band's first move splits three ways rather than naming one lever; and both Black plans in the referenced shape entry have null success signatures, so the library cannot say when Black's counterplay has arrived. Any deadline would have been authored out of nothing, which is the one thing the timing layer must not be used for."
+      },
+      {
+        "id": "no-engine-pass-has-been-run-on-this-pack-so-no-deviation",
+        "state": "blocking",
+        "statement": "No engine pass has been run on this pack, so no deviation carries a measured cost. There is also no concept_violation: the referenced entry's trigger needs both sides to keep a queenless position with a rook and a minor, and no single legal move from the start position can break that conjunction, so nothing here is off-objective by definition."
+      },
+      {
+        "id": "the-referenced-entry-s-own-trigger-narrowing-note-applie",
+        "state": "blocking",
+        "statement": "The referenced entry's own trigger-narrowing note applies to this pack: the trigger proves queenless but cannot prove the symmetry its name promises, and cannot mark the middlegame-endgame boundary. This pack inherits both limits."
+      }
     ],
     "attribution": [
       {

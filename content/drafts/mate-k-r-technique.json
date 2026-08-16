@@ -413,12 +413,36 @@
       "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Checkmate §Basic checkmates (CC BY-SA 4.0, read 2026-08-16) states the K+R method as confining \"the black king to a rectangle and shrinking the rectangle to force the king to the edge of the board\", with mate forced \"in at most sixteen moves from any starting position\". en.wikipedia.org/wiki/Opposition_(chess) (CC BY-SA 4.0, same date) defines the direct opposition — \"both kings are two squares apart on the same rank or file\" — and states that \"the player not having to move is said to have the opposition\", which is the mechanism this pack's opposition-and-drive plan uses. WHAT THEY DO NOT SUPPLY: the tempo-move plan (the rook slide along the fence that changes only whose turn it is) is named as the move beginners never find and neither source states it. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "CITED 2026-08-16 (partial). The cut-and-fence and opposition-and-drive plans restate the method in en.wikipedia.org/wiki/Checkmate §Basic checkmates plus the opposition definition in en.wikipedia.org/wiki/Opposition_(chess) (both CC BY-SA 4.0), attributed in provenance.attribution.",
-      "STILL UNBACKED after the 2026-08-16 citation pass: the tempo-move plan and the long-side preference inside it are authored; no consulted CC-BY-SA source states either. This is a zugzwang claim about specific positions, so a tablebase enumeration could settle it and has not been run.",
-      "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
-      "No shape-library entry names the theoretical-mate boxes; commission one if the library should fire on K+R positions in Just Play.",
-      "The natural opponent for a mates pack is perfect_tablebase; that mode is declared-unimplemented in v1, so human_common at 1200 stands in.",
-      "PRE-EXISTING at the 2026-08-16 citation pass, found by running digestDrillPack against the sidecar and NOT caused by that pass: this pack's evidence ledger stores a packDigest that does not match the pack document, so `checkSourcingFile` raises EVIDENCE_DIGEST_STALE (\"re-confirm evidence\") on it. The evidence in the sidecar was confirmed against a different version of this file. The citation pass did not re-stamp it, because re-stamping would erase a signal it did not create. Only three of the corpus's 32 evidence sidecars are in this state: mate-bishop-knight, mate-k-q-technique and mate-k-r-technique. Clearing this means re-running the evidence, not re-writing the digest."
+      {
+        "id": "cited-2026-08-16-partial-the-cut-and-fence-and-oppositio",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (partial). The cut-and-fence and opposition-and-drive plans restate the method in en.wikipedia.org/wiki/Checkmate §Basic checkmates plus the opposition definition in en.wikipedia.org/wiki/Opposition_(chess) (both CC BY-SA 4.0), attributed in provenance.attribution."
+      },
+      {
+        "id": "still-unbacked-after-the-2026-08-16-citation-pass-the-te",
+        "state": "blocking",
+        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the tempo-move plan and the long-side preference inside it are authored; no consulted CC-BY-SA source states either. This is a zugzwang claim about specific positions, so a tablebase enumeration could settle it and has not been run."
+      },
+      {
+        "id": "the-syzygy-root-assessment-is-declared-but-not-ledger-ve",
+        "state": "blocking",
+        "statement": "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced."
+      },
+      {
+        "id": "no-shape-library-entry-names-the-theoretical-mate-boxes-",
+        "state": "blocking",
+        "statement": "No shape-library entry names the theoretical-mate boxes; commission one if the library should fire on K+R positions in Just Play."
+      },
+      {
+        "id": "the-natural-opponent-for-a-mates-pack-is-perfect-tableba",
+        "state": "blocking",
+        "statement": "The natural opponent for a mates pack is perfect_tablebase; that mode is declared-unimplemented in v1, so human_common at 1200 stands in."
+      },
+      {
+        "id": "pre-existing-at-the-2026-08-16-citation-pass-found-by-ru",
+        "state": "blocking",
+        "statement": "PRE-EXISTING at the 2026-08-16 citation pass, found by running digestDrillPack against the sidecar and NOT caused by that pass: this pack's evidence ledger stores a packDigest that does not match the pack document, so `checkSourcingFile` raises EVIDENCE_DIGEST_STALE (\"re-confirm evidence\") on it. The evidence in the sidecar was confirmed against a different version of this file. The citation pass did not re-stamp it, because re-stamping would erase a signal it did not create. Only three of the corpus's 32 evidence sidecars are in this state: mate-bishop-knight, mate-k-q-technique and mate-k-r-technique. Clearing this means re-running the evidence, not re-writing the digest."
+      }
     ],
     "licence": "CC-BY-SA-4.0",
     "attribution": [

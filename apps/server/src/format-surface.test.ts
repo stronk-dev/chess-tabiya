@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFileSync } from "node:fs";
 
 import { DRILL_PACK_SCHEMA_VERSION } from "@chess-tabiya/schema";
@@ -9,7 +11,7 @@ import { DECLARED_UNIMPLEMENTED_POLICY_MODES } from "./capabilities.js";
 import { validatePackDocument } from "./pack-validation.js";
 
 const source = JSON.parse(readFileSync(
-  new URL("../../../content/drafts/trajectory-mate-bishop-knight.json", import.meta.url),
+  new URL(resolvePackPath("trajectory-mate-bishop-knight"), import.meta.url),
   "utf8",
 )) as DrillPackDefinition;
 
@@ -26,7 +28,7 @@ describe("format surface 0.25", () => {
     const value = candidate();
     const result = validatePackDocument(value);
     expect(result.valid, JSON.stringify(result.issues)).toBe(true);
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.26");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.27");
   });
 
   it("refuses every inert or unrecordable per-leg form by name", () => {

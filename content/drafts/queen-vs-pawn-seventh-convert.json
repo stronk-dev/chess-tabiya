@@ -474,9 +474,21 @@
       "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Queen_versus_pawn_endgame (CC BY-SA 4.0, read 2026-08-16) states this pack's technique verbatim in substance — \"check the defending king until it is forced in front of the pawn and using that tempo to bring the attacking king closer\" — and states the exception this pack's second plan class is entirely about: against a bishop or rook pawn on the seventh the defender draws by stalemate, \"White cannot capture the pawn because stalemate would result\". This is the closest source-to-prose match in the corpus. WHAT IT DOES NOT SUPPLY: that this root's king distance still wins, and the companion c-pawn draw, are tablebase facts recorded in this pack, not citations. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "CITED 2026-08-16. Both the zigzag technique and the drawn-files exception are stated by en.wikipedia.org/wiki/Queen_versus_pawn_endgame (CC BY-SA 4.0), attributed in provenance.attribution. The prose is no longer authored consensus.",
-      "STILL UNBACKED after the 2026-08-16 citation pass: the claim about \"how little slack\" this position has is an authored reading of the tablebase margin rather than a measured margin, and the pack states no enumeration behind it.",
-      "The rook-pawn drawn-file claim inside the drawn-files plan class is standard theory NOT queried here; one further tablebase query would clear it and should be made when the hold-side pack is authored."
+      {
+        "id": "cited-2026-08-16-both-the-zigzag-technique-and-the-drawn",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16. Both the zigzag technique and the drawn-files exception are stated by en.wikipedia.org/wiki/Queen_versus_pawn_endgame (CC BY-SA 4.0), attributed in provenance.attribution. The prose is no longer authored consensus."
+      },
+      {
+        "id": "still-unbacked-after-the-2026-08-16-citation-pass-the-cl",
+        "state": "blocking",
+        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the claim about \"how little slack\" this position has is an authored reading of the tablebase margin rather than a measured margin, and the pack states no enumeration behind it."
+      },
+      {
+        "id": "the-rook-pawn-drawn-file-claim-inside-the-drawn-files-pl",
+        "state": "blocking",
+        "statement": "The rook-pawn drawn-file claim inside the drawn-files plan class is standard theory NOT queried here; one further tablebase query would clear it and should be made when the hold-side pack is authored."
+      }
     ],
     "licence": "CC-BY-SA-4.0",
     "attribution": [

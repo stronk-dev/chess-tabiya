@@ -263,9 +263,13 @@ export function runExpressionCensus(options: CensusOptions = {}): any {
   const packsWithoutSpine: string[] = [];
   const fixturePacks: string[] = [];
   const packDocuments = new Map<string, DrillPackDefinition>();
+  const packIds = new Map<string, string>();
   for (const absolute of discoveredPackFiles) {
     const pack = readJson(absolute) as DrillPackDefinition;
     if (typeof pack.id !== "string" || typeof pack.mode !== "string") continue;
+    const previous = packIds.get(pack.id);
+    if (previous !== undefined) throw new Error(`duplicate pack id ${pack.id}: ${displayPath(previous)} and ${displayPath(absolute)}`);
+    packIds.set(pack.id, absolute);
     packDocuments.set(absolute, pack);
     const fens = authoredSpineFens(pack);
     if (!Object.hasOwn(pack, "spine")) packsWithoutSpine.push(pack.id);

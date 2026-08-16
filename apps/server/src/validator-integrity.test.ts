@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFileSync } from "node:fs";
 
 import {
@@ -16,7 +18,7 @@ const example = JSON.parse(
   readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8"),
 ) as DrillPackDefinition;
 const trajectory = JSON.parse(
-  readFileSync(new URL("../../../content/drafts/trajectory-mate-bishop-knight.json", import.meta.url), "utf8"),
+  readFileSync(new URL(resolvePackPath("trajectory-mate-bishop-knight"), import.meta.url), "utf8"),
 ) as DrillPackDefinition;
 
 function issue(document: DrillPackDefinition, code: string, path?: string) {
@@ -234,7 +236,7 @@ describe("validator integrity", () => {
       expect(issues.some((candidate) => candidate.code === "THEORY_OBJECTIVE_NEEDS_LINE_MODE")).toBe(false);
     }
 
-    const qgd = JSON.parse(readFileSync(new URL("../../../content/drafts/trajectory-qgd-exchange-minority.json", import.meta.url), "utf8")) as DrillPackDefinition;
+    const qgd = JSON.parse(readFileSync(new URL(resolvePackPath("trajectory-qgd-exchange-minority"), import.meta.url), "utf8")) as DrillPackDefinition;
     const root = createRun({
       id: "qgd-theory-membership",
       packId: qgd.id,

@@ -318,14 +318,42 @@
       "NO ENGINE ANALYSIS WAS RUN. Not one position in this pack has been seen by Stockfish at any depth. NO TABLEBASE GROUND TRUTH EXISTS for any node: fifteen units at the root, eleven after maximal spine trades — Syzygy stops at seven.",
       "UNGROUNDED: the root assessment ('a clean knight up with level pawns is winning'), every plan-class description, every annotation, every deviation classification and note, and every feedbackClaim are agent-authored model knowledge with no citation, no engine validation and no reviewer sign-off."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on a claim clears a blocker.",
-      "The root authored assessment (win) is the pack's load-bearing claim. It is engine-checkable at fixed depth and — after enough trades — partially checkable against Syzygy on sub-lines; neither instrument has been run.",
-      "The claim that the pawn ending after any Nd5/exd5 give-back is 'drawn at best' is stated as a practical judgment and is engine-checkable; it has not been checked.",
-      "The win objective resolves at terminal play against human_common resistance, which means the learner must actually deliver mate — possibly forty-plus moves beyond the 8-ply authored horizon. Whether a 1000-1400 learner finishes rather than abandons is a play-test question the format cannot answer; if runs abandon, the fix is an authored mid-checkpoint resolution, which for a win objective the current grading vocabulary cannot express short of terminal.",
-      "The guard threshold (200cp) encodes the authored claim that give-backs are the only firing-worthy errors in a won position; no play-test evidence supports the number.",
-      "No engine validation pass has been run on any position in this pack."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on a claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "the-root-authored-assessment-win-is-the-pack-s-load-bear",
+        "state": "blocking",
+        "statement": "The root authored assessment (win) is the pack's load-bearing claim. It is engine-checkable at fixed depth and — after enough trades — partially checkable against Syzygy on sub-lines; neither instrument has been run."
+      },
+      {
+        "id": "the-claim-that-the-pawn-ending-after-any-nd5-exd5-give-b",
+        "state": "blocking",
+        "statement": "The claim that the pawn ending after any Nd5/exd5 give-back is 'drawn at best' is stated as a practical judgment and is engine-checkable; it has not been checked."
+      },
+      {
+        "id": "the-win-objective-resolves-at-terminal-play-against-huma",
+        "state": "blocking",
+        "statement": "The win objective resolves at terminal play against human_common resistance, which means the learner must actually deliver mate — possibly forty-plus moves beyond the 8-ply authored horizon. Whether a 1000-1400 learner finishes rather than abandons is a play-test question the format cannot answer; if runs abandon, the fix is an authored mid-checkpoint resolution, which for a win objective the current grading vocabulary cannot express short of terminal."
+      },
+      {
+        "id": "the-guard-threshold-200cp-encodes-the-authored-claim-tha",
+        "state": "blocking",
+        "statement": "The guard threshold (200cp) encodes the authored claim that give-backs are the only firing-worthy errors in a won position; no play-test evidence supports the number."
+      },
+      {
+        "id": "no-engine-validation-pass-has-been-run-on-any-position-i",
+        "state": "blocking",
+        "statement": "No engine validation pass has been run on any position in this pack."
+      }
     ]
   }
 }

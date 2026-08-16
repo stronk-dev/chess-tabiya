@@ -181,6 +181,30 @@ export interface CheckpointDefinition {
   readonly [key: string]: unknown;
 }
 
+export type GraduationEntry =
+  | {
+      readonly id: string;
+      readonly state: "blocking";
+      readonly statement: string;
+      readonly clearedBy?: string;
+    }
+  | {
+      readonly id: string;
+      readonly state: "resolved";
+      readonly statement: string;
+      readonly resolved: { readonly at: string; readonly by: string };
+    }
+  | {
+      readonly id: string;
+      readonly state: "accepted";
+      readonly statement: string;
+      readonly accepted: {
+        readonly kind: "owner_ruling" | "permanent_property" | "out_of_scope";
+        readonly ruling: string;
+        readonly rulingRef: string;
+      };
+    };
+
 export interface DrillPackDefinition {
   readonly id: string;
   readonly version: string;
@@ -197,6 +221,14 @@ export interface DrillPackDefinition {
     readonly [key: string]: unknown;
   };
   readonly checkpoints: readonly CheckpointDefinition[];
+  readonly provenance: {
+    readonly reviewStatus: "schema_example" | "draft" | "published";
+    readonly sources?: readonly string[];
+    readonly licence?: string;
+    readonly reviewers?: readonly string[];
+    readonly attribution?: readonly Readonly<Record<string, unknown>>[];
+    readonly graduationBlockers?: readonly (GraduationEntry | string)[];
+  };
   readonly timingWindows?: readonly TimingWindowDefinition[];
   readonly guard?: {
     readonly evalSwingCp?: number | null;

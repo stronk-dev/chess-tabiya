@@ -473,14 +473,46 @@
       "MECHANICAL WALK: every spine move, every sibling branch and every deviation was walked with the repo's chessops dependency and its SAN legality check before encoding. Three drafted lines were refuted by the walk and are not in this pack: after 7...Nxd4, Bxe2xg4 is illegal because White's own knight stands on f3; after 6.h3 Qh5, Nxh5 is not a knight move; and 6...Qxd4 is not a queen move from a5. Lines are derived here, never recalled.",
       "UNGROUNDED: the objective summary, the three plan-class descriptions, every spine annotation's strategic content, all deviation classes, and the reasoning that connects the measured numbers to advice are agent-authored prose with no citation and no human review. What is measured is the numbers; what is asserted is what they mean."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "NO shapes reference, deliberately, and a third shape entry is hereby commissioned. The trunk reaches kings castled on opposite wings, but content/shapes/opposite-castling-race.json covers only the White-long / Black-short orientation - checked mechanically this session: its trigger matches none of this pack's 15 walked trunk positions, and no other shipped entry matches any of them either. Per the mirroring law its colour-owned plans cannot simply be re-pointed, so this pack ships without a reference rather than with a wrong one, following the wave-4a London precedent.",
-      "The spine drills 5...Bg4 (53.7% at band) although the engine ranks it fourth of five at this node. The judgment that a band-popular move with a measurably worse evaluation is the right thing to drill is the pack's central authored claim and no instrument in this repository bears on it.",
-      "Deviation classes are agent-authored and objective-relative (rfc/archive/content-sourcing-foundation.md:772). Three of them sit beside evaluations that do not obviously support them: 3...Qe5+ is classed tactical_error at a measured cost of 0.18, 4...Nc6 is classed concept_violation at 0.74, and 7...e6 is classed accepted_alternative at 0.96. The numbers are recorded beside the classes and the classes were not changed to fit them.",
-      "The pack's central corpus claim - that Black's 56.7% and 58.5% at these nodes reflect the race rather than selection effects in who plays the Scandinavian - is an interpretation of the frequency data, not a measurement of it.",
-      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "no-shapes-reference-deliberately-and-a-third-shape-entry",
+        "state": "blocking",
+        "statement": "NO shapes reference, deliberately, and a third shape entry is hereby commissioned. The trunk reaches kings castled on opposite wings, but content/shapes/opposite-castling-race.json covers only the White-long / Black-short orientation - checked mechanically this session: its trigger matches none of this pack's 15 walked trunk positions, and no other shipped entry matches any of them either. Per the mirroring law its colour-owned plans cannot simply be re-pointed, so this pack ships without a reference rather than with a wrong one, following the wave-4a London precedent."
+      },
+      {
+        "id": "the-spine-drills-5-bg4-53-7-at-band-although-the-engine-",
+        "state": "blocking",
+        "statement": "The spine drills 5...Bg4 (53.7% at band) although the engine ranks it fourth of five at this node. The judgment that a band-popular move with a measurably worse evaluation is the right thing to drill is the pack's central authored claim and no instrument in this repository bears on it."
+      },
+      {
+        "id": "deviation-classes-are-agent-authored-and-objective-relat",
+        "state": "blocking",
+        "statement": "Deviation classes are agent-authored and objective-relative (rfc/archive/content-sourcing-foundation.md:772). Three of them sit beside evaluations that do not obviously support them: 3...Qe5+ is classed tactical_error at a measured cost of 0.18, 4...Nc6 is classed concept_violation at 0.74, and 7...e6 is classed accepted_alternative at 0.96. The numbers are recorded beside the classes and the classes were not changed to fit them."
+      },
+      {
+        "id": "the-pack-s-central-corpus-claim-that-black-s-56-7-and-58",
+        "state": "blocking",
+        "statement": "The pack's central corpus claim - that Black's 56.7% and 58.5% at these nodes reflect the race rather than selection effects in who plays the Scandinavian - is an interpretation of the frequency data, not a measurement of it."
+      },
+      {
+        "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
+        "state": "resolved",
+        "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
+        "resolved": {
+          "at": "2026-08-16",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      }
     ]
   }
 }

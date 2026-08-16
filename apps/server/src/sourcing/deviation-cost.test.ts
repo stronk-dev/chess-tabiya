@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFile } from "node:fs/promises";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -12,7 +14,7 @@ import type { EvidenceRecord, SourcingIssue } from "./types.js";
 
 async function fixture(): Promise<DrillPackDefinition> {
   return JSON.parse(
-    await readFile("content/drafts/maroczy-bind-white-squeeze.json", "utf8"),
+    await readFile(resolvePackPath("maroczy-bind-white-squeeze"), "utf8"),
   ) as DrillPackDefinition;
 }
 

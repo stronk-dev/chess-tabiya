@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFileSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -7,7 +9,7 @@ import { describe, expect, it } from "vitest";
 import { objectiveRules, orchestratePackMove, planSignatureResolver } from "./pack-orchestrator.js";
 import { validatePackDocument } from "./pack-validation.js";
 
-const pack = JSON.parse(readFileSync(new URL("../../../content/drafts/carlsbad-minority-attack.json", import.meta.url), "utf8")) as DrillPackDefinition;
+const pack = JSON.parse(readFileSync(new URL(resolvePackPath("carlsbad-minority-attack"), import.meta.url), "utf8")) as DrillPackDefinition;
 const carlsbad = JSON.parse(readFileSync(new URL("../../../content/shapes/carlsbad.json", import.meta.url), "utf8"));
 const shapes = { get: (id: string) => id === "carlsbad" ? { document: carlsbad } : undefined };
 const resolvePlan = planSignatureResolver(pack, shapes);

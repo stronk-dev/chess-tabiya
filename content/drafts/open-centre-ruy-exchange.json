@@ -13,8 +13,19 @@
   "start": {
     "fen": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 7",
     "movesSan": [
-      "e4", "e5", "Nf3", "Nc6", "Bb5", "a6", "Bxc6", "dxc6", "O-O", "f6",
-      "d4", "exd4", "Nxd4"
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bb5",
+      "a6",
+      "Bxc6",
+      "dxc6",
+      "O-O",
+      "f6",
+      "d4",
+      "exd4",
+      "Nxd4"
     ],
     "side": "black"
   },
@@ -22,10 +33,23 @@
     "type": "reach_structure",
     "summary": "No isolani on either side and one fully pawnless central file: neither colour has a pawn on the d-file, and both queens are still on the board — which is exactly what the shape library's open-centre entry requires before it fires. This drill asks for the state the entry's Black plan names: both queens off the board with a central file still open. The corpus's most-played continuation reaches it on Black's third move, and the entry's own trigger stops firing at that moment, because it requires the queens to be present.",
     "successConditions": [
-      { "kind": "plan_consequence", "planClassId": "neutralize-the-file", "to": "achieved" },
+      {
+        "kind": "plan_consequence",
+        "planClassId": "neutralize-the-file",
+        "to": "achieved"
+      },
       {
         "kind": "structural_feature",
-        "feature": { "kind": "not", "of": { "kind": "feature", "feature": { "kind": "open_file", "file": "d" } } },
+        "feature": {
+          "kind": "not",
+          "of": {
+            "kind": "feature",
+            "feature": {
+              "kind": "open_file",
+              "file": "d"
+            }
+          }
+        },
         "to": "transitioned"
       }
     ]
@@ -36,19 +60,27 @@
     "central-outpost",
     "doubled-c-pawns"
   ],
-  "shapes": ["open-centre"],
+  "shapes": [
+    "open-centre"
+  ],
   "planClasses": [
     {
       "id": "neutralize-the-file",
       "label": "Trade the queens with the file still open",
       "description": "The library's Black plan for this entry. Its success signature is a state change this pack can check and does: both queens off the board while a central file is still open. Evaluated on the authored positions, it is false at the start and at the moment Black's queen lands on d1, and true from White's recapture onwards.",
-      "shapePlan": { "shape": "open-centre", "plan": "black-neutralize-and-level" }
+      "shapePlan": {
+        "shape": "open-centre",
+        "plan": "black-neutralize-and-level"
+      }
     },
     {
       "id": "central-outpost",
       "label": "Put a knight on a central square",
       "description": "The library's other Black plan for this entry. Its success signature is stricter than arrival — a black knight on d4 or e4 that the detector also reads as an outpost. Measured on this spine: Black's king's knight stands on g8 in all ten authored positions and no black knight reaches d4 or e4 in any of them, so this pack's spine never tests the signature.",
-      "shapePlan": { "shape": "open-centre", "plan": "black-central-outpost" }
+      "shapePlan": {
+        "shape": "open-centre",
+        "plan": "black-central-outpost"
+      }
     }
   ],
   "spine": [
@@ -151,24 +183,39 @@
     {
       "id": "plan-choice",
       "label": "Before your first move: which of the library's two Black plans are you playing?",
-      "trigger": { "atStart": true },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atStart": true
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["neutralize-the-file", "central-outpost"]
+        "planClassIds": [
+          "neutralize-the-file",
+          "central-outpost"
+        ]
       }
     },
     {
       "id": "queens-are-off",
       "label": "Both queens are off and the d-file is still pawnless",
-      "trigger": { "atSpineNode": "rxd1-recapture" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "rxd1-recapture"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "pawn-leaves-c5",
       "label": "The c-pawn steps forward and d4 loses its only black attacker",
-      "trigger": { "atSpineNode": "c4-push" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "c4-push"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "queenless-open-file",
@@ -179,14 +226,42 @@
           "feature": {
             "kind": "all",
             "of": [
-              { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "equal", "count": 0 } },
-              { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "equal", "count": 0 } },
-              { "kind": "feature", "feature": { "kind": "open_file", "file": "d" } }
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_count",
+                  "color": "white",
+                  "role": "queen",
+                  "basis": "count",
+                  "comparison": "equal",
+                  "count": 0
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "piece_count",
+                  "color": "black",
+                  "role": "queen",
+                  "basis": "count",
+                  "comparison": "equal",
+                  "count": 0
+                }
+              },
+              {
+                "kind": "feature",
+                "feature": {
+                  "kind": "open_file",
+                  "file": "d"
+                }
+              }
             ]
           }
         }
       },
-      "actions": ["compare_branches"]
+      "actions": [
+        "compare_branches"
+      ]
     }
   ],
   "authoredBoundary": {
@@ -212,37 +287,49 @@
   },
   "deviations": [
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "f8c5",
       "class": "accepted_alternative",
       "note": "Bc5: 865 of 2634 (32.8%), the second-most-played move in the start position at this band and only thirteen points behind the spine move. The resulting position is reached by 865 games where White plays c3 206 (23.8%), Be3 196 (22.7%), Qh5+ 183 (21.2%), Nf5 107 (12.4%), Nb3 89 (10.3%). It leaves the c6 pawn where it is, so the doubled pair stays doubled — a fact about the skeleton, not a comparison."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "f8d6",
       "class": "accepted_alternative",
       "note": "Bd6: 243 of 2634 (9.2%), the third-most-played move here."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "g8e7",
       "class": "interesting_deviation",
       "note": "Ne7: 135 of 2634 (5.1%). It is the only move in this node's top five that moves the king's knight, and that knight stands on g8 in all ten authored positions of this pack. The shape entry's Black outpost plan needs a black knight on d4 or e4, so this is the only measured door in the corpus toward the plan class this spine never tests."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c8d7",
       "class": "accepted_alternative",
       "note": "Bd7: 69 of 2634 (2.6%), the fifth-most-played move in the band's table for this position."
     },
     {
-      "at": { "spineNodeId": "rxd1-recapture" },
+      "at": {
+        "spineNodeId": "rxd1-recapture"
+      },
       "moveUci": "c8g4",
       "class": "accepted_alternative",
       "note": "Bg4: 44 of 269 (16.4%) at this node, the fourth of four bishop moves the corpus spreads itself across. The objective's state is already satisfied before this move, so nothing in this pack's grading distinguishes it from the spine move."
     },
     {
-      "at": { "spineNodeId": "bf4-develop" },
+      "at": {
+        "spineNodeId": "bf4-develop"
+      },
       "moveUci": "e6b3",
       "class": "interesting_deviation",
       "note": "Bxb3: 3 of 58 (5.2%) at this node. The corpus contains three examples in three years of this band, which is the whole evidence base for it; it is listed so the compare view has a door, not because anything measured it."
@@ -253,22 +340,30 @@
     {
       "id": "band-result-split",
       "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 2634 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-15) the outcomes were 1309 white wins, 197 draws and 1128 black wins (49.7/7.5/42.8%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "position-is-attested",
       "text": "At the Lichess 1400/1600/1800 bands (rapid and classical, 2023-01 to 2025-12) the start position occurs in 2634 games. Two of the spine's eight moves dominate their node — Qxd1 269 of 326 (82.5%) and Rxd1 269 of 269 (100%) — and two do not: at 1219 games the top four replies sit within four points of each other, and at 269 games four bishop moves sit within thirteen.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "trigger-and-plan-cross",
       "text": "The shape entry's trigger and its Black plan signature were both evaluated on every authored position of this pack. The trigger fires on the first three and stops at the fourth; the plan signature is false on the first three and true from the fourth onward. The crossing point is the queen recapture, because the trigger requires both queens present and the plan requires both queens gone. That is a property of the two expressions, not a claim about the position.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     },
     {
       "id": "no-black-knight-in-the-centre",
       "text": "Black's king's knight stands on g8 in all ten authored positions of this pack, and no black knight occupies d4 or e4 in any of them. The entry's Black outpost plan is therefore named but never tested by this spine; the one measured corpus move toward it is ...Ne7 at 135 of 2634 (5.1%) in the start position.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     }
   ],
   "provenance": {
@@ -285,14 +380,42 @@
       "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one. In particular, nothing here claims that the queen trade favours Black, that the doubled c-pawns are a weakness or a strength, or that Black's knight belongs on any square.",
       "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Ruy_Lopez,_Exchange_Variation (CC BY-SA 4.0, read 2026-08-16) states this pack's objective premise directly — \"White aims to reach an endgame with a superior pawn structure, which may become an important factor\" — notes that \"Black has gained the bishop pair at the cost of a weakened pawn structure, having doubled pawns on c6 and c7\", and gives the endgame plan as \"to create a passed pawn on the kingside, while Black is unable to do the same on the queenside because of the doubled pawns\". WHAT IT DOES NOT SUPPLY: the source frames the target as an endgame; this pack's objective is a queenless MIDDLEGAME with the open file, which is a narrower and different state, and no consulted source names it. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "CITED 2026-08-16 (the trade-into-a-better-structure premise). That White plays this variation to reach a favourable endgame off Black's doubled c-pawns is stated by en.wikipedia.org/wiki/Ruy_Lopez,_Exchange_Variation (CC BY-SA 4.0), attributed in provenance.attribution.",
-      "STILL UNCITED after the 2026-08-16 pass: the cited source's target is an ENDGAME with a healthy kingside majority; this pack's objective is the queenless middlegame with the open file, which the source does not name as a goal. The inherited UNGROUNDED provenance of the open-centre entry is untouched, and no corpus measurement relating the queen trade to results at this band has been done.",
-      "No engine pass has been run on this pack. No deviation carries a cost for that reason.",
-      "This pack declares no timing window. The measured reason: the only candidate race is Black's queen trade against White's occupation of the open file, and the corpus shows the recapture is forced (269 of 269), so there is no opponent lever whose arrival ends a preparation. A window here would be an invention.",
-      "The shape entry this pack references fires on only three of its ten authored positions, because the entry's trigger requires both queens. Whether an entry that stops describing the position after three plies is the right library hook for this tabiya is an open question this pack surfaces and does not settle."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "cited-2026-08-16-the-trade-into-a-better-structure-premi",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (the trade-into-a-better-structure premise). That White plays this variation to reach a favourable endgame off Black's doubled c-pawns is stated by en.wikipedia.org/wiki/Ruy_Lopez,_Exchange_Variation (CC BY-SA 4.0), attributed in provenance.attribution."
+      },
+      {
+        "id": "still-uncited-after-the-2026-08-16-pass-the-cited-source",
+        "state": "blocking",
+        "statement": "STILL UNCITED after the 2026-08-16 pass: the cited source's target is an ENDGAME with a healthy kingside majority; this pack's objective is the queenless middlegame with the open file, which the source does not name as a goal. The inherited UNGROUNDED provenance of the open-centre entry is untouched, and no corpus measurement relating the queen trade to results at this band has been done."
+      },
+      {
+        "id": "no-engine-pass-has-been-run-on-this-pack-no-deviation-ca",
+        "state": "blocking",
+        "statement": "No engine pass has been run on this pack. No deviation carries a cost for that reason."
+      },
+      {
+        "id": "this-pack-declares-no-timing-window-the-measured-reason-",
+        "state": "blocking",
+        "statement": "This pack declares no timing window. The measured reason: the only candidate race is Black's queen trade against White's occupation of the open file, and the corpus shows the recapture is forced (269 of 269), so there is no opponent lever whose arrival ends a preparation. A window here would be an invention."
+      },
+      {
+        "id": "the-shape-entry-this-pack-references-fires-on-only-three",
+        "state": "blocking",
+        "statement": "The shape entry this pack references fires on only three of its ten authored positions, because the entry's trigger requires both queens. Whether an entry that stops describing the position after three plies is the right library hook for this tabiya is an open question this pack surfaces and does not settle."
+      }
     ],
     "attribution": [
       {

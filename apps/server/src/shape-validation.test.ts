@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
@@ -47,7 +49,7 @@ describe("pack shape references", () => {
     ["SHAPE_PLAN_REF_UNLISTED", (pack: any) => ({ ...pack, shapes: ["iqp-white"], planClasses: [{ ...pack.planClasses[0], shapePlan: { shape: "carlsbad", plan: "white-minority-attack" } }] })],
     ["SHAPE_PLAN_UNKNOWN", (pack: any) => ({ ...pack, shapes: ["carlsbad"], planClasses: [{ ...pack.planClasses[0], shapePlan: { shape: "carlsbad", plan: "missing" } }] })],
   ])("refuses %s against the loaded catalogue", async (code, mutate) => {
-    const pack = JSON.parse(readFileSync(new URL("../../../content/drafts/carlsbad-minority-attack.json", import.meta.url), "utf8"));
+    const pack = JSON.parse(readFileSync(new URL(resolvePackPath("carlsbad-minority-attack"), import.meta.url), "utf8"));
     const registry = await ShapeRegistry.loadDefault();
     expect(validatePackDocument(mutate(pack), { shapes: registry }).issues).toContainEqual(expect.objectContaining({ code }));
   });

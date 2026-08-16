@@ -466,13 +466,41 @@
       "UNGROUNDED: every strategic claim — the objective summary, both plan-class descriptions, all spine annotations, all eight deviation classifications and notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE. 'Original prose' answers copyright, not truth.",
       "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 12 decision positions and 26 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). The only two things that clear a blocker are a citable source or mechanical validation that actually bears on the claim.",
-      "ENGINE-CHECKED 2026-08-15 and the 8.Qd2 claim is REFUTED. After 8.Qd2 Ng4 White evaluates +1.08 at depth 22, up from +0.40 before it: the claimed open door costs Black, not White. Worse for the pack's central thesis, 8.Qd2 is itself the highest-scoring eighth move measured (+0.40), ahead of the spine's 8.f3 (+0.31). The deviation note's mechanism was deleted and the contrary number recorded in its place; the class was left as authored because it is a claim about this pack's objective (the move order), which no evaluation settles. The other judgment survives its check: 7.Nf5 evaluates -0.69 against +0.42 for the spine's 7.Nb3, a cost of 1.11.",
-      "The claim that ...Ng4 is 'Black's standing resource' against a bishop on e3 without f3, and the entire move-order thesis, is standard theory rendered from model knowledge with no named source. A citable book/course reference (any Najdorf or English Attack monograph) would clear it; none is cited.",
-      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
-      "Popularity claims below the 1.e4 c5 root (which 6th moves club players actually face) are asserted only implicitly; the explorer API could quantify them and has not been queried below the family root."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). The only two things that clear a blocker are a citable source or mechanical validation that actually bears on the claim.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "engine-checked-2026-08-15-and-the-8-qd2-claim-is-refuted",
+        "state": "blocking",
+        "statement": "ENGINE-CHECKED 2026-08-15 and the 8.Qd2 claim is REFUTED. After 8.Qd2 Ng4 White evaluates +1.08 at depth 22, up from +0.40 before it: the claimed open door costs Black, not White. Worse for the pack's central thesis, 8.Qd2 is itself the highest-scoring eighth move measured (+0.40), ahead of the spine's 8.f3 (+0.31). The deviation note's mechanism was deleted and the contrary number recorded in its place; the class was left as authored because it is a claim about this pack's objective (the move order), which no evaluation settles. The other judgment survives its check: 7.Nf5 evaluates -0.69 against +0.42 for the spine's 7.Nb3, a cost of 1.11."
+      },
+      {
+        "id": "the-claim-that-ng4-is-black-s-standing-resource-against-",
+        "state": "blocking",
+        "statement": "The claim that ...Ng4 is 'Black's standing resource' against a bishop on e3 without f3, and the entire move-order thesis, is standard theory rendered from model knowledge with no named source. A citable book/course reference (any Najdorf or English Attack monograph) would clear it; none is cited."
+      },
+      {
+        "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
+        "state": "resolved",
+        "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
+        "resolved": {
+          "at": "2026-08-16",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      },
+      {
+        "id": "popularity-claims-below-the-1-e4-c5-root-which-6th-moves",
+        "state": "blocking",
+        "statement": "Popularity claims below the 1.e4 c5 root (which 6th moves club players actually face) are asserted only implicitly; the explorer API could quantify them and has not been queried below the family root."
+      }
     ]
   }
 }

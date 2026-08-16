@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { createHash } from "node:crypto";
 import { mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -12,7 +14,7 @@ import { checkShapeFile, formatProbeResult } from "./shape-check.js";
 import { validateShapeEntry } from "./shape-validation.js";
 
 function packFiles(): string[] {
-  return readdirSync("content/drafts").filter((name) => name.endsWith(".json") && !/\.(?:evidence|job|sources)\.json$/u.test(name));
+  return ["content/drafts", "content/packs"].flatMap((root) => readdirSync(root).filter((name) => name.endsWith(".json") && !/\.(?:evidence|job|sources)\.json$/u.test(name)).map((name) => `${root}/${name}`));
 }
 
 const witnesses = JSON.parse(readFileSync("content/witnesses/expression-witnesses.json", "utf8"));
@@ -24,7 +26,7 @@ describe("expression census", () => {
     expect(report.corpus.packs).toBe(packFiles().length);
     expect(report.corpus.positions).toBeGreaterThan(report.corpus.packs);
     expect(report.corpus.packsWithoutSpine).toContain("trajectory-legs-browser");
-    expect(report.corpus.fixturePacks).toEqual(packFiles().filter((name) => name.endsWith(".browser.json")).map((name) => JSON.parse(readFileSync(`content/drafts/${name}`, "utf8")).id).sort());
+    expect(report.corpus.fixturePacks).toEqual(packFiles().filter((name) => name.endsWith(".browser.json")).map((name) => JSON.parse(readFileSync(name, "utf8")).id).sort());
   });
 
   it("reports each pack's evidence rungs, backing, and corpus population", () => {
@@ -41,7 +43,7 @@ describe("expression census", () => {
   it("matches ledger backing and exposes its machine-readable population", () => {
     const root = mkdtempSync(resolve(tmpdir(), "tabiya-evidence-census-"));
     const file = resolve(root, "sample.json");
-    const pack = JSON.parse(readFileSync("content/drafts/anti-caro-advance-early-c5.json", "utf8"));
+    const pack = JSON.parse(readFileSync(resolvePackPath("anti-caro-advance-early-c5"), "utf8"));
     const claimText = "The corpus contains 9,346,096 games in this window.";
     pack.feedbackClaims = [{ id: "observed", text: claimText, evidenceTypes: ["corpus_observed"] }];
     writeFileSync(file, JSON.stringify(pack));
@@ -116,11 +118,11 @@ describe("expression census", () => {
   });
 
   it("is deterministic and does not mutate content", () => {
-    const before = packFiles().map((name) => [name, statSync(`content/drafts/${name}`).mtimeMs, createHash("sha256").update(readFileSync(`content/drafts/${name}`)).digest("hex")] as const);
+    const before = packFiles().map((name) => [name, statSync(name).mtimeMs, createHash("sha256").update(readFileSync(name)).digest("hex")] as const);
     const one = canonicalizeJson(runExpressionCensus({ witnesses }));
     const two = canonicalizeJson(runExpressionCensus({ witnesses }));
     expect(two).toBe(one);
-    expect(packFiles().map((name) => [name, statSync(`content/drafts/${name}`).mtimeMs, createHash("sha256").update(readFileSync(`content/drafts/${name}`)).digest("hex")])).toEqual(before);
+    expect(packFiles().map((name) => [name, statSync(name).mtimeMs, createHash("sha256").update(readFileSync(name)).digest("hex")])).toEqual(before);
   }, 20_000);
 
   it("reuses the shipped walker and leaves the verification gate report-free", () => {

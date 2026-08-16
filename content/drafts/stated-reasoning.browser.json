@@ -12,7 +12,10 @@
     "type": "play_until_checkpoint",
     "summary": "State the plan before opening the authored points.",
     "successConditions": [
-      { "kind": "reach_checkpoint", "checkpointId": "reasoning" }
+      {
+        "kind": "reach_checkpoint",
+        "checkpointId": "reasoning"
+      }
     ]
   },
   "spine": [
@@ -27,7 +30,9 @@
     {
       "id": "reasoning",
       "label": "What is your plan?",
-      "trigger": { "atSpineNode": "quiet-wait" },
+      "trigger": {
+        "atSpineNode": "quiet-wait"
+      },
       "actions": [],
       "interaction": {
         "type": "stated_reasoning",
@@ -35,25 +40,47 @@
           {
             "id": "protect-queen",
             "label": "Keep the queen protected",
-            "phrases": ["protect the queen", "keep the queen"],
-            "ground": { "kind": "spine_move", "spineNodeId": "quiet-wait" }
+            "phrases": [
+              "protect the queen",
+              "keep the queen"
+            ],
+            "ground": {
+              "kind": "spine_move",
+              "spineNodeId": "quiet-wait"
+            }
           },
           {
             "id": "watch-rook",
             "label": "Notice the rook on the d-file",
-            "phrases": ["rook on the d-file", "back-rank rook"],
-            "ground": { "kind": "spine_move", "spineNodeId": "quiet-wait" }
+            "phrases": [
+              "rook on the d-file",
+              "back-rank rook"
+            ],
+            "ground": {
+              "kind": "spine_move",
+              "spineNodeId": "quiet-wait"
+            }
           }
         ]
       }
     }
   ],
-  "opponentPolicy": { "mode": "theory_strict" },
+  "opponentPolicy": {
+    "mode": "theory_strict"
+  },
   "feedbackPolicy": "delayed_checkpoint",
   "provenance": {
     "reviewStatus": "draft",
-    "sources": ["Browser fixture; key-point attribution is limited to the encoded authored line."],
+    "sources": [
+      "Browser fixture; key-point attribution is limited to the encoded authored line."
+    ],
     "licence": "CC-BY-SA-4.0",
-    "graduationBlockers": ["Testing fixture only; do not publish as chess instruction."]
+    "graduationBlockers": [
+      {
+        "id": "testing-fixture-only-do-not-publish-as-chess-instruction",
+        "state": "blocking",
+        "statement": "Testing fixture only; do not publish as chess instruction."
+      }
+    ]
   }
 }

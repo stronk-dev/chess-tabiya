@@ -533,15 +533,47 @@
       "NOT CLAIMED: no move in this pack is graded better or worse than another, neither wing's race is asserted to be faster, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one.",
       "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/King%27s_Indian_Defence (CC BY-SA 4.0, read 2026-08-16) states White's plan in the Classical/Mar del Plata as attacking \"on the queenside by preparing the pawn break c4-c5\" while Black transfers the f6-knight and starts \"a kingside pawn storm with f7-f5-f4 and g6-g5\" — the two-sided race this pack drills from the White chair. WHAT IT DOES NOT SUPPLY: the ORDER claim — arrangement complete before the centre locks — is not stated; the source names the plans, not their timing. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "CITED 2026-08-16 (the plan, not the timing). White's c4-c5 queenside break and Black's ...f5/...g5 kingside storm are stated by en.wikipedia.org/wiki/King%27s_Indian_Defence (CC BY-SA 4.0), attributed in provenance.attribution.",
-      "STILL UNCITED after the 2026-08-16 pass: the objective grades arrangement-before-the-lock, and the cited source names White's plan without sequencing it against the moment the centre closes. That is a timing-window claim; per D155 the instrument that could settle it is a game-level corpus, which does not exist at HEAD.",
-      "The window's thresholds are authored: the budget of one, the deadline of six, and the tolerated pair are the author's encoding of the teaching point, and nothing measured says those are the right numbers.",
-      "The readiness set is a proper subset of the shape entry's own signature. Whether a rook on f2 or e1 belongs in the race is unmeasured; it is omitted because the corpus line does not reach it inside the authored horizon, which is an argument about data coverage, not about chess.",
-      "No engine pass has been run on this pack. The single concept_violation (c4-c5 played first) records an unmeasurable cost for exactly that reason.",
-      "The shape entry kid-chain-arrangement carries its own UNGROUNDED provenance for all six of its plan descriptions, including the three this pack references. Referencing them does not launder them."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "cited-2026-08-16-the-plan-not-the-timing-white-s-c4-c5-q",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (the plan, not the timing). White's c4-c5 queenside break and Black's ...f5/...g5 kingside storm are stated by en.wikipedia.org/wiki/King%27s_Indian_Defence (CC BY-SA 4.0), attributed in provenance.attribution."
+      },
+      {
+        "id": "still-uncited-after-the-2026-08-16-pass-the-objective-gr",
+        "state": "blocking",
+        "statement": "STILL UNCITED after the 2026-08-16 pass: the objective grades arrangement-before-the-lock, and the cited source names White's plan without sequencing it against the moment the centre closes. That is a timing-window claim; per D155 the instrument that could settle it is a game-level corpus, which does not exist at HEAD."
+      },
+      {
+        "id": "the-window-s-thresholds-are-authored-the-budget-of-one-t",
+        "state": "blocking",
+        "statement": "The window's thresholds are authored: the budget of one, the deadline of six, and the tolerated pair are the author's encoding of the teaching point, and nothing measured says those are the right numbers."
+      },
+      {
+        "id": "the-readiness-set-is-a-proper-subset-of-the-shape-entry-",
+        "state": "blocking",
+        "statement": "The readiness set is a proper subset of the shape entry's own signature. Whether a rook on f2 or e1 belongs in the race is unmeasured; it is omitted because the corpus line does not reach it inside the authored horizon, which is an argument about data coverage, not about chess."
+      },
+      {
+        "id": "no-engine-pass-has-been-run-on-this-pack-the-single-conc",
+        "state": "blocking",
+        "statement": "No engine pass has been run on this pack. The single concept_violation (c4-c5 played first) records an unmeasurable cost for exactly that reason."
+      },
+      {
+        "id": "the-shape-entry-kid-chain-arrangement-carries-its-own-un",
+        "state": "blocking",
+        "statement": "The shape entry kid-chain-arrangement carries its own UNGROUNDED provenance for all six of its plan descriptions, including the three this pack references. Referencing them does not launder them."
+      }
     ],
     "attribution": [
       {

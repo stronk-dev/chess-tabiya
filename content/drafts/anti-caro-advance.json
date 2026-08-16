@@ -327,13 +327,41 @@
       "UNGROUNDED: all strategic claims, plan descriptions, annotations and deviation judgments are agent-authored original prose with NO citation and no human validation, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE. 'Original prose' satisfies copyright, not truth.",
       "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 8 decision positions and 16 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Nothing in this file has been checked by a second party, nothing here is labelled as checked, and no sign-off will ever clear a blocker below. The only two things that clear one are a citable source or mechanical validation that actually bears on the claim.",
-      "Every feedbackClaim needs a citable source (a named book, course or annotated master game whose idea is restated in our words) or engine/corpus validation that bears on it. None has either.",
-      "ENGINE-CHECKED 2026-08-15. Castling costs nothing the engine can see: 6.O-O evaluates +0.32 at depth 22, the HIGHEST of the four candidates at that position, ahead of 6.c3 (+0.27) and ahead of this pack's own model answer 6.Be3 (+0.09). The note's 'not a blunder' is confirmed. The concept_violation class is a claim about this pack's objective and no evaluation settles it (rfc/archive/content-sourcing-foundation.md:772), so it was left as authored. The pass did surface a new and worse problem the blocker did not anticipate: the spine's model answer is the third-ranked of its own four candidates, and the deviation classed as a conceptual error is the first.",
-      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
-      "The frequency claims about what players in this rating band actually play are asserted from model knowledge. The Lichess explorer API is shipped in this repo and could settle them cheaply."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Nothing in this file has been checked by a second party, nothing here is labelled as checked, and no sign-off will ever clear a blocker below. The only two things that clear one are a citable source or mechanical validation that actually bears on the claim.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "every-feedbackclaim-needs-a-citable-source-a-named-book-",
+        "state": "blocking",
+        "statement": "Every feedbackClaim needs a citable source (a named book, course or annotated master game whose idea is restated in our words) or engine/corpus validation that bears on it. None has either."
+      },
+      {
+        "id": "engine-checked-2026-08-15-castling-costs-nothing-the-eng",
+        "state": "blocking",
+        "statement": "ENGINE-CHECKED 2026-08-15. Castling costs nothing the engine can see: 6.O-O evaluates +0.32 at depth 22, the HIGHEST of the four candidates at that position, ahead of 6.c3 (+0.27) and ahead of this pack's own model answer 6.Be3 (+0.09). The note's 'not a blunder' is confirmed. The concept_violation class is a claim about this pack's objective and no evaluation settles it (rfc/archive/content-sourcing-foundation.md:772), so it was left as authored. The pass did surface a new and worse problem the blocker did not anticipate: the spine's model answer is the third-ranked of its own four candidates, and the deviation classed as a conceptual error is the first."
+      },
+      {
+        "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
+        "state": "resolved",
+        "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
+        "resolved": {
+          "at": "2026-08-16",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      },
+      {
+        "id": "the-frequency-claims-about-what-players-in-this-rating-b",
+        "state": "blocking",
+        "statement": "The frequency claims about what players in this rating band actually play are asserted from model knowledge. The Lichess explorer API is shipped in this repo and could settle them cheaply."
+      }
     ]
   }
 }

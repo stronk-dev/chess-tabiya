@@ -916,14 +916,42 @@
       "LIQUIDATION HONESTY: the trade sequence from ply 41 to 54 (bishops on a6, rooks on b2, queens on a5) is a single agent-authored plausible continuation, chosen so that every capture has a legal recapture (verified) and so that the trades happen on the files the minority attack opened. It is not forced, not engine-checked, and not claimed to be best play by either side; it is the causal road this guided trajectory rehearses.",
       "UNGROUNDED: every strategic claim - leg summaries, annotations, deviation judgments, feedback claims, and the leg-3 authored win assessment - is agent-authored prose with no citation, no engine evaluation and no human review."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13); only a citable source or mechanical validation that bears on a claim clears a blocker.",
-      "The leg-3 'win' objective is the strongest claim in the file: an authored assessment that the minority-attack rook ending is winning in practice, with no engine pass, no tablebase applicability (fourteen units at entry), and no cited endgame source. A fixed-depth Stockfish sweep over the ending spine would bear on it directly.",
-      "The authored liquidation (plies 41-54) is one plausible road, not a forced or measured one. Nothing grounds the claim that games from this middlegame actually reach rook endings at these rating bands; explorer data cannot reach positions this deep, so the instrument would have to be the Go corpus pipeline.",
-      "Inherited from Pack B: the three-plan Carlsbad taxonomy and every minority-attack evaluation are uncited.",
-      "The rook-4v3-same-side shape reference relies on the census gap documented in provenance; if a literal same-side-4v3 trigger ever becomes expressible, this pack's ending does not match it and the reference must be reviewed.",
-      "No rating-band frequency evidence for any move past the opening leg; content/candidates/priority/priority.json has no D35 row, so even the opening's popularity is uncited here."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13); only a citable source or mechanical validation that bears on a claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "the-leg-3-win-objective-is-the-strongest-claim-in-the-fi",
+        "state": "blocking",
+        "statement": "The leg-3 'win' objective is the strongest claim in the file: an authored assessment that the minority-attack rook ending is winning in practice, with no engine pass, no tablebase applicability (fourteen units at entry), and no cited endgame source. A fixed-depth Stockfish sweep over the ending spine would bear on it directly."
+      },
+      {
+        "id": "the-authored-liquidation-plies-41-54-is-one-plausible-ro",
+        "state": "blocking",
+        "statement": "The authored liquidation (plies 41-54) is one plausible road, not a forced or measured one. Nothing grounds the claim that games from this middlegame actually reach rook endings at these rating bands; explorer data cannot reach positions this deep, so the instrument would have to be the Go corpus pipeline."
+      },
+      {
+        "id": "inherited-from-pack-b-the-three-plan-carlsbad-taxonomy-a",
+        "state": "blocking",
+        "statement": "Inherited from Pack B: the three-plan Carlsbad taxonomy and every minority-attack evaluation are uncited."
+      },
+      {
+        "id": "the-rook-4v3-same-side-shape-reference-relies-on-the-cen",
+        "state": "blocking",
+        "statement": "The rook-4v3-same-side shape reference relies on the census gap documented in provenance; if a literal same-side-4v3 trigger ever becomes expressible, this pack's ending does not match it and the reference must be reviewed."
+      },
+      {
+        "id": "no-rating-band-frequency-evidence-for-any-move-past-the-",
+        "state": "blocking",
+        "statement": "No rating-band frequency evidence for any move past the opening leg; content/candidates/priority/priority.json has no D35 row, so even the opening's popularity is uncited here."
+      }
     ]
   }
 }

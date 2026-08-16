@@ -336,13 +336,41 @@
       "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all three deviation notes, and the two non-corpus feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE.",
       "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 11 decision positions and 19 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "The 'one-break counting rule' feedbackClaim is the pack's strongest generalization and is authored doctrine with no source; the structural-feature vocabulary could express supporter counts on e5 and has not been asked to.",
-      "The spine's preamble is the 2.c4 order (33.3% at band) but the finisher rows are catalogued under 2.g3 (2.0% at band): the transposition is machine-verified, but which order club opponents actually reach these tabiyas through is unquantified below the family root.",
-      "Which finisher (...c6 / ...Nc6 / ...Qe8) is most common or scores best at these bands is unquantified.",
-      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "the-one-break-counting-rule-feedbackclaim-is-the-pack-s-",
+        "state": "blocking",
+        "statement": "The 'one-break counting rule' feedbackClaim is the pack's strongest generalization and is authored doctrine with no source; the structural-feature vocabulary could express supporter counts on e5 and has not been asked to."
+      },
+      {
+        "id": "the-spine-s-preamble-is-the-2-c4-order-33-3-at-band-but-",
+        "state": "blocking",
+        "statement": "The spine's preamble is the 2.c4 order (33.3% at band) but the finisher rows are catalogued under 2.g3 (2.0% at band): the transposition is machine-verified, but which order club opponents actually reach these tabiyas through is unquantified below the family root."
+      },
+      {
+        "id": "which-finisher-c6-nc6-qe8-is-most-common-or-scores-best-",
+        "state": "blocking",
+        "statement": "Which finisher (...c6 / ...Nc6 / ...Qe8) is most common or scores best at these bands is unquantified."
+      },
+      {
+        "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
+        "state": "resolved",
+        "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
+        "resolved": {
+          "at": "2026-08-16",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      }
     ]
   }
 }

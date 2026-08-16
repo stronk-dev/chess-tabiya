@@ -38,8 +38,20 @@
         "feature": {
           "kind": "all",
           "of": [
-            { "kind": "not", "of": { "kind": "plan_signature", "planClassId": "white-file-ownership" } },
-            { "kind": "feature", "feature": { "kind": "open_file", "file": "e" } }
+            {
+              "kind": "not",
+              "of": {
+                "kind": "plan_signature",
+                "planClassId": "white-file-ownership"
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "open_file",
+                "file": "e"
+              }
+            }
           ]
         },
         "to": "achieved"
@@ -52,25 +64,36 @@
     "symmetry-and-the-extra-tempo",
     "plan-now-or-plan-later"
   ],
-  "shapes": ["open-centre"],
+  "shapes": [
+    "open-centre"
+  ],
   "planClasses": [
     {
       "id": "white-file-ownership",
       "label": "What the objective is written against",
       "description": "The library's White plan for this structure, named here because this pack's success condition is its negation. Its signature is exact and has no judgment in it: the central file is open, White has a rook on it, Black has none. Evaluated on this spine, it holds at the start position and at every position on the developing branch, and stops holding the moment a Black rook reaches the file. The pack grades that state change and nothing more.",
-      "shapePlan": { "shape": "open-centre", "plan": "white-seize-the-file" }
+      "shapePlan": {
+        "shape": "open-centre",
+        "plan": "white-seize-the-file"
+      }
     },
     {
       "id": "black-outpost",
       "label": "Central outpost",
       "description": "The library's other Black plan: a knight on d4 or e4 that the detector reads as an outpost. Evaluated on every authored position in this pack, the signature is false throughout — d4 holds a White pawn all the way down the spine, and no Black knight reaches e4 on any authored line. Listed because it is the plan the structure normally offers, and recorded as unreachable here rather than quietly dropped.",
-      "shapePlan": { "shape": "open-centre", "plan": "black-central-outpost" }
+      "shapePlan": {
+        "shape": "open-centre",
+        "plan": "black-central-outpost"
+      }
     },
     {
       "id": "level-it-out",
       "label": "Trade the queens with the file still open",
       "description": "The library's neutralising plan, whose signature demands both queens off the board while a central file is still open. Evaluated here: false at every authored position, because no authored line trades queens. It is the plan the objective is a first step toward, and this pack stops well short of it.",
-      "shapePlan": { "shape": "open-centre", "plan": "black-neutralize-and-level" }
+      "shapePlan": {
+        "shape": "open-centre",
+        "plan": "black-neutralize-and-level"
+      }
     }
   ],
   "spine": [
@@ -162,24 +185,40 @@
     {
       "id": "file-choice",
       "label": "White owns the file. Take it now, or develop and come back?",
-      "trigger": { "atStart": true },
-      "actions": ["compare_branches"],
+      "trigger": {
+        "atStart": true
+      },
+      "actions": [
+        "compare_branches"
+      ],
       "interaction": {
         "type": "intent_capture",
-        "planClassIds": ["white-file-ownership", "black-outpost", "level-it-out"]
+        "planClassIds": [
+          "white-file-ownership",
+          "black-outpost",
+          "level-it-out"
+        ]
       }
     },
     {
       "id": "file-contested",
       "label": "A Black rook stands on the open e-file",
-      "trigger": { "atSpineNode": "re8-contest" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "re8-contest"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     },
     {
       "id": "still-uncontested",
       "label": "Six plies in, the file is still White's alone",
-      "trigger": { "atSpineNode": "qxd3-recapture" },
-      "actions": ["compare_branches"]
+      "trigger": {
+        "atSpineNode": "qxd3-recapture"
+      },
+      "actions": [
+        "compare_branches"
+      ]
     }
   ],
   "authoredBoundary": {
@@ -200,9 +239,35 @@
         "feature": {
           "kind": "all",
           "of": [
-            { "kind": "feature", "feature": { "kind": "open_file", "file": "e" } },
-            { "kind": "feature", "feature": { "kind": "piece_count", "color": "white", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } },
-            { "kind": "feature", "feature": { "kind": "piece_count", "color": "black", "role": "queen", "basis": "count", "comparison": "atLeast", "count": 1 } }
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "open_file",
+                "file": "e"
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "piece_count",
+                "color": "white",
+                "role": "queen",
+                "basis": "count",
+                "comparison": "atLeast",
+                "count": 1
+              }
+            },
+            {
+              "kind": "feature",
+              "feature": {
+                "kind": "piece_count",
+                "color": "black",
+                "role": "queen",
+                "basis": "count",
+                "comparison": "atLeast",
+                "count": 1
+              }
+            }
           ]
         }
       }
@@ -217,31 +282,41 @@
   },
   "deviations": [
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c8g4",
       "class": "accepted_alternative",
       "note": "Bg4: 364 of 2695 (13.5%), the third-most-played move. The same developing idea as the main branch with the bishop on the other diagonal, aimed at the knight that defends d4 rather than at the bishop that defends the king. It leaves the objective unsatisfied for the same reason Bf5 does, and the pack says nothing about which square is better."
     },
     {
-      "at": { "atStart": true },
+      "at": {
+        "atStart": true
+      },
       "moveUci": "c7c6",
       "class": "accepted_alternative",
       "note": "c6: 325 of 2695 (12.1%). A move that changes the pawn mirror rather than the piece placement — after it Black's d5 pawn has a defender and the c-file has a Black pawn on it. The library's Black plans for this structure are both about pieces, so nothing in the entry names this; it is authored territory because it is played, not because the library covers it."
     },
     {
-      "at": { "spineNodeId": "bf5-develop" },
+      "at": {
+        "spineNodeId": "bf5-develop"
+      },
       "moveUci": "e1e7",
       "class": "interesting_deviation",
       "note": "Rxe7: 224 of 1535 (14.6%). White spends the rook that owns the file to take the knight that a rook on e8 would have defended. It is the sharpest thing in the position and it changes what the objective is about — after the exchange the file is still open, but the piece that owned it is gone, so the library's White signature ends by White's own hand. Whether the material is worth it is a concrete question this pack does not answer, and there is no engine pass here to answer it with."
     },
     {
-      "at": { "spineNodeId": "bg5-pin-main" },
+      "at": {
+        "spineNodeId": "bg5-pin-main"
+      },
       "moveUci": "f5d3",
       "class": "accepted_alternative",
       "note": "Bxd3 immediately: 110 of 513 (21.4%), the only other move above two games here. It trades on d3 before the pawn goes to f6, which means the knight on e7 is still pinned when the dust settles. The two orders are both authored; the difference between them is one pawn move, and this pack measures neither."
     },
     {
-      "at": { "spineNodeId": "re8-contest" },
+      "at": {
+        "spineNodeId": "re8-contest"
+      },
       "moveUci": "e1e7",
       "class": "interesting_deviation",
       "note": "Rxe7 after the rooks are opposed: 20 of 339 (5.9%). Worth playing out beside the same capture on the other branch, because the two are not the same transaction — here a Black rook is already on the file and recaptures, and there it is not. That comparison is exactly what the drill's rewind is for."
@@ -252,22 +327,30 @@
     {
       "id": "band-result-split",
       "text": "The band's own results at this position are on record and are stated here as a fact about what happened. Over 2695 games (Lichess explorer, ratings 1400/1600/1800, speeds rapid+classical, 2023-01 to 2025-12, retrieved 2026-08-16) the outcomes were 1297 white wins, 208 draws and 1190 black wins (48.1/7.7/44.2%). Stated as what happened, per the owner ruling of 2026-08-15: a result split may be stated with its population and may never be converted into a move verdict or a quality claim. No move, plan or side in this pack is graded from these numbers.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "the-file-is-already-owned",
       "text": "The shape library's White plan for this structure - the central file is open, White has a rook on it, Black has none - already holds in this pack's start position, and it holds at every position on the developing branch through move eleven. It stops holding on the move a Black rook reaches the file. Both statements were evaluated with the repo's own structural evaluator on the authored positions; neither says anything about whether owning the file is worth anything.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     },
     {
       "id": "same-move-two-depths",
       "text": "Re8 occurs in 339 of the 2695 games at this pack's start position, and in 48 of the 822 games at the position six plies later on the developing branch (Lichess explorer, same population, retrieved 2026-08-16). The second is below the hundred-game floor at which this repo's explorer client abstains, so the corpus can be asked about the early rook and cannot be asked about the late one. That is a fact about the evidence, not about the moves: no comparison, preference or cost is derived from it here.",
-      "evidenceTypes": ["corpus_observed"]
+      "evidenceTypes": [
+        "corpus_observed"
+      ]
     },
     {
       "id": "the-mirror-is-exact",
       "text": "In the start position Black's pawns stand on a7, b7, c7, d5, f7, g7 and h7 and White's on a2, b2, c2, d4, f2, g2 and h2 - the same seven files, the same shape, reflected. Neither side has an e-pawn, so the e-file is open for both. This was read off the position rather than recalled, and it is a description of the pawns, not a claim that the position is equal.",
-      "evidenceTypes": ["derived_feature"]
+      "evidenceTypes": [
+        "derived_feature"
+      ]
     }
   ],
   "provenance": {
@@ -286,15 +369,47 @@
       "UNGROUNDED: that contesting the open file is what Black should be doing in this structure is this pack's authored premise and nothing here establishes it. The corpus says what the band played; the detector says which pieces are on which file. Neither says the file is worth contesting, and neither says early is better than late. No engine evaluation has been run on any position in this pack.",
       "NOT CLAIMED: no move is graded better or worse than another; the early rook is not asserted to be better than the late one, and the two are contrasted only by how much evidence exists about each; no split is compared with another; and no deviation note asserts a chess consequence beyond an explicitly measured one."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No sign-off will ever clear a blocker below; a citable source or mechanical validation that bears on the claim are the only two things that will.",
-      "THE OBJECTIVE'S PREMISE IS UNCITED. That Black's job in a symmetrical open centre is to contest the file White took first is asserted by the shape library entry and by this pack, and neither cites anything. The 2026-08-16 citation pass established that encyclopedic structure articles are theme inventories and never sequence what they list (design/BACKLOG.md D272), which is precisely the shape of this claim.",
-      "THE TIMING CONTRAST IS EVIDENCE-SHAPED, NOT RESULT-SHAPED, AND THAT IS A CEILING. The pack contrasts contesting the file at ply 1 against contesting it at ply 7 purely by whether the corpus can be asked about each. It cannot say the early rook scored better, because that is a per-position aggregate on two different branches, and it cannot say the plan arrived in time, because the explorer cannot condition an outcome on when something happened inside a game (design/BACKLOG.md D155). This is the sixth wave to arrive at that missing instrument.",
-      "THE PLYHORIZON OF 16 AND THE FENPREDICATE ARE AUTHORED. What is measured is the corpus census that motivated them — 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, 0 of 47 use fenPredicates — and the ply at which this line's band evidence dies. Nothing measured says 16 is the right cap or that structure-keyed authored territory serves a learner better than move-keyed territory.",
-      "TWO OF THE THREE PLAN CLASSES ARE NEVER SATISFIED ON THIS SPINE, MEASURED. black-central-outpost is false throughout because d4 holds a White pawn on every authored position and no Black knight reaches e4; black-neutralize-and-level is false throughout because no authored line trades queens. Both are recorded rather than removed, because a plan that the structure offers and this position does not reach is a fact worth carrying.",
-      "NO ENGINE PASS. Two deviations turn on the Rxe7 exchange and neither is priced; there is no cost field on either, because a candidate-relative centipawn loss is the only thing this repo can measure there and no engine walk was run.",
-      "THE SUB-FLOOR NUMBER IS LOAD-BEARING. The claim that the late rook is unattested rests on a 48-game count, which is under the abstention floor. It is used only to say the corpus abstains, never as evidence about the move — but a reader who takes 48 as a measurement rather than as an absence has been misled, and nothing in the format distinguishes the two."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No sign-off will ever clear a blocker below; a citable source or mechanical validation that bears on the claim are the only two things that will.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "the-objective-s-premise-is-uncited-that-black-s-job-in-a",
+        "state": "blocking",
+        "statement": "THE OBJECTIVE'S PREMISE IS UNCITED. That Black's job in a symmetrical open centre is to contest the file White took first is asserted by the shape library entry and by this pack, and neither cites anything. The 2026-08-16 citation pass established that encyclopedic structure articles are theme inventories and never sequence what they list (design/BACKLOG.md D272), which is precisely the shape of this claim."
+      },
+      {
+        "id": "the-timing-contrast-is-evidence-shaped-not-result-shaped",
+        "state": "blocking",
+        "statement": "THE TIMING CONTRAST IS EVIDENCE-SHAPED, NOT RESULT-SHAPED, AND THAT IS A CEILING. The pack contrasts contesting the file at ply 1 against contesting it at ply 7 purely by whether the corpus can be asked about each. It cannot say the early rook scored better, because that is a per-position aggregate on two different branches, and it cannot say the plan arrived in time, because the explorer cannot condition an outcome on when something happened inside a game (design/BACKLOG.md D155). This is the sixth wave to arrive at that missing instrument."
+      },
+      {
+        "id": "the-plyhorizon-of-16-and-the-fenpredicate-are-authored-w",
+        "state": "blocking",
+        "statement": "THE PLYHORIZON OF 16 AND THE FENPREDICATE ARE AUTHORED. What is measured is the corpus census that motivated them — 29 of 31 opening and middlegame packs set plyHorizon exactly equal to their deepest authored spine ply, 0 of 47 use fenPredicates — and the ply at which this line's band evidence dies. Nothing measured says 16 is the right cap or that structure-keyed authored territory serves a learner better than move-keyed territory."
+      },
+      {
+        "id": "two-of-the-three-plan-classes-are-never-satisfied-on-thi",
+        "state": "blocking",
+        "statement": "TWO OF THE THREE PLAN CLASSES ARE NEVER SATISFIED ON THIS SPINE, MEASURED. black-central-outpost is false throughout because d4 holds a White pawn on every authored position and no Black knight reaches e4; black-neutralize-and-level is false throughout because no authored line trades queens. Both are recorded rather than removed, because a plan that the structure offers and this position does not reach is a fact worth carrying."
+      },
+      {
+        "id": "no-engine-pass-two-deviations-turn-on-the-rxe7-exchange-",
+        "state": "blocking",
+        "statement": "NO ENGINE PASS. Two deviations turn on the Rxe7 exchange and neither is priced; there is no cost field on either, because a candidate-relative centipawn loss is the only thing this repo can measure there and no engine walk was run."
+      },
+      {
+        "id": "the-sub-floor-number-is-load-bearing-the-claim-that-the-",
+        "state": "blocking",
+        "statement": "THE SUB-FLOOR NUMBER IS LOAD-BEARING. The claim that the late rook is unattested rests on a 48-game count, which is under the abstention floor. It is used only to say the corpus abstains, never as evidence about the move — but a reader who takes 48 as a measurement rather than as an absence has been misled, and nothing in the format distinguishes the two."
+      }
     ],
     "attribution": []
   }

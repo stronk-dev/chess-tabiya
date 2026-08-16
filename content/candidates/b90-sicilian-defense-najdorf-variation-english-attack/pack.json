@@ -1,1 +1,102 @@
-{"checkpoints":[{"actions":[],"id":"line-end","trigger":{"atPly":6}}],"feedbackPolicy":"delayed_checkpoint","id":"b90-sicilian-defense-najdorf-variation-english-attack","mode":"line","objective":{"successConditions":[{"checkpointId":"line-end","kind":"reach_checkpoint"}],"summary":"Play the recorded line to its end: 6 plies from this position.","type":"play_until_checkpoint"},"opponentPolicy":{"mode":"theory_strict"},"phase":"opening","provenance":{"graduationBlockers":["objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft"],"licence":"CC-BY-SA-4.0","reviewStatus":"draft","reviewers":[],"sources":["B90 Sicilian Defense: Najdorf Variation, English Attack: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/b.tsv) — CC0-1.0, no attribution required"]},"spine":[{"children":[{"children":[{"children":[{"children":[{"children":[{"children":[],"id":"p15-f3","moveSan":"f3","moveUci":"f2f3"}],"id":"p14-be6","moveSan":"Be6","moveUci":"c8e6"}],"id":"p13-nb3","moveSan":"Nb3","moveUci":"d4b3"}],"id":"p12-e5","moveSan":"e5","moveUci":"e7e5"}],"id":"p11-be3","moveSan":"Be3","moveUci":"c1e3"}],"id":"p10-a6","moveSan":"a6","moveUci":"a7a6"}],"start":{"fen":"rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5","movesSan":["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3"],"side":"black"},"title":"Sicilian Defense: Najdorf Variation, English Attack","version":"0.1.0"}
+{
+  "checkpoints": [
+    {
+      "actions": [],
+      "id": "line-end",
+      "trigger": {
+        "atPly": 6
+      }
+    }
+  ],
+  "feedbackPolicy": "delayed_checkpoint",
+  "id": "b90-sicilian-defense-najdorf-variation-english-attack",
+  "mode": "line",
+  "objective": {
+    "successConditions": [
+      {
+        "checkpointId": "line-end",
+        "kind": "reach_checkpoint"
+      }
+    ],
+    "summary": "Play the recorded line to its end: 6 plies from this position.",
+    "type": "play_until_checkpoint"
+  },
+  "opponentPolicy": {
+    "mode": "theory_strict"
+  },
+  "phase": "opening",
+  "provenance": {
+    "graduationBlockers": [
+      {
+        "id": "mechanical-objective-placeholder",
+        "state": "blocking",
+        "statement": "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft"
+      }
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "reviewStatus": "draft",
+    "sources": [
+      "B90 Sicilian Defense: Najdorf Variation, English Attack: lichess-chess-openings (https://raw.githubusercontent.com/lichess-org/chess-openings/4b8622759e7ae6f93f011cc6c83a3823401ab45e/b.tsv) — CC0-1.0, no attribution required"
+    ]
+  },
+  "spine": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "id": "p15-f3",
+                          "moveSan": "f3",
+                          "moveUci": "f2f3"
+                        }
+                      ],
+                      "id": "p14-be6",
+                      "moveSan": "Be6",
+                      "moveUci": "c8e6"
+                    }
+                  ],
+                  "id": "p13-nb3",
+                  "moveSan": "Nb3",
+                  "moveUci": "d4b3"
+                }
+              ],
+              "id": "p12-e5",
+              "moveSan": "e5",
+              "moveUci": "e7e5"
+            }
+          ],
+          "id": "p11-be3",
+          "moveSan": "Be3",
+          "moveUci": "c1e3"
+        }
+      ],
+      "id": "p10-a6",
+      "moveSan": "a6",
+      "moveUci": "a7a6"
+    }
+  ],
+  "start": {
+    "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+    "movesSan": [
+      "e4",
+      "c5",
+      "Nf3",
+      "d6",
+      "d4",
+      "cxd4",
+      "Nxd4",
+      "Nf6",
+      "Nc3"
+    ],
+    "side": "black"
+  },
+  "title": "Sicilian Defense: Najdorf Variation, English Attack",
+  "version": "0.1.0"
+}

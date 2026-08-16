@@ -328,13 +328,45 @@
       "UNGROUNDED: every strategic claim — the objective summary, the plan-class descriptions, all spine annotations, all deviation classifications and notes, and the non-derived feedbackClaims — is agent-authored prose with NO citation and NO human review, and — after the 2026-08-15 engine pass — with evaluated MOVES but still unevaluated PROSE.",
       "ENGINE PASS (mechanical, 2026-08-15): Stockfish 18 at the repo's authoring profile — depth 22, Threads 1, Hash 16MB, MultiPV 1 — run through apps/server's EngineSupervisor and StockfishEvidenceExecutor, the same engine path make candidate-emit --engine-eval uses. 11 decision positions and 17 candidate moves were evaluated: every spine node's resulting position, every authored deviation's resulting position, and the engine's own depth-22 first choice at each decision. Per-move centipawns and losses are in provenance.engineValidation. Loss is candidate-relative (best evaluated candidate minus this move) and is therefore a LOWER BOUND: all legal moves were not enumerated. Spine moves the engine ranks materially below a sibling at the same position: Ne5 (p17-ne5) 0.65 below e4."
     ],
-    "reviewers": [],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "SHAPE ENTRY AUTHORED 2026-08-15 — this blocker is superseded and kept for the record. content/shapes/london-wedge.json now exists and this pack references it from the preserve-and-attack plan class, which points at the white-clamp-on-e5 plan. What that does NOT clear: the entry's own plan descriptions, watch items and typical mistakes are agent-authored and ungrounded exactly as this pack's prose is, so the reference moves the teaching into a reusable place without grounding it. What was machine-checked before the reference was made: the entry's trigger fires on seven (p11-c3 through p17-ne5) of this pack's spine positions and on no position of any other shipped pack, evaluated with the repo's own matchesStructuralExpression over all 487 walked spine positions in content/drafts. Original blocker text: \"This pack has NO shapes reference, deliberately: no library entry names the London wedge (c3/d4/e3 with the dark bishop outside) — bishop-good-bad is an endgame entry with different plan ownership, and closed-centre-chain's trigger is French-pinned. A London/system-pyramid shape entry is the commissioned ask, mirroring the wave-3 dxc5-residue precedent.\"",
-      "The 'order is the theory' claim — that Londons fail by construction order rather than refutation at these bands — is a measurable corpus hypothesis nobody has measured.",
-      "The spine drills the 3...c5 row while 3...e6 is the more common reply at band (28.1% vs 11.7%); a companion line for the ...e6/...Bd6 move orders is unwritten.",
-      "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "shape-entry-authored-2026-08-15-this-blocker-is-supersed",
+        "state": "resolved",
+        "statement": "SHAPE ENTRY AUTHORED 2026-08-15 — this blocker is superseded and kept for the record. content/shapes/london-wedge.json now exists and this pack references it from the preserve-and-attack plan class, which points at the white-clamp-on-e5 plan. What that does NOT clear: the entry's own plan descriptions, watch items and typical mistakes are agent-authored and ungrounded exactly as this pack's prose is, so the reference moves the teaching into a reusable place without grounding it. What was machine-checked before the reference was made: the entry's trigger fires on seven (p11-c3 through p17-ne5) of this pack's spine positions and on no position of any other shipped pack, evaluated with the repo's own matchesStructuralExpression over all 487 walked spine positions in content/drafts. Original blocker text: \"This pack has NO shapes reference, deliberately: no library entry names the London wedge (c3/d4/e3 with the dark bishop outside) — bishop-good-bad is an endgame entry with different plan ownership, and closed-centre-chain's trigger is French-pinned. A London/system-pyramid shape entry is the commissioned ask, mirroring the wave-3 dxc5-residue precedent.\"",
+        "resolved": {
+          "at": "2026-08-15",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      },
+      {
+        "id": "the-order-is-the-theory-claim-that-londons-fail-by-const",
+        "state": "blocking",
+        "statement": "The 'order is the theory' claim — that Londons fail by construction order rather than refutation at these bands — is a measurable corpus hypothesis nobody has measured."
+      },
+      {
+        "id": "the-spine-drills-the-3-c5-row-while-3-e6-is-the-more-com",
+        "state": "blocking",
+        "statement": "The spine drills the 3...c5 row while 3...e6 is the more common reply at band (28.1% vs 11.7%); a companion line for the ...e6/...Bd6 move orders is unwritten."
+      },
+      {
+        "id": "engine-evidence-now-recorded-the-root-and-authored-posit",
+        "state": "resolved",
+        "statement": "ENGINE EVIDENCE NOW RECORDED — the root and authored positions have fixed-depth, manifest-linked Stockfish measurements. This makes the stated root assessment falsifiable at the named engine version and cost; it does not ground strategic prose, plan classes, annotations, or deviation classifications, and it is not a proof.",
+        "resolved": {
+          "at": "2026-08-16",
+          "by": "The recorded work was completed; the original statement remains as history."
+        }
+      }
     ]
   }
 }

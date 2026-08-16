@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
@@ -32,7 +34,7 @@ describe("principle registry",()=>{
 
   it("projects the real prose-preserving Philidor binding at registration",async()=>{
     const principles=await PrincipleRegistry.loadDefault();
-    const document=JSON.parse(await readFile(resolve("content/drafts/philidor-third-rank-hold.json"),"utf8"));
+    const document=JSON.parse(await readFile(resolve(resolvePackPath("philidor-third-rank-hold")),"utf8"));
     const ledger=JSON.parse(await readFile(resolve("content/drafts/philidor-third-rank-hold.evidence.json"),"utf8"));
     const issues:any[]=[]; const bindings=validateClaimBindings(document,ledger,issues);
     expect(issues,JSON.stringify(issues)).toEqual([]); expect(bindings).toHaveLength(1);

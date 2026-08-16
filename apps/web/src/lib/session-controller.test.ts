@@ -1,3 +1,5 @@
+import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
+
 import { readFileSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -46,7 +48,7 @@ const pack = JSON.parse(
 ) as DrillPackDefinition;
 const blackToMovePack = JSON.parse(
   readFileSync(
-    new URL("../../../../content/drafts/anti-caro-advance.json", import.meta.url),
+    new URL(resolvePackPath("anti-caro-advance"), import.meta.url),
     "utf8",
   ),
 ) as DrillPackDefinition;

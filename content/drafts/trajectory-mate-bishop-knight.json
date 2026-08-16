@@ -862,12 +862,46 @@
       "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Bishop_and_knight_checkmate (CC BY-SA 4.0, read 2026-08-16) states the three-phase method that this trajectory's three legs enact — drive to the edge, drive from the wrong corner to the right corner, mate — plus the W manoeuvre and the 33-move bound. WHAT IT DOES NOT SUPPLY: the claim that the leg boundaries are facts about where the black king stands rather than move numbers is this pack's own runtime construction and no source speaks to it; the per-leg objective replacements are ours. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13); only a citable source or mechanical validation that bears on a claim clears a blocker.",
-      "The dynamically reached leg-3 assessment remains authored: the root ledger proves the start is a win, not that every learner-produced leg-entry position preserves it.",
-      "perfect_tablebase is declared as the opponent. It is published only where a tablebase provider is configured; a deployment without one will not offer the mode and the drill falls back to whatever the learner selects, which is not the opponent this content was verified against.",
-      "The fifty-move pressure named in the annotations is real arithmetic but the runtime surfaces no counter; whether a mates pack should show the halfmove clock is an open product question.",
-      "CITED 2026-08-16 (partial). The three-phase method the three legs enact is stated by en.wikipedia.org/wiki/Bishop_and_knight_checkmate (CC BY-SA 4.0), attributed in provenance.attribution; the leg decomposition is no longer an uncited taxonomy.",
-      "STILL UNBACKED after the 2026-08-16 citation pass: the causal claim that each leg begins because of what the player's own moves did in the previous one, and the structural boundary predicates that implement it, are runtime constructions with no source and no measurement. Tablebase categories remain the only mechanically grounded element."
+      {
+        "id": "no-review-workflow",
+        "state": "accepted",
+        "statement": "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13); only a citable source or mechanical validation that bears on a claim clears a blocker.",
+        "accepted": {
+          "kind": "owner_ruling",
+          "ruling": "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.",
+          "rulingRef": "planning/exploration/log.md#L1231"
+        }
+      },
+      {
+        "id": "the-dynamically-reached-leg-3-assessment-remains-authore",
+        "state": "blocking",
+        "statement": "The dynamically reached leg-3 assessment remains authored: the root ledger proves the start is a win, not that every learner-produced leg-entry position preserves it."
+      },
+      {
+        "id": "tablebase-provider-availability",
+        "state": "accepted",
+        "statement": "perfect_tablebase is declared as the opponent. It is published only where a tablebase provider is configured; a deployment without one will not offer the mode and the drill falls back to whatever the learner selects, which is not the opponent this content was verified against.",
+        "accepted": {
+          "kind": "permanent_property",
+          "ruling": "The runtime can offer perfect tablebase resistance only where a Syzygy provider is configured.",
+          "rulingRef": "docs/tablebase-grounding.md"
+        }
+      },
+      {
+        "id": "the-fifty-move-pressure-named-in-the-annotations-is-real",
+        "state": "blocking",
+        "statement": "The fifty-move pressure named in the annotations is real arithmetic but the runtime surfaces no counter; whether a mates pack should show the halfmove clock is an open product question."
+      },
+      {
+        "id": "cited-2026-08-16-partial-the-three-phase-method-the-thre",
+        "state": "blocking",
+        "statement": "CITED 2026-08-16 (partial). The three-phase method the three legs enact is stated by en.wikipedia.org/wiki/Bishop_and_knight_checkmate (CC BY-SA 4.0), attributed in provenance.attribution; the leg decomposition is no longer an uncited taxonomy."
+      },
+      {
+        "id": "still-unbacked-after-the-2026-08-16-citation-pass-the-ca",
+        "state": "blocking",
+        "statement": "STILL UNBACKED after the 2026-08-16 citation pass: the causal claim that each leg begins because of what the player's own moves did in the previous one, and the structural boundary predicates that implement it, are runtime constructions with no source and no measurement. Tablebase categories remain the only mechanically grounded element."
+      }
     ],
     "licence": "CC-BY-SA-4.0",
     "attribution": [

@@ -1,4 +1,5 @@
 import { branchPath, type DrillRun } from "@chess-tabiya/runtime";
+import type { GraduationEntry } from "@chess-tabiya/schema/drill-pack";
 import type { PackRecord } from "./pack-registry.js";
 import { ServerError } from "./errors.js";
 
@@ -39,9 +40,9 @@ export function distillRun(run: DrillRun, source: PackRecord | undefined, input:
     .sort((left, right) => Number(selectedIds.has(right.id)) - Number(selectedIds.has(left.id)) || left.id.localeCompare(right.id))
     .map((node) => Object.freeze({ id: distilledId(node.id), moveUci: node.moveUci!, moveSan: node.moveSan!, children: build(node.id) }));
 
-  const blockers: string[] = [
-    "Session-distilled moves are recorded play, not reviewed theory; a human author must judge every line before publication.",
-    "The mechanical objective and checkpoint are navigation facts, not a chess assessment; replace or ground them before publication.",
+  const blockers: GraduationEntry[] = [
+    { id: "recorded-play-needs-authoring", state: "blocking", statement: "Session-distilled moves are recorded play, not reviewed theory; a human author must judge every line before publication." },
+    { id: "mechanical-objective-needs-grounding", state: "blocking", statement: "The mechanical objective and checkpoint are navigation facts, not a chess assessment; replace or ground them before publication." },
   ];
   const dropped: string[] = [];
   const fired = run.events.filter((event): event is Extract<DrillRun["events"][number], { type: "checkpoint.reached" }> => event.type === "checkpoint.reached");
@@ -61,10 +62,10 @@ export function distillRun(run: DrillRun, source: PackRecord | undefined, input:
   if (checkpoints.length === 0) {
     const deepestLearnerPly = Math.max(...learnerNodes.map((node) => node.ply));
     checkpoints.push({ id: "distilled-end", label: "Recorded consequence reached", trigger: { atPly: deepestLearnerPly }, actions: [] });
-    blockers.push("No portable fired checkpoint survived; a mechanical atPly checkpoint was substituted.");
+    blockers.push({ id: "portable-checkpoint-absent", state: "blocking", statement: "No portable fired checkpoint survived; a mechanical atPly checkpoint was substituted." });
   }
-  if (source?.document.mode === "line" || source?.document.mode === "trajectory") blockers.push(`Source mode ${source.document.mode} was reduced to an outcome seed because its authored grading structure is not carried by a run.`);
-  if (run.feedbackPolicy === "attempt_end") blockers.push("Run-only attempt_end feedback was substituted with delayed_checkpoint for the pack draft.");
+  if (source?.document.mode === "line" || source?.document.mode === "trajectory") blockers.push({ id: "source-mode-reduced", state: "blocking", statement: `Source mode ${source.document.mode} was reduced to an outcome seed because its authored grading structure is not carried by a run.` });
+  if (run.feedbackPolicy === "attempt_end") blockers.push({ id: "attempt-end-substituted", state: "blocking", statement: "Run-only attempt_end feedback was substituted with delayed_checkpoint for the pack draft." });
   for (const branch of run.branches.filter((candidate) => candidate.origin === "simulated")) dropped.push(`${branch.id}: simulated branch`);
 
   const proposals: DistillProposal[] = [];
