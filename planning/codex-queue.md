@@ -1,19 +1,85 @@
-# Codex queue — refreshed 2026-08-16 (engine-leverage landed)
+# Codex queue — refreshed 2026-08-16 (engine-leverage RETURNED)
 
-**`engine-leverage` is in independent review** (`18d2832`, `a1b0332`) — pack 0.23, run 0.16,
-migration 21, 637 tests, 51/51 reproducible Stockfish. Not yours again; an independent
-reviewer has it. **Do not archive it** until that comes back.
+**STOP the batches below. `engine-leverage` is returned with a list, and one item is the
+doctrine.** Independent review re-ran both gates itself (`make verify` and
+`ENGINES_REQUIRED=1 make verify` both pass at 637/101, cold-engine reproducibility 10/10 in
+fresh processes) — your reported numbers all hold. The defects are elsewhere.
 
-**Correction to this file: the Elo batch was already done.** D58, D60, D73 and D74 are all
-closed (`4ce13c2` and the contract work) and this queue still listed them. My staleness, not
-yours — I re-derived the open set from the ledger this time instead of trusting the file.
+**All four rulings verified HONOURED**, criterion 4 stayed scoped (140 costs: 137 `cp/engine`,
+3 `mate/engine`, 4 `unmeasurable`, **zero tablebase-basis**), and migration 21 froze its
+literals correctly. That part is clean work.
 
-**Three batches below, none needing an RFC.** They are defect fixes inside shipped
-mechanisms, which is the line the last several waves have used: a bug in a shipped mechanism
-is yours; a change to the *format* needs a lane and a draft. Where a fix looked schema-shaped
-I pulled it out and listed it in §3 instead.
+## 0. D194 — an engine evaluation reaches the learner ungated, during committed play
 
-## 0. Take this first — a live disclosure gap
+**Verified independently by claude.** `§5.1`'s `candidateLines` change parses `score cp` for
+every caller including `#strongEngine`; `SelectionCandidate` now carries `scoreCp` and `wdl`;
+`opponent.move_selected` carries `selection: OpponentSelection`, which carries those
+candidates; and `engineFeedbackEvent` — the barrier in `publicEvents` — matches only
+`evidence.attached` and machine-ref `objective.state_changed`. **`opponent.move_selected` is
+not barriered.** So `GET /runs/:id/events` serves Stockfish's centipawn score for positions
+during committed play, before disclosure, behind no assistance gate.
+
+**This is the named anti-pattern.** `AGENTS.md` §Rejected: *"an engine review screen with a
+rewind button — the failure shape the whole product dies in"*, and ADR-0005's dashboard.
+`design/02` §157-158's anti-contamination default says hide the eval bar until segment end or
+explicit request. **The RFC's own §7 deviation 3 states the opposite of what shipped**, so
+this is not a scope call anyone made — it is a defect.
+
+**Fix the barrier, not the parse.** The scores are wanted; reaching an undisclosed learner is
+not. And note D195 while you are there: **24 of 51 recorded `scoreCp` values are
+aspiration-window bounds** (`upperbound`/`lowerbound` on the final `multipv 1` line), and 2
+carry `score mate` with no `scoreCp` at all — so two of criterion 17's "score agreements" are
+`undefined === undefined`. The numbers are both ungated and, as evaluations, unsound.
+
+## 1. D196 — a failed tablebase probe deletes a different instrument's evidence
+
+`#ensureStoryEvidence` builds `failed` from `queue.failures(run.id)` keyed by **nodeId, not
+kind**, while the next line filters `outstanding` by `job.kind === "eval"`. One
+`TABLEBASE_UNAVAILABLE` therefore permanently blocks the **Stockfish** eval for that node and
+marks the path ready. Two instruments, one failure key.
+
+## 2. D193 — the register is a table nothing checks, and it is already short
+
+`assertAdvertisedCapabilityDispositions` has **one call site in the whole tree**:
+`capabilities.test.ts`, handed a hand-authored six-name list built to match the register. It
+is wired to no handshake and to no real engine. Diffed against the Stockfish 18 the repo's own
+tests use, **eight advertised options have no disposition row** — `Debug Log File`,
+`NumaPolicy`, `Move Overhead`, `UCI_Chess960`, `SyzygyProbeDepth`, `Syzygy50MoveRule`,
+`EvalFile`, `EvalFileSmall`. Wired to a real engine it throws. Criterion 26 has no test at all
+(`expect.any(Array)` passes on an empty register).
+
+**This is the third register in a row to pass vacuously** — `format-surface`'s gate rejected
+its own seed rows and an empty register passed every clause. Treat "the register is checked"
+as a claim needing a real call site, every time.
+
+## 3. Normative clauses that did not land
+
+- **D197** — §3.6's producer budget: no queue-emptiness check, no yield to the interactive
+  path, no drop-on-full. Rejected probes land in `#failures`.
+- **D198** — the desugaring shipped as **two independent copies**, which is the one thing
+  §3.1 made normative against (*"one shared helper, used by all three sites"*), plus a
+  duplicated `CATEGORY_RANK` in `guard.ts` instead of reusing `sourcing/tablebase-category.ts`.
+- **D199** — `guard.overrides` silently reorders authored `conditions`, breaking §3.4's
+  declared-order firing rule.
+- **D200** — declaring `conditions` silently kills an authored `evalSwingCp`/`fireOnMate`,
+  with no lint and no refusal.
+- **D201** — the cost checker cannot see the provenance rule it enforces, and `comparable`
+  compares mate/category costs by `JSON.stringify`, which is key-order sensitive over
+  author-written JSON.
+- **D202** — the per-move explorer split renders to 0.1% with **no per-move sample floor**;
+  the 100-game abstention is position-level only.
+
+**Two criteria were never executed by either gate:** 21a and 22 live in
+`maia.maia.integration.ts`, which `vitest.config.ts` excludes — they run only under
+`pnpm test:maia`. Criterion 21a's whole purpose was to *report* observed `wdl` sums so a later
+RFC can pin the encoding, and no sums are reported anywhere. Criterion 16's fixture-realism
+registration is also unmet: `instrument-fed.fixture-register.json` holds one entry and its gate
+scans only `practical-difficulty.ts`.
+
+**Do not archive `engine-leverage`.** Fix D194 and D196 first — those two are shipping
+defects, not polish.
+
+## 4. Then: a live disclosure gap
 
 **D140.** Four `/runs/:id/*` routes build an `evidencePacket`; **three call
 `requireGuidanceDisclosure` and `/reasoning-review` does not.** Verified at HEAD: the
@@ -23,7 +89,7 @@ built from recorded Maia policy masses — so it is a rung-3 egress skipping the
 three siblings enforce. **This is D68's shape at a fourth site**, after D68 was closed.
 Small fix, real exposure, take it ahead of everything else.
 
-## 1. The authoring-instrument batch — this is what unblocks content
+## 5. The authoring-instrument batch — this is what unblocks content
 
 Every row here cost a content agent real time this week, measured. The owner's priority is
 content velocity, and these are the friction.
@@ -40,7 +106,7 @@ content velocity, and these are the friction.
   corpus-wide content instrument cannot see rung-4 evidence, so a grounding wave looks
   exactly like a wave that did nothing.
 
-## 2. The selection-integrity batch — one file family, found together
+## 6. The selection-integrity batch — one file family, found together
 
 All four came out of `format-surface`'s cross-review while verifying the same code path, and
 routing them into one change is the point.
@@ -59,7 +125,7 @@ routing them into one change is the point.
   `formatDispositions` off `/capabilities` partly on the strength of this row, so the two are
   related but separate — this one is the false advertisement, not the siting.)*
 
-## 3. Gathered for an RFC — do NOT take these
+## 7. Gathered for an RFC — do NOT take these
 
 Schema-shaped, so they need a lane and a draft. Listed so you can see why they are not in §1
 despite being the same kind of friction: **D123/D153** (the 400-char `timingWindows[].note`
@@ -70,7 +136,7 @@ a machine-readable field), **D112** (`$defs/feedbackClaim` is `additionalPropert
 it out explicitly), **D148/D150** (no record kind can carry a result split; `claim-backing`
 round 2 owns it).
 
-## 4. In flight elsewhere — for your awareness only
+## 8. In flight elsewhere — for your awareness only
 
 `claim-backing` round 2 (claim routing to rung 5 + a principle registry), `pack-graduation`
 (D162 — **production serves one pack, and it is the schema example**), `board-annotation`
