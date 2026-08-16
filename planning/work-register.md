@@ -153,6 +153,27 @@ rules, tablebase and structural reading intact, and `UCI_Chess960` is already an
 Stockfish option (see **D193**). It is the natural probe for the whole cluster, because it
 tests the *variant plumbing* without testing the *detector* question at all.
 
+## 4c. Pack shape and time — queued 2026-08-16, not launched
+
+Owner ideas: **D329** (famous-game provenance), **D330** (no time control exists), **D331**
+(time as a difficulty axis that misses the power curve). Two waves are still in flight, so
+these wait here rather than being re-uttered later as new.
+
+**Ordering, and it is not the order they were raised in.** D329 is the cheapest and most
+independent — a `sourceGame` object on `provenance`, one pack-schema lane, no runtime change,
+and the `variantOf` precedent already shows the shape. **D330/D331 are one item, not two**, and
+should not be drafted until D331 is tested: if time pressure really does degrade assistance
+value continuously, it changes the coaching/cheating design that landed 2026-08-16, and a clock
+built before that is a clock built against the wrong requirement.
+
+**The entry condition for D330/D331 is an experiment, not a draft.** The claim to test is
+narrow and falsifiable: *does a time constraint reduce the usefulness of an item at a given
+distance-from-answer?* If it does, time is a legibility-consumption lever and belongs in
+`design/05`-s ladder discussion. If it does not, a clock is only an atmosphere feature and
+should be priced as such. **`design/06` §5-s refused list already contains "a pursuit clock is
+a retry price by another name"** — so whoever takes this must show why a *game* clock is not
+that, and the answer is not obvious.
+
 ## 5. Research — two states, and the distinction is the standing sequence
 
 **The owner's sequence is breadth → content → ONE play session at the end.** R6, R7 and R8 are
