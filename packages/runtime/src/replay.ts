@@ -28,6 +28,7 @@ export interface OpponentMoveReadback {
   readonly moveUci: string;
   readonly engine: SelectionEngineIdentity;
   readonly policyModeApplied: import("./types.js").PolicyModeApplied;
+  readonly orderingBasis?: import("./types.js").OpponentSelection["orderingBasis"];
 }
 
 export interface ReadBackReplay {
@@ -64,6 +65,9 @@ function readOpponentMove(
     moveUci: selection.data.moveUci,
     engine: selection.data.selection.engine,
     policyModeApplied: selection.data.selection.policyModeApplied,
+    ...(selection.data.selection.orderingBasis === undefined
+      ? {}
+      : { orderingBasis: selection.data.selection.orderingBasis }),
   });
 }
 

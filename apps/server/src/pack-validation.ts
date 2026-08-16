@@ -1001,6 +1001,13 @@ function runtimeIssues(
   if (opponentMode === "perfect_tablebase" && countFenPieces(pack.start.fen) > 7) {
     issues.push(runtimeIssue("PERFECT_TABLEBASE_OUT_OF_RANGE", "/opponentPolicy/mode", "perfect_tablebase requires a root with at most seven pieces"));
   }
+  if (opponentMode === "perfect_tablebase" && pack.objective.type === "hold") {
+    issues.push(runtimeWarning(
+      "PERFECT_TABLEBASE_UNORDERED_OBJECTIVE",
+      "/opponentPolicy/mode",
+      "a hold objective may present perfect_tablebase with a drawn root, where it has no ordering basis and its reply is a declared-neutral pick among category-preserving moves; practical_resistance is the mode written for difficulty in a decided position.",
+    ));
+  }
   if (opponentMode === "practical_resistance" && countFenPieces(pack.start.fen) > 7) {
     issues.push(runtimeIssue("PRACTICAL_RESISTANCE_OUT_OF_RANGE", "/opponentPolicy/mode", "practical_resistance requires a root with at most seven pieces"));
   }

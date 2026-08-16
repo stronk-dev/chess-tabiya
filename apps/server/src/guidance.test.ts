@@ -4,7 +4,7 @@ import { voiceCheck, type EvidencePacket } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { afterEach, describe, expect, it } from "vitest";
 
-import type { CapabilitiesProvider } from "./capabilities.js";
+import { HUMAN_COMMON_RESISTANCE_PROFILE, type CapabilitiesProvider } from "./capabilities.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import type { EngineHealth, EngineRequest } from "./engine-supervisor.js";
 import { renderVoice, type VoiceProvider } from "./guidance.js";
@@ -30,11 +30,11 @@ class MaiaClient implements SelectorEngineClient {
 const capabilities: CapabilitiesProvider = {
   async get() {
     return {
-      engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], costBasis: ["material"], capabilityDispositions: [], recordedReadingKinds: [], runSchemaVersion: "0.16",
+      engines: [], policyModes: ["human_common"], feedbackPolicies: ["delayed_checkpoint", "segment_end", "immediate_guard"], guardBasis: ["rules"], costBasis: ["material"], capabilityDispositions: [], recordedReadingKinds: [], runSchemaVersion: "0.17",
       tempoVerdicts: ["unopened", "open", "in_time", "over_budget", "too_slow", "outpaced", "premature"], tempoGradeable: ["in_time", "over_budget", "too_slow", "premature", "outpaced"], tempoDefaults: { outpaced: "failed" },
       assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
       objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },
-      policyProfiles: { strong_engine: { movetimeMs: 100, nodes: 50_000, threads: 1, hashMb: 16, multiPv: 1 }, human_common: { elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } } } },
+      policyProfiles: { strong_engine: { movetimeMs: 100, nodes: 50_000, threads: 1, hashMb: 16, multiPv: 1 }, human_common: { elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } }, resistance: HUMAN_COMMON_RESISTANCE_PROFILE } },
       providers: { opponent: "maia", judge: "none", llm: "none", corpus: "mock", tts: "none", tablebase: "none" },
       surfaces: { play: "available", review: "available", learn: "available", live: "available", create: "available", justPlay: "available", fromPosition: "available" },
     };

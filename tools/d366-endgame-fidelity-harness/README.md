@@ -61,7 +61,7 @@ build probe-maia
 #    by a seeded walk in which both sides play a uniformly random result-preserving move.
 node $SP/build-set.mjs content/drafts $SP/positions.jsonl 2 5 700
 
-# 2. Corpus-level, Maia-free: the criticality census and what perfect_tablebase picks.
+# 2. Corpus-level, Maia-free: the criticality census and what current perfect_tablebase picks.
 python3 tools/d366-endgame-fidelity-harness/census.py $SP/positions.jsonl $SP/census.json
 
 # 3. The probe set: 45 critical positions (arm A, preservation) + 15 lost positions on
@@ -94,3 +94,8 @@ Run of record: **1,095 probes, 0 errors, 6 complete repeat rounds**, at
 `Temperature 0.7 / TopP 0.9` (the value all 12 `human_common` endgame packs
 declare), against `chess-tabiya-maia:dev` (Maia-3 source `1e13597`, 5M
 checkpoint).
+
+`census.py` follows the current selector contract: DTZ remains primary in won/lost
+roots and every residual tie uses `sha256(fen + "\\0" + uci)`. Its report includes
+`dtzTiedRoots`, making explicit whether a won-root re-run had enough ties for a tiebreak
+change to affect the aggregate.

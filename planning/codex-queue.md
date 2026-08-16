@@ -9,13 +9,11 @@
 while you had uncommitted register edits, absorbing them into my commits. Ledgered as D372;
 the rule is that I add the paths I authored, never a shared directory, while you are working.
 
-## 0. `rfc/opponent-contracts.md` — BLOCKED by its governing body
+## 0. `rfc/opponent-contracts.md` — implementing; pending independent review
 
-The queue called this accepted, but the RFC still says `Status: draft` and open question 2 is
-explicitly owner-facing: whether the digest tiebreak ships or legibility is kept with the
-measured bias published. That choice changes the implementation. Per the queue's own standing
-rule, a resolution in this file is not a resolution in the body; do not implement until the
-RFC body records the ruling and its status becomes accepted.
+The owner ruled the digest tiebreak in the RFC body on 2026-08-16. Codex reviewed and
+implemented it; the lifecycle remains open for gate results and independent review, not for
+another design decision.
 
 Claims **run schema 0.17** (`OpponentSelection.orderingBasis`), a **stamp-only migration at
 position `STORAGE_VERSION + 1`** (22 at HEAD), and an unversioned `/capabilities` change.

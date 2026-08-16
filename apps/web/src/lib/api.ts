@@ -293,6 +293,17 @@ export interface Capabilities {
         readonly source: "advertised" | "configured" | "advertised+configured" | "unpublished";
         readonly advertised: { readonly min: number | null; readonly max: number | null };
       };
+      readonly resistance: {
+        readonly basis: "measured";
+        readonly metric: "dtz_percentile";
+        readonly scope: string;
+        readonly corpus: { readonly dossier: string; readonly positions: 15; readonly probes: 270; readonly measuredAt: "2026-08-16" };
+        readonly bands: readonly [1100, 1500, 1900];
+        readonly bandConditioned: false;
+        readonly dtzPercentile: { readonly min: 0.719; readonly max: 0.751; readonly uniformBaseline: 0.38 };
+        readonly slowestLosingRate: { readonly min: 0.611; readonly max: 0.689; readonly uniformBaseline: 0.227 };
+        readonly fastestLosingRate: { readonly value: 0.033; readonly uniformBaseline: 0.313 };
+      };
     };
   };
   readonly providers: {

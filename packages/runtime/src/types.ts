@@ -102,6 +102,7 @@ export interface SelectionEngineIdentity {
 export interface OpponentSelection {
   readonly moveUci: string;
   readonly policyModeApplied: PolicyModeApplied;
+  readonly orderingBasis?: "dtz_ascending" | "dtz_descending" | "none";
   readonly candidates?: readonly SelectionCandidate[];
   readonly engine: SelectionEngineIdentity;
 }

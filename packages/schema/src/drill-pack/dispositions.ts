@@ -33,6 +33,34 @@ export const FORMAT_DISPOSITIONS: readonly FormatDisposition[] = Object.freeze([
     reason: "human_external is not selectable in v1; external-human selection is not implemented",
   }),
   row({
+    pointer: "/opponentPolicy/mode",
+    value: "human_common",
+    disposition: "reached",
+    reason: "Samples the Maia policy head at the requested band; in a decided position its selected move sits at |DTZ| percentile 0.72-0.75 against 0.38 for a uniform legal move (design/research/maia-endgame-fidelity.md §6), measured at mode scope and never rendered per move",
+    site: { module: "apps/server/src/opponent-selector.ts", symbol: "humanCommon" },
+  }),
+  row({
+    pointer: "/opponentPolicy/mode",
+    value: "theory_strict",
+    disposition: "reached",
+    reason: "Samples Maia restricted to authored spine children; records the off-spine transition to human_common",
+    site: { module: "apps/server/src/opponent-selector.ts", symbol: "theoryStrict" },
+  }),
+  row({
+    pointer: "/opponentPolicy/mode",
+    value: "strong_engine",
+    disposition: "reached",
+    reason: "Stockfish under a reproducible search bound; targetElo is not honoured here",
+    site: { module: "apps/server/src/opponent-selector.ts", symbol: "strongEngine" },
+  }),
+  row({
+    pointer: "/opponentPolicy/mode",
+    value: "perfect_tablebase",
+    disposition: "reached",
+    reason: "Category-preserving and DTZ-optimal in a won or lost root; in a drawn root it declares orderingBasis: none and picks by the neutral tiebreak",
+    site: { module: "apps/server/src/opponent-selector.ts", symbol: "perfectTablebase" },
+  }),
+  row({
     pointer: "assistance:arrows",
     disposition: "unmeasured",
     reason: "design/05 promises arrows-for-sight; no directed structural primitive exists (the reader emits square sets, not vectors). The evidence rung stays refused under law 8. Learner-drawn and host-relayed marks are board-annotation surfaces and are not this axis.",
@@ -72,3 +100,23 @@ export const FORMAT_DISPOSITIONS: readonly FormatDisposition[] = Object.freeze([
     site: { module: "apps/server/src/pack-validation.ts", symbol: "runtimeIssues" },
   }),
 ]);
+
+export function assertOpponentModeDispositions(
+  declaredModes: readonly string[],
+  executableModes: readonly string[],
+  dispositions: readonly FormatDisposition[] = FORMAT_DISPOSITIONS,
+): void {
+  const executable = new Set(executableModes);
+  const declared = new Set(declaredModes);
+  const rows = dispositions.filter((entry) => entry.pointer === "/opponentPolicy/mode");
+  for (const mode of declared) {
+    const matching = rows.filter((entry) => entry.value === mode);
+    if (matching.length !== 1) throw new TypeError(`OPPONENT_MODE_DISPOSITION_MISSING:${mode}`);
+    const [entry] = matching;
+    const expected = executable.has(mode) ? "reached" : "refused";
+    if (entry!.disposition !== expected) throw new TypeError(`OPPONENT_MODE_DISPOSITION_INVALID:${mode}:${expected}`);
+    if (entry!.disposition === "reached" && entry!.site === undefined) throw new TypeError(`OPPONENT_MODE_DISPOSITION_SITE_MISSING:${mode}`);
+  }
+  const undeclared = rows.find((entry) => entry.value === undefined || !declared.has(entry.value));
+  if (undeclared !== undefined) throw new TypeError(`OPPONENT_MODE_DISPOSITION_UNDECLARED:${undeclared.value ?? "<missing>"}`);
+}

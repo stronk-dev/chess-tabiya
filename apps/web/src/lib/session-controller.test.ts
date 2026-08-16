@@ -74,7 +74,18 @@ const capabilities: Capabilities = {
   runSchemaVersion: "0.6",
   policyProfiles: {
     strong_engine: { movetimeMs: 100, threads: 1, hashMb: 16, multiPv: 1 },
-    human_common: { elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } } },
+    human_common: {
+      elo: { min: null, max: null, default: null, source: "unpublished", advertised: { min: null, max: null } },
+      resistance: {
+        basis: "measured", metric: "dtz_percentile",
+        scope: "positions of at most seven pieces in which every legal move preserves the mover's tablebase category",
+        corpus: { dossier: "design/research/maia-endgame-fidelity.md#6", positions: 15, probes: 270, measuredAt: "2026-08-16" },
+        bands: [1100, 1500, 1900], bandConditioned: false,
+        dtzPercentile: { min: 0.719, max: 0.751, uniformBaseline: 0.38 },
+        slowestLosingRate: { min: 0.611, max: 0.689, uniformBaseline: 0.227 },
+        fastestLosingRate: { value: 0.033, uniformBaseline: 0.313 },
+      },
+    },
   },
   providers: { opponent: "maia", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "lichess" },
   surfaces: {

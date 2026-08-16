@@ -42,7 +42,13 @@ reach halfmove 100.
 
 The interactive provider uses `tablebase.lichess.org/standard` with percent-encoded FENs, one request at a time, identical-request coalescing, a bounded queue, a 512-entry positive LRU, and a 60-second negative cache after upstream failures. Positive facts have no TTL because tablebase results are immutable.
 
-The API reports each move's category for the resulting position's side to move, so selection inverts that category back to the current mover's perspective. It keeps only legal, category-preserving moves, orders winning positions by shortest absolute DTZ and losing positions by longest, and resolves every tie by lexicographically least UCI. Drawn positions use the same UCI tiebreak. The result is a pure function of the position and therefore composes with the fixed-resistance branch reply journal.
+The API reports each move's category for the resulting position's side to move, so selection inverts that category back to the current mover's perspective. It keeps only legal, category-preserving moves and orders winning positions by shortest absolute DTZ and losing positions by longest. Every residual tie, including the whole drawn-root set, is resolved by ascending `sha256(fen + "\\0" + uci)` with UCI retained only as an unreachable hash-collision totalizer. The digest order removes the measured alphabetical bias toward captures and pawn moves while remaining a pure function of the probed FEN. It therefore composes with the fixed-resistance branch reply journal.
+
+Selections declare the basis they can honestly support: `dtz_ascending` for win/cursed-win,
+`dtz_descending` for loss/blessed-loss, and `none` for a drawn root. Candidate `rank` under
+`none` is presentation order only and must not be rendered as preference. Pack validation
+warns when `perfect_tablebase` is paired with a `hold` objective because the exact result
+class supplies no difficulty ordering; `practical_resistance` is the separate measured mode.
 
 Named refusals are part of the contract:
 
@@ -51,4 +57,7 @@ Named refusals are part of the contract:
 - upstream outage or timeout returns `TABLEBASE_UNAVAILABLE` without committing a substitute move; and
 - an over-range runtime position returns `TABLEBASE_OUT_OF_RANGE`.
 
-Pack-free position sessions remain limited to `human_common` and `strong_engine`. Run schema v0.13 and storage migration 18 add the new persisted policy value without rewriting historical events.
+Pack-free position sessions remain limited to `human_common` and `strong_engine`. Run schema
+v0.13 and storage migration 18 added the persisted policy value. Run schema v0.17 and
+stamp-only migration 23 add optional `orderingBasis`; historical selections remain absent
+rather than being inferred.

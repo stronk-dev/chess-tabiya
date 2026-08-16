@@ -252,7 +252,13 @@ function parseSelectionEngine(value: unknown): SelectionEngineIdentity {
 }
 
 function parseOpponentSelection(value: unknown): OpponentSelection {
-  const selection = record(value, "selection");
+  const selection = closedRecord(value, "/selection", [
+    "moveUci",
+    "policyModeApplied",
+    "orderingBasis",
+    "candidates",
+    "engine",
+  ]);
   if (selection.candidates !== undefined && !Array.isArray(selection.candidates)) {
     throw invalid("selection.candidates must be an array");
   }
@@ -271,6 +277,20 @@ function parseOpponentSelection(value: unknown): OpponentSelection {
       }
       return mode as OpponentSelection["policyModeApplied"];
     })(),
+    ...(selection.orderingBasis === undefined
+      ? {}
+      : {
+          orderingBasis: (() => {
+            const basis = requiredString(
+              selection.orderingBasis,
+              "selection.orderingBasis",
+            );
+            if (!["dtz_ascending", "dtz_descending", "none"].includes(basis)) {
+              throw invalid("selection.orderingBasis is unsupported");
+            }
+            return basis as NonNullable<OpponentSelection["orderingBasis"]>;
+          })(),
+        }),
     ...(selection.candidates === undefined
       ? {}
       : {

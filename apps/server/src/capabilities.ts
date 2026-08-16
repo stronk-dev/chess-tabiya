@@ -47,6 +47,18 @@ export type SurfaceId = (typeof SURFACE_IDS)[number];
 export type SurfaceAvailability = "available" | "unavailable-here";
 export type CapabilityEngineMode = "mock" | "maia";
 
+export const HUMAN_COMMON_RESISTANCE_PROFILE = Object.freeze({
+  basis: "measured" as const,
+  metric: "dtz_percentile" as const,
+  scope: "positions of at most seven pieces in which every legal move preserves the mover's tablebase category",
+  corpus: Object.freeze({ dossier: "design/research/maia-endgame-fidelity.md#6", positions: 15 as const, probes: 270 as const, measuredAt: "2026-08-16" as const }),
+  bands: Object.freeze([1100, 1500, 1900] as const),
+  bandConditioned: false as const,
+  dtzPercentile: Object.freeze({ min: 0.719 as const, max: 0.751 as const, uniformBaseline: 0.38 as const }),
+  slowestLosingRate: Object.freeze({ min: 0.611 as const, max: 0.689 as const, uniformBaseline: 0.227 as const }),
+  fastestLosingRate: Object.freeze({ value: 0.033 as const, uniformBaseline: 0.313 as const }),
+});
+
 export interface CapabilityProviders {
   readonly opponent: "maia" | "mock" | "none";
   readonly judge: "stockfish" | "mock" | "none";
@@ -78,6 +90,7 @@ export interface Capabilities {
     readonly strong_engine: StrongEngineProfile;
     readonly human_common: {
       readonly elo: EngineBandProfile;
+      readonly resistance: typeof HUMAN_COMMON_RESISTANCE_PROFILE;
     };
   };
   readonly providers: CapabilityProviders;
@@ -116,6 +129,9 @@ export const CAPABILITY_DISPOSITIONS: readonly CapabilityDisposition[] = Object.
   { instrument: "Maia", capability: "Elo", disposition: "reached", reason: "Applied band is recorded on every new Maia selection", surface: "opponent selection", advertisedOptions: ["Elo"] },
   { instrument: "Maia", capability: "TopP", disposition: "reached", reason: "Authored resistance setting applied to policy mass", surface: "opponent selection", advertisedOptions: ["TopP"] },
   { instrument: "Maia", capability: "MultiPV", disposition: "reached", reason: "Candidate window for policy-mass recording", surface: "human split", advertisedOptions: ["MultiPV"] },
+  { instrument: "Maia", capability: "|DTZ| percentile of the selected move in a decided position", disposition: "reached", reason: "Measured 0.72-0.75 against 0.38 for a uniform legal move over 270 probes on 15 in-pack lost positions (design/research/maia-endgame-fidelity.md §6); recorded at mode scope, never rendered as a move verdict", surface: "opponent selection" },
+  { instrument: "Maia", capability: "band-conditioned resistance", disposition: "refused", reason: "Measured flat across 1100/1500/1900 (fastest-losing 3.3% at every band, design/research/maia-endgame-fidelity.md §6); the band's game-level transfer ratio falls from 0.40 at full material to ~0.07 below ten pieces (design/research/maia-band-outcome-transfer.md §7, 16,660 games), so the flat endgame reading has a measured cause and a per-band resistance figure would assert a difference no instrument finds" },
+  { instrument: "Maia", capability: "resistance above seven pieces", disposition: "unmeasured", reason: "No exact DTZ ground truth exists outside the Syzygy range; conversion-up-a-piece (17 pieces) and rook-4v3-same-side-hold (11) are outside it at every authored position", experiment: "D370-b realized-ply-count-to-conversion against a fixed converting opponent on the two out-of-range packs" },
   { instrument: "Maia", capability: "Temperature 0", disposition: "refused", reason: "A modal opponent is a different product", advertisedOptions: ["Temperature"] },
   { instrument: "Maia", capability: "asymmetric SelfElo / OppoElo", disposition: "unmeasured", reason: "Advertised but unmeasured", experiment: "RFC ledger row 5 asymmetric Elo experiment", advertisedOptions: ["SelfElo", "OppoElo"] },
   { instrument: "Syzygy", capability: "category", disposition: "reached", reason: "Opponent modes and category guard", surface: "feedback" },
@@ -333,7 +349,10 @@ export class EngineCapabilities implements CapabilitiesProvider {
       runSchemaVersion: runtimeBuildInfo.runSchemaVersion,
       policyProfiles: Object.freeze({
         strong_engine: this.#strongEngineProfile,
-        human_common: Object.freeze({ elo }),
+        human_common: Object.freeze({
+          elo,
+          resistance: HUMAN_COMMON_RESISTANCE_PROFILE,
+        }),
       }),
       providers: providerState,
       surfaces: surfaces(providerState),

@@ -19,6 +19,7 @@ Two Maia-free measurements over the whole tablebase-ground-truthed corpus:
    itself returned; nothing here grades a move.
 """
 import json
+import hashlib
 import sys
 from collections import Counter, defaultdict
 
@@ -39,6 +40,10 @@ def is_capture(san):
 
 def is_pawn_move(san):
     return san[0] in "abcdefgh"
+
+
+def neutral_key(fen, uci):
+    return hashlib.sha256((fen + "\0" + uci).encode()).hexdigest()
 
 
 def main():
@@ -64,6 +69,8 @@ def main():
     # perfect_tablebase's pick, reproduced from the shipped ordering.
     picks = {"win": Counter(), "draw": Counter(), "loss": Counter()}
     pools = {"win": Counter(), "draw": Counter(), "loss": Counter()}
+    uniform_expected = {"win": Counter(), "draw": Counter(), "loss": Counter()}
+    dtz_ties = {"win": 0, "draw": 0, "loss": 0}
     for row in rows:
         own = row["resultClass"]
         preserving = [m for m in row["moves"] if m["moverClass"] == own]
@@ -71,10 +78,16 @@ def main():
             continue
         winning = "win" in row["category"]
         losing = "loss" in row["category"]
+        primary = [
+            abs(m["dtz"] or 0) if winning else (-abs(m["dtz"] or 0) if losing else 0)
+            for m in preserving
+        ]
+        dtz_ties[own] += 1 if sum(value == min(primary) for value in primary) > 1 else 0
         ordered = sorted(
             preserving,
             key=lambda m: (
                 abs(m["dtz"] or 0) if winning else (-abs(m["dtz"] or 0) if losing else 0),
+                neutral_key(row["fen"], m["uci"]),
                 m["uci"],
             ),
         )
@@ -89,6 +102,11 @@ def main():
         pools[own]["captureOrPawn"] += sum(
             1 for m in preserving if is_capture(m["san"]) or is_pawn_move(m["san"])
         )
+        uniform_expected[own]["capture"] += sum(1 for m in preserving if is_capture(m["san"])) / len(preserving)
+        uniform_expected[own]["pawn"] += sum(1 for m in preserving if is_pawn_move(m["san"])) / len(preserving)
+        uniform_expected[own]["captureOrPawn"] += sum(
+            1 for m in preserving if is_capture(m["san"]) or is_pawn_move(m["san"])
+        ) / len(preserving)
 
     report = {
         "corpusPositions": len(rows),
@@ -98,6 +116,8 @@ def main():
         "bySideOfThePack": {k: dict(v) for k, v in side_split.items()},
         "perfectTablebasePick": {k: dict(v) for k, v in picks.items()},
         "preservingMovePool": {k: dict(v) for k, v in pools.items()},
+        "uniformExpectedPick": {k: dict(v) for k, v in uniform_expected.items()},
+        "dtzTiedRoots": dtz_ties,
         "pieceCounts": dict(Counter(r["pieceCount"] for r in rows)),
     }
     with open(out_path, "w") as handle:

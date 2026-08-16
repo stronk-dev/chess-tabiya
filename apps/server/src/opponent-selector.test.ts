@@ -14,6 +14,7 @@ import type {
   EngineRequest,
 } from "./engine-supervisor.js";
 import {
+  neutralTiebreakKey,
   OpponentSelector,
   selectionCacheKey,
   type SelectMoveRequest,
@@ -315,17 +316,109 @@ describe("pure opponent selector", () => {
     const input = request("perfect_tablebase", { startFen: fen, historyUci: [] });
     const first = await selector.select(input);
     const second = await selector.select(input);
+    const tiedPromotions = ["h7h8q", "h7h8r"].sort((left, right) => {
+      const leftKey = neutralTiebreakKey(fen, left);
+      const rightKey = neutralTiebreakKey(fen, right);
+      return leftKey < rightKey ? -1 : leftKey > rightKey ? 1 : left.localeCompare(right);
+    });
     expect(first).toEqual(second);
     expect(first).toMatchObject({
-      moveUci: "h7h8q",
+      moveUci: tiedPromotions[0],
       policyModeApplied: "perfect_tablebase",
+      orderingBasis: "dtz_ascending",
       engine: { id: "lichess-tablebase", version: "7man", seedHonored: true },
       candidates: [
-        { moveUci: "h7h8q", rank: 1 },
-        { moveUci: "h7h8r", rank: 2 },
+        { moveUci: tiedPromotions[0], rank: 1 },
+        { moveUci: tiedPromotions[1], rank: 2 },
       ],
     });
     expect(selector.availableModes()).toContain("perfect_tablebase");
+  });
+
+  it.each([
+    ["win", "loss", "dtz_ascending"],
+    ["cursed-win", "blessed-loss", "dtz_ascending"],
+    ["draw", "draw", "none"],
+    ["blessed-loss", "cursed-win", "dtz_descending"],
+    ["loss", "win", "dtz_descending"],
+  ] as const)("records the %s root ordering basis", async (rootCategory, childCategory, orderingBasis) => {
+    const fen = "4k3/6KP/8/8/8/8/8/8 w - - 0 1";
+    const selector = new OpponentSelector(new FakeEngineClient(() => []), {
+      tablebaseSource: new FixtureTablebaseSource({
+        [fen]: parseTablebasePosition({
+          category: rootCategory,
+          dtz: orderingBasis === "none" ? 0 : orderingBasis === "dtz_ascending" ? 4 : -4,
+          moves: [
+            { uci: "h7h8r", san: "h8=R+", category: childCategory, dtz: -2, precise_dtz: -2 },
+            { uci: "h7h8q", san: "h8=Q+", category: childCategory, dtz: -2, precise_dtz: -2 },
+          ],
+        }),
+      }),
+    });
+    await expect(selector.select(request("perfect_tablebase", { startFen: fen, historyUci: [] })))
+      .resolves.toMatchObject({ policyModeApplied: "perfect_tablebase", orderingBasis });
+  });
+
+  it.each([
+    ["win", "loss", "dtz_ascending", "h7h8q"],
+    ["loss", "win", "dtz_descending", "h7h8r"],
+  ] as const)("keeps DTZ primary for a %s root", async (rootCategory, childCategory, orderingBasis, moveUci) => {
+    const fen = "4k3/6KP/8/8/8/8/8/8 w - - 0 1";
+    const selector = new OpponentSelector(new FakeEngineClient(() => []), {
+      tablebaseSource: new FixtureTablebaseSource({
+        [fen]: parseTablebasePosition({
+          category: rootCategory,
+          dtz: rootCategory === "win" ? 4 : -4,
+          moves: [
+            { uci: "h7h8r", san: "h8=R+", category: childCategory, dtz: -4, precise_dtz: -4 },
+            { uci: "h7h8q", san: "h8=Q+", category: childCategory, dtz: -1, precise_dtz: -1 },
+          ],
+        }),
+      }),
+    });
+    await expect(selector.select(request("perfect_tablebase", { startFen: fen, historyUci: [] })))
+      .resolves.toMatchObject({ moveUci, orderingBasis });
+  });
+
+  it("keeps the neutral reply pure across seeds and histories reaching the same FEN", async () => {
+    const fen = "4k3/6KP/8/8/8/8/8/8 w - - 4 2";
+    const ancestor = "3k4/6KP/8/8/8/8/8/8 b - - 3 1";
+    const payload = parseTablebasePosition({
+      category: "draw",
+      dtz: 0,
+      moves: [
+        { uci: "h7h8r", san: "h8=R+", category: "draw", dtz: 0, precise_dtz: 0 },
+        { uci: "h7h8q", san: "h8=Q+", category: "draw", dtz: 0, precise_dtz: 0 },
+      ],
+    });
+    const selector = new OpponentSelector(new FakeEngineClient(() => []), {
+      tablebaseSource: new FixtureTablebaseSource({ [fen]: payload }),
+    });
+    const direct = await selector.select(request("perfect_tablebase", { startFen: fen, historyUci: [], seed: 1 }));
+    const replayed = await selector.select(request("perfect_tablebase", { startFen: ancestor, historyUci: ["d8e8"], seed: 99 }));
+    expect(replayed).toEqual(direct);
+    expect(direct.orderingBasis).toBe("none");
+  });
+
+  it("selects uniformly by set index without enriching a synthetic move class", () => {
+    const positions = 10_000;
+    const setSize = 8;
+    const counts = Array.from({ length: setSize }, () => 0);
+    let captureOrPawn = 0;
+    for (let position = 0; position < positions; position += 1) {
+      const fen = `synthetic-position-${position}`;
+      const moves = Array.from({ length: setSize }, (_, index) => `a${index}a${index + 1}`);
+      const selected = moves
+        .map((move, index) => ({ index, key: neutralTiebreakKey(fen, move) }))
+        .sort((left, right) => left.key < right.key ? -1 : left.key > right.key ? 1 : left.index - right.index)[0]!.index;
+      counts[selected]! += 1;
+      if (selected === 0 || selected === 3) captureOrPawn += 1;
+    }
+    const expected = positions / setSize;
+    const chiSquared = counts.reduce((sum, count) => sum + ((count - expected) ** 2) / expected, 0);
+    expect(chiSquared).toBeLessThan(20);
+    expect(counts.every((count) => Math.abs(count - expected) / expected < 0.1)).toBe(true);
+    expect(captureOrPawn / positions).toBeCloseTo(2 / setSize, 1);
   });
 
   it("refuses perfect play by name when the provider is absent", async () => {
@@ -418,6 +511,7 @@ describe("pure opponent selector", () => {
       `position fen ${INITIAL_FEN} moves e2e4`,
       "go",
     ]);
+    expect(client.calls).toHaveLength(1);
   });
 
   it("does not send or record a requested Elo band when the engine does not advertise it", async () => {
@@ -811,6 +905,15 @@ describe("selector/writer REST seam", () => {
     expect(selection).toMatchObject({ moveUci: "e7e5", policyModeApplied: "human_common", engine: { id: "maia-5m" } });
     expect(storage.read("seam-run")!.run.events).toHaveLength(beforeSelection);
 
+    const unknownSelectionField = await httpRequest(
+      handler,
+      "POST",
+      "/runs/seam-run/moves",
+      { selection: { ...selection, futureMeasurement: 1 }, at },
+    );
+    expect(unknownSelectionField.status).toBe(400);
+    expect(await unknownSelectionField.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
+
     const { policyModeApplied: _missing, ...legacySelection } = selection;
     const rejected = await httpRequest(
       handler,
@@ -834,11 +937,12 @@ describe("selector/writer REST seam", () => {
       error: { code: "NOT_ACTIVE_WRITER" },
     });
 
+    const orderedSelection = { ...selection, orderingBasis: "none" as const };
     const committed = await httpRequest(
       handler,
       "POST",
       "/runs/seam-run/moves",
-      { selection, at },
+      { selection: orderedSelection, at },
     );
     expect(committed.status).toBe(200);
     const stored = storage.read("seam-run")!.run;
@@ -849,6 +953,7 @@ describe("selector/writer REST seam", () => {
     expect(readBackReplay(stored.events).opponentMoves.at(-1)).toMatchObject({
       moveUci: "e7e5",
       policyModeApplied: "human_common",
+      orderingBasis: "none",
     });
 
     expect((await httpRequest(handler, "POST", "/runs/seam-run/moves", { uci: "g1f3", at })).status).toBe(200);

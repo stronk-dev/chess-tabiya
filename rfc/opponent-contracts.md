@@ -1,6 +1,6 @@
 # RFC: Opponent contracts — what a mode executes, what it may claim, and what it must refuse
 
-- **Status:** **accepted 2026-08-16** — adversarially cross-reviewed (pack lane released, see Changelog), and **owner question 2 ruled in the body below on 2026-08-16**. Codex correctly refused to implement while this line read `draft`: *a resolution in a queue file is not a resolution in the body.*
+- **Status:** **implementing 2026-08-16** — accepted after adversarial cross-review (pack lane released, see Changelog), with owner question 2 ruled in the body below. Implementation is underway; archival is deliberately deferred until both gates and independent review.
   **0.28** claim is **RELEASED** by the cross-review (§5, open question 1); the run-schema
   0.17 claim, the migration position, the `/capabilities` change, and both substantive
   findings survive. Six line references were corrected against the tree, one precedent
@@ -714,7 +714,7 @@ the first thing anyone writing that sentence discovers is missing.
 |---|---|---|
 | **Pack schema** | **NONE — 0.28 RELEASED by cross-review 2026-08-16.** `0.28 remains the next free lane and this RFC leaves it free.` | `FORMAT_DISPOSITIONS` gains **four** rows (§4) and the totality gate lands, unversioned. Reasoning below. |
 | **Run schema** | **0.17** | `OpponentSelection.orderingBasis` (§3.4), the optional property on `$defs/opponentSelection` in `schemas/drill_run.schema.json`, and the `$id` bump `urn:chess-tabiya:schema:drill-run:0.16` → `:0.17`. Additive and optional; historical selections omit it and it is never inferred. **0.16 has already LANDED** — `DRILL_RUN_SCHEMA_VERSION` reads `"0.16"` at HEAD (`packages/schema/src/index.ts:1`) — so 0.17 is genuinely next, and no other active draft claims it (swept 2026-08-16 across all nine active drafts). |
-| **Storage migration** | **position `STORAGE_VERSION + 1`** — **CONTESTED, see below** | Stamp-only: frozen run-schema literals `"0.16"` → `"0.17"`. No table, no index, no data rewrite — the same body as migrations 16–20. `STORAGE_VERSION` is **22** at `apps/server/src/storage.ts:407`; the **integer is assigned at landing**, never claimed here, and the migration body uses frozen literals rather than the moving constant. |
+| **Storage migration** | **23 (`STORAGE_VERSION` 22 → 23), assigned at landing** | Stamp-only: frozen run-schema literals `"0.16"` → `"0.17"`. No table, no index, no data rewrite — the same body as migrations 16–20. The owner-blocked `teacher-surface` draft had not landed, so the standing landing-order rule assigns this RFC the next contiguous number; `teacher-surface` takes the next free position at its own landing. The migration body uses frozen literals rather than the moving constant. |
 | **`/capabilities` payload** | **changed** | `policyProfiles.human_common.resistance` (§2.4c) and three `CAPABILITY_DISPOSITIONS` rows (§2.4a). Not a versioned register; client types widen with the server type. |
 
 #### 5.1 The 0.28 ruling — **RELEASED**, and the draft's own two grounds are why
@@ -775,16 +775,12 @@ pack register are requested to read that `opponent-contracts` claims **no pack l
 
 #### 5.2 Two contentions the draft did not name
 
-1. **The migration position is contested with `teacher-surface`.** Both drafts claim
-   `STORAGE_VERSION + 1`, and `rfc/README.md`'s 2026-08-16 amendment makes the **position**,
-   not the integer, the shared single-writer resource — so "the integer is assigned at
-   landing" does not dissolve the contest, it *is* the contest. `teacher-surface` is listed
-   above this RFC in the Active table and `rfc/README.md`'s migration-22 row already records
-   that it *"remains unlanded and therefore takes the next contiguous number at its turn."*
-   **This RFC yields the position and takes the next one after `teacher-surface`**, or
-   renegotiates in the register — never by renumbering unilaterally. Nothing here depends on
-   ordering: the migration is stamp-only and its body is frozen literals. (Noted in passing:
-   `teacher-surface` states `STORAGE_VERSION` is 21; it is **22**.)
+1. **The migration-position contention with `teacher-surface` is resolved by landing order.**
+   Both drafts originally claimed `STORAGE_VERSION + 1`, but the register's 2026-08-16 rule
+   assigns the number only when a migration lands. `teacher-surface` remains owner-blocked;
+   this accepted RFC therefore takes the next contiguous number, **23**, and the teacher draft
+   moves to the next free position at its own landing. Nothing here depends on ordering: this
+   migration is stamp-only and its body uses frozen literals.
 2. **`apps/server/src/opponent-selector.ts` is shared with `engine-leverage`, which is
    already `implementing`.** Its own contention table lists the file. The targets are
    textually disjoint — this RFC edits `#perfectTablebase` (`:625-641`, comparator at `:636`),
@@ -1015,8 +1011,9 @@ is the only versioned one this RFC makes.
   `runtimeWarning` `133-135` → **`149-151`**; the *record*-obligation quote
   `format-surface.md:177` → **`:187`**; `format-surface.test.ts:66-88` → **`:68-92`**.
 
-  **Contentions the draft did not name** (§5.2): the migration position is claimed by
-  `teacher-surface` too — this RFC yields; and `opponent-selector.ts` is shared with
+  **Contentions the draft did not name** (§5.2): the migration position was also claimed by
+  `teacher-surface`; the contention was later resolved by the standing landing-order rule,
+  which assigns this implementation migration 23. `opponent-selector.ts` was also shared with
   `engine-leverage`, already implementing.
 
   **Verified sound and left alone:** `grounding-pair` §2c quoted verbatim and correct; the

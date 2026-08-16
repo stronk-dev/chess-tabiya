@@ -19,6 +19,7 @@ export {
 } from "./urls.js";
 export { normalizeShapeReference, normalizeShapeReferences, type NormalizedShapeReference } from "./shape-references.js";
 export {
+  assertOpponentModeDispositions,
   FORMAT_DISPOSITIONS,
   type FormatDisposition,
   type FormatDispositionKind,

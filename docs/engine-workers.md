@@ -172,7 +172,7 @@ The modes currently shipped are:
 | `human_common` | Maia using optional Elo, temperature, and top-p; temperature defaults to 0.8 and top-p to 0.92. |
 | `strong_engine` | Stockfish best move under the ratified, deployment-configurable movetime profile. |
 | `theory_strict` | Maia restricted to legal authored spine children while the current four-field `transposeKey` is on the spine. |
-| `perfect_tablebase` | A category-preserving Syzygy reply with deterministic DTZ/UCI ordering. |
+| `perfect_tablebase` | A category-preserving Syzygy reply. Won/lost roots retain DTZ ordering; residual ties and drawn roots use a position-pure neutral digest order. |
 | `practical_resistance` | Among at most four category-preserving tablebase replies, choose the reply that leaves the greatest measured Maia policy mass on learner moves that concede the result. Refuse when the measurement is vacuous. |
 
 `theory_strict` derives every authored spine position, so a move-order deviation
@@ -212,11 +212,12 @@ wire format:
   engine identity (`id`, name/version, optional model/container identifiers,
   and `seedHonored`).
 
-The living schema is now v0.16; it retains both engine amendments, the v0.5
+The living schema is now v0.17; it retains both engine amendments, the v0.5
 session identity/reveal contract, the v0.6 terminal outcome contract, and the
 recorded applied-policy field documented in `docs/branch-runtime.md`. New strong
-engine selections also retain their applied search bound; historical events are
-left absent by migration 21.
+engine selections also retain their applied search bound. Perfect-tablebase selections
+record `orderingBasis` as `dtz_ascending`, `dtz_descending`, or `none`; migration 23
+stamps historical v0.16 runs without inferring that optional fact.
 Candidate records may retain exact centipawn and WDL measurements. UCI
 `upperbound` and `lowerbound` lines are not recorded as exact measurements, and
 public run/event projections remove both fields until feedback disclosure opens;
@@ -268,7 +269,12 @@ is currently executable: Maia for `human_common`/`theory_strict`, the judge for
   engines: [{ id, kind, name, version, modelId?, containerDigest?, seedHonored, eloHonored? }],
   policyModes: ["human_common", "strong_engine", "theory_strict", "perfect_tablebase", "practical_resistance"],
   policyProfiles: {
-    strong_engine: { nodes, movetimeMs, threads, hashMb, multiPv }
+    strong_engine: { nodes, movetimeMs, threads, hashMb, multiPv },
+    human_common: {
+      elo,
+      resistance: { basis: "measured", metric: "dtz_percentile", scope, corpus, bands,
+                    bandConditioned, dtzPercentile, slowestLosingRate, fastestLosingRate }
+    }
   },
   costBasis,
   capabilityDispositions,
@@ -325,6 +331,12 @@ Known limitations:
 provider. It is deterministic, capability-published, and records its applied policy and
 synthetic provider identity. It never falls back to Stockfish or Maia on outage or above
 the seven-piece boundary; see `tablebase-grounding.md`.
+
+The capability payload publishes Maia's measured resistance only at mode scope. It names
+the 15-position/270-probe corpus and its measured DTZ-percentile and slowest/fastest-losing
+rates; no selection or candidate is assigned a resistance score. The capability-disposition
+register marks band-conditioned resistance refused and resistance above seven pieces
+unmeasured with its named follow-up experiment.
 
 `practical_resistance` composes that tablebase gate with Maia policy mass. It
 never weakens Stockfish and never falls back under the same name. The selector

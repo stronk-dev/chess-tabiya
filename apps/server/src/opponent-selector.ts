@@ -182,6 +182,17 @@ function historyHash(request: SelectMoveRequest): string {
   return digest.digest("hex");
 }
 
+/** Position-pure order for moves whose selector basis declares them equal. */
+export function neutralTiebreakKey(fen: string, moveUci: string): string {
+  return createHash("sha256").update(fen).update("\0").update(moveUci).digest("hex");
+}
+
+function neutralTiebreak(fen: string, leftUci: string, rightUci: string): number {
+  const leftKey = neutralTiebreakKey(fen, leftUci);
+  const rightKey = neutralTiebreakKey(fen, rightUci);
+  return leftKey < rightKey ? -1 : leftKey > rightKey ? 1 : leftUci.localeCompare(rightUci);
+}
+
 export function selectionCacheKey(request: SelectMoveRequest): string {
   return [request.policy.policyConfigDigest, request.policy.targetElo ?? "", request.packId ?? "", request.seed, historyHash(request)].join(
     "\0",
@@ -621,21 +632,43 @@ export class OpponentSelector {
     return makeSelection(moveUci, candidates, result.identity, "theory_strict", result.eloApplied);
   }
 
-  async #perfectTablebase(request: SelectMoveRequest):Promise<OpponentSelection>{
-    if(this.#tablebase===undefined)throw new ServerError("TABLEBASE_UNAVAILABLE","Perfect tablebase resistance is unavailable",{details:{retryAfterMs:0}});
-    const fen=makeFen(currentPosition(request).toSetup()),position=await this.#tablebase.probe(fen);
-    if(position.category==="unknown")throw new ServerError("TABLEBASE_UNAVAILABLE","Tablebase category is unknown",{details:{retryAfterMs:60_000}});
-    const board=currentPosition(request);
-    const preserving=position.moves.filter((move)=>{
-      const parsed=parseUci(move.uci);
-      return parsed!==undefined&&board.isLegal(parsed)&&invertTablebaseCategory(move.category)===position.category;
+  async #perfectTablebase(request: SelectMoveRequest): Promise<OpponentSelection> {
+    if (this.#tablebase === undefined) {
+      throw new ServerError("TABLEBASE_UNAVAILABLE", "Perfect tablebase resistance is unavailable", { details: { retryAfterMs: 0 } });
+    }
+    const board = currentPosition(request);
+    const fen = makeFen(board.toSetup());
+    const position = await this.#tablebase.probe(fen);
+    if (position.category === "unknown") {
+      throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase category is unknown", { details: { retryAfterMs: 60_000 } });
+    }
+    const preserving = position.moves.filter((move) => {
+      const parsed = parseUci(move.uci);
+      return parsed !== undefined
+        && board.isLegal(parsed)
+        && invertTablebaseCategory(move.category) === position.category;
     });
-    if(preserving.length===0)throw new ServerError("TABLEBASE_UNAVAILABLE","Tablebase returned no category-preserving move",{details:{retryAfterMs:60_000}});
-    const winning=position.category.includes("win"),losing=position.category.includes("loss");
-    const metric=(move:TablebaseMove)=>Math.abs(move.preciseDtz??move.dtz??0);
-    const ordered=[...preserving].sort((left,right)=>winning?metric(left)-metric(right)||left.uci.localeCompare(right.uci):losing?metric(right)-metric(left)||left.uci.localeCompare(right.uci):left.uci.localeCompare(right.uci));
-    const candidates=Object.freeze(ordered.map((move,index)=>Object.freeze({moveUci:move.uci,rank:index+1})));
-    return Object.freeze({moveUci:ordered[0]!.uci,policyModeApplied:"perfect_tablebase",candidates,engine:this.identityFor("perfect_tablebase")});
+    if (preserving.length === 0) {
+      throw new ServerError("TABLEBASE_UNAVAILABLE", "Tablebase returned no category-preserving move", { details: { retryAfterMs: 60_000 } });
+    }
+    const winning = position.category.includes("win");
+    const losing = position.category.includes("loss");
+    const metric = (move: TablebaseMove) => Math.abs(move.preciseDtz ?? move.dtz ?? 0);
+    const ordered = [...preserving].sort((left, right) =>
+      winning
+        ? metric(left) - metric(right) || neutralTiebreak(fen, left.uci, right.uci)
+        : losing
+          ? metric(right) - metric(left) || neutralTiebreak(fen, left.uci, right.uci)
+          : neutralTiebreak(fen, left.uci, right.uci));
+    const candidates = Object.freeze(ordered.map((move, index) =>
+      Object.freeze({ moveUci: move.uci, rank: index + 1 })));
+    return Object.freeze({
+      moveUci: ordered[0]!.uci,
+      policyModeApplied: "perfect_tablebase",
+      orderingBasis: winning ? "dtz_ascending" : losing ? "dtz_descending" : "none",
+      candidates,
+      engine: this.identityFor("perfect_tablebase"),
+    });
   }
 
   async #practicalResistance(request: SelectMoveRequest): Promise<OpponentSelection> {

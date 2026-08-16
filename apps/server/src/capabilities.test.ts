@@ -5,6 +5,7 @@ import {
   assertAdvertisedCapabilityDispositions,
   assertRecordedReadingCapabilityDispositions,
   assertSurfaceCapabilities,
+  CAPABILITY_DISPOSITIONS,
   EngineCapabilities,
   type CapabilityEngineClient,
 } from "./capabilities.js";
@@ -142,6 +143,22 @@ describe("engine capabilities", () => {
               default: 1500,
               source: "advertised",
               advertised: { min: 0, max: 5000 },
+            },
+            resistance: {
+              basis: "measured",
+              metric: "dtz_percentile",
+              scope: "positions of at most seven pieces in which every legal move preserves the mover's tablebase category",
+              corpus: {
+                dossier: "design/research/maia-endgame-fidelity.md#6",
+                positions: 15,
+                probes: 270,
+                measuredAt: "2026-08-16",
+              },
+              bands: [1100, 1500, 1900],
+              bandConditioned: false,
+              dtzPercentile: { min: 0.719, max: 0.751, uniformBaseline: 0.38 },
+              slowestLosingRate: { min: 0.611, max: 0.689, uniformBaseline: 0.227 },
+              fastestLosingRate: { value: 0.033, uniformBaseline: 0.313 },
             },
           },
         },
@@ -327,6 +344,11 @@ describe("engine capabilities", () => {
       .toThrow(/stockfish-analysis published no option table/);
     expect(() => assertAdvertisedCapabilityDispositions([{ ...stockfish, options: [{ name: "Elo", type: "spin" }] }]))
       .toThrow(/Elo/);
+    const resistance = CAPABILITY_DISPOSITIONS.find((row) => row.capability === "resistance above seven pieces");
+    expect(resistance).toMatchObject({ disposition: "unmeasured", experiment: expect.any(String) });
+    expect(() => assertAdvertisedCapabilityDispositions([], CAPABILITY_DISPOSITIONS.map((row) =>
+      row === resistance ? { ...row, experiment: "" } : row,
+    ))).toThrow(/resistance above seven pieces is unmeasured without an experiment/);
   });
 
   it("is a strict superset of policyConfig.locus engine identity fields", async () => {

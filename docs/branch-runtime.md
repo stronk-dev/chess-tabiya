@@ -356,6 +356,11 @@ the frozen literals `0.14` and `0.15`. The only wire widening is optional
 its reported MultiPV window. Historical selections are not rewritten and replay
 remains byte-identical.
 
+Migration 23 stamps v0.16 snapshots and indexed rows to run schema v0.17 using
+the frozen literals `0.16` and `0.17`. It adds no event and infers no ordering:
+historical opponent selections keep `orderingBasis` absent. New selections may record
+`dtz_ascending`, `dtz_descending`, or `none`, and read-back replay preserves the value.
+
 ## Derived Line Drill state
 
 `spinePositionIndex` resolves authored positions by transpose key, keeping the

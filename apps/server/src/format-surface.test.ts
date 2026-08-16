@@ -3,7 +3,7 @@ import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 import { readFileSync } from "node:fs";
 
 import { DRILL_PACK_SCHEMA_VERSION } from "@chess-tabiya/schema";
-import { FORMAT_DISPOSITIONS, type DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import { assertOpponentModeDispositions, FORMAT_DISPOSITIONS, type DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { RUN_OPPONENT_MODES } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
@@ -14,6 +14,10 @@ const source = JSON.parse(readFileSync(
   new URL(resolvePackPath("trajectory-mate-bishop-knight"), import.meta.url),
   "utf8",
 )) as DrillPackDefinition;
+const drillPackSchema = JSON.parse(readFileSync(
+  new URL("../../../schemas/drill_pack.schema.json", import.meta.url),
+  "utf8",
+)) as any;
 
 function candidate(): any {
   const value = structuredClone(source) as any;
@@ -84,6 +88,17 @@ describe("format surface 0.25", () => {
         reason: refusal.reason,
       }));
     }
+
+    const schemaModes = drillPackSchema.$defs.opponentPolicy.properties.mode.enum as string[];
+    expect(schemaModes).toHaveLength(7);
+    expect(() => assertOpponentModeDispositions(schemaModes, RUN_OPPONENT_MODES)).not.toThrow();
+    const modeRows = FORMAT_DISPOSITIONS.filter((entry) => entry.pointer === "/opponentPolicy/mode");
+    const replace = (value: string, update: Record<string, unknown>) => FORMAT_DISPOSITIONS.map((entry) => entry.pointer === "/opponentPolicy/mode" && entry.value === value ? { ...entry, ...update } : entry);
+    expect(() => assertOpponentModeDispositions(schemaModes, RUN_OPPONENT_MODES, FORMAT_DISPOSITIONS.filter((entry) => !(entry.pointer === "/opponentPolicy/mode" && entry.value === "human_common")))).toThrow(/MISSING:human_common/);
+    expect(() => assertOpponentModeDispositions(schemaModes, RUN_OPPONENT_MODES, replace("human_common", { disposition: "refused" }) as typeof FORMAT_DISPOSITIONS)).toThrow(/INVALID:human_common:reached/);
+    expect(() => assertOpponentModeDispositions(schemaModes, RUN_OPPONENT_MODES, replace("plan_defense", { disposition: "reached", site: { module: "fixture", symbol: "fixture" } }) as typeof FORMAT_DISPOSITIONS)).toThrow(/INVALID:plan_defense:refused/);
+    expect(() => assertOpponentModeDispositions(schemaModes, RUN_OPPONENT_MODES, replace("human_common", { site: undefined }) as typeof FORMAT_DISPOSITIONS)).toThrow(/SITE_MISSING:human_common/);
+    expect(modeRows).toHaveLength(schemaModes.length);
 
     const capabilitiesSource = readFileSync(new URL("./capabilities.ts", import.meta.url), "utf8");
     expect(capabilitiesSource).not.toContain("formatDispositions");
