@@ -52,6 +52,16 @@ rewind adds value**.
   diversity, and human plausibility over 10–20 plies; the harness also records latency,
   memory, failures, and variance (feeds exploration Q5).
 - **Status:** untested · **Evidence:** — · **Verdict:** —
+- **Scope note added 2026-08-16** (`design/research/coaching-versus-cheating-and-the-band-curve.md`):
+  H5 as written compares Maia against weakened Stockfish. The campaign's 1000→2000 curve
+  needs a **second, narrower** claim that nothing has tested — that the requested band is a
+  **difficulty** lever and not only a **policy** lever. R10 measured that the distribution
+  responds to every 100-Elo step inside `[1000, 2400]` and states explicitly that it makes no
+  claim about play quality at any band. The missing arm is engine-vs-engine (so no human is
+  graded): Maia-vs-Maia, N ≥ 200 games per arm, bands {1000, 1400, 1800, 2200} against a fixed
+  band-1400 reference on R5's stratified position set; **pass = monotone score across all four
+  arms with non-overlapping 95% CIs.** If it fails, K5's horizon question is moot for the
+  campaign because the ladder has no rungs. Ledgered as **D324**.
 
 ## Kill criteria
 

@@ -2392,3 +2392,60 @@ keying pairs alphabetically on one population and by leaf order on the other. Th
 the shape of result R11 was hoping for. It is fixed, and the guard is now a rule — canonicalise
 combination keys through one function, and never render an infinite ratio; substitute the
 rule-of-three bound so a zero denominator prints as a bound and stays visibly suspicious.
+
+## 2026-08-16 — coaching vs cheating, and the 1000→2000 curve
+
+`design/research/coaching-versus-cheating-and-the-band-curve.md` landed against the owner's
+two-part brief. Ledger block **D317–D326**; coverage-matrix row added; H5 carries a new scope
+note (D324).
+
+**The criterion.** Rung is refuted as the coaching/cheating line — the owner's own win
+condition *requires* rung 5 authored counter-theory, and rung-0 all-on is the measured
+unreadable state. **Timing is refuted as *sufficient* by the shipped code**: `feedbackDeliveryOpen`
+re-closes the reveal window on `move.committed` (`feedback.ts:22-30`) precisely because
+post-commit at move *n* is pre-commit for *n+1*, and `events.ts:154-159` already forces
+bounded sessions onto authored boundaries and unbounded ones onto the closable window. What
+survives is **distance from the answer** — `kind` · `fact` · `ranking` · `move`, read
+syntactically off what an item says — giving **"cheating iff `distance === "move"` while a
+committing decision still depends on it"**, with a second and separate failure mode
+(coaching fails by volume, D78). It is orthogonal to `permittedAssistance` and to
+`AssistanceConfig`, and it is **D113 arrived at from the honesty side**: the hint-distance idea
+and the campaign's loadout currency are the same object.
+
+**The obstacle is a shipped decision, not a gap.** `capabilities.ts` publishes 36 dispositions
+whose recurring predicate is *recording vs grading*, and `bestmove / MultiPV rank / bestline`
+is `refused` product-wide on the reason *"Move verdicts are not condition measurements"* — an
+answer to whether it may **fire a condition**, used to refuse **display**. So the campaign
+cannot hand a learner the move as a reward even after the game, and D113's ladder tops out at
+exactly the refused value. That is the dossier's owner question (D318).
+
+**The trajectory.** The product measures neither *played well* nor *run succeeded*; it measures
+whether an authored or tablebase-decided objective survived the submitted path. Eight sites
+compare a learner move to anything, one emits a verdict and it is an authored lookup; the only
+computed learner judgement (`TempoVerdict`) has zero authored users; prediction grading was
+deleted at schema 0.8→0.9 and replaced by a record nothing reads; no learner number exists
+anywhere, refused in three lines of shipped copy. So *"2000 Elo skills"* is a claim about the
+**encounter's configuration**, and the curve can be **declared but never adapted** — with a
+named price already on record (ChessMonitor's manufactured FIDE-Elo estimate is its most-loved
+number). The resolution is that **full suppression makes the claim true without measuring the
+learner**, so the career curve is suppression rather than accumulation, running down the
+distance axis at a flat slot count (D325).
+
+**Two content findings that need an authoring decision either way.** The declared *learner*
+band is continuous across 1000–2000 (42–58 packs per 100-point bin from 1400) while the
+declared *opponent* band is a two-point step function — **30 packs ≤1394, three real packs in
+the whole 400-point stretch 1400–1799, 39 at ≥1800**, with 1800 alone accounting for 36 of 45
+real authored packs (D322). And the `plyHorizon` act ramp runs **11 → 8 → 24**, so `06` §5's
+Act II is the shortest encounter in the corpus (D323).
+
+**Escalations owed to the owner tier, none acted on here.** `06` §1's *"all nine are monotone"*
+is wrong as stated — five are; `boardLighting` has a collapsed top and a broken floor, `spoken`
+is not a chain, `voice` is substitutive, `arrows` is inert (D326). `permittedAssistance` never
+reads its own `sessionKind` input, so the honesty ceiling is parameterised on role and
+disclosure state only, although `05` §4 names run kind as one of its four varying axes (D321).
+Both are ledger rows rather than design edits, per law 5.
+
+**Good news carried:** the `SelfElo`/`OppoElo` regression that made R10's band range inert was
+repaired the same evening at `0985fa4`, with a real-engine integration arm. The band lever
+works; nothing has yet measured that it changes the **result** rather than the distribution,
+which is now the campaign cluster's cheapest unrun experiment (D324).
