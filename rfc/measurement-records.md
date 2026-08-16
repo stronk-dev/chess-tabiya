@@ -29,7 +29,7 @@
     that admits result splits**"* (**D161**) — the *format* gap is closed by §4c's `illustrative`
     span form. **Process documents remain out of any lint's reach and this RFC says so** rather than
     implying otherwise (§9).
-- **Ledger rows this RFC opens** (law 4): **D373**–**D377**, listed in §12. No id outside that block
+- **Ledger rows this RFC opens** (law 4): **D376**–**D380**, listed in §12. No id outside that block
   was minted.
 - **Depends on:** `rfc/claim-backing.md` (**status `implementing`; the mechanism this RFC extends is
   already in the tree** — `apps/server/src/sourcing/claim-binding.ts`, `CLAIM_ASSERTION_KINDS`,
@@ -264,7 +264,7 @@ written from was one lane stale and `rfc/README.md` is behind the tree:**
    *"Shape-entry schema | **NONE**"*; `pack-graduation` records *"**Shape-entry schema: nothing.**"*;
    the other seven do not mention the file as a target. **0.4 collides with nothing.**
    `vocabulary-wiring`'s `plan_signature` leaf *did* land inside `schemas/shape_entry.schema.json`
-   without a shape-entry register row — filed as **D373** (§12) so the next drafter is not misled by
+   without a shape-entry register row — filed as **D376** (§12) so the next drafter is not misled by
    the register's silence.
 3. **This RFC does not edit `rfc/README.md`.** The register rows it requests are in §11; the file's
    single writer lands them.
@@ -605,7 +605,7 @@ REFRESH=1` rewrites **cardinal spans only**, together with `textSha256`, `observ
 | `corpus.{roots,packs,positions}` | none — the check re-derives them | keep, **diagnostic**; a refusal wants to say *"the corpus moved 694→827"* |
 | `rationale` | none of the four — it is **D103's** field, and it is human-only prose | keep, human-only (§5b) |
 | `corpus.digest` | none; §2a measures it as strictly worse than re-derivation | **refused** |
-| an instrument version | none. `census.*` values come from the checkout's own `expression-census` and `matchesStructuralExpression`; a record cannot be checked against a *different* version of the evaluator than the one running, so recording one would produce a field that is always trivially equal to the runtime's | **refused** — and this is the sharpest divergence from the engine record, where `engineVersion` is load-bearing precisely because the binary is not in the repo. **D374** (§12) records the residue: an evaluator-semantics change silently changes every reading, and the only detector is that the readings move — which this RFC does supply, one commit late. |
+| an instrument version | none. `census.*` values come from the checkout's own `expression-census` and `matchesStructuralExpression`; a record cannot be checked against a *different* version of the evaluator than the one running, so recording one would produce a field that is always trivially equal to the runtime's | **refused** — and this is the sharpest divergence from the engine record, where `engineVersion` is load-bearing precisely because the binary is not in the repo. **D377** (§12) records the residue: an evaluator-semantics change silently changes every reading, and the only detector is that the readings move — which this RFC does supply, one commit late. |
 
 ### §5. The shape-entry surface (shape-entry schema 0.4)
 
@@ -767,7 +767,7 @@ describes.
 **Runtime is a gate concern and was measured, not assumed.** The full census over 56 packs / 827
 positions / 192 subjects completed inside a single `make` invocation on this machine today, including
 the `esbuild` bundle (reported at 94 ms). Check mode adds a per-record pointer resolution and one
-integer comparison per span; it walks no additional positions. **D375** (§12) records the standing
+integer comparison per span; it walks no additional positions. **D378** (§12) records the standing
 obligation to re-measure if the corpus grows an order of magnitude.
 
 ### §7. Refusal-code register and collision sweep
@@ -818,7 +818,7 @@ RFC's commit, and this RFC's commit changes no content.
 
 **Two entries are wrong at HEAD right now** (`kid-chain-arrangement`, `london-wedge`), and this RFC
 does not fix them: fixing a wrong number is a content edit, and the entries also need their
-*propositions* rewritten (*"and nowhere else in the corpus"* is false in both). Filed as **D376**
+*propositions* rewritten (*"and nowhere else in the corpus"* is false in both). Filed as **D379**
 (§12) so the debt is a row rather than an assumption.
 
 ### §9. What this RFC deliberately does not take
@@ -827,7 +827,7 @@ does not fix them: fixing a wrong number is a content edit, and the entries also
 |---|---|---|
 | **D368** | closed | — |
 | **D103** | closed | — |
-| **D157** | `declared` makes *"quotes no population"* countable and printed | the **graduation policy** — may a pack publish with `declared: 0`? — to `rfc/pack-graduation.md`, which owns `GRADUATION_REQUIRES_SOURCES` and the published-status floor. Filed as **D377**. |
+| **D157** | `declared` makes *"quotes no population"* countable and printed | the **graduation policy** — may a pack publish with `declared: 0`? — to `rfc/pack-graduation.md`, which owns `GRADUATION_REQUIRES_SOURCES` and the published-status floor. Filed as **D380**. |
 | **D151** | the `abstained` disposition makes *"measured, below floor"* recordable | the **authoring-time warning** — telling an author their window sits below the 100-game floor *before* they choose its depth — is explorer-side work on `attachExplorerEvidence` / the priority path, not census work. Routed to the explorer wave; the row stays open with its scope narrowed. |
 | **D154 / D161** | the `illustrative` span form makes an invented number declarable | **nothing here lints Markdown.** `design/BACKLOG.md` is a process document; no schema governs it, no pointer addresses it, and building a lint for it would mean parsing prose in a file every agent edits concurrently. D161's standing rule — *"worked examples in ledger and design tier are claims and must carry their provenance or be marked synthetic"* — is a **documentation and review rule**, and it is the owner's to place. Stated rather than quietly inherited. |
 
@@ -847,6 +847,41 @@ line. `rfc/pack-graduation.md` (accepted, 0.27) moves all pack digests and re-st
   three span forms.
 - `docs/expression-census.md` currently omits the `.browser` fixture convention that
   `corpus.fixturePacks` encodes; correcting that is one sentence and belongs in the same commit.
+
+### §11. Register rows requested (this RFC does not edit `rfc/README.md`)
+
+`rfc/README.md` has a single writer and this RFC does not touch it. The rows it asks that writer to
+land, in the register's own form:
+
+- **Active table:** `| measurement-records.md | draft 2026-08-16 — measurement records for corpus
+  census readings; shape-entry schema 0.4; claims no pack lane |`
+- **Pack-schema register:** no row. **The sentinel row `| — | 0.28 is the next free pack lane |`
+  stands unchanged** — this RFC's whole register position is that it does not take it.
+- **Shape-entry lane:** the register has **no shape-entry table**. One should exist, because
+  `schemas/shape_entry.schema.json` has moved to 0.3 and `vocabulary-wiring`'s `plan_signature` leaf
+  landed inside it with no register row of any kind. Requested:
+  `| 0.4 | measurement-records.md | claimed 2026-08-16 — additive optional measurements[] plus three $defs; no existing entry changes, no digest moves |`, with 0.1–0.3 backfilled by the writer.
+- **Migration register:** no row. `STORAGE_VERSION` stays at **22** and the landing order is
+  unaffected.
+
+Two register facts worth the writer's attention while they are in the file, both re-derived from the
+tree today and neither this RFC's to fix: the **0.26 row still reads *claimed*** while
+`DRILL_PACK_SCHEMA_VERSION` and the `$id` both read `0.26` (landed), and **`dead-vocabulary.md` has
+no Active row at all**.
+
+### §12. Ledger rows this RFC opens (law 4)
+
+**Not written to `design/BACKLOG.md` by this RFC.** Concurrent agents collide on the shared ledger,
+so the rows are stated here in landing form and claude lands them. The id block **D376–D380** was
+taken after verifying that **D371–D375 are occupied** and nothing above D375 exists.
+
+| Row | Text |
+|---|---|
+| **D376 🐞** | **The shape-entry schema has no register lane, and a version already moved inside it unannounced.** `schemas/shape_entry.schema.json` reads `urn:chess-tabiya:schema:shape-entry:0.3` and `vocabulary-wiring`'s `plan_signature` leaf landed in that file — while `vocabulary-wiring`'s own register claim says *"claims pack schema 0.24 and nothing else"*, and no active RFC records a shape-entry version at all (two explicitly write *"Shape-entry schema: NONE"*). So the file is a shared versioned resource with **no register**, which is the exact collision class the pack register exists to prevent, one file over. Remedy is a table in `rfc/README.md`, not a code change |
+| **D377 🐞** | **A change to `matchesStructuralExpression`'s semantics silently changes every census reading in the corpus, and no record can detect it.** `rfc/measurement-records.md` §4f refuses an instrument-version field on the ground that a record can only ever be checked against the running evaluator — so the version would always be trivially equal and would prove nothing. The consequence is real and is recorded rather than papered over: an evaluator change surfaces only as *many records diverging in one commit*, which reads as N unrelated content defects. A "records moved together" heuristic would name the common cause; whether that is worth building is §Open questions 6 |
+| **D378 💡** | **`census-check` joins `make verify` on a runtime measured at one corpus size and nothing re-measures it.** The full census over 56 packs / 827 positions / 192 subjects completes inside one `make` invocation today (esbuild reported 94 ms). Check mode adds one pointer resolution and one integer comparison per span and walks no extra positions, so it is not the risk — the **census walk itself** is, and it is `O(subjects × positions)`. At an order of magnitude more content the gate cost should be re-measured before it is assumed |
+| **D379 🐞** | **Two shape entries carry a census reading that is false at HEAD, and the 2026-08-16 manual sweep missed both for a mechanical reason.** `kid-chain-arrangement` and `london-wedge` each state *"Firing census over all 487 spine positions of the 37 shipped packs … fires on exactly 14 nodes … and nowhere else in the corpus"* in `provenance.sources[1]`. Re-measured 2026-08-16: **24 of 827 across three packs** (`anti-kid-classical-white` 7, `kid-classical-black` 7, `kid-mar-del-plata-white` 10) and **19 of 827 across three packs** (`anti-london-black` 7, `london-system-white` 7, `london-wedge-black-counterplay` 5). Wave F corrected nine entries by grepping for `694`, the denominator it knew; these two were measured against **487** a generation earlier and were invisible to that key. **Both need the proposition rewritten, not just the numeral** — *"nowhere else in the corpus"* is false in both. Content debt, not an RFC deliverable |
+| **D380 💡** | **May a pack graduate while quoting no population at all?** D157 measures that `carlsbad-minority-attack` — the middlegame exemplar `design/04-content-architecture.md` §8 names — carried no corpus evidence of any kind, and that *"a pack quoting no population is indistinguishable from a pack quoting the wrong one."* `rfc/measurement-records.md` §6c supplies the missing half: once readings are declared, `declared: 0` is countable and printed per document. **The policy is not supplied and is deliberately not taken there** — the published-status floor is `rfc/pack-graduation.md`'s (`GRADUATION_REQUIRES_SOURCES`), and this row is the hand-off so neither RFC assumes the other owns it |
 
 ---
 
@@ -907,8 +942,8 @@ is untouched: nothing here changes what a learner is shown, and B4 remains unmet
    `grunfeld-exchange-fianchetto` (`planClasses/0/description`). `claimBindings` lives in the
    `evidence.json` sidecar, and `validateClaimBindings` refuses any pointer outside
    `/feedbackClaims/{i}/text` (`CLAIM_POINTER_INVALID`) — so **neither pack claim is bindable by the
-   shipped mechanism**, and `grunfeld-exchange-fianchetto` has no sidecar at all (32 of 153 files in
-   `content/drafts/` are `.evidence.json`). Three options: widen `CLAIM_POINTER_INVALID` to the
+   shipped mechanism**, and **neither pack has a sidecar at all** (32 of 153 files in
+   `content/drafts/` are `.evidence.json`; neither of these two is among them). Three options: widen `CLAIM_POINTER_INVALID` to the
    `PROSE_POINTERS` set (touches `claim-backing`'s surface while it is `implementing`); give packs the
    same `measurements` property (costs pack lane 0.28, which §0 promised to leave free); or defer.
    **This RFC defers, and the deferral is the reason §0 can claim no pack lane** — that trade should
@@ -936,7 +971,7 @@ is untouched: nothing here changes what a learner is shown, and B4 remains unmet
    it. Should `records.documents` carry an `illustrative` count, printed alongside `declared`, so the
    escape hatch is at least as visible as the thing it evades? Probably yes; deferred to
    cross-review.
-6. **The evaluator-semantics residue (D374).** §4f refuses an instrument-version field on the ground
+6. **The evaluator-semantics residue (D377).** §4f refuses an instrument-version field on the ground
    that a record can only ever be checked against the running evaluator. The consequence is that a
    change to `matchesStructuralExpression`'s semantics silently changes every reading in the corpus,
    and the only signal is that many records diverge at once. `census-check` would report that as N
