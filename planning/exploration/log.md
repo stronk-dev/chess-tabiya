@@ -3138,3 +3138,16 @@ D232 was stale in the opposite direction. `evidence-at-runtime` already shipped 
 test that enumerates all four `evidencePacket(` construction sites and requires a preceding
 disclosure gate. The ledger now records that closure, and the queue advances only to the
 independently takeable B2 subset after rechecking its current referents.
+
+## 2026-08-17 — runtime and storage invariants stopped depending on repetition
+
+The takeable B2 subset closed four rows without changing a learner-facing contract. Storage now
+refuses startup unless its migration versions are exactly the ordered range from 1 through
+`STORAGE_VERSION`; focused regressions cover a hole, a duplicate and an ordering error. The
+five-member assessment category is declared once in the schema package and type-checked where
+runtime and server consume it, removing the three-copy drift.
+
+One real checkmating run now pins the three event gaps that emitters keep closed: opponent
+selection immediately precedes its committed move, an ending checkpoint immediately precedes
+its segment, and a terminal move immediately precedes its outcome. The test documents the
+synchronous bracketing without widening the event schema or changing replay semantics.

@@ -1,10 +1,11 @@
 import { transposeKey } from "@chess-tabiya/runtime";
+import type { AssessmentCategory } from "@chess-tabiya/schema/drill-pack";
 import { ServerError } from "./errors.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
 
 export const TABLEBASE_CATEGORIES = Object.freeze(["win","syzygy-win","maybe-win","cursed-win","draw","blessed-loss","maybe-loss","syzygy-loss","loss","unknown"] as const);
 export type TablebaseCategory = typeof TABLEBASE_CATEGORIES[number];
-export const ASSESSMENT_CATEGORIES = Object.freeze(["win", "loss", "draw", "cursed-win", "blessed-loss"] as const satisfies readonly TablebaseCategory[]);
+export const ASSESSMENT_CATEGORIES = Object.freeze(["win", "loss", "draw", "cursed-win", "blessed-loss"] as const satisfies readonly AssessmentCategory[]);
 export const OBJECTIVE_ASSESSMENT_SETS = Object.freeze({
   win: Object.freeze(["win"] as const),
   hold: Object.freeze(["draw", "cursed-win", "blessed-loss"] as const),

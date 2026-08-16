@@ -1,11 +1,14 @@
+import type { AssessmentCategory } from "@chess-tabiya/schema/drill-pack";
+
 import { branchPaths } from "./branch-path.js";
 import { MAX_COMPARISON_BRANCHES } from "./compare.js";
 import type { DrillRun, ObjectiveState, RunOutcome } from "./types.js";
 
+export type { AssessmentCategory } from "@chess-tabiya/schema/drill-pack";
+
 export const BRANCH_COLLAPSE_FLOOR = MAX_COMPARISON_BRANCHES;
 
 export type AssessmentObjective = "win" | "hold" | "save" | "resist";
-export type AssessmentCategory = "win" | "loss" | "draw" | "cursed-win" | "blessed-loss";
 export type TablebaseCategory = AssessmentCategory | "syzygy-win" | "maybe-win" | "maybe-loss" | "syzygy-loss" | "unknown";
 
 export type DecidednessGround =

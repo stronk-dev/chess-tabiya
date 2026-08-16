@@ -58,6 +58,10 @@ change whose own row requires a census first (D373). In A3, D232 was already imp
 and D214 specify no mechanical remedy. Do not invent the missing decisions. The next independently
 takeable subset is B2's D219/D229/D258/D213, re-derived against the current tree before editing.
 
+**B2 subset landed 2026-08-17:** D219, D229, D258 and D213 are closed. Storage now asserts a
+contiguous migration range, the assessment category has one declaration, and one executable run
+pins all three authoritative event adjacencies. The record-only B2 rows remain untouched.
+
 **Two findings in that document outrank most of the batches.** `db243f5` edited nineteen defect
 rows and **changed column 3 only** — writing *"✅ closed by pack-graduation 0.27"* into the
 disposition while leaving column 1 at 🐞/💡. So [[D418]] is exactly right, and **the wave that

@@ -6,7 +6,11 @@ import { DatabaseSync } from "node:sqlite";
 import { appendOpponentPly, commitMove, createRun, fork, readBackReplay, resistanceOnPath } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { SQLiteRunStorage, type StorageMigrationLog } from "./storage.js";
+import {
+  SQLiteRunStorage,
+  assertContiguousMigrationVersions,
+  type StorageMigrationLog,
+} from "./storage.js";
 
 const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const createdAt = "2026-08-11T10:00:00.000Z";
@@ -33,6 +37,13 @@ describe("SQLite run-storage migrations and summaries", () => {
     for (const directory of directories.splice(0)) {
       rmSync(directory, { recursive: true, force: true });
     }
+  });
+
+  it("refuses missing, duplicated, or out-of-order migration versions", () => {
+    expect(() => assertContiguousMigrationVersions([1, 2, 3], 3)).not.toThrow();
+    expect(() => assertContiguousMigrationVersions([1, 3], 3)).toThrow(/exactly 1\.\.3/u);
+    expect(() => assertContiguousMigrationVersions([1, 2, 2], 3)).toThrow(/exactly 1\.\.3/u);
+    expect(() => assertContiguousMigrationVersions([2, 1, 3], 3)).toThrow(/exactly 1\.\.3/u);
   });
 
   it("upgrades and backfills a legacy fixture once, then skips on reopen", () => {

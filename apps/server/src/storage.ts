@@ -408,6 +408,21 @@ export const STORAGE_VERSION = 23;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
+export function assertContiguousMigrationVersions(
+  versions: readonly number[],
+  storageVersion = STORAGE_VERSION,
+): void {
+  const expected = Array.from({ length: storageVersion }, (_value, index) => index + 1);
+  if (
+    versions.length !== expected.length ||
+    versions.some((version, index) => version !== expected[index])
+  ) {
+    throw new TypeError(
+      `Storage migrations must be exactly 1..${storageVersion}; received ${versions.join(",")}`,
+    );
+  }
+}
+
 function isRunRole(value: unknown): value is RunRole {
   return RUN_ROLES.includes(value as RunRole);
 }
@@ -2347,6 +2362,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         apply: () => this.#upgradeV016Runs(),
       },
     ] as const;
+    assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
     for (const migration of migrations) {
       if (migration.version <= version) continue;
       const rebuildsReferencedTables = migration.version === 14;

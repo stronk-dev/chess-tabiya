@@ -33,6 +33,7 @@ export {
   RETRY_VARIANT_KINDS,
   STRUCTURAL_FEATURE_KINDS,
   TRANSITION_FEATURE_KINDS,
+  type AssessmentCategory,
   type CheckpointAction,
   type CheckpointDefinition,
   type CheckpointInteraction,

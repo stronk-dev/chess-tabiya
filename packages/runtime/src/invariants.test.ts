@@ -97,6 +97,45 @@ function assertLegalPgn(run: DrillRun): void {
 }
 
 describe("runtime invariant properties", () => {
+  it("keeps all authoritative event pairs adjacent in emitted runs", () => {
+    const selection = (moveUci: string) => ({
+      moveUci,
+      policyModeApplied: "human_common" as const,
+      candidates: [{ moveUci, mass: 1, rank: 1 }],
+      engine: {
+        id: "fixture-maia",
+        name: "Fixture Maia",
+        version: "1",
+        seedHonored: false,
+      },
+    });
+
+    let run = commitMove(newRun(), "f2f3", { at }).run;
+    run = reachCheckpoint(run, "first", at).run;
+    run = appendOpponentPly(run, selection("e7e5"), { at }).run;
+    run = commitMove(run, "g2g4", { at }).run;
+    run = reachCheckpoint(run, "second", at).run;
+    run = appendOpponentPly(run, selection("d8h4"), { at }).run;
+
+    for (const [index, event] of run.events.entries()) {
+      if (event.type === "opponent.move_selected") {
+        expect(run.events[index + 1]?.type).toBe("move.committed");
+      } else if (event.type === "segment.completed") {
+        expect(run.events[index - 1]?.type).toBe("checkpoint.reached");
+      } else if (event.type === "outcome.reached") {
+        expect(run.events[index - 1]?.type).toBe("move.committed");
+      }
+    }
+
+    expect(run.events.map((event) => event.type)).toEqual(
+      expect.arrayContaining([
+        "opponent.move_selected",
+        "segment.completed",
+        "outcome.reached",
+      ]),
+    );
+  });
+
   it("keeps derived segments in one-to-one correspondence with authoritative events", () => {
     fc.assert(
       fc.property(
