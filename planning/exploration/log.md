@@ -2718,3 +2718,48 @@ Svelte 0/0, schema, scaffold and packaging clean. `make test-browser` passed 24 
 zero retries; the optional Maia latency test skipped. D57, D85 and D86 close; D84 stays open
 as a named measurement gap, and D96 stays partially open only for its bundled
 `deviation.planClassId` residue.
+
+## 2026-08-16 — Maia in the endgame: club-player-wrong, and band-blind
+
+**Landed.** `design/research/maia-endgame-fidelity.md` — 1,095 probes, 0 errors, 507
+tablebase-probed positions from 11 of the 14 endgame packs, run at the **0.7/0.9**
+temperature those packs actually declare rather than the code default. The owner's
+question was whether the endgame is where humans and agents diverge most; the
+answer splits, and the split is the finding.
+
+**Human-shaped, decisively.** 84 errors across 810 probes, and they land on **6 of 45
+positions and 5 distinct moves** — the same move on every repeat. Modal error share
+inside a (position, band) cell is **0.95–1.00** against **0.58–0.64** if the erring
+move were uniform over the same dropping moves. **All 84 are `win→draw`; zero
+`win→loss`, zero `draw→loss`**, where a uniform-random legal move concedes the whole
+point on 10.7% of winning and 27.6% of drawn roots. The exemplar: in
+`8/3k4/8/8/5K2/8/4P3/8 w` exactly one of ten legal moves throws the win — the pawn
+push — and Maia plays it **13 of 18** times against a uniform 10%. And
+`argmax(policy)` preserves at the identical rate, so **the errors are the model's
+belief, not the unseeded sampler's tail**; lowering temperature would not remove
+them.
+
+**Band-blind.** 88.1 / 88.9 / 91.9% at 1100 / 1500 / 1900, **tied on 43 of 45
+positions** (sign p = 0.5). Band application was verified per probe against the
+D58/D91 confound — 810/810 sent `Elo` after the `SelfElo`/`OppoElo` defaults, and
+45/45 positions produced three distinct policy vectors. The dial reaches the model
+and moves dropping-mass on 30 of 40 non-tied positions (p = 0.0022) by a mean **4.3
+pp** — real, and far too small to change the move played.
+
+**So the mode is sound and the declared band is the fiction.** Twelve packs span
+`targetElo` 1150–1900 and none of that span is observable in an endgame (D369).
+
+**Three by-products.** Only **5.1%** of positions on Maia's side of a pack are
+decisions at all, against 76.4% on the learner's — twelve packs seat it on an
+already-decided side, so its real job is **resistance**, at which it is measurably
+good (slowest-losing move 61–69% vs 23% for chance) and which no mode contract
+declares or guards (D370). `perfect_tablebase` in a **drawn** root has no DTZ term
+and degenerates to lexicographic UCI order (D371). And a correction to claude's
+framing: `practical_resistance` is **not** broken — that tolerance defect closed on
+2026-08-15 — so it is a live candidate wherever the endgame is decided.
+
+**Method note worth keeping.** Five operationalisations were written into the harness
+*before* the run, two exploratory ones added afterwards and disclosed as such, and one
+(mechanical "plan conservation") **failed to discriminate and is reported as a
+negative**. The judgment word — calling these "the textbook club-player error" — is
+flagged inline as judgment; the measurement stands without it.
