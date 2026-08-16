@@ -11,16 +11,19 @@
   solo, host, participant, or spectator*); `design/00-thesis.md` §§70, 93-94 (no
   lesson content — an assignment points at a pack, it does not author teaching).
   *Every code site below is cited **by symbol name**; line numbers are advisory. The
-  tree moved roughly thirteen times on 2026-08-15. Locate `RUN_ROLES`, `run_grants`,
-  `permittedAssistance`, `feedbackDeliveryOpen`, `mayManageGrants`, `updateGrant`,
-  `SESSION_KINDS`, `mintLink` and `STORAGE_VERSION` by name, not by number.*
+  tree moved roughly thirteen times on 2026-08-15 and again on 2026-08-16. Locate
+  `RUN_ROLES`, `run_grants`, `permittedAssistance`, `feedbackDeliveryOpen`,
+  `mayManageGrants`, `updateGrant`, `LIVE_SESSION_KINDS`, `assistanceProfile`,
+  `mintLink` and `STORAGE_VERSION` by name, not by number.*
 - **Exploration gate:** owner ruling 2026-08-15 — **scope it now**, explicitly
   overriding the *defer with a named trigger* verdict in
   `design/research/broadcast-and-teacher-surfaces.md` §7.2. That dossier is this RFC's
   entire evidence base and its §4 is the specification's starting point, including the
   finding it corrected: **the streamer and academy surfaces already ship**, as
-  `SESSION_KINDS = ["stream","academy","match"]` (`apps/server/src/live-types.ts:3`),
-  so nothing in this RFC is a live-session mode.
+  `LIVE_SESSION_KINDS = ["stream","academy","match"]` (`packages/runtime/src/types.ts`,
+  re-exported as `SESSION_KINDS` by `apps/server/src/live-types.ts` — the D185
+  hand-duplication is gone, so there is now exactly one definition), so nothing in this
+  RFC is a live-session mode.
 - **Depends on:**
   - `rfc/archive/learner-identity-and-authorization.md` — owns `run_grants`, `RUN_ROLES`
     and the per-run consent object this RFC extends rather than replaces.
@@ -37,9 +40,16 @@
     permission table as a ceiling, and its acceptance tests assert that participants
     and spectators are refused. §5 is deliberately shaped to be a **pure narrowing** of
     that table so this RFC can land behind it without forcing a rebase.
-  - `rfc/client-surface-floor.md` (*implementing*) — owns the dead compact **Session**
-    tab (D62). This RFC's honesty requirement in §2.4 is unmet on a phone until that
-    lands; it is named as a dependency, not re-fixed here.
+  - `rfc/archive/live-surface-honesty.md` (*implemented 2026-08-15*) — **added by
+    cross-review 2026-08-16.** It closed **D81 and D82**, which this draft was written
+    the same day believing open: `session.kind` now selects an assistance *preference
+    profile*, and `ASSISTANCE_PROFILES` has six exhaustive members. §6 is rewritten
+    against it.
+  - ~~`rfc/client-surface-floor.md` (*implementing*)~~ — **dependency CLEARED, cross-review
+    2026-08-16.** It is `rfc/archive/client-surface-floor.md`, implemented, and **D62 is
+    closed**: compact navigation has three real regions and a spelling-independent source
+    guard now refuses any `viewerRole`-conditioned rendered control. §2.4's in-run leg
+    therefore ships today and is no longer a blocked requirement — see §2.4.
 - **Parent / amends:** amends `run_grants` (one nullable column), `live_sessions` (one
   nullable column) and `permittedAssistance`'s context (one field). Introduces four new
   tables and one new client route pair. **No run-schema change. No pack-schema change.
@@ -99,11 +109,17 @@ zero rosters in existence and expensive afterwards.
 
 ### Explicitly out of scope
 
-- **Any widening of `/progress*`.** All six progress routes take only `authenticate()`
-  and resolve to that principal (`rest.ts` `/progress`, `/progress/due`,
+- **Any widening of `/progress*`.** All **seven** progress routes take only
+  `authenticate()` and resolve to that principal (`rest.ts` `/progress`, `/progress/due`,
   `/progress/related`, `/progress/metrics`, `/progress/milestones`,
-  `/progress/schedules/:id`; `RunService.progress`, `.due`, `.related`,
-  `.progressMetrics`, `.milestones`, each of which passes `principal.learnerId` down).
+  `/progress/recommendations`, `/progress/schedules/:id`; `RunService.progress`, `.due`,
+  `.related`, `.progressMetrics`, `.milestones`, `.shapeRecommendations`, each of which
+  passes `principal.learnerId` down). **Corrected from six by cross-review 2026-08-16:
+  `/progress/recommendations` is a seventh, and it is the most tempting one to widen** —
+  it composes `RepertoireService.recommendations` with `RunService.shapeRecommendations`,
+  so a teacher-facing variant would be a per-learner weakness feed, which is precisely
+  the v1 identity this product rejected (§Motivation, *Tested against the two rejected
+  shapes*). It stays principal-only.
   **No route in this RFC takes another learner's id as a subject.** A teacher never sees
   a learner's attempt history, due queue, metrics or milestones. Class analytics is the
   feature this RFC most conspicuously refuses.
@@ -114,7 +130,52 @@ zero rosters in existence and expensive afterwards.
   (`packages/runtime/src/feedback.ts`) take no viewer parameter and this RFC adds none.
 - **Grading, scoring, or any teacher-facing verdict.** A submission is received, never
   marked.
-- **Making `session.kind` behavioural (D81).** Considered and refused — see §6.
+- **Making `session.kind` behavioural.** Considered and refused — see §6. (D81 was
+  **closed by `live-surface-honesty` on 2026-08-15**; the refusal below is about not
+  adding a fourth *kind*, not about the row.)
+
+### Tested against the two rejected shapes, by name
+
+Added by cross-review 2026-08-16. A document with "teacher" in its title must be held
+against `AGENTS.md` §Rejected explicitly rather than by implication, because the two
+nearest failure shapes are both *adjacent to this one and legitimate elsewhere*.
+
+**"The v1 identity: personal game-analysis AI coach (mine games → detect weaknesses →
+generate episodes)."** Each of the three verbs is refused by a shipped constraint, not
+by intention:
+
+- *mine games* — no route in §7.1 takes another learner's id as a subject, and the
+  seven `/progress*` routes stay principal-only. A teacher's entire read surface is the
+  set of `run_grants` rows learners minted at them, one attempt at a time. There is no
+  query in this RFC that returns "this learner's games".
+- *detect weaknesses* — §Out of scope refuses grading, scoring and any teacher-facing
+  verdict; `/progress/recommendations` is not widened. Class analytics is named as the
+  feature most conspicuously refused.
+- *generate episodes* — a teacher may assign a **registered pack and nothing else**
+  (§3.3). The assignment authors no content; it is a pointer plus a human sentence.
+  `design/00-thesis.md` §§70, 93-94 forbids lesson content and this RFC creates none.
+
+The v1 product also made import the entry point; this RFC touches `imported_games` not
+at all and works with zero imported games.
+
+**"An engine review screen with a rewind button."** The teacher's review of a submitted
+run is the *shipped run view under an ordinary grant* — the same projection the learner
+gets, byte-identical (§9.4), reached through `GET /runs/:id`, not through any new
+teacher-facing evaluation surface. Concretely, the three things that would make it that
+screen are each absent: this RFC adds **no evaluation projection** (no route here
+returns an engine number, and §5 *narrows* engine access rather than widening it), **no
+per-learner dashboard of verdicts** (the classroom view lists submissions and their
+access status — received-or-not, never marked), and **no second read path** (§2.2: a
+submission mints a real `run_grants` row precisely so there is no parallel visibility
+rule to grow a dashboard on). The teacher's affordance is the learner's affordance,
+granted; a review screen is what you build when the reviewer gets a surface the player
+does not have.
+
+**The honest residual, stated rather than argued away:** the classroom detail view for
+teachers is a list over other people's activity, and that is the shape a dashboard grows
+from. What keeps it on the right side is that every cell in it is *an act the learner
+performed* — submitted, withdrawn, revoked, expired — and none is a judgement the
+product formed. Criterion 3 and criterion 4 pin both halves.
 
 ## 1. What ships already, and is therefore not respecified
 
@@ -223,12 +284,20 @@ follow:
 
 - the assignment card in `/learn` (§7.2) names, in words, every teacher who currently
   holds access to each submitted run, and offers revoke;
-- **the in-run answer is D62's** — the compact **Session** tab is inert and its role
-  condition is inverted, so the learner most likely to be observed (a student on a phone)
-  cannot see the room. That is owned by `rfc/client-surface-floor.md`. This RFC declares
-  the dependency and adds an acceptance criterion that the desktop session/grant list
-  renders classroom-minted grants indistinguishably from any other (§9), so nothing about
-  a teacher's presence is special-cased into invisibility.
+- **the in-run answer was D62's, and D62 has closed** (cross-review 2026-08-16;
+  `rfc/archive/client-surface-floor.md`, implemented). The first draft declared a
+  dependency on a phone-side surface that did not exist. It exists now: compact
+  navigation has exactly three real regions — Timeline, Branches and Evidence — and a
+  spelling-independent source guard refuses any `viewerRole`-conditioned rendered
+  control, so the inverted role condition that made the Session tab unreachable cannot
+  be reintroduced. **The consequence for this RFC is a requirement, not a dependency:**
+  the compact surface no longer has a Session region to put a watcher list in, so the
+  learner-facing answer to *"who is watching"* must be carried by a region that survives
+  the floor — the `/learn` card above, which is reachable on every viewport — and not by
+  a fourth compact tab. The acceptance criterion stands and is unchanged in substance:
+  the desktop session/grant list renders classroom-minted grants indistinguishably from
+  any other (§9), so nothing about a teacher's presence is special-cased into
+  invisibility.
 
 ## 3. Specification — the standing objects
 
@@ -333,6 +402,39 @@ CREATE INDEX assignments_classroom ON assignments(classroom_id, created_at);
   explanation or voice path. **Law 8 note:** nothing in this RFC generates chess content;
   an LLM is not invoked anywhere in it, and a teacher's sentence is attributed human
   speech, not product-voice chess truth.
+
+  **Grounded in the shipped design rather than asserted — expanded by cross-review
+  2026-08-16, because a note is the one place this RFC puts chess prose on a screen and
+  §5's ladder governs everything on that screen.** `design/05-in-run-experience.md`
+  §3-forms already rules exactly this case, for marks rather than sentences: *"HOST- or
+  TEACHER-DRAWN marks relayed to viewers are a **person's** claim, not the product's —
+  they need **attribution**, not a rung"*, and the same section's *"The config owns the
+  matrix"* confirms that such marks are *"not assistance settings at all… governed by
+  attribution and by the live surface's admission rule, not by the ladder"*. A teacher's
+  note is that ruling's sentence form, and it inherits the ruling's condition:
+  attribution is mandatory and structural, never a styling choice. Three consequences
+  are normative here:
+
+  1. **The note never enters the run.** It is not a `DrillRunEvent`, is not written to
+     any run snapshot, and is never appended to `packet.sentences` or reachable by
+     `evidencePacket` / `renderVoice`. The run stays the sole source of chess truth
+     (`design/05` §1) and the voice provider's input is byte-identical to today's.
+  2. **The note never renders inside a run.** It lives in the `/learn` assignment card
+     and the classroom view, outside the board experience. It is therefore not live
+     assistance, does not occupy a rung, and adds **no kind to the live surface** — so
+     `rfc/live-marker-quality.md`'s L5 burden (*a new live kind arrives with a dossier*)
+     is not engaged by this RFC at all, and L1–L4 have nothing here to bind.
+  3. **The note is pre-commitment, and that is deliberate rather than overlooked.** A
+     learner reads it before starting the pack, which is the one timing §3a
+     (*the default is silence*) and ADR-0006 (*commit before you learn anything*) are
+     strictest about. It is admissible because the invariant governs what the **product**
+     may tell you before you decide, not what another person may say to you — a coach
+     saying *"watch the minority attack"* over the board is the shipped academy session,
+     already ruled legitimate. The line that must hold is that the product never speaks
+     in the note's voice and never launders a rung through it: no evidence value, engine
+     number, corpus figure or generated sentence may be composed into a note by any code
+     path, and the note is stored and rendered as the literal bytes the teacher typed.
+     §9 criterion 3a tests it.
 - **`due_at` is advisory.** It does **not** create a `schedules` row. The return loop's
   scheduler is the learner's own (`schedules`, keyed `learner_id`, with `origin IN
   ('auto','learner')`); an assignment is a third party's request and conflating it with
@@ -479,19 +581,27 @@ invariant applied to a permissions surface. The `run_grants` row remains the **s
 source of truth for access; `assignment_submissions` is the record of the act.
 
 **Revocation ends access; it does not undo what access permitted, and the boundary is
-worth stating precisely.** Two of the three shipped ways to make a durable object out of
-somebody else's run are already closed to a teacher: `RunService.share` and
-`RunService.distillationAccess` both check `mayManageGrants(role)` and refuse every role
-but `host`, so a granted teacher can neither mint a `story_read` public token on a
-student's run nor distil it into a pack draft of their own. The third is open:
-**`RunService.flip` is `requireRead`-only.** Any grant-holder may fork a position out of
-the run into a *new run they own*, with a `run_derivations` row recording
-`sourceRunId`/`sourceNodeId`, and that object survives revocation, expiry and classroom
-deletion. This RFC does **not** propose narrowing `flip` — the derived run carries a FEN
+worth stating precisely.** **All three** shipped ways to make a durable object out of
+somebody else's run are now closed to a submission-granted teacher — **corrected by
+cross-review 2026-08-16, which found the first draft's one open case had been shut
+under it.** `RunService.share` and `RunService.distillationAccess` both check
+`mayManageGrants(role)` and refuse every role but `host`, so a granted teacher can
+neither mint a `story_read` public token on a student's run nor distil it into a pack
+draft of their own. The third, `RunService.flip`, was `requireRead`-only when this draft
+was written; **D94 closed on 2026-08-16 and it now checks `mayWrite(access.role)`
+first**, refusing `FORBIDDEN` before any derived run is created. A submission mints
+`spectator` (§3.4 step 5), and `mayWrite` is false for `spectator`, so a teacher holding
+only a classroom-minted grant cannot fork a position out of a student's run at all.
+
+**This tightens the surface but does not make revocation an undo, and the copy in §7.2
+must still not imply it does.** A teacher whom the learner has *separately* granted
+`participant` — an ordinary shipped act, not something this RFC mints — passes `mayWrite`
+and may `flip`, producing a run they own with a `run_derivations` row recording
+`sourceRunId`/`sourceNodeId` that survives revocation, expiry and classroom deletion.
+The residue is small and was never the interesting part: the derived run carries a FEN
 and no part of the learner's event log, and a reader who can see a position can always
-retype it — but the learner-facing copy in §7.2 must not imply that revoking restores the
-pre-submission state, and Open question 8 asks whether `flip` on another learner's run
-should be host-only anyway.
+retype it. What revocation guarantees is that *future* reads stop — never that what was
+read is forgotten.
 
 ### 4.2 Enrolment is symmetrically exitable
 
@@ -508,6 +618,17 @@ ALTER TABLE run_grants ADD COLUMN expires_at TEXT;
 `NULL` means never expires, which every existing row is, so the migration is additive
 with no backfill. A grant whose `expires_at` is non-null and `<= now` is **treated as
 absent everywhere**, not merely hidden.
+
+**The refusal is named, not left to the implementer** (added by cross-review
+2026-08-16 — a column with no named refusal is a declaration, not an executable rule).
+Absence is produced at the chokepoint: `RunStorage.runRole` returns `undefined` for an
+expired grant, so `requireRead` throws the shipped **`RUN_NOT_FOUND`** (`Unknown run:
+<id>`) — byte-identical to the refusal a stranger receives, which is the uniform
+non-disclosure this RFC applies everywhere else. **No new refusal code is introduced for
+expiry**, and none is needed: an expired teacher is a stranger, and telling them their
+access lapsed rather than that the run is unknown would itself disclose that the run
+exists. The non-`runRole` sites fail closed to the same effect — the row is filtered out
+of the join, so the run or session simply is not in the list.
 
 This is the riskiest change in the RFC, because a single missed read site is a silent
 access leak. Every reader of `run_grants` is therefore enumerated, and the enumeration is
@@ -545,12 +666,15 @@ student boards on one page"*. It is also the one site where the run-level chokep
 not save an implementer who forgets: `runRole` is not on this path at all.
 
 **The enumeration is of *readers*; the *writers* of `expires_at` must be decided too**, and
-five of them exist. Each `run_grants` insert or upsert must state what it does with the
-column, because the default — leaving it alone — is wrong in at least two of them:
+**six** of them exist — five plus a family of run-creation inserts the first draft of this
+table omitted (cross-review 2026-08-16; the RFC's own rule is that *every* insert or
+upsert states what it does with the column, and four inserts were relying on an unstated
+default). The default — leaving it alone — is wrong in at least two of them:
 
 | Write site | Required behaviour |
 |---|---|
 | the submission mint (§3.4) | sets `expires_at` from `expiresInDays` |
+| **the four run-creation host inserts** — `RunStorage.create`, `createDerivedRun`, the live-run create path, and `createRepertoireGapRun`, each `INSERT INTO run_grants (…) VALUES (…,'host',…)` | **writes NULL, and the column is deliberately left unnamed in the statement so SQLite's NULL default supplies it.** A run's own host never expires. Listed rather than assumed, because "the default is already right" is exactly the reasoning that made two of the rows below wrong |
 | `#mutateGrant`'s upsert (`ON CONFLICT … DO UPDATE SET role, granted_at`) | **must also clear `expires_at`**. A host re-granting a teacher by hand is an unbounded act; inheriting a stale classroom expiry would silently expire a grant the learner deliberately made |
 | `redeemSessionJoinToken`'s `spectator` → `participant` promotion | **must preserve `expires_at`**, never clear it. Clearing it would convert an expiring classroom grant into a permanent participant grant through a path the learner did not intend — the leak this section exists to prevent, arriving through the promotion rather than the mint |
 | `createLiveSession`'s match-player upgrade | same rule as the promotion above |
@@ -602,7 +726,7 @@ consumer rather than letting a missed site inherit a silent `false`. The consume
 |---|---|
 | `GET …/human-split` (`rest.ts`) | the run's `match_states` row versus `principal.learnerId` |
 | `GET …/corpus` (`rest.ts`) | same |
-| **`requireGuidanceDisclosure` (`rest.ts`), which gates `POST …/voice` and `POST …/speech`** | same. **Added by cross-review 2026-08-15** — the first draft of this table missed it. This is the site `live-marker-quality` landed as the D68 fix (`design/BACKLOG.md` D68, closed 2026-08-15), so it did not exist when the source dossier was written and it is exactly the site this RFC claims to land behind. It must resolve the real seating, not a hardcoded `false`: a `false` here would leave `/voice` and `/speech` narrating the human-split content that `/human-split` refuses on the same run — reinstating D68 for the seated host |
+| **`requireGuidanceDisclosure` (`rest.ts`), which gates `POST …/voice` (both the `compare` and the node arms), `POST …/speech` **and `POST …/reasoning-review`** | same. **Added by cross-review 2026-08-15; the route list corrected upward by cross-review 2026-08-16 — it is called from four places, not three, and `/reasoning-review` is the one nobody had counted.** This is the site `live-marker-quality` landed as the D68 fix (`design/BACKLOG.md` D68, closed 2026-08-15), so it did not exist when the source dossier was written and it is exactly the site this RFC claims to land behind. It must resolve the real seating, not a hardcoded `false`: a `false` here would leave `/voice` and `/speech` narrating the human-split content that `/human-split` refuses on the same run — reinstating D68 for the seated host. **Because the seating check lives inside `requireGuidanceDisclosure` rather than at each call site, `/reasoning-review` is covered for free** — but it is named so the implementer knows a fourth route's behaviour changes, and so a future refactor that inlines the check cannot drop it silently |
 | the machine-seeded group path (`RunService`, the `permittedAssistance` call guarding `GROUP_SEEDS`) | same |
 | `assistanceContext` (`apps/web/src/lib/DrillScreen.svelte`) | the session detail's `match` state versus the signed-in learner — the client already computes this for `learnerOwnsActiveMatchTurn` in `App.svelte` |
 | `liveMarkers` (`packages/runtime/src/pivotal.ts`, which calls `permittedAssistance` itself) | passed through its context |
@@ -653,7 +777,7 @@ receiving Stockfish from `RunService.evidence`, which has no role check at all �
 change to the same table in the *widening* direction, and the table is in flight. It is
 Open question 1, with a proposal, not a unilateral edit.
 
-## 6. `session.kind` (D81) — considered and refused
+## 6. A fourth `session.kind` — considered and refused
 
 The brief's suggestion that making `session.kind` behavioural might be the cheapest
 correct foundation was tested against this design and rejected, for a reason worth
@@ -670,27 +794,52 @@ recording:
   route-validated enum with two behavioural branches to gain a label that
   `classroom_id` expresses better, as a relation.
 
-**The refusal stress-tested (cross-review 2026-08-15): does refusing `kind` cost more than
-it saves when per-context assistance policy eventually needs a field?** It does not, and
-the reason is a symbol-level fact the original three bullets gestured at but did not
-close. D82's gap is between `design/05`'s five contexts and **`RunSessionKind = pack |
-position | imported`** (`packages/runtime/src/types.ts`) — the type that keys
-`assistanceKey(kind)`'s three `localStorage` entries and `AssistanceContext.sessionKind`.
-`SESSION_KINDS = stream | academy | match` lives in a different package
-(`apps/server/src/live-types.ts`), on a different aggregate, and is **not** what any
-preference or permission is keyed on. So a fourth `SESSION_KINDS` member would not have
-paid for D82 even in the future where D82 is paid for: the widening D82 needs is on
-`RunSessionKind`, and it is available whether or not `session.kind` is behavioural. The
-refusal forgoes nothing it could have bought. What it costs is one join — a policy that
-wants to know *"is this a classroom context?"* reads `live_sessions.classroom_id` rather
-than a label — and a relation that can answer *which* classroom is strictly more than a
-label that cannot.
+**The stress test, rebuilt from scratch by cross-review 2026-08-16, because the version
+it replaces was reasoning from a tree that no longer exists.** The 2026-08-15 argument
+ran: *D82's gap is against `RunSessionKind = pack | position | imported`, which keys
+`assistanceKey`'s three `localStorage` entries; `SESSION_KINDS` is a different type on a
+different aggregate and keys no preference, so a fourth member would not have paid for
+D82 anyway.* **Every load-bearing clause of that is now false**, and the refusal has to
+survive without it:
 
-**D81 therefore stays open and unclaimed by this RFC.** Making `kind` behavioural is a
-live-session concern; D82 is an `AssistanceContext` concern; the two are separable and the
-original framing that made `kind` "most plausibly the vehicle" for D82 is withdrawn. Both
-belong to whoever next owns the assistance-context surface. Naming them here without
-claiming them is the point.
+- **D81 and D82 are both CLOSED**, by `live-surface-honesty`, implemented 2026-08-15 —
+  the same day this draft was written, which is how it missed them.
+- **`assistanceKey` no longer takes `RunSessionKind`.** It takes
+  `AssistanceProfile`, and `ASSISTANCE_PROFILES` has **six** exhaustive members —
+  `pack`, `position`, `imported`, `match`, `stream`, `onramp`
+  (`apps/web/src/lib/assistance-preference.ts`). There are six preference slots, not
+  three.
+- **`session.kind` *is* behavioural in the preference layer.** `assistanceProfile({
+  sessionKind, feedbackPolicy, liveKind })` reads `liveKind` — a `SessionKind` — and
+  returns `stream` or `match` from it. So the premise that a `SESSION_KINDS` member keys
+  no preference is exactly inverted: **a fourth member would flow straight into
+  `assistanceProfile` and produce a seventh profile.** The refusal below is therefore
+  giving something up, and has to be worth it.
+
+**It is, and the surviving reason is the first bullet of the three above, not the symbol
+argument.** A classroom is not a session — it is standing and asynchronous, while
+`LIVE_SESSION_KINDS` labels an aggregate that ends — and a *classroom pack night is an
+ordinary `academy` session that a classroom happens to own* (§3.5). A `classroom` kind
+would therefore not name a new kind of live session; it would name the same live session
+with a relation attached, and the relation is what `live_sessions.classroom_id` already
+carries. The seventh preference profile it would buy is a profile for *"an academy
+session whose host wrote a roster"* — a distinction no learner experiences and no
+permission reads, since §5's fix reads `match_states` seating, which is a persisted fact
+carrying no dependence on the label. Widening a closed, SQL-constrained, route-validated
+enum to gain that is the category error `broadcast-and-teacher-surfaces.md` §4.4 warns
+about, where three distinct objects hide under one word.
+
+What the refusal costs is one join — a policy that wants to know *"is this a classroom
+context?"* reads `live_sessions.classroom_id` rather than a label — and a relation that
+can answer *which* classroom is strictly more than a label that cannot.
+
+**The live row in this territory is now D307, and this RFC does not touch it.**
+`permittedAssistance` takes `sessionKind` and never reads it, and `loadAssistance`
+returns `SILENT_ASSISTANCE` for every unset profile — so the six profiles ship the
+*permission* half of per-context assistance and not the *defaults* half. That is an
+owner-tier design gap on the assistance-context surface, it is unaffected in both
+directions by anything here, and it belongs to whoever next owns that surface. Naming it
+without claiming it is the point.
 
 ## 7. Routes and client surface
 
@@ -750,9 +899,17 @@ section must not imply one.
    §4.4: session versus standing relationship) and reusing "academy" would hide that. The
    word "teacher" still appears in no design document; this RFC's title uses it because
    the owner's ruling does.
-3. **`design/05:147` promises five per-context assistance defaults.** This RFC neither
-   widens nor narrows that gap (D82); §5 changes one conjunct in the permission rule and
-   leaves the preference keys alone. Recorded so the gap is not silently attributed here.
+3. **`design/05-in-run-experience.md` §3-forms, *"The config owns the matrix"*, promises
+   that *"a curated drill, Just Play, a match, a stream, and the on-ramp each get their
+   own defaults"*.** **Re-pointed by cross-review 2026-08-16** — the first draft cited
+   this as `design/05:147` against **D82**, and both halves have moved: the line number
+   now lands inside the honesty blockquote rather than on the promise, and **D82 is
+   closed** (six exhaustive `ASSISTANCE_PROFILES` ship). The residual is **D307**: the
+   profiles select *permission* but every unset profile still resolves to
+   `SILENT_ASSISTANCE`, so the *defaults* half of the promise is unshipped. This RFC
+   neither widens nor narrows D307 — §5 changes one conjunct in the permission rule and
+   leaves the preference keys and their defaults alone. Recorded so the gap is not
+   silently attributed here.
 
 Otherwise: none.
 
@@ -771,8 +928,16 @@ Otherwise: none.
    `classroom_members` read** other than through the submission path: the classroom
    service exposes exactly one grant-minting function and it is called only from
    `submitAssignment`.
-3. Every `/progress*` route continues to take only `authenticate()`; a test asserts no
-   route or service method in this RFC accepts a subject learner id.
+3. Every one of the **seven** `/progress*` routes continues to take only
+   `authenticate()` — `/progress/recommendations` explicitly among them; a test asserts
+   no route or service method in this RFC accepts a subject learner id.
+3a. **Law 8 at the note (§3.3).** A test asserts an assignment `note` round-trips as the
+    literal bytes submitted, is absent from the run's event log and from every
+    `evidencePacket` / `renderVoice` input on a run submitted to that assignment, and is
+    rendered only with its author's handle. A source guard asserts no code path composes
+    a note from an evidence value, engine reading, corpus figure or provider output. A
+    second guard asserts this RFC introduces no `PivotalKind` member and no live-surface
+    firing, so `rfc/live-marker-quality.md`'s L5 admission burden is untouched.
 
 **Submission and review:**
 
@@ -810,11 +975,14 @@ Otherwise: none.
 **D80:**
 
 10. In a native match with the host seated White and a friend-linked guest Black, at a
-    mutually-accepted pause, `GET …/human-split`, `GET …/corpus`, `POST …/voice` and
-    `POST …/speech` all return `ASSISTANCE_WITHHELD` for **both** players, and
-    `permittedAssistance` returns `boardLighting: "sight"` and `arrows: "sight"` for both.
-    A non-seated host in the same session, with the same run state, is still permitted on
-    all four routes and still gets `evidence` lighting.
+    mutually-accepted pause, `GET …/human-split`, `GET …/corpus`, `POST …/voice`,
+    `POST …/speech` **and `POST …/reasoning-review`** all return `ASSISTANCE_WITHHELD`
+    for **both** players, and `permittedAssistance` returns `boardLighting: "sight"` and
+    `arrows: "sight"` for both. A non-seated host in the same session, with the same run
+    state, is still permitted on all **five** routes and still gets `evidence` lighting.
+    (`/reasoning-review` added by cross-review 2026-08-16: it is the fourth caller of
+    `requireGuidanceDisclosure` and inherits the narrowing whether or not anyone tests
+    it — so it is tested.)
 11. `permittedAssistance` returns identical tables for participant and spectator contexts
     before and after this change — the regression guard that
     `rfc/live-marker-quality.md`'s refusal assertions are untouched. Separately, a test
@@ -824,13 +992,18 @@ Otherwise: none.
 
 **Migration:**
 
-12. Migration 21 applies to a database at version 20 and to a fresh one; all existing
-    `run_grants` rows read back with `expires_at` null and unchanged behaviour; no run
-    snapshot is rewritten and `DRILL_RUN_SCHEMA_VERSION` stays `0.15`. It runs inside the
+12. **The migration is written as `STORAGE_VERSION + 1` at the moment it lands, never as
+    a literal chosen while drafting** (restated by cross-review 2026-08-16 under the
+    register's *assigned at landing* rule; the first draft pinned `21`, then `22`, and
+    both were stale within a day). It applies to a database at the immediately preceding
+    version and to a fresh one; all existing `run_grants` rows read back with
+    `expires_at` null and unchanged behaviour; **no run snapshot is rewritten and this
+    RFC moves no run-schema version** — a test asserts `DRILL_RUN_SCHEMA_VERSION` is
+    byte-identical before and after, whatever it reads at the time. It runs inside the
     migration loop's ordinary `BEGIN IMMEDIATE` arm with **neither** `PRAGMA foreign_keys
-    = OFF` nor `legacy_alter_table = ON` — that arm is `migration.version === 14` only, and
-    21 must not extend it. Both `ADD COLUMN`s carry a NULL default, which is what SQLite
-    requires of an added `REFERENCES` column while foreign keys are on.
+    = OFF` nor `legacy_alter_table = ON` — that arm is `migration.version === 14` only,
+    and this migration must not extend it. Both `ADD COLUMN`s carry a NULL default, which
+    is what SQLite requires of an added `REFERENCES` column while foreign keys are on.
 
 **Docs:** `docs/` gains a classrooms page stating the enrolment-is-not-observation rule
 and the revocation table, and `docs/live-sessions.md`'s §Accepted limitation gains the
@@ -840,14 +1013,16 @@ seat-symmetry sentence from §5.
 
 | Register | Claim |
 |---|---|
-| **Migration** | **21** (`STORAGE_VERSION` 20 → 21), owner: this RFC. Verified free by cross-review: `STORAGE_VERSION` is `20` and migration 20 (`archive/engine-request-contract.md`) is `implemented`. Creates `classrooms`, `classroom_members`, `assignments`, `assignment_submissions`; adds nullable `run_grants.expires_at`; adds nullable `live_sessions.classroom_id` with `ON DELETE SET NULL`. Create-table/index plus two `ADD COLUMN`s — **no table rebuild, no backfill, no snapshot rewrite**, verified against the two closest precedents: migration 15 (`repertoire-gap-finding`, create-table/index only) rather than migration 14 (`social-match`, the only rebuild). The one shipped read that filters on a version is `RunStorage.list`'s `WHERE r.schema_version = ?` against `DRILL_RUN_SCHEMA_VERSION`, which is why migration 11 needed a stamp; 21 moves no run schema, so existing rows stay `0.15` and stay listed, and **no stamp is required** |
-| **Run schema** | **none.** Stays `0.15` (`packages/schema/src/index.ts`). A classroom is not run state and no new run event is emitted |
-| **Pack schema** | **none.** Stays `0.22` (`archive/transition-primitives.md`, implemented; **0.19 is frozen shut**, not free — so no draft may reach for it). An assignment references a registered `packId`; no pack document changes, so no digest moves and there is no rebase pressure against the pack lane |
+| **Migration** | **A POSITION IN THE LANDING ORDER, NOT AN INTEGER — rewritten by cross-review 2026-08-16.** This RFC takes `STORAGE_VERSION + 1` **at the moment it lands**, per the register's *assigned at landing* rule and in the form `board-annotation` already ratified. It does not claim a number, and the integer printed in `rfc/README.md`'s row is a record of order, not a reservation. **The prior claims are withdrawn as history, not corrected in place:** the first draft claimed `21` (`STORAGE_VERSION` 20 → 21); it was reassigned to `22` on 2026-08-16; **both are dead — `STORAGE_VERSION` is `21` at HEAD**, migration 21 is `engine-leverage`'s and has landed, and any literal written here goes stale faster than the draft can be reviewed. What this RFC **does not move** is the durable claim: no run-schema version, no pack-schema version, no `public_tokens` scope, no `RunRole`, no `LIVE_SESSION_KINDS` member. What it adds: creates `classrooms`, `classroom_members`, `assignments`, `assignment_submissions`; adds nullable `run_grants.expires_at`; adds nullable `live_sessions.classroom_id` with `ON DELETE SET NULL`. Create-table/index plus two `ADD COLUMN`s — **no table rebuild, no backfill, no snapshot rewrite**, verified against the two closest precedents: migration 15 (`repertoire-gap-finding`, create-table/index only) rather than migration 14 (`social-match`, the only rebuild). The one shipped read that filters on a version is `RunStorage.list`'s `WHERE r.schema_version = ?` against `DRILL_RUN_SCHEMA_VERSION`, which is why migration 11 needed a stamp; this one moves no run schema, so existing rows stay at whatever they are stamped and stay listed, and **no stamp is required** |
+| **Landing position** | **Behind `board-annotation`, not ahead of it — proposed by cross-review 2026-08-16 and for `rfc/README.md`'s writer to apply.** The register currently has `board-annotation` claiming a position *behind* this draft. That order inverted while nobody was looking: `board-annotation` is **accepted** with all four breaks ratified, while this RFC is a **draft** with an owner-gated open question (Open question 1) that must be ruled before `accepted`. A draft that cannot land ahead of an accepted RFC renegotiates — that is the register's own rule and it points the other way now. Since both claims are backfill-free create-table work, the swap costs neither of them anything but text |
+| **Run schema** | **none.** This RFC moves no run-schema version. (`DRILL_RUN_SCHEMA_VERSION` reads **`0.16`** at HEAD — `engine-leverage` moved it from `0.15` on 2026-08-16; the first draft's *"stays 0.15"* was true when written and false a day later, which is why the claim is now stated as *moves nothing* rather than as a number.) A classroom is not run state and no new run event is emitted |
+| **Pack schema** | **none.** This RFC moves no pack-schema version. (`DRILL_PACK_SCHEMA_VERSION` reads **`0.24`** at HEAD, with `0.25`–`0.27` claimed by `format-surface`, `claim-backing` and `pack-graduation` and **`0.28` the next free lane**; **`0.19` is frozen shut**, not free. The first draft's *"stays 0.22"* was two waves stale.) An assignment references a registered `packId`; no pack document changes, so no digest moves and there is no rebase pressure against the pack lane |
 | **Token surface** | **none.** `public_tokens` keeps its two shipped scopes; enrolment is handle-bound, per the `adoption-wave-1` ownership pin |
 | **Refusal codes** | **none** — added by cross-review 2026-08-15, because the first draft made no claim here and §7.1 named a *"uniform not-found"* with no code behind it. There is no `NOT_FOUND` member of `ServerErrorCode` (`errors.ts`); the literal in `rest.ts` is the unrouted-path response, and `RUN_NOT_FOUND` is run-specific. **Ruling: every classroom and assignment non-disclosure refuses `INVALID_REQUEST`**, identical in body for "does not exist", "you are not a member" and "you have left". Reusing `RUN_NOT_FOUND` for a classroom would lie about the subject; minting `CLASSROOM_NOT_FOUND` would both add a versioned member and *be* the disclosure it is meant to prevent, since only a member could ever see it |
-| **Cross-draft ownership** | `rfc/live-marker-quality.md` owns the `permittedAssistance` table **and its four enforcement sites** — `/human-split`, `/corpus`, and (as of the D68 fix) `requireGuidanceDisclosure`'s `/voice` and `/speech`. This RFC changes one conjunct in the **narrowing** direction only, touches all four sites because the new field is required, and lands **behind** it |
-| **Ledger rows this RFC ships** (owner tier; reported, not edited) | **D80** — closed by §5. **Events layer: pack nights, cohorts, team relays** (row title verbatim) — its cohort and pack-night halves ship here; the row should be **split, not closed**, so team relays and native matchmaking survive it with their own row. **D81** and **D82** — explicitly **not** claimed (§6). **D62** — depended on, owned by `client-surface-floor` |
-| **`rfc/README.md`** | **not edited by this draft**, per the drafting instruction — but its **Active table row already exists** (added when this draft was registered), so only two things are missing and cross-review names them precisely: a **migration-register row for 21** (the register currently ends at 20, `archive/engine-request-contract.md`), and a **cross-draft ownership pin** for the `permittedAssistance` table and its four enforcement sites. Whoever accepts this RFC adds those two, in the accepting commit |
+| **Refusal codes, second pass** | **still none**, re-swept 2026-08-16 across `apps/`, `packages/`, `schemas/` and the other nine active RFCs. The four codes this RFC emits — `INVALID_REQUEST`, `RUN_NOT_FOUND`, `FORBIDDEN`, `ASSISTANCE_WITHHELD` — are all shipped members of `ServerErrorCode`. No other active draft mints a classroom-, assignment-, enrolment- or grant-shaped code (`claim-backing`'s `CLAIM_*`, `pack-graduation`'s `GRADUATION_*`, `vocabulary-wiring`'s `PLAN_SIGNATURE_*`, `format-surface`'s `LEG_*` and `engine-leverage`'s `DEVIATION_COST_*` families are disjoint from this surface), so the sweep is clean in both directions |
+| **Cross-draft ownership** | `rfc/live-marker-quality.md` owns the `permittedAssistance` table **and its enforcement sites** — `/human-split`, `/corpus`, and (as of the D68 fix) `requireGuidanceDisclosure`, which gates `/voice`, `/speech` **and `/reasoning-review`**: **five routes across three sites, corrected upward from "four" by cross-review 2026-08-16.** This RFC changes one conjunct in the **narrowing** direction only, touches all three sites because the new field is required, and lands **behind** it |
+| **Ledger rows this RFC ships** (owner tier; reported, not edited) | **D80** — closed by §5, and its row already reads *"owned by `rfc/teacher-surface.md`"*, so no title changes. **Events layer: pack nights, cohorts, team relays** (row title verbatim) — its cohort and pack-night halves ship here; the row should be **split, not closed**, so team relays and native matchmaking survive it with their own row. **Rows this RFC previously claimed and now does not, all corrected 2026-08-16:** **D81** and **D82** are ✅ **closed** by `live-surface-honesty`, not open-and-unclaimed (§6); **D62** is ✅ **closed** by `client-surface-floor`, so it is no longer a dependency (§2.4); **D94** is ✅ **closed** by the permission-and-correctness batch, which retires this RFC's Open question 8 (§4.1). **D307** is named but explicitly not claimed (§6, §8.3) |
+| **`rfc/README.md`** | **not edited by this draft**, per the drafting instruction. Its **Active table row exists** but is stale in three ways, all for the accepting commit to fix: (1) the row prints *"claims **migration 22** (`STORAGE_VERSION` 21→22)"* — under the *assigned at landing* rule it should record a **position**, in `board-annotation`'s ratified form, and state what this RFC does not move; (2) the row's *"no run-schema change (0.15), no pack-schema change (0.22)"* cites two stale constants — the durable claim is *moves neither*, and the live values are `0.16` and `0.24`; (3) the **migration-register row for this RFC should sit behind `board-annotation`**, not ahead of it (see the landing-position row above). Two additions are still owed: the register row in whatever position is agreed, and a **cross-draft ownership pin** for the `permittedAssistance` table and its three enforcement sites |
 
 ## Open questions
 
@@ -881,6 +1056,22 @@ seat-symmetry sentence from §5.
    authored feedback, the run's own evidence rail and Stockfish, and what they most lack is
    the learner's sentence (Open question 4), not a second engine — but this is a product
    call and it is the owner's.
+
+   **The block, disentangled — cross-review 2026-08-16**, because the changelog and this
+   question had been read together as one condition and they are two:
+
+   - **The real, live block is an owner ruling on the paragraph above.** It is a product
+     call, nobody has made it, and it is what keeps this RFC at `draft`. It does not
+     expire with time or with anyone else's implementation.
+   - **The `live-marker-quality` block is conditional on that ruling coming back *no*,
+     and on the *yes* branch it is not a block at all** — merely the ordinary landing
+     order this RFC already declares in §5. `live-marker-quality` is `implementing` as of
+     2026-08-16, so even on the *no* branch the dependency is in flight rather than
+     unstarted.
+
+   Stating it this way matters for one practical reason: a draft recorded as *"blocked
+   until another RFC is implemented"* looks like it is waiting on someone else, and this
+   one is waiting on a single question the owner can answer in a sentence.
 2. **Teacher-initiated observation requests.** This RFC ships only learner-initiated
    sharing, because a request from a teacher is a pressure surface: a student who can
    technically decline may not feel able to. Should a request primitive exist at all, and
@@ -903,15 +1094,17 @@ seat-symmetry sentence from §5.
 7. **Is 90 days the right cap?** It was chosen to match `mintLink`'s shipped bound rather
    than from any evidence about how long a coach needs a submitted game. (`mintLink`'s
    bounds are verified as claimed: default 14 days, range 1–90, one use, 50 active links.)
-8. **Should `RunService.flip` be host-only on another learner's run?** Raised by
-   cross-review 2026-08-15 (§4.1). `share` and `distill` both check `mayManageGrants` and
-   refuse a granted teacher; `flip` checks only `requireRead`, so a teacher can fork a
-   position out of a student's run into a run of their own that survives revocation, with
-   a `run_derivations` row still naming the source. The residue is small — a FEN, not the
-   learner's log — and narrowing `flip` would change a shipped route this RFC otherwise
-   does not touch, which is why it is a question and not a specification. It is named
-   because §4.1 would otherwise imply that revocation restores the pre-submission state,
-   and it does not.
+8. ~~**Should `RunService.flip` be host-only on another learner's run?**~~ **ANSWERED AND
+   RETIRED, cross-review 2026-08-16 — the tree closed it under the draft.** Raised
+   2026-08-15 on the finding that `flip` was `requireRead`-only. **D94 closed on
+   2026-08-16**: `flip` now calls `mayWrite(access.role)` and refuses `FORBIDDEN` before
+   creating any derived run, so a `spectator` — which is all a submission mints — cannot
+   fork a position out of a student's run at all. Not host-only, but write-capable-only,
+   which is the narrower answer this question was reaching for and it costs this RFC
+   nothing. §4.1 is corrected accordingly, including the part this question existed to
+   protect: revocation still does not restore the pre-submission state, because a teacher
+   separately granted `participant` by the learner does pass `mayWrite`. Nothing remains
+   for the owner to rule.
 
 ## Changelog
 
@@ -937,6 +1130,73 @@ seat-symmetry sentence from §5.
   renderer; (8) a refusal-code register row, and a corrected `rfc/README.md` row; (9) Open
   question 1 re-posed — the `reviewing` widening **cannot be taken here** — and Open
   question 8 added for `flip`'s `requireRead`-only residue. Verified sound and unchanged:
-  migration **22** free and backfill-free (**reassigned 2026-08-16 from 21**: `STORAGE_VERSION` is 20 at HEAD, this RFC is owner-blocked until `live-marker-quality` is `implemented`, and the register's rule is that the draft which cannot land renegotiates — so accepted `engine-leverage` took 21), run `0.15`, pack `0.22` with `0.19` frozen shut,
-  `mintLink`'s bounds, the two `public_tokens` scopes, `RUN_ROLES`, all six `/progress*`
-  routes, the ledger row titles, and template compliance.
+  the migration free and backfill-free, `mintLink`'s bounds, the two `public_tokens`
+  scopes, `RUN_ROLES`, the `/progress*` routes, the ledger row titles, and template
+  compliance.
+- 2026-08-16: **second adversarial cross-review**, by a different agent that did not write
+  the draft or the first review, against the tree at `STORAGE_VERSION` 21. **The consent
+  model survives a second attack unchanged** — enrolment still derives no grant, the
+  submission path is still the only minter, and the tree has since closed *more* of the
+  residue than the draft claimed. **The finding that organises the rest: this draft was
+  written on 2026-08-15 and four ledger rows it reasons from closed on 2026-08-15 or
+  2026-08-16, three of them in its favour.** Eleven changes landed:
+
+  1. **The migration claim is withdrawn as an integer and restated as a position.** The
+     first draft claimed 21, was reassigned to 22 on the premise *"`STORAGE_VERSION` is 20
+     at HEAD"*, and that premise was already false: **`STORAGE_VERSION` is 21**,
+     `engine-leverage`'s migration has landed, and `migration 21` is `engine-leverage`'s,
+     not `22`. Under the register's *assigned at landing* rule a held-but-unlandable
+     integer is a hazard rather than a reservation, so §10 now claims `STORAGE_VERSION + 1`
+     at landing and states what this RFC **does not move** (§10, criterion 12).
+  2. **The landing position is proposed to swap with `board-annotation`** — that RFC is
+     accepted; this one is a draft with an owner-gated question, and the register's own
+     rule sends the draft behind (§10).
+  3. **Two more stale constants:** run schema reads **`0.16`**, not `0.15`; pack schema
+     reads **`0.24`**, not `0.22`, with `0.28` the next free lane. Both rows now claim
+     *moves nothing* rather than a number (§10).
+  4. **§6 rebuilt from scratch: D81 and D82 are CLOSED** by `live-surface-honesty`, and
+     every load-bearing clause of the old symbol argument is now false —
+     `assistanceKey` takes `AssistanceProfile` (**six** members, not three), and
+     `assistanceProfile` reads `liveKind`, so a fourth `LIVE_SESSION_KINDS` member **would**
+     reach the preference layer. The refusal survives on the category-error ground alone,
+     which is now the only ground stated. **D307** replaces D82 as the live row (§6, §8.3).
+  5. **`client-surface-floor` is archived and D62 is closed**, so §2.4's phone dependency
+     has cleared — and it inverts into a requirement, because the compact floor now has
+     no Session region to host a watcher list (§2.4, `Depends on:`).
+  6. **D94 is closed and `RunService.flip` now checks `mayWrite`**, so a submission-minted
+     `spectator` cannot fork a student's position at all. §4.1's *"the third is open"*
+     paragraph was false; **Open question 8 is retired**, answered by the tree.
+  7. **A fifth route behind `requireGuidanceDisclosure`: `POST …/reasoning-review`.** The
+     seating field reaches it for free, which is exactly why it is now named and tested
+     rather than left to be discovered (§5.1, §9.10, §10).
+  8. **A seventh `/progress*` route: `/progress/recommendations`** — and it is the one a
+     teacher surface is most tempted to widen, since it is literally a per-learner
+     weakness feed. Named and refused (§Out of scope).
+  9. **A sixth `expires_at` write site**, the four run-creation host inserts, which the
+     first table left to an unstated default — the same reasoning that had made two of its
+     five rows wrong (§4.3).
+  10. **The expiry refusal is named:** `RUN_NOT_FOUND` via `runRole` → `requireRead`, with
+      the reasoning for why a distinct "your access lapsed" code would itself be a
+      disclosure. An expiry column with no named refusal is a declaration, not a rule (§4.3).
+  11. **Two additions of substance rather than correction**, both in territory a document
+      with "teacher" in its title cannot leave implicit: a **§Motivation subsection testing
+      this RFC against *"the v1 identity"* and *"an engine review screen with a rewind
+      button"* by name**, including the honest residual that a classroom view is the shape
+      a dashboard grows from; and **§3.3's note grounded in `design/05` §3-forms'
+      attribution ruling** — never in the run, never inside a run, never composed from an
+      evidence value, and pre-commitment by design rather than by oversight, with
+      criterion 3a to pin it. Also recorded: this RFC admits **no live-surface kind**, so
+      `live-marker-quality`'s L5 burden is not engaged.
+
+  **The owner block is disentangled and it is smaller than it read:** the live block is a
+  single product call (Open question 1's re-posed question), not a wait on
+  `live-marker-quality` — which is `implementing`, and which only blocks this RFC on the
+  branch where the owner answers *no*. Verified sound and unchanged in this pass: the
+  consent separation and its normative rule, all nine `run_grants` read sites, the five
+  §4.1 revocation triggers and §4.1a's account-deletion correction, `RunService.evidence`
+  being `requireRead` + `feedbackDeliveryOpen` with no role check, `share` and
+  `distillationAccess` being host-only, §5's narrowing direction and its `boardLighting` /
+  `arrows` consequence, `mintLink`'s bounds (14 default, 1–90, one use, 50 links), the two
+  `public_tokens` scopes and their CHECK, `RUN_ROLES`, `LIVE_SESSION_KINDS`, the refusal-code
+  register (no new code, and no collision with the other nine active RFCs), the
+  `design/05:41` citation, the ledger row titles, and template compliance.

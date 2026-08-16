@@ -1,6 +1,6 @@
 # RFC: Pack graduation
 
-- **Status:** **accepted 2026-08-16** — returned once by cross-review, all four returns
+- **Status:** **implementing 2026-08-16** — returned once by cross-review, all four returns
   ratified in the author round with three amendments. Two owner-facing open questions remain
   and neither blocks implementation. — **author return round complete 2026-08-16, ready to accept.** The
   cross-review returned the draft for four things it did not count; all four are ratified, three
@@ -37,7 +37,7 @@
   and `rfc/archive/content-sourcing-foundation.md` (which shipped the empty-`content/packs/`
   registry split)
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/pack-graduation/` (once implementing)
+- **Planning:** `planning/pack-graduation/`
 
 ## Summary
 
