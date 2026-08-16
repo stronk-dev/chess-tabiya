@@ -175,7 +175,7 @@ describe("learner identity and run authorization", () => {
   });
 
   it("rejects missing sessions, spectator writes, and non-JSON grant mutations", async () => {
-    const { handler } = setup();
+    const { storage, handler } = setup();
     expect((await call(handler, "GET", "/runs")).status).toBe(401);
     const alice = await register(handler, "alice");
     const bob = await register(handler, "bob");
@@ -198,6 +198,11 @@ describe("learner identity and run authorization", () => {
       cookie: bob.cookie,
       writerId: "writer-bob",
       body: {},
+    })).status).toBe(403);
+    const rootNodeId = storage.read("spectated-run")!.run.nodes[0]!.id;
+    expect((await call(handler, "POST", "/runs/spectated-run/flip", {
+      cookie: bob.cookie,
+      body: { nodeId: rootNodeId },
     })).status).toBe(403);
     const plain = await handler(new Request("http://tabiya.test/runs/spectated-run/grants", {
       method: "POST",

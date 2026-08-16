@@ -183,7 +183,7 @@ function historyHash(request: SelectMoveRequest): string {
 }
 
 export function selectionCacheKey(request: SelectMoveRequest): string {
-  return [request.policy.policyConfigDigest, request.packId ?? "", request.seed, historyHash(request)].join(
+  return [request.policy.policyConfigDigest, request.policy.targetElo ?? "", request.packId ?? "", request.seed, historyHash(request)].join(
     "\0",
   );
 }

@@ -28,7 +28,7 @@ describe("assistance preference", () => {
   it("upgrades version three idempotently and maps browser speech", () => {
     const value = { version: 3, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "authored", spoken: "on" };
     const storage = { getItem: () => JSON.stringify(value), setItem() {} };
-    expect(loadAssistance("imported", storage)).toEqual({ ...SILENT_ASSISTANCE, spoken: "browser" });
+    expect(loadAssistance("imported", storage)).toEqual({ ...SILENT_ASSISTANCE, spoken: "browser", boardLighting: "legal" });
     const current = { getItem: () => JSON.stringify({ ...SILENT_ASSISTANCE, ambient: "on" }), setItem() {} };
     expect(loadAssistance("imported", current)).toEqual({ ...SILENT_ASSISTANCE, ambient: "on" });
   });
@@ -55,14 +55,14 @@ describe("assistance preference", () => {
     expect(values.get(assistanceKey("position"))).toBe(JSON.stringify(position));
   });
 
-  it("keeps the silent-profile exception confined to board lighting", () => {
+  it("keeps every fresh assistance profile fully silent", () => {
     const maximum = { version: 4, markers: "live", guided: "live", humanSplit: "on_request", corpus: "on_request", voice: "persona", spoken: "provider", boardLighting: "evidence", arrows: "evidence", ambient: "on" } as const;
     for (const profile of ["match", "stream", "onramp"] as const) {
       expect(loadAssistance(profile, { getItem: () => null, setItem() {} })).toEqual(SILENT_ASSISTANCE);
       const storedOff = { ...maximum, markers: "off" as const, guided: "off" as const, humanSplit: "off" as const, corpus: "off" as const, voice: "authored" as const, spoken: "off" as const, boardLighting: "off" as const, arrows: "off" as const, ambient: "off" as const };
       const resolved = loadAssistance(profile, { getItem: () => null, setItem() {} });
       const changed = Object.keys(resolved).filter((key) => resolved[key as keyof typeof resolved] !== storedOff[key as keyof typeof storedOff]);
-      expect(changed).toEqual(["boardLighting"]);
+      expect(changed).toEqual([]);
     }
   });
 

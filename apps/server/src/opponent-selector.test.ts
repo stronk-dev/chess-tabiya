@@ -15,6 +15,7 @@ import type {
 } from "./engine-supervisor.js";
 import {
   OpponentSelector,
+  selectionCacheKey,
   type SelectMoveRequest,
   type SelectorEngineClient,
   type SelectorSpineNode,
@@ -183,6 +184,16 @@ function practicalTablebase(conceding = true): FixtureTablebaseSource {
 }
 
 describe("pure opponent selector", () => {
+  it("keys cached selections by the requested Elo band", () => {
+    const lower = request("human_common", {
+      policy: { mode: "human_common", policyConfigDigest: digest, targetElo: 1400 },
+    });
+    const upper = request("human_common", {
+      policy: { mode: "human_common", policyConfigDigest: digest, targetElo: 1800 },
+    });
+    expect(selectionCacheKey(lower)).not.toBe(selectionCacheKey(upper));
+  });
+
   it("pins captured Maia fixture identity to the deployed instrument", () => {
     expect(maiaPolicyFixture.provenance.image).toBe(DEFAULT_MAIA_IMAGE);
     expect(maiaPolicyFixture.provenance.modelId).toBe(MAIA3_MODEL_ID);
