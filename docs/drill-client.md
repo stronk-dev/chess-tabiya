@@ -189,7 +189,8 @@ run. Resume projects the complete public event stream from `run.started`.
 
 The writer does not poll its own run events. It tracks one pending evaluation
 per committed move and, once the run's feedback delivery condition is open,
-polls `/evidence` every second until the staged results have been writer-applied
+polls `/evidence` every second until the staged results have been writer-applied;
+overlapping async timer ticks coalesce so one staged page cannot be consumed twice
 and their `evidence.attached` events drain the pending count. A client rejected
 with `NOT_ACTIVE_WRITER` becomes a follower and polls `/events?sinceSeq` every
 two seconds. Rewinds remove server-canceled jobs for pruned nodes from the

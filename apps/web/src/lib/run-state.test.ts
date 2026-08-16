@@ -240,6 +240,22 @@ describe("RunStateStore", () => {
     expect(scheduler.timers.size).toBe(0);
   });
 
+  it("coalesces overlapping evidence timer ticks", async () => {
+    const api = new FakeApi();
+    const scheduler = new FakeScheduler();
+    const store = new RunStateStore(api, session(), api.serverRun, scheduler);
+    store.start();
+    await store.move({ uci: "e2e4" });
+
+    await Promise.all([store.pollEvidence(), store.pollEvidence()]);
+
+    expect(api.evidenceCalls).toBe(1);
+    expect(store.snapshot.pendingEvidence).toBe(0);
+    expect(store.snapshot.run.nodes.at(-1)!.evidenceRefs).toEqual([
+      "engine:evidence-job-1",
+    ]);
+  });
+
   it("does not evidence-poll before the pack reveal condition", async () => {
     const api = new FakeApi();
     const scheduler = new FakeScheduler();

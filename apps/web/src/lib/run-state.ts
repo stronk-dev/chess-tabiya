@@ -101,6 +101,7 @@ export class RunStateStore {
   #evidenceSeq = 0;
   #followerPoll: unknown;
   #evidencePoll: unknown;
+  #evidencePollInFlight = false;
   #started = false;
 
   constructor(
@@ -270,6 +271,7 @@ export class RunStateStore {
   }
 
   async pollEvidence(): Promise<void> {
+    if (this.#evidencePollInFlight) return;
     if (
       this.#snapshot.access !== "writer" ||
       this.#snapshot.pendingEvidence === 0 ||
@@ -278,17 +280,22 @@ export class RunStateStore {
       this.#syncPolling();
       return;
     }
-    const page = await this.#api.evidence(this.#session.runId, this.#evidenceSeq);
-    for (const result of page.results) {
-      const mutation = await this.#api.applyEvidence(
-        this.#session.runId,
-        result.seq,
-        this.#session.writerId,
-      );
-      this.#applyMutation(mutation);
+    this.#evidencePollInFlight = true;
+    try {
+      const page = await this.#api.evidence(this.#session.runId, this.#evidenceSeq);
+      for (const result of page.results) {
+        const mutation = await this.#api.applyEvidence(
+          this.#session.runId,
+          result.seq,
+          this.#session.writerId,
+        );
+        this.#applyMutation(mutation);
+      }
+      this.#evidenceSeq = page.nextSeq;
+    } finally {
+      this.#evidencePollInFlight = false;
+      this.#syncPolling();
     }
-    this.#evidenceSeq = page.nextSeq;
-    this.#syncPolling();
   }
 
   async #mutate(action: () => Promise<MutationResult>): Promise<MutationResult> {
