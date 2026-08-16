@@ -14,6 +14,7 @@ import {
   comparisonNarrative,
   comparisonStrips,
   suggestTitle,
+  trajectoryPolicyAt,
   RUN_OPPONENT_MODES,
   type OpponentSelection,
   type SelectionCandidate,
@@ -570,13 +571,13 @@ export function errorResponse(error: unknown): Response {
                     || error.code === "TOO_MANY_BRANCHES"
                     || error.code === "NO_AUTHORED_VARIATIONS"
                     || error.code === "SIMULATE_TOO_LARGE"
-                    || error.code === "SIMULATE_BUDGET_EXCEEDED"
                     || error.code === "GROUP_SEEDS_UNAVAILABLE"
                     || error.code === "TABLEBASE_OUT_OF_RANGE"
                     || error.code === "PERFECT_TABLEBASE_OUT_OF_RANGE"
                     || error.code === "PRACTICAL_RESISTANCE_OUT_OF_RANGE"
                     || error.code === "PRACTICAL_RESISTANCE_UNAVAILABLE"
                     || error.code === "PRACTICAL_RESISTANCE_UNDECIDABLE"
+                    || error.code === "PRACTICAL_RESISTANCE_UNMEASURED"
                     || error.code === "PRACTICAL_RESISTANCE_POLICY_MASS_INVALID"
                     || error.code === "TARGET_ELO_REQUIRED"
                     || error.code === "TARGET_ELO_OUT_OF_RANGE"
@@ -1093,7 +1094,9 @@ export function createRestHandler(
         if (permission.humanSplit === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Human-model distribution is withheld in this context");
         const available = await capabilities.get();
         if (available.providers.opponent === "none") throw new ServerError("ENGINE_UNAVAILABLE", "Human-model distribution is unavailable", { details: { engineId: "opponent-selector", retryAfterMs: 0 } });
-        const authored = access.run.opponentPolicy;
+        const authored = access.pack === undefined
+          ? access.run.opponentPolicy
+          : trajectoryPolicyAt(access.pack.document, access.run, access.node.id)?.policy ?? access.run.opponentPolicy;
         const selection = await selector.select({
           startFen: access.run.start.fen,
           historyUci: access.historyUci,
@@ -1108,7 +1111,10 @@ export function createRestHandler(
         const access = service.guidanceAccess(route.runId, principal, requiredString(url.searchParams.get("nodeId"), "nodeId"));
         const permission = permittedAssistance({ sessionKind: access.run.sessionKind, deliveryOpen: feedbackDeliveryOpen(access.run), role: access.role });
         if (permission.corpus === "locked_off") throw new ServerError("ASSISTANCE_WITHHELD", "Corpus evidence is withheld in this context");
-        const selectedPopulation = corpusPopulation(access.run.opponentPolicy.mode === "human_common" ? access.run.opponentPolicy.targetElo : undefined);
+        const authored = access.pack === undefined
+          ? access.run.opponentPolicy
+          : trajectoryPolicyAt(access.pack.document, access.run, access.node.id)?.policy ?? access.run.opponentPolicy;
+        const selectedPopulation = corpusPopulation(authored.mode === "human_common" ? authored.targetElo : undefined);
         const path = historyFrom(access.run, access.run.activeCursor.nodeId);
         const index = path.findIndex((node) => node.id === access.node.id);
         const child = index < 0 ? undefined : path[index + 1];

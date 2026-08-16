@@ -24,7 +24,7 @@ appears in the ledger or the log**. This is the first real use, and it failed.
 
 Rows: D347 (the three-way disagreement), D353 (the census delta going the wrong way).
 
-## 0a. Accepted RFCs — four of them, take in lane order
+## 0a. Accepted RFCs — three remain, take in lane order
 
 **These were mis-flagged "do not start" until 2026-08-16 (late). They are accepted and
 implementable now.** Lane order matters only where a pack-schema number does; the two
@@ -32,10 +32,11 @@ that claim nothing versioned can be taken at any point.
 
 | # | RFC | Claims | Note |
 |---|---|---|---|
-| 1 | `rfc/format-surface.md` | pack **0.25** | Accepted; both owner rulings applied throughout the body. `arrows` is `unmeasured`, **not** retired, and the `<select>` STAYS. `formatDispositions` does **not** go on `/capabilities` |
-| 2 | `rfc/claim-backing.md` | pack **0.26** | Round 2 complete, ready to accept; two owner-gated questions that do **not** block. Re-claimed 0.26, reversing its own earlier release |
-| 3 | `rfc/pack-graduation.md` | pack **0.27** | Accepted. Graduation is a **move**, not a copy; `graduationBlockers` entries become `blocking`/`resolved`/`accepted` objects |
-| 4 | `rfc/evidence-at-runtime.md` | **nothing versioned** | Accepted, one owner call open (the voice seam) — does not block. Closes D118 by deleting a discard: `loadDefault` already reads every ledger and drops 764 records |
+| 1 | `rfc/claim-backing.md` | pack **0.26** | Round 2 complete, ready to accept; two owner-gated questions that do **not** block. Re-claimed 0.26, reversing its own earlier release |
+| 2 | `rfc/pack-graduation.md` | pack **0.27** | Accepted. Graduation is a **move**, not a copy; `graduationBlockers` entries become `blocking`/`resolved`/`accepted` objects |
+| 3 | `rfc/evidence-at-runtime.md` | **nothing versioned** | Accepted, one owner call open (the voice seam) — does not block. Closes D118 by deleting a discard: `loadDefault` already reads every ledger and drops 764 records |
+
+`format-surface` implemented and archived 2026-08-16 at pack 0.25; both gates passed.
 
 **Register drift corrected in the same pass:** `engine-leverage` holds **migration 21**
 (landed — `STORAGE_VERSION` is 21 at HEAD), not 22. Its own text said 22 in two places and

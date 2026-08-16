@@ -3,6 +3,7 @@ import {
   historyFrom,
   groupsFromEvents,
   projectRun,
+  trajectoryPolicyAt,
   type BranchComparison,
   type DrillRunEvent,
   type PolicyConfig,
@@ -508,7 +509,20 @@ export class DrillSessionController {
     const capabilities = this.#capabilities;
     if (capabilities === undefined) throw new Error("Capabilities are unavailable");
     const run = this.#requiredRun().run;
-    const authored = record(pack?.opponentPolicy ?? run.opponentPolicy);
+    const legPolicy = pack === undefined
+      ? undefined
+      : trajectoryPolicyAt(pack, run, run.activeCursor.nodeId);
+    const authored = record(legPolicy?.policy ?? pack?.opponentPolicy ?? run.opponentPolicy);
+    const requestedMode = authored.mode;
+    const mode = pack === undefined
+      ? run.opponentPolicy.mode as "human_common" | "strong_engine"
+      : legPolicy === undefined
+        ? selectorMode(pack, capabilities)
+        : requestedMode === "human_common" || requestedMode === "strong_engine"
+          ? capabilities.policyModes.includes(requestedMode)
+            ? requestedMode
+            : (() => { throw new ApiError(503, "POLICY_MODE_UNSUPPORTED", `${requestedMode} is unavailable for trajectory leg ${legPolicy.legId}`); })()
+          : (() => { throw new ApiError(422, "POLICY_MODE_UNSUPPORTED", `${String(requestedMode)} is invalid for trajectory leg ${legPolicy.legId}`); })();
     const branch = run.branches.find((candidate) => candidate.id === run.activeCursor.branchId)!;
     return {
       startFen: pack?.start.fen ?? run.start.fen,
@@ -516,7 +530,7 @@ export class DrillSessionController {
         historyNode.moveUci === null ? [] : [historyNode.moveUci],
       ),
       policy: {
-        mode: pack === undefined ? (run.opponentPolicy.mode as "human_common" | "strong_engine") : selectorMode(pack, capabilities),
+        mode,
         policyConfigDigest: run.sessionDigest,
         ...(typeof authored.targetElo === "number"
           ? { targetElo: authored.targetElo }

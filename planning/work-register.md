@@ -107,7 +107,7 @@ act is `carlsbad-minority-attack`. Spire parity is **56 hours, 64% middlegame**.
 owner-gated row"* before that draft could be accepted, on the grounds that handing items to
 *"a later wave"* is not a destination — the failure that RFC-s own §5c warns about, applied to
 itself. **Half of Q9 resolved on its own:** per-leg `shapes`/`opponentPolicy` is **D96**, and
-`rfc/format-surface.md` — drafted after the question was written — owns and implements it at
+`rfc/archive/format-surface.md` — drafted after the question was written — owns and implements it at
 pack 0.25.
 
 **This cluster is the other half, and it exists so the remainder has a name rather than a

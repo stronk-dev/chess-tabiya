@@ -19,6 +19,11 @@ export {
 } from "./urls.js";
 export { normalizeShapeReference, normalizeShapeReferences, type NormalizedShapeReference } from "./shape-references.js";
 export {
+  FORMAT_DISPOSITIONS,
+  type FormatDisposition,
+  type FormatDispositionKind,
+} from "./dispositions.js";
+export {
   CHECKPOINT_ACTIONS,
   DEVIATION_MISTAKES,
   FEEDBACK_POLICIES,
@@ -65,6 +70,7 @@ export {
   type SquareRegion,
   type SquareTemplateFeature,
   type TimingWindowDefinition,
+  type TrajectoryLeg,
   type WindowTrigger,
   type WindowOpening,
   type WindowClosing,

@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.22; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.25; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -80,6 +80,22 @@ beside `conditions[]`, and per-anchor scalar overrides replace matching arms in 
 reordering unrelated authored conditions.
 Tablebase conditions are learner-relative, require both probes at seven pieces or fewer, and cite
 the exact `tablebase:` record that fired them.
+
+Version 0.24 replaces inline plan-consequence copies with the registry-backed
+`plan_signature` structural leaf. Selection is explicit: position predicates use the
+current position; transition conditions use the committed edge.
+
+Version 0.25 adds optional `opponentPolicy` and `shapes` to trajectory legs. A leg policy
+replaces the pack policy for that leg and is intentionally limited to `human_common` or
+`strong_engine`, with only a recordable `targetElo`; omitted policies inherit. Leg shapes
+must also appear in the pack-level shape list. The JSON Schema now has one shared
+`shapeReference` definition for both sites.
+
+The schema package exports `FORMAT_DISPOSITIONS`, a versioned register of declarations that
+are reached, refused, retired, unmeasured, or impossible. It is not a deployment capability
+and is therefore absent from `/capabilities`. `retryVariants` remains authoring catalogue
+metadata but emits `RETRY_VARIANTS_NOT_EXECUTABLE`; `SIMULATE_BUDGET_EXCEEDED` is retired;
+system-drawn arrows remain a reachable setting with an `unmeasured` producer gap.
 
 The already-declared `practical_resistance` opponent policy is executable
 without changing pack bytes or the pack-schema version. Its two-provider

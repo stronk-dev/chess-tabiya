@@ -486,6 +486,23 @@ describe("DrillSessionController", () => {
     });
   });
 
+  it("posts the active trajectory leg policy on the ordinary opponent path", async () => {
+    const trajectory = structuredClone(blackToMovePack) as any;
+    trajectory.mode = "trajectory";
+    trajectory.objective = { type: "run_trajectory", summary: "Exercise leg policy resolution." };
+    trajectory.legs = [
+      { id: "opening", opponentPolicy: { mode: "strong_engine" }, objective: { type: "play_until_checkpoint", summary: "First leg." } },
+      { id: "later", entryCheckpointId: trajectory.checkpoints[0].id, objective: { type: "play_until_checkpoint", summary: "Later leg." } },
+    ];
+    const api = new FakeApi(trajectory, "c8f5", false);
+    const environment = controller(api);
+
+    await environment.controller.startPack(trajectory.id);
+
+    expect(api.selected?.policy).toMatchObject({ mode: "strong_engine" });
+    expect(api.selected?.policy).not.toHaveProperty("targetElo");
+  });
+
   it("refuses an unavailable authored opponent mode without substituting another mode", async () => {
     const api = new FakeApi(blackToMovePack, "c8f5", false);
     api.capabilitiesValue = { ...capabilities, policyModes: ["human_common"] };

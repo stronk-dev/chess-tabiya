@@ -245,6 +245,11 @@ export interface TrajectoryLeg {
   readonly entryCheckpointId?: string;
   readonly branchLengthTarget?: number;
   readonly objective: DrillPackDefinition["objective"];
+  readonly opponentPolicy?: {
+    readonly mode: "human_common" | "strong_engine";
+    readonly targetElo?: number;
+  };
+  readonly shapes?: readonly ShapeReference[];
 }
 
 export type ObjectiveState =

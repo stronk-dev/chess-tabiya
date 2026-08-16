@@ -1,4 +1,4 @@
-import { appendOpponentPly, commitMove, createRun, projectRun, trajectoryVerdict } from "@chess-tabiya/runtime";
+import { appendOpponentPly, commitMove, createRun, projectRun, resistanceOnPath, trajectoryPolicyAt, trajectoryVerdict } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
 
@@ -101,5 +101,33 @@ describe("Trajectory Drill", () => {
       "TRAJECTORY_NONFINAL_LEG_ABSORBING",
       "TRAJECTORY_LEG_CONDITION_PRECEDES_ENTRY",
     ]));
+  });
+
+  it("derives leg requests and the mixed resistance projection from checkpoint occurrences", () => {
+    const authored = structuredClone(pack) as any;
+    authored.legs[1].opponentPolicy = { mode: "strong_engine" };
+    authored.legs[2].opponentPolicy = { mode: "human_common", targetElo: 1800 };
+    let run = rootRun();
+    const first = commitMove(run, "e2e4", { at });
+    run = orchestratePackMove(authored, run, first).run;
+    expect(trajectoryPolicyAt(authored, run, run.activeCursor.nodeId)).toMatchObject({
+      legId: "middle",
+      policy: { mode: "strong_engine" },
+    });
+    const second = appendOpponentPly(run, {
+      moveUci: "e7e5",
+      policyModeApplied: "strong_engine",
+      engine: { id: "stockfish", name: "Stockfish", version: "17", seedHonored: true },
+    }, { at });
+    run = orchestratePackMove(authored, run, second).run;
+    expect(trajectoryPolicyAt(authored, run, run.activeCursor.nodeId)).toMatchObject({
+      legId: "ending",
+      policy: { mode: "human_common", targetElo: 1800 },
+    });
+    expect(resistanceOnPath(run, run.activeCursor.nodeId, authored).requestedByLeg).toEqual([
+      { legId: "opening", legIndex: 0, policy: run.opponentPolicy, plyCount: 0 },
+      { legId: "middle", legIndex: 1, policy: { mode: "strong_engine" }, plyCount: 1 },
+      { legId: "ending", legIndex: 2, policy: { mode: "human_common", targetElo: 1800 }, plyCount: 0 },
+    ]);
   });
 });

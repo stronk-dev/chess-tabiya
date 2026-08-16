@@ -113,10 +113,12 @@ export {
 } from "./structure.js";
 export {
   legIndexAt,
+  trajectoryPolicyAt,
   trajectoryLegSpans,
   trajectoryVerdict,
   type TrajectoryLegOutcome,
   type TrajectoryLegSpan,
+  type ResolvedTrajectoryPolicy,
   type TrajectoryTransition,
   type TrajectoryVerdict,
 } from "./trajectory.js";
@@ -188,6 +190,7 @@ export {
   type OpponentMoveReadback,
   type AppliedPolicyCount,
   type PathResistance,
+  type RequestedLegPolicy,
   type ReadBackReplay,
   type ResistanceEngineCount,
 } from "./replay.js";

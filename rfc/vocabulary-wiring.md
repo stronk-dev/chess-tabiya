@@ -1141,7 +1141,7 @@ on with its measurements corrected rather than dropping it.
    fourth law gets invented later by someone re-finding the same gap.
 9. **Where do per-leg `shapes`/`opponentPolicy` and `deviation.planClassId` actually go?**
    **HALF-ANSWERED by the coordinator 2026-08-15, and the half that remains is the real one.**
-   Per-leg `shapes`/`opponentPolicy` is **D96**, and `rfc/format-surface.md` — drafted after
+   Per-leg `shapes`/`opponentPolicy` is **D96**, and `rfc/archive/format-surface.md` — drafted after
    this question was written — **owns and implements it** at pack 0.25. So the "hypothetical
    RFC no register row owns" now exists and is registered; that half is destinated and the
    ledger row is flipped. **`deviation.planClassId` is not covered by `format-surface` and

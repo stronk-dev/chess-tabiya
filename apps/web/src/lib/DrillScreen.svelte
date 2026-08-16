@@ -309,7 +309,7 @@
   let resistance = $derived(
     pack === undefined || (grading === undefined && pack.objective.type !== "follow_theory")
       ? []
-      : resistanceSentences(run, currentNode.id),
+      : resistanceSentences(run, currentNode.id, pack),
   );
   let checkpointResolution = $derived.by(() => {
     if (

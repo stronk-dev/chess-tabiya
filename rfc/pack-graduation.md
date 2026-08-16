@@ -1038,7 +1038,7 @@ something automatic:
 | Shape-entry prose ungrounded (*"Referencing them does not launder them"*) | 14 | Shape-library grounding; nothing in flight owns it |
 | Timing-window thresholds authored | 7 | Blocked on a **game-level** corpus per the row **"The instrument the tempo layer needs is a game-level corpus, and calling it 'the explorer' is why four waves have re-derived that it does not exist"** (D155) |
 | `perfect_tablebase` unavailable as an opponent | 5 | Tablebase opponent selection; unowned |
-| Format / encoding gaps | 5 | `rfc/format-surface.md` in part |
+| Format / encoding gaps | 5 | `rfc/archive/format-surface.md` in part |
 | Human-play / practical difficulty (Maia) | 4 | No instrument; `design/04` §7's standing gap |
 | Permanent properties | 2 (**[cross-review]** only **1** states permanence explicitly — §1.2 correction 1; the second is unnamed here and Stage B must either name it or leave it `blocking`) | → `accepted` at migration |
 | Pack-specific residue (fifty-move counter surfacing, ledger-unverified Syzygy roots, deviation-class/evaluation tension, objective-signature gaps) | 34 | Mixed; 4 of them are one `make verify-draft` run away |

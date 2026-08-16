@@ -30,6 +30,7 @@ import {
   rewind,
   rewindToCheckpoint,
   storyMoments,
+  trajectoryPolicyAt,
   shapeFirings,
   suggestTitle,
   type BranchComparison,
@@ -47,6 +48,7 @@ import {
   type GroupResistance,
   type GroupSource,
   type RunOpponentMode,
+  type RunOpponentPolicy,
   type PositionOpponentPolicy,
   type ReasoningTranscript,
   type RunMark,
@@ -885,7 +887,7 @@ export class RunService {
       }
       const selector = this.#requiredOpponentSelector();
       const mode = input.source === "human_replies" ? "human_common" : "strong_engine";
-      const request = this.#selectionRequest(stored.run, sourceNode.id, pack, mode, stored.run.branches[0]!.seed);
+      const request = this.#selectionRequest(stored.run, sourceNode.id, pack, Object.freeze({ ...stored.run.opponentPolicy, mode }), stored.run.branches[0]!.seed);
       distribution = input.source === "human_replies"
         ? await selector.select(request)
         : await selector.enumerate(request, requestedSize);
@@ -989,10 +991,10 @@ export class RunService {
     const pack = this.#requiredRegisteredPack(stored.run);
     const selector = this.#requiredOpponentSelector();
     const available = selector.availableModes();
-    const requested = stored.run.opponentPolicy.mode;
-    if (!available.includes(requested)) throw new ServerError("POLICY_MODE_UNSUPPORTED", `Policy mode is unavailable: ${requested}`, { details: { policyMode: requested } });
-    const mode = requested;
-    const identity = selector.identityFor(mode, stored.run.opponentPolicy.targetElo);
+    const policy = this.#policyAt(stored.run, node.id, pack);
+    const mode = policy.mode;
+    if (!available.includes(mode)) throw new ServerError("POLICY_MODE_UNSUPPORTED", `Policy mode is unavailable for the active trajectory leg: ${mode}`, { details: { policyMode: mode } });
+    const identity = selector.identityFor(mode, policy.targetElo);
     if (group.resistance === "fixed") {
       const memberIds = new Set(group.members.map((member) => member.branchId));
       const sourcePly = stored.run.nodes.find((candidate) => candidate.id === group.sourceNodeId)!.ply;
@@ -1009,7 +1011,7 @@ export class RunService {
     const seed = group.resistance === "fixed"
       ? stored.run.branches[0]!.seed
       : stored.run.branches[0]!.seed + memberIndex + 1;
-    const request = this.#selectionRequest(stored.run, node.id, pack, mode, seed);
+    const request = this.#selectionRequest(stored.run, node.id, pack, policy, seed);
     return Object.freeze({ selection: await selector.select(request), reusedFromNodeId: null });
   }
 
@@ -1877,15 +1879,14 @@ export class RunService {
     run: DrillRun,
     nodeId: string,
     pack: PackRecord | undefined,
-    mode: RunOpponentMode,
+    authored: RunOpponentPolicy,
     seed: number,
   ): SelectMoveRequest {
-    const authored = run.opponentPolicy;
     return Object.freeze({
       startFen: run.start.fen,
       historyUci: Object.freeze(historyFrom(run, nodeId).flatMap((node) => node.moveUci === null ? [] : [node.moveUci])),
       policy: Object.freeze({
-        mode,
+        mode: authored.mode,
         policyConfigDigest: run.sessionDigest,
         ...(authored.targetElo === undefined ? {} : { targetElo: authored.targetElo }),
         ...(authored.temperature === undefined ? {} : { temperature: authored.temperature }),
@@ -1895,6 +1896,11 @@ export class RunService {
       seed,
       ...(pack === undefined ? {} : { packId: pack.document.id }),
     });
+  }
+
+  #policyAt(run: DrillRun, nodeId: string, pack: PackRecord | undefined): RunOpponentPolicy {
+    if (pack === undefined) return run.opponentPolicy;
+    return trajectoryPolicyAt(pack.document, run, nodeId)?.policy ?? run.opponentPolicy;
   }
 
   #requiredOpponentSelector(): OpponentSelector {

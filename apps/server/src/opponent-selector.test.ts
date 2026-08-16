@@ -275,23 +275,14 @@ describe("pure opponent selector", () => {
     })).rejects.toMatchObject({ code: "PRACTICAL_RESISTANCE_UNDECIDABLE" });
   });
 
-  it("uses the deterministic UCI tiebreak when every Maia reading abstains", async () => {
-    const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
-    try {
-      const selector = new OpponentSelector(new FakeEngineClient(() => [
-        "info depth 1 multipv 1 score cp 0 pv e2f2",
-        "bestmove e2f2",
-      ]), { tablebaseSource: practicalTablebase() });
-      await expect(selector.select({
-        ...request("practical_resistance"), startFen: practicalFen, historyUci: [],
-      })).resolves.toMatchObject({ moveUci: "c3b3", candidates: [
-        { moveUci: "c3b3", rank: 1 },
-        { moveUci: "c3c2", rank: 2 },
-      ] });
-      expect(warning).toHaveBeenCalledWith(expect.stringContaining("DEGRADED_POLICY_MASS"));
-    } finally {
-      warning.mockRestore();
-    }
+  it("refuses practical resistance when every Maia reading abstains", async () => {
+    const selector = new OpponentSelector(new FakeEngineClient(() => [
+      "info depth 1 multipv 1 score cp 0 pv e2f2",
+      "bestmove e2f2",
+    ]), { tablebaseSource: practicalTablebase() });
+    await expect(selector.select({
+      ...request("practical_resistance"), startFen: practicalFen, historyUci: [],
+    })).rejects.toMatchObject({ code: "PRACTICAL_RESISTANCE_UNMEASURED" });
   });
 
   it("refuses when no legal reply preserves the tablebase category", async () => {

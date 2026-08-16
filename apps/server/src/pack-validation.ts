@@ -45,6 +45,7 @@ import {
 } from "./pack-orchestrator.js";
 import { countFenPieces } from "./sourcing/chess-facts.js";
 import { AUTHORING_PROFILE } from "./sourcing/authoring-profile.js";
+import { MAIA3_BAND_RANGE } from "./maia.js";
 import {
   ASSESSMENT_CATEGORIES,
   invertTablebaseCategory,
@@ -908,6 +909,19 @@ function runtimeIssues(
   if (opponentMode === "practical_resistance" && countFenPieces(pack.start.fen) > 7) {
     issues.push(runtimeIssue("PRACTICAL_RESISTANCE_OUT_OF_RANGE", "/opponentPolicy/mode", "practical_resistance requires a root with at most seven pieces"));
   }
+  const retryCounterparts: Readonly<Partial<Record<string, string>>> = Object.freeze({
+    opposite_side: "same_root_other_side",
+    same_root_new_defense: "root_after_move",
+    alternate_plan_class: "same_root_other_objective",
+  });
+  for (const [index, retry] of (pack.retryVariants ?? []).entries()) {
+    const counterpart = retryCounterparts[retry.kind];
+    issues.push(runtimeWarning(
+      "RETRY_VARIANTS_NOT_EXECUTABLE",
+      `/retryVariants/${index}`,
+      `retryVariants is a catalogue relation, not a run modifier: nothing in the runtime reads it and it names no referent; ${counterpart === undefined ? "no variantOf counterpart exists for this kind yet" : `use variantOf relation ${counterpart} once the successor supports every referenced sibling`}`,
+    ));
+  }
   const rootAssessment = pack.objective.grading?.assessedBy;
   if (rootAssessment?.kind === "engine") {
     if (rootAssessment.depth < AUTHORING_PROFILE.depth) issues.push(runtimeIssue("ENGINE_ASSESSMENT_DEPTH_BELOW_FLOOR", "/objective/grading/assessedBy/depth", `engine assessment depth must be at least ${AUTHORING_PROFILE.depth}`));
@@ -929,6 +943,7 @@ function runtimeIssues(
     const seenLegs = new Set<string>();
     const seenEntries = new Set<string>();
     let theoryCount = 0;
+    const packShapes = new Set(normalizeShapeReferences(pack.shapes).map((shape) => shape.shape));
     for (const [index, leg] of legs.entries()) {
       if (seenLegs.has(leg.id)) issues.push(runtimeIssue("TRAJECTORY_DUPLICATE_LEG_ID", `/legs/${index}/id`, `duplicate leg id ${leg.id}`));
       seenLegs.add(leg.id);
@@ -950,6 +965,27 @@ function runtimeIssues(
       if (leg.objective.type === "follow_theory") theoryCount += 1;
       if (leg.objective.grading?.assessedBy.kind === "syzygy") issues.push(runtimeIssue("TRAJECTORY_LEG_SYZYGY_UNSUPPORTED", `/legs/${index}/objective/grading/assessedBy`, "leg entry positions are not statically bound to a Syzygy record"));
       if (leg.objective.grading?.assessedBy.kind === "engine") issues.push(runtimeIssue("TRAJECTORY_LEG_ENGINE_UNSUPPORTED", `/legs/${index}/objective/grading/assessedBy`, "leg entry positions are not statically bound to an engine evidence record"));
+      if (leg.shapes !== undefined) {
+        if (leg.shapes.length === 0) issues.push(runtimeIssue("LEG_SHAPE_LIST_EMPTY", `/legs/${index}/shapes`, "a leg shape list may not be empty"));
+        for (const [shapeIndex, shape] of normalizeShapeReferences(leg.shapes).entries()) {
+          if (!packShapes.has(shape.shape)) issues.push(runtimeIssue("LEG_SHAPE_REF_UNLISTED", `/legs/${index}/shapes/${shapeIndex}`, `leg shape ${shape.shape} must also appear in the pack shape list`));
+        }
+      }
+      if (leg.opponentPolicy !== undefined) {
+        const policyPath = `/legs/${index}/opponentPolicy`;
+        if (leg.opponentPolicy.mode !== "human_common" && leg.opponentPolicy.mode !== "strong_engine") {
+          issues.push(runtimeIssue("LEG_POLICY_MODE_UNSUPPORTED", `${policyPath}/mode`, `trajectory leg ${leg.id} cannot use ${String(leg.opponentPolicy.mode)}`));
+        }
+        if (leg.opponentPolicy.mode === "strong_engine" && leg.opponentPolicy.targetElo !== undefined) {
+          issues.push(runtimeIssue("LEG_POLICY_ELO_UNHONORED", `${policyPath}/targetElo`, "strong_engine does not publish or record a target Elo"));
+        }
+        if (
+          leg.opponentPolicy.targetElo !== undefined &&
+          (leg.opponentPolicy.targetElo < MAIA3_BAND_RANGE.min || leg.opponentPolicy.targetElo > MAIA3_BAND_RANGE.max)
+        ) {
+          issues.push(runtimeIssue("LEG_TARGET_ELO_OUT_OF_RANGE", `${policyPath}/targetElo`, `targetElo must be within the published ${MAIA3_BAND_RANGE.min}-${MAIA3_BAND_RANGE.max} Maia band`));
+        }
+      }
       if (index < legs.length - 1 && leg.objective.grading?.resolveAt.kind === "terminal") issues.push(runtimeIssue("TRAJECTORY_NONFINAL_TERMINAL_RESOLUTION", `/legs/${index}/objective/grading/resolveAt`, "only the final trajectory leg may resolve at terminal"));
       for (const [conditionIndex, condition] of (leg.objective.successConditions ?? []).entries()) {
         const to = condition.to ?? "achieved";

@@ -2699,3 +2699,22 @@ also refuses any merge beyond the 64-mark scope bound.
 schema, scaffold and packaging clean. `make test-browser` passed 24 tests at zero retries; the
 optional Maia latency test skipped. D159, D186, D187, D218 and D249 are closed. D158 remains partial:
 learner and attributed-human marks ship; system-drawn directed marks still have no honest producer.
+
+## 2026-08-16 — Format surface makes trajectory resistance leg-aware
+
+**Landed.** Pack schema 0.25 adds narrowed per-leg `opponentPolicy` and pack-subset
+`shapes`, backed by active-leg resolution on ordinary play, groups, corpus/human-split
+context, and the derived resistance projection. The schema package now exports a versioned
+`FORMAT_DISPOSITIONS` register; deployment capabilities deliberately do not.
+
+**Honesty fixes.** Practical resistance can no longer record its own name after choosing
+alphabetically: partial zero measurement and total abstention are separate typed refusals.
+Every `retryVariants` entry carries a pointed non-executable warning, and the dead simulation
+budget code is retired. The owner-ruling review kept the nine-axis arrows setting intact and
+classified its missing system producer as `unmeasured` rather than deleting it.
+
+**Verified.** `ENGINES_REQUIRED=1 make verify` passed with 688 tests across 107 files,
+Svelte 0/0, schema, scaffold and packaging clean. `make test-browser` passed 24 tests at
+zero retries; the optional Maia latency test skipped. D57, D85 and D86 close; D84 stays open
+as a named measurement gap, and D96 stays partially open only for its bundled
+`deviation.planClassId` residue.

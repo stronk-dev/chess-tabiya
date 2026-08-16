@@ -1690,7 +1690,7 @@ statements.
   `assessedBy.retrievedAt` across committed sidecars. §4's figures are derived from those files; if
   it lands first, §4's Bucket 1/2 split is **re-derived, not assumed**. It adds no claim-pointing
   record, so the split should be stable.
-- **`rfc/format-surface.md` (draft, **returned for one narrow round** 2026-08-15; pack 0.25).** No
+- **`rfc/archive/format-surface.md` (implemented 2026-08-16; pack 0.25).** No
   overlap: it touches `$defs/trajectoryLeg`, `$defs/legOpponentPolicy` and `$defs/shapeReference`.
   This RFC touches no `$defs` at all.
 - **`rfc/feedback-delivery.md` (behind this one).** §6.

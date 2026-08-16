@@ -134,7 +134,7 @@
 |---|---|---|
 | **Pack schema** | **none** | No `$defs` entry is added, widened or narrowed. `DRILL_PACK_SCHEMA_VERSION` (`packages/schema/src/index.ts`) is untouched — **0.22** committed at `bc3cdc1`, **0.23** in the uncommitted `engine-leverage` implementation; this RFC is indifferent to which, because it writes neither. No committed pack byte changes; no content digest moves. **0.26 stays free** — this RFC does not take the lane `claim-backing` released. |
 | **Run schema** | **none** | Nothing is persisted. No event type, no payload, no `EvidenceKind`, no `EvidenceSource`, no evidence ref. A recorded reading never becomes run evidence — the shipped precedent is `GET /runs/:id/corpus`, which is *"ephemeral … append no run event or evidence"* (`docs/runtime-corpus-evidence.md`). |
-| **Migration** | **none** | `STORAGE_VERSION` (`apps/server/src/storage.ts`) is untouched — **20** committed, **21** in the working tree from the RFC ahead of this one. No table, no column, no frozen literal, so the landing order of 21 and 22 is not this RFC's problem. The projection is **derived and never persisted** — the migration-10 precedent cited in `rfc/format-surface.md` §4.4 applies exactly: rung-0 facts, and now recorded readings, are recomputed at load rather than stored. |
+| **Migration** | **none** | `STORAGE_VERSION` (`apps/server/src/storage.ts`) is untouched — **20** committed, **21** in the working tree from the RFC ahead of this one. No table, no column, no frozen literal, so the landing order of 21 and 22 is not this RFC's problem. The projection is **derived and never persisted** — the migration-10 precedent cited in `rfc/archive/format-surface.md` §4.4 applies exactly: rung-0 facts, and now recorded readings, are recomputed at load rather than stored. |
 | **Ledger schema** | **none** | Read-only. `tabiya.sourcing.evidence.v1` is unchanged; no field is added; all 32 committed draft ledgers validate exactly as today. |
 | **`/capabilities`** | payload addition | `Capabilities` gains `recordedReadingKinds`, computed from the admission registry exactly as `guardBasis` is computed by `EngineCapabilities.get`. A payload field is not a versioned resource; it is named here so a reviewer does not have to rediscover it. |
 
@@ -447,7 +447,7 @@ conservative.
 **(E) Precompute the index at authoring time and commit it as a third sidecar.**
 *Gets wrong:* a fourth committed artifact and a second digest-linkage rule, for a projection
 that is a pure function of a file already committed. The migration-10 precedent for
-derived-not-persisted values, cited in `rfc/format-surface.md` §4.4, says do not persist what
+derived-not-persisted values, cited in `rfc/archive/format-surface.md` §4.4, says do not persist what
 you can recompute. It would also fork the ledger's single source of truth, which is the
 defect `claim-backing` §3.1 avoids for the same reason. **Rejected.**
 

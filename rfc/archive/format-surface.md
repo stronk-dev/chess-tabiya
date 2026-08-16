@@ -1,8 +1,9 @@
 # RFC: Format surface — what is declared, what is reached, and what cannot be said
 
-- **Status:** draft — **round 2 complete 2026-08-15**; the three returned specification
-  changes are ruled (§4.3 ×2, §4.5) and the re-verification pass is done. Ready for the
-  acceptance decision; Open questions 2 and 7 are the two the owner must rule first
+- **Status:** implemented 2026-08-16 — **round 2 complete 2026-08-15**; the returned specification
+  changes and owner questions are ruled in the sections they govern. The 2026-08-16
+  implementation review reconciled two remaining stale normative passages and criteria
+  with those rulings before code
 - **Author:** claude
 - **Created:** 2026-08-15
 - **Design refs:** `design/04-content-architecture.md` §5 (the six-entry trajectory launch
@@ -283,10 +284,10 @@ offline, exactly as `DECLARED_UNIMPLEMENTED_POLICY_MODES` reasons already reach 
 > is the pair `(pointer, value)`, the `error:` namespace is declared here rather than
 > introduced in passing, and clause 3 is scoped to schema-namespace pointers below.
 
-**Publication.** `apps/server/src/capabilities.ts` re-exports it on `/capabilities` as
-`formatDispositions`, alongside `engine-leverage`'s `capabilityDispositions`. A deployment
-that cannot execute a declared field says so in the same payload it already uses to say
-which policy modes it can select.
+**Publication.** `FORMAT_DISPOSITIONS` is exported by the schema package alongside
+`DRILL_PACK_SCHEMA_VERSION`. It is a fact about that schema version and is deliberately
+absent from `/capabilities`, whose values describe the current deployment. Consumers that
+inspect a pack format import the register from the same package that defines the format.
 
 **The gate, and it must not be vacuous.** A test in `packages/schema/src/drill-pack.test.ts`:
 
@@ -426,8 +427,8 @@ one weak axis among nine; it is the only one with nothing behind it.
 > reader can use without re-running it, which is why criterion 7 asserts the **zero**
 > directly rather than the ranking.
 
-**Disposition: `retired`, successor `null`.** Reasoning, in the order it was actually
-decided:
+**Disposition: `unmeasured`, successor `null`.** The measurement and the owner ruling have
+different jobs:
 
 - **Implement was considered first and rejected on grounds already published.** An arrow
   is a *directed* mark and needs a from→to pair. The structural reader produces
@@ -438,9 +439,10 @@ decided:
   rank / `bestline` → `refused` — verdicts, not measurements — C3 / Law 8*. Implementing
   the `evidence` rung would reintroduce, on the board itself, the thing `AGENTS.md`
   identifies as the failure shape the whole product dies in.
-- **Retire is therefore the only remaining option that is not a lie**, and it is what the
-  finding dossier recommended (`design/research/campaign-effect-vocabulary.md` §"Fix or
-  delete `arrows`").
+- **Those two refused implementations do not exhaust the product intent.** The system-drawn
+  structural-sight form remains promised and has no directed primitive yet. That is a named
+  measurement gap, not evidence that the axis should be deleted. The register carries the
+  experiment and revisit obligation while the field remains reachable from settings.
 
 **What a shipped-and-unused declaration cost us, stated plainly.** `arrows` is not an
 inert schema field an author might never notice. It is **a control the learner can see and
@@ -455,14 +457,9 @@ without anyone asking what read it — which is precisely the fourth silent stat
 to a user-visible surface.
 
 **Mechanics.**
-- `AssistanceConfig` drops `arrows`; `SILENT_ASSISTANCE` and `AssistancePermission` drop it.
-- `apps/web/src/lib/assistance-preference.ts` gains a **version 5**: the v4 arm strips
-  `arrows`; the v3/v2/v1 arms stop writing it. This is the file's fourth upgrade arm and
-  follows the three already there exactly.
-- **The `<select>` STAYS in `AssistanceSettings.svelte`** *(corrected 2026-08-16 by owner
-  ruling)*. The draft removed it. `assistance.arrows` remains the config axis for the
-  **system-drawn** leg, and removing the control would make the surviving field unreachable,
-  a worse declared-vs-executable defect than the one this section opened with.
+- `AssistanceConfig`, `SILENT_ASSISTANCE`, `AssistancePermission`, preference version 4,
+  and the `<select>` in `AssistanceSettings.svelte` all stay. `assistance.arrows` remains
+  the config axis for the **system-drawn** leg; there is no preference-schema bump.
 - `FORMAT_DISPOSITIONS` gains `{pointer: "assistance:arrows", disposition: "unmeasured",
   successor: null, reason: "design/05 promises arrows-for-sight; no directed structural
   primitive exists (the reader emits square sets, not vectors). The evidence rung stays
@@ -471,10 +468,9 @@ to a user-visible surface.
   (`engine-leverage` open question 6), so this row must be revisited when a directed
   primitive lands. That obligation is the whole difference between `unmeasured` and
   `retired`, and the reason the ruling is not a naming preference.
-- The committed test `apps/web/src/lib/client-surface-floor.test.ts:47` asserts
-  `permission.arrows === "sight"`; that line is deleted here. `[round 2]` It is no longer a
-  cross-draft item — `client-surface-floor` is **archived** (`rfc/archive/`), so nothing is
-  in flight and nothing is amended. See §6.
+- The committed `permission.arrows === "sight"` assertion stays: it pins the reachable
+  permission path for the retained axis. Nothing in the archived client-surface-floor
+  lifecycle is amended. See §6.
 
 #### 3.2 D85 — *"`SIMULATE_BUDGET_EXCEEDED` is declared and never thrown"* → **retire**
 
@@ -1288,7 +1284,7 @@ record):
 
 ### 6. Cross-draft coordination
 
-**`client-surface-floor.md` — a real collision, and it is no longer a coordination problem.**
+**`client-surface-floor.md` — reviewed and unchanged.**
 `[round 2]` That RFC is **archived** — it landed at `2d0f7be` and now lives at
 `rfc/archive/client-surface-floor.md`, not `rfc/client-surface-floor.md`. Its acceptance
 criterion 8(b) requires a test asserting `permittedAssistance` returns *"`sight` rather than
@@ -1296,26 +1292,18 @@ criterion 8(b) requires a test asserting `permittedAssistance` returns *"`sight`
 test is committed at `apps/web/src/lib/client-surface-floor.test.ts:47` `[cross-review]` —
 the draft read `:46`, which is the **`boardLighting`** assertion one line above; the `arrows`
 assertion is `:47`, and an implementer should match on the `expect` text rather than the
-line, since the file moves. §3.1 deletes the field the assertion names.
+line, since the file moves. §3.1 retains the field and its permission assertion.
 
 The criterion's stated *purpose* is *"C6b did not collaterally remove the role plumbing it
 shares with the permission path"*, and both fields are derived from the **same**
 `mayRequestSplit` binding — `role === "solo" || role === "host"`, defined at
 `packages/runtime/src/assistance.ts:28` and consumed by both fields on `:29`, which is the
-`:28-29` span `client-surface-floor` 8(b) itself cites. `boardLighting` alone therefore
-proves exactly what the criterion set out to prove.
+`:28-29` span `client-surface-floor` 8(b) itself cites. Both assertions remain valid because
+the owner ruling retains the `arrows` axis.
 
-**Resolution, restated for an archived predecessor.** `[round 2]` The draft's resolution was
-written against an in-flight sibling — *"it lands first, unchanged; this RFC lands after and
-amends criterion 8(b)"* — and both halves are now moot in the right direction. It **has**
-landed, so there is no ordering constraint left; and an archived RFC is **frozen**, so this
-RFC does **not** amend criterion 8(b) and this document's header no longer claims to. The
-archived text stands as the historical record of what that RFC required when it landed, which
-is what an archive is for. What changes is the **committed test**, and §3.1 owns that deletion
-outright: it drops the `expect(permission.arrows).toBe("sight")` line and leaves
-`expect(permission.boardLighting).toBe("sight")` one line above it in place — which, per the
-paragraph just above, proves everything 8(b) set out to prove. **The test loses an assertion;
-it does not lose its subject.** Criterion 7 asserts the deletion.
+**Resolution, restated for an archived predecessor.** The predecessor is frozen and this
+RFC does not amend its criterion or committed test. The retained axis keeps the existing
+`permission.arrows` assertion true, so there is no coordination change to land.
 
 **`engine-leverage.md`** — **[owner ruling 2026-08-16: `formatDispositions` does NOT go on
 `/capabilities`.]** The draft published it there, next to that RFC's
@@ -1471,18 +1459,13 @@ wrong:
    selection, proving the tiebreak survives. **Both refusal cases are recorded as
    *absence*:** the run's event log contains no `opponent.move_selected` for the refused
    ply, so no move is ever recorded under a mode that did not choose it.
-7. **D84: the axis is gone, root and branch.** `arrows` appears **zero** times across
-   `apps/`, `packages/`, and `schemas/` (excluding `dist/`) — **other than as the
-   `assistance:arrows` pointer of its own `FORMAT_DISPOSITIONS` row** `[round 2]`, which
-   §3.1's mechanics require to survive the deletion and which lives in
-   `packages/schema/src/drill-pack/dispositions.ts`. As drafted this criterion and §3.1
-   contradicted each other and the test could not have passed; the carve-out is the one
-   criterion 8 already has, and the two are now written the same way. The deleted
-   `expect(permission.arrows).toBe("sight")` in
-   `apps/web/src/lib/client-surface-floor.test.ts` (§6) is covered by the same sweep. A
-   localStorage record at `version: 4` carrying `arrows` upgrades to `version: 5` without
-   it and without discarding the other eight axes; the v3/v2/v1 arms upgrade straight to 5.
-   `AssistanceSettings.svelte` renders eight axes.
+7. **D84: the axis remains reachable and its missing producer is explicit.**
+   `AssistanceConfig`, `SILENT_ASSISTANCE`, `AssistancePermission`, preference version 4,
+   the `permission.arrows === "sight"` client-floor assertion, and the `<select>` in
+   `AssistanceSettings.svelte` all remain. `FORMAT_DISPOSITIONS` contains exactly one
+   `assistance:arrows` row with disposition `unmeasured`, the named directed-primitive
+   experiment, and no system producer is introduced by this RFC. The settings surface
+   still renders all nine axes.
 8. **D85: the code is gone and cannot half-return.** `SIMULATE_BUDGET_EXCEEDED` appears zero
    times outside `FORMAT_DISPOSITIONS`; the `rest.ts` 422 arm is removed; `/simulate` still
    refuses an over-shape request with `SIMULATE_TOO_LARGE` 422 (regression).
@@ -1543,7 +1526,8 @@ wrong:
    > which is right, but that is **7** of the authored 9, not the residue of 11.
 10. **The register is real and its gate is not vacuous.** `FORMAT_DISPOSITIONS` contains a
     row for every item §3 and §4 decide, plus the two seed rows **derived from**
-    `DECLARED_UNIMPLEMENTED_POLICY_MODES` rather than transcribed. `/capabilities` publishes
+    `DECLARED_UNIMPLEMENTED_POLICY_MODES` rather than transcribed. The schema package
+    exports it alongside `DRILL_PACK_SCHEMA_VERSION`, and `/capabilities` does not publish
     it. The gate test is **demonstrated failing** six ways on deliberately broken inputs:
     a register row pointing at a pointer absent from the schema; a row whose `value` is not
     a member of the enum at its pointer; a `reached` row naming a module that does not export
@@ -1683,6 +1667,12 @@ wrong:
    publication site moves**, exactly as this question anticipated.
 
 ## Changelog
+
+- 2026-08-16: **owner rulings reconciled before implementation.** D84 is `unmeasured`, not
+  retired: the `arrows` field, preference v4, permission assertion, and settings `<select>`
+  stay. `FORMAT_DISPOSITIONS` ships from the schema package and is deliberately absent from
+  `/capabilities`. The status, normative mechanics, cross-draft section, and acceptance
+  criteria now agree with Open questions 2 and 7.
 
 - 2026-08-15: created. Wave 3. Claims pack schema **0.25**; no run-schema version, no
   migration. Applies the **declared-vs-executable law** (unamended) and the

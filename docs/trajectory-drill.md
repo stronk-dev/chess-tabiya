@@ -53,6 +53,11 @@ per-leg states, transition nodes, skipped legs, and `producedBy` move lists from
 nodes and events. None is stored. Leg index is monotone along a path; rewind above a boundary
 creates a path that may enter again independently.
 
+`trajectoryPolicyAt` resolves the active leg's opponent policy on both ordinary and group
+reply paths. Omitted leg policies inherit the run request; an authored override replaces it
+for that leg. `resistanceOnPath(run, nodeId, pack)` adds `requestedByLeg` to the derived
+projection while the persisted run-level request remains unchanged.
+
 The verdict is an ordered list of per-leg outcomes. There is deliberately no trajectory
 score, completion percentage, or claim that one phase caused another beyond the actual
 legal moves recorded in `producedBy`.

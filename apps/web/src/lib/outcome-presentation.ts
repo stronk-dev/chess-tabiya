@@ -92,11 +92,15 @@ function engineIdentityKey(identity: SelectionEngineIdentity): string {
   ]);
 }
 
-export function resistanceSentences(run: DrillRun, nodeId: string): readonly string[] {
-  const resistance = resistanceOnPath(run, nodeId);
+export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillPackDefinition): readonly string[] {
+  const resistance = resistanceOnPath(run, nodeId, pack);
   const requested = resistance.requested;
   const target = requested.targetElo === undefined ? "" : `, target Elo ${requested.targetElo}`;
   const lines = [`Requested resistance: ${requested.mode}${target} — the pack's request.`];
+  for (const leg of resistance.requestedByLeg ?? []) {
+    const legTarget = leg.policy.targetElo === undefined ? "" : `, target Elo ${leg.policy.targetElo}`;
+    lines.push(`Leg ${leg.legId}: requested ${leg.policy.mode}${legTarget}; ${leg.plyCount} opponent plies recorded.`);
+  }
   if (resistance.engines.length === 0) {
     return [
       ...lines,

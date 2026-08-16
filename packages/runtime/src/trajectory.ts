@@ -1,7 +1,7 @@
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
 import { historyFrom } from "./runtime.js";
-import type { DrillRun, Node, ObjectiveState } from "./types.js";
+import type { DrillRun, Node, ObjectiveState, RunOpponentPolicy } from "./types.js";
 
 const ABSORBING = new Set<ObjectiveState>(["achieved", "failed", "transitioned"]);
 
@@ -103,6 +103,33 @@ export function trajectoryLegSpans(
 
 export function legIndexAt(pack: DrillPackDefinition, run: DrillRun, nodeId: string): number {
   return trajectoryLegSpans(pack, run, nodeId).at(-1)!.legIndex;
+}
+
+export interface ResolvedTrajectoryPolicy {
+  readonly legId: string;
+  readonly legIndex: number;
+  readonly policy: RunOpponentPolicy;
+}
+
+export function trajectoryPolicyAt(
+  pack: DrillPackDefinition,
+  run: DrillRun,
+  nodeId: string,
+): ResolvedTrajectoryPolicy | undefined {
+  if (pack.legs === undefined) return undefined;
+  const legIndex = legIndexAt(pack, run, nodeId);
+  const leg = pack.legs[legIndex]!;
+  if (leg.opponentPolicy === undefined) {
+    return Object.freeze({ legId: leg.id, legIndex, policy: run.opponentPolicy });
+  }
+  return Object.freeze({
+    legId: leg.id,
+    legIndex,
+    policy: Object.freeze({
+      mode: leg.opponentPolicy.mode,
+      ...(leg.opponentPolicy.targetElo === undefined ? {} : { targetElo: leg.opponentPolicy.targetElo }),
+    }),
+  });
 }
 
 export function trajectoryVerdict(

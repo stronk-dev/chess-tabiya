@@ -709,14 +709,14 @@ export class OpponentSelector {
     }
 
     const measured = scored.filter((candidate) => candidate.ratio !== null);
-    if (measured.length === scored.length && measured.every((candidate) => candidate.ratio === 0)) {
+    if (measured.length === 0) {
+      throw new ServerError("PRACTICAL_RESISTANCE_UNMEASURED", "No candidate returned a measured policy mass; practical resistance cannot select");
+    }
+    if (measured.every((candidate) => candidate.ratio === 0)) {
       throw new ServerError("PRACTICAL_RESISTANCE_UNDECIDABLE", "No category-preserving reply leaves measured concession mass");
     }
-    if (measured.length === 0) {
-      console.warn("DEGRADED_POLICY_MASS: Maia candidate omitted policy mass; practical resistance uses the lexicographically first preserving reply");
-    }
-    const ordered = [...(measured.length === 0 ? scored : measured)].sort((left, right) =>
-      (right.ratio ?? 0) - (left.ratio ?? 0) || left.move.uci.localeCompare(right.move.uci),
+    const ordered = [...measured].sort((left, right) =>
+      right.ratio! - left.ratio! || left.move.uci.localeCompare(right.move.uci),
     );
     const selected = ordered[0]!;
     const candidates = Object.freeze(scored.map((candidate, index): SelectionCandidate => Object.freeze({

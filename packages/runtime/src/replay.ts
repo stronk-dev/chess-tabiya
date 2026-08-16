@@ -1,4 +1,5 @@
 import { projectRun } from "./events.js";
+import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import type {
   DrillRun,
   DrillRunEvent,
@@ -7,6 +8,7 @@ import type {
   SelectionEngineIdentity,
 } from "./types.js";
 import { historyFrom } from "./runtime.js";
+import { trajectoryPolicyAt } from "./trajectory.js";
 
 export class ReplayError extends Error {
   readonly seq: number;
@@ -90,9 +92,17 @@ export interface ResistanceEngineCount {
 
 export interface PathResistance {
   readonly requested: RunOpponentPolicy;
+  readonly requestedByLeg?: readonly RequestedLegPolicy[];
   readonly engines: readonly ResistanceEngineCount[];
   readonly applied: readonly AppliedPolicyCount[];
   readonly unknownPlyCount: number;
+}
+
+export interface RequestedLegPolicy {
+  readonly legId: string;
+  readonly legIndex: number;
+  readonly policy: RunOpponentPolicy;
+  readonly plyCount: number;
 }
 
 export interface AppliedPolicyCount {
@@ -100,13 +110,22 @@ export interface AppliedPolicyCount {
   readonly plyCount: number;
 }
 
-export function resistanceOnPath(run: DrillRun, nodeId: string): PathResistance {
+export function resistanceOnPath(
+  run: DrillRun,
+  nodeId: string,
+  pack?: DrillPackDefinition,
+): PathResistance {
   const pathNodeIds = new Set(historyFrom(run, nodeId).map((node) => node.id));
   const counts = new Map<string, { engine: SelectionEngineIdentity; plyCount: number }>();
   const applied = new Map<AppliedPolicyCount["mode"], number>();
   let unknownPlyCount = 0;
+  const legCounts = new Map<number, number>();
   for (const move of opponentMovesFromEvents(run.events)) {
     if (!pathNodeIds.has(move.committedNodeId)) continue;
+    if (pack?.legs !== undefined) {
+      const resolved = trajectoryPolicyAt(pack, run, move.parentNodeId);
+      if (resolved !== undefined) legCounts.set(resolved.legIndex, (legCounts.get(resolved.legIndex) ?? 0) + 1);
+    }
     if (move.policyModeApplied === "unknown") unknownPlyCount += 1;
     else applied.set(move.policyModeApplied, (applied.get(move.policyModeApplied) ?? 0) + 1);
     const identity = move.engine;
@@ -128,6 +147,14 @@ export function resistanceOnPath(run: DrillRun, nodeId: string): PathResistance 
   }
   return Object.freeze({
     requested: run.opponentPolicy,
+    ...(pack?.legs === undefined ? {} : {
+      requestedByLeg: Object.freeze(pack.legs.map((leg, legIndex) => Object.freeze({
+        legId: leg.id,
+        legIndex,
+        policy: Object.freeze(leg.opponentPolicy ?? run.opponentPolicy),
+        plyCount: legCounts.get(legIndex) ?? 0,
+      }))),
+    }),
     applied: Object.freeze(
       [...applied].map(([mode, plyCount]) => Object.freeze({ mode, plyCount })),
     ),
