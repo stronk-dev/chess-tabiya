@@ -40,6 +40,45 @@ to flip D360's ledger row, which already reads `✅ refuted 2026-08-16`.
 `make verify` **and** writes no content. Criterion 13 asserts the second half, which the
 draft had asserted only in prose.
 
+## 0b. `rfc/graduation-clearance.md` — ACCEPTED 2026-08-16, take it after `dead-vocabulary`
+
+Claims **pack schema 0.28** — earned, not discretionary: `$defs/provenance` and
+`$defs/graduationEntry` are **both `additionalProperties: false` at 0.27**, so there is no
+unversioned hiding place for five `$defs`-level changes. **No migration position, no run
+schema, no shape-entry** — deliberately, so it does not join [[D423]]'s three-way contest.
+
+**All four author-call open questions are closed in the body.** Question 5 is deferred to the
+first content wave *by design*, with its follow-up recorded. **No owner ruling is owed** —
+do not wait for one.
+
+Three things that changed under the RFC and that you should read before implementing:
+
+- **The classifier ruleset is now PUBLISHED** (§5.1a, seven literal keyword rules) and every
+  count is its output. The residue is **17, not 12** — and the four entries the cross-review
+  cited as evidence for its own ruling were **matched by rule 1 and were never residue**
+  ([[D434]]). The ruling survived; its sample did not. `clearable` is **179 / 41**, and the
+  pack split **inverts** to **27 instrument-bound / 23 authoring-bound**.
+- **The acceptance back door is closed by a line-level `git blame` arm**, not by the three
+  file-level tightenings originally proposed ([[D435]]). T1 never fires — `log.md` was added
+  in `8fb62692` and an author *appends*. T3 is **unpayable** and was withdrawn: all three
+  `permanent_property` rulings are undated. **Implement `GRADUATION_RULING_SELF_MINTED` with
+  `git blame -L n,n`**, rejecting both the commit under review and the all-zero
+  `Not Committed Yet` sentinel.
+- **Two lint codes are handed back, not minted.** `GRADUATION_RESOLVED_WITHOUT_RESOLUTION` and
+  `GRADUATION_ACCEPTED_WITHOUT_RULING` describe conditions that are **unrepresentable** under
+  the closed schema, so minting them would be [[D426]]'s own failure performed deliberately.
+  **The template registry IS adopted** — criterion 7 cannot land without it. Counts corrected
+  to **9 ids over 11 literals**, with **2** candidate entries matching no template and a third
+  matching one the draft's list omitted.
+
+**Accounting to trust:** 113 entries are *machine-decidable*, but only **43 are
+machine-producible unaided**. The draft's 108 double-counted — the corpus and citation classes
+are **one atomic write**, priced once.
+
+**What this RFC does NOT fix, and must not be read as fixing:** the six browser fixtures in
+`content/drafts/` are accepted as `out_of_scope`, which is correct-in-kind and leaves every
+corpus denominator contaminated. [[D227]] and [[D257]] stay open and own that.
+
 ## 1. Independent review owed, not implementation
 
 `opponent-contracts` shipped **run schema 0.17**, **migration 23**, mode-scope resistance on
