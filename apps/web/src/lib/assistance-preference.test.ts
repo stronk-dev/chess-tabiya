@@ -70,5 +70,12 @@ describe("assistance preference", () => {
     const source = readFileSync(new URL("./AssistanceSettings.svelte", import.meta.url), "utf8");
     expect(source).toContain("{#each ASSISTANCE_PROFILES as kind}");
     for (const label of ["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "On-ramp"]) expect(source).toContain(label);
+    for (const label of ["Human move split on request", "Corpus counts on request", "External voice"]) expect(source).toContain(label);
+  });
+
+  it("keeps unavailable-control reasons visible", () => {
+    const source = readFileSync(new URL("./HonestControl.svelte", import.meta.url), "utf8");
+    expect(source).toContain("display: block");
+    expect(source).not.toContain("clip: rect(0, 0, 0, 0)");
   });
 });

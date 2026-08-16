@@ -9,7 +9,13 @@
 while you had uncommitted register edits, absorbing them into my commits. Ledgered as D372;
 the rule is that I add the paths I authored, never a shared directory, while you are working.
 
-## 0. `rfc/opponent-contracts.md` — ACCEPTED at cross-review, take it first
+## 0. `rfc/opponent-contracts.md` — BLOCKED by its governing body
+
+The queue called this accepted, but the RFC still says `Status: draft` and open question 2 is
+explicitly owner-facing: whether the digest tiebreak ships or legibility is kept with the
+measured bias published. That choice changes the implementation. Per the queue's own standing
+rule, a resolution in this file is not a resolution in the body; do not implement until the
+RFC body records the ruling and its status becomes accepted.
 
 Claims **run schema 0.17** (`OpponentSelection.orderingBasis`), a **stamp-only migration at
 position `STORAGE_VERSION + 1`** (22 at HEAD), and an unversioned `/capabilities` change.
@@ -32,35 +38,7 @@ Two defects, both measured:
 **rebuilds** the opponent selection field-by-field, so `orderingBasis` would be **silently
 dropped on the wire while every test passed** (D382). Same shape as D235.
 
-## 1. Client and runtime defects found tonight — no RFC, no schema, no lane
-
-All from `design/research/band-flattery-and-buried-value.md`, an audit of our own surfaces
-against two accusations aimed at a competitor. **None is owned by an active RFC** (checked).
-
-- **D393** — `BANNED_JUDGEMENTS` (18 words, duplicated as `KEY_POINT_JUDGEMENTS`) covers the
-  entire **criticism** register and none of the **praise** register, so `voiceCheck` passes
-  *"a brilliant practical choice"*. **We banned harshness and left flattery free.** Add the
-  praise register, or invert to an allowlist — the second is what law 8 implies. *(Both
-  `feedback-delivery` and `live-marker-quality` mention the constant; neither owns this fix —
-  confirm before editing.)*
-- **D398** — `HonestControl` renders its reason `clip: rect(0,0,0,0)` at **all seven call
-  sites**. The component whose job is stating why something is unavailable states it **only to
-  screen readers**, while the sibling `honest` class is visible at 28 sites. Smallest fix here.
-- **D397** — the human-model split needs **five clicks and an unsignposted prerequisite**:
-  `projectedPivotal` is empty unless `assistance.markers === "live"`, and the only request
-  button lives inside the pivotal modal, so ticking the split checkbox yields **no button, no
-  error, no explanation**. Plus `/settings` omits exactly `humanSplit`, `corpus`, `voice` —
-  the three on-request evidence rungs. The reference implementation is in the same panel:
-  corpus counts, three clicks, every step visible.
-- **D396** — the grounded narrative is the **7th of 8** `CompareView` sections and the only
-  substantive one starting **closed**, ranked below an expanded centipawn row and eval
-  sparkline. §3a's silence is a rule about **defaults**, not layout. *(`feedback-delivery`
-  touches `CompareView` and is owner-blocked — coordinate or take only the ordering.)*
-- **D394** — 24 packs say *"an opponent near your rating"* and **no learner rating exists**;
-  the number is the Lichess **puzzle's** difficulty. Blocked from publication, but drafts are
-  playable.
-
-## 2. Still do NOT take
+## 1. Still do NOT take
 
 **D348** (needs a versioned lane), **D351** (needs an accepted authoring-instrument RFC),
 **D104** (not reproduced in 20 isolated runs — your call to refuse a speculative patch was

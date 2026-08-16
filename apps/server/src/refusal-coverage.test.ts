@@ -160,7 +160,7 @@ describe("fixed refusal-code coverage", () => {
 
     const judgement = clone(reasoning);
     const judgementPoints = judgement.checkpoints.find((checkpoint: any) => checkpoint.interaction?.type === "stated_reasoning").interaction.keyPoints;
-    judgementPoints[0].phrases = ["good best"];
+    judgementPoints[0].phrases = ["brilliant"];
     has(judgement, "KEY_POINT_PHRASE_IS_JUDGEMENT");
 
     const falseGround = clone(reasoning);

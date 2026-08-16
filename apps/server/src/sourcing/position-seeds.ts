@@ -236,7 +236,7 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
       ...(phase(row.themes) === undefined ? {} : { phase: phase(row.themes) }),
       difficulty: { minOnlineRapid: Math.max(1000, row.rating - 150), maxOnlineRapid: Math.max(1000, row.rating + 150), branchLengthTarget: plies },
       start: { fen: replay.fen, side: learnerSide(row) },
-      objective: { type: "play_until_checkpoint", summary: `Play on from this position for ${plies} plies against an opponent near your rating.`, successConditions: [{ kind: "reach_checkpoint", checkpointId: "consequence" }] },
+      objective: { type: "play_until_checkpoint", summary: `Play on from this position for ${plies} plies, then compare the consequence.`, successConditions: [{ kind: "reach_checkpoint", checkpointId: "consequence" }] },
       checkpoints: [{ id: "consequence", label: "Consequence", trigger: { atPly: plies }, actions: [] }],
       opponentPolicy: { mode: "human_common", targetElo: clampElo(row.rating), seedMode: "per_branch" },
       feedbackPolicy: "immediate_guard",

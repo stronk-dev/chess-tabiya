@@ -604,6 +604,9 @@ test("served Najdorf pack plays, rewinds, branches, compares, and exports", asyn
   await expect(
     page.getByRole("heading", { name: "Same decision, two consequences." }),
   ).toBeVisible();
+  await expect(
+    page.getByText("The comparison is already at its first aligned position."),
+  ).toBeVisible();
   await expect(page.locator(".boards article")).toHaveCount(2);
   await expect(page.getByRole("heading", { name: "Recorded branch strips" })).toBeVisible();
   await expect(page.locator(".sparkline")).toHaveCount(2);

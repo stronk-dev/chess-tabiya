@@ -45,6 +45,10 @@
         <label><input type="checkbox" checked={configs[kind].ambient === "on"} onchange={(event) => set(kind, "ambient", event.currentTarget.checked ? "on" : "off")} /> Ambient presence</label>
         <label><input type="checkbox" checked={configs[kind].markers === "live"} onchange={(event) => set(kind, "markers", event.currentTarget.checked ? "live" : "off")} /> Passive markers</label>
         <label><input type="checkbox" checked={configs[kind].guided === "live"} onchange={(event) => set(kind, "guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
+        <label><input type="checkbox" checked={configs[kind].humanSplit === "on_request"} onchange={(event) => set(kind, "humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move split on request</label>
+        <label><input type="checkbox" checked={configs[kind].corpus === "on_request"} onchange={(event) => set(kind, "corpus", event.currentTarget.checked ? "on_request" : "off")} /> Corpus counts on request</label>
+        <label><input type="checkbox" checked={configs[kind].voice === "persona"} disabled={capabilities?.providers.llm !== "external"} aria-describedby={capabilities?.providers.llm !== "external" ? `${kind}-voice-unavailable` : undefined} onchange={(event) => set(kind, "voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>
+        {#if capabilities?.providers.llm !== "external"}<span class="honest" id={`${kind}-voice-unavailable`}>No external voice provider is configured for this deployment.</span>{/if}
       </fieldset>
     {/each}
   </div>

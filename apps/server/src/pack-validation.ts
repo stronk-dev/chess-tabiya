@@ -12,6 +12,7 @@ import {
   type StructuralFeature,
 } from "@chess-tabiya/schema/drill-pack";
 import {
+  BANNED_JUDGEMENTS,
   DECLARED_UNGRADEABLE_VERDICTS,
   TEMPO_GRADEABLE_VERDICTS,
   createRun,
@@ -181,7 +182,7 @@ const PLAN_OBJECTIVES = new Set([
   "reach_structure", "preserve_plan_window", "execute_break",
   "prevent_opponent_plan", "transition_to_endgame",
 ]);
-const KEY_POINT_JUDGEMENTS = new Set(["weak", "strong", "good", "bad", "better", "worse", "advantage", "winning", "losing", "should", "must", "best", "worst", "mistake", "blunder", "punish", "wins", "loses"]);
+const KEY_POINT_JUDGEMENTS = new Set(BANNED_JUDGEMENTS);
 
 function reasoningCheckpointFen(pack: DrillPackDefinition, checkpoint: DrillPackDefinition["checkpoints"][number]): string | undefined {
   const trigger = checkpoint.trigger;

@@ -107,6 +107,11 @@
     </HonestControl>
   </div>
 
+  <section class="narrative" aria-label="Comparison narrative">
+    <button type="button" aria-expanded={narrativeOpen} onclick={() => narrativeOpen = !narrativeOpen}>Narrative</button>
+    {#if narrativeOpen}{#each narrative.groups as group}<div>{#each group.sentences as sentence}<p>{sentence}</p>{/each}</div>{/each}{#if onVoice}<button type="button" onclick={() => void onVoice().then((text) => personaText = text)}>Revoice narrative</button>{/if}{#if personaText}<p>{personaText}</p>{/if}{/if}
+  </section>
+
   <section class="trajectory" aria-label="Recorded engine evaluation">
     <h3>Recorded engine evaluation</h3>
     <span class="fork-marker">Fork</span>
@@ -132,11 +137,6 @@
       </article>
     {/each}
   </section>
-  <section class="narrative" aria-label="Comparison narrative">
-    <button type="button" aria-expanded={narrativeOpen} onclick={() => narrativeOpen = !narrativeOpen}>Narrative</button>
-    {#if narrativeOpen}{#each narrative.groups as group}<div>{#each group.sentences as sentence}<p>{sentence}</p>{/each}</div>{/each}{#if onVoice}<button type="button" onclick={() => void onVoice().then((text) => personaText = text)}>Revoice narrative</button>{/if}{#if personaText}<p>{personaText}</p>{/if}{/if}
-  </section>
-
   <section class="results" aria-label="Per-branch consequences">
     {#each comparison.columns as column}
       {@const consequence = comparison.consequences[column.branchId]}

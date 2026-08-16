@@ -51,6 +51,8 @@ describe("Lichess puzzle consequence seeds", () => {
       expect(pack).not.toHaveProperty("spine");
       expect(pack.start).not.toHaveProperty("movesSan");
       expect(pack.mode).toBe("outcome");
+      expect(pack.objective.summary).toMatch(/^Play on from this position for \d+ plies, then compare the consequence\.$/);
+      expect(pack.objective.summary).not.toContain("your rating");
       expect(pack.opponentPolicy).toMatchObject({ mode: "human_common", seedMode: "per_branch" });
       expect(validatePackDocument(pack).valid).toBe(true);
       expect((await checkSourcingDirectory(output)).valid).toBe(true);

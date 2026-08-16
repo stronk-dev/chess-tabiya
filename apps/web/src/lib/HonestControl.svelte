@@ -19,14 +19,10 @@
 <style>
   .honest-control { display: contents; }
   .reason {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+    display: block;
+    margin: .25rem 0;
+    color: var(--muted);
+    font-size: .72rem;
+    line-height: 1.35;
   }
 </style>

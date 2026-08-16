@@ -24,7 +24,7 @@
         "kind": "reach_checkpoint"
       }
     ],
-    "summary": "Play on from this position for 8 plies against an opponent near your rating.",
+    "summary": "Play on from this position for 8 plies, then compare the consequence.",
     "type": "play_until_checkpoint"
   },
   "opponentPolicy": {

@@ -2912,3 +2912,26 @@ Verification: `ENGINES_REQUIRED=1 make verify` passed 712 tests across 113 files
 0 errors / 0 warnings and schema/packaging clean; `make test-browser` passed 24 tests at zero
 retries with the optional Maia test skipped. The lifecycle is archived in
 `rfc/archive/evidence-at-runtime.md` and `planning/archive/evidence-at-runtime/`.
+
+## 2026-08-16 — Band-flattery surface defects closed
+
+Five schema-neutral defects from the self-surface audit are closed. The shared voice guard now
+rejects evidence-absent praise as well as criticism, and pack validation consumes that same
+vocabulary instead of maintaining a duplicate. `HonestControl` reasons are visible rather than
+screen-reader-only. Human-model splits can be requested directly from the Assistance panel without
+enabling or opening pivotal markers; Settings now exposes all nine assistance axes. The grounded
+comparison narrative remains opt-in but is placed before the engine-evaluation dashboard.
+
+The on-ramp emitter and all 24 reachable candidate packs no longer claim an opponent near a learner
+rating the product does not have; they now ask the learner to play on and compare the consequence.
+D393, D394, D396, D397, and D398 are closed.
+
+Verification: `ENGINES_REQUIRED=1 make verify` passed 714 tests across 113 files with Svelte
+0 errors / 0 warnings and schema/packaging clean; `make test-browser` passed 24 tests at zero
+retries with the optional Maia test skipped. The browser gate explicitly observes an unavailable
+control's reason as visible.
+
+`rfc/opponent-contracts.md` was not started: its queue entry says accepted, while its governing
+body still says `draft` and leaves owner-facing open question 2 unresolved. That question chooses
+between the digest tiebreak and retaining the measured lexicographic bias, so it changes code and
+cannot be inferred from the queue banner.

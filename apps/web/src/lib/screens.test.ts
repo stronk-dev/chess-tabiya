@@ -10,6 +10,7 @@ import {
   createRun,
   fork,
   reachCheckpoint,
+  revealFeedback,
   rewind,
   transitionObjective,
   type DrillRun,
@@ -236,6 +237,49 @@ describe("Layer 3 screens", () => {
     const checkbox = document.querySelector<HTMLInputElement>('.assistance-grid input[type="checkbox"]')!;
     checkbox.click(); await tick();
     expect(document.querySelector(".pivotal-marker")).toBeNull();
+    await unmount(component);
+  });
+
+  it("requests the human-model split without requiring pivotal markers", async () => {
+    const initial = createRun({
+      id: "split-without-marker",
+      session: {
+        kind: "position",
+        start: { fen: "4k3/8/8/8/8/8/P7/4K3 w - - 0 1", side: "white" },
+        feedbackPolicy: "attempt_end",
+        opponentPolicy: { mode: "human_common", targetElo: 1500 },
+      },
+      sessionDigest: `sha256:${"f".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    const run = revealFeedback(initial, at).run;
+    const onHumanSplit = vi.fn(async () => ({
+      nodeId: run.activeCursor.nodeId,
+      engine: { id: "maia", name: "Maia", version: "3", seedHonored: false },
+      targetElo: 1500,
+      candidates: [{ moveUci: "e8e7", mass: .4, rank: 1 }],
+    }));
+    const assistanceStorage = {
+      getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "on_request", corpus: "off", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }),
+      setItem: vi.fn(),
+    };
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onHumanSplit, registerKeyboardRegion,
+    } });
+    await tick();
+
+    expect(document.querySelector(".pivotal-marker")).toBeNull();
+    const request = [...document.querySelectorAll<HTMLButtonElement>(".assistance-grid button")]
+      .find((button) => button.textContent?.includes("Show recorded human-model split"));
+    expect(request).toBeDefined();
+    request!.click();
+    expect(onHumanSplit).toHaveBeenCalledWith(run.activeCursor.nodeId);
+    await vi.waitFor(() => expect(document.querySelector("[aria-label='Human-model evidence']")?.textContent).toContain("e8e7 40%"));
     await unmount(component);
   });
 
@@ -505,6 +549,10 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("objective achieved");
     expect(document.body.textContent).toContain("M-2");
     expect(document.body.textContent).toContain("Recorded branch strips");
+    const compareSections = [...document.querySelectorAll(".compare > section")];
+    expect(compareSections.indexOf(document.querySelector(".narrative")!)).toBeLessThan(
+      compareSections.indexOf(document.querySelector(".trajectory")!),
+    );
     expect(document.querySelector(".boards")?.getAttribute("data-zoom")).toBe("near");
     expect(document.querySelectorAll(".boards [aria-label='Chessboard']")).toHaveLength(1);
     document.querySelector<HTMLButtonElement>(".zoom-control button")!.click();
