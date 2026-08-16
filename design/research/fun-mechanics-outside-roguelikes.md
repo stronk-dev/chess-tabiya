@@ -42,7 +42,10 @@ in a three-value type, and the owner's micro-DLC framing is correct with the pac
 
 ## Method, and its limits stated first
 
-1. **Repo claims are `[V]`**, derived in this pass at `c55b9cf`. Pack counts are a Python walk
+1. **Repo claims are `[V]`**, derived in this pass at `c55b9cf` and **re-checked at `bae0a90`**
+   after twelve commits landed mid-pass — 47 packs, the 20/11/14/2 phase split and the 330/189
+   deviation/checkpoint counts are unchanged, and `RunSessionKind`, `AssistancePermission` and
+   `permittedAssistance` are byte-identical. Pack counts are a Python walk
    over `content/drafts/*.json`, canonical packs = those declaring a `phase`, with
    `.evidence.json` / `.job.json` / `.sources.json` sidecars and `.browser.json` fixtures
    excluded — the **same selection** `campaign-effect-vocabulary.md` §Method,
@@ -1025,7 +1028,7 @@ human moderator verification ([Wikipedia](https://en.wikipedia.org/wiki/Speedrun
   developer shipping anything.
 - **Collides with:** **`06` §3 law 5** if a category is defined by rarity, and with C1 if a
   category is "no rewinds" — which is the obvious one to reach for and is a retry price wearing a
-  costume. It is available only as a *player's own_ declaration, never as a product-offered
+  costume. It is available only as a **player's own** declaration, never as a product-offered
   challenge, and the difference is not cosmetic.
 - **Transformation:** **run categories over the loadout and the ladder, not over the retry.**
   "≤3 lenses", "no corpus rung", "silent" (`SILENT_ASSISTANCE` is already a shipped named
@@ -1256,7 +1259,7 @@ the best to come around in a while"* `[P]`.
   loadout and the suppressor — and unlike the suppressor it is *elective*, so it produces no
   resentment. It is also the single best use of the one honest difficulty dial the campaign has.
 - **What would kill it:** the shipped catalogue does not vary the band — **35 of 47 packs declare
-  1800** and the corpus spans 1150–1939 `[V]` — so the dial is currently theoretical for content
+  1800** and the corpus spans 1150–1900 `[V]` — so the dial is currently theoretical for content
   that hard-codes it. Whether an opponent band is *usable* as a per-run modifier depends on the
   pack's declared band being an override-able default, which today it is not. Second killer: R10
   found the band trajectory doubles back above ≈2500, so "+200" is only monotone inside the ruled
