@@ -3126,3 +3126,15 @@ as independent from verification. The server and Maia build/push jobs now both d
 dedicated release job that installs Stockfish and runs `ENGINES_REQUIRED=1 make verify`. The
 packaging verifier pins the dependency, so a later workflow edit cannot silently restore the
 race between validation and publication.
+
+## 2026-08-17 — the queue's A2/A3 headings were not executable batches
+
+Re-deriving the next queue items against their own defect rows found that A2 mixes format work,
+measurements and a behaviour change gated on a census, while A3 mixes teacher-owned work with
+rows that state no mechanical remedy. The headings remain useful routing, but treating them as
+implementation authorization would require inventing missing decisions.
+
+D232 was stale in the opposite direction. `evidence-at-runtime` already shipped a structural
+test that enumerates all four `evidencePacket(` construction sites and requires a preceding
+disclosure gate. The ledger now records that closure, and the queue advances only to the
+independently takeable B2 subset after rechecking its current referents.

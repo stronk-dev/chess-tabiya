@@ -51,6 +51,13 @@ flagged).
 **B6 and B7 are listed as traps**, not batches: B6 is mostly owner-tier `DESIGN-GAP:` rows with
 one takeable member, B7 is convention with one.
 
+**Queue correction 2026-08-17:** A2 and A3 are routing headings, not executable batches.
+A2 contains format work that needs an RFC (D106/D195), measurements (D375/D457), and a behaviour
+change whose own row requires a census first (D373). In A3, D232 was already implemented by
+`evidence-at-runtime` and is now reconciled; D448/D92 remain teacher-surface-owned, while D259
+and D214 specify no mechanical remedy. Do not invent the missing decisions. The next independently
+takeable subset is B2's D219/D229/D258/D213, re-derived against the current tree before editing.
+
 **Two findings in that document outrank most of the batches.** `db243f5` edited nineteen defect
 rows and **changed column 3 only** — writing *"✅ closed by pack-graduation 0.27"* into the
 disposition while leaving column 1 at 🐞/💡. So [[D418]] is exactly right, and **the wave that
