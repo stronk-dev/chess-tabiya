@@ -92,6 +92,33 @@ written. **Locate by symbol name first — every line number in this document is
 >   the author's position is unchanged from the reviewer's: **take the anchor (Open question 4), do
 >   not weaken the predicate.**
 
+
+> **OWNER RESPONSE 2026-08-16, and it reframes Open question 1 rather than answering it.**
+> The owner asked: *"i dont understand… what are we missing? can't we implement it properly?
+> what do we gain/lose?"* — and that is the right question. Claude posed C6 / C6′ / C6″ as a
+> three-way product fork about **what to show a learner while the attach path is broken**. It is
+> not primarily that. **What is missing is an implementation, not a decision.**
+>
+> The evidence contract was built for machine-*rendered* sentences: a claim's text pointer is
+> `PROSE_POINTER`, only a registered explorer or engine template may support it, and both require
+> the supported prose to be the **byte-exact rendered template**. So the only way to "back" an
+> authored sentence today is to **replace it** — `attachExplorerEvidence` literally assigns
+> `pack.feedbackClaims[i].text = renderExplorerFrequency(values)` and then records evidence for
+> the sentence *it* wrote. Authored prose was never given a path, and the contract forbids one.
+>
+> **`rfc/claim-backing.md` (accepted, pack 0.26) is that implementation.** It adds `claimBindings`:
+> the author keeps their own sentence and declares, span by span, which verbatim fragments are
+> instrument readings; the validator re-derives each reading from records already in that pack's
+> ledger and requires the author's words to match. The author's voice survives and the numbers
+> inside it are verified.
+>
+> **Therefore this RFC is sequenced BEHIND `claim-backing`, and that sequencing dissolves the
+> costly half of the fork.** "Withhold" stops meaning *permanently dark for 37 claims* and starts
+> meaning *not yet bound* — deferral, which is what it was always assumed to be. This RFC must
+> restate Open question 1 against a working attach path and report what residue, if any, still
+> cannot be bound once `claimBindings` exists. **Do not re-ask the owner the three-way question;
+> it was a symptom of enforcing before building.**
+
 ## Summary
 
 Q8 measured the product's feedback surface against the named anti-pattern and returned a split
