@@ -471,14 +471,32 @@
       "UNGROUNDED: the objective summary's framing (that completing the arrangement before the lever arrives is the right way to play the structure) is the pack's one authored strategic premise. It is not established by any evidence here. The corpus shows what the band plays, not what is correct; the attack counts show what attacks what, not what matters. No engine evaluation has been run on any position in this pack.",
       "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one.",
       "ENGINE PASS (mechanical, 2026-08-15): make engine-walk over this pack — Stockfish 18 at the repo's authoring profile (depth 22, Threads 1, Hash 16 MB, MultiPV 1), 21 queries, no abstentions. Recorded White-perspective centipawns: start +75; spine Qd2 +52, ...Rc8 +74, Rac1 +65, ...a6 +68, b3 +75, ...Ng4 +80, Bxg4 +82, ...Bxg4 +77; sibling ...Nxd4 +59; deviations f3 +55, Rc1 +34, f4 +32, Nxc6 +50, c4-c5 -117. Deviation costs in this file are candidate-relative losses against the best evaluated candidate (+77, the engine's own first choice Nc2) and are LOWER BOUNDS: legal moves were not exhaustively enumerated. Engine evidence supports these literal numbers only — it does not ground any deviation class, the offObjective flag, or any plan claim in this pack.",
-      "TEMPO WINDOW VERIFIED (mechanical): the authored spine was replayed through the shipped evaluator (packages/runtime/src/tempo.ts windowStates, learner white). Result: readiness satisfied 2 of 2, spend 0 of budget 1, closedBy deadline at bxg4-take, verdict in_time. The window is therefore reachable and non-vacuous on the line the pack teaches; the budget of one and the deadline of four are authored numbers, and only the fact that the spine resolves them was measured."
+      "TEMPO WINDOW VERIFIED (mechanical): the authored spine was replayed through the shipped evaluator (packages/runtime/src/tempo.ts windowStates, learner white). Result: readiness satisfied 2 of 2, spend 0 of budget 1, closedBy deadline at bxg4-take, verdict in_time. The window is therefore reachable and non-vacuous on the line the pack teaches; the budget of one and the deadline of four are authored numbers, and only the fact that the spine resolves them was measured.",
+      "CITATION PASS (2026-08-16): the restraint premise is now cited. en.wikipedia.org/wiki/Mar%C3%B3czy_Bind (CC BY-SA 4.0, read 2026-08-16) states that \"White's c- and e-pawns control the d5-square, making it difficult for Black to open their position with ...d5\" and that Black \"often settles for the less active ...d6 and may develop a Hedgehog pawn formation against the Bind\". en.wikipedia.org/wiki/Pawn_structure §Maróczy Bind (CC BY-SA 4.0, section wikitext read via the MediaWiki action=parse API the same day) gives \"Themes for White: Nd4-c2-e3, fianchettoing one or both bishops, the Maróczy hop (Nc3-d5 followed by e4xd5 with terrific pressure on the e-file), kingside attack, c4-c5 and e4-e5 breaks\" and \"Themes for Black: b7-b5 break, f7-f5 break, d6-d5 break\" — the restrained breaks this pack's objective is arranged against. WHAT THEY DO NOT SUPPLY: the ORDER claim — arrangement before lever — is not stated by either source; both list themes, neither sequences them. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "The objective's premise — arrangement before lever — is uncited. The routes out are a citable source that states the restraint plan for this structure, or a corpus measurement relating the arrangement's completion to results at this band; neither has been done.",
+      "CITED 2026-08-16 (the restraint half). What the bind restrains and what Black's freeing breaks are (...b5, ...f5, ...d5) is stated by en.wikipedia.org/wiki/Mar%C3%B3czy_Bind and by en.wikipedia.org/wiki/Pawn_structure §Maróczy Bind (both CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNCITED after the 2026-08-16 pass: the ORDER — that the arrangement must be complete before the lever — is the objective's actual content and neither cited source sequences the themes it lists. This is a timing claim; per design/04 §7 and the D155 finding, the instrument that could settle it is a game-level corpus, which does not exist at HEAD. Corpus measurement relating arrangement completion to results at this band is still not done.",
       "An engine pass has been run (see ENGINE PASS in sources) and the deviation costs are now measured rather than declared unmeasurable. What it does not do is ground the objective's premise, any deviation class, or the timing window's thresholds — a fixed-depth score is a measurement of a position, not of a plan.",
       "The timing window's numbers are authored: a luxury budget of one and a deadline of five learner moves are the author's encoding of the teaching point, and nothing measured says those are the right thresholds."
+    ],
+    "attribution": [
+      {
+        "sourceId": "wikipedia-maroczy-bind",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Maróczy Bind\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Mar%C3%B3czy_Bind. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Mar%C3%B3czy_Bind",
+        "retrievedAt": "2026-08-16"
+      },
+      {
+        "sourceId": "wikipedia-pawn-structure",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Pawn structure\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Pawn_structure. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Pawn_structure",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

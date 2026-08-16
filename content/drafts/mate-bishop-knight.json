@@ -692,14 +692,34 @@
       "WHY THIS PACK EXISTS ALONGSIDE trajectory-mate-bishop-knight. The B+N mate was commissioned as a multi-segment trajectory (owner ruling 2026-08-15). `make verify-draft` cannot attach evidence to a trajectory pack - it requires a top-level syzygy assessment and a trajectory's top-level objective is run_trajectory, which may not carry grading. This file is the same root and the same thirty-nine plies wrapped in an outcome objective so that the technique's tablebase evidence is machine-attached somewhere. It is also the missing member of the theoretical-mates family (mate-k-q-technique, mate-k-r-technique, mate-two-bishops), whose 2026-08-14 batch deliberately deferred B+N pending exactly this ruling.",
       "difficulty.branchLengthTarget IS OMITTED, NOT FORGOTTEN. The spine is 39 plies and the schema caps the field at 20. Declaring any legal value would misdescribe the drill, so the field is absent and the pack states its length here instead. This is the same 20-ply cap the 2026-08-14 mates batch hit from the other direction (a 23-ply K+R finish that had to be discarded).",
       "AUTHORED, NOT PROVED: every sentence of reasoning is the author's rendering of standard technique. The tablebase grounds categories and distances; square-coverage statements in the annotations are derivable FEN arithmetic and were checked by hand against the position at that ply.",
-      "No shape-library entry exists for theoretical mates; none is referenced. See graduationBlockers."
+      "No shape-library entry exists for theoretical mates; none is referenced. See graduationBlockers.",
+      "CITATION PASS (2026-08-16): the method prose in this pack now has named, retrievable, licence-compatible sources instead of authored consensus. en.wikipedia.org/wiki/Bishop_and_knight_checkmate (CC BY-SA 4.0, read 2026-08-16) states the three-phase method this pack's plan classes decompose — \"1. Driving the opposing king to the edge of the board. 2. Forcing the king out of the 'wrong' corner to the 'right' corner, if necessary. 3. Delivering the checkmate\" — names the knight's \"W manoeuvre\" and Delétang's shrinking triangles, and states \"checkmate can be forced in at most thirty-three moves from almost any starting position\". en.wikipedia.org/wiki/Checkmate (CC BY-SA 4.0, same date) calls B+N \"the most difficult one to force\" of the basic mates. WHAT THESE DO NOT SUPPLY: the pack's plan-class names (bishop-fence / knight-bridge / corner-net) are ours, the per-ply annotations are ours, and neither source states this pack's corner-stalemate density claim. Pack prose is CC-BY-SA-4.0 (owner ruling, design/02 §Content/data rights); the attribution chain is encoded in provenance.attribution and cannot be relicensed unilaterally."
     ],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13); only a citable source or mechanical validation that bears on a claim clears a blocker.",
-      "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
+      "CITED 2026-08-16 (partial). The method the prose describes is no longer authored consensus: the three-phase drive, the W manoeuvre, the Delétang triangles and the 33-move bound are stated by en.wikipedia.org/wiki/Bishop_and_knight_checkmate (CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNBACKED after the 2026-08-16 citation pass: the plan-class names and their boundaries are this pack's own carving, the per-ply annotations are uncited, and the corner-stalemate claim (\"nearly every quiet move is stalemate\") is asserted rather than enumerated — a mechanical stalemate count at the authored corner positions would settle it and has not been run. Tablebase categories remain the only mechanically grounded element.",
       "No shape-library entry names the theoretical-mate geometry; commission one if the library should fire on K+B+N positions in Just Play.",
       "perfect_tablebase is published only where a tablebase provider is configured; a deployment without one will not offer the opponent this content was verified against.",
-      "The drill has no fifty-move counter surfaced even though the annotations argue from it."
+      "The drill has no fifty-move counter surfaced even though the annotations argue from it.",
+      "PRE-EXISTING at the 2026-08-16 citation pass, found by running digestDrillPack against the sidecar and NOT caused by that pass: this pack's evidence ledger stores a packDigest that does not match the pack document, so `checkSourcingFile` raises EVIDENCE_DIGEST_STALE (\"re-confirm evidence\") on it. The evidence in the sidecar was confirmed against a different version of this file. The citation pass did not re-stamp it, because re-stamping would erase a signal it did not create. Only three of the corpus's 32 evidence sidecars are in this state: mate-bishop-knight, mate-k-q-technique and mate-k-r-technique. Clearing this means re-running the evidence, not re-writing the digest."
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "attribution": [
+      {
+        "sourceId": "wikipedia-bishop-and-knight-checkmate",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Bishop and knight checkmate\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Bishop_and_knight_checkmate. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Bishop_and_knight_checkmate",
+        "retrievedAt": "2026-08-16"
+      },
+      {
+        "sourceId": "wikipedia-checkmate",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Checkmate\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Checkmate. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Checkmate",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   },
   "retryVariants": [

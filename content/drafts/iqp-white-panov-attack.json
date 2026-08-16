@@ -295,15 +295,33 @@
       "STRUCTURAL READINGS (mechanical, chessops): the pawn skeletons, the attacker and defender counts for d4 and d5 at each quoted position, the half-open e-file for White, and the occupancy of d5 across all seven authored positions, and the outpost detector's reading of d5 for Black at the start position were computed from the FENs in this file with the chessops attack tables, not recalled.",
       "SHAPE REFERENCE (mechanical): the iqp-white entry's trigger is the named_structure detector; it was evaluated on every authored position of this pack and fires on all seven, and on the ...Nf6 sibling. The shape entry's Black plan signature (a black knight on d5 with White's d-pawn isolated) was evaluated at the start position (holds) and after ...Nf6 (does not hold). The plan classes reference the entry's own plans rather than restating them; the entry's plan prose carries its own UNGROUNDED provenance and this pack does not improve it.",
       "UNGROUNDED: the objective summary's framing — that the rook on e1 and the bishop on e4 constitute an arrangement worth completing before Black's second defender arrives — is this pack's one authored strategic premise, and so are the window's thresholds. The corpus shows what the band plays, not what is correct; the attack counts show what attacks what, not what matters. No engine evaluation has been run on any position in this pack.",
-      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one. In particular, nothing here claims that Black's knight reaching d5 first is a problem for White, or that d4-d5 is bad — only that the window's rules record it as premature and that the detector stops firing."
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one. In particular, nothing here claims that Black's knight reaching d5 first is a problem for White, or that d4-d5 is bad — only that the window's rules record it as premature and that the detector stops firing.",
+      "CITATION PASS (2026-08-16): the structural plan is now cited; the specific arrangement is not. en.wikipedia.org/wiki/Isolated_pawn (CC BY-SA 4.0, read 2026-08-16) states the isolani owner's plan — \"either advance thematically with d4-d5 opening the position and dissolving the IQP, or use the greater activity of his pieces to launch an attack\" — and the defender's — \"blockade the pawn on d4 with a piece (most likely a knight)\" and \"exchange pieces as much as possible\". en.wikipedia.org/wiki/Pawn_structure §Queen's Gambit - Isolani formation (CC BY-SA 4.0, section wikitext read via the MediaWiki action=parse API the same day) gives \"Themes for White: d4-d5 break, sacrifice of the isolani, outpost on e5, kingside attack\" and \"Themes for Black: Blockading the isolani, trading pieces for a favorable endgame\". WHAT THEY DO NOT SUPPLY: the concrete arrangement this pack grades — Re1 and Be4 before ...Nce7 — appears in no consulted source. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "The objective's premise — Re1 and Be4 before ...Nce7 — is uncited. The routes out are a citable source that states an arrangement for this structure, or a corpus measurement relating the arrangement's completion to results at this band; neither has been done.",
+      "CITED 2026-08-16 (the structural half). The IQP owner's plan set — the d5 break, the e5 outpost, piece activity and the kingside attack — and the defender's blockade-and-trade answer are stated by en.wikipedia.org/wiki/Isolated_pawn and en.wikipedia.org/wiki/Pawn_structure §Queen's Gambit - Isolani formation (both CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNCITED after the 2026-08-16 pass: the objective grades a specific arrangement — Re1 and Be4 completed before ...Nce7 — and no consulted source names it. The cited sources supply the plan family, not this move order, and a corpus measurement relating the arrangement's completion to results at this band is still not done.",
       "No engine pass has been run on this pack. The single concept_violation (d4-d5 on the ...Nf6 branch) records an unmeasurable cost for exactly that reason.",
       "The timing window's numbers are authored: a luxury budget of one and a deadline of four learner moves are the author's encoding of the teaching point, and nothing measured says those are the right thresholds.",
       "The band's data is thin past ply four: 12 games after ...Nce7 and 4 after h4. The last two spine moves are the most-played moves of a handful of games, and no measurement in this repo says they are representative."
+    ],
+    "attribution": [
+      {
+        "sourceId": "wikipedia-isolated-pawn",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Isolated pawn\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Isolated_pawn. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Isolated_pawn",
+        "retrievedAt": "2026-08-16"
+      },
+      {
+        "sourceId": "wikipedia-pawn-structure",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Pawn structure\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Pawn_structure. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Pawn_structure",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

@@ -453,13 +453,26 @@
       "AUTHORED, NOT PROVED: all prose reasoning, phase names, and the 'beginners most often get wrong' judgment. The tablebase and the rules of chess ground the categories only.",
       "No shape-library entry exists for theoretical mates; none is referenced. See graduationBlockers.",
       "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check.",
-      "Sibling packs in the theoretical-mates family: mate-k-r-technique (K+R) and mate-two-bishops (B+B)."
+      "Sibling packs in the theoretical-mates family: mate-k-r-technique (K+R) and mate-two-bishops (B+B).",
+      "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Checkmate §Basic checkmates (CC BY-SA 4.0, read 2026-08-16) states the K+Q method this pack drills — \"confining the black king to a rectangle and shrinking the rectangle to force the king to the edge\" — and that mate can be forced \"in at most ten moves from any starting position, with optimal play\". WHAT IT DOES NOT SUPPLY: the knight's-move queen distance, the never-check rule, and the give-air stalemate discipline are stated here as method and the source does not state them; they are authored. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
+      "CITED 2026-08-16 (partial). The shrink-the-box plan and the bring-the-king plan restate the method in en.wikipedia.org/wiki/Checkmate §Basic checkmates (CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNBACKED after the 2026-08-16 citation pass: the give-air plan — the rule that the defending king must always keep exactly one square — is authored prose no consulted source states, and the knight's-move queen placement is a technique detail the cited source does not reach. Both are the kind of claim a tablebase CAN settle position by position and no such enumeration has been run.",
       "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
       "No shape-library entry names the theoretical-mate boxes; if the library is to fire on K+Q positions in Just Play, an entry needs commissioning.",
-      "The natural opponent for a mates pack is perfect_tablebase (the method must work against best defence); that mode is declared-unimplemented in v1, so human_common at 1200 stands in. Revisit when tablebase opponent selection ships."
+      "The natural opponent for a mates pack is perfect_tablebase (the method must work against best defence); that mode is declared-unimplemented in v1, so human_common at 1200 stands in. Revisit when tablebase opponent selection ships.",
+      "PRE-EXISTING at the 2026-08-16 citation pass, found by running digestDrillPack against the sidecar and NOT caused by that pass: this pack's evidence ledger stores a packDigest that does not match the pack document, so `checkSourcingFile` raises EVIDENCE_DIGEST_STALE (\"re-confirm evidence\") on it. The evidence in the sidecar was confirmed against a different version of this file. The citation pass did not re-stamp it, because re-stamping would erase a signal it did not create. Only three of the corpus's 32 evidence sidecars are in this state: mate-bishop-knight, mate-k-q-technique and mate-k-r-technique. Clearing this means re-running the evidence, not re-writing the digest."
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "attribution": [
+      {
+        "sourceId": "wikipedia-checkmate",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Checkmate\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Checkmate. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Checkmate",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   },
   "retryVariants": [

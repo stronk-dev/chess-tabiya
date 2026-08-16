@@ -282,15 +282,26 @@
       "STRUCTURAL READINGS (mechanical, chessops): the pawn skeletons, the attacker counts for d1, d4 and d8 at each quoted position, the occupancy of g8 across all ten authored positions, the absence of any pawn on the d-file, and the outpost detector's reading of d4 for White at the last spine node were computed from the FENs in this file with the chessops attack tables, not recalled.",
       "SHAPE REFERENCE (mechanical): the open-centre entry's trigger was evaluated on every authored position of this pack; it fires on the first three and stops after the queens are exchanged, which is the clause of its own trigger requiring at least one queen of each colour. The entry's Black plan signature (both queens off with a central file still open) was evaluated on the same set and holds from the queen recapture onward, which is why this pack's objective can consume it as a plan consequence. The plan classes reference the entry's own plans rather than restating them; the entry's plan prose carries its own UNGROUNDED provenance and this pack does not improve it.",
       "UNGROUNDED: the objective summary's framing — that reaching the queenless position with the file still open is what this position is about for Black — is this pack's one authored strategic premise. It rests on the shape entry naming that plan for this side, and the entry's own prose is uncited. The corpus shows what the band plays, not what is correct. No engine evaluation has been run on any position in this pack.",
-      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one. In particular, nothing here claims that the queen trade favours Black, that the doubled c-pawns are a weakness or a strength, or that Black's knight belongs on any square."
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one. In particular, nothing here claims that the queen trade favours Black, that the doubled c-pawns are a weakness or a strength, or that Black's knight belongs on any square.",
+      "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Ruy_Lopez,_Exchange_Variation (CC BY-SA 4.0, read 2026-08-16) states this pack's objective premise directly — \"White aims to reach an endgame with a superior pawn structure, which may become an important factor\" — notes that \"Black has gained the bishop pair at the cost of a weakened pawn structure, having doubled pawns on c6 and c7\", and gives the endgame plan as \"to create a passed pawn on the kingside, while Black is unable to do the same on the queenside because of the doubled pawns\". WHAT IT DOES NOT SUPPLY: the source frames the target as an endgame; this pack's objective is a queenless MIDDLEGAME with the open file, which is a narrower and different state, and no consulted source names it. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "The objective's premise — that the queenless open-file position is the state worth reaching from this chair — is uncited, and it inherits the open-centre entry's own UNGROUNDED provenance. The routes out are a citable source or a corpus measurement relating the queen trade to results at this band; neither has been done.",
+      "CITED 2026-08-16 (the trade-into-a-better-structure premise). That White plays this variation to reach a favourable endgame off Black's doubled c-pawns is stated by en.wikipedia.org/wiki/Ruy_Lopez,_Exchange_Variation (CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNCITED after the 2026-08-16 pass: the cited source's target is an ENDGAME with a healthy kingside majority; this pack's objective is the queenless middlegame with the open file, which the source does not name as a goal. The inherited UNGROUNDED provenance of the open-centre entry is untouched, and no corpus measurement relating the queen trade to results at this band has been done.",
       "No engine pass has been run on this pack. No deviation carries a cost for that reason.",
       "This pack declares no timing window. The measured reason: the only candidate race is Black's queen trade against White's occupation of the open file, and the corpus shows the recapture is forced (269 of 269), so there is no opponent lever whose arrival ends a preparation. A window here would be an invention.",
       "The shape entry this pack references fires on only three of its ten authored positions, because the entry's trigger requires both queens. Whether an entry that stops describing the position after three plies is the right library hook for this tabiya is an open question this pack surfaces and does not settle."
+    ],
+    "attribution": [
+      {
+        "sourceId": "wikipedia-ruy-lopez-exchange-variation",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Ruy Lopez, Exchange Variation\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Ruy_Lopez,_Exchange_Variation. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Ruy_Lopez,_Exchange_Variation",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

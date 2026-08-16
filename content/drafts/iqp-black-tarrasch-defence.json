@@ -298,15 +298,33 @@
       "STRUCTURAL READINGS (mechanical, chessops): the pawn skeletons, the attacker and defender counts for d4, d5 and f6 at each quoted position, and the occupancy of d4 across all nine authored positions, and the outpost detector's reading of d4 for Black after ...Nxd4 were computed from the FENs in this file with the chessops attack tables, not recalled.",
       "SHAPE REFERENCE (mechanical): the iqp-black entry's trigger is the named_structure detector; it was evaluated on every authored position of this pack and fires on the first six, stopping after exd4. Its three conjuncts were then evaluated individually on that position to identify which one fails. The entry's White plan signature (a White knight on d4 with Black's d-pawn isolated) was evaluated at the start position (holds), after ...Nxd4 (does not hold) and after the immediate ...Nxd4 Qxd4 branch (does not hold). The plan classes reference the entry's own plans rather than restating them.",
       "UNGROUNDED: the objective summary's framing — that getting White's knight off d4 while the isolani is still on the board is what this position is about for Black — is this pack's one authored strategic premise. The corpus shows what the band plays, not what is correct; the attack counts show what attacks what, not what matters. No engine evaluation has been run on any position in this pack.",
-      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one. In particular, nothing here claims that the symmetric isolated-pawn position the spine reaches favours either side, and nothing claims that a knight on d4 is bad for Black."
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, and no deviation note asserts a chess consequence beyond an explicitly measured one. In particular, nothing here claims that the symmetric isolated-pawn position the spine reaches favours either side, and nothing claims that a knight on d4 is bad for Black.",
+      "CITATION PASS (2026-08-16): the structural plan is now cited; the removal premise is an inference from it. en.wikipedia.org/wiki/Isolated_pawn (CC BY-SA 4.0, read 2026-08-16) states that the side facing an isolani will \"blockade the pawn on d4 with a piece (most likely a knight) or prevent its advance long enough to increase pressure on it until it falls\", and that the isolani's owner should \"use the IQP to support an attack or dissolve it before the endgame\" via the d4-d5 break. en.wikipedia.org/wiki/Pawn_structure §Giuoco Piano - Isolani formation (CC BY-SA 4.0, section wikitext read via the MediaWiki action=parse API the same day) states the owner's theme as \"Maintaining control over the weak square in front of the isolated queen pawn as it advances to prevent enemy blockade\". WHAT THEY DO NOT SUPPLY: neither source says REMOVE the blockading piece; they say prevent or outlast the blockade. This pack's objective goes one step further than its source. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "The objective's premise — removing the blockading knight while the isolani stands — is uncited. The routes out are a citable source that states a plan for this structure from the isolani's side, or a corpus measurement relating the removal to results at this band; neither has been done.",
+      "CITED 2026-08-16 (the structure, not the move). That the blockade of the square in front of the isolani is the pawn's central problem, and that contesting it is the owner's job, is stated by en.wikipedia.org/wiki/Isolated_pawn and en.wikipedia.org/wiki/Pawn_structure §Giuoco Piano - Isolani formation (both CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNCITED after the 2026-08-16 pass, with the gap now named precisely: the cited sources say the owner must PREVENT or OUTLAST the blockade; this pack's objective grades REMOVING the blockading knight while the isolani still stands. That is a stronger and more specific claim than any consulted source makes, and a corpus measurement relating the removal to results at this band is still not done.",
       "No engine pass has been run on this pack. Every note that could have carried a cost carries none for that reason.",
       "This pack declares no timing window. The measured reason is recorded in the objective summary and the first spine annotation: the blockading knight is already on d4 in the start position, so there is no arrival to race, and no other opponent lever on this spine ends a preparation. If a race is later found here, the window is the honest way to encode it.",
       "The success condition's second rule sends the run to transitioned when the detector stops firing. That is a definitional state change, but calling it a transition rather than a failure is an authoring choice with no measurement behind it."
+    ],
+    "attribution": [
+      {
+        "sourceId": "wikipedia-isolated-pawn",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Isolated pawn\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Isolated_pawn. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Isolated_pawn",
+        "retrievedAt": "2026-08-16"
+      },
+      {
+        "sourceId": "wikipedia-pawn-structure",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Pawn structure\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Pawn_structure. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Pawn_structure",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

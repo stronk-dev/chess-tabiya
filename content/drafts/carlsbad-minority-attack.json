@@ -516,17 +516,43 @@
       "MECHANICALLY VERIFIED (chessops, this session): the start FEN parses as legal standard chess and is reached by the listed SAN move list; every spine UCI/SAN pair is legal and agrees; every deviation move is legal from the position after its anchor node; the pawn structure is White a2/b2/d4/e3/f2/g2/h2 against Black a7/b7/c6/d5/f7/g7/h7, i.e. the genuine Carlsbad with no c-pawn for White and no e-pawn for Black; the attacker/defender counts asserted for b5, h4 and h7 were computed from the position, not recalled.",
       "RESULT SPLITS (mechanical, retrieved 2026-08-15): Lichess opening explorer, https://explorer.lichess.ovh/lichess, variant=standard, ratings=1400,1600,1800, speeds=rapid,classical, since=2023-01, until=2025-12, authenticated with the operator token. Every split below was re-queried live for this pass rather than copied from a document, and every position total reproduced the count this pack already quoted. Result splits are admissible corpus_observed evidence under the owner ruling of 2026-08-15 (design/BACKLOG.md D126); the boundary is that a split may be stated with its population and may never be converted into a move verdict or a quality claim. Measured here: start position 815 games, 390 white / 60 draw / 365 black (47.9/7.4/44.8%). No verdict, preference, comparison or cost is derived from any of these numbers anywhere in this pack. The repo's own explorer client abstains below 100 games at a position (apps/server/src/sourcing/explorer.ts), and that floor is applied here: where a position falls under it the split is recorded as unavailable rather than quoted. This is the first corpus evidence of any kind in this pack.",
       "UNGROUNDED: every strategic claim in this pack — the objective summary, all three plan-class descriptions, all spine annotations, all ten deviation classifications and notes, and all four feedbackClaims — is agent-authored prose with NO citation, NO engine evaluation, NO corpus frequency and NO human review. The Carlsbad plan taxonomy used here (minority attack / central break / kingside attack) is presented as established, but nothing in this file establishes it. 'Original prose' answers copyright, not truth.",
-      "AUTHORING NOTE: the commissioning brief described this structure as 'White c3/d4/e3 vs Black c6/d5/e6' and named '...e5' as Black's central break. That is not the Carlsbad reached from the QGD Exchange, where White has no c-pawn and Black has no e-pawn. The structure in this file was verified against the board and the brief's description was not followed; Black's breaks here are ...c5 and ...f5, not ...e5."
+      "AUTHORING NOTE: the commissioning brief described this structure as 'White c3/d4/e3 vs Black c6/d5/e6' and named '...e5' as Black's central break. That is not the Carlsbad reached from the QGD Exchange, where White has no c-pawn and Black has no e-pawn. The structure in this file was verified against the board and the brief's description was not followed; Black's breaks here are ...c5 and ...f5, not ...e5.",
+      "CITATION PASS (2026-08-16): the three-plan taxonomy is now partly cited. en.wikipedia.org/wiki/Pawn_structure §Carlsbad formation (CC BY-SA 4.0, section wikitext read via the MediaWiki action=parse API on 2026-08-16) gives \"Themes for White: Minority attack on the queenside. e3-e4 break, sometimes prepared with f2-f3. e5 outpost, sometimes supported with f2-f4\" and \"Themes for Black: e4 outpost, kingside attack\". en.wikipedia.org/wiki/Minority_attack (CC BY-SA 4.0, same date) defines the minority attack as \"the advancement of one's pawns on the side of the board where one has fewer pawns than their opponent, intending to use their minority to strategically provoke a weakness\" and states \"In the Carlsbad pawn structure, a common plan for White is to advance the a- and b-pawns in a minority attack\". en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority (CC BY-SA 4.0, same date) describes the b2-b4-b5 exchange on c6 leaving \"a weak c-pawn that will last the entire game\", which is this pack's backward-c6 success condition. THE TAXONOMY DOES NOT MATCH CLEANLY: the cited source assigns the KINGSIDE ATTACK to Black in this structure, not to White. White's third theme there is an e5 outpost supported by f2-f4. This pack's third White plan is therefore NOT cited and is in visible tension with the source. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). No sign-off will ever clear a blocker below; a citable source or mechanical validation that bears on the claim are the only two things that will.",
-      "The three-plan taxonomy is the pack's foundational claim and is entirely uncited. It needs a citable source \u2014 a named book or course whose idea is restated in our words, or an annotated master game in which the taxonomy is visible. Nothing mechanical can supply a taxonomy, so this blocker has exactly one route out.",
+      "CITED 2026-08-16 (two of three plans). The minority attack and the e3-e4 central break are named as White's themes in the Carlsbad by en.wikipedia.org/wiki/Pawn_structure §Carlsbad formation and by en.wikipedia.org/wiki/Minority_attack (both CC BY-SA 4.0); the backward-c6 success condition is stated by en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority. All three are attributed in provenance.attribution. The taxonomy is no longer entirely uncited.",
+      "STILL UNCITED, AND NOW CONTRADICTED IN SHAPE: the third plan class — a White kingside attack in the Carlsbad — is not what the cited source gives. en.wikipedia.org/wiki/Pawn_structure §Carlsbad formation lists \"kingside attack\" under Themes for BLACK, and gives White's third theme as \"e5 outpost, sometimes supported with f2-f4\". Either the plan class is re-cut to the outpost the source names, or a different source that states a White kingside attack in this structure has to be found. Nothing mechanical can supply a taxonomy, so this residual still has exactly one route out.",
       "All four feedbackClaims need grounding: minority-target and kingside-hook are author principles with no evidence; b5-arithmetic is partly derivable from the position and could be mechanically checked; plan-tempi-nonrefundable is a hypothesis that a comparison corpus could actually test.",
       "The two concept_violation judgments (13.f3 and 14.Na4) assert that a legal, non-losing move is a conceptual error. That is the strongest claim in the file and the least supported; it needs engine and/or corpus evidence that these moves cost something measurable.",
       "The evaluative language in the b5-strike annotation ('the textbook result', 'that structure outlives the middlegame') asserts endgame consequences no evidence in this repo supports.",
       "No engine validation pass has been run on any position in this pack.",
       "No rating-band frequency check: the tabiya is asserted to be a position 1400-2000 players actually reach, on model knowledge alone. The Lichess explorer API could settle this cheaply."
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "attribution": [
+      {
+        "sourceId": "wikipedia-pawn-structure",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Pawn structure\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Pawn_structure. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Pawn_structure",
+        "retrievedAt": "2026-08-16"
+      },
+      {
+        "sourceId": "wikipedia-minority-attack",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Minority attack\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Minority_attack. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Minority_attack",
+        "retrievedAt": "2026-08-16"
+      },
+      {
+        "sourceId": "wikibooks-chess-strategy-queenside-pawn-majority",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Chess Strategy/Queenside pawn majority\", Wikibooks, open books for an open world — by Wikibooks contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority. Retrieved 2026-08-16.",
+        "url": "https://en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

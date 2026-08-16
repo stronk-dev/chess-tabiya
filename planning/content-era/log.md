@@ -2971,3 +2971,221 @@ censused (range 4.7–9.8%). No one has been misled and the illustration did its
 job, but a plausible split paired with a real count is D110's shape one tier up,
 in the document every agent reads first. Ledgered D154; the fix is one edit and
 it is the owner's, not this wave's.
+
+## 2026-08-16 — Citation pass: 22 packs get sources, 0 packs get closer to publishing (claude)
+
+**Ledger block D267–D276, all ten used.** The wave `rfc/pack-graduation.md` §7
+prices as the cheapest step on the publishability ladder — *"+ the above **and** a
+citation pass → 10 of 47"* — run against 47 authored packs. The headline is a
+measurement, not an argument: **the checker cannot see a citation, so the number
+it moves is zero.**
+
+### The measurement, run rather than reasoned
+
+`checkSourcingFile` over all 47 `content/drafts/` packs, at `c55b9cf`, before and
+after this wave's 22 edits, at both severities (published severity measured by
+running the same checker against a copy with `reviewStatus: "published"`):
+
+| | Draft severity clean | Published severity clean |
+|---|---|---|
+| Before | **32 of 47** | **4 of 47** |
+| After 22 packs cited | **32 of 47** | **4 of 47** |
+
+The 4 are `anti-caro-advance`, `opening-principles-black`,
+`opening-principles-white`, `opponent-intent-early-queen`. §7's corrected
+right-hand column said **4**, not 7, and that reproduces exactly. The 15 draft
+failures are all `EVIDENCE_READ_ERROR` + `MANIFEST_READ_ERROR` — packs with no
+sidecars at all — which reproduces D238's *15 of 47* independently.
+
+**Why zero.** Every remaining published-severity error in the corpus is
+`EVIDENCE_TYPE_UNBACKED`, which fires when a `feedbackClaims[].evidenceTypes`
+label has no evidence **record of a matching kind**. A bibliographic source
+produces no record of any kind, because `EVIDENCE_KINDS` has six members and none
+of them is a citation (D268). §7's *"10 after a citation pass"* is a hand audit
+against the **blocker gate**, which is prose; it can be true while the instrument
+is unmoved. Both statements are now measured, which is what the RFC's own
+cross-review asked for. Ledgered **D267**.
+
+### What was cited — 22 packs, 19 sources, every one fetched and quoted
+
+All sources are CC BY-SA 4.0 and compatible with the owner ruling that pack prose
+is `CC-BY-SA-4.0` (`design/02` §Content/data rights). Every URL was retrieved on
+2026-08-16 and the sentences relied on are quoted inside each pack's
+`provenance.sources`. **No source text was paraphrased closely enough to be a
+derivative** — the idea is cited, the prose stays ours.
+
+**Endgame class — the 11 packs carrying the two tablebase-family blockers:**
+
+| Pack | Source | What it backs |
+|---|---|---|
+| `mate-bishop-knight`, `trajectory-mate-bishop-knight` | en.wikipedia.org/wiki/Bishop_and_knight_checkmate | the three-phase method, the W manoeuvre, Delétang's triangles, the 33-move bound |
+| `mate-k-q-technique` | en.wikipedia.org/wiki/Checkmate §Basic checkmates | shrink-the-rectangle, bring the king, "at most ten moves" |
+| `mate-k-r-technique` | same, + en.wikipedia.org/wiki/Opposition_(chess) | the rectangle drive and "at most sixteen moves"; the opposition and who must give way |
+| `mate-two-bishops` | en.wikipedia.org/wiki/Checkmate §Basic checkmates | drive to an edge then a corner, "a maximum of 19 moves" |
+| `philidor-third-rank-hold` | en.wikipedia.org/wiki/Philidor_position | the third-rank fence, then check from behind when the pawn arrives |
+| `philidor-passive-rook-convert` | same | "A passive defense does not work" — the root's premise |
+| `pawn-opposition-convert` | Opposition (chess) + King and pawn versus king endgame | the opposition, key squares, and Averbakh's king-leads-the-pawn |
+| `queen-vs-pawn-seventh-convert` | en.wikipedia.org/wiki/Queen_versus_pawn_endgame | the zigzag **and** the bishop/rook-pawn stalemate exception — the closest source-to-prose match in the corpus |
+| `opposite-bishops-fortress-hold` | en.wikipedia.org/wiki/Opposite-coloured_bishops_endgame | the drawing tendency, two extra pawns often insufficient, the fortress method |
+| `pawn-breakthrough-convert` | en.wikibooks.org/wiki/Chess_Strategy/Queenside_pawn_majority | the majority-with-distant-kings premise only — see D273 |
+
+**Middlegame and opening class — the 11 "objective's premise is uncited" packs:**
+
+| Pack | Source | What it backs |
+|---|---|---|
+| `carlsbad-minority-attack` | Pawn structure §Carlsbad + Minority attack + Queenside pawn majority | two of the three plans, and the lasting weak c-pawn — see D271 |
+| `maroczy-bind-white-squeeze` | Maróczy Bind + Pawn structure §Maróczy Bind | what the bind restrains and Black's three freeing breaks |
+| `iqp-white-panov-attack` | Isolated pawn + Pawn structure §Queen's Gambit – Isolani | the d5 break, the e5 outpost, blockade-and-trade as the answer |
+| `iqp-black-tarrasch-defence` | Isolated pawn + Pawn structure §Giuoco Piano – Isolani | the blockade of the square in front of the isolani as the pawn's central problem |
+| `kid-mar-del-plata-white` | King's Indian Defence | White's c4–c5 break against Black's ...f5/...g5 storm |
+| `dragon-yugoslav-race` | Sicilian Defence, Dragon Variation | the c-file/...Ne5-c4 counterplay and the "race-to-mate pawn storms" framing |
+| `french-advance-chain-white` | French Defence + Pawn structure §e5-chain | ...c5 attacking the chain at its base — see D270 |
+| `nimzo-doubled-c-pawns` | Nimzo-Indian Defence | the bishop-pair-for-doubled-c-pawns bargain |
+| `open-centre-ruy-exchange` | Ruy Lopez, Exchange Variation | "White aims to reach an endgame with a superior pawn structure" |
+| `grunfeld-exchange-fianchetto` | Grünfeld Defence | the g7-bishop-plus-...c5 attack on the big centre |
+| `berlin-queenless-press` | Berlin Defence | the position and the ...Kc8 walk — and it argues against the objective, see D270 |
+
+### How a citation is encoded, and why not as evidence
+
+Each cited pack gained `provenance.licence: "CC-BY-SA-4.0"`, a
+`provenance.attribution[]` row per source (`sourceId`, `licence`, `noticeText`,
+`url`, `retrievedAt`), and a `CITATION PASS (2026-08-16)` entry in
+`provenance.sources` quoting what was actually read and naming what the source
+does **not** reach.
+
+**No evidence record and no manifest entry was invented.** `linkage` requires
+every manifest entry to be consumed by a record or an abstention, `EVIDENCE_KINDS`
+has no bibliographic member, and `evidenceSupports` raises `EVIDENCE_OVERREACH`
+for any non-template record supporting a prose pointer. An abstention was
+considered and rejected as dishonest: the sources are available and were fetched;
+what is missing is a **record kind**, not a source. `rfc/claim-backing.md` owns
+that mechanism, is not landed, and was neither pre-empted nor read as binding.
+Ledgered **D268**.
+
+### Blockers were split, never deleted
+
+Every citation-shaped blocker became **two** entries — a `CITED 2026-08-16` entry
+naming what the source now backs, and a `STILL UNBACKED` / `STILL UNCITED` entry
+naming what it does not. The corpus went from **240** blocker entries to **265**
+(22 splits, +22; three stale-digest findings, +3), which is the direction a
+truthful pass moves it. The
+previous wave's finding that 42 of 48 resolution-marked entries were compound is
+exactly why no prefix-and-retire was attempted.
+
+### What could not be cited — the more valuable half, three distinct failures
+
+The three are not the same failure and the distinction is the output:
+
+1. **The claim is not the kind of thing a source can settle — 5 packs.** Every
+   remaining middlegame premise reduces to *arrangement before X*:
+   `maroczy-bind-white-squeeze` (before lever), `kid-mar-del-plata-white` (before
+   the lock), `dragon-yugoslav-race` (before the h-pawn arrives),
+   `iqp-white-panov-attack` (Re1 and Be4 before ...Nce7), and
+   `carlsbad-minority-attack` implicitly. **Wikipedia's structure articles are
+   theme inventories by construction** — they list what each side plays and never
+   sequence it. No encyclopedic source settles an order claim. Per D155 the
+   instrument that would is a game-level corpus, which does not exist at HEAD.
+   This is the third wave to arrive at that missing instrument from a new
+   direction. Ledgered **D272**.
+2. **No compatible source exists — 1 claim.** The three-against-two pawn
+   breakthrough. `Breakthrough_(chess)` is a 404; `Passed_pawn` covers **piece**
+   sacrifices clearing a promotion path, not the pawn breakthrough;
+   `Chess/The_Endgame/Pawn_Endings` has no breakthrough section; the MediaWiki
+   search API returns no article on either wiki. The shelf is genuinely empty for
+   the mechanism. Ledgered **D273**.
+3. **A source exists and points the other way — 2 packs, and this is the
+   finding.** `berlin-queenless-press` wants a king-activity plan for queenless
+   middlegames; the Berlin Defence article calls the position an **endgame**,
+   calls Black's king **"misplaced in the centre"**, and says **"Black can hold
+   the endgame with accurate play"**. The pack's own corpus measurement already
+   said nobody plays it, so two independent signals now lean against that
+   objective, and the honest next step is to re-examine it rather than to cite
+   harder. `french-advance-chain-white` premises that holding the base census is
+   **White's** plan; Pawn structure §e5-chain gives White's themes as *"Kingside
+   mating attack, f2–f4–f5 break"* and names d4 only as what **Black** attacks.
+   Both are recorded in the packs unchanged and unrationalized. Ledgered
+   **D270**; `carlsbad-minority-attack`'s third plan class is the same shape at
+   the level of one plan and is **D271**.
+
+### Found on the way, not looked for
+
+**Three evidence sidecars were already digest-stale at HEAD** —
+`mate-bishop-knight`, `mate-k-q-technique`, `mate-k-r-technique`, 3 of 32. Their
+evidence was confirmed against a different version of their pack and
+`EVIDENCE_DIGEST_STALE` has been firing on them unnoticed because it is a
+*warning*. This wave did **not** re-stamp them; the finding was written into each
+pack's `graduationBlockers` so it survives the re-stamp `pack-graduation` §4.5
+plans for all 32 ledgers. The eight sidecars this wave itself staled **were**
+re-stamped, by string-substituting the digest literal, because no evidence record
+in the corpus supports any pointer under `/provenance` (checked: zero) so nothing
+the ledger attests changed. Ledgered **D269**.
+
+**`provenance.attribution` is validated for one field.** `licenceObligations`
+refuses a row whose `licence` is not `CC-BY-SA-4.0` and demands a row for every
+prose-contributing CC-BY-SA **manifest** entry — which, by D268, a citation can
+never be. So the 22 packs would pass identically with invented URLs. Every source
+here was fetched and quoted by hand; that discipline is a convention, not a gate.
+Ledgered **D275**.
+
+### Verification actually performed
+
+- `make pack-check FILE=…` on all 22 edited packs: **22 passed**, one advisory
+  `CONSTRUCT_UNREACHED` warning that predates the wave.
+- `sourcing-check` on the 11 edited packs that have sidecars: **11 passed
+  (strict)**. The other 11 have no sidecars and fail exactly as they did before.
+- `checkSourcingFile` over all 47 at both severities, before and after: table
+  above.
+- `digestDrillPack` over all 32 sidecars, before and after.
+- `make verify`: **green**, first run — 103 test files, 661 tests, typecheck and
+  schema-check clean. **No test was edited and none needed to be.**
+
+### Frictions, with time cost — ~47 of ~155 minutes (30%)
+
+1. **A JSON round-trip destroys the corpus's hand-formatting** (~18 min, and a
+   full revert-and-rewrite). `content/drafts/*.json` mixes pretty-printed and
+   hand-compacted arrays; `*.evidence.json` files are single-line. A naive
+   `json.dump(indent=2)` turned a one-field edit into **2,101 insertions**, and
+   the digest re-stamp turned a one-character change into **1,222 lines** on one
+   sidecar. The pass that shipped splices only the `provenance` block by
+   brace-matching, and substitutes the digest literal as a string. There is no
+   `make` target that edits a pack field, so every content wave writes this by
+   hand. Ledgered **D276**.
+2. **Nothing reports the corpus's clean/failing counts** (~10 min). `make
+   sourcing-check` is per-file, `make verify` never runs it (D208), and
+   published-severity is only reachable by mutating `reviewStatus` on a copy.
+   Built a disposable scanner to get the six numbers this entry quotes.
+3. **Nothing reports digest staleness** (~5 min). `EVIDENCE_DIGEST_STALE` is
+   emitted per-file at warning severity and aggregated nowhere, which is why D269
+   sat unnoticed. Built a disposable digest walker.
+4. **A rendered Wikipedia page truncates before the section a citation needs**
+   (~8 min). `Pawn_structure` carries 20 structure sections and the fetch was cut
+   off before *Carlsbad formation* — the exact section three packs needed. The
+   MediaWiki `action=parse&prop=sections` / `&prop=wikitext&section=N` pair
+   returns any one section in full in a small request, and turned that article
+   into the wave's highest-yield source (six sections, five packs). Recorded as a
+   method for future waves: **D274**.
+5. **`git checkout -- content/drafts/` in a live multi-agent tree** (~6 min, a
+   near miss). Reverting the wave's own reformatting churn also reverted two pack
+   files another agent had been editing. Nothing was lost — the other agent had
+   committed two minutes earlier (`caa8afa`) — but the wave had no way to know
+   that before running the command, and no cheaper undo than a whole-directory
+   checkout. Reported, not ledgered: this is a working-practice hazard, not a
+   repo defect.
+
+### Not done, deliberately
+
+- **No evidence record, abstention or manifest entry invented** for any
+  bibliographic source. `rfc/claim-backing.md` owns binding instruments to prose;
+  this wave attached bibliography and said so (D268).
+- **No blocker deleted.** 22 split into 44; the corpus's blocker count went up.
+- **No `graduationBlockers` restructure.** `rfc/pack-graduation.md` is accepted
+  but the blocker-state object is not implemented at HEAD — the field is still a
+  bare `string[]` — and this wave authored against the schema as it stands.
+- **No prose rewritten to match a source.** Where a source contradicted a pack
+  (D270, D271), the contradiction was recorded and the pack left alone; changing
+  the claim to fit the citation would be the citation writing the chess.
+- **No source paraphrased into pack prose.** CC BY-SA share-alike is satisfied by
+  attribution, but a close paraphrase would make the pack a derivative of that
+  specific text; the ideas are cited and the sentences are ours.
+- **The three pre-existing stale digests were not re-stamped** (D269).
+- **No test edited, no `design/00`–`06`, no `rfc/`, no `archive/` touched.**

@@ -488,11 +488,23 @@
       "The Syzygy root assessment is ledger-verified by the sibling evidence and source manifests re-derived from live tablebase responses on 2026-08-15; offline fixture output is explicitly ineligible for that admission.",
       "AUTHORED, NOT PROVED: all prose reasoning. The tablebase grounds categories only. The claim that the premature rook drop is 'harder in practice' though drawn is explicitly an authored practical judgment with no instrument behind it in this repo.",
       "Technique name 'Philidor' and all three plan classes reference content/shapes/philidor.json.",
-      "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check."
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check.",
+      "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Philidor_position (CC BY-SA 4.0, read 2026-08-16) states the two-phase defensive scheme this pack drills: \"The defender's rook is on the third rank, keeping the opposing king off that rank\", and once the pawn advances the rook goes \"to the far end of the board (the seventh or eighth rank)\" to \"check the opposing king from behind\". It also states that \"A passive defense does not work\". WHAT IT DOES NOT SUPPLY: the timing sensitivity this pack asserts (\"one move early or late is a different, and here sometimes losing, position\") is a per-position claim the source does not make; in this pack it is separately tablebase-grounded at the authored positions only. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
+      "CITED 2026-08-16. The third-rank-fence and drop-and-check-behind plans, and the king-on-the-path premise, restate the scheme stated at en.wikipedia.org/wiki/Philidor_position (CC BY-SA 4.0), attributed in provenance.attribution. This is the pack's foundational claim and it is no longer uncited.",
+      "STILL UNBACKED after the 2026-08-16 citation pass: the deviation classifications and the per-move timing penalties are graded judgments, not restatements of the cited scheme; the tablebase settles category, not the cost the pack assigns to being one move early.",
       "The practical-difficulty judgments (fence easier than early rear-checking; side checks fragile) are exactly the save/resist-adjacent judgments design/04 §7 says need human-play evidence; none exists here."
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "attribution": [
+      {
+        "sourceId": "wikipedia-philidor-position",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Philidor position\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Philidor_position. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Philidor_position",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

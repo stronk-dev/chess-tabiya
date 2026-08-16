@@ -305,15 +305,26 @@
       "STRUCTURAL READINGS (mechanical, chessops and the shipped structural evaluator): the pawn skeletons, the attacker counts for d4, e5 and f3, the open c-file, and every g7-a1 blocker count were computed from the FENs in this file, not recalled.",
       "SHAPE REFERENCE (mechanical): the fianchetto-g7 entry's trigger was evaluated with the shipped structural evaluator against all seven positions this pack authors and fires on all seven. Its plan success signatures were evaluated against the same seven: black-long-diagonal-pressure 0/7, white-trade-the-fianchetto-bishop 0/7, white-h-file-lever 0/7, and black-guard-the-dark-squares has no signature at all. The doubled-c-pawns entry's trigger was evaluated against the same seven and fires on none, so it is not referenced. The plan classes reference the entry's own plans rather than restating them; the entry's plan prose carries its own UNGROUNDED provenance and this pack does not improve it.",
       "UNGROUNDED: the objective's premise — that reaching the entry's clear-diagonal signature is the thing to play for in this structure — is this pack's one strategic premise, and no evidence here establishes it. The entry's plan prose is itself agent-authored and uncited by its own admission. Nothing measured says the diagonal is worth more than the d4 pawn that blocks it, nor that a Black player at this band should prefer this plan to the other.",
-      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no engine evaluation has been run on any position here, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one. No timing window is declared; the reason is recorded in the graduation blockers."
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no engine evaluation has been run on any position here, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one. No timing window is declared; the reason is recorded in the graduation blockers.",
+      "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence (CC BY-SA 4.0, read 2026-08-16) states the Exchange Variation plan this pack drills — \"Black generally attacks White's centre with ...c5 and ...Bg7, often followed by moves such as ...Qa5, ...cxd4, ...Bg4 and ...Nc6. White often uses the big centre to launch an attack against Black's king.\" That is the long-diagonal-plus-c5 plan against the big centre. WHAT IT DOES NOT SUPPLY: the source names the plan and its move set, not the diagonal-clearing condition this pack's objective grades. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "The objective is uncited. The routes out are a citable source that states the diagonal plan for this structure, or a corpus measurement relating the diagonal's clearing to results at this band; neither has been done.",
+      "CITED 2026-08-16 (the diagonal plan). The g7-bishop-plus-...c5 attack on White's big centre, and White's use of that centre to attack, are stated by en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence (CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNCITED after the 2026-08-16 pass: the objective grades a specific clearing of the long diagonal, and the cited source names the plan without stating that condition as the state worth reaching. The corpus measurement relating the diagonal's clearing to results at this band has still not been done.",
       "No timing window is declared, and the measurement that decided it is recorded here: at the node after the learner's first move, White's two central levers are the two most-played moves (e4-e5 at 230 of 644, 35.7%; d4-d5 at 185 of 644, 28.7%). An arrival close on either would shut the window after one learner move, so any readiness set of more than one move would report too_slow on the corpus's own main line. The structure has a lever but not a race with room in it.",
       "The objective's achieved signature is satisfied at none of the seven authored positions, so the spine itself never demonstrates the target. That is deliberate — the target is reached in play, past the authored boundary — but it means nothing in this file shows a learner what success looks like.",
       "No engine pass has been run on this pack, so the single concept_violation records an unmeasurable cost, and the count for that move is only an upper bound (at most 2 of 730) because the explorer returned twelve moves and it was not among them."
+    ],
+    "attribution": [
+      {
+        "sourceId": "wikipedia-grunfeld-defence",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Grünfeld Defence\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

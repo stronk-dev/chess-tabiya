@@ -464,11 +464,23 @@
       "The Syzygy root assessment is ledger-verified by the sibling evidence and source manifests re-derived from live tablebase responses on 2026-08-15; offline fixture output is explicitly ineligible for that admission.",
       "VARIANTS RULE: design/04 §4 asks for convert/hold/save variants per root where material permits. Material permits a defender-side variant here; the pack format does not permit two objectives or two start sides in one file, so this file is the convert pack and the retryVariants note records the deliberate deferral. This is a format finding, logged in planning/content-era/log.md.",
       "AUTHORED, NOT PROVED: all prose reasoning; categories only are machine facts.",
-      "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative."
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative.",
+      "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Queen_versus_pawn_endgame (CC BY-SA 4.0, read 2026-08-16) states this pack's technique verbatim in substance — \"check the defending king until it is forced in front of the pawn and using that tempo to bring the attacking king closer\" — and states the exception this pack's second plan class is entirely about: against a bishop or rook pawn on the seventh the defender draws by stalemate, \"White cannot capture the pawn because stalemate would result\". This is the closest source-to-prose match in the corpus. WHAT IT DOES NOT SUPPLY: that this root's king distance still wins, and the companion c-pawn draw, are tablebase facts recorded in this pack, not citations. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "Prose explanations are authored; categories are tablebase-grounded.",
+      "CITED 2026-08-16. Both the zigzag technique and the drawn-files exception are stated by en.wikipedia.org/wiki/Queen_versus_pawn_endgame (CC BY-SA 4.0), attributed in provenance.attribution. The prose is no longer authored consensus.",
+      "STILL UNBACKED after the 2026-08-16 citation pass: the claim about \"how little slack\" this position has is an authored reading of the tablebase margin rather than a measured margin, and the pack states no enumeration behind it.",
       "The rook-pawn drawn-file claim inside the drawn-files plan class is standard theory NOT queried here; one further tablebase query would clear it and should be made when the hold-side pack is authored."
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "attribution": [
+      {
+        "sourceId": "wikipedia-queen-versus-pawn-endgame",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Queen versus pawn endgame\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Queen_versus_pawn_endgame. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Queen_versus_pawn_endgame",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

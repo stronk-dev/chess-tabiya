@@ -360,15 +360,26 @@
       "STRUCTURAL READINGS (mechanical, chessops): the pawn skeletons and every attacker/defender count in this file (c3, h5, g6) were computed from the FENs in this file with the chessops attack tables, not recalled.",
       "SHAPE REFERENCE (mechanical): the opposite-castling-race entry's trigger was evaluated with the shipped structural evaluator against all twelve positions this pack authors and fires on all twelve. The entry's four plan success signatures were evaluated against the same twelve: black-queenside-file-storm 0/12, black-central-brake 0/12, white-h-file-storm 0/12, white-prophylactic-tempo 1/12 (the kb1-tuck node). The plan classes reference the entry's own plans rather than restating them; the entry's plan prose carries its own UNGROUNDED provenance and this pack does not improve it.",
       "UNGROUNDED: the authored arrangement — rook to c8, knight to e5, rook to c5 as the thing to complete, and the h-pawn's arrival on h5 as the thing to complete it before — is this pack's one strategic premise, and it is not established by any evidence here. The corpus shows what the band plays, not what is correct. The three readiness moves were chosen because they are the three non-h5 moves the corpus's own most-played line contains, which is a selection rule, not a justification. Also ungrounded: the choice of a black rook reaching c3 as the release close.",
-      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no engine evaluation has been run on any position here, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one. In particular the 12...Nc4 branch, which the window reports as too_slow, is not claimed to be inferior — the note at that node says exactly why the report is about this pack's encoding."
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no engine evaluation has been run on any position here, and no deviation note asserts a chess consequence beyond an explicitly measured or definitional one. In particular the 12...Nc4 branch, which the window reports as too_slow, is not claimed to be inferior — the note at that node says exactly why the report is about this pack's encoding.",
+      "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation (CC BY-SA 4.0, read 2026-08-16) states the Yugoslav Attack race this pack drills — White castles queenside, trades the Dragon bishop with Bh6 and storms with h4-h5 and g4, aiming \"at delivering mate down the h-file\", while \"Black's strategy is centred around the c-file and the ability to push the a- and b-pawns\", with ...Ne5-c4 and the exchange sacrifice on c3 named as themes. The article calls these \"race-to-mate pawn storms on opposite sides of the board\". WHAT IT DOES NOT SUPPLY: this pack's specific three-move arrangement, and the claim that it must be complete before the h-pawn arrives, are not stated by the source. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "The objective's premise — this three-move arrangement, completed before the h-pawn arrives — is uncited. The routes out are a citable source that states the Black arrangement for this structure, or a corpus measurement relating the arrangement's completion to results at this band; neither has been done.",
+      "CITED 2026-08-16 (the arrangement's components, not its deadline). Black's ...Rc8/...Ne5-c4/c-file counterplay and the mutual-race framing are stated by en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation (CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNCITED after the 2026-08-16 pass: the deadline — this arrangement completed before the h-pawn arrives — is the objective's whole content and the cited source states no such tempo relation. This is a timing-window claim blocked on the game-level corpus (D155), and the corpus measurement relating completion to results at this band is still not done.",
       "The window's numbers are authored: a luxury budget of one and a deadline of four learner moves are the author's encoding of the teaching point. The deadline was set to the number of learner moves the spine takes to complete the readiness set; nothing measured says four is the right threshold.",
       "No engine pass has been run on this pack, so no deviation carries a measured cost and there is no concept_violation: no single legal move from the start position removes a piece the shape entry's trigger requires, so nothing here is off-objective by definition.",
       "The shape entry this pack references encodes only the White-long-against-Black-short orientation and reads king placement as a proxy for castling, per its own trigger-narrowing note. This pack inherits that narrowing."
+    ],
+    "attribution": [
+      {
+        "sourceId": "wikipedia-sicilian-defence-dragon-variation",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Sicilian Defence, Dragon Variation\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

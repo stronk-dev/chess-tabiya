@@ -328,11 +328,23 @@
       "The Syzygy root assessment is ledger-verified by the sibling evidence and source manifests re-derived from live tablebase responses on 2026-08-15; offline fixture output is explicitly ineligible for that admission.",
       "WHAT CANNOT BE CENSUSED: the fortress itself. The blockade-set checkpoint detects the piece configuration (pieceOnSquare facts); it does not and cannot detect unbreakability. For THIS root unbreakability happens to be tablebase-provable and was proved; for the family in general (more pawns, more pieces) it is not, and content/shapes/opposite-coloured-bishops.json §plans records that no structural signature is honest for holding.",
       "AUTHORED, NOT PROVED: all prose reasoning; categories only are machine facts.",
-      "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative."
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative.",
+      "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Opposite-coloured_bishops_endgame (CC BY-SA 4.0, read 2026-08-16) states the drawing tendency this pack's hold objective rests on — \"Positions where one side has an extra pawn are usually drawn\", and \"it is not uncommon to have two extra pawns (occasionally more) and to be unable to make progress\" — and states the defensive method: the weaker side places pawns on the colour of their own bishop to defend them, \"thereby creating an impregnable fortress\". WHAT IT DOES NOT SUPPLY: the specific post assignment in this root (king in front of the e-pawn, bishop on the a5-d8 diagonal covering the c-pawn's landing squares) is a position fact, tablebase-grounded here, not cited; and the sell-the-bishop reserve plan is authored. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "Prose explanations are authored; categories are tablebase-grounded.",
+      "CITED 2026-08-16. The fortress-on-your-colour plan and the two-pawns-down hold premise restate en.wikipedia.org/wiki/Opposite-coloured_bishops_endgame (CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNBACKED after the 2026-08-16 citation pass: the sell-the-bishop reserve plan is authored and, by the pack's own admission, never fires in the authored line — so nothing in this file, cited or measured, bears on it at all.",
       "The general fortress-recognition skill this pack gestures at (above seven pieces, real games) has no instrument in this repo and never will below the census boundary; this pack grounds one root of it and says so."
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "attribution": [
+      {
+        "sourceId": "wikipedia-opposite-coloured-bishops-endgame",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Opposite-coloured bishops endgame\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Opposite-coloured_bishops_endgame. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Opposite-coloured_bishops_endgame",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

@@ -537,11 +537,30 @@
       "FIRST USE of the king_opposition structural predicate (wave-2 vocabulary) in a pack objective: the preserved-transition condition and the opposition-taken checkpoint both evaluate it mechanically. What the predicate sees — alignment, odd gap, opponent to move — is exactly the textbook definition; what it cannot see (key squares, races) stays authored, as the shape entry already records.",
       "AUTHORED, NOT PROVED: all prose reasoning; categories only are machine facts.",
       "Plan classes reference content/shapes/pawn-opposition-key-squares.json.",
-      "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative."
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` authoritative.",
+      "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Opposition_(chess) (CC BY-SA 4.0, read 2026-08-16) defines the opposition — \"both kings are two squares apart on the same rank or file\" — states that \"the player not having to move is said to have the opposition\", and states the purpose: \"the opposition is a means to an end; the end is penetration to a key square\". en.wikipedia.org/wiki/King_and_pawn_versus_king_endgame (CC BY-SA 4.0, same date) defines a key square as one where \"if White's king occupies it, White can force the pawn to promotion\", and quotes Averbakh that \"the king should also lead the pawn to the queening square\" — which is this pack's king-first, pawn-last plan. WHAT THEY DO NOT SUPPLY: that e3 is the opposition-taking move in this position, and that stepping backwards throws the win away, are position facts and are tablebase-grounded here, not cited. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "Prose explanations are authored; categories are tablebase-grounded.",
+      "CITED 2026-08-16. Both plan classes now restate named sources rather than authored consensus: the opposition and its purpose from en.wikipedia.org/wiki/Opposition_(chess), and key squares plus king-leads-pawn from en.wikipedia.org/wiki/King_and_pawn_versus_king_endgame (both CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNBACKED after the 2026-08-16 citation pass: the mapping from the general scheme to this root — which square is a key square here, and that the runtime's mechanical stand-off detection is the right grading signal for \"has the opposition\" — is authored. The tablebase settles the result, not the detector's fidelity to the concept.",
       "No human-play evidence for the difficulty banding of this on-ramp-adjacent material."
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "attribution": [
+      {
+        "sourceId": "wikipedia-opposition-chess",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Opposition (chess)\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Opposition_(chess). Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Opposition_(chess)",
+        "retrievedAt": "2026-08-16"
+      },
+      {
+        "sourceId": "wikipedia-king-and-pawn-versus-king-endgame",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"King and pawn versus king endgame\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/King_and_pawn_versus_king_endgame. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/King_and_pawn_versus_king_endgame",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }

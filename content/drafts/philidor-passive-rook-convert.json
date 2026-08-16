@@ -455,14 +455,26 @@
       "The Syzygy assessment declaration is NOT ledger-verified (no sourcing sidecars); registry admission will show a declared, unverified assessment.",
       "AUTHORED, NOT PROVED: all prose reasoning. The tablebase grounds categories; the illegality of Rxa8 is rules arithmetic; the 'defence re-assembles' explanations of WHY the drawing moves draw are authored renderings.",
       "Technique names and two plan classes reference content/shapes/philidor.json (white-squeeze-the-passive-rook, white-king-before-pawn). The skewer plan is inlined: no shape-library plan names the back-rank skewer geometry — see graduationBlockers.",
-      "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check."
+      "Move legality: python-chess 1.11.2 at build time; `make pack-check` is the authoritative second check.",
+      "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/Philidor_position (CC BY-SA 4.0, read 2026-08-16) states the premise this pack starts from — that abandoning the third-rank fence loses, \"A passive defense does not work\" — and states the attacker's normal plan against passive defence. That is the background for this drill's root. WHAT IT DOES NOT SUPPLY, AND WHERE IT POINTS THE OTHER WAY: the source describes the attacker's textbook squeeze (king to the sixth), and this pack's own tablebase evidence refutes that plan in THIS position, where only the back-rank skewer wins. The pack keeps the measured answer over the cited one and says so in the squeeze-with-king plan class. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "graduationBlockers": [
-      "Prose explanations are authored consensus; categories are tablebase-grounded, reasons are not.",
+      "CITED 2026-08-16 (partial). The \"passive defence loses\" premise the root depends on is stated by en.wikipedia.org/wiki/Philidor_position (CC BY-SA 4.0), attributed in provenance.attribution.",
+      "STILL UNBACKED after the 2026-08-16 citation pass, and note the tension: the cited source gives the attacker's plan as the king-to-the-sixth squeeze, which this pack's tablebase evidence shows losing the win in this exact position. The skewer geometry is tablebase-grounded; the prose that explains WHY the squeeze fails here, and the claim that the winning window is one move wide, are authored readings of the tablebase rather than restatements of it or of any source.",
       "The Syzygy root assessment is declared but not ledger-verified; no sourcing sidecars were produced.",
       "The variants rule has no encoding: the sibling link to philidor-third-rank-hold is prose plus a retryVariants note, invisible to the runtime. A root-identity field or pack-group would make the convert/hold pairing a machine fact.",
       "The philidor shape entry has no plan for the back-rank skewer against the passive rook; its typicalMistakes list names passive placement but not this refutation geometry. Commission an amendment.",
       "No human-play evidence on how often defenders actually play the passive rook at the target band; the difficulty block is authored judgment."
+    ],
+    "licence": "CC-BY-SA-4.0",
+    "attribution": [
+      {
+        "sourceId": "wikipedia-philidor-position",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Philidor position\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Philidor_position. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Philidor_position",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   },
   "retryVariants": [

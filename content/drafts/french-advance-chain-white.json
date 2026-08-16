@@ -300,15 +300,33 @@
       "SHAPE REFERENCE (mechanical): the closed-centre-chain entry's trigger is the four-pawn conjunction d4/e5 White, d5/e6 Black. It fires on the start position and on every spine position here, which is what make pack-check verifies by refusing SHAPE_REFERENCE_NEVER_PRESENT. The objective consumes the entry's own white-hold-the-base success signature through a plan_consequence condition, so pack-check also verifies that the signature is actually reached on the authored spine. The plan classes reference the entry's plans rather than restating them; the entry's plan prose carries its own UNGROUNDED provenance and this pack does not improve it.",
       "TIMING: no timing window is declared, and the reason is measured rather than felt. A window needs an opponent lever whose arrival ends the preparation. The two levers this structure is known for are both absent from the corpus on this line: the base lever was already spent before the start position (Black's most-played move at the 158493-game root is 6...cxd4 at 39.4%, and the spine's own move order resolves the base tension on move 7), and the head lever ...f6 appears zero times in the 3769 games at the node after 10.Na4 and at most three times in the 164 games at the node after 12.fxe3. Declaring a race against a lever that arrives in under 2 percent of games would be authoring a feeling with a number pasted on it.",
       "UNGROUNDED: the objective's framing — that the census on the base pawn is the thing worth measuring in this structure — is this pack's one authored premise. Nothing here establishes it. The corpus shows what the band played, the attack tables show what attacks what, and neither shows what matters. No engine evaluation has been run on any position in this pack.",
-      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no deviation note asserts a chess consequence beyond an explicitly measured one, and the absence of ...f6 from the corpus is not claimed to mean the move is bad."
+      "NOT CLAIMED: no move in this pack is graded better or worse than another, no plan is asserted to be best, no deviation note asserts a chess consequence beyond an explicitly measured one, and the absence of ...f6 from the corpus is not claimed to mean the move is bad.",
+      "CITATION PASS (2026-08-16): en.wikipedia.org/wiki/French_Defence (CC BY-SA 4.0, read 2026-08-16) states that in the Advance Variation Black is \"almost always playing c7-c5 early on to attack White's pawn chain at its base\", and notes the pressure on d4 from ...Qb6 with the g1-a7 diagonal. en.wikipedia.org/wiki/Pawn_structure §e5-chain (CC BY-SA 4.0, section wikitext read via the MediaWiki action=parse API the same day) gives \"Themes for White: Kingside mating attack, f2-f4-f5 break\" and \"Themes for Black: Exchanging the hemmed-in queen's bishop, c7-c5 and f7-f6 breaks\", and states that \"Attacking the head of the pawn chain with f7-f6 is seen as frequently as attacking its base\". WHAT THEY DO NOT SUPPLY, AND WHERE THEY POINT ELSEWHERE: the cited sources name White's theme as a kingside mating attack, not as holding the d4 base. Base defence appears only as the thing Black attacks. Pack prose is CC-BY-SA-4.0; attribution is encoded in provenance.attribution."
     ],
     "reviewers": [],
     "graduationBlockers": [
       "There is no pack review workflow in this system and there never will be one (owner ruling 2026-08-13). Only a citable source or mechanical validation that bears on the claim clears a blocker.",
-      "The objective's premise — that holding the base census is the White plan here — is uncited. The routes out are a citable source that states the restraint plan for the French Advance chain, or a corpus measurement relating the census to results at this band; neither has been done.",
+      "CITED 2026-08-16 (Black's side of it). That ...c5 attacks the chain at its base, and that ...Qb6 loads the pressure on d4, is stated by en.wikipedia.org/wiki/French_Defence and en.wikipedia.org/wiki/Pawn_structure §e5-chain (both CC BY-SA 4.0), attributed in provenance.attribution. The structure the objective is about is no longer uncited.",
+      "STILL UNCITED, AND THE CITATION LEANS AGAINST IT: the premise is that holding the base census is WHITE'S plan here, and the cited sources give White's theme in the e5-chain as a kingside mating attack with f2-f4-f5, mentioning d4 defence only as the target of Black's play. No consulted CC-BY-SA source states base-holding as White's plan. The corpus measurement relating the census to results at this band is also still not done.",
       "No engine pass has been run on this pack. Every deviation note therefore stops at an arithmetic consequence and none of them prices the resulting position.",
       "The shape entry closed-centre-chain carries its own UNGROUNDED provenance for all four of its plan descriptions, including the two this pack references. Referencing them does not launder them.",
       "The ...f6 absence is measured against the explorer's twelve-move response cap, not against a full move distribution. At the 164-game node three games are outside the returned list, so the ceiling of three is an upper bound, not a count."
+    ],
+    "attribution": [
+      {
+        "sourceId": "wikipedia-french-defence",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"French Defence\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/French_Defence. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/French_Defence",
+        "retrievedAt": "2026-08-16"
+      },
+      {
+        "sourceId": "wikipedia-pawn-structure",
+        "licence": "CC-BY-SA-4.0",
+        "noticeText": "\"Pawn structure\", Wikipedia, The Free Encyclopedia — by Wikipedia contributors, licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Source: https://en.wikipedia.org/wiki/Pawn_structure. Retrieved 2026-08-16.",
+        "url": "https://en.wikipedia.org/wiki/Pawn_structure",
+        "retrievedAt": "2026-08-16"
+      }
     ]
   }
 }
