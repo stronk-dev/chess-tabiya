@@ -152,6 +152,35 @@ afterEach(() => {
 });
 
 describe("Layer 3 screens", () => {
+  it("keeps a drawn mark in parent state and saves it against the node where the gesture began", async () => {
+    vi.useFakeTimers();
+    const run = branchedRun();
+    const onSaveMarks = vi.fn(() => new Promise<never>(() => {}));
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(),
+      onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(),
+      onExport: vi.fn(), onStop: vi.fn(), onLoadMarks: async () => [], onSaveMarks,
+      registerKeyboardRegion,
+    } });
+    await tick();
+
+    chessground.configs.at(-1)!.drawable!.onChange!([{ orig: "a1", dest: "h8", brush: "red" }]);
+    await tick();
+    const earlier = document.querySelector<HTMLButtonElement>('.timeline button[aria-label^="Ply 1:"]')!;
+    earlier.click();
+    await tick();
+    vi.advanceTimersByTime(400);
+    await tick();
+    expect(onSaveMarks).toHaveBeenCalledWith(expect.objectContaining({ nodeId: run.activeCursor.nodeId, branchId: run.activeCursor.branchId }));
+
+    earlier.click();
+    await tick();
+    expect(chessground.configs.at(-1)!.drawable!.shapes).toEqual([{ orig: "a1", dest: "h8", brush: "red" }]);
+    await unmount(component);
+    vi.useRealTimers();
+  });
+
   it("keeps read-only followers on inspect-only controls without write errors", async () => {
     const run = branchedRun();
     const onRewind = vi.fn();

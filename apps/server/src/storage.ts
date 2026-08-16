@@ -7,6 +7,7 @@ import {
   type DrillRun,
   type DrillRunEvent,
   type ObjectiveState,
+  type RunMark,
 } from "@chess-tabiya/runtime";
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
@@ -83,6 +84,13 @@ export interface StoredRun {
   readonly run: DrillRun;
   readonly activeWriterId: string;
   readonly activeWriterLearnerId: string;
+}
+
+export interface StoredRunMark extends RunMark {
+  readonly id: string;
+  readonly runId: string;
+  readonly authorLearnerId: string;
+  readonly relayed: boolean;
 }
 
 export interface ImportedGameRecord {
@@ -195,6 +203,18 @@ export interface RunStorage {
 
   grants(runId: string): readonly RunGrant[];
   runRole(runId: string, learnerId: string): RunRole | undefined;
+  runMarks(runId: string, learnerId: string): readonly StoredRunMark[];
+  relayedRunMarks(runId: string, positionKey: string, branchKey: string): readonly StoredRunMark[];
+  replaceRunMarks(input: {
+    readonly runId: string;
+    readonly learnerId: string;
+    readonly scope: RunMark["scope"];
+    readonly scopeKey: string;
+    readonly shapes: readonly Pick<RunMark, "brush" | "orig" | "dest">[];
+    readonly relayed: boolean;
+    readonly at: string;
+  }): readonly StoredRunMark[];
+  rescopeRunMarks(input: { readonly runId:string;readonly learnerId:string;readonly fromScope:RunMark["scope"];readonly fromKey:string;readonly toScope:RunMark["scope"];readonly toKey:string }): readonly StoredRunMark[];
   ownerLearnerId?(runId: string): string | undefined;
   grantRole(
     runId: string,
@@ -384,12 +404,39 @@ export interface SQLiteRunStorageOptions {
   readonly onMigration?: (entry: StorageMigrationLog) => void;
 }
 
-export const STORAGE_VERSION = 21;
+export const STORAGE_VERSION = 22;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
 function isRunRole(value: unknown): value is RunRole {
   return RUN_ROLES.includes(value as RunRole);
+}
+
+function storedRunMark(row: Readonly<Record<string, unknown>>): StoredRunMark {
+  if (
+    typeof row.id !== "string" ||
+    typeof row.run_id !== "string" ||
+    typeof row.author_learner_id !== "string" ||
+    (row.scope !== "position" && row.scope !== "branch") ||
+    typeof row.scope_key !== "string" ||
+    (row.brush !== "green" && row.brush !== "red" && row.brush !== "blue" && row.brush !== "yellow") ||
+    typeof row.orig !== "string" ||
+    (row.dest !== null && typeof row.dest !== "string") ||
+    (row.relayed !== 0 && row.relayed !== 1) ||
+    typeof row.created_at !== "string"
+  ) throw new TypeError("Stored run mark is invalid");
+  return Object.freeze({
+    id: row.id,
+    runId: row.run_id,
+    authorLearnerId: row.author_learner_id,
+    scope: row.scope,
+    scopeKey: row.scope_key,
+    brush: row.brush,
+    orig: row.orig,
+    ...(row.dest === null ? {} : { dest: row.dest }),
+    relayed: row.relayed === 1,
+    at: row.created_at,
+  });
 }
 
 export function runRoleMayWrite(role: RunRole): boolean {
@@ -1034,6 +1081,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       const repertoireRows=this.#database.prepare("SELECT id FROM repertoires WHERE owner_learner_id=?").all(learnerId) as unknown as readonly {id:string}[];
       for(const row of repertoireRows)this.#deleteRepertoireRows(row.id);
       this.#database.prepare("UPDATE live_sessions SET created_by = ? WHERE created_by = ?").run(LEGACY_ID,learnerId);
+      this.#database.prepare("DELETE FROM run_marks WHERE author_learner_id = ?").run(learnerId);
       this.#database.prepare("DELETE FROM learners WHERE id = ?").run(learnerId);
       const restore = this.#database.prepare(
         `INSERT OR IGNORE INTO run_grants (run_id, learner_id, role, granted_at)
@@ -1138,6 +1186,99 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       return value.role;
     } catch (error) {
       throw storageFailure("Could not read run role", error);
+    }
+  }
+
+  runMarks(runId: string, learnerId: string): readonly StoredRunMark[] {
+    try {
+      const rows = this.#database.prepare(
+        `SELECT id,run_id,author_learner_id,scope,scope_key,brush,orig,dest,relayed,created_at
+         FROM run_marks WHERE run_id=? AND author_learner_id=? ORDER BY created_at ASC,id ASC`,
+      ).all(runId, learnerId) as readonly Record<string, unknown>[];
+      return Object.freeze(rows.map(storedRunMark));
+    } catch (error) {
+      throw storageFailure("Could not list run marks", error);
+    }
+  }
+
+  relayedRunMarks(runId: string, positionKey: string, branchKey: string): readonly StoredRunMark[] {
+    try {
+      const rows = this.#database.prepare(
+        `SELECT id,run_id,author_learner_id,scope,scope_key,brush,orig,dest,relayed,created_at
+         FROM run_marks
+         WHERE run_id=? AND relayed=1
+           AND ((scope='position' AND scope_key=?) OR (scope='branch' AND scope_key=?))
+         ORDER BY created_at DESC,id DESC LIMIT 129`,
+      ).all(runId, positionKey, branchKey) as readonly Record<string, unknown>[];
+      return Object.freeze(rows.map(storedRunMark));
+    } catch (error) {
+      throw storageFailure("Could not list relayed run marks", error);
+    }
+  }
+
+  replaceRunMarks(input: {
+    readonly runId: string;
+    readonly learnerId: string;
+    readonly scope: RunMark["scope"];
+    readonly scopeKey: string;
+    readonly shapes: readonly Pick<RunMark, "brush" | "orig" | "dest">[];
+    readonly relayed: boolean;
+    readonly at: string;
+  }): readonly StoredRunMark[] {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const existing = this.#database.prepare(
+        `SELECT count(*) AS count FROM run_marks
+         WHERE run_id=? AND author_learner_id=? AND NOT (scope=? AND scope_key=?)`,
+      ).get(input.runId, input.learnerId, input.scope, input.scopeKey) as { readonly count: number };
+      if (existing.count + input.shapes.length > 1_000) {
+        throw new ServerError("INVALID_REQUEST", "A run may hold at most 1,000 marks per learner");
+      }
+      this.#database.prepare(
+        "DELETE FROM run_marks WHERE run_id=? AND author_learner_id=? AND scope=? AND scope_key=?",
+      ).run(input.runId, input.learnerId, input.scope, input.scopeKey);
+      const insert = this.#database.prepare(
+        `INSERT INTO run_marks
+          (id,run_id,author_learner_id,scope,scope_key,brush,orig,dest,relayed,created_at)
+         VALUES (?,?,?,?,?,?,?,?,?,?)`,
+      );
+      for (const shape of input.shapes) {
+        insert.run(randomUUID(), input.runId, input.learnerId, input.scope, input.scopeKey,
+          shape.brush, shape.orig, shape.dest ?? null, input.relayed ? 1 : 0, input.at);
+      }
+      this.#database.exec("COMMIT");
+      return this.runMarks(input.runId, input.learnerId);
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      throw storageFailure("Could not replace run marks", error);
+    }
+  }
+
+  rescopeRunMarks(input: { readonly runId:string;readonly learnerId:string;readonly fromScope:RunMark["scope"];readonly fromKey:string;readonly toScope:RunMark["scope"];readonly toKey:string }): readonly StoredRunMark[] {
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      const counts = this.#database.prepare(
+        `SELECT
+           sum(CASE WHEN scope=? AND scope_key=? THEN 1 ELSE 0 END) AS source_count,
+           sum(CASE WHEN scope=? AND scope_key=? THEN 1 ELSE 0 END) AS target_count
+         FROM run_marks WHERE run_id=? AND author_learner_id=?`,
+      ).get(input.fromScope,input.fromKey,input.toScope,input.toKey,input.runId,input.learnerId) as {readonly source_count:number|null;readonly target_count:number|null};
+      if (input.fromScope !== input.toScope || input.fromKey !== input.toKey) {
+        if ((counts.source_count ?? 0) + (counts.target_count ?? 0) > 64) {
+          throw new ServerError("INVALID_REQUEST", "A position may hold at most 64 marks");
+        }
+      }
+      this.#database.prepare(
+        `UPDATE run_marks SET scope=?,scope_key=?
+         WHERE run_id=? AND author_learner_id=? AND scope=? AND scope_key=?`,
+      ).run(input.toScope,input.toKey,input.runId,input.learnerId,input.fromScope,input.fromKey);
+      this.#database.exec("COMMIT");
+      return this.runMarks(input.runId,input.learnerId);
+    } catch (error) {
+      this.#rollback();
+      if (error instanceof ServerError) throw error;
+      throw storageFailure("Could not re-scope run marks",error);
     }
   }
 
@@ -2195,6 +2336,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "engine leverage run schema",
         apply: () => this.#upgradeV015Runs(),
       },
+      {
+        version: 22,
+        name: "learner board annotations",
+        apply: () => this.#addRunMarks(),
+      },
     ] as const;
     for (const migration of migrations) {
       if (migration.version <= version) continue;
@@ -2224,6 +2370,25 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         }
       }
     }
+  }
+
+  #addRunMarks(): void {
+    this.#database.exec(`
+      CREATE TABLE IF NOT EXISTS run_marks (
+        id TEXT PRIMARY KEY,
+        run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
+        author_learner_id TEXT NOT NULL,
+        scope TEXT NOT NULL CHECK (scope IN ('position','branch')),
+        scope_key TEXT NOT NULL,
+        brush TEXT NOT NULL CHECK (brush IN ('green','red','blue','yellow')),
+        orig TEXT NOT NULL,
+        dest TEXT,
+        relayed INTEGER NOT NULL CHECK (relayed IN (0,1)),
+        created_at TEXT NOT NULL
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS run_marks_author ON run_marks(run_id,author_learner_id,scope,scope_key);
+      CREATE INDEX IF NOT EXISTS run_marks_relay ON run_marks(run_id,relayed,scope,scope_key);
+    `);
   }
 
   #addAdoptionTables(): void {

@@ -103,8 +103,11 @@ export class LiveSessionService {
     const match=this.#storage.matchState(sessionId);
     const voteAdapter=session.voteAdapterLearnerId===undefined?undefined:this.#storage.learnerById(session.voteAdapterLearnerId);
     const moveAuthorship=deriveMoveAuthorship(stored.run,this.#storage.sessionJournal(sessionId,0),session.createdBy);
+    const activeNode=stored.run.nodes.find((node)=>node.id===stored.run.activeCursor.nodeId);if(activeNode===undefined)throw new ServerError("STORAGE_FAILURE","Session cursor is missing");
+    const storedMarks=this.#storage.relayedRunMarks(session.runId,activeNode.transposeKey,`${stored.run.activeCursor.branchId}:${activeNode.id}`);
+    const marks=Object.freeze(storedMarks.slice(0,128).map((mark)=>{const author=this.#storage.learnerById(mark.authorLearnerId);return Object.freeze({scope:mark.scope,brush:mark.brush,orig:mark.orig,...(mark.dest===undefined?{}:{dest:mark.dest}),...(author===undefined?{}:{drawnBy:Object.freeze({learnerId:author.id,handle:author.handle})}),at:mark.at});}));
     return Object.freeze({session,role:this.#storage.runRole(session.runId,principal.learnerId)!,activeNodeId:stored.run.activeCursor.nodeId,leaseHeldBy:{learnerId:holder.id,handle:holder.handle},...(voteAdapter===undefined?{}:{voteAdapter:{learnerId:voteAdapter.id,handle:voteAdapter.handle}}),grants:this.#storage.grants(session.runId),moveAuthorship,proposals,
-      ...(latest===undefined?{}:{vote:this.#tallyWithDerivedState(session,latest.id)}),invitations:this.#storage.invitations(sessionId),legs:this.#storage.arenaLegs(sessionId),...(match===undefined?{}:{match})});
+      ...(latest===undefined?{}:{vote:this.#tallyWithDerivedState(session,latest.id)}),invitations:this.#storage.invitations(sessionId),legs:this.#storage.arenaLegs(sessionId),...(match===undefined?{}:{match}),marks,...(storedMarks.length>128?{marksTruncated:true as const}:{})});
   }
 
   close(sessionId:string,principal:Principal):LiveSession { const session=this.#requiredControl(sessionId,principal);return this.#storage.closeLiveSession(session.id,principal.learnerId,this.#now()); }

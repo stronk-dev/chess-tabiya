@@ -1,0 +1,7 @@
+# Board annotation implementation log
+
+- 2026-08-16 — Review found one mechanical contradiction: the RFC header called D187 an external prerequisite while §2.7 and criterion 17 explicitly own the parent-state lift. Reconciled in favor of the normative body; D187 closes in this lifecycle.
+- 2026-08-16 — Implemented sibling-table persistence, principal-scoped replacement and atomic re-scoping, PGN `%csl`/`%cal` export with a constant-information filter, live lease-holder relay, parent-owned drill-screen state, and read-only overlay rendering.
+- 2026-08-16 — The first full gate caught one criterion-1 omission: a public `RunMark` necessarily appears in the runtime barrel export as well as its declaration and two consumers. The census now pins `{index.ts, types.ts, pgn.ts, pack-pgn.ts}`; no detector or grader is admitted.
+- 2026-08-16 — Closeout reconciliation caught a debounce race before archive: a mark save read the active node when its 400 ms timer fired, so a fast move could attach the gesture to the child. The callback now captures node, branch and scope at gesture time, while the parent takes an optimistic copy immediately; the remount regression drives that exact sequence. Re-scope now also refuses a target that would exceed 64 marks.
+- 2026-08-16 — Final gates on the closeout tree: `ENGINES_REQUIRED=1 make verify` green (682 tests / 106 files, Svelte 0 errors and 0 warnings, scaffold and packaging clean); `make test-browser` green at zero retries (24 passed, optional Maia latency test skipped).

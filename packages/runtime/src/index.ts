@@ -244,13 +244,15 @@ export type {
   RunOutcome,
   RunSessionKind,
   LiveSessionKind,
+  MarkBrush,
+  RunMark,
   RunStart,
   SelectionCandidate,
   SelectionEngineIdentity,
   Segment,
   VersionedPolicy,
 } from "./types.js";
-export { LIVE_SESSION_KINDS, RUN_OPPONENT_MODES } from "./types.js";
+export { LIVE_SESSION_KINDS, MARK_BRUSHES, RUN_OPPONENT_MODES } from "./types.js";
 
 export const runtimeBuildInfo = Object.freeze({
   packageName: "@chess-tabiya/runtime",

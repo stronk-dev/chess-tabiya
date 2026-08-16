@@ -278,7 +278,7 @@ count, not assumed. Per-axis consumer audit:
 test, **permissioned** (`assistance.ts:29` computes `arrows: mayRequestSplit ? "evidence" :
 "sight"`) and rendered as a three-value `<select>` — with **zero readers, including of its own
 permission**. It is the cleanest instance of the shape the owner is asking about, and it is
-already ledgered (D158/D159) and owned by the **accepted** `rfc/board-annotation.md`.
+already ledgered (D158/D159) and owned by the **implemented** `rfc/archive/board-annotation.md`.
 
 `ambient` is new: the button's `aria-label` is `"Open assistance"`, it opens nothing, and its
 `title` *is* reactive — so it is a live status glyph mislabelled as a control.

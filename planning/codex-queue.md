@@ -24,7 +24,7 @@ appears in the ledger or the log**. This is the first real use, and it failed.
 
 Rows: D347 (the three-way disagreement), D353 (the census delta going the wrong way).
 
-## 0a. Accepted RFCs — five of them, take in lane order
+## 0a. Accepted RFCs — four of them, take in lane order
 
 **These were mis-flagged "do not start" until 2026-08-16 (late). They are accepted and
 implementable now.** Lane order matters only where a pack-schema number does; the two
@@ -36,12 +36,12 @@ that claim nothing versioned can be taken at any point.
 | 2 | `rfc/claim-backing.md` | pack **0.26** | Round 2 complete, ready to accept; two owner-gated questions that do **not** block. Re-claimed 0.26, reversing its own earlier release |
 | 3 | `rfc/pack-graduation.md` | pack **0.27** | Accepted. Graduation is a **move**, not a copy; `graduationBlockers` entries become `blocking`/`resolved`/`accepted` objects |
 | 4 | `rfc/evidence-at-runtime.md` | **nothing versioned** | Accepted, one owner call open (the voice seam) — does not block. Closes D118 by deleting a discard: `loadDefault` already reads every ledger and drops 764 records |
-| 5 | `rfc/board-annotation.md` | see its header | Accepted, returned once, all four breaks ratified. **D187 is its hard prerequisite** — `Chessboard.svelte` is destroyed and recreated on every node change, so no board-local state survives a move. Take D187 first or the RFC cannot work |
 
 **Register drift corrected in the same pass:** `engine-leverage` holds **migration 21**
 (landed — `STORAGE_VERSION` is 21 at HEAD), not 22. Its own text said 22 in two places and
-`evidence-at-runtime` had inherited that citation; both are fixed. **Migration 22 is
-`teacher-surface`'s**, still a draft awaiting cross-review.
+`evidence-at-runtime` had inherited that citation; both are fixed. **Migration 22 landed
+with `board-annotation`; `teacher-surface` holds the next migration position**, still a
+draft awaiting cross-review.
 
 ## 1. Then — a broken exemplar and a closed vocabulary
 
@@ -79,10 +79,6 @@ that claim nothing versioned can be taken at any point.
 
 ## 2. Client surface — and one of these blocks an RFC
 
-- **D187** — `Chessboard.svelte` is destroyed and recreated on every node change, so **no
-  board-local state can survive a move**. This is a hard prerequisite for
-  `rfc/board-annotation.md` (learner-drawn marks): a mark drawn on one node cannot outlive the
-  next move while the component is torn down. **Highest leverage row in this section.**
 - **D100** — the vote form hardcodes three inputs against a server accepting **2–8** options
   and **15–600** seconds, and sets `label = moveUci` while `rest.ts` requires `label` — so
   `design/03`'s *"chat votes on plans or moves"* is blocked purely client-side.

@@ -225,7 +225,7 @@ Nothing is left unclassified. Where a classification is provisional, the disposi
 
 | Row (ledger title, abbreviated) | Direction | Law applied | **Disposition** | One-line justification | §
 |---|---|---|---|---|---|
-| **D84** *"`arrows` is a fully-plumbed no-op"* | **deficit, not excess** *(reclassified 2026-08-16 by owner ruling, see Open question 2)* | — | **`unmeasured`, NOT retired** | The measurement holds: `sight` has no directed structural primitive (the reader emits square *sets*) and `evidence` is a move verdict refused under law 8. **The disposition does not follow from it.** `design/05` promises arrows-for-sight, and the owner ruled `arrows` is three things: learner-drawn (outside the ladder entirely), host-relayed (attribution, not a rung), and system-drawn (this row). Legs (a) and (b) belong to `rfc/board-annotation.md`. **This RFC may not retire the field** | 3.1 |
+| **D84** *"`arrows` is a fully-plumbed no-op"* | **deficit, not excess** *(reclassified 2026-08-16 by owner ruling, see Open question 2)* | — | **`unmeasured`, NOT retired** | The measurement holds: `sight` has no directed structural primitive (the reader emits square *sets*) and `evidence` is a move verdict refused under law 8. **The disposition does not follow from it.** `design/05` promises arrows-for-sight, and the owner ruled `arrows` is three things: learner-drawn (outside the ladder entirely), host-relayed (attribution, not a rung), and system-drawn (this row). Legs (a) and (b) belong to `rfc/archive/board-annotation.md`. **This RFC may not retire the field** | 3.1 |
 | **D85** *"`SIMULATE_BUDGET_EXCEEDED` is declared and never thrown"* | excess | declared-vs-executable (principle; remedy clause vacuous) | **retire** | Implementing it means inventing a budget, i.e. inventing product from a defect row. Re-mint with the economy that needs it | 3.2 |
 | **D86** *"`retryVariants` has no runtime effect"* | excess | declared-vs-executable | **refused** now, `retired` when its successor is a superset | It names no referent, so it cannot be executed as declared; `variantOf` is the executable successor and covers **4 of 11** committed entries. `retired` needs a `removedAt` this RFC cannot honestly fill | 3.3 |
 | — *"`segment_end` is used zero times"* (D86's second half) | **neither** | none — not a format defect | **`reached`; content gap** | Fully executable and gated; zero authored uses. Belongs to `vocabulary-wiring`'s *reach* failure, not here. Split out so D86 does not close as if both halves were one finding | 3.3 |
@@ -388,7 +388,7 @@ mode added later fails the gate instead of quietly widening the enum.
 > nothing renders it, and `sight` has no directed primitive. What changes is what follows.
 > A promise in `design/05` with no producer is **`unmeasured`**, not dead; retiring it would
 > delete a design commitment by way of a format cleanup. Legs (a) learner-drawn and (b)
-> host-relayed belong to `rfc/board-annotation.md`. Only the **system-drawn** leg is this
+> host-relayed belong to `rfc/archive/board-annotation.md`. Only the **system-drawn** leg is this
 > RFC-s, and it is the leg with no producer. **The field survives; the disposition records
 > the gap.**
 

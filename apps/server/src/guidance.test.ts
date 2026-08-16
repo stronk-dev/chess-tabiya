@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import type { EvidencePacket } from "@chess-tabiya/runtime";
+import { voiceCheck, type EvidencePacket } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -79,6 +79,52 @@ describe("adaptive guidance server seams", () => {
     const packet = { fen: FEN, phase: { source: "detector", value: "opening" }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], sentences: ["Detected by Tabiya's phase bands: opening."] } satisfies EvidencePacket;
     expect(await renderVoice(provider, packet, "plain")).toEqual({ text: packet.sentences[0], source: "deterministic" });
     expect(calls).toBe(2);
+  });
+
+  it("keeps learner-drawn squares outside the voice allowlist", async () => {
+    const { service, run } = await setup();
+    service.reveal("guide", "writer", at);
+    const packets: EvidencePacket[] = [];
+    const provider: VoiceProvider = {
+      async render(packet, _persona, deterministicText) {
+        packets.push(packet);
+        return deterministicText;
+      },
+    };
+    const handler = createRestHandler(
+      service,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      provider,
+    );
+    const body = { nodeId: run.activeCursor.nodeId, scope: "reading" };
+    expect((await handler(request("/runs/guide/voice", "POST", body))).status).toBe(200);
+    const source = packets[0]!.sentences.join("\n").toLowerCase();
+    const markedSquare = Array.from({ length: 64 }, (_, index) =>
+      `${String.fromCharCode(97 + (index % 8))}${Math.floor(index / 8) + 1}`,
+    ).find((square) => !source.includes(square))!;
+    const graph = service.graph("guide");
+    const write = await handler(request("/runs/guide/marks", "PUT", {
+      nodeId: graph.activeCursor.nodeId,
+      branchId: graph.activeCursor.branchId,
+      scope: "position",
+      shapes: [{ brush: "green", orig: markedSquare }],
+    }));
+    expect(write.status).toBe(200);
+    expect((await handler(request("/runs/guide/voice", "POST", body))).status).toBe(200);
+    expect(packets[1]!.sentences).toEqual(packets[0]!.sentences);
+    expect(voiceCheck(packets[1]!, markedSquare).violations).toContain(`square:${markedSquare}`);
+    expect(voiceCheck({ ...packets[1]!, sentences: [...packets[1]!.sentences, markedSquare] }, markedSquare).violations).not.toContain(`square:${markedSquare}`);
+
+    const restSource = readFileSync(new URL("./rest.ts", import.meta.url), "utf8");
+    expect(restSource.match(/\bsentences\s*:/gu)).toHaveLength(3);
+    expect(restSource.match(/suggestTitle\(story\)/gu)).toHaveLength(2);
+    expect(restSource.match(/narrative\.groups\.flatMap/gu)).toHaveLength(1);
   });
 
   it("maps absent TTS to 503 and sends only deterministic checked text", async () => {

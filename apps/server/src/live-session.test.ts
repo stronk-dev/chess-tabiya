@@ -26,7 +26,7 @@ describe("live session platform",()=>{
   async function register(handler:ReturnType<typeof createRestHandler>,handle:string){const response=await request(handler,"POST","/auth/register",{body:{handle,password:PASSWORD}});return {cookie:cookie(response),learner:(await response.json() as any).learner as {id:string;handle:string}};}
 
   it("migrates to the live schema and enforces board control, proposals, and namespaced advisory votes",async()=>{
-    const {storage,queue,handler}=setup();expect(STORAGE_VERSION).toBe(21);
+    const {storage,queue,handler}=setup();expect(STORAGE_VERSION).toBe(22);
     const alice=await register(handler,"alice");const bob=await register(handler,"bob");const chat=await register(handler,"chatbridge");
     const run={id:"live-run",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:7};
     expect((await request(handler,"POST","/runs",{cookie:alice.cookie,writerId:"writer-a",body:run})).status).toBe(201);
@@ -53,6 +53,40 @@ describe("live session platform",()=>{
     expect(authors.map((entry)=>entry.learnerId)).toEqual([alice.learner.id,bob.learner.id]);
     const attributedDetail=await (await request(handler,"GET",`/sessions/${session.id}`,{cookie:bob.cookie})).json() as any;
     expect(attributedDetail.moveAuthorship).toEqual(authors);
+  });
+
+  it("persists principal-scoped marks, exports them, and relays only lease-holder marks outside matches",async()=>{
+    const {storage,handler}=setup();const alice=await register(handler,"markalice");const bob=await register(handler,"markbob");
+    const create={id:"mark-run",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:3};
+    expect((await request(handler,"POST","/runs",{cookie:alice.cookie,writerId:"writer-a",body:create})).status).toBe(201);
+    await request(handler,"POST","/runs/mark-run/grants",{cookie:alice.cookie,writerId:"writer-a",body:{op:"grant",handle:"markbob",role:"spectator"}});
+    const session=await (await request(handler,"POST","/sessions",{cookie:alice.cookie,body:{runId:"mark-run",kind:"stream",title:"Annotated stream"}})).json() as any;
+    const graph=await (await request(handler,"GET","/runs/mark-run/graph",{cookie:alice.cookie})).json() as any;const root=graph.graph.nodes[0];const branchId=graph.graph.branches[0].id;
+    const shapes=[{brush:"green",orig:"e2"},{brush:"red",orig:"e2",dest:"e5"}];
+    const written=await request(handler,"PUT","/runs/mark-run/marks",{cookie:alice.cookie,body:{nodeId:root.id,branchId,scope:"position",shapes}});expect(written.status).toBe(200);expect((await written.json() as any).marks).toHaveLength(2);
+    const rescoped=await request(handler,"PUT","/runs/mark-run/marks",{cookie:alice.cookie,body:{nodeId:root.id,branchId,scope:"branch",rescopeFrom:"position"}});expect(rescoped.status).toBe(200);expect((await rescoped.json() as any).marks.every((mark:any)=>mark.scope==="branch")).toBe(true);
+    expect((await (await request(handler,"GET","/runs/mark-run/marks",{cookie:bob.cookie})).json() as any).marks).toEqual([]);
+    const detail=await (await request(handler,"GET",`/sessions/${session.session.id}`,{cookie:bob.cookie})).json() as any;expect(detail.marks).toHaveLength(2);expect(detail.marks[0].drawnBy.handle).toBe("markalice");
+    const pgn=await (await request(handler,"GET","/runs/mark-run/pgn",{cookie:alice.cookie})).text();expect(pgn).toContain("TabiyaMarks \"own (2); other authors' marks are not exported\"");expect(pgn).toContain("%csl");expect(pgn).toContain("%cal");
+    const bad=await request(handler,"PUT","/runs/mark-run/marks",{cookie:alice.cookie,body:{nodeId:root.id,branchId,scope:"position",shapes:[{brush:"purple",orig:"e2"}]}});expect(bad.status).toBe(400);expect((await bad.json() as any).error.code).toBe("INVALID_REQUEST");
+    const crowded=Array.from({length:63},(_,index)=>({brush:"green",orig:`${String.fromCharCode(97+(index%8))}${Math.floor(index/8)+1}`}));
+    expect((await request(handler,"PUT","/runs/mark-run/marks",{cookie:alice.cookie,body:{nodeId:root.id,branchId,scope:"position",shapes:crowded}})).status).toBe(200);
+    const overflow=await request(handler,"PUT","/runs/mark-run/marks",{cookie:alice.cookie,body:{nodeId:root.id,branchId,scope:"branch",rescopeFrom:"position"}});expect(overflow.status).toBe(400);expect((await overflow.json() as any).error.code).toBe("INVALID_REQUEST");
+    storage.deleteLearner(alice.learner.id,"2026-08-16T12:30:00.000Z");expect(storage.runMarks("mark-run",alice.learner.id)).toEqual([]);
+  });
+
+  it("keeps spectator and match-seat sketches private while preserving the constant export filter",async()=>{
+    const {handler}=setup();const host=await register(handler,"privatehost");const viewer=await register(handler,"privateviewer");
+    await request(handler,"POST","/runs",{cookie:host.cookie,writerId:"writer-h",body:{id:"private-run",session:{kind:"position",start:{fen:FEN,side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"human_common"}},policyConfig:{seedMode:"fixed",locus:{executedAt:"server",engineIds:[],modelIds:[]}},seed:4}});
+    await request(handler,"POST","/runs/private-run/grants",{cookie:host.cookie,writerId:"writer-h",body:{op:"grant",handle:"privateviewer",role:"spectator"}});
+    const made=await (await request(handler,"POST","/sessions",{cookie:host.cookie,body:{runId:"private-run",kind:"match",title:"Private match"}})).json() as any;
+    const graph=await (await request(handler,"GET","/runs/private-run/graph",{cookie:host.cookie})).json() as any;const root=graph.graph.nodes[0],branchId=graph.graph.branches[0].id;
+    await request(handler,"PUT","/runs/private-run/marks",{cookie:host.cookie,body:{nodeId:root.id,branchId,scope:"position",shapes:[{brush:"blue",orig:"d4"}]}});
+    await request(handler,"PUT","/runs/private-run/marks",{cookie:viewer.cookie,body:{nodeId:root.id,branchId,scope:"position",shapes:[{brush:"yellow",orig:"e5"}]}});
+    const detail=await (await request(handler,"GET",`/sessions/${made.session.id}`,{cookie:viewer.cookie})).json() as any;expect(detail.marks).toEqual([]);
+    const hostPgn=await (await request(handler,"GET","/runs/private-run/pgn",{cookie:host.cookie})).text();const viewerPgn=await (await request(handler,"GET","/runs/private-run/pgn",{cookie:viewer.cookie})).text();
+    expect(hostPgn).toContain("own (1); other authors' marks are not exported");expect(hostPgn).toContain("Bd4");expect(hostPgn).not.toContain("Ye5");
+    expect(viewerPgn).toContain("own (1); other authors' marks are not exported");expect(viewerPgn).toContain("Ye5");expect(viewerPgn).not.toContain("Bd4");
   });
 
   it("rejects adapter keys from ordinary learners and reports declared statuses",async()=>{

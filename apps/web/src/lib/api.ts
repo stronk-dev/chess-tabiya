@@ -19,6 +19,7 @@ import type {
   PolicyConfig,
   ReasoningDetection,
   ReasoningTranscript,
+  RunMark,
   StoryMoment,
 } from "@chess-tabiya/runtime";
 
@@ -250,7 +251,8 @@ export interface SessionJournalEntry { readonly sessionId:string;readonly seq:nu
 export interface MoveAuthorship { readonly eventSeq:number;readonly nodeId:string;readonly learnerId:string|null }
 export interface SessionInvitation { readonly id:string;readonly sessionId:string;readonly leg:1|2|null;readonly invitedHandle:string|null;readonly invitedRole:RunRole;readonly externalChallengeUrl:string|null;readonly state:"open"|"accepted"|"revoked";readonly createdAt:string }
 export interface ArenaLeg { readonly sessionId:string;readonly leg:1|2;readonly referencePlayerHandle:string|null;readonly externalChallengeUrl:string|null;readonly pgn:string|null;readonly result:"1-0"|"0-1"|"1/2-1/2"|"*"|null;readonly branchId:string|null;readonly importedAt:string|null }
-export interface LiveSessionDetail { readonly session:LiveSession;readonly role:RunRole;readonly activeNodeId:string;readonly leaseHeldBy:LeaseIdentity;readonly voteAdapter?:LeaseIdentity;readonly grants:readonly RunGrant[];readonly moveAuthorship:readonly MoveAuthorship[];readonly proposals:readonly SessionProposal[];readonly vote?:VoteTally;readonly invitations:readonly SessionInvitation[];readonly legs:readonly ArenaLeg[];readonly match?:MatchState }
+export interface RelayedMark { readonly scope:"position"|"branch";readonly brush:import("@chess-tabiya/runtime").MarkBrush;readonly orig:string;readonly dest?:string;readonly drawnBy?:LeaseIdentity;readonly at:string }
+export interface LiveSessionDetail { readonly session:LiveSession;readonly role:RunRole;readonly activeNodeId:string;readonly leaseHeldBy:LeaseIdentity;readonly voteAdapter?:LeaseIdentity;readonly grants:readonly RunGrant[];readonly moveAuthorship:readonly MoveAuthorship[];readonly proposals:readonly SessionProposal[];readonly vote?:VoteTally;readonly invitations:readonly SessionInvitation[];readonly legs:readonly ArenaLeg[];readonly match?:MatchState;readonly marks:readonly RelayedMark[];readonly marksTruncated?:true }
 export interface SessionJoinLink {readonly id:string;readonly scope:"session_join";readonly sessionId:string;readonly matchSlot:"white"|"black"|null;readonly invitedRole:"participant"|"spectator";readonly invitedHandle:string|null;readonly expiresAt:string;readonly usesRemaining:number;readonly createdAt:string;readonly revokedAt:string|null}
 
 export interface Capabilities {
@@ -564,6 +566,9 @@ export interface RunApi {
 }
 
 export interface DrillClientApi extends RunApi {
+  marks?(runId: string): Promise<readonly RunMark[]>;
+  replaceMarks?(runId: string, input: { readonly nodeId:string;readonly branchId:string;readonly scope:"position"|"branch";readonly shapes:readonly Pick<RunMark,"brush"|"orig"|"dest">[] }): Promise<readonly RunMark[]>;
+  rescopeMarks?(runId:string,input:{readonly nodeId:string;readonly branchId:string;readonly fromScope:"position"|"branch";readonly toScope:"position"|"branch"}):Promise<readonly RunMark[]>;
   session?(): Promise<Learner>;
   register?(handle: string, password: string, displayName?: string): Promise<Learner>;
   login?(handle: string, password: string): Promise<Learner>;
@@ -1035,6 +1040,20 @@ export class DrillApi implements DrillClientApi {
     return this.#json(`/runs/${encoded(runId)}/evidence?sinceSeq=${sinceSeq}`);
   }
 
+  async marks(runId: string): Promise<readonly RunMark[]> {
+    const page = await this.#json<{ readonly marks: readonly RunMark[] }>(`/runs/${encoded(runId)}/marks`);
+    return page.marks;
+  }
+
+  async replaceMarks(runId: string, input: { readonly nodeId:string;readonly branchId:string;readonly scope:"position"|"branch";readonly shapes:readonly Pick<RunMark,"brush"|"orig"|"dest">[] }): Promise<readonly RunMark[]> {
+    const page = await this.#json<{ readonly marks: readonly RunMark[] }>(`/runs/${encoded(runId)}/marks`, { method:"PUT", body:input });
+    return page.marks;
+  }
+
+  async rescopeMarks(runId:string,input:{readonly nodeId:string;readonly branchId:string;readonly fromScope:"position"|"branch";readonly toScope:"position"|"branch"}):Promise<readonly RunMark[]>{
+    const page=await this.#json<{readonly marks:readonly RunMark[]}>(`/runs/${encoded(runId)}/marks`,{method:"PUT",body:{nodeId:input.nodeId,branchId:input.branchId,scope:input.toScope,rescopeFrom:input.fromScope}});return page.marks;
+  }
+
   authoredFeedback(runId: string): Promise<AuthoredFeedbackPage> {
     return this.#json(`/runs/${encoded(runId)}/authored-feedback`);
   }
@@ -1125,7 +1144,7 @@ export class DrillApi implements DrillClientApi {
   async #json<T>(
     path: string,
     options: {
-      readonly method?: "GET" | "POST" | "DELETE";
+      readonly method?: "GET" | "POST" | "PUT" | "DELETE";
       readonly writerId?: string;
       readonly body?: unknown;
     } = {},

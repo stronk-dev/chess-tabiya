@@ -89,4 +89,13 @@ describe("Chessboard", () => {
     expect(onMove).toHaveBeenCalledWith("a7a8q");
     await unmount(component);
   });
+
+  it("keeps learner shapes separate from system overlays without snapping or erasing", async () => {
+    const onMarksChange = vi.fn();
+    const target = document.createElement("div");document.body.append(target);
+    const component = mount(Chessboard,{target,props:{fen:"8/8/8/8/8/8/8/K6k w - - 0 1",startSide:"white",onMove:vi.fn(),drawingEnabled:true,marks:[{orig:"a1",dest:"h8",brush:"red"}],overlays:[{orig:"b2",brush:"blue"}],onMarksChange}});
+    await tick();
+    expect(chessground.configs[0]!.drawable).toMatchObject({enabled:true,defaultSnapToValidMove:false,eraseOnMovablePieceClick:false,shapes:[{orig:"a1",dest:"h8",brush:"red"}],autoShapes:[{orig:"b2",brush:"blue"}],onChange:onMarksChange});
+    await unmount(component);
+  });
 });

@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, RunRole, SessionKind, ShapeEntryView, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, liveMarkers, permittedAssistance, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness } from "@chess-tabiya/runtime";
+  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, liveMarkers, permittedAssistance, renderEndgameReading, renderPhaseReading, renderPivotalMarker, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type RunMark } from "@chess-tabiya/runtime";
+  import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick } from "svelte";
 
   import BranchRail from "./BranchRail.svelte";
@@ -73,6 +74,9 @@
     onPrediction?: (uci: string) => void | Promise<void>;
     onReasoning?: (input: { readonly transcript?: import("@chess-tabiya/runtime").ReasoningTranscript; readonly skipped?: true }) => void | Promise<void>;
     onExport: (branchIds?: readonly string[]) => void | Promise<void>;
+    onLoadMarks?: (() => Promise<readonly RunMark[]>) | undefined;
+    onSaveMarks?: ((input: { readonly nodeId:string;readonly branchId:string;readonly scope:"position"|"branch";readonly shapes:readonly Pick<RunMark,"brush"|"orig"|"dest">[] }) => Promise<readonly RunMark[]>) | undefined;
+    onRescopeMarks?: ((input:{readonly nodeId:string;readonly branchId:string;readonly fromScope:"position"|"branch";readonly toScope:"position"|"branch"})=>Promise<readonly RunMark[]>)|undefined;
     onStop: () => void;
     onHumanSplit?: (nodeId: string) => Promise<HumanSplitPage>;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
@@ -114,6 +118,9 @@
     onPrediction = () => {},
     onReasoning = () => {},
     onExport,
+    onLoadMarks,
+    onSaveMarks,
+    onRescopeMarks,
     onStop,
     onHumanSplit,
     onCorpus,
@@ -166,6 +173,9 @@
   let pinnedExpanded: string[] = $state([]);
   let compareLimitNotice: string | undefined = $state();
   let viewportSupport: RunViewportSupport = $state({ supported: true, width: 0, height: 0, reason: null });
+  let ownMarks: readonly RunMark[] = $state([]);
+  let markScope: "position" | "branch" = $state("position");
+  let markTimer: ReturnType<typeof setTimeout> | undefined;
 
   function measureViewport(): void {
     viewportSupport = runViewportSupport(globalThis.innerWidth, globalThis.innerHeight);
@@ -174,6 +184,38 @@
   let run = $derived(snapshot.run);
   let canWrite = $derived(snapshot.access === "writer");
   let currentNode = $derived(activeNode(run));
+
+  function changedMarks(shapes: readonly DrawShape[]): void {
+    if (onSaveMarks === undefined || previewNodeId !== undefined) return;
+    if (markTimer !== undefined) clearTimeout(markTimer);
+    const nodeId = displayedNode.id;
+    const branchId = run.activeCursor.branchId;
+    const scope = markScope;
+    const scopeKey = displayedMarkKey;
+    const persistable: readonly Pick<RunMark,"brush"|"orig"|"dest">[] = shapes.slice(0,64).flatMap((shape) =>
+      shape.brush !== undefined && MARK_BRUSHES.includes(shape.brush as RunMark["brush"])
+        ? [{ brush:shape.brush as RunMark["brush"],orig:shape.orig,...(shape.dest===undefined?{}:{dest:shape.dest}) }]
+        : []);
+    const at = new Date().toISOString();
+    ownMarks = [
+      ...ownMarks.filter((mark) => mark.scope !== scope || mark.scopeKey !== scopeKey),
+      ...persistable.map((shape) => ({ ...shape, scope, scopeKey, at })),
+    ];
+    markTimer = setTimeout(() => {
+      void onSaveMarks({ nodeId, branchId, scope, shapes: persistable }).then((marks)=>ownMarks=marks);
+    },400);
+  }
+
+  function setMarkScope(event: Event): void {
+    markScope = (event.currentTarget as HTMLSelectElement).value as "position" | "branch";
+    try { globalThis.localStorage?.setItem(`tabiya:mark-scope:${run.id}`, markScope); } catch { /* local preference only */ }
+  }
+
+  function rescopeVisibleMarks():void{
+    if(onRescopeMarks===undefined||displayedMarks.length===0)return;
+    const toScope=markScope==="position"?"branch":"position";
+    void onRescopeMarks({nodeId:displayedNode.id,branchId:run.activeCursor.branchId,fromScope:markScope,toScope}).then((marks)=>{ownMarks=marks;markScope=toScope;try{globalThis.localStorage?.setItem(`tabiya:mark-scope:${run.id}`,markScope);}catch{/* local preference only */}});
+  }
   let guardEvent = $derived(
     [...run.events].reverse().find(
       (event) =>
@@ -286,6 +328,8 @@
       ? currentNode
       : (run.nodes.find((node) => node.id === previewNodeId) ?? currentNode),
   );
+  let displayedMarkKey = $derived(markScope === "position" ? displayedNode.transposeKey : `${run.activeCursor.branchId}:${displayedNode.id}`);
+  let displayedMarks = $derived(ownMarks.filter((mark) => mark.scope === markScope && mark.scopeKey === displayedMarkKey).map((mark) => ({ orig:mark.orig as import("@lichess-org/chessground/types").Key,...(mark.dest===undefined?{}:{dest:mark.dest as import("@lichess-org/chessground/types").Key}),brush:mark.brush })));
   let structure = $derived(structuralReading(displayedNode.fen));
   let transition = $derived.by(() => {
     if (displayedNode.parentId === null || displayedNode.moveUci === null) return null;
@@ -647,6 +691,8 @@
     globalThis.addEventListener("resize", measureViewport);
     speechAvailable = typeof globalThis.speechSynthesis !== "undefined" && typeof globalThis.SpeechSynthesisUtterance !== "undefined" && globalThis.speechSynthesis.getVoices().length > 0;
     assistance = loadAssistance(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }), preferenceStorage());
+    if (onLoadMarks !== undefined) void onLoadMarks().then((marks)=>ownMarks=marks);
+    try { const saved=globalThis.localStorage?.getItem(`tabiya:mark-scope:${run.id}`);if(saved==="branch")markScope="branch"; } catch { /* local preference only */ }
     try {
       const stored = JSON.parse(globalThis.localStorage?.getItem(`tabiya:branch-fold:v1:${run.id}`) ?? "[]");
       if (Array.isArray(stored) && stored.every((value) => typeof value === "string")) foldedBranchIds = stored;
@@ -663,6 +709,7 @@
     globalThis.removeEventListener("resize", measureViewport);
     unregisterKeyboard?.();
     if (replayTimer !== undefined) clearInterval(replayTimer);
+    if (markTimer !== undefined) clearTimeout(markTimer);
   });
 
   $effect(() => {
@@ -831,10 +878,19 @@
                 showDests={effectiveLighting !== "off"}
                 highlightMoves={effectiveLighting !== "off"}
                 overlays={boardOverlays}
+                marks={displayedMarks}
+                drawingEnabled={previewNodeId === undefined}
+                onMarksChange={changedMarks}
                 onSelect={(square) => selectedSquare = square}
                 onMove={boardMove}
               />
             {/key}
+            <div class="mark-controls" aria-label="Board marks">
+              <label>Marks stay with <select value={markScope} onchange={setMarkScope}><option value="position">this position</option><option value="branch">this line</option></select></label>
+              <span>{displayedMarks.length}/64 marks</span>
+              <button type="button" disabled={displayedMarks.length===0||onRescopeMarks===undefined} aria-describedby={displayedMarks.length===0||onRescopeMarks===undefined?"rescope-marks-disabled":undefined} onclick={rescopeVisibleMarks}>Move these marks to the other scope</button>
+              {#if displayedMarks.length===0||onRescopeMarks===undefined}<span id="rescope-marks-disabled">Draw a mark before moving this position's marks to another scope.</span>{/if}
+            </div>
           </div>
           {#if overlayCaption.length > 0}<div class="overlay-caption" aria-live="polite">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
           {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No disclosed evidence exists here; structural sight remains available.</p>{/if}

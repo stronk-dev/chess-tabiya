@@ -49,6 +49,18 @@ export type RunOpponentMode = (typeof RUN_OPPONENT_MODES)[number];
 export type PolicyModeApplied = RunOpponentMode | "enumerated" | "unknown";
 export type RunOutcome = "win" | "loss" | "draw";
 
+export const MARK_BRUSHES = Object.freeze(["green", "red", "blue", "yellow"] as const);
+export type MarkBrush = (typeof MARK_BRUSHES)[number];
+
+export interface RunMark {
+  readonly scope: "position" | "branch";
+  readonly scopeKey: string;
+  readonly brush: MarkBrush;
+  readonly orig: string;
+  readonly dest?: string;
+  readonly at: string;
+}
+
 export interface RunStart {
   readonly fen: string;
   readonly side: "white" | "black";

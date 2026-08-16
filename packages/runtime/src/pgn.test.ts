@@ -92,6 +92,19 @@ describe("PGN variation export", () => {
     expect(pgn).not.toContain("hostile-run");
   });
 
+  it("exports position and branch marks through the chessops comment codec", () => {
+    const run = branchedRun();
+    const root = run.nodes[0]!, leaf = run.nodes.find((node) => node.moveUci === "g1f3")!;
+    const pgn = exportPgn(run, undefined, { TabiyaMarks: "spoofed" }, [
+      { scope:"position",scopeKey:root.transposeKey,brush:"green",orig:"e2",at },
+      { scope:"branch",scopeKey:`${leaf.branchId}:${leaf.id}`,brush:"red",orig:"f3",dest:"e5",at },
+    ]);
+    expect(pgn).toContain("%csl Ge2");
+    expect(pgn).toContain("%cal Rf3e5");
+    expect(pgn).toContain('[TabiyaMarks "own (2); other authors\' marks are not exported"]');
+    expect(pgn).not.toContain("spoofed");
+  });
+
   it("rejects a corrupted move path before writing PGN", () => {
     const run = branchedRun();
     const corrupted: DrillRun = {

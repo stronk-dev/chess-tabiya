@@ -8,9 +8,9 @@ import {
 import { branchPath } from "./branch-path.js";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { exportPgn } from "./pgn.js";
-import { commitMove, createRun, fork } from "./runtime.js";
+import { commitMove, createRun, fork, historyFrom } from "./runtime.js";
 import { isPackSession } from "./session.js";
-import type { Actor, DrillRun, Node } from "./types.js";
+import type { Actor, DrillRun, Node, RunMark } from "./types.js";
 
 export type PackRunPgnErrorCode =
   | "INVALID_PACK"
@@ -165,6 +165,8 @@ export async function exportPackRunPgn(
   pack: DrillPackDefinition,
   run: DrillRun,
   branchIds?: readonly string[],
+  marks: readonly RunMark[] = [],
+  headerOverrides: Readonly<Record<string, string>> = {},
 ): Promise<string> {
   if (!isPackSession(run)) {
     throw new PackRunPgnError(
@@ -202,5 +204,22 @@ export async function exportPackRunPgn(
   }
 
   exportPgn(run, branchIds);
-  return exportPgn(combinedRun(pack, run, branchIds));
+  const combined = combinedRun(pack, run, branchIds);
+  const selected = new Set(branchIds ?? run.branches.map((branch) => branch.id));
+  const remapped = marks.flatMap((mark): readonly RunMark[] => {
+    if (mark.scope === "position") return [mark];
+    const source = run.branches.flatMap((branch) => run.nodes.map((node) => ({ branch, node })))
+      .find(({ branch, node }) => mark.scopeKey === `${branch.id}:${node.id}`);
+    if (source === undefined || !selected.has(source.branch.id)) return [];
+    const sourcePath = historyFrom(run, source.node.id).slice(1).map((node) => node.moveUci);
+    let target = combined.nodes[0];
+    for (const move of sourcePath) {
+      if (target === undefined) return [];
+      const parentId = target.id;
+      target = combined.nodes.find((node) => node.parentId === parentId && node.moveUci === move);
+    }
+    if (target === undefined) return [];
+    return [Object.freeze({ ...mark, scopeKey: `${target.branchId}:${target.id}` })];
+  });
+  return exportPgn(combined, undefined, headerOverrides, remapped);
 }

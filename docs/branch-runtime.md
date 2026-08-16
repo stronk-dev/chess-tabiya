@@ -1,5 +1,7 @@
 # Branch runtime
 
+Learner board marks are deliberately stored outside the run event log. Their gesture timing cannot satisfy the log's adjacency invariants, and no mark may become grading input; see `docs/board-annotation.md`.
+
 The branch runtime is the implemented foundation for a chess-tabiya rehearsal. It
 records play as an immutable, path-keyed tree: play forward, rewind to an earlier
 node, choose another move, and compare the consequences without destroying the

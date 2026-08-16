@@ -1,10 +1,10 @@
 # RFC: Board annotation — a mark is the learner's own thought
 
-- **Status:** **accepted 2026-08-16** — returned once by cross-review; all four breaks ratified, five of the reviewer's counts corrected. Implementation gated on **D187** (the `Chessboard.svelte` state lift), which is not this RFC's to ship. Seven open questions are deferrals, not gates.
-  returned finding ratified, none declined. **Ready to accept.** Implementation is gated on
-  one code prerequisite that is not this RFC's to ship — the `Chessboard.svelte` state lift,
-  queued for codex — and on nothing else; the seven open questions are all deferrals, not
-  gates.
+- **Status:** **implemented 2026-08-16** — returned once by cross-review; all four breaks
+  ratified, five of the reviewer's counts corrected. **D187 closes in this lifecycle:**
+  §2.7 lifts mark state into `DrillScreen.svelte`, and criterion 17 asserts that the
+  keyed `Chessboard.svelte` remount cannot lose it. Seven open questions are deferrals,
+  not gates.
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-16
 - **Design refs:** `design/05-in-run-experience.md` §3-forms — the *"Board overlays —
@@ -35,15 +35,11 @@
     which this RFC does not revisit.
   - `rfc/archive/learner-identity-and-authorization.md` — owns `run_grants`, `RUN_ROLES`
     and `requireRead`, the single read chokepoint this RFC reuses and does not duplicate.
-  - **[author round] A code prerequisite, not an RFC one: the ledger row *"`Chessboard.svelte`
-    is destroyed and recreated on every node change, so no board-local state can survive a
-    ply."*** It is queued for codex (`planning/codex-queue.md` §2, which names this RFC as the
-    blocked party) and it is a **hard prerequisite for leg (a)**: while `DrillScreen.svelte`
-    wraps the board in `` {#key `${displayedNode.id}:…`} `` — verified present at HEAD — a
-    mark drawn on one node cannot outlive the next move, so leg
-    (a) is unshippable until the state lift lands. §2.7 specifies the lift this RFC needs;
-    stating it here means an implementer meets the blocker in the dependency list rather than
-    in the client section.
+  - **[implementation reconciliation] D187 is owned here, not an external prerequisite:**
+    the ledger row *"`Chessboard.svelte` is destroyed and recreated on every node change,
+    so no board-local state can survive a ply."* is the reason §2.7 requires mark state to
+    live in `DrillScreen.svelte`. The keyed board may continue to remount; parent-owned
+    marks survive it. Criterion 17 closes the row in this lifecycle.
 - **Parent / amends:** amends `exportPgn`'s signature (one optional parameter),
   `Chessboard.svelte`'s `drawable` config, and `LiveSessionDetail` (one field, declared
   twice per the shipped mirror rule). Introduces one table. **No run-schema change. No
@@ -1399,7 +1395,8 @@ call into a build failure.
    same way. A regex cannot see through a `Parameters<typeof exportPgn>` alias or an
    options-bag field, both of which this codebase uses, so the criterion is met by grepping
    for the **`RunMark` type name** across `packages/runtime/src` and asserting the set of
-   files mentioning it is exactly `{ pgn.ts, pack-pgn.ts, types.ts }`.
+   files mentioning it is exactly `{ index.ts, pgn.ts, pack-pgn.ts, types.ts }`; `index.ts`
+   is the public type re-export, not a consumer.
 2. **No grading path can observe a mark.** A run is played to a graded outcome twice from
    identical inputs, once with 64 marks written at every node and once with none. The
    resulting `DrillRun` projections, objective states, trajectory verdicts, deviation

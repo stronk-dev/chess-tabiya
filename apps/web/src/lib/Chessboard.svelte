@@ -27,6 +27,9 @@
     showDests?: boolean;
     highlightMoves?: boolean;
     overlays?: readonly DrawShape[];
+    marks?: readonly DrawShape[];
+    drawingEnabled?: boolean;
+    onMarksChange?: (shapes: readonly DrawShape[]) => void;
     onSelect?: (square: Key) => void;
     onMove: (uci: string) => void | Promise<void>;
   }
@@ -39,6 +42,9 @@
     showDests = true,
     highlightMoves = true,
     overlays = [],
+    marks = [],
+    drawingEnabled = false,
+    onMarksChange,
     onSelect,
     onMove,
   }: Props = $props();
@@ -56,7 +62,15 @@
       check: model.check,
       ...(model.lastMove === undefined ? {} : { lastMove: [...model.lastMove] }),
       highlight: { lastMove: highlightMoves, check: true },
-      drawable: { enabled: false, visible: true, autoShapes: [...overlays] },
+      drawable: {
+        enabled: drawingEnabled,
+        visible: true,
+        autoShapes: [...overlays],
+        shapes: [...marks],
+        defaultSnapToValidMove: false,
+        eraseOnMovablePieceClick: false,
+        ...(onMarksChange === undefined ? {} : { onChange: onMarksChange }),
+      },
       ...(onSelect === undefined ? {} : { events: { select: onSelect } }),
       movable: {
         free: false,
@@ -103,6 +117,9 @@
     showDests;
     highlightMoves;
     overlays;
+    marks;
+    drawingEnabled;
+    onMarksChange;
     pendingPromotion = undefined;
     board?.set(config());
     // Objective/checkpoint banners can move the board without resizing it.

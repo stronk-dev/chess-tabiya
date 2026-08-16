@@ -1,5 +1,7 @@
 # Live sessions
 
+Live-session detail may carry attributed board marks for the active position. A mark is relayed only when its author held the board lease at write time and the session is not a match; otherwise it remains visible only to its author. Relayed marks are shared rather than viewer-specific, capped at 128 per poll, and never widen the assistance ceiling. See `docs/board-annotation.md`.
+
 Tabiya can place a shared session around one existing run. The run remains the sole
 source of chess truth and deterministic replay; the session records people, possession,
 proposals, votes, invitations, and imported match legs. Closing session state cannot

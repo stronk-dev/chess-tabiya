@@ -2678,3 +2678,24 @@ wherever it is cited (D359).
 because option (c) there flips the sign of the clock's effect. If (b) is chosen, the work is one
 retained field in `pgn-import.ts` plus a renderer and an abstention path (F6). If (a), the deletion
 of `clockState` and the two `06` §5 amendments land together.
+
+## 2026-08-16 — Board annotation closes two legs of the arrows ruling
+
+**Landed.** `board-annotation` implements learner-drawn circles and arrows as principal-scoped
+sibling-table state, not run evidence. Marks may follow a transposition-keyed position or a
+branch visit, can be re-scoped atomically, survive the deliberate board remount and page reload,
+export through chessops' `%csl`/`%cal` codec, and relay from the active lease-holder to live viewers
+with attribution outside matches. PGN export is own-only and states that constant filter without
+measuring another author's marks.
+
+**Isolation and corrections.** `DrillRun`, its event union, grading and evidence packets remain
+unchanged; a runtime census and a route-level voice test pin that boundary. Review reconciled D187
+into this lifecycle rather than treating parent-owned board state as a prerequisite. Closeout then
+caught a real debounce race: a quick move could make a delayed save read the child node. The save
+now captures node, branch and scope at gesture time, and parent state updates immediately. Re-scope
+also refuses any merge beyond the 64-mark scope bound.
+
+**Verified.** `ENGINES_REQUIRED=1 make verify` passed with 682 tests across 106 files, Svelte 0/0,
+schema, scaffold and packaging clean. `make test-browser` passed 24 tests at zero retries; the
+optional Maia latency test skipped. D159, D186, D187, D218 and D249 are closed. D158 remains partial:
+learner and attributed-human marks ship; system-drawn directed marks still have no honest producer.

@@ -9,7 +9,7 @@ import { parseSan } from "chessops/san";
 import { describe, expect, it } from "vitest";
 
 import { appendOpponentPly, commitMove, createRun, rewind } from "./runtime.js";
-import type { OpponentSelection } from "./types.js";
+import type { OpponentSelection, RunMark } from "./types.js";
 import { exportPackRunPgn } from "./pack-pgn.js";
 
 const fixtureUrl = new URL(
@@ -84,6 +84,7 @@ describe("pack + run PGN export", () => {
     const checkpointNodeId = run.activeCursor.nodeId;
     run = commitMove(run, f3.moveUci).run;
     run = appendOpponentPly(run, opponent(b5.moveUci)).run;
+    const authoredBranchId = run.activeCursor.branchId;
 
     run = rewind(run, checkpointNodeId).run;
     expect(findSpineNode(pack, "najdorf-e6").children.map((node) => node.moveUci))
@@ -91,15 +92,26 @@ describe("pack + run PGN export", () => {
     run = commitMove(run, "g2g3").run;
     run = appendOpponentPly(run, opponent("b7b5")).run;
     expect(run.branches.at(-1)?.label).toBe("alt-1");
+    const alternateLeaf = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;
+    const marks: readonly RunMark[] = [
+      { scope: "position", scopeKey: run.nodes[0]!.transposeKey, brush: "green", orig: "e2", at: "2026-08-16T12:00:00.000Z" },
+      { scope: "branch", scopeKey: `${alternateLeaf.branchId}:${alternateLeaf.id}`, brush: "red", orig: "g3", dest: "g4", at: "2026-08-16T12:00:01.000Z" },
+    ];
 
-    const pgn = await exportPackRunPgn(pack, run);
+    const pgn = await exportPackRunPgn(pack, run, undefined, marks);
     expect(pgn).toContain("Be2");
     expect(pgn).toContain("f3");
     expect(pgn).toContain("b5");
     expect(pgn).toContain("g3");
     expect(pgn).toContain("authored:najdorf-be2");
     expect(pgn).toContain("run:alt-1");
+    expect(pgn).toContain("%csl Ge2");
+    expect(pgn).toContain("%cal Rg3g4");
     expect(assertLegal(pgn)).toBe(7);
+
+    const authoredOnly = await exportPackRunPgn(pack, run, [authoredBranchId], marks);
+    expect(authoredOnly).toContain("%csl Ge2");
+    expect(authoredOnly).not.toContain("%cal Rg3g4");
 
     const serializedAgain = makePgn(parsePgn(pgn)[0]!);
     expect(assertLegal(serializedAgain)).toBe(7);

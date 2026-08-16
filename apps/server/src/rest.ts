@@ -597,7 +597,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|share|flip|derivations|distill)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(moves|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|share|flip|derivations|distill|marks)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -1051,6 +1051,9 @@ export function createRestHandler(
       if (request.method === "GET" && route.action === "authored-feedback") {
         return json(200, service.authoredFeedback(route.runId, principal));
       }
+      if (request.method === "GET" && route.action === "marks") {
+        return json(200, { marks: service.marks(route.runId, principal) });
+      }
       if (request.method === "GET" && route.action === "reasoning") {
         return json(200, service.reasoning(route.runId, principal, requiredString(url.searchParams.get("checkpointId"), "checkpointId")));
       }
@@ -1111,6 +1114,26 @@ export function createRestHandler(
         const child = index < 0 ? undefined : path[index + 1];
         const result = await corpusSource.stats({ ...selectedPopulation, fen: access.node.fen });
         return json(200, { nodeId: access.node.id, result, committedMoveSan: child?.actor === "user" ? child.moveSan : null });
+      }
+      if (request.method === "PUT" && route.action === "marks") {
+        requireJson(request);
+        const value = await parseBody(request);
+        const body = closedRecord(value, "/", ["nodeId", "branchId", "scope", "shapes", "rescopeFrom"]);
+        const scope = requiredString(body.scope, "scope");
+        if (scope !== "position" && scope !== "branch") throw invalid("scope must be position or branch");
+        if (body.rescopeFrom !== undefined) {
+          const fromScope=requiredString(body.rescopeFrom,"rescopeFrom");if(fromScope!=="position"&&fromScope!=="branch")throw invalid("rescopeFrom must be position or branch");
+          if(body.shapes!==undefined)throw invalid("rescope does not accept shapes");
+          return json(200,{marks:service.rescopeMarks(route.runId,principal,{nodeId:requiredString(body.nodeId,"nodeId"),branchId:requiredString(body.branchId,"branchId"),fromScope,toScope:scope})});
+        }
+        if (!Array.isArray(body.shapes)) throw invalid("shapes must be an array");
+        const shapes = body.shapes.map((item, index) => {
+          const shape = closedRecord(item, `/shapes/${index}`, ["brush", "orig", "dest"]);
+          const brush = requiredString(shape.brush, `shapes[${index}].brush`);
+          if (brush !== "green" && brush !== "red" && brush !== "blue" && brush !== "yellow") throw invalid("brush must be green, red, blue, or yellow");
+          return Object.freeze({ brush, orig: requiredString(shape.orig, `shapes[${index}].orig`), ...(shape.dest === undefined ? {} : { dest: requiredString(shape.dest, `shapes[${index}].dest`) }) });
+        });
+        return json(200, { marks: service.replaceMarks(route.runId, principal, { nodeId: requiredString(body.nodeId, "nodeId"), branchId: requiredString(body.branchId, "branchId"), scope, shapes }) });
       }
       if (request.method !== "POST") {
         return json(405, {

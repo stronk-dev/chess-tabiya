@@ -19,6 +19,7 @@ import {
   digestSessionSource,
   isPackSession,
   lineMembership,
+  MARK_BRUSHES,
   branchDecidedness,
   MAX_COMPARISON_BRANCHES,
   matchKeyPoints,
@@ -48,6 +49,7 @@ import {
   type RunOpponentMode,
   type PositionOpponentPolicy,
   type ReasoningTranscript,
+  type RunMark,
   RuntimeError,
 } from "@chess-tabiya/runtime";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
@@ -335,6 +337,51 @@ export class RunService {
 
   validateOpponentPolicy(policy: Pick<import("@chess-tabiya/runtime").RunOpponentPolicy, "mode" | "targetElo">): void {
     this.#opponentSelector?.validatePolicy(policy);
+  }
+
+  marks(runId: string, principal: Principal): readonly RunMark[] {
+    requireRead(this.#storage, runId, principal);
+    return Object.freeze(this.#storage.runMarks(runId, principal.learnerId).map(({ scope, scopeKey, brush, orig, dest, at }) =>
+      Object.freeze({ scope, scopeKey, brush, orig, ...(dest === undefined ? {} : { dest }), at })));
+  }
+
+  replaceMarks(runId: string, principal: Principal, input: {
+    readonly nodeId: string;
+    readonly branchId: string;
+    readonly scope: "position" | "branch";
+    readonly shapes: readonly Pick<RunMark, "brush" | "orig" | "dest">[];
+  }): readonly RunMark[] {
+    const { stored } = requireRead(this.#storage, runId, principal);
+    const node = stored.run.nodes.find((candidate) => candidate.id === input.nodeId);
+    if (node === undefined) throw new ServerError("INVALID_REQUEST", "Unknown mark node");
+    if (input.shapes.length > 64) throw new ServerError("INVALID_REQUEST", "A position may hold at most 64 marks");
+    for (const shape of input.shapes) {
+      if (!MARK_BRUSHES.includes(shape.brush) || !/^[a-h][1-8]$/.test(shape.orig) || (shape.dest !== undefined && !/^[a-h][1-8]$/.test(shape.dest))) {
+        throw new ServerError("INVALID_REQUEST", "A mark must use an exportable brush and board squares");
+      }
+    }
+    let scopeKey: string;
+    if (input.scope === "position") scopeKey = node.transposeKey;
+    else {
+      let path;
+      try { path = branchPath(stored.run, input.branchId); }
+      catch { throw new ServerError("INVALID_REQUEST", "Unknown mark branch"); }
+      if (!path.some((candidate) => candidate.id === node.id)) throw new ServerError("INVALID_REQUEST", "Mark node is not on the named branch");
+      scopeKey = `${input.branchId}:${node.id}`;
+    }
+    const session = this.#storage.liveSessionByRun?.(runId);
+    const relayed = session !== undefined && session.kind !== "match" && stored.activeWriterLearnerId === principal.learnerId;
+    return Object.freeze(this.#storage.replaceRunMarks({ runId, learnerId: principal.learnerId, scope: input.scope, scopeKey, shapes: input.shapes, relayed, at: new Date().toISOString() }).map(({ scope, scopeKey: key, brush, orig, dest, at }) =>
+      Object.freeze({ scope, scopeKey: key, brush, orig, ...(dest === undefined ? {} : { dest }), at })));
+  }
+
+  rescopeMarks(runId:string,principal:Principal,input:{readonly nodeId:string;readonly branchId:string;readonly fromScope:"position"|"branch";readonly toScope:"position"|"branch"}):readonly RunMark[]{
+    const {stored}=requireRead(this.#storage,runId,principal);
+    const node=stored.run.nodes.find((candidate)=>candidate.id===input.nodeId);if(node===undefined)throw new ServerError("INVALID_REQUEST","Unknown mark node");
+    let branchOnPath=false;try{branchOnPath=branchPath(stored.run,input.branchId).some((candidate)=>candidate.id===node.id);}catch{/* translated below */}
+    if(!branchOnPath)throw new ServerError("INVALID_REQUEST","Mark node is not on the named branch");
+    const key=(scope:"position"|"branch")=>scope==="position"?node.transposeKey:`${input.branchId}:${node.id}`;
+    return Object.freeze(this.#storage.rescopeRunMarks({runId,learnerId:principal.learnerId,fromScope:input.fromScope,fromKey:key(input.fromScope),toScope:input.toScope,toKey:key(input.toScope)}).map(({scope,scopeKey,brush,orig,dest,at})=>Object.freeze({scope,scopeKey,brush,orig,...(dest===undefined?{}:{dest}),at})));
   }
 
   async create(input: CreateRunRequest, leaseInput: LeaseHolder | string): Promise<DrillRun> {
@@ -1462,11 +1509,13 @@ export class RunService {
       : principalOrBranches as Principal;
     const branchIds = Array.isArray(principalOrBranches) ? principalOrBranches : maybeBranches;
     const run = requireRead(this.#storage, runId, principal).stored.run;
+    const marks = this.marks(runId, principal);
+    const headers = { TabiyaMarks: `own (${marks.length}); other authors' marks are not exported` };
     const pack = this.#requiredRegisteredPack(run);
     if (run.sessionKind === "imported") {
       const record = this.#storage.importedGame?.(run.id);
       if (record === undefined) throw new ServerError("STORAGE_FAILURE", "Imported run has no import record");
-      const headers: Record<string, string> = {
+      const importedHeaders: Record<string, string> = {
         ...(record.headers.White === undefined ? {} : { White: record.headers.White }),
         ...(record.headers.Black === undefined ? {} : { Black: record.headers.Black }),
         ...(record.headers.Date === undefined ? {} : { Date: record.headers.Date }),
@@ -1474,11 +1523,11 @@ export class RunService {
         ...(record.headers.Event === undefined ? {} : { SourceEvent: record.headers.Event }),
         ...(record.headers.Site === undefined ? {} : { SourceSite: record.headers.Site }),
       };
-      return exportPgn(run, branchIds, headers);
+      return exportPgn(run, branchIds, { ...importedHeaders, ...headers }, marks);
     }
     return pack === undefined
-      ? exportPgn(run, branchIds)
-      : exportPackRunPgn(pack.document, run, branchIds);
+      ? exportPgn(run, branchIds, headers, marks)
+      : exportPackRunPgn(pack.document, run, branchIds, marks, headers);
   }
 
   reveal(runId: string, writerId: string, at?: string): MutationResult;

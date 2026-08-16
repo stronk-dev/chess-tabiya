@@ -1,4 +1,4 @@
-import { LIVE_SESSION_KINDS, type LiveSessionKind } from "@chess-tabiya/runtime";
+import { LIVE_SESSION_KINDS, type LiveSessionKind, type MarkBrush } from "@chess-tabiya/runtime";
 
 import type { LeaseIdentity, RunRole } from "./storage.js";
 
@@ -110,6 +110,17 @@ export interface LiveSessionDetail {
   readonly invitations: readonly SessionInvitation[];
   readonly legs: readonly ArenaLeg[];
   readonly match?: MatchState;
+  readonly marks: readonly RelayedMark[];
+  readonly marksTruncated?: true;
+}
+
+export interface RelayedMark {
+  readonly scope: "position" | "branch";
+  readonly brush: MarkBrush;
+  readonly orig: string;
+  readonly dest?: string;
+  readonly drawnBy?: LeaseIdentity;
+  readonly at: string;
 }
 
 export interface MatchState {
