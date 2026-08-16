@@ -98,13 +98,26 @@ unscheduled things are not rows.
   one of the eleven was written in a form a person could fail** ([[D482]]). Rewriting them is
   design-tier and on nobody's list.
 
-## 4. Gated on the owner playing a run
+## 4. Gated on the owner playing a run — **on real content, which is the correction**
 
-**Nobody has played since 2026-08-12.** This is the only lane where building does not help.
+**"Nobody has played since 2026-08-12" is FALSE and was repeated all session, including into a
+published report** ([[D489]]). A run was played to termination, forked and compared on
+**2026-08-16**. *(This section carried the error for one commit after the row was written, which
+is the point of the row.)*
 
-- **H1–H4** untested; **K1–K5, K8, K9** have no evidence either way.
-- **R6, R7, R8** deliberately deferred until the loop has been felt.
-- Runtime playtest cost — unmeasured since 2026-08-12, and it is the open half of **K10**.
+**The true statement is narrower and still damning: the OWNER has not played, and nobody has
+played REAL CONTENT** — production served one schema fixture, so the run that happened exercised
+four plies of a format example. **This changes the action**: the deferred questions are not
+waiting on a calendar slot, they are waiting on [[D502]] shipping the draft channel.
+
+- **H1–H4** untested; **K1–K5, K8, K9** have no evidence either way — and **K1–K4/K8 are
+  unmeasurable while the product serves one fixture**, so [[D481]] is their blocker too.
+- **R6, R7, R8** deferred until the loop has been felt. **R6 is two-thirds already resolved** by
+  `design/06` §2c; only the retry budget is genuinely experiential.
+- Runtime playtest cost — the open half of **K10**.
+- **[[D488]] — K9 has never had OUR side measured.** The competitor's latency is on file from
+  2026-08-11; ours is absent. **An afternoon with a shipped browser suite, and the only kill
+  criterion testable today** without a content wave, an owner ruling or a human subject.
 
 ## Maintenance rule
 

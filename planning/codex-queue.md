@@ -63,6 +63,39 @@ must be authored, the row was split and the sentence sent to the authored side. 
 which no row records — and it must **not** be bulk-fixed, because the `blocking → resolved`
 writer does not exist yet.
 
+## 0-OWNER. Two rulings landed 2026-08-16 — these outrank the batches
+
+**[[D502]] — the corpus reaches learners through BOTH channels.** Ship all 56 packs behind a
+clear **unreviewed draft** badge, and promote onto an official shelf as clearance lands. The
+registry **already carries** `channel: "official" | "community"` and the UI already renders the
+badge, so this is wiring, not new surface. **Explicitly NOT by flipping `NODE_ENV`** — [[D481]]
+found `PackRegistry.loadDefault` reads `content/drafts/` only when `options.development === true`
+and `compose.yaml` never sets it, which is the bug, not the mechanism to use.
+
+**[[D502]] — remove the schema example fixture from the served library.** It is a format
+fixture, not content; its own commentary reads *"Schema-only annotation; requires human
+review."* It validates the schema in tests and never reaches a user. `content/packs/` currently
+holds only `.gitkeep`.
+
+**[[D493]] — one token, and it is a same-day regression, not a ruling.**
+`SILENT_ASSISTANCE.boardLighting` was flipped `"legal"` → `"off"` at `f304384` (11:44 today) in a
+7-file batch, on the rationale that the constant is *"now silent in all nine fields"* — a claim
+about tidiness, not about a learner. **`docs/adaptive-guidance.md:61` still calls `"legal"` the
+single named exception to literal off, and all three migration branches in
+`assistance-preference.ts` still write it.** Restoring it brings back move dots **and** the
+last-move highlight, because `DrillScreen.svelte:882-883` gates `highlightMoves` — run history,
+not evidence — on the same `!== "off"`. **Silence over evidence stays; the rules floor was never
+on the assistance ladder.**
+
+**Highest impact-per-line in the whole UX audit, take with the above:** `.board-frame`'s
+`calc(100dvh - 34rem)` → the container-query sizing **already present in the same file's mobile
+branch** (`DrillScreen.svelte:1479-1480`). **~2 lines; the board roughly doubles.** And a
+code→sentence map at `SessionController.#fail` — **10 call sites, one choke point** — which
+turns out to fix *both* `Run is terminal at node: run-<uuid>:node:4` **and** the fork button that
+409s silently ([[D495]]). They are the same event.
+
+Full lane: `planning/ux-work-lane.md`. Entry point for everything: `planning/WORK.md`.
+
 ## 0. [[D468]] — a live boot failure. Take this before anything else.
 
 **Not hypothetical and not scheduled work.** `GRADUATION_RULING_UNCITED` resolves living-tier
