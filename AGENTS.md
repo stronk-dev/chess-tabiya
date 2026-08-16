@@ -62,6 +62,18 @@ than more ceremony. The original ledger clause stands on its own evidence: the
 2026-08-14 reverse-trace found flow-back died exactly where it was left to a later
 pass, while the RFC registers, edited in-commit, stayed perfect.
 
+**Content waves have the same closeout, and this clause exists because they did not.**
+A content wave flips the `design/BACKLOG.md` rows it fixes and appends its entry to
+`planning/content-era/log.md` **in the commit that ships the content**. **Added
+2026-08-16 by claude on measured evidence and the owner's to veto:** cluster F ran on
+2026-08-15 (`41afe00`) and `planning/work-register.md` still called it *"queued, never
+launched"* a day later — a second wave was commissioned and re-did the verification
+before discovering the first had shipped. The RFC lifecycle had both halves of a
+closeout and content had neither, which made it **the only tier of work in this repo
+that can complete invisibly**. The cost was one duplicated wave; the guard is one
+commit's discipline. (The re-run was not wasted — it found nine entries carrying claims
+pinned to a stale corpus, four of them materially false — but that was luck, not design.)
+
 New idea mid-task? BACKLOG row first ("an idea missing from the ledger is a process
 bug"), then continue.
 
