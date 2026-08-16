@@ -16,7 +16,6 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 | `engine-leverage.md` | **implementing 2026-08-16** — Q1/Q9 owner-ruled, Q3/Q7 closed on their stated fallbacks | `planning/engine-leverage/` | claims **pack 0.23**, **run 0.16**, **migration 21** (reassigned 2026-08-16 from 22 — `STORAGE_VERSION` was **20**, so 22 was unlandable while owner-blocked `teacher-surface` held 21). Engine-condition surface, `cost` bound to existing evidence, `go nodes 50000` for `strong_engine`. **Claude marked this `accepted` in error; codex refused to implement it and was right** — the RFC's own text says questions 1 and 3 must be ruled *before* `accepted` |
 | `vocabulary-wiring.md` | **implementing 2026-08-16** — Q1/Q8 owner-ruled, Q9 closed against work-register §4a | `planning/vocabulary-wiring/` | claims **pack 0.24** (yielded 0.23 to `engine-leverage`). Merges `plan_consequence` into `structural_feature{plan_signature}`; carries the D64 escalation |
 | `feedback-delivery.md` | **revised 2026-08-15 — OWNER-BLOCKED on the C6 fork** | — | **claims nothing versioned**. The revision replaced the reviewer's `outcome.reached` conjunct (only 6 of 37 packs have a chess-terminal spine leaf, capping delivery at 18.3% structurally) and made the exhaustion predicate stricter — full authored spine, not `reachableAuthoredSpineIds`, which omits exactly the mating leaf in four packs. Cannot be accepted until the owner rules the withhold/deliver fork |
-| `evidence-at-runtime.md` | **accepted 2026-08-16** — one owner call open (the voice seam) | — | Closes D118 by deleting a discard: `PackRegistry.loadDefault` already reads every ledger and drops 764 records. Load-time position-keyed projection on `PackRecord`. **Nothing versioned.** Absence-honesty is structural — readings never enter `packet.sentences`, they are appended **after** `renderVoice` returns, so the provider's input is byte-identical to today's |
 
 **Three-draft wave, 2026-08-14** — claim order: `repertoire-gap-finding` first, then
 `onramp-guard`, then `open-answer-grading`. Shared-resource claims (migrations, pack
@@ -256,6 +255,7 @@ before re-attempting this territory.
 | `archive/client-surface-floor.md` | implemented | `docs/app-shell.md` |
 | `archive/live-surface-honesty.md` | implemented | `docs/live-sessions.md`, `docs/adaptive-guidance.md` |
 | `archive/pack-graduation.md` | implemented | `docs/pack-graduation.md`, `docs/drill-pack-format.md` |
+| `archive/evidence-at-runtime.md` | implemented | `docs/recorded-evidence.md`, `docs/explanation-grounds.md` |
 
 ## The archive sketches are quarry, not RFCs
 

@@ -2888,3 +2888,27 @@ hardcoded real-pack test path now resolves across both roots.
 
 Verification: `ENGINES_REQUIRED=1 make verify` passed 700 tests across 110 files with schema and
 packaging clean; `make test-browser` passed 25 tests at zero retries. No authored pack was promoted.
+
+## 2026-08-16 — Evidence at runtime implemented
+
+The runtime now retains the admissible part of every digest-current pack ledger instead of
+discarding it after grounding. Thirty-two packs supply 732 position-keyed readings (391
+Stockfish and 341 Syzygy) across 731 per-pack entries and 568 corpus-distinct positions.
+The projection is server-local, multi-valued, allow-listed, and network-free; pack wire
+projections remain unchanged.
+
+Readings use the existing run-level guidance barrier. Live same-kind evidence wins, Syzygy
+halfmove clocks must match, and neither absence nor a cross-node comparison is rendered.
+External voice and reasoning providers receive no recorded-reading bytes: their sentence
+packet is unchanged and the server appends frozen attributed prose only after rendering.
+
+The coverage limit is now executable rather than implied. Across 497 authored spine
+positions, 11,559 legal moves produce 11,464 per-pack-distinct one-ply successors; 10,765
+(93.90%) have no recorded reading. Of 372 arrivals at a tablebase-indexed key, 43 are refused
+for a different halfmove clock. This closes D118 and the mechanical half of D116 while leaving
+rung-4 packet evidence explicitly open under D147.
+
+Verification: `ENGINES_REQUIRED=1 make verify` passed 712 tests across 113 files with Svelte
+0 errors / 0 warnings and schema/packaging clean; `make test-browser` passed 24 tests at zero
+retries with the optional Maia test skipped. The lifecycle is archived in
+`rfc/archive/evidence-at-runtime.md` and `planning/archive/evidence-at-runtime/`.

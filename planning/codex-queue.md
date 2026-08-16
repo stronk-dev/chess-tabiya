@@ -24,15 +24,11 @@ appears in the ledger or the log**. This is the first real use, and it failed.
 
 Rows: D347 (the three-way disagreement), D353 (the census delta going the wrong way).
 
-## 0a. Accepted RFCs — one remains
+## 0a. Accepted RFC batch — complete
 
-**These were mis-flagged "do not start" until 2026-08-16 (late). They are accepted and
-implementable now.** Lane order matters only where a pack-schema number does; the two
-that claim nothing versioned can be taken at any point.
-
-| # | RFC | Claims | Note |
-|---|---|---|---|
-| 1 | `rfc/evidence-at-runtime.md` | **nothing versioned** | Accepted, one owner call open (the voice seam) — does not block. Closes D118 by deleting a discard: `loadDefault` already reads every ledger and drops 764 records |
+The four RFCs previously mis-flagged "do not start" are implemented and archived.
+`evidence-at-runtime` landed last: 732 digest-current readings are retained and 10,765 of
+11,464 per-pack-distinct one-ply successors are recorded as uncovered rather than inferred.
 
 `format-surface` implemented and archived 2026-08-16 at pack 0.25; both gates passed.
 `pack-graduation` implemented and archived 2026-08-16 at pack 0.27; 700 unit tests and 25 browser tests passed, and the landing corpus has zero legacy entries and zero graduable packs.
@@ -59,14 +55,8 @@ draft awaiting cross-review.
   actually 2 against 3, because a queen was blocked by its own pawn). That is a diagram anyone
   would misread, and nothing in the repo would have caught it.
 
-## 0. The main course — two accepted RFCs, land in lane order
-
-| # | RFC | Claims | Notes |
-|---|---|---|---|
-| 1 | `rfc/vocabulary-wiring.md` | **pack 0.24** | **Accepted.** Q1/Q8 owner-ruled, Q9 closed against `planning/work-register.md` §4a. **Read the open questions; do not grep them** — superseded *"resolve before `accepted`"* strings are struck through and labelled, because that search gave you a false clear here once. Merges `plan_consequence` into a `plan_signature` leaf and publishes the selection rule D89 names as missing |
-| 2 | `rfc/format-surface.md` | **pack 0.25** | **Accepted.** Both owner rulings are applied throughout the body, not just in the questions. **`arrows` is `unmeasured`, NOT retired, and the `<select>` STAYS.** **`formatDispositions` does NOT go on `/capabilities`** — it ships with the schema |
-
-`DRILL_PACK_SCHEMA_VERSION` reads **0.23** at HEAD, so the order is clean.
+The earlier vocabulary/format/claim/graduation lane is complete through pack schema 0.27.
+Its historical ordering remains in the RFC register, not in the live work queue.
 
 ## 1. Permission and correctness — smallest, sharpest, take first
 
