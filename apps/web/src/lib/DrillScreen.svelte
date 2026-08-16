@@ -172,6 +172,7 @@
   }
 
   let run = $derived(snapshot.run);
+  let canWrite = $derived(snapshot.access === "writer");
   let currentNode = $derived(activeNode(run));
   let guardEvent = $derived(
     [...run.events].reverse().find(
@@ -387,7 +388,7 @@
   }
 
   async function createGroup(): Promise<void> {
-    if (onCreateGroup === undefined) return;
+    if (!canWrite || onCreateGroup === undefined) return;
     await onCreateGroup({
       source: groupSource,
       resistance: groupResistance,
@@ -489,7 +490,7 @@
   }
 
   async function confirmPreview(nodeId = previewNodeId): Promise<void> {
-    if (nodeId === undefined) return;
+    if (!canWrite || nodeId === undefined) return;
     previewNodeId = undefined;
     await onRewind({ nodeId });
   }
@@ -552,6 +553,7 @@
   }
 
   async function submitFork(): Promise<void> {
+    if (!canWrite) return;
     forkOpen = false;
     await onFork(forkLabel, forkIntent);
     forkLabel = "";
@@ -591,6 +593,7 @@
     }
     if (event.key.toLowerCase() === "r") {
       event.preventDefault();
+      if (!canWrite) return true;
       if (event.shiftKey) {
         checkpointPickerOpen = true;
         void tick().then(() => pickerHeading?.focus());
@@ -602,6 +605,7 @@
       return true;
     } else if (event.key.toLowerCase() === "b") {
       event.preventDefault();
+      if (!canWrite) return true;
       forkOpen = true;
       void tick().then(() => forkInput?.focus());
       return true;
@@ -631,6 +635,7 @@
       return true;
     } else if (event.key === "Enter" && previewNodeId !== undefined) {
       event.preventDefault();
+      if (!canWrite) return true;
       void confirmPreview();
       return true;
     }
@@ -876,6 +881,7 @@
           {previewNodeId}
           onPreview={preview}
           onConfirm={confirmPreview}
+          canConfirm={canWrite}
           {authoredSpineNodeIds}
           rootNodeId={run.nodes[0]?.id}
           {shapeMarkers}
@@ -884,8 +890,12 @@
           onOpenPivotal={openPivotalMarker}
         />
         <div class="quick-actions" aria-label="Run actions">
-          <button type="button" onclick={() => (forkOpen = true)}>Fork <kbd>B</kbd></button>
-          <button type="button" onclick={() => (groupOpen = !groupOpen)}>Branch group</button>
+          <HonestControl disabled={!canWrite} reasonId="drill-fork-readonly" reason="This read-only view cannot create a branch.">
+            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={() => (forkOpen = true)}>Fork <kbd>B</kbd></button>{/snippet}
+          </HonestControl>
+          <HonestControl disabled={!canWrite} reasonId="drill-group-readonly" reason="This read-only view cannot create a branch group.">
+            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={() => (groupOpen = !groupOpen)}>Branch group</button>{/snippet}
+          </HonestControl>
           <HonestControl
             disabled={cards.length < 2}
             reasonId="drill-compare-unavailable"

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import HonestControl from "./HonestControl.svelte";
   import type { TimelineEntry } from "./screen-model.js";
 
   interface Props {
@@ -7,6 +8,7 @@
     previewNodeId?: string | undefined;
     onPreview: (nodeId: string) => void;
     onConfirm: (nodeId: string) => void | Promise<void>;
+    canConfirm?: boolean;
     authoredSpineNodeIds?: ReadonlySet<string>;
     rootNodeId?: string | undefined;
     shapeMarkers?: readonly { readonly nodeId: string; readonly entryId: string; readonly label: string; readonly channel: "official" | "community" }[];
@@ -21,6 +23,7 @@
     previewNodeId,
     onPreview,
     onConfirm,
+    canConfirm = true,
     authoredSpineNodeIds = new Set<string>(),
     rootNodeId,
     shapeMarkers = [],
@@ -77,9 +80,21 @@
     {/each}
   </ol>
   {#if previewNodeId}
-    <button class="confirm" type="button" onclick={() => onConfirm(previewNodeId)}>
-      Rewind to preview <kbd>Enter</kbd>
-    </button>
+    <HonestControl
+      disabled={!canConfirm}
+      reasonId="timeline-rewind-readonly"
+      reason="This read-only view can inspect earlier positions but cannot rewind the shared run."
+    >
+      {#snippet children(describedBy)}
+        <button
+          class="confirm"
+          type="button"
+          disabled={!canConfirm}
+          aria-describedby={describedBy}
+          onclick={() => onConfirm(previewNodeId)}
+        >Rewind to preview <kbd>Enter</kbd></button>
+      {/snippet}
+    </HonestControl>
   {/if}
 </section>
 

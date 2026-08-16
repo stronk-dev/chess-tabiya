@@ -152,6 +152,44 @@ afterEach(() => {
 });
 
 describe("Layer 3 screens", () => {
+  it("keeps read-only followers on inspect-only controls without write errors", async () => {
+    const run = branchedRun();
+    const onRewind = vi.fn();
+    const onFork = vi.fn();
+    const onCreateGroup = vi.fn();
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "read_only", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind, onFork, onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onCreateGroup, registerKeyboardRegion,
+    } });
+    await tick();
+
+    const button = (label: string) => [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((candidate) => candidate.textContent?.trim().startsWith(label));
+    const forkButton = button("Fork")!;
+    const groupButton = button("Branch group")!;
+    expect(forkButton.disabled).toBe(true);
+    expect(groupButton.disabled).toBe(true);
+    expect(document.getElementById(forkButton.getAttribute("aria-describedby")!)?.textContent).toContain("read-only");
+    expect(document.getElementById(groupButton.getAttribute("aria-describedby")!)?.textContent).toContain("read-only");
+
+    document.querySelector<HTMLButtonElement>(".timeline ol button")!.click();
+    await tick();
+    const rewindButton = button("Rewind to preview")!;
+    expect(rewindButton.disabled).toBe(true);
+    expect(document.getElementById(rewindButton.getAttribute("aria-describedby")!)?.textContent).toContain("read-only");
+
+    expect(regionKeyboard?.(new KeyboardEvent("keydown", { key: "b" }))).toBe(true);
+    expect(regionKeyboard?.(new KeyboardEvent("keydown", { key: "r" }))).toBe(true);
+    expect(regionKeyboard?.(new KeyboardEvent("keydown", { key: "Enter" }))).toBe(true);
+    expect(document.querySelector('[role="dialog"]')).toBeNull();
+    expect(onFork).not.toHaveBeenCalled();
+    expect(onRewind).not.toHaveBeenCalled();
+    expect(onCreateGroup).not.toHaveBeenCalled();
+    await unmount(component);
+  });
+
   it("keeps pivotal markers off by default, passive when enabled, and removable again", async () => {
     const initial = createRun({ id: "pivotal-ui", session: { kind: "position", start: { fen: "r3k2r/ppppqppp/2nbbn2/8/8/2NBBN2/PPPPQPPP/R3K2R w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
     const child = { ...initial.nodes[0]!, id: "pivotal-ui:node:1", parentId: initial.nodes[0]!.id, fen: "4k2r/8/8/8/8/8/RP6/4K3 b - - 0 1", transposeKey: "4k2r/8/8/8/8/8/RP6/4K3 b - -", moveUci: "a2a3", moveSan: "a3", ply: 1, actor: "user" as const };

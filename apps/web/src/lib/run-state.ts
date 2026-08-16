@@ -101,7 +101,8 @@ export class RunStateStore {
   #evidenceSeq = 0;
   #followerPoll: unknown;
   #evidencePoll: unknown;
-  #evidencePollInFlight = false;
+  #evidencePollInFlight: Promise<void> | undefined;
+  #analysisInFlight = false;
   #started = false;
 
   constructor(
@@ -231,14 +232,20 @@ export class RunStateStore {
     if (this.#snapshot.access === "read_only") {
       throw new ApiError(409, "NOT_ACTIVE_WRITER", "Run is read-only");
     }
-    const result = await this.#api.analysis(this.#session.runId, nodeIds, this.#session.writerId);
-    this.#snapshot = Object.freeze({
-      ...this.#snapshot,
-      pendingEvidence: this.#snapshot.pendingEvidence + nodeIds.length,
-    });
-    this.#emit();
-    this.#syncPolling();
-    return result;
+    while (this.#evidencePollInFlight !== undefined) await this.#evidencePollInFlight;
+    this.#analysisInFlight = true;
+    try {
+      const result = await this.#api.analysis(this.#session.runId, nodeIds, this.#session.writerId);
+      this.#snapshot = Object.freeze({
+        ...this.#snapshot,
+        pendingEvidence: this.#snapshot.pendingEvidence + nodeIds.length,
+      });
+      this.#emit();
+      return result;
+    } finally {
+      this.#analysisInFlight = false;
+      this.#syncPolling();
+    }
   }
 
   rewind(input: RewindRequest): Promise<MutationResult> {
@@ -271,7 +278,8 @@ export class RunStateStore {
   }
 
   async pollEvidence(): Promise<void> {
-    if (this.#evidencePollInFlight) return;
+    if (this.#evidencePollInFlight !== undefined) return this.#evidencePollInFlight;
+    if (this.#analysisInFlight) return;
     if (
       this.#snapshot.access !== "writer" ||
       this.#snapshot.pendingEvidence === 0 ||
@@ -280,22 +288,27 @@ export class RunStateStore {
       this.#syncPolling();
       return;
     }
-    this.#evidencePollInFlight = true;
+    const task = this.#pollEvidenceOnce();
+    this.#evidencePollInFlight = task;
     try {
-      const page = await this.#api.evidence(this.#session.runId, this.#evidenceSeq);
-      for (const result of page.results) {
-        const mutation = await this.#api.applyEvidence(
-          this.#session.runId,
-          result.seq,
-          this.#session.writerId,
-        );
-        this.#applyMutation(mutation);
-      }
-      this.#evidenceSeq = page.nextSeq;
+      await task;
     } finally {
-      this.#evidencePollInFlight = false;
+      if (this.#evidencePollInFlight === task) this.#evidencePollInFlight = undefined;
       this.#syncPolling();
     }
+  }
+
+  async #pollEvidenceOnce(): Promise<void> {
+    const page = await this.#api.evidence(this.#session.runId, this.#evidenceSeq);
+    for (const result of page.results) {
+      const mutation = await this.#api.applyEvidence(
+        this.#session.runId,
+        result.seq,
+        this.#session.writerId,
+      );
+      this.#applyMutation(mutation);
+    }
+    this.#evidenceSeq = page.nextSeq;
   }
 
   async #mutate(action: () => Promise<MutationResult>): Promise<MutationResult> {

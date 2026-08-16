@@ -177,8 +177,10 @@ requests do not.
 a run-scoped `localStorage` key. `peek()` is non-minting, and observing a run
 owned by another writer leaves storage untouched. On load, the client compares
 the stored identity with `activeWriterId` and enters writer or read-only mode
-before the first mutation. A later `NOT_ACTIVE_WRITER` response remains a
-defensive demotion path; lease transfer is still unsupported.
+before the first mutation. Read-only followers may inspect timeline positions,
+but Fork, Branch group, and rewind confirmation are disabled with an attributed
+reason; their keyboard shortcuts are inert. A later `NOT_ACTIVE_WRITER` response
+remains a defensive demotion path; lease transfer is still unsupported.
 
 ## Run-state projection and polling
 
@@ -191,7 +193,9 @@ The writer does not poll its own run events. It tracks one pending evaluation
 per committed move and, once the run's feedback delivery condition is open,
 polls `/evidence` every second until the staged results have been writer-applied;
 overlapping async timer ticks coalesce so one staged page cannot be consumed twice
-and their `evidence.attached` events drain the pending count. A client rejected
+and explicit analysis enqueueing waits for an in-flight page to finish so its
+pending count cannot be overwritten by the older page's projection. Their
+`evidence.attached` events drain the pending count. A client rejected
 with `NOT_ACTIVE_WRITER` becomes a follower and polls `/events?sinceSeq` every
 two seconds. Rewinds remove server-canceled jobs for pruned nodes from the
 pending count. Poll scheduling is injectable and covered without wall-clock

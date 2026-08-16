@@ -864,10 +864,16 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await expect(spectator.getByLabel("Chessboard")).toBeVisible();
   await expect(spectator.getByText("Read-only", { exact: true })).toBeVisible();
   await expect(spectator.getByRole("button", { name: "Take the board on this device" })).toHaveCount(0);
+  await expect(spectator.getByRole("button", { name: /^Fork/ })).toBeDisabled();
+  await expect(spectator.getByRole("button", { name: "Branch group" })).toBeDisabled();
 
   await move(page, "g1", "f3");
   await expect(page.getByText("Active line 3 plies")).toBeVisible();
   await expect(spectator.getByText("Active line 3 plies")).toBeVisible({ timeout: 4_000 });
+  await spectator.getByRole("button", { name: /^Ply 1:/ }).click();
+  const rewind = spectator.getByRole("button", { name: /^Rewind to preview/ });
+  await expect(rewind).toBeDisabled();
+  await expect(rewind).toHaveAttribute("aria-describedby", "timeline-rewind-readonly");
   await spectatorContext.close();
 });
 

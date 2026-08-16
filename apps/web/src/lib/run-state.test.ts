@@ -9,7 +9,7 @@ import {
   type MutationResult,
   type OpponentSelection,
 } from "@chess-tabiya/runtime";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   ApiError,
@@ -132,7 +132,7 @@ class FakeApi implements RunApi {
 
   async createGroup(): Promise<never> { throw new Error("not used"); }
   async groupReply(): Promise<never> { throw new Error("not used"); }
-  async analysis(): Promise<never> { throw new Error("not used"); }
+  async analysis(): Promise<{ readonly jobs: readonly { readonly id: string }[] }> { throw new Error("not used"); }
 
   async rewind(
     _runId: string,
@@ -254,6 +254,39 @@ describe("RunStateStore", () => {
     expect(store.snapshot.run.nodes.at(-1)!.evidenceRefs).toEqual([
       "engine:evidence-job-1",
     ]);
+  });
+
+  it("serializes an explicit analysis request behind an in-flight evidence page", async () => {
+    const api = new FakeApi();
+    const scheduler = new FakeScheduler();
+    const store = new RunStateStore(api, session(), api.serverRun, scheduler);
+    store.start();
+    await store.move({ uci: "e2e4" });
+
+    let releaseApply!: () => void;
+    let markApplyStarted!: () => void;
+    const applyGate = new Promise<void>((resolve) => { releaseApply = resolve; });
+    const applyStarted = new Promise<void>((resolve) => { markApplyStarted = resolve; });
+    const applyEvidence = api.applyEvidence.bind(api);
+    vi.spyOn(api, "applyEvidence").mockImplementation(async (runId, resultSeq, writerId) => {
+      markApplyStarted();
+      await applyGate;
+      return applyEvidence(runId, resultSeq, writerId);
+    });
+    const analysis = vi.spyOn(api, "analysis").mockResolvedValue({ jobs: [{ id: "manual-job" }] });
+
+    const poll = store.pollEvidence();
+    await applyStarted;
+    const requested = store.analysis([store.snapshot.run.activeCursor.nodeId]);
+    await Promise.resolve();
+    expect(analysis).not.toHaveBeenCalled();
+
+    releaseApply();
+    await poll;
+    await requested;
+    expect(analysis).toHaveBeenCalledTimes(1);
+    expect(store.snapshot.pendingEvidence).toBe(1);
+    expect([...scheduler.timers.values()].map((timer) => timer.interval)).toEqual([1_000]);
   });
 
   it("does not evidence-poll before the pack reveal condition", async () => {
