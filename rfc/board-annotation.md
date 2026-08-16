@@ -1,6 +1,10 @@
 # RFC: Board annotation — a mark is the learner's own thought
 
-- **Status:** draft
+- **Status:** **accepted 2026-08-16** — returned once by cross-review; all four breaks ratified, five of the reviewer's counts corrected. Implementation gated on **D187** (the `Chessboard.svelte` state lift), which is not this RFC's to ship. Seven open questions are deferrals, not gates.
+  returned finding ratified, none declined. **Ready to accept.** Implementation is gated on
+  one code prerequisite that is not this RFC's to ship — the `Chessboard.svelte` state lift,
+  queued for codex — and on nothing else; the seven open questions are all deferrals, not
+  gates.
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-16
 - **Design refs:** `design/05-in-run-experience.md` §3-forms — the *"Board overlays —
@@ -31,6 +35,15 @@
     which this RFC does not revisit.
   - `rfc/archive/learner-identity-and-authorization.md` — owns `run_grants`, `RUN_ROLES`
     and `requireRead`, the single read chokepoint this RFC reuses and does not duplicate.
+  - **[author round] A code prerequisite, not an RFC one: the ledger row *"`Chessboard.svelte`
+    is destroyed and recreated on every node change, so no board-local state can survive a
+    ply."*** It is queued for codex (`planning/codex-queue.md` §2, which names this RFC as the
+    blocked party) and it is a **hard prerequisite for leg (a)**: while `DrillScreen.svelte`
+    wraps the board in `` {#key `${displayedNode.id}:…`} `` — verified present at HEAD — a
+    mark drawn on one node cannot outlive the next move, so leg
+    (a) is unshippable until the state lift lands. §2.7 specifies the lift this RFC needs;
+    stating it here means an implementer meets the blocker in the dependency list rather than
+    in the client section.
 - **Parent / amends:** amends `exportPgn`'s signature (one optional parameter),
   `Chessboard.svelte`'s `drawable` config, and `LiveSessionDetail` (one field, declared
   twice per the shipped mirror rule). Introduces one table. **No run-schema change. No
@@ -210,9 +223,36 @@ section the runtime happens to be inside, refused with a `TypeError` surfacing a
 and the learner's thought discarded. Today's gaps are closed only because every emitter
 brackets them inside one synchronous call — a property no test asserts and nothing holds.
 A user-gesture-timed event would make that accidental bracketing load-bearing forever.
-That is the general fact, and it is ledgered ([[D183]], amended by [[D213]]): a new
+That is the general fact, and it is ledgered in the rows *"`projectRun` enforces adjacency
+invariants over the run event stream…"* and *"The run event log's adjacency invariants are
+held open only by every emitter's synchronous bracketing, and nothing asserts it."*: a new
 `DrillRunEvent` member is only safe if its emission instant is controlled, and a user
 gesture's is not.
+
+**[author round] Ratified, and the bracketing is looser than even the correction implies —
+one of the three pairs is not one `appendEvents` call but two.** Re-verified at HEAD
+(`7650d41`): `commitMove` does emit `move.committed` and `outcome.reached` in a single
+drafts array, so the mating-move scenario is unconstructible as the review says, and
+`appendEvents` is `projectRun([...run.events, ...appended])` — a pure re-projection whose
+throw happens before any caller reaches `RunStorage.save`. But `reachCheckpoint` calls
+`appendEvents` **twice**, once for `checkpoint.reached` and again for `segment.completed`
+against the run the first call returned, with only straight-line synchronous code between
+them and no lock, no queue and no `await`. The gap is therefore held open by nothing
+stronger than *the absence of an `await` in one function body*. That is the sharpest
+available statement of the hazard: the invariant is real, its enforcement is real, and the
+thing keeping the enforcement from firing on legitimate writes is a property of the source
+text that no test reads.
+
+**It deserves a criterion, and a narrow one.** The invariant is not this RFC's to own — it
+predates the draft and would matter with or without marks — but this RFC's central argument
+*rests* on it, and an argument resting on an unasserted property should either assert it or
+stop resting on it. Criterion 3a asserts the cheap half: **no function in
+`packages/runtime/src` that calls `appendEvents` more than once is `async` or contains an
+`await` between those calls.** That is one source-level assertion in the shipped census
+idiom, it fails the moment someone makes an emitter asynchronous, and it does not attempt to
+police the adjacency rules themselves, which `projectRun` already polices. Anything broader
+belongs to the runtime, not here. Ledgered in the row *"`reachCheckpoint` emits its
+checkpoint/segment pair through two separate `appendEvents` calls…"*.
 
 **(2) Every append is a full replay.** `appendEvents` assigns sequence numbers and then
 re-runs `projectRun` over the *entire* log; `RunStorage.save` rewrites the whole
@@ -254,9 +294,12 @@ detectors, by four measured paths:
 | `run_grants` | `permittedAssistance` — `AssistanceContext.role` is a raw `SELECT role FROM run_grants` (`storage.ts:1131`) via `requireRead` | `packages/runtime/src/assistance.ts:21-27` |
 | `session_proposals` / `session_votes` / `match_states` | `commitMove` and `rewind` — a string in a sibling table becomes the move that gets graded | `live-session.ts` `resolveProposal` / `closeVote` / `matchOperation` |
 
-`evidencePacket` alone takes **four** non-`DrillRun` inputs (`run`, `node`, `pack`,
-`authored`, `shapes`). So *"nothing but the run reaches the runtime"* is not a property
-this codebase has, and an RFC resting its whole safety case on it rests on nothing.
+`evidencePacket` alone takes **four inputs beyond the run** — **[author round]** its
+parameter object is `{ run, node, pack?, authored, shapes? }` (`guidance.ts`), so the four
+are `node`, `pack`, `authored` and `shapes`; the review's parenthetical listed five names
+under the count of four by including `run` itself. So *"nothing but the run reaches the
+runtime"* is not a property this codebase has, and an RFC resting its whole safety case on
+it rests on nothing.
 
 **The narrowed property, which is true at HEAD and is what this RFC actually needs:**
 
@@ -277,31 +320,63 @@ conceded the second in §3.2 while §9's criterion 1 pinned the set at one — t
 contradiction is resolved here in favour of two, because the pack export path is
 `RunService.pgn`'s **default arm** for pack sessions (`service.ts:1451`) and cannot be
 left unplumbed. Both return strings and no detector, validator or grader reads their
-output. `exportPgn` is called from **five** non-test sites, not one — `service.ts:1447`,
-`:1450`, `pack-pgn.ts:204` and `:205`, plus its own definition — which is why criterion 1
-pins the *marks-accepting* set rather than the call graph.
+output. `exportPgn` has **four** non-test call sites, not one — two in `RunService.pgn`
+(the imported-headers arm and the position arm) and two in `exportPackRunPgn` (the
+discarded legality validation and the combined-tree export) — which is why criterion 1
+pins the *marks-accepting* set rather than the call graph. **[author round] The review's
+"five" counted the definition as a call site**, and the recount matters for a second reason
+it did not reach: `exportPgn` is a **homonym**. `apps/web/src/App.svelte` declares a local
+`exportPgn` and `session-controller.ts` a method of the same name, both of which call the
+REST route and neither of which is the runtime function. A grep-based criterion that is not
+scoped to `packages/runtime/src` will hit them; criterion 1 is scoped, and this is why.
 
 **[cross-review] The second path exists, and it is not a grader — it is the voice
 allowlist.** `voiceCheck` (`packages/runtime/src/voice.ts:32-33`) builds
 `source = packet.sentences.join("\n")` and licenses the model to emit any square, UCI, SAN
 token, chess noun or judgement word that appears in it. `EvidencePacket.sentences` is
-therefore not a projection — it is **the boundary of what may be asserted about the
-position**, and `rest.ts:1178` and `:1191` already splice additional derived sentences into
-it at the REST layer. One line of that established shape — *"the voice should acknowledge
-what the learner circled"* is the obvious follow-on request for this feature — would put
-learner-chosen squares into the allowlist, letting a provider say `e5` about a position
-where nothing validated mentions `e5`. The learner would be authoring their own law-8
-bypass, `DrillRun` would gain no field, and **criterion 2's byte-identity test would still
-pass**, because it compares the un-plumbed state against itself.
+therefore not a projection — it is **the allowlist that decides which chess tokens may be
+spoken at all**, and `rest.ts` already splices additional derived sentences into it at the
+REST layer, at the two story-aware voice arms. One line of that established shape — *"the
+voice should acknowledge what the learner circled"* is the obvious follow-on request for
+this feature — would put learner-chosen squares into the allowlist, letting a provider say
+`e5` about a position where nothing validated mentions `e5`. The learner would be authoring
+their own law-8 bypass, `DrillRun` would gain no field, and **criterion 2's byte-identity
+test would still pass**.
+
+**[author round] Ratified with two narrowings, and the second one is what makes the
+replacement criterion designable.**
+
+- **`sentences` is a token allowlist, not the boundary of what may be asserted.** The ledger
+  row *"`voiceCheck` is a token filter, and every RFC that treats it as a proposition binder
+  over-claims it"* demonstrates by execution that a packet containing one sentence licenses
+  entirely invented prose so long as it carries no square, no move token, and no word from
+  the three fixed lists. The review's *"the boundary of what may be asserted about the
+  position"* is exactly that over-claim, and this RFC will not inherit it. The corrected
+  statement — *splicing a mark would license a chess token nothing validated mentions* — is
+  narrower, is true, and is enough: a square is precisely the kind of thing `voiceCheck`
+  does bind.
+- **The reason criterion 2 cannot catch this is the layer, not the self-comparison.** The
+  review says the byte-identity test *"compares the un-plumbed state against itself"*, which
+  reads as though the test were vacuous. It is not: criterion 2 exercises `evidencePacket`
+  directly with a `DrillRun`, and the splice sites are in `rest.ts`, **above**
+  `evidencePacket` and outside everything criterion 2 calls. A mark reaching `sentences`
+  through a REST-layer splice changes nothing criterion 2 observes, because criterion 2 never
+  runs the route. That is a sharper statement of the same conclusion, and it dictates the
+  fix: **the replacement criterion must run at the layer where the splice happens.** A
+  source-grep over four assembly sites and two splice sites, as the review proposed it, is
+  not that — it is pinned to line numbers that have already drifted once during this review,
+  and the natural violation adds a *new* splice line that an enumeration of the old ones
+  cannot see.
 
 **The barrier: no mark-derived value may enter `EvidencePacket.sentences`, `plans`,
 `authored`, `observations` or `structures`, ever.** This is stated as a rule because it
 cannot be a type — `sentences` is `readonly string[]` and a mark's `orig` is a string.
-Criterion 2a enforces it in the `expression-census.test.ts:107` source-grep idiom, over the
-four packet-assembly sites (`rest.ts:1137`, `:1168`, `:1174`, `:1189`) and the two splice
-sites. Open question 3 (text on a mark) is now load-bearing rather than cosmetic: text
-would make this barrier the only thing between free learner prose and the voice allowlist.
-Ledgered as [[D214]].
+Criterion 2a, rewritten in §9, enforces it **behaviourally at the route layer** with a
+census as the second net and a positive control that proves the assertion can go red. Open
+question 3 (text on a mark) is now load-bearing rather than cosmetic: text would make this
+barrier the only thing between free learner prose and the voice allowlist. Ledgered in the
+row *"`EvidencePacket.sentences` is the `voiceCheck` allowlist…"*, amended by *"A barrier
+test that runs below the layer the barrier is breached at cannot fail…"*.
 
 ### 2.3 Scope — the four selected behaviours, and why they do not conflict
 
@@ -343,7 +418,17 @@ fork node itself keeps its original branch id, so marks at the fork point would 
 clear on a fork — which is the owner's fourth selected behaviour, at exactly the node where
 it matters. **Cursor-derived is kept**, and the cost is stated rather than discovered:
 criterion 4a tests the return path, and the re-scope action (below) is the learner's escape
-hatch when a branch-scoped mark has gone quiet. Ledgered as [[D215]].
+hatch when a branch-scoped mark has gone quiet. Ledgered in the row *"`Cursor.branchId` is
+history-dependent…"*.
+
+**[author round] Ratified, re-verified, and the disposition stands.** `rewind` at HEAD picks
+`isAncestor(run, nodeId, run.activeCursor.nodeId) ? run.activeCursor.branchId :
+target.branchId`, exactly as described, and `Node.branchId` is stamped once at commit and
+never rewritten. The finding is a defect in this RFC's key choice, not in `rewind`: rewind's
+own behaviour — *staying on the branch you are exploring when you step back along it* — is
+correct for the cursor and is what the compare and group surfaces expect. Keeping the
+cursor-derived key with a tested return path and a re-scope escape hatch is the right trade,
+and it is now a pinned behaviour rather than an undiscovered one.
 
 **The default is `position`,** for three reasons, ordered by weight:
 
@@ -432,6 +517,12 @@ exactly the four — the wider `DrawBrushes` record exists for `autoShapes` call
 this RFC's choice, and criterion 9 tests a server backstop against a hand-built request,
 not a UI state.
 
+**[author round] Both corrections ratified on a recount.** `defaultState()` ships **twelve**
+brushes — the four exportable ones and eight extras (`paleBlue`, `paleGreen`, `paleRed`,
+`paleGrey`, `purple`, `pink`, `white`, `paleWhite`) — and `BrushColor` is declared as the
+four-member union in the same package's `types.d.ts`. The draft's "five extras" was a
+miscount of a list it had in front of it, which is the least defensible kind.
+
 Two chessground defaults must be overridden, and both are substantive:
 
 - **`defaultSnapToValidMove: false`** (chessground's default is `true`). Snapping a drawn
@@ -505,16 +596,36 @@ Rules:
    class the repo has been bitten by, avoided by reuse.
 
    **[cross-review] This is not the idiom departure §6 called it — it is the majority
-   idiom, and the real invariant is sharper than "read gate ⇒ read-only".** Seventeen
-   shipped mutating methods gate on `requireRead`: `RunService.share`, `revokeShare`,
-   `flip`, `duplicate`, `updateGrant`, `claimLease`, `enqueueEvidence`, and every
-   `LiveSessionService` mutator (`create`, `close`, `board`, `matchOperation`'s
-   non-`resume` arms, `mintLink`, `revokeLink`, `propose`, `openVote`, `castVote`,
-   `closeVote`, `invite`). The shipped rule is: **touch the `DrillRun` graph ⇒
-   `requireWrite`; everything else ⇒ `requireRead` plus a capability predicate or a
-   principal-keyed object.** Marks touch no run-graph state and are principal-keyed, so
-   they land on the second arm with no predicate needed — which is a *stronger*
-   justification than the one §6 offered, and §6 is corrected accordingly.
+   idiom, and the real invariant is sharper than "read gate ⇒ read-only".** The shipped
+   rule is: **touch the `DrillRun` graph ⇒ `requireWrite`; everything else ⇒ `requireRead`
+   plus a capability predicate or a principal-keyed object.** Marks touch no run-graph
+   state and are principal-keyed, so they land on the second arm with no predicate needed —
+   which is a *stronger* justification than the one §6 offered, and §6 is corrected
+   accordingly.
+
+   **[author round] Ratified, recounted, and the recount produces better evidence than the
+   count did.** The review's "seventeen" is not the number its own list adds to. Measured at
+   HEAD by the predicate *a method that writes to storage and whose only run-scoped
+   authorization is `requireRead`, directly or through a helper that calls it*: **eighteen** —
+   `RunService.share`, `revokeShare`, `duplicate`, `updateGrant`, `claimLease`,
+   `enqueueEvidence`, and eleven `LiveSessionService` mutators (`create`, `close`, `board`,
+   `mintLink`, `revokeLink`, `propose`, `openVote`, `castVote`, `closeVote`, `invite`,
+   `importLeg`, all reaching `requireRead` through `#required` / `#requiredOpen` /
+   `#requiredControl`). Two further methods are **mixed, and they are the strongest evidence
+   in the section**: `matchOperation` gates on `requireRead` and escalates to `requireWrite`
+   inside its `resume` arm alone, and `resolveProposal` does the same inside its `apply` arm —
+   in both, the escalation happens at exactly the statement that touches the run graph and
+   nowhere else. The invariant is visible *within* a single method body, not only across the
+   service.
+
+   **`RunService.flip` is deliberately dropped from that list, and the reason matters.** The
+   review counted it as a shipped instance of the idiom. It is a shipped instance of the
+   idiom being wrong: the ledger row *"`RunService.flip` is `requireRead`-only, so anyone
+   granted a run can fork a position out of it into a permanent run of their own"* is an open
+   defect, queued for codex. It does not weaken the invariant — it confirms it, because
+   `flip` mints run-graph state (a derived `DrillRun` plus a `run_derivations` row) and is
+   therefore on the `requireWrite` arm by the rule this section is citing. Marks mint no run,
+   no node, no branch and no event, so the same rule that condemns `flip` clears them.
 
 1a. **[cross-review] Can a read-scoped anonymous token write a mark? No — but not for the
    reason the two-scope claim suggests, and the real mechanism needs a criterion.**
@@ -531,12 +642,27 @@ Rules:
    rule this RFC adopts: the mark routes take their principal from `authenticate()` and
    from nowhere else; no token-derived principal may reach them.** Without it, one future
    convenience route hands an anonymous link holder the ability to write marks *attributed
-   to the host*, on a run they cannot otherwise touch. Criterion 6a pins it. Ledgered as
-   [[D216]]. Related and out of scope: `RunService.pgn`'s optional-principal overload
+   to the host*, on a run they cannot otherwise touch. Criterion 6a pins it. Ledgered in the
+   row *"A `story_read` token passes `requireRead` as the token's creator, through a
+   fabricated principal…"*. Related and out of scope: `RunService.pgn`'s optional-principal
+   overload
    (`service.ts:1430-1432`) falls back to the auto-created `__legacy` learner, which passes
    `requireRead`; it is unreachable from REST (`rest.ts:1035` always authenticates) and the
    §3.2 filter means `__legacy` exports no marks, but it is why §3.2 filters on the
    resolved principal rather than on the route.
+
+   **[author round] Ratified in full, and the criterion is the right response rather than an
+   over-reaction.** Re-verified at HEAD: `publicStory` resolves the token record, loads
+   `learnerById(record.createdBy)`, and calls `this.story(runId, {learnerId: learner.id,
+   handle: learner.handle}, branchId)` — the anonymous holder is authenticated *as the host*
+   and the only thing narrowing what they get is `moments.slice(0, 8)`. `Principal` has no
+   token variant, so nothing downstream can tell the difference. The reason this needs a
+   criterion rather than a sentence is that the property this RFC relies on — *"a read-scoped
+   token cannot write a mark"* — is true today for a reason that has nothing to do with
+   scoping: `publicStory` simply does not call a mark route. That is a fact about one
+   function's body, not a guarantee, and a guarantee is what a write route deserves.
+   Criterion 6a pins it from both sides: the token path writes nothing, and a `session_join`
+   redemption — which mints a real `run_grants` row — writes its own marks correctly.
 
 2. **The server derives `scope_key`; the client never supplies one.** For `scope:
    "position"` the server resolves `run.nodes.find(n => n.id === nodeId).transposeKey`;
@@ -550,15 +676,29 @@ Rules:
    therefore pair any branch with any node and mint a key like `B7:N3` for a pairing the
    cursor never held — re-opening, inside the branch arm, exactly the unauditable surface
    this rule exists to close. **Normative: the branch arm additionally requires `nodeId` to
-   appear in `branchPath(run, branchId)`** (same module, `:21`), and refuses
-   `INVALID_REQUEST` otherwise. Criterion 6 is extended to cover the pairing, not only the
-   two existence checks.
+   appear in `branchPath(run, branchId)`** (same module), and refuses `INVALID_REQUEST`
+   otherwise. Criterion 6 is extended to cover the pairing, not only the two existence
+   checks.
+
+   **[author round] Ratified, and `branchPath` is confirmed the right predicate rather than
+   merely a stricter one.** `requireBranch` is a `find` over `run.branches` and returns the
+   branch; it never sees a node. `branchPath` walks from the branch's own tip back through
+   `parentId` to the root, so membership means *this node is on the path the cursor would
+   have held on that branch* — which is exactly the pairing the scope key is supposed to
+   name. It also throws `BranchQueryError` rather than returning a falsy value, so the arm
+   must catch and re-refuse as `INVALID_REQUEST` rather than letting an `UNKNOWN_BRANCH`
+   escape as a 500; that translation is part of the normative rule, not an implementation
+   detail.
 
 2a. **[cross-review] `/runs/:id/marks` must be added to a closed route enumeration.**
-   `parseRunRoute` (`apps/server/src/rest.ts:600`) matches run subroutes against a literal
-   alternation of 31 action names; an unlisted action returns `undefined` and 404s. Noted
-   because it is the one implementation site that is invisible from every symbol this RFC
-   cites by name.
+   `parseRunRoute` matches run subroutes against a literal alternation of action names; an
+   unlisted action returns `undefined` and 404s. Noted because it is the one implementation
+   site that is invisible from every symbol this RFC cites by name. **[author round] The
+   alternation holds 33 members, and held 33 at `a7e700d` too — the review's 31 is a
+   miscount, not drift** — which is itself the argument for citing it by symbol and never
+   by arity: any
+   number written here is stale by the time it is read, and the implementer's task is
+   *"add one member to the alternation in `parseRunRoute`"*, which does not need a count.
 3. **`relayed` is stamped server-side at write time** and is never client-supplied (§4.2).
 4. **Bounds** (§5.1) are checked server-side; the client stops offering the gesture at the
    cap rather than re-implementing the check, per `live-surface-honesty` §5.2's rule.
@@ -654,16 +794,61 @@ regenerated, and the final call passes **no `branchIds`** at all. Consequences:
   refusal and no header signal. §3.1's rule *"and only when that branch is in `branchIds`"*
   is also undefined on this path, because `branchIds` is not passed.
 
-**Normative disposition:** `exportPackRunPgn` accepts `marks` and forwards to the
-`combinedRun` call **after remapping branch-scoped keys** — `combinedRun` already walks
-source paths to build the combined tree, so it can carry a source-node-id → combined-node-id
-map and rewrite each branch-scoped `scopeKey`'s node half; the branch half resolves to the
-combined branch that path became. If the remap is judged too much surface for v1, the
-alternative that is **not** acceptable is silence: the export must then state the omission
-in the `TabiyaMarks` header the same way §3.2 states a withheld author's, because a mark
-disappearing from an export with no signal is the failure `design/05:41` names. The first
-`exportPgn(run, branchIds)` at `pack-pgn.ts:204` is a legality validation whose output is
-discarded and takes no marks. Criterion 7a covers the pack arm; ledgered as [[D217]].
+**[author round] Finding ratified; the disposition is specified rather than offered as a
+choice, because the fallback it offered is no longer available.** The review left two arms —
+remap, or declare the omission in the `TabiyaMarks` header — and §3.2's own correction closed
+the second one in the same review: that header is now a **constant** string by construction,
+and a clause that appears only when marks were dropped is a variable-content clause in a
+header criterion 8 pins as invariant after `own (N)`. Silence is refused and header-signalling
+is foreclosed, so remapping is the specification. It is also cheaper than the review assumed,
+because no map has to be threaded anywhere.
+
+**Normative: the remap is by move path, and the move path is the only identity the transform
+preserves.** `combinedRun` reduces both the authored spine and the played branches to
+`CombinedPath.moves` — bare UCI sequences — dedupes them by their joined UCI string, and
+replays them with `commitMove`, forking at the longest shared prefix; `sharedPrefix` itself
+locates a node by walking children whose `moveUci` matches. Node ids, branch ids, seqs and
+cursors are all regenerated, but **a node's UCI path from the root survives exactly**, and it
+is unique within a tree. So:
+
+1. `exportPackRunPgn` gains the same defaulted trailing `marks` parameter as `exportPgn`.
+2. Each `branch`-scoped mark is resolved **against the source run before the combine**, into
+   its move path: `historyFrom(run, nodeId).slice(1).map(node => node.moveUci)`, where
+   `nodeId` is the node half of `` `${branchId}:${nodeId}` ``. The root is dropped because
+   its `moveUci` is `null`.
+3. After `combinedRun` returns, each such mark is re-addressed by walking the combined tree
+   from its root, matching that UCI sequence one ply at a time by the same child-matching
+   rule `sharedPrefix` uses. A completed walk yields the combined node, and the mark's
+   rewritten key is `` `${combined.branchId}:${combined.id}` ``.
+4. **A walk that cannot complete means the mark's source branch was excluded by `branchIds`**
+   — `playedPaths` filters on exactly that set — so the mark is omitted for the same reason
+   every move of its branch was omitted, and no signal is owed for it any more than for the
+   moves. This is what replaces §3.1's *"and only when that branch is in `branchIds`"* on
+   this path: the rule is enforced upstream, in `playedPaths`, rather than at attachment.
+5. `position`-scoped marks are **not** remapped and must not be: `transposeKey` is derived
+   from the FEN, the combined run replays the same moves from the same start, and §3.1's
+   matching rule applies to the combined tree unchanged.
+6. **Deduplication is required, and it is `uniquePaths` that makes it required.** Two source
+   branches whose move sequences are identical collapse into one combined path, so two
+   branch-scoped marks from different source branches can re-address onto the *same* combined
+   node. `%csl` and `%cal` have no multiplicity, so identical `{brush, orig, dest}` triples on
+   one node are emitted once.
+7. The first `exportPgn(run, branchIds)` call is a legality validation whose output is
+   discarded; it takes no marks, because validation is about legality, not content.
+
+**One consequence of the combined tree that §2.3's bound paragraph does not cover, and it is
+this section's to state.** The combined tree contains **authored spine nodes the learner never
+reached**, so a `position`-scoped mark can attach to an authored node whose `transposeKey`
+matches — a position that exists in the export but not in the run. §2.3's *"never reach a
+position the run did not reach"* is a statement about the **run**, and it stays true there;
+on the pack export path the tree is wider than the run by construction. This is accepted
+rather than filtered: the artifact carries only the requester's own marks, `transposeKey` is
+the product's own definition of the same position, and suppressing the mark on the authored
+line would make the PGN disagree with the board the learner would see if they walked that line
+in-app. It is stated here so it is a specified behaviour rather than a surprise found in an
+export. Criterion 7a covers the pack arm, both scopes and this case; ledgered in the row
+*"`exportPackRunPgn` exports a synthesized run with regenerated ids…"*, amended by
+*"`combinedRun` preserves exactly one identity — the move path…"*.
 
 ### 3.2 Whose marks are exported — the disclosure hole this closes
 
@@ -718,7 +903,19 @@ authors have zero marks or nine hundred, so it carries no bits about anyone else
 still satisfying `design/05:41` — absence is *stated*, and the reader knows the artifact is
 filtered. `design/05:41` requires the gap be visible; it does not require it be measured,
 and here measuring it is the leak. Criterion 8 is rewritten against this header. Ledgered
-as [[D218]].
+in the row *"A withheld-count in a filtered artifact is a side channel…"*.
+
+**[author round] Ratified without reservation — this is the finding I am most glad to have
+had taken off me, and both halves of its mechanism reproduce.** `RunService.pgn` resolves
+`requireRead` and then branches straight into its three export arms: there is no terminal
+check, no `closedAt` check, and no `#refuseWhileMatchLive` call, which the same file *does*
+make in `flip`. And `redeemSessionJoinToken` inserts a `run_grants` row for the redeeming
+learner, so both seats of a native match are grant-holders on one run and both can call the
+route throughout the game. The draft built the header to close a disclosure hole and opened a
+narrower, worse one: the original hole leaked *content* to people who already had a grant;
+the header leaked a *timing signal* to the one principal the whole session design works to
+keep asymmetric. The constant clause is the right repair, and the rule generalizes past this
+RFC: **in a filtered artifact, state the filter, never the residue.**
 
 Like `Site`, `TabiyaRun` and `TabiyaSession`, `TabiyaMarks` is re-forced after
 `headerOverrides` are applied so a caller cannot spoof it — verified at
@@ -778,6 +975,12 @@ stamped into `run_marks.relayed`; neither is client-supplied.
   primitive table is corrected accordingly: the shipped board-possession primitives are
   `drill_runs.active_writer_learner_id`, `BOARD_CONTROLS` and `RunStorage.boardOperation`;
   `leaseHeldBy` is how possession is *rendered*.
+
+  **[author round] Ratified. The draft's conclusion was right and its symbol was fiction**,
+  which is the worst combination available: a reviewer checking the conclusion finds it
+  sound, an implementer looking the symbol up finds a response field, and the two never
+  meet. The corrected test is also the cheaper one — `requireRead` has already returned the
+  `StoredRun`, so the conjunct costs one property read and no second query.
 - **`match` is refused** because a mark is a plan, and broadcasting a seated player's plan
   to their seated opponent is the D80 seat-asymmetry defect arriving in a new form. It
   **widens no enum** — `live-surface-honesty` §3.2's ruling (*read the enum; do not widen
@@ -792,6 +995,21 @@ stamped into `run_marks.relayed`; neither is client-supplied.
   The conclusion is unchanged and is arguably strengthened — reading `kind` is a
   well-established pattern rather than a near-unprecedented one — but a count offered as
   evidence has to be the real count.
+
+  **[author round] Ratified: all eight reproduce at HEAD, at those exact lines, and this
+  RFC's would be the ninth.** One clarification the recount earns. There is a **second,
+  distinct** predicate in the same neighbourhood — `boardControl === "match"`, the *native
+  two-player board* rather than the session kind — read at seven further sites (`storage.ts`
+  ×3, `live-session.ts` ×3, `service.ts` ×1). The two are **not** interchangeable, and the
+  gap between them is a live configuration rather than a hypothetical: `live-session.ts:74`
+  refuses a `match` board control on any other kind, so `boardControl === "match"` implies
+  `kind === "match"` — but **not** the reverse. An **imported Arena** session is
+  `kind: "match"` with a non-`match` board control; that combination is precisely what
+  `storage.ts:1657` detects when it seeds `arena_legs`. §4.2's conjunct is on **`kind`**
+  deliberately: an implementer who reaches for the nearer-looking `boardControl` would relay
+  a seated player's marks inside every imported-Arena contest, which is the exact defect the
+  refusal exists to prevent. Ledgered in the row *"`kind === "match"` and `boardControl ===
+  "match"` are not interchangeable…"*.
 - **`relayed` is stamped at write time, not evaluated at read time**, and the choice
   matters in both directions. A read-time rule would (i) make a host's teaching marks
   vanish the moment they hand the board over, and (ii) retroactively publish everything a
@@ -853,6 +1071,14 @@ export interface RelayedMark {
   I1/I4 compliance without saying why the new handle is safe.
 - Cap the projection at **128 marks, newest first**, setting `marksTruncated: true` when
   it bites. The cap is a poll-cost bound, not a policy; it is stated rather than silent.
+  **[author round] The bound was asserted without its cost, which is the same fault §5.1 was
+  returned for.** Measured: one `RelayedMark` with a UUID-bearing `learnerId` and a
+  twelve-character handle serializes to **186 bytes**, so a saturated projection is
+  **23.4 KiB** and the 2-second poll costs **11.7 KiB/s per viewer** *for the marks alone*,
+  on top of the grants, journal and match state the detail already carries. That is
+  acceptable for an academy room and is the reason the cap exists at all; it is also the
+  number to revisit before anyone proposes raising it, and it is why §4.3 projects no
+  `scopeKey` — the keys would add roughly a third again for data no viewer can use.
 
 **The rendered attribution line**, on both the session page and the chrome-free overlay,
 following `voteAttribution`'s shipped four-branch table and its lesson that the
@@ -904,18 +1130,40 @@ member of a classroom cannot exhaust another's budget:
 | Bound | Value | Where |
 |---|---|---|
 | shapes per `(run, author, scope, scope_key)` | **64** | one per square; past this the board is unreadable and the intent is not annotation |
-| marks per `(run, author)` | **1,000** | **[cross-review] ~155 KB**, not the ~70 KB first stated, on a route fetched once per run load, not polled |
+| marks per `(run, author)` | **1,000** | **[author round] 155–198 KiB** depending on scope — not the ~70 KB first stated, nor the review's 154 KB — on a route fetched once per run load, not polled |
 | shapes in one `PUT` body | **64** | equal to the per-key cap, so a legal body can never be a refused write |
 
 **[cross-review] The 1,000-mark figure was measured, and it is 2.2× the stated one.** One
 serialized position-scoped `RunMark` — `{scope, scopeKey, brush, orig, dest, at}` with a
 four-field FEN key — is **158 bytes** of JSON (`{"scope":"position","scopeKey":"rnbqkbnr/
 pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -","brush":"green","orig":"e2","dest":"e4",
-"at":"2026-08-16T12:00:00.000Z"}`), so 1,000 is **154 KB**; a branch-scoped key is shorter
-at 133 bytes, or 130 KB. The bound is kept at 1,000 — 155 KB on a once-per-run-load fetch
-is still the right trade, and halving the cap would bite a real classroom before the
-transfer cost bites anything — but the number the bound is justified by has to be the
-measured one. The `PUT` body cap is unaffected: 64 shapes is ~10 KB.
+"at":"2026-08-16T12:00:00.000Z"}`), so the bound is kept at 1,000 — a once-per-run-load
+fetch of that size is still the right trade, and halving the cap would bite a real
+classroom before the transfer cost bites anything — but the number the bound is justified
+by has to be the measured one.
+
+**[author round] The per-mark measurement reproduces; the two figures derived from it do
+not, and one of them is backwards.** Re-measured by serializing the objects rather than
+estimating them:
+
+| Quantity | Review | Measured |
+|---|---|---|
+| one `position`-scoped mark | 158 bytes | **158 bytes** ✓ |
+| 1,000 of them, as the array the route returns | 154 KB | **159,001 bytes = 155.3 KiB** (the review counted objects and dropped the separators) |
+| one `branch`-scoped mark | 133 bytes — *"shorter"* | **202 bytes — longer** |
+| 1,000 of them | 130 KB | **198.2 KiB** |
+| a 64-shape `PUT` body | ~10 KB | **2,769 bytes = 2.7 KiB** |
+
+The branch inversion is the one that matters, and its cause is a fact about the runtime the
+review did not check: ids are `` `${run.id}:branch:${n}` `` and `` `${run.id}:node:${n}` ``
+(`createRun`, `commitMove`), so the composite key **embeds the run id twice** — 98 characters
+against a four-field FEN key's 52. A `branch`-scoped mark is the *expensive* one, not the
+cheap one. The bound stands at 1,000 either way: **198 KiB worst case on a fetch that happens
+once per run load** is still the right trade, and the figure is now the measured worst case
+rather than an estimate of the best. The `PUT` cap is comfortable by a wider margin than the
+review credited: 64 shapes is under 3 KiB, so the body cap is a correctness bound, not a
+transfer one. The id-shape finding is ledgered in the row *"Ids in this runtime are
+path-shaped…"*, because it prices every future composite key, not only this one.
 
 The client disables further drawing at the per-key cap and says so; the server refuses the
 over-cap `PUT` with `INVALID_REQUEST` as a backstop. **[cross-review] `INVALID_REQUEST` is
@@ -969,6 +1217,16 @@ transaction and would still work, but it would sit in the post-delete restore bl
 whole reason for existing is that it must run *after* the FK cascade, which is a different
 concern.
 
+**[author round] Ratified on the structure, and the line numbers are struck out on
+principle.** The shape reproduces exactly: one `BEGIN IMMEDIATE`, a reassignment block
+ending in `UPDATE live_sessions SET created_by`, then `DELETE FROM learners`, then the
+`INSERT OR IGNORE INTO run_grants … 'host'` restore loop, then `COMMIT`. The numbers have
+already moved by one since the review — the learner delete sits a line earlier at HEAD — in
+a file nobody edited for this RFC's sake. **Normative, stated so it cannot drift: the mark
+delete is the last statement of the reassignment block, immediately before
+`DELETE FROM learners` and inside the same transaction.** That sentence survives every
+future edit to `storage.ts`; `:1038` did not survive a day.
+
 Delete, not reassign, and the choice is between two shipped precedents. `registered_packs`,
 `pack_drafts`, `shape_drafts` and `live_sessions.created_by` are all reassigned to
 `LEGACY_ID`, because a published pack is an artifact that must survive its publisher.
@@ -1004,6 +1262,14 @@ A schema test asserts no column in this RFC declares a foreign key against `lear
    have left the *actual* authorization question — which principals `requireRead` admits,
    answered in §2.6 rule 1a — looking as though it had been addressed.
 
+   **[author round] Withdrawal accepted.** The draft asserted *"every other mutating run
+   route follows `requireWrite`"* from having read `requireWrite` rather than from having
+   counted its callers, and it is false by eighteen. One qualification carried over from
+   §2.6: the idiom is a majority, not a unanimity, and the ledger row on `RunService.flip`
+   is an open defect of exactly this shape — so *"other routes do it"* is not on its own a
+   licence. The licence is the invariant (**run graph ⇒ `requireWrite`**), which marks satisfy
+   and `flip` does not.
+
 Otherwise: none.
 
 ## 7. Boundaries against the three sibling documents
@@ -1012,7 +1278,7 @@ Otherwise: none.
 |---|---|---|
 | `rfc/format-surface.md` | **accepted**, conditional on two owner rulings | Owns `assistance:arrows` and leg **(c)**. This RFC adds no `AssistanceConfig` field, reads `assistance.arrows` nowhere, constructs no system-drawn shape, and changes no `FORMAT_DISPOSITIONS` row. `format-surface` may take its `unmeasured` disposition with the named gap (*the structural reader emits square sets, not vectors*) with **zero interaction** with this document, in either landing order. What it may **not** do is retire the field — that is the owner's ruling, not this RFC's claim. |
 | `rfc/archive/live-surface-honesty.md` | **implemented** (`f2be4ed`) | Owns **I1–I4** and the ceiling/preference partition. §4 is checked clause-by-clause against all four (§4.3) and changes none of them. It reuses that RFC's `LeaseIdentity` projection idiom and its four-branch render table rather than inventing an attribution model. It touches neither `permittedAssistance` (the ceiling) nor `assistanceProfile` / `ASSISTANCE_PROFILES` (the preference), so **D81, D82 and D83 stay closed** and none is reopened. |
-| `rfc/teacher-surface.md` | **draft, owner-blocked**, claims migration **22** | Owns classroom identity, `classrooms` / `classroom_members` / `assignments` / `assignment_submissions`, `run_grants.expires_at`, `live_sessions.classroom_id`, and the `AssistanceContext.seatedInContest` narrowing. This RFC touches **none** of those and introduces **no `member_role`, no roster and no standing relationship** — a mark is per-run, ephemeral to a run, and confers nothing. Two collisions are checked: (i) **[cross-review] the migration collision is NOT clear** — the two share no table, but the loop's `migration.version <= version` skip means a database that reaches 23 can never receive 22, so an unconditional 23 would permanently strand `teacher-surface`'s migration on every existing database; §8's *Why the 23-with-a-hole claim is withdrawn* replaces the claim with "the next contiguous number at implementation time", which at HEAD means **reassigning `teacher-surface` to 23** and taking 22, exactly as 21/22 were reassigned to each other on 2026-08-16. That reassignment is a register edit for the accepting commit and it does touch `teacher-surface`'s row, so it is named here rather than buried in §8; (ii) `teacher-surface` §4.3 enumerates **nine readers of `run_grants`** and makes a tenth-without-a-case a test failure — **this RFC introduces no direct `run_grants` query**, reaching grants only through `requireRead` → `runRole` (its site 1) and through `LiveSessionService.detail` (already covered), so the expiry enumeration is unaffected and its criterion 7 still passes. If `teacher-surface` lands first, marks written by a teacher whose grant later expires become unreadable to them at site 1, which is the correct behaviour and needs no code here. |
+| `rfc/teacher-surface.md` | **draft, owner-blocked**, holds the earlier **position** in the migration landing order | Owns classroom identity, `classrooms` / `classroom_members` / `assignments` / `assignment_submissions`, `run_grants.expires_at`, `live_sessions.classroom_id`, and the `AssistanceContext.seatedInContest` narrowing. This RFC touches **none** of those and introduces **no `member_role`, no roster and no standing relationship** — a mark is per-run, ephemeral to a run, and confers nothing. Two collisions are checked: (i) **[cross-review] the migration collision is NOT clear** — the two share no table, but the loop's `migration.version <= version` skip means a database that reaches 23 can never receive 22, so an unconditional 23 would permanently strand `teacher-surface`'s migration on every existing database. **[author round] The register has since instituted the rule that follows from that finding, and this row is rewritten against it rather than against the review's interim fix.** `rfc/README.md` now assigns migration numbers **at landing, not at claim**; a draft claims a *position in the landing order* and takes `STORAGE_VERSION + 1` when its implementing commit is written. So this RFC **reassigns nothing and names no integer**: `teacher-surface` holds the earlier position, whichever of the two lands first takes the next free number, and the other renegotiates in the register — which is the register's own instruction to an implementer who finds the next number taken. The review's *"reassign `teacher-surface` to 23 and take 22"* was the right instinct against the wrong constraint: it was still one draft telling a sibling draft to move, which is the thing the landing-order rule makes unnecessary. No edit to `teacher-surface`'s row is proposed by this document; (ii) `teacher-surface` §4.3 enumerates **nine readers of `run_grants`** and makes a tenth-without-a-case a test failure — **this RFC introduces no direct `run_grants` query**, reaching grants only through `requireRead` → `runRole` (its site 1) and through `LiveSessionService.detail` (already covered), so the expiry enumeration is unaffected and its criterion 7 still passes. If `teacher-surface` lands first, marks written by a teacher whose grant later expires become unreadable to them at site 1, which is the correct behaviour and needs no code here. |
 
 ## 8. Register claims — stated loudly
 
@@ -1027,19 +1293,33 @@ this review's HEAD (`a7e700d`): `STORAGE_VERSION = 21` (`storage.ts:387`),
 `DRILL_RUN_SCHEMA_VERSION = "0.16"` and `DRILL_PACK_SCHEMA_VERSION = "0.23"`
 (`packages/schema/src/index.ts:1-2`).
 
+**[author round] Two rounds of drift correction in one document is the evidence, not the
+accident, and this section stops quoting integers because of it.** Re-verified at
+`7650d41`: `STORAGE_VERSION` is still 21 and `DRILL_RUN_SCHEMA_VERSION` is still `"0.16"`,
+but **`DRILL_PACK_SCHEMA_VERSION` already reads `"0.24"` in the working tree** —
+`vocabulary-wiring`, accepted and first in the codex lane order, is mid-implementation as
+this is written, and `format-surface` (0.25) and `claim-backing` (0.26) queue behind it. The
+draft was written against 20, the cross-review against 21, and the pack constant moved
+between the review and this round. A shared, monotonic integer is *not a fact a document can
+hold*; it is a fact the tree holds, and the only correct thing a draft can write down is its
+**position in the order** plus the expression that resolves the number at landing. That is
+now the register's rule for migrations, and this section applies the same discipline to
+every version constant it mentions: each row below states what it does **not** move, and no
+row asserts a number this RFC would have to be re-edited to keep true.
+
 | Register | Claim |
 |---|---|
-| **Migration** | **[cross-review] the next contiguous number at implementation time — 22 if `teacher-surface` has not landed, 23 if it has. The unconditional 23 claim is withdrawn, because the hole it leaves is a one-way door.** See the block below this table. Creates `run_marks` plus two indexes; adds one clause to `deleteLearner`. **Create-table/index only — no table rebuild, no backfill, no snapshot rewrite**, on the migration-15 (`repertoire-gap-finding`) and migration-10 (`shape-library`) precedent rather than migration 14's rebuild. It runs in the migration loop's ordinary `BEGIN IMMEDIATE` arm with **neither** `PRAGMA foreign_keys = OFF` nor `legacy_alter_table = ON` — that arm is `migration.version === 14` only. CHECK vocabularies are literal strings, never interpolated from the live TS constants |
-| **Run schema** | **none.** Stays **`0.16`**. `DrillRun` gains no field, `DrillRunEvent` gains no member, and `projectRun` gains no case. This is the whole of §2.2's isolation argument and it is a register fact, not only a design one: because the run schema does not move, `RunStorage.read`'s `schema_version = ?` filter keeps every stored run visible and **no stamp is required** |
-| **Pack schema** | **none.** Stays **`0.23`** (`engine-leverage`, implementing). **0.19 is frozen shut**; **0.26 is the next free lane** and this RFC does not take it. No pack document changes, so no digest moves and there is no rebase pressure on the pack lane |
+| **Migration** | **[author round] A POSITION in the landing order, not a number. The number is `STORAGE_VERSION + 1`, read by the implementing commit at the moment it is written, and this document names no integer.** This RFC's position is **behind `teacher-surface`'s** — that draft claimed first and is owner-blocked, not withdrawn — but the position is a claim on *the next free slot at its turn*, so if this lands first it simply takes the next number and `teacher-surface` renegotiates in the register, per `rfc/README.md`'s instruction to an implementer who finds the next number taken. See the block below this table. Creates `run_marks` plus two indexes; adds one clause to `deleteLearner`. **Create-table/index only — no table rebuild, no backfill, no snapshot rewrite**, on the migration-15 (`repertoire-gap-finding`) and migration-10 (`shape-library`) precedent rather than migration 14's rebuild. It runs in the migration loop's ordinary `BEGIN IMMEDIATE` arm with **neither** `PRAGMA foreign_keys = OFF` nor `legacy_alter_table = ON` — that arm is `migration.version === 14` only. CHECK vocabularies are literal strings, never interpolated from the live TS constants |
+| **Run schema** | **none.** **[author round]** The constant reads `"0.16"` at HEAD and the claim is that this RFC does not move it, whatever it reads at landing. `DrillRun` gains no field, `DrillRunEvent` gains no member, and `projectRun` gains no case. This is the whole of §2.2's isolation argument and it is a register fact, not only a design one: because the run schema does not move, `RunStorage.read`'s `schema_version = ?` filter keeps every stored run visible and **no stamp is required** |
+| **Pack schema** | **none, and no version is quoted.** No pack document changes, no `$defs` are touched, no digest moves, and there is therefore no rebase pressure on the pack lane in either direction. **[author round]** The constant read `0.22` when this was drafted, `0.23` at the cross-review and `0.24` in the working tree now, with 0.25 and 0.26 claimed ahead of any date this could land — which is exactly why the claim is *"none"* and not *"stays at N"*: **"stays at N" is a claim that expires; "changes nothing" is not** |
 | **Assistance ceiling** | **none.** `AssistanceConfig`, `SILENT_ASSISTANCE`, `AssistancePermission`, `AssistanceContext` and `permittedAssistance` are untouched. `rfc/live-marker-quality.md` owns that table and its four enforcement sites; this RFC lands in any order relative to it |
 | **Assistance preference** | **none.** `ASSISTANCE_PROFILES`, `assistanceProfile` and `assistanceKey` are untouched; no new `localStorage` version arm is added |
 | **Session vocabulary** | **none.** `SESSION_KINDS` keeps its three members, `BOARD_CONTROLS` its four, `RUN_ROLES` its three, `SESSION_JOURNAL_KINDS` its sixteen. §4.2's `match` refusal reads the shipped enum; it does not widen it |
 | **Token surface** | **none.** `public_tokens` keeps its two shipped scopes |
 | **Refusal codes** | **none.** Every refusal in this RFC is `INVALID_REQUEST`. Considered and declined: minting `MARK_LIMIT_EXCEEDED` on the `REPERTOIRE_IMPORT_LIMIT` precedent. That code exists because a repertoire import is a *bulk* operation whose partial failure needs a distinct client message; a single over-cap mark is a control the client should already have stopped offering, so a dedicated code would add a versioned union member to describe a state the UI is specified never to reach |
 | **PGN header namespace** | **`TabiyaMarks`**, joining the shipped `TabiyaRun` / `TabiyaSession` / `TabiyaPack` set and re-forced after `headerOverrides` like the first two |
-| **Ledger rows this RFC ships** (shared register; **flipped by the implementing commit**, not by this draft) | *"Learner-drawn board annotation — one boolean, and it is nobody's"* — **closed** by §2–§3. *"`arrows` is THREE different things sharing one field name…"* — legs (a) and (b) close here; **the row should be split, not closed**, so leg (c) survives with a row of its own and `format-surface` keeps its subject. **D183–D188** (§10) — opened by this draft; **[cross-review] D213–D219** (§10) — opened by the cross-review, from block D213–D222 |
-| **`rfc/README.md`** | **not edited by this draft**, per the drafting instruction. Whoever accepts this RFC adds three things in the accepting commit: an **Active table row**; a **migration-register row for the number resolved below**; and, if the resolution is a reassignment, the reassignment note on both rows in the idiom migrations 21 and 22 already use |
+| **Ledger rows this RFC ships** (shared register; **flipped by the implementing commit**, not by this draft) | *"Learner-drawn board annotation — one boolean, and it is nobody's"* — **closed** by §2–§3. *"`arrows` is THREE different things sharing one field name…"* — legs (a) and (b) close here; **the row should be split, not closed**, so leg (c) survives with a row of its own and `format-surface` keeps its subject. **D183–D188** (§10) — opened by this draft; **[cross-review] D213–D219** (§10) — opened by the cross-review, from block D213–D222; **[author round] D247–D252** (§10) — opened by this return round, from block D247–D256 |
+| **`rfc/README.md`** | **not edited by this draft**, per the drafting instruction — **[author round] and not by this round either**, though the register now carries the landing-order rule this RFC's review produced. Whoever accepts this RFC adds two things in the accepting commit: an **Active table row**, and a **migration-register row bearing the number the implementation actually took** (`STORAGE_VERSION + 1` at that moment). No reassignment note is owed unless the implementer had to renegotiate a position, in which case the register's own instruction governs the note |
 
 ### [cross-review] Why the 23-with-a-hole claim is withdrawn
 
@@ -1062,15 +1342,43 @@ was drafted: migration 16 was *"rebased from an initial 15 claim"*, and 21/22 we
 nothing but text."* Every one of the 22 register rows is contiguous. A hole would be this
 register's first.
 
-**Resolution, normative:** this RFC claims **the next contiguous number at implementation
-time**. At HEAD that is **22** — `STORAGE_VERSION` is 21, and `teacher-surface` is
-owner-blocked, unlanded, and backfill-free, so reassigning it to 23 costs it the same
-"nothing but text" its own 21→22 reassignment cost. If `teacher-surface` lands first, this
-takes 23 unchanged. Either way `STORAGE_VERSION` moves by exactly one and the array stays
-contiguous. The reassignment is recorded in `rfc/README.md`'s migration register by the
-accepting commit, not asserted here. Note the draft's own register row also read
-*"`STORAGE_VERSION` 22 → 23"* while the paragraph above it correctly said 21 — an
-arithmetic that only works in the world where 22 had already landed. Ledgered as [[D219]].
+**Resolution, normative — [author round] rewritten, because the register answered this
+between the review and this round and its answer is stronger than the review's.**
+`rfc/README.md` now carries the rule: **migration numbers are assigned at LANDING, not at
+claim.** A draft claims a *position in the landing order*; the number is `STORAGE_VERSION + 1`
+at the moment the migration lands; an implementer who finds the next contiguous number
+already taken renegotiates in the register rather than skipping. Against that rule:
+
+- **This RFC claims a position, not an integer.** It does not claim 22, it does not claim 23,
+  and no number in this document needs re-editing when the tree moves. The implementing
+  commit reads `STORAGE_VERSION`, adds one, and writes that number into the migration array
+  and the register row together.
+- **It claims the position *behind* `teacher-surface`,** which claimed first and is blocked
+  rather than withdrawn. That is a statement about courtesy and order, not about integers: if
+  `teacher-surface` is still blocked when this is implemented, this takes the next free slot
+  and `teacher-surface` renegotiates its position at *its* turn — a renegotiation that costs
+  it nothing, because it is backfill-free, and that its own 21→22 move already demonstrated.
+- **What is forbidden is unchanged and is the whole point:** never claim a number above an
+  unlanded one. `migration.version <= version` makes the skipped slot permanently unfillable
+  and silent — `#migrate` throws only in the opposite direction, on `version >
+  STORAGE_VERSION` — so the hole is discovered as *"the classroom tables are missing on every
+  database older than the fix"*, months later, with no error to trace it by.
+- **The instruction that produced the hazard came from the coordinator, not from this
+  draft**, and it is recorded here rather than quietly dropped: this RFC was told to claim 23.
+  A rule now exists so the next draft cannot be told the same thing. That is the correct
+  disposition of a process defect found by a review — a rule in the register, not a fix in
+  one document.
+
+Note also the draft's own register row read *"`STORAGE_VERSION` 22 → 23"* while the paragraph
+above it correctly said 21 — an arithmetic that only works in the world where 22 had already
+landed, and a second-order symptom of writing an integer into a document at all. Ledgered in
+the row *"A skipped migration number is a one-way door…"*, amended by *"A draft that writes a
+shared monotonic integer into its body has written a claim with an expiry date…"*.
+
+**Criterion 21 carries the assertion that would have caught this at review time**: the
+migration array's versions are exactly `1..STORAGE_VERSION` with no gap. It is four lines of
+test and it converts the entire class — not this instance of it — from a review-time judgement
+call into a build failure.
 
 ## 9. Acceptance criteria
 
@@ -1098,15 +1406,39 @@ arithmetic that only works in the world where 22 had already landed. Ledgered as
    detections, tempo verdicts, guard firings, structural readings, compare strips and
    `evidencePacket` outputs are **byte-identical**. This is the whole safety argument
    expressed as one test.
-2a. **[cross-review] No mark-derived value reaches the voice allowlist.** `voiceCheck`
-   licenses every square, UCI, SAN token, chess noun and judgement word appearing in
-   `EvidencePacket.sentences` (`packages/runtime/src/voice.ts:32-33`), so `sentences` is a
-   law-8 boundary, not a projection — and criterion 2 cannot see a violation because it
-   compares the un-plumbed state against itself. A source test in the
-   `expression-census.test.ts:107` idiom asserts that the four packet-assembly sites
-   (`rest.ts:1137`, `:1168`, `:1174`, `:1189`) and the two sentence-splice sites (`:1178`,
-   `:1191`) mention no mark symbol, and that `guidance.ts` imports nothing mark-shaped.
-   §2.2's barrier, made a build failure.
+2a. **No mark-derived value reaches the voice allowlist. [author round] Rewritten, because
+   the version the review proposed inherits criterion 2's own defect: it cannot fail on the
+   thing it guards.** A source grep pinned to four assembly sites and two splice sites is
+   blind to the violation's natural shape, which is a *seventh* line spliced in next to them
+   — and its line numbers are stale already. The replacement has three parts, and the third
+   is what makes the first two trustworthy:
+
+   **(i) Behavioural, at the layer the breach happens on.** Drive the real voice route for a
+   run in which the requesting principal has marks. Choose the marked square **by
+   construction**: scan the assembled packet's `sentences` and pick any of the 64 squares
+   that does not occur in `sentences.join("\n")` **as a substring** — substring, not
+   word-boundary, because `voiceCheck` admits tokens with `String.includes`, per the ledger
+   row *"`voiceCheck` is a token filter…"* (2). Draw a mark on that square, re-run the route,
+   and assert `voiceCheck(packet, "<square>")` still reports the violation `square:<square>`.
+   Splice marks into `sentences` anywhere at or below the route and this assertion goes red.
+   It is the same assertion for the story-aware arms, which are the two that already splice.
+
+   **(ii) A census, so a new splice site cannot arrive unseen.** In the
+   `expression-census.test.ts` source-idiom: the set of expressions in `rest.ts` that
+   construct or extend an `EvidencePacket`'s `sentences` is pinned to an inventory, matched
+   by pattern rather than by line number, and a new one fails the build until it is added
+   deliberately. Adding one is then a review event, which is all this net is for.
+
+   **(iii) A positive control, asserted in the same test.** The same predicate, run against a
+   packet whose `sentences` **do** contain the square, must report **no** violation. Without
+   this the suite cannot distinguish *"the barrier holds"* from *"the assertion is
+   inoperative"* — which is precisely the failure this criterion replaces. A guard test that
+   has never been shown to go red is not evidence.
+
+   Scope note: the claim being tested is narrow and stays narrow. `voiceCheck` binds chess
+   **tokens**, not propositions; this criterion asserts that a learner's chosen square is not
+   made speakable, and asserts nothing about prose, which that same ledger row shows
+   `voiceCheck` does not govern.
 3. **A mark cannot break replay.** **[cross-review] restated — the scenario the criterion
    named cannot be constructed.** `commitMove` emits `move.committed` and `outcome.reached`
    in a single `appendEvents` drafts array (`runtime.ts:346-351`), so there is no interval
@@ -1118,6 +1450,17 @@ arithmetic that only works in the world where 22 had already landed. Ledgered as
    the regression guard against anyone later moving marks into the event log — the failure
    §2.1(1) documents, whose real shape is a write-time `TypeError` that discards the
    learner's gesture.
+3a. **[author round] The adjacency gaps stay closed only while the emitters stay
+   synchronous, and that is now asserted.** `reachCheckpoint` emits `checkpoint.reached` and
+   `segment.completed` through **two separate `appendEvents` calls**, with nothing between
+   them but straight-line code; the pairing survives on the absence of an `await`. A source
+   test asserts that **no function in `packages/runtime/src` that calls `appendEvents` more
+   than once is `async` or contains an `await` between those calls**, with a positive control
+   proving the predicate detects a planted violation. It fails the moment an emitter is made
+   asynchronous — which is the change that would open a gap for an unrelated write to land
+   in, and the only change that can. This asserts a property this RFC *depends on* rather
+   than one it creates; it is claimed here because §2.1's whole argument leans on it and an
+   unasserted load-bearing property is a debt whoever leans on it should pay.
 
 **Scope:**
 
@@ -1154,10 +1497,23 @@ arithmetic that only works in the world where 22 had already landed. Ledgered as
    text. `parseComment` round-trips every emitted shape back to the same `{color, from,
    to}`. Root-position marks appear in `Game.comments`, before the first move.
    `startingComments` still carries `Tabiya branch: <label>` unchanged, on the same runs.
-7a. **[cross-review] The pack export path carries marks.** A pack-session run with both
-   scopes exports through `exportPackRunPgn` → `combinedRun` (`pack-pgn.ts:205`) with every
-   position-scoped mark present, and every branch-scoped mark either remapped onto the
-   combined tree or declared missing in the header — never silently dropped (§3.1).
+7a. **The pack export path carries marks. [author round] Tightened to the specification
+   §3.1 now gives, which admits one outcome rather than two.** A pack-session run with marks
+   of both scopes exports through `exportPackRunPgn` → `combinedRun` and:
+   (i) every `position`-scoped mark is present, unremapped, at every combined node whose
+   `transposeKey` matches — **including a node on the authored spine that the run never
+   reached**, which §3.1 specifies rather than filters;
+   (ii) every `branch`-scoped mark whose source branch is in the exported set is present at
+   the combined node reached by replaying its source **UCI path** from the root, and the
+   remap is asserted against a run where node and branch ids provably differ between source
+   and combined trees — a test that passes with an identity remap is not testing the remap;
+   (iii) a `branch`-scoped mark whose source branch was excluded by `branchIds` is absent,
+   together with all of that branch's moves, and this is asserted as the *same* omission
+   rather than as a mark-specific rule;
+   (iv) two source branches with identical move sequences — which `uniquePaths` collapses —
+   contribute their marks to one combined node with identical `{brush, orig, dest}` triples
+   emitted **once**;
+   (v) the discarded legality-validation `exportPgn` call receives no marks.
 8. **A second principal's marks never appear in a principal's export.** Learner L and
    granted teacher T both mark run R; `GET /runs/R/pgn` as L contains L's shapes and none
    of T's; as T, the mirror. **[cross-review] The header is a constant-information string,
@@ -1225,7 +1581,11 @@ arithmetic that only works in the world where 22 had already landed. Ledgered as
     test asserts the migration array's versions are exactly `1..STORAGE_VERSION` with no
     gap**, which is the assertion that would have caught the withdrawn 23-with-a-hole claim
     at review time rather than after a database had run it, and which protects every future
-    draft from the same one-way door (`storage.ts:2197`, `migration.version <= version`).
+    draft from the same one-way door (`storage.ts`, `migration.version <= version`).
+    **[author round] It is the enforcement half of the register's landing-order rule**, and it
+    is why this RFC is content to name no number: the rule says take `STORAGE_VERSION + 1` at
+    landing, and this criterion is what makes a draft that ignored the rule fail the build
+    rather than a review.
 
 **Docs:** `docs/` gains a board-annotation page stating the scope rule, the isolation
 guarantee, the relay condition and the export filter; `docs/live-sessions.md` gains the
@@ -1275,6 +1635,35 @@ three unspent).** Cited by id; the rows carry the evidence.
 - **D219** — *A skipped migration number is a one-way door: `migration.version <= version`
   means a lower number can never be applied afterwards.* The generalization past this RFC —
   no draft may leave a hole for a blocked sibling.
+
+**[author round] Six further rows opened by this return round, id block D247–D256 (six used,
+four unspent).** Cited by title in the sections they govern; the rows carry the evidence.
+
+- **D247** — *`combinedRun` preserves exactly one identity across the pack export boundary —
+  the move path — so any key that must survive it is keyed on the UCI sequence, never on ids.*
+  Amends the `exportPackRunPgn` row with the remedy, not just the defect; §3.1 is its first
+  application.
+- **D248** — *A guard test that runs below the layer its barrier is breached at cannot fail,
+  and a guard never shown to go red is not evidence.* Both halves are this document's own
+  history: criterion 2 sits under the splice sites, and the proposed replacement grepped six
+  line numbers that had already moved. Every barrier criterion in the repo should carry a
+  positive control.
+- **D249** — *`reachCheckpoint` emits its checkpoint/segment pair through two separate
+  `appendEvents` calls, so one of the three adjacency gaps is held open by nothing but the
+  absence of an `await`.* The sharpest instance of the unasserted-bracketing row, and the one
+  criterion 3a is written against.
+- **D250** — *A draft that writes a shared monotonic integer into its body has written a claim
+  with an expiry date.* The migration rule generalizes: this RFC's pack-schema constant moved
+  three times between drafting and this round, and each move made a true sentence false. State
+  what a document does not move; resolve numbers at landing.
+- **D251** — *Ids in this runtime are path-shaped (`` `${run.id}:node:${n}` ``), so any key
+  built by concatenating two of them embeds the run id twice.* Why a `branch`-scoped mark is
+  the expensive one at 202 bytes against a FEN-keyed 158 — and a caution for every future
+  composite key.
+- **D252** — *`kind === "match"` and `boardControl === "match"` are not interchangeable, and
+  the divergent case ships: an imported-Arena session is a `match` kind on a non-`match`
+  board.* A predicate swap that looks like a simplification would relay a seated player's
+  marks inside a contest.
 
 ## Open questions
 
@@ -1345,3 +1734,26 @@ three unspent).** Cited by id; the rows carry the evidence.
   `live-types.ts`; and `requireRead` on a mutating route is the **majority idiom**
   (seventeen shipped methods), so §6's deviation 3 is withdrawn. Seven ledger rows opened
   (§10).
+- 2026-08-16: **author return round** (id block D247–D256; corrections in the body they
+  govern). **Every cross-review finding ratified, none declined**, four of them with a
+  narrowing or a corrected mechanism: the adjacency argument gains the measured fact that
+  `reachCheckpoint` splits its pair across two `appendEvents` calls, plus criterion 3a for
+  the unasserted bracketing; `EvidencePacket.sentences` is restated as a **token** allowlist
+  rather than a proposition boundary, and criterion 2a is rewritten to run at the route
+  layer with a census and a **positive control**, because as proposed it could not fail on
+  the thing it guarded; §3.1 specifies the `combinedRun` remap **by UCI path**, with the
+  header-signal fallback foreclosed and the authored-spine consequence stated; §8 is
+  rewritten under the register's new **landing-order** rule — this RFC claims a *position*,
+  names no integer, and proposes no reassignment of `teacher-surface`. Counts re-measured
+  against HEAD (`7650d41`), five of them wrong in the review: `exportPgn` has **four** call
+  sites and two homonyms in the web tree; `requireRead` is the gate of **eighteen** whole
+  mutating methods and two mixed ones, with `RunService.flip` dropped from the list as an
+  open defect; `parseRunRoute`'s alternation is **33**, and was 33 at the review's own HEAD;
+  1,000 marks is **155.3 KiB** position-scoped and **198.2 KiB** branch-scoped — branch keys
+  are the *expensive* ones, not the cheap ones — and a 64-shape `PUT` is **2.7 KiB**, not
+  10 KB. The relay cap is priced for the first time (**11.7 KiB/s per viewer**). Confirmed
+  unchanged: the eight `kind === "match"` sites, the twelve chessground brushes, the
+  `LeaseIdentity` and `leaseHeldBy` corrections, the `branchPath` requirement, the
+  `story_read` fabricated principal and the `deleteLearner` insertion point — the last
+  restated as a statement rather than a line number, which had already drifted. Six ledger
+  rows opened (§10).
