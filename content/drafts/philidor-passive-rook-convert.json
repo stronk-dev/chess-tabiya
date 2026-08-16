@@ -10,6 +10,10 @@
     "label": "Club player on the strong side of the Philidor who must cash the defender's one passive move",
     "branchLengthTarget": 15
   },
+  "variantOf": {
+    "packId": "philidor-third-rank-hold",
+    "relation": { "kind": "root_after_move", "moveUci": "h6h8" }
+  },
   "start": {
     "fen": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2",
     "side": "white"

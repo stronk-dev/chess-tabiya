@@ -10,7 +10,9 @@ import type {
   DrillPackDefinition,
   SimpleTrigger,
   SpineNode,
+  StructuralExpression,
 } from "./types.js";
+import { canonicalizeJson } from "./digest.js";
 
 export type PackLintCode =
   | "AUTHORED_PROSE_AFTER_LAST_CHECKPOINT"
@@ -29,7 +31,9 @@ export type PackLintCode =
   | "SPINE_TRANSPOSITION_COLLISION"
   | "BOUNDARY_NODE_BEYOND_HORIZON"
   | "CONCEPT_KEY_NOT_SLUG"
-  | "SEGMENT_BEYOND_PLAN_BAND";
+  | "SEGMENT_BEYOND_PLAN_BAND"
+  | "PLAN_CONSEQUENCE_DEPRECATED"
+  | "PLAN_SIGNATURE_INLINED";
 
 export interface PackLintIssue {
   readonly severity: "error" | "warning";
@@ -128,6 +132,41 @@ export interface PackLintOptions {
    * a grouping; otherwise the whole pack is treated conservatively as one segment.
    */
   readonly predictionSegments?: readonly PredictionSegment[];
+  readonly resolvePlanSignature?: (planClassId: string) => StructuralExpression | null | undefined;
+}
+
+function lintPlanSignatures(
+  pack: DrillPackDefinition,
+  options: PackLintOptions,
+  issues: PackLintIssue[],
+): void {
+  const signatures = (pack.planClasses ?? []).flatMap((planClass) => {
+    if (planClass.shapePlan === undefined) return [];
+    const signature = options.resolvePlanSignature?.(planClass.id);
+    return signature == null ? [] : [{ planClassId: planClass.id, canonical: canonicalizeJson(signature) }];
+  });
+  const expressionKinds = new Set(["all", "any", "not", "feature", "pieceOnSquare", "mirrored", "quantified", "plan_signature"]);
+  const visit = (value: unknown, path: string): void => {
+    if (value === null || typeof value !== "object") return;
+    if (Array.isArray(value)) {
+      value.forEach((child, index) => visit(child, `${path}/${index}`));
+      return;
+    }
+    const object = value as Record<string, unknown>;
+    if (object.kind === "plan_consequence") {
+      issues.push({ severity: "warning", code: "PLAN_CONSEQUENCE_DEPRECATED", path, message: "plan_consequence is deprecated; use structural_feature with a plan_signature leaf" });
+    }
+    if (typeof object.kind === "string" && expressionKinds.has(object.kind) && object.kind !== "plan_signature") {
+      const canonical = canonicalizeJson(object);
+      for (const signature of signatures) {
+        if (canonical === signature.canonical) {
+          issues.push({ severity: "warning", code: "PLAN_SIGNATURE_INLINED", path, message: `Expression duplicates the registered signature for ${signature.planClassId}; use plan_signature instead` });
+        }
+      }
+    }
+    for (const [key, child] of Object.entries(object)) visit(child, `${path}/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`);
+  };
+  visit(pack, "");
 }
 
 function startPosition(fen: string): Chess {
@@ -265,6 +304,7 @@ export function lintDrillPack(
     return Object.freeze(issues);
   }
   lintSpine(pack.spine ?? [], position, "/spine", spineIds, issues, spineLocations);
+  lintPlanSignatures(pack, options, issues);
 
   for (const [index, checkpoint] of pack.checkpoints.entries()) {
     for (const nodeId of triggerNodeRefs(checkpoint.trigger)) {

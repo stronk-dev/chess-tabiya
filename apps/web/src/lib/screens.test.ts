@@ -320,6 +320,22 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("renders a derived sibling-pack link at the rehearsal entry point", async () => {
+    const related = { ...structuredClone(pack), variantOf: { packId: "related-pack", relation: { kind: "same_root_other_objective" as const } } };
+    const run = createRun({ id: "variant-run", packId: related.id, packDigest: `sha256:${"b".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, startFen: related.start.fen, seed: 1, createdAt: at });
+    const onSelectPack = vi.fn();
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack: related,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onSelectPack, registerKeyboardRegion,
+    } });
+    await tick();
+    expect(document.querySelector(".variant-link")?.textContent).toContain("Same position, other objective");
+    document.querySelector<HTMLButtonElement>(".variant-link button")!.click();
+    expect(onSelectPack).toHaveBeenCalledWith("related-pack");
+    await unmount(component);
+  });
+
   it("composes board, objective, why-banner, timeline preview, branch rail, and checkpoint sheet", async () => {
     const run = branchedRun();
     const checkpoint = latestCheckpoint(pack, run)!;

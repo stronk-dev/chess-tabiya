@@ -36,6 +36,7 @@ import {
 } from "./guard-conditions.js";
 import {
   checkpointMatches,
+  expandTransitionExpression,
   objectiveRules,
   PackCompileError,
   planSignatureResolver,
@@ -347,11 +348,12 @@ export function structuralIssues(value: unknown, path = "", depth = 0): readonly
       if (expression.feature.kind === "direct_attack_count" && expression.feature.count < 0) issues.push(runtimeIssue("NEGATIVE_FEATURE_COUNT", `${expressionPath}/feature/count`, "feature counts cannot be negative"));
       return;
     }
+    if (expression.kind === "plan_signature") return;
     const exhaustive: never = expression;
     issues.push(runtimeIssue("STRUCTURAL_KIND_UNRECOGNISED", expressionPath || "/", `unhandled structural expression ${JSON.stringify(exhaustive)}`));
   };
   const object = value as Record<string, unknown>;
-  if (object.kind === "feature" || object.kind === "pieceOnSquare" || object.kind === "all" || object.kind === "any" || object.kind === "not" || object.kind === "mirrored" || object.kind === "quantified") {
+  if (object.kind === "feature" || object.kind === "pieceOnSquare" || object.kind === "all" || object.kind === "any" || object.kind === "not" || object.kind === "mirrored" || object.kind === "quantified" || object.kind === "plan_signature") {
     visit(value as StructuralExpression, path, depth);
   } else {
     leaf(value as StructuralFeature, path, false);
@@ -522,6 +524,12 @@ function runtimeIssues(
   compile: ObjectiveCompiler = objectiveRules,
 ): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
+  const containsPlanSignature = (expression: StructuralExpression): boolean => {
+    if (expression.kind === "plan_signature") return true;
+    if (expression.kind === "all" || expression.kind === "any") return expression.of.some(containsPlanSignature);
+    if (expression.kind === "not" || expression.kind === "mirrored") return containsPlanSignature(expression.of);
+    return false;
+  };
   const resolved = planSignatureResolver(pack, shapes);
   const resolvePlanSignature: PlanSignatureResolver = shapes === undefined
     ? (planClassId) => pack.planClasses?.find((candidate) => candidate.id === planClassId)?.shapePlan === undefined
@@ -542,9 +550,12 @@ function runtimeIssues(
   }
   for (const [index, planClass] of (pack.planClasses ?? []).entries()) {
     if (planClass.shapePlan === undefined) continue;
-    if (!shapeIds.has(planClass.shapePlan.shape)) issues.push(runtimeIssue("SHAPE_PLAN_REF_UNLISTED", `/planClasses/${index}/shapePlan`, `shape ${planClass.shapePlan.shape} is not listed in pack.shapes`));
-    const entry = shapes?.get(planClass.shapePlan.shape);
-    if (entry !== undefined && !entry.document.plans.some((plan) => plan.id === planClass.shapePlan!.plan)) issues.push(runtimeIssue("SHAPE_PLAN_UNKNOWN", `/planClasses/${index}/shapePlan`, `shape ${planClass.shapePlan.shape} has no plan ${planClass.shapePlan.plan}`));
+    const shapePlan = planClass.shapePlan;
+    if (!shapeIds.has(shapePlan.shape)) issues.push(runtimeIssue("SHAPE_PLAN_REF_UNLISTED", `/planClasses/${index}/shapePlan`, `shape ${shapePlan.shape} is not listed in pack.shapes`));
+    const entry = shapes?.get(shapePlan.shape);
+    if (entry !== undefined && !entry.document.plans.some((plan) => plan.id === shapePlan.plan)) issues.push(runtimeIssue("SHAPE_PLAN_UNKNOWN", `/planClasses/${index}/shapePlan`, `shape ${shapePlan.shape} has no plan ${shapePlan.plan}`));
+    const signature = entry?.document.plans.find((plan) => plan.id === shapePlan.plan)?.success.signature;
+    if (signature != null && containsPlanSignature(signature)) issues.push(runtimeIssue("PLAN_SIGNATURE_NESTED", `/planClasses/${index}/shapePlan`, `shape plan ${shapePlan.shape}#${shapePlan.plan} contains plan_signature`));
   }
   const planClasses = new Map((pack.planClasses ?? []).map((planClass) => [planClass.id, planClass]));
   const checkPlanConsequences = (objective: DrillPackDefinition["objective"], pointer: string): void => {
@@ -559,7 +570,7 @@ function runtimeIssues(
       const entry = shapes?.get(planClass.shapePlan.shape);
       const plan = entry?.document.plans.find((candidate) => candidate.id === planClass.shapePlan!.plan);
       if (entry !== undefined && plan?.success.signature === null) { issues.push(runtimeIssue("PLAN_CONSEQUENCE_NOT_COMPUTABLE", `${conditionPath}/planClassId`, plan.success.note)); continue; }
-      if (plan?.success.signature !== undefined && !authoredSpineFens(pack).some((fen) => matchesStructuralExpression(fen, plan.success.signature!))) issues.push(runtimeIssue("PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT", `${conditionPath}/planClassId`, `the authored signature for ${condition.planClassId} never matches an authored spine position`));
+      if (plan?.success.signature !== undefined && plan.success.signature !== null && !containsPlanSignature(plan.success.signature) && !authoredSpineFens(pack).some((fen) => matchesStructuralExpression(fen, plan.success.signature!))) issues.push(runtimeIssue("PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT", `${conditionPath}/planClassId`, `the authored signature for ${condition.planClassId} never matches an authored spine position`));
     }
   };
   checkPlanConsequences(pack.objective, "/objective");
@@ -576,7 +587,14 @@ function runtimeIssues(
       const conditionPath = `${pointer}/successConditions/${index}/transition`;
       issues.push(...transitionExpressionIssues(condition.transition, conditionPath));
       if (transitions.length === 0) continue;
-      const results = transitions.map((edge) => matchesTransitionExpression(edge.before, edge.moveUci, edge.after, condition.transition));
+      let transition = condition.transition;
+      try {
+        transition = expandTransitionExpression(condition.transition, conditionPath, resolvePlanSignature).value;
+      } catch (error) {
+        if (error instanceof PackCompileError) issues.push(runtimeIssue(error.code, error.pointer, error.message));
+        continue;
+      }
+      const results = transitions.map((edge) => matchesTransitionExpression(edge.before, edge.moveUci, edge.after, transition));
       const to = condition.to ?? "achieved";
       const positive = to === "achieved" || to === "preserved" || to === "transitioned";
       if (positive && !results.some(Boolean)) {
@@ -1097,7 +1115,7 @@ export function validatePackDocument(value: unknown, options: {
 
   const document = structuredClone(value) as DrillPackDefinition;
   const issues: PackValidationIssue[] = [
-    ...lintDrillPack(document).map((issue) =>
+    ...lintDrillPack(document, { resolvePlanSignature: planSignatureResolver(document, options.shapes) }).map((issue) =>
       Object.freeze({
         severity: issue.severity,
         source: "lint" as const,

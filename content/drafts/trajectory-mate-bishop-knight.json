@@ -10,6 +10,10 @@
     "label": "Club player learning the one elementary mate nobody holds in a single gulp - drilled as three phases, not as thirty-nine plies of memory",
     "branchLengthTarget": 20
   },
+  "variantOf": {
+    "packId": "mate-bishop-knight",
+    "relation": { "kind": "same_root_other_objective" }
+  },
   "start": {
     "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1",
     "side": "white"

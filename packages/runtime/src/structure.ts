@@ -62,7 +62,8 @@ export type StructuralExpression =
   | { readonly kind: "pieceOnSquare"; readonly square: SquareName; readonly piece: { readonly color: Color; readonly role: Role } | null }
   | { readonly kind: "mirrored"; readonly axis: MirrorAxis; readonly of: StructuralExpression }
   | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly files: FileRange }; readonly feature: FileTemplateFeature }
-  | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly squares: SquareRegion }; readonly feature: SquareTemplateFeature };
+  | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly squares: SquareRegion }; readonly feature: SquareTemplateFeature }
+  | { readonly kind: "plan_signature"; readonly planClassId: string };
 
 export interface PawnSafety {
   readonly square: SquareName;
@@ -299,6 +300,7 @@ function normalizedRange(from: number, to: number): readonly [number, number] {
 }
 
 export function mirrorExpression(expression: StructuralExpression, axis: MirrorAxis): StructuralExpression {
+  if (expression.kind === "plan_signature") throw new TypeError("plan_signature must be expanded before runtime evaluation");
   if (expression.kind === "all" || expression.kind === "any") return { kind: expression.kind, of: expression.of.map((item) => mirrorExpression(item, axis)) as [StructuralExpression, ...StructuralExpression[]] };
   if (expression.kind === "not") return { kind: "not", of: mirrorExpression(expression.of, axis) };
   if (expression.kind === "feature") return { kind: "feature", feature: mirrorFeature(expression.feature, axis) };
@@ -418,6 +420,7 @@ export function matchesStructuralFeature(fen: string, feature: StructuralFeature
 }
 
 export function matchesStructuralExpression(fen: string, expression: StructuralExpression): boolean {
+  if (expression.kind === "plan_signature") throw new TypeError("plan_signature must be expanded before runtime evaluation");
   if (expression.kind === "all" || expression.kind === "any") return expression.kind === "all" ? expression.of.every((item) => matchesStructuralExpression(fen, item)) : expression.of.some((item) => matchesStructuralExpression(fen, item));
   if (expression.kind === "not") return !matchesStructuralExpression(fen, expression.of);
   if (expression.kind === "feature") return matchesStructuralFeature(fen, expression.feature);
@@ -526,6 +529,7 @@ export function vacationReading(fen: string, squareName: SquareName): VacationRe
 export function structuralFeatureKinds(expression: StructuralExpression): readonly StructuralFeatureKind[] {
   const values: StructuralFeatureKind[] = [];
   const visit = (item: StructuralExpression): void => {
+    if (item.kind === "plan_signature") throw new TypeError("plan_signature must be expanded before runtime evaluation");
     if (item.kind === "feature") { values.push(item.feature.kind); return; }
     if (item.kind === "pieceOnSquare") return;
     if (item.kind === "not" || item.kind === "mirrored") { visit(item.of); return; }

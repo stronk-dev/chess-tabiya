@@ -95,6 +95,7 @@ function renderSquareTemplate(feature: SquareTemplateFeature): string {
 }
 
 export function renderStructuralExpressionSpec(expression: StructuralExpression): string {
+  if (expression.kind === "plan_signature") return `registered plan ${expression.planClassId}`;
   if (expression.kind === "all") return expression.of.map(renderStructuralExpressionSpec).join(" and ");
   if (expression.kind === "any") return expression.of.map(renderStructuralExpressionSpec).join(" or ");
   if (expression.kind === "not") return `not: ${renderStructuralExpressionSpec(expression.of)}`;

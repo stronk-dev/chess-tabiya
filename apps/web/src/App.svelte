@@ -608,6 +608,7 @@
         onAnalyzeMissing={(nodeIds) => controller.analyzeMissingEvidence(nodeIds)}
         onStory={session.runState.run.events.some((event) => event.type === "outcome.reached") ? () => navigate(routePath({ name: "story", runId: session.runState!.run.id })) : undefined}
         onFlip={(nodeId) => flipRun(session.runState!.run.id, nodeId)}
+        onSelectPack={(packId) => controller.startPack(packId)}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
       {#if activeLiveDetail}

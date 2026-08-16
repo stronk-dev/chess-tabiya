@@ -14,6 +14,22 @@ export interface PackCheckResult {
   readonly issues: readonly PackValidationIssue[];
 }
 
+export interface ConstructReach {
+  readonly construct: string;
+  readonly count: number;
+}
+
+const REACH_CONSTRUCTS = Object.freeze([
+  "variantOf",
+  "retryVariants",
+  "plan_consequence",
+  "tempo:in_time",
+  "tempo:too_slow",
+  "tempo:premature",
+  "tempo:outpaced",
+  "tempo:over_budget",
+] as const);
+
 function fileIssue(code: string, message: string): PackValidationIssue {
   return Object.freeze({
     severity: "error",
@@ -54,6 +70,25 @@ async function siblingLookup(): Promise<Map<string, { readonly start: { readonly
     } catch { /* A malformed unrelated pack is absent from this narrow lookup. */ }
   }
   return result;
+}
+
+export async function constructReachReport(): Promise<readonly ConstructReach[]> {
+  const files = await packJsonFiles(resolve("content"));
+  const counts = new Map<string, number>(REACH_CONSTRUCTS.map((name) => [name, 0]));
+  const visit = (value: unknown): void => {
+    if (value === null || typeof value !== "object") return;
+    if (Array.isArray(value)) { value.forEach(visit); return; }
+    const object = value as Record<string, unknown>;
+    if (object.variantOf !== undefined) counts.set("variantOf", counts.get("variantOf")! + 1);
+    if (Array.isArray(object.retryVariants) && object.retryVariants.length > 0) counts.set("retryVariants", counts.get("retryVariants")! + object.retryVariants.length);
+    if (object.kind === "plan_consequence") counts.set("plan_consequence", counts.get("plan_consequence")! + 1);
+    if (typeof object.verdict === "string" && counts.has(`tempo:${object.verdict}`)) counts.set(`tempo:${object.verdict}`, counts.get(`tempo:${object.verdict}`)! + 1);
+    Object.values(object).forEach(visit);
+  };
+  for (const file of files) {
+    try { visit(JSON.parse(await readFile(file, "utf8"))); } catch { /* Pack validation reports malformed files. */ }
+  }
+  return Object.freeze(REACH_CONSTRUCTS.map((construct) => Object.freeze({ construct, count: counts.get(construct)! })));
 }
 
 export async function checkPackFile(file: string): Promise<PackCheckResult> {
@@ -122,6 +157,9 @@ async function main(): Promise<number> {
     const line = formatPackIssue(issue);
     if (issue.severity === "error") console.error(line);
     else console.warn(line);
+  }
+  for (const row of await constructReachReport()) {
+    if (row.count === 0) console.warn(`WARNING / [CONSTRUCT_UNREACHED] ${row.construct} has zero uses across content/`);
   }
   if (!result.valid) {
     console.error(`Pack check failed: ${result.file}`);

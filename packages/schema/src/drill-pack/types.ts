@@ -385,7 +385,8 @@ export type StructuralExpression =
   | { readonly kind: "pieceOnSquare"; readonly square: SquareName; readonly piece: { readonly color: Color; readonly role: Role } | null }
   | { readonly kind: "mirrored"; readonly axis: MirrorAxis; readonly of: StructuralExpression }
   | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly files: FileRange }; readonly feature: FileTemplateFeature }
-  | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly squares: SquareRegion }; readonly feature: SquareTemplateFeature };
+  | { readonly kind: "quantified"; readonly quantifier: Quantifier; readonly over: { readonly squares: SquareRegion }; readonly feature: SquareTemplateFeature }
+  | { readonly kind: "plan_signature"; readonly planClassId: string };
 
 export const TRANSITION_FEATURE_KINDS = Object.freeze([
   "attacked_squares_changed",

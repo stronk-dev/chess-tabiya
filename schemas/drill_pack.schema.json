@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.23",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.24",
   "title": "Tabiya Drill Pack",
   "description": "Living v0.23 format for an engine-independent authored drill.",
   "type": "object",
@@ -525,7 +525,8 @@
         { "type": "object", "required": ["kind", "axis", "of"], "properties": { "kind": { "const": "mirrored" }, "axis": { "enum": ["colors", "files", "both"] }, "of": { "$ref": "#/$defs/structuralExpression" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "quantifier", "over", "feature"], "properties": { "kind": { "const": "quantified" }, "quantifier": { "enum": ["some", "every"] }, "over": { "type": "object", "required": ["files"], "properties": { "files": { "$ref": "#/$defs/fileRange" } }, "additionalProperties": false }, "feature": { "$ref": "#/$defs/fileTemplateFeature" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "quantifier", "over", "feature"], "properties": { "kind": { "const": "quantified" }, "quantifier": { "enum": ["some", "every"] }, "over": { "type": "object", "required": ["squares"], "properties": { "squares": { "$ref": "#/$defs/squareRegion" } }, "additionalProperties": false }, "feature": { "$ref": "#/$defs/squareTemplateFeature" } }, "additionalProperties": false },
-        { "type": "object", "required": ["kind", "square", "piece"], "properties": { "kind": { "const": "pieceOnSquare" }, "square": { "$ref": "#/$defs/square" }, "piece": { "oneOf": [{ "$ref": "#/$defs/piece" }, { "type": "null" }] } }, "additionalProperties": false }
+        { "type": "object", "required": ["kind", "square", "piece"], "properties": { "kind": { "const": "pieceOnSquare" }, "square": { "$ref": "#/$defs/square" }, "piece": { "oneOf": [{ "$ref": "#/$defs/piece" }, { "type": "null" }] } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "planClassId"], "properties": { "kind": { "const": "plan_signature" }, "planClassId": { "$ref": "#/$defs/id" } }, "additionalProperties": false }
       ]
     },
     "transitionFeature": {

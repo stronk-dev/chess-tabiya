@@ -17,8 +17,8 @@ import {
 import { PackRegistry, SIDECAR_BASENAMES } from "./pack-registry.js";
 import { assessmentAdmissionCode, validatePackDocument } from "./pack-validation.js";
 import { Chess } from "chessops/chess";
-import { makeFen, parseFen } from "chessops/fen";
-import { parseUci } from "chessops/util";
+import { parseFen } from "chessops/fen";
+import { makeUci, parseUci } from "chessops/util";
 
 const fixture = JSON.parse(
   readFileSync(
@@ -316,21 +316,27 @@ describe("pack authoring validation", () => {
   });
 
   it("proves root-after-move variants and refuses false or absent siblings", () => {
-    const sibling = structuredClone(fixture) as DrillPackDefinition;
-    const board = Chess.fromSetup(parseFen(sibling.start.fen).unwrap()).unwrap();
-    const move = parseUci("c1e3")!;
-    board.play(move);
-    const candidate = structuredClone(fixture) as DrillPackDefinition;
-    (candidate as any).id = "variant-child";
-    (candidate as any).start = { ...candidate.start, fen: makeFen(board.toSetup()) };
-    (candidate as any).variantOf = { packId: sibling.id, relation: { kind: "root_after_move", moveUci: "c1e3" } };
+    const sibling = JSON.parse(readFileSync("content/drafts/philidor-third-rank-hold.json", "utf8")) as DrillPackDefinition;
+    const candidate = JSON.parse(readFileSync("content/drafts/philidor-passive-rook-convert.json", "utf8")) as DrillPackDefinition;
     const packs = new Map([[sibling.id, { start: sibling.start, objective: { type: sibling.objective.type } }]]);
     expect(validatePackDocument(candidate, { packs }).issues.filter((issue) => issue.code.startsWith("VARIANT_"))).toEqual([]);
-    (candidate as any).variantOf.relation.moveUci = "a1a8";
-    expect(validatePackDocument(candidate, { packs }).issues).toContainEqual(expect.objectContaining({ code: "VARIANT_RELATION_UNPROVEN" }));
-    (candidate as any).variantOf.packId = "absent";
-    expect(validatePackDocument(candidate, { packs }).issues).toContainEqual(expect.objectContaining({ code: "VARIANT_PACK_UNKNOWN" }));
-    expect(validatePackDocument(candidate).issues.some((issue) => issue.code === "VARIANT_PACK_UNKNOWN")).toBe(false);
+    const board = Chess.fromSetup(parseFen(sibling.start.fen).unwrap()).unwrap();
+    const alternatives = [...board.allDests()].flatMap(([from, destinations]) => [...destinations].map((to) => makeUci({ from, to }))).filter((move) => move !== "h6h8").slice(0, 15);
+    expect(alternatives).toHaveLength(15);
+    for (const moveUci of alternatives) {
+      const wrong = structuredClone(candidate) as any;
+      wrong.variantOf.relation.moveUci = moveUci;
+      expect(validatePackDocument(wrong, { packs }).issues, moveUci).toContainEqual(expect.objectContaining({ code: "VARIANT_RELATION_UNPROVEN" }));
+    }
+    const absent = structuredClone(candidate) as any;
+    absent.variantOf.packId = "absent";
+    expect(validatePackDocument(absent, { packs }).issues).toContainEqual(expect.objectContaining({ code: "VARIANT_PACK_UNKNOWN" }));
+    expect(validatePackDocument(absent).issues.some((issue) => issue.code === "VARIANT_PACK_UNKNOWN")).toBe(false);
+
+    const mate = JSON.parse(readFileSync("content/drafts/mate-bishop-knight.json", "utf8")) as DrillPackDefinition;
+    const trajectory = JSON.parse(readFileSync("content/drafts/trajectory-mate-bishop-knight.json", "utf8")) as DrillPackDefinition;
+    const trajectoryPacks = new Map([[mate.id, { start: mate.start, objective: { type: mate.objective.type } }]]);
+    expect(validatePackDocument(trajectory, { packs: trajectoryPacks }).issues.filter((issue) => issue.code.startsWith("VARIANT_"))).toEqual([]);
   });
 
   it("refuses self-referential variants", () => {

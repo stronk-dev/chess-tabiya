@@ -75,18 +75,24 @@ existing evidence renderer has no FEN argument. Exact position-specific prose is
 current FEN in the structural reading. This prevents evidence text from inventing parameters that
 were not persisted.
 
-Pack schema 0.18 also adds `plan_consequence`. It resolves a pack plan class through its shape-plan
-reference to that shape plan's structural success signature, then compiles the result to the same
-FEN predicate used by an inline structural condition. Unknown, unbound, uncomputable, and
-never-present signatures fail closed at pack load. Revealed plan classes publish whether their
-structural consequence is graded, declared uncheckable, or unbound; the latter two are never turned
-into a learner verdict.
+Pack schema 0.24 factors registry references into the expression grammar. A `plan_signature` leaf
+resolves a pack plan class through its shape-plan reference and compiles to the same FEN predicate
+as the registered structural signature, with a `planClass#<id>` evidence ref. It can be used in a
+position condition or inside a transition's before/after position node. Unknown, unbound,
+uncomputable, nested, and never-present signatures fail closed at pack load. The older
+`plan_consequence` condition is deprecated.
 
-Pack B (`carlsbad-minority-attack`) now grades the committed transition that produces its target:
+The selection rule has one axis and one modifier. If the claim can be checked from one diagram,
+use `structural_feature`; if it needs two positions or a move property, use `transition_feature`.
+If a bound shape plan already defines the structural expression, reference it with
+`plan_signature` in either grammar and never restate the registered signature inline.
+
+Pack B (`carlsbad-minority-attack`) grades the committed transition that produces its target:
 a White slider line opens and the resulting position has the grounded backward Black c-pawn on a
-White half-open c-file. This is a transition expression with embedded structural facts, not a static `plan_consequence`; see
-`docs/transition-primitives.md`. The alternative central and kingside plans are not graded without
-recorded intent.
+White half-open c-file. Its currently inlined after-position expression is detected by the
+`PLAN_SIGNATURE_INLINED` authoring warning and can be replaced by the registered
+`minority-attack` plan signature without changing the predicate; see `docs/transition-primitives.md`.
+The alternative central and kingside plans are not graded without recorded intent.
 
 Plan-family packs that declare a graded objective but compile to no transition rules are refused at
 load with `OBJECTIVE_GRADES_NOTHING`. `play_until_checkpoint` is exempt because it explicitly makes

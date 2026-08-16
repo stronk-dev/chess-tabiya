@@ -58,7 +58,8 @@ Every engine request closes over the instrument state its answer depends on:
 - **clear** — unwanted accumulated search state is reset by that request;
 - **bind** — option-setting, reset, and search occupy one serialized queue entry;
 - **bound** — sent values lie inside the deployment-published range or refuse by name;
-- **record** — the applied band and the move actually played are persisted.
+- **record** — every instrument, stateful or not, persists what it actually applied and what it
+  actually returned; for an engine this includes the applied band and the move actually played.
 
 The UCI handshake retains the complete advertised option table, including spin
 defaults and ranges. `resetSearchState` sends `ucinewgame`, conditionally sends

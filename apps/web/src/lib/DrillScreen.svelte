@@ -83,6 +83,7 @@
     onAnalyzeMissing?: (nodeIds: readonly string[]) => void | Promise<void>;
     onStory?: (() => void) | undefined;
     onFlip?: ((nodeId: string) => void | Promise<void>) | undefined;
+    onSelectPack?: ((packId: string) => void | Promise<void>) | undefined;
     registerKeyboardRegion: RegisterKeyboardRegion;
   }
 
@@ -123,6 +124,7 @@
     onAnalyzeMissing,
     onStory,
     onFlip,
+    onSelectPack,
     registerKeyboardRegion,
   }: Props = $props();
 
@@ -765,6 +767,12 @@
           <p>Objective</p>
           <h1 id="drill-title">{pack === undefined ? "No pack is loaded. Nothing is claimed about this position." : packObjective(pack)}</h1>
         </div>
+        {#if pack?.variantOf !== undefined}
+          <section class="variant-link" aria-label="Related rehearsal">
+            <span>{pack.variantOf.relation.kind === "root_after_move" ? `After ${pack.variantOf.relation.moveUci}` : pack.variantOf.relation.kind === "same_root_other_side" ? "Same position, other side" : "Same position, other objective"}:</span>
+            <button type="button" disabled={onSelectPack === undefined} onclick={() => onSelectPack?.(pack.variantOf!.packId)}>{pack.variantOf.packId}</button>
+          </section>
+        {/if}
         <section class="phase-reading" aria-label="Phase reading">
           {#if pack}<span>This pack declares: {pack.phase}.</span>{/if}
           <span>{renderPhaseReading(detectedPhase)}</span>

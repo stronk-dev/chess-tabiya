@@ -278,3 +278,16 @@ Version 0.11 also adds optional `shapes` entry ids and optional
 `planClass.shapePlan {shape, plan}` references. Resolution is registry-backed at server load
 and studio registration; unknown entries, references that bypass `pack.shapes`, and unknown
 plan ids are refused. Inlined plan classes remain fully supported.
+
+## v0.24 structural claim selection
+
+Choose the grammar by the subject of the claim. A fact visible in one position uses
+`structural_feature`; an edge fact that needs the position before and after, or a property of the
+move itself, uses `transition_feature`. The practical test is whether one diagram is sufficient.
+
+When a registered shape plan already names the structural fact, use a `plan_signature` expression
+leaf instead of copying the signature. The server expands that leaf before runtime evaluation and
+adds `planClass#<id>` evidence attribution. It works inside either position grammar, including a
+transition expression's before/after position node. `plan_consequence` remains readable but is
+deprecated; author `structural_feature` with `plan_signature` instead. Pack check warns when a
+bound plan signature has been copied inline.

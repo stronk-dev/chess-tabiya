@@ -3,8 +3,11 @@ import type {
   DrillPackDefinition,
   SimpleTrigger,
   SuccessCondition,
+  StructuralExpression,
   TimingWindowDefinition,
+  TransitionExpression,
 } from "@chess-tabiya/schema/drill-pack";
+import { normalizeShapeReferences } from "@chess-tabiya/schema/drill-pack";
 import {
   evaluateObjective,
   evaluateObjectivePredicate,
@@ -32,7 +35,6 @@ import {
   type ObjectivePredicate,
   type ObjectiveState,
   type ObjectiveTransitionRule,
-  type StructuralExpression,
 } from "@chess-tabiya/runtime";
 
 export type PlanSignatureResolver = (planClassId: string) => StructuralExpression | null | undefined;
@@ -45,6 +47,7 @@ export function planSignatureResolver(pack: DrillPackDefinition, shapes?: PlanSh
   return (planClassId) => {
     const planClass = pack.planClasses?.find((candidate) => candidate.id === planClassId);
     if (planClass?.shapePlan === undefined) return undefined;
+    if (normalizeShapeReferences(pack.shapes).find((reference) => reference.shape === planClass.shapePlan!.shape)?.relation === "prospective") return undefined;
     return shapes?.get(planClass.shapePlan.shape)?.document.plans.find((plan) => plan.id === planClass.shapePlan!.plan)?.success.signature;
   };
 }
@@ -59,6 +62,70 @@ export class PackCompileError extends Error {
     this.code = code;
     this.pointer = pointer;
   }
+}
+
+export interface ExpandedExpression<T> {
+  readonly value: T;
+  readonly planEvidenceRefs: readonly string[];
+}
+
+function containsPlanSignature(expression: StructuralExpression): boolean {
+  if (expression.kind === "plan_signature") return true;
+  if (expression.kind === "all" || expression.kind === "any") return expression.of.some(containsPlanSignature);
+  if (expression.kind === "not" || expression.kind === "mirrored") return containsPlanSignature(expression.of);
+  return false;
+}
+
+export function expandStructuralExpression(
+  expression: StructuralExpression,
+  pointer: string,
+  resolvePlanSignature?: PlanSignatureResolver,
+): ExpandedExpression<StructuralExpression> {
+  if (expression.kind === "plan_signature") {
+    const signature = resolvePlanSignature?.(expression.planClassId);
+    if (signature == null) {
+      throw new PackCompileError("PLAN_CONSEQUENCE_UNRESOLVED", pointer, `plan consequence ${expression.planClassId} has no resolved structural signature`);
+    }
+    if (containsPlanSignature(signature)) {
+      throw new PackCompileError("PLAN_SIGNATURE_NESTED", pointer, `resolved plan signature ${expression.planClassId} contains plan_signature`);
+    }
+    return { value: signature, planEvidenceRefs: [`planClass#${expression.planClassId}`] };
+  }
+  if (expression.kind === "all" || expression.kind === "any") {
+    const children = expression.of.map((child, index) => expandStructuralExpression(child, `${pointer}/of/${index}`, resolvePlanSignature));
+    return {
+      value: { ...expression, of: children.map((child) => child.value) as unknown as typeof expression.of },
+      planEvidenceRefs: children.flatMap((child) => child.planEvidenceRefs),
+    };
+  }
+  if (expression.kind === "not" || expression.kind === "mirrored") {
+    const child = expandStructuralExpression(expression.of, `${pointer}/of`, resolvePlanSignature);
+    return { value: { ...expression, of: child.value }, planEvidenceRefs: child.planEvidenceRefs };
+  }
+  return { value: expression, planEvidenceRefs: [] };
+}
+
+export function expandTransitionExpression(
+  expression: TransitionExpression,
+  pointer: string,
+  resolvePlanSignature?: PlanSignatureResolver,
+): ExpandedExpression<TransitionExpression> {
+  if (expression.kind === "all" || expression.kind === "any") {
+    const children = expression.of.map((child, index) => expandTransitionExpression(child, `${pointer}/of/${index}`, resolvePlanSignature));
+    return {
+      value: { ...expression, of: children.map((child) => child.value) as unknown as typeof expression.of },
+      planEvidenceRefs: children.flatMap((child) => child.planEvidenceRefs),
+    };
+  }
+  if (expression.kind === "not") {
+    const child = expandTransitionExpression(expression.of, `${pointer}/of`, resolvePlanSignature);
+    return { value: { ...expression, of: child.value }, planEvidenceRefs: child.planEvidenceRefs };
+  }
+  if (expression.kind === "position") {
+    const child = expandStructuralExpression(expression.expression, `${pointer}/expression`, resolvePlanSignature);
+    return { value: { ...expression, expression: child.value }, planEvidenceRefs: child.planEvidenceRefs };
+  }
+  return { value: expression, planEvidenceRefs: [] };
 }
 
 function activeSpineNodeId(
@@ -241,7 +308,8 @@ function successPredicate(
     };
   }
   if (condition.kind === "structural_feature") {
-    return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: condition.feature } };
+    const expanded = expandStructuralExpression(condition.feature, `${pointer}/feature`, resolvePlanSignature);
+    return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: expanded.value } };
   }
   if (condition.kind === "timing_window") {
     const window = pack.timingWindows?.find((candidate) => candidate.id === condition.windowId);
@@ -260,7 +328,8 @@ function successPredicate(
     return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: signature } };
   }
   if (condition.kind === "transition_feature") {
-    return { type: "transitionFeature", transition: condition.transition };
+    const expanded = expandTransitionExpression(condition.transition, `${pointer}/transition`, resolvePlanSignature);
+    return { type: "transitionFeature", transition: expanded.value };
   }
   const exhaustive: never = condition;
   throw new PackCompileError(
@@ -302,27 +371,32 @@ function conditionEvidenceRefs(
     return [`planClass#${condition.planClassId}`, ...structuralFeatureKinds(signature).map((kind) => rulesEvidenceRef(`structure-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]))];
   }
   if (condition.kind === "transition_feature") {
-    const references = transitionFeatureKinds(condition.transition).map((kind) =>
+    const expanded = expandTransitionExpression(condition.transition, `${pointer}/transition`, resolvePlanSignature);
+    const references = expanded.value === condition.transition ? transitionFeatureKinds(condition.transition) : transitionFeatureKinds(expanded.value);
+    const featureReferences = references.map((kind) =>
       kind.startsWith("structure:")
         ? rulesEvidenceRef(`structure-${kind.slice("structure:".length).replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0])
         : rulesEvidenceRef(`transition-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]),
     );
-    if (references.length === 0) {
+    const allReferences = [...expanded.planEvidenceRefs, ...featureReferences];
+    if (allReferences.length === 0) {
       throw new PackCompileError("TRANSITION_CONDITION_HAS_NO_FEATURE", `${pointer}/transition`, "transition success condition has no feature leaf");
     }
-    return references as [string, ...string[]];
+    return allReferences as [string, ...string[]];
   }
-  const references = structuralFeatureKinds(condition.feature).map((kind) =>
+  const expanded = expandStructuralExpression(condition.feature, `${pointer}/feature`, resolvePlanSignature);
+  const references = structuralFeatureKinds(expanded.value).map((kind) =>
     rulesEvidenceRef(`structure-${kind.replaceAll("_", "-")}` as Parameters<typeof rulesEvidenceRef>[0]),
   );
-  if (references.length === 0) {
+  const allReferences = [...expanded.planEvidenceRefs, ...references];
+  if (allReferences.length === 0) {
     throw new PackCompileError(
       "STRUCTURAL_CONDITION_HAS_NO_FEATURE",
       `${pointer}/feature`,
       "structural success condition has no feature leaf: an expression built only from pieceOnSquare or quantified-over-piece nodes derives no rules evidence reference",
     );
   }
-  return references as [string, ...string[]];
+  return allReferences as [string, ...string[]];
 }
 
 function conditionRules(

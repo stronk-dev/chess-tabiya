@@ -1,6 +1,6 @@
 # RFC: Vocabulary wiring — what a construct must earn before the format admits it
 
-- **Status:** **accepted 2026-08-16.** All acceptance-blocking open questions are closed **in
+- **Status:** **implementing 2026-08-16.** All acceptance-blocking open questions are closed **in
   their own bodies**: Q1 and Q8 owner-ruled, Q9 closed by the coordinator against a named
   work-register cluster. Q2/Q3/Q4/Q5/Q6/Q7 were never acceptance-blocking. Superseded
   "resolve before accepted" strings inside preserved original text are struck through and
