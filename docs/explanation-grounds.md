@@ -186,8 +186,8 @@ Each objective-timeline entry is rendered as `from → to`. Every one of its
 
 - known `rules:` facts use the shipped fixed rules sentences;
 - `pack:<checkpointId>` uses the checkpoint's authored label; and
-- `engine:` remains explicitly engine evidence; and
-- `tablebase:` identifies an exact category/DTZ measurement without carrying a line.
+- `engine:` renders the attached evidence kind and source rather than a permanent pending placeholder; and
+- `tablebase:` renders the attached exact category for the side to move, piece count, DTZ, and source without carrying a line.
 
 Engine and tablebase references share the machine-evidence disclosure barrier. Neither
 `publicNodes` nor `publicEvents` exposes a newly attached `tablebase:` reference before the

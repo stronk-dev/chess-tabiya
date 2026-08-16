@@ -202,7 +202,7 @@ export function latestCheckpoint(
   });
 }
 
-function evidencePayloads(run: DrillRun): ReadonlyMap<string, EvidencePayload> {
+export function evidencePayloads(run: DrillRun): ReadonlyMap<string, EvidencePayload> {
   const payloads = new Map<string, EvidencePayload>();
   for (const event of run.events) {
     if (event.type !== "evidence.attached") continue;

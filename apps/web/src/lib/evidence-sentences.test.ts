@@ -91,6 +91,34 @@ describe("evidence sentence contract", () => {
     });
   });
 
+  it("renders exact tablebase payloads from the side-to-move perspective", () => {
+    const payload = {
+      kind: "tablebase" as const,
+      source: "tablebase_exact" as const,
+      values: {
+        category: "draw",
+        pieceCount: 5,
+        dtz: 0,
+        preciseDtz: 0,
+        sourceId: "tablebase-fixture",
+      },
+    };
+    const sentence = renderEvidenceRef(
+      "tablebase:exact-1",
+      pack,
+      new Map([["tablebase:exact-1", payload]]),
+    );
+
+    expect(sentence).toMatchObject({
+      text: "Exact tablebase evidence recorded: category draw for the side to move; 5 pieces; DTZ 0; source tablebase-fixture.",
+      sourceLabel: "Tablebase",
+      payload,
+    });
+    expect(renderEvidenceRef("tablebase:pending", pack).text).toBe(
+      "Tablebase evidence recorded; details are pending.",
+    );
+  });
+
   it("keeps unknown refs explicit and refuses merged payloads", () => {
     expect(renderEvidenceRef("future:fact", pack)).toEqual({
       reference: "future:fact",

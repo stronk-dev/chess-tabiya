@@ -10,7 +10,9 @@ Each branch column carries its label, origin, own fork, leaf, objective and
 checkpoint timeline, recorded engine evidence, theory membership, resistance,
 and a consequence row. These are facts about that branch. The payload never
 ranks branches, computes an eval delta, or recommends a winner. Missing
-checkpoints use a fixed pack-grounded absence sentence.
+checkpoints use a fixed pack-grounded absence sentence. Objective-timeline
+grounds resolve payloads from the same run snapshot, so recorded engine and
+tablebase references do not remain in a permanent “details pending” state.
 
 The branch rail provides manual checkboxes and “compare all forked here.” The
 same selection drives branch-selective PGN export. The comparison screen renders

@@ -491,6 +491,31 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("renders comparison objective grounds from the run's attached payload", async () => {
+    const run = branchedRun();
+    const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
+    const [branchId, timeline] = Object.entries(comparison.objectiveTimelines)
+      .find(([, entries]) => entries.length > 0)!;
+    const grounded = {
+      ...comparison,
+      objectiveTimelines: {
+        ...comparison.objectiveTimelines,
+        [branchId]: timeline.map((entry, index) => index === 0
+          ? { ...entry, evidenceRefs: ["engine:fork-eval"] }
+          : entry),
+      },
+    };
+    const component = mount(CompareView, { target: target(), props: {
+      run, pack, comparison: grounded, startSide: "white", step: 0,
+      onStep: vi.fn(), onClose: vi.fn(),
+    } });
+    await tick();
+
+    expect(document.body.textContent).toContain("eval evidence recorded.");
+    expect(document.body.textContent).not.toContain("details are pending");
+    await unmount(component);
+  });
+
   it("rejects an ungrounded objective transition instead of inventing copy", () => {
     const run = branchedRun();
     const comparison = compareBranches(run, run.branches.map((branch) => branch.id));

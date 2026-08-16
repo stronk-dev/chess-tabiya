@@ -16,7 +16,7 @@ import { evidenceKindLabel, type StagedEvidence } from "./api.js";
 export interface EvidenceSentence {
   readonly reference: string;
   readonly text: string;
-  readonly sourceLabel: "Rules" | "Pack" | "Engine" | "Human model" | "Recorded";
+  readonly sourceLabel: "Rules" | "Pack" | "Engine" | "Human model" | "Tablebase" | "Recorded";
   readonly payload?: EvidencePayload;
 }
 
@@ -156,6 +156,37 @@ export function renderEvidenceRef(
       text: `${evidenceKindLabel(payload.kind)} evidence recorded.`,
       sourceLabel:
         payload.source === "engine_validated" ? "Engine" : "Human model",
+      payload,
+    });
+  }
+
+  if (reference.startsWith("tablebase:")) {
+    const payload = payloads.get(reference);
+    if (payload === undefined) {
+      return Object.freeze({
+        reference,
+        text: "Tablebase evidence recorded; details are pending.",
+        sourceLabel: "Tablebase",
+      });
+    }
+    const category = typeof payload.values.category === "string" ? payload.values.category : undefined;
+    const pieceCount = Number.isSafeInteger(payload.values.pieceCount) ? payload.values.pieceCount as number : undefined;
+    const dtz = typeof payload.values.preciseDtz === "number"
+      ? payload.values.preciseDtz
+      : typeof payload.values.dtz === "number" ? payload.values.dtz : undefined;
+    const sourceId = typeof payload.values.sourceId === "string" ? payload.values.sourceId : undefined;
+    const details = [
+      category === undefined ? undefined : `category ${category} for the side to move`,
+      pieceCount === undefined ? undefined : `${pieceCount} pieces`,
+      dtz === undefined ? undefined : `DTZ ${dtz}`,
+      sourceId === undefined ? undefined : `source ${sourceId}`,
+    ].filter((value): value is string => value !== undefined);
+    return Object.freeze({
+      reference,
+      text: details.length === 0
+        ? "Exact tablebase evidence recorded."
+        : `Exact tablebase evidence recorded: ${details.join("; ")}.`,
+      sourceLabel: "Tablebase",
       payload,
     });
   }

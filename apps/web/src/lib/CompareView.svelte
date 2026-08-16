@@ -11,7 +11,7 @@
     type ComparisonZoomBand,
   } from "./compare-geometry.js";
   import { renderEvidenceRef } from "./evidence-sentences.js";
-  import { comparisonNode } from "./screen-model.js";
+  import { comparisonNode, evidencePayloads } from "./screen-model.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
 
   interface Props {
@@ -34,11 +34,12 @@
   let zoom: ComparisonZoomBand = $state(defaultComparisonZoom(comparison.columns.length));
   let strips = $derived(comparisonStrips(run, comparison));
   let narrative = $derived(comparisonNarrative(run, comparison, strips));
+  let payloads = $derived(evidencePayloads(run));
 
   function timeline(entries: readonly ObjectiveTimelineEntry[]) {
     return entries.map((entry) => {
       if (entry.evidenceRefs.length === 0) throw new TypeError(`Comparison objective transition at event ${entry.eventSeq} has no evidence references`);
-      return { ...entry, grounds: entry.evidenceRefs.map((ref) => renderEvidenceRef(ref, pack)) };
+      return { ...entry, grounds: entry.evidenceRefs.map((ref) => renderEvidenceRef(ref, pack, payloads)) };
     });
   }
   function score(entry: ComparisonEvidenceEntry): string {
