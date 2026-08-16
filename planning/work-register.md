@@ -133,8 +133,27 @@ that wants it"*, used by `engine-leverage` for `searchmoves` and by `format-surf
 per-leg tablebase modes) would then dispose of them without a schema change at all. **Measure
 before drafting.**
 
-## 5. Research still open
+## 5. Research — two states, and the distinction is the standing sequence
 
-R6, R7, R8 (experiential — rewind budget, scarcity, whether the loop rewards
-wrapping) · R11 (the conjunction hypothesis, runnable on the existing R3 harness) ·
-Q1b, Q1c, Q6, Q9 · validating Maia's WDL against R9's ply-≤20 ground truth.
+**The owner's sequence is breadth → content → ONE play session at the end.** R6, R7 and R8 are
+**SCHEDULED at that session**, not blocked on anyone. They are experiential by nature and the
+session answers all three at once. *Recorded 2026-08-16 because the coordinator twice described
+them as "blocked on the owner", which inverts the agreed sequence and reads as a nag; the owner
+had already said "stop asking for play".* Do not re-surface them as pending — they are the last
+step, not a waiting one.
+
+| # | Question | State |
+|---|---|---|
+| R6 | Does a rewind budget preserve or destroy punishment-free experimentation? | scheduled — the play session |
+| R7 | What does assistance-as-inventory feel like when you *lack* a rung you need? | scheduled — the play session |
+| R8 | Is the drill loop itself worth wrapping? | scheduled — the play session |
+| R11 | The conjunction hypothesis (R3's successor) | **running 2026-08-16**, on the existing R3 harness |
+| — | Maia's WDL vs R9's ply-≤20 ground truth | **running 2026-08-16** — unblocked by D236 measuring the encoding as per-mille |
+| Q1b | Do target learners and coaches recognise and want the problem solved? | advisory; re-gates a public push |
+| Q1c | Does rehearsal improve learning versus simpler formats? | requires the slice; cannot gate building it |
+| Q6 | How do we use historical games without the ingestion-first trap? | open |
+| Q9 | Branch growth, navigation, comparison overload, destructive-action mistakes | open — low-fidelity testing |
+
+**Q1b and Q1c are the two where the thesis could be wrong**, and nothing in the 2026-08-15/16
+waves touches either. They are advisory rather than blocking by an earlier ruling, but that is a
+scheduling decision, not evidence that they are answered.
