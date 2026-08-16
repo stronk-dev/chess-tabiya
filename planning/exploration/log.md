@@ -3162,3 +3162,14 @@ learner catalogue serves: test documents are test input, not community packs.
 The first browser run after the change went red on the immediate-guard and stated-reasoning
 fixtures, proving the old suite depended on implicit discovery. After moving all six paths to
 the explicit test-server contract, the full browser gate returned to 24 passed at zero retries.
+
+## 2026-08-17 — Q8's committed measurement became a real guard
+
+The Q8 harness no longer writes into the repository during verification. A normal run generates
+the report in memory and compares it byte-for-byte with `q8-output.md`; only an explicit
+`UPDATE_Q8=1` run refreshes the artifact. The new guard was demonstrated red before refresh: the
+committed report said 37 packs and 634 transitions while the current corpus measured 50 and 754.
+
+After the explicit refresh, the ordinary run passed. The artifact's SHA-256 remained
+`3996e4476aa181303ae754272f85529c793c2ec49e451960d4b7e19bfdcf8bc2` before and after that ordinary
+run, demonstrating that verification now detects drift without causing it.

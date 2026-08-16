@@ -66,6 +66,11 @@ pins all three authoritative event adjacencies. The record-only B2 rows remain u
 uses the exported pack-document predicate and excludes `.browser.json`; the browser server names
 its six fixtures explicitly. D262 remains a terminology rule, and D211 was already closed.
 
+**B4 takeable residue landed 2026-08-17:** D446 is closed. Q8 verification is side-effect free,
+fails when its committed artifact is stale, and refreshes only under explicit `UPDATE_Q8=1`.
+D477 overlaps the in-flight shared-resource-registers RFC; D416/D402 are protocol work, not an
+unowned code patch. The other B4 rows were already closed.
+
 **Two findings in that document outrank most of the batches.** `db243f5` edited nineteen defect
 rows and **changed column 3 only** — writing *"✅ closed by pack-graduation 0.27"* into the
 disposition while leaving column 1 at 🐞/💡. So [[D418]] is exactly right, and **the wave that

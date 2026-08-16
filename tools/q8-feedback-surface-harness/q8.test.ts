@@ -2,7 +2,7 @@
 // Measures the SHIPPED derived-feedback surfaces over the committed pack corpus, applying
 // R3's necessary-condition method (design/research/census-hint-false-positives.md §3b) to
 // the surfaces this product actually renders, rather than to the RFC's proposed leaves.
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
@@ -293,7 +293,9 @@ describe("Q8 — the shipped derived-feedback surface", () => {
     say(`Observations differing between the pair: median ${dq.p50}, mean ${dq.mean.toFixed(1)}, max ${dq.max}.`);
     say();
 
-    writeFileSync(OUT, `${lines.join("\n")}\n`, "utf8");
+    const rendered = `${lines.join("\n")}\n`;
+    if (process.env.UPDATE_Q8 === "1") writeFileSync(OUT, rendered, "utf8");
+    expect(readFileSync(OUT, "utf8")).toBe(rendered);
     expect(rows.length).toBeGreaterThan(500);
   });
 });

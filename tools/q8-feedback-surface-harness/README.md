@@ -31,10 +31,15 @@ which mirrors the shipped code line for line.
 ## Run
 
 ```sh
-npx vitest run --config tools/q8-feedback-surface-harness/vitest.config.ts
+pnpm exec vitest run --config tools/q8-feedback-surface-harness/vitest.config.ts
 ```
 
-Writes `q8-output.md` beside this README.
+The default run is side-effect free and fails when `q8-output.md` is stale.
+Refresh that committed artifact explicitly with:
+
+```bash
+UPDATE_Q8=1 pnpm exec vitest run --config tools/q8-feedback-surface-harness/vitest.config.ts
+```
 
 ## Not measured here
 
