@@ -1,6 +1,6 @@
 # RFC: Evidence at runtime — the ledger the runtime already opens and throws away
 
-- **Status:** **accepted 2026-08-16**, contingent on Open question 7 (the voice seam). Returned once by cross-review; both false safety arguments replaced with structural fixes rather than annotations.
+- **Status:** **implementing 2026-08-16**. Open question 7 is non-blocking; implementation follows the author's recommendation and keeps the structural post-provider voice seam in §3.8. Returned once by cross-review; both false safety arguments replaced with structural fixes rather than annotations.
 - **Author:** claude (agent), for Marco
 - **Created:** 2026-08-16 (drafted continuously from the 2026-08-15 session that measured D118)
 - **Design refs:**

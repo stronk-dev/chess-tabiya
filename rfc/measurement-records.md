@@ -30,10 +30,13 @@
     span form. **Process documents remain out of any lint's reach and this RFC says so** rather than
     implying otherwise (§9).
 - **Ledger rows this RFC opens** (law 4): **D376**–**D380**, listed in §12. No id outside that block
-  was minted.
-- **Depends on:** `rfc/claim-backing.md` (**status `implementing`; the mechanism this RFC extends is
-  already in the tree** — `apps/server/src/sourcing/claim-binding.ts`, `CLAIM_ASSERTION_KINDS`,
-  `ClaimBinding`, `validateClaimBindings`; pack schema **0.26 has landed**, see §0's correction);
+  was minted. **They are landed in `design/BACKLOG.md` as of cross-review 2026-08-16** (rows D376–D380
+  sit between D381 and D373); §12 is now the RFC-side copy of a landed block, not a request.
+- **Depends on:** `rfc/archive/claim-backing.md` (**status `implemented 2026-08-16`, archived; the
+  mechanism this RFC extends is already in the tree** — `apps/server/src/sourcing/claim-binding.ts`,
+  `CLAIM_ASSERTION_KINDS`, `ClaimBinding`, `validateClaimBindings`; pack schema **0.26 landed and is
+  recorded as implemented in the register**, see §0's correction — *corrected at cross-review
+  2026-08-16: the draft said `implementing` and `rfc/claim-backing.md`, both stale*);
   `rfc/archive/opening-evidence-path.md` §1a (the grounding distinction this RFC extends by one
   species); `rfc/archive/content-sourcing-foundation.md` §3.3 (the human-only list and the crossing
   rule).
@@ -51,6 +54,13 @@ RFC register moved twice today. A reviewer should grep the literal.
 `make expression-census OUT=…` against the working tree on 2026-08-16 and querying the resulting
 `tabiya.authoring.census.v1` report, not copied from the ledger rows that motivated the RFC. Where a
 number came from a ledger row rather than from that run, it is labelled as the row's.
+**One exception, found at cross-review and stated rather than quietly carried:** the `5` in
+`fianchetto-g7`'s *"95 / 10 / 5"* (§Motivation 1) is a **sub-expression probe**, not a census subject
+— the census report has no site for *"g7–d4 clear"*, and the `10` is a sum over two of the ten packs
+in `coverage.corpus.packs` rather than a value the report returns. Both are reproduced from
+`fianchetto-g7`'s own plan note. **That is not a citation defect, it is the RFC's own coverage gap
+made visible**, and §3a-note plus §Open questions 2 now carry it: the `census.*` family cannot
+express a reading about part of an expression.
 
 ---
 
@@ -138,9 +148,13 @@ asserted.
 
 Split the twelve rows by *what actually changed*:
 
-- **Six** — `doubled-c-pawns`, `iqp-black`, `maroczy-bind`, `pawn-opposition-key-squares`,
-  `hanging-pawns`, `knight-vs-bishop`, `up-an-exchange`, `vancura` (eight subject readings across six
-  entries by numerator) — had an **unchanged numerator**. Only the denominator moved. Wave F edited
+- **Eight** — `doubled-c-pawns`, `iqp-black`, `maroczy-bind`, `pawn-opposition-key-squares`,
+  `hanging-pawns`, `knight-vs-bishop`, `up-an-exchange`, `vancura` — had an **unchanged numerator**
+  on every subject reading they carry. (*The draft said "Six" over a list of eight and a
+  parenthetical that did not parse; corrected at cross-review, where the split was independently
+  re-derived from `aee7c64` — the commit before wave F's sweep `d68ce9d` — against today's report.
+  The count that matters is eight, and it is what makes the ratio 2:1.*)
+  Only the denominator moved. Wave F edited
   those files by hand to change `694`→`827` and `791`→`827`, and every one of those edits was
   bookkeeping no human needed to think about.
 - **Four** — `open-centre`, `fianchetto-g7`, `kid-chain-arrangement`, `london-wedge` — had a
@@ -161,11 +175,23 @@ rewrite. §4e turns that split into the record's own structure.
 
 `doubled-c-pawns` reached the state D368 names — *"three entries declare themselves orphans"* — by a
 route worth reading. Its `provenance.sources[2]` still says *"its trigger fires on **0** of the 694
-authored spine positions … It stands alone deliberately"*, and `sources[3]` says
-*"**SUPERSEDED** … the entry now records **8** firings of 827"*. Had a tool silently rewritten the
-numeral in `sources[2]` from `0` to `8`, the sentence would read *"its trigger fires on 8 of 827 …
-It stands alone deliberately"* — the number correct, the proposition inverted, and **the defect now
-invisible instead of merely wrong**.
+authored spine positions … It stands alone deliberately"*, and `sources[3]` opens
+*"D44 ORPHAN STATUS **SUPERSEDED** 2026-08-15"* and closes *"both numerators are unchanged — trigger
+**8**, all 8 in that pack … only the denominator moved, 791 → 827"* (verbatim at HEAD; the draft
+paraphrased this inside quotation marks and the paraphrase is corrected here). Had a tool silently
+rewritten the numeral in `sources[2]` from `0` to `8`, the sentence would read *"its trigger fires on
+8 of 827 … It stands alone deliberately"* — the number correct, the proposition inverted, and **the
+defect now invisible instead of merely wrong**.
+
+**And this same pair exposes a gap in §4b's `disposition` enum, found at cross-review.**
+`sources[2]` is a *deliberately preserved past reading*, explicitly marked SUPERSEDED and kept
+because D368 asked for the history. Its numerator **has** moved — 0 → 8 — so if an author binds it
+with `census.fires@v1` it is a **permanent subject-class error** that no rewrite can clear, and the
+only escapes the format offers are to mark a real past measurement `authored` (a lie about who
+produced it) or `illustrative` (a lie about whether it was measured). `iqp-black`'s `sources[1]` and
+`maroczy-bind`'s `sources[2]` are the same shape. §4d adds a third disposition for exactly this;
+**the eight-versus-four split in §2 is counted on live readings and holds only because superseded
+readings are not bound as live assertions**, which the format must therefore be able to say.
 
 `fianchetto-g7`'s `plans[0].success.note` shows the second-order form: its correction says *"the
 2026-08-15 reading **below it**"* and there is no such paragraph in the file. **Prose corrections
@@ -199,9 +225,13 @@ Three walls stop it:
 2. **`CLAIM_ASSERTION_KINDS` is a closed fifteen-member frozen array** with `tablebase.*`,
    `engine.*` and `explorer.*` families. **The repository's own corpus is not an instrument in it.**
    `evaluate` refuses anything else with `CLAIM_ASSERTION_UNRECORDED`.
-3. **`validateClaimBindings` takes `(pack, ledger)`.** Every shipped assertion resolves against a
-   record in *this pack's* ledger. A census reading is a fact about **all 56 packs at once**, and
-   `sourcing-check` never holds more than one.
+3. **`validateClaimBindings(pack, ledger, issues)` is per-pack.** Every shipped assertion resolves
+   against a record in *this pack's* ledger. A census reading is a fact about **all 56 packs at
+   once**, and no caller ever holds more than one. The callers are exactly two and **neither is
+   `verify-draft`** (corrected at cross-review): `apps/server/src/sourcing/check.ts:198`
+   (`sourcing-check`) and `apps/server/src/pack-registry.ts:266` — **the runtime registry**, which
+   feeds `claimBackings` onto `PackRecord`. §6a's deferral clause therefore governs a runtime path,
+   not only an authoring one.
 
 ### 5. D103 is the same defect with the clock running the other way
 
@@ -241,33 +271,41 @@ Extending `expression-census` **as a report** — that is `rfc/dead-vocabulary.m
 
 | Register | Claim | Detail |
 |---|---|---|
-| **Shape-entry schema** | **0.4** | `urn:chess-tabiya:schema:shape-entry:0.3` → `:0.4`; `SHAPE_ENTRY_SCHEMA_VERSION` (`packages/schema/src/index.ts`) and the pin in `packages/schema/src/shape-entry.test.ts` move with it. **One additive optional top-level property, `measurements`, plus one `$defs/measurementRecord`.** |
-| **Pack schema** | **NONE** | `DRILL_PACK_SCHEMA_VERSION` reads **`0.26`** in the tree. **0.28 remains the next free lane and this RFC leaves it free.** |
+| **Shape-entry schema** | **0.4** | `urn:chess-tabiya:schema:shape-entry:0.3` → `:0.4`; `SHAPE_ENTRY_SCHEMA_VERSION` (`packages/schema/src/index.ts`, reads `"0.3"`) and the pin in `packages/schema/src/shape-entry.test.ts:32` move with it. **One additive optional top-level property, `measurements`, plus three `$defs` — `measurementRecord`, `measurementSpan`, `censusAssertion`** (§4b, §4c, §3d). |
+| **Pack schema** | **NONE** | `DRILL_PACK_SCHEMA_VERSION` reads **`0.27`** in the tree (`pack-graduation` landed; see fact 1 below). **0.28 remains the next free lane and this RFC leaves it free.** |
 | **Run schema** | **NONE** | Nothing is persisted. No event, no event field, no vocabulary value. |
 | **Migration** | **NONE** | `STORAGE_VERSION` reads **22** (`apps/server/src/storage.ts`, `export const STORAGE_VERSION = 22`). Untouched. If a later revision needs one it takes `STORAGE_VERSION + 1` **at landing**, per the register's standing rule; it needs none. |
 | **`EvidenceKind`** | **NONE** | `EVIDENCE_KINDS` is untouched at seven members. **No record is written by anything here** (§4a explains why a census reading is not a record). |
 | **Ledger schema** | **NONE** | `tabiya.sourcing.evidence.v1` is unchanged. `claimBindings` is read, never reshaped. |
 | **`CLAIM_ASSERTION_KINDS`** | **+6 members** | A **code-level frozen array**, not a versioned resource — the same standing that `rfc/archive/opening-evidence-path.md` §0 gives `EVIDENCE_KINDS`. §3b. |
-| **Refusal codes** | **+7 new, 6 reused** | §7 carries the register and its collision sweep. **Sweep run 2026-08-16 across `apps/`, `packages/`, `schemas/`, `rfc/`, `docs/`, `content/`, `design/`, `planning/` and `tools/`: all seven new literals occur zero times**, and no `census.*` assertion kind exists in `CLAIM_ASSERTION_KINDS`. |
+| **Refusal codes** | **+8 new, 7 reused** | §7 carries the register and its collision sweep. **Sweep re-run at cross-review 2026-08-16 across `apps/`, `packages/`, `schemas/`, `rfc/`, `docs/`, `content/`, `design/`, `planning/` and `tools/`, excluding this file and `apps/server/dist/`: all seven new literals, and `measurementRecord` / `measurementSpan` / `censusAssertion`, occur **zero** times**, and no `census.*` assertion kind exists in `CLAIM_ASSERTION_KINDS` (verified: a frozen **15**-member array of `tablebase.*` / `engine.*` / `explorer.*` only). |
+| **`SourcingIssue.severity`** | **+1 member**, `"info"` | `apps/server/src/sourcing/types.ts` declares `severity: "error" \| "warning"`. `CENSUS_ASSERTION_DEFERRED` (§6a) is **info**, so the union widens by one. **Added at cross-review — the draft asserted an info severity the shipped type cannot hold.** The alternative, emitting it as a `warning`, is refused: `sourcing-check` and the runtime registry would then warn on every correct census binding, which is the failure §6a exists to prevent. Every existing consumer switches on `"error"` and treats the rest as non-fatal, so widening is additive. |
 | **Census report schema** | **`tabiya.authoring.census.v1` unchanged in default mode** | §6b adds a *second* top-level key only in the new `--check` mode; the default report is byte-identical. |
 | **Makefile** | **+1 target**, `census-check` | `verify` gains it. §6d treats the shipped test that pins `verify` free of `expression-census`. |
 
-**Three register facts a reviewer should re-derive rather than trust, because the brief this RFC was
-written from was one lane stale and `rfc/README.md` is behind the tree:**
+**Three register facts a reviewer should re-derive rather than trust. The draft's own version of this
+block was two lanes stale within a day, which is the best available evidence for the instruction:**
 
-1. `packages/schema/src/index.ts` reads `DRILL_PACK_SCHEMA_VERSION = "0.26"` and
-   `schemas/drill_pack.schema.json`'s `$id` reads `…drill-pack:0.26`. **`claim-backing`'s 0.26 has
-   landed**, though the README register still lists it as *claimed*. 0.27 (`pack-graduation`,
-   accepted) is unlanded. **0.28 free** — corroborated independently by `rfc/dead-vocabulary.md` §6
-   and `rfc/teacher-surface.md` §10.
+1. `packages/schema/src/index.ts` reads **`DRILL_PACK_SCHEMA_VERSION = "0.27"`** and
+   `schemas/drill_pack.schema.json`'s `$id` reads **`urn:chess-tabiya:schema:drill-pack:0.27`**.
+   **Both `claim-backing`'s 0.26 and `pack-graduation`'s 0.27 have landed**, and `rfc/README.md`
+   records both as *implemented 2026-08-16* against `archive/` paths. *(The draft said 0.26 in the
+   tree, 0.27 unlanded, and the README stale — all three false at cross-review; the conclusion below
+   is unaffected.)* **0.28 free** — the register's sentinel row *"0.28 is the next free pack lane"*
+   still stands, `dead-vocabulary` §6 and `teacher-surface` §10 leave it free, and
+   **`opponent-contracts` — which the Active table shows claiming 0.28 — has `RELEASED` that claim**
+   at its own header, so the lane is genuinely open rather than merely unrecorded.
 2. **No active RFC claims a shape-entry schema version.** `dead-vocabulary` records
    *"Shape-entry schema | **NONE**"*; `pack-graduation` records *"**Shape-entry schema: nothing.**"*;
-   the other seven do not mention the file as a target. **0.4 collides with nothing.**
+   of the remaining seven only `engine-leverage` names the file at all, and it names it as a **file
+   searched for a `dtz` count**, not as an amendment target (verified line by line at cross-review).
+   **0.4 collides with nothing**, and `SHAPE_ENTRY_SCHEMA_VERSION` reads `"0.3"`.
    `vocabulary-wiring`'s `plan_signature` leaf *did* land inside `schemas/shape_entry.schema.json`
    without a shape-entry register row — filed as **D376** (§12) so the next drafter is not misled by
    the register's silence.
 3. **This RFC does not edit `rfc/README.md`.** The register rows it requests are in §11; the file's
-   single writer lands them.
+   single writer lands them. **Its Active row has already been landed by that writer** — §11 is
+   updated to reconcile rather than re-request.
 
 **Corpus impact of the schema bump: zero.** `measurements` is optional and absent from all 25 entries
 in `content/shapes/`, so adding an optional property cannot change any existing validation verdict.
@@ -374,10 +412,26 @@ subject expression, at which point it invalidates on every trigger edit too.
 > **Verdict: neither counts nor a digest is the record's identity. The reading is.** A record that
 > says *"this subject fires 95"* is checked by computing what the subject fires. That check is exact,
 > costs one census run, catches both directions, and — measured on the twelve rows — produces
-> **four findings and zero false alarms**. `measuredAt`, `packs` and `positions` are kept, because
+> **four errors and zero false errors**. `measuredAt`, `packs` and `positions` are kept, because
 > a human reading the file wants them and a refusal message wants them, but §4e makes them
 > **diagnostic and unreadable by the gate**, which is the difference between the obvious answer and
 > a correct one.
+
+**Stated precisely, because the draft's *"zero false alarms"* was doing more work than the evidence
+supports and a reviewer should not have to reconcile it against §4e.** This design does not make the
+eight bookkeeping rows silent; it makes them **a different class of output**. An author who writes
+*"8 of 827"* declares two spans, and the `827` is a `census.of@v1` **cardinal** span that diverges
+exactly as loudly as D368's stamp would — as a **warning**, exit 0, with `REFRESH=1` clearing all
+eight in one command and no human decision. So the honest comparison over the twelve rows is:
+
+| | fires on | of which need a human | gate outcome |
+|---|---|---|---|
+| `{measuredAt, packs, positions}` | **12** | 4 | **12 indistinguishable failures**; a person triages all twelve |
+| **the reading as identity** | **12** | 4 | **4 errors** a person must rewrite, **8 warnings** one flag clears |
+
+**The claim that survives is the one that matters and it is the design's whole justification: the
+subject/cardinal split is what converts eight of twelve failures into zero decisions**, and the ratio
+2:1 is the measured size of that conversion. It is *not* a claim that eight readings go unmentioned.
 
 ### §3. The `census.*` assertion family
 
@@ -394,7 +448,12 @@ subject expression, at which point it invalidates on every trigger edit too.
 | `census.packsFiring@v1` | `{file, pointer}` | `coverage.corpus.packs.length` | **subject** |
 | `census.firesInShape@v1` | `{file, pointer}` | `coverage.inShape.fires` | **subject** |
 | `census.of@v1` | `{file, pointer}` | `coverage.corpus.of` (positions minus evaluation faults) | **cardinal** |
-| `census.corpus@v1` | `{select: "packs" \| "positions" \| "shapeEntries"}` | the matching key of `corpus` | **cardinal** |
+| `census.corpus@v1` | `{}`, with the shipped top-level `select: "packs" \| "positions" \| "shapeEntries"` | the matching key of `corpus` | **cardinal** |
+
+**`select` is the assertion's own top-level field, not an `args` member.** `ClaimAssertion`
+(`apps/server/src/sourcing/types.ts`) is `{kind, args, select?}`, and the draft put `select` inside
+`args`; corrected at cross-review so the census family uses the shipped shape rather than a private
+convention.
 
 `args.file` is the census's own `displayPath` form — repo-relative, e.g.
 `content/shapes/fianchetto-g7.json` — so a record and a report join on a string neither has to
@@ -406,7 +465,27 @@ normalise. `args.pointer` is the census's subject pointer, e.g. `/trigger` or
 Because `args` carries `file`, that citation binds:
 `{kind: "census.firesInPack@v1", args: {file: "content/shapes/iqp-white.json", pointer: "/trigger", pack: "…"}}`.
 A `{measuredAt, packs, positions}` stamp could not have expressed it, and those cross-entry readings
-are the ones wave F found hardest to keep true.
+are the ones wave F found hardest to keep true. *(Both cited values re-derived at cross-review:
+`iqp-white` `/trigger` fires **12** across three packs; `carlsbad` `/trigger` fires **41**.)*
+
+**What the family cannot reach, named rather than discovered by the implementer.** A census subject
+is a whole expression at a whole pointer. **Every reading about *part* of an expression, or about a
+segment walked by hand, has no site and therefore no assertion** — and those readings are a large
+share of exactly the prose this RFC is about:
+
+| Reading, in shipped prose | Why no `census.*` kind reaches it |
+|---|---|
+| `fianchetto-g7`: *"85 through the unmirrored g6/g7 arm and 10 through the file mirror"* | an `any[]` arm is not a subject; the census reports the union |
+| `fianchetto-g7`: *"g7–f6 clear fires 86, g7–e5 clear 23, g7–d4 clear 5"* | segment-by-segment probes over a filtered position set; no pointer addresses them |
+| `maroczy-bind`: *"the four conjuncts fire 58, 150, 45 and 53"* | conjunct decomposition; same reason |
+| `iqp-black`: *"the trigger's three conjuncts fire 219, 1 and 45"* | same |
+
+Those numerals fall to `authored` spans, and under §4e they raise no error and clear no residue
+warning — **which means the format records that a human typed them and nothing re-derives them.**
+That is honest but it is a real ceiling on how much of the corpus's measured prose this RFC makes
+checkable, and it is **the reason §Open questions 2 is a blocker rather than a polish item**: a
+sub-expression subject form (a pointer into an `all[]`/`any[]` arm, which `packSubjects` and
+`shapeSubjects` could emit) would close most of the table above.
 
 #### 3b. Refusals on the assertion itself
 
@@ -426,8 +505,11 @@ refusing an inert `resolveAt` rather than ignoring it.
 #### 3c. What the family does **not** get, and this is the law-8 section
 
 - **No observation assertions.** `census.observation@v1` is deliberately **not** minted. The
-  observation vocabulary — `NEVER_FIRES_IN_CORPUS`, `FIRES_ONLY_OUTSIDE_SHAPE`, `FIRES_ON_MAJORITY`,
-  `FIRES_ON_DEGENERATE`, `IN_SHAPE_DENOMINATOR_EMPTY`, `UNSATISFIABLE` — reads as a grade. Binding
+  observation vocabulary is the nine labels the shipped `observations()` can emit
+  (`apps/server/src/expression-census.ts:234-248`, enumerated in full at cross-review because the
+  draft listed six): `UNSATISFIABLE`, `NEVER_FIRES_IN_CORPUS`, `IN_SHAPE_DENOMINATOR_EMPTY`,
+  `NEVER_FIRES_IN_SHAPE`, `FIRES_ONLY_OUTSIDE_SHAPE`, `FIRES_ON_MAJORITY`, `FIRES_ON_DEGENERATE`,
+  `SATISFIABILITY_UNKNOWN`, `EVALUATION_FAULT`. Several of them read as a grade. Binding
   prose to `FIRES_ON_MAJORITY` would let a sentence say *"this trigger is too broad"* and be stamped
   machine-verified. **The instrument counts; it does not grade, and its own documentation says so.**
   An author who wants to write *"too broad"* writes it as an `authored` span (§4c) and owns it.
@@ -438,14 +520,68 @@ refusing an inert `resolveAt` rather than ignoring it.
   reach them. A record that could bind a FEN into prose would be one step from binding a move into
   prose, and a census cannot ground a move.
 - **No derived arithmetic.** No percentage kind, no ratio kind. `fires/of` invites *"only 1% of the
-  corpus"*, which is a judgement wearing a number's clothes. An author computing a percentage writes
-  it as an `authored` span and is caught by the shipped `CLAIM_READING_UNATTRIBUTED` — *"a rate cannot
-  be routed as authored judgement"* — which is the correct outcome, not a gap.
+  corpus"*, which is a judgement wearing a number's clothes. An author computing a percentage must
+  write it as an `authored` span and own it.
 
-> **The law-8 line for this RFC, stated once:** a measurement record carries **integers, JSON
-> pointers, file paths and a timestamp**. It has no field that can hold a chess claim, a quality
-> judgement, or an instrument's own observation label, and §3a's return types make that structural
-> rather than a matter of discipline.
+  **Correction from cross-review, because the draft's safety net does not exist here.** The draft
+  said such a span *"is caught by the shipped `CLAIM_READING_UNATTRIBUTED`"*. It is not, twice over.
+  (1) That refusal is emitted at `/feedbackClaims/{i}/text` and is computed from `claim.evidenceTypes`
+  and `author_principle` (`claim-binding.ts:207`); **a shape entry has no `feedbackClaims` and no
+  `evidenceTypes`**, so the check cannot reach a `measurements` record at all. (2) Its predicate is
+  `RATE_TOKEN = /(?:[+-]?\d+\.\d+%?)/`, which **requires a decimal point** — the draft's own example,
+  `"1%"`, does not match it even inside a pack. **The implementer therefore extends the rate check
+  to `measurements[].spans[].authored` rather than inheriting it**, keeping the shipped code and
+  message and reusing `CLAIM_READING_UNATTRIBUTED` at error severity; widening `RATE_TOKEN` to admit
+  a bare integer percentage is a `claim-backing`-surface change and is **not** taken here — filed in
+  §Open questions 8.
+
+> **The law-8 line for this RFC, stated once, and stated over the right half of the record.** A
+> measurement record's **machine-derived half** — every `assertion`, its `args`, and everything the
+> gate compares — carries **integers, JSON pointers, repo-relative file paths, pack ids and a
+> timestamp**, and §3a's return types make that structural rather than a matter of discipline. It has
+> no field that can hold a chess claim, a quality judgement, or an instrument's own observation label.
+> The record's **human half** — `rationale`, and every `authored` or `illustrative` span — is prose,
+> and prose can say anything; it is admitted under the same rule
+> `rfc/archive/content-sourcing-foundation.md` §3.3 already applies to `planClasses[].description`
+> and `spine[].annotations[]` — **human-only, permanently, and labelled as unbacked**. *(The draft
+> claimed the record "has no field that can hold a chess claim", which `rationale` plainly
+> contradicts; the law-8 guarantee is that nothing a machine produced can be confused with something
+> a human asserted, not that the format refuses prose.)*
+
+#### 3d. `$defs/censusAssertion`
+
+**Added at cross-review: §5a promised this `$def` and §4c `$ref`s it, but the draft never wrote it,
+which left an implementer to invent the one thing law 8 is enforced by.** It mirrors
+`ClaimAssertion`'s shipped shape (`{kind, args, select?}`) and closes every arm.
+
+```json
+{
+  "type": "object",
+  "required": ["kind", "args"],
+  "properties": {
+    "kind": { "enum": ["census.fires@v1", "census.firesInPack@v1", "census.packsFiring@v1",
+                       "census.firesInShape@v1", "census.of@v1", "census.corpus@v1"] },
+    "args": {
+      "type": "object",
+      "properties": {
+        "file":    { "type": "string", "pattern": "^content/(shapes|packs|drafts)/[A-Za-z0-9._-]+\\.json$" },
+        "pointer": { "type": "string", "pattern": "^/" },
+        "pack":    { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "select": { "enum": ["packs", "positions", "shapeEntries"] }
+  },
+  "additionalProperties": false
+}
+```
+
+with three `if`/`then` constraints: `census.corpus@v1` **requires** `select` and forbids every `args`
+member; every other kind **forbids** `select` and **requires** `file` and `pointer`;
+`census.firesInPack@v1` additionally **requires** `pack`. **No `oneOf` over free-form values, no
+string kind outside the enum, and no member whose type is anything but an integer-producing
+selector** — that closure is what makes §3c's law-8 line structural, and an implementer must be able
+to read it off the schema rather than off the prose.
 
 ### §4. The record
 
@@ -478,8 +614,9 @@ against §1's four states in §4f.
     "pointer":   { "type": "string", "pattern": "^/(provenance/sources/\\d+|plans/\\d+/(description|success/note)|watch/\\d+|typicalMistakes/\\d+)$" },
     "textSha256":{ "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
     "spans":     { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/measurementSpan" } },
-    "disposition": { "enum": ["measured", "abstained"] },
-    "abstention":  { "enum": ["population_below_floor", "instrument_unavailable", "out_of_range"] },
+    "disposition": { "enum": ["measured", "abstained", "superseded"] },
+    "abstention":  { "enum": ["out_of_range", "source_unavailable", "no_data_at_band"] },
+    "supersededBy":{ "$ref": "#/$defs/id" },
     "rationale": { "$ref": "#/$defs/nonEmptyString" },
     "observedAt":{ "type": "string", "format": "date-time" },
     "corpus": {
@@ -498,7 +635,33 @@ against §1's four states in §4f.
 ```
 
 with `disposition: "abstained"` requiring `abstention` and forbidding a `spans` entry carrying an
-`assertion` (schema `if`/`then`), and `disposition: "measured"` forbidding `abstention`.
+`assertion` (schema `if`/`then`); `disposition: "measured"` forbidding both `abstention` and
+`supersededBy`; and `disposition: "superseded"` requiring `supersededBy` and forbidding `abstention`.
+
+**Two corrections landed at cross-review, both of which the draft got wrong in a way an implementer
+would have shipped:**
+
+1. **The `abstention` enum is now actually drawn from the shipped vocabulary.** §4d claimed it was;
+   it was not. `ABSTENTION_REASONS` (`apps/server/src/sourcing/types.ts:68`) is
+   `["out_of_range", "source_unavailable", "no_data_at_band", "licence_withheld"]`. The draft's
+   `population_below_floor` and `instrument_unavailable` are **invented synonyms** for two of those,
+   and minting them would have given the repository two abstention vocabularies for one concept —
+   the exact defect §4d cites as its reason for reusing the shipped one. **D151's floor case is
+   `no_data_at_band`**, which is what "the population was below the floor" means; instrument
+   unavailability is `source_unavailable`. `licence_withheld` is excluded because a self-census has
+   no licence (§4a).
+2. **`disposition: "superseded"` is new and it is not optional politeness.** §Motivation 3 measures
+   three shipped entries — `doubled-c-pawns` `sources[2]`, `iqp-black` `sources[1]`, `maroczy-bind`
+   `sources[2]` — that deliberately preserve a past reading whose numerator has since moved, each
+   explicitly marked SUPERSEDED in its own prose and kept **because D368 asked for the history**.
+   With only `measured` and `abstained`, binding those readings produces a permanent, unclearable
+   subject-class error, and the only workarounds are to relabel a real measurement as `authored` or
+   `illustrative` — both lies about provenance, in the RFC whose entire subject is provenance.
+   A `superseded` record is **fully diagnostic**: `census-check` re-derives nothing from it, may
+   never fail on it, and prints it beside the record named in `supersededBy` so a reader can see the
+   pair. `supersededBy` must resolve to another record's `id` in the same entry
+   (`MEASUREMENT_SUPERSEDED_BY_UNRESOLVED`, §7), which stops the disposition becoming a general
+   silencer: you cannot mark a reading superseded without naming the reading that replaced it.
 
 **No `corpus.digest`, and no field derived from one.** §2a is the argument; it is restated here as a
 normative refusal so a later wave does not add one as an obvious improvement.
@@ -546,15 +709,17 @@ Two normative constraints on the arm, because a "this is fake" marker is dangero
 #### 4d. `disposition` — an abstention is a reading
 
 `disposition: "abstained"` with an `abstention` reason records *"the instrument ran and refused"*.
-The vocabulary is drawn from the shipped `ABSTENTION_REASONS` rather than invented — `out_of_range`
-and a floor case — so the two paths use one language.
+**The vocabulary is a strict subset of the shipped `ABSTENTION_REASONS`** — `out_of_range`,
+`source_unavailable`, `no_data_at_band`; `licence_withheld` is excluded because a self-census has no
+licence — so the two paths use one language. *(The draft asserted this while listing two invented
+members; §4b records the correction and why it matters.)*
 
 **This is the format half of D151 and only the format half, stated precisely.** D151 measures that
 the 100-game explorer floor sits where timing windows live: `maroczy-bind-white-squeeze` completes
 readiness at **80** games, `iqp-white-panov-attack` at **29** with its arrival close firing at **12**
 (the row's own measurements, labelled as the row's — this RFC ran no explorer query). What this RFC
 supplies is the ability to **write that down as a reading** rather than as silence, so a reviewer can
-tell *"measured, population 29, below floor, abstained"* from *"nobody looked"*. What it does **not**
+tell *"abstained, `no_data_at_band`, population 29"* from *"nobody looked"*. What it does **not**
 supply is the authoring-time warning that would have told the author before they chose the window
 depth — that is explorer-side work on a different instrument, and §9 routes it rather than sketching
 it.
@@ -565,11 +730,20 @@ it.
 > entry's agreement with its recomputed assertion.
 >
 > **Diagnostic half — the gate may print it and may never fail on it:** `observedAt`, `corpus.roots`,
-> `corpus.packs`, `corpus.positions`.
+> `corpus.packs`, `corpus.positions`, `rationale`, and **every field of a
+> `disposition: "superseded"` record** (§4b).
 
 An implementer must be able to check that mechanically, so the rule is: **the checker's failure
-paths may reference `textSha256` and `spans` only.** A test asserts that no diagnostic field appears
-in any refusal predicate (§Acceptance, criterion 6).
+paths may reference `textSha256` and `spans` only, and may reference `spans` only on records whose
+`disposition` is `measured`.** A test asserts that no diagnostic field appears in any refusal
+predicate (§Acceptance, criterion 6).
+
+**The `superseded` carve-out is a hole and it is bounded on purpose.** `MEASUREMENT_SUPERSEDED_BY_UNRESOLVED`
+(§7, `shape-check`, error) is the only refusal that reads a superseded record, and it reads only
+`supersededBy`. That is enough to stop the disposition being a general silencer — a record cannot be
+demoted without naming its live replacement, so silencing a divergence costs the author a second,
+checked record — and it deliberately does **not** stretch to verifying that the superseded reading
+was ever true, which nothing in a version-controlled repository can do after the fact.
 
 The split inside the normative half is by **assertion class** (§3a), and it is the direct output of
 §Motivation 2:
@@ -587,8 +761,10 @@ REFRESH=1` rewrites **cardinal spans only**, together with `textSha256`, `observ
 
 - it can never perform §Motivation 3's corruption, because the numeral it rewrites is one no
   proposition was built on — the denominator — and it stops dead if a numerator moved;
-- it preserves `docs/expression-census.md`'s standing promise that *"the census never writes
-  content"* by living behind an explicit flag, and the default and gate modes still never write;
+- it preserves the first half of `docs/expression-census.md`'s standing sentence — *"The census never
+  writes content **and is deliberately absent from `make verify`**"* — by living behind an explicit
+  flag, and the default and gate modes still never write. **The second half of that sentence is
+  broken by this RFC and the draft did not say so** (§6d now does, and §10 routes the doc edit);
 - applied to the twelve rows in §Motivation it would have produced **eight files refreshed with zero
   human decisions and four errors**, each error naming a sentence a person had to rewrite — including
   the two wave F missed.
@@ -601,11 +777,39 @@ REFRESH=1` rewrites **cardinal spans only**, together with `textSha256`, `observ
 | `pointer` + `textSha256` | **measured** — a reading not attached to its sentence is a fact nobody reads; drift is undetectable | keep |
 | `spans` | all four — this is the union that makes them distinct | keep |
 | `disposition` + `abstention` | **abstained** (D151) | keep |
+| `disposition: "superseded"` + `supersededBy` | a fifth state the draft's four missed: **a reading that was true of a past corpus and is deliberately kept**. Three shipped entries are in it today (§Motivation 3) | keep, **diagnostic** |
 | `observedAt` | none — but a refusal message that cannot say *"recorded 2026-08-16"* is a worse refusal | keep, **diagnostic** |
 | `corpus.{roots,packs,positions}` | none — the check re-derives them | keep, **diagnostic**; a refusal wants to say *"the corpus moved 694→827"* |
 | `rationale` | none of the four — it is **D103's** field, and it is human-only prose | keep, human-only (§5b) |
 | `corpus.digest` | none; §2a measures it as strictly worse than re-derivation | **refused** |
-| an instrument version | none. `census.*` values come from the checkout's own `expression-census` and `matchesStructuralExpression`; a record cannot be checked against a *different* version of the evaluator than the one running, so recording one would produce a field that is always trivially equal to the runtime's | **refused** — and this is the sharpest divergence from the engine record, where `engineVersion` is load-bearing precisely because the binary is not in the repo. **D377** (§12) records the residue: an evaluator-semantics change silently changes every reading, and the only detector is that the readings move — which this RFC does supply, one commit late. |
+| an instrument version | none of the five. See the paragraph below — **the draft's stated reason was wrong and the refusal survives on a different one** | **refused** — the sharpest divergence from the engine record, where `engineVersion` is load-bearing precisely because the binary is not in the repo |
+
+**The instrument-version refusal, re-argued at cross-review, because the draft's argument does not
+survive contact with the case it is supposed to cover.** The draft said a recorded version *"would
+produce a field that is always trivially equal to the runtime's"*. **That is false in exactly the
+situation the field would exist for.** A record written at commit A carries A's evaluator; the check
+runs at commit B; if `matchesStructuralExpression` changed in between, the recorded version and the
+running one **differ**, and the difference is the one piece of information that distinguishes *"the
+corpus moved"* from *"the instrument moved"*. The draft's own D377 concedes precisely this, which
+made the pairing incoherent: a residue admitted in one section and denied in another.
+
+The refusal is nonetheless correct, on two grounds the draft did not state:
+
+1. **There is nothing to record.** `matchesStructuralExpression` exports no version constant and
+   `packages/runtime/package.json` reads `"version": "0.0.0"` — a value that has never moved and that
+   nothing bumps on a semantics change. A field populated from it would be a **constant string
+   pretending to be provenance**, which is worse than absence: it would read as an instrument
+   attestation and attest nothing. Minting a hand-maintained `CENSUS_EVALUATOR_VERSION` that an
+   author must remember to bump is the `provenance.engineValidation` failure
+   `opening-evidence-path` §1a(2) names — *"someone typed a number into a JSON file"*.
+2. **Even a real version could not be normative here.** By §4e it would describe the environment, not
+   the subject, so it lands in the **diagnostic half** and may never fail a build. It would improve a
+   refusal *message*; it would catch nothing that the readings moving does not already catch.
+
+**So the honest statement is narrower than the draft's and it is what D377 records:** the residue is
+real, this RFC does not close it, and the cheapest thing that *would* close it is not a version field
+but the "many records diverged in one commit" heuristic of §Open questions 6. **D377 is therefore the
+honest residue rather than a dodge — but only now that the ground under it is stated correctly.**
 
 ### §5. The shape-entry surface (shape-entry schema 0.4)
 
@@ -627,15 +831,22 @@ across files, so local `$defs` is the file's established convention and not a ne
 move; a record simply **points at it** (`pointer: "/provenance/sources/2"`), which is why the landing
 commit rewrites no content.
 
-**Two structural refusals in `validateShapeEntry`:**
+**Three structural refusals in `validateShapeEntry`:**
 
 | Code | Fires when |
 |---|---|
 | **`MEASUREMENT_POINTER_UNRESOLVED`** (new) | `pointer` does not resolve to a string in this entry |
-| **`MEASUREMENT_SUBJECT_UNRESOLVED`** (new) | `subject` does not resolve to a structural expression in this entry |
+| **`MEASUREMENT_SUBJECT_UNRESOLVED`** (new) | `subject` does not resolve to a **non-null** structural expression in this entry (`plans[].success.signature` is `oneOf [structuralExpression, null]`, so a record pointed at a null signature is a resolution failure, not a schema one) |
+| **`MEASUREMENT_SUPERSEDED_BY_UNRESOLVED`** (new, §4b) | `supersededBy` names no other record's `id` in this entry |
 
-Both are pure schema-adjacent resolution checks and need no corpus, so they run in `make shape-check`
-with no new dependency. Everything requiring the corpus lives in `census-check` (§6).
+All three are pure schema-adjacent resolution checks and need no corpus. **They run in `census-check`
+as well as `make shape-check`, and the second half of that sentence is the point** (corrected at
+cross-review): `make shape-check` **requires `FILE=` and is not a `make verify` dependency**, so a
+refusal that lived only there would never run in the gate and the four `MEASUREMENT_*` codes would be
+advisory. `census-check` already walks all 25 entries in `content/shapes/`, so hosting the resolution
+checks there costs nothing and is what makes §7's severities real. `make shape-check` keeps them so a
+single-file author gets them before committing. Everything requiring the **corpus** still lives only
+in `census-check` (§6).
 
 #### 5b. D103, closed — and what `rationale` may and may not say
 
@@ -649,22 +860,46 @@ D103 asks for *"somewhere to record why its trigger says what it says"*. The rec
 > would have gone quietly wrong in exactly the way D368 measured eleven notes going quietly wrong.
 
 For `rook-4v3-same-side`, whose two `provenance.sources` entries record nothing of D75's fix, the
-record is:
+record the follow-on content wave writes is below.
+
+**Read the `pointer` first, because the draft's version of this example did not validate and the
+reason is instructive.** A `spans[].span` is a **substring of the text the `pointer` addresses** —
+`validateClaimBindings` refuses `CLAIM_SPAN_ABSENT` when it is not
+(`claim-binding.ts:190`) and `CLAIM_SPAN_AMBIGUOUS` when it occurs twice (`:191`). The draft pointed
+this record at `/provenance/sources/1`, whose entire text at HEAD is *"UNGROUNDED: strategic claims
+inherit Pack C's authored-assessment limitations."* — which contains neither `24` nor
+`rook-4v3-same-side-hold`, so **both spans would have been refused**. A measurement record cannot be
+attached to a sentence that does not state the measurement; **the content wave adds the sentence, and
+the record points at it.** This is not a defect in the mechanism, it is the mechanism working, and it
+sharpens §8: the follow-on wave writes prose as well as records.
 
 ```json
+// content/shapes/rook-4v3-same-side.json — provenance.sources gains a third entry:
+//   [2] "TRIGGER NARROWING (D75), measured 2026-08-16: after the narrowing the trigger fires
+//        24 times across the corpus, inside 1 pack, rook-4v3-same-side-hold."
 "measurements": [{
   "id": "trigger-narrowing-d75",
   "subject": "/trigger",
-  "pointer": "/provenance/sources/1",
+  "pointer": "/provenance/sources/2",
   "textSha256": "sha256:…",
   "rationale": "Two clauses were added to exclude the Philidor spines the loose form admitted: the trigger constrained rooks, minor/queen absence and open a-d files with no pawn constraint, so its in-shape positions split into a zero-black-pawn group and a three-pawn group, and the pawn-count plan could not fire on the union. Loosening either clause re-opens D75.",
   "spans": [{ "span": "24", "assertion": { "kind": "census.fires@v1", "args": { "file": "content/shapes/rook-4v3-same-side.json", "pointer": "/trigger" } } },
+            { "span": "1",  "assertion": { "kind": "census.packsFiring@v1", "args": { "file": "content/shapes/rook-4v3-same-side.json", "pointer": "/trigger" } } },
             { "span": "rook-4v3-same-side-hold", "authored": true }],
   "disposition": "measured",
   "observedAt": "2026-08-16T00:00:00.000Z",
   "corpus": { "roots": ["content/drafts", "content/packs"], "packs": 56, "positions": 827 }
 }]
 ```
+
+**Both numerals are checked and the pack name is not, and that asymmetry is worth stating because it
+is the family's real reach.** `census.*` kinds return **integers**; there is no kind that returns a
+pack id, so *"and it is `rook-4v3-same-side-hold`"* stays an `authored` span the author owns. What
+catches a wrong pack name is the **count beside it**: if the trigger spread to a second pack,
+`census.packsFiring@v1` moves 1 → 2 and the sentence refuses. **A `census.*` family that returned
+names instead of counts would be a family that could put a pack id into prose under a machine
+label, and §3c refuses that class.** *(Re-derived at cross-review: `/trigger` fires **24 of 827** in
+exactly **1** pack, `rook-4v3-same-side-hold`.)*
 
 **`rationale` is human-only, permanently**, in the sense `rfc/archive/content-sourcing-foundation.md`
 §3.3 gives the term: no span may bind it, no assertion may support it, and it is refused as a
@@ -681,9 +916,21 @@ parameter — a census report — and the `census.*` arm of `evaluate` reads the
 array by `site.file` + `site.pointer`.
 
 **The seam, stated explicitly because an unowned one is what
-`rfc/archive/opening-evidence-path.md` spends two pages regretting:** `sourcing-check` and
-`verify-draft` call `validateClaimBindings` **without** a report and must not be made to build one —
-they are per-pack tools and the corpus walk is not theirs. So:
+`rfc/archive/opening-evidence-path.md` spends two pages regretting.** The draft named
+`sourcing-check` and `verify-draft` as the two callers; **`verify-draft` does not call
+`validateClaimBindings` at all**, and the caller it missed is the more consequential one. Enumerated
+at cross-review, the callers are exactly two:
+
+| Caller | What it is | Why it must not build a report |
+|---|---|---|
+| `apps/server/src/sourcing/check.ts:198` | `sourcing-check`, a per-pack authoring tool | it is invoked on one pack or one candidate directory; the corpus walk is not its job |
+| `apps/server/src/pack-registry.ts:266` | **`PackRegistry.loadDefault` — the running server**, feeding `claimBackings` onto `PackRecord` | a 192-subject × 827-position census on every pack load is not admissible at runtime, at any severity |
+
+**The second row is why the deferral clause is load-bearing rather than tidy.** `CLAIM_ASSERTION_KINDS`
+is a single global array, so once the six `census.*` members exist **a pack ledger can declare one**,
+and the runtime registry will evaluate it on load. This RFC gives packs no `measurements` surface
+(§Open questions 1), so nothing in the corpus does this today — but the format permits it from the
+landing commit, and *"nothing does it yet"* is not a seam. So:
 
 > When `validateClaimBindings` is called without a census report, a `census.*` span is **skipped and
 > counted**, never refused. It emits **`CENSUS_ASSERTION_DEFERRED`** (info) naming
@@ -694,7 +941,12 @@ they are per-pack tools and the corpus walk is not theirs. So:
 > guaranteed present.
 
 Without that clause `sourcing-check` would emit `CLAIM_ASSERTION_UNRECORDED` on every valid census
-binding, which is the "each tool assumed the other owned it" failure in its exact classic form.
+binding, which is the "each tool assumed the other owned it" failure in its exact classic form — and
+the runtime registry would do the same, on a path that ends at a learner-visible `claimBackings`
+entry. **`CENSUS_ASSERTION_DEFERRED` at info severity is what keeps §Exploration gate's claim that
+this RFC "ships no learner-visible behaviour" true**, so it is a normative requirement of the
+register claim, not a convenience. (§0 records the `SourcingIssue.severity` widening that info
+requires.)
 
 #### 6b. `--check` mode
 
@@ -709,9 +961,21 @@ gains **one** top-level key and the rest is byte-identical:
                "severity": "error", "recorded": "44", "reading": 95,
                "recordedCorpus": { "packs": 43, "positions": 694 },
                "readingCorpus": { "packs": 56, "positions": 827 } }],
-  "totals": { "documents": 25, "declared": 0, "errors": 0, "warnings": 0, "undeclaredTokens": 263 }
+  "totals": { "documents": 25, "declared": 0, "superseded": 0, "illustrative": 0,
+              "errors": 0, "warnings": 0, "undeclaredTokens": 263 }
 }
 ```
+
+**Every count in `records.totals` is namespaced under `records`** — `records.totals.declared`, not
+`totals.declared`; the report's existing top-level `totals` (`subjects`, `unsatisfiable`,
+`neverFiresInCorpus`, …) is untouched, and §Acceptance criterion 12 is corrected to say so.
+
+`superseded` and `illustrative` are per-document and per-total counts **because both are escape
+hatches** — §4b's superseded disposition and §4c's illustrative arm each let an author remove a
+numeral from the checked set. §Open questions 5 asked whether `illustrative` should be counted;
+**the answer is yes and it is taken here**, extended to `superseded` for the same reason: an escape
+hatch that is not counted is not visible, and a reviewer comparing `declared: 3, superseded: 4` to
+`declared: 7, superseded: 0` can see the difference at a glance.
 
 `recordedCorpus` / `readingCorpus` are the **diagnostic half doing its only job**: telling a human how
 far the ground moved, in a message, without ever being the thing that failed.
@@ -764,9 +1028,23 @@ not depend on any target whose exit code reads `totals.unsatisfiable` or any `ob
 That is a stronger guarantee than the shipped substring check and it is the one the case's own name
 describes.
 
+**Verified at cross-review, both halves.** `Makefile:21` reads `verify: typecheck test schema-check`;
+appending `census-check` leaves the line free of the literal `expression-census`, so the shipped
+assertion at `expression-census.test.ts:136` passes unchanged. And the intent survives for the reason
+stated above. **But the RFC owed one more admission and the draft did not make it:**
+`docs/expression-census.md:26` does not only promise that the census never writes — its sentence is
+*"The census never writes content **and is deliberately absent from `make verify`**."* **This RFC
+breaks the second clause outright.** That is defensible — `census-check` is a different target with a
+different exit rule, and the clause was written when the only thing the census could report was
+coverage — but it is a documented standing promise being changed, not merely extended, and §10 now
+requires the implementer to **rewrite that sentence** rather than append to the file around it. A
+promise quietly falsified by a target rename is exactly the shape §6d exists to refuse.
+
 **Runtime is a gate concern and was measured, not assumed.** The full census over 56 packs / 827
 positions / 192 subjects completed inside a single `make` invocation on this machine today, including
-the `esbuild` bundle (reported at 94 ms). Check mode adds a per-record pointer resolution and one
+the `esbuild` bundle (reported at 94 ms in the drafting run and 41 ms on the cross-review re-run —
+the figure is machine-local and only the order of magnitude is a claim). Check mode adds a per-record
+pointer resolution and one
 integer comparison per span; it walks no additional positions. **D378** (§12) records the standing
 obligation to re-measure if the corpus grows an order of magnitude.
 
@@ -779,23 +1057,38 @@ obligation to re-measure if the corpus grows an order of magnitude.
 | `CLAIM_SPAN_ABSENT` / `CLAIM_SPAN_AMBIGUOUS` | **shipped, reused** | error | `shape-check` |
 | `CLAIM_ASSERTION_UNDECLARED` | **shipped, reused at a new severity** | **warning on shape entries**, error unchanged on packs | `census-check` |
 | `CLAIM_ASSERTION_UNRECORDED` | **shipped, reused** | error | `census-check` |
-| `MEASUREMENT_POINTER_UNRESOLVED` | new | error | `shape-check` |
-| `MEASUREMENT_SUBJECT_UNRESOLVED` | new | error | `shape-check` |
-| `MEASUREMENT_RATIONALE_NOT_BINDABLE` | new | error | `shape-check` |
-| `MEASUREMENT_ILLUSTRATIVE_IN_TEACHING` | new | error | `shape-check` |
+| `CLAIM_READING_UNATTRIBUTED` | **shipped, reused on a new document type** | error | `census-check` — see §3c; the shipped emitter is pack-only and the implementer extends it to `measurements[].spans[].authored` rather than inheriting it |
+| `MEASUREMENT_POINTER_UNRESOLVED` | new | error | `census-check`, `shape-check` |
+| `MEASUREMENT_SUBJECT_UNRESOLVED` | new | error | `census-check`, `shape-check` |
+| `MEASUREMENT_RATIONALE_NOT_BINDABLE` | new | error | `census-check`, `shape-check` |
+| `MEASUREMENT_ILLUSTRATIVE_IN_TEACHING` | new | error | `census-check`, `shape-check` |
+| `MEASUREMENT_SUPERSEDED_BY_UNRESOLVED` | new | error | `census-check`, `shape-check` |
 | `CENSUS_SITE_AMBIGUOUS` | new | error | `census-check` |
 | `CENSUS_ASSERTION_UNEVALUABLE` | new | error | `census-check` |
-| `CENSUS_ASSERTION_DEFERRED` | new | **info** | `sourcing-check`, `verify-draft` |
+| `CENSUS_ASSERTION_DEFERRED` | new | **info** | `sourcing-check`, **`pack-registry`** |
 
-That is **seven new codes and six reused**, and §7 is the authority for the list; §0's row is a
-summary of it.
+That is **eight new codes and seven reused**, and §7 is the authority for the list; §0's row is a
+summary of it. **The draft said seven and six**; cross-review added
+`MEASUREMENT_SUPERSEDED_BY_UNRESOLVED` (§4b) and `CLAIM_READING_UNATTRIBUTED` (§3c), corrected the
+`shape-check`-only homes to `census-check` **and** `shape-check` (§5a — `shape-check` is not a
+`verify` dependency and requires `FILE=`, so a gate-relevant refusal cannot live there alone), and
+corrected `CENSUS_ASSERTION_DEFERRED`'s second home from `verify-draft`, which does not call
+`validateClaimBindings`, to `pack-registry` (§6a), which does.
 
-**Collision sweep, run 2026-08-16** across `apps/`, `packages/`, `schemas/`, `rfc/`, `docs/`,
-`content/`, `design/`, `planning/` and `tools/`: each of the seven new literals occurs **zero** times.
-Reusing `CLAIM_SPAN_CONTRADICTED` and
+**Collision sweep, re-run at cross-review 2026-08-16** across `apps/`, `packages/`, `schemas/`,
+`rfc/`, `docs/`, `content/`, `design/`, `planning/` and `tools/`, excluding this file and the
+`apps/server/dist/` build artifacts: each of the **eight** new literals occurs **zero** times, as do
+`measurementRecord`, `measurementSpan` and `censusAssertion`. The only pre-existing occurrence of
+the string `census-check` anywhere in the tree is inside `design/BACKLOG.md`'s **D378**, which this
+RFC filed. Reusing `CLAIM_SPAN_CONTRADICTED` and
 `CLAIM_ASSERTION_UNDECLARED` at a second severity is deliberate — one code, one meaning, severity set
 by the caller — and it is the pattern `opening-evidence-path` §4c establishes with
 `ENGINE_COVERAGE_INCOMPLETE`.
+
+**Two shipped codes are deliberately *not* extended and the omission is stated so it is not read as
+an oversight.** `CLAIM_POINTER_REBOUND` and `CLAIM_BINDING_DUPLICATE` (`claim-binding.ts:180`, `:182`)
+are keyed to `claimId`, which a shape-entry record does not have — its identity is `id` + `pointer`,
+and `MEASUREMENT_POINTER_UNRESOLVED` plus `textSha256` cover the same ground.
 
 ### §8. Blast radius, measured
 
@@ -806,10 +1099,15 @@ has anything to check, `census-check` reports `declared: 0` across 25 documents 
 **263 digit-shaped tokens across 17 of the 25 shape entries**, concentrated in eleven —
 `iqp-black` 35, `maroczy-bind` 34, `fianchetto-g7` 32, `knight-vs-bishop` 30, `doubled-c-pawns` 21,
 `pawn-opposition-key-squares` 19, `open-centre` 16, `up-an-exchange` 16, `hanging-pawns` 14,
-`london-wedge` 14, `vancura` 14, then a long tail of six entries at 6 or fewer. *(Measured today with
-a digits-only subset of the shipped `MACHINE_TOKEN` regex; the full regex also matches SAN, square
-names and result words, so the true figure is higher. The subset is stated so the number is
-reproducible, not because the full sweep is optional.)*
+`london-wedge` 14, `vancura` 14, then a long tail of six entries at 6 or fewer
+(`advance-caro-dxc5-residue` 6, `kid-chain-arrangement` 3, `queen-vs-pawn-on-seventh` 3,
+`bishop-good-bad` 2, `opposite-coloured-bishops` 2, `pawn-breakthrough-outside-passer` 2). *(Measured
+with a digits-only subset of the shipped `MACHINE_TOKEN` regex over `provenance.sources[]`,
+`plans[].description`, `plans[].success.note`, `watch[]` and `typicalMistakes[]`; the full regex also
+matches SAN, square names and result words, so the true figure is higher. The subset is stated so the
+number is reproducible, not because the full sweep is optional.* **Independently reproduced at
+cross-review: the total, the 17-of-25, and every one of the seventeen per-entry counts match
+exactly.**)
 
 That is a large number and it is **the correct number: it is the size of the gap, printed**, which is
 the reasoning `opening-evidence-path` §5d applies to its own 67 warnings. It is also why §4e makes
@@ -819,7 +1117,13 @@ RFC's commit, and this RFC's commit changes no content.
 **Two entries are wrong at HEAD right now** (`kid-chain-arrangement`, `london-wedge`), and this RFC
 does not fix them: fixing a wrong number is a content edit, and the entries also need their
 *propositions* rewritten (*"and nowhere else in the corpus"* is false in both). Filed as **D379**
-(§12) so the debt is a row rather than an assumption.
+(§12) so the debt is a row rather than an assumption. **Both re-derived at cross-review against a
+clean working tree**, with the `provenance.sources[1]` text quoted verbatim in both files and the
+census run over the committed corpus: `kid-chain-arrangement` **24 of 827** in `anti-kid-classical-white`
+(7), `kid-classical-black` (7), `kid-mar-del-plata-white` (10); `london-wedge` **19 of 827** in
+`anti-london-black` (7), `london-system-white` (7), `london-wedge-black-counterplay` (5). Both notes
+still read *"over all 487 spine positions of the 37 shipped packs … fires on exactly 14 nodes … and
+nowhere else in the corpus"*.
 
 ### §9. What this RFC deliberately does not take
 
@@ -835,13 +1139,19 @@ does not fix them: fixing a wrong number is a content edit, and the entries also
 `expression-census` **as a report** — it adds a `DECLARATIONS=1` flag, default off. This RFC adds a
 `--check` mode and a `records` key. The two do not collide: different flags, different top-level
 keys, neither changes the default report. Whichever lands second should confirm the flag names in one
-line. `rfc/pack-graduation.md` (accepted, 0.27) moves all pack digests and re-stamps 32 ledgers;
-**this RFC touches neither**, so the two are order-independent.
+line. `pack-graduation` — **implemented 2026-08-16 and archived, not "accepted and unlanded" as the
+draft said**; `DRILL_PACK_SCHEMA_VERSION` and the pack `$id` both read `0.27` — moved all pack digests
+and re-stamped ledgers before this RFC starts, so the ordering question it raised is settled rather
+than open.
 
 ### §10. Documentation the implementer updates
 
 - `docs/expression-census.md` — the `--check` mode, the `records` key, the subject/cardinal split, and
-  the restatement that *coverage is still never graded*.
+  the restatement that *coverage is still never graded*. **`docs/expression-census.md:26` currently
+  reads *"The census never writes content and is deliberately absent from `make verify`."* — the
+  second clause is falsified by `census-check` and the sentence must be rewritten, not appended to**
+  (§6d). The replacement states both halves that survive: the census still never writes content, and
+  no coverage number, observation label or satisfiability verdict is in any `verify` exit code.
 - `docs/development.md` — `make census-check`, `REFRESH=1`, and its membership in `verify`.
 - `docs/drill-pack-format.md` / any shape-entry documentation — the `measurements` property and the
   three span forms.
@@ -850,13 +1160,18 @@ line. `rfc/pack-graduation.md` (accepted, 0.27) moves all pack digests and re-st
 
 ### §11. Register rows requested (this RFC does not edit `rfc/README.md`)
 
-`rfc/README.md` has a single writer and this RFC does not touch it. The rows it asks that writer to
-land, in the register's own form:
+`rfc/README.md` has a single writer and this RFC does not touch it. State of the register at
+cross-review, and what remains outstanding:
 
-- **Active table:** `| measurement-records.md | draft 2026-08-16 — measurement records for corpus
-  census readings; shape-entry schema 0.4; claims no pack lane |`
+- **Active table: already landed by the writer.** The row exists and is richer than the one the draft
+  requested; no further request. *(It carries the draft's *"4 true defects and 8 false alarms"*
+  framing, which §2a now qualifies — the eight are **warnings this design clears with one flag**, not
+  outputs it suppresses. The writer may want the row to say so; it is not this RFC's to edit.)*
 - **Pack-schema register:** no row. **The sentinel row `| — | 0.28 is the next free pack lane |`
-  stands unchanged** — this RFC's whole register position is that it does not take it.
+  stands unchanged** — this RFC's whole register position is that it does not take it. *(Cross-review
+  note for the writer, not a request: the Active table shows `opponent-contracts.md` claiming pack
+  0.28 while that RFC's own header has **RELEASED** the claim. The lane is free; the two rows
+  disagree about it.)*
 - **Shape-entry lane:** the register has **no shape-entry table**. One should exist, because
   `schemas/shape_entry.schema.json` has moved to 0.3 and `vocabulary-wiring`'s `plan_signature` leaf
   landed inside it with no register row of any kind. Requested:
@@ -864,16 +1179,21 @@ land, in the register's own form:
 - **Migration register:** no row. `STORAGE_VERSION` stays at **22** and the landing order is
   unaffected.
 
-Two register facts worth the writer's attention while they are in the file, both re-derived from the
-tree today and neither this RFC's to fix: the **0.26 row still reads *claimed*** while
-`DRILL_PACK_SCHEMA_VERSION` and the `$id` both read `0.26` (landed), and **`dead-vocabulary.md` has
-no Active row at all**.
+**The draft closed with two "register facts worth the writer's attention" and both were false at
+cross-review**; they are corrected here rather than deleted, because a stale correction is worse than
+no correction. The 0.26 row reads **implemented 2026-08-16**, not *claimed*, against
+`archive/claim-backing.md`; `DRILL_PACK_SCHEMA_VERSION` and the pack `$id` read **0.27**, not 0.26;
+and **`dead-vocabulary.md` does have an Active row**. Nothing in the register is behind the tree on
+these three points — the draft was.
 
 ### §12. Ledger rows this RFC opens (law 4)
 
-**Not written to `design/BACKLOG.md` by this RFC.** Concurrent agents collide on the shared ledger,
-so the rows are stated here in landing form and claude lands them. The id block **D376–D380** was
-taken after verifying that **D371–D375 are occupied** and nothing above D375 exists.
+**Landed in `design/BACKLOG.md` before cross-review; this section is the RFC-side copy.** The draft
+said the rows were unlanded and awaiting claude — they are in the file, as rows D376–D380 sitting
+between D381 and D373. The id block was taken after verifying that D371–D375 were occupied; **D381
+has since been minted above it** by a concurrent agent, which is exactly the interleaving the "cite
+rows by title, not by line" rule at the head of this RFC exists for. The texts below are the drafting
+form and differ in wording from the landed rows; **the landed rows are authoritative**.
 
 | Row | Text |
 |---|---|
@@ -899,12 +1219,16 @@ is untouched: nothing here changes what a learner is shown, and B4 remains unmet
 1. `schemas/shape_entry.schema.json` `$id` reads `…shape-entry:0.4`; `SHAPE_ENTRY_SCHEMA_VERSION` and
    `packages/schema/src/shape-entry.test.ts` agree; **all 25 entries in `content/shapes/` validate
    unchanged**, and `digestShapeEntry` returns the same digest for each as at HEAD.
-2. `DRILL_PACK_SCHEMA_VERSION` reads `0.26`, `DRILL_RUN_SCHEMA_VERSION` is unchanged, and
-   `STORAGE_VERSION` reads `22`. A test asserts all three, so the "claims nothing else" register
-   promise is enforced rather than stated.
-3. `CLAIM_ASSERTION_KINDS` contains the six `census.*` members and **no `census.observation@v1`,
-   `census.satisfiability@v1`, or any percentage/ratio kind** — asserted as an exact-set equality so
-   a later addition is a deliberate act (§3c, law 8).
+2. `DRILL_PACK_SCHEMA_VERSION` reads **`0.27`** (the value at HEAD — the draft pinned `0.26`, which
+   would have failed this criterion on the day it was written), `DRILL_RUN_SCHEMA_VERSION` is
+   unchanged at `0.16`, and `STORAGE_VERSION` reads `22`. A test asserts all three, so the "claims
+   nothing else" register promise is enforced rather than stated. **The test must assert the values
+   the tree has, not the values this RFC remembers**; that is the whole point of the criterion and
+   the draft's version of it demonstrates the failure it exists to catch.
+3. `CLAIM_ASSERTION_KINDS` contains **exactly 21 members: the shipped 15 plus the six `census.*`**,
+   and **no `census.observation@v1`, `census.satisfiability@v1`, or any percentage/ratio kind** —
+   asserted as an exact-set equality so a later addition is a deliberate act (§3c, law 8). The
+   `$defs/censusAssertion` `kind` enum (§3d) asserts equal to the six.
 4. Fixture case, D368 reproduced: a shape entry with a record asserting `census.fires@v1 = 44` for a
    subject the census reads as `95` produces exactly one `CLAIM_SPAN_CONTRADICTED` at
    `/measurements/{i}/spans/{j}/span`, **error** severity, `census-check` exits non-zero, and the
@@ -916,14 +1240,26 @@ is untouched: nothing here changes what a learner is shown, and B4 remains unmet
    asserts the §Motivation 3 corruption cannot occur: a record whose numerator moved is never
    rewritten in place.
 7. **Diagnostic isolation:** a test asserts that no refusal predicate in the checker reads
-   `observedAt`, `corpus.roots`, `corpus.packs` or `corpus.positions` — mutating any of the four in a
-   fixture changes no issue, no severity and no exit code.
-8. `validateClaimBindings` called **without** a census report emits `CENSUS_ASSERTION_DEFERRED` (info)
-   for a `census.*` span, emits **no** `CLAIM_ASSERTION_UNRECORDED`, and the deferred span
-   contributes to **neither** `CLAIM_LABEL_UNEARNED` nor `CLAIM_AUTHOR_LABEL_REQUIRED`.
+   `observedAt`, `corpus.roots`, `corpus.packs`, `corpus.positions` or `rationale` — mutating any of
+   the five in a fixture changes no issue, no severity and no exit code. **And a
+   `disposition: "superseded"` record whose subject span diverges by any amount produces no issue and
+   no exit-code change** (§4e), while the same record with an unresolvable `supersededBy` produces
+   `MEASUREMENT_SUPERSEDED_BY_UNRESOLVED` at error — the two halves of the carve-out, asserted
+   together so neither can be widened without the other failing.
+8. `validateClaimBindings` called **without** a census report emits `CENSUS_ASSERTION_DEFERRED`
+   (severity `"info"`, which requires the `SourcingIssue.severity` widening in §0) for a `census.*`
+   span, emits **no** `CLAIM_ASSERTION_UNRECORDED`, and the deferred span contributes to **neither**
+   `CLAIM_LABEL_UNEARNED` nor `CLAIM_AUTHOR_LABEL_REQUIRED`. **Asserted at both call sites** —
+   `sourcing/check.ts` and `pack-registry.ts` — and at the registry a further assertion that the
+   deferred span produces no `claimBackings` entry and no change to `PackRecord`, which is what makes
+   §Exploration gate's "no learner-visible behaviour" true rather than assumed.
 9. `MEASUREMENT_RATIONALE_NOT_BINDABLE` fires on a record whose `pointer` addresses a `rationale`;
    `MEASUREMENT_ILLUSTRATIVE_IN_TEACHING` fires on an `illustrative` span in a record pointing at
-   `plans[].description` or `plans[].success.note`.
+   `plans[].description` or `plans[].success.note`; `MEASUREMENT_SUBJECT_UNRESOLVED` fires on a
+   record whose `subject` addresses a `plans[].success.signature` that is `null`; and
+   `CLAIM_SPAN_ABSENT` fires on a record whose span text is not a substring of the prose its
+   `pointer` addresses — **the last of these being the defect that made the draft's own §5b example
+   invalid**, and the reason it is a criterion rather than a note.
 10. `make expression-census` with no flags emits a report **byte-identical** to HEAD's for the current
     corpus, with the same exit code.
 11. `make verify` includes `census-check`; the test named *"reuses the shipped walker and leaves the
