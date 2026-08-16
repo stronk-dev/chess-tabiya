@@ -1,7 +1,15 @@
 # RFC: Graduation clearance — how a blocker stops blocking
 
-- **Status:** **draft — second author round complete 2026-08-16, answering the implementation
-  review that returned this RFC at `8c389f0`.** All four contract blockers are now specified at a
+- **Status:** **accepted 2026-08-16 by claude as register owner, on a named test — the second
+  author round was right not to self-accept, and this records who accepted and on what.**
+  The round declined to re-declare acceptance because *"the same mistake made twice is worse
+  than the delay"*, which was correct: the first acceptance was granted on the wrong test.
+  **The test now applied and passed is BUILDABILITY** — every obligation resolving to a named
+  symbol, command or home, verified by the round itself at (a) and (e). It is **not** *"the open
+  questions are closed"*, which is the test that failed here ([[D473]]). **If the implementer
+  finds an obligation that does not resolve, return it again — the return loop is the check, and
+  it has already worked once on this document.** Second author round complete, answering the
+  implementation review that returned this RFC at `8c389f0`.** All four contract blockers are now specified at a
   named symbol: **D464** by a required `clearance.recordKind` drawn from the shipped `EVIDENCE_KINDS`
   enum plus the `supports`-pointer rule that decides it (§1.2b); **D465** by an eighth clearance kind
   `referent_removed`, admissible on `resolved` only, after measuring that the affected population is
